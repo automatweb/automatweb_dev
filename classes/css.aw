@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.12 2002/02/18 13:41:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.13 2002/06/10 15:50:53 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -31,20 +31,14 @@
 
 // lisaks on kasutajatel olemas oma grupid, mille elemente saab jagada teiste kasutajatega, 
 // ja nii edasi ja nii tagasi
-lc_load("css");
-global $orb_defs;
-$orb_defs["css"] = "xml";
 
-class css extends aw_template {
+class css extends aw_template 
+{
 	function css ($args = array())
 	{
-		$this->db_init();
 		// kuidas ma seda edimisvormi alati automawebi juurest lugeda saan?
-		$this->tpl_init("css");
-		global $lc_css;
-		if (is_array($lc_css))
-		{
-			$this->vars($lc_css);}
+		$this->init("css");
+		$this->lc_load("css","lc_css");
 		// fondifamilyd, do not change the order
 		$this->font_families = array(
 				"0" => "Verdana,Helvetica,sans-serif",
@@ -79,10 +73,8 @@ class css extends aw_template {
 
 		// siin peaks diferentseerima selle, kas tegu on süsteemste voi kasutaja
 		// stiilidega.
-		global $udata;
+		$udata = $this->get_user();
 		$this->rootmenu = $udata["home_folder"];
-
-
 	}
 
 	////
@@ -90,15 +82,14 @@ class css extends aw_template {
 	function css_draw_menu($args = array())
 	{
 		extract($args);
-		global $basedir,$ext;
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
 		$retval = $xm->build_menu(array(
-				"vars" => array_merge($vars,array("ext" => $ext)),
-				"xml" => $basedir . "/xml/css_editor.xml",
-				"tpl" => $this->template_dir . "/menus.tpl",
-				"activelist" => $activelist,
-			));
+			"vars" => array_merge($vars,array("ext" => $this->cfg["ext"])),
+			"xml" => $this->cfg["basedir"] . "/xml/css_editor.xml",
+			"tpl" => $this->template_dir . "/menus.tpl",
+			"activelist" => $activelist,
+		));
 		return $retval;
 	}
 
@@ -128,16 +119,15 @@ class css extends aw_template {
 	function css_active_list($args = array())
 	{
 		$menu = $this->css_draw_menu(array(
-				"activelist" => array("list")
-				));
+			"activelist" => array("list")
+		));
 
 		classload("users");
 		$u = new users();
 		$group_in_user = $u->get_user_config(array(
-						"uid" => UID,
-						"key" => "automatweb_css_group",
-				));
-
+			"uid" => aw_global_get("uid"),
+			"key" => "automatweb_css_group",
+		));
 
 		if (!$group_in_use)
 		{
@@ -150,11 +140,9 @@ class css extends aw_template {
 		);
 
 		// koigepealt kuvame stiiligrupid, mis on süsteemi all
-		global $rootmenu;
 		// ja seejärel need, mis on kasutaja all
 		$groups = $this->get_objects_below(array(
-				//"parent" => $this->rootmenu,
-				"parent" => $rootmenu,
+				"parent" => $this->cfg["rootmenu"],
 				"class" => CL_CSS_GROUP,
 				"active" => $active,
 		));
@@ -197,9 +185,9 @@ class css extends aw_template {
 		$u = new users();
 
 		$u->set_user_config(array(
-				"uid" => UID,
-				"key" => "automatweb_css_group",
-				"value" => $use,
+			"uid" => aw_global_get("uid"),
+			"key" => "automatweb_css_group",
+			"value" => $use,
 		));
 		
 		$this->css_sync(array("gid" => $use));
@@ -212,9 +200,8 @@ class css extends aw_template {
 	function css_mylist($args = array())
 	{
 		$menu = $this->css_draw_menu(array(
-				"activelist" => array("my","mylist"),
-				
-				));
+			"activelist" => array("my","mylist"),
+		));
 
 		extract($args);
 		$this->read_template("global_list.tpl");
@@ -245,10 +232,9 @@ class css extends aw_template {
 		extract($args);
 		
 		$menu = $this->css_draw_menu(array(
-				"activelist" => array("list"),
-				"vars" => array("glist" => "syslist","stylist" => "syslist_styles"),
-			));
-
+			"activelist" => array("list"),
+			"vars" => array("glist" => "syslist","stylist" => "syslist_styles"),
+		));
 
 		$this->read_template("syslist.tpl");
 
@@ -270,10 +256,9 @@ class css extends aw_template {
 				
 		);
 	
-		global $rootmenu;
 		$styles = $this->get_objects_below(array(
-				"parent" => $rootmenu,
-				"class" => CL_CSS_GROUP,
+			"parent" => $this->cfg["rootmenu"],
+			"class" => CL_CSS_GROUP,
 		));
 
 		$lx = array_merge($lx,$styles);
@@ -309,13 +294,12 @@ class css extends aw_template {
 	function css_syslist_submit($args = array())
 	{
 		extract($args);
-		global $rootmenu;
-		$q = "UPDATE objects SET status = 1 WHERE parent = '$rootmenu' AND class_id = " . CL_CSS_GROUP;
+		$q = "UPDATE objects SET status = 1 WHERE parent = '".$this->cfg["rootmenu"]."' AND class_id = " . CL_CSS_GROUP;
 		$this->db_query($q);
 		if (is_array($active))
 		{
 			$actlist = join(",",$active);
-			$q = "UPDATE objects SET status = 2 WHERE parent = '$rootmenu' AND class_id = " . CL_CSS_GROUP . " AND oid IN ($actlist)";
+			$q = "UPDATE objects SET status = 2 WHERE parent = '".$this->cfg["rootmenu"]."' AND class_id = " . CL_CSS_GROUP . " AND oid IN ($actlist)";
 			$this->db_query($q);
 		};
 		
@@ -343,7 +327,7 @@ class css extends aw_template {
 		if ($type == "system")
 		{
 			$redir_action = "syslist";
-			global $rootmenu;
+			$rootmenu = $this->cfg["rootmenu"];
 		}
 		elseif ($type == "user")
 		{
@@ -370,13 +354,11 @@ class css extends aw_template {
 	// poolt defineeritud stiilid ja teisel pool on sinu omad.
 	function css_group_contents($args = array())
 	{
-
 		extract($args);
 		// loeme grupi info sisse
-		global $rootmenu;
 		$css_ginfo = $this->get_object($gid);
 
-		if ( ($css_ginfo["parent"] == $rootmenu) || ($gid == 0) )
+		if ( ($css_ginfo["parent"] == $this->cfg["rootmenu"]) || ($gid == 0) )
 		{
 		}
 		else
@@ -384,9 +366,8 @@ class css extends aw_template {
 		};
 
 		$menu = $this->css_draw_menu(array(
-				"activelist" => "globals",
-			));
-
+			"activelist" => "globals",
+		));
 
 		extract($args);
 		classload("users","xml");
@@ -394,8 +375,8 @@ class css extends aw_template {
 		$xml = new xml();
 
 		$custom_css = $u->get_simple_config(array(
-					"uid" => UID,
-					"key" => "custom_css",
+			"uid" => aw_global_get("uid"),
+			"key" => "custom_css",
 		));
 
 		$this->read_template("list.tpl");
@@ -447,9 +428,9 @@ class css extends aw_template {
 		$xml = new xml();
 
 		$use_group = $u->get_user_config(array(
-					"uid" => UID,
-					"key" => "automatweb_css_group",
-				));
+			"uid" => aw_global_get("uid"),
+			"key" => "automatweb_css_group",
+		));
 		if (not($use_group == $args["gid"]))
 		{
 			// don't do anything since this is not the css currently in use
@@ -457,8 +438,8 @@ class css extends aw_template {
 		};
 
 		$meta = $this->get_object_metadata(array(
-						"oid" => $args["gid"],
-						"key" => "custom_css",
+			"oid" => $args["gid"],
+			"key" => "custom_css",
 		));
 		$custom_css_xml = $meta;
 		$this->dequote($custom_css_xml);
@@ -476,9 +457,9 @@ class css extends aw_template {
 		}
 
 		$awf = new file();
-		$uid = UID;
+		$uid = aw_global_get("uid");
 		$success =$awf->put_special_file(array(
-			"name" => "$uid.css",
+			"name" => aw_global_get("uid").".css",
 			"path" => "css",
 			"content" => $css_file,
 			"sys" => true,
@@ -503,7 +484,6 @@ class css extends aw_template {
 			"value" => $custom_css,
 		));
 
-
 		$this->css_sync(array("gid" => $gid));
 
 		return $this->mk_my_orb("group_content_list",array("gid" => $gid));
@@ -521,9 +501,9 @@ class css extends aw_template {
 		};
 		
 		$styles = $this->get_objects_below(array(
-				"parent" => $parent,
-				"class" => CL_CSS,
-				"active" => $active,
+			"parent" => $parent,
+			"class" => CL_CSS,
+			"active" => $active,
 		));
 
 		return $styles;
@@ -590,7 +570,6 @@ class css extends aw_template {
 			{
 				$retval .= sprintf("\t" . $mask,$val);
 			};
-
 		}
 
 		$retval .= "}\n";
@@ -621,13 +600,12 @@ class css extends aw_template {
 
 	function get_cached_style_data($id)
 	{
-		global $AW_CSS_STYLE_CACHE;
-		if (!$AW_CSS_STYLE_CACHE[$id])
+		if (!aw_cache_get("AW_CSS_STYLE_CACHE",$id))
 		{
 			$css_info = $this->get_obj_meta($id);
-			$AW_CSS_STYLE_CACHE[$id] = $css_info["meta"]["css"];
+			aw_cache_set("AW_CSS_STYLE_CACHE",$id,$css_info["meta"]["css"]);
 		}
-		return $AW_CSS_STYLE_CACHE[$id];
+		return aw_cache_get("AW_CSS_STYLE_CACHE",$id);
 	}
 
 	////
@@ -750,7 +728,6 @@ class css extends aw_template {
 		return $this->parse();
 	}
 
-
 	////
 	// !Salvestab CSS stiili
 	function css_submit($args = array())
@@ -829,5 +806,32 @@ class css extends aw_template {
 			$ret[$row["oid"]] = $row["name"];
 		}
 		return $ret;
+	}
+
+	////
+	// !this reads and outputs the user's css file 
+	function get_user_css($arr)
+	{
+		extract($arr);
+		if (strpos("/",$name) === false)
+		{
+			$path = sprintf("%s/files/css/%s.css",$this->cfg["site_basedir"],aw_global_get("uid"));
+			$arr = @file($path);
+			if (is_array($arr))
+			{
+				$css = join("",$arr);
+			}
+			print $css;
+		};
+		die();
+	}
+
+	////
+	// !I could not think of another place to stick this. oh well. whatever
+	function colorpicker($arr)
+	{
+		$this->tpl_init("automatweb");
+		$this->read_template("colorpicker.tpl");
+		die($this->parse());
 	}
 };

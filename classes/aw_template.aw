@@ -1,84 +1,55 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.22 2002/02/18 19:50:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.23 2002/06/10 15:50:52 kristo Exp $
 // aw_template.aw - Templatemootor
-class tpl
-{
-	var $name;   // siia paigutame template nime
-	var $source; // siia paigutame template source
-	var $vars;   // siia paigutame leitud variabled
-	var $subs;   // siia arraysse paigutame alamtemplated;
-	function tpl($name)
-	{
-		$this->name = $name;
-    $this->subs = array();
-		$this->source = "";
-			lc_load("definition");
-	}
-	
-	function sink($line)
-	{
-		$this->source .= $line . "\n";
-	}
 
-	function add_sub($object)
-	{
-		array_push($this->subs,$object);
-	}
-
-	function replace_sub($object)
-	{
-		array_pop($this->subs);
-		array_push($this->subs,$object);
-	}
-};
-
-include_once("$classdir/acl_base.$ext");
+classload("acl_base");
 class aw_template extends acl_base
 {
-	// compatibility muutujad
-	var $template_dir; // millisest kataloomast templatesid loetakse (string)
-	var $tplfile;      // template faili sisu (arr)
-	var $templates;    // erinevate templatede sisu salvestatakse siia (arr)
-	var $variables;    // siia paigutame imporditud muutujad
-	var $ignored;      // siia paigutame muutujad, mille sisu asendatakse tühjusega
-	var $expandsubs;   // kas <!-- SUB: blaa muutub {VAR:blaa}-ks?
-
-	// compatibility funktsioonid
-	function tpl_init($basedir = "",$expandsubs = 1)
+	function tpl_init($basedir = "")
 	{
-		# kui basedir-il on väärtus, siis read_template otsib
-		# templatet $tpldir/basedir kataloomast
-		$this->set_root($basedir);
-		$this->expandsubs = $expandsubs;
-		$this->ignored = array();
-		$this->templates = array();
-		$this->t_tree = array();
-		$this->_init_vars();
+		if (!is_array($this->cfg))
+		{
+			aw_config_init_class(&$this);
+		}
+
+
+		$this->REQUEST_URI = aw_global_get("REQUEST_URI");
+		$this->PHP_SELF = aw_global_get("PHP_SELF");
+
+		$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
+		$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+		
+		// I'm trying to fix the breakage of links class
+		// it does $this->extlinks() first, which loads the localizations
+		// and calls tpl_init as well, and then does $this->init,
+		// which in turn calls tpl_init again and makes us lose
+		// all the data that came from extlinks
+		if ($this->init_done == 1)
+		{
+			return false;
+		}
+
+		$this->vars = array();
 		$this->sub_merge = 0;
+
+		$this->_init_vars();
+
+		$this->init_done = 1;
 	}
 
 	function _init_vars()
 	{
-		global $basedir,$baseurl,$status_msg,$PHP_SELF,$ext;
-		$this->basedir = $basedir;
-		// edaspidi kui on vaja basedir-i kasutada, siis ei pea seda globaalsest skoobist importima
-		$this->vars(array(
-			"self" => $PHP_SELF,
-			"ext"  => $ext,
+		// this comes from session.
+		global $status_msg;
+
+		$this->vars = array(
+			"self" => $this->PHP_SELF,
+			"ext"  => $this->cfg["ext"],
+			// not very random really
 			"rand" => time(),
 			"status_msg" => $status_msg,
-			"baseurl" => $baseurl
-		));
-	}
-
-	////
-	// !sets the root directory to read templates from
-	function set_root($path)
-	{
-		global $tpldir;
-		$this->template_dir = $tpldir . "/$path";
-		global $basedir;
-		$this->adm_template_dir = $basedir . "/templates/$path";
+			"baseurl" => $this->cfg["baseurl"]
+		);
 	}
 
 	////
@@ -92,16 +63,11 @@ class aw_template extends acl_base
 	// !resets all templates and variables
 	function tpl_reset()
 	{
-		unset($this->tplfile);
 		unset($this->templates);
-		unset($this->vars);
-		$this->_init_vars();
-	}
-
-	function ignore($array)
-	{
-		// see funktsioon ei tee mitte midagi ja on siin ainult backwards
-		// compatiblity jaoks
+		$this->v2_templates = array();
+		$this->v2_name_map = array();
+		$this->v2_parent_map = array();
+		//$this->_init_vars();
 	}
 
 	// ma ei osanud seda mujale panna ;)
@@ -150,17 +116,27 @@ class aw_template extends acl_base
 
 	////
 	// !Loeb template failist
-	function read_template($filename,$silent = 0)
+	function read_template($name,$silent = 0)
 	{
-		// loeme faili sisse
-		$filename = $this->template_dir . "/$filename";
-		$this->template_filename = $filename;
-		$source = $this->get_file(array("file" => $filename));
-		$this->names = array();
-
-		if ($source)
+		$this->template_filename = $this->template_dir."/".$name;
+		if (file_exists($this->template_filename))
 		{
-			$retval = $this->use_template($source);
+			global $TPL;
+			if ($TPL)
+			{
+				print "using " . $this->template_filename . "<br>";
+			};
+			$retval = $this->read_tpl(file($this->template_filename));
+		}
+		// try to load a template from aw directory then
+		elseif (file_exists($this->adm_template_dir . "/" . $name))
+		{
+			global $TPL;
+			if ($TPL)
+			{
+				print "using " . $this->adm_template_dir . "/" . $name . "<br>";
+			};
+			$retval = $this->read_tpl(file($this->adm_template_dir . "/" . $name));
 		}
 		else
 		{
@@ -170,29 +146,27 @@ class aw_template extends acl_base
 			}
 			else
 			{
-				global $tpldir;
-				//$name = substr($filename,strlen($tpldir) + 1);
-				$name = $filename;
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
 			};
-		};
+		}
 		return $retval;
+	}
+
+	function use_template($source)
+	{
+		$slines = explode("\n",$source);
+		return $this->read_tpl($slines);
 	}
 	
 	////
 	// !Loeb template failist
-	function read_adm_template($filename,$silent = 0)
+	function read_adm_template($name,$silent = 0)
 	{
-		// loeme faili sisse
-		$filename = $this->adm_template_dir . "/$filename";
-		$this->template_filename = $filename;
-
-		$source = $this->get_file(array("file" => $filename));
-		
-		if ($source)
+		$this->template_filename = $this->adm_template_dir."/".$name;
+		if (file_exists($this->template_filename))
 		{
-			$retval = $this->use_template($source);
+			$retval = $this->read_tpl(file($this->template_filename));
 		}
 		else
 		{
@@ -202,207 +176,27 @@ class aw_template extends acl_base
 			}
 			else
 			{
-				global $tpldir;
-				//$name = substr($filename,strlen($tpldir) + 1);
-				$name = $filename;
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
 			};
-		};
+		}
 		return $retval;
 	}
 	
 	////
-	// !Selle abil saab sisse lugeda kusagilt mujalt (mitte failist) voetud template
-	function use_template($source)
-	{
-	/*	if (isset($awt) && is_object($awt))
-		{
-			$awt->start("read_template");
-		};*/
-
-		$this->tp = $source;
-		
-		// paigutame arraysse 
-		$this->tlist = array();
-		$tlines = explode("\n",$this->tp);
-                
-		// this is what we call a construct, we can load everything
-		// we need here - variables, arrays, objects;
-		$construct = array();
-                
-		// paigutame arraysse root elemendi, default nimega MAIN
-		$tpl = new tpl("MAIN");
-		$level = 0;
-		array_push($construct,$tpl);
-
-		// tsükkel üle faili ridade
-		while(list($linenum,$line) = each($tlines))
-		{
-			// kas see rida alustab subtemplatet?
-      if (preg_match("/<!-- SUB: (.*) -->/",$line,$m))
-			{
-				$level++;
-        // jep, loome uue objekti selle nimega
-        $tpl = new tpl($m[1]);
-
-				$this->names[$m[1]] = $m[1];
-
-        // votame constructist aktiivse template
-				$last = array_pop($construct);
-
-				$this->tlist[$level][] = $m[1];
-
-        // compatibility jauks
-        isset($this->templates[$last->name]) ? $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
-
-				$this->relations[$m[1]] = $last->name;
-
-        // ja lisame sinna sub-i asemele var-i  
-        $last->sink("{VAR:$m[1]}");
-        array_push($construct,$last);
-
-        // viga on siin, selles vahemikus
-        // vaatame, kas constructis on veel midagi,
-        $last1 = array_pop($construct);
-        // lisame selle subi kohta info master template sisse
-        $last1->add_sub($tpl);
-        //$construct[sizeof($construct)-1]->add_sub($tpl);
-        array_push($construct,$last1);
-        // ja laadime selle objekti constructi sisse
-        array_push($construct,$tpl);
-      }
-			else
-      // kas see rida lopetab subtemplate?
-			if (preg_match("/<!-- END SUB: (.*) -->/",$line,$m))
-			{
-				$level--;
-        // unloadime viimase objekti constructist
-        $last = array_pop($construct);
-        if ($last->name != $m[1])
-				{
-          printf("Broken template $this->template_filename. Tried to close '%s' while '%s' was open",$m[1],$last->name);
-          die;
-        };
-      }
-			else
-			{
-        // votame constructist aktiivse template
-        $last = array_pop($construct);
-
-        // compatibility jauks
-        isset($this->templates[$last->name]) ?  $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
-
-        // ja lisame sinna töödeldava rea       
-        $last->sink($line);
-
-        // viga on siin, selles vahemikus
-        // vaatame, kas constructis on veel midagi,
-        $last1 = array_pop($construct);
-        // kui on, siis 
-        if (is_object($last1))
-				{
-          $kala = array_pop($last1->subs);
-          // votame sealsest sub-ide arrayst viimase
-          // elemendi
-          if ($kala)
-					{
-            array_push($last1->subs,$last);
-            array_push($construct,$last1);
-          };
-        };
-        array_push($construct,$last);
-      };
-    };
-    $last = array_pop($construct);
-    $this->construct = $last;
-/*		if (isset($awt) && is_object($awt))
-		{
-			$awt->stop("read_template");
-		};*/
-    return $last;
-  }
-
-	////
 	// !Saab kysida, kas sellise nimega template on registreeritud
 	function is_template($name)
 	{
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("aw_template::is_template");
-			$awt->count("aw_template:is_template");
-		};
-		$retval = $this->names[$name];
-		// wrapper backwards compatibility jaoks
-    //$retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
-    if (is_object($awt))
-		{
-			$awt->stop("aw_template::is_template");
-		};
+		$retval = isset($this->v2_name_map[$name]);
 		return $retval;
   }
 
 	function is_parent_tpl($tpl,$parent)
 	{
-		if (isset($this->relations[$tpl]) && $this->relations[$tpl] == $parent)
-		{
-			return true;
-		} 
-		else 
-		{
-			return false;
-		};
+		$retval = $this->v2_parent_map[$tpl] == $parent;
+		return $retval;
 	}
        
-	////
-	// !Tagastab template nime jargi
-	function get_tpl_by_name($name,$c = array())
-	{
-	  $this->result = "";
-		$this->t_tree = array();
-		return $this->_get_tpl_by_name($name,$c);
-  }
-
-  function _get_tpl_by_name($name,$c = array())
-	{
-		// see on rekusiivne funktsioon
-		// esimesel labimisel oleme 0 taseme
-    $obj = array();
-    reset($c);
-		// tsykkel yle esimesel tasemel olevate templatede (0 levelil ainult MAIN)
-    while(list($k,$v) = each($c))
-		{
-			// kui leiti alamtemplate, siis...
-      if (is_object($v))
-			{
-				array_push($this->t_tree,$v->name);
-				// loikame $fqtn lopust valja name pikkuse tyki
-				// ja vaatame, kas need on vordsed
-        if ((".".$name) == substr(".".join(".",$this->t_tree),-(strlen($name)+1)))
-				{
-          $this->result = $v;
-          return $v;
-        }
-				// vastasel korral, kui sellel templatel ka sub-e ja vastust ei ole veel kaes,
-				// siis lahme selle template alamtemplatesid otsima
-				elseif ((sizeof($v->subs) > 0) && (!$this->result))
-				{
-		      $this->_get_tpl_by_name($name,$v->subs);
-        };
-				array_pop($this->t_tree);
-      };
-    };
-    if ($this->result)
-		{
-			return $this->result;
-    }
-		else
-		{
-			return false;
-    };
-   }
-
 	////
   // !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
 	// muutujad yle
@@ -411,29 +205,13 @@ class aw_template extends acl_base
 		$this->vars = array_merge($this->vars,$params);
 	}
 
-	////
-  // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse
-	// väärtus
-  function vars_merge($params)
+	function vars_merge($params)
 	{
 		while(list($k,$v) = each($params))
 		{
 			$this->vars[$k] .= $v;
-    };
-  }
-
-  // impordime andmestruktuuri mingi template juurde
-  function define_data($tpl,$branches)
-	{
-    if (!is_array($branches))
-		{
-      return false;
-    }
-		else
-		{
-      $this->branches[$tpl] = $branches;
-    };
-  }
+		}
+	}
 
 	////
 	// !see on nüüd pisike häkk. Nimelt saab selle funktsiooni abil parsida kusagilt mujalt sissetoodud
@@ -448,28 +226,12 @@ class aw_template extends acl_base
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("aw_template::parse");
-			$awt->count("aw_template::parse");
-		}
-		// siia voib anda ette nii objekti nime, kui ka
-		// viite objektile. Esimesel juhul leiab ta ise
-		// objekti viite ja töötab selle kalllal edasi
-
-		// defineerime yhe lokaalse funktsiooni, mis on vajalik uue parseri jaoks
-		if (!is_object($object))
-		{
-			$name = $object;
-			$new_object = $this->get_tpl_by_name($object,array("0" => $this->construct));
-			$object = $new_object;
-		};
+		$src = $this->v2_templates[$this->v2_name_map[$object]];
 
 		// kogu asendus tehakse ühe reaga
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
-		$src = preg_replace("/{VAR:(.+?)}/e","isset(\$this->vars[\"\\1\"]) ? \$this->vars[\"\\1\"] : \"\"",$object->source);
+		$src = preg_replace("/{VAR:(.+?)}/e","\$this->vars[\"\\1\"]",$src);
 
 		// võtame selle maha ka
 		global $status_msg;
@@ -480,56 +242,61 @@ class aw_template extends acl_base
 
 		if ($this->sub_merge == 1)
 		{
-	   	isset($this->vars[$object->name]) ? $this->vars[$object->name] .= $src : $this->vars[$object->name] = $src;
-		}
-		else
-		{
-			#$this->vars[$object->name] = $src;
-		};
-		if (is_object($awt))
-		{
-			$awt->stop("aw_template::parse");
+	   		$this->vars[$object] .= $src;
 		}
 		return $src;
   }
 
-  // joonistab sektsiooni
-  function draw_section($params)
+	////
+	// !$arr - template content, array of lines of text
+	function read_tpl($arr)
 	{
-		$section_id = $params["section_id"];  // millist sektsiooni joonistame
-		$parent     = $params["parent"];      // millisest sektsioonist joonistamist alustame
-		$use_tpl    = $params["use_tpl"];     // millist templatet selleks kasutame (obj)
-		$main_tpl   = $params["main_tpl"];    // millisest templatest joonistamist alustame (obj)
+		$this->tpl_reset();
+		if (is_array($arr))
+		{
+			reset($arr);
+			$this->v2_arr = $arr;
+			$this->req_read_tpl("MAIN","MAIN","");
+		}
+	}
 
-		if ((!is_object($use_tpl)) || (!is_object($main_tpl)))
+	function req_read_tpl($fq_name,$cur_name,$parent_name)
+	{
+		$cur_src = "";
+		$this->v2_parent_map[$cur_name] = $parent_name;
+		while (list(,$line) = each($this->v2_arr))
 		{
-			print "unknown template";
-			die;
-		};
-
-		$current = $this->branches[$main_tpl->name][$section_id];
-		if (!(is_array($current) && sizeof($current) > 0) )
-		{
-			return;
-		};
-		reset($current);
-		while(list($k,$v) = each($current))
-		{
-      $this->vars($v);
-      $this->vars_merge(array($main_tpl->name => $this->parse($use_tpl)));
-      if (sizeof($use_tpl->subs) > 0)
+			if (preg_match("/<!-- SUB: (.*) -->/",$line, $mt))
 			{
-        $new = $use_tpl->subs[0]->name;
-        $newtpl = $this->get_tpl_by_name($new,array("0" => $this->construct));
-        $this->draw_section(array(
-					"section_id" => $v[oid],
-          "parent"     => $parent,
-          "use_tpl"    => $newtpl,
-          "main_tpl"   => $main_tpl
-				));
-      };
-    };
-  }
+				// start new subtemplate
+				$this->req_read_tpl($fq_name.".".$mt[1],$mt[1],$cur_name);
+				// add the var def for this sub to this template
+				$cur_src.="{VAR:".$mt[1]."}";
+			}
+			else
+			if (preg_match("/<!-- END SUB: (.*) -->/",$line, $mt))
+			{
+				// found an end of this subtemplate, 
+				// finish and exit
+				$this->v2_templates[$fq_name] = $cur_src;
+				$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
+				$this->v2_name_map[$cur_name] = $fq_name;
+				$this->v2_name_map[$parent_name.".".$cur_name] = $fq_name;
+				$this->v2_name_map[$fq_name] = $fq_name;
+				return;
+			}
+			else
+			{
+				// just add this line
+				$cur_src.=$line;
+			}
+		}
+		$this->v2_templates[$fq_name] = $cur_src;
+		$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
+		$this->v2_name_map[$cur_name] = $fq_name;
+		$this->v2_name_map[$fq_name] = $fq_name;
+		return;
+	}
 };
 
 ?>

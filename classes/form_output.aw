@@ -1,22 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.19 2001/12/18 00:09:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.20 2002/06/10 15:50:53 kristo Exp $
 
-global $orb_defs;
-$orb_defs["form_output"] = "xml";
-lc_load("form");
 class form_output extends form_base 
 {
 	function form_output()
 	{
-		$this->tpl_init("forms");
-		$this->db_init();
+		$this->form_base();
 		$this->sub_merge = 1;
 		$this->is_form_output = true;	// so that when something needs to tell the deifference it can
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form","lc_form");
 	}
 
 	////
@@ -61,10 +54,10 @@ class form_output extends form_base
 		{
 			$odata = $this->get_object($id);
 			$xdata = $this->get_object_metadata(array(
-						"metadata" => $odata["metadata"],
+				"metadata" => $odata["metadata"],
 			));
 			$this->vars(array(
-					"adminurl" => $this->mk_my_orb("xml_op",array("id" => $id)),
+				"adminurl" => $this->mk_my_orb("xml_op",array("id" => $id)),
 			));
 		}
 		$sel = ($xdata["forms"]) ? array_flip($xdata["forms"]) : array();
@@ -87,24 +80,25 @@ class form_output extends form_base
 		if ($id)
 		{
 			$this->upd_object(array(
-					"oid" => $id,
-					"name" => $name,
-					"comment" => $comment,
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
 			));
 		}
 		else
 		{
 			$id = $this->new_object(array(
-					"parent" => $parent,
-					"name" => $name,
-					"comment" => $comment,
-					"class_id" => CL_FORM_XML_OUTPUT));
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"class_id" => CL_FORM_XML_OUTPUT
+			));
 		};
 		
 		$xmlblock = $this->set_object_metadata(array(
-						"oid" => $id,
-						"key" => "forms",
-						"value" => $forms,
+			"oid" => $id,
+			"key" => "forms",
+			"value" => $forms,
 		));
 	
 		$url = $this->mk_my_orb("edit_xml",array("id" => $id));
@@ -120,7 +114,7 @@ class form_output extends form_base
 		extract($args);
 		$odata = $this->get_object($id);
 		$xdata = $this->get_object_metadata(array(
-					"metadata" => $odata["metadata"],
+			"metadata" => $odata["metadata"],
 		));
 
 		if (is_array($xdata["forms"]))
@@ -216,9 +210,9 @@ class form_output extends form_base
 			"active" => $real_act,
 		);
 		$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "data",
-					"value" => $data,
+			"oid" => $id,
+			"key" => "data",
+			"value" => $data,
 		));
 		return $this->mk_my_orb("xml_op",array("id" => $id));
 	}
@@ -259,6 +253,11 @@ class form_output extends form_base
 		$els = array();
 
 		$bof = array();
+
+		// avoid the error message if a baseform was not chosen.
+		// this is better than putting the whole cycle into one if block
+		$baseform = (is_array($baseform)) ? $baseform : array();
+
 		foreach($baseform as $bf)
 		{
 			// don't ask me why but for some weirdass reason the forms get duplicated in the array twice. so we avoid that
@@ -316,6 +315,7 @@ class form_output extends form_base
 			if (is_array($baseform))
 			{
 				// if the user selected a form to base this op on, make it look like the form.
+				$ord = (is_array($ord)) ? $ord : array();
 				asort($ord);
 				classload("form");
 				$f = new form;
@@ -366,9 +366,15 @@ class form_output extends form_base
 				$this->db_query("INSERT INTO output2form (op_id, form_id) VALUES($id,'$fid')");
 			}
 		}
-		
+	
+		// FIXME: we load and save the output twice if that's a new form
 		$this->load_output($id);
 		$this->output["table_style"] = $table_style;
+		$this->output["has_aliasmgr"] = $has_aliasmgr;
+		$this->output["has_controllers"] = $has_controllers;
+		$this->output["session_value"] = $session_value;
+		$this->output["session_form"] = $session_form;
+
 		$this->save_output($id);
 		return $this->mk_orb("change", array("id" => $id));
 	}
@@ -393,6 +399,10 @@ class form_output extends form_base
 			"name" => $this->name,
 			"comment" => $this->comment,
 			"admin" => $this->mk_orb("admin_op", array("id" => $id)),
+			"has_aliasmgr" => checked($this->output["has_aliasmgr"]),
+			"has_controllers" => checked($this->output["has_controllers"]),
+			"session_value" => checked($this->output["session_value"]),
+			"session_form" => $this->picker($this->output["session_form"],$this->get_flist(array("addempty" => true))),
 			"forms" => $this->multiple_option_list($this->get_op_forms($id), $this->get_list(FTYPE_ENTRY,false,true)),
 			"styles" => $this->picker($this->output["table_style"],$st->get_select(0,ST_TABLE)),
 			"meth" => "POST"
@@ -559,14 +569,35 @@ class form_output extends form_base
 
 		classload("objects");
 		$ob = new db_objects;
+
+		$this->vars(array(
+			"aliasmgr" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
+		));
+
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
 			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
 			"folders" => $this->picker(0,$ob->get_list(false,true)),
+			"ALIASMGR" => ($this->output["has_aliasmgr"]) ? $this->parse("ALIASMGR") : "",
+			"change" => $this->mk_my_orb("change",array("id" => $id)),
 			"translate" => $this->mk_my_orb("translate", array("id" => $id))
 		));
 		return $this->parse();
+	}
+
+	////
+	// !Wrapper for including alias manager in form output editing
+	function aliasmgr($args = array())
+	{
+		extract($args);
+		$this->read_template("output_aliasmgr.tpl");
+		$this->vars(array(
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+			"change" => $this->mk_my_orb("change",array("id" => $id)),
+		));
+		return $this->parse();
+
 	}
 
 	function add_n_rows($arr)
@@ -688,22 +719,11 @@ class form_output extends form_base
 	// !saves the current state of the loaded form output
 	function save_output($id)
 	{
-		global $awt;
-		$awt->start("form_output::save_output");
-		$awt->count("form_output::save_output");
-
-/*		// saveme xml
-		classload("xml");
-		$x = new xml;
-		$tp = $x->xml_serialize($this->output);*/
-		classload("php");
-		$p = new php_serializer;
-		$tp = $p->php_serialize($this->output);
+		$tp = aw_serialize($this->output,SERIALIZE_PHP);
 		$this->quote(&$tp);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->upd_object(array("oid" => $id));
 		$this->_log("form",sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name));
-		$awt->stop("form_output::save_output");
 	}
 
 	////
@@ -963,6 +983,19 @@ class form_output extends form_base
 	{
 		return $this->get_op_forms($this->output_id);
 	}
+	function get_relation_targets()
+	{
+		$ret = array();
+		if (is_array($this->arr["relation_forms"]))
+		{
+			foreach ($this->arr["relation_forms"] as $fid => $fid)
+			{
+				$o = $this->get_object($fid);
+				$ret[$fid] = $o["name"];
+			}
+		}
+		return $ret;
+	}
 
 	function mk_elarr($id)
 	{
@@ -1070,9 +1103,7 @@ class form_output extends form_base
 				// add the element into the form.
 				// but! use the props saved in the form_elements table to create them with the right config right away!
 				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
-				classload("xml");
-				$xml = new xml;
-				$arr = $xml->xml_unserialize(array("source" => $props));
+				$arr = aw_unserialize($props);
 				$arr["id"] = $el;
 				$arr["name"] = $name;
 				$arr["ord"] = $ord;
@@ -1426,6 +1457,19 @@ class form_output extends form_base
 	function get_element_by_type($type,$subtype = "",$all_els = false)
 	{
 		return array();
+	}
+
+	function parse_alias($args = array())
+	{
+		extract($args);
+
+		classload("form");
+		$fo = new form;
+		$replacement = $fo->show(array(
+			"op_id" => $alias["target"],
+		));
+
+		return $replacement;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.6 2002/03/27 02:21:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.7 2002/06/10 15:50:54 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -16,7 +16,7 @@ class db_stat extends aw_template
 		$this->dm = date("t",$this->start);
 		$this->end = mktime(23,59,59,$this->month+1,0,2000);
 		$this->filter_uid = $GLOBALS["filter_uid"];
-		$this->syslog_site_id = (aw_global_get("syslog_site_id")) ? aw_global_get("syslog_site_id") : aw_ini_get("site_id");
+		$this->syslog_site_id = (aw_global_get("syslog_site_id")) ? aw_global_get("syslog_site_id") : $this->cfg["site_id"];
 		lc_load("definition");
 	}
 
@@ -49,7 +49,8 @@ class db_stat extends aw_template
 		};
 		$this->vars(array(
 			"line" => $c,
-			"graph" => $g
+			"graph" => $g,
+			"reforb" => $this->mk_reforb("compare", array("no_reforb" => 1, "showgraph" => 1))
 		));
 		return $this->parse();
 	}
@@ -76,7 +77,8 @@ class db_stat extends aw_template
 			"from" => $this->start,
 			"parts" => $this->parts,
 			"right" => $right,
-			"to"   => $this->end
+			"to"   => $this->end,
+			"reforb" => $this->mk_reforb("show", array("no_reforb" => 1))
 		));
 		return $this->parse();
 	}
@@ -187,7 +189,7 @@ class db_stat extends aw_template
 			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
 		}
 		
-		if (aw_ini_get("syslog.has_site_id") == 1)
+		if (aw_ini_get("syslog.has_site_id") == 1 && $this->syslog_site_id != -1)
 		{
 			$ss = " AND syslog.site_id = " . $this->syslog_site_id;
 		};
@@ -274,10 +276,10 @@ class db_stat extends aw_template
 			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
 		}
 
-		if (aw_ini_get("syslog.has_site_id") == 1)
-                {
-                        $ss = " AND syslog.site_id = " . $this->syslog_site_id;
-                };
+		if (aw_ini_get("syslog.has_site_id") == 1 && $this->syslog_site_id != -1)
+    {
+	    $ss = " AND syslog.site_id = " . $this->syslog_site_id;
+    };
 
 		$q = "SELECT COUNT(*) AS hits,ip
 			FROM syslog
@@ -364,7 +366,7 @@ class db_stat extends aw_template
 			$fu = " AND uid = '".$GLOBALS["filter_uid"]."' ";
 		}
 
-		if (aw_ini_get("syslog.has_site_id") == 1)
+		if (aw_ini_get("syslog.has_site_id") == 1 && $this->syslog_site_id != -1)
 		{
 			$ss = " AND syslog.site_id = " . $this->syslog_site_id;
 		};
@@ -498,6 +500,96 @@ class stat extends db_stat
 	function stat($params = array())
 	{
 		$this->db_stat($params);
+	}
+
+	function show($arr)
+	{
+		extract($arr);
+
+		global $types, $syslog_types,$gdata;
+		session_register("syslog_types");
+		session_register("syslog_params");
+		if (is_array($types))
+		{
+			$syslog_types = $types;
+		};
+
+		$this->db_stat(array(
+			"month" => $month,
+			"day"   => $day,
+			"uniqid"=> gen_uniq_id()
+		));
+		$this->set_timeframe($from,$to);
+		$this->prep_query($syslog_types);
+		$c = $this->display_stat();
+		$gdata = array();
+		while(list($k,$v) = each($this->saved[$this->uniqid]["hits"]))
+		{
+			$gdata[$this->uniqid][] = $v["hits"];
+		};
+		session_register("gdata");
+		return $c;
+	}
+
+	function graph($arr)
+	{
+		extract($arr);
+		global $gdata;
+		classload("aw_graph");
+		$awg = new aw_graph();
+		$awg->parse_xml_def("graph.xml");
+		$awg->import_data($gdata[$id]);
+		$awg->draw_graph();
+		die();
+	}
+
+	function compare($arr)
+	{
+		extract($arr);
+		global $day, $color, $showgraph,$gdata,$gd;
+		$this->db_stat(array("uniqid" => gen_uniq_id()));
+		$c = $this->display_compare(array(
+			"cnt" => 5,
+			"day" => $day,
+			"color" => $color,
+			"showgraph" => $showgraph
+		));
+		$gdata = array();
+		$gd = array();
+		$i = 0;
+		if (is_array($day))
+		{
+			while(list($k,$v) = each($day))
+			{
+				if (is_date($v))
+				{
+					$this->set_timeframe($v,$v);
+					$this->_stat_by_hits(69);
+					$gdata = $this->saved[$this->uniqid]["hits"];
+					$i++;
+					while(list(,$v) = each($gdata))
+					{
+						$gd[$i][] = $v["hits"];
+					};
+				};
+			};
+		};
+		session_register("gd");
+		session_register("color");
+		return $c;
+	}
+
+	function cgraph($arr)
+	{
+		extract($arr);
+		global $gd,$color;
+		classload("aw_graph");
+		$awg = new aw_graph();
+		$awg->parse_xml_def("cgraph.xml");
+		$awg->import_multi($gd);
+		$awg->import_color($color);
+		$awg->draw_graph();
+		die();
 	}
 }
 ?>

@@ -32,6 +32,11 @@
 					<optional name="section"/>
 					<optional name="form_id"/>
 					<optional name="entry_id"/>
+					<optional name="form_entry_id"/>
+					<optional name="start_el"/>
+					<optional name="end_el"/>
+					<optional name="start"/>
+					<optional name="end"/>
 				</arguments>
 			</function>
 		</action>

@@ -78,6 +78,17 @@
 <!-- END SUB: LCOL6 -->
 </tr>
 <!-- END SUB: LROW6 -->
+
+<tr>
+<td colspan=10 class="fform">Elementide metadata:</td>
+</tr>
+<!-- SUB: LROW7 -->
+<tr>
+<!-- SUB: LCOL7 -->
+<td class="fform"><input type='text' name='w[{VAR:row}][{VAR:col}][{VAR:elid}][{VAR:lang_id}][{VAR:mtk}]' value='{VAR:text}' class='small_button'></td>
+<!-- END SUB: LCOL7 -->
+</tr>
+<!-- END SUB: LROW7 -->
 <tr>
 <td class="fform" colspan=10><input type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>

@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' method=post>
+<form action='reforb.{VAR:ext}' method=post>
 {VAR:error}
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
@@ -11,6 +11,5 @@
 <td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Save'></td>
 </tr>
 </table>
-<input type='hidden' NAME='action' VALUE='submit_file_icon'>
-<input type='hidden' NAME='change' VALUE='{VAR:change}'>
+{VAR:reforb}
 </form>

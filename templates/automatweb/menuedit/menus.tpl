@@ -36,10 +36,33 @@ function cut()
 	foo.submit();
 }
 
-function del()
+function ddelete()
 {
-	foo.action.value="mdelete";
-	foo.submit();
+	// first, if nothing is selected, say so. or maybe we shouldn't? naah. better tell the user about his/her errors
+	chk = false;
+	for(i = 0; i < document.foo.elements.length; i++)
+	{
+		if (document.foo.elements[i].type == "checkbox")
+		{
+			if (document.foo.elements[i].name.substr(0,3) == "sel" && document.foo.elements[i].checked)
+			{
+				chk = true;
+			}
+		}
+	}
+	if (!chk)
+	{
+		alert("Vali menyy(d), mida soovid kustutada!");
+		return false;
+	}
+
+	if (confirm("Oled kindel et soovid valitud menyy(d) kustutada?"))
+	{
+		document.foo.action.value="mdelete";
+		document.foo.submit();
+		return true;
+	}
+	return false;
 }
 
 function paste()
@@ -148,7 +171,7 @@ href="javascript:paste()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapI
 
 <td><IMG
 SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:del()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a></td>
+href="javascript:document.foo.submit()" onclick="return ddelete()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a></td>
 
 
 <td><IMG
@@ -170,7 +193,7 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 
 </tr></table>
 </td>
-<td align="right" class="celltext">&nbsp;&nbsp;[ <a target="list" href='languages.{VAR:ext}'><b>{VAR:lang_name}</b></a> ]&nbsp;&nbsp;</td>
+<td align="right" class="celltext">&nbsp;&nbsp;[ <a target="list" href='{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=languages&action=admin_list'><b>{VAR:lang_name}</b></a> ]&nbsp;&nbsp;</td>
 </tr>
 </table>
 
@@ -213,12 +236,12 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr class="aste05">
 <td width="1%" height="15" class="celltext">&nbsp;</td>
-<td width="40%" height="15" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
-<td width="4%" align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
-<td width="6%" align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=status&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg5}&nbsp;</td>
-<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
-<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
-<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
+<td width="40%" height="15" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
+<td width="4%" align="center" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
+<td width="6%" align="center" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=status&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg5}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='orb.{VAR:ext}?class=menuedit&action=menu_list&parent={VAR:parent}&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
 <td align="center" colspan="4" class="celltext">&nbsp;{VAR:LC_MENUEDIT_ACTION}&nbsp;</td>
 <td align="center" class="celltext"><b>&nbsp;<a href='#' onClick="selall()">{VAR:LC_MENUEDIT_CHOOSE}</a>&nbsp;</b></td>
 </tr>
@@ -231,8 +254,8 @@ aste07
 
 <!-- SUB: LINE -->
 <tr class="{VAR:is_cut}">
-<td height="15" class="celltext" align=center><a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='{VAR:imgref}'></a></td>
-<td height="15" onMouseOver="this.style.backgroundColor='#A2BCCC';" onMouseOut="this.style.backgroundColor='#DBE8EE';" class="celltext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
+<td height="15" class="celltext" align=center><a href='{VAR:clicker}' target='list'><img border=0 src='{VAR:imgref}'></a></td>
+<td height="15" onMouseOver="this.style.backgroundColor='#A2BCCC';" onMouseOut="this.style.backgroundColor='#DBE8EE';" class="celltext">&nbsp;<a href='{VAR:clicker_r}' target='list'>{VAR:name}</a>&nbsp;</td>
 <td class="celltext" align=center>
 <!-- SUB: NFIRST -->
 <input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=3 MAXLENGTH=4><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>

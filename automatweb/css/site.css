@@ -7,6 +7,10 @@ BODY
 	 scrollbar-arrow-color : #FFFFFF;
 	}
 
+
+
+
+
 .yah {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
 	font-size: 10px;
@@ -123,7 +127,7 @@ background: #DBE8EE;
 	text-decoration: none;
 	color: #000000;
 	background: #DBE8EE;
-	background-image: URL('{VAR:baseurl}/automatweb/images/blue/tab_taust.gif');
+	background-image: URL('/automatweb/images/blue/tab_taust.gif');
 }
 
 .tab a {color: #000000; text-decoration: none;}
@@ -135,7 +139,7 @@ background: #DBE8EE;
 	text-decoration: none;
 	color: #000000;
 	background: #8AABBE;
-	background-image: URL('{VAR:baseurl}/automatweb/images/blue/tabsel_taust.gif');
+	background-image: URL('/automatweb/images/blue/tabsel_taust.gif');
 }
 
 .tabsel a {color: #000000; text-decoration: none;}
@@ -147,11 +151,24 @@ background: #DBE8EE;
 	text-decoration: none;
 	color: #000000;
 	background: #8AABBE;
-	background-image: URL('{VAR:baseurl}/automatweb/images/blue/tabsel_taust.gif');
+	background-image: URL('/automatweb/images/blue/tabsel_taust.gif');
 }
 
+.tab2 {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	text-decoration: none;
+	color: #000000;
+	background: #DBE8EE;
+	background-image: URL('/automatweb/images/blue/tab2_taust.gif');
+}
 
+.tab2 a {color: #000000; text-decoration: none;}
+.tab2 a:hover {color: #0000FF; text-decoration: none;}
+.tab2 a:visited {color: #0000FF; text-decoration: none;}
+.tab2 a:active {color: #0000FF; text-decoration: none;}
 
+.aste00 {background: #FFFFFF;}
 .aste01 {background: #DBE8EE;}
 .aste02 {background: #95B4C5;}
 .aste03 {

@@ -3,13 +3,26 @@
 	<class name="dns">
 		<action name="query_form" nologin="1">
 			<function name="query_form">
-				<arguments>
-				</arguments>
+				<arguments/>
 			</function>
 		</action>
 
 		<action name="query" nologin="1">
 			<function name="query">
+				<arguments>
+					<required name="domain"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="dns_form" nologin="1">
+			<function name="dns_form">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="dns_query" nologin="1">
+			<function name="dns_query">
 				<arguments>
 					<required name="domain"/>
 				</arguments>

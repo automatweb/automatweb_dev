@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.6 2002/02/13 01:01:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -10,15 +10,12 @@
 // stiil, aeg, nimi, place, city, organizer, 
 // ülejäänud data voiks ju vabalt kokku pakkida ühte välja, 
 // xml serializeri abil
-global $orb_defs;
-$orb_defs["events"] = "xml";
 
-class events extends aw_template {
-
+class events extends aw_template 
+{
 	function events($args = array())
 	{
-		$this->tpl_init("events");
-		$this->db_init("events");
+		$this->init("events");
 		$this->styles = array(
 			"1" => "House",
 			"2" => "Hip-Hop",
@@ -63,7 +60,7 @@ class events extends aw_template {
 	function event_list($args = array())
 	{
 		extract($args);
-		global $rootmenu,$year,$mon,$day,$op;
+		global $year,$mon,$day,$op;
 			
 		classload("calendar");
 		$cal = new calendar();
@@ -124,7 +121,7 @@ class events extends aw_template {
 
 		$q = "SELECT objects.*,events.* FROM objects
 			LEFT JOIN events ON (objects.oid = events.id)
-			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+			WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status = 2
 			$limits	
 			ORDER BY events.start";
 
@@ -350,15 +347,15 @@ class events extends aw_template {
 		load_vcl("date_edit");
 		if ($page == 1)
 		{
-                	$start = new date_edit("start");
-                	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
+     	$start = new date_edit("start");
+     	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
 			$old_st = ($old["start"]) ? $old["start"] : time();
 			$start_ed = $start->gen_edit_form("start",$old_st);
                 
 			$time_start = new date_edit("end");
-	       	        $time_start->configure(array("hour" => 4,"minute" => 5));
+	    $time_start->configure(array("hour" => 4,"minute" => 5));
 			$time_end = new date_edit("time_start");
-	       	        $time_end->configure(array("hour" => 4,"minute" => 5));
+	    $time_end->configure(array("hour" => 4,"minute" => 5));
 	
 			if ($old["end"])	
 			{
@@ -453,22 +450,19 @@ class events extends aw_template {
 
 		if (not($id))
 		{
-			global $rootmenu;
-			$parent = $rootmenu;
+			$parent = $this->cfg["rootmenu"];
 			$id = $this->new_object(array(
-						"parent" => $parent,
-						"class_id" => CL_EVENT,
-						"name" => $name,
-						"status" => 1,
+				"parent" => $parent,
+				"class_id" => CL_EVENT,
+				"name" => $name,
+				"status" => 1,
 			));
 				
-			$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
-							$start["day"],$start["year"]);
+			$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],$start["day"],$start["year"]);
 
 			$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
 				
-			$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
-							$_day,$start["year"]);
+			$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],$_day,$start["year"]);
 
 			$q = "INSERT INTO events (id,city,start,end,place,artist1,artist2,artist3,organizer,style)
 				VALUES($id,'$city',$st,$et,'$place','$artist1','$artist2','$artist3','$organizer','$styl')";
@@ -479,9 +473,9 @@ class events extends aw_template {
 			$meta["brief"] = $brief;
 
 			$this->set_object_metadata(array(
-						"oid" => $id,
-						"key" => "meta",
-						"value" => $meta,
+				"oid" => $id,
+				"key" => "meta",
+				"value" => $meta,
 			));
 					
 		}
@@ -489,29 +483,26 @@ class events extends aw_template {
 		{
 
 			$meta = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "meta",
+				"oid" => $id,
+				"key" => "meta",
 			));
 
 
 			if ($page == 1)
 			{
-			
 				$this->upd_object(array(
-						"oid" => $id,
-						"name" => $name,
+					"oid" => $id,
+					"name" => $name,
 				));
 
 				$meta["address"] = $address;
 				$meta["brief"] = $brief;
 			
-				$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
-								$start["day"],$start["year"]);
+				$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],$start["day"],$start["year"]);
 
 				$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
 					
-				$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
-								$_day,$start["year"]);
+				$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],$_day,$start["year"]);
 
 				$stl = 0;
 				if (is_array($style))
@@ -526,9 +517,6 @@ class events extends aw_template {
 				$q = "UPDATE events SET city = '$city',place = '$place',
 						start = '$st',end = '$et',style = '$stl'
 					WHERE id = '$id'";
-
-				
-
 			}
 			elseif ($page == 2)
 			{
@@ -553,7 +541,6 @@ class events extends aw_template {
 			}
 			elseif ($page == 4)
 			{
-
 				$st = mktime(0,0,0,$t_start["month"],$t_start["day"],$t_start["year"]);
 				
 				$meta["price_flyer"] = $price_flyer;
@@ -591,15 +578,15 @@ class events extends aw_template {
 	function event_search($args = array())
 	{
 		load_vcl("date_edit");
-               	$start = new date_edit("start");
-               	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
+    $start = new date_edit("start");
+    $start->configure(array("day" => 1,"month" => 2,"year" => 3));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$sx = mktime(0,0,0,$m,$d,$y);
 		$start_ed = $start->gen_edit_form("start",$sx);
-               	$end = new date_edit("end");
+    $end = new date_edit("end");
 		list($d,$m,$y) = explode("-",date("d-m-Y",strtotime("+1 week")));
 		$ex = mktime(23,59,59,$m,$d,$y);
-               	$end->configure(array("day" => 1,"month" => 2,"year" => 3));
+    $end->configure(array("day" => 1,"month" => 2,"year" => 3));
 		$end_ed = $start->gen_edit_form("end",$ex);
 		$this->read_template("search.tpl");
 		foreach($this->styles as $key => $val)
@@ -675,7 +662,6 @@ class events extends aw_template {
 		//print_r($args);
 		//print "</pre>";
 		extract($args);
-		global $ext,$baseurl;
 		switch($matches[2])
 		{
 			case "calendar":
@@ -704,9 +690,9 @@ class events extends aw_template {
 		$cal = new calendar();
 
 		$range = $cal->get_date_range(array(
-					"date" => "$day-$mon-$year",
-					"type" => "day",
-				));
+			"date" => "$day-$mon-$year",
+			"type" => "day",
+		));
 
 		$_timestamp = time();	
 		$ts1 = "$year-$mon";
@@ -723,11 +709,10 @@ class events extends aw_template {
 			$start = mktime(0,0,0,$mon,0,$year);
 			$end = mktime(0,0,0,$mon+1,0,$year);
 			$limits = " AND events.start >= $start AND events.start <= $end";
-			global $rootmenu;
 			$cl = CL_EVENT;
 			$q = "SELECT objects.*,events.* FROM objects
 				LEFT JOIN events ON (objects.oid = events.id)
-				WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+				WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status = 2
 				$limits	
 				ORDER BY events.start";
 
@@ -747,14 +732,13 @@ class events extends aw_template {
 		};*/
 					
 		$calendar = $cal->draw_month(array(
-					"year" => $year,
-					"mon" => $mon,
-					"day" => $day,
-					"marked" => $marked,
-					"misc" => array("section" => "events"),
+			"year" => $year,
+			"mon" => $mon,
+			"day" => $day,
+			"marked" => $marked,
+			"misc" => array("section" => "events"),
 		));
 	
-
 		$start = $range["start"];
 		$end = $range["end"];
 		return array($start,$end,$calendar);
@@ -762,7 +746,7 @@ class events extends aw_template {
 
 	function my_events($args = array())
 	{
-		if (not(defined("UID")))
+		if (aw_global_get("uid") == "")
 		{
 			// return, if not logged in. actually, ORB should take care of this check
 			return false;
@@ -774,12 +758,11 @@ class events extends aw_template {
 			$xml = new xml(array("ctag" => "metadata"));
 
 			$cl = CL_EVENT;
-			$uid = UID;
-			global $rootmenu;
+			$uid = aw_global_get("uid");
 
 			$q = "SELECT objects.*,events.* FROM objects
 				LEFT JOIN events ON (objects.oid = events.id)
-				WHERE objects.parent = $rootmenu AND class_id=$cl AND status > 0
+				WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status > 0
 				AND objects.createdby = '$uid'
 				ORDER BY events.start";
 
@@ -810,7 +793,7 @@ class events extends aw_template {
 	{
 		extract($args);
 		$cl = CL_EVENT;
-		$uid = UID;
+		$uid = aw_global_get("uid");
 		// määrame hetkeks koik kasutaja eventid deaktiivseks
 		if ($save)
 		{
@@ -838,11 +821,9 @@ class events extends aw_template {
 	function invite($args = array())
 	{
 		$this->read_template("invite.tpl");
-		if (defined("UID"))
+		if (aw_global_get("uid") != "")
 		{
-			classload("users");
-			$u = new users();
-			$udata = $u->get_user_info(UID);
+			$udata = $this->get_user();
 		};
 		$this->vars(array(
 			"yname" => $udata["First Name: element"] . " " . $udata["Last Name: element"],
@@ -886,8 +867,7 @@ class events extends aw_template {
 			WHERE oid = '$id' AND class_id=$cl AND status = 2";
 		$this->db_query($q);
 		$event = $this->db_next();
-		global $no_menus;
-		if ($no_menus)
+		if (aw_global_get("no_menus"))
 		{	
 			$tpl = "popup.tpl";
 		}

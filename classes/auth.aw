@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.1 2002/02/19 00:39:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.2 2002/06/10 15:50:52 kristo Exp $
 // auth.aw - authentication functions
-class auth extends aw_template {
+class auth extends aw_template 
+{
 	function auth($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/auth");
+		$this->init("automatweb/auth");
 	}
 
 	////
@@ -27,6 +27,8 @@ class auth extends aw_template {
 
 	////
 	// !Performs the actual login
+	// uhuh. yeah. ok, and why texactly is this duplicated here? 
+	// the users_user::login version seems to be much more secured to me - terryf
 	function login($args = array())
 	{
 		global $uid;
@@ -43,7 +45,7 @@ class auth extends aw_template {
 
 		if ($success)
 		{
-			$success = (defined("MD5_PASSWORDS")) ? 
+			$success = ($this->cfg["md5_passwords"]) ? 
 				md5($password) == $udata["password"] : 
 				$password == $udata["password"];
 		}
@@ -57,9 +59,7 @@ class auth extends aw_template {
 		{
 			$this->_log("auth","Tundmatu kasutaja või vale parool - $uid");
 		};
-		// I could really use that aw_ini_get function here
-		global $baseurl;
-		return $baseurl . aw_global_get("request_uri_before_auth");
+		return $this->cfg["baseurl"] . aw_global_get("request_uri_before_auth");
 	}
 }
 ?>

@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.25 2002/01/31 00:15:03 kristo Exp $
-lc_load("shop");
-global $orb_defs;
-$orb_defs["shop_item"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.26 2002/06/10 15:50:54 kristo Exp $
 
 define("PRICE_PER_WEEK",1);
 define("PRICE_PER_2WEEK",2);
@@ -15,13 +12,6 @@ class shop_item extends shop_base
 	function shop_item()
 	{
 		$this->shop_base();
-		lc_load("shop");
-		global $lc_shop;
-		if (is_array($lc_shop))
-		{
-			$this->vars($lc_shop);
-			lc_load("definition");
-		}
 	}
 
 	////
@@ -37,7 +27,7 @@ class shop_item extends shop_base
 			$this->vars(array(
 				"reforb" => $this->mk_reforb("new", array("parent" => $parent,"reforb" => 0,"step" => 2)),
 				"types" => $this->picker(0,$this->listall_item_types(FOR_SELECT)),
-				"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
+				"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$parent
 			));
 			return $this->parse();
 		}
@@ -56,7 +46,7 @@ class shop_item extends shop_base
 				"item" => $f->gen_preview(array(
 					"id" => $itt["form_id"],
 					"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type)),
-					"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
+					"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$parent
 				)),
 				"menus" => $this->multiple_option_list(array(),$o->get_list())
 			));
@@ -107,7 +97,7 @@ class shop_item extends shop_base
 			$eid = $f->entry_id;
 			// kui itemi nimi muutub, siis muutub vendadel ka
 			$name = $f->get_element_value_by_name("nimi");
-			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."' WHERE brother_of = $id ");
+			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".aw_global_get("uid")."' WHERE brother_of = $id ");
 			$price = $f->get_element_value_by_type("price");
 
 			$this->db_query("UPDATE shop_items SET price='$price',entry_id = '$eid' WHERE id = $id");
@@ -190,7 +180,7 @@ class shop_item extends shop_base
 			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"cal_event"),
 			"per_cnt" => $o["per_cnt"],
 			"per_prices" => $this->mk_my_orb("set_per_prices", array("id" => $id)),
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"],
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$o["parent"],
 			"show_free" => $this->mk_my_orb("show_free", array("id" => $id)),
 			"cnt_form" => $this->picker($o["cnt_form"], $fl),
 			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
@@ -254,8 +244,8 @@ class shop_item extends shop_base
 		$planner = new planner();
 
 		$new_entry_id = $f_entry->cp(array(
-					"eid" => $old_item["entry_id"],
-					"parent" => $new_id,
+			"eid" => $old_item["entry_id"],
+			"parent" => $new_id,
 		));
 
 
@@ -278,8 +268,8 @@ class shop_item extends shop_base
 			{
 				$planner_id = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = '$args[id]' AND class_id = " . CL_CALENDAR,"oid");
 				$new_cal_id = $planner->cp(array(
-						"id" => $planner_id,
-						"parent" => $n_id,
+					"id" => $planner_id,
+					"parent" => $n_id,
 				));
 
 			}

@@ -1,20 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.8 2002/02/18 13:44:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
 session_register("group_folders");
 
-global $orb_defs;
-$orb_defs["groups"] = "xml";
 class groups extends users_user
 {
 	var $typearr = array(0 => LC_GROUPS_GROUP , 1 => LC_GROUPS_USER, 2 => LC_GROUPS_DYNGROUP);
 
 	function groups() 
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/groups");
+		$this->init("automatweb/groups");
 		lc_load("definition");
 	}
 
@@ -43,21 +40,23 @@ class groups extends users_user
 			$this->grpcache[$row[parent]][] = $row;
 		};
 
-		$this->vars(	array("space_images" => "",
-												"image"=>"<img src='/images/puu_site.gif'>",
-												"gid"=>0,
-												"op"=>"&op=open",
-												"name"=>"K&otilde;ik kasutajad",
-												"type"=>"",
-												"members" => "",
-												"modified" => "", 
-												"modifiedby"=>"",
-												"parent"=>0,
-												"CAN_CHANGE"=>"",
-												"CAN_DELETE" =>"",
-												"CHECK" => "",
-												"CAN_ACL" => "",
-												"CAN_PRIORITY" => ""));
+		$this->vars(array(
+			"space_images" => "",
+			"image"=>"<img src='".$this->cfg["baseurl"]."/images/puu_site.gif'>",
+			"gid"=>0,
+			"op"=>"&op=open",
+			"name"=>"K&otilde;ik kasutajad",
+			"type"=>"",
+			"members" => "",
+			"modified" => "", 
+			"modifiedby"=>"",
+			"parent"=>0,
+			"CAN_CHANGE"=>"",
+			"CAN_DELETE" =>"",
+			"CHECK" => "",
+			"CAN_ACL" => "",
+			"CAN_PRIORITY" => ""
+		));
 		$ret = $this->parse("LINE");
 		// now recursively show the menu
 		$this->selected = $parent;
@@ -65,25 +64,27 @@ class groups extends users_user
 		$this->level = -1;
 		$ret.=$this->rec_menu(0,"",$parent_name);
 
-		$this->vars(	array("space_images" => "",
-												"image"=>"<img src='/images/puu_site.gif'>",
-												"gid"=>0,
-												"op"=>"&op=open",
-												"name"=>$GLOBALS["uid"],
-												"type"=>"",
-												"members" => "",
-												"modified" => "",
-												"modifiedby"=>"",
-												"parent"=>0,
-												"CAN_CHANGE"=>"",
-												"CAN_DELETE" =>"",
-												"CHECK" => "",
-												"CAN_ACL" => "",
-												"CAN_PRIORITY" => ""));
+		$this->vars(array(
+			"space_images" => "",
+			"image"=>"<img src='".$this->cfg["baseurl"]."/images/puu_site.gif'>",
+			"gid"=>0,
+			"op"=>"&op=open",
+			"name"=>aw_global_get("uid"),
+			"type"=>"",
+			"members" => "",
+			"modified" => "",
+			"modifiedby"=>"",
+			"parent"=>0,
+			"CAN_CHANGE"=>"",
+			"CAN_DELETE" =>"",
+			"CHECK" => "",
+			"CAN_ACL" => "",
+			"CAN_PRIORITY" => ""
+		));
 		$ret.= $this->parse("LINE");
 
 		$this->grpcache = array();
-		$ugid = $this->get_gid_by_uid($GLOBALS["uid"]);
+		$ugid = $this->get_gid_by_uid(aw_global_get("uid"));
 		$this->listgroups("parent","asc",GRP_USERGRP,$ugid);
 		while ($row = $this->db_next())
 		{
@@ -95,27 +96,29 @@ class groups extends users_user
 		$ret.=$this->rec_menu($ugid,"",$parent_name);
 
 		// kasutajad
-		$this->vars(	array("space_images" => "",
-												"image"=>"<img src='/images/puu_site.gif'>",
-												"gid"=>0,
-												"op"=>"&op=open",
-												"name"=>"Kasutajad",
-												"type"=>"",
-												"members" => "",
-												"modified" => "",
-												"modifiedby"=>"",
-												"parent"=>0,
-												"CAN_CHANGE"=>"",
-												"CAN_DELETE" =>"",
-												"CHECK" => "",
-												"CAN_ACL" => "",
-												"CAN_PRIORITY" => ""));
+		$this->vars(array(
+			"space_images" => "",
+			"image"=>"<img src='".$this->cfg["baseurl"]."/images/puu_site.gif'>",
+			"gid"=>0,
+			"op"=>"&op=open",
+			"name"=>"Kasutajad",
+			"type"=>"",
+			"members" => "",
+			"modified" => "",
+			"modifiedby"=>"",
+			"parent"=>0,
+			"CAN_CHANGE"=>"",
+			"CAN_DELETE" =>"",
+			"CHECK" => "",
+			"CAN_ACL" => "",
+			"CAN_PRIORITY" => ""
+		));
 		$ret.= $this->parse("LINE");
 
 		$this->grpcache = array();
 
 		// make list of users who you can vju
-		$users = array("'".$GLOBALS["uid"]."'");
+		$users = array("'".aw_global_get("uid")."'");
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
@@ -138,13 +141,13 @@ class groups extends users_user
 		$this->listgroups("parent","asc",GRP_DEFAULT);
 		while ($row = $this->db_next())
 		{
-			if (!$row[parent])
+			if (!$row["parent"])
 			{
-				$row[parent] = 0;
+				$row["parent"] = 0;
 			};
-			if ($users[$row[name]] != "")
+			if ($users[$row["name"]] != "")
 			{
-				$this->grpcache[$row[parent]][] = $row;
+				$this->grpcache[$row["parent"]][] = $row;
 			}
 		}
 		$this->selected = $ugid;
@@ -156,10 +159,13 @@ class groups extends users_user
 
 	function rec_menu($parent,$space_images,$parent_name)
 	{
-		global $ext,$group_folders,$orb;
+		global $group_folders,$orb;
+		$ext = $this->cfg["ext"];
 
 		if (!is_array($this->grpcache[$parent]))	// if no items on this level return immediately
+		{
 			return;
+		}
 
 		$this->level++;
 		$ret = "";
@@ -171,11 +177,15 @@ class groups extends users_user
 			$spim = $space_images;
 
 			if ($group_folders[$v[gid]] == 1)	// if it's closed
+			{
 				$op = "open";
+			}
 			else
+			{
 				$op = "close";
+			}
 
-			if (is_array($this->grpcache[$v[gid]]))	// has subitems
+			if (is_array($this->grpcache[$v["gid"]]))	// has subitems
 			{
 				if ($orb)
 				{
@@ -183,43 +193,28 @@ class groups extends users_user
 				}
 				else
 				{
-					$image = "<a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'><img src='";
+					$image = "<a href='".$this->make_url(array($parent_name => $v["gid"], "op" => $op))."'><img src='";
 				}
 
-/*				if ($group_folders[$v[gid]] == 1)	// if closed
-					$image.="/images/puu_plus";
-				else
-					$image.="/images/puu_miinus";
-
-				if ($cnt == $num_els)
-					$image.="l.gif";
-				else
-					$image.=".gif";*/
-
-				
 				$image.="/images/puu_tyhi.gif' border=0>";
 			}
 			else	// does not have subitems
 			{
-				$image = "<img src='/images/puu_tyhi.gif";
-/*				if ($cnt == $num_els)
-					$image.="/images/puu_lopp.gif";
-				else
-					$image.="/images/puu_rist.gif";*/
+				$image = "<img src='".$this->cfg["baseurl"]."/images/puu_tyhi.gif";
 				if ($orb)
 				{
 					$image.="' border=0>";
 				}
 				else
 				{
-					$image.="' border=0><a href='".$this->make_url(array($parent_name => $v[gid], "op" => $op))."'>";
+					$image.="' border=0><a href='".$this->make_url(array($parent_name => $v["gid"], "op" => $op))."'>";
 				}
 			}
 
 			$b = "";
-			if ($this->selected == $v[gid])
+			if ($this->selected == $v["gid"])
 			{
-				$this->seltype = $v[type];
+				$this->seltype = $v["type"];
 				$this->sel_level = $this->level;
 				$b = "l";
 			}
@@ -230,7 +225,7 @@ class groups extends users_user
 				$image.="</a>";
 			}
 
-			switch ($v[type])
+			switch ($v["type"])
 			{
 				case "0":
 					$type = LC_GROUPS_GROUP;
@@ -246,47 +241,54 @@ class groups extends users_user
 			$name = $v["name"];
 			if (!$orb)
 			{
-				$name="<a href='".$this->make_url(array($parent_name => $v[gid],"op" => "open"))."'>".$v["name"]."</a>";
+				$name="<a href='".$this->make_url(array($parent_name => $v["gid"],"op" => "open"))."'>".$v["name"]."</a>";
 			}
-			$this->vars(array("space_images"	=> $spim, 
-												"image"					=> $image,
-												"gid"						=> $v[gid],
-												"name"					=> $name,
-												"type"					=> $type,
-												"members"				=> $v[gcount],
-												"modifiedby"		=> $v[modifiedby],
-												"modified"			=> $this->time2date($v[modified],2),
-												"op"						=> "&op=open",
-												"parent"				=> $this->selected,
-												"priority"			=> $v[priority],
-												"level"					=> $this->level,
-												"goid"					=> $v[oid]));
+			$this->vars(array(
+				"space_images"	=> $spim, 
+				"image"					=> $image,
+				"gid"						=> $v["gid"],
+				"name"					=> $name,
+				"type"					=> $type,
+				"members"				=> $v["gcount"],
+				"modifiedby"		=> $v["modifiedby"],
+				"modified"			=> $this->time2date($v["modified"],2),
+				"op"						=> "&op=open",
+				"parent"				=> $this->selected,
+				"priority"			=> $v["priority"],
+				"level"					=> $this->level,
+				"goid"					=> $v["oid"]
+			));
 
 			if ($this->pick_list)
 			{
-				$this->vars(array("grp_check" => (is_array($this->pick_arr[$v[gid]]) ? "CHECKED" : ""),
-													"member"		=> (is_array($this->pick_arr[$v[gid]]) ? "1" : "0")));
+				$this->vars(array(
+					"grp_check" => checked(is_array($this->pick_arr[$v["gid"]])),
+					"member"		=> (is_array($this->pick_arr[$v["gid"]]) ? "1" : "0")
+				));
 				$che = $this->parse("CHECK");
 			}
 
-			$rt = $v[type] == GRP_REGULAR || $v[type] == GRP_DYNAMIC || $v[type] == GRP_USERGRP;
+			$rt = $v["type"] == GRP_REGULAR || $v["type"] == GRP_DYNAMIC || $v["type"] == GRP_USERGRP;
 
-			$this->vars(array("CAN_CHANGE" => $rt && $this->can("edit",$v[oid]) ? $this->parse("CAN_CHANGE") : "",
-												"CAN_DELETE" => $rt && $this->can("delete",$v[oid]) ? $this->parse("CAN_DELETE") : "",
-												"CAN_ACL" => $rt && $this->can("admin",$v[oid]) ? $this->parse("CAN_ACL") : "",
-												"CHECK"			 => $che,
-												"CAN_PRIORITY" => $rt && $this->can("order",$v[oid]) ? $this->parse("CAN_PRIORITY") : ""));
+			$this->vars(array(
+				"CAN_CHANGE" => $rt && $this->can("edit",$v["oid"]) ? $this->parse("CAN_CHANGE") : "",
+				"CAN_DELETE" => $rt && $this->can("delete",$v["oid"]) ? $this->parse("CAN_DELETE") : "",
+				"CAN_ACL" => $rt && $this->can("admin",$v["oid"]) ? $this->parse("CAN_ACL") : "",
+				"CHECK"			 => $che,
+				"CAN_PRIORITY" => $rt && $this->can("order",$v["oid"]) ? $this->parse("CAN_PRIORITY") : ""
+			));
 
-			if ($this->can("view", $v[oid]))
+			if ($this->can("view", $v["oid"]))
+			{
 				$ret.=$this->parse("LINE");
+			}
 
-//			if ($cnt == $num_els)			// if we are not at the end of this level we need to show a line, otherwise empty space.
-				$spim.="<img src='/images/puu_tyhi.gif' border=0>";
-	/*		else
-				$spim.="<img src='/images/puu_joon.gif' border=0>";*/
+			$spim.="<img src='".$this->cfg["baseurl"]."/images/puu_tyhi.gif' border=0>";
 
-			if ($group_folders[$v[gid]] == 0 && $this->can("view", $v[oid]))	// if the folder is open and we can see it
-				$ret.=$this->rec_menu($v[gid],$spim,$parent_name);
+			if ($group_folders[$v["gid"]] == 0 && $this->can("view", $v["oid"]))	// if the folder is open and we can see it
+			{
+				$ret.=$this->rec_menu($v["gid"],$spim,$parent_name);
+			}
 
 			$cnt++;
 		}
@@ -306,9 +308,11 @@ class groups extends users_user
 
 		$ng = new groups;
 
-		$this->vars(array("CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg[oid]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
-											"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
-											"from"			=> $GLOBALS["REQUEST_URI"]));
+		$this->vars(array(
+			"CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg["oid"]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
+			"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
+			"from"			=> aw_global_get("REQUEST_URI")
+		));
 		return $this->parse();
 	}
 
@@ -328,11 +332,14 @@ class groups extends users_user
 		$pg = $this->fetchgroup($parent);
 
 		$ng = new groups;
-		$this->vars(array("CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg[oid]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
-											"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
-											"from"			=> $GLOBALS["REQUEST_URI"],
-											"reforb"  => $this->mk_reforb("submit_acl_groups", array("oid" => $oid,"user" => $user)),
-											"oid"				=> $oid));
+		$this->vars(array(
+			"CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg["oid"]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
+			"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
+			"from"			=> aw_global_get("REQUEST_URI"),
+			"reforb"  => $this->mk_reforb("submit_acl_groups", array("oid" => $oid,"user" => $user)),
+			"oid"				=> $oid,
+			"file" => $GLOBALS["file"]
+		));
 		return $this->parse();
 	}
 
@@ -344,7 +351,6 @@ class groups extends users_user
 		return "/?orb=1&class=acl&action=edit&oid=" . $arr["oid"];
 	}
 	
-
 	function gen_grpgrp_list()
 	{
 		global $parent,$all,$oid,$groups,$sparent;
@@ -360,47 +366,17 @@ class groups extends users_user
 		$t = new users;
 		$pg = $this->fetchgroup($parent);
 
-		$this->vars(array("userlist"	=> ($sparent ? $t->gen_select_list($sparent,$all,false) : ""),
-											"from"			=> $GLOBALS["REQUEST_URI"],
-											"parent"		=> $parent,
-											"urlgrp"		=> $this->make_url(array("parent" => $parent,"all" => 0,"groups" => 0)),
-											"urlall"		=> $this->make_url(array("parent"	=> $parent,"all" => 1,"groups" => 0)),
-											"urlgrps"		=> $this->make_url(array("parent"	=> $parent,"all" => 0,"groups" => 1)),
-											"from"			=> $GLOBALS["REQUEST_URI"]));
-		$this->vars(array("CAN_EDIT"=> ($this->can("edit",$pg[oid]) ? $this->parse("CAN_EDIT") : "")));
+		$this->vars(array(
+			"userlist"	=> ($sparent ? $t->gen_select_list($sparent,$all,false) : ""),
+			"from"			=> aw_global_get("REQUEST_URI"),
+			"parent"		=> $parent,
+			"urlgrp"		=> $this->make_url(array("parent" => $parent,"all" => 0,"groups" => 0)),
+			"urlall"		=> $this->make_url(array("parent"	=> $parent,"all" => 1,"groups" => 0)),
+			"urlgrps"		=> $this->make_url(array("parent"	=> $parent,"all" => 0,"groups" => 1)),
+			"from"			=> aw_global_get("REQUEST_URI")
+		));
+		$this->vars(array("CAN_EDIT"=> ($this->can("edit",$pg["oid"]) ? $this->parse("CAN_EDIT") : "")));
 		return $this->parse();
-	}
-
-	// vana menüüeditor kasutab seda. seega on see justkui deprecated. Samas, moned kohad kasutavad endiselt 
-	// seda vana menüüeditori. Sitt niff.
-	function gen_add($parent,$level,$grp_level)
-	{
-		if ($parent > 0)
-		{
-			$pg = $this->fetchgroup($parent);
-			if (!$this->can("add",$pg[oid]))
-				$this->acl_error("add",$pg[oid]);
-		}
-
-		if (!$level)
-		{
-			$this->read_template("add.tpl");
-			$this->vars(array(
-				"parent" => $parent,
-				"grp_level" => $grp_level
-			));
-			return $this->parse();
-		}
-		else
-		{
-			$c = new db_config;
-			$fid = $c->get_simple_config("user_search_form");
-
-			$f = new form($fid);
-
-			global $name;
-			return $f->gen_user_html(0,"submit_group","/automatweb/refcheck.".$GLOBALS["ext"],array("parent" => $parent,"name" => $name,"type" => 2,"level" => 1,"grp_level" => $grp_level));
-		}
 	}
 
 	function submit_group($arr)
@@ -409,13 +385,17 @@ class groups extends users_user
 		extract($arr);
 
 		if (!$parent)
+		{
 			$parent = 0;
+		}
 
 		if ($gid)	// change
 		{
 			$pg = $this->fetchgroup($gid);
-			if (!$this->can("edit",$pg[oid]))
-				$this->acl_error("edit",$pg[oid]);
+			if (!$this->can("edit",$pg["oid"]))
+			{
+				$this->acl_error("edit",$pg["oid"]);
+			}
 
 			if ($type == 0)
 			{
@@ -440,7 +420,9 @@ class groups extends users_user
 					return true;
 				}
 				else
+				{
 					return false;
+				}
 			}
 		}
 		else
@@ -448,8 +430,10 @@ class groups extends users_user
 			if ($parent > 0)
 			{
 				$pg = $this->fetchgroup($parent);
-				if (!$this->can("add",$pg[oid]))
-					$this->acl_error("add",$pg[oid]);
+				if (!$this->can("add",$pg["oid"]))
+				{
+					$this->acl_error("add",$pg["oid"]);
+				}
 			}
 
 			if ($type == 0)
@@ -483,45 +467,9 @@ class groups extends users_user
 		}
 	}
 
-	function gen_change($gid,$level)
-	{
-		$pg = $this->fetchgroup($gid);
-		if (!$this->can("edit",$pg[oid]))
-			$this->acl_error("edit",$pg[oid]);
-
-		if (!$level)
-		{
-			$this->read_template("change.tpl");
-			if (!($grp = $this->fetchgroup($gid)))
-				$this->raise_error(ERR_GRP_NOGRP,"groups->gen_change($gid,$level): no such group!",true);
-
-			$this->vars(array("name"				=> $grp[name],
-												"type"				=> $grp[type],
-												"modifiedby"	=> $grp[modifiedby],
-												"modified"		=> $this->time2date($grp[modified],2),
-												"members"			=> $grp[gcount],
-												"gid"					=> $gid));
-			return $this->parse();
-		}
-		else
-		{
-			// since we are on level 2, it is a dyn group.
-			$c = new db_config;
-			$fid = $c->get_simple_config("user_search_form");
-
-			$f = new form($fid);
-
-			if (!($grp = $this->fetchgroup($gid)))
-				$this->raise_error(ERR_GRP_NOGRP,"groups->gen_change($gid,$level): no such group!",true);
-
-			global $name;
-			return $f->gen_user_html($grp[data],"submit_group_change","/automatweb/refcheck.".$GLOBALS["ext"],array("gid" => $gid,"name" => $name,"type" => 2,"level" => 1));
-		}
-	}
-
 	function update_grp_members($arr)
 	{
-		$members = $this->getgroupmembers2($arr[gid]);
+		$members = $this->getgroupmembers2($arr["gid"]);
 
 		$toadd = array();
 		$toremove = array();
@@ -552,12 +500,12 @@ class groups extends users_user
 		}
 
 		// here we must add the user to this group and all the groups above it
-		$this->add_users_to_group_rec($arr[gid],$toadd,true,true);
+		$this->add_users_to_group_rec($arr["gid"],$toadd,true,true);
 
 		// we must find all groups below this one and remove the user from all those groups and this one 
 		// and we must check that if the group we are removing the user from is a dynamic group, then we
 		// must also update the users' record, that he must not be reinserted into that group
-		$this->remove_users_from_group_rec($arr[gid],$toremove,true);
+		$this->remove_users_from_group_rec($arr["gid"],$toremove,true);
 	}
 
 	function update_priorities($arr)
@@ -581,7 +529,7 @@ class groups extends users_user
 			{
 				// check if membership has changed
 				$gid = substr($k,3);
-				if ($gid != $arr[parent])	// don't let the user add a group into itself
+				if ($gid != $arr["parent"])	// don't let the user add a group into itself
 				{
 					$var = "gs_".$gid;
 					$nv = $arr[$var];
@@ -594,13 +542,13 @@ class groups extends users_user
 						{
 							// group was added
 							// add relation and make all users of the added group members of the parent group
-							$this->add_grpgrp_relation($arr[parent],$gid);
+							$this->add_grpgrp_relation($arr["parent"],$gid);
 						}
 						else
 						{
 							// group was removed
 							// delete relation and remove all members of the removed group from the members of the parent group
-							$this->remove_grpgrp_relation($arr[parent],$gid);
+							$this->remove_grpgrp_relation($arr["parent"],$gid);
 						}
 					}
 				}
@@ -614,7 +562,7 @@ class groups extends users_user
 		$this->dmsg("entered list_grps_user");
 		if (!$parent)
 		{
-			$parent = $this->db_fetch_field("SELECT gid FROM groups WHERE type = ".GRP_DEFAULT." AND name = '".$GLOBALS["uid"]."'","gid");
+			$parent = $this->db_fetch_field("SELECT gid FROM groups WHERE type = ".GRP_DEFAULT." AND name = '".aw_global_get("uid")."'","gid");
 		}
 
 		$this->read_template("list_grps_user.tpl");
@@ -624,16 +572,28 @@ class groups extends users_user
 		$this->listgroups(-1,-1,-1,-1,$parent);
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("name" => $row[name],"gid" => $row[gid],"priority" => $row[priority],"level" => $level+1,"type" => "Grupp","members" => $row[gcount], "modifiedby" => $row[modifiedby], "modified" => $this->time2date($row[modified],2), "goid" => $row[oid],
-												"change"	=> $this->mk_my_orb("change_user_grp", array("id" => $row[gid], "parent" => $parent)),
-												"delete"	=> $this->mk_my_orb("delete_user_grp", array("id" => $row[gid], "parent" => $parent)),
-												"grpmembers"	=> $this->mk_my_orb("user_grp_members", array("id" => $row[gid])),
-												"acl" => $this->mk_my_orb("edit", array("oid" => $row["oid"]), "acl")));
+			$this->vars(array(
+				"name" => $row["name"],
+				"gid" => $row["gid"],
+				"priority" => $row["priority"],
+				"level" => $level+1,
+				"type" => "Grupp",
+				"members" => $row["gcount"], 
+				"modifiedby" => $row["modifiedby"], 
+				"modified" => $this->time2date($row["modified"],2), 
+				"goid" => $row["oid"],
+				"change"	=> $this->mk_my_orb("change_user_grp", array("id" => $row["gid"], "parent" => $parent)),
+				"delete"	=> $this->mk_my_orb("delete_user_grp", array("id" => $row["gid"], "parent" => $parent)),
+				"grpmembers"	=> $this->mk_my_orb("user_grp_members", array("id" => $row["gid"])),
+				"acl" => $this->mk_my_orb("edit", array("oid" => $row["oid"]), "acl")
+			));
 			$l.=$this->parse("LINE");
 		}
 
-		$this->vars(array("addgrp" => $this->mk_my_orb("add_user_grp",array("parent" => $parent)),"LINE" => $l,
-											"reforb"	=> $this->mk_reforb("submit_user_grp_priorities", array("parent" => $parent))));
+		$this->vars(array(
+			"addgrp" => $this->mk_my_orb("add_user_grp",array("parent" => $parent)),"LINE" => $l,
+			"reforb"	=> $this->mk_reforb("submit_user_grp_priorities", array("parent" => $parent))
+		));
 
 		return $this->parse();
 	}
@@ -643,7 +603,9 @@ class groups extends users_user
 		extract($arr);
 		$this->mk_path(0,sprintf(LC_GROUPS_GROUP_ADD,$this->mk_orb("list_grps_user",array("parent" => $parent))));
 		$this->read_template("add_user_grp.tpl");
-		$this->vars(array("reforb" => $this->mk_reforb("submit_user_grp",array("parent" => $parent,"level" => $this->get_grp_level($parent)))));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_user_grp",array("parent" => $parent,"level" => $this->get_grp_level($parent)))
+		));
 		return $this->parse();
 	}
 
@@ -655,7 +617,11 @@ class groups extends users_user
 
 		$gp = $this->fetchgroup($id);
 
-		$this->vars(array("reforb" => $this->mk_reforb("submit_user_grp",array("parent" => $parent,"level" => $this->get_grp_level($parent),"id" => $id)),"name" => $gp[name], "priority" => $gp[priority]));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_user_grp",array("parent" => $parent,"level" => $this->get_grp_level($parent),"id" => $id)),
+			"name" => $gp["name"], 
+			"priority" => $gp["priority"]
+		));
 		return $this->parse();
 	}
 
@@ -682,7 +648,7 @@ class groups extends users_user
 		$gp = $this->fetchgroup($id);
 
 		// we must only show users who are in groups to which the suer has can_copy access
-		$users = array($GLOBALS["uid"] => "\"".$GLOBALS["uid"]."\"");
+		$users = array(aw_global_get("uid") => "\"".aw_global_get("uid")."\"");
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
@@ -691,7 +657,7 @@ class groups extends users_user
 			{
 				// add all users of this group to list of users
 				$this->save_handle();
-				$ul = $this->getgroupmembers2($row[gid]);
+				$ul = $this->getgroupmembers2($row["gid"]);
 				reset($ul);
 				while (list(,$u_uid) = each($ul))
 				{
@@ -705,25 +671,27 @@ class groups extends users_user
 		$this->listall($id);
 		while ($row = $this->db_next())
 		{
-			if ($users[$row[uid]])
+			if ($users[$row["uid"]])
 			{
-				$members[$row[uid]] = "\"".$row[uid]."\"";
+				$members[$row["uid"]] = "\"".$row["uid"]."\"";
 			}
 		}
 
-		$this->vars(array("members" => join(",",$members),
-											"users"		=> join(",",$users)));
+		$this->vars(array(
+			"members" => join(",",$members),
+			"users"		=> join(",",$users)
+		));
 	}
 
 	function grp_members($arr)
 	{
 		extract($arr);
 		$gp = $this->fetchgroup($gid);
-		if (!$this->can("copy",$gp[oid]))
+		if (!$this->can("copy",$gp["oid"]))
 		{
 			return "";
 		}
-		$this->mk_path(0,"Muuda grupi ".$gp[name]." liikmeid");
+		$this->mk_path(0,"Muuda grupi ".$gp["name"]." liikmeid");
 		$this->read_template("user_grp_members.tpl");
 		$this->do_grp_members($gid);
 		$this->vars(array("reforb"	=> $this->mk_reforb("submit_grp_members", array("gid" => $gid))));
@@ -734,11 +702,11 @@ class groups extends users_user
 	{
 		extract($arr);
 		$gp = $this->fetchgroup($id);
-		if (!$this->can("copy",$gp[oid]))
+		if (!$this->can("copy",$gp["oid"]))
 		{
 			return "";
 		}
-		$this->mk_path(0,"<a href='".$this->mk_orb("list_grps_user",array("parent" => $gp[parent]))."'>Grupid</a> / Muuda liikmeid");
+		$this->mk_path(0,"<a href='".$this->mk_orb("list_grps_user",array("parent" => $gp["parent"]))."'>Grupid</a> / Muuda liikmeid");
 		$this->read_template("user_grp_members.tpl");
 		$this->do_grp_members($id);
 		$this->vars(array("reforb"	=> $this->mk_reforb("submit_user_grp_members", array("id" => $id))));
@@ -756,16 +724,16 @@ class groups extends users_user
 
 		$pmembers = $this->getgroupmembers2($id);
 
-		$users = array($GLOBALS["uid"] => $GLOBALS["uid"]);
+		$users = array(aw_global_get("uid") => aw_global_get("uid"));
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			if ($this->can("copy", $row[oid]))
+			if ($this->can("copy", $row["oid"]))
 			{
 				// add all users of this group to list of users
 				$this->save_handle();
-				$ul = $this->getgroupmembers2($row[gid]);
+				$ul = $this->getgroupmembers2($row["gid"]);
 				reset($ul);
 				while (list(,$u_uid) = each($ul))
 				{
@@ -774,7 +742,6 @@ class groups extends users_user
 				$this->restore_handle();
 			}
 		}
-
 
 		$toadd = array();
 		$toremove = array();
@@ -819,10 +786,10 @@ class groups extends users_user
 		$this->remove_users_from_group_rec($id,$toremove,true);
 
 		// check if the logged in user is still a member of his own group.
-		if (!$this->is_member($GLOBALS["uid"],$this->get_gid_by_uid($GLOBALS["uid"])))
+		if (!$this->is_member(aw_global_get("uid"),$this->get_gid_by_uid(aw_global_get("uid"))))
 		{
 			// if not, add him to the group
-			$this->add_users_to_group($id,array($GLOBALS["uid"]));
+			$this->add_users_to_group($id,array(aw_global_get("uid")));
 		}
 	}
 
@@ -831,15 +798,15 @@ class groups extends users_user
 		extract($arr);
 		$this->do_submit_gp_members($arr);
 		$gp = $this->fetchgroup($id);
-		return $this->mk_my_orb("list_grps_user", array("parent" => $gp[parent]));
+		return $this->mk_my_orb("list_grps_user", array("parent" => $gp["parent"]));
 	}
 
 	function submit_grp_members($arr)
 	{
 		extract($arr);
-		$arr[id] = $arr[gid];
+		$arr["id"] = $arr["gid"];
 		$this->do_submit_gp_members($arr);
-		return $this->mk_orb("grp_members", array("gid" => $arr[gid]));
+		return $this->mk_orb("grp_members", array("gid" => $arr["gid"]));
 	}
 
 	function delete_user_grp($arr)
@@ -877,47 +844,52 @@ class groups extends users_user
 		$this->listgroups(-1,-1,-1,-1,$parent);
 		while ($row = $this->db_next())
 		{
-			if ($row[parent] != $parent)
+			if ($row["parent"] != $parent)
 			{
 				continue;
 			}
 
-			$this->vars(array("name"				=> $row[name], 
-												"gid"					=> $row[gid], 
-												"type"				=> $this->typearr[$row[type]], 
-												"members"			=> $row[gcount], 
-												"modifiedby"	=> $row[modifiedby], 
-												"modified"		=> $this->time2date($row[modified], 2), 
-												"priority"		=> $row[priority],
-												"oid"					=> $row[oid],
-												"change"			=> $this->mk_orb("change", array("gid" => $row[gid],"parent" => $row[parent])),
-												"delete"			=> $this->mk_orb("delete", array("gid" => $row[gid], "parent" => $parent)),
-												"chmembers"		=> $this->mk_orb("grp_members", array("gid" => $row[gid]))));
+			$this->vars(array(
+				"name"				=> $row["name"], 
+				"gid"					=> $row["gid"], 
+				"type"				=> $this->typearr[$row["type"]], 
+				"members"			=> $row["gcount"], 
+				"modifiedby"	=> $row["modifiedby"], 
+				"modified"		=> $this->time2date($row["modified"], 2), 
+				"priority"		=> $row["priority"],
+				"oid"					=> $row["oid"],
+				"change"			=> $this->mk_orb("change", array("gid" => $row["gid"],"parent" => $row["parent"])),
+				"delete"			=> $this->mk_orb("delete", array("gid" => $row["gid"], "parent" => $parent)),
+				"chmembers"		=> $this->mk_orb("grp_members", array("gid" => $row["gid"]))
+			));
 			$cc = "";
 			$cd = "";
 			$ca = "";
 			$nf = "";
-			if ($this->can("edit", $row[oid]))
+			if ($this->can("edit", $row["oid"]))
 			{
 				$cc = $this->parse("CAN_CHANGE");
 			}
-			if ($this->can("delete", $row[oid]))
+			if ($this->can("delete", $row["oid"]))
 			{
 				$cd = $this->parse("CAN_DELETE");
 			}
-			if ($this->can("admin", $row[oid]))
+			if ($this->can("admin", $row["oid"]))
 			{
 				$ca = $this->parse("CAN_ACL");
 			}
-			if ($this->can("order", $row[oid]))
+			if ($this->can("order", $row["oid"]))
 			{
 				$nf = $this->parse("NFIRST");
 			}
 			$this->vars(array("CAN_CHANGE" => $cc, "CAN_DELETE" => $cd, "CAN_ACL" => $ca, "NFIRST" => $nf));
 			$l.=$this->parse("LINE");
 		}
-		$this->vars(array("LINE" => $l, "addgrp" => $this->mk_orb("add", array("parent" => $parent)),
-											"reforb" => $this->mk_reforb("submit_priorities", array("parent" => $parent))));
+		$this->vars(array(
+			"LINE" => $l, 
+			"addgrp" => $this->mk_orb("add", array("parent" => $parent)),
+			"reforb" => $this->mk_reforb("submit_priorities", array("parent" => $parent))
+		));
 		
 		$gp = $this->fetchgroup($parent);
 		$add = true;
@@ -927,7 +899,7 @@ class groups extends users_user
 		}
 		else
 		{
-			$add = $this->can("add", $gp[oid]);
+			$add = $this->can("add", $gp["oid"]);
 		}
 		if ($add)
 		{
@@ -940,7 +912,7 @@ class groups extends users_user
 		reset($yaha);
 		while (list(,$gid) = each($yaha))
 		{
-			$yah="<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => $gid))."'>".$this->grpcache2[$gid][name]."</a> / ".$yah;
+			$yah="<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => $gid))."'>".$this->grpcache2[$gid]["name"]."</a> / ".$yah;
 		}
 		$yah = "<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => 0))."'>Grupid</a> / ".$yah;
 		$this->vars(array("yah" => $yah));
@@ -971,33 +943,35 @@ class groups extends users_user
 		global $level;
 
 		$pg = $this->fetchgroup($gid);
-		if (!$this->can("edit",$pg[oid]))
+		if (!$this->can("edit",$pg["oid"]))
 		{
-			$this->acl_error("edit",$pg[oid]);
+			$this->acl_error("edit",$pg["oid"]);
 		}
 
 		if (!$level)
 		{
 			$this->read_template("change_grp.tpl");
 
-			$this->vars(array("name"				=> $pg[name],
-												"type"				=> $pg[type],
-												"modifiedby"	=> $pg[modifiedby],
-												"modified"		=> $this->time2date($pg[modified],2),
-												"gcount"			=> $pg[gcount],
-												"gid"					=> $gid,
-												"reforb"			=> $this->mk_reforb("submit_grp", array("gid" => $gid))));
+			$this->vars(array(
+				"name"				=> $pg["name"],
+				"type"				=> $pg["type"],
+				"modifiedby"	=> $pg["modifiedby"],
+				"modified"		=> $this->time2date($pg["modified"],2),
+				"gcount"			=> $pg["gcount"],
+				"gid"					=> $gid,
+				"reforb"			=> $this->mk_reforb("submit_grp", array("gid" => $gid))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			// since we are on level 2, it is a dyn group.
-			$fid = $pg[search_form];
+			$fid = $pg["search_form"];
 
 			$f = new form();
 
 			global $name;
-			return $f->gen_preview(array("id" => $fid,"entry_id" => $pg[data], "reforb" => $this->mk_reforb("submit_grp", array("parent" => $parent, "level" => 1, "search_form" => $fid, "name" => $name,"type" => 2, "gid" => $gid))));
+			return $f->gen_preview(array("id" => $fid,"entry_id" => $pg["data"], "reforb" => $this->mk_reforb("submit_grp", array("parent" => $parent, "level" => 1, "search_form" => $fid, "name" => $name,"type" => 2, "gid" => $gid))));
 		}
 	}
 
@@ -1007,30 +981,32 @@ class groups extends users_user
 		extract($arr);
 
 		if (!$parent)
+		{
 			$parent = 0;
+		}
 
 		if ($gid)	// change
 		{
 			$pg = $this->fetchgroup($gid);
-			if (!$this->can("edit",$pg[oid]))
+			if (!$this->can("edit",$pg["oid"]))
 			{
-				$this->acl_error("edit",$pg[oid]);
+				$this->acl_error("edit",$pg["oid"]);
 			}
 
 			$this->savegroup(array("gid" => $gid,"name" => $name));
 
 			if (!$level)
 			{
-				if ($pg[type] != 0)
+				if ($pg["type"] != 0)
 				{
-					return $this->mk_orb("change", array("parent" => $pg[parent],"gid" => $gid, "level" => 1,"name" => $name));
+					return $this->mk_orb("change", array("parent" => $pg["parent"],"gid" => $gid, "level" => 1,"name" => $name));
 				}
 			}
 			else
 			{
 				// save dyn grp
 				$f = new form();
-				$f->process_entry(array("id" => $pg[search_form], "entry_id" => $entry_id));
+				$f->process_entry(array("id" => $pg["search_form"], "entry_id" => $entry_id));
 				$eid = $f->entry_id;
 
 				if (!$parent) 
@@ -1041,21 +1017,24 @@ class groups extends users_user
 				$this->savegroup(array("gid" => $gid,"name" => $name, "data" => $eid));
 				$this->update_dyn_group($gid);
 			}
-			return $this->mk_orb("list_grps", array("parent" => $pg[parent]));
+			return $this->mk_orb("list_grps", array("parent" => $pg["parent"]));
 		}
 		else
-		{					// add
+		{					
+			// add
 			if ($parent > 0)
 			{
 				$pg = $this->fetchgroup($parent);
-				if (!$this->can("add",$pg[oid]))
-					$this->acl_error("add",$pg[oid]);
+				if (!$this->can("add",$pg["oid"]))
+				{
+					$this->acl_error("add",$pg["oid"]);
+				}
 			}
 
 			if ($type == 0)
 			{
 				// normal group, jizt add it
-				if ($pg[type] == GRP_USERGRP || $pg[type] == GRP_DEFAULT)
+				if ($pg["type"] == GRP_USERGRP || $pg["type"] == GRP_DEFAULT)
 				{
 					$this->addgroup($parent,$name,GRP_USERGRP,0,0);
 				}
@@ -1099,24 +1078,28 @@ class groups extends users_user
 		if ($parent > 0)
 		{
 			$pg = $this->fetchgroup($parent);
-			if (!$this->can("add",$pg[oid]))
-				$this->acl_error("add",$pg[oid]);
+			if (!$this->can("add",$pg["oid"]))
+			{
+				$this->acl_error("add",$pg["oid"]);
+			}
 		}
 
 		global $level;
 		if (!$level)
 		{
 			// make list of search forms
-			$this->db_query("SELECT objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE type = ".FTYPE_SEARCH." AND objects.status != 0 and site_id = ".$GLOBALS["SITE_ID"]);
+			$this->db_query("SELECT objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE type = ".FTYPE_SEARCH." AND objects.status != 0 and site_id = ".$this->cfg["site_id"]);
 			$sfs = array();
 			while ($row = $this->db_next())
 			{
-				$sfs[$row[oid]] = $row[name];
+				$sfs[$row["oid"]] = $row["name"];
 			}
 			$this->read_template("add_grp.tpl");
-			$this->vars(array("parent" => $parent,
-												"search_forms" => $this->picker(0,$sfs),
-												"reforb"	=> $this->mk_reforb("submit_grp",array("parent" => $parent))));
+			$this->vars(array(
+				"parent" => $parent,
+				"search_forms" => $this->picker(0,$sfs),
+				"reforb"	=> $this->mk_reforb("submit_grp",array("parent" => $parent))
+			));
 			return $this->parse();
 		}
 		else
@@ -1142,8 +1125,10 @@ class groups extends users_user
 			$this->prog_acl_error("view", PRG_GROUPS);
 		}
 		$this->read_template("frameset.tpl");
-		$this->vars(array("topframe"	=> $this->mk_orb("list_grps", array("parent" => $parent)),
-											"bottframe"	=> $this->mk_orb("grp_members", array("gid" => $parent))));
+		$this->vars(array(
+			"topframe"	=> $this->mk_orb("list_grps", array("parent" => $parent)),
+			"bottframe"	=> $this->mk_orb("grp_members", array("gid" => $parent))
+		));
 		die($this->parse());
 	}
 };

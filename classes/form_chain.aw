@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.16 2002/03/08 14:37:18 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.17 2002/06/10 15:50:53 kristo Exp $
 // form_chain.aw - form chains
-lc_load("form");
-global $orb_defs;
-$orb_defs["form_chain"] = "xml";
 
 classload("form_base");
 
@@ -14,10 +11,7 @@ class form_chain extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form","lc_form");
 	}
 
 	function add($arr)
@@ -69,13 +63,19 @@ class form_chain extends form_base
 		$ct["after_redirect_url"] = $after_redirect_url;
 
 		$ct["save_folder"] = $save_folder;
+		
+		$ct["show_reps"] = $show_reps;
+		$ct["rep_tbls"] = $rep_tbls;
+
+		$ct["has_calendar"] = $has_calendar;
+		$ct["cal_form"] = $cal_form;
+		$ct["cal_controller"] = $cal_controller;
+		$ct["cal_entry_form"] = $cal_entry_form;
 
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
 		
-		classload("xml");
-		$x = new xml;
-		$content = $x->xml_serialize($ct);
+		$content = aw_serialize($ct,SERIALIZE_XML);
 		$this->quote(&$content);
 
 		if ($id)
@@ -163,6 +163,8 @@ class form_chain extends form_base
 					"fjrk" => $this->chain["form_order"][$fid],
 					"fgoto" => checked($this->chain["gotonext"][$fid]),
 					"rep" => checked($this->chain["rep"][$fid]),
+					"show_reps" => checked($this->chain["show_reps"][$fid]),
+					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->get_list_tables()),
 					"LANG" => $lg
 				));
 				$this->parse("FORM");
@@ -171,12 +173,23 @@ class form_chain extends form_base
 
 		classload("objects");
 		$ob = new objects;
+
+		$forms = $this->get_list(FTYPE_ENTRY,false,true);
+		$selected_forms = array("" => " -- Vali --");
+		foreach($forms as $key => $val)
+		{
+			if (in_array($key,$this->chain["forms"]))
+			{
+				$selected_forms[$key] = $val;
+			};
+		};
+
+
 		$this->vars(array(
-			"forms" => $this->multiple_option_list($this->chain["forms"],$this->get_list(FTYPE_ENTRY,false,true)),
+			"forms" => $this->multiple_option_list($this->chain["forms"],$forms),
 			"name" => $fc["name"],
 			"comment" => $fc["comment"],
 			"fillonce" => checked($this->chain["fillonce"]),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
 			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
 			"ops" => $this->picker($this->chain["after_show_op"], $this->listall_ops()),
@@ -191,7 +204,12 @@ class form_chain extends form_base
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
 			"after_redirect_url" => $this->chain["after_redirect_url"],
-			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list())
+			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list()),
+			"has_calendar" => checked($this->chain["has_calendar"]),
+			"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
+			"cal_controllers" => $this->picker($this->chain["cal_controller"],$selected_forms),
+			"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],array("0" => " --  Vali --") + $forms),
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 		));
 		return $this->parse();
 	}
@@ -238,11 +256,11 @@ class form_chain extends form_base
 	// entry_id - the chain entry id
 	function show($arr)
 	{
-		global $awt;
-		$awt->start("form_chain::show");
-		$awt->count("form_chain::show");
-
 		extract($arr);
+		$this->start_el = $start_el;
+		$this->end_el = $end_el;
+		$this->start = $start;
+		$this->end = $end;
 		$ch = $this->load_chain($id);
 
 		if (!$form_id)
@@ -252,21 +270,23 @@ class form_chain extends form_base
 
 		$this->read_template("chain.tpl");
 
-		if ($this->chain["fillonce"] && $GLOBALS["uid"])
+		if ($this->chain["fillonce"] && aw_global_get("uid"))
 		{
 			// kui seda saab aint yx kord t2ita siis yritame leida selle t2itmise
-			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".$GLOBALS["uid"]."'","id");
+			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".aw_global_get("uid")."'","id");
 		}
 
-		if ($entry_id)
+//		echo "entry_id = $entry_id <br>";
+		if ($entry_id && !$this->chain["rep"][$form_id] && !$form_entry_id)
 		{
 			$ear = $this->get_chain_entry($entry_id);
 			$form_entry_id = $ear[$form_id];
+//			echo "ear = <pre>", var_dump($ear),"</pre> <br>";
 		}
 
 		$sep = $this->parse("SEP");
 		$first = true;
-		global $lang_id;
+		$lang_id = aw_global_get("lang_id");
 		foreach($this->chain["forms"] as $fid)
 		{
 			if (!$first)
@@ -275,7 +295,7 @@ class form_chain extends form_base
 			}
 			if ($section && $from_alias)
 			{
-				$url = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section."/form_id=".$fid."/entry_id=".$entry_id;
+				$url = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section."/form_id=".$fid."/entry_id=".$entry_id;
 			}
 			else
 			{
@@ -305,9 +325,55 @@ class form_chain extends form_base
 		}
 
 		classload("form");
+		$cur_form = "";
+		if ($this->chain["show_reps"][$form_id] && $entry_id)
+		{
+			// show form table with all the entries for the current chain entry
+			$cur_form = $this->show_table_for_chain_entry(array(
+				"chain" => $id,
+				"chain_entry" => $entry_id,
+				"form_id" => $form_id,
+				"section" => $section,
+				"table" => $this->chain["rep_tbls"][$form_id],
+				"attribs" => array(
+					"id" => $id,
+					"section" => $section,
+					"form_id" => $form_id,
+					"entry_id" => $entry_id,
+				)
+			));
+		}
+
+		if (!$form_entry_id)
+		{
+			$led = $GLOBALS["load_entry_data"];
+			$lcd = $GLOBALS["load_chain_data"];
+		}
 		$f = new form;
+		$f->set_current_chain_entry($entry_id);
+		aw_global_set("current_chain_entry", $entry_id);
+		// FIXME: blah
+		global $load_chain_data;
+		$lcd = $load_chain_data;
+
+//		echo "showng form $form_id entry $form_entry_id $led $lcd <br>";
+		$cur_form .= $f->gen_preview(array(
+			"id" => $form_id,
+			"entry_id" => $form_entry_id, 
+			"load_entry_data" => $led,
+			"load_chain_data" => $lcd,
+			"reforb" => $this->mk_reforb("submit_form", array(
+				"id" => $id, 
+				"section" => $section, 
+				"form_id" => $form_id, 
+				"chain_entry_id" => $entry_id,
+				"form_entry_id" => $form_entry_id,
+				"load_chain_data" => $load_chain_data, 
+			))
+		));
+
 		$this->vars(array(
-			"cur_form" => $f->gen_preview(array("id" => $form_id,"entry_id" => $form_entry_id, "reforb" => $this->mk_reforb("submit_form", array("id" => $id, "section" => $section, "form_id" => $form_id, "chain_entry_id" => $entry_id,"form_entry_id" => $form_entry_id)))),
+			"cur_form" => $cur_form,
 			"FORM" => $ff,
 			"SEL_FORM" => "",
 			"SEP" => ""
@@ -348,7 +414,6 @@ class form_chain extends form_base
 				}
 			}
 		}
-		$awt->stop("form_chain::show");
 		return $this->parse();
 	}
 
@@ -362,12 +427,11 @@ class form_chain extends form_base
 		// ok, here we must create a new chain_entry if none is specified
 		if (!$chain_entry_id)
 		{
-/*			$chain_entry_id = $this->db_fetch_field("SELECT MAX(id) as id FROM form_chain_entries","id")+1;*/
 			$chain_entry_id = $this->new_object(array(
 				"parent" => $this->chain["save_folder"],
 				"class_id" => CL_CHAIN_ENTRY,
 			));
-			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) VALUES($chain_entry_id,$id,'".$GLOBALS["uid"]."')");
+			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) VALUES($chain_entry_id,$id,'".aw_global_get("uid")."')");
 		}
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
@@ -425,7 +489,7 @@ class form_chain extends form_base
 
 		if ($section && $GLOBALS["class"] == "")
 		{
-			$url = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section."/form_id=".$form_id."/entry_id=".$chain_entry_id;
+			$url = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section."/form_id=".$form_id."/entry_id=".$chain_entry_id;
 		}
 		else
 		{
@@ -438,21 +502,15 @@ class form_chain extends form_base
 	{
 		$this->db_query("SELECT * FROM form_chain_entries WHERE id = $chain_entry_id");
 		$row = $this->db_next();
-		classload("xml");
-		$x = new xml;
-		$ar = $x->xml_unserialize(array("source" => $row["ids"]));
+		$ar = aw_unserialize($row["ids"]);
 		$ar[$form_id] = $form_entry_id;
-		$tx = $x->xml_serialize($ar);
+		$tx = aw_serialize($ar,SERIALIZE_XML);
 		$this->quote(&$tx);
-		$this->db_query("UPDATE form_chain_entries SET ids = '$tx' WHERE id = $chain_entry_id");
+		$this->db_query("UPDATE form_chain_entries SET ids = '$tx',tm = '".time()."' WHERE id = $chain_entry_id");
 	}
 
 	function show_chain_entries($arr)
 	{
-		global $awt;
-		$awt->start("form_chain::show_chain_entries");
-		$awt->count("form_chain::show_chain_entries");
-
 		extract($arr);
 		$ob = $this->load_chain($id);
 		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id)).LC_FORM_CHAIN_CHANGE_WREATH_INPUT);
@@ -469,7 +527,6 @@ class form_chain extends form_base
 			));
 			$this->parse("LINE");
 		}
-		$awt->stop("form_chain::show_chain_entries");
 		return $this->parse();
 	}
 
@@ -529,6 +586,48 @@ class form_chain extends form_base
 			}
 			$this->restore_handle();
 		}
+	}
+
+	////
+	// !this shows all the form $form_id entries for the chain $chain for the entry $chain_entry with form table $table
+	// table uses the url parts from $attribs
+	function show_table_for_chain_entry($arr)
+	{
+		extract($arr);
+		classload("form_table");
+		$ft = new form_table;
+		// now get all entries of the form for the chain entry
+		$entdat = $ft->get_entries(array(
+			"id" => $form_id,
+			"all_data" => true,
+			"chain_id" => $chain_entry
+		));
+
+		$ft->start_table($table,$attribs);
+
+		if ($this->start_el)
+		{
+			// filter out everything outside the range that interests us
+			// GOD DAMMIT, this sucks
+			$new_entdat = array();
+			foreach($entdat as $row)
+			{
+				$rstart = $row["el_" . $this->start_el];
+				$rend = $row["el_" . $this->end_el];
+				if ( ($rstart > $this->start) && ($rend < $this->end) )
+				{
+					$new_entdat[] = $row;
+				};
+			}
+			$entdat = $new_entdat;
+		}
+
+		foreach($entdat as $row)
+		{
+			$ft->row_data($row,$form_id,$section,0,$chain,$chain_entry);
+		}
+
+		return $ft->finish_table();
 	}
 
 	function delreplicas()

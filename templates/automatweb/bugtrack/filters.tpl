@@ -1,4 +1,5 @@
 <form action='reforb.aw' method='POST' name='foo'>
+{VAR:header}
 <script language="javascript">
 function Do(what,gid)
 {
@@ -74,5 +75,4 @@ function Do2(what,gid,fid)
 
 {VAR:reforb}
 </form>
-
 

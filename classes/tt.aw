@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.5 2002/01/31 00:11:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
@@ -8,7 +8,6 @@
 */
 class TTGraph
 {
-
 	//Attributes
 	var $image;
 	var $imageHeight;
@@ -73,9 +72,18 @@ class TTGraph
 	//Methods
 	function TTGraph($border,$inside,$frame)
 	{
-		if ($border=="") $border=1;
-		if ($frame=="") $border=5;
-		if ($inside=="") $inside=40;
+		if ($border=="") 
+		{
+			$border=1;
+		}
+		if ($frame=="") 
+		{
+			$border=5;
+		}
+		if ($inside=="") 
+		{
+			$inside=40;
+		}
 		$this->setBorderWidth($border);
 		$this->setFrameWidth($frame);
 		$this->setInsideWidth($inside);
@@ -84,9 +92,18 @@ class TTGraph
 	function GraphBase($width=400,$height=200,$bg="FFFFFF")
 	{
 		//Initialize Variables
-		if ($width=="") $width=400;
-		if ($height=="") $height=200;
-		if ($bg=="") $bg=FFFFFF;
+		if ($width=="") 
+		{
+			$width=400;
+		}
+		if ($height=="") 
+		{
+			$height=200;
+		}
+		if ($bg=="") 
+		{
+			$bg=FFFFFF;
+		}
 		$imageWidth = $width;
 		$imageHeight = $height;
 
@@ -178,7 +195,8 @@ class TTGraph
 		if (isset($this->borderWidth)) 
 		{
 			return $this->borderWidth;
-		} else
+		}
+		else
 		{
 			$this->setBorderWidth(1);
 			return $this->borderWidth;
@@ -195,7 +213,8 @@ class TTGraph
 		if (isset($this->frameWidth)) 
 		{
 			return $this->frameWidth;
-		} else
+		} 
+		else
 		{
 			$this->setFrameWidth(4);
 			return $this->frameWidth;
@@ -212,7 +231,8 @@ class TTGraph
 		if (isset($this->insideWidth)) 
 		{
 			return $this->insideWidth;
-		} else
+		} 
+		else
 		{
 			$this->setInsideWidth(40);
 			return $this->insideWidth;
@@ -221,8 +241,14 @@ class TTGraph
 		
 	function grid($count="10",$drawval=TRUE,$_col="000000")
 	{
-		if ($count=="") $count=10;
-		if ($_col=="") $_col="000000";
+		if ($count=="") 
+		{
+			$count=10;
+		}
+		if ($_col=="") 
+		{
+			$_col="000000";
+		}
 		//Draw division lines
 		$col_ar=$this->rgb2Array($_col);
 		$padWidth = $this->imageHeight - (2 * ($this->insideWidth + 1));
@@ -232,10 +258,12 @@ class TTGraph
 		$color = imagecolorallocate($this->image,$col_ar["r"], $col_ar["g"], $col_ar["b"]);
 		$range=(double)round(($this->maxValue-$this->minValue)/($count));
 		$cur_ran=$range;
-		for($i=($count-1) ; $i>0 ; $i--) {
+		for($i=($count-1) ; $i>0 ; $i--) 
+		{
 			imageline($this->image, $this->insideWidth + 2, $this->insideWidth + 2 + ($i * $gridHeight),
 				 $this->imageWidth - ($this->insideWidth + 6), $this->insideWidth + 2 + ($i * $gridHeight), $colorDkGray);
-			if ($drawval>0) {
+			if ($drawval>0) 
+			{
 			imagestring($this->image,1,$this->borderWidth+$this->frameWidth+$this->insideWidth/2-(strlen(($cur_ran+$this->minValue))*imagefontwidth(1)/2), $this->insideWidth + ($i * $gridHeight) - 3,abs($cur_ran+$this->minValue),$color);
 				$cur_ran+=$range;
 			}
@@ -244,7 +272,10 @@ class TTGraph
 
 	function xaxis($values, $label="", $_col="000000")
 	{
-		if ($_col=="") $_col="000000";
+		if ($_col=="") 
+		{
+			$_col="000000";
+		}
 		$nextCol = $this->getTriple();
 		$col_ar=$this->rgb2Array($_col);
 		$colblack= imagecolorallocate($this->image, 0,0,0);
@@ -255,10 +286,10 @@ class TTGraph
 //			if (($j%2)&&$j!=0) $values[$j]="";
 			$count=(strlen($values[0])*imagefontwidth(1))/($this->colSize)+1;
 			$k=0;
-				for ($i = 0; $i < $this->xItemCount; $i+=$count)
-				{
-					$tmp[$k++]=$values[$i];
-				}
+			for ($i = 0; $i < $this->xItemCount; $i+=$count)
+			{
+				$tmp[$k++]=$values[$i];
+			}
 			$colSize = ($this->imageWidth - (2 * ($this->getTriple())))/count($tmp);
 			for ($i = 0; $i < count($tmp); $i++)
 			{
@@ -267,7 +298,8 @@ class TTGraph
 			}
 
 		}
-		else {
+		else 
+		{
 			for ($i = 0; $i < $this->xItemCount; $i++)
 			{
 				imagestring($this->image, 1, ($nextCol + ($this->colSize/2))-(strlen($values[$i])/2), ($this->imageHeight - ($this->insideWidth - 3)), $values[$i], $color);
@@ -281,17 +313,22 @@ class TTGraph
 	
 	function yaxis($drawval=TRUE,$ylabel="", $_col="000000",$_col2="000000")
 	{
-		if ($_col=="") $_col="000000";
+		if ($_col=="") 
+		{
+			$_col="000000";
+		}
 		$col_ar=$this->rgb2Array($_col2);
 		$col_label=$this->rgb2Array($_col);
 		$color = imagecolorallocate($this->image, $col_ar["r"], $col_ar["g"], $col_ar["b"]);
 		$labelcolor = imagecolorallocate($this->image, $col_label["r"], $col_label["g"], $col_label["b"]);
 		imagestring($this->image, 1, $this->getTriple()-(strlen((string)$ylabel)*imagefontwidth(1)/2), $this->insideWidth-18,$ylabel, $labelcolor);
-		if ($drawval>0) {
+		if ($drawval>0) 
+		{
 			imagestring($this->image,1,$this->borderWidth+$this->frameWidth+$this->insideWidth/2-(strlen(abs($this->maxValue))*imagefontwidth(1)/2), $this->insideWidth - 3,abs($this->maxValue),$color);
 			imagestring($this->image,1,$this->borderWidth+$this->frameWidth+$this->insideWidth/2-(strlen(abs($this->minValue))*imagefontwidth(1)/2), $this->imageHeight - $this->insideWidth - $this->frameWidth-$this->borderWidth-3,abs($this->minValue),$color);
 		}
 	}
+
 	function title($title="Line Graph", $_col="000000")
 	{
 		$col_ar=$this->rgb2Array($_col);
@@ -306,36 +343,48 @@ class TTGraph
 		$max=-999999999999;
 		$min=999999999999;
 		$ycnt=0;
-				while(list(,$v) = each($yvalues)) 
+		while(list(,$v) = each($yvalues)) 
+		{
+			if (is_array($v))
+			{					
+				$ycnt++;
+				while(list($ke,$val) = each($v)) 
 				{
-					if (is_array($v))
-					{					
-						$ycnt++;
-						while(list($ke,$val) = each($v)) 
-						{
-							if (!$val==""){
-								if ($max < $val) $max = $val;
-								if ($min > $val) $min = $val;
-
-							}
-//							echo "$ke = $val<br>";						
-							if (is_array($val))
-							{
-							while(list($kee,$va) = each($val)) 
-							{
-//								echo "$kee = $va<br>";						
-							}}
-
+					if (!$val=="")
+					{
+						if ($max < $val) 
+						{							
+							$max = $val;
 						}
-					} else {
-							if (!$v==""){
-								if ($max < $v) $max = $v;
-								if ($min > $v) $min = $v;
-							}
-//							echo "mh1 = $v<br>";						
+						if ($min > $val) 
+						{
+							$min = $val;
+						}
+					}
+//							echo "$ke = $val<br>";						
+					if (is_array($val))
+					{
+						while(list($kee,$va) = each($val)) 
+						{
+	//								echo "$kee = $va<br>";						
+						}
 					}
 				}
-		if (!is_array($values["ydata_0"])) $ycnt=1;
+			} 
+			else 
+			{
+				if (!$v=="")
+				{
+					if ($max < $v) $max = $v;
+					if ($min > $v) $min = $v;
+				}
+//							echo "mh1 = $v<br>";						
+			}
+		}
+		if (!is_array($values["ydata_0"])) 
+		{
+			$ycnt=1;
+		}
 		$this->ycnt=$ycnt;
 		$xItemCount = count($xvalues);
 		$colSize = ($this->imageWidth - (2 * ($this->getTriple()))-3)/$xItemCount;
@@ -370,9 +419,8 @@ class TTGraph
 			if ($values[$i]==0) $values[$i]=0.0000001;
 			if ($values[$i] > 0)
 			{
-
-			$height = ($minHeight - (abs($values[$i] - $this->minValue)*$yp));
-			imageline($this->image,$beginx,$beginy,$nextCol + ($this->colSize/2),$height,$color);
+				$height = ($minHeight - (abs($values[$i] - $this->minValue)*$yp));
+				imageline($this->image,$beginx,$beginy,$nextCol + ($this->colSize/2),$height,$color);
 				$beginx=$nextCol + ($this->colSize/2);
 				$beginy = ($height+$this->minHeight);
 	
@@ -383,11 +431,11 @@ class TTGraph
 				}
 					
 				//Draws triangles on every point
-				if ($this->vertice_tri) {
-				$point=array($nextCol + ($this->colSize/2)-4,$minHeight - $height,$nextCol + ($this->colSize/2)+4,$minHeight - $height,$nextCol + ($this->colSize/2),$minHeight - $height+5);
-				imagefilledpolygon($this->image,$point,3,$color);
+				if ($this->vertice_tri) 
+				{
+					$point=array($nextCol + ($this->colSize/2)-4,$minHeight - $height,$nextCol + ($this->colSize/2)+4,$minHeight - $height,$nextCol + ($this->colSize/2),$minHeight - $height+5);
+					imagefilledpolygon($this->image,$point,3,$color);
 				}
-
 			}
 			$nextCol += $this->colSize;
 		}

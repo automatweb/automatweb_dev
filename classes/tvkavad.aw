@@ -4,8 +4,7 @@ class tvkavad extends aw_template
 {
 	function tvkavad()
 	{
-		$this->db_init();
-		$this->tpl_init("tvkavad");
+		$this->init("tvkavad");
 		lc_load("definition");
 	}
 
@@ -20,16 +19,25 @@ class tvkavad extends aw_template
 		$this->db_query("SELECT tv_kavad.*, tv_kanalid.name as name FROM tv_kavad LEFT JOIN tv_kanalid ON tv_kanalid.id = tv_kavad.kanal_id WHERE kuup = $t2na AND kell < $kell");
 		while ($row = $this->db_next())
 		{
-			if ($row[kell] > $kanalid[$row[name]][kell])
-				$kanalid[$row[name]] = $row;
+			if ($row["kell"] > $kanalid[$row["name"]]["kell"])
+			{
+				$kanalid[$row["name"]] = $row;
+			}
 		}
 
 		reset($kanalid);
 		while (list(,$v) = each($kanalid))
 		{
-			$hr = (int)($v[kell] / 3600);
-			$min = ($v[kell] - ($hr * 3600)) / 60;
-			$this->vars(array("kanal_id" => $v[kanal_id], "kanal" => $v[name], "kell" => sprintf("%02.0f:%02.0f",$hr, $min), "pealkiri" => $v[pealkiri], "kirjeldus" => $v[comment],"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
+			$hr = (int)($v["kell"] / 3600);
+			$min = ($v["kell"] - ($hr * 3600)) / 60;
+			$this->vars(array(
+				"kanal_id" => $v["kanal_id"], 
+				"kanal" => $v["name"], 
+				"kell" => sprintf("%02.0f:%02.0f",$hr, $min), 
+				"pealkiri" => $v["pealkiri"], 
+				"kirjeldus" => $v["comment"],
+				"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)
+			));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
@@ -56,28 +64,46 @@ class tvkavad extends aw_template
 		$this->db_query("SELECT * FROM tv_kavad WHERE kanal_id = $kanal AND kuup = $date");
 		while ($row = $this->db_next())
 		{
-			if (($t2na == true) && ($row[kell] < $kell) && ($nomore == false))
-				$on_id = $row[id];
+			if (($t2na == true) && ($row["kell"] < $kell) && ($nomore == false))
+			{
+				$on_id = $row["id"];
+			}
 			else
+			{
 				$nomore = true;
+			}
 			$kava[] = $row;
 		}
 
 		reset($kava);
 		while (list(,$row) = each($kava))
 		{
-			if ($on_id == $row[id])
+			if ($on_id == $row["id"])
+			{
 				$this->vars(array("ON" => $this->parse("ON"), "NOT_ON" => ""));
+			}
 			else
+			{
 				$this->vars(array("ON" => $this->parse("NOT_ON"), "NOT_ON" => ""));
+			}
 
-			$hr = (int)($row[kell] / 3600);
-			$min = ($row[kell] - ($hr * 3600)) / 60;
-			$this->vars(array("kell" => sprintf("%02.0f:%02.0f",$hr, $min), "title" => $row[pealkiri], "comment" => $row[comment],"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
+			$hr = (int)($row["kell"] / 3600);
+			$min = ($row["kell"] - ($hr * 3600)) / 60;
+			$this->vars(array(
+				"kell" => sprintf("%02.0f:%02.0f",$hr, $min), 
+				"title" => $row["pealkiri"], 
+				"comment" => $row["comment"],
+				"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)
+			));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
-		$this->vars(array("date" => $this->time2date(time(),2), "KANAL" => $k,"kanal" => $kname, "kdate" => $this->time2date($date,3)));
+		$this->vars(array(
+			"date" => $this->time2date(time(),2), 
+			"KANAL" => $k,
+			"kanal" => $kname, 
+			"kdate" => $this->time2date($date,3)
+		));
 		return $this->parse();
 	}
 
@@ -90,13 +116,19 @@ class tvkavad extends aw_template
 
 		$os = array("kuup = $kuupaev");
 		if ($algus_k != -1)
+		{
 			$os[]="kell >= $algus_k";
+		}
 
 		if ($lopp_k != -1)
+		{
 			$os[]="kell <= $lopp_k";
+		}
 
 		if ($s_string != "")
+		{
 			$os[] = "(pealkiri LIKE '%$s_string%' OR comment LIKE '%$s_string%')";
+		}
 
 		$this->read_template("search_res.tpl");
 
@@ -104,9 +136,16 @@ class tvkavad extends aw_template
 		$this->db_query("SELECT tv_kavad.*, tv_kanalid.name as name FROM tv_kavad LEFT JOIN tv_kanalid ON tv_kanalid.id = tv_kavad.kanal_id WHERE $search ORDER BY kuup");
 		while ($row = $this->db_next())
 		{
-			$hr = (int)($row[kell] / 3600);
-			$min = ($row[kell] - ($hr * 3600)) / 60;
-			$this->vars(array("kanal_id" => $row[kanal_id], "kanal" => $row[name], "kell" => sprintf("%02.0f:%02.0f",$hr, $min), "pealkiri" => $row[pealkiri], "v2rv" => ($cnt & 1 ? "Valge" : "Hall"),"kuup" => $kuupaev));
+			$hr = (int)($row["kell"] / 3600);
+			$min = ($row["kell"] - ($hr * 3600)) / 60;
+			$this->vars(array(
+				"kanal_id" => $row["kanal_id"], 
+				"kanal" => $row["name"], 
+				"kell" => sprintf("%02.0f:%02.0f",$hr, $min), 
+				"pealkiri" => $row["pealkiri"], 
+				"v2rv" => ($cnt & 1 ? "Valge" : "Hall"),
+				"kuup" => $kuupaev
+			));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
@@ -120,11 +159,19 @@ class tvkavad extends aw_template
 		$this->db_query("SELECT * FROM tv_kanalid");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("kanal_id" => $row[id], "kanal" => $row[name], "kuup" => $date,"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
+			$this->vars(array(
+				"kanal_id" => $row["id"], 
+				"kanal" => $row["name"], 
+				"kuup" => $date,
+				"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)
+			));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
-		$this->vars(array("date" => $this->time2date(time(), 2), "KANAL" => $k));
+		$this->vars(array(
+			"date" => $this->time2date(time(), 2), 
+			"KANAL" => $k
+		));
 		return $this->parse();
 	}
 }

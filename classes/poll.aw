@@ -1,21 +1,13 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.8 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.9 2002/06/10 15:50:54 kristo Exp $
 session_register("poll_clicked");
-global $class_defs;
-$class_defs["poll"] = "xml";
 class poll extends aw_template 
 {
 	function poll()
 	{
-		$this->db_init();
-		$this->tpl_init("poll");
+		$this->init("poll");
 		lc_site_load("poll",&$this);
-		global $lc_poll;
-		if (is_array($lc_poll))
-		{
-			$this->vars($lc_poll);
-		}
 		//if (!$this->prog_acl("view", PRG_POLL))
 		//{
 		//	$this->prog_acl_error("view", PRG_POLL);
@@ -28,25 +20,23 @@ class poll extends aw_template
 	function poll_list($args = array())
 	{
 		extract($args);
-		global $lc_poll;
-		lc_load("poll");
-		$this->vars($lc_poll);
+		$this->lc_load("poll","lc_poll");
 		$this->read_adm_template("list.tpl");
 
 
 		load_vcl("table");
 		$t = new aw_table(array(
 			"prefix" => "poll",
-			"imgurl"    => $GLOBALS["baseurl"]."/automatweb/images",
+			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 			
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 
 		$t->set_header_attribs(array(
 			"class" => "poll",
 			"action" => "list",
-                ));
+    ));
 
 		$t->define_field(array(
 			"name" => "name",
@@ -54,7 +44,7 @@ class poll extends aw_template
 			"talign" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-                ));
+		));
 		
 		$t->define_field(array(
 			"name" => "modifiedby",
@@ -63,7 +53,7 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-                ));
+    ));
 		
 		$t->define_field(array(
 			"name" => "modified",
@@ -72,7 +62,7 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-                ));
+    ));
 		
 		$t->define_field(array(
 			"name" => "active",
@@ -81,25 +71,25 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-                ));
+    ));
 		
 		$t->define_field(array(
 			"name" => "change",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
-                ));
+    ));
 		
 		$t->define_field(array(
 			"name" => "delete",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
-                ));
+    ));
 
 		$this->db_query("SELECT * FROM objects
 				WHERE class_id = ".CL_POLL." AND
-				status != 0 AND parent = ".$GLOBALS["SITE_ID"]);
+				status != 0");
 
 		while ($row = $this->db_next())
 		{
@@ -117,7 +107,6 @@ class poll extends aw_template
 				"change" => $this->parse("CHANGE"),
 				"delete" => $this->parse("DELETE"),
 			));
-				
 		}
 
 		$t->sort_by(array("field" => $args["sortby"]));
@@ -145,9 +134,7 @@ class poll extends aw_template
 	function add($args = array())
 	{
 		extract($args);
-		global $lc_poll;
-		lc_load("poll");
-		$this->vars($lc_poll);
+		$this->lc_load("poll","lc_poll");
 		if ($return_url)
 		{
 			$this->mk_path(0,sprintf("<a href='%s'>%s</a> / Lisa poll",$return_url,"Tagasi"));
@@ -217,7 +204,6 @@ class poll extends aw_template
 				"comment" => $comment,
 				"class_id" => CL_POLL,
 				"status" => 1,
-				//"parent" => $GLOBALS["SITE_ID"], huh?
 				"parent" => $parent,
 			));
 			if ($alias_to)
@@ -234,7 +220,7 @@ class poll extends aw_template
 	{
 		$ret = array();
 		$poll_obj = $this->get_obj_meta($id);
-		global $lang_id;
+		$lang_id = aw_global_get("lang_id");
 		$meta_answers = $poll_obj["meta"]["answers"];
 		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = $id ORDER BY id");
 		while ($row = $this->db_next())
@@ -251,7 +237,10 @@ class poll extends aw_template
 
 	function get_active_poll()
 	{
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status = 2 AND parent =".$GLOBALS["SITE_ID"]);
+		// what the deal with that query? parent and site_id?
+		//$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status = 2 AND parent =".$this->cfg["site_id"]);
+
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status = 2");
 		return $this->db_next();
 	}
 
@@ -260,9 +249,7 @@ class poll extends aw_template
 	function change($args = array())
 	{
 		extract($args);
-		global $lc_poll;
-		lc_load("poll");
-		$this->vars($lc_poll);
+		$this->lc_load("poll","lc_poll");
 		$this->read_adm_template("add.tpl");
 		if ($return_url)
 		{
@@ -349,7 +336,7 @@ class poll extends aw_template
 	function set_active($args = array())
 	{
 		extract($args);
-		$this->db_query("UPDATE objects SET status = 1 WHERE class_id = ".CL_POLL." AND parent = ".$GLOBALS["SITE_ID"]." AND status = 2 ");
+		$this->db_query("UPDATE objects SET status = 1 WHERE class_id = ".CL_POLL." AND status = 2 ");
 		$this->db_query("UPDATE objects SET status = 2 WHERE oid = $id");
 		return $this->mk_my_orb("list",array());
 	}
@@ -361,10 +348,11 @@ class poll extends aw_template
 		$this->read_template("poll.tpl");
 
 		if (!($ap = $this->get_active_poll()))
+		{
 			return "";
+		}
 
-		//global $lang_id;
-		$this->vars(array("poll_id" => $ap[oid], "question" => $ap["name"]));
+		$this->vars(array("poll_id" => $ap["oid"], "question" => $ap["name"]));
 
 		$ans = $this->get_answers($ap["oid"]);
 		reset($ans);
@@ -397,31 +385,37 @@ class poll extends aw_template
 	function show($id)
 	{
 		if (!is_number($id))
+		{
 			return "";
+		}
 
 		$this->read_template("show.tpl");
 
 		if (!($poll = $this->get_object($id)))
+		{
 			return "";
-		global $lang_id;
+		}
+		$lang_id = aw_global_get("lang_id");
 
 		$answers = $this->get_answers($id);
 		$total = 0;
 		reset($answers);
 		while(list($k,$v) = each($answers))
-			$total += $v[clicks];
+		{
+			$total += $v["clicks"];
+		}
 	
 		reset($answers);
 		while(list($k,$v) = each($answers))
 		{
-			$percent = $total ? (($v[clicks] / $total) * 100) : 0;
+			$percent = $total ? (($v["clicks"] / $total) * 100) : 0;
 			$width = sprintf("%2.0f", $percent);
 			$percent = sprintf("%2.1f", $percent);
-			if ($GLOBALS["lang_id"] == 1)
+			if ($lang_id == 1)
 			{
 				$percent = str_replace(".",",",$percent);
 			}
-			$this->vars(array("answer" => $v[answer], "percent" => $percent, "width" => $width*2));
+			$this->vars(array("answer" => $v["answer"], "percent" => $percent, "width" => $width*2));
 			$as.=$this->parse("ANSWER");
 		}
 
@@ -431,13 +425,13 @@ class poll extends aw_template
 		$t = new forum;
 
 		// pollide arhiiv
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0 AND parent = ".$GLOBALS["SITE_ID"]);
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			if ($id != $row[oid])
+			if ($id != $row["oid"])
 			{
 				//$qs = aw_unserialize($row["questions"]);
-				$this->vars(array("question" => $row["name"], "poll_id" => $row[oid], "num_comments" => $t->get_num_comments($row[oid])));
+				$this->vars(array("question" => $row["name"], "poll_id" => $row["oid"], "num_comments" => $t->get_num_comments($row["oid"])));
 				$p.=$this->parse("QUESTION");
 			}
 		}
@@ -445,7 +439,7 @@ class poll extends aw_template
 		$qs = aw_unserialize($poll["questions"]);
 
 
-		$this->vars(array("ANSWER" => $as,"question" => $qs[$lang_id], "date" => $this->time2date($poll[modified],2),"addcomment" => $t->add_comment(array("board" => $id)), "num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
+		$this->vars(array("ANSWER" => $as,"question" => $poll["name"], "date" => $this->time2date($poll["modified"],2),"addcomment" => $t->add_comment(array("board" => $id)), "num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
 
 		return $this->parse();
 	}
@@ -456,12 +450,12 @@ class poll extends aw_template
 		if (!is_array($this->pollaliases) || $this->pollaliasoid != $oid)
 		{
 			$this->pollaliases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_POLL,
+				"oid" => $oid,
+				"type" => CL_POLL,
 			));
 			$this->pollaliasoid = $oid;
-                };
-                $f = $this->pollaliases[$matches[3] - 1];
+    };
+    $f = $this->pollaliases[$matches[3] - 1];
 		return $this->gen_user_html($f["target"]);
 	}
 }

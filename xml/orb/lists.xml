@@ -32,6 +32,18 @@
 			</function>
 		</action>
 		
+		<action name="submit_default_list">
+			<function name="submit_default_list"/>
+		</action>
+		
+		<action name="change_list_vars">
+			<function name="change_list_vars">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="gen_list">
 			<function name="gen_list">
 				<arguments>
@@ -68,6 +80,7 @@
 				</arguments>
 			</function>
 		</action>
+		
 		
 	</class>
 </orb>

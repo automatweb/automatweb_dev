@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.8 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
@@ -132,7 +132,9 @@ class msg_sql_driver extends core
 		}
 	}
 
-	// listib teated. inefficient? maybe
+	////
+	// !returns messages under folder $folder
+	// $from, $to can be used to limit the returned set
 	function msg_list($args = array())
 	{
 		extract($args);
@@ -140,10 +142,15 @@ class msg_sql_driver extends core
 		{
 			return false;
 		};
+
+		if (isset($from) && isset($to))
+		{
+			$lim = "LIMIT $from,".($to-$from);
+		}
 		$q = sprintf("SELECT objects.*,messages.* FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
 			WHERE class_id = %d AND parent = '$folder'
-			ORDER BY objects.created DESC",CL_MESSAGE);
+			ORDER BY objects.created DESC $lim",CL_MESSAGE);
 		$this->db_query($q);
 		$res = array();
 		while($row = $this->db_next())
@@ -225,8 +232,8 @@ class msg_sql_driver extends core
 		if ($forward)
 		{
 			$headers = $this->parse_headers(array(
-						"headers" => $old["headers"],
-					));
+				"headers" => $old["headers"],
+			));
 			$subject = "Fwd: $subject";
 			$message = "\n\nForwarded message:\n\n";
 			$message .= "Date: " . $headers["Date"] . "\n";
@@ -261,5 +268,13 @@ class msg_sql_driver extends core
 		return $retval;
 	}
 
+	////
+	// !returns the number of messages in folder $folder
+	function get_num_messages($arr)
+	{
+		extract($arr);
+		$q = sprintf("SELECT count(*) as cnt FROM objects	WHERE class_id = %d AND parent = '$folder' ",CL_MESSAGE);
+		return $this->db_fetch_field($q,"cnt");
+	}
 }
 ?>

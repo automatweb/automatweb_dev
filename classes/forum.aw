@@ -1,10 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.44 2002/03/14 15:06:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.45 2002/06/10 15:50:53 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
-global $orb_defs;
-$orb_defs["forum"] = "xml";
-lc_load("msgboard");
 
 class forum extends aw_template
 {
@@ -13,8 +10,7 @@ class forum extends aw_template
 		extract($args);
 		$this->embedded = false;
 
-		$this->db_init();
-		$this->tpl_init("msgboard");
+		$this->init("msgboard");
 		// $this->sub_merge = 1;
 		// to keep track of how many topics we have already drawn
 		$this->topic_count = 0; 
@@ -34,11 +30,7 @@ class forum extends aw_template
 		$u = new users_user();
 		$this->$members = $u->getgroupmembers("Kasutajatugi");
 		
-		global $lc_msgboard;
-		if (is_array($lc_msgboard))
-		{
-			$this->vars($lc_msgboard);
-		}
+		$this->lc_load("msgboard","lc_msgboard");
 	}
 
 	function change_rates($args = array())
@@ -145,42 +137,42 @@ class forum extends aw_template
 		$this->mk_path(0,"Muuda foorumit");
 	
 		load_vcl("table");	
-                $t = new aw_table(array(
-                        "prefix" => "nforum",
-                        "imgurl"    => $GLOBALS["baseurl"]."/automatweb/images",
-                        "tbgcolor" => "#C3D0DC",
-                ));
+		$t = new aw_table(array(
+			"prefix" => "nforum",
+			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
+			"tbgcolor" => "#C3D0DC",
+		));
 
-                $t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
-                $t->set_header_attribs(array(
-                        "id" => $id,
-                        "class" => "forum",
-                        "action" => "notify_list",
-                ));
-                $t->define_field(array(
-                        "name" => "name",
-                        "caption" => "Nimi",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        "sortable" => 1,
-                ));
-                $t->define_field(array(
-                        "name" => "address",
-                        "caption" => "Aadress",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        "sortable" => 1,
-                ));
-                $t->define_field(array(
-                        "name" => "check",
-                        "caption" => "Vali",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        //"sortable" => 1,
-                ));
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+		$t->set_header_attribs(array(
+			"id" => $id,
+			"class" => "forum",
+			"action" => "notify_list",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "address",
+			"caption" => "Aadress",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => "Vali",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			//"sortable" => 1,
+		));
 
 		$nflist = $this->get_object_metadata(array(
 			"oid" => $id,
@@ -285,7 +277,6 @@ class forum extends aw_template
 			$this->mk_path($pobj["oid"], $title);
 		};
 
-		global $template_sets;
 		$this->vars(array(
 			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
 			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
@@ -300,7 +291,7 @@ class forum extends aw_template
 			"name" => $obj["name"],
 			"comment" => $obj["comment"],
 			"comments" => checked($meta["comments"]),
-			"template" => $this->picker($meta["template"],$template_sets),
+			"template" => $this->picker($meta["template"],aw_ini_get("menuedit.template_sets")),
 			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
 			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
 			"rated" => checked($meta["rated"]),
@@ -369,7 +360,7 @@ class forum extends aw_template
 	function tabs($args = array(),$active = "")
 	{
 		// et mitte koiki seniseid saite katki teha
-		if (not(defined("FORUM_TABS")))
+		if (not($this->cfg["tabs"]))
 		{
 			return "";
 		};
@@ -378,8 +369,7 @@ class forum extends aw_template
 		$board = $this->board;
 		$from = $this->from;
 		// oh god, I hate this
-		global $REQUEST_URI;
-		if (strpos($REQUEST_URI,"automatweb"))
+		if (strpos(aw_global_get("REQUEST_URI"),"automatweb"))
 		{
 			array_push($args,"configure");
 		};
@@ -419,9 +409,8 @@ class forum extends aw_template
 		$this->read_template("tabs.tpl");
 		foreach($args as $key => $val)
 		{
-			if ( ($val == "newtopic") && defined("FORUM_NEWTOPIC_LOGGED_ONLY") && not(defined("UID")) )
+			if ( ($val == "newtopic") && $this->cfg["newtopic_logged_only"] == 1 && aw_global_get("uid") == "" )
 			{
-
 				// suck
 			}
 			else
@@ -471,7 +460,7 @@ class forum extends aw_template
 			$b_obj = $this->get_object($board);
 			if ($b_obj["class_id"] == CL_PERIODIC_SECTION)
 			{
-				$topic_link = "/index.aw/" . $this->mk_link(array("section" => $board));
+				$topic_link = "/index.".$this->cfg["ext"]."/" . $this->mk_link(array("section" => $board));
 			};
 			$this->vars(array(
 				"topic_link" => $topic_link,
@@ -491,7 +480,7 @@ class forum extends aw_template
 	function add_topic($args = array())
 	{
 		// this first setting should really be configurable on per-forum basis
-		if ( defined("TOPIC_ADD_REQUIRES_LOGIN") && not(defined("UID")) )
+		if ( $this->cfg["newtopic_logged_only"] && aw_global_get("uid") == "" )
 		{
 			classload("config");
 			$c = new db_config;
@@ -548,8 +537,7 @@ class forum extends aw_template
 
 		if ($section)
 		{
-			global $baseurl;
-			$retval = $baseurl . "/?section=$section";
+			$retval = $this->cfg["baseurl"] . "/?section=$section";
 		}
 		else
 		{
@@ -584,14 +572,15 @@ class forum extends aw_template
 
 		$content = "";
 
-		$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"flatcomments");
+		$tab_base = array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details");
+		$tabs = $this->tabs($tab_base,"flatcomments");
 		if ($addcomment)
 		{
-			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"addcomment");
+			$tabs = $this->tabs($tab_base,"addcomment");
 		}
 		elseif ($no_response)
 		{
-			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"no_response");
+			$tabs = $this->tabs($tab_base,"no_response");
 		};
 		$rated = "";
 		if ($meta["rated"])
@@ -627,7 +616,6 @@ class forum extends aw_template
 			{
 				$this->comm_count++;
 				$content .= $this->display_comment($row);
-
 			};
 		};
 
@@ -638,7 +626,6 @@ class forum extends aw_template
 		{
 			$id = $forum_obj["oid"];
 		};
-
 
 		$comment = stripslashes($board_obj["comment"]);
 		$comment = str_replace("'","",$comment);
@@ -698,7 +685,6 @@ class forum extends aw_template
 			"message" => $content,
 			"VOTE_FOR_TOPIC" => $voteblock,
 			"TOPIC" => $this->parse("TOPIC"),
-			
 		));
 		if ($this->prog_acl("view", PRG_MENUEDIT))
 		{
@@ -777,14 +763,16 @@ class forum extends aw_template
 			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
 		};
 	
+		$tab_base = array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details");
+
 		if ($no_comments)
 		{
-			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
+			$tabs = $this->tabs($tab_base,"threadedsubjects");
 			$this->read_template("subjects_threaded.tpl");
 		}
 		else
 		{
-			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedcomments");
+			$tabs = $this->tabs($tab_base,"threadedcomments");
 			$this->read_template("messages_threaded.tpl");
 		};
 
@@ -923,10 +911,10 @@ class forum extends aw_template
 		{
 			for ($i = 0; $i < ($this->level - 1); $i++)
 			{
-				$icons .= "<img src='/img/forum/vert.gif'>";
+				$icons .= "<img src='".$this->cfg["baseurl"]."/img/forum/vert.gif'>";
 			};
 
-			$icon_prefix = "<img src='/img/forum/vert.gif'>";
+			$icon_prefix = "<img src='".$this->cfg["baseurl"]."/img/forum/vert.gif'>";
 		}
 
 		$cc = 0;
@@ -945,7 +933,7 @@ class forum extends aw_template
 			{
 				$icon_sufix = ($replies == 0) ? "node" : "minus";
 			};
-			$val["icons"] = $icons . $icon_prefix . "<img src='/img/forum/$icon_sufix.gif'>";
+			$val["icons"] = $icons . $icon_prefix . "<img src='".$this->cfg["baseurl"]."/img/forum/$icon_sufix.gif'>";
 			$this->content .= $this->display_comment($val);
 			$this->level++;
 			$this->rec_comments($val["id"]);
@@ -963,10 +951,8 @@ class forum extends aw_template
 			return;
 		}
 
-
 		foreach($this->_comments[$level] as $key => $val)
 		{
-			
 			if ($this->level == 1)
 			{
 				$use_level = $val["id"];
@@ -1014,7 +1000,7 @@ class forum extends aw_template
 			"TABS" => $tabs,
 			"TOPIC" => $this->parse("TOPIC"),
 		));
-		$act = defined("FORUM_REPLY_RETURN") ? FORUM_REPLY_RETURN : "show";
+		$act = $this->cfg["reply_return"] != "" ? $this->cfg["reply_return"] : "show";
 		return $this->parse() . $this->add_comment(array("parent" => $parent,"section" => $section,"act" => $act,"subj" => $row["subj"]));
 	}
 
@@ -1070,7 +1056,7 @@ class forum extends aw_template
 			$this->vars(array("SHOW_COMMENT" => $this->parse("SHOW_COMMENT")));
 		};
 
-		if ( ($this->prog_acl("view", PRG_MENUEDIT)) || ($this->members[UID]))
+		if ( ($this->prog_acl("view", PRG_MENUEDIT)) || ($this->members[aw_global_get("uid")]))
 		{
 			$del = $this->parse("KUSTUTA");
 			$repl = $this->parse("REPLY");
@@ -1157,8 +1143,6 @@ class forum extends aw_template
 						"Uus sissekanne teemal: $forum_obj[name]",
 						"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: http://sylvester.struktuur.ee/?class=forum&action=show_threaded&board=$board",
 						"From: $name <$email>");
-	
-	
 				}
 			};
 			$name = strip_tags($name);
@@ -1173,8 +1157,8 @@ class forum extends aw_template
 				$board = $row["board_id"];
 			};
 			$parent = (int)$parent;
-			$site_id = $GLOBALS["SITE_ID"];
-			$ip = $GLOBALS["REMOTE_ADDR"];
+			$site_id = $this->cfg["site_id"];
+			$ip = aw_global_get("REMOTE_ADDR");
 			$t = time();
 			if ($remember_me)
 			{
@@ -1248,7 +1232,7 @@ class forum extends aw_template
 
 		$this->use_orb_for_links = 1;
 		$content = $this->_draw_all_topics(array(
-						"id" => $id,
+			"id" => $id,
 		));
 
 		// õkk, this is overkill
@@ -1291,8 +1275,8 @@ class forum extends aw_template
 
 		$this->cid = $args["cid"];
 		$content = $this->_draw_all_topics(array(
-						"id" => $id,
-						"details" => 1,
+			"id" => $id,
+			"details" => 1,
 		));
 		
 		$this->mk_links(array(
@@ -1427,10 +1411,8 @@ class forum extends aw_template
 		extract($args);
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
-		global $DBG;
 		$aw_mb_last[$id] = time();
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
-		global $alias;
 		return $this->mk_my_orb("topics",array("id" => $id,"section" => $section,"_alias" => "forum"));
 	}
 
@@ -1442,9 +1424,9 @@ class forum extends aw_template
 		// we are inside the document, so we switch to embedded mode
 		$this->embedded = true;
 		$l = $alias;
-                $target = $l["target"];
-                $tobj = $this->get_object($target);
-                $parent = $tobj["last"];
+    $target = $l["target"];
+	  $tobj = $this->get_object($target);
+    $parent = $tobj["last"];
 		$id = $target;
 		$section = $oid;
 		

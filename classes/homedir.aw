@@ -1,16 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.5 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
-global $orb_defs;
-$orb_defs["homedir"] = "xml";
-
-class homedir extends users {
-	
+class homedir extends users 
+{
 	function homedir($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("homedir");
+		$this->init("homedir");
 		lc_load("definition");
 	}
 
@@ -23,11 +19,6 @@ class homedir extends users {
 		// first we need to check whether the object we are requesting is actually under the homedir
 		// of the user. Actually this should be done by checking ACL, but for now we will settle
 		// for this.
-
-
-
-
-
 	}
 
 	////
@@ -50,7 +41,8 @@ class homedir extends users {
 	//! Genereerib sisselogitud kasutaja kodukataloogi
 	function gen_home_dir($args = array())
 	{
-		global $udata,$baseurl,$class_defs;
+		$udata = $this->get_user();
+		$baseurl = $this->cfg["baseurl"];
 		$parent = $args["id"];
 
 		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
@@ -68,9 +60,9 @@ class homedir extends users {
 		do
 		{
 			$groups = $this->get_objects_below(array(
-						"parent" => $fldr,
-						"class" => CL_PSEUDO,
-				));
+				"parent" => $fldr,
+				"class" => CL_PSEUDO,
+			));
 
 			foreach($groups as $key => $val)
 			{
@@ -130,7 +122,7 @@ class homedir extends users {
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
-			$class = $class_defs[$row["class_id"]]["file"];
+			$class = $this->cfg["classes"][$row["class_id"]]["file"];
 			$preview = $this->mk_my_orb("preview", array("id" => $row["oid"]),$class);
 			$cnt++;
 			switch ($row["class_id"])
@@ -140,7 +132,7 @@ class homedir extends users {
 					break;
 				
 				case CL_FILE:
-					$preview = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".$row["name"];
+					$preview = file::get_url($row["oid"],$row["name"]);
 					break;
 
 				default:
@@ -192,11 +184,11 @@ class homedir extends users {
 			{
 				$cnt++;
 				$this->vars(array(
-						"id" => $val["oid"],
-						"indent" => str_repeat("&nbsp;",$indent * 3),
-						"name" => $val["name"],
-						"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
-					));
+					"id" => $val["oid"],
+					"indent" => str_repeat("&nbsp;",$indent * 3),
+					"name" => $val["name"],
+					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+				));
 				$tpl = ($this->active == $key) ? "activefolder" : "folders";
 				$this->folders .= $this->parse($tpl);
 				if ( (is_array($items[$key])) && ($this->path[$key]))

@@ -1,3 +1,4 @@
+{VAR:header}
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr><td class="fcaption2" colspan="2">
 <input type="button" value="Tagasi" class="small_button" OnClick="javascript:window.location='{VAR:back}'">

@@ -1,14 +1,10 @@
 <?php
 
-global $orb_defs;
-$orb_defs["contact"] = "xml";
-
 class contact extends aw_template
 {
 	function contact()
 	{
-		$this->db_init();
-		$this->tpl_init("contact");
+		$this->init("contact");
 	}
 
 	////

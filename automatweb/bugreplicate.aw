@@ -1,12 +1,12 @@
 <?php
 
 include("const.aw");
-classload("replicator","bugtrack");
+classload("replicator","bugtrack","defs");
 
 $bt=new bugtrack();
 
-$hostkey=$bt->sitekeys[$baseurl]?
-	$bt->sitekeys[$baseurl]:"unsetsitekey57005-49374";
+$hostkey=$bt->sitekeys[aw_ini_get("baseurl")]?
+	$bt->sitekeys[aw_ini_get("baseurl")]:"unsetsitekey57005-49374";
 
 $rh=new replicator_host($hostkey,"bugreplicate");
 
@@ -21,7 +21,7 @@ if (!$req["nop"])
 			case "testing":
 				$reply["servertime"]=time();
 				$reply["servername"]=$SERVER_NAME;
-				$reply["baseurl"]=$baseurl;
+				$reply["baseurl"]=aw_ini_get("baseurl");
 				$reply["hkey"]=$rh->key;// see pole mingi turvaauk, siia nigunii siis ei tule, kui õige sitekey teada pole
 				$reply["tid"]=$req["tid"];
 				$reply["hash"]=$req["hash"];

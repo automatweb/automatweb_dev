@@ -1,14 +1,11 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.1 2001/10/22 22:28:08 duke Exp $
-global $orb_defs;
-$orb_defs["html_popup"] = "xml";
-class html_popup extends aw_template {
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.2 2002/06/10 15:50:53 kristo Exp $
+class html_popup extends aw_template 
+{
 	function html_popup($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/html_popup");
-
+		$this->init("automatweb/html_popup");
 	}
 
 	function add($args = array())
@@ -86,7 +83,5 @@ class html_popup extends aw_template {
 		));
 		return $this->parse();
 	}
-
-		
 };
 ?>

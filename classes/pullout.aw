@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.3 2002/01/30 00:02:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
 // pullout.aw - Pullout manager
 
 classload("menuedit","users");
@@ -8,8 +8,7 @@ class pullout extends aw_template
 {
 	function pullout()
 	{
-		$this->db_init();
-		$this->tpl_init("pullout");
+		$this->init("pullout");
 		$this->align = array(
 			"left" => "Vasak",
 			"center" => "Keskel",
@@ -141,7 +140,7 @@ class pullout extends aw_template
 			"metadata" => $o["metadata"]
 		));
 
-		global $gidlist;
+		$gidlist = aw_global_get("gidlist");
 		$found = false;
 		if (is_array($meta["groups"]))
 		{

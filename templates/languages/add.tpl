@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' method=post name="languagesadd">
+<form action='reforb.{VAR:ext}' method=post name="languagesadd">
 
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
@@ -67,8 +67,7 @@
 </tr>
 </table>
 
-<input type='hidden' NAME='action' VALUE='admin_languages'>
-<input type='hidden' NAME='id' VALUE='{VAR:id}'>
+{VAR:reforb}
 </form>
 
 

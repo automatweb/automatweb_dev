@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.31 2002/04/17 22:01:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.32 2002/06/10 15:50:52 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -81,6 +81,30 @@ class aliasmgr extends aw_template
 				"generator" => "_form_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form"),
 				"chlink" => $this->mk_my_orb("change",array(),"form"),
+				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
+				"field" => "id",
+		);
+		
+		$this->defs["form_output"] = array(
+				"alias" => "u",
+				"title" => "Formi v&auml;ljund",
+				"class" => "form_output",
+				"class_id" => CL_FORM_OUTPUT,
+				"generator" => "_op_aliases",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_output"),
+				"chlink" => $this->mk_my_orb("change",array(),"form_output"),
+				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
+				"field" => "id",
+		);
+		
+		$this->defs["form_table"] = array(
+				"alias" => "w",
+				"title" => "Formi tabel",
+				"class" => "form_table",
+				"class_id" => CL_FORM_TABLE,
+				"generator" => "_ft_aliases",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_table"),
+				"chlink" => $this->mk_my_orb("change",array(),"form_table"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 				"field" => "id",
 		);
@@ -237,7 +261,7 @@ class aliasmgr extends aw_template
 				"class" => "planner",
 				"class_id" => CL_CALENDAR,
 				"generator" => "_calendar_aliases",
-				"addlink" => $this->mk_my_orb("new_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
 				"chlink" => $this->mk_my_orb("change",array(),"planner"),
 				"field" => "id"
 		);
@@ -261,6 +285,17 @@ class aliasmgr extends aw_template
 				"generator" => "_iframe_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"iframe"),
 				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"iframe"),
+				"field" => "id"
+		);
+
+		$this->defs["mingi"] = array(
+				"alias" => "z",
+				"title" => "mingi objekt",
+				"class" => "mingi",
+				"class_id" => CL_MINGI,
+				"generator" => "_mingi_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url, "alias_to" => $this->id),"mingi"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"mingi"),
 				"field" => "id"
 		);
 
@@ -302,14 +337,14 @@ class aliasmgr extends aw_template
 			}
 
 			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
-as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = ".aw_ini_get("site_id")." OR objects.site_id IS NULL) AND ".join("AND",$se);
+as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND ".join("AND",$se);
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
 					"name" => $row["name"],
 					"id" => $row["oid"],
-					"type"  => $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"type"  => $this->cfg["classes"][$row["class_id"]]["name"],
 					"created" => $this->time2date($row["created"],2),
 					"modified" => $this->time2date($row["modified"], 2),
 					"createdby" => $row["createdby"],
@@ -332,7 +367,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		foreach($this->defs as $key => $val)
 		{
 			$clid = $val["class_id"];
-			$tar[$clid] = $GLOBALS["class_defs"][$clid]["name"];
+			$tar[$clid] = $this->cfg["classes"][$clid]["name"];
 		}
 		$this->vars(array(
 			"docid" => $docid,
@@ -413,7 +448,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 						"modifiedby"		=> $row["modifiedby"],
 						"created"				=> $this->time2date($created),
 						"modified"			=> $this->time2date($modified),
-						"class"					=> $GLOBALS["class_defs"][$class_id]["name"],
+						"class"					=> $this->cfg["classes"][$class_id]["name"],
 						"docid"					=> $docid,
 						"expandurl"     => $expandurl,
 						"pickurl"				=> (in_array($class_id,$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $oid),"document")."'>Võta see</a>" : "")));
@@ -449,11 +484,11 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 		$this->t = new aw_table(array(
 			"prefix" => "images",
-			"imgurl"    => aw_ini_get("baseurl")."/automatweb/images",
+			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 
-		$this->t->parse_xml_def(aw_ini_get("basedir")."/xml/generic_table.xml");
+		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->set_header_attribs(array(
 			"id" => $this->id,
 			"class" => "aliasmgr",
@@ -755,7 +790,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		reset($aliases);
 		while (list(,$v) = each($aliases))
 		{	
-			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"planner");
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"planner");
 			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
@@ -806,6 +841,25 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 	
+	function _mingi_aliases($args = array())
+	{
+		$aliases = $this->get_aliases_for($this->id,CL_MINGI,$_sby, $s_link_order);
+		reset($aliases);
+		while (list(,$v) = each($aliases))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"mingi");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
 	function _form_aliases($args = array())
 	{
 		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
@@ -813,6 +867,48 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		while (list(,$v) = each($forms))
 		{
 			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+
+			$this->t->define_data(array(
+				"name"                => $link,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description" 		=> $v["comment"],
+				"id"                  => $v["id"],		
+			));
+			$this->_common_parts($v);
+		};
+	}
+
+	function _op_aliases($args = array())
+	{
+		$ops = $this->get_aliases_for($this->id,CL_FORM_OUTPUT,$s_form_sortby, $s_form_order);
+		reset($ops);
+		while (list(,$v) = each($ops))
+		{
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form_output");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+
+			$this->t->define_data(array(
+				"name"                => $link,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description" 		=> $v["comment"],
+				"id"                  => $v["id"],		
+			));
+			$this->_common_parts($v);
+		};
+	}
+
+	function _ft_aliases($args = array())
+	{
+		$ops = $this->get_aliases_for($this->id,CL_FORM_TABLE,$s_ft_sortby, $s_ft_order);
+		reset($ops);
+		while (list(,$v) = each($ops))
+		{
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form_table");
 			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 
@@ -1135,6 +1231,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 		};
 
+		$construct = get_instance("construct");
 		$this->aliases = $aliases;
 
 		$by_alias = array();
@@ -1185,6 +1282,18 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 						"alias" => $aliases[$clid][$idx],
 						"tpls" => &$args["templates"],
 					);
+
+					global $DEBUG;
+					if ($DEBUG)
+					{
+						print "<pre>";
+						print_r($aliases);
+						print_r($val);
+						print "clid = $clid<br>";
+						print "idx = $idx<br>";
+					};
+					$construct->load($clid,$aliases[$clid][$idx]["target"],$params);
+
 					$repl = $$emb_obj_name->parse_alias($params);
 				
 					$inplace = false;
@@ -1211,6 +1320,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 			}
 		};
+		upd_instance("construct",$construct);
 		//return $source;
 	}
 

@@ -1,35 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.34 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.35 2002/06/10 15:50:54 kristo Exp $
 // users.aw - User Management
-classload("users_user","config","form","objects");
+classload("users_user","config","form","objects","file");
 
 load_vcl("table","date_edit");
 
 session_register("add_state");
 
-global $orb_defs;
-
 define("PER_PAGE", 20);
-
-// you know what that means
-$orb_defs["users"] = "xml";
-lc_load("users");
 
 class users extends users_user
 {
 	function users()
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/users");
+		$this->init("automatweb/users");
 		lc_site_load("definition",&$this);
 		lc_load("definition");
-		global $lc_users;
-		if (is_array($lc_users))
-		{
-			$this->vars($lc_users);
-		};
+		$this->lc_load("users","lc_users");
 	}
-
 
 	function rpc_getuser($args = array())
 	{
@@ -129,47 +117,65 @@ class users extends users_user
 	function gen_select_list($gid,$all,$pickable = true)
 	{
 		$pg = $this->fetchgroup($gid);
-		$can_edit = $this->can("edit",$pg[oid]);
+		$can_edit = $this->can("edit",$pg["oid"]);
 
 		$this->read_template("sel_list.tpl");
 
 		global $lookfor, $sortby;
-		$t = new aw_table(array("prefix" => "users","sortby" => $sortby,"lookfor" => $lookfor,"imgurl" => $GLOBALS["baseurl"]."/vcl/img", "self" => $GLOBALS["PHP_SELF"].($gid ? "?gid=$gid" : "")));
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/users/pickable.xml");
+		$t = new aw_table(array(
+			"prefix" => "users",
+			"sortby" => $sortby,
+			"lookfor" => $lookfor,
+			"imgurl" => $this->cfg["baseurl"]."/vcl/img", 
+			"self" => aw_global_get("PHP_SELF").($gid ? "?gid=$gid" : "")
+		));
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/users/pickable.xml");
 
 		$members = $this->getgroupmembers2($gid);
 
 		if ($all)
+		{
 			$this->listall();
+		}
 		else
+		{
 			$this->listall($gid);
+		}
 		while ($row = $this->db_next())
 		{
-			$row[online] = $row[online] == 1 ? LC_YES : LC_NO;
-			$row[uuid] = $row[uid];		// blah, gotta rename it, because "uid" is a used global variable :(
+			$row["online"] = $row["online"] == 1 ? LC_YES : LC_NO;
+			$row["uuid"] = $row["uid"];		// blah, gotta rename it, because "uid" is a used global variable :(
 
 			// check if user is a member
-			$vl = isset($members[$row[uid]]) ? "CHECKED" : "";
-			$v2 = isset($members[$row[uid]]) ? 1 : 0;
+			$vl = isset($members[$row["uid"]]) ? "CHECKED" : "";
+			$v2 = isset($members[$row["uid"]]) ? 1 : 0;
 
 			// um_$uid shows if the user is in the group or not
 			// and us_$uid lets you change it
 			if ($can_edit && $pickable)
-				$row[check] = "<input type='hidden' NAME='um_".$row[uid]."' VALUE='$v2'><input type='checkbox' NAME='us_".$row[uid]."' VALUE='1' $vl>";
+			{
+				$row["check"] = "<input type='hidden' NAME='um_".$row["uid"]."' VALUE='$v2'><input type='checkbox' NAME='us_".$row["uid"]."' VALUE='1' $vl>";
+			}
 			else
-				$row[check] = "";
+			{
+				$row["check"] = "";
+			}
 			$t->define_data($row);
 		}
 		$t->sort_by(array("field" => $sortby));
-		$this->vars(array("table"		=> $t->draw(),
-											"gid"			=> $gid,
-											"all"			=> $all,
-											"urlgrp"	=> $this->make_url(array("parent" => $gid,"all" => 0,"groups" => 0)),
-											"urlall"	=> $this->make_url(array("parent"	=> $gid,"all" => 1,"groups" => 0)),
-											"urlgrps"	=> $this->make_url(array("parent"	=> $gid,"all" => 0,"groups" => 1)),
-											"from"		=> $GLOBALS["REQUEST_URI"]));
-		$this->vars(array("CAN_EDIT"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT") : ""),
-											"CAN_EDIT_2"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT_2") : "")));
+		$this->vars(array(
+			"table"		=> $t->draw(),
+			"gid"			=> $gid,
+			"all"			=> $all,
+			"urlgrp"	=> $this->make_url(array("parent" => $gid,"all" => 0,"groups" => 0)),
+			"urlall"	=> $this->make_url(array("parent"	=> $gid,"all" => 1,"groups" => 0)),
+			"urlgrps"	=> $this->make_url(array("parent"	=> $gid,"all" => 0,"groups" => 1)),
+			"from"		=> aw_global_get("REQUEST_URI")
+		));
+		$this->vars(array(
+			"CAN_EDIT"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT") : ""),
+			"CAN_EDIT_2"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT_2") : "")
+		));
 		return $this->parse();
 	}
 
@@ -193,12 +199,13 @@ class users extends users_user
 	function _gen_usr_list($args = array())
 	{
 		extract($args);
-		global $uid;
-		$retval[$uid] = array(	"can_change" 	=> true,
-					"can_view"	=> true,
-					// no we don't let you suicide
-					// um, why not exactly? - terryf
-					"can_del"	=> false);	
+		$retval[aw_global_get("uid")] = array(	
+			"can_change" 	=> true,
+			"can_view"	=> true,
+			// no we don't let you suicide
+			// um, why not exactly? - terryf
+			"can_del"	=> false
+		);	
 
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 	
@@ -371,14 +378,18 @@ class users extends users_user
 		}
 		// hmpf. Huvitav, kas IN klauslil mingi suuruspiirang ka on?
 		// kui kasutajaid on ntx 2000, siis see päring voib ysna jube olla
-		$q = "SELECT * FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 $let order by uid LIMIT ".$page*PER_PAGE.",".PER_PAGE;
+
+		$q = "SELECT * FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 $let ORDER BY uid LIMIT ".$page*PER_PAGE.",".PER_PAGE;
 		$this->db_query($q);
+
+		$timeout = ini_get("session.gc_maxlifetime");
+
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
 				"uid"				=> $row["uid"], 
 				"logs"				=> $row["logins"],
-				"online"			=> $row["online"] == 1 ? LC_YES : LC_NO,
+				"online"			=> ((time() - $row["lastaction"]) < $timeout) ? LC_YES : LC_NO,
 				"last"				=> $this->time2date($row["lastaction"],2),
 				"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
 				"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
@@ -387,12 +398,22 @@ class users extends users_user
 				"log" => $this->mk_my_orb("user_stats", array("s_uid" => $row["uid"])),
 				"acl" => $this->mk_my_orb("user_acl", array("s_uid" => $row["uid"]))
 			));
+
 			$cc = ""; $cd = ""; $cpw = "";
 			if ($users[$row["uid"]]["can_change"])
 			{
 				$cc = $this->parse("CAN_CHANGE");
 				$cpw = $this->parse("CAN_PWD");
 			}
+
+			$met = aw_unserialize($row["join_form_entry"]);
+			// no information about jon forms, don't show the change link
+			// because it doesn't do anything anyway
+			if (sizeof($met) == 0)
+			{
+				$cc = "";
+			};
+
 			if ($users[$row["uid"]]["can_del"])
 			{
 				$cd = $this->parse("CAN_DEL");
@@ -458,7 +479,8 @@ class users extends users_user
 	//! Genereerib sisselogitud kasutaja kodukataloogi
 	function gen_home_dir($args = array())
 	{
-		global $udata,$baseurl,$class_defs;
+		$udata = $this->get_user();
+		$baseurl = $this->cfg["baseurl"];
 		$parent = $args["id"];
 
 		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
@@ -476,9 +498,9 @@ class users extends users_user
 		do
 		{
 			$groups = $this->get_objects_below(array(
-						"parent" => $fldr,
-						"class" => CL_PSEUDO,
-				));
+				"parent" => $fldr,
+				"class" => CL_PSEUDO,
+			));
 
 			foreach($groups as $key => $val)
 			{
@@ -538,7 +560,7 @@ class users extends users_user
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
-			$class = $class_defs[$row["class_id"]]["file"];
+			$class = $this->cfg["classes"][$row["class_id"]]["file"];
 			$preview = $this->mk_my_orb("preview", array("id" => $row["oid"]),$class);
 			$cnt++;
 			switch ($row["class_id"])
@@ -548,7 +570,7 @@ class users extends users_user
 					break;
 				
 				case CL_FILE:
-					$preview = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".$row["name"];
+					$preview = file::get_url($row["oid"],$row["name"]);
 					$iconurl = get_icon_url(CL_FILE,$row["name"]);
 					$tpl = "doc";
 					break;
@@ -607,11 +629,11 @@ class users extends users_user
 		{
 			$cnt++;
 			$this->vars(array(
-					"id" => $val["oid"],
-					"indent" => str_repeat("&nbsp;",$indent * 3),
-					"name" => $val["name"],
-					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
-				));
+				"id" => $val["oid"],
+				"indent" => str_repeat("&nbsp;",$indent * 3),
+				"name" => $val["name"],
+				"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+			));
 			$tpl = ($this->active == $key) ? "activefolder" : "folders";
 			$this->folders .= $this->parse($tpl);
 			if ( (is_array($items[$key])) && ($this->path[$key]))
@@ -667,9 +689,9 @@ class users extends users_user
 		$jfrm = 0;
 		while ($row = $this->db_next())
 		{
-			if (!$session_filled_forms[$row[id]])
+			if (!$session_filled_forms[$row["id"]])
 			{
-				$jfrm = $row[id];
+				$jfrm = $row["id"];
 				break;
 			}
 		}
@@ -681,10 +703,10 @@ class users extends users_user
 		extract($arr);
 
 		$u = $this->fetch($id);
-		$fs = unserialize($u[join_form_entry]);
+		$fs = unserialize($u["join_form_entry"]);
 
 		// iterate over the join forms
-		$jfrm = $this->get_next_jf($u[join_grp]);
+		$jfrm = $this->get_next_jf($u["join_grp"]);
 
 		if ($jfrm)
 		{
@@ -715,22 +737,28 @@ class users extends users_user
 	{
 		extract($arr);
 		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array()).LC_USERS_USERS);
+		if (!$id)
+		{
+			$id = aw_global_get("uid");
+		}
 		$u = $this->fetch($id);
 		$this->read_template("changepwd.tpl");
-		$this->vars(array("email" => $u[email],
-				"error" => $error,
-				"reforb" => $this->mk_reforb("submit_change_pwd", array("id" => $id))));
+		$this->vars(array(
+			"email" => $u["email"],
+			"error" => $error,
+			"reforb" => $this->mk_reforb("submit_change_pwd", array("id" => $id))
+		));
 		return $this->parse();
 	}
 
 	////
 	// !generates form for changing the password inside the site
-	function user_change_pwd($section = 0)
+	function user_change_pwd($arr)
 	{
-		global $uid;
+		extract($arr);
 		$this->read_template("changeuserpwd.tpl");
 		$this->vars(array(
-			"section" => $section
+			"reforb" => $this->mk_reforb("submit_user_change_pwd",array("section" => $section))
 		));
 		return $this->parse();
 	}
@@ -740,18 +768,35 @@ class users extends users_user
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
-		if ($arr[pwd] != $arr[pwd2])
+		if ($arr["pwd"] != $arr["pwd2"])
 		{
-			return $this->mk_orb("change_pwd", array("id" => $id, "error" => LC_USERS_PASSW_NOT_SAME));
+			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => LC_USERS_PASSW_NOT_SAME));
 		}
 
-		if ($arr[pwd] != "")
-			$this->save(array("uid" => $arr[id], "password" => $arr[pwd],"email" => $arr[email]));
+		if (!is_valid("password",$pwd))
+		{
+			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid märke<br>"));
+		}
+
+		if ($arr["pwd"] != "")
+		{
+			$this->save(array("uid" => $arr["id"], "password" => $arr["pwd"],"email" => $arr["email"]));
+		}
 		else
-			$this->save(array("uid" => $arr[id], "email" => $arr[email]));
+		{
+			$this->save(array("uid" => $arr["id"], "email" => $arr["email"]));
+		}
 
 		$this->_log("user", "$arr[id] changed password");
-		return $this->mk_orb("gen_list", array());
+		if (is_admin())
+		{
+			return $this->mk_my_orb("gen_list", array());
+		}
+		else
+		{
+			header("Refresh: 2;url=".$this->cfg["baseurl"]);
+			die("Parool on edukalt vahetatud");
+		}
 	}
 
 	////
@@ -759,10 +804,20 @@ class users extends users_user
 	function delete($arr)
 	{
 		extract($arr);
-		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => UID));
+		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => aw_global_get("uid")));
 		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
-		$this->_log("user", UID." blocked user $id");
+		$this->_log("user", aw_global_get("uid")." blocked user $id");
 		header("Location: ".$this->mk_orb("gen_list", array()));
+
+		//magistrali korral võtan javaga yhendust
+		if (aw_ini_get("acl.use_server") == 1)
+		{
+			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			//teatan, et user kustutati saidilt 
+			$str="2 12 ".$id." 0\n";
+			fputs($acl_server_socket,$str);
+			fclose($acl_server_socket);
+		}
 	}
 
 	////
@@ -772,49 +827,61 @@ class users extends users_user
 		extract($arr);
 
 		global $add_state;
-		$add_state[pass] = $pass;
-		$add_state[uid] = $a_uid;
-		$add_state[email] = $email;
+		$add_state["pass"] = $pass;
+		$add_state["uid"] = $a_uid;
+		$add_state["email"] = $email;
 
 		if ($this->can_add($arr))
 		{
 			$jfs = serialize($this->get_join_form_entries($join_grp));
 
-			$this->add(array("join_form_entry" => $jfs, "uid" => $add_state[uid], "password" => $add_state[pass],"email" => $add_state[email], "join_grp" => $join_grp));
-			$this->update_dyn_user($add_state[uid]);
+			$this->add(array(
+				"join_form_entry" => $jfs, 
+				"uid" => $add_state["uid"], 
+				"password" => $add_state["pass"],
+				"email" => $add_state["email"], 
+				"join_grp" => $join_grp
+			));			
+			$this->update_dyn_user($add_state["uid"]);
 
-			global $last_join_uid;
+			$al = $this->get_cval("useradd::autologin");
+
 			$last_join_uid = $add_state["uid"];
-			$uid = $add_state["uid"];
-      $session = $this->gen_uniq_id();
-			session_register("uid","session");
-			$GLOBALS["uid"] = $uid;
-			session_register("last_join_uid");
+			aw_session_set("last_join_uid", $last_join_uid);
+
+			if ($al)
+			{
+				$uid = $add_state["uid"];
+				$session = $this->gen_uniq_id();
+				aw_session_set("uid", $uid);
+				aw_session_set("session", $session);
+				aw_global_set("uid", $uid);
+			}
 
 			// send him some email as well
 			classload("config");
 			$c = new config;
-			$mail = $c->get_simple_config("join_mail".$GLOBALS["LC"]);
+			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
 			$mail = str_replace("#parool#", $add_state["pass"],$mail);
 			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
 
-			mail($add_state["email"],$c->get_simple_config("join_mail_subj".$GLOBALS["LC"]),$mail,"From: ".MAIL_FROM);
+			mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
 			if ($jsa != "")
 			{
-				mail($jsa,$c->get_simple_config("join_mail_subj".$GLOBALS["LC"]),$mail,"From: ".MAIL_FROM);
+				mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			}
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
 
 			$this->_log("user", $add_state["uid"]." joined");
-			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after_join;
+			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after_join;
 		}
 		else
 		{
-			$add_state[level] = 0;
-			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=$section";
+			$add_state["level"] = 0;
+			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=$section";
 		}
 
 		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
@@ -827,41 +894,33 @@ class users extends users_user
 		extract($arr);
 
 		global $add_state;
-		$add_state[pass] = $pass;
-		$add_state[uid] = $a_uid;
-		$add_state[email] = $email;
+		$add_state["pass"] = $pass;
+		$add_state["uid"] = $a_uid;
+		$add_state["email"] = $email;
 
 		if ($this->can_add($arr))
 		{
 			$jfs = serialize($this->get_join_form_entries($join_grp));
 
-			$this->add(array("join_form_entry" => $jfs, "uid" => $add_state[uid], "password" => $add_state[pass],"email" => $add_state[email]));
-			$this->update_dyn_user($add_state[uid]);
+			$this->add(array(
+				"join_form_entry" => $jfs, 
+				"uid" => $add_state["uid"], 
+				"password" => $add_state["pass"],
+				"email" => $add_state["email"]
+			));
+			$this->update_dyn_user($add_state["uid"]);
 
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
-			$this->_log("user", $add_state["uid"]." was added from admin interface by ".$GLOBALS["uid"]);
+			$this->_log("user", $add_state["uid"]." was added from admin interface by ".aw_global_get("uid"));
 			return $this->mk_orb("gen_list", array());
 		}
 		else
 		{
-			$add_state[level] = 0;
+			$add_state["level"] = 0;
 		}
 
 		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
-	}
-
-	function check_chars($str)
-	{
-		$len = strlen($str);
-		for ($i=0; $i < $len; $i++)
-		{
-			$c = substr($str,$i,1);
-			if (!strstr("1234567890qwertyuiopasdfghjklzxcvbnm_",$c))
-				return false;
-		}
-
-		return true;
 	}
 
 	function can_add($arr)
@@ -879,40 +938,40 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state[error] = LC_USERADD_ERROR_EXISTS;;
+			$add_state["error"] = LC_USERADD_ERROR_EXISTS;;
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state[error] = LC_USERADD_ERROR_SYMBOL;
+			$add_state["error"] = LC_USERADD_ERROR_SYMBOL;
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state[error] = LC_USERADD_ERROR_PWD;
+			$add_state["error"] = LC_USERADD_ERROR_PWD;
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state[error] = LC_USERADD_ERROR_PWD_SYMBOL;
-		return false;
+			$add_state["error"] = LC_USERADD_ERROR_PWD_SYMBOL;
+			return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state[error] = LC_USERADD_ERROR_SHORT;
+			$add_state["error"] = LC_USERADD_ERROR_SHORT;
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state[error] = LC_USERADD_ERROR_PWD_SHORT;
+			$add_state["error"] = LC_USERADD_ERROR_PWD_SHORT;
 			return false;
 		}
-		$add_state[error] = "";
+		$add_state["error"] = "";
 		return true;
 	}
 
@@ -933,35 +992,40 @@ class users extends users_user
 			$found = false;
 			while ($row = $this->db_next())
 			{
-				$jgrps[$row[grp]] = $row[grp];
+				$jgrps[$row["grp"]] = $row["grp"];
 				$found = true;
 			}
 			if ($found)
 			{
 				$this->read_template("sel_join_grp.tpl");
-				$this->vars(array("reforb" => $this->mk_reforb("add_user", array("level" => 1)),
-													"join_grps" => $this->picker(0,$jgrps)));
+				$this->vars(array(
+					"reforb" => $this->mk_reforb("add_user", array("level" => 1)),
+					"join_grps" => $this->picker(0,$jgrps)
+				));
 				return $this->parse();
 			}
 			else
 			{
 				$this->read_template("add.tpl");
-				$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
-													"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))));
+				$this->vars(array(
+					"error" => $add_state["error"], 
+					"uid" => $add_state["uid"],
+					"email" => $add_state["email"],
+					"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))
+				));
 				return $this->parse();
 			}
 		}
 		else
 		{
-
 			// find all the forms in the selected join group 
 			$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
 			$jfrm = 0;
 			while ($row = $this->db_next())
 			{
-				if (!$session_filled_forms[$row[id]])
+				if (!$session_filled_forms[$row["id"]])
 				{
-					$jfrm = $row[id];
+					$jfrm = $row["id"];
 					break;
 				}
 			}
@@ -977,8 +1041,12 @@ class users extends users_user
 			{
 				// and when we're dont with all of them, let the user select username/password
 				$this->read_template("add.tpl");
-				$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
-													"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))));
+				$this->vars(array(
+					"error" => $add_state["error"], 
+					"uid" => $add_state["uid"],
+					"email" => $add_state["email"],
+					"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))
+				));
 				return $this->parse();
 			}
 		}
@@ -989,11 +1057,8 @@ class users extends users_user
 		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
 		global $session_filled_forms;
 
-/*		classload("config");
-		$t = new db_config;
-		$jfs = unserialize($t->get_simple_config("user_add_forms"));*/
 		$jfs = array();
-		$this->db_query("SELECT objects.*,forms.grp as grp,forms.j_mustfill as j_mustfill FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$GLOBALS["SITE_ID"]." AND forms.subtype = ".FSUBTYPE_JOIN);
+		$this->db_query("SELECT objects.*,forms.grp as grp,forms.j_mustfill as j_mustfill FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$this->cfg["site_id"]." AND forms.subtype = ".FSUBTYPE_JOIN);
 		while ($row = $this->db_next())
 		{
 			// paneme siia arraysse aint need formid, mida PEAB t2itma, teisi v6ime ignoreerida
@@ -1003,7 +1068,6 @@ class users extends users_user
 			}
 		}
 
-//			echo "<pre>",var_dump($jfs)."</pre>";
 		// nini nyyd on vaja tshekkida et kas k6ik vajalikud formid on t2idetud
 		$groups = array();
 		reset($jfs);
@@ -1011,7 +1075,6 @@ class users extends users_user
 		while (list($fid,$ar) = each($jfs))
 		{
 			$groups[$ar["group"]][$fid] = $session_filled_forms[$fid];
-//				echo "fid $fid ", $session_filled_forms[$fid],"<br>";
 		}
 
 		// k2ime grupid l2bi ja tshekime, et kas m6ni on tervenisti t2idetud
@@ -1043,10 +1106,13 @@ class users extends users_user
 			global $add_state;
 			// n2itame kasutaja tegemise formi
 			$this->read_template("add_site.tpl");
-			$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
-												"reforb"	=> $this->mk_reforb("submit_user_site", array("join_grp" => $add_group, "section" => $GLOBALS["section"], "after_join" => $after_join))));
+			$this->vars(array(
+				"error" => $add_state["error"], 
+				"uid" => $add_state["uid"],
+				"email" => $add_state["email"],
+				"reforb"	=> $this->mk_reforb("submit_user_site", array("join_grp" => $add_group, "section" => aw_global_get("section"), "after_join" => $after_join))
+			));
 			return $this->parse();
-//			return $this->gen_add_form($GLOBALS["baseurl"]."/refcheck.".$GLOBALS["ext"],$add_group);
 		}
 		else
 		{
@@ -1068,28 +1134,61 @@ class users extends users_user
 		// teeme gruppide nimekirja
 		while ($row = $this->db_next())
 		{
-			$ret[$row[id]] = $session_filled_forms[$row[id]];
+			$ret[$row["id"]] = $session_filled_forms[$row["id"]];
 		}
 		return $ret;
 	}
 
-	function do_change_site($fid)
+	////
+	// !shows the form $fid with the entry the user entered when he/she joined
+	function do_change_site($arr)
 	{
-		$id = $GLOBALS["uid"];
+		extract($arr);
+		$id = aw_global_get("uid");
 		if ($id == "")
 		{
 			return LC_USERS_NOT_LOGGED_IN;
 		}
 
-		// zero out formgen's user data cache
-		$this->set_user_config(array("uid" => $id, "key" => "user_info_cache", "value" => false));
-
-		$this->update_dyn_user($id);
 		$u = $this->fetch($id);
-		$fs = unserialize($u[join_form_entry]);
+		$fs = unserialize($u["join_form_entry"]);
 
 		$t = new form;
-		return $t->gen_preview(array("id" => $fid, "entry_id" => $fs[$fid], "extraids" => array("redirect_after" => $GLOBALS["baseurl"]."/?special=2&fid=$fid")));
+		return $t->gen_preview(array(
+			"id" => $fid, 
+			"entry_id" => $fs[$fid], 
+			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id))
+		));
+	}
+
+	////
+	// !this saves the data entered in the form and flushes all necessary caches and group memberships
+	function submit_do_change_site($arr)
+	{
+		extract($arr);
+
+		$u = $this->fetch($user_id);
+		$fs = unserialize($u["join_form_entry"]);
+
+		$t = new form;
+		$t->process_entry(array(
+			"id" => $fid,
+			"entry_id" => $fs[$fid]
+		));
+
+		$fs[$fid] = $t->entry_id;
+
+		// write the entry to the user table as well, in case it is a new entry
+		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE))); 
+
+		// zero out formgen's user data cache
+		$this->set_user_config(array("uid" => $user_id, "key" => "user_info_cache", "value" => false));
+		// and regenerate the cache with the new data
+		$this->get_user_info($user_id);
+
+		$this->update_dyn_user($user_id);
+
+		return $this->mk_my_orb("udata", array("fid" => $fid));
 	}
 
 	////
@@ -1106,7 +1205,7 @@ class users extends users_user
 		{
 			$tpl = "show_join_data.tpl";
 		}
-		global $uid,$last_join_uid;
+		$uid = aw_global_get("uid");
 		$uuid = $uid;
 		if ($uuid == "")
 		{
@@ -1114,7 +1213,7 @@ class users extends users_user
 		}
 		if ($uuid == "")
 		{
-			$uuid = $last_join_uid;
+			$uuid = aw_global_get("last_join_uid");
 		}
 		if ($uuid == "")
 		{
@@ -1144,7 +1243,13 @@ class users extends users_user
 				{
 					foreach($jf as $joinform => $joinentry)
 					{
-						$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml,"no_load_op" => $arr["no_load_op"]));
+						$ret.=$f->show(array(
+							"id" => $joinform,
+							"entry_id" => $joinentry, 
+							"op_id" => $ops[$joinform],
+							"no_html" => $nohtml,
+							"no_load_op" => $arr["no_load_op"]
+						));
 					};
 				}
 			};
@@ -1184,11 +1289,11 @@ class users extends users_user
 	function submit_pwd_remind($arr)
 	{
 		extract($arr);
-		$udata = $this->fetch($username);
+		$udata = $this->get_user(array("uid" => $username));
 		if (!$udata)
 		{
 			$username = $this->db_fetch_field("SELECT uid FROM users WHERE email = '$username'","uid");
-			$udata = $this->fetch($username);
+			$udata = $this->get_user(array("uid" => $username));
 		}	
 
 		classload("config");
@@ -1201,9 +1306,9 @@ class users extends users_user
 		#$mail = str_replace("\r","",$mail);
 		$mail = str_replace("\r\n","\n",$mail);
 
-		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".MAIL_FROM);
+		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
 		$this->_log("user", "user $username was reminded of his/her password");
-		return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after;
+		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
 
 	////
@@ -1272,9 +1377,9 @@ class users extends users_user
 	{
 		if ($uid == "")
 		{
-			$uid = $GLOBALS["uid"];
+			$uid = aw_global_get("uid");
 		}
-		$udata = $this->fetch($uid);
+		$udata = $this->get_user(array("uid" => $uid));
 		$ar = unserialize($udata["join_form_entry"]);
 		if (!is_array($ar))
 		{
@@ -1299,7 +1404,7 @@ class users extends users_user
 			$this->vars(array(
 				"lang_name" => $lrow["name"],
 				"lang_id" => $lrow["id"],
-				"checked" => checked($GLOBALS["admin_lang"] == $lrow["id"])
+				"checked" => checked(aw_global_get("admin_lang") == $lrow["id"])
 			));
 			$lp.=$this->parse("LANG");
 		}
@@ -1372,7 +1477,7 @@ class users extends users_user
 		{
 			classload("form");
 			$f = new form;
-			$eid = $this->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "info_entry"));
+			$eid = $this->get_user_config(array("uid" => aw_global_get("uid"), "key" => "info_entry"));
 			if ($eid)
 			{
 				return $f->show(array("id" => $fo, "entry_id" => $eid,"op_id" => $co->get_simple_config("user_info_op")));
@@ -1396,7 +1501,7 @@ class users extends users_user
 		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
 
-		$this->_log("user", $GLOBALS["uid"]." changed settings ");
+		$this->_log("user", aw_global_get("uid")." changed settings ");
 		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 
@@ -1411,7 +1516,7 @@ class users extends users_user
 			"search" => $this->mk_my_orb("gen_list", array("search" => 1)),
 			"stats" => $this->mk_my_orb("user_stats", array()),
 			"s_uid" => $s_uid,
-			"syslog_url" => $GLOBALS["baseurl"]."/monitor.".$GLOBALS["ext"]."?filter_uid=".$s_uid,
+			"syslog_url" => $this->cfg["baseurl"]."/monitor.".$this->cfg["ext"]."?filter_uid=".$s_uid,
 		));
 		if ($this->prog_acl("add", PRG_USERS))
 		{
@@ -1800,7 +1905,7 @@ class users extends users_user
 			"ACL_TITLE" => $at
 		));
 
-		$grp = $this->get_user_group($GLOBALS["uid"]);
+		$grp = $this->get_user_group(aw_global_get("uid"));
 
 		$obj = new objects;
 		$ol = $obj->get_list();
@@ -1841,7 +1946,7 @@ class users extends users_user
 			{
 				$this->vars(array(
 					"acl_name" => $acl_name,
-					"checked" => checked($row[$acl_name] == ALLOWED),
+					"checked" => checked($row[$acl_name] == aw_ini_get("acl.allowed")),
 					"acl_value" => $row[$acl_name]
 				));
 				$at .= $this->parse("ACL_CELL");
@@ -1861,7 +1966,7 @@ class users extends users_user
 	function submit_user_acl($arr)
 	{
 		extract($arr);
-		$grp = $this->get_user_group($GLOBALS["uid"]);
+		$grp = $this->get_user_group(aw_global_get("uid"));
 
 		foreach($old_acls as $oid => $odata)
 		{
@@ -1884,7 +1989,7 @@ class users extends users_user
 	{
 		extract($args);
 		
-		if (not(defined("MD5_PASSWORDS")))
+		if (not(aw_ini_get("auth.md5_passwords")))
 		{
 			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
 		};
@@ -1943,10 +2048,10 @@ class users extends users_user
 			));
 
 			global $status_msg;
-			$host = $GLOBALS["HTTP_HOST"];
+			$host = aw_global_get("HTTP_HOST");
 			$churl = $this->mk_my_orb("pwhash",array("uid" => $uid,"key" => $hash));
 			$msg = "Keegi (ilmselt teie) soovis vahetada oma parooli saidis $host. Parooli vahetamiseks klikkige \n$churl\n\nKui te aga ei soovinud parooli vahetada, siis võite seda kirja ignoreerida\n";
-			mail($row["email"],"Paroolivahetus saidil $GLOBALS[HTTP_HOST]",$msg,"From: AutomatWeb <automatweb@automatweb.com>");
+			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: AutomatWeb <automatweb@automatweb.com>");
 			$status_msg = "Link saadeti aadressile <b>$row[email]</b>. Vaata oma postkasti";
 			session_register("status_msg");
 			return $this->mk_my_orb("send_hash",array());
@@ -1986,7 +2091,8 @@ class users extends users_user
 		));
 
 		if ($pwhash != $key)
-		{	$this->read_adm_template("hash_results.tpl");
+		{	
+			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
 				"msg" => "Sellist võtit pole väljastatud",
 			));
@@ -2067,6 +2173,15 @@ class users extends users_user
 		$this->_log("auth","$uid vahetas parooli (hash)");
 		$this->read_adm_template("password_change_success.tpl");
 		return $this->parse();
+	}
+
+	function request_startup()
+	{
+		if (($uid = aw_global_get("uid")) != "")
+		{
+			aw_global_set("gidlist", $this->get_gids_by_uid($uid));
+			$this->touch($uid);
+		}
 	}
 }
 ?>

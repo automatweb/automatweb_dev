@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.44 2002/02/18 13:46:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.45 2002/06/10 15:50:54 kristo Exp $
 // shop.aw - Shop
-lc_load("shop");
-global $orb_defs;
-$orb_defs["shop"] = "xml";
 
 session_register("shopping_cart");
 
@@ -29,16 +26,8 @@ class shop extends shop_base
 	function shop()
 	{
 		$this->shop_base();
-		lc_site_load("shop",&$this);
-		lc_load("shop");
 		$this->shop_menus = "";
-		global $lc_shop;
-		if (is_array($lc_shop))
-		{
-			$this->vars($lc_shop);
-		
-			lc_load("definition");
-		}
+		lc_site_load("shop",&$this);
 	}
 
 	////
@@ -54,7 +43,7 @@ class shop extends shop_base
 
 		classload("form_base");
 		$fb = new form_base;
-		$fl = $fb->get_list(FORM_ENTRY);
+		$fl = $fb->get_list(FTYPE_ENTRY);
 
 		classload("currency");
 		$cu = new currency;
@@ -238,7 +227,8 @@ class shop extends shop_base
 
 		// we must detect if we are outside of the shop menu hierarchy
 		// make yah link
-		global $baseurl,$ext;
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"]; 
 		$p = $parent;
 		$y = "";
 		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid=$p");
@@ -368,9 +358,9 @@ class shop extends shop_base
 			}
 		}
 		$this->vars(array(
-				"SHOW_CAT" => $this->shop_menus,
-				"CAT" => "",
-				"CAT_NOCLICK" => ""
+			"SHOW_CAT" => $this->shop_menus,
+			"CAT" => "",
+			"CAT_NOCLICK" => ""
 		));
 
 		$this->vars(array(
@@ -389,7 +379,7 @@ class shop extends shop_base
 	{
 		classload("users");
 		$u = new users;
-		$ucur = $u->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "user_currency"));
+		$ucur = $u->get_user_config(array("uid" => aw_global_get("uid"), "key" => "user_currency"));
 		if (!$ucur)
 		{
 			$ucur = $shop["def_cur"];
@@ -417,7 +407,6 @@ class shop extends shop_base
 			return $this->order_item(array("shop" => $id, "section" => $section, "parallel" => true));
 		}
 
-
 		$shop = $this->get($id);
 
 		global $shopping_cart;
@@ -444,7 +433,6 @@ class shop extends shop_base
 			$itt = $ityp->get_item_type($row["type_id"]);
 			if ($this->is_item_available($row,1,new form(), $min_p,$max_p,$itt))
 			{
-
 				$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
 
 				$f = new form;
@@ -581,7 +569,7 @@ class shop extends shop_base
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section,"first" => 1)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id,"section" => $section)),
 			"t_price" => $t_price,
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section,
 			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $shop_id, "section" => $section))
 		));
 		if ($items)
@@ -825,7 +813,6 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("order.tpl");
 
-
 		classload("form");
 		$f = new form;
 
@@ -833,7 +820,7 @@ class shop extends shop_base
 		$elvals = array();
 		classload("users");
 		$u = new users;
-		$udata = $u->get_user(array("uid" => UID));
+		$udata = $u->get_user(array("uid" => aw_global_get("uid")));
 		$jf = unserialize($udata["join_form_entry"]);
 		if (is_array($jf))
 		{
@@ -917,12 +904,12 @@ class shop extends shop_base
 									"entry_id" => $eid,
 									"id" => $order_forms["order"][$num]["form"], 
 									"reforb" => $this->mk_reforb("pre_submit_order", array("shop_id" => $shop_id, "section" => $section,"num" => $num,"prev_eid" => $eid)),
-									"form_action" => "/index.".$GLOBALS["ext"]
+									"form_action" => "/index.".$this->cfg["ext"]
 								)),
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section)),
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section,
 			"next"		=> $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => ($num+1))),
 			"cnt"			=> $order_forms["current_cnt"]
 		));
@@ -1080,7 +1067,7 @@ class shop extends shop_base
 		classload("form");
 		$f = new form;
 
-		global $uid;
+		$uid = aw_global_get("uid");
 		
 		// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 		$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
@@ -1215,7 +1202,7 @@ class shop extends shop_base
 		}
 
 		classload("form");
-		global $shopping_cart,$ext;
+		global $shopping_cart;
 		$f = new form;
 
 		$shop_o = $this->get($shop);
@@ -1329,7 +1316,7 @@ class shop extends shop_base
 				"cnt_form" => $f->gen_preview(array(
 												"id" => $row["cnt_form"] ? $row["cnt_form"] : $itt["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"],
-												"form_action" => "/index.".$ext,
+												"form_action" => "/index.".$this->cfg["ext"],
 												"tpl" => "show_noform.tpl")),
 				"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $parent,"ignoregoto" => $ignoregoto)),
 				"PAR_ITEM" => $pari
@@ -1351,7 +1338,7 @@ class shop extends shop_base
 													"id" => $row["cnt_form"] ? $row["cnt_form"] : $itt["cnt_form"],
 													"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
 													"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent,"ignoregoto" => $ignoregoto)),
-													"form_action" => "/index.".$ext)),
+													"form_action" => "/index.".$this->cfg["ext"])),
 			));
 		}
 
@@ -1540,7 +1527,7 @@ class shop extends shop_base
 		$ss = "";
 		if ($filter_uid && !is_admin())
 		{
-			global $uid;
+			$uid = aw_global_get("uid");
 			$ss = " AND user = '$uid' ";
 		}
 
@@ -1621,7 +1608,7 @@ class shop extends shop_base
 		$arr["search"] = 1;
 		unset($arr["s_name"]);
 		$this->vars(array(
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section,
 			"search_reforb" => $this->mk_reforb($GLOBALS["action"],$arr),
 		));
 		return $this->parse();
@@ -1708,7 +1695,7 @@ class shop extends shop_base
 			$this->parse("LINE");
 		}
 		$this->vars(array(
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section
 		));
 		return $this->parse();
 	}
@@ -1730,7 +1717,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("view_order.tpl");
 		$this->vars(array(
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+			"to_shop" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section
 		));
 		$sh = $this->get($shop);
 		if (!isset($id))
@@ -2244,7 +2231,7 @@ class shop extends shop_base
 	}
 
 
-////
+	////
 	// !shows the confirmation for order $order_id to user
 	function view_confirmation($arr)
 	{
@@ -2558,7 +2545,7 @@ class shop extends shop_base
 
 		classload("users");
 		$u = new users;
-		$u_cur = $u->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "user_currency"));
+		$u_cur = $u->get_user_config(array("uid" => aw_global_get("uid"), "key" => "user_currency"));
 
 		$this->save_handle();
 		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $item_id AND tfrom <= $start AND tto >= $start ");
@@ -2805,7 +2792,7 @@ class shop extends shop_base
 
 		$sh = $this->get($shop);
 
-		$_mail = LC_SHOP_ORDER_USER.$GLOBALS["uid"].sprintf(LC_SHOP_ABOLISH_ORDER,$order_id);
+		$_mail = LC_SHOP_ORDER_USER.aw_global_get("uid").sprintf(LC_SHOP_ABOLISH_ORDER,$order_id);
 		$_mail.= $this->time2date(time(),2)."\n\n".$mail;
 		
 

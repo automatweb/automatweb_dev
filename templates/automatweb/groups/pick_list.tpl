@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' METHOD=POST name='foo'>
+<form action='reforb.{VAR:ext}' METHOD=POST name='foo'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 	<tr>
 		<td bgcolor="#CCCCCC">
@@ -46,7 +46,10 @@
 		</td>
 	</tr>
 </table>
-<input type='submit' class='small_button' VALUE='Add groups'><input type='hidden' NAME='action' VALUE='submit_acl_groups'>
+<input type='submit' class='small_button' VALUE='Add groups'>
+<input type='hidden' NAME='action' VALUE='submit_acl_groups'>
+<input type='hidden' NAME='class' VALUE='acl'>
+<input type='hidden' NAME='reforb' VALUE='1'>
 <input type='hidden' NAME='from' VALUE='{VAR:from}'>
 <input type='hidden' NAME='oid' VALUE='{VAR:oid}'>
 </form>

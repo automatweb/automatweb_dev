@@ -1,9 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.10 2001/10/16 04:29:32 kristo Exp $
-
-global $orb_defs;
-lc_load("form");
-$orb_defs["form_entry"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.11 2002/06/10 15:50:53 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -17,10 +13,7 @@ class form_entry extends aw_template
 		$this->db_init();
 		$this->tpl_init("forms");
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form", "lc_form");
 	}
 
 	function change($arr)
@@ -43,8 +36,6 @@ class form_entry extends aw_template
 	function get_entry($args = array())
 	{
 		extract($args);
-		classload("xml");
-		$xml = new xml();
 		// koigepealt teeme kindlaks, millise vormi juurde see entry kuulub
 		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = '$eid'","form_id");
 		
@@ -54,7 +45,7 @@ class form_entry extends aw_template
 		if ($entry["chain_id"])
 		{
 			$chain_entry = $this->get_record("form_chain_entries","id",$row["chain_id"]);
-			$els = $xml->xml_unserialize(array("source" => $chain_entry["ids"]));
+			$els = aw_unserialize($chain_entry["ids"]);
 		}
 		else
 		{

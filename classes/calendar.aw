@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.11 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.12 2002/06/10 15:50:53 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -10,10 +10,7 @@ define(CAL_SUNDAY,7);
 define(CAL_WEEK_START,1);
 define(ROLL_OVER,6 + CAL_WEEK_START);
 define(DAY,86400);
-lc_load("calendar");
 classload("defs");
-global $orb_defs;
-$orb_defs["calendar"] = "xml";
 
 class calendar extends aw_template
 {
@@ -21,20 +18,12 @@ class calendar extends aw_template
 	// !Konstruktor
 	function calendar()
 	{
-		$this->tpl_init("calendar");
-		global $lc_calendar;
-		if (is_array($lc_calendar))
-		{
-			$this->vars($lc_calendar);
-		};
+		$this->init("calendar");
+		$this->lc_load("calendar","lc_calendar");
 	}
 
 	function draw_month($args = array())
 	{
-		// whatta hell? I'm a dreaming or what?
-		// debuukisin natuke ja mulle tundub, et ntx vibe eventite
-		// lehel kutsutakse seda funktsiooni 5(!) korda
-		// millise kuu kohta kalendrit joonistame?
 		$year	= ($args["year"]) ? $args["year"] : date("Y");
 		$mon	= ($args["mon"]) ? $args["mon"] : date("m");
 		$act_day = ($args["day"]) ? $args["day"] : date("d");
@@ -42,12 +31,13 @@ class calendar extends aw_template
 		$tpl 	= ($args["tpl"]) ? $args["tpl"] : "plain.tpl";
 		$misc   = (is_array($args["misc"])) ? $args["misc"] : array();
 		$marked = (is_array($args["marked"])) ? $args["marked"] : array();
+		$id = $args["id"];
+		$type = $args["type"];
 
 		$add	= $args["add"]; // miski räga, mis linkidele otsa pannakse
 
 		// mitu päeva selles kuus on?
 		$days_in_mon = $this->get_days_in_month($mon,$year);
-
 
 		// mis nädalapäevad on kuu esimene ja viimane päev?
 		list($start_wday,$end_wday) = $this->get_weekdays_for_month($mon,$year);
@@ -87,7 +77,8 @@ class calendar extends aw_template
 		$line = "";
 
 		$baselink = $misc + array("year" => $year,"mon" => $mon);
-			
+
+		
 		for ($day = $start; $day <= $end; $day++)
 		{
 			// kui on lubatud vahemikus, siis joonistame päeva,
@@ -108,14 +99,21 @@ class calendar extends aw_template
 				{
 					$markup = "<b>%s</b>";
 				}
+				elseif ($marked[sprintf("%02d%02d%04d",$day,$mon,$year)])
+				{
+					$markup_style = "caldayevent";
+				}
 				else
 				{
+					$markup_style = "calday";
 					$markup = "%s";
 				};
 			$this->vars(array(
 				"nday" => sprintf($markup,$day),
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
+				"dayorblink" => $this->mk_my_orb("view",array("id" => $id,"type" => "day","date" => "$day-$mon-$year")),
 				"day" => sprintf($markup,$day),
+				"markup_style" => $markup_style,
 			));
 			$tpl = ($day == $act_day) ? "week.activecell" : "week.cell";
 			if (($day <= 0) || ($day > $days_in_mon))
@@ -159,6 +157,8 @@ class calendar extends aw_template
 			"caption" => $caption,
 			"prev" => $this->mk_link($misc + array("year" => $prevyear,"mon" => $prevmon)),
 			"next" => $this->mk_link($misc + array("year" => $nextyear,"mon" => $nextmon)),
+			"prevorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"date" => "$act_day-$prevmon-$prevyear")),
+			"nextorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"date" => "$act_day-$nextmon-$nextyear")),
 			"week" => $month,
 			"prefix" => $prefix,
 			"prevmon" => $prevmon,
@@ -209,7 +209,7 @@ class calendar extends aw_template
 	{
 		extract($args);
 		list($date,$monday,$sunday) = $this->get_week_range(array("date" => $date));
-		global $uid;
+		$uid = aw_global_get("uid");
 		$q = "SELECT * FROM events WHERE uid = '$uid' AND start >= '$monday' AND start <= '$sunday' ORDER BY start";
 		$this->db_query($q);
 		$counts = array();

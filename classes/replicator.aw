@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.7 2002/02/18 13:47:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.8 2002/06/10 15:50:54 kristo Exp $
 
-
-classload("connect");
+classload("db");
 class replicator_host extends db_connector
 {
 	//key on host key ja table on ülekannete tabel
@@ -27,21 +26,21 @@ class replicator_host extends db_connector
 			// no prize for anyone who can tell why the next line is not * 65536
 			srand((double)microtime() * 131337);
 			$rand=md5(uniqid(rand()));
+			$q = "INSERT INTO $this->table (ip,tm,rand) VALUES ('$REMOTE_ADDR','".time()."','$rand')";
 			if (!$this->db_query("INSERT INTO $this->table (ip,tm,rand) values ('$REMOTE_ADDR','".time()."','$rand')",false))
+			{
 				$error="can't allocate tid";
+			};
+				
 
 			$tid=$this->db_last_insert_id();
 			$this->respond(array("error"=>$error,"tid"=>$tid,"rand"=>$rand));
 			return array("nop"=>1,"error"=>$error);
 		}
 
-		$tid=(int)$tid;
+		$q=$this->db_query("SELECT * FROM $this->table where tid=$tid",true);
 
-	
-		$q=$this->db_query("SELECT * FROM $this->table where tid=$tid",false);
-		
-
-		if (!$q || $this->num_rows < 1)
+		if (!$q || $this->num_rows() < 1)
 		{
 			$error="nonexisting tid";
 		} else
@@ -135,7 +134,7 @@ class replicator_client extends db_connector
 
 	function query($func,$arr,$rclose=0)
 	{
-		return $this->_query(array_merge($arr,array("func"=>$func,"tid"=>$this->tid,"hash"=>$this->hash,"replicator_close"=>$rclose,"r_uid" => UID)));
+		return $this->_query(array_merge($arr,array("func"=>$func,"tid"=>$this->tid,"hash"=>$this->hash,"replicator_close"=>$rclose,"r_uid" => aw_global_get("uid"))));
 	}
 }
 ?>

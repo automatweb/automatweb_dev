@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.5 2002/03/04 20:20:53 duke Exp $
-class repeater {
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+class repeater 
+{
 	////
 	// !Konstruktor.
 	// argumendid:
@@ -240,11 +241,11 @@ class repeater {
 	}
 
 	function get_day_diff($time1,$time2)
-        {
-                $diff = $time2 - $time1;
-                $days = (int)($diff / 86400);
-                return $days;
-        }
+	{
+		$diff = $time2 - $time1;
+		$days = (int)($diff / 86400);
+		return $days;
+	}
 
 };
 ?>

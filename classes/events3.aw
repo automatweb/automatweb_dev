@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.4 2002/01/21 13:05:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.5 2002/06/10 15:50:53 kristo Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -11,15 +11,11 @@
 //  koolituskalender
 
 
-global $orb_defs;
-$orb_defs["events3"] = "xml";
-
-class events3 extends aw_template {
-
+class events3 extends aw_template 
+{
 	function events3($args = array())
 	{
-		$this->tpl_init("events");
-		$this->db_init("events");
+		$this->init("events");
 		$this->types = array(
 			"1" => "Laadad",
 			"2" => "Messid",
@@ -81,9 +77,9 @@ class events3 extends aw_template {
 		$this->read_template("edit.tpl");
 		
 		load_vcl("date_edit");
-               	$start = new date_edit("start");
+		$start = new date_edit("start");
 		$start->set("minute_step",30);
-               	$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
+		$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
 		classload("calendar");
 		$cal = new calendar();
 		if ($old["start"])
@@ -133,8 +129,7 @@ class events3 extends aw_template {
 		};
 		if (not($id))
 		{
-			global $rootmenu;
-			$parent = $rootmenu;
+			$parent = $this->cfg["rootmenu"];
 			$id = $this->new_object(array(
 						"parent" => $parent,
 						"class_id" => CL_EVENT,
@@ -193,7 +188,7 @@ class events3 extends aw_template {
 	function event_list($args = array())
 	{
 		extract($args);
-		global $rootmenu,$year,$mon,$day,$op;
+		global $year,$mon,$day,$op;
 			
 		classload("calendar");
 		$cal = new calendar();
@@ -267,7 +262,7 @@ class events3 extends aw_template {
 
 		$q = "SELECT objects.*,events3.* FROM objects
 			LEFT JOIN events3 ON (objects.oid = events3.id)
-			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+			WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status = 2
 			$limits	
 			ORDER BY events3.start $limits2";
 
@@ -409,16 +404,16 @@ class events3 extends aw_template {
 	{
 		extract($args);
 		load_vcl("date_edit");
-               	$start = new date_edit("start");
+		$start = new date_edit("start");
 		$start->set("minute_step",30);
-               	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
+		$start->configure(array("day" => 1,"month" => 2,"year" => 3));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$sx = ($st) ? $st : mktime(0,0,0,$m,$d,$y);
 		$start_ed = $start->gen_edit_form("start",$sx);
-               	$end = new date_edit("end");
+		$end = new date_edit("end");
 		list($d,$m,$y) = explode("-",date("d-m-Y",strtotime("+1 week")));
 		$ex = ($et) ? $et : mktime(23,59,59,$m,$d,$y);
-               	$end->configure(array("day" => 1,"month" => 2,"year" => 3));
+		$end->configure(array("day" => 1,"month" => 2,"year" => 3));
 		$end_ed = $start->gen_edit_form("end",$ex);
 		$this->read_template("search.tpl");
 		$type = ($type) ? $type : -1;
@@ -440,7 +435,6 @@ class events3 extends aw_template {
 		extract($args);
 		$st = mktime(0,0,0,$start["month"],$start["day"],$start["year"]);
 		$et = mktime(23,59,59,$end["month"],$end["day"],$end["year"]);
-		global $rootmenu;
 		$cl = CL_EVENT;
 		$type_search = ($type != 0) ? " AND events3.type = '$type' " : "";
 		$place_search = ($place != 0) ? " AND events3.place = '$place' " : "";
@@ -449,7 +443,7 @@ class events3 extends aw_template {
 		$this->read_template("search_results.tpl");
 		$q = "SELECT objects.*,events3.* FROM objects
 			LEFT JOIN events3 ON (objects.oid = events3.id)
-			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+			WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status = 2
 			AND start >= '$st' AND start <= '$et' $type_search $place_search $loc_search
 			ORDER BY events3.start";
 		$this->db_query($q);
@@ -472,7 +466,6 @@ class events3 extends aw_template {
 	function parse_alias($args = array())
 	{
 		extract($args);
-		global $ext,$baseurl;
 		switch($matches[2])
 		{
 			case "calendar":
@@ -518,11 +511,10 @@ class events3 extends aw_template {
 			$start = mktime(0,0,0,$mon,1,$year);
 			$end = mktime(0,0,0,$mon+1,0,$year);
 			$limits = " AND events3.start >= $start AND events3.start <= $end";
-			global $rootmenu;
 			$cl = CL_EVENT;
 			$q = "SELECT objects.*,events3.* FROM objects
 				LEFT JOIN events3 ON (objects.oid = events3.id)
-				WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+				WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status = 2
 				$limits	
 				ORDER BY events3.start";
 
@@ -555,7 +547,7 @@ class events3 extends aw_template {
 
 	function my_events($args = array())
 	{
-		if (not(defined("UID")))
+		if (aw_global_get("uid") == "")
 		{
 			// return, if not logged in. actually, ORB should take care of this check
 			return false;
@@ -567,12 +559,11 @@ class events3 extends aw_template {
 			$xml = new xml(array("ctag" => "metadata"));
 
 			$cl = CL_EVENT;
-			$uid = UID;
-			global $rootmenu;
+			$uid = aw_global_get("uid");
 
 			$q = "SELECT objects.*,events.* FROM objects
 				LEFT JOIN events ON (objects.oid = events.id)
-				WHERE objects.parent = $rootmenu AND class_id=$cl AND status > 0
+				WHERE objects.parent = ".$this->cfg["rootmenu"]." AND class_id=$cl AND status > 0
 				AND objects.createdby = '$uid'
 				ORDER BY events.start";
 
@@ -603,7 +594,7 @@ class events3 extends aw_template {
 	{
 		extract($args);
 		$cl = CL_EVENT;
-		$uid = UID;
+		$uid = aw_global_get("uid");
 		// määrame hetkeks koik kasutaja eventid deaktiivseks
 		if ($save)
 		{
@@ -631,11 +622,9 @@ class events3 extends aw_template {
 	function invite($args = array())
 	{
 		$this->read_template("invite.tpl");
-		if (defined("UID"))
+		if (aw_global_get("uid") != "")
 		{
-			classload("users");
-			$u = new users();
-			$udata = $u->get_user_info(UID);
+			$udata = $this->get_user();
 		};
 		$this->vars(array(
 			"yname" => $udata["First Name: element"] . " " . $udata["Last Name: element"],
@@ -679,8 +668,7 @@ class events3 extends aw_template {
 			WHERE oid = '$id' AND class_id=$cl AND status = 2";
 		$this->db_query($q);
 		$event = $this->db_next();
-		global $no_menus;
-		if ($no_menus)
+		if (aw_global_get("no_menus"))
 		{	
 			$tpl = "popup.tpl";
 		}

@@ -10,45 +10,48 @@ function selall()
 
 function del_ic()
 {
-document.boo.action.value='del_icons';document.boo.submit();
+	document.boo.action.value='del_icons';document.boo.submit();
 }
+
 function grp_ic()
 {
-document.boo.action.value='grp_icons';document.boo.submit();
+	document.boo.action.value='grp_icons';
+	document.boo.submit();
 }
 function sel_grp()
 {
-document.boo.action.value='sel_grp';document.boo.submit();
+	window.location.href = "{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=icons&action=icon_db&grp="+document.boo.grp.options[document.boo.grp.selectedIndex].value;
 }
 function del_grp()
 {
-document.boo.action.value='del_grp';document.boo.submit();
+	document.boo.action.value='del_grp';
+	document.boo.submit();
 }
 </script>
-<form name='boo' action='refcheck.{VAR:ext}' method=post>
+<form name='boo' action='reforb.{VAR:ext}' method=post>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="5" class="fgtitle">&nbsp;<b>IKOONID:&nbsp;<a href='config.{VAR:ext}?type=add_icon'>Lisa</a> | <a href='config.{VAR:ext}?type=add_icon_zip'>Uploadi zip</a>
+<td height="15" colspan="5" class="fgtitle">&nbsp;<b>IKOONID:&nbsp;<a href='{VAR:add_icon}'>Lisa</a> | <a href='{VAR:add_zip}'>Uploadi zip</a>
 <br>&nbsp;Lehek&uuml;lg: 
 <!-- SUB: PAGE -->
-<a href='config.{VAR:ext}?type=icon_db&page={VAR:num}&grp={VAR:grp}'>{VAR:from} - {VAR:to}</a> | 
+<a href='{VAR:pg_url}'>{VAR:from} - {VAR:to}</a> | 
 <!-- END SUB: PAGE -->
 
 <!-- SUB: SEL_PAGE -->
 {VAR:from} - {VAR:to} |
 <!-- END SUB: SEL_PAGE -->
 <!-- SUB: ALL -->
-<a href='config.{VAR:ext}?type=icon_db&page=all&grp={VAR:grp}'>K&otilde;ik</a>
+<a href='{VAR:all_url}'>K&otilde;ik</a>
 <!-- END SUB: ALL -->
 <!-- SUB: ALL_SEL -->
 K&otilde;ik
 <!-- END SUB: ALL_SEL -->
 </b></td>
 <td height="15" colspan="2" class="fgtitle">
-<select name='grp'>{VAR:grps}</select><input type='submit' onClick='sel_grp()' value='Vali grupp'><br>
+<select name='grp'>{VAR:grps}</select><input type='submit' onClick='sel_grp();return false;' value='Vali grupp'><br>
 <a href='javascript:grp_ic()'>Grupeeri</a>
 </td>
 </tr>
@@ -66,8 +69,8 @@ K&otilde;ik
 <td class="fgtext">&nbsp;{VAR:comment}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:programm}&nbsp;</td>
 <td class="fgtext">&nbsp;<img src='{VAR:url}'>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='config.{VAR:ext}?type=change_icon&id={VAR:id}'>Muuda</a>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='config.{VAR:ext}?type=del_icon&id={VAR:id}&page={VAR:page}'>Kustuta</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:change}'>Muuda</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:delete}'>Kustuta</a>&nbsp;</td>
 <td class="fgtext"><input type='checkbox' name='sel[]' value={VAR:id}></td>
 </tr>
 <!-- END SUB: LINE -->
@@ -84,6 +87,6 @@ K&otilde;ik
 </td>
 </tr>
 </table>
-<input type='hidden' name='action' value='export_icons'>
+{VAR:reforb}
 </form>
 <Br><br>

@@ -1,7 +1,16 @@
 /*
  * AW install script
  * path to configuration file should probably come from command line
- * $Header: /home/cvs/automatweb_dev/scripts/install/Attic/install.c,v 1.3 2002/04/10 01:03:21 duke Exp $
+ * $Header: /home/cvs/automatweb_dev/scripts/install/Attic/install.c,v 1.4 2002/06/10 15:51:01 kristo Exp $
+ */
+
+/* 1 - get data from users (logroot, folder, ServerName, admin_folder, type)
+ * 2 - get vhost conf file from user
+ * 3 - copy the vhost conf to place
+ * 4 - create log dir based on user input
+ * 5 - create site dir based on user input
+ * 6 - copy files to site directory
+ * 7 - return - aw has to do the rest
  */
 #include <stdio.h>
 #include <string.h>
@@ -11,112 +20,165 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <syslog.h>
 
 main(int argc, char **argv)
 {
-	FILE *fpconfig; // config file 
+	// that's where we store the vhost conf we receive from caller
+	char vhost_conf[4097];
+	char line[200],basedir[200],vhost_loc[200],logroot[200],ServerName[200],admin_folder[200],type[200],remote_host[200],cmdline[200],mysql_host[200],mysql_user[200],mysql_pass[200],mysql_client[200],dbname[200],dbuser[200],dbpass[200];
+	char errmsg[200];
+	char logmsg[200];
 	FILE *pmysql; // pipe to mysql
+	// we get the whole apache configuration block from caller (AW)
+	// it contains an unknown number of lines so we use those tokens
+	// to mark the begin and end of the config block
+	const char vhost_start_token[] = "##vhost-start##";
+	const char vhost_end_token[] = "##vhost-end##";
+	const int keys_needed = 14;
+	int is_conf,keys = 0;
 
-	// these come from stdin/client
-	char dbname[60], dbhost[60], dbuser[60], dbpass[60], sitename[60];
-
-	// these come from install.ini
-	char mysql_host[30], mysql_user[30], mysql_pass[30], mysql_client[30];
-	char default_user[30], default_pass[30], wwwroot[30];
-
-	// for internal use
-	char cline[100],myline[100],cmdline[200],path[100];
 	char *ckey,*cval;
+
+	FILE *tmp;
 
 	extern int errno;
 
-	if ((fpconfig = fopen("/www/automatweb_dev/scripts/install/install.ini","r")) == NULL)
+	strcpy(vhost_conf,"");
+
+	while( fgets(line,sizeof(line)-1,stdin) != NULL)
 	{
-		printf("Can't open configuration file!\n");
-		return 1;
-	}
-	else
-	{
-		while ( fgets(cline,sizeof(cline)-1,fpconfig) != NULL)
+		if ( strncmp(line,vhost_start_token,sizeof(vhost_start_token)-1) == 0)
 		{
-			// snarf the key
-			ckey = strtok(cline,"=");
-			// and now the value up to the end of line
-			cval = strtok(NULL,"\n");
-			// check whether the key is one of the things we need
-			// and if so, assign it to correct variable
-			if ( strcmp(ckey,"mysql.host") == 0)
+			is_conf = 1;
+		}
+		else if ( strncmp(line,vhost_end_token,sizeof(vhost_end_token)-1) == 0)
+		{
+			is_conf = 0;
+		}
+		else
+		{
+			if (is_conf == 1)
 			{
-				strncpy(mysql_host,cval,sizeof(mysql_host)-1);
+				strcat(vhost_conf,line);
 			}
-			else if ( strcmp(ckey,"mysql.user") == 0)
+			else
 			{
-				strncpy(mysql_user,cval,sizeof(mysql_user)-1);
-			}
-			else if ( strcmp(ckey,"mysql.pass") == 0)
-			{
-				strncpy(mysql_pass,cval,sizeof(mysql_pass)-1);
-			}
-			else if ( strcmp(ckey,"mysql.client") == 0)
-			{
-				strncpy(mysql_client,cval,sizeof(mysql_client)-1);
-			}
-			else if ( strcmp(ckey,"default_user") == 0)
-			{
-				strncpy(default_user,cval,sizeof(default_user)-1);
-			}
-			else if ( strcmp(ckey,"default_pass") == 0)
-			{
-				strncpy(default_pass,cval,sizeof(default_pass)-1);
-			}
-			else if ( strcmp(ckey,"wwwroot") == 0)
-			{
-				strncpy(wwwroot,cval,sizeof(wwwroot)-1);
+				// snarf the key
+				ckey = strtok(line,"=");
+				// and now the value up to the end of line
+				cval = strtok(NULL,"\n");
+				if (strcmp(ckey,"basedir") == 0)
+				{
+					strncpy(basedir,cval,sizeof(basedir));
+					keys++;
+				}
+				else if (strcmp(ckey,"logroot") == 0)
+				{
+					strncpy(logroot,cval,sizeof(logroot));
+					keys++;
+				}
+				else if (strcmp(ckey,"ServerName") == 0)
+				{
+					strncpy(ServerName,cval,sizeof(ServerName));
+					keys++;
+				}
+				else if (strcmp(ckey,"admin_folder") == 0)
+				{
+					strncpy(admin_folder,cval,sizeof(admin_folder));
+					keys++;
+				}
+				else if (strcmp(ckey,"vhost_loc") == 0)
+				{
+					strncpy(vhost_loc,cval,sizeof(vhost_loc));
+					keys++;
+				}
+				else if (strcmp(ckey,"type") == 0)
+				{
+					strncpy(type,cval,sizeof(type));
+					keys++;
+				}
+				else if (strcmp(ckey,"remote_host") == 0)
+				{
+					strncpy(remote_host,cval,sizeof(remote_host));
+					keys++;
+				}
+				else if (strcmp(ckey,"mysql_host") == 0)
+				{
+					strncpy(mysql_host,cval,sizeof(mysql_host));
+					keys++;
+				}
+				else if (strcmp(ckey,"mysql_user") == 0)
+				{
+					strncpy(mysql_user,cval,sizeof(mysql_user));
+					keys++;
+				}
+				else if (strcmp(ckey,"mysql_pass") == 0)
+				{
+					strncpy(mysql_pass,cval,sizeof(mysql_pass));
+					keys++;
+				}
+				else if (strcmp(ckey,"mysql_client") == 0)
+				{
+					strncpy(mysql_client,cval,sizeof(mysql_client));
+					keys++;
+				}
+				else if (strcmp(ckey,"dbname") == 0)
+				{
+					strncpy(dbname,cval,sizeof(dbname));
+					keys++;
+				}
+				else if (strcmp(ckey,"dbuser") == 0)
+				{
+					strncpy(dbuser,cval,sizeof(dbuser));
+					keys++;
+				}
+				else if (strcmp(ckey,"dbpass") == 0)
+				{
+					strncpy(dbpass,cval,sizeof(dbpass));
+					keys++;
+				}
 			};
 		};
-		fclose(fpconfig);
 	};
+	openlog("awinst",0,LOG_USER);
+	sprintf(logmsg,"AW installer received a request from %s to initialize site %s",remote_host,ServerName);
+	syslog(LOG_USER | LOG_NOTICE,logmsg);
+	// write config file
+	// now just for testing we write all the data out to tmp file
+	if ( (tmp = fopen(vhost_loc,"w")) == NULL)
+	{
+		strcpy(errmsg,"tried to open /tmp/awinst.tmp for writing, but ");
+		strncat(errmsg,strerror(errno),sizeof(errmsg)-strlen(errmsg));
+		syslog(LOG_USER | LOG_NOTICE,errmsg);
+		return 1;
+	};
+
+	if ( (strlen(vhost_conf) == 0) || (keys != keys_needed) )
+	{
+		printf("didn't get everything I need, dropping out\n");
+		return 1;
+	};
+
+	fputs(vhost_conf,tmp);
+	fclose(tmp);
+	
+	// create dir for log files
+	mkdir(logroot,0777);
+
+	// create basedir for teh site
+	mkdir(basedir,0777);
+
+	// copy files
+	sprintf(cmdline,"cd %s; tar xpzf /www/automatweb_dev/install/%s.tar.gz",basedir,type);
+	system(cmdline);
+
+	printf("finishing %d",keys);
 
 	// get the information from the client
 	// tegelikult võiks see vajalik kataloogistrukuur tulla ju tar failist?
 	// oh yes.
-	printf("AW installer\n");
-	
-	printf("db.name (will also be used as sitename: ");
-	scanf("%20s",dbname);
-	printf("db.host: ");
-	scanf("%20s",dbhost);
-	printf("db.user: ");
-	scanf("%20s",dbuser);
-	printf("db.pass: ");
-	scanf("%20s",dbpass);
-	printf("default.user (%s): ",default_user);
-	scanf("%20s",default_user);
-	printf("default.pass (%s): ",default_pass);
-	scanf("%20s",default_pass);
-
-	strncpy(sitename,dbname,sizeof(sitename)-1);
-	
-	strncpy(path,wwwroot,sizeof(wwwroot)-1);
-
-	strcat(path,sitename);
-	create_dir(path);
-	copy_site_files(path);
-	create_apache_conf(path,sitename);
-
-	return 0;
-
-	// create required directories
-	// site_dir
-	// pagecache
-	// public
-	// public/img
-	// archive
-	// files
 	//
-	//
-
-	// get the database dump
 	sprintf(cmdline,"mysqldump -d -h %s -u %s --password=%s samaw > /tmp/dump.tmp",mysql_host,mysql_user,mysql_pass);
 	printf("dumping samaw...\n");
 	printf("executing %s\n",cmdline);
@@ -133,14 +195,14 @@ main(int argc, char **argv)
 		return 1;
 	};
 
-	sprintf(myline,"CREATE DATABASE %s;\n",dbname);
-	fputs(myline,pmysql);
+	sprintf(cmdline,"CREATE DATABASE %s;\n",dbname);
+	fputs(cmdline,pmysql);
 
-	sprintf(myline,"GRANT ALL PRIVILEGES ON %s.* TO %s@%s IDENTIFIED BY '%s';\n",dbname,dbuser,mysql_client,dbpass);
-	fputs(myline,pmysql);
+	sprintf(cmdline,"GRANT ALL PRIVILEGES ON %s.* TO %s@%s IDENTIFIED BY '%s';\n",dbname,dbuser,mysql_client,dbpass);
+	fputs(cmdline,pmysql);
 		
 	pclose(pmysql);
-
+	
 	sprintf(cmdline,"mysql -h %s -u %s --password=%s %s< /tmp/dump.tmp",mysql_host,dbuser,dbpass,dbname);
 	printf("Importing database dump\n");
 	printf("Executing %s\n",cmdline);
@@ -148,51 +210,43 @@ main(int argc, char **argv)
 	unlink("/tmp/dump.tmp");
 	printf("Import done\n");
 
-	/*
-	printf("Creating default entries\n");
-	sprintf(cmdline,"mysql -h %s -u %s --password=%s %s",mysql_host,dbuser,dbpass,dbname);
-	printf("executing %s\n",cmdline);
-	if ((pmysql = popen(cmdline,"w")) == NULL)
-	{
-		printf("Can't open pipe to MySQL!\n");
-		return 1;
-	};
-
-	sprintf(myline,"INSERT INTO users (uid,password) VALUES ('%s','%s');\n",default_user,default_pass);
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
+	// create symlink
+	//
+	// copy neccessary files
+	//
+	// create log dir
 	
-	sprintf(myline,"INSERT INTO groups (gid,name,type,priority) VALUES (1,'root user',1,100000000);\n");
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO groupmembers (gid,uid) values(1,'%s');\n",default_user);
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO groups (gid,name,type,priority) VALUES (2,'admins',0,1);\n");
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO groupmembers (gid,uid) VALUES (2,'%s');\n",default_user);
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO objects (oid,parent,name,class_id,status) VALUES (1,0,'root',1,2);\n");
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO objects (oid,parent,name,class_id,status) VALUES (2,1,'admins',37,2);\n");
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	sprintf(myline,"INSERT INTO acl VALUES(1,2,2,1);\n");
-	printf("Executing %s\n",myline);
-	fputs(myline,pmysql);
-	
-	pclose(pmysql);
-	*/
+	closelog;
+	return 0;
 
 	printf("NICE ONE, BROTHA!!!!\n");
 	return 0;
+}
+
+void create_dir(char path[])
+{
+	if ( (mkdir(path,0777)) != 0)
+	{
+		perror(path);
+		//printf("mkdir failed - %s!\n",errno);	
+		exit(1);
+	};
+}
+
+void copy_site_files(char path[])
+{
+	char cmdline[200];
+	int ret;
+	strncpy(cmdline,"cd ",sizeof(cmdline)-1);
+	strcat(cmdline,path);
+
+	strcat(cmdline,"; tar xzf /www/automatweb_dev/install/default.tar.gz");
+	printf("executing %s",cmdline);
+	ret = system(cmdline);
+	// fix it. should figure out under what user apache is running as and set the owner of
+	// the file to that uid
+	strncpy(cmdline,"chmod 666 ",sizeof(cmdline)-1);
+	strcat(cmdline,path);
+	strcat(cmdline,"/aw.ini");
+	system(cmdline);
 }

@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' method=post>
+<form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
 <td class="plain">Ikoonide baas</td>
@@ -25,5 +25,5 @@
 <td class="plain"><input type='submit' class='small_button' value='Ekspordi'></td>
 </tr>
 </table>
-<input type='hidden' name='action' value='exp_icons'>
+{VAR:reforb}
 </form>

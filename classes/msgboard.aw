@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.26 2002/02/18 13:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.27 2002/06/10 15:50:53 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -8,15 +8,14 @@ class msgboard extends aw_template
 {
 	function msgboard()
 	{
-		$this->db_init();
-		$this->tpl_init("msgboard");
+		$this->init("msgboard");
 	}
 
 	////
 	//! submitib teemadele antud haaled
 	function submit_votes($args = array())
 	{
-		if ($GLOBALS["uid"] == "fubar")
+		if (aw_global_get("uid") == "fubar")
 		{
 			// see, kes haaletada saab, peab olema konfigureeritav
 			$this->raise_error(ERR_MSGB_NOLOGIN,"sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
@@ -36,8 +35,8 @@ class msgboard extends aw_template
 			foreach($vote as $key => $val)
 			{
 				$topicvotes = $this->get_object_metadata(array(
-							"oid" => $key,
-							"key" => "votes",
+					"oid" => $key,
+					"key" => "votes",
 				));
 	
 				$oldvotes[$key] = $val;
@@ -46,15 +45,14 @@ class msgboard extends aw_template
 				$topicvotes["total"] = $topicvotes["total"] + $val;
 
 				$this->set_object_metadata(array(
-							"oid" => $key,
-							"key" => "votes",
-							"value" => $topicvotes,
+					"oid" => $key,
+					"key" => "votes",
+					"value" => $topicvotes,
 				));
 			};
 		};
 		$commentvotes = $oldvotes;
 		session_register("commentvotes");
-		global $baseurl;
 		return;
 	}	
 
@@ -68,7 +66,9 @@ class msgboard extends aw_template
 		global $msgboard_type,$aw_mb_last;
 
 		if ($msgboard_type == "threaded")	// the lotsa-pageviews version
+		{
 			return $this->show_threaded($id, $page,$forum_id);
+		}
 
 		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
 		$aw_mb_last[$id] = time();
@@ -79,7 +79,9 @@ class msgboard extends aw_template
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
 
 		if ($msgboard_type == "flat")	// the wussy version
+		{
 			return $this->show_flat($id, $page,$forum_id);
+		}
 
 
 		$this->quote(&$id);
@@ -137,9 +139,13 @@ class msgboard extends aw_template
 		{
 			$this->vars(array("pagenum" => $i, "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE)));
 			if ($i == $page)
+			{
 				$p.=$this->parse("SEL_PAGE");
+			}
 			else
+			{
 				$p.=$this->parse("PAGE");
+			}
 		}
 		if ($num_pages > 1)
 		{
@@ -156,11 +162,13 @@ class msgboard extends aw_template
 	function req_msgs($parent,&$str)
 	{
 		if (!is_array($this->comments[$parent]))
+		{
 			return;
+		}
 
 		$this->level++;
 
-		global $uid;
+		$uid = aw_global_get("uid");
 
 		reset($this->comments[$parent]);
 		while (list(,$v) = each($this->comments[$parent]))
@@ -170,7 +178,9 @@ class msgboard extends aw_template
 			if ($this->level == 0)	//count messages only on 1st level
 			{
 				if ($this->msg_num < $this->msg_begin || $this->msg_num >= $this->msg_end)
+				{
 					$show = false;
+				}
 				$this->msg_num++;
 			}
 
@@ -213,7 +223,9 @@ class msgboard extends aw_template
 		{
 			$this->db_query("SELECT * FROM comments WHERE id = $parent");
 			if (!($row = $this->db_next()))
+			{
 				$this->raise_error(ERR_MSGB_NOCOMM,"msgboard->add($parent, $section): no comment with id $parent!", true);
+			}
 
 			if ($subj == "")
 			{
@@ -223,7 +235,7 @@ class msgboard extends aw_template
 
 			if ($comment == "")
 			{
-				$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($row[comment],33,"\r\n",1))));
+				$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($row["comment"],33,"\r\n",1))));
 			}
 		}
 
@@ -236,7 +248,7 @@ class msgboard extends aw_template
 			"parent" => $parent, 
 			"topic_id" => ($topic_id) ? $topic_id : $section,
 			"section" => ($parent) ? $section : $GLOBALS["section"], 
-			"ext" => $GLOBALS["ext"],
+			"ext" => $this->cfg["ext"],
 			"subj" => $subj, 
 			"comment" => $comment,
 			"page" => $page,
@@ -281,10 +293,10 @@ class msgboard extends aw_template
 
 			// figure out the senders ip.
 			// FIXME: comments.aw?HTTP_X_FORWARDED_FOR=h4x0r3d
-			$ip = $GLOBALS["HTTP_X_FORWARDED_FOR"];
+			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 			if ($ip == "")
 			{
-				$ip = $GLOBALS["REMOTE_ADDR"];
+				$ip = aw_global_get("REMOTE_ADDR");
 			}
 			$ip = gethostbyaddr($ip);
 			$pp = strpos($ip,".");
@@ -296,7 +308,7 @@ class msgboard extends aw_template
 			$subj = strip_tags($subj);
 			$email = strip_tags($email);
 
-			$q = "INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')";
+			$q = "INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$this->cfg["site_id"].",'$sendmail','$ip')";
 			$this->db_query($q);
 			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM comments","id");
 
@@ -325,11 +337,11 @@ class msgboard extends aw_template
 				$p = $row["parent"];
 			}
 
-			global $baseurl, $ext,$section;
+			global $section;
 			reset($mails);
 			while (list(,$mail) = each($mails))
 			{
-				$msg = sprintf(FORUM_MAIL_MESSAGE, $baseurl."/comments.$ext?section=$section&msg=".$mail[id], $mail[comment], $baseurl."/comments.$ext?section=$section&msg=".$id,$comment);
+				$msg = sprintf(FORUM_MAIL_MESSAGE, $this->cfg["baseurl"]."/comments.".$this->cfg["ext"]."?section=$section&msg=".$mail["id"], $mail["comment"], $this->cfg["baseurl"]."/comments.".$this->cfg["ext"]."?section=$section&msg=".$id,$comment);
 				$msg = str_replace("&gt;",">",$msg);
 				$msg = str_replace("&lt;","<",$msg);
 				$msg = str_replace("\n","\n\r", $msg);
@@ -360,8 +372,8 @@ class msgboard extends aw_template
 		$meta = $this->get_object_metadata(array("metadata" => $forumdat["metadata"]));
 
 		$votedata = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "votes",
+			"oid" => $id,
+			"key" => "votes",
 		));
 
 		$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
@@ -397,10 +409,13 @@ class msgboard extends aw_template
 		$msg_begin = $page * PER_FLAT_PAGE;
 		$msg_end = ($page+1) * PER_FLAT_PAGE;
 
-		global $uid,$msgboard_order;
+		global $msgboard_order;
+		$uid = aw_global_get("uid");
 
 		if ($msgboard_order = "reverse")
+		{
 			$ss = "DESC";
+		}
 
 		$this->db_query("SELECT * FROM comments WHERE board_id = '$id' ORDER BY time $ss");
 		while ($row = $this->db_next())
@@ -408,10 +423,14 @@ class msgboard extends aw_template
 			$show = true;
 
 			if ($msg_num >= $msg_end)
+			{
 				break;
+			}
 
 			if ($msg_num < $msg_begin)
+			{
 				$show = false;
+			}
 			$msg_num++;
 
 			if ($show)
@@ -445,9 +464,13 @@ class msgboard extends aw_template
 		{
 			$this->vars(array("pagenum" => $i, "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE)));
 			if ($page == $i)
+			{
 				$p.=$this->parse("SEL_PAGE");
+			}
 			else
+			{
 				$p.=$this->parse("PAGE");
+			}
 		}
 		if ($num_pages > 1)
 		{
@@ -468,7 +491,6 @@ class msgboard extends aw_template
 			"PAGES" => $ps,
 			"ALREADY_VOTED" => $l,
 			"date" => $this->time2date(time(), 2),
-
 		));
 
 		$ret = $this->parse();
@@ -498,7 +520,7 @@ class msgboard extends aw_template
 		extract($args);
 		$this->read_template("search_results.tpl");
 		$this->vars(array("forum_id" => $forum_id));
-		$s_params = array("site_id = ".$GLOBALS["SITE_ID"]);
+		$s_params = array("site_id = ".$this->cfg["site_id"]);
 		// Otsida ainult kommentaaridest?
 		$this->read_template("search_results.tpl");
 		$tables = array("objects");
@@ -519,7 +541,7 @@ class msgboard extends aw_template
 				"key" => "comments"				
 			));
 
-			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND createdby LIKE '%$name%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $GLOBALS["SITE_ID"];
+			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND createdby LIKE '%$name%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $this->cfg["site_id"];
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
@@ -585,10 +607,14 @@ class msgboard extends aw_template
 			$show = true;
 
 			if ($cnt >= $msg_end)
+			{
 				break;
+			}
 
 			if ($cnt < $msg_begin)
+			{
 				$show = false;
+			}
 
 			if ($show)
 			{
@@ -613,9 +639,13 @@ class msgboard extends aw_template
 		{
 			$this->vars(array("url" => $this->make_url(array("page" => $i)), "ltext" => $i,"from" => $i*PER_PAGE, "to" => min($cnt,($i+1)*PER_PAGE)));
 			if ($page == $i)
+			{
 				$p.=$this->parse("SEL_PAGE");
+			}
 			else
+			{
 				$p.=$this->parse("PAGE");
+			}
 
 		}
 		if ($num_pages > 1)
@@ -642,7 +672,9 @@ class msgboard extends aw_template
 			while ($row = $this->db_next())
 			{
 				if ($row["id"] == $cid)
+				{
 					break;
+				}
 				$cnt++;
 			}
 			return sprintf("%4.0f",$cnt / PER_FLAT_PAGE);
@@ -652,7 +684,9 @@ class msgboard extends aw_template
 			// 1st find the top level comment for $cid
 			$parent = $cid;
 			while ($parent > 1)
+			{
 				$parent = $this->db_fetch_field("SELECT parent FROM comments WHERE id = $parent", "parent");
+			}
 
 			// now find the page that top level comment is on
 			$cnt=0;
@@ -660,7 +694,9 @@ class msgboard extends aw_template
 			while ($row = $this->db_next())
 			{
 				if ($row["id"] == $parent)
+				{
 					break;
+				}
 				$cnt++;
 			}
 			return sprintf("%4.0f",$cnt / PER_PAGE);
@@ -738,28 +774,27 @@ class msgboard extends aw_template
 	
 		while ($row = $this->db_next())
 		{
-		
-			$forum_parents[$row[oid]] = $section;
+			$forum_parents[$row["oid"]] = $section;
 			if ($cnt >= ($page * TOPICS_PER_PAGE) && $cnt <= (($page+1) * TOPICS_PER_PAGE))
 			{
-				$nc = $numcomments[$row[oid]]["cnt"];
-				$lc = $numcomments[$row[oid]]["mtime"];
+				$nc = $numcomments[$row["oid"]]["cnt"];
+				$lc = $numcomments[$row["oid"]]["mtime"];
 				// FIXME: We already have the data from the previous query
 				$this->save_handle();
 
 				$votedata = $this->get_object_metadata(array(
-								"oid" => $row["oid"],
-								"key" => "votes",
+					"oid" => $row["oid"],
+					"key" => "votes",
 				));
 				
 				$this->restore_handle();
 				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
 				$this->vars(array(
-					"topic" => $row[name], 
-					"from" => $row[last],
-					"created" => $this->time2date($row[created],2), 
-					"text" => str_replace("\n","<br>",$row[comment]),
-					"topic_id" => $row[oid],
+					"topic" => $row["name"], 
+					"from" => $row["last"],
+					"created" => $this->time2date($row["created"],2), 
+					"text" => str_replace("\n","<br>",$row["comment"]),
+					"topic_id" => $row["oid"],
 					"cnt" => ( $nc < 1 ? "0" : $nc),
 					"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
 					"lastmessage" => ($lc) ? $this->time2date($lc,2) : "n/a",
@@ -808,9 +843,13 @@ class msgboard extends aw_template
 			{
 				$this->vars(array("pagenum" => $i, "ltext" => $i));
 				if ($i == $page)
+				{
 					$pages.=$this->parse("SEL_PAGE");
+				}
 				else
+				{
 					$pages.=$this->parse("PAGE");
+				}
 			}
 			$this->vars(array("PAGE" => $pages, "SEL_PAGE" => ""));
 			$pages = $this->parse("PAGES");
@@ -845,27 +884,32 @@ class msgboard extends aw_template
 			}
 		}
 
-		global $baseurl;
+		$baseurl = $this->cfg["baseurl"];
 		
 		$this->line = 0;
 		reset($topicarr);
 		while (list(,$row) = each($topicarr))
 		{
 			$image = "<img src='$baseurl/images/foorumimgs/miinus.gif' width='9' height='100%'>";
-			if (!is_array($msgcache[$row[oid]]))
+			if (!is_array($msgcache[$row["oid"]]))
 			{
 				$image = "<img src='$baseurl/images/foorumimgs/pluss.gif' width='9' height='100%'>";
 			}
-			$this->vars(array("topic" => $row[name], "from" => $row[last], "created" => $this->time2date($row[created],2),
-												"image" => $image,"topic_id" => $row[oid]));
+			$this->vars(array(
+				"topic" => $row["name"], 
+				"from" => $row["last"], 
+				"created" => $this->time2date($row["created"],2),
+				"image" => $image,
+				"topic_id" => $row["oid"]
+			));
 
-			$n = $this->aw_mb_last[$row[oid]] < $row[created] ? $this->parse("NEW") : "";
+			$n = $this->aw_mb_last[$row["oid"]] < $row["created"] ? $this->parse("NEW") : "";
 			$this->vars(array("NEW" => $n));
 			$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
 			$this->line++;
 
-			$this->topic = $row[oid];
-			$l.=$this->req_msgs_short($row[oid],&$msgcache,"<img src='/images/transa.gif' width='9' height='100%'>","",false,true);
+			$this->topic = $row["oid"];
+			$l.=$this->req_msgs_short($row["oid"],&$msgcache,"<img src='/images/transa.gif' width='9' height='100%'>","",false,true);
 		}
 		$this->vars(array("TOPIC_EVEN" => $l, "TOPIC_ODD" => ""));
 		return $this->parse();
@@ -882,7 +926,7 @@ class msgboard extends aw_template
 
 		$num = count($msgcache[$parent]);
 
-		global $baseurl;
+		$baseurl = $this->cfg["baseurl"]; 
 		$cnt = 1;
 		reset($msgcache[$parent]);
 		while (list(,$v) = each($msgcache[$parent]))
@@ -947,10 +991,14 @@ class msgboard extends aw_template
 				$add = str_replace("foorumimgs/lopp.gif","transa.gif",$add);
 			}
 
-			$this->vars(array("topic" => $v[subj], "from" => $v[name], "created" => $this->time2date($v[time],2),
-												"image" => $img_prefix.$add.$image,"msg_id" => $v[id]));
+			$this->vars(array(
+				"topic" => $v["subj"], 
+				"from" => $v["name"], 
+				"created" => $this->time2date($v["time"],2),
+				"image" => $img_prefix.$add.$image,"msg_id" => $v["id"]
+			));
 		
-			$n = $this->aw_mb_last[$this->topic] < $v[time] ? $this->parse("NEW") : "";
+			$n = $this->aw_mb_last[$this->topic] < $v["time"] ? $this->parse("NEW") : "";
 			$this->vars(array("NEW" => $n));
 
 			$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
@@ -965,13 +1013,13 @@ class msgboard extends aw_template
 
 			if ($cnt >= $num)
 			{
-				if (is_array($msgcache[$v[id]]))
+				if (is_array($msgcache[$v["id"]]))
 				{
 					$nadd = "<img src='".$baseurl."/images/foorumimgs/lopp.gif' width='9' height='100%'>";
 				}
 			}
 
-			$l.=$this->req_msgs_short($v[id],&$msgcache,$img_prefix.$add,$nadd,$center);
+			$l.=$this->req_msgs_short($v["id"],&$msgcache,$img_prefix.$add,$nadd,$center);
 			$cnt++;
 		}
 
@@ -997,8 +1045,6 @@ class msgboard extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 
-		global $ext, $baseurl;
-
 		$tid = $this->new_object(array(
 			"parent" => $forum_id,
 			"name" => $topic,
@@ -1008,12 +1054,12 @@ class msgboard extends aw_template
 			"status" => 2,
 		));
 		// see peaks ka foorumi/topicu juurest konfitav olema
-		if (MSGBOARD_MAIL_TOPIC_TO != "")
+		if ($this->cfg["mail_topic_to"] != "")
 		{
 			mail(
-				MSGBOARD_MAIL_TOPIC_TO,
-				MSGBORARD_NOTIFY_SUBJ,
-				sprintf(MSGBOARD_NOTIFY_BODY,$from,$topic,($baseurl."/comments.$ext?section=".$tid."&type=flat&forum_id=$forum_id"))
+				$this->cfg["mail_topic_to"],
+				$this->cfg["notify_subj"],
+				sprintf($this->cfg["notify_body"],$from,$topic,($this->cfg["baseurl"]."/comments.".$this->cfg["ext"]."?section=".$tid."&type=flat&forum_id=$forum_id"))
 			);
 		}
 	}
@@ -1022,7 +1068,7 @@ class msgboard extends aw_template
 	// !Eemaldab topicu
 	function delete_topic($id)
 	{
-		if ($GLOBALS["uid"] != "")
+		if (aw_global_get("uid") != "")
 		{
 			$id = (int)$id;
 			$this->delete_object($id);
@@ -1036,7 +1082,7 @@ class msgboard extends aw_template
 		$this->db_query("SELECT objects.*,count(comments.id) as msgcnt FROM objects LEFT JOIN comments ON comments.board_id = objects.oid WHERE class_id = ".CL_MSGBOARD_TOPIC." AND objects.status = 2  GROUP BY objects.oid ORDER BY objects.modified DESC LIMIT 5");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("topic_id" => $row[oid], "name" => $row[name],"msgs" => $row["msgcnt"]));
+			$this->vars(array("topic_id" => $row["oid"], "name" => $row["name"],"msgs" => $row["msgcnt"]));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));
@@ -1052,7 +1098,7 @@ class msgboard extends aw_template
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  AND parent = $forum_id ORDER BY objects.created DESC");
 		while ($row = $this->db_next())
 		{
-			$aw_mb_last[$row[oid]] = time();
+			$aw_mb_last[$row["oid"]] = time();
 		}
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 	}
@@ -1064,7 +1110,7 @@ class msgboard extends aw_template
 
 		$this->read_template("messages_threaded.tpl");
 		$this->vars(array("forum_id" => $forum_id));
-		global $baseurl;
+		$baseurl = $this->cfg["baseurl"];
 		global $aw_mb_last;
 		$message= array();
 		$this->aw_mb_last = unserialize($aw_mb_last);
@@ -1072,12 +1118,12 @@ class msgboard extends aw_template
 		$this->db_query("SELECT * FROM comments WHERE board_id = '$id'");
 		while ($row = $this->db_next())
 		{
-			if (!$row[parent])
+			if (!$row["parent"])
 			{
-				$row[parent] = $id;
+				$row["parent"] = $id;
 			}
-			$msgcache[$row[parent]][] = $row;
-			if ($row[id] == $msg)
+			$msgcache[$row["parent"]][] = $row;
+			if ($row["id"] == $msg)
 			{
 				$message = $row;
 			}
@@ -1089,48 +1135,59 @@ class msgboard extends aw_template
 		{
 			$row["last"] = "";
 		}
-		global $baseurl;
 		$image = "<img src='".$baseurl."/images/foorumimgs/miinus.gif' width='9' height='100%'>";
 		if (!is_array($msgcache[$id]))
 		{
 			$image = "<img src='".$baseurl."/images/foorumimgs/pluss.gif' width='9' height='100%'>";
 		}
-		$this->vars(array("topic" => $row[name], "from" => $row[last], "created" => $this->time2date($row[created],2),
-											"image" => $image,"topic_id" => $row[oid]));
+		$this->vars(array(
+			"topic" => $row["name"], 
+			"from" => $row["last"], 
+			"created" => $this->time2date($row["created"],2),
+			"image" => $image,"topic_id" => $row["oid"]
+		));
 
-		$n = $this->aw_mb_last[$row[oid]] < $row[created] ? $this->parse("NEW") : "";
+		$n = $this->aw_mb_last[$row["oid"]] < $row["created"] ? $this->parse("NEW") : "";
 		$this->vars(array("NEW" => $n));
 		$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
 		$this->line++;
 
-		$this->topic = $row[oid];
-		$l.=$this->req_msgs_short($row[oid],&$msgcache,"<img src='".$baseurl."/images/transa.gif' width='9' height='100%'>","",false,true);
+		$this->topic = $row["oid"];
+		$l.=$this->req_msgs_short($row["oid"],&$msgcache,"<img src='".$baseurl."/images/transa.gif' width='9' height='100%'>","",false,true);
 		$this->vars(array("TOPIC_EVEN" => $l, "TOPIC_ODD" => ""));
 		
 		// if no comment was selected, this means the topic is selecteed, so show it. 
 		if (!$msg)
 		{
-			$this->vars(array("subj" => $row[name], "author" => $row[last], "date" => $this->time2date($row[created],2),
-												"message" => $this->proc_show_msg($row[comment])));
-			$time = $row[created];
-			$subj = $row[name];
-			$comment = $row[comment];
+			$this->vars(array(
+				"subj" => $row["name"], 
+				"author" => $row["last"], 
+				"date" => $this->time2date($row["created"],2),
+				"message" => $this->proc_show_msg($row["comment"])
+			));
+			$time = $row["created"];
+			$subj = $row["name"];
+			$comment = $row["comment"];
 		}
 		else
 		{
-			$author = $message[name];
-			if ($message[email] != "")
+			$author = $message["name"];
+			if ($message["email"] != "")
 			{
-				$author = '<a href="mailto:'.$message[email].'">'.$author.'</a>';
+				$author = '<a href="mailto:'.$message["email"].'">'.$author.'</a>';
 			}
-			$this->vars(array("subj" => $message[subj], "author" => $author, "date" => $this->time2date($message[time],2),
-												"message" => $this->proc_show_msg($message[comment]),"ip" => $message[ip]));
-			$time = $message[time];
-			$subj = $message[subj];
-			$comment = $message[comment];
+			$this->vars(array(
+				"subj" => $message["subj"], 
+				"author" => $author, 
+				"date" => $this->time2date($message["time"],2),
+				"message" => $this->proc_show_msg($message["comment"]),"ip" => $message["ip"]
+			));
+			$time = $message["time"];
+			$subj = $message["subj"];
+			$comment = $message["comment"];
 		}
 
-		$this->aw_mb_last[$row[oid]] = time();
+		$this->aw_mb_last[$row["oid"]] = time();
 		setcookie("aw_mb_last",serialize($this->aw_mb_last),time()+24*3600*1000);
 
 		$subj = strpos($subj,"Re:")===false ? "Re: ".$subj : $subj;
@@ -1142,8 +1199,12 @@ class msgboard extends aw_template
 			"ALREADY_VOTED" => $l,
 		));
 
-		$this->vars(array("a_subj" => $subj, "a_comment" => $comment,
-											"topic_id" => $id, "msg_id" => $msg ? $msg : 0));
+		$this->vars(array(
+			"a_subj" => $subj, 
+			"a_comment" => $comment,
+			"topic_id" => $id, 
+			"msg_id" => $msg ? $msg : 0
+		));
 
 		return $this->parse();
 	}

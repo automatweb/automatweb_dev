@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.94 2002/03/20 20:21:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.95 2002/06/10 15:50:53 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
-lc_load("document");
-classload("msgboard","aw_style","form_base");
+classload("msgboard","aw_style","form_base","file");
 // erinevad dokumentide muutmise templated.
 //  kui soovid uut lisada, siis paned selle kataloogi 
 //  /www/automatweb/public/templates/automatweb/documents
@@ -31,16 +30,12 @@ class document extends aw_template
 		$this->period = $period;
 		
 		$this->style_engine = new aw_style;
+		$this->lc_load("document","lc_document");
 		lc_load("definition");
-		global $lc_document;
-		if (is_array($lc_document))
-		{
-			$this->vars($lc_document);
-		}
 			
 		// this takes less than 0.1 seconds btw
-		$xml_def = $this->get_file(array("file" => aw_ini_get("basedir")."/xml/documents/defaults.xml"));
-    if ($xml_def)
+		$xml_def = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/documents/defaults.xml"));
+	    if ($xml_def)
 		{
 			$this->style_engine->define_styles($xml_def);
 		}
@@ -238,18 +233,18 @@ class document extends aw_template
 	function gen_rss_feed($args = array())
 	{
 		classload("rdf");
-		$baseurl = aw_ini_get("baseurl");
-		global $stitle;
-		$ext = aw_ini_get("ext");
+		$baseurl = $this->cfg["baseurl"];
+		$stitle = $this->cfg["stitle"]; 
+		$ext = $this->cfg["ext"];
 		$rdf = new rdf(array(
 			"about" => "$baseurl/index.$ext/format=rss",
 			"link" => "$baseurl/index.$ext",
 			"title" => $stitle,
-			"description" => PUBLISHER,
+			"description" => $this->cfg["publisher"],
     ));
 
 		extract($args);
-		$rootmenu = aw_ini_get("rootmenu");
+		$rootmenu = $this->cfg["rootmenu"];
 		$parent = (int)$parent;
 		if ($parent && ($parent != $rootmenu))
 		{
@@ -303,12 +298,8 @@ class document extends aw_template
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
 		
-		global $awt;
-		$baseurl = aw_ini_get("baseurl");
-		$ext = aw_ini_get("ext");
-		$awt->start("document::gen_preview");
-		$awt->count("document::gen_preview");
-
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
 
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
 		// but a number
@@ -343,41 +334,18 @@ class document extends aw_template
 		{
 			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		};
+
+		$si = __get_site_instance();
+		//hook for site specific document parsing
+		$si->parse_document(&$doc);
+
+		
 		//$meta = $doc["meta"];
 		if ($meta["show_last_changed"])
 		{
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
 	
-		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
-		{
-			if ($this->cfg["print_cap"] != "")
-			{
-				$pc = localparse($this->cfg["print_cap"],array("link" => "/section=$docid" . "&print=1","docid" => $docid));
-				if ($this->cfg["pc_bottom"])
-				{
-					$doc["content"] .= $pc;
-				}
-				else
-				{
-					if (!($doc["showlead"] == 1 || $showlead == 1))
-					{
-						$doc["content"] = $pc . $doc["content"];
-					}
-					else
-					{
-						$doc["lead"] = $pc . $doc["lead"];
-					}
-				};
-			}
-			else
-			{
-				$this->vars(array("docid" => $docid));
-				$_tmp = $this->parse("PRINTANDSEND");
-				$this->vars(array("PRINTANDSEND" => $_tmp));
-			};
-		};
-
 
 		$this->tpl_reset();
 		
@@ -402,6 +370,38 @@ class document extends aw_template
 			$this->read_template($tpl);
 		};
 
+		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
+		{
+			if ($this->cfg["print_cap"] != "")
+			{
+				$pc = localparse($this->cfg["print_cap"],array(
+					"link" => $this->mk_my_orb("print", array("section" => $docid)),
+					"docid" => $docid
+				));
+				if ($this->cfg["pc_bottom"])
+				{
+					$doc["content"] .= $pc;
+				}
+				else
+				{
+					if (!($doc["showlead"] == 1 || $showlead == 1))
+					{
+						$doc["content"] = $pc . $doc["content"];
+					}
+					else
+					{
+						$doc["lead"] = $pc . $doc["lead"];
+					}
+				};
+			}
+			else
+			{
+				$this->vars(array("docid" => $docid));
+				$_tmp = $this->parse("PRINTANDSEND");
+				$this->vars(array("PRINTANDSEND" => $_tmp));
+			};
+		};
+
 		$this->vars(array("imurl" => "/images/trans.gif"));
 
 		// load localization settings and put them in the template
@@ -423,8 +423,27 @@ class document extends aw_template
 			return $this->telekava_doc($doc["content"]);
 		}
 
-		// vaatame kas vaja poolitada kui arhiivis oleme
-		if ($GLOBALS["in_archive"])
+		// ut 6pilaste tabel
+		if (strpos($doc["content"], "#ut_opilased#") !== false)
+		{
+			$ust = get_instance("ut_stat_table");
+			$doc["content"] = str_replace("#ut_opilased#", $ust->draw($section), $doc["content"]);
+		}
+
+		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
+
+		// in_archive disappears if we move around in archives
+		// so we need another way to determine whether this document belongs to the active
+		// period
+
+		classload("periods");
+		$db_periods = new db_periods(aw_ini_get("per_oid"));
+		$act_per = $db_periods->get_active_period(aw_ini_get("per_oid"));
+
+		$this->title = $doc["title"];
+
+		//if (aw_global_get("in_archive"))
+		if ($doc["period"] != $act_per)
 		{
 			$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
 		}
@@ -569,10 +588,10 @@ class document extends aw_template
 		if (strpos($doc["content"], "#chat#") !== false)
 		{
 			$doc["content"] = str_replace("#chat#", "<applet codebase=\"http://aw.struktuur.ee/risto/arco/\" code=Klient.class height=37 width=77></applet>",$doc["content"]);
-			if($GLOBALS["uid"] != "")
+			if(aw_global_get("uid") != "")
 			{
 				$socket = fsockopen("aw.struktuur.ee", 10020,$errno,$errstr,10);
-				fputs($socket,"NIMI ".$login."\n");
+				fputs($socket,"NIMI ".aw_global_get("uid")."\n");
 				fclose($socket);
 			}
 		}
@@ -590,9 +609,9 @@ class document extends aw_template
 		if ($notitleimg != 1)
 		{
 			$doc["title"] = $this->parse_aliases(array(
-							"text"	=> $doc["title"],
-							"oid"	=> $doc["docid"],
-					));
+				"text"	=> $doc["title"],
+				"oid"	=> $doc["docid"],
+			));
 		}
 		else
 		{
@@ -619,9 +638,9 @@ class document extends aw_template
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
 			$doc["content"] = $this->parse_aliases(array(
-                                "oid" => $docid,
-                                "text" => $doc["content"],
-                        ));
+		    "oid" => $docid,
+        "text" => $doc["content"],
+      ));
 
 			$this->vars($al->get_vars());
 		}; 
@@ -634,16 +653,17 @@ class document extends aw_template
 		$pb = "";
 		if ($doc["photos"])
 		{
-			if (DOC_LINK_AUTHORS && ($this->templates["pblock"]))
+			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
 			{
-				$x = $this->get_relations_by_field(array("field"    => "title",
-						 "keywords" => $doc["photos"],
-						 "section"  => DOC_LINK_AUTHORS_SECTION));
+				$x = $this->get_relations_by_field(array(
+					"field"    => "title",
+					"keywords" => strip_tags($doc["photos"]),
+					"section"  => $this->cfg["link_authors_section"]
+				));
 				$authors = array();
-				global $ext;
 				while(list($k,$v) = each($x)) 
 				{
-					if (DOC_LINK_DEFAULT_LINK != "")
+					if ($this->cfg["link_default_link"] != "")
 					{
 						if ($v) 
 						{
@@ -651,7 +671,7 @@ class document extends aw_template
 						} 
 						else 
 						{
-							$authors[] = sprintf("<a href='%s'>%s</a>",DOC_LINK_DEFAULT_LINK,$k);
+							$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
 						};
 					}
 					else
@@ -679,36 +699,47 @@ class document extends aw_template
 		*/
 
 		// <mail to="bla@ee">lahe tyyp</mail>
-    		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
+ 		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
 		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
 
 		if (!(strpos($doc["content"],"#liitumisform") === false))
 		{
-			preg_match("/#liitumisform info=\"(.*)\"#/",$doc["content"], $maat);
+			$qt = false;
+			if (!preg_match("/#liitumisform info=\"(.*)\"#/",$doc["content"], $maat))
+			{
+				preg_match("/#liitumisform info=&quot;(.*)&quot;#/",$doc["content"], $maat);
+				$qt = true;
+			}
 
 			// siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
 			// aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
 			classload("users");
 			$dbu = new users;
-			$doc["content"] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc["content"]);
+			if ($qt)
+			{
+				$doc["content"] = preg_replace("/#liitumisform info=&quot;(.*)&quot;#/",$dbu->get_join_form($maat[1]),$doc["content"]);
+			}
+			else
+			{
+				$doc["content"] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc["content"]);
+			}
 		}
 				
 		$ab = "";
 		// I hate the next block of code
 		if ($doc["author"]) 
 		{
-			if (DOC_LINK_AUTHORS && isset($this->templates["ablock"])) 
+			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
 			{
 				$x = $this->get_relations_by_field(array(
 					"field"    => "title",
 					"keywords" => $doc["author"],
-					"section"  => DOC_LINK_AUTHORS_SECTION
+					"section"  => $this->cfg["link_authors_section"]
 				));
 				$authors = array();
-				global $ext;
 				while(list($k,$v) = each($x)) 
 				{
-					if (DOC_LINK_DEFAULT_LINK != "")
+					if ($this->cfg["link_default_link"] != "")
 					{
 						if ($v)
 						{
@@ -716,7 +747,7 @@ class document extends aw_template
 						} 
 						else 
 						{
-							$authors[] = sprintf("<a href='%s'>%s</a>",DOC_LINK_DEFAULT_LINK,$k);
+							$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
 						};
 					}
 					else
@@ -763,15 +794,21 @@ class document extends aw_template
 		while (list(,$v) = each($larr))
 		{
 			$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"]));
-			if ($GLOBALS["lang_id"] == $v["id"])
+			if (aw_global_get("lang_id") == $v["id"])
+			{
 				$langs.=$this->parse("SEL_LANG");
+			}
 			else
+			{
 				$langs.=$this->parse("LANG");
+			}
 		}
 
 		$lc = "";
 		if ($doc["lead_comments"]==1)
+		{
 			$lc = $this->parse("lead_comments");
+		}
 
 		if ($doc["parent"])
 		{
@@ -790,7 +827,7 @@ class document extends aw_template
 		$title = $doc["title"];
 		$this->vars(array(
 			"title"	=> $title,
-			"menu_image" => $mn["img_url"],
+			"menu_image" => image::check_url($mn["img_url"]),
 			"text"  => $doc["content"],
 			"secid" => isset($secID) ? $secID : 0,
 			"docid" => $docid,
@@ -826,7 +863,7 @@ class document extends aw_template
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
-			"logged" => ($GLOBALS["uid"] != "" ? $this->parse("logged") : "")
+			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : "")
 			));
 		
 		// keeleseosed
@@ -843,7 +880,7 @@ class document extends aw_template
 				if ($lab[$v["id"]])
 				{
 					$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
-					if ($GLOBALS["lang_id"] == $v["id"])
+					if (aw_global_get("lang_id") == $v["id"])
 					{
 						$langs.=$this->parse("SLANG_BRO");
 					}
@@ -875,7 +912,7 @@ class document extends aw_template
 				"application/vnd.ms-excel" => "xls",
 				"text/html" => "html",
 				"image/gif" => "gif",
-      			);
+ 			);
 			reset($aliases);
 			while (list(,$ar) = each($aliases))
 			{
@@ -888,7 +925,7 @@ class document extends aw_template
 					if ($im != "" && $im != "html")
 					{
 						$this->vars(array(
-							"url" => $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$ar["target"]."/".urlencode($fif["name"]),
+							"url" => file::get_url($ar["target"],$fif["name"]),
 							"im" => $im == "" ? "fil" : $im
 						));
  
@@ -901,7 +938,6 @@ class document extends aw_template
  
 
 		$retval = $this->parse();
-		$awt->stop("document::gen_preview");
 		return $retval;
 	}
 
@@ -920,8 +956,7 @@ class document extends aw_template
 			};
 			if (is_array($qparts) && (sizeof($qparts) > 0)) 
 			{
-				$q = "SELECT docid,title,keywords FROM documents WHERE ". 
-					join(" OR ",$qparts);
+				$q = "SELECT docid,title,keywords FROM documents WHERE ".join(" OR ",$qparts);
 				$this->db_query($q);
 				$retval = array();
 				while($row = $this->db_next()) 
@@ -953,10 +988,11 @@ class document extends aw_template
 			$retval = array();
 			while(list($k,$v) = each($keywords)) 
 			{
-				$v = trim($v);
+				// fields may contain HTML and we don't want that
+				$v = trim(strip_tags($v));
 				$q = "SELECT docid FROM documents
 							LEFT JOIN objects ON (documents.docid = objects.oid)
-							WHERE parent = $section AND $field LIKE '$v' AND objects.status = 2";
+							WHERE parent = $section AND $field LIKE '%$v%' AND objects.status = 2";
 				$retval[$v] = $this->db_fetch_field($q,"docid");
 			}; // eow
 			return $retval;
@@ -977,13 +1013,13 @@ class document extends aw_template
 
 		// $data["version"] means that we are working on a archive copy of a document and
 		// should therefore save the changes to archive and not to the document table
-		if (defined("ARCHIVE"))
+		if (aw_ini_get("archive.use"))
 		{
 			classload("archive");
 			$arc = new archive();
 		};
 
-		if (defined("ARCHIVE") && ($data["archive"]) )
+		if (aw_ini_get("archive.use") && ($data["archive"]) )
 		{
 			// teeme arhiivi, kui seda pole
 			// kallis vaataja, ma tean, et sulle meeldib jargnev rida kohe sitta moodi
@@ -1003,15 +1039,15 @@ class document extends aw_template
 			$arc_name = ($data["archive_name"]) ? $data["archive_name"] : $data["title"];
 
 			$arc->commit(array(
-						"oid" => $data["id"],
-						"ser_content" => $old,
-						"name" => $arc_name,
-						"data" => $arc_data,
-						"class_id" => CL_DOCUMENT,
+				"oid" => $data["id"],
+				"ser_content" => $old,
+				"name" => $arc_name,
+				"data" => $arc_data,
+				"class_id" => CL_DOCUMENT,
 			));
 		};
 		
-		if (defined("ARCHIVE") && ($data["version"]) )
+		if (aw_ini_get("archive.use") && ($data["version"]) )
 		{
 			$actual = array_merge($old,$data);
 			$arc_data = array();
@@ -1021,16 +1057,16 @@ class document extends aw_template
 			};
 			$arc_name = ($data["archive_name"]) ? $data["archive_name"] : $data["title"];
 			$arc->commit(array(
-						"oid" => $data["id"],
-						"ser_content" => $actual,
-						"name" => $arc_name,
-						"version" => $data["version"],
-						"data" => $arc_data,
-						"class_id" => CL_DOCUMENT,
+				"oid" => $data["id"],
+				"ser_content" => $actual,
+				"name" => $arc_name,
+				"version" => $data["version"],
+				"data" => $arc_data,
+				"class_id" => CL_DOCUMENT,
 			));
 			
 			// logime aktsioone
-			$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat");
+			$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat");
 			// laena mulle bensiini ja tikke, vanemuine
 			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
@@ -1049,15 +1085,15 @@ class document extends aw_template
 			if ($data["keywords"])
 			{
 				$kw->update_keywords(array(
-							"keywords" => $data["keywords"],
-							"oid" => $data["id"],
+					"keywords" => $data["keywords"],
+					"oid" => $data["id"],
 				));
 			}
 			else
 			{
 				$kw->update_relations(array(
-						"id" => $data["id"],
-						"data" => $data["content"],
+					"id" => $data["id"],
+					"data" => $data["content"],
 				));
 				// also update keyword brother docs
 				$kw->update_menu_keyword_bros(array("doc_ids" => array($data["id"])));
@@ -1158,7 +1194,15 @@ class document extends aw_template
 			$oq_parts["parent"] = $data["docfolder"];
 		}
 
+		if (not(preg_match("/\W/",$data["alias"])))
+		{
+			$oq_parts["alias"] = $data["alias"];
+		};
+			
+
 		$this->upd_object($oq_parts);
+
+		// uuendame vennastatud dokude nimed ka
 		$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '".$old["brother_of"]."'");
 
 		// nih, updateme objekti metadata ka 2ra.
@@ -1170,7 +1214,7 @@ class document extends aw_template
 		$this->flush_cache();
 
 		// logime aktsioone
-		$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
+		$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
 		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]));
 	}
@@ -1202,53 +1246,49 @@ class document extends aw_template
 	// !Send a link to someone
 	function send_link()
 	{
-		global $from_name, $from, $baseurl, $ext, $section, $copy,$to_name, $to,$comment, $SITE_ID;
+		global $from_name, $from, $section, $copy,$to_name, $to,$comment;
+
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
+		$SITE_ID = $this->cfg["site_id"];
 
 		if ($SITE_ID == 5)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata Pere ja Kodu saidile ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata Pere ja Kodu saidile ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
-		}
-		else
-		if ($SITE_ID == 9)
-		{
-			$text = "$from_name ($from) soovitab teil vaadata Struktuur Meedia saidile ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
-
-			if ($copy != "")
-				$bcc = "\nCc: $copy ";
-
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		if ($SITE_ID == 17)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		if ($SITE_ID == 71)
 		{
-			$text = "$from_name ($from) soovitab teil vaadata saiti ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
+			$text = "$from_name ($from) soovitab teil vaadata saiti ".$baseurl.",\ntäpsemalt linki ".$baseurl."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$baseurl,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
 		{
 			$text = "$from_name ($from) soovitab teil vaadata Nädala saidile www.nadal.ee,\ntäpsemalt linki http://www.nadal.ee/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
+			{
 				$bcc = "\nCc: $copy ";
+			}
 
 
 			mail("\"$to_name\" <".$to.">",LC_DOCUMENT_ART_FROM_NADAL,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
@@ -1333,9 +1373,13 @@ class document extends aw_template
 			while (list(,$v) = each($sections))
 			{
 				if ($sar[$v])
+				{
 					$not_changed[$v] = $v;
+				}
 				else
+				{
 					$added[$v] = $v;
+				}
 				$a[$v]=$v;
 			}
 		}
@@ -1344,7 +1388,9 @@ class document extends aw_template
 		while (list($oid,) = each($sar))
 		{
 			if (!$a[$oid])
+			{
 				$deleted[$oid] = $oid;
+			}
 		}
 
 		reset($deleted);
@@ -1357,7 +1403,14 @@ class document extends aw_template
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER_DOCUMENT,"status" => 1,"brother_of" => $docid,"name" => $obj["name"],"comment" => $obj["comment"]));
+				$noid = $this->new_object(array(
+					"parent" => $oid,
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => 1,
+					"brother_of" => $docid,
+					"name" => $obj["name"],
+					"comment" => $obj["comment"]
+				));
 			}
 		}
 
@@ -1367,7 +1420,8 @@ class document extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		global $per_oid,$period;
+		$per_oid= $this->cfg["per_oid"];
+		global $period;
 
 		$ret = $this->submit_add(array(
 			"section" => $section,
@@ -1391,7 +1445,9 @@ class document extends aw_template
 		{
 			$data["class_id"] = CL_PERIODIC_SECTION;
 			$data["period"] = $period;
-		} else {
+		} 
+		else 
+		{
 			$data["class_id"] = CL_DOCUMENT;
 		};
 		$data["name"] = $name;
@@ -1402,15 +1458,19 @@ class document extends aw_template
 		$lid = $this->new_object($data);
 		$this->upd_object(array("oid" => $lid, "brother_of" => $lid));	// dokument on enda vend ka
 		// me peame selle dokumendi ka menyys registreerima
-		if ($period) {
+		if ($period) 
+		{
 			$q = "INSERT INTO menu (id,type,periodic) VALUES ('$lid','99','1')";
-		} else {
+		} 
+		else 
+		{
 			$q = "INSERT INTO menu (id,type) VALUES ('$lid','99')";
 		};
 		$defaults = $this->fetch($parent);
 		$flist = array();
 		$vlist = array();
-		while(list($k,$v) = each($this->knownfields)) {
+		while(list($k,$v) = each($this->knownfields)) 
+		{
 			$flist[] = $v;
 			switch($v)
 			{
@@ -1437,7 +1497,7 @@ class document extends aw_template
 					$vlist[] = "'".date("d/m/y")."'";
 					break;
 				case "no_right_pane":
-					if ($GLOBALS["SITE_ID"] == 9)
+					if ($this->cfg["site_id"] == 9)
 					{
 						$vlist[] = "'1'";
 					}
@@ -1450,10 +1510,17 @@ class document extends aw_template
 					$vlist[] = "'" . $defaults[$v] . "'";
 			};
 		};
-		if (is_array($flist) && (sizeof($flist) > 0)) {
+
+		$flist[] = "lang_id";
+		$vlist[] = "'".aw_global_get("lang_id")."'";
+
+		if (is_array($flist) && (sizeof($flist) > 0)) 
+		{
 			$part1 = "," . join(",",$flist);
 			$part2 = "," . join(",",$vlist);
-		} else {
+		} 
+		else 
+		{
 			$part1 = "";
 			$part2 = "";
 		};
@@ -1471,10 +1538,10 @@ class document extends aw_template
 	// !Displays the document edit form
 	function change($arr)
 	{
-		global $baseurl;
+		$baseurl = $this->cfg["baseurl"];
 		// hmpf, imho voiks see veidi globaalsem kontroll olla, kui
 		// ainult siin, selles yhes funktsioonid
-		if (!$this->prog_acl("view",PRG_MENUEDIT) && !$this->prog_acl("view",PRG_DOCEDIT))
+		if (!$this->prog_acl("view",PRG_DOCEDIT))
 		{
 			header("Location: $baseurl");
 			exit;
@@ -1496,7 +1563,11 @@ class document extends aw_template
 			$arr["template"] = $_tpl;
 			return $this->do_form_change($arr);
 		}
-
+		global $DBG;
+		if ($DBG)
+		{
+			printf("using %s/%s<br>",$this->template_dir,$_tpl);
+		};
 		$this->read_template($_tpl);
 
 		// $version indicates that we should load an archived copy of this document
@@ -1512,7 +1583,7 @@ class document extends aw_template
 			$document = $this->fetch($id);
 			$addcap = "";
 		};
-		$this->mk_path($document["parent"],"<a href='/automatweb/orb.aw?class=document&action=change&id=$id'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>",$document["period"]);
+		$this->mk_path($document["parent"],"<a href='/automatweb/orb.".$this->cfg["ext"]."?class=document&action=change&id=$id'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>",$document["period"]);
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
@@ -1553,7 +1624,10 @@ class document extends aw_template
 			$this->vars(array("DOC_BROS" => $db));
 		}
 
-		$GLOBALS["lang_id"] = $document["lang_id"];
+// this will seriously fuck up shit, because document.lang_id will override objects.lang_id :(
+//		classload("languages");
+//		$l = new languages;
+//		$l->set_active($document["lang_id"],true);
 
 		$alilist = array();
 		$jrk = array(
@@ -1581,7 +1655,7 @@ class document extends aw_template
 		classload("keywords");
 		$kw = new keywords();
 		$keywords = $kw->get_keywords(array(
-									"oid" => $id,
+			"oid" => $id,
 		));
 
 		classload("languages");
@@ -1590,7 +1664,7 @@ class document extends aw_template
 		$meta = $this->get_object_metadata(array("oid" => $id));
 
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
+		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
 		if ($df != "")
 		{
 			$xml = new xml;
@@ -1627,6 +1701,7 @@ class document extends aw_template
 											"visible" => $this->option_list($document["visible"],array("1" => "Jah","0" => "Ei")),
 											"keywords"  => $document["keywords"],
 										  "lead"    => str_replace("\"","&quot;",trim($document["lead"])),
+											"alias" => $document["alias"],
 											"content" => str_replace("\"","&quot;",trim($document["content"])),
 											"channel"	=> trim($document["channel"]),
 											"nobreaks"	=> $document["nobreaks"],
@@ -1637,11 +1712,10 @@ class document extends aw_template
 											"id" => $id,
 											"docid" => $id,
 											"previewlink" => $previewlink,
-											"weburl" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$document["docid"],
+											"weburl" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$document["docid"],
 											"lburl"		=> $this->mk_my_orb("sellang", array("id" => $id)),
 											"long_title"	=> $document["long_title"],
 											"menurl"		=> $this->mk_my_orb("sel_menus",array("id" => $id)),
-											"preview"	=> $this->mk_my_orb("preview", array("id" => $id)),
 											"cstatus"	=> checked($document["status"] == 2),
 											"no_search" => checked($document["no_search"]),
 											"no_left_pane" => checked($document["no_left_pane"]),
@@ -1660,8 +1734,7 @@ class document extends aw_template
 
 
 		// detect browser and if it's compatible, use WYSIWYG editor
-		global $HTTP_USER_AGENT;
-		if (!(strpos($HTTP_USER_AGENT,"MSIE") === false))
+		if (!(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false))
 		{
 			// IE
 			$brows = $this->parse("IE");
@@ -1690,63 +1763,63 @@ class document extends aw_template
 	{
 		extract($args);
 		$this->read_template("archive.tpl");
-		$GLOBALS["site_title"] = "Arhiiv";
+		$this->mk_path(0,"Arhiiv");
 
 		classload("archive");
 		$arc = new archive();
 		$t = new aw_table(array(
-					"prefix" => "mailbox",
-					"imgurl"    => $GLOBALS["baseurl"]."/images",
-          "tbgcolor" => "#C3D0DC",
-				));
+			"prefix" => "mailbox",
+			"imgurl"    => $this->cfg["baseurl"]."/images",
+			"tbgcolor" => "#C3D0DC",
+		));
 
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 
 		$t->set_header_attribs(array(
-					"class" => "document",
-					"action" => "archive",
-					"docid" => $args["docid"],
+			"class" => "document",
+			"action" => "archive",
+			"docid" => $args["docid"],
 		));
 
 		$t->define_field(array(
-								"name" => "name",
-								"caption" => "Nimi",
-								"talign" => "center",
-								"nowrap" => 1,
-								"sortable" => 1,
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
-								"name" => "uid",
-								"caption" => "Muutja",
-								"talign" => "center",
-								"align" => "center",
-								"nowrap" => 1,
-								"sortable" => 1,
+			"name" => "uid",
+			"caption" => "Muutja",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
-								"name" => "date",
-								"caption" => "Kuupäev",
-								"talign" => "center",
-								"nowrap" => 1,
-								"sortable" => 1,
+			"name" => "date",
+			"caption" => "Kuupäev",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
-								"name" => "pick",
-								"caption" => "Vali",
-								"talign" => "center",
-								"nowrap" => 1,
-								"align" => "center",
+			"name" => "pick",
+			"caption" => "Vali",
+			"talign" => "center",
+			"nowrap" => 1,
+			"align" => "center",
 		));
 		
 		$t->define_field(array(
-								"name" => "check",
-								"caption" => "Default",
-								"talign" => "center",
-								"align" => "center",
-								"nowrap" => 1,
+			"name" => "check",
+			"caption" => "Default",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => 1,
 		));
 
 		$contents = $arc->get(array("oid" => $args["docid"]));
@@ -1770,12 +1843,11 @@ class document extends aw_template
 				$name = ($meta["archive"][$key]["name"]) ? $meta["archive"][$key]["name"] : "(nimetu)";
 				$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("change",array("id" => $args["docid"],"version" => $key)),$name);
 				$t->define_data(array(
-						"name" => $link,
-						"uid" => $meta["archive"][$key]["uid"],
-						"date" => $this->time2date($val[FILE_MODIFIED],9),
-						"check" => sprintf("<input type='radio' name='default' value='%d'>",$key),
-						"pick" => sprintf("<input type='checkbox' name='check[%d]' value=1>",$key),
-
+					"name" => $link,
+					"uid" => $meta["archive"][$key]["uid"],
+					"date" => $this->time2date($val["FILE_MODIFIED"],9),
+					"check" => sprintf("<input type='radio' name='default' value='%d'>",$key),
+					"pick" => sprintf("<input type='checkbox' name='check[%d]' value=1>",$key),
 				));
 			}
 		};
@@ -1785,7 +1857,6 @@ class document extends aw_template
 		$this->vars(array(
 			"docid" => $docid,
 			"arc_table" => $t->draw(),
-			"preview"	=> $this->mk_my_orb("preview", array("id" => $docid)),
 			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $docid)),
 			"docid" => $docid,
 			"reforb" => $this->mk_reforb("submit_archive",array("id" => $docid)),
@@ -1832,11 +1903,11 @@ class document extends aw_template
 			$arc = new archive();
 
 			$arc->commit(array(
-						"oid" => $id,
-						"ser_content" => $old,
-						"name" => $arc_name,
-						"data" => $arc_data,
-						"class_id" => CL_DOCUMENT,
+				"oid" => $id,
+				"ser_content" => $old,
+				"name" => $arc_name,
+				"data" => $arc_data,
+				"class_id" => CL_DOCUMENT,
 			));
 			// now the current document is archived, let's restore and older version
 			$document = $arc->checkout(array("oid" => $id,"version" => $default));
@@ -1859,55 +1930,6 @@ class document extends aw_template
 		};
 
 		return $this->mk_my_orb("archive",array("docid" => $id));
-	}
-
-	function preview($arr)
-	{
-		extract($arr);
-		$this->dmsg("a");
-		if ($user)
-		{
-			$this->read_template("preview_user.tpl");
-		}
-		else
-		{
-			$this->read_template("preview.tpl");
-		}
-		$this->dmsg("b");
-
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],LC_DOCUMENT_PREW);
-
-		if (!$user)
-		{
-			global $HTTP_HOST,$tpldirs,$tpldir;
-			$tpldir = $tpldirs[$HTTP_HOST];
-		}
-		$template = $this->get_long_template($id);
-		classload("document");
-		$t = new document;
-		$content = $t->gen_preview(array("docid" => $id, "tpl" => $template,"leadonly" => false, "stripimg" => false));
-
-		if (!$user)
-		{
-			// nice :)
-			// basically each site has preview_frame.tpl , that mimics the site , and sets the right style and width for the
-			// preview and has {VAR:content} which gets replaced by the document contents
-			$awt = new aw_template;
-			$awt->tpl_init("automatweb/documents");
-			$awt->db_init();
-			$awt->read_template("preview_frame.tpl");
-			$awt->vars(array("content" => $content));
-			$content = $awt->parse();
-		}
-		$this->vars(array("content" => $content,
-											"id"			=> $id,
-											"preview"	=> $this->mk_orb("preview", array("id" => $id)),
-											"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
-											"weburl"	=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$id,
-											"change"	=> $this->mk_orb("change", array("id" => $id)),
-											"lburl"		=> $this->mk_orb("sellang", array("id" => $id))));
-		return $this->parse();
 	}
 
 	function sel_lang_bros($arr)
@@ -1937,13 +1959,14 @@ class document extends aw_template
 			}
 		}
 
-		$this->vars(array("reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
-											"sstring"	=> $sstring,
-											"preview"	=> $this->mk_orb("preview", array("id" => $id)),
-											"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
-											"weburl"	=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$id,
-											"change"	=> $this->mk_orb("change", array("id" => $id)),
-											"lburl"		=> $this->mk_orb("sellang", array("id" => $id))));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
+			"sstring"	=> $sstring,
+			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
+			"weburl"	=> $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$id,
+			"change"	=> $this->mk_orb("change", array("id" => $id)),
+			"lburl"		=> $this->mk_orb("sellang", array("id" => $id))
+		));
 
 		if ($slang_id < 1)
 		{
@@ -1960,10 +1983,12 @@ class document extends aw_template
 										 WHERE objects.lang_id=".$slang_id." AND documents.title LIKE '%$sstring%'
 										 ORDER BY objects.parent,jrk");
 		while ($row = $this->db_next()) 
-			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".aw");
+		{
+			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".".$this->cfg["ext"]);
+		}
 
 		$this->docs = array("0" => "");
-		$this->mk_folders($GLOBALS["admin_rootmenu"],"");
+		$this->mk_folders($this->cfg["admin_rootmenu2"],"");
 
 
 		reset($this->docs);
@@ -1971,15 +1996,21 @@ class document extends aw_template
 		{
 			$this->vars(array("name" => $v, "selurl" => $this->mk_orb("set_lang_bro", array("id" => $id, "bro" => $k,"sstring" => $sstring, "slang_id" => $slang_id)),"id" => $k));
 			if ($lang_brothers[$slang_id] == $k)
+			{
 				$mt.=$this->parse("MATCH_SEL");
+			}
 			else
+			{
 				$mt.=$this->parse("MATCH");
+			}
 		}
 
-		$this->vars(array("reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
-											"sstring"	=> $sstring,
-											"MATCH" => $mt,
-											"MATCH_SEL" => ""));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
+			"sstring"	=> $sstring,
+			"MATCH" => $mt,
+			"MATCH_SEL" => ""
+		));
 		return $this->parse();
 	}
 
@@ -2015,7 +2046,7 @@ class document extends aw_template
 		if ($al["class_id"] == CL_FORM_ENTRY)	// form_entry
 		{
 			// we must let the user select whether he wants to view or edit the entry
-			$this->mk_path($al["parent"],"<a href='pickobject.$ext?docid=$docid&parent=".$al["parent"]."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
+			$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $docid),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
 			return $this->select_alias($id, $alias);
 		} 
 		elseif ($al["class_id"] == CL_OBJECT_CHAIN)
@@ -2044,12 +2075,14 @@ class document extends aw_template
 			$this->vars(array("sstring" => $sstring,"sstring2" => $sstring2));
 			$this->parse("SEARCH");
 			if ($sstring == "" && $sstring2 == "")
+			{
 				$sstring = "|||||||||||||||||||||||||||";
+			}
 
 			$ko = " AND documents.title LIKE '%$sstring%' AND documents.content LIKE '%$sstring2%' ";
 		}
 
-		$this->mk_menucache($GLOBALS["lang_id"]);
+		$this->mk_menucache(aw_global_get("lang_id"));
 
 		// dokumentide list
 		$this->extrarr = array();
@@ -2060,69 +2093,78 @@ class document extends aw_template
 										 objects.jrk as jrk, objects.modified as modified, objects.modifiedby as modifiedby
 										 FROM documents
 										 LEFT JOIN objects ON objects.brother_of = documents.docid
-										 WHERE objects.period = $prd AND objects.lang_id=".$GLOBALS["lang_id"]." and site_id = ".$GLOBALS["SITE_ID"]." $ko
+										 WHERE objects.period = $prd AND objects.lang_id=".aw_global_get("lang_id")." and site_id = ".aw_global_get("site_id")." $ko
 										 ORDER BY objects.parent,jrk");
 		while ($row = $this->db_next()) 
 		{
-			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".aw");
+			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".".$this->cfg["ext"]);
 			$this->docarr[$row["docid"]] = $row;
 		}
 			
 		$this->docs = array();
-		$this->mk_folders($GLOBALS["admin_rootmenu"],"");
+		$this->mk_folders($this->cfg["admin_rootmenu2"],"");
 
 		reset($this->docs);
 		while (list($k,$v) = each($this->docs))
 		{
 			$row = $this->docarr[$k];
-			$this->vars(array("doc_id"		=> $row["docid"],
-													"doc_title"	=> strip_tags($v),
-													"doc_title_s"	=> strip_tags(str_replace("\"","\\\"",$row["title"])),
-													"jrk"			  => $row["jrk"],
-													"modifiedby"	=> $row["modifiedby"],
-													"modified"		=> $this->time2date($row["modified"],2),
-													"active"			=> ($row["status"] > 0 ? "checked" : ""),
-													"is_forum"    => ($row["is_forum"] > 0 ? "checked" : ""),
-													"esilehel"    => ($row["esilehel"] > 0 ? "checked" : ""),
-													"jrk1"				=> $row["jrk1"],
-													"jrk2"				=> $row["jrk2"],
-													"esilehel_uudis"    => ($row["esilehel_uudis"] > 0 ? "checked" : ""),
-													"showlead"    => ($row["showlead"] > 0 ? "checked" : ""),
-													"text_ok"    => ($row["text_ok"] > 0 ? "checked" : ""),
-													"pic_ok"    => ($row["pic_ok"] > 0 ? "checked" : ""),
-													"link"				=> "<a href='".$GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["docid"]."'>url</a>",
-													"doc_default"	=> ($this->sel_doc == $row["docid"] ? "CHECKED" : ""),
-													"gee"			=> $dcnt & 1 ? "" : "_g"));
+			$this->vars(array(
+				"doc_id"		=> $row["docid"],
+				"doc_title"	=> strip_tags($v),
+				"doc_title_s"	=> strip_tags(str_replace("\"","\\\"",$row["title"])),
+				"jrk"			  => $row["jrk"],
+				"modifiedby"	=> $row["modifiedby"],
+				"modified"		=> $this->time2date($row["modified"],2),
+				"active"			=> ($row["status"] > 0 ? "checked" : ""),
+				"is_forum"    => ($row["is_forum"] > 0 ? "checked" : ""),
+				"esilehel"    => ($row["esilehel"] > 0 ? "checked" : ""),
+				"jrk1"				=> $row["jrk1"],
+				"jrk2"				=> $row["jrk2"],
+				"esilehel_uudis"    => ($row["esilehel_uudis"] > 0 ? "checked" : ""),
+				"showlead"    => ($row["showlead"] > 0 ? "checked" : ""),
+				"text_ok"    => ($row["text_ok"] > 0 ? "checked" : ""),
+				"pic_ok"    => ($row["pic_ok"] > 0 ? "checked" : ""),
+				"link"				=> "<a href='".$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"]."'>url</a>",
+				"doc_default"	=> ($this->sel_doc == $row["docid"] ? "CHECKED" : ""),
+				"gee"			=> $dcnt & 1 ? "" : "_g"));
 
 				$dd = $this->parse("D_DELETE");
 				$dc = $this->parse("D_CHANGE");
 				$da = $this->parse("D_ACL");
 				$on2.= $this->parse("ONAME2");
 
-				$this->vars(array("D_DELETE" => $dd,
-													"D_CHANGE" => $dc,
-													"D_ACL" => $da));
+				$this->vars(array(
+					"D_DELETE" => $dd,
+					"D_CHANGE" => $dc,
+					"D_ACL" => $da
+				));
 				$this->parse("FLINE");
 				if ($this->sel_doc == $row["docid"])
+				{
 					$sub_sel = true;
+				}
 				$dcnt++;
 		}
 
 		classload("objects");
 		$ob = new db_objects;
 	 
-		$this->vars(array("default_doc" => $default_doc,
-											"dest"				=> $dest,
-											"doc_default"	=> ($sub_sel == false ? "CHECKED" : "" ),
-											"ONAME2" => $on2,
-											"period" => $arr["period"]));
+		$this->vars(array(
+			"default_doc" => $default_doc,
+			"dest"				=> $dest,
+			"doc_default"	=> ($sub_sel == false ? "CHECKED" : "" ),
+			"ONAME2" => $on2,
+			"period" => $arr["period"]
+		));
 		return $this->parse();
 	}
 
 		function mk_folders($parent,$str)
 		{
 			if (!is_array($this->menucache[$parent]))
+			{
 				return;
+			}
 
 			reset($this->menucache[$parent]);
 			while(list(,$v) = each($this->menucache[$parent]))
@@ -2132,13 +2174,17 @@ class document extends aw_template
 				{
 					$words = explode(" ",$name);
 					if (count($words) == 1)
+					{
 						$name = $words[0][0].$words[0][1];
+					}
 					else
 					{
 						reset($words);
 						$mstr = "";
 						while(list(,$v3) = each($words))
+						{
 							$mstr.=$v3[0];
+						}
 						$name = $mstr;
 					}
 				}
@@ -2150,7 +2196,9 @@ class document extends aw_template
 				{
 					reset($this->extrarr[$v["data"]["oid"]]);
 					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
+					{
 						$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
+					}
 				}
 
 				$this->mk_folders($v["data"]["oid"],$tstr);
@@ -2211,7 +2259,9 @@ class document extends aw_template
 		$sar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
 		while ($arow = $this->db_next())
+		{
 			$sar[$arow["parent"]] = $arow["parent"];
+		}
 
 		classload("objects");
 		$ob = new db_objects;
@@ -2219,7 +2269,7 @@ class document extends aw_template
 
 		classload("config");
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
+		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
 		$xml = new xml;
 		$_df = $xml->xml_unserialize(array("source" => $df));
 
@@ -2235,13 +2285,14 @@ class document extends aw_template
 			$ndf = $ol;
 		}
 
-		$this->vars(array("docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ndf),
-											"reforb"	=> $this->mk_reforb("submit_menus",array("id" => $id)),
-											"preview"	=> $this->mk_orb("preview", array("id" => $id)),
-											"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
-											"weburl"	=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$id,
-											"change"	=> $this->mk_orb("change", array("id" => $id)),
-											"lburl"		=> $this->mk_orb("sellang", array("id" => $id))));
+		$this->vars(array(
+			"docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ndf),
+			"reforb"	=> $this->mk_reforb("submit_menus",array("id" => $id)),
+			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
+			"weburl"	=> $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$id,
+			"change"	=> $this->mk_orb("change", array("id" => $id)),
+			"lburl"		=> $this->mk_orb("sellang", array("id" => $id))
+		));
 		return $this->parse();
 	}
 
@@ -2268,9 +2319,13 @@ class document extends aw_template
 			while (list(,$v) = each($sections))
 			{
 				if ($sar[$v])
+				{
 					$not_changed[$v] = $v;
+				}
 				else
+				{
 					$added[$v] = $v;
+				}
 				$a[$v]=$v;
 			}
 		}
@@ -2279,7 +2334,9 @@ class document extends aw_template
 		while (list($oid,) = each($sar))
 		{
 			if (!$a[$oid])
+			{
 				$deleted[$oid] = $oid;
+			}
 		}
 
 		reset($deleted);
@@ -2317,7 +2374,8 @@ class document extends aw_template
 		extract($arr);
 		$this->mk_path($parent, LC_DOCUMENT_BROD_DOC);
 		$this->read_template("search_doc.tpl");
-		global $s_name, $s_content,$SITE_ID;
+		global $s_name, $s_content;
+		$SITE_ID = $this->cfg["site_id"];
 		if ($s_name != "" || $s_content != "")
 		{
 			$se = array();
@@ -2332,9 +2390,10 @@ class document extends aw_template
 			$this->db_query("SELECT documents.title as name,objects.oid FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row["name"], "id" => $row["oid"],
-													"brother" => $this->mk_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => $GLOBALS["period"])),
-													"change" => $this->mk_orb("change", array("parent" => $parent, "id" => $row["oid"]))));
+				$this->vars(array(
+					"name" => $row["name"], "id" => $row["oid"],
+					"brother" => $this->mk_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => aw_global_get("period"))),
+					"change" => $this->mk_orb("change", array("parent" => $parent, "id" => $row["oid"]))));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));
@@ -2403,7 +2462,7 @@ class document extends aw_template
 
 		$row["oid"] = 0;
 		$row["parent"] = $parent;
-		$row["lang_id"] = $GLOBALS["lang_id"];
+		$row["lang_id"] = aw_global_get("lang_id");
 		$this->quote(&$row);
 		$id = $this->new_object($row);
 
@@ -2437,8 +2496,9 @@ class document extends aw_template
 	// section - section id, mille sisu asemel otsingutulemusi naidatakse
 	// sortby - mille jargi otsingu tulemusi sortida
 	// from - alates millisest vastusest naitama hakatakse?
-	function do_search($parent,$str,$sec,$sortby,$from)
+	function do_search($arr = array())
 	{
+		extract($arr);
 		if ($sortby == "")
 		{
 			$sortby = "percent";
@@ -2463,9 +2523,9 @@ class document extends aw_template
 
 		// besides, mulle tundub, et otsingutulemusi kuvades taidetakse seda koodi
 		// 2 korda .. teine kord menueditit. Tyhi too?
-		if ($GLOBALS["lang_menus"] == 1)
+		if ($this->cfg["lang_menus"] == 1)
 		{
-			$ss = " AND (objects.lang_id = ".$GLOBALS["lang_id"]." OR menu.type = ".MN_CLIENT.")";
+			$ss = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
 		}
 		else
 		{
@@ -2486,7 +2546,7 @@ class document extends aw_template
 		{
 			// peame tshekkima et kui tyyp pole sisse loginud et siis ei otsitaks users only menyyde alt
 			$can = true;
-			if ($GLOBALS["uid"] == "" && $search_group["no_usersonly"] == 1)
+			if (aw_global_get("uid") == "" && $search_group["no_usersonly"] == 1)
 			{
 				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 				if ($meta["users_only"] == 1)
@@ -2531,27 +2591,38 @@ class document extends aw_template
 		}
 	
 		if ($sortby == "time")
+		{
 			$ml.=" ORDER BY objects.modified DESC";
+		}
 
 		// oh crap. siin peab siis failide seest ka otsima. 
 		$mtfiles = array();
 		$this->db_query("SELECT id FROM files WHERE files.showal = 1 AND files.content LIKE '%$str%' ");
 		while ($row = $this->db_next())
 		{
-			$mtfiles[] = $row[id];
+			$mtfiles[] = $row["id"];
 		}
+
+		$docids = array();
+
 		$fstr = join(",",$mtfiles);
 		if ($fstr != "")
 		{
 			// nyyd leiame k6ik aliased, mis vastavatele failidele tehtud on
+			// and we need that because .. ?
 			$this->db_query("SELECT * FROM aliases WHERE target IN ($fstr)");
 			while ($row = $this->db_next())
 			{
-				$faliases[] = $row[source];
+				$docids[$row["source"]] = $row["source"];
+				//$faliases[] = $row["source"];
 			}
 			// nyyd on $faliases array dokumentidest, milles on tehtud aliased matchivatele failidele.
+			/*
 			if (is_array($faliases))
+			{
 				$fasstr = "OR documents.docid IN (".join(",",$faliases).")";
+			}
+			*/
 		}
 
 		// nini. otsime tabelite seest ka.
@@ -2559,7 +2630,7 @@ class document extends aw_template
 		$this->db_query("SELECT id FROM aw_tables WHERE contents LIKE '%$str%'");
 		while ($row = $this->db_next())
 		{
-			$mts[] = $row[id];
+			$mts[] = $row["id"];
 		}
 
 		$mtsstr = join(",",$mts);
@@ -2571,8 +2642,11 @@ class document extends aw_template
 			$this->db_query("SELECT * FROM aliases WHERE target IN ($mtsstr)");
 			while ($row = $this->db_next())
 			{
-				$mtals[$row[source]] = $row[source];
+				$docids[$row["source"]] = $row["source"];
+				//$mtals[$row["source"]] = $row["source"];
 			}
+
+			/*
 
 			$mts = join(",",$mtals);
 			if ($mts != "")
@@ -2580,6 +2654,7 @@ class document extends aw_template
 				// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
 				$mtalsstr = "OR documents.docid IN (".$mts.")";
 			}
+			*/
 			//echo "ms = $mtalsstr<br>";
 		}
 
@@ -2588,11 +2663,16 @@ class document extends aw_template
 		$max_count = 0;
 		$docarr = array();
 
+		if ( sizeof($docids) > 0 )
+		{
+			$docidstr = " OR documents.docid IN (" . join(",",$docids) . ")";
+		};
+
 		$plist = join(",",$parent_list);
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) $ml";
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%') AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		dbg("search_q = $q <br>");
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2603,19 +2683,22 @@ class document extends aw_template
 			};
 			// find number of matches in document for search string, for calculating percentage
 			// if match is found in title, then multiply number by 5, to emphasize importance
-			$c = substr_count(strtoupper($row[content]),strtoupper($str)) + substr_count(strtoupper($row[title]),strtoupper($str))*5;
+			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 			$max_count = max($c,$max_count);
 
 			// find the first paragraph of text
-			$p1 = strpos($row[content],"<BR>");
-			$p2 = strpos($row[content],"</P>");
+			$p1 = strpos($row["content"],"<BR>");
+			$p2 = strpos($row["content"],"</P>");
 			$pos = min($p1,$p2);
-			$co = substr($row[content],0,$pos);
+			$co = substr($row["content"],0,$pos);
 			$co = strip_tags($co);
 			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
-			$docarr[] = array("matches" => $c, "title" => $row[title],"section" => $row[docid],"content" => $co,"modified" => $this->time2date($row[modified],5),"tm" => $row[tm]);
-			
+			// to hell with html in titles
+			$row["title"] = strip_tags($row["title"]);
+			$title = ($row["title"]) ? $row["title"] : "(nimetu)";
+			$docarr[] = array("matches" => $c, "title" => $title,"section" => $row["docid"],"content" => $co,"modified" => $this->time2date($row["modified"],5),"tm" => $row["tm"]);
 			$cnt++;
+			
 		}
 
 		if ($sortby == "percent")
@@ -2625,9 +2708,13 @@ class document extends aw_template
 			while (list(,$v) = each($docarr))
 			{
 				if ($max_count == 0)
+				{
 					$d2arr[100][] = $v;
+				}
 				else
+				{
 					$d2arr[($v[matches]*100) / $max_count][] = $v;
+				}
 			}
 
 			krsort($d2arr,SORT_NUMERIC);
@@ -2638,7 +2725,9 @@ class document extends aw_template
 			{
 				reset($v);
 				while (list(,$v2) = each($v))
+				{
 					$docarr[] = $v2;
+				}
 			}
 
 		}
@@ -2652,20 +2741,32 @@ class document extends aw_template
 			if ($num >= $from && $num < ($from + $per_page))	// show $per_page matches per screen
 			{
 				if ($max_count == 0)
+				{
 					$sstr = 100;
+				}
 				else
-					$sstr = substr(($v[matches]*100) / $max_count,0,4);
-				$this->vars(array("title"			=> strip_tags($v[title]),
+				{
+					$sstr = substr(($v["matches"]*100) / $max_count,0,4);
+				}
+				$this->vars(array("title"			=> strip_tags($v["title"]),
 													"percent"		=> $sstr,
-													"content"		=> preg_replace("/#(.*)#/","",$v[content]),
-													"modified"	=> $v[tm] == "" ? $v[modified] : $v[tm],
-													"section"		=> $v[section]));
+													"content"		=> preg_replace("/#(.*)#/","",$v["content"]),
+													"modified"	=> $v["tm"] == "" ? $v["modified"] : $v["tm"],
+													"section"		=> $v["section"]));
 				$r.= $this->parse("MATCH");
 			}
 			$num++;
 		}
 
-		$this->vars(array("MATCH" => $r,"s_parent" => $parent,"sstring" => urlencode($str),"sstringn" => $str, "section" => $sec,"matches" => $cnt,"sortby" => $sortby));
+		$this->vars(array(
+			"MATCH" => $r,
+			"s_parent" => $parent,
+			"sstring" => urlencode($str),
+			"sstringn" => $str, 
+			"section" => $section,
+			"matches" => $cnt,
+			"sortby" => $sortby
+		));
 
 		// make prev page / next page
 		if ($cnt > $per_page)
@@ -2683,19 +2784,36 @@ class document extends aw_template
 
 			for ($i=0; $i < $cnt / $per_page; $i++)
 			{
-				$this->vars(array("from" => $i*$per_page,"page_from" => $i*$per_page,"page_to" => ($i+1)*$per_page));
+				$this->vars(array(
+					"from" => $i*$per_page,
+					"page_from" => $i*$per_page,
+					"page_to" => min(($i+1)*$per_page,$cnt)
+				));
 				if ($i*$per_page == $from)
+				{
 					$pg.=$this->parse("SEL_PAGE");
+				}
 				else
+				{
 					$pg.=$this->parse("PAGE");
+				}
 			}
 		}
-		$this->vars(array("PREVIOUS" => $prev,"NEXT" => $next,"PAGE" => $pg,"SEL_PAGE" => "","from" => $from));
+		$this->vars(array(
+			"PREVIOUS" => $prev,
+			"NEXT" => $next,
+			"PAGE" => $pg,
+			"SEL_PAGE" => "",
+			"from" => $from,
+			"section" => $section
+		));
 		$ps = $this->parse("PAGESELECTOR");
 		$this->vars(array("PAGESELECTOR" => $ps));
 
-		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".$GLOBALS["REMOTE_ADDR"]."','".time()."')");
+		$this->_log("document", "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
+		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
+		$retval = $this->parse();
 		return $this->parse();
 	}
 
@@ -2728,9 +2846,9 @@ class document extends aw_template
 		$this->read_template("user_docs.tpl");
 
 		$ob = new objects;
-		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
+		$obl = $ob->get_list(false,false,$this->cfg["rootmenu"]);
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
+		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
 		if ($df != "")
 		{
 			$xml = new xml;
@@ -2743,7 +2861,7 @@ class document extends aw_template
 			list($parent,$parent) = each($_df);
 		}
 
-		global $lang_id;
+		$lang_id = aw_global_get("lang_id");
 
 		$_df = array(0 => "Vaata / Liiguta") + $_df;
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND parent = '$parent' AND lang_id = '$lang_id'");
@@ -2806,7 +2924,7 @@ class document extends aw_template
 
 	function lookup($args = array())
 	{
-		global $SITE_ID;
+		$SITE_ID = $this->cfg["site_id"];
 		extract($args);
 		$id = (int)$id;
 		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
@@ -2815,11 +2933,11 @@ class document extends aw_template
 
 		$tt = new aw_table(array(
 			"prefix" => "keywords",
-			"imgurl"    => $GLOBALS["baseurl"]."/img",
+			"imgurl"    => $this->cfg["baseurl"]."/img",
 			"tbgcolor" => "#C3D0DC",
 		));
 
-		$tt->parse_xml_def($GLOBALS["site_basedir"]."/xml/generic_table.xml");
+		$tt->parse_xml_def($this->cfg["site_basedir"]."/xml/generic_table.xml");
 		$tt->set_header_attribs(array(
 			"id" => $id,
 			"class" => "document",
@@ -2962,7 +3080,6 @@ class document extends aw_template
 
 	function register_parsers()
 	{
-		
 		// keywordide list. bijaatch!
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)huvid(.+?)(#)/i",
@@ -3098,6 +3215,132 @@ class document extends aw_template
 				$text = preg_replace("/\b$k_key\b/i",$k_val," " . $text . " ");
 			};
 		}
+	}
+
+	////
+	// !lets the user send a document to someone else
+	function send($arr)
+	{
+		extract($arr);
+		$data = $this->fetch($section);
+		$this->read_template("email.tpl");
+		$this->vars(array(
+			"docid" => $section,
+			"section" => $section,
+			"doc_name" => $data["title"],
+			"reforb" => $this->mk_reforb("submit_send", array("section" => $section))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !actually sends the document as a link via e-mail
+	function submit_send($arr)
+	{
+		extract($arr);
+		$this->read_template("doc_mail.tpl");
+		$this->vars(array(
+			"from_name" => $from_name,
+			"from" => $from,
+			"section" => $section,
+			"comment" => $comment
+		));
+
+		if ($copy != "")
+		{
+			$bcc = "\nCc: $copy ";
+		}
+
+		mail("\"$to_name\" <".$to.">",str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+
+		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
+		$this->_log("document", "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
+
+		return $this->cfg["baseurl"]."/?section=".$section;
+	}
+
+	function feedback($arr)
+	{
+		extract($arr);
+		classload("feedback");
+		$feedback = new db_feedback;
+		$inf = $this->fetch($section);
+		$this->read_template("feedback.tpl");
+		$this->vars(array(
+			"uid" => aw_global_get("uid")
+		));
+		$tekst = "";
+		while(list($k,$v) = each($feedback->tekst)) 
+		{
+			$tekst .= "<tr><td align='right'><input type='radio' name='tekst' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
+		};
+
+		$kujundus = "";
+		while(list($k,$v) = each($feedback->kujundus)) 
+		{
+			$kujundus .= "<tr><td align='right'><input type='radio' name='kujundus' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
+		};
+		
+		$struktuur = ""; $tehnika = ""; $ala = "";	
+		while(list($k,$v) = each($feedback->struktuur)) 
+		{
+			$struktuur .= "<tr><td align='right'><input type='radio' name='struktuur' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
+		};
+		
+		while(list($k,$v) = each($feedback->ala)) 
+		{
+			$ala .= "<tr><td align='right'><input type='radio' name='ala' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
+		};
+		
+		while(list($k,$v) = each($feedback->tehnika)) 
+		{
+			$tehnika .= "<tr><td align='right'><input type='checkbox' name='tehnika[]'  value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
+		};
+			
+   	$this->vars(array(
+			"docid" => $section,
+			"tekst" => $tekst,
+			"kujundus" => $kujundus,
+			"struktuur" => $struktuur,
+			"ala" => $ala,
+			"tehnika" => $tehnika,
+			"title" => $inf["title"],
+			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section))
+		));
+		return $this->parse();
+	}
+
+	function submit_feedback($arr)
+	{
+		extract($arr);
+		classload("feedback");
+		$inf = $this->fetch($docid);
+		$feedback = new db_feedback;
+		$arr["title"] = $inf["title"];
+		$feedback->add_feedback($arr);
+		$this->_log("document", "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
+		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
+	}
+
+	function thanks($arr)
+	{
+		extract($arr);
+		$this->read_template("feedback_thanks.tpl");
+		$this->vars(array(
+			"eesnimi" => $eesnimi
+		));
+		return $this->parse();
+	}
+
+	function do_print($arr)
+	{
+		extract($arr);
+		$dat = $this->get_record("objects","oid",$section);
+		$this->_log("document", "Printis dokumendi $dat[name] ",$section);
+		die($this->gen_preview(array(
+			"docid" => $section,
+			"tpl" => "print.tpl"
+		)));
 	}
 };
 ?>

@@ -5,12 +5,14 @@ class acl_class extends aw_template
 {
 	function acl_class()
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/acl");
+		enter_function("acl_class::acl_class",array());
+		$this->init("automatweb/acl");
+		exit_function("acl_class::acl_class");
 	}
 
 	function add($arr)
 	{
+		enter_function("acl_class::add",array());
 		extract($arr);
 		$this->read_template("add.tpl");
 		$this->mk_path($parent,"Lisa ACL");
@@ -34,11 +36,13 @@ class acl_class extends aw_template
 			"groups" => $this->multiple_option_list(array(),$groups),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
 		));
+		exit_function("acl_class::add");
 		return $this->parse();
 	}
 
 	function submit($arr)
 	{
+		enter_function("acl_class::submit",array());
 		extract($arr);
 
 		if ($id)
@@ -104,11 +108,13 @@ class acl_class extends aw_template
 			// for all groups selected.
 			$this->update_acl($id);
 		}
+		exit_function("acl_class::submit");
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function update_acl($id)
 	{
+		enter_function("acl_class::update_acl",array());
 		$o = $this->get_object($id);
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $o["metadata"]
@@ -142,10 +148,12 @@ class acl_class extends aw_template
 			"key" => "added_groups",
 			"value" => $gads
 		));
+		exit_function("acl_class::update_acl");
 	}
 
 	function change($arr)
 	{
+		enter_function("acl_class::change",array());
 		extract($arr);
 		$this->read_template("add.tpl");
 		$o = $this->get_object($id);
@@ -175,11 +183,13 @@ class acl_class extends aw_template
 			"groups" => $this->multiple_option_list($meta["groups"],$groups),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
+		exit_function("acl_class::change");
 		return $this->parse();
 	}
 
 	function get_acls_for_role($role)
 	{
+		enter_function("acl_class::get_acls_for_role",array());
 		$objs = $this->list_objects(array(
 			"class" => CL_ACL,
 			"return" => ARR_ALL
@@ -196,6 +206,7 @@ class acl_class extends aw_template
 				$ret[$oid] = $oid;
 			}
 		}
+		exit_function("acl_class::get_acls_for_role");
 		return $ret;
 	}
 }

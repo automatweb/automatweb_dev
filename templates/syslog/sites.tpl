@@ -15,12 +15,12 @@
 </head>
 <body bgcolor="#FFFFFF">
 Vali sait, mille logi Dr. Online näitab<br>
-<a href="{VAR:self}">tagasi</a>
+<a href="orb.{VAR:ext}?class=syslog">tagasi</a>
 <p>
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="#CCCCCC">
 <tr>
 <td>
-	<form method="POST">
+	<form action="reforb.{VAR:ext}" method="POST">
 	<table border="1" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">
 	<tr>
 		<td colspan="3" class="header">Saidid</td>
@@ -32,15 +32,20 @@ Vali sait, mille logi Dr. Online näitab<br>
 	</tr>
 	<!-- SUB: line -->
 	<tr>
-		<td class="line">{VAR:id}</td>
+		<td class="line">{VAR:id}&nbsp;</td>
 		<td class="line" align="center"><input type="text" name="name[{VAR:id}]" value="{VAR:name}" size="40"></td>
 		<td class="line" align="center"><input type="radio" name="syslog_site_id" value="{VAR:id}" {VAR:active}></td>
 	</tr>
 	<!-- END SUB: line -->
 	<tr>
+		<td class="line">&nbsp;</td>
+		<td class="line" align="center"><input type="text" name="name[-1]" value="K&otilde;ik" size="40"></td>
+		<td class="line" align="center"><input type="radio" name="syslog_site_id" value="-1" {VAR:active}></td>
+	</tr>
+	<tr>
 		<td class="line" colspan="3" align="center">
 		<input type="submit" value="Salvesta">
-		<input type="hidden" name="op" value="savesites">
+		{VAR:reforb}
 		</td>
 	</tr>
 	</table>

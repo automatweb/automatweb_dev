@@ -41,15 +41,17 @@ $lc_form["LC_FORMS_IMPORT_ENTRIES"]="Import entries";
 $lc_form["LC_FORMS_ENTRIES"]="Entries";
 
 $lc_form["LC_FORMS_ADD_NEW_ELEMENT"]="Add new element";
+$lc_form["LC_FORMS_CHOOSE_STYLE"]="Pick style";
 $lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_ADD_ELEMENT"]="Choose catalogue where should place the element";
 $lc_form["LC_FORMS_ELEMENT_NAME"]="Element name";
 $lc_form["LC_FORMS_ADD_EXISTING_ELEMENT"]="Add exiting element";
 $lc_form["LC_FORMS_CHOOSE_ELEMENT"]="Choose element";
+$lc_form["LC_FORMS_CHOOSE_ELEMENTS"]="Choose elements";
 $lc_form["LC_FORMS_SEARCH"]="Search";
 
 $lc_form["LC_FORMS_CHOOSE_TABLE_STYLE"]="Choose table style";
-$lc_form["LC_FORMS_CHOOS_SUBFORM"]="Choose baseform";
-$lc_form["LC_FORMS_ADMIN"]="Administer";
+$lc_form["LC_FORMS_CHOOSE_SUBFORM"]="Choose baseform";
+$lc_form["LC_FORMS_ADMIN"]="Admin";
 
 $lc_form["LC_FORMS_HOW_MANY_COLUMNS"]="How many columns";
 $lc_form["LC_FORMS_TABLE_STYLE"]="Table style";
@@ -85,6 +87,9 @@ $lc_form["LC_FORMS_EXPLONATION"]="Explanation";
 
 $lc_form["LC_FORMS_BIG_ELEMENTS"]="ELEMENTS";
 $lc_form["LC_FORMS_SAVE"]="Save";
+$lc_form["LC_FORMS_RESET"]="Reset";
+$lc_form["LC_FORMS_OUTPUT_SETTINGS"]="Settings";
+
 $lc_form["LC_FORMS_SETTINGS"]="Settings";
 $lc_form["LC_FORMS_STYLES"]="Stytes";
 $lc_form["LC_FORMS_SMALL_ACTIONS"]="Actions";
@@ -224,6 +229,7 @@ $lc_form["LC_FORMS_CHOOSE_LOOKED_FORMS"]="Choose search forms";
 $lc_form["LC_FORMS_PREVIEW"]="Preview";
 $lc_form["LC_FORMS_ALL_ELEMENTS"]="All elements";
 $lc_form["LC_FORMS_IMPORT_DATA"]="Import data";
+$lc_form["LC_FORMS_ALIASMGR"]="Alias manager";
 $lc_form["LC_FORMS_TABLE_STYLES"]="Table settings";
 $lc_form["LC_FORMS_FORM_ACTIONS"]="Form actions";
 $lc_form["LC_FORMS_CHOOSE_CATALOGUES"]="Choose catalogues";
@@ -341,7 +347,7 @@ $lc_form["LC_FORMS_SEARCH_FROM_FORMCHAINS"]="Otsing formi p&auml;rjast";
 $lc_form["LC_FORMS_CHOOSE_CHAIN_WH_SEARCH"]="Vali p&auml;rg, millest otsitakse";
 
 
-$lc_form["LC_FORMS_TRANSALTE"]="T&otilde;lgi";
+$lc_form["LC_FORMS_TRANSLATE"]="T&otilde;lgi";
 
 //menu.tpl
 $lc_form["LC_FORMS_CHOOSE_USEABLE_FILTER"]="Vali kasutatav filter";

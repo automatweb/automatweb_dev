@@ -88,7 +88,6 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 </table>
 </td>
 </tr>
-<!-- END SUB: EDIT -->
 
 </table>
 {VAR:reforb}

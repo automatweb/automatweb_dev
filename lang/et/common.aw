@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.3 2001/07/16 06:01:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.4 2002/06/10 15:50:59 kristo Exp $
 // kuude nimed
 define("LC_M1","jaanuar");
 define("LC_M2","veebruar");
@@ -85,27 +85,27 @@ define("MN_EKOMAR", "EKOMAR");
 define("MN_JOIN_MAIL", "Liitumise ja parooli meilid");
 
 //const.aw
-define("LC_CONST_MENU","Men&uuml");
+define("LC_CONST_MENU","Men&uuml;&uuml;");
 define("LC_CONST_DOCUMENT", "Dokument");
 define("LC_CONST_DOCUMENT_BROTH", "Dokument(vend)");
-define("LC_CONST_FORM", "Form");
+define("LC_CONST_FORM", "Vorm");
 define("LC_CONST_SHOP", "Pood");
 define("LC_CONST_GOODS_ART","Kaubaartikkel");
 define("LC_CONST_TABLE", "Tabel");
 define("LC_CONST_PICT", "Pilt");
-define("LC_CONST_FORM_ENTRY", "Formi sisestus");
-define("LC_CONST_FORM_ELEMENT", "Formi element");
+define("LC_CONST_FORM_ENTRY", "Vormisisestus");
+define("LC_CONST_FORM_ELEMENT", "Vormielement");
 define("LC_CONST_STYLE","Stiil");
-define("LC_CONST_FORM_OUTPUT", "Formi v&auml;ljund");
-define("LC_CONST_FORM_ACTION", "Formi action");
+define("LC_CONST_FORM_OUTPUT", "Vormiv&auml;ljund");
+define("LC_CONST_FORM_ACTION", "Vormiaction");
 define("LC_CONST_MAILLIST", "Meilinglist");
 define("LC_CONST_LIST_MEMBER", "Listi liige");
 define("LC_CONST_LIST_VARIABLE", "Listi muutuja");
 define("LC_CONST_LIST_STAMP", "Listi stamp");
 define("LC_CONST_LIST_MAIL", "Listi mail");
 define("LC_CONST_LINK", "Link");
-define("LC_CONST_EMAIL_LINK", "Emaili link");
-define("LC_CONST_EMAIL", "Email");
+define("LC_CONST_EMAIL_LINK", "E-posti link");
+define("LC_CONST_EMAIL", "E-post");
 define("LC_CONST_GRAPH", "Graafik");
 define("LC_CONST_DOCUMENT_P", "Dokument(p)");
 define("LC_CONST_SECTION_LINK", "Sektsiooni link");
@@ -127,8 +127,8 @@ define("LC_CONST_MESSAGE", "Message");
 define("LC_CONST_SHOP_STAT", "Poe statistika");
 define("LC_CONST_GOODS_TYPE", "Kauba t&uuml;&uuml;p");
 define("LC_CONST_GOODS_PRICE_FORMULA", "Kauba hinnavalem");
-define("LC_CONST_FORM_TABLE", "Formi tabel");
-define("LC_CONST_RATE_OF_EXCHANGE", "Valuuta kurss");
-define("LC_CONST_FORM_WREATH", "Formi p&auml;rg");
+define("LC_CONST_FORM_TABLE", "Vormitabel");
+define("LC_CONST_RATE_OF_EXCHANGE", "Valuutakurss");
+define("LC_CONST_FORM_WREATH", "Vormip&auml;rg");
 define("LC_CONST_PROMOBOX", "Promo kast");
 ?>

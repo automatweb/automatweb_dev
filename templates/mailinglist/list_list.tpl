@@ -9,7 +9,7 @@
 <tr class="aste05">
 <td height="15" colspan="11" class="celltext">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
 <!-- SUB: ADD_CAT -->
-<a href='{VAR:add_link}'>{VAR:LC_MAILINGLIST_ADD}</a>
+<a href='{VAR:add_cat_link}'>{VAR:LC_MAILINGLIST_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 </b>
 </td>
@@ -104,7 +104,7 @@
 <!-- END SUB: L_ACL -->
 &nbsp;</td>
 <td class="celltext">&nbsp;<a href='{VAR:members_link}'>{VAR:LC_MAILINGLIST_LIST_MEMBERS}</a>&nbsp;</td>
-<td class="celltext">&nbsp;<a href='list.{VAR:ext}?type=list_mails&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_SMALL_MAILS}</a>&nbsp;</td>
+<td class="celltext">&nbsp;<a href='{VAR:mails}'>{VAR:LC_MAILINGLIST_SMALL_MAILS}</a>&nbsp;</td>
 <td class="celltext">&nbsp;
 <!-- SUB: L_IMPORT -->
 <a href='{VAR:import_link}'>{VAR:LC_MAILINGLIST_IMPORT_ADDRESS}</a>

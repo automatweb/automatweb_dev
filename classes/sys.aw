@@ -1,21 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.10 2002/02/18 13:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.11 2002/06/10 15:50:54 kristo Exp $
 // sys.aw - various system related functions
-lc_load("syslog");
-global $orb_defs;
-$orb_defs["sys"] = "xml";
 
 class sys extends aw_template
 {
 	function sys($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb");
-		global $lc_syslog;
-		if (is_array($lc_syslog))
-		{
-			$this->vars($lc_syslog);
-		}
+		$this->init("automatweb");
+		$this->lc_load("syslog","lc_syslog");
 	}
 
 	////
@@ -42,7 +34,7 @@ class sys extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$name = strip_tags($row[name]);
+			$name = strip_tags($row["name"]);
 			print "found document $row[oid] $name, checking images<br>";
 			$this->save_handle();
 			$q = "SELECT * FROM objects WHERE parent = $row[oid] AND class_id = " . CL_IMAGE;
@@ -102,20 +94,20 @@ class sys extends aw_template
 
 		$request = "http://" . $server . $url;
 		$op = "GET $request HTTP/1.1\r\n";
-                $op .= "User-Agent: Autom@tWeb\r\n";
-                $op .= "Host: $server\r\n\r\n";
+		$op .= "User-Agent: Autom@tWeb\r\n";
+		$op .= "Host: $server\r\n\r\n";
 
-		if (!fputs($fp, $op, strlen($op))) {
-                        $this->errstr="Write error";
-                        return 0;
-                }
+		if (!fputs($fp, $op, strlen($op))) 
+		{
+			$this->errstr="Write error";
+			return 0;
+    }
+	  $ipd="";
 
- 
-                $ipd="";
-
-                while($data=fread($fp, 32768)) {
-                        $ipd.=$data;
-                }
+		while($data=fread($fp, 32768)) 
+		{
+			$ipd.=$data;
+		}
 
 		list(,$res) = explode("\r\n\r\n",$ipd);
 		
@@ -261,7 +253,7 @@ class sys extends aw_template
 	// !Is called from _db_compare_tables for each invidual field
 	function _db_compare_fields($field1,$field2)
 	{
-	       	global $problems;
+	  global $problems;
 		if ($field1["type"] == $field2["type"])
 		{
 			$res1 = true;
@@ -465,8 +457,7 @@ class sys extends aw_template
 	// it tries to find the templates in the automatweb folder
 	function check_admin_templates($td, $arr)
 	{
-		global $basedir;
-		$tpldir = $basedir . "/templates/".$td;
+		$tpldir = $this->cfg["basedir"] . "/templates/".$td;
 		$ret = "";
 		foreach($arr as $tpl)
 		{
@@ -483,8 +474,7 @@ class sys extends aw_template
 	// it tries to find the templates in the site's folder
 	function check_site_templates($td,$arr)
 	{
-		global $tpldir;
-		$td=$tpldir."/".$td;
+		$td=$this->cfg["tpldir"]."/".$td;
 		$ret = "";
 		foreach($arr as $tpl)
 		{
@@ -500,7 +490,7 @@ class sys extends aw_template
 	// !this function checks if all the files are readable and exist
 	function check_site_files($arr)
 	{
-		global $site_basedir;
+		$site_basedir = $this->cfg["site_basedir"]; 
 		$ret = "";
 		foreach($arr as $tpl)
 		{
@@ -516,7 +506,7 @@ class sys extends aw_template
 	// !this function checks if all the xml defs are readable and exist
 	function check_orb_defs($arr)
 	{
-		global $basedir;
+		$basedir = $this->cfg["basedir"];
 		$ret = "";
 		foreach($arr as $tpl)
 		{
@@ -527,6 +517,20 @@ class sys extends aw_template
 		}
 		return $ret;
 	}
+
+	////
+	// !updates the syslog table to contain information about site_id-s where possible (pageview actions)
+	function conv_syslog_site_id($args = array())
+	{
+		$q = "SELECT oid,count(*) AS cnt FROM syslog GROUP BY oid ORDER BY cnt DESC";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			print "oid = $row[oid], cnt = $row[cnt]<br>";
+		};
+
+	}
+
 
 };
 ?>

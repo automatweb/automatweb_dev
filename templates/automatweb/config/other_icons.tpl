@@ -8,7 +8,7 @@ function selall()
 	return false;
 }
 </script>
-<form name='boo' action='refcheck.{VAR:ext}' method=post>
+<form name='boo' action='reforb.{VAR:ext}' method=post>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
@@ -26,7 +26,7 @@ function selall()
 <tr>
 <td class="fgtext">&nbsp;{VAR:type}&nbsp;</td>
 <td class="fgtext">&nbsp;<img src='{VAR:url}'>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='config.{VAR:ext}?type=sel_icon&rtype=other_icon&rid={VAR:mtype}'>Vali ikoon</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:select}'>Vali ikoon</a>&nbsp;</td>
 <td class="fgtext"><input type='checkbox' name='sel[]' value='{VAR:mtype}'></td>
 </tr>
 <!-- END SUB: LINE -->
@@ -40,6 +40,6 @@ function selall()
 </td>
 </tr>
 </table>
-<input type='hidden' name='action' value='export_other_icons'>
+{VAR:reforb}
 </form>
 <Br><br>

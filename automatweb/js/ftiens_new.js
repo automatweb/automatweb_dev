@@ -78,14 +78,14 @@ function initializeFolder(level, lastNode, leftSide)
   if (level>0) 
     if (lastNode) //the last child in the children array 
     { 
-      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='images/ftv2mlastnode.gif' width=16 height=22 border=0></a>") 
-      leftSide = leftSide + "<img src='images/ftv2blank.gif' width=16 height=22>"  
+      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='/automatweb/images/ftv2mlastnode.gif' width=16 height=22 border=0></a>") 
+      leftSide = leftSide + "<img src='/automatweb/images/ftv2blank.gif' width=16 height=22>"  
       this.isLastNode = 1 
     } 
     else 
     { 
-      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='images/ftv2mnode.gif' width=16 height=22 border=0></a>") 
-      leftSide = leftSide + "<img src='images/ftv2vertline.gif' width=16 height=22>" 
+      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='/automatweb/images/ftv2mnode.gif' width=16 height=22 border=0></a>") 
+      leftSide = leftSide + "<img src='/automatweb/images/ftv2vertline.gif' width=16 height=22>" 
       this.isLastNode = 0 
     } 
   else 
@@ -137,9 +137,9 @@ function propagateChangesInState(folder)
   { 
     if (folder.nodeImg) 
       if (folder.isLastNode) 
-        folder.nodeImg.src = "images/ftv2mlastnode.gif" 
+        folder.nodeImg.src = "/automatweb/images/ftv2mlastnode.gif" 
       else 
-	    folder.nodeImg.src = "images/ftv2mnode.gif" 
+	    folder.nodeImg.src = "/automatweb/images/ftv2mnode.gif" 
     //folder.iconImg.src = "images/ftv2folderopen.gif" 
     folder.iconImg.src = folder.iconSrc;
     for (i=0; i<folder.nChildren; i++) 
@@ -149,9 +149,9 @@ function propagateChangesInState(folder)
   { 
     if (folder.nodeImg) 
       if (folder.isLastNode) 
-        folder.nodeImg.src = "images/ftv2plastnode.gif" 
+        folder.nodeImg.src = "/automatweb/images/ftv2plastnode.gif" 
       else 
-	    folder.nodeImg.src = "images/ftv2pnode.gif" 
+	    folder.nodeImg.src = "/automatweb/images/ftv2pnode.gif" 
     //folder.iconImg.src = "images/ftv2folderclosed.gif"
     folder.iconImg.src = folder.iconSrc;
     for (i=0; i<folder.nChildren; i++) 
@@ -278,13 +278,13 @@ function initializeItem(level, lastNode, leftSide)
   if (level>0) 
     if (lastNode) //the last 'brother' in the children array 
     { 
-      this.renderOb(leftSide + "<img src='images/ftv2lastnode.gif' width=16 height=22>") 
-      leftSide = leftSide + "<img src='images/ftv2blank.gif' width=16 height=22>"  
+      this.renderOb(leftSide + "<img src='/automatweb/images/ftv2lastnode.gif' width=16 height=22>") 
+      leftSide = leftSide + "<img src='/automatweb/images/ftv2blank.gif' width=16 height=22>"  
     } 
     else 
     { 
-      this.renderOb(leftSide + "<img src='images/ftv2node.gif' width=16 height=22>") 
-      leftSide = leftSide + "<img src='images/ftv2vertline.gif' width=16 height=22>" 
+      this.renderOb(leftSide + "<img src='/automatweb/images/ftv2node.gif' width=16 height=22>") 
+      leftSide = leftSide + "<img src='/automatweb/images/ftv2vertline.gif' width=16 height=22>" 
     } 
   else 
     this.renderOb("")   

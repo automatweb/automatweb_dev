@@ -54,7 +54,7 @@ function show_stat()
 {
 	with (document.subb)
 	{
-		link = "display=stat&from=" + from.value + "&to=" + to.value;
+		link = "class=stat&action=show&from=" + from.value + "&to=" + to.value;
 	};
 	document.location = "{VAR:self}?" + link;
 };
@@ -79,7 +79,7 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 </style>
 </head>
 <body bgcolor="#FFFFFF" link="blue" vlink="blue" marginwidth=0 marginheight=0>
-<form name='subb' action='monitor.{VAR:ext}' method=post>
+<form name='subb' action='{VAR:baseurl}/orb.{VAR:ext}' method=GET>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
@@ -92,8 +92,8 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 <a href='javascript:show_today()'>T&auml;nased</a> |
 <a href='javascript:document.subb.submit()'>Reload</a> |
 <a href='javascript:show_stat()'>Statistika</a> |
-<a href='{VAR:self}?display=block'>IP block</a> | 
-<a href='{VAR:self}?display=site_id'>Saidid</a> | 
+<a href='{VAR:self}?class=syslog&action=block'>IP block</a> | 
+<a href='{VAR:self}?class=syslog&action=site_id'>Saidid</a> | 
 <a href='{VAR:baseurl}'>Esilehele</a> 
 </b> Uuendatakse iga
 <input type="text" name="update" size="4"  class="plain_el" value="{VAR:update}">
@@ -159,6 +159,7 @@ Mida tegi<br>
 {VAR:LINE}
 </table>
 </td></tr></table>
+{VAR:reforb}
 </form>
 </body>
 </html>

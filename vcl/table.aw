@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.20 2002/03/04 20:20:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.21 2002/06/10 15:51:47 kristo Exp $
 global $PHP_SELF;
+// no one will notice anyway
+/*
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
 	with(document.aw_table) {
@@ -10,6 +12,7 @@ function xnavi_alfa(char_to_look_for) {
 	}
 }
 ";
+*/
 
 class aw_table
 {
@@ -21,7 +24,7 @@ class aw_table
 		// prefix - kasutame sessioonimuutujate registreerimisel
 		$this->set_attribs($data);
 		$this->sortby = $data["sortby"];
-		$this->imgurl = $data["imgurl"];
+		$this->imgurl = aw_ini_get("baseurl")."/automatweb/images";
 		$this->self   = $data["self"];
 		$this->tbgcolor = $data["tbgcolor"];
 		$this->header_attribs = array();
@@ -148,6 +151,11 @@ class aw_table
 	
 	function set_header_attribs($args)
 	{
+		if (!is_array($args))
+		{
+			return false;
+		};
+
 		while(list($k,$v) = each($args))
 		{
 			$this->header_attribs[$k] = $v;
@@ -171,9 +179,8 @@ class aw_table
 		// määrame ära sorteeritava välja
 		// paramteetrid: 
 		//		field
-		global $aw_tables,$awt; // see peaks olema array,
+		global $aw_tables; // see peaks olema array,
 				   // kus on regitud erinevate tabelite andmed
-		$awt->start("table::sort_by");
 		reset($this->data);
 		$newdata = array();
 		$sess_field_key   = $this->prefix . "_sortby";
@@ -246,7 +253,7 @@ class aw_table
 
 		// sorteerime andmed
 		// uurime flagi v2lja
-		if ($this->nfields[$this->sortby]) 
+		if ($this->nfields[$this->sortby] || $params["sort_numeric"]) 
 		{
 			$this->sort_flag = SORT_NUMERIC;
 		} 
@@ -266,7 +273,21 @@ class aw_table
 
 		usort($this->data,array($this,"sorter"));
 
-		$awt->stop("table::sort_by");
+		if ($this->groupby != "")
+		{
+			// now go over the defs and leave only those rows, where group_by's value is unique
+			$newdat = array();
+			$usedvals = array();
+			foreach($this->data as $row)
+			{
+				if (!isset($usedvals[$row[$this->groupby]]))
+				{
+					$usedvals[$row[$this->groupby]] = 1;
+					$newdat[] = $row;
+				}
+			}
+			$this->data = $newdat;
+		}
 	}
 
 
@@ -329,9 +350,6 @@ class aw_table
 		};
 
 		extract($arr);
-
-		global $awt;
-		$awt->start("table::draw");
 
 /*		if (sizeof($this->data) == 0)
 		{
@@ -530,7 +548,7 @@ class aw_table
 				reset($this->rowdefs);
 				
 				// grpupeerimine
-				if ($groupby != "" && $lgrpval != $v[$groupby])
+				if ($rgroupby != "" && $lgrpval != $v[$rgroupby])
 				{
 					// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
 					$tbl.=$this->opentag(array(
@@ -538,11 +556,11 @@ class aw_table
 						"colspan" => count($this->rowdefs),
 						"classid" => $this->group_style
 					));
-					$tbl.=$v[$groupby];
+					$tbl.=$v[$rgroupby];
 					$tbl.=$this->closetag(array(
 						"name" => "td"
 					));
-					$lgrpval = $v[$groupby];
+					$lgrpval = $v[$rgroupby];
 
 					$tbl .= $this->closetag(array("name" => "tr"));
 					$tbl .= $this->opentag(array("name" => "tr"));
@@ -639,6 +657,13 @@ class aw_table
 						$val = "&nbsp;";
 					};
 
+					if ($v1["thousands_sep"] != "")
+					{
+						// insert separator every after every 3 chars, starting from the end. 
+						$val = strrev(chunk_split(strrev(trim($val)),3,$v1["thousands_sep"]));
+						// chunk split adds one too many separators, so remove that
+						$val = substr($val,strlen($v1["thousands_sep"]));
+					}
 					$tbl .= $val;
 					$tbl .= $this->closetag(array("name" => "td"));
 				};
@@ -707,7 +732,6 @@ class aw_table
 		}
 
 		// tagastame selle käki
-		$awt->stop("table::draw");
 		return $tbl;
 	}
 
@@ -988,14 +1012,14 @@ class aw_table
 		$xml_parser = xml_parser_create();
 		xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
 		xml_set_object($xml_parser,&$this);
-	  xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
+		xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
 		if (!xml_parse($xml_parser,$xml_data)) 
 		{
 			echo(sprintf("XML error: %s at line %d",
-				xml_error_string(xml_get_error_code($xml_parser)),
-        xml_get_current_line_number($xml_parser)));
-    };
-    return $this->data;
+			xml_error_string(xml_get_error_code($xml_parser)),
+			xml_get_current_line_number($xml_parser)));
+		};
+		return $this->data;
 	}
 
 	function parse_xml_def($file) 

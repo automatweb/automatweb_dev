@@ -9,26 +9,38 @@ class smtp extends aw_template
 	function send_message($server, $from, $to, $msg)
 	{
 		if (!$this->connect($server))
+		{
 			return false;
+		}
 
 		if (!$this->get_status($this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_WSERVER,"smtp: error, something wrong with server", false);
+		}
 
-		$this->send_command("HELO ".$GLOBALS["SERVER_NAME"]);
+		$this->send_command("HELO ".aw_global_get("SERVER_NAME"));
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error(ERR_SMTP_HELO,"smtp: error '$err' after HELO ".$GLOBALS["SERVER_NAME"], false);
+		{
+			$this->raise_error(ERR_SMTP_HELO,"smtp: error '$err' after HELO ".aw_global_get("SERVER_NAME"), false);
+		}
 
 		$this->send_command("MAIL FROM:<$from>");
 		if (!$this->get_status($err = $this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_MFROM,"smtp: error '$err' after MAIL FROM:<$from>", false);
+		}
 
 		$this->send_command("RCPT TO:<$to>");
 		if (!$this->get_status($err = $this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_RCPT,"smtp: error '$err' after RCPT TO:<$to>", false);
+		}
 
 		$this->send_command("DATA");
 		if (!$this->get_status($err = $this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_DATA,"smtp: error '$err' after DATA", false);
+		}
 		
 		$larr = explode("\n", $msg);
 		reset($larr);
@@ -44,11 +56,15 @@ class smtp extends aw_template
 		}
 		$this->send_command(".");
 		if (!$this->get_status($err = $this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_MSG,"smtp: error '$err' after message", false);
+		}
 
 		$this->send_command("QUIT");
 		if (!$this->get_status($err = $this->read_response()))
+		{
 			$this->raise_error(ERR_SMTP_QUIT,"smtp: error '$err' after QUIT", false);
+		}
 
 		return true;
 	}

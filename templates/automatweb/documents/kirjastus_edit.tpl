@@ -24,7 +24,8 @@
 		<td class="fcaption2_nt">&nbsp;			
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
 			Foorum:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>
-	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}> |
+	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
+	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
 	Esilehel: <input type='checkbox' NAME='esilehel' VALUE=1 {VAR:esilehel}> <select name="jrk1">{VAR:jrk1}</select>|
 	All paremal: <input type='checkbox' NAME='esilehel_uudis' VALUE=1 {VAR:esilehel_uudis}> <select name="jrk2">{VAR:jrk2}</select>|
  <select name="jrk2">{VAR:jrk2}</select>|

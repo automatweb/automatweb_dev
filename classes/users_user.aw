@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.28 2002/02/27 19:56:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.29 2002/06/10 15:50:54 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -20,13 +20,12 @@ define(GROUP_LEVEL_PRIORITY, 100000);
 define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 classload("defs");
-lc_load("users");
 
 class users_user extends aw_template 
 {
 	function users_user() 
 	{
-		$this->db_init();
+		$this->init("");
 	}
 
 	////
@@ -51,17 +50,17 @@ class users_user extends aw_template
 	// !Listib koik grupid, kontrollib ka n2gemis6igust, tagastab array 
 	function listall_acl() 
 	{
-		$users = array("'".$GLOBALS["uid"]."'");
+		$users = array("'".aw_global_get("uid")."'");
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			$view = $this->can("view_users", $row[oid]);
+			$view = $this->can("view_users", $row["oid"]);
 			if ($view)
 			{
 				// add all users of this group to list of users
 				$this->save_handle();
-				$ul = $this->getgroupmembers2($row[gid]);
+				$ul = $this->getgroupmembers2($row["gid"]);
 				reset($ul);
 				while (list(,$u_uid) = each($ul))
 				{
@@ -112,52 +111,27 @@ class users_user extends aw_template
 	function login($params = array())
 	{
 		global $uid;
-		$uid = $params["uid"];
-		$password = $params["password"];
-		// why are we doing this? I mean we get all the postvars directly from orb?
-		global $HTTP_POST_VARS;
-		if ($HTTP_POST_VARS["uid"] || $HTTP_POST_VARS["l_uid"])
-		{
-			$uid		= ($HTTP_POST_VARS["uid"]) ? $HTTP_POST_VARS["uid"] : $HTTP_POST_VARS["l_uid"];
-			$password	= $HTTP_POST_VARS["password"];
-			// need on selleks, et ei peaks global $REMOTE_ADDR tegema, vms
-			$ip		= $params["remote_ip"];
-			$host		= $params["remote_host"];
-		}
-		else
-		{
-			// this probably means we were called from inside of orb wrapper
-			$uid = $params["vars"]["uid"];
-			$password = $params["vars"]["password"];
-		};
+		extract($params);
+		$ip	= $params["remote_ip"];
+		$host	= $params["remote_host"];
+		$t = time();
+		$msg = "";
 
-		$t 		= time();
-		$msg		= "";
 		// by default eeldame, et kasutaja on jobu ja ei saa
 		// sisse logida
 		$success	= false;
 		$load_user 	= true;
 
-		// 2 voiks ka konstandiga asendada, 
-		// samuti voiks kontrollida, kas kasutajanimi (parool) liiga pikk ei ole
-		// ja keelatud tähti ei sisalda
-		// is_valid_uid funktsioon ntx?
-		if (strlen($uid) < 2)
-		{
-			$msg = sprintf(E_USR_UID_TOO_SHORT,$uid,"");
-			$this->send_alert($msg);
-			$this->_log("auth",$msg);
-			$load_user = false;
-		}
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
-		elseif (strlen($password) < 2)
+		if (!is_valid("password",$password))
 		{
-			$msg = sprintf(E_USR_PASS_TOO_SHORT,$uid,"");
+			$msg = "Vigane v&otilde;i vale parool";
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$load_user = false;
 		}
-		elseif (!is_valid("uid",$uid))
+		else
+		if (!is_valid("uid",$uid))
 		{
 			$msg = "Vigane kasutajanimimi $uid";
 			$this->send_alert($msg);
@@ -171,17 +145,18 @@ class users_user extends aw_template
 			$this->db_query($q);
 			$udata = $this->db_next();
 		};
-	
+
 		if (is_array($udata))
 		{
-			if (defined("MD5_PASSWORDS"))
+			if (aw_ini_get("auth.md5_passwords"))
 			{
 				if (md5($password) == $udata["password"])
 				{
 					$success = true;
 				};
 			}
-			elseif ($password == $udata["password"])
+			else
+			if ($password == $udata["password"])
 			{
 				$success = true;
 			}
@@ -198,84 +173,61 @@ class users_user extends aw_template
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			session_unregister("uid");
+			aw_global_set("uid","");
 			$uid = "";
 		};
 
-		if ($success)
-		{
-			// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
-			// HUZZAH!
-			$q = "UPDATE users
-				SET 	logins = logins+1,
-			    	ip = '$ip',
-			    		lastaction = $t,
-			    		online = 1
-		      		WHERE uid = '$uid'";
-			$this->db_query($q);
-			$this->_log("auth",USR_LOGGED_IN);
-			if (defined("TAFKAP"))
-			{
-				setcookie("tafkap",$uid,strtotime("+7 years"));
-			};
-		};
 		$this->msg = $msg;
-		// caller voib kontrollida - if (!$users->login("fubar"))
-		//				login failed	
-		// no fucking way. this function returns either true
-		// or false. If you want to read an url then use 
-		// $users->url or something.
-		if ($success) 
-		{
-			session_register("uid");
-		}
-		else
+
+		// all checks complete, result in $success, process it
+		if (!$success)
 		{
 			session_unregister("uid");
+			aw_global_set("uid", "");
 			$uid = "";
-		};
-		
-		if ($params["reforb"])
-		{
-			classload("config");
-			$t = new db_config;
-			// 1st try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
-			// wow. is this graceful degradation or what!
-			$url = $this->find_group_login_redirect($uid);
-			if (!$url)
-			{
-				$url = $t->get_simple_config("after_login");
-			}
-			$this->url = (strlen($url) > 0) ? $url : $baseurl;
-		};
-
-		if ($success)
-		{
-			global $baseurl;
-			if ($this->url != "")
-			{
-				$retval = $this->url;
-			}
-			else
-			{
-				$retval = true;
-			}
-		}
-		else
-		{
 			// suck. 
-			global $baseurl;
 			global $verbosity;
 			if ($verbosity = 1)
 			{
 				$msg = "Vigane kasutajanimi või parool";
 			}
-			header("Refresh: 3;url=$baseurl");
+			header("Refresh: 3;url=".$this->cfg["baseurl"]);
 			print $msg;
 			exit;
-			$retval = false;
 		};
-		return $retval;
-	
+		
+		// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
+		// HUZZAH!
+		$q = "UPDATE users
+					SET	logins = logins+1,
+					ip = '$ip',
+					lastaction = $t,
+					online = 1
+					WHERE uid = '$uid'";
+		$this->db_query($q);
+		$this->_log("auth",USR_LOGGED_IN);
+		if (aw_ini_get("TAFKAP"))
+		{
+			setcookie("tafkap",$uid,strtotime("+7 years"));
+		};
+		session_register("uid");
+		aw_global_set("uid", $uid);
+
+		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
+		// 1st try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
+		// wow. is this graceful degradation or what!
+		$this->url = $this->find_group_login_redirect($uid);
+		if (!$this->url)
+		{
+			$this->url = $this->get_cval("after_login");
+		}
+		$this->url = (strlen($this->url) > 0) ? $this->url : $this->cfg["baseurl"];
+		$this->login_successful = true;
+		if ($this->url[0] == "/")
+		{
+			$this->url = $this->cfg["baseurl"].$this->url;
+		}
+		return $this->url;
 	}
 
 	////
@@ -288,6 +240,7 @@ class users_user extends aw_template
 				lastaction = $t
 			WHERE uid = '$uid'";
 		$this->db_query($q);
+    aw_global_set("uid","");
 		$this->_log("auth",USR_LOGGED_OUT);
 	}
 
@@ -315,10 +268,9 @@ class users_user extends aw_template
 	function orb_logout($args)
 	{
 		extract($args);
-		$this->logout($uid);
+		$this->logout(aw_global_get("uid"));
 		session_destroy();
-		global $baseurl;
-		return $baseurl;
+		return $this->cfg["baseurl"];
 	}
 	
 
@@ -326,7 +278,7 @@ class users_user extends aw_template
 	//! Genereerib sisselogitud kasutaja kodukataloogi
 	function gen_homedir($args = array())
 	{
-		global $udata;
+		$udata = $this->get_user(array("uid" => aw_global_get("uid")));
 
 		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
 		$this->read_template($tpl);
@@ -366,7 +318,6 @@ class users_user extends aw_template
 			$this->vars(array(
 				"name" => $row["name"],
 				"id" => $row["oid"],
-				#"iconurl" => "images/ftv2doc.gif",
 				"iconurl" => get_icon_url($row["class_id"],0),
 			));
 			switch ($row["class_id"])
@@ -386,14 +337,15 @@ class users_user extends aw_template
 			$delete = $this->parse("delete");
 		};
 
-		$this->vars(array("folder" => $folders,
-				  "doc" => $docs,
-				  "name" => $thisone["name"],
-				  "parent" => $startfrom,
-				  "delete" => $delete,
-				  "total" => $cnt,
-				  "up" => $up,
-				 ));
+		$this->vars(array(
+			"folder" => $folders,
+			"doc" => $docs,
+			"name" => $thisone["name"],
+			"parent" => $startfrom,
+			"delete" => $delete,
+			"total" => $cnt,
+			"up" => $up,
+		));
 		return $this->parse();
 	}
 
@@ -424,16 +376,19 @@ class users_user extends aw_template
 			{
 				if ($k == "password")
 				{
-					$v = md5($v);
+					if (aw_ini_get("auth.md5_passwords"))
+					{
+						$v = md5($v);
+					}
 				};
 				$sets[] = " $k = '$v' ";
 			}
 		};
 		$sets = join(",", $sets);
 
-		$q = "UPDATE users SET $sets WHERE uid = '".$data[uid]."'";
+		$q = "UPDATE users SET $sets WHERE uid = '".$data["uid"]."'";
 		$this->db_query($q);
-		$this->_log("user",$GLOBALS["uid"] . " muutis kasutaja \"$uid\" andmeid");
+		$this->_log("user",aw_global_get("uid") . " muutis kasutaja \"$data[uid]\" andmeid");
 	}
 
 	function savegroup($data) 
@@ -451,9 +406,9 @@ class users_user extends aw_template
 		}
 		$sets = join(",", $sets);
 
-		$q = "UPDATE groups SET modified = ".time().", modifiedby = '".$GLOBALS["uid"]."', $sets WHERE gid = '".$data[gid]."'";
+		$q = "UPDATE groups SET modified = ".time().", modifiedby = '".aw_global_get("uid")."', $sets WHERE gid = '".$data["gid"]."'";
 		$this->db_query($q);
-		$this->_log("group",$GLOBALS["uid"] . " muutis grupi \"$data[gid]\" andmeid");
+		$this->_log("group",aw_global_get("uid") . " muutis grupi \"$data[gid]\" andmeid");
 	}
 
 	///
@@ -528,17 +483,17 @@ class users_user extends aw_template
 	function addgroup($parent,$gname,$type=0,$data = 0,$priority = USER_GROUP_PRIORITY,$search_form = 0) 
 	{
 		$this->quote($gname);
-		global $uid;
+		$uid = aw_global_get("uid");
 
 		$pg = $this->fetchgroup($parent);
 
 		$t = time();
-		$oid = $this->new_object(array("name" => $gname, "class_id" => CL_GROUP, "status" => 2, "parent" => $pg[oid]));
+		$oid = $this->new_object(array("name" => $gname, "class_id" => CL_GROUP, "status" => 2, "parent" => $pg["oid"]));
 
 		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
 			VALUES('$gname',$t,'$uid',$t,'$uid','$type','$data',$parent,$priority,$oid,$search_form)";
 		$this->db_query($q);
-		$this->_log("group",$GLOBALS["uid"] . " lisas uue grupi - $gname");
+		$this->_log("group",aw_global_get("uid") . " lisas uue grupi - $gname");
 		return $this->db_fetch_field("SELECT MAX(gid) AS gid FROM groups", "gid");
 	}
 
@@ -597,13 +552,14 @@ class users_user extends aw_template
 		}
 	}
 
-	function remove_users_from_group($gid,$users,$checkdyn = false) {
+	function remove_users_from_group($gid,$users,$checkdyn = false) 
+	{
 		if (is_array($users)) 
 		{
 			if ($checkdyn)
 			{
 				$grp = $this->fetchgroup($gid);
-				$dyn = $grp[type] == 2 ? true : false;
+				$dyn = $grp["type"] == 2 ? true : false;
 			}
 
 			$garr = $this->get_grp_parent_grps($gid);
@@ -617,16 +573,27 @@ class users_user extends aw_template
 				if ($checkdyn && $dyn)
 				{
 					$user = $this->fetch($k);
-					$udata = unserialize($user[exclude_grps]);
+					$udata = unserialize($user["exclude_grps"]);
 					$udata[$gid] = 1;
 					$this->save(array("uid" => $k, "exclude_grps" => serialize($udata)));
 				}
 
 				$q = "DELETE FROM groupmembers WHERE uid = '$k' AND gid IN ($gstr)";
 				$this->db_query($q);
+
+				//magistrali korral võtan javaga yhendust
+				if($this->cfg["site_id"]==12)
+				{
+					$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+					//teatan, et grupist $gid kustutati user $k 
+					$str="1 ".$this->cfg["site_id"]." ".$k." ".$gid."\n";
+					fputs($acl_server_socket,$str);
+					fclose($acl_server_socket);
+				}
 			};
 		};
 		$this->_log("group","Kustutas grupist $gid kasutajad ".join(",",$users));
+
 	}
 
 	function is_member($uuid, $gid)
@@ -647,9 +614,10 @@ class users_user extends aw_template
 		}
 	}
 
-	function add_users_to_group($gid,$users,$permanent = 0,$check = false) {
+	function add_users_to_group($gid,$users,$permanent = 0,$check = false) 
+	{
 		$t = time();
-		global $uid;
+		$uid = aw_global_get("uid");
 		if (is_array($users)) 
 		{
 			$garr = $this->get_grp_parent_grps($gid);
@@ -662,23 +630,26 @@ class users_user extends aw_template
 				while (list(,$v) = each($garr))
 				{
 					if ($check)
+					{
 						// if checking is on and suer is already a member, take next user
 						if ($this->is_member($k,$v))
+						{
 							continue;
+						}
+					}
 
 					$q = "INSERT INTO groupmembers (gid,uid,created,createdby,permanent) VALUES('$v','$k','$t','$uid',$permanent)";
 					$this->db_query($q);
-					
-					//magistrali korral võtan javaga yhendust
-					if($GLOBALS["SITE_ID"]==12)
-					{
-						$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-						//teatan, et grupile $v lisadi user $uid
-						$str="0 ".$GLOBALS["SITE_ID"]." ".$uid." ".$v."\n";
-						fputs($acl_server_socket,$str);
-						fclose($acl_server_socket);
-					}
-					
+				}
+
+				//magistrali korral võtan javaga yhendust
+				if($this->cfg["site_id"]==12)
+				{
+					$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+					//teatan, et grupile $v lisadi user $uid
+					$str="0 ".$this->cfg["site_id"]." ".$uid." ".$gid."\n";
+					fputs($acl_server_socket,$str);
+					fclose($acl_server_socket);
 				}
 			};
 		};
@@ -690,7 +661,9 @@ class users_user extends aw_template
 		$this->db_query("SELECT * FROM groupmembers WHERE uid = '$uid'");
 		$ret = array();
 		while ($row = $this->db_next())
-			$ret[$row[gid]] = $row[uid];
+		{
+			$ret[$row["gid"]] = $row["uid"];
+		}
 
 		return $ret;
 	}
@@ -705,13 +678,13 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
 
 
-		if (defined("MD5_PASSWORDS"))
+		if (aw_ini_get("auth.md5_passwords"))
 		{
 			$password = md5($password);
 		};
 
 		// teeme kasutaja
-		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,created_hour,created_day,created_week,created_month,created_year) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')");
+		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,created_hour,created_day,created_week,created_month,created_year,logins) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."','0')");
 
 		// teeme default grupi
 		$oid = $this->new_object(array("name" => $uid, "class_id" => CL_USER_GROUP, "status" => 2));
@@ -722,7 +695,7 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO groupmembers (gid,uid,created) VALUES ('$gid','$uid',$t)");
 
 		// lisame kasutaja k6ikide kasutajate grupi liikmex
-		global $all_users_grp;
+		$all_users_grp = aw_ini_get("groups.all_users_grp");
 		if ($all_users_grp)
 		{
 			$this->db_query("INSERT INTO groupmembers(gid,uid,created) VALUES($all_users_grp,'$uid',$t)");
@@ -733,15 +706,17 @@ class users_user extends aw_template
 		// ja v6tame teistelt k6ik 6igused kodukataloomale 2ra
 		$this->deny_obj_access($hfid);
 
-		$this->_log("user",$GLOBALS["uid"]." lisas kasutaja $uid");
+		$this->_log("user",aw_global_get("uid")." lisas kasutaja $uid");
 	}
 
 	function deletegroup($gid)
 	{
 		if (!is_array($this->grpcache))
+		{
 			$this->mk_grpcache();
+		}
 
-		$this->delete_object($this->grpcache[$gid][oid]);
+		$this->delete_object($this->grpcache[$gid]["oid"]);
 		$this->db_query("DELETE FROM groups WHERE gid = $gid");
 		$this->db_query("DELETE FROM groupmembers WHERE gid = $gid");
 //		$this->db_query("DELETE FROM groupmembergroups WHERE parent = $gid OR child = $gid");
@@ -751,21 +726,25 @@ class users_user extends aw_template
 
 		
 		//magistrali korral võtan javaga yhendust
-		if($GLOBALS["SITE_ID"]==12)
+		if($this->cfg["site_id"]==12)
 		{
 			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
 			//teatan, et saidilt kustutati grupp $grpcache[$gid]
-			$str="5 ".$GLOBALS["SITE_ID"]." ".$GLOBALS["uid"]." ".$grpcache[$gid]."\n";
+			$str="5 ".$this->cfg["site_id"]." ".aw_global_get("uid")." ".$gid."\n";
 			fputs($acl_server_socket,$str);
 			fclose($acl_server_socket);
 		}
 		
 		if (!is_array($this->grpcache[$gid]))
+		{
 			return;
+		}
 
 		reset($this->grpcache[$gid]);
 		while (list(,$v) = each($this->grpcache[$gid]))
+		{
 			$this->deletegroup($v[gid]);
+		}
 	}
 
 	function get_gid_by_uid($uid)
@@ -781,12 +760,12 @@ class users_user extends aw_template
 		$gr = $this->fetchgroup($gid);
 
 		// et like otsimisvorm
-		$sfid = $gr[search_form];
+		$sfid = $gr["search_form"];
 
 		// now do the search
 		$f = new form();
 		$f->load($sfid);
-		$matches = $f->search($gr[data]);
+		$matches = $f->search($gr["data"]);
 
 		// find all the users that have those join form entries that match
 
@@ -797,16 +776,16 @@ class users_user extends aw_template
 		while ($row = $this->db_next())
 		{
 			// make sure we don't addd users that are set as not to be added to this group. 
-			$udata = unserialize($row[exclude_grps]);
+			$udata = unserialize($row["exclude_grps"]);
 			if (!$udata[$gid])
 			{
-				$jf = unserialize($row[join_form_entry]);
+				$jf = unserialize($row["join_form_entry"]);
 				if (is_array($jf))
 				{
 					reset($jf);
 					while (list($fid, $eid) = each($jf))
 					{
-						$users[$eid] = $row[uid];
+						$users[$eid] = $row["uid"];
 					}
 				}
 			}
@@ -873,16 +852,16 @@ class users_user extends aw_template
 		while($group = $this->db_next())
 		{
 			// do the search for the group
-			if (!$group[search_form])
+			if (!$group["search_form"])
 			{
 				continue;
 			}
 
-			$f->load($group[search_form]);
-			$mt = $f->search($group[data]);
+			$f->load($group["search_form"]);
+			$mt = $f->search($group["data"]);
 
 			// check if the user is in the result set
-			$jfs = unserialize($user[join_form_entry]);
+			$jfs = unserialize($user["join_form_entry"]);
 
 			$in = false;
 			$efid = $f->search_form;
@@ -897,18 +876,18 @@ class users_user extends aw_template
 			if ($in)
 			{
 				// ok, in the result, that means, user must be in $group
-				if (!$ugrps[$group[gid]])
+				if (!$ugrps[$group["gid"]])
 				{
-					$toadd[] = $group[gid];
+					$toadd[] = $group["gid"];
 				}
 			}
 			else
 			{
 				// ok, not in the result, that means, user must not be in $group
-				if ($ugrps[$group[gid]])
+				if ($ugrps[$group["gid"]])
 				{
 					// user already in group, remove
-					$toremove[] = $group[gid];
+					$toremove[] = $group["gid"];
 				}
 			}
 		}
@@ -916,7 +895,7 @@ class users_user extends aw_template
 		$auid = array();
 		$auid[] = $uid;
 
-		$excludes = unserialize($user[exclude_grps]);
+		$excludes = unserialize($user["exclude_grps"]);
 
 		// ok, here we add the user to all the groups he should be in
 		// but we must first check if the user must not be in that group
@@ -937,7 +916,9 @@ class users_user extends aw_template
 		while(list(,$v) = each($toremove))
 		{
 			if ($perms[$v] != $v)
+			{
 				$this->remove_users_from_group_rec($v,$auid);
+			}
 		}
 	}
 
@@ -946,7 +927,9 @@ class users_user extends aw_template
 		$ret = array();
 		$this->db_query("SELECT * FROM groupmembers WHERE gid = $gid AND permanent = 1");
 		while ($row = $this->db_next())
-			$ret[$row[uid]] = $row[uid];
+		{
+			$ret[$row["uid"]] = $row["uid"];
+		}
 
 		return $ret;
 	}
@@ -956,7 +939,9 @@ class users_user extends aw_template
 		$ret = array();
 		$this->db_query("SELECT * FROM groupmembers WHERE uid = '$uid' AND permanent = 1");
 		while ($row = $this->db_next())
-			$ret[$row[gid]] = $row[gid];
+		{
+			$ret[$row["gid"]] = $row["gid"];
+		}
 
 		return $ret;
 	}
@@ -964,27 +949,33 @@ class users_user extends aw_template
 	function getgroupsbelow($gid,&$arr)
 	{
 		if (!is_array($this->grpcache))
+		{
 			$this->mk_grpcache();
+		}
 
 		if (!is_array($this->grpcache[$gid]))
+		{
 			return;
+		}
 
 		reset($this->grpcache[$gid]);
 		while (list(,$v) = each($this->grpcache[$gid]))
 		{
-			$arr[] = $v[gid];
-			$this->getgroupsbelow($v[gid],&$arr);
+			$arr[] = $v["gid"];
+			$this->getgroupsbelow($v["gid"],&$arr);
 		}
 	}
 
 	function getgroupsabove($gid,&$arr)
 	{
 		if (!is_array($this->grpcache2))
+		{
 			$this->mk_grpcache();
+		}
 
 		while ($gid != 0)
 		{
-			if ($this->grpcache2[$gid][type] == GRP_DEFAULT)
+			if ($this->grpcache2[$gid]["type"] == GRP_DEFAULT)
 			{
 				// ignore the user group so you won't add lotsa people ya don't need into it.
 				$gid = 0;
@@ -992,7 +983,7 @@ class users_user extends aw_template
 			else
 			{
 				$arr[] = $gid;
-				$gid = $this->grpcache2[$gid][parent];
+				$gid = $this->grpcache2[$gid]["parent"];
 			}
 		}
 	}
@@ -1006,8 +997,8 @@ class users_user extends aw_template
 		$this->db_query("SELECT * FROM groups WHERE type != 3");
 		while ($row = $this->db_next())
 		{
-			$this->grpcache[$row[parent]][] = $row;
-			$this->grpcache2[$row[gid]] = $row;
+			$this->grpcache[$row["parent"]][] = $row;
+			$this->grpcache2[$row["gid"]] = $row;
 		}
 	}
 
@@ -1016,7 +1007,9 @@ class users_user extends aw_template
 		$ret = array();
 		$this->db_query("SELECT * FROM groupmembergroups WHERE parent = $gid");
 		while ($row = $this->db_next())
-			$ret[$row[child]] = $row;
+		{
+			$ret[$row["child"]] = $row;
+		}
 
 		return $ret;
 	}
@@ -1024,9 +1017,9 @@ class users_user extends aw_template
 	function add_grpgrp_relation($parent,$child)
 	{
 		$this->db_query("INSERT INTO groupmembergroups(parent,child,created,createdby)
-					VALUES($parent,$child,".time().",'".$GLOBALS["uid"]."')");
+					VALUES($parent,$child,".time().",'".aw_global_get("uid")."')");
 
-		$this->_log("user",$GLOBALS["uid"]." lisas grupi $parent sisse grupi $child");
+		$this->_log("user",aw_global_get("uid")." lisas grupi $parent sisse grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->add_users_to_group_rec($parent,$uarr);
 	}
@@ -1036,7 +1029,7 @@ class users_user extends aw_template
 		$this->db_query("DELETE FROM groupmembergroups
 					WHERE parent = $parent AND child = $child");
 
-		$this->_log("user",$GLOBALS["uid"]." kustutas grupi $parent seest grupi $child");
+		$this->_log("user",aw_global_get("uid")." kustutas grupi $parent seest grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->remove_users_from_group_rec($parent,$uarr);
 	}
@@ -1049,11 +1042,13 @@ class users_user extends aw_template
 		{
 			// we must also recursively find the parent groups of this group
 			$this->save_handle();
-			$tar = $this->get_grp_parent_grps($row[parent]);
+			$tar = $this->get_grp_parent_grps($row["parent"]);
 			$this->restore_handle();
-			$ret[$row[parent]] = $row[parent];
+			$ret[$row["parent"]] = $row["parent"];
 			while (list($k,) = each($tar))
+			{
 				$ret[$k] = $k;
+			}
 		}
 
 		return $ret;
@@ -1139,9 +1134,7 @@ class users_user extends aw_template
 		classload("config");
 		$c = new db_config;
 		$ec = $c->get_simple_config("login_grp_redirect");
-		classload("xml");
-		$x = new xml;
-		$ra = $x->xml_unserialize(array("source" => $ec));
+		$ra = aw_unserialize($ec);
 
 		// kuna kasutaja pole veel sisse loginud, siis pole globallset gidlisti olemas, see tuleb leida
 		$gidlist = $this->get_gids_by_uid($uuid);
@@ -1165,6 +1158,47 @@ class users_user extends aw_template
 			}
 		}
 		return false;
+	}
+
+	////
+	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
+	// This function shouldn't be in the core, I think, since it's called only once,
+	// from the site_header
+	// 
+	// - yeah. good point. - terryf
+	function get_gids_by_uid($uid)
+	{
+		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
+			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'
+			ORDER BY priority";
+		$this->db_query($q);
+		$retval = array();
+		while($row = $this->db_next())
+		{
+			$retval[(int)$row["gid"]] = (int)$row["gid"];
+		};
+
+		// FIXME: make the damn login menu thingies work again. 
+
+		// oh, yes, this is higly not logical, to do this here,
+		// but for now, this will do
+/*		classload("config");
+		$config = new config();
+
+		$this->login_menu = $config->get_login_menus($retval);
+
+		if ($this->login_menu)
+		{
+			$menu_defs_v2 = aw_ini_get("menuedit.menu_defs");
+			$_tmp = array_flip($menu_defs_v2);
+			if ($_tmp["LOGGED"])
+			{
+				// nullime senise LOGGED menüü
+				unset($menu_defs_v2[$_tmp["LOGGED"]]);
+			}
+			$menu_defs_v2[$this->login_menu] = "LOGGED";
+		};*/
+		return $retval;
 	}
 };
 ?>

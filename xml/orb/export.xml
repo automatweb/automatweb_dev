@@ -14,6 +14,50 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="rules">
+			<function name="rules">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_rule">
+			<function name="submit_rule">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_rule">
+			<function name="add_rule">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_rule">
+			<function name="change_rule">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_rule">
+			<function name="del_rule">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_export" nologin="1">
+			<function name="do_export">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

@@ -149,6 +149,21 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="get_user_css">
+			<function name="get_user_css">
+				<arguments>
+					<optional name="name"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="colorpicker">
+			<function name="colorpicker">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

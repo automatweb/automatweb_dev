@@ -6,9 +6,18 @@ class BarGraph extends TTGraph
 
 	function BarGraph($border,$inside,$frame)
 	{
-		if ($border=="") $border=1;
-		if ($frame=="") $border=5;
-		if ($inside=="") $inside=40;
+		if ($border=="") 
+		{
+			$border=1;
+		}
+		if ($frame=="") 
+		{
+			$border=5;
+		}
+		if ($inside=="") 
+		{
+			$inside=40;
+		}
 		$this->setBorderWidth($border);
 		$this->setFrameWidth($frame);
 		$this->setInsideWidth($inside);
@@ -20,36 +29,55 @@ class BarGraph extends TTGraph
 		$max=-999999999999;
 		$min=999999999999;
 		$ycnt=0;
-				while(list(,$v) = each($yvalues)) 
+		while(list(,$v) = each($yvalues)) 
+		{
+			if (is_array($v))
+			{					
+				$ycnt++;
+				while(list($ke,$val) = each($v)) 
 				{
-					if (is_array($v))
-					{					
-						$ycnt++;
-						while(list($ke,$val) = each($v)) 
+					if (!$val=="")
+					{
+						if ($max < $val) 
 						{
-							if (!$val==""){
-								if ($max < $val) $max = $val;
-								if ($min > $val) $min = $val;
-
-							}
-//							echo "$ke = $val<br>";						
-							if (is_array($val))
-							{
-							while(list($kee,$va) = each($val)) 
-							{
-//								echo "$kee = $va<br>";						
-							}}
-
+							$max = $val;
 						}
-					} else {
-							if (!$v==""){
-								if ($max < $v) $max = $v;
-								if ($min > $v) $min = $v;
-							}
-//							echo "mh1 = $v<br>";						
+						if ($min > $val) 
+						{
+							$min = $val;
+						}
+					}
+//							echo "$ke = $val<br>";						
+					if (is_array($val))
+					{
+						while(list($kee,$va) = each($val)) 
+						{
+	//								echo "$kee = $va<br>";						
+						}
+					}
+
+				}
+			} 
+			else 
+			{
+				if (!$v=="")
+				{
+					if ($max < $v) 
+					{
+						$max = $v;
+					}
+					if ($min > $v) 
+					{
+						$min = $v;
 					}
 				}
-		if (!is_array($values["ydata_0"])) $ycnt=1;
+//							echo "mh1 = $v<br>";						
+			}
+		}
+		if (!is_array($values["ydata_0"])) 
+		{
+			$ycnt=1;
+		}
 		$this->ycnt=$ycnt;
 		$xItemCount = count($xvalues);
 		$colSize = ($this->imageWidth - (2 * ($this->getTriple()))-3)/$xItemCount;
@@ -64,7 +92,10 @@ class BarGraph extends TTGraph
 
 	function xaxis($values, $label="", $_col="000000")
 	{
-		if ($_col=="") $_col="000000";
+		if ($_col=="") 
+		{
+			$_col="000000";
+		}
 		$nextCol = $this->getTriple();
 		$col_ar=$this->rgb2Array($_col);
 		$colblack= imagecolorallocate($this->image, 0,0,0);
@@ -75,20 +106,19 @@ class BarGraph extends TTGraph
 //			if (($j%2)&&$j!=0) $values[$j]="";
 			$count=(strlen($values[0])*imagefontwidth(1))/($this->colSize)+1;
 			$k=0;
-				for ($i = 0; $i < $this->xItemCount; $i+=$count)
-				{
-					$tmp[$k++]=$values[$i];
-				}
+			for ($i = 0; $i < $this->xItemCount; $i+=$count)
+			{
+				$tmp[$k++]=$values[$i];
+			}
 			$colSize = ($this->imageWidth - (2 * ($this->getTriple())))/count($tmp);
 			for ($i = 0; $i < count($tmp); $i++)
 			{
 				imagestring($this->image, 1, ($nextCol - (strlen($tmp[$i])/2)), ($this->imageHeight - ($this->insideWidth - 3)), $tmp[$i], $colblack);
 				$nextCol += $colSize;
 			}
-
 		}
-		else {
-			
+		else 
+		{
 			$colsz=floor((($this->imageWidth - 2*$this->getTriple())-4)/$this->xItemCount);
 			$nextCol += 4;
 /*			$ycnt=$this->ycnt;
@@ -100,9 +130,8 @@ class BarGraph extends TTGraph
 */			
 			for ($i = 0; $i < $this->xItemCount; $i++)
 			{				
-
-			//	imagestring($this->image, 1, ($sm_cur)-((imagefontwidth(1)*strlen($values[$i]))/2), ($this->imageHeight - ($this->insideWidth - 3)), $values[$i], $color);
-			//	$sm_cur += $colsz;
+				//	imagestring($this->image, 1, ($sm_cur)-((imagefontwidth(1)*strlen($values[$i]))/2), ($this->imageHeight - ($this->insideWidth - 3)), $values[$i], $color);
+				//	$sm_cur += $colsz;
 				imagestring($this->image, 1, ($nextCol + ($this->colSize/2))-(imagefontwidth(3)*strlen($values[$i])/2), ($this->imageHeight - ($this->insideWidth - 3)), $values[$i], $color);
 				$nextCol += $colsz;
 			}
@@ -132,7 +161,10 @@ class BarGraph extends TTGraph
 			$values["ydata_0"]=$values;
 			$ycnt=1;
 		}
-		if (!is_array($colorarr)) $colorarr=array("ycol_0" => $colorarr);		
+		if (!is_array($colorarr)) 
+		{
+			$colorarr=array("ycol_0" => $colorarr);		
+		}
 
 		$nextCol = $this->getTriple();
 		$colorBlack= imagecolorallocate($this->image, 0, 0, 0);

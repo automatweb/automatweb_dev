@@ -1,16 +1,12 @@
 <?php
 // tpledit.aw - Template Editor
-global $orb_defs;
-$orb_defs["tpledit"] = "xml";
 classload("defs");
 
-
-class tpledit extends aw_template {
+class tpledit extends aw_template 
+{
 	function tpledit($args =array())
 	{
-		$this->tpl_init("tpledit");
-		$this->db_init();
-
+		$this->init("tpledit");
 	}
 
 	////
@@ -21,83 +17,83 @@ class tpledit extends aw_template {
 		load_vcl("table");
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
-                                "prefix" => "tpledit_browse",
-                                "imgurl"    => $GLOBALS["baseurl"]."/images",
-                                "tbgcolor" => "#C3D0DC",
-                        ));
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+			"prefix" => "tpledit_browse",
+			"imgurl"    => $this->cfg["baseurl"]."/images",
+			"tbgcolor" => "#C3D0DC",
+		));
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$t->set_header_attribs(array(
-                                "class" => "tpledit",
-                                "action" => "browse",
-                                "parent" => $args["parent"],
-                ));
+			"class" => "tpledit",
+			"action" => "browse",
+			"parent" => $args["parent"],
+		));
 
 		$t->define_field(array(
-                                "name" => "oid",
-                                "caption" => "ID",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-				"align" => "right",
-                ));
+			"name" => "oid",
+			"caption" => "ID",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+			"align" => "right",
+    ));
 		$t->define_field(array(
-                                "name" => "name",
-                                "caption" => "Nimi",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-				"align" => "right",
-                ));
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+			"align" => "right",
+    ));
 		$t->define_field(array(
-                                "name" => "date",
-                                "caption" => "Muudetud",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-				"align" => "right",
-                ));
+			"name" => "date",
+			"caption" => "Muudetud",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+			"align" => "right",
+    ));
 		$t->define_field(array(
-                                "name" => "size",
-                                "caption" => "Suurus",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-				"align" => "right",
-                ));
+			"name" => "size",
+			"caption" => "Suurus",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+			"align" => "right",
+    ));
 		$t->define_field(array(
-                                "name" => "uid",
-                                "caption" => "Muutja",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-				"align" => "right",
-                ));
+			"name" => "uid",
+			"caption" => "Muutja",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+			"align" => "right",
+    ));
 		$t->define_field(array(
-                                "name" => "arc",
-                                "caption" => "Arhiveeritakse",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"align" => "center",
-                ));
+			"name" => "arc",
+			"caption" => "Arhiveeritakse",
+			"talign" => "center",
+			"nowrap" => 1,
+			"align" => "center",
+    ));
 		$t->define_action(array(
-				"link" => "class=tpledit&action=edit",
-				"field" => "file",
-				"caption" => "Muuda",
+			"link" => "class=tpledit&action=edit",
+			"field" => "file",
+			"caption" => "Muuda",
 		));
 		$t->define_action(array(
-				"link" => "class=tpledit&action=archive",
-				"field" => "oid",
-				"caption" => "Arhiiv",
+			"link" => "class=tpledit&action=archive",
+			"field" => "oid",
+			"caption" => "Arhiiv",
 		));
 		$t->define_action(array(
-				"link" => "class=tpledit&action=upload",
-				"field" => "fullname",
-				"caption" => "Upload",
+			"link" => "class=tpledit&action=upload",
+			"field" => "fullname",
+			"caption" => "Upload",
 		));
 		$t->define_action(array(
-				"link" => "class=tpledit&action=download",
-				"field" => "file",
-				"caption" => "Download",
+			"link" => "class=tpledit&action=download",
+			"field" => "file",
+			"caption" => "Download",
 		));
 
 		// gather information about all template metaobjects
@@ -109,8 +105,7 @@ class tpledit extends aw_template {
 			$tdata[$row["name"]] = $row;
 		}
 
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$tplroot = $tpldir;
 		if (!$parent)
 		{
@@ -124,8 +119,10 @@ class tpledit extends aw_template {
 		$files = array();
 		$dirs = array();
 		$sep = (strlen($parent) > 1) ? "/" : "";
-		if ($dir = @opendir($tpldir)) {
-			while ($file = readdir($dir)) {
+		if ($dir = @opendir($tpldir)) 
+		{
+			while ($file = readdir($dir)) 
+			{
 				$fullname = $tpldir . $sep . $file;
 				if (is_dir($fullname))
 				{
@@ -152,8 +149,8 @@ class tpledit extends aw_template {
 			$fullname = $tpldir .$name;
 			$this->vars(array(
 				"name" => $name,
-				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
-				"size" => $stat[$fullname][FILE_SIZE],
+				"date" => $this->time2date($stat[$fullname]["FILE_MODIFIED"],6),
+				"size" => $stat[$fullname]["FILE_SIZE"],
 				"dirlink" => $this->mk_orb("browse",array("parent" => $parent . $sep . $name)),
 			));
 
@@ -181,22 +178,21 @@ class tpledit extends aw_template {
 
 			$t->define_data(array(
 				"oid" => $tdata[$relname]["oid"],
-				"size" => $stat[$fullname][FILE_SIZE],
+				"size" => $stat[$fullname]["FILE_SIZE"],
 				"name" => $name,
 				"uid" => $tdata[$relname]["modifiedby"],
-				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
+				"date" => $this->time2date($stat[$fullname]["FILE_MODIFIED"],6),
 				"file" => $relname,
 				"fullname" => $fullname,
 				"arc" => "<input type=checkbox name=arc[$oid] $archived value=1><input type=hidden name=exists[$oid] value=1>",
 				"parent" => $parent,
 			));
 
-
 			$f .= $this->parse("file");
 		};
 	
 		$path = array();
-		$path["root"] = $HTTP_HOST;
+		$path["root"] = aw_global_get("HTTP_HOST");
 
 		$parents = explode("/",$parent);
 
@@ -217,7 +213,7 @@ class tpledit extends aw_template {
 		$title_path = array();
 		$title_path[] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
 
-		$title_path = $title_path + map2("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$path);
+		$title_path = $title_path + map2("<a href='orb.".$this->cfg["ext"]."?class=tpledit&action=browse&parent=%s'>%s</a>",$path);
 		$t->sort_by(array("field" => $args["sortby"]));
 
 		$this->vars(array(
@@ -253,8 +249,7 @@ class tpledit extends aw_template {
 	function edit($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 		$oid = $meta_obj["oid"];
 		classload("archive");
@@ -270,8 +265,8 @@ class tpledit extends aw_template {
 		if ($revision)
 		{
 			$source = $arc->checkout(array(
-						"oid" => $oid,
-						"version" => $revision,
+				"oid" => $oid,
+				"version" => $revision,
 			));
 
 			$arc_name = $meta["archive"][$revision]["name"];
@@ -300,7 +295,7 @@ class tpledit extends aw_template {
 			};
 			$fullname .= "/$name";
 			$index = (strlen($fullname) > 0) ? $fullname : $name;
-			$path[$index] = sprintf("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$fullname,$name);
+			$path[$index] = sprintf("<a href='orb.".$this->cfg["ext"]."?class=tpledit&action=browse&parent=%s'>%s</a>",$fullname,$name);
 		};
 
 		$this->vars(array(
@@ -320,62 +315,56 @@ class tpledit extends aw_template {
 	function submit($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$fullpath = $tpldir . "/" . $args["file"];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 			
 		classload("archive");
 		$arc = new archive();
 
-
 		if (not($meta_obj))
 		{
 			// Objekti polnud, teeme uue
 			$oid = $this->new_object(array(
-					"class_id" => CL_TEMPLATE,
-					"name" => $file,
+				"class_id" => CL_TEMPLATE,
+				"name" => $file,
 			));
 			$arc->add(array("oid" => $oid));
 			$timestamp = 0;
 			$activate = 1;
 			$meta_obj["oid"] = $oid;
 		};
-			if ($activate)
-			{
-				// Uuendame olemasoleva objekti metainfot
-				$this->upd_object(array(
-						"oid" => $meta_obj["oid"],
-						"name" => $file,
-				));
-
-
-			};
+		if ($activate)
+		{
+			// Uuendame olemasoleva objekti metainfot
+			$this->upd_object(array(
+				"oid" => $meta_obj["oid"],
+				"name" => $file,
+			));
+		};
 				
-			$oid = $meta_obj["oid"];
+		$oid = $meta_obj["oid"];
 
-			if ($archive || $revision)
+		if ($archive || $revision)
+		{
+			if (not($revision))
 			{
-
-				if (not($revision))
-				{
-					$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
-				}
-				else
-				{
-					$ser = stripslashes($source);
-				};
-				// add a new copy of the template object to the archive
-				$timestamp = $arc->commit(array(
-					"oid" => $meta_obj["oid"],
-					"content" => trim($ser),
-					"name" => $name,
-					"comment" => $comment,
-					"version" => $revision,
-				));
+				$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
+			}
+			else
+			{
+				$ser = stripslashes($source);
 			};
+			// add a new copy of the template object to the archive
+			$timestamp = $arc->commit(array(
+				"oid" => $meta_obj["oid"],
+				"content" => trim($ser),
+				"name" => $name,
+				"comment" => $comment,
+				"version" => $revision,
+			));
+		};
 
-			
 		if ($revision)
 		{
 			$do_update = $activate;
@@ -388,11 +377,11 @@ class tpledit extends aw_template {
 		if ($do_update)
 		{
 			$this->obj_set_meta(array(
-					"oid" => $oid,
-					"meta" => array(
-						"arc_name" => $name,
-						"arc_comment" => $comment,
-						),
+				"oid" => $oid,
+				"meta" => array(
+					"arc_name" => $name,
+					"arc_comment" => $comment,
+					),
 			));
 
 			$this->put_file(array(
@@ -434,8 +423,7 @@ class tpledit extends aw_template {
 		extract($args);
 		global $HTTP_POST_FILES;
 		$filedat = $HTTP_POST_FILES["template"];
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		// we got a file, so register it
 		if (is_array($filedat))
 		{
@@ -443,18 +431,14 @@ class tpledit extends aw_template {
 			$meta_obj = $this->_fetch_tpl_obj(array("name" => $realname));
 			// name - original name
 			// tmp_name - the current location
-
-
 		}
-			
 	}
 
 
 	function download($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$src_path = $tpldir . $file;
 		$source = join("",@file($tpldir . "/" . $file));
 		$realname = basename($file);
@@ -467,8 +451,7 @@ class tpledit extends aw_template {
 	function preview($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$src_path = $tpldir . "/" . $file;
 		$this->read_template("preview.tpl");
 		$this->vars(array(
@@ -480,8 +463,7 @@ class tpledit extends aw_template {
 	function source($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$source = join("",@file($tpldir . "/" . $file));
 		$realname = basename($file);
 		header("Content-Type: text/html");
@@ -495,8 +477,7 @@ class tpledit extends aw_template {
 	function _fetch_template($args = array())
 	{
 		extract($args);
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$source = join("",@file($tpldir . "/" . $file));
 		return $source;
 	}
@@ -523,60 +504,60 @@ class tpledit extends aw_template {
 		load_vcl("table");
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
-                                "prefix" => "mailbox",
-                                "imgurl"    => $GLOBALS["baseurl"]."/img",
-                                "tbgcolor" => "#C3D0DC",
-                        ));
-		$t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+			"prefix" => "mailbox",
+			"imgurl"    => $this->cfg["baseurl"]."/img",
+			"tbgcolor" => "#C3D0DC",
+		));
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$t->set_header_attribs(array(
-                                "class" => "tpledit",
-                                "action" => "archive",
-                                "oid" => $args["oid"],
-                ));
+			"class" => "tpledit",
+			"action" => "archive",
+			"oid" => $args["oid"],
+		));
 
 		$t->define_field(array(
-                                "name" => "name",
-                                "caption" => "Nimi",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-                ));
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+    ));
 		$t->define_field(array(
-                                "name" => "uid",
-                                "caption" => "Muutja",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-                ));
+			"name" => "uid",
+			"caption" => "Muutja",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+    ));
 		$t->define_field(array(
-                                "name" => "date",
-                                "caption" => "Kuupäev",
-                                "talign" => "center",
-                                "nowrap" => 1,
-				"sortable" => 1,
-                ));
+			"name" => "date",
+			"caption" => "Kuupäev",
+			"talign" => "center",
+			"nowrap" => 1,
+			"sortable" => 1,
+    ));
 		$t->define_field(array(
-                                "name" => "size",
-                                "caption" => "Suurus",
-                                "talign" => "center",
-				"align" => "right",
-                                "nowrap" => 1,
-				"sortable" => 1,
-                ));
+			"name" => "size",
+			"caption" => "Suurus",
+			"talign" => "center",
+			"align" => "right",
+			"nowrap" => 1,
+			"sortable" => 1,
+    ));
 		$t->define_field(array(
-                                "name" => "activate",
-                                "caption" => "Aktiveeri",
-                                "talign" => "center",
-				"align" => "center",
-                                "nowrap" => 1,
-                ));
+			"name" => "activate",
+			"caption" => "Aktiveeri",
+			"talign" => "center",
+			"align" => "center",
+      "nowrap" => 1,
+    ));
 		$t->define_field(array(
-                                "name" => "act1",
-                                "caption" => "Tegevus",
-                                "talign" => "center",
-				"align" => "center",
-                                "nowrap" => 1,
-                ));
+			"name" => "act1",
+			"caption" => "Tegevus",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => 1,
+		));
 		$arc = new archive();
 		$contents = $arc->get($args);
 		// FIXME: check the object class too
@@ -601,7 +582,7 @@ class tpledit extends aw_template {
 					"name" => $name,
 					"uid" => $meta["archive"][$elname]["uid"],
 					"date" => $this->time2date($elname,9),
-					"size" => $element[FILE_SIZE],
+					"size" => $element["FILE_SIZE"],
 					"activate" => "<input type=radio name=active value=" . $elname . ">",
 				));
 
@@ -638,8 +619,7 @@ class tpledit extends aw_template {
 			"content" => $ser,
 		));
 		
-		global $tpldirs,$HTTP_HOST;
-		$tpldir = $tpldirs[$HTTP_HOST];
+		$tpldir = $this->cfg["tpldir"];
 		$fullpath = $tpldir . "/" . $obj["name"];
 
 		// lets put the old object instead of the current one

@@ -29,7 +29,7 @@ function MM_swapImage() { //v3.0
 }
 
 USETEXTLINKS = 1
-pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "menuedit_right.{VAR:ext}?parent={VAR:root}","images/aw_ikoon.gif")
+pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}","images/aw_ikoon.gif")
 
 <!-- SUB: TREE -->
 	pr_{VAR:id} = insFld(pr_{VAR:parent}, gFld("{VAR:name}", "{VAR:url}","{VAR:iconurl}"));
@@ -52,9 +52,9 @@ foldersTree = pr_{VAR:root};
                                         <tr>
                                                 <td class="tableshadow">
                                                                 <table border="0" cellspacing="0" cellpadding="0" width=100%><tr><td class="tableinside"><table border="0" cellspacing="0" cellpadding="0">
-                <form action='menuedit.{VAR:ext}' method='get' name='pfft'>
+                <form action='orb.{VAR:ext}' method='get' name='pfft'>
                                         <tr>
-                                                <td class="tableinside" height="20" colspan="11" align=center><select class='formselect' name='period'>{VAR:periods}</select></td><td class="tableinside"><a href='javascript:document.pfft.submit()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','images/blue/awicons/refresh_over.gif',1)"><img name='refresh' alt='{VAR:LC_MENUEDIT_REFRESH}' border='0' SRC='{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif' width='25' height='25'></a><input type='hidden' name='type' value='folders'>
+                                                <td class="tableinside" height="20" colspan="11" align=center><select class='formselect' name='period'>{VAR:periods}</select></td><td class="tableinside"><a href='javascript:document.pfft.submit()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','images/blue/awicons/refresh_over.gif',1)"><img name='refresh' alt='{VAR:LC_MENUEDIT_REFRESH}' border='0' SRC='{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif' width='25' height='25'></a><input type='hidden' name='action' value='folders'><input type='hidden' name='class' value='menuedit'>
                                                 </td>
                                         </tr>
                                 </form>

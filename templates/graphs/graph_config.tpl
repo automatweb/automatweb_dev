@@ -14,7 +14,7 @@ function set_color(vrv)
 function varvivalik(nr)
 {
 	kuhu = nr;
-  aken=window.open("colorpicker.{VAR:ext}","varvivalik","HEIGHT=220,WIDTH=310");
+  aken=window.open("orb.aw?class=css&action=colorpicker","varvivalik","HEIGHT=220,WIDTH=310");
  	aken.focus();
 }
 // -->

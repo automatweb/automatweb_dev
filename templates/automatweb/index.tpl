@@ -1,12 +1,13 @@
 <html>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}"> 
-<title>{VAR:title} / AutomatWeb</title>
+<title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awplanner.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <!-- SUB: custom_css -->
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/get_css.aw?name={VAR:custom}.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/orb.aw?class=css&action=get_user_css&fastcall=1&name={VAR:custom}.css">
 <!-- END SUB: custom_css -->
 <script language="Javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script language="Javascript">
@@ -86,7 +87,3 @@ function check_generic_loader()
 </center>
 </body>
 </html>
-<!-- 
-{VAR:menu} {VAR:rmenu}
-<strong>{VAR:qcount}</strong> päringut, <strong>{VAR:timers}</strong><br>
--->

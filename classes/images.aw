@@ -1,14 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.22 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.23 2002/06/10 15:50:53 kristo Exp $
 // klass piltide manageerimiseks
-global $orb_defs;
-$orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
-														"submit"				=> array("function"	=> "submit","params"	=> array("parent")),
-														"submit_change"	=> array("function"	=> "submit_change","params"	=> array("id","parent","idx")),
-														"change"				=> array("function"	=> "change","params"	=> array("id")),
-														"delete"				=> array("function"	=> "delete","params"	=> array("id"), "opt" =>array("parent","docid"))
-														);
-lc_load("document");
 
 // wrapper, et saax asja orbiga kasutada
 // why the flying fuck do we have 2 classes in here? What the fuck is going on?
@@ -31,12 +23,12 @@ class images extends aw_template
 		if ($idata)
 		{
 			$vars = array(
-					"docid" => $oid,
-					"imgref" => $idata["url"],
-					"imgcaption" => $idata["comment"],
-					"align" => $align[$matches[4]],
-					"plink" => $idata["link"],
-					"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
+				"docid" => $oid,
+				"imgref" => $idata["url"],
+				"imgcaption" => $idata["comment"],
+				"align" => $align[$matches[4]],
+				"plink" => $idata["link"],
+				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
 			);
  
 			if ($idata["link"] != "")
@@ -59,8 +51,8 @@ class images extends aw_template
 			}	
 		};
 		$retval = array(
-				"replacement" => $replacement,
-				"inplace" => $inplace,
+			"replacement" => $replacement,
+			"inplace" => $inplace,
 		);
 		return $retval;
 	}
@@ -126,7 +118,7 @@ class images extends aw_template
 		$this->di->delete_alias($docid,$id);
 		if ($parent)
 		{
-			header("Location: menuedit.".$GLOBALS["ext"]."?parent=$parent&type=objects");
+			header("Location: ".$this->mk_my_orb("obj_list", array("parent" => $parent)));
 		}
 		else
 		if ($docid)
@@ -144,24 +136,18 @@ class db_images extends aw_template
 
 	function db_images() 
 	{
-		global $basedir;
-		global $baseurl,$site_basedir;
-		$this->imgdir = $site_basedir . "/img";	// we put images here,but some older images are 
-		$this->imgdir2 = $basedir . "/img";			// in here so if we can't find them from the prev one, we look here too
-		$this->imgurl = $baseurl . "/img";			
+		$this->init("automatweb/images");
+		$this->imgdir = $this->cfg["site_basedir"] . "/img";	// we put images here,but some older images are 
+		$this->imgdir2 = $this->cfg["basedir"] . "/img";			// in here so if we can't find them from the prev one, we look here too
+		$this->imgurl = $this->cfg["baseurl"] . "/img";			
 		// lubatud failitüüpide nimekiri
-		$this->itypes = array("jpg" => "image/jpeg",
-		                      "gif"  => "image/gif",
-				      "jpg"  => "image/jpg",
-				      "jpg"  => "image/pjpeg");
-		$this->db_init();
-		$this->tpl_init("automatweb/images");
+		$this->itypes = array(
+			"jpg" => "image/jpeg",
+		  "gif"  => "image/gif",
+			"jpg"  => "image/jpg",
+			"jpg"  => "image/pjpeg"
+		);
 		$this->proc_parent=-1;
-		global $lc_document;
-		if (is_array($lc_document))
-		{
-			$this->vars($lc_document);
-		}
 	}
 
 	// pildid on kõik objektide tabelis registeeritud, 
@@ -251,9 +237,7 @@ class db_images extends aw_template
 
 	function get_url($url) 
 	{
-		global $ext;
-		$first = substr($url,0,1);
-		$url = $GLOBALS["baseurl"]."/img.$ext?file="."$url";
+		$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 		return $url;
 	}
 

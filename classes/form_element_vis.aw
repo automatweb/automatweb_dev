@@ -1,7 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element_vis.aw,v 2.0 2001/10/01 14:03:13 duke Exp $
-global $orb_defs;
-$orb_defs["form_element_vis"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element_vis.aw,v 2.1 2002/06/10 15:50:53 kristo Exp $
 
 class form_element_vis
 {

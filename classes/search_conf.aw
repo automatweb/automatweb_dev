@@ -1,10 +1,6 @@
 <?php
-lc_load("search_conf");
 classload("objects");
 classload("config");
-
-global $orb_defs;
-$orb_defs["search_conf"] = "xml";
 
 define("PER_PAGE",10);
 
@@ -12,21 +8,16 @@ class search_conf extends aw_template
 {
 	function search_conf()
 	{
-		$this->tpl_init("search_conf");
-		$this->db_init();
+		$this->init("search_conf");
 		lc_load("definition");
-		global $lc_search_conf;
-		if (is_array($lc_search_conf))
-		{
-			$this->vars($lc_search_conf);
-		}
-
+		$this->lc_load("search_conf","lc_search_conf");
 		lc_site_load("search",&$this);
 	}
 
 	function gen_admin($level)
 	{
-		global $lang_id,$SITE_ID;
+		$lang_id = aw_global_get("lang_id");
+		$SITE_ID = $this->cfg["site_id"];
 
 		$ob = new db_objects;
 		$c = new db_config;
@@ -35,7 +26,7 @@ class search_conf extends aw_template
 		if (!$level)
 		{
 			$this->read_template("conf1.tpl");
-			$this->vars(array("section"		=> $ob->multiple_option_list($conf[$SITE_ID][$lang_id][sections],$ob->get_list())));
+			$this->vars(array("section"		=> $ob->multiple_option_list($conf[$SITE_ID][$lang_id]["sections"],$ob->get_list())));
 			return $this->parse();
 		}
 		else
@@ -43,10 +34,10 @@ class search_conf extends aw_template
 			$sarr = $ob->get_list();
 
 			$this->read_template("conf2.tpl");
-			reset($conf[$SITE_ID][$lang_id][sections]);
-			while (list(,$v) = each($conf[$SITE_ID][$lang_id][sections]))
+			reset($conf[$SITE_ID][$lang_id]["sections"]);
+			while (list(,$v) = each($conf[$SITE_ID][$lang_id]["sections"]))
 			{
-				$this->vars(array("section" => $sarr[$v],"section_id" => $v,"section_name" => $conf[$SITE_ID][$lang_id][names][$v],"order" => $conf[$SITE_ID][$lang_id][order][$v]));
+				$this->vars(array("section" => $sarr[$v],"section_id" => $v,"section_name" => $conf[$SITE_ID][$lang_id]["names"][$v],"order" => $conf[$SITE_ID][$lang_id]["order"][$v]));
 				$s.= $this->parse("RUBR");
 			}
 			$this->vars(array("RUBR" => $s));
@@ -56,7 +47,8 @@ class search_conf extends aw_template
 
 	function submit($arr)
 	{
-		global $lang_id,$SITE_ID;
+		$lang_id = aw_global_get("lang_id");
+		$SITE_ID = $this->cfg["site_id"];
 
 		extract($arr);
 
@@ -65,7 +57,9 @@ class search_conf extends aw_template
 			reset($section);
 			$a = array();
 			while (list(,$v) = each($section))
+			{
 				$a[$v]=$v;
+			}
 		}
 
 		$c = new db_config;
@@ -73,31 +67,31 @@ class search_conf extends aw_template
 
 		if (!$level)
 		{
-			$conf[$SITE_ID][$lang_id][sections] = $a;
+			$conf[$SITE_ID][$lang_id]["sections"] = $a;
 			$c->set_simple_config("search_conf",serialize($conf));
 			return 1;
 		}
 		else
 		{
-			$conf[$SITE_ID][$lang_id][names] = array();
+			$conf[$SITE_ID][$lang_id]["names"] = array();
 			reset($arr);
 			while (list($k,$v) = each($arr))
 			{
 				if (substr($k,0,3) == "se_")
 				{
 					$id = substr($k,3);
-					$conf[$SITE_ID][$lang_id][names][$id] = $v;
+					$conf[$SITE_ID][$lang_id]["names"][$id] = $v;
 				}
 			}
 
-			$conf[$SITE_ID][$lang_id][order] = array();
+			$conf[$SITE_ID][$lang_id]["order"] = array();
 			reset($arr);
 			while (list($k,$v) = each($arr))
 			{
 				if (substr($k,0,3) == "so_")
 				{
 					$id = substr($k,3);
-					$conf[$SITE_ID][$lang_id][order][$id] = $v;
+					$conf[$SITE_ID][$lang_id]["order"][$id] = $v;
 				}
 			}
 			$c->set_simple_config("search_conf",serialize($conf));
@@ -111,11 +105,11 @@ class search_conf extends aw_template
 		$ret = array();
 		foreach($grps as $grpid => $gdata)
 		{
-			if ($GLOBALS["uid"] != "" || $gdata["users_only"] != 1)
+			if (aw_global_get("uid") != "" || $gdata["users_only"] != 1)
 			{
-				foreach($gdata["menus"] as $mn => $mn)
+				foreach($gdata["menus"] as $mn1 => $mn2)
 				{
-					if ($mn == $default)
+					if ($mn1 == $default)
 					{
 						$def = $grpid;
 					}
@@ -377,7 +371,7 @@ class search_conf extends aw_template
 
 	function do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt)
 	{
-		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$sstring','$s_parent','$cnt','".$GLOBALS["REMOTE_ADDR"]."','".time()."')");
+		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$sstring','$s_parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
 		$sel_parent = $search_list[$s_parent];
 		if ($t_type == 1)
@@ -551,9 +545,9 @@ class search_conf extends aw_template
 
 	function get_parent_arr($parent)
 	{
-		if ($GLOBALS["lang_menus"] == 1)
+		if ($this->cfg["lang_menus"] == 1)
 		{
-			$ss = " AND objects.lang_id = ".$GLOBALS["lang_id"];
+			$ss = " AND objects.lang_id = ".aw_global_get("lang_id");
 		}
 
 		$this->menucache = array();
@@ -562,7 +556,7 @@ class search_conf extends aw_template
 										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
 		while ($row = $this->db_next())
 		{
-			$this->menucache[$row[parent]][] = $row;
+			$this->menucache[$row["parent"]][] = $row;
 		}
 
 		// now, make a list of all menus below $parent
@@ -573,10 +567,13 @@ class search_conf extends aw_template
 		// $parent is the id of the menu group, not the parent menu
 		// so now we figure out the parent menus and do rec_list for all of them 
 		$mens = $this->get_menus_for_grp($parent);
-		foreach($mens as $mn)
+		if (is_array($mens))
 		{
-			$this->rec_list($mn);
-		}
+			foreach($mens as $mn)
+			{
+				$this->rec_list($mn);
+			}
+		};
 		return (is_array($this->marr)) ? $this->marr : array(0);
 	}
 
@@ -720,9 +717,9 @@ class search_conf extends aw_template
 		$cache = new cache();
 
 		$lgps = $this->get_groups(true);
-		$lgps[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]] = $grps;
+		$lgps[$this->cfg["site_id"]][aw_global_get("lang_id")] = $grps;
 
-		$cache->file_set("search_groups::$GLOBALS[SITE_ID]",aw_serialize($lgps));
+		$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($lgps));
 		classload("xml");
 		$x = new xml;
 		$dat = $x->xml_serialize($lgps);
@@ -736,7 +733,7 @@ class search_conf extends aw_template
 	{
 		classload("cache");
 		$cache = new cache();
-		$cs = $cache->file_get("search_groups::$GLOBALS[SITE_ID]");
+		$cs = $cache->file_get("search_groups::".$this->cfg["site_id"]);
 		if ($cs)
 		{
 			$ret = aw_unserialize($cs);
@@ -749,7 +746,7 @@ class search_conf extends aw_template
 			classload("xml");
 			$x = new xml;
 			$ret = $x->xml_unserialize(array("source" => $dat));
-			$cache->file_set("search_groups::$GLOBALS[SITE_ID]",aw_serialize($ret));
+			$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($ret));
 		};
 
 		if ($no_strip)
@@ -758,7 +755,7 @@ class search_conf extends aw_template
 		}
 		else
 		{
-			$r = $ret[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]];
+			$r = $ret[$this->cfg["site_id"]][aw_global_get("lang_id")];
 		}
 		if (!is_array($r))
 		{
@@ -801,6 +798,7 @@ class search_conf extends aw_template
 				"s_parent" => $grps[$row["s_parent"]]["name"],
 				"numresults" => $row["numresults"],
 				"ip" => $row["ip"],
+				"s_url" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?class=document&action=search&str=".$row["str"]."&parent=".$row["s_parent"]
 			));
 			$l.=$this->parse("LINE");
 		}

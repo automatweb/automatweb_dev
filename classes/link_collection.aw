@@ -1,20 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.6 2002/01/02 18:21:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
 // link_collection.aw - Lingikogude haldus
-global $orb_defs;
-lc_load("linkcollection");
-$orb_defs["link_collection"] = "xml";
 
-class link_collection extends aw_template {
+class link_collection extends aw_template 
+{
 	function link_collection($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("link_collection");
-		global $lc_linkcollection;
-		if (is_array($lc_linkcollection))
-		{
-			$this->vars($lc_linkcollection);
-		}
+		$this->init("link_collection");
+		$this->lc_load("linkcollection","lc_linkcollection");
 	}
 
 	////
@@ -155,7 +148,6 @@ class link_collection extends aw_template {
 			$this->add_alias($parent,$id);
 		};
 
-
 		// salvestan lingikogu aliase
 		return $this->mk_orb("pick_branch",array("id" => $id,"parent" => $parent),"link_collection");
 	}
@@ -167,8 +159,8 @@ class link_collection extends aw_template {
 	{
 		extract($args);
 		$this->lc_aliases = $this->get_aliases(array(
-						"oid" => $oid,
-						"type" => CL_LINK_COLLECTION,
+			"oid" => $oid,
+			"type" => CL_LINK_COLLECTION,
 		));
 		$l = $this->lc_aliases[$matches[3] - 1];
 		// see imeb. kivimune.
@@ -213,7 +205,6 @@ class link_collection extends aw_template {
 		};
 
 		// now we create links to categories
-		global $baseurl,$ext;
 		$q = "SELECT oid,name FROM objects WHERE parent = '$parent' AND class_id = '" . CL_PSEUDO . "' AND status = 2 ORDER BY name";
 		$this->db_query($q);
 		define("SECTION_COLUMNS",2);
@@ -250,7 +241,6 @@ class link_collection extends aw_template {
 		$ec = new extlinks();
 		while($row = $this->db_next())
 		{
-		
 			list($url,$target,$caption) = $ec->draw_link($row["oid"]);
 			$this->vars(array(
 				"url" => $url,

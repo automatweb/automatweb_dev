@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.14 2002/03/08 14:37:18 cvs Exp $
-global $orb_defs;
-$orb_defs["form_import"] = "xml";
-lc_load("form");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.15 2002/06/10 15:50:53 kristo Exp $
+
 class form_import extends form_base
 {
 	function form_import()
@@ -10,10 +8,7 @@ class form_import extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form","lc_form");
 	}
 
 	////
@@ -43,11 +38,10 @@ class form_import extends form_base
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
-		global $tmpdir;
 		$fname = $this->gen_uniq_id();
 
 		// peaks ka kontrollima, kas tmpdir on ikka olemas ja kirjutatav
-		move_uploaded_file($file,$tmpdir."/".$fname);
+		move_uploaded_file($file,aw_ini_get("server.tmpdir")."/".$fname);
 
 		return $this->mk_my_orb("select_form_els", array("id" => $id, "file" => $fname));
 	}
@@ -65,8 +59,7 @@ class form_import extends form_base
 		$this->read_template("import_entries2.tpl");
 
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
-		global $tmpdir;
-		$fp = fopen($tmpdir."/".$file,"r");
+		$fp = fopen(aw_ini_get("server.tmpdir")."/".$file,"r");
 		$ar = fgetcsv($fp,100000,"\t");
 		fclose($fp);
 
@@ -127,8 +120,7 @@ class form_import extends form_base
 		$f->load($id);
 
 		// open the file and start reading lines from it and for each line turn it into an entry
-		global $tmpdir;
-		$fp = fopen($tmpdir."/".$file,"r");
+		$fp = fopen(aw_ini_get("server.tmpdir")."/".$file,"r");
 
 		$els = $f->get_all_elements();
 
@@ -201,6 +193,15 @@ class form_import extends form_base
 					$rowvals[] = "'".$ar[$el[$elid]]."'";
 					$entry[$elid] = $elvalue;
 				}
+				else
+				{
+					// init element with empty value, so that the columns will not contain NULL's - cause then the searches will fail l8r
+					$rowels[] = "el_".$elid;
+					$rowels[] = "ev_" . $elid;
+					$rowvals[] = "''";
+					$rowvals[] = "''";
+					$entry[$elid] = "";
+				}
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
 			$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
@@ -215,7 +216,7 @@ class form_import extends form_base
 		}
 		
 		fclose($fp);
-		unlink($tmpdir."/".$file);
+		unlink(aw_ini_get("server.tmpdir")."/".$file);
 		return $this->mk_my_orb("change", array("id" => $id),"form");
 	}
 
@@ -235,16 +236,16 @@ class form_import extends form_base
 	function submit_chain($arr)
 	{
 		extract($arr);
-		global $file,$file_type;
-		if (!is_uploaded_file($file))
-		{
-			$this->raise_error(ERR_FG_NOFILE,LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
-		}
+
+		global $HTTP_POST_FILES;
+                if (!is_uploaded_file($HTTP_POST_FILES["file"]["tmp_name"]))
+                {
+                        $this->raise_error(ERR_FG_NOFILE,LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
+                }
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
-		global $tmpdir;
 		$fname = $this->gen_uniq_id();
-		move_uploaded_file($file,$tmpdir."/".$fname);
+		move_uploaded_file($HTTP_POST_FILES["file"]["tmp_name"],aw_ini_get("server.tmpdir")."/".$fname);
 
 		return $this->mk_my_orb("select_chain_els", array("id" => $id, "file" => $fname));
 	}
@@ -259,8 +260,7 @@ class form_import extends form_base
 		$this->read_template("import_entries2.tpl");
 
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
-		global $tmpdir;
-		$fp = fopen($tmpdir."/".$file,"r");
+		$fp = fopen(aw_ini_get("server.tmpdir")."/".$file,"r");
 		$ar = fgetcsv($fp,100000,"\t");
 		fclose($fp);
 
@@ -322,22 +322,18 @@ class form_import extends form_base
 		$f->load_chain($id);
 
 		// open the file and start reading lines from it and for each line turn it into an entry
-		global $tmpdir;
-		$fp = fopen($tmpdir."/".$file,"r");
+		$fp = fopen(aw_ini_get("server.tmpdir")."/".$file,"r");
 
-		classload("xml");
-		$x = new xml;
 		$form = new form;
 		$ar = fgetcsv($fp,100000,"\t");	// skipime esimese rea
 		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
 			// first we create a new chain entry for this line
-//			$chain_entry_id = $this->db_fetch_field("SELECT max(id) as id FROM form_chain_entries", "id")+1;
 			$chain_entry_id = $this->new_object(array(
 				"parent" => $f->chain["save_folder"],
 				"class_id" => CL_CHAIN_ENTRY,
 			));
-			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) values($chain_entry_id,$id,'".$GLOBALS["uid"]."')");
+			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) values($chain_entry_id,$id,'".aw_global_get("uid")."')");
 
 			$chentrys = array();
 			/// now create entries for all forms in the chain
@@ -419,13 +415,13 @@ class form_import extends form_base
 					$this->db_query($sql);
 				}
 			}
-			$ches = $x->xml_serialize($chentrys);
+			$ches = aw_serialize($chentrys,SERIALIZE_XML);
 			$this->quote(&$ches);
 			$this->db_query("UPDATE form_chain_entries SET ids = '$ches' WHERE id = $chain_entry_id");
 		}
 		
 		fclose($fp);
-		unlink($tmpdir."/".$file);
+		unlink(aw_ini_get("server.tmpdir")."/".$file);
 		return $this->mk_my_orb("change", array("id" => $id),"form_chain");
 	}
 }

@@ -66,6 +66,10 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 <td class="celltext"><input class="formtext" type='text' NAME='name' VALUE='{VAR:name}'></td>
 </tr>
 <tr>
+<td class="celltext">CSS class:</td>
+<td class="celltext"><input class="formtext" type='text' NAME='st[css_class]' VALUE='{VAR:css_class}'></td>
+</tr>
+<tr>
 <td class="celltext">{VAR:LC_STYLE_COMMENT}:</td>
 <td class="celltext"><textarea class="formtext" NAME='comment' cols=50 rows=5>{VAR:comment}</textarea></td>
 </tr>

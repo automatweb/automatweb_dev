@@ -9,9 +9,9 @@ document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cell
 		<tr>																																																			\
 			<td bgcolor=\"#000000\">																																								\
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=100%>																		\
-		<form action='menuedit.{VAR:ext}' method='get' name='pfft'>																								\
+		<form action='orb.{VAR:ext}' method='get' name='pfft'>																								\
 					<tr>																																																\
-						<td height=\"20\" colspan=\"11\" class=\"fgtitle_new\" align=center><span class=\"fgtitle_text\"><!--<select class='small_button' name='xperiod'>{VAR:periods}</select>--><a class='fgtitle_link' href='javascript:document.pfft.submit()'><font size=1 face=arial>&nbsp;{VAR:LC_MENUEDIT_REFRESH}</font></a><input type='hidden' name='type' value='folders'></span>															\
+						<td height=\"20\" colspan=\"11\" class=\"fgtitle_new\" align=center><span class=\"fgtitle_text\"><!--<select class='small_button' name='xperiod'>{VAR:periods}</select>--><a class='fgtitle_link' href='javascript:document.pfft.submit()'><font size=1 face=arial>&nbsp;{VAR:LC_MENUEDIT_REFRESH}</font></a><input type='hidden' name='action' value='folders'><input type='hidden' name='class' value='menuedit'></span>															\
 						</td>																																															\
 					</tr>																																																\
 				</form>																																																\
@@ -30,7 +30,7 @@ document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cell
 		</table>																																																	\
 		");
 
-pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "menuedit_right.{VAR:ext}?parent={VAR:root}","images/aw_ikoon.gif")
+pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}","images/aw_ikoon.gif")
 
 <!-- SUB: TREE -->
 	pr_{VAR:id} = insFld(pr_{VAR:parent}, gFld("{VAR:name}", "{VAR:url}","{VAR:iconurl}"));

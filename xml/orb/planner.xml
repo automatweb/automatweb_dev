@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="parent" type="int"/>
 					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
@@ -32,6 +33,9 @@
 				<arguments>
 					<required name="id" type="int"/>
 					<optional name="return_url"/>
+					<optional name="date"/>
+					<optional name="type"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
@@ -58,6 +62,8 @@
 					<required name="id" type="int"/>
 					<optional name="date"/>
 					<optional name="type"/>
+					<optional name="ctrl" type="int"/>
+					<optional name="ctrle" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -70,6 +76,7 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="display_object">
 			<function name="display_object">
 				<arguments>
@@ -83,6 +90,7 @@
 				<arguments>
 					<required name="parent" type="int"/>
 					<optional name="date"/>
+					<optional name="time"/>
 				</arguments>
 			</function>
 		</action>

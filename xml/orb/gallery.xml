@@ -99,8 +99,14 @@
 		</action>
 
 		<action name="show" nologin="1">
-			<function name="show"  nologin="1">
+			<function name="show">
 				<arguments>
+					<optional name="id"/>
+					<optional name="page"/>
+					<optional name="col"/>
+					<optional name="row"/>
+					<optional name="section"/>
+					<optional name="nr"/>
 				</arguments>
 			</function>
 		</action>

@@ -1,13 +1,31 @@
 <?php
 
-classload("extlinks");
+classload("extlinks","config","planner");
+
+define("FN_TYPE_SECID",1);
+define("FN_TYPE_NAME",2);
+define("FN_TYPE_HASH",3);
+define("FN_TYPE_ALIAS",4);
 
 class export extends aw_template
 {
 	function export()
 	{
-		$this->tpl_init("export");
-		$this->db_init();
+		$this->init("export");
+		$this->menu_cache = get_instance("menu_cache");
+		$this->menu_cache->make_caches();
+
+		$this->type2ext = array(
+			"text/html" => "html",
+			"text/html; charset=iso-8859-1" => "html",
+			"text/css" => "css",
+			"image/gif" => "gif",
+			"image/jpeg" => "jpg",
+			"image/pjpeg" => "jpg",
+			"application/pdf" => "pdf",
+			"application/x-javascript" => "js",
+			"application/zip" => "zip"
+		);
 	}
 
 	function orb_export($arr)
@@ -15,10 +33,52 @@ class export extends aw_template
 		extract($arr);
 		$this->read_template("export.tpl");
 
+		$folder = $this->get_cval("export::folder");
+		if (strpos($folder, $this->cfg["site_basedir"]."/public") !== false)
+		{
+			$url = $this->cfg["baseurl"].substr($folder, strlen($this->cfg["site_basedir"]."/public"))."/index.html";
+		}
+		else
+		{
+			$url = "Veebiv&auml;line";
+		}
+
+		$cal_id = $this->get_cval("export::cal_id");
+		$event_id = $this->get_cval("export::event_id");
+		if (!$cal_id)
+		{
+			$pl = new planner;
+			$pl->submit_add(array("parent" => 1));
+			$cal_id = $pl->id;
+			$event_id = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
+
+			$c = new config;
+			$c->set_simple_config("export::cal_id",$cal_id);
+			$c->set_simple_config("export::event_id",$event_id);
+		}
+
+		$fn_type = $this->get_cval("export::fn_type");
+		if (!$fn_type)
+		{
+			$fn_type = 3;
+		}
+
+		$o = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_export"),
-			"folder" => $this->get_cval("export::folder"),
-			"zip_file" => $this->get_cval("export::zip_file")
+			"folder" => $folder,
+			"url" => $url,
+			"zip_file" => $this->get_cval("export::zip_file"),
+			"aw_zip_folder" => $this->picker($this->get_cval("export::aw_zip_folder"),$o->get_list()),
+			"aw_zip_fname" => $this->get_cval("export::aw_zip_fname"),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $event_id),"cal_event",false,true),
+			"automatic" => checked($this->get_cval("export::automatic") == 1),
+			"static_site" => checked($this->get_cval("export::static_site") == 1),
+			"fn_type_1" => checked($fn_type == FN_TYPE_SECID),
+			"fn_type_2" => checked($fn_type == FN_TYPE_NAME),
+			"fn_type_3" => checked($fn_type == FN_TYPE_HASH),
+			"gen_url" => $this->mk_my_orb("do_export"),
+			"rules" => $this->mk_my_orb("rules")
 		));
 		return $this->parse();
 	}
@@ -31,16 +91,56 @@ class export extends aw_template
 		$c = new config;
 		$c->set_simple_config("export::folder",$folder);
 		$c->set_simple_config("export::zip_file",$zip_file);
+		$c->set_simple_config("export::aw_zip_folder",$aw_zip_folder);
+		$c->set_simple_config("export::aw_zip_fname",$aw_zip_fname);
+		$c->set_simple_config("export::automatic",$automatic);
+		$c->set_simple_config("export::static_site",$static_site);
+		$c->set_simple_config("export::fn_type",$fn_type);
+
+		$sched = get_instance("scheduler");
+		$sched->remove(array(
+			"event" => $this->mk_my_orb("do_export"),
+			"rep_id" => $this->get_cval("export::event_id")
+		));
+		if ($automatic)
+		{
+			$sched->add(array(
+				"event" => $this->mk_my_orb("do_export"),
+				"rep_id" => $this->get_cval("export::event_id")
+			));
+		}
+
+		return $this->mk_my_orb("export");
+	}
+
+	function rep_dates($str)
+	{
+		$str = str_replace("%y", date("Y"),$str);
+		$str = str_replace("%m", date("m"),$str);
+		$str = str_replace("%d", date("d"),$str);
+		$str = str_replace("%h", date("H"),$str);
+		$str = str_replace("%n", date("i"),$str);
+		return str_replace("%s", date("s"),$str);
+	}
+
+	function do_export($arr)
+	{
+		extract($arr);
+
+		$folder = $this->rep_dates($this->get_cval("export::folder"));
+		$zip_file = $this->rep_dates($this->get_cval("export::zip_file"));
+		$aw_zip_folder = $this->get_cval("export::aw_zip_folder");
+		$aw_zip_fname = $this->rep_dates($this->get_cval("export::aw_zip_fname"));
+		$automatic = $this->get_cval("export::automatic");
+		$this->fn_type = $this->get_cval("export::fn_type");
 
 		// take the folder thing and add the date to it so we can make several copies in the same folder
+		@mkdir($folder,0777);
 		if (!is_dir($folder))
 		{
 			$this->raise_error(ERR_SITEXPORT_NOFOLDER,"Folder $folder does not exist on server!",true);
 		}
-		global $stitle;
-		$fname = $stitle."-".date("Y")."-".date("m")."-".date("d")."-".time();
-		mkdir($folder."/".$fname,0777);
- 		$this->folder = $folder."/".$fname;
+ 		$this->folder = $folder;
 
 		// ok, this is the complicated bit. 
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
@@ -51,89 +151,143 @@ class export extends aw_template
 		$this->hashes = array();
 
 		// import exclusion list
-		global $site_export_exclude_urls;
-		if (is_array($site_export_exclude_urls))
+		if (is_array($this->cfg["exclude_urls"]))
 		{
-			$this->hashes = $site_export_exclude_urls;
+			$this->exclude_urls = $this->cfg["exclude_urls"];
 		}
 
-		global $baseurl,$ext;
-
 		// ok, start from the front page
-		$this->fetch_and_save_page($baseurl."/");
-		
+		$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=1",1);
+
+		// copy needed files
+		if (is_array($this->cfg["copy_files"]))
+		{
+			foreach($this->cfg["copy_files"] as $fil)
+			{
+				$filf = $this->cfg["baseurl"]."/".$fil;
+				$fp = fopen($filf,"r");
+				$nname = $this->folder."/".$fil;
+				if (!is_dir(dirname($nname)))
+				{
+					@mkdir(dirname($nname),0777);
+				}
+
+				$this->put_file(array(
+					"file" => $nname,
+					"content" => fread($fp, 10000000)
+				));
+				echo "copied file $fil to $nname <br>";
+				fclose($fp);
+			}
+		}
+
 		if ($zip_file != "")
 		{
 			// $zip_file contains the path and name of the file into which we should zip the exported site
 			// first, delete the old zip
 			@unlink($zip_file);
-			global $zip_path;
 			echo "creating zip file $zip_file <br>\n";
 			flush();
 			if (!chdir($this->folder))
 			{
 				echo "can't change dir to $this->folder <br>\n";
 			}
-			$res = `$zip_path $zip_file *`;
+			$cmd = aw_ini_get("server.zip_path")." -r $zip_file *";
+			$res = `$cmd`;
 			echo "created zip file $zip_file<br>\n";
 			flush();
 		}
+
+		if ($aw_zip_fname != "" && $aw_zip_folder)
+		{
+			echo "creating zip file $aw_zip_fname in AW <br>\n";
+			flush();
+			if (!chdir($this->folder))
+			{
+				echo "can't change dir to temp folder <br>\n";
+			}
+			$cmd = aw_ini_get("server.zip_path")." -r ".aw_ini_get("server.tmpdir")."/aw_zip_temp.zip *";
+			$res = `$cmd`;
+
+			// check if the file already exists
+			$oid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = $aw_zip_folder AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND class_id = ".CL_FILE." AND name = '$aw_zip_fname'", "oid");
+
+			$f = get_instance("file");
+
+			if ($oid)
+			{
+				$f->save_file(array(
+					"name" => $aw_zip_fname,
+					"type" => "application/zip",
+					"file_id" => $oid,
+					"content" => $this->get_file(array("file" => aw_ini_get("server.tmpdir")."/aw_zip_temp.zip"))
+				));
+			}
+			else
+			{
+				$f->put(array(
+					"filename" => $aw_zip_fname,
+					"type" => "application/zip",
+					"parent" => $aw_zip_folder,
+					"content" => $this->get_file(array("file" => aw_ini_get("server.tmpdir")."/aw_zip_temp.zip"))
+				));
+			}
+			unlink(aw_ini_get("server.tmpdir")."/aw_zip_temp.zip");
+			echo "uploaded zip file to AW<br>\n";
+			flush();
+		}
+
 		echo "<br>all done. <br><br>\n\n";
 		die();
 	}
 
-	function fetch_and_save_page($url)
+	function fetch_and_save_page($url, $lang_id)
 	{
-		if (isset($this->hashes[$url]))
+		if ($url == "")
 		{
-			// if the hash for the link is set, we have already saved it
-//			echo "hash for url $url found, returning <br>\n";
-			return;
+			echo "<p><Br>VIGA, tyhi url! </b><Br>";
 		}
 
-		global $baseurl,$ext,$frontpage;
+		$url = $this->add_session_stuff($url, $lang_id);
 
-		// make sure that the frontpage is named index.html
-		if ($url == $baseurl."/")
+		// if we have done this page already, let's not do it again!
+		if (isset($this->hashes[$url]) || $this->check_excludes($url))
 		{
-			$this->hashes[$url] = "index";
-		}
-		else
-		{
-			$this->hashes[$url] = $this->gen_uniq_id();
+			return $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
 		}
 
-		$name = $this->folder."/".$this->hashes[$url].".".$this->get_ext_for_link($url);
-
-		echo "saving $url as $name <br>\n";
-		flush();
-//		echo "fetching $url <br>\n\n";
-		flush();
-
-		// we do this, so we don't get several copies of the same page with differend session ids
-		if (strpos($url,"?") === false)
+		// here we track the active language in the url
+		$t_lang_id = $lang_id;
+		if (preg_match("/set_lang_id=(\d*)/", $url,$mt))
 		{
-			$url.="?automatweb=aw_export";
+			$t_lang_id=$mt[1];
 		}
-		else
-		{
-			$url.="&automatweb=aw_export";
-		}
+
+		// set the hash table
+		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
+
+		// read content
 		$fp = fopen($url,"r");
 		$fc = fread($fp,10000000);
 		fclose($fp);
-//		echo "fetched page $url <br>\n";
+
+		$f_name = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
+		$name = $this->folder."/".$f_name;
+		echo "saving $url as $name <br>\n";
+		flush();
 
 		// now. convert all the links in the page
-		$this->convert_links($fc);
+		$this->convert_links($fc,$t_lang_id);
 
 		$this->save_file($fc,$name);
+		return $f_name;
 	}
 
-	function convert_links(&$fc)
+	function convert_links(&$fc,$lang_id)
 	{
 		// uukay. so the links we gotta convert are identified by having $baseurl in them. so look for that
-		global $baseurl,$ext,$frontpage;
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
 
 		$ends = array("'","\"",">"," ","\n");
 		$len = strlen($fc);
@@ -144,8 +298,11 @@ class export extends aw_template
 		// fix some other common mistakes 
 		$fc = str_replace("\"/index.".$ext,"\"".$baseurl."/index.".$ext,$fc);
 		$fc = str_replace("'/index.".$ext,"'".$baseurl."/index.".$ext,$fc);
+		// sitemap
+		$fc = str_replace("\"/sitemap","\"".$baseurl."/sitemap",$fc);
+		$fc = str_replace("'/sitemap","'".$baseurl."/sitemap",$fc);
 
-		while (($pos = $this->get_next_link_pos($fc,$baseurl)) !== false)
+		while (($pos = strpos($fc,$baseurl)) !== false)
 		{
 			// now find all of the link - we do that by looking for ' " > or space
 			$begin = $pos;
@@ -156,27 +313,14 @@ class export extends aw_template
 				$end++;
 			}
 
-			$link = substr($fc,$begin,($end-$begin));
+			// correct the link
+			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
 
-			$_link = $this->rewrite_link($link);
-			if ($_link == false)
-			{
-				// external link
-				$this->hashes[$link] = $this->real_url;
-				$fc = substr($fc,0,$begin).$this->hashes[$link].substr($fc,$end);
-			}
-			else
-			{
-				$link = $_link;
-				if (!isset($this->hashes[$link]))
-				{
-					$this->fetch_and_save_page($link);
-				}
+			// fetch the page
+			$fname = $this->fetch_and_save_page($link,$lang_id);
 
-				$_ext = $this->get_ext_for_link($link);
-//				echo "replacing ",substr($fc,$begin,($end-$begin))," with ".$this->hashes[$link].".".$_ext." <Br>";
-				$fc = substr($fc,0,$begin).$this->hashes[$link].".".$_ext.substr($fc,$end);
-			}
+			// replace the link in the html
+			$fc = substr($fc,0,$begin).$fname.substr($fc,$end);
 		}
 	}
 
@@ -188,32 +332,39 @@ class export extends aw_template
 		fclose($fp);
 	}
 
-	function get_ext_for_link($link)
+	function get_ext_for_link($link, $headers)
 	{
-		global $baseurl,$ext;
-		$ud = parse_url($link);
-		// if path == img.aw, then we need to get the extensiob from query, not path
-		if ($ud["path"] == "/img.".$ext)
+		if (isset($this->link2type[$link]))
 		{
-			$pt = $ud["query"];
-		}
-		else
-		{
-			$pt = $ud["path"];
+			return $this->link2type[$link];
 		}
 
-		$_rp = strrpos($pt,".");
-		if ($_rp === false)
+		if (count($headers) < 1)
 		{
-			return "html";
+			// we gotta get the page, cause we haven't yet
+			$fp = fopen($link,"r");
+			fread($fp, 1000000);
+			fclose($fp);
+			$headers = $http_response_header;
 		}
 
-		$_ext = substr($pt,$_rp+1);
-		if ($_ext == $ext)
+		// deduct the type from the headers - muchos beteros that way
+		$ct = "text/html";
+		foreach($headers as $hd)
 		{
-			$_ext = "html";
+			if (preg_match("/Content\-Type\: (.*)/", $hd, $mt))
+			{
+				$ct = $mt[1];
+			}
 		}
-		return $_ext;
+
+		if (!isset($this->type2ext[$ct]))
+		{
+			echo "<B><font color=red><br>VIGA! EI LEIDNUD ext for type $ct <br></font></b>";
+		}
+
+		$this->link2type[$link] = $this->type2ext[$ct];
+		return $this->type2ext[$ct];
 	}
 
 	////
@@ -221,13 +372,56 @@ class export extends aw_template
 	// things work correctly
 	function rewrite_link($link)
 	{
-		global $baseurl,$ext,$frontpage;
-//		echo "rewrite_link($link) <Br>";
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
+		$frontpage = $this->cfg["frontpage"];
+
+		// do link processing as aw would upon request startup
+		$ud = parse_url($link);
+		if (!preg_match("/(shop.aw|banner.aw|graphs.aw|css|poll|files|ipexplorer|icon.aw|gallery.aw|login|stats|vcl|misc|index|images|feedback|forms|indexx|showimg|sorry|monitor|vv|automatweb|img|reforb|orb)/",$link))
+		{
+			$url = $baseurl."/index.".$ext.$ud["path"].$ud["query"].$ud["fragment"];
+			echo "changed $link to $url <br>";
+		}
+
+		if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
+		{
+			$pi = $PATH_INFO;
+		};
+		if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
+		{
+			$pi .= "?".$QUERY_STRING;
+		};
+
+		if ($pi) 
+		{
+			// uh, why do you use sprintf to do string->int conversion? I mean, it's GOTTA be wayyy slower than $i = (int)$str;
+
+			// I think type-cast had problems in some situations, but right now I can't really reproduce any of those
+			$section = (int)substr($pi,1);
+
+			// if $pi contains & or = 
+			if (preg_match("/[&|=]/",$pi)) 
+			{
+				// expand and import PATH_INFO
+				// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
+				// why so?
+				parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
+				extract($HTTP_GET_VARS);
+			} 
+			else 
+			{
+				$section = substr($pi,1);
+			};
+		};
+
+
+		return $link;
+
 		// here we check the link for weirdness:
 		// if it is == $baseurl, we need to rewrite it to $baseurl/index.aw?section=$frontpage
 		if ($link == $baseurl)
 		{
-//			echo "link is baseurl <br>";
 			$link = $baseurl."/index.".$ext."?section=".$frontpage;
 		}
 
@@ -236,7 +430,6 @@ class export extends aw_template
 		if (strpos($link,"index.".$ext."/section=") !== false)
 		{
 			$link = str_replace("index.".$ext."/section=","index.".$ext."?section=",$link);
-//			echo "replacing /, rewriting link to  $link<br>";
 		}
 
 		$ud = parse_url($link);
@@ -244,32 +437,16 @@ class export extends aw_template
 		{
 			// we found a section link $baseurl/section
 			$link = $baseurl."/index.".$ext."?section=".substr($ud["path"],1);
-//			echo "found site/666 link, rewrote to $link <br>";
 		}
 
 		// rewrite indexx.aw links to their real address
-		if ($ud["path"] == "/indexx.".$ext)
+		if ($ud["path"] == "/indexx.".$ext || strpos($ud["query"], "class=links&action=show") !== false)
 		{
 //			echo "extlink detected in $link , rewriting to real adress. query = $ud[query] <br>\n";
 			$el = new extlinks;
-			$ld = $el->get_link(substr($ud["query"],strlen("id=")));
+			preg_match("/id=(\d*)/", $ud["query"], $mt);
+			$ld = $el->get_link($mt[1]);
 			$link = $ld["url"];
-			// siin peab tshekkima et link poleks kuskile mujale saidile
-			// hm, kui link ei alga http:// asjaga, siis pole ta kindlasti muule saidile
-			// kui algab, siis leiame sealt urli ja vaatame, kas domeen on sama, mis baseurlis olev. 
-			if (substr($link,0,strlen("http://")) == "http://")
-			{
-				// v6ib olla teisele saidile, uurime domeeni v2lja. 
-				$_ud = parse_url($link);
-				$_bud = parse_url($baseurl);
-				if ($_ud["host"] != $_bud["host"])
-				{
-					// we have outside link
-					$this->real_url = $link;
-					return false;
-				}
-			}
-
 			if (strpos($link,$baseurl) === false && $link[0] == "/")
 			{
 				$link = $baseurl.$link;
@@ -288,53 +465,228 @@ class export extends aw_template
 			$link = $baseurl."/".str_replace("/","&",$link);
 //			echo "rewrote gallery link to $link <br>\n";
 		}
-
-		if ($link[0] == "/")
-		{
-			$link = $baseurl.$link;
-//			echo " slash link , rewrote to $link <br>";
-		}
-//		echo "returning $link <Br>";
 		return $link;
 	}
 
-	function get_next_link_pos($fc,$baseurl)
+	function load_rules()
 	{
-		$pos = strpos($fc,$baseurl);
-		if ($pos === false)
+		$rd = $this->get_cval("export::rules");
+//		echo "rd = <pre>", htmlentities($rd),"</pre> <br>";
+		$this->rules = aw_unserialize($rd);
+		if (!is_array($this->rules))
 		{
-			// if no normal links are left, check for badly-made links, like <a href="/111">
-			$pos = strpos(strtolower($fc),"href=\"/");
-			if ($pos !== false)
-			{
-				return $pos+6;
-			}
+			$this->rules = array();
+		}
+	}
 
-			$pos = strpos(strtolower($fc),"href='/");
-			if ($pos !== false)
-			{
-				return $pos+6;
-			}
+	function rules($arr)
+	{
+		extract($arr);
+		$this->read_template("rules.tpl");
 
-			$pos = strpos(strtolower($fc),"src=\"/");
-			if ($pos !== false)
-			{
-				return $pos+5;
-			}
+		$this->load_rules();
+//		echo "rules = <pre>",var_dump($this->rules),"</pre> <br>";
+		foreach($this->rules as $rid => $rdat)
+		{
+			$this->vars(array(
+				"name" => $rdat["name"],
+				"change" => $this->mk_my_orb("change_rule", array("id" => $rid)),
+				"delete" => $this->mk_my_orb("del_rule", array("id" => $rid))
+			));
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array(
+			"LINE" => $l,
+			"add" => $this->mk_my_orb("add_rule"),
+			"settings" => $this->mk_my_orb("export"),
+			"gen_url" => $this->mk_my_orb("do_export")
+		));
+		return $this->parse();
+	}
 
-			$pos = strpos(strtolower($fc),"src='/");
-			if ($pos !== false)
-			{
-				return $pos+5;
-			}
+	function add_rule($arr)
+	{
+		extract($arr);
+		$this->read_template("add_rule.tpl");
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("rules")."'>Ruulid</a> / Lisa");
 
-			$pos = strpos(strtolower($fc),"lue=\"/");
-			if ($pos !== false)
+		$o = get_instance("objects");
+		$this->vars(array(
+			"menus" => $this->multiple_option_list(array(),$o->get_list()),
+			"reforb" => $this->mk_reforb("submit_rule")
+		));
+		return $this->parse();
+	}
+
+	function submit_rule($arr)
+	{
+		extract($arr);
+		$this->load_rules();
+
+		if ($id)
+		{
+			$this->rules[$id]["name"] = $name;
+			$this->rules[$id]["menus"] = $this->make_keys($menus);
+		}
+		else
+		{
+			$id = $this->gen_uniq_id();
+			$arr = array("name" => $name, "menus" => $this->make_keys($menus));
+
+			$pl = new planner;
+			$pl->submit_add(array("parent" => 1));
+			$arr["cal_id"] = $pl->id;
+			$arr["event_id"] = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
+
+			$this->rules[$id] = $arr;
+		}
+
+		$this->save_rules();
+		return $this->mk_my_orb("change_rule", array("id" => $id));
+	}
+
+	function change_rule($arr)
+	{
+		extract($arr);
+		$this->load_rules();
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("rules")."'>Ruulid</a> / Muuda");
+		$this->read_template("add_rule.tpl");
+		$o = get_instance("objects");
+		$this->vars(array(
+			"name" => $this->rules[$id]["name"],
+			"menus" => $this->multiple_option_list($this->rules[$id]["menus"],$o->get_list()),
+			"reforb" => $this->mk_reforb("submit_rule", array("id" => $id)),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->rules[$id]["event_id"]),"cal_event",false,true),
+		));
+		$this->vars(array(
+			"CHANGE" => $this->parse("CHANGE")
+		));
+		return $this->parse();
+	}
+
+	function save_rules()
+	{
+		$ser = aw_serialize($this->rules, SERIALIZE_PHP);
+		$this->quote(&$ser);
+		$c = get_instance("config");
+		$c->set_simple_config("export::rules", $ser);
+	}
+
+	function del_rule($arr)
+	{
+		extract($arr);
+		$this->load_rules();
+		$this->delete_object($this->rules[$id]["cal_id"]);
+		$this->delete_object($this->rules[$id]["event_id"]);
+		unset($this->rules[$id]);
+		$this->save_rules();
+		header("Location: ".$this->mk_my_orb("rules"));
+	}
+
+	function get_hash_for_url($url, $lang_id)
+	{
+		if ($url == $this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export")
+		{
+			return "index";
+		}
+
+		if ($this->fn_type == FN_TYPE_SECID)
+		{
+			// figure out the section id from the url
+			preg_match("/section=(\d*)/",$url,$mt);
+			$secid = $mt[1];
+			if ($secid)
 			{
-				return $pos+5;
+				return $secid.",".$lang_id;
+			}
+			// if no secid, still do the hash thingie
+		}
+		else
+		if ($this->fn_type == FN_TYPE_NAME)
+		{
+			preg_match("/section=(\d*)/",$url,$mt);
+			$secid = $mt[1];
+			if ($secid)
+			{
+				$md = $this->menu_cache->get_cached_menu($secid);
+				$mn = $md["name"];
+				if ($mn != "")
+				{
+					$cnt = 1;
+					$_res = str_replace(" ", "_", $mn);
+					$res = $_res;
+					while (isset($this->ftn_used[$res]))
+					{
+						$res = $_res.",".($cnt++);
+					}
+					$this->ftn_used[$res] = true;
+					return $res;
+				}
 			}
 		}
-		return $pos;
+		else
+		if ($this->fn_type == FN_TYPE_ALIAS)
+		{
+			preg_match("/section=(\d*)/",$url,$mt);
+			$secid = $mt[1];
+			if ($secid)
+			{
+				$md = $this->menu_cache->get_cached_menu($secid);
+				$mn = $md["alias"];
+				if ($mn != "")
+				{
+					$cnt = 1;
+					$_res = str_replace(" ", "_", str_replace("/","_",$mn));
+					$res = $_res;
+					while (isset($this->fta_used[$res]))
+					{
+						$res = $_res.",".($cnt++);
+					}
+					$this->fta_used[$res] = true;
+					return $res;
+				}
+			}
+		}
+
+		return $this->gen_uniq_id($url).",".$lang_id;
+	}
+
+	function add_session_stuff($url, $lang_id)
+	{
+		if (strpos($url,"?") === false)
+		{
+			$sep = "?";
+		}
+		else
+		{
+			$sep = "&";
+		}
+
+		if (strpos($url, "automatweb=aw_export") === false)
+		{
+			$url = $url.$sep."automatweb=aw_export";
+		}
+
+		if (strpos($url, "set_lang_id=") === false)
+		{
+			$url = $url."&set_lang_id=".$lang_id;
+		}
+		return $url;
+	}
+
+	function check_excludes($url)
+	{
+		if (is_array($this->exclude_urls))
+		{
+			foreach($this->exclude_urls as $eu)
+			{
+				if (strncasecmp($url,$eu, strlen($eu)) == 0)
+				{
+					echo "excluded $url <br>";
+					return true;
+				}
+			}
+		}
 	}
 }
 ?>

@@ -1,16 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.3 2002/02/15 18:25:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
 // remote_login.aw - AW remote login
-global $orb_defs;
-$orb_defs["remote_login"] = "xml";
 classload("socket");
 
-class remote_login extends aw_template {
+class remote_login extends aw_template 
+{
 	function remote_login($args = array())
 	{
 		extract($args);
-		$this->db_init();
-		$this->tpl_init("automatweb/remote_login");
+		$this->init("automatweb/remote_login");
 	}
 
 	function change($args = array())
@@ -117,13 +115,13 @@ class remote_login extends aw_template {
 		));
 
 		
-		$request = "uid=$uid&password=$password&Submit=Login&action=login";
+		$request = "uid=$uid&password=$password&class=users&action=login";
 
-		$op = "POST http://$host/refcheck.aw HTTP/1.1\r\n";
+		$op = "POST http://$host/orb.".$this->cfg["ext"]." HTTP/1.1\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
 		$op .= "Keep-Alive: 5\r\n";
-		$op .= "Referer: http://$host/login.aw\r\n";
+		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n";
 		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
 		print "<pre>";
@@ -151,7 +149,7 @@ class remote_login extends aw_template {
 			"host" => $host,
 			"port" => 80,
 		));
-		$op = "GET http://aw.struktuur.ee/index.aw?action=logout HTTP/1.1\r\n";
+		$op = "GET http://aw.struktuur.ee/index.".$this->cfg["ext"]."?class=users&action=logout HTTP/1.1\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 

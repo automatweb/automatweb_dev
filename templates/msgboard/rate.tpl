@@ -1,14 +1,14 @@
+<table border="0" cellspacing="5" cellpadding="0">
 <form action="reforb.{VAR:ext}" method="POST">
-<table border="1" cellspacing="0" cellpadding="0" width="100%">
 <tr>
+<td class="celltext" valign="bottom">Hinne: {VAR:rating}</td>
+
 <!-- SUB: rate -->
-<td class="text"><input type="radio" name="vote" value="{VAR:value}"> {VAR:name}</td>
+<td class="celltext" valign="middle"><input type="radio" name="vote" value="{VAR:value}">{VAR:name}</td>
 <!-- END SUB: rate -->
-<td class="text">
-Hinne: {VAR:rating}
-</td>
-<td class="text">
-<input type="submit" value="Hääleta">
+
+<td class="celltext" valign="middle">
+<input type="submit" value="Hääleta" class="formbutton">
 </td>
 </tr>
 </table>

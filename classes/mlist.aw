@@ -1,13 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.2 2002/03/15 01:16:01 duke Exp $
-lc_load("mailinglist");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.3 2002/06/10 15:50:53 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
 	{
 		lc_load("automatweb");
-		$this->tpl_init("mailinglist");
-		$this->db_init();
+		$this->init("mailinglist");
 		$this->id = $id;
 		$this->db_query("SELECT * FROM objects WHERE oid = $id");
 		$row = $this->db_next();
@@ -16,23 +14,14 @@ class mlist extends aw_template
 		$this->l_vars = unserialize($row["last"]);
 		$this->vars(array("list_name" => $this->name, "list_id" => $this->id));
 		lc_load("definition");
-		global $lc_mailinglist;
-		if (is_array($lc_mailinglist))
-		{
-			$this->vars($lc_mailinglist);
-		}
-		global $lc_autamatweb;
-		if (is_array($lc_automatweb))
-		{
-			$this->vars($lc_automatweb);
-		}
+		$this->lc_load("mailinglist","lc_mailinglist");
 	}
 	
 	function list_members($args = array())
 	{
 		extract($args);
 		$list_obj = $this->get_object(array("oid" => $id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / Listi '$list_obj[name]' liikmed");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / Listi '$list_obj[name]' liikmed");
 		$this->read_template("list_users.tpl");
 		
 		$c=""; $cnt=0; $s = ""; 
@@ -62,12 +51,18 @@ class mlist extends aw_template
 		while ($row = $this->db_next())
 		{
 			if ($row["is_copied"] == 1)
+			{
 				$bgk = "class='fgtext_copied'";
+			}
 			else
 			if ($row["is_cut"] == 1)
+			{
 				$bgk = "class='fgtext_cut'";
+			}
 			else
+			{
 				$bgk = "class='fgtext'";
+			}
 
 			$this->vars(array(
 				"user_name" => $row["name"],
@@ -89,13 +84,15 @@ class mlist extends aw_template
 		}
 		$p = "";
 		if ($this->db_fetch_field("SELECT count(*) as cnt from ml_users WHERE is_cut = 1 OR is_copied = 1", "cnt") > 0)
+		{
 			$p = $this->parse("PASTE");
+		}
 
 		$ua = $this->parse("U_ADD");
 		$ui = $this->parse("U_IMPORT");
 		$revo = ($order == "ASC" ? "DESC" : "ASC" );
-		$up = "<img src='".$GLOBALS["baseurl"]."/images/up.gif'>";
-		$down = "<img src='".$GLOBALS["baseurl"]."/images/down.gif'>";
+		$up = "<img src='".$this->cfg["baseurl"]."/images/up.gif'>";
+		$down = "<img src='".$this->cfg["baseurl"]."/images/down.gif'>";
 		$this->vars(array(
 			"LINE" => $c, 
 			"SELLINE" => $s, 
@@ -117,19 +114,28 @@ class mlist extends aw_template
 	{
 		extract($args);
 		$list_obj = $this->get_object(array("oid" => $list_id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Lisa liige");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Lisa liige");
 		
 		$this->read_template("add_user.tpl");
 		
 		$ls = "";
+		$this->db_query("SELECT * FROM objects WHERE oid = $list_id");
+		$row = $this->db_next();
+		$this->l_vars = unserialize($row["last"]);
 		if (is_array($this->l_vars))
 		{
 			reset($this->l_vars);
 			while(list($id,) = each($this->l_vars))
+			{
 				if ($ls == "")
+				{
 					$ls = $id;
+				}
 				else
+				{
 					$ls.=",".$id;
+				}
+			}
 		}
 
 		$c="";	
@@ -174,7 +180,9 @@ class mlist extends aw_template
 		{
 			reset($vars);
 			while (list($var_id, $var_value) = each($vars))
+			{
 				$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$var_value."')");
+			}
 		}
 
 		$this->_log("mlist",sprintf(LC_LIST_ADD_USER,$name,$this->name));
@@ -207,9 +215,13 @@ class mlist extends aw_template
 					$v = "var_".$var_id;
 					$this->db_query("SELECT * FROM ml_var_values WHERE var_id = $var_id AND user_id = $user_id");
 					if ($this->db_next())
+					{
 						$this->db_query("UPDATE ml_var_values SET value='".$$v."' WHERE var_id = $var_id AND user_id = $user_id");
+					}
 					else
+					{
 						$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$$v."')");
+					}
 				}
 			}
 			$this->_log("mlist",sprintf(LC_LIST_CHANGED_USER,$name,$this->name));
@@ -256,7 +268,6 @@ class mlist extends aw_template
 					VALUES('$id','$name','$email','$val','$uid',$t)";
 
 				$this->db_query($q);
-
 			}
 		};
 	}
@@ -304,7 +315,7 @@ class mlist extends aw_template
 		extract($args);
 		$uid = $user_id;
 		$list_obj = $this->get_object(array("oid" => $id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$id'>Listi liikmed</a> / Muuda liiget");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.".$this->cfg["ext"]."?class=mlist&action=list_members&id=$id'>Listi liikmed</a> / Muuda liiget");
 		$this->read_template("add_user.tpl");
 		$this->db_query("SELECT objects.*,ml_users.mail as mail,acl FROM objects
 										 LEFT JOIN ml_users ON ml_users.id = objects.oid
@@ -312,20 +323,31 @@ class mlist extends aw_template
 										 WHERE objects.oid = $uid
 										 GROUP BY objects.oid");
 		if (!($row = $this->db_next()))
+		{
 			$this->raise_error(ERR_LIST_NOUSER,"mlist->change_user($uid): No such user!", true);
+		}
 
-		
 		$this->vars(array("user_id" => $row["oid"], "user_name" => $row["name"], "user_mail" => $row["mail"]));
+
+		$this->db_query("SELECT * FROM objects WHERE oid = $id");
+		$row = $this->db_next();
+		$this->l_vars = unserialize($row["last"]);
 
 		$ls = "";
 		if (is_array($this->l_vars))
 		{
 			reset($this->l_vars);
 			while(list($id,) = each($this->l_vars))
+			{
 				if ($ls == "")
+				{
 					$ls = $id;
+				}
 				else
+				{
 					$ls.=",".$id;
+				}
+			}
 		}
 
 		$c="";	
@@ -363,9 +385,13 @@ class mlist extends aw_template
 			if (substr($k, 0, 3) == "ch_" && $v == 1)
 			{
 				if ($ids == "")
+				{
 					$ids = substr($k, 3);
+				}
 				else
+				{
 					$ids.=",".substr($k,3);
+				}
 			}
 		}
 		return $ids;
@@ -394,8 +420,12 @@ class mlist extends aw_template
 			$uidarr = explode(",",$ids);
 			reset($uidarr);
 			while (list(,$v) = each($uidarr))
+			{
 				if ($rows[$v] == 1)
+				{
 					$this->delete_object($v);
+				}
+			}
 
 			$this->_log("mlist",sprintf(LC_LIST_ERASED_USER,$this->name));
 		}
@@ -412,8 +442,9 @@ class mlist extends aw_template
 		$this->db_query("UPDATE ml_users SET is_cut = 0");
 
 		if ($ids != "")
+		{
 			$this->db_query("UPDATE ml_users SET is_copied = 1 WHERE id IN ($ids)");
-
+		}
 
 		return $this->mk_my_orb("list_members",array("id" => $list_id));
 	}
@@ -428,7 +459,9 @@ class mlist extends aw_template
 		$this->db_query("UPDATE ml_users SET is_copied = 0");
 
 		if ($ids != "")
+		{
 			$this->db_query("UPDATE ml_users SET is_cut = 1 WHERE id IN ($ids)");
+		}
 		
 		return $this->mk_my_orb("list_members",array("id" => $list_id));
 	}
@@ -443,7 +476,9 @@ class mlist extends aw_template
 			$vars = array();
 			$this->db_query("SELECT * FROM ml_var_values WHERE user_id = ".$row["oid"]);
 			while ($vrow = $this->db_next())
+			{
 				$vars[$vrow["var_id"]] = $vrow["value"];
+			}
 
 			$this->db_add_user(array("name" => $row["name"], "email" => $row["mail"]), $vars);
 			$this->restore_handle();
@@ -481,9 +516,29 @@ class mlist extends aw_template
 	{
 		extract($args);
 		$list_obj = $this->get_object(array("oid" => $list_id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Impordime failist meiliaadresse list");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.".$this->cfg["ext"]."?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Impordime failist meiliaadresse list");
 		$this->read_template("import_emails.tpl");
+
+		$this->db_query("SELECT * FROM objects WHERE oid = $list_id");
+		$row = $this->db_next();
+		$this->l_vars = unserialize($row["last"]);
+
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_MAILINGLIST_VARIABLE." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			if ($this->l_vars[$row["parent"]] == 1)
+			{
+				$this->vars(array(
+					"var_name"	=> $row["name"], 
+					"var_id"		=> $row["oid"],
+					"ord"		=> ++$ord
+				));
+				$line.=$this->parse("V_LINE");
+			}
+		}
+
 		$this->vars(array(
+			"V_LINE" => $line,
 			"reforb" => $this->mk_reforb("import_members_submit",array("list_id" => $list_id)),
 		));
 		return $this->parse();
@@ -497,14 +552,34 @@ class mlist extends aw_template
 		global $pilt;
 		$arr = file($pilt);
 		
+		$variables = array();
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_MAILINGLIST_VARIABLE." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$variables[$row["oid"]] = $row["name"];
+		}
+
 		reset($arr);
 		while(list($num, $line) = each($arr))
 		{	
 			$line = str_replace("\n" , "", $line);
-			list($name, $mail) = explode(",", $line);
-			echo "Leidsin $name ( $mail )<br>";
+			$res = explode(",", $line);
+			$name = $res[0];
+			$mail = $res[1];
+			$varst = array();
+			$usid = $this->db_add_user(array("name" => $name, "email" => $mail));
+			if (is_array($vars))
+			{
+				foreach($vars as $v_id => $v_v)
+				{
+					$varst[] = $variables[$v_id]." = ".$res[$ord[$v_id]+1];
+					$vvl = $res[$ord[$v_id]+1];
+					$this->quote(&$vvl);
+					$this->db_query("INSERT INTO ml_var_values(var_id,user_id,value) VALUES('$v_id','$usid','$vvl')");
+				}
+			}
+			echo "Leidsin $name ( $mail ) muutujad: ".join(",",$varst)."<br>";
 			flush();
-			$this->db_add_user(array("name" => $name, "email" => $mail));
 		}			
 		$this->_log("mlist",sprintf(LC_LIST_IMPORTED_USER,$this->name));
 		$or = $this->mk_my_orb("list_members",array("id" => $list_id)); 
@@ -517,16 +592,18 @@ class mlist extends aw_template
 		extract($args);
 		$this->id = $list_id;
 		$list_obj = $this->get_object(array("oid" => $list_id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Vali listi muutujad");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.".$this->cfg["ext"]."?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Vali listi muutujad");
 		$this->read_template("sel_vars.tpl");
 		$this->l_vars = unserialize($list_obj["last"]);
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = 24 AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("var_name"	=> $row["name"], 
-												"var_id"		=> $row["oid"],
-												"var_ch"		=> ($this->l_vars[$row[oid]] == 1 ? "CHECKED" : "")));
+			$this->vars(array(
+				"var_name"	=> $row["name"], 
+				"var_id"		=> $row["oid"],
+				"var_ch"		=> checked($this->l_vars[$row["oid"]] == 1)
+			));
 			$line.=$this->parse("LINE");
 		}
 		$this->vars(array(
@@ -548,7 +625,9 @@ class mlist extends aw_template
 			while (list($k,$v) = each($arr))
 			{
 				if (substr($k,0,3) == "ch_")
+				{
 					$this->l_vars[substr($k,3)] = $v;
+				}
 			}
 		};
 		$s = serialize($this->l_vars);
@@ -565,7 +644,9 @@ class mlist extends aw_template
 			while (list($k,$v) = each($this->l_vars))
 			{
 				if ($v == 1)
+				{
 					$ret[] = $k;
+				}
 			}
 		}
 		return $ret;
@@ -576,7 +657,9 @@ class mlist extends aw_template
 		$id = $this->db_fetch_field("SELECT id FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE ml_users.mail = '$email' AND status != 0 AND parent = $this->id","id");
 
 		if ($id)
+		{
 			$this->delete_object($id);
+		}
 	}
 
 	function export_members($args = array())
@@ -585,7 +668,9 @@ class mlist extends aw_template
 		header("Content-type: text/plain");
 		$this->db_query("SELECT ml_users.mail as mail, objects.name as name FROM objects LEFT JOIN ml_users ON objects.oid = ml_users.id WHERE class_id = 17 AND status != 0 AND parent = '$list_id'");
 		while ($row = $this->db_next())
+		{
 			echo $row["name"],",",$row["mail"],"\n";
+		}
 
 		exit;
 	}
@@ -594,9 +679,13 @@ class mlist extends aw_template
 	{
 		$this->db_query("SELECT * FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE parent=$this->id AND status != 0 AND mail='$email'");
 		if (($row = $this->db_next()))
-			return $row[id];	
+		{
+			return $row["id"];	
+		}
 		else
+		{
 			return false;
+		}
 	}
 
 	function checkit($args = array())
@@ -604,7 +693,7 @@ class mlist extends aw_template
 		extract($args);
 		$this->read_template("checkit.tpl");
 		$list_obj = $this->get_object(array("oid" => $list_id,"class_id" => CL_MAILINGLIST));
-		$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.aw?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Kontrolli listi liikmeid");
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / <a href='orb.".$this->cfg["ext"]."?class=mlist&action=list_members&id=$list_id'>Listi liikmed</a> / Kontrolli listi liikmeid");
 
 		$this->id = $list_id;
 
@@ -613,7 +702,7 @@ class mlist extends aw_template
 		$this->db_query("SELECT oid,name FROM objects WHERE class_id = 15 AND status != 0");
 		while ($row = $this->db_next()) 
 		{
-			$lar[$row[oid]] = $row[name];
+			$lar[$row["oid"]] = $row["name"];
 		}
 
 		// mailide nimekirja. whee. loeme aga terve baasi korraga m2llu, mis ikka juhtub :p
@@ -621,7 +710,7 @@ class mlist extends aw_template
 		$this->db_query("SELECT objects.*,ml_mails.* FROM objects LEFT JOIN ml_mails ON ml_mails.id = objects.oid WHERE class_id = 20 AND status != 0");
 		while ($row = $this->db_next()) 
 		{
-			$mails[$row[parent]] = $row[sent];
+			$mails[$row["parent"]] = $row["sent"];
 		}
 
 		$this->vars(array("blid" => $this->id));
@@ -643,19 +732,20 @@ class mlist extends aw_template
 			$this->db_query($q);
 			while ($us = $this->db_next())
 			{
-				if ($lar[$us[list_id]] && $us[list_id] != $this->id)
+				if ($lar[$us["list_id"]] && $us["list_id"] != $this->id)
 				{
-					$this->vars(array("list_id" => $us[list_id], "list_name" => $lar[$us[list_id]],
-					"user_id" => $us[oid],
-					"mail_sent" => ($mails[$us[list_id]] ? "Jah" : "Ei"),
-					"mail_when" => ($mails[$us[list_id]] ? $this->time2date($mails[$us[list_id]],2) : ""),
-					"delete_link" => $this->mk_my_orb("del_user",array("list_id" => $this->id,"user_id" => $us["oid"])),
-					"list_link" => $this->mk_my_orb("list_members",array("id" => $us["list_id"])),
+					$this->vars(array(
+						"list_id" => $us["list_id"], "list_name" => $lar[$us["list_id"]],
+						"user_id" => $us["oid"],
+						"mail_sent" => ($mails[$us["list_id"]] ? "Jah" : "Ei"),
+						"mail_when" => ($mails[$us["list_id"]] ? $this->time2date($mails[$us["list_id"]],2) : ""),
+						"delete_link" => $this->mk_my_orb("del_user",array("list_id" => $this->id,"user_id" => $us["oid"])),
+						"list_link" => $this->mk_my_orb("list_members",array("id" => $us["list_id"])),
 					));
 					$ls.=$this->parse("LIST");
 				}
 			}
-			$this->vars(array("user_name" => $row[name], "user_mail" => $row[mail], "LIST" => $ls));
+			$this->vars(array("user_name" => $row["name"], "user_mail" => $row["mail"], "LIST" => $ls));
 			$hl = "";
 			if ($ls != "")
 			{

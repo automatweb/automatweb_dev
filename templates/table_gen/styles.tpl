@@ -71,10 +71,10 @@ function pick_style(row,col)
 <!-- SUB: DC -->
 <td bgcolor="#FFFFFF">
 <!-- SUB: FIRST_C -->
-<a href='{VAR:add_col}'><img alt="{VAR:LC_TABLE_ADD_COL}" src='/images/rohe_nool_alla.gif' border=0></a>
+<a href='{VAR:add_col}'><img alt="{VAR:LC_TABLE_ADD_COL}" src='/automatweb/images/rohe_nool_alla.gif' border=0></a>
 <!-- END SUB: FIRST_C -->
-<input type='checkbox' NAME='dc_{VAR:col}' value=1>&nbsp;<a href="javascript:box2('{VAR:LC_TABLE_SURE_DEL_COLUMN}?','{VAR:del_col}')"><img alt="{VAR:LC_TABLE_DEL_COL}" src='/images/puna_nool_alla.gif' border=0></a>
-<a href='{VAR:add_col}'><img alt="{VAR:LC_TABLE_ADD_COL}" src='/images/rohe_nool_alla.gif' border=0></a>
+<input type='checkbox' NAME='dc_{VAR:col}' value=1>&nbsp;<a href="javascript:box2('{VAR:LC_TABLE_SURE_DEL_COLUMN}?','{VAR:del_col}')"><img alt="{VAR:LC_TABLE_DEL_COL}" src='/automatweb/images/puna_nool_alla.gif' border=0></a>
+<a href='{VAR:add_col}'><img alt="{VAR:LC_TABLE_ADD_COL}" src='/automatweb/images/rohe_nool_alla.gif' border=0></a>
 </td>
 <!-- END SUB: DC -->
 <td bgcolor="#FFFFFF">&nbsp;</td>
@@ -86,10 +86,10 @@ function pick_style(row,col)
 <!-- END SUB: COL -->
 <td bgcolor=#ffffff valign=bottom align=left>
 <!-- SUB: FIRST_R -->
-<a href='{VAR:add_row}'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='/images/rohe_nool_vasakule.gif' BORDER=0></a><br>
+<a href='{VAR:add_row}'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a><br>
 <!-- END SUB: FIRST_R -->
-<a href="javascript:box2('{VAR:LC_TABLE_SURE_DEL_ROW}?','{VAR:del_row}')"><img src='/images/puna_nool_vasakule.gif' alt="{VAR:LC_TABLE_DEL_ROW}" BORDER=0></a><Br><input type='checkbox' NAME='dr_{VAR:row}' value=1><br>
-<a href='{VAR:add_row}'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='/images/rohe_nool_vasakule.gif' BORDER=0></a>
+<a href="javascript:box2('{VAR:LC_TABLE_SURE_DEL_ROW}?','{VAR:del_row}')"><img src='/automatweb/images/puna_nool_vasakule.gif' alt="{VAR:LC_TABLE_DEL_ROW}" BORDER=0></a><Br><input type='checkbox' NAME='dr_{VAR:row}' value=1><br>
+<a href='{VAR:add_row}'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a>
 </td>
 </tr>
 <!-- END SUB: LINE -->

@@ -1,5 +1,4 @@
 <?php
-lc_load("shop");
 define("FOR_SELECT",1);
 define("ALL_PROPS",2);
 
@@ -11,18 +10,11 @@ class shop_base extends aw_template
 {
 	function shop_base()
 	{
-		$this->tpl_init("shop");
-		$this->db_init();
+		$this->init("shop");
 		$this->sub_merge = 1;
 		lc_load("definition");
-		lc_load("shop");
 
-		global $lc_shop;
-		if (is_array($lc_shop))
-		{
-			$this->vars($lc_shop);
-	}
-
+		$this->lc_load("shop","lc_shop");
 	}
 
 	////
@@ -46,11 +38,11 @@ class shop_base extends aw_template
 		$ret = array();
 		if ($type == FOR_SELECT)
 		{
-			$this->db_query("SELECT objects.name, objects.oid FROM objects WHERE class_id = ".CL_SHOP_ITEM_TYPE." AND status != 0 AND SITE_ID = ".$GLOBALS["SITE_ID"]);
+			$this->db_query("SELECT objects.name, objects.oid FROM objects WHERE class_id = ".CL_SHOP_ITEM_TYPE." AND status != 0 AND SITE_ID = ".$this->cfg["site_id"]);
 		}
 		else
 		{
-			$this->db_query("SELECT objects.*,shop_item_types.* FROM objects LEFT JOIN shop_item_types ON shop_item_types.id = objects.oid WHERE class_id = ".CL_SHOP_ITEM_TYPE." AND status != 0 AND SITE_ID = ".$GLOBALS["SITE_ID"]);
+			$this->db_query("SELECT objects.*,shop_item_types.* FROM objects LEFT JOIN shop_item_types ON shop_item_types.id = objects.oid WHERE class_id = ".CL_SHOP_ITEM_TYPE." AND status != 0 AND SITE_ID = ".$this->cfg["site_id"]);
 		}
 		while ($row = $this->db_next())
 		{
@@ -307,7 +299,8 @@ class shop_base extends aw_template
 
 	function get_user_tables_for_types()
 	{
-		global $uid,$all_users_grp;
+		$uid = aw_global_get("uid");
+		$all_users_grp = aw_ini_get("groups.all_users_grp");
 		$gid = $this->db_fetch_field("SELECT groups.gid as gid FROM groupmembers LEFT JOIN groups ON groups.gid = groupmembers.gid WHERE groupmembers.uid = '$uid' AND groupmembers.gid != $all_users_grp AND (groups.type = ".GRP_REGULAR." OR groups.type = ".GRP_DYNAMIC.")  ORDER BY groups.priority DESC","gid");
 
 		$ret = array();
@@ -326,12 +319,11 @@ class shop_base extends aw_template
 		classload("config");
 		$con = new config;
 		$_its = $con->get_simple_config("show_items");
-		classload("php");
-		$php = new php_serializer;
-		$its = $php->php_unserialize($_its);
+		$its = aw_unserialize($_its);
 
 		// now find the group with the biggest priority that the user belongs to.
-		global $uid,$all_users_grp;
+		$uid = aw_global_get("uid");
+		$all_users_grp = aw_ini_get("groups.all_users_grp");
 
 		$gid = $this->db_fetch_field("SELECT groups.gid as gid FROM groupmembers LEFT JOIN groups ON groups.gid = groupmembers.gid WHERE groupmembers.uid = '$uid' AND groupmembers.gid != $all_users_grp AND (groups.type = ".GRP_REGULAR." OR groups.type = ".GRP_DYNAMIC.") ORDER BY groups.priority DESC","gid");
 

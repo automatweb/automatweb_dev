@@ -1,7 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="config">
-
 		<action name="join_mail">
 			<function name="join_mail">
 				<arguments>
@@ -86,6 +85,232 @@
 			</function>
 		</action>
 
+		<action name="sel_join_form">
+			<function name="sel_join_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_jf">
+			<function name="save_jf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="config">
+			<function name="gen_config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_loginaddr">
+			<function name="submit_loaginaddr">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="class_icons">
+			<function name="class_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export_class_icons">
+			<function name="export_class_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="class_icon">
+			<function name="set_class_icon">
+				<arguments>
+					<required name="id"/>
+					<required name="icon_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="program_icons">
+			<function name="program_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export_program_icons">
+			<function name="export_program_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="program_icon">
+			<function name="set_program_icon">
+				<arguments>
+					<required name="id"/>
+					<required name="icon_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="file_icons">
+			<function name="file_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export_file_icons">
+			<function name="export_file_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="file_icon">
+			<function name="set_file_icon">
+				<arguments>
+					<required name="id"/>
+					<required name="icon_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_filetype">
+			<function name="add_filetype">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_filetype">
+			<function name="submit_filetype">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_filetype">
+			<function name="change_filetype">
+				<arguments>
+					<required name="extt"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_filetype">
+			<function name="delete_filetype">
+				<arguments>
+					<required name="extt"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="other_icons">
+			<function name="other_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export_other_icons">
+			<function name="export_other_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="other_icon">
+			<function name="set_other_icon">
+				<arguments>
+					<required name="id"/>
+					<required name="icon_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import">
+			<function name="import">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_class_icons">
+			<function name="import_class_icons">
+				<arguments>
+					<optional name="level"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_file_icons">
+			<function name="import_file_icons">
+				<arguments>
+					<optional name="level"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_program_icons">
+			<function name="import_program_icons">
+				<arguments>
+					<optional name="level"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_other_icons">
+			<function name="import_other_icons">
+				<arguments>
+					<optional name="level"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_all_icons">
+			<function name="import_all_icons">
+				<arguments>
+					<optional name="level"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export">
+			<function name="export">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="exp_icons">
+			<function name="do_export">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="menu_icon">
+			<function name="set_menu_icon">
+				<arguments>
+					<required name="id"/>
+					<required name="icon_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="favicon" nologin="1">
+			<function name="show_favicon">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

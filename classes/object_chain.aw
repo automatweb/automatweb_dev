@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.3 2002/01/04 15:53:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 classload("objects");
@@ -8,8 +8,7 @@ class object_chain extends aw_template
 {
 	function object_chain()
 	{
-		$this->tpl_init("object_chain");
-		$this->db_init();
+		$this->init("object_chain");
 	}
 
 	function add($arr)
@@ -90,7 +89,8 @@ class object_chain extends aw_template
 		
 		// kui tegemist on aliaste ja kui see siin on objektipärg, siis
 		// loeme koigepealt sisse olemasolevad aliased ning _kustutame_ need
-		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))                        {
+		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))                        
+		{
 			$old_contents = $this->get_objects_in_chain($id);
 			if (is_array($old_contents))
 			{
@@ -151,8 +151,7 @@ class object_chain extends aw_template
 		));
 
 		$tar = array(0 => "K&otilde;ik");
-		global $class_defs;
-		foreach($class_defs as $clid => $cldata)
+		foreach($this->cfg["classes"] as $clid => $cldata)
 		{
 			$tar[$clid] = $cldata["name"];
 		}
@@ -199,7 +198,7 @@ class object_chain extends aw_template
 			{
 				$names[$row["oid"]] = $row["name"];
 				$this->vars(array(
-					"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$class_defs[$row["class_id"]]["file"]),
+					"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$this->cfg["classes"][$row["class_id"]]["file"]),
 					"name" => $row["name"],
 					"oid" => $row["oid"]
 				));

@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.28 2002/04/08 06:15:51 duke Exp $
-global $orb_defs;
-$orb_defs["form_table"] = "xml";
-lc_load("form");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.29 2002/06/10 15:50:53 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -10,10 +7,9 @@ class form_table extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form","lc_form");
+		$this->fakels = array("change", "view", "special", "delete", "created", "modified", "uid", "active", "chpos","order");
+		$this->lang_id = aw_global_get("lang_id");
 	}
 
 	////
@@ -59,9 +55,7 @@ class form_table extends form_base
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 			$t_forms = $this->get_forms_for_table($id);
 			
-
 			// noojah lae aga kõik formid sisse
-			
 			if (is_array($t_forms))
 			foreach($t_forms as $formid)
 			{
@@ -71,9 +65,13 @@ class form_table extends form_base
 				{
 					$els[$k_elid]=$formid;
 					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
+					$elsubtypes[$formid][$k_elid]["thousands_sep"]=$v_eldata["thousands_sep"];
+					if ($k_elid == $defaultsort)
+					{
+						$elsubtypes[$els[$defaultsort]][$defaultsort]["subtype"]=$v_eldata["subtype"];
+					}
 				};
 			};
-			
 			
 			$this->load_table($id);
 			$this->table["defs"] = array();
@@ -108,12 +106,18 @@ class form_table extends form_base
 							//elid tuleb eelmisest loobist
 							//echo("column $r_c [id:$col ] has 1 el (id:$elid) of type".$elsubtypes[$els[$elid]][$elid]["subtype"]."<br>");
 							$this->table["defs"][$r_c]["show_int"]=1;
+							$this->table["defs"][$r_c]["thousands_sep"]= $elsubtypes[$els[$elid]][$elid]["thousands_sep"];
 						};
 						
 						$this->table["defs"][$r_c]["lang_title"] = $names[$r_c];
 						$this->table["defs"][$r_c]["sortable"] = $sortable[$r_c];
 						$this->table["defs"][$r_c]["is_email"] = $is_email[$r_c];
 						$this->table["defs"][$r_c]["doelsearch"] = $doelsearch[$r_c];
+						$this->table["defs"][$r_c]["show_grps"] = $this->make_keys($show_grps[$r_c]);
+						$this->table["defs"][$r_c]["order_form"] = $order_forms[$r_c];
+						$this->table["defs"][$r_c]["linkel"] = $linkels[$r_c];
+						$this->table["defs"][$r_c]["alias"] = $aliases[$r_c];
+						$this->table["defs"][$r_c]["alias_data"] = $this->get_data_for_alias($aliases[$r_c]);
 						$r_c++;
 					}
 					else
@@ -154,14 +158,18 @@ class form_table extends form_base
 			$this->table["change_col"] = $changecol;
 			$this->table["defaultsort"] = $defaultsort;
 			$this->table["defaultsort_form"] = $els[$defaultsort];
+			$this->table["defaultsort_type"] = $elsubtypes[$els[$defaultsort]][$defaultsort]["subtype"];
 			$this->table["group"] = $group_el;
+			$this->table["rgroup"] = $rgroup_el;
 			$this->table["group_form"] = $els[$group_el];
+			$this->table["rgroup_form"] = $els[$rgroup_el];
 			$this->table["view_new_win"] = $view_new_win;
 			$this->table["new_win_x"] = $new_win_x;
 			$this->table["new_win_y"] = $new_win_y;
 			$this->table["new_win_scroll"] = $new_win_scroll;
 			$this->table["new_win_fixedsize"] = $new_win_fixedsize;
 			$this->table["print_button"] = $print_button;
+			$this->table["texts"] = $texts;
 			$this->save_table(array("id" => $id, "num_cols" => $num_cols));
 		}
 		else
@@ -184,9 +192,7 @@ class form_table extends form_base
 	function save_table($arr)
 	{
 		extract($arr);
-		classload("xml");
-		$x = new xml;
-		$co = $x->xml_serialize($this->table);
+		$co = aw_serialize($this->table,SERIALIZE_XML);
 		$this->quote(&$co);
 		$noc = "";
 		if (isset($num_cols))
@@ -220,11 +226,15 @@ class form_table extends form_base
 		$els["uid"] = "UID";
 		$els["active"] = "Active";
 		$els["chpos"] = "Move";
-
+		$els["order"] = "Order";
 
 		classload("languages");
 		$lang = new languages;
 		$lar = $lang->listall();
+
+		classload("users");
+		$us = new users;
+		$grplist = $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
 
 		for ($col=0; $col < $this->table["cols"]; $col++)
 		{
@@ -236,11 +246,39 @@ class form_table extends form_base
 				"link_elements" => $this->picker($this->table["defs"][$col]["link_el"],$els),
 				"add_col" => $this->mk_my_orb("add_col", array("id" => $id,"after" => $col)),
 				"del_col" => $this->mk_my_orb("del_col", array("id" => $id,"col" => $col)),
-				"doelsearch" => checked($this->table["defs"][$col]["doelsearch"])
+				"doelsearch" => checked($this->table["defs"][$col]["doelsearch"]),
+				"linkel" => checked($this->table["defs"][$col]["linkel"]),
+				"show_grps" => $this->multiple_option_list($this->table["defs"][$col]["show_grps"],$grplist),
+				"order_forms" => $this->table["defs"][$col]["order_form"],
+				"aliases" => $this->picker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
+			));
+
+			if (is_array($this->table["defs"][$col]["el"]) && in_array("order", $this->table["defs"][$col]["el"]))
+			{
+				$of = $this->parse("ORDER");
+				$nof = "";
+			}
+			else
+			{
+				$of = "";
+				if ($this->table["defs"][$col]["linkel"])
+				{
+					$nof = $this->parse("NOT_ORDER");
+				}
+				else
+				{
+					$nof = "";
+				}
+			}
+			$this->vars(array(
+				"ORDER" => $of,
+				"NOT_ORDER" => $nof
 			));
 
 			$lh = "";
 			$lit = "";
+			$lh2 = "";
+			$lit2 = "";
 			foreach($lar as $la)
 			{
 				if ($tbo["lang_id"] == $la["id"] && $this->table["defs"][$col]["lang_title"][$la["id"]] == "")
@@ -254,24 +292,57 @@ class form_table extends form_base
 				$this->vars(array(
 					"lang_name" => $la["name"],
 					"lang_id" => $la["id"],
-					"c_name" => $lt
+					"c_name" => $lt,
 				));
 				$lh.=$this->parse("LANG_H");
 				$lit.=$this->parse("LANG");
 			}
 			$this->vars(array(
 				"LANG_H" => $lh,
-				"LANG" => $lit
+				"LANG" => $lit,
+				"CLANG" => $lit2
 			));
-		
 			$co.=$this->parse("COL");
 		}
+
+		$clh = "";
+		foreach($lar as $la)
+		{
+			$this->vars(array(
+				"lang_name" => $la["name"]
+			));
+			$clh.=$this->parse("CLANG_H");
+		}
+
+		$ct = "";
+		foreach($this->fakels as $fakelname)
+		{
+			$cl="";
+			$this->vars(array(
+				"eltype" => $fakelname
+			));
+			foreach($lar as $la)
+			{
+				$this->vars(array(
+					"lang_id" => $la["id"],
+					"t_name" => $this->table["texts"][$fakelname][$la["id"]]
+				));
+				$cl.=$this->parse("CLANG");
+			}
+			$this->vars(array(
+				"CLANG" => $cl
+			));
+			$ct.=$this->parse("COL_TEXT");
+		}
 		$this->vars(array(
+			"COL_TEXT" => $ct,
+			"CLANG_H" => $clh,
 			"COL" => $co,
 			"v_elements" => $this->picker($this->table["view_col"], array(0 => "") + $els),
 			"c_elements" => $this->picker($this->table["change_col"], array(0 => "") + $els),
 			"ds_elements" => $this->picker($this->table["defaultsort"], array(0 => "") + $els),
 			"g_elements" => $this->picker($this->table["group"], array(0 => "") + $els),
+			"rg_elements" => $this->picker($this->table["rgroup"], array(0 => "") + $els),
 		));
 
 		classload("style");
@@ -309,9 +380,21 @@ class form_table extends form_base
 			"user_button_top" => checked($this->table["user_button_top"]),
 			"user_button_bottom" => checked($this->table["user_button_bottom"]),
 			"user_button_text" => $this->table["user_button_text"],
-			"user_button_url" => $this->table["user_button_url"]
+			"user_button_url" => $this->table["user_button_url"],
+			"aliasmgr_link" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
 		));
 		return $this->parse();
+	}
+	
+	function aliasmgr($args = array())
+	{
+		extract($args);
+		$this->read_template("table_aliasmgr.tpl");
+		$this->vars(array(
+			"table_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+		));
+    		return $this->parse();
 	}
 
 	function add_col($arr)
@@ -345,17 +428,25 @@ class form_table extends form_base
 	// !returns an array of forms that this table gets elements from
 	function get_forms_for_table($id)
 	{
-		global $awt;
-		$awt->start("form_table::get_forms_for_table");
-		$awt->count("form_table::get_forms_for_table");
-
 		$ret = array();
 		$this->db_query("SELECT * FROM form_table2form WHERE table_id = $id");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
-		$awt->stop("form_table::get_forms_for_table");
+		return $ret;
+	}
+
+	////
+	//  !returns an array of defined tables for a form
+	function get_tables_for_form($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT *,objects.name FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["table_id"]] = $row["name"];
+		}
 		return $ret;
 	}
 
@@ -364,56 +455,89 @@ class form_table extends form_base
 	// $header_attribs = an array of get items in the url, used to sort the table
 	function start_table($id,$header_attribs)
 	{
-		global $awt;
-		$awt->start("form_table::start_table");
-		$awt->count("form_table::start_table");
-
 		load_vcl("table");
 		$this->t = new aw_table(array(
 			"prefix" => "fg_".$id,
-			"self" => $PHP_SELF,
-			"imgurl" => $GLOBALS["baseurl"] . "/automatweb/images"
+			"self" => aw_global_get("PHP_SELF"),
+			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images"
 		));
 		$this->t->parse_xml_def_string($this->get_xml($id));
 		$this->t->set_header_attribs($header_attribs);
-		$awt->stop("form_table::start_table");
 	}
 
 	////
 	// !adds another row of data to the table
-	function row_data($dat,$form_id = 0,$section = 0 ,$op_id = 0)
+	function row_data($dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
-		global $awt;
-		$awt->start("form_table::row_data");
-		$awt->count("form_table::row_data");
-
 		if ($form_id != 0)
 		{
 			// here also make the view and other links
-			$dat["ev_change"] = "<a href='".$this->mk_my_orb(
-				"show", 
-				array(
-					"id" => $form_id,
-					"entry_id" => $dat["entry_id"],
-					"section" => $section
-				), 
-				"form"
-			)."'>Muuda</a>";
+			if ($chain_id)
+			{
+				// if we are in a chain, leave the chain also shown
+				$change_link = $this->mk_my_orb("show",
+					array(
+						"id" => $chain_id,
+						"form_id" => $form_id,
+						"entry_id" => $chain_entry_id,
+						"form_entry_id" => $dat["entry_id"],
+						"section" => $section
+					),
+				"form_chain");
+			}
+			else
+			{
+				$change_link = $this->mk_my_orb("show", 
+					array(					
+						"id" => $form_id,
+						"entry_id" => $dat["entry_id"],
+						"section" => $section
+					), 
+				"form");
+			}
 
+			$show_link = $this->mk_my_orb("show_entry",array(
+				"id" => $form_id,
+				"entry_id" => $dat["entry_id"], 
+				"op_id" => $op_id,				
+				"section" => $section
+			),
+			"form");
+
+//			echo "aa $dat[entry_id] ",var_dump($this->can("edit",$dat["entry_id"])),"<br>";
+			// FIXME: kõigepealt peaks kontrollima, kas tabelis üldse ev_change välja ongi, vastasel
+			// korral on see acl kontroll mõttetu ajakulu -- duke
+			if ($this->can("edit",$dat["entry_id"])  || $this->cfg["site_id"] == 11)
+			{
+//				echo "change = ",$this->table["texts"]["change"][$this->lang_id]," <br>";
+//				echo "change1 = ",$this->table["texts"]["change"][aw_global_get("lang_id")]," <br>";
+//				echo "change2 = <pre>",var_dump($this->table["texts"]["change"]),"</pre> <br>";
+				$dat["ev_change"] = "<a href='".$change_link."'>".$this->table["texts"]["change"][$this->lang_id]."</a>";
+			}
 			$dat["ev_created"] = $this->time2date($dat["created"], 2);
 			$dat["ev_uid"] = $dat["modifiedby"];
 			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
+			$dat["ev_view"] = "<a href='".$show_link."'>".$this->table["texts"]["view"][$this->lang_id]."</a>";		
 
-			$dat["ev_view"] = "<a href='".$this->mk_my_orb(
-				"show_entry", 
+			$after_show = $this->mk_my_orb("show_entry", 
 				array(
-					"id" => $form_id,
-					"entry_id" => $dat["entry_id"], 
+					"id" => $form_id, 
+					"entry_id" => $entry_id, 
 					"op_id" => $op_id,
 					"section" => $section
-				),
-				"form"
-			)."'>Vaata</a>";		
+				),"form"
+			);
+			if ($chain_id)
+			{
+				$after_show = $this->mk_my_orb("show",
+					array(
+						"id" => $chain_id,
+						"form_id" => $form_id,
+						"entry_id" => $chain_entry_id,
+						"section" => $section
+					),
+				"form_chain");
+			}
 
 			$dat["ev_delete"] = "<a href='".$this->mk_my_orb(
 				"delete_entry", 
@@ -437,26 +561,19 @@ class form_table extends form_base
 
 			if ($this->table["view_col"] && $this->table["view_col"] != "view")
 			{
-				$_link = $this->mk_my_orb("show_entry", array(
-					"id" => $form_id,
-					"entry_id" => $dat["entry_id"],
-					"op_id" => $op_id,
-					"section" => $section,
-				));
-
 				$_caption = $dat["ev_".$this->table["view_col"]];
 
 				if ($this->table["view_new_win"])
 				{
-					$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$this->table["new_win_scroll"],!$this->table["new_win_fixedsize"],$this->table["new_win_x"],$this->table["new_win_y"]);
+					$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$show_link,$this->table["new_win_scroll"],!$this->table["new_win_fixedsize"],$this->table["new_win_x"],$this->table["new_win_y"]);
 				};
 
-				$dat["ev_".$this->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
+				$dat["ev_".$this->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
 			}
 
-			if ($this->table["change_col"] && $this->table["change_col"] != "change")
+			if ($this->table["change_col"] && $this->table["change_col"] != "change" && ($this->can("edit",$dat["entry_id"]) || $this->cfg["site_id"] == 11))
 			{
-				$dat["ev_".$this->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $dat["entry_id"],"section" => $section), "form")."'>".$dat["ev_".$this->table["change_col"]]."</a>";
+				$dat["ev_".$this->table["change_col"]] = "<a href='".$change_link."'>".$dat["ev_".$this->table["change_col"]]."</a>";
 			}
 		}
 
@@ -471,10 +588,24 @@ class form_table extends form_base
 				{
 					if ($dat["ev_".$elid] != "")
 					{
-						$str[]=$dat["ev_".$elid];
+						// check if the column has an alias set, if it does then figure out the url for the alias
+						if ($cc["alias"])
+						{
+							$str[] = $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section);
+						}
+						else
+						if ($elid == "order")
+						{
+							$str[]=$this->get_order_url($col,$dat["ev_".$elid],$dat);
+						}
+						else
+						{
+							$str[]=$dat["ev_".$elid];
+						}
 					}
 				}
 				$dat["ev_col_".$col] = join(",",$str);
+
 				if ($this->table["defs"][$col]["link_el"])
 				{
 					$dat["ev_col_".$col] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_col_".$col]."</a>";
@@ -505,21 +636,34 @@ class form_table extends form_base
 						}
 					}
 				}
+				else
+				{
+					if (is_array($cc["el"]))
+					{
+						foreach($cc["el"] as $_elid => $elid)
+						{
+							if ($cc["alias"])
+							{
+								$dat["ev_".$elid] = $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section);
+							}
+							else
+							if ($elid == "order")
+							{
+								$dat["ev_".$elid] = $this->get_order_url($col,$dat["ev_".$elid],$dat);
+							}
+						}
+					}
+				}
 			}
 		}
 
 		$this->t->define_data($dat);
-		$awt->stop("form_table::row_data");
 	}
 
 	////
 	// !reads the loaded entries from array of forms $forms and adds another row of data to the table
 	function row_data_from_form($forms,$special = "")
 	{
-		global $awt;
-		$awt->start("form_table::row_data_from_form");
-		$awt->count("form_table::row_data_from_form");
-
 		$rds = array();
 		foreach($forms as $form)
 		{
@@ -540,17 +684,12 @@ class form_table extends form_base
 			}
 		}
 		$this->t->define_data($rds);
-		$awt->stop("form_table::row_data_from_form");
 	}
 
 	////
 	// !draws the table and returns the html for the current table
 	function finish_table()
 	{
-		global $awt;
-		$awt->start("form_table::finish_table");
-		$awt->count("form_table::finish_table");
-
 		if (is_object($this->t))
 		{
 			$_sby = $GLOBALS["sortby"];
@@ -559,13 +698,19 @@ class form_table extends form_base
 			{
 				$_sby = "ev_".$this->table["defaultsort"];
 				$_so = "asc";
+				$_sn = ($this->table["defaultsort_type"] == "int");
 			}
-			$this->t->sort_by(array("field" => $_sby,"sorder" => $_so));
+			if ($this->table["group"])
+			{
+				$_grpby = "ev_".$this->table["group"];
+			}
+			$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"sort_numeric" => $_sn,"group_by" => $_grpby));
 			$css = $this->get_css();
-			$contents = $this->t->draw();
+			$contents = $this->t->draw(array(
+				"rgroupby" => "ev_".$this->table["rgroup"]
+			));
 			return $this->get_css().$contents;
 		}
-		$awt->stop("form_table::finish_table");
 		return "";
 	}
 
@@ -579,12 +724,6 @@ class form_table extends form_base
 			return $this->show_user_form_entries($arr);
 		}
 
-
-		global $awt;
-		$awt->start("form_table::show_user_entries");
-		$awt->count("form_table::show_user_entries");
-
-
 		global $section;
 		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
 
@@ -592,7 +731,7 @@ class form_table extends form_base
 
 		$eids = array();
 		// leiame k6ik sisestused mis on tehtud $uid poolt $chain_id jaox.
-		$this->db_query("SELECT id FROM form_chain_entries WHERE uid = '".$GLOBALS["uid"]."'");
+		$this->db_query("SELECT id FROM form_chain_entries WHERE uid = '".aw_global_get("uid")."'");
 		while ($row = $this->db_next())
 		{
 			$eids[] = $row["id"];
@@ -642,7 +781,9 @@ class form_table extends form_base
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
 		}
-		$tbl.=$this->t->draw();
+		$tbl.=$this->t->draw(array(
+			"rgroupby" => "ev_".$this->table["rgroup"]
+		));
 
 		if ($this->table["submit_bottom"])
 		{
@@ -654,7 +795,6 @@ class form_table extends form_base
 		}
 		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 		$tbl.="</form>";
-		$awt->stop("form_table::show_user_entries");
 		return $tbl;
 	}
 
@@ -662,10 +802,6 @@ class form_table extends form_base
 	// !shows all the entries for the logged in user of form ($form_id) with table $table_id
 	function show_user_form_entries($arr)
 	{
-		global $awt;
-		$awt->start("form_table::show_user_form_entries");
-		$awt->count("form_table::show_user_form_entries");
-
 		extract($arr);
 
 		global $section;
@@ -674,7 +810,7 @@ class form_table extends form_base
 		// leiame k6ik sisestused mis on tehtud $uid poolt $form_id jaox.
 		$this->load($form_id);
 
-		$this->db_query("SELECT form_".$fid."_entries.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0 AND objects.createdby = '".$GLOBALS["uid"]."'");
+		$this->db_query("SELECT form_".$fid."_entries.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0 AND objects.createdby = '".aw_global_get("uid")."'");
 		while ($row = $this->db_next())
 		{
 			$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["id"]), "form")."'>Muuda</a>";
@@ -701,7 +837,9 @@ class form_table extends form_base
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
 		}
-		$tbl.=$this->t->draw();
+		$tbl.=$this->t->draw(array(
+			"rgroupby" => "ev_".$this->table["rgroup"]
+		));
 
 		if ($this->table["submit_bottom"])
 		{
@@ -713,7 +851,6 @@ class form_table extends form_base
 		}
 		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 		$tbl.="</form>";
-		$awt->stop("form_table::show_user_form_entries");
 		return $tbl;
 	}
 
@@ -722,8 +859,6 @@ class form_table extends form_base
 	// assumes the table is loaded already.
 	function get_used_elements()
 	{
-		global $awt;
-		$awt->start("form_table::get_used_elements");
 		$ret = array();
 		for ($i=0; $i < $this->table["cols"]; $i++)
 		{
@@ -743,7 +878,11 @@ class form_table extends form_base
 		{
 			$ret[$this->table["group_form"]][$this->table["group"]] = $this->table["group"];
 		}
-		$awt->stop("form_table::get_used_elements");
+		
+		if ($this->table["rgroup_form"] && $this->table["rgroup"])
+		{
+			$ret[$this->table["rgroup_form"]][$this->table["rgroup"]] = $this->table["rgroup"];
+		}
 		return $ret;
 	}
 
@@ -761,7 +900,7 @@ class form_table extends form_base
 		{
 			foreach($this->table["moveto"] as $mfid)
 			{
-				$mar = $this->get_object_chain($mfid,false,$GLOBALS["rootmenu"]);
+				$mar = $this->get_object_chain($mfid,false,$this->cfg["rootmenu"]);
 				$str = "";
 				foreach($mar as $oid => $row)
 				{
@@ -776,9 +915,21 @@ class form_table extends form_base
 
 	function finalize_table()
 	{
-		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$_sby = $GLOBALS["sortby"];
+		$_so = $GLOBALS["sort_order"];
+		if ($_sby == "")
+		{
+			$_sby = "ev_".$this->table["defaultsort"];
+			$_so = "asc";
+			$_sn = ($this->table["defaultsort_type"] == "int");
+		}
+		if ($this->table["group"])
+		{
+			$_grpby = "ev_".$this->table["group"];
+		}
+		$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby,"sort_numeric" => $_sn));
 		$tbl = $this->get_css();
-		$tbl.="<form action='reforb.aw' method='POST'>\n";
+		$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST'>\n";
 		if ($this->table["submit_top"])
 		{
 			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
@@ -795,7 +946,9 @@ class form_table extends form_base
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
 		}
-		$tbl.=$this->t->draw();
+		$tbl.=$this->t->draw(array(
+			"rgroupby" => "ev_".$this->table["rgroup"]
+		));
 
 		if ($this->table["submit_bottom"])
 		{
@@ -815,10 +968,6 @@ class form_table extends form_base
 	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, presumes table is loaded already
 	function get_xml($id = 0)
 	{
-		global $awt;
-		$awt->start("form_table::get_xml");
-		$awt->count("form_table::get_xml");
-
 		if ($id)
 		{
 			$this->load_table($id);
@@ -850,10 +999,18 @@ class form_table extends form_base
 		$xml.="</definitions>
 			<data>\n";
 		
+		$gidlist = aw_global_get("gidlist");
+
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
-			
+			if (is_array($cc["show_grps"]) && count($cc["show_grps"]) > 0)
+			{
+				if (count(array_intersect($gidlist,$cc["show_grps"])) < 1)
+				{
+					continue;
+				}
+			}
 			$numericattr="";
 			if (is_array($cc["el"]))
 			{
@@ -872,18 +1029,15 @@ class form_table extends form_base
 				$eln = $cc["el"];
 			}
 			
-			
 			if ($cc["show_int"])
 			{
-				$numericattr=" numeric=\"1\"";
+				$numericattr=" numeric=\"1\" thousands_sep=\"".$cc["thousands_sep"]."\"";
 				if ($GLOBALS["dbg_num"]) echo("get_xml: set numericattr for el $eln<br>");
 			};
 			
-
-			global $lang_id;
 			if (isset($cc["lang_title"]))
 			{
-				$title = $cc["lang_title"][$lang_id];
+				$title = $cc["lang_title"][aw_global_get("lang_id")];
 			}
 			else
 			{
@@ -896,17 +1050,12 @@ class form_table extends form_base
 			}
 			$xml.=" $numericattr />\n";
 		}
-		$awt->stop("form_table::get_xml");
 		if ($GLOBALS["dbg_num"]) {echo("<textarea cols=80 rows=40>$xml</textarea>");};
 		return $xml.="\n</data></tabledef>";
 	}
 
 	function get_css($id = 0)
 	{
-		global $awt;
-		$awt->start("form_table::get_css");
-		$awt->count("form_table::get_css");
-
 		if ($id)
 		{
 			$this->load_table($id);
@@ -918,6 +1067,10 @@ class form_table extends form_base
 		if ($this->table["header_normal"])
 		{
 			$op.= $s->get_css($this->table["header_normal"],$this->table["link_style"]);
+		}
+		if ($this->table["group_style"])
+		{
+			$op.= $s->get_css($this->table["group_style"],$this->table["link_style"]);
 		}
 		if ($this->table["header_sortable"])
 		{
@@ -944,8 +1097,111 @@ class form_table extends form_base
 			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style"]);
 		}
 		$op.="</style>\n";
-		$awt->stop("form_table::get_css");
 		return $op;
+	}
+
+	function get_order_url($col,$elval,$dat)
+	{
+		if (strpos($this->table["defs"][$col]["order_form"],"?") === false)
+		{
+			$sep = "?";
+		}
+		else
+		{
+			$sep = "&";
+		}
+		if ($dat["chain_entry_id"])
+		{
+			$link = $this->table["defs"][$col]["order_form"].$sep."load_chain_data=".$dat["chain_entry_id"];
+		}
+		else
+		{
+			$link = $this->table["defs"][$col]["order_form"].$sep."load_entry_data=".$dat["entry_id"];
+		}
+		return "<a href='".$link."'>".$this->table["texts"]["order"][$this->lang_id]."</a>";
+	}
+
+	function get_aliases_for_table()
+	{
+		if (!($ret = aw_cache_get("form_table::aliases",$this->table_id)))
+		{
+			classload("aliasmgr");
+			$am = new aliasmgr;
+			$am->_init_aliases();
+			$defs = $am->get_defs();
+			
+			$defs2 = array();
+			foreach($defs as $dd)
+			{
+				$defs2[$dd["class_id"]] = $dd["alias"];
+			}
+
+			$cnts = array();
+			$aliases = $this->get_aliases_for($this->table_id);
+			$ret = array();
+			foreach($aliases as $ad)
+			{
+				$ret[$ad["id"]] = "#".$defs2[$ad["class_id"]].(++$cnts[$ad["class_id"]])."#";
+			}
+			aw_cache_set("form_table::aliases", $this->table_id, $ret);
+		}
+
+		return $ret;
+	}
+
+	function get_data_for_alias($aid)
+	{
+		if (!($all_aliases = aw_cache_get("form_table::galiases", $this->table_id)))
+		{
+			$all_aliases = $this->get_aliases_for($this->table_id);
+			aw_cache_set("form_table::galiases", $this->table_id, $all_aliases);
+		}
+
+		foreach($all_aliases as $ad)
+		{
+			if ($ad["target"] == $aid)
+			{
+				return $ad; 
+			}
+		}
+		return false;
+	}
+
+	function get_alias_url($col, $elval, $elid,$dat,$section)
+	{
+		$alias_data = $this->table["defs"][$col]["alias_data"];
+		if ($alias_data["class_id"] == CL_FORM_TABLE)
+		{
+			$ru = aw_global_get("REQUEST_URI");
+			// here we must strip out the previous bits 
+			$ru = preg_replace("/use_table=[^&$]*/","",$ru);
+			$ru = preg_replace("/restrict_search_el=[^&$]*/","",$ru);
+			$ru = preg_replace("/restrict_search_val=[^&$]*/","",$ru);
+			// and the leftover &&'s
+			$ru = preg_replace("/&{2,}/","",$ru);
+			if (strpos("?",$ru) === false)
+			{
+				$sep = "?";
+			}
+			else
+			{
+				$sep = "&";
+			}
+			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid]);
+			return "<a href='".$url."'>".$elval."</a>";
+		}
+		else
+		if ($alias_data["class_id"] == CL_FORM_OUTPUT)
+		{
+			$url = $this->mk_my_orb("show_entry", array(
+				"id" => $this->get_form_for_entry($dat["entry_id"]),
+				"entry_id" => $dat["entry_id"],
+				"op_id" => $alias_data["target"],
+				"section" => $section
+			),"form");
+			return "<a href='".$url."'>".$elval."</a>";
+		}
+		return $elval;
 	}
 }
 

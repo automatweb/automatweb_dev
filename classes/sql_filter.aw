@@ -1,32 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.5 2002/02/18 13:46:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
 
 class sql_filter extends aw_template 
 {
-
 	function sql_filter()
 	{
-		//$this->tablefields=array("id","itype","pri","url","tm","text","uid","title","status","sendmail2","sendmail2_mail","site","severity","developer","timeready","resol","mails","text_result");
-		// 2 on time,1 on integer,0 on string
-		//$this->tablefieldtypes=array(1,1,1,0,2,0,0,0,1,1,0,0,1,0,2,1,0,0);
-		
 		$this->tables=array();
-		/*
-		array("BugTrack"=>array(
-			"real"=>"bugtrack",
-			"fields"=>array(
-				"id"=>array("real"=>"id","type"=>0),
-				"Filtri tüüp"=>array("real"=>"ftype","type"=>1,"select"=>array(0=>"null",1=>"yks",2=>"kax")))
-			))
-		*/
 
 		$this->joinnames=array("and"=>"ja","or"=>"või");
-		$this->db_init();
-		$this->tpl_init("automatweb");
+		$this->init("automatweb");
 	}
 
-
-	
 
 	// filtrite stuff algab siit
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -94,6 +78,9 @@ class sql_filter extends aw_template
 		
 		$this->read_template("sql_filter.tpl");
 
+		$this->vars(array(
+			"header" => $header
+		));
 		$optionvarr=array();//it stores a javascript array for every tablefield
 		$optionkarr=array();
 		$fieldarr=array();//Contains all fields for field selection box
@@ -223,7 +210,8 @@ class sql_filter extends aw_template
 			};
 
 			$addpars="";
-		} else
+		} 
+		else
 		{
 			$addpars=$this->parse("addpars");
 			$lisa=$this->parse("LISA");
@@ -254,7 +242,7 @@ class sql_filter extends aw_template
 			"name" => $this->filter["name"],
 			"dedit" => $date_edit->gen_edit_form("dateval",$selecteddate),
 			"reforb" => $arr["reforb"] ? $arr["reforb"] : $this->mk_my_orb($reforb_func,$reforb_arr,$reforb_class),
-			));
+		));
 		
 		
 		return $this->parse();
@@ -286,7 +274,8 @@ class sql_filter extends aw_template
 			if ($ign[$i])
 			{
 				$this->filter["p$i"]["ign"]=1;
-			} else
+			} 
+			else
 			{
 				$this->filter["p$i"]["ign"]="";
 			};
@@ -359,20 +348,23 @@ class sql_filter extends aw_template
 			$newp=array(
 				"field" => ")",
 				"join" => $expr);
-		} else
+		} 
+		else
 		if ($selt=="left")
 		{
 			$newp=array(
 				"field" => "(",
 				"join" => $expr);
-		} else
+		} 
+		else
 		{
 			$newp=array(
 				"field" => $fie,
 				"op" => $expr,
 				"join" => $op,
 				"val" => $value,
-				"type" => $type);
+				"type" => $type
+			);
 		};
 
 		//echo("newp=<pre>");print_r($newp);echo("</pre>");//dbg
@@ -387,7 +379,8 @@ class sql_filter extends aw_template
 			/*echo("filtri osa muutmise submit: $change_part,<pre>");//dbg
 			print_r($newp);//dbg
 			echo("</pre>");//dbg*/
-		} else
+		} 
+		else
 		{
 			//Kui tahetakse lisada esimese ette, siis tee seda
 			if ($piir==-1)
@@ -448,7 +441,9 @@ class sql_filter extends aw_template
 		};
 		//viimased, mis yle jäid, võta ära. krdi keemia
 		for ($i=0;$i<sizeof($sel);$i++)
+		{
 			unset($this->filter["p".($j+$i)]);
+		}
 		
 		//Vähenda osade arvu
 		$nf["nump"]=(int)$this->filter["nump"]-sizeof($sel);
@@ -486,11 +481,13 @@ class sql_filter extends aw_template
 			{
 				$w.=(!$w? $fake?"kus":"WHERE" : $fjoin )." left";
 				
-			} else
+			} 
+			else
 			if ($f["field"]==")")
 			{
 				$w.=" ) ";
-			} else
+			} 
+			else
 			{
 				if ($do_ign && $f["ign"] && ($f["val"]=="" || !isset($f["val"]) || !$f["user_dta"]) )
 				{
@@ -515,10 +512,12 @@ class sql_filter extends aw_template
 					// ntx $t-24h tähendab 24 tundi tagasi ja $t+30m tähenab 30 minuti pärast
 					$q2='$val=time() '.substr($f["val"],2,1).((int)substr($f["val"],3,strlen($f["val"])-4)).'*'.$mul.";";
 					eval($q2);
-				} elseif (!$noeval && $f["val"]=="@uid")
+				} 
+				elseif (!$noeval && $f["val"]=="@uid")
 				{
-					$val=UID;
-				} else
+					$val=aw_global_get("uid");
+				} 
+				else
 				{
 					$val=strtr($f["val"],array("'"=>"\'"));
 				};

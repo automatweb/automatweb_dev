@@ -6,8 +6,7 @@ class role extends aw_template
 {
 	function role()
 	{
-		$this->db_init();
-		$this->tpl_init("role");
+		$this->init("role");
 	}
 
 	function add($arr)
@@ -16,7 +15,7 @@ class role extends aw_template
 		$this->read_template("add.tpl");
 		$this->mk_path($parent,"Lisa ACL");
 
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 		foreach($acl_ids as $bit => $name)
 		{
 			$this->vars(array(
@@ -86,7 +85,7 @@ class role extends aw_template
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $o["metadata"]
 		));
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 		foreach($acl_ids as $bit => $name)
 		{
 			$this->vars(array(
@@ -132,7 +131,7 @@ class role extends aw_template
 		$ret = array();
 		foreach($meta["acls"] as $aclname)
 		{
-			$ret[$aclname] = ($meta["acls_set"][$aclname] == $aclname ? ALLOWED : DENIED);
+			$ret[$aclname] = ($meta["acls_set"][$aclname] == $aclname ? aw_ini_get("acl.allowed") : aw_ini_get("acl.denied"));
 		}
 		return $ret;
 	}

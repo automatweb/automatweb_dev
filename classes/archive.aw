@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.11 2002/02/18 13:38:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.12 2002/06/10 15:50:52 kristo Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -18,34 +18,33 @@
 // I think this class really should be independent, since archiving objects
 // can be quite complex
 classload("defs");
-class archive extends aw_template {
+class archive extends aw_template 
+{
 	var $arc_dir; // millises kataloogis faile hoitakse?
+
 	function archive($args = array())
 	{
 		extract($args);
 
-		$this->tpl_init();
-		$this->db_init();
+		$this->init("");
 
 		// since most archive functions use serialization anyway
 		// we can load and use that module from here anyway
 		classload("php");
 		$this->serializer = new php_serializer();
 
-		if (not(defined("ARC_DEPTH")))
+		if (not($this->cfg["depth"]))
 		{
-			$this->raise_error(ERR_ARC_NODEPTH,"ARC_DEPTH is not defined, cannot continue",true);
+			$this->raise_error(ERR_ARC_NODEPTH,"archive.depth is not specified, cannot continue",true);
 		};
 
-		global $site_basedir; // *cringe*
-		$this->arc_dir = sprintf("%s/%s",$site_basedir,"archive");
+		$this->arc_dir = sprintf("%s/%s",$this->cfg["site_basedir"],"archive");
 
 		// this might be slow
 		if (not(is_writable($this->arc_dir)))
 		{
 			$this->raise_error(ERR_ARC_NOWRITE,"Archive directory is not writable",true);
 		};
-
 	}
 
 	////
@@ -56,14 +55,13 @@ class archive extends aw_template {
 
 		$this->path_parts = array();
 
-		for ($i = 0; $i < ARC_DEPTH; $i++ )
+		for ($i = 0; $i < $this->cfg["depth"]; $i++ )
 		{
 			$this->path_parts[] = substr($this->id,$i * 2,2);
 		};
 
 		$path = join("/",$this->path_parts);
 		$this->fullpath = $this->arc_dir . "/" . $path . "/" . $this->id;
-
 	}
 
 	////
@@ -72,7 +70,7 @@ class archive extends aw_template {
 	// oid(int) - objekti ID, millest koopia teha
 	function add($args = array())
 	{
-		if (not(defined("ARCHIVE")))
+		if (not($this->cfg["use"]))
 		{
 			return false;
 		};
@@ -97,7 +95,7 @@ class archive extends aw_template {
 	// data(array) - väljad, mis on vaja andmebaasitabelisse salvestada
 	function commit($args = array())
 	{
-		if (not(defined("ARCHIVE")))
+		if (not($this->cfg["use"]))
 		{
 			return false;
 		};
@@ -112,6 +110,8 @@ class archive extends aw_template {
 			// if we update an existing version then we have to 
 			// replace the data in the archive table, not 
 			// insert a new record
+			//
+			// and since when is define() good for setting variables? - terryf
 			define("REPLACE",1);
 		}
 		else
@@ -142,7 +142,7 @@ class archive extends aw_template {
 		$arc = $meta["archive"];
 		$arc[$tstamp] = array(
 			"timestamp" => $tstamp,
-			"uid" => UID,
+			"uid" => aw_global_get("uid"),
 			"name" => $name,
 			"comment" => $comment,
 		);
@@ -187,16 +187,18 @@ class archive extends aw_template {
 	{
 		$this->_calc_path($args);
 		$res = array();
-                if ($dir = @opendir($this->fullpath)) {
-                        while ($file = readdir($dir)) {
+		if ($dir = @opendir($this->fullpath)) 
+		{
+			while ($file = readdir($dir)) 
+			{
 				$full = $this->fullpath . "/$file";
 				if (is_file($full))
 				{
 					$res[$file] = stat($full);
 				};
-                        }
-                        closedir($dir);
-                };
+			}
+			closedir($dir);
+		};
 		return $res;
 	}
 	

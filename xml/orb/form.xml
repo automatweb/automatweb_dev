@@ -165,6 +165,7 @@
 					<optional name="extraids"/>
 					<optional name="reforb"/>
 					<optional name="load_entry_data"/>
+					<optional name="load_chain_data"/>
 					<optional name="method"/>
 				</arguments>
 			</function>
@@ -235,9 +236,9 @@
 		<action name="show_entry" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id"/>
+					<optional name="id"/>
 					<required name="op_id"/>
-					<required name="entry_id"/>
+					<optional name="entry_id"/>
 					<optional name="search_el"/>
 					<optional name="search_val"/>
 				</arguments>
@@ -429,6 +430,18 @@
 				<arguments>
 				</arguments>
 			</function>
+		</action>
+		
+		<action name="calendar">
+			<function name="gen_calendar">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_calendar">
+			<function name="submit_calendar"/>
 		</action>
 	</class>
 </orb>

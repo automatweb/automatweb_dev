@@ -6,8 +6,7 @@ class keyword_db extends aw_template
 {
 	function keyword_db()
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/keywords");
+		$this->init("automatweb/keywords");
 	}
 
 	function add($arr)

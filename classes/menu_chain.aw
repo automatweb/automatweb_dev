@@ -1,19 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.3 2001/12/19 23:26:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
 // menu_chain.aw - menüüpärjad
-global $orb_defs;
-$orb_defs["menu_chain"] = "xml";
-class menu_chain extends aw_template {
+
+class menu_chain extends aw_template 
+{
 	function menu_chain($args = array())
 	{
 		extract($args);
-		$this->db_init();
-		$this->tpl_init("automatweb/menu_chain");
+		$this->init("automatweb/menu_chain");
 	}
 
 	////
 	// !Displays the form for adding or editing a menu chain
-	function change($args = array()){
+	function change($args = array())
+	{
 		extract($args);
 		
 		if ($id)
@@ -46,7 +46,6 @@ class menu_chain extends aw_template {
 		classload("objects");
 		$dbo = new db_objects();
 		$olist = $dbo->get_list();
-
 
 		$this->vars(array(
 			"name" => $obj["name"],
@@ -97,7 +96,6 @@ class menu_chain extends aw_template {
 						#$this->delete_object($val);
 					};
 				};
-
 			}
 			
 			$this->upd_object(array(
@@ -106,7 +104,6 @@ class menu_chain extends aw_template {
 				"comment" => $comment,
 				"metadata" => $meta,
 			));
-
 		}
 		else
 		{
@@ -146,10 +143,8 @@ class menu_chain extends aw_template {
 	{
 		extract($args);
 		$obj = $this->get_object($id);
-		classload("php");
-		$phps = new php_serializer();
 		$this->read_template("view.tpl");
-		$meta = $phps->php_unserialize($obj["metadata"]);
+		$meta = aw_unserialize($obj["metadata"]);
 		$content = "";
 		classload("menuedit");
 		$m = new menuedit();
@@ -168,7 +163,7 @@ class menu_chain extends aw_template {
 			$this->vars(array(
 				"title" => $obj["name"],
 				"line" => $content,
-				));
+			));
 		};
 		return $this->parse();
 	}
@@ -180,16 +175,16 @@ class menu_chain extends aw_template {
 		extract($args);
 		if (!is_array($this->mcaliases))
 		{
-                        $this->mcaliases = $this->get_aliases(array(
-                                                                "oid" => $oid,
-                                                                "type" => CL_MENU_CHAIN,
-                                                        ));
-                };
-                $f = $this->mcaliases[$matches[3] - 1];
-                if (!$f["target"])
-                {
-                        return "";
-                }
+			$this->mcaliases = $this->get_aliases(array(
+				"oid" => $oid,
+        "type" => CL_MENU_CHAIN,
+			));
+    };
+    $f = $this->mcaliases[$matches[3] - 1];
+    if (!$f["target"])
+    {
+			return "";
+    }
 		return $this->view(array("id" => $f["target"]));
 	}
 };

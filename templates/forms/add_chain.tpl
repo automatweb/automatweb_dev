@@ -53,16 +53,57 @@ function setLink(li,title)
 <td class="fform" colspan=20><input type="checkbox" name="after_redirect" value="1" {VAR:after_redirect}> P&auml;rast t&auml;itmist Suuna aadressile: <input type='text' name='after_redirect_url' value='{VAR:after_redirect_url}'> <a href="#" onclick="sel_el=document.b88.after_redirect_url;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
 <tr>
-	<td class="fcaption" colspan="30">P&auml;rja sisesused salvestatakse kataloogi <select name='save_folder'>{VAR:folders}</select></td>
+	<td class="fform" colspan="30">P&auml;rja sisesused salvestatakse kataloogi <select name='save_folder'>{VAR:folders}</select></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=30><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
+<td class="fform" colspan=30><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 <tr>
 <td class="fform" colspan=30><a href='{VAR:import}'>{VAR:LC_FORMS_IMPORT_ENTRIES}</a></td>
 </tr>
 <tr>
 <td class="fform" colspan=30><a href='{VAR:entries}'>{VAR:LC_FORMS_ENTRIES}</a></td>
+</tr>
+<tr>
+<td class="fform" colspan=30>
+<table width="100%" cellspacing="1" border="0" bgcolor="#CCCCCC">
+<tr>
+<td class="fform" width="30%">
+Pärja sisestustel on kalender
+</td>
+<td class="fform">
+<input type="checkbox" name="has_calendar" value="1" {VAR:has_calendar}>
+</td>
+</tr>
+<tr>
+<td class="fform" width="30%">
+Kalendri vorm<br>
+<i>(see mille sisse on kalendri alias lisatud)</i>
+</td>
+<td class="fform">
+<select name="cal_form">{VAR:cal_forms}</select>
+</td>
+</tr>
+<tr>
+<td class="fform" width="30%">
+Kalendri kontrollervorm<br>
+<i>(vakantside defineerimine)</i>
+</td>
+<td class="fform">
+<select name="cal_controller">{VAR:cal_controllers}</select>
+</td>
+</tr>
+<tr>
+<td class="fform" width="30%">
+Eventite sisestusvorm<br>
+<i>(millise vormi sisestusi kalendris arvestatakse)</i>
+</td>
+<td class="fform">
+<select name="cal_entry_form">{VAR:cal_entry_forms}</select>
+</td>
+</tr>
+</table>
+</td>
 </tr>
 </table>
 {VAR:reforb}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.29 2002/05/02 22:32:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.30 2002/06/10 15:50:54 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -270,7 +270,7 @@ class objects extends db_objects
 		};
 
 		// FIXME: loeb globaalsest skoobist parameetreid (NB! need on arrayd)
-		global $s,$class_defs;
+		global $s;
 
 		$SITE_ID = $this->cfg["site_id"];
 
@@ -320,8 +320,8 @@ class objects extends db_objects
 			{
 				$this->vars(array(
 					"name" => $row["name"], 
-					"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
-					"change" => $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $class_defs[$row["class_id"]]["file"]),
+					"type"	=> $this->cfg["classes"][$row["class_id"]]["name"],
+					"change" => $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]),
 					"created" => $this->time2date($row["created"], 2),
 					"modified" => $this->time2date($row["modified"], 2),
 					"createdby" => $row["createdby"],
@@ -353,11 +353,10 @@ class objects extends db_objects
 		}
 
 		$tar = array(0 => " " . LC_OBJECTS_ALL);
-		global $class_defs;
-		reset($class_defs);
-		while (list($v,) = each($class_defs))
+		reset($this->cfg["classes"]);
+		while (list($v,) = each($this->cfg["classes"]))
 		{
-			$tar[$v] = $GLOBALS["class_defs"][$v]["name"];
+			$tar[$v] = $this->cfg["classes"][$v]["name"];
 		}
 		asort($tar);
 		classload("users");
@@ -393,6 +392,7 @@ class objects extends db_objects
 			exit;
 		};
 
+		$updmenus = array();
 		// Renaming ...
 		if (is_array($old_text))
 		{
@@ -407,6 +407,11 @@ class objects extends db_objects
 					{
 						$this->_search_rename_form_element($oid,$name);
 					}
+					else
+					if ($class_id[$oid] == CL_PSEUDO)
+					{
+						$updmenus[] = $oid;
+					}
 				}
 			}
 		}
@@ -417,6 +422,10 @@ class objects extends db_objects
 			foreach($sel as $oid => $one)
 			{
 				$this->upd_object(array("oid" => $oid, "parent" => $moveto));
+				if ($class_id[$oid] == CL_PSEUDO)
+				{
+					$updmenus[] = $oid;
+				}
 			}
 		}
 
@@ -428,6 +437,10 @@ class objects extends db_objects
 				if ($one == 1)
 				{
 					$this->delete_object($oid);
+					if ($class_id[$oid] == CL_PSEUDO)
+					{
+						$updmenus[] = $oid;
+					}
 				}
 			}
 		}
@@ -437,7 +450,7 @@ class objects extends db_objects
 		// - yeah, that would be a lot safer, but is it really necessary?
 		classload("menuedit");
 		$m = new menuedit;
-		$m->invalidate_menu_cache();
+		$m->invalidate_menu_cache($updmenus);
 
 		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"],"stype" => $stype,"target" => $target));
 	}
@@ -510,7 +523,7 @@ class objects extends db_objects
 
 	////
 	// !Displays an object. Any object.
-	// and yes. it's not very smart. all the functionality to generate a preview of an object
+	// and yes, it's not very smart. all the functionality to generate a preview of an object
 	// should be inside the correspondending class
 	function show($args = array())
 	{
@@ -662,9 +675,34 @@ class objects extends db_objects
 				$replacement = "<a href='/index.".$this->cfg["ext"]."?section=$obj[oid]'>$obj[name]</a>";
 				break;
 
+			case CL_CALENDAR:
+				classload("planner");
+				$cal = new planner();
+				$cform = $args["form"];
+				$ctrl = 0;
+
+				// chain entry id.
+				$ceid = $cform->current_chain_entry;
+
+				if ($cform && $cform->arr["has_calendar"] && $cform->arr["cal_controller"])
+				{
+					$ctrl = $cform->id;
+				};
+
+				$curl = $this->mk_my_orb("view",array("type" => "week","id" => $obj["oid"],"ctrl" => $ctrl,"ctrle" => $ceid,"chain_id" => $cform->id),"planner",false,true);
+				if (not($caption))
+				{
+					$caption = "Näita kalendrit";
+				};
+				$replacement = "<a target='new' href='$curl'>$caption</a>";
+				/*
+				$replacement = $cal->view(array("id" => $obj["oid"],"type" => "week"));
+				*/
+				break;
+
 			default:
 				$this->has_output = false;
-				$replacement = "This object class has no output yet<br>";
+				$replacement = $obj["class_id"] . " This object class has no output yet<br>";
 		}
 		return $replacement;
 

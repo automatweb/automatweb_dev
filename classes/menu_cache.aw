@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.3 2002/03/20 19:36:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
 // menu_cache.aw - Menüüde cache
-class menu_cache extends acl_base {
+class menu_cache extends aw_template
+{
 	function menu_cache($args = array())
 	{
-		$this->db_init();
+		$this->init("");
 		$this->period = $args["period"];
 	}
 
@@ -22,13 +23,13 @@ class menu_cache extends acl_base {
 		// query only periodic objects if a period is set
 		$sufix = ($this->period) ? " AND period = '$this->period' " : "";
 		$where = ($args["where"]) ? $args["where"] : "";
-		$q = "SELECT objects.parent AS parent,count(*) as subs
+		$q = "SELECT objects.parent AS parent,COUNT(*) AS subs
 			FROM objects WHERE $where $sufix
 			GROUP BY parent";
 
 		if (not($this->db_query($q,false)))
 		{
-			return false;
+			print "false!";
 		};
 
 		while($row = $this->db_next())
@@ -50,30 +51,31 @@ class menu_cache extends acl_base {
 		if (!$ignore)
 		{
 			// loeme sisse koik objektid
-			$aa = sprintf(" AND objects.site_id = '%d' ",$GLOBALS["SITE_ID"]);
-                };
-                if ($GLOBALS["lang_menus"] == 1 && $ignore_lang == false)
-                {
-			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",$GLOBALS["lang_id"],MN_CLIENT);
-                }
+			$aa = sprintf(" AND objects.site_id = '%d' ",$this->cfg["site_id"]);
+    };
+    if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
+    {
+			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",aw_global_get("lang_id"),MN_CLIENT);
+    }
 
-                $q = "SELECT objects.oid as oid, 
-                                objects.parent as parent,
-                                objects.name as name,
-                                objects.last as last,
-                                objects.jrk as jrk,
-                                objects.alias as alias,
-                                objects.brother_of as brother_of,
-                                objects.metadata as metadata,
-                                objects.class_id as class_id,
-                                objects.comment as comment,
-                                menu.*
-                        FROM objects 
-                                LEFT JOIN menu ON menu.id = objects.oid
-                                WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
-				AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
-                                ORDER BY objects.parent, jrk,objects.created";
-                if (not($this->db_query($q,false)))
+     $q = "SELECT objects.oid as oid, 
+									objects.parent AS parent,
+									objects.name AS name,
+									objects.last AS last,
+									objects.jrk AS jrk,
+									objects.alias AS alias,
+									objects.status AS status,
+									objects.brother_of AS brother_of,
+									objects.metadata AS metadata,
+									objects.class_id AS class_id,
+									objects.comment AS comment,
+									menu.*
+					FROM objects 
+						      LEFT JOIN menu ON menu.id = objects.oid
+          WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
+									AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
+          ORDER BY objects.parent, jrk,objects.created";
+		if (not($this->db_query($q,false)))
 		{
 			return false;
 		};	
@@ -93,48 +95,54 @@ class menu_cache extends acl_base {
 		}
 
 		return true;
-
 	}
 
 	function make_caches($args = array())
 	{
 		classload("cache");
 		$cache = new cache();
-		$where = ($args["where"]) ? $args["where"] : " objects.status = 2";
-		global $awt,$lang_id,$SITE_ID;
+		$where = ($args["where"]) ? $args["where"] : " class_id = 1 AND objects.status = 2";
+		$lang_id = aw_global_get("lang_id");
+		$SITE_ID = $this->cfg["site_id"];
 		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID;
-                $ms = $cache->file_get($filename);
+		$fn = aw_ini_get("cache.page_cache")."/".$filename;
 		$this->mar = array();
 		$this->mpr = array();
 		$this->subs = array();
-		if (!$ms)
-                {
+		if (file_exists($fn))
+		{
+			include($fn);
+		}
+		else
+    {
 			$cached = array();
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
 			// in the cache until the cache is invalidated
-			if ( $this->_list_subs(array("where" => $where)) &&
-				$this->_list_menus(array("where" => $where)) )
+			if ( $this->_list_subs(array("where" => $where)) &&	$this->_list_menus(array("where" => $where)) )
 			{
-				// I don't know for sure, but I hope that doing this avoids copying
-				// the whole data around in memory
-				$cached["mar"] = $this->mar;
-				$cached["mpr"] = $this->mpr;
-				$cached["subs"] = $this->subs;
-				$c_d = aw_serialize($cached,SERIALIZE_PHP);
-                        	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
+				// make sure that we ust have to include this file and the menu cache will be read into
+				// the correct member arrays
+
+				$c_d = "<?php";
+
+				classload("php");
+				$php = new php_serializer;	
+				$php->set("for_include", 1);
+
+				$php->set("arr_name", "this->mar");
+				$c_d .= "\n".$php->php_serialize($this->mar,true);
+
+				$php->set("arr_name", "this->mpr");
+				$c_d .= "\n".$php->php_serialize($this->mpr,true);
+
+				$php->set("arr_name", "this->subs");
+				$c_d .= "\n".$php->php_serialize($this->subs,true);
+
+				$c_d .= "\n?>";
+       	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
 			};
 		}
-		else
-		{
-			// unserialize the cache
-			$cached = aw_unserialize($ms,1);
-			$this->mar = $cached["mar"];
-			$this->mpr = $cached["mpr"];
-			$this->subs = $cached["subs"];
-		};
-
-
 	}
 
 	function get_cached_menu($oid)

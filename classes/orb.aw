@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.15 2002/02/19 00:37:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.16 2002/06/10 15:50:54 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
-class orb extends aw_template {
+class orb extends aw_template 
+{
 	////
 	//! Konstruktor. Koik vajalikud argumendid antakse url-is ette
 	var $data;
@@ -23,7 +24,7 @@ class orb extends aw_template {
 
 		$fatal = true;
 
-		$this->db_init();
+		$this->init("");
 		$this->data = "";
 		$this->info = array();
 		lc_load("definition");
@@ -67,9 +68,17 @@ class orb extends aw_template {
 			};*/
 		};
 
+		global $DBG;
+		if ($DBG)
+		{
+			print "<pre>";
+			print_r($orb_defs);
+			print "</pre>";
+		}
+
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
-		//if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
+		//if ((aw_global_get("uid") == "") && (!isset($orb_defs[$class][$action]["nologin"])))
 		//{
 		// 	//need to do the transparent redirect in here
 		//	classload("config");
@@ -255,9 +264,9 @@ class orb extends aw_template {
 	// why exactly is this function here and not in the orb class?
 	function load_xml_orb_def($class)
 	{
-		global $basedir;
+		$basedir = $this->cfg["basedir"];
 		// klassi definitsioon sisse
-		$xmldef = get_file(array(
+		$xmldef = $this->get_file(array(
 			"file" => "$basedir/xml/orb/$class.xml"
 		));
 
@@ -402,7 +411,7 @@ class orb extends aw_template {
 	function check_login($args = array())
 	{
 		extract($args);
-		if ((!defined("UID")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
+		if ((!aw_global_get("uid")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
 		{
 			classload("auth");
 			$auth = new auth();

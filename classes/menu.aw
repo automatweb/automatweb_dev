@@ -1,15 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.2 2001/12/21 10:16:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.3 2002/06/10 15:50:53 kristo Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
-global $orb_defs;
-$orb_defs["menu"] = "xml";
-class menu extends aw_template {
+class menu extends aw_template 
+{
 	function menu($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/menu");
+		$this->init("automatweb/menu");
 	}
 
 	////
@@ -89,21 +87,18 @@ class menu extends aw_template {
 		extract($args);
 		if (!is_array($this->mcaliases))
 		{
-                        $this->mcaliases = $this->get_aliases(array(
-                                                                "oid" => $oid,
-                                                                "type" => CL_PSEUDO,
-                                                        ));
-                };
-                $f = $this->mcaliases[$matches[3] - 1];
-                if (!$f["target"])
-                {
-                        return "";
-                }
+	    $this->mcaliases = $this->get_aliases(array(
+        "oid" => $oid,
+        "type" => CL_PSEUDO,
+      ));
+    };
+    $f = $this->mcaliases[$matches[3] - 1];
+    if (!$f["target"])
+    {
+			return "";
+    }
 		$target = $f;
-		#$target = $this->get_object($f["last"]);
 		return sprintf("<a href='/?section=%d'>%s</a>",$target["oid"],$target["name"]);
 	}
-
-
 };
 ?>

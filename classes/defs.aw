@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.43 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.44 2002/06/10 15:50:53 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -19,10 +19,8 @@ if (!defined("DEFS"))
 		header(LC_DEFS_HTTP);
 		print LC_DEFS_NOT_FOUND;
 		print LC_DEFS_NOT_FOUND2;
-		global $REQUEST_URI;
-		global $SERVER_SIGNATURE;
-		print LC_DEFS_REG_URL . $REQUEST_URI . LC_DEFS_NOT_IN_SERVER;
-		print "<hr>\n<address>" . $SERVER_SIGNATURE . "</address>\n</body></html>";
+		print LC_DEFS_REG_URL . aw_global_get("REQUEST_URI") . LC_DEFS_NOT_IN_SERVER;
+		print "<hr>\n<address>" . aw_global_get("SERVER_SIGNATURE") . "</address>\n</body></html>";
 		exit;
 		lc_load("definition");
 	}
@@ -36,6 +34,38 @@ if (!defined("DEFS"))
 		$src = preg_replace('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',"<a href=\"mailto:$1\">$1</a>",$src);
 		// stripime viimase tyhiku maha ka j2lle. ex ta ju asja aeglasemaks tee a seda on kaind of vaja - terryf
 		return substr($src,0,strlen($src)-1);	
+	}
+
+	function strip_html($src)
+	{
+		$search = array (	"'<script[^>]*?>.*?</script>'si",  // Strip out javascript
+					"'<[\/\!]*?[^<>]*?>'si",           // Strip out html tags
+					"'&(quot|#34);'i",                 // Replace html entities
+					"'&(amp|#38);'i",
+					"'&(lt|#60);'i",
+					"'&(gt|#62);'i",
+					"'&(nbsp|#160);'i",
+					"'&(iexcl|#161);'i",
+					"'&(cent|#162);'i",
+					"'&(pound|#163);'i",
+					"'&(copy|#169);'i",
+					"'&#(\d+);'e");                    // evaluate as php
+
+		$replace = array (	"",
+					"",
+					"\"",
+					"&",
+					"<",
+					">",
+					" ",
+					chr(161),
+					chr(162),
+					chr(163),
+					chr(169),
+					"chr(\\1)");
+
+		$text = preg_replace ($search, $replace, $src);
+		return $text;
 	}
 		
 	function localparse($src = "",$vars = array())
@@ -84,7 +114,9 @@ if (!defined("DEFS"))
 		if ( ($number > 10) || ($number < 0))
 		{
 			$ret = $number;
-		} else {
+		} 
+		else 
+		{
 			$ret = $strings[$number];
 		};
 		return $ret;
@@ -95,25 +127,23 @@ if (!defined("DEFS"))
 	function get_icon_url($clid,$name)
 	{
 		classload("config");
-		global $d_icon_cache,$d_icons_loaded,$d_fileicon_cache, $d_fileicons_loaded,$d_othericon_cache, $d_othericons_loaded;
-		if (!$d_icons_loaded)
+		if (!is_array(aw_global_get("d_icon_cache")))
 		{
 			$c = new db_config;
-			$d_icon_cache = unserialize($c->get_simple_config("menu_icons"));
-			$d_icons_loaded = true;
+			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
 		}
+		$d_icon_cache = aw_global_get("d_icon_cache");
 		$i = $d_icon_cache["content"][$clid]["imgurl"];
 
 		if ($clid == CL_FILE)
 		{
-			if (!$d_fileicons_loaded)
+			if (!is_array(aw_global_get("d_fileicon_cache")))
 			{
 				$c = new db_config;
-				$d_fileicon_cache = unserialize($c->get_simple_config("file_icons"));
-				$d_fileicons_loaded = true;
+				aw_global_set("d_fileicon_cache",unserialize($c->get_simple_config("file_icons")));
 			}
+			$d_fileicon_cache = aw_global_get("d_fileicon_cache");
 			$extt = substr($name,strpos($name,"."));
-			#$extt = substr($name,strpos($name,".")+1);
 			if ($d_fileicon_cache[$extt]["url"] != "")
 			{
 				$i = $d_fileicon_cache[$extt]["url"];
@@ -122,24 +152,23 @@ if (!defined("DEFS"))
 
 		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
 		{
-			if (!$d_othericons_loaded)
+			if (!is_array(aw_global_get("d_othericon_cache")))
 			{
 				$c = new db_config;
-				$d_othericon_cache = unserialize($c->get_simple_config("other_icons"));
-				$d_othericons_loaded = true;
+				aw_global_set("d_othericon_cache",unserialize($c->get_simple_config("other_icons")));
 			}
+			$d_othericon_cache = aw_global_get("d_othericon_cache");
 			if ($d_othericon_cache[$clid]["url"] != "")
 			{
 				$i = $d_othericon_cache[$clid]["url"];
 			}
 			else
 			{
-				$i = "images/ftv2doc.gif";
+				$i = "/automatweb/images/ftv2doc.gif";
 			}
 		}
-			$retval = $i == "" ? "/images/icon_aw.gif" : $i;
-			$retval = preg_replace("/^http:\/\/(.*)\//","/",$retval);
-			return $retval;
+		$retval = $i == "" ? "/automatweb/images/icon_aw.gif" : $i;
+		return icons::check_url($retval);
 	}
 
 	////
@@ -203,7 +232,7 @@ if (!defined("DEFS"))
 			$valid = !(strpos($checkagainst,$string[$i]) === false);
 			if (!$valid)
 			{
-	//			echo "invd char = ", $string[$i],"<br>";
+				return false;
 			}
 			$i++;
 		};
@@ -234,15 +263,14 @@ if (!defined("DEFS"))
 		{
 			$addr = $parts[2];
 		};
-		global $solved;
-		if (!$solved[$addr])
+		if (!aw_cache_get("solved",$addr))
 		{
-			$solved[$addr] = gethostbyaddr($addr);
+			aw_cache_set("solved",$addr,gethostbyaddr($addr));
 		};
 		// tagastab 2 elemendiga array, esimene on lahendatud 
 		// nimi, teine aadress, mis ette anti voi stringist välja
 		// parsiti
-		return array($solved[$addr],$addr);
+		return array(aw_cache_get("solved",$addr),$addr);
 	};
 
 	////
@@ -409,7 +437,10 @@ if (!defined("DEFS"))
 		}
 		else
 		{
-			$retval[] = sprintf($format,$array);
+			if ($array)
+			{
+				$retval[] = sprintf($format,$array);
+			};
 		};
 		return $retval;
 	}
@@ -448,11 +479,10 @@ if (!defined("DEFS"))
 	// !returns the ip address of the current user. tries to bypass the users cache if it can
 	function get_ip()
 	{
-		global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR;
-		$ip = $HTTP_X_FORWARDED_FOR;
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if (!is_ip($ip))
 		{
-			$ip = $REMOTE_ADDR;
+			$ip = aw_global_get("REMOTE_ADDR");
 		}
 		return $ip;
 	}
@@ -467,7 +497,7 @@ if (!defined("DEFS"))
 
 	function is_admin()
 	{
-			return (stristr($GLOBALS["REQUEST_URI"],LC_DEFS_AUTOMATWEB)!=false);
+		return (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false);
 	}
 
 	////
@@ -475,8 +505,52 @@ if (!defined("DEFS"))
 	// around with sessions
 	function dbg($msg)
 	{
-		global $DEBUG;
-		if ($DEBUG == 1)
+		if (aw_global_get("DEBUG") == 1)
+		{
+			echo $msg;
+		}
+	}
+	
+	// prints if the user has a cookie named debug1
+	function dbg1($msg)
+	{
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug1"]))
+		{
+			echo $msg;
+		}
+	}
+
+	// prints if the user has a cookie named debug2
+	function dbg2($msg)
+	{
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug2"]))
+		{
+			echo $msg;
+		}
+	}
+
+	// prints if the user has a cookie named debug3
+	function dbg3($msg)
+	{
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug3"]))
+		{
+			echo $msg;
+		}
+	}
+
+	// prints if the user has a cookie named debug4
+	function dbg4($msg)
+	{
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug4"]))
+		{
+			echo $msg;
+		}
+	}
+
+	// prints if the user has a cookie named debug5
+	function dbg5($msg)
+	{
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug5"]))
 		{
 			echo $msg;
 		}
@@ -528,7 +602,6 @@ if (!defined("DEFS"))
 			// php serializer
 			$p = new php_serializer;
 			$retval = $p->php_unserialize($str);
-
 		}
 		else
 		{
@@ -545,18 +618,32 @@ if (!defined("DEFS"))
 			classload("dummy");
 			$aw_globals_instance = new dummy();
 			// import CGI spec variables and apache variables
-			$impvars = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT", "REQUEST_METHOD", "PATH_INFO", "PATH_TRANSLATED", "SCRIPT_NAME", "QUERY_STRING", "REMOTE_HOST", "REMOTE_ADDR", "AUTH_TYPE", "REMOTE_USER", "REMOTE_IDENT", "CONTENT_TYPE", "CONTENT_LENGTH","HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME","REQUEST_URI","PHP_SELF","uid");
-			foreach($impvars as $var)
+
+			// but we must do this in a certain order - first the global vars, then the session vars and then the server vars
+			// why? well, then you can't override server vars from the url.
+
+			// known variables - these can be modified by the user and are not to be trusted, so we get them first 
+			$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period");
+			foreach($impvars as $k)
 			{
-				aw_global_set($var,$GLOBALS[$var]);
+				aw_global_set($k,$GLOBALS[$k]);
 			}
 
+			// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
 			if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
 			{
-				foreach($GLOBALS["HTTP_SESSION_VARS"] as $key => $val)
+				foreach($GLOBALS["HTTP_SESSION_VARS"] as $k => $v)
 				{
-					aw_global_set($key,$val);
+					aw_global_set($k,$v);
 				}
+			}
+			aw_global_set("uid", $GLOBALS["HTTP_SESSION_VARS"]["uid"]);
+
+			// server vars - these can be trusted pretty well, so we do these last
+			$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
+			foreach($server as $var)
+			{
+				aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
 			}
 		}
 		return $aw_globals_instance;
@@ -597,16 +684,57 @@ if (!defined("DEFS"))
 		return $inst->caches[$cache][$key];
 	}
 
-	function aw_cache_set($cache,$key,$val)
+	function aw_cache_set($cache,$key,$val = "")
 	{
 		$inst =& _aw_cache_init();
-		$inst->caches[$cache][$key] = $val;
+		// if $key is array, we will just stick it into the cache
+		if (is_array($key))
+		{
+			$inst->caches[$cache] = $key;
+		}
+		else
+		{
+			$inst->caches[$cache][$key] = $val;
+		};
 	}
 
 	function aw_cache_flush($cache)
 	{
 		$inst =& _aw_cache_init();
 		$inst->caches[$cache] = false;
+	}
+
+	////
+	// !this returns the entire cache array - this is useful for instance if you want to iterate over the cache
+	function aw_cache_get_array($cache)
+	{
+		$inst =& _aw_cache_init();
+		return $inst->caches[$cache];
+	}
+
+	////
+	// !this is for initializing the cache
+	function aw_cache_set_array($cache,$arr)
+	{
+		$inst =& _aw_cache_init();
+		$inst->caches[$cache] = $arr;
+	}
+
+	////
+	// !saves a local variable's value to the session - there is no session_get, because 
+	// session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get()
+	function aw_session_set($name,$value)
+	{
+		$GLOBALS[$name] = $value;
+		session_register($name);
+		aw_global_set($name,$value);
+	}
+
+	////
+	// !deletes the variable $name from the session
+	function aw_session_del($name)
+	{
+		session_unregister($name);
 	}
 };
 

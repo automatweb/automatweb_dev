@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.89 2002/03/27 02:05:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.90 2002/06/10 15:50:53 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -8,24 +8,10 @@ define("ARR_ALL",2);
 define("TPLTYPE_TPL",0);
 define("TPLTYPE_FORM",1);
 
-classload("connect");
+classload("db");
 class core extends db_connector
 {
 	var $errmsg;		
-
-	function core_init()
-	{
-		// globaalsed muutujad impordime siin, niimoodi saab vältita koiki neid globaalsete
-		// muutujate sissetoomist all over the field.
-		// ja seda ka kuniks meil paremat lahendust pole
-
-		// s.t. nii peaks tehtama, aga samas ei tehta, kuna seda konstruktorit siin
-		// ei kutsuta jargnevatest välja. Kuigi peaks
-		// ntx $this->core_init();
-		$this->basedir = aw_ini_get("basedir");
-		$this->parsers = "";
-		lc_load("definition");
-	}
 
 	////
 	// !fetchib kirje suvalisest tabelist
@@ -115,6 +101,8 @@ class core extends db_connector
 	//				"key" => "notes",
 	//				"value" => "3l33t",
 	// ));
+	// mitu keyd saab korraga ka ette anda - $data arrays
+	// kui see on antud, siis mergetakse see metadata arrayga kokku
 	function set_object_metadata($args = array())
 	{
 		$this->quote($args);
@@ -143,9 +131,18 @@ class core extends db_connector
 		
 		if (is_array($data))
 		{
-			$metadata = array_merge($metadata,$data);
+			// no array_merge here, that screws up numeric indexes - instead of overwriting is renumbers and appends them
+			if (is_array($metadata))
+			{
+				$metadata = $data + $metadata;
+			}
+			else
+			{
+				$metadata = $data;
+			}
 		}
-		elseif ($key)
+		else
+		if ($key)
 		{
 			$metadata[$key] = $value;
 		}
@@ -216,35 +213,11 @@ class core extends db_connector
 	}
 
 	////
-	// järgmised 2 funktsiooni on vajalikud ntx siis, kui on tarvis ühe objekti
-	// juures korraga 2 või enamat päringut kasutada. Enne uue sisestamist tuleb
-	// siis lihtsalt vana handle ära seivida
-
-	////
-	// !Salvestab query handle sisemise pinu sisse
-	function save_handle()
-	{
-		if (!isset($this->qID))
-		{
-			$this->qID = 0;
-		}
-		$this->_push($this->qID,"qID");
-	}
-
-	////
-	// !Taastab query handle pinu seest
-	function restore_handle()
-	{
-		$this->qID = $this->_pop("qID");
-	}
-
-	////
 	// !write to syslog. 
 	function _log($type,$action,$oid = 0)
 	{
 		$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
-		// too insecure
-		//$ip = $HTTP_X_FORWARDED_FOR;
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if (!is_ip($ip))
 		{
 			$ip = $REMOTE_ADDR;
@@ -253,17 +226,17 @@ class core extends db_connector
 		$this->quote($action);
 		$this->quote($time);
 		$fields = array("tm","uid","type","action","ip","oid","created_hour","created_day","created_week","created_month","created_year");
-		$values = array($t,$uid,$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
+		$values = array($t,aw_global_get("uid"),$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
 		if (aw_ini_get("tafkap"))
 		{
 			$fields[] = "tafkap";
-			$values[] = $tafkap;
+			$values[] = aw_global_get("tafkap");
 		};
 
 		if (aw_ini_get("syslog.has_site_id") == 1)
 		{
 			$fields[] = "site_id";
-                        $values[] = aw_ini_get("site_id");
+      $values[] = aw_ini_get("site_id");
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 
@@ -306,9 +279,20 @@ class core extends db_connector
 	// Parameetrid:
 	//	uid - kelle info
 	//	field - millise välja sisu. Kui defineerimata, siis terve kirje
-	function get_user($args = array())
+	function get_user($args = false)
 	{
-		extract($args);
+		if (!is_array($args))
+		{
+			$uid = aw_global_get("uid");
+		}
+		else
+		{
+			extract($args);
+		}
+		if ($uid == "")
+		{
+			return false;
+		}
 		if (!is_array(aw_cache_get("users_cache",$uid)))
 		{
 			$q = "SELECT * FROM users WHERE uid = '$uid'";
@@ -359,58 +343,32 @@ class core extends db_connector
 
 	////
 	// !tagastab objekti info aliase kaudu
-	function _get_object_by_alias($alias) 
+	// if optional $parent argument is also se, we add that to the WHERE clause
+	// of the query (needed for parsing long urs like http://site/kalad/tursk
+	// where we have to make sure that "tursk" actually belongs to "kalad"
+	function _get_object_by_alias($alias,$parent = 0) 
 	{
+		// bail out, if $alias doesn't have the value, because otherwise
+		// we end up scanning _all_ objects which have no alias and are not deleted
+		// for no reason at all. I don't know why this is called with no value
+		// but it does sometimes
+		if (strlen($alias) == 0)
+		{
+			return false;
+		};
 		if (aw_ini_get("lang_menus") == 1)
 		{
 			$ss = " AND lang_id = ".aw_global_get("lang_id");
 		};
+		if ($parent)
+		{
+			$ps = " AND parent = $parent ";
+		};
 		$q = "SELECT * FROM objects
-			WHERE alias = '$alias' AND status != 0 $ss";
+			WHERE alias = '$alias' AND status != 0 $ps $ss";
 		$this->db_query($q);
 		$res = $this->db_fetch_row();
 		return $res;
-	}
-
-	////
-	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
-	// This function shouldn't be in the core, I think, since it's called only once,
-	// from the site_header
-	// 
-	// - yeah. good point. - terryf
-	function get_gids_by_uid($uid)
-	{
-		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
-			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'
-			ORDER BY priority";
-		$this->db_query($q);
-		$retval = array();
-		while($row = $this->db_next())
-		{
-			$gid = sprintf("%d",$row["gid"]);
-			$retval[$gid] = $gid;
-		};
-
-		// oh, yes, this is higly not logical, to do this here,
-		// but for now, this will do
-		classload("config");
-		$config = new config();
-
-
-		$this->login_menu = $config->get_login_menus($retval);
-
-		if ($this->login_menu)
-		{
-			$menu_defs_v2 = aw_ini_get("menuedit.menu_defs");
-			$_tmp = array_flip($menu_defs_v2);
-			if ($_tmp["LOGGED"])
-			{
-				// nullime senise LOGGED menüü
-				unset($menu_defs_v2[$_tmp["LOGGED"]]);
-			}
-			$menu_defs_v2[$this->login_menu] = "LOGGED";
-		};
-		return $retval;
 	}
 
 	////
@@ -494,6 +452,15 @@ class core extends db_connector
 		{
 			$this->create_obj_access($oid);
 		};
+
+		if (is_array($arr["metadata"]))
+		{
+			$this->set_object_metadata(array(
+				"oid" => $oid,
+				"data" => $arr["metadata"]
+			));
+		}
+
 		$this->flush_cache();
 		return $oid;
 	}
@@ -511,7 +478,6 @@ class core extends db_connector
 			$meta = $this->get_object_metadata(array(
 				"metadata" => $obj["metadata"]
 			));
-			$fi->add_size_to_parents($obj["parent"],-$meta["file_size"]);
 		}
 		$t = time();
 		$where = " oid = '$oid'";
@@ -696,6 +662,40 @@ class core extends db_connector
 	}
 
 	////
+	// !$arr must contain 
+	// id = alias id
+	// target = alias target
+	// and may contain 
+	// extra = data to write to alias table
+	function change_alias($arr) 
+	{
+		extract($arr);
+		$target_data = $this->get_object($target);
+
+		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
+
+		$q = "UPDATE aliases SET target = '$target' , type = '$target_data[class_id]' , data = '$extra' 
+					WHERE id = '$id'";
+
+		$this->db_query($q);
+		classload("aliasmgr");
+		$aliasmgr = new aliasmgr();
+		$_aliases = $aliasmgr->get_oo_aliases(array("oid" => $source));
+
+
+		// paneme aliases kirja
+    if (is_array($_aliases))
+		{
+			$this->set_object_metadata(array(
+				"oid" => $source,
+				"key" => "aliases",
+				"value" => $_aliases,
+			));
+    };
+		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
+	}
+
+	////
 	// !deletes alias $target from object $source
 	function delete_alias($source,$target)
 	{
@@ -747,9 +747,6 @@ class core extends db_connector
 		extract($args);
 		
 		// map2 supports both arrays and strings and returns array
-		global $awt;
-		$awt->start("get_alises");
-		$awt->count("get_aliases");
 		$tlist = join(',',map('%d',$type));
 
 		$q = "SELECT aliases.*,objects.*
@@ -766,7 +763,6 @@ class core extends db_connector
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
 			$aliases[] = $row;
 		};
-		$awt->stop("get_aliases");
 		
 		return $aliases;
 	}
@@ -814,12 +810,6 @@ class core extends db_connector
 	{
 		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
 		// edaspidi registreerime koikide parserite callback meetodid
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("register_parser");
-			$awt->count("register_parser_c");
-		};
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
 			classload("dummy");
@@ -856,11 +846,7 @@ class core extends db_connector
 		};
 		$this->parsers->reglist[] = $block;
 		
-		if (is_object($awt))
-		{
-			$awt->stop("register_parser");
-		};
-		
+	
 		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
@@ -876,12 +862,6 @@ class core extends db_connector
 	function register_sub_parser($args = array())
 	{
 		extract($args);	
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("register_sub_parser");
-			$awt->count("register_sub_parser_c");
-		};
 		classload($class);
 		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
@@ -899,10 +879,6 @@ class core extends db_connector
 		);
 
 		$this->parsers->reglist[$reg_id]["parserchain"][] = $block;
-		if (is_object($awt))
-		{
-			$awt->stop("register_sub_parser");
-		};
 	}
 
 	////
@@ -914,11 +890,6 @@ class core extends db_connector
 	function parse_aliases($args = array())
 	{
 		$this->blocks = array();
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("parse_aliases");
-		};
 		extract($args);
 		$meta = $this->get_object_metadata(array(
 			"oid" => $oid,
@@ -951,10 +922,6 @@ class core extends db_connector
 		{
 			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
 			$cnt = 0;
-			if (is_object($awt))
-			{
-				$awt->count("parser-cycle");
-			}
 			while(preg_match($parser["reg"],$text,$matches))
 			{
 				$cnt++;
@@ -988,16 +955,7 @@ class core extends db_connector
 								"meta" => $meta,
 							);
 
-							if (is_object($awt))
-							{
-								$awt->count("parse_alias_call");
-								$awt->start("actual_parse");
-							};
 							$repl = $this->parsers->$cls->$fun($params);
-							if (is_object($awt))
-							{
-								$awt->stop("actual_parse");
-							};
 							
 							if (is_array($repl))
 							{
@@ -1029,10 +987,6 @@ class core extends db_connector
 					};
 				};
 			};
-		};
-		if (is_object($awt))
-		{
-			$awt->stop("parse_aliases");
 		};
 		return $text;
 	}
@@ -1067,8 +1021,6 @@ class core extends db_connector
 	//	$rootobj = the oid of the object where to stop traversing, ie the root of the tree
 	function get_object_chain($oid,$check_objs = false, $rootobj = 0) 
 	{
-		global $awt;
-		$awt->count("get_object_chain");
 		if (!$oid) 
 		{
 			$int = (int)$oid;
@@ -1084,6 +1036,7 @@ class core extends db_connector
 		};
 		$parent = $oid;
 		$chain = array();
+		// um. this is stupid
 		while($parent > $rootobj) 
 		{
 			$row = $this->get_menu($oid);
@@ -1158,13 +1111,20 @@ class core extends db_connector
 	}
 
 	////
-	// !tagastab objekti
-	function get_object($arg,$no_cache = false) 
+	// !returns object specified in $arg
+	// if $arg is an array, it can contain $oid and $class_id variables
+	// if not, it is used as the $oid variable
+	// if $class_id is specified, the returned object is checked to be of that class,
+	// if not, error is raised
+	// if no_cache is true, the object cache is not used
+	// if $unserialize_meta == true, object's metadata will be unserialized to meta field
+	function get_object($arg,$no_cache = false,$unserialize_meta = true) 
 	{
 		if (is_array($arg))
 		{
 			$oid = $arg["oid"];
 			$class_id = $arg["class_id"];
+			$unserialize_meta = $arg["unserialize_meta"];
 		}
 		else
 		{
@@ -1174,27 +1134,38 @@ class core extends db_connector
 		if ($no_cache)
 		{
 			$_t = $this->get_record("objects","oid",$oid);
+			if ($unserialize_meta)
+			{
+				$_t["meta"] = aw_unserialize($_t["metadata"]);
+			}
 		}
 		else
 		{
-			if (!aw_cache_get("objcache",$oid))
+			if (!($_t = aw_cache_get("objcache",$oid)))
 			{
-				aw_cache_set("objcache",$oid,$this->get_record("objects","oid",$oid));
-			}
+				$_t = $this->get_record("objects","oid",$oid);
+				if ($unserialize_meta)
+				{
+					$_t["meta"] = aw_unserialize($_t["metadata"]);
+				}
 
-			$_t = aw_cache_get("objcache",$oid);
+				aw_cache_set("objcache",$oid,$_t);
+			}
 		}
+
 		if (isset($class_id) && ($_t["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
 			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
 		}
 
+		// and also unserialize the object's metadata
 		return $_t;
 	}
 
 	////
-	// !Tagastab objekti ja tema lahtiparsitud metainfo
+	// !DEPRECATED - get_object pakib ka metadata lahti nyyd
+	// Tagastab objekti ja tema lahtiparsitud metainfo
 	function get_obj_meta($oid)
 	{
 		$object = $this->get_object($oid);
@@ -1239,6 +1210,8 @@ class core extends db_connector
 
 		$astr = ($active) ? " AND status = 2 " : "";
 
+		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
+
 		if ($lang_id)
 		{
 			if ($class == CL_PSEUDO)
@@ -1269,7 +1242,7 @@ class core extends db_connector
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status = 2 $pstr $astr $ostr";
+					WHERE class_id = $class AND status = 2 $pstr $sc $astr $ostr";
 		};
 		$this->db_query($q);
 	}
@@ -1411,9 +1384,9 @@ class core extends db_connector
 
 		// try to find the user's email;
 		$head = "";
-		global $udata;
-		if (is_array($udata) && aw_global_get("uid") != "")
+		if (aw_global_get("uid") != "")
 		{
+			$udata = $this->get_user(array("uid" => $uid));
 			$head="From: $uid<".$udata["email"].">\n";
 		}
 		mail("vead@struktuur.ee", $subj, $content,$head);
@@ -1547,8 +1520,12 @@ class core extends db_connector
 	function get_edit_template($section)
 	{
 		do { 
+			// for edit templates the type is 0
+			// this probably breaks the formgen edit templates, but detecting it this way
+			// caused major breakage, I got showing templates if I tried to edit documents
 			$section = (int)$section;
-			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
+			
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE template.type = 0 AND menu.id = $section");
 			$row = $this->db_next();
 			$meta = $this->get_object_metadata(array(
 				"metadata" => $row["metadata"]
@@ -1562,11 +1539,27 @@ class core extends db_connector
 			{
 				$template = $meta["ftpl_edit"];
 			}
-			$section = $row["parent"];
+			
+			if (not($row))
+			{
+				$prnt = $this->get_object($section);
+				$section = $prnt["parent"];
+			}
+			else
+			{
+				$section = $row["parent"];
+			};
 		} while ($template == "" && $section > 1);
 		if ($template == "")
 		{
-			$this->raise_error(ERR_CORE_NOTPL,"You have not selected an document editing template for this menu!",true);
+			//$this->raise_error(ERR_CORE_NOTPL,"You have not selected an document editing template for this menu!",true);
+			// just default to that
+			global $DBG;
+			if ($DBG)
+			{
+				print "not found, defaulting to edit<br>";
+			}
+			$template = "edit.tpl";
 		}
 		return $template;
 	}
@@ -1608,7 +1601,7 @@ class core extends db_connector
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
 	// this function has became such a spaghetti, that it really should be rewritten. --duke
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array())
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array(),$separator = "&")
 	{
 		if ($cl_name == "")
 		{
@@ -1618,7 +1611,7 @@ class core extends db_connector
 		// this means it was not passed as an argument
 		if (is_array($use_orb))
 		{
-			if (!(strpos(aw_global_get("REQUEST_URI"),"orb.".aw_ini_get("ext")) === false) &&  strpos(aw_global_get("REQUEST_URI"),"reforb.".aw_ini_get("ext")) === false)
+			if (!(strpos($this->REQUEST_URI,"orb.".$this->cfg["ext"]) === false) &&  strpos($this->REQUEST_URI,"reforb.".$this->cfg["ext"]) === false)
 			{
 				$use_orb = true;
 			}
@@ -1640,7 +1633,7 @@ class core extends db_connector
 				{
 					$stra[] = $k."[$k2]=".$v2;
 				}
-				$str = join("&",$stra);
+				$str = join($separator,$stra);
 			}
 			else
 			{
@@ -1672,64 +1665,45 @@ class core extends db_connector
 		print_r($ura);
 		print "</pre>";
 		*/
-		$urs = join("&",$ura);
+		$urs = join($separator,$ura);
 
 		$sec = "";
 		if ($section)
 		{
-			$sec = "section=".$section."&";
+			$sec = "section=".$section.$separator;
 		}
 
+		$qm = "?";
+		if ($separator == "/")
+		{
+			$qm = "/";
+		}
 		// now figure out if we are in the admin interface. 
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
 		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
 		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
-		if ((stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false) || $force_admin)
+		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
-			return aw_ini_get("baseurl")."/automatweb/orb.".aw_ini_get("ext")."?".$sec."class=$cl_name&action=$fun&$urs";
+			return $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 		}
 		else
 		{
-			$uo = "/?";
+			$uo = "/".$qm;
 			if ($use_orb)
 			{
-				$uo = "/orb.".aw_ini_get("ext")."?";
+				$uo = "/orb.".$this->cfg["ext"].$qm;
 			}
 			// user side
 			if ($arr["_alias"])
 			{
-				return aw_ini_get("baseurl").$uo.$sec."alias=$arr[_alias]&action=$fun&$urs";
+				return $this->cfg["baseurl"].$uo.$sec."alias=$arr[_alias]".$separator."action=$fun".$separator."$urs";
 			}
 			else
 			{
-				return aw_ini_get("baseurl").$uo.$sec."class=$cl_name&action=$fun&$urs";
+				return $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 			};
 		}
-	}
-
-	////
-	// !Creates an url, similar to mk_my_orb but this doesnt put the orb attributes
-	// into the link
-	function mk_url($params)
-	{
-		// polegi array? näri siis pori
-		if (not(is_array($params)))
-		{
-			return false;
-		}
-
-		$parts = join("&",map2("%s=%s",$params));
-
-		if ((stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false))
-		{
-			$retval = aw_ini_get("baseurl")."/automatweb/?$parts";
-		}
-		else
-		{
-			$retval = aw_ini_get("baseurl")."/?".$parts;
-		}
-		return $retval;
 	}
 
 	////
@@ -1840,11 +1814,19 @@ class core extends db_connector
 			if ($use)
 			{
 				$name = ($row["name"]) ? $row["name"] : "(nimetu)";
-				$path="<a href='menuedit.".aw_ini_get("ext")."?parent=".$row["oid"]."&type=objects&period=".$period."'>".$name."</a> / ".$path;
+				$path="<a href='".$this->mk_my_orb("obj_list", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
 			}
 		}
 
 		$GLOBALS["site_title"] = $path.$text;
+		// find the bit after / in text
+		$sps = strrpos(strip_tags($text),"/");
+		if ($sps > 0)
+		{
+			$sps++;
+		}
+
+		aw_global_set("title_action", substr(strip_tags($text),$sps));
 		return $path;
 	}
 
@@ -1878,7 +1860,9 @@ class core extends db_connector
 	}
 
 	////
-	// !fwrite wrapper
+	// !fwrite wrapper - args:
+	// file - file name to write
+	// content - file contents to write
 	function put_file($arr)
 	{
 		if (not($arr["file"]))
@@ -1959,8 +1943,7 @@ class core extends db_connector
 		extract($arr);
 		$obj = $this->get_object($oid);
 
-		global $class_defs;
-		$v = $class_defs[$obj["class_id"]];
+		$v = $this->cfg["classes"][$obj["class_id"]];
 		if (!is_array($v))
 		{
 			return false;
@@ -1995,8 +1978,7 @@ class core extends db_connector
 			return false;
 		}
 
-		global $class_defs;
-		$v = $class_defs[$s["class_id"]];
+		$v = $this->cfg["classes"][$s["class_id"]];
 		if (!is_array($v))
 		{
 			return false;
@@ -2038,6 +2020,26 @@ class core extends db_connector
 		$this->db_init();
 		$this->tpl_init($tpldir);
 		aw_config_init_class(&$this);
+	}
+
+	////
+	// !loads localization constans and imports them to the current class, vars are assumed to be in array $arr_name
+	function lc_load($file,$arr_name)
+	{
+		$admin_lang_lc = aw_global_get("admin_lang_lc");
+		if (!$admin_lang_lc)
+		{
+			$admin_lang_lc = "et";
+		}
+
+		// for better debugging
+		$fullpath = aw_ini_get("basedir")."/lang/" . $admin_lang_lc . "/$file.".aw_ini_get("ext");
+		@include_once($fullpath);
+
+		if (is_array($GLOBALS[$arr_name]))
+		{
+			$this->vars($GLOBALS[$arr_name]);
+		}
 	}
 };
 ?>

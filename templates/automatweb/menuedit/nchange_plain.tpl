@@ -11,7 +11,7 @@ function set_color(vrv)
 function varvivalik(nr)
 {  
 	element = nr;  
-	aken=window.open("colorpicker.aw","varvivalik","HEIGHT=220,WIDTH=310");  
+	aken=window.open("orb.aw?class=css&action=colorpicker","varvivalik","HEIGHT=220,WIDTH=310");  
 	aken.focus();
 }
 
@@ -179,7 +179,7 @@ function savemenu() {
 		</tr>
 
 		<tr>
-			<td class="celltext"  align="right">&nbsp;<a href='config.{VAR:ext}?type=sel_icon&rtype=menu_icon&rid={VAR:id}'>AW {VAR:LC_MENUEDIT_ICON}:</a>&nbsp;</td>
+			<td class="celltext"  align="right">&nbsp;<a href='orb.{VAR:ext}?class=icons&action=sel_icon&rtype=menu_icon&rid={VAR:id}'>AW {VAR:LC_MENUEDIT_ICON}:</a>&nbsp;</td>
 			<td class="celltext">{VAR:icon}</td>
 		</tr>
 	
@@ -270,11 +270,6 @@ function savemenu() {
 </tr>
 </table>
 
-
-<!-- SUB: IS_BROTHER -->
-<br>
-{VAR:LC_MENUEDIT_BROTHER_WHICH} <a href='menuedit.{VAR:ext}?menu=menu&parent={VAR:real_id}'>{VAR:LC_MENUEDIT_HERE}</a>
-<!-- END SUB: IS_BROTHER -->
 
 <!-- 1 END GENERAL -->
 

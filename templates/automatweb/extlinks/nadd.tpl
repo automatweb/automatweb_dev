@@ -34,7 +34,7 @@ function toggle_javascript()
 };
 </script>
 
-<form method="POST" action="reforb.{VAR:ext}" name='b88'>
+<form enctype="multipart/form-data" method="POST" action="reforb.{VAR:ext}" name='b88'>
 
 
 <!--tabelraam-->
@@ -77,10 +77,6 @@ href="javascript:this.document.b88.submit();">Salvesta<!--{VAR:LC_EXTLINKS_ADD} 
 
 
 
-
-
-
-
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
 	<td>
@@ -106,8 +102,18 @@ href="javascript:this.document.b88.submit();">Salvesta<!--{VAR:LC_EXTLINKS_ADD} 
 <tr>
 	<td colspan=2 class="celltext">{VAR:LC_EXTLINKS_DOC_LC}? <input type="checkbox" name="doclinkcollection" value=1 {VAR:doclinkcollection}></td>
 </tr>
-
-
+<tr>
+	<td colspan=2 class="celltext">
+			{VAR:link_image}<br>
+			Uploadi pilt: <input type='file' size='30' name='link_image'>
+	</td>
+</tr>
+<tr>
+	<td colspan=2 class="celltext">
+		Pilt on aktiivne: <input type='checkbox' name='link_image_check_active' value='1' {VAR:link_image_check_active}><br>
+		{VAR:link_image_active_until}
+	</td>
+</tr>
 </table>
 
 	</td>
@@ -159,6 +165,7 @@ Kasutada lingi loomisel Javascripti? <input type="checkbox" name="use_javascript
 		</table>
 <span class="celltext">{VAR:LC_EXTLINKS_CHOOSE_CATALOGUE}</span><br>
 <select class='small_button' name='parent'>{VAR:parent}</select>
+
 {VAR:reforb}
 </form>
 <script language="JavaScript">

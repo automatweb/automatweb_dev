@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.6 2002/06/10 15:50:52 kristo Exp $
 // AW Style Engine.
 class aw_style 
 {
@@ -7,7 +7,7 @@ class aw_style
 	function aw_style()
 	{
 		$this->tags = array();
-			lc_load("definition");
+		lc_load("definition");
 	}
 
 	// loeb sisse XML formaadis stiilifaili. See kust data tuleb pole enam selle klassi

@@ -70,44 +70,63 @@ function del_rep()
 	};
 };
 </script>
-<table border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC" width="500">
-<tr>
-<td>
-	{VAR:menubar}
-</td>
-</tr>
-<tr>
-<td>
+{VAR:menubar}
 
-<table border="0" cellspacing="1" cellpadding="1" bgcolor="#FFFFFF" width="100%">
-<form method="POST" action="reforb.{VAR:ext}" name="replist">
+
+
+
+
+<table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td class="fgtitle" colspan="4">&nbsp;
-<a href='{VAR:add_link}'>Lisa</a> |
-<a href='javascript:ed_rep()'>Muuda</a> |
-<a href='javascript:del_rep()'>Kustuta</a>
-</td>
+<td bgcolor="#FFFFFF">
+
+
+
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
+
+
+
+<tr class="aste01">
+
+<td valign="middle" colspan="4"><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="{VAR:add_link}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img
+name="new" alt="Lisa" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:ed_rep()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="Muuda" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:del_rep()"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a></td>
 </tr>
-<tr>
-<td class="fgtitle" align="center"><b>ID</b></td>
-<td class="fgtitle" align="center"><b>Algab</b></td>
-<td class="fgtitle" align="center"><b>Lõpeb</b></td>
-<td class="fgtitle" align="center"><b>Vali</b></td>
+
+
+
+
+
+<tr class="aste05">
+<form method="POST" action="reforb.{VAR:ext}" name="replist">
+
+<td class="celltext" align="center" width="2%">ID</td>
+<td class="celltext" align="center">Algab</td>
+<td class="celltext" align="center">Lõpeb</td>
+<td class="celltext" align="center" width="4%">Vali</td>
 </tr>
 <!-- SUB: line -->
-<tr>
-<td class="fgtitle">{VAR:id}</td>
-<td class="fgtitle">{VAR:start}</td>
-<td class="fgtitle">{VAR:end}</td>
-<td class="fgtitle" align="center"><input type="radio" name="check" value="{VAR:id}"></td>
+<tr class="aste01">
+<td class="celltext">{VAR:id}</td>
+<td class="celltext">{VAR:start}</td>
+<td class="celltext">{VAR:end}</td>
+<td class="celltext" align="center"><input type="radio" name="check" value="{VAR:id}"></td>
 </tr>
 <!-- END SUB: line -->
 </form>
-</table>
+
+
+
+
+	</table>
 
 
 </td>
 </tr>
-
 </table>
-
+<br>

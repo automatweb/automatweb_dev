@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.31 2002/04/16 10:22:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.32 2002/06/10 15:50:54 kristo Exp $
 // table.aw - tabelite haldus
 
 
@@ -48,7 +48,7 @@ class table extends aw_template
 		extract($args);
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
-		$basedir = aw_ini_get("basedir");
+		$basedir = $this->cfg["basedir"];
 		$links = array(
 			"change_url" => $this->mk_my_orb("change", array("id" => $this->id)),
 			"edit_url" => $this->mk_my_orb("styles", array("id" => $this->id)),
@@ -1064,32 +1064,32 @@ class table extends aw_template
 				$sh = ""; $sv = "";
 				if ($spans["rowspan"] > 1)
 				{
-					$sh = "&nbsp;| <a href='javascript:split_hor($i,$a)'><img alt='LC_TABLE_DEVIDE_CELL_HOR' src='/images/split_cell_down.gif' border=0></a>";
+					$sh = "&nbsp;| <a href='javascript:split_hor($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_HOR . "' src='/automatweb/images/split_cell_down.gif' border=0></a>";
 				}
 				if ($spans["colspan"] > 1)
 				{
-					$sv = "<a href='javascript:split_ver($i,$a)'><img alt='LC_TABLE_DEVIDE_CELL_VER' src='/images/split_cell_left.gif' border=0></a>&nbsp;";
+					$sv = "<a href='javascript:split_ver($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_VER . "' src='/automatweb/images/split_cell_left.gif' border=0></a>&nbsp;";
 				}
 
 				$eu = "";
 				if ($i != 0)
 				{
-					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='LC_TABLE_DELETE_UPPER_CELL' src='/images/up_r_arr.gif'></a>&nbsp;";
+					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_UPPER_CELL . "' src='/automatweb/images/up_r_arr.gif'></a>&nbsp;";
 				}
 				$el = "";
 				if ($a != 0)
 				{
-					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='LC_TABLE_DELETE_LEFT_CELL' src='/images/left_r_arr.gif'></a>";
+					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LEFT_CELL . "' src='/automatweb/images/left_r_arr.gif'></a>";
 				}
 				$er = "";
 				if (($a+$spans["colspan"]) != $this->arr["cols"])
 				{
-					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='LC_TABLE_DELETE_RIGHT_CELL' src='/images/right_r_arr.gif'></a>";
+					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_RIGHT_CELL . "' src='/automatweb/images/right_r_arr.gif'></a>";
 				}
 				$ed = "";
 				if (($i+$spans["rowspan"]) != $this->arr["rows"])
 				{
-					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='LC_TABLE_DELETE_LOWER_CELL' src='/images/down_r_arr.gif'></a>";
+					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LOWER_CELL . "' src='/automatweb/images/down_r_arr.gif'></a>";
 				}
 
 				$map = $this->arr["map"][$i][$a];
@@ -2259,7 +2259,7 @@ class table extends aw_template
 		$txt = create_links($txt);
 		if ($txt == "")
 		{
-			$txt = "<img src='".aw_ini_get("baseurl")."/images/transa.gif'>";
+			$txt = "<img src='".$this->cfg["baseurl"]."/img/trans.gif'>";
 		}
 		return $txt;
 	}
@@ -2336,7 +2336,7 @@ class table extends aw_template
 		);
 
 		$ret = $sys->check_admin_templates("table_gen", array("table_modify.tpl","admin.tpl","styles.tpl","pickstyle.tpl","import.tpl","table_add.tpl"));
-		$ret.= $sys->check_site_files(array("/images/split_cell_down.gif","/images/split_cell_left.gif","/images/up_r_arr.gif","/images/left_r_arr.gif","/images/right_r_arr.gif","/images/down_r_arr.gif","/images/transa.gif"));
+		$ret.= $sys->check_site_files(array("/images/split_cell_down.gif","/images/split_cell_left.gif","/images/up_r_arr.gif","/images/left_r_arr.gif","/images/right_r_arr.gif","/images/down_r_arr.gif","/img/trans.gif"));
 		$ret.= $sys->check_db_tables(array($op_table),$fix);
 
 		return $ret;

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_alias.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
 
 classload("form");
 
@@ -6,8 +7,7 @@ class form_alias extends form_base
 {
 	function form_alias()
 	{
-		$this->db_init();
-		$this->tpl_init("forms");
+		$this->form_base();
 	}
 
 	function new_entry_alias($arr)
@@ -34,9 +34,9 @@ class form_alias extends form_base
 			$f = new form;
 			$form = $f->gen_preview(array(
 				"id" => $sf,
-				"reforb" => $this->mk_reforb("new_entry_alias",array("no_reforb" => true,"parent" => $parent, "return_url" => $return_url,"sf" => $sf,"entry_id" => $entry_id,"form_submit" => true,"alias_to" => $alias_to),"form_alias"),
+				"reforb" => $this->mk_reforb("new_entry_alias",array("no_reforb" => true,"parent" => $parent, "return_url" => $return_url,"sf" => $sf,"entry_id" => $entry_id,"form_submit" => true,"alias_to" => $alias_to,"id" => $id),"form_alias"),
 				"entry_id" => $entry_id,
-				"form_action" => "orb.".$GLOBALS["ext"],
+				"form_action" => "orb.".$this->cfg["ext"],
 				"method" => "GET"
 			));
 
@@ -51,11 +51,11 @@ class form_alias extends form_base
 		}
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("new_entry_alias", array("no_reforb" => true, "parent" => $parent, "return_url" => $return_url,"alias_to" => $alias_to)),
+			"reforb" => $this->mk_reforb("new_entry_alias", array("no_reforb" => true, "parent" => $parent, "return_url" => $return_url,"alias_to" => $alias_to,"id" => $id)),
 			"sfs" => $this->picker($sf,$this->get_flist(array("type" => FTYPE_SEARCH))),
 			"form" => $form,
 			"entry" => $entry,
-			"a_reforb" => $this->mk_reforb("submit_entry_alias", array("parent" => $parent, "return_url" => $return_url,"sf" => $sf, "entry_id" => $entry_id,"alias_to" => $alias_to))
+			"a_reforb" => $this->mk_reforb("submit_entry_alias", array("parent" => $parent, "return_url" => $return_url,"sf" => $sf, "entry_id" => $entry_id,"alias_to" => $alias_to,"id" => $id))
 		));
 		if ($entry != "")
 		{
@@ -72,7 +72,20 @@ class form_alias extends form_base
 	{
 		extract($arr);
 
-		$this->add_alias($alias_to,$entry_id,serialize(array("type" => "show", "output" => 1, "form_id" => $sf)));
+		if ($alias_to)
+		{
+			$this->add_alias($alias_to,$entry_id,serialize(array("type" => "show", "output" => 1, "form_id" => $sf)));	
+		}
+		else
+		if ($id)
+		{
+			// change alias
+			$this->change_alias(array(
+				"id" => $id,
+				"target" => $entry_id,
+				"extra" => serialize(array("type" => "show", "output" => 1, "form_id" => $sf))
+			));
+		}
 
 		return $return_url;
 	}
@@ -80,8 +93,19 @@ class form_alias extends form_base
 	function change_entry_alias($arr)
 	{
 		extract($arr);
-		$this->mk_path(0, "<a href='".$return_url."'>Tagasi</a> / Muuda sisestuse aliast");
-		return $this->parse();
+
+		$this->db_query("SELECT * FROM aliases WHERE target = '$id'");
+		$ret = $this->db_next();
+		$dat = aw_unserialize($ret["data"]);
+
+		return $this->new_entry_alias(array(
+			"sf" => $dat["form_id"],
+			"return_url" => $return_url,
+			"entry_id" => $id,
+			"id" => $ret["id"]
+		));
+//		$this->mk_path(0, "<a href='".$return_url."'>Tagasi</a> / Muuda sisestuse aliast");
+//		return $this->parse();
 	}
 
 	///

@@ -96,7 +96,7 @@
 			</tr>
 			<tr>
 				<td align=right class="celltext">Jrk:</td>
-				<td><input type='text' NAME='ord_{VAR:row}_{VAR:col}' class="formtext" size="3"></td>
+				<td><input type='text' NAME='ord_{VAR:row}_{VAR:col}' class="formtext" size="3" VALUE='{VAR:ord}'></td>
 			</tr>
 		</table>
 	</td>

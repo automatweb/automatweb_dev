@@ -1,4 +1,5 @@
-<form method="POST">
+
+<form method="POST" action="reforb.{VAR:ext}">
 <table border="0" cellspacing="0" cellpadding="1">
 <tr>
 <td bgcolor=#000000>

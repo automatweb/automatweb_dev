@@ -1,15 +1,13 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.15 2002/02/15 11:52:00 duke Exp $
-global $class_defs;
-$class_defs["cal_event"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.16 2002/06/10 15:50:53 kristo Exp $
 
-class cal_event extends aw_template {
+class cal_event extends aw_template 
+{
 	function cal_event($args = array())
 	{	
 		extract($args);
-		$this->db_init();
-		$this->tpl_init("cal_event");
+		$this->init("cal_event");
 	}
 	
 	////
@@ -21,12 +19,11 @@ class cal_event extends aw_template {
 	function gen_menu($args = array())
 	{
 		extract($args);
-		global $basedir;
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
 		$xm->vars($vars);
 		$xm->load_from_files(array(
-					"xml" => $basedir . "/xml/planner/event_menu.xml",
+					"xml" => $this->cfg["basedir"] . "/xml/planner/event_menu.xml",
 					"tpl" => $this->template_dir . "/menus.tpl",
 				));
 		return $xm->create(array(
@@ -45,17 +42,16 @@ class cal_event extends aw_template {
 		list($shour,$smin) = split("-",date("G-i",$args["start"]));
 		if ($args["end"])
 		{
-			$dsec = $args["end"] - $args["start"];
-			$dhour = (int)($dsec / (60 * 60));
-			$dsec = $dsec - ($dhour * 60 * 60);
-			$dmin = (int)($dsec / 60);
+			$ehour = date("H",$args["end"]);
+			$emin = date("i",$args["end"]);
 		}
 		else
 		{
 			$dsec = $args["start"];
-			$dhour = 1;
-			$dmin = 0;
+			$ehour = date("H",$args["start"]) + 1;
+			$emin = 0;
 		};
+
 		$colors = array(
 			"#000000" => "must",
 			"#990000" => "punane",
@@ -77,13 +73,13 @@ class cal_event extends aw_template {
 		};
 
 		// nimekiri tundidest
-                $h_list = range(0,23);
-                // nimekiri minutitest
-                $m_list = array("00" => "00", "05" => "05", "10" => "10", "15" => "15", 
+		$h_list = range(0,23);
+		// nimekiri minutitest
+		$m_list = array("00" => "00", "05" => "05", "10" => "10", "15" => "15", 
 			"20" => "20", "25" => "25", "30" => "30", "35" => "35", "40" => "40",
 			"45" => "45", "50" => "50", "55" => "55",
 		);
-		$smin = (sprintf("%d",$smin / 5) * 5) + 5;
+		$smin = (sprintf("%d",$smin / 5) * 5);
 		if ($args["oid"])
 		{
 			$obj = $this->get_object($args["oid"]);
@@ -95,8 +91,8 @@ class cal_event extends aw_template {
 			"smin" => $this->picker($smin,$m_list),
 			"calendars" => $this->picker($args["folder"],$calendars),
 			"showtype" => $this->picker($args["meta"]["showtype"],$types),
-			"dhour" => $this->picker($dhour,$h_list),
-			"dmin" => $this->picker($dmin,$m_list),
+			"ehour" => $this->picker($ehour,$h_list),
+			"emin" => $this->picker($emin,$m_list),
 			"object" => $obj["name"],
 			"obj_icon" => get_icon_url($obj["class_id"],""),
 			"color" => $this->picker($args["color"],$colors),
@@ -113,7 +109,13 @@ class cal_event extends aw_template {
 		$par_obj = $this->get_object($parent);
 		$this->read_template("edit.tpl");
 		$this->mk_path($parent,"Lisa kalendrisündmus");
-		if ($date)
+		if ($time)
+		{
+			list($hr,$mn) = explode(":",$time);
+			list($d,$m,$y) = explode("-",$date);
+			$start = mktime($hr,$mn,00,$m,$d,$y);
+		}
+		elseif ($date)
 		{
 			list($d,$m,$y) = explode("-",$date);
 			list($sh,$sm,$ss) = explode("-",date("H-i-s"));
@@ -140,7 +142,9 @@ class cal_event extends aw_template {
 		// sellest teeme timestampi
 		$st = mktime($shour,$smin,0,$start["month"],$start["day"],$start["year"]);
 		// lopu aeg
-		$et = mktime($shour + $dhour,$smin + $dmin,59,$start["month"],$start["day"],$start["year"]);
+		$et = mktime($ehour,$emin,0,$start["month"],$start["day"],$start["year"]);
+
+		//$et = mktime($shour + $dhour,$smin + $dmin,59,$start["month"],$start["day"],$start["year"]);
 
 		if ($parent)
 		{
@@ -228,8 +232,8 @@ class cal_event extends aw_template {
 		$meta = $object["meta"];
 
 		$menubar = $this->gen_menu(array(
-				"activelist" => array("event"),
-				"vars" => array("id" => $id),
+			"activelist" => array("event"),
+			"vars" => array("id" => $id),
 		));
 
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE objects.oid = '$id'";
@@ -286,12 +290,11 @@ class cal_event extends aw_template {
 		$par_obj = $this->get_object($obj["parent"]);
 		
 		$menubar = $this->gen_menu(array(
-				"activelist" => array("repeaters"),
-				"vars" => array("id" => $id),
+			"activelist" => array("repeaters"),
+			"vars" => array("id" => $id),
 		));
 
 		$this->mk_path($par_obj["parent"],"Muuda eventit");
-
 
 		// what's that?
 		$caldata = $obj_meta["calconfig"];
@@ -312,8 +315,8 @@ class cal_event extends aw_template {
 			if (is_number($cycle))
 			{
 				$meta = $this->get_object_metadata(array(
-							"oid" => $id,
-							"key" => "repeaters" . $cycle,
+					"oid" => $id,
+					"key" => "repeaters" . $cycle,
 				));
 			}
 			// so it must be a new one
@@ -321,8 +324,8 @@ class cal_event extends aw_template {
 			{
 				// we have to figure out the last cycle number in use
 				$cycle = $this->get_object_metadata(array(
-							"oid" => $id,
-							"key" => "cycle_counter",
+					"oid" => $id,
+					"key" => "cycle_counter",
 				));
 				$new = 1;
 				// us the next available
@@ -445,7 +448,6 @@ class cal_event extends aw_template {
 			"menubar" => $menubar,
 		));
 			
-		
 		return $this->parse();
 	}
 
@@ -455,7 +457,6 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 		
-
 		// save the current settings
 		$key = "repeaters" . $cycle;
 		$this->set_object_metadata(array(
@@ -519,6 +520,10 @@ class cal_event extends aw_template {
 		$this->quote($reps);
 		$q = "UPDATE planner SET rep_until = '$rep_end', rep_from = '$rep_from', repeaters = '$reps' WHERE id = '$id'";
 		$this->db_query($q);
+
+		classload("scheduler");
+		$sched = new scheduler;
+		$sched->update_repeaters(array("id" => $id));
 
 		// FIXME: this sucks
 		if ($parent_class == CL_CALENDAR)
@@ -703,9 +708,6 @@ class cal_event extends aw_template {
 		
 			$this->daynum++;
 			$this->gdaynum++;
-				
-
-
 		}
 	}
 
@@ -723,7 +725,6 @@ class cal_event extends aw_template {
 		
 		$this->start_month = $sx_m;
 		$this->start_year = $start_year;
-
 
 		// that's a semaphore, which is used to decide whether we should drop out
 		// from the calculations
@@ -779,7 +780,6 @@ class cal_event extends aw_template {
 		// cycle over all the years in the repeater cycle
 		for ($y = $start_year; $y <= $end_year; $y = $y + $yearskip)
 		{
-		
 			$months = array();
 			// every X months
 			if ($month == 2)
@@ -836,17 +836,13 @@ class cal_event extends aw_template {
 				};
 				$this->from_scratch = false;
 				//print "<br>";
-
-
 			}
-
 		}
 		return $this->rep_end;
 	}		
 	
 	////
 	// !Allows to search for objects to include in the document
-	// intended to replace pickobject.aw
 	function search($args = array())
 	{
 		extract($args);
@@ -858,7 +854,7 @@ class cal_event extends aw_template {
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);
 		$parent_class = $par_obj["class_id"];
-		global $s_name, $s_comment,$s_type,$SITE_ID;
+		global $s_name, $s_comment,$s_type;
 		if ($parent_class == CL_CALENDAR)
 		{
 			$back_link = $this->mk_my_orb("change_event",array("id" => $id),"planner");
@@ -868,8 +864,8 @@ class cal_event extends aw_template {
 			$back_link = $this->mk_my_orb("change",array("id" => $id));
 		};
 		$this->mk_path(0,"<a href='$back_link'>Tagasi</a> | <b>Otsi objekti</b>");
-                if ($s_name != "" || $s_comment != "" || $s_type > 0)
-                {
+    if ($s_name != "" || $s_comment != "" || $s_type > 0)
+    {
 			$se = array();
 			if ($s_name != "")
 			{
@@ -889,14 +885,14 @@ class cal_event extends aw_template {
 			}
 
 			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
-as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se);
+as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND ".join("AND",$se);
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
 					"name" => $row["name"],
 					"id" => $row["oid"],
-					"type"  => $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"type"  => $this->cfg["classes"][$row["class_id"]]["name"],
 					"created" => $this->time2date($row["created"],2),
 					"modified" => $this->time2date($row["modified"], 2),
 					"createdby" => $row["createdby"],
@@ -919,7 +915,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		foreach($this->defs as $key => $val)
 		{
 			$clid = $val["class_id"];
-			$tar[$clid] = $GLOBALS["class_defs"][$clid]["name"];
+			$tar[$clid] = $this->cfg["classes"][$clid]["name"];
 		}
 		$this->vars(array("id" => $id,
 				"class" => ($parent_class == CL_CALENDAR) ? "planner" : "cal_event",

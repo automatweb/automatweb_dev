@@ -148,4 +148,9 @@ class date_edit {
 		}; // end while
 		return $retval;
 	} // end gen_edit_form
+
+	function get_timestamp($var)
+	{
+		return mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
+	}
 }; // end class

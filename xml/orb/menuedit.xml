@@ -5,6 +5,9 @@
 			<function name="gen_list_objs">
 				<arguments>
 					<required name="parent"/>
+					<optional name="sortby"/>
+					<optional name="order"/>
+					<optional name="period"/>
 				</arguments>
 			</function>
 		</action>
@@ -72,6 +75,18 @@
 					<required name="id"/>
 				</arguments>
 			</function>
+		</action>
+
+		<action name="get_branch" nologin="1">
+			<function name="get_branch">
+				<arguments>
+					<optional name="parent" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="get_periods" nologin="1">
+			<function name="get_periods"/>
 		</action>
 		
 		<action name="menuedit_redirect">
@@ -161,6 +176,29 @@
 			</function>
 		</action>
 
+		<action name="right_frame">
+			<function name="right_frame">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="period"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="blank">
+			<function name="blank">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="folders">
+			<function name="show_folders">
+				<arguments>
+					<optional name="period"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

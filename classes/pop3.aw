@@ -1,17 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.5 2002/02/18 13:45:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
 class pop3 extends aw_template
 {
 	function pop3()
 	{
-		$this->db_init();
+		$this->init("");
 		lc_load("definition");
 	}
 
 	function get_messages($server,$user,$pass,$delete,$uidls)
 	{
 		if (!$this->connect($server))
+		{
 			return false;
+		}
 
 		$this->read_response();
 		$this->send_command("USER $user");
@@ -111,9 +113,13 @@ class pop3 extends aw_template
 		if (strlen($line) > 0)
 		{
 			if ($line[0] == "+")
+			{
 				return true;
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		return false;
@@ -132,13 +138,19 @@ class pop3 extends aw_template
 		do {
 			$line = $this->read_response();
 			if ($line == ".\x0d\x0a")
+			{
 				$continue = false;
+			}
 			else
 			{
 				if ($line[0] == ".")
+				{
 					$ret.=substr($line,1);
+				}
 				else
+				{
 					$ret.=$line;
+				}
 			}
 		} while ($continue);
 //	echo "message $num follows:<br>\n<pre>$ret</pre>\nBEEP!\n<br>";

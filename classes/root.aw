@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.11 2002/05/08 20:37:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.12 2002/06/10 15:50:54 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -32,7 +32,26 @@ class root
 	// !Pops a variable from the stack
 	function _pop($stack = "root")
 	{
-		return array_pop($this->stacks[$stack]);
+		if (is_array($this->stacks[$stack]))
+		{
+			return array_pop($this->stacks[$stack]);
+		}
+	}
+
+	// right, I made a stupid mistake by assuming
+	// that this function was no longer used, so I 
+	// deleted it, so I found out, that it was still
+	// needed. right, my bad, fuck me, BUT
+	// fuck, why wasn't this in the cvs anyway?
+	// I could have just restored it from there
+	// now I have not even the faintest idea, what this
+	// function is supposed to do? is this right?
+	// or is something broken somewhere?
+	function _clear_stack($stack = "root")
+	{
+		$tmp = $this->stacks[$stack];
+		$this->stacks[$stack] = array();
+		return $tmp;
 	}
 
 

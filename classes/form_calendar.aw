@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.1 2002/05/10 02:56:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.2 2002/06/10 15:50:53 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -36,12 +36,10 @@ class form_calendar extends form_base
 			exit;
 		};
 
-
-		
-
-		// need to figure out what elements of controller form control the behaviour of
+		// need to figure out what elements of the controller form control the behaviour of
 		// the calendar
 		$els = $this->get_form_elements(array("id" => $cal_controller));
+		
 
 		foreach($els as $key => $el)
 		{
@@ -78,9 +76,11 @@ class form_calendar extends form_base
 		
 		// need all the entry id-s for that chain entry
 		$eids = $this->get_form_entries_for_chain_entry($eid,$cal_controller);
-
+		
 		// figure out all the windows defined by the controller form entries
 		$blocks = array();
+
+
 		foreach($eids as $entry_id)
 		{
 			$new_blocks = $this->_ctrl_process_entry(array(
@@ -91,6 +91,7 @@ class form_calendar extends form_base
 
 			$blocks = $blocks + $new_blocks;
 		};
+		
 
 		$this->vector = array();
 		
@@ -104,23 +105,53 @@ class form_calendar extends form_base
 		// [14:00] -> -1
 
 		// --------
-		
+
 		if ($event_entry_form)
 		{
 			$events = $this->_get_entries_in_range(array(
 								"id" => $event_entry_form,
 								"start" => $start,
 								"end" => $end,
+								"cal_id" => $eid,
+								"ignore" => $ignore,
 			));
 		}
 		else
 		{
 			$events = array();
 		};
+		
 
+		/*
+
+		classload("form_table");
+		$ft = new form_table();
+
+		
+		// now get all entries of the form for the chain entry
+                $entdat = $ft->get_entries(array(
+                        "id" => $event_entry_form,
+                        "all_data" => true,
+                ));
+
+		$table_id = $row["table_id"];
+		*/
+
+		// FIXME: user should choose this
+
+		/*
+		$ft->start_table($table_id,$attribs);
+		foreach($entdat as $row)
+                {
+                        $ft->row_data($row,$form_id,$section,0,$chain,$chain_entry);
+                }
+
+		print $ft->finish_table();
+		*/
 
 		// now we have all the ranges (if any) and events (if any)
 		// and are going to build the events for calendar
+
 
 		ksort($this->vector);
 		// I have three kinds of data
@@ -140,25 +171,61 @@ class form_calendar extends form_base
 		// many reservations each one has
 		$this->blocks = $blocks;
 		reset($this->blocks);
+		
+		if ( is_array($this->blocks) && (sizeof($this->blocks) > 0) )
+		{
+			array_walk($this->vector,array(&$this,"_process_frame"));
+		}
+		
+		
+		// If I want to find vacancies, then I have to check whether each block has
+		// the required amount of blocks available:
+		
 
-		array_walk($this->vector,array(&$this,"_process_frame"));
+		if ($check == "vacancies")
+		{
+			$this->has_vacancies = true;
+		}
+			
+		// do not show usual entries		
+		//$events = array();
+
+		// no blocks, just bail out
+		if (sizeof($this->blocks) == 0)
+		{
+			$this->has_vacancies = false;
+		}
 
 		// done. now we can build the special entries for the calenar
-		foreach($this->blocks as $block)
+		
+		foreach($this->blocks as $bid => $block)
 		{
 			$dkey = date("dmY",$block["start"]);
-			$vac = $block["max"] - $block["cnt"];
-			$title = "has <b>$vac</b> vacations";
+			$cnt = (int)$this->event_counts[$dkey];
+			//$vac = $block["max"] - $block["cnt"];
+			$vac = $block["max"] - $cnt;
+
+			$title = "<small>free <b>$vac of $block[max]</b></small>";
+
+			if ($check == "vacancies")
+			{
+				if ($vac < $count)
+				{
+					$this->has_vacancies = false;
+				};
+			};
+
+
 			if ($vac == $block["max"])
 			{
 				$color = "#AAFFAA";
 			}
 			elseif ($vac == 0)
 			{
-				$title = "fully booked ($block[max])!";
+				//$title = "fully booked ($block[max])!";
 				$color = "#FF6633";
 			}
-			// shouldn't happen
+			// shouldn't happen, maybe should even be configurable?
 			elseif ($vac < 0)
 			{
 				$title = sprintf("<b>OVERBOOKED BY %d!</b>",abs($vac));
@@ -168,14 +235,21 @@ class form_calendar extends form_base
 			{
 				$color = "#FFFFAA";
 			};
+			
+			$this->raw_headers[$dkey] = $title;
 		
 			$dummy = array(
 				"title" => $title,
 				"start" => $block["start"],
 				"end" => $block["end"],
 				"color" => $color,
+				"target" => "_new",
 			);
-			$events[$dkey][] = $dummy;
+
+			if ($vac != 0)
+			{
+				$events[$dkey][] = $dummy;
+			}
 		};
 
 		// and now add the usual entries too
@@ -183,13 +257,16 @@ class form_calendar extends form_base
 
 		// and then there is that problem somewhere behind the horizon ...
 		// how do we check whether the entered event is a valid one?
-		/*
-		print "<pre>";	
-		print_r($events);
-		print "</pre>";
-		*/
 
-		return $events;
+
+		if ($check == "vacancies")
+		{
+			return $this->has_vacancies;
+		}
+		else
+		{
+			return $events;
+		};
 
 		
 
@@ -211,12 +288,12 @@ class form_calendar extends form_base
 			list($this->bid,$this->current_block) = each($this->blocks);
 			$this->state = 0;
 		};
-			
 
 		// advance the other pointer, repeat and rinse until we find the first block,
 		// which actually matches the first key of the vector (try to sync the array pointers)
-		while ( ($key > $this->current_block["end"]) && ($this->bid < sizeof($this->blocks)) )
+		while ( ($key > $this->current_block["start"]) && ($this->bid) && ($this->bid < sizeof($this->blocks)) )
 		{
+			
 			$this->blocks[$this->bid]["cnt"] = $this->state;
 			list($this->bid,$this->current_block) = each($this->blocks);
 		};
@@ -230,12 +307,15 @@ class form_calendar extends form_base
 		}
 		else
 		{
-			$this->blocks[$this->bid]["cnt"] = $this->state;
+			// still, I have to set the state up to the end of the blocks
+			if (isset($this->bid))
+			{
+				$this->blocks[$this->bid]["cnt"] = $this->state;
+			};
 		};
 			
 		// advance the other pointer too			
 		list($this->bid,$this->current_block) = each($this->blocks);
-
 	}
 
 	////
@@ -259,25 +339,48 @@ class form_calendar extends form_base
 			{
 				$el_end = $val["id"];
 			}
+			
+			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
+			{
+				$count_el = $val["id"];
+			}
 
 		};
 
+		$this->ev_entry_start_el = $el_start;
+		$this->ev_entry_end_el = $el_end;
+
 		$ft_name = sprintf("form_%s_entries",$id);
+
+		// this means that we can ignore one entry when doing our calculations
+		$ignore = (int)$ignore;
 
 		// this query could be faster if the date elements in the database
 		// would be integers
+
+		// I should ignore events which
+		// 1) end before my time slot starts ($ev[end] < $start)
+		// 2) start after my time slot ends ($ev[start] > $end)
+		// 3) are $ignored
+		$chains = $this->get_chains_for_form($id);
+		list($cid,) = each($chains);
+
 		$q = sprintf("SELECT *,objects.name AS name FROM $ft_name
 				LEFT JOIN objects ON ($ft_name.id = objects.oid)
-				WHERE (el_%s >= %d) AND (el_%s <= %d)",
-				$el_start,$start,$el_start,$end);
+				LEFT JOIN form_entries ON ($ft_name.id = form_entries.id)
+				WHERE form_entries.cal_id = $cal_id AND objects.status = 2 AND objects.oid != $ignore AND (el_%s >= %d) AND (el_%s <= %d)",
+				$el_end,$start,$el_start,$end);
 
 		$this->db_query($q);
 		$events = array();
+		$this->raw_events = array();
+		$this->raw_headers = array();
 
 		while($row = $this->db_next())
 		{
 			$e_start = $row["el_" . $el_start];
 			$e_end = $row["el_" . $el_end];
+			$e_count = (int)$row["el_" . $count_el];
 
 			$dkey = date("dmY",$e_start);
 
@@ -285,9 +388,17 @@ class form_calendar extends form_base
 				"start" => $e_start,
 				"end" => $e_end,
 				"title" => $row["name"],
+				"link" => $this->mk_my_orb("show",array("id" => $cid,"entry_id" => $row["oid"]),"form_chain"),
 			);
-			
+
 			$events[$dkey][] = $event;	
+
+			for ($xi = $e_start; $xi < $e_end; $xi = $xi + (60*60*24))
+			{
+				$dkey = date("dmY",$xi);
+				$this->raw_events[$dkey][] = $row;
+				$this->event_counts[$dkey] += $e_count;
+			}
 		
 			// update the timeline vector as well	
 			// --------------
@@ -303,9 +414,10 @@ class form_calendar extends form_base
 			};
 
 			// and now increment/decrement the value
-			$this->vector[$e_start]++;
-			$this->vector[$e_end]--;
+			$this->vector[$e_start] += $e_count;
+			$this->vector[$e_end] -= $e_count;
 		}
+
 		return $events;
 	}
 
@@ -314,11 +426,7 @@ class form_calendar extends form_base
 	function _ctrl_process_entry($args = array())
 	{
 		extract($args);
-		/*
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
-		*/
+
 		$this->load_entry($entry_id);
 
 		// maybe this function should return the building blocks instead?
@@ -332,18 +440,21 @@ class form_calendar extends form_base
 		// this one can be zero as well
 		$ct_pregap = $ct_tslice2["count"];
 
+		$shift = ($ct_tslice["type"] == "day") ? 3600 * 24 : 3600;
+
 		$blocks = array();
 
 		// XXX 3600
+		//$timeshift = $ct_pregap * 3600;
 		$timeshift = $ct_pregap * 3600;
-		for ($i = ($start + $timeshift); $i <= $end; $i=$i+(3600 * $ct_cnt)+$timeshift)
+		for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $ct_cnt)+$timeshift)
 		{
 			// if it is in range, then ..
 			if ( ($i >= $ct_start) && ($i <= $ct_end) )
 			{
 				$blocks[] = array(
 					"start" => $i,
-					"end" => $i+(3600 * $ct_cnt) - 1,
+					"end" => $i+($shift * $ct_cnt) - 1,
 					"max" => $ct_max,
 				);
 			};

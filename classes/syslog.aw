@@ -1,20 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.12 2002/03/27 02:21:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.13 2002/06/10 15:50:54 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
-lc_load("syslog");
 class db_syslog extends aw_template
 {
 	function db_syslog()
 	{
 		$this->init("syslog");
 		lc_load("definition");
-		global $lc_syslog;
-		$this->syslog_site_id = (aw_global_get("syslog_site_id")) ? aw_global_get("syslog_site_id") : aw_ini_get("site_id");
-		if (is_array($lc_syslog))
-		{
-			$this->vars($lc_syslog);
-		}
+		$this->lc_load("syslog","lc_syslog");
+		$this->syslog_site_id = (aw_global_get("syslog_site_id")) ? aw_global_get("syslog_site_id") : $this->cfg["site_id"];
 	}
 
 	function display_sites()
@@ -31,12 +26,19 @@ class db_syslog extends aw_template
 				$this->vars(array(
 					"id" => $row["site_id"],
 					"name" => $old[$row["site_id"]],
-					"active" => ($row["site_id"] == $this->syslog_site_id) ? "checked" : "",
+					"active" => checked($row["site_id"] == $this->syslog_site_id),
 				));
 				$c .= $this->parse("line");
 			};
 		};
-		$this->vars(array("line" => $c));
+		$this->vars(array(
+			"active" => checked(-1 == $this->syslog_site_id),
+		));
+		$c .= $this->parse("line");
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("save_sites")
+		));
 		$retval = $this->parse();
 		return $retval;
 	}
@@ -49,15 +51,22 @@ class db_syslog extends aw_template
 		$conf = new db_config();
 		$conf->set_simple_config("syslog_sites",$name_ser);
 		global $syslog_site_id;
-		$syslog_site_id = ($args["syslog_site_id"]) ? $args["syslog_site_id"] : $GLOBALS["SITE_ID"];
+		$syslog_site_id = ($args["syslog_site_id"]) ? $args["syslog_site_id"] : $this->cfg["site_id"];
 		session_register("syslog_site_id");
+		return $this->mk_my_orb("site_id", array(), "syslog", false,true);
 	}
 
 
-	function display_last_10()
+	function display_last_10($arr)
 	{
+		global $syslog_types,$syslog_params,$filter_uid,$types;
+		session_register("syslog_types");
+		session_register("syslog_params");
+		if (is_array($types))
+		{
+			$syslog_types = $types;
+		};
 		// faking global muutujad?
-		global $syslog_types,$syslog_params,$filter_uid;
 		$this->read_adm_template("parts.tpl");
 		if (is_array($syslog_types))
 		{
@@ -242,7 +251,7 @@ class db_syslog extends aw_template
 		}
 
 		
-		if (aw_ini_get("syslog.has_site_id") == 1)
+		if ($this->cfg["has_site_id"] == 1 && $this->syslog_site_id != -1)
 		{
 			$ss .= " AND syslog.site_id = " . $this->syslog_site_id;
 		};
@@ -263,10 +272,13 @@ class db_syslog extends aw_template
 			"prefix" 	=> "syslog", 
       "sortby" 	=> $syslog_params["sortby"],
       "lookfor" => "",
-      "imgurl" 	=> aw_ini_get("baseurl")."/images",
-      "self" 		=> aw_global_get("PHP_SELF")
+      "imgurl" 	=> $this->cfg["baseurl"]."/images",
+      "self" 		=> aw_global_get("PHP_SELF"),
 		));
-    $t->parse_xml_def(aw_ini_get("basedir")."/xml/syslog.xml");
+		$t->set_header_attribs(array(
+			"class" => "syslog"
+		));
+    $t->parse_xml_def($this->cfg["basedir"]."/xml/syslog.xml");
                                                                                             
 		$content = "";
 		while($row = $this->db_next())
@@ -308,10 +320,12 @@ class db_syslog extends aw_template
 			"act"		=> $syslog_params["act"],
 			"parts"		=> $parts,
 			"uid_c"	=> $syslog_params["uid_c"],
-			"email_c" => $syslog_params["email_c"]
+			"email_c" => $syslog_params["email_c"],
+			"reforb" => $this->mk_reforb("show", array("no_reforb" => 1))
 		)); 
-		return
-		$this->parse("MAIN");
+		header("Refresh: ".($syslog_params["update"]*60).";url=".$this->mk_my_orb("show", array(),"syslog", false,true));
+		$retval =  $this->parse("MAIN");
+		return $retval;
 	}
 
 	function check_environment(&$sys, $fix = false)
@@ -341,6 +355,51 @@ class syslog extends db_syslog
 	function syslog()
 	{
 		$this->db_syslog();
+	}
+
+	function block($arr)
+	{
+		extract($arr);
+		$this->read_adm_template("block.tpl");
+		$old = unserialize($this->get_cval("blockedip"));
+		$c = "";
+		while(list($k,$v) = each($old))
+		{
+			$this->vars(array(
+				"ip" => $v,
+				"id" => $k,
+				"checked" => "checked",
+			));
+			$c .= $this->parse("line");
+		};
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("saveblock")
+		));
+		return $this->parse();
+	}
+
+	function saveblock($arr)
+	{
+		extract($arr);
+		$old = unserialize($this->get_cval("blockedip"));
+		$store = array();
+		if (is_array($check))
+		{
+			while(list($k,$v) = each($check))
+			{
+				$store[] = $old[$k];
+			};
+		};
+		if (is_ip($new))
+		{
+			$store[] = $new;
+		};
+		$old_s = serialize($store);
+		$this->quote($old_s);
+		$q = "UPDATE config SET content = '$old_s' WHERE ckey = 'blockedip'";
+		$this->db_query($q);
+		return $this->mk_my_orb("block",array(),"syslog",false,true);
 	}
 }
 ?>

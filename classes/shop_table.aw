@@ -1,16 +1,12 @@
 <?php
 
-global $orb_defs;
-$orb_defs["shop_table"] = "xml";
-
 classload("shop_base");
 classload("shop_item");
 class shop_table extends shop_base
 {
 	function shop_table()
 	{
-		$this->db_init();
-		$this->tpl_init("shop");
+		$this->init("shop");
 	}
 
 	function add($arr)
@@ -48,9 +44,7 @@ class shop_table extends shop_base
 			$sht["item"] = $item;
 			$sht["nnum_cols"] = $num_cols;
 			$sht["titles"] = $title;
-			classload("xml");
-			$x = new xml;
-			$co = $x->xml_serialize($sht);
+			$co = aw_serialize($sht,SERIALIZE_XML);
 			$this->quote(&$co);
 			$this->db_query("INSERT INTO shop_tables(id,content) VALUES($id,'$co')");
 		}
@@ -62,16 +56,13 @@ class shop_table extends shop_base
 	{
 		$this->db_query("SELECT objects.*,shop_tables.* FROM objects LEFT JOIN shop_tables ON shop_tables.id = objects.oid WHERE oid = $id");
 		$ret = $this->db_next();
-		classload("xml");
-		$x = new xml;
-		$ret["table"] = $x->xml_unserialize(array("source" => $ret["content"]));
+		$ret["table"] = aw_unserialize($ret["content"]);
 		return $ret;
 	}
 
 	function save_table($sht)
 	{
-		$x = new xml;
-		$co = $x->xml_serialize($sht["table"]);
+		$co = aw_serialize($sht["table"],SERIALIZE_XML);
 		$this->quote(&$co);
 		$this->db_query("UPDATE shop_tables SET content = '$co' WHERE id = ".$sht["id"]);
 	}
@@ -543,6 +534,7 @@ class shop_table extends shop_base
 			$pl = new planner;
 			$_from = $from < $it["per_from"] ? $it["per_from"] : $from;
 			$reps = $pl->get_events(array("start" => $_from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
+
 			if (is_array($reps))
 			{
 				foreach($reps as $time => $evnt)

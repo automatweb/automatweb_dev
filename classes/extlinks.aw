@@ -1,32 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.16 2002/01/29 23:55:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.17 2002/06/10 15:50:53 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
-lc_load("extlinks");
 
 
-class extlinks extends aw_template {
-
+class extlinks extends aw_template 
+{
 	function extlinks($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init();
+		$this->init("");
 		lc_load("definition");
-		
-		global $lc_extlinks;
-		if (is_array($lc_extlinks))
-		{
-			$this->vars($lc_extlinks);
-		}
-		
-		
 	
-
+		$this->lc_load("extlinks","lc_extlinks");
 	}
-	 
 	
   
   // lisab lingi objekti och dokumendi juurde
-	function add_link($args) {
+	function add_link($args) 
+	{
 	  extract($args);
 		if ($type == "")
 		{
@@ -36,9 +26,6 @@ class extlinks extends aw_template {
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
 		$this->db_query($q);
 		$this->_log("link",sprintf(LC_EXTLINKS_ADD_LINK,$name));
-
-		
-
 	}
 
 	////
@@ -46,12 +33,14 @@ class extlinks extends aw_template {
 	function parse_alias($args = array())
 	{
 		extract($args);
+
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
 		$vars = array(
-				"url" => $url,
-				"caption" => $caption,
-				"target" => $target,
-			);
+			"url" => $url,
+			"caption" => $caption,
+			"target" => $target,
+			"img" => $this->img,
+		);
 
 		if (isset($tpls["link"]))
 		{
@@ -73,26 +62,47 @@ class extlinks extends aw_template {
 		}
 		$this->dequote(&$link);
 
-		global $baseurl,$ext;
 		if (strpos($link["url"],"@") > 0)
 		{
 			$linksrc = $link["url"];
 		}
 		else
 		{
-			$linksrc = sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$link["id"]);
+			$linksrc = $this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
 		};
 
+		if ($link["link_image_check_active"] && ($link["active_until"] <= time()) )
+		{
+			$awf = get_instance("file");
+			$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$target' AND class_id = " . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+
+			if ($row && $awf->can_be_embedded(&$row))
+			{
+				$img = $awf->get_url($row["oid"],"");
+				$img = "<img border='0' src='$img'>";
+			}
+			else
+			{
+				$img = "";
+			};
+
+			$this->img = $img;
+		}
+		
 		if ($link["use_javascript"])
 		{
 			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",$linksrc,$link["id"],$link["newwintoolbar"],$link["newwinlocation"],$link["newwinmenu"],$link["newwinscroll"],$link["newwinwidth"],$link["newwinheight"]);
-			$url = "#";
+			$url = "javascript:void(0)";
 		}
 		else
 		{
 			$url = $linksrc;
 			$target = $link["newwindow"] ? "target='_blank'" : "";
 		};
+
+
 		return(array($url,$target,$link["name"]));
 	}
 
@@ -103,7 +113,8 @@ class extlinks extends aw_template {
 		$this->extlinkaliases = "";
 	}
 
-	function save_link($args) {
+	function save_link($args) 
+	{
 		$this->quote($args);
 		extract($args);
 		if ($type == "")
@@ -120,8 +131,7 @@ class extlinks extends aw_template {
 					docid = '$docid'
 			WHERE id = '$lid'";
 		$this->db_query($q);
-		$this->upd_object(array("oid" => $lid,
-					"name" => $name));
+		$this->upd_object(array("oid" => $lid,"name" => $name));
 		$this->_log("link",sprintf(LC_EXTLINKS_CHANGED_LINK,$name));
 	}
 
@@ -140,7 +150,7 @@ class extlinks extends aw_template {
 		
 		if ($row["type"] == "int")
 		{
-			$row["url"] = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."?section=".$row["docid"];
+			$row["url"] = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$row["docid"];
 		}
 		return $row;
 	}
@@ -148,7 +158,8 @@ class extlinks extends aw_template {
   // registreerib kliki lingile
 
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
-	function add_hit($id,$host,$uid) {
+	function add_hit($id,$host,$uid) 
+	{
 		$q = "UPDATE extlinks
 							SET hits = hits + 1
 							WHERE id = '$id'";

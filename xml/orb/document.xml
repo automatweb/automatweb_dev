@@ -56,13 +56,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="preview">
-			<function name="preview">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
+
 		<action name="sellang">
 			<function name="sel_lang_bros">
 				<arguments>
@@ -167,6 +161,64 @@
 		<action name="submit_select_alias">
 			<function name="submit_select_alias">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send" nologin="1">
+			<function name="send">
+				<arguments>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_send" nologin="1">
+			<function name="submit_send">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="feedback" nologin="1">
+			<function name="feedback">
+				<arguments>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_feedback" nologin="1">
+			<function name="submit_feedback">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="thanks" nologin="1">
+			<function name="thanks">
+				<arguments>
+					<optional name="eesnimi"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="print" nologin="1">
+			<function name="do_print">
+				<arguments>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search" nologin="1">
+			<function name="do_search">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="str"/>
+					<optional name="section"/>
+					<optional name="sortby"/>
+					<optional name="from"/>
 				</arguments>
 			</function>
 		</action>

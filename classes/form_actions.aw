@@ -1,29 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.8 2002/02/18 13:42:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
-lc_load("form");
-global $orb_defs;
-$orb_defs["form_actions"] = 
-array("list_actions"	=> array("function" => "list_actions", "params" => array("id")),
-			"add_action"		=> array("function" => "add_action", "params" => array("id")),
-			"submit_action" => array("function" => "submit_action", "params" => array()),
-			"delete_action" => array("function" => "delete_action", "params" => array("id", "aid")),
-			"change_action" => array("function" => "change_action", "params" => array("id", "aid"),"opt" => array( "level"))
-			);
 
 class form_actions extends form_base
 {
 	function form_actions()
 	{
-		$this->tpl_init("forms");
-		$this->db_init();
+		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);}
+		$this->lc_load("form","lc_form");
 	}
 
 	////
@@ -39,10 +26,13 @@ class form_actions extends form_base
 										 WHERE objects.status != 0 AND form_actions.form_id = $id");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("action_id" => $row["id"], "action_name" => $row["name"], "action_comment" => $row["comment"],
-												"change"	=> $this->mk_orb("change_action", array("id" => $id, "aid" => $row["id"])),
-												"delete"	=> $this->mk_orb("delete_action", array("id" => $id, "aid" => $row["id"]))
-												));
+			$this->vars(array(
+				"action_id" => $row["id"], 
+				"action_name" => $row["name"], 
+				"action_comment" => $row["comment"],
+				"change"	=> $this->mk_orb("change_action", array("id" => $id, "aid" => $row["id"])),
+				"delete"	=> $this->mk_orb("delete_action", array("id" => $id, "aid" => $row["id"]))
+			));
 			$this->parse("LINE");
 		}
 		$this->vars(array("add"		=> $this->mk_orb("add_action", array("id" => $id))));
@@ -55,8 +45,14 @@ class form_actions extends form_base
 	{
 		extract($arr);
 		$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_ADD_ACTIONS);
-		$this->vars(array("name" => "", "comment" => "", "email_selected" => "checked", "move_filled_selected" => "", "action_id" => 0,
-											"reforb" => $this->mk_reforb("submit_action", array("id" => $id))));
+		$this->vars(array(
+			"name" => "", 
+			"comment" => "", 
+			"email_selected" => "checked", 
+			"move_filled_selected" => "", 
+			"action_id" => 0,
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id))
+		));
 		return $this->parse();
 	}
 
@@ -80,6 +76,12 @@ class form_actions extends form_base
 						$data["email"] = $email;
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
+						$la = new languages;
+						$ls = $la->listall();
+						foreach($ls as $ld)
+						{
+							$data["subj"][$ld["id"]] = $subj[$ld["id"]];
+						}
 						$data = serialize($data);
 						break;
 
@@ -87,9 +89,15 @@ class form_actions extends form_base
 						reset($arr);
 						$selarr = array();
 						while (list($k, $v) = each($arr))
+						{
 							if (substr($k, 0,3) == "ch_")
+							{
 								if ($v == 1)
+								{
 									$selarr[substr($k,3)] = $v;
+								}
+							}
+						}
 						$data = serialize($selarr);
 						break;
 
@@ -116,7 +124,13 @@ class form_actions extends form_base
 		else
 		{
 			// add
-			$action_id = $this->new_object(array("parent" => $id, "name" => $name, "class_id" => CL_FORM_ACTION, "comment" => $comment, "status" => 2));
+			$action_id = $this->new_object(array(
+				"parent" => $id, 
+				"name" => $name, 
+				"class_id" => CL_FORM_ACTION, 
+				"comment" => $comment, 
+				"status" => 2
+			));
 			$this->db_query("INSERT INTO form_actions(id,form_id,type) VALUES($action_id, $id, '$type')");
 			$this->_log("form",sprintf(LC_FORM_ACTIONS_ADDED_FORM_ACTIONS,$id,$name));
 			return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
@@ -139,13 +153,15 @@ class form_actions extends form_base
 		if ($level < 2)
 		{
 			$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
-			$this->vars(array("name"									=> $row["name"], 
-												"comment"								=> $row["comment"], 
-												"email_selected"				=> ($row["type"] == 'email' ? "CHECKED" : ""),
-												"move_filled_selected"	=> ($row["type"] == 'move_filled' ? "CHECKED" : ""),
-												"join_list_selected"		=> ($row["type"] == 'join_list' ? "CHECKED" : ""),
-												"action_id"							=> $id,
-												"reforb"								=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))));
+			$this->vars(array(
+				"name"									=> $row["name"], 
+				"comment"								=> $row["comment"], 
+				"email_selected"				=> ($row["type"] == 'email' ? "CHECKED" : ""),
+				"move_filled_selected"	=> ($row["type"] == 'move_filled' ? "CHECKED" : ""),
+				"join_list_selected"		=> ($row["type"] == 'join_list' ? "CHECKED" : ""),
+				"action_id"							=> $id,
+				"reforb"								=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
+			));
 			return $this->parse();
 		}
 		else
@@ -167,12 +183,28 @@ class form_actions extends form_base
 					$opar = $this->get_op_list($id);
 					classload("objects");
 					$ob = new db_objects();
+					classload("languages");
+					$la = new languages;
+					$ls = $la->listall();
+					foreach($ls as $ld)
+					{
+						$this->vars(array(
+							"lang_name" => $ld["name"],
+							"lang_id" => $ld["id"],
+							"subj" => $data["subj"][$ld["id"]]
+						));
+						$lt.=$this->parse("T_LANG");
+						$lc.=$this->parse("LANG");
+					}
 					$this->vars(array(
 						"email" => $data["email"],
 						"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
 						"sec" => $this->picker($data["l_section"],$ob->get_list()),
-						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
+						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
+						"T_LANG" => $lt,
+						"LANG" => $lc
 					));
+
 					return $this->parse();
 					break;
 				case "move_filled":
@@ -182,11 +214,13 @@ class form_actions extends form_base
 					$this->vars(array("LINE" => ""));
 					while ($row = $this->db_next())
 					{
-						$this->vars(array("cat_name"		=> $row["name"], 
-															"cat_id"			=> $row["oid"], 
-															"cat_comment"	=> $row["comment"], 
-															"cat_checked" => ($selarr[$row["oid"]] == 1 ? "CHECKED" : ""),
-															"action_id"		=> $id));
+						$this->vars(array(
+							"cat_name"		=> $row["name"], 
+							"cat_id"			=> $row["oid"], 
+							"cat_comment"	=> $row["comment"], 
+							"cat_checked" => ($selarr[$row["oid"]] == 1 ? "CHECKED" : ""),
+							"action_id"		=> $id
+						));
 						$this->parse("LINE");
 					}
 					return $this->parse();
@@ -205,9 +239,13 @@ class form_actions extends form_base
 							while (list(,$el) = each($elar))
 							{
 								if ($el["type"] == "checkbox")
+								{
 									$checks[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
+								}
 								if ($el["type"] == "textbox")
+								{
 									$texts[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
+								}
 							}
 						}
 					}
@@ -216,12 +254,14 @@ class form_actions extends form_base
 					$li = new lists;
 					$lists = $li->get_op_list();
 
-					$this->vars(array("checkbox"	=> $this->option_list($data["checkbox"],$checks),
-														"list"			=> $this->option_list($data["list"],$lists),
-														"textbox"		=> $this->option_list($data["textbox"],$texts),
-														"name_tb"		=> $this->option_list($data["name_tb"],$texts),
-														"action_id"	=> $id,
-														"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))));
+					$this->vars(array(
+						"checkbox"	=> $this->option_list($data["checkbox"],$checks),
+						"list"			=> $this->option_list($data["list"],$lists),
+						"textbox"		=> $this->option_list($data["textbox"],$texts),
+						"name_tb"		=> $this->option_list($data["name_tb"],$texts),
+						"action_id"	=> $id,
+						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
+					));
 					return $this->parse();
 					break;
 			}

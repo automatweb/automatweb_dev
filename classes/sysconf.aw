@@ -1,20 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.1 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.2 2002/06/10 15:50:54 kristo Exp $
 // sysconf.aw - const.aw web frontend
-global $orb_defs;
-$orb_defs["sysconf"] = "xml";
+
 classload("aw_template");
-if (!defined("sysconf_loaded"))
+
+class sysconf extends aw_template 
 {
-define("sysconf_loaded",1);
-class sysconf extends aw_template {
 	function sysconf($args = array())
 	{
 		extract($args);
 		$this->config = array();
-		$this->tpl_init();
-		$this->db_init();
-
+		$this->init("");
 	}
 
 	function adm_init($args = array())
@@ -30,15 +26,15 @@ class sysconf extends aw_template {
 	function gen_menu($args = array())
 	{
 		extract($args);
-		global $basedir;
+		$basedir = $this->cfg["basedir"];
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
 		$retval = $xm->build_menu(array(
-				"vars"	=> $vars,
-				"xml"	=> $basedir . "/xml/sysconf_menu.xml",
-				"tpl"	=> $this->template_dir . "/sysconf_menu.tpl",
-				"activelist" => $activelist,
-			));
+			"vars"	=> $vars,
+			"xml"	=> $basedir . "/xml/sysconf_menu.xml",
+			"tpl"	=> $this->template_dir . "/sysconf_menu.tpl",
+			"activelist" => $activelist,
+		));
 		return $retval;
 	}
 
@@ -57,14 +53,15 @@ class sysconf extends aw_template {
 		{
 			$groups[$row["gid"]] = $row["name"];
 		};
-		global $menu_defs_v2;
+		$menu_defs_v2 = aw_ini_get("menuedit.menu_defs");
 		$c = "";
 		$this->core->read_template("edit.tpl");
 		foreach($menu_defs_v2 as $id => $name)
 		{
-			$this->core->vars(array("name" => $name,
-					"id" => $id,
-					"pickmenu" => $this->core->picker($id,$menus),
+			$this->core->vars(array(
+				"name" => $name,
+				"id" => $id,
+				"pickmenu" => $this->core->picker($id,$menus),
 			));
 			$c .= $this->core->parse("line");
 		};
@@ -114,16 +111,16 @@ class sysconf extends aw_template {
 		$lines = explode("\n",$source);
 		if (is_array($lines))
 		{
-      			foreach($lines as $line)
-        		{
-                		list($key,$value) = explode("=",$line);
-                		$key = trim($key);
-                		$value = trim($value);
-                		if ( (strlen($key) > 0) && (strlen($value) > 0) )
-                		{
+			foreach($lines as $line)
+			{
+				list($key,$value) = explode("=",$line);
+				$key = trim($key);
+				$value = trim($value);
+				if ( (strlen($key) > 0) && (strlen($value) > 0) )
+				{
 					$this->config[$key] = $value;
-                		};
-        		};
+				};
+			};
 		};
 	}
 
@@ -133,6 +130,5 @@ class sysconf extends aw_template {
 	{
 		return $this->config;
 	}
-};
 };
 ?>

@@ -1,5 +1,4 @@
 
-
 <script language="javascript">
 function box2(caption,url)
 {
@@ -11,48 +10,52 @@ function box2(caption,url)
 }
 </script>
 
-			<!--1-->
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e2e2e2">
-              <tr> 
-                <td>
-		{VAR:TABS}
 
-					<!--4-->
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3e5f94" height="1">
-                    <tr> 
-                      <td><img src="{VAR:baseurl}/img/trans.gif" width="435" height="1"></td>
-                    </tr>
-                  </table>
-				  <!--end 4-->
+{VAR:TABS}
+
+					
+<table width="100%" cellpadding="1" cellspacing="0" border="0">
+<tr><td bgcolor="#FFFFFF">
 
 <table width="100%" cellpadding="10" cellspacing="0" border="0">
 <!-- SUB: TOPIC -->
-<tr> 
-<td  bgcolor="#ECECEC" class="text">
+
+<tr class="aste05"> 
+<td class="aste05">
+<span class="text"><a href="{VAR:topic_link}"><b>{VAR:topic}</b></a></span><br>
+
+<span class="celltext">Autor: <b>{VAR:from}</b>  ({VAR:created})</span><br>
 
 
-<a href="{VAR:topic_link}"><b>{VAR:topic}</b></a>
+</td>
+<td valign="top" align="right" class="aste05">
 <!-- SUB: CHANGE_TOPIC -->
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='{VAR:change_topic}'>Muuda</a>
+<a href='{VAR:change_topic}'><img src="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" border="0" alt="Muuda"></a>
 <!-- END SUB: CHANGE_TOPIC -->
 
 <!-- SUB: DELETE -->
-&nbsp;&nbsp;&nbsp;<a href="javascript:box2('Oled kindel, et soovid seda teemat
-kustutada?','{VAR:del_topic}')"><font size="1">Kustuta</font></a>
+<a href="javascript:box2('Oled kindel, et soovid seda teemat
+kustutada?','{VAR:del_topic}')"><img src="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" border="0" alt="Kustuta"></a>
 <!-- END SUB: DELETE -->
+<br>
 
-<br>Autor: <b>{VAR:from}</b>  ({VAR:created})<br>
-<img src="{VAR:baseurl}/img/trans.gif" border="0" width="1" height="10" alt=""><br>
+{VAR:rated}
+</td>
+</tr>
+<tr>
+<td class="text">
 {VAR:text}<br>
 
 </td>
 </tr>
-<tr>
-<td>
-{VAR:rated}
-</td>
-</tr>
+</table>
+
+</td></tr>
 <form method="POST" name="commform" action="reforb.{VAR:ext}">
+</table>
+
+
+
 
 <!--<tr> 
 <td bgcolor="#ECECEC" class="textsmall"><img
@@ -66,9 +69,70 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
 							
 
 <!-- END SUB: TOPIC -->
+
+
+
+
+
+
+
+
+			<!--tabelshadow-->
+			<table width="100%" cellspacing="0" cellpadding="0">
+				<tr>
+					<td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td>
+					<td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+						<!--tabelsisu-->
+						<table width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<td class="tableinside">
+
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+
+<td height="29">
+
+<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:this.document.commform.submit();" onClick="if (confirm('Kustutada valitud kommentaarid?')) {document.commform.submit()} ;return false;"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="Kustuta valitud teemad" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a></td>
+
+{VAR:reforb}
+
+
+
+
+<!-- SUB: PAGES -->
+<td valign="bottom" align="right" height="29">
+											
+											<table border=0 cellpadding=0 cellspacing=0>
+													<tr>
+													   <td class="celltext">Vali lehekülg:&nbsp;</td>
+
+														<!-- SUB: PAGE -->
+														<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'>{VAR:ltext}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+														<!-- END SUB: PAGE -->
+
+														<!-- SUB: SEL_PAGE -->
+														<td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+														<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'><b>{VAR:linktext}</b></a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+														<!-- END SUB: SEL_PAGE -->
+														<td class="celltext">&nbsp;</td>
+													</tr>
+												</table>
+
+</td>
+<!-- END SUB: PAGES -->
+</tr></table>
+
+</td>
+</tr>
 </table>
 
-
+</td>
+</tr>
+</table>
 
 
 
@@ -84,17 +148,6 @@ Sorteeri <a href="{VAR:threaded_link}"><b>VASTUSTE</b></a> või <a href="{VAR:fla
 
 			<TD align="right" class="textesileht">
 
-			<!-- SUB: PAGES -->
-			Vali lehekülg:&nbsp;
-
-			<!-- SUB: PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'>{VAR:ltext}</a>&nbsp;&nbsp;
-			<!-- END SUB: PAGE -->
-			<!-- SUB: SEL_PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'><b>&gt;{VAR:ltext}&lt;</b></a>&nbsp;&nbsp;
-			<!-- END SUB: SEL_PAGE -->
-		
-			<!-- END SUB: PAGES -->
 
 
 			</TD>
@@ -116,10 +169,6 @@ Sorteeri <a href="{VAR:threaded_link}"><b>VASTUSTE</b></a> või <a href="{VAR:fla
 
 
 
-
-
-
-<img src='{VAR:baseurl}/img/trans.gif' width="1" height="5" alt="" border="0"><br>
 
 <a name="comments"></a>
 

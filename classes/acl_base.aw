@@ -1,44 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.17 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.18 2002/06/10 15:50:52 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
-
-$aclcache;	// this is the place, where all the acl will be stored after querying
-
-global $acl_ids;
-$acl_ids = array("0" =>	 "can_edit",
-								 "2" =>	"can_add",
-								 "4" =>	"can_admin",
-								 "6" =>  "can_delete",
-								 "8" =>	"can_clone",
-								 "10" => "can_stat",
-								 "12" => "can_view",
-								 "14" => "can_fill",
-								 "16" => "can_export",
-								"18" => "can_import",
-								"20" => "can_action",
-								"22" => "can_import_styles",
-								"24" => "can_import_data",
-								"26" => "can_add_output",
-								"28" => "can_delegate",
-								"30" => "can_export_styles",
-								"32" => "can_export_data",
-								"34" => "can_view_filled",
-								"36" => "can_send",
-								"38" => "can_active",
-								"40" => "can_periodic",
-								"42" => "can_order",
-								"44" => "can_copy",
-								"46" => "can_view_users",
-								"48" => "can_change_users",
-								"50" => "can_delete_users",
-								"52" => "can_add_users",
-								"54" => "can_change_variables",
-								"56" => "can_change_variable_acl");
-
-global $acl_default;
-$acl_default = array("can_view" => ALLOWED);
 
 lc_load("definition");
 
@@ -50,14 +14,15 @@ class acl_base extends core
 		// oi kakaja huinja, bljat. 
 		// the point is, that php can only handle 32-bit integers, but mysql can handle 64-bit integers
 		// and so, we do the packing/unpacking to integer in the database. whoop-e
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 		$qstr = array();
 		reset($acl_ids);
 		while (list($bitpos, $name) = each($acl_ids))
+		{
 			$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
+		}
 
 		$s =  join(",",$qstr);
-//		echo $s,"<br><br>";
 		return $s;
 	}
 
@@ -70,16 +35,17 @@ class acl_base extends core
 
 		$this->db_query($q);
 		while ($row = $this->db_next())
+		{
 			$ret[$row["gid"]] = $row;
+		}
 
 		return $ret;
 	}
 
 	function add_acl_group_to_obj($gid,$oid)
 	{
-		global $acl_default;
 		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
-		$this->save_acl($oid,$gid,$acl_default);		// set default acl to the new relation
+		$this->save_acl($oid,$gid,aw_ini_get("acl.default"));		// set default acl to the new relation
 	}
 
 	function remove_acl_group_from_obj($gid,$oid)
@@ -89,22 +55,32 @@ class acl_base extends core
 
 	function save_acl($oid,$gid,$aclarr)
 	{
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 		reset($acl_ids);
 		while(list($bitpos,$name) = each($acl_ids))
 		{
 			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
 			{
-				$a = ALLOWED;
+				$a = aw_ini_get("acl.allowed");
 			}
 			else
 			{
-				$a = DENIED;
+				$a = aw_ini_get("acl.denied");
 			}
 
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+	
+		//magistrali korral võtan javaga yhendust
+		if (aw_ini_get("acl.use_server") == 1)
+		{
+			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			//objekti acl muutus
+			$str="3 12 blah ".$oid."\n";
+			fputs($acl_server_socket,$str);
+			fclose($acl_server_socket);
+		}
 	}
 
 	////
@@ -113,7 +89,7 @@ class acl_base extends core
 	{
 		$acl = $this->get_acl_for_oid_gid($oid,$gid);
 
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 		reset($acl_ids);
 		while(list($bitpos,$name) = each($acl_ids))
 		{
@@ -121,11 +97,11 @@ class acl_base extends core
 			{
 				if (isset($aclarr[$name]) && $aclarr[$name] == 1)
 				{
-					$a = ALLOWED;
+					$a = aw_ini_get("acl.allowed");
 				}
 				else
 				{
-					$a = DENIED;
+					$a = aw_ini_set("acl.denied");
 				}
 			}
 			else
@@ -136,6 +112,16 @@ class acl_base extends core
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+	
+		//magistrali korral võtan javaga yhendust
+		if (aw_ini_get("acl.use_server") == 1)
+		{
+			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
+			//objekti acl muutus
+			$str="3 12 blah ".$oid."\n";
+			fputs($acl_server_socket,$str);
+			fclose($acl_server_socket);
+		}
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -160,19 +146,17 @@ class acl_base extends core
 
 	function get_acl_for_oid($oid)
 	{
-		global $gidlist;
+		$gidlist = aw_global_get("gidlist");
 		// select acl entry for this object, whose group is one of
 		// the groups the current user is in 
 		// and whose priority is highest
 		if (!is_array($gidlist))
 		{
-//			echo "no gidlist arr<br>";
 			return false;
 		}
 		$gidstr = join(",",$gidlist);
 		if ($gidstr == "")
 		{
-//			echo "gidlist empty <br>";
 			return false;
 		}
 		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
@@ -182,59 +166,60 @@ class acl_base extends core
 										 ORDER BY groups.priority DESC
 										 LIMIT 1";
 						
-//		echo "q = $q <br>";
 		$this->db_query($q);
 		$row = $this->db_next();
-//		echo "<pre>",var_dump($row),"</pre><Br>";
-
+		if ($row)
+		{
+			dbg("$oid has ACL!<br>");
+		}
+		else
+		{
+			dbg("$oid has NO ACL!<br>");
+		};
 		return $row;
 	}
 
 	function can_aw($access,$oid)
 	{
-		global $acl_default,$no_check_acl;
-		global $SITE_ID,$uid;
 		$o_oid = $oid;
 		
-		global $awt;
-		$awt->start("acl::can");
-		$awt->count("acl::can");
 		$access="can_".$access;
 
 		$this->save_handle();
 
 		$max_priority = -1;
-		$max_acl = $acl_default;
+		$max_acl = aw_ini_get("acl.default");
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
 		//	echo "entering can, access = $access, oid = $oid<Br>";
 		while ($oid > 0)
 		{
-			// echo "oid = $oid<br>";
-			if (is_array($GLOBALS["aclcache"][$oid]))
+//			echo "oid = $oid<br>";
+			$_t = aw_cache_get("aclcache",$oid);
+			if (is_array($_t))
 			{
-				$tacl = $GLOBALS["aclcache"][$oid];
-				$parent = $GLOBALS["aclcache"][$oid]["parent"];
-				//echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
+				$tacl = $_t;
+				$parent = $_t["parent"];
+//				echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
 			}
 			else
 			{
-				//echo "not found in cache!<br>";
+//				echo "not found in cache!<br>";
 				if ($tacl = $this->get_acl_for_oid($oid))
 				{
 					// found acl for this object from the database, so check it
 					$parent = $tacl["parent"];
-					//echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
-					$GLOBALS["aclcache"][$oid] = $tacl;
+//					echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
+					aw_cache_set("aclcache",$oid,$tacl);
 				}
 				else
 				{
 					// no acl for this object in the database, find it's parent
 					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
 					$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
-					$GLOBALS["aclcache"][$oid] = $tacl;
-					//echo "not found in db, parent = $parent<br>";
+					aw_cache_set("aclcache",$oid,$tacl);
+//					echo "not found in db, parent = $parent<br>";
 				}
 			}
 
@@ -246,7 +231,7 @@ class acl_base extends core
 			{
 				$max_priority = $tacl["priority"];
 				$max_acl = $tacl;
-				//echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
+//				echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
 			}
 			// siin oli 100, aga seda on imho ilmselgelt liiga palju
 			// 25 peaks vist piisama kyll
@@ -262,33 +247,26 @@ class acl_base extends core
 		// and now return the highest found
 //		return 1;
 		
-		$awt->stop("acl::can");
 		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
+//		echo "returning from can_aw , oid = $o_oid , result = <pre>", var_dump($max_acl),"</pre> <br>";
 		return $max_acl;
 	}
 
 	function can_server($access,$oid)
 	{
-		global $acl_default,$no_check_acl;
-		global $SITE_ID,$uid;
 		$o_oid = $oid;
 
-		global $awt;
 		$access = "can_".$access;
-		$awt->start("acl::can_server");
 		if (!$o_oid)
 		{
-			dbg("olen real 231 OID=".$o_oid." tagastan false<br>");
-			return false;
+			$o_oid = 0;
 		}
 		dbg("olen real 234 <br>");
 		global $acl_server_socket;
 		if (!$acl_server_socket)
 		{
 			dbg("olen real 237 võtan javaga yhendust<br>");
-			$awt->start("acl::can_server::connect");
 			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-			$awt->stop("acl::can_server::connect");
 		}
 		if (!$acl_server_socket)
 		{
@@ -297,17 +275,18 @@ class acl_base extends core
 		}
 		else
 		{
-			if ($uid == "")
+			if (aw_global_get("uid") == "")
 			{
 				$u_uid = ",";
 			}
 			else
 			{
-				$u_uid = $uid;
+				$u_uid = aw_global_get("uid");
 			}
-			//echo "saadan: -1 ".$SITE_ID." ".$u_uid." ".$o_oid."<br>";
-			fputs($acl_server_socket,"-1 ".$SITE_ID." ".$u_uid." ".$o_oid."\n");
+//			echo "saadan: -1 ".$this->cfg["site_id"]." ".$u_uid." ".$o_oid."<br>";
+			fputs($acl_server_socket,"-1 ".$this->cfg["site_id"]." ".$u_uid." ".$o_oid."\n");
 			$s_res.=fgets ($acl_server_socket,1000);
+//			echo "vastus = '$s_res' <br>";
 			// parsime tulemuse laiali
 			$s_rights = explode(",",$s_res);
 			foreach($s_rights as $s_line)
@@ -316,9 +295,8 @@ class acl_base extends core
 				$max_acl[$s_r_name] = $s_r_value;
 				//echo "got access for $s_r_name as $s_r_value <br>";
 			}
-	//		echo "out of can() <br>";
+			//echo "out of can() <br>";
 		}
-		$awt->stop("acl::can_server");
 
 		return $max_acl;
 	}
@@ -326,29 +304,28 @@ class acl_base extends core
 	// black magic follows.
 	function can($access, $oid)
 	{
-		global $no_check_acl,$compare_acls;
-		if ($no_check_acl)
+		if (aw_ini_get("acl.no_check"))
 		{
 			return true;
 		}
 
 		$max_acl = array();
-		if ((!($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto"))) || $compare_acls)
+		if ((!(aw_ini_get("use_acl_server") && (aw_global_get("uid") == "kix" || aw_global_get("uid") == "risto"))) || aw_ini_get("acl.compare"))
 		{
 			$max_acl = $this->can_aw($access,$oid);
 			$cmp_aw = $max_acl;
 		}
 
-		if (($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto")) || $compare_acls)
+		if ((aw_ini_get("acl.use_server") && (aw_global_get("uid") == "kix" || aw_global_get("uid") == "risto")) || aw_ini_get("acl.compare"))
 		{
 			$max_acl = $this->can_server($access,$oid);
 			$cmp_server = $max_acl;
 		}
 
 
-		if ($compare_acls)
+		if (aw_ini_get("acl.compare"))
 		{
-			global $acl_ids;
+			$acl_ids = aw_ini_get("acl.ids");
 			foreach($acl_ids as $bp => $aname)
 			{
 				if (((int)$cmp_aw[$aname]) != ((int)$cmp_server[$aname]))
@@ -363,14 +340,16 @@ class acl_base extends core
 		return $max_acl[$access];
 	}
 
+	////
 	// SELECT * FROM objects join(" ",map2("LEFT JOIN %s ON %s",$joins)) WHERE $where
 	// this function just caches the results, so that when you list objects, asking their acl is lots faster later
+	//
+	// this will be completely deprecated, when java server is used
 	function listacl($where,$joins = -1)
 	{
 		$this->save_handle();
 
-		global $gidlist;
-
+		$gidlist = aw_global_get("gidlist");
 		if (!is_array($gidlist) || count($gidlist) < 1)
 		{
 			return;
@@ -378,7 +357,9 @@ class acl_base extends core
 
 		$js = "";
 		if (is_array($joins))
+		{
 			$js = join(' ',$this->map2('LEFT JOIN %s ON %s',$joins));
+		}
 
 		// stuff all the objects in the cache, because the next query will not 
 		// get a list of objects if they don't have their acl specified
@@ -387,8 +368,7 @@ class acl_base extends core
 		while ($row = $this->db_next())
 		{
 			$row["priority"] = -1;
-			$GLOBALS["aclcache"][$row["oid"]] = $row;
-			//echo "adding to cache ",$row[oid],"<br>";
+			aw_cache_set("aclcache",$row["oid"],$row);
 		}
 
 		$q = "SELECT objects.parent as parent,".$this->sql_unpack_string().", groups.priority as priority, acl.oid as oid 
@@ -403,7 +383,8 @@ class acl_base extends core
 	//	 echo "query: '$q'<br>";
 
 		$this->db_query($q);
-		$currobj = array(); $curr_oid = 0;
+		$currobj = array(); 
+		$curr_oid = 0;
 		while ($row = $this->db_next())
 		{
 //			echo "row! <br>";
@@ -430,7 +411,7 @@ class acl_base extends core
 				//			 echo "higher priority ($mp), setting new high, ",$v[oid],"<br>";
 						}
 					}
-					$GLOBALS["aclcache"][$ma["oid"]] = $ma;
+					aw_cache_set("aclcache",$ma["oid"],$ma);
 //				echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
 				}
 				$currobj = array();
@@ -453,7 +434,7 @@ class acl_base extends core
 	//				 echo "higher priority ($mp), setting new high<br>";
 				}
 			}
-			$GLOBALS["aclcache"][$ma["oid"]] = $ma;
+			aw_cache_set("aclcache",$ma["oid"],$ma);
 //			echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
 		}
 		$this->restore_handle();
@@ -461,17 +442,20 @@ class acl_base extends core
 
 	function create_obj_access($oid,$uuid = "")
 	{
-		global $uid;
 		if ($uuid == "")
-			$uuid = $uid;
+		{
+			$uuid = aw_global_get("uid");
+		}
 
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 
 		if ($uuid != "")
 		{
 			reset($acl_ids);
 			while (list(,$k) = each($acl_ids))
-				$aclarr[$k] = ALLOWED;
+			{
+				$aclarr[$k] = aw_ini_get("acl.allowed");
+			}
 
 			$gr = $this->get_user_group($uuid);
 			if (!$gr) 
@@ -483,25 +467,29 @@ class acl_base extends core
 		}
 	}
 
+	////
+	// v6tab k6ikide kasutajate grupilt 2ra 6igused sellele objektile
 	function deny_obj_access($oid)
 	{
-		// @desc: v6tab k6ikide kasutajate grupilt 2ra 6igused sellele objektile
-
-		global $all_users_grp;
+		$all_users_grp = aw_ini_get("groups.all_users_grp");
 		if (!$all_users_grp)
 		{
 			return;
 		}
-		global $acl_ids;
+		$acl_ids = aw_ini_get("acl.ids");
 
 		reset($acl_ids);
 		while (list(,$k) = each($acl_ids))
-			$aclarr[$k] = DENIED;
+		{
+			$aclarr[$k] = aw_ini_get("acl.denied");
+		}
 
 		// so we wouldn't add the group twice
 		$grplist = $this->get_acl_groups_for_obj($oid);
 		if (!is_array($grplist[$all_users_grp]))
+		{
 			$this->add_acl_group_to_obj($all_users_grp, $oid);
+		}
 
 		$this->save_acl($oid,$all_users_grp, $aclarr);		// give no access to all users
 	}
@@ -510,7 +498,7 @@ class acl_base extends core
 	// !Wrapper for "prog_acl", used to display the login form if the user is not logged in
 	function prog_acl_auth($right,$progid)
 	{
-		if ( defined("UID") && (strlen(UID) > 0) )
+		if (aw_global_get("uid") != "")
 		{
 			return $this->prog_acl($right,$progid);
 		}
@@ -529,24 +517,25 @@ class acl_base extends core
 	// !checks if the user has the $right for program $progid
 	function prog_acl($right,$progid)
 	{
-		//dbg("nime pikkusex=".strlen(UID)."   nimex on=".defined("UID")."<br>");
-		global $prog_cache,$SITE_ID;
-		if ((!defined("UID")) or (strlen(UID) == 0))
+		//dbg("nime pikkusex=".strlen(aw_global_get("uid"))."   nimex on=".aw_global_get("uid")."<br>");
+		if (aw_global_get("uid") == "")
 		{
-			return DENIED;
+			return aw_ini_get("acl.denied");
 		}
 		
-		if (isset($GLOBALS["no_check_acl"]) && $GLOBALS["no_check_acl"] == true)
+		if (aw_ini_get("acl.no_check") == true)
 		{
-				return ALLOWED;
+			return aw_ini_get("acl.allowed");
 		}
 		else
 		{
+			$prog_cache = aw_global_get("prog_cache");
 			if (!is_array($prog_cache))
 			{
 				classload("config");
 				$c = new db_config;
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
+				aw_global_set("prog_cache",$prog_cache);
 			}
 			return $this->can($right,$prog_cache[$progid]);
 		};
@@ -556,8 +545,7 @@ class acl_base extends core
 	// !generates an error message to the user and exits aw
 	function prog_acl_error($right,$prog)
 	{
-		global $programs;
-		die("Sorry, but you do not have $right access to program ".$programs[$prog]["name"]."<br>");
+		die("Sorry, but you do not have $right access to program ".$this->cfg["programs"][$prog]["name"]."<br>");
 	}
 
 	function check_environment(&$sys, $fix = false)
@@ -580,8 +568,7 @@ class acl_base extends core
 	// !returns an array of acls in the system as array(bitpos => name)
 	function acl_list_acls()
 	{
-		global $acl_ids;
-		return $acl_ids;
+		return aw_ini_get("acl.ids");
 	}
 
 	function acl_get_acls_for_grp($gid,$min,$num)
@@ -590,6 +577,23 @@ class acl_base extends core
 		$ret= array();
 		$this->db_query("SELECT objects.name as name,acl.oid as oid, ".$this->sql_unpack_string()."	FROM acl LEFT JOIN objects ON objects.oid = acl.oid WHERE acl.gid = $gid LIMIT $min,$num");
 		return $ret;
+	}
+
+	function auth_error()
+	{
+		header ("HTTP/1.1 404 Not Found");
+		echo "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">";
+		echo "<HTML><HEAD>";
+		echo "<TITLE>404 Not Found</TITLE>";
+		echo "</HEAD><BODY>";
+		echo "<H1>Not Found</H1>";
+		echo "The requested URL ".aw_global_get("REQUEST_URI")." ";
+		echo "was not found on this server.<P>";
+		echo "<HR>";
+		echo "<ADDRESS>Apache/1.3.14 Server at ".aw_global_get("HTTP_HOST");
+		echo "Port 80</ADDRESS>";
+		echo "</BODY></HTML>";
+		die();
 	}
 }
 ?>

@@ -59,6 +59,14 @@ Kalendri kontrollervorm: &nbsp;<select name="cal_controller">{VAR:cal_controller
 </td>
 </tr>
 <tr>
+<td class="fform" colspan=2 style="background: #eeeeee">Vormi sisestuste korrektsust kontrollitakse
+selle vormi juures olevast kalendrist:<br>
+&nbsp;<input type="checkbox" name="event_check_form" value=1 {VAR:event_check_form}><select name="event_check_against_form">{VAR:event_check_against_forms}</select><br>
+Kalendris näidatakse eventeid kasutades tabelit:
+&nbsp;<select name="event_display_table">{VAR:event_display_tables}</select><br>
+</td>
+</tr>
+<tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
 <br>
 {VAR:LC_FORMS_TEXT_DISPLAY_USER}: <input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40">

@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.5 2002/01/16 21:12:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
 // currency.aw - Currency management
-lc_load("currency");	
-global $orb_defs;
-$orb_defs["currency"] = "xml";
 
 define("RET_NAME",1);
 define("RET_ARR",2);
@@ -12,14 +9,10 @@ class currency extends aw_template
 {
 	function currency()
 	{
-		$this->db_init();
-		$this->tpl_init("currency");
+		$this->init("currency");
 		$this->sub_merge = 1;
+		$this->lc_load("currency","lc_currency");	
 		lc_load("definition");
-		global $lc_currency;
-		if (is_array($currency))
-		{
-			$this->vars($lc_currency);}
 	}
 
 	function add($arr)
@@ -66,7 +59,7 @@ class currency extends aw_template
 	function get_list($type = RET_NAME)
 	{
 		$ret = array();
-		$this->db_query("SELECT oid,name,comment as rate FROM objects WHERE class_id = ".CL_CURRENCY." AND status != 0 AND site_id = ".$GLOBALS["SITE_ID"]);
+		$this->db_query("SELECT oid,name,comment as rate FROM objects WHERE class_id = ".CL_CURRENCY." AND status != 0 AND site_id = ".$this->cfg["site_id"]);
 		while ($row = $this->db_next())
 		{
 			if ($type == RET_NAME)
@@ -84,13 +77,13 @@ class currency extends aw_template
 
 	function get($id)
 	{
-		global $currency_cache;
-		if (!is_array($currency_cache))
+		if (!is_array(aw_global_get("currency_cache")))
 		{
-			$GLOBALS["currency_cache"] = $this->get_list(RET_ARR);
+			aw_global_set("currency_cache",$this->get_list(RET_ARR));
 		}
 
-		return $currency_cache[$id];
+		$_t = aw_global_get("currency_cache");
+		return $_t[$id];
 	}
 }
 ?>

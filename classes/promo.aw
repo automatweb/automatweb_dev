@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.14 2002/02/18 13:47:14 kristo Exp $
-lc_load("promo");
-global $orb_defs;
-$orb_defs["promo"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.15 2002/06/10 15:50:54 kristo Exp $
 
 classload("objects");
 classload("menuedit","users");
@@ -10,13 +7,9 @@ class promo extends aw_template
 {
 	function promo()
 	{
-		$this->tpl_init("promo");
-		$this->db_init();
+		$this->init("promo");
 		lc_load("definition");
-		global $lc_promo;
-		if (is_array($lc_promo))
-		{
-			$this->vars($lc_promo);}
+		$this->lc_load("promo","lc_promo");
 	}
 
 	function add($arr)
@@ -27,7 +20,7 @@ class promo extends aw_template
 		$this->read_template("add_promo.tpl");
 		$ob = new db_objects;
 		$menu = $ob->get_list();
-		$menu[$GLOBALS["rootmenu"]] = LC_PROMO_FRONTPAGE;
+		$menu[$this->cfg["rootmenu"]] = LC_PROMO_FRONTPAGE;
 
 		// kysime infot adminnitemplatede kohta
 		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
@@ -152,7 +145,7 @@ class promo extends aw_template
 
 		$menu = $ob->get_list();
 		$menu[0] = "";
-		$menu[$GLOBALS["frontpage"]] = LC_PROMO_FRONTPAGE;
+		$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
 
 
 		$u = new users;
@@ -184,14 +177,14 @@ class promo extends aw_template
 	// !and thus must go to a different place when clicked.
 	function mk_path($oid,$text = "",$period = 0,$set = true)
 	{
-		global $ext;
+		$ext = $this->cfg["ext"];
 
-		$ch = $this->get_object_chain($oid,false,$GLOBALS["admin_rootmenu2"]);
+		$ch = $this->get_object_chain($oid,false,$this->cfg["admin_rootmenu2"]);
 		$path = "";
 		reset($ch);
 		while (list(,$row) = each($ch))
 		{
-			$path="<a target='list' href='menuedit_right.$ext?parent=".$row["oid"]."&period=".$period."'>".strip_tags($row["name"])."</a> / ".$path;
+			$path="<a target='list' href='".$this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $row["oid"],"period" => $period),"menuedit")."'>".strip_tags($row["name"])."</a> / ".$path;
 		}
 
 		if ($set)

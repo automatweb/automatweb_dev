@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_buyer.aw,v 2.3 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_buyer.aw,v 2.4 2002/06/10 15:50:52 kristo Exp $
 
-global $orb_defs;
-$orb_defs["banner_buyer"] = "xml";
-lc_load("banner");
 classload("banner");
 
 class banner_buyer extends banner
@@ -11,11 +8,8 @@ class banner_buyer extends banner
 	function banner_buyer()
 	{
 		$this->banner();
-			lc_load("definition");
-			global $lc_banner;
-		if (is_array($lc_banner))
-		{
-			$this->vars($lc_banner);}
+		lc_load("definition");
+		$this->lc_load("banner","lc_banner");
 	}
 
 	////

@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_site.aw,v 2.3 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_site.aw,v 2.4 2002/06/10 15:50:52 kristo Exp $
 
-global $orb_defs;
-$orb_defs["banner_site"] = "xml";
-lc_load("banner");
 classload("banner");
 
 class banner_site extends banner
@@ -12,11 +9,7 @@ class banner_site extends banner
 	{
 		$this->banner();
 		lc_load("definition");
-		global $lc_banner;
-		if (is_array($lc_banner))
-		{
-			$this->vars($lc_banner);}
-
+		$this->lc_load("banner","lc_banner");
 	}
 
 	////
@@ -98,7 +91,6 @@ class banner_site extends banner
 		while ($row = $this->db_next())
 		{
 			$ca_sel[$row["location_id"]] = $row["location_id"];
-
 		}
 		return $ca_sel;
 	}
@@ -165,7 +157,7 @@ class banner_site extends banner
 				$t_vi+=$vi;
 				$t_cl+=$cl;
 				$this->vars(array(
-					"img" => "<img src='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id()."'>",
+					"img" => "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id()."'>",
 					"views" => $vi,
 					"clics" => $cl,
 					"ctr"	=> ($vi ? ((double)$cl/(double)$vi)*100.0 : 0),

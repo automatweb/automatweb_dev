@@ -16,6 +16,20 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="save_acl">
+			<function name="ui_save_acl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_acl_groups">
+			<function name="submit_acl_groups">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

@@ -1,26 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.15 2002/01/07 16:35:54 kristo Exp $
-global $orb_defs;
-$orb_defs["links"] = array("new"		=>	array("function"	=> "add",	"params"	=> array("parent"), "opt" => array("docid")),
-													 "submit"	=>	array("function"	=> "submit","params" => array("parent","id")),
-													 "change"	=>	array("function"	=> "change", "params" => array("id"), "opt" => array("docid","parent")),
-													 "delete"	=>	array("function"	=> "delete", "params" => array("parent", "id")),
-													 "search_doc" => array("function" => "search_doc", "params" => array())
-													);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.16 2002/06/10 15:50:53 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
 {
 	function links()
 	{
-		$this->tpl_init("automatweb/extlinks");
-		$this->db_init();
-		global $lc_extlinks;
-		if (is_array($lc_extlinks))
-		{
-			$this->vars($lc_extlinks);
-		}
-		lc_load("definition");
+		$this->extlinks();
+		$this->init("automatweb/extlinks");
 	}
 
 	////
@@ -34,11 +21,23 @@ class links extends extlinks
 		$this->read_template("nadd.tpl");
 		classload("objects");
 		$ob = new db_objects;
-		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => 0, "docid" => $docid)),
-											"parent" => $this->picker($parent,$ob->get_list()),
-											"search_doc" => $this->mk_orb("search_doc", array()),
-											"extlink" => "checked",
-											"docs" => $this->picker(0,$t->mk_docsel())));
+		load_vcl("date_edit");
+		$de = new date_edit("active_until");
+                $de->configure(array(
+                        "day" => "",
+                        "month" => "",
+                        "year" => "",
+                        "hour" => "",
+                        "minute" => ""
+                ));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "docid" => $docid)),
+			"parent" => $this->picker($parent,$ob->get_list()),
+			"search_doc" => $this->mk_orb("search_doc", array()),
+			"extlink" => "checked",
+			"link_image_active_until" => $de->gen_edit_form("active_until",0),
+			"docs" => $this->picker(0,$t->mk_docsel())
+		));
 		return $this->parse();
 	}
 
@@ -52,28 +51,59 @@ class links extends extlinks
 		classload("menuedit");
 		$t = new menuedit;
 
-		$this->mk_path($link[parent], LC_LINKS_CHANGE);
+		$this->mk_path($link["parent"], LC_LINKS_CHANGE);
+
+		// check whether this link has an image attached
+		$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$id' AND class_id = " . CL_FILE;
+		$this->db_query($q);
+		$row = $this->db_next();
+		$awf = get_instance("file");
+		
 		$this->read_template("nadd.tpl");
+
+		if ($row && $awf->can_be_embedded(&$row))
+		{
+			$url = $awf->get_url($row["oid"],"");
+			$this->vars(array("link_image" => "<img src='$url'>"));
+		}
+		
+		load_vcl("date_edit");
+		$de = new date_edit("active_until");
+                $de->configure(array(
+                        "day" => "",
+                        "month" => "",
+                        "year" => "",
+                        "hour" => "",
+                        "minute" => ""
+                ));
+
+		$active_until = ($link["link_image_check_active"]) ? $link["link_image_active_until"] : time() + (3 * 86400);
+
+
 		$ob = new db_objects;
-		$this->vars(array("reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent)),
-											"name"		=> $link[name],
-											"url"			=> $link[url],
-											"search_doc" => $this->mk_orb("search_doc", array()),
-											"desc"		=> $link[descript],
-											"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
-											"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
-											"newwintoolbar" => checked($link["newwintoolbar"]),
-											"newwinlocation" => checked($link["newwinlocation"]),
-											"newwinmenu" => checked($link["newwinmenu"]),
-											"newwinscroll" => checked($link["newwinscroll"]),
-											"use_javascript" => checked($link["use_javascript"]),
-											"comment"	=> $link[comment],
-											"parent"	=> $this->picker($link[parent], $ob->get_list()),
-											"extlink"	=> checked($link[type] != "int"),
-											"intlink"	=> checked($link[type] == "int"),
-											"doclinkcollection"	=> checked($link[doclinkcollection]),
-											"docs"		=> $this->picker($link[docid], $t->mk_docsel()),
-											"newwindow" => checked($link[newwindow])));
+		$this->vars(array(
+			"reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent)),
+			"name"		=> $link["name"],
+			"url"			=> $link["url"],
+			"search_doc" => $this->mk_orb("search_doc", array()),
+			"desc"		=> $link["descript"],
+			"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
+			"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
+			"newwintoolbar" => checked($link["newwintoolbar"]),
+			"newwinlocation" => checked($link["newwinlocation"]),
+			"newwinmenu" => checked($link["newwinmenu"]),
+			"newwinscroll" => checked($link["newwinscroll"]),
+			"use_javascript" => checked($link["use_javascript"]),
+			"comment"	=> $link["comment"],
+			"parent"	=> $this->picker($link["parent"], $ob->get_list()),
+			"extlink"	=> checked($link["type"] != "int"),
+			"intlink"	=> checked($link["type"] == "int"),
+			"doclinkcollection"	=> checked($link["doclinkcollection"]),
+			"docs"		=> $this->picker($link["docid"], $t->mk_docsel()),
+			"newwindow" => checked($link["newwindow"]),
+			"link_image_active_until" => $de->gen_edit_form("active_until",$active_until),
+			"link_image_check_active" => checked($link["link_image_check_active"]),
+		));
 		return $this->parse();
 	}
 
@@ -81,9 +111,9 @@ class links extends extlinks
 	// !Submitib add voi change actioni tulemuse
 	function submit($arr)
 	{
-
 		$this->quote($arr);
 		extract($arr);
+			
 		if (!$id)
 		{
 			$newlinkid = $this->new_object(array(
@@ -111,6 +141,8 @@ class links extends extlinks
 			{
 				$this->add_alias($docid,$newlinkid);
 			}
+
+			$id = $newlinkid;
 		}
 		else
 		{
@@ -135,6 +167,8 @@ class links extends extlinks
 			));
 		}
 		// tegelikult voiks metainfo salvetamise upd_object sisse panema muidugi
+		load_vcl("date_edit");
+		$de = new date_edit("foo");
 		$meta = array(
 			"use_javascript" => $use_javascript,
 			"newwinwidth" => $newwinwidth,
@@ -142,10 +176,55 @@ class links extends extlinks
 			"newwintoolbar" => $newwintoolbar,
 			"newwinlocation" => $newwinlocation,
 			"newwinmenu" => $newwinmenu,
-			"newwinscroll" => $newwinscroll
+			"newwinscroll" => $newwinscroll,
+			"link_image_active_until" => $de->get_timestamp($active_until),
+			"link_image_check_active" => $link_image_check_active,
 		);
 
 		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
+		
+		$_fi = new file;
+		// figure out whether that link already has an image attached
+		$q = "SELECT * FROM objects WHERE parent = '$id' AND class_id = " . CL_FILE;
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row)
+		{
+			$img_id = $row["oid"];
+		}
+		else
+		{	
+			$img_id = "";
+		};
+		
+		global $link_image,$link_image_name,$link_image_type;
+		if ($link_image != "" && $link_image != "none")
+		{
+			if (is_uploaded_file($link_image))
+			{
+				$fl = $_fi->_put_fs(array("type" => $link_image_type, "content" => $this->get_file(array("file" => $link_image))));	
+				// I'm only interested in the filename, not the path
+				$fl = basename($fl);
+
+				$fn = $link_image_name;
+
+				if ($img_id)
+				{
+					$this->db_query("UPDATE files SET file = '$fl',type = '$link_image_type' WHERE id = $img_id");
+				}
+				else
+				{
+					$img_id = $this->new_object(array(
+						"parent" => $id,
+						"name" => "link image",
+						"class_id" => CL_FILE,
+						"status" => 2,
+					));
+
+					$this->db_query("INSERT INTO files (id,file,type) VALUES ('$img_id','$fl','$link_image_type')");
+				};
+			}
+		};
 
 		// arendaks miskit plugin arhitektuuri siin.
 		// ntx, klass providib vahendid linkide lisamiseks, muutmiseks ja submiti
@@ -153,6 +232,8 @@ class links extends extlinks
 		// neid teenuseid. Ntx dokumendiklassi sees.
 
 		#$par_obj = $this->get_object($xparent);
+		return $this->mk_my_orb("change",array("id" => $id));
+		/*
 		if ($docid)
 		{
 			return $this->mk_my_orb("list_aliases", array("id" => $docid), "aliasmgr");
@@ -161,6 +242,7 @@ class links extends extlinks
 		{
 			return $this->mk_orb("obj_list", array("parent" => $parent),"menuedit");
 		}
+		*/
 	}
 
 	////
@@ -184,8 +266,10 @@ class links extends extlinks
 	function search_doc($arr)
 	{
 		$this->read_template("search_doc.tpl");
-		$this->vars(array("index_file" => $GLOBALS["index_file"]));
-		global $s_name, $s_content,$SITE_ID,$baseurl,$index_file,$ext,$s_class_id;
+		$this->vars(array("index_file" => $this->cfg["index_file"]));
+		global $s_name, $s_content,$s_class_id;
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
 		if ($s_name != "" || $s_content != "")
 		{
 			if ($s_class_id == "item")
@@ -195,7 +279,7 @@ class links extends extlinks
 				{
 					$se = " AND name LIKE '%".$s_name."%' ";
 				}
-				$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.parent as parent FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_SHOP_ITEM.") $se");
+				$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.parent as parent FROM objects WHERE objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_SHOP_ITEM.") $se");
 			}
 			else
 			{
@@ -208,7 +292,7 @@ class links extends extlinks
 				{
 					$se[] = " content LIKE '%".$s_content."%' ";
 				}
-				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
+				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			}
 			while ($row = $this->db_next())
 			{
@@ -219,7 +303,7 @@ class links extends extlinks
 				}
 				else
 				{
-					$url = "/".$index_file.".".$ext."/section=".$row["oid"];
+					$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
 				}
 				$name = strip_tags($row["name"]);
 				$name = str_replace("'","",$name);
@@ -279,6 +363,22 @@ class links extends extlinks
 		$id = $this->new_object($row);
 		$this->db_query("INSERT INTO extlinks(id,url,name,hits,oid,descript,newwindow,type,docid,doclinkcollection) VALUES($id,'".$row["e_url"]."','".$row["e_name"]."','".$row["e_hits"]."','".$row["e_oid"]."','".$row["e_descript"]."','".$row["e_newwindow"]."','".$row["e_type"]."','".$row["e_docid"]."','".$row["e_doclinkcollection"]."')");
 		return true;
+	}
+
+	function show($arr)
+	{
+		extract($arr);
+		$link = $this->get_link($id);
+		if (!$link) 
+		{
+			print "Sellist linki pole baasis";
+		} 
+		else 
+		{
+			$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
+			header("Location: ".$link["url"]);
+			exit;
+		};
 	}
 }
 ?>

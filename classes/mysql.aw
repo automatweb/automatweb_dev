@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.17 2002/05/08 20:23:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.18 2002/06/10 15:50:53 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -70,7 +70,7 @@ class mysql
 				exit;
 			}
 		};
-		$this->qID = @mysql_query($qtext, $this->dbh);
+		$this->qID = mysql_query($qtext, $this->dbh);
 		if (!$this->qID ) 
 		{
 			if (!$errors)
@@ -151,7 +151,7 @@ class mysql
 
 	function db_last_insert_id() 
 	{
-		$res = mysql_insert_id();
+		$res = mysql_insert_id($this->dbh);
 		return $res;
 	}
 

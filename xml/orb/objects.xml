@@ -4,20 +4,12 @@
 		<action name="search">
 			<function name="search">
 				<arguments>
+					<optional name="stype" type="int"/>
+					<optional name="target" type="int"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="browser">
-			<function name="browser">
-				<arguments>
-					<optional name="type"/>
-					<optional name="parent"/>
-					<optional name="msgid"/>
-				</arguments>
-			</function>
-		</action>
-		
 		<action name="submit_hd">
 			<function name="submit_hd">
 				<arguments>

@@ -1,25 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
-lc_load("guestbook");
-global $orb_defs;
-$orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
-															 "submit_gb" => array("function" => "submit_gb", "params" => array()),
-															 "change" => array("function" => "change", "params" => array("id"), "opt" => array("parent", "docid")),
-															 "add_entry" => array("function" => "add_entry", "params" => array("id","url"))
-															);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
 
 class guestbook extends aw_template
 {
 	function guestbook()
 	{
-		$this->tpl_init("guestbook");
-		$this->db_init();
+		$this->init("guestbook");
 		$this->sub_merge = 1;
 		lc_load("definition");
-		global $lc_guestbook;
-		if (is_array($lc_guestbook))
-		{
-			$this->vars($lc_guestbook);}
+		$this->lc_load("guestbook","lc_guestbook");
 	}
 
 	////
@@ -30,9 +19,9 @@ class guestbook extends aw_template
 		if (!is_array($this->gbaliases))
 		{
 			$this->gbaliases = $this->get_aliases(array(
-							"oid" => $oid,
-							"type" => CL_GUESTBOOK,
-					));
+				"oid" => $oid,
+				"type" => CL_GUESTBOOK,
+			));
 		};
 		$g = $this->gbaliases[$matches[3] - 1];
 		$replacement = $this->draw($g["target"]);
@@ -95,11 +84,19 @@ class guestbook extends aw_template
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GUESTBOOK_ENTRY." AND status != 0 AND parent = $id");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("name" => $row[name], "email" => $row[last], "comment" => $row[comment], "date" => $this->time2date($row[created], 2), "id" => $row[oid]));
+			$this->vars(array(
+				"name" => $row["name"], 
+				"email" => $row["last"], 
+				"comment" => $row["comment"], 
+				"date" => $this->time2date($row["created"], 2), "id" => $row["oid"]
+			));
 			$this->parse("ENTRY");
 		}
-		$this->vars(array("name" => $o[name], "comment" => $o[comment],
-											"reforb" => $this->mk_reforb("submit_gb", array("id" => $id, "parent" => $parent, "docid" => $docid))));
+		$this->vars(array(
+			"name" => $o["name"], 
+			"comment" => $o["comment"],
+			"reforb" => $this->mk_reforb("submit_gb", array("id" => $id, "parent" => $parent, "docid" => $docid))
+		));
 
 		return $this->parse();
 	}
@@ -111,15 +108,21 @@ class guestbook extends aw_template
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GUESTBOOK_ENTRY." AND status != 0 AND parent = $id");
 		while ($row = $this->db_next())
 		{
-			$from = htmlspecialchars($row[name]);
-			if ($row[last] != "")
+			$from = htmlspecialchars($row["name"]);
+			if ($row["last"] != "")
 			{
-				$from = "<a href='mailto:".htmlspecialchars($row[last])."'>$from</a>";
+				$from = "<a href='mailto:".htmlspecialchars($row["last"])."'>$from</a>";
 			}
-			$this->vars(array("from" => $from, "message" => nl2br(htmlspecialchars($row[comment])), "date" => $this->time2date($row[created], 2)));
+			$this->vars(array(
+				"from" => $from, 
+				"message" => nl2br(htmlspecialchars($row["comment"])), 
+				"date" => $this->time2date($row["created"], 2)
+			));
 			$this->parse("ENTRY");
 		}
-		$this->vars(array("reforb" => $this->mk_reforb("add_entry", array("id" => $id, "url" => urlencode($GLOBALS["REQUEST_URI"])))));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("add_entry", array("id" => $id, "url" => urlencode(aw_global_get("REQUEST_URI"))))
+		));
 		return $this->parse();
 	}
 
@@ -129,7 +132,7 @@ class guestbook extends aw_template
 
 		$this->new_object(array("parent" => $id, "class_id" => CL_GUESTBOOK_ENTRY, "name" => $name, "last" => $email, "comment" => $comment));
 
-		return $GLOBALS["baseurl"].urldecode($url);
+		return $this->cfg["baseurl"].urldecode($url);
 	}
 }
 ?>

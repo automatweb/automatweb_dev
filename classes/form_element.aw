@@ -1,21 +1,24 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.48 2002/03/11 16:15:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.49 2002/06/10 15:50:53 kristo Exp $
 // form_element.aw - vormi element.
-lc_load("form");
+classload("image");
 
 class form_element extends aw_template
 {
 	function form_element()
 	{
+		// FIXME: need stringid lokaliseerida
 		$this->all_subtypes=array(
 			"textbox" => array(
 				"" => "",
 				"count" => "Mitu",
+				"period" => "Perioodiühik",
 				"int" => "Arv",
 				"activity" => "Aktiivsuse pikendamine",
 				"email" => "E-mail", 
 				"surname" => "Eesnimi", 
-				"lastname" => "Perekonnanimi"
+				"lastname" => "Perekonnanimi",
+				"password" => "Parool"
 			),
 			"textarea" => array(
 			),
@@ -66,6 +69,12 @@ class form_element extends aw_template
 				"created" => "Loomine",
 				"activity" => "Aktiivsuse pikendamine"
 			),
+			"alias" => array(
+				"single" => "Ühekordne",
+				"multiple" => "Mitmekordne", 
+			),
+			"timeslice" => array(
+			),
 		);
 
 		$this->all_types = array(
@@ -79,7 +88,18 @@ class form_element extends aw_template
 			'link' => "H&uuml;perlink",
 			'button' => "Nupp",
 			'price' => "Hind",
-			'date' => "Kuup&auml;ev"
+			'date' => "Kuup&auml;ev",
+			'alias' => "Alias",
+			'timeslice' => "Ajaühik",
+	
+		);
+
+		// week and month do not work very well yet
+		$this->timeslice_types = array(
+			'hour' => 'tund(i)',
+			'day' => 'päev(a)',
+			'week' => 'nädal(at)',
+			'month' => 'kuu(d)',
 		);
 	}	
 
@@ -139,7 +159,34 @@ class form_element extends aw_template
 				"ignore_text" => checked($this->arr["ignore_text"]),
 				"act_from" => $de->gen_edit_form("element_".$this->id."_act_from",$this->arr["act_from"],2001,2005,true),
 				"act_to" => $de->gen_edit_form("element_".$this->id."_act_to",$this->arr["act_to"],2001,2005,true),
-				"has_act" => checked($this->arr["has_act"] == 1)
+				"has_act" => checked($this->arr["has_act"] == 1),
+				"entry_controllers" => $this->multiple_option_list($this->arr["entry_controllers"], $this->form->get_list_controllers()),
+				"show_controllers" => $this->multiple_option_list($this->arr["show_controllers"], $this->form->get_list_controllers()),
+				"default_controller" => $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
+				"value_controller" => $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
+				"disabled" => checked($this->arr["disabled"]),
+			));
+
+			// now do element metadata
+			$mtd = "";
+			if (is_array($this->arr["metadata"][$this->form->lang_id]))
+			{
+				foreach($this->arr["metadata"][$this->form->lang_id] as $mn => $mv)
+				{
+					$this->vars(array(
+						"metadata_name" => $mn,
+						"metadata_value" => $mv
+					));
+					$mtd.=$this->parse("METADATA");
+				}
+			}
+			$this->vars(array(
+				"metadata_name" => "",
+				"metadata_value" => ""
+			));
+			$mtd.=$this->parse("METADATA");
+			$this->vars(array(
+				"METADATA" => $mtd
 			));
 
 			$cd = "";
@@ -154,7 +201,10 @@ class form_element extends aw_template
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["link"])
 				));
 				$li = $this->parse("HLINK_ITEMS");
-				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$this->vars(array(
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
+				));
 			}
 			else
 			{
@@ -174,11 +224,14 @@ class form_element extends aw_template
 			$fi = "";
 			if ($this->arr["type"] == "file")
 			{
-				$this->vars(array("ftype_image_selected"	=> ($this->arr["ftype"] == 1 ? "CHECKED" : ""),
-													"ftype_file_selected"		=> ($this->arr["ftype"] == 2 ? "CHECKED" : ""),
-													"file_link_text"				=> $this->arr["flink_text"],
-													"file_show"							=> ($this->arr["fshow"] == 1 ? "CHECKED" : ""),
-													"file_alias"						=> ($this->arr["fshow"] != 1 ? "CHECKED" : "")));
+				$this->vars(array(
+					"ftype_image_selected"	=> checked($this->arr["ftype"] == 1),
+					"ftype_file_selected"		=> checked($this->arr["ftype"] == 2),
+					"file_link_text"				=> $this->arr["flink_text"],
+					"file_show"							=> checked($this->arr["fshow"] == 1),
+					"file_alias"						=> checked($this->arr["fshow"] != 1),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
+				));
 				$fi = $this->parse("FILE_ITEMS");
 			}
 
@@ -189,7 +242,7 @@ class form_element extends aw_template
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
 					"lb_size" => $this->arr["lb_size"],
-					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"])
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"]),
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -227,15 +280,12 @@ class form_element extends aw_template
 						"unique"	=> checked($this->arr["rel_unique"] == 1)
 					));
 					$relation_lb = $this->parse("RELATION_LB");
+					$this->vars(array("RELATION_LB" => $relation_lb));
 					if ($this->form->type == FTYPE_SEARCH)
 					{
 						$relation_uniq = $this->parse("SEARCH_RELATION");
 					}
 				}
-				$this->vars(array(
-					"RELATION_LB" => $relation_lb,
-					"SEARCH_RELATION" => $relation_uniq
-				));
 			}
 
 			$mu = "";
@@ -264,8 +314,27 @@ class form_element extends aw_template
 			{
 				$this->vars(array(
 					"sort_by_order" => checked($this->arr["sort_by_order"]),
-					"sort_by_alpha" => checked($this->arr["sort_by_alpha"])
+					"sort_by_alpha" => checked($this->arr["sort_by_alpha"]),
+					"lb_item_controllers" => $this->multiple_option_list($this->arr["lb_item_controllers"], $this->form->get_list_controllers()),
 				));
+
+				if ($this->form->arr["has_controllers"])
+				{
+					$this->vars(array(
+						"HAS_CONTROLLER" => $this->parse("HAS_CONTROLLER"),
+						"LB_ITEM_CONTROLLER" => $this->parse("LB_ITEM_CONTROLLER"),
+						"NO_ITEM_CONTROLLER" => ""
+					));
+				}
+				else
+				{
+					$this->vars(array(
+						"HAS_CONTROLLER" => "",
+						"LB_ITEM_CONTROLLER" => "",
+						"NO_ITEM_CONTROLLER" => $this->parse("NO_ITEM_CONTROLLER")
+					));
+				}
+
 				if ($this->arr["subtype"] == "activity")
 				{
 					$this->vars(array("LISTBOX_SORT_ACTIVITY" => $this->parse("LISTBOX_SORT_ACTIVITY")));
@@ -288,7 +357,10 @@ class form_element extends aw_template
 					"is_wysiwyg" => checked($this->arr["wysiwyg"] == 1)
 				));
 				$ta = $this->parse("TEXTAREA_ITEMS");
-				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
+				$this->vars(array(
+					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+				));
 			}
 
 			$gp="";
@@ -297,7 +369,8 @@ class form_element extends aw_template
 				$this->vars(array(
 					"default_checked"		=> checked($this->arr["default"] == 1),
 					"cell_group"				=> $this->arr["group"],
-					"ch_value" => $this->arr["ch_value"]
+					"ch_value" => $this->arr["ch_value"],
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 				));
 				$gp = $this->parse("RADIO_ITEMS");
 			}
@@ -314,14 +387,42 @@ class form_element extends aw_template
 					"activity_weeks" => checked($this->arr["activity_type"] == "weeks"),
 					"activity_months" => checked($this->arr["activity_type"] == "months"),
 					"activity_date" => checked($this->arr["activity_type"] == "date"),
+					"thousands_sep" => $this->arr["thousands_sep"],
+
 				));
-				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
+				$this->vars(array(
+					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
+				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 
 				if ($this->arr["subtype"] == "activity")
 				{
 					$this->vars(array("ACTIVITY" => $this->parse("ACTIVITY")));
+				}
+
+				if ($this->arr["subtype"] == "count")
+				{
+					$this->vars(array("COUNT" => $this->parse("COUNT")));
+				}
+
+				if ($this->arr["subtype"] == "int")
+				{
+					$this->vars(array("IS_NUMBER" => $this->parse("IS_NUMBER")));
+				}
+
+				if ($this->arr["subtype"] == "period")
+				{
+					$period_types = array("hour" => "tund","day" => "päev","week" => "week","month" => "month");
+					$this->vars(array(
+						"period_types" => $this->picker($this->arr["period_type"],$period_types),
+						"period_items" => $this->arr["period_items"],
+						"max_period_items" => $this->arr["max_period_items"],
+					));
+
+					$this->vars(array("HAS_PERIOD" => $this->parse("HAS_PERIOD")));
 				}
 			}
 
@@ -335,7 +436,10 @@ class form_element extends aw_template
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["checkbox"])
 				));
 				$dc = $this->parse("CHECKBOX_ITEMS");
-				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$this->vars(array(
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+				));
 			}
 
 			$pc="";
@@ -348,16 +452,57 @@ class form_element extends aw_template
 					"price"	=> $this->arr["price"],
 					"price_cur" => $this->picker($this->arr["price_cur"], $gl),
 					"price_sep" => $this->arr["price_sep"],
-					"price_show" => $this->multiple_option_list($this->arr["price_show"], $gl)
+					"price_show" => $this->multiple_option_list($this->arr["price_show"], $gl),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 				));
 				$pc = $this->parse("PRICE_ITEMS");
 			}
+
+			$al = "";
+			if ($this->arr["type"] == "alias")
+			{
+				classload("aliasmgr");
+				$am = new aliasmgr();
+				// fid, if we are editing a form
+				// output_id, if we are editing an output
+				$id = ($this->fid) ? $this->fid : $this->form->output_id;
+				$alist = $am->get_oo_aliases(array(
+					"oid" => $id,
+					"ret_type" => GET_ALIASES_FLAT,
+				));
+
+				$aliaslist = array();
+
+				if (is_array($alist))
+				{
+					foreach($alist as $key => $val)
+					{
+						$aliaslist[$val["target"]] = $val["name"];
+					};
+				};
+
+				$atypelist = array(
+					"0" => "Ühekordne",
+					"1" => "Igal sisestusel oma",
+				);
+
+				$defs = $am->get_defs();
+
+				$this->vars(array(
+					"aliaslist" => $this->picker($this->arr["alias"],$aliaslist),
+					"aliastype" => $this->picker($this->arr["alias_type"],$atypelist),
+				));
+				
+				$al = $this->parse("ALIASES");
+			}
+
 
 			$bt = "";
 			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset")
 			{
 				$this->vars(array(
 					"button_text" => $this->arr["button_text"],
+					"button_css_class" => $this->arr["button_css_class"],
 					"chain_forward" => checked($this->arr["chain_forward"]==1)
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
@@ -381,9 +526,10 @@ class form_element extends aw_template
 				$img = "";
 				if ($this->arr["button_img"]["url"] != "")
 				{
-					$img = "<img src='".$this->arr["button_img"]["url"]."'>";
+					$img = "<img src='".image::check_url($this->arr["button_img"]["url"])."'>";
 				}
 				$this->vars(array(
+					"button_css_class" => $this->arr["button_css_class"],
 					"button_text" => $this->arr["button_text"],
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["button"]),
 					"button_url" => $this->arr["button_url"],
@@ -401,7 +547,8 @@ class form_element extends aw_template
 					"BUTTON_CONFIRM_TYPE" => ($this->arr["subtype"] == "confirm" ? $this->parse("BUTTON_CONFIRM_TYPE") : ""),
 					"BUTTON_SUB_URL" => ($this->arr["subtype"] == "url" ? $this->parse("BUTTON_SUB_URL") : ""),
 					"BUTTON_SUB_OP" => ($this->arr["subtype"] == "preview" ? $this->parse("BUTTON_SUB_OP") : ""),
-					"BUTTON_SUB_ORDER" => ($this->arr["subtype"] == "order" ? $this->parse("BUTTON_SUB_ORDER") : "")
+					"BUTTON_SUB_ORDER" => ($this->arr["subtype"] == "order" ? $this->parse("BUTTON_SUB_ORDER") : ""),
+					"HAS_ONLY_SHOW_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_ONLY_SHOW_CONTROLLER") : "")
 				));
 			}
 
@@ -448,7 +595,11 @@ class form_element extends aw_template
 					"second_ord" => $this->arr["second_ord"],
 				));
 				$di = $this->parse("DATE_ITEMS");
-				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$this->vars(array(
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
+				));
 			}
 
 			if ($this->form->arr["save_table"] == 1)
@@ -495,7 +646,8 @@ class form_element extends aw_template
 				"HLINK_ITEMS"			=> $li,
 				"BUTTON_ITEMS"		=> $bt,
 				"PRICE_ITEMS"			=> $pc,
-				"DATE_ITEMS"			=> $di
+				"DATE_ITEMS"			=> $di,
+				"ALIASES"			=> $al,
 			));
 	}	
 
@@ -584,6 +736,32 @@ class form_element extends aw_template
 		$var=$base."_text_pos";
 		$this->arr["text_pos"] = $$var;
 
+		// save selected controllers for element
+		$var=$base."_entry_controllers";
+		$this->arr["entry_controllers"] = $this->make_keys($$var);
+		$var=$base."_show_controllers";
+		$this->arr["show_controllers"] = $this->make_keys($$var);
+		$var=$base."_default_controller";
+		$this->arr["default_controller"] = $$var;
+		$var=$base."_value_controller";
+		$this->arr["value_controller"] = $$var;
+
+		$var=$base."_disabled";
+		$this->arr["disabled"] = $$var;
+
+		// metadata
+		$this->arr["metadata"] = array();
+		$varn = $base."_metadata_name";
+		$varv = $base."_metadata_value";
+		$varv = $$varv;
+		foreach($$varn as $nr => $vl)
+		{
+			if ($vl != "")
+			{
+				$this->arr["metadata"][$this->form->lang_id][$vl] = $varv[$nr];
+			}
+		}
+
 		if ($this->arr["type"] == "listbox")
 		{
 			$arvar = $base."_sel";
@@ -594,6 +772,9 @@ class form_element extends aw_template
 
 			$var = $base."_lb_size";
 			$this->arr["lb_size"] = $$var;
+
+			$var = $base."_lb_item_controllers";
+			$this->arr["lb_item_controllers"] = $this->make_keys($$var);
 
 			$this->arr["listbox_items"] = array();
 			$cnt=$this->arr["listbox_count"]+1;
@@ -638,37 +819,25 @@ class form_element extends aw_template
 				$var = $base."_unique";
 				$this->arr["rel_unique"] = $$var;
 
-				// if we get here a relation has already been created, at least we can hope so :p
 				$rel_changed = false;
 				$var = $base."_rel_form";
-				if ($$var != $this->arr["rel_form"])
-				{
-					$this->arr["rel_form"] = $$var;
-					$rel_changed = true;
-				}
+				$this->arr["rel_form"] = $$var;
+
 				$var = $base."_rel_element";
-				if ($$var != $this->arr["rel_element"])
+				$this->arr["rel_element"] = $$var;
+
+				// always update the relation in the table, just to be sure
+				if ($this->arr["rel_table_id"])
 				{
-					$this->arr["rel_element"] = $$var;
-					$rel_changed = true;
+					// SET form_from = '".$this->arr["rel_form"]."' , form_to = '".$this->form->id."' , el_from = '".$this->arr["rel_element"]."' , el_to = ".$this->id."
+					$this->db_query("DELETE FROM form_relations WHERE id = '".$this->arr["rel_table_id"]."'");
 				}
 
-				if ($rel_changed || !$this->arr["rel_table_id"])
-				{
-					// update the relation in the table
-					if ($this->arr["rel_table_id"])
-					{
-						$this->db_query("UPDATE form_relations SET form_from = '".$this->arr["rel_form"]."' , form_to = '".$this->form->id."' , el_from = '".$this->arr["rel_element"]."' , el_to = ".$this->id." WHERE id = ".$this->arr["rel_table_id"]);
-					}
-					else
-					{
-						// make sure we got it right.
-						$this->db_query("DELETE FROM form_relations WHERE form_from = ".$this->arr["rel_form"]." AND form_to = ".$this->form->id." AND el_from = ".$this->arr["rel_element"]." AND el_to = ".$this->id);
+				// make sure we got it right.
+				$this->db_query("DELETE FROM form_relations WHERE form_from = '".$this->arr["rel_form"]."' AND form_to = '".$this->form->id."' AND el_from = '".$this->arr["rel_element"]."' AND el_to = '".$this->id."'");
 
-						$this->db_query("INSERT INTO form_relations (form_from,form_to,el_from,el_to) VALUES('".$this->arr["rel_form"]."','".$this->form->id."','".$this->arr["rel_element"]."','".$this->id."')");
-						$this->arr["rel_table_id"] = $this->db_last_insert_id();
-					}
-				}
+				$this->db_query("INSERT INTO form_relations (form_from,form_to,el_from,el_to) VALUES('".$this->arr["rel_form"]."','".$this->form->id."','".$this->arr["rel_element"]."','".$this->id."')");
+				$this->arr["rel_table_id"] = $this->db_last_insert_id();
 			}
 		}
 
@@ -682,6 +851,9 @@ class form_element extends aw_template
 
 			$var = $base."_lb_size";
 			$this->arr["mb_size"] = $$var;
+
+			$var = $base."_lb_item_controllers";
+			$this->arr["lb_item_controllers"] = $this->make_keys($$var);
 
 			$this->arr["multiple_items"] = array();
 			$cnt=$this->arr["multiple_count"]+1;	
@@ -757,6 +929,19 @@ class form_element extends aw_template
 			}
 		}
 
+		if ($this->arr["type"] == "alias")
+		{
+			$var=$base."_alias";
+			$this->arr["alias"] = $$var;
+
+			// I should somehow determine what type the alias is,
+			// and if it is a calendar, then update it to point to an entry
+
+			$var=$base."_alias_type";
+			$this->arr["alias_type"] = $$var;
+			
+		}
+
 		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea" || $this->arr["type"] == "checkbox" || $this->arr["type"] == "radiobutton")
 		{
 			$var=$base."_def";
@@ -785,6 +970,14 @@ class form_element extends aw_template
 		{
 			$var=$base."_activity_type";
 			$this->arr["activity_type"] = $$var;
+			$var=$base."_thousands_sep";
+			$this->arr["thousands_sep"] = $$var;
+			$var=$base."_period_type";
+			$this->arr["period_type"] = $$var;
+			$var=$base."_period_items";
+			$this->arr["period_items"] = $$var;
+			$var=$base."_max_period_items";
+			$this->arr["max_period_items"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -878,6 +1071,9 @@ class form_element extends aw_template
 			$var = $base."_use_button_img";
 			$this->arr["button_img"]["use"] = $$var;
 
+			$var = $base."_button_css_class";
+			$this->arr["button_css_class"] = $$var;
+
 			$var = $base."_button_img";
 			classload("image");
 			$im = new image;
@@ -913,10 +1109,7 @@ class form_element extends aw_template
 
 	function gen_check_html()
 	{
-		global $lang_id,$awt;
-		$awt->start("form_element::gen_check_html");
-		$awt->count("form_element::gen_check_html");
-
+		$lang_id = aw_global_get("lang_id");
 		if ($this->form->lang_id == $lang_id)
 		{
 			$mue = $this->arr["must_error"];
@@ -930,7 +1123,7 @@ class form_element extends aw_template
 
 		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
 		{
-			$str .= "doc._el_".$this->id.".value=_ifr_".$this->id.".document.body.innerHTML;\n";
+			$str .= "document.fm_".$this->form->id."._el_".$this->id.".value=_ifr_".$this->id.".document.body.innerHTML;\n";
 		}
 
 		if (($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea") && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
@@ -939,7 +1132,6 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
-			$awt->stop("form_element::gen_check_html");
 			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
 		else
@@ -949,11 +1141,9 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
-			$awt->stop("form_element::gen_check_html");
 			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
 
-		$awt->stop("form_element::gen_check_html");
 		return $str;
 	}
 
@@ -977,7 +1167,7 @@ class form_element extends aw_template
 	{	
 		if ($lid == -1)
 		{
-			$lid = $GLOBALS["lang_id"];
+			$lid = aw_global_get("lang_id");
 		}
 		if ($this->form->lang_id == $lid)
 		{
@@ -1000,6 +1190,7 @@ class form_element extends aw_template
 	}
 
 	function get_ch_grp() { return $this->arr["ch_grp"]; }
+	function get_ch_value() { return $this->arr["ch_value"]; }
 	function get_el_name()		{	return $this->arr["name"]; }
 	function get_style()	{	return $this->arr["style"]; }
 	function get_type()		{	return $this->arr["type"]; }
@@ -1013,11 +1204,45 @@ class form_element extends aw_template
 	function get_col()		{ return $this->col; }
 	function get_el_group()		{ return $this->arr["group"]; }
 	function get_related_form() { return $this->arr["rel_form"]; }
-	function get_related_element() { return $this->arr["rel_elelement"]; }
+	function get_related_element() { return $this->arr["rel_element"]; }
 	function get_el_lb_items()	
 	{
 		return $this->arr["listbox_items"];
 	} 
+	function get_thousands_sep() { return $this->arr["thousands_sep"]; }
+
+	// generic wrapper
+	function get_prop($key)
+	{
+		return $this->arr[$key];
+	}
+
+	function get_show_controllers() 
+	{ 
+		if (is_array($this->arr["show_controllers"]))
+		{
+			return $this->arr["show_controllers"];
+		}
+		return array();
+	}
+
+	function get_entry_controllers() 
+	{ 
+		if (is_array($this->arr["entry_controllers"]))
+		{
+			return $this->arr["entry_controllers"];
+		}
+		return array();
+	}
+
+	function get_lb_controllers() 
+	{ 
+		if (is_array($this->arr["lb_item_controllers"]))
+		{
+			return $this->arr["lb_item_controllers"];
+		}
+		return array();
+	}
 
 	////
 	// !returns the name of table that the data from this element should be written to
@@ -1045,6 +1270,30 @@ class form_element extends aw_template
 		{
 			return "ev_".$this->id;
 		}
+	}
+
+	////
+	// !returns the name of column that the data from this element should be written to - if it is formgen table
+	// it returns el_ instead of ev_
+	function get_save_col2()
+	{
+		if ($this->form->arr["save_table"] == 1)
+		{
+			return $this->arr["table"][0]["col"];
+		}
+		else
+		{
+			return "el_".$this->id;
+		}
+	}
+
+	function get_metadata($lid = 0)
+	{
+		if (!$lid)
+		{
+			$lid = aw_global_get("lang_id");
+		}
+		return is_array($this->arr["metadata"][$lid]) ? $this->arr["metadata"][$lid] : array();
 	}
 
 	function save_short()
@@ -1180,27 +1429,10 @@ class form_element extends aw_template
 	{
 		$this->entry = $arr[$this->id];
 		$this->entry_id = $e_id;
-	}
-
-	function gen_controller_html()
-	{
-		$this->read_template("admin_element_controllers.tpl");
-		$tt = "";
-		if ($this->arr["type"] == "textbox")
+		if ($this->arr["type"] == "file" || $this->arr["type"] == "link")
 		{
-			$this->vars(array("el_maxlen"			=> $this->arr["c_maxlen"],
-												"el_minlen"			=> $this->arr["c_minlen"],
-												"t_email_sel"		=> ($this->arr["c_type"] == "email" ? "SELECTED" : ""),
-												"t_url_sel"			=> ($this->arr["c_type"] == "url" ? "SELECTED" : ""),
-												"t_number_sel"	=> ($this->arr["c_type"] == "number" ? "SELECTED" : ""),
-												"t_letter_sel"	=> ($this->arr["c_type"] == "letter" ? "SELECTED" : ""),
-												"el_req_sel"		=> ($this->arr["c_req"] == 1 ? "CHECKED" : "" )));
-			$tt = $this->parse("T_TEXTBOX");
+			$this->entry = aw_unserialize($this->entry);
 		}
-		$this->vars(array("element_text"	=> $this->arr["text"], 
-											"element_type"	=> $this->arr["type"],
-											"T_TEXTBOX"			=> $tt));
-		return $this->parse();
 	}
 
 	function change_pos($arr,&$f)
@@ -1208,7 +1440,7 @@ class form_element extends aw_template
 		$this->read_template("change_pos.tpl");
 		$o = new db_objects;
 		$obj = $this->get_object($this->id);
-		if (!is_array($f->arr["el_menus"]))
+		if (!(is_array($f->arr["el_menus"]) && count($f->arr["el_menus"]) > 0))
 		{
 			$mlist = $o->get_list();
 		}
@@ -1274,11 +1506,7 @@ class form_element extends aw_template
 
 	function do_core_userhtml($prefix,$elvalues,$no_submit)
 	{
-		global $awt;
-		$awt->start("form_element::do_core_userhtml");
-		$awt->count("form_element::do_core_userhtml");
-
-		// sheck if this element is supposed to be shown right now
+		// check if this element is supposed to be shown right now
 		$show = true;
 		if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"] && $this->arr["has_act"] == 1)
 		{
@@ -1294,7 +1522,14 @@ class form_element extends aw_template
 		}
 
 		$html="";
-		global $lang_id;
+		if (is_array($this->form->controller_errors[$this->id]) && count($this->form->controller_errors[$this->id]) > 0)
+		{
+			$html.="<font color='red' size='2'>";
+			$html.=join("<br>",$this->form->controller_errors[$this->id])."<Br>";
+			$html.="</font>";
+		}
+
+		$lang_id = aw_global_get("lang_id");
 		if ($this->form->lang_id == $lang_id)
 		{
 			$text = $this->arr["text"];
@@ -1309,14 +1544,18 @@ class form_element extends aw_template
 		$elid = $this->id;
 		$ext = false;
 
-		global $fg_check_status;
-
 		$stat_check = "";
 
-		if ($fg_check_status)
+		if (aw_global_get("fg_check_status"))
 		{
 			$stat_check = " onChange='set_changed()' ";
 		};
+
+		$disabled = ($this->arr["disabled"] == 1 ? " disabled " : "");
+		if ($disabled)
+		{
+			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."'>";
+		}
 
 		switch($this->arr["type"])
 		{
@@ -1328,12 +1567,12 @@ class form_element extends aw_template
 					$html.="<script for=window event=onload>\n";
 					$html.="_ifr_".$prefix.$elid.".document.designMode='On';\n";
 					$html.="_ifr_".$prefix.$elid.".document.write(\"<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>\");\n";
-					$html.="_ifr_".$prefix.$elid.".document.write(doc._el_".$prefix.$elid.".value);\n";
+					$html.="_ifr_".$prefix.$elid.".document.write(document.fm_".$this->form->id."._el_".$prefix.$elid.".value);\n";
 					$html.="</script>\n";
 				}
 				else
 				{
-					$html="<textarea $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
+					$html.="<textarea $disabled $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
 					$html .= htmlspecialchars($this->get_val($elvalues));
 					$html .= "</textarea>";
 				}
@@ -1341,7 +1580,7 @@ class form_element extends aw_template
 
 			case "radiobutton":
 				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html="<input type='radio' $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
+				$html .="<input type='radio' $disabled $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
 				break;
 
 			case "listbox":
@@ -1350,7 +1589,7 @@ class form_element extends aw_template
 				{
 					$this->make_relation_listbox_content();
 				}
-				$html="<select $stat_check name='".$prefix.$elid."'";
+				$html .="<select $disabled $stat_check name='".$prefix.$elid."'";
 				if ($this->arr["lb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["lb_size"]."\"";
@@ -1385,7 +1624,7 @@ class form_element extends aw_template
 						$_lbsel = "element_".$this->id."_lbopt_".$this->arr["listbox_default"];
 					}
 				}
-				
+
 				for ($b=0; $b < $cnt; $b++)
 				{	
 					$_v = "element_".$this->id."_lbopt_".$b;
@@ -1395,30 +1634,47 @@ class form_element extends aw_template
 					if (is_array($larr))
 					{
 						list($key,$value) = each($larr);
-						if ($ext)
+
+						// now check all listbox item controllers for this lb item and if any of them fail, don't show item
+						$controllers_ok = true;
+						if (is_array($this->arr["lb_item_controllers"]))
 						{
-							$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
-						}
-						else
-						{
-							// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
-							// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
-							if ($this->form->type == FTYPE_SEARCH && $b == ($cnt-1))
+							foreach($this->arr["lb_item_controllers"] as $ctrlid)
 							{
-								$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts;
+								if (($res = $this->form->controller_instance->do_check($ctrlid, $value, &$this->form, $this)) !== true)
+								{
+									$controllers_ok = false;
+								}
+							}
+						}
+
+						if ($controllers_ok)
+						{
+							if ($ext)
+							{
+								$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
 							}
 							else
 							{
-								$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+								// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
+								// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
+								if ($this->form->type == FTYPE_SEARCH && $b == ($cnt-1))
+								{
+									$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts;
+								}
+								else
+								{
+									$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+								}
 							}
-						};
+						}
 					}
 				}
 				$html.=$lb_opts."</select>";
 				break;
 
 			case "multiple":
-				$html="<select $stat_check NAME='".$prefix.$elid."[]' MULTIPLE";
+				$html.="<select $disabled $stat_check NAME='".$prefix.$elid."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["mb_size"]."\"";
@@ -1426,7 +1682,9 @@ class form_element extends aw_template
 				$html.=">";
 
 				if ($this->entry_id)
+				{
 					$ear = explode(",",$this->entry);
+				}
 
 				if ($lang_id != $this->form->lang_id)
 				{
@@ -1444,36 +1702,109 @@ class form_element extends aw_template
 					{
 						reset($ear);
 						while (list(,$v) = each($ear))
+						{
 							if ($v == $b)
+							{
 								$sel = true;
+							}
+						}
 					}
 					else
+					{
 						$sel = ($this->arr["multiple_defaults"][$b] == 1 ? true : false);
+					}
 
-					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$larr[$b];
+					// now check all multiple item controllers for this item and if any of them fail, don't show item
+					$controllers_ok = true;
+					if (is_array($this->arr["lb_item_controllers"]))
+					{
+						foreach($this->arr["lb_item_controllers"] as $ctrlid)
+						{
+							if (($res = $this->form->controller_instance->do_check($ctrlid, $larr[$b], &$this->form, $this)) !== true)
+							{
+								$controllers_ok = false;
+							}
+						}
+					}
+
+					if ($controllers_ok)
+					{
+						$html.="<option ".selected($sel == true)." VALUE='$b'>".$larr[$b];
+					}
 				}
 				$html.="</select>";
 				break;
 
 			case "checkbox":
-				$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
-				$html = "<input $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
+				$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
+				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
 				break;
 
 			case "textbox":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
+				$tb_type = "text";
+				if ($this->arr["subtype"] == "password")
+				{
+					$tb_type = "password";
+				}
+				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
+				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
+				break;
+
+			case "alias":
+				// igal entryle on võimalik sisestada oma alias
+				if ( $this->arr["alias_type"] == 1)
+				{
+					$am = get_instance("aliasmgr");
+
+					// There can be only one
+					$alias = $am->get_oo_aliases(array("oid" => $this->arr["id"],"ret_type" => GET_ALIASES_FLAT));
+
+					$defs = $am->get_defs();
+
+					$def = $defs[$this->arr["alias_subtype"]];
+
+					if ($alias[0]["class_id"] != $def["class_id"])
+					{
+						$link = $def["addlink"];
+						$caption = "Lisa objekt ($def[title])";
+					}
+					else
+					{
+						$link = $def["chlink"];
+						$link .= "&id=" . $alias[0]["target"];
+						$caption = "Muuda objekti ($def[title])";
+					};
+
+					$window = "window.open('$link','edit','toolbar=no,location=no,directories=no,menubar=no,width=800,height=500')";
+					$html .= "<a href=\"#\" onClick=\"$window\">$caption</a>";
+				}
+				elseif ($this->arr["alias"] > 0)
+				{
+					classload("objects");
+					$obj = new objects();
+					// just show the aliased object
+					// yeah!
+					// I really hope that the thing we pass there is a reference to the form data
+					$html .= $obj->show(array("id" => $this->arr["alias"],"form" => $this->form, "caption" => $this->arr["text"]));
+				};
+				break;
+
+			case "timeslice":
+				$values = aw_unserialize($this->get_val($elvalues));
+				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d'>",$prefix.$elid,$values["count"]);
+				$html .= sprintf("<select name='%s_type'>%s</select",$prefix.$elid,$this->picker($values["type"],$this->timeslice_types));
 				break;
 
 			case "button":
 			case "submit":
 			case "reset":
+				$csscl = ($this->arr["button_css_class"] != "" ? "class=\"".$this->arr["button_css_class"]."\"" : "");
 				if (!$no_submit)
 				{
 					if ($lang_id == $this->form->lang_id)
@@ -1488,7 +1819,7 @@ class form_element extends aw_template
 					if ($this->arr["button_img"]["use"] == 1)
 					{
 						$btype = "image";
-						$bsrc  = "src=\"".$this->arr["button_img"]["url"]."\"";
+						$bsrc  = "src=\"".image::check_url($this->arr["button_img"]["url"])."\"";
 					}
 					else
 					{
@@ -1511,48 +1842,52 @@ class form_element extends aw_template
 						{
 							$bname = "name=\"confirm\"";
 						}
-						$html = "<input $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">";
+						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
 						if ($btype == "image")
 						{
-							$html = "<input type='image' $bsrc onClick=\"form_reset(); return false;\">";
+							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\">";
 						}
 						else
 						{
-							$html = "<input type='reset' VALUE='".$butt."'>";
+							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."'>";
 						};
 					}
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
 					}
 					else
 					if ($this->arr["subtype"] == "order")
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
-						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
 					{
-						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">";
 					}
 				}
 				break;
 
 			case "file":
-				$html = "<input type='file' $stat_check NAME='".$prefix.$elid."' value=''>";
+				if ($this->entry_id)
+				{
+					$html.=$this->get_value();
+				}
+				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value=''>";
 				break;
 
 			// yuck
 			case "link":
 				if ($this->arr["subtype"] != "show_op")
 				{
-					$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
+					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
 					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
 					$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
 				}
@@ -1617,7 +1952,9 @@ class form_element extends aw_template
 				{
 					$def = time();
 				}
-				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+//				echo "aentry_id = $this->entry_id , $this->entry <br>";
+				$vl = $this->get_val($elvalues);
+				$html .= $de->gen_edit_form($prefix.$elid, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				break;
 		};
 		
@@ -1658,7 +1995,6 @@ class form_element extends aw_template
 		{
 			$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
 		}
-		$awt->stop("form_element::do_core_userhtml");
 		return $html;
 	}
 
@@ -1666,11 +2002,15 @@ class form_element extends aw_template
 	// tagastab mingi elemendi väärtuse
 	function get_val($elvalues = array())
 	{
-		global $lang_id,$awt;
-		$awt->start("form_element::get_val");
-		$awt->count("form_element::get_val");
+		$lang_id = aw_global_get("lang_id");
 
-
+		// if value controiller is set, always use that
+		if ($this->arr["value_controller"]) 
+		{
+			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], "", &$this->form, $this);
+//			echo "el $this->id has value controller val = $val <br>";
+		}
+		else
 		// kui entry on laetud, siis voetakse see sealt.
 		if ($this->entry_id)
 		{
@@ -1681,6 +2021,12 @@ class form_element extends aw_template
 		if (isset($elvalues[$this->arr["name"]]) && $elvalues[$this->arr["name"]] != "")
 		{
 			$val = $elvalues[$this->arr["name"]];
+		}
+		else
+		// if a default value controller is specified, then get the value from that
+		if ($this->arr["default_controller"]) 
+		{
+			$val = $this->form->controller_instance->eval_controller($this->arr["default_controller"], "", &$this->form, $this);
 		}
 		// finally, if nothing else succeeded, we will just use the default.
 		else
@@ -1694,107 +2040,55 @@ class form_element extends aw_template
 				$val = $this->arr["default"];
 			}
 		}
-		$awt->stop("form_element::get_val");
 		return $val;
 	}
 
 	function core_process_entry(&$entry, $id,$prefix = "")
 	{
-		global $awt;
-		$awt->start("form_element::core_process_entry");
-		$awt->count("form_element::core_process_entry");
-
-
 		//// This is called for every single element in the form.
-		// $this->form->post_vars sisaldab $HTTP_POST_VARS väärtusi.
-		// the following code should be fixed to use only that and
-		// not import the variables from the local scope.
+		// $this->form->post_vars contains $HTTP_POST_VARS.
+
 		if ($this->arr["type"] == 'link')
 		{
-			$var = $prefix.$this->id."_text";
-			$var2= $prefix.$this->id."_address";
-			// fuck you. fuck YOU. 
-			// ok, is it really THAT hard to change this into $this->form->post_vars[$var] or what are you whining about? :p - terryf
-			global $$var, $$var2;
-			$entry[$this->id] = array("text" => $$var, "address" => $$var2);
-			$this->entry_id = $id;
-			$this->entry = $entry[$this->id];
-			$awt->stop("form_element::core_process_entry");
-			return;
+			$var = $this->form->post_vars[$prefix.$this->id."_text"];
+			$var2= $this->form->post_vars[$prefix.$this->id."_address"];
+			$var = array("text" => $var, "address" => $var2);
 		}
 		else
 		if ($this->arr["type"] == 'file')
 		{
 			// gotcha, siis handletakse piltide uploadi
 			$var = $prefix.$this->id;
-			global $$var;
-
-			if ($$var != "none")
-			{
-				$ft = $var."_type";
-				global $$ft;
-				$fn = $var."_name";
-				global $$fn;
-
-				// nyah. this should be rewritten to use file class... 
-				// and actually db_images class should be deprecated and all file uploads handled by file class
-				// cause it's interface and everything is lots better
-				$im = new db_images;
-				if ($this->arr["fshow"] == 1)
-				{
-					if (is_array($entry[$this->id]))	// this holds array("id" => $image_id, "idx" => $image_idx);
-					{
-						$entry[$this->id] = $im->replace($$var,$$ft,$id,$entry[$this->id]["idx"],"",$entry[$this->id]["id"],true,$$fn);
-					}
-					else
-					{
-						$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
-					};
-				}
-				else
-				{
-					$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
-				}
-				$this->entry = $entry[$this->id];
-				$this->entry_id = $id;
-			}
-			$awt->stop("form_element::core_process_entry");
-			return;
+			$img = new file;
+			$var = $img->add_upload_image($var,$this->form->entry_parent,$this->entry["id"]);
 		}
 		else
 		if ($this->arr["type"] == "radiobutton")
 		{
-			// this is not good, I hade to hack around this naming scheme in
-			// XML-RPC.
-			// um, could you explain what's wrong with it? - terryf
 			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
 		}
 		else
 		if ($this->arr["type"] == "button" && $this->arr["subtype"] == "confirm")
 		{
+			// confirm button moves the entry to another folder
 			if (isset($GLOBALS[$prefix."confirm"]))
 			{
-				$this->form->update_entry_object(array("oid" => $id, "parent" => $this->arr["confirm_moveto"]));
+				// just set the entry parent to the correct value, the object will actually be updated a bit later
+				$this->form->entry_parent = $this->arr["confirm_moveto"];
 			}
 		}
 		else
-		// I think the listboxes are handled as well here.
 		if ($this->arr["type"] == "multiple")
 		{
-			$var = $prefix.$this->id;
-			global $$var;
-			if (is_array($$var))
+			$var = $this->form->post_vars[$prefix.$this->id];
+			if (is_array($var))
 			{
-				$entry[$this->id] = join(",",$$var);
+				$var = join(",",$var);
 			}
 			else
 			{
-				$entry[$this->id] = "";
+				$var = "";
 			}
-			$this->entry = $entry[$this->id];
-			$this->entry_id = $id;
-			$awt->stop("form_element::core_process_entry");
-			return;
 		}
 		else
 		if ($this->arr["type"] == "date")
@@ -1806,6 +2100,9 @@ class form_element extends aw_template
 			{
 				$d_id = $this->arr["def_date_rel_el"];
 			}
+			$v = $this->form->post_vars[$prefix.$d_id];
+			$var = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+
 			$var = $prefix.$d_id;
 			global $$var;
 			$v = $$var;
@@ -1828,13 +2125,15 @@ class form_element extends aw_template
 
 			if ($this->arr["def_date_type"] == "rel")
 			{
-				$tm+=($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+				$var+=($this->arr["def_date_num"] * $this->arr["def_date_add"]);
 			}
-			$entry[$this->id] = $tm;
-			$this->entry = $entry[$this->id];
-			$this->entry_id = $id;
-			$awt->stop("form_element::core_process_entry");
-			return;
+		}
+		else
+		if ($this->arr["type"] == "timeslice")
+		{
+			$count = $this->form->post_vars[$prefix.$this->id."_count"];
+			$type= $this->form->post_vars[$prefix.$this->id."_type"];
+			$var = array("count" => $count, "type" => $type);
 		}
 		else
 		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
@@ -1846,20 +2145,30 @@ class form_element extends aw_template
 			$var = $this->form->post_vars[$prefix.$this->id];
 		}
 
+		// if value controiller is set, always use that
+		if ($this->arr["value_controller"]) 
+		{
+			$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], "", &$this->form, $this);
+		}
+
 		$entry[$this->id] = $var;
 		$this->entry = $var;
 		$this->entry_id = $id;
-		$awt->stop("form_element::core_process_entry");
+
+			$var = $this->form->post_vars[$prefix.$this->id];
+//		echo "id = ",$this->id," entry = ", $var ,"<br>";
+		if ($this->form->arr["has_controllers"])
+		{
+			// now let all the element's controllers do their checks
+			return $this->do_entry_controller_checks();
+		}
+		return true;
 	}
 
 	////
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user
 	function get_value($numeric = false)
 	{
-		global $awt;
-		$awt->start("form_element::get_value");
-		$awt->count("form_element::get_value");
-
 		switch($this->arr["type"])
 		{
 			case "textarea":
@@ -1936,8 +2245,32 @@ class form_element extends aw_template
 			case "link":
 				$html = $this->entry["address"];
 				break;
+
+			case "timeslice":
+				$html = $this->entry["count"] . $this->timeslice_types[$this->entry["type"]];
+				break;
+
+			case "file":
+				if ($this->entry["url"] != "")
+				{
+					if ($this->arr["ftype"] == 1)
+					{
+						if ($this->arr["fshow"])
+						{
+							$html="<img src=\"".file::check_url($this->entry["url"])."\"><br>";
+						}
+					}
+					else
+					if ($this->arr["ftype"] == 2)
+					{
+						if ($this->arr["fshow"])
+						{
+							$html.="<a href=\"".file::check_url($this->entry["url"])."\">".$this->arr["flink_text"]."</a><br>";
+						}
+					}
+				}
+				break;
 		};
-		$awt->stop("form_element::get_value");
 		return $html;
 	}
 
@@ -2133,26 +2466,20 @@ class form_element extends aw_template
 
 	function do_search_script($rel = false)
 	{
-		global $elements_created,$search_script;
-
-		if (!$search_script)
+		if (!aw_global_get("search_script"))
 		{
-			$GLOBALS["search_script"] = true;
+			aw_global_set("search_script",true);
 			$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
 		}
 
-		if (!$elements_created)
+		if (!aw_global_get("elements_created"))
 		{
 			// make javascript arrays for form elements
 			$formcache = array(0 => "");
-			if (!$rel)
-			{
-				$tarr = $this->form->get_search_targets();
-			}
-			else
-			{
-				$tarr = $this->form->get_relation_targets();
-			}
+			$tarr = array();
+			$tarr = $this->form->get_search_targets();
+			$tarr += $this->form->get_relation_targets();
+
 			$tarstr = join(",",$this->map2("%s",$tarr));
 			if ($tarstr != "")
 			{
@@ -2162,7 +2489,8 @@ class form_element extends aw_template
 					$formcache[$row["oid"]] = $row["name"];
 				}
 			
-				$el_num = 0;
+				global $tbl_num;
+				$el_num = (int)$tbl_num;
 				$this->db_query("SELECT objects.name as el_name, element2form.el_id as el_id,element2form.form_id as form_id FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN ($tarstr)");
 				while ($row = $this->db_next())
 				{
@@ -2177,8 +2505,8 @@ class form_element extends aw_template
 			}
 			$this->vars(array("ELDEFS" => $eds));
 			$this->vars(array("SEARCH_DEFS" => $this->parse("SEARCH_DEFS")));
-			$GLOBALS["elements_created"] = true;
-			$GLOBALS["formcache"] = $formcache;
+			aw_global_set("elements_created",true);
+			aw_global_set("formcache",$formcache);
 		}
 	}
 
@@ -2187,6 +2515,7 @@ class form_element extends aw_template
 	function make_relation_listbox_content()
 	{
 		$this->save_handle();
+		/*
 		$rel_el = "form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"];
 
 		$order_by = "";
@@ -2207,6 +2536,11 @@ class form_element extends aw_template
 			$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
 			$cnt++;
 		}
+		*/
+
+		// I made it a separete function because I need those valuse in exact same order in form->process_entry
+		// too - to check whether the entry falls into allowed range in a calendar
+		list($cnt,$this->arr["listbox_items"]) = $this->form->_get_relation_listbox_content($this->arr);
 		$this->arr["listbox_count"] = $cnt;
 		if ($this->form->type == FTYPE_SEARCH)
 		{
@@ -2219,10 +2553,6 @@ class form_element extends aw_template
 
 	function get_types_cached()
 	{
-		global $awt;
-		$awt->count("form_element::get_types_cached");
-		$awt->start("form_element::get_types_cached");
-
 		if (!is_array($this->subtypes))
 		{
 			classload("config");
@@ -2250,7 +2580,6 @@ class form_element extends aw_template
 				$this->types = aw_unserialize($dat);
 			}
 		}
-		$awt->stop("form_element::get_types_cached");
 	}
 
 	function get_all_types()
@@ -2261,6 +2590,72 @@ class form_element extends aw_template
 	function get_all_subtypes()
 	{
 		return $this->all_subtypes;
+	}
+
+	////
+	// !this returns the value for ane element that will be used in controllers 
+	// it picks the best version based on the element type
+	function get_controller_value()
+	{
+		if ($this->arr["type"] == "date")
+		{
+			$val = $this->get_val();
+		}
+		else
+		if ($this->arr["type"] == "radiobutton")
+		{
+			// for radio elements in the same radio group,
+			// we should return the value of the selected radiobutton
+	
+			// the entry for radio button is the id of the button in the group that is selected. 
+			// so we can easily find the correct element
+			$sel_id = $this->entry;
+			if ($sel_id)
+			{
+				// if something is selected, go fetch it's value
+				$el =& $this->form->get_element_by_id($sel_id);
+				$val = $el->get_ch_value();
+			}
+		}
+		else
+		{
+			$val = $this->get_value();
+		}
+		return $val;
+	}
+
+	////
+	// !this gives a chance to validate input to all the element's controllers
+	function do_entry_controller_checks()
+	{
+		$ret = true;
+		if (is_array($this->arr["entry_controllers"]))
+		{
+			foreach($this->arr["entry_controllers"] as $ctrlid)
+			{
+				$this->form->controller_queue[] = array(
+					"ctrlid" => $ctrlid, 
+					"val" => $this->get_controller_value(), 
+					"el_id" => $this->id
+				);
+			}
+		}
+		return $ret;
+	}
+
+	function remove_entry_controller($controller)
+	{
+		unset($this->arr["entry_controllers"][$controller]);
+	}
+
+	function remove_show_controller($controller)
+	{
+		unset($this->arr["show_controllers"][$controller]);
+	}
+
+	function remove_lb_controller($controller)
+	{
+		unset($this->arr["lb_item_controllers"][$controller]);
 	}
 
 	function get_date_value()

@@ -13,6 +13,10 @@
 <td class="fgtitle"><input type="text" name="name" size="30" value="{VAR:name}"></td>
 </tr>
 <tr>
+<td class="fgtitle">Konfi objekt</td>
+<td class="fgtitle"><select name="confobject">{VAR:confobjects}</select></td>
+</tr>
+<tr>
 <td class="fgtitle" colspan="2" align="center">
 <input type="submit" value="Salvesta">
 </td>

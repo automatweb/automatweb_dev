@@ -1,8 +1,5 @@
 <?php
 
-global $orb_defs;
-$orb_defs["shop_admin"] = "xml";
-
 classload("shop_base","shop_menuedit");
 classload("shop");
 classload("form");
@@ -30,7 +27,7 @@ class shop_admin extends shop_base
 		extract($arr);
 		$this->read_template("shop_top_frame.tpl");
 
-		global $ext;
+		$ext = $this->cfg["ext"];
 		if (!$menu_id)
 		{
 			$menu_id = 1;
@@ -57,10 +54,9 @@ class shop_admin extends shop_base
 			1 => array(
 								 array("name" => "System", "url" => $this->mk_my_orb("system_general", array("shop_id" => $shop_id),"",false,true)),
 								 array("name" => "Categories", "url" => $this->mk_my_orb("categories_frame", array("shop_id" => $shop_id),"",false,true)),
-//								 array("name" => "Users", "url" => "#"),
 								 array("name" => "Groups/rights", "url" => "#"),
 								 array("name" => "Currencies", "url" => $this->mk_my_orb("currency_redirect", array("shop_id" => $shop_id),"",false,true)),
-								 array("name" => "Languages", "url" => "languages.$ext"),
+								 array("name" => "Languages", "url" => "{VAR:baseurl}/orb.{VAR:ext}?class=languages&action=admin_list"),
 								 array("name" => "Formulas", "url" => $this->mk_my_orb("formula_redirect", array("shop_id" => $shop_id),"",false,true)),
 								),
 			2 => array(
@@ -77,8 +73,7 @@ class shop_admin extends shop_base
 								),
 			4 => array(
 								 array("name" => "Add new user", "url" => "#"),
-//								 array("name" => "Add new group", "url" => "#"),
-								 array("name" => "View users", "url" => "orb.aw?class=users&action=gen_list"),
+								 array("name" => "View users", "url" => "orb.".$ext."?class=users&action=gen_list"),
 								),
 			
 		);
@@ -96,19 +91,6 @@ class shop_admin extends shop_base
 			$this->vars(array("L2_ITEM" => $mn2));
 		}
 		
-/*		$this->vars(array(
-			"system_url" => $this->mk_my_orb("system_general", array("shop_id" => $shop_id),"",false,true),
-			"categories_url" => $this->mk_my_orb("categories_frame", array("shop_id" => $shop_id),"",false,true),
-			"users_url" => "#",
-			"currencies_url" => $this->mk_my_orb("currency_redirect", array("shop_id" => $shop_id),"",false,true),
-			"lang_url" => "languages.$ext",
-			"formula_url" => $this->mk_my_orb("formula_redirect", array("shop_id" => $shop_id),"",false,true),
-			"article_url" => $this->mk_my_orb("article_frame", array("shop_id" => $shop_id),"",false,true),
-			"article_types_url" => $this->mk_my_orb("arttype_redirect", array("shop_id" => $shop_id),"",false,true),
-			"all_reservations_url" => $this->mk_my_orb("admin_orders", array("id" => $shop_id),"shop",false,true),
-			"detailed_reservations_url" => $this->mk_my_orb("detailed_reservations", array("shop_id" => $shop_id),"shop_admin",false,true),
-			"statistics" => "#"
-		));*/
 		return $this->parse();
 	}
 
@@ -253,26 +235,9 @@ class shop_admin extends shop_base
 		$ob = new objects;
 		$this->do_core_admin_ofs($shop_id);
 
-/*		$shts = $this->listall_shop_tables();
-
-		$its = $this->listall_item_types();
-
-		$tablesfortypes = $this->get_tables_for_types();
-
-		foreach($its as $i_id => $i_name)
-		{
-			$this->vars(array(
-				"it_type" => $i_name,
-				"type_id" => $i_id,
-				"tables" => $this->picker($tablesfortypes[$i_id],$shts)
-			));
-			$stt.=$this->parse("STAT_TABLE");
-		}*/
-
 		$this->vars(array(
 			"root_menu" => $this->picker($sh["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit_system_other", array("shop_id" => $shop_id)),
-//			"STAT_TABLE" => $stt
 		));
 		return $this->do_system_menu($shop_id);
 	}
@@ -285,14 +250,6 @@ class shop_admin extends shop_base
 
 		$this->do_core_save_ofs($shop_id, $order_form,$of_rep,$of_op,$of_op_long,$of_op_search);
 
-/*		$this->db_query("DELETE FROM shop_table2item_type");
-		if (is_array($type_tables))
-		{
-			foreach($type_tables as $type_id => $table_id)
-			{
-				$this->db_query("INSERT INTO shop_table2item_type(type_id,table_id) VALUES('$type_id','$table_id')");
-			}
-		}*/
 		return $this->mk_my_orb("system_other", array("shop_id" => $shop_id), "", false, true);
 	}
 
@@ -362,7 +319,7 @@ class shop_admin extends shop_base
 			"TREE" => $tr,
 			"DOC" => "",
 			"root" => $root_o["parent"],
-			"uid" => $GLOBALS["uid"],
+			"uid" => aw_global_get("uid"),
 			"date" => $this->time2date(time(),2)
 		));
 		die($m->parse());
@@ -1032,9 +989,7 @@ class shop_admin extends shop_base
 		classload("config");
 		$con = new db_config;
 		$its = $con->get_simple_config("show_items");
-		classload("php");
-		$php = new php_serializer;
-		$_its = $php->php_unserialize($its);
+		$_its = aw_unserialize($its);
 
 		$all_its = $this->get_item_picker();
 
@@ -1083,9 +1038,7 @@ class shop_admin extends shop_base
 			}
 		}
 			
-		classload("php");
-		$php = new php_serializer;
-		$_its = $php->php_serialize($its);
+		$_its = aw_serialize($its,SERIALIZE_PHP);
 		classload("config");
 		$con = new config;
 		$con->set_simple_config("show_items", $_its);

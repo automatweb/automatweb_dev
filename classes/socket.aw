@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/socket.aw,v 2.2 2002/02/05 03:29:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/socket.aw,v 2.3 2002/06/10 15:50:54 kristo Exp $
 // socket.aw - low level communications
 // provides functions that can be used by other classes to connect to hosts
 // and read/write information to/from those hosts
-class socket {
+class socket 
+{
 	var $host;
 	var $port;
 	var $sock;

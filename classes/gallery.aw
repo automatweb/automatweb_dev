@@ -1,39 +1,30 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.24 2002/02/18 13:43:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.25 2002/06/10 15:50:53 kristo Exp $
 classload("images");
-lc_load("gallery");
-global $orb_defs;
-$orb_defs["gallery"] = "xml";
 
 class gallery extends aw_template
 {
 	function gallery($id = 0)
 	{
-		$this->db_init();
-		$this->tpl_init("gallery");
+		$this->init("gallery");
 		$this->sub_merge = 1;
 		if ($id)
 		{
 			$this->load($id,$GLOBALS["page"]);
 		}
-		global $lc_gallery;
-		if (is_array($lc_gallery))
-		{
-			$this->vars($lc_gallery);
-		}
+		$this->lc_load("gallery","lc_gallery");
 		lc_load("definition");
 	}
 
 	function parse_alias($args = array())
 	{
 		extract($args);
-		$this->load($alias["target"],$GLOBALS["page"]);
-		$replacement = $this->show($GLOBALS["page"]);
-		return $replacement;
+		global $page,$section;
+		$this->load($alias["target"],$page);
+		return $this->show(array("page" => $page,"section" => $section));
 	}
 		
-
 	////
 	// !generates the form for adding a gallery
 	function add($arr)
@@ -82,7 +73,7 @@ class gallery extends aw_template
 		}
 		else
 		{
-			$parent = $parent ? $parent : $GLOBALS["rootmenu"];
+			$parent = $parent ? $parent : $this->cfg["rootmenu"];
 			$id = $this->new_object(array("parent" => $parent,"name" => $name, "comment" => $comment, "class_id" => CL_GALLERY));
 			$this->db_query("INSERT INTO galleries VALUES($id,'')");
 			if ($alias_doc)
@@ -172,9 +163,9 @@ class gallery extends aw_template
 			{
 				$cell = $this->arr[$page]["content"][$row][$col];
 				$this->vars(array(
-					"imgurl" => $cell["tnurl"], 
+					"imgurl" => image::check_url($cell["tnurl"]), 
 					"caption" => $cell["caption"], 
-					"bigurl" => $cell["bigurl"],
+					"bigurl" => image::check_url($cell["bigurl"]),
 					"col" => $col,
 					"date" => $cell["date"],
 					"link" => $cell["link"],
@@ -297,7 +288,7 @@ class gallery extends aw_template
 					$sz = getimagesize($$var);
 					$img = $t->get_img_by_id($pid);
 					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
-					$this->arr[$page]["content"][$row][$col]["tnurl"] = $img["url"];
+					$this->arr[$page]["content"][$row][$col]["tnurl"] = image::check_url($img["url"]);
 					$this->arr[$page]["content"][$row][$col]["tnxsize"] = $sz[0];
 					$this->arr[$page]["content"][$row][$col]["tnysize"] = $sz[1];
 				}
@@ -321,7 +312,7 @@ class gallery extends aw_template
 					$sz = getimagesize($$var);
 					$img = $t->get_img_by_id($pid);
 					$this->arr[$page]["content"][$row][$col]["im_id"] = $img["id"];
-					$this->arr[$page]["content"][$row][$col]["bigurl"] = $img["url"];
+					$this->arr[$page]["content"][$row][$col]["bigurl"] = image::check_url($img["url"]);
 					$this->arr[$page]["content"][$row][$col]["xsize"] = $sz[0];
 					$this->arr[$page]["content"][$row][$col]["ysize"] = $sz[1];
 				}
@@ -390,14 +381,14 @@ class gallery extends aw_template
 	{
 		if (is_array($page))
 		{
-			global $page,$id;
+			extract($page);	// via orb call
 			$this->load($id,$page);
 		}
 
 		if ($page < 1)
+		{
 			$page = 0;
-
-		$baseurl = $GLOBALS["baseurl"]."/gallery.".$GLOBALS["ext"]."/id=".$this->id;
+		}
 
 		if ($this->arr["is_automatic_slideshow"] == 1)
 		{
@@ -422,32 +413,31 @@ class gallery extends aw_template
 			$ius = array();
 			foreach($imgurls as $dat)
 			{
-				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["tnurl"]);
+				$bigurl = image::check_url($dat["tnurl"]);
 				$ius[] = "\"".$bigurl."\"";
 			}
 
 			$this->vars(array(
 				"img_urls" => join(",",$ius),
-				"img_url" => preg_replace("/^http:\/\/.*\//","/",$this->arr[0]["content"][0][0]["tnurl"])
+				"img_url" => image::check_url($this->arr[0]["content"][0][0]["tnurl"])
 			));
 			return $this->parse();
 		}
     else
-		if (isset($GLOBALS["col"]) && isset($GLOBALS["row"]) && !isset($GLOBALS["class"]))
+		if (isset($col) && isset($row))
 		{
-			global $col, $row;
 			$this->read_template("show_pic.tpl");
 			$cell = $this->arr[$page]["content"][$row][$col];
-			// which one is right?
-			// the first one was in domina
-			//$bigurl = preg_replace("/^http:\/\/.*\//","/",$cell["tnurl"]);
-			$bigurl = preg_replace("/^http:\/\/.*\//","/",$cell["bigurl"]);
-			$this->vars(array("bigurl" => $bigurl, "caption" => $cell["caption"], "date" => $cell["date"]));
+			$bigurl = image::check_url($cell["bigurl"]);
+			$this->vars(array(
+				"bigurl" => $bigurl, 
+				"caption" => $cell["caption"], 
+				"date" => $cell["date"]
+			));
 		}
 		else
 		if ($this->arr["is_slideshow"] == 1)
 		{
-			global $nr;
 			if ($nr < 1)
 			{
 				$nr = 0;
@@ -477,12 +467,12 @@ class gallery extends aw_template
 			$cnt=0;
 			foreach($imgurls as $dat)
 			{
-				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["bigurl"]);
-				$tnurl = preg_replace("/^http:\/\/.*\//","/",$dat["tnurl"]);
+				$bigurl = image::check_url($dat["bigurl"]);
+				$tnurl = image::check_url($dat["tnurl"]);
 				$caps[$cnt] = $dat["caption"];
 				$dates[$cnt] = $dat["date"];
-				$xsizes[$cnt] = $dat["tnxsize"];
-				$ysizes[$cnt] = $dat["tnysize"];
+				$xsizes[$cnt] = $dat["xsize"];
+				$ysizes[$cnt] = $dat["ysize"];
 				$rows[$cnt] = $dat["row"];
 				$cols[$cnt] = $dat["col"];
 				$pages[$cnt] = $dat["page"];
@@ -501,14 +491,20 @@ class gallery extends aw_template
 			$prev_nr = (($nr - 1) > -1) ? $nr - 1 : $cnt - 1;
 			$next_nr = $nr+1 >= $cnt ? 0 : $nr+1;
 
-			global $baseurl,$ext;
+			$gurl = $this->mk_my_orb("show",array(
+				"id" => $id,
+				"col" => $cols[$nr],
+				"row" => $rows[$nr], 
+				"page" => $pages[$nr]
+			),"gallery",false,true,"/");
+
 			$this->vars(array(
 				"bigurl" => $tnurl,
 				"caption" => $cap,
 				"date" => $deit,
 				"next" => $this->mk_my_orb("show", array("id" => $this->id, "nr" => $next_nr),"",false,true),
 				"prev" => $this->mk_my_orb("show", array("id" => $this->id, "nr" => $prev_nr),"",false,true),
-				"lurl" => "javascript:rremote('".$baseurl."/gallery.".$ext."/id=".$id."/col=".$cols[$nr]."/row=".$rows[$nr]."/page=".$pages[$nr]."',$xsize,$ysize)",
+				"lurl" => "javascript:rremote('".$gurl."',$xsize,$ysize)",
 				"xsize" => $xsize,
 				"ysize" => $ysize
 			));
@@ -520,7 +516,7 @@ class gallery extends aw_template
 			$ret = $this->parse();
 			return $ret;
 		}
-                else
+    else
 		{
 			$this->read_template("show.tpl");
 
@@ -539,12 +535,18 @@ class gallery extends aw_template
 					}
 					else
 					{	
-						$url = "javascript:rremote(\"$baseurl/col=$col/row=$row/page=$page\",$xsize,$ysize)";
+						$gurl = $this->mk_my_orb("show", array(
+							"id" => $this->id,
+							"col" => $col,
+							"row" => $row,
+							"page" => $page
+						),"gallery", false,true,"/");
+						$url = "javascript:rremote(\"".$gurl."\",$xsize,$ysize)";
 						$target = "";
 					}
 
 					// strip the beginning of a posible absolute url
-					$tnurl = preg_replace("/^http:\/\/.*\//","/",$cell["tnurl"]);
+					$tnurl = image::check_url($cell["tnurl"]);
 					$this->vars(array(
 						"tnurl" => $tnurl, 
 						"caption" => $cell["caption"], 
@@ -569,8 +571,7 @@ class gallery extends aw_template
 			}
 		}
 
-		global $section;
-		$baseurl = $GLOBALS["baseurl"]."/index.aw/section=$section";
+		$baseurl = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=$section";
 
 		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
 		{
@@ -585,14 +586,14 @@ class gallery extends aw_template
 			$pr = $this->parse("PREVIOUS");
 		}
 		$nx = "";
-		if ($page < ($this->arr[pages]-1))
+		if ($page < ($this->arr["pages"]-1))
 		{
 			$this->vars(array("url" => $baseurl."/page=".($page+1)));
 			$nx = $this->parse("NEXT");
 		}
 		$this->vars(array("LINE" => $l,"PAGE" => $p,"sel_page" => $page,"PREVIOUS" => $pr, "NEXT" => $nx));
 
-		if ($this->arr[pages] > 1)
+		if ($this->arr["pages"] > 1)
 		{
 			$this->vars(array("PAGES" => $this->parse("PAGES")));
 		}

@@ -17,7 +17,7 @@
 
 
 
-<td class="celltitle">&nbsp;<b>Saidi export:&nbsp;</td>
+<td class="celltitle">&nbsp;<b>Saidi export | <a href='{VAR:rules}'>Ruulid</a> | <a href='{VAR:gen_url}'>Ekspordi</a> &nbsp;</td>
 <td align="left"><!--save--><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.q.submit()" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
 </tr></table>
@@ -34,12 +34,41 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 	<tr class="aste05">
-		<td class="celltext">Kataloog serveris:</td>
-		<td colspan="2" class="celltext"><input type='text' class='formtext' name='folder' value='{VAR:folder}'></td>
+		<td colspan="3" class="celltext">Faili ja katalooginimedes v&otilde;ib kasutada muutujaid:<Br>
+		%y - aasta<Br>
+		%m - kuu<br>
+		%d - p&auml;ev<br>
+		%h - tund<br>
+		%n - minut<br>
+		%s - sekund</td>
 	</tr>
 	<tr class="aste05">
-		<td class="celltext">Fail, kuhu export kokku pakkida:</td>
+		<td class="celltext">Kataloog serveris:</td>
+		<td colspan="2" class="celltext"><input type='text' class='formtext' name='folder' value='{VAR:folder}'> URL: ({VAR:url})</td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Fail serveris, kuhu export kokku pakkida:</td>
 		<td colspan="2" class="celltext"><input type='text' class='formtext' name='zip_file' value='{VAR:zip_file}'></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Kataloog AW's, kuhu export kokku pakkida:</td>
+		<td colspan="2" class="celltext"><select class='formselect' name='aw_zip_folder'>{VAR:aw_zip_folder}</select></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Objekti nimi AW's, kuhu export kokku pakkida:</td>
+		<td colspan="2" class="celltext"><input type='text' class='formtext' name='aw_zip_fname' value='{VAR:aw_zip_fname}'></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Kas export tehakse automaatselt:</td>
+		<td colspan="2" class="celltext"><input type='checkbox' class='formtext' name='automatic' value='1' {VAR:automatic}> <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>Vali kordused automaatseks ekspordiks</a></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Kas sait k&auml;ib staatilise koopia pealt:</td>
+		<td colspan="2" class="celltext"><input type='checkbox' class='formtext' name='static_site' value='1' {VAR:static_site}></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Kuidas tehakse failide nimed:</td>
+		<td colspan="2" class="celltext"><input type='radio' class='formradio' name='fn_type' value='1' {VAR:fn_type_1}> sektsiooni id <input type='radio' class='formradio' name='fn_type' value='2' {VAR:fn_type_2}> men&uuml;&uuml; nimi <input type='radio' class='formradio' name='fn_type' value='3' {VAR:fn_type_3}> hash <input type='radio' class='formradio' name='fn_type' value='4' {VAR:fn_type_4}> men&uuml;&uuml;aliased </td>
 	</tr>
 </table>
 

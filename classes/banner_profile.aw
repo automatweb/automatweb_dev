@@ -1,20 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.4 2002/02/18 13:39:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.5 2002/06/10 15:50:52 kristo Exp $
 
-global $orb_defs;
-$orb_defs["banner_profile"] = "xml";
-lc_load("banner");
 classload("banner");
 class banner_profile extends banner
 {
 	function banner_profile()
 	{
 		$this->banner();
-	lc_load("definition");	
-	global $lc_banner;
-		if (is_array($lc_banner))
-		{
-			$this->vars($lc_banner);}
+		lc_load("definition");
+		$this->lc_load("banner","lc_banner");
 	}
 
 	////
@@ -23,9 +17,7 @@ class banner_profile extends banner
 	{
 		extract($arr);
 
-		classload("config");
-		$c = new db_config();
-		$fid = $c->get_simple_config("banner_profile_form");
+		$fid = $this->get_cval("banner_profile_form");
 		if (!$fid)
 		{
 			$this->raise_error(ERR_BANNER_NOFORM,LC_NO_FORM_FOR_BANNER, true);
@@ -49,9 +41,7 @@ class banner_profile extends banner
 		classload("form");
 		$f = new form;
 
-		classload("config");
-		$c = new db_config();
-		$fid = $c->get_simple_config("banner_profile_form");
+		$fid = $this->get_cval("banner_profile_form");
 
 		if ($id)
 		{
@@ -83,9 +73,7 @@ class banner_profile extends banner
 		$o = $this->get_object($id);
 		$e_id = $o["last"];
 
-		classload("config");
-		$c = new db_config();
-		$fid = $c->get_simple_config("banner_profile_form");
+		$fid = $this->get_cval("banner_profile_form");
 
 		if (!$fid)
 		{

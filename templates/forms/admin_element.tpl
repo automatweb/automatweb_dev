@@ -1,6 +1,8 @@
-<!-- SUB: SEARCH_DEFS -->
 <script language="javascript">
 var elements = new Array();
+</script>
+<!-- SUB: SEARCH_DEFS -->
+<script language="javascript">
 // elements = array(form_id, el_id,el_text);
 
 <!-- SUB: ELDEFS -->
@@ -12,7 +14,6 @@ elements[{VAR:el_num}] = new Array({VAR:form_id},{VAR:el_id},"{VAR:el_text}");
 
 <!-- SUB: TABLE_DEFS -->
 <script language="javascript">
-var elements = new Array();
 
 <!-- SUB: TBL -->
 elements[{VAR:tbl_num}] = new Array("{VAR:table_name}","{VAR:col_name}","{VAR:col_name}");
@@ -569,4 +570,22 @@ function toggle_file_link_newwin()
 <td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_value_controller'>{VAR:value_controller}</select></td>
 </tr>
 <!-- END SUB: HAS_DEFAULT_CONTROLLER -->
+
+<tr>
+	<td class="fgtext" colspan="4">Metadata:</td>
+</tr>
+<tr>
+	<td class="fgtext">Nimi</td>
+	<td class="fgtext">V&auml;&auml;rtus</td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- SUB: METADATA -->
+<tr>
+	<td class="fgtext"><input type='text' name='{VAR:cell_id}_metadata_name[]' value='{VAR:metadata_name}' class='small_button'></td>
+	<td class="fgtext"><input type='text' name='{VAR:cell_id}_metadata_value[]' value='{VAR:metadata_value}' class='small_button'></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: METADATA -->
 </table>

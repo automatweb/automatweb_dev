@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.15 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.16 2002/06/10 15:50:52 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -18,7 +18,7 @@ define('HTML','text/html');
 define('CHARSET','iso-8859-4');
 define('INLINE','inline');
 define('ATTACH','attachment');
-define('CRLF',"\r\n");
+define('CRLF',"\n");
 define('BASE64','base64');
 
 class aw_mail {
@@ -32,7 +32,6 @@ class aw_mail {
 	function aw_mail($args = array())
 	{
 		return $this->clean($args);
-			lc_load("definition");
 	}
 
 	////
@@ -401,20 +400,22 @@ class aw_mail {
 		// nii, kuidas seda siis teha? 
 		// tuleb teha juurde yx mime part, mille Content-Type: multipart/alternative;
 		// sinna sisse paneme vana message body ja eraldatult uue html body.
-		$boundary='AW'.chr(rand(65,91)).'--'.md5(uniqid(rand()))."YAXPAH";
-
+		$boundary='AW'.chr(rand(65,91)).'--'.md5(uniqid(rand()));
 		$atc="Content-Type: multipart/alternative;".CRLF." boundary=\"$boundary\"".CRLF.CRLF;
 
-		$atc.="--".$boundary.CRLF;
-		$atc.="Content-Type: text/html; charset=".CHARSET . CRLF;
-		$atc.="Content-Transfer-Encoding: 7bit".CRLF.CRLF.$this->gen_htmlbody($data).CRLF.CRLF;
-
-		$atc.="--".$boundary.CRLF;
+		$plain = strtr($this->body,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+		$plain = strip_html($plain);
+				
 		$atc.="Content-Type: text/plain; charset=".CHARSET . CRLF;
-		$atc.="Content-Transfer-Encoding: 7bit".CRLF.CRLF.$this->body.CRLF;
-		$atc.="--".$boundary/*.CRLF*/;//crlf paneb see build.. func ise lõppu
-		
+		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$plain.CRLF.CRLF;
+		$atc.="--".$boundary.CRLF;
 
+		$data = str_replace("\\\"","\"",$data);
+		$atc.="Content-Type: text/html; charset=".CHARSET . CRLF;
+		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$this->gen_htmlbody($data).CRLF.CRLF;
+
+		$atc .= "--".$boundary."--".CRLF;
+		
 		// see peab kindlalt olema esimene ättäts.
 		$this->mimeparts=array_merge(array($atc),$this->mimeparts);
 		unset($this->body);
@@ -437,6 +438,11 @@ class aw_mail {
 		if (!$contenttype)
 		{
 			$contenttype = OCTET;
+		};
+
+		if (substr($contenttype,0,4) == "text")
+		{
+			$encoding = "8bit";
 		};
 
 		if (!$encoding)
@@ -479,7 +485,15 @@ class aw_mail {
 	function build_message($args = array())
 	{
 		$msg = "";
-		$boundary = 'AW'.chr(rand(65,91)).'------'.md5(uniqid(rand()));
+		if ($this->boundary)
+		{
+			$boundary = $this->boundary;
+		}
+		else
+		{
+			$boundary = 'AW'.chr(rand(65,91)).'------'.md5(uniqid(rand()));
+		};
+
 		$nparts = sizeof($this->mimeparts);
 
 		// we have more than one attach
@@ -487,6 +501,7 @@ class aw_mail {
 		{
 			//$c_ver = "MIME-Version: 1.0".CRLF;
 			$this->headers["MIME-Version"] = "1.0";
+			//$this->headers["Content-Type"] = "multipart/mixed;" . CRLF . " boundary=\"$boundary\"";
 			$this->headers["Content-Type"] = "multipart/mixed;" . CRLF . " boundary=\"$boundary\"";
 			$this->headers["Content-Transfer-Encoding"] = "8bit";
 			if ($c_desc)
@@ -546,14 +561,15 @@ class aw_mail {
 			$this->set_header("Content-Type","text/plain; charset=\"iso-8859-4\"");
 		};
 		unset($this->headers["To"]);
-		unset($this->headers["Subject"]);
+// why is this here? it will screw up sending to mailinglists - only the first mail will get the subject
+//		unset($this->headers["Subject"]);
 		$this->set_header("Message-Id",$this->gen_message_id());
 		$this->set_header("Sender",$this->headers["From"]);
 		foreach($this->headers as $name => $value)
 		{
 			if ($value)
 			{
-				$headers .= sprintf("%s: %s%s",$name,$value,"\n");
+				$headers .= sprintf("%s: %s%s",$name,$value,CRLF);
 			};
 		}
 		if ($GLOBALS["__debug"])

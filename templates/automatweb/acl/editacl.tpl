@@ -1,4 +1,4 @@
-<form method="POST" ACTION="refcheck.{VAR:ext}">
+<form method="POST" ACTION="reforb.{VAR:ext}">
 <input type="submit" value="Salvesta oigused">
 
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
@@ -22,6 +22,8 @@
 
 <input type="hidden" name="oid" value="{VAR:oid}">
 <input type="hidden" name="action" value="save_acl">
+<input type="hidden" name="class" value="acl">
+<input type="hidden" name="reforb" value="1">
 <input type="hidden" name="file" value="{VAR:file}">
 <input type="submit" value="Salvesta oigused">
 

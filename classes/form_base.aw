@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.30 2002/02/18 13:42:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.31 2002/06/10 15:50:53 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
-lc_load("form");
 
 classload("form_db_base");
 class form_base extends form_db_base
@@ -11,18 +10,12 @@ class form_base extends form_db_base
 	{
 		$this->tpl_init("forms");
 		$this->db_init();
+		// must NOT call core::init from here, because we also have an init function in form_base that clashes with the name
+		// fuck, this sucks
+		aw_config_init_class(&$this);
+
 		lc_load("definition");
-		lc_load("form");
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);
-		}
-		global $lc_automatweb;
-		if (is_array($lc_automatweb))
-		{
-			$this->vars($lc_automatweb);
-		}
+		$this->lc_load("form","lc_form");
 	}
 
 	////
@@ -56,24 +49,18 @@ class form_base extends form_db_base
 	// $arr[elements] - array of elements in the form, indexed by row and column
 	function load($id = 0)
 	{
-		global $awt;
-		$awt->start("form_base::load");
-		$awt->count("form_base::load");
-
 		if ($id == 0)
 		{
 			// see tuleb form klassi konstruktorist
 			$id = $this->fid;
 		};
 
-		$awt->start("form_base::load::query");
 		$q = "SELECT forms.*,objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE forms.id = $id";
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
 		{
 			$this->raise_error(ERR_FG_NOFORM,"form->load($id): no such form!",true);
 		}
-		$awt->stop("form_base::load::query");
 
 
 		$this->name = $row["name"];
@@ -84,15 +71,12 @@ class form_base extends form_db_base
 		$this->lang_id = $row["lang_id"];
 		$this->entry_id = 0;
 
+		// FIXME: use aw_unserialize
 		if (substr($row["content"],0,14) == "<?xml version=")
 		{
-			$awt->start("form_base::load::xml");
 			classload("xml");
 			$x = new xml;
-			$awt->start("form_base::load::xml::unserialize");
 			$this->arr = $x->xml_unserialize(array("source" => $row["content"]));
-			$awt->stop("form_base::load::xml::unserialize");
-			$awt->stop("form_base::load::xml");
 		}
 		else
 		if (substr($row["content"],0,6) == "\$arr =")
@@ -100,9 +84,7 @@ class form_base extends form_db_base
 			// php serializer
 			classload("php");
 			$p = new php_serializer;
-			$awt->start("form_base::load::php::unserialize");
 			$this->arr = $p->php_unserialize($row["content"]);
-			$awt->stop("form_base::load::php::unserialize");
 		}
 		else
 		{
@@ -110,13 +92,8 @@ class form_base extends form_db_base
 		}
 
 		$this->allow_html = $this->arr["allow_html"];
-		$awt->start("form_base::load::normalize");
 		$this->normalize();
-		$awt->stop("form_base::load::normalize");
-		$awt->start("form_base::load::load_elements");
 		$this->load_elements();
-		$awt->stop("form_base::load::load_elements");
-		$awt->stop("form_base::load");
 	}
 
 	////
@@ -126,19 +103,14 @@ class form_base extends form_db_base
 	// puts elements in $this->arr[contents]
 	function load_elements()
 	{
-		global $awt;
-		$awt->start("form_base::load_elements");
-		$awt->count("form_base::load_elements");
-
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
 				$this->arr["contents"][$row][$col] = new form_cell();		
-				$awt->start("form_base::form_cell_load()");
 				$this->arr["contents"][$row][$col] -> load(&$this,$row,$col);
-				$awt->stop("form_base::form_cell_load()");
 			}
-		$awt->stop("form_base::load_elements");
+		}
 	}
 
 	////
@@ -174,26 +146,53 @@ class form_base extends form_db_base
 
 	////
 	// !Saves the form
-	// saves the form settings, nothing else
+	// saves the form settings
 	function save()
 	{
+		// here we also update the controller usage table
+		$this->db_query("DELETE FROM form_controller2element WHERE form_id = '".$this->id."'");
+		
 		// we must do this, otherwise we also serialize all the cells and stuff, which isn't necessary
 		for ($col = 0; $col < $this->arr["cols"]; $col++)		
 		{
 			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
+				// if we are adding rows/columns, then those objects might not be initialized yet
+				if (is_object($this) && is_object($this->arr["contents"][$row][$col]))
+				{
+					$ret = array();
+					$this->arr["contents"][$row][$col]->get_els(&$ret);
+					foreach($ret as $el)
+					{
+						$entry_c = $el->get_entry_controllers();
+						foreach($entry_c as $ctrlid)
+						{
+							$this->db_query("INSERT INTO form_controller2element(ctrl_id, form_id ,el_id, type)
+								VALUES('$ctrlid','".$this->id."','".$el->get_id()."','".CTRL_USE_TYPE_ENTRY."')");
+						}
+
+						$show_c = $el->get_show_controllers();
+						foreach($show_c as $ctrlid)
+						{
+							$this->db_query("INSERT INTO form_controller2element(ctrl_id, form_id ,el_id, type)
+								VALUES('$ctrlid','".$this->id."','".$el->get_id()."','".CTRL_USE_TYPE_SHOW."')");
+						}
+
+						$lb_c = $el->get_lb_controllers();
+						foreach($lb_c as $ctrlid)
+						{
+							$this->db_query("INSERT INTO form_controller2element(ctrl_id, form_id ,el_id, type)
+								VALUES('$ctrlid','".$this->id."','".$el->get_id()."','".CTRL_USE_TYPE_LB."')");
+						}
+					}
+				}
+
 				$this->arr["contents"][$row][$col] = "";
 			}
 		}
 
 		// we must also do this, because the column/row count may have changed
-/*		classload("xml");
-		$x = new xml;
-		$contents = $x->xml_serialize($this->arr);*/
-		// ok, try the new php serializer
-		classload("php");
-		$p = new php_serializer;
-		$contents = $p->php_serialize($this->arr);
+		$contents = aw_serialize($this->arr,SERIALIZE_PHP);
 
 		$this->quote(&$contents);
 
@@ -222,28 +221,34 @@ class form_base extends form_db_base
 	// if $map or $rows or $cols are omitted, they are taken from $this
 	function get_spans($i, $a, $map = -1,$rows = -1, $cols = -1)	// row, col
 	{
-		global $awt;
-		$awt->start("form_base::get_spans");
-		$awt->count("form_base::get_spans");
-
 		if ($map == -1)
+		{
 			$map = $this->arr["map"];
+		}
 		if ($rows == -1)
+		{
 			$rows = $this->arr["rows"];
+		}
 		if ($cols == -1)
+		{
 			$cols = $this->arr["cols"];
+		}
 
 		// find if this cell is the top left one of the area
 		$topleft = true;
 		if ($i > 0)
 		{
 			if ($map[$i-1][$a]["row"] == $map[$i][$a]["row"])
+			{
 				$topleft = false;
+			}
 		}
 		if ($a > 0)
 		{
 			if ($map[$i][$a-1]["col"] == $map[$i][$a]["col"])
+			{
 				$topleft = false;
+			}
 		}
 
 		if ($topleft)
@@ -260,25 +265,30 @@ class form_base extends form_db_base
 				
 			$this->vars(array("colspan" => $colspan, "rowspan" => $rowspan));
 			if ($colspan > 1)
+			{
 				$r_col = $map[$i][$a]["col"];
+			}
 			else
+			{
 				$r_col = $a;
+			}
 
 			if ($rowspan > 1)
+			{
 				$r_row = $map[$i][$a]["row"];
+			}
 			else
+			{
 				$r_row = $i;
+			}
 
-			$awt->stop("form_base::get_spans");
 			return array("colspan" => $colspan, "rowspan" => $rowspan, "r_row" => $r_row, "r_col" => $r_col);
 		}
 		else
 		{
 			// we return false if the cell is not the top-left cell of the area, because then we need to skip drawing it
-			$awt->stop("form_base::get_spans");
 			return false;
 		}
-		$awt->stop("form_base::get_spans");
 	}
 
 	////
@@ -290,9 +300,10 @@ class form_base extends form_db_base
 		{
 			$this->read_template($tpl);
 		}
+		$chlink = sprintf("<a href='%s'>%s</a> / ",$this->mk_my_orb("change",array("id" => $id),"form"),$this->name);
 		if ($desc != "")
 		{
-			$this->mk_path($this->parent,$desc);
+			$this->mk_path($this->parent,$chlink . $desc);
 		}
 	}
 
@@ -311,11 +322,6 @@ class form_base extends form_db_base
 		{
 			$this->vars($lc_form);
 		}
-		global $lc_automatweb;
-		if (is_array($lc_automatweb))
-		{
-			$this->vars($lc_automatweb);
-		}
 		$this->read_template("menu.tpl");
 		$this->do_menu();
 		return $this->parse().$st;
@@ -325,26 +331,28 @@ class form_base extends form_db_base
 	// !draws the formgen menu and makes the correct tab active. 
 	function do_menu()
 	{
-		global $action,$op_id, $ext;
+		global $action,$op_id;
 
 		$this->vars(array(
 			"form_id"					=> $this->id, 
-			"change"					=> $this->mk_orb("change", array("id" => $this->id),"form"),
-			"show"						=> $this->mk_orb("show", array("id" => $this->id),"form"),
-			"table_settings"	=> $this->mk_orb("table_settings", array("id" => $this->id),"form"),
-			"all_elements"		=> $this->mk_orb("all_elements", array("id" => $this->id),"form"),
-			"list_op"					=> $this->mk_orb("list_op", array("id" => $this->id),"form_output"),
-			"change_op"				=> $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-			"op_style"				=> $this->mk_orb("op_style", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-			"op_meta"					=> $this->mk_orb("op_meta", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-			"actions"					=> $this->mk_orb("list_actions", array("id" => $this->id),"form_actions"),
-			"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
-			"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form"),
-			"sel_filter_search"			=> $this->mk_orb("sel_filter_search", array("id" => $this->id), "form"),
+			"change"					=> $this->mk_my_orb("change", array("id" => $this->id),"form"),
+			"show"						=> $this->mk_my_orb("show", array("id" => $this->id),"form"),
+			"table_settings"	=> $this->mk_my_orb("table_settings", array("id" => $this->id),"form"),
+			"all_elements"		=> $this->mk_my_orb("all_elements", array("id" => $this->id),"form"),
+			"list_op"					=> $this->mk_my_orb("list_op", array("id" => $this->id),"form_output"),
+			"change_op"				=> $this->mk_my_orb("change_op", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"op_style"				=> $this->mk_my_orb("op_style", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"op_meta"					=> $this->mk_my_orb("op_meta", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"actions"					=> $this->mk_my_orb("list_actions", array("id" => $this->id),"form_actions"),
+			"sel_search"			=> $this->mk_my_orb("sel_search", array("id" => $this->id), "form"),
+			"metainfo"				=> $this->mk_my_orb("metainfo", array("id" => $this->id), "form"),
+			"calendar"				=> $this->mk_my_orb("calendar", array("id" => $this->id), "form"),
+			"sel_filter_search"			=> $this->mk_my_orb("sel_filter_search", array("id" => $this->id), "form"),
 			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import"),
 			"set_folders" => $this->mk_my_orb("set_folders", array("id" => $this->id),"form"),
 			"translate" => $this->mk_my_orb("translate", array("id" => $this->id),"form"),
-			"tables" => $this->mk_my_orb("sel_tables", array("id" => $this->id),"form")
+			"tables" => $this->mk_my_orb("sel_tables", array("id" => $this->id),"form"),
+			"aliasmgr" => $this->mk_my_orb("form_aliasmgr", array("id" => $this->id),"form"),
 		));
 
 		if ($action == "change" || $action == "show" || $action == "all_elements")
@@ -352,17 +360,17 @@ class form_base extends form_db_base
 			$this->parse("GRID_SEL");
 		}
 
-		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders" || $action=="translate" || $action=="tables")
+		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders" || $action=="translate" || $action=="tables" || $action == "calendar")
 		{
 			$this->parse("SETTINGS_SEL");
 		}
 
-		if ($this->type == 2)//blah, better use the constant, man!
+		if ($this->type == FTYPE_SEARCH)
 		{
 			$this->parse("SEARCH_SEL");
 		} 
 		else
-		if ($this->type == FORM_FILTER_SEARCH)
+		if ($this->type == FTYPE_FILTER_SEARCH)
 		{
 			$this->parse("FILTER_SEARCH_SEL");
 		}
@@ -384,8 +392,13 @@ class form_base extends form_db_base
 		$this->parse("CAN_ACTION");
 
 		$this->parse("M_EXPORT_STYLES");
+		
+		if ($this->arr["has_aliasmgr"])
+		{
+			$this->parse("HAS_ALIASMGR");
+		};
 
-		if ($this->type != 2 && $this->type != FORM_FILTER_SEARCH)
+		if ($this->type != FTYPE_SEARCH && $this->type != FTYPE_FILTER_SEARCH)
 		{
 			$this->parse("OP_1");
 		}
@@ -408,7 +421,7 @@ class form_base extends form_db_base
 					$data = unserialize($row["data"]);
 					if ($data["list"])
 					{
-						classload("list");
+						classload("mlist");
 						$li = new mlist($data["list"]);
 
 						if ($this->entry[$data["checkbox"]] == 1 || $data["checkbox"] < 1)
@@ -423,19 +436,19 @@ class form_base extends form_db_base
 					break;
 
 				case "email":
-					if ($GLOBALS["uid"] != "")
+					if (aw_global_get("uid") != "")
 					{
 						if (!is_array($jfes))
 						{
 							classload("users");
 							$us = new users;
-							$uif = $us->fetch($GLOBALS["uid"]);
+							$uif = $us->fetch(aw_global_get("uid"));
 							$jfes = unserialize($uif["join_form_entry"]);
 						}
 
 						if (is_array($jfes))
 						{
-							$app = LC_FORM_BASE_USER.$GLOBALS["uid"].LC_FORM_BASE_INFO;
+							$app = LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO;
 							foreach($jfes as $fid => $eid)
 							{
 								$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
@@ -458,7 +471,8 @@ class form_base extends form_db_base
 					{
 						$app.="\n".$this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $data["op_id"],"section" => $data["l_section"]), "form");
 					}
-					mail($data["email"],LC_FORM_BASE_ORDER_FROM_AW, $msg.$app,"From: automatweb@automatweb.com\n");
+					$subj = $data["subj"][aw_global_get("lang_id")] != "" ? $data["subj"][aw_global_get("lang_id")] :LC_FORM_BASE_ORDER_FROM_AW;
+					mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
 					break;
 			}
 			$this->restore_handle();
@@ -469,16 +483,11 @@ class form_base extends form_db_base
 	// !generates a plain-text representation of the loaded entry for the loaded form, suitable for e-mailing
 	function show_text()
 	{
-		global $awt;
-		$awt->start("form_base::show_text");
-		$awt->count("form_base::show_text");
-
 		$msg = "";
 		for ($r = 0; $r < $this->arr["rows"]; $r++)
 		{
 			$msg.=$this->mk_show_text_row($r)."\n";
 		}
-		$awt->stop("form_base::show_text");
 		return $msg;
 	}
 
@@ -486,10 +495,6 @@ class form_base extends form_db_base
 	// !generates row $r of the plain-text representation of the loaded entry for the loaded form 
 	function mk_show_text_row($r)
 	{
-		global $awt;
-		$awt->start("form_base::mk_show_text_row");
-		$awt->count("form_base::mk_show_text_row");
-
 		$msg = "";
 		for ($c = 0; $c < $this->arr["cols"]; $c++)
 		{
@@ -497,15 +502,25 @@ class form_base extends form_db_base
 			$this->arr["contents"][$r][$c]->get_els(&$elr);
 			reset($elr);
 			while (list(,$v) = each($elr))
+			{
 				$msg.=$v->gen_show_text();
+			}
 		}
-		$awt->stop("form_base::mk_show_text_row");
 		return $msg;
 	}
 
+	////
+	// !Loads an output
+	// hm. maybe we should create a variation of get_object which can figure out
+	// the table that needs to be joined and would then fetch the joined data
+	// we could get rid of quite a few queries and perhaps even cache the result
+	// too (if thats neccessary)
 	function get_op($id)
 	{
-		$this->db_query("SELECT form_output.*,objects.* FROM objects LEFT JOIN form_output ON form_output.id = objects.oid WHERE objects.oid = $id");
+		$q = "SELECT form_output.*,objects.* FROM objects
+			LEFT JOIN form_output ON form_output.id = objects.oid
+			WHERE objects.oid = '$id'";
+		$this->db_query($q);
 		return $this->db_next();
 	}
 
@@ -513,15 +528,12 @@ class form_base extends form_db_base
 	// !loads the specified output for the currently loaded form
 	function load_output($id)
 	{
-		global $awt;
-		$awt->start("form_base::load_output");
-		$awt->count("form_base::load_output");
-
 		if (!($row = $this->get_op($id)))
 		{
 			$this->raise_error(ERR_FG_NOOP,sprintf("No such output %s",$id),true);
 		}
 
+		// FIXME: aw_unserialize should be used
 		if (substr($row["op"],0,6) == "\$arr =")
 		{
 			classload("php");
@@ -534,6 +546,7 @@ class form_base extends form_db_base
 			$x = new xml;
 			$this->output = $x->xml_unserialize(array("source" => $row["op"]));
 		}
+
 		$this->vars(array("output_id" => $id));
 		if (!isset($this->output["cols"]) || $this->output["cols"] < 1 || !isset($this->output["rows"]) || $this->output["rows"] < 1)
 		{
@@ -541,12 +554,14 @@ class form_base extends form_db_base
 			$this->output["rows"] = 1;
 			$this->output["map"][0][0]=array("row" => 0, "col" => 0);
 		}
+
 		$this->output_id = $id;
 		$this->name = $row["name"];
 		$this->comment = $row["comment"];
 		$this->parent = $row["parent"];
 		$this->lang_id = $row["lang_id"];
-		$awt->stop("form_base::load_output");
+		// fake some stuff for form elements to work:
+		$this->arr["has_controllers"] = $this->output["has_controllers"];
 	}
 
 	////
@@ -555,31 +570,57 @@ class form_base extends form_db_base
 	// type(int) - listitavate vormide tüüp
 	// addempty(bool) - kas lisada tagastatava array algusse tühi element?
 	// onlyactive(bool) - whether to list only active forms?
+	// addfolders(bool) - if true, folders are added to list of forms
+	// lang_id - if set, filters by lang id
+	// all_data - if set, all dafa of form is included
 	function get_flist($args = array())
 	{
-		global $awt;
-		$awt->start("form_base::get_flist");
-		$awt->count("form_base::get_flist");
-
 		extract($args);
 
 		$ret = ($addempty) ? array("0" => "") : array();
 		$st = ($onlyactive) ? " = 2" : "!= 0";
+		
+		if ($lang_id)
+		{
+			$wh = " AND objects.lang_id = ".$lang_id;
+		}
+
+		if ($addfolders)
+		{
+			classload("objects");
+			$ob = new objects;
+			$ol = $ob->get_list();
+		}
+
+		if ($type)
+		{
+			$typ = " AND forms.type = $type ";
+		}
 
 		$q = sprintf("	SELECT
 					objects.name AS name,
-					objects.oid AS oid
+					objects.oid AS oid,
+					objects.parent AS parent
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
-				WHERE objects.status %s AND forms.type = %d",
-				$st,$type);
-		
+				WHERE objects.status %s $typ $wh",
+				$st);
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			$ret[$row["oid"]] = $row["name"];
+			if ($addfolders)
+			{
+				$row["name"] = $ol[$row["parent"]]."/".$row["name"];
+			}
+			if ($all_data)
+			{
+				$ret[$row["oid"]] = $row;
+			}
+			else
+			{
+				$ret[$row["oid"]] = $row["name"];
+			}
 		}
-		$awt->stop("form_base::get_flist");
 		return $ret;
 	}
 
@@ -594,6 +635,9 @@ class form_base extends form_db_base
 		));
 	}
 
+	////
+	// !if that's still needed, it could probably be consolidated into one generic function, just 
+	// like get_op (look at its comments) above
 	function listall_ops()
 	{
 		$ret = array();
@@ -609,22 +653,16 @@ class form_base extends form_db_base
 	// !returns a list of all form_outputs
 	function get_op_list($fid = 0)
 	{
-		global $awt;
-		$awt->start("form_base::get_op_list");
-		$awt->count("form_base::get_op_list");
-
-		global $SITE_ID;
 		$ret = array();
 		if ($fid)
 		{
 			$ss = " AND form_id = $fid ";
 		}
-		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = $SITE_ID $ss");
+		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = ".$this->cfg["site_id"]." $ss");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]][$row["op_id"]] = $row["name"];
 		}
-		$awt->stop("form_base::get_op_list");
 		return $ret;
 	}
 
@@ -632,17 +670,12 @@ class form_base extends form_db_base
 	// !returns an array of all forms for output $op_id
 	function get_op_forms($op_id)
 	{
-		global $awt;
-		$awt->start("form_base::get_op_forms");
-		$awt->count("form_base::get_op_forms");
-
 		$ret = array();
 		$this->db_query("SELECT form_id FROM output2form WHERE op_id = $op_id");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
-		$awt->stop("form_base::get_op_forms");
 		return $ret;
 	}
 
@@ -1112,10 +1145,6 @@ class form_base extends form_db_base
 
 	function load_table($id)
 	{
-		global $awt;
-		$awt->start("form_base::load_table");
-		$awt->count("form_base::load_table");
-
 		$this->db_query("SELECT objects.*,form_tables.* FROM objects LEFT JOIN form_tables ON form_tables.id = objects.oid WHERE oid = $id");
 		$row = $this->db_next();
 		#print "<pre>";
@@ -1136,18 +1165,24 @@ class form_base extends form_db_base
 		{
 			$this->table["cols"] = 1;
 		}
-		$awt->stop("form_base::load_table");
 	}
 
 	////
 	// !returns an array of id => name of all elements in the forms whose id's are in $arr
-	function get_elements_for_forms($arr,$ret_forms = false)
+	function get_elements_for_forms($arr,$ret_forms = false,$addempty = false)
 	{
-		global $awt;
-		$awt->start("form_base::get_elements_for_forms");
-		$awt->count("form_base::get_elements_for_forms");
-
-		$ret = array();
+		if ($addempty)
+		{
+			$ret = array(0 => "");
+		}
+		else
+		{
+			$ret = array();
+		}
+		if (!is_array($arr))
+		{
+			$arr = array();
+		}
 		$sss = join(",",$arr);
 		if ($sss != "")
 		{
@@ -1164,7 +1199,6 @@ class form_base extends form_db_base
 				}
 			}
 		}
-		$awt->stop("form_base::get_elements_for_forms");
 		return $ret;
 	}
 
@@ -1176,10 +1210,6 @@ class form_base extends form_db_base
 	// key(int) - what value to use as the key of the resulting array. default is the name
 	function get_form_elements($args = array())
 	{
-		global $awt;
-		$awt->start("form_base::get_form_elements");
-		$awt->count("form_base::get_form_elements");
-
 		extract($args);
 		$arrkey = ($args["key"]) ? $args["key"] : "name";
 		$this->load($id);
@@ -1209,7 +1239,6 @@ class form_base extends form_db_base
 				};
 			}
 		}
-		$awt->stop("form_base::get_form_elements");
 		return $retval;
 	}
 
@@ -1217,17 +1246,12 @@ class form_base extends form_db_base
 	// !returns an array of all form tables
 	function get_list_tables()
 	{
-		global $awt;
-		$awt->start("form_base::get_list_tables");
-		$awt->count("form_base::get_list_tables");
-
 		$ret = array();
 		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_FORM_TABLE." AND status != 0");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["oid"]] = $row["name"];
 		}
-		$awt->stop("form_base::get_list_tables");
 		return $ret;
 	}
 
@@ -1235,36 +1259,62 @@ class form_base extends form_db_base
 	// !returns an array of form_id => entry_id for the given chain entry id
 	function get_chain_entry($entry_id)
 	{
-		global $awt;
-		$awt->start("form_base::get_chain_entry");
-		$awt->count("form_base::get_chain_entry");
-
-		$this->db_query("SELECT * FROM form_chain_entries WHERE id = $entry_id");
-		$row = $this->db_next();
-		classload("xml");
-		$x = new xml;
-		$r =  $x->xml_unserialize(array("source" => $row["ids"]));
-		$awt->stop("form_base::get_chain_entry");
+		// $this->db_query("SELECT * FROM form_chain_entries WHERE id = $entry_id");
+		// $row = $this->db_next();
+		$row = $this->get_record("form_chain_entries","id",$entry_id);
+		$r =  aw_unserialize($row["ids"]);
 		return $r;
+	}
+
+
+	////
+	// !Retrieves all form entries from a single form inside the chain
+	// used for the forms which "repeat" inside the chain
+	function get_form_entries_for_chain_entry($chain_entry_id,$form_id)
+	{
+		// protect the query from string arguments
+		$q = sprintf("SELECT id FROM form_%d_entries LEFT JOIN objects ON (form_%d_entries.id = objects.oid) WHERE chain_id = %d AND objects.status = 2",$form_id,$form_id,$chain_entry_id);
+		$this->db_query($q);
+
+		// always return an array
+		$eids = array();
+		while($row = $this->db_next())
+		{
+			$eids[] = $row["id"];
+		};
+		return $eids;
 	}
 
 	////
 	// !loads form chain $id into $this->chain
+	// this should probably check for site_id as well, to avoid using the object from the wrong site
 	function load_chain($id)
 	{
-		global $awt;
-		$awt->start("form_base::load_chain");
-		$awt->count("form_base::load_chain");
-
 		$this->db_query("SELECT objects.*, form_chains.* FROM objects LEFT JOIN form_chains ON objects.oid = form_chains.id WHERE objects.oid = $id");
 		$row = $this->db_next();
-		classload("xml");
-		$x = new xml;
-		$this->chain = $x->xml_unserialize(array("source" => $row["content"]));
-		$awt->stop("form_base::load_chain");
+		$this->chain = aw_unserialize($row["content"]);
 		return $row;
 	}
 
+	function get_chain_for_chain_entry($cid)
+	{
+		$cid = (int)$cid;
+		if (aw_cache_get("fc_cache",$cid))
+		{
+			return aw_cache_get("fc_cache",$cd);
+		}
+		else
+		{
+			$q = "SELECT chain_id FROM form_chain_entries WHERE id = '$cid'";
+			$res = $this->db_fetch_field($q,"chain_id");
+			aw_cache_set("fc_cache",$cid,$res);
+			return $res;
+		}
+	}
+
+	////
+	// !I think those should be replaced by generic get and put method in the core class
+	// so that I could use $this->get["type"] which then in turn accesses $this->type
 	function get_type()
 	{
 		return $this->type;
@@ -1287,10 +1337,6 @@ class form_base extends form_db_base
 
 	function listall_el_types($addempty = false)
 	{
-		global $awt;
-		$awt->start("form_base::listall_el_types");
-		$awt->count("form_base::listall_el_types");
-
 		if ($addempty)
 		{
 			$ret = array(0 => "");
@@ -1304,18 +1350,13 @@ class form_base extends form_db_base
 		{
 			$ret[$row["id"]] = $row["type_name"];
 		}
-		$awt->stop("form_base::listall_el_types");
 		return $ret;
 	}
 
 	////
-	// !creates a list of all elements to be put in a listbox for the suer to select which one he wants to add
+	// !creates a list of all elements to be put in a listbox for the user to select which one he wants to add
 	function listall_elements()
 	{
-		global $awt;
-		$awt->start("form_base::listall_elements");
-		$awt->count("form_base::listall_elements");
-
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
 														objects.name as name
@@ -1369,12 +1410,11 @@ class form_base extends form_db_base
 				}
 				else
 				{
-						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+					$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
 				}
 			}
 		}
 
-		$awt->stop("form_base::listall_elements");
 		return $ar;
 	}
 
@@ -1394,42 +1434,30 @@ class form_base extends form_db_base
 
 	function get_chains_for_form($fid)
 	{
-		global $awt;
-		$awt->start("form_base::get_chains_for_form");
-		$awt->count("form_base::get_chains_for_form");
-
 		$ret = array();
 		$this->db_query("SELECT chain_id FROM form2chain LEFT JOIN objects ON objects.oid = form2chain.chain_id WHERE form_id = $fid AND objects.status != 0");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["chain_id"]] = $row["chain_id"];
 		}
-		$awt->stop("form_base::get_chains_for_form");
 		return $ret;
 	}
 
 	function get_forms_for_chain($chid)
 	{
-		global $awt;
-		$awt->start("form_base::get_forms_for_chain");
-		$awt->count("form_base::get_forms_for_chain");
-
+		$this->save_handle();
 		$ret = array();
 		$this->db_query("SELECT form_id FROM form2chain WHERE chain_id = $chid ORDER BY ord");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
-		$awt->stop("form_base::get_forms_for_chain");
+		$this->restore_handle();
 		return $ret;
 	}
 
 	function get_chains($addempty = false)
 	{
-		global $awt;
-		$awt->start("form_base::get_chains");
-		$awt->count("form_base::get_chains");
-
 		if ($addempty)
 		{
 			$ret = array(0 => "");
@@ -1443,8 +1471,98 @@ class form_base extends form_db_base
 		{
 			$ret[$row["chain_id"]] = $row["name"];
 		}
-		$awt->stop("form_base::get_chains");
 		return $ret;
 	}
+
+	////
+	// !returns a cached list of controllers for this form
+	function get_list_controllers($add_empty = false)
+	{
+		if (!$this->controller_instance)
+		{
+			$this->controller_instance = new form_controller;
+		}
+
+		if (!($ret = aw_global_get("form_controllers_cache".$add_empty)))
+		{
+			$ret = $this->controller_instance->listall(array("parents" => $this->arr["controller_folders"],"add_empty" => $add_empty));
+			aw_global_set("form_controllers_cache".$add_empty,$ret);
+		}
+		return $ret;
+	}
+
+	////
+	// !loads entry $entry_id for the loaded form and maps the data to the form elements
+	function load_entry($entry_id,$silent_errors = false)
+	{
+		$this->entry_id = $entry_id;
+		// reads the data from the configured data source for the form and returns it as an array of el_id => el_value pairs
+		$this->entry = $this->read_entry_data($entry_id,$silent_errors);
+		// now $this->entry contains el_id => el_value pairs - not user values though, they are formgen values
+
+		$this->vars(array("entry_id" => $entry_id));
+		
+		// so we feed the data to the elements and that should be it
+		$this->read_entry_from_array($entry_id);
+	}
+
+	function read_entry_from_array($entry_id)
+	{
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
+			};
+		};
+	}
+
+	function _get_relation_listbox_content($args)
+	{
+		extract($args);
+		$result = array();
+
+		$inst =& $this->cache_get_form_instance($rel_form);
+
+		if ($inst->arr["save_table"] == 1)
+		{
+			$el = $inst->get_element_by_id($rel_element);
+
+			$rel_el = $el->get_save_table().".".$el->get_save_col();
+
+			$id_col = $inst->arr["save_tables"][$el->get_save_table()];
+
+			$this->db_query("SELECT $id_col as id, $rel_el as ev_".$rel_element." FROM ".$el->get_save_table());
+		}
+		else
+		{
+			$rel_el = "form_".$rel_form."_entries.ev_".$rel_element;
+
+			$order_by = "";
+			if ($sort_by_alpha)
+			{
+				$order_by = "ORDER BY $rel_el ";
+			}
+
+			if ($rel_unique == 1)
+			{
+				$rel_el = "distinct(".$rel_el.")";
+			}
+
+			$this->db_query("SELECT id,$rel_el as ev_".$rel_element." FROM form_".$rel_form."_entries LEFT JOIN objects ON objects.oid = form_".$rel_form."_entries.id  WHERE objects.status != 0 $order_by");
+		}
+
+		$cnt=0;
+
+		while($row = $this->db_next())
+		{
+			$result[$cnt] = $row["ev_".$rel_element];
+			$this->rel_lbopt[$cnt] = $row["id"];
+      $cnt++;
+    }
+
+		return array($cnt,$result);
+	}
+
 }
 ?>

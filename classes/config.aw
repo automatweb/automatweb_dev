@@ -1,16 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.29 2002/02/18 13:40:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.30 2002/06/10 15:50:53 kristo Exp $
 
-global $orb_defs;
-$orb_defs["config"] = "xml";
-
-classload("aw_template","xml","objects","languages");
+classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
 {
 	function db_config() 
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/config");
+		$this->init("automatweb/config");
 		$this->sub_merge = 1;
 		lc_load("definition");
 	}
@@ -42,7 +38,7 @@ class db_config extends aw_template
 
 	function create_config($ckey,$value)
 	{
-		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".$GLOBALS["uid"]."')");
+		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
 	}
 
 	function gen_config()
@@ -57,6 +53,7 @@ class db_config extends aw_template
 		$op = $this->get_simple_config("user_info_op");
 		$bt = $this->get_simple_config("bugtrack_developergid");
 		$btadm = $this->get_simple_config("bugtrack_admgid");
+		$al = $this->get_simple_config("useradd::autologin");
 
 		classload("form_base");
 		$fb = new form_base;
@@ -66,6 +63,7 @@ class db_config extends aw_template
 		$us = new users;
 
 		$this->vars(array(
+			"favicon" => "<img src='".$this->mk_my_orb("favicon", array(),"config", false,true)."'>",
 			"after_login" => $al,
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
@@ -73,7 +71,9 @@ class db_config extends aw_template
 			"bt_gid" => $this->picker($bt,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
 			"bt_adm" => $this->picker($btadm,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
 			"mustlogin" => $doc,
-			"error_redirect" => $err
+			"error_redirect" => $err,
+			"reforb" => $this->mk_reforb("submit_loginaddr"),
+			"autologin" => checked($al)
 		));
 		return $this->parse();
 	}
@@ -84,12 +84,9 @@ class db_config extends aw_template
 	function get_login_menus($args = array())
 	{
 		$_data = $this->_get_login_menus();
-		global $lang_id;
-		global $DEBUG;
-		$data = $_data[$lang_id];
+		$data = $_data[aw_global_get("lang_id")];
 		$cur_pri = -1;
 		$cur_menu = false;
-		global $uid;
 
 		if (is_array($data["menu"]))
 		{
@@ -108,11 +105,7 @@ class db_config extends aw_template
 
 	function _get_login_menus($args = array())
 	{
-		$xmldata = $this->get_simple_config("login_menus");
-		classload("xml");
-		$xml = new xml();
-		$data = $xml->xml_unserialize(array("source" => $xmldata));
-		return $data;
+		return aw_unserialize($this->get_simple_config("login_menus"));
 	}
 	
 
@@ -122,17 +115,16 @@ class db_config extends aw_template
 	{
 		$this->read_template("login_menu.tpl");
 
-		if (not(defined("LOGIN_MENUS")))
+		if (not($this->cfg["login_menus"]))
 		{
 			$this->raise_error(ERR_CONF_NLOGIN,"LOGIN_MENUS on defineerimata.",true);
 		};
 	
-		global $lang_id;	
 		$_data = $this->_get_login_menus();
-		$data = $_data[$lang_id];
+		$data = $_data[aw_global_get("lang_id")];
 
 
-		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO,"lang_id" => $lang_id));
+		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO,"lang_id" => aw_global_get("lang_id")));
 
 		$menus = array();
 
@@ -172,7 +164,6 @@ class db_config extends aw_template
 		return $this->parse();
 	}
 
-
 	////
 	// !Submitib login_menus funktsioonis tehtud valikud
 	function submit_login_menus($args = array())
@@ -180,11 +171,9 @@ class db_config extends aw_template
 		extract($args);
 		classload("xml");
 		$xml = new xml();
-		global $lang_id;
 		$old = $this->get_simple_config("login_menus");
 		$olddata = $xml->xml_unserialize(array("source" => $old));
-		global $lang_id;
-		$olddata[$lang_id] = array(
+		$olddata[aw_global_get("lang_id")] = array(
 			"pri" => $pri,
 			"menu" => $menu,
 		);
@@ -200,10 +189,10 @@ class db_config extends aw_template
 
 
 	// see laseb saidile liitumisvormi valida
-	function sel_join_form()
+	function sel_join_form($arr)
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_USER,config.$ext));
+		extract($arr);
+		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_USER,$this->mk_my_orb("config")));
 
 		$this->read_template("sel_form.tpl");
 		
@@ -257,7 +246,11 @@ class db_config extends aw_template
 			}
 			$l.=$this->parse("LINE");
 		}
-		$this->vars(array("LINE" => $l, "SEL_LINE" => ""));
+		$this->vars(array(
+			"LINE" => $l, 
+			"SEL_LINE" => "",
+			"reforb" => $this->mk_reforb("save_jf")
+		));
 
 		return $this->parse();
 	}
@@ -283,41 +276,31 @@ class db_config extends aw_template
 				$this->db_query($q);
 			}
 		}
-	}
-
-	function sel_search_form()
-	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_USER_FORM,config.$ext));
-
-		$this->read_template("sel_form.tpl");
-		
-		$this->gen_form_list("sel_search",$this->get_simple_config("user_search_form"),2);
-
-		return $this->parse();
-	}
-
-	function sel_search($id)
-	{
-		$this->set_simple_config("user_search_form",$id);
+		return $this->mk_my_orb("sel_join_form");
 	}
 
 	function class_icons()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CLASS_ICONS,config.$ext));
+		$this->mk_path(0,sprintf(LC_CONFIG_CLASS_ICONS,$this->mk_my_orb("config")));
 
-		global $class_defs;
 		$this->read_template("admin_class_icons.tpl");
 
 		$il = unserialize($this->get_simple_config("menu_icons"));
-		reset($class_defs);
-		while (list($clid,$desc) = each($class_defs))
+		reset($this->cfg["classes"]);
+		while (list($clid,$desc) = each($this->cfg["classes"]))
 		{
-			$this->vars(array("name" => $desc["name"], "url" => ($il["content"][$clid]["imgurl"] == "" ? "/images/icon_aw.gif" : $il["content"][$clid]["imgurl"]),"id" => $clid));
+			$this->vars(array(
+				"name" => $desc["name"], 
+				"url" => ($il["content"][$clid]["imgurl"] == "" ? "/automatweb/images/icon_aw.gif" : icons::check_url($il["content"][$clid]["imgurl"])),
+				"id" => $clid,
+				"change" => $this->mk_my_orb("sel_icon", array("rtype" => "class_icon" , "rid" => $clid),"icons")
+			));
 			$l.=$this->parse("LINE");
 		}
-		$this->vars(array("LINE" => $l));
+		$this->vars(array(
+			"LINE" => $l,
+			"reforb" => $this->mk_reforb("export_class_icons")
+		));
 		return $this->parse();
 	}
 
@@ -325,7 +308,9 @@ class db_config extends aw_template
 	{
 		extract($arr);
 		if (!is_array($sel))
+		{
 			return;
+		}
 
 		$il = unserialize($this->get_simple_config("menu_icons"));
 
@@ -342,7 +327,7 @@ class db_config extends aw_template
 			$ar = array("clid" => $clid, "icon" => $icon);
 			$ret.=serialize($ar);
 		}
-		return $ret;
+		die($ret);
 	}
 
 	function export_all_class_icons()
@@ -351,9 +336,8 @@ class db_config extends aw_template
 		$ic = new icons;
 
 		$il = unserialize($this->get_simple_config("menu_icons"));
-		global $class_defs;
-		reset($class_defs);
-		while (list($clid,$desc) = each($class_defs))
+		reset($this->cfg["classes"]);
+		while (list($clid,$desc) = each($this->cfg["classes"]))
 		{
 			$ret.="\x01classicon\x02\n";
 			$icon = $il["content"][$clid]["imgid"] ? $ic->get($il["content"][$clid]["imgid"]) : -1;
@@ -363,37 +347,43 @@ class db_config extends aw_template
 		return $ret;
 	}
 
-	function import_class_icons($level)
+	function import_class_icons($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_CLASS_ICON,config.$ext));
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_CLASS_ICON,$this->mk_my_orb("config")));
 			$this->read_template("import_class_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_class_icons", array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			$this->do_import("classicon",set_class_icon,"class_icons","clid");
+			die();
 		}
 	}
 
-	function set_class_icon($clid, $icon_id)
+	function set_class_icon($arr)
 	{
+		extract($arr);
+		classload("icons");
 		$t = new icons;
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("menu_icons"));
-		$icons["content"][$clid]["imgid"] = $icon_id;
-		$icons["content"][$clid]["imgurl"] = $ic["url"];
+		$icons["content"][$id]["imgid"] = $icon_id;
+		$icons["content"][$id]["imgurl"] = $ic["url"];
 
 		$cs = serialize($icons);
 		$this->set_simple_config("menu_icons",$cs);
+		header("Location: ".$this->mk_my_orb("class_icons"));
 	}
 
 	function file_icons()
 	{
-		global $ext;
 		$this->mk_path(0,LC_CONFIG_FILETYPE_ICONS);
 
 		$this->read_template("file_icons.tpl");
@@ -405,12 +395,25 @@ class db_config extends aw_template
 			while (list($extt,$v) = each($ar))
 			{
 				if ($v["url"] == "")
-					$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
+				{
+					$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+				}
 
-				$this->vars(array("extt" => $extt, "type" => $v["type"], "url" => $v["url"]));
+				$this->vars(array(
+					"extt" => $extt, 
+					"type" => $v["type"], 
+					"url" => icons::check_url($v["url"]),
+					"select" => $this->mk_my_orb("sel_icon", array("rtype" => "file_icon" ,"rid" => $extt),"icons"),
+					"change" => $this->mk_my_orb("change_filetype", array("extt" => $extt)),
+					"delete" => $this->mk_my_orb("delete_filetype", array("extt" => $extt))
+				));
 				$this->parse("LINE");
 			}
 		}
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("export_file_icons"),
+			"add" => $this->mk_my_orb("add_filetype")
+		));
 		return $this->parse();
 	}
 
@@ -418,7 +421,9 @@ class db_config extends aw_template
 	{
 		extract($arr);
 		if (!is_array($sel))
+		{
 			return;
+		}
 
 		$il = unserialize($this->get_simple_config("file_icons"));
 
@@ -435,7 +440,7 @@ class db_config extends aw_template
 			$ar = array("ext" => $extt, "icon" => $icon);
 			$ret.=serialize($ar);
 		}
-		return $ret;
+		die($ret);
 	}
 
 	function export_all_file_icons()
@@ -459,14 +464,15 @@ class db_config extends aw_template
 	function do_import($sep,$callback,$goto,$arname)
 	{
 		global $fail;
-		if (!($f = fopen($fail,"r")))
+		if (is_uploaded_file($fail))
 		{
-			$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
+			if (!($f = fopen($fail,"r")))
+			{
+				$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
+			}
+			$fc = fread($f,filesize($fail));
+			fclose($f);
 		}
-
-		$fc = fread($f,filesize($fail));
-		fclose($f);
-
 		$this->do_core_import($sep,$callback,$goto,$arname,$fc);
 	}
 
@@ -479,6 +485,7 @@ class db_config extends aw_template
 		// splitime ta lahti, eraldajaks on string \x01$sep\x02\n
 		$arr = explode("\x01".$sep."\x02\n",$fc);
 		reset($arr);
+		$cnt = 0;
 		list(,$v) = each($arr); // skipime tyhja
 		while (list(,$v) = each($arr))
 		{
@@ -492,43 +499,53 @@ class db_config extends aw_template
 			$this->$callback($v[$arname],$iid);
 			$cnt++;
 		}
-		global $ext;
-		echo sprintf(LC_CONFIG_ALL_BEEN_IMPORTED,$cnt,"config.$ext?type=$goto");
+		echo sprintf(LC_CONFIG_ALL_BEEN_IMPORTED,$cnt,$this->mk_my_orb($goto));
 	}
 
-	function import_file_icons($level)
+	function import_file_icons($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_FILE_ICONS,config.$ext));
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_FILE_ICONS,$this->mk_my_orb("config")));
 			$this->read_template("import_file_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_file_icons", array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			$this->do_import("fileicon",set_file_icon,"file_icons","ext");
+			die();
 		}
 	}
 
-	function add_filetype($error)
+	function add_filetype($arr)
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,"config.$ext","config.$ext?type=file_icons"));
+		extract($arr);
+		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,$this->mk_my_orb("config"),$this->mk_my_orb("file_icons")));
 
 		$this->read_template("add_filetype.tpl");
-		$this->vars(array("error" => $error));
+		$this->vars(array(
+			"error" => $error,
+			"reforb" => $this->mk_reforb("submit_filetype")
+		));
 		return $this->parse();
 	}
 
-	function change_filetype($extt)
+	function change_filetype($arr)
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,"config.$ext","config.$ext?type=file_icons"));
+		extract($arr);
+		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,$this->mk_my_orb("config"),$this->mk_my_orb("file_icons")));
 
 		$this->read_template("add_filetype.tpl");
 		$ar = unserialize($this->get_simple_config("file_icons"));
-		$this->vars(array("change" => 1,"extt" => $extt,"type" => $ar[$extt][type]));
+		$this->vars(array(
+			"extt" => $extt,
+			"type" => $ar[$extt]["type"],
+			"reforb" => $this->mk_reforb("submit_filetype", array("extt" => $extt))
+		));
 		return $this->parse();
 	}
 
@@ -537,57 +554,67 @@ class db_config extends aw_template
 		extract($arr);
 
 		$ar = unserialize($this->get_simple_config("file_icons"));
-		if (is_array($ar[$extt]) && $change != 1)
-		{
-			header("Location: conf.".$GLOBALS["ext"]."?type=add_filetype&error=Selline+t&uuml;&uuml;p+on+juba+andembaasis+olemas!");
-			die();
-		}
 
 		$ar[$extt] = array("type" => $type);
 
 		$this->set_simple_config("file_icons", serialize($ar));
+		return $this->mk_my_orb("change_filetype", array("extt" => $extt));
 	}
 
-	function set_file_icon($extt, $icon_id)
+	function set_file_icon($arr)
 	{
-		if ($extt == "")
+		extract($arr);
+		if ($id == "")
+		{
 			return;
+		}
 
 		$t = new icons;
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("file_icons"));
-		$icons[$extt]["url"] = $ic["url"];
-		$icons[$extt]["id"] = $icon_id;
+		$icons[$id]["url"] = $ic["url"];
+		$icons[$id]["id"] = $icon_id;
 
 		$cs = serialize($icons);
 		$this->set_simple_config("file_icons",$cs);
+		header("Location: ".$this->mk_my_orb("file_icons"));
+		die();
 	}
 
-	function delete_filetype($extt)
+	function delete_filetype($arr)
 	{
+		extract($arr);
 		$icons = unserialize($this->get_simple_config("file_icons"));
 		unset($icons[$extt]);
 		$cs = serialize($icons);
 		$this->set_simple_config("file_icons",$cs);
+		header("Location: ".$this->mk_my_orb("file_icons"));
+		die();
 	}
 
 	function program_icons()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_PROGRAMS_ICONS,"config.$ext"));
+		$this->mk_path(0,sprintf(LC_CONFIG_PROGRAMS_ICONS,$this->mk_my_orb("config")));
 
-		global $programs;
 		$this->read_template("admin_program_icons.tpl");
 
 		$il = unserialize($this->get_simple_config("program_icons"));
-		reset($programs);
-		while (list($id,$desc) = each($programs))
+		reset($this->cfg["programs"]);
+		while (list($id,$desc) = each($this->cfg["programs"]))
 		{
-			$this->vars(array("name" => $desc["name"], "url" => ($il[$id]["url"] == "" ? "/images/icon_aw.gif" : $il[$id]["url"]),"id" => $id));
+			$this->vars(array(
+				"name" => $desc["name"], 
+				"url" => ($il[$id]["url"] == "" ? "/automatweb/images/icon_aw.gif" : icons::check_url($il[$id]["url"])),
+				"id" => $id,
+				"select" => $this->mk_my_orb("sel_icon", array("rtype" => "program_icon","rid" => $id),"icons")
+			));
 			$l.=$this->parse("LINE");
 		}
-		$this->vars(array("LINE" => $l));
+		$this->vars(array(
+			"LINE" => $l,
+			"reforb" => $this->mk_reforb("export_program_icons")
+		));
 		return $this->parse();
 	}
 
@@ -595,7 +622,9 @@ class db_config extends aw_template
 	{
 		extract($arr);
 		if (!is_array($sel))
+		{
 			return;
+		}
 
 		$il = unserialize($this->get_simple_config("program_icons"));
 
@@ -612,7 +641,7 @@ class db_config extends aw_template
 			$ar = array("id" => $id, "icon" => $icon);
 			$ret.=serialize($ar);
 		}
-		return $ret;
+		die($ret);
 	}
 
 	function export_all_program_icons()
@@ -624,9 +653,8 @@ class db_config extends aw_template
 		classload("icons");
 		$ic = new icons;
 
-		global $programs;
-		reset($programs);
-		while (list($id,$desc) = each($programs))
+		reset($this->cfg["programs"]);
+		while (list($id,$desc) = each($this->cfg["programs"]))
 		{
 			$ret.="\x01programicon\x02\n";
 			$icon = $il[$id]["id"] ? $ic->get($il[$id]["id"]) : -1;
@@ -636,23 +664,28 @@ class db_config extends aw_template
 		return $ret;
 	}
 
-	function import_program_icons($level)
+	function import_program_icons($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_CONFIC_CONFIG_IMPORT_FILE_ICONS,config.$ext));
+			$this->mk_path(0,sprintf(LC_CONFIC_CONFIG_IMPORT_FILE_ICONS,$this->mk_my_orb("config")));
 			$this->read_template("import_program_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_program_icons", array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			$this->do_import("programicon",set_program_icon,"program_icons","id");
+			die();
 		}
 	}
 
-	function set_program_icon($id, $icon_id)
+	function set_program_icon($arr)
 	{
+		extract($arr);
 		$t = new icons;
 		$ic = $t->get($icon_id);
 
@@ -664,56 +697,94 @@ class db_config extends aw_template
 
 		$cs = serialize($icons);
 		$this->set_simple_config("program_icons",$cs);
+		header("Location: ".$this->mk_my_orb("program_icons"));
 	}
 
 	function other_icons()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_ELSE_ICONS,config.$ext));
+		$this->mk_path(0,sprintf(LC_CONFIG_ELSE_ICONS,$this->mk_my_orb("config")));
 
 		$this->read_template("other_icons.tpl");
 
 		$ar = unserialize($this->get_simple_config("other_icons"));
 		$v = $ar["promo_box"];
 		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
+		{
+			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+		}
 
-		$this->vars(array("type" => LC_CONFIG_PROMO_BOX, "mtype" => "promo_box", "url" => $v["url"]));
+		$this->vars(array(
+			"type" => LC_CONFIG_PROMO_BOX, 
+			"mtype" => "promo_box", 
+			"url" => icons::check_url($v["url"]),
+			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "promo_box"),"icons")
+		));
 		$this->parse("LINE");
 
 		$v = $ar["brother"];
 		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
+		{
+			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+		}
 
-		$this->vars(array("type" => LC_CONFIG_BROD_MENY, "mtype" => "brother", "url" => $v["url"]));
+		$this->vars(array(
+			"type" => LC_CONFIG_BROD_MENY, 
+			"mtype" => "brother", 
+			"url" => icons::check_url($v["url"]),
+			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "brother"),"icons")
+		));
 		$this->parse("LINE");
 
 		$v = $ar["homefolder"];
 		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
-		$this->vars(array("type" => LC_CONFIG_HOME_CAT, "mtype" => "homefolder", "url" => $v["url"]));
+		{
+			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+		}
+		$this->vars(array(
+			"type" => LC_CONFIG_HOME_CAT, 
+			"mtype" => "homefolder", 
+			"url" => icons::check_url($v["url"]),
+			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "homefolder"),"icons")
+		));
 		$this->parse("LINE");
 
 		$v = $ar["shared_folders"];
 		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
+		{
+			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+		}
 
-		$this->vars(array("type" => LC_CONFIG_HOME_CAT_SHAR_FOL, "mtype" => "shared_folders", "url" => $v["url"]));
+		$this->vars(array(
+			"type" => LC_CONFIG_HOME_CAT_SHAR_FOL, 
+			"mtype" => "shared_folders", 
+			"url" => icons::check_url($v["url"]),
+			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "shared_folders"),"icons")
+		));
 		$this->parse("LINE");
 
 		$v = $ar["hf_groups"];
 		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
+		{
+			$v["url"] = $this->cfg["baseurl"]."/images/transa.gif";
+		}
 
-		$this->vars(array("type" => LC_CONFIG_HOMECATALOG_GROUPS, "mtype" => "hf_groups", "url" => $v["url"]));
+		$this->vars(array(
+			"type" => LC_CONFIG_HOMECATALOG_GROUPS, 
+			"mtype" => "hf_groups", 
+			"url" => icons::check_url($v["url"]),
+			"select" => $this->mk_my_orb("sel_icon", array("rtype" => "other_icon","rid" => "hf_groups"),"icons")
+		));
 		$this->parse("LINE");
 
-
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("export_other_icons")
+		));
 		return $this->parse();
 	}
 
-	function set_other_icon($id, $icon_id)
+	function set_other_icon($arr)
 	{
+		extract($arr);
 		$t = new icons;
 		$ic = $t->get($icon_id);
 
@@ -723,13 +794,16 @@ class db_config extends aw_template
 
 		$cs = serialize($icons);
 		$this->set_simple_config("other_icons",$cs);
+		header("Location: ".$this->mk_my_orb("other_icons"));
 	}
 
 	function export_other_icons($arr)
 	{
 		extract($arr);
 		if (!is_array($sel))
+		{
 			return;
+		}
 
 		$il = unserialize($this->get_simple_config("other_icons"));
 
@@ -746,7 +820,7 @@ class db_config extends aw_template
 			$ar = array("id" => $id, "icon" => $icon);
 			$ret.= serialize($ar);
 		}
-		return $ret;
+		die($ret);
 	}
 
 	function export_all_other_icons()
@@ -769,25 +843,33 @@ class db_config extends aw_template
 		return $ret;
 	}
 
-	function import_other_icons($level)
+	function import_other_icons($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ELSE_ICONS,config.$ext));
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ELSE_ICONS,$this->mk_my_orb("config")));
 			$this->read_template("import_other_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_other_icons", array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			global $fail;
-			if (!($f = fopen($fail,"r")))
-				$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
-
-			$fc = fread($f,filesize($fail));
-			fclose($f);
+			if (is_uploaded_file($fail))
+			{
+				if (!($f = fopen($fail,"r")))
+				{
+					$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
+				}
+				$fc = fread($f,filesize($fail));
+				fclose($f);
+			}
 
 			$this->do_core_import_other_icons($fc);
+			die();
 		}
 	}
 
@@ -800,6 +882,7 @@ class db_config extends aw_template
 		// splitime ta lahti, eraldajaks on string \x01$sep\x02\n
 		$arr = explode("\x01othericon\x02\n",$fc);
 		reset($arr);
+		$cnt = 0;
 		list(,$v) = each($arr); // skipime tyhja
 		while (list(,$v) = each($arr))
 		{
@@ -808,13 +891,14 @@ class db_config extends aw_template
 			if (is_array($v["icon"]))
 			{
 				if (!($iid = $ic->get_icon_by_file($v["icon"]["file"])))
+				{
 					$iid = $ic->add_array($v["icon"]);
+				}
 			}
 			$this->set_other_icon($v["id"],$iid);
 			$cnt++;
 		}
-		global $ext;
-		echo "Importisin $cnt ikooni. <a href='config.aw?type=other_icons'>Tagasi</a><br>";
+		echo "Importisin $cnt ikooni. <a href='".$this->mk_my_orb("other_icons")."'>Tagasi</a><br>";
 	}
 
 	function import()
@@ -826,6 +910,9 @@ class db_config extends aw_template
 	function export()
 	{
 		$this->read_template("export.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("exp_icons")
+		));
 		return $this->parse();
 	}
 
@@ -863,26 +950,34 @@ class db_config extends aw_template
 		}
 
 		header("Content-type: aw/icon-export");
-		return serialize($ex);
+		die(serialize($ex));
 	}
 
-	function import_all_icons($level)
+	function import_all_icons($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ALL_ICONS,config.$ext));
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ALL_ICONS,$this->mk_my_orb("config")));
 			$this->read_template("import_all_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_all_icons",array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			global $fail;
-			if (!($f = fopen($fail,"r")))
-				$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
+			if (is_uploaded_file($fail))
+			{
+				if (!($f = fopen($fail,"r")))
+				{
+					$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
+				}
 
-			$fc = fread($f,filesize($fail));
-			fclose($f);
+				$fc = fread($f,filesize($fail));
+				fclose($f);
+			}
 
 			$ar = unserialize($fc);
 			if ($ar["db"] != "")
@@ -907,14 +1002,14 @@ class db_config extends aw_template
 			{
 				$this->do_core_import_other_icons($ar["ot"]);
 			}
+			die();
 		}
 	}
 
 	// see laseb kontakti formi valida
 	function sel_contact_form()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_CONTACT_INPUT_FORM,config.$ext));
+		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_CONTACT_INPUT_FORM,"config.".$this->cfg["ext"]));
 
 		$this->read_template("sel_form.tpl");
 		
@@ -948,6 +1043,19 @@ class db_config extends aw_template
 		$this->set_simple_config("error_redirect",$error_redirect);
 		$this->set_simple_config("bugtrack_developergid",$bt_gid);
 		$this->set_simple_config("bugtrack_admgid",$bt_adm);
+		$this->set_simple_config("useradd::autologin",$autologin);
+
+		// if favicon was uploaded, handle it. 
+		global $favicon;
+		if (is_uploaded_file($favicon))
+		{
+			$f = fopen($favicon,"r");
+			$fc = fread($f,filesize($favicon));
+			fclose($f);
+			$this->quote(&$fc);
+			$this->set_simple_config("favicon", $fc);
+		}
+		return $this->mk_my_orb("config");
 	}
 };
 
@@ -1146,13 +1254,13 @@ class config extends db_config
 	{
 		extract($arr);
 
-		global $AW_SITES_basefolder,$status_msg,$add_site_status;
+		global $status_msg,$add_site_status;
 
 		umask(0);
 
 		$act = "";
 
-		$site_dir = $AW_SITES_basefolder."/".$site_folder;	
+		$site_dir = $this->cfg["AW_SITES_basefolder"]."/".$site_folder;	
 		if (is_dir($site_dir))
 		{
 			$status_msg = "A folder with that name ($site_dir) already exists!";
@@ -1190,18 +1298,17 @@ class config extends db_config
 		else
 		{
 			// now create the apache vhost file
-			global $AW_SITES_vhost_folder,$AW_SITES_server_ip;
-			$fc = "<VirtualHost $AW_SITES_server_ip>\n";
+			$fc = "<VirtualHost ".$this->cfg["AW_SITES_server_ip"].">\n";
 			$fc.= "Servername $site_url\n";
 			$fc.= "DocumentRoot ".$site_dir."/public\n";
 			$fc.= "ErrorLog /var/log/apache/aw.struktuur.ee/error_log\n";
 			$fc.= "CustomLog /var/log/apache/aw.struktuur.ee/access_log common\n";
 			$fc.= "</VirtualHost>\n";
 
-			$fp = fopen($AW_SITES_vhost_folder."/".$site_url,"w");
+			$fp = fopen($this->cfg["AW_SITES_vhost_folder"]."/".$site_url,"w");
 			if (!$fp)
 			{
-				$status_msg = "Could not create apache VirtualHost file (".$AW_SITES_vhost_folder."/".$site_url.") ";
+				$status_msg = "Could not create apache VirtualHost file (".$this->cfg["AW_SITES_vhost_folder"]."/".$site_url.") ";
 			}
 			else
 			{
@@ -1214,15 +1321,13 @@ class config extends db_config
 		if ($status_msg == "")
 		{
 			// creat the link to automatweb folder
-			global $AW_SITES_admin_dir;
-			symlink($AW_SITES_admin_dir,$site_dir."/public/automatweb");
+			symlink($this->cfg["AW_SITES_admin_dir"],$site_dir."/public/automatweb");
 
 			// now copy all the files in the public folder to the new site from this site
-			global $site_basedir;
-			$di = opendir($site_basedir."/public");
+			$di = opendir($this->cfg["site_basedir"]."/public");
 			while (($file = readdir($di)) && $status_msg == "")
 			{
-				$_file = $site_basedir."/public/".$file;
+				$_file = $this->cfg["site_basedir"]."/public/".$file;
 				$dest = $site_dir."/public/".$file;
 				if (is_file($_file))
 				{
@@ -1258,9 +1363,8 @@ class config extends db_config
 		extract($arr);
 		$this->read_template("docfolders.tpl");
 
-		global $lang_id;
 		$langs = new languages;
-		$la = $langs->fetch($lang_id);
+		$la = $langs->fetch(aw_global_get("lang_id"));
 		$LC=$la["acceptlang"];
 
 		$df = $this->get_simple_config("docfolders".$LC);
@@ -1276,7 +1380,7 @@ class config extends db_config
 
 		$ob = new objects;
 		$this->vars(array(
-			"folders" => $this->multiple_option_list($ndf,$ob->get_list(false,false,$GLOBALS["rootmenu"])),
+			"folders" => $this->multiple_option_list($ndf,$ob->get_list(false,false,$this->cfg["rootmenu"])),
 			"reforb" => $this->mk_reforb("submit_docfolders",array())
 		));
 		return $this->parse();
@@ -1289,7 +1393,7 @@ class config extends db_config
 		extract($arr);
 
 		$ob = new objects;
-		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
+		$obl = $ob->get_list(false,false,$this->cfg["rootmenu"]);
 
 		$_df = array();
 		if (is_array($docfolders))
@@ -1305,14 +1409,30 @@ class config extends db_config
 
 		$this->quote(&$df);
 
-		global $lang_id;
 		$langs = new languages;
-		$la = $langs->fetch($lang_id);
+		$la = $langs->fetch(aw_global_get("lang_id"));
 		$LC=$la["acceptlang"];
 
 		$this->set_simple_config("docfolders".$LC, $df);
 
 		return $this->mk_my_orb("docfolders");
+	}
+
+	function set_menu_icon($arr)
+	{
+		extract($arr);
+		classload("menuedit");
+		$t = new menuedit;
+		$t->set_menu_icon($id,$icon_id);
+		$obj = $t->get_object($id);
+		header("Location: ".$t->mk_orb("change", array("id" => $id, "parent" => $obj["parent"])));
+		die();
+	}
+
+	function show_favicon($arr)
+	{
+		header("Content-type: image/x-icon");
+		die($this->get_simple_config("favicon"));
 	}
 }
 ?>

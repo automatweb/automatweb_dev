@@ -35,7 +35,7 @@
 	</tr>
 	<tr>
 		<td class="fgtext" colspan="3" align="center">
-		<img src="{VAR:self}?display=graph&id={VAR:uniqid}">
+		<img src="{VAR:self}?class=stat&action=graph&id={VAR:uniqid}">
 		</td>
 	</tr>
 	</table>
@@ -199,7 +199,7 @@
 	<tr>
 		<td class="{VAR:style}">{VAR:cnt}</td>
 		<td class="{VAR:style}" nowrap align="right">{VAR:oid}</td>
-		<td class="{VAR:style}" nowrap><a target="new" href="/automatweb/metainfo.{VAR:ext}?oid={VAR:oid}">{VAR:name}</a>&nbsp;</td>
+		<td class="{VAR:style}" nowrap><a target="new" href="{VAR:baseurl}/?section={VAR:oid}">{VAR:name}</a>&nbsp;</td>
 		<td class="{VAR:style}">{VAR:hits}</td>
 		<td class="{VAR:style}">
 			<img src="images/bar.gif" width="{VAR:width}" height="5">

@@ -1,9 +1,11 @@
 <br>
-<form action='config.{VAR:ext}' METHOD="GET">
+<form action='orb.{VAR:ext}' METHOD="GET">
 <input type='hidden' NAME='type' VALUE='sel_icon'>
 <input type='hidden' NAME='rtype' VALUE='{VAR:rtype}'>
 <input type='hidden' NAME='rid' VALUE='{VAR:rid}'>
 <input type='hidden' NAME='search' VALUE='1'>
+<input type='hidden' name='class' value='icons'>
+<input type='hidden' name='action' value='sel_icon'>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='sstring' VALUE='{VAR:sstring}'></td>
@@ -59,7 +61,7 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>TULEMUSED:&nbsp;<a href='config.{VAR:ext}?type=add_icon'>Lisa ikoon</a></b></td>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>TULEMUSED:&nbsp;<a href='{VAR:add}'>Lisa ikoon</a></b></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;Nimi&nbsp;</td>
@@ -72,7 +74,7 @@
 <td class="fgtext">&nbsp;{VAR:name}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:comment}&nbsp;</td>
 <td class="fgtext">&nbsp;<img src='{VAR:url}'>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='config.{VAR:ext}?type={VAR:rtype}&id={VAR:rid}&icon_id={VAR:id}'>Vali</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:select}'>Vali</a>&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>

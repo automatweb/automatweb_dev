@@ -2,16 +2,12 @@
 // $Header
 // contacts.aw - kontaktihaldus
 
-global $orb_defs;
-$orb_defs["contacts"] = "xml";
-
-class contacts extends aw_template {
-	
+class contacts extends aw_template 
+{
 	function contacts($args = array())
 	{
-		$this->db_init();
 		// right now contact templates are stored next to the messenger ones
-		$this->tpl_init("messenger");
+		$this->init("messenger");
 		lc_load("definition");
 	}
 
@@ -22,14 +18,14 @@ class contacts extends aw_template {
 	function import($args = array())
 	{
 		extract($args);
-		global $ext,$udata;
+		$udata = $this->get_user();
  
 		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$this->_gen_contact_group_list();
  
 		classload("form");
 		$f = new form();
-		$f->load(CONTACT_FORM);
+		$f->load($this->cfg["form"]);
 		$el = $f->get_element_by_name("grupp");
 		$ef = &$f->get_element_by_id($el->id);
  
@@ -39,20 +35,20 @@ class contacts extends aw_template {
 		//$name = str_replace("\"","",$matches[1]);
 		//list($name,$surname) = explode(" ",$name);
 		$elvalues = array(
-				"name" => $name,
-				"surname" => $surname,
-				"email" => $addr,
-				"grupp" => $this->flatlist,
-			);
+			"name" => $name,
+			"surname" => $surname,
+			"email" => $addr,
+			"grupp" => $this->flatlist,
+		);
 		$form = $f->gen_preview(array(
-					"id" => CONTACT_FORM,
-					"reforb" => $this->mk_reforb("submitimport",array("folder" => $folder)),
-					"elvalues" => $elvalues,
-					"form_action" => "/index.$ext",
-				));
-		 print $form;
-                exit;
-        }
+			"id" => $this->cfg["form"],
+			"reforb" => $this->mk_reforb("submitimport",array("folder" => $folder)),
+			"elvalues" => $elvalues,
+			"form_action" => "/index.".$this->cfg["ext"],
+		));
+		print $form;
+    exit;
+  }
 
 	////
 	// !importcontact handler
@@ -60,9 +56,9 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		classload("form");
-		$f = new form(CONTACT_FORM);
+		$f = new form($this->cfg["form"]);
 		// save the form entry, and now .. should we show it?
-		$args["id"] = CONTACT_FORM;
+		$args["id"] = $this->cfg["form"];
 		$args["parent"] = $args[0];
 		$f->process_entry($args);
 		// I realize that this a little ugly
@@ -75,7 +71,7 @@ class contacts extends aw_template {
 	// startfrom(int) - millisest objektist alustada
 	function _gen_contact_group_list($args = array())
 	{
-		global $udata;
+		$udata = $this->get_user();
 		$fldr = ($args["startfrom"]) ? $args["startfrom"] : $udata["home_folder"];
 		do
 		{
@@ -138,17 +134,16 @@ class contacts extends aw_template {
 	function gen_msg_menu($args = array())
 	{
 		extract($args);
-		global $basedir;
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();
 		$retval = $xm->build_menu(array(
-				"vars"  => $vars,
-				"xml"   => $basedir . "/xml/contacts/menucode.xml",
-				"tpl"   => $this->template_dir . "/menus.tpl",
-				"activelist" => $activelist,
+			"vars"  => $vars,
+			"xml"   => $this->cfg["basedir"] . "/xml/contacts/menucode.xml",
+			"tpl"   => $this->template_dir . "/menus.tpl",
+			"activelist" => $activelist,
 		));
 		return $retval;
-        }
+	}
 	
 	////
 	// !Contact manager
@@ -157,12 +152,12 @@ class contacts extends aw_template {
 		extract($args);
 		$folder = ($folder) ? "folder=$folder" : "";
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("contact","list"),
-				"vars" => array("folder" => $folder),
-				));
+			"activelist" => array("contact","list"),
+			"vars" => array("folder" => $folder),
+		));
 		
 		$this->read_template("contacts.tpl");
-		global $udata;
+		$udata = $this->get_user();
 		$folder = ($args["folder"]) ? $args["folder"] : $udata["home_folder"];
 		$fdata = $this->get_object($folder);
 		$path = array();
@@ -205,39 +200,38 @@ class contacts extends aw_template {
 		$fullpath = map2("<a href='?class=contacts&id=%s'>%s</a>",$path);
 		$fullpath = join(" &gt; " ,array_reverse($fullpath));
 		
-		
 		$this->get_objects_by_class(array(
-					"parent" => $folder,
-					"class" => CL_CONTACT_GROUP,
-				));
+			"parent" => $folder,
+			"class" => CL_CONTACT_GROUP,
+		));
 		$glist = "";
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
 			$cnt++;
 			$this->vars(array(
-					"jrk" => $cnt,
-					"name" => $row["name"],
-					"id" => $row["oid"],
-					"members" => "n/a",
+				"jrk" => $cnt,
+				"name" => $row["name"],
+				"id" => $row["oid"],
+				"members" => "n/a",
 			));
 			$glist .= $this->parse("gline");
 		};
 		classload("form");
-		$f = new form(CONTACT_FORM);
-		$f->load(CONTACT_FORM);
+		$f = new form($this->cfg["form"]);
+		$f->load($this->cfg["form"]);
 		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
-		$f->get_entries(array("parent" => $folder));
+		$ear = $f->get_entries(array("parent" => $folder,"all_data" => true));
 		$c = "";
 		$cnt = 0;
-		while($row = $f->db_next())
+		foreach($ear as $row)
 		{
 			$this->vars(array(
-					"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
-					"email" => $row[$ids["email"]],
-					"phone" => $row[$ids["phone"]],
-					"id" => $row["id"],
-					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+				"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
+				"email" => $row[$ids["email"]],
+				"phone" => $row[$ids["phone"]],
+				"id" => $row["id"],
+				"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
 			));
 			$cnt++;
 			$c .= $this->parse("line");
@@ -245,13 +239,13 @@ class contacts extends aw_template {
 
 		$this->_gen_contact_group_list();
 		$this->vars(array(
-				"menu" => $menu,
-				"line" => $c,
-				"gline" => $glist,
-				"mlist" => $this->picker($folder,$this->flatlist),
-				"grouplist" => $this->picker($folder,$this->flatlist),
-				"reforb" => $this->mk_reforb("submit_contacts",array("folder" => $folder)),
-				"fullpath" => $fullpath,
+			"menu" => $menu,
+			"line" => $c,
+			"gline" => $glist,
+			"mlist" => $this->picker($folder,$this->flatlist),
+			"grouplist" => $this->picker($folder,$this->flatlist),
+			"reforb" => $this->mk_reforb("submit_contacts",array("folder" => $folder)),
+			"fullpath" => $fullpath,
 		));
 		return $this->parse();
 	}
@@ -261,12 +255,12 @@ class contacts extends aw_template {
 	function groups($args = array())
 	{
 		extract($args);
-		global $udata;
+		$udata = $this->get_user();
 		$folder = ($parent) ? "folder=$parent" : "";
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("groups","list"),
-				"vars" => array("folder" => $folder),
-				));
+			"activelist" => array("groups","list"),
+			"vars" => array("folder" => $folder),
+		));
 		$this->read_template("contactgroups.tpl");
 		$folder = ($args["parent"]) ? $args["parent"] : $udata["home_folder"];
 		$fdata = $this->get_object($folder);
@@ -310,19 +304,19 @@ class contacts extends aw_template {
 		$fullpath = map2("<a href='?class=groups&parent=%s'>%s</a>",$path);
 		$fullpath = join(" &gt; " ,array_reverse($fullpath));
 		$this->get_objects_by_class(array(
-					"parent" => $folder,
-					"class" => CL_CONTACT_GROUP,
-				));
+			"parent" => $folder,
+			"class" => CL_CONTACT_GROUP,
+		));
 		$glist = "";
 		$cnt = 0;
 		while($row = $this->db_next())
 		{
 			$cnt++;
 			$this->vars(array(
-					"jrk" => $cnt,
-					"name" => $row["name"],
-					"id" => $row["oid"],
-					"members" => "n/a",
+				"jrk" => $cnt,
+				"name" => $row["name"],
+				"id" => $row["oid"],
+				"members" => "n/a",
 			));
 			$glist .= $this->parse("gline");
 		};
@@ -351,7 +345,6 @@ class contacts extends aw_template {
 		return $this->mk_site_orb(array(
 					"action" => "contacts",
 					"folder" => $folder));
-
 	}
 	
 	////
@@ -363,19 +356,19 @@ class contacts extends aw_template {
 				"activelist" => array("contact",($args["id"]) ? "list" : "add"),
 			));
 		classload("form");
-		$f = new form(CONTACT_FORM);
-		global $ext,$udata,$baseurl;
+		$f = new form($this->cfg["form"]);
+		$udata = $this->get_user();
 		$folder = ($folder) ? $folder : $udata["home_folder"];
 		$form = $f->gen_preview(array(
-						"id" => CONTACT_FORM,
-						"entry_id" => ($args["id"]) ? $args["id"] : "",
-						"reforb" => $this->mk_reforb("submit",array("folder" => $folder)),
-						"form_action" => "$baseurl/index.$ext",
-					));
+			"id" => $this->cfg["form"],
+			"entry_id" => ($args["id"]) ? $args["id"] : "",
+			"reforb" => $this->mk_reforb("submit",array("folder" => $folder)),
+			"form_action" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"],
+		));
 		$this->read_template("edit_contact.tpl");
 		$this->vars(array(
-				"menu" => $menu,
-				"form" => $form,
+			"menu" => $menu,
+			"form" => $form,
 		));
 		return $this->parse();
 	}
@@ -386,9 +379,9 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		classload("form");
-		$f = new form(CONTACT_FORM);
+		$f = new form($this->cfg["form"]);
 		// save the form entry, and now .. should we show it?
-		$args["id"] = CONTACT_FORM;
+		$args["id"] = $this->cfg["form"];
 		$args["parent"] = $folder;
 		$f->process_entry($args);
 		global $status_msg;
@@ -399,9 +392,9 @@ class contacts extends aw_template {
 			$entry_id = $f->entry_id;
 		};
 		$ref = $this->mk_site_orb(array(
-					"action" => "edit",
-					"id" => $entry_id,
-			));
+			"action" => "edit",
+			"id" => $entry_id,
+		));
 		return $ref;
 	}
 	
@@ -411,8 +404,8 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => ($args["id"]) ? array("contacts") : array("addgroup"),
-			));
+			"activelist" => ($args["id"]) ? array("contacts") : array("addgroup"),
+		));
 		$this->read_template("contact_group.tpl");
 		$name = "";
 		if ($args["id"])
@@ -421,9 +414,9 @@ class contacts extends aw_template {
 			$name = $obj["name"];
 		};
 		$this->vars(array(
-				"name" => $name,
-				"menu" => $menu,
-				"reforb" => $this->mk_reforb("submit_group",array("id" => $id,"folder" => $folder)),
+			"name" => $name,
+			"menu" => $menu,
+			"reforb" => $this->mk_reforb("submit_group",array("id" => $id,"folder" => $folder)),
 		));
 		return $this->parse();
 	}
@@ -435,29 +428,29 @@ class contacts extends aw_template {
 		extract($args);
 		// kui folder on defineeritud, siis lisame grupi selle alla
 		// kui mitte, siis otse kodukataloogi alla
-		global $udata;
+		$udata = $this->get_user();
 		$folder = ($folder) ? $folder: $udata["home_folder"];
 		if ($args["id"])
 		{
 			$this->upd_object(array(
-						"oid" => $id,
-						"name" => $name,
+				"oid" => $id,
+				"name" => $name,
 			));
 		}
 		else
 		{
 			$id = $this->new_object(array(
-						"class_id" => CL_CONTACT_GROUP,
-						"name" => $name,
-						"parent" => $folder,
+				"class_id" => CL_CONTACT_GROUP,
+				"name" => $name,
+				"parent" => $folder,
 			));
 		};
 		global $status_msg;
 		$status_msg = ($args["id"]) ? LC_CONTACT_GROUP_SAVED : LC_CONTACT_GROUP_ADDED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
-					"action" => "edit_group",
-					"id" => $id,
+			"action" => "edit_group",
+			"id" => $id,
 		));
 	}
 	
@@ -467,20 +460,19 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("search"),
-			));
+			"activelist" => array("search"),
+		));
 		$this->read_template("search_contact.tpl");
 		classload("form");
 		$f = new form(2024);
-		global $ext,$baseurl;
 		$form = $f->gen_preview(array(
-						"id" => 2024,
-						"reforb" => $this->mk_reforb("submit_search",array()),
-						"form_action" => "$baseurl/index.$ext",
-					));
+			"id" => 2024,
+			"reforb" => $this->mk_reforb("submit_search",array()),
+			"form_action" => $this->cfg["baseurl"]."/index.".$this->cfg["ext"],
+		));
 		$this->vars(array(
-				"menu" => $menu,
-				"form" => $form,
+			"menu" => $menu,
+			"form" => $form,
 		));
 		return $this->parse();
 	}
@@ -490,17 +482,16 @@ class contacts extends aw_template {
 	function submit_search($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("contacts","search"),
-			));
+			"activelist" => array("contacts","search"),
+		));
 		
 		$this->_gen_contact_group_list();
-		
 		
 		$this->read_template("search_contact_res.tpl");
 		// FIXME:
 		classload("form");
 		$f = new form(2024);
-		$f->load(CONTACT_FORM);
+		$f->load($this->cfg["form"]);
 		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 		// vaja kuvada otsitulemused. kuidas?
 		$f->process_entry(array("id" => 2024));
@@ -514,20 +505,19 @@ class contacts extends aw_template {
 				foreach($results as $idx => $row)
 				{
 					$this->vars(array(
-							"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
-							"phone" => $row[$ids["phone"]],
-							"id" => $idx,
-							"email" => $row[$ids["email"]],
-						));
+						"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
+						"phone" => $row[$ids["phone"]],
+						"id" => $idx,
+						"email" => $row[$ids["email"]],
+					));
 					$c .= $this->parse("line");
 				};
 			};
 		};
 		
-
 		$this->vars(array(
-				"menu" => $menu,
-				"line" => $c,
+			"menu" => $menu,
+			"line" => $c,
 		));
 		return $this->parse();
 	}
@@ -545,7 +535,7 @@ class contacts extends aw_template {
 		
 		
 			// Koostame nimekirja koigist selle kasutaja kontaktigruppidest
-			global $udata;
+			$udata = $this->get_user();
 			$fldr = $udata["home_folder"];
 
 			do
@@ -574,20 +564,20 @@ class contacts extends aw_template {
 			
 			// koostame nimekirja koigist selle formi entritest
 			classload("form");
-			$f = new form(CONTACT_FORM);
-			$f->load(CONTACT_FORM);
+			$f = new form($this->cfg["form"]);
+			$f->load($this->cfg["form"]);
 			$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
 			
 			// see on selleks, et get_entries arvestaks ka neid kontakte, mis kodukataloogi
 			// on salvestatud
 			$grps[$udata["home_folder"]] = 1;
 		
-			$f->get_entries(array("parent" => array_keys($grps)));
+			$dat = $f->get_entries(array("parent" => array_keys($grps), "all_data" => true));
 			
 			// siia salvestame koik entryd parentite kaupa grupeerituna
 			$entries_by_parent = array();
 
-			while($row = $f->db_next())
+			foreach($dat as $row)
 			{
 				$name = sprintf("%s %s <%s>",$row[$ids["name"]],$row[$ids["surname"]],$row[$ids["email"]]);
 				$entries[$row["oid"]] = $name;
@@ -599,7 +589,6 @@ class contacts extends aw_template {
 			$gl = "";
 			$garr = "";
 			$gd = 0;
-
 
 		
 			foreach($grps as $oid => $name)
@@ -632,16 +621,16 @@ class contacts extends aw_template {
 			
 			// listid
 			$this->get_objects_by_class(array(
-						"class" => CL_MAILINGLIST,
-					));
+				"class" => CL_MAILINGLIST,
+			));
 			$gd = 0;
 			$larr = "";
 			while($row = $this->db_next())
 			{
 				$this->vars(array(
-						"name" => $row["name"],
-						"gd" => $gd,
-					));
+					"name" => $row["name"],
+					"gd" => $gd,
+				));
 				$gd++;
 				$larr .= $this->parse("larr");
 			};
@@ -649,7 +638,6 @@ class contacts extends aw_template {
 			$g .= $this->parse("group");
 
 
-		
 			$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS, "2" => "Uued listid");
 			
 			classload("ml_list");
@@ -661,27 +649,24 @@ class contacts extends aw_template {
 			foreach($arr as $lid_gid => $name)
 			{
 				$this->vars(array(
-						"name" => $name,
-						"gd" => $gd,
-					));
+					"name" => $name,
+					"gd" => $gd,
+				));
 				$gd++;
 				$l2arr .= $this->parse("l2arr");
 			};
 			$this->vars(array("l2arr" => $l2arr,"oid" => "0"));
 			//$g = $this->parse("group");
 			$listcontacts = $this->parse("listcontacts");
-
-			
-
+	
 
 		$this->vars(array(
-				"groups" => $this->picker(-1,$dummy + $this->flatlist),
-				"group" => $g,
-				"is_list_msg" => $listmsg,
-				"garr" => $garr,
-				"hf" => $udata["home_folder"],
-			));
-		
+			"groups" => $this->picker(-1,$dummy + $this->flatlist),
+			"group" => $g,
+			"is_list_msg" => $listmsg,
+			"garr" => $garr,
+			"hf" => $udata["home_folder"],
+		));
 		
 		print $this->parse();
 	}

@@ -1,8 +1,9 @@
 <?php
-class db_feedback extends aw_template {
-	function db_feedback() {
-		$this->db_init();
-		$this->tpl_init();
+class db_feedback extends aw_template 
+{
+	function db_feedback() 
+	{
+		$this->init("");
 		$this->tekst[0] = "Nii nagu vaja, lihtne ja arusaadav.";
 		$this->tekst[1] = "Arusaadav, kuid konarlik. Vajab toimetamist.";
 		$this->tekst[2] = "Liiga keeruline või tehniline.";
@@ -25,11 +26,10 @@ class db_feedback extends aw_template {
 		$this->ala[1] = "Arvutid ja Internet";
 		$this->ala[2] = "Müük ja turundus";
 		$this->ala[3] = "Muu";
-
-
 	}
 	
-	function add_feedback($data) {
+	function add_feedback($data) 
+	{
 		$this->quote($data);
 		extract($data);
 		$msg = "
@@ -48,37 +48,42 @@ Kujundus: " . $this->kujundus[$kujundus] . "
 Struktuur: " . $this->struktuur[$struktuur] . "
 Tehnika: 
 ";
-$tsum = 0;
-if (is_array($tehnika)) {
-	while(list($k,$v) = each($tehnika)) {
-		$msg .= $this->tehnika[$v] . "\n";
-		$tsum = $tsum + $v;
-	};
-};
+		$tsum = 0;
+		if (is_array($tehnika)) 
+		{
+			while(list($k,$v) = each($tehnika)) 
+			{
+				$msg .= $this->tehnika[$v] . "\n";
+				$tsum = $tsum + $v;
+			};
+		};
 
-$msg .= "\nTäpsustav tekst:\n" . $more . "\n";
-if ($wantsnews1) {
-	$msg .= "\nSoovib dokumendi teemaga seonduvat e-uudiskirja\n";
-};
-if ($wantsnews2) {
-	$msg .= "\nSoovib teadet e-postile, kui toimuvad suuremad muudatused Struktuur Meedia kodulehel.\n";
-};
-if ($wantsfeedback) {
-	$msg .= "\nSoovin oma arvamusele/ettepanekule personaalset tagasisidet\n";
-};
-$headers = "From: $eesnimi $perenimi <$mail>";
+		$msg .= "\nTäpsustav tekst:\n" . $more . "\n";
+		if ($wantsnews1) 
+		{
+			$msg .= "\nSoovib dokumendi teemaga seonduvat e-uudiskirja\n";
+		};
+		if ($wantsnews2) 
+		{
+			$msg .= "\nSoovib teadet e-postile, kui toimuvad suuremad muudatused Struktuur Meedia kodulehel.\n";
+		};
+		if ($wantsfeedback) 
+		{
+			$msg .= "\nSoovin oma arvamusele/ettepanekule personaalset tagasisidet\n";
+		};
+		$headers = "From: $eesnimi $perenimi <$mail>";
 		$t = time();
 		$q = "INSERT INTO feedback (docid,time,tekst,kujundus,
-			struktuur,tehnika,ala, more, gender,
-			eesnimi, perenimi, mail, homepage,
-			wantsnews1, wantsnews2, wantsfeedback)
-			VALUES('$docid','$t','$tekst','$kujundus','$struktuur',
-				'$tsum','$ala','$more','$gender',
-				'$eesnimi','$perenimi','$mail',
-				'$homepage','$wantsnew1','$wantsnew2',
-				'$wantsfeedback')";
+					struktuur,tehnika,ala, more, gender,
+					eesnimi, perenimi, mail, homepage,
+					wantsnews1, wantsnews2, wantsfeedback)
+					VALUES('$docid','$t','$tekst','$kujundus','$struktuur',
+						'$tsum','$ala','$more','$gender',
+						'$eesnimi','$perenimi','$mail',
+						'$homepage','$wantsnew1','$wantsnew2',
+						'$wantsfeedback')";
 		$this->db_query($q);
 		mail("content@struktuur.ee","FB-SA-007 \"$title\"",$msg,"$headers");
-}
+	}
 };
 ?>

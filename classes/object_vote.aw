@@ -1,35 +1,32 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.2 2001/08/02 16:21:58 duke Exp $
-global $orb_defs; 
-$orb_defs["object_vote"] = "xml";
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.3 2002/06/10 15:50:54 kristo Exp $
 
 class  object_vote extends aw_template
 {
 	function object_vote($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("documents");
+		$this->init("documents");
 	}
 
 	function list_objects($args = array())
 	{
 		$this->read_template("list_clusters.tpl");
-		global $per_oid;
+		$per_oid = $this->cfg["per_oid"];
 		$q = "SELECT * FROM objects WHERE parent = '$per_oid' AND class_id = " . CL_OBJECT_VOTE . " AND status != 0 ORDER BY period DESC";
 		$this->db_query($q);
 		$c = "";
 		while($row = $this->db_next())
 		{
 			$this->vars(array(
-					"id" => $row["oid"],
-					"title" => $row["name"],
-					"checked" => ($row["status"] == 2) ? "checked" : "",
-					"class" => ($row["status"] == 2) ? "selected" : "plain",
+				"id" => $row["oid"],
+				"title" => $row["name"],
+				"checked" => ($row["status"] == 2) ? "checked" : "",
+				"class" => ($row["status"] == 2) ? "selected" : "plain",
 			));
 			$c .= $this->parse("line");
 		};
 		$this->vars(array(
-			"add" => "orb.aw?class=object_vote&action=add_cluster",
+			"add" => "orb.".$this->cfg["ext"]."?class=object_vote&action=add_cluster",
 			"line" => $c,
 			"reforb" => $this->mk_reforb("submit_cluster_list",array()),
 		));
@@ -39,13 +36,12 @@ class  object_vote extends aw_template
 	function submit_cluster_list($args = array())
 	{
 		extract($args);
-		global $per_oid;
+		$per_oid = $this->cfg["per_oid"];
 		$q = "UPDATE objects SET status = 1 WHERE parent = '$per_oid' AND class_id = " . CL_OBJECT_VOTE;
 		$this->db_query($q);
 		$q = "UPDATE objects set status = 2 WHERE oid = $check";
 		$this->db_query($q);
-		global $baseurl;
-		header("Location: " . $baseurl . "/automatweb/orb.aw?class=object_vote&action=list");
+		header("Location: " . $this->cfg["baseurl"] . "/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=list");
 		exit;
 	}
 		
@@ -56,7 +52,7 @@ class  object_vote extends aw_template
 	{
 		extract($args);
 		$this->read_template("add_cluster.tpl");
-		global $per_oid;
+		$per_oid = $this->cfg["per_oid"];
 		classload("periods");
 		$dbp = new db_periods($per_oid);
 		$active = $dbp->get_active_period();
@@ -64,11 +60,11 @@ class  object_vote extends aw_template
 		$periods = array();
 		while($row = $dbp->db_next())
 		{
-			 $periods[$row["id"]] = $row["description"];
+		 $periods[$row["id"]] = $row["description"];
 		};
 		$this->vars(array(
-				"periods" => $this->picker($active,$periods),
-				"reforb" => $this->mk_reforb("submit_add_cluster",array()),
+			"periods" => $this->picker($active,$periods),
+			"reforb" => $this->mk_reforb("submit_add_cluster",array()),
 		));
 		return $this->parse();
 	}
@@ -78,19 +74,19 @@ class  object_vote extends aw_template
 	function submit_add_cluster($args = array())
 	{
 		extract($args);
-		global $baseurl;
-		global $per_oid;
+		$baseurl = $this->cfg["baseurl"];
+		$per_oid = $this->cfg["per_oid"];
 		classload("periods");
 		$dbp = new db_periods($per_oid);
 		$rec = $dbp->get($period);
 		$name = $rec["description"];
 		$oid = $this->new_object(array(
-					"name" => $name,
-					"parent" => $per_oid,
-					"period" => $period,
-					"class_id" => CL_OBJECT_VOTE,
+			"name" => $name,
+			"parent" => $per_oid,
+			"period" => $period,
+			"class_id" => CL_OBJECT_VOTE,
 		));
-		$link = "$baseurl/automatweb/orb.aw?class=object_vote&action=edit_cluster&id=$oid";
+		$link = "$baseurl/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=edit_cluster&id=$oid";
 		header("Location: $link");
 		print " ";
 		exit;
@@ -99,11 +95,11 @@ class  object_vote extends aw_template
 	function edit_cluster($args = array())
 	{
 		extract($args);
-		global $SITE_ID;
+		$SITE_ID = $this->cfg["site_id"];
 		$this->read_template("list_contents.tpl");
 		$meta = $this->get_object_metadata(array(
-				"oid" => $id,
-				"key" => "object_vote",
+			"oid" => $id,
+			"key" => "object_vote",
 		));
 		$check = $meta["check"];
 		$jrk = $meta["jrk"];
@@ -114,11 +110,11 @@ class  object_vote extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->vars(array(
-					"id" => $row["oid"],
-					"name" => $row["name"],
-					"value" => ($jrk[$row["oid"]]) ? $jrk[$row["oid"]] : 0,
-					"checked" => ($check[$row["oid"]]) ? "checked" : "",
-					"author" => $row["author"],
+				"id" => $row["oid"],
+				"name" => $row["name"],
+				"value" => ($jrk[$row["oid"]]) ? $jrk[$row["oid"]] : 0,
+				"checked" => ($check[$row["oid"]]) ? "checked" : "",
+				"author" => $row["author"],
 			));
 			$c .= $this->parse("line");
 		};
@@ -144,14 +140,13 @@ class  object_vote extends aw_template
 		));
 
 
-		global $baseurl;
-		return $baseurl . "/automatweb/orb.aw?class=object_vote&action=edit_cluster&id=$id";
+		return $this->cfg["baseurl"] . "/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=edit_cluster&id=$id";
 	}
 
 	function gen_user_html()
 	{
-		global $per_oid;
-		global $SITE_ID;
+		$per_oid = $this->cfg["per_oid"];
+		$SITE_ID = $this->cfg["site_id"];
 		classload("msgboard");
 		$mboard = new msgboard();
 		$this->read_template("object_vote.tpl");
@@ -160,8 +155,7 @@ class  object_vote extends aw_template
 		$row = $this->db_next();
 		$id = $row["oid"];
 		$meta = $this->get_object_metadata(array(
-				"oid" => $id,
-				//"key" => "object_vote",
+			"oid" => $id,
 		));
 
 		$votes = $meta["votes"];
@@ -172,7 +166,6 @@ class  object_vote extends aw_template
 		foreach($check as $key => $val)
 		{
 			$lx[$key] = $jrk[$key];
-
 		}
 
 		asort($lx);
@@ -221,24 +214,24 @@ class  object_vote extends aw_template
 		classload("msgboard");
 		$mboard = new msgboard();
 		$mboard->submit_add($args);
-		global $per_oid;
-		global $SITE_ID;
+		$per_oid = $this->cfg["per_oid"];
+		$SITE_ID = $this->cfg["site_id"];
 		$q = "SELECT * FROM objects WHERE parent = '$per_oid' AND site_id = '$SITE_ID' and status = 2 AND class_id =" . CL_OBJECT_VOTE;
 		$this->db_query($q);
 		$row = $this->db_next();
 		$id = $row["oid"];
 		$xmeta = $this->get_object_metadata(array(
-				"oid" => $id,
-				"metadata" => $row["metadata"],
-				"key" => "votes",
+			"oid" => $id,
+			"metadata" => $row["metadata"],
+			"key" => "votes",
 		));
 		$votes = $xmeta;
 		$votes[$args["vote"]] += 1;
 		$votes["total"] += 1;
 		$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "votes",
-				"value" => $votes,
+			"oid" => $id,
+			"key" => "votes",
+			"value" => $votes,
 		));
 		if ($args["comment"])
 		{

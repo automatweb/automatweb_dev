@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.6 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
 // item_type.aw - kaupade tüübid
-
-global $orb_defs;
-$orb_defs["item_type"] = "xml";
 
 classload("shop_base");
 class item_type extends shop_base
@@ -11,12 +8,7 @@ class item_type extends shop_base
 	function item_type()
 	{
 		$this->shop_base();
-		lc_load("shop");
-		global $lc_shop;
-		if (is_array($lc_shop))
-		{
-			$this->vars($lc_shop);
-		}
+		$this->lc_load("shop","lc_shop");
 		lc_load("definition");
 	}
 

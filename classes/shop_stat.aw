@@ -1,7 +1,4 @@
 <?php
-lc_load("shop");
-global $orb_defs;
-$orb_defs["shop_stat"] = "xml";
 
 classload("shop");
 class shop_stat extends shop
@@ -9,15 +6,8 @@ class shop_stat extends shop
 	function shop_stat()
 	{
 		$this->shop();
-		lc_load("definition");
-		lc_load("shop");
+	}
 
-		global $lc_shop;
-		if (is_array($lc_shop))
-		{
-			$this->vars($lc_shop);
-	}
-	}
 	////
 	// !shows adding form
 	function add($arr)
@@ -26,7 +16,6 @@ class shop_stat extends shop
 		$this->mk_path($parent,LC_SHOP_STAT_ADD_SHOP_STAT);
 		$this->read_template("shop_stat_add.tpl");
 
-		
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"shop_list" => $this->multiple_option_list(array(),$this->get_list())

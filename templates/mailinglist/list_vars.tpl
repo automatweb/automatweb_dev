@@ -67,7 +67,7 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_VARIABLES}: 
-&nbsp;<a href='list.{VAR:ext}?type=add_var&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a></b>
+&nbsp;<a href='{VAR:add_var}'>{VAR:LC_MAILINGLIST_ADD}</a></b>
 </td>
 </tr>
 <tr>
@@ -82,12 +82,12 @@
 <td class="fgtext">&nbsp;{VAR:var_name}&nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: V_CHANGE -->
-<a href='list.{VAR:ext}?type=change_var&id={VAR:var_id}&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
+<a href='{VAR:change_var}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
 <!-- END SUB: V_CHANGE -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: V_DELETE -->
-<a href='javascript:box2("{VAR:LC_MAILINGLIST_WANT_TO_DEL_VARIABLE} {VAR:var_name}?","list.{VAR:ext}?type=delete_var&id={VAR:var_id}&parent={VAR:parent}")'>{VAR:LC_MAILINGLIST_DELETE}</a>
+<a href='javascript:box2("{VAR:LC_MAILINGLIST_WANT_TO_DEL_VARIABLE} {VAR:var_name}?","{VAR:delete_var}")'>{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: V_DELETE -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;

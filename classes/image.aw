@@ -8,8 +8,7 @@ class image extends aw_template
 {
 	function image()
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/images");
+		$this->init("automatweb/images");
 	}
 
 	function add($arr)
@@ -41,15 +40,11 @@ class image extends aw_template
 		global $file,$file_name,$file_type;
 		if ($id)
 		{
-
 			if ($file != "" && $file != "none")
 			{
 				if (is_uploaded_file($file))
 				{
-					$f = fopen($file,"r");
-					$fc = fread($f,filesize($file));
-					fclose($f);
-					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $fc));
+					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
 					$name = $file_name;
 
 					$this->db_query("UPDATE images SET file = '$fl' WHERE id = $id");
@@ -62,7 +57,6 @@ class image extends aw_template
 				"comment" => $comment,
 				"parent" => $parent
 			));
-			
 		}
 		else
 		{
@@ -83,11 +77,7 @@ class image extends aw_template
 			{
 				if (is_uploaded_file($file))
 				{
-					$f = fopen($file,"r");
-					$fc = fread($f,filesize($file));
-					fclose($f);
-					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $fc));
-
+					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
 					$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
 				}
 			}
@@ -155,9 +145,7 @@ class image extends aw_template
 
 	function get_url($url) 
 	{
-		global $ext;
-//		$url = $this->mk_my_orb("show", array("file" => basename($url)),"image",false,true);
-		$url = $GLOBALS["baseurl"]."/img.".$GLOBALS["ext"]."?file=".basename($url);
+		$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
 		return $url;
 	}
 
@@ -292,37 +280,147 @@ class image extends aw_template
 	// !saves a image that was uploaded in a form to the db
 	// $name - the name of the image input in form
 	// $parent - the parent object of the image
-	function add_upload_image($name,$parent)
+	// $img_id - if not specified, image will be added, else changed
+	function add_upload_image($name,$parent,$img_id = 0)
 	{
-		global $HTTP_POST_FILES;
+		$img_id = (int)$img_id;
 
+		global $HTTP_POST_FILES;
 		$_fi = new file;
-		$id = false;
 		if ($HTTP_POST_FILES[$name]['tmp_name'] != "" && $HTTP_POST_FILES[$name]['tmp_name'] != "none")
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_IMAGE,
-				"status" => 2,
-				"name" => $name,
-			));
+			if (!$img_id)
+			{
+				$id = $this->new_object(array(
+					"parent" => $parent,
+					"class_id" => CL_IMAGE,
+					"status" => 2,
+					"name" => $HTTP_POST_FILES[$name]["name"],
+				));
+			}
 
 			if (is_uploaded_file($HTTP_POST_FILES[$name]['tmp_name']))
 			{
-				$f = fopen($HTTP_POST_FILES[$name]['tmp_name'],"r");
-				$fc = fread($f,filesize($HTTP_POST_FILES[$name]['tmp_name']));
-				fclose($f);
-				$fl = $_fi->_put_fs(array("type" => $HTTP_POST_FILES[$name]['type'], "content" => $fc));
+				$fl = $_fi->_put_fs(array("type" => $HTTP_POST_FILES[$name]['type'], "content" => $this->get_file(array("file" => $HTTP_POST_FILES[$name]['tmp_name']))));
 
-				$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
+				if (!$img_id)
+				{
+					$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
+				}
+				else
+				{
+					$id = $img_id;
+					$this->db_query("UPDATE images SET file = '$fl' WHERE id = '$id'");
+				}
 			}
 		}
 		else
 		{
-			return false;
+			if ($img_id)
+			{
+				$id = $this->get_image_by_id($img_id);
+				return array("id" => $img_id,"url" => $id["url"]);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		return array("id" => $id,"url" => $this->get_url($fl));
+	}
+
+	function show($arr)
+	{
+		extract($arr);
+		$rootdir = aw_ini_get("site_basedir");
+		$f1 = substr($file,0,1);
+		$fname = $rootdir . "/img/$f1/" . $file;
+		if ($file) 
+		{
+			if (strpos("/",$file) !== false) 
+			{
+				header("Content-type: text/html");
+				print "access denied,";
+			} 
+
+			// the site's img folder
+			$passed = false;	
+			if (is_file($fname) && is_readable($fname)) 
+			{
+				$passed = true;
+			}
+
+			if (!$passed)
+			{
+				$rootdir = aw_ini_get("site_basedir");
+				$fname = $rootdir . "/files/$f1/" . $file;
+				if (is_file($fname) && is_readable($fname)) 
+				{
+					$passed = true;
+				}
+			}
+
+			if ($passed)
+			{
+				$size = GetImageSize($fname);
+				if (!is_array($size)) 
+				{
+					print "access denied.";
+				} 
+				else 
+				{
+					switch($size[2]) 
+					{
+						case "1":
+							$type = "image/gif";
+							break;
+						case "2":
+							$type = "image/jpg";
+							break;
+						case "3":
+							$type = "image/png";
+							break;
+					};
+					header("Content-type: $type");
+					readfile($fname);
+				};
+			} 
+			else 
+			{
+				print "access denied:";
+			};
+		} 
+		else 
+		{
+			print "access denied;";
+		};
+		die();
+	}
+
+	////
+	// !rewrites the image's url to the correct value
+	// removes host name from url
+	// if url is site/img.aw , rewrites to the correct orb fastcall
+	// adds baseurl
+	function check_url($url)
+	{
+		if ($url == "")
+		{
+			return $url;
+		}
+
+		$url = preg_replace("/^http:\/\/.*\//U","/",$url);
+		if (substr($url,0,4) == "/img")
+		{
+			$fname = substr($url,13);
+			$url = aw_ini_get("baseurl")."/orb.".aw_ini_get("ext")."/class=image/action=show/fastcall=1/file=".$fname;
+		}
+		else
+		{
+			$url = aw_ini_get("baseurl").$url;
+		}
+		return $url;
 	}
 }
 ?>

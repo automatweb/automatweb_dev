@@ -1,4 +1,5 @@
-<form method="POST" action="reforb.{VAR:ext}">
+<form method="POST" action="reforb.{VAR:ext}" name="foo">
+{VAR:header}
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 <td class="fcaption2" colspan="2">
@@ -11,30 +12,25 @@
 	<td class="fcaption2"><strong>{VAR:uid} @ {VAR:now}</strong></td>
 </tr>
 <tr>
+	<td class="fcaption2">T&uuml;&uuml;p:</td>
+	<td class="fcaption2">{VAR:BUG_TYPE}</td>
+</tr>
+<tr>
 	<td class="fcaption2">Mille kohta</td>
-	<td class="fcaption2"><strong>{VAR:url}</strong></td>
+	<td class="fcaption2"><input type="text" name="url" size="30" value="{VAR:url}" Style="width:50%"  class="small_button">
+	<select id="millekohta"  OnChange="foo.url.value=foo.millekohta[foo.millekohta.selectedIndex].value" Style="width:48%"  class="small_button">{VAR:millekohta}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2">Prioriteet: Pealkiri</td>
-	<td class="fcaption2"><select name="pri"  class="small_button">
-	{VAR:prilist}
-	</select>
-	<input type="text" name="title" value="{VAR:title}" size="60" class="small_button"></td>
-</tr>
-<tr>
-	<td class="fcaption2">Staatus</td>
-	<td class="fform">
-		<select name="status" class="small_button">
-			{VAR:statuslist}
-		</select>
-	</td>
+	<td class="fcaption2">Prioriteet:</td>
+	<td class="fform"><input type="text" name="pri" class="small_button" size="4" value='{VAR:priority}'></td>
 </tr>
 <tr>
 	<td class="fcaption2">Kellele</td>
-	<td class="fform">
-		<select name="developer[]" multiple class="small_button">
-			{VAR:developerlist}
-		</select></td>
+	<td class="fform"><select name="developer[]" class="small_button">{VAR:developerlist}</select></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2>Lisa aadress(e) kuhu tahad lisaks teate saada (eralda komaga): 
+	<INPUT TYPE="text" NAME="mails" Value="{VAR:mails}" SIZE=40 class="small_button"></td>
 </tr>
 <tr>
 	<td class="fcaption2">Tõsidus</td>
@@ -45,49 +41,46 @@
 	<td class="fform">{VAR:time_fixed}</td>
 </tr>
 <tr>
-	
-	<td class="fcaption2" colspan=2><input type='checkbox' NAME='sendmail2' value=1 {VAR:sendmail2} class="small_button">Kas soovite ülesande täitmisest teadet aadressile "{VAR:sendmail2_mail}" 
-	 </td>
+	<td class="fcaption2">Mitu tundi kulub:</td>
+	<td class="fform"><input size="4" type='text' name='hours' value='{VAR:hours}' class="small_button"></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Lisa aadress(e) kuhu tahad teate saada (eralda komaga): 
-	<INPUT TYPE="text" NAME="mails" Value="{VAR:mails}" SIZE=40 class="small_button"></td>
+	<td class="fcaption2">Percent completed:</td>
+	<td class="fform"><input size="4" type='text' name='percent' value='{VAR:percent}' class="small_button"></td>
 </tr>
 <tr>
-	<td class="fcaption2" valign="top">Tekst</td>
-	<td class="fcaption2">
-	<!-- SUB: text -->
-	<textarea name="text" cols="60" rows="10" class="small_button">{VAR:txt}</textarea>
-	<input type="hidden" name="savetext" value="1">
-	<!-- END SUB: text -->
+	<td class="fcaption2">Staatus:</td>
+	<td class="fform"><select class="small_button" name='status'>{VAR:statuses}</select></td>
+</tr>
+<tr>
+	<td class="fcaption2">Pealkiri: </td>
+	<td class="fcaption2"><input type="text" value="{VAR:title}" name="title" Style="width:60%"  class="small_button"></td>
+</tr>
+<tr>
+	<td class="fcaption2" valign="top">Tekst:</td>
+	<td class="fcaption2">{VAR:m_text}</td>
+</tr>
+<!-- SUB: COMMENT -->
+<tr>
+	<td class="fcaption2">{VAR:m_uid} @ {VAR:m_date}</td>
+	<td class="fcaption2">{VAR:m_text}</td>
+</tr>
+<!-- END SUB: COMMENT -->
+<tr>
+	<td class="fcaption2" valign="top">Kommenteeri:</td>
+	<td class="fform"><textarea name="text" cols="120" rows="10" class="small_button"></textarea>
 	</td>
 </tr>
 <tr>
-	<td class="fcaption2">Järeldus</td>
-	<td class="fform"><select name="resol" class="small_button">{VAR:resollist}</select></td>
+	<td class="fcaption2" valign="top">Attachment:</td>
+	<td class="fform"><input type="file" name="attach" class="small_button"></td>
 </tr>
 <tr>
-	<td class="fcaption2" valign="top">Parandaja märkus:</td>
-	<td class="fcaption2"><textarea name="text_result" cols="60" rows="10" class="small_button">{VAR:text_result}</textarea>
-	</td>
-</tr>
-<tr>
-	<td class="fcaption2" valign="top">Kommentaarid:</td>
-	<td class="fcaption2"> <a href='comments.aw?section=bug_{VAR:id}'>Kommenteeri siin</a>
-	</td>
-</tr>
-<tr>
-	<td class="fform"  colspan="2">
-	<input type="submit" value="Salvesta" class="small_button">
-	<input type="button" value="Tagasi" class="small_button" OnClick="javascript:window.location='{VAR:backlink}'">
-
-	{VAR:reforb}
-	</td>
-</tr>
-<tr>
-<td width="100%" colspan="2">
-<iframe src="{VAR:iframesrc}" Style="width:100%;height:500">
+<td class="fcaption2" colspan="2">
+<input type="submit" value="Salvesta" class="small_button">
+<input type="button" value="Tagasi" class="small_button" OnClick="javascript:window.location='{VAR:backlink}'">
 </td>
 </tr>
 </table>
+{VAR:reforb}
 </form>

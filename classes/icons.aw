@@ -1,21 +1,19 @@
 <?php
-define(PER_PAGE,100);
 
 class icons extends aw_template
 {
 	function icons()
 	{
-		$this->tpl_init("automatweb/config");
-		$this->db_init();
+		$this->init("automatweb/config");
 		$this->sub_merge = 1;
 		lc_load("definition");
 	}
 
-	function gen_db($page,$grp)
+	function gen_db($arr)
 	{	
+		extract($arr);
 		$this->read_template("icon_list.tpl");
-		global $ext;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG,"config.$ext"));
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG,$this->mk_my_orb("config", array(),"config")));
 
 		if ($grp)
 		{
@@ -26,15 +24,24 @@ class icons extends aw_template
 			$ss = "WHERE grp_id = 0 OR grp_id IS NULL";
 		}
 
-		$start = $page*PER_PAGE;
-		$end = ($page+1)*PER_PAGE;
+		$start = $page*$this->cfg["per_page"];
+		$end = ($page+1)*$this->cfg["per_page"];
 		$this->db_query("SELECT * FROM icons $ss ORDER BY id");
 		$n = 0;
 		while ($row = $this->db_next())
 		{
 			if (($n >= $start && $n <= $end) || $page == "all")
 			{
-				$this->vars(array("page" => $page,"id" => $row["id"], "name" => $row["name"], "comment" => $row["comment"],"programm" => $row["programm"],"url" => 	$this->get_url($row)));
+				$this->vars(array(
+					"page" => $page,
+					"id" => $row["id"], 
+					"name" => $row["name"], 
+					"comment" => $row["comment"],
+					"programm" => $row["programm"],
+					"url" => 	$this->get_url($row),
+					"change" => $this->mk_my_orb("change_icon", array("id" => $row["id"])),
+					"delete" => $this->mk_my_orb("delete_icon", array("id" => $row["id"],"page" => $page))
+				));
 				$this->parse("LINE");
 			}
 			$n++;
@@ -42,14 +49,15 @@ class icons extends aw_template
 
 		// make pageselector
 		$total = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM icons $ss", "cnt");
-		$pages = $total/PER_PAGE;
+		$pages = $total/$this->cfg["per_page"];
 		for ($i=0; $i < $pages; $i++)
 		{
 			$this->vars(array(
-				"from" => $i*PER_PAGE, 
-				"to" => min($total,($i+1)*PER_PAGE), 
+				"from" => $i*$this->cfg["per_page"], 
+				"to" => min($total,($i+1)*$this->cfg["per_page"]), 
 				"num" => $i,
-				"grp" => $grp
+				"grp" => $grp,
+				"pg_url" => $this->mk_my_orb("icon_db", array("page" => $i,"grp" => $grp))
 			));
 			if ($i == $page && $page != "all")
 			{
@@ -60,6 +68,9 @@ class icons extends aw_template
 				$p.=$this->parse("PAGE");
 			}
 		}
+		$this->vars(array(
+			"all_url" => $this->mk_my_orb("icon_db", array("page" => "all" ,"grp" => $grp))
+		));
 		$all = $this->parse("ALL");
 		if ($page == "all")
 		{
@@ -79,25 +90,34 @@ class icons extends aw_template
 		{
 			$icarr[$row["id"]] = $row["name"];
 		}
-		$this->vars(array("grps" => $this->picker($grp,$icarr)));
+		$this->vars(array(
+			"grps" => $this->picker($grp,$icarr),
+			"reforb" => $this->mk_reforb("export_icons"),
+			"add_icon" => $this->mk_my_orb("add_icon"),
+			"add_zip" => $this->mk_my_orb("add_zip")
+		));
 		return $this->parse();
 	}
 
 	function add()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,"config.$ext","config.$ext?type=icon_db"));
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
 
 		$this->read_template("add_icon.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_icon")
+		));
 		return $this->parse();
 	}
 
 	function add_zip()
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,"config.$ext","config.$ext?type=icon_db"));
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
 
 		$this->read_template("add_icon_zip.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_icon_zip")
+		));
 		return $this->parse();
 	}
 
@@ -106,10 +126,12 @@ class icons extends aw_template
 		extract($arr);
 		global $fail, $fail_type;
 
-		$itypes = array("image/jpeg",
-		                "image/gif",
-							      "image/jpg",
-								    "image/pjpeg");
+		$itypes = array(
+			"image/jpeg",
+		  "image/gif",
+			"image/jpg",
+			"image/pjpeg"
+		);
 		if (!in_array($fail_type,$itypes) && $fail != "none")
 		{
 			$this->raise_error(ERR_ICONS_WTYPE,LC_ICONS_GIR_OR_JPEG,true);
@@ -149,40 +171,46 @@ class icons extends aw_template
 																		 VALUES($id,'$name','$comment','$kelle','$puhastatud','$praht','$opsys','$p2rit','$m2rks6nad','$m2rks6nad2','$programm','$fc','$fail_type')");
 			}
 		}
-		return $id;
+		return $this->mk_my_orb("change_icon", array("id" => $id));
 	}
 
-	function change($id)
+	function change($arr)
 	{
-		global $ext;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_CHANGE,"config.$ext","config.$ext?type=icon_db"));
+		extract($arr);
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_CHANGE,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
 		$this->read_template("change_icon.tpl");
 
 		// mdx, yx ennustus. MITTE KEEGI ei hakka MITTE KUNAGI neid v2lju k6iki t2itma. 
 		// aga, nagu duke ytles, SUUR VALGE MASSA tahtis, niiet teeme siis.
 
 		$ic = $this->get($id);
-		$this->vars(array("ref" => $ic[url], "name" => $ic[name], "comment" => $ic[comment], "id" => $id,
-											"meie"				=> $ic[kelle] == "meie" ? "CHECKED" : "",
-											"nende"				=> $ic[kelle] == "nende" ? "CHECKED" : "",
-											"puhastatud"	=> $ic[puhastatud] ? "CHECKED" : "",
-											"praht"				=> $ic[praht] ? "CHECKED" : "",
-											"m2kk"				=> $ic[opsys] == "m2kk" ? "CHECKED" : "",
-											"winblows"		=> $ic[opsys] == "winblows" ? "CHECKED" : "",
-											"l33nox"			=> $ic[opsys] == "l33nox" ? "CHECKED" : "",
-											"p2rit"				=> $ic[p2rit],
-											"m2rks6nad"		=> $ic[m2rks6nad],
-											"programm"		=> $ic[programm],
-											"m2rks6nad2"		=> $ic[m2rks6nad2]));
+		$this->vars(array(
+			"ref" => $ic["url"], 
+			"name" => $ic["name"], 
+			"comment" => $ic["comment"], 
+			"id" => $id,
+			"meie"				=> checked($ic["kelle"] == "meie"),
+			"nende"				=> checked($ic["kelle"] == "nende"),
+			"puhastatud"	=> checked($ic["puhastatud"]),
+			"praht"				=> checked($ic["praht"]),
+			"m2kk"				=> checked($ic["opsys"] == "m2kk"),
+			"winblows"		=> checked($ic["opsys"] == "winblows"),
+			"l33nox"			=> checked($ic["opsys"] == "l33nox"),
+			"p2rit"				=> $ic["p2rit"],
+			"m2rks6nad"		=> $ic["m2rks6nad"],
+			"programm"		=> $ic["programm"],
+			"m2rks6nad2"		=> $ic["m2rks6nad2"],
+			"reforb" => $this->mk_reforb("submit_icon", array("id" => $id))
+		));
 
 		return $this->parse();
 	}
 
 	function get($id)
 	{
-		if (is_array($GLOBALS["icon_cache"][$id]))
+		if (is_array(aw_cache_get("icon_cache",$id)))
 		{
-			return $GLOBALS["icon_cache"][$id];
+			return aw_cache_get("icon_cache",$id);
 		}
 
 		$this->db_query("SELECT * FROM icons WHERE id = $id");
@@ -192,10 +220,9 @@ class icons extends aw_template
 			return false;
 		}
 
-		global $ext,$baseurl;
-		$ret["url"] = $baseurl."/icon.$ext?id=$id";
+		$ret["url"] = $this->cfg["baseurl"]."/automatweb/icon.".$this->cfg["ext"]."?id=$id";
 
-		$GLOBALS["icon_cache"][$id] = $ret;
+		aw_cache_set("icon_cache",$id,$ret);
 
 		return $ret;
 	}
@@ -204,14 +231,14 @@ class icons extends aw_template
 	{
 		if (!$id)
 		{
-			header("Location: ".$GLOBALS["baseurl"]."/images/icon_aw.gif");
+			header("Location: ".$this->cfg["baseurl"]."/automatweb/images/icon_aw.gif");
 			die();
 		}
 
 		$ic = $this->get($id);
 		if (!is_array($ic))
 		{
-			header("Location: ".$GLOBALS["baseurl"]."/images/icon_aw.gif");
+			header("Location: ".$this->cfg["baseurl"]."/automatweb/images/icon_aw.gif");
 			die();
 		}
 		header("Content-type: ".$ic["file_type"]);
@@ -220,16 +247,19 @@ class icons extends aw_template
 
 	function get_url($row)
 	{
-		return $GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row["id"];
+		return $this->cfg["baseurl"]."/automatweb/icon.".$this->cfg["ext"]."?id=".$row["id"];
 	}
 
-	function delete($id)
+	function delete($arr)
 	{
+		extract($arr);
 		$this->db_query("DELETE FROM icons WHERE id = $id");
+		header("Location: ".$this->mk_my_orb("icon_db", array("page" => $page)));
 	}
 
-	function del_icons($sel)
+	function del_icons($arr)
 	{
+		extract($arr);
 		if(is_array($sel))
 		{
 			foreach($sel as $icon_id)
@@ -237,26 +267,31 @@ class icons extends aw_template
 				$this->delete($icon_id);
 			}
 		}
+		return $this->mk_my_orb("icon_db");
 	}
 
-	function sel_icon($rtype,$rid,$sstring = "",$sstring2 = "",$grp="")
+	function sel_icon($arr)
 	{
-		global $ext,$kelle,$puhastatud,$praht,$opsys,$p2rit,$m2rks6nad,$m2rks6nad2,$search,$programm;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_FIND,config.$ext));
+		extract($arr);
+		global $kelle,$puhastatud,$praht,$opsys,$p2rit,$m2rks6nad,$m2rks6nad2,$search,$programm;
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_FIND,$this->mk_my_orb("config", array(),"config")));
 
 		$this->read_template("search_icon.tpl");
-		$this->vars(array("rtype" => $rtype, "rid" => $rid, "sstring" => (!$search ? "%" : $sstring), "sstring2" => $sstring2,
-											"meie"				=> $kelle == "meie" ? "CHECKED" : "",
-											"nende"				=> $kelle == "nende" ? "CHECKED" : "",
-											"puhastatud"	=> $puhastatud ? "CHECKED" : "",
-											"praht"				=> $praht ? "CHECKED" : "",
-											"m2kk"				=> $opsys == "m2kk" ? "CHECKED" : "",
-											"winblows"		=> $opsys == "winblows" ? "CHECKED" : "",
-											"l33nox"			=> $opsys == "l33nox" ? "CHECKED" : "",
-											"p2rit"				=> $p2rit,
-											"programm"				=> $programm,
-											"m2rks6nad"		=> $m2rks6nad,
-											"m2rks6nad2"		=> $m2rks6nad2));
+		$this->vars(array(
+			"rtype" => $rtype, "rid" => $rid, "sstring" => (!$search ? "%" : $sstring), "sstring2" => $sstring2,
+			"meie"				=> checked($kelle == "meie"),
+			"nende"				=> checked($kelle == "nende"),
+			"puhastatud"	=> checked($puhastatud),
+			"praht"				=> checked($praht),
+			"m2kk"				=> checked($opsys == "m2kk"),
+			"winblows"		=> checked($opsys == "winblows"),
+			"l33nox"			=> checked($opsys == "l33nox"),
+			"p2rit"				=> $p2rit,
+			"programm"				=> $programm,
+			"m2rks6nad"		=> $m2rks6nad,
+			"m2rks6nad2"		=> $m2rks6nad2,
+			"add" => $this->mk_my_orb("add_icon")
+		));
 		$icarr = array(0 => "");
 		$this->db_query("SELECT * from icon_grps");
 		while ($row = $this->db_next())
@@ -269,32 +304,58 @@ class icons extends aw_template
 		{
 			$sp = array();
 			if ($kelle != "")
+			{
 				$sp[] = " kelle = '$kelle' ";
+			}
 			if ($puhastatud != "")
+			{
 				$sp[] = " puhastatud = '$puhastatud' ";
+			}
 			if ($praht != "")
+			{
 				$sp[] = " praht = '$praht' ";
+			}
 			if ($opsys != "")
+			{
 				$sp[] = " opsys = '$opsys' ";
+			}
 			if ($p2rit != "")
+			{
 				$sp[] = " p2rit = '$p2rit' ";
+			}
 			if ($programm != "")
+			{
 				$sp[] = " programm = '$programm' ";
+			}
 			if ($m2rks6nad != "")
+			{
 				$sp[] = " m2rks6nad LIKE '%$m2rks6nad%' ";
+			}
 			if ($m2rks6nad2 != "")
+			{
 				$sp[] = " m2rks6nad2 LIKE '%$m2rks6nad2%' ";
+			}
 			if ($grp > 0)
+			{
 				$sp[] = " grp_id = $grp ";
+			}
 
 			$sps = join("AND",$sp);
 			if ($sps != "")
+			{
 				$sps= "AND ".$sps;
+			}
 
 			$this->db_query("SELECT * FROM icons WHERE name LIKE '%$sstring%' AND comment LIKE '%$sstring2%' $sps");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row[name], "comment" => $row[comment], "id" => $row[id], "url" => $this->get_url($row)));
+				$this->vars(array(
+					"name" => $row["name"], 
+					"comment" => $row["comment"], 
+					"id" => $row["id"], 
+					"url" => $this->get_url($row),
+					"select" => $this->mk_my_orb($rtype,array("id" => $rid,"icon_id" => $row["id"]),"config")
+				));
 				$this->parse("LINE");
 			}
 		}
@@ -305,7 +366,9 @@ class icons extends aw_template
 	{
 		extract($arr);
 		if (!is_array($sel))
+		{
 			return;
+		}
 
 		$sels = join(",",$sel);
 		$this->db_query("SELECT * FROM icons WHERE id IN ($sels)");
@@ -314,7 +377,7 @@ class icons extends aw_template
 		{
 			$ret.= "\x01icon\x02\n".serialize($row)."\n";
 		}
-		return $ret;
+		die($ret);
 	}
 
 	function export_all()
@@ -328,24 +391,32 @@ class icons extends aw_template
 		return $ret;
 	}
 
-	function import($level)
+	function import($arr)
 	{
+		extract($arr);
 		if (!$level)
 		{
-			global $ext;
-			$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_IMPORT,config.$ext));
+			$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_IMPORT,$this->mk_my_orb("config", array(),"config")));
 			$this->read_template("import_icons.tpl");
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("import_icons", array("level" => 1))
+			));
 			return $this->parse();
 		}
 		else
 		{
 			global $fail;
-			if (!($f = fopen($fail,"r")))
-				$this->raise_error(ERR_ICONS_EOPEN,LC_ICONS_SOME_IS_WRONG,true);
-
-			$fc = fread($f,filesize($fail));
-			fclose($f);
+			if (is_uploaded_file($fail))
+			{
+				if (!($f = fopen($fail,"r")))
+				{
+					$this->raise_error(ERR_ICONS_EOPEN,LC_ICONS_SOME_IS_WRONG,true);
+				}
+				$fc = fread($f,filesize($fail));
+				fclose($f);
+			}
 			$this->core_import($fc);
+			die();
 		}
 	}
 
@@ -365,13 +436,13 @@ class icons extends aw_template
 				$cnt++;
 			}
 		}
-		global $ext;
-		echo sprintf(LC_ICONS_IMPORTED_ICONS,$cnt,"config.aw?type=icon_db");
+		echo sprintf(LC_ICONS_IMPORTED_ICONS,$cnt,$this->mk_my_orb("icon_db"));
 	}
 
+	////
+	// adds a new icon to the database. the icon is described in the array
 	function add_array($v)
 	{
-		// @desc: adds a new icon to the database. the icon is described in the array
 		$this->quote(&$v["file"]);
 		$id = $this->db_fetch_field("SELECT MAX(id) as id FROM icons","id")+1;
 		$this->db_query("INSERT INTO icons (id,name,comment,kelle,puhastatud,praht,opsys,p2rit,m2rks6nad,m2rks6nad2,programm,file,file_type) 
@@ -390,7 +461,8 @@ class icons extends aw_template
 	function upload_zip($arr)
 	{
 		extract($arr);
-		global $fail,$tmpdir;
+		global $fail;
+		$tmpdir = aw_ini_get("server.tmpdir");
 
 		$cnt = 0;
 		if ($fail != "none" && $fail != "")
@@ -409,7 +481,7 @@ class icons extends aw_template
 				$this->raise_error(ERR_ICONS_NOTEMP,"Unable to create temp directory $tdir !", true);
 			}
 
-			global $unzip_path;
+			$unzip_path = aw_ini_get("server.unzip_path");
 			$op = `$unzip_path -o -j -d $dir $fail`;
 			echo "<pre>".$op."</pre><br>";
 			flush();
@@ -476,12 +548,13 @@ class icons extends aw_template
 			rmdir($dir);
 			rmdir($tdir);
 		}
-		return sprintf(LC_ICONS_IMPORTING,$cnt,"config.aw?type=icon_db");
+		die(sprintf(LC_ICONS_IMPORTING,$cnt,$this->mk_my_orb("icon_db")));
 	}
 
 	function convert_icon($idir, $icon, $tdir)
 	{
-		global $convert_dir,$identify_dir;
+		$convert_dir = aw_ini_get("server.convert_dir");
+		$identify_dir = aw_ini_get("server.identify_dir");
 
 		$basename = substr($icon,0,strrpos($icon,"."));
 		$nname = $basename.".gif";
@@ -561,19 +634,18 @@ class icons extends aw_template
 	function grp_icons($arr)
 	{
 		extract($arr);
-		global $ext;
 		if(is_array($sel))
 		{
 			$ics = join("|",$sel);
 		}
-		header("Location: config.$ext?type=ic_grp_name&ics=$ics");
-		die();
+		return $this->mk_my_orb("ic_grp_name", array("ics"=> $ics));
 	}
 
 	////
 	// !asks user new grp name
-	function ic_grp_name($ics)
+	function ic_grp_name($arr)
 	{
+		extract($arr);
 		$this->read_template("add_icon_grp.tpl");
 
 		$icarr = array(0 => "");
@@ -584,7 +656,8 @@ class icons extends aw_template
 		}
 		$this->vars(array(
 			"ics" => $ics,
-			"grps" => $this->picker($grp,$icarr)
+			"grps" => $this->picker($grp,$icarr),
+			"reforb" => $this->mk_reforb("submit_ic_grp", array("ics" => $ics))
 		));
 		return $this->parse();
 	}
@@ -602,15 +675,42 @@ class icons extends aw_template
 		}
 		$ics = join(",",$ics);
 		$this->db_query("update icons set grp_id = $grp where id in($ics)");
-		return $id;
+		return $this->mk_my_orb("icon_db", array("grp" => $grp));
 	}
 
 	////
 	// !deletes icon group $id
-	function del_grp($id)
+	function del_grp($arr)
 	{
-		$this->db_query("UPDATE icons SET grp_id = 0 WHERE grp_id = '$id'");
-		$this->db_query("DELETE FROM icon_grps WHERE id = $id");
+		extract($arr);
+		$this->db_query("UPDATE icons SET grp_id = 0 WHERE grp_id = '$grp'");
+		$this->db_query("DELETE FROM icon_grps WHERE id = $grp");
+		return $this->mk_my_orb("icon_db");
+	}
+
+	////
+	// !checks the icon url, to see if it complies to the rules. 
+	// removes host part of url
+	// this rewrites site/icon.aw to site/automatweb/icon.aw
+	// prepends baseurl 
+	function check_url($url)
+	{
+		if ($url == "")
+		{
+			return $url;
+		}
+		$retval = preg_replace("/^http:\/\/(.*)\//","/",$url);
+		if (substr($retval,0,5) == "/icon")
+		{
+			// if the url refers to the site/icon, rewrite it to site/automatweb/icon
+			$retval = aw_ini_get("baseurl")."/automatweb".$retval;
+		}
+		else
+		{
+			// prepend site baseurl, in case we are running in a subdirectory
+			$retval = aw_ini_get("baseurl").$retval;
+		}
+		return $retval;
 	}
 }
 ?>

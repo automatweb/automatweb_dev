@@ -19,8 +19,7 @@ href="javascript:this.document.aa.submit();">Otsi / Salvesta</a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;</td>
 <td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="save" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><br><a
-href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();">Kustuta</a>
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><br><a href="document.aa.delete.value=1;document.aa.submit();">Kustuta</a>
 </td>
 </tr>
 </table>
@@ -88,6 +87,7 @@ href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();">Ku
 	<td class="celltext" width=70%><input class="formtext" type='text' name='s[alias]' value="{VAR:alias}"></td>
 </tr>
 </table>
+<!-- SUB: FOUND -->
 <table border="0" cellspacing="1" cellpadding="2"  width=100%>
 <tr class="aste05">
 	<td class="celltext" colspan=10>Leitud objektid:</td>
@@ -123,6 +123,7 @@ href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();">Ku
 	<td class='celltext' colspan=9><select name='moveto' class='small_button'>{VAR:moveto}</select></td>
 </tr>
 </table>
+<!-- END SUB: FOUND -->
 <input type='hidden' name='delete' value=''>
 {VAR:reforb}
 </form>

@@ -1,15 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.5 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
 // form_input.aw - Tegeleb vormi sisestustega, hetkel ainult XML.
-global $orb_defs;
-$orb_defs["form_input"] = "xml";
 
 class form_input extends form_base 
 {
 	function form_input($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("forms");
+		$this->form_base();
 	}
 
 	////
@@ -35,7 +32,7 @@ class form_input extends form_base
 		};
 
 		$chains = $this->get_objects_below(array(
-				"class" => CL_FORM_CHAIN,
+			"class" => CL_FORM_CHAIN,
 		));
 
 		foreach($chains as $key => $val)
@@ -64,10 +61,10 @@ class form_input extends form_base
 	{
 		extract($args);
 		$new_id = $this->new_object(array(
-				"name" => $name,
-				"comment" => $comment,
-				"parent" => $parent,
-				"class_id" => CL_FORM_XML_INPUT,
+			"name" => $name,
+			"comment" => $comment,
+			"parent" => $parent,
+			"class_id" => CL_FORM_XML_INPUT,
 		));
 		
 		$this->set_object_metadata(array(
@@ -105,7 +102,7 @@ class form_input extends form_base
 		};
 
 		$chains = $this->get_objects_below(array(
-				"class" => CL_FORM_CHAIN,
+			"class" => CL_FORM_CHAIN,
 		));
 
 		foreach($chains as $key => $val)
@@ -124,12 +121,9 @@ class form_input extends form_base
 		));
 
 		$forms = $this->get_flist(array(
-				"type" => FTYPE_ENTRY,
-				"onlyactive" => true,
+			"type" => FTYPE_ENTRY,
+			"onlyactive" => true,
 		));
-
-		#$c = "";
-
 
 		$this->vars(array(
 			"name" => $object["name"],
@@ -175,7 +169,6 @@ class form_input extends form_base
 		$f = "";
 		$els = array();
 		$elements = $meta["elements"];
-		global $uid;
 		$cs = $this->get_object($meta["form"]);
 
 		$farr = array();
@@ -191,11 +184,8 @@ class form_input extends form_base
 			$farr = $t->chain["forms"];
 		};
 			
-
 		foreach($farr as $key => $val)
 		{
-		//if (is_array($meta["forms"]))
-		//{
 			$c = "";
 			$tmp = $this->get_form_elements(array("id" => $key)); 
 
@@ -215,7 +205,6 @@ class form_input extends form_base
 						break;
 
 					default:
-
 						if ($tval["name"])
 						{
 							$name = $tval["name"];
@@ -257,7 +246,6 @@ class form_input extends form_base
 		extract($args);
 		$data = array();
 				
-
 		$loaded_forms = array();
 
 		$el_data = array();
@@ -281,11 +269,11 @@ class form_input extends form_base
 			if ($active[$key])
 			{
 				$data[$key] = array(
-						"name" => $extname[$key],
-						"type" => $type[$key],
-						"form" => $form[$key],
-						"group" => $el_data[$key]["group"],
-						"lb_items" => $el_data[$key]["lb_items"],
+					"name" => $extname[$key],
+					"type" => $type[$key],
+					"form" => $form[$key],
+					"group" => $el_data[$key]["group"],
+					"lb_items" => $el_data[$key]["lb_items"],
 				);
 			};
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.5 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -14,7 +14,8 @@ define(ITEM_TPL,"
 </item>
 ");
 
-class rdf {
+class rdf 
+{
 	var $li;
 	var $items;
 	function rdf($args = array())
@@ -48,8 +49,8 @@ class rdf {
 
 	function add_item($args = array())
 	{
-		global $baseurl;
-		global $ext;
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
 		if (is_array($args))
 		{
 			extract($args);
@@ -62,7 +63,7 @@ class rdf {
 			$publisher = $this->_convert($publisher);
 			$date = date("Y-m-d",$args["modified"]) . "T" . date("H:i",$args["modified"]) . "+02:00";
 			$this->li .= sprintf("<rdf:li resource=\"%s\"/>\n",$link);
-			$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,PUBLISHER,$date); 
+			$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,aw_ini_get("document.publisher"),$date); 
 		}
 	}
 

@@ -4,9 +4,9 @@ class graph_modules extends aw_template
 		//Constructor
 		function graph_modules()
 		{
-			$this->db_init();
-			$this->tpl_init();
+			$this->init("");
 		}
+
 		//Et saada datat syslogi tabelist ja n2idata aktiivsust saidil
 		//Asi ei kipu töötama enam korralikult kuna andmehulk l2biparsimiseks on liiga suur
 		function get_syslog()
@@ -19,15 +19,25 @@ class graph_modules extends aw_template
 				$tmp=explode(":",$this->time2date($row[when]));
 				$arr_slog[$i++]=$tmp[0];
 			}
-			for ($k=0;$k<24;$k++) $temp[$k]=0;
+			for ($k=0;$k<24;$k++) 
+			{
+				$temp[$k]=0;
+			}
 			for ($i=0;$i<24;$i++)
+			{
 				for ($k=0;$k<count($arr_slog);$k++) 
 				{
-					if ($i>9&&($i==$arr_slog[$k])) $temp[$i]++;
-					else if ("0".$i==$arr_slog[$k]){
+					if ($i>9&&($i==$arr_slog[$k])) 
+					{
+						$temp[$i]++;
+					}
+					else 
+					if ("0".$i==$arr_slog[$k])
+					{
 						$temp[$i]++;
 					}
 				}
+			}
 			$i=0;$j=0;
 			$arr_slog=$temp;
 			for($i=0;$i<24;$i++)
@@ -37,6 +47,7 @@ class graph_modules extends aw_template
 			$jur=array("xdata"=>$array_x,"ydata"=>$arr_slog);
 			return $jur;
 		}
+
 		//Et n2idata koodamise statsi
 		function get_stats()
 		{
@@ -45,7 +56,8 @@ class graph_modules extends aw_template
 
 			$f = fopen($stat_file, "r");
 			$i=0;$l=0;
-			while (!feof ($f)) {
+			while (!feof ($f)) 
+			{
 				$i++;
 				if ($i<2)
 				{
@@ -55,7 +67,8 @@ class graph_modules extends aw_template
 				else if ($i==2)
 				{
 					$buffer = fgets($f, 4096);
-				} else 
+				} 
+				else 
 				{
 					$buffer = fgets($f, 4096);
 					$buffer = ereg_replace(" +", " ", $buffer );
@@ -103,12 +116,11 @@ class graph_modules extends aw_template
 				echo $arr_bytes[$i]."<br>";
 */			}
 	
-
 			$ydata=array(				
 				"ydata_0" => $y0,
 				"ydata_1" => $y1,
 				"ydata_2" => $y2
-				);
+			);
 			$ycol=array(
 				"ycol_0" => "ff0000",
 				"ycol_1" => "asdf",
@@ -118,7 +130,7 @@ class graph_modules extends aw_template
 				"xdata" => $xdata,
 				"ydata" => $ydata,
 				"ycol" => $ycol
-				);
+			);
 			
 			return $data;
 		}

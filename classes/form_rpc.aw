@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.4 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.5 2002/06/10 15:50:53 kristo Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("form");
-class form_rpc extends form {
+class form_rpc extends form 
+{
 	function form_rpc($args = array())
 	{
-		$this->db_init();
+		$this->form_base();
 	}
 
 	////
@@ -17,7 +18,6 @@ class form_rpc extends form {
 			"alias" => $args["alias"],
 		));
 		
-
 		// iga vormi submitmine eraldi
 		foreach($meta["forms"] as $key => $form_id)
 		{
@@ -78,13 +78,13 @@ class form_rpc extends form {
 			"key" => "forms",
 		));
 		$fid = $meta[0];
-		$this->get_entries(array("id" => $fid));
+		$ret = $this->get_entries(array("id" => $fid));
 		$struct = array();
-		while($row = $this->db_next())
+		foreach($ret as $oid => $name)
 		{
 			$struct[] = array(
-				"oid" => $row["oid"],
-				"name" => $row["name"],
+				"oid" => $oid,
+				"name" => $name,
 			);
 		};
 		return $struct;
@@ -134,10 +134,9 @@ class form_rpc extends form {
 		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
 		$this->db_query($q);
 		$entry_list = array();
-		classload("xml");
-		$xml = new xml();
 		$blacklist = array();
-                $row = $this->db_next();
+    $row = $this->db_next();
+
 		if ($row)
 		{
 			$xdata = $this->get_object_metadata(array(
@@ -155,7 +154,7 @@ class form_rpc extends form {
 						if (!$blacklist[$row["id"]])
 						{
 							$entry_list[] = $row["id"];
-                                                };
+            };
  
 						if ($row["chain_id"])
 						{
@@ -163,7 +162,7 @@ class form_rpc extends form {
 							$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
 							$this->db_query($q);
 							$crow = $this->db_next();
-							$blacklist = $blacklist + array_flip($xml->xml_unserialize(array("source" => $crow["ids"])));
+							$blacklist = $blacklist + array_flip(aw_unserialize($crow["ids"]));
 							$this->restore_handle();
 						};
 					};
@@ -187,7 +186,6 @@ class form_rpc extends form {
 
 	////
 	// !Gets a form entry
-
 	function rpc_getentry($args = array())
 	{
 		$eid = $args[0];

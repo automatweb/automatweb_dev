@@ -46,7 +46,7 @@
 		<action name="change_pwd">
 			<function name="change_pwd">
 				<arguments>
-					<required name="id"/>
+					<optional name="id"/>
 					<optional name="error"/>
 				</arguments>
 			</function>
@@ -200,5 +200,23 @@
 			<function name="submit_password_hash"/>
 		</action>
 
+		<action name="show_user_info">
+			<function name="show_user_info"/>
+		</action>
+
+		<action name="udata">
+			<function name="do_change_site">
+				<arguments>
+					<required name="fid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_udata">
+			<function name="submit_do_change_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

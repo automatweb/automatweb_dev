@@ -1,20 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.3 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
 // events2.aw - FormGen based events
-global $orb_defs;
-$orb_defs["events2"] = "xml";
-lc_load("events");
-class events2 extends aw_template {
+
+class events2 extends aw_template 
+{
 	function events2($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init();
+		$this->init("");
 		lc_load("definition");
-		global $lc_events;
-		if (is_array($lc_events))
-		{
-			$this->vars($lc_events);}
-
+		$this->lc_load("events","lc_events");
 	}
 
 	////
@@ -24,7 +18,6 @@ class events2 extends aw_template {
 	function parse_alias($args = array())
 	{
 		extract($args);
-		global $ext,$baseurl;
 		list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
 		switch($matches[2])
 		{
@@ -68,14 +61,13 @@ class events2 extends aw_template {
 	function _gen_search_form($args = array())
 	{
 		extract($args);
-		global $ext;
 		classload("form");
 		$f = new form();
 				
-               	$form = $f->gen_preview(array(
+   	$form = $f->gen_preview(array(
 				"id" => 12168,
 				"reforb" => $this->mk_reforb("submit_search",array()),
-				"form_action" => "/index.$ext",
+				"form_action" => "/index.".$this->cfg["ext"],
 				"entry_id" => $entry_id,
 				"extraids" => array("oid" => $args["oid"]),
 		));

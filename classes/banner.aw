@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.7 2002/01/31 00:29:22 kristo Exp $
-global $orb_defs;
-$orb_defs["banner"] = "xml";
-lc_load("banner");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.8 2002/06/10 15:50:52 kristo Exp $
+
 // act_type's:
 // 0 - always active
 // 1 - from date to date
@@ -30,20 +28,14 @@ lc_load("banner");
 // banner.aw?gid=[gid]&ss=[ss]&htmlb=1
 //  -- used when showing banners with IFRAME's. selects a random banner from group [gid] and it can be any kind of banner at all. flash or html or whateva.
 
-define(PER_PAGE,500);
-
 class banner extends aw_template
 {
 	function banner()
 	{
-		$this->tpl_init("banner");
-		$this->db_init();
+		$this->init("banner");
 		$this->sub_merge = 1;
-			lc_load("definition");
-			global $lc_banner;
-		if (is_array($lc_banner))
-		{
-			$this->vars($lc_banner);}
+		lc_load("definition");
+		$this->lc_load("banner","lc_banner");
 	}
 
 	////
@@ -248,7 +240,7 @@ class banner extends aw_template
 		{
 			$h = "height=\"$height\"";
 		}
-		return "<img src='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?bid=$id&noview=1&ss=".$this->gen_uniq_id()."' $h>";
+		return "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=$id&noview=1&ss=".$this->gen_uniq_id()."' $h>";
 	}
 
 	function get($id)
@@ -480,11 +472,10 @@ class banner extends aw_template
 		$this->db_query("INSERT INTO banner_ids(ss,bid,tm,clid) values('$ss','$bid',".time().",'$clid')");
 		if (!$noview)
 		{
-			global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR;
-			$ip = $HTTP_X_FORWARDED_FOR;
+			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 			if ($ip == "" || !(strpos($ip,"unknown") === false))
 			{
-				$ip = $REMOTE_ADDR;
+				$ip = aw_global_get("REMOTE_ADDR");
 			}
 			// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
 			$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
@@ -511,15 +502,14 @@ class banner extends aw_template
 			$this->db_query("DELETE FROM banner_ids WHERE tm < ".(time()-(48*3600)));
 		}
 
-		global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR,$HTTP_REFERER;
-		$ip = $HTTP_X_FORWARDED_FOR;
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if ($ip == "" || !(strpos($ip,"unknown") === false))
 		{
-			$ip = $REMOTE_ADDR;
+			$ip = aw_global_get("REMOTE_ADDR");
 		}
 
 		$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
-		$this->db_query("INSERT INTO banner_clicks(tm,bid,ip,clid,buid,day,dow,hr,refferer) VALUES(".time().",$bid,'$ip','$clid','$buid','$day','".date("w")."','".date("G")."','$HTTP_REFERER')");
+		$this->db_query("INSERT INTO banner_clicks(tm,bid,ip,clid,buid,day,dow,hr,refferer) VALUES(".time().",$bid,'$ip','$clid','$buid','$day','".date("w")."','".date("G")."','".aw_global_get("HTTP_REFERER")."')");
 		$this->db_query("UPDATE banners SET clicks=clicks+1 WHERE id = $bid");
 
 		$this->db_query("SELECT * FROM banners WHERE id = $bid");
@@ -599,11 +589,10 @@ class banner extends aw_template
 	{
 		global $aw_banner_uid,$aw_banner_check;
 
-		global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR;
-		$ip = $HTTP_X_FORWARDED_FOR;
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if ($ip == "" || !(strpos($ip,"unknown") === false))
 		{
-			$ip = $REMOTE_ADDR;
+			$ip = aw_global_get("REMOTE_ADDR");
 		}
 
 		if (!isset($aw_banner_uid))
@@ -772,7 +761,7 @@ class banner extends aw_template
 	function error_banner()
 	{
 		header("Content-type: image/gif");
-		readfile($GLOBALS["baseurl"]."/images/transa.gif");
+		readfile($this->cfg["baseurl"]."/images/transa.gif");
 		die();
 	}
 
@@ -780,7 +769,7 @@ class banner extends aw_template
 	// !redirects to the site, used when any errors occur when the user clicks on a banner
 	function error_click()
 	{
-		header("Location: ".$GLOBALS["baseurl"]);
+		header("Location: ".$this->cfg["baseurl"]);
 		die();
 	}
 
@@ -905,7 +894,7 @@ class banner extends aw_template
 						"modifiedby" => $row["modifiedby"],
 						"modified" => $this->time2date($row["modified"],2),
 						"img" => $this->get_noview_url($row["oid"],30),
-						"img_large" => $GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id(),
+						"img_large" => $this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id(),
 						"change" => $this->mk_orb("change_site", array("id" => $row["oid"])),
 						"delete" => $this->mk_orb("delete_site", array("id" => $row["oid"],"cl_id" => $id)),
 						"stats" => $this->mk_orb("showstats", array("id" => $row["oid"]))
@@ -1193,7 +1182,7 @@ class banner extends aw_template
 			$this->vars(array(
 				"t_views" => $t_views,
 				"t_clicks" => $t_clicks,
-				"chart" => $found ? $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$xvs)), "yvals" => urlencode(join(",",array(0,$m_cnt))), "data" => urlencode(join(",",$gviews)),"title" => "Profiilide statistika", "xtitle" => "Profiil", "ytitle" => "Vaatamisi","data2" => urlencode(join(",",$gclicks))),"banner") : $GLOBALS["baseurl"].'/images/transa.gif'
+				"chart" => $found ? $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$xvs)), "yvals" => urlencode(join(",",array(0,$m_cnt))), "data" => urlencode(join(",",$gviews)),"title" => "Profiilide statistika", "xtitle" => "Profiil", "ytitle" => "Vaatamisi","data2" => urlencode(join(",",$gclicks))),"banner") : $this->cfg["baseurl"].'/images/transa.gif'
 			));
 		}
 	}
@@ -1384,14 +1373,15 @@ class banner extends aw_template
 		$this->mk_path("Banneri kasutajad");
 
 		$num = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM banner_users","cnt");
-		$np = $num / PER_PAGE;
+		$per_page = $this->cfg["users_per_page"];
+		$np = $num / $per_page;
 
 		for ($i = 0; $i < $np; $i++)
 		{
 			$this->vars(array(
 				"url" => $this->mk_orb("show_users", array("page" => $i)),
-				"from" => $i*PER_PAGE, 
-				"to" => ($i+1)*PER_PAGE > $num ? $num : ($i+1)*PER_PAGE
+				"from" => $i*$per_page, 
+				"to" => ($i+1)*$per_page > $num ? $num : ($i+1)*$per_page
 			));
 			if ($i == $page)
 			{
@@ -1404,7 +1394,7 @@ class banner extends aw_template
 		}
 		$this->vars(array("PAGE" => $p,"SEL_PAGE" => ""));
 
-		$this->db_query("SELECT * FROM banner_users LIMIT ".($page*PER_PAGE).",".PER_PAGE);
+		$this->db_query("SELECT * FROM banner_users LIMIT ".($page*$per_page).",".$per_page);
 		while ($row = $this->db_next())
 		{
 			$ip = $row["ip"];

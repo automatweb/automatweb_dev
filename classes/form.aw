@@ -1,25 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.94 2002/03/08 14:37:18 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.95 2002/06/10 15:50:53 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
 // filling them and processing the results. It's needed to complete our plan to take over the world.
-lc_load("form");
 lc_load("automatweb");
-global $orb_defs;
-$orb_defs["form"] = "xml";
 
 classload("form_base","form_element","form_entry_element","form_search_element","form_cell","images","style","acl");
-classload("form_filter_search_element","form_table");
+classload("form_filter_search_element","form_table","form_controller");
 
 // see on kasutajate registreerimiseks. et pannaxe kirja et mis formid tyyp on t2itnud.
 session_register("session_filled_forms");
-
-define("FORM_ENTRY",1);
-define("FORM_SEARCH",2);
-define("FORM_RATING",3);
-define("FORM_FILTER_SEARCH",4);//lauri muudetud 09302001
-//damn, const.aw-s on defineeritud FTYPE_ ja need samad, milleks ??
 
 // constants for get_elements_for_row - specify wheter the return array is 
 // element_name => element_value
@@ -37,22 +28,17 @@ class form extends form_base
 {
 	function form()
 	{
-		$this->tpl_init("forms");
-		
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);
-		}
+		$this->form_base();
 
-		$this->db_init();
+		$this->lc_load("form","lc_form");
+
 		$this->sub_merge = 1;
 
 		$this->typearr = array(
-				FORM_ENTRY => FG_ENTRY_FORM, 
-				FORM_SEARCH => FG_SEARCH_FORM, 
-				FORM_RATING => FG_RATING_FORM,
-				FORM_FILTER_SEARCH => "Filtri otsinguform",
+			FTYPE_ENTRY => FG_ENTRY_FORM, 
+			FTYPE_SEARCH => FG_SEARCH_FORM, 
+			FTYPE_RATING => FG_RATING_FORM,
+			FTYPE_FILTER_SEARCH => "Filtri otsinguform",
 		);
 
 		$this->formaliases = "";
@@ -60,47 +46,36 @@ class form extends form_base
 
 		$this->active_currency = 0;
 
-		lc_load("definition");
-
-		global $lc_automatweb;
-
-		// those should only be loaded, if we are inside an interactive session
-		// and not let's say process_entry.
-		if (is_array($lc_automatweb))
+		if (!$this->controller_instance)
 		{
-			$this->vars($lc_automatweb);
-		};
+			$this->controller_instance = new form_controller;
+		}
+		lc_load("definition");
 	}
 
 	////
 	// !Alias parser
 	function parse_alias($args = array())
 	{
-		global $awt;
-		$awt->start("form::parse_alias");
-		$awt->count("form::parse_alias");
-
 		extract($args);
 
 		$replacement = $this->gen_preview(array(
-					"id" => $alias["target"],
-					"form_action" => "/reforb.".$GLOBALS["ext"],
+			"id" => $alias["target"],
+			"form_action" => "/reforb.".$this->cfg["ext"],
+			"load_entry_data" => $GLOBALS["load_entry_data"],
+			"load_chain_data" => $GLOBALS["load_chain_data"]
 		));
 
-		$awt->stop("form::parse_alias");
 		return $replacement;
 	}
 
 	////
 	// !Generates form admin interface
 	// $arr[id] - form id, required
-	// TODO: Move to a separate class
+	// FIXME: Move form editing functions into a separate class
+	// so that we can market the form editor as a separate component
 	function gen_grid($arr)
 	{
-		global $awt;
-		$awt->start("form::gen_grid");
-		$awt->count("form::gen_grid");
-
 		extract($arr);
 		$this->init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
 
@@ -258,7 +233,6 @@ class form extends form_base
 			"addc_reforb"	=> $this->mk_reforb("add_col", array("id" => $this->id, "after" => $this->arr["cols"]-1)),
 			"reforb"			=> $this->mk_reforb("submit_grid", array("id" => $this->id))
 		));
-		$awt->stop("form::gen_grid");
 		return $this->do_menu_return();
 	}
 
@@ -267,10 +241,6 @@ class form extends form_base
 	// TODO: Move to another class
 	function gen_all_elements($arr)
 	{
-		global $awt;
-		$awt->start("form::gen_all_elements");
-		$awt->count("form::gen_all_elements");
-
 		extract($arr);
 		$this->init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
 
@@ -338,11 +308,11 @@ class form extends form_base
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
-			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) ? $this->arr["el_move_menus"] : $ob->get_list(false,true))),
-			"types" => $this->picker(0,$this->listall_el_types(true))
+			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $ob->get_list(false,true))),
+			"types" => $this->picker(0,$this->listall_el_types(true)),
+			"controllers" => $this->multiple_option_list(array(), $this->get_list_controllers(true))
 		));
 
-		$awt->stop("form::gen_all_elements");
 		return $this->do_menu_return();
 	}
 
@@ -351,10 +321,6 @@ class form extends form_base
 	// TODO: Move to another class
 	function submit_all_els($arr)
 	{
-		global $awt;
-		$awt->start("form::submit_all_els");
-		$awt->count("form::submit_all_els");
-
 		extract($arr);
 
 		if ($setstyle)
@@ -405,7 +371,33 @@ class form extends form_base
 			}
 			$this->save();
 		}
-		$awt->stop("form::submit_all_els");
+
+		if (is_array($selel))
+		{
+			$this->load($id);
+			$tad = $this->make_keys($add_entry_controllers);
+			$tsd = $this->make_keys($add_show_controllers);
+			$tld = $this->make_keys($add_lb_controllers);
+
+			foreach($selel as $selid)
+			{
+				$el =& $this->get_element_by_id($selid);
+				if (is_array($add_entry_controllers))
+				{
+					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["entry_controllers"] = $tad;
+				}
+				if (is_array($add_show_controllers))
+				{
+					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["show_controllers"] = $tsd;
+				}
+				if (is_array($add_lb_controllers))
+				{
+					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["lb_item_controllers"] = $tld;
+				}
+			}
+			$this->save();
+		}
+
 		return $this->mk_my_orb("all_elements", array("id" => $id));
 	}
 
@@ -414,10 +406,6 @@ class form extends form_base
 	// TODO: Move to another class
 	function save_settings($arr)
 	{
-		global $awt;
-		$awt->start("form::save_settings");
-		$awt->count("form::save_settings");
-
 		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
@@ -428,6 +416,16 @@ class form extends form_base
 		$this->arr["after_submit"] = $after_submit;
 		$this->arr["after_submit_text"] = $after_submit_text;
 		$this->arr["after_submit_link"] = $after_submit_link;
+		$this->arr["has_aliasmgr"] = $has_aliasmgr;
+		$this->arr["has_controllers"] = $has_controllers;
+		$this->arr["has_calendar"] = $has_calendar;
+		$this->arr["cal_controller"] = $cal_controller;
+		$this->arr["event_entry_form"] = $event_entry_form;
+		$this->arr["event_check_form"] = $event_check_form;
+		$this->arr["event_check_against_form"] = $event_check_against_form;
+		$this->arr["event_display_table"] = $event_display_table;
+
+		$this->arr["is_order_form"] = $is_order_form;
 
 		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
@@ -461,7 +459,6 @@ class form extends form_base
 		$this->arr["tablestyle"] = $tablestyle;
 		$this->arr["after_submit_op"] = $after_submit_op;
 		$this->save();
-		$awt->stop("form::save_settings");
 		return $this->mk_orb("table_settings", array("id" => $id));
 	}
 
@@ -470,10 +467,6 @@ class form extends form_base
 	// TODO: Move to another class
 	function save_grid($arr)
 	{
-		global $awt;
-		$awt->start("form::save_grid");
-		$awt->count("form::save_grid");
-
 		extract($arr);
 		$this->load($id);
 
@@ -508,7 +501,12 @@ class form extends form_base
 					{
 						$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = ".$el->get_id(),"parent");
 
-						$this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid,"props" => $el->get_props()));
+						$newelid = $this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid,"props" => $el->get_props()));
+
+						// save element props also
+						$prp = aw_serialize($this->arr["elements"][$el->get_row()][$el->get_col()][$newelid],SERIALIZE_XML);
+						$this->quote(&$prp);
+						$this->db_query("UPDATE form_elements SET props = '$prp' WHERE id = $newelid");
 
 						unset($this->arr["elements"][$el->get_row()][$el->get_col()][$elid]);
 						$el->del();	// delete the element from this form
@@ -549,7 +547,6 @@ class form extends form_base
 			$this->delete_row(array("id" => $id, "row" => $v));
 		}
 
-		$awt->stop("form::save_grid");
 		return $this->mk_orb("change",array("id" => $this->id));
 	}
 
@@ -557,10 +554,6 @@ class form extends form_base
 	// !Adds $count columns after column $after in form $id
 	function add_col($arr)
 	{
-		global $awt;
-		$awt->start("form::add_col");
-		$awt->count("form::add_col");
-
 		extract($arr);
 		$this->load($id);
 
@@ -587,7 +580,6 @@ class form extends form_base
 		$orb = $this->mk_orb("change", array("id" => $this->id));
 		// since this function can be called both from reforb and orb
 		// we make sure we return to the right place afterwards.
-		$awt->stop("form::add_col");
 		header("Location: $orb");
 		return $orb;
 	}
@@ -600,10 +592,6 @@ class form extends form_base
 	// count - number of rows to add
 	function add_row($arr)
 	{
-		global $awt;
-		$awt->start("form::add_row");
-		$awt->count("form::add_row");
-
 		extract($arr);
 		$this->load($id);
 
@@ -630,7 +618,6 @@ class form extends form_base
 		}
 		$this->save();
 		$orb = $this->mk_orb("change", array("id" => $this->id));
-		$awt->stop("form::add_row");
 		header("Location: $orb");
 		return $orb;
 	}
@@ -639,10 +626,6 @@ class form extends form_base
 	// !Deletes column $col of form $id
 	function delete_column($arr)
 	{
-		global $awt;
-		$awt->start("form::delete_column");
-		$awt->count("form::delete_column");
-
 		extract($arr);
 		$this->load($id);
 
@@ -670,7 +653,6 @@ class form extends form_base
 		$this->arr["cols"]--;
 		$this->save();
 		$orb = $this->mk_orb("change" , array("id" => $this->id));
-		$awt->stop("form::delete_column");
 		header("Location: $orb");
 		return $orb;
 	}
@@ -679,10 +661,6 @@ class form extends form_base
 	// !Deletes row $row from form $id
 	function delete_row($arr)
 	{
-		global $awt;
-		$awt->start("form::delete_row");
-		$awt->count("form::delete_row");
-
 		extract($arr);
 		$this->load($id);
 
@@ -708,7 +686,6 @@ class form extends form_base
 		
 		$this->save();
 		$orb = $this->mk_orb("change", array("id" => $this->id));
-		$awt->stop("form::delete_column");
 		header("Location: $orb");
 		return $orb;
 	}
@@ -722,10 +699,6 @@ class form extends form_base
 	// 2) the actual name
 	function get_all_elements($args = array())
 	{
-		global $awt;
-		$awt->start("form::get_all_elements");
-		$awt->count("form::get_all_elements");
-
 		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -750,7 +723,6 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->stop("form::get_all_elements");
 		return $ret;
 	}
 
@@ -775,10 +747,6 @@ class form extends form_base
 	// !Generates the form used in modifying the table settings
 	function gen_settings($arr)
 	{
-		global $awt;
-		$awt->start("form::gen_settings");
-		$awt->count("form::gen_settings");
-
 		extract($arr);
 		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
@@ -787,6 +755,27 @@ class form extends form_base
 		$o = new db_objects;
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
+		
+		// FIXME: calendar settings should probably be on their own tab
+	
+		// list of forms for calendar controller
+		$this->get_objects_by_class(array("class" => CL_FORM));
+		$forms = array();
+		while($row = $this->db_next())
+		{
+			$forms[$row["oid"]] = $row["name"];
+		};
+
+		// if entries of this form are to be checked against a calendar
+		// fetch a list of elements in that form so that we can give the
+		// user the possibility to choose the element to which the calendar
+		// belongs
+		if ($this->arr["event_check_form"])
+		{
+			$ft = get_instance("form_table");
+			$tables = array("0" => "Vali üks") + $ft->get_tables_for_form($id);
+		}
+
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
 			"def_style"	=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
@@ -799,12 +788,22 @@ class form extends form_base
 			"els"	=> $this->multiple_option_list(is_array($this->arr["name_els"]) ? $this->arr["name_els"] : $this->arr["name_el"] ,$this->get_all_elements()),
 			"try_fill"	=> checked($this->arr["try_fill"]),
 			"check_status"	=> checked($this->arr["check_status"]),
+			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
+			"has_controllers"	=> checked($this->arr["has_controllers"]),
+			"has_calendar"	=> checked($this->arr["has_calendar"]),
+			"is_order_form"	=> checked($this->arr["is_order_form"]),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"cal_controllers" => $this->picker($this->arr["cal_controller"],$forms),
+			"event_entry_forms" => $this->picker($this->arr["event_entry_form"],$forms),
+			"event_check_form" => checked($this->arr["event_check_form"]),
+			"event_check_against_forms" => $this->picker($this->arr["event_check_against_form"],$forms),
+			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 		));
+
 		$ns = "";
 		if ($this->type != 2)
 		{
@@ -820,8 +819,20 @@ class form extends form_base
 			"SEARCH" => "",
 			"reforb"	=> $this->mk_reforb("save_settings", array("id" => $this->id))
 		));
-		$awt->stop("form::gen_settings");
 		return $this->do_menu_return();				
+	}
+
+	////
+	// !Wrapper for showing alias manager inside the formgen
+	function form_aliasmgr($args = array())
+	{
+		extract($args);
+		$this->init($id,"aliasmgr.tpl", $this->vars["LC_FORMS_ALIASMGR"]);
+		$this->vars(array(
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+		));
+		return $this->do_menu_return();				
+
 	}
 
 	////
@@ -836,51 +847,69 @@ class form extends form_base
 	//  $silent_errors - if true, error messages are only written to syslog, not shown to user
 	//	$load_entry_data - loads the specified entry's data (can be an other form) and matches the elements in this form by element names
 	//	$method - form submit mthod, defaults to POST
+	//	$load_chain_data - loads the specified chain entry's data and matches the elements in this form by element names
 	function gen_preview($arr)
 	{
-		global $awt;
-		$awt->start("form::gen_preview");
-		$awt->count("form::gen_preview");
-
 		extract($arr);
-	
+
 		// kui id-d pole antud, siis kasutame seda vormi, mis juba eelnevalt
 		// laetud on. Somewhere.
 		if (isset($id))
 		{
 			$this->load($id);
 		};
-		global $baseurl;
 
-		if (!($this->can("view",$id) || $GLOBALS["SITE_ID"] == 11))
+		// FIXME: 11?
+		if (!($this->can("view",$id) || $this->cfg["site_id"] == 11))
 		{
 			$this->acl_error("view",$id);
 		}
 
 		if ($form_action == "")
 		{
-			if (stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false)
+			if (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false)
 			{
-				$form_action = "/automatweb/reforb.".$GLOBALS["ext"];
+				$form_action = "/automatweb/reforb.".$this->cfg["ext"];
 			}
 			else
 			{
-				$form_action = "/reforb.".$GLOBALS["ext"];
+				$form_action = "/reforb.".$this->cfg["ext"];
 			}
 		}
 
-		global $section;
+		$section = aw_global_get("section");
 		if (!isset($reforb) || $reforb == "")
 		{
 			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section));
 		}
 
+		if (!$entry_id)
+		{
+			$entry_id = 0;
+		}
+
+		// if the entry is an error-entry, than the data will be in the session, check for that
+		if (aw_global_get("form_".$this->id."_entry_".$entry_id."_is_error"))
+		{
+			// we are in error, load the data from the session
+			$this->entry_id = $entry_id;
+			$this->entry = aw_global_get("form_".$this->id."_entry_".$entry_id."_data");
+			$this->controller_errors = aw_global_get("form_".$this->id."_entry_".$entry_id."_errors");
+			// use a fake entry id just so that the values get shown
+			$this->read_entry_from_array(-1);
+			// and clear the session
+			aw_session_del("form_".$this->id."_entry_".$entry_id."_data");
+			aw_session_del("form_".$this->id."_entry_".$entry_id."_errors");
+			aw_session_del("form_".$this->id."_entry_".$entry_id."_is_error");
+		}
+		else
 		if (isset($entry_id) && $entry_id)
 		{
-			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)  || $GLOBALS["SITE_ID"] == 11))
+			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)  || $this->cfg["site_id"] == 11))
 			{
 				$this->acl_error("edit",$entry_id);
 			}
+
 			$this->load_entry($entry_id,$silent_errors);
 		}
 		else
@@ -897,6 +926,20 @@ class form extends form_base
 					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
 				}
 			}
+			if ($load_chain_data)
+			{
+				$ed = $this->get_chain_entry($load_chain_data);
+				foreach($ed as $c_fid => $c_eid)
+				{
+					$lf_fm =& $this->cache_get_form_instance($c_fid);
+					$lf_fm->load_entry($c_eid);
+					$lf_els = $lf_fm->get_all_els();
+					foreach($lf_els as $lf_el)
+					{
+						$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+					}
+				}
+			}
 
 			if ($this->arr["try_fill"])
 			{
@@ -906,7 +949,7 @@ class form extends form_base
 				}
 				classload("users");
 				$u = new users;
-				$elvalues=$elvalues + $u->get_user_info($GLOBALS["uid"]);
+				$elvalues=$elvalues + $u->get_user_info(aw_global_get("uid"));
 			}
 		}
 
@@ -922,12 +965,11 @@ class form extends form_base
 		$c="";
 		$chk_js = "";
 
-		global $fg_check_status;
-		$fg_check_status = false;
+		aw_global_set("fg_check_status",false);
 
 		if ($this->arr["check_status"])
 		{
-			$fg_check_status = true;
+			aw_global_set("fg_check_status",true);
 			$this->vars(array("check_status_text" => $this->arr["check_status_text"]));
 		};
 
@@ -957,16 +999,19 @@ class form extends form_base
 				$pic.=$this->parse("IMAGE");
 			}
 		}
-		global $REQUEST_URI;
 		$ip ="";
-		if ($this->entry_id != 0)	// images can only be addes after the place is entered for the first time
+		if ($this->entry_id != 0)	// images can only be added after the place is entered for the first time
 		{
-			$this->vars(array("IMAGE" => $pic, "url"	=> $REQUEST_URI));
+			$this->vars(array("IMAGE" => $pic, "url"	=> aw_global_get("REQUEST_URI")));
 			$ip = $this->parse("IMG_WRAP");
 		}
 
 		$this->vars(array("var_name" => "entry_id", "var_value" => $this->entry_id));
 		$ei = $this->parse("EXTRAIDS");
+
+		$this->vars(array("var_name" => "return_url", "var_value" => aw_global_get("REQUEST_URI")));
+		$ei .= $this->parse("EXTRAIDS");
+
 		if (isset($extraids) && is_array($extraids))
 		{
 			reset($extraids);
@@ -1007,7 +1052,7 @@ class form extends form_base
 			"submit_text"				=> isset($this->arr["submit_text"]) ? $this->arr["submit_text"] : "",
 			"reforb"						=> $reforb,
 			"checks"						=> $chk_js,
-			"stat_check_sub" => ($fg_check_status) ? $check : "",
+			"stat_check_sub" => (aw_global_get("fg_check_status")) ? $check : "",
 		));
 
 		classload("style");
@@ -1034,7 +1079,6 @@ class form extends form_base
 		{
 			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
 		}
-		$awt->stop("form::gen_preview");
 		return $st;
 	}
 
@@ -1042,10 +1086,6 @@ class form extends form_base
 	// !generates one row of form elements
 	function mk_row_html($row,$prefix = "",$elvalues = array(),$no_submit = false)
 	{
-		global $awt;
-		$awt->start("form::mk_row_html");
-		$awt->count("form::mk_row_html");
-
 		$html = "";
 		for ($a=0; $a < $this->arr["cols"]; $a++)
 		{
@@ -1055,7 +1095,6 @@ class form extends form_base
 				$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds,$arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
 			}
 		}
-		$awt->stop("form::mk_row_html");
 		return $html;
 	}
 
@@ -1069,13 +1108,9 @@ class form extends form_base
 	// no_process_entry - no entry is read from user entered data, the loaded entry is just saved
 	function process_entry($arr)
 	{
-		global $awt;
-		$awt->start("form::process_entry");
-		$awt->count("form::process_entry");
-
 		extract($arr);
 
-		// values can be bassed from the caller inside the $values argument, or..
+		// values can be passed from the caller inside the $values argument, or..
 		if (is_array($values))
 		{
 			$this->post_vars = $values;
@@ -1091,7 +1126,7 @@ class form extends form_base
 		{
 			$this->load($id);
 		}
-
+		
 		if ($entry_id && $this->arr["save_table"] != 1)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, 
 		{																						// siis ignoorime seda
 			$fid = $this->get_form_for_entry($entry_id);
@@ -1101,34 +1136,125 @@ class form extends form_base
 			}
 		}
 
-		if (!$entry_id)
+		// if entry_id is set, load the entry so we can use the previous data as well
+		if ($entry_id)
 		{
-			// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
-			// minema. parent argument overraidib selle
-			$parent = isset($parent) ? $parent : $this->arr["ff_folder"];
-			
-			// we override the lang_id here, because entries that have been entered over
-			// XML-RPC do not know what their language_id might be, so specify one.
-			$this->entry_id = $this->create_entry_object(array(
-				"parent" => $parent,
-				"class_id" => CL_FORM_ENTRY,
-				"lang_id" => $lang_id,
-			));
-			$new = true;
-		}
-		else
-		{
-			$this->entry_id = $entry_id;
-			$new = false;
+			$this->load_entry($entry_id);
 		}
 
-		if (!isset($prefix))
+		// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
+		// minema. parent argument overraidib selle
+		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
+
+		$this->entry_id = $entry_id;
+
+		// do we have to validate this entry against a calendar?
+		// FIXME: this check should be in the form_calendar class
+		if ($this->arr["event_check_form"])
 		{
-			$prefix = "";
+			// we need to fetch the values of "start" and "end" and "count" elements, pass those to the
+			// form_calendar which then in turn will tell us whether that calendar has enough vacancies
+			// in the requested time slot
+			$cal_target = $this->arr["event_check_against_form"];
+
+			$cal_element = $this->arr["event_check_against_element"];
+
+			// actually I think should just be a special controller
+			// it has to be a separeate instance or we will lose the settings for current form
+			$qf = get_instance("form_base");
+
+			// that loads the target form too, so we can access it's properties
+			$els = $qf->get_form_elements(array("id" => $id));
+
+			foreach($els as $key => $el)
+			{
+				// start of requested time slot
+				if ( ($el["type"] == "date") && ($el["subtype"] == "from") )
+				{
+					$start_el = $el["id"];
+				};
+
+				// end of the requested time slot
+				if ( ($el["type"] == "date") && ($el["subtype"] == "to") )
+				{
+					$end_el = $el["id"];
+				};
+
+				// count 
+				if ( ($el["type"] == "textbox") && ($el["subtype"] == "count") )
+				{
+					$count_el = $el["id"];
+				};
+
+			}	
+
+			$_start = $this->post_vars[$start_el];
+			$_end = $this->post_vars[$end_el];
+			$range_start = mktime($_start["hour"],$_start["minute"],0,$_start["month"],$_start["day"],$_start["year"]);
+			$range_end = mktime($_end["hour"],$_end["minute"],-1,$_end["month"],$_end["day"],$_end["year"]);
+			$count = (int)$this->post_vars[$count_el];
+
+			// default to 1, if not set or not int, this might be a mistake
+			// though
+			if ($count == 0)
+			{
+				$count = 1;
+			};
+	
+			/*
+			print "start = $range_start<br>";
+			print "end = $range_end<br>";
+			print "count = $count<br>";
+			*/
+
+			// and now for the easy part (hah!), ask the calendar to check whether there are enough vacancies in
+			// the required time window
+			classload("form_calendar");
+			$fc = new form_calendar();
+
+			$cal_id = ($this->post_vars["load_chain_data"]) ? $this->post_vars["load_chain_data"] : $chain_entry_id;
+
+			if ($entry_id)
+			{
+				$q = "SELECT cal_id FROM form_entries WHERE id = '$entry_id'";
+				$this->db_query($q);
+				$row = $this->db_next();
+				if ($row)
+				{
+					$cal_id = $row["cal_id"];
+				};
+			}
+
+
+			$has_vacancies = $fc->load_cal_controller(array(
+				"id" => $cal_target,
+				"eid" => $cal_id,
+				"start" => $range_start,
+				"end" => $range_end,
+				"count" => $count,
+				"ignore" => $entry_id,
+				"check" => "vacancies",
+			));
+
+
+			if (not($has_vacancies))
+			{
+				$has_errors = true;
+				$this->controller_errors[$count_el][] = "The requested period does not have this many vacancies.";
+			}
+
+		}
+
+
+		$new = true;
+		if ($entry_id)
+		{
+			$new = false;
 		}
 
 		if (!$no_process_entry)
 		{
+			$this->controller_queue = array();
 			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				for ($a=0; $a < $this->arr["cols"]; $a++)
@@ -1138,15 +1264,71 @@ class form extends form_base
 					$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $this->entry_id,$prefix);
 				}
 			}
+
+			$controllers_ok = true;
+			foreach($this->controller_queue as $ctrl)
+			{
+				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
+				if ($res !== true)
+				{
+					$this->controller_errors[$ctrl["el_id"]][] = $res;
+					$controllers_ok = false;
+				}
+			}
+
+			if ( (!$controllers_ok) || ($has_errors) )
+			{
+				// ok, now the error messages are in $this->controller_errors
+
+				if (!$entry_id)
+				{
+					$entry_id = 0;
+				}
+
+				// we must stick the data that was entered in the session, 
+				aw_session_set("form_".$this->id."_entry_".$entry_id."_data", $this->entry);
+				aw_session_set("form_".$this->id."_entry_".$entry_id."_errors", $this->controller_errors);
+				aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error", true);
+
+				// return to the form display url and show the error messages to the user so he/she can
+				// correct the data
+				if ($return_url == "")
+				{
+					$return_url = $GLOBALS["return_url"];
+					if ($return_url == "")
+					{
+						// if no return url was specified, try to come up with a reasonable one by ourselves
+						$return_url = $this->mk_my_orb("show", array("id" => $this->id, "entry_id" => $this->entry_id));
+					}
+				}
+				header("Location: ".$return_url);
+				die();
+			}
 		}
 
-		$this->update_entry_name($this->entry_id);
+		if ($new)
+		{
+			// we override the lang_id here, because entries that have been entered over
+			// XML-RPC do not know what their language_id might be, so specify one.
+			$this->entry_id = $this->create_entry_object(array(
+				"parent" => $this->entry_parent,
+				"class_id" => CL_FORM_ENTRY,
+				"lang_id" => $lang_id,
+			));
+		}
+
+		$this->update_entry_name($this->entry_id,$this->entry_parent);
 		
 		if ($new)
 		{
 			// now write the data from the previously gathered array to the storage medium
 			// specified in the forms settings
-			$this->create_entry_data($this->entry_id,$this->entry,$chain_entry_id);
+			$this->create_entry_data(array(
+				"entry_id" => $this->entry_id,
+				"entry" => $this->entry,
+				"chain_entry_id" => $chain_entry_id,
+				"cal_id"  => $cal_id,
+			));
 
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
@@ -1158,17 +1340,17 @@ class form extends form_base
 			$this->update_entry_data($this->entry_id,$this->entry);
 			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
 		}
+
 		$this->do_actions($this->entry_id);
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$GLOBALS["session_filled_forms"][$this->id] = $this->entry_id;
 
-		global $ext;
+		$ext = $this->cfg["ext"];
 
 		if (isset($redirect_after) && $redirect_after)
 		{
 			// if this variable has been set in extraids when showing the form, redirect to it
-			$awt->stop("form::process_entry");
 			return $redirect_after;
 		}
 
@@ -1195,7 +1377,6 @@ class form extends form_base
 				}
 				break;
 		}
-		$awt->stop("form::process_entry");
 		return $l;
 	}
 
@@ -1208,8 +1389,17 @@ class form extends form_base
 	// and this is where it's done - terryf
 	//
 	// and such was the reply.
-	function update_entry_name($entry_id)
+	function update_entry_name($entry_id,$entry_parent = false)
 	{
+		$uar = array(
+			"oid" => $entry_id,
+			"comment" => ""
+		);
+		if ($entry_parent !== false)
+		{
+			$uar["parent"] = $entry_parent;
+		}
+
 		if (is_array($this->arr["name_els"]))
 		{
 			foreach($this->arr["name_els"] as $elid)
@@ -1227,7 +1417,8 @@ class form extends form_base
 					}
 				}
 			}
- 			$this->update_entry_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
+			$uar["name"] = $this->entry_name;
+ 			$this->update_entry_object($uar);
 		}
 		else
 		if ($this->arr["name_el"])
@@ -1244,40 +1435,9 @@ class form extends form_base
 					$this->entry_name = $el->get_value();
 				}
 			}
-			$this->update_entry_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
+			$uar["name"] = $this->entry_name;
+			$this->update_entry_object($uar);
 		}
-	}
-
-	////
-	// !loads entry $entry_id for the loaded form and maps the data to the form elements
-	function load_entry($entry_id,$silent_errors = false)
-	{
-		global $awt;
-		$awt->start("form::load_entry");
-		$awt->count("form::load_entry");
-
-		$this->entry_id = $entry_id;
-		// reads the data from the configured data source for the form and returns it as an array of el_id => el_value pairs
-		$this->entry = $this->read_entry_data($entry_id,$silent_errors);
-		// now $this->entry contains el_id => el_value pairs - not user values though, they are formgen values
-
-		$this->vars(array("entry_id" => $entry_id));
-		
-		// so we feed the data to the elements and that should be it
-		$this->read_entry_from_array($entry_id);
-
-		$awt->stop("form::load_entry");
-	}
-
-	function read_entry_from_array($entry_id)
-	{
-		for ($row=0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col=0; $col < $this->arr["cols"]; $col++)
-			{
-				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
-			};
-		};
 	}
 
 	////
@@ -1287,22 +1447,20 @@ class form extends form_base
 	// optional - search_el and search_val - if then does a search using only that element and value
 	function show($arr)
 	{
-		global $awt;
-		$awt->start("form::show");
-		$awt->count("form::show");
-		
 		extract($arr);
+		// FIXME: blergh!
+		global $load_chain_data;
+		$lcd = $load_chain_data;
 
-		
 		// if reset argument is set, zero out all data that has been gathered inside templates
 		if (isset($reset))
 		{
 			$this->tpl_reset();
 		};
 
-		if (!$no_load_entry)
+		if (!$no_load_entry && $id)
 		{
-			if (!($this->can("view",$id)  || $GLOBALS["SITE_ID"] == 11))
+			if (!($this->can("view",$id)  || $this->cfg["site_id"] == 11))
 			{
 				$this->acl_error("view",$id);
 			}
@@ -1310,34 +1468,53 @@ class form extends form_base
 		}
 
 		// if this is a search form, then search, instead of showing the entered data
-		if ($this->type == FORM_SEARCH)
+		if ($this->type == FTYPE_SEARCH)
 		{
 			$r = $this->do_search($entry_id, $op_id, $search_el, $search_val);
-			$awt->stop("form::show");
 			return $r;
 		}
 
-		if ($this->type == FORM_FILTER_SEARCH)
+		if ($this->type == FTYPE_FILTER_SEARCH)
 		{
 			$parse = $this->do_filter_search($entry_id, $op_id, $arr);
-			$awt->stop("form::show");
 			return $parse;
 		}
 
 
 		if (!$no_load_op)
 		{
-			if (!($this->can("view",$op_id)  || $GLOBALS["SITE_ID"] == 11))
+			if (!($this->can("view",$op_id)  || $this->cfg["site_id"] == 11))
 			{
 				$this->acl_error("view",$op_id);
 			}
-			print $no_load_op;
 			$this->load_output($op_id);
 		}
-		
+
+		// if it is set for this op that it is to be loaded from the session then get the entry id for the form
+		if ($this->output["session_value"] && !$entry_id)
+		{
+			global $session_filled_forms;
+			$entry_id = $session_filled_forms[$this->output["session_form"]];
+			if (!$entry_id)
+			{
+				$no_load_entry = true;
+			}
+			$id = $this->output["session_form"];
+			if (!$id)
+			{
+				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,"Sessioonist lugemise formi pole valitud v&auml;ljundile $op_id ",true);
+			}
+
+			if (!($this->can("view",$id)  || $this->cfg["site_id"] == 11))
+			{
+				$this->acl_error("view",$id);
+			}
+			$this->load($id);
+		}
+
 		if (!$no_load_entry)
 		{
-			if (!($this->can("view",$entry_id)  || $GLOBALS["SITE_ID"] == 11))
+			if (!($this->can("view",$entry_id)  || $this->cfg["site_id"] == 11))
 			{
 				$this->acl_error("view",$entry_id);
 			}
@@ -1355,8 +1532,6 @@ class form extends form_base
 			$entry_id = $this->entry_id;
 		}
 
-		global $HTTP_SESSION_VARS;
-    
 		if (isset($no_html) && $no_html)
 		{
 			$this->read_template("show_user_nohtml.tpl");
@@ -1396,7 +1571,6 @@ class form extends form_base
 	
 		$op_far = $this->get_op_forms($op_id);
 
-		$awt->start("form::show::cycle");
 		// tsykkel yle koigi outputi ridade ja cellide
 		for ($row = 0; $row < $this->output["rows"]; $row++)
 		{
@@ -1404,7 +1578,9 @@ class form extends form_base
 			for ($col = 0; $col < $this->output["cols"]; $col++)
 			{
 				if (!($arr = $this->get_spans($row, $col, $this->output["map"], $this->output["rows"], $this->output["cols"])))
+				{
 					continue;
+				}
 
 				$rrow = $arr["r_row"];
 				$rcol = $arr["r_col"];
@@ -1429,10 +1605,9 @@ class form extends form_base
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
 					// load the element from output
-					$awt->start("form::show::cycle::new_element");
-					$awt->count("form::show::cycle::new_element");
 					$el=new form_entry_element;
 					$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
+
 					// if the element is linked, then fake the elements entry
 					if ($op_cell["elements"][$i]["linked_element"] && $op_far[$op_cell["elements"][$i]["linked_form"]] == $op_cell["elements"][$i]["linked_form"])
 					{
@@ -1444,17 +1619,27 @@ class form extends form_base
 						$_entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
 						$el->set_entry($_entry,$this->entry_id);
 					}
-					$awt->stop("form::show::cycle::new_element");
 
-					$awt->start("form::show::cycle::show");
-					if ($el)
+					// now do the element show controller check
+					$show = true;
+					$shcs = $el->get_show_controllers();
+					foreach($shcs as $ctlid)
 					{
-						$chtml.= $el->gen_show_html();
+						if (($res = $this->controller_instance->do_check($ctlid, $el->get_controller_value(), &$this, $el)) !== true)
+						{
+							$show = false;
+						}
 					}
-					$awt->stop("form::show::cycle::show");
+
+					if ($show)
+					{
+						if ($el)
+						{
+							$chtml.= $el->gen_show_html();
+						}
+					}
 				}
 
-				$awt->start("form::show::cycle::style");
 				if (isset($no_html) && $no_html)
 				{
 					$html.=$chtml." ";
@@ -1470,12 +1655,10 @@ class form extends form_base
 						$html.= "<td colspan=\"".$arr["colspan"]."\" rowspan=\"".$arr["rowspan"]."\">".$chtml."</td>";
 					}
 				}
-				$awt->stop("form::show::cycle::style");
 			}
 			$this->vars(array("COL" => $html));
 			$this->parse("LINE");
 		}
-		$awt->stop("form::show::cycle");
 
 		// uurime v2lja outputi tabeli stiili ja kasutame seda
 		if ($this->output["table_style"])
@@ -1484,7 +1667,6 @@ class form extends form_base
 				"tablestring" => $t_style->get_table_string($this->output["table_style"])
 			));
 		}
-		$awt->stop("form::show");
 		$retval = $this->parse();
 		global $type;
 		if ($type == "popup")
@@ -1596,10 +1778,6 @@ class form extends form_base
 	// !generates the form for selecting among which forms to search for search form $id
 	function gen_search_sel($arr)
 	{
-		global $awt;
-		$awt->start("form::gen_search_sel");
-		$awt->count("form::gen_search_sel");
-
 		extract($arr);
 		$this->init($id, "search_sel.tpl", "Vali otsitavad formid");
 
@@ -1750,7 +1928,6 @@ class form extends form_base
 			"use_new_search" => checked($this->arr["new_search_engine"] == 1)
 		));
 
-		$awt->stop("form::gen_search_sel");
 		return $this->do_menu_return();
 	}
 
@@ -1800,6 +1977,11 @@ class form extends form_base
 
 		$this->arr["search_chain"] = $search_chain;
 		$this->arr["search_chain_op"] = $chain_op;
+
+		if ($this->arr["search_type"] == "chain")
+		{
+			$this->arr["search_forms"] = $this->get_forms_for_chain($this->arr["search_chain"]);
+		}
 
 		// here we must check if the users selection is valid - whether all the selected forms are connected via 
 		// relation elements and also remember the form where one should start in order to be able to traverse 
@@ -1873,6 +2055,14 @@ class form extends form_base
 				$this->arr["start_search_relations_from"] = 0;
 				return "No output selected for chain!";
 			}
+			else
+			{
+				// we must find the first form of the chain and use that as the form to start relations from
+				$dat = $this->get_forms_for_chain($this->arr["search_chain"]);
+				reset($dat);
+				list(,$_fid) = each($dat);
+				$this->arr["start_search_relations_from"] = $_fid;
+			}
 		}
 		return "ok";
 	}
@@ -1911,13 +2101,33 @@ class form extends form_base
 	function new_do_search($arr)
 	{
 		extract($arr);
+
+		// $this->arr["search_chain"] on selle chaini id, mille kalendreid ma arvestama pean
+		// samas kuulub seal iga kalender konkreetse pärja elementvormi külge, so I have
+		// to figure out which one it is, to find the calendars I required
+
 		if ($id)
 		{
+//			echo "loading $id <br>";
 			$this->load($id);
 		}
 		if ($entry_id)
 		{
+//			echo "loading entry $entry_id <br>";
 			$this->load_entry($entry_id);
+		}
+
+		if ($restrict_search_el)
+		{
+			// alter the loaded search entry with the data
+			$l2r = $this->get_linked2real_element_array();
+
+			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
+
+			if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+			{
+				$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+			}
 		}
 
 		$form_table = new form_table;
@@ -1931,26 +2141,133 @@ class form extends form_base
 			{
 				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing search results for form ".$this->id."!",true);
 			}
+			if (!$use_table)
+			{
+				$use_table = $this->arr["table"];
+			}
+
+			$form_table->start_table($use_table,array(
+				"class" => "form", 
+				"action" => "show_entry", 
+				"id" => $this->id, 
+				"entry_id" => $this->entry_id, 
+				"op_id" => 1,
+				"section" => $section,
+				"use_table" => $use_table,
+				"restrict_search_el" => $restrict_search_el,
+				"restrict_search_val" => $restrict_search_val
+			));
+
 			$used_els = $form_table->get_used_elements();
-			$form_table->start_table($this->arr["table"],array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
+
+//			echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
 		}
 
 		// now get the search query
+//		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
 		$sql = $this->get_search_query(array("used_els" => $used_els));
-
+//		echo "sql = $sql <br>";
 		$result = "";
 
+//		echo "startform = ".$this->arr["start_search_relations_from"]." <br>";
 		$show_form = new form;
 		$show_form->load($this->arr["start_search_relations_from"]);
 		$show_form->load_output($this->get_search_output());
 
 		// execute it and show the results in the desired form
-		$this->db_query($sql);
+		if ($this->arr["search_type"] == "forms")
+		{
+			$op = $this->arr["search_form_op"];
+		}
+		else
+		{
+			$op = $this->arr["search_chain_op"];
+		}
+
+		if ($this->arr["search_chain"])
+		{
+			$fc = get_instance("form_chain");
+			$fc->load_chain($this->arr["search_chain"]);
+			//print "loading calendar for " . $this->arr["search_chain"] . "<br>";
+			if ($fc->chain["has_calendar"])
+			{
+				$fcal = get_instance("form_calendar");
+				$els = $this->get_form_elements(array("id" => $this->id));
+				// figure out the start and end elements
+				$start_el = $end_el = 0;
+				$count_el = 0;
+				foreach($els as $key => $val)
+				{
+					if ($val["type"] == "date")
+					{
+						if ($start_el == 0)
+						{
+							$start_el = $val["id"];
+						}
+						else
+						{
+							$end_el = $val["id"];
+						}
+					}
+
+					if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
+					{
+						$count_el = $val["id"];
+					};
+				};
+
+				$start = $this->entry[$start_el];
+				$end = $this->entry[$end_el];
+				$count = (int)$this->entry[$count_el];
+
+				// if no amount was specified default to 1
+				// and .. why the hell are you searching anyway if you dont want any rooms?
+				if ($count == 0)
+				{
+					$count = 1;
+				};
+
+			};
+		}
+		$this->db_query($sql,false);
 		while ($row = $this->db_next())
 		{
 			if ($this->arr["show_table"])
 			{
-				$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$this->arr["search_form_op"]);
+				if ($row["chain_entry_id"])
+				{
+					$this->save_handle();
+					$cid = $this->get_chain_for_chain_entry($row["chain_entry_id"]);
+					$this->restore_handle();
+				};
+
+				if ($fc->chain["has_calendar"])
+				{
+					dbg("checking calendar for $row[chain_entry_id]<br>");
+					dbg("id = " . $fc->chain["cal_form"] . "<br>");
+					$has_vacancies = $fcal->load_cal_controller(array(
+						"id" => $fc->chain["cal_form"],
+						"eid" => $row["chain_entry_id"],
+						"start" => $start,
+						"end" => $end - 1,
+						"count" => $count,
+						"check" => "vacancies",
+					));
+					// ironic, isn't it?
+					$has_vacancies = true;
+					if ($has_vacancies)
+					{
+						$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
+					}
+					else
+					{
+						dbg("no show because no vacancies <br>");
+					}
+				}
+				else
+				{
+					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
+				}
 			}
 			else
 			{
@@ -1962,6 +2279,7 @@ class form extends form_base
 				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
 			}
 		}
+
 		
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"])
@@ -1986,12 +2304,10 @@ class form extends form_base
 	// an array, that has one entry for each form selected as a search target
 	// and that entry is an array of matching entries for that form
 	// parent(int) - millise parenti alt entrysid otsida
-	function search($entry_id,$parent = 0,$search_el = "",$search_val = "")
+	// $restrict_el - if set, the element in the search form that is linked to this element 
+	// will be set to value $restrict_val
+	function search($entry_id = 0,$parent = 0,$search_el = "",$search_val = "",$restrict_search_el = 0, $restrict_search_val = "")
 	{
-		global $awt;
-		$awt->start("form::search");
-		$awt->count("form::search");
-
 		// laeb täidetud vormi andmed sisse
 		if ($search_el != "" && $search_val != "")
 		{
@@ -2002,10 +2318,22 @@ class form extends form_base
 		}
 		else
 		{
-			$this->load_entry($entry_id);
+			if ($entry_id)
+			{
+				$this->load_entry($entry_id);
+			}
 			$word_search = true;
+			// TODO: restrict search here
 		}
 		
+		if ($restrict_search_el)
+		{
+			// alter the loaded search entry with the data
+			$l2r = $this->get_linked2real_element_array();
+
+			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
+			$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+		}
 
 		// gather all the elements of this form in an array
 		$els = array();
@@ -2126,7 +2454,7 @@ class form extends form_base
 											$el->arr["linked_form"],
 											$el->arr["linked_element"]);
 							// now split it at the spaces
-							if ($word_search)
+/*							if ($word_search)
 							{
 								if (preg_match("/\"(.*)\"/",$value,$matches))
 								{
@@ -2147,9 +2475,9 @@ class form extends form_base
 								$query.= "AND ($qstr)";
 							}
 							else
-							{
+							{*/
 								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
-							}
+//							}
 						}
 						if ($el->arr["linked_form"] != $mid)
 						{
@@ -2214,7 +2542,7 @@ class form extends form_base
 
 			$this->search_form = $id;
 			// create the sql that searches from this form's entries
-			$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".$GLOBALS["lang_id"]." " ;
+			$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".aw_global_get("lang_id")." " ;
 			if (is_array($parent))
 			{
 				$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
@@ -2295,7 +2623,7 @@ class form extends form_base
 						$value = $el->get_value();
 						$elname = sprintf("ev_%s",$el->arr["linked_element"]);
 						// now split it at the spaces
-						if ($word_search)
+	/*					if ($word_search)
 						{
 							if (preg_match("/\"(.*)\"/",$value,$matches))
 							{
@@ -2317,9 +2645,9 @@ class form extends form_base
 							$query.= "AND ($qstr)";
 						}
 						else
-						{	
+						{	*/
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
-						}
+//						}
 					}
 				}
 			}
@@ -2352,23 +2680,38 @@ class form extends form_base
 			$this->form_search_only = true;
 		}
 	
-		$awt->stop("form::search");
 		return $ret;
 	}
 
 	function do_search($entry_id, $output_id,$search_el,$search_val)
 	{
+		global $section,$use_table, $restrict_search_el, $restrict_search_val;
+
 		if ($this->arr["new_search_engine"] == 1)
 		{
-			return $this->new_do_search(array("entry_id" => $entry_id));
+			return $this->new_do_search(array(
+				"entry_id" => $entry_id,
+				"restrict_search_el" => $restrict_search_el, 
+				"restrict_search_val" => $restrict_search_val,
+				"use_table" => $use_table,
+				"section" => $section
+			));
 		}
 
-		global $awt;
-		$awt->start("form::do_search");
-		$awt->count("form::do_search");
+		$matches = $this->search($entry_id,0,$search_el,$search_val,$restrict_search_el, $restrict_search_val);
 
-		global $section;
-		$matches = $this->search($entry_id,0,$search_el,$search_val);
+		if ($restrict_search_el)
+		{
+			// alter the loaded search entry with the data
+			$l2r = $this->get_linked2real_element_array();
+
+			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
+			if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+			{
+				$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+			}
+		}
+
 		if ($this->arr["show_table"])
 		{
 			if (!$this->arr["table"])
@@ -2376,7 +2719,6 @@ class form extends form_base
 				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
 			}
 
-			$awt->start("form::do_search::setup");
 			classload("form_table");
 			$ft = new form_table;
 			// This stuff is here for the numeric element type. -->
@@ -2400,14 +2742,27 @@ class form extends form_base
 			if ($GLOBALS["dbg_num"]) {echo("<pre>");print_r($ft->runtime_col_types);echo("</pre>");};
 			*/
 			// <--
-			$ft->start_table($this->arr["table"], array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section));
+			if (!$use_table)
+			{
+				$use_table = $this->arr["table"];
+			}
+			$ft->start_table($use_table, array(
+				"class" => "form", 
+				"action" => "show_entry", 
+				"id" => $this->id, 
+				"entry_id" => $entry_id, 
+				"op_id" => $output_id,
+				"section" => $section,
+				"use_table" => $use_table,
+				"restrict_search_el" => $restrict_search_el,
+				"restrict_search_val" => $restrict_search_val
+			));
 
 			// make an array of linked_element => this form element
 			$linked_els = $this->get_linked2real_element_array();
 
 			// this returns an array of roms each of which is an array of elements that are actually used in the table
 			$used_els = $ft->get_used_elements();
-
 			if ($this->form_search_only)
 			{
 				foreach($used_els as $form_id => $el_arr)
@@ -2424,10 +2779,8 @@ class form extends form_base
 				}
 
 				$eids = join(",", $matches);
-				$awt->stop("form::do_search::setup");
 				if ($eids != "")
 				{
-					$awt->start("form::do_search::qandstuff");
 					$jss = join(",",$q_els);
 					if ($jss != "")
 					{
@@ -2439,60 +2792,9 @@ class form extends form_base
 					$cnt = 0;
 					while ($row = $this->db_next())
 					{
-						if ($this->can("view",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11)
 						{
 							$cnt++;
-							if ($this->can("edit",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
-							{
-								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>Muuda</a>";
-
-								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],$ft->get_menu_picker())."</select>";
-							}
-
-							$row["ev_created"] = $this->time2date($row["created"], 2);
-							$row["ev_uid"] = $row["modifiedby"];
-							$row["ev_modified"] = $this->time2date($row["modified"], 2);
-							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
-							if ($ft->table["view_new_win"])
-							{
-								$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section)),$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
-								$row["ev_view"] = sprintf("<a href=\"%s\">Vaata</a>",$_link);
-							}
-
-							if ($this->can("delete",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
-							{
-								$row["ev_delete"] = "<a href='".$this->mk_my_orb(
-									"delete_entry", 
-										array(
-											"id" => $form_id,
-											"entry_id" => $row["entry_id"], 
-											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
-										),
-									"form")."'>Kustuta</a>";
-							}
-
-							if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
-							{
-								$_link = $this->mk_my_orb("show_entry", array(
-											"id" => $form_id,
-											"entry_id" => $row["entry_id"],
-											"op_id" => $this->arr["search_outputs"][$form_id],
-											"section" => $section,
-								));
-
-								$_caption = $row["ev_".$ft->table["view_col"]];
-
-								if ($ft->table["view_new_win"])
-								{
-									$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
-								}
-
-								$row["ev_".$ft->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
-							}
-							if ($ft->table["change_col"] && $ft->table["change_col"] != "change" && ($this->can("edit",$row["entry_id"]) || $GLOBALS["SITE_ID"] == 11))
-							{
-								$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
-							}
 
 							// dis shit here makes the link that does a new search on the element you clicked 
 							if (is_array($ft->table["doelsearchcols"]))
@@ -2501,12 +2803,20 @@ class form extends form_base
 								{
 									if ($row["ev_".$_de_elid_ar["elid"]] != "")
 									{
-										$_de_url = $this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1, "search_el" => $linked_els[$_de_elid_ar["elid"]], "search_val" => $row["ev_".$_de_elid_ar["elid"]]));
+										$_de_url = $this->mk_my_orb("show_entry", 
+											array(
+												"id" => $this->id, 
+												"entry_id" => $this->entry_id, 
+												"op_id" => 1, 
+												"search_el" => $linked_els[$_de_elid_ar["elid"]], 
+												"search_val" => $row["ev_".$_de_elid_ar["elid"]]
+											)
+										);
 										$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
 									}
 								}
 							}
-							$ft->row_data($row);
+							$ft->row_data($row,$form_id,$section,$this->arr["search_outputs"][$form_id]);
 						}
 					}
 				}
@@ -2538,10 +2848,8 @@ class form extends form_base
 				}
 					
 				$eids = join(",", $matches);
-				$awt->stop("form::do_search::setup");
 				if ($eids != "")
 				{
-					$awt->start("form::do_search::qandstuff");
 					$jss = join(",",$q_els);
 					if ($jss != "")
 					{
@@ -2549,7 +2857,7 @@ class form extends form_base
 					}
 					$joss = join(" ",$joins);
 					$chenrties = array();
-					$q = "SELECT form_chain_entries.id as chain_entry_id,uid as modifiedby, tm as created, tm as modified  $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
+					$q = "SELECT form_chain_entries.id as chain_entry_id,fco.modifiedby as modifiedby, fco.created as created, fco.modified as modified  $jss FROM form_chain_entries LEFT JOIN objects AS fco ON fco.oid = form_chain_entries.id $joss WHERE form_chain_entries.id in ($eids)";
 					$this->db_query($q);
 					$cnt = 0;
 					$used_ids = array();
@@ -2560,30 +2868,30 @@ class form extends form_base
 							continue;
 						}
 						$used_ids[$row["chain_entry_id"]]=1;
-						if ($this->can("view",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+						if ($this->can("view",$row["entry_id"])  || $this->cfg["site_id"] == 11)
 						{
 							$cnt++;
 							// kui on p2rg, siis muudame p2rga
-							if ($this->can("edit",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+							if ($this->can("edit",$row["entry_id"])  || $this->cfg["site_id"] == 11)
 							{
-								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$ft->table["texts"]["change"][$ft->lang_id]."</a>";
 
 								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$real_form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$real_form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],$ft->get_menu_picker())."</select>";
 							}
 							$row["ev_created"] = $this->time2date($row["created"], 2);
 							$row["ev_uid"] = $row["modifiedby"];
 							$row["ev_modified"] = $this->time2date($row["modified"], 2);
-							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>Vaata</a>";		
-							if ($this->can("delete", $row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>".$ft->table["texts"]["view"][$ft->lang_id]."</a>";		
+							if ($this->can("delete", $row["entry_id"])  || $this->cfg["site_id"]== 11)
 							{
 								$row["ev_delete"] = "<a href='javascript:box2(\"Kas oled kindel et tahad kustutada?\",\"".$this->mk_my_orb(
 									"delete_entry", 
 										array(
-											"id" => $fid,
+											"id" => $real_form_id ,
 											"entry_id" => $row["chain_entry_id"], 
 											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
 										),
-									"form")."\")'>Kustuta</a>";
+									"form")."\")'>".$ft->table["texts"]["delete"][$ft->lang_id]."</a>";
 							}
 							if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
 							{
@@ -2611,22 +2919,25 @@ class form extends form_base
 					}
 				}
 			}
-			$awt->stop("form::do_search::qandstuff");
-			$awt->start("form::do_search::finish_table");
 			$_sby = $GLOBALS["sortby"];
 			$_so = $GLOBALS["sort_order"];
 			if ($_sby == "")
 			{
 				$_sby = "ev_".$ft->table["defaultsort"];
 				$_so = "asc";
+				$_sn = ($ft->table["defaultsort_type"] == "int");
 			}
 			if ($ft->table["group"])
 			{
 				$_grpby = "ev_".$ft->table["group"];
 			}
-			$ft->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby));
+			$ft->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby,"sort_numeric" => $_sn));
 			$tbl = $ft->get_css();
-			$tbl.="<form action='reforb.aw' method='POST'>\n";
+			$is_button_table = $ft->table["submit_top"] || $ft->table["user_button_top"] || $ft->table["submit_bottom"] || $ft->table["user_button_bottom"];
+			if ($is_button_table)
+			{
+				$tbl.="<form action='reforb.aw' method='POST'>\n";
+			}
 			if ($ft->table["submit_top"])
 			{
 				$tbl.="<input type='submit' value='".$ft->table["submit_text"]."'>";
@@ -2643,7 +2954,12 @@ class form extends form_base
 			{
 				$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
 			}
-			$tbl.=$ft->t->draw(array("groupby" => $_grpby));
+			$_rgrpby = "";
+			if ($ft->table["rgroup"])
+			{
+				$_rgrpby = "ev_".$ft->table["rgroup"];
+			}
+			$tbl.=$ft->t->draw(array("rgroupby" => $_rgrpby));
 
 			if ($ft->table["submit_bottom"])
 			{
@@ -2664,25 +2980,24 @@ class form extends form_base
 
 			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 
-			$tbl.="</form>";
+			if ($is_button_table)
+			{
+				$tbl.="</form>";
+			}
 
 //			$tbl = create_links($tbl);
-			$awt->stop("form::do_search::finish_table");
-			$awt->stop("form::do_search");
 
 			global $print;
 
 			if ( ($ft->table["print_button"]) && (not($print)) )
 			{
-				global $PHP_SELF,$REQUEST_URI;
-				$link = $REQUEST_URI . "&print=1";
+				$link = aw_global_get("REQUEST_URI") . "&print=1";
 				$tbl = $tbl . "<div align=right><a href='$link' target='_new'><img src='/img/print.gif' border='0' title='Print'></a></div>";
 			}
 
-			if ($GLOBALS["SITE_ID"] == 50)
+			if ($this->cfg["site_id"] == 14 || $this->cfg["site_id"] == 50)
 			{
-				global $REQUEST_URI;
-				$url = "&nbsp;&nbsp;<a href='".$REQUEST_URI."&get_csv_file=1' target=_blank>CSV</a><br>";
+				$url = "&nbsp;&nbsp;<a href='".aw_global_get("REQUEST_URI")."&get_csv_file=1' target=_blank>CSV</a><br>";
 				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br>".$url.$tbl;
 			}
 			return $tbl;
@@ -2719,7 +3034,6 @@ class form extends form_base
 			}
 		}
 	
-		$awt->stop("form::search");
 		return " ".$html;
 	}
 
@@ -2798,20 +3112,20 @@ class form extends form_base
 		
 		if ($type == "entry") 
 		{
-			$type = FORM_ENTRY;
+			$type = FTYPE_ENTRY;
 		}
 		if ($type == "search")
 		{
-			$type = FORM_SEARCH;
+			$type = FTYPE_SEARCH;
 		}
 		if ($type == "rating")
 		{
-			$type = FORM_RATING;
+			$type = FTYPE_RATING;
 		}
 
 		if ($type == "filter_search")
 		{
-			$type = FORM_FILTER_SEARCH;
+			$type = FTYPE_FILTER_SEARCH;
 		}
 
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
@@ -2860,11 +3174,16 @@ class form extends form_base
 								$elval["linked_form"] = $base;
 								$elval["linked_element"] = $elid;
 								$this->arr["elements"][$row][$col][$newel] = $elval;
+//								echo "elval linked form = $base , real = ", $this->arr["elements"][$row][$col][$newel]["linked_form"]," <br>";
+								// save element props also
+								$prp = aw_serialize($this->arr["elements"][$row][$col][$newel],SERIALIZE_XML);
+								$this->quote(&$prp);
+								$this->db_query("UPDATE form_elements SET props = '$prp' WHERE id = $newel");
 							}
 							else
 							{
 								// class style
-								$this->arr["elements"][$row][$col]["style"] = $elval;
+								$this->arr["elements"][$row][$col][$elid] = $elval;
 							}
 						}
 					}
@@ -2874,85 +3193,6 @@ class form extends form_base
 			$this->save();
 		}
 		return $this->mk_orb("change", array("id" => $id));
-	}
-
-	// here we must make a list of all the filled forms, that include element with id $arr[id]
-	function list_el_forms($arr)
-	{
-		global $awt;
-		$awt->start("form::list_el_forms");
-		$awt->count("form::list_el_forms");
-
-		extract($arr);
-		$this->read_template("objects.tpl");
-		$this->db_query("SELECT form_id FROM element2form WHERE el_id = $id");
-		$el_row = $this->db_next();
-		$form_id = $el_row["form_id"];
-		
-		global $sortby;
-		if ($sortby == "")
-			$sortby = "jrk";
-
-		global $order,$baseurl;
-		if ($order == "")
-			$order = "ASC";
-
-		global $class_defs;
-		$arr = array();
-		reset($class_defs);
-		while (list($id,$ar) = each($class_defs))
-		{
-			if ($ar["can_add"])	// only object types that can be added anywhere
-			{
-				$arr[$id] = $ar["name"];
-			}
-		}
-		$this->vars(array("parent" => $parent,"types" => $this->option_list(0,$arr)));
-		$this->vars(array("ADD_CAT" => "","form_id" => $form_id));
-
-		global $class_defs;
-
-		classload("menuedit");
-		$m = new menuedit;
-
-		$this->listacl("objects.class_id = ".CL_FORM_ENTRY." AND objects.status != 0 AND form_entries.form_id = $form_id",array("form_entries" => "form_entries.id = objects.oid"));
-		$this->db_query("SELECT objects.* FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE objects.class_id = ".CL_FORM_ENTRY." AND objects.status != 0 AND form_entries.form_id = $form_id ORDER BY $sortby $order");
-		while ($row = $this->db_next())
-		{
-			$this->dequote(&$row["name"]);
-			$inf = $class_defs[$row["class_id"]];
-			$this->vars(array("name"				=> $row["name"],
-												"oid"					=> $row["oid"], 
-												"order"				=> $row["jrk"], 
-												"active"			=> ($row["status"] == 2 ? "CHECKED" : ""),
-												"active2"			=> $row["status"],
-												"modified"		=> $this->time2date($row["modified"],2),
-												"modifiedby"	=> $row["modifiedby"],
-												"icon"				=> $m->get_icon_url($row["class_id"],$row["name"]),
-												"type"				=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
-												"change"			=> $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"])));
-			$this->vars(array("NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
-												"CAN_ACTIVE" => $this->can("active",$row["oid"]) ? $this->parse("CAN_ACTIVE") : ""));
-			$l.=$this->parse("LINE");
-		}
-
-		$this->vars(array("LINE" => $l,
-											"reforb" => $this->mk_reforb("submit_order_doc", array("parent" => $parent)),
-											"order1"			=> $sortby == "name" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg1"	=> $sortby == "name" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-											"order2"			=> $sortby == "jrk" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg2"	=> $sortby == "jrk" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-											"order3"			=> $sortby == "modifiedby" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg3"	=> $sortby == "modifiedby" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-											"order4"			=> $sortby == "modified" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg4"	=> $sortby == "modified" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-											"order5"			=> $sortby == "class_id" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg5"	=> $sortby == "class_id" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-											"order6"			=> $sortby == "status" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-											"sortedimg6"	=> $sortby == "status" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : ""
-											));
-		$awt->stop("form::list_el_forms");
-		return $this->parse();
 	}
 
 	////
@@ -3029,10 +3269,6 @@ class form extends form_base
 	// !finds the element with id $id in the loaded form and returns a reference to it
 	function &get_element_by_id($id)
 	{
-		global $awt;
-		$awt->start("form::get_element_by_id");
-		$awt->count("form::get_element_by_id");
-
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -3042,13 +3278,11 @@ class form extends form_base
 				{
 					if ($el->get_id() == $id)
 					{
-						$awt->stop("form::get_element_by_id");
 						return $el;
 					}
 				}
 			}
 		}
-		$awt->stop("form::get_element_by_id");
 		return false;
 	}
 
@@ -3058,13 +3292,8 @@ class form extends form_base
 	//
 	// nope, see ei eelda, get_element_value_by_name eeldab et miski entry on loaditud - terryf
 	// $type can be either RET_FIRST - returns the forst element or RET_ALL - returns all elements with the name
-
 	function get_element_by_name($name,$type = RET_FIRST)
 	{
-		global $awt;
-		$awt->start("form::get_element_by_name");
-		$awt->count("form::get_element_by_name");
-
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -3077,8 +3306,6 @@ class form extends form_base
 					{
 						if ($type == RET_FIRST)
 						{
-							$awt->start("form::get_element_by_name");
-		$awt->count("form::get_element_by_name");
 
 							return $el;
 						}
@@ -3090,8 +3317,6 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->start("form::get_element_by_name");
-		$awt->count("form::get_element_by_name");
 
 		if ($type == RET_FIRST || !is_array($ret))
 		{
@@ -3109,10 +3334,6 @@ class form extends form_base
 	// names(array) - array nimedest, mille id-sid me teada tahame
 	function get_ids_by_name($args = array())
 	{
-		global $awt;
-		$awt->start("form::get_ids_by_name");
-		$awt->count("form::get_ids_by_name");
-
 		extract($args);
 		$retval = array();
 		$namelist = array_flip($names);
@@ -3134,36 +3355,13 @@ class form extends form_base
 				};
 			};
 		};
-		$awt->stop("form::get_ids_by_name");
 		return $retval;
-	}
-	////
-	// !Teeb paringu entryte saamiseks laaditud vormi juures
-	function get_entries($args = array())
-	{
-		global $awt;
-		$awt->start("form::get_entries");
-		$awt->count("form::get_entries");
-
-		extract($args);
-		// kui parent on antud, siis moodustame sellest IN klausli
-		$pstr = ($parent) ? " WHERE objects.parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
-		$fid = ($id) ? $id : $this->id;
-
-		$table = sprintf("form_%d_entries",$fid);
-		$q = "SELECT * FROM $table LEFT JOIN objects ON ($table.id = objects.oid) $pstr";
-		$this->db_query($q);
-		$awt->stop("form::get_entries");
 	}
 
 	////
 	// !finds the first element with type $type (and subtype $subtype) in the loaded form and returns a reference to it
 	function get_element_by_type($type,$subtype = "",$all_els = false)
 	{
-		global $awt;
-		$awt->start("form::get_element_by_type");
-		$awt->count("form::get_element_by_type");
-
 		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -3175,7 +3373,6 @@ class form extends form_base
 				{
 					if ($el->get_type() == $type && ($subtype == "" || $el->get_subtype() == $subtype))
 					{
-						$awt->stop("form::get_element_by_type");
 						if ($all_els)
 						{
 							$ret[] = $el;
@@ -3188,7 +3385,6 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->stop("form::get_element_by_type");
 		if ($all_els)
 		{
 			return $ret;
@@ -3242,11 +3438,11 @@ class form extends form_base
 
 		if (!($r == $row && $c == $col))
 		{
-			$this->arr[elements][$r][$c][$el_id] = $this->arr[elements][$row][$col][$el_id];
-			unset($this->arr[elements][$row][$col][$el_id]);
-			if (!is_array($this->arr[elements][$row][$col]))
+			$this->arr["elements"][$r][$c][$el_id] = $this->arr["elements"][$row][$col][$el_id];
+			unset($this->arr["elements"][$row][$col][$el_id]);
+			if (!is_array($this->arr["elements"][$row][$col]))
 			{
-				$this->arr[elements][$row][$col] = array();
+				$this->arr["elements"][$row][$col] = array();
 			}
 			$this->save();
 		}
@@ -3315,7 +3511,9 @@ class form extends form_base
 
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
 		if (!($cnt = $this->db_next()))
+		{
 			$this->raise_error(ERR_FG_EMETAINFO,"form->metainfo(): weird error!", true);
+		}
 
 		$this->vars(array("created"			=> $this->time2date($row["created"],2), 
 											"created_by"	=> $row["createdby"],
@@ -3344,19 +3542,13 @@ class form extends form_base
 	// !returns the value of the entered element. form entry must be loaded before calling this.
 	function get_element_value_by_name($name)
 	{
-		global $awt;
-		$awt->start("form::get_element_value_by_name");
-		$awt->count("form::get_element_value_by_name");
-
 		$el = $this->get_element_by_name($name);
 		if (!$el)
 		{
-			$awt->stop("form::get_element_value_by_name");
 			return false;
 		}
 
 		$va = $el->get_value();
-		$awt->stop("form::get_element_value_by_name");
 		return $va;
 	}
 
@@ -3365,19 +3557,13 @@ class form extends form_base
 	// ignores the rest. form entry must be loaded before calling this.
 	function get_element_value_by_type($type,$subtype = "")
 	{
-		global $awt;
-		$awt->start("form::get_element_value_by_type");
-		$awt->count("form::get_element_value_by_type");
-
 		$el = $this->get_element_by_type($type,$subtype);
 		if (!$el)
 		{
-			$awt->stop("form::get_element_value_by_type");
 			return false;
 		}
 
 		$va = $el->get_value();
-		$awt->stop("form::get_element_value_by_type");
 		return $va;
 	}
 
@@ -3385,18 +3571,12 @@ class form extends form_base
 	// !returns the value of element with id $id
 	function get_element_value($id)
 	{
-		global $awt;
-		$awt->start("form::get_element_value");
-		$awt->count("form::get_element_value");
-
 		$el = $this->get_element_by_id($id);
 		if ($el)
 		{
 			$ev =  $el->get_value();
-			$awt->stop("form::get_element_value");
 			return $ev;
 		}
-		$awt->stop("form::get_element_value");
 		return "";
 	}
 
@@ -3404,10 +3584,6 @@ class form extends form_base
 	// !sets the element $id's value in the loaded entry to $val
 	function set_element_value($id,$val)
 	{
-		global $awt;
-		$awt->start("form::set_element_value");
-		$awt->count("form::set_element_value");
-
 		$this->entry[$id] = $val;
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
@@ -3416,24 +3592,18 @@ class form extends form_base
 				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
 			};
 		};
-		$awt->stop("form::set_element_value");
 	}
 
 	////
 	// !sets the element value in the loaded entry to $val fort elements of type $type
 	function set_element_value_by_type($type,$val)
 	{
-		global $awt;
-		$awt->start("form::set_element_value");
-		$awt->count("form::set_element_value");
-
 		$el = $this->get_element_by_type($type);
 		if ($el)
 		{
 			$id = $el->get_id();
 			$this->set_element_value($id,$val);
 		}
-		$awt->stop("form::set_element_value");
 	}
 
 	////
@@ -3448,10 +3618,6 @@ class form extends form_base
 	// type values are defined in the beginning of this file
 	function get_elements_for_row($row,$type = ARR_ELNAME)
 	{
-		global $awt;
-		$awt->start("form::get_elements_for_row");
-		$awt->count("form::get_elements_for_row");
-
 		$ret = array();
 		for ($col = 0; $col < $this->arr["cols"]; $col++)
 		{
@@ -3471,7 +3637,6 @@ class form extends form_base
 				$ret[$k] = $el->get_value();
 			}
 		}
-		$awt->stop("form::get_elements_for_row");
 		return $ret;
 	}
 
@@ -3491,10 +3656,6 @@ class form extends form_base
 	// if $type == ARR_ELID, then array index is element id
 	function get_element_values($type = ARR_ELNAME)
 	{
-		global $awt;
-		$awt->start("form::get_element_values");
-		$awt->count("form::get_element_values");
-
 		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -3517,7 +3678,6 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->stop("form::get_element_values");
 		return $ret;
 	}
 
@@ -3525,10 +3685,6 @@ class form extends form_base
 	// returns the entry in an array that you can feed to restore_entry to revert the saved entry to the old data
 	function get_entry($form_id,$entry_id,$id_only = false)
 	{
-		global $awt;
-		$awt->start("form::get_entry");
-		$awt->count("form::get_entry");
-
 		$ret = array();
 		$this->db_query("SELECT * FROM form_".$form_id."_entries WHERE id = $entry_id");
 		$row =  $this->db_next();
@@ -3550,7 +3706,6 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->stop("form::get_entry");
 		return $ret;
 	}
 
@@ -3607,9 +3762,22 @@ class form extends form_base
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			echo "ALTER TABLE form_".$row["oid"]."_entries add index chain_id(chain_id)<br>\n";
-			flush();
-			$this->db_query("ALTER TABLE form_".$row["oid"]."_entries add index chain_id(chain_id)");
+			
+			$this->db_query("SELECT * FROM element2form WHERE form_id = ".$row["oid"]);
+			while ($erow = $this->db_next())
+			{
+				$this->save_handle();
+				
+				echo "q = ALTER TABLE form_".$row["oid"]."_entries ADD index ev_".$erow["el_id"]."(ev_".$erow["el_id"]."(10)) ";
+				flush();
+				$this->db_query("ALTER TABLE form_".$row["oid"]."_entries ADD index ev_".$erow["el_id"]."(ev_".$erow["el_id"]."(10))");
+				echo "q = ALTER TABLE form_".$row["oid"]."_entries ADD index el_".$erow["el_id"]."(ev_".$erow["el_id"]."(10)) ";
+				flush();
+				$this->db_query("ALTER TABLE form_".$row["oid"]."_entries ADD index el_".$erow["el_id"]."(el_".$erow["el_id"]."(10))");
+				
+				$this->restore_handle();
+			}
+			
 			$this->restore_handle();
 		}
 	}
@@ -3642,11 +3810,10 @@ class form extends form_base
 	function conventries()
 	{
 		$run = true;
-//		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
 		
-//		while ($frow = $this->db_next())
-//		{
-	$frow=array("oid" => 1735);
+		while ($frow = $this->db_next())
+		{
 
 			if ($run)
 			{
@@ -3696,7 +3863,7 @@ class form extends form_base
 
 			$this->restore_handle();
 			}
-//		}
+		}
 	}
 
 	function convchains()
@@ -3763,6 +3930,7 @@ class form extends form_base
 			"el_menus" => $this->multiple_option_list($this->arr["el_menus"], $menulist),
 			"el_menus2" => $this->multiple_option_list($this->arr["el_menus2"], $menulist),
 			"el_move_menus" => $this->multiple_option_list($this->arr["el_move_menus"], $menulist),
+			"form_controller_folders" => $this->multiple_option_list($this->arr["controller_folders"], $menulist),
 			"reforb"	=> $this->mk_reforb("save_folders", array("id" => $id))
 		));
 		return $this->do_menu_return();
@@ -3785,29 +3953,16 @@ class form extends form_base
 		$this->arr["tear_folder"] = $tear_folder;
 
 		// kataloogid, kuhu saab uusi elemente salvestada
-		$this->arr["el_menus"] = "";
-		if (is_array($el_menus))
-		{
-			foreach($el_menus as $menuid)
-			{
-				$this->arr["el_menus"][$menuid] = $menuid;
-			}
-		}
+		$this->arr["el_menus"] = $this->make_keys($el_menus);
 
 		// formid kust saab seoseelemente valida
-		if (is_array($relation_forms))
-		{
-			foreach($relation_forms as $r_fid)
-			{
-				$this->arr["relation_forms"][$r_fid] = $r_fid;
-			}
-		}
+		$this->arr["relation_forms"] = $this->make_keys($relation_forms);
 
+		// kataloogid kuhu saab elemente liigutada
 		classload("objects");
 		$iobj = new db_objects;
 		$ms = $iobj->get_list();
-		// kataloogid kuhu saab elemente liigutada
-		$this->arr["el_move_menus"] = "";
+		$this->arr["el_move_menus"] = array();
 		if (is_array($el_move_menus))
 		{
 			foreach($el_move_menus as $menuid)
@@ -3816,15 +3971,10 @@ class form extends form_base
 			}
 		}
 
-		$this->arr["el_menus2"] = "";
-		if (is_array($el_menus2))
-		{
-			foreach($el_menus2 as $menuid)
-			{
-				$this->arr["el_menus2"][$menuid] = $menuid;
-			}
-		}
+		// kataloogid, kust alt kontrollereid valida lastakse
+		$this->arr["controller_folders"] = $this->make_keys($form_controller_folders);
 
+		$this->arr["el_menus2"] = $this->make_keys($el_menus2);
 		$this->arr["main_folders"] = $this->make_keys($main_folders);
 
 		$this->save();
@@ -3833,10 +3983,6 @@ class form extends form_base
 
 	function get_search_targets()
 	{
-		global $awt;
-		$awt->start("form::get_search_targets");
-		$awt->count("form::get_search_targets");
-
 		$ret = array();
 		if ($this->arr["new_search_engine"] == 1)
 		{
@@ -3858,16 +4004,11 @@ class form extends form_base
 				}
 			}
 		}
-		$awt->stop("form::get_search_targets");
 		return $ret;
 	}
 
 	function get_relation_targets()
 	{
-		global $awt;
-		$awt->start("form::get_relation_targets");
-		$awt->count("form::get_relation_targets");
-
 		$ret = array();
 		if (is_array($this->arr["relation_forms"]))
 		{
@@ -3877,7 +4018,6 @@ class form extends form_base
 				$ret[$fid] = $o["name"];
 			}
 		}
-		$awt->stop("form::get_relation_targets");
 		return $ret;
 	}
 
@@ -4159,6 +4299,39 @@ class form extends form_base
 				}
 			}
 		}
+
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					$mtd = $el->get_metadata();
+					foreach($mtd as $mtk => $mtv)
+					{
+						$lcol7 = "";
+						foreach($langs as $lar)
+						{
+							$this->vars(array(
+								"text" => $el->arr["metadata"][$lar["id"]][$mtk],
+								"col" => $col,
+								"row" => $row,
+								"mtk" => $mtk,
+								"elid" => $el->get_id(),
+								"lang_id" => $lar["id"],
+							));
+							$lcol7.=$this->parse("LCOL7");
+						}
+						$this->vars(array("LCOL7" => $lcol7));
+						$lrow7.=$this->parse("LROW7");
+					}
+				}
+			}
+		}
+
 		$this->vars(array(
 			"LROW" => $lrow,
 			"LROW1" => $lrow1,
@@ -4167,6 +4340,7 @@ class form extends form_base
 			"LROW4" => $lrow4,
 			"LROW5" => $lrow5,
 			"LROW6" => $lrow6,
+			"LROW7" => $lrow7,
 			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
 		));
 
@@ -4223,6 +4397,8 @@ class form extends form_base
 							}
 						}
 					}
+					// now set metadata
+					$this->arr["elements"][$row][$col][$el->get_id()]["metadata"] = $w[$row][$col][$el->get_id()];
 				}
 			}
 		}
@@ -4637,11 +4813,7 @@ class form extends form_base
 	// !generates the form for selecting the used filter
 	function gen_filter_search_sel($arr)
 	{
-		global $awt;
 		$page=(int)$page;
-		$awt->start("form::gen_filter_search_sel");
-		$awt->count("form::gen_filter_search_sel");
-
 		extract($arr);
 		$this->init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
 
@@ -4700,7 +4872,6 @@ class form extends form_base
 			"reforb"	=> $this->mk_reforb("save_filter_search_sel", array("id" => $this->id,"page" => $page)),
 		));
 
-		$awt->stop("form::gen_filter_search_sel");
 		return $this->do_menu_return();
 	}
 
@@ -4780,6 +4951,87 @@ class form extends form_base
 			$ret[$el->arr["linked_element"]] = $el->get_id();
 		}
 		return $ret;
+	}
+
+	////
+	// !removes controller $controller for type $type from element $element in the loaded form
+	function remove_controller_from_element($arr)
+	{
+		extract($arr);
+		$el = $this->get_element_by_id($element);
+		if ($el)
+		{
+			$this->arr["contents"][$el->get_row()][$el->get_col()]->remove_controller_from_element($arr);
+			$this->arr["contents"][$el->get_row()][$el->get_col()]->prep_save();
+		}
+	}
+
+	function get_current_chain_entry()
+	{
+		return $this->current_chain_entry;
+	}
+
+	function set_current_chain_entry($id)
+	{
+		$this->current_chain_entry = $id;
+	}
+	
+	function gen_calendar($args = array())
+	{
+		extract($args);
+		$this->init($id,"calendar.tpl", "Kalendrisätungid");
+		$period_types = array("hour" => "tund", "day" => "päev", "week" => "nädal", "month" => "kuu");
+		$deact_types = array("hour" => "tundi", "day" => "päeva", "week" => "nädalat", "month" => "kuud");
+
+		$this->get_objects_by_class(array("class" => CL_FORM));
+		$forms = $chains = array();
+		while($row = $this->db_next())
+		{
+			$forms[$row["oid"]] = $row["name"];
+		};
+			
+		$this->get_objects_by_class(array("class" => CL_FORM_CHAIN));
+		while($row = $this->db_next())
+		{
+			$chains[$row["oid"]] = $row["name"];
+		};
+
+		$of_target_type = ($this->arr["of_target_type"]) ? $this->arr["of_target_type"] : "form";
+		
+		$this->vars(array(
+			"period_entry_forms" => $this->picker($this->arr["period_entry_form"],$forms),
+			"forms" => $this->picker($this->arr["of_target_form"],$forms),
+			"chains" => $this->picker($this->arr["of_target_chain"],$chains),
+			"form_checked" => checked($of_target_type == "form"),
+			"chain_checked" => checked($of_target_type == "chain"),
+			"reforb"	=> $this->mk_reforb("submit_calendar", array("id" => $this->id))
+		));
+		$res = "";
+		if ($this->arr["has_calendar"])
+		{
+			$this->parse("HAS_CALENDAR");
+		};
+
+		if ($this->arr["is_order_form"])
+		{
+			$this->parse("IS_ORDER_FORM");
+		};
+		
+		return $this->do_menu_return();				
+	}
+
+	function submit_calendar($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$this->load($id);
+		$this->arr["period_entry_form"] = $period_entry_form;
+		$this->arr["of_target_form"] = $of_target_form;
+		$this->arr["of_target_chain"] = $of_target_chain;
+		$this->arr["of_target_type"] = $of_target_type;
+		$this->save();
+		return $this->mk_my_orb("calendar",array("id" => $id));
+
 	}
 };	// class ends
 ?>

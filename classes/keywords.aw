@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.37 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.38 2002/06/10 15:50:53 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
-global $orb_defs;
-$orb_defs["keywords"] = "xml";
 classload("defs");
 
 define("ARR_LISTID", 1);
@@ -12,8 +10,7 @@ class keywords extends aw_template
 {
 	function keywords($args = array())
 	{
-		$this->db_init();
-		$this->tpl_init("automatweb/keywords");
+		$this->init("automatweb/keywords");
 		lc_load("definition");
 	}
 
@@ -90,7 +87,7 @@ class keywords extends aw_template
 		$data = " $data ";
 		while($row = $this->db_next())
 		{
-			$row[keyword] = str_replace("/","\/",$row[keyword]);
+			$row["keyword"] = str_replace("/","\/",$row["keyword"]);
 			if (preg_match("/$row[keyword]/i",$data))
 			{
 				$this->save_handle();
@@ -155,7 +152,7 @@ class keywords extends aw_template
 	{
 		extract($args);
 		$this->read_template("users.tpl");
-		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
+		$this->info["site_title"] = "<a href='orb.".$this->cfg["ext"]."?class=keywords&action=list'>Keywords</a>";
 		$q = "SELECT users.uid AS uid,
 				users.email AS email,
 				ml_users.name AS name,
@@ -169,10 +166,10 @@ class keywords extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->vars(array(
-					"uid" => $row["uid"],
-					"email" => $row["mail"],
-					"name" => $row["name"],
-					"tm" => ($row["tm"]) ? $this->time2date($row["tm"],2) : "(info puudub)",
+				"uid" => $row["uid"],
+				"email" => $row["mail"],
+				"name" => $row["name"],
+				"tm" => ($row["tm"]) ? $this->time2date($row["tm"],2) : "(info puudub)",
 			));
 			$c .= $this->parse("LINE");
 		};
@@ -184,7 +181,7 @@ class keywords extends aw_template
 	function notify($args = array())
 	{
 		extract($args);
-		$gp = $this->get_object(KEYWORD_LISTS);
+		$gp = $this->get_object($this->cfg["list"]);
 		$doc = $this->get_object($id);
 		$q = "SELECT keywords.list_id AS list_id,keywords.keyword AS keyword  FROM keywords2objects
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
@@ -201,8 +198,8 @@ class keywords extends aw_template
 		$kw = join(",",$kwa);
 		classload("email");
 		$email = new email();
-		$this->info["site_header"] ="<a href='orb.aw?class=document&action=change&id=$id'>Dokument</a>";
-		global $baseurl;
+		$this->info["site_header"] ="<a href='orb.".$this->cfg["ext"]."?class=document&action=change&id=$id'>Dokument</a>";
+		$baseurl = $this->cfg["baseurl"];
 		foreach($lx as $row)
 		//while($row = $this->db_next())
 		{
@@ -239,16 +236,16 @@ class keywords extends aw_template
 			else
 			{
 				$content = $ml["contents"];
-				$content = str_replace("#url#","$baseurl/index.aw?section=$id",$content);
+				$content = str_replace("#url#","$baseurl/index.".$this->cfg["ext"]."?section=$id",$content);
 				$content = str_replace("#title#",$doc["name"],$content);
 				$content = str_replace("#keyword#",$kw,$content);
 				$email->mail_members(array(
-						"list_id" => $row["list_id"],
-						"name" => $ml["mail_from_name"],
-						"from" => $ml["mail_from"],
-						"subject" => $ml["subj"],
-						"content" => $content,
-						"cache"   => 1,
+					"list_id" => $row["list_id"],
+					"name" => $ml["mail_from_name"],
+					"from" => $ml["mail_from"],
+					"subject" => $ml["subj"],
+					"content" => $content,
+					"cache"   => 1,
 				));
 			};
 		};
@@ -262,14 +259,14 @@ class keywords extends aw_template
 		classload("list");
 		$list = new mlist();
 		$list->remove_user_from_lists(array(
-					"uid" => UID,
+			"uid" => aw_global_get("uid"),
 		));
 		$list->add_user_to_lists(array(
-					"uid" => UID,
-					"name" => $name,
-					"email" => $email,
-					"list_ids" => $lists,
-				));
+			"uid" => aw_global_get("uid"),
+			"name" => $name,
+			"email" => $email,
+			"list_ids" => $lists,
+		));
 		global $status_msg;
 		$status_msg = LC_KEYWORDS_CHANGES_SAVED;
 		session_register("status_msg");
@@ -278,8 +275,7 @@ class keywords extends aw_template
 		{
 			$res = urldecode($gotourl);
 		}
-		global $baseurl;
-		return $baseurl . $res;
+		return $this->cfg["baseurl"] . $res;
 	}
 	
 	////
@@ -323,18 +319,18 @@ class keywords extends aw_template
 		};
 
 		// vahepeal kui on defineeritud m2rks6nu valinud tyypide grupp, siis paneme ta sinna gruppi ka
-		if ($GLOBALS["keywords_dyn_group"])
+		if ($this->cfg["dyn_group"])
 		{
 			classload("users_user");
 			$usu = new users_user;
-			$usu->add_users_to_group($GLOBALS["keywords_dyn_group"], array($GLOBALS["uid"]),0,true);
+			$usu->add_users_to_group($this->cfg["dyn_group"], array(aw_global_get("uid")),0,true);
 		}
 
 		// ja nyyd koostame meili
 		$txt = "";
 		$txt .= sprintf(LC_KEYWORDS_NAME,$name);
 		$txt .= sprintf(LC_KEYWORDS_ADDRESS,$email);
-		$uid = UID;
+		$uid = aw_global_get("uid");
 		foreach($kw as $key => $val)
 		{
 			$txt .= "\n" . $catnamelist[$key] . "\n";
@@ -348,18 +344,17 @@ class keywords extends aw_template
 		classload("list");
 		$list = new mlist();
 		$list->remove_user_from_lists(array(
-					"uid" => UID,
+			"uid" => aw_global_get("uid"),
 		));
 		$list->add_user_to_lists(array(
-					"uid" => UID,
-					"name" => $name,
-					"email" => $email,
-					"list_ids" => $lists,
-				));
+			"uid" => aw_global_get("uid"),
+			"name" => $name,
+			"email" => $email,
+			"list_ids" => $lists,
+		));
 		$from = sprintf("%s <%s>",$name,$email);
 		mail(KW_MAIL,KW_SUBJECT,$txt,"From: $from");
-		global $baseurl,$ext;
-		$retval = "$baseurl/index.$ext?section=$after";
+		$retval = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=$after";
 		return $retval;
 	}
 
@@ -393,7 +388,7 @@ class keywords extends aw_template
 		$this->db_query($q);
 		$c = "";
 		$last = "";
-		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
+		$this->info["site_title"] = "<a href='orb.".$this->cfg["ext"]."?class=keywords&action=list'>Keywords</a>";
 		while($row = $this->db_next())
 		{
 			if ($last != $row["cname"])
@@ -430,8 +425,10 @@ class keywords extends aw_template
 			));
 			$c .= $this->parse("LINE");
 		};
-		$this->vars(array("LINE" => $c,
-				"reforb" => $this->mk_reforb("delete_keywords",array())));
+		$this->vars(array(
+			"LINE" => $c,
+			"reforb" => $this->mk_reforb("delete_keywords",array())
+		));
 		return $this->parse();
 	}
 	
@@ -507,8 +504,6 @@ class keywords extends aw_template
 			$begar[$beg] = strlen($beg);
 		}
 
-		global $strip_keyword_grps;
-
 		$q = "SELECT list_id,keyword,id FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
@@ -526,7 +521,7 @@ class keywords extends aw_template
 
 			if ($match)
 			{
-				if ($strip_keyword_grps)
+				if ($this->cfg["strip_grps"])
 				{
 					$row["keyword"] = preg_replace("/(.*\/)/","",$row["keyword"]);
 				}
@@ -623,10 +618,10 @@ class keywords extends aw_template
 				$newid++;
 				$this->save_handle();
 				$list_id = $lists->create_list(array(
-								"parent" => KEYWORD_LISTS,
-								"name" => $keyword,
-								"comment" => LC_KEYWORDS_AUTOMAG_LIST,
-							));
+					"parent" => $this->cfg["list"],
+					"name" => $keyword,
+					"comment" => LC_KEYWORDS_AUTOMAG_LIST,
+				));
 				$this->restore_handle();
 				$q = "INSERT INTO keywords (id,list_id,keyword,category_id) VALUES ('$newid','$list_id','$keyword','$catid')";
 				$this->db_query($q);
@@ -640,10 +635,6 @@ class keywords extends aw_template
 				$this->db_query($q);
 			};
 			// otherwise pole midagi vaja teha
-				
-				
-				
-
 		};
 
 		// nüüd peaksid koik votmesonad baasis kajastatud olema
@@ -653,7 +644,6 @@ class keywords extends aw_template
 		$this->db_query($q);
 
 		// ja loome uued
-
 		foreach($klist as $val)
 		{
 			$q = sprintf("INSERT INTO keywords2objects (oid,keyword_id) VALUES ('%d','%s')",$oid,$ids[$val]);
@@ -667,11 +657,8 @@ class keywords extends aw_template
 	// see peaks vist tegelikult hoopis mujal klassis olema
 	function _get_user_data($args = array())
 	{
-		classload("users_user","form");
-		$u = new users_user();
-		$udata = $u->get_user(array(
-				"uid" => UID,
-			));
+		classload("form");
+		$udata = $this->get_user();
 		$jf = unserialize($udata["join_form_entry"]);
 		$eesnimi = $perenimi = "";
 		if (is_array($jf))
@@ -717,9 +704,9 @@ class keywords extends aw_template
 		elseif (preg_match("/_check algus=\"(.*)\" go=\"(.*)\"/",$matches[2], $maat))
 		{
 			$retval = $this->show_interests_form2(array(
-						"beg" => $maat[1],
-						"section" => $maat[2],
-					));
+				"beg" => $maat[1],
+				"section" => $maat[2],
+			));
 		}
 		elseif (preg_match("/_kategooriad go=\"(.*)\"/",$matches[2], $maat))
 		{
@@ -739,16 +726,15 @@ class keywords extends aw_template
 		classload("list");
 		$mlist = new mlist();
 		$act = $mlist->get_user_lists(array(
-					"uid" => UID,
-					));
-		global $REQUEST_URI,$ext;
+			"uid" => aw_global_get("uid"),
+		));
 		$udata = $this->_get_user_data();
 		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		$this->vars(array(
-				"name" => $name,
-				"email" => $udata["Email"],
-				"keywords" => $this->multiple_option_list($act,$this->get_all_keywords(array("beg" => $beg))),
-				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
+			"name" => $name,
+			"email" => $udata["Email"],
+			"keywords" => $this->multiple_option_list($act,$this->get_all_keywords(array("beg" => $beg))),
+			"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.".$this->cfg["ext"]."?section=$section")))
 		));
 		return $this->parse();
 	}
@@ -762,27 +748,26 @@ class keywords extends aw_template
 		$mlist = new mlist();
 		$kw = new keywords();
 		$act = $mlist->get_user_lists(array(
-				"uid" => UID,
-			));
-		global $ext;
+			"uid" => aw_global_get("uid"),
+		));
 		$kwlist = $this->get_all_keywords(array("beg" => $beg));
 		$ret = "";
 		foreach($kwlist as $k => $v)
 		{
 			$this->vars(array(
-					"checked" => ($act[$k]) ? "checked" : "",
-					"id" => $k,
-					"keyword" => $v,
+				"checked" => ($act[$k]) ? "checked" : "",
+				"id" => $k,
+				"keyword" => $v,
 			));
 			$ret .= $this->parse("keywords");
 		};
 		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		$this->vars(array(
-				"name" => $name,
-				"email" => $udata["Email"],
-				"keywords" => $ret,
-				"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.$ext?section=$section"))),
-			));
+			"name" => $name,
+			"email" => $udata["Email"],
+			"keywords" => $ret,
+			"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.".$this->cfg["ext"]."?section=$section"))),
+		));
 		return $this->parse();
 	}
 
@@ -792,10 +777,8 @@ class keywords extends aw_template
 		$mlist = new mlist();
 		$kw = new keywords();
 		$act = $mlist->get_user_lists(array(
-				"uid" => UID,
-			));
-		global $ext;
-		//$kwlist = $this->get_all_keywords(array("beg" => $beg));
+			"uid" => aw_global_get("uid"),
+		));
 
 		$cats = join(",",array_keys($act));
 				
@@ -819,14 +802,16 @@ class keywords extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->vars(array(
-					"id" => $row["id"],
-					"name" => $row["name"],	
-					"checked" => ($cids[$row["id"]]) ? "checked" : "",
+				"id" => $row["id"],
+				"name" => $row["name"],	
+				"checked" => ($cids[$row["id"]]) ? "checked" : "",
 			));
 			$c .= $this->parse("line");
 		};
-		$this->vars(array("line" => $c,
-				  "reforb" => $this->mk_reforb("select_keywords",array("after" => $after))));
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("select_keywords",array("after" => $after))
+		));
 		return $this->parse();
 	}
 
@@ -836,15 +821,14 @@ class keywords extends aw_template
 		classload("list");
 		$mlist = new mlist();
 		$act = $mlist->get_user_lists(array(
-					"uid" => UID,
-					));
+			"uid" => aw_global_get("uid"),
+		));
 		$this->read_template("pick_keywords.tpl");
-		global $HTTP_REFERER;
 		$udata = $this->_get_user_data();
 		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		if (!is_array($category))
 		{
-			$retval = $HTTP_REFERER;
+			$retval = aw_global_get("HTTP_REFERER");
 		}
 		else
 		{
@@ -861,19 +845,21 @@ class keywords extends aw_template
 				while($row = $this->db_next())
 				{
 					$this->vars(array(
-							"checked" => ($act[$row["list_id"]]) ? "checked" : "",
-							"keyword" => $row["keyword"],
-							"id" => $row["id"],
+						"checked" => ($act[$row["list_id"]]) ? "checked" : "",
+						"keyword" => $row["keyword"],
+						"id" => $row["id"],
 					));
 					$d .= $this->parse("line.subline");
 				};
 				$this->vars(array("subline" => $d));
 				$c .= $this->parse("line");
 			}
-			$this->vars(array("line" => $c,
-					  "name" => $name,
-					  "reforb" => $this->mk_reforb("submit_interests2",array("after" => $after)),
-					  "email"=> $udata["Email"]));
+			$this->vars(array(
+				"line" => $c,
+				"name" => $name,
+				"reforb" => $this->mk_reforb("submit_interests2",array("after" => $after)),
+				"email"=> $udata["Email"]
+			));
 			$retval = $this->parse();
 		};
 		return $retval;
@@ -998,6 +984,7 @@ class keywords extends aw_template
 		{
 			$kwds[$row["oid"]] = $row;
 		}
+
 		classload("objects");
 		$ob = new objects;
 		$menus = $ob->get_list();

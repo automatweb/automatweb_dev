@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' method=post>
+<form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0 width=80%>
 <tr>
 <td class="fcaption">{VAR:LC_MAILINGLIST_SMALL_VARIABLES}:</td><td class="fform">
@@ -44,7 +44,5 @@
 <td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_MAILINGLIST_SAVE}' NAME='save_mail'>&nbsp;<input class='small_button' type='submit' VALUE='{VAR:LC_MAILINGLIST_SEND}' NAME='send_mail'></td>
 </tr>
 </table>
-<input type='hidden' NAME='action' VALUE='admin_mail'>
-<input type='hidden' NAME='mail_id' VALUE='{VAR:mail_id}'>
-<input type='hidden' NAME='parent' VALUE='{VAR:parent}'>
+{VAR:reforb}
 </form>

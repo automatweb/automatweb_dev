@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_xml.aw,v 2.1 2001/11/20 13:25:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_xml.aw,v 2.2 2002/06/10 15:50:52 kristo Exp $
 // AW_XML parser
 class aw_xml {
 
@@ -11,7 +11,6 @@ class aw_xml {
 	function aw_xml($args = array())
 	{
 		extract($args);
-			
 	}
 
 	function parse($args = array())

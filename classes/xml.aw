@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.8 2001/11/28 10:07:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.9 2002/06/10 15:50:54 kristo Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 // now, I'm working on adding XML-RPC format support for this.
-class xml {
+class xml 
+{
 	////
 	// !Konstruktor
 	function xml($args = array())
@@ -28,10 +29,6 @@ class xml {
 	// !Genereerib parameetrige pohjal tag-i
 	function xml_gen_tag($args = array())
 	{
-		global $awt;
-		$awt->start("xml::xml_gen_tag");
-		$awt->count("xml::xml_gen_tag");
-
 		// nende m‰rkide puhul kasutame tagi v‰‰rtuse esitamisel CDATA notatsiooni,
 		// vastasel juhul lihtsalt v‰ljastame stringi
 		$specials = array("<",">","\"");
@@ -77,7 +74,6 @@ class xml {
 		{
 			$retval = $spacer . "<$tag>" . $value . "</$tag>" . "\n";
 		};
-		$awt->stop("xml::xml_gen_tag");
 		return $retval;
 	}
 
@@ -86,15 +82,10 @@ class xml {
 	// arg - array
 	function xml_serialize($arg = array())
 	{
-		global $awt;
-		$awt->start("xml::xml_serialize");
-		$awt->count("xml::xml_serialize");
-
 		$tmp = $this->_xml_serialize($arg);
 		$r = $this->_complete_definition(array(
-							"data" => $tmp,
-						));
-		$awt->stop("xml::xml_serialize");
+			"data" => $tmp,
+		));
 		return $r;
 	}
 
@@ -112,10 +103,6 @@ class xml {
 			return;
 		};
 	
-		global $awt;
-		$awt->start("xml::_xml_serialize");
-		$awt->count("xml::_xml_serialize");
-
 		$tmp = "";
 		$realval = "";
 	
@@ -143,14 +130,13 @@ class xml {
 			else
 			{
 				$realval .= $this->xml_gen_tag(array(
-							"tag" => $key,
-							"value" => $val,
-							"spacer" => $spacer,
-						));
+					"tag" => $key,
+					"value" => $val,
+					"spacer" => $spacer,
+				));
 			};
 			$tmp = $realval;
 		};
-		$awt->stop("xml::_xml_serialize");
 		return $tmp;
 	}
 
@@ -159,15 +145,10 @@ class xml {
 	// source - xml
 	function xml_unserialize($args = array())
 	{
-		global $awt;
-		//$awt->start("xml::xml_unserialize");
-		//$awt->count("xml::xml_unserialize");
-
 		$source = $args["source"];
 		$retval = array();
 		$ckeys = array();
 		
-		//$awt->start("xml::xml_unserialize::parsers");
 		// parsimist enam kiiremaks ei saa, see toimub enivei PHP siseselt
 		$parser = xml_parser_create();
 		
@@ -181,10 +162,6 @@ class xml {
 		// Good parser. Now go back where you came from
 		xml_parser_free($parser);
 
-		//$awt->stop("xml::xml_unserialize::parsers");
-
-		//$awt->start("xml::xml_unserialize::php");
-
 		$datablock = "";
 		$ckeys = array();
 
@@ -194,9 +171,7 @@ class xml {
 			{
 				continue;
 			};
-			//$awt->start("xml::unserialize::datacycles");
 			$tag = $v1["tag"];
-			//$awt->start("xml::unserialize::prefix_replace");
 		
 			// hm. mulle tundub, et seda voiks teha str_replacega, mis annaks ilmselt pisikese kiirusevoidu ka.
 			$pref_idx = strpos($tag,$this->num_prefix);
@@ -214,7 +189,6 @@ class xml {
 			//	$tag = str_replace($this->num_prefix,"",$tag);
 			//};
 
-			//$awt->stop("xml::unserialize::prefix_replace");
 		
 			// kui lopetet tag, siis on meil v‰‰rtus k‰es, ja rohkem pole vaja midagi teha
 			if ($v1["type"]	== "complete")

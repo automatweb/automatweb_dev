@@ -8,12 +8,20 @@
 classload("tt");
 class LineGraph extends TTGraph
 {
-
 	function LineGraph($border,$inside,$frame)
 	{
-		if ($border=="") $border=1;
-		if ($frame=="") $border=5;
-		if ($inside=="") $inside=40;
+		if ($border=="") 
+		{
+			$border=1;
+		}
+		if ($frame=="") 
+		{
+			$border=5;
+		}
+		if ($inside=="") 
+		{
+			$inside=40;
+		}
 		$this->setBorderWidth($border);
 		$this->setFrameWidth($frame);
 		$this->setInsideWidth($inside);
@@ -51,9 +59,8 @@ class LineGraph extends TTGraph
 			if ($values[$i]==0) $values[$i]=0.0000001;
 			if ($values[$i] > 0)
 			{
-
-			$height = ($minHeight - (abs($values[$i] - $this->minValue)*$yp));
-			imageline($this->image,$beginx,$beginy,$nextCol + ($this->colSize/2),$height,$color);
+				$height = ($minHeight - (abs($values[$i] - $this->minValue)*$yp));
+				imageline($this->image,$beginx,$beginy,$nextCol + ($this->colSize/2),$height,$color);
 				$beginx=$nextCol + ($this->colSize/2);
 				$beginy = ($height+$this->minHeight);
 	
@@ -64,11 +71,11 @@ class LineGraph extends TTGraph
 				}
 					
 				//Draws triangles on every point [NOT USED]
-				if ($this->vertice_tri) {
-				$point=array($nextCol + ($this->colSize/2)-4,$minHeight - $height,$nextCol + ($this->colSize/2)+4,$minHeight - $height,$nextCol + ($this->colSize/2),$minHeight - $height+5);
-				imagefilledpolygon($this->image,$point,3,$color);
+				if ($this->vertice_tri) 
+				{
+					$point=array($nextCol + ($this->colSize/2)-4,$minHeight - $height,$nextCol + ($this->colSize/2)+4,$minHeight - $height,$nextCol + ($this->colSize/2),$minHeight - $height+5);
+					imagefilledpolygon($this->image,$point,3,$color);
 				}
-
 			}
 			$nextCol += $this->colSize;
 		}

@@ -2,23 +2,17 @@
 define(C_TYPE_PLACE,0);
 define(C_TYPE_EVENT,1);
 classload("defs");
-lc_load("events");
 class events_user extends aw_template
 {
 	function events_user()
 	{
-		$this->db_init();
-		$this->tpl_init("events");
+		$this->init("events");
 		$this->tclasses = array(
 			C_TYPE_PLACE => LC_EVENTS_USER_PLACETYPE,
 			C_TYPE_EVENT => LC_EVENTS_USERADD_EVENTTYPE
 		);
 		lc_load("definition");
-		global $lc_events;
-		if (is_array($lc_events))
-		{
-			$this->vars($lc_events);}
-
+		$this->lc_load("events","lc_events");
 	}
 
 	////
@@ -27,11 +21,10 @@ class events_user extends aw_template
 	{
 		extract($args);
 		load_vcl("table");
-		global $PHP_SELF;
 		$t = new aw_table(array(
 			"prefix" => "events",
 			"imgurl" => "/img",
-			"self" => $PHP_SELF,
+			"self" => aw_global_get("PHP_SELF"),
 		));
 		if ($year)
 		{
@@ -104,8 +97,7 @@ class events_user extends aw_template
 		};
 		$this->_list_events($args);
 		$count = 0;
-		global $basedir;
-		$t->parse_xml_def($this->basedir . "/xml/events/showevents.xml"); 
+		$t->parse_xml_def($this->cfg["basedir"] . "/xml/events/showevents.xml"); 
 		while($row = $this->db_next())
 		{
 			$count++;
@@ -132,9 +124,10 @@ class events_user extends aw_template
 		$t->sort_by(array("field" => $args["sortby"])); 
 		$table = $t->draw();	
 		$this->vars(array("table" => $table,
-				"total" => $count,
-				  "caption" => $caption,
-				  "eventline" => $eline));
+			"total" => $count,
+		  "caption" => $caption,
+		  "eventline" => $eline
+		));
 		return $this->parse();
 	}
 
@@ -170,8 +163,10 @@ class events_user extends aw_template
 		}
 		else
 		{
-			$this->vars(array("price" => $event["price"],
-					"priceflyer" => $event["priceflyer"]));
+			$this->vars(array(
+				"price" => $event["price"],
+				"priceflyer" => $event["priceflyer"]
+			));
 			$price = $this->parse(LC_EVENTS_USERADD_PRICE);
 		};
 		if ($flyer)
@@ -217,54 +212,54 @@ class events_user extends aw_template
 	}
 
 	////
-        // !Lisab uue koha andmebaasi
-        function _add_place($args)
-        {
+  // !Lisab uue koha andmebaasi
+  function _add_place($args)
+  {
 		$this->quote($args);
-                extract($args);
+    extract($args);
 		$oid = $this->new_object(array(
 			"class_id" => CL_LOCATION,
 			"name" => $name,
 			"parent" => $type,
 		));
 
-                $q = "INSERT INTO event_places (id,name,description,address,phone,url)
-                        VALUES ('$oid','$name','$description','$address','$phone','$url')";
-                $this->db_query($q);
-                // siia peab lisama ka kirjed objektitabeli uuendamiseks
-        }
+    $q = "INSERT INTO event_places (id,name,description,address,phone,url)
+                    VALUES ('$oid','$name','$description','$address','$phone','$url')";
+    $this->db_query($q);
+    // siia peab lisama ka kirjed objektitabeli uuendamiseks
+	}
  
-        ////
-        // !Uuendab baasis koha kohta käivat infot
-        function _update_place($args)
-        {
-                extract($args);
+  ////
+  // !Uuendab baasis koha kohta käivat infot
+  function _update_place($args)
+  {
+		extract($args);
 		$this->upd_object(array(
 			"oid" => $id,
 			"name" => $name,
 			"parent" => $type,
 		));
-                $q = "UPDATE event_places
-                        SET     name = '$name',
-                                type = '$type',
-                                description = '$description',
-                                address = '$address',
-                                phone = '$phone',
-                                url = '$url'
-                        WHERE id = '$id'";
-                $this->db_query($q);
-        }
+		$q = "UPDATE event_places
+						SET     name = '$name',
+										type = '$type',
+										description = '$description',
+										address = '$address',
+										phone = '$phone',
+										url = '$url'
+						WHERE id = '$id'";
+		$this->db_query($q);
+	}
 
 	////
-        // !Listib koik kohad id, name paaridena
-        function _list_places($arg = array())
-        {
+	// !Listib koik kohad id, name paaridena
+	function _list_places($arg = array())
+	{
 		extract($arg);
 		$q = "SELECT *,event_places.* FROM objects 
 			LEFT JOIN event_places ON (objects.oid = event_places.id)
 			WHERE class_id = " . CL_LOCATION . " AND objects.parent = $type";
-                $this->db_query($q);
-        }
+    $this->db_query($q);
+  }
 
 	////
 	// !Tagastab info mingi location kohta, joinituna tüüpide tabeliga
@@ -279,19 +274,19 @@ class events_user extends aw_template
 		return $row;
 	}
  
-        ////
-        // !Listib koik tyybid id, name paaridena
-        function _list_types($var)
-        {
-                $q = "SELECT id,name FROM event_types WHERE class=$var";
-                $this->db_query($q);
-                $retval = array();
-                while($row = $this->db_next())
-                {
-                        $retval[$row["id"]] = $row["name"];
-                };
-                return $retval;
-        }
+	////
+	// !Listib koik tyybid id, name paaridena
+	function _list_types($var)
+	{
+		$q = "SELECT id,name FROM event_types WHERE class=$var";
+		$this->db_query($q);
+		$retval = array();
+		while($row = $this->db_next())
+		{
+			$retval[$row["id"]] = $row["name"];
+		};
+		return $retval;
+	}
 
 
 	////
@@ -373,74 +368,75 @@ class events_user extends aw_template
 	}
 
 	////
-        // !Lisab uue eventi
-        function _add_event($args)
-        {
-                extract($args);
+	// !Lisab uue eventi
+	function _add_event($args)
+	{
+		extract($args);
 		$oid = $this->new_object(array(
 			"name" => $name,
 			"class_id" => CL_EVENT,
 			"parent" => $type
 		));
-                $q = "INSERT INTO events (id,name,type,description,place,url,start,end,contact,price,priceflyer,flyer,
+    $q = "INSERT INTO events (id,name,type,description,place,url,start,end,contact,price,priceflyer,flyer,
 			free,agelimit,reservation,flyeronly)
                         VALUES('$oid','$name','$type','$description','$place','$url','$start','$end','$contact','$price',
 				'$priceflyer','$flyer','$free','$agelimit','$reservation','$flyeronly')";
-                $this->db_query($q);
-        }
+    $this->db_query($q);
+	}
  
-        ////
-        // !Uuendab eventi infot
-        function _update_event($args)
-        {
-                extract($args);
+	////
+	// !Uuendab eventi infot
+	function _update_event($args)
+	{
+		extract($args);
 		$this->upd_object(array(
 			"oid" => $id,
 			"name" => $name,
 			"parent" => $type,
 		));
-                $q = "UPDATE events
-                        SET     
-                                name = '$name',
-                                description = '$description',
-                                place = '$place',
-                                start = '$start',
-                                end = '$end',
-                                url = '$url',
-                                contact = '$contact',
-                                price = '$price',
-                                priceflyer = '$priceflyer',
+		$q = "UPDATE events
+						SET     
+										name = '$name',
+										description = '$description',
+										place = '$place',
+										start = '$start',
+										end = '$end',
+										url = '$url',
+										contact = '$contact',
+										price = '$price',
+										priceflyer = '$priceflyer',
 				flyer = '$flyer',
 				free = '$free',
 				agelimit = '$agelimit',
 				reservation = '$reservation',
 				flyeronly = '$flyeronly'
-                        WHERE id = '$id'";
-                $this->db_query($q);
-        }
+        WHERE id = '$id'";
+    $this->db_query($q);
+  }
 
 	 ////
-        // !Salvestab tüübi info
-        function _update_type($args)
-        {
-                extract($args);
+	// !Salvestab tüübi info
+	function _update_type($args)
+	{
+		extract($args);
 		$this->upd_object(array(
 			"oid" => $id,
 			"name" => $name,
 		));
-        }
+  }
  
-        ////
-        // !Lisab uue tüübi
-        function _add_type($args)
-        {
-                extract($args);
+	////
+	// !Lisab uue tüübi
+	function _add_type($args)
+	{
+		extract($args);
 		$this->new_object(array(
 			"class_id" => $type,
 			"name" => $name,
 			"parent" => $parent,
 		));
-        }
+	}
+
 	function _gen_place_list($args = array())
 	{
 		extract($args);
@@ -455,45 +451,42 @@ class events_user extends aw_template
 	}
 
 	function _gen_type_list($args)
-        {
-                extract($args);
-                $q = "SELECT * FROM objects WHERE class_id = '$class_id'";
-                $this->db_query($q);
-                $this->storage = array();
-                $this->linear = array();
+	{
+		extract($args);
+		$q = "SELECT * FROM objects WHERE class_id = '$class_id'";
+		$this->db_query($q);
+		$this->storage = array();
+		$this->linear = array();
 		$last = 0;
-                while($row = $this->db_next())
-                {
-                        $this->storage[$row["parent"]][] = $row;
+		while($row = $this->db_next())
+		{
+			$this->storage[$row["parent"]][] = $row;
 			if ($args["remember_last"])
 			{
 				$last = $row["parent"];
 			};
-                };
-                $this->level = -1;
-                $this->_show_branch($last);
-        }
+		};
+		$this->level = -1;
+		$this->_show_branch($last);
+	}
 
-        function _show_branch($parent)
-        {
-                $this->level++;
+	function _show_branch($parent)
+	{
+		$this->level++;
 		if (is_array($this->storage[$parent]))
 		{
-                	while(list($k,$v) = each($this->storage[$parent]))
-                	{
-                       		$id = $v["oid"];
-                        	$name = str_repeat("&nbsp;&nbsp;&nbsp;",$this->level) . $v["name"];
-                        	$this->linear[$id] = $name;
-                        	if (is_array($this->storage[$v["oid"]]))
-                        	{
-                               		$this->_show_branch($v["oid"]);
-                        	}
-                	};
+			while(list($k,$v) = each($this->storage[$parent]))
+			{
+				$id = $v["oid"];
+				$name = str_repeat("&nbsp;&nbsp;&nbsp;",$this->level) . $v["name"];
+				$this->linear[$id] = $name;
+				if (is_array($this->storage[$v["oid"]]))
+				{
+					$this->_show_branch($v["oid"]);
+				}
+			};
 		}
-                $this->level--;
-        }	
-
-	
+		$this->level--;
+	}	
 };
-
 ?>

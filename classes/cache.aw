@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.6 2002/02/18 13:40:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
-// cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud muutujas PAGE_CACHE
+// cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
 // cache kasutamist kontrollib muutuja USE_PAGE_CACHE
 // cachetakse ainult mitte sisse-loginud kasutajatele
 
@@ -11,6 +11,7 @@ class cache extends core
 	function cache()
 	{
 		$this->db_init();
+		aw_config_init_class(&$this);
 	}
 	
 	////
@@ -22,16 +23,15 @@ class cache extends core
 	//               idee on selles, et siis saab yhele objektile ka mitu cachet teha.
 	function set($oid,$arr,$content,$clear_flag = true)
 	{
-		if (($GLOBALS["USE_PAGE_CACHE"] || defined("USE_PAGE_CACHE")) && !$GLOBALS[uid])
+		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
-			$fname = PAGE_CACHE . "/$oid";
+			$fname = $this->cfg["page_cache"] . "/$oid";
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
 				$fname.="-".$v;
 			}
 			$this->put_file(array("file" => $fname, "content" => $content));
-//			echo "<!-- cache put file $fname -->\n";
 			if ($clear_flag)
 			{
 				$this->clear_cache($oid);
@@ -47,9 +47,9 @@ class cache extends core
 	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
 	function get($oid,$arr)
 	{
-		if (($GLOBALS["USE_PAGE_CACHE"] || defined("USE_PAGE_CACHE")) && !$GLOBALS[uid])
+		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
-			$fname = PAGE_CACHE . "/$oid";
+			$fname = $this->cfg["page_cache"] . "/$oid";
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
@@ -58,7 +58,6 @@ class cache extends core
 
 			if ($this->cache_dirty($oid))
 			{
-				#echo "<!-- SS NO cache dirty! $oid ",join(",",$arr)," -->\n";
 				return false;
 			}
 			else
@@ -66,19 +65,16 @@ class cache extends core
 				$content = $this->get_file(array("file" => $fname));
 				if ($content == false)
 				{
-					#echo "<!-- SS NO cache content! $oid ",join(",",$arr)," -->\n";
 					return false;
 				} 
 				else 
 				{
-					#echo "<!-- SS using cache! $oid ",join(",",$arr)," , file $fname -->\n";
 					return $content;
 				};
 			};
 		}
 		else
 		{
-			#echo "<!-- SS NO cache! $oid ",join(",",$arr)," -->\n";
 			return false;
 		};
 	}
@@ -113,27 +109,27 @@ class cache extends core
 
 	function file_set($key,$value)
 	{
-		if (defined("PAGE_CACHE"))
+		if ($this->cfg["page_cache"] != "")
 		{
-			$fname = PAGE_CACHE . "/$key";
+			$fname = $this->cfg["page_cache"] . "/$key";
 			$this->put_file(array("file" => $fname, "content" => $value));
 		}
 	}
 
 	function file_get($key)
 	{
-		if (!defined("PAGE_CACHE"))
+		if ($this->cfg["page_cache"] == "")
 		{
 			return false;
 		}
-		return $this->get_file(array("file" => PAGE_CACHE."/".$key));
+		return $this->get_file(array("file" => $this->cfg["page_cache"]."/".$key));
 	}
 
 	function file_invalidate($key)
 	{
-		if (defined("PAGE_CACHE"))
+		if ($this->cfg["page_cache"] != "")
 		{
-			@unlink(PAGE_CACHE."/".$key);
+			@unlink($this->cfg["page_cache"]."/".$key);
 		}
 	}
 };

@@ -293,6 +293,7 @@ define("LC_FORM_CHANGE_FOLDERS", "Muuda katalooge");
 define("LC_FORM_CHANGE_FORM","Muuda formi");
 define("LC_FORM_ALL_ELEMENTS","K&otilde;ik elemendid");
 define("LC_FORM_CHANGE_SETTINGS","Muuda settinguid");
+define("LC_FORM_ALIASMGR","Aliastehaldur");
 // yeah, SQL i pole ka vaja t6lkida 
 //define("LC_FORM_INSERT_INO_FORM","insert into form_entries values($entry_id, $this->id, ");	
 

@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.3 2002/06/10 15:50:52 kristo Exp $
 class aw_graph extends aw_template
 {
 	function aw_graph()
 	{
-	lc_load("definition");
+		$this->init("");
+		lc_load("definition");
 	}
 
 	function import_data($arr)
@@ -23,36 +24,36 @@ class aw_graph extends aw_template
 	}
 
 	// for internal use
-        function _xml_start_element($parser,$name,$attribs)
-        {
-                switch($name)
-                {
-                        // telgede info
-                        case "AXIS":
-                                $this->axis[$attribs[NAME]] = $attribs;
-                                break;
-                        // üldine info graafikute kohta
-                        case "GENERAL":
-                                $this->config = $attribs;
-                                break;
+	function _xml_start_element($parser,$name,$attribs)
+  {
+		switch($name)
+    {
+			// telgede info
+      case "AXIS":
+				$this->axis[$attribs[NAME]] = $attribs;
+        break;
+
+      // üldine info graafikute kohta
+      case "GENERAL":
+				$this->config = $attribs;
+        break;
+
 			case "BORDER":
 				$this->border = $attribs;
 				break;
-                        default:
-                                // do nothing
-                };
 
-        }
+			default:
+        // do nothing
+    };
+	}
 
-        function _xml_end_element($parser,$name)
-        {
+	function _xml_end_element($parser,$name)
+  {
+  }
 
-        }
-
-        function _xml_data_handler($parser,$data)
-        {
-
-        }
+  function _xml_data_handler($parser,$data)
+  {
+  }
 
 	// graafiku kuju defineeritakse XML faili abil
 	function parse_xml_def($file)
@@ -62,11 +63,10 @@ class aw_graph extends aw_template
 			print "FUBAR";
 			die;
 		};
-		global $basedir;
-		$xmldata = $this->get_file(array("file" => "$basedir/xml/$file"));
+		$xmldata = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/$file"));
 		$xml_parser = xml_parser_create();
 		xml_set_object($xml_parser,&$this);
-	        xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
+		xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
 		if (!xml_parse($xml_parser,$xmldata,true))
 		{
 			die(sprintf("XML error: %s at line %d",
@@ -75,6 +75,7 @@ class aw_graph extends aw_template
 		};
 		xml_parser_free($xml_parser);
 	}
+
 	function rgb2arr($rgb)
 	{
 		preg_match("/^#(..)(..)(..)$/",$rgb,$m);
@@ -96,14 +97,14 @@ class aw_graph extends aw_template
 
 	function draw_graph()
 	{
-		$width = $this->config[WIDTH];
-		$height = $this->config[HEIGHT];
-		$border = $this->border[SIZE];
+		$width = $this->config["WIDTH"];
+		$height = $this->config["HEIGHT"];
+		$border = $this->border["SIZE"];
 		$image = imagecreate($width,$height);
-		list($r,$g,$b) = $this->rgb2arr($this->border[COLOR]);
+		list($r,$g,$b) = $this->rgb2arr($this->border["COLOR"]);
 		$bordercolor = imagecolorallocate($image,$r,$g,$b);
 		imagefill($image, 0, 0, $bordercolor);
-		list($r,$g,$b) = $this->rgb2arr($this->config[BGCOLOR]);
+		list($r,$g,$b) = $this->rgb2arr($this->config["BGCOLOR"]);
 		$bgcolor = imagecolorallocate($image,$r,$g,$b);
 		// täidame kogu pildi raami värviga
 		// joonistame selle sisse sisu
@@ -200,7 +201,7 @@ class aw_graph extends aw_template
 			};
 		};
 			
-		if ($this->config[IMGTYPE] == "png")
+		if ($this->config["IMGTYPE"] == "png")
 		{
 			header("Content-type: image/png");
 			imagepng($image);

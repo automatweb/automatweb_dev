@@ -1,4 +1,4 @@
-<form action='languages.{VAR:ext}' method=POST name='q'>
+<form action='reforb.{VAR:ext}' method=POST name='q'>
 
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
@@ -20,7 +20,7 @@
 
 <td class="celltitle">&nbsp;<b>{VAR:LC_LANGUAGES_BIG_LANGUAGES}:&nbsp;</td>
 <td align="left"><!--add--><IMG
-SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="languages.{VAR:ext}?type=add"
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="{VAR:add}"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img
 name="new" alt="{VAR:LC_LANGUAGES_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a><!--save--><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.q.submit()" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_LANGUAGES_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
@@ -66,11 +66,11 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 <td class="celltext" align="center">&nbsp;<input type="radio" name="selected" value='{VAR:id}' {VAR:selected}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
 <td class="celltext" align="center">&nbsp;<input type="checkbox" name="act[{VAR:id}]" value='1' {VAR:active}>&nbsp;</td>
-<td class="celltext" align=center><a href='languages.{VAR:ext}?type=change&id={VAR:id}'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_CHANGE}"></a></td>
-<td class="celltext" align=center><a href='javascript:box2("Are You sure you wish to delete language?","languages.{VAR:ext}?type=delete&id={VAR:id}")'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_DELETE}"></a></td>
+<td class="celltext" align=center><a href='{VAR:change}'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_edit.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_CHANGE}"></a></td>
+<td class="celltext" align=center><a href='javascript:box2("Are You sure you wish to delete language?","{VAR:delete}")'><IMG SRC="{VAR:baseurl}/automatweb/images/blue/obj_delete.gif" WIDTH="16" HEIGHT="16" BORDER=0 ALT="{VAR:LC_LANGUAGES_DELETE}"></a></td>
 </tr>
 <!-- END SUB: LINE -->
 </table>
 </td></tr></table>
-<input type='hidden' name='type' value='saveadmin'>
+{VAR:reforb}
 </form>

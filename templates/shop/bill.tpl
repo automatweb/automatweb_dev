@@ -1,7 +1,6 @@
 <html>
 <body bgcolor="#FFFFFF">
 
-<img border=0 src="http://www.horizontravel.ee/img.aw?file=9d02e1a98d969cd3da2bc50827168edd.pjpeg">
 
 <font face="Verdana, Arial" size="2"> <center>{VAR:LC_SHOP_BILL_NR}.{VAR:number}</center><br><br></font>
 <font face="Verdana, Arial" size="2"> {VAR:date}</font><br>

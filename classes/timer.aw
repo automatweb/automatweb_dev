@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.3 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -28,74 +28,98 @@ class aw_timer
 		};
 	}
 
-	function start($name) {
+	function start($name) 
+	{
 		// kui sellenimeline taimer on olemas
-		if ($this->is_defined($name)) {
-			if ($this->is_running($name)) {
+		if ($this->is_defined($name)) 
+		{
+			if ($this->is_running($name)) 
+			{
 				// kui taimer juba käib, siis me ei tee midagi
 				return true;
-			} else {
+			} 
+			else 
+			{
 				$this->timers[$name]["started"] = $this->get_time();
 				$this->timers[$name]["running"] = 1;
 			};
 		// sellist taimerit pole olemas
-		} else {
+		} 
+		else 
+		{
 			$this->timers[$name]["running"] = 1;
 			$this->timers[$name]["started"] = $this->get_time();
 			$this->timers[$name]["elapsed"] = 0;
 		};
 	}
 
-	function stop($name) {
-		if ($this->is_defined($name)) {
-			if ($this->is_running($name)) {
+	function stop($name) 
+	{
+		if ($this->is_defined($name)) 
+		{
+			if ($this->is_running($name)) 
+			{
 				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
 				$this->timers[$name]["running"] = 0;
-			} else {
+			} 
+			else 
+			{
 				return false;
 			};
-		} else {
+		} 
+		else 
+		{
 			return false;
 		};
 	}
 
 	// peatab koik taimerid ja tagastab nad arrays
 	//  $arr[taimerinimi] = kulutatud_aeg
-	function summaries() {
+	function summaries() 
+	{
 		krsort($this->timers);
-		while(list($timer,) = each($this->timers)) {
+		while(list($timer,) = each($this->timers)) 
+		{
 			$this->stop($timer);
 		};
 		reset($this->timers);
 		$retval = array();
 		$fstr = "%0." . $this->precision . "f";
-		while(list($timer,$val) = each($this->timers)) {
+		while(list($timer,$val) = each($this->timers)) 
+		{
 			$retval[$timer] = sprintf($fstr,$val["elapsed"]);
 		};
+		// sort timers by time desc
+		arsort($retval);
+
+		$tmp = array();
 		if (is_array($this->counters))
 		{
-		reset($this->counters);
-		while(list($counter,$value) = each($this->counters))
-		{
-			$xval = "counter_" . $counter;
-			$retval[$xval] = $value;
+			reset($this->counters);
+			while(list($counter,$value) = each($this->counters))
+			{
+				$xval = "counter_" . $counter;
+				$tmp[$xval] = $value;
+			};
 		};
-		};
-		return $retval;
+		arsort($tmp);
+
+		return $retval + $tmp;
 	}
 
 	// tagastab aja epohhi algusest sekundites
-	function get_time() {
+	function get_time() 
+	{
 		list($micro,$sec) = split(" ",microtime());
 		return $sec + $micro;
 	}
 
 	// kas taimer töötab?
-	function is_running($name) {
+	function is_running($name) 
+	{
 		return ($this->timers[$name]["running"] == 1);
 	}
 		
-
 	// kas taimer on defineeritud?
 	function is_defined($name) 
 	{

@@ -1,8 +1,8 @@
 <?php
 
-global $lc_automatweb;
+global $lc_accessmsg;
 
-$lc_automatweb["LC_ACCSESS_PROGRAMS"]="PROGRAMS:";
-$lc_automatweb["LC_ACCSESS_NAME"]="Name";
+$lc_accessmsg["LC_ACCSESS_PROGRAMS"]="PROGRAMS:";
+$lc_accessmsg["LC_ACCSESS_NAME"]="Name";
 
 ?>

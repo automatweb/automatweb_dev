@@ -6,7 +6,8 @@ function setLink(li,title)
 }
 </script>
 
-<form action='refcheck.{VAR:ext}' method=post name="b88">
+<form action='reforb.{VAR:ext}' method=post name="b88" enctype="multipart/form-data">
+<input type="hidden" name="MAX_FILE_SIZE" VALUE="1000000">
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
 <td class="plain">Aadress, kuhu suunatakse p&auml;rast sisse logimist:</td>
@@ -37,28 +38,36 @@ function setLink(li,title)
 <td class="plain"><select name='bt_adm'>{VAR:bt_adm}</select></td>
 </tr>
 <tr bgcolor="#C9EFEF">
+<td class="plain">Uploadi "favorites icon":</td>
+<td class="plain">{VAR:favicon} <input type="file" name="favicon"></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Kas p&auml;rast lisamist logitakse kasutaja sisse:</td>
+<td class="plain"><input type="checkbox" name="autologin" value='1' {VAR:autologin}></td>
+</tr>
+<tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><a href='config.{VAR:ext}?type=icon_db'>Ikoonide baas</a></td>
-<td class="plain"><a href='config.{VAR:ext}?type=import_icons'>Impordi</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=icons&action=icon_db'>Ikoonide baas</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=icons&action=import_icons'>Impordi</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><a href='config.{VAR:ext}?type=class_icons'>Klasside ikoonid</a></td>
-<td class="plain"><a href='config.{VAR:ext}?type=import_class_icons'>Impordi</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=class_icons'>Klasside ikoonid</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_class_icons'>Impordi</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><a href='config.{VAR:ext}?type=file_icons'>Failit&uuml;&uuml;pide ikoonid</a></td>
-<td class="plain"><a href='config.{VAR:ext}?type=import_file_icons'>Impordi</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=file_icons'>Failit&uuml;&uuml;pide ikoonid</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_file_icons'>Impordi</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><a href='config.{VAR:ext}?type=program_icons'>Programmide ikoonid</a></td>
-<td class="plain"><a href='config.{VAR:ext}?type=import_program_icons'>Impordi</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=program_icons'>Programmide ikoonid</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_program_icons'>Impordi</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain"><a href='config.{VAR:ext}?type=other_icons'>Muud ikoonid</a></td>
-<td class="plain"><a href='config.{VAR:ext}?type=import_other_icons'>Impordi</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=other_icons'>Muud ikoonid</a></td>
+<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_other_icons'>Impordi</a></td>
 </tr>
 </table>
-<input type='hidden' name='action' value='submit_loaginaddr'>
+{VAR:reforb}
 </form>

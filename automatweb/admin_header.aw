@@ -1,53 +1,29 @@
 <?php
+$uid = "";	// for the extra paranoid 
 session_name("automatweb");
 session_start();
 
-classload("timer","aw_template","defs");
-$sf = new aw_template;
-$sf->db_init();
+classload("timer","aw_template","defs","users","objects","languages");
 
-$uid = $HTTP_SESSION_VARS["uid"];
-// it doesn't matter if the uid is not set, prog_acl performs that check 
-// and responds appropriately
-define("UID",$uid);
+// there is no need to do aw_startup() here, it will probably do bad things anyway
+$u = new users;
+$u->request_startup();
+$l = new languages;
+$l->request_startup();
+
 $awt = new aw_timer;
 
-if (strpos($HTTP_HOST,"horizon") !== false)
+$sf = new aw_template;
+$sf->db_init();
+$sf->tpl_init("automatweb");
+if (!$sf->prog_acl_auth("view", PRG_MENUEDIT))
 {
-	if (!$sf->prog_acl("view", PRG_MENUEDIT))
-	{
-		include("sorry.aw");
-		exit;
-	}
-}
-else
-{
-	if (!$sf->prog_acl_auth("view", PRG_MENUEDIT))
-	{
-		include("sorry.aw");
-		exit;
-	}
-}
-
-if ($lang_id < 1)
-{
-	$lang_id = 1;
+	$sf->auth_error();
 }
 
 lc_load("automatweb");
-classload("users","objects");
 
 $LC=$admin_lang_lc;
 setcookie("LC",$LC,time()+24*1000,"/");
-
-
-$users = new users;
-$gidlist = $users->get_gids_by_uid($uid);
-$udata = $users->fetch(UID);
-$user_email = isset($udata["email"]) ? $udata["email"] : "" ;
-
-$sf->tpl_init("automatweb");
-// do we really need that?
-$ob = new db_objects;
-
+aw_global_set("LC", $LC);
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.7 2002/03/07 19:13:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.8 2002/06/10 15:50:54 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -11,7 +11,9 @@ class php_serializer
 			return false;
 		}
 
-		return "\$arr = ".$this->req_serialize($arr,$to_file).";";
+		$arrname = ($this->arr_name != "" ? $this->arr_name : "arr");
+
+		return "\$".$arrname." = ".$this->req_serialize($arr,$to_file).";";
 	}
 
 	function set($key,$val)
@@ -45,7 +47,10 @@ class php_serializer
 				// $v = "\"$v\"";
 				$v = "\"$v\"";
 			}
-			$k = str_replace("\"","\\\"",$k);
+			if (!$this->for_include)
+			{
+				$k = str_replace("\"","\\\"",$k);
+			}
 			if ($this->no_index)
 			{
 				$td[] = $v."\n";
@@ -61,17 +66,7 @@ class php_serializer
 
 	function php_unserialize($str)
 	{
-		global $awt;
-		if (is_object($awt))
-		{
-			$awt->start("php::php_unserialize");
-			$awt->count("php::unser");
-		};
 		eval($str);
-		if (is_object($awt))
-		{
-			$awt->stop("php::php_unserialize");
-		};
 		return $arr;
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.1 2002/05/08 20:23:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.2 2002/06/10 15:50:53 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -55,6 +55,15 @@ class db_connector extends root
 		// FIXME: validate arguments
 
 		// if no connection id is set, pretend that this is the primary data source
+		$id = "db::$cid";
+		$dc = aw_global_get($id);
+
+		if ($dc)
+		{
+			$this->dc[$cid] = $dc;
+			// already connected, drop out
+			return false;
+		};
 
 		switch($driver)
 		{
@@ -69,7 +78,6 @@ class db_connector extends root
 		// FIXME: check for return value
 		$dc->db_connect($server,$base,$username,$password);
 
-		$id = "db::$cid";
 		aw_global_set($id,$dc);
 		$this->dc[$cid] = $dc;
 
@@ -82,16 +90,6 @@ class db_connector extends root
 	{
 		$cid = "DBMAIN";
 		$this->default_cid = $cid;
-		$id = "db::$cid";
-		$dc = aw_global_get($id);
-
-		if ($dc)
-		{
-			$this->dc[$cid] = $dc;
-			// already connected, drop out
-			return false;
-		};
-
 
 		$this->db_connect(array(
 			"cid" => $cid,
@@ -105,7 +103,7 @@ class db_connector extends root
 	}
 
 	// route all functions to default/primary driver
-	function db_query($qtext,$errors = false)
+	function db_query($qtext,$errors = true)
 	{
 		return $this->dc[$this->default_cid]->db_query($qtext,$errors);
 	}

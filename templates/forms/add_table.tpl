@@ -153,8 +153,12 @@
 	<td class="fform"><select name="defaultsort">{VAR:ds_elements}</select></td>
 </tr>
 <tr>
-	<td class="fform">Grupeeri:</td>
+	<td class="fform">J&auml;ta v&auml;lja mitmekordsed:</td>
 	<td class="fform"><select name="group_el">{VAR:g_elements}</select></td>
+</tr>
+<tr>
+	<td class="fform">Grupeeri:</td>
+	<td class="fform"><select name="rgroup_el">{VAR:rg_elements}</select></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
