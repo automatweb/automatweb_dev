@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.209 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.210 2003/09/12 11:56:09 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -936,6 +936,7 @@ class document extends aw_template
 			"modified"	=> $this->time2date($doc["modified"],2),
 			"createdby" => $doc["createdby"],
 			"date2"	=> $this->time2date($doc["modified"],8),
+			"timestamp" => $doc["modified"],
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
 			"link_text"	=> $doc["link_text"],
