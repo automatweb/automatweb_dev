@@ -1,8 +1,61 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<form method="GET" name="foo">
+<tr><td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
+<td width="50" valign="middle">
+<select name="aselect" onChange="replace_action(this)">
+<option>--Vali alias--</option>
+{VAR:aliases}
+</select>
+</td>
+<!--ikoonid-->
+<td valign="bottom">
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:redir()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img name="new" alt="{VAR:LC_MENUEDIT_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a>
+<a href="javascript:window.location.href='{VAR:baseurl}/automatweb/pickobject.{VAR:ext}?docid={VAR:id}'" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('search','','{VAR:baseurl}/automatweb/images/blue/awicons/search_over.gif',1)"><img name="search" alt="Search" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/search.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="">
+<!--
+<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:seif()" onClick="seif()"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_MENUEDIT_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="">
+-->
+<img SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25">
+<!--
+<IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:document.foo.submit()"  onClick="return awcut()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('cut','','{VAR:baseurl}/automatweb/images/blue/awicons/cut_over.gif',1)"><img name="cut" alt="Cut" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/cut.gif" width="25" height="25"></a><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:document.foo.submit()" onClick="return awcopy()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copy','','{VAR:baseurl}/automatweb/images/blue/awicons/copy_over.gif',1)"><img name="copy" alt="Copy" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/copy.gif" width="25" height="25"></a><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:document.foo.submit()" onClick="return awpaste()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('paste','','{VAR:baseurl}/automatweb/images/blue/awicons/paste_over.gif',1)"><img name="paste" alt="Paste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/paste.gif" width="25" height="25"></a>
+-->
+<IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:awdelete()" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:awchange()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><!--show-->
+<!--
+<IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:window.parent.objects.location.href=show()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('show','','{VAR:baseurl}/automatweb/images/blue/awicons/show_over.gif',1)"><img name="show" alt="{VAR:LC_MENUEDIT_SHOW}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/show.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="">
+-->
+<img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--refresh--><a
+href="javascript:window.location.reload()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','{VAR:baseurl}/automatweb/images/blue/awicons/refresh_over.gif',1)"><img name="refresh" alt="{VAR:LC_MENUEDIT_REFRESH}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--search-->
+</td>
+</tr>
+</table>
+
+
 <script language="Javascript">
 var targets = new Array();
 <!-- SUB: target_def -->
 targets[{VAR:cnt}] = "{VAR:target}";
 <!-- END SUB: target_def -->
+
+var chlinks = new Array();
+{VAR:chlinks}
+
+var dellinks = new Array();
+{VAR:dellinks}
+
 function replace_action(selbox)
 {
 	with(document.foo)
@@ -34,142 +87,92 @@ function redir()
 		};
 	};
 };
+
+function awchange()
+{
+	len = document.aform.elements.length;
+	cnt = 0;
+	chk = 0;
+	for (i = 0; i < len; i++)
+	{
+		with(document.aform.elements[i])
+		{
+			if (type == "checkbox" 
+				&& name.indexOf("check") != -1
+				&& checked )
+			{
+				cnt++;
+				chk = value;
+			}	
+		}
+	};
+	if (cnt == 1)
+	{
+		window.location.href = chlinks[chk];
+	}
+	else
+	{
+		alert('Palun valige 1 objekt muutmiseks');
+	};
+}
+
+function awdelete()
+{
+	len = document.aform.elements.length;
+	cnt = 0;
+	chk = 0;
+	ids = new Array();
+	for (i = 0; i < len; i++)
+	{
+		with(document.aform.elements[i])
+		{
+			if (type == "checkbox"
+				&& name.indexOf("check") != -1
+				&& checked )
+			{
+				cnt++;
+				ids[cnt] = value;
+			}
+		}
+	};
+	dellink = "";
+	for (i = 1; i < ids.length; i++)
+	{
+		if (i == 1)
+		{
+			dellink = dellink + dellinks[ids[i]];
+		}
+		else
+		{
+			dellink = dellink + ';' + dellinks[ids[i]];
+		};
+
+	}
+		
+	if (cnt > 0)
+	{
+		if (confirm('Kustutada need ' + cnt + ' aliast?'))
+		{
+			window.location.href = '{VAR:delorb}&id=' + dellink;
+		};
+	}
+	else
+	{
+		alert('Vali kustutatavad objektid.');
+	}
+	
+
+	
+}
 </script>
 <table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#EEEEEE">
 <tr>
-<form method="GET" name="foo">
 <td colspan="2" class="title">
-<select name="aselect" onChange="replace_action(this)">
-<option>--Vali alias--</option>
-{VAR:aliases}
-</select>
-<a href="javascript:redir()">Lisa uus alias</a>
- |
-<a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus objekt&gt;&gt;&gt;</a>
 </td>
 <input type="hidden" name="act" value="undef"> 
 </form>
 </tr>
 <form name="aform">
-<!-- SUB: table -->
-<tr>
-	<td colspan=2><img src='{VAR:baseurl}/images/transa.gif' width=10 height=16></td>
-</tr>
-	<script language="JavaScript">
-		var sel_{VAR:type} = 0;
-		function ch_{VAR:type}()
-		{
-			len = document.aform.elements.length;
-			cnt = 0;
-			chk = 0;
-			for (i = 0; i < len; i++)
-			{
-				with(document.aform.elements[i])
-				{
-					if (type == "checkbox" 
-						&& name.indexOf("_{VAR:type}") != -1
-						&& checked )
-						{
-							cnt++;
-							chk = value;
-						}	
-				}
-			};
-			use = 0;
-			if (sel_{VAR:type} > 0)
-			{
-				if (cnt == 0)
-				{
-					use = sel_{VAR:type};
-				}
-			}
-			else
-			{
-				if (cnt == 1)
-				{
-					use = chk;
-				};
-			};
-			if (use > 0)
-			{
-				loc = '{VAR:chlink}&{VAR:field}=' + use;
-				window.location = loc;
-			}
-			else
-			{
-				alert('Palun valige _üks_ objekt muutmiseks');
-			};
-		}
-
-		function del_{VAR:type}()
-		{
-			len = document.aform.elements.length;
-			cnt = 0;
-			chk = 0;
-			for (i = 0; i < len; i++)
-			{
-				with(document.aform.elements[i])
-				{
-					if (type == "checkbox" 
-						&& name.indexOf("_{VAR:type}") != -1
-						&& checked )
-						{
-							cnt++;
-							chk = value;
-						}	
-				}
-			};
-			if (cnt != 1)
-			{
-				alert('Palun valige _üks_ objekt kustutamiseks');
-			}
-			else
-			{
-				if (confirm('Kustutada see objekt?'))
-				{
-					window.location = '{VAR:dellink}&id=' + chk;
-				};
-			};
-		}
-	</script>
-<tr>
-	<td valign=top>
-		<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
-		<tr>
-			<td class="title">{VAR:title}</td>
-		</tr>
-		</table>
-	</td>
-	<td>
-		<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
-		<tr>
-			<td class="title" colspan=7><a href="{VAR:add_link}">Lisa uus</a> | <a href="javascript:ch_{VAR:type}()">Muuda</a> | <a href="javascript:del_{VAR:type}();">Kustuta</a></td>
-		</tr>
-		<tr>
-		<td>{VAR:contents}</td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<!-- END SUB: table -->
-
-<!-- SUB: empty -->
-<tr>
-	<td valign=top width="200">
-		<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
-		<tr>
-			<td class="title">{VAR:title}</td>
-		</tr>
-		</table>
-	</td>
-	<td>
-		<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
-		<tr>
-			<td class="title" colspan=7><a href="{VAR:add_link}">Lisa uus</a></td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<!-- END SUB: empty -->
+{VAR:table}
 </form>
 </table>
