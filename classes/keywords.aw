@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.24 2001/05/28 00:39:28 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.25 2001/05/28 01:03:46 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -455,6 +455,7 @@ class keywords extends aw_template {
 
 		foreach($klist as $val)
 		{
+			$val = trim($val);
 			if (strpos($val,"/") > 0)
 			{
 				list($category,$keyword) = explode("/",$val);
@@ -502,7 +503,7 @@ class keywords extends aw_template {
 
 			}
 			// keyword oli, aga kategooria on muutunud
-			elseif ($cids[$val] != $catid1)
+			elseif ($cids[$val] != $catid)
 			{
 				$q = sprintf("UPDATE keywords SET category_id = '%d',keyword = '%s' WHERE id = '%d'",$catid,$keyword,$ids[$val]);
 				$this->db_query($q);
@@ -657,7 +658,6 @@ class keywords extends aw_template {
 	{
 		extract($args);
 		$this->read_template("pick_keywords.tpl");
-		print "after = $after<br>";
 		global $HTTP_REFERER;
 		$udata = $this->_get_user_data();
 		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
