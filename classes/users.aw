@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.82 2003/04/17 12:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.83 2003/05/09 16:17:15 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1211,36 +1211,43 @@ class users extends users_user
 			$lp.=$this->parse("LANG");
 		}
 
-		$cu = get_instance("currency");
-		$cul = $cu->get_list();
-
-		$userconfig = $this->get_user_config(array("uid" => $id));
-		$ccur = $userconfig["user_currency"];
-	
-		foreach($cul as $cuid => $cuname)
-		{
-			$this->vars(array(
-				"cur_name" => $cuname,
-				"cur_id" => $cuid,
-				"checked" => checked($cuid == $ccur)
-			));
-			$ccr .= $this->parse("CUR");
-		}
-
 		$co = get_instance("config");
 		$fo = $co->get_simple_config("user_info_form");
 		if ($fo)
 		{
 			$f = get_instance("formgen/form");
-			$eid = $this->get_user_config(array("uid" => $id, "key" => "info_entry"));
-			$this->vars(array("form" => $f->gen_preview(array("id" => $fo, "entry_id" => $eid,"silent_errors" => true,"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")))));
+			$eid = $this->get_user_config(array(
+				"uid" => $id, 
+				"key" => "info_entry"
+			));
+			$this->vars(array(
+				"form" => $f->gen_preview(array(
+					"id" => $fo, 
+					"entry_id" => $eid,
+					"silent_errors" => true,
+					"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")
+				))
+			));
 		}
 
+		$act_from = $this->get_user_config(array(
+			"uid" => $id, 
+			"key" => "act_from"
+		));
+		$act_to = $this->get_user_config(array(
+			"uid" => $id, 
+			"key" => "act_to"
+		));
+
+		// act from / act to selectors
+		load_vcl("date_edit");
+		$de = new date_edit();
+		$de2 = new date_edit();
+		
 		$this->vars(array(
 			"LANG" => $lp,
-			"CUR" => $ccr,
-			"treetype" => $this->picker($userconfig["treetype"],array("0" => "Default (saidi konfist)","dhtml" => "DHTML","java" => "Java")),
-			"addobject_type" => $this->picker($userconfig["addobject_type"],array("" => "Java","dhtml" => "DHTML")),
+			"act_from" => $de->gen_edit_form("act_from", $act_from, date("Y") - 5, date("Y") + 5, true),
+			"act_to" => $de2->gen_edit_form("act_to", $act_to, date("Y") - 5, date("Y") + 5, true),
 			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
 		));
 		return $this->parse();
@@ -1284,10 +1291,8 @@ class users extends users_user
 		$this->set_user_config(array(
 			"uid" => $id,
 			"data" => array(
-				"user_currency" => $currency,
-				"calendar" => $calendar,
-				"treetype" => $treetype,
-				"addobject_type" => $addobject_type,
+				"act_from" => date_edit::get_timestamp($act_from),
+				"act_to" => date_edit::get_timestamp($act_to),
 			),
 		));
 

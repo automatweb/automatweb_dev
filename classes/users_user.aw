@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.51 2003/02/12 15:44:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.52 2003/05/09 16:17:15 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -190,6 +190,28 @@ class users_user extends aw_template
 			$uid = "";
 		};
 
+		// check for not active. 
+		if (is_array($udata))
+		{
+			$act_from = $this->get_user_config(array(
+				"uid" => $uid, 
+				"key" => "act_from"
+			));
+			$act_to = $this->get_user_config(array(
+				"uid" => $uid, 
+				"key" => "act_to"
+			));
+			if ($act_from > 0 && $act_from > time())
+			{
+				$success = false;
+				$msg = "Kasutaja pole aktiivne!";
+			}
+			if ($act_to > 0 && $act_to < time())
+			{
+				$success = false;
+				$msg = "Kasutaja pole aktiivne!";
+			}
+		}
 		$this->msg = $msg;
 
 		// all checks complete, result in $success, process it
