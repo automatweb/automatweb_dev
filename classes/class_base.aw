@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.72 2003/02/14 18:34:13 duke Exp $
+// $Id: class_base.aw,v 2.73 2003/02/17 11:52:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -321,12 +321,15 @@ class class_base extends aliasmgr
 					"status" => isset($status) ? $status : 1,
 			));
 
-			$almgr = get_instance("aliasmgr");
-			$almgr->create_alias(array(
-				"alias" => $id,
-				"id" => $alias_to,
-				"reltype" => $reltype,
-			));
+			if ($alias_to)
+			{
+				$almgr = get_instance("aliasmgr");
+				$almgr->create_alias(array(
+					"alias" => $id,
+					"id" => $alias_to,
+					"reltype" => $reltype,
+				));
+			};
 
 			$this->new = true;
 			$this->id = $id;
@@ -516,8 +519,12 @@ class class_base extends aliasmgr
 			));
 		}
 
+
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
+
+
 		$this->save_object(array("data" => $objdata));
+
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
