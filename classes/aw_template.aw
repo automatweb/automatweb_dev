@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.51 2003/10/05 17:20:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.52 2003/10/14 12:21:06 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -276,6 +276,29 @@ class aw_template extends core
 	function get_parent_template($tpl)
 	{
 		return $this->v2_parent_map[$tpl];
+	}
+
+	////
+	// !the difference between this and get_parent_template is
+	// that this might return several, if the name is not fully qualified. 
+	function get_parent_templates($tpl)
+	{
+		$ret = array();
+		foreach($this->v2_templates as $fqname => $tt)
+		{
+			// if fqname contains the needed template,
+			// get the parent
+			$parts = explode(".", $fqname);
+			foreach($parts as $idx => $part)
+			{
+				if ($part == $tpl)
+				{
+					$ret[] = $parts[$idx-1];
+					break;
+				}
+			}
+		}
+		return $ret;
 	}
        
 	////

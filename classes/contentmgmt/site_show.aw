@@ -70,6 +70,11 @@ class site_show extends class_base
 
 		// save path
 		$this->path = $this->section_obj->path();
+		$this->path_ids = array();
+		foreach($this->path as $p_obj)
+		{
+			$this->path_ids[] = $p_obj->id();
+		}
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
@@ -99,7 +104,8 @@ class site_show extends class_base
 
 		$this->do_check_properties(&$arr);
 
-		return $this->do_show_template($arr);
+		$apd = get_instance("layout/active_page_data");
+		return $this->do_show_template($arr).$apd->on_shutdown_get_styles();
 	}
 
 	function show_type($arr)
@@ -124,7 +130,7 @@ class site_show extends class_base
 		$this->vars(array(
 			"sel_menu_id" => $this->sel_section,
 			"sel_menu_comment" => isset($arr["comment"]) ? $arr["comment"] : "",
-			"site_title" => $this->site_title
+			"site_title" => strip_tags($this->site_title),
 		));
 		
 		// leat each class handle it's own variable import
@@ -450,7 +456,7 @@ class site_show extends class_base
 			$ok = $check->class_id() == CL_DOCUMENT && $check->status() == STAT_ACTIVE;
 			if ($this->cfg["lang_menus"] == 1)
 			{
-				$ok &= $check->lang_id() == aw_global_get("LC");
+				$ok &= $check->lang() == aw_global_get("LC");
 			}
 			if (!$ok)
 			{
@@ -797,7 +803,7 @@ class site_show extends class_base
 				}
 			}
 		}
-		$smn = $o->name();
+		$smn = $this->sel_section_obj->name();
 		if (aw_ini_get("menuedit.strip_tags"))
 		{
 			$smn = strip_tags($smn);
@@ -812,9 +818,9 @@ class site_show extends class_base
 		$sel_menu_timing = 6;
 		if ($imgs)
 		{
-			if ($o->meta("img_timing"))
+			if ($this->sel_section_obj->meta("img_timing"))
 			{
-				$sel_menu_timing = $o->meta("img_timing");
+				$sel_menu_timing = $this->sel_section_obj->meta("img_timing");
 			}
 		}
 
@@ -1081,9 +1087,8 @@ class site_show extends class_base
 		{
 			return $a_parent;
 		}
-
-		$pos = array_search($a_parent, $this->path);
-		return $this->path[$pos+$level];
+		$pos = array_search($a_parent, $this->path_ids);
+		return $this->path_ids[$pos+($level-1)];
 	}
 
 	function _helper_is_in_path($oid)
@@ -1104,7 +1109,7 @@ class site_show extends class_base
 	// for the menu area beginning at $parent
 	function _helper_get_levels_in_path_for_area($parent)
 	{
-		$pos = array_search($parent, $this->path);
+		$pos = array_search($parent, $this->path_ids);
 		if ($pos === NULL || $pos === false)
 		{
 			return 0;
@@ -1145,7 +1150,9 @@ class site_show extends class_base
 			));
 		}
 	
+		enter_function("site_show::do_draw_menus");
 		include_once($arr["compiled_filename"]);
+		exit_function("site_show::do_draw_menus");
 	}
 
 	function exec_subtemplate_handlers($arr)
@@ -1569,6 +1576,9 @@ class site_show extends class_base
 		}
 
 		$this->read_template($arr["template"]);
+
+		// import language constants
+		lc_site_load("menuedit",$this);
 
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 		

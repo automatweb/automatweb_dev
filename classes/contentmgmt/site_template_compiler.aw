@@ -2,22 +2,24 @@
 
 define("OP_START_BLK", 1);
 define("OP_END_BLK", 2);
-define("OP_IF_VISIBLE", 3);		// params { a_parent, level, in_parent_tpl }
-define("OP_SHOW_ITEM", 4);		// params { tpl (fully qualified name)}
+define("OP_IF_VISIBLE", 3);			// params { a_parent, level, in_parent_tpl }
+define("OP_SHOW_ITEM", 4);			// params { tpl (fully qualified name), has_image_tpl, no_image_tpl}
 
-define("OP_LOOP_LIST_BEGIN", 5);		// params { a_parent, level, in_parent_tpl}
+define("OP_LOOP_LIST_BEGIN", 5);	// params { a_parent, level, in_parent_tpl}
 
 // list filter creation
-define("OP_LIST_BEGIN", 6);		// params { a_parent, level, a_parent_p_fn}
-define("OP_LIST_FILTER", 7);	// params { prop, value }
-define("OP_LIST_END", 8);		// params {}
+define("OP_LIST_BEGIN", 6);			// params { a_parent, level, a_parent_p_fn}
+define("OP_LIST_FILTER", 7);		// params { prop, value }
+define("OP_LIST_END", 8);			// params {}
 
-define("OP_LOOP_LIST_END", 9);	// params { tpl (not-fully qualified name)}
+define("OP_LOOP_LIST_END", 9);		// params { tpl (not-fully qualified name)}
 
-define("OP_IF_BEGIN", 10);		// params {}
-define("OP_IF_COND", 11); 		// params {prop, value}
-define("OP_IF_END", 12);		// params {}
-define("OP_IF_ELSE", 13);		// params {}
+define("OP_IF_BEGIN", 10);			// params {}
+define("OP_IF_COND", 11); 			// params {prop, value}
+define("OP_IF_END", 12);			// params {}
+define("OP_IF_ELSE", 13);			// params {}
+
+define("OP_CHECK_SUBITEMS_SEL", 14);// params { tpl }
 
 class site_template_compiler extends aw_template
 {
@@ -38,15 +40,19 @@ class site_template_compiler extends aw_template
 			11 => "OP_IF_COND", 
 			12 => "OP_IF_END",
 			13 => "OP_IF_ELSE",
+			14 => "OP_CHECK_SUBITEMS_SEL"
 		);
 	}
 
 	function compile($tpl)
 	{
+		enter_function("site_template_compiler::compile");
 		$this->read_template($tpl);
 		$this->parse_template_parts();
 		$this->compile_template_parts();
-		return "<?php\n".$this->generate_code()."?>";
+		$code =  "<?php\n".$this->generate_code()."?>";
+		exit_function("site_template_compiler::compile");
+		return $code;
 	}
 
 	////
@@ -80,28 +86,92 @@ class site_template_compiler extends aw_template
 			{
 				$this->menu_areas[$area]["levels"][$level]["all_opts"][$part] = $part;
 			}
+
+			// check if it has HAS_IMAGE subtemplate or NO_IMAGE subtemplate
+			if ($this->is_parent_tpl("HAS_IMAGE", $tpl))
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_image_tpl"] = 1;
+			}
+			if ($this->is_parent_tpl("NO_IMAGE", $tpl))
+			{
+				$this->menu_areas[$area]["levels"][$level]["no_image_tpl"] = 1;
+			}
+
 			// figure out if the template was inside another menu template
 			// 	to do that, we get the parent template and check if it has the same menu area and level -1
 			$is_in_parent = false;
 
-			$parent_tpl = $this->get_parent_template($tpl);
-			if (substr($parent_tpl, 0, 5) == "MENU_")
+			$parent_tpls = $this->get_parent_templates($tpl);
+			foreach($parent_tpls as $parent_tpl)
 			{
-				$parts = explode("_", $parent_tpl);
-				$parent_area = $parts[1];
-				$parent_level = substr($parts[2], 1);
-				if ($parent_area == $area && ($parent_level+1) == $level)
+				if (substr($parent_tpl, 0, 5) == "MENU_")
 				{
-					$is_in_parent = true;
+					$parts = explode("_", $parent_tpl);
+					$parent_area = $parts[1];
+					$parent_level = substr($parts[2], 1);
+					if ($parent_area == $area && ($parent_level+1) == $level)
+					{
+						$is_in_parent = true;
+					}
+					// set this template as the parent's sub template
+					$this->menu_areas[$parent_area]["levels"][$parent_level]["child_tpls"][$parent_tpl] = array(
+						"area" => $area,
+						"level" => $level,
+						"parts" => $parts
+					);
 				}
-				// set this template as the parent's sub template
-				$this->menu_areas[$parent_area]["levels"][$parent_level]["child_tpls"][$parent_tpl] = array(
-					"area" => $area,
-					"level" => $level,
-					"parts" => $parts
-				);
+				else
+				if (substr($parent_tpl, 0, strlen("HAS_SUBITEMS")) == "HAS_SUBITEMS")
+				{
+					// fetch the parent templates for that and try again
+					$parent_tpls2 = $this->get_parent_templates($parent_tpl);
+					foreach($parent_tpls2 as $parent_tpl2)
+					{
+						if (substr($parent_tpl2, 0, 5) == "MENU_")
+						{
+							$parts = explode("_", $parent_tpl2);
+							$parent_area = $parts[1];
+							$parent_level = substr($parts[2], 1);
+							if ($parent_area == $area && ($parent_level+1) == $level)
+							{
+								$is_in_parent = true;
+							}
+							// set this template as the parent's sub template
+							$this->menu_areas[$parent_area]["levels"][$parent_level]["child_tpls"][$parent_tpl2] = array(
+								"area" => $area,
+								"level" => $level,
+								"parts" => $parts
+							);
+						}
+					}
+				}
+
+				if ($found)
+				{
+				}
+				$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] |= $is_in_parent;
 			}
-			$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] |= $is_in_parent;
+		}
+
+		// HAS_SUBITEMS_AREA_L1_SEL check - these will go after each level is inserted in the template
+		$tpls = $this->get_subtemplates_regex("(HAS_SUBITEMS.*)");
+		
+		// now figure out the menu areas that are used
+		$_tpls = array();
+ 		foreach($tpls as $tpl)
+		{
+			list($tpl) = explode(".", $tpl);
+			$_tpls[] = $tpl;
+		}
+		$tpls = array_unique($_tpls);
+		foreach($tpls as $tpl)
+		{
+			$parts = explode("_", $tpl);
+			$area = $parts[2];
+			$level = substr($parts[3], 1)+1;
+			
+			$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check"] = true;
+			$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check_tpl"] = $tpl;
 		}
 	}
 
@@ -213,15 +283,19 @@ class site_template_compiler extends aw_template
 				"params" => array()
 			);
 
+			$no_display_item = false;
 			foreach($tdat as $tpl_opt)
 			{
 				$params = $this->get_if_filter_from_tpl_opt($tpl_opt, $ldat["all_opts"]);
 				if ($params)
 				{
+					$params["a_parent"] = $adat["parent"];
+					$params["level"] = $level;
 					$this->ops[] = array(
 						"op" => OP_IF_COND,
 						"params" => $params
 					);
+					$no_display_item |= $params["no_display_item"];
 				}
 			}
 
@@ -235,25 +309,30 @@ class site_template_compiler extends aw_template
 				"params" => array()
 			);
 
-			// here we gotta check if we need to 
-			// insert the items for the next level in between here. 
-			// to do that, we need to check if the next level subtemplate is 
-			// inside the current template
-			if (isset($ldat["child_tpls"][$cur_tpl]))
+			if (!$no_display_item)
 			{
-				$chd_tpl_dat = $ldat["child_tpls"][$cur_tpl];
-				$chd_area = $chd_tpl_dat["area"];
-				$chd_lv = $chd_tpl_dat["level"];
-				$this->compile_template_level($chd_area, $this->menu_areas[$chd_area], $chd_lv, $this->menu_areas[$chd_area]["levels"][$chd_lv]);
-				$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
-			}
+				// here we gotta check if we need to 
+				// insert the items for the next level in between here. 
+				// to do that, we need to check if the next level subtemplate is 
+				// inside the current template
+				if (isset($ldat["child_tpls"][$cur_tpl]))
+				{
+					$chd_tpl_dat = $ldat["child_tpls"][$cur_tpl];
+					$chd_area = $chd_tpl_dat["area"];
+					$chd_lv = $chd_tpl_dat["level"];
+					$this->compile_template_level($chd_area, $this->menu_areas[$chd_area], $chd_lv, $this->menu_areas[$chd_area]["levels"][$chd_lv]);
+					$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
+				}
 
-			$this->ops[] = array(
-				"op" => OP_SHOW_ITEM,
-				"params" => array(
-					"tpl" => $cur_tpl_fqn
-				)
-			);
+				$this->ops[] = array(
+					"op" => OP_SHOW_ITEM,
+					"params" => array(
+						"tpl" => $cur_tpl_fqn,
+						"has_image_tpl" => $ldat["has_image_tpl"],
+						"no_image_tpl" => $ldat["no_image_tpl"],
+					)
+				);
+			}
 
 			$this->ops[] = array(
 				"op" => OP_END_BLK,
@@ -268,6 +347,16 @@ class site_template_compiler extends aw_template
 			)
 		);
 
+		if ($ldat["has_subitems_sel_check"])
+		{
+			$this->ops[] = array(
+				"op" => OP_CHECK_SUBITEMS_SEL,
+				"params" => array(
+					"tpl" => $ldat["has_subitems_sel_check_tpl"]
+				)
+			);
+		}
+
 		if ($end_block)
 		{
 			$this->ops[] = array(
@@ -277,50 +366,6 @@ class site_template_compiler extends aw_template
 		}
 	}	
 
-	function get_list_filter_from_tpl_opt($opt, $all_opts)
-	{
-		switch($opt)
-		{
-			case "BEGIN":
-				return array(
-					"key" => "limit",
-					"value" => 1
-				);
-				break;
-
-			case "SEL":
-				return array(
-					"key" => "oid",
-					"value" => "aw_global_get(\"section\")"
-				);
-				break;
-
-			case "SEP":
-				return array(
-					"key" => "clickable",
-					"value" => "0"
-				);
-				break;
-
-			default:
-				$ret = array();
-
-				// check if we have SEP for this level, then normal menus must only show
-				// non-sep
-				if ($all_opts["SEP"] == "SEP")
-				{
-					$ret = array(
-						"key" => "clickable",
-						"value" => "1"
-					);
-				}
-				return $ret;
-				break;
-		}
-
-		return false;
-	}
-
 	function get_if_filter_from_tpl_opt($opt, $all_opts)
 	{
 		switch($opt)
@@ -328,7 +373,14 @@ class site_template_compiler extends aw_template
 			case "BEGIN":
 				return array(
 					"prop" => "loop_counter",
-					"value" => 1
+					"value" => "0"
+				);
+				break;
+
+			case "END":
+				return array(
+					"prop" => "loop_counter",
+					"value" => "list_end"
 				);
 				break;
 
@@ -343,6 +395,14 @@ class site_template_compiler extends aw_template
 				return array(
 					"prop" => "clickable",
 					"value" => "0"
+				);
+				break;
+
+			case "NOTACT":
+				return array(
+					"prop" => "level_selected",
+					"value" => "not_in_path",
+					"no_display_item" => true
 				);
 				break;
 
@@ -452,6 +512,89 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
+	
+		if ($arr["has_image_tpl"] || $arr["no_image_tpl"])
+		{
+			$ret .= $this->_gi()."\$has_images = false;\n";
+		}
+		
+		// do menu images
+		$n_img = aw_ini_get("menuedit.num_menu_images");
+		$ret .= $this->_gi()."\$img = ".$o_name."->meta(\"menu_images\");\n";
+		$ret .= $this->_gi()."if (is_array(\$img) && count(\$img) > 0)\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		for($i = 0; $i < $n_img; $i++)
+		{
+			$ret .= $this->_gi()."if (!empty(\$img[".$i."][\"url\"]))\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$imgurl = image::check_url(\$img[".$i."][\"url\"]);\n";
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"menu_image_".$i."\" => \"<img src='\".\$imgurl.\"'>\",\n";
+			$ret .= $this->_gi()."\"menu_image_".$i."_url\" => \$imgurl\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			if ($arr["has_image_tpl"] || $arr["no_image_tpl"])
+			{
+				$ret .= $this->_gi()."\$has_images = true;\n";
+			}
+			
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		if ($arr["has_image_tpl"])
+		{
+			$ret .= $this->_gi()."if (\$has_images)\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"HAS_IMAGE\" => \$this->parse(\"HAS_IMAGE\")\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"HAS_IMAGE\" => \"\"\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
+		if ($arr["no_image_tpl"])
+		{
+			$ret .= $this->_gi()."if (!\$has_images)\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"NO_IMAGE\" => \$this->parse(\"NO_IMAGE\")\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"NO_IMAGE\" => \"\"\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
 		return $ret;
 	}
@@ -465,14 +608,21 @@ class site_template_compiler extends aw_template
 		$list_name = "\$list_".$arr["a_parent"]."_".$arr["level"];
 		$o_name = "\$o_".$arr["a_parent"]."_".$arr["level"];
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
+		$loop_counter_name = "\$i_".$arr["a_parent"]."_".$arr["level"];
 
 		array_push($this->list_name_stack, array(
 			"list_name" => $list_name,
 			"o_name" => $o_name,
-			"content_name" => $content_name
+			"content_name" => $content_name,
+			"loop_counter_name" => $loop_counter_name
 		));
 
-		$ret  = $this->_gi()."$list_name = new object_list(array(\n";
+		$ret = "";
+
+		// also set the area as visible, because if we get here in execution, it is visible.
+		$ret .= $this->_gi()."\$this->menu_levels_visible[".$arr["a_parent"]."][".$arr["level"]."] = 1;\n";
+
+		$ret  .= $this->_gi()."$list_name = new object_list(array(\n";
 		$this->brace_level++;
 		if ($arr["level"] == 1)
 		{
@@ -524,9 +674,10 @@ class site_template_compiler extends aw_template
 		$list_name = $dat["list_name"];
 		$o_name = $dat["o_name"];
 		$content_name = $dat["content_name"];
+		$loop_counter_name = $dat["loop_counter_name"];
 
 		$ret  = $this->_gi().$content_name." = \"\";\n";
-		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(); !".$list_name."->end(); ".$o_name." =& ".$list_name."->next())\n";
+		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); ".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $ret;
@@ -537,6 +688,7 @@ class site_template_compiler extends aw_template
 		// pop one item off the list name stack
 		$dat = array_pop($this->list_name_stack);
 		$content_name = $dat["content_name"];
+		$this->last_list_dat = $dat;
 
 		$this->brace_level--;
 		$ret  = $this->_gi()."}\n";
@@ -552,17 +704,34 @@ class site_template_compiler extends aw_template
 
 	function _g_op_if_cond($arr)
 	{
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$o_name = $dat["o_name"];
+		$loop_counter_name = $dat["loop_counter_name"];
+		$list_name = $dat["list_name"];
+
+		if ($arr["prop"] == "level_selected")
+		{
+			if ($arr["value"] == "not_in_path")
+			{
+				$ret = "((\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->id()) && \$this->_helper_is_in_path(".$o_name."->parent())) && ";
+			}
+		}
+		else
 		if ($arr["prop"] == "loop_counter")
 		{
-			$ret = "(\$i == ".$arr["value"].") && ";
+			if ($arr["value"] == "list_end")
+			{
+				$ret = "(".$loop_counter_name." == (".$list_name."->count()-1)) && ";
+			}
+			else
+			{
+				$ret = "(".$loop_counter_name." == ".$arr["value"].") && ";
+			}
 		}
 		else
 		if ($arr["prop"] == "oid")
 		{
-			end($this->list_name_stack);
-			$dat = current($this->list_name_stack);
-			$o_name = $dat["o_name"];
-
 			if ($arr["value"] == "is_in_path")
 			{
 				$ret = "(\$this->_helper_is_in_path(".$o_name."->id())) && ";
@@ -574,10 +743,6 @@ class site_template_compiler extends aw_template
 		}
 		else
 		{
-			end($this->list_name_stack);
-			$dat = current($this->list_name_stack);
-			$o_name = $dat["o_name"];
-
 			$ret = "(".$o_name."->prop(\"".$arr["prop"]."\") == \"".$arr["value"]."\") && ";
 		}
 		return $ret;
@@ -592,6 +757,25 @@ class site_template_compiler extends aw_template
 	function _g_op_if_else($arr)
 	{
 		$ret = $this->_gi()."else\n";
+		return $ret;
+	}
+
+	function _g_op_check_subitems_sel($arr)
+	{
+		$ret = "";
+		$dat = $this->last_list_dat;
+		$list_name = $dat["list_name"];
+
+		$ret .= $this->_gi()."if (".$list_name."->count() > 0)\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["tpl"]."\")\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
 		return $ret;
 	}
 }

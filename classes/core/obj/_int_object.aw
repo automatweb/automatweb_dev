@@ -1017,7 +1017,6 @@ class _int_object
 
 		if (!$this->obj["oid"])
 		{
-			
 			$this->_int_init_new();
 
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
@@ -1070,6 +1069,7 @@ class _int_object
 			$ret[] = $t;
 			$parent = $t->parent();
 		}
+		$ret[] = obj($this->ini["rootmenu"]);
 		return array_reverse($ret);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.69 2003/10/06 10:23:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.70 2003/10/14 12:21:06 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -99,7 +99,7 @@
 	@property link type=textbox group=show
 	@caption Menüü link
 
-	@property type type=select group=general
+	@property type type=select group=general table=menu field=type
 	@caption Menüü tüüp
 	
 	@property admin_feature type=select group=general table=menu field=admin_feature

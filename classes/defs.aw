@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.106 2003/10/14 10:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.107 2003/10/14 12:21:06 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -432,6 +432,15 @@ if (!defined("DEFS"))
 			case SERIALIZE_PHP:
 				classload("php");
 				$ser = new php_serializer;
+				foreach($flags as $fk => $fv)
+				{
+					$ser->set($fk, $fv);
+				}
+				$str = $ser->php_serialize($arr);
+				break;
+			case SERIALIZE_PHP_FILE:
+				classload("php_file");
+				$ser = new php_serializer_file;
 				foreach($flags as $fk => $fv)
 				{
 					$ser->set($fk, $fv);

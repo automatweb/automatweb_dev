@@ -1,5 +1,6 @@
 <?php
 classload(
+	"core/obj/ds_decorator_base",
 	"core/obj/_int_obj_container_base", 
 	"core/obj/_int_object", 
 	"core/obj/ds_base",

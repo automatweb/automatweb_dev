@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.26 2003/09/23 16:26:30 duke Exp $
+// $Id: cfgutils.aw,v 1.27 2003/10/14 12:21:06 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -128,19 +128,19 @@ class cfgutils extends aw_template
 		};
 		$fqfn = $this->fbasedir . $file . ".xml";
 
-                $source = $this->get_file(array("file" => $fqfn));
+		$source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
 
-                if ($source)
-                {
-                        $parser = get_instance("xml/xml_path_parser");
-                        //$parser->parse_data(array("content" => $source));
+		if ($source)
+		{
+			$parser = get_instance("xml/xml_path_parser");
+			//$parser->parse_data(array("content" => $source));
 
-                        $parser->parse_file(array("fname" => "/xml/properties/$file" . ".xml"));
+			$parser->parse_file(array("fname" => "/xml/properties/$file" . ".xml"));
 
 			// how on earth do I invoke functions on 
 
-                        $properties = $parser->get_data("/properties/property");
+			$properties = $parser->get_data("/properties/property");
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");

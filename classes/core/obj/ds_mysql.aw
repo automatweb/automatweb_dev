@@ -524,6 +524,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
+		$where = array();
+
 		if ($params["class_id"] && !is_array($params["class_id"]))
 		{
 			$classes = aw_ini_get("classes");
@@ -531,6 +533,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				"file" => $classes[$params["class_id"]]["file"],
 				"clid" => $params["class_id"]
 			));
+			if (isset($tableinfo["documents"]))
+			{
+				$where["documents"] = array();
+			}
 		}
 		else
 		if (is_array($params["class_id"]))
@@ -549,11 +555,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$tableinfo += $tmp2;
 				}
+				if (isset($tableinfo["documents"]))
+				{
+					$where["documents"] = array();
+				}
 			}
 		}
 
 		$stat = false;
-		$where = array();
 		$sby = "";
 
 		foreach($params as $key => $val)

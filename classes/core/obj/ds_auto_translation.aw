@@ -3,26 +3,11 @@
 define("OBJ_TRANS_ORIG", 1);
 define("OBJ_TRANS_TRANSLATION", 2);
 
-class _int_obj_ds_auto_translation 
+class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 {
-	//////////////////////////////////////////////
-	// private variables
-	var $contained;	// the contained ds
-
 	function _int_obj_ds_auto_translation($contained)
 	{
-		$this->contained = $contained;
-	}
-
-	////
-	// !returns the oid that has the specified alias
-	// parameters:
-	//	alias - required
-	//	site_id - optional
-	//	parent - optional
-	function get_oid_by_alias($arr)
-	{
-		return $this->contained->get_oid_by_alias($arr);
+		parent::_int_obj_ds_decorator($contained);
 	}
 
 	////
@@ -178,60 +163,6 @@ class _int_obj_ds_auto_translation
 		}
 	}
 
-	////
-	// !creates new object, returns object id
-	// params:
-	//	properties - prop array from propreader
-	//	objdata - object data from objtable
-	//	tableinfo - tableinfo from prop reader
-	// returns:
-	//	new oid
-	function create_new_object($arr)
-	{
-		return $this->contained->create_new_object($arr);
-	}
-
-	////
-	// !saves object properties, including all object table fields, 
-	// params:
-	//	properties - prop array from propreader
-	//	objdata - object data from objtable
-	//	tableinfo - tableinfo from prop reader
-	//	propvalues - property values
-	function save_properties($arr)
-	{
-		return $this->contained->save_properties($arr);
-	}
-
-	////
-	// !returns all data for connection $id
-	function read_connection($id)
-	{
-		return $this->contained->read_connection($id);
-	}
-
-	////
-	// !saves connection 
-	function save_connection($data)
-	{
-		return $this->contained->save_connection($data);
-	}
-
-	////
-	// !deletes connection $id
-	function delete_connection($id)
-	{
-		return $this->contained->delete_connection($id);
-	}
-
-	
-	////
-	// !returns all connections that match filter
-	function find_connections($arr)
-	{
-		return $this->contained->find_connections($arr);
-	}
-
 	function _get_root_obj($oid)
 	{
 		// now figure out if this is the root obj
@@ -279,16 +210,6 @@ class _int_obj_ds_auto_translation
 			$params["lang_id"] = aw_global_get("lang_id");
 		}
 		return $this->contained->search($params);
-	}
-
-	function can($a, $b)
-	{
-		return $this->contained->can($a,$b);
-	}
-
-	function delete_object($oid)
-	{
-		return $this->contained->delete($oid);
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.14 2003/10/08 15:27:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.15 2003/10/14 12:21:07 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -324,16 +324,16 @@ class promo extends class_base
 		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
-			if ($alias["reltype"] == RELTYPE_ASSIGNED_MENU)
+			if ($alias->prop("reltype") == RELTYPE_ASSIGNED_MENU)
 			{
-				$section[$alias["to"]] = $alias["to"];
-				$new_alias_reltype[$alias["to"]] = RELTYPE_ASSIGNED_MENU;
+				$section[$alias->prop("to")] = $alias->prop("to");
+				$new_alias_reltype[$alias->prop("to")] = RELTYPE_ASSIGNED_MENU;
 			};
 			
-			if ($alias["reltype"] == RELTYPE_DOC_SOURCE)
+			if ($alias->prop("reltype") == RELTYPE_DOC_SOURCE)
 			{
-				$last_menus[$alias["to"]] = $alias["to"];
-				$new_alias_reltype[$alias["to"]] = RELTYPE_DOC_SOURCE;
+				$last_menus[$alias->prop("to")] = $alias->prop("to");
+				$new_alias_reltype[$alias->prop("to")] = RELTYPE_DOC_SOURCE;
 			};
 		};
 
@@ -556,18 +556,19 @@ class promo extends class_base
 				$show_promo = true;
 			}
 			else
-			if (is_array($o->meta("section_include_submenus")) && $inst->is_in_path($inst->sel_section))
+			if (is_array($o->meta("section_include_submenus")))
 			{
-				$pa = array();
-				foreach($inst->path as $o)
+				$pa = array(aw_ini_get("frontpage"), aw_ini_get("rootmenu"));
+				foreach($inst->path as $p_o)
 				{
-					$pa[] = $o->id();
+					$pa[] = $p_o->id();
 				}
 
 				// here we need to check, whether any of the parent menus for
 				// this menu has been assigned a promo box and has been told
 				// that it should be shown in all submenus as well
-				$intersect = array_intersect($pa,$o->meta("section_include_submenus"));
+				$sis = new aw_array($o->meta("section_include_submenus"));
+				$intersect = array_intersect($pa,$sis->get());
 				if (sizeof($intersect) > 0)
 				{
 					$show_promo = true;

@@ -2735,7 +2735,7 @@ class site_content extends menuedit
 			$ok = $check->class_id() == CL_DOCUMENT && $check->status() == STAT_ACTIVE;
 			if ($this->cfg["lang_menus"] == 1)
 			{
-				$ok &= $check->lang_id() == aw_global_get("LC");
+				$ok &= $check->lang() == aw_global_get("LC");
 			}
 			if (!$ok)
 			{

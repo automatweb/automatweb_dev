@@ -642,8 +642,53 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 		$content.="HTTP_SERVER_VARS[$k] = $v \n";
 	}
 
+		// also attach backtrace
+		if (function_exists("debug_backtrace"))
+		{
+			$content .= "<br><br> Backtrace: \n\n<Br><br>";
+			$bt = debug_backtrace();
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
+				}
+				else
+				{
+					$fnm = "file ".$bt[$i]["file"];
+				}
+
+				$content .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
+
+				if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
+				}
+				else
+				{
+					$fnm2 = "file ".$bt[$i]["file"];
+				}
+
+				$conten .= $fnm2." with arguments ";
+
+				$content .= "<font size=\"-1\">(".join(",", $bt[$i]["args"]).") file = ".$bt[$i]["file"]."</font>";
+			
+				$content .= " <br><br>\n\n";
+			}
+		}
+
 	$head = "";
-	mail("vead@struktuur.ee", $subj, $content,$head);
+	//mail("vead@struktuur.ee", $subj, $content,$head);
 
 	die("<br><b>AW_ERROR: $msg</b><br>");
 }
