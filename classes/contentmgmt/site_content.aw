@@ -1318,7 +1318,7 @@ class site_content extends menuedit
 				$this->vars(array(
 					"target" => $samenu["target"] ? "target=\"_blank\"" : "",
 					"link" => $link,
-					"text" => $samenu["name"],
+					"text" => str_replace("&nbsp;", " ", $samenu["name"]),
 				));
 				$tmp[$ord] .= $this->parse($subtpl);
 			}
