@@ -617,13 +617,13 @@ class user extends class_base
 					{
 						$user->connect(array(
 							"to" => $p_o->id(),
-							"reltype" => RELTYPE_GRP
+							"reltype" => "RELTYPE_GRP",
 						));
 
 						// add reverse alias to group
 						$p_o->connect(array(
 							"to" => $user->id(),
-							"reltype" => 2 // RELTYPE_MEMBER from group
+							"reltype" => "RELTYPE_MEMBER" // from group
 						));
 
 						$user->create_brother($p_o->id());
@@ -801,13 +801,13 @@ class user extends class_base
 					{
 						$user->connect(array(
 							"to" => $p_o->id(),
-							"reltype" => RELTYPE_GRP
+							"reltype" => "RELTYPE_GRP",
 						));
 
 						// add reverse alias to group
 						$p_o->connect(array(
 							"to" => $user->id(),
-							"reltype" => 2 // RELTYPE_MEMBER from group
+							"reltype" => "RELTYPE_MEMBER" // from group
 						));
 
 						if ($p_o->id() != $group->id())
@@ -1243,13 +1243,13 @@ class user extends class_base
 				{
 					$user->connect(array(
 						"to" => $p_o->id(),
-						"reltype" => RELTYPE_GRP
+						"reltype" => "RELTYPE_GRP",
 					));
 
 					// add reverse alias to group
 					$p_o->connect(array(
 						"to" => $user->id(),
-						"reltype" => 2 // RELTYPE_MEMBER from group
+						"reltype" => "RELTYPE_MEMBER" // from group
 					));
 
 
@@ -1310,13 +1310,13 @@ class user extends class_base
 				$aug_o = obj($aug_oid);
 				$arr["obj_inst"]->connect(array(
 					"to" => $aug_o->id(),
-					"reltype" => RELTYPE_GRP
+					"reltype" => "RELTYPE_GRP",
 				));
 
 				// add reverse alias to group
 				$aug_o->connect(array(
 					"to" => $arr["obj_inst"]->id(),
-					"reltype" => 2 // RELTYPE_MEMBER from group
+					"reltype" => "RELTYPE_MEMBER" // from group
 				));
 
 				//$arr["obj_inst"]->create_brother($aug_o->id());
@@ -1346,13 +1346,13 @@ class user extends class_base
 
 				$user->connect(array(
 					"to" => $parent->id(),
-					"reltype" => 1 // RELTYPE_GRP
+					"reltype" => "RELTYPE_GRP",
 				));
 
 				// add reverse alias to group
 				$parent->connect(array(
 					"to" => $user->id(),
-					"reltype" => 2 // RELTYPE_MEMBER from group
+					"reltype" => "RELTYPE_MEMBER" // from group
 				));
 
 				$this->users->add_users_to_group_rec(
@@ -1371,13 +1371,13 @@ class user extends class_base
 					{
 						$user->connect(array(
 							"to" => $p_o->id(),
-							"reltype" => RELTYPE_GRP
+							"reltype" => "RELTYPE_GRP",
 						));
 
 						// add reverse alias to group
 						$p_o->connect(array(
 							"to" => $user->id(),
-							"reltype" => 2 // RELTYPE_MEMBER from group
+							"reltype" => "RELTYPE_MEMBER", // from group
 						));
 
 						$last_bro = $user->create_brother($p_o->id());
@@ -1549,7 +1549,7 @@ class user extends class_base
 				// now, connect user to person
 				$p_o->connect(array(
 					"to" => $p->id(),
-					"reltype" => 6 // RELTYPE_WORK from crm_person
+					"reltype" => "RELTYPE_WORK" // from crm_person
 				));
 				return $p->id();
 			}
@@ -1622,13 +1622,13 @@ class user extends class_base
 			$aug_o = obj($aug_oid);
 			$o->connect(array(
 				"to" => $aug_o->id(),
-				"reltype" => 1 // RELTYPE_GRP from user
+				"reltype" => "RELTYPE_GRP" // from user
 			));
 
 			// add reverse alias to group
 			$aug_o->connect(array(
 				"to" => $o->id(),
-				"reltype" => 2 // RELTYPE_MEMBER from group
+				"reltype" => "RELTYPE_MEMBER" // from group
 			));
 		}
 
