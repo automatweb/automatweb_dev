@@ -319,8 +319,8 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @groupinfo tasks_overview caption="Ülevaade" parent=overview
 
 @groupinfo relorg caption="Kliendid"
-@groupinfo customers caption="Kliendid" parent=relorg submit=no
-@groupinfo my_customers caption="Kliendid" parent=relorg submit=no
+@groupinfo customers caption="Kõik kliendid" parent=relorg submit=no
+@groupinfo my_customers caption="Minu kliendid" parent=relorg submit=no
 @groupinfo fcustomers caption="Tulevased kliendid" parent=relorg
 @groupinfo partners caption="Partnerid" parent=relorg
 @groupinfo fpartners caption="Tulevased partnerid" parent=relorg
@@ -429,6 +429,9 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 
 @reltype CLIENT_MANAGER value=34 clid=CL_CRM_MANAGER
 @caption Kliendihaldur
+
+@reltype SECTION_WEBSIDE value=35 clid=CL_CRM_MANAGER
+@caption Üksus veebis
 
 @classinfo no_status=1
 			
@@ -727,6 +730,7 @@ class crm_company extends class_base
 	{
 		switch ($arr['id'])
 		{
+			/*
 			case 'customers':
 				$tmp_obj = new object($arr['request']['id']);
 				$arr['caption'] = $tmp_obj->prop('name');
@@ -735,6 +739,7 @@ class crm_company extends class_base
 			case 'my_customers':
 					$arr['caption'] = $this->users_person->prop('name');			
 			break;
+			*/
 			case 'people':
 				$arr['link'] = aw_url_change_var(array("group" => "contacts2"));
 				//arr($arr);

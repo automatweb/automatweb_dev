@@ -1,11 +1,9 @@
-<table border="0" cellspacing="4" width="100%">
+<table border="0" cellspacing="0" cellpadding="0" width="100%" class="cbyellow">
 <tr>
-
 <!-- SUB: persons -->
-<td class="cbyellow">{VAR:person}</td>
+{VAR:person}
 <!-- END SUB: persons -->
 {VAR:personinfo}
-
 </tr>
 </table>
 

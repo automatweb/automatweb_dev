@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.13 2004/09/27 13:46:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.14 2004/10/04 09:45:52 sven Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -203,7 +203,6 @@ class crm_section extends class_base
 				"type" => "RELTYPE_WORKERS",
 			))));
 		}
-		
 		if($recrusive)
 		{
 			foreach ($section->connections_from(array("type" => "RELTYPE_SECTION")) as $subsection)
@@ -211,8 +210,14 @@ class crm_section extends class_base
 				$this->get_section_workers($subsection->prop("to"), true);
 			}
 		}
-		
-		
+		else
+		{
+			//fuck this, im too lazy to lazy to think and do it corretly
+			$section = $section->get_first_obj_by_reltype("RELTYPE_SECTION");
+			$retval = new object_list($section->connections_from(array(
+				"type" => "RELTYPE_WORKERS"
+			)));
+		}
 		return $retval;
 	}
 	
@@ -257,11 +262,10 @@ class crm_section extends class_base
       $target_obj = $conn->to();
       if ($target_obj->class_id() == CL_CRM_SECTION)
       {
-			$from = $conn->from();
-			if($target_obj->is_connected_to(array('to' => $from->id())))
+			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
 			{
 				$target_obj->disconnect(array(
-					"from" => $from->id(),
+					"from" => $conn->prop("from"),
 				));
 			}
       }
