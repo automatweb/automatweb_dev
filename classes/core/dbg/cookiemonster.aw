@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cookiemonster.aw,v 2.4 2004/02/11 21:34:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/dbg/cookiemonster.aw,v 1.1 2004/11/07 11:55:32 kristo Exp $
 // a class to aid in debugging - you can set cookies in your browser with this
 
 /*
