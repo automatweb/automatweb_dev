@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.37 2001/10/14 15:17:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.38 2001/10/14 16:07:04 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -2645,17 +2645,56 @@ class shop extends shop_base
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
 		$ret = $this->db_next();
 
+		// ok, cancelling orders is not so simple unfortunately
+		// we must update all the weeks in the order, not just the first one
+		// so, we first find out the min and max periods of the order
+		$order2item = array();
+		$min_p = 2000000000;
+		$max_p = 0;
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
-			$this->save_handle();
+			$order2item[$row["item_id"]] = $row;
+			if ($row["period"] > $max_p)
+			{
+				$max_p = $row["period"];
+			}
+			if ($row["period"] < $min_p)
+			{
+				$min_p = $row["period"];
+			}
+		}
+
+		$weeks = ($max_p - $min_p)/(24*3600*7);
+		if ($weeks < 1)
+		{
+			$weeks = 1;
+		}
+		foreach($order2item as $iid => $row)
+		{
 			$it = $this->get_item($row["item_id"]);
+			$itt = $this->get_item_type($it["type_id"]);
+
 			if ($it["has_period"] && !$it["has_objs"])
 			{
-				$this->db_query("UPDATE shop_item_period_avail SET num_sold=num_sold - ".$row["count"]." WHERE item_id = ".$row["item_id"]." AND period = ".$row["period"]);
+				if ($itt["has_voucher"] == 1)
+				{
+					// items with voucher are hotels - they are taken for the entire period
+					for ($i=0; $i < $weeks; $i++)
+					{
+						$q = "UPDATE shop_item_period_avail SET num_sold=num_sold - ".$row["count"]." WHERE item_id = ".$row["item_id"]." AND period = ".($min_p+($i*(24*7*3600)));
+						$this->db_query($q);
+					}
+				}
+				else
+				{
+					// other items - flights are taken only for the arrival/departure date
+				
+					$q = "UPDATE shop_item_period_avail SET num_sold=num_sold - ".$row["count"]." WHERE item_id = ".$row["item_id"]." AND period = ".$row["period"];
+					$this->db_query($q);
+				}
 			}
 			$this->db_query("UPDATE shop_items SET sold_items = sold_items - ".$row["count"]." WHERE id = ".$row["item_id"]);
-			$this->restore_handle();
 		}
 		$this->db_query("DELETE FROM order2item WHERE order_id = $order_id");
 		$this->db_query("DELETE FROM orders WHERE id = $order_id");
