@@ -10,5 +10,16 @@
 			</function>
 		</action>
 
+		<action name="submit_show" >
+			<function name="submit_show">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<required name="subact" />
+					<optional name="sel" />
+					<required name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

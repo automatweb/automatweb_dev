@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.5 2004/05/19 16:08:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.6 2004/06/04 11:16:03 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -96,6 +96,10 @@ class object_treeview_v2 extends class_base
 			case "sortbl":
 				$this->do_sortbl($arr);
 				break;
+
+			case "access":
+				$this->do_access_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -186,6 +190,32 @@ class object_treeview_v2 extends class_base
 			$this->do_pageselector($ol, $ob->prop("per_page"));
 		}
 
+		$has_access_to = false;
+		$has_add_access = false;
+		foreach($ol as $odata)
+		{	
+			if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
+			{
+				$has_access_to = true;
+			}
+			$last_o = $odata;
+		}
+
+		if (!$has_access_to)
+		{	
+			unset($col_list["change"]);
+			unset($col_list["select"]);
+		}
+
+		if ($last_o)
+		{
+			if (!$d_inst->check_acl("add", $d_o, $last_o["id"]))
+			{
+				$ob->set_prop("show_add", false);
+			}
+		}
+
+
 		foreach($ol as $odata)
 		{
 			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
@@ -211,7 +241,8 @@ class object_treeview_v2 extends class_base
 			"HEADER_NO_TOOLBAR" => $no_tb,
 			"reforb" => $this->mk_reforb("submit_show", array(
 				"return_url" => aw_global_get("REQUEST_URI"),
-				"subact" => "0"
+				"subact" => "0",
+				"id" => $ob->id()
 			))
 		));
 
@@ -470,6 +501,7 @@ class object_treeview_v2 extends class_base
 			"name" => html::href(array(
 				"url" => $url,
 				"caption" => $name,
+				"target" => "_blank"
 			)),
 			"oid" => $oid,
 			"target" => $target,
@@ -486,7 +518,12 @@ class object_treeview_v2 extends class_base
 			"act" => $act,
 			"delete" => $delete,
 			"bgcolor" => $bgcolor,
-			"size" => ($fileSizeMBytes > 1 ? $fileSizeMBytes."MB" : ($fileSizeKBytes > 1 ? $fileSizeKBytes."kb" : $fileSizeBytes."b"))
+			"size" => ($fileSizeMBytes > 1 ? $fileSizeMBytes."MB" : ($fileSizeKBytes > 1 ? $fileSizeKBytes."kb" : $fileSizeBytes."b")),
+			"change" => $change,
+			"select" => html::checkbox(array(
+				"name" => "sel[]",
+				"value" => $id,
+			))
 		);
 
 		$del = "";
@@ -578,14 +615,23 @@ class object_treeview_v2 extends class_base
 		foreach($folders as $fld)
 		{
 			$i_o = obj($fld["id"]);
-			$parent = 0;
-			if (in_array($i_o->parent(),$folders))
-			{
-				$parent = $i_o->parent();
-			}
 			
 			if ($level == 0)
 			{
+				$parent = 0;
+				$found = false;
+				foreach($folders as $fp)
+				{
+					if ($fp["id"] == $i_o->parent())
+					{
+						$found = true;
+					}
+				}
+				if ($found)
+				{
+					$parent = $i_o->parent();
+				}
+
 				if ($parent == 0)
 				{
 					$ol->add($fld["id"]);
@@ -593,7 +639,7 @@ class object_treeview_v2 extends class_base
 			}
 			else
 			{
-				if ($parent == $object->id())
+				if ($parent_o->id() == $i_o->parent())
 				{
 					$ol->add($fld["id"]);
 				}
@@ -768,6 +814,41 @@ class object_treeview_v2 extends class_base
 			"PAGE_SEL" => "",
 			"PAGE" => $ps
 		));
+	}
+
+	/**  
+		
+		@attrib name=submit_show params=name default="0"
+
+		@param id required type=int acl=view
+		@param subact required
+		@param sel optional
+		@param return_url required		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function submit_show($arr)
+	{
+		extract($arr);
+
+		if ($subact == "delete")
+		{
+			$tt = array();
+			$awa = new aw_array($sel);
+			$farr = $awa->get();
+
+			// get datasource 
+			$ob = obj($id);
+			$d_o = obj($ob->prop("ds"));
+			$d_inst = $d_o->instance();
+			$d_inst->do_delete_objects($d_o, $farr);
+		}
+
+		return $return_url;
 	}
 }
 ?>

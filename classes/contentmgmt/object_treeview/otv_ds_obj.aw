@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.2 2004/05/06 12:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.3 2004/06/04 11:16:04 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -225,7 +225,8 @@ class otv_ds_obj extends class_base
 					"class_id" => CL_MENU,
 					"parent" => $c_o->id(),
 					"status" => STAT_ACTIVE,
-					"lang_id" => array()
+					"lang_id" => array(),
+					"sort_by" => "objects.jrk"
 				));
 				$cur_ids = $_ot->ids();
 			}
@@ -352,15 +353,15 @@ class otv_ds_obj extends class_base
 			if ($t->class_id() == CL_FILE)
 			{
 				$fi = get_instance("file");
-				$fd = $fi->get_file_by_id($t->id());
-				$url = $fi->get_url($t->id(),$fd["name"]);
+				$url = $fi->get_url($t->id(),$t->name());
+				
 				if ($fd["newwindow"])
 				{
 					$target = "target=\"_blank\"";
 				}
-				$fileSizeBytes = number_format(filesize($t->prop('file')),2);
-				$fileSizeKBytes = number_format(filesize($t->prop('file'))/(1024),2);
-				$fileSizeMBytes = number_format(filesize($t->prop('file'))/(1024*1024),2);
+				$fileSizeBytes = number_format(file::get_file_size($t->prop('file')),2);
+				$fileSizeKBytes = number_format(file::get_file_size($t->prop('file'))/(1024),2);
+				$fileSizeMBytes = number_format(file::get_file_size($t->prop('file'))/(1024*1024),2);
 			}
 			else
 			if ($t->class_id() == CL_MENU)
@@ -393,7 +394,11 @@ class otv_ds_obj extends class_base
 				"icon" => image::make_img_tag(icons::get_icon_url($t->class_id(), $t->name())),
 				"fileSizeBytes" => $fileSizeBytes,
 				"fileSizeKBytes" => $fileSizeKBytes,
-				"fileSizeMBytes" => $fileSizeMBytes
+				"fileSizeMBytes" => $fileSizeMBytes,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $t->id(), "section" => aw_global_get("section")), $t->class_id()),
+					"caption" => "Muuda"
+				)),
 			);
 		}
 		return $ret;
@@ -435,6 +440,15 @@ class otv_ds_obj extends class_base
 			$ret[] = $c->to();
 		}
 		return $ret;
+	}
+
+	function do_delete_objects($o, $arr)
+	{
+		foreach($arr as $oid)
+		{
+			$o = obj($oid);
+			$o->delete();
+		}
 	}
 }
 ?>
