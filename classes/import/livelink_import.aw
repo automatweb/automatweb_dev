@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.14 2004/01/13 16:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.15 2004/02/05 14:06:48 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -10,10 +10,10 @@
 	@default field=meta
 	@default method=serialize
 
-	@property rootnode type=textbox size=40 maxlength=10
+	@property rootnode type=textbox size=40 maxlength=40
 	@caption Juurika ID (eralda komadega)
 	
-	@property exception_node type=textbox size=40 maxlength=10
+	@property exception_node type=textbox size=40 maxlength=40
 	@caption Erandite ID (eralda komadega)
 
 	@property outdir type=textbox 
@@ -246,6 +246,7 @@ class livelink_import extends class_base
 			{
 				# so it must be new
 				$this->quote($name);
+				$this->quote($realname);
 				$this->quote($description);
 				$icon = ($attribs["objtype"] == 136) ? "compound_doc.gif" : "folder.gif";
 				$iconurl = sprintf("<img src='/img/%s' alt='' title='' />",$icon);
@@ -265,6 +266,7 @@ class livelink_import extends class_base
 				print "renewing $name\n";
 				$this->quote($name);
 				$this->quote($description);
+				$this->quote($realname);
 			
 				$q = "SELECT id FROM livelink_files WHERE parent = '$id' AND rootnode = '$rootnode'";
 				$this->db_query($q);
@@ -402,6 +404,7 @@ class livelink_import extends class_base
 				print "creating file $filename\n";
 				$this->quote($name);
 				$this->quote($filename);
+				$this->quote($realname);
 				// wah, wah
 				$this->write_outfile();
 				$q = "INSERT INTO livelink_files (id,parent,name,realname,filename,modified,icon,rootnode)
@@ -414,6 +417,7 @@ class livelink_import extends class_base
 				print "updating file $filename";
 				$this->quote($name);
 				$this->quote($filename);
+				$this->quote($realname);
 				// wah, wah
 				$this->write_outfile();
 				$q = "UPDATE livelink_files SET

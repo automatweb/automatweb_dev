@@ -4,7 +4,7 @@
             <name>rootnode</name>
             <type>textbox</type>
             <size>40</size>
-            <maxlength>10</maxlength>
+            <maxlength>40</maxlength>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -15,7 +15,7 @@
             <name>exception_node</name>
             <type>textbox</type>
             <size>40</size>
-            <maxlength>10</maxlength>
+            <maxlength>40</maxlength>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
