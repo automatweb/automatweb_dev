@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.56 2004/07/16 07:55:51 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.57 2004/07/19 13:57:46 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -593,10 +593,17 @@ class crm_company extends class_base
 		{
 			$value = $obj->id();
 		}
+
 		foreach($prof_connections as $prof_conn)
 		{
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
+			
+			if($tmp_obj->id()==$this->active_node)
+			{
+				$name = '<b>'.$name.'</b>';
+			}
+			
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
@@ -830,6 +837,10 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
+				if(is_oid($arr['request']['cat']))
+				{
+					$this->active_node = $arr['request']['cat'];
+				}
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
 				break;
 			}
@@ -1143,8 +1154,8 @@ class crm_company extends class_base
 			"profession" => $arr["request"]["cat"],
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
-		
-		foreach ($job_obj_list->arr() as $job)
+		$job_obj_list = $job_obj_list->arr();
+		foreach ($job_obj_list as $job)
 		{
 			if($arr['request']['unit'])
 			{
@@ -1839,6 +1850,8 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=search_for_contacts
+		@param cat optional type=int
+		@param unit optional type=int
 	**/
 	function search_for_contacts($arr)
 	{
@@ -1847,7 +1860,8 @@ class crm_company extends class_base
 						'id' => $arr['id'],
 						'group' => $arr['group'],
 						'contact_search' => true,
-						'unit' => $arr['unit']
+						'unit' => $arr['unit'],
+						'cat' => $arr['cat'],
 						),
 					'crm_company');
 	}
@@ -2408,6 +2422,11 @@ class crm_company extends class_base
 			$this->show_customer_search = $arr['customer_search'];
 		}
 
+		if(is_oid($arr['request']['cat']))
+		{
+			$this->cat = $arr['request']['cat'];
+		}
+
 		//stuff
 		if((int)$arr['request']['unit'])
 		{
@@ -2429,7 +2448,7 @@ class crm_company extends class_base
 		{
 			$this->category=$arr['request']['category'];
 		}
-
+		
 		if(is_oid($arr['request']['category']))
 		{
 			$this->reltype_category = $this->crm_category_reltype_category;
@@ -2447,6 +2466,7 @@ class crm_company extends class_base
 	{
 		$arr['unit'] = $this->unit;
 		$arr['category'] = $this->category;
+		$arr['cat'] = $this->cat;
 		$arr['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
@@ -2633,6 +2653,11 @@ class crm_company extends class_base
 		if($arr['request']['category'])
 		{
 			$arr['args']['category'] = $arr['request']['category'];
+		}
+		
+		if($arr['request']['cat'])
+		{
+			$arr['args']['cat'] = $arr['request']['cat'];
 		}
 	}
 
@@ -3265,20 +3290,13 @@ class crm_company extends class_base
 		//let's try to get certain fields
 		$search_params['sort_by'] = 'name';
 
-		/*$ol = new object_list(array(
-					'limit' => 50,
-					'sort_by' => 'name',
-					'class_id' => CL_CRM_PERSON,
-					'CL_CRM_PERSON.RELTYPE_PHONE.name' => '%'
-				));
-		arr($ol);
-		die();*/
-
 		$ol = new object_list($search_params);
+
 		//$ol = new object_list(array('class_id' => CL_CRM_PERSON,'firstname'=>'toomas','lastname'=>'koobas'));
 		$pl = get_instance(CL_PLANNER);
 		$person = get_instance("crm/crm_person");
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
+
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
 		{
 			$person_data = $person->fetch_person_by_id(array(
