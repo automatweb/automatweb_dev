@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.5 2005/01/18 10:52:48 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -129,6 +129,10 @@ class calendar_vacancy extends class_base
 		{
 			case "morph_to":
 				$vac = $arr["obj_inst"];
+				if (!$vac)
+				{
+					return PROP_IGNORE;
+				}
 				$cal_id = 
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(

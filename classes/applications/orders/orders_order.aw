@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.3 2004/11/30 16:58:23 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.4 2005/01/18 10:51:55 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -336,7 +336,7 @@ class orders_order extends class_base
 		$oform = &obj($_SESSION["order_form_id"]);
 		$check["cfgform_id"] = $oform->prop("itemform");
 		$check["request"] = $submit_data;
-		
+	
 		$errors = $this->validate_data($check);
 		
 		if(!$errors)
@@ -369,7 +369,7 @@ class orders_order extends class_base
 			$_SESSION["order_form_errors"]["items"] = $errors;
 			$_SESSION["order_form_values"] = $arr["orders"];
 		}
-		
+
 		return $this->mk_my_orb("change", array(
 			"id" => $_SESSION["order_form_id"],
 			"section" => $_SESSION["orders_section"],
@@ -470,9 +470,9 @@ class orders_order extends class_base
 		if($person && $person->prop("email"))
 		{
 			$person_email = &obj($person->prop("email"));
+			$msg->set_prop("mfrom", $person_email->prop("mail"));
 		}
 		
-		$msg->set_prop("mfrom", $person_email->prop("mail"));
 		$msg->set_prop("mto", $admin_mail);
 		$msg->set_prop("name", $form->name());
 		$msg->set_prop("html_mail", 1);
@@ -489,8 +489,7 @@ class orders_order extends class_base
 	function send_mail_to_orderer()
 	{
 		$form = &obj($_SESSION["order_form_id"]);
-		$mail_tpl = &obj($form->prop("ordemail"));
-		$mail_obj = &obj($mail_tpl->save_new());
+		$mail_obj = &obj($form->prop("ordemail"));
 		$order = &obj($_SESSION["order_cart_id"]);
 		$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
 		if(!$person || !$person->prop("email"))
@@ -515,6 +514,13 @@ class orders_order extends class_base
 	{
 		$order_form = &obj($_SESSION["order_form_id"]);
 		$order = &obj($_SESSION["order_cart_id"]);
+		if ($order->class_id() != CL_ORDERS_ORDER)
+		{
+			error::raise(array(
+				"id" => "ERR_WTF",
+				"msg" => "orders_order::send_order(): order_cart_id in session is of wrong class!!"
+			));
+		}
 		$order->set_prop("order_completed", 1);
 		if($order_form->prop("orders_to_mail"))
 		{
