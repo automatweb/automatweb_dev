@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="form_import">
+		<action name="import_form_entries">
+			<function name="import_form_entries">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import_chain_entries">
+			<function name="import_chain_entries">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
