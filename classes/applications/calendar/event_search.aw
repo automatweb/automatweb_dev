@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.5 2004/12/01 15:09:45 sven Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -13,12 +13,16 @@
 @property event_cfgform type=relpicker reltype=RELTYPE_EVENT_CFGFORM
 @caption Kasutatav vorm
 
+@property show_current_mont type=checkbox ch_value=1 field=meta method=serialize
+@caption Naita vaikimisi antud kuu sündmusi
+
+
 @default group=ftsearch
 @property ftsearch_fields type=chooser multiple=1 orient=vertical
 @caption Vabateksti väljad
 
 @default group=ftform
-@property ftform type=table
+@property ftform type=table no_caption=1
 @caption Vorm
 
 @default group=ftsearch
@@ -63,7 +67,7 @@ class event_search extends class_base
 			"clid" => CL_EVENT_SEARCH
 		));
 
-		$this->fields = array("fulltext","start_date","end_date","project1","project2");
+		$this->fields = array("fulltext","start_date","end_date","project1","project2", "active", "format");
 	}
 
 	function callback_search_form($arr)
@@ -127,21 +131,48 @@ class event_search extends class_base
 			"caption" => t("Sisu"),
 		));
 
+		
+		$t->define_field(array(
+			"name" => "active",
+			"caption" => "Aktiivne",
+		));
+		
 		$t->set_sortable(false);
-
+		
 		$t->define_data(array(
 			"type" => t("Tekstiotsing"),
 			"caption" => html::textbox(array(
 				"name" => "fulltext[caption]",
 				"value" => $formconfig["fulltext"]["caption"] ? $formconfig["fulltext"]["caption"] : ("Tekstiotsing"),
 			)),
+			"active" => html::checkbox(array(
+				"name" => "fulltext[active]",
+				"value" => $formconfig["fulltext"]["active"],
+				"checked" => $formconfig["fulltext"]["active"],
+			)),
+		));
+		
+		$format_selector = html::select(array(
+			"options" => array(
+				0 => "Ainult kuupäev",
+				1 => "Kuupäev, kellaajad"
+			),
+			"name" => "start_date[format]",
+			"value" => $formconfig["start_date"]["format"],
 		));
 		
 		$t->define_data(array(
+
 			"type" => t("Alguskuupäev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
 				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuupäev"),
+			)),
+			"active" => html::checkbox(array(
+				"name" => "start_date[active]",
+				"value" => $formconfig["start_date"]["active"],
+				"checked" => $formconfig["start_date"]["active"],
+	
 			)),
 		));
 		
@@ -150,6 +181,12 @@ class event_search extends class_base
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
 				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lõppkuupäev"),
+			)),
+			
+			"active" => html::checkbox(array(
+				"name" => "end_date[active]",
+				"value" => $formconfig["end_date"]["active"],
+				"checked" => $formconfig["end_date"]["active"],	
 			)),
 		));
 		
@@ -172,6 +209,11 @@ class event_search extends class_base
 				"name" => "project1[caption]",
 				"value" => $formconfig["project1"]["caption"] ? $formconfig["project1"]["caption"] : t("Projekt 1"),
 			)),
+			"active" => html::checkbox(array(
+				"name" => "project1[active]",
+				"value" => $formconfig["project1"]["active"],
+				"checked" => $formconfig["project1"]["active"],
+			)),
 			"data" => html::select(array(
 				"name" => "project1[rootnode]",
 				"options" => $prj_opts,
@@ -190,6 +232,11 @@ class event_search extends class_base
 				"options" => $prj_opts,
 				"value" => $formconfig["project2"]["rootnode"],
 			)),
+			"active" => html::checkbox(array(
+				"name" => "project2[active]",
+				"value" => $formconfig["project2"]["active"],
+				"checked" => $formconfig["project2"]["active"],
+			))
 		));
 
 	}
@@ -301,13 +348,14 @@ class event_search extends class_base
 			case "ftform":
 				$o = $arr["obj_inst"];
 				$fdata = array();
+				
 				foreach($this->fields as $fname)
 				{
 					if ($arr["request"][$fname])
 					{
 						$fdata[$fname] = $arr["request"][$fname];
 					};
-				};	
+				};
 				$o->set_meta("formconfig",$fdata);
 				break;
 
@@ -403,7 +451,6 @@ class event_search extends class_base
 		$htmlc->start_output();
 
 		$formconfig = $ob->meta("formconfig");
-		
 		$do_search = false;
 		$search = array();
 		load_vcl("date_edit");
@@ -411,44 +458,59 @@ class event_search extends class_base
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
-
-
-		$htmlc->add_property(array(
-			"name" => "fulltext",
-			"caption" => $formconfig["fulltext"]["caption"],
-			"type" => "textbox",
-			"value" => $arr["fulltext"],
-		));
-
-		$htmlc->add_property(array(
-			"name" => "start_date",
-			"caption" => $formconfig["start_date"]["caption"],
-			"type" => "date_select",
-			"value" => $start_tm != -1 ? $start_tm : time(),
-		));
+		//arr($formconfig);
 		
-		$htmlc->add_property(array(
-			"name" => "end_date",
-			"caption" => $formconfig["end_date"]["caption"],
-			"type" => "date_select",
-			"value" => $end_tm != -1 ? $end_tm : time() + (30 * 86400),
-		));
+		if($formconfig["fulltext"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "fulltext",
+				"caption" => $formconfig["fulltext"]["caption"],
+				"type" => "textbox",
+				"value" => $arr["fulltext"],
+			));
+		}
 		
-		$htmlc->add_property(array(
-			"name" => "project1",
-			"caption" => $formconfig["project1"]["caption"],
-			"type" => "select",
-			"options" => $this->_get_project_choices($formconfig["project1"]["rootnode"]),
-			"value" => $arr["project1"],
-		));
+		if($formconfig["start_date"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "start_date",
+				"caption" => $formconfig["start_date"]["caption"],
+				"type" => "date_select",
+				"value" => $start_tm != -1 ? $start_tm : time(),
+			));
+		}
 		
-		$htmlc->add_property(array(
-			"name" => "project2",
-			"caption" => $formconfig["project2"]["caption"],
-			"type" => "select",
-			"options" => $this->_get_project_choices($formconfig["project2"]["rootnode"]),
-			"value" => $arr["project2"],
-		));
+		if($formconfig["end_date"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "end_date",
+				"caption" => $formconfig["end_date"]["caption"],
+				"type" => "date_select",
+				"value" => $end_tm != -1 ? $end_tm : time() + (30 * 86400),
+			));
+		}
+		
+		if($formconfig["project1"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "project1",
+				"caption" => $formconfig["project1"]["caption"],
+				"type" => "select",
+				"options" => $this->_get_project_choices($formconfig["project1"]["rootnode"]),
+				"value" => $arr["project1"],
+			));
+		}
+		
+		if($formconfig["project2"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "project2",
+				"caption" => $formconfig["project2"]["caption"],
+				"type" => "select",
+				"options" => $this->_get_project_choices($formconfig["project2"]["rootnode"]),
+				"value" => $arr["project2"],
+			));
+		}
 		
 		$htmlc->add_property(array(
 			"name" => "sbt",
@@ -532,6 +594,7 @@ class event_search extends class_base
 				*/
 				$this->read_template("search_results.tpl");
 				$tabledef = $ob->meta("result_table");
+				
 				uasort($tabledef,array($this,"__sort_props_by_ord"));
 				// first I have to sort the bloody thing in correct order
 				//$this->sub_merge = 1;
@@ -621,7 +684,8 @@ class event_search extends class_base
 
 			//arr($edata);
 			$res = "";
-
+			
+	
 			foreach($edata as $eval)
 			{
 				//if (!empty($eval["parent1"]) && !empty($eval["parent2"]))
@@ -634,12 +698,24 @@ class event_search extends class_base
 							$val = $eval[$sname];
 							if ($sname == "start1")
 							{
-								$val = date("d-m-Y",$val);
+								
+								if($formconfig["start_date"]["format"] == 1)
+								{
+									$val = date("d-m-Y",$val)."&nbsp;|&nbsp;".date("H:m",$val)." - ".date("H:m", $eval["end"]);
+								}
+								else
+								{
+									$val = date("d-m-Y",$val);
+								}
 							};
 							if ($sname == "end")
 							{
 								$val = date("d-m-Y",$val);
 							};
+							if($sname == "time")
+							{
+								$val = date("H:m", $eval["start1"]). " - " .date("H:m", $eval["end"]);
+							}
 							if ($sname == "name")
 							{
 								$val = html::href(array(
@@ -648,15 +724,105 @@ class event_search extends class_base
 								));
 							};
 							$this->vars(array("cell" => $val));
-							//print "exporting $sname" . $eval[$sname];
+						 	//print "exporting $sname" . $eval[$sname];
 							$cdat .= $this->parse("CELL");
 						};
 						$this->vars(array("CELL" => $cdat));
 				};
+				
+				$this->vars(array(
+					"fulltext" => $eval["utextarea1"],
+				));
+				
+				$i++;
+				if($i%2)
+				{
+					$this->vars(array(
+						"fuck" => "1",
+					));
+				}
+				else
+				{
+					$this->vars(array(
+						"fuck" => "2",
+					));
+				}
+				
+				//arr($eval["utextarea1"]);
 				$res .= $this->parse("EVENT");
-				//var_dump($res);
 			};
-
+			
+			//Navigation bar
+			
+			$next_month_args = $arr;
+			$prev_month_args = $arr;
+			
+			if($next_month_args["start_date"]["month"] == 12)
+			{
+		
+				$next_month_args["start_date"]["month"] = 1;
+				$next_month_args["end_date"]["month"] = 1;
+				
+				$next_month_args["start_date"]["year"]++;
+				$next_month_args["end_date"]["year"]++;
+			}
+			else
+			{
+				$next_month_args["start_date"]["month"]++;
+				$next_month_args["end_date"]["month"] = $next_month_args["start_date"]["month"];
+			}
+			$next_month_args["start_date"]["day"] = 1;
+			$next_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $next_month_args["end_date"]["month"], $next_month_args["end_date"]["year"]);
+			
+			
+			if($prev_month_args["start_date"]["month"] == 1)
+			{
+				$prev_month_args["start_date"]["month"] = 12;
+				$prev_month_args["start_date"]["year"]--;
+				
+				$prev_month_args["end_date"]["month"] = 12;
+				$prev_month_args["end_date"]["year"]--;
+			}
+			else
+			{
+				$prev_month_args["start_date"]["month"]--;
+				$prev_month_args["end_date"]["month"] = $prev_month_args["start_date"]["month"];
+			}
+			
+			$prev_month_args["start_date"]["day"] = 1;
+			$prev_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $prev_month_args["end_date"]["month"], $prev_month_args["end_date"]["year"]);
+			
+			for($i=1; $i <= 5; $i++)
+			{
+				
+				$week_args = $arr;
+				$week_args["start_date"]["day"] = (7 * ($i-1)) + 1;
+				$week_args["end_date"]["day"] = (7 * ($i-1)) + 7;
+								
+				$this->vars(array(
+					"week_url" => $this->mk_my_orb("search", $week_args, "event_search"),
+					"week_nr" => $i,	
+				));
+				
+				if($i == 5)
+				{
+					$res_weeks.= $this->parse("next_weeks_end");
+		
+				}
+				else
+				{
+					$res_weeks.= $this->parse("next_weeks");
+				}
+			}
+			
+			$this->vars(array(
+				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
+				"begin_year" => $arr["start_date"]["year"],
+				"next_month_url" => $this->mk_my_orb("search", $next_month_args, "event_search"),
+				"perv_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
+				"next_weeks" => $res_weeks,
+			));
+			
 			$this->vars(array(
 				"EVENT" => $res,
 			));
@@ -670,11 +836,19 @@ class event_search extends class_base
 			));
 		};
 
+<<<<<<< event_search.aw
+			$htmlc->finish_output(array("data" => array(
+                                "class" => get_class($this),
+                                "section" => aw_global_get("section"),
+                                "action" => "search",
+								"alias" => get_class($this),
+=======
 		$htmlc->finish_output(array(
 			"data" => array(
 				"class" => get_class($this),
 				"section" => aw_global_get("section"),
 				"action" => "search",
+>>>>>>> 1.4
 				"id" => $ob->id(),
 			),
 			"method" => "get",
@@ -685,8 +859,7 @@ class event_search extends class_base
 			"form_only" => 1
 		));
 
-		//arr($arr);
-
+		
 		return $html;
 
 		// kuupäeva numbrid on lihtsalt selectid
