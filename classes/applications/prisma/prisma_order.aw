@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.6 2004/06/11 08:51:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.7 2004/07/09 07:59:50 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -686,6 +686,7 @@ class prisma_order extends class_base
 			}
 			else
 			{
+				$this->rtgbr_cnt = 0;
 				$this->req_get_time_for_resource($resid, $length, $order, $event_ids, $pred, $buffer);
 			}
 		}
@@ -699,6 +700,7 @@ class prisma_order extends class_base
 			if ($event_ids[$resid] && !$processing[$resid] && !$done[$resid])
 			{
 				// also check preds 
+				$this->ps_pred_cnt = 0;
 				$ps_preds_ok = $this->do_check_ps_preds($resid, $pred, $processing, $order);
 				
 				if ($ps_preds_ok)
@@ -894,6 +896,12 @@ class prisma_order extends class_base
 
 	function req_get_time_for_resource($resid, $length, $order, $event_ids, $pred, $buffer, $min_time = NULL)
 	{
+		$this->rtgbr_cnt++;
+		if ($this->rtgbr_cnt > 100)
+		{
+			echo "resources are in a cyclic dependency!";
+			return;
+		}
 		$reso = obj($resid);
 		//echo "enter rgt for resource ".$reso->name()." <br>";
 		$res_i = $reso->instance();
@@ -1004,6 +1012,7 @@ class prisma_order extends class_base
 		$j_events_keys = $this->make_keys(array_values($j_events));
 
 		//echo "glob date = ".date("d.m.Y H:i:s", $event_data["start"])." evdate = ".date("d.m.Y H:i:s", $overlap->prop("start1"))." <br>";
+				$this->rtgbr_cnt = 0;
 		$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer, $overlap->prop("start1"));
 
 		$res_obj = obj($overlap_resid);
@@ -1026,6 +1035,7 @@ class prisma_order extends class_base
 			}
 
 			$this->times_by_resource = array();
+				$this->rtgbr_cnt = 0;
 			$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
 			$j_evo = obj($j_evid);
 			//if ($ts > $j_evo->prop("start1"))
@@ -1141,6 +1151,7 @@ class prisma_order extends class_base
 				// find first avail time
 				$this->cur_priority = $overlap->meta("task_priority");
 				$this->times_by_resource = array();
+				$this->rtgbr_cnt = 0;
 				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
 				//echo "got new ts as ".date("d.m.Y H:i", $ts)." len = $overlap_len <br>";
 				$overlap->set_prop("start1", $ts);
@@ -1158,6 +1169,7 @@ class prisma_order extends class_base
 						continue;
 					}
 
+				$this->rtgbr_cnt = 0;
 					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
 					$j_evo = obj($j_evid);
 					//if ($ts > $j_evo->prop("start1"))
@@ -1178,6 +1190,13 @@ class prisma_order extends class_base
 		if ($pred[$resid] == "")
 		{
 			return true;
+		}
+
+		$this->ps_pred_cnt++;
+		if ($this->ps_pred_cnt > 100)
+		{
+			echo "predicates cause a loop!";
+			return false;
 		}
 
 		$ret = true;
