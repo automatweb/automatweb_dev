@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.8 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.9 2001/11/20 13:43:13 cvs Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -103,10 +103,6 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
-<<<<<<< calendar.aw
-			$_day = sprintf("%02d",$day);
-			$_mask = ($args["marked"][$_day]) ? "<b>%s</b>" : "%s";
-=======
 				if ($marked[$day])
 				{
 					$markup = "<b>%s</b>";
@@ -115,13 +111,8 @@ class calendar extends aw_template
 				{
 					$markup = "%s";
 				};
->>>>>>> 2.7
 			$this->vars(array(
-<<<<<<< calendar.aw
-				"nday" => sprintf($_mask,$day),
-=======
 				"nday" => sprintf($markup,$day),
->>>>>>> 2.7
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
 				"day" => sprintf($markup,$day),
 			));
