@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.7 2004/08/17 11:17:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.8 2004/08/19 07:57:13 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -346,6 +346,10 @@ class cb_search extends class_base
 			{
 				$dat["sortable"] = 1;
 			}
+			if ($iname == "del_link" || $iname == "change_link")
+			{
+				$dat["align"] = "center";
+			}
 			$t->define_field($dat);
 		}
 
@@ -445,6 +449,10 @@ class cb_search extends class_base
 					$row["change_link"] = html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
 						"caption" => $this->in_results["change_link"]["caption"]
+					));
+					$row["del_link"] = html::href(array(
+						"url" => $this->mk_my_orb("delete_obj", array("id" => $o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI")))),
+						"caption" => $this->in_results["del_link"]["caption"]
 					));
 					$row["oid"] = $o->id();
 					$t->define_data($row);
@@ -820,6 +828,20 @@ class cb_search extends class_base
 			"obj_inst" => &$arr["ob"],
 			"request" => $arr["request"],
 		));
+	}
+
+	/** deletes the given object and returns to return_url
+
+		@attrib name=delete_obj
+
+		@param id required
+		@param return_url required
+	**/	
+	function delete_obj($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->delete();
+		return $arr["return_url"];
 	}
 }
 ?>
