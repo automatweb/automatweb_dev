@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.30 2002/03/26 16:58:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.31 2002/04/16 10:22:57 duke Exp $
 // table.aw - tabelite haldus
 
 
 classload("images");
 classload("style");
-lc_load("table");
 class table extends aw_template
 {
 	var $table_id;
@@ -18,11 +17,7 @@ class table extends aw_template
 		$this->sub_merge = 1;
 		$this->table_loaded = false;
 		lc_load("definition");
-		global $lc_table;
-		if (is_array($lc_table))
-		{
-			$this->vars($lc_table);
-		}
+		$this->lc_load("table","lc_table");
 	}
 
 	////
@@ -2321,6 +2316,7 @@ class table extends aw_template
 		$row["parent"] = $parent;
 		// $row may contain metadata and the query will fail, if that metadata contains apostrophses
 		$this->quote($row);
+		$row["lang_id"] = aw_global_get("lang_id");
 		$id = $this->new_object($row);
 		$this->quote(&$row["contents"]);
 		$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
