@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.65 2004/02/11 11:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.66 2004/03/24 10:24:04 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2981,7 +2981,17 @@ class form_element extends aw_template
 			$v = $this->form->post_vars[$prefix.$d_id];
 			if ($this->arr["hidden"] || aw_global_get("is_ft_change"))
 			{
-				$tm = $v;
+				if (is_array($v))
+				{
+					$_tmp = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+					$tm = $_tmp;
+					$var = $_tmp;
+				}
+				else
+				{
+					$tm = $v;
+					$var = $v;
+				}
 			}
 			else
 			{
