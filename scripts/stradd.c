@@ -39,12 +39,12 @@ my_bool stradd_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 	pt = (struct stradd_struct *)initid->ptr;
 	
 	pt->sep = (char *)malloc(args->lengths[0]+1);
-	pt->sep[0] = 0;
+	memset(pt->sep, 0, args->lengths[0]+1);
 	strncpy(pt->sep, args->args[0], args->lengths[0]);
 	pt->sep_len = args->lengths[0];
 	
 	pt->collect = (char *)malloc(65535);
-	pt->collect[0] = 0;
+	memset(pt->collect, 0, 65535);
 	
 	return 0;
 }
