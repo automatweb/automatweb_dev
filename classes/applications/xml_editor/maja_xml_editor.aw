@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.11 2005/03/20 17:08:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.12 2005/03/20 17:31:06 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -252,6 +252,11 @@ class maja_xml_editor extends class_base
 			"parent" => $parent_tag,
 		));
 //		foreach($xml_file_content[0] as $key => $value)
+		if (!is_array($complete_tags))
+		{
+			return false;
+		}
+		
 		foreach($complete_tags as $key => $value)
 		{
 			if($value['type'] == "open")
