@@ -19,6 +19,15 @@
             <caption>Active Directory domeen</caption>
       </property>
       <property>
+            <name>ad_base_dn</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Active Directory baas-DN kasutajate otsimiseks</caption>
+      </property>
+      <property>
             <name>ad_uid</name>
             <table>objects</table>
             <group>general</group>

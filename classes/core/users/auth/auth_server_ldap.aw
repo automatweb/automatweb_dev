@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.7 2004/11/01 13:18:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.8 2004/11/25 07:32:38 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -15,6 +15,9 @@
 
 @property ad_domain type=textbox
 @caption Active Directory domeen
+
+@property ad_base_dn type=textbox
+@caption Active Directory baas-DN kasutajate otsimiseks
 
 @property ad_uid type=textbox
 @caption AD kasutaja (gruppide lugemiseks)
