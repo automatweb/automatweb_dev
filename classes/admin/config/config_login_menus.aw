@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.6 2004/02/12 11:48:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.7 2004/05/11 07:19:22 duke Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -116,29 +116,10 @@ class config_login_menus extends class_base
 
 		$lm = $arr["obj_inst"]->meta("lm");
 
-		$node = array();
-		$node["caption"] = "<b>Grupp</b>";
-		$node["store"] = "no";
-		$node["name"] = "grp_txaa";
-		$node["items"] = array();
-		$node["group"] = "general";
-
-		$tmp = array(
-			"type" => "text",
-			"value" => "Prioriteet"
-		);
-		array_push($node["items"], $tmp);
-
-		$tmp = array(
-			"type" => "text",
-			"value" => "Login men&uuml;&uuml;",
-		);
-		array_push($node["items"], $tmp);
-
-		$ret[] = $node;
 
 		foreach($gl as $gid => $gdat)
 		{
+			/*
 			$node = array();
 			$node["caption"] = $gdat["name"];
 			$node["store"] = "no";
@@ -146,23 +127,30 @@ class config_login_menus extends class_base
 			$node["items"] = array();
 			$node["group"] = "general";
 
+			$ret[] = $node;
+			*/
+
 			$tmp = array(
 				"type" => "textbox",
+				"caption" => $gdat["name"],
 				"size" => 4,
 				"name" => "lm[$gid][pri]",
 				"value" => $lm[$gid]["pri"]
 			);
-			array_push($node["items"], $tmp);
+			//array_push($node["items"], $tmp);
+			$ret[] = $tmp;
 
 			$tmp = array(
+				"caption" => $gdat["name"] . " menyy",
 				"type" => "relpicker",
 				"name" => "lm[$gid][menu]",
 				"value" => $lm[$gid]["menu"],
-				"reltype" => RELTYPE_FOLDER
+				"reltype" => "RELTYPE_FOLDER"
 			);
-			array_push($node["items"], $tmp);
+			//array_push($node["items"], $tmp);
 
-			$ret[] = $node;
+			//$ret[] = $node;
+			$ret[] = $tmp;
 		}
 
 		return $ret;
