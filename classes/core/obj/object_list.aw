@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.33 2004/08/31 07:06:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.34 2004/09/09 11:08:48 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -16,6 +16,10 @@ class object_list extends _int_obj_container_base
 
 	function filter($param)
 	{
+		if ($GLOBALS["OBJ_TRACE"])
+		{
+			echo "object_list::filter(".join(",", map2('%s => %s', $param)).") <br>";
+		}
 		if (!is_array($param))
 		{
 			error::throw(array(
