@@ -947,7 +947,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				if ($this->properties[$key]["store"] == "connect")
 				{
-					$str[] = " aliases_".$key.".target = '$v' ";
+					$sql[] = " aliases_".$key.".target = '$val' ";
 				}
 				else
 				if ($key == "modified" || $key == "flags")
