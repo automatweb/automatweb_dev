@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.36 2004/12/03 11:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.37 2004/12/14 08:46:40 kristo Exp $
 
 /*
 
@@ -47,7 +47,7 @@
 @caption Klassid
 
 @default group=styles
-@property style_donor type=relpicker reltype=LTYPE_STY_DONOR 
+@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR 
 @caption Stiilide doonor
 
 @property title_bgcolor type=colorpicker 
@@ -59,17 +59,17 @@
 @property odd_bgcolor type=colorpicker 
 @caption Paaritu rea taustav&auml;rv
 
-@property header_css type=relpicker reltype=LTYPE_CSS 
+@property header_css type=relpicker reltype=RELTYPE_CSS 
 @caption Pealkirja stiil
 
-@property line_css type=relpicker reltype=LTYPE_CSS 
+@property line_css type=relpicker reltype=RELTYPE_CSS 
 @caption a stiil
 
 @default group=columns
 @property columns type=callback callback=callback_get_columns 
 @caption Tulbad
 
-@reltype FOLDER value=1 clid=CL_MENU,CL_SERR_FOLDER
+@reltype FOLDER value=1 clid=CL_MENU,CL_SERVER_FOLDER
 @caption kataloog
 
 @reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
@@ -81,7 +81,7 @@
 @reltype CSS value=4 clid=CL_CSS
 @caption css stiil
 
-@reltype STY_DONOR value=5 clid=CL_OBJECT_VIEW
+@reltype STYLE_DONOR value=5 clid=CL_OBJECT_VIEW
 @caption stiilide doonor
 
 */
@@ -104,7 +104,7 @@ class object_treeview extends class_base
 	{
 		$this->init(array(
 			'tpldir' => 'contentmgmt/object_tree',
-			'clid' => CL_OBJECT_
+			'clid' => CL_OBJECT_TREE
 		));
 		$this->sub_merge = 1;
 	}
@@ -191,7 +191,7 @@ class object_treeview extends class_base
 				list($url,$target,$caption) = $li->draw_link($oid);
 			}
 			else
-			if ($od->class_id() == CL_FI)
+			if ($od->class_id() == CL_FILE)
 			{
 				$fi = get_instance("file");
 				$fd = $fi->get_file_by_id($oid);
@@ -214,7 +214,7 @@ class object_treeview extends class_base
 				));
 			}
 			else
-			if ($od->class_id() == CL_SERR_FOLDER)
+			if ($od->class_id() == CL_SERVER_FOLDER)
 			{
 				$sf = get_instance("contentmgmt/server_folder");
 				$fl = $sf->get_contents($od);
@@ -471,7 +471,7 @@ class object_treeview extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"status" => $ob->prop("show_notact") ? array(STAT_ACTI, STAT_NOTACTI) : STAT_ACTI,
+			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			"class_id" => $ob->meta('clids'),
 			"sort_by" => $sby,
 			"lang_id" => array()
@@ -503,7 +503,7 @@ class object_treeview extends class_base
 		foreach($awa->get() as $p_id)
 		{
 			$p_o = obj($p_id);
-			if ($p_o->class_id() == CL_SERR_FOLDER)
+			if ($p_o->class_id() == CL_SERVER_FOLDER)
 			{
 				$ol->add($p_o);
 			}
@@ -611,7 +611,7 @@ class object_treeview extends class_base
 				{
 					$c_id_o = obj($c_id);
 					$c_id_gr = $c_id_o->connections_from(array(
-						"type" => LTYPE_ACL_GROUP
+						"type" => RELTYPE_ACL_GROUP
 					));
 					foreach($c_id_gr as $c_id_gr_c)
 					{
@@ -698,7 +698,7 @@ class object_treeview extends class_base
 		// 
 		// hehe, heuristics rule ;)
 		$t_c = $ob->connections_to(array(
-			"type" => 8,	// LTYPE_OBJ_ from menu
+			"type" => 8,	// RELTYPE_OBJ_ from menu
 			"from.class_id" => CL_MENU
 		));
 		
@@ -1122,10 +1122,10 @@ class object_treeview extends class_base
 		$del = "";
 		if ($this->can("delete", $acl_obj->id()))
 		{
-			$del = $this->parse("DE");
+			$del = $this->parse("DELETE");
 		}
 		$this->vars(array(
-			"DE" => $del
+			"DELETE" => $del
 		));
 
 		$tb = "";
@@ -1149,16 +1149,16 @@ class object_treeview extends class_base
 			$str = "";
 			if ($sel_cols[$colid] == 1)
 			{
-				$str = $this->parse("FI_".$colid);
+				$str = $this->parse("FILE_".$colid);
 			}
 			$this->vars(array(
-				"FI_".$colid => $str
+				"FILE_".$colid => $str
 			));
 		}
 		
 		$this->cnt++;
 
-		return $this->parse("FI");
+		return $this->parse("FILE");
 	}
 }
 ?>
