@@ -1,11 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.7 2004/04/22 10:03:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.8 2004/04/28 13:54:33 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
 
 // .. I need an additonal option .. multiple .. if it is not set, then it acts exactly
 // like the single relpicker .. radiobutton is used for selecting data
+
+// can I perhaps merge those things?
 
 */
 class relmanager extends aw_template 
@@ -21,8 +23,11 @@ class relmanager extends aw_template
 		$obj = $arr["obj_inst"];
 		
 		load_vcl("table");
-		$this->t = new aw_table(array("layout" => "generic"));
+		$this->t = new aw_table(array(
+			"layout" => "generic",
+		));
 
+		// XX: wtf is this?
 		if ($arr["new"])
 		{
 			return false;
@@ -248,21 +253,16 @@ class relmanager extends aw_template
 		};
 
 		$arglist["parent"] = $arr["obj_inst"]->parent();
+		$arglist["return"] = "id";
 
 		$inst = get_instance($clid);
-		$inst->id_only = true;
 		$obj_id = $inst->submit($arglist);
 
+		// TODO: Implement error checking! What if the relinfo value is not valid?
 		$arr["obj_inst"]->connect(array(
 			"to" => $obj_id,
 			"reltype"=> $arr["prop"]["relinfo"]["value"],
 		));
-
-		/*
-		print "<pre>";
-		print_r(dbg::process_backtrace(debug_backtrace()));
-		print "</pre>";
-		*/
 	}
 
 };
