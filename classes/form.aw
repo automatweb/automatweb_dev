@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.59 2001/09/04 16:36:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.60 2001/09/05 13:12:34 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1519,7 +1519,9 @@ class form extends form_base
 			));
 		}
 		$awt->stop("form::show");
-		return $this->parse();
+		$retval = $this->parse();
+		return $retval;
+		
 	}
 
 	////
@@ -2084,7 +2086,21 @@ class form extends form_base
 							"form")."'>Kustuta</a>";
 						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
 						{
-							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+							$_link = $this->mk_my_orb("show_entry", array(
+										"id" => $form_id,
+										"entry_id" => $row["entry_id"],
+										"op_id" => $this->arr["search_outputs"][$form_id],
+										"section" => $section,
+							));
+
+							$_caption = $row["ev_".$ft->table["view_col"]];
+
+							if ($ft->table["view_new_win"])
+							{
+								$_link = sprintf("javascript:aw_popup('%s&type=popup','popup',%d,%d)",$_link,$ft->table["new_win_x"],$ft->table["new_win_y"]);
+							};
+
+							$row["ev_".$ft->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
 						}
 						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
 						{
