@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.22 2005/02/11 08:04:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.23 2005/02/11 08:36:13 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -7,15 +7,14 @@
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"
-@groupinfo grp_resources caption="Ressursid"
 @groupinfo grp_schedule caption="Kalender" submit=no
-@groupinfo grp_users caption="Kasutajad"
-	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
-	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
+@groupinfo grp_printer caption="Operaatori vaade" submit=no
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
 	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=grp_settings
-@groupinfo grp_printer caption="Tr&uuml;kkali vaade" submit=no
+	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_settings submit=no
+	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_settings submit=no
+	@groupinfo grp_resources caption="Ressursside haldus" parent=grp_settings
 
 
 
@@ -953,45 +952,45 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Kõik projektid",
-			"id" => 1,
-			"url" => $url_projects_all,
-		));
-
-		$tree->add_item (1, array (
 			"name" => "Kõik plaanisolevad" . "(" . $count_projects_planned . ")",
 			"id" => 7,
 			"url" => $url_projects_planned,
 		));
 
-		$tree->add_item (1, array (
+		$tree->add_item (0, array (
 			"name" => "Hetkel töösolevad" . "(" . $count_projects_in_work . ")",
 			"id" => 2,
 			"url" => $url_projects_in_work,
 		));
 
-		$tree->add_item (1, array (
+		$tree->add_item (0, array (
 			"name" => "Planeeritud üle tähtaja" . "(" . $count_projects_planned_overdue . ")",
 			"id" => 3,
 			"url" => $url_projects_planned_overdue,
 		));
 
-		$tree->add_item (1, array (
+		$tree->add_item (0, array (
 			"name" => "Üle tähtaja" . "(" . $count_projects_overdue . ")",
 			"id" => 4,
 			"url" => $url_projects_overdue,
 		));
 
-		$tree->add_item (1, array (
+		$tree->add_item (0, array (
 			"name" => "Uued" . "(" . $count_projects_new . ")",
 			"id" => 5,
 			"url" => $url_projects_new,
 		));
 
-		$tree->add_item (1, array (
+		$tree->add_item (0, array (
 			"name" => "Valmis" . "(" . $count_projects_done . ")",
 			"id" => 6,
 			"url" => $url_projects_done,
+		));
+
+		$tree->add_item (0, array (
+			"name" => "Kõik projektid",
+			"id" => 1,
+			"url" => $url_projects_all,
 		));
 
 		$active_node = is_integer ($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : 7;
@@ -1168,9 +1167,7 @@ class mrp_workspace extends class_base
 			}
 
 			### get project customer
-			$connections = $project->connections_from (array ("type" => RELTYPE_CUSTOMER, "class_id" => CL_CRM_COMPANY));
-			$connection = reset ($connections);
-			$customer = is_object ($connection) ? $connnection->to () : obj ();
+			$customer = $project->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
 
 			### do request specific operations
 			switch ($list_request)
@@ -1217,7 +1214,7 @@ class mrp_workspace extends class_base
 					"url" => $change_url,
 					)
 				),
-				"customer" => $customer->name (),
+				"customer" => (is_object($customer) ? $customer->name () : ""),
 				"name" => $project->name (),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
@@ -2117,6 +2114,13 @@ class mrp_workspace extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
 			"name" => "project",
 			"caption" => t("Projekt"),
 			"align" => "center",
@@ -2173,6 +2177,17 @@ class mrp_workspace extends class_base
 			$len  = sprintf("%02d", floor($job->prop("length") / 3600)).":";
 			$len .= sprintf("%02d", floor(($job->prop("length") % 3600) / 60));
 
+			$custo = "";
+			$cust = $proj->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
+			if (is_object($cust))
+			{
+				$custo = html::get_change_url($cust->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$cust->name()
+				);
+			}
+
 			$t->define_data(array(
 				"tm" => $job->prop("starttime"),
 				"tm_end" => $job->prop("starttime") + $job->prop("length"),
@@ -2191,7 +2206,8 @@ class mrp_workspace extends class_base
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
 					$proj->name()
-				)
+				),
+				"customer" => $custo
 			));
 		}
 

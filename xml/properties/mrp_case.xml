@@ -455,7 +455,7 @@
                   <caption>Kommentaarid</caption>
             </grp_case_comments>
             <grp_case_log>
-                  <caption>Logi</caption>
+                  <caption>Ajalugu</caption>
                   <submit>no</submit>
             </grp_case_log>
       </groupinfo>

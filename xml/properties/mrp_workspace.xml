@@ -200,7 +200,7 @@
             <group>grp_schedule</group>
             <type>select</type>
             <store>no</store>
-            <caption>Tõsta esile projekt</caption>
+            <caption>T&amp;otilde;sta esile projekt</caption>
       </property>
       <property>
             <name>chart_project_hilight_gotostart</name>
@@ -220,7 +220,7 @@
             <group>grp_schedule</group>
             <type>date_select</type>
             <store>no</store>
-            <caption>Näidatava perioodi algus</caption>
+            <caption>N&amp;auml;idatava perioodi algus</caption>
       </property>
       <property>
             <name>chart_submit</name>
@@ -230,7 +230,7 @@
             <group>grp_schedule</group>
             <type>submit</type>
             <store>no</store>
-            <caption>Näita</caption>
+            <caption>N&amp;auml;ita</caption>
       </property>
       <property>
             <name>user_list_toolbar</name>
@@ -789,26 +789,14 @@
             <grp_projects>
                   <caption>Projektid</caption>
             </grp_projects>
-            <grp_resources>
-                  <caption>Ressursid</caption>
-            </grp_resources>
             <grp_schedule>
                   <caption>Kalender</caption>
                   <submit>no</submit>
             </grp_schedule>
-            <grp_users>
-                  <caption>Kasutajad</caption>
-            </grp_users>
-            <grp_users_tree>
-                  <caption>Kasutajate puu</caption>
-                  <parent>grp_users</parent>
+            <grp_printer>
+                  <caption>Operaatori vaade</caption>
                   <submit>no</submit>
-            </grp_users_tree>
-            <grp_users_mgr>
-                  <caption>Kasutajate rollid</caption>
-                  <parent>grp_users</parent>
-                  <submit>no</submit>
-            </grp_users_mgr>
+            </grp_printer>
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>
@@ -820,10 +808,20 @@
                   <caption>M&amp;uuml;&amp;uuml;gimehe seaded</caption>
                   <parent>grp_settings</parent>
             </grp_settings_salesman>
-            <grp_printer>
-                  <caption>Tr&amp;uuml;kkali vaade</caption>
+            <grp_users_tree>
+                  <caption>Kasutajate puu</caption>
+                  <parent>grp_settings</parent>
                   <submit>no</submit>
-            </grp_printer>
+            </grp_users_tree>
+            <grp_users_mgr>
+                  <caption>Kasutajate rollid</caption>
+                  <parent>grp_settings</parent>
+                  <submit>no</submit>
+            </grp_users_mgr>
+            <grp_resources>
+                  <caption>Ressursside haldus</caption>
+                  <parent>grp_settings</parent>
+            </grp_resources>
       </groupinfo>
       <reltypes>
             <MRP_FOLDER>

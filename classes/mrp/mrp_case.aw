@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.17 2005/02/11 07:36:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.18 2005/02/11 08:36:13 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
-@groupinfo grp_case_log caption="Logi" submit=no
+@groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
 @default group=general
