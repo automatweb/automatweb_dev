@@ -629,7 +629,7 @@ class core extends acl_base
 		{
 			if ($is_rpc_call)
 			{
-				$driver_inst = get_instance("orb/".$rpc_call_type);
+				$driver_inst = get_instance("core/orb/".$rpc_call_type);
 				$driver_inst->handle_error($err_type, $orig_msg);
 				die();
 			}
@@ -1270,7 +1270,7 @@ class core extends acl_base
 			$arr["class"] = get_class($this);
 		}
 	
-		$ob = get_instance("orb");
+		$ob = get_instance("core/orb/orb");
 		return $ob->do_method_call($arr);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/index.aw,v 2.15 2004/11/26 14:05:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/index.aw,v 2.16 2005/03/20 15:38:23 kristo Exp $
 
 if (isset($_GET["class"]))
 {
@@ -9,7 +9,7 @@ if (isset($_GET["class"]))
 
 include("const.aw");
 include("admin_header.".aw_ini_get("ext"));
-classload("orb");
+classload("core/orb/orb");
 $orb = new orb();
 $orb->process_request(array(
 	"class" => "workbench",

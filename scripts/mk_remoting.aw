@@ -30,7 +30,7 @@ $construct = <<<CONSTRUCT
 	}
 CONSTRUCT;
 
-$orb = get_instance("orb");
+$orb = get_instance("core/orb/orb");
 
 $clss = aw_ini_get("classes");
 foreach($clss as $clid => $cld)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.17 2004/10/08 16:09:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.18 2005/03/20 15:38:23 kristo Exp $
 set_time_limit(0);
 include("const.aw");
 
@@ -51,7 +51,7 @@ if ($vars["fastcall"] == 1)
 include("admin_header.".aw_ini_get("ext"));
 
 
-classload("defs","orb");
+classload("defs","core/orb/orb");
 $t = new aw_template;
 $t->init("");
 if (!$t->prog_acl_auth("view", PRG_MENUEDIT))
