@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.199 2003/07/08 11:48:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.200 2003/07/10 12:43:46 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2251,11 +2251,20 @@ class document extends aw_template
 			$this->delete_object($oidar[$oid]);
 		}
 		reset($added);
+		$this->quote($obj);
 		while(list($oid,) = each($added))
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER_DOCUMENT,"status" => $obj["status"],"brother_of" => $id,"name" => $obj["name"],"comment" => $obj["comment"],"period" => $obj["period"]));
+				$noid = $this->new_object(array(
+					"parent" => $oid,
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => $obj["status"],
+					"brother_of" => $id,
+					"name" => $obj["name"],
+					"comment" => $obj["comment"],
+					"period" => $obj["period"]
+				));
 			}
 		}
 
