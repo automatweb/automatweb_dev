@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.17 2002/08/08 17:02:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.18 2002/08/08 17:15:38 duke Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -388,7 +388,7 @@ class email extends aw_template
 			return false;
 		};
 		$q = "SELECT * FROM ml_users LEFT JOIN objects ON (ml_users.id = objects.oid) 
-			WHERE ml_users.mail = '$mail' AND status = 2";
+			WHERE objects.parent = '$list_id' AND ml_users.mail = '$mail' AND status = 2";
 		$this->db_query($q);
 		return $this->db_next();
 	}
