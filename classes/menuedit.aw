@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.198 2003/01/06 09:46:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.199 2003/01/06 11:15:57 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -712,9 +712,11 @@ class menuedit extends aw_template
 
 	function is_periodic($section,$checkobj = 1) 
 	{
-//		$mn = $this->mar[$section];
-//		$periodic = $mn["periodic"];
 		$mn = $this->get_object($section);
+		if ($mn["class_id"] != CL_PSEUDO)
+		{
+			$mn = $this->get_object($mn["parent"]);
+		}
 		$periodic = $mn["periodic"];
 		// menyysektsioon ei ole perioodiline. Well, vaatame 
 		// siis, kas ehk dokument ise on?
@@ -775,6 +777,7 @@ class menuedit extends aw_template
 				objects.class_id as class_id,
 				objects.brother_of as brother_of,
 				objects.metadata as metadata,
+				objects.periodic as periodic,
 				menu.type as mtype,
 				menu.link as link,
 				menu.clickable as clickable,
