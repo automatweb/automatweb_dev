@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.64 2004/08/03 10:47:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.65 2004/09/04 18:46:58 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -106,22 +106,6 @@ class form_table extends form_base
 			$this->table_html_form_name = "tb_".$this->table_id."_".$cnt;
 		}
 		aw_global_set("form_table_html_form_names", $fns);
-
-		// initialize all the baskets that are to be used in this table
-		for ($i=0; $i < $this->table["cols"]; $i++)
-		{
-			if (is_array($this->table["defs"][$i]["basket"]))
-			{
-				foreach($this->table["defs"][$i]["basket"] as $fel => $bid)
-				{
-					$this->baskets[$bid] =& get_instance("basket");
-					$this->baskets[$bid]->init_basket($bid);
-				}
-			}
-		}
-
-		// all the price element's values in the table are accumulated in here
-		$this->pricel_sum = 0;
 
 		if ($GLOBALS["tbl_dbg"] || $GLOBALS["fg_tbl_dbg"])
 		{
@@ -389,8 +373,6 @@ class form_table extends form_base
 
 		$cursums = aw_global_get("fg_element_sums");
 
-		$basketsonrow = array();
-
 		// here we must preprocess the data, cause then the column names will be el_col_[col_number] not element names
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
@@ -438,118 +420,6 @@ class form_table extends form_base
 						if ($elid == "order" )
 						{
 							$str[$elid] = $this->get_order_url($col,$dat, $form_id);
-						}
-						else
-						if ($elid == "formel")
-						{
-							enter_function("form_table::row_data::formel", array());
-							if (!is_array($cc["basket"]))
-							{
-								$this->raise_error(ERR_FG_TBL_NOBASKET, "Column $col for form table $this->table_id has a count element selected, but no basket! You must also select a basket, where the ordered items will be stored!", true);
-							}
-							// bit of trickey here - this will get used in some next loop iteration to calculate price
-							foreach($cc["basket"] as $element_id => $bid)
-							{
-								$basketsonrow[$bid] = $bid;
-
-								// now, if we have a controller set for this basket
-								$ctrl_ok = true;
-								enter_function("form_table::row_data::eval_controller", array());
-								if (is_array($cc["basket_controller"][$element_id]))
-								{
-									// eval it. and if it returns false, then we must not show this basket's count element
-									// but in order to eval it, we must load the form for the current row
-									// and then the entry for the current row
-									foreach($cc["basket_controller"][$element_id] as $ctrlid)
-									{
-										$curfinst =& $this->cache_get_form_instance($this->form_for_entry_id);
-
-										$curfinst->read_elements_from_q_result($dat, $curfinst->entry);
-										$curfinst->read_entry_from_array($dat["entry_id"]);
-
-										$ctrl_ok &= $this->controller_instance->eval_controller($ctrlid, "", $curfinst);
-									}
-								}
-								exit_function("form_table::row_data::eval_controller", array());
-
-								if ($ctrl_ok)
-								{
-									enter_function("form_table::row_data::showbasketadd", array());
-									// this is the form where the count element will come from
-									$form_id = $cc["el_forms"][$element_id];
-									$form =& $this->cache_get_form_instance($form_id);
-									$form->unload_entry();
-									$form->set_form_html_name($this->get_html_name_for_tbl_form());
-									$el_ref = $form->get_element_by_id($element_id);
-									$bcount = $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
-
-									$redir = $cc["basket_url"][$element_id];
-									if ($redir == "")
-									{
-										$redir = $this->ru;
-									}
-									$burl = $this->mk_my_orb("add_item", array(
-										"item_id" => $dat["entry_id"], 
-										"form_id" => $this->form_for_entry_id, 
-										"basket_id" => $bid,
-										"redir" => urlencode($redir),
-										"count" => $dat["ev_".$cc["basket_add_count_el"][$element_id]]
-									),"basket", false, true);
-									$el_ref->onclick = "window.location='".$burl."';return false;";
-
-									if (isset($cc["link_popup"]) && $cc["link_popup"])
-									{
-										$burl = sprintf("ft_popup('%s','popup$bid',%d,%d,%d,%d,%d,%d);return false;",
-											$burl,
-											$cc["link_popup_scrollbars"],
-											!$cc["link_popup_fixed"],
-											$cc["link_popup_toolbar"],
-											$cc["link_popup_addressbar"],
-											$cc["link_popup_width"],
-											$cc["link_popup_height"]
-										);
-										$el_ref->onclick = $burl;
-									};
-
-									$el_ref->form->set_form_html_name($this->get_html_name_for_tbl_form());
-									$str[$elid] .= $el_ref->gen_user_html_not(
-										"",
-										array($el_ref->get_el_name() => $bcount),
-										false,
-										"ftbl_el[$col][".$this->form_for_entry_id."][".$dat["entry_id"]."]",
-										$dat
-									);
-									exit_function("form_table::row_data::showbasketadd", array());
-								}
-							}
-							exit_function("form_table::row_data::formel", array());
-						}
-						else
-						if ($elid == "formel_price")
-						{
-							enter_function("form_table::row_data::formel_price", array());
-							reset($cc["formel"]);
-//							list(,$element_id) = each($cc["formel"]);
-							setlocale(LC_ALL, 'et_EE');
-							foreach($cc["formel"] as $element_id)
-							{
-								$basket_count = 0;
-								foreach($basketsonrow as $bid)
-								{
-									// set the item price for the item in all the baskets it can get to from this table
-									$_pr = $dat["ev_".$element_id];
-									$this->baskets[$bid]->set_item_price(array("item_id" => $dat["entry_id"], "price" => $_pr));
-
-									// calculate the total count of the item on this table row (we can have several baskets on one row)
-									$basket_count += $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
-								}
-								$this->pricel_sum += str_replace(",",".", $dat["ev_".$element_id])*$basket_count;
-								if (((double)$dat["ev_".$element_id]*(double)$basket_count) > 0)
-								{
-									$str[$elid] .= (double)str_replace(",",".",$dat["ev_".$element_id])*(double)$basket_count;
-								}
-							}
-							exit_function("form_table::row_data::formel_price", array());
 						}
 					}
 				}
@@ -742,35 +612,6 @@ class form_table extends form_base
 						$ret[$fid][$elid] = $elid;
 					}
 				}
-			}
-			// we got to check all the shop basket count elements and get the increment/decrement count element's id also, 
-			// because we got to load it's value from the database...
-			if ($this->table["defs"][$i]["els"]["formel"] == "formel")
-			{
-				// if baskets are in the table, we should load all elements from the db, because controllers might need 
-				// any element and this way we can avoid doing load_entry for each row for evaling controllers
-				return false;
-/*				foreach($this->table["defs"][$i]["formel"] as $element_id)
-				{
-					$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
-					$form =& $this->cache_get_form_instance($form_id);
-					$el_ref = $form->get_element_by_id($this->table["defs"][$i]["basket_add_count_el"][$element_id]);
-					if (is_object($el_ref))
-					{
-						if (($fid = $el_ref->get_up_down_count_el_form()))
-						{
-							$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
-						}
-						else
-						{
-							$el_ref = $form->get_element_by_id($element_id);
-							if (($fid = $el_ref->get_up_down_count_el_form()))
-							{
-								$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
-							}
-						}
-					}
-				}*/
 			}
 		}
 		
@@ -2121,69 +1962,6 @@ class form_table extends form_base
 				$coldata[$col][7] = $this->parse("SEL_LINK");
 			}
 
-			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
-			{
-				$this->vars(array(
-					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
-				));
-				$coldata[$col][8] = $this->parse("SEL_FORMEL");
-			}
-			else
-			if ($this->table["defs"][$col]["els"]["formel_price"] == "formel_price")
-			{
-				$this->vars(array(
-					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
-				));
-				$coldata[$col][8] = $this->parse("SEL_FORMEL");
-			}
-
-			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
-			{
-				if (is_array($this->table["defs"][$col]["formel"]))
-				{
-					foreach($this->table["defs"][$col]["formel"] as $fel)
-					{
-						$ol = new object_list(array(
-							"class_id" => CL_SHOP_BASKET,
-							"site_id" => array(),
-							"lang_id" => array()
-						));
-						$bk_names = array("" => "") + $ol->names();
-
-						$ol = new object_list(array(
-							"class_id" => CL_FORM_CONTROLLER,
-							"site_id" => array(),
-							"lang_id" => array()
-						));
-						$fc_names = array("" => "") + $ol->names();
-
-						$this->vars(array(
-							"fel_name" => $els[$fel],
-							"fel_id" => $fel,
-							"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $bk_names),
-							"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $fc_names),
-							"basket_url" => $this->table["defs"][$col]["basket_url"][$fel],
-							"bcount_el" => $this->picker($this->table["defs"][$col]["basket_add_count_el"][$fel], $els_nof)
-						));
-
-						$issb = "";
-						if ($this->table["defs"][$col]["el_forms"][$fel])
-						{
-							$finst =& $this->cache_get_form_instance($this->table["defs"][$col]["el_forms"][$fel]);
-							$el_ref = $finst->get_element_by_id($fel);
-							if ($el_ref->get_type() == "button")
-							{
-								$issb = $this->parse("EL_IS_SUBMIT");
-							}
-						}
-						$this->vars(array(
-							"EL_IS_SUBMIT" => $issb
-						));
-						$coldata[$col][9] .= $this->parse("SEL_BASKET");
-					}
-				}
-			}
-
 			$l = "";
 			$elns = array();
 			if (is_array($this->table["defs"][$col]["els"]))
@@ -2357,7 +2135,6 @@ class form_table extends form_base
 			"SEL_IMAGE" => "",
 			"SEL_ORDER_FORM" => "",
 			"SEL_FORMEL" => "",
-			"SEL_BASKET" => "",
 			"SEL_DATEFORMAT" => ""
 		));
 		return $this->parse();
@@ -2418,31 +2195,6 @@ class form_table extends form_base
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
 				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["subtype"];
 				$this->table["defs"][$i]["el_main_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["type"];
-
-				// if the damn element is a "formel" then we gots to figure out the damn thing's form 
-				// so that when we show the damn thing, we will know what damn form to load the damn thing from. 
-				// damn. 
-				// oh. did I say that already?
-				if ($elid == "formel" || $elid == "formel_price")
-				{
-					if (is_array($this->table["defs"][$i]["formel"]))
-					{
-						foreach($this->table["defs"][$i]["formel"] as $fel)
-						{
-							$this->table["defs"][$i]["el_forms"][$fel] = $els[$fel];
-							$this->table["defs"][$i]["basket_controller"][$fel] = $this->make_keys($cols[$i]["basket_controller"][$fel]);
-
-							if (($fid = $this->table["defs"][$i]["basket_add_count_el"][$fel]))
-							{
-								$ret[$fid][$this->table["defs"][$i]["basket_add_count_el"][$fel]] = $this->table["defs"][$i]["basket_add_count_el"][$fel];
-							}
-						}
-					}
-					else
-					{
-						$this->table["defs"][$i]["el_forms"][$this->table["defs"][$i]["formel"]] = $els[$this->table["defs"][$i]["formel"]];
-					}
-				}
 
 				// if the element was just added, default the damn thing to show and search
 				if (!isset($old_defs[$i]["els"][$elid]))
@@ -3428,40 +3180,6 @@ class form_table extends form_base
 		extract($arr);
 
 		$this->load_table($table_id);
-
-		// now, if we gots a basket where we should add selected stuff, then add the damn things
-		if (is_array($ftbl_el))
-		{
-			$baskets = array();
-
-			foreach($ftbl_el as $col => $coldat)
-			{
-				if (is_array($this->table["defs"][$col]["basket"]))
-				{
-					foreach($this->table["defs"][$col]["basket"] as $ef => $basket_id)
-					{
-						if (!is_object($baskets[$basket_id]))
-						{
-							$baskets[$basket_id] =&get_instance("basket");
-							$baskets[$basket_id]->init_basket($basket_id);
-						}
-					}
-				}
-
-				foreach($coldat as $form_id => $form_data)
-				{
-					foreach($form_data as $entry_id => $count)
-					{
-						$baskets[$basket_id]->set_item_count(array("form_id" => $form_id, "item_id" => $entry_id, "count" => $count));
-					}
-				}
-			}
-
-			foreach($baskets as $bid => $bo)
-			{
-				$bo->save_user_basket();
-			}
-		}
 
 		if (($butt_delete != "" || $butt_delete_x > 0) && is_array($sel))
 		{
