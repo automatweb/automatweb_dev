@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.70 2004/09/20 13:09:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.71 2004/09/22 14:37:52 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -67,7 +67,10 @@
 	@default group=export_members
 	@property export_type type=chooser orient=vertical store=no
 	@caption Formaat
-
+	
+	@property export_from_date type=date_select store=no default=-1
+	@caption Alates kuupäevast
+	
 	@property exp_sbt type=submit
 	@caption Ekspordi
 
@@ -156,6 +159,7 @@
 define("ML_EXPORT_CSV",1);
 define("ML_EXPORT_NAMEADDR",2);
 define("ML_EXPORT_ADDR",3);
+define("ML_EXPORT_ALL", 4);
 
 class ml_list extends class_base
 {
@@ -531,6 +535,7 @@ class ml_list extends class_base
 					ML_EXPORT_CSV => "nimi,aadress",
 					ML_EXPORT_NAMEADDR => "nimi &lt;aadress&gt;",
 					ML_EXPORT_ADDR => "aadress",
+					ML_EXPORT_ALL => "Kõik andmed",
 				);
 				$data["value"] = 1;
 				break;
@@ -610,9 +615,11 @@ class ml_list extends class_base
 	{
 		if (isset($this->do_export))
 		{
+			
 			$arr["action"] = "export_members";
 			$arr["args"]["filename"] = "members.txt";
 			$arr["args"]["export_type"] = $this->export_type;
+			$arr["args"]["export_date"] = strtotime($arr["request"]["export_from_date"]["year"]."-".$arr["request"]["export_from_date"]["month"]."-".$arr["request"]["export_from_date"]["day"]);
 		};
 		if (isset($this->edit_msg))
 		{
@@ -754,21 +761,36 @@ class ml_list extends class_base
 		@param id required type=int 
 		@param filename optional
 		@param export_type optional type=int
+		@param export_date optional type=int
 
 
 	**/
 	function export_members($arr)
 	{
+		$arr["obj_inst"] = &obj($arr["id"]);
 		$members = $this->get_members($arr["id"]);
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
-
 		$ser = "";
+		
+		if($arr["obj_inst"]->prop("member_config"))
+		{
+			$config_obj = &obj($arr["obj_inst"]->prop("member_config"));
+			$config_data = array();
+			$config_data = $config_obj->meta("cfg_proplist");
+			uasort($config_data, array($this,"__sort_props_by_ord"));
+		}
+				
 		foreach($members as $key => $val)
 		{
 			list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
 			));
+			
+			$member = &obj($memberdata["id"]);
+			if($member->created() > $arr["export_date"] or ($arr["export_date"] == -1))
+			{
+			
 			switch($arr["export_type"])
 			{
 				case ML_EXPORT_ADDR:
@@ -778,12 +800,32 @@ class ml_list extends class_base
 				case ML_EXPORT_NAMEADDR:
 					$ser .= $memberdata["name"] . " <" . $mailto . ">";
 					break;
-
+				
+				case ML_EXPORT_ALL:
+						$ser .= $memberdata["name"] . ";" . $mailto . ";";							
+						foreach ($config_data as $key2 => $value)
+						{
+							if(strpos($key2, "def_"))
+							{
+								if(strpos($key2, "def_date"))
+								{
+									$ser .= get_lc_date($member->prop($key2));
+								}
+								else
+								{
+									$ser .= $member->prop($key2);		
+								}
+								$ser .=";";
+							}
+						}
+					
+					break;
 				default:
 					$ser .= $memberdata["name"] . "," . $mailto;
 					break;
 			};
 			$ser .= "\n";
+			}
 		};
 		header("Content-Type: text/plain");
 		header("Content-length: " . strlen($ser));
@@ -808,22 +850,25 @@ class ml_list extends class_base
 			$config_obj = &obj($arr["obj_inst"]->prop("member_config"));
 			
 			$config_data = $config_obj->meta("cfg_proplist");
+			uasort($config_data, array($this,"__sort_props_by_ord"));
 			
-			for($i = 0; $i < 10; $i++)
+			foreach($config_data as $key => $item)
 			{	
-				if($config_data["udef_txbox$i"])
+				strpos($key, "def_txbox");
+				if(strpos($key, "def_txbox"))
 				{
 					$t->define_field(array(
-						"name" => $config_data["udef_txbox$i"]["name"],
-						"caption" => $config_data["udef_txbox$i"]["caption"],
+						"name" => $item["name"],
+						"caption" => $item["caption"],
 						"sortable" => 1,
 					));	
 				}
-				if($config_data["udef_date$i"])
-				{
+				
+				if(strpos($key, "def_date"))
+				{				
 					$t->define_field(array(
-						"name" => $config_data["udef_date$i"]["name"],
-						"caption" => $config_data["udef_date$i"]["caption"],
+						"name" => $item["name"],
+						"caption" => $item["caption"],
 						"sortable" => 1,
 					));	
 				}
@@ -883,13 +928,23 @@ class ml_list extends class_base
 						$tabledata["udef_date$i"] = get_lc_date($member_obj->prop("udef_date$i"));
 					}
 				}
+				$t->define_data($tabledata);	
+		
 			}	
-			$t->define_data($tabledata);	
 		}		
 		$t->sort_by();
 	}
 
-
+	function __sort_props_by_ord($el1,$el2)
+	{
+		if (empty($el1["ord"]) && empty($el2["ord"]))
+		{
+			return (int)($el1["tmp_ord"] - $el2["tmp_ord"]);
+			//return 0;
+		};
+		return (int)($el1["ord"] - $el2["ord"]);
+	}
+	
 	function gen_list_status_tb($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
@@ -1290,7 +1345,7 @@ class ml_list extends class_base
 			foreach($templates as $template)
 			{
 				$options[$template->prop("to")] = $template->prop("to.name");
-			};
+			}
 			$filtered_props["template_selector"] = array(
 				"type" => "select",
 				"name" => "template_selector",
