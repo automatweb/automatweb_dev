@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.71 2004/03/24 16:16:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.72 2004/03/25 08:57:41 kristo Exp $
 
 lc_load("definition");
 
@@ -143,7 +143,7 @@ class acl_base extends db_connector
 					FROM acl 
 						LEFT JOIN groups ON groups.gid = acl.gid
 						LEFT JOIN objects ON objects.oid = acl.oid
-					WHERE acl.oid = $oid AND acl.gid = $gid
+					WHERE acl.oid = '$oid' AND acl.gid = '$gid'
 				";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -169,7 +169,7 @@ class acl_base extends db_connector
 				objects
 				LEFT JOIN acl ON objects.oid = acl.oid
 			WHERE 
-				objects.oid = $oid AND objects.status != 0
+				objects.oid = '$oid' AND objects.status != 0
 		";
 		$this->db_query($q);
 		while ($row = $this->db_next())
