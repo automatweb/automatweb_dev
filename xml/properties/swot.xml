@@ -5,64 +5,65 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SWOT_FOLDER</reltype>
             <multiple>1</multiple>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>SWOT Objektide kataloogid</caption>
       </property>
       <property>
             <name>strengths</name>
             <type>text</type>
             <group>strengths</group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tugevused</caption>
       </property>
       <property>
             <name>weaknesses</name>
             <type>text</type>
             <group>weaknesses</group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Norkused</caption>
       </property>
       <property>
             <name>opportunities</name>
             <type>text</type>
             <group>opportunities</group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Voimalused</caption>
       </property>
       <property>
             <name>threats</name>
             <type>text</type>
             <group>threats</group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Ohud</caption>
       </property>
       <property>
             <name>view</name>
             <type>text</type>
             <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
             <no_caption>1</no_caption>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <classinfo>
             <syslog_type>ST_SWOT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <general>
