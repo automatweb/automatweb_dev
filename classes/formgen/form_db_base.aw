@@ -770,7 +770,13 @@ class form_db_base extends aw_template
 								$lang = " AND $jdata[to_tbl].lang_id = ".aw_global_get("lang_id");
 							}
 
-							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON (".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"]." $lang) ";
+							$del = "";
+							if (!$dat["save_table"])
+							{
+								$del = " AND $jdata[to_tbl].deleted != 1 ";
+							}
+
+							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON (".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"]." $lang $del) ";
 
 							// ok, now we must also join the objects table if it is a regular fg table
 							// and add to the where clause the check that the objects are not deleted
