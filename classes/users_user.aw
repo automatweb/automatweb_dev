@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.14 2001/08/14 09:27:02 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.15 2001/08/23 10:34:43 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -245,6 +245,11 @@ class users_user extends aw_template
 		}
 		else
 		{
+			// suck. 
+			global $baseurl;
+			header("Refresh: 3;url=$baseurl");
+			print $msg;
+			exit;
 			$retval = false;
 		};
 		return $retval;
@@ -738,10 +743,10 @@ class users_user extends aw_template
 		$toadd = array();
 
 		reset($matches);
-		while (list($fid,$ar) = each($matches))
-		{
-			reset($ar);
-			while (list(,$eid) = each($ar))
+//		while (list($fid,$ar) = each($matches))
+//		{
+//			reset($ar);
+			while (list(,$eid) = each($matches))
 			{
 				$u_uid = $users[$eid];
 				if (!$cmembers[$u_uid])
@@ -750,7 +755,7 @@ class users_user extends aw_template
 				}
 				unset($cmembers[$u_uid]);
 			}
-		}
+//		}
 
 		// now toadd contains users to add and $cmembers contains users to remove
 
