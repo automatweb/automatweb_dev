@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.17 2003/01/21 09:23:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.18 2003/01/23 09:05:37 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -190,7 +190,7 @@ class cache extends core
 		$cachedir = $this->cfg["page_cache"];
 
 		$cachefile = $cachedir . "/" . $cache_id;
-		
+			
 		if (!is_writable($cachedir))
 		{
 			// cannot write cache, bail out
@@ -202,10 +202,18 @@ class cache extends core
 		$source_mtime = @filemtime($fqfn);
 		$cache_mtime = @filemtime($cachefile);
 
-		if ($source_mtime > $cache_mtime)
+		// get the cache contents here, so we can check whether it is empty, cause for some weird reason 
+		// cache files get to be empty sometimes, damned if I know why
+
+		$src = $this->get_file(array(
+			"file" => $cachefile,
+		));
+
+		if (($source_mtime > $cache_mtime) || (strlen($src) < 1))
 		{
 			//print "need to reparse<br>";
 			// 1) get an instance of the unserializer class,
+			
 			$clobj = &$args["unserializer"][0];
 			$clmeth = $unserializer[1];
 			if (is_object($clobj) && method_exists($clobj,$clmeth))
@@ -234,9 +242,6 @@ class cache extends core
 		{
 			// 1) get the contents of cached file
 			// 2) awunserialize the data
-			$src = $this->get_file(array(
-				"file" => $cachefile,
-			));
 			
 			$clobj = &$args["loader"][0];
 			$clmeth = $loader[1];
