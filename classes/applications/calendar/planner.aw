@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.48 2005/03/18 12:12:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.49 2005/03/18 13:34:28 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -238,7 +238,7 @@ class planner extends class_base
 		$user = new object($users->get_oid_for_uid($uid));
 
 		$conns = $user->connections_to(array(
-			"type" => "RELTYPE_CALENDAR_OWNERSHIP",
+			"type" => 8 //RELTYPE_CALENDAR_OWNERSHIP,
 		));
 		if (sizeof($conns) == 0)
 		{
