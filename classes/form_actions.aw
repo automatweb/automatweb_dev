@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.12 2002/07/17 07:44:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.13 2002/07/24 20:48:03 kristo Exp $
 // form_actions.aw - creates and executes form actions
 
 class form_actions extends form_base
@@ -8,8 +8,12 @@ class form_actions extends form_base
 	{
 		$this->form_base();
 		$this->sub_merge = 1;
-		lc_load("definition");
-		$this->lc_load("form","lc_form");
+
+		$this->actiontype2func = array(
+			"join_list" => array("execute" => "do_join_list_action"),
+			"email_form" => array("execute" => "do_email_form_action"),
+			"email" => array("execute" => "do_email_action"),
+		);
 	}
 
 	////
@@ -210,56 +214,6 @@ class form_actions extends form_base
 		extract($args);
 		// retrieve e-mail aadresses to send mail to
 		// XXX: what if the form gets data from SQL table?
-		$fid = sprintf("form_%d_entries",$data["srcform"]);
-		$did = sprintf("ev_%d",$data["srcfield"]);
-		$q = "SELECT $did FROM $fid LEFT JOIN objects ON ($fid.id = objects.oid) WHERE status = 2";
-
-		$this->awm = get_instance("aw_mail");
-		if ($data["output"] > 0)
-		{
-			// we have to form a special html message
-			$body=strtr($msg,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
-
-		}
-		else
-		{
-			$body = $msg;
-		};
-
-		// we set all the relevant fields later on
-		$this->awm->create_message(array(
-                        "froma" => "",
-                        "fromn" => "",
-                        "subject" => "",
-                        "to" => "",
-                        "body" => $body,
-                ));
-
-		if ($data["output"] > 0)
-		{
-			$this->awm->htmlbodyattach(array("data"=>$msg));
-		};
-
-
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$addr = $row[$did];
-			// don't try to send to invalid addresses
-			if (is_email($addr))
-			{
-				print "sending to $addr<br>";
-				$this->awm->set_header("Subject",$data["subject"]);
-				$this->awm->set_header("From",$data["from"]);
-				$this->awm->set_header("To",$addr);
-				$this->awm->set_header("Return-path", $data["from"]);
-				$this->awm->gen_mail();
-			}
-			else
-			{
-				print "$addr is invalid<br>";
-			};
-		}
 
 	}
 
@@ -280,10 +234,8 @@ class form_actions extends form_base
 		}
 
 		$opar = $this->get_op_list($id);
-		classload("objects");
-		$ob = new db_objects();
-		classload("languages");
-		$la = new languages;
+		$ob = get_instance("objects");
+		$la = get_instance("languages");
 		$ls = $la->listall();
 
 		foreach($ls as $ld)
@@ -300,14 +252,13 @@ class form_actions extends form_base
 		$this->vars(array(
 			"email" => $data["email"],
 			"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
-			"sec" => $this->picker($data["l_section"],$ob->get_list()),
+			"sec" => $this->picker($data["l_section"],$ob->get_list(false, true)),
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
 			"T_LANG" => $lt,
 			"LANG" => $lc
 		));
 
 		return $this->parse();
-
 	}
 
 	////
@@ -395,42 +346,240 @@ class form_actions extends form_base
 		$this->read_template("action_join_list.tpl");
 		$data = unserialize($row["data"]);
 
-		$this->load($id);
-		for ($row = 0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col = 0; $col < $this->arr["cols"]; $col++)
-			{
-				$elar = $this->arr["contents"][$row][$col]->get_elements();
-				reset($elar);
-				while (list(,$el) = each($elar))
-				{
-					if ($el["type"] == "checkbox")
-					{
-						$checks[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
-					}
-					if ($el["type"] == "textbox")
-					{
-						$texts[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
-					}
-				}
-			}
-		}
-					
-		classload("lists");
-		$li = new lists;
-		$lists = $li->get_op_list();
+		$finst = get_instance("form");
+		$finst->load($id);
 
+		// make checkboxes
+		$checks = $finst->get_element_by_type("checkbox","",true);
+		$chk = array();
+		foreach($checks as $el)
+		{
+			$chk[$el->get_id()] = $el->get_el_name() == "" ? $el->get_text() == "" ? $el->get_type() : $el->get_text() : $el->get_el_name();
+		}
+		// make textboxes
+		$textboxs = $finst->get_element_by_type("textbox","",true);
+		$txt = array();
+		foreach($textboxs as $el)
+		{
+			$txt[$el->get_id()] = $el->get_el_name() == "" ? $el->get_text() == "" ? $el->get_type() : $el->get_text() : $el->get_el_name();
+		}
+
+		$li = get_instance("lists");
 		$this->vars(array(
-			"checkbox"	=> $this->option_list($data["checkbox"],$checks),
-			"list"			=> $this->option_list($data["list"],$lists),
-			"textbox"		=> $this->option_list($data["textbox"],$texts),
-			"name_tb"		=> $this->option_list($data["name_tb"],$texts),
+			"checkbox"	=> $this->option_list($data["checkbox"],$chk),
+			"list"			=> $this->option_list($data["list"],$li->get_op_list()),
+			"textbox"		=> $this->option_list($data["textbox"],$txt),
+			"name_tb"		=> $this->option_list($data["name_tb"],$txt),
 			"action_id"	=> $id,
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
 		));
 		return $this->parse();
-
 	}
 
+	////
+	// !ececutes form actions, gets called after form submit
+	// params:
+	// form - reference to the calling form
+	// entry_id - submitted form entry id
+	function do_actions(&$form, $entry_id)
+	{
+		$this->db_query("SELECT * FROM form_actions LEFT JOIN objects ON objects.oid = form_actions.id WHERE form_id = ".$form->get_id()." AND objects.status != 0");
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$fname = $this->actiontype2func[$row["type"]]["execute"];
+			$data = aw_unserialize($row["data"]);
+
+			$this->$fname($form, $data, $entry_id);
+			$this->restore_handle();
+		}
+	}
+
+	////
+	// !the action through which the user can join a mailinglist
+	// params:
+	// $form - the instance of the form that was submitted
+	// $data - the action data, unpacked
+	// $entry_id - submitted form entry id
+	function do_join_list_action(&$form, $data, $entry_id)
+	{
+		if ($data["list"])
+		{
+			classload("mlist");
+			$li = new mlist($data["list"]);
+
+			// if the checkbox is checked, then add user to list, else remove
+			// if no checkbox is set, always add
+			if ($form->get_element_value($data["checkbox"], true) == 1 || $data["checkbox"] < 1)
+			{
+				$li->db_add_user(array(
+					"name" => $form->get_element_value($data["name_tb"]), 
+					"email" => $form->get_element_value($data["textbox"])
+				));
+			}
+			else
+			{
+				$li->db_remove_user($form->get_element_value($data["textbox"]));
+			};
+		}
+	}
+
+	////
+	// !sends email to an adress from a different form or something
+	// params:
+	// $form - the instance of the form that was submitted
+	// $data - the action data, unpacked
+	// $entry_id - submitted form entry id
+	function do_email_form_action(&$form, $data, $entry_id)
+	{
+		if ($data["sbt_bind"] == 0)
+		{
+			$send = true;
+		}
+		else
+		{
+			$send = ($data["sbt_bind"] == $form->el_submit["id"]);
+		};
+
+		if (not($send))
+		{
+			// YIKES
+			return;
+		};
+
+		$f = get_instance("form");
+
+		if ($data["output"] > 0)
+		{
+			// have to create the output
+			$msg = $f->show(array(
+				"id" => $form->get_id(),
+				"entry_id" => $entry_id,
+				"op_id" => $data["output"],
+			));
+		}
+		else
+		{
+			// warning, the following code has a very high
+			// suck factor. Some sites have a "update" link
+			// by each document. Clickin on that link opens 
+			// a new document which contains a FG form that can
+			// be used to submit comments about the visited
+			// document. That form has an email action and
+			// the contents of that e-mail action should
+			// contain the referer, the link, from which 
+			// the user clicked on the Update button.
+
+			// can this be done in some other way? if so,
+			// this should be fixed.
+
+			// oh and last_section is set in the site code
+			$last = aw_global_get("last_section");
+			if ($last)
+			{
+				$msg = "Referer: " . $this->cfg["baseurl"] . "/$last\n";
+			};
+
+			$f->load($form->get_id());
+			$f->load_entry($entry_id);
+			$msg .= $f->show_text();
+		};
+
+		$this->awm = get_instance("aw_mail");
+		if ($data["output"] > 0)
+		{
+			// we have to form a special html message
+			$body = strtr($msg,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+		}
+		else
+		{
+			$body = $msg;
+		};
+
+		// we set all the relevant fields later on
+		$this->awm->create_message(array(
+			"froma" => "",
+      "fromn" => "",
+      "subject" => "",
+      "to" => "",
+      "body" => $body,
+    ));
+
+		if ($data["output"] > 0)
+		{
+			$this->awm->htmlbodyattach(array("data"=>$msg));
+		};
+
+		$elvals = $this->get_entries_for_element(array(
+			"rel_form" => $data["srcform"],
+			"rel_element" => $data["srcfield"],
+			"rel_unique" => true,
+			"ret_values" => true
+		));
+		foreach($elvals as $addr)
+		{
+			// don't try to send to invalid addresses
+			if (is_email($addr))
+			{
+				echo "sending to $addr <br>";
+				$this->awm->set_header("Subject",$data["subject"]);
+				$this->awm->set_header("From",$data["from"]);
+				$this->awm->set_header("To",$addr);
+				$this->awm->set_header("Return-path", $data["from"]);
+				$this->awm->gen_mail();
+			}
+			else
+			{
+				print "$addr is invalid<br>";
+			};
+		}
+	}
+
+	////
+	// !sends email about the fact that the form was submitted
+	// params:
+	// $form - the instance of the form that was submitted
+	// $data - the action data, unpacked
+	// $entry_id - submitted form entry id
+	function do_email_action(&$form, $data, $entry_id)
+	{
+		if (aw_global_get("uid") != "")
+		{
+			$us = get_instance("users");
+			$uif = $us->fetch(aw_global_get("uid"));
+			$jfes = unserialize($uif["join_form_entry"]);
+
+			if (is_array($jfes))
+			{
+				$app = LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO;
+				foreach($jfes as $fid => $eid)
+				{
+					$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+				}
+			}
+		}
+		$f = get_instance("form");
+		$f->load($form->get_id());
+		$f->load_entry($entry_id);
+		$msg = $f->show_text();
+
+		if (!is_array($data))
+		{
+			$data = array("email" => $data);
+		}
+
+		if ($data["op_id"])
+		{
+			$app.="\n".$this->mk_my_orb("show_entry", array(
+				"id" => $form->get_id(), 
+				"entry_id" => $entry_id, 
+				"op_id" => $data["op_id"],
+				"section" => $data["l_section"]
+			), "form");
+		}
+		$subj = $data["subj"][aw_global_get("lang_id")] != "" ? $data["subj"][aw_global_get("lang_id")] :LC_FORM_BASE_ORDER_FROM_AW;
+
+		mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+	}
 }
 ?>
