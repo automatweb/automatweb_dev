@@ -32,6 +32,21 @@
 			</function>
 		</action>
 
+		<action name="edit_input">
+			<function name="edit_input">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_edit">
+			<function name="submit_edit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
