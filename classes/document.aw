@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.93 2002/03/20 19:36:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.94 2002/03/20 20:21:15 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 lc_load("document");
@@ -225,6 +225,7 @@ class document extends aw_template
 			$data["content"] = trim($data["content"]);
 			$data["lead"] = trim($data["lead"]);
 			$data["cite"] = trim($data["cite"]);
+			$data["meta"] = aw_unserialize($data["metadata"]);
 		};
 		$this->dequote($data);
 		$this->data = $data;
@@ -306,6 +307,7 @@ class document extends aw_template
 		$baseurl = aw_ini_get("baseurl");
 		$ext = aw_ini_get("ext");
 		$awt->start("document::gen_preview");
+		$awt->count("document::gen_preview");
 
 
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
@@ -332,8 +334,16 @@ class document extends aw_template
 			return false;
 		};
 
-		$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
-		
+
+		if ($doc["meta"])
+		{
+			$meta = $doc["meta"];
+		}
+		else
+		{
+			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
+		};
+		//$meta = $doc["meta"];
 		if ($meta["show_last_changed"])
 		{
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
@@ -569,7 +579,7 @@ class document extends aw_template
 
 		// create keyword links unless we are in print mode, since you cant click
 		// on links on the paper they dont make sense there :P
-		if ($this->cfg["keyword_relations"] && not($print))
+		if ($this->cfg["keyword_relations"] && not($print) && $params["keywords"])
 		{
 			$this->create_keyword_relations(&$doc["content"]);
 		}

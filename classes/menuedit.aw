@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.117 2002/03/20 19:36:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.118 2002/03/20 20:21:15 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4358,6 +4358,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cont = $d->gen_preview(array(
 						"docid" => $section,
 						"boldlead" => 1,
+						"keywords" => 1,
 						"tpl" => $template));
 			$this->vars(array("docid" => $section));
 			$this->active_doc = $section;
@@ -4387,6 +4388,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						"tpl" => $template,
 						"leadonly" => 1,
 						"section" => $section,
+						"keywords" => 1,
 						"doc"	=> $row));
 					$d->restore_handle();
 				}; // while
@@ -4406,6 +4408,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$cont = $d->gen_preview(array(
 							"docid" => $row["docid"],
 							"boldlead" => 1,
+							"keywords" => 1,
 							"tpl" => $template));
 				$this->vars(array("docid" => $row["docid"]));
 				$this->active_doc = $row["docid"];
@@ -4471,6 +4474,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"section" => $section,
 					"strip_img" => $strip_img,
 					"tpls" => $tpls,
+					"keywords" => 1,
 					"no_strip_lead" => $GLOBALS["no_strip_lead"]
 				));
 				$dk++;
@@ -4499,6 +4503,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"no_strip_lead" => $GLOBALS["no_strip_lead"],
 					"notitleimg" => 0,
 					"tpl" => $template,
+					"keywords" => 1,
 					"boldlead" => $GLOBALS["boldlead"]
 				));
 				if ($d->no_left_pane)
@@ -4736,13 +4741,32 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					{
 						if ($row["filename"])
 						{
-						$pr_c.=str_replace("\r","",str_replace("\n","",$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1))));
+							$cont = $doc->gen_preview(array(
+								"docid" => $d,
+								"tpl" => $row["filename"],
+								"leadonly" => $leadonly,
+								"section" => $section,
+								"strip_img" => false,
+								"showlead" => 1,
+								"boldlead" => 1,
+								"no_strip_lead" => 1,
+							));
+							$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 						}
 					}
 				}
 				else
 				{
-					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+					$pr_c.=$doc->gen_preview(array(
+						"docid" => $docid, 
+						"tpl" => $row["filename"],
+						"leadonly" => $leadonly, 
+						"section" => $section, 	
+						"strip_img" => false,
+						"showlead" => 1, 
+						"boldlead" => 0,
+						"no_strip_lead" => 1,
+					));
 						
 				}
 
