@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.30 2004/07/27 15:03:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.31 2004/09/10 12:08:06 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -208,7 +208,7 @@ class releditor extends core
 			//else if ($prop["rel_id"] == "first")
 			//{
 				$o = $arr["obj_inst"];
-				if (is_oid($o->id()))
+				if (is_object($o) && is_oid($o->id()))
 				{
 					$conns = $o->connections_from(array(
 						"type" => $prop["reltype"],
@@ -270,7 +270,10 @@ class releditor extends core
 		};
 
 		// so that the object can access the source object
-		aw_global_set("from_obj",$arr["obj_inst"]->id());
+		if (is_object($arr["obj_inst"]))
+		{
+			aw_global_set("from_obj",$arr["obj_inst"]->id());
+		};
 
 		// maybe I can use the property name itself
 		if ($arr["cb_values"])
@@ -481,7 +484,6 @@ class releditor extends core
 			$use_form = $prop["use_form"];
 		};
 
-		//$props = $clinst->get_property_group($filter);
 		$props = $clinst->load_defaults();
 
 		$propname = $prop["name"];
