@@ -91,4 +91,16 @@ function aw_remove_arr_el(value,arr)
 		if (arr[i] != value)
 			rv.push(arr[i]);
 	return rv;
-}
+};
+
+function awlib_addevent(o,e,f)
+{
+	if(o.addEventListener)
+		o.addEventListener(e,f,true);
+
+	else if(o.attachEvent)
+		o.attachEvent("on"+e,f);
+	
+	else
+		eval("o.on"+e+"="+f)
+};
