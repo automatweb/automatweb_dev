@@ -35,7 +35,8 @@ if (!aw_global_get("no_menus"))
 		"vars" => $si->on_page(),
 		"text" => $content,
 		"docid" => $docid,
-		"sub_callbacks" => $si->get_sub_callbacks()
+		"sub_callbacks" => $si->get_sub_callbacks(),
+		"type" => $type
 	));
 }
 
