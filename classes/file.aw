@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.89 2004/09/09 11:15:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.90 2004/09/24 09:33:10 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -99,8 +99,13 @@ class file extends class_base
 				classload("icons");
 
 				$fname = basename($arr["obj_inst"]->prop("file"));
-				$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
-				$data["value"] = "fail puudub";
+				if ($fname == "" && $arr["obj_inst"]->prop("file_url") == "")
+				{
+					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
+					$data["value"] = "fail puudub";
+					return PROP_OK;
+				}
+
 				if (is_file($file))
 				{
 					$size = @filesize($file);
@@ -132,7 +137,20 @@ class file extends class_base
 							))." ".$name.", ".$filesize,
 						"target" => "_blank",
 					));
-				};
+				}
+				else
+				{
+					$fu = $arr["obj_inst"]->prop("file_url");
+					$name = basename($fu);
+					$data["value"] = html::href(array(
+						"url" => $fu,
+						"caption" => html::img(array(
+							"url" => icons::get_icon_url(CL_FILE,$name),
+							"border" => "0"
+							))." ".$name,
+						"target" => "_blank",
+					));
+				}
 				break;
 
 			case "file":
