@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.273 2003/04/04 13:48:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.274 2003/04/04 14:25:41 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -412,7 +412,7 @@ class menuedit extends aw_template
 			// leiame aktiivse eventi ka
 			list($_d,$_m,$_y) = explode("-",aw_global_get("date"));
 			$tm = mktime(0,0,0,$_m,$_d,$_y)-1;
-			$q = "SELECT objects.oid,name,parent,start FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent = $cal_id AND planner.start > $tm AND class_id = " . CL_DOCUMENT . " AND objects.status = 2 LIMIT 1";
+			$q = sprintf("SELECT objects.oid,name,parent,start FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent = $cal_id AND planner.start >= $tm AND class_id IN (%d,%d) ORDER BY start LIMIT 1",CL_DOCUMENT,CL_BROTHER_DOCUMENT);
 			$this->db_query($q);
 			$event = $this->db_next();
 			if (!$event)
@@ -1322,16 +1322,6 @@ class menuedit extends aw_template
 			"key" => "treetype",
 		));
 
-		if (!$treetype)
-		{
-			$treetype = $this->cfg["tree_type"];
-		};
-
-		if ($treetype == "java")
-		{
-			return $this->gen_java_tree($period);
-		};
-
 		if ($this->cfg["site_id"] == 88)
 		{
 			$this->read_template("folders_no_periods.tpl");
@@ -1447,21 +1437,6 @@ class menuedit extends aw_template
 		$this->vars(array(
 			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]))
 			//"rooturl" => "javascript:go_go(".$this->cfg['admin_rootmenu2'].",'')",
-		));
-		return $this->parse();
-	}
-
-	function gen_java_tree($period)
-	{
-		$this->read_template("javatree.tpl");
-		$this->vars(array(
-			"session" => $GLOBALS["automatweb"],
-			"uid" => aw_global_get("uid"),
-			"site_id" => aw_ini_get("site_id"),
-			"date" => $this->time2date(time(),2),
-			"demon_server" => $this->cfg["java_tree_update_server"],
-			"demon_port" => $this->cfg["java_tree_update_port"],
-			"rootmenu" => $this->cfg["admin_rootmenu2"],
 		));
 		return $this->parse();
 	}
@@ -1956,319 +1931,6 @@ class menuedit extends aw_template
 		exit;
 	}
 
-	function get_branch($args = array())
-	{
-		extract($args);
-		// Header
-		$baseurl = $this->cfg["baseurl"];
-		$this->format = $format;
-		$this->java_branches = array();
-		if (not($parent))
-		{
-			$parent = $this->cfg["amenustart"];
-			// kui parentit antud pole, siis esimese elemendina tagastame selle AW ikooni
-			$rooturl = $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]));
-			//$rooturl = "javascript:go_go(".$this->cfg["admin_rootmenu2"].",'')";
-			$this->_send_branch_line(0,0,"AutomatWeb",$rooturl,$baseurl . "/automatweb/images/aw_ikoon.gif");
-		};
-
-		// grupid
-
-		// sisumend.
-		$this->_gen_menu_branch($args);
-
-		// kodukataloog, kui oleme esimesel tasemel
-		if (not($args["parent"]))
-		{
-			$udata = $this->get_user();
-			$hf_id = (int)$udata["home_folder"];
-			// there is a bunch of objects with parent=0, and we dont want to show
-			// those unter the home folder
-			if ($hf_id == 0)
-			{
-				$hf_id = -1;
-			};
-			$this->db_query("SELECT menu.*,objects.* FROM menu
-						LEFT JOIN objects ON objects.oid = menu.id
-						WHERE oid = '$hf_id'");
-			if ($hf = $this->db_next())
-			{
-
-				$url = $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]));
-				//$url = "javascript:go_go(".$hf["oid"].",'')";
-				$iconurl = icons::get_icon_url("homefolder","");
-				// allpool peab ka acli kontrollima :(
-				$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != " . MN_ADMIN1 . ") AND objects.parent = '$hf[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
-				$this->db_query($q);
-				$subcnt = 0;
-				while ($drow = $this->db_next())
-				{
-					if ($this->can("view", $drow["oid"]))
-					{
-						$subcnt++;
-					}
-				}
-				$this->_send_branch_line($hf["oid"],$subcnt,$hf["name"],$url,$iconurl);
-			};
-		}
-			
-		
-		// programmid
-		$this->_gen_prog_branch(array("parent" => $parent));
-
-		if ($format == "xmlrpc")
-		{
-			header("Content-Type: text/xml");
-			print "<?xml version=\"1.0\"?>\n";
-			print "<methodResponse>\n";
-			print "<params>\n";
-			print "<param>\n<value>\n<struct><member><name>result</name><value>\n";
-			$mask .= "<member><name>object</name><value><array><data>";
-			$mask .= "<i4>%d</i4>\n";
-			$mask .= "<i4>%d</i4>\n";
-			$mask .= "<string>%s</string>\n";
-			$mask .= "<string>%s</string>\n";
-			$mask .= "<string>%s</string></data></array></value></member>\n";
-		}
-		else
-		{
-			$mask = "%d\t%d\t%s\t%s\t%s\n";
-		};
-
-		foreach($this->java_branches as $dt)
-		{
-			printf($mask,$dt["oid"],$dt["subcnt"],$dt["name"],$dt["url"],$dt["iconurl"]);
-		}
-
-		if ($format == "xmlrpc")
-		{
-			print "</value>\n";
-			print "</member>\n";
-			print "</struct>\n";
-			print "</value>\n";
-			print "</param>\n";
-			print "</params>\n";
-			print "</methodResponse>\n";
-		};
-		exit;
-	}
-
-	function get_hf_branch($args = array())
-	{
-		$uid = aw_global_get("uid");
-		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
-		$ext = $this->cfg["ext"];
-		$baseurl = $this->cfg["baseurl"];
-
-		$ret = $this->rec_homefolder($arr, $hf["oid"]);
-
-	}
-
-	function _gen_menu_branch($args = array())
-	{
-		extract($args);
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
-		$arr = array();
-		$mpr = array();
-		if (!$parent)
-		{
-			$parent = $this->cfg["admin_rootmenu2"];
-		};
-
-		$this->listacl("objects.status != 0 AND objects.parent = '$parent' AND objects.class_id = ".CL_PSEUDO);
-		// listib koik menyyd ja paigutab need arraysse
-		$this->db_listall("objects.status != 0 AND objects.parent = '$parent' AND (menu.type != ".MN_FORM_ELEMENT." AND menu.type != ".MN_ADMIN1.") AND objects.lang_id = ".aw_global_get("lang_id") . " OR (menu.type = 69 AND objects.parent ='$parent')",true);
-
-		while ($row = $this->db_next())
-		{
-			$this->save_handle();
-			// allpool peab ka acli kontrollima :(
-			$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != ".MN_ADMIN1.") AND objects.parent = '$row[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
-			$this->db_query($q);
-			$subcnt = 0;
-			while ($drow = $this->db_next())
-			{
-				if ($this->can("view", $drow["oid"]))
-				{
-					$subcnt++;
-				}
-			}
-			$this->restore_handle();
-
-			if ($this->can("view",$row["oid"]))
-			{
-				if (!isset($row["mtype"]) || $row["mtype"] != MN_HOME_FOLDER)
-				{
-					if ($row["class_id"] == CL_PROMO)
-					{
-						$iconurl = icons::get_icon_url("promo_box","");
-					}
-					else
-					if ($row["class_id"] == CL_BROTHER)
-					{
-						$iconurl = icons::get_icon_url("brother","");
-					}
-					else
-					{
-						$iconurl = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
-					}
-
-					//$url = $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period));
-					$url = "javascript:go_view(".$row["oid"].")";
-					$this->_send_branch_line($row["oid"],$subcnt,$row["name"],$url,$iconurl);
-				}
-			}
-			else
-			{
-				$subcnt--;
-			}
-		}
-		// also, we do the parent-not-visible check for all menus if we are showing the root branch
-		if ($parent == $this->cfg["admin_rootmenu2"])
-		{
-			$this->x_mpr = array();
-			$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
-			// listib koik menyyd ja paigutab need arraysse
-			$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
-			while ($row = $this->db_next())
-			{
-				$row["name"] = str_replace("\"","&quot;", $row["name"]);//"
-				if ($this->can("view",$row["oid"]) || 
-					$row["oid"] == $this->cfg["admin_rootmenu2"]
-				)
-				{
-					$arr[$row["parent"]][] = $row;
-					$mpr[] = $row["parent"];
-				}
-				else
-				{
-					$this->x_mpr[$row['oid']] = $row;
-				}
-			}
-
-			// here we will make the parent of all objects that don't have parents in the tree,
-			// but have them in the excluded list, to be the root
-			// why is this? well, because then the folders that are somewhere deep in the tree and that the user
-			// has can_view acces for, but not their parent folders, can still see them
-			foreach($arr as $prnt => $data)
-			{
-				foreach($data as $d_idx => $d_row)
-				{
-					if (isset($this->x_mpr[$d_row["parent"]]))
-					{
-						$d_row["parent"] = $this->cfg["admin_rootmenu2"];
-						if (!isset($d_row["mtype"]) || $d_row["mtype"] != MN_HOME_FOLDER)
-						{
-							if ($d_row["class_id"] == CL_PROMO)
-							{
-								$iconurl = icons::get_icon_url("promo_box","");
-							}
-							else
-							if ($d_row["class_id"] == CL_BROTHER)
-							{
-								$iconurl = icons::get_icon_url("brother","");
-							}
-							else
-							{
-								$iconurl = $d_row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$d_row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
-							}
-
-							$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != ".MN_ADMIN1.") AND objects.parent = '$d_row[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
-							$this->db_query($q);
-							$subcnt = 0;
-							while ($drow = $this->db_next())
-							{
-								if ($this->can("view", $drow["oid"]))
-								{
-									$subcnt++;
-								}
-							}
-							$url = $this->mk_my_orb("right_frame",array("parent" => $d_row["oid"], "period" => $period));
-							//$url = "javascript:go_go(".$d_row["oid"].",'".$period."')";
-							$this->_send_branch_line($d_row["oid"],$subcnt,$d_row["name"],$url,$iconurl);
-						}
-					}
-				}
-			}
-		}
-	}
-		
-		
-	function _gen_prog_branch($args = array())
-	{
-		extract($args);
-		$baseurl = $this->cfg["baseurl"];
-
-		//$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1." AND objects.lang_id = ".aw_global_get("lang_id"),true,true);
-		$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1,true,true);
-		$ext = $this->cfg["ext"];
-		$blank = $this->mk_my_orb("blank");
-		while ($row = $this->db_next())
-		{
-			$this->save_handle();
-			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
-			{
-				continue;
-			}
-
-			$subcnt = 0;
-			$q = "SELECT * FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status = 2 AND menu.type = " . MN_ADMIN1 . " AND objects.parent = '$row[oid]'";
-			$this->db_query($q);
-			while ($_row = $this->db_next())
-			{
-				if ($_row["admin_feature"] && !$this->prog_acl("view", $_row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
-				{
-					continue;
-				}
-				$subcnt++;
-			}
-
-
-			$this->restore_handle();
-			$iconurl = $baseurl . isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : $baseurl."/automatweb/images/ftv2doc.gif");
-			$name = $row["name"];
-			$url = $row["link"] != "" ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank);
-			if (substr($url,0,7) != "http://")
-			{
-				$url = $baseurl . "/automatweb/" . $url;
-			};
-			$this->_send_branch_line($row["oid"],$subcnt,$name,$url,$iconurl);
-		};
-	}
-	
-	function _send_branch_line($oid,$subcnt,$name,$url,$iconurl)
-	{
-		if (strlen($name) == 0)
-		{
-			$name = "(nimetu)";
-		};
-		if ($this->format == "xmlrpc")
-		{
-			$name = str_replace("&","&amp;",$name);
-			$url = str_replace("&","&amp;",$url);
-			$iconurl = str_replace("&","&amp;",$iconurl);
-		};
-
-//		printf("%d\t%d\t%s\t%s\t%s\n",$oid,$subcnt,$name,$url,$iconurl);
-		$this->java_branches[$oid] = array("oid" => $oid, "subcnt" => $subcnt, "name" => $name, "url" => $url, "iconurl" => $iconurl);
-	}		
-
-	// see oli siin java puu sees perioodide testimise jaoks
-	function get_periods()
-	{
-		$per = get_instance("periods");
-		$act_per = $per->get_active_period();
-		$plist = $per->period_list($act_per, true);
-		foreach($plist as $id => $desc)
-		{
-			$act = $id == $act_per ? 1 : 0;
-			printf("%d\t%s\t%d\n",$id,$desc,$act);
-		};
-		exit;
-	}
-
-
 	function get_shared_arr(&$arr,$exclude)
 	{
 		$ret = array();
@@ -2509,14 +2171,6 @@ class menuedit extends aw_template
 
 	function get_feature_icon_url($fid)
 	{
-/*		if (!is_array($this->pr_icons))
-		{
-			$c = get_instance("config");
-			$this->pr_icons = aw_unserialize($c->get_simple_config("program_icons"));
-		}
-		$i = $this->pr_icons[$fid]["url"];
-		classload("icons");
-		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);*/
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
 
