@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.83 2003/02/26 15:57:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.84 2003/03/13 12:13:08 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -12,6 +12,18 @@ if (!defined("DEFS"))
 	define("SERIALIZE_XMLRPC", 5);
 
 	classload("xml","php");
+
+	////
+	// !adds or changes a variable in the current url
+	function aw_url_change_var($name, $value)
+	{
+		$url = aw_global_get("REQUEST_URI");
+		// remove old
+		$url = preg_replace("/$name=[^&]*/","", $url);
+		$url = preg_replace("/&{2,}/","&",$url);
+		$url .= (strpos($url,"?") === false ? "?" : "&" ).$name."=".$value;
+		return $url;
+	}
 
 	////
 	// !generates a password with length $length
@@ -506,6 +518,49 @@ if (!defined("DEFS"))
 	}
 
 	////
+	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
+	function aw_session_cache_get($cache,$key)
+	{
+		if (!is_array($_SESSION["__aw_sess_cache"]))
+		{
+			return false;
+		}
+		if (!isset($_SESSION["__aw_sess_cache"][$cache]) || !is_array($_SESSION["__aw_sess_cache"][$cache]))
+		{
+			return false;
+		}
+		return isset($_SESSION["__aw_sess_cache"][$cache][$key]) ? $_SESSION["__aw_sess_cache"][$cache][$key] : false;
+	}
+
+	function aw_session_cache_set($cache,$key,$val = "")
+	{
+		// if $key is array, we will just stick it into the cache. 
+		// NO!! that's what aw_cache_set_array() is for!!! - terryf
+		if (!is_array($_SESSION["__aw_sess_cache"]))
+		{
+			$_SESSION["__aw_sess_cache"] = array($cache => array($key => $val));
+		}
+		else
+		if (!is_array($_SESSION["__aw_sess_cache"][$cache]))
+		{
+			$_SESSION["__aw_sess_cache"][$cache] = array($key => $val);
+		}
+		else
+		{
+			$_SESSION["__aw_sess_cache"][$cache][$key] = $val;
+		}
+	}
+
+	function aw_session_cache_flush($cache)
+	{
+		if (!is_array($_SESSION["__aw_sess_cache"]))
+		{
+			$_SESSION["__aw_sess_cache"] = array();
+		}
+		$_SESSION["__aw_sess_cache"][$cache] = false;
+	}
+
+	////
 	// !saves a local variable's value to the session - there is no session_get, because 
 	// session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get()
 	function aw_session_set($name,$value)
@@ -748,6 +803,11 @@ if (!defined("DEFS"))
 				return "NULL";
 			}
 			return $str;
+		}
+
+		function count()
+		{
+			return count($this->arg);
 		}
 	};
 };
