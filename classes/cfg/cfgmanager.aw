@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.5 2002/11/07 10:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.6 2002/11/08 15:03:19 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 class cfgmanager extends aw_template
@@ -7,6 +7,7 @@ class cfgmanager extends aw_template
 	function cfgmanager($args = array())
 	{
 		$this->init("cfgmanager");
+		$this->output_client = "htmlclient";
 	}
 
 	////
@@ -43,6 +44,8 @@ class cfgmanager extends aw_template
 			$filter = (int)$cs[$class_id];
 		};
 
+		$this->id = $id;
+
 		$filter = 0;
 
 		if (!$clfile)
@@ -52,6 +55,7 @@ class cfgmanager extends aw_template
 
 		$inst = get_instance($clfile);
 
+		// tabpanel really should be in the htmlclient too
 		$tp = get_instance("vcl/tabpanel");
 		
 		$this->mk_path($parent,$title);
@@ -62,13 +66,16 @@ class cfgmanager extends aw_template
 			$callback = true;
 		};
 
+		$realprops = $this->get_active_properties(array(
+					"clfile" => $clfile,
+					"group" => $group,
+		));
 
+		// this removes the properties that have been excluded by a 
+		// configuration form object
 
-		$cfgu = get_instance("cfg/cfgutils");
-	
-		$coreprops = $cfgu->load_properties(array("file" => "core"));
-		$objprops = $cfgu->load_properties(array("file" => basename($clfile)));
-
+		// the big question is - why don't we do that inside the get_active_properties
+		// function?
 		if ($filter)
 		{
 			$saved = $objprops;
@@ -85,20 +92,23 @@ class cfgmanager extends aw_template
 			};
 		};
 
-
-		$realprops = array_merge($coreprops,$objprops);
-
-		$this->group_magic(&$realprops,$group);
-		$grpnames = new aw_array($this->groupnames);
 		// I really really need to get rid of class specific code
 		if ($clfile == "menuedit")
 		{
 			$this->objdata = $this->get_menu($id);
 		};
+		
+		$grpnames = new aw_array($this->groupnames);
 		$active = ($group) ? $group : "general";
+
+		if (!$orb_class)
+		{
+			$orb_class = "cfgmanager";
+		};
+
 		foreach($grpnames->get() as $key => $val)
 		{
-			$link = $this->mk_my_orb("change",array("id" => $id,"group" => $key));
+			$link = $this->mk_my_orb("change",array("id" => $id,"group" => $key),$orb_class);
 			$tp->add_tab(array(
 				"link" => $link,
 				"caption" => $key,
@@ -111,7 +121,7 @@ class cfgmanager extends aw_template
 		// actually I'm thinking of native clients and XML-RPC
 		// output client is probably the first that should be
 		// implemented.
-		$cli = get_instance("cfg/htmlclient");
+		$cli = get_instance("cfg/" . $this->output_client);
 		$cli->start_output();
 
 		// need to cycle over the property nodes, to replacemenets
@@ -119,10 +129,26 @@ class cfgmanager extends aw_template
 		// the output
 		$resprops = array();
 
+		// there are two ways for a class to change the properties
+		// 1 - get_property callback - usually used to change some
+		// fields of the property - common use is to set the contents
+		// of an select field
+
+		// 2 - getter - which should return full property definitions
+		// in the same format they come from load_properties.
+		// those can be called dynamic properties I suppose
+		// since they don't have to exist anywhere in the property
+		// definitions
+
+
+		// XXX: clean up this get_property/getter/array handling mess
 		foreach($realprops as $key => $val)
 		{
-			$val = $this->normalize_text_nodes($val);
-			$this->get_value(&$val);
+			if (is_array($val))
+			{
+				$val = $this->normalize_text_nodes($val);
+				$this->get_value(&$val);
+			};
 
 			$argblock = array(
 				"prop" => &$val,
@@ -134,11 +160,16 @@ class cfgmanager extends aw_template
 			{
 				$inst->get_property($argblock);
 			};
-
-
+			
+			
+			
 			// if the property has a getter, call it directly
-			if ($val["getter"])
+			if (is_array($val) && $val["getter"])
 			{
+				if ($XXX)
+				{
+					print "getter";
+				};
 				$meth = $val["getter"];
 				if (method_exists($inst,$meth))
 				{
@@ -167,6 +198,8 @@ class cfgmanager extends aw_template
 				$resprops[] = $val;
 			};
 		}
+		
+		$content = "";
 
 		foreach($resprops as $val)
 		{
@@ -182,8 +215,12 @@ class cfgmanager extends aw_template
 			{
 				$this->convert_element(&$val);
 			};
-			
 
+			// add properties - one line at a time
+			if (is_string($val) && method_exists($this,$val))
+			{
+				$content = $this->$val();
+			};
 			$cli->add_property($val);
 		};
 
@@ -196,8 +233,13 @@ class cfgmanager extends aw_template
 						"parent" => $parent),
 		));
 
+		if (!$content)
+		{
+			$content = $cli->get_result();
+		};
+
 		return $tp->get_tabpanel(array(
-			"content" => $cli->get_result(),
+			"content" => $content,
 		));
 
 	}
@@ -208,6 +250,8 @@ class cfgmanager extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
+		$cfgu = get_instance("cfg/cfgutils");
+		$clid = $cfgu->get_clid_by_file(array("file" => $class));
 		if (!$clid)
 		{
 			die("class_id is missing. please report this to duke");
@@ -228,18 +272,11 @@ class cfgmanager extends aw_template
 		$this->coredata = $this->get_object($id);
 		$clfile = $cp[$this->coredata["class_id"]];
 		
-		// figure out the name of the class file
-
-		$cfgu = get_instance("cfg/cfgutils");
-		$coreprops = $cfgu->load_properties(array("file" => "core"));
-		$objprops = $cfgu->load_properties(array("file" => basename($clfile)));
-		$realprops = array_merge($coreprops,$objprops);
+		$realprops = $this->get_active_properties(array(
+					"clfile" => $clfile,
+					"group" => $group,
+		));
 			
-		if ($clfile == "menuedit")
-		{
-			$this->group_magic(&$realprops,$group);
-		};
-
 		// now we need to figure out the save strategy
 		// cycle over the properties and sort out all the stuff 
 		// that has values in the form
@@ -303,35 +340,6 @@ class cfgmanager extends aw_template
 		};
 
 		return $this->mk_my_orb("change",array("id" => $id,"group" => $group),$class);
-	}
-
-	function group_magic($props,$group = "")
-	{
-		$by_group = array();
-		foreach($props as $val)
-		{
-			$grpname = $val["group"]["text"];
-			if ($grpname)
-			{
-				$by_group[$grpname][] = $val;
-			};
-		}
-		$groupnames = array_flip(array_keys($by_group));
-		$this->groupnames = $groupnames;
-		if (!$group)
-		{
-			$group = "general";
-		};
-
-		if (!$by_group[$group])
-		{
-			$group = "general";
-		};
-		$filtered = $by_group[$group];
-		if (is_array($filtered))
-		{
-			$props = $filtered;
-		};
 	}
 
 	function create_toolbar($args = array())
@@ -547,11 +555,17 @@ class cfgmanager extends aw_template
 
 	function normalize_text_nodes($val)
 	{
-		$arr = new aw_array($val);
-		$res = array();
-		foreach($arr->get() as $key => $val)
+		if (is_array($val))
 		{
-			$res[$key] = $val["text"];
+			$res = array();
+			foreach($val as $key => $val)
+			{
+				$res[$key] = $val["text"];
+			};
+		}
+		else
+		{
+			$res = $val;
 		};
 		return $res;
 	}
@@ -561,8 +575,79 @@ class cfgmanager extends aw_template
 		if (($val["type"] == "objpicker") && $val["clid"])
 		{
 			$val["type"] = "select";
-                        $val["options"] = $this->list_objects(array("class" => constant($val["clid"]), "addempty" => true));
+                        $val["options"] = $this->list_objects(array(
+					"class" => constant($val["clid"]),
+					"addempty" => true,
+			));
 		};
+
+		if (($val["type"] == "relpicker") && ($val["clid"]))
+		{
+			// retrieve the list of all aliases first time this is invoked
+			if (!is_array($this->alist))
+			{
+				$almgr = get_instance("aliasmgr");
+				$this->alist = $almgr->get_oo_aliases(array(
+							"oid" => $this->id,
+				));
+			};
+
+			$objlist = new aw_array($this->alist[constant($val["clid"])]);
+
+			$options = array("0" => "--vali--");
+			// generate option list
+			foreach($objlist->get() as $okey => $oval)
+			{
+				$options[$oval["target"]] = $oval["name"];
+			}
+
+			$val["type"] = "select";
+			$val["options"] = $options;
+		};
+	}
+
+	function get_active_properties($args = array())
+	{
+		// load all properties
+		$cfgu = get_instance("cfg/cfgutils");
+		$coreprops = $cfgu->load_properties(array("file" => "core"));
+		$objprops = $cfgu->load_properties(array("file" => basename($args["clfile"])));
+		$this->classinfo = $cfgu->get_classinfo();
+		$all_props = array_merge($coreprops,$objprops);
+	
+		// I need names of all group and the contents of active group
+		$by_group = array();
+		$activegroup = ($args["group"]) ? $args["group"] : "general";
+		$elements = array();
+		$this->groupnames = array();
+		foreach($all_props as $val)
+		{
+			$grpname = ($val["group"]["text"]) ? $val["group"]["text"] : "general";
+			// stuff with no group name goes into general. 
+			if ($grpname == $activegroup)
+			{
+				$elements[] = $val;
+			};
+			$this->groupnames[$grpname] = $grpname;
+		}
+		
+		if ($this->classinfo["relationmgr"])
+		{
+			$this->groupnames["related_objects"] = "related_objects";
+			if ($activegroup == "related_objects")
+			{
+				$elements[] = "callback_get_relation_mgr";
+			};
+		};
+
+		return $elements;
+	}
+
+	function callback_get_relation_mgr($args = array())
+	{
+		$almgr = get_instance("aliasmgr");
+		$gen = $almgr->new_list_aliases(array("id" => $this->coredata["oid"]));
+		return $gen;
 	}
 	
 	function __add($args = array())
