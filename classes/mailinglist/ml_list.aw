@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.60 2004/08/27 11:13:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.61 2004/08/27 12:12:40 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -314,20 +314,8 @@ class ml_list extends class_base
 			$allow = true;
 		};
 
-		// nii .. ja siin on ka see koht, kus tuleb teostada kontroll ..
-		// ja suunata tagasi sinna kuhu vaja
-
-		// nini .. ml_member on meil loodud .. nüüd on vaja teada saada, kas vormis olev info valideerub.
-
-		// selleks on vaja teada kasutavat konfivormi
-		//arr($list_obj->properties());
-
-		// member_config property sisaldab seda vajalikku infot
-
-		// nii .. load form data, load member_config .. chec ..
-
-
 		// I HATE you all
+		$args["mail"] = $args["email"];
 		$request = $args;
 		if (is_array($args["udef_txbox"]))
 		{
