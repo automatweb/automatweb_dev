@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.80 2004/07/28 09:10:08 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.81 2004/09/09 11:16:20 kristo Exp $
 
 lc_load("definition");
 
@@ -500,6 +500,12 @@ class acl_base extends db_connector
 				"msg" => "acl_base::prog_acl($right, $progid): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 			));
 
+			$can_adm = aw_global_get("acl_base::prog_acl_cache");
+			if ($can_adm > 0)
+			{
+				return $can_adm - 1;
+			}
+
 			$can_adm = false;
 			$can_adm_max = 0;
 			$can_adm_oid = 0;
@@ -523,6 +529,7 @@ class acl_base extends db_connector
 			}
 			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
 
+			aw_global_set("acl_base::prog_acl_cache", $can_adm+1);
 			return $can_adm;
 		};
 	}
