@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.128 2002/07/12 18:33:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.129 2002/07/15 09:53:58 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4946,6 +4946,25 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $this->cfg["rootmenu"])
 			{
 				$show = true;
+			}
+		}
+
+		// form table yah links get made here. 
+		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for 
+		// all shown tables (and yeah, I know it is gonna be friggin huge. 
+		// and no, I can't remove the old ones, cause the user might have other windows open
+		// and if I remove all the other ones from the array, he will lose the yah link in other windows
+		if ($GLOBALS["tbl_sk"] != "")
+		{
+			$tbld = aw_global_get("fg_table_sessions");
+			foreach($tbld[$GLOBALS["tbl_sk"]] as $url)
+			{
+				preg_match("/restrict_search_val=([^&$]*)/",$url,$mt);
+				$this->vars(array(
+					"link" => $url,
+					"text" => urldecode($mt[1])
+				));
+				$ya.=$this->parse("YAH_LINK");
 			}
 		}
 		return $ya;

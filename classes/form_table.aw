@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.30 2002/06/18 08:49:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.31 2002/07/15 09:53:58 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -8,8 +8,22 @@ class form_table extends form_base
 		$this->sub_merge = 1;
 		lc_load("definition");
 		$this->lc_load("form","lc_form");
-		$this->fakels = array("change", "view", "special", "delete", "created", "modified", "uid", "active", "chpos","order", "select");
+		$this->fakels = array(
+			"change" => "Change", 
+			"view" => "View", 
+			"special" => "Special", 
+			"delete" => "Delete", 
+			"created" => "Created", 
+			"modified" => "Modified", 
+			"uid" => "UID", 
+			"active" => "Acive", 
+			"chpos" => "Move",
+			"order" => "Order", 
+			"select" => "Select"
+		);
+
 		$this->lang_id = aw_global_get("lang_id");
+		$this->buttons = array("save" => "Salvesta", "add" => "Lisa", "delete" => "Kustuta", "move" => "Liiguta");
 	}
 
 	////
@@ -317,7 +331,7 @@ class form_table extends form_base
 		}
 
 		$ct = "";
-		foreach($this->fakels as $fakelname)
+		foreach($this->fakels as $fakelname => $__fk)
 		{
 			$cl="";
 			$this->vars(array(
@@ -507,14 +521,10 @@ class form_table extends form_base
 			),
 			"form");
 
-//			echo "aa $dat[entry_id] ",var_dump($this->can("edit",$dat["entry_id"])),"<br>";
 			// FIXME: kõigepealt peaks kontrollima, kas tabelis üldse ev_change välja ongi, vastasel
 			// korral on see acl kontroll mõttetu ajakulu -- duke
 			if ($this->can("edit",$dat["entry_id"])  || $this->cfg["site_id"] == 11)
 			{
-//				echo "change = ",$this->table["texts"]["change"][$this->lang_id]," <br>";
-//				echo "change1 = ",$this->table["texts"]["change"][aw_global_get("lang_id")]," <br>";
-//				echo "change2 = <pre>",var_dump($this->table["texts"]["change"]),"</pre> <br>";
 				$dat["ev_change"] = "<a href='".$change_link."'>".$this->table["texts"]["change"][$this->lang_id]."</a>";
 			}
 			$dat["ev_created"] = $this->time2date($dat["created"], 2);
@@ -581,14 +591,14 @@ class form_table extends form_base
 			}
 		}
 
-		// hmph. here we must preprocess the data if any columns have more than 1 elements assigned to them, cause then the column names will be el_col_[col_number] not element names
+		// here we must preprocess the data, cause then the column names will be el_col_[col_number] not element names
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
-			if (is_array($cc["el"]) && count($cc["el"]) > 1)
+			if (is_array($cc["els"]))
 			{
 				$str = array();
-				foreach($cc["el"] as $elid => $elid)
+				foreach($cc["els"] as $elid => $elid)
 				{
 					if ($dat["ev_".$elid] != "")
 					{
@@ -610,53 +620,14 @@ class form_table extends form_base
 				}
 				$dat["ev_col_".$col] = join(",",$str);
 
-				if ($this->table["defs"][$col]["link_el"])
+				if ($cc["link_el"])
 				{
-					$dat["ev_col_".$col] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_col_".$col]."</a>";
+					$dat["ev_col_".$col] = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$dat["ev_col_".$col]."</a>";
 				}
 				else
 				if ($this->table["defs"][$col]["is_email"])
 				{
 					$dat["ev_col_".$col] = "<a href='mailto:".$dat["ev_col_".$col]."'>".$dat["ev_col_".$col]."</a>";
-				}
-			}
-			else
-			{
-				if ($this->table["defs"][$col]["link_el"])
-				{
-					foreach($cc["el"] as $_elid => $elid)
-					{
-						$dat["ev_".$elid] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_".$elid]."</a>";
-					}
-				}
-				else
-				if ($this->table["defs"][$col]["is_email"])
-				{
-					if (is_array($cc["el"]))
-					{
-						foreach($cc["el"] as $_elid => $elid)
-						{
-							$dat["ev_".$elid] = "<a href='mailto:".$dat["ev_".$elid]."'>".$dat["ev_".$elid]."</a>";
-						}
-					}
-				}
-				else
-				{
-					if (is_array($cc["el"]))
-					{
-						foreach($cc["el"] as $_elid => $elid)
-						{
-							if ($cc["alias"])
-							{
-								$dat["ev_".$elid] = $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section);
-							}
-							else
-							if ($elid == "order")
-							{
-								$dat["ev_".$elid] = $this->get_order_url($col,$dat["ev_".$elid],$dat);
-							}
-						}
-					}
 				}
 			}
 		}
@@ -931,11 +902,45 @@ class form_table extends form_base
 			$_so = "asc";
 			$_sn = ($this->table["defaultsort_type"] == "int");
 		}
+
+		$_grpby = array();
+		$_coll_el = array();
+		$_coll_sep = array();
+		if (is_array($this->table["grps"]))
+		{
+			foreach($this->table["grps"] as $nr => $dat)
+			{
+				$_grpby[] = "ev_col_".$this->get_col_for_el($dat["gp_el"]);
+				if (isset($dat["collect_el"]))
+				{
+					$_coll_el[] = "ev_col_".$this->get_col_for_el($dat["collect_el"]);
+				}
+
+				if (isset($dat["sep"]))
+				{
+					$_coll_sep["ev_col_".$this->get_col_for_el($dat["collect_el"])] = $dat["sep"];
+				}
+
+				if (isset($dat["ord_el"]))
+				{
+					$_coll_ordel["ev_col_".$this->get_col_for_el($dat["collect_el"])] = $dat["ord_el"];
+				}
+			}
+		}
+		else
 		if ($this->table["group"])
 		{
 			$_grpby = "ev_".$this->table["group"];
 		}
-		$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby,"sort_numeric" => $_sn));
+		$this->t->sort_by(array(
+			"field" => $_sby,
+			"sorder" => $_so,
+			"group_by" => $_grpby,
+			"collect_el" => $_coll_el,
+			"collect_sep" => $_coll_sep,
+			"collect_ordel" => $_coll_ordel,
+			"sort_numeric" => $_sn
+		));
 		$tbl = $this->get_css();
 
 		$tbl.=$this->get_js();
@@ -962,8 +967,18 @@ class form_table extends form_base
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
 		}
+		$r_g = false;
+		if (is_array($this->table["rgrps"]))
+		{
+			foreach($this->table["rgrps"] as $nr => $dat)
+			{
+				$cl = $this->get_col_for_el($dat["el"]);
+				$r_g[$cl] = $cl;
+			}
+		}
+
 		$tbl.=$this->t->draw(array(
-			"rgroupby" => "ev_".$this->table["rgroup"]
+			"rgroupby" => $r_g
 		));
 
 		if ($this->table["submit_bottom"])
@@ -980,6 +995,8 @@ class form_table extends form_base
 			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 			$tbl.="</form>";
 		}
+
+//		echo "fgtbls = <pre>", var_dump(aw_global_get("fg_table_sessions")),"</pre> <br>";
 		return $tbl;
 	}
 
@@ -1023,15 +1040,16 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
-			if (is_array($cc["show_grps"]) && count($cc["show_grps"]) > 0)
+
+			// don't show column to the users that are not part of the correct groups
+			if (is_array($cc["grps"]) && count($cc["grps"]) > 0)
 			{
-				if (count(array_intersect($gidlist,$cc["show_grps"])) < 1)
+				if (count(array_intersect($gidlist,$cc["grps"])) < 1)
 				{
 					continue;
 				}
 			}
-			$numericattr="";
-			if (is_array($cc["el"]))
+/*			if (is_array($cc["el"]))
 			{
 				if (count($cc["el"]) == 1)
 				{
@@ -1046,27 +1064,23 @@ class form_table extends form_base
 			else
 			{
 				$eln = $cc["el"];
-			}
+			}*/
+			$eln = "col_".$col;
 			
+			$numericattr="";
 			if ($cc["show_int"])
 			{
 				$numericattr=" numeric=\"1\" thousands_sep=\"".$cc["thousands_sep"]."\"";
 				if ($GLOBALS["dbg_num"]) echo("get_xml: set numericattr for el $eln<br>");
 			};
 			
-			if (isset($cc["lang_title"]))
-			{
-				$title = $cc["lang_title"][aw_global_get("lang_id")];
-			}
-			else
-			{
-				$title = $cc["title"];
-			}
+			$title = $cc["lang_title"][aw_global_get("lang_id")];
 
-			if ($eln == "select")
+			if (is_array($cc["els"]) && in_array("select", $cc["els"]))
 			{
 				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall()'&gt;".$title."&lt;/a&gt;";
 			}
+			
 			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
 			if ($cc["sortable"])
 			{
@@ -1201,6 +1215,7 @@ class form_table extends form_base
 			$ru = preg_replace("/use_table=[^&$]*/","",$ru);
 			$ru = preg_replace("/restrict_search_el=[^&$]*/","",$ru);
 			$ru = preg_replace("/restrict_search_val=[^&$]*/","",$ru);
+			$ru = preg_replace("/tbl_sk=[^&$]*/","",$ru);
 			// and the leftover &&'s
 			$ru = preg_replace("/&{2,}/","",$ru);
 			if (strpos("?",$ru) === false)
@@ -1211,7 +1226,19 @@ class form_table extends form_base
 			{
 				$sep = "&";
 			}
-			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid]);
+			$new_sk = $this->gen_uniq_id();
+			$fg_table_sessions = aw_global_get("fg_table_sessions");
+			$fg_table_sessions[$new_sk] = $fg_table_sessions[$GLOBALS["tbl_sk"]];
+			if (!is_array($fg_table_sessions[$new_sk]))
+			{
+				$fg_table_sessions[$new_sk] = array();
+			}
+
+			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk;
+
+			$fg_table_sessions[$new_sk][] = $url;
+			aw_session_set("fg_table_sessions",$fg_table_sessions);
+
 			return "<a href='".$url."'>".$elval."</a>";
 		}
 		else
@@ -1247,6 +1274,673 @@ class form_table extends form_base
 					return false;
 				}
 		</script>";
+	}
+
+	function new_add($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_settings.tpl");
+		$this->mk_path($parent, "Lisa formi tabel");
+
+		$lang = get_instance("languages");
+		$obj = get_instance("objects");
+
+		$this->vars(array(
+			"languages" => $this->mpicker(array(), $lang->get_list()),
+			"forms" => $this->mpicker(array(), $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "sort" => true))),
+			"folders" => $this->mpicker(array(), $obj->get_list()),
+			"reforb" => $this->mk_reforb("new_submit_settings", array("parent" => $parent))
+		));
+
+		return $this->parse();
+	}
+
+	function new_submit_settings($arr)
+	{
+		extract($arr);
+
+		if ($id)
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_FORM_TABLE,
+				"name" => $name,
+				"comment" => $comment
+			));
+			$this->db_query("INSERT INTO form_tables(id, content, num_cols, cols) values('$id','',0,0)");
+		}
+
+		$this->load_table($id);
+
+		$this->table["has_aliasmgr"] = $settings["has_aliasmgr"];
+		$this->table["has_yah"] = $settings["has_yah"];
+		$this->table["select_default"] = $settings["select_default"];
+		$this->table["has_textels"] = $settings["has_textels"];
+		$this->table["has_groupacl"] = $settings["has_groupacl"];
+		$this->table["has_grpnames"] = $settings["has_grpnames"];
+		$this->table["print_button"] = $settings["print_button"];
+		$this->table["has_pages"] = $settings["has_pages"];
+		$this->table["has_pages_type"] = $settings["has_pages_type"];
+		$this->table["user_entries"] = $settings["user_entries"];
+		$this->table["forms"] = $this->make_keys($settings["forms"]);
+		$this->table["languages"] = $this->make_keys($settings["languages"]);
+		$this->table["moveto"] = $this->make_keys($settings["folders"]);
+		$this->table["view_cols"] = $this->make_keys($settings["view_cols"]);
+		$this->table["change_cols"] = $this->make_keys($settings["change_cols"]);
+		$this->table["user_entries_except_grps"] = $this->make_keys($user_entries_except_grps);
+
+		if (!is_array($defsort))
+		{
+			$defsort = array();
+		}
+		$this->table["defsort"] = array();
+		foreach($defsort as $nr => $dat)
+		{
+			if ($dat["el"])
+			{
+				$this->table["defsort"][] = $dat;
+			}
+		}
+		usort($this->table["defsort"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
+
+		if (!is_array($grps))
+		{
+			$grps = array();
+		}
+		$this->table["grps"] = array();
+		foreach($grps as $nr => $dat)
+		{
+			if ($dat["gp_el"])
+			{
+				$this->table["grps"][] = $dat;
+			}
+		}
+
+		if (!is_array($rgrps))
+		{
+			$rgrps = array();
+		}
+		$this->table["rgrps"] = array();
+		foreach($rgrps as $nr => $dat)
+		{
+			if ($dat["el"])
+			{
+				$this->table["rgrps"][] = $dat;
+			}
+		}
+		usort($this->table["rgrps"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
+
+		$this->table["buttons"] = $buttons;
+
+		$this->save_table_settings();
+		return $this->mk_my_orb("new_change_settings", array("id" => $id));
+	}
+
+	function new_change_settings($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+		$this->read_template("add_table_settings.tpl");
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+
+		$this->do_menu(2);
+
+		$lang = get_instance("languages");
+		$obj = get_instance("objects");
+		$us = get_instance("users");
+
+		$els = $this->get_tbl_elements();
+
+		$this->vars(array(
+			"name" => $this->table_name,
+			"comment" => $this->table_comment,
+			"languages" => $this->mpicker($this->table["languages"], $lang->get_list()),
+			"forms" => $this->mpicker($this->table["forms"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "sort" => true))),
+			"folders" => $this->mpicker($this->table["moveto"], $obj->get_list()),
+			"has_print_button" => checked($this->table["print_button"]),
+			"has_grpnames" => checked($this->table["has_grpnames"]),
+			"has_groupacl" => checked($this->table["has_groupacl"]),
+			"has_textels" => checked($this->table["has_textels"]),
+			"has_aliasmgr" => checked($this->table["has_aliasmgr"]),
+			"select_default" => checked($this->table["select_default"]),
+			"has_yah" => checked($this->table["has_yah"]),
+			"has_pages" => checked($this->table["has_pages"]),
+			"has_pages_text" => checked($this->table["has_pages_type"] == "text"),
+			"has_pages_lb" => checked($this->table["has_pages_type"] == "lb"),
+			"has_user_entries" => checked($this->table["user_entries"]),
+			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
+			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
+			"change_cols" => $this->mpicker($this->table["change_cols"], $els),
+			"reforb" => $this->mk_reforb("new_submit_settings", array("id" => $id))
+		));
+
+		$mnr = 0;
+		if (is_array($this->table["defsort"]))
+		{
+			foreach($this->table["defsort"] as $nr => $dat)
+			{
+				$this->vars(array(
+					"ds_nr" => $nr,
+					"ds_ord" => $dat["ord"],
+					"ds_els" => $this->picker($dat["el"], $els),
+					"ds_asc" => checked($dat["type"] == "asc"),
+					"ds_desc" => checked($dat["type"] == "desc")
+				));
+				$l.= $this->parse("DEFSORT_LINE");
+				$mnr = $nr;
+				$mord = max($dat["ord"], $mord);
+			}
+		}
+		$this->vars(array(
+			"ds_nr" => $mnr+1,
+			"ds_ord" => $mord+1,
+			"ds_els" => $this->picker('', $els),
+			"ds_asc" => checked(true),
+			"ds_desc" => checked(false)
+		));
+		$l.= $this->parse("DEFSORT_LINE");
+		$this->vars(array("DEFSORT_LINE" => $l));
+
+		$l = "";
+		if (is_array($this->table["grps"]))
+		{
+			foreach($this->table["grps"] as $nr => $dat)
+			{
+				$this->vars(array(
+					"grp_nr" => $nr,
+					"gp_sep" => $dat["sep"],
+					"gp_els" => $this->picker($dat["gp_el"], $els),
+					"collect_els" => $this->picker($dat["collect_el"], $els),
+					"ord_els" => $this->picker($dat["ord_el"], $els),
+				));
+				$l.= $this->parse("GRPLINE");
+				$mnr = $nr;
+			}
+		}
+		$this->vars(array(
+			"grp_nr" => $mnr+1,
+			"gp_sep" => ",",
+			"gp_els" => $this->picker('', $els),
+			"collect_els" => $this->picker('', $els),
+			"ord_els" => $this->picker('', $els),
+		));
+		$l.= $this->parse("GRPLINE");
+		$this->vars(array("GRPLINE" => $l));
+
+
+		$l = "";
+		$mnr = 0;
+		$mord = 0;
+		if (is_array($this->table["rgrps"]))
+		{
+			foreach($this->table["rgrps"] as $nr => $dat)
+			{
+				$this->vars(array(
+					"grp_nr" => $nr,
+					"gp_ord" => $dat["ord"],
+					"els" => $this->picker($dat["el"], $els),
+					"gp_count" => checked($dat["count"] == 1)
+				));
+				$l.= $this->parse("GRP2LINE");
+				$mnr = $nr;
+				$mord = max($dat["ord"], $mord);
+			}
+		}
+		$this->vars(array(
+			"grp_nr" => $mnr+1,
+			"gp_ord" => $mord+1,
+			"els" => $this->picker('', $els),
+			"gp_count" => checked(false),
+		));
+		$l.= $this->parse("GRP2LINE");
+		$this->vars(array("GRP2LINE" => $l));
+
+		$l = "";
+		foreach($this->buttons as $btn_id => $btn_name)
+		{
+			$this->vars(array(
+				"button_check" => checked($this->table["buttons"][$btn_id]["check"] == 1),
+				"button_text" => $this->table["buttons"][$btn_id]["text"],
+				"button_ord" => $this->table["buttons"][$btn_id]["ord"],
+				"button_up" => checked($this->table["buttons"][$btn_id]["pos"]["up"] == 1),
+				"button_down" => checked($this->table["buttons"][$btn_id]["pos"]["down"] == 1),
+				"bt_name" => $btn_name,
+				"bt_id" => $btn_id
+			));
+			$l.=$this->parse("BUTTON");
+		}
+		$this->vars(array(
+			"BUTTON" => $l,
+			"CHANGE" => $this->parse("CHANGE")
+		));
+		return $this->parse();
+	}
+
+	function save_table_settings()
+	{
+		// make things just a bit more sane
+		for($i=0; $i < $this->table["cols"]; $i++)
+		{
+			if (!is_array($this->table["defs"][$i]["els"]))
+			{
+				$this->table["defs"][$i]["els"] = array();
+			}
+		}
+		if (!is_array($this->table["forms"]))
+		{
+			$this->table["forms"] = array();
+		}
+
+		$this->db_query("DELETE FROM form_table2form WHERE table_id = ".$this->table_id);
+		if (is_array($this->table["forms"]))
+		{
+			foreach($this->table["forms"] as $fid)
+			{
+				$this->db_query("INSERT INTO form_table2form(form_id,table_id) VALUES($fid,".$this->table_id.")");
+			}
+		}
+		$co = aw_serialize($this->table,SERIALIZE_XML);
+		$this->quote(&$co);
+		$q = "UPDATE form_tables SET num_cols = '".$this->table["cols"]."' , content = '$co' WHERE id = ".$this->table_id;
+		$this->db_query($q);
+	}
+
+	function do_menu()
+	{
+		$tpl = new aw_template;
+		$tpl->tpl_init("forms");
+		$tpl->read_template("fg_table_menu.tpl");
+
+		$items["new_change_cols"] = array("name" => "Tulbad", "url" => $this->mk_my_orb("new_change_cols", array("id" => $this->table_id), "",false,true));
+
+		$items["new_change_settings"] = array("name" => "M&auml;&auml;rangud", "url" => $this->mk_my_orb("new_change_settings", array("id" => $this->table_id), "",false,true));
+
+		$items["new_change_styles"] = array("name" => "Stiilid", "url" => $this->mk_my_orb("new_change_styles", array("id" => $this->table_id), "",false,true));
+
+		$items["new_change_styles"] = array("name" => "Stiilid", "url" => $this->mk_my_orb("new_change_styles", array("id" => $this->table_id), "",false,true));
+
+		if ($this->table["has_aliasmgr"])
+		{
+			$items["new_change_aliasmgr"] = array("name" => "Aliastehaldur", "url" => $this->mk_my_orb("new_change_aliasmgr", array("id" => $this->table_id), "",false,true));
+		}
+
+		$items["new_change_translate"] = array("name" => "T&otilde;lgi", "url" => $this->mk_my_orb("new_change_translate", array("id" => $this->table_id), "",false,true));
+
+		$this->vars(array(
+			"menu" => $tpl->do_menu($items)
+		));
+	}
+
+	function new_change_cols($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_cols.tpl");
+		$this->load_table($id);
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->do_menu();
+
+		$els = $this->get_tbl_elements();
+
+		$this->vars(array(
+			"num_cols" => $this->table["cols"],
+			"reforb" => $this->mk_reforb("new_submit_cols", array("id" => $id))
+		));
+
+		for ($col = 0; $col < $this->table["cols"]; $col++)
+		{
+			$this->vars(array(
+				"lang_title" => $this->table["defs"][$col]["lang_title"][aw_global_get("lang_id")],
+				"ord" => $this->table["defs"][$col]["ord"],
+				"col_id" => $col,
+				"lang_id" => aw_global_get("lang_id")
+			));
+			$coldata[$col][1] = $this->parse("COL_HEADER");
+
+			$this->vars(array(
+				"els" => $this->mpicker($this->table["defs"][$col]["els"], $els)
+			));
+			$coldata[$col][2] = $this->parse("SEL_ELS");
+
+			if ($this->table["has_aliasmgr"])
+			{
+				$this->vars(array(
+					"aliases" => $this->picker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
+				));
+				$coldata[$col][3] = $this->parse("SEL_ALIAS");
+			}
+
+			if ($this->table["has_groupacl"])
+			{
+				$us = get_instance("users");
+				$this->vars(array(
+					"grps" => $this->mpicker($this->table["defs"][$col]["grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC))))
+				));
+				$coldata[$col][4] = $this->parse("SEL_GRPS");
+			}
+
+			if ($this->table["defs"][$col]["link"] == 1)
+			{
+				$this->vars(array(
+					"link" => $this->picker($this->table["defs"][$col]["link_el"], $els)
+				));
+				$coldata[$col][5] = $this->parse("SEL_LINK");
+			}
+
+			
+			$l = "";
+			if (is_array($this->table["defs"][$col]["els"]))
+			{
+				foreach($this->table["defs"][$col]["els"] as $el)
+				{
+					$this->vars(array(
+						"el_name" => $els[$el],
+						"el_ord" => $this->table["defs"][$col]["el_ord"][$el],
+						"el_id" => $el,
+						"el_sep" => $this->table["defs"][$col]["el_sep"][$el]
+					));
+					$l.= $this->parse("SEL_EL");
+				}
+			}
+			$this->vars(array(
+				"SEL_EL" => $l
+			));
+			$coldata[$col][6] = $this->parse("SEL_SETTINGS");
+
+			$this->vars(array(
+				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
+				"col_email" => checked($this->table["defs"][$col]["is_email"]),
+				"col_clicksearch" => checked($this->table["defs"][$col]["clicksearch"]),
+				"col_link" => checked($this->table["defs"][$col]["link"]),
+				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"])
+			));
+			$coldata[$col][7] = $this->parse("SEL_SETINGS2");
+
+			$this->vars(array(
+				"popup_width" => $this->table["defs"][$col]["link_popup_width"],
+				"popup_height" => $this->table["defs"][$col]["link_popup_height"],
+				"scrollbars" => checked($this->table["defs"][$col]["link_popup_scrollbars"]),
+				"fixed" => checked($this->table["defs"][$col]["link_popup_fixed"]),
+				"toolbar" => checked($this->table["defs"][$col]["link_popup_toolbar"]),
+				"addressbar" => checked($this->table["defs"][$col]["link_popup_addressbar"]),
+			));
+			$coldata[$col][8] = $this->parse("SEL_POPUP");
+
+			$this->vars(array(
+				"img_type_img" => checked($this->table["defs"][$col]["image_type"] == "img"),
+				"img_type_tximg" => checked($this->table["defs"][$col]["image_type"] == "tximg"),
+				"img_type_imgtx" => checked($this->table["defs"][$col]["image_type"] == "imgtx"),
+			));
+			$coldata[$col][9] = $this->parse("SEL_IMAGE");
+		}
+
+		$l = "";
+		for ($idx = 1; $idx < 10; $idx++)
+		{
+			$td = "";
+			for ($col =0 ; $col < $this->table["cols"]; $col++)
+			{
+				$this->vars(array(
+					"content" => $coldata[$col][$idx]
+				));
+				$td.=$this->parse("TD");
+			}
+			$this->vars(array("TD" => $td));
+			$l.=$this->parse("ROW");
+		}
+		$this->vars(array(
+			"ROW" => $l,
+			"COL_HEADER" => "",
+			"SEL_ELS" => "",
+			"SEL_ALIAS" => "",
+			"SEL_GRPS" => "",
+			"SEL_LINK" => "",
+			"SEL_SETTINGS" => "",
+			"SEL_SETINGS2" => "",
+			"SEL_POPUP" => "",
+			"SEL_IMAGE" => "",
+		));
+		return $this->parse();
+	}
+
+	function new_submit_cols($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		$this->table["cols"] = $num_cols;
+		$this->table["defs"] = $cols;
+
+		// now create lookup tables for elements so we know in which forms they are
+		$t_forms = $this->get_forms_for_table($id);
+		
+		if (is_array($t_forms))
+		foreach($t_forms as $formid)
+		{
+			$formels=$this->get_form_elements(array("id"=> $formid,"key"=> "id"));
+			if (is_array($formels))
+			{
+				foreach($formels as $k_elid => $v_eldata)
+				{
+					$els[$k_elid]=$formid;
+					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
+					$elsubtypes[$formid][$k_elid]["thousands_sep"]=$v_eldata["thousands_sep"];
+				};
+			}
+		};
+
+		for ($i=0; $i < $this->table["cols"]; $i++)
+		{
+			$this->table["defs"][$i]["els"] = $this->make_keys($cols[$i]["els"]);
+			foreach($this->table["defs"][$i]["els"] as $elid)
+			{
+				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
+			}
+			$this->table["defs"][$i]["grps"] = $this->make_keys($cols[$i]["grps"]);
+			$this->table["defs"][$i]["alias_data"] = $this->get_data_for_alias($cols[$i]["alias"]);
+		}
+
+		usort($this->table["defs"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
+		$this->save_table_settings();
+		return $this->mk_my_orb("new_change_cols", array("id" => $id));
+	}
+
+	function new_change_styles($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_styles.tpl");
+		$this->load_table($id);
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->do_menu();
+
+		$s = get_instance("style");
+		$css = $s->get_select(0,ST_CELL, true);
+
+		$this->vars(array(
+			"tablestyles" => $this->picker($this->table["table_style"],$s->get_select(0,ST_TABLE,true)),
+			"header_normal" => $this->picker($this->table["header_normal"],$css),
+			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
+			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
+			"header_sortable_link" => $this->picker($this->table["header_sortable_link"], $css),
+			"content_style1" => $this->picker($this->table["content_style1"],$css),
+			"content_style2" => $this->picker($this->table["content_style2"],$css),
+			"link_style1" => $this->picker($this->table["link_style1"],$css),
+			"link_style2" => $this->picker($this->table["link_style2"],$css),
+			"group_style" => $this->picker($this->table["group_style"],$css),
+			"content_sorted_style1" => $this->picker($this->table["content_sorted_style1"],$css),
+			"content_sorted_style2" => $this->picker($this->table["content_sorted_style2"],$css),
+			"sum_style" => $this->picker($this->table["sum_style"],$css),
+			"reforb" => $this->mk_reforb("new_submit_styles", array("id" => $id))
+		));
+
+		return $this->parse();
+	}
+
+	function new_submit_styles($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		$this->table = array_merge($this->table, $styles);
+
+		$this->save_table_settings();
+		return $this->mk_my_orb("new_change_styles", array("id" => $id));
+	}
+
+	function new_change_translate($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_translate.tpl");
+		$this->load_table($id);
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->do_menu();
+
+		$la = get_instance("languages");
+		$ls = $la->get_list();
+		foreach($ls as $lid => $lname)
+		{
+			if ($this->table["languages"][$lid] != $lid)
+			{
+				unset($ls[$lid]);
+			}
+		}
+
+		foreach($ls as $lid => $lname)
+		{
+			$this->vars(array(
+				"lang_name" => $lname
+			));
+			$lh.= $this->parse("LANG_H");
+		}
+
+		for ($col = 0; $col < $this->table["cols"]; $col++)
+		{
+			$this->vars(array(
+				"col_id" => $col
+			));
+			$lg = "";
+			foreach($ls as $lid => $lname)
+			{
+				$this->vars(array(
+					"lang_id" => $lid,
+					"title" => $this->table["defs"][$col]["lang_title"][$lid]
+				));
+				$lg.=$this->parse("LANG");
+			}
+			$this->vars(array(
+				"LANG" => $lg
+			));
+			$l.=$this->parse("COL");
+		}
+
+		$clh = "";
+		foreach($ls as $lid => $lname)
+		{
+			$this->vars(array(
+				"lang_name" => $lname
+			));
+			$clh.=$this->parse("CLANG_H");
+		}
+
+		$ct = "";
+		foreach($this->fakels as $fakelname => $__fk)
+		{
+			$cl="";
+			$this->vars(array(
+				"eltype" => $fakelname
+			));
+			foreach($ls as $lid => $lname)
+			{
+				$tx = $this->table["texts"][$fakelname][$lid];
+				$this->vars(array(
+					"lang_id" => $lid,
+					"t_name" => ($tx != "" ? $tx : $__fk )
+				));
+				$cl.=$this->parse("CLANG");
+			}
+			$this->vars(array(
+				"CLANG" => $cl
+			));
+			$ct.=$this->parse("COL_TEXT");
+		}
+
+		$this->vars(array(
+			"COL_TEXT" => $ct,
+			"CLANG_H" => $clh,
+			"COL" => $l,
+			"LANG_H" => $lh,
+			"reforb" => $this->mk_reforb("new_submit_translate", array("id" => $id))
+		));
+
+		return $this->parse();
+	}
+
+	function new_submit_translate($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		$la = get_instance("languages");
+		$ls = $la->get_list();
+
+		for ($col = 0; $col < $this->table["cols"]; $col++)
+		{
+			foreach($ls as $lid => $lname)
+			{
+				$this->table["defs"][$col]["lang_title"][$lid] = $langs[$col][$lid];
+			}
+		}
+		
+		$this->table["texts"] = $texts;
+
+		$this->save_table_settings();
+		return $this->mk_my_orb("new_change_translate", array("id" => $id));
+	}
+
+	function new_change_aliasmgr($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_aliasmgr.tpl");
+		$this->load_table($id);
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->do_menu();
+
+		$this->vars(array(
+			"aliasmgr" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr")
+		));
+		return $this->parse();
+	}
+
+	////
+	// !returns an array of all elements that are in the forms selected for this table
+	// honors the no_text_tlements setting
+	function get_tbl_elements()
+	{
+		$ret = array();
+		foreach($this->table["forms"] as $fid)
+		{
+			$ret += $this->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
+		}
+		$ret+=$this->fakels;
+		return $ret;
+	}
+
+	function get_col_for_el($el)
+	{
+		for ($_i = 0; $_i < $this->table["cols"]; $_i++)
+		{
+			if ($this->table["defs"][$_i]["els"][$el])
+			{
+				$cl = $_i;
+			}
+		}
+		return $cl;
 	}
 }
 
