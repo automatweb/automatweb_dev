@@ -1489,7 +1489,7 @@ class crm_company extends class_base
 		$candidate_conns = $candidate_conns->find(array(
         	"from" => array_keys($jobs_ids),
         	"to.class_id" => CL_CRM_PERSON,
-        	"reltype" => RELTYPE_CANDIDATE,
+        	"reltype" => 66666, //RELTYPE_CANDIDATE
 		));
 		
 		$professions = $section_cl->get_all_org_proffessions($arr["obj_inst"]->id(), true);
@@ -1535,7 +1535,7 @@ class crm_company extends class_base
 		));
 		
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
 		{
 			$job = &obj($job->prop("to"));
 			
@@ -1585,7 +1585,7 @@ class crm_company extends class_base
 			"caption" => "X",
 		));
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
 		{
 			$job = &obj($job->prop("to"));
 			
@@ -1967,15 +1967,15 @@ class crm_company extends class_base
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
-				$args["type"] = RELTYPE_CALL;
+				$args["type"] = 12; //RELTYPE_CALL
 				break;
 			
 			case "org_meetings":
-				$args["type"] = RELTYPE_KOHTUMINE;
+				$args["type"] = 11; //RELTYPE_KOHTUMINE;
 				break;
 			
 			case "org_tasks":
-				$args["type"] = RELTYPE_TASK;
+				$args["type"] = 13; //RELTYPE_TASK;
 				break;
 		};
 		$conns = $ob->connections_from($args);
@@ -2152,11 +2152,11 @@ class crm_company extends class_base
 			{
 				if($target_obj->is_connected_to(array(
 						'to' => $conn->prop('from'),
-						'type' => RELTYPE_WORKER)))
+						'type' => 8))) //RELTYPE_WORKER
 				{
 					$target_obj->disconnect(array(
 						"from" => $conn->prop("from"),
-						'reltype' => "RELTYPE_WORKER",
+						'reltype' => "RELTYPE_WORKERS",
 					));
 				}
 			}
@@ -2164,7 +2164,7 @@ class crm_company extends class_base
 			{
 				if($target_obj->is_connected_to(array(
 						'to' => $conn->prop('from'),
-						'type' => RELTYPE_MAINTAINER)))
+						'type' => 31))) //RELTYPE_MAINTAINER
 				{
 					$target_obj->disconnect(array(
 						"from" => $conn->prop("from"),
@@ -2176,7 +2176,7 @@ class crm_company extends class_base
 			{
 				if($target_obj->is_connected_to(array(
 						'to' => $conn->prop('from'),
-						'type' => RELTYPE_SELLER)))
+						'type' => 32))) //RELTYPE_SELLER
 				{
 					$target_obj->disconnect(array(
 						"from" => $conn->prop("from"),
@@ -2363,20 +2363,20 @@ class crm_company extends class_base
 		// through the crm_db class, which means that they can be different for each user
 		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_JOBS] = $parents[RELTYPE_WORKERS] = $parents[$RELTYPE_ADDRESS] = $args['obj_inst']->parent();
+			$parents[19] = $parents[8] = $parents[$RELTYPE_ADDRESS] = $args['obj_inst']->parent();
 		}
 		else
 		{
 			$crm_db = new object($crm_db_id);
 			$default_dir = $crm_db->prop("dir_default");
 			$parents[$RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
-			$parents[RELTYPE_WORKERS] = $crm_db->prop("folder_person") == "" ? $default_dir : $crm_db->prop('folder_person');
+			$parents[8] = $crm_db->prop("folder_person") == "" ? $default_dir : $crm_db->prop('folder_person');
 		};
 
 		if (!empty($this->cal_id))
 		{
 			$user_calendar = new object($this->cal_id);
-			$parents[RELTYPE_CALL] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $parents[RELTYPE_TASK] = $user_calendar->prop('event_folder');
+			$parents[12] = $parents[11] = $parents[10] = $parents[13] = $user_calendar->prop('event_folder');
 		}
 
 		$clss = aw_ini_get("classes");
@@ -2398,8 +2398,8 @@ class crm_company extends class_base
 			"text" => $clss[$this->clid]["name"],
 		));
 
-		//3 == crm_company.reltype_address=3 //
-		$alist = array(RELTYPE_WORKERS,$RELTYPE_ADDRESS,RELTYPE_JOBS);
+		//3 == crm_company.reltype_address=3 //RELTYPE_WORKERSRELTYPE_JOBS
+		$alist = array(8,$RELTYPE_ADDRESS,19);
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
@@ -2434,9 +2434,9 @@ class crm_company extends class_base
 
 		// basically, I need to create a list of relation types that are of any
 		// interest to me and then get a list of all classes for those
-
-		$action = array(RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
-
+		
+		//$action = array(RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
+		$action = array(10, 11, 12, 13);
 		foreach($action as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
@@ -3273,13 +3273,13 @@ class crm_company extends class_base
 		));
 
 		$alias_to = $arr['obj_inst']->id();
-		$rel_type = RELTYPE_CATEGORY;
+		$rel_type = 30; //RELTYPE_CATEGORY;
 		
 		if((int)$arr['request']['category'])
 		{
 			$alias_to = $arr['request']['category'];
 			$parent = (int)$arr['request']['category'];
-			$rel_type = RELTYPE_CATEGORY;
+			$rel_type = 30; //RELTYPE_CATEGORY;
 		}
 
 		$tb->add_menu_item(array(
@@ -4253,7 +4253,7 @@ class crm_company extends class_base
 		
 		$params = array(
 				'alias_to'=> $arr['obj_inst']->id(),
-				'reltype'=> RELTYPE_OFFER,
+				'reltype'=> 9, //RELTYPE_OFFER,
 				//'return_url'=> urlencode(aw_global_get('REQUEST_URI')),
 				'org' => $arr['obj_inst']->id(),
 				'alias_to_org' => $arr['request']['org_id'],

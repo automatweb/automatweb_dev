@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.31 2005/03/18 12:18:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.32 2005/03/18 13:36:32 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -389,7 +389,7 @@ class project extends class_base
 		if ($obj->class_id() == CL_CRM_COMPANY)
 		{
 			$conns = $obj->connections_to(array(
-				"reltype" => RELTYPE_PARTICIPANT,
+				"reltype" => 2 //RELTYPE_PARTICIPANT,
 			));
 			foreach($conns as $conn)
 			{
@@ -748,7 +748,7 @@ class project extends class_base
 		{
 			$conns = $c->find(array(
 				"from" => $projects,
-				"type" => RELTYPE_PRJ_VIDEO,
+				"type" => 11 //RELTYPE_PRJ_VIDEO,
 			));
 
 			foreach($conns as $conn)
@@ -764,7 +764,7 @@ class project extends class_base
 		{
 			$conns = $c->find(array(
 				"from" => $projects,
-				"type" => RELTYPE_PRJ_IMAGE,
+				"type" => 8 //RELTYPE_PRJ_IMAGE,
 			));
 
 			$t_img = get_instance(CL_IMAGE);
@@ -1031,7 +1031,7 @@ class project extends class_base
 		$o = $arr["obj_inst"];
 		$inst = $o->instance();
 
-		$int = $GLOBALS["relinfo"][$this->clid][RELTYPE_PRJ_EVENT];
+		$int = $GLOBALS["relinfo"][$this->clid][3]; //RELTYPE_PRJ_EVENT
 
 		$clinf = aw_ini_get("classes");
 

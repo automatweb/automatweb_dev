@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.76 2005/03/18 12:01:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.77 2005/03/18 13:33:59 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -424,7 +424,7 @@ class crm_person extends class_base
 				//if the person is associated with a section then show the professions
 				//from the section and if not then show all the professions in the system
 				$conns = $arr['obj_inst']->connections_to(array(
-					'type'=> RELTYPE_SECTION
+					'type'=> 28, //RELTYPE_SECTION
 				));
 
 				$drop_down_list = array();
@@ -683,24 +683,24 @@ class crm_person extends class_base
 
 		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_WORK] = $args["obj_inst"]->parent();
+			$parents[6] = $args["obj_inst"]->parent();
 		}
 		else
 		{
 			$crm_db = new object($crm_db_id);
-			$parents[RELTYPE_WORK] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
+			$parents[6] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
 		}
 
 		if (!empty($cal_id))
 		{
 			$user_calendar = new object($cal_id);
-			$parents[RELTYPE_PERSON_CALL] = $parents[RELTYPE_PERSON_MEETING] = $user_calendar->prop('event_folder');
+			$parents[8] = $parents[9] = $user_calendar->prop('event_folder');
 		}
 
 		/*
 
 		$alist = array(
-			array('caption' => t('Organisatsioon'),'class' => 'crm_company', 'reltype' => RELTYPE_WORK),
+			array('caption' => t('Organisatsioon'),'class' => 'crm_company', 'reltype' => 6), //RELTYPE_WORK
 		);
 		
 		$toolbar->add_menu_button(array(
@@ -748,11 +748,11 @@ class crm_person extends class_base
 
 		$action = array(
 			array(
-				"reltype" => RELTYPE_PERSON_MEETING,
+				"reltype" => 8, //RELTYPE_PERSON_MEETING,
 				"clid" => CL_CRM_MEETING,
 			),
 			array(
-				"reltype" => RELTYPE_PERSON_CALL,
+				"reltype" => 9, //RELTYPE_PERSON_CALL,
 				"clid" => CL_CRM_CALL,
 			),
 		);
@@ -1329,15 +1329,15 @@ class crm_person extends class_base
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
-				$args["type"] = RELTYPE_PERSON_CALL;
+				$args["type"] = 9; //RELTYPE_PERSON_CALL;
 				break;
 			
 			case "org_meetings":
-				$args["type"] = RELTYPE_PERSON_MEETING;
+				$args["type"] = 8; //RELTYPE_PERSON_MEETING;
 				break;
 			
 			case "org_tasks":
-				$args["type"] = RELTYPE_PERSON_TASK;
+				$args["type"] = 10; //RELTYPE_PERSON_TASK;
 				break;
 		};
 		$conns = $ob->connections_from($args);
