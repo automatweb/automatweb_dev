@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.1 2005/01/20 11:16:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.2 2005/01/20 11:36:56 kristo Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
@@ -255,7 +255,7 @@ class auth_remote_settings extends class_base
 
 	/** autologin from remote site
 
-		@attrib name=autologin
+		@attrib name=autologin nologin="1"
 
 		@param remote_uid required
 		@param remote_hash required
@@ -277,7 +277,6 @@ class auth_remote_settings extends class_base
 				"c_hash" => $arr["remote_hash"]
 			)
 		));
-
 		if ($srv)
 		{
 			// get conf obj
@@ -285,16 +284,23 @@ class auth_remote_settings extends class_base
 			if ($conf)
 			{
 				$uid = $this->_get_uid_for_site($arr["remote_site"], $conf);
-
 				if ($uid)
 				{
 					// log in
 					$this->db_query("INSERT INTO user_hashes(hash, hash_time, uid)
-						values('$arr[remote_hash]','".time()."','$uid')");
+						values('$arr[remote_hash]','".(time()+100)."','$uid')");
 					$u = get_instance("users");	
-					return $u->login(array(
-						"hash" => $arr["remote_hash"]
+					$ret = $u->login(array(
+						"hash" => $arr["remote_hash"],
+						"uid" => $uid,
+						"dbg" => 1
 					));
+					if ($ret == "")
+					{
+						$ret = aw_ini_get("baseurl");
+					}
+					header("Location: $ret");
+					die();
 				}
 			}
 		}
@@ -336,7 +342,13 @@ class auth_remote_settings extends class_base
 	function _get_uid_for_site($id, $conf)
 	{
 		$s2u = $conf->meta("site2user");
-		return $s2u[$id];
+		$uo = $s2u[$id];
+		if (is_oid($uo) && $this->can("view", $uo))
+		{
+			$uo = obj($uo);
+			return $uo->name();
+		}
+		return NULL;
 	}
 }
 ?>
