@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.30 2001/08/08 00:21:25 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.31 2001/08/08 09:12:56 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -235,6 +235,14 @@ class keywords extends aw_template {
 			$kw[$row["category_id"]][] = $row["keyword"];
 			$lists[$row["keyword"]] = $row["list_id"];
 		};
+
+		// vahepeal kui on defineeritud m2rks6nu valinud tyypide grupp, siis paneme ta sinna gruppi ka
+		if ($GLOBALS["keywords_dyn_group"])
+		{
+			classload("users_user");
+			$usu = new users_user;
+			$usu->add_users_to_group($GLOBALS["keywords_dyn_group"], array($GLOBALS["uid"]),0,true);
+		}
 
 		// ja nyyd koostame meili
 		$txt = "";
