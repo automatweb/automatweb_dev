@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.295 2003/06/26 15:31:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.296 2003/07/01 10:05:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -148,6 +148,8 @@ class menuedit extends aw_template
 			$site_content->raw = $this->raw;
 			$res = $site_content->_gen_site_html($params);
 			$this->sel_menus = $site_content->sel_menus;
+			$apd = get_instance("layout/active_page_data");
+			$res .= $apd->on_shutdown_get_styles();
 			if ($use_cache && !aw_global_get("no_cache_content"))
 			{
 				$cache->set($section,$cp,$res);
