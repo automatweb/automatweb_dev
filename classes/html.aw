@@ -1,25 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.10 2002/11/22 17:59:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.11 2002/11/22 20:02:04 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
-	function draw($arg)
-	{
-
-		$arg = new aw_array($arg);
-		$args = $arg->get();
-		$type = $args["type"];
-		if (method_exists($this,$type))
-		{
-			$retval = $this->$type($args);
-		}
-		else
-		{
-			// draw the text for undefined elements
-			$retval = $this->text($args);
-		};
-		return $retval;
-	}
 	////
 	// !html select
 	// name(string)
