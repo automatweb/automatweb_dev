@@ -1,6 +1,10 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.30 2002/03/22 18:07:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.31 2002/04/17 22:01:30 duke Exp $
+
+// used to specify how get_oo_aliases should return the list
+define("GET_ALIASES_BY_CLASS",1);
+define("GET_ALIASES_FLAT",2);
 
 class aliasmgr extends aw_template 
 {
@@ -10,12 +14,12 @@ class aliasmgr extends aw_template
 		$this->init("aliasmgr");
 
 		$this->contents = "";
-		lc_load("aliasmgr");
-		global $lc_aliasmgr;
-		if (is_array($lc_aliasmgr))
-		{
-			$this->vars($lc_aliasmgr);
-		};
+		$this->lc_load("aliasmgr","lc_aliasmgr");
+	}
+
+	function get_defs()
+	{
+		return $this->defs;
 	}
 		
 	function _init_aliases($args = array())
@@ -88,7 +92,7 @@ class aliasmgr extends aw_template
 				"generator" => "_file_aliases",
 				"class" => "file",
 				"addlink" => $this->mk_my_orb("new",array("id" => $this->id, "parent" => $this->parent),"file"),
-				"chlink" => $this->mk_my_orb("change",array("doc" => $this->id),"file"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"file"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 				"field" => "id",
 		);
@@ -246,6 +250,17 @@ class aliasmgr extends aw_template
 				"generator" => "_menu_tree_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_tree"),
 				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"menu_tree"),
+				"field" => "id"
+		);
+		
+		$this->defs["iframe"] = array(
+				"alias" => "i",
+				"title" => "inline frame",
+				"class" => "iframe",
+				"class_id" => CL_HTML_IFRAME,
+				"generator" => "_iframe_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"iframe"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"iframe"),
 				"field" => "id"
 		);
 
@@ -434,11 +449,11 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 		$this->t = new aw_table(array(
 			"prefix" => "images",
-			"imgurl"    => $GLOBALS["baseurl"]."/automatweb/images",
+			"imgurl"    => aw_ini_get("baseurl")."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 
-		$this->t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$this->t->parse_xml_def(aw_ini_get("basedir")."/xml/generic_table.xml");
 		$this->t->set_header_attribs(array(
 			"id" => $this->id,
 			"class" => "aliasmgr",
@@ -772,6 +787,25 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 	
+	function _iframe_aliases($args = array())
+	{
+		$aliases = $this->get_aliases_for($this->id,CL_HTML_IFRAME,$_sby, $s_link_order);
+		reset($aliases);
+		while (list(,$v) = each($aliases))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"iframe");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
 	function _form_aliases($args = array())
 	{
 		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
@@ -795,12 +829,11 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 	function _file_aliases($args = array())
 	{
-
 		$files = $this->get_aliases_for($this->id,CL_FILE,$s_file_sortby, $s_file_order);
 		reset($files);
 		while (list(,$v) = each($files))
 		{
-			$url = $this->mk_my_orb("change", array("id" => $v["id"], "doc" => $id),"file");
+			$url = $this->mk_my_orb("change", array("id" => $v["id"], "return_url" => $this->return_url),"file");
 			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
@@ -1050,9 +1083,10 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	{
 		extract($args);
 		$oid = sprintf("%d",$oid);
+		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
 		$this->id = $oid;
 		$this->_init_aliases();
-		$q = "SELECT aliases.*, objects.class_id AS class_id
+		$q = "SELECT aliases.*, objects.class_id AS class_id, objects.name AS name
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)
 			WHERE source = '$oid' ORDER BY aliases.id";
@@ -1061,7 +1095,14 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		while($row = $this->db_next())
 		{
 			$row["aliaslink"] = $this->obj_data["meta"]["aliaslinks"][$row["target"]];
-			$retval[$row["class_id"]][] = $row;
+			if ($ret_type == GET_ALIASES_BY_CLASS)
+			{
+				$retval[$row["class_id"]][] = $row;
+			}
+			else
+			{
+				$retval[] = $row;
+			};
 		};
 		return $retval;
 	}
