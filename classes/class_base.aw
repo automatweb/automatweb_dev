@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.117 2003/06/04 14:19:54 axel Exp $
+// $Id: class_base.aw,v 2.118 2003/06/04 16:48:01 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -116,7 +116,7 @@ class class_base extends aw_template
 			"meta" => $obj["meta"],
 			"args" => $args,
 		));
-		
+
 		$this->validate_cfgform($cfgform_id);
 		
 		$realprops = $this->get_active_properties(array(
@@ -182,7 +182,7 @@ class class_base extends aw_template
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
-			"cfgform" => isset($this->cfgform_id) ? $this->cfgform_id : "",
+			"cfgform" => isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($args["extraids"]) && is_array($args["extraids"]) ? array("extraids" => $args["extraids"]) : array());
@@ -227,7 +227,7 @@ class class_base extends aw_template
 		// differently in the config form then they are in the original
 		// properties
 		$this->is_rel = false;
-		if (isset($id))
+		if (!empty($id))
 		{
 			$_tmp = $this->get_object($id);
 			if ($_tmp["class_id"] == CL_RELATION)
@@ -246,6 +246,7 @@ class class_base extends aw_template
 		};
 
 		$this->validate_cfgform($cgid);
+
 
 		$this->id = isset($id) ? $id : "";
 
@@ -473,7 +474,7 @@ class class_base extends aw_template
 				{
 					if (isset($savedata[$name]))
 					{
-						$coredata[$name] = $savedata[$name];
+						$coredata[$field] = $savedata[$name];
 					};
 				}
 				else
@@ -530,7 +531,7 @@ class class_base extends aw_template
 		}
 
 		// it is set (or not) on validate_cfgform
-		if ($this->cfgform_id)
+		if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
 		{
 			$coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
 		};
@@ -625,6 +626,18 @@ class class_base extends aw_template
 				$this->cfgform_id = $_tmp["oid"];
 				$this->cfgform = $_tmp;
 			};
+		}
+		elseif ($this->clid == CL_DOCUMENT)
+		{
+			$cfgu = get_instance("cfg/cfgutils");
+			$def = file_get_contents(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml");
+			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+			$this->cfg_proplist = $proplist;
+			$this->cfg_groups = $grplist;
+			$this->cfgform["meta"]["cfg_groups"] = $grplist;
+			$this->cfgform["meta"]["cfg_proplist"] = $proplist;
+			// heh
+			$this->cfgform_id = "notempty";
 		};
 	}
 
@@ -635,12 +648,12 @@ class class_base extends aw_template
 		$retval = "";
 		if (($args["args"]["action"] == "new") && !empty($args["args"]["cfgform"]))
 		{
-			$retval = $args["cfgform"];
+			$retval = $args["args"]["cfgform"];
 		};
 
 		if (($args["args"]["action"] == "change") && !empty($args["meta"]["cfgform_id"]))
 		{
-			$reval = $obj["meta"]["cfgform_id"];
+			$retval = $args["meta"]["cfgform_id"];
 		};
 		return $retval;
 	}
@@ -1640,6 +1653,7 @@ class class_base extends aw_template
 		}
 		else
 		{
+			$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
 			if ($table == "objects")
 			{
 				if ($field == "meta")
@@ -1651,9 +1665,9 @@ class class_base extends aw_template
 				}
 				else
 				{
-					if (isset($this->coredata[$property["name"]]))
+					if (isset($this->coredata[$_field]))
 					{
-						$property["value"] = $this->coredata[$property["name"]];
+						$property["value"] = $this->coredata[$_field];
 					};
 				};
 			}
@@ -1670,7 +1684,6 @@ class class_base extends aw_template
 				}
 				else
 				{
-					$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
 					if (isset($this->data[$table][$_field]))
 					{
 						$property["value"] = $this->data[$table][$_field];
