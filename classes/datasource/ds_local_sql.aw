@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.1 2002/11/21 17:26:07 duke Exp $
+// $Id: ds_local_sql.aw,v 1.2 2002/11/26 12:38:48 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -65,6 +65,7 @@ class ds_local_sql extends aw_template
 //                $fp = $this->cfg["basedir"];
 //                $fp .= "/files/stuff";
 
+
 		if ($args["table"] && $args["idfield"])
 		{
 			$this->db_update_record(array(
@@ -117,6 +118,10 @@ class ds_local_sql extends aw_template
 		}
 		else
 		{
+			if ($data["period"])
+			{
+				$data["periodic"] = 1;
+			};
 			$retval = $this->new_object($data);
 		};
 		return $retval;
