@@ -27,6 +27,16 @@
             <caption>Projektid</caption>
       </property>
       <property>
+            <name>project_selector2</name>
+            <group>projects22</group>
+            <table>planner</table>
+            <type>project_selector</type>
+            <store>no</store>
+            <all_projects>1</all_projects>
+            <field>project_selector2</field>
+            <caption>Projektid 2</caption>
+      </property>
+      <property>
             <name>utextbox1</name>
             <group>general</group>
             <table>planner</table>

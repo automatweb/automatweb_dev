@@ -155,7 +155,10 @@
             </EVENT_SOURCE>
             <OUTPUT>
                   <value>2</value>
-                  <clid>CL_RELATION</clid>
+                  <clid>
+                        <num_0>CL_RELATION</num_0>
+                        <num_1>CL_DOCUMENT</num_1>
+                  </clid>
                   <caption>väljund</caption>
             </OUTPUT>
             <STYLE>
