@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.146 2002/09/26 16:15:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.147 2002/09/30 06:58:22 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1151,13 +1151,13 @@ class form extends form_base
 
 			$has_errors = $errors;
 			$has_cal_errors = $errors;
-
 		}
 
 		$new = ($entry_id) ? false : true;
 
 		if (!$no_process_entry)
 		{
+//			echo "ctrlchk <br>";
 			$this->controller_queue = array();
 			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
@@ -1178,9 +1178,11 @@ class form extends form_base
 			};
 
 			$controllers_ok = true;
+			$controller_warnings_ok = true;
 			foreach($this->controller_queue as $ctrl)
 			{
 				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
+//				echo "ctrlid = $ctrl[ctrlid] val - $ctrl[val] <br>";
 				if ($res !== true)
 				{
 					if (!$res)
@@ -1188,12 +1190,20 @@ class form extends form_base
 						$res = "error!";
 					};
 					$this->controller_errors[$ctrl["el_id"]][] = $res;
-					$controllers_ok = false;
+					if (!$this->controller_instance->is_warning_controller($ctrl["ctrlid"]))
+					{
+						$controllers_ok = false;
+					}
+					$controller_warnings_ok = false;
+//					echo "ctrlid $ctrl[ctrlid] failed! <br>";
 				}
 			}
 
 
-			if ( (!$controllers_ok) || ($has_errors) )
+			$this->has_controller_warnings = !$controller_warnings_ok;
+			$this->has_controller_errors = !$controllers_ok;
+//			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br>";
+			if ( (!$controllers_ok) || ($has_errors) || (!$controller_warnings_ok))
 			{
 				// ok, now the error messages are in $this->controller_errors
 
@@ -1207,19 +1217,22 @@ class form extends form_base
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_errors", $this->controller_errors);
 				aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error", true);
 
-				// return to the form display url and show the error messages to the user so he/she can
-				// correct the data
-				if ($return_url == "")
+				if ((!$controllers_ok) || ($has_errors))
 				{
-					$return_url = $GLOBALS["return_url"];
+					// return to the form display url and show the error messages to the user so he/she can
+					// correct the data
 					if ($return_url == "")
 					{
-						// if no return url was specified, try to come up with a reasonable one by ourselves
-						$return_url = $this->mk_my_orb("show", array("id" => $this->id, "entry_id" => $this->entry_id));
+						$return_url = $GLOBALS["return_url"];
+						if ($return_url == "")
+						{
+							// if no return url was specified, try to come up with a reasonable one by ourselves
+							$return_url = $this->mk_my_orb("show", array("id" => $this->id, "entry_id" => $this->entry_id));
+						}
 					}
+					header("Location: ".$return_url);
+	//				die();
 				}
-				header("Location: ".$return_url);
-				die();
 			}
 		}
 
@@ -1233,6 +1246,13 @@ class form extends form_base
 				"class_id" => CL_FORM_ENTRY,
 				"lang_id" => $lang_id,
 			));
+		}
+
+		if (!$controller_warnings_ok)
+		{
+			aw_session_set("form_".$this->id."_entry_".$this->entry_id."_data", $this->entry);
+			aw_session_set("form_".$this->id."_entry_".$this->entry_id."_errors", $this->controller_errors);
+			aw_session_set("form_".$this->id."_entry_".$this->entry_id."_is_error", true);
 		}
 
 		$this->update_entry_name($this->entry_id,$this->entry_parent);
@@ -2435,7 +2455,7 @@ class form extends form_base
 	{
 		if ($this->arr["new_search_engine"] == 1)
 		{
-			return $this->new_search($entry_id);
+			return $this->new_search(array("entry_id" => $entry_id));
 		}
 
 		// laeb täidetud vormi andmed sisse
@@ -4840,7 +4860,7 @@ class form extends form_base
 		{
 			foreach($tables as $tbl)
 			{
-				$this->arr["save_tables"][$tbl] = (string)$indexes[$tbl];
+				$this->arr["save_tables"][$tbl] = (string)$indexes[$tbl]." ";
 			}
 		}
 
