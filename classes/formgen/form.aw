@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.50 2003/04/17 11:14:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.51 2003/04/23 14:03:03 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1197,6 +1197,9 @@ class form extends form_base
 	{
 		extract($arr);
 
+		global $awt;
+		$awt->start("fg");
+
 		set_time_limit(0);
 		// values can be passed from the caller inside the $values argument, or..
 		if (is_array($values))
@@ -1242,43 +1245,42 @@ class form extends form_base
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
-		// if this form uses a calendar and is an event entry form, figure out
-		// whether the calendar it is trying to write to, have enough vacancies
-		if ($this->subtype & FSUBTYPE_EV_ENTRY)
-		{
-			// check vacations and if found, update calendar->form relations
-			// set error messages otherwise
-			$fcal = get_instance("formgen/form_calendar");
-			$els = $this->get_form_elements(array(
-                                "use_loaded" => true,
-                                "key" => "id",
-                        ));
-
-			$errors = $fcal->check_calendar(array(
-				"id" => $id,
-				"post_vars" => $this->post_vars,
-				"entry_id" => $entry_id,
-				"chain_entry_id" => $chain_entry_id,
-				"els" => $els,
-			));
-
-			// if any of the vacancy checks failed,
-			// merge the error messages into controller_errors
-			if ($errors)
-			{
-				if (!is_array($this->controller_errors))
-				{
-					$this->controller_errors = array();
-				};
-				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
-			};
-
-			$has_errors = $errors;
-			$has_cal_errors = $errors;
-		}
-
 		$new = ($entry_id) ? false : true;
 
+			// if this form uses a calendar and is an event entry form, figure out
+			// whether the calendar it is trying to write to, have enough vacancies
+			if ($this->subtype & FSUBTYPE_EV_ENTRY)
+			{
+				// check vacations and if found, update calendar->form relations
+				// set error messages otherwise
+				$fcal = get_instance("formgen/form_calendar");
+				$els = $this->get_form_elements(array(
+					"use_loaded" => true,
+					"key" => "id",
+				));
+
+				$errors = $fcal->check_calendar(array(
+					"id" => $id,
+					"post_vars" => $this->post_vars,//$this->entry,
+					"entry_id" => $entry_id,
+					"chain_entry_id" => $chain_entry_id,
+					"els" => $els,
+				));
+
+				// if any of the vacancy checks failed,
+				// merge the error messages into controller_errors
+				if ($errors)
+				{
+					if (!is_array($this->controller_errors))
+					{
+						$this->controller_errors = array();
+					};
+					$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
+				};
+
+				$has_errors = $errors;
+				$has_cal_errors = $errors;
+			}
 
 		if (!$no_process_entry)
 		{
@@ -1333,6 +1335,10 @@ class form extends form_base
 				}
 			}
 
+			// moved calendar checks after value controller checks, so that calendar can use value
+			// controller generated values. 
+
+
 
 			$this->has_controller_warnings = !$controller_warnings_ok;
 			$this->has_controller_errors = !$controllers_ok;
@@ -1369,7 +1375,6 @@ class form extends form_base
 				}
 			}
 		}
-
 
 		if ($new)
 		{
@@ -1439,7 +1444,6 @@ class form extends form_base
 				"chain_entry_id" => $chain_entry_id,
 				"els" => $els,
 			));
-
 		}
 		elseif (($this->subtype & FSUBTYPE_CAL_CONF))
 		{
@@ -3930,6 +3934,20 @@ class form extends form_base
 		if ($el)
 		{
 			$ev =  $el->get_value($numeric);
+			return $ev;
+		}
+		return "";
+	}
+
+	////
+	// !returns the value of element with id $id
+	// $numeric - if true, the element will try to return a number instead of a string (checkbox value vs 1/0)
+	function get_element_value_ctr($id, $numeric = false)
+	{
+		$el = $this->get_element_by_id($id);
+		if ($el)
+		{
+			$ev =  $el->get_val($numeric);
 			return $ev;
 		}
 		return "";
