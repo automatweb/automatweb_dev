@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.32 2002/09/26 15:41:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.33 2002/10/08 14:15:23 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -406,9 +406,15 @@ class aw_table
 			$tbl .= $this->opentag(array("name" => "tr"));
 			foreach($this->rowdefs as $k => $v)
 			{
+				$style = false;
+				$style = $this->header_styles[$v["name"]];
+				if (!$style)
+				{
+					$style = ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+				}
 				$tbl.=$this->opentag(array(
 					"name" => "td",
-					"classid"=> ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal),
+					"classid"=> $style,
 					"align" => ($v["talign"] ? $v["talign"] : ""),
 					"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
 					"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
@@ -530,16 +536,20 @@ class aw_table
 					// m??rame ?ra staili
 					if (!$style)
 					{
-						if ($this->sortby[$v1["name"]]) 
+						$style = $this->col_styles[$v1["name"]];
+						if (!$style)
 						{
-							$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
-							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
-						} 
-						else 
-						{
-							$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
-							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
-						};
+							if ($this->sortby[$v1["name"]]) 
+							{
+								$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
+								$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
+							} 
+							else 
+							{
+								$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
+								$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
+							};
+						}
 					}
 						
 					// moodustame celli
@@ -905,6 +915,15 @@ class aw_table
 				{
 					$this->nfields[$attrs["name"]] = 1;
 				};
+
+				if ($attrs["style"] != "") 
+				{
+					$this->col_styles[$attrs["name"]] = $attrs["style"];
+				};
+				if ($attrs["header_style"] != "") 
+				{
+					$this->header_styles[$attrs["name"]] = $attrs["header_style"];
+				};
 				break;
 
 			default:
@@ -1001,7 +1020,36 @@ class aw_table
 				"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
 				"width" => ($v["width"] ? $v["width"] : "")
 			));
-			$tbl .= $v["caption"];
+
+			// if the column is sortable, turn it into a link
+			if ($v["sortable"]) 
+			{
+				// by default (the column is not sorted) don't show any arrows
+				$sufix = "";
+				// by default, if a column is not sorted and you click on it, it should be sorted asc
+				$so = "asc";
+
+				// kui on sorteeritud selle v?lja j?rgi
+				if ($this->sortby[$v["name"]])
+				{
+					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
+					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
+				}
+
+				$url = aw_global_get("REQUEST_URI");
+				$url = preg_replace("/sortby=[^&$]*/","",$url);
+				$url = preg_replace("/sort_order=[^&$]*/","",$url);
+				$url = preg_replace("/&{2,}/","&",$url);
+				$url = str_replace("?&", "?",$url);
+				$sep = (strpos($url,"?") === false) ?	"?" : "&";
+				$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
+
+				$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
+			} 
+			else 
+			{
+				$tbl .= $v["caption"];
+			};
 			$tbl .= $this->closetag(array("name" => "td"));
 		}
 

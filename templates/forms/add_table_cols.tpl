@@ -57,7 +57,7 @@
 
 											<!-- SUB: SEL_ELS -->
 											Vali elemendid:<Br>
-											<select class="formselect" name="cols[{VAR:col_id}][els][]" multiple size="10">{VAR:els}</select>
+											<select class="formselect" name="cols[{VAR:col_id}][els][]" multiple size="10">{VAR:els}</select><br>
 											<!-- END SUB: SEL_ELS -->
 
 											<!-- SUB: SEL_ORDER_FORM -->
@@ -135,6 +135,18 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][link]" value="1" {VAR:col_link}> Link <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>
+											Erineva stiiliga: <input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][has_col_style]" value="1" {VAR:has_col_style}><Br>
+
+											<!-- SUB: HAS_STYLE -->
+											Stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][col_style]">{VAR:styles}</select><br>
+											Lingi stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][col_link_style]">{VAR:link_styles}</select><br>
+											Headeri stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][col_header_style]">{VAR:header_styles}</select><br>
+											Headeri lingi stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][col_header_link_style]">{VAR:header_link_styles}</select><br>
+											<!-- END SUB: HAS_STYLE -->
 											<!-- END SUB: SEL_SETINGS2 -->
 
 											<!-- SUB: SEL_POPUP -->
