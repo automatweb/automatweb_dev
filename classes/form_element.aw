@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.45 2002/01/14 05:28:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.46 2002/01/22 10:23:17 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -377,6 +377,12 @@ class form_element extends aw_template
 				}
 				classload("objects");
 				$ob = new db_objects;
+
+				$img = "";
+				if ($this->arr["button_img"]["url"] != "")
+				{
+					$img = "<img src='".$this->arr["button_img"]["url"]."'>";
+				}
 				$this->vars(array(
 					"button_text" => $this->arr["button_text"],
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["button"]),
@@ -385,7 +391,9 @@ class form_element extends aw_template
 					"chain_backward" => checked($this->arr["chain_backward"]==1),
 					"folders" => $this->picker($this->arr["confirm_moveto"],$ob->get_list()),
 					"redirect" => $this->arr["confirm_redirect"],
-					"order_form" => $this->picker($this->arr["order_form"],$this->form->get_list(FTYPE_ENTRY))
+					"order_form" => $this->picker($this->arr["order_form"],$this->form->get_list(FTYPE_ENTRY)),
+					"button_img" => $img,
+					"use_button_img" => checked($this->arr["button_img"]["use"] == 1)
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
 				$this->vars(array(
@@ -866,6 +874,18 @@ class form_element extends aw_template
 
 			$var = $base."_order_form";
 			$this->arr["order_form"] = $$var;
+
+			$var = $base."_use_button_img";
+			$this->arr["button_img"]["use"] = $$var;
+
+			$var = $base."_button_img";
+			classload("image");
+			$im = new image;
+			$_tmp = $im->add_upload_image($var,$this->id);
+			if ($_tmp)
+			{
+				$this->arr["button_img"] = $_tmp;
+			}
 		}
 
 		$var = $base."_separator_type";
@@ -1464,6 +1484,17 @@ class form_element extends aw_template
 					{
 						$butt = $this->arr["lang_button_text"][$lang_id];
 					}
+
+					if ($this->arr["button_img"]["use"] == 1)
+					{
+						$btype = "image";
+						$bsrc  = "src=\"".$this->arr["button_img"]["url"]."\"";
+					}
+					else
+					{
+						$btype = "submit";
+						$bsrc = "";
+					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit" || $this->arr["subtype"] == "confirm")
 					{
 						if ($this->arr["chain_forward"] == 1)
@@ -1480,7 +1511,7 @@ class form_element extends aw_template
 						{
 							$bname = "name=\"confirm\"";
 						}
-						$html = "<input $bname type='submit' VALUE='".$butt."' onClick=\"return check_submit();\">";
+						$html = "<input $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
@@ -1490,18 +1521,18 @@ class form_element extends aw_template
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
+						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
 					}
 					else
 					if ($this->arr["subtype"] == "order")
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
-						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
+						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
 					{
-						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.close();return false;\">";
+						$html = "<input type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">";
 					}
 				}
 				break;
