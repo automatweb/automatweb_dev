@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_config.aw,v 2.2 2002/04/11 11:02:57 duke Exp $
+// form_config.aw - FormGen configuration
 
 classload("form_element");
 
@@ -6,7 +8,7 @@ class form_config extends form_base
 {
 	function form_config()
 	{
-		$this->db_init();
+		$this->form_base();
 		$this->tpl_init("forms/configure");
 	}
 
@@ -16,6 +18,7 @@ class form_config extends form_base
 
 		classload("config");
 		$co = new config;
+		$this->mk_path(0,"FormGen configuration");
 		$_typs = $co->get_simple_config("form::element_types");
 		$_styps = $co->get_simple_config("form::element_subtypes");
 		$typs = aw_unserialize($_typs);
@@ -44,18 +47,22 @@ class form_config extends form_base
 			));
 			
 			$stp = "";
-			foreach($astyps[$type] as $st => $stname)
+			// some element types don't have subtypes - duke
+			if (is_array($astyps[$type]))
 			{
-				if ($st != "")
+				foreach($astyps[$type] as $st => $stname)
 				{
-					$this->vars(array(
-						"subtype" => $st,
-						"subtype_name" => $stname,
-						"subtype_check" => checked($styps[$type][$st] != "")
-					));
-					$stp.=$this->parse("SUBTYPE");
+					if ($st != "")
+					{
+						$this->vars(array(
+							"subtype" => $st,
+							"subtype_name" => $stname,
+							"subtype_check" => checked($styps[$type][$st] != "")
+						));
+						$stp.=$this->parse("SUBTYPE");
+					}
 				}
-			}
+			};
 			$this->vars(array(
 				"SUBTYPE" => $stp
 			));
@@ -105,6 +112,9 @@ class form_config extends form_base
 
 		$types = aw_serialize($ts);
 		$subtypes = aw_serialize($sts);
+
+		$types = $this->quote($types);
+		$subtypes = $this->quote($subtypes);
 
 		$co->set_simple_config("form::element_types",$types);
 		$co->set_simple_config("form::element_subtypes",$subtypes);
