@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.75 2003/05/29 15:34:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.76 2003/06/04 15:37:14 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -361,6 +361,7 @@ class forum extends class_base
 					$retval .= $this->parse($tpl);
 				};
 			};
+
 		}
 		$this->vars(array(
 			"tab" => $retval,
@@ -1920,6 +1921,11 @@ topic");
 			if ($args["details"] == "topics")
 			{
 				$pglink = $this->mk_my_orb("topics",array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section,"archive" => $this->archive));
+			}
+			else
+			{
+				$pglink = $this->mk_my_orb("topics",array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section,"archive" => $this->archive,"_alias" => "forum"));
+
 			};
 			$this->vars(array(
 				"pagelink" => $pglink,
