@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/install.aw,v 2.2 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/install.aw,v 2.3 2002/10/09 10:25:28 duke Exp $
 // install.aw - used for creating and configuring new sites
 class install extends aw_template
 {
@@ -206,6 +206,8 @@ class install extends aw_template
 			// teeme kodukataloogi
 			$hfid = $this->new_object(array("parent" => 1, "name" => $default_user, "class_id" => 1, "comment" => $default_user." kodukataloog"),false);
 			$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
+
+			$default_pass = md5($default_pass);
 
 			$q = "INSERT INTO users (uid,password,home_folder) VALUES ('$default_user','$default_pass',$hfid)";
 			$this->db_query($q);
