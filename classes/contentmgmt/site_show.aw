@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.101 2004/11/16 13:23:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.102 2004/11/24 08:28:33 kristo Exp $
 
 /*
 
@@ -182,8 +182,11 @@ class site_show extends class_base
 			"tpl_lead" => "",// prop!
 			"show_layout" => "",
 			"ip_allowed" => array(),
-			"ip_denied" => array()
+			"ip_denied" => array(),
+			"images" => array();
 		);
+
+		$ni = aw_ini_get("menuedit.num_menu_images");
 
 		$cnt = count($this->path);
 		for ($i = $cnt-1; $i > -1; $i--)
@@ -207,6 +210,18 @@ class site_show extends class_base
 					if (is_array($tipa) && count($tipa) > 0)
 					{
 						$this->properties[$key] = $tipa;
+					}
+				}
+				else
+				if ($key == "images")
+				{
+					$im = $obj->meta("menu_images");
+					for($imn = 0; $imn < $ni; $imn++)
+					{
+						if (!isset($this->properties["images"][$imn]) && is_oid($im[$imn]["image_id"]))
+						{
+							$this->properties["images"][$imn] = $im[$imn]["image_id"];
+						}
 					}
 				}
 				else
