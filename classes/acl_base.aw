@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.43 2003/10/15 12:39:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.44 2003/11/13 11:24:00 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -52,6 +52,8 @@ class acl_base extends db_connector
 	{
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
 		aw_session_set("__acl_cache", array());
+		$c = get_instance("cache");
+		$c->file_invalidate_regex("acl::cache(.*)");
 	}
 
 	function save_acl($oid,$gid,$aclarr)
@@ -73,6 +75,8 @@ class acl_base extends db_connector
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 		aw_session_set("__acl_cache", array());
+		$c = get_instance("cache");
+		$c->file_invalidate_regex("acl::cache(.*)");
 	}
 
 	////
@@ -105,6 +109,8 @@ class acl_base extends db_connector
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 		aw_session_set("__acl_cache", array());
+		$c = get_instance("cache");
+		$c->file_invalidate_regex("acl::cache(.*)");
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -166,7 +172,7 @@ class acl_base extends db_connector
 		$max_row = array();
 		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",acl.oid as oid,acl.gid as gid FROM acl 
 										 LEFT JOIN objects ON objects.oid = acl.oid
-										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.")";
+										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") ";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
