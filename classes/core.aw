@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.280 2004/06/26 09:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.281 2004/06/26 09:18:08 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -354,79 +354,6 @@ class core extends acl_base
 		{
 			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
-	}
-
-	////
-	// !returns object specified in $arg
-	// if $arg is an array, it can contain $oid and $class_id variables
-	// if not, it is used as the $oid variable
-	// if $class_id is specified, the returned object is checked to be of that class,
-	// if not, error is raised
-	// if no_cache is true, the object cache is not used
-	// if $unserialize_meta == true, object's metadata will be unserialized to meta field
-	function get_object($arg,$no_cache = false,$unserialize_meta = true) 
-	{
-		if (is_array($arg))
-		{
-			$oid = $arg["oid"];
-			$class_id = isset($arg["class_id"]) ? $arg["class_id"] : false;
-			$unserialize_meta = isset($arg["unserialize_meta"]) ? $arg["unserialize_meta"] : true;
-		}
-		else
-		{
-			$oid = $arg;
-		};
-
-		list($oid) = explode(":", $oid);
-
-		if (!$oid)
-		{
-			return false;
-		}
-
-		if ($no_cache)
-		{
-			$_t = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
-			if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
-			{
-				// brother object, so we gots to read the real objets metadata
-				$_tt = $this->db_fetch_row("SELECT * FROM objects WHERE oid = ".$_t["brother_of"]."");
-				$_t["metadata"] = $_tt["metadata"];
-			}
-			if ($unserialize_meta && $_t)
-			{
-				$_t["meta"] = aw_unserialize($_t["metadata"]);
-			}
-		}
-		else
-		{
-			if (!($_t = aw_cache_get("objcache",$oid)))
-			{
-				$_t = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
-				if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
-				{
-					// brother object, so we gots to read the real objets metadata
-					$_tt = $this->db_fetch_row("SELECT * FROM objects WHERE oid = ".$_t["brother_of"]."");
-					$_t["metadata"] = $_tt["metadata"];
-				}
-				if ($unserialize_meta && $_t)
-				{
-					$_t["meta"] = aw_unserialize($_t["metadata"]);
-				}
-
-				aw_cache_set("objcache",$oid,$_t);
-			}
-		}
-
-		// damn it, promo boxes act as menus too
-		if (!empty($class_id) && ($class_id != CL_PSEUDO) && ($_t["class_id"] != $class_id) )
-		{
-			// objekt on valest klassist
-			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
-		}
-
-		// and also unserialize the object's metadata
-		return $_t;
 	}
 
 	////
@@ -1189,10 +1116,10 @@ class core extends acl_base
 	function serialize($arr)
 	{
 		extract($arr);
-		$obj = $this->get_object($oid);
+		$obj = obj($oid);
 
 		$tmp = aw_ini_get("classes");
-		$v = $tmp[$obj["class_id"]];
+		$v = $tmp[$obj->class_id()];
 		if (!is_array($v))
 		{
 			return false;
@@ -1215,7 +1142,7 @@ class core extends acl_base
 		{
 			$arr["raw"] = 1;
 		};
-		$str = array("class_id" => $obj["class_id"], "str" => $s);
+		$str = array("class_id" => $obj->class_id(), "str" => $s);
 		return isset($arr["raw"]) ? $s : serialize($str);
 	}
 
@@ -1462,8 +1389,8 @@ class core extends acl_base
 
 	function show($args)
 	{
-		$obj = $this->get_object($args['id']);
-		return $obj['name'];
+		$obj = obj($args['id']);
+		return $obj->name();
 	}
 	
 	////
