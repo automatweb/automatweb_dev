@@ -1,0 +1,46 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>name</field>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>uname</name>
+            <type>textbox</type>
+            <table>forum_comments</table>
+            <group>general</group>
+            <field>uname</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>uemail</name>
+            <type>textbox</type>
+            <table>forum_comments</table>
+            <group>general</group>
+            <field>uemail</field>
+            <caption>E-post</caption>
+      </property>
+      <property>
+            <name>commtext</name>
+            <type>textarea</type>
+            <table>forum_comments</table>
+            <group>general</group>
+            <field>commtext</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_COMMENT</syslog_type>
+      </classinfo>
+      <tableinfo>
+            <forum_comments>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </forum_comments>
+      </tableinfo>
+</properties>
+
