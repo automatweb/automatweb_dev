@@ -241,8 +241,8 @@ class aw_site extends class_base
 				$this->raise_error(ERR_SITE_CFG, "errir in site config: $this->err_str",true,false);
 			}
 				
-//			echo "generating site, params: <Br>";
-//			echo "site data : ".dbg::dump($site)." <br>";
+			echo "generating site, params: <Br>";
+			echo "site data : ".dbg::dump($site)." <br>";
 			echo "Loon saiti! \n<Br>HOIATUS! Saidi loomine v&otilde;tab paar minutit aega!<br><br>\n";
 			flush();
 
@@ -273,7 +273,7 @@ class aw_site extends class_base
 			$this->create_ini_file($site, $ini_opts);
 
 			// now restart webserver
-//			echo "restarting webserver ... <br>\n";
+			echo "restarting webserver ... <br>\n";
 			aw_global_set("__is_install", 0);
 			flush();
 			touch("/tmp/ap_reboot");
@@ -365,8 +365,8 @@ class aw_site extends class_base
 		));
 		$si->add_cmd("copy $constaw_file_name ".$site["docroot"]."/public/const.aw");
 			
-		// right, now exec the script 
-		// echo "execd = <pre>".$si->exec()."</pre> <br>";
+		 //right, now exec the script 
+		 echo "execd = <pre>".$si->exec()."</pre> <br>";
 	}
 
 	function do_init_classes($site, &$ini_opts)
@@ -411,10 +411,10 @@ class aw_site extends class_base
 		flush();
 
 		$mgr_server = $this->get_dns_manager_for_url($site["url"]);
-//		echo "mgr_server = $mgr_server <Br>";
+		echo "mgr_server = $mgr_server <Br>";
 		if ($mgr_server !== false)
 		{
-//			echo "doing rpc call to change $site[url] 's ip to ",aw_ini_get("install.default_ip")," <br>";
+			echo "doing rpc call to change $site[url] 's ip to ",aw_ini_get("install.default_ip")," <br>";
 			$this->do_orb_method_call(array(
 				"class" => "dns_server_manager",
 				"action" => "add_or_update_site",
@@ -434,8 +434,8 @@ class aw_site extends class_base
 	{
 		if ($site['site_obj']['use_existing_database'])
 		{
-//			echo "reading database access data from the existing site<br>\n";
-//			flush();
+			echo "reading database access data from the existing site<br>\n";
+			flush();
 
 			$db_dat = $this->do_orb_method_call(array(
 				"class" => "objects",
@@ -449,13 +449,13 @@ class aw_site extends class_base
 			$ini_opts['db.host'] = $db_dat['host'];
 			$ini_opts['db.base'] = $db_dat['base'];
 			$ini_opts['db.pass'] = $db_dat['pass'];
-//			echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br>";
+			echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br>";
 		}
 		else
 		{
 			echo "Loon andmebaasi...<br>\n";
 			flush();
-//			echo "creating database .. <br>";
+			echo "creating database .. <br>";
 			$dbi = get_instance("class_base");
 			$dbi->db_connect(array(
 				'driver' => 'mysql',
@@ -467,7 +467,7 @@ class aw_site extends class_base
 
 			// create database
 			$q = "CREATE DATABASE $site[db_name]";
-//			echo "exec $q <br>";
+			echo "exec $q <br>";
 			$dbi->db_query($q);
 
 			// grant permission
@@ -477,7 +477,7 @@ class aw_site extends class_base
 					TO $site[db_user]@".aw_ini_get("install.mysql_client")." 
 					IDENTIFIED BY '$site[db_pwd]'
 			";
-//			echo "exec $q <Br>";
+			echo "exec $q <Br>";
 			$dbi->db_query($q);
 
 			$ini_opts['db.user'] = $site['db_user'];
@@ -704,7 +704,7 @@ class aw_site extends class_base
 	
 	function create_ini_file($site, &$ini_opts)
 	{
-//		echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br>";
+		echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br>";
 		// create temp ini file, then use su_exec to copy it to the correct place
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
 
@@ -747,7 +747,7 @@ class aw_site extends class_base
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com"
 		));
-//		echo "got site id $site_id <br>";
+		echo "got site id $site_id <br>";
 		$ini_opts["site_id"] = $site_id;
 	}
 
