@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.36 2004/12/13 14:18:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.37 2004/12/15 12:25:20 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -228,14 +228,6 @@ class vcalendar extends aw_template
 	function get_html($arr = array())
 	{
 		global $awt;
-		/*
-		if (aw_global_get("uid") == "duke")
-		{
-			print "bljäää3";
-			print $this->range["viewtype"];
-			flush();
-		};
-		*/
 		$awt->start("gen-calendar-html");
 		$this->styles = array();
 		if (is_array($arr["style"]))
