@@ -11,7 +11,7 @@
 		<action name="query" nologin="1">
 			<function name="query">
 				<arguments>
-					<required name="host"/>
+					<required name="domain"/>
 				</arguments>
 			</function>
 		</action>
