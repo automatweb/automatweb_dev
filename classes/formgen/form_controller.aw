@@ -194,7 +194,11 @@ class form_controller extends form_base
 		if (!$res)
 		{
 			$co = $this->loaded_controller;
-			return $this->replace_vars($co,$co["meta"]["errmsg"][aw_global_get("lang_id")],false,&$form_ref, $el_ref, $entry);
+			if ($co["meta"]["errmsg"][aw_global_get("lang_id")] != "")
+			{
+				return $this->replace_vars($co,$co["meta"]["errmsg"][aw_global_get("lang_id")],false,&$form_ref, $el_ref, $entry);
+			}
+			return false;
 		}
 		return true;
 	}
@@ -237,7 +241,6 @@ class form_controller extends form_base
 			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
 		}
 
-		exit_function("form_controller::eval_controller");
 		return $res;
 	}
 
@@ -628,7 +631,6 @@ class form_controller extends form_base
 				}
 			}
 		}
-		exit_function("form_controller::get_var_value");
 	}
 
 	function del_var($arr)
