@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.28 2004/05/20 11:22:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.29 2004/05/25 08:30:09 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -269,7 +269,7 @@ class crm_person extends class_base
 				break;
 
 			case "social_status":
-				$data["options"] = array("Vallaline","Abielus","Vabaabielus");
+				$data["options"] = array(3 => "Vallaline", 1 => "Abielus", 2 => "Vabaabielus");
 				break;
 
 			case "templates":
