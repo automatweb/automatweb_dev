@@ -118,6 +118,15 @@ class shop_item extends shop_base
 			$shcats = $shcats + $shop->get_shop_categories($sh_id);
 		}
 
+		$de = new date_edit(time());
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+			"hour" => "", 
+			"minute" => ""
+		));
+
 		$eq = $this->get_eq($itt["eq_id"]);
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
@@ -136,7 +145,11 @@ class shop_item extends shop_base
 			"has_objs" => checked($o["has_objs"]),
 			"price_eq" => $o["price_eq"],
 			"type" => $itt["name"],
-			"price_eq" => $eq["name"]
+			"price_eq" => $eq["name"],
+			"per_from" => $de->gen_edit_form("per_from", $o["per_from"],2001,2010),
+			"sel_period" => $this->mk_orb("repeaters", array("id" => $o["per_event_id"]),"planner"),
+			"per_cnt" => $o["per_cnt"],
+			"per_prices" => $this->mk_orb("set_per_prices", array("id" => $id))
 		));
 		return $this->parse();
 	}
@@ -239,6 +252,7 @@ class shop_item extends shop_base
 		// siin peame tegema uued objektid ja v2rgid ka
 		$o = $this->get_item($id);
 
+		classload("planner");
 		if ($has_objs)
 		{
 			$num_items = $this->db_fetch_field("SELECT count(*) AS cnt FROM objects WHERE parent = $id AND class_id = ".CL_SHOP_ITEM." AND status != 0","cnt");
@@ -262,7 +276,6 @@ class shop_item extends shop_base
 			else
 			if ($num_items < $max_items)
 			{
-				classload("planner");
 				$pl = new planner;
 
 				// olemas on v2hem kui vaja, teeme uusi
@@ -283,15 +296,119 @@ class shop_item extends shop_base
 			}
 			// nyt peax olema 6ige arv child objekte
 		}
-
-		$this->db_query("UPDATE shop_items SET price='$price',has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , price_eq = '$price_eq' WHERE id = $id");
-
-		if ($type != $o["type_id"])
+		else
+		if ($has_period)
 		{
-			$this->db_query("UPDATE shop_items SET type_id = '$type', entry_id = '', price = '' WHERE id = $id");
+			// read the period start time
+			$per_from = mktime($per_from["hour"],$per_from["minute"],0,$per_from["month"],$per_from["day"],$per_from["year"]);
+
+			$calendar_id = $o["calendar_id"];
+			$event_id = $o["per_event_id"];
+			$pl = new planner;
+			// has period but no objects, then it must have just one calendar attached to it. create it if it doesn't exist
+			if (!$o["calendar_id"])
+			{
+				$pl->submit_add(array("parent" => $id));
+				$calendar_id = $pl->id;
+
+				// also add one event to the calendar as the start of the periodics
+				// lengh 1 second, just to have something there
+				$event_id = $pl->add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));			
+			}
+			else
+			if ($per_from != $o["per_from"])
+			{
+				// the period start date has changed. 
+				// delete the old event and add a new one with the correct start time
+				$this->db_query("UPDATE objects SET status = 1 WHERE class_id = ".CL_CAL_EVENT." AND parent = ".$calendar_id);
+
+				$event_id = $pl->add_event(array("parent" => $calendar_id,"start" => $per_from, "end" => $per_from+1));
+			}
 		}
 
+		$this->db_query("UPDATE shop_items SET price='$price',has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , price_eq = '$price_eq',calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt' WHERE id = $id");
+
 		return $this->mk_orb("change", array("id" => $id));
+	}
+
+	////
+	// !allows the user to define different prices for item $id for different periods
+	function set_per_prices($arr)
+	{
+		extract($arr);
+		$it = $this->get_item($id);
+		$this->mk_path($it["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda</a> / Muuda hindu");
+		$this->read_template("set_per_prices.tpl");
+
+		load_vcl("date_edit");
+		$de = new date_edit(time());
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => ""
+		));
+
+		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $id");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"from" => $de->gen_edit_form("from[".$row["id"]."]",$row["tfrom"]),
+				"to" => $de->gen_edit_form("to[".$row["id"]."]",$row["tto"]),
+				"price" => $row["price"],
+				"id" => $row["id"],
+				"week_check" => checked($row["per_type"] == PRICE_PER_WEEK),
+				"day_check" => checked($row["per_type"] == PRICE_PER_DAY)
+			));
+			$per.=$this->parse("PERIOD");
+		}
+
+		$this->vars(array(
+			"from" => $de->gen_edit_form("from[0]",time()),
+			"to" => $de->gen_edit_form("to[0]",time()),
+			"price" => 0,
+			"id" => 0,
+			"week_check" => "",
+			"day_check" => ""
+		));
+		$per.=$this->parse("PERIOD");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_per_prices", array("id" => $id)),
+			"PERIOD" => $per
+		));
+		return $this->parse();
+	}
+
+	function submit_per_prices($arr)
+	{
+		extract($arr);
+		
+		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $id");
+		while ($row = $this->db_next())
+		{
+			$tfrom = mktime(0,0,0,$from[$row["id"]]["month"],$from[$row["id"]]["day"],$from[$row["id"]]["year"]);
+			$tto = mktime(0,0,0,$to[$row["id"]]["month"],$to[$row["id"]]["day"],$to[$row["id"]]["year"]);
+			$this->save_handle();
+			$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$price[$row["id"]]."',per_type = '".$price_type[$row["id"]]."' WHERE id = ".$row["id"]);
+			$this->restore_handle();
+		}
+
+		if (is_array($del))
+		{
+			foreach($del as $did => $o)
+			{
+				$this->db_query("DELETE FROM shop_item2per_prices WHERE id = $did");
+			}
+		}
+
+		if ($price[0] > 0)
+		{
+			// lisame uue ka
+			$tfrom = mktime(0,0,0,$from[0]["month"],$from[0]["day"],$from[0]["year"]);
+			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
+			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price) VALUES($id,$tfrom,$tto,'".$price[0]."')");
+		}
+		return $this->mk_orb("set_per_prices", array("id" => $id));
 	}
 }
 ?>

@@ -1,27 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.5 2001/06/18 17:20:50 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
-
-/*										array("list_op"					=> array("function" => "gen_output_list", "params" => array("id")),
-													"add_op"					=> array("function" => "add_output",			"params" => array("id")),
-													"submit_op"				=> array("function" => "admin_output",		"params" => array()),
-													"change_op"				=> array("function" => "gen_output_grid", "params" => array("id", "op_id")),
-													"op_add_col"			=> array("function" => "op_add_col",			"params" => array("id", "op_id", "after")),
-													"op_add_row"			=> array("function" => "op_add_row",			"params" => array("id", "op_id", "after")),
-													"op_del_col"			=> array("function" => "op_del_col",			"params" => array("id", "op_id", "col")),
-													"op_del_row"			=> array("function" => "op_del_row",			"params" => array("id", "op_id", "row")),
-													"op_exp_left"			=> array("function" => "op_exp_left",			"params" => array("id", "op_id", "row", "col")),
-													"op_exp_up"				=> array("function"	=> "op_exp_up",				"params" => array("id", "op_id", "row", "col")),
-													"op_exp_down"			=> array("function"	=> "op_exp_down",			"params" => array("id", "op_id", "row", "col")),
-													"op_exp_right"		=> array("function" => "op_exp_right",		"params" => array("id", "op_id", "row", "col")),
-													"submit_op_grid"	=> array("function" => "save_output_grid","params" => array()),
-													"op_style"				=> array("function" => "gen_output_settings", "params" => array("id", "op_id")),
-													"submit_op_settings" => array("function" => "save_output_settings", "params" => array()),
-													"op_meta"					=> array("function" => "gen_output_meta", "params" => array("id" , "op_id")),
-													"save_op_meta"		=> array("function" => "save_output_meta", "params" => array())
-												);*/
 
 class form_output extends form_base 
 {
@@ -73,6 +54,7 @@ class form_output extends form_base
 				$this->output= array();
 				$this->output["rows"] = $f->arr["rows"];
 				$this->output["cols"] = $f->arr["cols"];
+
 				for ($row =0; $row < $f->arr["rows"]; $row++)
 				{
 					for ($col =0; $col < $f->arr["cols"]; $col++)
@@ -81,11 +63,13 @@ class form_output extends form_base
 						$f->arr["contents"][$row][$col]->get_els(&$elarr);
 						$this->output[$row][$col]["style"] = $f->arr["contents"][$row][$col]->get_style();
 
-						$this->output[$row][$col]["el_count"] = count($elarr);
-						for ($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+						$num=0;
+						foreach($elarr as $el)
 						{
-							$this->output[$row][$col]["els"][$i] = $elarr[$i]->get_id();
+							$this->output[$row][$col]["els"][$num] = $el->get_id();
+							$num++;
 						}
+						$this->output[$row][$col]["el_count"] = $num;
 					}
 				}
 				$this->output["map"] = $f->arr["map"];
@@ -171,7 +155,7 @@ class form_output extends form_base
 		if ($fidstring != "")
 		{
 			$this->db_query(
-				"SELECT distinct(el_id) as el_id, objects.name as name
+				"SELECT el_id, objects.name as name
 				 FROM element2form 
 					 LEFT JOIN objects ON objects.oid = element2form.el_id
 					WHERE form_id IN ($fidstring)"
@@ -563,210 +547,5 @@ class form_output extends form_base
 		header("Location: $orb");
 		return $orb;
 	}
-
-// ---------------------------------------------------------------------------------
-	////
-	// !lists the outputs for this form
-/*	function gen_output_list($arr)
-	{
-		extract($arr);
-		$this->init($id, "output_list.tpl","V&auml;ljundite nimekiri");
-
-		$this->db_query("SELECT form_output.*, objects.name as name, objects.oid as oid, objects.comment as comment
-										 FROM form_output
-										 LEFT JOIN objects ON objects.oid = form_output.id
-										 WHERE objects.status !=0 AND objects.parent = $this->id
-										 GROUP BY objects.oid");
-		$this->vars(array("LINE" => ""));
-		while ($row = $this->db_next())
-		{
-			$this->vars(array("name" => $row[name], "comment" => $row[comment], "id" => $row[oid],
-												"change"	=> $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $row[oid])),
-												"delete"	=> $this->mk_orb("delete_op", array("id" => $this->id, "op_id" => $row[oid]))));
-
-			$co = "";
-			$co = $this->parse("CHANGE_OP");
-			$do = "";
-			$do = $this->parse("DELETE_OP");
-			
-			$this->vars(array("CHANGE_OP"=>$co, "DELETE_OP"=>$do));
-			$this->parse("LINE");
-		}
-		$this->vars(array("add" => $this->mk_orb("add_op", array("id" => $this->id))));
-		$ca = "";
-		$ca = $this->parse("ADD_OP");
-		$this->vars(array("ADD_OP" => $ca));
-		return $this->do_menu_return();
-	}
-
-	////
-	// !generates output adding UI for form
-	function add_output($arr)
-	{
-		extract($arr);
-		$this->init($id, "add_output.tpl", "<a href='".$this->mk_orb("change", array("id" => $this->id))."'>Muuda formi</a> / Lisa v&auml;ljund");
-		$this->vars(array("name" => "", "comment" => "", "id" => "",
-											"reforb" => $this->mk_reforb("submit_op", array("id" => $this->id))));
-		return $this->parse();
-	}
-
-	////
-	// !saves the properties of the output
-	function admin_output($arr)
-	{
-		$this->dequote(&$arr);
-		extract($arr);
-		$this->load($id);
-
-		if ($op_id)
-		{
-			$this->upd_object(array("oid" => $op_id, "name" => $name, "comment" => $comment));
-			$this->_log("form","Muutis formi $this->name outputi stiili $name");
-		}
-		else
-		{
-			$this->output= array();
-			// when adding a new output, make it look like the form by default.
-			$this->output[rows] = $this->arr[rows];
-			$this->output[cols] = $this->arr[cols];
-			for ($row =0; $row < $this->arr[rows]; $row++)
-			{
-				for ($col =0; $col < $this->arr[cols]; $col++)
-				{
-					$elarr=array();
-					$this->arr[contents][$row][$col]->get_els(&$elarr);
-					$this->output[$row][$col][style] = $this->arr[contents][$row][$col]->get_style();
-
-					$this->output[$row][$col][el_count] = count($elarr);
-					for ($i=0; $i < $this->output[$row][$col][el_count]; $i++)
-					{
-						$this->output[$row][$col][els][$i] = $elarr[$i]->get_id();
-					}
-				}
-			}
-			$this->output[map] = $this->arr[map];
-			$tp = serialize($this->output);
-			$id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_FORM_OUTPUT, "comment" => $comment));
-			$this->db_query("insert into form_output values($id, '$tp')");
-			$this->_log("form","Lisas formile $this->name outputi stiili $name");
-		}
-		return $this->mk_orb("list_op", array("id" => $this->id));
-	}
-
-	////
-	// !generates the form to change the table properties of output $opid of form $id
-	function gen_output_settings($arr)
-	{
-		extract($arr);
-		$this->init($id, "output_settings.tpl", "Muuda v&auml;ljundit");
-		$this->load_output($op_id);
-
-		$st = new style;
-
-		$this->vars(array("form_bgcolor"				=> $this->output[bgcolor],
-											"form_border"					=> $this->output[border],
-											"form_cellpadding"		=> $this->output[cellpadding],
-											"form_cellspacing"		=> $this->output[cellspacing],
-											"form_height"					=> $this->output[height],
-											"form_width"					=> $this->output[width],
-											"form_hspace"					=> $this->output[hspace],
-											"form_vspace"					=> $this->output[vspace],
-											"id"									=> $id,
-											"reforb"							=> $this->mk_reforb("submit_op_settings", array("id" => $this->id, "op_id" => $op_id)),
-											"def_style"						=> $this->picker($this->output[def_style],$st->get_select(0,ST_CELL))));
-		return $this->do_menu_return();
-	}
-
-	////
-	// !generates the form for changing output metainfo
-	function gen_output_meta($arr)
-	{
-		extract($arr);
-		$this->init($id, "output_metainfo.tpl", "V&auml;ljundi metainfo");
-		
-		$this->db_query("SELECT form_output.*, objects.name as name, objects.comment as comment, objects.created as created, 
-														objects.createdby as createdby, objects.modified as modified, objects.modifiedby as modifiedby,
-														objects.hits as hits
-										 FROM form_output
-										 LEFT JOIN objects ON objects.oid = form_output.id
-										 LEFT JOIN acl ON acl.oid = objects.oid
-										 WHERE form_output.id = $op_id
-										 GROUP BY objects.oid");
-		if (!($row = $this->db_next()))
-		{
-			$this->raise_error("form->change_output($id): No such output!", true);
-		}
-
-		$this->vars(array("op_name" => $row[name], "op_comment" => $row[comment], "id" => $op_id,
-											"modified" => $this->time2date($row[modified],2),
-											"modified_by" => $row[modifiedby], "created" => $this->time2date($row[created],2), 
-											"created_by" => $row[createdby], "views"=>$row[hits],
-											"reforb"		=> $this->mk_reforb("save_op_meta", array("id" => $this->id, "op_id" => $op_id))));
-
-		return $this->do_menu_return();
-	}
-
-	function delete_output($id)
-	{
-		$this->delete_object($id);
-		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->_log("form","Kustutas formi $this->name outputi stiili $name");
-	}
-
-	////
-	// !saves the metadata of output $op_id on form $id
-	function save_output_meta($arr)
-	{
-		$this->dequote(&$arr);
-		extract($arr);
-
-		$this->upd_object(array("oid" => $op_id, "name" => $name, "comment" => $comment));
-		$this->_log("form","Muutis formi $this->name outputi stiili $name");
-		return $this->mk_orb("op_meta", array("id" => $id, "op_id" => $op_id));
-	}
-
-	////
-	// !saves table settings for output $op_id for form $id
-	function save_output_settings($arr)
-	{
-		$this->dequote(&$arr);
-		extract($arr);
-		$this->load($id);
-		$this->load_output($op_id);
-
-		$this->output[bgcolor] = $bgcolor;
-		$this->output[border] = $border;
-		$this->output[cellpadding]	= $cellpadding;
-		$this->output[cellspacing] = $cellspacing;
-		$this->output[height] = $height;
-		$this->output[width] = ($width > 316 ? 316 : $width);
-		$this->output[height] = $height;
-		$this->output[hspace] = $hspace;
-		$this->output[vspace] = $vspace;
-		$this->output[def_style] = $def_style;
-
-		$this->save_output($op_id);
-		return $this->mk_orb("op_style", array("id" => $id, "op_id" => $op_id));
-	}
-
-	////
-	// !returns an array op_id => op_name for all outputs of form $id
-	function get_op_list($arr)
-	{
-		extract($arr);
-		$this->load($id);
-
-		$ret = array();
-		$this->db_query("SELECT form_output.*, objects.name as name, objects.oid as oid, objects.comment as comment
-										 FROM form_output
-										 LEFT JOIN objects ON objects.oid = form_output.id
-										 WHERE objects.status !=0 AND objects.parent = $this->id
-										 GROUP BY objects.oid");
-		while ($row = $this->db_next())
-		{
-			$ret[$row[oid]] = $row[name];
-		}
-		return $ret;
-	}*/
 }
 ?>

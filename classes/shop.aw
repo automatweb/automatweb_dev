@@ -323,6 +323,14 @@ class shop extends shop_base
 			$id = $this->find_shop_id($section);
 		}
 
+		// tshekime et kas 2kki on menyy propertites 8eldud et see menyy on selline kus on poe asjad paralleelselt
+		// ja kui on, siis joonistame paralleelselt or something
+		$spl = $this->db_fetch_field("SELECT shop_parallel FROM menu WHERE id = $section","shop_parallel");
+		if ($spl)
+		{
+			return $this->order_item(array("shop" => $id, "section" => $section, "parallel" => true));
+		}
+
 		global $shopping_cart;
 		$section = $this->do_shop_menus($id,$section);
 
@@ -379,9 +387,9 @@ class shop extends shop_base
 			{
 				if ($ar["cnt"] > 0)
 				{
+					$f = new form;
 					// now here we must show the name of the item followed by
 					// the rows from the cnt_form for that item that have selectrow checked
-
 					// so, get the item
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
@@ -401,12 +409,26 @@ class shop extends shop_base
 						$this->vars(array("row" => $f->mk_row_html($rownum,$images,"entry_".$ar["cnt_entry"]."_")));
 						$rowhtml.=$this->parse("F_ROW");
 					}
-
+	
+					if ($ar["period"])
+					{
+						// if there is a period set in the cart for this item, we must replace the date in the item's form 
+						// with the selected period
+						$f->load($itt["form_id"]);
+						$f->load_entry($it["entry_id"]);
+						$el = $f->get_element_by_type("date", "from");
+						$f->set_element_value($el->get_id(),$ar["period"]);
+						$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"],"no_load_entry" => true));
+					}
+					else
+					{
+						$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"]));
+					}
 					$t_price += $ar["price"];
 					$this->vars(array(
 						"item_link" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop_id, "section" => $section)),
 						"name" => $ar["name"],
-						"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"])),
+						"item" => $item,
 						"F_ROW" => $rowhtml
 					));
 					$this->parse("ITEM");
@@ -418,7 +440,7 @@ class shop extends shop_base
 			"reforb" => $this->mk_reforb("submit_cart", array("shop_id" => $shop_id,"section" => $section)),
 			"shop_id" => $shop_id,
 			"section" => $section,
-			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
+			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section,"first" => 1)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id,"section" => $section)),
 			"t_price" => $t_price,
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
@@ -481,46 +503,15 @@ class shop extends shop_base
 					}
 
 					// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
-					if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
+					if (!$this->is_item_available($it,$count,$f,$ar["period"]))
 					{
-						// check if the user entered some dates in the form, if not, then show error message and go back.
-						$from = $f->get_element_value_by_type("date","from");
-						$to = $f->get_element_value_by_type("date","to");
-
-						$free_items = array();
-						$free_item_count = 0;
-						classload("planner");
-						$pl = new planner;
-						// we must repeat this whole operation $count number of times too.
-						// so we must load the items one by one and check their calendars for events during the time specified in the form. 
-						$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
-						while ($row = $this->db_next())
-						{
-							// objekti last v2ljas on kalendri id
-							// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
-							if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
-							{
-								// leidsime vaba itemi
-								$free_items[] = $row;
-								$free_item_count++;
-
-								// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
-								if ($free_item_count == $count)
-								{
-									break;
-								}
-							}
-						}
-						if ($free_item_count < $count)
-						{
-							// pold vabu itemeid sel ajal
-							global $status_msg;
-							$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
-							session_register("status_msg");
-							// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-							$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
-							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
-						}
+						// pold vabu itemeid sel ajal
+						global $status_msg;
+						$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
+						session_register("status_msg");
+						// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
+						$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
+						return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
 					}
 
 					// now calc price
@@ -536,9 +527,23 @@ class shop extends shop_base
 		return $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section));
 	}
 
+	////
+	// !calculates the price for item $it of type $itt , count of items is $count and the form filled for the order is loaded in $f
+	// uses the equasion specified in $itt and if none is specified, the price specified in form $f or the item's form that is loaded
 	function calc_price($itt,$it,$count,$f)
 	{
 		$eq = $this->get_eq($itt["eq_id"]);
+
+		// the price might be different based on the date
+		// so if the item purchace has a date attached
+		if ($it["has_period"] && $it["has_objs"])
+		{
+			// find the start and end dates of the purchase
+			$from = $f->get_element_value_by_type("date","from");
+			$to = $f->get_element_value_by_type("date","to");
+			// now check if any price alterations fall in this timespan
+		}
+
 		if ($eq["comment"] == "")
 		{
 			$price = (double)$it["price"] * (double)$count;
@@ -605,7 +610,7 @@ class shop extends shop_base
 		};
 
 		global $order_forms;
-		if (!$num)
+		if ($first)
 		{
 			$order_forms = false;
 			$num = 0;
@@ -636,6 +641,13 @@ class shop extends shop_base
 			$order_forms["max_cnt"] = $cnt;
 			$order_forms["current_cnt"] = 0;
 			session_register("order_forms");
+		}
+
+		if (!$order_forms["order"][$num]["form"])
+		{
+			// if this form doesh not exist
+			header("Location: ".$this->mk_my_orb("submit_order", array("shop_id" => $shop_id, "section" => $section)));
+			die();
 		}
 
 		$this->vars(array(
@@ -713,53 +725,17 @@ class shop extends shop_base
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 
-					// check the availability of the item
-					if ($it["has_max"] && $it["has_period"] && $it["has_objs"])
+					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$ar["period"])))
 					{
-						$from = $f->get_element_value_by_type("date","from");
-						$to = $f->get_element_value_by_type("date","to");
-						$count = $ar["cnt"];
-						$free_items = array();
-						$free_item_count = 0;
-						classload("planner");
-						$pl = new planner;
-						// we must repeat this whole operation $count number of times too.
-						// so we must load the items one by one and check their calendars for events during the time specified in the form. 
-						$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
-						while ($row = $this->db_next())
-						{
-							// objekti last v2ljas on kalendri id
-							// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
-							if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
-							{
-								// leidsime vaba itemi
-								$free_items[] = $row;
-								$free_item_count++;
-
-								// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
-								if ($free_item_count == $count)
-								{
-									break;
-								}
-							}
-						}
-						if ($free_item_count < $count)
-						{
-							// if no item is available, abort the order
-							global $status_msg;
-							$status_msg = sprintf(E_SHOP_ITEMS_ORDER_CHANGED,$it["name"]);
-							session_register("status_msg");
-							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
-						}
-						else
-						{
-							// broneerime itemid
-							foreach($free_items as $row)
-							{
-								// lisame itemi kalenddrisse evendi selle aja peale
-								$pl->add_event(array("parent" => $row["last"],"start" => $from, "end" => $to));
-							}
-						}
+						// if no item is available, abort the order
+						global $status_msg;
+						$status_msg = sprintf(E_SHOP_ITEMS_ORDER_CHANGED,$it["name"]);
+						session_register("status_msg");
+						return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
+					}
+					else
+					{
+						$this->do_order_item($it,$ar["cnt"],$free_items);
 					}
 
 					$selrows = $this->get_selected_rows_in_form(&$f);
@@ -767,6 +743,7 @@ class shop extends shop_base
 					$mail.="Nimi: ".$it["name"]."\n";
 					$mail.="Kogus ja tüüp: \n";
 					$rowhtml = "";
+
 					foreach($selrows as $rownum)
 					{
 						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
@@ -803,7 +780,7 @@ class shop extends shop_base
 			{
 				if ($ar["cnt"] > 0)
 				{
-					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."')");
+					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$ar["period"]."')");
 					$t_p += (double)$ar["cnt"] * (double)$ar["price"];
 				}
 			}
@@ -919,25 +896,104 @@ class shop extends shop_base
 		}
 
 		classload("form");
-		$row = $this->get_item($item_id,true);
-		$itt = $this->get_item_type($row["type_id"]);
-
 		global $shopping_cart,$ext;
-
-		$this->read_template("order_item.tpl");
-		$parent = $this->do_shop_menus($shop,$section);
 		$f = new form;
+
+		// ok, now, if $parallel is set then we must show several items side by side, but 
+		// that only makes sense for isems that has_periods and !has_objs and has_max
+		if ($item_id)
+		{
+			$row = $this->get_item($item_id,true);
+			$itt = $this->get_item_type($row["type_id"]);
+		}
+
+		if (($row["has_period"] && !$row["has_objs"] && $row["has_max"]) || $parallel)
+		{
+			$this->read_template("order_item_rep.tpl");
+			$parent = $this->do_shop_menus($shop,$section);
+			classload("planner");
+
+			// so we check for it here
+			if ($parallel)
+			{
+				// and if it is so, then select all the items for showing
+				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.oid = shop_items.id WHERE objects.parent = $parent AND status != 0 AND objects.class_id = ".CL_SHOP_ITEM);
+			}
+			else
+			{
+				$this->db_query("SELECT shop_items.*, objects.* FROM objects LEFT JOIN shop_items ON objects.oid = shop_items.id WHERE objects.oid = $item_id");
+			}
+			$item_id = 0;
+			while ($row = $this->db_next())
+			{
+				if (!$item_id)
+				{
+					$item_id = $row["oid"];
+				}
+				$this->save_handle();
+				$itt = $this->get_item_type($row["type_id"]);
+				$ir = "";
+				// this object has a repeater and can therefore have a repeat count
+				$rep_days = $row["per_cnt"];
+				$pl = new planner;
+				// get the events for this planner from today to today+$rep_days <- change this later when duke adds get_events_by_count
+				$reps = $pl->get_events(array("parent" => $row["calendar_id"], "start" => time(), "end" => time()+$rep_days*24*3600,"index_time" => true));
+				foreach($reps as $time => $evnt)
+				{
+					$f = new form;
+					$f->load($itt["form_id"]);
+					$f->load_entry($row["entry_id"]);
+
+					$el = $f->get_element_by_type("date", "from");
+					if (!$el)
+					{
+						$this->raise_error("No from date element in item form! ", true);
+					}
+					$f->set_element_value($el->get_id(),$time);
+
+					$this->vars(array(
+						"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true)),
+						"perd_val" => $time,
+						"perd_check" => checked($shopping_cart["items"][$row["oid"]]["period"] == $time),
+						"item_id" => $row["oid"]
+					));
+					$ir.= $this->parse("ITEM_REP_N");
+				}
+				$this->vars(array(
+					"ITEM_REP_N" => $ir
+				));
+				$pari .= $this->parse("PAR_ITEM");
+				$this->restore_handle();
+			}
+			$this->vars(array(
+				"cnt_form" => $f->gen_preview(array(
+												"id" => $itt["cnt_form"],
+												"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"],
+												"form_action" => "/index.".$ext,
+												"tpl" => "show_noform.tpl")),
+				"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $parent)),
+				"PAR_ITEM" => $pari
+			));
+		}
+		else
+		{
+			$this->read_template("order_item.tpl");
+			$parent = $this->do_shop_menus($shop,$section);
+			$this->vars(array("item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"]))));
+			$this->vars(array(
+				"cnt_form" => $f->gen_preview(array(
+													"id" => $itt["cnt_form"],
+													"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
+													"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
+													"form_action" => "/index.".$ext)),
+			));
+		}
+
 		$this->vars(array(
-			"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"])),
 			"item_id" => $row["oid"],
 			"price" => $row["price"],
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
-			"cnt_form" => $f->gen_preview(array(
-												"id" => $itt["cnt_form"],
-												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
-												"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
-												"form_action" => "/index.".$ext)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
 		));
 		return $this->parse();
@@ -951,91 +1007,54 @@ class shop extends shop_base
 		extract($arr);
 		global $shopping_cart;
 	
-		$it = $this->get_item($item_id,true);
-		$itt = $this->get_item_type($it["type_id"]);
-
-		classload("form");
-		$f = new form;
-
-		$old_entry = false;
-		if ($shopping_cart["items"][$item_id]["cnt_entry"])
+		if (!is_array($period))
 		{
-			$old_entry = $f->get_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
+			$period[$item_id] = 1;
 		}
 
-		$f->process_entry(array(
-			"id" => $itt["cnt_form"], 
-			"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
-		));
-		$entry_id = $f->entry_id;
-
-		// now figure out the correct row(s) in the count form and mark them in the shopping cart.
-		// rows are figured out based on elements named selectrow - if it's checked on that row, then that row
-		// nost be added to the cart. 
-		// here we just calculate the amount of items based on the selected rows and numbers entered in textbox/count elements
-
-		$selrows = $this->get_selected_rows_in_form(&$f);
-
-		$count = 0;
-		foreach($selrows as $i)
+		foreach($period as $item_id => $iperiod)
 		{
-			$rowels = $f->get_elements_for_row($i,ARR_ELID);
-			// this row's count must be added to this item's count in the shopping cart
-			foreach($rowels as $rowelid => $rowelvalue)
+			$it = $this->get_item($item_id,true);
+			$itt = $this->get_item_type($it["type_id"]);
+
+			classload("form");
+			$f = new form;
+
+			$old_entry = false;
+			if ($shopping_cart["items"][$item_id]["cnt_entry"])
 			{
-				$rowelref = $f->get_element_by_id($rowelid);
-				if ($rowelref->get_type() == "textbox" && $rowelref->get_subtype() == "count")
-				{
-					$count+=$rowelvalue;
-				}
+				$old_entry = $f->get_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
 			}
-		}
 
-		// if the item is set to have some max amount of items and they have calendars, then we must check if there are still some available
-		// during the specified time.
-		if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
-		{
-			// check if the user entered some dates in the form, if not, then show error message and go back.
-			$from = $f->get_element_value_by_type("date","from");
-			$to = $f->get_element_value_by_type("date","to");
+			$f->process_entry(array(
+				"id" => $itt["cnt_form"], 
+				"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
+			));
+			$entry_id = $f->entry_id;
 
-			if ($from < 1 || $to < 1)
+			// now figure out the correct row(s) in the count form and mark them in the shopping cart.
+			// rows are figured out based on elements named selectrow - if it's checked on that row, then that row
+			// nost be added to the cart. 
+			// here we just calculate the amount of items based on the selected rows and numbers entered in textbox/count elements
+
+			$selrows = $this->get_selected_rows_in_form(&$f);
+
+			$count = 0;
+			foreach($selrows as $i)
 			{
-				global $status_msg;
-				$status_msg = E_SHOP_NO_DATE_SET;
-				session_register("status_msg");
-
-				// before returning also restore the form entry
-				$f->restore_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
-				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
-			}
-			// right now just check this combination
-			
-			$free_items = array();
-			$free_item_count = 0;
-			classload("planner");
-			$pl = new planner;
-			// we must repeat this whole operation $count number of times too.
-			// so we must load the items one by one and check their calendars for events during the time specified in the form. 
-			$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
-			while ($row = $this->db_next())
-			{
-				// objekti last v2ljas on kalendri id
-				// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
-				if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
+				$rowels = $f->get_elements_for_row($i,ARR_ELID);
+				// this row's count must be added to this item's count in the shopping cart
+				foreach($rowels as $rowelid => $rowelvalue)
 				{
-					// leidsime vaba itemi
-					$free_items[] = $row;
-					$free_item_count++;
-
-					// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
-					if ($free_item_count == $count)
+					$rowelref = $f->get_element_by_id($rowelid);
+					if ($rowelref->get_type() == "textbox" && $rowelref->get_subtype() == "count")
 					{
-						break;
+						$count+=$rowelvalue;
 					}
 				}
 			}
-			if ($free_item_count < $count)
+
+			if (!$this->is_item_available($it,$count,$f,$iperiod))
 			{
 				// pold vabu itemeid sel ajal
 				global $status_msg;
@@ -1045,18 +1064,20 @@ class shop extends shop_base
 				$f->restore_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
 				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
 			}
+
 			// ei broneeri asju tegelt 2ra, bronnime alles siis kui tyyp p2ris tellimuse teeb.
 			// tegelt tuleks siinkohal teha miski temp-record selle kohta, et see asi on sel kellal bronnitud
 			// et keegi teine samal ajal ei saax seda sama aja peale bronnida a minu vaene v2ike pea ei v6ta seda praegusel hetkel
+
+			// calculate price
+			$price = $this->calc_price($itt,$it,$count,$f);
+		
+			$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+			$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
+			$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
+			$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
+			$GLOBALS["shopping_cart"]["items"][$item_id]["period"] = $iperiod;
 		}
-
-		// calculate price
-		$price = $this->calc_price($itt,$it,$count,$f);
-
-		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
-		$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
-		$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
-		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
 
 		// if the item specifies, where to go after ordering it, then go there. otherwise don't go anywhere
 		if ($it["redir"])
@@ -1344,6 +1365,135 @@ class shop extends shop_base
 			$ret[] = $cur_var;
 		}
 		return $ret;
+	}
+
+	////
+	// !this checks if $count items $it are still available for the dates specified int $f's loaded entry
+	// returns the data to be passed to do_order_item or false if not enough items are available
+	// note that data has no defined type, it must not be manipulated, just passed to do_order_item 
+	function is_item_available(&$it, $count,&$f,$period)
+	{
+		if ($it["has_max"])
+		{
+			// check if there still are $count items available. 
+			if ($it["has_period"])
+			{
+				// if the item has periods and has objects for each period then we figure out for which time span the
+				// item was requested and check if in that span there are some free objects
+				if ($it["has_objs"])
+				{
+					// check if the user entered some dates in the form, if not, then show error message and go back.
+					$from = $f->get_element_value_by_type("date","from");
+					$to = $f->get_element_value_by_type("date","to");
+
+					$free_items = array();
+					$free_item_count = 0;
+					classload("planner");
+					$pl = new planner;
+					// we must repeat this whole operation $count number of times too.
+					// so we must load the items one by one and check their calendars for events during the time specified in the form. 
+					$this->db_query("SELECT * FROM objects WHERE parent = ".$it["oid"]." AND class_id = ".CL_SHOP_ITEM." AND status != 0");
+					while ($row = $this->db_next())
+					{
+						// objekti last v2ljas on kalendri id
+						// vaatame kas selle objekti kohta on eventeid valitud vahemikus
+						if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
+						{
+							// leidsime vaba itemi
+							$free_items[] = $row;
+							$free_item_count++;
+
+							// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
+							if ($free_item_count == $count)
+							{
+								break;
+							}
+						}
+					}
+					if ($free_item_count < $count)
+					{
+						return false;
+					}
+					else
+					{
+						return array("items" => $free_items, "from" => $from, "to" => $to);
+					}
+				}
+				else
+				{
+					// if the item is periodic, but doesn't have objects for it, then it 
+					// is periodic - and therefore must have some periods defined
+					// so we find the period for which the order was placed and check if for that period there are still some available
+
+					// the period only has one date - the start date and that must be 
+//					$period = $f->get_element_value_by_type("date","from");
+
+//					echo "preiod = ", $this->time2date($period,2), "<br>";
+					$num_sold = $this->db_fetch_field("SELECT num_sold FROM shop_item_period_avail WHERE period = $period AND item_id = ".$it["oid"],"num_sold");
+					if (($it["max_items"] - $num_sold) >= $count)
+					{
+						return $period;
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+			else
+			{
+				// if the item doesn't have periods then we just check the item's free count
+				if (($it["max_items"] - $it["sold_items"]) >= $count)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			// if the item count is not limited, then there area lways items available
+			return true;
+		}
+	}
+
+	function do_order_item($it,$cnt,$free_items)
+	{
+		// update the item's sold count
+		$this->db_query("UPDATE shop_items SET sold_items = sold_items + ".$cnt." WHERE id = ".$it["oid"]);
+
+		if ($it["has_period"] && $it["has_objs"])
+		{
+			// if the item has periods and objects then free_items will contain an array
+			// of objects to order for period $free_items["from"] to $free_items["to"]
+
+			$pl = new planner;
+			// broneerime itemid
+			foreach($free_items["items"] as $row)
+			{
+				// lisame itemi kalenddrisse evendi selle aja peale
+				$pl->add_event(array("parent" => $row["last"],"start" => $free_items["from"], "end" => $free_items["to"]));
+			}
+		}
+		else
+		if ($it["has_period"])
+		{
+			// period but no objects, then $free_items contains the period for which to order the items
+			// we must update the free count in the correct period
+			$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = ".$it["oid"]." AND period = $free_items");
+			if (!($row = $this->db_next()))
+			{
+				// there is no record and we must create one
+				$this->db_query("INSERT INTO shop_item_period_avail(item_id,period,num_sold) VALUES(".$it["oid"].",$free_items,$cnt)");
+			}
+			else
+			{
+				$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt");
+			}
+		}
 	}
 }
 ?>

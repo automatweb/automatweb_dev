@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.23 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.24 2001/06/18 17:20:50 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2428,6 +2428,7 @@ classload("cache","validator","defs");
 								pers = '$pers',
 								admin_feature = '$admin_feature',
 								left_pane = '$left_pane',
+								shop_parallel = '$shop_parallel',
 								right_pane = '$right_pane'
 								WHERE id = '$id'";
 				$this->db_query($q);
@@ -2733,7 +2734,8 @@ classload("cache","validator","defs");
 											 menu.width as width,
 											 menu.left_pane as left_pane,
 											 menu.right_pane as right_pane,
-											 menu.pers as pers
+											 menu.pers as pers,
+											 menu.shop_parallel as shop_parallel
 											 FROM objects 
 											 LEFT JOIN menu ON menu.id = objects.oid
 											 WHERE oid = $id");
@@ -2864,6 +2866,7 @@ classload("cache","validator","defs");
 												"is_shop"			=> checked($row["is_shop"]),
 												"left_pane"		=> checked($row["left_pane"]),
 												"right_pane"	=> checked($row["right_pane"]),
+												"shop_parallel" => checked($row["shop_parallel"]),
 												"width" => $row["width"],
 												"pers" => $dbp->period_mlist(unserialize($row["pers"]))
 												));

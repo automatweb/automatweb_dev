@@ -516,6 +516,7 @@ load_vcl("date_edit");
 				$var2= $prefix.$this->id."_address";
 				global $$var, $$var2;
 				$entry[$this->id] = array("text" => $$var, "address" => $$var2);
+				$this->entry = $entry[$this->id];
 				return;
 			}
 			else
@@ -540,7 +541,10 @@ load_vcl("date_edit");
 							$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
 					}
 					else
+					{
 						$im->upload($$var, $$ft, $id, "",true,$$fn);
+					}
+					$this->entry = $entry[$this->id];
 				}
 				return;
 			}
@@ -555,6 +559,7 @@ load_vcl("date_edit");
 				$var = $prefix.$this->id;
 				global $$var;
 				$entry[$this->id] = join(",",$$var);
+				$this->entry = $entry[$this->id];
 				return;
 			}
 			else
@@ -564,6 +569,7 @@ load_vcl("date_edit");
 				global $$var;
 				$v = $$var;
 				$entry[$this->id] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+				$this->entry = $entry[$this->id];
 				return;
 			}
 			else
@@ -571,6 +577,7 @@ load_vcl("date_edit");
 
 			global $$var;
 			$entry[$this->id] = $$var;
+			$this->entry = $$var;
 		}
 
 		function gen_show_html()
@@ -652,43 +659,65 @@ load_vcl("date_edit");
 
 			$html = trim($this->arr["text"])." ";
 
+			$html.=$this->get_value();
+
+			return $html;
+		}
+
+		////
+		// !returns the elements value in the currently loaded entry in a form that can be presented to the user
+		function get_value()
+		{
 			if ($this->arr["type"] == "textarea")
-				$html.=trim($this->entry);
-					
+			{
+				$html=trim($this->entry);
+			}
+			else
 			if ($this->arr["type"] == "radiobutton")
-				$html.=($this->entry == $this->id ? " Jah " : " Ei ");
-					
+			{
+				$html=($this->entry == $this->id ? " Jah " : " Ei ");
+			}
+			else		
 			if ($this->arr["type"] == "listbox")
 			{
 				$sp = split("_", $this->entry, 10);
-				$html.=$this->arr["listbox_items"][$sp[3]];
+				$html=$this->arr["listbox_items"][$sp[3]];
 			}
-					
+			else
 			if ($this->arr["type"] == "multiple")
 			{
 				$ec=explode(",",$this->entry);
 				reset($ec);
 				while (list(, $v) = each($ec))
-					$html.=($this->arr["multiple_items"][$v]." ");
+				{
+					$html=($this->arr["multiple_items"][$v]." ");
+				}
 			}
-
+			else
 			if ($this->arr["type"] == "checkbox")
-				$html.=$this->entry == 1 ? "Jah " : " Ei ";
-					
+			{
+				$html=$this->entry == 1 ? "Jah " : " Ei ";
+			}
+			else
 			if ($this->arr["type"] == "textbox")
-				$html.=trim($this->entry);
-
+			{
+				$html=trim($this->entry);
+			}
+			else
 			if ($this->arr["type"] == "date")
 			{
-				$html.=$this->time2date($this->entry,5);
+				$html=$this->time2date($this->entry,5);
 			}
-
+			else
 			if ($this->arr["type"] == "price")
-				$html.=trim($this->entry);
-
+			{
+				$html=trim($this->entry);
+			}
+			else
 			if ($this->arr["type"] == "link")
-				$html.=$this->entry["address"];
-
+			{
+				$html=$this->entry["address"];
+			}
 			return $html;
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.7 2001/06/05 13:26:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.8 2001/06/18 17:20:50 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -62,7 +62,7 @@ class file extends aw_template
 				$comment = $fi["name"];
 			}
 			
-			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=$gid/".urlencode($fi[name])."'>$comment</a>";
+			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$f["target"]."/".urlencode($fi[name])."'>$comment</a>";
 		}
 		return $replacement;
 	}
@@ -162,6 +162,17 @@ class file extends aw_template
 	// !checks whether the directory needed for file storing exists and is writable
 	function check_environment($args = array())
 	{
+		$this->db_list_tables();
+		while($name = $this->db_next_table())
+		{
+			print "name = $name<br>";
+			$q = "SELECT * FROM $name LIMIT 1";
+			$this->db_query($q);
+			$fields = $this->db_get_fields();
+			print "<pre>";
+			print_r($fields);
+			print "</pre>";
+		};
 		$retval = "";
 		if (!defined("SITE_DIR"))
 		{

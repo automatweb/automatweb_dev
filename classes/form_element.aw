@@ -43,6 +43,17 @@ class form_element extends aw_template
 		}
 		return "";
 	}
+
+	////
+	// !seab vormielemendi sisu
+	function set_content($args = array())
+	{
+		if ($this->arr["type"] == "textbox")
+		{
+			$this->arr["text"] = $args["content"];
+		};
+	}
+
 	function get_text()		{	return $this->arr["text"]; }
 	function get_el_name()		{	return $this->arr["name"]; }
 	function get_style()	{	return $this->arr["style"]; }
@@ -140,15 +151,18 @@ class form_element extends aw_template
 		for ($row = 0; $row < $f->arr["rows"]; $row++)
 		{
 			$c = "";
+			$cc="";
 			for ($col = 0; $col < $f->arr["cols"]; $col++)
 			{
-				$this->vars(array("row" => $row, "col" => $col, "checked" => checked($this->col == $col && $this->row == $row)));
+				$this->vars(array("row" => $row, "col" => $col, "checked" => checked($this->col == $col && $this->row == $row),"cnt" => $cnt++));
 				$c.=$this->parse("COL");
+				$cc.=$this->parse("COLC");
 			}
-			$this->vars(array("COL" => $c));
+			$this->vars(array("COL" => $c,"COLC" => $cc));
 			$l.=$this->parse("ROW");
+			$cl.=$this->parse("ROWC");
 		}
-		$this->vars(array("ROW" => $l));
+		$this->vars(array("ROW" => $l,"ROWC" => $cl));
 		return $this->parse();
 	}
 }

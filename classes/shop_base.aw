@@ -3,6 +3,9 @@
 define("FOR_SELECT",1);
 define("ALL_PROPS",2);
 
+define("PRICE_PER_WEEK",1);
+define("PRICE_PER_DAY",2);
+
 // not publicly accessible, jsut to derive from
 class shop_base extends aw_template
 {

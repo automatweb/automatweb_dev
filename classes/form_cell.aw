@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.7 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.8 2001/06/18 17:20:50 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -158,13 +158,15 @@ class form_cell extends aw_template
 				// add new element
 				// form elements are weird things.
 				// namely. they are at the same time menus AND form elements. 
-				// so each element is written in two places
+				// so each element is written in three places
 				// objects table, class_id = CL_PSEUDO 
 				// menu table with type MN_FORM_ELEMENT
+				// form_elements table that is used to remember the elements proiperties when the element is insertet into another form
 				// the actual info about how the element is to be shown is written into the form's array. whee. 
 				// and also element2form table contains all element -> table relationships
 				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO));
 				$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
+				$this->db_query("INSERT INTO form_elements (id) values($el)");
 			}
 			else
 			{
@@ -179,9 +181,16 @@ class form_cell extends aw_template
 			if ($el)
 			{
 				$this->_do_add_element($this->id,$el);
-
 				// add the element into the form.
-				$form->arr["elements"][$this->row][$this->col][$el] = array("id" => $el,"name" => $name,"ord" => $ord);
+				// but! use the props saved in the form_elements table to create them with the right config right away!
+				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
+				classload("xml");
+				$xml = new xml;
+				$arr = $xml->xml_unserialize(array("source" => $props));
+				$arr["id"] = $el;
+				$arr["name"] = $name;
+				$arr["ord"] = $ord;
+				$form->arr["elements"][$this->row][$this->col][$el] = $arr;
 				$form->save();
 			}
 			return false;
@@ -429,7 +438,16 @@ class form_cell extends aw_template
 			}
 			else
 			{
-				$form->arr["elements"][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
+				$id = $this->arr[$i]->get_id();
+				$props = $this->arr[$i]->get_props();
+				$form->arr["elements"][$this->row][$this->col][$id] = $props;
+				// also save the elements properties so that when you add the same element to a new form, 
+				// all it's properties are exactly the same! yeah! baby! SWEET!
+				classload("xml");
+				$x = new xml;
+				$xp = $x->xml_serialize($props);
+				$this->quote(&$xp);
+				$this->db_query("UPDATE form_elements SET props = '".$xp."' WHERE id = ".$id);
 			}
 		}
 	}

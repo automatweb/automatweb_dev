@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.22 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.23 2001/06/18 17:20:50 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -309,6 +309,7 @@ $orb_defs["form"] = "xml";
 			$this->arr["after_submit_link"] = $after_submit_link;
 			$this->arr["ff_folder"] = $ff_folder;
 			$this->arr["name_el"] = $entry_name_el;
+			$this->arr["try_fill"] = $try_fill;
 			$this->save();
 			return $this->mk_orb("table_settings", array("id" => $id));
 		}
@@ -517,7 +518,8 @@ $orb_defs["form"] = "xml";
 				"as_2"								=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
 				"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
 				"ff_folder"						=> $this->picker($this->arr["ff_folder"], $o->get_list()),
-				"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements())
+				"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements()),
+				"try_fill"						=> checked($this->arr["try_fill"])
 			));
 			$ns = "";
 			if ($this->type != 2)
@@ -540,7 +542,13 @@ $orb_defs["form"] = "xml";
 		function gen_preview($arr)
 		{
 			extract($arr);
-			$this->load($id);
+		
+			// kui id-d pole antud, siis kasutame seda vormi, mis juba eelnevalt
+			// laetud on. Somewhere.
+			if (isset($id))
+			{
+				$this->load($id);
+			};
 
 			if ($form_action == "")
 			{
@@ -556,16 +564,22 @@ $orb_defs["form"] = "xml";
 			{
 				$this->load_entry($entry_id);
 			}
-			if (!isset($prefix))
+			else
 			{
-				$prefix = "";
-			}
-			if (!isset($elvalues))
-			{
-				$elvalues = array();
+				if ($this->arr["try_fill"])
+				{
+					if (!isset($elvalues))
+					{
+						$elvalues = array();
+					}
+					classload("users");
+					$u = new users;
+					$elvalues=$elvalues + $u->get_user_info($GLOBALS["uid"]);
+				}
 			}
 
-			$this->read_template("show.tpl",1);
+			$tpl = isset($tpl) ? $tpl : "show.tpl";
+			$this->read_template($tpl,1);
 			$this->vars(array("form_id" => $id));
 			$images = new db_images;
 
@@ -581,6 +595,10 @@ $orb_defs["form"] = "xml";
 				for ($a = 0; $a < $this->arr["cols"]; $a++)
 				{
 					$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+					//print "<pre>";
+					//print_r($this->arr["contents"][$i][$a]);
+					//print "</pre>";
+					//print "---";
 				}
 			}
 
@@ -687,7 +705,7 @@ $orb_defs["form"] = "xml";
 
 			if ($this->arr["name_el"])
 			{
-				$this->upd_object(array("oid" => $entry_id, "name" => $this->entry[$this->arr["name_el"]],"comment" => ""));
+				$this->upd_object(array("oid" => $entry_id, "name" => $this->get_element_value($this->arr["name_el"]),"comment" => ""));
 			}
 			$en = serialize($this->entry);
 			if ($new)
@@ -824,16 +842,29 @@ $orb_defs["form"] = "xml";
 
 		////
 		// !shows entry $entry_id of form $id using output $op_id
+		// if $no_load_entry == true, the loaded entry is used
 		function show($arr)
 		{
 			extract($arr);
-			$this->load($id);
+			if (!$no_load_entry)
+			{
+				$this->load($id);
+			}
 
 			if ($this->type == 2)	// if this is a search form, then search, instead of showing the entered data
+			{
 				return $this->do_search($entry_id, $op_id);
+			}
 
 			$this->load_output($op_id);
-			$this->load_entry($entry_id);
+			if (!$no_load_entry)
+			{
+				$this->load_entry($entry_id);
+			}
+			else
+			{
+				$entry_id = $this->entry_id;
+			}
 			if (isset($admin) && $admin)
 			{
 				$this->read_template("show_user_admin.tpl");
@@ -883,15 +914,29 @@ $orb_defs["form"] = "xml";
 			$this->add_hit($entry_id);
 			$this->add_hit($op_id);
 
-//			$style_cache = array();
-//			$styles_loaded = array();
-
-			if (($def_style = (isset($this->output["def_style"]) ? $this->output["def_style"] : 0)) == 0)
+			$t_style = new style();
+			// kui on tabeli stiil m22ratud v2ljundile, siis kasutame seda, kui pole, siis vaatame kas sellele formile on 
+			// m22ratud default stiil ja kui on, siis kasutame seda
+			$fcol_style = 0;
+			$fcol_cnt = 0;
+			$frow_style = 0;
+			$frow_cnt = 0;
+			if ($this->output["table_style"])
 			{
-				$def_style = $this->arr["def_style"];
+				$fcol_style = $t_style->get_fcol_style($this->output["table_style"]);
+				$fcol_cnt = $t_style->get_num_fcols($this->output["table_style"]);
+				$frow_style = $t_style->get_frow_style($this->output["table_style"]);
+				$frow_cnt = $t_style->get_num_frows($this->output["table_style"]);
 			}
 
-			$t_style = new style();
+			// kui tabeli stiilis ei m22ratud default stiili, siis v6etakse see formist. I guess. 
+			if ($this->arr["def_style"] && $fcol_cnt < 1 && $frow_cnt < 1)
+			{
+				$fcol_style = $this->arr["def_style"];
+				$fcol_cnt = $this->output["cols"];
+				$frow_style = $this->arr["def_style"];
+				$frow_cnt = $this->output["rows"];
+			}
 
 			for ($row = 0; $row < $this->output["rows"]; $row++)
 			{
@@ -900,12 +945,24 @@ $orb_defs["form"] = "xml";
 				{
 					if (!($arr = $this->get_spans($row, $col, $this->output["map"], $this->output["rows"], $this->output["cols"])))
 						continue;
-	
-					$op_cell = isset($this->output[$arr["r_row"]][$arr["r_col"]]) ? $this->output[$arr["r_row"]][$arr["r_col"]] : array("style" => 0, "el_count" => 0, "els" => array());
+
+					$rrow = $arr["r_row"];
+					$rcol = $arr["r_col"];
+					$op_cell = $this->output[$rrow][$rcol];
 					$style_id = $op_cell["style"];
 					if ($style_id == 0)
 					{
-						$style_id = $def_style;
+						// now. find the defult style based on the row / col default styles. 
+						// start with cols
+						if ($col < $fcol_cnt && $fcol_style)
+						{
+							$style_id = $fcol_style;
+						}
+						else
+						if ($row < $frow_cnt && $frow_style)
+						{
+							$style_id = $frow_style;
+						}
 					}
 
 					$chtml= "";
@@ -937,17 +994,14 @@ $orb_defs["form"] = "xml";
 				$this->vars(array("COL" => $html));
 				$this->parse("LINE");
 			}
-			$this->vars(array(
-				"form_border"	=> (isset($this->output["border"]) && $this->output["border"] != "" ? " BORDER='".$this->output["border"]."'" : ""),
-				"form_bgcolor"	=> (isset($this->output["bgcolor"]) && $this->output["bgcolor"] !="" ? " BGCOLOR='".$this->output["bgcolor"]."'" : ""),
-				"form_cellpadding"	=> (isset($this->output["cellpadding"]) && $this->output["cellpadding"] != "" ? " CELLPADDING='".$this->output["cellpadding"]."'" : ""),
-				"form_cellspacing"	=> (isset($this->output["cellspacing"]) && $this->output["cellspacing"] != "" ? " CELLSPACING='".$this->output["cellspacing"]."'" : ""),
-				"form_height"	=> (isset($this->output["height"]) && $this->output["height"] != "" ? " HEIGHT='".$this->output["height"]."'" : ""),
-				"form_width"	=> (isset($this->output["width"]) && $this->output["width"] != "" ? " WIDTH='".$this->output["width"]."'" : "" ),
-				"form_height"	=> (isset($this->output["height"]) && $this->output["height"] != "" ? " HEIGHT='".$this->output["height"]."'" : "" ),
-				"form_vspace"	=> (isset($this->output["vspace"]) && $this->output["vspace"] != "" ? " VSPACE='".$this->output["vspace"]."'" : ""),
-				"form_hspace"	=> (isset($this->output["hspace"]) && $this->output["hspace"] != "" ? " HSPACE='".$this->output["hspace"]."'" : "")
-			));
+
+			// uurime v2lja outputi tabeli stiili ja kasutame seda
+			if ($this->output["table_style"])
+			{
+				$this->vars(array(
+					"tablestring" => $t_style->get_table_string($this->output["table_style"])
+				));
+			}
 			return $this->parse();
 		}
 
@@ -1394,7 +1448,7 @@ $orb_defs["form"] = "xml";
 
 		////
 		// !finds the element with id $id in the loaded form and returns a reference to it
-		function get_element_by_id($id)
+		function &get_element_by_id($id)
 		{
 			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
@@ -1420,6 +1474,7 @@ $orb_defs["form"] = "xml";
 		//
 		// nope, see ei eelda, get_element_value_by_name eeldab et miski entry on loaditud - terryf
 		// $type can be either RET_FIRST - returns the forst element or RET_ALL - returns all elements with the name
+
 		function get_element_by_name($name,$type = RET_FIRST)
 		{
 			for ($row = 0; $row < $this->arr["rows"]; $row++)
@@ -1537,6 +1592,29 @@ $orb_defs["form"] = "xml";
 			
 			$this->upd_object(array("oid" => $el_id, "parent" => $parent));
 
+			if (is_array($c_cell))
+			{
+				$oldel = $this->arr["elements"][$row][$col][$el_id];
+				$cnt = 1;
+				foreach($c_cell as $rowc)
+				{
+					list($r,$c) = explode("_", $rowc);
+					// $r,$c = kuhu kopeerida element
+					$name = $oldel["name"]."_".$cnt;
+					$new_el = $this->new_object(array("parent" => $oldel["parent"], "name" => $name, "class_id" => CL_PSEUDO));
+					$this->db_query("INSERT INTO menu (id,type) values($new_el,".MN_FORM_ELEMENT.")");
+					$this->db_query("INSERT INTO form_elements (id) VALUES($new_el)");
+					$this->arr["contents"][$r][$c]->_do_add_element($this->id,$new_el);
+					$arr = $oldel;
+					$arr["id"] = $new_el;
+					$arr["name"] = $name;
+					$this->arr["elements"][$r][$c][$new_el] = $arr;
+					$cnt++;
+				}
+				$this->save();	// sync
+				$this->load($id);
+			}
+
 			list($r,$c) = explode("_", $s_cell);
 
 			if (!($r == $row && $c == $col))
@@ -1649,7 +1727,7 @@ $orb_defs["form"] = "xml";
 				return false;
 			}
 
-			return $this->entry[$el->get_id()];
+			return $el->get_value();
 		}
 
 		////
@@ -1663,14 +1741,29 @@ $orb_defs["form"] = "xml";
 				return false;
 			}
 
-			return $this->entry[$el->get_id()];
+			return $el->get_value();
 		}
 
 		////
 		// !returns the value of element with id $id
 		function get_element_value($id)
 		{
-			return $this->entry[$id];
+			$el = $this->get_element_by_id($id);
+			return $el->get_value();
+		}
+
+		////
+		// !sets the element $id's value in the loaded entry to $val
+		function set_element_value($id,$val)
+		{
+			$this->entry[$id] = $val;
+			for ($row=0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col=0; $col < $this->arr["cols"]; $col++)
+				{
+					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
+				};
+			};
 		}
 
 		////
@@ -1701,7 +1794,7 @@ $orb_defs["form"] = "xml";
 					{
 						$k = $el->get_id();
 					}
-					$ret[$k] = $this->entry[$el->get_id()];
+					$ret[$k] = $el->get_value();
 				}
 			}
 			return $ret;
@@ -1741,7 +1834,7 @@ $orb_defs["form"] = "xml";
 						{
 							$k = $el->get_id();
 						}
-						$ret[$k] = $this->entry[$el->get_id()];
+						$ret[$k] = $el->get_value();
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.25 2001/06/16 09:47:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.26 2001/06/18 17:20:50 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -444,6 +444,7 @@ class planner extends calendar {
 	// parent(int) - kalendri ID
 	//  voi
 	// uid(char) - kasutaja id, kui tegemist on kasutaja kalendriga
+	// index_time - if set, the returned array is indexed by the event start time
 	
 	function get_events($args = array())
 	{
@@ -484,13 +485,27 @@ class planner extends calendar {
 				{
 					list($slice_start,$slice_end) = each($slice);
 					$index = date("dmY",$slice_start);
-					$retval[$index][] = $row;
+					if ($index_time)
+					{
+						$retval[$slice_start] = $row;
+					}
+					else
+					{
+						$retval[$index][] = $row;
+					}
 				};
 			}
 			else
 			{
 				$index = date("dmY",$row["start"]);
-				$retval[$index][] = $row;
+				if ($index_time)
+				{
+					$retval[$row["start"]] = $row;
+				}
+				else
+				{
+					$retval[$index][] = $row;
+				}
 			};
 		};
 		
@@ -541,10 +556,7 @@ class planner extends calendar {
 			$q = "INSERT INTO planner (id,uid,start) VALUES ('$id','$uid','$start')";
 			$this->db_query($q);
 			$status_msg = "Event on lisatud";
-			$retval = $this->mk_site_orb(array(
-					"action" => "editevent",
-					"id" => $id,
-				));
+			$retval = $this->mk_my_orb("editevent",array("id" => $id));
 			return $retval;
 		};
 			
@@ -836,10 +848,7 @@ class planner extends calendar {
 				
 					
 		$this->db_query($q);
-		return $this->mk_site_orb(array(
-				"action" => "repeaters",
-				"id" => $id,
-			));
+		return $this->mk_my_orb("repeaters",array("id" => $id));
 	}
 
 	function submit_adm_event($args = array())
@@ -1031,6 +1040,7 @@ class planner extends calendar {
 			(id,uid,start,end,title,place,description)
 			VALUES ('$id','$uid','$start','$end','$title','$place','$description')";
 		$this->db_query($q);
+		return $id;
 	}
 
 

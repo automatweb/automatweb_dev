@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.7 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.8 2001/06/18 17:20:50 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -58,6 +58,7 @@ class form_base extends aw_template
 		$this->parent = $row["parent"];
 		$this->type = $row["type"];
 		$this->comment = $row["comment"];
+		$this->entry_id = 0;
 
 		if (substr($row["content"],0,14) == "<?xml version=")
 		{
@@ -71,7 +72,6 @@ class form_base extends aw_template
 		}
 
 		$this->normalize();
-
 		$this->load_elements();
 	}
 

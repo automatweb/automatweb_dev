@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.62 2001/06/16 10:46:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.63 2001/06/18 17:20:50 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -214,6 +214,33 @@ class messenger extends menuedit_light
 		return $xm->create(array(
 				"activelist" => $activelist,
 			));
+	}
+
+	////
+	// !Imports a contact
+	function importcontact($args = array())
+	{
+		classload("form");
+		$f = new form();
+		global $ext,$udata;
+		$folder = ($folder) ? $folder : $udata["home_folder"];
+		$f->load(CONTACT_FORM);
+		$el = $f->get_element_by_name("name");
+		$ef = &$f->get_element_by_id($el->id);
+		print gettype($ef);
+		$ef->set_content(array("content" => "blah"));
+		
+		$form = $f->gen_preview(array(
+						"id" => CONTACT_FORM,
+						"reforb" => $this->mk_reforb("submit_contact",array("folder" => $folder)),
+						"form_action" => "/index.$ext",
+					));
+		print "<pre>";
+		print_r($ef);
+		print "</pre>";
+		
+		print $form;
+		exit;
 	}
 
 
@@ -1658,6 +1685,7 @@ class messenger extends menuedit_light
 				$subject = $this->MIME_decode($msg["subject"]);
 				$vars = array(
 					"mfrom" => htmlspecialchars($from),
+					"encaddr" => rawurlencode($from),
 					"mtargets1" => htmlspecialchars($msg["mto"]),
 					"subject" => htmlspecialchars($subject),
 					"mtargets2" => htmlspecialchars($cc),
@@ -1689,7 +1717,8 @@ class messenger extends menuedit_light
 		$message = $msg["message"];
 		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
 
-		$message = nl2br($this->MIME_decode($message));
+		$message = $this->MIME_decode($message);
+		$message = preg_replace("/(\r|\n)/","<br>",$message);
 		$this->vars(array("msg_id" => $args["id"]));
 		
 		// soltuvalt "op"-ist naitame kas show voi preview sectionit muutmistemplatest
@@ -1965,6 +1994,23 @@ class messenger extends menuedit_light
 		$users = new users();
 		// default_acc peaks sisaldama koigi nende accountide id-sid, millelt
 		// get mail id-sid peaks kysima
+		if ($page == "folders")
+		{
+			$conf = $this->conf;
+			$conf["msg_outbox"] = $msg_outbox;
+			$conf["msg_draft"] = $msg_draft;
+			$conf["msg_trash"] = $msg_trash;
+			classload("xml");
+			$xml = new xml();
+			// Moodustame konfi pohjal uue xml-i
+			// users tabeli messenger vali on tegelikult Deprecated.
+			$newconf = $xml->xml_serialize($conf);
+			$this->quote($newconf);
+			$q = "UPDATE users SET msg_inbox = '$msg_inbox',messenger = '$newconf' WHERE uid = '" . UID . "'";
+			$this->db_query($q);
+			return $this->mk_my_orb("configure",array("page" => "folders"));
+		}
+			
 		if (is_array($default_acc))
 		{
 			$serverlist = $this->msgconf["msg_pop3servers"];
@@ -1998,6 +2044,7 @@ class messenger extends menuedit_light
 			$this->msgconf["msg_move_read"] = ($msg_move_read) ? 1 : 0;
 			$this->msgconf["msg_filter_address"] = ($msg_filter_address) ? 1 : 0;
 		};
+
 		$users->set_user_config(array(
 						"uid" => UID,
 						"key" => "messenger",

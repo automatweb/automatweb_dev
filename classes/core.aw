@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.26 2001/06/16 12:43:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.27 2001/06/18 17:20:50 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1074,7 +1074,7 @@ class core extends db_connector
 		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
-			return "orb.$ext?class=$cl_name&action=$fun&$urs";
+			return $GLOBALS["baseurl"]."/automatweb/orb.$ext?class=$cl_name&action=$fun&$urs";
 		}
 		else
 		{

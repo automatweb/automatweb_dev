@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.1 2001/05/30 03:35:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.2 2001/06/18 17:20:50 kristo Exp $
 // system.aw - various system related functions
 global $orb_defs;
 $orb_defs["sys"] = "xml";
@@ -41,5 +41,6 @@ class sys {
 		};
 		exit;
 	}
+
 };
 ?>
