@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.2 2001/05/18 14:04:14 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // definnerime orbi funktsioonid
 global $orb_defs;
