@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.64 2004/02/05 15:04:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.65 2004/02/05 15:17:20 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -549,7 +549,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							}
 							else
 							{
-								$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.")";
+								$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.",".CL_USER_GROUP.")";
 								$partcount++;
 							}
 						}
@@ -561,7 +561,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						}
 						else
 						{
-							$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.")";
+							$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.",".CL_USER_GROUP.")";
 							$partcount++;
 						}
 						break;
