@@ -25,48 +25,49 @@
 	@property destination_path type=select
 	@caption uued kaustad salvesta sellesse kausta
 
-
+////////////////////////////////////////////////////////////////////////////
 	@default group=how
 
-	@property gen_and_deal type=checkbox ch_value=ok
-	@caption genereeri kataloogid ja jaga neisse objektid
+//	@property gen_and_deal type=checkbox ch_value=ok
+//	@caption genereeri kataloogid ja jaga neisse objektid
 
 	@property group_by type=select
 	@caption mille j‰rgi objektid kataloogidesse grupeerida
 
-	@property gen_rest_into type=textbox size=8
-	@caption tee kataloog, kuhu l‰hevad objektid, mida ei suudetud grupeerida, muidu objekte ei liigutata
+//	@property gen_rest_into type=textbox size=8
+//	@caption tee kataloog, kuhu l‰hevad objektid, mida ei suudetud grupeerida, muidu objekte ei liigutata
 
 	@property gen_only type=checkbox ch_value=ok
 	@caption genereeri ainult kataloogid
 
-	@property deal_excisting type=checkbox ch_value=ok
-	@caption jaga objektid olemasolevatesse kataloogidesse
+//	@property deal_excisting type=checkbox ch_value=ok
+//	@caption jaga objektid olemasolevatesse kataloogidesse
 
-
-
+////////////////////////////////////////////////////////////////////////////
 	@default group=misc
 
-	@property save_undo type=checkbox ch_value=saveundo
-	@caption save undo
+//	@property save_undo type=checkbox ch_value=saveundo
+//	@caption save undo
 
-	@property make_catalogs type=href target=_blank editonly=1
+	@property make_catalogs type=text
 	@caption tee kataloogid
 
-	@property undo type=href caption=undo target=_blank editonly=1 url=
-	@caption undo last gen
+//	@property undo type=href caption=undo target=_blank editonly=1 url=
+//	@caption undo last gen
 
+//	@property analyse_this type=select size=10 multiple=1
+//	@caption objektid vıta kataloogi(de)st
 
+////////////////////////////////////////////////////////////////////////////
 	@default group=analyse
 
-	@property analyse_this type=select size=10 multiple=1
-	@caption objektid vıta kataloogi(de)st
 
 	@property sub_menus type=checkbox ch_value=ok
 	@caption otsi ka alamkataloogidest
 
 	@property show_all_objects type=text
 	@caption objektid
+////////////////////////////////////////////////////////////////////////////
 
 */
 
@@ -81,7 +82,7 @@ class menu_gen extends class_base
 	{
 		// change this to the folder under the templates folder, where this classes templates will be
 		$this->init(array(
-			'tpldir' => 'menu_gen',
+//			'tpldir' => 'menu_gen',
 			'clid' => CL_MENU_GEN,
 		));
 	}
@@ -90,10 +91,16 @@ class menu_gen extends class_base
 	{
 		$data = &$args["prop"];
 		$retval = true;
+		$meta=$args['obj']['meta'];
+
 		switch($data["name"])
 		{
 			case 'group_by':
-				$data['options'] =array(
+
+				if ($meta['gen_and_deal'] || $meta['deal_excisting'])
+				{
+
+					$data['options'] =array(
 					'name' => 'objekti nimi',
 //					'class_id' => 'objekti t¸¸p',
 //					'modified' => 'muutmise aeg',
@@ -105,25 +112,32 @@ class menu_gen extends class_base
 //					'jrk' => 'j‰rjekord',
 //					'site_id' => 'site_id',
 //					'' => '',
-				);
+					);
+				}
+				else
+				{
+					$retval=PROP_IGNORE;
+				}
 			break;
 			case 'analyse_this':
 				$par = get_instance('objects');
-				$data['selected'] = $this->make_keys($args['obj']['meta']['analyse_this']);
+				$data['selected'] = $this->make_keys($meta['analyse_this']);
 				$data['options'] = $par->get_list(false,true);
 //				$data['options'] = array('0'=>'-');
 			break;
 			case 'destination_path':
 				$par = get_instance("objects");
-				$data['selected'] = $this->make_keys($args['obj']['meta']['destination_path']);
+				$data['selected'] = $this->make_keys($meta['destination_path']);
 				$data['options'] = $par->get_list(false,true);
 //				$data['options'] = array('0'=>'-');
 			break;
 			case 'make_catalogs':
-				$data['url'] = $this->mk_my_orb('make_the_catalogs', array('id'=>$args['obj']['oid']));
+				$url = $this->mk_my_orb('make_the_catalogs', array('id'=>$args['obj']['oid']));
+				$data['value'] = html::href(array('url'=>$url,'caption'=>'tee kataloogid', 'target'=>'_blank'));
+
 			break;
 			case 'show_all_objects':
-				$objects=$this->find_objects_under_parent($args['obj']['meta']['analyse_this'],$args['obj']['meta']['sub_menus'],'',ARR_ALL);
+				$objects=$this->find_objects_under_parent($meta['analyse_this'],$meta['sub_menus'],'',ARR_ALL);
 
 				foreach($objects as $val)
 				{
@@ -133,12 +147,11 @@ class menu_gen extends class_base
 					$str.=$val['name'].' - '.$this->cfg['classes'][$val['class_id']]['name'].'<br>';
 				}
 				$data['value'] = 'NB! neid objekte liigutatakse!!!(va kataloogid)<br><br>'.$str.
-				'<br><b>need kataloogid luuakse</b> <br>'.implode('<br>',$this->catalogs_to_make($args['obj']['meta']));
-
+				'<br><b>need kataloogid luuakse</b> <br>'.implode('<br />',$this->complete_names($this->catalogs_to_make($meta),$meta['prefix'],$meta['sufix']));
 
 			break;
 			case 'tyyp':
-				$data['selected'] = $args['obj']['meta']['tyyp'];
+				$data['selected'] = $meta['tyyp'];
 				$data['options'] = array(
 					'CAPITAL' => 'objekti nimi (esim. t‰ht) A..Z',
 //					'' => 'objekti nimi (3 t‰hte)',
@@ -163,9 +176,10 @@ class menu_gen extends class_base
 // source_cats - list of catalogs
 // full - sub catalogs
 
-	function find_objects_under_parent($source_cats=array(),$full,$class='',$ret=ARR_ALL)
+	function find_objects_under_parent($source_cats,$full,$class='',$ret=ARR_ALL)
 	{
 		$objects=array();
+		$source_cats=(array)$source_cats;
 		foreach($source_cats as $parent)
 		{
 			$objects+=$this->get_objects_below($args = array(
@@ -248,8 +262,23 @@ class menu_gen extends class_base
 			$names+=array('rest'=>$gen_rest_into);
 		}
 
+		return //$this->complete_names($names,$prefix,$sufix);//
+		$names;
+
+	}
+
+	function name_appender(&$item1, $key, $fix)
+	{
+		$item1 = $fix[0].$item1.$fix[1];
+	}
+
+
+	function complete_names($names,$prefix,$sufix)
+	{
+		array_walk($names, array($this,'name_appender'), array($prefix,$sufix));
 		return $names;
 	}
+
 
 	function assign_catalog($obj,$made,$group_by,$gen_rest_into)
 	{
@@ -311,45 +340,50 @@ class menu_gen extends class_base
 	{
 		extract($arr);
 		$obj=$this->get_object($id);
-		$objects=$this->find_objects_under_parent($obj['meta']['analyse_this'],$obj['meta']['sub_menus']);//CL_PSEUDO
+		$meta=$obj['meta'];
 
-		$CREATE=$this->catalogs_to_make($obj['meta']);
+		$objects=$this->find_objects_under_parent($meta['analyse_this'],$meta['sub_menus']);//CL_PSEUDO
 
-		if ($obj['meta']['save_undo'])
+		$CREATE=$this->complete_names($this->catalogs_to_make($meta),$meta['prefix'],$meta['sufix']);
+
+		if ($meta['save_undo'])
 		{
 			$str='h‰‰';
 		}
 		$jrk=0;
-		if ($obj['meta']['gen_and_deal'] || $obj['meta']['gen_only'])
+		if ($meta['gen_and_deal'] || $meta['gen_only'])
 		{
+			echo "parent = {$meta['destination_path']} <br>";
 			$mn = get_instance('menuedit');
 			foreach ($CREATE as $key => $name)
 			{
 				$jrk++;
-			 	$new_cat = $mn->add_new_menu(array(
-					'name' => $obj['meta']['prefix'].$name.$obj['meta']['sufix'],
-					'parent' => $obj['meta']['destination_path'],
+
+				$new_cat = $mn->add_new_menu(array(
+					'name' => $name,
+					'parent' => $meta['destination_path'],
 					'type' => MN_CONTENT,
 					'status' => 2,
 					'jrk' => $jrk,
 					'no_flush' => 1,
-				));
-				echo $new_cat.' - '.$name.'<br>' ;
+				));/**/
+				echo $jrk.'. oid('.$new_cat.') - '.$name.'<br>' ;
 				$made[$key]=array('id' => $new_cat,'name' => $name);
-				set_time_out(20);
+				//settimeout(20);
 				flush();
 			}
+			$this->flush_cache();
 		}
-		elseif($obj['meta']['deal_excisting'])
+		elseif($meta['deal_excisting'])
 		{
-			$mde=$this->find_objects_under_parent($obj['meta']['analyse_this'],false,CL_PSEUDO,ARR_NAME);
+			$mde=$this->find_objects_under_parent($meta['analyse_this'],false,CL_PSEUDO,ARR_NAME);
 			foreach ($mde as $key => $name)
 			{
 				$made[$name]=array('oid' => $key,'name' => $name);
 			}
 		}
-
-		if ($obj['meta']['deal_excisting'] || $obj['meta']['gen_and_deal'])
+/*
+		if ($meta['deal_excisting'] || $meta['gen_and_deal'])
 		{
 			foreach($objects as $key => $val)
 			{
@@ -357,7 +391,7 @@ class menu_gen extends class_base
 				{
 					continue;
 				}
-				$where_to=$this->assign_catalog($val,$made,$obj['meta']['group_by'],$obj['meta']['gen_rest_into']); //object,available catalogs,grouping
+				$where_to=$this->assign_catalog($val,$made,$meta['group_by'],$meta['gen_rest_into']); //object,available catalogs,grouping
 				echo "{$val['name']} - $key >> $where_to<br>";
 				if ($where_to)
 				{
@@ -366,7 +400,7 @@ class menu_gen extends class_base
 				}
 			}
 		}
-		$this->flush_cache();
+*/
 		die();
 	}
 
