@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.111 2003/11/08 05:55:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.112 2003/11/10 19:38:37 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -81,8 +81,11 @@ if (!defined("DEFS"))
 		$url = aw_global_get("REQUEST_URI");
 		// remove old
 		$url = preg_replace("/$name=[^&]*/","", $url);
-		$url .= (strpos($url,"?") === false ? "?" : "&" ).$name."=".$value;
-		$url = preg_replace("/&{2,}/","&",$url);
+		if (!empty($value))
+		{
+			$url .= (strpos($url,"?") === false ? "?" : "&" ).$name."=".$value;
+			$url = preg_replace("/&{2,}/","&",$url);
+		};
 		return $url;
 	}
 
