@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.76 2003/06/04 15:37:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.77 2003/07/28 15:43:55 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1181,6 +1181,7 @@ topic");
 			"name" => $aw_mb_name,
 			"mail" => $aw_mb_mail,
 			"comment" => $args["comment"],
+			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => aw_global_get("section")),"forum"),
 			"subj" => $subj,
 			"reply" => $reply,
 			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act,"no_comments" => $args["no_comments"])),
