@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.31 2001/06/28 18:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.32 2001/06/29 14:51:37 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -424,7 +424,6 @@ class core extends db_connector
 		};
 		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
 		$this->db_query($q);
-		// see on siis see vinge funktsioon
 		$this->flush_cache();
 	}
 
@@ -434,6 +433,7 @@ class core extends db_connector
 	// vaikse osaga kogu objektihierarhiast, ntx kodukataloog
 	// parent(int) - millisest nodest alustame?
 	// class(int) - milline klass meid huvitab?
+	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
 	function get_objects_below($args = array())
 	{
 		extract($args);
@@ -441,6 +441,7 @@ class core extends db_connector
 		$this->get_objects_by_class(array(
 					"parent" => $parent,
 					"class" => $class,
+					"type" => $type,
 			));
 			
 		while($row = $this->db_next())
@@ -913,12 +914,22 @@ class core extends db_connector
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
-		// see groyp by jaab mulle natuke segaks tekalt. oidid ju ei kordu eniveis, so what's the point?
-		// I have no idea. The answer lies somewhere in a bottom of a bottle of wine.
-		$this->db_query("SELECT objects.*
+		
+		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
+		if ($class == CL_PSEUDO)
+		{
+			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
+			$q = "SELECT objects.* FROM objects 
+				LEFT JOIN menu ON (objects.oid = menu.id)
+				WHERE objects.class_id = $class AND objects.status != 0 $pstr $typestr";
+		}
+		else
+		{
+			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0 $pstr
-					GROUP BY objects.oid");
+					WHERE class_id = $class AND status != 0 $pstr";
+		};
+		$this->db_query($q);
 	}
 
 	////
@@ -1301,8 +1312,8 @@ class core extends db_connector
 			{
 				$ret.= dechex($v);
 			};
-			return $ret;
 		}
+		return $ret;
 	}
 
 	////
