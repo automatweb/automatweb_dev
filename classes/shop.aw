@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.42 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.43 2002/01/31 00:15:28 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -1267,7 +1267,7 @@ class shop extends shop_base
 				$rep_cnt = $row["per_cnt"];
 				$pl = new planner;
 				// get the events for this planner from today to 800 days, limiting the number of events to $rep_num
-				$reps = $pl->get_events(array( "start" => time(), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()+800*24*3600));
+				$reps = $pl->get_events(array( "start" => max($row["per_from"],time()), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()+800*24*3600));
 				if (is_array($reps))
 				{
 					$f = new form;
@@ -2058,7 +2058,7 @@ class shop extends shop_base
 			foreach($free_items["items"] as $row)
 			{
 				// lisame itemi kalenddrisse evendi selle aja peale
-				$pl->add_event(array("parent" => $row["last"],"start" => $free_items["from"], "end" => $free_items["to"]));
+				$pl->bron_add_event(array("parent" => $row["last"],"start" => $free_items["from"], "end" => $free_items["to"]));
 			}
 		}
 		else
