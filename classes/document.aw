@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.166 2003/03/26 03:48:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.167 2003/03/27 10:58:00 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1783,18 +1783,8 @@ class document extends aw_template
 		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
 		{
 			$id = $oob["brother_of"];
+		
 		}
-
-		// well, first I need to check whether the parent menu of this document
-		// .. or any of the grandparents has a config form editing template set,
-		// if so .... we need to use that
-		$m = get_instance("menuedit");
-		$m->build_menu_chain($oob["parent"]);
-
-		if (!empty($m->properties["tpl_edit_cfgform"]))
-		{
-			return $this->mk_my_orb("change",array("id" => $oob["oid"]),"doc");
-		};
 
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
 		// menyy, mille juures on m??ratud edimistemplate
