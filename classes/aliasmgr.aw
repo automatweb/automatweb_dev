@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.66 2002/12/02 18:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.67 2002/12/30 18:54:38 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -73,7 +73,7 @@ class aliasmgr extends aw_template
 			$to_delete = new aw_array($check);
 			foreach($to_delete->get() as $alias_id)
 			{
-        $this->delete_alias($id,$alias_id);
+				$this->delete_alias($id,$alias_id);
 				unset($link[$alias_id]);
 			};
 		};
@@ -81,6 +81,13 @@ class aliasmgr extends aw_template
 			"oid" => $id,
 			"key" => "aliaslinks",
 			"value" => $link,
+			"overwrite" => 1,
+		));
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "alias_reltype",
+			"value" => $reltype,
 			"overwrite" => 1,
 		));
 
@@ -393,6 +400,13 @@ class aliasmgr extends aw_template
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
+			"name" => "reltype",
+			"caption" => "Seose tüüp",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+		));
+		$this->t->define_field(array(
 			"caption" => "<a href='javascript:void(0)' onClick='selall()'>Vali</a>",
 			"name" => "check",
 			"width" => 20,
@@ -404,6 +418,7 @@ class aliasmgr extends aw_template
 	// !the new alias lister
 	// params:
 	//   id - the object whose aliases we will observe
+	//   reltypes(array) - array of relation types
 	function new_list_aliases($args)
 	{
 		extract($args);
@@ -411,6 +426,15 @@ class aliasmgr extends aw_template
 		$this->read_template("lists_new.tpl");
 		$obj = $this->get_object($id);
 		$this->id = $id;
+
+		if (!is_array($reltypes))
+		{
+			$reltypes = array();
+		};
+
+		$alias_rel_types = array(
+			"0" => "alias",
+		) + $reltypes;
 
 		// init vcl table to $this->t and define columns
 		$this->_init_la_tbl();
@@ -473,6 +497,11 @@ class aliasmgr extends aw_template
 			$alias["title"] = $classes[$aclid]["name"];
 			$alias["check"] = sprintf("<input type='checkbox' name='check[%d]' value='%d'>",$alias["target"],$alias["target"]);
 			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
+			$alias["reltype"] = html::select(array(
+				'name' => 'reltype['.$alias['target'].']',
+				'options' => $alias_rel_types,
+				'selected' => $obj["meta"]["alias_reltype"][$alias["target"]],
+			));
 
 			$alias["cache"] = html::checkbox(array(
 				'name' => 'cache['.$alias['target'].']',
