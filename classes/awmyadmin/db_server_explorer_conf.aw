@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status 
-	@caption Staatus
-
 	@property all_servers type=checkbox ch_value=1
 	@caption K&otilde;ik serverid
 

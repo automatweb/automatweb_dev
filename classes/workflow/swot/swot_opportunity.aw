@@ -15,9 +15,6 @@
 @property clf type=select field=meta method=serialize
 @caption Klassifikaator
 
-@property status type=status field=status
-@caption Staatus
-
 
 */
 

@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status
-	@caption Staatus
-
 	@property db_server type=objpicker clid=CL_DB_SERVER_LOGIN
 	@caption Server
 

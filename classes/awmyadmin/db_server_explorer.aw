@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status 
-	@caption Staatus
-
 	@property conf type=objpicker clid=CL_DB_VIEW_CONF
 	@caption Vali konfiguratsioon
 

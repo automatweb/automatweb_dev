@@ -14,9 +14,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property swot_folder type=relpicker reltype=RELTYPE_FOLDER multiple=1 field=meta method=serialize
 @caption SWOT Objektide kataloogid
 

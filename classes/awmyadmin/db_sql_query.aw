@@ -6,9 +6,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status
-	@caption Staatus
-
 	@property db_base type=objpicker clid=CL_DB_LOGIN
 	@caption Andmebaas
 

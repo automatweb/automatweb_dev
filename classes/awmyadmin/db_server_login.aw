@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status group=general 
-	@caption Staatus
-
 	@property server_host type=textbox 
 	@caption Server
 

@@ -16,9 +16,6 @@
 @caption Klassifikaator
 
 
-@property status type=status field=status
-@caption Staatus
-
 */
 
 classload("workflow/swot/swot_type");
