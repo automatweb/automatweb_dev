@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.116 2002/10/18 14:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.117 2002/10/22 08:04:59 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -486,6 +486,11 @@ class core extends db_connector
 	// !kirjutab objekti kustutatux
 	function delete_object($oid,$class_id = false)
 	{
+		if (!$this->can("delete", $oid))
+		{
+			return;
+		}
+
 		$obj = $this->get_object($oid);
 		if ($obj["class_id"] == CL_FILE || $obj["class_id"] == CL_PSEUDO)
 		{
@@ -1785,7 +1790,7 @@ class core extends db_connector
 		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
-			return $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 		}
 		else
 		{
@@ -1797,13 +1802,14 @@ class core extends db_connector
 			// user side
 			if (isset($arr["_alias"]) && $arr["_alias"])
 			{
-				return $this->cfg["baseurl"].$uo.$sec."alias=$arr[_alias]".$separator."action=$fun".$separator."$urs";
+				$ret = $this->cfg["baseurl"].$uo.$sec."alias=$arr[_alias]".$separator."action=$fun".$separator."$urs";
 			}
 			else
 			{
-				return $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+				$ret = $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 			};
 		}
+		return $ret;
 	}
 
 	////

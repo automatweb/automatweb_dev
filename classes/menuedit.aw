@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.165 2002/10/21 13:29:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.166 2002/10/22 08:04:59 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1656,7 +1656,7 @@ class menuedit extends aw_template
 			}
 		}
 
-//		if ($this->can("change", $id))
+		if ($this->can("edit", $id))
 		{
 			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"]), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
 			if ($type == "js")
@@ -1671,21 +1671,22 @@ class menuedit extends aw_template
 			{
 				$retval .= "1|0|Change|".$churl."|list".$sep;
 			}
+
+			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+			if ($type == "js")
+			{
+				$this->vars(array(
+					"link" => $cuturl,
+					"text" => "Cut"
+				));
+				$retval .= $this->parse("MENU_ITEM");
+			}
+			else
+			{
+				$retval .= "2|0|Cut|".$cuturl."|list".$sep;
+			}
 		}
 
-		$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-		if ($type == "js")
-		{
-			$this->vars(array(
-				"link" => $cuturl,
-				"text" => "Cut"
-			));
-			$retval .= $this->parse("MENU_ITEM");
-		}
-		else
-		{
-			$retval .= "2|0|Cut|".$cuturl."|list".$sep;
-		}
 
 		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
 		if ($type == "js")
@@ -5766,6 +5767,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				continue;
 			}
+			$can_change = $this->can("edit", $row["oid"]);
+			$can_delete = $this->can("delete", $row["oid"]);
+			$can_admin = $this->can("admin", $row["oid"]);
+
 			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER || $row["class_id"] == CL_PROMO)
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
@@ -5791,22 +5796,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
 			$this->save_handle();
-/*			$this->vars(array(
-				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true))
-			));*
-
-			$this->vars(array(
-				"oid" => $row["oid"],
-				"name" => "",
-				"bgcolor" => $row["cutcopied"],
-				"icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"width" => "16",
-				"height" => "16",
-				"icon_over" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"url" => $host,
-				"URLPARAM" => "",
-				"FETCHCONTENT" => ($this->cfg["fetchcontent"] ? $this->parse("FETCHCONTENT") : "")
-			));*/
 			$this->vars(array(
 				"menu_id" => "js_pop_".$row["oid"],
 				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
@@ -5823,9 +5812,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
 			$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
 			$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
-			$row["change"] = "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>";
-			$row["delete"] = "<a href=\"javascript:box2('Oled kindel, et soovid seda objekti kustutada?','$dellink')\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_delete.gif\" border=\"0\"></a>";
-			$row["acl"] = "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>";
+			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
+			$row["delete"] = $can_delete ? "<a href=\"javascript:box2('Oled kindel, et soovid seda objekti kustutada?','$dellink')\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_delete.gif\" border=\"0\"></a>" : "";
+			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
 			if ($this->co_id)
 			{
 				$this->otc_inst->table_row($row, &$this->t);
