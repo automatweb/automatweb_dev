@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.107 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.108 2002/07/18 21:57:47 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -83,11 +83,12 @@ class document extends aw_template
 			"Jrk Esileht keskel" => "frontpage_center_jrk",
 			"Jrk Esileht keskel all" => "frontpage_center_bottom_jrk",
 			"Jrk Esileht parem" => "frontpage_right_jrk",
-			"no_last" => "no_last"
+			"no_last" => "no_last",
+			"dcache" =>  "Dok. cache",
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt");
+		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt","dcache");
 
 		// for referer checks
 		$this->refopts = array("Ignoreeri","Näita","Ära näita");
@@ -398,7 +399,10 @@ class document extends aw_template
 
 		$si = __get_site_instance();
 		//hook for site specific document parsing
-		$si->parse_document(&$doc);
+		if ($si)
+		{
+			$si->parse_document(&$doc);
+		};
 
 		
 		//$meta = $doc["meta"];
@@ -1193,6 +1197,7 @@ class document extends aw_template
 			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
 
+
 		// go on with our usual business
 		
 		$this->quote($data);
@@ -1336,6 +1341,14 @@ class document extends aw_template
 		{
 			$this->set_object_metadata(array("oid" => $id, "key" => $m_key, "value" => $data[$m_key]));
 		}
+		
+		if ($this->cfg["use_dcache"] && $data["dcache"])
+		{
+			$preview = $this->gen_preview(array("docid" => $id));
+			$this->quote($preview);
+			$q = "UPDATE documents SET dcache = '$preview'  WHERE docid = '$id'";
+			$this->db_query($q);
+		};
 
 		$this->flush_cache();
 
@@ -1858,6 +1871,7 @@ class document extends aw_template
 											"no_last" => checked($document["no_last"]),
 											"referer" => $meta["referer"],
 											"refopts" => $this->picker($meta["refopt"],$this->refopts),
+											"dcache" => checked($meta["dcache"]),
 											));
 
 
@@ -2653,7 +2667,7 @@ class document extends aw_template
 		// mujal olemas, kas ei voiks seda kuidagi yhtlustada?
 
 		// besides, mulle tundub, et otsingutulemusi kuvades taidetakse seda koodi
-		// 2 korda .. teine kord menueditit. Tyhi too?
+		// 2 korda .. teine kord menueditis. Tyhi too?
 		if ($this->cfg["lang_menus"] == 1)
 		{
 			$ss = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
@@ -2808,6 +2822,10 @@ class document extends aw_template
 			$str = substr($str, 2,strlen($str)-4);
 			// search concrete quoted string
 			$docmatch = "documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' OR documents.author LIKE '%".$str."%'";
+			if ($this->cfg["use_dcache"])
+			{
+				$docmatch .= " OR documents.dcache LIKE '%" . $str . "%'";
+			};
 		}
 		else
 		{
@@ -2817,6 +2835,10 @@ class document extends aw_template
 			$docmatcha[] = join(" AND ",$this->map("documents.title LIKE '%%%s%%'",$wds));
 			$docmatcha[] = join(" AND ",$this->map("documents.content LIKE '%%%s%%'",$wds));
 			$docmatcha[] = join(" AND ",$this->map("documents.author LIKE '%%%s%%'",$wds));
+			if ($this->cfg["use_dcache"])
+			{
+				$docmatcha[] = join(" AND ",$this->map("documents.dcache LIKE '%%%s%%'",$wds));
+			};
 			$docmatch = join(" OR ", $this->map("(%s)",$docmatcha));
 		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
