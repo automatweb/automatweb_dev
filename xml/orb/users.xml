@@ -90,7 +90,7 @@
 			</function>
 		</action>
 
-		<action name="login">
+		<action name="login" nologin="1">
 			<function name="login">
 				<arguments>
 					<required name="uid"/>
