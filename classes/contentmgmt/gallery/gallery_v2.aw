@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.27 2003/10/27 12:06:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.28 2003/10/30 11:22:36 kristo Exp $
 
 /*
 
@@ -364,6 +364,7 @@ class gallery_v2 extends class_base
 				{
 					$this->raise_error(ERR_NO_FOLDER,"Sellist kataloogi pole serveris! ($meta[local_folder])", false, true);
 				}
+				sort($files);
 			}
 
 			$img = get_instance("image");
