@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.22 2002/01/30 00:10:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.23 2002/02/12 23:37:02 cvs Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -65,7 +65,7 @@ class file extends aw_template
 				$comment = $fi["name"];
 			}
 			
-			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$f["target"]."/".urlencode($fi["name"])."'>$comment</a>";
+			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$alias["target"]."/".urlencode($fi["name"])."'>$comment</a>";
 		}
 		return $replacement;
 	}
@@ -108,6 +108,7 @@ class file extends aw_template
 		list($major,$minor) = explode("/",$args["type"]);
 
 		// why the fuck id SITE_DIR better than $site_basedir?
+		// what SITE_DIR?	
 		// first, we need to find a path to put the file
 		$filename = $this->gen_uniq_id();
 		$prefix = substr($filename,0,1);
@@ -527,11 +528,13 @@ class file extends aw_template
 		{
 			extract($id);
 		}
-		$this->db_query("SELECT files.* FROM files WHERE id = $id");
+		// allow only integer id-s
+		$this->db_query(sprintf("SELECT files.* FROM files WHERE id = %d",$id));
 		$o = $this->db_next();
 		if ($o)
 		{
 			header("Content-type: ".$o["type"]);
+			header("Pragma: no-cache");
 			return $o["content"];
 		}
 	}
