@@ -948,7 +948,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$str[] = " aliases_".$key.".target = '$v' ";
 					}
 					else
-					if (strpos("%", $v) !== false)
+					if (strpos($v, "%") !== false)
 					{
 						$str[] = $tf." LIKE '".$v."'";
 					}
