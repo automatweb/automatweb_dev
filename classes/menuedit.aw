@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.231 2003/02/11 15:54:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.232 2003/02/12 08:24:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -414,7 +414,6 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			// text on ette antud
 			$this->vars(array("doc_content" => $text));
 		}
 
@@ -875,6 +874,7 @@ class menuedit extends aw_template
 		$docid = $obj["last"];
 		$ar = unserialize($docid);
 
+
 		// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe
 		// siia array aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
 		if (is_array($ar))
@@ -925,7 +925,6 @@ class menuedit extends aw_template
 			};
 
 			$periods = $me_row["meta"]["pers"];
-
 
 			if (is_array($sections) && ($sections[0] !== 0))
 			{
@@ -4578,10 +4577,30 @@ class menuedit extends aw_template
 					{
 						if ($this->is_template($sub))
 						{
-							$si->$fun(&$this);
+							if (method_exists($si, $fun))
+							{
+								$si->$fun(&$this);
+							}
+							else
+							{
+								if (function_exists($fun))
+								{
+									$fun(&$this);
+								}
+							}
 						}
 					}
-				};
+				}
+				else
+				{
+					foreach($sub_callbacks as $sub => $fun)
+					{
+						if ($this->is_template($sub))
+						{
+							$fun(&$this);
+						}
+					}
+				}
 			}
 			else
 			{
