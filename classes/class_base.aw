@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.281 2004/06/25 20:22:47 duke Exp $
+// $Id: class_base.aw,v 2.282 2004/06/25 20:23:46 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2669,6 +2669,7 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
+		
 
 		// and this of course should handle both creating new objects and updating existing ones
 
@@ -2719,6 +2720,7 @@ class class_base extends aw_template
 		}
 
 		$this->new = $new;
+		
 
 		// the question is .. should I call set_property for those too?
 		// and how do I load the stuff with defaults?
@@ -2747,7 +2749,15 @@ class class_base extends aw_template
 			$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
 		};
 
-		$properties = $this->get_property_group($filter);
+		if ($args["cb_existing_props_only"])
+		{
+			$properties = $this->load_defaults();
+		}
+		else
+		{
+			$properties = $this->get_property_group($filter);
+		};
+		
 
 
 		$pvalues = array();
@@ -2761,7 +2771,7 @@ class class_base extends aw_template
 		{
 			// XXX: temporary workaround to save only these properties which were present in the form
 			// required by releditor
-			if ($args["cb_existing_props_only"] && empty($args[$key]))
+			if ($args["cb_existing_props_only"] && !isset($args[$key]))
 			{
 				continue;
 			};
@@ -2828,7 +2838,6 @@ class class_base extends aw_template
 		}
 
 		$realprops = $tmp;
-
 
 		// now do the real job.
 		foreach($realprops as $key => $property)
@@ -3409,6 +3418,11 @@ class class_base extends aw_template
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
+			global $CFG_DEBUG;
+			if ($CFG_DEBUG)
+			{
+				print "loading from " . $arr["cfgform_id"] . "<br>";
+			};
 
 			// if there is a bug in config form which caused the groupdata
 			// to be empty, then this is the place where we should fix it.	
@@ -3420,15 +3434,26 @@ class class_base extends aw_template
 
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
+				global $CFG_DEBUG;
 				$def_cfgform = aw_ini_get("document.default_cfgform");
 				if (is_oid($def_cfgform) && $this->can("view",$def_cfgform))
 				{
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $def_cfgform,
 					));
+
+					if ($CFG_DEBUG)
+					{
+						print "loading cfgform $def_cfgform specified by document.default_cfgform";
+					};
 				}
 				else
 				{
+					if ($CFG_DEBUG)
+					{
+						print "loading the most basic document template";
+					};
+
 					list($cfg_props,$grplist) = $this->load_from_file();
 					if (empty($this->groupinfo) || !empty($grplist))
 					{
