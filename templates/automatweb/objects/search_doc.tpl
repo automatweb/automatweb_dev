@@ -25,17 +25,27 @@
 </table>
 <table border="0" cellspacing="1" cellpadding="2"  width=100%>
 <tr>
-	<td class="fcaption2" colspan=3>Leitud dokumendid:</td>
+	<td class="fcaption2" colspan=8>Leitud dokumendid:</td>
 </tr>
 <tr>
 	<td class="fcaption2">Nimi</td>
 	<td class="fcaption2" nowrap>&nbsp;T&uuml;&uuml;p&nbsp;</td>
+	<td class="fcaption2" nowrap>&nbsp;Loodud&nbsp;</td>
+	<td class="fcaption2" nowrap>&nbsp;Looja&nbsp;</td>
+	<td class="fcaption2" nowrap>&nbsp;Muudetud&nbsp;</td>
+	<td class="fcaption2" nowrap>&nbsp;Muutja&nbsp;</td>
+	<td class="fcaption2" nowrap>&nbsp;Parent&nbsp;</td>
 	<td class="fform" nowrap>&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
 	<td class="fcaption2">{VAR:name}</td>
 	<td class="fcaption2" nowrap>{VAR:type}</td>
+	<td class="fcaption2" nowrap>{VAR:created}</td>
+	<td class="fcaption2" nowrap>{VAR:createdby}</td>
+	<td class="fcaption2" nowrap>{VAR:modified}</td>
+	<td class="fcaption2" nowrap>{VAR:modifiedby}</td>
+	<td class="fcaption2" nowrap>{VAR:parent_name}</td>
 	<td class="fform" nowrap>{VAR:pickurl}</td>
 </tr>
 <!-- END SUB: LINE -->
