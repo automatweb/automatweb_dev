@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.51 2004/10/29 14:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.52 2004/11/05 14:06:24 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -39,9 +39,6 @@
 	@property promo_tpl type=select table=objects field=meta method=serialize
 	@caption Template (dokumendi sees)
 
-	@property show_inact type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption N&auml;ita mitteaktiivseid dokumente tekstina
-	
 	@default table=objects
 	@default field=meta
 
@@ -73,6 +70,9 @@
 	@caption Dokumente j&auml;rjestatakse
 
 	@property sort_ord type=select table=objects field=meta method=serialize group=show
+
+	@property show_inact type=checkbox ch_value=1 table=objects field=meta method=serialize group=show
+	@caption N&auml;ita mitteaktiivseid dokumente tekstina
 
 	@classinfo relationmgr=yes
 	@classinfo syslog_type=ST_PROMO
