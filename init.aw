@@ -138,6 +138,7 @@ function init_config($arr)
 			}
 		}
 	}
+
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
 //	echo "timestamping took ",($ts_e - $ts_s), "seconds <br>";
@@ -148,19 +149,27 @@ function init_config($arr)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
-		$f = fopen($cache_file,"r");
-		$fc = fread($f,filesize($cache_file));
-		fclose($f);
-		$GLOBALS["cfg"] = unserialize($fc);
-		if (is_array($GLOBALS["cfg"]["__default"]["classes"]) && $GLOBALS["cfg"]["__default"]["frontpage"] > 0)
+		$f = @fopen($cache_file,"r");
+		if ($f && filesize($cache_file) > 0)
 		{
-			$read_from_cache = true;
+			$fc = fread($f,filesize($cache_file));
+			fclose($f);
+			$GLOBALS["cfg"] = unserialize($fc);
+			if (is_array($GLOBALS["cfg"]["__default"]["classes"]) && $GLOBALS["cfg"]["__default"]["frontpage"] > 0)
+			{
+				$read_from_cache = true;
+			}
 		}
+		else
+		{
+			$read_from_cache = false;
+		};
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_e = $sec + $micro;
 //		echo "cache unserialize ",($ts_e - $ts_s), " seconds <br>";
 //		result: 0.005 - too small to measure correctly
 	}
+
 
 	if (!$read_from_cache)
 	{
