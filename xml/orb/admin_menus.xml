@@ -38,6 +38,13 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="mk_shortcut">
+			<function name="mk_shortcut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 			
 		<action name="paste">
 			<function name="paste">
@@ -53,6 +60,7 @@
 					<optional name="period"/>
 					<optional name="sortby"/>
 					<optional name="sort_order"/>
+					<optional name="view_type"/>
 				</arguments>
 			</function>
 		</action>
