@@ -9,6 +9,9 @@
 <td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='sstring' VALUE='{VAR:sstring}'></td>
 </tr>
 <tr>
+<td class="fcaption">Grupp:</td><td class="fform"><select name='grp'>{VAR:grps}</select></td>
+</tr>
+<tr>
 <td class="fcaption">Kommentaar:</td><td class="fform"><input type='text' NAME='sstring2' VALUE='{VAR:sstring2}'></td>
 </tr>
 <tr>

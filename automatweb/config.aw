@@ -110,7 +110,7 @@ switch($type)
 		break;
 
 	case "sel_icon":
-		$content = $t->sel_icon($rtype,$rid,$sstring,$sstring2);
+		$content = $t->sel_icon($rtype,$rid,$sstring,$sstring2,$grp);
 		break;
 
 	case "import_icons":

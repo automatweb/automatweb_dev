@@ -84,7 +84,6 @@ switch ($type)
 		break;
 
 	case "folders":
-		echo $m->gen_folders($period);
 /*		// peatame koik taimerid ja kysime nende kohta info
 		$alltimers = $awt->summaries();
 
@@ -98,15 +97,19 @@ switch ($type)
 			$timers_arr[] = "$label = $v" . "s";
 		};
 		die("<br><br><br><font size=1>".join(" | ",$timers_arr)."</font>");*/
-		die();
+		classload("languages");
+		$t = new languages;
+		$sf->read_template("index_folders.tpl");
+		$sf->vars(array("charset" => $t->get_charset(),"content" => $m->gen_folders($period)));
+		die($sf->parse());
 		break;
 
 	case "menus":
-		die($m->gen_list($parent,$period));
+		$content = $m->gen_list($parent,$period);
 		break;
 
 	case "objects":
-		die($m->gen_list_objs($parent));
+		$content = $m->gen_list_objs($parent);
 		break;
 
 	case "popup_objects":

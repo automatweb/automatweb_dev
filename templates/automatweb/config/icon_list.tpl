@@ -48,8 +48,8 @@ K&otilde;ik
 <!-- END SUB: ALL_SEL -->
 </b></td>
 <td height="15" colspan="2" class="fgtitle">
-<a href='javascript:sel_grp()'>Vali</a>:<select name='grp'>{VAR:grps}</select><br>
-<a href='javascript:del_grp()'>Kustuta valitud grupp</a>
+<select name='grp'>{VAR:grps}</select><input type='submit' onClick='sel_grp()' value='Vali grupp'><br>
+<a href='javascript:grp_ic()'>Grupeeri</a>
 </td>
 </tr>
 <tr>
@@ -72,13 +72,13 @@ K&otilde;ik
 </tr>
 <!-- END SUB: LINE -->
 <tr>
+<td class="fgtext"><a href='javascript:del_grp()'>Kustuta valitud grupp</a></td>
+<td class="fgtext"><a href='javascript:del_ic()'>Kustuta valitud ikoonid</a></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='javascript:del_ic()'>Kustuta</a><br><a href='javascript:grp_ic()'>Grupeeri</a></td>
+<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='javascript:grp_ic()'>Grupeeri</a></td>
 </tr>
 </table>
 </td>
