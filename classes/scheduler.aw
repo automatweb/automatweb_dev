@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.21 2004/06/17 13:57:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.22 2004/06/22 14:30:27 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -127,6 +127,10 @@ class scheduler extends aw_template
 	{
 		$this->open_session();
 		$found = false;
+		if (substr($event,0,4) != "http")
+		{
+			$event = aw_ini_get("baseurl") . $event;
+		};
 		// try and remove all existing scheduling information for this event
 		if (is_array($this->repdata))
 		{
