@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.19 2004/06/14 14:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.20 2004/10/13 13:40:44 duke Exp $
 
 class templatemgr extends aw_template
 {
@@ -140,7 +140,8 @@ class templatemgr extends aw_template
 			return "plain.tpl";
 		};
 		$obj = new object($section);
-		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT)
+		$clid = $obj->class_id();
+		if ($clid == CL_PERIODIC_SECTION || $clid == CL_DOCUMENT)
 		{
 			$section = $obj->parent();
 		};
@@ -153,10 +154,10 @@ class templatemgr extends aw_template
 			$path = array_reverse($path);
 			foreach($path as $path_item)
 			{
-				if (empty($template) && is_oid($path_item->prop("tpl_view")))
+				$tpl_view = $path_item->prop("tpl_view");
+				if (empty($template) && is_oid($tpl_view))
 				{
-					$tview = $path_item->prop("tpl_view");
-					$template = $this->get_template_file_by_id(array("id" => $tview));
+					$template = $this->get_template_file_by_id(array("id" => $tpl_view));
 				};
 
 			};
@@ -183,10 +184,10 @@ class templatemgr extends aw_template
 			$path = array_reverse($path);
 			foreach($path as $path_item)
 			{
-				if (empty($template) && is_oid($path_item->prop("tpl_lead")))
+				$tpl_lead = $path_item->prop("tpl_lead");
+				if (empty($template) && is_oid($tpl_lead))
 				{
-					$tlead = $path_item->prop("tpl_lead");
-					$template = $this->get_template_file_by_id(array("id" => $tlead));
+					$template = $this->get_template_file_by_id(array("id" => $tpl_lead));
 				};
 
 			};
