@@ -5,10 +5,10 @@ el = "color";
 function set_color(color) 
 {
 	if (el == "color")
-		document.forms[0].elements[6].value="#"+color;
+		document.forms[0].elements[7].value="#"+color;
 	else
 	if (el == "bgcolor")
-		document.forms[0].elements[7].value="#"+color;
+		document.forms[0].elements[8].value="#"+color;
 } 
 
 function pick_color(el_id) 
