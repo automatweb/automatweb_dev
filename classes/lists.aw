@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.2 2001/05/18 15:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.3 2001/05/20 18:46:40 duke Exp $
 
 	global $orb_defs;
 	$orb_defs["lists"] = array(
@@ -313,7 +313,7 @@
 		// !Koostab koigi listide hierarhilise nimekirja (s.t. koos kategooriatega)
 		function get_op_list()
 		{
-			$this->get_objects_by_clas(array(
+			$this->get_objects_by_class(array(
 						"class" => CL_MAILINGLIST_CATEGORY,
 						));
 			$this->lcarr = array();
