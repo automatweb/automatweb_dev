@@ -35,8 +35,7 @@
 			<function name="orb_change">
 				<arguments>
 					<required name="id"/>
-					<optional name="parent"/>
-					<optional name="lid"/>
+					<optional name="fid"/>
 				</arguments>
 			</function>
 		</action>

@@ -61,11 +61,11 @@ class ml_mail extends aw_template
 	function orb_change($ar)
 	{
 		extract($ar);
+		$d = get_instance("msg_sql");
+		$msg = $d->msg_get(array("id" => $id));
 		$this->mk_path($msg["parent"],"Muuda meili");
 		$this->read_template("ml_mail_change.tpl");
 
-		$d = get_instance("msg_sql");
-		$msg = $d->msg_get(array("id" => $id));
 		$ret = array();
 		$fb = get_instance("formgen/form_base");
 
@@ -383,46 +383,50 @@ class ml_mail extends aw_template
 		$limit=" LIMIT $first,$num";
 		// võta meil
 
-		$d=get_instance("msg_sql");
+		$ml_list_inst = get_instance("mailinglist/ml_list");
+		$form_inst = get_instance("formgen/form");
 
-		$msg=$d->msg_get(array("id" => $mid));// mid on message id
-
-		// tee vorm
-		$f=get_instance("formgen/form");
-		$f->load($this->formid);
+		// list of forms for this list
+		$user_forms = $ml_list_inst->get_forms_for_list($lid);
 		
 		//võta need elemendid, mis on siin listis kasutusel
-		$row = $this->get_object($lid);
-		$last=unserialize($row["last"]);
-		$vars=unserialize($last["vars"]);
+		$vars = $ml_list_inst->get_all_varnames($lid);
 		
+		$d = get_instance("msg_sql");
+		$msg = $d->msg_get(array("id" => $mid));// mid on message id
+
 		//tee awm objekt
-		$awm=get_instance("aw_mail");
+		$awm = get_instance("aw_mail");
+
 		// võta listi liikmed
-		$q="SELECT mid FROM ml_list2member WHERE lid = '$lid' ORDER BY mid $limit";
-		echo("q=$q<br>");//dbg
-		$this->db_query($q);//mid on member id
-		while ($m = $this->db_next())
+		$list_members = $ml_list_inst->get_members($lid);
+		foreach($list_members as $m)
 		{
-			echo("liige ".$m["mid"]."<br>");flush();//dbg
-			$f->load_entry($m["mid"]);
-			$liige=$f->get_element_values();
-			echo("Andmed:<pre>");print_r($liige);echo("</pre><br>");flush();//dbg
-			// miks ei võiks kõiki muutujaid kohe kasutada??
-			$l=array();
-			foreach ($vars as $k => $v)
+			echo("liige ".$m["oid"]."<br>");flush();//dbg
+
+			// put all the variables for the user into $l array
+			$l = array();
+			foreach($user_forms as $uf_id)
 			{
-				echo("k=$k");//dbg
-				$el=$f->get_element_by_id($k);
-				$n=$el->get_el_name();
-				$l[$n]=$liige[$n];
-			};
+				if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
+				{
+					$uf_inst =& $form_inst->cache_get_form_instance($uf_id);
+					$uf_inst->load_entry($uf_eid);
+					foreach($vars as $var_id => $var_name)
+					{
+						$el = $uf_inst->get_element_by_id($var_id);
+						$l[$var_name] = $el->get_value();
+					}
+				}
+			}
+			echo "vars = <pre>", var_dump($l),"</pre> <br>";
 
 			$l["time"]=$this->time2date(time(),2);
 
 			$mtargets1=preg_replace("/#(.+?)#/e","\$l[\"\\1\"]",$msg["mtargets1"]);
 			$message=preg_replace("/#(.+?)#/e","\$l[\"\\1\"]",$msg["message"]);
 			$subject=preg_replace("/#(.+?)#/e","\$l[\"\\1\"]",$msg["subject"]);
+
 			echo("clean<br>");flush();//dbg
 			$awm->clean();
 			echo("create<br>");flush();//dbg

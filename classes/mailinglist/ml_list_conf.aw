@@ -64,7 +64,8 @@ class ml_list_conf extends aw_template
 				"user_form" => $this->make_keys($user_form),
 				"folders" => $this->make_keys($folder),
 				"name_els" => $this->make_keys($name_els),
-				"form_jrk" => $jrk
+				"form_jrk" => $jrk,
+				"mailto_el" => $mailto_el
 			)
 		));
 
@@ -130,7 +131,8 @@ class ml_list_conf extends aw_template
 		}
 		$this->vars(array(
 			"FORM" => $f,
-			"ELEMENT" => $e
+			"ELEMENT" => $e,
+			"mailto_el" => $this->picker($ob["meta"]["mailto_el"], $elements)
 		));
 
 		$this->vars(array(
@@ -231,6 +233,12 @@ class ml_list_conf extends aw_template
 		$ob = $this->get_object($id);
 		$ar = new aw_array($ob["meta"]["name_els"]);
 		return $ar->get();
+	}
+
+	function get_mailto_element($id)
+	{
+		$ob = $this->get_object($id);
+		return $ob["meta"]["mailto_el"];
 	}
 }
 ?>

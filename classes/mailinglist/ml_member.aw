@@ -99,61 +99,6 @@ class ml_member extends aw_template
 	}
 
 	////
-	//! Händleb liikme omaduste vaatamises "vali listid kus liige on" muutusi
-	// $id=liikme id
-	function orb_submit_change_lists($arr)
-	{
-		$this->quote(&$arr);
-		extract($arr);
-		$ml=get_instance("mailinglist/ml_list");
-		
-		$mname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-
-		if (!is_array($lists))
-		{
-			$flists=$lists=array();
-		} 
-		else
-		{
-			$flists=array_flip($lists);
-		};
-
-		$oldlists=$ml->get_lists_of_member(array("mid" => $id));
-
-		// leia erinevus vana ja uue nimekirja vahel
-		
-//			echo("<pre>");print_r($oldlists);echo("</pre>");//dbg
-		foreach ($oldlists as $k => $v)
-		{
-			if (!isset($flists[$k]))
-			{
-				if ($this->can("delete_users",$k))
-				{
-					$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $k","name");
-					$this->_log("mlist","eemaldas liikme $mname listist $name");
-					$ml->remove_member_from_list(array("mid" => $id,"lid" => $k));
-				};
-			};
-		};
-		
-//			echo("<pre>");print_r($flists);echo("</pre>");//dbg
-		foreach ($flists as $k => $v)
-		{
-			if (!isset($oldlists[$k]))
-			{
-				if ($this->can("add_users",$k))
-				{
-					$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $k","name");
-					$this->_log("mlist","lisas liikme $mname listi $name");
-					$ml->add_member_to_list(array("mid" => $id,"lid" => $k));
-				};
-			};
-		};
-
-		return $this->mk_my_orb("change",array("id" => $id, "lid" => $lid));
-	}
-
-	////
 	//! Näitab liikme muutmist
 	function orb_change($ar)
 	{
@@ -195,20 +140,10 @@ class ml_member extends aw_template
 	{
 		extract($arr);
 		$o=$this->get_object($id);
-		$ml=get_instance("mailinglist/ml_list");
 		$link="<a href=\"".$this->mk_my_orb("change",array("id" => $id,"lid" => $lid))."\">Muuda meililisti liiget</a> / Saadetud meilid";
-
-		if ($lid)
-		{
-			$this->mk_path($o["parent"],$ml->_get_lf_path($lid).$link);
-		} 
-		else
-		{
-			$this->mk_path($o["parent"],$link);
-		};
+		$this->mk_path($o["parent"],$link);
 
 		load_vcl("table");
-		
 		$t = new aw_table(array(
 			"prefix" => "ml_member",
 		));
@@ -258,29 +193,6 @@ class ml_member extends aw_template
 		extract($arr);
 		$this->db_query("DELETE FROM ml_sent_mails WHERE id='$id'");
 		return "<script language='javascript'>opener.history.go(0);window.close();</script>";
-	}
-
-	////
-	//! Hmm??
-	// miks menuedit.aw ei kutsu orb funktsiooni objekti kustutamisel??
-	function orb_delete($ar)
-	{
-		is_array($ar) ? extract($ar) : $id=$ar;
-
-		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->delete_object($id);
-
-		$this->db_query("DELETE FROM form_".$this->formid."_entries where id='$id'");
-		
-		$ml = get_instance("mailinglist/ml_list");
-		$ml->remove_member_from_list(array("lid" => $id));
-
-		if (!$ar["_inner_call"])		
-		{
-			$this->_log("mlist","kustutas liikme $name");
-			$url= $this->mk_my_orb("obj_list",array("parent" => $parent),"menuedit");
-			header("Location:$url");
-		};
 	}
 
 	////

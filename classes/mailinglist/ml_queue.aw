@@ -24,7 +24,6 @@ class ml_queue extends aw_template
 		lc_load("definition");
 
 		$this->dbconf=get_instance("config");
-		$this->formid=$this->dbconf->get_simple_config("ml_form");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 		$this->mailel=$this->dbconf->get_simple_config("ml_mail_el");
 		
@@ -87,13 +86,13 @@ class ml_queue extends aw_template
 		switch ($show)
 		{
 			case "list":
-				$headerarray[$this->mk_orb("queue",array("show"=>"all","fid"=>$fid))]="Kõik";
+				$headerarray[$this->mk_my_orb("queue",array("show"=>"all","fid"=>$fid))]="Kõik";
 				$filt=" WHERE lid = '$fid'";
 				$title="(list $name)";
 				break;
 
 			case "mail":
-				$headerarray[$this->mk_orb("queue",array("show"=>"all","fid"=>$fid))]="Kõik";
+				$headerarray[$this->mk_my_orb("queue",array("show"=>"all","fid"=>$fid))]="Kõik";
 				$filt=" WHERE mid = '$fid'";
 				$title="(meil $name)";
 				break;
@@ -112,7 +111,6 @@ class ml_queue extends aw_template
 
 		$q = "SELECT * FROM ml_queue $filt";
 		$this->db_query($q);
-
 		while ($row = $this->db_next())
 		{
 			//echo("<pre>");print_r($row);echo("</pre>");//dbg
@@ -359,7 +357,6 @@ class ml_queue extends aw_template
 	{
 		decho("process_queue:<br>");//dbg
 		$tm=time();
-		$awm=0;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE status IN (0,1) AND start_at<='$tm'");
 		while ($r = $this->db_next())
@@ -382,11 +379,6 @@ class ml_queue extends aw_template
 				// vaata, kas on aeg saata
 				if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"])
 				{
-					if (!$awm)
-					{
-						decho("aw mail loaded<br>");//dbg
-						$awm=1;
-					};
 					decho("saadan  meili<br>");flush();//dbg
 					$this->save_handle();
 					//lukusta queue item
@@ -428,11 +420,6 @@ class ml_queue extends aw_template
 			{
 				// siin lõudib klassid sest äkki pole neid vajagi lõudida ja mis siis ikka aega raisata
 				// a siin on juba peaaegu kindel, et läheb saatmisex
-				if (!$awm)
-				{
-					decho("aw mail loaded<br>");//dbg
-					$awm=1;
-				};
 				$this->save_handle();
 				//lukusta queue item
 				$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
@@ -468,24 +455,32 @@ class ml_queue extends aw_template
 		decho("<b>do_queue_item::</b><br>");
 		extract($r);
 		// vali järgmine meililisti liige tabelist
+		$gidin = false;
 		if ($gid != "0" &&  $gid)
 		{
-			$gidin="AND lgroup IN (". join(",",explode("|",$gid)). ")";
+			$gidin=explode("|",$gid);
 		} 
-		else
-		{
-			$gidin="";
-		};
-		$avoidmids=$this->db_fetch_field("SELECT avoidmids FROM ml_avoidmids WHERE aid='$aid'","avoidmids");
-		$avoidmids=strtr($avoidmids," ';-","____");
+		$avoidmids=explode(",", $this->db_fetch_field("SELECT avoidmids FROM ml_avoidmids WHERE aid='$aid'","avoidmids"));
 
 		// tee nii kaua kuni sobiv liige on leitud või liikmed on otsas
 		$ok=0;
 		while (!$ok)
 		{
-			//liikmed kellele on juba saadetud või kellele ei tohi saata 
-			decho("avoidmids=$avoidmids<br>");//dbg
-			if ($avoidmids != "")
+			// fetch next member
+			$ml_list_inst = get_instance("mailinglist/ml_list");
+			$ml_list_members = $ml_list_inst->get_members($lid);
+			$found = false;
+			foreach($ml_list_members as $_mid => $_mdat)
+			{
+				if (!in_array($_mid, $avoidmids) && (!is_array($gidin) || (in_array($_mdat["parent"], $gidin))))
+				{
+					$found = true;
+					$member = $_mdat;
+					break;
+				}
+			}
+			decho ("found member $_mid <br>");
+/*			if ($avoidmids != "")
 			{
 				$midnotin="AND mid NOT IN (".$avoidmids.")";
 			} 
@@ -497,15 +492,15 @@ class ml_queue extends aw_template
 			$q="SELECT mid FROM ml_list2member WHERE lid='$lid' $gidin $midnotin LIMIT 1";
 			decho("q=$q<br>");//dbg
 			$this->db_query($q);
-			$member=$this->db_next();
+			$member=$this->db_next();*/
 
-			if ($member["rec"] == 0)// kui enam liikmeid ei ole
+			if (!$found)// kui enam liikmeid ei ole
 			{
 				decho("liikmed otsas<br>");
 				return 2;
 			}
 				
-			$member=$member["mid"];
+			$member=$member["oid"];
 			$avoidmessages=$this->get_object_metadata(array("oid" => $member,"key" => "avoidmessages"));
 			if ($avoidmessages[$mid])
 			{
@@ -518,7 +513,7 @@ class ml_queue extends aw_template
 			};
 
 			// pane siia tabelisse kirja, et sellele liikmele enam ei saadaks
-			$aavoidmids=explode(",",$avoidmids);
+			$aavoidmids=$avoidmids;
 			if (!$avoidmids)
 			{
 				$aavoidmids=array();// et ei tekiks seda tobedat 0 => "" entryt
@@ -565,27 +560,53 @@ class ml_queue extends aw_template
 		// võta meil
 		if (!isset($this->d))
 		{
-			$this->d=get_instance("msg_sql");
+			$this->d = get_instance("msg_sql");
 		};
-		$msg=$this->d->msg_get(array("id" => $mid));
+		$msg = $this->d->msg_get(array("id" => $mid));
 
-		// tee form
-		if (!isset($this->f))
+
+		$ml_list_inst = get_instance("mailinglist/ml_list");
+		$form_inst = get_instance("formgen/form");
+
+		// the element that contains the e-mail address
+		$mailel = $ml_list_inst->get_mailto_element($lid);
+		decho("mailel = $mailel lid = $lid <br>");
+
+		$m = $this->get_object($member);
+
+		$vars = $ml_list_inst->get_all_varnames($lid);
+		$user_forms = $ml_list_inst->get_forms_for_list($lid);
+		$l = array();
+		foreach($user_forms as $uf_id)
+		{
+			if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
+			{
+				$uf_inst =& $form_inst->cache_get_form_instance($uf_id);
+				$uf_inst->load_entry($uf_eid);
+				foreach($vars as $var_id => $var_name)
+				{
+					$el = $uf_inst->get_element_by_id($var_id);
+					if (is_object($el))
+					{
+						$memberdata[$var_name] = $el->get_value();
+						if ($var_id == $mailel)
+						{
+							$mailto = $memberdata[$var_name];
+						};
+					}
+				}
+			}
+		}
+
+/*		if (!isset($this->f))
 		{
 			$this->f=get_instance("formgen/form");
 		};
 		$this->f->load($this->formid);
 		$this->f->load_entry($member);
 		$memberdata=$this->f->get_element_values();
-		decho("memberdata=<pre>");dprint_r($memberdata);decho("</pre>");//dbg
+		decho("memberdata=<pre>");dprint_r($memberdata);decho("</pre>");//dbg*/
 		
-		
-		// võta listis kasutatud elemendid
-		$row = $this->get_object($lid);
-		$last=unserialize($row["last"]);
-		$vars=unserialize($last["vars"]);
-		decho("vars=<pre>");dprint_r($vars);decho("</pre>");//dbg
-
 		decho("impersonating ".$r["uid"]."<br>");//dbg
 		
 		// save original UID
@@ -624,32 +645,9 @@ class ml_queue extends aw_template
 			};
 		};
 		decho("stamps=<pre>");dprint_r($data);decho("</pre>");//dbg
-		
-		// otsi meili seest kasutatud muutujaid & stambid
-		/*preg_match_all("/#(.+?)#/",$msg["message"],$uvm);
-		is_array($uvm)?$uvm=array_values($uvm[1]):$uvm=array();
 
-		$used_vars=$uvm;// saadetud  meilide tabla jaox*/
-		
-
-		// võta ainult need muutujad, millele saatjal on "send" õigus
-		foreach ($vars as $k => $v)
-		{
-			$el=$this->f->get_element_by_id($k);
-			$n=$el->get_el_name();
-			
-			if ($k==$this->mailel)
-			{
-				$mailto=$memberdata[$n];
-			};
-
-			$pseudovar=$this->ml->get_pseudo_var($lid,$k);
-			if ($this->can("send",$pseudovar))
-			{
-				$data[$n]=$memberdata[$n];
-			};
-		};
-		
+		// use all variables. 
+		$data = $memberdata;
 		$data["sendtime"]=$this->time2date(time(),2);
 		decho("data=<pre>");dprint_r($data);decho("</pre>");//dbg
 		
