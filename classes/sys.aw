@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.5 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.6 2001/07/31 13:24:28 duke Exp $
 // sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
@@ -10,11 +10,306 @@ class sys extends aw_template
 	function sys($args = array())
 	{
 		$this->db_init();
+		$this->tpl_init("automatweb");
 		global $lc_syslog;
 		if (is_array($lc_syslog))
 		{
 			$this->vars($lc_syslog);
+		}
 	}
+
+	////
+	// !Genereerib andmebaasi struktuuri väljundi XML-is
+	function gen_db_struct($args = array())
+	{
+		$tables = $this->db_get_struct();
+		classload("xml");
+		$xml = new xml(array("ctag" => "tabledefs"));
+		$ser = $xml->xml_serialize($tables);
+		header("Content-Type: text/xml");
+		header("Content-length: " . strlen($ser));
+		header("Content-Disposition: filename=awtables.xml");
+		print $ser;
+		exit;
+	}
+		
+
+	////
+	// !Laeb predefined serverist andmebaasi struktuuri, ning kuvab selle, ning kohaliku
+	// andmebaasi vordleva tabeli
+	// argumendid:
+	// server(string) - serveri nimi
+	// port(int) - port
+	// url(string) - mida lugeda?
+
+	// njaa, see peaks hakkama üle XML-RPC serveri käima tegelikult. But for now, 
+	// we will do it this way.
+	function db_sync($args = array())
+	{
+		extract($args);
+
+		$server = ($server) ? $server : "work.struktuur.ee";
+		$port = ($port) ? $port : 80;
+
+		$fp=fsockopen($server,$port,&$this->errno, &$this->errstr);
+		if (!$fp)
+		{
+			$this->raise_error("Failed opening connection to server $server",true);
+		};
+
+		$request = "http://" . $server . $url;
+		$op = "GET $request HTTP/1.1\r\n";
+                $op .= "User-Agent: Autom@tWeb\r\n";
+                $op .= "Host: $server\r\n\r\n";
+
+		if (!fputs($fp, $op, strlen($op))) {
+                        $this->errstr="Write error";
+                        return 0;
+                }
+
+ 
+                $ipd="";
+
+                while($data=fread($fp, 32768)) {
+                        $ipd.=$data;
+                }
+
+		list(,$res) = explode("\r\n\r\n",$ipd);
+		
+		// 1) laeme serverist andmebaasi struktuuri
+		// 2) laeme kohalikust masinast baasi struktuuri
+		// 3) kuvame vordleva tabeli, kuhu saab erinevate kirjete juurde checkboxe panna
+		// 4) teeme muudatused. 
+		// 5) Toome poest uue õlle
+		return $res;
+	}
+
+	function db_compare_choose_donor($args = array())
+	{
+		$files = array(
+			"work.struktuur.ee" => "work.struktuur.ee",
+			"aw.struktuur.ee" => "aw.struktuur.ee",
+			"idaviru.struktuur.ee" => "idaviru.struktuur.ee",
+			"awvibe.struktuur.ee" => "awvibe.struktuur.ee",
+		);
+		
+		$this->read_template("compare_db_step1.tpl");
+
+		$this->vars(array(
+			"donors" => $this->picker(-1,$files),
+			"reforb" => $this->mk_reforb("db_compare_dbs",array()),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni
+	// argumendid:
+	// left,right(array) - baaside definitsioonid
+	// vasakul on sisseloetud, ehk external definitsioon, pareml on kohalik baas, kus vajalike
+	// väljade juures on linnukesed.
+	function _db_compare_dbs($args)
+	{
+		extract($args);
+		$right = $this->db_get_struct();
+		$block = $this->db_sync(array(
+			"server" => $donor,
+			"url" => "/?class=sys&action=gen_db_struct",
+		));
+		classload("xml");
+		$xml = new xml(array("ctag" => "tabledefs"));
+		global $donor_struct;
+		$dsource = $xml->xml_unserialize(array("source" => $block));
+		$donor_struct = $dsource;
+		session_register("donor_struct");
+		$all_keys = array_merge(array_flip(array_keys($dsource)),array_flip(array_keys($right)));
+		ksort($all_keys);
+		$this->read_template("compare_db.tpl");
+		$c = "";
+		foreach($all_keys as $key => $value)
+		{
+			$c .= $this->_db_compare_tables($key,$dsource[$key],$right[$key]);
+		};
+		$this->vars(array(
+			"block" => $c,
+			"reforb" => $this->mk_reforb("submit_compare_db",array()),
+		));
+		print $this->parse();
+		exit;
+	}
+
+	////
+	// !Is called from _db_compare_db-s for each invidual table	
+	function _db_compare_tables($name,$arg1,$arg2)
+	{
+		// koigepealt leiame siis molema tabelidefinitsiooni väljade nimed, ning
+		// moodustame neist ühise array
+		if (is_array($arg1) && is_array($arg2))
+		{
+			$all_keys = array_merge(array_flip(array_keys($arg1)),array_flip(array_keys($arg2)));
+		}
+		elseif (is_array($arg1))
+		{
+			$all_keys = array_flip(array_keys($arg1));
+		}
+		else
+		{
+			$all_keys = array_flip(array_keys($arg2));
+		};
+		ksort($all_keys);
+		global $left,$right;
+		$gproblems = 0;
+		global $problems;
+		$problems = 0;
+		$c = "";
+		$this->vars(array("name" => $name));
+
+		foreach($all_keys as $key => $val)
+		{
+			list($typematch,$flagmatch,$keymatch) = $this->_db_compare_fields($arg1[$key],$arg2[$key]);
+			$color1 = ($typematch) ? "#FFFFFF" : "#FFCCCC";
+			$color2 = ($keymatch)  ? "#FFFFFF" : "#FFCCCC";
+			$color3 = ($flagmatch) ? "#FFFFFF" : "#FFCCCC";
+			$flags1 = is_array($arg1[$key]["flags"]) ? join(" ",$arg1[$key]["flags"]) : "";
+			$flags2 = is_array($arg2[$key]["flags"]) ? join(" ",$arg2[$key]["flags"]) : "";
+
+			// kui koik matchivad, siis pole checkboxi vaja kuvada
+			if ($typematch && $flagmatch && $keymatch)
+			{	
+				$check = "";
+			}
+			else
+			{
+				// ehk siis, kui doonoris vastav väli olemas on, siis teeme selle operatsiooni.
+				if ($arg1[$key]["type"])
+				{
+					$check = "checked";
+				}
+				else
+				{
+					$check = "";
+				};
+			};
+
+			$this->vars(array(
+				"key" => $key,
+				"color1" => $color1,
+				"color2" => $color2,
+				"color3" => $color3,
+				"name" => $name,
+				"type1" => $arg1[$key]["type"],
+				"key1" => $arg1[$key]["key"],
+				"flags1" => $flags1,
+				"type2" => $arg2[$key]["type"],
+				"key2" => $arg2[$key]["key"],
+				"flags2" => $flags2,
+				"checked" => $check,
+			));
+			$c .= $this->parse("block.line");
+		};
+		$this->vars(array(
+			"line" => $c,
+		));
+		return $this->parse("block");
+	}
+
+	////
+	// !Is called from _db_compare_tables for each invidual field
+	function _db_compare_fields($field1,$field2)
+	{
+	       	global $problems;
+		if ($field1["type"] == $field2["type"])
+		{
+			$res1 = true;
+		}
+		else
+		{
+			$problems++;
+			$res1 = false;
+		};
+ 
+		$flags1 = (is_array($field1["flags"])) ? join(",",$field1["flags"]) : "";
+		$flags2 = (is_array($field2["flags"])) ? join(",",$field2["flags"]) : "";
+		$res2 = ( $flags1 == $flags2 );
+		if (not($res2))
+		{
+			$problems++;
+		};
+
+		if ( isset($field1["key"]) == isset($field2["key"]) )
+		{
+			$res3 = ( $field1["key"] == $field2["key"] );
+		}
+		else
+		{
+			$problems++;
+			$res3 = false;
+		};
+ 
+		return array($res1,$res2,$res3);
+	}
+
+	function submit_compare_db($args = array())
+	{
+		global $donor_struct;
+		$orig = $this->db_get_struct();
+		extract($args);
+		if (is_array($check))
+		{
+			foreach($check as $table => $fields)
+			{
+				foreach($fields as $key => $val)
+				{
+					$dr = $donor_struct[$table][$key];
+					$og = $orig[$table][$key];
+					if (is_array($dr["flags"]))
+					{
+						$flags = join(" ",$dr["flags"]);
+					}
+					else
+					{
+						$flags = "";
+					};
+
+					if ($og["type"])
+					{
+						$line = "ALTER TABLE $table CHANGE $key $key $dr[type] $flags";
+					}
+					else
+					{
+						if (not($orig[$table]))
+						{
+							$line = "CREATE table $table ($key $dr[type] $flags)";
+							$orig[$table] = 1;
+						}
+						else
+						{
+							$line = "ALTER TABLE $table ADD $key $dr[type] $flags";
+						};
+					};
+					print "Q: $line<br>";
+					$this->db_query($line);
+					if ($dr["key"] == "PRI")
+					{
+						$line = "ALTER TABLE $table ADD PRIMARY KEY ($key)";
+					}
+					elseif ($dr["key"] == "MUL")
+					{
+						$line = "ALTER TABLE $table ADD KEY ($key)";
+					};
+					print "Q: $line<br>";
+					$this->db_query($line);
+					//print "updating field $key of table $table<br>";
+					//print "donor value is <pre>";
+					//print_r($donor_struct[$table][$key]);
+					//print "</pre>";
+
+				};
+			}
+
+		};
+		print "all done<br>";
+		exit;
 	}
 
 	////
@@ -160,5 +455,6 @@ class sys extends aw_template
 		}
 		return $ret;
 	}
+
 };
 ?>
