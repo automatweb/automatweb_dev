@@ -24,8 +24,7 @@
 		</td>
 
 <!--ikoonid-->
-<td valign="bottom"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:redir()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img name="new" alt="{VAR:LC_ALIASMGR_ADD}" title="{VAR:LC_ALIASMGR_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a>
-
+<td valign="bottom">
 {VAR:buttons}
 </td>
 </tr>
@@ -75,4 +74,20 @@ function aw_save()
 		alert('Ühtegi objekti pole valitud!');
 	};
 }
+
+function redir()
+{
+	with(document.foo)
+	{
+		if (aselect.selectedIndex == 0)
+		{
+			alert('Vali alias!');
+		}
+		else
+		{
+			cl = aselect.options[aselect.selectedIndex].value;
+			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
+		};
+	};
+};
 </script>
