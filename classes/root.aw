@@ -1,9 +1,34 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.13 2002/06/26 11:10:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.14 2002/10/10 12:39:54 duke Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
 classload("defs");
+
+// wrapper for arrays - helps to get rid of numerous is_array checks
+// in code and reduces the amount of indenting
+class aw_array
+{
+        function aw_array($arg)
+        {
+                $this->arg = (is_array($arg)) ? $arg : array();
+        }
+
+        function &get()
+        {
+                return $this->arg;
+        }
+
+	function next()
+	{
+		return each($this->arg);
+	}
+
+	function reset()
+	{
+		reset($this->arg);
+	}
+};
 
 class root
 {
