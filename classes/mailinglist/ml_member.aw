@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.27 2004/05/06 12:37:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.28 2004/06/25 19:26:40 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -28,26 +28,6 @@ class ml_member extends class_base
 		lc_load("definition");
 	}
 
-	function get_property($arr)
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-		}
-		return $retval;
-	}
-
-	function set_property($arr)
-        {
-                $data = &$arr["prop"];
-                $retval = PROP_OK;
-                switch($data["name"])
-                {
-		}
-		return $retval;
-	}
-
 	////
 	// email(string) - email addy
 	// folder(string) - id of the folder to check
@@ -56,18 +36,20 @@ class ml_member extends class_base
 		$this->quote($args);
 		extract($args);
 		// XXX: can I do this with object_list/search?
-		$q = "SELECT oid FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE mail = '$email' AND parent = '$folder' AND status != 0";
-		$this->db_query($q);
-		return $this->db_next();
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"mail" => $email,
+			"parent" => $folder,
+		));
+		$rv = $ol->count > 0 ? $ol->begin() : false;
+		return $rv;
 	}
 
 	function get_member_by_id($id)
 	{
 		$id = (int)$id;
-		$q = "SELECT ml_users.name,ml_users.mail FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE ml_users.id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		return $row["name"] . " " . $row["mail"];
+		$member_obj = new object($id);
+		return $row->prop("name") . " " . $row->prop("email");
 	}
 
 	////
@@ -147,7 +129,7 @@ class ml_member extends class_base
 		if ($list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")
 		{
 			// now generate and send the bloody message
-			$msg = get_instance("messenger/mail_message");
+			$msg = get_instance(CL_MESSAGE);
 			$msg->process_and_deliver(array(
 				"id" => $list_obj->prop("confirm_subscribe_msg"),
 				"to" => $objname,
@@ -212,16 +194,8 @@ class ml_member extends class_base
 		$list_obj = new object($lid);
 
 		$m = new object($member);
-
-		$replica = $this->db_fetch_row("SELECT name,mail FROM ml_users WHERE id = '$member'");
-
-		$ml_list_inst = get_instance(CL_ML_LIST);
-
-		if (is_array($replica))
-		{
-			$mailto = $replica["mail"];
-			$memberdata["name"] = $replica["name"];
-		}
+		$mailto = $m->prop("mail");
+		$memberdata["name"] = $m->prop("name");
 		return array($mailto,$memberdata);
 	}
 

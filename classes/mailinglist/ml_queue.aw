@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.26 2004/06/11 12:31:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.27 2004/06/25 19:26:40 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
-classload("messenger/messenger_v2");
 define("ML_QUEUE_NEW",0);
 define("ML_QUEUE_IN_PROGRESS",1);
 define("ML_QUEUE_READY",2);
@@ -18,8 +17,6 @@ define("ML_QUEUE_PROCESSING",5);
 
 	@property q_status type=textbox
 	@caption Staatus
-
-
 
 
 */
@@ -47,7 +44,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=submit_manager params=name default="0"
+		@attrib name=submit_manager params=name 
 		
 		
 		@returns
@@ -68,7 +65,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=queue params=name default="0"
+		@attrib name=queue params=name 
 		
 		@param id optional
 		@param fid optional
@@ -210,7 +207,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=queue_change params=name default="0"
+		@attrib name=queue_change params=name 
 		
 		@param id required
 		
@@ -266,7 +263,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=submit_queue_change params=name default="0"
+		@attrib name=submit_queue_change params=name 
 		
 		
 		@returns
@@ -312,7 +309,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=queue_delete params=name default="0"
+		@attrib name=queue_delete params=name 
 		
 		
 		@returns
@@ -351,7 +348,7 @@ class ml_queue extends aw_template
 
 	/**  
 		
-		@attrib name=queue_send_now params=name default="0"
+		@attrib name=queue_send_now params=name 
 		
 		
 		@returns
@@ -422,26 +419,9 @@ class ml_queue extends aw_template
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
 	}
 
-	// vähendab avoidmids tabelis usagec välja ja kui see on 0, siis võtab selle kirje tabelist ära
-	function increase_avoidmids_ready($aid)
-	{
-		$this->save_handle();
-		$r=$this->db_fetch_field("SELECT usagec FROM ml_avoidmids WHERE aid='$aid'","usagec");
-		//decho("<i>inc_avoidmids $aid r=$r</i><br />");
-		if ($r<=1)
-		{
-			//$this->db_query("DELETE FROM ml_avoidmids WHERE aid='$aid'");
-		} 
-		else
-		{
-			$this->db_query("UPDATE ml_avoidmids SET usagec=usagec-1 WHERE aid='$aid'");
-		};
-		$this->restote_handle();
-	}
-
 	/**  
 		
-		@attrib name=process_queue params=name nologin="1" default="0"
+		@attrib name=process_queue params=name nologin="1" 
 		
 		
 		@returns
@@ -632,7 +612,7 @@ class ml_queue extends aw_template
 		// I need lid (list_id)
 		if (!isset($this->d))
 		{
-			$this->d = get_instance("messenger/mail_message");
+			$this->d = get_instance(CL_MESSAGE);
 		};
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
@@ -641,24 +621,26 @@ class ml_queue extends aw_template
 		$list_obj = new object($arr["list_id"]);
 		$def_user_folder = $list_obj->prop("def_user_folder");
 		// 2) retrieves a list of mailing list users
-		$q = "SELECT ml_users.id,ml_users.name,ml_users.mail FROM ml_users LEFT JOIN objects ON (ml_users.id = objects.oid) WHERE objects.parent = '$def_user_folder' AND objects.status != 0";
-		$this->db_query($q);
+		$member_list = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"parent" => $def_user_folder,
+		));
+
+			
 		// 3) calls preprocess_one_message for each one
 		print "preprocessing<br>";
 		set_time_limit(0);
-		while($row = $this->db_next())
+		for($member = $member_list->begin(); !$member_list->end(); $member = $member_list->next())
 		{
-			$this->save_handle();
 			$this->preprocess_one_message(array(
-				"name" => $row["name"],
-				"mail" => $row["mail"],
+				"name" => $member->name(),
+				"mail" => $member->prop("mail"),
 				"mail_id" => $arr["mail_id"],
-				"member_id" => $row["id"],
+				"member_id" => $member->id(),
 				"list_id" => $arr["list_id"],
 				"msg" => $msg,
 				"qid" => $arr["qid"],
 			));
-			$this->restore_handle();
 		};
 		print "<br>done";
 	}
