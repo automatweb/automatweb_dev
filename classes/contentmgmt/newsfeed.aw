@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.5 2005/02/28 15:09:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.6 2005/02/28 15:28:36 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -146,7 +146,8 @@ class newsfeed extends class_base
 			$baseurl = aw_ini_get("baseurl");
 			foreach($ol->arr() as $o)
 			{
-				$mod_date = $o->modified();
+				//$mod_date = $o->modified();
+				$mod_date = $o->prop("doc_modified");
 				if ($first == 0)
 				{
 					$first = $mod_date;
