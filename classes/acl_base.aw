@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.66 2004/03/16 14:37:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.67 2004/03/17 11:36:12 kristo Exp $
 
 lc_load("definition");
 
@@ -458,7 +458,7 @@ class acl_base extends db_connector
 			}
 			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
 
-			if (aw_ini_get("site_id") == 84)
+			if (aw_ini_get("site_id") == 84 || aw_ini_get("site_id") == 95)
 			{
 				return $can_adm;
 			}
