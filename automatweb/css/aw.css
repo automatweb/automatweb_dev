@@ -12,11 +12,11 @@ background: #001D45;
 
 
 .calmonthback {
-background: #C6C7A3;
+background: #EEE;
 }
 
 .caldaysback {
-background: #F8F9D5;
+background: #FFF;
 }
 
 .caldayname {
@@ -62,7 +62,7 @@ background: #F8F9D5;
 	border: 1px;
 	height: 17px;
 	color: #000000;
-	background-image: URL('/automatweb/images/blue/cal_paev_raam.gif');
+	border: 1px dotted black;
 }
 
 .caltoday a {color: #000000; text-decoration: none;}
@@ -81,8 +81,7 @@ background: #F8F9D5;
 	border: 1px;
 	height: 17px;
 	color: #000000;
-	background: #FFFFFF;
-	background-image: URL('/automatweb/images/blue/cal_paev_raam.gif');
+	border: 1px dotted black;
 }
 
 .caltodayevent a {color: #000000; text-decoration: none;}
@@ -117,13 +116,13 @@ background: #F8F9D5;
 
 .caldayheadday {
 	font-family: Arial,Helvetica,sans-serif;
-	font-size: 20px;
-	font-weight: normal;	
+	font-size: 14px;
+	font-weight: bold;	
 	text-decoration: none;
 	text-align: left;
 	vertical-align: middle;
 	color: #000000;
-	background: BCDCF0;
+	background: #BCDCF0;
 }
 
 .caldayheadday a {color: #FFFFFF; text-decoration: none;}
@@ -151,12 +150,20 @@ background: #F8F9D5;
 
 
 
+.caleventday {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 12px;
+	color: #000000;
+	text-decoration: none;
+	padding: 3px;
+}
 
 
 
 .caleventtext {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
+	font-size: 12px;
 	line-height: 12px;
 	color: #000000;
 	text-decoration: none;
