@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.17 2003/05/15 15:26:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.18 2003/06/03 15:22:27 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -93,7 +93,13 @@
 @caption Aliastehaldur
 
 @property start type=date_select table=planner group=calendar
-@caption Algab
+@caption Algab (kp)
+
+@property start1 type=datetime_select field=start table=planner group=calendar
+@caption Algab 
+
+@property end1 type=time_select field=end table=planner group=calendar
+@caption Lõpeb
 
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
@@ -112,6 +118,8 @@
 @classinfo corefields=status
 
 */
+
+define(RELTYPE_COMMENT,1);
 
 class doc extends class_base
 {
