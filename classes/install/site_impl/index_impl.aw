@@ -1,8 +1,10 @@
 <?php
+/*
 if ($alias)
 {
 	$class = $alias;
 };
+*/
 if ($class || $reforb)
 {
 	// if we detect an orb call, load the orb handler and let it take over
