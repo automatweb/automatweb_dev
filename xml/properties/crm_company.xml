@@ -836,6 +836,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Persoon, kes müüs</caption>
             </SELLER>
+            <PROJECT>
+                  <value>33</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
       </reltypes>
       <layout>
             <hbox_toolbar>
