@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.46 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.47 2002/07/23 05:19:33 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -2119,7 +2119,7 @@ class shop extends shop_base
 				if (!$first)
 				{
 					// l6petame vana tabeli
-					$tx.=$ft->finish_table();
+					$tx.=$ft->finalize_table();
 				}
 				// ja alustame uut
 				$ft->start_table($type2table[$row["item_type"]]);
@@ -2160,7 +2160,7 @@ class shop extends shop_base
 			$first = false;
 			$this->restore_handle();
 		}
-		$tx.=$ft->finish_table();
+		$tx.=$ft->finalize_table();
 
 		$min_p = 2000000000;
 		foreach($periods as $ip)
@@ -2264,7 +2264,7 @@ class shop extends shop_base
 				if (!$first)
 				{
 					// l6petame vana tabeli
-					$tx.=$ft->finish_table();
+					$tx.=$ft->finalize_table();
 				}
 				// ja alustame uut
 				$ft->start_table($type2table[$row["item_type"]]);
@@ -2305,7 +2305,7 @@ class shop extends shop_base
 			$first = false;
 			$this->restore_handle();
 		}
-		$tx.=$ft->finish_table();
+		$tx.=$ft->finalize_table();
 
 		$f = new form;
 		$txx = "";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.67 2002/07/17 11:04:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.68 2002/07/23 05:20:15 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1502,7 +1502,9 @@ class planner extends calendar
 		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
 		return $menubar . $html;
 	}
-	
+
+	////
+	// !Embed the repeater editor form inside the planner interface
 	function event_repeaters($args = array())
 	{
 		extract($args);
@@ -1522,6 +1524,8 @@ class planner extends calendar
 		return $menubar . $html;
 	}
 
+	////
+	// !Deletes a repeater.
 	function delete_repeater($args = array())
 	{
 		extract($args);
@@ -1610,7 +1614,7 @@ class planner extends calendar
 			}
 
 
-			$this->ft->start_table($table_id,$attribs);
+			$this->ft->start_table($table_id);
 			foreach($this->raw_events[$args["dx"]] as $row)
 			{
 				// FIXME: bogus arguments
@@ -1623,7 +1627,7 @@ class planner extends calendar
 				};
 				$this->ft->row_data($row,$row["form_id"],$section,0,$cid,$row["chain_id"]);
 			}
-			$c .= $this->ft->finish_table();
+			$c .= $this->ft->finalize_table();
 
 		}
 		else
