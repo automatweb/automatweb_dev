@@ -26,7 +26,7 @@ function selall()
 	return false;
 }
 
-function redir()
+function create_new_object()
 {
 	with(document.foo)
 	{
@@ -36,33 +36,19 @@ function redir()
 			alert('Vali objekti tüüp!');
 		}
 		else
-		if (cl == "capt_new_relation")
 		{
-			alert('Vali seose tüüp!');
-		}
-		else
-		{
-			if (cl.indexOf("reltype_") == 0)
-			{
-				is_reltype = 1;
-			}
-			else
-			{
-				is_reltype = 0;
-			};
-			if (is_reltype)
-			{
-				// the string "reltype_" is 8 characters long
-				reltype = cl.substr(8,2);
-				window.location.href="{VAR:create_relation_url}&reltype=" + reltype;
-			}
-			else
-			{
-				window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
-			};
+			rel_type = reltype.options[reltype.selectedIndex].value;
+			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
 		};
 	};
 };
+
+function search_for_object()
+{
+	var search_url = "{VAR:search_url}";
+	reltype = document.foo.reltype.options[document.foo.reltype.selectedIndex].value;
+	window.location.href=search_url + "&reltype=" + reltype;
+}
 
 function awchange()
 {
