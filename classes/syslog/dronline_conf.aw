@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.14 2004/03/05 13:24:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.15 2004/03/10 09:51:11 kristo Exp $
 /*
 
 @default table=objects
@@ -92,7 +92,7 @@ class dronline_conf extends class_base
 				"site_id" => array(),
 				"lang_id" => array()
 			));
-			$prop["options"] = array();	
+			$prop["options"] = array("" => "");	
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				$prop["options"][$o->prop("uid")] = $o->prop("uid");
