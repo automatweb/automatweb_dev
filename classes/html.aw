@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.45 2004/02/27 11:58:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.46 2004/04/12 17:21:42 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -290,7 +290,9 @@ class html extends aw_template
 		{
 			$val = $args['value'];
 		}
-		return $selector->gen_edit_form($args["name"], $val, 2001, 2008, true);
+		$year_from = isset($args["year_from"]) ? $args["year_from"] : 2001;
+		$year_to = isset($args["year_to"]) ? $args["year_to"] : 2008;
+		return $selector->gen_edit_form($args["name"], $val, $year_from, $year_to, true);
 	}
 
 	function img($args = array())
