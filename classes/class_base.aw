@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.338 2004/12/07 12:16:55 kristo Exp $
+// $Id: class_base.aw,v 2.339 2004/12/09 11:27:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -486,6 +486,10 @@ class class_base extends aw_template
 			{
 				$o_arr["template"] = $template;
 			};
+			if ($this->embedded)
+			{
+				$o_arr["embedded"] = true;
+			};
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
@@ -614,7 +618,7 @@ class class_base extends aw_template
 			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->use_group,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
-			"section" => $_REQUEST["section"],
+			"section" => aw_global_get("section"),
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
@@ -1926,10 +1930,6 @@ class class_base extends aw_template
 
 		$remap_children = false;
 		
-		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
-		{
-			$this->process_view_controllers(&$properties, $controllers, $argblock);
-		}
 		// how do I stop parsing of properties that _are_ already parsed?
 
 		// 
@@ -2411,6 +2411,11 @@ class class_base extends aw_template
 				};
 				$resprops[$name] = $val;
 			};
+		}
+		
+		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
+		{
+			$this->process_view_controllers(&$resprops, $controllers, $argblock);
 		}
 
 
@@ -4313,6 +4318,7 @@ class class_base extends aw_template
 			"id" => $arr["id"],
 			"section" => $arr["section"],
 		));
+
 	}
 
 	/** helper method to generate return url if PROP_FATAL_ERROR occured
