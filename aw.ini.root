@@ -36,7 +36,6 @@ include ${ini_dir}/db.ini
 include ${ini_dir}/acl.ini
 include ${ini_dir}/groups.ini
 include ${ini_dir}/cfgform.ini
-include ${ini_dir}/archive.ini
 include ${ini_dir}/auth.ini
 include ${ini_dir}/banner.ini
 include ${ini_dir}/bugtrack.ini
