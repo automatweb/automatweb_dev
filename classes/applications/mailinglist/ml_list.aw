@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.11 2005/01/06 12:47:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.12 2005/01/24 11:26:33 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -465,7 +465,7 @@ class ml_list extends class_base
 		$al->parse_oo_aliases($msg_obj->id(), &$message);
 		
 		$c_title = $msg_obj->prop("msg_contener_title");
-		$c_content = $msg_obj->prop("msg_contener_content");
+		$c_content = nl2br($msg_obj->prop("msg_contener_content"));
 		
 		$message = str_replace("#username#", "Kasutajanimi", $message);
 		$message = str_replace("#name#", "Nimi Perenimi", $message);
