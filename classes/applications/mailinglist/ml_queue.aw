@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.11 2005/01/21 10:15:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.12 2005/01/25 11:00:53 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -560,16 +560,38 @@ class ml_queue extends aw_template
 			echo "couldn't send mail<br />\n";
 			return;
 		}
-		$msgobj = new object($msg["mail"]);
-		$is_html = $msgobj->prop("html_mail") == 1024;
+		$subject = $msg["subject"];
+		$msg_obj = new object($msg["mail"]);
+		$is_html = $msg_obj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
 		$message = $msg["message"];
+
+		$c_title = $msg_obj->prop("msg_contener_title");
+		$c_content = $msg_obj->prop("msg_contener_content");
+		$al = get_instance("aliasmgr");
+		$al->parse_oo_aliases($msg_data["id"], &$message);
+		$tpl = $msg_obj->meta("template_selector");
+		if(is_oid($tpl) && $this->can("view", $tpl))
+		{
+			$o = new object($tpl);
+			$template = $o->prop("content");
+			$tsubject = $o->prop("subject");
+			if(!empty($tsubject))
+			{
+				$subject = $tsubject;
+			}
+			$message = nl2br($message);
+			$template = str_replace("#title#", $c_title, $template);
+			$template = str_replace("#container#", $c_content, $template);
+			$message = str_replace("#content#", $message, $template);
+		}
+
 		//arr($is_html);
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />";
 		$this->awm->create_message(array(
 			"froma" => $msg["mailfrom"],
-			"subject" => $msg["subject"],
+			"subject" => $subject,
 			"To" => $msg["target"],
 			"Sender"=>"bounces@struktuur.ee",
 			"body" => $message,
@@ -582,7 +604,25 @@ class ml_queue extends aw_template
 				"data" => $message,
 			));
 		};
-
+		$conns = $msg_obj->connections_from(array(
+			"type" => "RELTYPE_ATTACHMENT",
+		));
+		$mimeregistry = get_instance("core/aw_mime_types");
+		foreach($conns as $conn)
+		{
+			$to_o = $conn->to();
+			// XXX: is this check correct?
+			if ($to_o->prop("file") == "")
+			{
+				continue;
+			};
+			$realtype = $mimeregistry->type_for_file($to_o->name());
+			$this->awm->fattach(array(
+				"path" => $to_o->prop("file"),
+				"contenttype"=> $mimeregistry->type_for_file($to_o->name()),
+				"name" => $to_o->name(),
+			));
+		};
 		$this->awm->gen_mail();
 		echo "<b>SENT!</b><br />\n";
 		$t = time();
@@ -696,8 +736,7 @@ class ml_queue extends aw_template
 				"key" => "real_name",
 			));
 		}
-		$message = nl2br($arr["msg"]["message"]);
-		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
+		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $arr["msg"]["message"]);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = $this->replace_tags($message, $data);
 		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
@@ -713,7 +752,7 @@ class ml_queue extends aw_template
 		
 		$this->quote($message);
 		$this->quote($subject);
-		$vars = join(",",$used_vars);
+		$vars = join(",", $used_vars);
 		$this->quote($vars);
 		$qid = $arr["qid"];
 		$target = $arr["name"] . " <" . $arr["mail"] . ">";

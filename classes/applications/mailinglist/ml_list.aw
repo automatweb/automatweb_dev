@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.12 2005/01/24 11:26:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.13 2005/01/25 11:00:53 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -554,14 +554,17 @@ class ml_list extends class_base
 				));
 				if (is_oid($arr["request"]["msg_id"]))
 				{
+					$link = $this->mk_my_orb("msg_preview",array(
+						"id" => $arr["obj_inst"]->id(),
+						"msg_id" => $arr["request"]["msg_id"],
+					), $this->clid, false, true);
+
 					$tb->add_button(array(
 						"name" => "preview",
 						"img" => "preview.gif",
 						"tooltip" => "Eelvaade",
-						"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("msg_preview",array(
-								"id" => $arr["obj_inst"]->id(),
-								"msg_id" => $arr["request"]["msg_id"],
-						),$this->clid,false,true) . "','mpreview',800,600)",
+						"url" => $link,
+						"target" => "_blank",
 					));
 				};
 				/*
@@ -1094,6 +1097,10 @@ class ml_list extends class_base
 				"caption" => "Liitumisinfo",
 			));
 		}
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
@@ -1133,6 +1140,7 @@ class ml_list extends class_base
 							"cfgform" => $arr["obj_inst"]->prop("member_config"),
 							), CL_ML_MEMBER),
 					)), 
+					"change" => html::get_change_url($memberdata["id"], array(), "Muuda"),
 					"name" => $memberdata["name"],
 				);
 				$member_obj = &obj($memberdata["id"]);
@@ -1756,7 +1764,6 @@ class ml_list extends class_base
 
 	function submit_write_mail($arr)
 	{
-
 		$msg_data = $arr["request"]["emb"];
 		// 1. create an object. for this I need to know the parent
 		// for starters I'll use the one from the list object itself
@@ -1775,38 +1782,11 @@ class ml_list extends class_base
 		{
 			$msg_obj = &obj($msg_data["id"]);
 		}
+		$tpl = $msg_data["template_selector"];
 		if ($msg_data["send_away"] == 1)
 		{
 			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("def_user_folder"));
-			$msg_obj->save();
-			//arr($arr["obj_inst"]->prop("def_user_folder"));
-			$message = $msg_data["message"];
-			$c_title = $msg_obj->prop("msg_contener_title");
-			$c_content = $msg_obj->prop("msg_contener_content");
-			$al = get_instance("aliasmgr");
-			$al->parse_oo_aliases($msg_data["id"], &$message);
-			$tpl = $msg_data["template_selector"];
-			if(is_oid($tpl) && $this->can("view", $tpl))
-			{
-				// use that template then!
-				// 1. load it
-				$o = new object($tpl);
-				$template = $o->prop("content");
-				$subject = $o->prop("subject");
-				if(!empty($subject))
-				{
-					$msg_data["name"] = $subject;
-				}
-				if ($o->prop("is_html") == 1)
-				{
-					$message = nl2br($message);
-				};
-				$template = str_replace("#title#", $c_title, $template);
-				$template = str_replace("#container#", $c_content, $template);
-				$message = str_replace("#content#", $message, $template);
-			}
-			$msg_data["message"] = $message;
-		};
+		}
 
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
@@ -1815,12 +1795,11 @@ class ml_list extends class_base
 		$msg_data["return"] = "id";
 		// no, it fucking does not!
 		$message_id = $writer->submit($msg_data);
-		if (is_oid($msg_data["template_selector"]))
+		if (is_oid($tpl) && $this->can("view", $tpl))
 		{
-			$msg_obj = new object($message_id);
-			$msg_obj->set_meta("template_selector",$msg_data["template_selector"]);
+			$msg_obj->set_meta("template_selector", $tpl);
 
-			$tpl_obj = new object($msg_data["template_selector"]);
+			$tpl_obj = new object($tpl);
 			if ($tpl_obj->prop("is_html") == 1)
 			{
 				$msg_obj->set_prop("html_mail", 1024);
