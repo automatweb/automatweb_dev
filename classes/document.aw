@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.168 2003/04/01 10:20:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.169 2003/04/04 08:41:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -105,8 +105,8 @@ class document extends aw_template
 		$this->period = $period;	
 	}
 
-	// listib kõik dokumendid
-	// iseenesest kahtlane funktsioon, imho ei lähe seda vaja
+	// listib kik dokumendid
+	// iseenesest kahtlane funktsioon, imho ei lï¿½e seda vaja
 	function listall()
 	{
 		$q = "SELECT *, objects.parent as parent FROM documents
@@ -207,8 +207,8 @@ class document extends aw_template
 
 		if (not($this->can("view",$docid)) && !$no_acl_checks)
 		{
-			$this->data = false;
-			return false;
+		//	$this->data = false;
+		//	return false;
 		}
 
 		if ($this->period > 0) 
@@ -299,16 +299,16 @@ class document extends aw_template
 	// tpls - selle votmega antakse ette template source, mille sisse kood paigutada
 	// doc - kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
 	//       s22stap yhe p2ringu.
-	function gen_preview($params) 
+	function gen_preview($params)
 	{
 		extract($params);
-		global $print;	
+		global $print;
 		$this->print = $print;
 		$tpl = isset($params["tpl"]) ? $params["tpl"] : "plain.tpl";
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
-		
+
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
@@ -990,10 +990,10 @@ class document extends aw_template
 		if ($this->cfg["capitalize_title"])
 		{
 			// switch to estonian locale
-			$old_loc = setlocale(LC_CTYPE,0);	
+			$old_loc = setlocale(LC_CTYPE,0);
 			setlocale(LC_CTYPE, 'et_EE');
 
-			$title = strtoupper($title);
+			$title = str_replace("&NBSP;", "&nbsp;", strtoupper($title));
 
 			// switch back to estonian
 			setlocale(LC_CTYPE, $old_loc);
@@ -3624,7 +3624,7 @@ class document extends aw_template
 	// uses the settings set in the general static site settings for generation
 	function gen_static_doc($id)
 	{
-		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br><br>\n\n"; 
+		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br><br>\n\n";
 		echo "\n\r<br>";
 		echo "\n\r<br>"; flush();
 		ob_start();
@@ -3639,7 +3639,7 @@ class document extends aw_template
 
 		$exp->exp_reset();
 
-		// doc 
+		// doc
 		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj["lang_id"], true);
 		// print doc
 		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj["lang_id"], true);
@@ -3653,6 +3653,8 @@ class document extends aw_template
 			$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage"), $obj["lang_id"], true);
 		}
 
+		ob_end_clean();
+		echo  "Staatilised lehek&uuml;ljed loodud!<br>\n";
 		die("<Br><br><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< tagasi dokumendi muutmise juurde</a>");
 	}
 
@@ -3753,15 +3755,29 @@ class document extends aw_template
 
 	function do_static_search($str, $from, $sortby, $_par, $_sec)
 	{
-		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
+		$cnt = 0;
 		$docarr = array();
 
 		$public_url = $this->get_cval("export::public_symlink_name");
 
-		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'");
+		if ($this->cfg["static_search_returns_dyn_urls"])
+		{
+			$hu = " AND orig_url != ''";
+		}
+
+		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."' $hu GROUP BY title");
 		while ($row = $this->db_next())
 		{
-			if (file_exists($public_url."/".$row['filename']))
+			$show = false;
+			if ($this->cfg["static_search_returns_dyn_urls"])
+			{
+				$show = ($row["orig_url"] != "");
+			}
+			else
+			{
+				$show = file_exists($public_url."/".$row['filename']);
+			}
+			if ($show)
 			{
 				$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 				$max_count = max($c,$max_count);
@@ -3770,13 +3786,20 @@ class document extends aw_template
 				$title = strip_tags($mt[$nm-1][1]);
 
 				$docarr[] = array(
-					"matches" => $c, 
+					"matches" => $c,
 					"title" => $title,
 					"section" => $row["filename"],
 					"modified" => $row["modified"],
-					"filename" => $row["filename"]
+					"filename" => $row["filename"],
+					"orig_url" => $row["orig_url"]
 				);
+				$cnt++;
 			}
+		}
+
+		if ($cnt == 0)
+		{
+			return $this->parse("NO_RESULTS");
 		}
 
 		if ($sortby == "percent")
@@ -3823,8 +3846,25 @@ class document extends aw_template
 				{
 					$sstr = substr(($row["matches"]*100) / $max_count,0,4);
 				}
+				$section = $row["section"];
+				if ($this->cfg['static_search_returns_dyn_urls'])
+				{
+					if ($row['orig_url'] != '')
+					{
+						$section = $row['orig_url'];
+						// blech. now we will try to shorten the url to foo.ee/666
+						if (preg_match("/^".str_replace("/","\\/",$this->cfg["baseurl"])."\/index.aw\?section=(\d+)&set_lang_id=(\d+)$/",$section, $mt))
+						{
+							$section = $this->cfg["baseurl"]."/".$mt[1];
+						}
+					}
+					else
+					{
+						$section = aw_ini_get("ut.static_server")."/".$section;
+					}
+				}
 				$this->vars(array(
-					"section" => $row["section"],
+					"section" => $section,
 					"title" => ($row["title"] != "" ? $row["title"] : $row["filename"]),
 					"modified" => $this->time2date($row["modified"],5),
 					"percent" => $sstr
@@ -3872,9 +3912,12 @@ class document extends aw_template
 				}
 			}
 		}
-		$pg = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $pg);
-		$prev = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $prev);
-		$next = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $next);
+		if (!$this->cfg["static_search_returns_dyn_urls"])
+		{
+			$pg = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $pg);
+			$prev = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $prev);
+			$next = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $next);
+		}
 		$this->vars(array(
 			"PREVIOUS" => $prev,
 			"NEXT" => $next,
@@ -3897,7 +3940,14 @@ class document extends aw_template
 			"from" => $from,
 			"s_parent" => 1
 		));
-		return str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"),$this->parse());
+		if (!$this->cfg["static_search_returns_dyn_urls"])
+		{
+			return str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"),$this->parse());
+		}
+		else
+		{
+			return $this->parse();
+		}
 	}
 
 	////
