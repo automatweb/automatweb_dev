@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.28 2005/01/28 14:15:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.29 2005/01/31 15:23:10 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1117,7 +1117,6 @@ class register_data extends class_base
 
 	function callback_pre_save($arr)
 	{
-
 		if ($arr["new"] && $arr["request"]["set_register_id"])
 		{
 			$arr["obj_inst"]->set_prop("register_id", $arr["request"]["set_register_id"]);
@@ -1135,17 +1134,13 @@ class register_data extends class_base
 	
 	function callback_post_save($arr)
 	{
-
 		if($arr['new'] && $arr['request']['cfgform'])
 		{
-//			arr($arr);
 			$tmp_cfgform = obj($arr['request']['cfgform']);
 			$conns = $tmp_cfgform->connections_to(array("from.class_id" => CL_REGISTER));
 			$register_obj = $conns[0]->from();
 			
 			$mail_addr_to = $register_obj->prop("mail_address_to");
-			
-//			arr($mail_addr_to);
 	
 			$mail_addresses_to = "";
 			$mail_addresses = new aw_array($mail_addr_to);
@@ -1197,6 +1192,21 @@ class register_data extends class_base
 		}
 
 	}
+
+	function callback_mod_retval($arr)
+	{
+		// if there is some address set in registri obj. where the should be redirected, then
+		// lets do it 
+		if (!empty($arr['request']['register_id']))
+		{
+			$register = obj($arr['request']['register_id']);
+			$data_return_url = $register->prop("data_return_url");
+			if (!empty($data_return_url))
+			{
+				$arr['args']['goto'] = aw_ini_get("baseurl")."/".$register->prop("data_return_url");	
+			}
+		}
+	}
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -1242,7 +1252,6 @@ class register_data extends class_base
 	function save_form_data($arr)
 	{
 		$rval = aw_ini_get("baseurl").$arr["return_url"];
-
 		$obj_inst = obj($arr["id"]);
 		$ot = get_instance(CL_OBJECT_TYPE);
 		if(!$ot_id = $ot->get_obj_for_class(array(
