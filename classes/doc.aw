@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.10 2003/04/01 16:42:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.11 2003/04/16 14:42:57 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -173,6 +173,13 @@ class doc extends class_base
 				$this->update_link_calendars($args);
 				break;
 
+			case "clear_styles":
+				if (isset($args["form_data"]["clear_styles"]))
+				{
+					$this->clear_styles = true;
+				};	
+				break;
+
 		};
 		return $retval;
 	}
@@ -186,6 +193,22 @@ class doc extends class_base
 		{
 			$coredata["name"] = $objdata["title"];
 		};
+		if ($this->clear_styles)
+		{
+			$objdata["content"] = $this->_doc_strip_tags($objdata["content"]);
+			$objdata["lead"] = $this->_doc_strip_tags($objdata["lead"]);
+			$objdata["moreinfo"] = $this->_doc_strip_tags($objdata["moreinfo"]);
+		};
+	}
+
+	function _doc_strip_tags($arg)
+	{
+		$arg = strip_tags($arg,"<b>,<i>,<u>,<br>,<p><ul><li><ol>");
+		$arg = str_replace("<p>","",$arg);
+		$arg = str_replace("<P>","",$arg);
+		$arg = str_replace("</p>","",$arg);
+		$arg = str_replace("</P>","",$arg);
+		return $arg;
 	}
 
 	function callback_get_toolbar($args = array())
