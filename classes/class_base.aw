@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.291 2004/08/11 10:57:34 sven Exp $
+// $Id: class_base.aw,v 2.292 2004/08/11 12:29:28 sven Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -871,7 +871,12 @@ class class_base extends aw_template
 			$this->classinfo = $cfgu->get_classinfo();
 			*/
 		};
-
+		
+		// If uses configform manager then use this.
+		if($this->tmp_cfgform)
+		{
+			return $this->tmp_cfgform;
+		}
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
 
@@ -2906,13 +2911,12 @@ class class_base extends aw_template
 		}
 
 		$realprops = $tmp;
-
 		
 		$controller_inst = get_instance(CL_CFGCONTROLLER);
 		
-		if($this->cfgform)
+		if($args["cfgform"])
 		{
-			$controllers = $this->get_all_controllers($this->cfgform);
+			$controllers = $this->get_all_controllers($args["cfgform"]);
 		}
 		
 		// now do the real job.
@@ -2974,7 +2978,7 @@ class class_base extends aw_template
 				$status = PROP_IGNORE;
 			}
 			
-			$retval = true;	
+			
 			if (PROP_FATAL_ERROR == $status)
 			{
 				// so what the fuck do I do now?
@@ -2996,8 +3000,8 @@ class class_base extends aw_template
 				};
 				aw_session_set("cb_values",$propvalues);
 				
-				$retval = false;
-				//return false;
+				
+				return false;
 			};
 
 			// oh well, bail out then.
@@ -3287,7 +3291,7 @@ class class_base extends aw_template
 			));
 		}
 		
-		return $false;
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -3575,7 +3579,7 @@ class class_base extends aw_template
 						if ($forms[$grp_oid] && empty($found_form))
 						{
 							$found_form = $forms[$grp_oid];
-							$this->cfgform = $found_form;
+							$this->tmp_cfgform = $found_form;
 							//arr($found_form);
 						};
 					};
