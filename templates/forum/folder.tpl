@@ -1,11 +1,11 @@
 <table border="0" width="100%">
 <tr>
-<td>
+<td class="{VAR:style_caption}">
 <small>
 <strong>{VAR:path}</strong>
 </small>
 </td>
-<td>
+<td class="{VAR:style_caption}">
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->
@@ -17,18 +17,18 @@
 </table>
 <table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
-	<td colspan=2>Teemad</td>
-	<td>Vastuseid</td>
-	<td>Autor</td>
-	<td>Viimane vastus</td>
+	<td colspan=2 class="{VAR:style_caption}">Teemad</td>
+	<td class="{VAR:style_caption}">Vastuseid</td>
+	<td class="{VAR:style_caption}">Autor</td>
+	<td class="{VAR:style_caption}">Viimane vastus</td>
 </tr>
 <!-- SUB: SUBTOPIC -->
 <tr>
-	<td><center><big>*</big></center></td>
-	<td><a href="{VAR:open_topic_url}">{VAR:name}</a></td>
-	<td bgcolor="#ECF6FF" align="center">{VAR:comment_count}</td>
-	<td align="center">{VAR:author}</td>
-	<td align="center">{VAR:last_date}<br>{VAR:last_createdby}</td>
+	<td class="{VAR:style_topic_caption}"><center><big>*</big></center></td>
+	<td class="{VAR:style_topic_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a></td>
+	<td class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
+	<td class="{VAR:style_topic_author}">{VAR:author}</td>
+	<td class="{VAR:style_topic_last_post}">{VAR:last_date}<br>{VAR:last_createdby}</td>
 </tr>
 <!-- END SUB: SUBTOPIC -->
 
