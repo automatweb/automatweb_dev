@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.214 2003/10/08 15:27:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.215 2003/10/16 11:56:28 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -901,7 +901,7 @@ class document extends aw_template
 		}
 
 		$_date = $doc["modified"] > 1 ? $doc["modified"] : $doc["created"];
-		$date_est = date("d", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
 			
 		if (!aw_ini_get("document.show_real_location"))
 		{
