@@ -40,6 +40,12 @@ class site_list_updater extends aw_template
 			$key = $this->_init_session_key();
 		}
 
+		if ($key[0] == "")
+		{
+			// bad key, something is wroing
+			return;
+		}
+
 		// the idea behind the session key is that the first time 
 		// any communication between the site and the register happens
 		// the session key is created in both databases

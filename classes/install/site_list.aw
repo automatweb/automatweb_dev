@@ -734,7 +734,7 @@ class site_list extends class_base
 		if (!($serv_id = $this->get_server_id_by_ip(array("ip" => $ip))))
 		{
 			// if not, add it
-			$serv_id = $this->db_query("SELECT MAX(id) as id FROM aw_server_list", "id")+1;
+			$serv_id = $this->db_fetch_field("SELECT MAX(id) as id FROM aw_server_list", "id")+1;
 			$this->db_query("INSERT INTO aw_server_list(id,name,ip) values($serv_id,'$ip','$url')");
 		}
 
