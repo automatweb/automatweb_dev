@@ -18,9 +18,6 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 href="javascript:this.document.aa.submit();">Otsi / Salvesta</a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;</td>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><br><a href="document.aa.delete.value=1;document.aa.submit();">Kustuta</a>
-</td>
 </tr>
 </table>
 
@@ -106,7 +103,7 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:bas
 <!-- SUB: LINE -->
 <tr>
 	<td class="celltext" >{VAR:oid}</td>
-	<td class="celltext" ><input type='text' class="formtext" name='text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='old_text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='class_id[{VAR:oid}]' value='{VAR:class_id}'></td>
+	<td class="celltext" >{VAR:name}</td>
 	<td class="celltext" >{VAR:type}</td>
 	<td class="celltext" nowrap>{VAR:created}</td>
 	<td class="celltext" >{VAR:createdby}</td>
