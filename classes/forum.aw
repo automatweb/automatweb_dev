@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.87 2004/03/15 13:43:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.88 2004/06/04 11:41:39 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -401,7 +401,7 @@ class forum extends class_base
 	{
 		extract($args);
 		classload("document");
-		$alias = ($this->embedded) ? "forum" : "";
+		$alias = ($this->embedded) ? "forum" : "forum";
 
 		if ($id)
 		{
