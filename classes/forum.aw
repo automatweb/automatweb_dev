@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.33 2002/01/10 23:40:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.34 2002/01/11 00:08:05 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -1052,6 +1052,11 @@ class forum extends aw_template
 
 			$this->db_query($q);
 		}
+		if (not($act))
+		{
+			$act = "show_threaded";
+		};
+
 		if ($section)
 		{
 			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"_alias" => "forum"));
