@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.7 2001/06/18 20:19:58 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -403,107 +403,6 @@ class db_images extends aw_template
 			print "Midagi on valesti. Pilti ei salvestatud";
 			return array();
 		};
-	}
-
-	// kustutame pildi, pildi objekti id j2rgi
-	function del_image_by_oid($oid)
-	{
-		$this->_log("image","Kustutas pildi $oid");
-		$this->delete_object($oid);
-	}
-
-	function prepare_proc_text($parent)
-	{
-		$this->proc_parent = $parent;
-		$this->proc=array();
-		$this->db_query("SELECT objects.*, images.*
-										 FROM objects 
-										 LEFT JOIN images ON objects.oid=images.id 
-										 WHERE objects.parent=$parent AND objects.status = 2 AND objects.class_id=6");
-		while ($row = $this->db_next())
-		{
-			$this->proc[] = $row;
-		}
-	}
-
-	function proc_text($text, $parent)
-	{
-		if (strchr($text, "#p")== "")	// if the text contains no aliases don't bother to check
-		{
-			return $text;
-		}
-
-		if ($this->proc_parent != $parent)
-		{
-			$this->prepare_proc_text($parent);
-		}
-
-		reset($this->proc);
-		while (list(, $v) = each($this->proc))
-		{
-			$u = $this->get_url($v["file"]);
-			if ($v["link"] != '')
-			{
-				$text = str_replace("#p".$v["idx"]."v#", "<table align=left><tr><td align=center><a href='".$v["link"]."'><img src='$u' border=0></a><br>".$v["comment"]."</td></tr></table>", $text);
-				$text = str_replace("#p".$v["idx"]."p#", "<table align=right><tr><td align=center><a href='".$v["link"]."'><img src='$u' border=0></a><br>".$row["comment"]."</td></tr></table>", $text);
-			}
-			else
-			{
-				$text = str_replace("#p".$v["idx"]."v#", "<table align=left><tr><td align=center><img src='$u'><br>".$v["comment"]."</td></tr></table>", $text);
-				$text = str_replace("#p".$v["idx"]."p#", "<table align=right><tr><td align=center><img src='$u'><br>".$row["comment"]."</td></tr></table>", $text);
-			}
-		}
-		return $text;
-	}
-
-	function gen_list($parent)
-	{
-		$this->read_template("list.tpl");
-		$this->vars(array("LINE" => ""));
-		$this->db_query("SELECT status,images.* , objects.comment as comment
-			FROM objects
-			LEFT JOIN images ON (objects.oid = images.id)
-			WHERE objects.parent = '$parent' AND class_id = '6' AND objects.status=2
-			ORDER BY idx");
-		while($row = $this->db_next())
-		{
-			$this->vars(array("image_number"	=> $row["idx"],
-												"image_url"			=> $this->get_url($row["file"]),
-												"image_comment" => $row["comment"],
-												"image_id"			=> $row["id"],
-												"image_link"		=> $row["link"],
-												"parent"				=> $parent));
-
-			$cc = $this->parse("CAN_CHANGE");
-			$cd = $this->parse("CAN_DELETE");
-
-			$this->vars(array("CAN_CHANGE"		=> $cc,"CAN_DELETE"		=> $cd));
-			$this->parse("LINE");
-		}
-		$ca = "";
-		$ca = $this->parse("CAN_ADD");
-		$this->vars(array("parent"	=> $parent,"CAN_ADD"=>$ca));
-		return $this->parse();
-	}
-
-	function add($parent)
-	{
-		$this->read_template("upload.tpl");
-		$this->vars(array("oid" => $parent));
-		return $this->parse();
-	}
-
-	function edit($id, $parent)
-	{
-		$this->read_template("edit.tpl");
-		$pic = $this->get_img_by_id($id);
-		$this->vars(array("parent"  => $parent,
-						 				  "poid"    => $id,
-											"comment" => $pic["comment"],
-											"idx"     => $pic["idx"],
-											"link"    => $pic["link"],
-											"url"     => $pic["url"]));
-		return $this->parse();
 	}
 };
 ?>
