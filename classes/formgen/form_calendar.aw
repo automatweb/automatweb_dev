@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.7 2003/01/13 14:39:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.8 2003/01/13 16:51:26 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -609,7 +609,7 @@ class form_calendar extends form_base
 		};
 
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
-			 WHERE oid = '$contr' AND relation IN ($rel2)
+			 WHERE oid = '$contr' AND relation IN ($rel2) AND count_el_id = '$el_count'
 				AND start <= '$_end' AND end >= '$_start'";
 
 		$this->db_query($q);
@@ -689,6 +689,26 @@ class form_calendar extends form_base
 		{
 			// get the vacancy controller for the chain.
 			$this->save_handle();
+			// now I need to fetch all the records for this from form the
+                        // calendar2form_relations table
+                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
+                        $this->db_query($q);
+                        $rels = array();
+                        while($relrow = $this->db_next())
+                        {
+                                if ($relrow["el_count"])
+                                {
+                                        $req_items = $args["post_vars"][$relrow["el_count"]];
+                                        if ($req_items == 0)
+                                        {
+                                                // default to 1. is this good?
+                                                $req_items = 1;
+                                        };
+                                        $relrow["req_items"] = $req_items;
+                                        $rels[] = $relrow;
+                                };
+                        };
+
 			if ($row["class_id"] == CL_FORM_CHAIN)
 			{
 				$fch->load_chain($row["cal_id"]);
@@ -738,23 +758,27 @@ class form_calendar extends form_base
 			{
 				$rel2 = $rowx["id"];
 			};
-			$vac = $this->get_vac_by_contr(array(
-					"start" => $args["post_vars"][$row["el_start"]],
-					"contr" => $cal_controller,
-					"cal_id" => $row["cal_id"],
-					"entry_id" => $args["entry_id"],
-					"req_items" => $_req_items,
-					"rel" => $_rel,
-					"rel2" => $rel2,
-					"id" => $id,
-			));
-
-			if ($vac < 0)
+			foreach($rels as $relval)
 			{
-				$has_errors = true;
-				// where do we put the error message?
-				$err_el = ($row["el_cnt"]) ? $row["el_cnt"] : $row["el_start"];
-				$this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
+				$vac = $this->get_vac_by_contr(array(
+						"start" => $args["post_vars"][$row["el_start"]],
+						"contr" => $cal_controller,
+						"cal_id" => $row["cal_id"],
+						"entry_id" => $args["entry_id"],
+						"req_items" => $relval["req_items"],
+						"el_count" => $relval["el_count"],
+						"rel" => $_rel,
+						"rel2" => $rel2,
+						"id" => $id,
+				));
+
+				if ($vac < 0)
+				{
+					$has_errors = true;
+					// where do we put the error message?
+					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
+					$this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
+				};
 			};
 			$this->restore_handle();
 
@@ -781,20 +805,28 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			// and I will again have check against all the records in
+			// calendar2form_relations
 			$this->save_handle();
-			if ($row["count"] > 0)
-			{
-				$_cnt = $row["count"];
-			}
-			else
-			{
-				$_cnt = (int)$args["post_vars"][$row["el_cnt"]];
-				// default to 1. Is this correct?
-				if ($_cnt == 0)
-				{
-					$_cnt = 1;
-				};
-			};
+			// now I need to fetch all the records for this from form the
+                        // calendar2form_relations table
+                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
+                        $this->db_query($q);
+                        $rels = array();
+                        while($relrow = $this->db_next())
+                        {
+                                if ($relrow["el_count"])
+                                {
+                                        $count = $args["post_vars"][$relrow["el_count"]];
+                                        if ($count == 0)
+                                        {
+                                                // default to 1. is this good?
+                                                $count = 1;
+                                        };
+                                        $relrow["count"] = $count;
+                                        $rels[] = $relrow;
+                                };
+                        };
 
 			$_start = (int)date_edit::get_timestamp($args["post_vars"][$row["el_start"]]);
 
@@ -815,14 +847,19 @@ class form_calendar extends form_base
 				$this->db_query($q);
 			};
 
-			$__rel = $args["post_vars"][$row["el_relation"]];
-			// gah, this sucks so much
-			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-			$_rel = (int)$m[1];
+			foreach($rels as $reval)
+			{
+				//$__rel = $args["post_vars"][$row["el_relation"]];
+				// gah, this sucks so much
+				//preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+				//$_rel = (int)$m[1];
+				$_rel = $reval["el_relation"];
+			
 
-			$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
-				VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
-			$this->db_query($q);
+				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
+				$this->db_query($q);
+			};
 			$this->restore_handle();
 
 		};
