@@ -1,211 +1,175 @@
 <?php
-
-if (defined("STYLES_LOADED")) {
-} else {
-define(STYLES_LOADED,1);
-	class styles extends aw_template
+// $Header: /home/cvs/automatweb_dev/classes/Attic/styles.aw,v 2.1 2001/05/19 21:49:23 duke Exp $
+class styles extends aw_template
+{
+	function styles($parent, $pacl = 0)
 	{
-		function styles($parent, $pacl = 0)
-		{
-			$this->tpl_init("styles");
-			$this->db_init();
+		$this->tpl_init("styles");
+		$this->db_init();
 			
-			$this->parent = $parent;
-			$this->back = $back;
-			$this->vars(array("parent" => $parent));
-			$this->acl = new acl;
-			if (is_object($pacl))
-				$this->pacl = $pacl;
+		$this->parent = $parent;
+		$this->back = $back;
+		$this->vars(array("parent" => $parent));
+		$this->acl = new acl;
+		if (is_object($pacl))
+			$this->pacl = $pacl;
+		else
+			$this->pacl = 0;
+	}
+		
+	// generates a list of all the parents of $parent, so we know to include all the styles
+	function gen_parent_arr($parent, $skipfirst=true)
+	{
+		if ($skipfirst)
+		{
+			$this->db_query("SELECT parent FROM objects where oid = $parent");
+			$row = $this->db_next();
+			$parent = $row["parent"];
+		}
+		$first = true;
+		while ($parent != 0)	// loop through all categories, until we reach the top
+		{
+			if ($first)
+				$ret = " ( parent = $parent ";
 			else
-				$this->pacl = 0;
+				$ret.= " OR parent = $parent ";
+
+			$this->db_query("SELECT parent FROM objects where oid = $parent");
+			$row = $this->db_next();
+			$parent = $row["parent"];
+			$first = false;
 		}
+		$ret.=" ) ";
+		return $ret;
+	}
+
+	function get_parent_acl()
+	{
+		if (!is_object($this->pacl))
+		{
+			$this->pacl = new acl;
+			$this->pacl->query_parent($this->parent);
+		}
+		return $this->pacl;
+	}
+
+	function gen_list($tpl="style_list.tpl")
+	{
+		global $back;
+		$this->read_template($tpl);
 		
-		// generates a list of all the parents of $parent, so we know to include all the styles
-		function gen_parent_arr($parent, $skipfirst=true)
+		$c="";
+		$p = $this->gen_parent_arr($this->parent, false);
+		$tacl = new acl;
+		$this->db_query("SELECT styles.*, objects.name, ".$tacl->sql()."
+										 FROM styles 
+										 LEFT JOIN objects ON objects.oid = styles.id
+										 LEFT JOIN acl ON acl.oid = objects.oid
+										 WHERE $p AND objects.status != 0
+										 GROUP BY objects.oid");
+		while ($row = $this->db_next())
 		{
-			if ($skipfirst)
-			{
-				$this->db_query("SELECT parent FROM objects where oid = $parent");
-				$row = $this->db_next();
-				$parent = $row[parent];
-			}
-			$first = true;
-			while ($parent != 0)	// loop through all categories, until we reach the top
-			{
-				if ($first)
-					$ret = " ( parent = $parent ";
-				else
-					$ret.= " OR parent = $parent ";
 
-				$this->db_query("SELECT parent FROM objects where oid = $parent");
-				$row = $this->db_next();
-				$parent = $row[parent];
-				$first = false;
-			}
-			$ret.=" ) ";
-			return $ret;
+			$this->vars(array("style_name" => $row["name"], "style_id" => $row["id"]));
+			$cc = "";
+			$cc = $this->parse("CAN_CHANGE");
+			$cd = "";
+			$cd = $this->parse("CAN_DELETE");
+			$ce = "";
+			$ce = $this->parse("CAN_EXPORT");
+			$this->vars(array("CAN_CHANGE"=>$cc,"CAN_DELETE"=>$cd,"CAN_EXPORT"=>$ce));
+			$c.=$this->parse("LINE");
 		}
+		$ca = ""; $ci = "";$ceb="";
+		$ca = $this->parse("CAN_ADD");
 
-		function get_parent_acl()
-		{
-			if (!is_object($this->pacl))
-			{
-				$this->pacl = new acl;
-				$this->pacl->query_parent($this->parent);
-			}
-			return $this->pacl;
-		}
+		$ci = $this->parse("CAN_IMPORT");
 
-		function gen_list($tpl="style_list.tpl")
-		{
-			global $back;
-			$this->read_template($tpl);
-			
-			$c="";
-			$p = $this->gen_parent_arr($this->parent, false);
-			$tacl = new acl;
-			$this->db_query("SELECT styles.*, objects.name, ".$tacl->sql()."
-											 FROM styles 
-											 LEFT JOIN objects ON objects.oid = styles.id
-											 LEFT JOIN acl ON acl.oid = objects.oid
-											 WHERE $p AND objects.status != 0
-											 GROUP BY objects.oid");
-			while ($row = $this->db_next())
-			{
+		$ceb = $this->parse("CAN_EXPORT_B");
 
-				$this->vars(array("style_name" => $row[name], "style_id" => $row[id]));
-				$cc = "";
-				$cc = $this->parse("CAN_CHANGE");
-				$cd = "";
-				$cd = $this->parse("CAN_DELETE");
-				$ce = "";
-				$ce = $this->parse("CAN_EXPORT");
-				$this->vars(array("CAN_CHANGE"=>$cc,"CAN_DELETE"=>$cd,"CAN_EXPORT"=>$ce));
-				$c.=$this->parse("LINE");
-			}
-			$ca = ""; $ci = "";$ceb="";
-			$ca = $this->parse("CAN_ADD");
-
-			$ci = $this->parse("CAN_IMPORT");
-
-			$ceb = $this->parse("CAN_EXPORT_B");
-
-			$this->vars(array("LINE" => $c, "CAN_ADD"=>$ca, "CAN_IMPORT" => $ci,"CAN_EXPORT_B"=>$ceb));
-			return $this->parse();
-		}
+		$this->vars(array("LINE" => $c, "CAN_ADD"=>$ca, "CAN_IMPORT" => $ci,"CAN_EXPORT_B"=>$ceb));
+		return $this->parse();
+	}
 		
-		function add_style($tpl="add_style.tpl")
-		{
-			$pacl = $this->get_parent_acl();
+	function add_style($tpl="add_style.tpl")
+	{
+		$pacl = $this->get_parent_acl();
 
-			$this->read_template($tpl);
-			$fz="";
-			for ($i = -5; $i < 6; $i++)
-			{
-				$this->vars(array("fontsize_value" => $i, "fontsize_selected" => ($i == 2 ? " SELECTED " : "")));
-				$fz.=$this->parse("FONTSIZE");
-			}
-			$this->vars(array("style_name" 				=> "", 
-												"font1_sel_arial" 	=> "",
-												"font1_sel_times" 	=> "",
-												"font1_sel_verdana"	=> "",
-												"font1_sel_tahoma"	=> "",
-												"font1_sel_geneva"	=> "",
-												"font1_sel_helvetica"	=> "",
-												"font2_sel_arial" 	=> "",
-												"font2_sel_times" 	=> "",
-												"font2_sel_verdana"	=> "",
-												"font2_sel_tahoma"	=> "",
-												"font2_sel_geneva"	=> "",
-												"font2_sel_helvetica"	=> "",
-												"font3_sel_arial" 	=> "",
-												"font3_sel_times" 	=> "",
-												"font3_sel_verdana"	=> "",
-												"font3_sel_tahoma"	=> "",
-												"font3_sel_geneva"	=> "",
-												"font3_sel_helvetica"	=> "",
-												"font_colour" 			=> "", 
-												"bgcolour"					=> "", 
-												"font_style_bold_selected" => "", 
-												"font_style_italic_selected" => "", 
-												"font_style_underline_selected" => "" , 
-												"font_style_normal_selected" => "", 
-												"style_id" 					=> "", 
-												"parent" 						=> $this->parent,
-												"FONTSIZE" 					=> $fz,
-												"align_left"				=> "",
-												"align_center"			=> "",
-												"align_right"				=> "",
-												"valign_top"				=> "",
-												"valign_center"			=> "",
-												"valign_bottom"			=> "",
-												"height"						=> "",
-												"width"							=> "",
-												"nowrap_checked"		=> ""));
-			return $this->parse();
+		$this->read_template($tpl);
+		$fz="";
+		for ($i = -5; $i < 6; $i++)
+		{
+			$this->vars(array("fontsize_value" => $i, "fontsize_selected" => ($i == 2 ? " SELECTED " : "")));
+			$fz.=$this->parse("FONTSIZE");
 		}
+		$this->vars(array(
+					"parent" 						=> $this->parent,
+					"FONTSIZE" 					=> $fz,
+			));
+		return $this->parse();
+	}
 		
-		function change_style($id, $tpl = "add_style.tpl")
-		{
-			$pacl = $this->get_parent_acl();
+	function change_style($id, $tpl = "add_style.tpl")
+	{
+		$pacl = $this->get_parent_acl();
 
-			global $back;
-			$this->read_template($tpl);
-			$this->db_query("SELECT styles.*, objects.name ,sql 
-											 FROM styles 
-											 LEFT JOIN objects ON objects.oid = styles.id
-											 LEFT JOIN acl ON acl.oid = objects.oid
-											 WHERE styles.id = $id
-											 GROUP BY objects.oid");
-			if (!($r = $this->db_next()))
-				$this->raise_error("NO SUCH STYLE id = $id", true);
+		global $back;
+		$this->read_template($tpl);
+		$this->db_query("SELECT styles.*, objects.name ,sql 
+										 FROM styles 
+										 LEFT JOIN objects ON objects.oid = styles.id
+										 LEFT JOIN acl ON acl.oid = objects.oid
+										 WHERE styles.id = $id
+										 GROUP BY objects.oid");
+		if (!($r = $this->db_next()))
+			$this->raise_error("NO SUCH STYLE id = $id", true);
 
-			$sa = unserialize($r[style]);
+			$sa = unserialize($r["style"]);
 
 			$fz="";
 			for ($i = -5; $i < 6; $i++)
 			{
-				$this->vars(array("fontsize_value" => $i, "fontsize_selected" => ($sa[fontsize] == $i ? " SELECTED " : "")));
+				$this->vars(array("fontsize_value" => $i, "fontsize_selected" => ($sa["fontsize"] == $i ? " SELECTED " : "")));
 				$fz.=$this->parse("FONTSIZE");
 			}
 			
 			$this->vars(array("style_name" 	=> $r[name], 			
-									"font1_sel_arial" 	=> ($sa[font1] == "arial" ? " SELECTED " : ""),
-									"font1_sel_times"		=> ($sa[font1] == "times" ? " SELECTED " : ""),
-									"font1_sel_verdana"	=> ($sa[font1] == "verdana" ? " SELECTED " : ""),
-									"font1_sel_tahoma"	=> ($sa[font1] == "tahoma" ? " SELECTED " : ""),
-									"font1_sel_geneva"	=> ($sa[font1] == "geneva" ? " SELECTED " : ""),
-									"font1_sel_helvetica"	=> ($sa[font1] == "helvetica" ? " SELECTED " : ""),
-									"font2_sel_arial" 	=> ($sa[font2] == "arial" ? " SELECTED " : ""),
-									"font2_sel_times"		=> ($sa[font2] == "times" ? " SELECTED " : ""),
-									"font2_sel_verdana"	=> ($sa[font2] == "verdana" ? " SELECTED " : ""),
-									"font2_sel_tahoma"	=> ($sa[font2] == "tahoma" ? " SELECTED " : ""),
-									"font2_sel_geneva"	=> ($sa[font2] == "geneva" ? " SELECTED " : ""),
-									"font2_sel_helvetica"	=> ($sa[font2] == "helvetica" ? " SELECTED " : ""),
-									"font3_sel_arial" 	=> ($sa[font3] == "arial" ? " SELECTED " : ""),
-									"font3_sel_times"		=> ($sa[font3] == "times" ? " SELECTED " : ""),
-									"font3_sel_verdana"	=> ($sa[font3] == "verdana" ? " SELECTED " : ""),
-									"font3_sel_tahoma"	=> ($sa[font3] == "tahoma" ? " SELECTED " : ""),
-									"font3_sel_geneva"	=> ($sa[font3] == "geneva" ? " SELECTED " : ""),
-									"font3_sel_helvetica"	=> ($sa[font3] == "helvetica" ? " SELECTED " : ""),
+									"font1_sel_arial" 	=> ($sa["font1"] == "arial" ? " SELECTED " : ""),
+									"font1_sel_times"		=> ($sa["font1"] == "times" ? " SELECTED " : ""),
+									"font1_sel_verdana"	=> ($sa["font1"] == "verdana" ? " SELECTED " : ""),
+									"font1_sel_tahoma"	=> ($sa["font1"] == "tahoma" ? " SELECTED " : ""),
+									"font1_sel_geneva"	=> ($sa["font1"] == "geneva" ? " SELECTED " : ""),
+									"font1_sel_helvetica"	=> ($sa["font1"] == "helvetica" ? " SELECTED " : ""),
+									"font2_sel_arial" 	=> ($sa["font2"] == "arial" ? " SELECTED " : ""),
+									"font2_sel_times"		=> ($sa["font2"] == "times" ? " SELECTED " : ""),
+									"font2_sel_verdana"	=> ($sa["font2"] == "verdana" ? " SELECTED " : ""),
+									"font2_sel_tahoma"	=> ($sa["font2"] == "tahoma" ? " SELECTED " : ""),
+									"font2_sel_geneva"	=> ($sa["font2"] == "geneva" ? " SELECTED " : ""),
+									"font2_sel_helvetica"	=> ($sa["font2"] == "helvetica" ? " SELECTED " : ""),
+									"font3_sel_arial" 	=> ($sa["font3"] == "arial" ? " SELECTED " : ""),
+									"font3_sel_times"		=> ($sa["font3"] == "times" ? " SELECTED " : ""),
+									"font3_sel_verdana"	=> ($sa["font3"] == "verdana" ? " SELECTED " : ""),
+									"font3_sel_tahoma"	=> ($sa["font3"] == "tahoma" ? " SELECTED " : ""),
+									"font3_sel_geneva"	=> ($sa["font3"] == "geneva" ? " SELECTED " : ""),
+									"font3_sel_helvetica"	=> ($sa["font3"] == "helvetica" ? " SELECTED " : ""),
 									"FONTSIZE"					=> $fz,
-									"font_colour"				=> $sa[colour] ,
-									"bgcolour" 					=> $sa[bgcolour], 
-									"font_style_bold_selected" 			=> ($sa[style] == "bold" ? " SELECTED " : ""),
-									"font_style_italic_selected" 		=> ($sa[style] == "italic" ? " SELECTED " : ""),
-									"font_style_underline_selected" => ($sa[style] == "underline" ? " SELECTED " : ""),
-									"font_style_normal_selected" 		=> ($sa[style] == "normal" ? " SELECTED " : ""),
-									"style_id" 					=> $r[id],
+									"font_colour"				=> $sa["colour"] ,
+									"bgcolour" 					=> $sa["bgcolour"], 
+									"font_style_bold_selected" 			=> ($sa["style"] == "bold" ? " SELECTED " : ""),
+									"font_style_italic_selected" 		=> ($sa["style"] == "italic" ? " SELECTED " : ""),
+									"font_style_underline_selected" => ($sa["style"] == "underline" ? " SELECTED " : ""),
+									"font_style_normal_selected" 		=> ($sa["style"] == "normal" ? " SELECTED " : ""),
+									"style_id" 					=> $r["id"],
 									"parent"						=> $this->parent,
-									"align_left"				=> ($sa[align] == "left" ? " CHECKED " : ""),
-									"align_center"			=> ($sa[align] == "center" ? " CHECKED " : ""),
-									"align_right"				=> ($sa[align] == "right" ? " CHECKED " : ""),
-									"valign_top"				=> ($sa[valign] == "top" ? " CHECKED " : ""),
-									"valign_center"			=> ($sa[valign] == "center" ? " CHECKED " : ""),
-									"valign_bottom"			=> ($sa[valign] == "bottom" ? " CHECKED " : ""),
-									"height"						=> $sa[height],
-									"width"							=> $sa[width],
-									"nowrap_checked"		=> ($sa[nowrap] == 1 ? " CHECKED " : "" )));
+									"align_left"				=> ($sa["align"] == "left" ? " CHECKED " : ""),
+									"align_center"			=> ($sa["align"] == "center" ? " CHECKED " : ""),
+									"align_right"				=> ($sa["align"] == "right" ? " CHECKED " : ""),
+									"valign_top"				=> ($sa["valign"] == "top" ? " CHECKED " : ""),
+									"valign_center"			=> ($sa["valign"] == "center" ? " CHECKED " : ""),
+									"valign_bottom"			=> ($sa["valign"] == "bottom" ? " CHECKED " : ""),
+									"height"						=> $sa["height"],
+									"width"							=> $sa["width"],
+									"nowrap_checked"		=> ($sa["nowrap"] == 1 ? " CHECKED " : "" )));
 
 			return $this->parse();
 		}
@@ -234,13 +198,13 @@ define(STYLES_LOADED,1);
 			{
 				$this->update_object($id,$name);
 				$this->db_query("UPDATE styles SET style='$c' WHERE id = $id");
-				$this->log_action($GLOBALS["uid"], "style", "Muutis stiili $name");
+				$this->_log("style", "Muutis stiili $name");
 			}
 			else
 			{
 				$id = $this->register_object($this->parent, $name,CL_STYLE);
 				$this->db_query("INSERT INTO styles VALUES($id, '$c')");
-				$this->log_action($GLOBALS["uid"], "style", "Lisas stiili $name");
+				$this->_log("style", "Lisas stiili $name");
 			}
 			return $id;
 		}
@@ -264,12 +228,12 @@ define(STYLES_LOADED,1);
 											 GROUP BY objects.oid");
 			while ($row = $this->db_next())
 			{
-				$var = "style_".$row[id];
+				$var = "style_".$row["id"];
 				global $$var;
 				if ($$var == 1)
-					echo $row[id],",",$row[name],",",$row[style], "\n";
+					echo $row["id"],",",$row["name"],",",$row["style"], "\n";
 			}
-			$this->log_action($GLOBALS["uid"], "style", "Eksportis stiile");
+			$this->_log("style", "Eksportis stiile");
 			die();
 		}
 
@@ -287,47 +251,47 @@ define(STYLES_LOADED,1);
 				$id = $this->register_object($this->parent, $idx[1],CL_STYLE);
 				$this->db_query("INSERT INTO styles VALUES($id,'".$idx[2]."')");
 			}
-			$this->log_action($GLOBALS["uid"], "style", "Importis stiile");
+			$this->_log("style", "Importis stiile");
 		}
 
 		function mk_style_vars($sr)
 		{
 			global $clipboard;
-			if ($sr[id] == $clipboard[id])		// if this is the selected style
+			if ($sr[id] == $clipboard["id"])		// if this is the selected style
 				$this->found = true;
 
-			$s = unserialize($sr[style]);
+			$s = unserialize($sr["style"]);
 
 			$flookup = array("" => 0, "arial" => 1, "times" => 2, "verdana" => 3, "tahoma" => 4, "geneva" => 5, "helvetica" =>6);
-			$f1 = ($f1=$flookup[$s[font1]]) == "" ? 0 : $f1;
-			$f2 = ($f2=$flookup[$s[font2]]) == "" ? 0 : $f2;
-			$f3 = ($f3=$flookup[$s[font3]]) == "" ? 0 : $f3;
+			$f1 = ($f1=$flookup[$s["font1"]]) == "" ? 0 : $f1;
+			$f2 = ($f2=$flookup[$s["font2"]]) == "" ? 0 : $f2;
+			$f3 = ($f3=$flookup[$s["font3"]]) == "" ? 0 : $f3;
 
 			$slookup = array("normal" => 0, "bold" => 1, "italic" => 2, "underline" => 3);
-			$fs = ($fs=$slookup[$s[style]]) == "" ? 0 : $fs;
+			$fs = ($fs=$slookup[$s["style"]]) == "" ? 0 : $fs;
 
-			$this->vars(array("style_item_active"		=> ($clipboard[id] == $sr[id] ? " SELECTED " : "" ),
-												"style_item_value"		=> $sr[id],
-												"style_item_text"			=> $sr[name],
-												"style_name"					=> ($sr[name] == "" ? "''" : "'".$sr[name]."'"),
+			$this->vars(array("style_item_active"		=> ($clipboard["id"] == $sr["id"] ? " SELECTED " : "" ),
+												"style_item_value"		=> $sr["id"],
+												"style_item_text"			=> $sr["name"],
+												"style_name"					=> ($sr["name"] == "" ? "''" : "'".$sr["name"]."'"),
 												"style_font1"					=> $f1,
 												"style_font2"					=> $f2,
 												"style_font3"					=> $f3,
-												"style_fontsize"			=> $s[fontsize]+5,		// need algavad -5'st
-												"style_color"					=> ($s[colour] == "" ? "''" : "'".$s["colour"]."'"),
-												"style_bgcolor"				=> ($s[bgcolour] == "" ? "''" : "'".$s["bgcolour"]."'"),
+												"style_fontsize"			=> $s["fontsize"]+5,		// need algavad -5'st
+												"style_color"					=> ($s["colour"] == "" ? "''" : "'".$s["colour"]."'"),
+												"style_bgcolor"				=> ($s["bgcolour"] == "" ? "''" : "'".$s["bgcolour"]."'"),
 												"style_fstyle"				=> $fs,
-												"style_align_left"		=> ($s[align] == "left" ? 1 : 0),
-												"style_align_center"	=> ($s[align] == "center" ? 1 : 0),
-												"style_align_right"		=> ($s[align] == "right" ? 1 : 0),
-												"style_valign_top"		=> ($s[valign] == "top" ? 1 : 0),
-												"style_valign_center"	=> ($s[valign] == "center" ? 1 : 0),
-												"style_valign_bottom"	=> ($s[valign] == "bottom" ? 1 : 0),
-												"style_valign"				=> ($s[valign] == "" ? "''" : "'".$s["valign"]."'"),
-												"style_height"				=> ($s[height] == "" ? "''" : "'".$s["height"]."'"),
-												"style_width"					=> ($s[width] == "" ? "''" : "'".$s["width"]."'"),
-												"style_id"						=> $sr[id],
-												"style_nowrap"				=> ($s[nowrap] == 1 ? 1 : 0)));
+												"style_align_left"		=> ($s["align"] == "left" ? 1 : 0),
+												"style_align_center"	=> ($s["align"] == "center" ? 1 : 0),
+												"style_align_right"		=> ($s["align"] == "right" ? 1 : 0),
+												"style_valign_top"		=> ($s["valign"] == "top" ? 1 : 0),
+												"style_valign_center"	=> ($s["valign"] == "center" ? 1 : 0),
+												"style_valign_bottom"	=> ($s["valign"] == "bottom" ? 1 : 0),
+												"style_valign"				=> ($s["valign"] == "" ? "''" : "'".$s["valign"]."'"),
+												"style_height"				=> ($s["height"] == "" ? "''" : "'".$s["height"]."'"),
+												"style_width"					=> ($s["width"] == "" ? "''" : "'".$s["width"]."'"),
+												"style_id"						=> $sr["id"],
+												"style_nowrap"				=> ($s["nowrap"] == 1 ? 1 : 0)));
 		}
 
 		function select_style()
@@ -354,14 +318,14 @@ define(STYLES_LOADED,1);
 				$sd.=$this->parse("STYLE_DEFS");
 			}
 
-			if ($clipboard[id] != 0 && $this->found == true)		// if a style is selected and it was also found , then it is a predefined style
+			if ($clipboard["id"] != 0 && $this->found == true)		// if a style is selected and it was also found , then it is a predefined style
 			{																										// and thus we must add an empty style
 				$this->mk_style_vars(array());
 				$str =$this->parse("STYLE_LIST").$str;
 				$sd.=$this->parse("STYLE_DEFS"); // avoid those nasty-ass javascript errors
 			}
 			else
-			if ($this->found == false && $clipboard[id] != 0)	// if a styles was not found, but one is selected
+			if ($this->found == false && $clipboard["id"] != 0)	// if a styles was not found, but one is selected
 			{																									// then it's a temporary style and we must load it
 				$this->db_query("SELECT styles.style as style, objects.name as name, styles.id as id, objects.parent as parent
 											 FROM styles 
@@ -407,18 +371,18 @@ define(STYLES_LOADED,1);
 			// right. here we must detect if the user selected a predefined style and a temp style was previously selected, because
 			// if we did no such thing, then we would have a lot of temp styles laying around soon, because they are not deleted anywhere
 			// and when the user defines different attributes a new temp style is always created.
-			if ($id != $clipboard[id] && $id != 0 && $clipboard[id] != 0)	// if a new style is selected and the previous style was not empty
+			if ($id != $clipboard["id"] && $id != 0 && $clipboard["id"] != 0)	// if a new style is selected and the previous style was not empty
 			{
 				$this->db_query("SELECT styles.style as style, objects.name as name, styles.id as id, objects.parent as parent
 											 FROM styles 
 											 LEFT JOIN objects ON objects.oid = styles.id
-											 WHERE styles.id = ".$clipboard[id]);
+											 WHERE styles.id = ".$clipboard["id"]);
 				$str = $this->db_next();	// get the previous style
 
-				if ($str[parent] == $this->parent)	// and if it's a temp style
+				if ($str["parent"] == $this->parent)	// and if it's a temp style
 				{
-					$this->db_query("DELETE FROM objects where oid = ".$clipboard[id]);	// delete it
-					$this->db_query("DELETE FROM styles where id = ".$clipboard[id]);
+					$this->db_query("DELETE FROM objects where oid = ".$clipboard["id"]);	// delete it
+					$this->db_query("DELETE FROM styles where id = ".$clipboard["id"]);
 				}
 			}
 			
@@ -442,8 +406,8 @@ define(STYLES_LOADED,1);
 				;// assign to table
 			}
 
-			$clipboard[id] = $t_id;
-			$clipboard[type] = "sel_style";
+			$clipboard["id"] = $t_id;
+			$clipboard["type"] = "sel_style";
 		}
 
 		function load_style($id)
@@ -452,7 +416,7 @@ define(STYLES_LOADED,1);
 			if (!($row = $this->db_next()))
 				$this->raise_error("styles->load_style($id) , no such style!", true);
 
-			$this->arr = unserialize($row[style]);
+			$this->arr = unserialize($row["style"]);
 		}
 
 		function get($name)
@@ -478,29 +442,29 @@ define(STYLES_LOADED,1);
 					break;
 			};
 	
-			if ($this->arr[font1] == "" && $this->arr[font2] == "" && $this->arr[font3] == "" && $this->arr[fontsize] == "" && $this->arr[colour] == "")
+			if ($this->arr["font1"] == "" && $this->arr["font2"] == "" && $this->arr["font3"] == "" && $this->arr["fontsize"] == "" && $this->arr["colour"] == "")
 				$fnt = "";
 			else
 			{
 				$fnt = "<font";
 				$ffac = "";
-				if ($this->arr[font1] != "")
-					$ffac.=$this->arr[font1];
+				if ($this->arr["font1"] != "")
+					$ffac.=$this->arr["font1"];
 
-				if ($this->arr[font2] != "")
-					$ffac = ($ffac == "" ? $this->arr[font2] : $ffac.",".$this->arr[font2]);
+				if ($this->arr["font2"] != "")
+					$ffac = ($ffac == "" ? $this->arr["font2"] : $ffac.",".$this->arr["font2"]);
 
-				if ($this->arr[font3] != "")
-					$ffac = ($ffac == "" ? $this->arr[font3] : $ffac.",".$this->arr[font3]);
+				if ($this->arr["font3"] != "")
+					$ffac = ($ffac == "" ? $this->arr["font3"] : $ffac.",".$this->arr["font3"]);
 
 				if ($ffac != "")
 					$fnt.=" face='".$ffac."'";
 
-				if ($this->arr[fontsize] != "")
-					$fnt.=" size='".$this->arr[fontsize]."'";
+				if ($this->arr["fontsize"] != "")
+					$fnt.=" size='".$this->arr["fontsize"]."'";
 
-				if ($this->arr[colour] != "")
-					$fnt.=" color='".$this->arr[colour]."'";
+				if ($this->arr["colour"] != "")
+					$fnt.=" color='".$this->arr["colour"]."'";
 
 				$fnt.=">";
 			}
@@ -510,7 +474,7 @@ define(STYLES_LOADED,1);
 
 		function get_font_end()
 		{
-			switch($this->arr[style])
+			switch($this->arr["style"])
 			{
 				case "bold":
 					$ste = "</b>";
@@ -529,11 +493,5 @@ define(STYLES_LOADED,1);
 			return $ste."</font>";
 		}
 
-		#function acl_error()
-		#{
-		#	global $back;
-		#	die("<br><b>Teie &otilde;igused ei luba seda operatsiooni sooritada!</b><br><Br><a href='$back'>Tagasi</a><Br>");
-		#}
 	};
-}
 ?>
