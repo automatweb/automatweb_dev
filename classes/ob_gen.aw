@@ -434,8 +434,18 @@ html::checkbox(array('name'=>'remember['.$what.']['.$field.']['.$nr.']','checked
 		$object['no_flush']=1;
 
 		//teeme objekti objektitabelisse
-
-		$oid = $this->new_object($object,false);
+		$o = obj();
+		$o->set_parent($object["parent"]);
+		$o->set_name($object["name"]);
+		$o->set_class_id($object["class_id"]);
+		if (is_array($object["meta"]))
+		{
+			foreach($object["meta"] as $k => $v)
+			{
+				$o->set_meta($k, $v);
+			}
+		}
+		$oid = $o->save();
 
 		// ja kui on andmeid sisu tabeli kohta, siis ka sisutabelisse kirje
 		if (is_array($sql))

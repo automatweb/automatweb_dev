@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.8 2004/06/08 19:26:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.9 2004/06/15 08:48:56 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -333,15 +333,13 @@ class cfgobject extends aw_template
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => CL_CFGOBJECT,
-				"metadata" => array(
-					"cfgform" => $cfgform,
-				),
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_class_id(CL_CFGOBJECT);
+			$o->set_meta("cfgform", $cfgform);
+			$id = $o->save();
 		};
 
 		return $this->mk_my_orb("change",array("id" => $id));

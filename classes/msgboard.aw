@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.32 2004/06/11 09:15:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.33 2004/06/15 08:53:58 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -42,11 +42,8 @@ class msgboard extends aw_template
 				$topicvotes["votes"] = $topicvotes["votes"] + 1;
 				$topicvotes["total"] = $topicvotes["total"] + $val;
 
-				$this->set_object_metadata(array(
-					"oid" => $key,
-					"key" => "votes",
-					"value" => $topicvotes,
-				));
+				$tmp->set_meta("votes", $topicvotes);
+				$tmp->save();
 			};
 		};
 		$commentvotes = $oldvotes;
@@ -1034,14 +1031,16 @@ class msgboard extends aw_template
 	{
 		extract($arr);
 
-		$tid = $this->new_object(array(
-			"parent" => $forum_id,
-			"name" => $topic,
-			"last" => $from,
-			"comment" => $text,
-			"class_id" => CL_MSGBOARD_TOPIC,
-			"status" => 2,
-		));
+		aw_disable_acl();
+		$o = obj();
+		$o->set_name($topic);
+		$o->set_parent($forum_id);
+		$o->set_class_id(CL_MSGBOARD_TOPIC);
+		$o->set_comment($comment);
+		$o->set_status(STAT_ACTIVE);
+		$tid = $o->save(); 
+		aw_restore_acl();
+
 		// see peaks ka foorumi/topicu juurest konfitav olema
 		if ($this->cfg["mail_topic_to"] != "")
 		{

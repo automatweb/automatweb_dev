@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.7 2004/01/13 16:24:14 kristo Exp $
+// $Id: menu_alias.aw,v 2.8 2004/06/15 08:57:09 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -133,15 +133,13 @@ class menu_alias extends aw_template
 		$target = $this->get_object($menu);
 		$name = $target["name"];
 		$comment = $target["comment"];
-		$id = $this->new_object(array(
-			"parent" => $parent,
-			"name" => $name,
-			"comment" => $comment,
-			"class_id" => CL_MENU_ALIAS,
-			"last" => $menu,
-		));
-		// I think that add_alias is a mistake
-//                $this->add_alias($parent,$id);
+
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($name);
+		$o->set_comment($comment);
+		$o->set_class_id(CL_MENU_ALIAS);
+		$id = $o->save();
 		return $id;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.16 2004/06/11 09:15:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.17 2004/06/15 08:52:28 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -50,33 +50,25 @@ class object_chain extends aw_template
 
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
 
-			$_tmp = $this->get_object($id);
-			$par_obj = $this->get_object($_tmp["parent"]);
+			$par_obj = obj($o->parent());
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_OBJECT_CHAIN
-			));
-			$par_obj = $this->get_object($parent);
-			if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_OBJECT_CHAIN);
+			$id = $o->save();
+
+			$par_obj = obj($parent);
+			if ( ($par_obj->class_id() == CL_DOCUMENT) || ($par_obj->class_id() == CL_TABLE))
 			{
 				$this->add_alias($parent,$id);
 			};
 		}
-
-			#$old_contents = $this->get_objects_in_chain($id);
-			#print "<pre>";
-			#print $par_obj["oid"];
-			#print_r($old_contents);
-			#print "</pre>";
 
 		$arr = array();
 		if (is_array($objs))
@@ -103,26 +95,33 @@ class object_chain extends aw_template
 
 		// kui tegemist on aliaste ja kui see siin on objektipärg, siis
 		// loeme koigepealt sisse olemasolevad aliased ning _kustutame_ need
-		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))
+		if ( ($par_obj->class_id() == CL_DOCUMENT) || ($par_obj->class_id() == CL_TABLE))
 		{
 			$old_contents = $this->get_objects_in_chain($id);
 			if (is_array($old_contents))
 			{
 				foreach($old_contents as $value)
 				{
-					$this->delete_alias($par_obj["oid"],$value);
+					$this->delete_alias($par_obj->id(),$value);
 				}
 			};
-			$this->expl_chain(array("id" => $id,"parent" => $par_obj["oid"],"objects" => $arr));
+			$this->expl_chain(array("id" => $id,"parent" => $par_obj->id(),"objects" => $arr));
 		};
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "objs",
-			"value" => $arr
-		));
+		$o->set_meta("objs", $arr);
+		$o->save();
 
-		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => urlencode($s_name),"s_comment" => urlencode($s_comment),"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to, "s_parent" => $s_parent, "return_url" => urlencode($return_url)));
+		return $this->mk_my_orb("change", array(
+			"id" => $id,
+			"search" => $search,
+			"s_name" => urlencode($s_name),
+			"s_comment" => urlencode($s_comment),
+			"s_type" => $s_type,
+			"s_id_from" => $s_id_from, 
+			"s_id_to" => $s_id_to, 
+			"s_parent" => $s_parent, 
+			"return_url" => urlencode($return_url)
+		));
 	}
 
 	//// explodes the added object into single aliases

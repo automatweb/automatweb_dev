@@ -63,12 +63,12 @@ class search_filter extends aw_template
         {
                 is_array($arr)? extract($arr) : $parent=$arr;
 
-                $id=$this->new_object(array(
-                        "class_id" => CL_SEARCH_FILTER,
-                        "name" => $name,
-                        "parent" => $parent,
-                        "comment" => $comment,
-                ));
+				$o = obj();
+				$o->set_parent($parent);
+				$o->set_name($name);
+				$o->set_class_id(CL_SEARCH_FILTER);
+				$o->set_comment($comment);
+                $id = $o->save();
 
                 $this->data=array(
                         "type" => $type,
@@ -89,7 +89,6 @@ class search_filter extends aw_template
                         $this->data["multchain"]=1;
                 };
                 
-                //$this->set_object_metadata(array("oid" => $id,"key" => "data","value"=> $this->data));
                 $this->obj_set_meta(array("oid"=>$id,"meta"=>array("data"=>$this->data)));
                 return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));
         }
@@ -173,7 +172,6 @@ class search_filter extends aw_template
 
         function __save_data()
         {
-                //$this->set_object_metadata(array("oid" => $this->id,"key" => "data", "value" => $this->data));
                 $this->obj_set_meta(array("oid" => $this->id,"meta"=>array("data"=>$this->data)));
         }
 
@@ -196,7 +194,6 @@ class search_filter extends aw_template
 
         function __save_filter()
         {
-                //$this->set_object_metadata(array("oid" => $this->id,"key" => "filter","value" => $this->filter));
                 $arr=array("filter"=>$this->filter);
                 $this->obj_set_meta(array("oid" => $this->id,"meta" => $arr));
         }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.28 2004/03/25 15:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.29 2004/06/15 08:46:20 kristo Exp $
 
 /*
 
@@ -1323,17 +1323,15 @@ class dronline extends class_base
 				$q = $this->$fn($param);
 				$this->quote(&$q);
 
-				$nid = $this->new_object(array(
-					'name' => $arr['request']['save_as_obj_name'],
-					'class_id' => CL_DRONLINE_LOG,
-					'parent' => $arr['obj_inst']->parent(),
-					'metadata' => array(
-						'dro_type' => $arr['request']['extraids']['dro_tab'],
-						'cur_range' => $arr['request']['extraids']['cur_range'],
-						'query' => $q,
-						'conf_desc' => $this->get_conf_desc($param)
-					)
-				));
+				$o = obj();
+				$o->set_name($arr['request']['save_as_obj_name']);
+				$o->set_class_id(CL_DRONLINE_LOG);
+				$o->set_parent($arr['obj_inst']->parent());
+				$o->set_meta('dro_type',$arr['request']['extraids']['dro_tab']);
+				$o->set_meta('cur_range',$arr['request']['extraids']['cur_range']);
+				$o->set_meta('query',$q);
+				$o->set_meta('conf_desc',$this->get_conf_desc($param));
+				$nid = $o->save();
 			}
 
 			$prop['value'] = 0;

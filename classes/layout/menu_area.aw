@@ -81,30 +81,23 @@ class menu_area extends class_base
 		for($i = 0; $i < $num; $i++)
 		{
 			$exists = false;
-			// removing that query and new_object is left as a home exersice for the reader
-			if ($od["level_objs"][$i])
+			if ($od["level_objs"][$i] && $this->can("view", $od["level_objs"][$i]))
 			{
-				// check if it is not deleted
-				$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '".$od["level_objs"][$i]."'", "status");
-				if ($stat >= 1)
-				{
-					$exists = true;
-				}
+				$exists = true;
 			}
 			
 			if (!$exists)
 			{
 				// create object for that level
-				$oid = $this->new_object(array(
-					"parent" => $ob->parent(),
-					"name" => $ob->name()." tase ".($i+1),
-					"class_id" => CL_MENU_AREA_LEVEL,
-					"status" => STAT_ACTIVE,
-					"metadata" => array(
-						"level" => $i,
-						"menu_area" => $ob->id(),
-					)
-				));
+				$o = obj();
+				$o->set_parent($ob->parent());
+				$o->set_name($ob->name()." tase ".($i+1));
+				$o->set_class_id(CL_MENU_AREA_LEVEL);
+				$o->set_status(STAT_ACTIVE);
+				$o->set_meta("level", $i);
+				$o->set_meta("menu_area", $ob->id());
+				$oid = $o->save();
+
 				$od["level_objs"][$i] = $oid;
 			}
 		}

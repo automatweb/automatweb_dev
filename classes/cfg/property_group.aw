@@ -20,12 +20,12 @@
 */
 class property_group extends class_base
 {
-        function property_group($args = array())
-        {
-                $this->init(array(
-                        "clid" => CL_PROPERTY_GROUP,
-                ));
-        }
+	function property_group($args = array())
+	{
+		$this->init(array(
+			"clid" => CL_PROPERTY_GROUP,
+		));
+	}
 
 	////
 	// !Returns a list of checkboxes for selecting classes
@@ -99,16 +99,16 @@ class property_group extends class_base
 		$comment = $obj->comment();
 		$parent = $obj->prop("rootmenu");
 		$subclass = $obj->subclass();
-		$grandparent = $this->new_object(array(
-			"parent" => $parent,
-			"name" => $name,
-			"comment" => $comment,
-			"class_id" => CL_MENU,
-			"status" => 2,
-			"no_flush" => 1,
-		));
-		$q = "INSERT INTO menu (id,type) VALUES ($grandparent," . MN_CONTENT . ");";
-		$this->db_query($q);
+
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($name);
+		$o->set_comment($comment);
+		$o->set_class_id(CL_MENU);
+		$o->set_status(STAT_ACTIVE);
+		$o->set_prop("type", MN_CONTENT);
+		$grandparent = $o->save();
+
 		$groups = array();
 		$properties = array();
 		foreach($props as $val)
@@ -120,15 +120,13 @@ class property_group extends class_base
 		foreach($groups as $group)
 		{
 			print "creating group $group<br />";
-			$group_id = $this->new_object(array(
-				"parent" => $grandparent,
-				"name" => $group,
-				"class_id" => CL_MENU,
-				"status" => 2,
-				"no_flush" => 1,
-			));
-			$q = "INSERT INTO menu (id,type) VALUES ($group_id," . MN_CONTENT . ");";
-			$this->db_query($q);
+			$o = obj();
+			$o->set_parent($grandparent);
+			$o->set_name($group);
+			$o->set_class_id(CL_MENU);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_prop("type", MN_CONTENT);
+			$group_id = $o->save();
 			flush();
 			sleep(1);
 
@@ -137,18 +135,22 @@ class property_group extends class_base
 				print "<pre>";
 				print_r($val);
 				print "</pre>";
-				$this->new_object(array(
-					"parent" => $group_id,
-					"name" => $val["caption"],
-					"class_id" => CL_PROPERTY,
-					"status" => 2,
-					"subclass" => $subclass,
-					"metadata" => $val,
-					"no_flush" => 1,
-				));
+				$o = obj();
+				$o->set_parent($group_id);
+				$o->set_name($val["caption"]);
+				$o->set_class_id(CL_PROPERTY);
+				$o->set_status(STAT_ACTIVE);
+				$o->set_subclass($subclass);
+				if (is_array($val))
+				{
+					foreach($val as $k => $v)
+					{
+						$o->set_meta($k, $v);
+					}
+				}
+				$o->save();
 			};
 		};
-		$this->flush_cache();
 		print "all done!<br />";
 	}
 };

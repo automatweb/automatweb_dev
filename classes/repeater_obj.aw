@@ -86,19 +86,18 @@ class repeater_obj extends cal_event
 		extract($arr);
 		if ($id)
 		{
-			$this->upd_object(array(
-				'oid' => $id,
-				'name' => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->save();
 			$this->_log(ST_REPEATER, SA_CHANGE, "$name ($id)", $id);
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				'parent' => $parent,
-				'name' => $name,
-				'class_id' => CL_REPEATER_OBJ
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_REPEATER_OBJ);
+			$id = $o->save();
 			$this->_log(ST_REPEATER, SA_ADD, "$name ($id)", $id);
 		}
 
@@ -153,41 +152,6 @@ class repeater_obj extends cal_event
 			"use_class" => "repeater_obj",
 			"use_method" => "set_time",
     ));	
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 }
 ?>

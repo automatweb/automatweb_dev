@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.54 2004/06/11 10:02:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.55 2004/06/15 08:50:18 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -220,13 +220,11 @@ class table extends aw_template
 	{
 		extract($args);
 		$this->load_table($id);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"aliases" => $aliases,
-				"last_changed" => $last_changed,
-			),
-		));
+		$o = obj($id);
+		$o->set_meta("aliases", $aliases);
+		$o->set_meta("last_changed", $last_changed);
+		$o->set_name($table_name);
+		$o->save();
 
 		$this->arr["table_footer"] = $table_footer;
 		$this->arr["table_header"] = $table_header;
@@ -248,11 +246,6 @@ class table extends aw_template
 			$this->arr["style2class"][$tbst["even_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["even_style"],"class_id");
 			$this->arr["style2class"][$tbst["odd_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["odd_style"],"class_id");
 		}
-		// touch the object
-		$this->upd_object(array(
-			"oid" => $id,
-			"name" => $table_name,
-		));
 		$this->save_table($args,false);
 		$this->_log(ST_AWTABLE, SA_CHANGE, $table_name);
 		return $this->mk_my_orb("configure",array("id" => $id));
@@ -2643,13 +2636,13 @@ class table extends aw_template
 	{
 		extract($arr);
 		
-		$this->id=$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($name);
+		$o->set_class_id(CL_TABLE);
+		$o->set_comment($comment);
+		$this->id = $id = $o->save(); 
 		$this->db_query("INSERT INTO aw_tables(id) VALUES($id)");
-		/*if ($GLOBALS["is_filter$id"])
-		{
-			$this->set_object_metadata(array("oid"=>$id,"key"=>"is_filter","value"=>1));
-			$this->set_object_metadata(array("oid"=>$id,"key"=>"filter","value"=>$filter));
-		};*/
 
 		if ($alias_to)
 		{
@@ -2722,7 +2715,13 @@ class table extends aw_template
 	{
 		extract($arr);
 		
-		$tid = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($name);
+		$o->set_class_id(CL_TABLE);
+		$o->set_comment($comment);
+		$tid = $o->save();
+
 		$this->db_query("INSERT INTO aw_tables(id) VALUES($tid)");
 		$this->add_alias($id,$tid);
 
@@ -2771,7 +2770,14 @@ class table extends aw_template
 		// $row may contain metadata and the query will fail, if that metadata contains apostrophses
 		$this->quote($row);
 		$row["lang_id"] = aw_global_get("lang_id");
-		$id = $this->new_object($row);
+
+		$o = obj();
+		$o->set_parent($row["parent"]);
+		$o->set_name($row["name"]);
+		$o->set_class_id(CL_TABLE);
+		$o->set_comment($row["comment"]);
+		$id = $o->save();
+
 		$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
 		$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
 		return true;

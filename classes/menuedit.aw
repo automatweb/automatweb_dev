@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.324 2004/06/07 06:51:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.325 2004/06/15 08:54:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -24,22 +24,18 @@ class menuedit extends aw_template
 	function add_new_menu($args = array())
 	{   
 		// ja eeldame, et meil on v�emalt parent ja name olemas.   
-		$this->quote($args["name"]);   
-		$newoid = $this->new_object(array(   
-			"name" => $args["name"],
-			"parent" => $args["parent"],   
-			"status" => (isset($args["status"]) ? $args["status"] : 2),   
-			"class_id" => CL_PSEUDO,   
-			"jrk" => $args["jrk"],   
-			'no_flush' => $args['no_flush'],   
-			"metadata" => array(
-				"pclass" => $args["pclass"],
-				"pm_url_admin" => $args["pm_url_admin"]
-			)
-		));   
-		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;   
-		$q = sprintf("INSERT INTO menu (id,type,link) VALUES (%d,%d,'%s')",$newoid,$type,$args["link"]);   
-		$this->db_query($q);   
+		$o = obj();
+		$o->set_name($args["name"]);
+		$o->set_parent($args["parent"]);
+		$o->set_status((isset($args["status"]) ? $args["status"] : 2));
+		$o->set_class_id(CL_MENU);
+		$o->set_jrk($args["jrk"]);
+		$o->set_meta("pclass", $args["pclass"]);
+		$o->set_meta("pm_url_admin", $args["pm_url_admin"]);
+		$o->set_prop("type", $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB);
+		$o->set_prop("link", $args["link"]);
+		$newoid = $o->save();
+
 		$this->_log(ST_MENUEDIT, SA_ADD, $args["name"], $newoid);   
 
 		if (!$args['no_flush'])   
@@ -615,94 +611,6 @@ class menuedit extends aw_template
 		$cache->file_invalidate_regex("menuedit::menu_cache::.*");
 	}
 
-	// !this should creates a string representation of the menu
-	// parameters
-	//    oid - menu id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$this->ser_obj = array();
-		$hash = gen_uniq_id();
-		$this->menu_hash2id[$oid] = $hash;
-		$od = $this->get_object($oid);
-		$od["parent"] = 0;
-		$od["oid"] = $hash;
-
-		$row = $this->db_fetch_row("SELECT * FROM menu WHERE id = '$oid'");
-		$row["id"] = $hash;
-		$dat = array(
-			"object" => $od,
-			"table" => $row
-		);
-		$this->ser_obj[$hash] = $dat;
-
-		if ($this->serialize_submenus || aw_global_get("__is_rpc_call"))
-		{
-			$this->req_serialize_obj_tree($oid);
-		}
-		else
-		{
-			if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
-			{
-				$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
-				while ($row = $this->db_next())
-				{
-					$dat = $this->serialize(array("oid" => $row["oid"]));
-					if ($dat !== false)
-					{
-						$hash = gen_uniq_id();
-						$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
-					}
-				}
-			}
-		}
-
-		return serialize($this->ser_obj);
-	}
-
-	////
-	// !this should create a menu from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$dat = unserialize($str);
-
-		$hash2id = array(0 => $parent);
-
-		foreach($dat as $hash => $row)
-		{
-			if (!$row["is_object"])
-			{
-				$ob = $row["object"];
-				$ob["parent"] = $hash2id[$ob["parent"]];
-				$this->quote(&$ob);
-				$id = $this->new_object($ob);
-				$hash2id[$hash] = $id;
-
-				$menu = $row["table"];
-				$m_ids = array("id");
-				$m_vls = array($id);
-				foreach($menu as $col => $val)
-				{
-					if ($col != "id" && $col != "rec")
-					{
-						$m_ids[] = $col;
-						$m_vls[] = "'".$val."'";
-					}
-				}
-				$this->db_query("INSERT INTO menu (".join(",",$m_ids).") VALUES(".join(",",$m_vls).")");
-			}
-			else
-			{
-				$this->unserialize(array("str" => $row["objstr"], "parent" => $hash2id[$row["parent"]], "period" => $period));
-			}
-		}
-		return true;
-	}
-
 	// builds HTML popups
 	function build_popups()
 	{
@@ -713,56 +621,6 @@ class menuedit extends aw_template
 		$ss->_init_path_vars($tmp);
 		$ss->sel_section = $ss->_get_sel_section(aw_global_get("section"));
 		return $ss->build_popups();
-		/*$pl = new object_list(array(
-			"status" => STAT_ACTIVE,
-			"class_id" => CL_HTML_POPUP
-		));
-		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
-		{
-			$ar = new aw_array($o->meta("menus"));
-			$sub = $o->meta("section_include_submenus");
-
-			foreach($ar->get() as $key => $val)
-			{
-				$show = false;
-				if ($sub[$val])
-				{
-					if (!is_array($this->path))
-					{
-						$so = $this->get_object($this->sel_section);
-						$this->path = $this->get_path($this->sel_section,$so);
-					}
-					if (in_array($val, $this->path))
-					{
-						$show = true;
-					}
-				}
-				else
-				{
-					if ($val == $this->sel_section)
-					{
-						$show = true;
-					}
-				}
-
-				if ($o->meta("only_once") && aw_global_get("aw_popup_shown_".$o->id()) == 1)
-				{
-					$show = false;
-				}
-
-				if ($show)
-				{
-					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');",
-						$this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects"),
-						$o->meta("width"), 
-						$o->meta("height")
-					);
-					aw_session_set("aw_popup_shown_".$o->id(), "1");
-				}
-			}
-		}
-		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		return $retval;*/
 	}
 
 	function get_path($section,$obj)

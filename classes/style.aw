@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.32 2004/06/11 10:03:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.33 2004/06/15 08:50:35 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -266,12 +266,13 @@ class style extends aw_template
 	function submit_sel($arr)
 	{
 		// lisame 6ige tyybiga
-		$id = $this->new_object(array(
-			"parent" => $arr["parent"], 
-			"class_id" => CL_STYLE, 
-			"name" => $arr["name"], 
-			"comment" => $arr["comment"]
-		));
+		$o = obj();
+		$o->set_parent($arr["parent"]);
+		$o->set_name($arr["name"]);
+		$o->set_class_id(CL_STYLE);
+		$o->set_comment($arr["comment"]);
+		$id = $o->save();
+
 		$this->db_query("INSERT INTO styles (id,type) values($id,".$arr["type"].")");
 		return $this->mk_orb("change", array("parent" => $arr["parent"], "id" => $id));
 	}
@@ -769,7 +770,15 @@ class style extends aw_template
 
 		$row = unserialize($str);
 		// basically, we create a new object and insert the stuff in the array right back in it. 
-		$oid = $this->new_object(array("parent" => $parent, "name" => $row["name"], "class_id" => CL_STYLE, "status" => $row["status"], "comment" => $row["comment"], "last" => $row["last"], "jrk" => $row["jrk"], "visible" => $row["visible"], "period" => $period, "alias" => $row["alias"], "periodic" => $row["periodic"], "doc_template" => $row["doc_template"], "activate_at" => $row["activate_at"], "deactivate_at" => $row["deactivate_at"], "autoactivate" => $row["autoactivate"], "autodeactivate" => $row["autodeactivate"], "brother_of" => $row["brother_of"]));
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($row["name"]);
+		$o->set_class_id(CL_STYLE);
+		$o->set_comment($row["comment"]);
+		$o->set_status($row["status"]);
+		$o->set_jrk($row["jrk"]);
+		$o->set_alias($row["alias"]);
+		$oid = $o->save();
 
 		// same with the style. 
 		$this->quote(&$row);
