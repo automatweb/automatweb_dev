@@ -11,10 +11,11 @@ classload(
 	"core/obj/object_list_filter"
 );
 
-// TODO:
-// cache properties by type
-// cache tableinfo by type, don't use member vars. 
-// access ini settings directly?
+$GLOBALS["properties"] = array();
+$GLOBALS["tableinfo"] = array();
+$GLOBALS["of2prop"] = array();
+
+
 
 // god damn, this is a fucking great idea!
 // how to get around the php copy-object problem. 

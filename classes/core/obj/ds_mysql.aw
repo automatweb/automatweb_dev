@@ -737,22 +737,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		foreach($clids as $clid)
 		{
-			list($tmp, $tmp2) = $GLOBALS["object_loader"]->load_properties(array(
-				"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
-				"clid" => $clid
-			));
+			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]))
+			{
+				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
+					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
+					"clid" => $clid
+				));
+			}
 
-			$this->properties += $tmp;
-			if (is_array($tmp2))
+			$this->properties += $GLOBALS["properties"][$clid];
+			if (is_array($GLOBALS["tableinfo"][$clid]))
 			{
 				if ($add_table)
 				{
-					foreach($tmp2 as $_tbl => $td)
+					foreach($GLOBALS["tableinfo"][$clid] as $_tbl => $td)
 					{
 						$this->used_tables[$_tbl] = $_tbl;
 					}
 				}
-				$this->tableinfo += $tmp2;
+				$this->tableinfo += $GLOBALS["tableinfo"][$clid];
 			}
 			if (isset($this->tableinfo["documents"]))
 			{

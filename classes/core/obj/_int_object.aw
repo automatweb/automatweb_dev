@@ -16,8 +16,6 @@ class _int_object
 
 	var $obj;			// actual object data
 	var $implicit_save; 
-	var $properties;	// class property definitions are here
-	var $of2prop;		// here we keep object field => property name mapping
 	
 
 	///////////////////////////////////////////
@@ -801,7 +799,7 @@ class _int_object
 		$this->obj["meta"][$key] = $value;
 
 		// if any property is defined for metadata, we gots to sync from object to property
-		if (is_array($this->properties[$key]) && $this->properties[$key]["field"] == "meta" && $this->properties[$key]["table"] == "objects")
+		if (is_array($GLOBALS["properties"][$this->obj["class_id"]][$key]) && $GLOBALS["properties"][$this->obj["class_id"]]["field"] == "meta" && $GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
 		{
 			$this->obj["properties"][$key] = $value;
 		}
@@ -812,7 +810,7 @@ class _int_object
 
 	function get_property_list()
 	{
-		return $this->properties;
+		return $GLOBALS["properties"][$this->obj["class_id"]];
 	}
 
 	function prop($param)
@@ -836,30 +834,30 @@ class _int_object
 		$this->obj["properties"][$key] = $val;
 
 		// if this is an object field property, sync to object field
-		if ($this->properties[$key]["table"] == "objects")
+		if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
 		{
-			if ($this->properties[$key]["field"] == "meta")
+			if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["field"] == "meta")
 			{
-				$this->obj["meta"][$this->properties[$key]["name"]] = $val;
+				$this->obj["meta"][$GLOBALS["properties"][$this->obj["class_id"]][$key]["name"]] = $val;
 			}
-			if ($this->properties[$key]["method"] == "bitmask")
+			if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["method"] == "bitmask")
 			{
 				// it's flags, sync to that
 				$mask = $this->obj["flags"];
 				// zero out cur field bits
-				$mask = $mask & (~((int)$this->properties[$key]["ch_value"]));
+				$mask = $mask & (~((int)$GLOBALS["properties"][$this->obj["class_id"]][$key]["ch_value"]));
 				$mask = $mask | $val;
 				$this->obj["flags"] = $mask;
 			}
 			else
 			{
-				if ($this->properties[$key]["method"] == "serialize")
+				if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["method"] == "serialize")
 				{
-					$this->obj[$this->properties[$key]["field"]][$this->properties[$key]["name"]] = $this->obj["properties"][$key];
+					$this->obj[$GLOBALS["properties"][$this->obj["class_id"]][$key]["field"]][$GLOBALS["properties"][$this->obj["class_id"]][$key]["name"]] = $this->obj["properties"][$key];
 				}
 				else
 				{
-					$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$key];
+					$this->obj[$GLOBALS["properties"][$this->obj["class_id"]][$key]["field"]] = $this->obj["properties"][$key];
 				}
 			}
 		}
@@ -1019,15 +1017,9 @@ class _int_object
 	
 	function _init_empty()
 	{
-		$this->ini = array();
-
 		$this->obj = array();
 		$this->obj["properties"] = array();
 		$this->implicit_save = false;
-		$this->properties = false;
-		$this->of2prop = false;
-
-		$this->_init_ini_cache();
 	}
 
 	function _int_load($oid)
@@ -1048,13 +1040,13 @@ class _int_object
 		$this->_int_load_properties();
 
 		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
-			"properties" => $this->properties,
-			"tableinfo" => $this->tableinfo,
+			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"objdata" => $this->obj,
 		));
 
 
-		foreach($this->of2prop as $key => $val)
+		foreach($GLOBALS["of2prop"][$this->obj["class_id"]] as $key => $val)
 		{
 			if (!$this->obj["properties"][$key])
 			{
@@ -1071,21 +1063,21 @@ class _int_object
 	function _int_load_properties()
 	{
 		// then get the properties
-		$file = $this->ini["classes"][$this->obj["class_id"]]["file"];
+		$file = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]]["file"];
 		if ($this->obj["class_id"] == 29)
 		{
 			$file = "doc";
 		}
-		list($this->properties, $this->tableinfo) = $GLOBALS["object_loader"]->load_properties(array(
+		list($GLOBALS["properties"][$this->obj["class_id"]], $GLOBALS["tableinfo"][$this->obj["class_id"]]) = $GLOBALS["object_loader"]->load_properties(array(
 			"file" => $file,
 			"clid" => $this->obj["class_id"]
 		));
 
 		// also make list of properties that belong to object, so we can keep them 
-		// in sync in $this->obj and $this->properties
+		// in sync in $this->obj and properties
 
 		// things in this array can be accessed later with $objref->prop("keyname")
-		$this->of2prop = array(
+		$GLOBALS["of2prop"][$this->obj["class_id"]] = array(
 			"brother_of" => "brother_of",
 			"parent" => "parent",
 			"class_id" => "class_id",
@@ -1093,22 +1085,14 @@ class _int_object
 			"period" => "period",
 			"periodic" => "periodic",
 		);
-		foreach($this->properties as $prop)
+		foreach($GLOBALS["properties"][$this->obj["class_id"]] as $prop)
 		{
 			if ($prop['table'] == "objects" && $prop["field"] != "meta")
 			{
-				$this->of2prop[$prop['name']] = $prop['name'];
+				$GLOBALS["of2prop"][$this->obj["class_id"]][$prop['name']] = $prop['name'];
 			}
 		}
 
-	}
-
-	function _init_ini_cache()
-	{
-		$this->ini = array();
-		$this->ini["site_id"] = aw_ini_get("site_id");
-		$this->ini["menuedit.recursive_aliases"] = aw_ini_get("menuedit.recursive_aliases");
-		$this->ini["rootmenu"] = aw_ini_get("rootmenu");
 	}
 
 	function _int_do_save()
@@ -1118,7 +1102,7 @@ class _int_object
 		$this->_int_set_of_value("modifiedby", aw_global_get("uid"));
 
 
-		if (!is_array($this->properties))
+		if (!is_array($GLOBALS["properties"][$this->obj["class_id"]]))
 		{
 			$this->_int_load_properties();
 		}
@@ -1129,8 +1113,8 @@ class _int_object
 
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
 				"objdata" => $this->obj,
-				"properties" => $this->properties,
-				"tableinfo" => $this->tableinfo
+				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
 			if (!$this->obj["brother_of"])
 			{
@@ -1141,8 +1125,8 @@ class _int_object
 		// now, save objdata
 		$GLOBALS["object_loader"]->ds->save_properties(array(
 			"objdata" => $this->obj,
-			"properties" => $this->properties,
-			"tableinfo" => $this->tableinfo,
+			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"propvalues" => $this->obj["properties"]
 		));
 
@@ -1161,9 +1145,9 @@ class _int_object
 	function _int_sync_from_objfield_to_prop($ofname)
 	{
 		// object field changed, sync to properties
-		if ($this->of2prop[$ofname] != "")
+		if ($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname] != "")
 		{
-			$this->obj["properties"][$this->of2prop[$ofname]] = $this->obj[$ofname];
+			$this->obj["properties"][$GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]] = $this->obj[$ofname];
 		}
 	}
 
@@ -1172,7 +1156,7 @@ class _int_object
 		$ret = array();
 		$parent = $this->id();
 		$cnt = 0;
-		while ($parent && $parent != $this->ini["rootmenu"])
+		while ($parent && $parent != $GLOBALS["cfg"]["__default"]["rootmenu"])
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent) && $GLOBALS["object_loader"]->ds->object_exists($parent))
 			{
@@ -1198,9 +1182,9 @@ class _int_object
 				));
 			}
 		}
-		if ($GLOBALS["object_loader"]->ds->can("view", $this->ini["rootmenu"]))
+		if ($GLOBALS["object_loader"]->ds->can("view", $GLOBALS["cfg"]["__default"]["rootmenu"]))
 		{
-			$ret[] = obj($this->ini["rootmenu"]);
+			$ret[] = obj($GLOBALS["cfg"]["__default"]["rootmenu"]);
 		}
 		return array_reverse($ret);
 	}
@@ -1260,7 +1244,7 @@ class _int_object
 		$this->_int_set_of_value("created", time());
 		$this->_int_set_of_value("createdby", aw_global_get("uid"));
 		$this->_int_set_of_value("hits", 0);
-		$this->_int_set_of_value("site_id", $this->ini["site_id"]);
+		$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["__default"]["site_id"]);
 
 		// new objects can't be created with deleted status
 		if (!$this->obj["status"])
@@ -1277,7 +1261,7 @@ class _int_object
 
 	function _int_is_property($prop)
 	{
-		return isset($this->properties[$prop]) && is_array($this->properties[$prop]);
+		return isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]) && is_array($GLOBALS["properties"][$this->obj["class_id"]][$prop]);
 	}
 
 	function _int_do_delete($oid)
