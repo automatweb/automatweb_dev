@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.8 2001/11/27 11:24:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.9 2001/11/27 13:01:19 duke Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -106,9 +106,17 @@ class archive extends aw_template {
 		$this->_calc_path($args);
 		$tstamp = ($version) ? $version : time();
 		$fname = $this->fullpath . "/$tstamp";
+		if ($ser_content)
+		{
+			$ser = aw_serialize($args["content"],SERIALIZE_XML);
+		}
+		else
+		{
+			$ser = $args["content"];
+		};
 		$this->put_file(array(
 			"file" => $fname,
-			"content" => $args["content"],
+			"content" => $ser,
 		));
 		$meta = $this->obj_get_meta(array("oid" => $oid));
 
