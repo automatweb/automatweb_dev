@@ -20,6 +20,13 @@ if (!is_array($AW_GET_VARS))
 $vars = $_GET + $_POST + $AW_GET_VARS;
 
 $class = $vars["class"];
+
+// I'll burn in hell for this
+if (!$class)
+{
+	$class = $vars["alias"];
+};
+
 $action = $vars["action"];
 
 if ($vars["fastcall"] == 1)
