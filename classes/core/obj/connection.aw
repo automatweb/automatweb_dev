@@ -296,6 +296,14 @@ class connection
 
 		if ($new)
 		{
+			// add the relation id to the connection object meta field as conn_id
+			if ($this->conn["relobj_id"])
+			{
+				$o = obj($this->conn["relobj_id"]);
+				$o->set_meta("conn_id", $this->conn["id"]);
+				$o->save();
+			}
+
 			post_message(
 				MSG_STORAGE_ALIAS_ADD,
 				array(
