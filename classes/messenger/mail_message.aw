@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.4 2003/09/08 14:50:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.5 2003/09/11 13:26:41 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -164,6 +164,34 @@ class mail_message extends class_base
 		print "<b>Teema:</b>" . parse_obj_name($obj->prop("name")) . "<br>";
 		print "<br><pre>" . htmlspecialchars($obj->prop("message")) . "</pre><br>";
 		exit;
+	}
+	
+	////
+	// !fetches a message by it's ID
+	// arguments:
+	// id(int) - message id
+	function msg_get($args = array())
+	{
+		// Will show only users own messages
+		//$q = sprintf("UPDATE messages SET status = %d WHERE id = %d",MSG_STATUS_READ,$args["id"]);
+		//$this->db_query($q);
+		$q = sprintf("SELECT *,objects.* 
+				FROM messages
+				LEFT JOIN objects ON (messages.id = objects.oid)
+				WHERE id = '%d'",
+				$args["id"]);
+		$this->db_query($q);
+		$row = $this->db_next();
+		$row["meta"] = $this->get_object_metadata(array(
+			"metadata" => $row["metadata"]
+		));
+		// get subject from object name, since that is where the new mail_message class keeps
+		// it -- duke
+		if (empty($row["subject"]) && !empty($row["name"]))
+		{
+			$row["subject"] = $row["name"];
+		};
+		return $row;
 	}
 		
 
