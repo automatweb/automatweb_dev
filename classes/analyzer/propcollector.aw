@@ -254,6 +254,14 @@ class propcollector extends aw_template
 		{
 			$fields["store"] = "no";
 		};
+		if ("releditor" == $fields["type"])
+		{
+			$fields["store"] = "no";
+		};
+		if ("toolbar" == $fields["type"])
+		{
+			$fields["store"] = "no";
+		};
 
 		// field defaults to the name of the property
 		if (!$fields["field"])
