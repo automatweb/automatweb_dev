@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.35 2001/09/28 14:51:39 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.36 2001/10/01 13:48:41 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -131,7 +131,8 @@ lc_load("definition");
 					
 			if ($this->arr["type"] == "textbox")
 			{
-				$html = htmlspecialchars($this->entry);
+				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
+				$html = $src;
 			}
 
 			if ($this->arr["type"] == "price")
