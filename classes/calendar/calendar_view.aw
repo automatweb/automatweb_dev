@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.5 2004/04/29 11:05:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.6 2004/05/17 10:45:28 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -88,6 +88,7 @@ class calendar_view extends class_base
 				$data["options"] = array(
 					"intranet1.tpl" => "Kuuvaade & nädala sündmused",
 					"month" => "Kuukalender",
+					"futureevents" => "Algavad sündmused",
 				);
 				break;
 
@@ -125,6 +126,7 @@ class calendar_view extends class_base
 
 	function gen_calendar_contents($arr)
 	{
+		$args = array();
 		$arr["prop"]["vcl_inst"]->configure(array(
 			//"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
@@ -205,6 +207,7 @@ class calendar_view extends class_base
 			foreach($overview as $event)
 			{
 				$item["timestamp"] = $event["start"];
+				$item["url"] = $event["url"];
 				if (!empty($item["url"]))
 				{
 					$item["url"] = aw_url_change_var("date",date("d-m-Y",$event["start"]),$item["url"]);
@@ -229,6 +232,7 @@ class calendar_view extends class_base
 		foreach ($conns as $conn)
 		{
 			$to_o = $conn->to();
+			$events = array();
 			// so, how do I get events from that calendar now?
 			// no matter HOW, that function needs to accept range arguments
 			if ($to_o->class_id() == CL_PLANNER)
@@ -241,7 +245,7 @@ class calendar_view extends class_base
 					"date" => date("d-m-Y",$range["timestamp"]),
 				));
 			};
-			
+		
 			if ($to_o->class_id() == CL_DOCUMENT_ARCHIVE)
 			{
 				$da = get_instance(CL_DOCUMENT_ARCHIVE);
@@ -289,11 +293,22 @@ class calendar_view extends class_base
 			"tpldir" => $tpldir,
 		));
 
-		$vcal->configure(array(
-			"overview_func" => array(&$this,"get_overview"),
-			"overview_range" => 1,
+		$args = array(
 			"container_template" => "intranet1.tpl",
-		));
+		);
+
+		if ("futureevents" != $this->obj_inst->prop("use_template"))
+		{
+			$args["overview_func"] = array(&$this,"get_overview");
+			$args["overview_range"] = 1;
+		};
+
+		if (1 == $this->obj_inst->prop("show_days_with_events"))
+		{
+			$args["show_days_with_events"] = 1;
+		};
+
+		$vcal->configure($args);
 
 		$viewtype = $this->obj_inst->prop("default_view");
 		if ($viewtype == "")
