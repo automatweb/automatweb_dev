@@ -219,15 +219,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			{
 				$this->cache->file_invalidate_regex($cfn."-search-(.*)");
 				$this->search_cache_is_cleared = true;
+				$this->cache->flush_cache();
 				if ($GLOBALS["INTENSE_DUKE"] == 1)
 				{
 					echo "CLEAR CACHE file  ".$cfn."-search-(.*) got result <br>";
 				}
-			}
-			else
-			if ($GLOBALS["file_cache_log"])
-			{
-				fwrite($GLOBALS["file_cache_log"], date("d.m.Y H:i:s").": ds_cache::_clear_cache($oid, $cfn) - saved a cache clear from ".dbg::short_backtrace()."\n\n");
 			}
 		};
 
@@ -235,16 +231,17 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$this->conn_cache_is_cleared = true;
 			$this->cache->file_invalidate_regex("connection(.*)");
-			$this->cache->flush_cache();
 			if ($GLOBALS["INTENSE_DUKE"] == 1)
 			{
 				echo "CLEAR CACHE file  connection(.*) got result <br>";
 			}
 		}
-		else
-		if ($GLOBALS["file_cache_log"])
+
+		// flush menu cache only once per request
+		if (!$this->menu_cache_flushed)
 		{
-			fwrite($GLOBALS["file_cache_log"], date("d.m.Y H:i:s").": ds_cache::_clear_cache($oid, $cfn) - saved a cache clear from ".dbg::short_backtrace()."\n\n");
+			$this->cache->file_invalidate_regex("menuedit-menu_cache(.*)");
+			$this->menu_cache_flushed = true;
 		}
 	}
 }
