@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.21 2004/12/30 14:16:59 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.22 2004/12/30 14:35:14 duke Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1058,13 +1058,22 @@ class register_data extends class_base
 		switch($prop["name"])
 		{
 		};
-		$this->set_register_id = $arr["request"]["set_register_id"];
-		if ($this->set_register_id && $arr["request"]["cfgform"])
+		if ($arr["new"])
+		{
+			$this->set_register_id = $arr["request"]["set_register_id"];
+			$cfg_id = $arr["request"]["cfgform"];
+		}
+		else
+		{
+			$this->set_register_id = $arr["obj_inst"]->prop("register_id");
+			$cfg_id = $arr["obj_inst"]->meta("cfgform_id");
+		};
+		if ($this->set_register_id && $cfg_id)
 		{
 			$rego = obj($this->set_register_id);
 			if ($rego->prop("cfgform_name_in_field") != "" && $prop["name"] == $rego->prop("cfgform_name_in_field"))
 			{
-				$co = obj($arr["request"]["cfgform"]);
+				$co = obj($cfg_id);
 				$prop["value"] = $co->name();
 			}
 		}
