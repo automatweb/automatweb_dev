@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.8 2003/06/04 14:19:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.9 2003/06/04 19:18:18 kristo Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -93,6 +93,22 @@ class admin_folders extends aw_template
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
 		// listib koik menyyd ja paigutab need arraysse
 		$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
+		while ($row = $this->db_next())
+		{
+			$row["name"] = parse_obj_name($row["name"]);
+			if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+			{
+				$arr[$row["parent"]][] = $row;
+				$mpr[] = $row["parent"];
+			}
+			else
+			{
+				$this->x_mpr[$row['oid']] = $row;
+			}
+		}
+
+		// list groups as well..
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GROUP." AND status != 0");
 		while ($row = $this->db_next())
 		{
 			$row["name"] = parse_obj_name($row["name"]);
@@ -402,12 +418,17 @@ class admin_folders extends aw_template
 			$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
 			// as far as I know, this works everywhere
 			$blank = "about:blank";
+			// ugly-ass hack, but can't really think of anything else right now
+			if ($row["admin_feature"] == PRG_GROUPS && aw_ini_get("groups.tree_root"))
+			{
+				$row["link"] = $this->mk_my_orb("right_frame", array("parent" => aw_ini_get("groups.tree_root")), "admin_menus");
+			}
 			$this->vars(array(
 				"name"		=> $row["name"],
 				"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
 				"parent"	=> ($parent == $this->cfg["amenustart"] ? $admin_rootmenu2 : $row["parent"]),
 				"iconurl" =>  $iconurl,
-				"url"			=> !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank)));
+				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank)));
 
 			if ($sub == "")
 			{
@@ -480,7 +501,7 @@ class admin_folders extends aw_template
 			$this->vars(array(
 				"name" => $row["name"],"id" => "gp_".$row["oid"], "parent" => "gp_".$row["parent"],
 				"iconurl" => $this->cfg["baseurl"]."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_orb("mk_grpframe",array("parent" => $row["gid"]),"groups")
+				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]),"admin_menus")
 			));
 			if ($sub == "")
 			{
