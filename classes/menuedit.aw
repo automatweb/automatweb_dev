@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.46 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.47 2001/08/13 14:33:01 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3957,11 +3957,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$left_promo = "";
 		$scroll_promo = "";
 		$template = $this->get_lead_template($section);
+		if ($GLOBALS["lang_menus"])
+		{
+			$lai = "AND objects.lang_id = ".$GLOBALS["lang_id"];
+		}
 		$q = "SELECT objects.*, template.filename as filename,menu.link as link
 				FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				LEFT JOIN template ON template.id = menu.tpl_lead
-				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) AND objects.lang_id = ".$GLOBALS["lang_id"]."
+				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
 		while ($row = $this->db_next())
