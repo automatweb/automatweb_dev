@@ -5,7 +5,9 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <table>documents</table>
             <group>general</group>
+            <field>navtoolbar</field>
             <caption>Toolbar</caption>
       </property>
       <property>
@@ -200,7 +202,9 @@
             <name>dcache</name>
             <type>checkbox</type>
             <store>no</store>
+            <table>documents</table>
             <group>general</group>
+            <field>dcache</field>
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
@@ -275,8 +279,8 @@
             <type>aliasmgr</type>
             <store>no</store>
             <editonly>1</editonly>
+            <group>relationmgr</group>
             <table>documents</table>
-            <group>general</group>
             <field>aliasmgr</field>
             <caption>Aliastehaldur</caption>
       </property>
@@ -327,7 +331,9 @@
             <name>gen_static</name>
             <type>checkbox</type>
             <store>no</store>
+            <table>documents</table>
             <group>general</group>
+            <field>gen_static</field>
             <caption>Genereeri staatiline</caption>
       </property>
       <property>
@@ -349,6 +355,10 @@
             <settings>
                   <caption>Seadistused</caption>
             </settings>
+            <relationmgr>
+                  <caption>Seostehaldur</caption>
+                  <submit>no</submit>
+            </relationmgr>
       </groupinfo>
       <tableinfo>
             <documents>
