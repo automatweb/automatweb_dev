@@ -1124,6 +1124,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				// so just return the table and field for that class
 				$prop = $GLOBALS["properties"][$clid][$filt[1]];
+				$this->used_tables[$prop["table"]] = $prop["table"];
 				return array($prop["table"], $prop["field"]);	
 			}
 		}
