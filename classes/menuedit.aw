@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.262 2003/03/13 08:20:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.263 2003/03/13 15:36:22 duke Exp $
 // menuedit.aw - menuedit. heh.
-
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
 
@@ -1357,14 +1356,16 @@ class menuedit extends aw_template
 			$dbp->clist();
 			$pl = array();
 			$actrec = 0;
+			$rc = 0;
 			// loeme k6ik perioodid sisse
 			while ($row = $dbp->db_next())
 			{
+				$rc++;
 				if ($row["id"] == $act_per_id)
 				{
-					$actrec = $row["rec"];
+					$actrec = $rc;
 				};
-				$pl[$row["rec"]] = $row;
+				$pl[$rc] = $row;
 			}
 			// leiame praegune +-3
 			$ar = array();
