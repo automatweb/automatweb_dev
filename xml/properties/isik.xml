@@ -1,14 +1,12 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>firstname</name>
+            <name>name</name>
             <type>textbox</type>
-            <size>15</size>
-            <maxlength>50</maxlength>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>general</group>
-            <field>firstname</field>
-            <caption>eesnimi</caption>
+            <field>name</field>
+            <caption>nimi</caption>
       </property>
       <property>
             <name>comment</name>
@@ -19,6 +17,16 @@
             <table>objects</table>
             <group>general</group>
             <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>firstname</name>
+            <type>textbox</type>
+            <size>15</size>
+            <maxlength>50</maxlength>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
+            <field>firstname</field>
+            <caption>eesnimi</caption>
       </property>
       <property>
             <name>lastname</name>

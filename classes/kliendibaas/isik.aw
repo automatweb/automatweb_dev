@@ -9,7 +9,7 @@
 	@default table=objects
 	@default group=general
 
-	@property firstname type=text
+	@property name type=textbox
 	@caption nimi
 
 	@property comment type=textarea field=comment cols=40 rows=3
