@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.118 2005/01/26 11:03:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.119 2005/01/26 11:26:15 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1353,12 +1353,7 @@ class menu extends class_base
 		foreach($sect->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
 		{
 			$tpl = isset($sad_opts[$c->prop("to")]["tpl"]) ? $sad_opts[$c->prop("to")]["tpl"] : "SEEALSO_DOCUMENT";
-
-			$d = get_instance("document");
-			$str[$tpl] .= $d->gen_preview(array(
-				"docid" => $c->prop("to"),
-				"tpl" => "seealso_document.tpl"
-			));
+			$str[$tpl][$c->prop("to")] = $c->prop("to.jrk");
 		}
 
 		// also parents
@@ -1376,17 +1371,32 @@ class menu extends class_base
 				if ($dat["submenus"] == $docid)
 				{
 					$tpl = isset($dat["tpl"]) ? $dat["tpl"] : "SEEALSO_DOCUMENT";
-
-					$d = get_instance("document");
-					$str[$tpl] .= $d->gen_preview(array(
-						"docid" => $docid,
-						"tpl" => "seealso_document.tpl"
-					));
+					$doco = obj($docid);
+					$str[$tpl][$docid] = $doco->ord();
 				}
 			}
 		}
 
-		foreach($str as $tpl => $docs)
+		if (aw_global_get("uid") == "kix")
+		{
+			echo dbg::dump($str);
+		}
+
+		$tmp = array();
+		foreach($str as $tpl => $dat)
+		{
+			asort($dat);
+
+			foreach($dat as $did => $ord)
+			{
+				$d = get_instance("document");
+				$tmp[$tpl] .= $d->gen_preview(array(
+					"docid" => $did,
+					"tpl" => "seealso_document.tpl"
+				));
+			}
+		}
+		foreach($tmp as $tpl => $docs)
 		{
 			$arr["inst"]->vars(array(
 				$tpl => $docs
