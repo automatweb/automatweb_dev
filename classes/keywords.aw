@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.11 2001/05/21 21:16:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.12 2001/05/21 21:42:15 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -180,6 +180,10 @@ class keywords extends aw_template {
 		$status_msg = "Muudatused on salvestatud";
 		session_register("status_msg");
 		$res = "?type=interests";
+		if ($gotourl != "")
+		{
+			$res = urldecode($gotourl);
+		}
 		return $res;
 	}
 
@@ -289,7 +293,7 @@ class keywords extends aw_template {
 		$resarray = array();
 		while($row = $this->db_next())
 		{
-			if (substr($row["keyword"],0,$blen) != $beg)
+			if (substr($row["keyword"],0,$blen) != $args["beg"])
 			{
 				continue;
 			}
@@ -415,10 +419,12 @@ class keywords extends aw_template {
 		$act = $mlist->get_user_lists(array(
 					"uid" => UID,
 					));
+		global $REQUEST_URI;
 		$this->vars(array(
 				"name" => "$eesnimi $perenimi",
 				"email" => $udata["email"],
-				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords($beg)),
+				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords(array("beg" => $beg))),
+				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode($REQUEST_URI)))
 		));
 		return $this->parse();
 	}

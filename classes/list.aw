@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.5 2001/05/18 22:13:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.6 2001/05/21 21:42:15 cvs Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -173,7 +173,7 @@ class mlist extends aw_template
 	{	
 		$this->quote($args);
 		extract($args);
-		if (sizeof($list_ids) > 0)
+		if (is_array($list_ids))
 		{
 			foreach($list_ids as $val)
 			{
