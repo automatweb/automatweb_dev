@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.154 2004/10/05 09:09:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.155 2004/10/08 05:09:29 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -1160,7 +1160,7 @@ class aliasmgr extends aw_template
 		);
 
 		$ht = <<<HTM
-			<select NAME="aselect" style="width:200px" onChange="GetOptions(document.foo.aselect,document.searchform.elements['s[class_id]']);">
+			<select NAME="aselect" style="width:200px" >
 				<script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT>
 			</select>
 HTM;
