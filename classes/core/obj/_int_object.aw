@@ -194,10 +194,17 @@ class _int_object
 			));
 			if (count($conn_id) < 1)
 			{
-				error::throw(array(
-					"id" => ERR_CONNECTION,
-					"msg" => "object::disconnect(): could not find connection to object $oid from object ".$this->obj["oid"]
-				));
+				if($param["errors"] === false)
+				{
+					return false;
+				}
+				else
+				{
+					error::throw(array(
+						"id" => ERR_CONNECTION,
+						"msg" => "object::disconnect(): could not find connection to object $oid from object ".$this->obj["oid"]
+					));
+				}
 			}
 			reset($conn_id);
 			list(, $f_c) = each($conn_id);
