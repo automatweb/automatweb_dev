@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.54 2004/02/20 09:08:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.55 2004/05/05 13:09:44 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1151,29 +1151,31 @@ class form_table extends form_base
 			$this->load_table($id);
 		}
 		
+		$css = $this->rewrite_table_style_classes();
+		
 		$xml = "<?xml version='1.0'?>
 			<tabledef>
 			<definitions>
-				<header_normal value=\"style_".$this->table["header_normal"]."\"/>
-				<header_sortable value=\"style_".$this->table["header_sortable"]."\"/>
-				<header_sorted value=\"style_".$this->table["header_sorted"]."\"/>
-				<content_style1 value=\"style_".$this->table["content_style1"]."\"/>
-				<content_style2 value=\"style_".$this->table["content_style2"]."\"/>";
-		if ($this->table["content_sorted_style1"])
+				<header_normal value=\"".$css["header_normal"]."\"/>
+				<header_sortable value=\"".$css["header_sortable"]."\"/>
+				<header_sorted value=\"".$css["header_sorted"]."\"/>
+				<content_style1 value=\"".$css["content_style1"]."\"/>
+				<content_style2 value=\"".$css["content_style2"]."\"/>";
+		if ($css["content_sorted_style1"])
 		{
-		  $xml .= "<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>";
+		  $xml .= "<content_style1_selected value=\"".$css["content_sorted_style1"]."\"/>";
 		}
-		if ($this->table["content_sorted_style2"])
+		if ($css["content_sorted_style2"])
 		{
-		  $xml .= "<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>";
+		  $xml .= "<content_style2_selected value=\"".$css["content_sorted_style2"]."\"/>";
 		}
-		if ($this->table["group_style"])
+		if ($css["group_style"])
 		{
-			$xml.= "<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+			$xml.= "<group_style value=\"".$css["group_style"]."\"/>\n";
 		}
-		if ($this->table["grp_add_els_style"])
+		if ($css["grp_add_els_style"])
 		{
-			$xml.= "<group_add_els_style value=\"style_".$this->table["grp_add_els_style"]."\"/>\n";
+			$xml.= "<group_add_els_style value=\"".$css["grp_add_els_style"]."\"/>\n";
 		}
 		$xml.="<tableattribs ";
 
@@ -3615,6 +3617,122 @@ class form_table extends form_base
 		$el = $this->edit_el_forms[$form_id]->get_element_by_id($elid);
 		$app = "<input type='hidden' name='shown_entries[$form_id][".$row["entry_id"]."][]' value='".$elid."'>";
 		return $el->gen_user_html_not("ft_row_".$row["entry_id"]."_form_".$form_id."_").$app;
+	}
+
+	function rewrite_table_style_classes()
+	{
+		$st = get_instance("style");
+		$css = array();
+
+		if ($this->table["header_normal"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["header_normal"])))
+			{
+				$css["header_normal"] = $_csscl;
+			}
+			else
+			{
+				$css["header_normal"] = "style_".$this->table["header_normal"];
+			}
+		}
+
+		if ($this->table["header_sortable"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["header_sortable"])))
+			{
+				$css["header_sortable"] = $_csscl;
+			}
+			else
+			{
+				$css["header_sortable"] = "style_".$this->table["header_sortable"];
+			}
+		}
+
+		if ($this->table["header_sorted"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["header_sorted"])))
+			{
+				$css["header_sorted"] = $_csscl;
+			}
+			else
+			{
+				$css["header_sorted"] = "style_".$this->table["header_sorted"];
+			}
+		}
+
+		if ($this->table["content_style1"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["content_style1"])))
+			{
+				$css["content_style1"] = $_csscl;
+			}
+			else
+			{
+				$css["content_style1"] = "style_".$this->table["content_style1"];
+			}
+		}
+
+		if ($this->table["content_style2"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["content_style2"])))
+			{
+				$css["content_style2"] = $_csscl;
+			}
+			else
+			{
+				$css["content_style2"] = "style_".$this->table["content_style2"];
+			}
+		}
+
+		if ($this->table["content_sorted_style1"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["content_sorted_style1"])))
+			{
+				$css["content_sorted_style1"] = $_csscl;
+			}
+			else
+			{
+				$css["content_sorted_style1"] = "style_".$this->table["content_sorted_style1"];
+			}
+		}
+
+		if ($this->table["content_sorted_style2"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["content_sorted_style2"])))
+			{
+				$css["content_sorted_style2"] = $_csscl;
+			}
+			else
+			{
+				$css["content_sorted_style2"] = "style_".$this->table["content_sorted_style2"];
+			}
+		}
+
+		if ($this->table["group_style"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["group_style"])))
+			{
+				$css["group_style"] = $_csscl;
+			}
+			else
+			{
+				$css["group_style"] = "style_".$this->table["group_style"];
+			}
+		}
+
+		if ($this->table["grp_add_els_style"])
+		{
+			if (($_csscl = $st->get_css_class($this->table["grp_add_els_style"])))
+			{
+				$css["grp_add_els_style"] = $_csscl;
+			}
+			else
+			{
+				$css["grp_add_els_style"] = "style_".$this->table["grp_add_els_style"];
+			}
+		}
+
+		return $css;
 	}
 }
 ?>
