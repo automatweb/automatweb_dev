@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.48 2003/04/16 17:26:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.49 2003/06/12 14:18:51 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -162,7 +162,8 @@ class file extends class_base
 	function callback_pre_save($args = array())
 	{
 		$coredata = &$args["coredata"];
-		if (!$coredata["name"] && isset($this->file_name))
+		// overwrite the name if new file is uploaded
+		if (isset($this->file_name))
 		{
 			$coredata["name"] = $this->file_name;
 		};
