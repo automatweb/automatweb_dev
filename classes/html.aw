@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.6 2002/11/14 17:55:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.7 2002/11/18 15:45:16 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -63,6 +63,18 @@ class html extends aw_template
 		extract($args);
 		$size = ($size) ? $size : 40;
 		return "<input type='text' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+	}
+	
+	////
+	// !html password input
+	// name(string)
+	// value(string)
+	// size(int)
+	function password($args = array())
+	{
+		extract($args);
+		$size = ($size) ? $size : 40;
+		return "<input type='password' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
 	}
 
 	////
