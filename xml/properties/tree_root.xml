@@ -2,12 +2,16 @@
 <properties>
       <property>
             <name>root</name>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOT</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <caption>Rootmenüü</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
 </properties>
 
