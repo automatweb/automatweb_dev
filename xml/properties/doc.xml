@@ -20,6 +20,16 @@
             <caption>Aktiivne</caption>
       </property>
       <property>
+            <name>plugins</name>
+            <type>callback</type>
+            <callback>callback_get_doc_plugins</callback>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Pluginad</caption>
+      </property>
+      <property>
             <name>title</name>
             <type>textbox</type>
             <size>60</size>
