@@ -67,16 +67,14 @@ class iframe extends aw_template
 			$prnt = $parent;
 		};
 
-		// if we were called from inside the alias manager, set the parent to 0
-		// and display the "back" link instead of the path
-		if ($return_url)
-		{
-			$prnt = 0;
-			$cprefix = sprintf("<a href='%s'>%s</a> / ",$return_url,IFRAME_RETURN_URL);
-		};
-
-
-		$this->mk_path($prnt,$cprefix . $caption);
+		//$this->mk_path($prnt,$cprefix . $caption);
+		$this->gen_path(array(
+			"oid" => $prnt,
+			"alias_to" => $alias_to,
+			"return_url" => $return_url,
+			"return_cap" => IFRAME_RETURN_URL,
+			"caption" => $caption,
+		));
 
 		$scrolling = array(
 			"yes" => IFRAME_SCROLL_YES,
