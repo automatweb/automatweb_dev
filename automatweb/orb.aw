@@ -1,10 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.1 2001/05/18 23:45:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.2 2001/07/12 04:23:07 kristo Exp $
 // noja tekalt voib selle ju taiesti vabalt adminni index.aw sisse integreerida
 // voi mis?
 include("const.aw");
 include("admin_header.$ext");
 classload("defs","orb");
+$t = new aw_template;
+$t->db_init();
+if (!$t->prog_acl("view", PRG_MENUEDIT))
+{
+	include("sorry.aw");
+	exit;
+}
 $orb = new orb(array(
 	"class" => $class,
 	"action" => $action,
