@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.63 2002/12/11 12:38:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.64 2002/12/17 19:07:58 duke Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1186,6 +1186,7 @@ class users extends users_user
 			"LANG" => $lp,
 			"CUR" => $ccr,
 			"calendar" => $this->picker($userconfig["calendar"],$calendars),
+			"treetype" => $this->picker($userconfig["treetype"],array("0" => "Default (saidi konfist)","dhtml" => "DHTML","java" => "Java")),
 			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
 		));
 		return $this->parse();
@@ -1226,7 +1227,7 @@ class users extends users_user
 	{
 		extract($arr);
 
-		$this->set_user_config(array("uid" => $id, "data" => array("user_currency" => $currency,"calendar" => $calendar)));
+		$this->set_user_config(array("uid" => $id, "data" => array("user_currency" => $currency,"calendar" => $calendar, "treetype" => $treetype)));
 
 		$t = get_instance("languages");
 
