@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.79 2003/08/08 13:10:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.80 2003/08/18 10:44:29 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1215,6 +1215,20 @@ topic");
 		};
 
 		$forum_obj = $this->get_object($board);
+
+		$_mx = aw_ini_get("forum.comments_mailto");
+		$mx = explode(",", $_mx);
+		if (is_array($mx))
+		{
+			foreach($mx as $val)
+			{
+				mail($val,
+					"Uus sissekanne teemal: $forum_obj[name]",
+					"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: ".aw_ini_get("baseurl")."/?class=forum&action=show_threaded&board=$board",
+					"From: $name <$email>");
+			}
+		};
+
 		$mx = $this->get_object_metadata(array(
 			"oid" => $forum_obj["parent"],
 			"key" => "notifylist",
