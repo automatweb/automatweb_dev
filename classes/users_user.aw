@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.34 2002/08/02 13:53:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.35 2002/08/02 14:02:20 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1171,6 +1171,10 @@ class users_user extends aw_template
 	// - I'm sure there are ways around _that_. Why I want this? It just seems utterly meaningless
 	//   to read the group data at every request. 99% of the time, this data does not change.
 	// - name one - terryf.
+	// - sure. We read users table too at each request. That table has at least one column
+	//   for metadata. So, let's use that. If someone changes any groups then AW sets a flag
+	//   in that field - do_update_group_data = 1 for example - and sets its only for the users
+	//   who belong to any of those groups.
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
