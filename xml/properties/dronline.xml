@@ -166,11 +166,6 @@
                   <clid>CL_MENU</clid>
                   <caption>filtri kataloog</caption>
             </FOLDER>
-            <LANGUAGE>
-                  <value>2</value>
-                  <clid>CL_LANGUAGE</clid>
-                  <caption>filtri keel</caption>
-            </LANGUAGE>
       </reltypes>
 </properties>
 

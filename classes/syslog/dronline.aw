@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.34 2005/03/02 13:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.35 2005/03/08 14:34:17 kristo Exp $
 
 /*
 
@@ -511,12 +511,16 @@ class dronline extends class_base
 
 		if (is_array($mt["sites"]) && count($mt['sites']) > 0 && aw_ini_get("syslog.has_site_id"))
 		{
-			$sql[] = "syslog.site_id IN (".join(",",map("%s",$mt['sites'])).")";
-			$this->vars(array(
-				"desc" => "Saidid:",
-				"value" => join(",",$mt['sites'])
-			));
-			$cd .= $this->parse("LINE");
+			$wsic = join(",",map("%s",$mt['sites']));
+			if ($wsic != "")
+			{
+				$sql[] = "syslog.site_id IN (".join(",",map("%s",$mt['sites'])).")";
+				$this->vars(array(
+					"desc" => "Saidid:",
+					"value" => join(",",$mt['sites'])
+				));
+				$cd .= $this->parse("LINE");
+			}
 		}
 
 		if (is_array($mt["languages"]) && count($mt['languages']) > 0 && aw_ini_get("syslog.has_lang_id"))
