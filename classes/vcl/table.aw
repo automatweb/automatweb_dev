@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.6 2004/02/27 16:10:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.7 2004/03/17 13:22:07 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -687,9 +687,16 @@ class aw_table extends aw_template
 					}
 				}
 
+				$row_style = $counter % 2 == 0 ? $this->tr_style2 : $this->tr_style1;
+				if ($v["_active"])
+				{
+					$row_style = $this->tr_active;
+				};
+
 				// rida algab
+				// rowid/domid is needed for the selector script
 				$rowid = $this->prefix . "trow" . $counter;
-				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
+				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => $row_style));
 
 				$tmp = "";
 				// grpupeerimine
@@ -1171,6 +1178,10 @@ class aw_table extends aw_template
 
 			case "content_tr_sel":
 				$this->tr_sel = $attrs["value"];
+				break;
+			
+			case "content_tr_active":
+				$this->tr_active = $attrs["value"];
 				break;
 
 			// actionid
