@@ -3,7 +3,7 @@ class date
 {
 	function date()
 	{
-		$this->month = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+		$this->month = array("janvaris", "februaris", "marts", "aprilis", "maijs", "junijs", "julijs", "augusts", "septembris", "oktobris", "novemberis", "decemberis");
 	}
 
 	function get_lc_date($timestamp, $format)
@@ -12,7 +12,6 @@ class date
 		{
 			$timestamp=time();
 		}
-		
 		switch ($format)
 		
 		{
@@ -25,11 +24,11 @@ class date
 				return $newdate;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				return $newdate;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
 
 			case 5:
