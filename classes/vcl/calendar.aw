@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.38 2004/12/15 13:29:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.39 2004/12/15 15:31:39 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -776,6 +776,7 @@ class vcalendar extends aw_template
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
 			"date" => locale::get_lc_date($this->range["start"],5),
+			"lc_weekday" => locale::get_lc_weekday(date("w",$this->range["start"])),
 		));
 		return $this->parse();
 	}
@@ -1011,7 +1012,7 @@ class vcalendar extends aw_template
 
 		// now, how to make those configurable?
 		$mon = locale::get_lc_month(date("m",$arr["timestamp"]));
-		$caption =  $mon . " " . date("Y",$arr["timestamp"]);
+		$caption =  $mon . " " . date("y",$arr["timestamp"]);
 
 		$caption_url = aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"])));
 
@@ -1028,8 +1029,13 @@ class vcalendar extends aw_template
 		$prev_month = t("Eelmine kuu");
 		$next_month = t("Järgmine kuu");
 
-		$caption = "<div class='$style_title'><a href='$prev_url' alt='$prev_month' title='$prev_month'>&lt;&lt;</a> <a href='$caption_url'>$caption</a> <a href='$next_url' alt='$next_month' title='$next_month'>&gt;&gt;</a>";
-		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='100%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
+		$baseurl = aw_ini_get("baseurl");
+
+		$prev_img = "<img border='0' src='" . $baseurl . "/automatweb/images/blue/cal_nool_left.gif" . "'>";
+		$next_img = "<img border='0' src='" . $baseurl . "/automatweb/images/blue/cal_nool_right.gif" . "'>";
+
+		$caption = "<div class='$style_title'><a href='$prev_url' alt='$prev_month' title='$prev_month'>$prev_img</a><a href='$caption_url'>$caption</a><a href='$next_url' alt='$next_month' title='$next_month'>$next_img</a>";
+		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='90%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
 	}
 
 	function draw_event($evt)
