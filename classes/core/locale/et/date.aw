@@ -18,27 +18,27 @@ class date
 		switch ($format)
 		{
 			case 1:
-				$rv = date("d.m.y", $timestamp);
+				$rv = date("j.m.y", $timestamp);
 				break;
 
 			case 2:
-				$rv = date("d.m.Y", $timestamp);
+				$rv = date("j.m.Y", $timestamp);
 				break;
 				
 			case 3:
-				$rv = date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				break;
 				
 			case 4:
-				$rv = date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$rv = date("j. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				break;
 
 			case 5:
-				$rv = date("d. ",$timestamp).$this->month[date("m",$timestamp)-1];
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1];
 				break;
 			
 			case 6:
-				$rv = date("d. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
 				break;
 				
 
