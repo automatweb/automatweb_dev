@@ -10,6 +10,12 @@ function varvivalik()
   aken=window.open("/vv.html","varvivalik","HEIGHT=220,WIDTH=310");
  	aken.focus();
 }
+
+function setLink(li,title)
+{
+	document.ffrm.after_submit_link.value=li;
+}
+
 </script>
 
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
@@ -45,7 +51,7 @@ function varvivalik()
 </tr>
 <tr>
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>{VAR:LC_FORMS_GOT_TO_ADDRESS}:</td>
-<td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'></td>
+<td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'> <a href="javascript:remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
 <tr>
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>{VAR:LC_FORMS_SHOW_ENTRIES}:</td>
