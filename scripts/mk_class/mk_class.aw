@@ -226,8 +226,16 @@ if ($class['folder'] != "")
 	// check if the directory exists
 	if (!is_dir("classes/".$class['folder']))
 	{
-		mkdir("classes/".$class['folder'],0775);
-		echo "created classes/".$class['folder']."...\n";
+		// mkdir can only create one level of directories at a time
+		// so if the folders has several levels, we need to create all of them.
+		$dir = "classes";
+		$dirs = explode("/", $class['folder']);
+		foreach($dirs as $fld)
+		{
+			$dir .= "/".$fld;
+			mkdir($dir,0775);
+			echo "created $dir ...\n";
+		}
 	}
 }
 
