@@ -5,7 +5,7 @@
 	</tr>
 </table>
 <IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
-<applet codebase="/automatweb/java/" code="menuThread2.class" width="100%" height="98%">
+<applet codebase="/automatweb/java/javatree" code="menuTree.class" width="100%" height="98%">
 <param name="background_color" value="#EEEEEE">
 <param name="mouseover_color" value="#478EB6">
 <param name="selected_color" value="#B58D47">
