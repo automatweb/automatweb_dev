@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.155 2003/02/10 18:06:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.156 2003/02/11 16:23:58 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -3693,10 +3693,11 @@ class document extends aw_template
 	// uses the settings set in the general static site settings for generation
 	function gen_static_doc($id)
 	{
-		echo "genereerin staatilisi lehek&uuuml;lgi, oodake palun .... <br><br>\n\n";
+		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br><br>\n\n"; 
 		echo "\n\r<br>";
-		echo "\n\r<br>";
-		flush();
+		echo "\n\r<br>"; flush();
+		ob_start();
+
 		$exp = get_instance("export");
 		$exp->init_settings();
 
@@ -3711,7 +3712,17 @@ class document extends aw_template
 		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj["lang_id"], true);
 		// print doc
 		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj["lang_id"], true);
-		die("<Br><br>Valmis, tagasi dokumendi muutmise juurde saab <a href='".$this->mk_my_orb("change", array("id" => $id))."'>siit</a>");
+
+
+		// if the document is on the front page, then do the damn
+		// frontpage as well
+		$fp = $this->db_fetch_field("SELECT frontpage_left FROM documents WHERE docid = $id", "frontpage_left");
+		if ($fp == 1)
+		{
+			$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage"), $obj["lang_id"], true);
+		}
+
+		die("<Br><br><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< tagasi dokumendi muutmise juurde</a>");
 	}
 
 	////
@@ -3811,6 +3822,10 @@ class document extends aw_template
 
 	function do_static_search($str, $from, $sortby, $_par, $_sec)
 	{
+		$this->vars(array(
+			"baseurl" => aw_ini_get("export.form_server")
+		));
+
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
 		$docarr = array();
 
