@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.13 2004/03/08 16:46:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.14 2004/04/06 09:51:48 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -147,16 +147,26 @@ class vcalendar extends aw_template
 		{
 			$this->future[] = &$this->items[$use_date][sizeof($this->items[$use_date])-1];
 		};
+
 	}
 
 	function add_overview_item($arr)
 	{
 		$use_date = date("Ymd",$arr["timestamp"]);
 		$this->overview_items[$use_date] = true;
+		if (!empty($arr["url"]))
+		{
+			$this->overview_urls[$use_date] = $arr["url"];
+		};
 	}
 
-	function get_html()
+	function get_html($arr = array())
 	{
+		$this->styles = array();
+		if (is_array($arr["style"]))
+		{
+			$this->styles = $arr["style"];
+		};
 		classload("date_calc");
 		if (!is_array($this->range))
 		{
@@ -225,7 +235,19 @@ class vcalendar extends aw_template
 			{
 				foreach($overview_items as $tm => $tmp)
 				{
-					$this->add_overview_item(array("timestamp" => $tm));
+					if (is_array($tmp))
+					{
+						$this->add_overview_item(array(
+							"timestamp" => $tmp["timestamp"],
+							"url" => $tmp["url"],
+						));
+					}
+					else
+					{
+						$this->add_overview_item(array(
+							"timestamp" => $tm,
+						));
+					};
 				};
 			};
 
@@ -574,7 +596,7 @@ class vcalendar extends aw_template
 	// XXX: this can and should be done without any templates. so it can be faster
 	function draw_s_month($arr)
 	{
-		$this->read_template("mini2.tpl");
+		//$this->read_template("mini2.tpl");
 		$rv = "";
 
 		// the idea here is that drawing of month always starts from
@@ -583,47 +605,113 @@ class vcalendar extends aw_template
 		$realstart = ($arr["start"] - ($arr["start_wd"] - 1) * 86400);
 		$realend = ($arr["end"] + (7 - $arr["end_wd"]) * 86400);
 
-
 		$now = date("Ymd");
 
+		$active_day = aw_global_get("date");
+		list($d,$m,$y) = explode("-",aw_global_get("date"));
+		$act_tm = mktime(0,0,0,$m,$d,$y);
+		$act_stamp = date("Ymd",$act_tm);
+		
+		$subs = array_flip($this->get_subtemplates_regex("(cell.*)"));
 
-		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
+		print "<pre>";
+		print_r($this->styles);
+		print "</pre>";
+
+		// modes
+		//  0: day with events
+		//  1: day with no events
+		//  2: day outside the current range
+
+		// styles
+		// minical_cell - usual cell with no events  - day_without_events
+		// minical_cellact - usual cell with events  - day_with_events 
+		// minical_cellselected - selected (active) cell - day_active
+		// minical_cell_today - day_today
+		// minical_cell_deact  - deactiv (outside teh current range) - day_deactive
+
+		$j = $realstart;
+		while($j <= $realend)
 		{
-			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
+			$i = $j;
+			while($i <= $j + (7*86400)-1)
 			{
 				$dstamp = date("Ymd",$i);
-				$style = ($this->overview_items[$dstamp]) ? "minical_cellact" : "minical_cell";
+				$has_events = $this->overview_items[$dstamp];
+				$style = $has_events ? "minical_cellact" : "minical_cell";
 				if (between($i,$arr["start"],$arr["end"]))
 				{
-					$tpl = "cell";
-					if ($now == date("Ymd",$i))
+					$mode = 0;
+					// if a day has no events and "cell_empty" sub is defined, use it.
+					if (empty($has_events) && isset($subs["cell_empty"]))
+					{
+						$mode = 1;
+					};
+
+					if ($act_stamp == $dstamp)
+					{
+						$style = "minical_cellselected";
+					};
+
+					if ($now == $dstamp)
 					{
 						$style = "minical_cell_today";
 					};
 				}
 				else
 				{
-					$tpl = "cell_deact";
+					// cells outside the current range will always be drawn with
+					// this subtemplate
+					$mode = 2;
+					$style = "minical_cell_deact";
 				};
-				$this->vars(array(
-					"daynum" => date("j",$i),
-					"daycell_style" => $style,
-					"day_url" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
-				));
-				$rv .= $this->parse($tpl);
+
+				if (!empty($this->overview_urls[$dstamp]))
+				{
+					$day_url = $this->overview_urls[$dstamp];
+				}
+				else
+				{
+					$day_url = aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i)));
+				};
+
+				// cell_empty has class, doesn't have a link, used to show days with no events
+				// cell - has class, has link, used to show days with events
+				// cell_deact - has a class, doesn't have a link, used to show days outside the current range
+
+				// and that pretty much is it.
+
+				// I set default styles in the container template and let them be overriden
+
+				$rv .= "<td class='$style'>";
+
+				if ($mode == 0)
+				{
+					$rv .= "<a href='$day_url'>";
+				};
+
+				// daynum
+				$rv .= date("j",$i);
+
+				if ($mode == 0)
+				{
+					$rv .= "</a>";
+				};
+				$rv .= "</td>";
+				$i = $i + 86400;
 			};
-			$this->vars(array(
-				"cell" => $rv,
-			));
+
+			$w .= "<tr>" . $rv . "</tr>";
 			$rv = "";
-			$w .= $this->parse("line");
+			$j = $j + (7*86400);
 		};
-		$this->vars(array(
-			"caption" => get_est_month(date("m",$arr["timestamp"])) . " " . date("Y",$arr["timestamp"]),
-			"caption_url" => aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"]))),
-			"line" => $w,
-		));
-		return $this->parse();
+
+		// now, how to make those configurable?
+		$caption =  get_est_month(date("m",$arr["timestamp"])) . " " . date("Y",$arr["timestamp"]);
+
+		$caption_url = aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"])));
+		$caption = "<div class='minical_table'><a href='$caption_url'>$caption</a></a>";
+		return $caption . "<table border=0 cellspacing=0 cellpadding=0><tr><td class='aw04kalendermini'><table border=0 cellpadding=0 cellspacing=1>" . $w . "</table></td></tr></table>";
 	}
 
 	function draw_event($evt)
