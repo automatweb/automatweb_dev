@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.155 2003/02/13 15:40:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.156 2003/02/14 17:52:27 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -688,11 +688,11 @@ class core extends db_connector
 		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$source' AND type =  '$target_data[class_id]'","idx");
 		if ($idx === "")
 		{
-			$idx = 0;
+			$idx = 1;
 		}
 		else
 		{
-			$idx = 1;
+			$idx++;
 		}
 		$q = "INSERT INTO aliases (source,target,type,data,idx)
 			VALUES('$source','$target','$target_data[class_id]','$extra','$idx')";
@@ -781,13 +781,18 @@ class core extends db_connector
 		extract($args);
 		
 		// map2 supports both arrays and strings and returns array
-		$tlist = join(',',map('%d',$type));
+		$typestring = "";
+		if ($type)
+		{
+			$tlist = join(',',map('%d',$type));
+			$typestring = " AND objects.class_id IN ($tlist)";
+		};
 
 		$q = "SELECT aliases.*,objects.*
 			FROM aliases
 			LEFT JOIN objects ON
 			(aliases.target = objects.oid)
-			WHERE source = '$oid' AND objects.class_id IN ($tlist)
+			WHERE source = '$oid' $typestring
 			ORDER BY aliases.id";
 		$this->db_query($q);
 		$aliases = array();
