@@ -1051,7 +1051,8 @@ class core extends acl_base
 			$file = "doc";
 		};
 
-		$t = get_instance($file);
+		$clid = clid_for_name($file);
+		$t = get_instance($clid);
 		$s = $t->_serialize($arr);
 		if (!$s)
 		{
