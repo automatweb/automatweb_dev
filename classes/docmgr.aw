@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.2 $
+// $Revision: 2.3 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -40,8 +40,11 @@ class docmgr extends document
 		// I'm a template molester
 		$this->read_template("search_results.tpl");
 		load_vcl("table");
-		classload("archive");
-		$archiver = new archive();
+		if (defined("ARCHIVE"))
+		{
+			classload("archive");
+			$archiver = new archive();
+		};
 		// create the query string for aw_table
 		$query_string = array(); 
 		$qstring = array(); // sellega loeme sisse koik vastavad dokumendid
@@ -130,7 +133,7 @@ class docmgr extends document
 		// kõigepealt tuleks sooritada arhiiviotsing.
 		$arc = array();
 		$in_archive = array("-1");
-		if ($args["fields"])
+		if ($args["fields"] && defined("ARCHIVE"))
 		{
 			foreach($args["fields"] as $key => $val)
 			{
