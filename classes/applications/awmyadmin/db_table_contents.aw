@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.6 2005/01/28 09:42:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.7 2005/02/23 13:00:18 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -17,7 +17,7 @@
 	@caption Tabel
 
 	@property sproc_params type=textbox
-	@caption Protsedduri parameetrid
+	@caption Protseduuri parameetrid
 
 	@property per_page type=textbox size=5
 	@caption Mitu rida lehel
@@ -75,6 +75,10 @@ class db_table_contents extends class_base
 
 			case "sproc_params":
 				$base = get_instance(CL_DB_LOGIN);
+				if (!is_oid($args['obj_inst']->prop('db_base')) || !$this->can("view", $args['obj_inst']->prop('db_base')))
+				{
+					return PROP_IGNORE;
+				}
 				if ($base->login_as($args['obj_inst']->prop('db_base')))
 				{
 					$table_type = $base->db_get_table_type($args["obj_inst"]->prop("db_table"));
@@ -442,7 +446,6 @@ class db_table_contents extends class_base
 		$db->login_as($o->prop('db_base'));
 
 		$ret = array();
-
 		if ($db->db_get_table_type($o->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
 			$q = $o->prop('db_table')." ".$o->prop("sproc_params");
@@ -461,10 +464,11 @@ class db_table_contents extends class_base
 				$ret[$fn] = $fn;
 			}
 		}
+
 		return $ret;
 	}
 
-	function get_objects($o, $params = array())
+	function get_objects($o, $fld = NULL, $tv_sel = NULL, $params = array())
 	{
 		if (!$o->prop("db_base"))
 		{
@@ -476,7 +480,7 @@ class db_table_contents extends class_base
 
 		if ($db->db_get_table_type($o->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
-			$q = $o->prop('db_table')." ".$o->prop("sproc_params");
+			$q = $o->prop('db_table')." ".(!isset($params["sproc_params"]) ? $o->prop("sproc_params") : $params["sproc_params"]);
 			$db->db_query($q);
 		}
 		else
