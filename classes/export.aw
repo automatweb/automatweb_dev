@@ -954,7 +954,7 @@ class export extends aw_template
 	{
 		if (isset($this->hash2url[$lang_id][$url]))
 		{
-			return $this->hash2url[$lang_id][$url];
+			return $this->fix_fn($this->hash2url[$lang_id][$url]);
 		}
 
 		$this->menu_cache->make_caches(array("lang_id" => $lang_id));
@@ -1071,15 +1071,8 @@ class export extends aw_template
 				{
 					$mn = substr($mn,0,strlen($mn)-1);
 				}
-				$mn = str_replace("Ãµ", "o", $mn);
-				$mn = str_replace("Ã¤", "a", $mn);
-				$mn = str_replace("Ã¶", "o", $mn);
-				$mn = str_replace("Ã¼", "u", $mn);
-				$mn = str_replace("Ã–", "O", $mn);
-				$mn = str_replace("Ã„", "A", $mn);
-				$mn = str_replace("Ã•", "O", $mn);
-				$mn = str_replace("Ãœ", "U", $mn);
-				$mn = str_replace(chr(166),"z", $mn);
+
+				$mn = $this->fix_fn($mn);
 				$mn = strip_tags($mn);
 
 				if ($mn != "")
@@ -1101,14 +1094,14 @@ class export extends aw_template
 						if (is_array($row))
 						{
 							// found the name for the current url, use it as final filename
-							$res = $row['filename'];
+							$res = $this->fix_fn($row['filename']);
 //							echo "found url in db $qu filename = $res <Br>";
 						}
 						else
 						{
 							// no row for current url, find count and insert new filename and url
 							$mcnt = $this->db_fetch_field("SELECT MAX(count) AS cnt FROM export_url2filename WHERE sec_name = '$res'", "cnt")+1;
-							$res = $_res.",".$mcnt;
+							$res = $this->fix_fn($_res.",".$mcnt);
 							$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 								VALUES('$qu','$res','$_res','$mcnt')");
 //							echo "did not find url in db, try sec_name $_res , got mcount $mcnt final res = $res <br>";
@@ -1928,6 +1921,27 @@ class export extends aw_template
 			}
 		}
 		echo "<br><br>\n\nValmis, <a href='".$this->mk_my_orb("iexport")."'>Tagasi</a> <br>\n";
+	}
+
+	function fix_fn($fn)
+	{
+		$fn = str_replace("?", "_", str_replace("ö", "o", $fn));
+		$fn = str_replace("\n", "", str_replace("\r", "", $fn));
+		$fn = str_replace("ä","a", $fn);
+		$fn = str_replace("õ","o", $fn);
+		$fn = str_replace("ü","u",$fn);
+		$fn = str_replace("ö","o",$fn);
+		$fn = str_replace("Ä","A", $fn);
+		$fn = str_replace("Õ","O",$fn);
+		$fn = str_replace("Ü","U",$fn);
+		$fn = str_replace("Ö","O", $fn);
+		$fn = str_replace(chr(166),"sh", $fn);
+		$fn = str_replace("?","_", $fn);
+		$fn = str_replace("*", "_", $fn);
+		$fn = str_replace("'","_",$fn);
+		$fn = str_replace("\"","_",$fn);
+		$fn = str_replace("&nbsp;", "_", $fn);
+		return $fn;
 	}
 }
 ?>
