@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.4 2004/02/12 10:57:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.5 2004/02/17 14:38:41 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -19,15 +19,20 @@ class relmanager extends aw_template
 	{
 		$prop = $arr["prop"];
 		$obj = $arr["obj_inst"];
+		
+		load_vcl("table");
+		$this->t = new aw_table(array("layout" => "generic"));
+
+		if ($arr["new"])
+		{
+			return false;
+		};
 
 		// XXX: should multiple classes be supported?
 		$conns = $obj->connections_from(array(
 			"type" => $prop["reltype"],
 			"class" => $prop["clid"][0],
 		));	
-
-		load_vcl("table");
-		$this->t = new aw_table(array("layout" => "generic"));
 
 		$rv = array();
 
@@ -52,10 +57,18 @@ class relmanager extends aw_template
 			));
 		};
 
+
+
+		if (empty($prop["props"]))
+		{
+			return false;
+		};
+
 		$proplist = is_array($prop["props"]) ? $prop["props"] : array($prop["props"]);
 
 		// first set the keys, this makes the properties be in the same order you
 		// define them, and then figure out property data for each
+		
 		$xproplist = array_flip(array_values($proplist));
 		
 		// load properties for the target class and then add lines to the
@@ -90,6 +103,10 @@ class relmanager extends aw_template
 			if ($to_o->class_id() == CL_FILE)
 			{
 				$to_prop["file"] = $to_prop["name"];
+			};
+			if ($to_o->class_id() == CL_IMAGE)
+			{
+				$to_prop["file"] = "";
 			};
 			
 			if ($use_chooser)
@@ -222,6 +239,12 @@ class relmanager extends aw_template
 			"to" => $obj_id,
 			"reltype"=> $arr["prop"]["relinfo"]["value"],
 		));
+
+		/*
+		print "<pre>";
+		print_r(dbg::process_backtrace(debug_backtrace()));
+		print "</pre>";
+		*/
 	}
 
 };
