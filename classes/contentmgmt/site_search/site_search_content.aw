@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.8 2004/02/13 16:13:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.9 2004/03/08 17:54:22 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -123,7 +123,7 @@ class site_search_content extends class_base
 	{
 		$ret = array();
 		$co = $obj->connections_from(array(
-			"type" => RELTYPE_SEARCH_GRP
+			"type" => 2 // RELTYPE_SEARCH_GRP
 		));
 		foreach($co as $c)
 		{
