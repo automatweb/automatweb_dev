@@ -1,10 +1,9 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.32 2004/12/27 12:36:57 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo templates caption=Templated
 @groupinfo db caption=Andmebaas
 

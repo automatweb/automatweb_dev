@@ -149,9 +149,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <templates>
                   <caption>Templated</caption>
             </templates>
