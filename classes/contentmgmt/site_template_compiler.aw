@@ -78,19 +78,19 @@ class site_template_compiler extends aw_template
 
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
-		enter_function("site_template_compiler::compile");
-
-		$this->tpl_init($path);
-
+		enter_function("site_template_compiler::compile");		
+		//aw_template::tpl_init uses $path as "$this->cfg['tpldir']."/$path"
+		//and it defaults to "", I HOPE SOMEONE IS READING THIS AND THINKING!
+		//now that i don't give it $path, the location won't smthing like $basedir/$basedir
+		$this->tpl_init();//$path);
 		$this->no_use_ma_cache = $no_cache;
-
+		//echo "compiling \$this->read_template($tpl,true)<br>";
 		$success = $this->read_template($tpl,true);
 		if (!$success)
 		{
 			return false;
-		};
+		}
 		$this->tplhash = md5($path.$tpl);
-
 		$this->parse_template_parts($mdefs);
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
@@ -104,11 +104,12 @@ class site_template_compiler extends aw_template
 	// so this is sort of a 3-step compilation process
 	function parse_template_parts($mdefs = NULL)
 	{
+
 		$this->menu_areas = array();
 
 		// get all subtemplates 
 		$tpls = $this->get_subtemplates_regex("(MENU_.*)");
-		
+
 		// now figure out the menu areas that are used
 		$_tpls = array();
  		foreach($tpls as $tpl)
@@ -126,7 +127,7 @@ class site_template_compiler extends aw_template
 				$mdefs = $mdefs[aw_global_get("lang_id")];
 			}
 		}
-		
+
 		foreach($tpls as $tpl)
 		{
 			$parts = explode("_", $tpl);
@@ -809,7 +810,7 @@ class site_template_compiler extends aw_template
 					"msg" => "show_site::generate_code(): could not find generator for op $op_name ($gen) op = ".$op["op"]
 				));
 			}
-
+			
 			$code .= $this->$gen($op["params"]);
 		}
 
