@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.121 2003/06/11 14:09:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.122 2003/06/16 10:35:36 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -351,6 +351,8 @@ class planner extends class_base
 		while($row = $this->db_next())
 		{
 			$gx = date("dmY",$row["start"]);
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			unset($row["metadata"]);
 			if ($this->content_gen_class)
 			{
 				$this->save_handle();
@@ -1646,7 +1648,7 @@ class planner extends class_base
 
 	function _get_cal_target($rel_id)
 	{
-		if (empty($rel_id))
+		if (!is_numeric($rel_id))
 		{
 			return false;
 		};
