@@ -138,7 +138,11 @@ class __classname extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($oid);
-		return aw_serialize($row);
+		if (is_array($ob))
+		{
+			return aw_serialize($ob, SERIALIZE_NATIVE);
+		}
+		return false;
 	}
 
 	////
@@ -149,10 +153,15 @@ class __classname extends aw_template
 	function _unserialize($arr)
 	{
 		extract($arr);
-		$row = unserialize($str);
+		$row = aw_unserialize($str);
 		$row["parent"] = $parent;
+		$this->quote(&$row);
 		$id = $this->new_object($row);
-		return true;
+		if ($id)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	////
