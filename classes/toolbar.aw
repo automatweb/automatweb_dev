@@ -1,12 +1,24 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.5 2002/10/16 14:17:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.6 2002/11/02 23:22:17 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
 	function toolbar($args = array())
 	{
 		$this->init("toolbar");
-		$this->read_template("buttons.tpl");
+		$styles = array(
+			"smallbuttons" => "buttons.tpl",
+		);
+
+		if (!$styles[$style])
+		{
+			$style = "smallbuttons";
+		};
+
+		$tpl = $styles[$style];
+
+
+		$this->read_template($tpl);
 		$this->matrix = array();
 
 		extract($args);
@@ -65,12 +77,12 @@ class toolbar extends aw_template
 						$val["name"] .= $args["id"];
 					};
 					$this->vars($val);
-					$result .= $this->parse("smallbutton");
+					$result .= $this->parse("button");
 					break;
 				
 				case "separator":
 					$this->vars($val);
-					$result .= $this->parse("smallseparator");
+					$result .= $this->parse("separator");
 					break;
 				
 				case "cdata":
