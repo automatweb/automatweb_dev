@@ -210,6 +210,7 @@ function store_n_close()
 	window.opener.document.event.yearpwhen.value = yx.join(',');
 	window.opener.document.event.monpwhen2.value = document.repeater.monpwhen2.value;
 	window.opener.document.event.yearskip.value = yearskip;
+	window.opener.document.event.repeater.checked = true;
 	window.close();
 }
 
