@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.27 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.28 2001/07/28 12:16:12 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -63,7 +63,7 @@ load_vcl("date_edit");
 			$html = "";
 			if ($this->arr["type"] == "textarea")
 			{
-				$html = htmlspecialchars($this->entry);
+				$html = str_replace("\n","<br>",htmlspecialchars($this->entry));
 			}
 					
 			if ($this->arr["type"] == "radiobutton")
