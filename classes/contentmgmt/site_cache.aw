@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.16 2004/05/27 08:48:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.17 2004/08/27 11:16:44 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -81,6 +81,11 @@ class site_cache extends aw_template
 	function get_cached_content($arr)
 	{
 		if (aw_global_get("uid") != "")
+		{
+			return false;
+		}
+
+		if (aw_global_get("no_cache"))
 		{
 			return false;
 		}
@@ -178,6 +183,20 @@ class site_cache extends aw_template
 			$ds = get_instance('contentmgmt/document_statistics');
 			$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
 		};
+
+		// also clear the no_cache flag from session if present
+		// why? well to let the session continue with cached pages. 
+		// basically, to have error messages on your submit handler you set 
+		// aw_session_set("no_cache", 1);
+		// then redirect to some page. now, the no_cache stays as an aw_global
+		// so on the next pageview it is checked and honored. 
+		// now, it could be the task of the application to clear this
+		// but then the content would still end up in the cache
+		// because this thing sets the cache content if the page is uncached
+		// and the no_cache flag is off after having displayed the page
+		// therefore this is the only place where we can safely clear the flag.
+		aw_session_set("no_cache", 0);
+
 		return $res;
 	}
 }
