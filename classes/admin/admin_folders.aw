@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.13 2003/09/25 12:35:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.14 2003/09/26 11:14:54 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -28,15 +28,11 @@ class admin_folders extends aw_template
 
 	////
 	// !Listib koik objektid
-	function db_listall($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
+	function db_listall()
 	{
+		$where = "objects.status != 0 AND (menu.type != ".MN_FORM_ELEMENT . " AND menu.type != ".MN_HOME_FOLDER . ")";
 		$aa = "";
-		if (!$ignore)
-		{
-			// loeme sisse koik objektid
-			$aa = "AND ((objects.site_id = '".aw_ini_get("site_id")."') OR (objects.site_id IS NULL))";
-		};
-		if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
+		if ($this->cfg["lang_menus"] == 1)
 		{
 			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
 		}
@@ -44,71 +40,72 @@ class admin_folders extends aw_template
 				objects.parent as parent,
 				objects.comment as comment,
 				objects.name as name,
-				objects.created as created,
-				objects.createdby as createdby,
-				objects.modified as modified,
-				objects.modifiedby as modifiedby,
-				objects.last as last,
 				objects.status as status,
 				objects.jrk as jrk,
 				objects.alias as alias,
 				objects.class_id as class_id,
 				objects.brother_of as brother_of,
-				objects.metadata as metadata,
 				objects.periodic as periodic,
 				menu.type as mtype,
 				menu.link as link,
-				menu.clickable as clickable,
-				menu.target as target,
-				menu.ndocs as ndocs,
-				menu.img_id as img_id,
-				menu.img_url as img_url,
-				menu.hide_noact as hide_noact,
-				menu.mid as mid,
-				menu.sss as sss,
-				menu.links as links,
 				menu.icon_id as icon_id,
-				menu.admin_feature as admin_feature,
-				menu.periodic as mperiodic
+				menu.admin_feature as admin_feature
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
+				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 	}
 
-	// I need some other and better way to build the tree
 	function gen_folders($period)
 	{
-
-		if (aw_ini_get("menuedit.folders_v2"))
-		{
-			$this->read_template("folders_v2.tpl");
-		}
-		else
-		{
-			$this->read_template("folders.tpl");
-		};
+		$this->read_template("folders.tpl");
 
 		$arr = array();
 		$mpr = array();
-
-		$this->treeitems = array();
 
 		get_instance("icons");
 	
 		// x_mpr is used to store items for which we have no view access
 		$this->x_mpr = array();
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
+
+		$treeitems = array();
+
+		$this->period = $period;
+
+		// nuhib ACL-i välja ja cacheb tulemuse
+		global $awt;
+		$awt->start("acl-cache");
+		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_MENU);
+		$awt->stop("acl-cache");
+
+		$this->tree = get_instance("vcl/treeview");
+
+		$treetype = aw_ini_get("menuedit.treetype");
+
+		$this->tree->start_tree(array(
+			"type" => !empty($treetype) ? constant($treetype) : TREE_JS,
+			"url_target" => "list",
+			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
+			"root_name" => "<b>AutomatWeb</b>",
+		));
+
+		$awt->start("menu-list");
 		// listib koik menyyd ja paigutab need arraysse
-		$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
+		$this->db_listall();
+		$awt->stop("menu-list");
+		$awt->start("menu-map");
 		while ($row = $this->db_next())
 		{
-			$row["name"] = parse_obj_name($row["name"]);
+			// why, is there a chance that we have no view access to that menu?
 			if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
 			{
 				$arr[$row["parent"]][] = $row;
 				$mpr[] = $row["parent"];
+				if ($this->resolve_item(&$row))
+				{
+					$this->tree->add_item($row["parent"],$row);
+				};
 			}
 			else
 			{
@@ -120,10 +117,13 @@ class admin_folders extends aw_template
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GROUP." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$row["name"] = parse_obj_name($row["name"]);
 			if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
 			{
 				$arr[$row["parent"]][] = $row;
+				if ($this->resolve_item(&$row))
+				{
+					$this->tree->add_item($row["parent"],$row);
+				};
 				$mpr[] = $row["parent"];
 			}
 			else
@@ -131,11 +131,13 @@ class admin_folders extends aw_template
 				$this->x_mpr[$row['oid']] = 1;
 			}
 		}
+		$awt->stop("menu-map");
 
 		// here we will make the parent of all objects that don't have parents in the tree,
 		// but have them in the excluded list, to be the root
 		// why is this? well, because then the folders that are somewhere deep in the tree and that the user
 		// has can_view acces for, but not their parent folders, can still see them
+
 		foreach($arr as $prnt => $data)
 		{
 			foreach($data as $d_idx => $d_row)
@@ -144,37 +146,40 @@ class admin_folders extends aw_template
 				{
 					$d_row["parent"] = $this->cfg["admin_rootmenu2"];
 					$arr[$this->cfg["admin_rootmenu2"]][] = $d_row;
+					if ($this->resolve_item(&$d_row))
+					{
+						$this->tree->add_item($this->cfg["admin_rootmenu2"],$d_row);
+					};
 				}
 			}
 		}
 
-		// and, of course, the drawing function has to be recursive
-
-
 		// objektipuu
-		$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
+		//$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
 		// kodukataloom
 
 		$tr.=$this->mk_homefolder(&$arr);
 
 		// shortcuts for the programs
+		$this->prefix = "ad_";
 		$tr.= $this->rec_admin_tree(&$arr, $this->cfg["amenustart"]);
 
+		$awt->start("tree-gen");
+		$res = $this->tree->finalize_tree(array("rootnode" => $this->cfg["admin_rootmenu2"]));
+		$awt->stop("tree-gen");
+
 		$this->vars(array(
-			"TREE" => $tr,
-			"DOC" => "",
-			"root" => $this->cfg["admin_rootmenu2"],
+			"TREE" => $res,
 			"uid" => aw_global_get("uid"),
 			"date" => $this->time2date(time(),2),
-			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]),"admin_menus"),
 		));
 
+		$tb = get_instance("toolbar");
 		// perioodide tropp.
 		if ($this->cfg["per_oid"])
 		{
 			// temp workaround
-			$tb = get_instance("toolbar");
 			$dbp = get_instance("period",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
 			$dbp->clist();
@@ -216,22 +221,96 @@ class admin_folders extends aw_template
 				"options" => $ar,
 				"selected" => isset($period) ? $period : 0,
 			)));
-			$tb->add_button(array(
-				"name" => "refresh",
-				"tooltip" => "Reload",
-				"url" => "javascript:document.pform.submit();",
-				"imgover" => "refresh_over.gif",
-				"img" => "refresh.gif",
-			));
-			$tb->add_cdata($this->mk_reforb("folders",array("no_reforb" => 1)));
-			$this->vars(array(
-				"toolbar" => $tb->get_toolbar(),
-			));
-			$this->vars(array(
-				"has_toolbar" => $this->parse("has_toolbar"),
-			));
-		}
+		};
+		$tb->add_button(array(
+			"name" => "refresh",
+			"tooltip" => "Reload",
+			"url" => "javascript:document.pform.submit();",
+			"imgover" => "refresh_over.gif",
+			"img" => "refresh.gif",
+		));
+
+		$tb->add_button(array(
+                        "name" => "logout",
+                        "tooltip" => "Logi v&auml;lja",
+                        "url" => $this->mk_my_orb("logout", array(), "users"),
+                        "imgover" => "logout_over.gif",
+                        "img" => "logout.gif",
+                        "target" => "_top"
+                ));
+
+		$tb->add_cdata($this->mk_reforb("folders",array("no_reforb" => 1)));
+		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
+		));
+		$this->vars(array(
+			"has_toolbar" => $this->parse("has_toolbar"),
+		));
+		/*
+		print "<pre>";
+		print_r($awt->summaries());
+		print "</pre>";
+		*/
 		return $this->parse();
+	}
+
+	// resolves icons, link .. and whatelse for a single menu item
+	// I'll do icons first	
+	function resolve_item(&$arr)
+	{
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
+		$arr["id"] = $arr["oid"];
+
+		if ($arr["class_id"] == CL_PROMO)
+		{
+			$iconurl = icons::get_icon_url("promo_box","");
+		}
+		else
+		if ($arr["class_id"] == CL_BROTHER)
+		{
+			$iconurl = icons::get_icon_url("brother","");
+		}
+		else
+		if ($arr["icon_id"] > 0)
+		{
+			$iconurl = $baseurl . "/automatweb/icon.${ext}?id=" . $arr["icon_id"];
+		}
+		else
+		if ($arr["admin_feature"] > 0)
+		{
+			$iconurl = $this->get_feature_icon_url($arr["admin_feature"]);
+		};
+
+		// if all else fails ..
+		if (empty($iconurl))
+		{
+			$iconurl = $baseurl . "/automatweb/images/ftv2doc.gif";
+		}
+		$arr["iconurl"] = $iconurl;
+		$arr["url"] = $this->mk_my_orb("right_frame",array("parent" => $arr["id"], "period" => $this->period),"admin_menus");
+		$arr["name"] = parse_obj_name($arr["name"]);
+				
+		// tshekime et kas menyyl on submenyysid
+		// kui on, siis n2itame alati
+		// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
+		// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
+		// kui pole perioodiline siis ei n2ita
+		$rv = true;
+
+		if ($this->period > 0)
+		{
+			//if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] != 1))
+			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
+			{
+				if ($arr["id"] == 126106)
+				{	
+					print "ignoring<br>";	
+				};
+				$rv = false;
+			};
+		};
+		return $rv;
 	}
 
 	////
@@ -254,20 +333,15 @@ class admin_folders extends aw_template
 	
 		$ret = $this->rec_tree($arr, $hf->id(),0);
 
-		$this->vars(array(
+		$this->tree->add_item($admin_rootmenu2, array(
+			"id" => $hf->id(),
 			"name" => $hf->name(),
-			"id" => $hf->id(), 
 			"parent" => $admin_rootmenu2,
 			"iconurl" => icons::get_icon_url("homefolder",""),
-			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus")
+			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus"),
 		));
 
-		$hft = $this->parse("TREE");
-		$ret = $hft.$ret;
-
-		return $ret;
 	}
-
 
 	function rec_admin_tree(&$arr,$parent)
 	{
@@ -310,43 +384,29 @@ class admin_folders extends aw_template
 				continue;
 			};
 
-			$sub = $this->rec_admin_tree(&$arr,$row["oid"]);
+			$this->rec_admin_tree(&$arr,$row["oid"]);
 
-			if ($row["admin_feature"])
+			if ($row["admin_feature"] == 4)
 			{
-				$sub.=$this->get_feature_tree($row["admin_feature"],$row["oid"]);
+				$this->mk_grp_tree($row["oid"]);
 			}
 
 			$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
 			// as far as I know, this works everywhere
 			$blank = "about:blank";
-			$this->vars(array(
-				"name"		=> $row["name"],
-				"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
-				"parent"	=> ($parent == $this->cfg["amenustart"] ? $admin_rootmenu2 : $row["parent"]),
-				"iconurl" =>  $iconurl,
-				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank)));
 
-			if ($sub == "")
-			{
-				$ret.=$this->parse("DOC");
-			}
-			else
-			{
-				$ret.=$this->parse("TREE").$sub;
-			}
+			$px = ($row["parent"] == $this->cfg["amenustart"] ? $admin_rootmenu2 : $this->prefix . $row["parent"]);
+			$id = $this->prefix . $row["oid"];
+
+			$this->tree->add_item($px,array(
+				"id" => $id,
+				"name" => $row["name"],
+				"parent" => $px,
+				"iconurl" => $iconurl,
+				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank),
+			));
 		}
 		return $ret;
-	}
-
-	function get_feature_tree($feat,$parent)
-	{
-		switch($feat)
-		{
-			// grupid
-			case 4:
-				return $this->mk_grp_tree($parent);
-		}
 	}
 
 	function mk_grp_tree($parent)
@@ -393,20 +453,15 @@ class admin_folders extends aw_template
 				continue;
 			}
 
-			$sub = $this->rec_grp_tree(&$arr,$row["oid"]);
-			$this->vars(array(
-				"name" => $row["name"],"id" => "gp_".$row["oid"], "parent" => "gp_".$row["parent"],
+			$this->rec_grp_tree(&$arr,$row["oid"]);
+
+			$this->tree->add_item("ad_" . $parent,array(
+				"id" => "ad_" . $row["oid"],
+				"name" => $row["name"],
+				"parent" => $row["parent"],
+				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]),"admin_menus"),
 				"iconurl" => $this->cfg["baseurl"]."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]),"admin_menus")
 			));
-			if ($sub == "")
-			{
-				$ret.=$this->parse("DOC");
-			}
-			else
-			{
-				$ret.=$this->parse("TREE").$sub;
-			}
 		}
 		return $ret;
 	}
@@ -453,21 +508,6 @@ class admin_folders extends aw_template
 					else
 					{
 						$url = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : "";
-					}
-					$this->vars(array(
-						"name" => $row["name"],
-						"id" => $row["oid"],
-						"parent" => $row["parent"],
-						"iconurl" => $url,
-						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period),"admin_menus"),
-					));
-					if ($sub == "")
-					{
-						$ret.=$this->parse("DOC");
-					}
-					else
-					{
-						$ret.=$this->parse("TREE").$sub;
 					}
 				}
 			}
