@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.51 2003/04/25 13:42:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.52 2003/04/28 14:06:26 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -139,6 +139,8 @@ class image extends class_base
 			{
 				$size = getimagesize($idata["meta"]["file2"]);
 			};
+			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
+			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]+10).",height=".($size[1]+10)."');";
 			$vars = array(
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
@@ -150,6 +152,7 @@ class image extends class_base
 				"bigurl" => $idata["big_url"],
 				"big_width" => isset($size[0]) ? $size[0] : "",
 				"big_height" => isset($size[1]) ? $size[1] : "",
+				"bi_link" => $bi_link
 			);
  
 			if ($this->is_flash($idata["file"]))
@@ -214,11 +217,11 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
-					$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
+					//$replacement = "<table border=0 cellpadding=0 cellspacing=0 $vars[align]><tr><td>";
+					$replacement = "";
 					if (!empty($idata["big_url"]))
 					{
-						$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
-						$replacement .= "<a href=\"#\" onClick=\"window.open('$bi_show_link','popup','width=400,height=400');\">";
+						$replacement .= "<a href=\"#\" onClick=\"$bi_link\">";
 					};
 					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\">";
 					if (!empty($idata["big_url"]))
@@ -227,9 +230,9 @@ class image extends class_base
 					}
 					if (!empty($idata["comment"]))
 					{
-						$replacement .= $idata["comment"];
+						$replacement .= "<BR>".$idata["comment"];
 					};
-					$replacement .= "</td></tr></table>";
+					//$replacement .= "</td></tr></table>";
 				};
 			}	
 		};
