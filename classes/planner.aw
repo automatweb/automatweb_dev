@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.131 2003/08/29 14:32:05 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.132 2003/09/12 11:54:50 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -228,7 +228,7 @@ class planner extends class_base
 				break;
 
 			case "navigator_months":
-				$data["options"] = array("1" => "1","2" => "2");
+				$data["options"] = array(1 => 1, 2 => 2, 3 => 3 );
 				break;
 
 			case "event_folder":
@@ -741,6 +741,7 @@ class planner extends class_base
 	function parse_alias($args = array())
 	{
 		extract($args);
+		// XXX: comment this
 		if (!is_array($this->calaliases) || ($oid != $this->cal_oid) )
 		{
 			$this->calaliases = $this->get_aliases(array(
@@ -1135,6 +1136,19 @@ class planner extends class_base
 			{
 				$this->day_orb_link = $this->mk_my_orb("view",array("id" => $id,"type" => "day","ctrl" => $ctrl,"section" => aw_global_get("section")));
 			};
+			if ($this->conf["navigator_months"] == 3)
+			{
+				$_thismon,$_thisyear) = explode("-",date("m-Y",$di["start"]));
+				$_prevmon = mktime(0,0,0,$_thismon-1,1,$_thisyear);
+				$navi0 = $_cal->draw_calendar(array(
+					"tm" => $_prevmon,
+					"caption" => get_lc_month((int)date("m",$_prevmon)) . " $y",
+					"width" => 7,
+					"type" => "month",
+					"day_orb_link" => $this->day_orb_link,
+					"marked" => $events,
+				));
+			};
 			$navi1 = $_cal->draw_calendar(array(
 				"tm" => $di["start"],
 				"caption" => get_lc_month((int)$m) . " $y",
@@ -1144,14 +1158,13 @@ class planner extends class_base
 				"day_orb_link" => $this->day_orb_link,
 				"marked" => $events,
 			));
-			if ($this->conf["navigator_months"] == 2)
+			if ($this->conf["navigator_months"] >= 2)
 			{
 				list($_thismon,$_thisyear) = explode("-",date("m-Y",$di["start"]));
 				$_nextmon = mktime(0,0,0,$_thismon+1,1,$_thisyear);
-				$_nm = date("m",$_nextmon);
 				$navi2 = $_cal->draw_calendar(array(
 					"tm" => $_nextmon,
-					"caption" => get_lc_month((int)$_nm) . " $y",
+					"caption" => get_lc_month((int)date("m",$_nextmon)) . " $y",
 					"width" => 7,
 					"type" => "month",
 					"day_orb_link" => $this->day_orb_link,
@@ -1161,6 +1174,7 @@ class planner extends class_base
 			};
 			
 			$this->vars(array(
+				"navi0" => $navi0,
 				"navi1" => $navi1,
 				"navi2" => $navi2,
 			));
