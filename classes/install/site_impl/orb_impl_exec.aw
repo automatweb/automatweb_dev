@@ -50,6 +50,7 @@ if ($vars["fastcall"] == 1)
 
 include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 
+enter_function("orb_impl_exec::process_request");
 classload("orb");
 $orb = new orb();
 $orb->process_request(array(
@@ -61,6 +62,7 @@ $orb->process_request(array(
 	"silent" => false,
 ));
 $content = $orb->get_data();
+exit_function("orb_impl_exec::process_request");
 
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
