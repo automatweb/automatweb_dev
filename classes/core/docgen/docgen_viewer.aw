@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.6 2004/04/29 12:21:07 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.7 2004/04/30 08:45:04 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -294,7 +294,8 @@ class docgen_viewer extends class_base
 		{
 			return CL_DOCUMENT;
 		}
-		foreach(aw_ini_get("classes") as $clid => $cld)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $clid => $cld)
 		{
 			if (basename($cld["file"]) == basename($name))
 			{
