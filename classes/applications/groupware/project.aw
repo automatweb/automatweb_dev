@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.13 2004/05/06 12:39:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.1 2004/05/20 08:21:32 duke Exp $
 // project.aw - Projekt 
 /*
 

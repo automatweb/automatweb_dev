@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.8 2004/04/28 14:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.1 2004/05/20 08:21:32 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -23,7 +23,11 @@
 @default field=meta
 @default method=serialize
 
+<<<<<<< task.aw
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first use_form=emb
+=======
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
+>>>>>>> 1.7
 @caption Kordused
 
 @property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
@@ -32,10 +36,14 @@
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
+<<<<<<< task.aw
+@groupinfo recurrence caption=Kordumine submit=no
+=======
 @property comment_list type=comments group=comments no_caption=1
 @caption Kommentaarid
 
 @groupinfo recurrence caption=Kordumine
+>>>>>>> 1.7
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
