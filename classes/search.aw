@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.23 2003/04/07 10:18:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.24 2003/04/07 17:19:12 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -1221,7 +1221,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"action" => $action, 
 			"params" => $params
 		);
-		if (isset($args["s"]["server"]))
+		if (!empty($args["s"]["server"]))
 		{
 			$_parms["method"] = "xmlrpc";
 			$_parms["login_obj"] = $args["s"]["server"];
