@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.11 2004/05/06 11:55:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.12 2004/05/07 06:53:34 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -227,12 +227,17 @@ class site_search_content extends class_base
 	function fetch_static_search_results($arr)
 	{
 		// rewrite fucked-up letters
-		$arr["str"] = str_replace(chr(0xb4), "&#0352;", $arr["str"]);
-		$arr["str"] = str_replace(chr(0xb8), "&#0352;", $arr["str"]);
-		$arr["str"] = str_replace(chr(0x9e), "&#0352;", $arr["str"]);
-		$arr["str"] = str_replace(chr(0x8e), "&#0352;", $arr["str"]);
-		$arr["str"] = str_replace("%9E", "&#0352;", $arr["str"]);
-		$arr["str"] = str_replace("%8E", "&#0352;", $arr["str"]);
+		// IE
+		$arr["str"] = str_replace(chr(0x9a), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace(chr(0x8a), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%9A", "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%8A", "&#0352;", $arr["str"]);
+		
+		// mozilla
+		$arr["str"] = str_replace(chr(0xa8), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%A8", "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace(chr(0xa6), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%A6", "&#0352;", $arr["str"]);
 		
 		extract($arr);
 	
