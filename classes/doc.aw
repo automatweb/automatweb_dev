@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.33 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.34 2003/08/18 13:06:21 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -435,6 +435,15 @@ class doc extends class_base
 			$objdata["lead"] = $this->_doc_strip_tags($objdata["lead"]);
 			$objdata["moreinfo"] = $this->_doc_strip_tags($objdata["moreinfo"]);
 		};
+		if (!$objdata["modified"])
+		{
+			$objdata["modified"] = time();
+		}
+		
+		if (!$objdata["tm"])
+		{
+			$objdata["tm"] = date("d/m/y", $objdata["modified"]);
+		}
 	}
 
 	function callback_post_save($args = array())
