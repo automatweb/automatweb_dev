@@ -1,11 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.23 2001/12/04 18:03:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.24 2001/12/06 01:21:09 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
-
-// Foorumite manageerimine, siia tuleb yle tuua ka koik msgboardi halduse funktsioonid,
-// et kogu see vark muutuks ORB kompatiibliks
 
 class forum extends aw_template
 {
@@ -30,18 +27,149 @@ class forum extends aw_template
 	}
 
 	////
-	// !Kuvab uue foorumi lisamise vormi
-	function add($arr)
+	// Järgmised 3 funktsiooni tegelevad foorumi objektidega
+	////
+
+	
+	////
+	// !Creates a new forum or updates configuration for an existing one
+	function submit_properties($arr)
+	{
+		$this->quote($arr);
+		extract($arr);
+		// we need to know the type of the parent object to figure
+		// out what to do after the forum has been added.
+		$pobj = $this->get_object($parent);
+		if ($id)
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_FORUM,
+				"name" => $name,
+				"comment" => $comment,
+			));
+		}
+	
+		// dammit, this sucks so much. Do we really have to
+		// use separate calls?
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "comments",
+			"value" => $comments,
+		));
+		
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "rated",
+			"value" => $rated,
+		));
+		
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "template",
+			"value" => $template,
+		));
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "onpage",
+			"value" => $onpage,
+		));
+		
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "topicsonpage",
+			"value" => $topicsonpage,
+		));
+
+		if ($pobj["class_id"] == CL_DOCUMENT)
+		{
+			// yea, it was a document allright. So we create an alias
+			// and return to the alias list. Or shouldn't we?
+			$this->add_alias($parent,$id);
+			$retval = $this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr");
+		}
+		else
+		{
+			$retval = $this->mk_my_orb("change", array("id" => $id,"parent" => $parent));
+		};
+		return $retval;
+	}
+	
+	////
+	// !Displays the form for changing the forum properties
+	function change($arr)
 	{
 		extract($arr);
 		$this->read_template("add_forum.tpl");
-		$this->mk_path($parent,"Lisa foorum");
+		// if parent is defined, then we are about to add a new forum,
+		if ($parent)
+		{
+			$pobj = $this->get_object($parent);
+			// UGLY HACK: if we entered this function from the objects list,
+			// we redirect the user to the topic list, becase the Big Pointy
+			// Haired boss wants it that way. And besides, this is temporary
+			// (yeah, right) anyway, until we figure out something better.
+			if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
+			{
+				header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
+				exit;
+			};
+			
+			$title = "Lisa foorum";
+		
+			$meta = array();
+		}
+		// otherwise we are modifying an existing forum
+		else
+		{
+			$obj = $this->get_object($id);
+			$pobj = $this->get_object($obj["parent"]);
+			$title = "Muuda foorumit";
+			$this->mk_path($parent, $title);
+			$meta = $this->get_object_metadata(array("metadata" => $o["metadata"]));
+		};
+
+		if ($pobj["class_id"] == CL_DOCUMENT)
+		{
+			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
+	
+		}
+		else
+		{
+			$this->mk_path($pobj["oid"], $title);
+		};
+
+		global $template_sets;
 		$this->vars(array(
+			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
+			// oh god, this sucks, but alas .. positioned arguments suck too
+			"url" => str_replace("/automatweb","",$this->mk_my_orb("topics",array("id" => $id),"forum",false)),
+		));
+
+		$url = ($id) ? $this->parse("URL") : "";
+
+		$this->vars(array(
+			"name" => $obj["name"],
+			"comment" => $obj["comment"],
+			"comments" => checked($meta["comments"]),
+			"template" => $this->picker($meta["template"],$template_sets),
 			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
 			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"reforb" => $this->mk_reforb("submit_properties", array("parent" => $parent)),
-			"comments" => checked(1),
+			"rated" => checked($meta["rated"]),
+			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent)),
+			"URL" => $url,
+			"EDIT" => $this->parse("EDIT"),
 		));
+		$this->parse("CHANGE");
 		return $this->parse();
 	}
 
@@ -50,6 +178,7 @@ class forum extends aw_template
 	// !Kuvab uue topicu lisamise vormi
 	function add_topic($args = array())
 	{
+		// this first setting should really be configurable on per-forum basis
 		if ( defined("TOPIC_ADD_REQUIRES_LOGIN") && not(defined("UID")) )
 		{
 			classload("config");
@@ -386,7 +515,7 @@ class forum extends aw_template
 
 	}
 
-	function change($args = array())
+	function topics($args = array())
 	{
 		extract($args);
 
@@ -415,7 +544,7 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $this->section)),
-			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id,"section" => $this->section)),
+			"props_link" => $this->mk_my_orb("change",array("id" => $id,"section" => $this->section)),
 			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"section" => $this->section)),
 			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"from" => $from,"section" => $this->section)),
@@ -444,7 +573,7 @@ class forum extends aw_template
 		$this->vars(array(
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $section,)),
 			"topics_link" => $this->mk_my_orb("topics",array("id" => $id,"from" => $from,"section" => $this->section)),
-			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id,"section" => $this->section)),
+			"props_link" => $this->mk_my_orb("change",array("id" => $id,"section" => $this->section)),
 			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $section)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"section" => $this->section)),
 			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"section" => $this->section)),
@@ -457,103 +586,7 @@ class forum extends aw_template
 
 		
 
-	////
-	// !Kuvab foorumi muutmise vormi
-	function edit_properties($arr)
-	{
-		extract($arr);
-		$this->read_template("add_forum.tpl");
-		$o = $this->get_object($id);
-		$meta = $this->get_object_metadata(array("metadata" => $o["metadata"]));
-		$this->mk_path($o["parent"], "Muuda foorumit");
-		global $template_sets;
-		$this->vars(array(
-			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
-		));
-		$this->vars(array(
-			"name" => $o["name"],
-			"comment" => $o["comment"],
-			"comments" => checked($meta["comments"]),
-			"template" => $this->picker($meta["template"],$template_sets),
-			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"rated" => checked($meta["rated"]),
-			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id)),
-			"url" => $GLOBALS["baseurl"]."/comments.".$GLOBALS["ext"]."?action=topics&forum_id=".$id,
-			"EDIT" => $this->parse("EDIT"),
-		));
-		$this->parse("CHANGE");
-		return $this->parse();
-	}
 	
-	////
-	// !Salvestab foorumi
-	function submit_properties($arr)
-	{
-		extract($arr);
-		if ($id)
-		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-		}
-		else
-		{
-			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_FORUM, "name" => $name,"comment" => $comment));
-		}
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "comments",
-			"value" => $comments,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "rated",
-			"value" => $rated,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "template",
-			"value" => $template,
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "onpage",
-			"value" => $onpage,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "topicsonpage",
-			"value" => $topicsonpage,
-		));
-
-		if ($xparent)
-		{
-			$parobj = $this->get_object($parent);
-			if ($parobj["class_id"] == CL_DOCUMENT)
-			{
-				$this->add_alias($parent,$id);
-			}
-			$retval = $this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr");
-		}
-		else
-		{
-			$thisobj = $this->get_object($id);
-			$parobj = $this->get_object($thisobj["parent"]);
-			if ($parobj["class_id"] == CL_DOCUMENT)
-			{
-				$this->add_alias($thisobj["parent"],$id);
-				$retval = $this->mk_my_orb("list_aliases",array("id" => $parobj["oid"]),"aliasmgr");
-			}
-			else
-			{
-				$retval = $this->mk_my_orb("edit_properties", array("id" => $id));
-			}
-		};
-		return $retval;
-	}
 
 	////
 	// !Shows the search form
