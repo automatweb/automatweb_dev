@@ -1,7 +1,14 @@
 <?php
 session_name("automatweb");
+session_cache_limiter("public");
 session_start();
-classload("aw_template","defs","cache","timer","menuedit","document","file");
+classload("aw_template");
+classload("defs");
+classload("cache");
+classload("timer");
+classload("menuedit");
+classload("document");
+classload("file");
 
 aw_startup();
 
