@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.4 2005/03/31 06:43:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.5 2005/03/31 07:01:41 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -850,7 +850,7 @@ class orb extends aw_template
 		ob_start();
 
 		// load rpc handler
-		$inst = get_instance("orb/".$method);
+		$inst = get_instance("core/orb/".$method);
 		if (!is_object($inst))
 		{
 			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"orb::handle_rpc_call - Could not load request handler for request method '".$method."'", true,false);
@@ -953,7 +953,7 @@ class orb extends aw_template
 	function get_methods_by_flag($args = array())
 	{
 		extract($args);
-		$orbclass = get_instance("orb");
+		$orbclass = get_instance("core/orb/orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 		$methods = array();
 		foreach(safe_array($orb_defs[$id]) as $key => $val)
@@ -971,7 +971,7 @@ class orb extends aw_template
 	function get_public_method($args = array())
 	{
 		extract($args);
-		$orbclass = get_instance("orb");
+		$orbclass = get_instance("core/orb/orb");
 		$orb_defs = $orbclass->load_xml_orb_def($id);
 //		echo "id = $id , action = $action , orb_defs = <pre>", var_dump($orb_defs),"</pre> <br />";
 		if ($action == "default")
