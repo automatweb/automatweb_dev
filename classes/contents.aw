@@ -74,10 +74,10 @@ class contents extends aw_template
 		
 		$act_per = $this->per->get($this->period);
 
-		if (!empty($act_per["data"]["image"]))
+		if (!empty($act_per["data"]["image"]["id"]))
 		{
 			$img = get_instance("image");
-			$dat = $img->get_image_by_id($act_per["data"]["image"]);
+			$dat = $img->get_image_by_id($act_per["data"]["image"]["id"]);
 			$imgurl = $dat["url"];
 		}
 		else
