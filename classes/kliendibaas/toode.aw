@@ -34,5 +34,25 @@ class toode extends class_base
 			'clid' => CL_TOODE,
 		));
 	}
+	function get_property($args)
+	{
+		$data = &$args['prop'];
+		$retval = true;
+		switch($data["name"])
+		{
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'jrk':
+				$retval=PROP_IGNORE;
+			break;
+			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+		}
+
+		return  $retval;
+	}
+
 }
 ?>

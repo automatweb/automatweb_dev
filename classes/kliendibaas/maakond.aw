@@ -32,5 +32,25 @@ class maakond extends class_base
 			'clid' => CL_MAAKOND,
 		));
 	}
+	function get_property($args)
+	{
+		$data = &$args['prop'];
+		$retval = true;
+		switch($data["name"])
+		{
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'jrk':
+				$retval=PROP_IGNORE;
+			break;
+			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+		}
+
+		return  $retval;
+	}
+
 }
 ?>

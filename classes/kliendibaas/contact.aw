@@ -148,6 +148,16 @@ SCR;
 			case 'more':
 				$data['value']='';
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'jrk':
+				$retval=PROP_IGNORE;
+			break;
+			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+		
 		}
 		return $retval;
 	}

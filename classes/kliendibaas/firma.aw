@@ -171,7 +171,14 @@ SCR;
 				$data['value']=$this->isik_manager($what,$args['objdata'][$what]);
 			break;
 
-			case 'plaaah':
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'jrk':
+				$retval=PROP_IGNORE;
+			break;
+			case 'alias':
+				$retval=PROP_IGNORE;
 			break;
 		};
 		return $retval;

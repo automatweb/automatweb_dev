@@ -11,7 +11,7 @@
 	@caption asi
 
 */
-classload('defs');
+//classload('defs');
 class kliendibaas extends class_base
 {
 	function kliendibaas()
