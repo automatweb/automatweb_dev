@@ -3,12 +3,14 @@
       <property>
             <name>ffile</name>
             <type>fileupload</type>
+            <group>general</group>
             <field>ffile</field>
             <caption>Pilt</caption>
       </property>
       <property>
             <name>file_show</name>
             <type>text</type>
+            <group>general</group>
             <field>file_show</field>
             <caption></caption>
       </property>
@@ -17,6 +19,7 @@
             <table>objects</table>
             <field>comment</field>
             <type>textbox</type>
+            <group>general</group>
             <caption>Pildi allkiri</caption>
       </property>
       <property>
@@ -25,6 +28,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Alt</caption>
       </property>
       <property>
@@ -32,6 +36,7 @@
             <type>textbox</type>
             <table>images</table>
             <field>link</field>
+            <group>general</group>
             <caption>Link</caption>
       </property>
       <property>
@@ -40,6 +45,7 @@
             <ch_value>1</ch_value>
             <table>images</table>
             <field>newwindow</field>
+            <group>general</group>
             <caption>Uues aknas</caption>
       </property>
       <classinfo>
