@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.253 2004/04/15 06:07:58 duke Exp $
+// $Id: class_base.aw,v 2.254 2004/04/20 11:28:25 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -299,7 +299,6 @@ class class_base extends aw_template
 		$properties = $this->get_property_group2($filter);
 
 
-
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
 			$o_t = get_instance("translate/object_translation");
@@ -431,7 +430,26 @@ class class_base extends aw_template
 					$cli->set_form_target("_parent");
 				};
 			};
+
+			$use_layout = $this->classinfo["layout"];
+			if ($use_layout == "boxed")
+			{
+				$cli->set_form_layout($use_layout);
+				if (is_callable(array($this->inst,"get_content_elements")))
+				{
+					$els = $this->inst->get_content_elements(array("obj_inst" => $this->obj_inst));
+					if (is_array($els))
+					{
+						foreach($els as $location => $_content)
+						{
+							$cli->add_content_element($location,$_content);
+						};
+					};
+				};
+			};
 		};
+
+		$this->cli = &$cli;
 
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
@@ -469,7 +487,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-		
+
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -592,9 +610,6 @@ class class_base extends aw_template
 				$this->cli = &$cli;
 				$_tmp = $this->gen_output(array());
 			};
-			$content = $cli->get_result(array(
-				"raw_output" => $this->raw_output,
-			));
 		};
 
 		$rv =  $this->gen_output(array(
@@ -958,7 +973,7 @@ class class_base extends aw_template
 			$this->mk_path($parent,$title,aw_global_get("period"));
 		};
 
-		$this->tp = get_instance("vcl/tabpanel");
+		//$this->tp = get_instance("vcl/tabpanel");
 
 
 		// I need a way to let the client (the class using class_base to
@@ -1052,7 +1067,8 @@ class class_base extends aw_template
 				if ($res !== false)
 				{
 					// so, how do I figure out
-					$this->tp->add_tab(array(
+					//$this->tp->add_tab(array(
+					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
 						"level" => empty($val["parent"]) ? 1 : 2,
 						"parent" => $val["parent"],
@@ -1104,7 +1120,8 @@ class class_base extends aw_template
 				get_class($this->orb_class));
 			};
 
-			$this->tp->add_tab(array(
+			//$this->tp->add_tab(array(
+			$this->cli->add_tab(array(
 				"id" => "list_aliases",
 				"link" => $link,
 				"caption" => "Seostehaldur",
@@ -1113,22 +1130,36 @@ class class_base extends aw_template
 			));
 		};
 
-		$vars = array();
+		if (empty($args["content"]))
+		{
+			$content = $this->cli->get_result(array(
+				"raw_output" => $this->raw_output,
+			));
+		}
+		else
+		{
+			$content = $args["content"];
+		};
+
+		/*$vars = array();
 
 		$vars["content"] = $args["content"];
+		*/
+
+		return $content;
 
 		if ($this->orb_class == "auth")
 		{
-			return $args["content"];
+			return $content;
 		}
 		else
 		if (isset($this->raw_output))
 		{
-			return $args["content"];
+			return $content;
 		}
 		else
 		{
-			return $this->tp->get_tabpanel($vars);
+			//return $this->tp->get_tabpanel($vars);
 		};
 	}
 
