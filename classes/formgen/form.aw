@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.89 2004/03/03 08:28:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.90 2004/03/03 11:33:52 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -735,6 +735,7 @@ class form extends form_base
 		$this->arr["trans_sect"] = $trans_sect;
 		$this->arr["dont_show_trans"] = $dont_show_trans;
 		$this->arr["js_default_element"] = $js_default_element;
+		$this->arr["join_optimizer_pessimist"] = $join_optimizer_pessimist;
 
 		if ($is_translatable && !$this->arr["is_translatable"])
 		{
@@ -1142,7 +1143,7 @@ class form extends form_base
 		$ops = $this->get_op_list($id);
 
 		// Why such an obsession with bit masks instead of just using
-		// $this->arr["something"]? 
+		// $this->arr["something"]?
 		// Because I need a fast way (and that means directly in the SQL
 		// clause) to figure out the type of the form -- duke
 
@@ -1207,7 +1208,8 @@ class form extends form_base
 			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"]),
 			"no_use_eid_once" => checked($this->arr["no_use_eid_once"]),
 			"dont_show_trans" => checked($this->arr["dont_show_trans"]),
-			"js_default_element" => $this->picker($this->arr["js_default_element"], $this->get_all_elements())
+			"js_default_element" => $this->picker($this->arr["js_default_element"], $this->get_all_elements()),
+			"join_optimizer_pessimist" => checked($this->arr["join_optimizer_pessimist"])
 		));
 
 		$l = get_instance("languages");

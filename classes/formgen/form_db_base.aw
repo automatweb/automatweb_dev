@@ -1479,15 +1479,24 @@ class form_db_base extends aw_template
 	// !finds the path from form $f_from to $f_to in the join tree created previously
 	function get_join_path($f_from, $f_to)
 	{
-		// we do this in a pretty slow way - 
+		// we do this in a pretty slow way -
 		// search through the form relations tree ($this->form_rel_tree)
 		// it is assumed, that the root element for the tree is $f_from
-		// and the tree contains all the relations for the forms in it. 
+		// and the tree contains all the relations for the forms in it.
 		// well - I see no way of avoiding this exhaustive search, and it really does not take that long
 		//$this->_clear_stack("join_path");
 		$this->join_path = array();
 		$this->rgjp_beenthere = array();
-		if ($this->req_get_join_path($f_from, $f_to))
+		if ($this->arr["join_optimizer_pessimist"])
+		{
+			$ret = $this->req_get_join_path_pessimistic($f_from, $f_to);
+		}
+		else
+		{
+			$ret = $this->req_get_join_path($f_from, $f_to);
+		}
+		
+		if ($ret)
 		{
 			return $this->join_path;
 		}
@@ -1529,10 +1538,37 @@ class form_db_base extends aw_template
 		return false;
 	}
 
+	function req_get_join_path_pessimistic($f_root, $f_to)
+	{
+		if ($this->rgjp_beenthere[$f_root])
+		{
+			return;
+		}
+		$this->rgjp_beenthere[$f_root] = $f_root;
+		array_push($this->join_path,$f_root);
+		if (is_array($this->form_rel_tree[$f_root]))
+		{
+			foreach($this->form_rel_tree[$f_root] as $r_fid => $r_data)
+			{
+				if ($r_fid == $f_to)	// we found the end, get out of here
+				{
+					array_push($this->join_path,$f_to);
+					return true;
+				}
+				if ($this->req_get_join_path_pessimistic($r_fid, $f_to) == true)
+				{
+					return true;
+				}
+			}
+		}
+		array_pop($this->join_path);
+		return false;
+	}
+
 	////
 	// !this creates the form relations tree, starting from $f_root and puts it in $this->form_rel_tree
 	// if $chain is specified, $f_root is assumed to be a member of chain $chain and other chains it belongs to are ignored
-	// $this->form_rel_tree is an array - index is the form id and value is an array of relations 
+	// $this->form_rel_tree is an array - index is the form id and value is an array of relations
 	// from the key form index is the related form id and value is an array of the relation data
 	function build_form_relation_tree($f_root, $chain = 0, $no_reverse_rels = false)
 	{
@@ -1980,7 +2016,7 @@ class form_db_base extends aw_template
 
 	////
 	// !adds object status checking to the where query if forms create objects
-	// this is separate, for performance reasons - we need to do the where bit 
+	// this is separate, for performance reasons - we need to do the where bit
 	// before any others and we don't know whether to add the object table there yet.
 	function get_sql_where_objects_part($query)
 	{
@@ -2011,8 +2047,8 @@ class form_db_base extends aw_template
 	}
 
 	////
-	// !makes the table name for table $tbl, in form $frm 
-	// - why is this? well, all the tables get renamed in the query to tablename_formid 
+	// !makes the table name for table $tbl, in form $frm
+	// - why is this? well, all the tables get renamed in the query to tablename_formid
 	// - that allows us to join the same table twice, provided that it has two separate forms
 	// - that write to it - using that we can even do self-joins
 	// static
@@ -2038,7 +2074,7 @@ class form_db_base extends aw_template
 	}
 
 	////
-	// !extracts the real table name from the mangled table name 
+	// !extracts the real table name from the mangled table name
 	// (removes _formid part)
 	function get_rtbl_from_tbl($tbl)
 	{

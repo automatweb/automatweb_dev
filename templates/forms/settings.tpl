@@ -169,6 +169,11 @@ function setLink(li,title)
 <td class="celltext"><select name="js_default_element" class="formselect2">{VAR:js_default_element}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Pesiimistlik p&auml;ringute generaator:</td>
+<td class="celltext"><input type="checkbox" name="join_optimizer_pessimist" value="1" {VAR:join_optimizer_pessimist}></td>
+</tr>
+
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>
