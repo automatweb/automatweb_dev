@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.274 2004/08/23 09:41:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.275 2004/08/31 08:31:03 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3114,7 +3114,8 @@ class document extends aw_template
 		}
 		else
 		{
-			$replacement = $this->gen_preview(array("docid" => $d["target"]));
+			
+			$replacement = $this->gen_preview(array("docid" => $d["target"], "leadonly" => 1));
 		};
 		return $replacement;
 
