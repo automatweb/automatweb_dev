@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.2 2004/06/23 12:21:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.3 2004/06/25 07:16:52 duke Exp $
 // quickmessage.aw - Kiirteade 
 /*
 
@@ -67,6 +67,7 @@ class quickmessage extends class_base
 		$user_to = $arr["user_to"];
 		$ol = new object_list(array(
 			"user_to" => $user_to,
+			"class_id" => CL_QUICKMESSAGE,
 			"sort_by" =>  "objects.created DESC",
 		));
 		$msgs = array();
@@ -82,6 +83,7 @@ class quickmessage extends class_base
 		$user_from = $arr["user_from"];
 		$ol = new object_list(array(
 			"user_from" => $user_from,
+			"class_id" => CL_QUICKMESSAGE,
 			"sort_by" => "objects.created DESC",
 		));
 		$msgs = array();
