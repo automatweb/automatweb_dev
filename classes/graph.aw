@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.13 2004/06/11 09:16:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.14 2004/06/18 16:20:24 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -48,8 +48,8 @@ class graph extends aw_template
 		$this->vars(array("reforb" => $this->mk_reforb("submit",array("parent" => $parent,"id" => 0, "alias_doc" => $alias_doc))));
 		return $this->parse();
 	}
-	//Uue graafikuga tegelemine
-	/**  
+
+	/** Uue graafikuga tegelemine  
 		
 		@attrib name=submit params=name default="0"
 		
@@ -63,53 +63,46 @@ class graph extends aw_template
 	function base_add($ar)
 	{
 		extract($ar);
-			$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_GRAPH,"comment" => $comment,"status" => 2));	
-			if ($alias_doc)
-			{
-				$this->add_alias($alias_doc,$id);
-			}
-			switch ($type) 
-			{
-				case TYPE_PIE:
-					//default setup ja data
-					$setup=array(
-						"title" => "Tiitel",
-						"title_col" => "000000",
-						"bgcolor" => "aabbaa",
-						"width" => "300",
-						"height" => "200",
-						"radius" => "50",
-						"showlabels" => "on",
-						"percentage" => "on"
-					);
-					$data=array(
-						"labels" => "Mai,Juuni,Juuli,August,September",
-						"data" => "5,13,18,7,3"
-					);
-					$sdata=$this->quote(serialize($data));
-					$ssetup=$this->quote(serialize($setup));
-					$q="INSERT INTO graphs (id,setup,type,data,datasrc) VALUES ('$id','$ssetup','$type','$sdata','userdata')";
-					$this->db_query($q);
-					return "orb.".$this->cfg["ext"]."?class=graph&action=conf&id=$id";
-					return $this->mk_orb("conf",array("id"=>$id));
-					break;
-				case TYPE_BAR:
-					return $this->mk_orb("gotbarline",array("id"=>$id,"type" => $type, "name" => $name));
-							//$tt=$this->quote(serialize($setup));
-							//$q="INSERT INTO graphs (id,setup,datasrc,type,ycount) VALUES ('$id','$tt','$datasrc','$type','$ycount')";
-							//$this->db_query($q);
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_class_id(CL_GRAPH);
+		$o->set_name($name);
+		$o->set_comment($comment);
+		$o->set_status(STAT_ACTIVE);
+		$id = $o->save();
+		switch ($type) 
+		{
+			case TYPE_PIE:
+				//default setup ja data
+				$setup=array(
+					"title" => "Tiitel",
+					"title_col" => "000000",
+					"bgcolor" => "aabbaa",
+					"width" => "300",
+					"height" => "200",
+					"radius" => "50",
+					"showlabels" => "on",
+					"percentage" => "on"
+				);
+				$data=array(
+					"labels" => "Mai,Juuni,Juuli,August,September",
+					"data" => "5,13,18,7,3"
+				);
+				$sdata = $this->quote(serialize($data));
+				$ssetup = $this->quote(serialize($setup));
+				$q = "INSERT INTO graphs (id,setup,type,data,datasrc) VALUES ('$id','$ssetup','$type','$sdata','userdata')";
+				$this->db_query($q);
+				return $this->mk_orb("change",array("id"=>$id));
+				break;
 
-					break;
-				case TYPE_LINE:
-					return $this->mk_orb("gotbarline",array("id"=>$id,"type" => $type, "name" => $name));
-							//$tt=$this->quote(serialize($setup));
-							//$q="INSERT INTO graphs (id,setup,datasrc,type,ycount) VALUES ('$id','$tt','$datasrc','$type','$ycount')";
-							//$this->db_query($q);
-				default:
-					break;
-			}
-//			echo $name;	echo $comment;		echo $id; echo $parent; echo $type;
-		//$q="INSERT INTO graphs (id,type) VALUES ('$oid','$type')";
+			case TYPE_BAR:
+				return $this->mk_orb("gotbarline",array("id"=>$id,"type" => $type, "name" => $name));
+				break;
+
+			case TYPE_LINE:
+				return $this->mk_orb("gotbarline",array("id"=>$id,"type" => $type, "name" => $name));
+				break;
+		}
 	}
 	
 	function pie_conf($ar) 
@@ -171,21 +164,9 @@ class graph extends aw_template
 		$ssetup=$this->quote(serialize($setup));
 		$q="UPDATE graphs SET data='$sdata',setup = '$ssetup' where id=$id";
 		$this->db_query($q);
-		return $this->mk_orb("conf",array("id"=>$id));
+		return $this->mk_orb("change",array("id"=>$id));
 	}
 	
-	/**  
-		
-		@attrib name=conf params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	/**  
 		
 		@attrib name=change params=name default="0"
@@ -380,7 +361,7 @@ class graph extends aw_template
 		$ssetup=$this->quote(serialize($setup));
 		$q="UPDATE graphs SET datasrc='$datasrc',ycount='$ycount',setup='$ssetup' WHERE id=$id";
 		$this->db_query($q);
-		return $this->mk_orb("conf",array("id"=>$id));
+		return $this->mk_orb("change",array("id"=>$id));
 	}
 
 	//Graafiku konfimise jaoks, manab esile konfi page
@@ -460,7 +441,7 @@ class graph extends aw_template
 		$ssetup=$this->quote(serialize($setup));
 		$q="UPDATE graphs SET setup = '$ssetup' where id=$id";
 		$this->db_query($q);
-		return $this->mk_orb("conf",array("id"=>$id));
+		return $this->mk_orb("change",array("id"=>$id));
 	}
 
 	//Annab by default n2idatava graafikute listi
@@ -768,7 +749,7 @@ class graph extends aw_template
 				"id" => $id,
 				"name" => $row["name"],
 				"xdata" => "$data[x]",
-				"conf" => $this->mk_orb("conf",array("id" => $id)),
+				"conf" => $this->mk_orb("change",array("id" => $id)),
 				"preview" => $this->mk_orb("preview", array("id" => $id)),
 				"upload" => $this->mk_reforb("upload",array("id" => $id))
 				));
@@ -839,7 +820,7 @@ class graph extends aw_template
 			"andmed" => $ar_datasrc[$datasrc],
 			"prev" => $this->mk_orb("preview",array("id" => $id)),
 			"reforb" => $this->mk_reforb("savemeta",array("id" => $id)),
-			"conf" => $this->mk_orb("conf",array("id" => $id)),
+			"conf" => $this->mk_orb("change",array("id" => $id)),
 		));
 		return $this->parse();
 	}
