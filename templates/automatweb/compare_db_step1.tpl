@@ -1,4 +1,4 @@
-<form method="POST">
+<form method="POST" action="/index.{VAR:ext}">
 Valige siit doonorserveri aadress:
 <p>
 <select name="donor">
