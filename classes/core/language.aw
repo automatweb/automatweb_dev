@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.11 2004/07/09 08:22:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.12 2004/10/08 15:57:54 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -140,6 +140,10 @@ class language extends class_base
 			case "texts":
 				$this->do_texts_table($arr);
 				break;
+
+			case "lang_status":
+				$arr["obj_inst"]->set_status($prop["value"]);
+				break;
 		};
 		return $retval;
 	}
@@ -210,6 +214,7 @@ class language extends class_base
 		}
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
 		$arr["obj_inst"]->set_prop("lang_site_id", join(",", array_keys(is_array($prop["value"]) ? $arr["obj_inst"]->prop("lang_site_id") : array())));
+		$arr["obj_inst"]->set_status($arr["obj_inst"]->prop("lang_status"));
 	}
 
 	function callback_post_save()
