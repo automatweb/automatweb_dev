@@ -45,6 +45,12 @@
 @property pre_image type=relpicker reltype=RELTYPE_IMAGE
 @caption Men&uuml;&uuml; pilt
 
+@property show_comment type=checkbox ch_value=1
+@caption N&auml;ita kommentaari
+
+@property comment_sep type=textbox
+@caption Kommentaari eraldaja
+
 */
 
 define("RELTYPE_STYLE",1);
@@ -219,6 +225,11 @@ class menu_area_level extends class_base
 			"url" => $this->get_menu_link($data),
 			"caption" => $data["name"]
 		));
+
+		if ($this->ob["meta"]["show_comment"] && $data["comment"] != "")
+		{
+			$link .= $this->ob["meta"]["comment_sep"].$data["comment"];
+		}
 
 		if ($stylid)
 		{
