@@ -21,7 +21,7 @@
 			<function name="submit"/>
 		</action>
 
-		<action name="getcookie" public="1">
+		<action name="getcookie" public="1" nologin="1">
 			<function name="getcookie"/>
 		</action>
 	</class>
