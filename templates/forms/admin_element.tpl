@@ -204,15 +204,15 @@ function toggle_file_link_newwin()
 <!-- SUB: LB_MUL_DS -->
 <tr>
 	<td class="fgtext">Andmed formist:</td>
-	<td class="fgtext"><select name="{VAR:cell_id}_lb_data_from_form">{VAR:lb_data_from_form}</select></td>
+	<td class="fgtext"><select class="small_button"  name="{VAR:cell_id}_lb_data_from_form">{VAR:lb_data_from_form}</select></td>
 <td class="fgtext">Andmete element:</td>
-<td class="fgtext"><select name="{VAR:cell_id}_lb_data_from_el">{VAR:lb_data_from_el}</select></td>
+<td class="fgtext"><select class="small_button" name="{VAR:cell_id}_lb_data_from_el">{VAR:lb_data_from_el}</select></td>
 </tr>
 <tr>
 	<td class="fgtext">Otsing alamstringist:</td>
 	<td class="fgtext"><input type="checkbox" value="1" name="{VAR:cell_id}_lb_search_like" {VAR:lb_search_like}></td>
-	<td class="fgtext">&nbsp;</td>
-	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">Sortimise element:</td>
+	<td class="fgtext"><select class="small_button" name="{VAR:cell_id}_lb_data_from_el_sby">{VAR:lb_data_from_el_sby}</select></td>
 </tr>
 <!-- END SUB: LB_MUL_DS -->
 

@@ -1876,6 +1876,7 @@ class form_db_base extends aw_template
 		$this->save_handle();
 
 		$where = "";
+		$order_by = "";
 
 		$inst = $this->cache_get_form_eldat($rel_form);
 		if ($inst["save_table"] == 1)
@@ -1884,6 +1885,10 @@ class form_db_base extends aw_template
 			$rel_el = $rel_tbl.".".$inst["els"][$rel_element]["col"];
 			$id_col = $inst["save_table_data"][$rel_tbl]." as id,";
 			$join = "";
+			if ($el_sort_by)
+			{
+				$order_by = $inst["els"][$el_sort_by]["table"].".".$inst["els"][$el_sort_by]["col"];
+			}
 		}
 		else
 		{
@@ -1914,10 +1919,14 @@ class form_db_base extends aw_template
 			{
 				$where .= " AND ".$rel_tbl.".lang_id = '".aw_global_get("lang_id")."' ";
 			}
+			
+			if ($el_sort_by)
+			{
+				$order_by = "el_".$el_sort_by;
+			}
 		}
 
-		$order_by = "";
-		if ($sort_by_alpha && $rel_el != "")
+		if ($sort_by_alpha && $rel_el != "" && $order_by = "")
 		{
 			$order_by = " ORDER BY $rel_el ";
 		}

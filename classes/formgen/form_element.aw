@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.78 2004/11/07 19:40:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.79 2004/11/15 15:20:09 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -450,7 +450,8 @@ class form_element extends aw_template
 				}
 				$this->vars(array(
 					"lb_data_from_form" => $this->picker($this->arr["lb_data_from_form"], $lbdforms),
-					"lb_data_from_el" => $this->picker($this->arr["lb_data_from_el"], $lbdeels)
+					"lb_data_from_el" => $this->picker($this->arr["lb_data_from_el"], $lbdeels),
+					"lb_data_from_el_sby" => $this->picker($this->arr["lb_data_from_el_sby"], $lbdeels)
 				));
 
 				$this->vars(array(
@@ -982,6 +983,9 @@ class form_element extends aw_template
 
 			$var = $base."_lb_data_from_el";
 			$this->arr["lb_data_from_el"] = $$var;
+			
+			$var = $base."_lb_data_from_el_sby";
+			$this->arr["lb_data_from_el_sby"] = $$var;
 		}
 
 		if ($this->arr["type"] == "listbox")
@@ -1653,6 +1657,7 @@ class form_element extends aw_template
 				"sort_by_alpha" => $this->arr["sort_by_alpha"],
 				"rel_unique" => $this->arr["rel_unique"],
 				"ret_ids" => true,
+				"el_sort_by" => $this->arr["lb_data_from_el_sby"]
 			);
 			list($cnt,$vals) = $this->form->get_entries_for_element($opts);
 			foreach($vals as $e_id => $e_val)
