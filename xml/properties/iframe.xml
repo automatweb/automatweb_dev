@@ -39,7 +39,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <value>1</value>
+            <default>1</default>
             <ch_value>1</ch_value>
             <caption>Ümbritseda raamiga</caption>
       </property>

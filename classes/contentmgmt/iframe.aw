@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.1 2005/01/20 20:39:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.2 2005/02/14 12:17:14 kristo Exp $
 // iframe.aw - iframes
 
 /*
@@ -18,7 +18,7 @@
 	@property height type=textbox size=4 maxlength=4
 	@caption Kõrgus
 
-	@property frameborder type=checkbox value=1 ch_value=1 
+	@property frameborder type=checkbox default=1 ch_value=1 
 	@caption Ümbritseda raamiga
 
 	@property scrolling type=select 
