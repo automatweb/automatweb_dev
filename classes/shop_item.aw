@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.18 2001/07/19 14:24:13 duke Exp $
 
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -19,7 +20,7 @@ class shop_item extends shop_base
 		if (is_array($lc_shop))
 		{
 			$this->vars($lc_shop);
-		}
+		lc_load("definition");}
 	}
 
 	////
@@ -178,6 +179,31 @@ class shop_item extends shop_base
 		extract($arr);
 		$this->db_query("UPDATE shop_items SET redir = '$redir' WHERE id = '$id'");
 		return $this->mk_my_orb("change", array("id" => $id));
+	}
+
+	function _serialize($args = array())
+	{
+		// we will only serialize the oid and class_id right now,
+		// the real magic will take place when we paste the object.
+		$old = $this->get_object($args["oid"]);
+		$block = array(
+			"oid" => $args["oid"],
+			"class_id" => $args["class_id"],
+		);
+		return serialize($block);
+	}
+
+	function _unserialize($args = array())
+	{
+		$str = unserialize($args["str"]);
+		$oid = $str["oid"];
+		$parent = $args["parent"];
+		classload("form_entry");
+		$f_entry = new form_entry();
+		$f_entry->cp(array(
+			"eid" => $oid,
+			"parent" => $parent,
+		));
 	}
 
 	////
