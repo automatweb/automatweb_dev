@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.2 2001/05/23 16:34:28 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.3 2001/05/24 00:04:04 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -329,6 +329,10 @@ class aw_template extends acl_base
 		while(list($k,$v) = each($params))
 		{
 			$this->vars[$k] = $v;
+			if (!(strpos($k,"MENU") === false))
+			{
+				echo "<!-- $k = '$v' -->\n";
+			}
 		};
         }
 

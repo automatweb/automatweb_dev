@@ -787,7 +787,7 @@ class shop extends aw_template
 												"id" => $row["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
 												"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
-												"form_action" => $GLOBALS["baseurl"]."/index.".$ext)),
+												"form_action" => "/index.".$ext)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
 		));
 		return $this->parse();

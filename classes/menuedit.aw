@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.10 2001/05/23 18:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.12 2001/05/24 00:04:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -232,6 +232,18 @@ classload("cache","validator","defs");
  			$periodic = $this->is_periodic($section);
 
 			$this->sel_section = $section;
+	
+			$sel_menu_id = $section;
+			if (!is_array($this->mar[$sel_menu_id]))
+			{
+				$seobj = $this->get_object($sel_menu_id);
+				$sel_menu_id = $seobj["parent"];
+			}
+			$this->vars(array(
+				"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
+				"sel_menu_image" => ($this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
+				"sel_menu_id" => $sel_menu_id
+			));
 
 			// loome sisu
 			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
@@ -2934,8 +2946,12 @@ classload("cache","validator","defs");
 				$this->level--;
 				return 0;
 			}
-			
-			$in_path = in_array($row[parent],$path);
+
+			// make the subtemplate names for this and the next level
+			$mn = "MENU_".$name."_L".$this->level."_ITEM";
+			$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
+
+			$in_path = in_array($this->mar[$parent]["oid"],$path);
 			$parent_tpl = $this->is_parent_tpl($mn2, $mn);
 			if (!(($in_path||$this->level == 1)||$parent_tpl||$ignore_path))
 			{
@@ -2946,12 +2962,8 @@ classload("cache","validator","defs");
 				$this->level--;
 				return 0;
 			}
-			
-			// make the subtemplate names for this and the next level
-			$mn = "MENU_".$name."_L".$this->level."_ITEM";
-			$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
 			$this->vars(array($mn => ""));
-
+			
 			// go over the menus on this level
 			reset($this->mpr[$parent]);
 			while (list(,$row) = each($this->mpr[$parent]))
@@ -2977,7 +2989,7 @@ classload("cache","validator","defs");
 					$this->do_seealso_items($row,$name);
 				}
 
-				$this->vars(array($mn2 => "", $mn2."_N" => ""));
+				$this->vars(array($mn2."_N" => ""));
 				$ap = "";
 				if ($this->is_template($mn."_N"))
 				{
