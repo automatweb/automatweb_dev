@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.3 2004/11/05 13:32:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.4 2004/12/15 12:07:48 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -139,7 +139,7 @@
 	@classinfo relationmgr=yes
 	@classinfo no_status=1
 
-	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP
+	@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER
 	@caption Listi liikmete allikas
 
 	@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -207,7 +207,7 @@ class ml_list extends class_base
 			"title" => $target,
 			"date_edit" => $date_edit->gen_edit_form("start_at",time()-13)
 		));
-		$listrida.=$this->parse("listrida");
+		$listrida .= $this->parse("listrida");
 		
 		$this->vars(array(
 			"listrida" => $listrida,
@@ -231,10 +231,10 @@ class ml_list extends class_base
 		extract($args);
 		
 		
-		$id=(int)$id;
+		$id = (int)$id;
 		load_vcl('date_edit');
 		unset($aid);
-		$total=0;
+		$total = 0;
 
 		$list_id = $args["list_id"];
 		$_start_at = date_edit::get_timestamp($start_at);
@@ -415,22 +415,29 @@ class ml_list extends class_base
 		
 	**/
 	function msg_preview($arr)
-	{	
+	{
+		//arr($arr);
 		extract($arr);
 		$msg_obj = new object($arr["msg_id"]);
+		//arr($msg_obj->properties());
 		$message = nl2br($msg_obj->prop("message"));
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($msg_obj->id(),&$message);
 		
-		$c_tile = $msg_obj->prop("msg_contener_title");
+		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
+		
+		$message = str_replace("#username#", "Kasutajanimi", $message);
+		$message = str_replace("#name#", "Nimi Perenimi", $message);
+		$message = str_replace("#pea#", "<font size=+2>".$msg_obj->name()."</font>", $message);
+		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<font size=+1>\1</font>', $message);
 		
 		if (is_oid($msg_obj->meta("template_selector")))
 		{
 			$tpl_obj = new object($msg_obj->meta("template_selector"));
 			$tpl_content = $tpl_obj->prop("content");
-			$tpl_content = str_replace("#title#", $c_tile, $tpl_content);
-			$tpl_content = str_replace("#content#", $message,$tpl_content);
+			$tpl_content = str_replace("#title#", $c_title, $tpl_content);
+			$tpl_content = str_replace("#content#", $message, $tpl_content);
 			$tpl_content = str_replace("#container#", $c_content, $tpl_content);
 			
 			print $tpl_content;
@@ -552,8 +559,6 @@ class ml_list extends class_base
 			case "show_mail_message":
 				$data["value"] = $this->gen_ml_message_view($arr);
 				break;
-
-
 		};
 		return $retval;
 	}
@@ -572,10 +577,14 @@ class ml_list extends class_base
 					return PROP_OK;
 				}
 				$contents = file_get_contents($imp);
-				$this->mass_subscribe(array(
+				if(!$this->mass_subscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
 					"text" => $contents,
-				));
+				)))
+				{
+					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					return PROP_FATAL_ERROR;
+				}
 				break;
 	
 			case "delete_textfile":
@@ -585,25 +594,37 @@ class ml_list extends class_base
 					return PROP_OK;
 				}
 				$contents = file_get_contents($imp);
-				$this->mass_unsubscribe(array(
+				if(!$this->mass_unsubscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
 					"text" => $contents,
-				));
+				)))
+				{
+					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					return PROP_FATAL_ERROR;
+				}
 				break;
 				
 
 			case "mass_subscribe":
-				$this->mass_subscribe(array(
+				if(!$this->mass_subscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
 					"text" => $data["value"],
-				));
+				)))
+				{
+					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					return PROP_FATAL_ERROR;
+				}
 				break;
 
 			case "mass_unsubscribe":
-				$this->mass_unsubscribe(array(
+				if(!$this->mass_unsubscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
 					"text" => $data["value"],
-				));
+				)))
+				{
+					$data["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					return PROP_FATAL_ERROR;
+				}
 				break;
 
 			case "write_mail":
@@ -622,11 +643,10 @@ class ml_list extends class_base
 	{
 		if (isset($this->do_export))
 		{
-			
 			$arr["action"] = "export_members";
 			$arr["args"]["filename"] = "members.txt";
 			$arr["args"]["export_type"] = $this->export_type;
-			$arr["args"]["export_date"] = strtotime($arr["request"]["export_from_date"]["year"]."-".$arr["request"]["export_from_date"]["month"]."-".$arr["request"]["export_from_date"]["day"]);
+			$arr["args"]["export_date"] = strtotime($arr["request"]["export_from_date"]["year"]. "-". $arr["request"]["export_from_date"]["month"]."-".$arr["request"]["export_from_date"]["day"]);
 		};
 		if (isset($this->edit_msg))
 		{
@@ -645,6 +665,10 @@ class ml_list extends class_base
 		$list_obj = new object($arr["list_id"]);
 		$fld = $list_obj->prop("def_user_folder");
 		$fld_obj = new object($fld);
+		if($fld_obj->class_id() != CL_MENU)
+		{
+			return false;
+		}
 		$name = $fld_obj->name();
 		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
 		set_time_limit(0);
@@ -695,6 +719,7 @@ class ml_list extends class_base
 			};
 		};
 		print "Importisin $cnt aadressi<br>";
+		return true;
 	}
 
 	////
@@ -705,6 +730,10 @@ class ml_list extends class_base
 		$list_obj = new object($arr["list_id"]);
 		$fld = $list_obj->prop("def_user_folder");
 		$fld_obj = new object($fld);
+		if($fld_obj->class_id() != CL_MENU)
+		{
+			return false;
+		}
 		$name = $fld_obj->name();
 		echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
 		set_time_limit(0);
@@ -749,6 +778,7 @@ class ml_list extends class_base
 			};
 		};
 		print "Kustutasin $cnt aadressi<br>";
+		return true;
 	}
 
 	function gen_member_list_tb($arr)
@@ -808,7 +838,7 @@ class ml_list extends class_base
 					break;
 				
 				case ML_EXPORT_ALL:
-						$ser .= $memberdata["name"] . ";" . $mailto . ";";							
+						$ser .= $memberdata["name"] . ";" . $mailto . ";";
 						foreach ($config_data as $key2 => $value)
 						{
 							if(strpos($key2, "def_"))
@@ -844,21 +874,21 @@ class ml_list extends class_base
 	{
 		$perpage = 100;
 		$ft_page = (int)$GLOBALS["ft_page"];
-		$ml_list_members = $this->get_members($arr["obj_inst"]->id(),$perpage * $ft_page +1,$perpage * ($ft_page + 1));
+		$ml_list_members = $this->get_members($arr["obj_inst"]->id(), $perpage * $ft_page +1, $perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->parse_xml_def("mlist/member_list");
+ 		$t->parse_xml_def("mlist/member_list");
 		$t->set_default_sortby("id");
 		$t->set_default_sorder("desc");
-		
-		if($arr["obj_inst"]->prop("member_config"))
+		$cfg = $arr["obj_inst"]->prop("member_config");
+		if(is_oid($cfg) && $this->can("view", $cfg))
 		{
-			$config_obj = &obj($arr["obj_inst"]->prop("member_config"));
+			$config_obj = &obj($cfg);
 			
 			$config_data = $config_obj->meta("cfg_proplist");
 			uasort($config_data, array($this,"__sort_props_by_ord"));
 			
 			foreach($config_data as $key => $item)
-			{	
+			{
 				strpos($key, "def_txbox");
 				if(strpos($key, "def_txbox"))
 				{
@@ -870,7 +900,7 @@ class ml_list extends class_base
 				}
 				
 				if(strpos($key, "def_date"))
-				{				
+				{
 					$t->define_field(array(
 						"name" => $item["name"],
 						"caption" => $item["caption"],
@@ -933,7 +963,7 @@ class ml_list extends class_base
 						$tabledata["udef_date$i"] = get_lc_date($member_obj->prop("udef_date$i"));
 					}
 				}
-				$t->define_data($tabledata);	
+				$t->define_data($tabledata);
 		
 			}	
 		}		
@@ -979,15 +1009,14 @@ class ml_list extends class_base
 			"field" => "qid",
 		));
 		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 AND lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
-                $this->db_query($q);
-                while ($row = $this->db_next())
-                {
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
 			$mail_obj = new object($row["mid"]);
 			if ($row["status"] != 2)
 			{
 				$stat_str = $mq->a_status[$row["status"]];
-				$status_str = "<a href='javascript:remote(0,450,270,\"".$this->mk_my_orb("queue_change",array
-	("id"=>$row["qid"]))."\");'>$stat_str</a>";
+				$status_str = "<a href='javascript:remote(0,450,270,\"".$this->mk_my_orb("queue_change", array("id"=>$row["qid"]))."\");'>$stat_str</a>";
 			}
 			else
 			{
@@ -1000,15 +1029,15 @@ class ml_list extends class_base
 				));
 			
 			//$row["mid"] = $mail_obj->name();
-                        if (!$row["patch_size"])
-                        {
-                                $row["patch_size"]="kõik";
-                        };
-                        $row["delay"]/=60;
-                        $row["status"] = $status_str;
-                        $row["protsent"]=$this->queue_ready_indicator($row["position"],$row["total"]);
-                        $row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
-                        $t->define_data($row);
+			if (!$row["patch_size"])
+			{
+				$row["patch_size"]="kõik";
+			};
+			$row["delay"]/=60;
+			$row["status"] = $status_str;
+			$row["protsent"] = $this->queue_ready_indicator($row["position"],$row["total"]);
+			$row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
+			$t->define_data($row);
 		};
 	}
 	
@@ -1050,23 +1079,24 @@ class ml_list extends class_base
 	function get_members_ol($id)
 	{
 		$obj = &obj($id);
-		if($this->can("view", $obj->prop("def_user_folder")))
+		$folder_id = $obj->prop("def_user_folder");
+		if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 		{
-			$list_source_obj = &obj($obj->prop("def_user_folder"));
+			return $ret;
 		}
-		
-		if($list_source_obj->class_id() == CL_MENU)
+		$source_obj = &obj($folder_id);
+		if($source_obj->class_id() == CL_MENU)
 		{
 			$member_list = new object_list(array(
-				"parent" => $obj->prop("def_user_folder"),
+				"parent" => $source_obj->id(),
 				"class_id" => CL_ML_MEMBER,
 				"lang_id" => array(),
 				"site_id" => array(),
 			));
 		}
-		elseif ($list_source_obj->class_id() == CL_GROUP)
+		elseif ($source_obj->class_id() == CL_GROUP)
 		{
-			$users_list = new object_list(($list_source_obj->connections_from(array(
+			$users_list = new object_list(($source_obj->connections_from(array(
 				"type" => "RELTYPE_MEMBER",
 			))));
 			
@@ -1074,35 +1104,38 @@ class ml_list extends class_base
 			
 			foreach ($users_list->arr() as $user)
 			{
-				unset($tmp);
 				if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 				{
 					$member_list->add($tmp);
 				}
+				unset($tmp);
+			}
+		}
+		elseif($source_obj->class_id() == CL_USER)
+		{
+			$member_list = new object_list();
+			if($tmp = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+			{
+				$member_list->add($tmp);
 			}
 		}
 		return $member_list;
 	}
 	
-	function get_members($id,$from = 0, $to = 0)
+	function get_members($id, $from = 0, $to = 0)
 	{
-		$this->get_members_ol($id);
+		$obj_inst = &obj($id);
 		$ret = array();
-		$list_obj = new object($id);
-
-		if($this->can("view", $list_obj->prop("def_user_folder")))
+		$folder_id = $obj_inst->prop("def_user_folder");
+		if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 		{
-			$list_source_obj = &obj($list_obj->prop("def_user_folder"));
+			return $ret;
 		}
-		
-		if(!$list_source_obj)
+		$source_obj = &obj($folder_id);
+		//$this->get_members_ol($source_obj);
+		if($source_obj->class_id() == CL_MENU)
 		{
-			return array();
-		}
-		
-		if($list_source_obj->class_id() == CL_MENU)
-		{
-			$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
+			$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
 
 			// why oh why is it so bloody slow with 1600 objects :(
 			/*
@@ -1123,7 +1156,7 @@ class ml_list extends class_base
 			//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 			{
 				$cnt++;
-				if (0 == $to || (0 != $from && 0 != $to && between($cnt,$from,$to)))
+				if (0 == $to || (0 != $from && 0 != $to && between($cnt, $from, $to)))
 				{
 				/*
 				$ret[$o->id()] = array(
@@ -1138,9 +1171,9 @@ class ml_list extends class_base
 				};
 			};
 		}
-		elseif ($list_source_obj->class_id() == CL_GROUP)
+		elseif ($source_obj->class_id() == CL_GROUP)
 		{
-			$members = $list_source_obj->connections_from(array(
+			$members = $source_obj->connections_from(array(
 				"type" => "RELTYPE_MEMBER",
 			));
 			foreach ($members as $member)
@@ -1154,7 +1187,17 @@ class ml_list extends class_base
 				$ret[] = array(
 					"oid" => $email->id(),
 					"parent" => $email->parent(),
-				);	
+				);
+			}
+		}
+		elseif($source_obj->class_id() == CL_USER)
+		{
+			if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+			{
+				$ret[] = array(
+					"oid" => $email->id(),
+					"parent" => $email->parent(),
+				);
 			}
 		}
 		$this->member_count = $cnt;
@@ -1248,35 +1291,34 @@ class ml_list extends class_base
 	}
 
 	       ////
-        //! teeb progress bari
-        // tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
-        // see olex overkill kui on palju queue itemeid
-        function queue_ready_indicator($osa,$kogu)
-        {
-                if (!$kogu)
-                {
-                        $p=100;
-                }
-                else
-                {
-                        $p=(int)((int)$osa * 100 / (int)$kogu);
-                };
-                $not_p=100-$p;
-                //echo("qri($osa,$kogu)=$p");//dbg
-
-                // tekst pane sinna, kus on rohkem ruumi.
-                if ($p>$not_p)
-                {
-                        $p1t="<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
-                }
-                else
-                {
-                        $p2t="<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
-                };
-                // kommentaar on selleks, et sorteerimine töötaks (hopefully)
-                return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
-        }
-
+	//! teeb progress bari
+	// tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
+	// see olex overkill kui on palju queue itemeid
+	function queue_ready_indicator($osa,$kogu)
+	{
+		if (!$kogu)
+		{
+			$p = 100;
+		}
+		else
+		{
+			$p = (int)((int)$osa * 100 / (int)$kogu);
+		};
+		$not_p = 100 - $p;
+		//echo("qri($osa,$kogu)=$p");//dbg
+		// tekst pane sinna, kus on rohkem ruumi.
+		if ($p > $not_p)
+		{
+			$p1t="<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
+		}
+		else
+		{
+			$p2t="<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
+		};
+		// kommentaar on selleks, et sorteerimine töötaks (hopefully)
+		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
+	}
+	
 	////
 	// !This will generate a raport for a single mail sent to a list.
 	// Ungh, shouldn't this be a separate class then?
@@ -1375,7 +1417,7 @@ class ml_list extends class_base
 		$mail_id = $arr["request"]["s_mail_id"];
 		if (!is_array($this->msg_view_data))
 		{
-                	$this->msg_view_data = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE id = '$mail_id'");
+			$this->msg_view_data = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE id = '$mail_id'");
 		};
 
 		$rv = "";
@@ -1520,7 +1562,7 @@ class ml_list extends class_base
 			
 			$message = str_replace("#title#", $c_tile, $message);
 			$message = str_replace("#container#", $c_content, $message);
-			$template = str_replace("#content#",$message,$template);
+			$template = str_replace("#content#", $message, $template);
 			
 			$msg_data["message"] = $template;
 		};
@@ -1541,7 +1583,7 @@ class ml_list extends class_base
 			$tpl_obj = new object($msg_data["template_selector"]);
 			if ($tpl_obj->prop("is_html") == 1)
 			{
-				$msg_obj->set_prop("html_mail",1024);			
+				$msg_obj->set_prop("html_mail",1024);
 			};
 			
 			$msg_obj->save();

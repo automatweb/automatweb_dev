@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.5 2004/11/29 16:01:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.6 2004/12/15 12:07:48 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -440,21 +440,19 @@ class ml_queue extends aw_template
 			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
-		$this->awm=get_instance("protocols/mail/aw_mail");
+		$this->awm = get_instance("protocols/mail/aw_mail");
 		echo "adding scheduler ! <br />\n";
 		flush();
 		//decho("process_queue:<br />");//dbg
-		$tm=time();
-		$old = time()-(20*60);
+		$tm = time();
+		$old = time() - 20 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
-		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at<='$tm') OR (status = 3 AND position < total AND last_sent < $old)");
+		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
 		echo "select <br />\n";
 		flush();
-		
-
 		while ($r = $this->db_next())
 		{
-			$qid=(int)$r["qid"];
+			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
 			//decho("doing item $qid<br />");flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
@@ -478,7 +476,8 @@ class ml_queue extends aw_template
 				$all_at_once = true;
 			};
 
-			$tm=time();
+			$tm = time();
+			// 
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
@@ -491,7 +490,8 @@ class ml_queue extends aw_template
 				// during which the queue remains locked.
 				$stat = ML_QUEUE_IN_PROGRESS;
 				$c = 0;
-				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND mail_sent = 0";
+				//arr($qid);
+				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND mail_sent IS NULL";
 				$this->db_query($qx);
 				$msg_data = true;
 				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS && $msg_data)
@@ -499,8 +499,10 @@ class ml_queue extends aw_template
 					$msg_data = $this->db_next();
 					if ($msg_data)
 					{
+						//arr($msg_data);
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
+						echo "sending queue item..<br />\n";
 						$stat = $this->do_queue_item($msg_data);
 
 						// yo, increase the counter
@@ -543,7 +545,7 @@ class ml_queue extends aw_template
 				$this->restore_handle();
 			};
 		};
-		die("die");
+		die("die<br />\n");
 		return "";//hmhm
 	}
 
@@ -554,15 +556,14 @@ class ml_queue extends aw_template
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
 		{
-			return;
+			return "couldn't send mail<br />\n";
 		}
 		$msgobj = new object($msg["mail"]);
 		$is_html = $msgobj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
 		$message = $msg["message"];
-
 		// compatiblity with old messenger .. yikes
-		echo "from = $msg[mailfrom]  <br />";
+		echo "from = {$msg["mailfrom"]}  <br />";
 		$this->awm->create_message(array(
 			"froma" => $msg["mailfrom"],
 			"subject" => $msg["subject"],
@@ -574,12 +575,12 @@ class ml_queue extends aw_template
 		if ($is_html)
 		{
 			$this->awm->htmlbodyattach(array(
-				"data"=>$message,
+				"data" => $message,
 			));
 		};
 
 		$this->awm->gen_mail();
-		//decho("<b>SENT!</b>");//dbg
+		echo("<b>SENT!</b><br />\n"); //dbg
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
@@ -627,11 +628,11 @@ class ml_queue extends aw_template
 		$def_user_folder = $list_obj->prop("def_user_folder");
 		// 2) retrieves a list of mailing list users
 		$source_obj = &obj($def_user_folder);
-		if($source_obj->class_id() == CL_GROUP)
+		if($source_obj->class_id() == CL_GROUP or $source_obj->class_id() == CL_USER)
 		{
 			$member_list = $ml_list_inst->get_members_ol($list_obj);
 		}
-		else
+		elseif($source_obj->class_id() == CL_MENU)
 		{
 			$member_list = new object_list(array(
 				"class_id" => CL_ML_MEMBER,
@@ -671,12 +672,21 @@ class ml_queue extends aw_template
 			"mail" => $arr["mail"],
 			"member_id" => $arr["member_id"],
 			"mail_id" => $arr["mail_id"],
+			"pea" => "<font size=+2>".$arr["msg"]["subject"]."</font>",
 		);
 		
-		$this->used_variables=array();
-
+		$this->used_variables = array();
+		$obj = obj($arr["member_id"]);
+		$user = reset($obj->connections_to(array(
+			"type" => 6,
+			"from.class_id" => CL_USER,
+		)));
+		if(is_object($user))
+		{
+			$data["username"] = $user->prop("from.name");
+		}
 		$message = $arr["msg"]["message"];
-
+		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<font size=+1>\1</font>', $message);
 		$message = $this->replace_tags($message,$data);
 		$subject = $this->replace_tags($arr["msg"]["subject"],$data);
 		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"],$data);
@@ -684,7 +694,7 @@ class ml_queue extends aw_template
 		$mailfrom = trim($mailfrom);
 		$subject = trim($subject);
 
-		$used_vars=array_keys($this->used_variables);
+		$used_vars = array_keys($this->used_variables);
 
 		$mid = $arr["mail_id"];
 		$member_id = $arr["member_id"];
@@ -695,12 +705,10 @@ class ml_queue extends aw_template
 		$vars = join(",",$used_vars);
 		$this->quote($vars);
 		$qid = $arr["qid"];
-
 		$target = $arr["name"] . " <" . $arr["mail"] . ">";
 		$this->quote($target);
 
 		$mid = $arr["mail_id"];
-
 		// there is an additional field mail_sent in that table with a default value of 0
 		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."',',".$vars.",','$message','$subject','$mailfrom','$qid','$target')");
 
