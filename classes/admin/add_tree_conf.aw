@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.27 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.28 2005/03/03 12:59:47 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -350,10 +350,6 @@ class add_tree_conf extends class_base
 		}
 
 		$ret = $us[$class_id] == 1;
-		/*if (aw_global_get("uid") == "kix")
-		{
-			echo "ret = ".dbg::dump($us);
-		}*/
 		if ($class_id != CL_MENU && $ret)
 		{
 			$v = $atc->meta("visible");
@@ -361,10 +357,6 @@ class add_tree_conf extends class_base
 			// do not show the alias
 			$grp = explode(",",$clss[$class_id]["parents"]);
 			$show = false;
-			/*if (aw_global_get("uid") == "kix")
-			{
-				echo dbg::dump($grp);
-			}*/
 			foreach($grp as $g)
 			{
 				// must check group parents as well :(
@@ -375,10 +367,6 @@ class add_tree_conf extends class_base
 					{
 						if (!$v["fld"][$g])
 						{
-						/*if (aw_global_get("uid") == "kix")
-						{
-							echo "set no has grp from $g <br>";
-						}*/
 							$has_grp = false;
 							break;
 						}
@@ -399,6 +387,139 @@ class add_tree_conf extends class_base
 		}
 
 		return $ret;
+	}
+
+	function on_site_init($dbi, $site, &$ini_opts, &$log, &$osi_vars)
+	{
+		$o = obj($osi_vars["add_tree_conf"]);
+		$this->adc_set_all($o);
+
+		$clss = aw_ini_get("classes");
+	
+		//  Dokumendi seostehalduris kuvatakse vaikimisi järgmisi objekte:
+		$alias_addable = array(CL_EXTLINK, CL_FILE, CL_IMAGE, CL_LAYOUT, CL_WEBFORM, CL_MINI_GALLERY, CL_DOCUMENT, CL_MENU_TREE, CL_ML_LIST, CL_PROMO);
+
+		foreach($clss as $clid => $cld)
+		{
+			$this->adc_set_class($o, $clid, true, true, in_array($clid, $alias_addable));
+		}
+		
+		// Kohe tuleb välja jätta järgmiste programmide kasutamise võimalus:
+
+		// Sisuhaldus > Taket
+		$this->adc_set_fld($o, 44, false);
+
+		// Otsingud > Saidi otsing (vist mingi vana objekt)
+		$this->adc_set_class($o, CL_SITE_SEARCH, false, false, false);
+
+		// Varia & Vanad > Dokument(p), Foorum (vana), Stamp, Mailinglisti seaded
+		$this->adc_set_class($o, CL_PERIODIC_SECTION, false, false, false);
+		$this->adc_set_class($o, CL_FORUM, false, false, false);
+		$this->adc_set_class($o, CL_ML_STAMP, false, false, false);
+		$this->adc_set_class($o, CL_ML_LIST_CONF, false, false, false);
+		
+		// Süsteemi haldus > Töösolevad klassid
+		$this->adc_set_fld($o, 19, false);
+
+		// Süsteemi haldus > Varia & Vanad
+		$this->adc_set_fld($o, 4, false);
+
+		$o->save();
+
+		echo "saved add tree conf! <br>\n";
+		flush();
+
+		aw_disable_messages();
+		// seostada Administraatorid ja Toimetajad grupiga
+		$adm_g = obj($osi_vars["groups.admins"]);
+		$adm_g->connect(array(
+			"to" => $o->id(),
+			"reltype" => 5 // RELTYPE_ADD_TREE
+		));
+
+		$ed_g = obj($osi_vars["groups.editors"]);
+		$ed_g->connect(array(
+			"to" => $o->id(),
+			"reltype" => 5 // RELTYPE_ADD_TREE
+		));
+		aw_restore_messages();
+	}
+
+	function adc_set_all($o)
+	{
+		$visible = array();
+		$usable = array();
+		$alias_add = array();
+			
+		$clsf = aw_ini_get("classfolders");
+		foreach($clsf as $id => $d)
+		{
+			$visible["fld"][$id] = 1;
+		}
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $id => $d)
+		{
+			$visible["obj"][$id] = 1;
+			$usable[$id] = 1;
+			if ($d["alias"] != "")
+			{
+				$alias_add[$id] = 1;
+			}
+		}
+
+		$o->set_meta("visible", $visible);
+		$o->set_meta("usable", $usable);
+		$o->set_meta("alias_add", $alias_add);
+	}
+
+	function adc_set_class($o, $clid, $visible, $usable, $alias_add)
+	{
+		$v = $o->meta("visible");
+		$u = $o->meta("usable");
+		$a = $o->meta("alias_add");
+
+		if (!$visible)
+		{
+			unset($v["obj"][$clid]);
+		}
+		else
+		{
+			$v["obj"][$clid] = $visible;
+		}
+		if (!$usable)
+		{
+			unset($u[$clid]);
+		}
+		else
+		{
+			$u[$clid] = $usable;
+		}
+		if (!$alias_add)
+		{
+			unset($a[$clid]);
+		}
+		else
+		{
+			$a[$clid] = $alias_add;
+		}
+
+		$o->set_meta("visible", $v);
+		$o->set_meta("usable", $u);
+		$o->set_meta("alias_add", $a);
+	}
+
+	function adc_set_fld($o, $fld, $visible)
+	{
+		$v = $o->meta("visible");
+		if (!$visible)
+		{
+			unset($v["fld"][$fld]);
+		}
+		else
+		{
+			$v["fld"][$fld] = $visible;
+		}
+		$o->set_meta("visible", $v);
 	}
 }
 ?>
