@@ -173,6 +173,7 @@
 					<optional name="extraids"/>
 					<optional name="reforb"/>
 					<optional name="load_entry_data"/>
+					<optional name="method"/>
 				</arguments>
 			</function>
 		</action>
@@ -237,6 +238,8 @@
 					<required name="id"/>
 					<required name="op_id"/>
 					<required name="entry_id"/>
+					<optional name="search_el"/>
+					<optional name="search_val"/>
 				</arguments>
 			</function>
 		</action>

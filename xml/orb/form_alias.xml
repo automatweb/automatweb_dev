@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="form_alias">
+		<action name="new_entry_alias">
+			<function name="new_entry_alias">
+				<arguments>
+					<required name="parent"/>
+					<required name="return_url"/>
+					<required name="alias_to"/>
+					<optional name="sf"/>				
+					<optional name="entry_id"/>				
+					<optional name="form_submit"/>				
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_entry_alias">
+			<function name="submit_entry_alias">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_entry_alias">
+			<function name="change_entry_alias">
+				<arguments>
+					<required name="id"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
