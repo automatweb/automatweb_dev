@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.6 2004/01/13 16:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.7 2004/02/25 16:03:43 kristo Exp $
 // aw_test.aw - AW remote control
 class aw_test extends aw_template 
 {
@@ -21,6 +21,11 @@ class aw_test extends aw_template
 		@comment
 
 	**/
+	function add($arr)
+	{
+		return $this->change($arr);
+	}
+
 	/**  
 		
 		@attrib name=change params=name default="0"
