@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.42 2005/03/07 16:41:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.43 2005/03/07 16:58:52 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -960,35 +960,6 @@ class event_search extends class_base
 						$ol = new object_list();
 					}
 				}
-				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
-				$tabledef = $ob->meta("result_table");
-				uasort($tabledef, array($this, "__sort_props_by_ord"));
-				$cdat = "";
-				$col_count = 0;
-				$clickable = false;
-				foreach($tabledef as $key => $propdef)
-				{
-					if($key == "content")
-					{
-						continue;
-					}
-					if($propdef["clickable"])
-					{
-						$clickable = true;
-					}
-					if ($propdef["active"])
-					{
-						$this->vars(array(
-							"colcaption" => $propdef["caption"],
-						));
-						$cdat .= $this->parse("COLHEADER");
-						$col_count++;
-					}
-					$this->vars(array(
-						"COLHEADER" => $cdat,
-						"col_count" => $col_count,
-					));
-				}
 				$origs = array();
 				foreach($ol->arr() as $res)
 				{
@@ -1028,8 +999,41 @@ class event_search extends class_base
 					);
 					$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
 					$ecount[$orig_id]++;
-				};
-			};
+				}
+				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
+				$tabledef = $ob->meta("result_table");
+				uasort($tabledef, array($this, "__sort_props_by_ord"));
+				$cdat = "";
+				$col_count = 0;
+				$clickable = false;
+				foreach($tabledef as $key => $propdef)
+				{
+					if(!$propdef["active"])
+					{
+						continue;
+					}
+					if($key == "content")
+					{
+						continue;
+					}
+
+					if($propdef["clickable"])
+					{
+						$clickable = true;
+					}
+					
+					$this->vars(array(
+						"colcaption" => $propdef["caption"],
+					));
+					$cdat .= $this->parse("COLHEADER");
+					$col_count++;
+					
+					$this->vars(array(
+						"COLHEADER" => $cdat,
+						"col_count" => $col_count,
+					));
+				}
+			}
 			$blist = array();
 			if(!empty($origs))
 			{
@@ -1093,6 +1097,10 @@ class event_search extends class_base
 						continue;
 					}
 					if($search["oid"] && !$propdef["fullview"])
+					{
+						continue;
+					}
+					if($search["oid"] && empty($eval[$sname]))
 					{
 						continue;
 					}
