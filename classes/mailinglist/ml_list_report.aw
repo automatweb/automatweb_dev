@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list_report.aw,v 1.3 2003/04/07 13:17:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list_report.aw,v 1.4 2003/04/07 14:02:12 duke Exp $
 // ml_list_report - listi raport
 
 /*
@@ -51,15 +51,18 @@ class ml_list_report extends class_base
 		if (empty($args["request"][$mail_id]))
 		{
 			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report_mails.xml");
-			$q = "
-				SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id, mail
-				FROM ml_sent_mails 
-				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
-				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-				WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).")
-				GROUP BY mail
-			";
-			$this->db_query($q);
+			if (is_array($args["obj"]["meta"]["lists"]))
+			{
+				$q = "
+					SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id, mail
+					FROM ml_sent_mails 
+					LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
+					LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
+					WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).")
+					GROUP BY mail
+				";
+				$this->db_query($q);
+			};
 			while ($row = $this->db_next())
 			{
 				$row['subject'] = html::href(array(
