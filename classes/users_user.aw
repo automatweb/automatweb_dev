@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.77 2004/01/06 12:02:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.78 2004/01/07 18:40:02 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -209,6 +209,7 @@ class users_user extends aw_template
 		$host	= $params["remote_host"];
 		$t = time();
 		$msg = "";
+
 
 		// by default eeldame, et kasutaja on jobu ja ei saa
 		// sisse logida
@@ -1284,8 +1285,7 @@ class users_user extends aw_template
 	function find_group_login_redirect($uuid)
 	{
 		$c = get_instance("config");
-		$ec = $c->get_simple_config("login_grp_redirect");
-		$ra = aw_unserialize($ec);
+		$ra = $c->get_grp_redir();
 
 		// kuna kasutaja pole veel sisse loginud, siis pole globallset gidlisti olemas, see tuleb leida
 		$gidlist = $this->get_gids_by_uid($uuid);

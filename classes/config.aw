@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.50 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.51 2004/01/07 18:40:02 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -195,14 +195,22 @@ class config extends db_config
 		return $this->mk_my_orb("errors", array());
 	}
 
+	function get_grp_redir()
+	{
+		$es = $this->get_simple_config("login_grp_redirect_".aw_global_get("LC"));
+		if ($es === false)
+		{
+			$es = $this->get_simple_config("login_grp_redirect");
+		}
+		return aw_unserialize($es);
+	}
+
 	////
 	// !lets the user set it so that different groups get redirected to diferent pages when logging in
 	function grp_redirect($arr)
 	{
 		$this->read_template("login_grp_redirect.tpl");
-		$es = $this->get_simple_config("login_grp_redirect");
-		$x = get_instance("xml");
-		$ea = $x->xml_unserialize(array("source" => $es));
+		$ea = $this->get_grp_redir();
 
 		$u = get_instance("users");
 		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
@@ -227,10 +235,7 @@ class config extends db_config
 	function submit_grp_redirect($arr)
 	{
 		extract($arr);
-
-		$es = $this->get_simple_config("login_grp_redirect");
-		$x = get_instance("xml");
-		$ea = $x->xml_unserialize(array("source" => $es));
+		$ea = $this->get_grp_redir();
 
 		if (is_array($grps))
 		{
@@ -241,9 +246,9 @@ class config extends db_config
 			}
 		}
 
-		$ss = $x->xml_serialize($ea);
+		$ss = aw_serialize($ea, SERIALIZE_XML);
 		$this->quote(&$ss);
-		$this->set_simple_config("login_grp_redirect", $ss);
+		$this->set_simple_config("login_grp_redirect_".aw_global_get("LC"), $ss);
 		return $this->mk_my_orb("grp_redirect", array());
 	}
 
