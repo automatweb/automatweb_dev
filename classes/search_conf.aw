@@ -158,7 +158,21 @@ class search_conf extends aw_template
 			$s_parent = 0;
 		};
 
+		$sp = "";
+		$first = true;
+		foreach($search_list as $sl_idx => $sl_val)
+		{
+			$this->vars(array(
+				"sp_val" => $sl_idx,
+				"sp_text" => $sl_val,
+				"sp_sel" => checked(($s_parent ? $s_parent == $sl_idx : $first) )
+			));
+			$sp.=$this->parse("SEARCH_PARENT");
+			$first = false;
+		}
+
 		$this->vars(array(
+			"SEARCH_PARENT" => $sp,
 			"search_sel" => $this->option_list($s_parent,$search_list),
 			"sstring_title" => $sstring_title,
 			"sstring" => $sstring,
@@ -175,6 +189,14 @@ class search_conf extends aw_template
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
 			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section"), "set_lang_id" => aw_global_get("lang_id")))
 		));
+
+		// this means that we only have one textbox, that sould search from title || body
+		if ($search_all)
+		{
+			$sstring = $sstring_title;
+			$t2c_log = "OR";
+			$c_type = $t_type;
+		}
 
 		if ($search && ($sstring_title != "" || $sstring != ""))
 		{
@@ -203,6 +225,12 @@ class search_conf extends aw_template
 
 				return $this->parse();
 			}
+			else
+			if ($grps[$s_parent]["static_search"])
+			{
+				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page);
+			}
+
 
 			// and here we do the actual searching bit!
 
@@ -434,6 +462,12 @@ class search_conf extends aw_template
 			{
 				$this->vars(array(
 					"SEARCH" => $this->parse("SEARCH")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"NO_RESULTS" => $this->parse("NO_RESULTS")
 				));
 			}
 
@@ -753,6 +787,7 @@ class search_conf extends aw_template
 			"menus" => $this->multiple_option_list($grps[$id]["menus"],$o->get_list()),
 			"no_usersonly" => checked($grps[$id]["no_usersonly"] == 1),
 			"users_only" => checked($grps[$id]["users_only"] == 1),
+			"static_search" => checked($grps[$id]["static_search"] == 1),
 			"min_len" => $grps[$id]["min_len"],
 			"max_len" => $grps[$id]["max_len"],
 			"empty_no_docs" => checked($grps[$id]["empty_search"] < 2),
@@ -774,6 +809,7 @@ class search_conf extends aw_template
 		$grps[$id]["ord"] = $ord;
 		$grps[$id]["no_usersonly"] = $no_usersonly;
 		$grps[$id]["users_only"] = $users_only;
+		$grps[$id]["static_search"] = $static_search;
 		$grps[$id]["min_len"] = $min_len;
 		$grps[$id]["max_len"] = $max_len;
 		$grps[$id]["empty_search"] = $empty_search;
@@ -889,6 +925,35 @@ class search_conf extends aw_template
 			"LINE" => $l,
 			"s_log" => $this->mk_my_orb("search_log", array())
 		));
+		return $this->parse();
+	}
+
+	function do_static_search($str, $page)
+	{
+		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%' LIMIT ".$page*PER_PAGE.",".PER_PAGE);
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"section" => $row["filename"],
+				"title" => $row["filename"],
+			));
+			$mat.=$this->parse("MATCH");
+		}
+		$this->vars(array(
+			"MATCH" => $mat
+		));
+		if ($mat != "")
+		{
+			$this->vars(array(
+				"SEARCH" => $this->parse("SEARCH")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_RESULTS" => $this->parse("NO_RESULTS")
+			));
+		}
 		return $this->parse();
 	}
 }
