@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.10 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.11 2001/07/17 03:18:53 duke Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -14,7 +14,214 @@ class form_output extends form_base
 		lc_load("definition");
 	}
 
-	function add($arr)
+	////
+	// !Kuvab vormi, kust saab valida väljundi tüüpide vahel
+	// regrettably I had to call this add, or ORB will break
+	function add($args = array())
+	{
+		extract($args);
+		$this->read_template("output_category.tpl");
+		$this->mk_path($parent,"Vali väljundi tüüp");
+	
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("choose_output_type",array("parent" => $parent)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta
+	function choose_output_type($args = array())
+	{
+		extract($args);
+		if ($type == "html")
+		{
+			$url = $this->mk_my_orb("add_html",array("parent" => $parent));
+		}
+		elseif ($type == "xml")
+		{
+			$url = $this->mk_my_orb("add_xml",array("parent" => $parent));
+		};
+		return $url;
+	}
+
+	////
+	//
+	function edit_xml($args = array())
+	{
+		extract($args);
+		$this->read_template("add_xml_output.tpl");
+		$pid = ($parent) ? $parent : $id;
+		$this->mk_path($pid,"Koosta XML väljund");
+		if ($id)
+		{
+			$odata = $this->get_object($id);
+			$xdata = $this->get_object_metadata(array(
+						"metadata" => $odata["metadata"],
+			));
+			$this->vars(array(
+					"adminurl" => $this->mk_my_orb("xml_op",array("id" => $id)),
+			));
+		}
+		$sel = ($xdata["forms"]) ? array_flip($xdata["forms"]) : array();
+		$this->vars(array(
+			"name" => $odata["name"],
+			"comment" => $odata["comment"],
+			"admin" => (isset($id)) ? $this->parse("admin") : "",
+			"forms" => $this->multiple_option_list($sel, $this->get_list(FTYPE_ENTRY,true,true)),
+			"reforb" => $this->mk_reforb("submit_xml",array("parent" => $parent,"id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// 
+	function submit_xml($args = array())
+	{
+		extract($args);
+		
+		if ($id)
+		{
+			$this->upd_object(array(
+					"oid" => $id,
+					"name" => $name,
+					"comment" => $comment,
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+					"parent" => $parent,
+					"name" => $name,
+					"comment" => $comment,
+					"class_id" => CL_FORM_XML_OUTPUT));
+		};
+		
+		$xmlblock = $this->set_object_metadata(array(
+						"oid" => $id,
+						"key" => "forms",
+						"value" => $forms,
+		));
+	
+		$url = $this->mk_my_orb("edit_xml",array("id" => $id));
+		return $url;
+	}
+
+	////
+	// 
+	function xml_op($args = array())
+	{
+		$this->mk_path($id,"Koosta XML väljund");
+		$this->read_template("xml_output.tpl");
+		extract($args);
+		$odata = $this->get_object($id);
+		$xdata = $this->get_object_metadata(array(
+					"metadata" => $odata["metadata"],
+		));
+
+		if (is_array($xdata["forms"]))
+		{
+			$forms = "";
+			foreach($xdata["forms"] as $key => $val)
+			{
+				$el = "";
+				$this->load($val);
+				$name = $this->name;
+				$this->vars(array("fname" => "$name ($val)"));
+				for ($i=0; $i < $this->arr["rows"]; $i++)
+				{
+					$cols="";
+					for ($a=0; $a < $this->arr["cols"]; $a++)
+					{
+						if (!($arr = $this->get_spans($i, $a)))
+						{
+							continue;
+						}
+ 
+						$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]];
+						$els = $cell->get_elements();
+						if (is_array($els))
+						{
+							foreach($els as $key => $val)
+							{
+								if ( ($val["type"] == "textbox") || ($val["type"] == "textarea") )
+								{
+									$jrk = ($xdata["data"]["jrk"][$val["id"]]) ? $xdata["data"]["jrk"][$val["id"]] : 0;
+									if ($xdata["data"]["tag"][$val["id"]])
+									{
+										$tag = $xdata["data"]["tag"][$val["id"]];
+									}
+									else
+									{
+										// tagi nime leidmiseks stripime koigepealt 
+										// nimest tühikud
+										$tag = strtolower(str_replace(" ","",$val["name"]));
+										if (preg_match("/(^\w*)/",$tag,$matches))
+										{
+											$tag = $matches[1];
+										};
+									};
+
+									if ( isset($xdata["data"]["active"][$val["id"]]) )
+									{
+										$checked = ($xdata["data"]["active"][$val["id"]]) ? "checked" : "";
+									}
+									else
+									{
+										$checked = "checked";
+									};										
+									$this->vars(array(
+										"id" => $val["id"],
+										"jrk" => $jrk,
+										"checked" => $checked,
+										"tag" => $tag,
+										"name" => $val["name"],
+										"type" => $val["type"],
+									));
+									$el .= $this->parse("element");
+								};
+							};
+						};
+					};
+				}
+				$this->vars(array(
+					"element" => $el,
+				));
+				$forms .= $this->parse("form");
+			};
+		};
+		$this->vars(array(
+			"form" => $forms,
+			"edurl" => $this->mk_my_orb("edit_xml",array("id" => $id)),
+			"reforb" => $this->mk_reforb("submit_xml_output",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	function submit_xml_output($args = array())
+	{
+		extract($args);
+		$real_act = array();
+		foreach($exists as $key => $val)
+		{
+			$real_act[$key] = $active[$key];
+		};
+		$data = array(
+			"jrk" => $jrk,
+			"tag" => $tag,
+			"active" => $real_act,
+		);
+		$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "data",
+					"value" => $data,
+		));
+		return $this->mk_my_orb("xml_op",array("id" => $id));
+	}
+
+	////
+	// !Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid.
+	function add_html($arr)
 	{
 		extract($arr);
 		$this->read_template("add_output.tpl");
