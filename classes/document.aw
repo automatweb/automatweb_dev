@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.232 2004/01/28 15:33:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.233 2004/02/04 13:49:09 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -868,7 +868,7 @@ class document extends aw_template
 				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => aw_global_get("section")),"forum"),
 			));
 			$forum = get_instance("forum");
-			$fr = $forum->add_comment(array("board" => $docid));
+			$fr = $forum->add_comment(array("board" => $docid,"section" => aw_global_get("section")));
 
 			if ($num_comments > 0)
 			{
@@ -1080,6 +1080,11 @@ class document extends aw_template
 			$retval = str_replace("</a>", "", $retval);
 		}
 
+		if (aw_global_get("print"))
+		{
+			die($retval);
+		}
+		
 		return $retval;
 	}
 
