@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.14 2003/04/17 12:26:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.15 2003/05/02 16:09:33 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -60,6 +60,7 @@ class xml_import extends class_base
 
 	function set_property($args = array())
         {
+		$retval = PROP_OK;
                 if ($args["prop"]["name"] == "run_import")
                 {
                         $retval = PROP_IGNORE;
@@ -283,13 +284,16 @@ class xml_import extends class_base
 						
 
 					$jrknimetus = sprintf("%02d%s",$jrk,$nimetus);
-					if ($str_level >= 3)
+					//if ($str_level >= 3)
+					if ($str_level > 3)
 					{
 						$t3_ylem = $t3taseme_ylem_id;
+						print "t3<br>";
 					}
 					else
 					{
 						$t3_ylem = $real_ylem_id;
+						print "real_ylem<br>";
 					};
 
 					if ($str_level < 4)
@@ -309,7 +313,10 @@ class xml_import extends class_base
 						$t3taseme_ylem_id = $real_ylem_id;
 						$t3taseme_id = $id;
 					};
-					print $q;
+					print "id = $id, kood = $kood, nimetus = $nimetus, aadress = $aadress, email=$email, veeb = $veeb, telefon = $telefon, faks = $faks<br>";
+					print "osakond = $osakond, real_ylem_id = $real_ylem_id, real_ylem_name = $real_ylem_name<br>";
+					print "jrk = $jrk, jrknimetus = $jrknimetus, t3_ylem = $t3_ylem, t3_sort = $t3_sort<br>";
+					#print $q;
 					print "<h1>$str_level</h1>";
 					
 					$this->db_query($q);
@@ -500,23 +507,33 @@ class xml_import extends class_base
 			print "<bR>";
 
 		}
-		print "sünkroniseerin ut_struktuurid tabeliga (MySQL imeb (TM))<br>";
-		print "NOT!<br>";
-		$str_info = array();
-		$q = "SELECT id,3taseme_ylem_id FROM ut_struktuurid";
+		// kahjuks ma ei saa mysql-ist kätte ainult neid, millel count=0, niet ma teen
+		// tsükli
+		$q = "SELECT ut_struktuurid.id,nimetus,COUNT(nimi) AS cnt FROM ut_struktuurid
+			LEFT OUTER JOIN ut_ametid ON (ut_struktuurid.id = ut_ametid.struktuur_id)
+			GROUP BY ut_struktuurid.id ORDER BY cnt";
 		$this->db_query($q);
+		$queries = array();
 		while($row = $this->db_next())
 		{
-			$str_info[$row["id"]] = $row["3taseme_ylem_id"];
-		};
-		// write to ametid table
-		foreach($str_info as $key => $val)
+			if ($row["cnt"] == 0)
+			{
+				$q = "INSERT INTO ut_ametid (struktuur_id,st_id) 
+					VALUES ('$row[id]','$row[id]')";
+				$queries[] = $q;
+			};
+		}
+		foreach($queries as $query)
 		{
+			$this->db_query($query);
 		};
+		print "all done!<br>";
+
 	}
 
 	function convert_unicode($source)
 	{
+		// utf8_decode doesn't work here
 		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
 		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
 		$retval = str_replace(chr(0xC3). chr(0xB6),"ö",$retval);
@@ -537,7 +554,6 @@ class xml_import extends class_base
 	function import_oppekava($args = array())
 	{
 		$contents = $args["source"];
-		//$contents = join("",file("/home/duke/oppekavad.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
@@ -546,21 +562,50 @@ class xml_import extends class_base
 		{
 			$this->bitch_and_die($parser,$contents);
 		};
+
+		print "<pre>";
+		print_r(htmlspecialchars($contents));
+		print "</pre>";
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_oppekavad";
 		$this->db_query($q);
+		$oppekava_url = $oppeaasta_url = "";
+
 		foreach($values as $key => $val)
 		{
-			if ( ($val["tag"] == "oppekava")  && ($val["type"] == "complete") )
+			if ( ($val["tag"] == "oppekava_url") && ($val["type"] == "complete") )
+			{
+				$oppekava_url = $val["value"];
+			};
+			if ( ($val["tag"] == "oppeaasta_url") && ($val["type"] == "complete") )
+			{
+				$oppeaasta_url = $val["value"];
+			};
+			if ( ($val["tag"] == "aasta"))
+			{
+				$aasta = $val["value"];
+				$aasta_id = $val["attributes"]["id"];
+			};
+			if ( ($val["tag"] == "oppekava")  && ( ($val["type"] == "complete") || ($val["type"] == "open")) )
 			{
 				$attr = $val["attributes"];		
 				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$nimetus_en = $attr["nimetus_en"];
 				$id = $attr["id"];
 				$kood = $attr["kood"];
 				$this->quote($nimetus);
-				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus)
-					VALUES('$id','$kood','$nimetus')";
+				$this->quote($nimetus_en);
+				$this->quote($kava_url);
+				$this->quote($aasta_url);
+				$kava_url = str_replace("[oppekava_id]",$id,$oppekava_url);
+				$aasta_url = str_replace("[oppekava_id]",$id,$oppeaasta_url);
+				$aasta_url = str_replace("[oppeaasta_id]",$aasta_id,$aasta_url);
+				$aasta_url = str_replace("[oppeaasta]",$aasta,$aasta_url);
+				$aasta = "";
+				$aasta_id = "";
+				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url)
+					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url')";
 				print $q;
 				print "<br>";
 				$this->db_query($q);
