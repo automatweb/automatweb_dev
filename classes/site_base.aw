@@ -42,7 +42,20 @@ class site_base extends aw_template
 	// that will get executed if the subtemplates exist in main.tpl and
 	// their output will replace the subtemplates
 	// the functions must be members of the site class
+	// these functions will get called BEFORE any menu parsing or document parsing take place
 	function get_sub_callbacks() 
+	{
+		return array();
+	}
+
+	////
+	// !this will get called one per pageview
+	// it may return an array of subtemplate_name => function_name pairs
+	// that will get executed if the subtemplates exist in main.tpl and
+	// their output will replace the subtemplates
+	// the functions must be members of the site class
+	// these functions will get called AFTER any menu parsing or document parsing take place
+	function get_sub_callbacks_after() 
 	{
 		return array();
 	}

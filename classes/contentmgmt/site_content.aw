@@ -357,9 +357,10 @@ class site_content extends menuedit
 			}
 		}
 
+		$this->do_sub_callbacks($sub_callbacks, true);
+
 		
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
-
 
 		if ($this->is_template("POLL"))
 		{
@@ -2003,6 +2004,10 @@ class site_content extends menuedit
 			"sel_menu_id" => $sel_menu_id,
 			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 6 
 		));
+		if ($this->site_title == "")
+		{
+			$this->site_title = $this->mar[$sel_menu_id]["name"];
+		}
 	}
 	
 	function is_link_collection($section)
@@ -2401,8 +2406,24 @@ class site_content extends menuedit
 	}
 
 
-	function do_sub_callbacks($sub_callbacks)
+	function do_sub_callbacks($sub_callbacks, $after = false)
 	{
+		if ($after)
+		{
+			$sub_callbacks = false;
+			if (function_exists("__get_site_instance"))
+			{
+				$si =&__get_site_instance();
+				if (is_object($si))
+				{
+					if (method_exists($si, "get_sub_callbacks_after"))
+					{
+						$sub_callbacks = $si->get_sub_callbacks_after();
+					}
+				}
+			}
+		}
+
 		if (is_array($sub_callbacks))
 		{
 			// ok, check if the new and better OO (TM) way exists
