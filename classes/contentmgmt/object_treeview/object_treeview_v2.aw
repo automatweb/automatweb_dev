@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.48 2005/01/20 08:48:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.49 2005/01/24 12:43:34 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -32,8 +32,11 @@
 @property hide_content_table_by_default type=checkbox ch_value=1
 @caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
 
-@property tree_type type=chooser default=1
+@property tree_type type=chooser default=TREE_DHTML
 @caption Puu n&auml;itamise meetod
+
+@property folders_table_column_count type=textbox 
+@caption Mitu tulpa n&auml;idata kaustade tabelis
 
 @property per_page type=textbox size=5
 @caption Mitu rida lehel
@@ -149,9 +152,15 @@ class object_treeview_v2 extends class_base
 				break;
 			case "tree_type":
 				$prop["options"] = array(
-					TREE_DHTML => "DHTML"
+					TREE_DHTML => "DHTML",
+					TREE_TABLE => t("Tabel"),
 				);
-				$prop["value"] = TREE_DHTML;
+// arr($prop['value']);
+/*				if (empty($prop['value']))
+				{
+					$prop['value'] = TREE_DHTML;
+				}
+*/		
 				break;
 
 			case "sortbl":
@@ -285,7 +294,7 @@ class object_treeview_v2 extends class_base
 		$this->_insert_styles($ob);
 
 		// returns an array of object id's that are folders that are in the object
-		$fld = $d_inst->get_folders($d_o);
+		$fld = $d_inst->get_folders($d_o, $ob->prop("tree_type"));
 
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
@@ -870,42 +879,84 @@ class object_treeview_v2 extends class_base
 		{
 			return;
 		}
-
-		classload("icons");
-		// use treeview widget
-		$tv = get_instance("vcl/treeview");
-		$tv->start_tree(array(
-			"root_name" => "",
-			"root_url" => "",
-			"root_icon" => "",
-			"type" => TREE_DHTML, //$ob->meta('tree_type'),
-			"persist_state" => true
-		));
-
-		// now, insert all folders defined
-		foreach($folders as $fld)
+		switch ($ob->prop("tree_type"))
 		{
+			case "TREE_TABLE":
 
-			$tv->add_item($fld["parent"], array(
-				"id" => $fld["id"],
-				"name" => $fld["name"],
-				"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'],
-				"icon" => $fld["icon"],
-				"comment" => $fld["comment"],
-				"data" => array(
-					"changed" => $this->time2date($fld["modified"], 2)
-				)
-			));
-		}
-		$tv->set_selected_item($_GET["tv_sel"]);
+				classload("vcl/table");
 
-		$pms = array();
+				$table = new vcl_table();
+				$cols_count = $ob->prop("folders_table_column_count");
+				if (empty($cols_count))
+				{
+					$cols_count = 2;
+				}
+				$folders_count = count($folders);
+				$folders_count_in_col = ceil($folders_count / $cols_count);
+				for ($i = 0; $i < $cols_count; $i++)
+				{
+					$table->define_field(array(
+						"name" => "col_".$i,
+						"caption" => t("Osakonnad"),
+					));
+				}
+				$tmp_fld = array_chunk($folders, $folders_count_in_col);
+				for ($i = 0; $i < $folders_count_in_col; $i++)
+				{
+					$row = array();
+					for ($j = 0; $j < $cols_count; $j++)
+					{
+						$row["col_".$j] = html::href(array(
+							"caption" => $tmp_fld[$j][$i]['name'],
+							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id'],
+						));
+					}	
+					$table->define_data($row);
+				}		
+				return $table->draw();
+				break;
+			case "TREE_DHTML":
+
+
+				classload("icons");
+				// use treeview widget
+				$tv = get_instance("vcl/treeview");
+				$tv->start_tree(array(
+					"root_name" => "",
+					"root_url" => "",
+					"root_icon" => "",
+					"type" => TREE_DHTML, //$ob->meta('tree_type'),
+					"persist_state" => true
+				));
+
+				// now, insert all folders defined
+				foreach($folders as $fld)
+				{
+	
+					$tv->add_item($fld["parent"], array(
+						"id" => $fld["id"],
+						"name" => $fld["name"],
+						"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'],
+						"icon" => $fld["icon"],
+						"comment" => $fld["comment"],
+						"data" => array(
+							"changed" => $this->time2date($fld["modified"], 2)
+						)
+					));
+				}
+				$tv->set_selected_item($_GET["tv_sel"]);
+	
+				$pms = array();
+
+// this one here needs to be commented out ... maybe ... at least it was commented out - until return 
 		/*if (isset($GLOBALS["class"]))
 		{
 			$pms["rootnode"] = aw_global_get("section");
 		}*/
 
-		return $tv->finalize_tree($pms);
+				return $tv->finalize_tree($pms);
+				break;
+			}
 	}
 
 	function _get_add_toolbar($ob, $drv = NULL)

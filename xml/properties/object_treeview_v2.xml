@@ -66,8 +66,17 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <default>1</default>
+            <default>TREE_DHTML</default>
             <caption>Puu n&amp;auml;itamise meetod</caption>
+      </property>
+      <property>
+            <name>folders_table_column_count</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Mitu tulpa n&amp;auml;idata kaustade tabelis</caption>
       </property>
       <property>
             <name>per_page</name>

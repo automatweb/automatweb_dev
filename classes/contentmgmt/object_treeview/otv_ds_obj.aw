@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.20 2005/01/19 02:49:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.21 2005/01/24 12:43:34 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -224,33 +224,13 @@ class otv_ds_obj extends class_base
 
 			bot id and parent are opaque strings
 	**/
-	function get_folders($ob)
+	function get_folders($ob, $tree_type)
 	{
 
 		if (!is_oid($ob->id()))
 		{
 			return;
 		}
-/*
-	some notes to implement here
-
-	esiteks, ilmselt piisab sellest, kui panna siin alguses mingitesse muutujatesse vastavalt kas
-	tegemist on RELTYPE_META või RELTYPE_FOLDER-ga ja samuti ka klassi konstandid
-	samuti tuleb ära teha siin see, et kas näidata alammenüüsid ja kas peamenüüd näidata
-	või mitte
-
-	siis ilmselt saab tv_sel muutuja abil vastavas grupis olevaid kontakte näitama hakata
-	ja kui mingi kontakt kuskil grupis ei ole, siis näidatakse neid siis kui mingit gruppi valitud
-	ei ole
-
-	siis teha ära see alamüksuste grupeerimine, see läheb juba otv külge ja pidi nii ehk naa
-	needed thing olema, nii et universaalsus is the key
-
-	ilmselt saab seda kuidagi fieldide sorteerimise ja selle abil teha, ei tohiks ülemäära keeruline
-	olla kui ma teada saan kuidagi kuidas erinev tabelirida kuskile teatud tingimuse alusel vahele torgata
-	eks seda homme hommikul küsib.
-	
-*/
 		// go over all related menus and add subtree id's together if the user has so said.
 		$ret = array();
 
@@ -274,7 +254,6 @@ class otv_ds_obj extends class_base
 		}
 
 		$conns = $ob->connections_from(array(
-//				"type" => RELTYPE_FOLDER
 			"type" => $opts['reltype'],
 		));
 		foreach($conns as $conn)
@@ -286,17 +265,20 @@ class otv_ds_obj extends class_base
 			}
 
 			$cur_ids = array();
-
 			if ($sub[$c_o->id()])
 			{
 				$_ot = new object_tree(array(
-//				"class_id" => CL_MENU,
 					"class_id" => $opts['class'],
 					"parent" => $c_o->id(),
 					"status" => $ob->prop("show_notact_folder") ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE,
 					"lang_id" => array(),
 					"sort_by" => "objects.jrk"
 				));
+
+				if ($tree_type == "TREE_TABLE")
+				{
+					$_ot->filter(array("parent" => $this->first_folder), false);
+				}
 				$cur_ids = $_ot->ids();
 			}
 
