@@ -1,4 +1,5 @@
 <?php
+
 class languages extends aw_template
 {
 	function languages()
@@ -206,6 +207,19 @@ class languages extends aw_template
 		}
 		$a = $this->fetch($id);
 		return $a["acceptlang"];
+	}
+
+	function get_langid_for_code($code)
+	{
+		$list = $this->get_list(array("all_data" => true));
+		foreach($list as $id => $dat)
+		{
+			if ($dat["acceptlang"] == $code)
+			{
+				return $id;
+			}
+		}
+		return NULL;
 	}
 
 	////
