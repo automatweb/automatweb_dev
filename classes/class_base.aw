@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.254 2004/04/20 11:28:25 duke Exp $
+// $Id: class_base.aw,v 2.255 2004/04/21 09:17:37 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -432,6 +432,7 @@ class class_base extends aw_template
 			};
 
 			$use_layout = $this->classinfo["layout"];
+			// XXX: cfgform seemingly overwrites classinfo
 			if ($use_layout == "boxed")
 			{
 				$cli->set_form_layout($use_layout);
@@ -530,7 +531,7 @@ class class_base extends aw_template
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
-			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->activegroup,
+			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->use_group,
 			"orb_class" => $orb_class,
 			"parent" => $this->parent,
 			"section" => $_REQUEST["section"],
@@ -1130,16 +1131,17 @@ class class_base extends aw_template
 			));
 		};
 
-		if (empty($args["content"]))
-		{
+		//if (empty($args["content"]))
+		//{
 			$content = $this->cli->get_result(array(
 				"raw_output" => $this->raw_output,
+				"content" => $args["content"],
 			));
-		}
-		else
-		{
-			$content = $args["content"];
-		};
+		//}
+		//else
+		//{
+		//	$content = $args["content"];
+		//};
 
 		/*$vars = array();
 
@@ -2196,6 +2198,9 @@ class class_base extends aw_template
 		extract($args);
 
 		$this->init_class_base();
+			
+		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
+		$this->cli = &$cli;
 
 		$this->action = $action;
 		$this->obj_inst = new object($args["id"]);
@@ -2283,6 +2288,9 @@ class class_base extends aw_template
 	{
 		extract($args);
 		$this->init_class_base();
+		
+		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
+		$this->cli = &$cli;
 
 		$this->action = $action;
 		$this->obj_inst = new object($args["id"]);
@@ -3242,14 +3250,6 @@ class class_base extends aw_template
 			};
 		}
 
-		global $XX3;
-		if ($XX3)
-		{
-			print "<pre>";
-			print_r($this->groupinfo);
-			print "</pre>";
-		};
-
 		/// XXX: group remapping is NOT done!
 
 		// that is all nice and perty .. but. I also need to take into account the
@@ -3464,7 +3464,10 @@ class class_base extends aw_template
 	function load_from_storage($arr)
 	{
 		extract($arr);
-		$this->classinfo = array();
+		if (!is_array($this->classinfo))
+		{
+			$this->classinfo = array();
+		};
 		$cfg_flags = array(
 			"classinfo_fixed_toolbar" => "fixed_toolbar",
 			"classinfo_allow_rte" => "allow_rte",
@@ -3560,7 +3563,7 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->normalize_text_nodes($cfgu->get_classinfo()));
-		
+
 		$this->layoutinfo = $cfgu->get_layoutinfo();
 
 		$this->relinfo = $cfgu->get_relinfo();
