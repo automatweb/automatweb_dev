@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.74 2002/09/04 08:14:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.75 2002/09/05 09:30:03 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -352,7 +352,6 @@ class planner extends calendar
 				"eform" => $vac_cont,
 				"ctrl" => $ctrl,
 			));
-
 
 			$this->raw_events = $fc->raw_events;
 			$this->raw_headers = $fc->raw_headers;
@@ -1600,8 +1599,7 @@ class planner extends calendar
 				return $c;
 			}
 
-
-			$this->ft->start_table($table_id);
+			$this->ft->start_table($this->table_id);
 			foreach($this->raw_events[$args["dx"]] as $row)
 			{
 				$__ch = $this->ft->get_chains_for_form($row["form_id"]);
