@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.182 2003/12/04 10:03:54 kristo Exp $
+// $Id: class_base.aw,v 2.183 2003/12/04 11:04:54 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2203,14 +2203,13 @@ class class_base extends aw_template
 			$o->save();
 			$id = $o->id();
 			aw_session_set("added_object",$id);//axel häkkis
-			
+
 			if ($alias_to || $rawdata["alias_to"])
 			{
-				$almgr = get_instance("aliasmgr");
-				$almgr->create_alias(array(
-					"alias" => $id,
-					"id" => $rawdata["alias_to"],
-					"reltype" => $rawdata["reltype"],
+				$_to = obj(($rawdata["alias_to"] ? $rawdata["alias_to"] : $alias_to));
+				$_to->connect(array(
+					"to" => $id,
+					"reltype" => ($rawdata["reltype"] ? $rawdata["reltype"] : $reltype),
 				));
 			};
 			
