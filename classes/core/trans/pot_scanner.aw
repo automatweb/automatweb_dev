@@ -78,7 +78,8 @@ class pot_scanner extends core
 		// regex would work, but we need the damn line numbers
 
 		// manual scanner :(
-		$strings = array();
+		$strings = $this->_scan_file_props($file_from);
+
 		$meth_name_chars = "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
 
 		$fc = $this->get_file(array("file" => $file_from));
@@ -240,5 +241,68 @@ class pot_scanner extends core
 				$this->warn_cnt++;
 			}
 		}
+	}
+
+	function _scan_file_props($file_from)
+	{
+		$strings = array();
+
+		// get filename and make the prop file from that
+		$propf = aw_ini_get("basedir")."/xml/properties/".basename($file_from,".aw").".xml";
+		if (!file_exists($propf))
+		{
+			return;
+		}
+
+		$cu = get_instance("cfg/cfgutils");
+		$props = $cu->load_properties(array(
+			"file" => basename($propf, ".xml"),
+			"clid" => clid_for_name(basename($propf, ".xml"))
+		));
+
+		// generate strings for 
+		//  1) property captions
+		//  2) property comments
+		//  3) property help
+		foreach($props as $pn => $pd)
+		{
+			$strings[] = array(
+				"line" => "prop_".$pn,
+				"str" => "Omaduse ".$pd["caption"]." ($pn) caption",
+			);
+			$strings[] = array(
+				"line" => "prop_".$pn."_comment",
+				"str" => "Omaduse ".$pd["caption"]." ($pn) kommentaar",
+			);
+			$strings[] = array(
+				"line" => "prop_".$pn."_help",
+				"str" => "Omaduse ".$pd["caption"]." ($pn) help",
+			);
+		}
+		
+		//  4) group captions
+		$grps = $cu->get_groupinfo();
+		foreach($grps as $gn => $gd)
+		{
+			$strings[] = array(
+				"line" => "group_".$gn,
+				"str" => "Grupi ".$gd["caption"]." ($gn) pealkiri",
+			);
+		}
+
+		//  5) relation captions
+		$ri = $cu->get_relinfo();
+		foreach($ri as $gn => $gd)
+		{
+			if (substr($gn, 0, 8) == "RELTYPE_")
+			{
+				$strings[] = array(
+					"line" => "rel_".$gn,
+					"str" => "Seose ".$gd["caption"]." ($gn) tekst",
+				);
+			}
+		}
+
+		return $strings;
 	}
 }
