@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.41 2001/07/30 13:26:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.42 2001/07/31 09:15:08 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3056,7 +3056,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function req_draw_menu($parent,$name,&$path,$ignore_path)
 	{
-		global $baseurl, $ext, $menu_check_acl;
+		global $baseurl, $ext, $menu_check_acl,$awt;
 		$this->sub_merge = 1;
 		$this->level++;
 
@@ -3085,7 +3085,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$in_path = in_array($this->mar[$parent]["oid"],$path);
 		$parent_tpl = $this->is_parent_tpl($mn2, $mn);
-		if (!(($in_path||$this->level == 1)||$parent_tpl||$ignore_path))
+		if (!(($in_path||$this->level == 1)||($parent_tpl&&$in_path)||$ignore_path))
 		{
 			// don't show unless the menu is selected (in the path)
 			// or the next level subtemplates are nested in this one
@@ -3096,16 +3096,21 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		$this->vars(array($mn => ""));
 
+		$no_mid = false;
 		// go over the menus on this level
 		$l = "";
+		$l_mid = "";
 		reset($this->mpr[$parent]);
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
 			// je, I know, this will kind of slow down things
+			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
+			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
+			// njah, praegu ainult nädalas. Aga idee on selles, et metainfo välja kasutad ka muu info salvestamiseks,
+			// mitte teha jarjest uusi valju juurde.
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
-
 
 			// see on siis nädala parema paani leadide näitamine
 			// nõme häkk. FIX ME.
@@ -3199,9 +3204,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$ap.="_SEP";		// non-clickable menu
 			};
 
+			$is_mid = false;
+			if ($row["mid"] == 1 && !in_array($parent,$path))
+			{
+				// keskel olevad menyyd peavad ignoreerima seda et neid igaljuhul n2idatakse
+				$no_mid = true;
+				continue;
+			}
 			if ($row["mid"] == 1)
 			{
 				$ap.="_MID";		// menu in center
+				$is_mid = true;
 			};
 
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)
@@ -3246,8 +3259,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 												"target" 	=> $target,
 												"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
 	
-			$l.=$this->parse($mn.$ap);
-			$this->vars(array($mn.$ap => ""));
+			if ($is_mid)
+			{
+				$l_mid.=$this->parse($mn.$ap);
+			}
+			else
+			{
+				$l.=$this->parse($mn.$ap);
+			}
+				$this->vars(array($mn.$ap => ""));
+			if (!$no_mid)
+			{
+				$this->vars(array($mn."_MID" => ""));
+			}
 			if ($this->is_template($mn."2"))
 			{
 				$l2.=$this->parse($mn."2".$ap);
@@ -3257,6 +3281,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cnt++;
 		}
 		$this->vars(array($mn => $l));
+		if (!$no_mid)
+		{
+			$this->vars(array($mn."_MID" => $l_mid));
+		}
 		if ($second)
 		{
 			$this->vars(array($mn."2" => $l2));
