@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.54 2002/01/03 09:32:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.55 2002/01/29 17:27:43 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -22,13 +22,14 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 
 if ($pi) 
 {
-	 if (preg_match("/[&|=]/",$pi)) 
-	 {
+	$section = sprintf("%d",substr($pi,1));
+	if (preg_match("/[&|=]/",$pi)) 
+	{
 		// expand and import PATH_INFO
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)));
-	 } 
-	 else 
-	 {
+	} 
+	else 
+	{
 		$section = substr($pi,1);
 	};
 };
@@ -229,7 +230,7 @@ else
 		{
 			$admin_lang_lc = "et";
 		}
-		include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
+		@include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
 	}
 
 	// loads localization constants from the site's $site_basedir
@@ -264,7 +265,7 @@ else
 			preg_match("/(\w*)$/",$lib,$m);
 			$lib = $m[1];
 			$lib = "$classdir/$lib.$ext";
-			@include_once($lib);
+			include_once($lib);
 		};
 	}
 	////
