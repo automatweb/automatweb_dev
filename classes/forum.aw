@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.43 2002/03/13 14:43:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.44 2002/03/14 15:06:15 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -461,6 +461,7 @@ class forum extends aw_template
 				"search_forum_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => $alias,"section" => $this->section,)),
 				"search_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => $alias,"section" => $this->section,)),
 				"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id, "_alias" => $alias,"section" => $this->section, "from" => $from)),
+				"topic_flat_link" => $this->mk_my_orb("topics",array("id" => $id, "_alias" => $alias,"section" => $this->section, "from" => $from)),
 				"flat_link" => $this->mk_my_orb("topics",array("id" => $id, "_alias" => $alias,"section" => $this->section, "from" => $from)),
 			));
 		}
@@ -537,6 +538,12 @@ class forum extends aw_template
 			"last" => $from,
 			"class_id" => CL_MSGBOARD_TOPIC,
 			"status" => 2,
+		));
+		
+		$this->set_object_metadata(array(
+			"oid" => $tid,
+			"key" => "author_email",
+			"value" => $email,
 		));
 
 		if ($section)
@@ -1525,6 +1532,7 @@ class forum extends aw_template
 			$cnt = 0;
 			foreach($obj as $key => $item)
 			{
+				$item["meta"] = aw_unserialize($item["metadata"]);
 				if ( ($cnt >= $from) && ($cnt <= $to) )
 				{
 					if ($args["details"])
@@ -1601,6 +1609,7 @@ class forum extends aw_template
 			"created" => $this->time2date($args["created"],2),
 			"created_date" => $this->time2date($args["created"],8),
 			"from" => $args["createdby"],
+			"email" => $args["meta"]["author_email"],
 			"text" => $args["comment"],
 			"createdby" => ($args["last"]) ? $args["last"] : $args["createdby"],
 			"last" => $this->time2date($args["modified"],11),
