@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.43 2002/08/29 03:16:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.44 2002/09/04 13:04:21 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -357,8 +357,8 @@ class form_base extends form_db_base
 		{
 			$this->parse("HAS_ALIASMGR");
 		};
-		
-		if ($this->uses_calendar)
+	
+		if ((int)$this->subtype & FORM_USES_CALENDAR)	
 		{
 			$this->parse("USES_CALENDAR");
 		};
