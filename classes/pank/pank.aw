@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.1 2004/07/15 06:49:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.2 2004/07/20 14:46:44 rtoomas Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -43,8 +43,11 @@
 
 @layout main_vbox_right type=vbox group=pank_owner_group_main_sub parent=main_hbox
 
-@property main_company_info type=text parent=main_vbox_right no_caption=1 store=no
+@property main_company_info type=table parent=main_vbox_right no_caption=1 store=no
 @caption Firma info
+
+@property main_company_projects_info type=table parent=main_vbox_right no_caption=1 store=no
+@caption Firma projektide info
 
 @property main_table type=table parent=main_vbox_right no_caption=1
 @caption Tabel
@@ -92,6 +95,8 @@
 
 class pank extends class_base
 {
+	var $company_account = null;
+
 	function pank()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
@@ -114,16 +119,24 @@ class pank extends class_base
 			case 'main_toolbar':
 				$this->do_main_toolbar(&$arr);
 				break;
+			case 'main_company_projects_info':
+				if(is_oid($arr['request']['company']))
+				{
+					$this->do_company_accounts_table($arr);
+				}
+				break;
 			case 'main_company_info':
 				if(is_oid($arr['request']['company']))
 				{
-					$this->do_company_info($arr);
+					$arr['company_id'] = $arr['request']['company'];
+					$this->do_company_info_table($arr);
 				}
 				break;
 			case 'main_table':
-				if(is_oid($arr['request']['company']))
+				if(is_oid($arr['request']['company']) || is_oid($arr['request']['project_id']))
 				{
-					$this->do_company_info_table($arr);	
+					$arr['parent'] = $arr['request']['project_id']?$arr['request']['project_id']:$arr['request']['company'];
+					$this->do_transactions_table($arr);	
 				}
 				break;
 			case 'main_treeview':
@@ -209,21 +222,16 @@ class pank extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if($arr['id']=='pank_owner_group' && is_oid($arr['obj_inst']->id()))
+		if($arr['id']=='pank_owner_group' || 
+			$arr['id']=='pank_owner_group_main_sub' 
+			&& is_oid($arr['obj_inst']->id())
+		)
 		{
 			$company = $this->get_owner($arr['obj_inst']);
 			if($company)
 			{
 				$arr['caption'] = $company->prop('name');
-			}			
-		}
-		else if($arr['id']=='pank_owner_group_main_sub' && is_oid($arr['obj_inst']->id()))
-		{
-			$company = $this->get_owner($arr['obj_inst']);
-			if($company)
-			{
-				$arr['caption'] = $company->prop('name');
-			}			
+			}
 		}
 	}
 
@@ -319,6 +327,32 @@ class pank extends class_base
 		}
 	}
 
+	/*
+		Every compay has ONE account. This function returns that
+		account. If it doesn't find any, then i'll create one manually.
+		
+	*/
+	function get_company_account($comp)
+	{
+		//listing all the accounts from the company
+		$ol = new object_list(array(
+						'class_id' => CL_ACCOUNT,
+						'parent' => $comp->id(),
+				));
+
+		//checking if there is one
+		if(sizeof($ol->ids()))
+		{
+			$tmp = $ol->arr();
+			return current($tmp);
+		}
+		//none found, will create one
+		else
+		{
+		
+		}
+	}
+
 	function get_owner($obj)
 	{
 		//let's get the company of this pank
@@ -339,12 +373,71 @@ class pank extends class_base
 		}
 	}
 
-	function do_company_info_table($arr)
+	/*
+		every company can have just one account, 
+		its more like it should have one account.
+
+		This function returns the account of the
+		give company, if none exist, will make 
+		a new one, and return that one.
+	*/
+	function get_account_for_obj($parent)
+	{
+		//paistab, et tuli id hoopis sisse
+		if(!is_object($parent))
+		{
+			$parent = new object($parent);
+		}
+		
+		//company accounts aren't in the company
+		//but in the pank associated with the company
+		/*if($parent->class_id() == CL_CRM_COMPANY)
+		{
+			$conns = $parent->connections_to(array(
+								'type' => RELTYPE_OWNER
+			));
+			if(sizeof($conns))
+			{
+				$bank = current($conns);
+				$bank = $bank->from();
+				return $this->get_account_for_obj(&$bank);
+			}
+			else
+			{
+				//ei suutnud saada
+				echo "Ei suutnud saada kontot järgmisele objektile: ";
+				arr($parent->properties());
+				die();
+			}
+		}
+		else*/
+		{
+			$ol = new object_list(array(
+							'parent' => $parent->id(),
+							'class_id' => CL_ACCOUNT
+			));
+			if(sizeof($ol->ids()))
+			{
+				return new object(current($ol->ids()));
+			}
+			//make account
+			else
+			{
+				$obj = new object();
+				$obj->set_class_id(CL_ACCOUNT);
+				$obj->set_parent($parent->id());
+				$obj->save();
+				return $obj;
+			}
+		}
+	}
+
+	function do_transactions_table($arr)
 	{
 		$table = &$arr['prop']['vcl_inst'];
 		
 		$table->define_field(array(
-			'name ' => 'from',
+			'name' => 'from',
 			'caption' => 'Kandja',			
 		));
 
@@ -354,81 +447,146 @@ class pank extends class_base
 		));
 
 		$table->define_field(array(
+			'name' => 'sum',
+			'caption' => 'Summa',
+		));
+
+		$table->define_field(array(
 			'name' => 'date',
 			'caption' => 'Aeg'
 		));
 
-		$company = new object($arr['request']['company']);
 
-		//now we have to get all the banking information for this company
-		$conns = $company->connections_to(array(
-						'type' => RELTYPE_OWNER
+		$parent = $this->get_account_for_obj($arr['parent']);
+
+		//let's list the accounts
+		$ol = new object_list(array(
+					'parent' => $parent->id(),
+					'class_id' => CL_TRANSACTION,
 		));
 	
-		//very good, the company has a bank!
-		if(sizeof($conns))
+		$trans = get_instance('pank/transaction');
+
+		$accounts = $ol->arr();
+		
+		foreach($accounts as $obj)
 		{
-			$bank = current($conns);
-			$bank = $bank->from();
-
-			//we have the bank!
-
-			//let's list the accounts
-			$ol = new object_list(array(
-						'parent' => $bank->id(),
-						'class_id' => CL_ACCOUNT
-			));
-			
-			foreach($ol->arr() as $obj)
+			$trans_info = $trans->get_info_on_transaction(&$obj);
+			if(!$trans_info)
 			{
-				//krt ma ei teagi, präägast listin mõlema kontoga toimunud
-				//aktsioonid
-				$tmp_ol = new object_list(array(
-								'parent' => $obj->id(),
-								'class_id' => CL_TRANSACTION
-				));
-
-				foreach($tmp_ol->arr() as $tmp_obj)
-				{
-					$table->define_data(array(
-								'from' => $tmp_obj->prop('trans_from'),
-								'to' => $tmp_obj->prop('trans_to'),
-								'sum' => $tmp_obj->prop('sum')
-					));
-				}
+				continue;
 			}
+
+			$table->define_data(array(
+					'from' => $trans_info['from_obj']->name(),
+					'to' => $trans_info['to_obj']->name(),
+					'date' => $this->time2date($obj->prop('date')),
+					'sum' => $obj->prop('sum'),
+			));
 		}
 	}
-
-	function do_company_info($arr)
+	
+	function do_company_info_table($arr)
 	{
-		$company = new object($arr['request']['company']);
+		$table = &$arr['prop']['vcl_inst'];
 
+		$table->set_layout('cool');
+
+		$table->define_field(array(
+			'name' => 'account_name',
+			'caption' => 'Konto nimi',
+		));
+
+		$table->define_field(array(
+			'name' => 'saldo',
+			'caption' => 'Saldo',
+			'type' => 'int',
+		));
+
+		$company = new object($arr['company_id']);
+
+		$account = $this->get_account_for_obj($company);
+
+		$table->define_data(array(
+					'saldo' => $account->prop('account_balance'),
+					'account_name' => $account->name(),
+		));
+	}
+
+	function do_company_accounts_table($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+
+		$table->define_field(array(
+			'name' => 'project_name',
+			'caption' => 'Projekt',
+		));
+
+
+		$table->define_field(array(
+			'name' => 'project_account',
+			'caption' => 'Konto',
+		));
+
+		$table->define_field(array(
+					'name' => 'saldo',
+					'caption' => 'Saldo',
+					'type' => int,
+		));
+
+		$table->define_chooser(array(
+					'name' => 'check',
+					'field' => 'id',
+					'caption' => 'X',
+		));
+	
+		$ol = new object_list(array(
+					'parent' => $arr['obj_inst']->id(),
+					'class_id' => CL_ACCOUNT
+		));
+
+
+		$company = new object($arr['request']['company']);
+		$crm_company = get_instance(CL_CRM_COMPANY);
+		//getting all the projects for this company
+		$projects = $crm_company->get_all_projects_for_company(array('id'=>$arr['request']['company']));
+		
+		$from_account = $this->get_account_for_obj($company);
+		
+		foreach($projects as $project)
+		{
+			$project_account = $this->get_account_for_obj($project); 
+
+			$project_name = $this->mk_my_orb('change',
+									array(
+										'group' => $arr['request']['group'],
+										'id' => $arr['request']['id'],
+									),
+									CL_PANK);
+
+			$table->define_data(array(
+				'project_name' => html::href(array(
+											'url'=>aw_url_change_var(array(
+												'project_id' => $project->id(),
+												'account_id' => '',
+												'return_url' => '',
+											)),
+											'caption'=>$project->name()
+										)),
+				'saldo' => $project_account->prop('account_balance'),
+				'project_account' => $project_account->name()
+								."<input type='hidden' name='from_account[".$project_account->id()
+								."]' value='".$from_account->id()."'>",
+				'id' => $project_account->id(),
+			));
+			
+		}
+		
 		//now we have to get all the banking information for this company
 		$conns = $company->connections_to(array(
 						'type' => RELTYPE_OWNER
 		));
 	
-		//very good, the company has a bank!
-		if(sizeof($conns))
-		{
-			$bank = current($conns);
-			$bank = $bank->from();
-			
-			//ill just get all the accounts
-			$ol = new object_list(array(
-						'parent' => $bank->id(),
-						'class_id' => CL_ACCOUNT
-			));
-
-
-			$arr['prop']['value'] = 'Kontod:<br><br>';
-			foreach($ol->arr() as $o)
-			{
-				$arr['prop']['value'].=$o->prop('name')."<br>";
-			}
-		}
-
 	}
 
 	function do_main_toolbar($arr)
@@ -438,8 +596,33 @@ class pank extends class_base
 		$toolbar->add_button(array(
 			'name' => 'Tee ülekanne',
 			'img' => 'objects/document.gif',
-			'tooltip' => 'Soorita ülekanne',			
+			'tooltip' => 'Soorita ülekanne',
+			'action' => 'submit_make_transaction'
 		));
+	}
+	
+	/**
+		@attrib name=submit_make_transaction
+		@param id required type=int acl=view
+	**/
+	function submit_make_transaction($arr)
+	{
+		//arr['check'] sees on kontode id
+		if(is_array($arr['check']) && sizeof($arr['check'])==1)
+		{
+			$account_id = current($arr['check']);
+			$url =  $this->mk_my_orb('new',array(
+								'parent' => $account_id,
+								'from_account' => $arr['from_account'][$account_id],
+							),
+							CL_TRANSACTION
+			);
+			return $url;
+		}
+		else
+		{
+			echo "Mida ma pean tegema, kui kasutaja ei vali ühtegi checkboxi välja või valib rohkem kui ühe?";
+		}
 	}
 
 }
