@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.60 2003/05/14 15:44:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.61 2003/05/26 12:44:12 duke Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2306,27 +2306,6 @@ class form extends form_base
 		if ($entry_id)
 		{
 			$this->load_entry($entry_id);
-			// check whether we are using are filtering using a calendar
-			// and if so, replace the value of date element before performing
-			// the actual search
-			//
-			// uh, dude, what the FUCK is this doing HERE??!?!
-			// this belongs to form_alias or something. definately not HERE. - terryf
-			global $cal;
-			if ($cal)
-			{
-				$co = $this->get_object($cal);
-				$tf = $co["meta"]["target_form"];
-				$te = $co["meta"]["target_element"];
-				$fid = $this->id;
-				if ($tf == $fid)
-				{
-					global $d;
-					list($_d,$_m,$_y) = explode("-",$d);
-					$_ds = mktime(0,0,0,$_m,$_d,$_y);
-					$this->entry[$co["meta"]["target_element"]] = $_ds;
-				};
-			};
 			$this->_do_value_controllers();
 		}
 
