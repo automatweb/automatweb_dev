@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.84 2002/01/31 00:22:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.85 2002/01/31 23:34:03 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -205,6 +205,8 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
+	////
+	// !Fetces a document from the database
 	function fetch($docid) 
 	{
 		if ($this->period > 0) 
@@ -307,8 +309,6 @@ class document extends aw_template
 		global $classdir,$baseurl,$ext,$awt;
 		$awt->start("document::gen_preview");
 
-		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
-	
 		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
 		// but a number
 		if (is_number($tpl))
@@ -322,13 +322,14 @@ class document extends aw_template
 		if (!isset($doc) || !is_array($doc))
 		{
 			$doc = $this->fetch($docid);
-			// I hope this won't break anything. but now when you click on a brother document you sould still be left under the 
-			// menu where the brother document is.
-//			$docid = $doc["docid"];
+			// I hope this won't break anything. but now when you click on a brother document
+			// you sould still be left under the menu where the brother document is.
+			//	$docid = $doc["docid"];
 		};
+			
+		// if there is no document with that id, then bail out
 		if (!isset($doc))
 		{
-			// objekti polnud, bail out
 			return false;
 		};
 
@@ -339,7 +340,6 @@ class document extends aw_template
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
 	
-
 		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
 		{
 			global $REQUEST_URI;
@@ -366,6 +366,7 @@ class document extends aw_template
 		};
 
 		$this->tpl_reset();
+		
 		$this->tpl_init("automatweb/documents");
 		
 		$this->no_right_pane = $doc["no_right_pane"];	// see on sellex et kui on laiem doku, siis menyyeditor tshekib
@@ -394,30 +395,13 @@ class document extends aw_template
 		if (isset($GLOBALS["lc_doc"]) && is_array($GLOBALS["lc_doc"]))
 		{
 			$this->vars($GLOBALS["lc_doc"]);
-		 }
-		// leiame kategooria cache jaoks
-		// vastavalt sellele kas kysiti leadi voi kogu asja
-		
-		$this->add_hit($docid);
-
-		// ok. replace <p>bla</p> with bla<br><br>
-		if (substr_count($doc["lead"],"<P>") > 1)
-		{
-			$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["lead"]);
-		}
-		else
-		{
-			$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1",$doc["lead"]);
 		}
 
-		if (substr_count($doc["content"],"<P>") > 1)
-		{
-			$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["content"]);
-		}
-		else
-		{
-			$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1",$doc["content"]);
-		}
+		// I don't think we should do that here
+		// $this->add_hit($docid);
+
+		$this->mk_ns4_compat(&$doc["lead"]);
+		$this->mk_ns4_compat(&$doc["content"]);
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc["content"], "#telekava_") === false))
@@ -452,15 +436,11 @@ class document extends aw_template
 		}
 
 		// laeme vajalikud klassid
-		classload("acl","form","table","extlinks","images","gallery");
-
-		$tbl = new table;
+		classload("images");
 		$img = new db_images;
-		$retval = "";
-		$used = array();
 
-		
 		// calculate the amount of comments this document has
+		// can we perhaps cache that somewhere?
 		$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
@@ -556,7 +536,6 @@ class document extends aw_template
 		$this->register_parsers();
 
 
-
 		// linkide parsimine
 		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/U",$doc["content"],$matches))
 		{
@@ -611,6 +590,7 @@ class document extends aw_template
 			$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["title"]);
 		}
 
+		// this is useless. do we use that code anywhere?
 		if (!(strpos($doc["content"], "#board_last5#") === false))
 		{
 			$mb = new msgboard;
@@ -3065,6 +3045,26 @@ class document extends aw_template
 		return $replacement;
 
 
+	}
+	
+	////
+	// !Makes a slice of text NS4 compatible - e.g. makes it look ok.
+	// and yes, NS4 is a steaming pile of crap and should die. NS6 is so much better
+	function mk_ns4_compat(&$text)
+	{
+		if ( (substr_count($text,"<P>") > 1) || (substr_count($text,"<p>") > 1) )
+		{
+			$text = str_replace("</p>","<br><br>",$text);	
+			$text = str_replace("</P>","<br><br>",$text);	
+		}
+		else
+		{
+			$text = str_replace("</P>","",$text);	
+			$text = str_replace("</p>","",$text);	
+		}
+		
+		$text = str_replace("<p>","",$text);
+		$text = str_replace("<P>","",$text);
 	}
 };
 ?>
