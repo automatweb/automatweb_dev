@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.25 2005/01/25 09:35:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.26 2005/03/01 13:21:56 duke Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -254,6 +254,7 @@ class add_tree_conf extends class_base
 		{
 			$ret = 0;
 		}
+
 		return $ret;
 	}
 
@@ -280,8 +281,9 @@ class add_tree_conf extends class_base
 				foreach($grp as $g)
 				{
 					// must check group parents as well :(
-					$has_grp = $v["fld"][$g];
-					if ($has_grp)
+					// but CL_MENU has no parent (g == 0) and we have to deal with it -- duke
+					$has_grp = $v["fld"][$g] || $g == 0;
+					if ($has_grp && $g != 0)
 					{
 						while ($g)
 						{
