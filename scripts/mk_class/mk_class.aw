@@ -63,14 +63,18 @@ $stdo = fopen("php://stdout", "w");
 echo "Hello! I am the AW class-o-maker 3000!\n";
 echo "You will answer these questions:\n\n";
 
-echo "Class def (CL_FOO_BAR): ";
-$class['def'] = trim(fgets($stdin));
+//echo "Class def (CL_FOO_BAR): ";
+//$class['def'] = trim(fgets($stdin));
 
 echo "Folder where the class file is (created under AWROOT/classes): ";
 $class['folder'] = trim(fgets($stdin));
 
 echo "Class file (foo_bar): ";
 $class['file'] = trim(fgets($stdin));
+
+// make these automatically, then we can be sure they foillow standard and are unique
+$class['def'] = "CL_".strtoupper($class['file']);
+$class['syslog.type'] = "ST_".strtoupper($class['file']);
 
 echo "Class name, users see this, so be nice (Foo bar): ";
 $class['name'] = trim(fgets($stdin));
@@ -84,8 +88,8 @@ $class['parents'] = trim(fgets($stdin));
 echo "Alias (if you leave this empty, then the class can't be added as an alias): ";
 $class['alias'] = trim(fgets($stdin));
 
-echo "Syslog type (ST_FOO , goes to syslog.ini): ";
-$class['syslog.type'] = trim(fgets($stdin));
+//echo "Syslog type (ST_FOO , goes to syslog.ini): ";
+//$class['syslog.type'] = trim(fgets($stdin));
 
 
 ////////////////////////////////////////////////////////////////////
