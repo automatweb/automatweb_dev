@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.53 2002/10/20 16:49:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.54 2002/10/21 10:10:20 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -685,24 +685,42 @@ if (!defined("DEFS"))
 	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
 	function aw_cache_get($cache,$key)
 	{
+		if (!is_array($GLOBALS["__aw_cache"]))
+		{
+			return false;
+		}
+		if (!is_array($GLOBALS["__aw_cache"][$cache]))
+		{
+			return false;
+		}
 		return $GLOBALS["__aw_cache"][$cache][$key];
 	}
 
 	function aw_cache_set($cache,$key,$val = "")
 	{
-		// if $key is array, we will just stick it into the cache
-		if (is_array($key))
+		// if $key is array, we will just stick it into the cache. 
+		// NO!! that's what aw_cache_set_array() is for!!! - terryf
+		if (!is_array($GLOBALS["__aw_cache"]))
 		{
-			$GLOBALS["__aw_cache"][$cache] = $key;
+			$GLOBALS["__aw_cache"] = array($cache => array($key => $val));
+		}
+		else
+		if (!is_array($GLOBALS["__aw_cache"][$cache]))
+		{
+			$GLOBALS["__aw_cache"][$cache] = array($key => $val);
 		}
 		else
 		{
 			$GLOBALS["__aw_cache"][$cache][$key] = $val;
-		};
+		}
 	}
 
 	function aw_cache_flush($cache)
 	{
+		if (!is_array($GLOBALS["__aw_cache"]))
+		{
+			$GLOBALS["__aw_cache"] = array();
+		}
 		$GLOBALS["__aw_cache"][$cache] = false;
 	}
 
@@ -710,6 +728,11 @@ if (!defined("DEFS"))
 	// !this returns the entire cache array - this is useful for instance if you want to iterate over the cache
 	function aw_cache_get_array($cache)
 	{
+		if (!is_array($GLOBALS["__aw_cache"]))
+		{
+			$GLOBALS["__aw_cache"] = array();
+			return false;
+		}
 		return $GLOBALS["__aw_cache"][$cache];
 	}
 
@@ -717,7 +740,14 @@ if (!defined("DEFS"))
 	// !this is for initializing the cache
 	function aw_cache_set_array($cache,$arr)
 	{
-		$GLOBALS["__aw_cache"][$cache] = $arr;
+		if (!is_array($GLOBALS["__aw_cache"]))
+		{
+			$GLOBALS["__aw_cache"] = array($cache => $arr);
+		}
+		else
+		{
+			$GLOBALS["__aw_cache"][$cache] = $arr;
+		}
 	}
 
 	////
