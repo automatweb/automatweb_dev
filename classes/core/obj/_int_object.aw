@@ -271,7 +271,7 @@ class _int_object
 		{
 			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
 		}
-		if($param['sort_dir'] == 'asc')
+		if($param['sort_dir'] == 'desc')
 		{
 			return array_reverse($ret);
 		}
