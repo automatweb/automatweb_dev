@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.50 2002/08/20 10:57:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.51 2002/08/29 03:19:29 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -565,12 +565,16 @@ if (!defined("DEFS"))
 	}
 
 
-	function aw_serialize($arr,$type = SERIALIZE_PHP)
+	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
 	{
 		switch($type)
 		{
 			case SERIALIZE_PHP:
 				$ser = new php_serializer;
+				foreach($flags as $fk => $fv)
+				{
+					$ser->set($fk, $fv);
+				}
 				$str = $ser->php_serialize($arr);
 				break;
 			case SERIALIZE_PHP_NOINDEX:
