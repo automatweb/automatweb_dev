@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.8 2001/10/16 04:29:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.9 2001/12/31 14:25:02 kristo Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -173,6 +173,11 @@ class form_import extends form_base
 						}
 					}
 					else
+					if ($elref->get_type() == "date")
+					{
+						$elvalue = strtotime($ar[$el[$elid]]);
+					}
+					else
 					{
 						$elvalue = $ar[$el[$elid]];
 					}
@@ -189,6 +194,7 @@ class form_import extends form_base
 					{
 						$entry_name = $ar[$el[$elid]];
 					}
+					$this->quote(&$elvalue);
 					$rowels[] = "el_".$elid;
 					$rowels[] = "ev_" . $elid;
 					$rowvals[] = "'".$elvalue."'";
