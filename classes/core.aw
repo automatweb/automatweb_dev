@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.112 2002/10/14 13:35:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.113 2002/10/15 14:43:31 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -15,12 +15,14 @@ class core extends db_connector
 
 	////
 	// !fetchib kirje suvalisest tabelist
+	/*
 	function get_record($table,$field,$selector)
 	{
 		$q = "SELECT * FROM $table WHERE $field = '$selector'";
 		$this->db_query($q);
 		return $this->db_fetch_row();
 	}
+	*/
 
 	////
 	// !kustutab kirje mingist tabelist. Kahtlane värk
@@ -134,7 +136,7 @@ class core extends db_connector
 		{
 			return false;
 		};
-			
+
 		$metadata = aw_unserialize($old["metadata"]);
 		if ($overwrite)
 		{
@@ -1018,7 +1020,19 @@ class core extends db_connector
 			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
 	}
+
+	////
+	// !get object's hits
+	// $oid =  object id
+	function get_hit($oid)
+	{
+		if ($oid)
+		{
+		return $this->db_fetch_field("SELECT hits from hits WHERE oid = $oid","hits");
+		};
+	}
      
+
 	////
 	// !imcrements the objects cached hit count by one
 	function add_cache_hit($oid) 
@@ -1833,6 +1847,23 @@ class core extends db_connector
 		return $retval;
 	}
 
+	function req_array_reforb($k, $v)
+	{
+		$ret = "";
+		foreach($v as $_k => $_v)
+		{
+			if (is_array($_v))
+			{
+				$ret .= $this->req_array_reforb($k."[".$_k."]",$_v);
+			}
+			else
+			{
+				$ret .= "<input type='hidden' name='".$k."[".$_k."]' value='".$_v."' />\n";
+			}
+		}
+		return $ret;
+	}
+
 	////
 	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
 	function mk_reforb($fun,$arr = array(),$cl_name = "")
@@ -1842,7 +1873,18 @@ class core extends db_connector
 			$cl_name = get_class($this);
 		}
 
-		$urs = join("\n",$this->map2("<input type='hidden' name='%s' value='%s' />\n",$arr));
+		$urs = "";
+		foreach($arr as $k => $v)
+		{
+			if (is_array($v))
+			{
+				$urs .= $this->req_array_reforb($k, $v);
+			}
+			else
+			{
+				$urs .= "<input type='hidden' name='$k' value='$v' />\n";
+			}
+		}
 		if (!isset($arr["no_reforb"]) || $arr["no_reforb"] != true)
 		{
 			$url = "\n<input type='hidden' name='reforb' value='1' />\n";
@@ -2341,9 +2383,11 @@ class core extends db_connector
 			$ret = array(0 => "");
 		}
 
+		$field = ($field) ? $field : "name";
+
 		foreach($cls as $clid => $cld)
 		{
-			$clname = $cld["name"];
+			$clname = $cld[$field];
 			if ($clname != "")
 			{
 /*			if ($cld["parents"] != "")
@@ -2355,7 +2399,14 @@ class core extends db_connector
 					$prnt =$clfs[$prnt]["parent"];
 				}
 			}*/
-				$ret[$clid] = $clname;
+				if ($index)
+				{
+					$ret[$cld[$index]] = $clname;
+				}
+				else
+				{
+					$ret[$clid] = $clname;
+				};
 			}
 		}
 		asort($ret);
