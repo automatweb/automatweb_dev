@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.34 2003/05/26 17:37:21 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.35 2003/05/27 13:26:53 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -452,28 +452,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "class_id":
-						if (is_array($val) || (!is_numeric($val) && ($val = explode(',', ltrim($val,',')))))
+						if (is_array($val))
 						{
-							//arr($val);
 							$tmp = array();
-							$val = $this->make_keys($val);
-
-							foreach($this->cfg["classes"] as $clid => $cldat)
-							{
-								if (isset($val[basename($cldat['file'])]) || isset($val[basename($cldat['alias_class'])]))
-								{
-									$tmp[] = $clid;
-								}
-							}
-
 							foreach($val as $_v)
 							{
-								if ((is_numeric($_v)) && ($_v != 0))
+								if ($_v != 0)
 								{
 									$tmp[] = $_v;
 								}
 							}
-
 							$xval = join(",",$tmp);
 							if ($xval != "")
 							{
@@ -487,9 +475,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
 						};
-
-
-					break;
+						break;
 
 					case "status":
 						if ($val == 3)

@@ -104,19 +104,15 @@ function aw_save()
 		alert('Ühtegi objekti pole valitud!');
 	};
 }
+
 function redir()
 {
 	with(document.foo)
 	{
 		cl = aselect.options[aselect.selectedIndex].value;
-		if (cl == "capt_new_object")
+		if ((cl == "capt_new_object") || (cl == "0")|| (cl == ""))
 		{
 			alert('Vali objekti tüüp!');
-		}
-		else
-		if (cl == "capt_new_relation")
-		{
-			alert('Vali seose tüüp!');
 		}
 		else
 		{
@@ -160,6 +156,9 @@ function selall()
 
 function create_new_object()
 {
+var clids = new Array();
+{VAR:class_ids}
+
 	with(document.foo)
 	{
 		cl = aselect.options[aselect.selectedIndex].value;
@@ -170,7 +169,7 @@ function create_new_object()
 		else
 		{
 			rel_type = reltype.options[reltype.selectedIndex].value;
-			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
+			window.location.href="orb.{VAR:ext}?class=" + clids[cl] + "&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
 		};
 	};
 };

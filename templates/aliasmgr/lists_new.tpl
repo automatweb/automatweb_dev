@@ -28,6 +28,8 @@ function selall()
 
 function create_new_object()
 {
+var clids = new Array();
+{VAR:class_ids}
 	with(document.foo)
 	{
 		cl = aselect.options[aselect.selectedIndex].value;
@@ -38,7 +40,7 @@ function create_new_object()
 		else
 		{
 			rel_type = reltype.options[reltype.selectedIndex].value;
-			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
+			window.location.href="orb.{VAR:ext}?class=" + clids[cl] + "&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
 		};
 	};
 };

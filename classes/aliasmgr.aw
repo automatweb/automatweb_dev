@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.97 2003/05/26 17:37:21 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.98 2003/05/27 13:26:52 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -27,8 +27,8 @@ class aliasmgr extends aw_template
 	// intended to replace pickobject.aw
 	function search($args = array())
 	{
-			$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 		extract($args);
+		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 		$GLOBALS['site_title'] = "Seostehaldur";
 		$this->read_template("search.tpl");
 		$search = get_instance("search");
@@ -44,6 +44,20 @@ class aliasmgr extends aw_template
 			foreach ($rel_type_classes as $key => $val)
 			{
 				$this->rel_type_classes[$key] = $this->make_alias_classarr2($val);
+			}
+		}
+
+		$classes = $this->cfg["classes"];
+		foreach($classes as $clid => $cldat)
+		{
+			if (isset($cldat["alias"]))
+			{
+				if ($cldat["alias_class"])
+				{
+					$cldat["file"] = $cldat["alias_class"];
+					$classes[$clid]["file"] = $cldat["alias_class"];
+				}
+				$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
 			}
 		}
 
@@ -65,6 +79,7 @@ class aliasmgr extends aw_template
 		$return_url = urlencode($return_url);
 
 		$this->vars(array(
+			'class_ids' => $clids,
 			"parent" => $obj["parent"],
 			"period" => $period,
 			"id" => $id,
@@ -126,14 +141,14 @@ class aliasmgr extends aw_template
 			);
 			//$fields["class_id"] = 'n/a';
 			$fields["reltype"] = array(
-				'type' => 'textbox',
+				'type' => 'hidden',
 				'value' => $args['reltype'],
-			);			
+			);
 		}
 		else
 		{
 			$fields["reltype"] = array(
-				'type' => 'textbox',
+				'type' => 'hidden',
 				'value' => $args['reltype'],
 			);
 			$fields["server"] = "n/a";
@@ -602,8 +617,9 @@ class aliasmgr extends aw_template
 				}
 
 				preg_match("/(\w*)$/",$cldat["file"],$m);
-				$aliases[$m[1]] = $cldat["name"];
+				//$aliases[$m[1]] = $cldat["name"];
 				$types[] = $clid;
+				$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
 			}
 		}
 
@@ -705,6 +721,7 @@ class aliasmgr extends aw_template
 		};
 
 		$this->vars(array(
+			'class_ids' => $clids,
 			"table" => $this->t->draw(),
 			"id" => $id,
 			"parent" => $obj["parent"],
@@ -838,13 +855,14 @@ class aliasmgr extends aw_template
 		$arr = array();
 		foreach($rel_arr as $val)
 		{
-			if (isset($classes[$val]) && isset($classes[$val]["alias"]))
+			if (isset($classes[$val]))// && isset($classes[$val]["alias"]))
 			{
 				$fil = ($classes[$val]["alias_class"] != "") ? $classes[$val]["alias_class"] : $classes[$val]["file"];
 				//preg_match("/(\w*)$/",$fil,$m);
 				//$lib = $m[1];
 				//$arr[$val] = $classes[$val]['name'];
-				$arr[basename($fil)] = $classes[$val]['name'];
+				//$arr[basename($fil)] = $classes[$val]['name'];
+				$arr[$val] = $classes[$val]['name'];
 			}
 		}
 		return $arr;
@@ -939,31 +957,24 @@ class aliasmgr extends aw_template
 
 		$choices = array();
 		$choices2 = array();
-		//$spacer = "&nbsp;&nbsp;&nbsp;";
-		$spacer = "";
-
-		//$ch["capt_new_object"] = "Objekti tüüp";
-
 		$classes = $this->cfg["classes"];
 		// generate a list of class => name pairs
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
 			{
-				$fil = ($cldat["alias_class"] != "") ? $cldat["alias_class"] : $cldat["file"];
-				preg_match("/(\w*)$/",$fil,$m);
-				$lib = $m[1];
-				// indent the names
+				//$fil = ($cldat["alias_class"] != "") ? $cldat["alias_class"] : $cldat["file"];
+				//preg_match("/(\w*)$/",$fil,$m);
+				//$lib = $m[1];
+				//indent the names
 				if (empty($cldat["disable_alias"]))
-					$choices[$lib] = $spacer . $cldat["name"];
+					$choices[$clid] = $cldat["name"];
 
-				$choices2[$lib] = $spacer . $cldat["name"];
+				$choices2[$clid] = $cldat["name"];
 			}
 		}
 		asort($choices);
 		asort($choices2);
-		$choices = array_merge($ch,$choices);
-		$choices2 = array_merge($ch,$choices2);
 
 		$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
