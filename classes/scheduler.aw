@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.18 2004/01/13 16:24:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.19 2004/04/12 19:07:20 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -122,33 +122,37 @@ class scheduler extends aw_template
 	{
 		$this->open_session();
 		$found = false;
+		// try and remove all existing scheduling information for this event
 		if (is_array($this->repdata))
 		{
+			// modifying an array while looping over it can lead to unexcected results
 			$tmp = $this->repdata;
 			foreach($tmp as $key => $evnt)
 			{
-				if ($found && $evnt["event"] == $event)
+				if ($evnt["event"] == $event && $evnt["uid"] == $uid)
 				{
 					unset($this->repdata[$key]);
-				};
-				if ($evnt["time"] == $time && $evnt["event"] == $event && $evnt["uid"] == $uid)
-				//if ($evnt["event"] == $event && $evnt["uid"] == $uid)
-				{
-					$found = true;
 				}
 			}
 		}
 
-		if (!$found)
+		if (empty($event_id))
 		{
-			if (empty($event_id))
-			{
-				// that should be enough to make sure that 2 requests to one url
-				// do not overlap
-				$event_id = md5($event);
-			};
-			$this->repdata[] = array("time" => $time, "event" => $event, "event_id" => $event_id, "uid" => $uid, "password" => $password, "rep_id" => $rep_id);
-		}
+			// that should be enough to make sure that 2 requests to one url
+			// do not overlap
+			$event_id = md5($event);
+		};
+
+		// (re)add the event to the queue
+		$this->repdata[] = array(
+			"time" => $time,
+			"event" => $event,
+			"event_id" => $event_id,
+			"uid" => $uid,
+			"password" => $password,
+			"rep_id" => $rep_id,
+		);
+
 		$this->close_session(true);
 	}
 
@@ -215,6 +219,7 @@ class scheduler extends aw_template
 		extract($arr);
 		set_time_limit(0);
 
+
 		// read in all events
 		$this->open_session();
 		$this->close_session(true);
@@ -241,8 +246,8 @@ class scheduler extends aw_template
 	
 		// ok, here check if this event is already being processed
 		$lockfilename = $this->cfg["lock_file"] . "." . $evnt["event_id"];
-		//if (file_exists($lockfilename) && (filectime($lockfilename) > (time()-36000)))
-		if (file_exists($lockfilename))
+		if (file_exists($lockfilename) && (filemtime($lockfilename) > (time()-300)))
+		//if (file_exists($lockfilename))
 		{
 			$pid = $this->get_file(array(
 				"file" => $lockfilename,
