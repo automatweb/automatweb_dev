@@ -115,6 +115,23 @@
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
+      <property>
+            <name>sort_by</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>show</group>
+            <caption>Dokumente j&amp;auml;rjestatakse</caption>
+      </property>
+      <property>
+            <name>sort_ord</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>show</group>
+      </property>
       <classinfo>
             <corefields>name,comment,status</corefields>
             <relationmgr>yes</relationmgr>

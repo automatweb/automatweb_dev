@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.36 2003/06/19 09:55:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.37 2003/07/08 10:49:52 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -43,6 +43,11 @@
 
 	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
 	@caption Mitu viimast dokumenti
+
+	@property sort_by type=select table=objects field=meta method=serialize group=show
+	@caption Dokumente j&auml;rjestatakse
+
+	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
 	@classinfo corefields=name,comment,status
 	@classinfo relationmgr=yes
@@ -130,6 +135,22 @@ class promo extends class_base
 				));
 				break;
 
+			case "sort_by":
+				$data['options'] = array(
+					'' => "",
+					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
+					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
+					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
+					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+				);
+				break;
+
+			case "sort_ord":
+				$data['options'] = array(
+					'DESC' => "Suurem (uuem) enne",
+					'ASC' => "V&auml;iksem (vanem) enne",
+				);
+				break;
 		}
 		return $retval;
 	}
