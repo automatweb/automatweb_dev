@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.47 2004/11/22 13:00:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.48 2004/11/24 10:27:23 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -11,6 +11,9 @@
 	@default field=meta
 	@default method=serialize
 
+	@property show_logged type=checkbox ch_value=1
+	@caption Kui kasutaja on sisse loginud, siis täidab e-posti ja nime välja automaatselt
+	
 	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
 	@caption Teemade kataloog
 	@comment Sellest kataloogist võetakse foorumi teemasid
@@ -1048,6 +1051,18 @@ class forum_v2 extends class_base
 		$this->_add_style("style_form_text");
 		$this->_add_style("style_form_element");
 		$this->vars($this->style_data);
+		$uid = aw_global_get("uid");
+		$add = "";
+		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
+		{
+			$this->vars(array(
+				"author" => $uid,
+			));
+			$add = "_logged";
+		}
+		$this->vars(array(
+			"a_name" => $this->parse("a_name".$add),
+		));
 		return $rv . $this->parse();
 
 	}
@@ -1340,13 +1355,28 @@ class forum_v2 extends class_base
 				"folder" => $arr["folder"],
 			)),
 		));
+		$uid = aw_global_get("uid");
+		$add = "";
+		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			$this->vars(array(
+				"author" => $uid,
+				"email" => $user->prop("email"),
+			));
+			$add = "_logged";
+		}
+		$this->vars(array(
+			"a_name" => $this->parse("a_name".$add),
+			"a_email" => $this->parse("a_email".$add),
+		));
+		
 		return $this->parse();
 	}
 
 	/**  
 		
 		@attrib name=submit_topic params=name all_args="1" nologin="1"
-		
 		
 		@returns
 		
@@ -1356,6 +1386,17 @@ class forum_v2 extends class_base
 	**/
 	function submit_topic($arr)
 	{
+		if($this->can("view", $arr["id"]) && is_oid($arr["id"]))
+		{
+			$obj_inst = obj($arr["id"]);
+			$uid = aw_global_get("uid");
+			if($obj_inst->prop("show_logged") == 1 && !empty($uid))
+			{
+				$user = obj(aw_global_get("uid_oid"));
+				$arr["author_name"] = $uid;
+				$arr["author_email"] = $user->prop("email");
+			} 
+		}
 		$t = get_instance("contentmgmt/forum/forum_topic");
                 $emb = $arr;
 		$emb["parent"] = $arr["folder"];
@@ -1376,12 +1417,21 @@ class forum_v2 extends class_base
 	**/
 	function submit_comment($arr)
 	{
+		if($this->can("view", $arr["id"]) && is_oid($arr["id"])
+		{
+			$obj_inst = obj($arr["id"]);
+			$uid = aw_global_get("uid");
+			if($obj_inst->prop("show_logged") == 1 && !empty($uid))
+			{
+				$arr["uname"] = $uid;
+			}
+		}
 		//arr($arr);
 		$t = get_instance(CL_COMMENT);
 		$topic = get_instance(CL_MSGBOARD_TOPIC);
 		
-                $emb = $arr;
-                $t->id_only = true;
+		$emb = $arr;
+		$t->id_only = true;
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
 		$emb["status"] = STAT_ACTIVE;
