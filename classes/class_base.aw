@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.45 2003/01/15 16:20:39 duke Exp $
+// $Id: class_base.aw,v 2.46 2003/01/15 17:27:12 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -669,9 +669,20 @@ class class_base extends aliasmgr
 
 			if (!$this->classinfo["hide_tabs"])
 			{
+				$tabinfo = array(
+					"link" => &$link,
+					"caption" => &$val,
+					"id" => $key,
+				);
+		
+				if (method_exists($this->inst,"callback_mod_tab"))
+				{
+					$this->inst->callback_mod_tab($tabinfo);
+				};
+				
 				$this->tp->add_tab(array(
-					"link" => $link,
-					"caption" => $val,
+					"link" => $tabinfo["link"],
+					"caption" => $tabinfo["caption"],
 					"active" => ($key == $activegroup),
 				));
 			};
