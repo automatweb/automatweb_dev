@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.5 2002/11/15 22:25:08 duke Exp $
+// $Id: cfgutils.aw,v 1.6 2002/11/21 17:23:14 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -27,6 +27,9 @@ class cfgutils extends aw_template
 			// exists.
 			$this->clist[$key] = $fl;
 		};
+		// XXX: remove this after document class has been converted
+		$this->clist[7] = "doc";
+		
 		$this->clist_init_done = true;
 	}
 	////
@@ -80,6 +83,8 @@ class cfgutils extends aw_template
 	{
 		$result = array();
 		$value = ($value) ? $value : "name";
+		$clist = $this->cfg["classes"];
+
 		foreach($this->cfg["classes"] as $clid => $desc)
                 {
                         if ($this->has_properties(array("clid" => $clid)))
@@ -110,7 +115,12 @@ class cfgutils extends aw_template
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$this->classinfo = $classinfo[0];
                 };
-                return $properties;
+		$res = array();
+		foreach($properties as $key => $val)
+		{
+			$res[] = $this->normalize_text_nodes($val);
+		};
+		return $res;
 	}
 
 	function load_properties($args = array())
@@ -134,6 +144,24 @@ class cfgutils extends aw_template
 	{
 		return $this->classinfo;
 	}
+
+	function normalize_text_nodes($val)
+	{
+		if (is_array($val))
+		{
+			$res = array();
+			foreach($val as $key => $val)
+			{
+				$res[$key] = $val["text"];
+			};
+		}
+		else
+		{
+			$res = $val;
+		};
+		return $res;
+	}
+
 	
 };
 ?>
