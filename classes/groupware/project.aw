@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.5 2003/11/19 17:57:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.6 2004/01/13 14:15:04 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property event_list type=table group=event_list no_caption=1
+@property event_list type=calendar group=event_list no_caption=1
 @caption Sündmused
 
 @groupinfo event_list caption="Sündmused" submit=no
@@ -60,6 +60,7 @@ class project extends class_base
 		$rv = "";
 
 		$t = &$arr["prop"]["vcl_inst"];
+		/*
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => "Aeg",
@@ -78,11 +79,19 @@ class project extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
+		*/
 
+		$range = $arr["prop"]["vcl_inst"]->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => $arr["request"]["viewtype"],
+		));
+		$start = $range["start"];
+		$end = $range["end"];
 
 		for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
 		{
 			$clinf = $this->cfg["classes"][$o->class_id()];
+			/*
 			$t->define_data(array(
 				"time" => $this->time2date($o->prop("start1")),
 				"type" => $clinf["name"],
@@ -90,6 +99,14 @@ class project extends class_base
 					"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
 					"caption" => $o->prop("name"),
 				)),
+			));
+			*/
+			$t->add_item(array(
+				"timestamp" => $o->prop("start1"),
+				"data" => array(
+					"name" => "<font color='gray'>" . $clinf["name"] . "</font> " . $o->prop("name"),
+					"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
+				),
 			));
 		};
 	}
