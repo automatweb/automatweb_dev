@@ -51,7 +51,9 @@
             <value>Saada</value>
             <store>no</store>
             <editonly>1</editonly>
+            <table>messages</table>
             <group>general</group>
+            <field>send</field>
             <caption>Saada</caption>
       </property>
       <tableinfo>

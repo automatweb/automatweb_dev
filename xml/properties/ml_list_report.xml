@@ -16,6 +16,9 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>general</group>
             <caption>Tabel</caption>
       </property>

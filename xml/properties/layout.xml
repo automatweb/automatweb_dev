@@ -72,6 +72,8 @@
             <type>aliasmgr</type>
             <group>aliases</group>
             <store>no</store>
+            <table>objects</table>
+            <field>meta</field>
             <caption>Aliaste manager</caption>
       </property>
       <property>

@@ -215,6 +215,9 @@
                   <num_2>show_month</num_2>
             </group>
             <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <store>no</store>
             <caption>Nav. toolbar</caption>
       </property>
@@ -222,6 +225,9 @@
             <name>show_day</name>
             <callback>callback_show_day</callback>
             <group>show_day</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <store>no</store>
             <caption>Päev</caption>
       </property>
@@ -229,6 +235,9 @@
             <name>show_week</name>
             <callback>callback_show_week</callback>
             <group>show_week</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <store>no</store>
             <caption>Nädal</caption>
       </property>
@@ -236,6 +245,9 @@
             <name>show_month</name>
             <callback>callback_show_month</callback>
             <group>show_month</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <store>no</store>
             <caption>Kuu</caption>
       </property>
@@ -243,6 +255,9 @@
             <name>add_event</name>
             <callback>callback_get_add_event</callback>
             <group>add_event</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <store>no</store>
             <caption>Lisa sündmus</caption>
       </property>

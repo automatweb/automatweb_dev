@@ -33,7 +33,10 @@
             <name>preview</name>
             <type>text</type>
             <store>no</store>
+            <table>objects</table>
             <group>general</group>
+            <method>serialize</method>
+            <field>preview</field>
             <caption>Eelvaade</caption>
       </property>
       <classinfo>

@@ -4,6 +4,8 @@
             <name>filename</name>
             <type>text</type>
             <store>no</store>
+            <field>name</field>
+            <table>files</table>
             <group>general</group>
             <caption>Faili nimi</caption>
       </property>

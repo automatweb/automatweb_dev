@@ -32,7 +32,10 @@
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
+            <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Definitsioon</caption>
       </property>
       <property>
@@ -41,6 +44,9 @@
             <callback>callback_gen_property_list</callback>
             <store>no</store>
             <group>prplist</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Omadused</caption>
       </property>
       <property>
@@ -49,6 +55,9 @@
             <callback>callback_gen_group_list</callback>
             <store>no</store>
             <group>grplist</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Grupid</caption>
       </property>
       <groupinfo>

@@ -58,6 +58,9 @@
             <store>no</store>
             <editonly>1</editonly>
             <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Eelvaade</caption>
       </property>
       <property>

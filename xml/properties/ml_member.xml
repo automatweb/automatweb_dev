@@ -15,6 +15,9 @@
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
             <group>general</group>
             <caption>Muuda</caption>
       </property>

@@ -81,6 +81,9 @@
             <type>text</type>
             <store>no</store>
             <group>members</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Liikmed</caption>
       </property>
       <classinfo>

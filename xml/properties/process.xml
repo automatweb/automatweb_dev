@@ -49,6 +49,8 @@
             <type>text</type>
             <group>actions</group>
             <store>no</store>
+            <table>objects</table>
+            <field>action_list</field>
             <caption>Tegevused</caption>
       </property>
       <classinfo>

@@ -15,7 +15,9 @@
             <type>text</type>
             <editonly>1</editonly>
             <store>no</store>
+            <table>objects</table>
             <group>general</group>
+            <field>preview</field>
             <caption>Näita</caption>
       </property>
       <property>
@@ -36,8 +38,10 @@
             <type>callback</type>
             <callback>callback_show_entities</callback>
             <group>show_entities</group>
+            <table>objects</table>
             <view>show</view>
             <store>no</store>
+            <field>show_entities</field>
             <caption>Olemid</caption>
       </property>
       <property>
@@ -45,8 +49,10 @@
             <type>callback</type>
             <callback>callback_show_actions</callback>
             <group>show_actions</group>
+            <table>objects</table>
             <view>show</view>
             <store>no</store>
+            <field>show_actions</field>
             <caption>Tegevused</caption>
       </property>
       <property>
@@ -54,8 +60,10 @@
             <type>callback</type>
             <callback>callback_show_processes</callback>
             <group>show_processes</group>
+            <table>objects</table>
             <view>show</view>
             <store>no</store>
+            <field>show_processes</field>
             <caption>Protsessid</caption>
       </property>
       <property>
@@ -63,16 +71,20 @@
             <type>callback</type>
             <callback>callback_show_actors</callback>
             <group>show_actors</group>
+            <table>objects</table>
             <view>show</view>
             <store>no</store>
+            <field>show_actors</field>
             <caption>Tegijad</caption>
       </property>
       <property>
             <name>show_documentation</name>
             <type>text</type>
             <group>show_documentation</group>
+            <table>objects</table>
             <view>show</view>
             <store>no</store>
+            <field>show_documentation</field>
             <caption>Juhendmaterjalid</caption>
       </property>
       <classinfo>
