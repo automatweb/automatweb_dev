@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.103 2002/02/27 18:45:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.104 2002/02/27 20:09:35 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -619,9 +619,10 @@ class menuedit extends aw_template
 		$popups = "";
 		while($row = $this->db_next())
 		{
-			$this->save_handle();
-			$meta = $this->obj_get_meta(array("oid" => $row["oid"]));
-			$this->restore_handle();
+			$meta = aw_unserialize($row["metadata"]);
+			//$this->save_handle();
+			//$meta = $this->obj_get_meta(array("oid" => $row["oid"]));
+			//$this->restore_handle();
 			if (is_array($meta["menus"]))
 			{
 			foreach($meta["menus"] as $key => $val)
