@@ -194,14 +194,52 @@ class propcollector extends aw_template
 	
 	function set_groupinfo($id,$data)
 	{
-		$_x = new aw_array(explode(" ",$data));
-		foreach($_x->get() as $field)
+		$open_token = false;
+		# so that we get the last token as well
+		$data .= " ";
+		# this could be rewritten to be shorter, of course. Feel free to do it
+		for ($i = 0; $i < strlen($data); $i++)
 		{
-			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
+			$chr = $data[$i];
+			if ($open_token)
 			{
-				$this->groupinfo[$id][$fname] = $fvalue;
+				if ($chr == "\"")
+				{
+					if (strlen($tmp) > 0)
+					{
+						list($_name,$_value) = explode("=",$tmp);
+						$this->groupinfo[$id][$_name] = $_value;
+						$tmp = "";
+					};
+					$open_token = false;
+				}
+				else
+				{
+					$tmp .= $chr;
+				};
+			}
+			else
+			{
+				if ($chr == "\"")
+				{
+					$open_token = true;
+				}
+				elseif ($chr == " ")
+				{
+					if (strlen($tmp) > 0)
+					{
+						list($_name,$_value) = explode("=",$tmp);
+						$this->groupinfo[$id][$_name] = $_value;
+						$tmp = "";
+					};
+					$open_token = false;
+				}
+				else
+				{
+					$tmp .= $chr;
+				};
 			};
+				
 		};
 	}
 	
