@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.67 2001/06/21 14:08:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.68 2001/06/21 14:27:25 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -604,6 +604,10 @@ class messenger extends menuedit_light
 
 	function _indent_array($arr,$level)
 	{
+		if (!is_array($arr))
+		{
+			return;
+		};
 		static $indent = 0;
 		$indent++;
 		while(list($key,$val) = each($arr[$level]))
