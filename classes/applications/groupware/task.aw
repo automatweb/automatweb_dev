@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.5 2004/08/25 18:49:04 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.6 2004/09/19 19:25:48 rtoomas Exp $
 // task.aw - TODO item
 /*
 
@@ -100,6 +100,46 @@ class task extends class_base
 									'caption' => $company->name(),
 							));
 						}
+						//isiku ametinimetused...
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_RANK',
+						));
+						$professions = '';
+						foreach($conns2 as $conn2)
+						{
+							$professions.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($professions))
+						{
+							$data['value'].=$professions;
+						}
+						//isiku telefonid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_PHONE'
+						));
+						$phones = '';
+						foreach($conns2 as $conn2)
+						{
+							$phones.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($phones))
+						{
+							$data['value'].=$phones;
+						}
+						//isiku emailid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_EMAIL',
+						));
+						$emails = '';
+						foreach($conns2 as $conn2)
+						{
+							$to_obj = $conn2->to();
+							$emails.=', '.$to_obj->prop('mail');
+						}
+						if(strlen($emails))
+						{
+							$data['value'].=$emails;
+						}						
 						$data['value'].='<br>';
 					}
 				}

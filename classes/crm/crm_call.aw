@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.14 2004/08/25 18:48:33 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.15 2004/09/19 19:25:48 rtoomas Exp $
 // crm_call.aw - phone call
 /*
 
@@ -108,6 +108,7 @@ class crm_call extends class_base
       switch($data['name'])
       {
 			case 'info_on_object':
+				$crm_person = get_instance('crm/crm_person');
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
@@ -119,8 +120,8 @@ class crm_call extends class_base
 						$obj = $conn->from();
 						//isik
 						$data['value'].= html::href(array(
-						'url' => html::get_change_url($obj->id()),
-						'caption' => $obj->name(),
+							'url' => html::get_change_url($obj->id()),
+							'caption' => $obj->name(),
 						));
 						//isiku default firma
 						if(is_oid($obj->prop('work_contact')))
@@ -131,7 +132,46 @@ class crm_call extends class_base
 								'caption' => $company->name(),
 							));
 						}
-						
+						//isiku ametinimetused...
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_RANK',
+						));
+						$professions = '';
+						foreach($conns2 as $conn2)
+						{
+							$professions.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($professions))
+						{
+							$data['value'].=$professions;
+						}
+						//isiku telefonid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_PHONE'
+						));
+						$phones = '';
+						foreach($conns2 as $conn2)
+						{
+							$phones.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($phones))
+						{
+							$data['value'].=$phones;
+						}
+						//isiku emailid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_EMAIL',
+						));
+						$emails = '';
+						foreach($conns2 as $conn2)
+						{
+							$to_obj = $conn2->to();
+							$emails.=', '.$to_obj->prop('mail');
+						}
+						if(strlen($emails))
+						{
+							$data['value'].=$emails;
+						}
 						$data['value'].='<br>';
 					}
 				}
