@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.163 2002/10/15 15:15:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.164 2002/10/18 09:45:25 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1012,9 +1012,17 @@ class menuedit extends aw_template
 			$set_lang_id = $_obj["lang_id"];
 		};
 
-		if ($set_lang_id)
+		$q = "SELECT name FROM languages WHERE id = '$set_lang_id' AND status = 2";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		if ($row && $set_lang_id)
 		{
 			aw_global_set("lang_id",$set_lang_id);
+		}
+		else
+		{
+			$realsect = $this->cfg["frontpage"];
 		};
 
 		aw_global_set("section",$realsect);
@@ -1434,26 +1442,33 @@ class menuedit extends aw_template
 				$menu_cache->make_caches();
 				$menus = $menu_cache->get_menus_below($atc_root);
 
-				$mn = array();
+				$mn = array($atc_root);
 				foreach($menus as $_oid => $_dat)
 				{
 					$mn[] = $_oid;
 				}
 
 				$objs = array();
-				$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".join(",",$mn).") ORDER BY jrk");
-				while ($row = $this->db_next())
+				$mns = join(",",$mn);
+				if ($mns != "")
 				{
-					$objs[$row["parent"]][] = $row;
+					$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".$mns.") ORDER BY jrk");
+					while ($row = $this->db_next())
+					{
+						$objs[$row["parent"]][] = $row;
+					}
 				}
 
 				$cnt = 0;
-				$counts = array();
+				$counts = array($atc_root => 0);
 				foreach($objs as $prnt => $arr)
 				{
 					$cnt++;
-					$counts[$prnt] = $cnt;
-					$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
+					if (!isset($counts[$prnt]))
+					{
+						$counts[$prnt] = $cnt;
+						$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
+					}
 					if (is_array($arr))
 					{
 						foreach($arr as $row)
@@ -3097,7 +3112,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		reset($this->mpr[$parent]);
 
 		global $DBX;
-		if ($DBX && ($parent == 36))
+		if ($DBX && ($parent == 489))
 		{
 			print "<pre>";
 			print_r($this->mpr[$parent]);
