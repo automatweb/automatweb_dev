@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mrp_case" folder="mrp" extends="class_base">
+		<action name="add_job">
+			<function name="add_job">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
