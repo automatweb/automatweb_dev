@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.20 2004/11/16 11:16:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.21 2004/11/23 13:56:06 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -122,7 +122,7 @@ class object_treeview_v2 extends class_base
 				arr($prop);
 				break;
 
- 			case "columns":
+			case "columns":
 				$this->_do_columns($arr);
 				break;
 		};
@@ -141,6 +141,27 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
 				$arr["obj_inst"]->set_meta("sel_columns_text", $arr["request"]["column_text"]);
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
+// don't save empty fields
+//				arr($arr["request"]["column_fields"]);
+				$valid_column_fields = array();
+				foreach($arr["request"]["column_fields"] as $key => $value)
+				{
+					foreach($value as $k => $v)
+					{
+						if(empty($v['field']))
+						{
+//							arr($v['field']);
+							unset($value[$k]);
+//							array_push(safe_array($valid_column_fields[$key]), $v);
+						}
+					}
+					if(!empty($value))
+					{
+						$valid_column_fields[$key] = $value;
+					}
+				}
+//				arr($valid_column_fields);
+				$arr["obj_inst"]->set_meta("sel_columns_fields", $valid_column_fields);
 				break;
 
 			case "sortbl":
@@ -208,6 +229,8 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+
+
 		// do some filtering in $ol
 		$filters = $ob->meta("saved_filters");
 
@@ -239,6 +262,48 @@ class object_treeview_v2 extends class_base
 
 			$ol = $ol_result;
 		}
+
+//		arr($ol);
+//		arr($ob->meta("sel_columns_fields"));
+//		arr($ob->meta("saved_filters"));
+
+// if there are set some fields to be displayed in one column
+
+		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
+
+		if($sel_columns_fields->count() != 0)
+		{
+			$ol_result = array();
+			foreach($ol as $ol_item)
+			{
+				foreach($sel_columns_fields->get() as $sel_columns_fields_key => $sel_columns_fields_value)
+				{
+	//				arr($sel_columns_fields_value);
+
+					foreach($sel_columns_fields_value as $key => $value)
+					{
+	//					arr($value);
+						if(empty($ol_item[$value['field']]))
+						{
+							$ol_item[$sel_columns_fields_key] .= "";
+						}
+						else
+						{
+							$ol_item[$sel_columns_fields_key] .= $value['sep'];
+						}
+						$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
+						$ol_item[$sel_columns_fields_key] .= $ol_item[$value['field']];
+						$ol_item[$sel_columns_fields_key] .= $value['right_encloser'];
+					}
+				}
+	//			echo "algus-----------------------------<br>";
+	//			arr($ol_item);
+				array_push($ol_result, $ol_item);
+			}
+			$ol = $ol_result;
+		}
+
+		
 
 		$this->cnt = 0;
 		$c = "";
@@ -395,6 +460,13 @@ class object_treeview_v2 extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "fields",
+			"caption" => "Milliste v&auml;ljade sisu n&auml;idata",
+			"sortable" => 1,
+			
+		));
 	}
 
 	function _do_columns($arr)
@@ -406,7 +478,8 @@ class object_treeview_v2 extends class_base
 		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
 		$cols_text = $arr["obj_inst"]->meta("sel_columns_text");
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
-		
+		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
+
 		$cold = $this->_get_col_list($arr["obj_inst"]);
 
 		if (!is_array($cols_text))
@@ -416,7 +489,8 @@ class object_treeview_v2 extends class_base
 
 		foreach($cold as $colid => $coln)
 		{
-			$text = $editable = "";
+			$text = $editable = $fields = "";
+			
 
 			if ($cols[$colid])
 			{
@@ -431,6 +505,67 @@ class object_treeview_v2 extends class_base
 					"value" => 1,
 					"size" => 40,
 					"checked" => $cols_edit[$colid]
+				));
+
+				$max_id = 0;
+				$fields = "";
+
+				if(is_array($cols_fields[$colid])){
+					foreach($cols_fields[$colid] as $f_key => $f_val)
+					{
+
+						$fields .= html::textbox(array(
+							"name" => "column_fields[".$colid."][".$f_key."][sep]",
+							"value" => $cols_fields[$colid][$f_key]['sep'],
+							"size" => 2,
+						));
+
+						$fields .= html::textbox(array(
+							"name" => "column_fields[".$colid."][".$f_key."][left_encloser]",
+							"value" => $cols_fields[$colid][$f_key]['left_encloser'],
+							"size" => 2,
+						));
+
+						$fields .= html::select(array(
+							"name" => "column_fields[".$colid."][".$f_key."][field]",
+							"options" => array_merge(array(""=>""), $cold),
+							"selected" => ($cols_fields) ? $cols_fields[$colid][$f_key]['field'] : $colid,
+						));
+
+						$fields .= html::textbox(array(
+							"name" => "column_fields[".$colid."][".$f_key."][right_encloser]",
+							"value" => $cols_fields[$colid][$f_key]['right_encloser'],
+							"size" => 2,
+						));
+
+						$fields .= "<br />";
+					}
+				}
+				$max_id = max($max_id, $f_key);
+				$max_id++;
+
+				$fields .= html::textbox(array(
+					"name" => "column_fields[".$colid."][".$max_id."][sep]",
+					"value" => "",
+					"size" => 2,
+				));
+
+				$fields .= html::textbox(array(
+					"name" => "column_fields[".$colid."][".$max_id."][left_encloser]",
+					"value" => "",
+					"size" => 2,
+				));
+
+				$fields .= html::select(array(
+					"name" => "column_fields[".$colid."][".$max_id."][field]",
+					"options" => array_merge(array(""=>""), $cold),
+					"selected" => "",
+				));
+
+				$fields .= html::textbox(array(
+					"name" => "column_fields[".$colid."][".$max_id."][right_encloser]",
+					"value" => "",
+					"size" => 2,
 				));
 			}
 
@@ -447,7 +582,8 @@ class object_treeview_v2 extends class_base
 					"value" => $cols_ord[$colid],
 				)),
 				"text" => $text,
-				"editable" => $editable
+				"editable" => $editable,
+				"fields" => $fields,
 			));
 		}
 
