@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.13 2001/06/05 17:40:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.14 2001/06/05 17:44:10 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -128,19 +128,68 @@ class document extends aw_template
 
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
-		// @desc: listib dokumendid mingis sektsioonis
-		if ($period == -1) {
-			if ($this->period > 0) {
+		global $awt;
+		$awt->start("db_documents->list_docs()");
+		if ($period == -1)
+		{
+			if ($this->period > 0)
+			{
 				$period = $this->period;
-			} else {
+			}
+			else
+			{
 				$period = $this->get_cval("activeperiod");
 			};
 		};
-		// suur valge massa ytles, et seda pole vaja. kommenteerime siis välja
-		//if ($visible != -1)
-		//	$v = " AND objects.visible = $visible ";
+		$this->db_query("SELECT * FROM menu WHERE id = $parent");
+		$row = $this->db_next();
+		$sections = unserialize($row["sss"]);
+		$periods = unserialize($row["pers"]);
+		
+		if (is_array($sections))
+		{
+			$pstr = join(",",$sections);
+			if ($pstr != "")
+			{
+				$pstr = "objects.parent IN ($pstr)";
+			}
+			else
+			{
+				$pstr = "objects.parent = $parent";
+			};
+		}
+		else
+		{
+			$pstr = "objects.parent = $parent";
+		};
+
+		if (is_array($periods))
+		{
+			$rstr = join(",",$periods);
+			if ($rstr != "")
+			{
+				$rstr = "objects.period IN ($rstr)";
+			}
+			else
+			{
+				$rstr = "objects.period = $period";
+			}
+		}
+		else
+		{
+			$rstr = "objects.period = $period";
+		};
+		
 		if ($status != -1)
+		{
 			$v.= " AND objects.status = $status ";
+		};
+
+		if ($row["ndocs"] > 0)
+		{
+			$lm = "LIMIT ".$row["ndocs"];
+		};
+
 		$q = "SELECT documents.lead AS lead,
 			documents.docid AS docid,
 			documents.title AS title,
@@ -151,14 +200,14 @@ class document extends aw_template
 			FROM documents
 			LEFT JOIN objects ON
 			(documents.docid = objects.oid)
-			WHERE objects.parent = '$parent' && objects.period = '$period' $v
-			ORDER BY objects.jrk";
+			WHERE $pstr && $rstr $v
+			ORDER BY objects.period DESC,objects.jrk $lm";
 		$this->db_query($q);
+		$awt->stop("db_documents->list_docs()");
 	}
 
 	function search($orderby,$sortorder,$field = "",$fval = "")
 	{
-		// @desc: otsib mingile tingimusele vastavaid dokumente
 		if (strlen($field) > 0) {
 			$sufix = "WHERE $field LIKE '$fval%'";
 		};
@@ -175,12 +224,13 @@ class document extends aw_template
 	}
 
 	function fetch($docid,$field = "main") {
-		// @desc: kysib infot mingi konkreetse doku kohta, mergib ka info objektide tabelist
+		global $awt;
 		if ($this->period > 0) {
 			$sufix = " && objects.period = " . $this->period;
 		} else {
 			$sufix = "";
 		};
+		$awt->start("doc_fetch");
 		$q = "SELECT documents.*,
 			objects.*
 			FROM documents
@@ -188,16 +238,38 @@ class document extends aw_template
 			(documents.docid = objects.oid)
 			WHERE docid = '$docid' $sufix";
 		$this->db_query($q);
+		$awt->stop("doc_fetch");
 		$data = $this->db_fetch_row();
+		
+		if (!$data)
+		{
+			// tshekime kas oli hoopis vend 2kki
+			$oo = $this->get_object($docid);
+			$q = "SELECT documents.*,
+					documents.keywords AS keywords,
+					objects.cachedirty AS cachedirty,
+					objects.parent AS parent,
+					objects.period AS period,
+					objects.modified AS modified
+				FROM documents
+					LEFT JOIN objects ON
+					(documents.docid = objects.oid)
+				WHERE docid = '".$oo["brother_of"]."' $sufix";
+			$this->db_query($q);
+			$awt->stop("doc_fetch");
+			$data = $this->db_fetch_row();
+		}
+
 		if (gettype($data) == "array") {
-			 //preg_replace("/(\s+?)$/","",$data[content]);
-			 //preg_replace("/^(\s+?)/","",$data[content]);
-			 //$data[content] = trim($data[content]);
 			 $data["content"] = trim($data["content"]);
 			 $data["lead"] = trim($data["lead"]);
 			 $data["cite"] = trim($data["cite"]);
 		};
 		$this->dequote($data);
+		if (preg_match("/<P(.*)>((&nbsp;)*)<\/P>/",$data["lead"]))
+		{
+			$data["lead"] = "";
+		}
 		$this->data = $data;
 		return $data;
 	}
@@ -257,6 +329,9 @@ class document extends aw_template
 		$notitleimg 	= $params["notitleimg"];
 		$showlead 	= $params["showlead"];
 		$no_strip_lead 	= $params["no_strip_lead"];
+		// kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
+		// s22stap yhe p2ringu.
+		$doc 		= $params["doc"]; 
 		
 		global $classdir;
 		global $ext;
@@ -289,7 +364,6 @@ class document extends aw_template
 		} else {
 			$this->read_template($tpl);
 		};
-		$this->ignore(array("image","link"));
 		$this->vars(array("imurl" => "/images/trans.gif"));
 		// leiame kategooria cache jaoks
 		// vastavalt sellele kas kysiti leadi voi kogu asja
