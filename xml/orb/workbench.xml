@@ -14,7 +14,7 @@
 				<arguments>
 					<optional name="id" type="int"/>
 					<optional name="parent" type="int"/>
-					<optional name="period" type="int"/>
+					<optional name="period"/>
 				</arguments>
 			</function>
 		</action>

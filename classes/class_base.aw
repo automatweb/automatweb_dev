@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.192 2003/12/15 18:03:56 duke Exp $
+// $Id: class_base.aw,v 2.193 2003/12/17 16:08:51 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -196,6 +196,7 @@ class class_base extends aw_template
 				// gah, I'm really not that proud of this shit
 				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
+
 		
 		if ($args["fxt"])
 		{
@@ -258,6 +259,7 @@ class class_base extends aw_template
 		// output client is probably the first that should be
 		// implemented.
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+
 
 		if (!empty($lm))
 		{

@@ -268,5 +268,27 @@
                   <parent>container</parent>
             </add_comment>
       </groupinfo>
+      <reltypes>
+            <TOPIC_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>teemade kataloog</caption>
+            </TOPIC_FOLDER>
+            <ADDRESS_FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>listiliikmete kataloog</caption>
+            </ADDRESS_FOLDER>
+            <STYLE>
+                  <value>3</value>
+                  <clid>CL_CSS</clid>
+                  <caption>Stiil</caption>
+            </STYLE>
+            <STYLE_DONOR>
+                  <value>4</value>
+                  <clid>CL_FORUM_V2</clid>
+                  <caption>võta stiilid</caption>
+            </STYLE_DONOR>
+      </reltypes>
 </properties>
 

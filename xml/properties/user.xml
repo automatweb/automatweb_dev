@@ -242,6 +242,13 @@
             <field>groups</field>
       </property>
       <property>
+            <name>home_folder</name>
+            <type>hidden</type>
+            <field>home_folder</field>
+            <table>users</table>
+            <group>roles</group>
+      </property>
+      <property>
             <name>jdata</name>
             <type>text</type>
             <store>no</store>

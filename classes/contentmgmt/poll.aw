@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.4 2002/12/24 15:19:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.1 2003/12/17 16:08:51 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -63,7 +63,7 @@ class poll extends class_base
 		$ret = $ans[$o->lang_id()];
 
 		$data = array();
-		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = '$id' ORDER BY id");
+		$this->db_query("SELECT * FROM poll_answers WHERE poll_id = $id ORDER BY id");
 		while ($row = $this->db_next())
 		{
 			$data[$row["id"]] = $row;
@@ -76,10 +76,6 @@ class poll extends class_base
 			$ret[$aid] = $data[$aid];
 		}
 
-		if (!is_array($ret))
-		{
-			return array();
-		}
 		return $ret;
 	}
 
@@ -205,19 +201,6 @@ class poll extends class_base
 		setcookie("polls_clicked", serialize($poa),time()+24*3600*1000,"/");
 	}
 
-	/**  
-		
-		@attrib name=show params=name nologin="1" default="0"
-		
-		@param poll_id required type=int
-		@param answer_id optional type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function show($id)
 	{
 		if (is_array($id))
@@ -345,7 +328,7 @@ class poll extends class_base
 		}
 		else
 		{
-			return $this->gen_user_html($alias["target"]);
+			return $this->gen_user_html($f["target"]);
 		}
 	}
 

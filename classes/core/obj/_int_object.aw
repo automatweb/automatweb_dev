@@ -480,6 +480,11 @@ class _int_object
 		return $li->get_langid($this->obj["lang_id"]);
 	}
 
+	function lang_id()
+	{
+		return $this->obj["lang_id"];
+	}
+
 	function set_lang($param)
 	{
 		$prev = $this->lang();

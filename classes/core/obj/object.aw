@@ -174,6 +174,11 @@ class object
 		return $GLOBALS["objects"][$this->oid]->lang($param);
 	}
 
+	function lang_id()
+	{
+		return $GLOBALS["objects"][$this->oid]->lang_id($param);
+	}
+
 	function set_lang($param)
 	{
 		return $GLOBALS["objects"][$this->oid]->set_lang($param);
