@@ -4,7 +4,6 @@
 		<action name="admin_list">
 			<function name="admin_list">
 				<arguments>
-					<optional name="sortby"/>
 				</arguments>
 			</function>
 		</action>
@@ -29,13 +28,6 @@
 		</action>
 		<action name="savestatus">
 			<function name="orb_savestatus">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="list" default="1" nologin="1">
-			<function name="site_list">
 				<arguments>
 				</arguments>
 			</function>
