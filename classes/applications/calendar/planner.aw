@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.14 2004/08/31 15:05:44 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.15 2004/09/01 15:32:47 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -340,20 +340,21 @@ class planner extends class_base
 					CL_TASK => "Toimetus",
 					CL_CRM_MEETING => "Kohtumine",				
 				);
-				$data["value"] = $arr["request"]["event_search_type"];
-				if(!$arr["request"]["search"] == 1)
+				
+				if($arr["request"]["event_search_type"])
 				{
-					return PROP_IGNORE;
+					$data["value"] = $arr["request"]["event_search_type"];
 				}
-			break;
-			case "event_search_done":
-				if(!$arr["request"]["search"] == 1)
+				else
 				{
-					return PROP_IGNORE;
+					$data["value"] = array(
+						CL_CRM_OFFER => 1,
+						CL_CRM_CALL => 1,
+						CL_TASK => 1,
+						CL_CRM_MEETING => 1,
+					);
 				}
-				$data["value"] = $arr["request"]["event_search_done"];
-			break;
-			case "event_search_all":
+				
 				if(!$arr["request"]["search"] == 1)
 				{
 					return PROP_IGNORE;
@@ -369,7 +370,14 @@ class planner extends class_base
 				if($arr["request"]["search"] == 1 &&($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
 				{
 					$results = $this->do_event_search($arr["request"]);
-					$this->do_events_results_table($arr, $results);
+					if($results->count() > 0)
+					{
+						$this->do_events_results_table($arr, $results);
+					}
+					else
+					{
+						$data["value"] = "Otsingu tulemusena ei leitud ühtegi objekti";
+					}
 				}
 				else
 				{
@@ -393,6 +401,7 @@ class planner extends class_base
 					$data["value"] = array(
 						"done" => 1,
 						"not_done" => 1,
+						"all_cal" => 1,
 					);
 				}
 				
@@ -1376,7 +1385,7 @@ class planner extends class_base
 			));
 			*/
 
-			if ($arr["obj_inst"]->prop("my_projects") == 1)
+			if ($arr["obj_inst"]->prop("my_projects") == 1 && !$arr["request"]["search"])
 			{
 				$toolbar->add_separator();
 
@@ -1890,12 +1899,6 @@ class planner extends class_base
 		));
 		
 		$table->define_field(array(
-			"name" => "type",
-			"caption" => "Sündmuse tüüp",
-			"sortable" => 1,
-		));
-		
-		$table->define_field(array(
 			"name" => "createdby",
 			"caption" => "Sündmuse looja",
 			"sortable" => "1",
@@ -1931,10 +1934,10 @@ class planner extends class_base
 		
 		get_instance("icons");
 		
-		$user_inst = get_instance(CL_USER);
-		$classes = aw_ini_get("classes");		
+		$user_inst = get_instance(CL_USER);		
 		foreach ($data->arr() as $result)
 		{
+		
 			
 			$participants = $result->connections_to(array(
 				"type" => array(8,9,10),
@@ -1959,17 +1962,35 @@ class planner extends class_base
 			$author_user = &obj($result->createdby());
 			$author_person_id = $user_inst->get_person_for_user($author_user);
 			$author_person_obj = &obj($author_person_id);
-			$table->define_data(array(
-				//"name" => html::get_change_url($result->id(), array(), $result->name()),
-				"name" => html::href(array(
+			
+			if($result->comment())
+			{
+				$comment = " /<i>".$result->comment()."</i>";
+			}
+			
+			if($result->class_id() != CL_CRM_OFFER)
+			{
+				$href_to_event = html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"group" => "add_event", 
 						"event_id" => $result->brother_of(), 
 						"id" => $arr["obj_inst"]->id()),
 						CL_PLANNER),
 					"caption" => $result->name(),
-				)),
-				"type" => $classes[$result->class_id()]["name"],
+				));
+			}
+			else
+			{
+				$href_to_event = html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $result->brother_of()),
+						CL_CRM_OFFER),
+					"caption" => $result->name(),
+				));
+			}
+			
+			$table->define_data(array(
+				"name" => $href_to_event.$comment,
 				"date" => $result->prop("start1"),
 				"createdby" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $author_person_obj->id()), CL_CRM_PERSON),
@@ -1981,7 +2002,10 @@ class planner extends class_base
 				)),
 				"participants" => $par_href,
 			));
+			arr($result->prop("is_done"));
 		}
+		$table->set_default_sortby("modified");
+		$table->set_default_sorder("desc");
 	}
 	
 	/**
@@ -2004,31 +2028,13 @@ class planner extends class_base
 				if($cal->prop("event_folder"))
 				{
 					$parents[] = $cal->prop("event_folder");
-					/*$tmp_list[$cal->id()] = $this->get_event_list(array(
-						"id" => $cal->id(),
-						"start" => 1,
-						"end" => time()*2,
-					));*/
 				}
 			}
-			/*
-			$list = array();
-			foreach ($tmp_list as $key => $events)
-			{
-				foreach ($events as $key => $event)
-				{
-					$list[] = $key;
-				}
-			}*/
 		}
 		else
 		{
-			$list = $this->get_event_list(array(
-				"id" => $arr["id"],
-				"start" => 1,
-				"end" => time() * 2,
-			));
-			$list = array_keys($list);
+			$obj_cal = &obj($arr["id"]);
+			$parents[] = $obj_cal->prop("event_folder");
 		}
 		
 		$params = array(
@@ -2040,10 +2046,6 @@ class planner extends class_base
 		if (is_array($parents))
 		{
 			$params["parent"] = $parents;
-		}
-		else
-		{
-			$params["oid"] = $list;
 		}
 		
 		if($arr["event_search_add"]["done"] && !$arr["event_search_add"]["not_done"])
@@ -2063,7 +2065,6 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-		
 		$event_ol = new object_list($params);
 		return $event_ol;
 	}

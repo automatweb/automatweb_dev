@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.16 2004/08/28 14:34:53 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.17 2004/09/01 15:31:58 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -33,6 +33,8 @@
 @property sum type=textbox table=aw_crm_offer size=7
 @caption Hind(ilma KM)
 
+@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
+@caption Tehtud
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -70,7 +72,7 @@
 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
-@tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=oid
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -132,26 +134,15 @@ class crm_offer extends class_base
 				return PROP_IGNORE;
 			break;
 			case "orderer":
-				$org_inst = get_instance(CL_CRM_COMPANY);
-				if(!($arr["new"] == 1))
+				if(!($my_org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PREFORMER')))
 				{
-					$ord_company_id = $arr["obj_inst"]->prop("preformer"); 
-					if(!$ord_company_id)
-					{
-						return PROP_IGNORE;
-					}
+					$my_org = $this->u_i->get_current_company();
+					$my_org = &obj($my_org);
 				}
-				elseif ($_GET["alias_to"])
-				{
-					$ord_company_id =  $_GET["alias_to"];
-				}
-				else
-				{
-					return PROP_IGNORE;
-				}
-				$org_obj = &obj($ord_company_id);
+				
 				$data = array();
-				$org_inst->get_customers_for_company($org_obj, &$data);
+				$org_inst = get_instance(CL_CRM_COMPANY);
+				$org_inst->get_customers_for_company($my_org, &$data);
 				
 				foreach ($data as $key)
 				{
@@ -160,9 +151,15 @@ class crm_offer extends class_base
 				}
 				
 				$prop["options"] = $options;
-				if(!$prop["value"])
-				{	
-					$prop["value"] = $_GET["alias_to_org"];
+				
+						
+				if($arr["new"] == 1)
+				{
+					$prop["value"] = $arr["request"]["alias_to_org"];
+				}
+				elseif($arr["obj_inst"]->prop("orderer"))
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("orderer");
 				}
 			break;
 			
@@ -176,6 +173,10 @@ class crm_offer extends class_base
 			
 			case "packages_search_toolbar":
 				$arr["request"]["search_package_name"]?$this->do_packages_search_toolbar($arr):$retval=PROP_IGNORE;
+			break;
+			
+			case "is_done":
+				return PROP_IGNORE;
 			break;
 			
 			case "preformer":
@@ -229,7 +230,7 @@ class crm_offer extends class_base
 			break;
 			
 			case "offer_status":
-				$prop["options"] = $this->statuses; 
+				$prop["options"] = $this->statuses;
 			break;
 			
 			case "prev_status":
@@ -238,6 +239,7 @@ class crm_offer extends class_base
 					$prop["value"] = $arr["obj_inst"]->prop("offer_status");
 				}
 			break;
+			
 		};
 		return $retval;
 	}
@@ -477,7 +479,7 @@ class crm_offer extends class_base
 					));
 				}
 			break;
-			
+					
 			case "preformer":
 				if($data["value"])
 				{
@@ -548,6 +550,10 @@ class crm_offer extends class_base
 	
 	function callback_pre_save($arr)
 	{
+		if($arr["request"]["offer_status"] == 3 || $arr["request"]["offer_status"] == 4)
+		{
+			$arr["obj_inst"]->set_prop("is_done", OBJ_IS_DONE);
+		}
 		//If offer status has been changed then lets write to log about it.
 		if($arr["request"]["prev_status"] != $arr["request"]["offer_status"])
 		{
@@ -563,25 +569,26 @@ class crm_offer extends class_base
 	
 	function callback_post_save($arr)
 	{
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-		// now I need to figure out the calendar that is connected to the user object
-		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
-		$conns = $user->connections_to(array(
-			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
-		));
-		if(count($conns))
+		if($arr["new"]==1)
 		{
-			$conn = current($conns);
-			$calender = &obj($conn->prop("from"));
-			$parent = $calender->prop("event_folder");
-			if($parent)
+			$users = get_instance("users");
+			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$conns = $user->connections_to(array(
+				"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+			));
+			if(count($conns))
 			{
-				$arr["obj_inst"]->create_brother($parent);
+				$conn = current($conns);
+				$calender = &obj($conn->prop("from"));
+				$parent = $calender->prop("event_folder");
+				if($parent)
+				{
+					$arr["obj_inst"]->create_brother($parent);
+				}
 			}
+			$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
+			$arr["obj_inst"]->save();
 		}
-		$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
-		$arr["obj_inst"]->save();
 	}
 	
 	function do_offer_history(&$arr)
