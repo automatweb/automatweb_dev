@@ -120,7 +120,8 @@
 		<action name="search" nologin="1">
 			<function name="search">
 				<arguments>
-					<required name="board"/>
+					<optional name="id"/>
+					<optional name="board"/>
 					<optional name="section"/>
 				</arguments>
 			</function>

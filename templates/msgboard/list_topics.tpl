@@ -9,9 +9,12 @@
 								<td colspan="4" height="14" class="header3"> 
 									<div align="center">
 																			<a href="{VAR:newtopic_link}" class="sisuteks">{VAR:LC_MSGBOARD_NEW_SUBJECT}</a> | 
-																			<a href="{VAR:search_link}" class="sisuteks">{VAR:LC_MSGBOARD_SEARCH} </a> | 
+																			<a href="{VAR:search_forum_link}" class="sisuteks">{VAR:LC_MSGBOARD_SEARCH} </a> | 
 																			<a href="{VAR:mark_all_read}" class="sisuteks">{VAR:LC_MSGBOARD_ALL_READ} </a> |
 																			<a href="{VAR:props_link}" class="sisuteks">H‰‰lestamine </a> | 
+																			<!--
+																			<a href="{VAR:topic_detail_link}" class="sisuteks">N‰ita detailselt </a> 
+																			-->
 									</div>
 								</td>
 							</tr>
