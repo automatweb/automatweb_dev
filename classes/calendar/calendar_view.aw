@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.7 2004/06/03 11:14:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.8 2004/06/17 14:36:02 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -56,7 +56,7 @@
 @groupinfo style caption=Stiilid
 @groupinfo show_events caption=Sündmused submit=no
 
-@reltype EVENT_SOURCE value=1 clid=CL_PLANNER,CL_DOCUMENT_ARCHIVE
+@reltype EVENT_SOURCE value=1 clid=CL_PLANNER,CL_DOCUMENT_ARCHIVE,CL_PROJECT
 @caption Võta sündmusi
 
 @reltype OUTPUT value=2 clid=CL_RELATION
@@ -256,6 +256,17 @@ class calendar_view extends class_base
 				));	
 
 			};
+
+			if ($to_o->class_id() == CL_PROJECT)
+			{
+				$pr = get_instance(CL_PROJECT);
+
+				$events = $pr->get_events(array(
+					"id" => $to_o->id(),
+					"range" => $range,
+				));
+			};
+
 
 			foreach($events as $event)
 			{
