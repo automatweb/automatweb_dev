@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.63 2002/11/26 18:12:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.64 2002/11/27 14:10:47 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -92,7 +92,7 @@ class aliasmgr extends aw_template
 			{
 				if (!$cache[$ad['target']])
 				{
-					$cache_inst->file_invalidate('alias_cache::source::'.$id.'::target::'.$ad['target']);
+					$cache_inst->file_invalidate_regex('alias_cache::source::'.$id.'::target::'.$ad['target'].'.*');
 				}
 				$q = "UPDATE aliases SET cached = '".$cache[$ad['target']]."' WHERE target = '".$ad['target']."' AND source = '$id'";
 				$this->db_query($q);
@@ -261,22 +261,12 @@ class aliasmgr extends aw_template
 					// if not, then parse all the aliases one by one
 					foreach($claliases as $avalue => $adata)
 					{
-						// if nothing comes up, we just replace it with a empty string
-						$replacement = "";
-				
 						// check if the alias is cached
-						$from_cache = false;
-						if ($adata['cached'] == 1)
-						{
-							$replacement = $cache_inst->file_get('alias_cache::source::'.$adata['source'].'::target::'.$adata['target']);
-							if ($replacement !== false)
-							{
-								$source = str_replace($avalue,$replacement,$source);
-								$from_cache = true;
-							}
-						}
+						// if nothing comes up, we just replace it with a empty string
+						$replacement = $this->get_alias_cache($adata, $$emb_obj_name, &$cache_inst);
+						$from_cache = true;
 
-						if (method_exists($$emb_obj_name,"parse_alias") && !$from_cache)
+						if (method_exists($$emb_obj_name,"parse_alias") && ($replacement === false))
 						{
 							$repl = $$emb_obj_name->parse_alias(array(
 								"oid" => $oid,
@@ -301,14 +291,11 @@ class aliasmgr extends aw_template
 								$this->tmp_vars = array($inplace => $replacement);
 								$replacement = "";
 							};
-								
-							$source = str_replace($avalue,$replacement,$source);
 
-							if ($adata['cached'] == 1)
-							{
-								$cache_inst->file_set('alias_cache::source::'.$adata['source'].'::target::'.$adata['target'],$replacement);
-							}
+							$from_cache = false;
 						}
+						$source = str_replace($avalue,$replacement,$source);
+						$this->write_alias_cache($adata, $$emb_obj_name, &$cache_inst, $replacement, $from_cache);
 					}
 				}
 			}
@@ -704,6 +691,62 @@ class aliasmgr extends aw_template
 			
 
 		return $toolbar->get_toolbar();
+	}
+
+	function get_alias_cache($adata, &$emb_inst, &$cache_inst)
+	{
+		if ($adata['cached'] == 1)
+		{
+			if (method_exists($emb_inst, "callback_alias_cache_get_url_hash"))
+			{
+				$this->url_hash = $emb_inst->callback_alias_cache_get_url_hash();
+			}
+			else
+			{
+				$this->url_hash = gen_uniq_id($this->REQUEST_URI);
+			}
+
+			$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
+			if (($replacement = $cache_inst->file_get($key)) !== false)
+			{
+				echo "read cache $key <br>";
+				return $replacement;
+			}
+		}
+		return false;
+	}
+
+	function write_alias_cache($adata, &$emb_inst, &$cache_inst, $replacement, $from_cache)
+	{
+		if ($from_cache)
+		{
+			// just let the object handle the cache show if needed
+			if (method_exists($emb_inst, "callback_alias_cache_show_alias"))
+			{
+				$emb_inst->callback_alias_cache_show_alias(array(
+					"alias" => $adata,
+					"content" => $replacement
+				));
+			}
+		}
+
+		if (!$from_cache)
+		{
+			if ($adata['cached'] == 1)
+			{
+				$groups = array();
+				if (method_exists($emb_inst, "callback_alias_cache_get_groups"))
+				{
+					$groups = $emb_inst->callback_alias_cache_get_groups(array(
+						'id' => $adata['source']
+					));
+				}
+
+				$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
+				echo "wrote cache $key <br>";
+				$cache_inst->file_set($key,$replacement);
+			}
+		}
 	}
 }
 ?>
