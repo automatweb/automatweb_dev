@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.2 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.3 2004/05/17 14:34:19 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -181,6 +181,9 @@ class shop_order_center extends class_base
 		{
 			$this->itemlayout_items[$c->prop("to")] = $c->prop("to.name");
 		}
+
+		$o = obj($conf->prop("pkt_fld"));
+		$this->layoutbl_ot_cb($o, $t);
 
 		$ot->foreach_cb(array(
 			"func" => array(&$this, "layoutbl_ot_cb"),
