@@ -1,4 +1,5 @@
 <?php
+// $Id: class_base.aw,v 2.4 2002/11/14 16:11:35 duke Exp $
 classload("aliasmgr");
 class class_base extends aliasmgr
 {
@@ -14,15 +15,9 @@ class class_base extends aliasmgr
 		$this->check_class();
 
 		extract($args);
-		// actually - the change form functionality should be in here
-		// and not in cfgmanager
 		$this->_init_object(array("id" => $id,"parent" => $parent));
 
-		$callback = false;
-		if (method_exists($this->inst,"get_property"))
-		{
-			$callback = true;
-		};
+		$callback = method_exists($this->inst,"get_property");
 		
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
@@ -80,6 +75,11 @@ class class_base extends aliasmgr
 			// I need other way to retrieve a list of dynamically
 			// generated properties from the class and display those
 
+			if ($val["editonly"] && !$this->id)
+			{
+				// skip editonly elements for new objects
+			}
+			else
 			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
 			{
 				$meth = $val["generator"];
@@ -278,29 +278,55 @@ class class_base extends aliasmgr
 	{
 		$cp = $this->get_class_picker(array("field" => "file"));
 		$this->clid = $this->orb_class->get_opt("clid");
+
 		if ($args["id"])
 		{
                         // retrieve the object
-                        $this->coredata = $this->get_object($args["id"]);
-                        // get an instance of the class that handles this object type
+			// NB! get_object dies if the object does not have the 
+			// correct type
+                        $this->coredata = $this->get_object(array(
+				"oid" => $args["id"],
+				"class_id" => $this->clid,
+			));
+
+			$this->id = $this->coredata["oid"];
                         $this->clfile = $cp[$this->coredata["class_id"]];
 			
-			$this->id = $this->coredata["oid"];
-//                        $this->filter = (int)$cs[$this->coredata["class_id"]];
 		}
 		else
 		{
-			$parobj = $this->get_object($args["parent"]);
-			$this->parent = $parobj["oid"];
+			// object should only be saved under menus
+			// NB! get_object dies if the object does not have the 
+			// correct type
+			$parobj = $this->get_object(array(
+				"oid" => $args["parent"],
+				"class_id" => CL_PSEUDO,
+			));
 
+			$this->parent = $parobj["oid"];
 			$this->clfile = $cp[$this->clid];
+
 		}
 
 		if (!$this->clfile)
 		{
 			die("coult not identify object " . $this->clfile);
 		};
+
+		// if there is a configuration form set for the current 
+		// class, load it and filter our display according to that
+		$cfg = get_instance("config");
+		$classconf = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
+
+		$use_form = $classconf[$this->clid];
+		$cfgform = $this->get_object($use_form);
+
+		$def = $this->cfg["classes"][$this->clid]["def"];
+		$this->visible_properties = $cfgform["meta"]["properties"][$def];
+		$this->el_ord = $cfgform["meta"]['ord'][$def];
+
 		
+		// get an instance of the class that handles this object type
 		$this->inst = get_instance($this->clfile);
 	}
 
@@ -373,20 +399,42 @@ class class_base extends aliasmgr
 		$activegroup = ($args["group"]) ? $args["group"] : "general";
 		$elements = array();
 		$this->groupnames = array();
+		$default_ord = 0;
 		foreach($all_props as $val)
 		{
-			if ($val["access"]["text"] != "ro")
+			$use = true;
+
+			if ($val["access"]["text"] == "ro")
+			{
+				$use = false;
+			};
+
+			$name = $val["name"]["text"];
+			if (is_array($this->visible_properties) && (!$this->visible_properties[$name]))
+			{
+				$use = false;
+			};
+
+			if ($use)
 			{
 				$grpname = ($val["group"]["text"]) ? $val["group"]["text"] : "general";
 				// stuff with no group name goes into general. 
 				if ($grpname == $activegroup)
 				{
-					$elements[] = $val;
+					$elkey = (int)$this->el_ord[$name];
+					if (!$elkey)
+					{
+						$elkey = $default_ord;
+					};
+					$elkey .= $name;
+					$elements[$elkey] = $val;
 				};
 				$this->groupnames[$grpname] = $grpname;
+				$default_ord++;
 			};
 		}
-		
+	
+		ksort($elements,SORT_NUMERIC);
 		return $elements;
 	}
 	
