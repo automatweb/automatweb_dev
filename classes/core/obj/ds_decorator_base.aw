@@ -122,12 +122,12 @@ class _int_obj_ds_decorator
 
 	function object_exists($oid)
 	{
-		$this->contained->object_exists($oid);
+		return $this->contained->object_exists($oid);
 	}
 
 	function create_brother($arr)
 	{
-		$this->contained->create_brother($arr);
+		return $this->contained->create_brother($arr);
 	}
 }
 

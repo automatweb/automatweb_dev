@@ -758,10 +758,6 @@ class _int_object
 
 	function set_meta($key, $value)
 	{
-		if (aw_global_get("uid") == "kix")
-		{
-			echo "key = $key , value = $value <br>";
-		}
 		$prev = $this->obj["meta"][$key];
 
 		$this->obj["meta"][$key] = $value;
@@ -789,10 +785,6 @@ class _int_object
 
 	function set_prop($key, $val)
 	{
-		if (aw_global_get("uid") == "kix")
-		{
-			echo "propkey = $key , value = $val <br>";
-		}
 		if (!$this->_int_is_property($key))
 		{
 			error::throw(array(
@@ -823,8 +815,14 @@ class _int_object
 			}
 			else
 			{
-				//$this->obj[$this->properties[$key]["field"]] = $val;
-				$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$field];
+				if ($this->properties[$key]["method"] == "serialize")
+				{
+					$this->obj[$this->properties[$key]["field"]][$this->properties[$key]["name"]] = $this->obj["properties"][$field];
+				}
+				else
+				{
+					$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$field];
+				}
 			}
 		}
 
@@ -942,7 +940,7 @@ class _int_object
 			"msg" => "object::create_brother($parent): no object loaded!"
 		));
 
-		error::throw_if(!$parent, array(
+		error::throw_if(!is_oid($parent), array(
 			"id" => ERR_CORE_OID,
 			"msg" => "object::create_brother($parent): no parent!"
 		));
