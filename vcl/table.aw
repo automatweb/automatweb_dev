@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.2 2001/06/14 08:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.3 2001/06/21 05:36:18 kristo Exp $
 if (!defined("AW_TABLE_LOADED"))
 {
 define("AW_TABLE_LOADED",1);
@@ -613,27 +613,32 @@ class aw_table {
 		}; // end of switch
 	}
 
-	function _xml_end_element($parser,$name) {
+	function _xml_end_element($parser,$name) 
+	{
 		// actually, this is only a dummy function that does nothing
 	}
 
-	function parse_xml_def($file) {
-		$xml_data = $this->get_file_contents($file);
+	function parse_xml_def_string($xml_data)
+	{
 		$this->sfields = array();
 		$xml_parser = xml_parser_create();
 		xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
 		xml_set_object($xml_parser,&$this);
-	        xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
-		if (!xml_parse($xml_parser,$xml_data)) {
-                        echo(sprintf("XML error: %s at line %d",
-                                      xml_error_string(xml_get_error_code($xml_parser)),
-                                      xml_get_current_line_number($xml_parser)));
-                };
-                return $this->data;
-        }
+	  xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
+		if (!xml_parse($xml_parser,$xml_data)) 
+		{
+			echo(sprintf("XML error: %s at line %d",
+				xml_error_string(xml_get_error_code($xml_parser)),
+        xml_get_current_line_number($xml_parser)));
+    };
+    return $this->data;
+	}
 
-				
-
+	function parse_xml_def($file) 
+	{
+		$xml_data = $this->get_file_contents($file);
+		return $this->parse_xml_def_string($xml_data);
+  }
 };
 }
 ?>
