@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.3 2001/10/09 11:42:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.1 2002/10/28 13:01:59 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -85,7 +85,7 @@ class form_base extends form_db_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr["contents"][$row][$col] = get_instance("formgen/form_cell");		
+				$this->arr["contents"][$row][$col] = new form_cell();		
 				$this->arr["contents"][$row][$col] -> load(&$this,$row,$col);
 			}
 		}
@@ -819,10 +819,6 @@ class form_base extends form_db_base
 	// !returns a list of forms that make up form_chain $chid
 	function get_forms_for_chain($chid)
 	{
-		if (is_array($res = aw_cache_get("form_base::get_forms_for_chain", $chid)))
-		{
-			return $res;
-		}
 		$this->save_handle();
 		$ret = array();
 		$this->db_query("SELECT form_id FROM form2chain LEFT JOIN objects ON objects.oid = form2chain.form_id WHERE chain_id = $chid AND objects.status != 0 ORDER BY ord");
@@ -831,7 +827,6 @@ class form_base extends form_db_base
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
 		$this->restore_handle();
-		aw_cache_set("form_base::get_forms_for_chain", $chid, $ret);
 		return $ret;
 	}
 
@@ -977,7 +972,7 @@ class form_base extends form_db_base
 	{
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = get_instance("formgen/form_controller");
+			$this->controller_instance = new form_controller;
 		}
 
 		if (!($ret = aw_global_get("form_controllers_cache".$add_empty)))
