@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.1 2002/10/28 13:00:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.2 2003/01/07 15:53:14 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -140,6 +140,15 @@ class form_alias extends form_base
 		}
 
 		return $replacement;
+	}
+
+	function callback_alias_cache_get_url_hash()
+	{
+		$ru = preg_replace('/tbl_sk=[^&$]*/','',aw_global_get("REQUEST_URI"));
+		$ru = preg_replace('/old_sk=[^&$]*/','',$ru);
+		// also insert current user's groups in the url. yeah yeah I know that we could do with less caches, but what the hell
+		$ru .= "&gid=".join(",",aw_global_get("gidlist"));
+		return gen_uniq_id($ru);
 	}
 
 }
