@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.101 2002/08/20 08:34:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.102 2002/08/20 08:56:01 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1248,7 +1248,7 @@ class core extends db_connector
 
 		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
 
-		$fl = ($fl) ? " AND flags = '$flags' " : "";
+		$fl = ($flags) ? " AND flags = '$flags' " : "";
 
 		if ($lang_id)
 		{
@@ -1280,10 +1280,10 @@ class core extends db_connector
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class $pstr $sc $astr $ostr";
+					WHERE class_id = $class $pstr $sc $astr $fl $ostr";
 		};
-		global $DBG;
-		if ($DBG)
+		global $DBUG;
+		if ($DBUG)
 		{
 			print $q;
 		}
