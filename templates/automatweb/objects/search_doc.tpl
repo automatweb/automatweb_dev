@@ -5,7 +5,7 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-	<td colspan=2 class="title">Search objects | <a href='pickobject.{VAR:ext}?docid={VAR:docid}'>List of objects</a></td>
+	<td colspan=2 class="title">Search objects | <a href='pickobject.{VAR:ext}?type=search&docid={VAR:docid}'>List of objects</a></td>
 </tr>
 <tr>
 	<td class="fcaption2">Search from name:</td>
