@@ -35,7 +35,6 @@ include ${ini_dir}/groups.ini
 include ${ini_dir}/cfgform.ini
 include ${ini_dir}/auth.ini
 include ${ini_dir}/banner.ini
-include ${ini_dir}/bugtrack.ini
 include ${ini_dir}/cache.ini
 include ${ini_dir}/install.ini
 include ${ini_dir}/config.ini
