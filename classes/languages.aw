@@ -340,6 +340,7 @@ class languages extends aw_template
 			}
 		}
 
+
 		// if at this point no language is active, then we must select one
 		if (!$lang_id)
 		{
@@ -362,7 +363,7 @@ class languages extends aw_template
 				$la = $this->fetch($lang_id);
 			}
 		}
-
+		
 		// assign the correct language so we can find translations
 		$LC=$la["acceptlang"];
 		if ($LC == "")
