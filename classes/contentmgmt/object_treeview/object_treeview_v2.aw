@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.34 2004/12/11 02:52:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.35 2004/12/28 09:48:56 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1159,9 +1159,16 @@ class object_treeview_v2 extends class_base
 		return $ol;
 	}
 
-	function make_menu_link($sect_obj)
+	function make_menu_link($sect_obj, $ref = NULL)
 	{
-		$link = $this->mk_my_orb("show", array("id" => $this->tree_ob->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
+		if ($ref)
+		{
+			$link = $this->mk_my_orb("show", array("id" => $ref->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
+		}
+		else
+		{
+			$link = $this->mk_my_orb("show", array("id" => $this->tree_ob->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
+		}
 		return $link;
 	}
 
