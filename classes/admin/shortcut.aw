@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.4 2004/06/15 08:49:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.5 2004/08/23 09:37:26 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -75,7 +75,7 @@ class shortcut extends class_base
 		$o->set_class_id(CL_SHORTCUT);
 		$o->set_status($val->status());
 		$o->set_comment($val->comment());
-		$o->set_jrk($val->jrk());
+		$o->set_ord($val->jrk());
 		$noid = $o->save();
 
 		header('Location:'.aw_global_get('HTTP_REFERER'));
