@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.6 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.7 2005/03/30 12:18:28 ahti Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -41,7 +41,7 @@
 @caption Haldurfirmad
 
 @property sell_prods type=checkbox ch_value=1
-@caption Ladu m&uuml;b tooteid, mitte pakendeid
+@caption Ladu m&uuml;&uuml;b tooteid, mitte pakendeid
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
