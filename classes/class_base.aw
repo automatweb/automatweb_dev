@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.221 2004/02/26 14:30:04 duke Exp $
+// $Id: class_base.aw,v 2.222 2004/02/26 16:52:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1874,7 +1874,7 @@ class class_base extends aw_template
 				{
 					if ($this->layout_mode == "fixed_toolbar")
 					{
-						$this->groupinfo = $this->groupinfo();
+						//$this->groupinfo = $this->groupinfo();
 						foreach($this->groupinfo as $grp_id => $grp_data)
 						{
 							// disable all other buttons besides the general when
@@ -2306,7 +2306,7 @@ class class_base extends aw_template
 		
 		$new = false;
 		$this->id = isset($id) ? $id : "";
-		
+
 
 		// basically, if this is a new object, then I need to load all the properties 
 		// that have default values and add them to the bunch.
@@ -2353,16 +2353,6 @@ class class_base extends aw_template
 
 		// the question is .. should I call set_property for those too?
 		// and how do I load the stuff with defaults?
-
-		$filter = array();
-		$filter["clfile"] = $this->clfile;
-		$filter["clid"] = $this->clid;
-		$filter["group"] = $group;
-		$filter["rel"] = $this->is_rel;
-		$filter["ignore_layout"] = 1;
-
-		$properties = $this->get_property_group($filter);
-
 		if (!$new)
 		{
 			$this->obj_inst = new object($this->id);
@@ -2371,6 +2361,17 @@ class class_base extends aw_template
 		{
 			$this->obj_inst = $o;
 		};
+
+		$filter = array();
+		$filter["clfile"] = $this->clfile;
+		$filter["clid"] = $this->clid;
+		$filter["group"] = $group;
+		$filter["rel"] = $this->is_rel;
+		$filter["ignore_layout"] = 1;
+		$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
+	
+		$properties = $this->get_property_group($filter);
+
 
 		$pvalues = array();
 
@@ -2649,6 +2650,7 @@ class class_base extends aw_template
 				} 
 				else
 				{
+					
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};
 			};
@@ -2968,10 +2970,20 @@ class class_base extends aw_template
 			// no config form? alright, load the default one then!
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
-				list($cfg_props,$grplist) = $this->load_from_file();
-				if (empty($this->groupinfo) || !empty($grplist))
+				$def_cfgform = aw_ini_get("document.default_cfgform");
+				if (is_oid($def_cfgform) && $this->object_exists($def_cfgform))
 				{
-					$this->groupinfo = $grplist;
+					$cfg_props = $this->load_from_storage(array(
+						"id" => $def_cfgform,
+					));
+				}
+				else
+				{
+					list($cfg_props,$grplist) = $this->load_from_file();
+					if (empty($this->groupinfo) || !empty($grplist))
+					{
+						$this->groupinfo = $grplist;
+					};
 				};
 			};
 		};
@@ -3163,6 +3175,16 @@ class class_base extends aw_template
 				if (empty($grps))
 				{
 					$grps = $grplist;
+				}
+				else
+				{
+					foreach($grps as $gkey => $gitem)
+					{
+						if (empty($gitem["icon"]) && !empty($grplist[$gkey]["icon"]))
+						{
+							$grps[$gkey]["icon"] = $grplist[$gkey]["icon"];
+						};
+					};
 				};
 			};
 			$this->groupinfo = $grps;
