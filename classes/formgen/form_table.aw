@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.15 2002/11/27 15:59:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.16 2002/12/02 17:44:25 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -594,7 +594,7 @@ class form_table extends form_base
 				{
 					$this->table_not_empty_cols[$col] = true;
 				}
-				$dat["ev_col_".$col] = $this->create_email_links($str);
+				$dat["ev_col_".$col] = create_links($str);
 			}
 		}
 
@@ -3015,11 +3015,6 @@ class form_table extends form_base
 			$ret ="<input type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."'>";
 		}
 		return $ret;
-	}
-
-	function create_email_links($str)
-	{
-		return preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
 	}
 
 	function callback_alias_cache_get_url_hash($arr)
