@@ -76,7 +76,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 
 @default group=chpwd
 
-@property passwd field=password type=password store=no
+@property passwd type=password store=no
 @caption Password
 
 @property passwd_again type=password store=no

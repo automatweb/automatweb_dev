@@ -132,11 +132,11 @@
       </property>
       <property>
             <name>passwd</name>
-            <field>password</field>
             <type>password</type>
             <store>no</store>
             <table>users</table>
             <group>chpwd</group>
+            <field>passwd</field>
             <caption>Password</caption>
       </property>
       <property>
