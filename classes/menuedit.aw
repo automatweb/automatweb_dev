@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.73 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.74 2001/11/28 17:00:13 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -162,7 +162,7 @@ class menuedit extends aw_template
 
 		$use_cache = true;
 
-		if ($params["print"])
+		if ($params["print"] || $params["text"])
 		{
 			$not_cached = true;
 			$use_cache = false;
@@ -2530,7 +2530,8 @@ class menuedit extends aw_template
 		$q = "SELECT * FROM menu WHERE id = '$parent'";
 		$this->db_query($q);
 		$par_info = $this->db_fetch_row();
-		if ((($parent == 1) || ($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
+		if ((($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
+		#if ((($parent == 1) || ($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		{
 			$classlist = $this->option_list(1,array("69" => LC_MENUEDIT_CLIENT));
 			// sektsioonid, mida saab teha kohe kliendi alla
@@ -3961,6 +3962,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array(
 				"text" 		=> $row["name"],
 				"link" 		=> $link,
+				"comment" 	=> $row["comment"],
 				"section"	=> $row["oid"],
 				"target" 	=> $target,
 				"image"		=> $imgurl,
@@ -4001,11 +4003,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$this->vars(array($mn."_MID" => $l_mid));
 			};
+
 			if ($this->is_template($mn."2"))
 			{
 				$l2.=$this->parse($mn."2".$ap);
 				$this->vars(array($mn."2".$ap => ""));
 				$second = true;
+
 			}
 
 			// ok, here's the tricky bit
