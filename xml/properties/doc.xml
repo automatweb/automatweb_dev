@@ -475,6 +475,9 @@
             <group>general</group>
             <field>sbt</field>
       </property>
+      <classinfo>
+            <trans>1</trans>
+      </classinfo>
       <groupinfo>
             <calendar>
                   <caption>Kalender</caption>
