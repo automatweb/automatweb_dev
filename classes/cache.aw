@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.27 2004/03/11 21:49:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.28 2004/03/12 12:31:48 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -137,6 +137,7 @@ class cache extends core
 				chmod($fname, 0777);
 			}
 
+			/*
 			$fname .= "/".$hash{1};
 			if (!is_dir($fname))
 			{
@@ -150,6 +151,7 @@ class cache extends core
 				@mkdir($fname, 0777);
 				chmod($fname, 0777);
 			}
+			*/
 
 			$fname .= "/$key";
 			$this->put_file(array("file" => $fname, "content" => $value));
@@ -172,7 +174,8 @@ class cache extends core
 	function get_fqfn($key)
 	{
 		$hash = md5($key);
-		return $this->cfg["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$key;
+		//return $this->cfg["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$key;
+		return $this->cfg["page_cache"]."/".$hash{0}."/".$key;
 	}
 
 	function file_get_ts($key, $ts)
@@ -192,10 +195,14 @@ class cache extends core
 
 	function file_invalidate($key)
 	{
+		global $awt;
+		$awt->start("file-invalidate");
+		$awt->count("file-invalidate");
 		if ($this->cfg["page_cache"] != "")
 		{
 			@unlink($this->get_fqfn($key));
 		}
+		$awt->stop("file-invalidate");
 	}
 
 	// fname = fully qualified file name minus basedir
