@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>kilogramms</name>
+            <type>textbox</type>
+            <table>aw_profile_weight</table>
+            <group>general</group>
+            <field>kilogramms</field>
+            <caption>Kilogrammides</caption>
+      </property>
+      <property>
+            <name>Pounds</name>
+            <type>textbox</type>
+            <table>aw_profile_weight</table>
+            <group>general</group>
+            <field>Pounds</field>
+            <caption>Naeltes</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROFILE_WEIGHT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <aw_profile_weight>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_profile_weight>
+      </tableinfo>
+</properties>
+

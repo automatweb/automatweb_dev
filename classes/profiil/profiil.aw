@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/profiil/Attic/profiil.aw,v 1.1 2004/02/05 14:58:09 jaanj Exp $
+// $Header: /home/cvs/automatweb_dev/classes/profiil/Attic/profiil.aw,v 1.2 2004/02/09 11:19:36 jaanj Exp $
 // profiil.aw - Profiil 
 /*
 
@@ -12,6 +12,12 @@
 @groupinfo comments caption=Kommentaarid
 
 @tableinfo aw_profiles index=id master_table=objects master_index=brother_of
+
+@property height type=relpicker reltype=RELTYPE_PRF_HEIGHT automatic=1 group=settings table=aw_profiles
+@caption Pikkus
+
+@property weight type=relpicker reltype=RELTYPE_PRF_WEIGHT automatic=1 group=settings table=aw_profiles
+@caption Kaal
 
 @property eyes_color type=relpicker reltype=RELTYPE_PRF_EYES_COLOR automatic=1 group=settings table=aw_profiles
 @caption Silmade värv
@@ -28,8 +34,8 @@
 @property sexual_orientation type=relpicker reltype=RELTYPE_PRF_SEX_ORIENT automatic=1 group=settings table=aw_profiles
 @caption Seksuaalne kalduvus   
 
-@property alcohol type=relpicker reltype=RELTYPE_PRF_ALCOHOL automatic=1 group=settings table=aw_profiles
-@caption Alkoholi tarbimine
+property alcohol type=relpicker reltype=RELTYPE_PRF_ALCOHOL automatic=1 group=settings table=aw_profiles
+caption Alkoholi tarbimine
 
 @property tobacco type=relpicker reltype=RELTYPE_PRF_TOBACCO automatic=1 group=settings table=aw_profiles
 @caption Tubaka tarbimine
@@ -63,6 +69,12 @@
 
 @reltype AW_PERSON value=9 clid=CL_CRM_PERSON
 @caption Isikuobjekt
+
+@reltype PRF_HEIGHT value=10 clid=CL_PROFILE_HEIGHT
+@caption Pikkus
+
+@reltype PRF_WEIGHT value=11 clid=CL_PROFILE_WEIGHT
+@caption Kaal
 
 */
 

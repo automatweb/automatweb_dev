@@ -1,6 +1,26 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>height</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_HEIGHT</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>height</field>
+            <caption>Pikkus</caption>
+      </property>
+      <property>
+            <name>weight</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_WEIGHT</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>weight</field>
+            <caption>Kaal</caption>
+      </property>
+      <property>
             <name>eyes_color</name>
             <type>relpicker</type>
             <reltype>RELTYPE_PRF_EYES_COLOR</reltype>
@@ -49,16 +69,6 @@
             <table>aw_profiles</table>
             <field>sexual_orientation</field>
             <caption>Seksuaalne kalduvus   </caption>
-      </property>
-      <property>
-            <name>alcohol</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PRF_ALCOHOL</reltype>
-            <automatic>1</automatic>
-            <group>settings</group>
-            <table>aw_profiles</table>
-            <field>alcohol</field>
-            <caption>Alkoholi tarbimine</caption>
       </property>
       <property>
             <name>tobacco</name>
@@ -149,6 +159,16 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Isikuobjekt</caption>
             </AW_PERSON>
+            <PRF_HEIGHT>
+                  <value>10</value>
+                  <clid>CL_PROFILE_HEIGHT</clid>
+                  <caption>Pikkus</caption>
+            </PRF_HEIGHT>
+            <PRF_WEIGHT>
+                  <value>11</value>
+                  <clid>CL_PROFILE_WEIGHT</clid>
+                  <caption>Kaal</caption>
+            </PRF_WEIGHT>
       </reltypes>
 </properties>
 

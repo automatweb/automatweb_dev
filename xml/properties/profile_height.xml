@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>meters</name>
+            <type>textbox</type>
+            <table>aw_profile_height</table>
+            <group>general</group>
+            <field>meters</field>
+            <caption>Sentimeetrites</caption>
+      </property>
+      <property>
+            <name>inches</name>
+            <type>textbox</type>
+            <table>aw_profile_height</table>
+            <group>general</group>
+            <field>inches</field>
+            <caption>Tollides</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROFILE_HEIGHT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <aw_profile_height>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_profile_height>
+      </tableinfo>
+</properties>
+
