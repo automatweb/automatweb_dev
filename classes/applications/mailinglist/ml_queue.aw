@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.7 2004/12/20 10:49:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.8 2004/12/23 09:47:13 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -481,7 +481,7 @@ class ml_queue extends aw_template
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
-				//decho("saadan  meili<br />");flush();//dbg
+				//echo("saadan  meili<br />");flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
 				$this->mark_queue_locked($qid);
@@ -491,7 +491,8 @@ class ml_queue extends aw_template
 				$stat = ML_QUEUE_IN_PROGRESS;
 				$c = 0;
 				//arr($qid);
-				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND mail_sent IS NULL";
+				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0)";
+				//echo "qx = $qx <br>";
 				$this->db_query($qx);
 				$msg_data = true;
 				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS && $msg_data)
