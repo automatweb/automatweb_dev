@@ -36,5 +36,19 @@
 			</function>
 		</action>
 
+		<action name="cut">
+			<function name="do_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste">
+			<function name="do_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

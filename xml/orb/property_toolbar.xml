@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="property_toolbar" folder="applications/class_designer" extends="class_base">
+	</class>
+</orb>
+		

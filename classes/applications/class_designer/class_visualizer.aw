@@ -135,30 +135,6 @@ class class_visualizer extends aw_template
 					"caption" => $el->name(),
 					"type" => $eltype,
 				);
-				if ($clid == CL_PROPERTY_TABLE)
-				{
-					$t = new vcl_table();
-					$table_items = new object_list(array(
-						"parent" => $el->id(),
-					));
-					foreach($table_items->arr() as $table_item)
-					{
-						$sortable = $table_item->prop("sortable");
-						$celldata = array(
-							"name" => $table_item->name(),
-							"caption" => $table_item->name(),
-							"width" => $table_item->prop("width"),
-							//"sortable" => (1 == $table_item->prop("sortable")) ? 1 : 0,
-						);
-						if ($sortable)
-						{
-							$celldata["sortable"] = 1;
-						};
-						$t->define_field($celldata);
-					};
-					$propdata["vcl_inst"] = $t;
-				}
-				else
 				if ($clid == CL_PROPERTY_CHOOSER)
 				{
 					$propdata["multiple"] = $el->prop("multiple");

@@ -11,14 +11,30 @@
             <store>no</store>
             <caption>Veerud</caption>
       </property>
+      <property>
+            <name>demo_data_table</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Demo andmed</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TABLE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <designer>
                   <caption>Tulbad</caption>
             </designer>
+            <data>
+                  <caption>Demo andmed</caption>
+            </data>
       </groupinfo>
 </properties>
 

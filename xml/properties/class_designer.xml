@@ -122,6 +122,29 @@
             <method>serialize</method>
             <type>hidden</type>
       </property>
+      <property>
+            <name>relations_mgr</name>
+            <table>objects</table>
+            <group>relations</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_RELATION</reltype>
+            <mode>manager</mode>
+            <no_caption>1</no_caption>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>r_class_id</num_1>
+                  <num_2>value</num_2>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>r_class_id</num_1>
+                  <num_2>value</num_2>
+            </table_fields>
+            <store>no</store>
+            <caption>Seosed</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -134,11 +157,22 @@
                   <caption>Disainer</caption>
                   <submit>no</submit>
             </designer>
+            <relations>
+                  <caption>Seosed</caption>
+                  <submit>no</submit>
+            </relations>
             <classdef>
                   <caption>Klassi definitsioon</caption>
                   <submit>no</submit>
             </classdef>
       </groupinfo>
+      <reltypes>
+            <RELATION>
+                  <value>1</value>
+                  <clid>CL_CLASS_DESIGNER_RELATION</clid>
+                  <caption>seos</caption>
+            </RELATION>
+      </reltypes>
       <layout>
             <hbox1>
                   <type>hbox</type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table_column.aw,v 1.1 2005/02/28 10:45:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table_column.aw,v 1.2 2005/03/03 15:20:55 kristo Exp $
 // property_table_column.aw - Tabeli veerg 
 /*
 
@@ -23,6 +23,9 @@
 @property nowrap type=checkbox ch_value=1
 @caption Poolitamine keelatud
 
+@property align type=select
+@caption Joondamine
+
 */
 
 class property_table_column extends class_base
@@ -34,21 +37,18 @@ class property_table_column extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "align":
+				$prop["options"] = array("" => "", "left" => "Vasakul", "center" => "Keskel", "right" => "Paremal");
+				break;
 		};
 		return $retval;
 	}
-	*/
 
 	/*
 	function set_property($arr = array())

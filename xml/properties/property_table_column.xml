@@ -39,6 +39,15 @@
             <ch_value>1</ch_value>
             <caption>Poolitamine keelatud</caption>
       </property>
+      <property>
+            <name>align</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Joondamine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TABLE_COLUMN</syslog_type>
             <relationmgr>yes</relationmgr>

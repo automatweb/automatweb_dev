@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>buttons</name>
+            <table>objects</table>
+            <group>buttons</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_BUTTON</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>b_type</num_1>
+            </props>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_TOOLBAR</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <buttons>
+                  <caption>Nupud</caption>
+            </buttons>
+      </groupinfo>
+      <reltypes>
+            <BUTTON>
+                  <value>1</value>
+                  <clid>CL_PROPERTY_TOOLBAR_BUTTON</clid>
+                  <caption>nupp</caption>
+            </BUTTON>
+      </reltypes>
+</properties>
+

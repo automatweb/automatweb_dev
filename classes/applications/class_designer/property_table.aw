@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.1 2005/02/28 10:45:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.2 2005/03/03 15:20:55 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
-@classinfo syslog_type=ST_PROPERTY_TABLE relationmgr=yes
+@classinfo syslog_type=ST_PROPERTY_TABLE relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
 @default group=general
@@ -12,10 +12,16 @@
 
 @default group=designer
 
-@property design_table type=table no_caption=1
-@caption Veerud
+	@property design_table type=table no_caption=1
+	@caption Veerud
+
+@default group=data
+
+	@property demo_data_table type=table no_caption=1
+	@caption Demo andmed
 
 @groupinfo designer caption="Tulbad"
+@groupinfo data caption="Demo andmed"
 
 */
 
@@ -28,9 +34,6 @@ class property_table extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -39,6 +42,10 @@ class property_table extends class_base
 		{
 			case "design_table":
 				$this->generate_design_table(&$arr);
+				break;
+
+			case "demo_data_table":
+				$this->generate_demo_data_table(&$arr);
 				break;
 		};
 		return $retval;
@@ -52,6 +59,10 @@ class property_table extends class_base
 		{
 			case "design_table":
 				$this->update_columns($arr);
+				break;
+
+			case "demo_data_table":
+				$this->save_demo_data_t($arr);
 				break;
 
 		}
@@ -79,6 +90,12 @@ class property_table extends class_base
 		$t->define_field(array(
 			"name" => "sortable",
 			"caption" => "Sorteeritav",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "align",
+			"caption" => "Joondamine",
 			"align" => "center",
 		));
 
@@ -110,6 +127,7 @@ class property_table extends class_base
 
 	}
 
+
 	function update_columns($arr)
 	{
 		$name = $arr["prop"]["name"];
@@ -136,6 +154,7 @@ class property_table extends class_base
 			$o->set_prop("ord",$coldat["ord"]);
 			$o->set_prop("width",$coldat["width"]);
 			$o->set_prop("sortable",$coldat["sortable"]);
+			$o->set_prop("align",$coldat["align"]);
 			
 			//print "creating new column object from the following data<br>";
 			$o->save();
@@ -173,7 +192,83 @@ class property_table extends class_base
 				"ch_value" => 1,
 				"checked" => ($arr["data"]["sortable"] == 1),
 			)),
+			"align" => html::select(array(
+				"name" => "${name}[${key}][align]",
+				"options" => array("" => "", "left" => "Vasakul", "center" => "Keskel", "right" => "Paremal"),
+				"selected" => $arr["data"]["align"],
+			))
 		));
+	}
+
+	function generate_demo_data_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+
+		$ol = new object_list(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"class_id" => CL_PROPERTY_TABLE_COLUMN,
+		));
+		$ol->sort_by(array(
+			"prop" => "ord"
+		));
+
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->name(),
+				"caption" => $o->name(),
+				"sortable" => $o->prop("sortable"),
+				"width" => $o->prop("width"),
+				"nowrap" => $o->prop("nowrap"),
+				"align" => $o->prop("align")
+			));
+		}
+
+		$dd = safe_array($arr["obj_inst"]->meta("demo_data"));
+		$dd[] = array();
+
+		$nr = 1;
+		foreach($dd as $row)
+		{
+			$row_def = array();
+			foreach($ol->arr() as $o)
+			{
+				$row_def[$o->prop("name")] = html::textbox(array(
+					"name" => "dd[$nr][".$o->prop("name")."]",
+					"value" => $dd[$nr][$o->prop("name")],
+				));
+			}
+			$nr++;
+
+			$t->define_data($row_def);
+		}
+	}
+
+	function save_demo_data_t($arr)
+	{
+		$dd = array();
+
+		$nr = 1;
+		foreach(safe_array($arr["request"]["dd"]) as $nr => $row)
+		{
+			$data = array();
+			foreach(safe_array($row) as $k => $v)
+			{
+				if (trim($v) != "")
+				{
+					$data[$k] = $v;
+				}
+			}
+
+			if (count($data))
+			{
+				$dd[$nr] = $data;
+			}
+			$nr++;
+		}
+
+		$arr["obj_inst"]->set_meta("demo_data", $dd);
 	}
 
 	function generate_get_property($arr)
@@ -209,11 +304,50 @@ class property_table extends class_base
 			$rv .= "\t\t\t" . '"caption" => "' . $el->name() . '",' . "\n";
 			$rv .= "\t\t\t" . '"width" => "' . $el->prop("width") . '",' . "\n";
 			$rv .= "\t\t\t" . '"sortable" => "' . $el->prop("sortable") . '",' . "\n";
+			if ($el->prop("align") != "")
+			{
+				$rv .= "\t\t\t" . '"align" => "' . $el->prop("align") . '",' . "\n";
+			}
 			$rv .= "\t\t" . ');' . "\n";
 			
 		};
 		$rv .= "\t};\n";
 		return $rv;
+	}
+
+	function get_visualizer_prop($el, &$propdata)
+	{
+		$t = new vcl_table();
+		$table_items = new object_list(array(
+			"parent" => $el->id(),
+		));
+		foreach($table_items->arr() as $table_item)
+		{
+			$sortable = $table_item->prop("sortable");
+			$celldata = array(
+				"name" => $table_item->name(),
+				"caption" => $table_item->name(),
+				"width" => $table_item->prop("width"),
+			);
+			if ($table_item->prop("sortable"))
+			{
+				$celldata["sortable"] = 1;
+			};
+
+			if ($table_item->prop("align") != "")
+			{
+				$celldata["align"] = $table_item->prop("align");
+			};
+			$t->define_field($celldata);
+		};
+
+		// get demo data
+		$dd = safe_array($el->meta("demo_data"));
+		foreach($dd as $row)
+		{
+			$t->define_data($row);
+		}
+		$propdata["vcl_inst"] = $t;
 	}
 }
 ?>

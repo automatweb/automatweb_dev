@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>b_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Nupu t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_TOOLBAR_BUTTON</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+</properties>
+

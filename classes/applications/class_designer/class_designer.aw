@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.2 2005/03/03 13:39:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.3 2005/03/03 15:20:55 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -50,9 +50,19 @@
 @property tmp_name type=hidden
 @property element_type type=hidden
 
+@default group=relations
+
+	@property relations_mgr type=releditor reltype=RELTYPE_RELATION mode=manager no_caption=1 props=name,r_class_id,value table_fields=name,r_class_id,value 
+	@caption Seosed
+
 @groupinfo settings caption="Seaded"
 @groupinfo designer caption="Disainer" submit=no
+@groupinfo relations caption="Seosed" submit=no
 @groupinfo classdef caption="Klassi definitsioon" submit=no
+
+
+@reltype RELATION value=1 clid=CL_CLASS_DESIGNER_RELATION
+@caption seos
 
 */
 
@@ -69,8 +79,14 @@ class class_designer extends class_base
 				CL_PROPERTY_TEXTBOX,CL_PROPERTY_CHOOSER,
 				CL_PROPERTY_CHECKBOX,CL_PROPERTY_TABLE,
 				CL_PROPERTY_TEXTAREA,CL_PROPERTY_SELECT,
-				CL_PROPERTY_TREE
+				CL_PROPERTY_TREE,CL_PROPERTY_TOOLBAR
 				);
+	}
+
+	function callback_mod_reforb(&$arr)
+	{
+		$arr["return_url"] = aw_global_get("REQUEST_URI");
+		$arr["group_parent"] = $_GET["group_parent"];
 	}
 
 	function callback_pre_edit($arr)
@@ -273,7 +289,6 @@ class class_designer extends class_base
 
 		$tb->add_separator();
 
-		/*
 		$tb->add_button(array(
 			"name" => "cut",
 			"action" => "cut",
@@ -281,14 +296,17 @@ class class_designer extends class_base
 			"action" => "cut",
 			"img" => "cut.gif",
 		));
-		$tb->add_button(array(
-			"name" => "paste",
-			"action" => "paste",
-			"tooltip" => t("Paste"),
-			"action" => "paste",
-			"img" => "paste.gif",
-		));
-		*/
+
+		if (count(safe_array($_SESSION["cd_cut"])) > 0 && $this->can_add["element"])
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"action" => "paste",
+				"tooltip" => t("Paste"),
+				"action" => "paste",
+				"img" => "paste.gif",
+			));
+		}
 
 		$tb->add_button(array(
 			"name" => "delete",
@@ -342,6 +360,8 @@ class class_designer extends class_base
 
 		$clinf = aw_ini_get("classes");
 
+		$elords = $arr["obj_inst"]->meta("element_ords");
+
 		foreach($elist->arr() as $element)
 		{
 			$el_id = $element->id();
@@ -356,11 +376,11 @@ class class_designer extends class_base
 				)),
 				"id" => $el_id,
 				"class_id" => $clinf[$el_clid]["name"],
-				"ord" => $element->prop("ord"),
+				"ord" => $elords[$element->id()],
 				"ordbox" => html::textbox(array(
 					"name" => "ord[${el_id}]",
 					"size" => 2,
-					"value" => $element->prop("ord"),
+					"value" => $elords[$element->id()],
 				)),
 				"edit" => html::href(array(
 					"caption" => "Muuda",
@@ -436,8 +456,7 @@ class class_designer extends class_base
 			$e->set_name($arr["tmp_name"]);
 			$e->save();
 		};
-		$arr["action"] = "change";
-		return $this->finish_action($arr);
+		return $arr["return_url"];
 	}
 
 	/**
@@ -445,19 +464,29 @@ class class_designer extends class_base
 	**/
 	function save_elements($arr)
 	{
-		if (is_array($arr["ord"]))
+		$o = obj($arr["id"]);
+		$ords = safe_array($o->meta("element_ords"));
+		foreach(safe_array($arr["ord"]) as $elid => $elord)
 		{
-			foreach($arr["ord"] as $oid => $ord)
-			{
-				$el_o = new object($oid);
-				$el_o->set_prop("ord",$ord);
-				$el_o->set_name($arr["name"][$oid]);
-				$el_o->save();
-			};
-		};
-		$arr["action"] = "change";
-		return $this->finish_action($arr);
+			$ords[$elid] = $elord;
+		}
+		$o->set_meta("element_ords", $ords);
+		$o->save();
 
+		return $arr["return_url"];
+
+	}
+
+	function __ellist_comp($a, $b)
+	{
+		$a_o = $this->__elord[$a->id()];
+		$b_o = $this->__elord[$b->id()];
+
+		if ($a_o == $b_o)
+		{
+			return 0;
+		}
+		return ($a_o > $b_o ? 1 : -1);
 	}
 
 	function gen_classdef($arr)
@@ -483,7 +512,12 @@ class class_designer extends class_base
 		$gpblock = "";
 		$methods = "";
 
-		foreach($cl_list->arr() as $el)
+		// sort elements according to order in metadata
+		$this->__elord = $c->meta("element_ords");
+		$ellist = $cl_list->arr();
+		usort($ellist, array(&$this, "__ellist_comp"));
+
+		foreach($ellist as $el)
 		{
 			$el_clid = $el->class_id();
 			$name = $el->name();
@@ -582,7 +616,38 @@ class class_designer extends class_base
 				$o->delete();
 			};
 		};
-		return $this->finish_action($arr);
+		return $arr["return_url"];
+	}
+
+	/** cuts properties
+
+		@attrib name=cut
+
+	**/
+	function do_cut($arr)
+	{
+		$_SESSION["cd_cut"] = safe_array($arr["sel"]);
+		return $arr["return_url"];
+	}
+
+	/** pastes properties
+
+		@attrib name=paste
+
+	**/
+	function do_paste($arr)
+	{
+		foreach(safe_array($_SESSION["cd_cut"]) as $oid)
+		{
+			if (is_oid($oid) && $this->can("edit", $oid))
+			{
+				$o = obj($oid);
+				$o->set_parent($arr["group_parent"]);
+				$o->save();
+			}
+		}
+		$_SESSION["cd_cut"] = array();
+		return $arr["return_url"];
 	}
 }
 ?>
