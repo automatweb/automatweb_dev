@@ -34,7 +34,7 @@
             <reltype>RELTYPE_COMPANY</reltype>
             <table>aw_crm_company_roles</table>
             <field>aw_client</field>
-            <caption>Klkient</caption>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>unit</name>

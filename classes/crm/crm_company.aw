@@ -2659,11 +2659,28 @@ class crm_company extends class_base
 		$role_entry_list = new object_list(array(
 			"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
 			"company" => $arr["request"]["id"],
-			"client" => $orglist
+			"client" => $orglist,
+			"project" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
 		));
 		foreach($role_entry_list->arr() as $role_entry)
 		{
-			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("person")][] = $role_entry->prop_str("unit")."/".$role_entry->prop_str("role");
+			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("person")][] = html::get_change_url(
+					$arr["request"]["id"], 
+					array(
+						"group" => "contacts2",
+						"unit" => $role_entry->prop("unit"),
+					), 
+					$role_entry->prop_str("unit")
+				)
+				."/".
+				html::get_change_url(
+					$arr["request"]["id"], 
+					array(
+						"group" => "contacts2",
+						"cat" => $role_entry->prop("role")
+					), 
+					$role_entry->prop_str("role")
+				);
 		}
 
 		foreach($orgs as $org)
@@ -2725,26 +2742,10 @@ class crm_company extends class_base
 
 			};
 
-			$role_url = $this->mk_my_orb("change", array(
+			$roles = $this->_get_role_html(array(
 				"from_org" => $arr["request"]["id"],
-				"to_org" => $o->id()
-			), "crm_role_manager");
-
-			$roles = array();
-			
-			foreach(safe_array($rc_by_co[$o->id()]) as $r_p_id => $r_p_data)
-			{
-				$r_p_o = obj($r_p_id);
-				$roles[] = $r_p_o->name().": ".join(",", $r_p_data);
-			}
-			$roles = join("<br>", $roles);
-
-			$roles .= ($roles != "" ? "<br>" : "" ).html::popup(array(
-				"url" => $role_url,
-				'caption' => t('Rollid'),
-				"width" => 800,
-				"height" => 600,
-				"scrollbars" => "auto"
+				"to_org" => $o->id(),
+				"rc_by_co" => $rc_by_co
 			));
 
 			$tf->define_data(array(
@@ -4597,7 +4598,23 @@ class crm_company extends class_base
 		));
 		foreach($role_entry_list->arr() as $role_entry)
 		{
-			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("project")][$role_entry->prop("person")][] = $role_entry->prop_str("unit")."/".$role_entry->prop_str("role");
+			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("project")][$role_entry->prop("person")][] = html::get_change_url(
+					$arr["request"]["id"], 
+					array(
+						"group" => "contacts2",
+						"unit" => $role_entry->prop("unit"),
+					), 
+					$role_entry->prop_str("unit")
+				)
+				."/".
+				html::get_change_url(
+					$arr["request"]["id"], 
+					array(
+						"group" => "contacts2",
+						"cat" => $role_entry->prop("role")
+					), 
+					$role_entry->prop_str("role")
+				);
 		}
 		
 		foreach ($ol->arr() as $project)
@@ -4614,26 +4631,11 @@ class crm_company extends class_base
 				)); 
 			}
 
-			$role_url = $this->mk_my_orb("change", array(
+			$roles = $this->_get_role_html(array(
 				"from_org" => $arr["request"]["id"],
+				"to_org" => $arr["request"]["org_id"],
+				"rc_by_co" => $rc_by_co,
 				"to_project" => $project->id()
-			), "crm_role_manager");
-			
-			$roles = array();
-			
-			foreach(safe_array($rc_by_co[$arr["request"]["org_id"]][$project->id()]) as $r_p_id => $r_p_data)
-			{
-				$r_p_o = obj($r_p_id);
-				$roles[] = $r_p_o->name().": ".join(",", $r_p_data);
-			}
-			$roles = join("<br>", $roles);
-
-			$roles .= ($roles != "" ? "<br>" : "" ).html::popup(array(
-				"url" => $role_url,
-				'caption' => t('Rollid'),
-				"width" => 800,
-				"height" => 600,
-				"scrollbars" => "auto"
 			));
 
 			$table->define_data(array(
@@ -4904,6 +4906,39 @@ class crm_company extends class_base
 		unset($_SESSION["crm_copy_p"]);
 
 		return urldecode($arr["return_url"]);
+	}
+
+	function _get_role_html($arr)
+	{
+		extract($arr);
+		$role_url = $this->mk_my_orb("change", array(
+			"from_org" => $from_org,
+			"to_org" => $to_org,
+			"to_project" => $to_project
+		), "crm_role_manager");
+
+		$roles = array();
+			
+		$iter = safe_array($rc_by_co[$to_org]);
+		if (!empty($to_project))
+		{
+			$iter = safe_array($rc_by_co[$to_org][$to_project]);
+		}
+		foreach($iter as $r_p_id => $r_p_data)
+		{
+			$r_p_o = obj($r_p_id);
+			$roles[] = html::get_change_url($r_p_o->id(), array(), $r_p_o->name()).": ".join(",", $r_p_data);
+		}
+		$roles = join("<br>", $roles);
+
+		$roles .= ($roles != "" ? "<br>" : "" ).html::popup(array(
+			"url" => $role_url,
+			'caption' => t('Rollid'),
+			"width" => 800,
+			"height" => 600,
+			"scrollbars" => "auto"
+		));
+		return $roles;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_role_entry.aw,v 1.1 2004/11/19 11:26:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company_role_entry.aw,v 1.2 2004/12/10 09:01:21 kristo Exp $
 // crm_company_role_entry.aw - Rolli kirje 
 /*
 
@@ -19,7 +19,7 @@
 @caption Organisatsioon
 
 @property client type=relpicker reltype=RELTYPE_COMPANY table=aw_crm_company_roles field=aw_client
-@caption Klkient
+@caption Klient
 
 @property unit type=relpicker reltype=RELTYPE_UNIT table=aw_crm_company_roles field=aw_unit
 @caption &Uuml;ksus

@@ -100,18 +100,40 @@ class crm_role_manager extends class_base
 			$o = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
 
 			$filt["client"] = $o->id();
+
+			$persons = array();
+			$rels = array();
+			$ol = new object_list($filt);
+			foreach($ol->arr() as $tmp_o)
+			{
+				$persons_f[$tmp_o->prop("person")] = $tmp_o->prop("person");
+			}
+
+			$filt["project"] = $r["to_project"];
+			$ol = new object_list($filt);
+			foreach($ol->arr() as $tmp_o)
+			{
+				$persons[$tmp_o->prop("person")] = $tmp_o->prop("person");
+				$rels[$tmp_o->prop("person")] = $tmp_o->id();
+			}
 		}
 		else
 		{
-			//$filt["client"] = $r["to_org"];
+			$persons = array();
+			$rels = array();
+			$ol = new object_list($filt);
+			foreach($ol->arr() as $tmp_o)
+			{
+				$persons[$tmp_o->prop("person")] = $tmp_o->prop("person");
+				$rels[$tmp_o->prop("person")] = $tmp_o->id();
+			}
 		}
 
-		$persons = array();
-		$ol = new object_list($filt);
-		foreach($ol->arr() as $tmp_o)
-		{
-			$persons[$tmp_o->prop("person")] = $tmp_o->prop("person");
-		}
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => "Vali roll",
+			"align" => "center"
+		));
 
 		$c = get_instance(CL_CRM_COMPANY);
 		$c->do_human_resources(array(
@@ -120,8 +142,29 @@ class crm_role_manager extends class_base
 			),
 			"request" => $r,
 			"obj_inst" => obj($org),
-			"person_filter" => $persons
+			"person_filter" => $r["to_project"] ? $persons_f : NULL
 		));
+
+		// re-arrange the table a bit
+		$t->remove_chooser();
+		
+		// add column
+		$dat = array();
+		foreach($t->get_data() as $idx => $row)
+		{
+			$row["check"] = html::checkbox(array(
+				"name" => "check[]",
+				"value" => $row["id"],
+				"checked" => isset($persons[$row["id"]])
+			)).html::hidden(array(
+				"name" => "rels[".$row["id"]."]",
+				"value" => $rels[$row["id"]]
+			)).html::hidden(array(
+				"name" => "r2p[".$rels[$row["id"]]."]",
+				"value" => $row["id"]
+			));
+			$t->set_data($idx, $row);
+		}
 
 		$this->vars(array(
 			"table" => $t->draw()
@@ -178,14 +221,15 @@ class crm_role_manager extends class_base
 		$ol = new object_list($filt);
 
 		$names = $ol->names();
+		//die(dbg::dump($names).dbg::dump($arr));
 		// now, if any of the selected persons were not present, add them 
 		// the objects will be added under the client org
 		foreach(safe_array($arr["check"]) as $p_id)
 		{
-			if (!isset($names[$p_id]))
+			if (!isset($names[$arr["rels"][$p_id]]))
 			{
 				$o = obj();
-				$o->set_parent(is_oid($arr["to_org"]) ? $arr["to_org"] : $arr["to_project"]);
+				$o->set_parent(is_oid($arr["to_project"]) ? $arr["to_project"] : $arr["to_org"]);
 				$o->set_class_id(CL_CRM_COMPANY_ROLE_ENTRY);
 				$o->set_prop("person", $p_id);
 				$o->set_prop("role", $arr["cat"]);
@@ -194,6 +238,22 @@ class crm_role_manager extends class_base
 				$o->set_prop("unit", $arr["unit"]);
 				$o->set_prop("project", $arr["to_project"]);
 				$o->save();
+			}
+		}
+
+		$ck = safe_array($arr["check"]);
+		// remove the ones that are in persons and not in check
+		foreach(safe_array($arr["rels"]) as $p_id)
+		{
+			if (!is_oid($p_id))
+			{
+				continue;
+			}
+			$o_id = $arr["r2p"][$p_id];
+			if (!in_array($o_id, $ck))
+			{
+				$o = obj($p_id);
+				$o->delete();
 			}
 		}
 
