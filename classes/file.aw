@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.83 2004/06/26 08:06:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.84 2004/06/29 11:49:56 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -555,6 +555,10 @@ class file extends class_base
 	function get_file_by_id($id) 
 	{
 		$tmp = obj($id);
+		if ($tmp->class_id() != CL_FILE)
+		{
+			return array();
+		}
 		$row = new aw_array($tmp->fetch());
 		$this->db_query("SELECT * FROM files WHERE id = $id");
 		$ar = new aw_array($this->db_next());
