@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.48 2003/06/04 14:19:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.49 2003/06/11 21:29:38 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -170,7 +170,7 @@
 	@property show_period_count type=textbox size=4 group=show table=objects field=meta method=serialize
 	@caption Mitu viimast perioodi
 
-	@property export type=callback callback=callback_get_export_options group=import_export
+	@property export type=callback callback=callback_get_export_options group=import_export store=no
 	@caption Eksport
 
 	@classinfo relationmgr=yes
@@ -516,7 +516,7 @@ class menu extends class_base
 				// XXX: this should be rewritten to upload one image at a time
 				if (!$this->menu_images_done)
 				{
-					$data["value"] = $this->update_menu_images(array(
+					$args["metadata"]["menu_images"] = $this->update_menu_images(array(
 						"id" => $args["obj"]["oid"],
 						"img_del" => $args["form_data"]["img_del"],
 						"img_ord" => $args["form_data"]["img_ord"],
@@ -716,7 +716,7 @@ class menu extends class_base
 		$cnt = 0;
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			if ($imgar[$i]["id"])
+			if ($imgar[$i]["id"] || $imgar[$i]["ord"])
 			{
 				$timgar[$cnt++] = $imgar[$i];
 			}
