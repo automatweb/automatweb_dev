@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.12 2005/01/27 08:35:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.13 2005/01/27 08:43:24 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -294,7 +294,29 @@ class mrp_workspace extends class_base
 					case "toolbar":
 						$this->_do_pj_toolbar($arr, $job);
 						return PROP_OK;
-					
+
+					case "starttime":
+						$prop["value"] = date("d.m.Y H:i", $job->prop("starttime"));
+						break;	
+				
+					case "length":
+						$len  = sprintf("%02d", floor($job->prop("length") / 3600)).":";
+						$len .= sprintf("%02d", floor(($job->prop("length") % 3600) / 60));
+						$prop["value"] = $len;
+						break;
+
+					case "pre_buffer":
+						$len  = sprintf("%02d", floor($job->prop("pre_buffer") / 3600)).":";
+						$len .= sprintf("%02d", floor(($job->prop("post_buffer") % 3600) / 60));
+						$prop["value"] = $len;
+						break;
+
+					case "post_buffer":
+						$len  = sprintf("%02d", floor($job->prop("post_buffer") / 3600)).":";
+						$len .= sprintf("%02d", floor(($job->prop("post_buffer") % 3600) / 60));
+						$prop["value"] = $len;
+						break;
+
 					case "project":
 					case "resource":
 						$tmp = obj($job->prop($rpn));
