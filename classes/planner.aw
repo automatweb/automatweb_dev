@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.26 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.27 2001/06/19 20:09:20 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -452,13 +452,15 @@ class planner extends calendar {
 		$repeater = new repeater();
 		extract($args);
 		$selector = ($uid) ? "planner.uid = '$uid'" : "objects.parent = '$parent'";
+		$eselect = ($event) ? "AND planner.oid = '$event'" : "";
+		$limit = ($limit) ? $limit : 999999;
 		$retval = array();
 		$reps = array();
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND $selector
+			WHERE objects.status = 2 AND $selector $eselect
 				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start'))
-				ORDER BY start";
+				ORDER BY start $l";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -481,8 +483,14 @@ class planner extends calendar {
 			$vector = $repeater->get_vector();
 			if ($vector)
 			{
-				foreach($vector as $slice)
+				$size = sizeof($vector);
+				$continue = true;
+				reset($vector);
+				$cnt = 0;
+				while($continue)
 				{
+					$cnt++;
+					list(,$slice) = each($vector);
 					list($slice_start,$slice_end) = each($slice);
 					$index = date("dmY",$slice_start);
 					if ($index_time)
@@ -493,6 +501,10 @@ class planner extends calendar {
 					{
 						$retval[$index][] = $row;
 					}
+					if ( ($cnt >= $size) || ($cnt > $limit) )
+					{
+						$continue = false;
+					};
 				};
 			}
 			else
@@ -689,7 +701,10 @@ class planner extends calendar {
 						"oid" => $id,
 						"key" => "calconfig",
 				));
-		extract($caldata);
+		if (is_array($caldata))
+		{
+			extract($caldata);
+		}
 		$this->tpl_init("planner");
 		$this->read_template("reps.tpl");
 		// oh, I know, this is sooo ugly
