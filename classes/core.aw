@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.109 2002/09/25 13:36:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.110 2002/09/26 16:16:12 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2252,19 +2252,45 @@ class core extends db_connector
 	}
 
 	function mkah(&$arr, &$ret,$parent,$prefix)
-        {
-                if (!is_array($arr[$parent]))
-                {
-                        return;
-                }
+	{
+		if (!is_array($arr[$parent]))
+    {
+			return;
+    }
 
-                reset($arr[$parent]);
-                while (list(,$v) = each($arr[$parent]))
-                {
-                        $name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
-                        $ret[$v["oid"]] = $name;
-                        $this->mkah(&$arr,&$ret,$v["oid"],$name);
-                }
-        }
+    reset($arr[$parent]);
+    while (list(,$v) = each($arr[$parent]))
+    {
+			$name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
+      $ret[$v["oid"]] = $name;
+      $this->mkah(&$arr,&$ret,$v["oid"],$name);
+    }
+  }
+
+	////
+	// !executes an orb function call and returns the data that the function returns
+	// params:
+	// required:
+	//	action - orb action to exec
+	// optional
+	//  class - class for the action - default the current class
+	//  params - params to the action 
+	//  method - the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
+	//  server - if doing a rpc call, the server where to connect
+	//  login_obj - if we must log in to a serverm the id of the CL_AW_LOGIN that will be used to login to the server
+	//              if this is set, then server will be ignored
+	function do_orb_method_call($arr)
+	{
+		extract($arr);
+
+		if (!$arr["class"])
+		{
+			$arr["class"] = get_class($this);
+		}
+		
+		classload("orb");
+		$ob = new new_orb;
+		return $ob->do_method_call($arr);
+	}
 };
 ?>
