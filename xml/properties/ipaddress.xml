@@ -10,6 +10,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_IPADDRESS</syslog_type>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <general>

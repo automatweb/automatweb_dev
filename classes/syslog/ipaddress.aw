@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_IPADDRESS
+@classinfo syslog_type=ST_IPADDRESS no_status=1 
 
 @groupinfo general caption=Üldine
 
