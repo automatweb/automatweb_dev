@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.3 2005/03/30 22:00:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.4 2005/03/31 06:43:46 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -703,7 +703,7 @@ class orb extends aw_template
 			list($arr["remote_host"], $arr["remote_session"]) = $this->get_remote_session($arr);
 
 			// load rpc handler
-			$inst = get_instance("orb/".$method);
+			$inst = get_instance("core/orb/".$method);
 			if (!is_object($inst))
 			{
 				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", true,$this->silent);
