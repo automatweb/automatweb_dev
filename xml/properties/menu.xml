@@ -52,7 +52,7 @@
             <method>serialize</method>
             <group>advanced</group>
             <table>objects</table>
-            <caption>Objektitabeli konff</caption>
+            <caption>Objektitabeli konf</caption>
       </property>
       <property>
             <name>add_tree_conf</name>

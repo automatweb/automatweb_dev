@@ -149,9 +149,18 @@
       </property>
       <property>
             <name>referer</name>
-            <type>generated</type>
-            <table>documents</table>
+            <type>textbox</type>
+            <size>50</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Ref</caption>
+      </property>
+      <property>
+            <name>refopt</name>
+            <type>select</type>
+            <table>documents</table>
+            <caption>Ref tüüp</caption>
       </property>
       <property>
             <name>sections</name>
@@ -162,12 +171,19 @@
             <table>documents</table>
             <caption>Sektsioonid</caption>
       </property>
+      <property>
+            <name>aliasmgr</name>
+            <type>aliasmgr</type>
+            <table>documents</table>
+            <caption>Aliastehaldur</caption>
+      </property>
       <classinfo>
             <toolbar>yes</toolbar>
             <objtable>documents</objtable>
             <objtable_index>docid</objtable_index>
             <relationmgr>yes</relationmgr>
             <corefields>status</corefields>
+            <hide_tabs>yes</hide_tabs>
       </classinfo>
 </properties>
 
