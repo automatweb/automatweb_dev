@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.20 2004/09/10 10:36:05 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.22 2004/09/12 21:07:40 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -31,7 +31,7 @@
 @property prev_status type=hidden store=no
 
 @property sum type=textbox table=aw_crm_offer size=7
-@caption Hind(ilma KM)
+@caption Hind (ilma KM)
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -126,8 +126,10 @@ class crm_offer extends class_base
 
 	function get_property($arr)
 	{
+		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		
 		switch($prop["name"])
 		{
 			case "start1":
@@ -168,10 +170,6 @@ class crm_offer extends class_base
 				}
 			break;
 			
-			case "start1":
-				//return PROP_IGNORE;
-			break;
-			
 			case "offer_history":
 				$this->do_offer_history($arr);
 			break;
@@ -181,10 +179,6 @@ class crm_offer extends class_base
 			break;
 			
 			case "is_done":
-				if(aw_global_get("uid") == "sven")
-				{
-					arr($prop);
-				}
 				return PROP_IGNORE;
 			break;
 			
@@ -468,7 +462,9 @@ class crm_offer extends class_base
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_calendar_selector($arr);
 				break;
-				
+			case "start1":
+				$data["value"] = $arr["obj_inst"]->created();
+			break;
 			case "salesman":
 				if($data["value"])
 				{
