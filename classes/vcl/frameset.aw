@@ -1,13 +1,16 @@
 <?php
-// $Id: frameset.aw,v 1.3 2002/11/07 10:52:37 kristo Exp $
+// $Id: frameset.aw,v 1.4 2002/11/14 15:36:36 duke Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
 	@default group=general
-	@property template type=select field=meta method=serialize
+	@default field=meta
+	@default method=serialize
+
+	@property template type=select 
 	@caption Frameseti template
 
-	@property framedata type=array field=meta method=serialize getter=callback_get_sources 
+	@property framedata type=generated editonly=1 generator=callback_get_sources 
 	@caption Raamide sisu
 */
 /*
@@ -67,17 +70,53 @@ class frameset extends aw_template
 			"clid" => CL_FRAMESET,
 		));
 
+		$this->frame_templates = array();
+
+	}
+
+	function _register_frame_templates()
+	{
+		// XXX: puh-lease, there has to be a better way for 
+		// defining framesets
+		$tmp = array(
+			"cols" => "20%,*",
+			"frames" => array("left","right"),
+		);
+
+		$this->frame_templates["u1d2"] = array(
+			"rows" => "18%,*",
+			"frames" => array("top",$tmp),
+		);
+
+		$this->frame_names["u1d2"] = "1 Üleval, 2 all";
+
+		$tmp = array(
+			"rows" => "20%,*",
+			"frames" => array("top","right"),
+		);
+
+		$this->frame_templates["l1r2"] = array(
+			"cols" => "20%,*",
+			"frames" => array("left",$tmp),
+		);
+		
+		$this->frame_names["l1r2"] = "1 vasakul, 2 paremal";
 	}
 
 	function show($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		if ($obj["class_id"] != CL_FRAMESET)
-		{
-			return "fuck off";
-		};
-		$tpl = $this->get_frame_template(array("type" => $obj["meta"]["template"]));
+
+		$obj = $this->get_object(array(
+			"oid" => $id,
+			"class_id" => CL_FRAMESET,
+		));
+
+		$this->title = $title;
+
+		$this->_register_frame_templates();
+		$tpl = $this->frame_templates[$obj["meta"]["template"]];
+
 		if ($args["sources"])
 		{
 			$this->sources = $args["sources"];
@@ -86,54 +125,25 @@ class frameset extends aw_template
 		{
 			$this->sources = $obj["meta"]["sources"];
 		};
+
 		$this->framedata = $obj["meta"]["framedata"];
 		$this->draw_frameset($tpl);
 		print $this->content;
 		exit;
 	}
 
-	function get_frame_template($args = array())
-	{
-		switch($args["type"])
-		{
-			case "u1d2":
-				$twopanel = array(
-					"cols" => "20%,*",
-					"frames" => array("left","right"),
-				);
-				$retval = array(
-					"rows" => "18%,*",
-					"frames" => array("top",$twopanel),
-				);
-				break;
-			case "l1r2":
-				$twopanel = array(
-					"rows" => "20%,*",
-					"frames" => array("top","right"),
-				);
-				$retval = array(
-					"cols" => "20%,*",
-					"frames" => array("left",$twopanel),
-				);
-				break;
-
-		};
-		return $retval;
-	}
-
 	function draw_frameset($data = array())
 	{
-		$this->content = "";
 		$this->level = 0;
 		$this->names = array();
+		$title = $this->title;
+		$this->content .= '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">';
+		$this->content .= "\n<HTML>\n<HEAD>\n<TITLE>$title</TITLE>\n</HEAD>\n";
 		$this->req_draw_frameset($data);
+		$this->content .= "</HTML>\n";
 		// a frameset needs a name, comment and the template
 		// also - for each frameset I should be able to select
 		// the source of content
-//                print "<pre>";
-//                print_r($this->names);
-//                print htmlspecialchars($this->content);
-//                print "</pre>";
 
 	}
 
@@ -174,70 +184,55 @@ class frameset extends aw_template
 		switch($data["name"])
 		{
 			case "template":
-				$data["options"] = array("" => "--vali--","u1d2" => "Üleval 1, all 2","l1r2" => "vasakul 1, paremal 2");
-				$tpl = $this->get_frame_template(array("type" => "u1d2"));
+				$this->_register_frame_templates();
+				$data["options"] = array("" => "--vali--") + $this->frame_names;
+				$tpl = $this->frame_templates[$args["obj"]["meta"]["template"]];
 				$this->draw_frameset($tpl);
 				break;
 
 		};
 	}
 
+	////
+	// !Returns a bunch of nodes for each frame
 	function callback_get_sources($args)
 	{
-		static $i = 0;
-		if ($this->names[$i])
+		$nodes = array();
+		$names = new aw_array($this->names);
+		foreach($names->get() as $name)
 		{
-			$node = array();
-			$tmp = array();
-			
-			$name = $this->names[$i];
-			$subnode0 = array(
-				"caption" => "Raam <b>'$name'</b>",
-			);
-			$subnode1 = array(
+			$nodes[] = array("caption" => "Raam <b>'$name'</b>");
+			$nodes[] = array(
 				"caption" => "Default sisu",
 				"type" => "textbox",
-				"size" => "50",
+				"size" => 50,
 				"name" => "framedata[$name][source]",
 				"value" => $args["prop"]["value"][$name]["source"],
 			);
-
-			$subnode2 = array(
+			$nodes[] = array(
 				"caption" => "Default lehe stiil",
 				"type" => "objpicker",
 				"name" => "framedata[$name][style]",
 				"clid" => "CL_PAGE",
 				"value" => $args["prop"]["value"][$name]["style"],
 			);
-		
-			$value = $args["prop"]["value"][$name]["frameborder"];
-			if (!isset($value))
-			{
-				$value = 1;
-			};
-			$subnode3 = array(
+			$nodes[] = array(
 				"caption" => "Border",
 				"type" => "checkbox",
 				"name" => "framedata[$name][frameborder]",
-				"value" => $value,
+				"checked" => checked($args["prop"]["value"][$name]["frameborder"]),
 			);
-			
-			$subnode4 = array(
+			$nodes[] = array(
 				"caption" => "Keritav",
 				"type" => "select",
 				"name" => "framedata[$name][scrolling]",
 				"value" => $args["prop"]["value"][$name]["scrolling"],
 				"options" => array("" => "","yes" => "Jah","no" => "Ei"),
 			);
-
-			$node = array("type" => "subnodes","content" => array($subnode0,$subnode1,$subnode2,$subnode3,$subnode4));
-			$i++;
-		}
-		else
-		{
-			$node = false;
+				
+				
 		};
-		return $node;
+		return $nodes;
 	}
 
 };
