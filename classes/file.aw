@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.50 2003/07/01 10:22:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.51 2003/07/07 14:59:29 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -493,7 +493,7 @@ class file extends class_base
 		}
 		else
 		{
-			$this->dequote($ret["content"]);
+			//$this->dequote($ret["content"]);
 		};
 		return $ret;
 	}
@@ -516,9 +516,10 @@ class file extends class_base
 			$fc["type"] = $this->ext2type[$pi['extension']];
 		}
 		header("Content-type: ".$fc["type"]);
-		header("Content-Disposition: filename=$fc[name]");
-		header("Content-Length: ".strlen($fc["content"]));
-		header("Pragma: no-cache");
+		header("Cache-control: public");
+		//header("Content-Disposition: inline; filename=\"$fc[name]\"");
+		//header("Content-Length: ".strlen($fc["content"]));
+		//header("Pragma: no-cache");
 		die($fc["content"]);
 	}
 
