@@ -53,11 +53,18 @@ class form_table extends form_base
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 
 			$this->load_table($id);
+			$this->table["defs"] = array();
 			if (is_array($columns))
 			{
-				foreach($columns as $col => $val)
+				foreach($columns as $col => $ar)
 				{
-					$this->table["defs"][$col]["el"] = $val;
+					if (is_array($ar))
+					{
+						foreach($ar as $elid)
+						{
+							$this->table["defs"][$col]["el"][$elid] = $elid;
+						}
+					}
 					$this->table["defs"][$col]["title"] = $names[$col];
 					$this->table["defs"][$col]["sortable"] = $sortable[$col];
 				}
@@ -142,23 +149,50 @@ class form_table extends form_base
 			$c = "";
 			foreach($els as $elid => $elname)
 			{
+				if (is_array($this->table["defs"][$col]["el"]))	// backward compatibility sucks
+				{
+					$chk = checked(in_array($elid,$this->table["defs"][$col]["el"]));
+				}
+				else
+				{
+					$chk = checked($this->table["defs"][$col]["el"] == $elid);
+				}
 				$this->vars(array(
 					"el_id" => $elid,
-					"checked" => checked($this->table["defs"][$col]["el"] == $elid)
+					"checked" => $chk
 				));
 				$c.=$this->parse("COL");
 			}
+			if (is_array($this->table["defs"][$col]["el"]))	// backward compatibility sucks
+			{
+				$this->vars(array(
+					"change_checked" => checked(in_array("change",$this->table["defs"][$col]["el"])),
+					"view_checked" => checked(in_array("view",$this->table["defs"][$col]["el"])),
+					"special_checked" => checked(in_array("special",$this->table["defs"][$col]["el"])),
+					"delete_checked" => checked(in_array("delete",$this->table["defs"][$col]["el"])),
+					"uid_checked" => checked(in_array("uid",$this->table["defs"][$col]["el"])),
+					"created_checked" => checked(in_array("created",$this->table["defs"][$col]["el"])),
+					"modified_checked" => checked(in_array("modified",$this->table["defs"][$col]["el"])),
+					"active_checked" => checked(in_array("active",$this->table["defs"][$col]["el"])),
+					"chpos_checked" => checked(in_array("chpos",$this->table["defs"][$col]["el"]))
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"change_checked" => checked($this->table["defs"][$col]["el"] == "change"),
+					"view_checked" => checked($this->table["defs"][$col]["el"] == "view"),
+					"special_checked" => checked($this->table["defs"][$col]["el"] == "special"),
+					"delete_checked" => checked($this->table["defs"][$col]["el"] == "delete"),
+					"uid_checked" => checked($this->table["defs"][$col]["el"] == "uid"),
+					"created_checked" => checked($this->table["defs"][$col]["el"] == "created"),
+					"modified_checked" => checked($this->table["defs"][$col]["el"] == "modified"),
+					"active_checked" => checked($this->table["defs"][$col]["el"] == "active"),
+					"chpos_checked" => checked($this->table["defs"][$col]["el"] == "chpos")
+				));
+			}
 			$this->vars(array(
 				"COL" => $c,
-				"change_checked" => checked($this->table["defs"][$col]["el"] == "change"),
-				"view_checked" => checked($this->table["defs"][$col]["el"] == "view"),
-				"special_checked" => checked($this->table["defs"][$col]["el"] == "special"),
-				"delete_checked" => checked($this->table["defs"][$col]["el"] == "delete"),
-				"uid_checked" => checked($this->table["defs"][$col]["el"] == "uid"),
-				"created_checked" => checked($this->table["defs"][$col]["el"] == "created"),
-				"modified_checked" => checked($this->table["defs"][$col]["el"] == "modified"),
-				"active_checked" => checked($this->table["defs"][$col]["el"] == "active"),
-				"chpos_checked" => checked($this->table["defs"][$col]["el"] == "chpos")
 			));
 			$this->parse("ROW");
 		}
@@ -227,6 +261,20 @@ class form_table extends form_base
 	// !adds another row of data to the table
 	function row_data($dat)
 	{
+		// hmph. here we must preprocess the data if any columns have more than 1 elements assigned to them, cause then the column names will be el_col_[col_number] not element names
+		for ($col = 0; $col < $this->arr["cols"]; $col++)
+		{
+			$cc = $this->table["defs"][$col];
+			if (is_array($cc["el"]) && count($cc["el"]) > 1)
+			{
+				$str = array();
+				foreach($cc["el"] as $elid)
+				{
+					$str[]=$dat["el_".$elid];
+				}
+				$dat["el_col_".$col] = join(",",$str);
+			}
+		}
 		$this->t->define_data($dat);
 	}
 
@@ -407,7 +455,23 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
-			$xml.="<field name=\"el_".$cc["el"]."\" caption=\"".$cc["title"]."\" talign=\"center\" align=\"center\"";
+			if (is_array($cc["el"]))
+			{
+				if (count($cc["el"]) == 1)
+				{
+					reset($cc["el"]);
+					list($eln,) = each($cc["el"]);
+				}
+				else
+				{
+					$eln = "col_".$col;
+				}
+			}
+			else
+			{
+				$eln = $cc["el"];
+			}
+			$xml.="<field name=\"el_".$eln."\" caption=\"".$cc["title"]."\" talign=\"center\" align=\"center\"";
 			if ($cc["sortable"])
 			{
 				$xml.=" sortable=\"1\" ";
