@@ -30,7 +30,7 @@
 												<td class="celltext" colspan="2">{VAR:menu}</td>
 											</tr>
 											<tr>
-												<td class="celltext">Tulpade arv:</td><td class="celltext"><input type='text' NAME='num_cols' VALUE='{VAR:num_cols}' class="formtext"></td>
+												<td class="celltext" colspan="2">Tulpade arv: <input type='text' NAME='num_cols' VALUE='{VAR:num_cols}' class="formtext"></td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2">Tulbad:</td>
