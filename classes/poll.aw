@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.24 2003/02/10 14:16:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.25 2003/02/20 15:59:31 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -129,6 +129,15 @@ class poll extends aw_template
 			"nowrap" => "1",
 			"sortable" => 1,
 		));
+
+		$t->define_field(array(
+			"name" => "in_archive",
+			"caption" => "Arhiivis?",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"sortable" => 1,
+		));
 		
 		$t->define_field(array(
 			"name" => "change",
@@ -157,7 +166,11 @@ class poll extends aw_template
 				"delete_url" => $this->mk_my_orb("delete",array("id" => $row["oid"])),
 				"activate_url" => $this->mk_my_orb("set_active",array("id" => $row["oid"])),
 			));
-				
+
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row['metadata']
+			));
+			
 			$t->define_data(array(
 				"name" => $row["name"],
 				"modified" => $this->time2date($row["modified"],2),
@@ -165,6 +178,7 @@ class poll extends aw_template
 				"active" => ($row["oid"] == $ap) ? $this->parse("ACTIVE") : $this->parse("NACTIVE"),
 				"change" => $this->parse("CHANGE"),
 				"delete" => $this->parse("DELETE"),
+				"in_archive" => ($meta['in_archive'] == 1 ? "(X)" : "( ) ")
 			));
 		}
 
@@ -266,7 +280,8 @@ class poll extends aw_template
 				"metadata" => array(
 					"answers" => $obj["meta"]["answers"],
 					"name" => $name,
-					"comment" => $comment
+					"comment" => $comment,
+					"in_archive" => $in_archive
 				)
 			));
 		}
@@ -282,7 +297,8 @@ class poll extends aw_template
 				"metadata" => array(
 					"answers" => $answer,
 					"name" => $name,
-					"comment" => $comment
+					"comment" => $comment,
+					"in_archive" => $in_archive
 				)
 			));
 		}
@@ -383,6 +399,7 @@ class poll extends aw_template
 			"reforb" => $this->mk_reforb("submit",array("id" => $id, "return_url" => urlencode($return_url))),
 			"translate" => $this->mk_my_orb("translate", array("id" => $id, "return_url" => urlencode($return_url))),
 			"clicks" => $this->mk_my_orb("clicks", array("id" => $id)),
+			"in_archive" => checked($obj['meta']['in_archive'])
 		));
 		$this->vars(array(
 			"CHANGE" => $this->parse("CHANGE")
@@ -563,13 +580,19 @@ class poll extends aw_template
 			if ($id != $row["oid"])
 			{
 				//$qs = aw_unserialize($row["questions"]);
-				$this->vars(array(
-					"question" => $row["name"], 
-					"poll_id" => $row["oid"], 
-					"num_comments" => $t->get_num_comments($row["oid"]),
-					"link" => $this->mk_my_orb("show", array("poll_id" => $row["oid"]))
+				$meta = $this->get_object_metadata(array(
+					"metadata" => $row['metadata']
 				));
-				$p.=$this->parse("QUESTION");
+				if ($meta['in_archive'] == 1)
+				{
+					$this->vars(array(
+						"question" => $row["name"], 
+						"poll_id" => $row["oid"], 
+						"num_comments" => $t->get_num_comments($row["oid"]),
+						"link" => $this->mk_my_orb("show", array("poll_id" => $row["oid"]))
+					));
+					$p.=$this->parse("QUESTION");
+				}
 			}
 		}
 

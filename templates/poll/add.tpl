@@ -53,6 +53,10 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 		<td colspan="3" class="celltext"><b>{VAR:lang}</b></td>
 	</tr>
 	<tr>
+		<td class="celltext">Arhiivis:&nbsp;&nbsp;</td>
+		<td colspan="3" class="celltext"><input type='checkbox' name='in_archive' value='1' {VAR:in_archive}></td>
+	</tr>
+	<tr>
 		<td class="celltext">{VAR:LC_POLL_QUESTION}:</td>
 		<td class="celltext"><input size="40" type='text' NAME='name[{VAR:lang_id}]' VALUE='{VAR:name}' class="formtext"></td>
 		<td class="celltext">&nbsp;&nbsp;</td>
