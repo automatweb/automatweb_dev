@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.169 2004/12/13 14:57:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.170 2005/01/03 12:12:05 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -38,7 +38,10 @@ if (!defined("DEFS"))
 
 	function create_email_links($str)
 	{
-		$str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+		if (!aw_ini_get("menuedit.protect_emails"))
+		{
+			$str = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
+		}
 		return preg_replace("/((\s|^))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\-]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str); 
 	}
 
@@ -212,7 +215,11 @@ if (!defined("DEFS"))
 	function create_links($src)
 	{
 		$src = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
-		return preg_replace("/([\w*|\.]*?)@([\w*|\.]*?)/imsU","<a href='mailto:$1@$2'>$1@$2</a>",$src);
+		if (!aw_ini_get("menuedit.protect_emails"))
+		{
+			$src = preg_replace("/([\w*|\.]*?)@([\w*|\.]*?)/imsU","<a href='mailto:$1@$2'>$1@$2</a>",$src);
+		}
+		return $src;
 	}
 
 	////

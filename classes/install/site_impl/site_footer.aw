@@ -18,6 +18,7 @@ $sf->vars(array(
 	"description" => $meta[$section]["description"],
 	"date" => $sf->time2date(time(),2),
 	"charset" => $ld["charset"],
+	"sel_charset" => $ld["charset"],
 	"title_action" => aw_global_get("title_action"),
 ));
 
@@ -35,7 +36,15 @@ else
 	$sf->parse("login");
 }
 
-echo $sf->parse();
+if (aw_ini_get("menuedit.protect_emails") == 1)
+{
+	$i = get_instance("contentmgmt/mail_protector");
+	echo $i->protect($sf->parse());
+}
+else
+{
+	echo $sf->parse();
+}
 
 aw_shutdown();
 ?>
