@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.173 2002/11/14 16:48:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.174 2002/11/15 18:05:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 
@@ -4168,10 +4168,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($copied_objects);
 			while (list($oid,$str) = each($copied_objects))
 			{
-				if ($oid != $parent)
-				{
-					$this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
-				}
+				$this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
 			}
 		}
 
@@ -6192,10 +6189,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				);
 				$this->ser_obj[$hash] = $dat;
 
+				$this->save_handle();
 				$this->req_serialize_obj_tree($cur_id);
+				$this->restore_handle();
 			}
 		}
-		if ($this->serialize_subobjs)
+		if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
 		{
 			$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
 			while ($row = $this->db_next())
@@ -6232,13 +6231,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		);
 		$this->ser_obj[$hash] = $dat;
 
-		if ($this->serialize_submenus)
+		if ($this->serialize_submenus || aw_global_get("__is_rpc_call"))
 		{
 			$this->req_serialize_obj_tree($oid);
 		}
 		else
 		{
-			if ($this->serialize_subobjs)
+			if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
 			{
 				$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
 				while ($row = $this->db_next())
