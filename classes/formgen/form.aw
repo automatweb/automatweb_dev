@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.65 2003/06/17 13:00:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.66 2003/06/19 09:56:52 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1354,9 +1354,19 @@ class form extends form_base
 					"entry_id" => $entry_id,
 					"chain_entry_id" => $chain_entry_id,
 					"els" => $els,
+					"formref" => &$this,
 				));
 
 				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
+
+				if (!empty($this->arr["calendar_controller"]) && $fcal->vac < 0)
+				{
+					$this->controller_instance->eval_controller(
+						$this->arr["calendar_controller"],
+						$fcal->msg,
+						&$this 
+					);
+				}
 
 				$has_errors = $errors;
 				$controller_warnings_ok = $fcal->fatal;
@@ -3466,8 +3476,9 @@ class form extends form_base
 
 		// $type is integer now
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
-		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,deleted int default 0, INDEX(chain_id))");
+		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,deleted int default 0,lang_id int, INDEX(chain_id))");
 		$this->db_query("ALTER TABLE form_".$id."_entries ADD index deleted(deleted)");
+		$this->db_query("ALTER TABLE form_".$id."_entries ADD index lang_id(lang_id)");
 
 		$this->load($id);
 
@@ -5679,7 +5690,7 @@ class form extends form_base
 			$tf = get_instance("formgen/form");
 			$search_res = "<br>".$tf->gen_preview(array(
 				"id" => $this->arr["sql_writer_form"],
-				"tpl" => "show_noform.tpl"
+				"tpl" => "show_noform.tpl",
 			));
 			$no_tags = true;
 		}
@@ -5707,7 +5718,8 @@ class form extends form_base
 		{
 			$search_res.= $this->mk_reforb("submit_writer", array(
 				"id" => $arr["id"],
-				"entry_id" => $arr["entry_id"]
+				"entry_id" => $arr["entry_id"],
+				"section" => aw_global_get("section")
 			));
 			$search_res.="</form>";
 		}
@@ -5804,7 +5816,7 @@ class form extends form_base
 		}
 
 		// and finally, call the search func so the search results will be shown again
-		return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
+		return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1, "section" => $section));
 	}
 
 	////
