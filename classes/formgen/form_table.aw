@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.73 2004/11/27 10:37:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.74 2004/11/30 16:01:00 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -820,6 +820,13 @@ class form_table extends form_base
 					$rgroupby_sep["ev_".$dat["el"]]["real_sep_before"] = $dat["real_sep_before"];
 				}
 			}
+		}
+		if ($GLOBALS["fg_sort_dbg"] == 1)
+		{
+		echo "rgroupby = ".dbg::dump($r_g)."<br>";
+		echo "rgroupsortdat = ".dbg::dump($rgroupsortdat)."<br>";
+		echo "vgroupby = ".dbg::dump($v_g)."<br>";
+		echo "vgroupdat = ".dbg::dump($vgroupdat)."<br>";
 		}
 		$this->t->sort_by(array(
 			"rgroupby" => $r_g,
