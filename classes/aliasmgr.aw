@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.173 2005/04/05 10:41:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.174 2005/04/05 11:06:24 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -280,8 +280,11 @@ class aliasmgr extends aw_template
 		}
 
 		// fetch objs in object_list, it's fastah
-		$ol = new object_list(array("oid" => $ids));
-		$ol->arr();
+		if (count($ids))
+		{
+			$ol = new object_list(array("oid" => $ids));
+			$ol->arr();
+		}
 
 		foreach($obj->connections_from() as $c)
 		{
