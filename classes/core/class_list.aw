@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.4 2004/05/17 07:46:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.5 2004/05/17 07:57:08 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
@@ -25,18 +25,20 @@ class class_list extends class_base
 
 		@attrib name=register_new_class_id nologin="1"
 
-		@param id optional
-		@param def required
-		@param name required
-		@param file required
-		@param can_add optional 
-		@param parents optional
-		@param alias optional
-		@param alias_class optional
-		@param old_alias optional
-		@param is_remoted optional 
-		@param subtpl_handler optional 
+		@param data required
 
+		@comment data can contain:
+			id optional
+			def required
+			name required
+			file required
+			can_add optional 
+			parents optional
+			alias optional
+			alias_class optional
+			old_alias optional
+			is_remoted optional 
+			subtpl_handler optional 
 	**/
 	function register_new_class_id($arr)
 	{
@@ -60,18 +62,20 @@ class class_list extends class_base
 
 		@attrib name=update_class_def
 
-		@param id required type=int
+		@param data required 
 
-		@param def required
-		@param name required
-		@param file required
-		@param can_add optional type=int
-		@param parents optional
-		@param alias optional
-		@param alias_class optional
-		@param old_alias optional
-		@param is_remoted optional type=int
-		@param subtpl_handler optional 
+		@comment data can contain:
+			id required
+			def required
+			name required
+			file required
+			can_add optional 
+			parents optional
+			alias optional
+			alias_class optional
+			old_alias optional
+			is_remoted optional 
+			subtpl_handler optional 
 		
 	**/
 	function update_class_def($arr)

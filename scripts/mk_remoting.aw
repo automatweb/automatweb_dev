@@ -9,8 +9,9 @@ aw_global_set("no_db_connection", true);
 $anal = get_instance("core/docgen/docgen_analyzer");
 
 $fn_c = <<<EOD
-	function %s(\$args)
+	function %s()
 	{
+		\$args = func_get_args();
 		return \$this->do_orb_method_call(array(
 			"class" => "%s",
 			"action" => "%s",

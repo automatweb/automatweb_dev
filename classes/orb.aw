@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.58 2004/05/12 06:37:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.59 2004/05/17 07:57:09 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -562,7 +562,7 @@ class orb extends aw_template
 
 		if (!isset($this->orb_class))
 		{
-			$this->orb_class = new $class;
+			$this->orb_class = get_instance($class);
 		};
 		
 		// FIXME: we should cache that def instead of parsing xml every time
