@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.39 2001/06/29 15:23:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.40 2001/07/03 02:38:53 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -216,11 +216,38 @@ class planner extends calendar {
 
 	function edit_todo_item($args = array())
 	{
+		global $udata;
 		extract($args);
+		$flatlist = array();
+		$res = true;
+		$keys = array($udata["home_folder"]);
+
+		while($res)
+		{
+			$res = $this->get_objects_below(array(
+						"parent" => $keys,
+						"class" => CL_PSEUDO,
+						"type" => MN_EVENT_FOLDER,
+				));
+			if (is_array($res))
+			{
+				foreach($res as $key => $val)
+				{
+					$flatlist[$val["parent"]][$key] = $val["name"];
+				};
+				$keys = array_keys($res);
+			};
+			
+		}
+
+		$flatlist[0][$udata["home_folder"]] = "sorteerimata";
+		$fl = $this->indent_array($flatlist,0);
 		$ftitle = ($op == "add") ? "Lisa TODO" : "Muuda TODO-d";
 		$this->read_template("edit_todo.tpl");
 		if ($id)
 		{
+			$obj = $this->get_object($id);
+			$parent = $obj["parent"];
 			$q = "SELECT * FROM planner WHERE id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_next();
@@ -233,7 +260,8 @@ class planner extends calendar {
 			"ftitle" => $ftitle,
 			"title" => $row["title"],
 			"description" => $row["description"],
-			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date,"parent" => $parent)),
+			"targetlist" => $this->picker($parent,$fl),
+			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date)),
 		));
 		return $this->parse();
 	}
@@ -247,6 +275,8 @@ class planner extends calendar {
 		{
 			$obj = $this->get_object($id);
 			// siia voiks mingi acl checki panna
+			$q = "UPDATE objects SET parent = '$parent' WHERE oid = '$id'";
+			$this->db_query($q);
 			$parent = $obj["parent"];
 			$q = "UPDATE planner 
 				SET title = '$title',
@@ -829,7 +859,8 @@ class planner extends calendar {
 			// date on hidden field muutmis/lisamisvormist. Sisaldab eventi kuupäeva dd-mm-yyyy
 			list($d,$m,$y) = split("-",$date);
 			// sellest teeme timestampi
-			$start = mktime(0,0,0,$m,$d,$y);
+			list($h,$m) = explode(":",date("H:i"));
+			$start = mktime($h,$m,0,$m,$d,$y);
 			// kui parent on defineerimata, siis savelstame ta kodukataloogi alla
 			if (!$parent)
 			{
