@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.12 2002/07/17 20:28:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.13 2002/09/19 15:12:09 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -15,11 +15,13 @@ class lists extends aw_template
 		extract($args);
 		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$parent'>Listid</a> / Uus list");
 		$this->read_template("list_add.tpl");
+		$us = get_instance("users");
 		$this->vars(array(
 			"name" => "", 
 			"comment" => "",
-			"reforb" => $this->mk_reforb("submit_list",array("parent" => $parent,"list_id" => 0))
-			));
+			"reforb" => $this->mk_reforb("submit_list",array("parent" => $parent,"list_id" => 0)),
+			"groups" => $this->picker(0,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC))))
+		));
 		return $this->parse();
 	}
 
@@ -54,7 +56,87 @@ class lists extends aw_template
 			"name" => $name,
 			"comment" => $comment,
 			"parent" => $parent,
+			"metadata" => array(
+				"based_on_grp" => $group
+			)
 		));
+
+		if ($group)
+		{
+			// get group members
+			$us = get_instance("users");
+			$grpmembers = $us->getgroupmembers2($group);
+
+			$joingrps = array();
+			foreach($grpmembers as $uid)
+			{
+				$udata[$uid] = $us->get_user(array("uid" => $uid));
+				$joingrps[$udata["join_grp"]] = $udata["join_grp"];
+			}
+
+			// load all join forms
+			$jf_list = array();
+			foreach($joingrps as $jg)
+			{
+				$jf_list += $us->get_jf_list($jg);
+			}
+
+			$els = array();
+			$finst = get_instance("form");
+			foreach($jf_list as $fid => $fname)
+			{
+				$finst->load($fid);
+				$els += $finst->get_all_elements(array("typematch" => "textbox"));
+			}
+
+			// create variables for all join forms' elements if they do not exist
+			$existing_variables = $this->list_objects(array("class" => CL_MAILINGLIST_VARIABLE));
+			foreach($els as $elid => $elname)
+			{
+				if (!in_array($elname,$existing_variables))
+				{
+					// we gots to create a new variable
+					$elid = $this->new_object(array("parent" => aw_ini_get("mailinglist.default_var_cat"),"name" => $elname, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
+					$existing_variables[$elid] = $elname;
+				}
+			}
+
+//			echo "id = $id newvars = <pre>", var_dump($newvars),"</pre> <br>";
+			// add variables to the list
+			classload("mlist");
+			$this->upd_object(array(
+				"oid" => $id,
+				"last" => serialize(array(aw_ini_get("mailinglist.default_var_cat") => 1))
+			));
+			$li = new mlist($id);
+
+			$var_name_to_id_map = array();
+			$this->db_query("SELECT oid, name FROM objects WHERE class_id = ".CL_MAILINGLIST_VARIABLE." AND status != 0 AND parent = ".aw_ini_get("mailinglist.default_var_cat"));
+			while ($row = $this->db_next())
+			{
+				$var_name_to_id_map[$row["name"]] = $row["oid"];
+			}
+
+			// create list members from all group members
+			foreach($udata as $uid => $udata)
+			{
+				// create variable values from the users' join data
+				$elvals = $us->get_user_info($uid,true);
+				$varvals = array();
+				foreach($elvals as $elid => $eval)
+				{
+					$vid = $var_name_to_id_map[$els[$elid]];
+					if ($vid)
+					{
+						$varvals[$vid] = $eval;
+					}
+				}
+				$li->db_add_user(array(
+					"name" => $uid, 
+					"email" => $udata["email"]
+				),$varvals);
+			}
+		}
 		return $id;
 	}
 		
