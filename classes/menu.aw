@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.13 2002/11/26 12:35:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.14 2002/12/06 16:41:39 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -22,13 +22,13 @@
 	@caption Failinimi
 
 	@property objtbl_conf type=objpicker clid=CL_OBJ_TABLE_CONF field=meta method=serialize group=advanced
-	@caption Objektitabeli konff
+	@caption Objektitabeli konf
 
 	@property add_tree_conf type=objpicker clid=CL_ADD_TREE_CONF field=meta method=serialize group=advanced
 	@caption Objekti lisamise puu konff
 
-	@property cfgmanager type=objpicker clid=CL_CFGMANAGER field=meta method=serialize group=advanced
-	@caption Konfiguratsioonihaldur
+	@property cfgmanager type=objpicker clid=CL_CFGFORM subclass=CL_PSEUDO field=meta method=serialize group=advanced
+	@caption Konfiguratsioonivorm
 	
 	@property show_lead type=checkbox field=meta method=serialize group=advanced
 	@caption Näita ainult leadi (kasutusel Nädalas)
@@ -74,7 +74,7 @@
 	@property link type=textbox group=show
 	@caption Menüü link
 
-	@property type type=select group=advanced
+	@property type type=select group=general
 	@caption Menüü tüüp
 	
 	@property admin_feature type=select group=advanced
@@ -590,6 +590,13 @@ class menu extends aw_template
 		usort($timgar,array($this,"_menu_img_cmp"));
 		return $timgar;
 	}
+
+	function _menu_img_cmp($a,$b)
+	{
+		if ($a["ord"] == $b["ord"]) return 0;
+		return ($a["ord"] > $b["ord"]) ? -1 : 1;
+	}
+
 
 	function callback_post_save($args = array())
 	{
