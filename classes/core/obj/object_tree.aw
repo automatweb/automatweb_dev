@@ -270,7 +270,13 @@ class object_tree extends _int_obj_container_base
 					$add = true;
 					foreach($meta_filter as $mf_k => $mf_v)
 					{
-						if ($o->meta($mf_k) != $mf_v)
+						$tmp = $_o->meta($mf_k);
+						if (is_numeric($mf_v))
+						{
+							$tmp = (int)$tmp;
+							$mf_v = (int)$mf_v;
+						}
+						if ($tmp != $mf_v)
 						{
 							$add = false;
 						}

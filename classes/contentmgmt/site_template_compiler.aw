@@ -552,14 +552,17 @@ class site_template_compiler extends aw_template
 					$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
 				}
 
-				$this->ops[] = array(
-					"op" => OP_HAS_LUGU,
-					"params" => array(
-						"tpl" => $cur_tpl_fqn,
-						"has_image_tpl" => $ldat["has_image_tpl"],
-						"no_image_tpl" => $ldat["no_image_tpl"],
-					)
-				);
+				if ($ldat["has_lugu"])
+				{
+					$this->ops[] = array(
+						"op" => OP_HAS_LUGU,
+						"params" => array(
+							"tpl" => $cur_tpl_fqn,
+							"has_image_tpl" => $ldat["has_image_tpl"],
+							"no_image_tpl" => $ldat["no_image_tpl"],
+						)
+					);
+				}
 				
 				$this->ops[] = array(
 					"op" => OP_SHOW_ITEM,
@@ -998,7 +1001,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."if (aw_global_get(\"uid\") == \"\")\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."; \$__list_filter[\"users_only\"] = 0;\n";
+		$ret .= $this->_gi()."\$__list_filter[\"users_only\"] = 0;\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 

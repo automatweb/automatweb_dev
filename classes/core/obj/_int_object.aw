@@ -51,7 +51,7 @@ class _int_object
 		{
 			error::throw(array(
 				"id" => ERR_SAVE,
-				"msg" => "object::save(): object cannot be saved, needed properties are not set (parent, class_id)"
+				"msg" => "object::save(): object (".$this->obj["oid"].") cannot be saved, needed properties are not set (parent, class_id)"
 			));
 		}
 
@@ -1086,14 +1086,6 @@ class _int_object
 
 		// now. we gots to find the class_id of the object
 		$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
-
-		global $XX3;
-		if ($XX3)
-		{
-			print "<pre>";
-			print_r($this->obj);
-			print "</pre>";
-		};
 
 		$this->_int_load_properties();
 
