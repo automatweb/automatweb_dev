@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.5 2003/05/12 17:39:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.6 2003/05/12 18:15:15 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -229,22 +229,33 @@ class converters extends aw_template
 			$q = "ALTER TABLE periods ADD obj_id bigint unsigned";
 			$this->db_query($q);
 
-			if (empty($args["parent"]))
-			{
-				$m = get_instance("menuedit");
-				$parent = $m->add_new_menu(array(
-					"name" => "Perioodid (K)",
-					"parent" => $this->cfg["admin_rootmenu2"],
-					"type" => MN_CLIENT,
-
-				));
-			}
-
 		};
+		
+		$pid = $this->cfg["per_oid"];
+		$q = "SELECT count(*) AS pcnt FROM periods WHERE oid = '$pid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row["pcnt"] == 0)
+		{
+			return "Perioodid on juba konverditud";
+		};
+		
+
+		if (empty($args["parent"]))
+		{
+			$m = get_instance("menuedit");
+			$parent = $m->add_new_menu(array(
+				"name" => "Perioodid (K)",
+				"parent" => $this->cfg["admin_rootmenu2"],
+				"type" => MN_CLIENT,
+
+			));
+		}
+
 		// now, cycle over all the periods, and create an object for each one
 		// under .. what? 
+		set_time_limit(0);
 		$map = array();
-		$pid = $this->cfg["per_oid"];
 		$q = "SELECT * FROM periods WHERE oid = '$pid'";
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -255,6 +266,8 @@ class converters extends aw_template
 				$this->save_handle();
 				$undat = aw_unserialize($row["data"]);
 				$comment = $undat["comment"];
+				print "converting $row[description]<br>";
+				flush();
 				if (!empty($undat["image"]["id"]))
 				{
 					$img_id = $undat["image"]["id"];
@@ -297,7 +310,6 @@ class converters extends aw_template
 		{
 			$q = sprintf("UPDATE periods SET obj_id = %d WHERE id = %d",$val,$key);
 			$this->db_query($q);
-			print $q;
 		};
 		
 		
