@@ -197,7 +197,7 @@ class db_objects extends aw_template
 	{
 		$this->save_handle();
 		$plist = join(",",$parents);
-		if($plist != "")
+		if($plist == "")
 		{
 			$this->restore_handle();
 			return;

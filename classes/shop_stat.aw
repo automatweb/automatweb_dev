@@ -357,6 +357,7 @@ class shop_stat extends shop
 
 		// ja siis muu data
 		$this->db_query("SELECT count(orders.id) as o_cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,wd FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY wd");
+		
 		while ($row = $this->db_next())
 		{
 			$m_sum = max($m_sum,$row["sum"]);
