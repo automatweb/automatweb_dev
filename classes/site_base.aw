@@ -4,7 +4,7 @@
 // you are supposed to use this when building new sites. 
 // basically, you copy all the files to the new folder, change a few paths
 // and fill this one in and you're good to go.
-
+classload("aw_template");
 class site_base extends aw_template
 {
 	function site_base()
