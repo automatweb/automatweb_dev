@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.14 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.15 2004/06/19 18:11:04 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -226,7 +226,7 @@ class form_cell extends form_base
 				// so we read it's properties from the element's table
 				$oo = obj($el);
 				$name = $oo->name();
-				$ord = $oo->jrk();
+				$ord = $oo->ord();
 				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
 				$arr = aw_unserialize($props);
 			}
