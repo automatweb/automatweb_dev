@@ -20,13 +20,32 @@
 											</td>
 										</tr>
 									</table>
-									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
-									{VAR:reset}<br>
-									{VAR:ruul_test}	<br>
-									{VAR:gogo}
+									<table border=0>
+										<tr>
+											<td>
+												{VAR:reset}<br>
+												{VAR:ruul_test}	<br>
+											</td>
+											<td>
+												faili unikaalne string siia: <br>
+												<textarea name="match" cols=30 rows=4>{VAR:match}</textarea>
+											</td>
+										</tr>
+									</table>
+									<table border=2 bgcolor=white>
+										<tr>
+											<td>
+												{VAR:source}
+											</td>
+										</tr>
+									<table>
+
+
 									<table border=1 cellpadding=0 cellspacing=0 bordercolor=white>
 									<!-- SUB: ruulbar -->
-									<tr><td>reegel</td><td>attribuudi alguskood</td><td>kirjeldus<br>veeru nimi</td><td>attribuudi lõpukood</td><td>abx</td></tr>
+										<tr><td>reegel</td><td>attribuudi alguskood</td><td>kirjeldus<br>veeru nimi</td>
+											<td>attribuudi 	lõpukood</td>
+										</tr>
 									<!-- END SUB: ruulbar -->
 
 									<!-- SUB: ruul -->
@@ -40,9 +59,9 @@
 											<td>
 										<table border=0 cellpadding=0 cellspacing=0>
 											<tr>
-												<td>
-												<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][desc]' value="{VAR:desc}"size=15><br>
-												<b>*</b><input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][mk_field]' value="{VAR:mk_field}" size=10>
+												<td>kirjeldus<br>
+												<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][desc]' value="{VAR:desc}"size=15><br />
+												<b>sql veerg</b><input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][mk_field]' value="{VAR:mk_field}" size=10><br />
 												</td>
 											</tr>
 										</table>
@@ -50,25 +69,16 @@
 											<td>
 											<textarea cols=25 rows=4 name='{VAR:mis}[{VAR:ruul}][end]'>{VAR:end}</textarea>
 											</td>
-											<td><a href=#bottom>html</a>
-											</td>
 											</tr>
 									<!-- END SUB: ruul -->
 									<!-- SUB: fields -->
-												<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][desc]' value="{VAR:desc}"size=15><br>
-												<b>*</b><input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][mk_field]' value="{VAR:mk_field}" size=10>
+												kirjeldus<br />
+												<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][desc]' value="{VAR:desc}"size=15><br />
+												sql veerg<br />
+												<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][mk_field]' value="{VAR:mk_field}" size=10><br />
 									<!-- END SUB: fields -->
 									</table>
-									<a name=bottom>
-									<table border=2 bgcolor=white>
-										<tr>
-											<td>
-												{VAR:source}
-											</td>
-										</tr>
-									<table>
-									faili unikaalne string siia: <textarea name="match" cols=30 rows=4>{VAR:match}</textarea>
-
+											{VAR:abx}
 								</td>
 							</tr>
 						</table>
