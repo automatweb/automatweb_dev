@@ -1,0 +1,75 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>event_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_CFGFORM</reltype>
+            <caption>Kasutatav vorm</caption>
+      </property>
+      <property>
+            <name>ftsearch_fields</name>
+            <table>objects</table>
+            <group>ftsearch</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Vabateksti väljad</caption>
+      </property>
+      <property>
+            <name>ftform</name>
+            <table>objects</table>
+            <group>ftform</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Vorm</caption>
+      </property>
+      <property>
+            <name>search_form</name>
+            <table>objects</table>
+            <group>ftsearch</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_search_form</callback>
+            <store>no</store>
+            <caption>Otsinguvorm</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_EVENT_SEARCH</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <ftsearch>
+                  <caption>Otsinguvorm</caption>
+            </ftsearch>
+            <ftform>
+                  <caption>Otsinguvorm seadistamine</caption>
+            </ftform>
+      </groupinfo>
+      <reltypes>
+            <EVENT_CFGFORM>
+                  <value>1</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Sündmuse vorm</caption>
+            </EVENT_CFGFORM>
+            <EVENT_SOURCE>
+                  <value>2</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Sündmuste allikas</caption>
+            </EVENT_SOURCE>
+            <PROJECT_SELECTOR>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Projekti valik</caption>
+            </PROJECT_SELECTOR>
+      </reltypes>
+</properties>
+
