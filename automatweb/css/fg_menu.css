@@ -8,13 +8,13 @@
 .mainmenu {
         position: absolute;
         left: 10px;
-        top: 10px;
+        top: 15px;
         visibility: visible;
 }
 .alammenyy {
         position: absolute;
         left: 0px;
-        top: 37px;
+        top: 54;
         height: 21px;
         width: 750px;
 		font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -23,6 +23,6 @@
         text-decoration: none;
         visibility: hidden;
 }
-.menyy1 {position: absolute; left: 0px; top: 18px; text-decoration: none; visibility: hidden;}
-.menyy2 {position: absolute; left: 56px; top: 18px; text-decoration: none; visibility: hidden;}
+.menyy1 {position: absolute; left: 7px; top: 28px; text-decoration: none; visibility: hidden;}
+.menyy2 {position: absolute; left: 58px; top: 28px; text-decoration: none; visibility: hidden;}
 
