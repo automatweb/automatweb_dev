@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.54 2005/04/02 00:45:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.55 2005/04/02 16:26:18 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -679,7 +679,7 @@ class mrp_case extends class_base
 				$resource = obj ($resource_id);
 				$start = $job->prop ("starttime");
 				$colour = ($job->prop ("project") == $this_object->id ()) ? MRP_COLOUR_HILIGHTED : $this->state_colours[$job->prop ("state")];
-				$job_name = $project->name () . " - " . $resource->name ();
+				$job_name = $project->name () . "-" . $job->prop ("exec_order") . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
@@ -688,7 +688,7 @@ class mrp_case extends class_base
 					"length" => $length,
 					"uri" => html::get_change_url ($job["oid"]),
 					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-// /* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+// /* dbg */ . " [res:" . $resource_id . " töö:" . $job->id () . " proj:" . $project_id . "]"
 				);
 
 				$chart->add_bar ($bar);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.38 2005/04/02 00:45:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.39 2005/04/02 16:26:18 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -410,13 +410,7 @@ class mrp_resource extends class_base
 		));
 		$table->define_field(array(
 			"name" => "project",
-			"caption" => t("Projekt"),
-			"sortable" => 1,
-			"align" => "center"
-		));
-		$table->define_field(array(
-			"name" => "name",
-			"caption" => t("Töö"),
+			"caption" => t("Projekt-Töö nr."),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -452,58 +446,51 @@ class mrp_resource extends class_base
 
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
-			"state" => $applicable_states,
 			"resource" => $this_object->id (),
-			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, time (), mktime (23, 59, 59)),
+			"state" => $applicable_states,
+			// "starttime" => new obj_predicate_compare (OBJ_COMP_LESS, (time () + 886400)),
 		));
-		$jobs = $list->arr ();
 
-		foreach ($jobs as $job_id => $job)
+		if ($list->count () > 0)
 		{
-			$starttime = date (MRP_DATE_FORMAT, $job->prop ("starttime"));
-			$project = $client = "";
-			if (is_oid ($job->prop ("project") && $this->can("view", $job->prop("project"))))
+			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
-				$p = obj($job->prop("project"));
-				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $p->name());
+				### get project and client name
+				$project = $client = "";
 
-				if (is_oid($p->prop("customer") && $this->can("view", $p->prop("customer"))))
+				if (is_oid ($job->prop ("project")) && $this->can("view", $job->prop("project")))
 				{
-					$c = obj($p->prop("customer"));
-					$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
+					$p = obj($job->prop("project"));
+					$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
+
+					if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
+					{
+						$c = obj($p->prop("customer"));
+						$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
+					}
 				}
+
+				### colour job status
+				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+
+				$starttime = date (MRP_DATE_FORMAT, $job->prop ("starttime"));
+				$change_url = $this->mk_my_orb ("change", array (
+					"id" => $job->id (),
+					"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
+					"group" => "",
+				), "mrp_job");
+
+				$table->define_data (array (
+					"modify" => html::href (array (
+						"caption" => t("Ava"),
+						"url" => $change_url,
+						)),
+					"project" => $project,
+					"state" => $state,
+					"starttime" => $starttime,
+					"client" => $client
+				));
 			}
-
-			### colour&... job status
-			switch ($job->prop ("state"))
-			{
-				case MRP_STATUS_INPROGRESS:
-				case MRP_STATUS_PAUSED:
-				case MRP_STATUS_DONE:
-					$disabled = true;
-					break;
-			}
-
-			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-
-
-			$change_url = $this->mk_my_orb ("change", array (
-				"id" => $job_id,
-				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
-				"group" => "",
-			), "mrp_job");
-
-			$table->define_data (array (
-				"modify" => html::href (array (
-					"caption" => t("Ava"),
-					"url" => $change_url,
-					)),
-				"project" => $project,
-				"name" => $job->name (),
-				"state" => $state,
-				"starttime" => $starttime,
-				"client" => $client
-			));
 		}
 	}
 
@@ -516,6 +503,7 @@ class mrp_resource extends class_base
 		$calendar->init_calendar (array ());
 		$calendar->configure (array (
 			"overview_func" => array (&$this, "get_overview"),
+			"full_weeks" => true,
 		));
 		$range = $calendar->get_range (array (
 			"date" => $arr["request"]["date"],
@@ -529,7 +517,7 @@ class mrp_resource extends class_base
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_PAUSED,
 			MRP_STATUS_INPROGRESS,
-			// MRP_STATUS_DONE,
+			MRP_STATUS_DONE,
 		);
 
 		$list = new object_list(array(
@@ -543,17 +531,21 @@ class mrp_resource extends class_base
 		{
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
-				//$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
-				$project = is_object ($project) ? $project->name () : "...";
+				### project name
+				$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
+				$project_name = is_object ($project) ? $project->name () : "...";
+
+				### set timestamp according to state
+				$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
 
 				### colour job status
 				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 				### ...
 				$calendar->add_item (array (
-					"timestamp" => $job->prop ("starttime"),
+					"timestamp" => $timestamp,
 					"data" => array(
-						"name" => $job->prop ("name") . " [" . $state . "]",
+						"name" => '<span  style="white-space: nowrap;">' . $project_name . "-" . $job->prop ("exec_order") . " [" . $state . "]</span>",
 						"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
 					),
 				));
@@ -837,35 +829,34 @@ class mrp_resource extends class_base
 		return $recurrent_unavailable_periods;
 	}
 
-	function get_week_start ($time) //!!! not really dst safe
+	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
 	{
+		if (!$time)
+		{
+			$time = time ();
+		}
+
 		$date = getdate ($time);
 		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
 		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
 		$nodst_hour = (int) date ("H", $week_start);
 
-		switch ($nodst_day_hour)
+		if ($nodst_hour === 0)
 		{
-			case 1:
-				$week_start = $week_start - 3600;
-				break;
-
-			case 23:
-				$week_start = $week_start + 3600;
-				break;
-
-			case 2:
-				$week_start = $week_start - 2*3600;
-				break;
-
-			case 22:
-				$week_start = $week_start + 2*3600;
-				break;
-
-			case 0:
-			default:
-				$week_start = $week_start;
-				break;
+			$week_start = $week_start;
+		}
+		else
+		{
+			if ($nodst_hour < 13)
+			{
+				$dst_error = $nodst_hour;
+				$week_start = $week_start - $dst_error*3600;
+			}
+			else
+			{
+				$dst_error = 24 - $nodst_hour;
+				$week_start = $week_start + $dst_error*3600;
+			}
 		}
 
 		return $week_start;
@@ -958,17 +949,9 @@ class mrp_resource extends class_base
 			return false;
 		}
 
-		switch ($resource->prop ("state"))
-		{
-			case MRP_STATUS_RESOURCE_INUSE:
-				$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
-				$resource->save ();
-				return true;
-				break;
-
-			default:
-				return false;
-		}
+		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		$resource->save ();
+		return true;
 	}
 }
 

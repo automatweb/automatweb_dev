@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.45 2005/04/02 00:45:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.46 2005/04/02 16:26:18 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -9,22 +9,32 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 
+@groupinfo data caption="Andmed"
+
+
 
 @default group=general
-@default table=objects
-	@property name type=text store=no
+	@property name type=text
 	@caption Nimi
 
 	@property comment type=textarea
 	@caption Kommentaar
 
-@groupinfo data caption="Andmed"
+
 @default group=data
+@default table=objects
 	@property job_toolbar type=toolbar no_caption=1 store=no
 
-	@property advised_starttime type=datetime_select
+	@property advised_starttime type=datetime_select field=meta method=serialize
 	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
 	@caption Soovitav algusaeg
+
+	@property started type=text field=meta method=serialize
+	@caption Alustatud
+
+	@property finished type=text field=meta method=serialize
+	@caption Lõpetatud
+
 
 @default table=mrp_job
 	@property resource type=text
@@ -257,6 +267,14 @@ class mrp_job extends class_base
 
 			case "starttime":
 				$prop["value"] = $prop["value"] ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Planeerimata");
+				break;
+
+			case "started":
+				$prop["value"] = $prop["value"] ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Tööd pole veel alustatud");
+				break;
+
+			case "finished":
+				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Tööd pole veel lõpetatud");
 				break;
 
 			case "job_toolbar":
@@ -536,6 +554,7 @@ class mrp_job extends class_base
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$this_object->set_prop ("started", time ());
 
 			### log
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -594,6 +613,7 @@ class mrp_job extends class_base
 		{
 			### finish job
 			$this_object->set_prop ("state", MRP_STATUS_DONE);
+			$this_object->set_prop ("finished", time ());
 			$this_object->save ();
 
 			### set resource as free
@@ -786,7 +806,7 @@ class mrp_job extends class_base
 			### pause job
 			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
 
-			// save paused times for job
+			### save paused times for job
 			$pt = safe_array($this_object->meta("paused_times"));
 			$pt[] = array("start" => time(), "end" => NULL);
 			$this_object->set_meta("paused_times" , $pt);
@@ -834,7 +854,6 @@ class mrp_job extends class_base
 		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
 			MRP_STATUS_INPROGRESS,
-			// MRP_STATUS_ONHOLD,
 		);
 		$applicable_job_states = array (
 			MRP_STATUS_PAUSED,
@@ -861,10 +880,9 @@ class mrp_job extends class_base
 			### continue job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 
-			// save paused times for job
+			### save paused times for job
 			$pt = safe_array($this_object->meta("paused_times"));
 			$pt[count($pt)-1]["end"] = time();
-
 			$this_object->set_meta("paused_times" , $pt);
 
 			$this_object->save ();

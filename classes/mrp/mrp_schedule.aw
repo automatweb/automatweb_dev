@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.36 2005/03/30 18:02:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.37 2005/04/02 16:26:18 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1347,7 +1347,7 @@ class mrp_schedule extends class_base
 			{
 				return $this->unavailable_times;
 			}
-			
+
 			$pointer = $unavailable_start + $unavailable_length + 1;
 			$unavailable_start = $this->schedule_start + $unavailable_start;
 			$unavailable_end = $unavailable_start + $unavailable_length;

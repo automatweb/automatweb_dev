@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.74 2005/04/02 00:45:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.75 2005/04/02 16:26:18 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1458,7 +1458,6 @@ class mrp_workspace extends class_base
 				break;
 
 			case "planned_overdue":
-				// $this->db_query("SELECT `oid` FROM `mrp_case` WHERE `planned_date`>`due_date`");//!!! lisada k6igile querydele join obj tabeliga et saada ainult selle workspace'i asju, siin ja scheduleris
 			///!!! pyyda teha object listina
 				// $list = new object_list (array (
 					// "class_id" => CL_MRP_CASE,
@@ -1467,7 +1466,7 @@ class mrp_workspace extends class_base
 					// "parent" => $this_object->prop ("projects_folder"),
 					//// "createdby" => aw_global_get('uid'),
 				// ));
-				// echo dbg::dump($this->get_proj_overdue($this_object));
+
 				$od = $this->get_proj_overdue($this_object);
 				if (count($od) == 0)
 				{
@@ -1872,6 +1871,7 @@ class mrp_workspace extends class_base
 
 	function create_schedule_chart ($arr)
 	{
+		$time =  time();
 		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
 		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
@@ -1925,7 +1925,7 @@ class mrp_workspace extends class_base
 					)
 				));
 
-				### add reserved times for resources
+				### add reserved times for resources, cut off past
 				$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
 					"mrp_resource" => $resource->id(),
 					"mrp_start" => $range_start,
@@ -1933,8 +1933,9 @@ class mrp_workspace extends class_base
 				));
 				foreach($reserved_times as $rt_start => $rt_end)
 				{
-					if ($rt_end > time())
+					if ($rt_end > $time)
 					{
+						$rt_start = ($rt_start < $time) ? $time : $rt_start;
 						$chart->add_bar(array(
 							"row" => $resource->id(),
 							"start" => $rt_start,
@@ -1970,10 +1971,26 @@ class mrp_workspace extends class_base
 		"");
 		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
 
-		### job states that are shown in chart
+		### job states that are shown in chart past
+		$applicable_states = array (
+			MRP_STATUS_DONE,
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
+		);
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"parent" => $this_object->prop ("jobs_folder"),
+			"state" => $applicable_states,
+			// "started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+		));
+		$jobs = $list->arr ();
+
+		### job states that are shown in chart future
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
-			MRP_STATUS_INPROGRESS,
 		);
 
 		$list = new object_list (array (
@@ -1981,19 +1998,22 @@ class mrp_workspace extends class_base
 			"parent" => $this_object->prop ("jobs_folder"),
 			"state" => $applicable_states,
 			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 		));
+		$jobs = array_merge ($list->arr (), $jobs);
 
-		for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
+		foreach ($jobs as $job)
 		{
-			$project_id = $job->prop ("project");
-			$project = obj ($project_id);
+			$project = obj ($job->prop ("project"));
 
 			### project states that are shown in chart
 			$applicable_states = array (
 				MRP_STATUS_PLANNED,
 				MRP_STATUS_INPROGRESS,
+				MRP_STATUS_DONE,
+				MRP_STATUS_ARCHIVED,
 			);
 
 			if (!in_array ($project->prop ("state"), $applicable_states))
@@ -2001,24 +2021,42 @@ class mrp_workspace extends class_base
 				continue;
 			}
 
-			$length = $job->prop ("planned_length");
-			$resource_id = $job->prop ("resource");
-			$resource = obj ($resource_id);
-			$start = $job->prop ("starttime");
-			$job_name = $project->name () . " - " . $resource->name ();
+			### get start&length according to job state
+			switch ($job->prop ("state"))
+			{
+				case MRP_STATUS_DONE:
+					$start = $job->prop ("started");
+					$length = $job->prop ("finished") - $job->prop ("started");
+// /* dbg */ echo date(MRP_DATE_FORMAT, $start) . "-" . date(MRP_DATE_FORMAT, $start + $length) . "<br>";
+					break;
+
+				case MRP_STATUS_PLANNED:
+					$start = $job->prop ("starttime");
+					$length = $job->prop ("planned_length");
+					break;
+
+				case MRP_STATUS_PAUSED:
+				case MRP_STATUS_INPROGRESS:
+					$start = $job->prop ("started");
+					$length = $job->prop ("planned_length");
+					break;
+			}
+
+			$resource = obj ($job->prop ("resource"));
+			$job_name = $project->name () . "-" . $job->prop ("exec_order") . " - " . $resource->name ();
 
 			### set bar colour
 			$colour = $this->state_colours[$job->prop ("state")];
 			$colour = in_array ($job->id (), $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
-				"row" => $resource_id,
+				"row" => $resource->id (),
 				"start" => $start,
 				"colour" => $colour,
 				"length" => $length,
-				"uri" => aw_url_change_var ("mrp_hilight", $project_id),
+				"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+/* dbg */ . " [res:" . $resource->id () . " töö:" . $job->id () . " proj:" . $project->id () . "]"
 			);
 
 			$chart->add_bar ($bar);
@@ -2029,12 +2067,12 @@ class mrp_workspace extends class_base
 				if ($pd["start"] && $pd["end"])
 				{
 					$bar = array (
-						"row" => $resource_id,
+						"row" => $resource->id (),
 						"start" => $pd["start"],
 						"nostartmark" => true,
 						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
 						"length" => ($pd["end"] - $pd["start"]),
-						"uri" => aw_url_change_var ("mrp_hilight", $project_id),
+						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
 					);
 
@@ -2252,7 +2290,7 @@ class mrp_workspace extends class_base
 		return $ret;
 	}
 
-	function get_week_start ($time = false)
+	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
 	{
 		if (!$time)
 		{
@@ -2262,6 +2300,26 @@ class mrp_workspace extends class_base
 		$date = getdate ($time);
 		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
 		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
+		$nodst_hour = (int) date ("H", $week_start);
+
+		if ($nodst_hour === 0)
+		{
+			$week_start = $week_start;
+		}
+		else
+		{
+			if ($nodst_hour < 13)
+			{
+				$dst_error = $nodst_hour;
+				$week_start = $week_start - $dst_error*3600;
+			}
+			else
+			{
+				$dst_error = 24 - $nodst_hour;
+				$week_start = $week_start + $dst_error*3600;
+			}
+		}
+
 		return $week_start;
 	}
 

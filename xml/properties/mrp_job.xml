@@ -3,16 +3,13 @@
       <property>
             <name>name</name>
             <group>general</group>
-            <table>objects</table>
             <type>text</type>
-            <store>no</store>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>comment</name>
             <group>general</group>
-            <table>objects</table>
             <type>textarea</type>
             <field>comment</field>
             <caption>Kommentaar</caption>
@@ -31,9 +28,28 @@
             <group>data</group>
             <table>objects</table>
             <type>datetime_select</type>
-            <field>advised_starttime</field>
+            <field>meta</field>
+            <method>serialize</method>
             <comment>Allhankijaga kokkulepitud aeg, millal töö alustada.</comment>
             <caption>Soovitav algusaeg</caption>
+      </property>
+      <property>
+            <name>started</name>
+            <group>data</group>
+            <table>objects</table>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Alustatud</caption>
+      </property>
+      <property>
+            <name>finished</name>
+            <group>data</group>
+            <table>objects</table>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lõpetatud</caption>
       </property>
       <property>
             <name>resource</name>
