@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.12 2004/03/25 19:39:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.13 2004/04/12 14:43:19 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -384,14 +384,14 @@ class releditor extends aw_template
 					$filename = $_fileinf["name"][$name];
 					$filetype = $_fileinf["type"][$name];
 					$tmpname = $_fileinf["tmp_name"][$name];
-					$contents = $this->get_file(array(
-						"file" => $tmpname,
-					));
 					// tundub, et polnud sellist faili, eh?
-					if (empty($tmpname))
+					if (empty($tmpname) || !is_uploaded_file($tmpname))
 					{
 						return false;
 					};
+					$contents = $this->get_file(array(
+						"file" => $tmpname,
+					));
 					$emb[$name] = array(
 						"tmp_name" => $tmpname,
 						"type" => $filetype,
