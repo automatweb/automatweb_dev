@@ -125,6 +125,10 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 		<td class="celltext">K&uuml;lastatud lingi stiil:</td>
 		<td class="celltext"><select class="small_button" name="st[visited]">{VAR:visited}</select></td>
 	</tr>
+	<tr>
+		<td class="celltext">CSS spetsiifiline:</td>
+		<td class="celltext"><textarea name="st[css_text]" cols="50" rows="5">{VAR:css_text}</textarea></td>
+	</tr>
 </table>
 {VAR:reforb}
 </form>

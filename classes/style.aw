@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.21 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.22 2003/01/29 12:38:23 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -184,6 +184,7 @@ class style extends aw_template
 			"css_class"		=> $style["css_class"],
 			"nowrap"	=> $style["nowrap"]  ? "CHECKED" : "",
 			"visited" => $this->picker($style["visited"], $this->get_select(0, ST_CELL, true)),
+			"css_text" => $style["css_text"],
 			"reforb"	=> $this->mk_reforb("submit",array("parent" => $parent, "id" => $id))
 		));
 		return $this->parse();
@@ -609,6 +610,10 @@ class style extends aw_template
 			$fstyles[] = "white-space: nowrap;";
 		}
 
+		if (isset($st["css_text"]) && $st["css_text"] != "")
+		{
+			$fstyles[] = $st["css_text"];
+		}
 		return  join("\n",$fstyles);
 	}
 
