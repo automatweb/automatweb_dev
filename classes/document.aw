@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.314 2005/01/18 10:54:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.315 2005/01/21 10:08:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -482,6 +482,8 @@ class document extends aw_template
 					"class" => "document",
 					"action" => "print",
 					"print" => 1,
+					"tv_sel" => $_GET["tv_sel"],
+					"section" => $docid
 				));
 				$this->vars(array(
 					"docid" => $docid,
