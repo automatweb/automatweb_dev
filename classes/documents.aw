@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.16 2001/05/24 21:10:03 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.17 2001/05/27 22:39:04 cvs Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -830,7 +830,7 @@ class db_documents extends aw_template
 				case "s":
 					$a_name = $match[2];
 					$replacement = "<a name=\"$a_name\">";
-					$text = preg_replace("/#$a_name#(.*)#$a_name#/","<a href=\"#$a_name\">\\1</a>",$text);
+					$text = preg_replace("/#$a_name#(.*)#$a_name#/","<a class=\"siselink\" href=\"#$a_name\">\\1</a>",$text);
 					break;
 
 				default:
@@ -988,7 +988,7 @@ class db_documents extends aw_template
 			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
 		}
 
-		if (!(strpos($doc["content"],"#huvid_check") == false))
+		if (!(strpos($doc["content"],"#huvid_check") === false))
 		{
 			preg_match("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
 			classload("keywords");
@@ -998,6 +998,14 @@ class db_documents extends aw_template
 							"section" => $maat[2],
 					));
 			$doc["content"] = preg_replace("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
+		}
+
+		if (!(strpos($doc["content"],"#huvid_kategooriad#") === false))
+		{
+			classload("keywords");
+			$kw = new keywords;
+			$blah = $kw->show_categories();
+			$doc["content"] = preg_replace("/#huvid_kategooriad#/",$blah,$doc["content"]);
 		}
 
 		$awt->stop("db_documents->gen_preview()::misc_replaces");
