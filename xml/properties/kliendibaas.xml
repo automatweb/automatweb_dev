@@ -22,11 +22,6 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_firma>
-            <kliendibaas_isik>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_isik>
       </tableinfo>
 </properties>
 
