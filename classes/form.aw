@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.97 2002/06/14 02:22:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.98 2002/06/15 14:43:46 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -737,22 +737,6 @@ class form extends form_base
 		return $ret;
 	}
 
-	////
-	// !returns an array of references to the instances of all elements in this form
-	// well, theoretically references anyway, but php craps out here and actually, if you modify them, they get cloned 
-	// and changes end up in the cloned versions, so no changing stuff through these pointers
-	function get_all_els()
-	{
-		$ret = array();
-		for ($row = 0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col = 0; $col < $this->arr["cols"]; $col++)
-			{
-				$this->arr["contents"][$row][$col]->get_els(&$ret);
-			}
-		}
-		return $ret;
-	}
 
 	////
 	// !Generates the form used in modifying the table settings
@@ -1149,9 +1133,11 @@ class form extends form_base
 			$this->load($id);
 		}
 		
-		if ($entry_id && $this->arr["save_table"] != 1)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, 
-		{																						// siis ignoorime seda
+		// tshekime et kas see entry on ikka loaditud formi jaox 
+		if ($entry_id && $this->arr["save_table"] != 1)
+		{	
 			$fid = $this->get_form_for_entry($entry_id);
+			// ja kui pole siis ignoorime seda
 			if ($fid != $id)
 			{
 				$entry_id = false;
@@ -1287,6 +1273,14 @@ class form extends form_base
 				}
 			}
 
+			if ($this->type == FTYPE_CONFIG)
+			{
+				$this->set_object_metadata(array(
+					"oid" => $obj_id,
+					"data" => $this->config_keys,
+				));
+			};
+
 			$controllers_ok = true;
 			foreach($this->controller_queue as $ctrl)
 			{
@@ -1351,6 +1345,17 @@ class form extends form_base
 				"chain_entry_id" => $chain_entry_id,
 				"cal_id"  => $cal_id,
 			));
+			
+			if ($this->type == FTYPE_CONFIG)
+			{
+				// remember obj_id
+				$q = "UPDATE form_entries SET
+					obj_id = '$obj_id'
+					WHERE id = '$this->entry_id'";
+				$this->db_query($q);
+			}
+
+			
 
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
@@ -1392,6 +1397,10 @@ class form extends form_base
 				{
 					// n2itame ocingu tulemusi
 					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id,"op_id" => 1,"section" => $section));
+				}
+				elseif ($this->type == FTYPE_CONFIG)
+				{
+					$l = $this->mk_my_orb("change",array("id" => $obj_id),"objconfig");
 				}
 				else
 				{
