@@ -1,172 +1,265 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.19 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.20 2002/12/19 19:06:34 duke Exp $
+// promo.aw - promokastid.
 
-class promo extends aw_template
+/*
+	@default group=general
+	
+	@property caption type=textbox table=objects field=meta method=serialize
+	@caption Pealkiri
+
+	@property tpl_lead type=select table=menu group=show
+	@caption Template näitamiseks
+	
+	@property preview type=text group=preview table=objects field=meta method=serialize
+	@caption Eelvaade
+
+	@property tpl_edit type=select table=menu group=show
+	@caption Template muutmiseks
+	
+	@property type type=select table=objects field=meta method=serialize
+	@caption Kasti tüüp
+
+	@property link type=textbox table=menu
+	@caption Link
+	
+	@property link_caption type=textbox table=objects field=meta method=serialize
+	@caption Lingi kirjeldus
+	
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+
+	@property all_menus type=checkbox ch_value=1 value=1 group=menus
+	@caption Näita igal pool
+
+	@property no_title type=checkbox ch_value=1 value=1 group=show
+	@caption Ilma pealkirjata
+
+	@property groups type=select multiple=1 size=15 group=show
+	@caption Grupid, kellele kasti näidata
+	
+	@property section type=select multiple=1 size=15 group=menus
+	@caption Vali menüüd, mille all kasti näidata
+	
+	@property last_menus type=select multiple=1 size=15 group=menus
+	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
+
+	@property ndocs type=textbox size=4 group=menus
+	@caption Mitu viimast dokumenti
+
+	@classinfo objtable=menu
+	@classinfo objtable_index=id
+
+	@classinfo corefields=name,comment,status
+
+	@tableinfo menu index=id master_table=objects master_index=oid
+
+	@groupinfo general caption=Üldine default=1
+	@groupinfo menus caption=Menüüd
+	@groupinfo show caption=Näitamine
+	@groupinfo preview caption=Eelvaade
+			
+*/
+class promo extends class_base
 {
 	function promo()
 	{
-		$this->init("promo");
+		$this->init(array(
+			"clid" => CL_PROMO,
+			"tpldir" => "promo",
+		));
 		lc_load("definition");
 		$this->lc_load("promo","lc_promo");
 	}
 
-	function add($arr)
+	function get_property($args = array())
 	{
-		extract($arr);
-		$this->mk_path($parent, LC_PROMO_TODAY);
-
-		$this->read_template("add_promo.tpl");
-		$ob = get_instance("objects");
-		$menu = $ob->get_list();
-		$menu[$this->cfg["rootmenu"]] = LC_PROMO_FRONTPAGE;
-
-		// kysime infot adminnitemplatede kohta
-		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
-		$this->db_query($q);
-		$edit_templates = array();
-		while($tpl = $this->db_fetch_row()) 
+		$data = &$args["prop"];
+		$retval = PROP_OK; 
+		switch($data["name"])
 		{
-			$edit_templates[$tpl["id"]] = $tpl["name"];
-		};
-		// kysime infot lyhikeste templatede kohta
-		$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-		$this->db_query($q);
-		$short_templates = array();
-		while($tpl = $this->db_fetch_row()) 
-		{
-			$short_templates[$tpl["id"]] = $tpl["name"];
-		};
+			case "tpl_edit":
+				// kysime infot adminnitemplatede kohta
+				$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
+				$this->db_query($q);
+				$edit_templates = array();
+				while($tpl = $this->db_fetch_row()) 
+				{
+					$edit_templates[$tpl["id"]] = $tpl["name"];
+				};
+				$data["options"] = $edit_templates;
+				break;
 
-		$u = get_instance("users");
-		$this->vars(array(
-			"section" => $ob->option_list($parent,$menu),
-			"left_sel" => "CHECKED",
-			"tpl_edit" => $this->option_list(0,$edit_templates),
-			"tpl_lead" => $this->option_list(0, $short_templates),
-			"last_menus" => $this->multiple_option_list(array(),$menu),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
-			"groups" => $this->multiple_option_list(array(),$u->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
-		));
-		return $this->parse();
+			case "tpl_lead":
+				// kysime infot lyhikeste templatede kohta
+				$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
+				$this->db_query($q);
+				$short_templates = array();
+				while($tpl = $this->db_fetch_row()) 
+				{
+					$short_templates[$tpl["id"]] = $tpl["name"];
+				};
+				$data["options"] = $short_templates;
+				break;
+	
+			case "type":
+				$data["options"] = array(
+					"0" => "Vasakul",
+					"1" => "Paremal",
+					"2" => "Üleval",
+					"3" => "All",
+					"scroll" => "Skrolliv",
+				);
+				break;
+
+			case "groups":
+				$u = get_instance("users");
+				$data["options"] = $u->get_group_picker(array(
+					"type" => array(GRP_REGULAR,GRP_DYNAMIC),
+				));
+				break;
+
+			case "last_menus":
+				$ob = get_instance("objects");
+				$menu = $ob->get_list();
+				$menu[0] = "";
+				$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
+				$data["options"] = $menu;
+				break;
+
+			case "section":
+				$ob = get_instance("objects");
+				$menu = $ob->get_list();
+				$menu[0] = "";
+				$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
+				$data["options"] = $menu;
+				break;
+
+			case "preview":
+				// first, figure out which main.tpl to use
+				// what a sorry way to do that
+				$tpldir = $this->cfg["site_basedir"] . "/templates/automatweb/menuedit";
+				// god, I hate myself
+				$this->template_dir = $tpldir;
+				$this->read_template("main.tpl");
+				$templates = array(
+					"" => "LEFT_PROMO",
+					"0" => "LEFT_PROMO",
+					"1" => "RIGHT_PROMO",
+					"2" => "UP_PROMO",
+					"3" => "DOWN_PROMO",
+					"scroll" => "SCROLL_PROMO",
+				);
+				$use_tpl = $templates[$args["obj"]["meta"]["type"]];
+				$tplsrc = $this->templates[$use_tpl];
+				$m = get_instance("menuedit");
+				$defs = new aw_array($m->get_default_document($args["obj"]["oid"],true));
+				$pr_c = "";
+				$menu = $this->get_menu($args["obj"]["oid"]);
+				$tpl_lead = $menu["tpl_lead"];
+				$tplmgr = get_instance("templatemgr");
+				$tpl_filename = $tplmgr->get_template_file_by_id($tpl_lead);
+				$data["value"] = "siia tuleb promokasti eelvaade, kui AW seda ükskord võimaldab";
+				break;
+
+		}
+		return $retval;
 	}
 
-	function submit($arr)
+	function callback_pre_edit($args = array())
 	{
-		extract($arr);
-
-		$a = $this->make_keys($section);
-
-		$sets = array(
-			"section" => $a,
-			"right" => ($right == 1 ? 1 : 0), 
-			"up" => ($right == 2 ? 1 : 0), 
-			"down" => ($right == 3 ? 1 : 0), 
-			"scroll" => ($right == 'scroll' ? 1 : 0),
-			"tpl_lead" => $tpl_lead, 
-			"tpl_edit" => $tpl_edit,
-			"comment" => $comment,
-		);
-
-		$com = serialize($sets);
-
-		if ($id)
+		$id = $args["object"]["oid"];
+		$menu = $this->get_menu($id);
+		$check1 = aw_unserialize($menu["comment"]);
+		$check2 = aw_unserialize($menu["sss"]);
+		if (is_array($check1) || is_array($check2))
 		{
-			$com = $all_menus ? "all_menus" : serialize($sets);
-			$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
-			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link',ndocs = '$num_last',sss = '".serialize($this->make_keys($last_menus))."' WHERE id = $id");
-			$this->_log("promo", sprintf(LC_PROMO_CHANGED_PROMO_BOX,$title));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $title,
-				"class_id" => CL_PROMO,
-				"comment" => $com,
-				"last" => 1,
-			));
-			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit,ndocs,sss) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit','$num_last','".serialize($this->make_keys($last_menus))."')");
-			$this->_log("promo", sprintf(LC_PROMO_ADD_TO_PROMO_BOX,$title));
-		}
-
-		$this->set_object_metadata(array("oid" => $id, "key" => "no_title", "value" => $no_title));
-		$this->set_object_metadata(array("oid" => $id, "key" => "link_caption", "value" => $link_caption));
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "groups",
-			"value" => $this->make_keys($groups)
-		));
-
-		return $this->mk_my_orb("change", array("id" => $id));
+			$convert_url = $this->mk_my_orb("convert",array());
+			print "See objekt on vanas formaadis. Enne kui seda muuta saab, tuleb kõik süsteemis olevad promokastis uude formaati konvertida. <a href='$convert_url'>Kliki siia</a> konversiooni alustamiseks";
+			exit;
+		};
 	}
 
-	function change($arr)
+	function callback_pre_save($args = array())
 	{
-		extract($arr);
-		$this->read_template("add_promo.tpl");
+		$objdata = &$args["objdata"];
+                if (!$objdata["type"])
+                {
+			$objdata["type"] = MN_PROMO_BOX;
+                };
+	}
 
-		if (!($row = $this->get_object($id)))
-		{
-			$this->raise_error(ERR_PROMO_NOBOX,"promo->gen_change($id): No such box!", true);
-		}
-
-		$this->mk_path($row["parent"],LC_PROMO_CHANGE_PROMO_BOX);
-		$ob = get_instance("objects");
-
-		$sets = unserialize($row["comment"]);
-
-		// kysime infot adminnitemplatede kohta
-		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
+	function convert($args = array())
+	{
+		$q = "SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = " . CL_PROMO;
 		$this->db_query($q);
-		$edit_templates = array();
-		while($tpl = $this->db_fetch_row()) 
+		// so, basically, if I load a CL_PROMO object and discover that it's
+		// comment field is serialized - I will have to convert all promo
+		// boxes in the system.
+
+		// menu.sss tuleb ka unserialiseerida, saadud asjad annavad meile
+		// last_menus sisu
+
+		// so, how on earth do i make a callback into this class
+
+		$convert = false;
+
+		while($row = $this->db_next())
 		{
-			$edit_templates[$tpl["id"]] = $tpl["name"];
+			print "doing $row[oid]<br>";
+			$this->save_handle();
+			$meta_add = aw_unserialize($row["comment"]);
+			$last_menus = aw_unserialize($row["sss"]);
+			$meta = aw_unserialize($row["metadata"]);
+			if (is_array($last_menus) || is_array($meta_add))
+			{
+				$convert = true;
+			};
+			$meta["last_menus"] = $last_menus;
+			$meta["section"] = $meta_add["section"];
+			if ($meta_add["right"])
+			{
+				$meta["type"] = 1;
+			}
+			elseif ($meta_add["up"])
+			{
+				$meta["type"] = 2;
+			}
+			elseif ($meta_add["down"])
+			{
+				$meta["type"] = 3;
+			}
+			elseif ($meta_add["scroll"])
+			{
+				$meta["type"] = "scroll";
+			}
+			else
+			{
+				$meta["type"] = 0;
+			};
+			$meta["all_menus"] = $meta_add["all_menus"];
+			$comment = $meta_add["comment"];
+			// reset sss field of menu table
+			if ($convert)
+			{
+				$q = "UPDATE menu SET sss = '' WHERE id = '$row[oid]'";
+				$this->db_query($q);
+
+				$this->upd_object(array(
+					"oid" => $row["oid"],
+					"comment" => $comment,
+					"metadata" => $meta,
+				));
+			};
+			print "<pre>";
+			print_r($meta);
+			print "</pre>";
+			$this->restore_handle();
+			print "done<br>";
+			sleep(1);
+			flush();
 		};
-		// kysime infot lyhikeste templatede kohta
-		$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-		$this->db_query($q);
-		$short_templates = array();
-		while($tpl = $this->db_fetch_row()) 
-		{
-			$short_templates[$tpl["id"]] = $tpl["name"];
-		};
-
-
-		$no_title = $this->get_object_metadata(array("oid" => $id, "key" => "no_title"));
-		$link_caption = $this->get_object_metadata(array("oid" => $id, "key" => "link_caption"));
-		$groups = $this->get_object_metadata(array("oid" => $id, "key" => "groups"));
-
-		$this->db_query("SELECT * FROM menu WHERE id = $id");
-		$rw = $this->db_next();
-
-		$menu = $ob->get_list();
-		$menu[0] = "";
-		$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
-
-
-		$u = get_instance("users");
-		$this->vars(array(
-			"last_menus" => $this->multiple_option_list(unserialize($rw["sss"]), $menu),
-			"num_last" => $rw["ndocs"],
-			"title" => $row["name"], 
-			"section"	=> $ob->multiple_option_list($sets["section"],$menu),
-			"all_menus"	=> checked($row["comment"] == "all_menus"),
-			"right_sel"	=> ($sets["right"] == 1 ? "CHECKED" : ""),
-			"up_sel"	=> ($sets["up"] == 1 ? "CHECKED" : ""),
-			"down_sel"	=> ($sets["down"] == 1 ? "CHECKED" : ""),
-			"left_sel" => ( ($sets["right"] != 1) && not($sets["scroll"]) && not($sets["up"]) && not($sets["down"])) ? "CHECKED" : "",
-			"scroll_sel" => checked($sets["scroll"]),
-			"link" => $rw["link"],
-			"comment" => $sets["comment"],
-			"link_caption" => $link_caption,
-			"tpl_edit" => $this->option_list($rw["tpl_edit"],$edit_templates),
-			"tpl_lead" => $this->option_list($rw["tpl_lead"],$short_templates),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"groups" => $this->multiple_option_list($groups,$u->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
-			"no_title" => checked($no_title)
-		));
-		return $this->parse();
 	}
 }
 ?>
