@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.2 2004/09/03 09:58:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.3 2004/12/02 09:04:02 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -14,13 +14,12 @@ class menu_export
 	function export_menus($arr)
 	{
 		extract($arr);
-		if (!is_array($ex_menus))
+		if (!is_array($ex_menus) || count($ex_menus) == 0)
 		{
 			return;
 		}
 
 		$i = get_instance("icons");
-		$this->m = get_instance("menuedit");
 		
 		$menus = array("0" => $id);
 
@@ -28,36 +27,31 @@ class menu_export
 		// he can select just the lower menus and assume that the upper onec come along with them.
 		// biyaatch 
 
-		// kay. so we cache the menus
-		$this->m->db_listall();
-		while ($row = $this->m->db_next())
+		$sels = array();
+		$ol = new object_list(array(
+			"oid" => $ex_menus,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		foreach($ol->arr() as $o)
 		{
-			$this->mar[$row["oid"]] = $row;
-		}
-
-		// this keeps all the menus that will be selected
-		$sels = array();	
-		// now we start going through the selected menus
-		reset($ex_menus);
-		while (list(,$eid) = each($ex_menus))
-		{
-			// and for each we run to the top of the hierarchy and also select all menus 
-			// so we will gather a list of all the menus we need. groovy.
-			
-			$sels[$eid] = $eid;
-			while ($eid != $id && $eid > 0)
+			$sels[$o->id()] = $o;
+			$pt = $o->path();
+			foreach($pt as $p_o)
 			{
-				$sels[$eid] = $eid;
-				$eid = $this->mar[$eid]["parent"];
+				if ($p_o->id() == $id)
+				{
+					break;
+				}
+				$sels[$p_o->id()] = $p_o;
 			}
 		}
-
+		
 		// so now we have a complete list of menus to fetch.
 		// so fetchemall
-		reset($sels);
-		while (list(,$eid) = each($sels))
+		foreach($sels as $o)
 		{
-			$row = $this->mar[$eid];
+			$row = $this->_get_row($o);
 			if ($allactive)
 			{
 				$row["status"] = 2;
@@ -82,7 +76,7 @@ class menu_export
 	{
 		$ret = array();
 		$ret["db"] = $db;
-		if ($ex_icons)
+		/*if ($ex_icons)
 		{
 			$icon = -1;
 			// admin_feature icon takes precedence over menu's icon. so include just that.
@@ -100,9 +94,37 @@ class menu_export
 				$icon = $i->get($db["icon_id"]);
 			}
 			$ret["icon"] = $icon;
-		}
+		}*/
 		$menus[$db["parent"]][] = $ret;
 	}
 
+	function _get_row($o)
+	{
+		$cb = $o->createdby();
+		$mb = $o->modifiedby();
+		return array(
+			"parent" => $o->parent(),
+			"oid" => $o->id(),
+			"comment" => $o->comment(),
+			"name" => $o->name(),
+			"created" => $o->created(),
+			"createdby" => $cb->name(),
+			"modified" => $o->modified(),
+			"modifiedby" => $mb->name(),
+			"status" => $o->status(),
+			"jrk" => $o->ord(),
+			"alias" => $o->prop("alias"),
+			"class_id" => $o->class_id(),
+			"brother_of" => $o->brother_of(),
+			"metadata" => aw_serialize($o->meta()),
+			"periodic" => $o->prop("periodic"),
+			"type" => $o->prop("type"),
+			"link" => $o->prop("link"),
+			"clickable" => $o->prop("clickable"),
+			"target" => $o->prop("target"),
+			"ndocs" => $o->prop("ndocs"),
+			"admin_feature" => $o->prop("admin_feature")
+		);
+	}
 };
 ?>
