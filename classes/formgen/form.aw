@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.85 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.86 2003/12/10 14:23:25 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1536,13 +1536,6 @@ class form extends form_base
 				VALUES ('$id','$id','$eid','$_start','$_end','$_max','2','$_period_cnt','$relation')";
 			$this->db_query($q);
 		};
-
-		// check mailinglist rules
-		if ($this->type == FTYPE_ENTRY && !$no_ml_rules)
-		{
-			$ml_rule_inst = get_instance("mailinglist/ml_rule");
-			$ml_rule_inst->exec_dynamic_rules();
-		}
 
 		if ($this->set_use_eid_once == true && !$this->arr["no_use_eid_once"])
 		{
