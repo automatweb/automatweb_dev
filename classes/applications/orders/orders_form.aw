@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.3 2004/11/11 15:53:02 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.4 2004/11/30 16:58:23 sven Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -101,6 +101,7 @@ class orders_form extends class_base
 			$obj->save();
 			$obj = &obj($arr["id"]);
 		}
+		return aw_ini_get("baseurl")."/".$_SESSION["orders_section"];
 	}
 	
 	function do_shop_cart($arr)
@@ -159,6 +160,7 @@ class orders_form extends class_base
 	
 	function parse_alias($arr)
 	{
+		$_SESSION["orders_section"] = $arr["alias"]["from"];
 		$arr["id"] = $arr["alias"]["target"];
 		$arr["group"] = "ordering";
 		$arr["cb_part"] = 1;

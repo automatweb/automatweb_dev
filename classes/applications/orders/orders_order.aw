@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.2 2004/11/10 16:38:49 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.3 2004/11/30 16:58:23 sven Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -370,7 +370,10 @@ class orders_order extends class_base
 			$_SESSION["order_form_values"] = $arr["orders"];
 		}
 		
-		return $this->mk_my_orb("change", array("id" => $_SESSION["order_form_id"]), CL_ORDERS_FORM);
+		return $this->mk_my_orb("change", array(
+			"id" => $_SESSION["order_form_id"],
+			"section" => $_SESSION["orders_section"],
+			), CL_ORDERS_FORM);
 	}
 	
 /**
@@ -429,6 +432,7 @@ class orders_order extends class_base
 			array(
 				"id" => $_SESSION["order_form_id"],
 				"group" => "confirmpage",
+				"section" => $_SESSION["orders_section"],
 			), CL_ORDERS_FORM);
 	}
 	
