@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.47 2002/02/26 16:23:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.48 2002/03/11 16:15:32 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -1809,7 +1809,23 @@ class form_element extends aw_template
 			$var = $prefix.$d_id;
 			global $$var;
 			$v = $$var;
-			$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+			if (!$this->arr["has_month"])
+			{
+				$v["month"] = 1;
+			}
+			if (!$this->arr["has_day"])
+			{
+				$v["day"] = 1;
+			}
+			if ($v["year"] > 0)
+			{
+				$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+			}
+			else
+			{
+				$tm = -1;
+			}
+
 			if ($this->arr["def_date_type"] == "rel")
 			{
 				$tm+=($this->arr["def_date_num"] * $this->arr["def_date_add"]);
@@ -1910,9 +1926,7 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				// FIXME: kui mingil hetkel kasutaja kuupäeva formaat muutub
-				// konfitavaks, siis muuda ka siit ära
-				$html = $this->time2date($this->entry,5);
+				$html = $this->get_date_value();
 				break;
 
 			case "price":
@@ -2247,6 +2261,40 @@ class form_element extends aw_template
 	function get_all_subtypes()
 	{
 		return $this->all_subtypes;
+	}
+
+	function get_date_value()
+	{
+		if ($this->arr["subtype"] == "created")
+		{
+			if ($this->arr["date_format"] == "")
+			{
+				$html.=$this->time2date($this->form->entry_created,2);
+			}
+			else
+			{
+				$html.=date($this->arr["date_format"],$this->form->entry_created);
+			}
+		}
+		else
+		{
+			if ($this->arr["date_format"] == "")
+			{
+				$html.=$this->time2date($this->entry,5);
+			}
+			else
+			{
+				if ($this->entry < 100)
+				{
+					$html = "";
+				}
+				else
+				{
+					$html.=date($this->arr["date_format"],$this->entry);
+				}
+			}
+		}
+		return $html;
 	}
 }
 ?>

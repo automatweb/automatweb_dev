@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.48 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.49 2002/03/11 16:15:32 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -210,35 +210,7 @@ lc_load("definition");
 
 			if ($this->arr["type"] == "date")
 			{
-				if ($this->arr["subtype"] == "created")
-				{
-					if ($this->arr["date_format"] == "")
-					{
-						$html.=$this->time2date($this->form->entry_created,2);
-					}
-					else
-					{
-						$html.=date($this->arr["date_format"],$this->form->entry_created);
-					}
-				}
-				else
-				{
-					if ($this->arr["date_format"] == "")
-					{
-						$html.=$this->time2date($this->entry,5);
-					}
-					else
-					{
-						if ($this->entry < 100)
-						{
-							$html = "";
-						}
-						else
-						{
-							$html.=date($this->arr["date_format"],$this->entry);
-						}
-					}
-				}
+				$html.=$this->get_date_value();
 			}
 
 			if ($this->arr["type"] == "file")
