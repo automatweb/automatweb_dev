@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.71 2005/02/17 10:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.72 2005/02/22 10:52:52 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1663,10 +1663,8 @@ class crm_person extends class_base
 		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON); 
 	}
 	
-	
 	function callback_pre_save($arr)
 	{	
-		
 		if(is_array($arr["request"]["speaking"]))
 		{
 			foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LANGUAGE_SKILL)) as $conn)

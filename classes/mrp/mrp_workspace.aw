@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.35 2005/02/18 14:37:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.36 2005/02/22 10:52:52 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -411,7 +411,7 @@ class mrp_workspace extends class_base
 
 					default:
 						$prop["value"] = $job->prop($rpn);
-						if ($prop["value"] == "")
+						if ($prop["value"] == "" && $prop["name"] != "pj_change_comment")
 						{
 							return PROP_IGNORE;
 						}
@@ -2325,14 +2325,18 @@ class mrp_workspace extends class_base
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => 30,
-			"minstart" => ($arr["request"]["group"] == "grp_printer_current" ? get_day_start() : NULL),
-			"maxend" => ($arr["request"]["group"] == "grp_printer_current" ? NULL : get_day_start()),
+			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
+			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
 		));
 
 		$workers = $this->get_workers_for_resources($res);
 
 		foreach($jobs as $job)
 		{
+			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			{
+				continue;
+			}
 			$res = obj($job->prop("resource"));
 			$proj = obj($job->prop("project"));
 
@@ -2504,6 +2508,7 @@ class mrp_workspace extends class_base
 		{
 			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 100, $arr["maxend"]);
 		}
+
 		$jobs = new object_list($filt);
 		$ret = array();
 		foreach($jobs->arr() as $o)

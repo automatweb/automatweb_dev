@@ -215,9 +215,10 @@ class crm_user_creator extends core
 				$uid = $o_uid.".".sprintf("%03d", ++$cnt);
 			}
 
+			$pwd = isset($_POST["password"]) ? $_POST["password"] : $pers->prop("password");
 			$uo = $us->add_user(array(
 				"uid" => $uid,
-				"password" => $pers->prop("password")
+				"password" => $pwd
 			));
 
 			$uo->connect(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.13 2005/02/18 14:37:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.14 2005/02/22 10:52:52 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -29,7 +29,8 @@ define ("MRP_STATUS_DELETED", 8);
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
-ini_set ("max_execution_time", "60");
+ini_set ("max_execution_time", "600");
+set_time_limit(600);
 
 class mrp_schedule extends class_base
 {
