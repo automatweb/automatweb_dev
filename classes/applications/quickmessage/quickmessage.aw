@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.6 2004/10/08 01:32:06 kristo Exp $
-// quickmessage.aw - Kiirteade 
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.7 2004/10/19 13:26:24 ahti Exp $
+// quickmessage.aw - Kiirteade  
 /*
 
 @classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes no_status=1 no_comment=1
@@ -9,12 +9,13 @@
 @default table=quickmessages
 @default group=general
 
-//@default form=message
+@property mstatus type=hidden table=objects field=meta method=serialize datatype=int
+@caption 
 
-@property user_from type=text datatype=int
+@property user_from type=text
 @caption Kellelt
 
-@property user_to type=textbox datatype=int
+@property user_to type=textbox
 @caption Kellele
 
 @property subject type=textbox
@@ -66,37 +67,6 @@ class quickmessage extends class_base
 		};
 		return $retval;
 	}
-	function get_inbox_for_user($arr)
-	{
-		$user_to = $arr["user_to"];
-		$ol = new object_list(array(
-			"user_to" => $user_to,
-			"class_id" => CL_QUICKMESSAGE,
-			"sort_by" =>  "objects.created DESC",
-		));
-		$msgs = array();
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$msgs[] = $o->properties();
-		};
-		return $msgs;
-	}
-
-	function get_outbox_for_user($arr)
-	{
-		$user_from = $arr["user_from"];
-		$ol = new object_list(array(
-			"user_from" => $user_from,
-			"class_id" => CL_QUICKMESSAGE,
-			"sort_by" => "objects.created DESC",
-		));
-		$msgs = array();
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$msgs[] = $o->properties();
-		};
-		return $msgs;
-	}
 	/*
 	function set_property($arr = array())
 	{
@@ -118,13 +88,15 @@ class quickmessage extends class_base
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	/*
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
-
+	*/
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/*
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -134,5 +106,6 @@ class quickmessage extends class_base
 		));
 		return $this->parse();
 	}
+	*/
 }
 ?>

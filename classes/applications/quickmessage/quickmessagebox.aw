@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.2 2004/08/25 07:13:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.3 2004/10/19 13:26:24 ahti Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
@@ -51,6 +51,9 @@
 @caption Omanik
 
 */
+define("QUICKMESSAGE_INCOMING", 1);
+define("QUICKMESSAGE_OUTGOING", 2);
+define("QUICKMESSAGE_ARCHIVED", 3);
 
 class quickmessagebox extends class_base
 {
@@ -90,7 +93,9 @@ class quickmessagebox extends class_base
 					"name"		=> "new",
 					"tooltip"	=> "Uus kiri",
 					"img"		=> "class_20.gif",
-					"url"	=> aw_url_change_var(array("group" => "newmessage")),
+					"url"	=> html::get_change_url($arr["request"]["id"], array(
+					"group" => "newmessage",
+					)),
 				));
 				$tb->add_separator();
 				if($o = $this->is_that_class(array("id" => $arr["request"]["mid"], "class" => CL_QUICKMESSAGE)))
@@ -100,9 +105,10 @@ class quickmessagebox extends class_base
 						"name"		=> "answer",
 						"tooltip"	=> "Vasta kirjale",
 						"img"		=> "edit.gif",
-						"url"		=> aw_url_change_var(array(
-							"user" => $users->get_uid_for_oid($o->prop("user_from")),
+						"url"		=> html::get_change_url($arr["request"]["id"], array(
+							"cuser" => $users->get_uid_for_oid($o->prop("user_from")),
 							"group" => "newmessage",
+							"mid" => $arr["request"]["mid"],
 							"subject" => urlencode("Re: ".$o->prop("subject")),
 						)),
 					));
@@ -111,7 +117,8 @@ class quickmessagebox extends class_base
 						"name"		=> "forward",
 						"tooltip"	=> "Edasta kiri",
 						"img"		=> "mail_send.gif",
-						"url"		=> aw_url_change_var(array(
+						"url"		=> html::get_change_url($arr["request"]["id"], array(
+							"mid" => $arr["request"]["mid"],
 							"group" => "newmessage",
 							"forward" => 1,
 						)),
@@ -121,14 +128,24 @@ class quickmessagebox extends class_base
 						"name"		=> "archive",
 						"tooltip"	=> "Arhiveeri valitud kirjad",
 						"img"		=> "archive.gif",
-						"url"		=> aw_url_change_var(array("action" => "archive_message", "sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"])),
+						"url"		=> html::get_change_url($arr["request"]["id"], array(
+							"group" => $arr["request"]["group"],
+							"action" => "archive_message",
+							"mid" => $arr["request"]["mid"],
+							"sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"],
+						)),
 					));
 					$tb->add_separator();
 					$tb->add_button(array(
 						"name"		=> "delete",
 						"tooltip"	=> "Kustuta valitud kirjad",
 						"img"		=> "delete.gif",
-						"url"		=> aw_url_change_var(array("action" => "delete_message", "sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"])),
+						"url"		=> html::get_change_url($arr["request"]["id"], array(
+							"group" => $arr["request"]["group"],
+							"action" => "delete_message", 
+							"mid" => $arr["request"]["mid"],
+							"sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"],
+						)),
 					));
 				}
 				else
@@ -152,34 +169,25 @@ class quickmessagebox extends class_base
 			case "outbox":
 			case "archive":
 			case "inbox":
-				// seems like an unnecessary doubling, but saves a few rows of code -- ahz
-				switch($prop["name"])
-				{
-					case "outbox":
-						$boxprop = array("user_from");
-						$archive = false;
-					break;
-					case "inbox":
-						$boxprop = array("user_to");
-						$archive = false;
-					break;
-					case "archive":
-						$boxprop = array("user_from", "user_to");
-						$archive = true;
-					break;
-				}
 				$vars = array(
-					"group" => $prop["name"],
-					"boxprop" => $boxprop,
-					"archive" => $archive,
+					"outbox" => QUICKMESSAGE_OUTGOING,
+					"inbox" => QUICKMESSAGE_INCOMING,
+					"archive" => QUICKMESSAGE_ARCHIVED,
+				);
+				// seems like an unnecessary doubling, but saves a few rows of code -- ahz
+				$vars = array(
+					"mstatus" => $vars[$prop["name"]],
+					"group" => $arr["request"]["group"],
 					"vcl_inst" => &$prop["vcl_inst"],
 					"id" => $arr["obj_inst"]->id(),
+					"class_id" => $arr["request"]["id"],
 				);
 				if($o = $this->is_that_class(array("id" => $arr["request"]["mid"], "class" => CL_QUICKMESSAGE)))
 				{
 					$args = array(
 						"o" => $o,
 						"vcl_inst" => &$prop["vcl_inst"],
+						"request" => $arr["request"],
 					);
 					$this->show_message($args);
 				}
@@ -192,11 +200,38 @@ class quickmessagebox extends class_base
 		return $retval;
 	}
 	
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			/*
+			case "user_to":
+				$prop["error"] = "sellist kasutajat ei ole olemas!";
+				$users = get_instance("users");
+				$t_id = $users->get_oid_for_uid($prop["value"]);
+				if(!$this->can("view", $t_id) || empty($t_id))
+				{
+					return PROP_FATAL_ERROR;
+				}
+				break;
+			*/
+			case "newmessage":
+				$this->save_new_message(array(
+					"obj_inst" => &$arr["obj_inst"],
+					"request" => $arr["request"],
+				));
+				break;
+		}
+		return $retval;
+	}
+	
 	// check, if this is the object of needed class and returns the object, else returns false -- ahz
 	function is_that_class($arr)
 	{
 		$val = false;
-		if(is_oid($arr["id"]))
+		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$o = obj($arr["id"]);
 			if($o->class_id() == $arr["class"])
@@ -206,6 +241,7 @@ class quickmessagebox extends class_base
 		}
 		return $val;
 	}
+	
 	function show_message($arr)
 	{
 		$users = get_instance("users");
@@ -224,9 +260,10 @@ class quickmessagebox extends class_base
 			"name" => "Kellelt",
 			"content" => html::href(array(
 				"caption" => $user_from,
-				"url" => aw_url_change_var(array(
+				"url" => html::get_change_url($arr["request"]["id"], array(
+					"mid" => $arr["request"]["mid"],
 					"group" => "newmessage",
-					"user" => $user_from,
+					"cuser" => $user_from,
 				)),
 			)),
 		));
@@ -234,9 +271,10 @@ class quickmessagebox extends class_base
 			"name" => "Kellele",
 			"content" => html::href(array(
 				"caption" => $user_to,
-				"url" => aw_url_change_var(array(
+				"url" => html::get_change_url($arr["request"]["id"], array(
+					"mid" => $arr["request"]["mid"],
 					"group" => "newmessage",
-					"user" => $user_to,
+					"cuser" => $user_to,
 				)),
 			)),
 		));
@@ -254,46 +292,31 @@ class quickmessagebox extends class_base
 		));
 		//arr($o->properties());
 	}
+	
 	function get_box_for_user($arr)
 	{
 		$ol = new object_list(array(
-			$arr["boxprop"] => $arr[$arr["boxprop"]],
+			"parent" => $arr["id"],
 			"class_id" => CL_QUICKMESSAGE,
 			"sort_by" =>  "objects.created DESC",
+			"mstatus" => $arr["mstatus"],
 		));
 		$msgs = array();
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
-			if($arr["archive"])
-			{
-				if(in_array($arr[$arr["boxprop"]], $o->meta("archive")))
-				{
-					$msgs[] = $o->properties();
-				}
-			}
-			else
-			{
-				if(in_array($arr[$arr["boxprop"]], $o->meta("view")))
-				{
-					$msgs[] = $o->properties();
-				}
-			}
+			$msgs[] = $o->properties();
 		}
 		return $msgs;
 	}
+	
 	function create_box($arr)
 	{
 		//arr($arr);
 		$users = get_instance("users");
-		$messages = array();
-		foreach($arr["boxprop"] as $boxprop)
-		{
-			$messages = $messages + $this->get_box_for_user(array(
-				"archive" => $arr["archive"],
-				"boxprop" => $boxprop,
-				$boxprop => $users->get_oid_for_uid(aw_global_get("uid")),
-			));
-		}
+		$messages = $this->get_box_for_user(array(
+			"id" => $arr["id"],
+			"mstatus" => $arr["mstatus"],
+		));
 		$t = &$arr["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
@@ -318,43 +341,30 @@ class quickmessagebox extends class_base
 		));
 		$t->draw_text_pageselector(array(
 			"records_per_page" => 25,
+			"d_row_cnt" => count($messages),
 		));
 		$t->set_default_sortby("time");
 		$t->set_default_sorder("desc");
 		// "subject" => urlencode("Re: ".$message["subject"]),
 		//arr($arr);
-		
-		// a small unnoticable hack to show thing right in other class also -- ahz
-		if(!empty($arr["class"]))
-		{
-			$class = $arr["class"];
-			$id = $arr["class_id"];
-		}
-		else
-		{
-			$class = CL_QUICKMESSAGEBOX;
-			$id = $arr["id"];
-		}
 		foreach($messages as $message)
 		{
-			$user = obj($message["parent"]);
+			$user = obj($message["user_from"]);
 			$t->define_data(array(
 				"id" => $message["brother_of"],
 				"time" => $this->time2date($message["created"], 2),
 				"user" => html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $id,
+					"url" => html::get_change_url($arr["class_id"], array(
 						"group" => "newmessage",
-						"user" => $user->name(),
-					), $class),
+						"cuser" => $user->name(),
+					)),
 					"caption" => $user->name(),
 				)),
 				"subject" => html::href(array(
-					"url" => $this->mk_my_orb("change", array(
-						"id" => $id,
+					"url" => html::get_change_url($arr["class_id"], array(
 						"mid" => $message["brother_of"],
 						"group" => $arr["group"],
-					), $class),
+					)),
 					"caption" => $message["subject"],
 				)),
 			));
@@ -362,6 +372,7 @@ class quickmessagebox extends class_base
 		$t->sort_by();
 		//$t->draw();
 	}
+	
 	function callback_new_message($arr)
 	{
 		$arr = $arr["request"];
@@ -389,41 +400,13 @@ class quickmessagebox extends class_base
 		}
 		else
 		{
-			$gotit_props["user_to"]["value"] = $arr["user"];
+			$gotit_props["user_to"]["value"] = $arr["cuser"];
 			$gotit_props["subject"]["value"] = urldecode($arr["subject"]);
 		}
 		//arr($gotit_props);
 		return $gotit_props;
 	}
-	
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			/*
-			case "user_to":
-				$prop["error"] = "sellist kasutajat ei ole olemas!";
-				$users = get_instance("users");
-				$t_id = $users->get_oid_for_uid($prop["value"]);
-				if(!$this->can("view", $t_id) || empty($t_id))
-				{
-					return PROP_FATAL_ERROR;
-				}
-				break;
-			*/
-			case "newmessage":
-				$vars = array(
-					"obj_inst" => &$arr["obj_inst"],
-					"request" => $arr["request"],
-				);
-				$this->save_new_message($vars);
-				break;
-		}
-		return $retval;
-	}
-	
+
 	// user gets a message box if he doesn't have it already -- ahz
 	function create_message_box_for_user($user)
 	{
@@ -442,16 +425,11 @@ class quickmessagebox extends class_base
 	// get the messagebox of the user -- ahz
 	function get_message_box_for_user($user)
 	{
-		//arr($user->properties());
-		$message_boxes = $user->connections_to(array(
+		$box = false;
+		$message_box = reset($user->connections_to(array(
 			"type" => 4, // RELTYPE_OWNER
-			"from.class_id" => 816,
-		));
-		foreach($message_boxes as $msgb)
-		{
-			$message_box = $msgb;
-		}
-		//reset($message_box);
+			"from.class_id" => CL_QUICKMESSAGEBOX,
+		)));
 		
 		// if he doesn't have the connection, then he doesn't have the box... simple -- ahz
 		if(!is_object($message_box))
@@ -460,7 +438,7 @@ class quickmessagebox extends class_base
 		}
 		else
 		{
-			$box = $message_box->to();
+			$box = $message_box->from();
 		}
 		return $box;
 	}
@@ -471,11 +449,11 @@ class quickmessagebox extends class_base
 		// yeah, the magic of messaging:
 		// 1. we get the object id's of sender and reciever
 		// 2. we check, whether the receiver is a user and he has a messagebox
-		// 3. we create the necessary obects
+		// 3. we create the necessary objects
 		// 4. we connect the message to sender and reciever
 		// 5. done!
 		$users = get_instance("users");
-		$u_id = $users->get_oid_for_uid(aw_global_get("uid"));
+		$u_id = aw_global_get("uid_oid");
 		$t_id = $users->get_oid_for_uid($vars["user_to"]);
 
 		if(!$this->can("view", $t_id) || empty($t_id))
@@ -484,8 +462,8 @@ class quickmessagebox extends class_base
 		}
 		$user_to = obj($t_id);
 		// if this person doesn't have a inbox, then we will currently add it to him brute-force -- ahz
-		$this->get_message_box_for_user($user_to);
-		$user = obj($u_id);
+		$mbox = $this->get_message_box_for_user($user_to);
+		//$user = obj($u_id);
 		$asd = $arr["obj_inst"]->prop("maxsize");
 		if(strlen($vars["content"]) > $asd && !empty($asd))
 		{
@@ -493,107 +471,69 @@ class quickmessagebox extends class_base
 		}
 		$o = new object();
 		$o->set_class_id(CL_QUICKMESSAGE);
-		$o->set_parent($u_id);
+		$o->set_parent($arr["obj_inst"]->id());
 		$o->set_status(STAT_ACTIVE);
 		// need to resolve it!
-		$o->set_prop("user_from",$u_id);
-		$o->set_prop("user_to",$t_id);
-		$o->set_prop("subject",$vars["subject"]);
-		$o->set_prop("content",$vars["content"]);
-		$o->set_meta("view",array($t_id,$u_id));
-		$o->set_meta("archive",array());
+		$o->set_prop("user_from", $u_id);
+		$o->set_prop("user_to", $t_id);
+		$o->set_prop("subject", $vars["subject"]);
+		$o->set_prop("content", $vars["content"]);
+		$o->set_prop("mstatus", QUICKMESSAGE_OUTGOING);
+		$o->set_name($vars["subject"]);
 		$o->save();
 		/*
 		$arr["obj_inst"]->connect(array(
 			"to" => $o->id(),
-			"reltype" => "RELTYPE_OUTBOX_MESSAGE",
+			"reltype" => "RELTYPE_OUTGOING",
 		));
+		*/
+		$brother = obj($o->save_new());
+		$brother->set_parent($mbox->id());
+		$brother->set_prop("mstatus", QUICKMESSAGE_INCOMING);
+		$brother->save();
+		/*
 		$mbox->connect(array(
-			"to" => $o->id(),
-			"reltype" => "RELTYPE_INBOX_MESSAGE",
+			"to" => $brother->id(),
+			"reltype" => "RELTYPE_INCOMING",
 		));
 		*/
 	}
 	
 	/**
 		@attrib name=delete_message
-		@param sel required type=int acl=delete
+		@param sel required 
+		
 	**/
 	function delete_message($arr)
 	{
-		$users = get_instance("users");
-		$user_id = $users->get_oid_for_uid(aw_global_get("uid"));
-		foreach($arr["sel"] as $sel)
+		if(is_array($arr["sel"]))
 		{
-			// filter the meta and count the leftover
-			$obj = obj($sel);
-			$vmetas = array();
-			$ovmetas = $obj->meta("view");
-			foreach($ovmetas as $meta)
+			foreach($arr["sel"] as $sel)
 			{
-				if($meta != $user_id)
-				{
-					$vmetas[] = $meta;
-				}
-			}
-			$aometas = $obj->meta("archive");
-			$ametas = array();
-			foreach($aometas as $meta)
-			{
-				if($meta != $user_id)
-				{
-					$ametas[] = $meta;
-				}
-			}
-			
-			// if the meta has run out, delete the object
-			
-			if(count($vmetas) == 0 && count($ametas) == 0)
-			{
+				$obj = obj($sel);
 				$obj->delete();
 			}
-			else
-			{
-				$obj->set_meta("view", $vmetas);
-				$obj->set_meta("archive", $ametas);
-				$obj->save();
-			}
 		}
-		return $this->mk_my_orb("change", array(
-			"group" => $arr["group"],
-			"id" => $arr["id"],
-		), $arr["class"]);
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
 	}
+	
 	/**
 		@attrib name=archive_message
 		@param sel required type=int acl=view
 	**/
 	function archive_message($arr)
 	{
-		$users = get_instance("users");
-		$user_id = $users->get_oid_for_uid(aw_global_get("uid"));
-		foreach($arr["sel"] as $sel)
+		if(is_array($arr["sel"]))
 		{
-			$obj = obj($sel);
-			$vmetas = array();
-			$ovmetas = $obj->meta("view");
-			foreach($ovmetas as $meta)
+			$user_id = aw_global_get("uid_oid");
+			foreach($arr["sel"] as $sel)
 			{
-				if($meta != $user_id)
-				{
-					$vmetas[] = $meta;
-				}
+				$obj = obj($sel);
+				$obj->set_prop("mstatus", QUICKMESSAGE_ARCHIVED);
+				$obj->save();
 			}
-			$obj->set_meta("view", $vmetas);
-			$ametas = $obj->meta("archive");
-			$ametas[] = $user_id;
-			$obj->set_meta("archive", $ametas);
-			$obj->save();
 		}
-		return $this->mk_my_orb("change", array(
-			"group" => "archive",
-			"id" => $arr["id"],
-		), $arr["class"]);
+		return html::get_change_url($arr["id"], array("group" => "archive"));
 	}
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -603,13 +543,16 @@ class quickmessagebox extends class_base
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	/*
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+	*/
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/*
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -619,5 +562,6 @@ class quickmessagebox extends class_base
 		));
 		return $this->parse();
 	}
+	*/
 }
 ?>
