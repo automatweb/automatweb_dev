@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="form_config">
+		<action name="config">
+			<function name="config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
