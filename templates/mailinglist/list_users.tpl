@@ -37,6 +37,7 @@ function submitForm(val)
 &nbsp;|&nbsp;<a href="list.{VAR:ext}?type=import_file&id={VAR:list_id}" >{VAR:LC_MAILINGLIST_IMPORT}</a>
 <!-- END SUB: U_IMPORT -->
 &nbsp;|&nbsp;<a href="list.{VAR:ext}?type=export_file&id={VAR:list_id}" >{VAR:LC_MAILINGLIST_EXPORT}</a>
+&nbsp;|&nbsp;<a target="_blank" href="list.{VAR:ext}?type=checkit&id={VAR:list_id}" >Kontrolli</a>
 </b></td>
 </tr>
 
