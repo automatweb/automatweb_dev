@@ -232,7 +232,15 @@ class object_treeview extends class_base
 		$glo = aw_global_get("gidlist_oid");
 
 		// check if the user is an admin
-		$is_admin = false;
+		if (!$ob->prop("groupfolder_acl"))
+		{
+			$is_admin = true;
+		}
+		else
+		{
+			$is_admin = false;
+		}
+																		a
 		$adm_c = $ob->connections_from(array(
 			"type" => RELTYPE_ALL_ACCESS_GRP
 		));
