@@ -21,6 +21,7 @@ class export extends aw_template
 			"text/css" => "css",
 			"image/gif" => "gif",
 			"image/jpeg" => "jpg",
+			"image/jpg" => "jpg",
 			"image/pjpeg" => "jpg",
 			"application/pdf" => "pdf",
 			"application/x-javascript" => "js",
@@ -77,6 +78,7 @@ class export extends aw_template
 			"fn_type_1" => checked($fn_type == FN_TYPE_SECID),
 			"fn_type_2" => checked($fn_type == FN_TYPE_NAME),
 			"fn_type_3" => checked($fn_type == FN_TYPE_HASH),
+			"fn_type_4" => checked($fn_type == FN_TYPE_ALIAS),
 			"gen_url" => $this->mk_my_orb("do_export"),
 			"rules" => $this->mk_my_orb("rules")
 		));
@@ -243,6 +245,8 @@ class export extends aw_template
 
 	function fetch_and_save_page($url, $lang_id)
 	{
+		$_url = $url;
+//		echo "fetch_and_save_page($url, $lang_id) <br>";
 		if ($url == "")
 		{
 			echo "<p><Br>VIGA, tyhi url! </b><Br>";
@@ -253,8 +257,12 @@ class export extends aw_template
 		// if we have done this page already, let's not do it again!
 		if (isset($this->hashes[$url]) || $this->check_excludes($url))
 		{
-			return $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
+			$tmp = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
+//			echo "fetch_and_save_page($_url, $lang_id) returning $tmp <br>";
+			return $tmp;
 		}
+
+		$this->fsp_level++;
 
 		// here we track the active language in the url
 		$t_lang_id = $lang_id;
@@ -273,18 +281,22 @@ class export extends aw_template
 
 		$f_name = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
 		$name = $this->folder."/".$f_name;
-		echo "saving $url as $name <br>\n";
+		echo "saving $url as $name (req level: $this->fsp_level)<br>\n";
 		flush();
 
 		// now. convert all the links in the page
 		$this->convert_links($fc,$t_lang_id);
 
 		$this->save_file($fc,$name);
+
+//		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
+		$this->fsp_level--;
 		return $f_name;
 	}
 
 	function convert_links(&$fc,$lang_id)
 	{
+//		echo "convert_links(fc,$lang_id) <br>";
 		// uukay. so the links we gotta convert are identified by having $baseurl in them. so look for that
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -302,6 +314,8 @@ class export extends aw_template
 		$fc = str_replace("\"/sitemap","\"".$baseurl."/sitemap",$fc);
 		$fc = str_replace("'/sitemap","'".$baseurl."/sitemap",$fc);
 
+		$fc = preg_replace("/<form(.*)action=([\"'])http:\/\/(.*)\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2"."__form_action_url__"."/\\4\\5\\6>",$fc);
+
 		while (($pos = strpos($fc,$baseurl)) !== false)
 		{
 			// now find all of the link - we do that by looking for ' " > or space
@@ -315,27 +329,45 @@ class export extends aw_template
 
 			// correct the link
 			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
-
-			// fetch the page
-			$fname = $this->fetch_and_save_page($link,$lang_id);
+			if (!$this->is_external($link))
+			{
+				// fetch the page
+				$fname = $this->fetch_and_save_page($link,$lang_id);
+			}
+			else
+			{
+				$fname = $link;
+			}
+			// we still gotta replace the link, even if it is an extlink outta here, 
+			// cause otherwise we would end up in an infinite loop
 
 			// replace the link in the html
 			$fc = substr($fc,0,$begin).$fname.substr($fc,$end);
 		}
+
+		// right, now. this kinda sucks, but that's how it is
+		// el no translado forms
+		$fc = preg_replace("/<form(.*)action=([\"'])__form_action_url__\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2".$this->cfg["form_server"]."/\\3\\4\\5>",$fc);
+
+//		echo "convert_links(fc,$lang_id) returning <br>";
 	}
 
 	function save_file($fc,$name)
 	{
+//		echo "save_file(fc,$name) <br>";
 //		echo "saving file as $name <br>\n";
 		$fp = fopen($name,"w");
 		fwrite($fp,$fc);
 		fclose($fp);
+//		echo "save_file(fc,$name) returning <br>";
 	}
 
 	function get_ext_for_link($link, $headers)
 	{
+//		echo "get_ext_for_link($link, headers) <br>";
 		if (isset($this->link2type[$link]))
 		{
+//			echo "get_ext_for_link($link, headers) returning ",$this->link2type[$link],"<br>";
 			return $this->link2type[$link];
 		}
 
@@ -364,6 +396,7 @@ class export extends aw_template
 		}
 
 		$this->link2type[$link] = $this->type2ext[$ct];
+//		echo "get_ext_for_link($link, headers) returning ",$this->link2type[$ct],"<br>";
 		return $this->type2ext[$ct];
 	}
 
@@ -372,99 +405,108 @@ class export extends aw_template
 	// things work correctly
 	function rewrite_link($link)
 	{
+//		echo "rewrite_link($link) <br>";
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 		$frontpage = $this->cfg["frontpage"];
+		$basedir = $this->cfg["site_basedir"]."/public";
+		$_link = $link;
+
+		$link = str_replace($baseurl."/?",$baseurl."/index.$ext?",$link);
+		if (substr($link,0,2) == "/?")
+		{
+			$link = $baseurl."/index.$ext?".substr($link,2);
+		}
 
 		// do link processing as aw would upon request startup
 		$ud = parse_url($link);
 		if (!preg_match("/(shop.aw|banner.aw|graphs.aw|css|poll|files|ipexplorer|icon.aw|gallery.aw|login|stats|vcl|misc|index|images|feedback|forms|indexx|showimg|sorry|monitor|vv|automatweb|img|reforb|orb)/",$link))
 		{
-			$url = $baseurl."/index.".$ext.$ud["path"].$ud["query"].$ud["fragment"];
-			echo "changed $link to $url <br>";
-		}
-
-		if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
-		{
-			$pi = $PATH_INFO;
-		};
-		if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
-		{
-			$pi .= "?".$QUERY_STRING;
-		};
-
-		if ($pi) 
-		{
-			// uh, why do you use sprintf to do string->int conversion? I mean, it's GOTTA be wayyy slower than $i = (int)$str;
-
-			// I think type-cast had problems in some situations, but right now I can't really reproduce any of those
-			$section = (int)substr($pi,1);
-
-			// if $pi contains & or = 
-			if (preg_match("/[&|=]/",$pi)) 
+			// treat the damn thing as an alias
+			// aliases will not contain ? and & so do this:
+			$end = "";
+			if (substr($ud["path"],1) != "" || $ud["query"] != "" || $ud["fragment"] != "")
 			{
-				// expand and import PATH_INFO
-				// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
-				// why so?
-				parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
-				extract($HTTP_GET_VARS);
-			} 
-			else 
+				$end = "?section=".substr($ud["path"],1)."&".$ud["query"].$ud["fragment"];
+			}
+			$link = $baseurl."/index.".$ext.$end;
+			// now just extract it again
+			$ud = parse_url($link);
+			parse_str($ud["query"],$HG);
+			$js = join("&", map2("%s=%s", $HG));
+			if ($js != "")
 			{
-				$section = substr($pi,1);
-			};
-		};
-
-
-		return $link;
-
-		// here we check the link for weirdness:
-		// if it is == $baseurl, we need to rewrite it to $baseurl/index.aw?section=$frontpage
-		if ($link == $baseurl)
-		{
-			$link = $baseurl."/index.".$ext."?section=".$frontpage;
+				$js = "?".$js;
+			}
+			$link = $baseurl."/index.aw".$js;
+//			echo "returned1 $link for $_link <Br>";
+//			echo "rewrite_link($_link) returning $link <br>";
+			return $link;
 		}
-
-		// and we should rewrite links $baseurl/section and $baseurl/index.aw/section=section
-		// to $baseurl/index.aw?section=section as well. but right now lets make this thing work first
-		if (strpos($link,"index.".$ext."/section=") !== false)
+		
+		// ok here separate the baseurl bit and the other bits
+		$link = str_replace($baseurl, "", $link);
+	
+		// now separate it by /'s and find the first one that matches a file
+		$pathbits = array();
+		
+		$pt = strtok($link, "?&/");
+		while ($pt !== false)
 		{
-			$link = str_replace("index.".$ext."/section=","index.".$ext."?section=",$link);
+//			echo "pt = $pt <br>";
+			if ($pt != "")
+			{
+				if (!$found)
+				{
+					$cname .= "/".$pt;
+					$trypath = $basedir.$cname;
+//					echo "part  = $pt ,cname = $cname,  $trypath = $trypath <br>";
+					if (is_file($trypath))
+					{
+//						echo "found file! $trypath <br>";
+						$found = true;
+					}
+				}
+				else
+				{
+					$pathbits[] = $pt;
+				}
+			}
+			$pt = strtok("?&/");
 		}
-
-		$ud = parse_url($link);
-		if (is_number(substr($ud["path"],1)))	// substr, because path is preceded by /
+		
+		$jo = join("&", $pathbits);
+		if ($jo != "")
 		{
-			// we found a section link $baseurl/section
-			$link = $baseurl."/index.".$ext."?section=".substr($ud["path"],1);
+			$end = "?".$jo;
 		}
+		$link = $baseurl.$cname.$end;
 
-		// rewrite indexx.aw links to their real address
-		if ($ud["path"] == "/indexx.".$ext || strpos($ud["query"], "class=links&action=show") !== false)
+		// now that we got a nice link, check if it is a class=links&action=show, cause those do redirects and
+		// php's fopen can't handle that
+		if (strpos($link, "class=links") !== false && strpos($link, "action=show") !== false)
 		{
-//			echo "extlink detected in $link , rewriting to real adress. query = $ud[query] <br>\n";
-			$el = new extlinks;
-			preg_match("/id=(\d*)/", $ud["query"], $mt);
+			preg_match("/id=(\d*)/", $link,$mt);
+
+			$el = get_instance("extlinks");
 			$ld = $el->get_link($mt[1]);
 			$link = $ld["url"];
+			if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)
+			{
+				// external link, should not be touched I guess
+//				echo "rewrite_link($_link) returning $link <br>";
+				return $link;
+			}
+
 			if (strpos($link,$baseurl) === false && $link[0] == "/")
 			{
 				$link = $baseurl.$link;
 			}
-//			echo "rewrote extlink to $link  <Br>";
-			// and also recurse once to fix the link pointed by the extlink
 			$link = $this->rewrite_link($link);
-//			echo "final extlink is $link  <Br>";
+//			echo "rewrote extlink $_link to $link  <br>";
 		}
 
-		// uukey, gallery popups need to be rewritten as well.
-		if (strpos($link,"/gallery.".$ext."/") !== false)
-		{
-//			echo "gallery link detected - $link <br>\n";
-			$link = str_replace("/gallery.".$ext."/","gallery.".$ext."?",$ud["path"]);
-			$link = $baseurl."/".str_replace("/","&",$link);
-//			echo "rewrote gallery link to $link <br>\n";
-		}
+//		echo "rewrite_link($_link) returning $link <br>";
 		return $link;
 	}
 
@@ -585,8 +627,16 @@ class export extends aw_template
 
 	function get_hash_for_url($url, $lang_id)
 	{
+		if (isset($this->hash2url[$lang_id][$url]))
+		{
+			return $this->hash2url[$lang_id][$url];
+		}
+
+//		echo "get_hash_for_url($url, $lang_id)<br>";
 		if ($url == $this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export")
 		{
+//			echo "get_hash_for_url($url, $lang_id) returning index<br>";
+			$this->hash2url[$lang_id][$url] = "index";
 			return "index";
 		}
 
@@ -597,6 +647,8 @@ class export extends aw_template
 			$secid = $mt[1];
 			if ($secid)
 			{
+//				echo "get_hash_for_url($url, $lang_id) returning ",$secid.",".$lang_id,"<br>";
+				$this->hash2url[$lang_id][$url] = $secid.",".$lang_id;
 				return $secid.",".$lang_id;
 			}
 			// if no secid, still do the hash thingie
@@ -620,6 +672,8 @@ class export extends aw_template
 						$res = $_res.",".($cnt++);
 					}
 					$this->ftn_used[$res] = true;
+//					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br>";
+					$this->hash2url[$lang_id][$url] = $res;
 					return $res;
 				}
 			}
@@ -627,12 +681,68 @@ class export extends aw_template
 		else
 		if ($this->fn_type == FN_TYPE_ALIAS)
 		{
-			preg_match("/section=(\d*)/",$url,$mt);
+			preg_match("/section=([^&=?]*)/",$url,$mt);
 			$secid = $mt[1];
-			if ($secid)
+			if ($secid != "")
 			{
-				$md = $this->menu_cache->get_cached_menu($secid);
-				$mn = $md["alias"];
+				if (!is_number($secid))
+				{
+					// no need to fetch alias, we already got it!
+					$mn = $secid;
+				}
+				else
+				{
+					$mn = "";
+					$cnt = 0;
+
+					// we need to check if the section is not a document
+					$obj = $this->get_object($secid);
+					if ($obj["class_id"] == CL_DOCUMENT)
+					{
+						$mn = strip_tags($obj["name"])."/";
+						$secid = $obj["parent"];
+					}
+
+					// here we need to find all the aliases of the menus upto $rootmenu as well and
+					// add them together
+					while ($secid && ($secid != 1) && $secid != $this->cfg["rootmenu"]) 
+					{
+						$sec = $this->menu_cache->get_cached_menu($secid);
+						$secid = $sec["parent"];
+						if ($sec["alias"] != "")
+						{
+							$mn = $sec["alias"]."/".$mn;
+						}
+						else
+						{
+							$mn = $sec["oid"]."/".$mn;
+						}
+						$cnt++;
+						if ($cnt > 10)
+						{
+							break;
+						}
+					}
+
+					if ($mn[0] == "/")
+					{
+						$mn = substr($mn,1);
+					}
+					if (substr($mn,strlen($mn)-1) == "/")
+					{
+						$mn = substr($mn,0,strlen($mn)-1);
+					}
+					$mn = str_replace("õ", "o", $mn);
+					$mn = str_replace("ä", "a", $mn);
+					$mn = str_replace("ö", "o", $mn);
+					$mn = str_replace("ü", "u", $mn);
+					$mn = str_replace("Õ", "O", $mn);
+					$mn = str_replace("Ä", "A", $mn);
+					$mn = str_replace("Ö", "O", $mn);
+					$mn = str_replace("Ü", "U", $mn);
+					$mn = strip_tags($mn);
+				}
+
 				if ($mn != "")
 				{
 					$cnt = 1;
@@ -643,12 +753,17 @@ class export extends aw_template
 						$res = $_res.",".($cnt++);
 					}
 					$this->fta_used[$res] = true;
+//					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br>";
+					$this->hash2url[$lang_id][$url] = $res;
 					return $res;
 				}
 			}
 		}
 
-		return $this->gen_uniq_id($url).",".$lang_id;
+		$tmp = $this->gen_uniq_id($url).",".$lang_id;
+//		echo "get_hash_for_url($url, $lang_id) returning ",$tmp,"<br>";
+		$this->hash2url[$lang_id][$url] = $tmp;
+		return $tmp;
 	}
 
 	function add_session_stuff($url, $lang_id)
@@ -687,6 +802,17 @@ class export extends aw_template
 				}
 			}
 		}
+	}
+
+	function is_external($link)
+	{
+		if (substr($link, 0, 4) == "ftp:" || (substr($link,0,4) == "http" && strpos($link, $this->cfg["baseurl"]) === false))
+		{
+//			echo "is_external($link) returning true <br>";
+			return true;
+		}
+//		echo "is_external($link) returning false<br>";
+		return false;
 	}
 }
 ?>
