@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.89 2003/03/12 11:09:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.90 2003/03/12 13:44:06 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1108,23 +1108,29 @@ class planner extends class_base
 			};
 		}
 		$calstring = join(",",$calendars);
-		$q = "SELECT * FROM aliases LEFT JOIN planner ON (aliases.target = planner.id) LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		//$q = "SELECT * FROM aliases LEFT JOIN planner ON (aliases.target = planner.id) LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		$q = "SELECT name,class_id,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
 		$this->db_query($q);
 		$results = array();
 		while($row = $this->db_next())
 		{
 			$gx = date("dmY",$row["start"]);
-			if ($row["source"] != $folder)
+			$fl = $this->cfg["classes"][$row["class_id"]]["file"];
+			if ($fl == "document")
 			{
-				$this->save_handle();
-				$target = $this->get_object($row["source"]);
 				$row["caption"] = html::href(array(
-					"url" => $this->mk_my_orb("view",array("id" => $row["source"])),
-					"caption" => $target["name"],
+					"url" => "/" . $row["id"],
+					"caption" => $row["name"],
 				));
-				$this->restore_handle();
+			}
+			else
+			{
+				$row["caption"] = html::href(array(
+					"url" => $this->mk_my_orb("view",array("id" => $row["id"]),$fl),
+					"caption" => $row["name"],
+				));
 			};
-			$row["title"] = $name;
+			$row["title"] = $row["name"];
 			$results[$gx][] = $row;
 		}
 		return $results;
