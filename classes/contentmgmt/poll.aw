@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.22 2004/10/20 13:31:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.23 2005/01/07 11:20:28 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -162,6 +162,26 @@ class poll extends class_base
 			"set_lang_id" => $lid
 		));
 
+		$so = obj($section);
+		$pt = $so->path();
+		$md = aw_ini_get("menuedit.menu_defs");
+		foreach($md as $id => $nm)
+		{
+			foreach($pt as $idx => $o)
+			{
+				if ($o->id() == $id && $pt[$idx+1])
+				{
+					foreach(explode(",", $nm) as $nmm)
+					{
+						$this->vars(array(
+							"sel_menu_".$nmm."_L1_id" => $pt[$idx+1]->id()
+						));
+					}
+					break;
+				}
+			}
+		}
+
 		$ans = $this->get_answers($poll_id);
 
 		$GLOBALS["poll_disp_count"]++;
@@ -191,6 +211,7 @@ class poll extends class_base
 				"click_answer_js" => $o_l,
 				"clicks" => $v["clicks"],
 			));
+
 			if ($v["answer"] != "")
 			{
 				$as.=$this->parse("ANSWER");
