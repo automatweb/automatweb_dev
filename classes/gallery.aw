@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.19 2002/01/07 17:30:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.20 2002/01/09 13:53:50 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -185,7 +185,8 @@ class gallery extends aw_template
 					"bigurl" => $cell["bigurl"],
 					"col" => $col,
 					"date" => $cell["date"],
-					"link" => $cell["link"]
+					"link" => $cell["link"],
+					"ord" => $cell["ord"]
 				));
 				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
 				$h = $cell["tnurl"] != "" ? $this->parse("HAS_IMG") : "";
@@ -301,9 +302,12 @@ class gallery extends aw_template
 						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
 						$pid = $ar["id"];
 					}
+					$sz = getimagesize($$var);
 					$img = $t->get_img_by_id($pid);
 					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
 					$this->arr[$page]["content"][$row][$col]["tnurl"] = $img["url"];
+					$this->arr[$page]["content"][$row][$col]["tnxsize"] = $sz[0];
+					$this->arr[$page]["content"][$row][$col]["tnysize"] = $sz[1];
 				}
 
 				$t = new db_images;
@@ -349,6 +353,12 @@ class gallery extends aw_template
 				$v = str_replace("'","\"",$v);
 				$this->arr[$page]["content"][$row][$col]["date"] = $v;
 
+				$var = "ord_".$row."_".$col;
+				global $$var;
+				$v = str_replace("\\","",$$var);
+				$v = str_replace("'","\"",$v);
+				$this->arr[$page]["content"][$row][$col]["ord"] = $v;
+
 				$var = "erase_".$row."_".$col;
 				global $$var;
 				if ($$var == 1)
@@ -375,22 +385,150 @@ class gallery extends aw_template
 		die();
 	}
 
+	function _sort_cmp($a,$b)
+	{
+		if ($a["ord"] == $b["ord"])
+		{
+			return 0;
+		}
+		return ($a["ord"] < $b["ord"]) ? -1 : 1;
+	}
+
 	function show($page)
 	{
+		if (is_array($page))
+		{
+			global $page,$id;
+			$this->load($id,$page);
+		}
+
 		if ($page < 1)
 			$page = 0;
 
 		$baseurl = $GLOBALS["baseurl"]."/gallery.".$GLOBALS["ext"]."/id=".$this->id;
 
-		if (isset($GLOBALS["col"]) && isset($GLOBALS["row"]))
+		if ($this->arr["is_automatic_slideshow"] == 1)
+		{
+			$this->read_template("show_slideshow_automatic.tpl");
+			$imgurls = array();
+			for ($page = 0; $page < $this->arr["pages"]; $page++)
+			{
+				for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
+				{
+					for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
+					{
+						$cell = $this->arr[$page]["content"][$row][$col];
+						if ($cell["bigurl"] != "")
+						{
+							$imgurls[] = $cell;
+						}
+					}
+				}
+			}
+
+			usort($imgurls,array($this,"_sort_cmp"));
+			$ius = array();
+			foreach($imgurls as $dat)
+			{
+				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["bigurl"]);
+				$ius[] = "\"".$bigurl."\"";
+			}
+
+			$this->vars(array(
+				"img_urls" => join(",",$ius),
+				"img_url" => preg_replace("/^http:\/\/.*\//","/",$this->arr[0]["content"][0][0]["bigurl"])
+			));
+			return $this->parse();
+                }
+                else
+		if (isset($GLOBALS["col"]) && isset($GLOBALS["row"]) && !isset($GLOBALS["class"]))
 		{
 			global $col, $row;
 			$this->read_template("show_pic.tpl");
 			$cell = $this->arr[$page]["content"][$row][$col];
+			// which one is right?
+			// the first one was in domina
+			//$bigurl = preg_replace("/^http:\/\/.*\//","/",$cell["tnurl"]);
 			$bigurl = preg_replace("/^http:\/\/.*\//","/",$cell["bigurl"]);
 			$this->vars(array("bigurl" => $bigurl, "caption" => $cell["caption"], "date" => $cell["date"]));
 		}
 		else
+		if ($this->arr["is_slideshow"] == 1)
+		{
+			global $nr;
+			if ($nr < 1)
+			{
+				$nr = 0;
+			}
+
+			$imgurls = array();
+			for ($page = 0; $page < $this->arr["pages"]; $page++)
+			{
+				for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
+				{
+					for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
+					{
+						$cell = $this->arr[$page]["content"][$row][$col];
+						if ($cell["bigurl"] != "")
+						{
+							$cell["col"] = $col;
+							$cell["row"] = $row;
+							$cell["page"] = $page;
+							$imgurls[] = $cell;
+						}
+					}
+				}
+			}
+
+			usort($imgurls,array($this,"_sort_cmp"));
+			$ius = array();
+			$cnt=0;
+			foreach($imgurls as $dat)
+			{
+				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["bigurl"]);
+				$tnurl = preg_replace("/^http:\/\/.*\//","/",$dat["tnurl"]);
+				$caps[$cnt] = $dat["caption"];
+				$dates[$cnt] = $dat["date"];
+				$xsizes[$cnt] = $dat["tnxsize"];
+				$ysizes[$cnt] = $dat["tnysize"];
+				$rows[$cnt] = $dat["row"];
+				$cols[$cnt] = $dat["col"];
+				$pages[$cnt] = $dat["page"];
+				$tnurls[$cnt] = $tnurl;
+				$ius[$cnt++] = $bigurl;
+			}
+		
+			$this->read_template("show_slideshow.tpl");
+			$bigurl = $ius[$nr];
+			$cap = $caps[$nr];
+			$deit = $dates[$nr];
+			$tnurl = $tnurls[$nr];
+			$xsize = $xsizes[$nr];
+			$ysize = $ysizes[$nr];
+
+			$prev_nr = (($nr - 1) > -1) ? $nr - 1 : $cnt - 1;
+			$next_nr = $nr+1 >= $cnt ? 0 : $nr+1;
+
+			global $baseurl,$ext;
+			$this->vars(array(
+				"bigurl" => $bigurl,
+				"caption" => $cap,
+				"date" => $deit,
+				"next" => $this->mk_my_orb("show", array("id" => $this->id, "nr" => $next_nr),"",false,true),
+				"prev" => $this->mk_my_orb("show", array("id" => $this->id, "nr" => $prev_nr),"",false,true),
+				"lurl" => "javascript:rremote('".$baseurl."/gallery.".$ext."/id=".$id."/col=".$cols[$nr]."/row=".$rows[$nr]."/page=".$pages[$nr]."',$xsize,$ysize)",
+				"xsize" => $xsize,
+				"ysize" => $ysize
+			));
+
+			if ($tnurl != "")
+			{
+				$this->vars(array("HAS_LARGE" => $this->parse("HAS_LARGE")));
+			}
+			$ret = $this->parse();
+			return $ret;
+		}
+                else
 		{
 			$this->read_template("show.tpl");
 
