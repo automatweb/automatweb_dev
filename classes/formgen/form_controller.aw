@@ -191,7 +191,7 @@ class form_controller extends form_base
 		{
 			return true;
 		}
-		$res = $this->eval_controller($id, $entry, $form_ref, $el_ref);
+		$res = $this->eval_controller_ref($id, $entry, $form_ref, $el_ref);
 		if (!$res)
 		{
 			$co = $this->loaded_controller;
@@ -202,6 +202,48 @@ class form_controller extends form_base
 			return false;
 		}
 		return true;
+	}
+
+	////
+	// !loads controller $id , replaces variables and evals the equasion
+	// $entry is the current element's value
+	// form_ref - reference to the form that the current element is a part of
+	// $el_ref is a reference to the current element - it is used to import metadata values - optional
+	function eval_controller_ref($id, $entry, &$form_ref ,&$el_ref)
+	{
+		if (!$id)
+		{
+			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
+		}
+		enter_function("form_controller::eval_controller");
+		$this->form_ref =& $form_ref;
+		$this->el_ref =& $el_ref;
+		$this->entry = $entry;
+
+		global $awt;
+		if ($_COOKIE["profile_controllers"] == "1")
+		{
+				$awt->start("eval_controller::$id");
+				echo "eval_controller $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
+		}
+		$co = $this->load_controller($id);
+		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
+
+		$eq = "\$res = ".$eq.";\$contr_finish = true;";
+		dbg::p2("controller id $id: evaling $eq <br>");
+		@eval($eq);
+		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br>");
+		if (!$contr_finish)
+		{
+			$this->dequote(&$eq);
+			@eval($eq);
+		}
+		if ($_COOKIE["profile_controllers"] == "1")
+		{
+			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
+		}
+
+		return $res;
 	}
 
 	////

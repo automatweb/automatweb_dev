@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.78 2003/07/11 07:23:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.79 2003/07/15 12:34:14 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1342,7 +1342,7 @@ class form extends form_base
 						$controllers_ok = false;
 					}
 					$controller_warnings_ok = false;
-//					echo "ctrlid $ctrl[ctrlid] failed! <br>";
+//						echo "ctrlid $ctrl[ctrlid] failed! <br>";
 				}
 			}
 
@@ -1388,6 +1388,10 @@ class form extends form_base
 				$has_errors = $errors;
 				$controller_warnings_ok = $fcal->fatal;
 				$has_cal_errors = $errors;
+				if ($GLOBALS["REMOTE_ADDR"] == "62.65.36.190")
+				{
+					echo dbg::dump($has_cal_errors);
+				}
 			};
 //			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br>";
 			if ( (!$controllers_ok) || ($has_errors) || (!$controller_warnings_ok))
