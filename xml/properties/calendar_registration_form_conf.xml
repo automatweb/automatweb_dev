@@ -21,16 +21,6 @@
             <caption>Registreerumisvorm</caption>
       </property>
       <property>
-            <name>ot</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_OT</reltype>
-            <caption>Registreerumisvormi objektit&amp;uuml;&amp;uuml;p</caption>
-      </property>
-      <property>
             <name>max_pers</name>
             <table>objects</table>
             <group>general</group>
@@ -146,11 +136,6 @@
                   </clid>
                   <caption>s&amp;uuml;ndmus</caption>
             </EVENT>
-            <OT>
-                  <value>2</value>
-                  <clid>CL_OBJECT_TYPE</clid>
-                  <caption>registreerumisvormi t&amp;uuml;&amp;uuml;p</caption>
-            </OT>
             <REG_ENTRY>
                   <value>3</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
