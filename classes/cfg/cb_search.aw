@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.22 2005/03/16 10:58:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.23 2005/03/16 12:06:17 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -307,12 +307,29 @@ class cb_search extends class_base
 			};
 
 			$item["ord"] = $fd[$item["clid"]][$iname]["jrk"];
-			$res[$iname] = $item;
 
 			if ($item["type"] == "classificator")
 			{
 				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
+			else
+			if ($item["type"] == "relpicker")
+			{
+				// get all conns from that class with that reltype
+				$c = new connection();
+				$conns = $c->find(array(
+					"from.class_id" => $item["clid"],
+					"type" => $item["reltype"]
+				));
+
+				$item["options"] = array("" => "");
+				foreach($conns as $con)
+				{
+					$item["options"][$con["to"]] = $con["to.name"];
+				}
+			}
+
+			$res[$iname] = $item;
 		};
 
 		uasort($res, create_function('$a,$b','if ($a["ord"] == $b["ord"] ) { return 0; } else { return $a["ord"] > $b["ord"] ? 1 : -1; }'));
@@ -419,7 +436,7 @@ class cb_search extends class_base
 		$classfps = array();
 		foreach($f_props as $f_pn => $f_pd)
 		{
-			if ($f_pd["type"] == "classificator")
+			if ($f_pd["type"] == "classificator" || $f_pd["type"] == "relpicker")
 			{
 				$classfps[$f_pn] = $f_pn;
 			}
@@ -432,7 +449,6 @@ class cb_search extends class_base
 				$price_props[$td_p] = $td_p;
 			}
 		}
-
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
 		{
@@ -467,7 +483,7 @@ class cb_search extends class_base
 						continue;
 					}
 
-					if ($this->in_form[$key]["type"] == "classificator")
+					if ($this->in_form[$key]["type"] == "classificator" || $this->in_form[$key]["type"] == "relpicker")
 					{
 						$sdata[$key] = $val;
 					}
@@ -520,19 +536,10 @@ class cb_search extends class_base
 				enter_function("cb_search::mk_result_table::objloop");
 				for($o = $olist->begin(); !$olist->end(); $o = $olist->next())
 				{
-					// not so simple - need to replace classificators with vals
-					$row = $o->properties();
-					foreach($classfps as $classfp)
+					$row = array();
+					foreach($this->in_results as $iname => $item)
 					{
-						if (is_oid($row[$classfp]) && $this->can("view", $row[$classfp]))
-						{
-							$tmp = obj($row[$classfp]);
-							$row[$classfp] = $tmp->name();
-						}
-						else
-						{
-							$row[$classfp] = "";
-						}
+						$row[$iname] = $o->prop_str($iname);
 					}
 
 					foreach($price_props as $p_pn)
@@ -542,7 +549,7 @@ class cb_search extends class_base
 					$vparms = array("id" => $o->id());
 					if ($arr["obj_inst"]->prop("view_cf"))
 					{
-						$vparms["cfgform"] = $arr["obj_inst"]->prop_str("view_cf");
+						$vparms["cfgform"] = $arr["obj_inst"]->prop("view_cf");
 					}
 					$row["view_link"] = html::href(array(
 						"url" => $this->mk_my_orb("view", $vparms, $o->class_id()),

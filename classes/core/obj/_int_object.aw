@@ -972,14 +972,6 @@ class _int_object
 
 	function prop($param)
 	{
-		// see if it is a metadata prop and if so return from that - might save some prop loads
-		//$this->_int_load_property_values();
-		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
-		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
-		{
-			return $this->obj["meta"][$pd["name"]];
-		}
-		
 		$retval = $this->_int_get_prop($param);
 		return $retval;
 	}
@@ -1001,28 +993,6 @@ class _int_object
 		$val = $this->_int_get_prop($param);
 		switch($type)
 		{
-			/*case "date_select":
-				if ($val > 1)
-				{
-					$val = date("d.m.Y", $val);
-				}
-				else
-				{
-					$val = "n/a";
-				}
-				break;
-
-			case "datetime_select":
-				if ($val > 1)
-				{
-					$val = date("d.m.Y H:i", $val);
-				}
-				else
-				{
-					$val = "n/a";
-				}
-				break;*/
-
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
@@ -1050,8 +1020,18 @@ class _int_object
 					$val = $tmp->name();
 				}
 				else
+				if (is_array($val))
 				{
-					$val = "";
+					$vals = array();
+					foreach($val as $k)
+					{
+						if (is_oid($k) && $GLOBALS["object_loader"]->ds->can("view", $k))
+						{
+							$tmp = new object($k);
+							$vals[] = $tmp->name();
+						}
+					}
+					$val = join(", ", $vals);
 				}
 				break;
 		}
@@ -1310,35 +1290,40 @@ class _int_object
 		$GLOBALS["objects"][$this->obj["oid"]] = $this;
 	}
 
-	function _int_load_properties()
+	function _int_load_properties($cl_id = NULL)
 	{
-		if (isset($GLOBALS["properties"][$this->obj["class_id"]]) && isset($GLOBALS["tableinfo"][$this->obj["class_id"]]) && isset($GLOBALS["of2prop"][$this->obj["class_id"]]))
+		if ($cl_id === NULL)
+		{
+			$cl_id = $this->obj["class_id"];
+		}
+
+		if (isset($GLOBALS["properties"][$cl_id]) && isset($GLOBALS["tableinfo"][$cl_id]) && isset($GLOBALS["of2prop"][$cl_id]))
 		{
 			return;
 		}
 
 		// then get the properties
-		$file = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]]["file"];
-		if ($this->obj["class_id"] == 29)
+		$file = $GLOBALS["cfg"]["classes"][$cl_id]["file"];
+		if ($cl_id == 29)
 		{
 			$file = "doc";
 		}
 		list(
-				$GLOBALS["properties"][$this->obj["class_id"]], 
-				$GLOBALS["tableinfo"][$this->obj["class_id"]], 
-				$GLOBALS["relinfo"][$this->obj["class_id"]],
-				$GLOBALS["classinfo"][$this->obj["class_id"]],
+				$GLOBALS["properties"][$cl_id], 
+				$GLOBALS["tableinfo"][$cl_id], 
+				$GLOBALS["relinfo"][$cl_id],
+				$GLOBALS["classinfo"][$cl_id],
 			) = 
 			$GLOBALS["object_loader"]->load_properties(array(
 				"file" => $file,
-				"clid" => $this->obj["class_id"]
+				"clid" => $cl_id
 		));
 
 		// also make list of properties that belong to object, so we can keep them 
 		// in sync in $this->obj and properties
 
 		// things in this array can be accessed later with $objref->prop("keyname")
-		$GLOBALS["of2prop"][$this->obj["class_id"]] = array(
+		$GLOBALS["of2prop"][$cl_id] = array(
 			"brother_of" => "brother_of",
 			"parent" => "parent",
 			"class_id" => "class_id",
@@ -1348,11 +1333,11 @@ class _int_object
 			"modified" => "modified",
 			"periodic" => "periodic",
 		);
-		foreach($GLOBALS["properties"][$this->obj["class_id"]] as $prop)
+		foreach($GLOBALS["properties"][$cl_id] as $prop)
 		{
 			if ($prop['table'] == "objects" && $prop["field"] != "meta")
 			{
-				$GLOBALS["of2prop"][$this->obj["class_id"]][$prop['name']] = $prop['name'];
+				$GLOBALS["of2prop"][$cl_id][$prop['name']] = $prop['name'];
 			}
 		}
 	}
@@ -1728,6 +1713,13 @@ class _int_object
 		{
 			$this->_int_load_property_values();
 		}
+
+		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
+		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
+		{
+			return $this->obj["meta"][$pd["name"]];
+		}
+
 		return $this->obj["properties"][$prop];
 	}
 
