@@ -202,10 +202,10 @@ class user extends class_base
 				break;*/
 
 			case "name":
-				if (!is_oid($arr["obj_inst"]->id()))
+				/*if (!is_oid($arr["obj_inst"]->id()))
 				{
 					return PROP_IGNORE;
-				}
+				}*/
 				$prop['value'] = $this->users->get_user_config(array(
 					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "real_name",
@@ -323,14 +323,6 @@ class user extends class_base
 		load_vcl("date_edit");
 		switch($prop['name'])
 		{
-			case "name":
-				$this->users->set_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "real_name",
-					"value" => $prop['value']
-				));
-				break;
-
 			case "uid_entry":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
@@ -1342,15 +1334,22 @@ class user extends class_base
 			}
 		}
 
+	
+		$this->users->set_user_config(array(
+			"uid" => $arr["obj_inst"]->prop("uid"),
+			"key" => "real_name",
+			"value" => $arr["request"]["name"]
+		));
+
+
 		// create email object
 		$umail = $arr["obj_inst"]->prop("email");
 		if($mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
-			if ($mail->prop("mail") != $umail)
-			{
-				$mail->set_prop("mail", $umail);
-				$mail->set_name($umail);
-			}
+			$mail->set_prop("mail", $umail);
+			$mail->set_prop("name",$arr["request"]["name"]);
+			$mail->set_name($mail->prop("name")." &lt;".$umail."&gt;");
+			$mail->save();
 		}
 		else
 		{
