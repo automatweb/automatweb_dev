@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.61 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.62 2002/12/18 13:16:45 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -7,10 +7,10 @@
         // stuff that goes into the objects table
         @default table=objects
 
-        @property comments type=checkbox field=meta method=serialize
+        @property comments type=checkbox field=meta method=serialize ch_value=1
         @caption Kommenteeritav
         
-	@property rated type=checkbox field=meta method=serialize
+	@property rated type=checkbox field=meta method=serialize ch_value=1
         @caption Hinnatav
 
 	@property template type=select field=meta method=serialize

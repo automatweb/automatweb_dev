@@ -1,5 +1,5 @@
 <?php
-// $Id: doc.aw,v 2.2 2002/11/26 18:42:06 duke Exp $
+// $Id: doc.aw,v 2.3 2002/12/18 13:16:45 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -30,44 +30,44 @@
 @property content type=textarea richtext=1 cols=60 rows=30
 @caption Sisu
 
-@property is_forum type=checkbox 
+@property is_forum type=checkbox ch_value=1
 @caption Foorum
 
-@property showlead type=checkbox
+@property showlead type=checkbox ch_value=1
 @caption Näita leadi
 
-@property show_modified type=checkbox
+@property show_modified type=checkbox ch_value=1
 @caption Näita muutmise kuupäeva
 
 //---------------
-@property no_right_pane type=checkbox
+@property no_right_pane type=checkbox ch_value=1
 @caption Ilma parema paanita
 
-@property no_left_pane type=checkbox
+@property no_left_pane type=checkbox ch_value=1
 @caption Ilma vasaku paanita
 
-@property title_clickable type=checkbox
+@property title_clickable type=checkbox ch_value=1
 @caption Pealkiri klikitav
 
-@property clear_styles type=checkbox
+@property clear_styles type=checkbox ch_value=1
 @caption Tühista stiilid
 
-@property link_keywords type=checkbox
+@property link_keywords type=checkbox ch_value=1
 @caption Lingi võtmesõnad
 
-@property esilehel type=checkbox
+@property esilehel type=checkbox ch_value=1
 @caption Esilehel
 
-@property frontpage_left type=checkbox
+@property frontpage_left type=checkbox ch_value=1
 @caption Esilehel tulbas
 
 @property dcache
 @caption Cache otsingu jaoks
 
-@property show_title type=checkbox
+@property show_title type=checkbox ch_value=1
 @caption Näita pealkirja
 
-@property no_search type=checkbox
+@property no_search type=checkbox ch_value=1
 @caption Jäta otsingust välja
 
 @property cite type=textarea cols=60 rows=10

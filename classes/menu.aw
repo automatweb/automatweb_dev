@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.17 2002/12/17 19:21:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.18 2002/12/18 13:16:45 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
 
-	@property users_only type=checkbox field=meta method=serialize group=advanced
+	@property users_only type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Ainult sisselogitud kasutajatele
 
 	@property color type=colorpicker field=meta method=serialize group=advanced
@@ -15,13 +15,13 @@
 	@property icon type=icon field=meta group=advanced
 	@caption Ikoon
 
-	@property sort_by_name type=checkbox field=meta method=serialize group=advanced
+	@property sort_by_name type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Sorteeri nime järgi
 
 	@property aip_filename type=textbox field=meta method=serialize group=advanced
 	@caption Failinimi
 	
-	@property periodic type=checkbox group=advanced
+	@property periodic type=checkbox group=advanced ch_value=1
 	@caption Perioodiline
 
 	@property objtbl_conf type=objpicker clid=CL_OBJ_TABLE_CONF field=meta method=serialize group=advanced
@@ -33,7 +33,7 @@
 	@property cfgmanager type=objpicker clid=CL_CFGFORM subclass=CL_PSEUDO field=meta method=serialize group=advanced
 	@caption Konfiguratsioonivorm
 	
-	@property show_lead type=checkbox field=meta method=serialize group=advanced
+	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Näita ainult leadi (kasutusel Nädalas)
 	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
@@ -86,42 +86,42 @@
 	@property pclass type=select table=objects field=meta method=serialize group=advanced
 	@caption Vali meetod
 	
-	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=advanced
+	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
 	@caption Meetod viitab adminni
 
-	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=advanced
+	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
 	@caption Meetodi väljundi kuvamisel menüüde näitamine
 
-	@property clickable type=checkbox group=advanced
+	@property clickable type=checkbox group=advanced ch_value=1
 	@caption Klikitav
 	
-	@property no_menus type=checkbox group=advanced
+	@property no_menus type=checkbox group=advanced ch_value=1
 	@caption Ilma menüüdeta
 	
-	@property target type=checkbox group=general
+	@property target type=checkbox group=general ch_value=1
 	@caption Uues aknas
 
-	@property mid type=checkbox group=advanced
+	@property mid type=checkbox group=advanced ch_value=1
 	@caption Paremal
 	
 	@property width type=textbox size=5 group=advanced
 	@caption Laius
 	
-	@property is_shop type=checkbox group=advanced
+	@property is_shop type=checkbox group=advanced ch_value=1
 	@caption Pood
 	
-	@property shop_parallel type=checkbox group=advanced
+	@property shop_parallel type=checkbox group=advanced ch_value=1
 	@caption Kaubad sbs (pood)
 	
-	@property shop_ignoregoto type=checkbox group=advanced
+	@property shop_ignoregoto type=checkbox group=advanced ch_value=1
 	@caption Ignoreeri järgmist (pood)
 
 	@default group=show
 
-	@property left_pane type=checkbox 
+	@property left_pane type=checkbox  ch_value=1
 	@caption Vasak paan
 
-	@property right_pane type=checkbox
+	@property right_pane type=checkbox ch_value=1
 	@caption Parem paan
 	
 	@property tpl_dir table=objects type=select field=meta method=serialize
@@ -139,7 +139,7 @@
 	@property tpl_edit_cfgform type=cfgform_picker clid=CL_DOCUMENT table=objects field=meta method=serialize
 	@caption Konfivorm/template dokumendi muutmiseks
 	
-	@property hide_noact type=checkbox
+	@property hide_noact type=checkbox ch_value=1
 	@caption Peida ära, kui dokumente pole
 	
 	@property ndocs type=textbox size=3

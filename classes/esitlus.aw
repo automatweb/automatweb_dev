@@ -12,16 +12,16 @@
 	@property pealkiri type=textbox 
 	@caption Tootekataloogi pealkiri
 
-	@property rootauto type=checkbox value=yes 
+	@property rootauto type=checkbox ch_value=yes 
 	@caption Automaatne rootmenüü nimi
 
 	@property rootname type=textbox 
 	@caption Rootmenüü pealkiri
 
-	@property newwindow type=checkbox value=yes 
+	@property newwindow type=checkbox ch_value=yes 
 	@caption Ava tooted uues aknas
 
-	@property headline type=checkbox value=yes 
+	@property headline type=checkbox ch_value=yes 
 	@caption Näita pealkirja ja joont
 
 	@property root type=select 

@@ -22,7 +22,7 @@
 @property link type=textbox table=images field=link
 @caption Link
 
-@property newwindow type=checkbox value=1 table=images field=newwindow
+@property newwindow type=checkbox ch_value=1 table=images field=newwindow
 @caption Uues aknas
 
 */

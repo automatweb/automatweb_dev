@@ -13,16 +13,16 @@
 	@property aliases type=select multiple=1 size=10
 	@caption Vali aliased
 
-	@property delete type=checkbox value=1
+	@property delete type=checkbox ch_value=1
 	@caption Kas kustutame valitud
 
 	@property repeater_obj type=objpicker clid=CL_REPEATER_OBJ
 	@caption Vali korduste objekt
 
-	@property del_cache type=checkbox value=1
+	@property del_cache type=checkbox ch_value=1
 	@caption Kas kordusel kustutatakse cache
 
-	@property regen_cache type=checkbox value=1
+	@property regen_cache type=checkbox ch_value=1
 	@caption Kas kordusel tehakse uus cache
 	
 */

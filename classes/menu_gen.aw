@@ -28,7 +28,7 @@
 
 	@default group=how
 
-	@property gen_and_deal type=checkbox value=ok
+	@property gen_and_deal type=checkbox ch_value=ok
 	@caption genereeri kataloogid ja jaga neisse objektid
 
 	@property group_by type=select
@@ -37,17 +37,17 @@
 	@property gen_rest_into type=textbox size=8
 	@caption tee kataloog, kuhu lähevad objektid, mida ei suudetud grupeerida, muidu objekte ei liigutata
 
-	@property gen_only type=checkbox value=ok
+	@property gen_only type=checkbox ch_value=ok
 	@caption genereeri ainult kataloogid
 
-	@property deal_excisting type=checkbox value=ok
+	@property deal_excisting type=checkbox ch_value=ok
 	@caption jaga objektid olemasolevatesse kataloogidesse
 
 
 
 	@default group=misc
 
-	@property save_undo type=checkbox value=saveundo
+	@property save_undo type=checkbox ch_value=saveundo
 	@caption save undo
 
 	@property make_catalogs type=href target=_blank editonly=1
@@ -62,7 +62,7 @@
 	@property analyse_this type=select size=10 multiple=1
 	@caption objektid võta kataloogi(de)st
 
-	@property sub_menus type=checkbox value=ok
+	@property sub_menus type=checkbox ch_value=ok
 	@caption otsi ka alamkataloogidest
 
 	@property show_all_objects type=text

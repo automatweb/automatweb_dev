@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.26 2002/12/17 17:41:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.27 2002/12/18 13:16:45 kristo Exp $
 
 /*
 
@@ -8,46 +8,46 @@
 
 @default group=general
 
-@property status type=status table=objects
+@property status type=status table=objects group=general
 @caption Staatus
 
-@property comment type=textarea cols=30 rows=5 table=objects field=comment
+@property comment type=textarea cols=30 rows=5 table=objects field=comment group=general
 @caption Kommentaar lingikogusse
 
-@property url table=extlinks type=textbox field=url
+@property url table=extlinks type=textbox field=url group=general
 @caption URL
 
-@property url_int_text type=text
+@property url_int_text type=text group=general
 @caption Saidi sisene link
 
-@property alt type=textbox table=objects field=meta method=serialize
+@property alt type=textbox table=objects field=meta method=serialize group=general
 @caption Alt tekst
 
-@property newwindow type=checkbox value=1 table=extlinks field=newwindow
+@property newwindow type=checkbox ch_value=1 table=extlinks field=newwindow group=general
 @caption Uues aknas
 
-@property doclinkcollection type=checkbox value=1 table=extlinks field=doclinkcollection
+@property doclinkcollection type=checkbox ch_value=1 table=extlinks field=doclinkcollection group=general
 @caption Dokumendi lingikogusse
 
-@property use_javascript type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@property use_javascript type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Kasuta javascripti
 
-@property newwinwidth type=textbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinwidth type=textbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Uue akna laius
 
-@property newwinheight type=textbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinheight type=textbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Uue akna k&otilde;rgus
 
-@property newwintoolbar type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwintoolbar type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Toolbar
 
-@property newwinlocation type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinlocation type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Address bar
 
-@property newwinmenu type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinmenu type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Men&uuml;&uuml;d
 
-@property newwinscroll type=checkbox value=1 table=objects field=meta method=serialize group=Javascript
+@property newwinscroll type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Skrollbarid
 
 @property link_image type=fileupload group=Pilt
@@ -56,7 +56,7 @@
 @property link_image_show type=text group=Pilt
 @caption 
 
-@property link_image_check_active type=checkbox value=1 field=meta table=objects method=serialize group=Pilt
+@property link_image_check_active type=checkbox ch_value=1 field=meta table=objects method=serialize group=Pilt
 @caption Pilt aktiivne
 
 @property link_image_active_until type=date_select field=meta table=objects method=serialize group=Pilt
