@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.7 2005/03/30 12:18:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.8 2005/03/30 13:01:00 ahti Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -26,7 +26,10 @@
 @caption Lao toodete t&uuml;&uuml;bid
 
 @property prod_type_cfgform type=relpicker reltype=RELTYPE_CFGFORM
-@caption Lao toodete t&uuml;&uuml;pide lisamise vormi seadete vorm
+@caption Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm
+
+@property prod_conf_folder type=relpicker reltype=RELTYPE_FOLDER
+@caption Toodete lisaobjektide seadetevormide kataloog
 
 @property order_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao tellimuste kataloog

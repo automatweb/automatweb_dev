@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.26 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.27 2005/03/30 13:01:00 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -785,7 +785,8 @@ class shop_warehouse extends class_base
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
-		$checks = array("prod_fld", "pkt_fld", "reception_fld", "export_fld", "prod_type_fld", "prod_type_cfgform", "order_fld", "buyers_fld");
+		//"prod_type_cfgform", 
+		$checks = array("prod_fld", "pkt_fld", "reception_fld", "export_fld", "prod_type_fld", "order_fld", "buyers_fld");
 		foreach($checks as $check)
 		{
 			if(!$this->config->prop($check))
@@ -813,6 +814,7 @@ class shop_warehouse extends class_base
 		$this->prod_type_fld = $this->config->prop("prod_type_fld");
 		$this->order_fld = $this->config->prop("order_fld");
 		$this->buyers_fld = $this->config->prop("buyers_fld");
+		$this->prod_conf_folder = $this->config->prop("prod_conf_folder");
 
 		return true;
 	}
