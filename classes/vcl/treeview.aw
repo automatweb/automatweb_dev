@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.18 2003/10/27 15:41:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.19 2003/10/28 14:36:44 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -249,6 +249,7 @@ class treeview extends class_base
 			$this->features[PERSIST_STATE] = 1;
 		};
 
+
 	}
 
 	function has_feature($feature)
@@ -392,6 +393,7 @@ class treeview extends class_base
 		$this->vars(array(
 			"target" => $this->tree_dat["url_target"],
 			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
+			"tree_id" => $this->tree_id,
 		));
 
 		$rv = $this->draw_dhtml_tree($this->rootnode);
@@ -402,7 +404,6 @@ class treeview extends class_base
 			$this->vars(array(
 				"rootname" => $this->tree_dat["root_name"],
 				"rooturl" => $this->tree_dat["root_url"],
-				"tree_id" => $this->tree_id,
 				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
 			));
 			if ($this->get_branch_func)
