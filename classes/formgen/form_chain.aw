@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.25 2004/10/21 09:31:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.26 2004/11/02 09:55:04 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -389,6 +389,10 @@ class form_chain extends form_base
 		$this->end = $end;
 		$ch = $this->load_chain($id);
 
+      if (!$this->can("view", $form_entry_id))
+		{
+			$form_entry_id = NULL;
+		}
 		if (!$form_id)
 		{
 			$form_id = $this->get_default_form_in_chain();
@@ -551,6 +555,10 @@ class form_chain extends form_base
 		global $load_chain_data;
 		$lcd = $load_chain_data;
 
+		if (!$this->can("view", $form_entry_id))
+		{
+			$form_entry_id = NULL;
+		}
 //		echo "showng form $form_id entry $form_entry_id $led $lcd <br />";
 		$cur_form .= $f->gen_preview(array(
 			"id" => $form_id,
