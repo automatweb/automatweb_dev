@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.46 2005/03/31 11:16:04 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.47 2005/03/31 11:48:59 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -387,7 +387,7 @@ class releditor extends core
 		};
 		if($arr["prop"]["filt_edit_fields"] == 1)
 		{
-			$ed_fields = array();
+			$ed_fields = array("name" => "name");
 		}
 		$fdata = array();
 		$conns = array();
@@ -480,14 +480,17 @@ class releditor extends core
 						};
 					};
 				};
-				$rowdata = $rowdata + $export_props;
+				$rowdata = $export_props + $rowdata;
 				$awt->define_data($rowdata);
 			}
 		}
 
 		if($arr["prop"]["filt_edit_fields"] == 1)
 		{
-			$ed_fields = array("name" => "name") + $ed_fields;
+			$awt->define_field(array(
+				"name" => "id",
+				"caption" => "ID",
+			));
 			foreach($ed_fields as $field)
 			{
 				$awt->define_field(array(
