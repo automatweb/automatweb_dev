@@ -21,7 +21,7 @@
 	<!-- SUB: TODAY -->
 	<td width="20%" valign="top" class="aw04kalenderkast02today">
 	<a name="today"></a>
-	<div align="right"><small><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></small></div>
+	<div align="right" class="aw04kalendertextday"><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></div>
 	<span style="font-size: 11px;">
 	<p>
 		{VAR:EVENT}

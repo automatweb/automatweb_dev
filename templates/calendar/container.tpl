@@ -79,13 +79,8 @@ function navigate_to()
 </script>
 
 
-<div class="aw04kalender01">
-
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td class="aw04kalender001" colspan="3" align="right" valign="bottom">
-	<table border="0" cellpadding="0" cellspacing="0">
+<div class="aw04kalender01" align="right">
+<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 	
 		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
@@ -105,17 +100,18 @@ function navigate_to()
 			<!-- END SUB: SEL_PAGE -->
 			</tr>
 			</table>
+</div>
 
-		</td>
-	</tr>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="aw04kalender01">
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="aw04kalender02">
 			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
 		</td>
-	<td valign="bottom">
-
-
-	</td>
 	<td align="right" valign="middle" class="aw04kalender02">
 
 	<select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
@@ -125,7 +121,9 @@ function navigate_to()
 	</td>
 	</tr>
 </table>
-</div>
+
+</td></tr></table>
+
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -135,28 +133,37 @@ function navigate_to()
 
 	</td>
 
-	<td valign="top" width="10%"  class="aw04kalenderkast01">
+	<td valign="top" width="10%">
+	<div class="aw04kalenderkast01">
 
 	{VAR:overview}
 
+	</div>
 
 	<!-- SUB: TASKS -->
+	<div class="aw04kalenderkast01">
 
-	<span style="font-size: 10px;">
-		<div class="minical_header">
-		<center>{VAR:tasks_title}</center>
-		</div>
+
+	<div class="minical_table">{VAR:tasks_title}</div>
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	<td class="aw04kalendermini">
+
+		<table border="0" cellpadding="0" cellspacing="1">
 
 		<!-- SUB: TASK -->
-		<div style="margin: 2px; border: 1px solid #CCC; background: #EEE;">
-		<a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a>
-		</div>
+		<tr><td class="minical_cell"><a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a></td></tr>
 		<!-- END SUB: TASK -->
-	</span>
+
+		</table>
+
+	</td></tr></table>
+	</div>
 
 	<!-- END SUB: TASKS -->
 
-</td>
+	</td>
 </tr>
 </table>
 
