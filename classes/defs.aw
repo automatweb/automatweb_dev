@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.36 2002/01/21 17:30:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.37 2002/01/22 09:37:57 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -31,11 +31,11 @@ function bail_out()
 // !Replaces links inside text
 function create_links($src)
 {
-	$src = preg_replace("/[\s|^]((http(s?):\/\/)|(www\.))(.+?)([\s|^])/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-        $src = preg_replace("/([^\s]*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a
->",$src);
-
-	return $src;
+	$src .= " ";
+	$src = preg_replace("/[\s|^]((http(s?):\/\/)|(www\.))(.+?)([\s|$])/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
+	$src = preg_replace('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',"<a href=\"mailto:$1\">$1</a>",$src);
+	// stripime viimase tyhiku maha ka j2lle. ex ta ju asja aeglasemaks tee a seda on kaind of vaja - terryf
+	return substr($src,0,strlen($src)-1);	
 }
 	
 function localparse($src = "",$vars = array())
