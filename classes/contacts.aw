@@ -156,7 +156,7 @@ class contacts extends aw_template {
 		extract($args);
 		$folder = ($folder) ? "folder=$folder" : "";
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("list"),
+				"activelist" => array("contact","list"),
 				"vars" => array("folder" => $folder),
 				));
 		
@@ -247,9 +247,88 @@ class contacts extends aw_template {
 				"menu" => $menu,
 				"line" => $c,
 				"gline" => $glist,
+				"mlist" => $this->picker($folder,$this->flatlist),
 				"grouplist" => $this->picker($folder,$this->flatlist),
 				"reforb" => $this->mk_reforb("submit_contacts",array("folder" => $folder)),
 				"fullpath" => $fullpath,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Kuvab kontaktigruppide puu
+	function groups($args = array())
+	{
+		extract($args);
+		global $udata;
+		$folder = ($parent) ? "folder=$parent" : "";
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("groups","list"),
+				"vars" => array("folder" => $folder),
+				));
+		$this->read_template("contactgroups.tpl");
+		$folder = ($args["parent"]) ? $args["parent"] : $udata["home_folder"];
+		$fdata = $this->get_object($folder);
+		$path = array();
+
+		if ($fdata["class_id"] == CL_CONTACT_GROUP)
+		{
+			//print "check passed<br>";
+			$path[$fdata["oid"]] = $fdata["name"];
+		}
+		else
+		{
+			// we will just default to the user homedir
+			// this is inexpensive, since get_object caches the results
+			$path[$udata["home_folder"]] = "root";
+			$fdata = $this->get_object($udata["home_folder"]);
+		};
+		
+		// now we will have to try and find the names of all objects up until the home_folder
+		// of course only if we already aren't IN the home folder
+		$found = ($udata["home_folder"] != $fdata["oid"]);
+		$parent = $fdata["parent"];
+		while($found)
+		{
+			$obj = $this->get_object($parent);
+			if ($obj["class_id"] != CL_CONTACT_GROUP)
+			{
+				if ($udata["home_folder"] == $obj["oid"])
+				{
+					$path[$obj["oid"]] = "root";
+				};
+				$found = false;
+			}
+			else
+			{
+				$path[$obj["oid"]] = $obj["name"];
+			};
+			$parent = $obj["parent"];
+		};
+		
+		$fullpath = map2("<a href='?class=groups&parent=%s'>%s</a>",$path);
+		$fullpath = join(" &gt; " ,array_reverse($fullpath));
+		$this->get_objects_by_class(array(
+					"parent" => $folder,
+					"class" => CL_CONTACT_GROUP,
+				));
+		$glist = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+					"jrk" => $cnt,
+					"name" => $row["name"],
+					"id" => $row["oid"],
+					"members" => "n/a",
+			));
+			$glist .= $this->parse("gline");
+		};
+		$this->vars(array(
+			"menu" => $menu,
+			"gline" => $glist,
+			"fullpath" => $fullpath,
 		));
 		return $this->parse();
 	}
@@ -280,7 +359,7 @@ class contacts extends aw_template {
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => ($args["id"]) ? array("contacts") : array("add"),
+				"activelist" => array("contact",($args["id"]) ? "list" : "add"),
 			));
 		classload("form");
 		$f = new form(CONTACT_FORM);
