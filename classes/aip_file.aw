@@ -192,9 +192,6 @@ class aip_file extends file
 
 			// parent on menüü
 			$orb_urls = array(
-				// saidi seest lisati doku juurde fail
-				"user" => $this->mk_site_orb(array("class" => "document","action" => "change","id" => $id)),
-
 				// aw-st lisati doku juurde fail
 				"awdoc" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr"),
 
@@ -213,11 +210,6 @@ class aip_file extends file
 				// $user argument tähendab, et request tuli saidi seest
 				// ja vastavalt sellele suuname kliendi ringi
 				$retval = ($user) ? $orb_urls["user"] : $orb_urls["awdoc"];
-			}
-			else
-			if (strpos(aw_global_get("REQUEST_URI"),"automatweb") === false)
-			{
-				$retval = $orb_urls["site"];
 			}
 			else
 			{
