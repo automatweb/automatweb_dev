@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.86 2004/02/25 16:11:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.87 2004/03/15 13:43:37 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -139,13 +139,13 @@ class forum extends class_base
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
-		$form_data = &$args["form_data"];
+		$request = &$args["request"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "rates":
-				$rates = new aw_array($args["form_data"]["rates"]);
-				$delete = $args["form_data"]["delete"];
+				$rates = new aw_array($args["request"]["rates"]);
+				$delete = $args["request"]["delete"];
 				$rate_array = array();
 				foreach($rates->get() as $key => $val)
 				{
@@ -156,7 +156,7 @@ class forum extends class_base
 				};
 				uasort($rate_array, create_function('$a,$b','if ($a["ord"] > $b["ord"]) { return 1; } if ($a["ord"] < $b["ord"]) { return -1; } return 0;'));
 
-				$form_data["rates"] = $rate_array;
+				$data["value"] = $rate_array;
 		};
 		return $retval;
 	}
