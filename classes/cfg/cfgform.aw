@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.36 2004/08/30 14:01:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.37 2004/10/08 16:04:03 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -77,6 +77,13 @@
 
 	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
 	@caption Kontroller
+
+	// so, how da fuck do I implement the grid layout thingie?
+	// add_item (item, row, col)
+
+	// so .. first I have to implement a new attribute for layout thingie
+
+	// and then I want to be able to add new widgets in the same order they are arriving
 
 */
 class cfgform extends class_base
@@ -182,6 +189,10 @@ class cfgform extends class_base
 			$fl = "doc";
 		};
 		$inst = get_instance($fl);
+		$cfgu = get_instance("cfg/cfgutils");
+		$_all_props = $cfgu->load_properties(array(
+			"file" => $fl,
+		));
 		$this->all_props = $inst->get_all_properties();
 	}
 
