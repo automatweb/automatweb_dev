@@ -155,33 +155,33 @@ class menuedit_light extends aw_template
 						$tpl = ($this->tpl_name) ? $this->tpl_name : $this->tlist[1][0];
 					}
 					elseif ($this->layout_mode == 2)
-                                        {
-                                                $tpl = "item_L" . $this->level;
-                                                if ( ($slicecounter == 1) && ($this->is_template($tpl . "_START")) )
-                                                {
-                                                        $tpl .= "_START";
-                                                }
-                                                else
-                                                if ( ($slicecounter == $slicesize) && ($this->is_template($tpl . "_END")) )
-                                                {
-                                                        $tpl .= "_END";
-                                                };
-                                        }
+					{
+						$tpl = "item_L" . $this->level;
+						if ( ($slicecounter == 1) && ($this->is_template($tpl . "_START")) )
+						{
+							$tpl .= "_START";
+						}
+						else
+						if ( ($slicecounter == $slicesize) && ($this->is_template($tpl . "_END")) )
+						{
+							$tpl .= "_END";
+						}
+					}
 					else
 					{
 						$tpl = $this->tlist[$this->level + 1][0];
 					};
 					if ($v["alias"])
 					{
-						  $id = join("/",$this->alias_stack);
-						  $id .= ($id == "" ? "" : "/") . $v["alias"];
+						$id = join("/",$this->alias_stack);
+						$id .= ($id == "" ? "" : "/") . $v["alias"];
+						$id = $this->cfg["baseurl"]."/".$id;
 					}
 					else
 					{
-						$id = $id;
+						$id = $this->cfg["baseurl"]."/".$id;
 					};
 
-					$url = "/" . $id;
 
 					if ($v["class_id"] == CL_PSEUDO)
 					{
@@ -190,7 +190,7 @@ class menuedit_light extends aw_template
 						{
 							$url = $_v_l;
 						}
-                                        }
+					}
 
 			 		$this->vars(array(
 						"url" => $url,
