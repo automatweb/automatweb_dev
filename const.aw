@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.79 2002/10/31 09:23:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.80 2003/04/23 11:49:18 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -131,10 +131,6 @@ if (empty($LC))
 
 // other stuff
 
-// hmmz. meeza thinks whe should only read/define those constants if we actually
-// _need_ them. -- duke
-// yeah. please to be findink the common ground between tpledit.aw and document.aw -- terryf
-
 // stat function fields
 define("FILE_SIZE",7);
 define("FILE_MODIFIED",9);
@@ -145,6 +141,11 @@ define("FILE_MODIFIED",9);
 //  naiteks "Ajakirjade Kirjastus"
 //  voi "StruktuurMeedia"
 // menyyd
+
+// please use $row[OID] instead of row["oid"] everywhere you can,
+// because "oid" is a reserved word in postgres (and probably others)
+// and we really-really want to port AW to other databases ASAP
+define("OID","oid");
 
 // mix 69? well mulle meeldib see number :-P
 define("MN_CLIENT",69);
