@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.45 2003/04/23 14:00:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.46 2003/07/10 12:23:36 duke Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -346,7 +346,7 @@ class table extends aw_template
 			$this->vars(array("aliases" => $this->parse("aliases")));
 		};
 
-		$ar = $this->get_aliases_of($this->table_id);
+		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
 		reset($ar);
 		while (list(,$v) = each($ar))
 		{
@@ -443,7 +443,7 @@ class table extends aw_template
 			"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")
 		));
 
-		$ar = $this->get_aliases_of($this->table_id);
+		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
 		reset($ar);
 		while (list(,$v) = each($ar))
 		{
@@ -1138,7 +1138,7 @@ class table extends aw_template
 			"cols"	=> $this->arr["cols"],
 			"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")
 		));
-		$ar = $this->get_aliases_of($this->table_id);
+		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
 		reset($ar);
 		while (list(,$v) = each($ar))
 		{
