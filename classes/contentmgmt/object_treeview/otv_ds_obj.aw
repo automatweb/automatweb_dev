@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.26 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.27 2005/03/17 11:11:46 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -328,6 +328,36 @@ class otv_ds_obj extends class_base
 		return $ret;
 	}
 
+	function _filt_get_fields($ob)
+	{
+		$ret = array();
+
+		$ot = get_instance("admin/object_type");
+
+		$clids = array();
+		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
+		foreach($cttt as $c)
+		{
+			$ps = $ot->get_properties($c->to());
+			foreach($ps as $pn => $pd)
+			{
+				if ($pd["store"] == "no")
+				{
+					continue;
+				}
+
+				if ($pd["method"] == "serialize")
+				{
+					continue;
+				}
+				$ret[$pn] = $pd["caption"];
+			}
+		}
+
+		$ret["jrk"] = "J&auml;rjekord";
+		return $ret;
+	}
+
 	function get_fields($ob, $full_props = false)
 	{
 		$ret = array();
@@ -476,6 +506,19 @@ class otv_ds_obj extends class_base
 			// filtering by these filters which are saved in otv
 			foreach($params['filters']['saved_filters']->get() as $filter)
 			{
+				if ($filter["field"] == "__fulltext")
+				{
+					$cond = array();
+					foreach($this->_filt_get_fields($ob) as $_fn => $_fc)
+					{
+						$cond[$_fn] = "%".$filter["value"]."%";
+					}
+					$_ft[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => $cond
+					));
+				}
+				else
 				if ($filter['is_strict'] == 1)
 				{
 					$_ft[$filter['field']] = $filter['value'];

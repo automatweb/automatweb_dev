@@ -1278,7 +1278,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$sql[] = " aliases_".$key.".target = '$val' ";
 				}
 				else
-				if ($key == "modified" || $key == "flags")
+				if (($key == "modified" && strpos($val, "%") === false) || $key == "flags")
 				{
 					// pass all arguments .. &, >, < or whatever the user wants to
 					$sql[] = $tf." ".$val;
