@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.44 2003/04/23 07:00:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.45 2003/05/08 10:22:29 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -409,6 +409,7 @@ class config extends db_config
 				"name" => $name,
 				"priority" =>  ($data[$row["gid"]]["pri"]) ? $data[$row["gid"]]["pri"] : 0,
 				"search" => $this->mk_my_orb("search",array("otype" => CL_PSEUDO,"one" => 1,"return_url" => $return_url),"objects"),
+				"login_menu" => $this->picker($midx, $menus)
 			));
 
 			$c .= $this->parse("LINE");
@@ -428,6 +429,14 @@ class config extends db_config
 		extract($args);
 		$xml = get_instance("xml");
 		$old = aw_unserialize($this->get_simple_config("login_menus"));
+
+		if (is_array($login_menu))
+		{
+			foreach($login_menu as $gid => $mn)
+			{
+				$old[aw_global_get("lang_id")][$gid]["menu"] = $mn;
+			}
+		}
 
 		if ($pick && $parent)
 		{

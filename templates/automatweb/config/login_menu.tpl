@@ -12,7 +12,7 @@
 		<td align="center" class="title">&nbsp;Pri&nbsp;</td>
 		<td align=center class="title">&nbsp;Grupp&nbsp;</td>
 		<td align=center class="title">&nbsp;Menüü&nbsp;</td>
-		<td align=center class="title">&nbsp;Otsi&nbsp;</td>
+<!--		<td align=center class="title">&nbsp;Otsi&nbsp;</td>-->
 	</tr>
 <!-- SUB: LINE -->
 <tr>
@@ -20,11 +20,12 @@
 <td class="fgtext" align=center>&nbsp;<input type="text" name="pri[{VAR:gid}]" value="{VAR:priority}" size="2" maxlength="2">&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:group}&nbsp;</td>
 <td class="fgtext">&nbsp;
-{VAR:name}
+<select name='login_menu[{VAR:gid}]'>{VAR:login_menu}</select>
 &nbsp;</td>
-<td class="fgtext">&nbsp;
+<!-- <td class="fgtext">&nbsp;
 <a href="{VAR:search}">Otsi uus..<a>
-&nbsp;</td>
+
+&nbsp;</td> -->
 <!-- END SUB: LINE -->
 </table>
 </td></tr></table>
