@@ -1,20 +1,29 @@
-<form action="{VAR:baseurl}/index.{VAR:ext}" method="GET">
-<table border="1">
+<div style="text-align: left;">
+<form method="GET" action="{VAR:baseurl}/index.{VAR:ext}">
+<table border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td>Otsi:</td>
-</tr>
-<!-- SUB: GROUP -->
-<tr>
-	<td><input type="radio" name="group" value="{VAR:group}" {VAR:checked}>{VAR:name}</td>
-</tr>
-<!-- END SUB: GROUP -->
-
-<tr>
-	<td><input type="text" name="str" value="{VAR:str}"></td>
+	<td class="text" colspan="2"><b>{VAR:LC_SEARCH_TOP}</b></td>
 </tr>
 <tr>
-	<td><input type="submit" value="Otsi"></td>
+	<td class="text" colspan="2">
+	<table border="0" cellpadding="0" cellspacing="2">
+		<!-- SUB: GROUP -->
+		<tr>
+			<td><input type="radio" name="group" value="{VAR:group}" {VAR:checked}></td>
+			<td class="text">{VAR:name}</td>
+		</tr>
+		<!-- END SUB: GROUP -->
+	</table>
+	</td>
+</tr>
+<tr>
+	<td class="text">
+	<input type="hidden" name="search_all" value="1">
+	<input class="text" type="text" NAME="str" VALUE='{VAR:str}' size="40"></td>
+	<td><input type="submit" value="{VAR:LC_SEARCH_CONF_DO_SEARCH}" class="btn"></td>
 </tr>
 </table>
+
 {VAR:reforb}
 </form>
+</div>
