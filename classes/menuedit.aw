@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.246 2003/02/28 15:29:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.247 2003/02/28 15:44:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4569,6 +4569,10 @@ class menuedit extends aw_template
 		while ($sel_image == "" && $si_parent)
 		{
 			$sel_menu_meta = $this->mar[$si_parent]["meta"];
+			if ($sel_menu_o_img_url == "")
+			{
+				$sel_menu_o_img_url = image::check_url($this->mar[$si_parent]["img_url"]);
+			}
 //			echo "si_parent = $si_parent , meta = <pre>", var_dump($sel_menu_meta),"</pre> <br>";
 			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
 			{
@@ -4611,6 +4615,7 @@ class menuedit extends aw_template
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
 			"sel_menu_image" => $sel_image,
 			"sel_menu_image_url" => $sel_image_url,
+			"sel_menu_o_img_url" => $sel_menu_o_img_url,
 			"sel_menu_id" => $sel_menu_id,
 			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 6 
 		));
