@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.195 2003/06/09 18:19:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.196 2003/06/12 14:29:50 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -715,6 +715,11 @@ class document extends aw_template
 		}
 
 		$pb = "";
+
+		$this->vars(array(
+			"link_text" => $doc["link_text"],
+		));
+
 		if ($doc["photos"])
 		{
 			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
@@ -1660,7 +1665,10 @@ class document extends aw_template
 
 		// if a config form was used to create this document, redirect to the
 		// class that can actually CAN use config forms
-		if (isset($oob["meta"]["cfgform_id"]) && ($oob["meta"]["cfgform_id"] > 0))
+		if (
+			(aw_ini_get("document.no_static_forms") == 1) || 
+			(isset($oob["meta"]["cfgform_id"]) && ( ($oob["meta"]["cfgform_id"] > 0)))
+		)
 		{
 			return $this->mk_my_orb("change",array("id" => $oob["oid"]),"doc");
 		};
