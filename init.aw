@@ -9,8 +9,6 @@
 // include aw const
 include_once(dirname(__FILE__)."/const.aw");
 
-class _config_dummy {};
-
 function aw_ini_get($var)
 {
 //	enter_function("__global::aw_ini_get",array());
