@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.20 2001/06/18 19:16:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.21 2001/06/21 03:51:05 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -332,6 +332,8 @@ define("CL_CONTACT_GROUP",63); // kontaktigrupp
 define("CL_SHOP_ITEM_TYPE",64); // poe kaupa tyyp
 define("CL_SHOP_EQUASION",65);  // poe kauba hinna arvutamise valem
 
+define("CL_FORM_TABLE",66);  // otsinguformi tulemuste kuvamise tabel
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -376,7 +378,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0),
 			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1),
 			CL_SHOP_ITEM_TYPE => array("name" => "Kauba t&uuml;&uuml;p", "file" => "item_type", "can_add" => 1),
-			CL_SHOP_EQUASION => array("name" => "Kauba hinnavalem", "file" => "shop_eq", "can_add" => 1)
+			CL_SHOP_EQUASION => array("name" => "Kauba hinnavalem", "file" => "shop_eq", "can_add" => 1),
+			CL_FORM_TABLE => array("name" => "Formi tabel", "file" => "form_table", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
