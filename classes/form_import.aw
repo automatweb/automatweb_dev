@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.12 2002/02/18 13:43:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.13 2002/03/08 12:10:32 kristo Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -332,7 +332,11 @@ class form_import extends form_base
 		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
 			// first we create a new chain entry for this line
-			$chain_entry_id = $this->db_fetch_field("SELECT max(id) as id FROM form_chain_entries", "id")+1;
+//			$chain_entry_id = $this->db_fetch_field("SELECT max(id) as id FROM form_chain_entries", "id")+1;
+			$chain_entry_id = $this->new_object(array(
+				"parent" => $f->chain["save_folder"],
+				"class_id" => CL_CHAIN_ENTRY,
+			));
 			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) values($chain_entry_id,$id,'".$GLOBALS["uid"]."')");
 
 			$chentrys = array();

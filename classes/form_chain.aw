@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.14 2002/02/28 12:17:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.15 2002/03/08 12:10:32 kristo Exp $
 // form_chain.aw - form chains
 lc_load("form");
 global $orb_defs;
@@ -26,10 +26,13 @@ class form_chain extends form_base
 		$this->mk_path($parent,LC_FORM_CHAIN_ADD_WREATH);
 		$this->read_template("add_chain.tpl");
 
+		classload("objects");
+		$ob = new objects;
 		$this->vars(array(
 			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY,false,true)),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"alias_doc" => $alias_doc)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"folders" => $this->picker(0,$ob->get_list())
 		));
 		return $this->parse();
 	}
@@ -64,6 +67,8 @@ class form_chain extends form_base
 
 		$ct["after_redirect"] = $after_redirect;
 		$ct["after_redirect_url"] = $after_redirect_url;
+
+		$ct["save_folder"] = $save_folder;
 
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
@@ -164,6 +169,8 @@ class form_chain extends form_base
 			}
 		}
 
+		classload("objects");
+		$ob = new objects;
 		$this->vars(array(
 			"forms" => $this->multiple_option_list($this->chain["forms"],$this->get_list(FTYPE_ENTRY,false,true)),
 			"name" => $fc["name"],
@@ -183,7 +190,8 @@ class form_chain extends form_base
 			"LANG_H" => $lh,
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
-			"after_redirect_url" => $this->chain["after_redirect_url"]
+			"after_redirect_url" => $this->chain["after_redirect_url"],
+			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list())
 		));
 		return $this->parse();
 	}
@@ -349,10 +357,16 @@ class form_chain extends form_base
 	function submit_form($arr)
 	{
 		extract($arr);
+		$this->load_chain($id);
+
 		// ok, here we must create a new chain_entry if none is specified
 		if (!$chain_entry_id)
 		{
-			$chain_entry_id = $this->db_fetch_field("SELECT MAX(id) as id FROM form_chain_entries","id")+1;
+/*			$chain_entry_id = $this->db_fetch_field("SELECT MAX(id) as id FROM form_chain_entries","id")+1;*/
+			$chain_entry_id = $this->new_object(array(
+				"parent" => $this->chain["save_folder"],
+				"class_id" => CL_CHAIN_ENTRY,
+			));
 			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) VALUES($chain_entry_id,$id,'".$GLOBALS["uid"]."')");
 		}
 
@@ -361,9 +375,13 @@ class form_chain extends form_base
 		$f = new form;
 		$f->process_entry(array("id" => $form_id, "chain_entry_id" => $chain_entry_id, "entry_id" => $form_entry_id));
 
+		// now update the chain entry object with the form entry name
+		$this->upd_object(array(
+			"oid" => $chain_entry_id,
+			"name" => $f->entry_name
+		));
 		$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
 
-		$this->load_chain($id);
 		$tfid = $form_id;
 		if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]) && !isset($GLOBALS["confirm"]))
 		{
@@ -440,7 +458,7 @@ class form_chain extends form_base
 		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id)).LC_FORM_CHAIN_CHANGE_WREATH_INPUT);
 		$this->read_template("show_chain_entries.tpl");
 
-		$this->db_query("SELECT * FROM form_chain_entries WHERE chain_id = $id");
+		$this->db_query("SELECT form_chain_entries.*,objects.created as tm FROM form_chain_entries LEFT JOIN objects ON objects.oid = form_chain_entries.id WHERE chain_id = $id AND objects.status != 0");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -459,16 +477,57 @@ class form_chain extends form_base
 	{
 		extract($arr);
 
-		/*
+		// get all form entries for chain entry and delete all of those as well.
 		$e = $this->get_chain_entry($entry_id);
 		foreach($e as $fid => $fentry_id)
 		{
 			$this->delete_object($fentry_id);
-		}*/
+		}
 
-		//$this->db_query("DELETE FROM form_chain_entries WHERE id = $entry_id");
-
+		// now delete chain entry object
+		$this->delete_object($entry_id);
 		header("Location: ".$this->mk_my_orb("show_chain_entries", array("id" => $id)));
+	}
+
+	function convchainentries($arr)
+	{
+		// for each chain
+		set_time_limit(0);
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM_CHAIN." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$f = new form_chain;
+			$f->load_chain($row["oid"]);
+
+			echo "chain $row[oid] <br>";
+			flush();
+			// for each entry in chain
+			$this->save_handle();
+			$this->db_query("SELECT * FROM form_chain_entries WHERE chain_id = ".$row["oid"]);
+			while ($erow = $this->db_next())
+			{
+				$this->save_handle();
+				// create object for it
+				echo "entry $erow[id] for chain $row[oid] <br>";
+				$chain_entry_id = $this->new_object(array(
+					"parent" => $f->chain["save_folder"],
+					"class_id" => CL_CHAIN_ENTRY,
+				));
+				
+				// update id in form_chain_entries table and all form_xxx_entries tables for the chain entry
+				$e = $this->get_chain_entry($erow["id"]);
+				foreach($e as $fid => $fentry_id)
+				{
+					echo "form_entry $fentry_id for form $fid of chain_entry $erow[id] for chain $row[oid] <br>";
+					flush();
+					$this->db_query("UPDATE form_".$fid."_entries SET chain_id = $chain_entry_id WHERE chain_id = $erow[id]");
+				}
+
+				$this->db_query("UPDATE form_chain_entries SET id = $chain_entry_id WHERE id = $erow[id] AND chain_id = $row[oid]");
+				$this->restore_handle();
+			}
+			$this->restore_handle();
+		}
 	}
 }
 ?>

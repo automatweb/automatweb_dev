@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.92 2002/02/21 18:13:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.93 2002/03/08 12:10:32 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2172,12 +2172,12 @@ class form extends form_base
 			if ($query == "")
 			{
 				// return all the chain entries for the first form in the chain
-				$query = "SELECT distinct(chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
+				$query = "SELECT distinct(chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON objects.oid = form_".$mid."_entries.chain_id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0";
 			}
 			else
 			{
 				// join all the necessary forms together
-				$query = "SELECT distinct(form_".$mid."_entries.chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".join(" ",map2("LEFT JOIN form_%s_entries ON form_%s_entries.chain_id = form_".$mid."_entries.chain_id",$forms_in_q))." WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ".$query;
+				$query = "SELECT distinct(form_".$mid."_entries.chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON objects.oid = form_".$mid."_entries.chain_id ".join(" ",map2("LEFT JOIN form_%s_entries ON form_%s_entries.chain_id = form_".$mid."_entries.chain_id",$forms_in_q))." WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0 ".$query;
 			}
 
 			$this->main_search_form = $mid;
