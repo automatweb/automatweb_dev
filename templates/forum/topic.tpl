@@ -1,9 +1,7 @@
 <table border="0" width="100%">
 <tr>
 <td class="{VAR:style_caption}">
-<small>
 <strong>{VAR:path}</strong>
-</small>
 </td>
 <td nowrap class="{VAR:style_caption}">
 <!-- SUB: active_page -->
@@ -17,7 +15,7 @@
 <tr>
 <td colspan="2" class="{VAR:style_caption}">
 <strong>{VAR:name}</strong><br>
-<small>{VAR:comment}</small>
+{VAR:comment}
 </td>
 </tr>
 </table>
@@ -25,7 +23,7 @@
 <!-- SUB: COMMENT -->
 <tr>
 	<td align="center" width="20%"><div class="{VAR:style_comment_user}">{VAR:createdby}</div><div class="{VAR:style_comment_time}">{VAR:date}</div></td>
-	<td valign="top" class="{VAR:style_comment_text}"><strong>{VAR:name}</strong><p><small>{VAR:commtext}</small></td>
+	<td valign="top" class="{VAR:style_comment_text}"><strong>{VAR:name}</strong><p>{VAR:commtext}</td>
 </tr>
 <!-- END SUB: COMMENT -->
 </table>

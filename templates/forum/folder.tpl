@@ -1,9 +1,7 @@
 <table border="0" width="100%">
 <tr>
 <td class="{VAR:style_caption}">
-<small>
 <strong>{VAR:path}</strong>
-</small>
 </td>
 <td class="{VAR:style_caption}">
 <!-- SUB: active_page -->
