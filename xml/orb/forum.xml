@@ -38,6 +38,13 @@
 			</function>
 		</action>
 		
+		<action name="submit_topics" nologin="1">
+			<function name="submit_topics">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="topics_detail" nologin="1">
 			<function name="topics_detail">
 				<arguments>
@@ -51,6 +58,45 @@
 
 		<action name="submit_vote" nologin="1">
 			<function name="submit_vote">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_rates">
+			<function name="change_rates">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_rates">
+			<function name="submit_rates">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_rate">
+			<function name="add_rate">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_rate">
+			<function name="change_rate">
+				<arguments>
+					<required name="id"/>
+					<required name="rate_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_rate">
+			<function name="submit_rate">
 				<arguments>
 				</arguments>
 			</function>
@@ -100,6 +146,32 @@
 				<arguments>
 					<required name="board"/>
 					<optional name="section"/>
+					<optional name="cid"/>
+					<optional name="no_comments"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="no_response" nologin="1">
+			<function name="show">
+				<arguments>
+					<required name="board"/>
+					<optional name="section"/>
+					<define name="no_response" value="1"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="submit_messages">
+			<function name="submit_messages">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		<action name="addcomment" nologin="1">
+			<function name="show">
+				<arguments>
+					<required name="board"/>
+					<optional name="section"/>
+					<define name="addcomment" value="1"/>
 				</arguments>
 			</function>
 		</action>
