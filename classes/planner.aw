@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.76 2002/09/05 14:01:58 duke Exp $
-// fuck, this is such a mess
-// planner.aw - päevaplaneerija
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.77 2002/09/05 16:06:14 duke Exp $
+// planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 classload("calendar","defs");
 define(WEEK,DAY * 7);
@@ -21,6 +20,14 @@ class planner extends calendar
 		$this->init("planner");
 		lc_load("definition");
 		$this->lc_load("planner","lc_planner");
+		global $XXX;
+		if ($XXX)
+		{
+			global $lc_planner;
+			print "<pre>";
+			print_r($lc_planner);
+			print "</pre>";
+		};
 	}
 	
 	////
@@ -517,6 +524,7 @@ class planner extends calendar
 					"day" => $d,
 					"type" => $type,
 					"marked" => $events,
+					"ctrl" => $this->ctrl,
 					"tpl" =>  "small_month.tpl",
 			));
 
@@ -528,6 +536,7 @@ class planner extends calendar
 					"id" => $id,
 					"day" => "666",
 					"type" => $type,
+					"ctrl" => $this->ctrl,
 					"tpl" =>  "small_month.tpl",
 			));
 
@@ -1775,7 +1784,7 @@ class planner extends calendar
 					"hcell" => strtoupper(substr(get_lc_weekday($i+1),0,1)) . " " . date("d-M",$thisday),
 					"hcell_weekday" => strtoupper(substr(get_lc_weekday($i+1),0,1)),
 					"hcell_date" =>  date("d-M",$thisday),
-					"dayorblink" => $this->mk_my_orb("view",array("id" => $this->id,"type" => "day","date" => "$day-$mon-$year")),
+					"dayorblink" => $this->mk_my_orb("view",array("id" => $this->id,"ctrl" => $this->ctrl, "type" => "day","date" => "$day-$mon-$year")),
 					"cell" => $c1,
 				));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.13 2002/06/26 11:27:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.14 2002/09/05 16:06:14 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -33,6 +33,7 @@ class calendar extends aw_template
 		$marked = (is_array($args["marked"])) ? $args["marked"] : array();
 		$id = $args["id"];
 		$type = $args["type"];
+		$ctrl = $args["ctrl"];
 
 		$add	= $args["add"]; // miski räga, mis linkidele otsa pannakse
 
@@ -111,7 +112,7 @@ class calendar extends aw_template
 			$this->vars(array(
 				"nday" => sprintf($markup,$day),
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
-				"dayorblink" => $this->mk_my_orb("view",array("id" => $id,"type" => "day","date" => "$day-$mon-$year")),
+				"dayorblink" => $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "day","date" => "$day-$mon-$year")),
 				"day" => sprintf($markup,$day),
 				"markup_style" => $markup_style,
 			));
@@ -128,7 +129,7 @@ class calendar extends aw_template
 				// nädal lõppes, lisame selle kalendrisse
 				$this->vars(array(
 					"cell" => $line,
-					"weekorblink" => $this->mk_my_orb("view",array("id" => $id,"type" => "week","date" => "$day-$mon-$year")),
+					"weekorblink" => $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "week","date" => "$day-$mon-$year")),
 				));
 				$month .= $this->parse("week");
 				$line = "";
@@ -160,8 +161,8 @@ class calendar extends aw_template
 			"caption" => $caption,
 			"prev" => $this->mk_link($misc + array("year" => $prevyear,"mon" => $prevmon)),
 			"next" => $this->mk_link($misc + array("year" => $nextyear,"mon" => $nextmon)),
-			"prevorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"date" => "$act_day-$prevmon-$prevyear")),
-			"nextorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"date" => "$act_day-$nextmon-$nextyear")),
+			"prevorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl,"date" => "$act_day-$prevmon-$prevyear")),
+			"nextorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl, "date" => "$act_day-$nextmon-$nextyear")),
 			"week" => $month,
 			"prefix" => $prefix,
 			"prevmon" => $prevmon,
