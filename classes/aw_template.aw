@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.38 2003/03/05 16:52:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.39 2003/03/06 19:58:04 duke Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -82,58 +82,29 @@ class aw_template extends acl_base
 		//$this->_init_vars();
 	}
 
-	// ma ei osanud seda mujale panna ;)
-	// see on <SELECT> elementide jaoks ...
-	// ette antakse array, millest produtseeritakse string, kus iga element on kujul
-	// <option value=$key>$value</option>
-	// ja see element, mille key on muutujas $active saab ka "selected" tagi
-	// TODO: move to defs.aw
+	////
+	// !Deprecated - use html::select instead
 	function option_list($active,$array)
 	{
-		$res = "";
-		if (is_array($array))
-		{
-			while(list($k,$v) = each($array))
-			{
-				$selected = ($active == $k) ? " selected " : "";
-				$res .= sprintf("<option %s value='%s'>%s</option>\n",$selected,$k,$v);
-			};
-		};
-		return $res;
+		return html::select(array("selected" => $active,"options" => $array));
 	}
 
-	// multiple <select> elementide jaox, $active on array aktiivsete asjadega
-	// TODO: move to defs.aw
+	////
+	// !Deprecated - use html::select instead
 	function multiple_option_list($active,$array)
 	{
-		$res = "";
-		if (not(is_array($array)))
-		{
-			return false;
-		};
-
-		if (is_array($active))
-		{
-			$active = array_flip($active);
-		};
-
-		while(list($k,$v) = each($array))
-		{
-			$selected = isset($active[$k]) ? " selected " : "";
-			$res .= sprintf("<option %s value='%s'>%s</option>\n",$selected,$k,$v);
-		};
-		return $res;
+		return html::select(array("selected" => $active,"options" => $array,"multiple" => 1));
 	}
         
 	////
-	// !damn the name kinda sucks, but oh well. anyway - shortcut to multiple_option_list()
+	// !Deprecated - use html::select instead
 	function mpicker($active, $array)
 	{
 		return $this->multiple_option_list($active, $array);
 	}
 
-	// shortcut eelmisele
-	// TODO: move to defs.aw
+	////
+	// !Deprecated - use html::select instead
 	function picker($active,$array)
 	{
 		return $this->option_list($active,$array);
