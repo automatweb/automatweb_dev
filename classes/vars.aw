@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.1 2001/05/18 17:01:26 duke Exp $
 
 	global $orb_defs;
 	$orb_defs["variables"] = array(
@@ -38,12 +39,12 @@
 			if ($id)
 			{
 				$this->upd_object(array("oid" => $id, "name" => $name));
-				$this->log_action($GLOBALS["uid"],"ml_var","Muutis meili muutujat $name");
+				$this->_log("ml_var","Muutis meili muutujat $name");
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent,"name" => $name, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
-				$this->log_action($GLOBALS["uid"],"ml_var","Lisas meili muutuja $name");
+				$this->_log("ml_var","Lisas meili muutuja $name");
 			}
 
 			return "list.aw?type=change_var&id=$id";
@@ -219,7 +220,7 @@
 											 WHERE objects.class_id = 18 AND objects.status != 0 AND objects.parent = $parent");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("var_id" => $row[oid], "var_name" => $row[name]));
+				$this->vars(array("var_id" => $row["oid"], "var_name" => $row["name"]));
 
 				$cc = $this->parse("V_CHANGE");
 				$cd = $this->parse("V_DELETE");
@@ -243,7 +244,7 @@
 											 WHERE objects.class_id = 19 AND objects.status != 0");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("stamp_id" => $row[oid], "stamp_name" => $row[name]));
+				$this->vars(array("stamp_id" => $row["oid"], "stamp_name" => $row["name"]));
 
 				$vc = $this->parse("V_CHANGE");
 				$vd = $this->parse("V_DELETE");
@@ -274,12 +275,12 @@
 			{
 
 				$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $value));
-				$this->log_action($GLOBALS["uid"],"ml_var","Muutis stampi $name");
+				$this->_log("ml_var","Muutis stampi $name");
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => 1,"name" => $name, "class_id" => CL_MAILINGLIST_STAMP, "comment" => $value));
-				$this->log_action($GLOBALS["uid"],"ml_var","Lisas stambi $name");
+				$this->_log("ml_var","Lisas stambi $name");
 			}
 
 			return $id;
@@ -303,14 +304,16 @@
 
 		function db_list()
 		{
-			$this->db_query("SELECT objects.* FROM objects
-											 WHERE objects.class_id = 18 AND objects.status != 0");
+			$this->get_objects_by_class(array(
+						"class" => CL_MAILINGLIST_VARIABLE,
+			));
 		}
 
 		function db_list_stamps()
 		{
-			$this->db_query("SELECT objects.* FROM objects
-											 WHERE objects.class_id = 19 AND objects.status != 0");
+			$this->get_objects_by_class(array(
+						"class" => CL_MAILINGLIST_STAMP,
+			));
 		}
 
 		function add_cat($parent)
@@ -328,12 +331,12 @@
 			if ($id)
 			{
 				$this->update_object($id, $name, 2, $comment);
-				$this->log_action($GLOBALS["uid"],"ml_var","Muutis meili muutujate kategooriat $name");
+				$this->_log("ml_var","Muutis meili muutujate kategooriat $name");
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_ML_VAR_CAT, "comment" => $comment));
-				$this->log_action($GLOBALS["uid"],"ml_var","Lisas meili muutujate kategooria $name");
+				$this->_log("ml_var","Lisas meili muutujate kategooria $name");
 			}
 
 			return $parent;
