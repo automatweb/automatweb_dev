@@ -1134,7 +1134,8 @@ class export extends aw_template
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "\r\n";
-		$socket = get_instance("socket",array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => $port,
 		));
@@ -1157,7 +1158,8 @@ class export extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
-		$socket = get_instance("socket",array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => $port,
 		));
