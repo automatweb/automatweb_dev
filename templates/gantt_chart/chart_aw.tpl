@@ -5,14 +5,14 @@
 <tr>
 	<td class="awmenuedittablehead" align="center">{VAR:row_dfn}</td>
 	<td colspan="{VAR:columns}" valign="top">
-		
+
 <table border="0" width="100%" style="height: 100%" cellspacing="0" cellpadding="0">
 	<tr>
 	<!-- SUB: column_head_link -->
-	<td class="awmenuedittablehead" align="center" style="border-left: 1px solid white; padding-bottom: 2px;"><a href="{VAR:uri}" target="{VAR:target}">{VAR:title}</a></td>
+	<td class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};"><a href="{VAR:uri}" target="{VAR:target}" style="white-space: nowrap;">{VAR:title}</a></td>
 	<!-- END SUB: column_head_link -->
 	<!-- SUB: column_head -->
-	<td class="awmenuedittablehead" align="center">{VAR:title}</td>
+	<td class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};">{VAR:title}</td>
 	<!-- END SUB: column_head -->
 	</tr>
 
@@ -27,13 +27,13 @@
 				<td class="awmenuedittablehead VclGanttChartTimespan" align="left">{VAR:time}</td>
 				<!-- END SUB: subdivision -->
 			</tr>
-		</table>	
+		</table>
 
 	</td>
 	<!-- END SUB: subdivision_head -->
 	</tr>
 	<!-- END SUB: subdivision_row -->
-</table>			
+</table>
 
 	</td>
 </tr>
@@ -45,13 +45,13 @@
 <td class="awmenuedittabletext VclGanttChartColumn">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_0 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_00.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_00.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_0 -->
 <!-- SUB: bar_1 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_01.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_01.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_1 -->
 <!-- SUB: bar_hilighted -->
-<a href="{VAR:bar_uri}" title="{VAR:title}" target="{VAR:bar_uri_target}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_hilighted -->
 <!-- SUB: bar_empty -->
 <img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" alt="" class="VclGanttChartDataImg">
@@ -64,13 +64,13 @@
 <td class="awmenuedittabletext VclGanttChartSubdivision">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_0 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_00.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_00.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_0 -->
 <!-- SUB: bar_1 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_01.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_01.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_1 -->
 <!-- SUB: bar_hilighted -->
-<a href="{VAR:bar_uri}" title="{VAR:title}" target="{VAR:bar_uri_target}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_hilighted -->
 <!-- SUB: bar_empty -->
 <img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" alt="" class="VclGanttChartDataImg">
@@ -89,13 +89,13 @@
 <td class="awmenuedittabletext VclGanttChartColumn">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_0 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_10.gif" width="{VAR:length}" title="{VAR:title}" alt="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_10.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_0 -->
 <!-- SUB: bar_1 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_11.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_11.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_1 -->
 <!-- SUB: bar_hilighted -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_hilighted -->
 <!-- SUB: bar_empty -->
 <img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" alt="" class="VclGanttChartDataImg">
@@ -108,13 +108,13 @@
 <td class="awmenuedittabletext VclGanttChartSubdivision">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_0 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_10.gif" width="{VAR:length}" title="{VAR:title}" alt="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_10.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_0 -->
 <!-- SUB: bar_1 -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_11.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_11.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_1 -->
 <!-- SUB: bar_hilighted -->
-<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" title="{VAR:title}" class="VclGanttChartLink"><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" alt="{VAR:title}" title="{VAR:title}" class="VclGanttChartDataImg VclGanttChartDataBar"></a>
+<a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_hilighted.gif" width="{VAR:length}" class="VclGanttChartDataImg"></a>
 <!-- END SUB: bar_hilighted -->
 <!-- SUB: bar_empty -->
 <img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" alt="" class="VclGanttChartDataImg">

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.6 2005/02/18 14:37:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.7 2005/03/11 09:12:28 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -383,6 +383,7 @@ class gantt_chart extends class_base
 						"title" => ($definition["title"] ? $definition["title"] : ($nr + 1)),
 						"uri" => $definition["uri"],
 						"target" => $definition["target"],
+						"column_width" => $this->cell_width,
 					));
 					$header_row .= $this->parse ("column_head_link");
 				}
@@ -390,6 +391,7 @@ class gantt_chart extends class_base
 				{
 					$this->vars (array (
 						"title" => $definition["title"],
+						"column_width" => $this->cell_width,
 					));
 					$header_row .= $this->parse ("column_head");
 				}
@@ -398,6 +400,7 @@ class gantt_chart extends class_base
 			{
 				$this->vars (array (
 					"title" => $nr + 1,
+					"column_width" => $this->cell_width,
 				));
 				$header_row .= $this->parse ("column_head");
 			}

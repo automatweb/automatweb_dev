@@ -4,6 +4,49 @@
 	text-decoration: none;
 }
 
+a.VclGanttChartBarLink
+{
+	z-index: 1000;
+	position: relative;
+}
+
+a.VclGanttChartBarLink:hover
+{
+	z-index: 1001;
+	background-color: white;
+}
+
+td.VclGanttChartHeader
+{
+	border-left: 1px solid white;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	white-space: nowrap;
+}
+
+a.VclGanttChartHeader
+{
+	white-space: nowrap;
+}
+
+a.VclGanttChartBarLink span
+{
+	display: none;
+	color: black;
+	text-decoration: none;
+	top: 2em;
+	width: 180px;
+	padding: 2px;
+	border: 1px solid black;
+	background-color: white;
+}
+
+a.VclGanttChartBarLink:hover span
+{
+	position: absolute;
+	display: block;
+}
+
 .VclGanttChartRowName
 {
 	background-color: #EEEEEE;
@@ -18,6 +61,7 @@
 
 .VclGanttChartDataImg
 {
+	position: relative;
 	border: none;
 	height: 12px;
 	margin: 0px;
@@ -47,6 +91,6 @@
 	font-size: 9px;
 	font-weight: normal;
 	border-left: 1px solid white;
-	padding-left: 1px;
+	padding-left: 2px;
 }
 </style>
