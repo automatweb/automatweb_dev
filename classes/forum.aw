@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.88 2004/06/04 11:41:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.89 2004/06/11 09:16:53 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -212,10 +212,8 @@ class forum extends class_base
 			//"sortable" => 1,
 		));
 
-		$nflist = $this->get_object_metadata(array(
-			"oid" => $id,
-			"key" => "notifylist",
-		));
+		$tmp = obj($id);
+		$nflist = $tmp->meta("notifylist");
 
 		if (is_array($nflist))
 		{
@@ -254,10 +252,8 @@ class forum extends class_base
 	function submit_notify_list($args = array())
 	{
 		extract($args);
-		$nflist = $this->get_object_metadata(array(
-			"oid" => $id,
-			"key" => "notifylist",
-		));
+		$tmp = obj($id);
+		$nflist = $tmp->meta("notifylist");
 		if (is_array($chk))
 		{
 			foreach($chk as $key => $val)
@@ -1367,10 +1363,8 @@ topic");
 			}
 		};
 
-		$mx = $this->get_object_metadata(array(
-			"oid" => $forum_obj["parent"],
-			"key" => "notifylist",
-		));
+		$tmp = obj($forum_obj["parent"]);
+		$nflist = $tmp->meta("notifylist");
 
 		if ($parent)
 		{
@@ -2004,9 +1998,7 @@ topic");
 			"id" => $args["oid"],
 		));
 
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $args["metadata"]
-		));
+		$meta = aw_unserialize($args["metadata"]);
 		if ($meta["voters"] == 0)
 		{
 			$rate = 0;
@@ -2202,11 +2194,14 @@ topic");
 	function del_topic($arr)
 	{
 		extract($arr);
-		$this->delete_object($board);
-		$pobj = $this->get_object($forum_id);
-		if ($pobj["class_id"] == CL_DOCUMENT)
+		aw_disable_acl();
+		$tmp = obj($board);
+		$tmp->delete();
+		$pobj = obj($forum_id);
+		aw_restore_acl();
+		if ($pobj->class_id() == CL_DOCUMENT)
 		{
-			$retval = $this->mk_link(array("section" => $pobj["oid"]));
+			$retval = $this->mk_link(array("section" => $pobj->id()));
 		}
 		else
 		{
