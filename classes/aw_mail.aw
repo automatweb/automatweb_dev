@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.5 2001/05/30 00:46:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.6 2001/05/30 03:37:39 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -120,7 +120,7 @@ class aw_mail {
 				// mime-partiks teha
 				if ($i == 1)
 				{
-					$xheaders = array_merge($headers,$headers2);
+					$xheaders = array_merge($this->headers,$headers2);
 					$this->headers = $xheaders;
 					$this->body = $block["body"];
 					$this->mimeparts[0] = array(
@@ -160,21 +160,25 @@ class aw_mail {
 
 		// strip the whitespace from the beginning
 		$data = preg_replace("/^\s+?/","",$data);
+		
+		// I'm not sure whether this is correct either.
+		$data = preg_replace("/\r/","",$data);
 
 		// split the data to individual lines
 		// actually, I don't like this one not a single bit, but since I do not know the internals
 		// of PHP very well, I don't know whether parsing the string until the next linefeed
 		// is found, is very effective. So right now, I'll leave it as it is.
-		$lines = preg_split("/[\r|\n|\r\n|\n\r]/",$data);
+
+		$lines = preg_split("/\n/",$data);
 
 		$i = 0;
 
 		foreach($lines as $num => $line)
 		{
+			#print "#";
 			// If we find an empty line, then we have all the headers and can continue with 
-			if (preg_match("/^$/",$line))
+			if ((preg_match("/^$/",$line)) && ($in_headers))
 			{
-				// print "aborting on line $num<br>";
 				$in_headers = false;
 			};
 
