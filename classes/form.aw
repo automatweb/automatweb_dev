@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.125 2002/08/20 12:42:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.126 2002/08/21 09:55:55 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1328,25 +1328,37 @@ class form extends form_base
 					$__rel = $this->post_vars[$row["el_relation"]];
 					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 					$_rel = (int)$m[1];
-					/*
-					print "_cnt = $_cnt<br>";
-					print "start = $_start<br>";
-					print "rel = $_rel<br>";
-					*/
 					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,items,relation)
 							VALUES ('$row[cal_id]','$eid','$_start','$_cnt','$_rel')";
 					$this->db_query($q);
-					/*
-					print $q;
-					print "<pre>";
-					print_r($row);
-					print "</pre>";
-					*/
 				};
 			}
 			elseif ($this->subtype = FSUBTYPE_CAL_CONF)
 			{
-				// update timedefs
+				$fc = get_instance("form_calendar");
+				$_start = get_ts_from_arr($this->post_vars[$this->arr["el_event_start"]]);
+				$_end = get_ts_from_arr($this->post_vars[$this->arr["el_event_end"]]) + 86399;
+				$_cnt = $this->post_vars[$this->arr["el_event_count"]];
+				$_types = array(
+					"hour" => "1",
+					"day" => "2",
+				);
+				$_period = $this->post_vars[$this->arr["el_event_period"] . "_count"];
+				$_release = $this->post_vars[$this->arr["el_event_release"] . "_count"];
+				$_pertype = $_types[$this->post_vars[$this->arr["el_event_period"] . "_type"]];
+				$_reltype = $_types[$this->post_vars[$this->arr["el_event_release"] . "_type"]];
+				$_oid = $this->id;
+				$_eid = $this->entry_id;
+
+				$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid'";
+				$this->db_query($q);
+
+				$q = "INSERT INTO calendar2timedef (oid,start,end,max_items,period,period_cnt,
+							release,release_cnt,entry_id) VALUES 
+							('$_oid','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
+							'$_release','$_eid')";
+
+				$this->db_query($q);
 			};
 		}
 
