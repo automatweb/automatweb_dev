@@ -45,5 +45,12 @@
 			</function>
 		</action>
 
+		<action name="test_tree" all_args="1">
+			<function name="test_tree">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
