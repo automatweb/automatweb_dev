@@ -1,4 +1,12 @@
+<table border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
+<tr>
+<td>
+	{VAR:menubar}
+</td>
+</tr>
+<tr>
 <form method="POST" action="reforb.{VAR:ext}" name="event">
+<td>
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
 <td class="header1" align="center">
@@ -15,31 +23,21 @@
 </tr>
 <tr>
 <td colspan="2" class="header1">
-<table border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
-<tr>
-<td class="fgtitle"><strong>Kuupäev</strong></td>
-<td class="fgtitle">{VAR:start}</td>
-<td colspan="2" class="fgtitle">&nbsp;</td>
-</tr>
-<tr>
-<td class="fgtitle"><strong>Kalender</strong></td>
-<td class="fgtitle"><select name="folder">{VAR:calendars}</select></td>
-<td colspan="2" class="fgtitle"><a href="{VAR:calendar_url}"><img border="0" src="{VAR:icon_url}">Näita kalendrit</a></td>
-</tr>
+<table border="0" width="100%" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 <tr>
 <td class="fgtitle"><strong>Algab</strong></td>
+<td class="fgtitle">{VAR:start}</td>
 <td class="fgtitle"><select class="lefttab" name="shour">{VAR:shour}</select> t:<select class="lefttab" name="smin">{VAR:smin}</select>m</td>
+</tr>
+<tr>
 <td class="fgtitle"><strong>Kestab</strong></td>
 <td class="fgtitle"><select class="lefttab" name="dhour">{VAR:dhour}</select> t:<select class="lefttab" name="dmin">{VAR:dmin}</select>m
 &nbsp;&nbsp;
 </td>
+<td class="fgtitle"><strong>Korduv sündmus: <input type="checkbox" name="repcheck" value="1" {VAR:repcheck}></td>
 </tr>
 </table>
 </td>
-</tr>
-<tr>
-<td class="fgtitle"><strong>Korduv sündmus</strong></td>
-<td class="fgtitle"><input type="checkbox" name="repcheck" value="1" {VAR:repcheck}></td>
 </tr>
 <tr>
 <td class="fgtitle"><strong>Nimi</strong></td>
@@ -80,6 +78,11 @@
 </td>
 </tr>
 <tr>
+<td class="fgtitle"><strong>Kalender</strong></td>
+<td class="fgtitle"><select name="folder">{VAR:calendars}</select>
+<a href="{VAR:calendar_url}"><img border="0" src="{VAR:icon_url}">Näita kalendrit</a></td>
+</tr>
+<tr>
 <td class="fgtitle" align="center" colspan="2">
 <input type="submit" value="Salvesta">
 <!-- SUB: delete -->
@@ -89,5 +92,7 @@
 </td>
 </tr>
 </table>
+</td>
 </form>
-
+</tr>
+</table>

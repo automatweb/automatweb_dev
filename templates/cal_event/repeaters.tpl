@@ -1,4 +1,3 @@
-{VAR:menubar}
 <style>
 	.reptexttitle {
 		font-family: Tahoma,Arial,Helvetica,sans-serif;
@@ -351,6 +350,14 @@ function toggle_year()
 	
 
 </script>
+<table border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
+<tr>
+<td>
+	{VAR:menubar}
+</td>
+</tr>
+<tr>
+<td>
 <table border="0" cellspacing="0" cellpadding="1">
 <form method="POST" action="reforb.{VAR:ext}" name="repeater">
 <tr>
@@ -478,6 +485,10 @@ function toggle_year()
 </td>
 </tr>
 </form>
+</table>
+
+</td>
+</tr>
 </table>
 
 <!-- initialize regions -->
