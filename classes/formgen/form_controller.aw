@@ -286,7 +286,7 @@ class form_controller extends form_base
 		}
 		else
 		{
-			@eval($eq);
+			eval($eq);
 		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
@@ -369,7 +369,7 @@ class form_controller extends form_base
 		$eq = preg_replace("/{include:(.*)}/eU","\$this->_incl_file(\"\\1\")",$eq);
 
 		// now do element metadata as well
-		if (is_object($el_ref))
+		if (is_object($el_ref) && method_exists($el_ref, "get_metadata"))
 		{
 			foreach($el_ref->get_metadata() as $mtk => $mtv)
 			{
@@ -404,7 +404,7 @@ class form_controller extends form_base
 		}
 
 		// now import all current form element values as well
-		if (is_object($form_ref))
+		if (is_object($form_ref) && method_exists($el_ref, "get_all_els"))
 		{
 			$els = $form_ref->get_all_els();
 			foreach($els as $el)
