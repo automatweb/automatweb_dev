@@ -1,15 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.31 2004/06/18 08:58:01 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.32 2004/07/06 10:25:41 rtoomas Exp $
 // treeview.aw - tree generator
 /*
 
 	@classinfo relationmgr=yes
 
-        @default table=objects
-        @default group=general
+	@default table=objects
+	@default group=general
 
-        @property root type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
-        @caption Root objekt
+	@property root type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+	@caption Root objekt
 
 	@property rootcaption type=textbox field=meta method=serialize
 	@caption Root objekti nimi
@@ -18,7 +18,7 @@
 	@caption Root objekti ikoon
         
 	@property treetype type=select field=meta method=serialize
-        @caption Puu tüüp
+	@caption Puu tüüp
 
 	@property icon_folder_open type=relpicker reltype=RELTYPE_ICON field=meta method=serialize
 	@caption Lahtise kausta ikoon
@@ -45,6 +45,8 @@ define("PERSIST_STATE",2);
 
 class treeview extends class_base
 {
+	var $only_one_level_opened = 0;
+
 	function treeview($args = array())
 	{
 		$this->init(array(
@@ -278,8 +280,6 @@ class treeview extends class_base
 		{
 			$this->features[PERSIST_STATE] = 1;
 		};
-
-
 	}
 
 	function has_feature($feature)
@@ -458,11 +458,10 @@ class treeview extends class_base
 			"TREE_NODE" => $rv,
 			"HAS_ROOT" => $root,
 			"persist_state" => $this->has_feature(PERSIST_STATE),
+			'only_one_level_opened' => $this->only_one_level_opened,
 		));
 
 		return $this->parse();
-
-
 	}
 
 	// figures out the path from an item to the root of the tree
@@ -521,6 +520,7 @@ class treeview extends class_base
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),
+				'menu_level' => $this->level,
 			));
 
 
@@ -540,6 +540,7 @@ class treeview extends class_base
 					"display" => in_array($item["id"],$this->r_path) ? "block" : "none",
 					"data_loaded" => in_array($item["id"],$this->r_path) ? "true" : "false",
 					"node_image" => in_array($item["id"],$this->r_path) ? $this->cfg["baseurl"] . "/automatweb/images/minusnode.gif" : $this->cfg["baseurl"] . "/automatweb/images/plusnode.gif",
+					'menu_level' => $this->level,
 				));
 				$tmp = $this->parse("SUB_NODES");
 				$this->vars(array(
@@ -720,5 +721,11 @@ class treeview extends class_base
 
 		return $tv;
 	}	
+	
+	//	  only_one_level_opened - set to 1 if you want to show one tree depth at a time
+	function set_only_one_level_opened($value)
+	{
+		$this->only_one_level_opened = $value;
+	}
 };
 ?>
