@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.15 2001/07/18 17:04:48 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -1078,6 +1078,69 @@ class users extends users_user
 			$ar = array();
 		}
 		return $ar;
+	}
+
+	////
+	// !showus user selectable settings
+	function settings($arr)
+	{
+		extract($arr);
+		$this->read_template("user_settings.tpl");
+		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a> / Muuda kasutaja $id m&auml;&auml;ranguid");
+		
+		classload("languages");
+		$l = new languages;
+		$llist = $l->listall();
+		foreach($llist as $lrow)
+		{
+			$this->vars(array(
+				"lang_name" => $lrow["name"],
+				"lang_id" => $lrow["id"],
+				"checked" => checked($GLOBALS["admin_lang"] == $lrow["id"])
+			));
+			$lp.=$this->parse("LANG");
+		}
+
+		classload("currency");
+		$cu = new currency;
+		$cul = $cu->get_list();
+	
+		$ccur = $this->get_user_config(array("uid" => $id, "key" => "user_currency"));
+
+		foreach($cul as $cuid => $cuname)
+		{
+			$this->vars(array(
+				"cur_name" => $cuname,
+				"cur_id" => $cuid,
+				"checked" => checked($cuid == $ccur)
+			));
+			$ccr .= $this->parse("CUR");
+		}
+		$this->vars(array(
+			"LANG" => $lp,
+			"CUR" => $ccr,
+			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !saves users settings
+	function submit_settings($arr)
+	{
+		extract($arr);
+
+		$this->set_user_config(array("uid" => $id, "key" => "user_currency", "value" => $currency));
+
+		classload("languages");
+		$t = new languages;
+
+		$admin_lang = $adminlang;
+		$admin_lang_lc = $t->get_langid($admin_lang);
+		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
+		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
+
+		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 }
 ?>
