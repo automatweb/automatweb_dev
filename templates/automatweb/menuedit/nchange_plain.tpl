@@ -351,6 +351,19 @@ function savemenu() {
 		<tr class="aste05">
 		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
 		<td class="celltext">&nbsp;</td></tr>
+		
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;Objektitabeli konfiguratsioon:&nbsp;</td>
+		<td class="celltext"><select name="objtbl_conf">{VAR:objtbl_conf}</select></td></tr>
+		
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;Objekti lisamise puu konfiguratsioon:&nbsp;</td>
+		<td class="celltext"><select name="add_tree_conf">{VAR:add_tree_conf}</select></td></tr>
+		
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;Konfiguratsioonihaldur:&nbsp;</td>
+		<td class="celltext"><select name="cfgmanager">{VAR:cfgmanager}</select></td></tr>
+
 		</table>
 
 		<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="10" BORDER=0 ALT=""><br>
