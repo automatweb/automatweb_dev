@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.13 2004/10/21 16:41:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.14 2004/10/22 10:48:45 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -56,7 +56,7 @@
 @caption Tulbad
 
 
-@reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_ROADINFO,CL_OTV_DS_MYSQL
+@reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_ROADINFO,CL_DB_TABLE_CONTENTS
 @caption andmed
 
 @reltype CSS value=2 clid=CL_CSS
