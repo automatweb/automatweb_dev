@@ -1,15 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.8 2002/02/18 13:48:54 kristo Exp $
-// list.aw - listide haldus
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.9 2002/03/13 22:09:43 duke Exp $
+// lists.aw - listide haldus
 lc_load("mailinglist");
-	global $orb_defs;
-	$orb_defs["lists"] = array(
-		"new" => array("function" => "add_list", "params"=> array("parent")),
-		"submit_list" => array("function" => "add_list_submit"),
-		"change" => array("function" => "change_list", "params"=> array("id")),
-		"delete" => array("function" => "delete_list", "params"=> array("id","parent"))
-		);
-
 	class lists extends aw_template
 	{
 		function lists()
@@ -152,7 +144,7 @@ lc_load("mailinglist");
 
 				if (is_array($this->menucache[$v[data][oid]]))	// has subitems
 				{
-					$image = "<a href='list.$ext?parent=".$v[data][oid]."&op=$op'><img src='";
+					$image = "<a href='orb.$ext?class=lists&action=gen_list&parent=".$v[data][oid]."&op=$op'><img src='";
 
 					if ($list_folders[$v[data][oid]] == 1)	// if closed
 						$image.="/images/puu_plus";
@@ -173,7 +165,7 @@ lc_load("mailinglist");
 						$image.="/images/puu_lopp.gif";
 					else
 						$image.="/images/puu_rist.gif";
-					$image.="' border=0><a href='list.$ext?parent=".$v[data][oid]."&op=$op'>";
+					$image.="' border=0><a href='orb.$ext?class=lists&action=gen_list&parent=".$v[data][oid]."&op=$op'>";
 				}
 
 				$image.="<img src='/images/";
@@ -190,7 +182,9 @@ lc_load("mailinglist");
 													"modifiedby"		=> $v[data][modifiedby],
 													"modified"			=> $this->time2date($v[data][modified],2),
 													"cat_id"				=> $v[data][oid],
-													"op"						=> "&op=open",
+													"open_link"			=> $this->mk_my_orb("gen_list",array("parent" => $v[data][oid],"op" => "open")),
+													"change_link" => $this->mk_my_orb("change_cat",array("id" => $v[data][oid])),
+													"delete_link" => $this->mk_my_orb("delete_cat",array("id" => $v[data][oid])),
 													"parent"				=> $this->selected));
 
 				$cc = "";
@@ -224,16 +218,25 @@ lc_load("mailinglist");
 		}
 		
 
-		function gen_list($parent)
+		function gen_list($args = array())
 		{
+			extract($args);
 			$this->read_template("list_list.tpl");
 			if ($parent < 1)
 				$parent = 1;
 
 			$p = $this->get_object($parent);
 
+			$this->vars(array(
+				"open_link" => $this->mk_my_orb("gen_list",array()),
+			));
+
 			$l = $this->make_tree($parent);
-			$this->vars(array("C_LINE" => $l,"parent" => $parent));
+			$this->vars(array(
+				"C_LINE" => $l,
+				"parent" => $parent,
+				"add_link" => $this->mk_my_orb("add_cat",array("parent" => $parent)),
+			));
 
 			$ac = $this->parse("ADD_CAT");
 			$al = $this->parse("ADD_LIST");
@@ -273,10 +276,16 @@ lc_load("mailinglist");
 			$this->db_query($q);
 		}
 
-		function add_cat($parent)
+		function add_cat($args = array())
 		{
+			extract($args);
 			$this->read_template("add_cat.tpl");
-			$this->vars(array("parent" => $parent, "name" => "", "comment" => "", "id" => 0));
+			$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$parent'>Listid</a> / Lisa kategooria");
+			$this->vars(array(
+				"name" => "",
+				"comment" => "",
+				"reforb" => $this->mk_reforb("submit_cat",array("parent" => $parent)),
+			));
 			return $this->parse();
 		}
 		
@@ -296,28 +305,34 @@ lc_load("mailinglist");
 				$this->_log("mlist",sprintf(LC_LISTS_ADD_CATEGORY,$name));
 			}
 
-			return $parent;
+			return $this->mk_my_orb("change_cat",array("id" => $id));
+
 		}
 
-		function change_cat($id)
+		function change_cat($args = array())
 		{
+			extract($args);
 			$this->db_query("SELECT * FROM objects WHERE oid = $id");
 			if (!($row = $this->db_next()))
 				$this->raise_error(ERR_LISTS_NOMENU,"menuedit->gen_change_html($id): No such menu!", true);
 
+			$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$row[parent]'>Listid</a> / Muuda kategooriat");
+
 			$this->read_template("change_cat.tpl");
 
-			$this->vars(array("parent"			=> $row[parent], 
-												"name"				=> $row[name], 
-												"comment"			=> $row[comment], 
+			$this->vars(array("parent"			=> $row["parent"], 
+												"name"				=> $row["name"], 
+												"comment"			=> $row["comment"], 
 												"id"					=> $id,
-												"created"			=> $this->time2date($row[created],2),
-												"createdby"		=> $row[createdby],
-												"modified"		=> $this->time2date($row[modified],2),
-												"modifiedby"	=> $row[modifiedby],
-												"link"				=> $row[link],
-												"sep_checked"	=> ($row[type] == 2 ? "CHECKED" : ""),
-												"doc_checked"	=> ($row[type] == 6 ? "CHECKED" : "")));
+												"created"			=> $this->time2date($row["created"],2),
+												"createdby"		=> $row["createdby"],
+												"modified"		=> $this->time2date($row["modified"],2),
+												"modifiedby"	=> $row["modifiedby"],
+												"link"				=> $row["link"],
+												"sep_checked"	=> ($row["type"] == 2 ? "CHECKED" : ""),
+												"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
+												"reforb" 			=> $this->mk_reforb("submit_cat",array("id" => $id)),
+			));
 			return $this->parse();
 		}
 
@@ -377,9 +392,11 @@ lc_load("mailinglist");
 			}
 		}
 
-		function delete_cat($id)
+		function delete_cat($args = array())
 		{
-			$this->delete_object($id);
+			extract($args);
+			$this->delete_object($id,CL_MAILINGLIST_CATEGORY);
+			return $this->mk_my_orb("gen_list",array());
 		}
 
 		function make_tree($selected)

@@ -9,7 +9,7 @@
 <tr class="aste05">
 <td height="15" colspan="11" class="celltext">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
 <!-- SUB: ADD_CAT -->
-<a href='list.{VAR:ext}?type=add_cat&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a>
+<a href='{VAR:add_link}'>{VAR:LC_MAILINGLIST_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 </b>
 </td>
@@ -28,7 +28,7 @@
 <table border=0 cellspacing=0 cellpadding=0 bgcolor=#ffffff vspace=0 hspace=0>
 <tr class="aste07">
 <td>{VAR:space_images}{VAR:image}</td>
-<td valign=center class="celltext">&nbsp;<a href='list.{VAR:ext}?parent={VAR:cat_id}{VAR:op}'>{VAR:cat_name}</a>&nbsp;</td>
+<td valign=center class="celltext">&nbsp;<a href='{VAR:open_link}'>{VAR:cat_name}</a>&nbsp;</td>
 </tr>
 </table>
 </td>
@@ -38,12 +38,12 @@
 <td align="center" class="celltext">&nbsp;{VAR:modified}&nbsp;</td>
 <td class="celltext">&nbsp;
 <!-- SUB: CAN_CHANGE -->
-<a href='list.{VAR:ext}?type=change_cat&id={VAR:cat_id}&parent={VAR:parent}'>Metainfo</a>
+<a href='{VAR:change_link}'>Metainfo</a>
 <!-- END SUB: CAN_CHANGE -->
 &nbsp;</td>
 <td class="celltext">&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_CAT}?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}')">{VAR:LC_MAILINGLIST_DELETE}</a>
+<a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_CAT}?','{VAR:delete_link}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 <td class="celltext">&nbsp;
