@@ -12,6 +12,10 @@ class site_logger extends core
 	// !writes a pageview event to the aw log
 	function add($arr)
 	{
+		if (aw_ini_get("syslog.log_pageviews") != 1)
+		{
+			return false;
+		};
 		$this->_log(
 			ST_MENUEDIT, 
 			SA_PAGEVIEW, 
