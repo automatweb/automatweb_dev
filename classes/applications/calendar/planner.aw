@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.3 2004/08/25 13:50:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.4 2004/08/26 13:30:34 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -150,7 +150,7 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
-		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY);
+		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY,CL_CALENDAR_EVENT);
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -342,7 +342,6 @@ class planner extends class_base
 
 		// generate a list of folders from which to take events
 		// both calendars and projects have "event_folder"'s
-		global $awt;
 		$folderlist = $obj->connections_from(array(
 			"type" => RELTYPE_EVENT_SOURCE,
 		));
@@ -358,7 +357,6 @@ class planner extends class_base
 		
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
-		$awt->start("calendar-events-from-projects");
 
 		// "my_projects" is misleading, what it actually does is that it includes
 		// events from projects that the owner of the current calendar participiates in
@@ -384,7 +382,6 @@ class planner extends class_base
 				{
 					$user_ids[] = $owner->prop("to");
 				};
-				$awt->start("calendar-project-event-loader");
 				// XXX: get_events_from_projects should use current date range as well
 				/*
 				$event_ids = $event_ids + $prj->get_events_from_projects(array(
@@ -412,11 +409,9 @@ class planner extends class_base
 				{
 					$folders = $folders + $tmp;
 				};
-				$awt->stop("calendar-project-event-loader");
 			};
 		};
 		
-		$awt->stop("calendar-events-from-projects");
 		
 		$rv = array();
 		// a project is selected, but no events in range? Just return
@@ -484,7 +479,6 @@ class planner extends class_base
 			};
 		//}
 
-		$awt->start("calendar-initial-event-list");
 
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
@@ -497,15 +491,11 @@ class planner extends class_base
 				"end" => $row["end"],
 			);
 		};
-		$awt->stop("calendar-initial-event-list");
 
 		$fldstr = join(",",$folders);
 
-		global $awt;
-
 		if (aw_ini_get("calendar.recurrence_enabled") == 1)
 		{
-			$awt->start("recurrence-calc");
 			// now collect recurrence data
 			$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
 				WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
@@ -529,7 +519,6 @@ class planner extends class_base
 				};
 				$this->recur_info[$row["id"]][] = $row["recur_start"];
 			};
-			$awt->stop("recurrence-calc");
 		};
 		return $rv;
 	}
@@ -675,6 +664,7 @@ class planner extends class_base
 			{
 				$event_obj = $event_obj->get_original();
 			};
+			$event_cfgform = $event_obj->meta("cfgform_id");
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
@@ -684,7 +674,15 @@ class planner extends class_base
 		}
 		else
 		{
-			$clid = $args["request"]["clid"];
+			if (!empty($args["request"]["clid"]))
+			{
+				$clid = $args["request"]["clid"];
+			}
+			elseif (is_oid($event_cfgform))
+			{
+				$cfgf_obj = new object($event_cfgform);
+				$clid = $cfgf_obj->prop("subclass");
+			};
 		};
 
 		$res_props = array();
@@ -725,9 +723,16 @@ class planner extends class_base
 			
 				$t->id = $this->event_id;
 
+				// aga vaata see koht siin peaks arvestama ka seadete vormi, nicht war?
+				$all_props = $t->get_property_group(array(
+					"group" => $emb_group,
+					"cfgform_id" => $event_cfgform,
+				));
+				/*
 				$all_props = $t->get_active_properties(array(
 					"group" => $emb_group,
 				));
+				*/
 
 				$xprops = $t->parse_properties(array(
 						"obj_inst" => $event_obj,
@@ -750,6 +755,7 @@ class planner extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[action]","value" => "submit");
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[group]","value" => $emb_group);
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[clid]","value" => $clid);
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform_id]","value" => $event_cfgform);
 				if ($this->event_id)
 				{
 					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
