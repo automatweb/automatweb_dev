@@ -84,6 +84,24 @@
             <method>serialize</method>
             <caption>Kõik omadused</caption>
       </property>
+      <property>
+            <name>cfg_proplist</name>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Omadused</caption>
+      </property>
+      <property>
+            <name>cfg_groups</name>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Grupid</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
