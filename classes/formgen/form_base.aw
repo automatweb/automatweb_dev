@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.4 2002/11/26 12:27:17 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -256,6 +256,9 @@ class form_base extends form_db_base
 
 		$el_tblstr = aw_serialize($el_tbls,SERIALIZE_PHP);
 		$this->quote(&$el_tblstr);
+
+		aw_session_del_patt("/_fr_forms_used.*/");
+		aw_session_del_patt("/form_rel_tree.*/");
 
 		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"].",el_tables = '$el_tblstr' WHERE id = ".$this->id);
 		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
@@ -819,6 +822,10 @@ class form_base extends form_db_base
 	// !returns a list of forms that make up form_chain $chid
 	function get_forms_for_chain($chid)
 	{
+		if (is_array($res = aw_cache_get("form_base::get_forms_for_chain", $chid)))
+		{
+			return $res;
+		}
 		$this->save_handle();
 		$ret = array();
 		$this->db_query("SELECT form_id FROM form2chain LEFT JOIN objects ON objects.oid = form2chain.form_id WHERE chain_id = $chid AND objects.status != 0 ORDER BY ord");
@@ -827,6 +834,7 @@ class form_base extends form_db_base
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
 		$this->restore_handle();
+		aw_cache_set("form_base::get_forms_for_chain", $chid, $ret);
 		return $ret;
 	}
 
