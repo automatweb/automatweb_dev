@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.6 2004/11/26 13:54:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.7 2005/01/10 12:53:29 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -124,6 +124,11 @@ class toolbar extends aw_template
 			$args["onClick"] = "if(!confirm('$args[confirm]')) { return false; };".$args["onClick"];
 		};
 		$this->matrix[$args["name"]] = $args;
+	}
+
+	function remove_button($nm)
+	{
+		unset($this->matrix[$nm]);
 	}
 
 	////
