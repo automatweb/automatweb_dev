@@ -15,6 +15,7 @@ IMG {border-width:0px}
   position: relative;
   left: 0px;
   top: 0px;
+  cursor:hand;
 }
 
 .boxB {
@@ -1504,7 +1505,15 @@ function dragStop(event) {
 
 //--end dragging---
 
-
+function is_number(a_string) {
+tc = a_string.charAt(0);
+if (tc == "0" || tc == "1" || tc == "2" || tc == "3" ||	tc == "4" || tc == "5" || tc == "6" || tc == "7" || tc == "8" || tc == "9") {
+return true;
+} 
+else {
+return false;
+   }
+}
 
 
 function pop(url,w,h,capt,icon)//oid
@@ -1526,7 +1535,14 @@ function pop(url,w,h,capt,icon)//oid
 ifrn = 'frei' + win;
 ifr = "'" + ifrn + "'";
 
-	icon = (icon ? icon : 100);
+
+	if (is_number(icon))
+	{
+		icon = '/icons/class_' + icon + '.gif';
+	}
+
+	//icon = (icon ? icon : 100);
+	//if (!icon) alert('icon not set');
 
 baritem = 'BARITEM' + el;
 
@@ -1552,7 +1568,7 @@ windstatus += 'document.getElementById(' + ifr + ').style.visibility = ' + "'" +
 //windstatus +='winList[' + ifr + '].restore();';
 windstatus += 'return false;" ';
 windstatus += 'oncontextmenu="buttonClick(event, ' + "'" + baritem + "'" + ',40 + barheight); return false;" >';
-windstatus += '<img style="position:relative;top:4px;" src="{VAR:icons_path}/class_' + icon + '.gif" height="16" />&nbsp;' + capt + '</a>';
+windstatus += '<img style="position:relative;top:4px;" src="{VAR:images_path}/' + icon + '" height="16" />&nbsp;' + capt + '</a>';
 
 document.getElementById(el).innerHTML = windstatus;
 
@@ -1567,7 +1583,7 @@ fen ='';
 fen +='<div name="' + ifrn + '" id="' + ifrn + '" class="window" style="left:' + (23 * win + 50) + 'px;top:' + (30 * win + 40) + 'px;width:' + w + 'px;z-index: 100;">';
 fen +='<div class="titleBar" style="z-index: 100;">';
 fen +='<span class="titleBarText" id="tb' + ifrn + '">';
-fen +='<img style="position:relative;top:1px;" src="{VAR:icons_path}/class_' + icon + '.gif" height="14" />&nbsp;';
+fen +='<img style="position:relative;top:1px;" src="{VAR:images_path}/' + icon + '" height="14" />&nbsp;';
 fen +='<span class="wincap" id="wc' + ifrn + '">' + capt + '</span></span>';
 fen +='<img class="titleBarButtons" src="" /><img height="17" ';
 fen +='src="http://axel.struktuur.ee/tmp/restore.gif" alt="" ';
@@ -1609,6 +1625,19 @@ function hide(el)
 {
 document.getElementById(el).style.visibility = 'hidden';
 }
+
+function hidemenus()
+{
+  var List = document.getElementsByTagName("DIV");
+  for (var i = 0; i < List.length; i++)
+  {
+    if (List[i].className == "menu")
+    {
+	List[i].style.visibility = 'hidden';
+    }
+  }
+}
+
 
 function drun(txt)
 {
@@ -1792,6 +1821,12 @@ document.getElementById('bodycontext').style.visibility = 'visible';
 }
 
 
+function deletion(url)
+{
+	top.frames['pipe'].document.getElementById('activity').innerHTML = 'kustutamine!!';
+	document.getElementById('pipe').src = url;
+}
+
 
 /*//]]>*/
 </script></head>
@@ -1810,25 +1845,36 @@ Salvesta</a>
 <a class="menuItem" onclick="reordericons(0);hide('bodycontext');return false;" href="{VAR:refresh_url}"
 title="Sorteeri ikoonid"><img src="{VAR:icons_path}/prog_42.gif" height="16"/>
 Sorteeri ikoonid</a>
-<a class="menuItem" onclick="document.unload();hide('bodycontext');return false;" href="{VAR:refresh_url}"
+<a class="menuItem" onclick="hide('bodycontext');return false;" href="{VAR:refresh_url}"
 title="Refresh"><img src="{VAR:images_path}/blue/awicons/refresh.gif" height="16" />
 Värskenda</a>
-<a class="menuItem" href="" href="{VAR:baseurl}/orb.{VAR:ext}?class=users&action=logout"
+<a class="menuItem" href="{VAR:baseurl}/orb.{VAR:ext}?class=users&action=logout"
 title="Logout" >Logi välja</a>
 <a class="menuItem" href="" onclick="
 var x=window.confirm('Oled sa ikka kindel, et tahad AW desktopi sulgeda?', 'jep', 'näi')
 if (x){window.close();} else {hide('bodycontext');}return false;"
-title="Sulge desktop"><img src="{VAR:icons_path}/class_1.gif" height="16" alt="" />
+title="Sulge desktop"><img src="{VAR:icons_path}/small_delete.gif" height="16" alt="" />
 Sulge Desktop</a>
 </div>
 
 <!-- tausta menüü -->
-<a id="backg" style="cursor:normal;position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1;" style="text-decoration:none"
+<a id="backg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1;text-decoration:none;cursor:pointer;"
 oncontextmenu="rbackmenu(event);return false;" onclick="hide('bodycontext');return false;"
- href=""> </a>
+ href=""></a>
 
 
-<iframe name="pipe" id="pipe" scrolling="no" width="100" height="50" src="{VAR:pipe_url}" style="border:0px;position:absolute;right:0px;z-index:0"></iframe>
+<!-- SUB: activedesktop -->
+<table id="activedesktop1" cellspacing="0" cellpadding="0" 
+style="border:0px;position:absolute;top:{VAR:top}px;left:{VAR:left}px;height:{VAR:height}px;width:{VAR:width}px;z-index:20;">
+<tr><td><div class="boxB" style="color:white;background-color:gray;z-index:21;"
+onmousedown="dragStart(event,'activedesktop1');"><b>tiri</b></div></td></tr>
+<tr><td>
+<iframe name="activedesktop" id="activedesktop" scrolling="auto" src="{VAR:url}"
+style="width:100%;height:110%;border:0px;z-index:22"></iframe>
+</td></tr></table>
+<!-- END SUB: activedesktop -->
+
+<iframe name="pipe" id="pipe" scrolling="no" width="100" height="50" src="{VAR:pipe_url}" style="border:0px;position:absolute;right:0px;z-index:5"></iframe>
 
 <!--
 <a href="" onclick="document.getElementById('sample1').style.visibility = 'visible';return false;">show</a>
@@ -1857,10 +1903,16 @@ return false;">Window 2</a>
 <div class="menuBar" style="width:100%;height:25;position:absolute;bottom:0px;left:0px;z-index:0"><img oncontextmenu="return false;"
 src="{VAR:transgif}" width="100%" height="20" /></div>
 
-<div class="menuBar" style="position:absolute;bottom:0px;left:0px;white-space:nowrap"><a class="menuButton"
+<div class="menuBar" style="position:absolute;bottom:0px;left:0px;white-space:nowrap">
+<!-- start nupp -->
+<a class="menuButton" style="z-index:4000"
 href="" title="Start" onclick="return buttonClick(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);"
-onmouseover="buttonMouseover(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);">AW</a>
+onmouseover="buttonMouseover(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);"><img
+onclick="return false;" style="border:0px;position:relative;top:4px;z-index:10" src="{VAR:images_path}/icon_aw.gif " height="16"/></a>
+
+
 {VAR:launchbar}
+
 
 <a href="" onclick="return buttonClick(event, 'launche',20 + barheight);"
 class="menuButton" title="" style="border:solid gray 1px"
@@ -1978,11 +2030,21 @@ style="z-index:1;" /></a>
 <div id="context{VAR:oid}" class="menu" onmouseover="menuMouseover(event)">
 <!-- SUB: ICON_CONTEXT_ITEM -->
 <a class="menuItem" href="" title="{VAR:title}"
+
 onclick="javascript:pop('{VAR:url}',{VAR:wxy},'{VAR:name}','{VAR:class_id}');
+
 hide('context{VAR:oid}');
 return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
 {VAR:caption}</a>
 <!-- END SUB: ICON_CONTEXT_ITEM -->
+
+<!-- SUB: ICON_CONTEXT_ITEM2 -->
+<a class="menuItem" href="" title="{VAR:title}"
+onclick="deletion('{VAR:url}');
+hide('context{VAR:oid}');
+return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
+{VAR:caption}</a>
+<!-- END SUB: ICON_CONTEXT_ITEM2 -->
 
 
 </div>
@@ -1999,8 +2061,7 @@ return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
 class="menuButton" title="{VAR:title}" style="z-index:80;"
 oncontextmenu="return buttonClick(event, 'launche{VAR:oid}',80 + barheight + 5);"
 onmouseover="buttonMouseover(event, 'launche{VAR:oid}',80 + barheight + 5);"><img style="position:relative;top:4px;z-index:81;height:16px"
-src="{VAR:icons_path}/class_{VAR:clid}.gif" ALT="" />
-</a>
+src="{VAR:icons_path}/class_{VAR:clid}.gif" ALT="" /></a>
 <!-- END SUB: LAUNCHER -->
 
 
@@ -2013,9 +2074,6 @@ onclick="javascript:pop('{VAR:delete_object_type}',{VAR:xy},'Kustuta programm','
 Kustuta</a>
 <a class="menuItem" href="" title="Lisa Programm" onclick="javascript:pop('{VAR:add_object_type}',{VAR:xy},'Lisa programm','111');hide('launche{VAR:oid}');return false;">Lisa programm</a>
 </div>
-
-
-
 <!-- END SUB: LAUNCHERCONTEXTS -->
 
 <div id="launche" class="menu" onmouseover="menuMouseover(event)">
@@ -2025,27 +2083,27 @@ Kustuta</a>
 
 <!-- SUB: MENU_ITEM_SUB -->
 <a class="menuItem" href=""
-	onclick="return false;"
+	onclick="hidemenus();return false;"
 	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');"><span
-	class="menuItemText"><IMG SRC="{VAR:icons_path}/class_{VAR:clid}.gif"
-	HEIGHT="16" BORDER=0 ALT="" /> {VAR:caption}</span><span
+	class="menuItemText"><img src="{VAR:icons_path}/class_{VAR:clid}.gif"
+	height="16" borer="0" alt="" /> {VAR:caption}</span><span
 	class="menuItemArrow">&gt;</span></a>
 <!-- END SUB: MENU_ITEM_SUB -->
 
 <!-- SUB: MENU_ITEM -->
 <a class="menuItem" title="{VAR:title}"
 href=""
-onclick="javascript:pop('{VAR:url}',{VAR:xy},'{VAR:caption}', '{VAR:clid}');return false;"><IMG
+onclick="javascript:pop('{VAR:url}',{VAR:xy},'{VAR:caption}', '{VAR:clid}');hidemenus();return false;"><img
 SRC="{VAR:icons_path}/class_{VAR:clid}.gif"
-HEIGHT="16" BORDER=0 ALT="" /> {VAR:caption}</a>
+height="16" BORDER=0 ALT="" /> {VAR:caption}</a>
 <!-- END SUB: MENU_ITEM -->
 
 <!-- SUB: RUN_MENU_ITEM -->
 <a class="menuItem" title="Käivita programm"
 href=""
-onclick="javascript:valu = prompt('Run...', ''); drun(valu); return false;"><IMG
+onclick="javascript:valu = prompt('Run...', ''); drun(valu); return false;"><img
 SRC="{VAR:icons_path}/class_111.gif"
-HEIGHT="16" BORDER=0 ALT="" />Run...</a>
+height="16" BORDER=0 ALT="" />Run...</a>
 <!-- END SUB: RUN_MENU_ITEM -->
 
 

@@ -35,7 +35,7 @@
 @property backgroundtextcolor type=colorpicker
 @caption Tausta tekstivärv
 
-//@property showclock type=checkbox value=1 ch_value=1
+//@property showclock type=checkbox value=1 ch_value=0
 //@caption Näita kella
 
 @property clockstyle type=checkbox value=12 ch_value=12
@@ -47,15 +47,38 @@
 @property windowsH type=textbox size=4
 @caption kõrgus (vaikimisi 500)
 
-
 @property calendar type=relpicker reltype=CALENDAR
 @caption Kalender
 
 @property backgroundtype type=select
 @caption Tausta pilt on ...
 
+//group=general,activedesktop
+
 @property startdesktop type=text
-@caption
+@caption Käivita
+
+@groupinfo activedesktop caption=Aktivedesktop
+@default group=activedesktop
+
+@property activedesktop_on type=checkbox value=1 ch_value=1
+@caption aktiivne
+
+@property activedesktop_url type=textbox
+@caption Tausta lehekülg
+
+@property AC_top type=textbox size=4
+@caption top
+@property AC_left type=textbox size=4
+@caption left
+@property AC_width type=textbox size=4
+@caption laius
+@property AC_height type=textbox size=4
+@caption kõrgus
+
+@property activedesktop_href type=checkbox value=1 ch_value=1
+@caption Lingid on klikitavad
+
 
 
 */
@@ -178,12 +201,23 @@ function pop(url,w,h)
 		switch($data['name'])
 		{
 			case 'windowsW':
-				$data['value'] = between((int)$form['windowsW'],200, 900, (int)$form['windowsW'], 600);
+				$data['value'] = between((int)$form[$data['name']],200, 900, (int)$form[$data['name']], 600);
 			break;
 			case 'windowsH':
-				$data['value'] = between((int)$form['windowsH'],100, 800, (int)$form['windowsH'], 500);
+				$data['value'] = between((int)$form[$data['name']],100, 800, (int)$form[$data['name']], 500);
 			break;
-
+			case 'AC_top':
+				$data['value'] = between((int)$form[$data['name']],0, 1000, (int)$form[$data['name']], 50);
+			break;
+			case 'AC_left':
+				$data['value'] = between((int)$form[$data['name']],0, 1200, (int)$form[$data['name']], 50);
+			break;
+			case 'AC_height':
+				$data['value'] = between((int)$form[$data['name']],20, 1000, (int)$form[$data['name']], 400);
+			break;
+			case 'AC_width':
+				$data['value'] = between((int)$form[$data['name']],50, 1200, (int)$form[$data['name']], 500);
+			break;
 		};
 
 		return $retval;
@@ -505,10 +539,9 @@ function pop(url,w,h)
 					$context_items['delete'] = array(
 						'title' => 'Kustuta',
 						'caption' => 'Kustuta',
-						'url' => '',
-						'wxy' => '100, 70',
-						'onclick' => "deletion('".$this->mk_my_orb('dodelete', array('id' => $val['oid'], 'class_id' => $val['class_id']))."')return false;",
+						'url' => $this->mk_my_orb('dodelete', array('id' => $val['oid'], 'class_id' => $val['class_id'])),
 						'iconfile' => 'small_delete.gif',
+						'tpl' => 'ICON_CONTEXT_ITEM2',
 					);
 
 					$icon_context_items =  '';
@@ -521,7 +554,7 @@ function pop(url,w,h)
 							$val['default_url'] = $cval['url'];
 						}
 						$this->vars($cval);
-						$icon_context_items .= $this->parse('ICON_CONTEXT_ITEM');
+						$icon_context_items .= $this->parse(isset($cval['tpl']) ? $cval['tpl'] : 'ICON_CONTEXT_ITEM');
 					}
 
 
@@ -599,6 +632,20 @@ function pop(url,w,h)
 		}
 
 
+		//activedesktop
+		$activedesktop = '';
+		if (isset($ob['meta']['activedesktop_on']) && ($ob['meta']['activedesktop_on'] == '1'))
+		{
+			$this->vars(array(
+				'url' => $ob['meta']['activedesktop_url'] ? $ob['meta']['activedesktop_url'] : 'http://www.neti.ee',
+				'width' => $ob['meta']['AC_width'],
+				'top' => $ob['meta']['AC_top'],
+				'height' => $ob['meta']['AC_height'],
+				'left' => $ob['meta']['AC_left'],
+			));
+			$activedesktop = $this->parse('activedesktop');
+		}
+
 
 		$this->vars(array(
 			'date' => date('d.').(defined($month = 'LC_M'.date('n')) ? constant($month) : date(' n')).date(' Y'),
@@ -606,6 +653,7 @@ function pop(url,w,h)
 		));
 		$this->vars(array(
 			//'redirect' =>
+			'activedesktop' => $activedesktop,
 			'RUNPROGRAMS' => $RUNPROGRAMS,
 			'OPENSAVEDWINDOWS2' => $OPENSAVEDWINDOWS2,
 			'OPENSAVEDWINDOWS' => $OPENSAVEDWINDOWS,
@@ -629,7 +677,7 @@ function pop(url,w,h)
 			'DESKTOP_ITEM' => $desktop_items,
 			'clockwidth' => 4 + ($usdate ? 4 : 0),
 			'usdate' => (int)$usdate,
-			'active_acceptlang' => aw_global_get('admin_lang_lc'),
+			//'active_acceptlang' => aw_global_get('admin_lang_lc'),
 			'launchbar' => $launchbar,
 			'datadir' => $ob['meta']['datadir'],
 			'filemenufix' => ($this->cnt + $cnt) * 25,
@@ -670,7 +718,7 @@ function pop(url,w,h)
 	{
 //		if (!isset($args['element'])) return die('*');
 
-
+		$str='';
 
 		if (isset($args['reorder']))
 		{
@@ -679,8 +727,11 @@ function pop(url,w,h)
 			$j=0;
 			foreach($current_layout['I'] as $key => $val)
 			{
-				$current_layout['I'][$key]['top'] = ($i * 76) . 'px';
-				$current_layout['I'][$key]['left'] = ($j * 76) . 'px';
+				$current_layout['I'][$key]['top'] = $newt = (($i * 76) . 'px');
+				$current_layout['I'][$key]['left'] = $newl =(($j * 76) . 'px');
+
+				$str.="parent.document.getElementById('".$key."').style.left='".$newl."';\n";
+				$str.="parent.document.getElementById('".$key."').style.top='".$newt."';\n";
 
 				$i++;
 				if ($i >= 3)
@@ -736,6 +787,9 @@ function pop(url,w,h)
 		<title>wehee</title>
 		</head>
 		<body>
+		<script>
+		'.$str.'
+		</script>
 		<span id="activity" style="color:red;postition:absolute;" ></span>
 		</body></html>';
 
@@ -751,6 +805,7 @@ function pop(url,w,h)
 		kustutamine...";
 		flush();
 
+		$str = '';
 		//arr($args,1);
 		if ($this->can('delete', $args['id']))
 		{
@@ -764,19 +819,19 @@ function pop(url,w,h)
 			}
 			$this->delete_object($args['id']);
 
-			$cnt = 'self.close();';
-			$txt = 'kustutatud';
+			$str="parent.document.getElementById('dra".$args['id']."').style.visibility='hidden';\n";
 		}
 		else
 		{
-			$txt = 'ei saanud kustutada, puuduvad õigused';
+			$str = "alert('Ei saanud kustutada, puuduvad õigused!');\n";
 		}
 
 		echo <<<DEL
 		<script>
-		$cnt
-		//parent.element.hide
+		$str
 		</script>
+		<body>
+		<span id="activity" style="color:red;postition:absolute;" ></span>
 		$txt
 		</body>
 		</html>
@@ -841,7 +896,7 @@ die;
 				'type' => 'month',
 				'day_orb_link' => $this->day_orb_link,
 				'marked' => $events,
-				'day_orb_attribs' => //'target="_blank"',
+				'more' => //'target="_blank"',
 				"onclick='pop(\"{VAR:url}\",".$this->xy.",\"Kalender\", \"59\"); return false;'",
 			));
 		}
@@ -868,12 +923,12 @@ die;
 				{
 					$arr = array();
 				}
-
+				$items = '';
 				if (count($arr) > 0)
 				{
 					$subs = array();
 					//$this->menu .= '<div id="filemenu'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n";
-					$items = '';
+
 					foreach($arr as $key => $val)
 					{
 						$val['meta'] = aw_unserialize($val['metadata']);
@@ -945,15 +1000,12 @@ die;
 						$items .= $this->levelcontent[$level]['items'];
 					}
 
-
 					$this->vars(array(
 						'name' => 'filemenu'.$parent,
 						'content' => $items,
 					));
 
 					$this->menu .= $this->parse('MENU');
-
-					//$this->menu .= '</div>'."\n\n";
 
 					if (count($subs) > 0)
 					{
@@ -962,10 +1014,10 @@ die;
 				}
 				else
 				{
-					if (isset($this->levelcontent[$level]))
+					/*if (isset($this->levelcontent[$level]))
 					{
 						$items = $this->levelcontent[$level]['items'];
-					}
+					}*/
 
 					$this->vars(array(
 						'name' => 'filemenu'.$parent,
