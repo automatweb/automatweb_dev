@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.16 2004/12/13 12:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.17 2004/12/15 15:30:56 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -200,6 +200,7 @@ class calendar_view extends class_base
 		{
 			$item["url"] = aw_ini_get("baseurl") . "/" . $target_doc;
 		};
+
 
 		foreach ($conns as $conn)
 		{
@@ -403,7 +404,7 @@ class calendar_view extends class_base
 		{
 			$tpldir = $use2dir[$use_template];
 		};
-	
+		
 		// oookey .. I need a way to query the calendar whether it has to show images?
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
@@ -435,6 +436,14 @@ class calendar_view extends class_base
 			$args["skip_empty"] = $arr["skip_empty"];
 		};
 
+		// this parse_alias is also being invoked directly from the project class, 
+		// without an alias anywhere. I want to show full months if this is an alias
+		// and this it's done
+		if (!empty($arr["matches"]))
+		{
+			$arr["full_weeks"] = 1;
+		};
+
 		if ($arr["full_weeks"])
 		{
 			$args["full_weeks"] = $arr["full_weeks"];
@@ -452,6 +461,24 @@ class calendar_view extends class_base
 			$viewtype = $arr["viewtype"];
 		};
 
+		if ($_GET["viewtype"])
+		{
+			$viewtype = $_GET["viewtype"];
+			if ($use2dir[$viewtype])
+			{
+				$tpldir = $use2dir[$viewtype];
+			};
+		};
+
+		$text = "";
+		if (is_oid($_GET["event_id"]) && $this->can("view",$_GET["event_id"]))
+		{
+			$o = obj($_GET["event_id"]);
+			$i = $o->instance();
+			$text = $i->request_execute($o);
+			$viewtype = "day";
+		}
+
 		$range_p = array(
 			"viewtype" => $viewtype,
 			"date" => aw_global_get("date"),
@@ -463,12 +490,6 @@ class calendar_view extends class_base
 			$range_p["type"] = "last_events";
 		}
 
-		/*
-		if (aw_global_get("uid") == "duke")
-		{
-			$range_p["date"] = "19-11-2004";
-		};
-		*/
 
 		$range = $vcal->get_range($range_p);
 
@@ -549,6 +570,11 @@ class calendar_view extends class_base
 			$args["tpl"] = "week.tpl";
 		};
 
+		if (!empty($text))
+		{
+			$args["text"] = $text;
+		};
+
 		$rv = $vcal->get_html($args);
 
 		if ("grouped" == $use_template)
@@ -563,11 +589,6 @@ class calendar_view extends class_base
 				"url" => aw_url_change_var("date",$range["prev"]),
 				"caption" => "&lt;&lt;",
 			));
-
-			if (aw_global_get("uid") == "duke")
-			{
-				arr($range);
-			};
 
 			$rv .= " &nbsp; " . locale::get_lc_date($range["start"],6) . "&nbsp; ";
 			
