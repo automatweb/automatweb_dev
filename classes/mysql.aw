@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.2 2001/06/15 21:09:48 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root {
@@ -35,10 +36,6 @@ class db_connector extends root {
 			$awt->start("querys");
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
-		if ($this->watch == 1)
-		{
-//			print "<!-- qid = ".$qcount." q= '$qtext'-->\n";
-		};
 		if (!$this->qID ) 
 		{
 			if (!$errors)
@@ -47,20 +44,21 @@ class db_connector extends root {
 			}
 			echo "Vigane päring";
 			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
-      // ja selle ekraanile pritsimine ei anna mitte midagi.
+			// ja selle ekraanile pritsimine ei anna mitte midagi.
 
-      if (strlen($qtext) > 5000)
+			if (strlen($qtext) > 5000)
 			{
 				$qtext = substr($qtext,0,5000) . "....(truncated)";
 			};
 
-			echo "<pre>",chunk_split($qtext,200),"</pre>\n";
+			echo $qtext . "\n";
 			echo "<br>\n";
 			echo mysql_error();
 		} 
 		else 
 		{
 			$this->num_rows = @mysql_num_rows($this->qID);
+			$this->num_fields = @mysql_num_fields($this->qID);
 		};
 		$this->rec_count = 0;
 		if (is_object($awt)) 
@@ -94,6 +92,31 @@ class db_connector extends root {
 			$awt->stop("db_next");
 		};
 		return $res;
+	}
+
+	function db_list_tables()
+	{
+		$this->tID = mysql_list_tables($this->db_base);
+		$this->tablecount = mysql_num_rows($this->tID);
+	}
+
+	function db_next_table()
+	{
+		static $cnt = 0;
+		$res = ($cnt < $this->tablecount) ? mysql_tablename($this->tID,$cnt) : false;
+		$cnt++;
+		return $res;
+	}
+	
+	function db_get_fields()
+	{
+		$retval = array();
+		print $this->num_fields;
+		for ($i = 0; $i < $this->num_fields; $i++)
+		{
+			$retval[] = mysql_fetch_field($this->qID);
+		}
+		return $retval;
 	}
 
 	function db_last_insert_id() {
