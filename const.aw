@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.10 2001/05/24 01:14:59 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.11 2001/05/25 09:08:06 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -313,6 +313,7 @@ define(CL_CALENDAR,59); // kalendri objekt
 
 define(CL_SHOP,60); // pood. w00t!
 define(CL_SHOP_ITEM,61); // kaup. poes. duh. 
+define(CL_SHOP_STATS,62); // poodide statistika vaatamine k2ib selle kaudu
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -356,7 +357,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_BANNER_SITE => array("name" => "Banneri sait", "file" => "banner_site", "can_add" => 1),
 			CL_SHOP => array("name" => "Pood", "file" => "shop", "can_add" => 1),
 			CL_SHOP_ITEM => array("name" => "Kaubaartikkel", "file" => "shop_item", "can_add" => 1),
-			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0)
+			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0),
+			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -438,6 +440,7 @@ define(PRG_BANNER_USERS,39);
 define(PRG_BANNER_PROFILES,40);
 define(PRG_EKOMAR,41);
 define(PRG_KEYWORD,42);
+
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
