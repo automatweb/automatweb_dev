@@ -88,12 +88,12 @@ $lc_document["LC_DOCUMENT_NAME"] = "Name";
 $lc_document["LC_DOCUMENT_COMMENT_TO_LC"] = "Comment to the link collection";
 $lc_document["LC_DOCUMENT_NEW_WINDOW"] = "In new window";
 $lc_document["LC_DOCUMENT_DOC_LC"] = "In documents link collection";
-$lc_document["LC_DOCUMENT_PICT_CHOOSE"] = "Choose picture";
+$lc_document["LC_DOCUMENT_PICT_CHOOSE"] = "Choose a picture";
 $lc_document["LC_DOCUMENT_PICT_SIGN"] = "Signature of picture";
 $lc_document["LC_DOCUMENT_PICT_LINK"] = "Link";
 $lc_document["LC_DOCUMENT_PICT_NEW_WIN"] = "In new window";
 $lc_document["LC_DOCUMENT_PICT_PER"] = "Picture to the same period as document";
-$lc_document["LC_DOCUMENT_PICT_ADD"] = "Add picture";
+$lc_document["LC_DOCUMENT_PICT_ADD"] = "Add an image";
 
 
 

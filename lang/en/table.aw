@@ -59,7 +59,7 @@ $lc_table["LC_TABLE_TABLE_HEADER"] = "Table header";
 $lc_table["LC_TABLE_TABLE_FOOTER"] = "Table footer";
 
 $lc_table["LC_TABLE_SETTINGS"] = "Settings";
-$lc_table["LC_TABLE_STYLEBOOK"] = "Stylebook";
+$lc_table["LC_TABLE_STYLEBOOK"] = "Styles";
 $lc_table["LC_TABLE_IMAGES"] = "Images";
 
 $lc_table["LC_TABLE_BACK_COLOR"] = "Background color";
