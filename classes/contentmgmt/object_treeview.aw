@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.39 2005/01/03 16:15:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.40 2005/01/18 12:09:29 kristo Exp $
 
 /*
 
@@ -347,7 +347,7 @@ class object_treeview extends class_base
 			"HEADER_HAS_TOOLBAR" => $tb,
 			"HEADER_NO_TOOLBAR" => $no_tb,
 			"reforb" => $this->mk_reforb("submit_show", array(
-				"return_url" => aw_global_get("QUEST_URI"),
+				"return_url" => aw_global_get("REQUEST_URI"),
 				"subact" => "0"
 			))
 		));
@@ -401,6 +401,7 @@ class object_treeview extends class_base
 					$sf->del_file($oid);
 				}
 				else
+				if ($this->can("view", $oid))
 				{
 					$o = obj($oid);
 					$o->delete();
@@ -895,7 +896,7 @@ class object_treeview extends class_base
 			"name" => "del",
 			"tooltip" => "Kustuta",
 			"url" => "#",
-			"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
+			"onClick" => "if (confirm('Oled kindel et soovid objekte kustutada?')) { document.objlist.subact.value='delete';document.objlist.submit(); }",
 			"img" => "delete.gif",
 			"class" => "menuButton",
 		));
