@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.99 2005/03/01 07:53:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.100 2005/03/01 08:26:39 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -954,17 +954,23 @@ class doc extends class_base
 
 	/**
 		@attrib name=convert_br
+		@param id optional
 
 	**/
 	function convert_br($arr)
 	{
-		$ol = new object_list(array(
+		$ol_args = array(
 			"class_id" => CL_DOCUMENT,
 			"site_id" => array(),
 			"lang_id" => array(),
-			//"oid" => 2479,
+		);
 
-		));
+		if (is_oid($arr["id"]))
+		{
+			$ol_args["oid"] = $arr["id"];
+		};
+
+		$ol = new object_list($ol_args);
 
 		//arr($ol);
 
