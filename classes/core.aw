@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.219 2003/09/08 14:18:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.220 2003/09/17 14:52:26 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1623,7 +1623,8 @@ class core extends acl_base
 
 				$msg .= $fnm2." with arguments ";
 
-				$msg .= "<font size=\"-1\">(".join(",", $bt[$i]["args"]).") file = ".$bt[$i]["file"]."</font>";
+				$args = new aw_array($bt[$i]["args"]);
+				$msg .= "<font size=\"-1\">(".join(",", $args->get()).") file = ".$bt[$i]["file"]."</font>";
 			
 				$msg .= " <br><br>\n\n";
 			}
