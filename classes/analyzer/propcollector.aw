@@ -71,6 +71,10 @@ class propcollector extends aw_template
 					{
 						$this->set_classinfo($m[1]);
 					};
+					if (preg_match("/^\s*@groupinfo (\w+?) (.*)/",$line,$m))
+					{
+						$this->set_groupinfo($m[1],$m[2]);
+					};
 					if (preg_match("/^\s*@default (\w+?)=(.*)/",$line,$m))
 					{
 						$this->set_default($m[1],$m[2]);
@@ -143,6 +147,19 @@ class propcollector extends aw_template
 			};
 		};
 	}
+	
+	function set_groupinfo($id,$data)
+	{
+		$_x = new aw_array(explode(" ",$data));
+		foreach($_x->get() as $field)
+		{
+			list($fname,$fvalue) = explode("=",$field);
+			if ($fname && $fvalue)
+			{
+				$this->groupinfo[$id][$fname] = $fvalue;
+			};
+		};
+	}
 
 	function add_caption($caption)
 	{
@@ -166,6 +183,10 @@ class propcollector extends aw_template
 			if (sizeof($this->classinfo) > 0)
 			{
 				$arr["properties"]["classinfo"] = $this->classinfo;
+			};
+			if (sizeof($this->groupinfo) > 0)
+			{
+				$arr["properties"]["groupinfo"] = $this->groupinfo;
 			};
 
 			$res = $sr->xml_serialize($arr);
