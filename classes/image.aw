@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.58 2003/05/29 07:49:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.59 2003/06/04 13:37:43 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -154,7 +154,7 @@ class image extends class_base
 				$size = getimagesize($idata["meta"]["file2"]);
 			};
 			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
-			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]+10).",height=".($size[1]+10)."');";
+			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]).",height=".($size[1])."');";
 			$vars = array(
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
