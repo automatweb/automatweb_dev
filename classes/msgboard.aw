@@ -940,6 +940,7 @@ class msgboard extends aw_template
 			return array();
 		};
 
+		$board=array();
 		$this->db_query("SELECT board_id FROM comments WHERE board_id LIKE '$topic'");
 		while ($row=$this->db_next())
 		{
