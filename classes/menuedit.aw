@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.115 2002/03/14 11:59:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.116 2002/03/18 13:49:54 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -90,6 +90,7 @@ class menuedit extends aw_template
 			"parent" => $args["parent"],
 			"status" => 2,
 			"class_id" => CL_PSEUDO,
+			"jrk" => $args["jrk"]
 		));
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,MN_HOME_FOLDER_SUB);
 		$this->db_query($q);
@@ -307,7 +308,9 @@ class menuedit extends aw_template
 		{
 			print "active language for menus is $GLOBALS[lang_id]<br>";
 		}
+
 		$this->make_menu_caches();
+
 
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
@@ -339,9 +342,13 @@ class menuedit extends aw_template
 			$this->users_only_redir();
 		};
 		// if the tpl_dir property is set, reinitialize the template class
-		if ($this->properties["tpl_dir"])
+		if (!isset($tpldir))
 		{
-			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$this->properties["tpl_dir"]));
+			$tpldir = $this->properties["tpl_dir"];
+		}
+		if ($tpldir)
+		{
+			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$tpldir));
 		};
 		
 		$this->read_template($template);
@@ -543,7 +550,27 @@ class menuedit extends aw_template
 			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
-		
+
+		// sucks.
+		if ($this->mar[$section]["parent"] == 34506 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 34506 || $section == $GLOBALS["frontpage"])
+		{
+			$this->vars(array(
+				"IS_AWCOM_FRONTPAGE" => $this->parse("IS_AWCOM_FRONTPAGE"),
+				"MOSTIMP" => '<span class="pealkiri2">'.$this->mar["34506"]["name"].'</span>'
+			));
+		}
+
+		// what's that for?
+		if (is_array($vars))
+		{
+			// this doesn't make any sense
+			//$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
+			$this->vars($vars);
+		}
+
+		// eek.
+
+		$cd = "";
 		if (aw_global_get("uid") == "")
 		{
 			$login = $this->parse("login");
@@ -674,6 +701,8 @@ class menuedit extends aw_template
 		return $has_dox;
 	}
 
+	////
+	// !Calculates the amount of subobjects
 	function db_prep_listall($where = " objects.status != 0") 
 	{
 		global $awt;
@@ -3625,7 +3654,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					}
 					else
 					{
-						$link .= "?section=".$row["oid"];
+						$link .= "index.".$ext."?section=".$row["oid"].$this->add_url;
 					}
 				}
 				else
@@ -4067,7 +4096,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->invalidate_menu_cache();
 
-		header("Location: ".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("menu_list", array("parent" => $parent)));
 		return $this->mk_orb("menu_list", array("parent" => $parent));
 	}
 
@@ -4236,50 +4264,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
-		$cache = new cache();
-		$ms = $cache->file_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
-		if (!$ms)
-		{
-			// make one big array for the whole menu
-			$this->mar = array();
-			// see laheb ja loeb kokku, mitu last mingil sektsioonil on
-			// salvestatakse $this->subs array sisse, key on objekti oidiman
-
-			$this->db_prep_listall($where);
-			$this->db_listall_lite($where);
-
-			while ($row = $this->db_next())
-			{
-				// some places need raw metadata, others benefit from reading
-				// the already uncompressed metainfo from the cache
-				$row["meta"] = aw_unserialize($row["metadata"]);
-				$row["mtype"] = $row["type"];
-				// Maybe this means that some people come with knives after me sometimes,
-				// but I'm pretty sure that we do not need to save unpacked metadata
-				// in the cache, since it's available in $row[meta] anyway
-				unset($row["metadata"]);
-				$this->mpr[$row["parent"]][] = $row;
-				$this->mar[$row["oid"]] = $row;
-			}
-
-			// write the data to the cache
-			$cached = array();
-			$cached["mar"] = $this->mar;
-			$cached["mpr"] = $this->mpr;
-			$cached["subs"] = $this->subs;
-
-			$cache = new cache();
-			$c_d = aw_serialize($cached,SERIALIZE_PHP);
-			$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
-		}
-		else
-		{
-			// unserialize the cache
-			$cached = aw_unserialize($ms,1);
-			$this->mar = $cached["mar"];
-			$this->mpr = $cached["mpr"];
-			$this->subs = $cached["subs"];
-		}
+		classload("menu_cache");
+		$mc = new menu_cache();
+		$mc->make_caches();
+		$this->subs =  $mc->get_ref("subs");
+		$this->mar =  $mc->get_ref("mar");
+		$this->mpr =  $mc->get_ref("mpr");
 		$awt->stop("menuedit::make_menu_caches");
 	}
 
@@ -4888,6 +4878,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		};
 
+		global $DEBUG;
+
 		$this->vars(array(
 			"LEFT_PROMO" => $left_promo,
 			"RIGHT_PROMO" => $right_promo,
@@ -4895,6 +4887,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"DOWN_PROMO" => $down_promo,
 			"SCROLL_PROMO" => $scroll_promo,
 		));
+
 		$awt->stop("menuedit::make_promo_boxes");
 	}
 
@@ -5685,6 +5678,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					print $this->replacement;
 					exit;
 				};
+				break;
+
+			case CL_FILE:
+				classload("file");
+				$t = new file();
+				die($t->show($obj["oid"]));
 				break;
 
 			case CL_TABLE:

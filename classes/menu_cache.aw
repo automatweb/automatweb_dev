@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.1 2002/03/15 15:26:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.2 2002/03/18 13:49:54 duke Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends acl_base {
 	function menu_cache($args = array())
@@ -10,7 +10,7 @@ class menu_cache extends acl_base {
 
 	////
 	// !Returns a reference to member variable
-	function &get_ref($name)
+	function get_ref($name)
 	{
 		return $this->$name;
 	}
@@ -21,10 +21,11 @@ class menu_cache extends acl_base {
 	{
 		// query only periodic objects if a period is set
 		$sufix = ($this->period) ? " AND period = '$this->period' " : "";
-		$where = " objects.status != 0 ";
+		$where = ($args["where"]) ? $args["where"] : "";
 		$q = "SELECT objects.parent AS parent,count(*) as subs
 			FROM objects WHERE $where $sufix
 			GROUP BY parent";
+
 		if (not($this->db_query($q,false)))
 		{
 			return false;
@@ -101,7 +102,7 @@ class menu_cache extends acl_base {
 		$cache = new cache();
 		$where = ($args["where"]) ? $args["where"] : " objects.status = 2";
 		global $awt,$lang_id,$SITE_ID;
-                $ms = $cache->file_get("menuedit2::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+                $ms = $cache->file_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 		$this->mar = array();
 		$this->mpr = array();
 		$this->subs = array();
@@ -120,16 +121,16 @@ class menu_cache extends acl_base {
 				$cached["mpr"] = $this->mpr;
 				$cached["subs"] = $this->subs;
 				$c_d = aw_serialize($cached,SERIALIZE_PHP);
-                        	$cache->file_set("menuedit2::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
+                        	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
 			};
 		}
 		else
 		{
 			// unserialize the cache
 			$cached = aw_unserialize($ms,1);
-			$this->mar = & $cached["mar"];
-			$this->mpr = & $cached["mpr"];
-			$this->subs = & $cached["subs"];
+			$this->mar = $cached["mar"];
+			$this->mpr = $cached["mpr"];
+			$this->subs = $cached["subs"];
 		};
 
 	}
