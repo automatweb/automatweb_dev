@@ -26,4 +26,12 @@ class core
 	{
 	}
 };
+
+class class_base extends core
+{
+  function init()
+	{
+	  aw_config_init_class(&$this);
+	}
+}
 ?>

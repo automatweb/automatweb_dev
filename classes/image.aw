@@ -2,145 +2,38 @@
 // image.aw - image management
 // $header$
 
-class image extends aw_template
+/*
+
+@classinfo objtable=images
+@classinfo objtable_index=id
+
+@property ffile type=fileupload
+@caption Pilt
+
+@property file_show type=text
+@caption 
+
+@property comment table=objects field=comment type=textbox
+@caption Pildi allkiri
+
+@property alt type=textbox table=objects field=meta method=serialize
+@caption Alt
+
+@property link type=textbox table=images field=link
+@caption Link
+
+@property newwindow type=checkbox value=1 table=images field=newwindow
+@caption Uues aknas
+
+*/
+class image extends class_base
 {
 	function image()
 	{
-		$this->init("automatweb/images");
-	}
-
-	function add($arr)
-	{
-		extract($arr);
-		$this->read_template("add.tpl");
-		if ($return_url)
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa pilt");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa pilt");
-		}
-
-		$ob = get_instance("objects");
-		$this->vars(array(
-			"parents" => $this->picker($parent, $ob->get_list()),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"return_url" => $return_url,"alias_to" => $alias_to))
-		));
-		return $this->parse();
-	}
-
-	function submit($arr)
-	{
-		extract($arr);
-
-		$_fi = get_instance("file");
-		global $file,$file_name,$file_type;
-		if ($id)
-		{
-			if ($file != "" && $file != "none")
-			{
-				if (is_uploaded_file($file))
-				{
-					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
-					$name = $file_name;
-
-					$this->db_query("UPDATE images SET file = '$fl' WHERE id = $id");
-				}
-			}
-			
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"parent" => $parent,
-				"metadata" => array(
-					"alt" => $alt,
-				),
-			));
-		}
-		else
-		{
-			if ($name == "")
-			{
-				$name = $file_name;
-			}
-
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_IMAGE,
-				"status" => 2,
-				"name" => $name,
-				"comment" => $comment,
-				"metadata" => array(
-					"alt" => $alt,
-				),
-			));
-
-			if ($file != "" && $file != "none")
-			{
-				if (is_uploaded_file($file))
-				{
-					$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
-					$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
-				}
-			}
-		}
-
-		if ($alias_to)
-		{
-			$this->delete_alias($alias_to,$id);
-			$this->add_alias($alias_to,$id);
-		}
-
-		$this->db_query("UPDATE images SET link = '$link' , newwindow = '$newwindow' WHERE id = $id");
-		return $this->mk_my_orb("change", array("id" => $id,"return_url" => urlencode($return_url),"alias_to" => $alias_to));
-	}
-
-	function change($arr)
-	{
-		extract($arr);
-		$this->read_template("add.tpl");
-		
-		$obj = $this->get_object($id);
-		if ($return_url)
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda pilti");
-		}
-		else
-		{
-			$this->mk_path($obj["parent"],"Muuda pilti");
-		}
-	
-		$img = $this->get_image_by_id($id);
-
-		// http://site/automatweb/orb.aw/class=image/action=show etc
-		// doesn't work for some reason - "class not defined"
-		// I'd like to find the real cause for this, but for now
-		// this has to do
-		$img["url"] = str_replace("automatweb/","",$img["url"]);
-
-		if ($this->is_flash($img["file"]))
-		{
-			$ima = "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0\" width=\"165\" height=\"75\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\"><param name=movie value=\"".$img["url"]."\"><param name=quality value=high><param name=\"BGCOLOR\" value=\"#336600\"><embed width=\"150\" height=\"150\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/\" src=\"".$img["url"]."\" bgcolor=\"#336600\"></embed></object>";
-		}
-		else
-		{
-			$ima = "<img src='".$img["url"]."'>";
-		}
-
-		$ob = get_instance("objects");
-		$this->vars(array(
-			"parents" => $this->picker($obj["parent"],$ob->get_list()),
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"img" => $ima,
-			"link" => $img["link"],
-			"alt" => $img["meta"]["alt"],
-			"newwindow" => checked($img["newwindow"]==1),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => $return_url,"alias_to" => $alias_to))
-		));
-		return $this->parse();
+		$this->init(array(
+						  "tpldir" => "automatweb/images",
+						  "clid" => CL_IMAGE
+						  ));
 	}
 
 	function get_image_by_id($id)
@@ -492,5 +385,37 @@ class image extends aw_template
 			return "<img border=\"0\" src=\"$url\" alt=\"$alt\">";
 		}
 	}
+
+   	function get_property($arr)
+	  {
+		$prop = &$arr['prop'];
+		if ($prop['name'] == 'file_show' && $arr['obj']['oid'])
+		  {
+			$imd = $this->get_image_by_id($arr['obj']['oid']);
+			if ($imd)
+			  {
+				$prop['value'] = html::img(array('url' => $imd['url']));
+			  }
+		  }
+		return PROP_OK;
+	  }
+
+	function set_property($arr)
+	  {
+		$prop = &$arr['prop'];
+		if ($prop['name'] == 'ffile' && $arr['obj']['oid'])
+		  {
+			global $ffile,$ffile_type;
+			$_fi = get_instance("file");
+			if (is_uploaded_file($ffile))
+			{
+				$fl = $_fi->_put_fs(array("type" => $ffile_type, "content" => $this->get_file(array("file" => $ffile))));
+				$q = "UPDATE images SET file = '$fl' WHERE id = '".$arr['obj']['oid']."'";
+				$this->db_query($q);
+			}
+			return PROP_IGNORE;
+		  }
+		return PROP_OK;
+	  }
 }
 ?>
