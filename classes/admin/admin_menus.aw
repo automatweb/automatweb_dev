@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.88 2004/11/15 16:21:14 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.89 2004/11/18 09:58:37 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -778,6 +778,10 @@ class admin_menus extends aw_template
 	//This returns config obj id for my group
 	function get_co_id(&$obj)
 	{
+		if (!is_oid($obj->meta("objtbl_conf")) || !$this->can("view", $obj->meta("objtbl_conf")))
+		{
+			return NULL; 
+		}
 		$conf_obj = &obj($obj->meta("objtbl_conf"));
 		$conn = new connection();
 		
