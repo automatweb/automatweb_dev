@@ -158,8 +158,7 @@ class shop_base extends aw_template
 	function do_core_change_tables($id)
 	{
 		$itypes = $this->listall_item_types();
-		$f = new form;
-		$tables = $f->get_list_tables();
+		$tables = $this->list_objects(array("class" => CL_FORM_TABLE));
 
 		$this->db_query("SELECT * FROM shop2table WHERE shop_id = $id");
 		while ($row = $this->db_next())
