@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.52 2001/11/29 13:57:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.53 2001/12/13 17:24:52 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -418,8 +418,11 @@ define("CL_HTML_POPUP",80); // html popup
 define("CL_LINK_COLLECTION",81); // lingikogu (dokualiase jaoks)
 
 define("CL_KEYWORD",82); // for keywords
-
 define("CL_KEYWORD_DB", 83); // keywordide andmebaas
+
+define("CL_MENU_CHAIN",84); // menüüde pärg
+
+define("CL_PULLOUT",85); // pullout - promo kast doku sees
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -483,7 +486,9 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_SEARCH_FILTER => array("name" => "Otsimise filter", "file" => "search_filter", "can_add" => 1),
 			CL_HTML_POPUP => array("name" => "HTML popup", "file" => "html_popup", "can_add" => 1),
 			CL_KEYWORD => array("name" => "AW võtmesõna", "file" => "keywords", "can_add" => 1),
-			CL_KEYWORD_DB => array("name" => "V&otilde;tmes&otilde;nade baas", "file" => "keyword_db", "can_add" => 1)
+			CL_KEYWORD_DB => array("name" => "V&otilde;tmes&otilde;nade baas", "file" => "keyword_db", "can_add" => 1),
+			CL_MENU_CHAIN => array("name" => "Menüüpärg", "file" => "menu_chain", "can_add" => 1),
+			CL_PULLOUT => array("name" => "Pullout", "file" => "pullout", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
