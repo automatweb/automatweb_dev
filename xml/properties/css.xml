@@ -139,6 +139,44 @@
             <caption>Valign</caption>
       </property>
       <property>
+            <name>width</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <size>5</size>
+            <table>objects</table>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>w_units</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Laiuse &amp;uuml;hikud</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <size>5</size>
+            <table>objects</table>
+            <caption>K&amp;otilde;rgus </caption>
+      </property>
+      <property>
+            <name>h_units</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>K&amp;otilde;rguse &amp;uuml;hikud</caption>
+      </property>
+      <property>
             <name>a_style</name>
             <type>relpicker</type>
             <field>meta</field>
@@ -177,6 +215,17 @@
             <reltype>RELTYPE_CSS</reltype>
             <table>objects</table>
             <caption>Lingi stiil (active)</caption>
+      </property>
+      <property>
+            <name>user_css</name>
+            <type>textarea</type>
+            <width>30</width>
+            <height>5</height>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Kasutaja css</caption>
       </property>
       <property>
             <name>pre</name>

@@ -23,6 +23,17 @@
             <caption>Vormi tüüp</caption>
       </property>
       <property>
+            <name>redir_obj</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIR_OBJECT</reltype>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Dokument millele suunata</caption>
+      </property>
+      <property>
             <name>user_form_conf</name>
             <type>objpicker</type>
             <clid>CL_ML_LIST_CONF</clid>

@@ -83,6 +83,17 @@
             <field>meta</field>
             <caption>Eelvaade</caption>
       </property>
+      <property>
+            <name>show_in_folders</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_FOLDER</reltype>
+            <multiple>1</multiple>
+            <rel>1</rel>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LAYOUT</syslog_type>
             <relationmgr>yes</relationmgr>
