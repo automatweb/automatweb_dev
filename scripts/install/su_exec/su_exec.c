@@ -31,6 +31,7 @@ CMD_TRANS_ENTRY g_cmd_trans_tbl[] = {
 	{"chmod", "chmod"},
 	{"ln", "ln"},
 	{"rndc","rndc"},
+	{"find", "find"}
 };
 
 char *g_err_line;
