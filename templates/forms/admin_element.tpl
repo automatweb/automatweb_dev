@@ -1,5 +1,8 @@
 <script language="javascript">
-var elements = new Array();
+if (typeof(elements) == "undefined")
+{
+	var elements = new Array();
+}
 </script>
 <!-- SUB: SEARCH_DEFS -->
 <script language="javascript">
