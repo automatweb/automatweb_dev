@@ -1,4 +1,5 @@
 <?php
+
 if ($class  || $reforb)
 {
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/orb_impl_exec.".aw_ini_get("ext"));
