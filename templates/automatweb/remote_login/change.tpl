@@ -6,11 +6,11 @@
 </tr>
 <tr>
 <td class="plain">Kasutajanimi:</td>
-<td class="plain"><input type="textbox" name="uid" value="" size="40"></td>
+<td class="plain"><input type="textbox" name="uid"  size="40" value="{VAR:uid}"></td>
 </tr>
 <tr>
 <td class="plain">Parool:</td>
-<td class="plain"><input type="password" name="password" value="" size="40"></td>
+<td class="plain"><input type="password" name="password"  size="40" value="{VAR:password}"></td>
 </tr>
 <tr>
 <td class="plain" colspan="2" align="center">
