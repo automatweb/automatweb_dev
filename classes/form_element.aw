@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.36 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.37 2001/11/17 17:57:49 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -199,9 +199,12 @@ class form_element extends aw_template
 			{
 				$this->vars(array("textarea_cols_name"	=> "element_".$this->id."_ta_cols",
 													"textarea_rows_name"	=> "element_".$this->id."_ta_rows",
+													"must_fill_checked" => checked($this->arr["must_fill"] == 1),
+													"must_error" => $this->arr["must_error"],
 													"textarea_cols"	=> $this->arr["ta_cols"],
 													"textarea_rows"	=> $this->arr["ta_rows"]));
 				$ta = $this->parse("TEXTAREA_ITEMS");
+				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 			}
 
 			$gp="";
@@ -583,6 +586,10 @@ class form_element extends aw_template
 			$this->arr["ta_rows"]= $$var;
 			$var = $base."_ta_cols";
 			$this->arr["ta_cols"]=$$var;
+			$var=$base."_must_fill";
+			$this->arr["must_fill"] = $$var;
+			$var=$base."_must_error";
+			$this->arr["must_error"] = $$var;
 		}
 
 		if ($this->arr["type"] == "radiobutton")
@@ -762,7 +769,7 @@ class form_element extends aw_template
 		{
 			$mue = $this->arr["lang_must_error"][$lang_id];
 		}
-		if ($this->arr["type"] == "textbox" && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
+		if (($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea") && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
 			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
