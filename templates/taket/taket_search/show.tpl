@@ -57,7 +57,7 @@
                           <td class=formText nowrap>{VAR:trans_product_code}</td>
                           <td class=formText>&nbsp;</td>
                           <td width="65" rowspan="5" align="right" nowrap>
-								  <a href='javascript:document.searchForm.submit();'><input type='image' src="img/mago.gif" width="48" height="57" border="0"></a> </td>
+								  <a href='javascript:document.searchForm.submit();'><input type='image' src="img/{VAR:trans_search_button}" border="0"></a> </td>
                         </tr>
                         <tr>
                           <td nowrap>
@@ -91,7 +91,7 @@
 													<input type='reset' class='formButton' value='{VAR:trans_clean_form}'>
 												</td>
 												<td align='right'>
-													<input type='button' class='formButton' value='{VAR:trans_expanded_search}' onClick="window.open('4686','','directory=0,height=340,width=310,resizable=1, statusbar=0, hotkeys=0,menubar=0,scrollbars=0,status=0,toolbar=0')">
+													<input type='button' class='formButton' value='{VAR:trans_expanded_search}' onClick="window.open('{VAR:trans_expanded_search_id}','','directory=0,height=340,width=310,resizable=1, statusbar=0, hotkeys=0,menubar=0,scrollbars=0,status=0,toolbar=0')">
 												</td>
 											</tr>
 										</table>

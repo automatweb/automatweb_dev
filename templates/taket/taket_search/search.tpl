@@ -23,7 +23,7 @@
                     <td height="70" valign="middle" bgcolor="#FFFFFF"><table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
                       <tr>
                           <td height=30 class="listItem" colspan="4">{VAR:trans_searched_for} &quot;<b>{VAR:otsisin}</b>&quot;, {VAR:trans_found} {VAR:results} {VAR:trans_results}.</td>
-                          <td colspan="6" align="right" class="listItem" >{VAR:trans_prices_w_vat} <a href="javascript:void(0)" onClick="window.open('155','','directory=0,height=340,width=350,resizable=1, statusbar=0, hotkeys=0,menubar=0,scrollbars=0,status=0,toolbar=0')"><img src="img/qmark.gif" width="20" height="20" hspace="10" border="0" align="absmiddle"></a></td>
+                          <td colspan="6" align="right" class="listItem" >{VAR:trans_prices_w_vat} <a href="javascript:void(0)" onClick="window.open('{VAR:trans_search_qmark}','','directory=0,height=340,width=350,resizable=1, statusbar=0, hotkeys=0,menubar=0,scrollbars=0,status=0,toolbar=0')"><img src="img/qmark.gif" width="20" height="20" hspace="10" border="0" align="absmiddle"></a></td>
                       </tr>
                       <tr>
                         <td width=50 height=30 class="{VAR:cssstaatus}"><a href="javascript: postSearch({VAR:prev},'staatus','{VAR:direction}')">{VAR:trans_status}</a></td>
@@ -39,11 +39,11 @@
                       </tr>
 							 
 							 <!-- SUB: asendustoodeblock -->
-                        <td class="{VAR:staatuscss}"><span title='{VAR:peatoode}'>{VAR:replacement}</span>&nbsp;</td>
-							 <!-- END SUB: asendustoodeblocblockk -->
+                        <td class="{VAR:staatuscss}"><span title='{VAR:peatoode}'>{VAR:trans_replacement}</span>&nbsp;</td>
+							 <!-- END SUB: asendustoodeblock -->
 							 
 							 <!-- SUB: mainproduct -->
-                        <td class="{VAR:staatuscss}"><span>{VAR:replacement}</span>&nbsp;</td>
+                        <td class="{VAR:staatuscss}"><span>{VAR:trans_asked}</span>&nbsp;</td>
 							 <!-- END SUB: mainproduct -->
 
 							 <!-- SUB: product -->
@@ -56,10 +56,24 @@
                         <td class="listItemSec" >{VAR:discount}&nbsp;</td>
                         <td class="listItemSec" >{VAR:finalPrice}&nbsp;</td>
 								{VAR:quantityParsed}
-                        <td align=center class="listItemSec">{VAR:inStock2}</td>
+								
+                        <td align=center class="listItemSec">{VAR:inStock3}</td>
 								{VAR:karuParsed}
                       </tr>
 							<!-- END SUB: product -->
+
+							<!-- SUB: instockno -->
+								{VAR:trans_instock_no}
+							<!-- END SUB: instockno -->
+							
+							<!-- SUB: instockyes -->
+								{VAR:trans_instock_yes}
+							<!-- END SUB: instockyes -->
+							
+							<!-- SUB: instockpartially -->
+								{VAR:trans_instock_partially}
+							<!-- END SUB: instockpartially -->
+							
 							{VAR:productParsed}
 
 							<!-- SUB: cannotSetQuantity -->
