@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.279 2003/04/10 11:57:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.280 2003/04/13 16:59:35 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -7,7 +7,7 @@
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
 
-classload('icons');
+##classload("icons");
 class menuedit extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1329,6 +1329,7 @@ class menuedit extends aw_template
 
 		$arr = array();
 		$mpr = array();
+		get_instance("icons");
 
 		$this->x_mpr = array();
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
@@ -3680,11 +3681,12 @@ class menuedit extends aw_template
 			$sec = $section; 
 		}
 		$cnt = 0;
+		$tmp = array();
 		// kontrollime seda ka, et kas see "sec" yldse olemas on,
 		// vastasel korral satume loputusse tsyklisse
 		while ($sec && ($sec != 1)) 
 		{
-			$this->_push($sec);
+			array_push($tmp,$sec);
 			$sec = $this->mar[$sec]["parent"];
 			$cnt++;
 			if ($cnt > 1000)
@@ -3696,7 +3698,8 @@ class menuedit extends aw_template
 
 		for ($i=0; $i < $cnt; $i++) 
 		{
-			$path[$i+1] = $this->_pop();
+			#$path[$i+1] = $this->_pop();
+			$path[$i+1] = array_pop($tmp);
 		};
 		// and now in the $path array
 		return $path;
@@ -4860,6 +4863,8 @@ class menuedit extends aw_template
 		{
 			$this->acl_error("view", PRG_MENUEDIT);
 		}
+
+		get_instance("icons");
 
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
