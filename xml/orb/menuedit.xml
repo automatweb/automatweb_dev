@@ -28,7 +28,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="parent"/>
+					<optional name="parent"/>
 					<required name="id"/>
 					<optional name="period"/>
 				</arguments>
