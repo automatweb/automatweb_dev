@@ -5,8 +5,6 @@ $sf->read_template("index.tpl");
 
 // tehakse kindlaks, milline custom_css
 $sf->vars(array("custom" => aw_global_get("uid")));
-$sf->vars(array("custom_css" => $sf->parse("custom_css")));
-
 $ta = aw_global_get("title_action");
 if ($ta != "")
 {
