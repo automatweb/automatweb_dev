@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="maja_xml_editor" folder="applications/xml_editor" extends="class_base">
+	</class>
+</orb>
+		
