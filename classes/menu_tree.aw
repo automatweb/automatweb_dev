@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.22 2004/06/15 09:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.23 2004/09/09 11:14:07 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -295,6 +295,9 @@ class menu_tree extends class_base
 			{
 				$tpl = $this->tlist[$this->level + 1][0];
 			};
+
+			$tmpp = $v->path();
+
 			if ($v->alias())
 			{
 				if (aw_ini_get("menuedit.recursive_aliases") == 0)
