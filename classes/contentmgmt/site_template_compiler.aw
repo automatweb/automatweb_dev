@@ -667,7 +667,7 @@ class site_template_compiler extends aw_template
 					"value" => "not_in_path",
 					"no_display_item" => true
 				);
-				break;
+ 				break;
 
 			case "FPONLY":
 				return array(
@@ -675,6 +675,12 @@ class site_template_compiler extends aw_template
 					"value" => "1"
 				);
 				break;
+
+			case "PREVSEL":
+				return array(
+					"prop" => "prev_oid",
+					"value" => "is_in_path"
+				);
 			default:
 				break;
 		}
@@ -1070,7 +1076,7 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
-		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); ".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
+		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); \$prev_obj = ".$o_name.",".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
@@ -1166,6 +1172,18 @@ class site_template_compiler extends aw_template
 			else
 			{
 				$ret = "(".$o_name."->id() == ".$arr["value"].") && ";
+			}
+		}
+		else
+		if ($arr["prop"] == "prev_oid")
+		{
+			if ($arr["value"] == "is_in_path")
+			{
+				$ret = "(\$this->_helper_is_in_path(\$prev_obj->id())) && ";
+			}
+			else
+			{
+				$ret = "(\$prev_obj->id() == ".$arr["value"].") && ";
 			}
 		}
 		else
