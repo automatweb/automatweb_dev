@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.245 2004/03/31 13:31:09 duke Exp $
+// $Id: class_base.aw,v 2.246 2004/04/02 11:16:11 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -210,7 +210,7 @@ class class_base extends aw_template
 		if (method_exists($this->inst,"callback_on_load"))
 		{
 			$this->inst->callback_on_load(array(
-				"request" => $this->request,
+				"request" => $args,
 			));
 		}
 
@@ -3187,6 +3187,7 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
+
 				};
 
 			};
@@ -3338,7 +3339,6 @@ class class_base extends aw_template
 		};
 
 
-		// I need to split this thing
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -3360,7 +3360,7 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+
 			if (1 == $propdata["richtext"] && 0 == $this->classinfo["allow_rte"])
 			{
 				unset($propdata["richtext"]);
@@ -3386,19 +3386,6 @@ class class_base extends aw_template
 		};
 
 		$this->use_group = $use_group;
-
-		// Very good. Now how do I deal with groups that contain subgroups?
-
-		// okey, now that I have the group, I need to filter the properties
-		// to return only the stuff that is the group that was requested
-		//print "use_group = $use_group<br>";
-
-		// if a group has properties and subgroups, then the properties need
-		// to be remapped to the first child group. 
-
-		// and I need to deal with multiple groups
-		
-		// and then I should leave out the groups with no properties
 
 		return $tmp;
 
