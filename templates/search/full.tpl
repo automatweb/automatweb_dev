@@ -158,9 +158,13 @@ function search_selall()
 	</td>
 </tr>
 <!-- END SUB: hidden -->
-</table>
-</td></tr>
-<tr><td></td>
+<tr>
+	<td class='chformleftcol' width='160' nowrap></td>
+	<td class='chformrightcol'>
+	<input type='submit' value='Otsi'/>
+</td>
+</tr>
+<tr>
 <td colspan="3" class="awtablecellbacklight"><div style="width:100%;height:5px" /></td>
 </tr>
 
