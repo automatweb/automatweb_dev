@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.342 2004/12/09 17:14:21 ahti Exp $
+// $Id: class_base.aw,v 2.343 2004/12/15 12:26:38 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2897,6 +2897,11 @@ class class_base extends aw_template
 
 		foreach($props as $key => $tmp)
 		{
+			// skiping text controllers.. you can't save anything with them, aight? -- ahz
+			if($tmp["type"] == "text")
+			{
+				continue;
+			}
 			$val = $arr["request"][$key];
 			$prpdata = &$props[$key];
 			if (1 == $prpdata["required"] && !$val)
