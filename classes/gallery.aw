@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.25 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.26 2002/07/12 16:57:55 kristo Exp $
 classload("images");
 
 class gallery extends aw_template
@@ -387,7 +387,7 @@ class gallery extends aw_template
 
 		if ($page < 1)
 		{
-			$page = 0;
+			$page = 1;
 		}
 
 		if ($this->arr["is_automatic_slideshow"] == 1)
@@ -520,12 +520,12 @@ class gallery extends aw_template
 		{
 			$this->read_template("show.tpl");
 
-			for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
+			for ($row = 0; $row < $this->arr[$page-1]["rows"]; $row++)
 			{
 				$c = "";
-				for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
+				for ($col = 0; $col < $this->arr[$page-1]["cols"]; $col++)
 				{
-					$cell = $this->arr[$page]["content"][$row][$col];
+					$cell = $this->arr[$page-1]["content"][$row][$col];
 					$xsize = $cell["xsize"] ? $cell["xsize"] : 500;
 					$ysize = $cell["ysize"] ? $cell["ysize"] + 50: 400;
 					if ($cell["link"] != "")
@@ -573,25 +573,32 @@ class gallery extends aw_template
 
 		$baseurl = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=$section";
 
-		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
+		for ($pg = 1; $pg <= $this->arr["pages"]; $pg++)
 		{
 			$this->vars(array("num" => $pg,"url" => $baseurl."/page=$pg"));
-			$p.=$this->parse("PAGE");
+			if ($this->is_template("PAGE_SEL") && $pg == $page)
+			{
+				$p.=$this->parse("PAGE_SEL");
+			}
+			else
+			{
+				$p.=$this->parse("PAGE");
+			}
 		}
 
 		$pr = "";
-		if ($page > 0)
+		if ($page > 1)
 		{
 			$this->vars(array("url" => $baseurl."/page=".($page-1)));
 			$pr = $this->parse("PREVIOUS");
 		}
 		$nx = "";
-		if ($page < ($this->arr["pages"]-1))
+		if (($page-1) < ($this->arr["pages"]-1))
 		{
 			$this->vars(array("url" => $baseurl."/page=".($page+1)));
 			$nx = $this->parse("NEXT");
 		}
-		$this->vars(array("LINE" => $l,"PAGE" => $p,"sel_page" => $page,"PREVIOUS" => $pr, "NEXT" => $nx));
+		$this->vars(array("PAGE_SEL" => "", "LINE" => $l,"PAGE" => $p,"sel_page" => $page,"PREVIOUS" => $pr, "NEXT" => $nx));
 
 		if ($this->arr["pages"] > 1)
 		{
