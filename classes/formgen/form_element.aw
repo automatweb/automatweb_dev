@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.15 2002/12/02 11:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.16 2002/12/03 12:52:21 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3001,7 +3001,7 @@ class form_element extends aw_template
 				$tarr += $this->form->get_relation_targets();
 			}
 
-			$tarstr = join(",",$this->map2("%s",$tarr));
+			$tarstr = join(",",map2("%s",$tarr));
 			if ($tarstr != "")
 			{
 				$this->db_query("SELECT name, oid FROM objects WHERE status != 0 AND oid IN ($tarstr)");

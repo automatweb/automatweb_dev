@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.4 2002/12/03 12:52:21 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -979,7 +979,7 @@ class form_output extends form_base
 		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi sees
 		$elarr = array("0" => "");
 		$op_forms = $this->get_op_forms($id);
-		$fidstring = join(",",$this->map2("%s",$op_forms));
+		$fidstring = join(",",map2("%s",$op_forms));
 		if ($fidstring != "")
 		{
 			// make preview

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.129 2002/12/03 11:19:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.130 2002/12/03 12:52:20 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -784,8 +784,8 @@ class core extends db_connector
 		$fs = "";
 		if ($join != "")
 		{
-			$js = join(' ',$this->map2('LEFT JOIN %s ON %s',$join));
-			$fs = ",".join(',',$this->map2('%s.*',$join));
+			$js = join(' ',map2('LEFT JOIN %s ON %s',$join));
+			$fs = ",".join(',',map2('%s.*',$join));
 		}
 		$q = "SELECT aliases.*,objects.* $fs FROM aliases
 			LEFT JOIN objects ON
@@ -1917,7 +1917,7 @@ class core extends db_connector
 			$cl_name = get_class($this);
 		}
 
-		$urs = join("&",$this->map2("%s=%s",$arr));
+		$urs = join("&",map2("%s=%s",$arr));
 
 		if ($user)
 		{
@@ -1951,7 +1951,7 @@ class core extends db_connector
 		{
 			$args["class"] = get_class($this);
 		};
-		$arguments = join("&",$this->map2("%s=%s",$args));
+		$arguments = join("&",map2("%s=%s",$args));
 		$retval = $this->cfg["baseurl"] . "/?" . $arguments;
 		return $retval;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.60 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.61 2002/12/03 12:52:20 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1091,7 +1091,7 @@ class users extends users_user
 						$tmp[$k] = $v;
 					}
 				}
-				$elsss = join(",",$this->map2("%s",$tmp));
+				$elsss = join(",",map2("%s",$tmp));
 
 				if ($elsss != "")
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.9 2002/12/03 12:39:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.10 2002/12/03 12:52:21 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2573,7 +2573,7 @@ class form extends form_base
 			else
 			{
 				// leiame kas see otsing on p2rja kohta. 
-				$fidstr = join(",", $this->map2("%s",$this->arr["search_from"]));
+				$fidstr = join(",", map2("%s",$this->arr["search_from"]));
 				if ($fidstr != "")
 				{
 					$this->db_query("SELECT distinct(chain_id) as chain_id FROM form2chain WHERE form_id IN ($fidstr)");
@@ -3989,7 +3989,7 @@ class form extends form_base
 		{
 			return;
 		}
-		$str = join(",",$this->map2(" %s = '%s' ",$arr));
+		$str = join(",",map2(" %s = '%s' ",$arr));
 		if ($str != "" && $entry_id)
 		{
 			$this->db_query("UPDATE form_".$form_id."_entries SET $str WHERE id = $entry_id");

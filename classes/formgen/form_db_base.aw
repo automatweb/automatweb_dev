@@ -266,7 +266,7 @@ class form_db_base extends aw_template
 				}
 			}
 			// we do this (update, not insert), because we already created a row in the first table to get the entry_id.
-			$q = "UPDATE $tbl SET ".join(",",$this->map2("%s = '%s'",$dat))." WHERE $idx_col = '$entry_id'";
+			$q = "UPDATE $tbl SET ".join(",",map2("%s = '%s'",$dat))." WHERE $idx_col = '$entry_id'";
 		}
 		else
 		{
@@ -361,7 +361,7 @@ class form_db_base extends aw_template
 
 		// and now just turn it into a query - hey, this is easy
 		$idx_col = $this->arr["save_tables"][$tbl];
-		$q = "UPDATE $tbl SET ".join(",",$this->map2("%s = '%s'",$dat,0,true))." WHERE $idx_col = '$entry_id'";
+		$q = "UPDATE $tbl SET ".join(",",map2("%s = '%s'",$dat,0,true))." WHERE $idx_col = '$entry_id'";
 //		echo "q = $q <br>";
 		$this->db_query($q);
 

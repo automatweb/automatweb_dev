@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.66 2002/12/03 12:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.67 2002/12/03 12:52:20 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -209,14 +209,14 @@ if (!defined("DEFS"))
 		return ($arg) ? "DISABLED" : "";
 	}
 
-	// järgmine funktsioon on inspireeritud perlist ;)
+	////
+	// !järgmine funktsioon on inspireeritud perlist ;)
 	// kasutusnäide:
 	//       print $object->map("--- %s ---\n",array("1","2","3"));
 	// tulemus:
 	//      --- 1 ---
 	//      --- 2 ---
 	//      --- 3 ---
-			
 	function map($format,$array)
 	{
 		$retval = array();
@@ -234,10 +234,10 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
-	// sama, mis eelmine, ainult et moodustuvad paarid
+	////
+	// !sama, mis eelmine, ainult et moodustuvad paarid
 	// array iga elemendi indeksist ja väärtusest
 	// format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
-
 	// kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära	
 	function map2($format,$array,$type = 0,$empty = false)
 	{

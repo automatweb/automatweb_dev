@@ -916,7 +916,7 @@ class ml_rule extends aw_template
 				}
 			}
 
-//			echo "entries eq ".join(",",$this->map2("%s => %s", $entries))." <br>";
+//			echo "entries eq ".join(",",map2("%s => %s", $entries))." <br>";
 			// now all the entries that are in $entries have no corresponding members, we gotta create them
 			$usedeids = array();
 			foreach($entries as $eid)
@@ -939,7 +939,7 @@ class ml_rule extends aw_template
 						"conf" => $ml_list_inst->get_conf_id($a_lid)
 					));
 					$ret[] = $n_m_id;
-//					echo "created new member ($n_m_id) under $m_parent entries = ".join(",", $this->map2("%s = %s ", $memberentries))." <br>\n";
+//					echo "created new member ($n_m_id) under $m_parent entries = ".join(",", map2("%s = %s ", $memberentries))." <br>\n";
 //					flush();
 				}
 			}

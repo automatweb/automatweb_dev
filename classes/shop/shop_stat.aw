@@ -166,7 +166,7 @@ class shop_stat extends shop
 			$this->read_template("to_stat_by_day_no_to.tpl");
 		}
 		$sh = $this->get($id);
-		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+		$shopss = join(",",map2("%s",$this->get_shops_for_stat($id)));
 
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistics</a> / By days");
 
@@ -235,7 +235,7 @@ class shop_stat extends shop
 			$this->read_template("to_stat_by_month_no_to.tpl");
 		}
 		$sh = $this->get($id);
-		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+		$shopss = join(",",map2("%s",$this->get_shops_for_stat($id)));
 
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistcs</a> / By months");
 
@@ -304,7 +304,7 @@ class shop_stat extends shop
 			$this->read_template("to_stat_by_wd_no_to.tpl");
 		}
 		$sh = $this->get($id);
-		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+		$shopss = join(",",map2("%s",$this->get_shops_for_stat($id)));
 
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id)).LC_SHOP_STAT_BY_WEEKDAYS);
 
@@ -405,7 +405,7 @@ class shop_stat extends shop
 			$this->read_template("to_stat_by_hr_no_to.tpl");
 		}
 		$sh = $this->get($id);
-		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+		$shopss = join(",",map2("%s",$this->get_shops_for_stat($id)));
 
 		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id)).LC_SHOP_STAT_BY_HOUR);
 

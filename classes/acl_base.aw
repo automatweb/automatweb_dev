@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.27 2002/11/15 13:30:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.28 2002/12/03 12:52:20 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -280,7 +280,7 @@ class acl_base extends core
 		$js = "";
 		if (is_array($joins))
 		{
-			$js = join(' ',$this->map2('LEFT JOIN %s ON %s',$joins));
+			$js = join(' ',map2('LEFT JOIN %s ON %s',$joins));
 		}
 
 		// stuff all the objects in the cache, because the next query will not 
