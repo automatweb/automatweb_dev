@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.8 2004/12/03 13:52:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.9 2004/12/03 16:05:09 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -438,13 +438,13 @@ class webform extends class_base
 					),
 					array(
 						"name" => "Kuva sisestaja IP ja host aadress",
-						"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "Host: ".$_SERVER["REMOTE_HOST"]."<br />IP: ".$_SERVER["REMOTE_ADDR"];}',
+						"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "Host: ".$_SERVER["REMOTE_HOST"]."\nIP: ".$_SERVER["REMOTE_ADDR"];}',
 					),
 				);
 				$get_controllers = array(
 					array(
 						"name" => "Kuva sisestaja IP ja host aadress",
-						"formula" => 'if(!empty($prop["value"])){$prop["type"] = "text";$prop["value"] = nl2br($prop["value"]);}',
+						"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
 					),
 				);
 				$i = 0;
