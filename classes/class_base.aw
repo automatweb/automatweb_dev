@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.21 2002/12/18 14:42:49 kristo Exp $
+// $Id: class_base.aw,v 2.22 2002/12/19 15:18:50 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -323,7 +323,7 @@ class class_base extends aliasmgr
 				"orb_class" => $orb_class,
 				"parent" => $parent,
 				"period" => $period,
-			),
+			)+(is_array($extraids) ? array('extraids' => $extraids) : array()),
 		));
 
 		if (!$content)
@@ -558,7 +558,8 @@ class class_base extends aliasmgr
 			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
 		};
 
-		return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"period" => aw_global_get("period")),get_class($this->orb_class));
+		$args = array("id" => $id,"group" => $group,"period" => aw_global_get("period")) + (is_array($extraids) ? $extraids : array());
+		return $this->mk_my_orb("change",$args,get_class($this->orb_class));
 	}
 
 	////
