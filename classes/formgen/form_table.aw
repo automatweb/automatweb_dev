@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.14 2002/11/27 14:13:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.15 2002/11/27 15:59:44 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -95,7 +95,14 @@ class form_table extends form_base
 			$cnt++;
 		}
 		$fns["tb_".$this->table_id."_".$cnt] = 1;
-		$this->table_html_form_name = "tb_".$this->table_id."_".$cnt;
+		if ($cnt == 1)
+		{
+			$this->table_html_form_name = "tb_".$this->table_id;
+		}
+		else
+		{
+			$this->table_html_form_name = "tb_".$this->table_id."_".$cnt;
+		}
 		aw_global_set("form_table_html_form_names", $fns);
 
 		// initialize all the baskets that are to be used in this table
@@ -1123,7 +1130,7 @@ class form_table extends form_base
 			$title = $cc["lang_title"][aw_global_get("lang_id")];
 			if (is_array($cc["els"]) && in_array("select", $cc["els"]))
 			{
-				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall()'&gt;".$title."&lt;/a&gt;";
+				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall(&quot;".$this->get_html_name_for_tbl_form()."&quot;)'&gt;".$title."&lt;/a&gt;";
 			}
 			
 			if ((!$cc["no_show_empty"] || $this->table_not_empty_cols[$col]) && !$cc["not_active"])
@@ -1312,14 +1319,15 @@ class form_table extends form_base
 		return "<script language='javascript'>
 			var chk_status = ".($this->table["sel_def"] == 1 ? "false" : "true").";
 
-				function tb_selall()
+				function tb_selall(frmna)
 				{
-					len = document.".$this->get_html_name_for_tbl_form().".elements.length;
+					els = eval('document.'+frmna);
+					len = els.elements.length;
 					for (i=0; i < len; i++)
 					{
-						if (document.".$this->get_html_name_for_tbl_form().".elements[i].name.indexOf('sel') != -1)
+						if (els.elements[i].name.indexOf('sel') != -1)
 						{
-							document.".$this->get_html_name_for_tbl_form().".elements[i].checked=chk_status;
+							els.elements[i].checked=chk_status;
 						}
 					}
 					chk_status = !chk_status;
