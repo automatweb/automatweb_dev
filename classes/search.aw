@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.65 2004/02/05 15:17:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.66 2004/02/18 10:11:46 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -1047,6 +1047,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function modify_toolbar($args)
 	{
+		return false;
 		if ($this->has_results && is_object($args["toolbar"]))
 		{
 			$args["toolbar"]->add_separator();
