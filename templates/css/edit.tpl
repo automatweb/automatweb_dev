@@ -83,6 +83,23 @@ function varvivalik(which)
 <a href="javascript:varvivalik('bgcolor')">{VAR:LC_CSS_CHOOSE}</a>
 </td>
 </tr>
+<tr>
+<td class="fgtext">Lingi stiil:</td>
+<td class="fgtext"><select name='a_style'>{VAR:a_style}</select></td>
+</tr>
+<tr>
+<td class="fgtext">Lingi stiil (hover):</td>
+<td class="fgtext"><select name='a_hover_style'>{VAR:a_hover_style}</select></td>
+</tr>
+<tr>
+<td class="fgtext">Lingi stiil (visited):</td>
+<td class="fgtext"><select name='a_visited_style'>{VAR:a_visited_style}</select></td>
+</tr>
+<tr>
+<td class="fgtext">Lingi stiil (active):</td>
+<td class="fgtext"><select name='a_active_style'>{VAR:a_active_style}</select></td>
+</tr>
+
 </table>
 </td>
 </tr>
