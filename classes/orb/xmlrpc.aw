@@ -2,6 +2,8 @@
 
 class xmlrpc extends aw_template
 {
+	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
+
 	function xmlrpc()
 	{
 		$this->init("");
@@ -12,6 +14,10 @@ class xmlrpc extends aw_template
 	function do_request($arr)
 	{
 		$xml = $this->make_request_xml($arr);
+		if (aw_global_get("xmlrpc_dbg"))
+		{
+			echo "sending request = <pre>", htmlspecialchars($xml),"</pre> <br>";
+		}
 
 		$resp = $this->send_request(array(
 			"server" => $arr["remote_host"],
@@ -43,7 +49,7 @@ class xmlrpc extends aw_template
 				$xml .= "\t\t\t\t<name>$name</name>\n";
 				if (is_array($value))
 				{
-					$value = aw_serialize($value, SERIALIZE_NATIVE);
+					$value = aw_serialize($value, SERIALIZE_XMLRPC);
 				}
 				$xml .= "\t\t\t\t<value>$value</value>\n";
 				$xml .= "\t\t\t</member>\n";
@@ -59,27 +65,92 @@ class xmlrpc extends aw_template
 
 	function decode_response($xml)
 	{
-		$xml = str_replace("&", "__faking_bitchass_barbara_streisand__",$xml);
+		if (aw_global_get("xmlrpc_dbg"))
+		{
+			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br>";
+		}
 		$result = array();
 
 		$parser = xml_parser_create();
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parse_into_struct($parser,$xml,&$values,&$tags); 
+		xml_parse_into_struct($parser,$xml,&$this->vals,&$tags); 
+		$err = xml_get_error_code($parser);
+		if ($err)
+		{
+			$this->raise_error(ERR_XML_PARSER_ERROR,"Viga XML-RPC p2ringu vastuse dekodeerimisel: ".xml_error_string($err)."!", true,false);
+		}
 		xml_parser_free($parser); 
 
-		foreach($values as $val)
+		reset($this->vals);
+		list(,$tmp) = each($this->vals);
+//		echo "expect methodresponse open got $tmp[tag] $tmp[type] <br>";
+		list(,$is_err) = each($this->vals);
+		if ($is_err["tag"] == "FAULT")
 		{
-			if ($val["tag"] == "value")
-			{
-				$val["value"] = str_replace("__faking_bitchass_barbara_streisand__","&", $val["value"]);
-//				$this->dequote(&$val["value"]);
-				$try = aw_unserialize(urldecode($val["value"]));
-				if (is_array($try))
-				{
-					return $try;
-				}
-				return $val["value"];
-			}
+//			echo "in fault: got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// value open
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// struct open
+//			echo "in fault: expect struct open got $tmp[tag] $tmp[type] <br>";
+
+			// faultcode member
+			list(,$tmp) = each($this->vals);	// member open
+//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br>";
+			list(,$faultcode_name_v) = each($this->vals);	// name complete
+//			echo "in fault: expect name complete got $faultcode_name_v[tag] $faultcode_name_v[type] <br>";
+			list(,$tmp) = each($this->vals);	// value open
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+			// chomp value
+			$faultcode = $this->_proc_unser_data();
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// member close
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+
+			// faultstring
+			list(,$tmp) = each($this->vals);	// member open
+//			echo "in fault: expect member open got $tmp[tag] $tmp[type] <br>";
+			list(,$faultstring_name) = each($this->vals);	// name complete
+//			echo "in fault: expect name complete got $faultstring_name[tag] $faultstring_name[type] <br>";
+			list(,$tmp) = each($this->vals);	// value open
+//			echo "in fault: expect value open got $tmp[tag] $tmp[type] <br>";
+			// chomp value
+			$faultstring = $this->_proc_unser_data();
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// member close
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+
+			list(,$tmp) = each($this->vals);	// struct close
+//			echo "in fault: expect member close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in fault: expect value close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in fault: expect fault close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in fault: expect methodresponse close got $tmp[tag] $tmp[type] <br>";
+			$this->raise_error(ERR_XMLRPC_FAULT, "Got remote error!<br><br> code: $faultcode<br> string: $faultstring", true, false);
+		}
+		else
+		{
+//			echo "in resp: expect params open got $is_err[tag] $is_err[type] <br>";
+			list(,$tmp) = each($this->vals);	// param open
+//			echo "in resp: expect param open got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// value open
+//			echo "in resp: expect value open got $tmp[tag] $tmp[type] <br>";
+
+			$retval = $this->_proc_unser_data();
+
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in resp: expect value close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// param close
+//			echo "in resp: expect param close got $tmp[tag] $tmp[type] <br>";
+			list(,$tmp) = each($this->vals);	// params close
+//			echo "in resp: expect params close got $tmp[tag] $tmp[type] <br>";
+
+			list(,$tmp) = each($this->vals);	// value close
+//			echo "in resp: expect methodresponse close got $tmp[tag] $tmp[type] <br>";
+
+			return $retval;
 		}
 		return false;
 	}
@@ -137,6 +208,8 @@ class xmlrpc extends aw_template
 		xml_parse_into_struct($parser,$xml,&$values,&$tags); 
 		xml_parser_free($parser); 
 
+		aw_global_set("__is_rpc_call", true);
+		aw_global_set("__rpc_call_type", "xmlrpc");
 		$res = $this->req_decode_xml($values);
 		return $res;	
 	}
@@ -211,15 +284,196 @@ class xmlrpc extends aw_template
 		$xml .= "<methodResponse>\n";
 		$xml .= "\t<params>\n";
 		$xml .= "\t\t<param>\n";
-		if (is_array($dat))
-		{
-			$dat = urlencode(aw_serialize($dat, SERIALIZE_NATIVE));
-		}
-		$xml .= "\t\t\t<value>".$dat."</value>\n";
+		$dat = aw_serialize($dat, SERIALIZE_XMLRPC);
+		$xml .= "\t\t\t<value>\n".$dat."\n</value>\n";
 		$xml .= "\t\t</param>\n";
 		$xml .= "\t</params>\n";
 		$xml .= "</methodResponse>\n";
 		return $xml;
+	}
+
+	function handle_error($code, $msg)
+	{
+		$xml  = "<?xml version=\"1.0\"?>\n";
+		$xml .= "<methodResponse>\n";
+		$xml .= "\t<fault>\n";
+		$xml .= "\t\t<value>\n";
+		$xml .= aw_serialize(array("faultCode" => $code, "faultString" => $msg),SERIALIZE_XMLRPC);
+		$xml .= "\t\t</value>\n";
+		$xml .= "\t</fault>\n";
+		$xml .= "</methodResponse>\n";
+		die($xml);
+	}
+
+	function xmlrpc_serialize($val, $level = 0)
+	{
+		$pre = "";
+		$pad = str_repeat("  ",$level);
+		switch(gettype($val))
+		{
+			case 'boolean':
+				$pre .= $pad.'<boolean>'.($val === true ? 1 : 0)."</boolean>\n";
+				break;
+
+			case 'integer':
+				$pre .= $pad."<i4>$val</i4>\n";
+				break;
+
+			case 'double':
+				$pre .= $pad."<double>$val</double>\n";
+				break;
+
+			case 'string':
+				$val = str_replace("<", "&lt;", $val);
+				$val = str_replace("&", "&amp;", $val);
+				$pre .= $pad."<string>$val</string>\n";
+				break;
+
+			case 'array':
+				$pre .= $pad."<struct>\n";
+				$level++;
+				foreach($val as $k => $v)
+				{
+					$pre .= $pad."  <member>\n";
+					$level++;
+					$pre .= $pad."    <name>".$k."</name>\n";
+					$pre .= $pad."    <value>\n";
+					$pre .= $this->xmlrpc_serialize($v,$level+1);
+					$pre .= $pad."    </value>\n";
+					$pre .= $pad."  </member>\n";
+					$level--;
+				}
+				$pre .= $pad."</struct>\n";
+				$level --;
+				break;
+
+			default:
+				// ignore all unknown types
+				return $pre;
+		}
+		return $pre;
+	}
+
+	function xmlrpc_unserialize($str)
+	{
+		$pars = xml_parser_create();
+		$this->vals = array();
+		$index = array();
+		xml_parse_into_struct($pars, $str, &$this->vals, &$index);
+		xml_parser_free($pars);
+
+		reset($this->vals);
+		return $this->_proc_unser_data();
+	}
+
+	function _proc_unser_data()
+	{
+		while ($v = $this->_expect(false,true))
+		{
+			switch ($v["tag"])
+			{
+				case "I4":
+					return (int)$v["value"];
+					break;
+				
+				case "BOOLEAN":
+					return (bool)$v["value"];
+					break;
+
+				case "STRING":
+					$str = $v["value"];
+					// collect all cdata as well
+					do {
+						list(,$tmp) = each($this->vals);
+						$cont = false;
+						if ($tmp["type"] == "cdata" && $tmp["tag"] == "STRING")
+						{
+							$str.=$tmp["value"];
+							$cont = true;
+						}
+					} while ($cont);
+					prev($this->vals);
+					return $str;
+					break;
+
+				case "DOUBLE":
+					return (double)$v["value"];
+					break;
+
+				case "DATETIME.ISO8601":
+					return strtotime($v["value"]);
+					break;
+
+				case "BASE64":
+					return base64_decode($v["value"]);
+					break;
+
+				case "STRUCT":
+					$ret = array();
+					$this->_expect("MEMBER");// open member
+					$is_mem = true;
+					do {
+						$name_v = $this->_expect("NAME");// name complete
+						$key = $name_v["value"];
+						$this->_expect("VALUE");  // value open
+						$value = $this->_proc_unser_data();		 // eat value value
+						$this->_expect("VALUE");  // value close
+						$this->_expect("MEMBER"); // member close
+						$mem_o = $this->_expect(); // try member open
+						if ($mem_o["tag"] != "MEMBER")
+						{
+							// we just ate struct close tag, so no need to rewind
+							$is_mem = false;
+						}
+						$ret[$key] = $value;
+					} while ($is_mem);
+					return $ret;
+					break;
+
+				case "ARRAY":
+					$ret = array();
+					each($this->vals); // open data 
+					$in_ar = true;
+					do {
+						list(,$tmp) = each($this->vals); // try open value
+						if ($tmp["tag"] == "VALUE")
+						{
+							// got data close, that means end of array
+							$in_ar = false;
+						}
+						else
+						{
+							// chomp value
+							$ret[] = $this->_proc_unser_data();
+							each($this->vals); // close value
+						}
+					} while ($in_ar);
+					each($this->vals); // close array
+					return $ret;
+					break;
+			}
+		}
+	}
+
+	////
+	// !skips rows in $this->vals until it finds a non-whitespace tag and returns it 
+	// if $tag is specified, complains if the tag does not match
+	function _expect($tag = false, $return_cdata = false)
+	{
+		do {
+			list($k,$tmp) = each($this->vals);
+			$is_sp = $tmp["type"] == "cdata" && trim($tmp["value"]) == "";
+			if ($return_cdata)
+			{
+				$is_sp = $is_sp && in_array($tmp["tag"],$this->allowed);
+			}
+		} while ($is_sp);
+		if ($tag && $tmp["tag"] != $tag)
+		{
+			echo "error! _expected $tag, got $tmp[tag] ,k = $k tmp = <pre>",var_dump($tmp),"</pre>";
+			die();
+		}
+		return $tmp;
 	}
 }
 ?>
