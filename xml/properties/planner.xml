@@ -14,6 +14,7 @@
             <name>content_generator</name>
             <type>select</type>
             <group>advanced</group>
+            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
