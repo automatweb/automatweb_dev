@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.36 2003/01/02 13:29:36 duke Exp $
+// $Id: class_base.aw,v 2.37 2003/01/02 15:18:35 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -407,7 +407,7 @@ class class_base extends aliasmgr
 			if ($status == PROP_OK)
 			{
 				// that is not set for checkboxes
-				$xval = ($form_data[$property["name"]]) ? $form_data[$property["name"]] : "";
+				$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
 				if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
 				{
 					$xval = (int)$xval;
