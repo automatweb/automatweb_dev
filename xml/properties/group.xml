@@ -37,6 +37,7 @@
             <name>mmodifiedby</name>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <table>groups</table>
             <group>general</group>
             <field>mmodifiedby</field>
@@ -54,6 +55,7 @@
             <name>mcreatedby</name>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <table>groups</table>
             <group>general</group>
             <field>mcreatedby</field>
@@ -144,9 +146,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <dyn_search>
                   <caption>Otsing</caption>
                   <submit>no</submit>

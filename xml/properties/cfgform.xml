@@ -40,6 +40,16 @@
             <caption>Definitsioon</caption>
       </property>
       <property>
+            <name>edit_groups</name>
+            <type>callback</type>
+            <callback>callback_edit_groups</callback>
+            <group>groupdata</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Muuda gruppe</caption>
+      </property>
+      <property>
             <name>navtoolbar</name>
             <type>toolbar</type>
             <group>layout</group>
@@ -122,6 +132,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <groupdata>
+                  <caption>Grupid</caption>
+            </groupdata>
             <layout>
                   <caption>Layout</caption>
                   <submit>no</submit>

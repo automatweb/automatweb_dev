@@ -120,17 +120,6 @@
             <method>serialize</method>
             <caption>Testi filtreid</caption>
       </property>
-      <property>
-            <name>parentfolder</name>
-            <type>hidden</type>
-            <store>no</store>
-            <group>folderadm</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <view>real</view>
-            <caption>Parent folder (sys)</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_MESSENGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -141,8 +130,5 @@
                   <submit>no</submit>
             </main_view>
       </groupinfo>
-      <views>
-            <real>1</real>
-      </views>
 </properties>
 

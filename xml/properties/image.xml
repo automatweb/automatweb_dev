@@ -131,6 +131,7 @@
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
+            <store>no</store>
             <table>objects</table>
             <caption>Uus laius</caption>
       </property>
@@ -141,6 +142,7 @@
             <field>meta</field>
             <method>serialize</method>
             <size>6</size>
+            <store>no</store>
             <table>objects</table>
             <caption>Uus k&amp;otilde;rgus</caption>
       </property>

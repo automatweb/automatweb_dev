@@ -288,6 +288,7 @@
             <name>tm</name>
             <type>textbox</type>
             <size>20</size>
+            <newonly>1</newonly>
             <table>documents</table>
             <group>general</group>
             <field>tm</field>
@@ -463,6 +464,19 @@
             <group>general</group>
             <field>sbt</field>
       </property>
+      <property>
+            <name>cb_part</name>
+            <type>hidden</type>
+            <value>1</value>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>settings</num_1>
+            </group>
+            <store>no</store>
+            <table>documents</table>
+            <field>cb_part</field>
+            <caption>cb_part</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
       </classinfo>
@@ -475,6 +489,7 @@
             </vennastamine>
             <settings>
                   <caption>Seadistused</caption>
+                  <icon>archive.gif</icon>
             </settings>
             <relationmgr>
                   <caption>Seostehaldur</caption>

@@ -255,9 +255,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <chpwd>
                   <caption>Muuda parooli</caption>
             </chpwd>

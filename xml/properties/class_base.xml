@@ -51,13 +51,11 @@
             <group>general</group>
             <caption>Tõlge kinnitatud</caption>
       </property>
-      <classinfo>
-            <trans_id>TR_CLASS_BASE</trans_id>
-      </classinfo>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
                   <default>1</default>
+                  <icon>edit</icon>
             </general>
       </groupinfo>
 </properties>

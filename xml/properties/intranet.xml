@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>showlink</name>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>showlink</field>
+            <caption>Näita</caption>
+      </property>
+      <property>
+            <name>tpldata</name>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>tpldata</field>
+            <caption>alamtemplated</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_INTRANET</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
