@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.142 2003/09/17 14:52:08 kristo Exp $
+// $Id: class_base.aw,v 2.143 2003/09/19 11:17:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -256,11 +256,12 @@ class class_base extends aw_template
 			aw_session_del('added_object');
 		}
 
-		return $this->gen_output(array(
+		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => $added.(isset($content) ? $content : ""),//axel häkkis
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
+		return $rv;
 	}
 
 	////
@@ -708,6 +709,7 @@ class class_base extends aw_template
 				"tp" => &$this->tp,
 				"coredata" => $this->coredata,
 				"request" => $this->request,
+				"view" => &$val["view"],
 			);
 
 			$res = true;
@@ -847,8 +849,6 @@ class class_base extends aw_template
 	// or saving data. 
 	function get_active_properties($args = array())
 	{
-		// properties are all saved in a single file, so sadly
-		// we do need to load them all
 		$no_group = !empty($args["all"]) ? $args["all"] : false;
 		$this->get_all_properties(array(
 			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
@@ -856,7 +856,6 @@ class class_base extends aw_template
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 		));
-
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -888,13 +887,14 @@ class class_base extends aw_template
 			$use_group = "general";
 		};
 
+
 		// and if nothing suitable was found, use the first group from the list
 		if (empty($use_group))
 		{
 			reset($this->groupinfo);
 			list($use_group,) = each($this->groupinfo);
 		};
-
+	
 		if (isset($this->grp_children[$use_group]))
 		{
 			list(,$use_group) = each($this->grp_children[$use_group]);
@@ -927,9 +927,6 @@ class class_base extends aw_template
 			$tables["objects"] = array("index" => "oid");
 		};
 
-		// well .. this is the place where I should somehow someway leave out the
-		// "translation confirmed" property ... if this object is not a translation
-
 		foreach($this->all_props as $key => $val)
 		{
 			if (isset($val["view"]) && empty($this->cb_views[$val["view"]]))
@@ -955,7 +952,6 @@ class class_base extends aw_template
 						$property_list[$key] = $tmp;
 					}
 					elseif (empty($sub_group) && $_grp == $this->activegroup)
-					//elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
 					{
 						$property_list[$key] = $tmp;
 					}
@@ -1029,22 +1025,6 @@ class class_base extends aw_template
 				$property["caption"] = $property_list[$key]["caption"];
 			};
 
-
-			// nyah .. do not create the toolbar instance, if we are submitting the
-			// form. but this approach really sucks
-			if (($property["type"] == "toolbar") && ($this->orb_action != "submit"))
-			{
-				classload("toolbar");
-				$property["toolbar"] = new toolbar();
-			};
-			
-			if (($property["type"] == "table") && ($this->orb_action != "submit"))
-			{
-				load_vcl("table");
-				$property["obj_inst"] = new aw_table(array(
-					"layout" => "generic",
-				));
-			};
 
 			// properties with no group end up in default group
 			if (isset($val["group"]))
@@ -1283,6 +1263,8 @@ class class_base extends aw_template
 		$this->groupinfo = $grpinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
+		$this->inst->all_props = $this->all_props;
+
 		return $this->all_props;
 	}
 
@@ -1294,12 +1276,12 @@ class class_base extends aw_template
 			return false;
 		};
 
-		if ($val["type"] == "toolbar")
+		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
 		};
 		
-		if ($val["type"] == "table")
+		if (($val["type"] == "table") && is_object($val["obj_inst"]))
 		{
 			$val["value"] = $val["obj_inst"]->draw();
 		};
@@ -1508,9 +1490,6 @@ class class_base extends aw_template
 		// while we are generating the output form
 		$callback = method_exists($this->inst,"get_property");
 
-		// need to cycle over the property nodes, do replacements
-		// where needed and then cycle over the result and generate
-		// the output
 		$resprops = array();
 
 		$argblock = array(
@@ -1524,8 +1503,50 @@ class class_base extends aw_template
 
 		$remap_children = false;
 
+		// First we resolve all callback properties, so that get_property calls will
+		// be valid for those as well
 		foreach($properties as $key => $val)
 		{
+			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
+			{
+				$meth = $val["callback"];
+				$vx = $this->inst->$meth($argblock);
+				if (is_array($vx))
+				{
+					foreach($vx as $ekey => $eval)
+					{
+						$this->convert_element(&$eval);
+						$resprops[$ekey] = $eval;
+					};
+				}
+			}
+			else
+			{
+				$resprops[$key] = $val;
+			};
+		}
+
+		$properties = $resprops;
+		$resprops = array();
+
+		// need to cycle over the property nodes, do replacements
+		// where needed and then cycle over the result and generate
+		// the output
+		foreach($properties as $key => $val)
+		{
+			if (($val["type"] == "toolbar") && ($this->orb_action != "submit"))
+			{
+				classload("toolbar");
+				$val["toolbar"] = new toolbar();
+			};
+			
+			if (($val["type"] == "table") && ($this->orb_action != "submit"))
+			{
+				load_vcl("table");
+				$val["obj_inst"] = new aw_table(array(
+					"layout" => "generic",
+				));
+			};
 
 			if (!empty($val["parent"]))
 			{
@@ -1593,20 +1614,7 @@ class class_base extends aw_template
 				// do not show alias manager if  no id
 			}
 			else
-			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
-			{
-				$meth = $val["callback"];
-				$vx = $this->inst->$meth($argblock);
-				if (is_array($vx))
-				{
-					foreach($vx as $ekey => $eval)
-					{
-						$this->convert_element(&$eval);
-						$resprops[$ekey] = $eval;
-					};
-				}
-			}
-			elseif ($val["type"] == "hidden")
+			if ($val["type"] == "hidden")
 			{
 				// do nothing
 				$resprops[$name] = $val;
@@ -1630,6 +1638,7 @@ class class_base extends aw_template
 			};
 		}
 
+	
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
 		// then the result will be name => emb[comment], this simplifies 
@@ -1641,6 +1650,7 @@ class class_base extends aw_template
 			foreach($tmp as $key => $el)
 			{
 				$bracket = strpos($el["name"],"[");
+				// I need to rename the parent attribute as well
 				if ($bracket > 0)
 				{
 					$pre = substr($el["name"],0,$bracket);
@@ -1650,6 +1660,10 @@ class class_base extends aw_template
 				else
 				{
 					$newname = $args["name_prefix"] . "[" . $el["name"] . "]";
+					if (!empty($el["parent"]))
+					{
+						$el["parent"] = $args["name_prefix"] . "_" . $el["parent"];
+					};
 				};
 				$el["name"] = $newname;
 				// just to get an hopefully unique name .. 
@@ -1657,6 +1671,7 @@ class class_base extends aw_template
 			}
 		}
 
+		// now check, whether any properties had parents. if so, remap them
 		if ($remap_children)
 		{
 			$tmp = $resprops;
@@ -1670,7 +1685,7 @@ class class_base extends aw_template
 			}
 		}
 
-		// now check, whether any properties had parents. if so, remap them
+
 		return $resprops;
 	}
 
@@ -1735,6 +1750,7 @@ class class_base extends aw_template
 				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
 					"reltype" => $key,
 				));
+
 			}
 		}
 		
@@ -1976,8 +1992,6 @@ class class_base extends aw_template
 
 		$metadata = array();
 
-		$sync_properties = array();
-
 		$pvalues = array();
 
 		foreach($realprops as $key => $property)
@@ -2068,13 +2082,6 @@ class class_base extends aw_template
 				continue;
 			};
 			*/
-
-			if (empty($property["trans"]))
-			{
-				$sync_properties[] = $property;
-			};
-			
-
 
 			if (($type == "date_select") || ($type == "datetime_select"))
 			{
@@ -2231,40 +2238,6 @@ class class_base extends aw_template
 			));
 		}
 		
-		/*
-		print "<pre>";
-		print_r($sync_properties);
-		print "</pre>";
-		*/
-
-		// alright then .. I'll do the object syncing here?
-		// cause .. that object class thingie feels like trying to drive a bike
-		// with square wheels -- duke
-		/*
-			1) figure out all the the sources and targets of this object
-			2) cycle over them .. and overwrite the fields that are not to 
-				be translated with the current values ... 
-			3) general nastyness
-
-			$orig = $this->db_fetch_row("SELECT source FROM aliases WHERE target = '$oid' AND reltype = " . RELTYPE_TRANSLATION);
-			 1) set base_oid to the current id
-
-			 2) set exclude list to empty array
-
-			 3) check whether base_oid is a target of any translation, if so add it to 
-			    exclude list and reset base_oid to the source of the translation
-
-			 4) get all the translation targets of the base_oid except the ones
-			    in the exclude list
-
-		 	 5) sync them .. and we should be done.
-			 	// yeah well .. that syncing operation is the meat of the whole task ...
-				// I need to overwrite all the values of not-translatable fields
-
-				// faaaak .. this is awful .. it's a freaking reentrant
-				// thing
-
-		*/
 		return true;
 	}
 		
@@ -2452,71 +2425,11 @@ class class_base extends aw_template
 		{
 			$this->id = $this->values["id"];
 		};
-//arr($resprops);
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
 
 		return $resprops;
 	}
-	
-	////
-	// !This works in 2 ways
-	// 1 - sync a single object
-	// 2 - sync a whole mouthful of objects (after a definition is changed for example)
-
-	// fuck, oh fuck, I hate this SO much
-	function sync_property_table($args = array())
-	{
-
-
-
-
-	}
-
-	function sync_object($args = array())
-	{
-		//print "syncing oid = " . $this->id . "<br />";
-		// remove current fields belonging to this object from the property table
-		$id = $this->id;
-
-		$q = "DELETE FROM properties WHERE oid = $id";
-		$this->db_query($q);
-
-		// load the current object data
-		$this->load_obj_data(array("id" => $this->id));
-
-		// figure out all fields that have the search flag set
-		foreach($this->all_props as $key => $val)
-		{
-			if ($val["search"] == 1 && ($val["method"] == "serialize"))
-			{
-				$this->get_value($val);
-				$searchfields[$val["name"]] = $val["value"];
-			};
-		};
-
-		// create new records
-		$fs = new aw_array($searchfields);
-		foreach($fs->get() as $key => $val)
-		{
-			$q = "INSERT INTO properties (oid,pname,pvalue)
-				VALUES ($id,'$key','$val')";
-			$this->db_query($q);
-		};
-
-	}
-
-/*
-mysql> explain select objects.oid,name from objects inner join properties as p_val ON (p_val.oid = objects.oid and p_val.pname = 'right_pane' and p_val.pvalue = 1) inner join properties as p_val2 ON (p_val2.oid = objects.oid and p_val2.pname = 'left_pane' and p_val2.pvalue = 1);
-+---------+--------+---------------+---------+---------+-----------+------+------------+
-| table   | type   | possible_keys | key     | key_len | ref       | rows | Extra      |
-+---------+--------+---------------+---------+---------+-----------+------+------------+
-| p_val   | ref    | oid,name      | name    |      51 | const     |    2 | where used |
-| objects | eq_ref | PRIMARY       | PRIMARY |       4 | p_val.oid |    1 | where used |
-| p_val2  | ref    | oid,name      | name    |      51 | const     |    2 | where used |
-+---------+--------+---------------+---------+---------+-----------+------+------------+
-3 rows in set (0.00 sec)
-*/
 };
 ?>
