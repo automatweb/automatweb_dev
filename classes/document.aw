@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.291 2004/10/29 14:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.292 2004/10/29 19:27:17 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -13,12 +13,11 @@ class document extends aw_template
 		$this->lc_load("document","lc_document");
 		lc_load("definition");
 			
-		$this->style_engine = get_instance("aw_style");
 		// this takes less than 0.1 seconds btw
 		$xml_def = $this->get_file(array("file" => $this->cfg["basedir"]."/xml/documents/defaults.xml"));
 		if ($xml_def)
 		{
-			$this->style_engine->define_styles($xml_def);
+			$this->define_styles($xml_def);
 		}
 
 		// siia tuleks kirja panna koik dokumentide tabeli v2ljade nimed,
@@ -699,7 +698,7 @@ class document extends aw_template
 		
 
 		// all the style magic is performed inside the style engine
-		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
+		$doc["content"] = $this->parse_text($doc["content"]); 
 		
 		$doc["content"] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc["content"]);
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
@@ -4227,6 +4226,39 @@ class document extends aw_template
 					};
 				};
 			};
+		};
+		return $text;
+	}
+
+	// loeb sisse XML formaadis stiilifaili. See kust data tuleb pole enam selle klassi
+	// vaid calleri probleem
+	function define_styles($data)
+	{
+		// that's the whole magic
+		$parser = xml_parser_create();
+		xml_parse_into_struct($parser,$data,&$values,&$tags);
+		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1);
+		xml_parser_free($parser);
+
+		foreach ($values as $element)
+		{
+			if ($element["tag"] == "TAG")
+			{
+				$id = $element["attributes"]["ID"];
+				$this->tags[$id] = $element["value"];
+			};
+		};
+
+	}
+
+	function parse_text($text)
+	{
+		reset($this->tags);
+		foreach ($this->tags as $tag => $val)
+		{
+			$find = sprintf("#%s#(.*)#\\/%s#",$tag,$tag);
+			$val = trim($val);
+			$text = preg_replace("/" . $find . "/isU",$val,$text);
 		};
 		return $text;
 	}
