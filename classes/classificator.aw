@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.15 2004/06/25 19:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.16 2004/07/01 16:10:54 duke Exp $
 
 /*
 
@@ -124,6 +124,12 @@ class classificator extends class_base
 
 			case "radiobuttons":
 				$prop["type"] = "chooser";
+				$prop["options"] = $choices->names();
+				break;
+
+			case "mselect":
+				$prop["type"] = "select";
+				$prop["multiple"] = 1;
 				$prop["options"] = $choices->names();
 				break;
 

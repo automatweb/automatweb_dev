@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.9 2004/06/17 13:57:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.10 2004/07/01 16:10:54 duke Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -174,6 +174,7 @@ class object_type extends class_base
 
 		$types = array(
 			"" => "-vali-",
+			"mselect" => "multiple select",
 			"select" => "select",
 			"checkboxes" => "checkboxid",
 			"radiobuttons" => "radiobuttons",
