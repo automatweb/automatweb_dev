@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.55 2003/07/01 15:28:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.56 2003/07/03 11:54:56 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -491,8 +491,7 @@ class menu extends class_base
 
 			// this puts the result of update_seealso into the save queue
 			case "seealso_refs":
-				$form_data = &$args["form_data"];
-				$form_data["seealso_refs"] = $this->seealso_refs;
+				$data["value"] = $this->seealso_refs;
 				break;
 
 			case "sections":
