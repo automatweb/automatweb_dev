@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.22 2004/05/06 12:24:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.23 2004/06/09 12:58:38 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -503,7 +503,7 @@ class form_actions extends form_base
 			{
 				foreach($meta["activate_on_button"] as $btid)
 				{
-					if ($GLOBALS["HTTP_POST_VARS"]["submit"][$btid] != "" || $GLOBALS["HTTP_POST_VARS"]["bt_url_".$btid."_x"])
+					if ($GLOBALS["HTTP_POST_VARS"]["submit"][$btid] != "" || $GLOBALS["HTTP_POST_VARS"]["bt_url_".$btid."_x"] || $GLOBALS["HTTP_POST_VARS"]["bt_url_".$btid] != "")
 					{
 						$show = true;
 					}
