@@ -1,0 +1,7 @@
+<?xml version='1.0'?>
+<tabledef>
+<data>
+<field name="ord" caption="Jrk" align="center" nowrap="1"/>
+<field name="name" caption="Nimi"/>
+</data>
+</tabledef>
