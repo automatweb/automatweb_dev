@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.7 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.8 2002/09/09 15:35:06 duke Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -176,12 +176,12 @@ class db_stat extends aw_template
 		if ($this->days <= 1)
 		{
 			// 1 päev, näitame väljavõtteid tundide kaupa
-   		$cf = "hour(from_unixtime(tm))";
+   			$cf = "hour(from_unixtime(tm))";
 		}
 		else
 		{
 			// rohkem, kui 1 päev, näitame päevade kaupa
-   		$cf = "dayofmonth(from_unixtime(tm))";
+			$cf = "date_format(from_unixtime(tm),'%m%d%y')";
 		};
 
 		if ($GLOBALS["filter_uid"] != "")
