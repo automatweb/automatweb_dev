@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.6 2004/10/30 13:04:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.7 2005/01/21 13:18:16 duke Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -502,20 +502,21 @@ class survey_manager extends class_base
 	}
 
 	/**
-		@attrib name=process_survey nologin=1
+		@attrib name=process_survey nologin=1 all_args=1
 	**/
 	function process_survey($arr)
 	{
 		$o = new object($arr["survey_id"]);
 		$cform_id = $o->prop("use_cfgform");
 		$survey_data = array();
-		if (is_oid($cform_id) && $this->can("view", $cform_id))
+		/*if (is_oid($cform_id) && $this->can("view", $cform_id))
 		{
 		}
 		else
 		{
 			return false;
 		};
+		*/
 		$cform = new object($cform_id);
 		$use_props = $cform->meta("cfg_proplist");
 		foreach($use_props as $key => $val)
