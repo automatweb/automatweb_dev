@@ -49,9 +49,9 @@ class propcollector extends aw_template
 			// xml file is already up to date
 			$cname = substr(basename($name),0,-3);
 			$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
+			$total++;
 			if (file_exists($targetfile))
 			{
-				$total++;
 				$target_mtime = filemtime($targetfile);
 				$source_mtime = filemtime($name);
 
@@ -90,6 +90,10 @@ class propcollector extends aw_template
 					if (preg_match("/^\s*@property (\w+?) (.*)/",$line,$m))
 					{
 						$this->add_property($m[1],$m[2]);
+					};
+					if (preg_match("/^\s*@layout (\w+?) (.*)/",$line,$m))
+					{
+						$this->add_layout($m[1],$m[2]);
 					};
 					if (preg_match("/^\s*@reltype (\w+?) (.*)/",$line,$m))
 					{
@@ -132,6 +136,7 @@ class propcollector extends aw_template
 		$this->views = array();
 		$this->reltypes = array();
 		$this->forminfo = array();
+		$this->layout = array();
 	}
 
 	function add_property($name,$data)
@@ -211,57 +216,24 @@ class propcollector extends aw_template
 	
 	function add_reltype($name,$data)
 	{
-		$_x = new aw_array(explode(" ",$data));
-		//$fields = array("name" => $name);
-		$fields = array();
-		foreach($_x->get() as $field)
-		{
-			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
-			{
-				// try to split fvalue
-				$_split = explode(",",$fvalue);
-				if (sizeof($_split) > 1)
-				{
-					$fields[$fname] = $_split;
-				}
-				else
-				{
-					$fields[$fname] = $fvalue;
-				};
-			};
-		};
-
+		$fields = $this->_parse_attribs($data);
 		$this->reltypes[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "relation";
 
 	}
+
+	function add_layout($name,$data)
+	{
+		$fields = $this->_parse_attribs($data);
+		$this->layout[$name] = $fields;
+		$this->last_element = "layout";
+	}
+
 	
 	function add_forminfo($name,$data)
 	{
-		$_x = new aw_array(explode(" ",$data));
-		$fields = array();
-		foreach($_x->get() as $field)
-		{
-			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
-			{
-				// try to split fvalue
-				$_split = explode(",",$fvalue);
-				if (sizeof($_split) > 1)
-				{
-					$fields[$fname] = $_split;
-				}
-				else
-				{
-					$fields[$fname] = $fvalue;
-				};
-			};
-		};
-
-		$this->forminfo[$name] = $fields;
-
+		$this->forminfo[$name] = $this->_parse_attribs($data);
 	}
 
 	function set_default($key,$value)
@@ -408,6 +380,11 @@ class propcollector extends aw_template
 			{
 				$arr["properties"]["reltypes"] = $this->reltypes;
 			};
+
+			if (sizeof($this->layout) > 0)
+			{
+				$arr["properties"]["layout"] = $this->layout;
+			};
 			
 			if (sizeof($this->forminfo) > 0)
 			{
@@ -421,6 +398,31 @@ class propcollector extends aw_template
 				"content" => $res,
 			));
 		};
+	}
+	
+	function _parse_attribs($data)
+	{
+		$_x = new aw_array(explode(" ",$data));
+		//$fields = array("name" => $name);
+		$fields = array();
+		foreach($_x->get() as $field)
+		{
+			list($fname,$fvalue) = explode("=",$field);
+			if ($fname && $fvalue)
+			{
+				// try to split fvalue
+				$_split = explode(",",$fvalue);
+				if (sizeof($_split) > 1)
+				{
+					$fields[$fname] = $_split;
+				}
+				else
+				{
+					$fields[$fname] = $fvalue;
+				};
+			};
+		};
+		return $fields;
 	}
 	
 };
