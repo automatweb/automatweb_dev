@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.16 2003/05/15 14:51:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.17 2003/05/15 15:26:29 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -608,18 +608,7 @@ class doc extends class_base
 			$inst->read_any_template($_long);
 		};
 
-		// now I want get the list of "plugins"
-		$tpls = array_keys($inst->v2_templates);
-		$sx = "MAIN.plugin";
-		$plugins = array();
-		foreach($tpls as $key)
-		{
-		    if (preg_match("/MAIN\.plugin\.(\w*)/",$key,$matches))
-		    {
-			$plugins[] = $matches[1];
-		    };
-		};
-		return $plugins;
+		return $inst->get_subtemplates_regex("plugin\.(\w*)");
 	}
 
 
