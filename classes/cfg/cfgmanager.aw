@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.8 2002/11/12 16:52:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.9 2004/03/30 14:41:33 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -9,109 +9,146 @@
 	@default field=meta
 	@default method=serialize
 
-	@property priobj type=objpicker clid=CL_PRIORITY
-	@caption Prioriteedi objekt
+	@property config type=table store=no group=config no_caption=1
+	@caption Tabel
 
-	@property cfgform type=generated generator=callback_get_groups
-	@caption Konfivormid
+	@reltype C_GROUP value=1 clid=CL_GROUP
+	@caption Grupp
 
-	// cfgform on miski array vist
+	@reltype C_CFGFORM value=2 clid=CL_CFGFORM
+	@caption Seadete vorm
+
+	@groupinfo config caption=Seaded
+	@classinfo relationmgr=yes
 
 */
-class cfgmanager extends aw_template
+class cfgmanager extends class_base
 {
+
 	function cfgmanager($args = array())
 	{
 		$this->init(array(
-			'clid' => CL_CFGMANAGER,
+			"clid" => CL_CFGMANAGER,
 		));
 	}
 
-	////
-	// !Metainfo for the class
-	function get_metainfo($key)
+	function get_property($arr)
 	{
-		// XXX: figure out a better way to load those strings
-		$params = array(
-			"title_add" => "Lisa konfiguratsioonihaldur",
-			"title_change" => "Muuda konfiguratsioonihaldurit",
-			"class_id" => CL_CFGMANAGER,
-		);
-
-		return $params[$key];
+		$prop = &$arr["prop"];
+		$rv = PROP_OK;
+		switch($prop["name"])
+		{
+			case "config":
+				$this->get_config_table(&$arr);
+				break;
+		};
+		return $rv;
 	}
 
-	function callback_get_groups($args = array())
+	function set_property($arr)
 	{
-		$fields = array();
-		// now, if the object is loaded AND has a priority object assigned to it, 
-		// generate fields for each member group of the priority object
-		$priobj = (int)$args['obj']['meta']['priobj'];
-		if (!$priobj)
+		$prop = &$arr["prop"];
+		$rv = PROP_OK;
+		switch($prop["name"])
 		{
-			return false;
+			case "config":
+				$arr["obj_inst"]->set_meta("use_form",$arr["request"]["use_form"]);
+				break;
 		};
-	
-		$ginst = get_instance('users');
-		$gdata= $ginst->get_group_picker(array('type' => array(GRP_REGULAR,GRP_DYNAMIC)));
-		// $gdata now contains a list of gid => name pairs
-
-		$pri = get_instance('priority');
-		$grps = new aw_array($pri->get_groups($priobj));
-		// $grps now contains a list of gid => priority pairs
-
-		// now we need to create a select element for each
-		// member of the group. haha. god dammit, I love this
-
-		// and I also need a list of all configuration forms.
-		$cfgforms = $this->list_objects(array('class' => CL_CFGFORM,'addempty' => true));
-		$keycount = 0;
-
-		$fields[] = array('caption' => 'Vali gruppide konfiguratsioonivormid');
-
-		foreach($grps->get() as $gid => $pri)
-		{
-			$keycount++;
-			$fields[] = array(
-					'name' => "cfgform[$gid]",
-					'type' => 'select',
-					'options' => $cfgforms,
-					'caption' => $gdata[$gid],
-					'selected' => $args['prop']['value'][$gid],
-			);
-		};
-		return $fields;
 	}
-	
-	function get_active_cfg_object($id)
-	{
-		$ob = $this->get_object($id);
-		$gidlist = aw_global_get("gidlist");
 
-		$root_id = 0;
-	
-		$max_pri = 0;
-		$max_gid = 0;
-		$pri_inst = get_instance("priority");
-		$grps = $pri_inst->get_groups($ob["meta"]["priobj"]);
-		foreach($gidlist as $ugid)
+	// there are 2 distinct roles
+	// 1 - apply cfgform by group
+	// 2 - apply cfgform to all classes
+
+	function get_config_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => "Grupp",
+		));
+
+		/*
+		$t->define_field(array(
+			"name" => "form",
+			"caption" => "Seadete vorm",
+			"callback" => array(&$this, "callb_form_picker"),
+			"callb_pass_row" => true,
+		));
+		*/
+
+		// I need a list of all connected groups
+		$groups = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_C_GROUP,
+		));
+
+		$grplist = array();
+		foreach($groups as $group)
 		{
-			if ($grps[$ugid])
+			$grplist[$group->prop("to")] = $group->prop("to.name");
+		};
+		
+		$forms = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_C_CFGFORM,
+		));
+
+		$by_subclass = array();
+
+		// I need a subclass for each too
+		$this->formlist = array("" => "");
+		foreach($forms as $form)
+		{
+			$target = $form->to();
+			$subclid = $target->subclass();
+			if (empty($this->formlist[$subclid]))
 			{
-				if ($max_pri < $grps[$ugid])
-				{
-					$max_pri = $grps[$ugid];
-					$max_gid = $ugid;
-				}
-			}
-		}
-		// now we have the gid with max priority
-		if ($max_gid)
+				$this->formlist[$subclid][""] = "";
+			};
+			$this->formlist[$subclid][$form->prop("to")] = $form->prop("to.name");
+			$by_subclass[$target->subclass()]++;
+		};
+		
+		foreach($by_subclass as $subclid => $fubar)
 		{
-			// find the root menu for this gid
-			$max_obj = $ob["meta"]["cfgform"][$max_gid];
+			$t->define_field(array(
+				"name" => "f_" . $subclid,
+				"caption" => $this->cfg["classes"][$subclid]["name"],
+				"callback" => array(&$this, "callb_form_picker"),
+				"callb_pass_row" => true,
+			));
 		}
-		return $max_obj;
+
+
+		$this->use_form = $arr["obj_inst"]->meta("use_form");
+
+		print "<pre>";
+		print_r($use_form);
+		print "</pre>";
+
+		foreach($grplist as $grpid => $grpname)
+		{
+			$data = array(
+				"group" => $grpname,
+				"grpid" => $grpid,
+			);
+			foreach($by_subclass as $subclid => $fubar)
+			{
+				$data["f_" . $subclid] = 0;
+			};
+			$t->define_data($data);
+		};
+	}
+
+	function callb_form_picker($arr)
+	{
+		// how do I figure the current cell?
+		list(,$subclid) = explode("_",$arr["_this_cell"]);
+		return html::select(array(
+			"name" => "use_form[$subclid][" . $arr["grpid"] . "]",
+			"options" => $this->formlist[$subclid],
+			"selected" => $this->use_form[$subclid][$arr["grpid"]],
+		));
 	}
 };
 ?>
