@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.12 2003/07/25 15:46:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.13 2003/07/31 14:42:31 duke Exp $
 // __classname.aw - __name 
 /*
 
@@ -22,6 +22,35 @@ class __classname extends class_base
 			"clid" => __classdef
 		));
 	}
+
+	//////
+	// class_base classes usually need those, uncomment them if you want to use them
+
+	/*
+	function get_property($args)
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+
+		};
+		return $retval;
+	}
+	*/
+
+	/*
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+                {
+
+		}
+		return $retval;
+	}	
+	*/
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
