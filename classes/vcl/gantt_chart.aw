@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.10 2005/03/30 12:55:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.11 2005/03/31 20:05:47 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -256,7 +256,7 @@ class gantt_chart extends class_base
 						}
 
 						### split bars longer than free space in one cell
-						if ( (($bar["start"] + $bar["length"]) >= $cell_end) and ($bar["start"] < $cell_end) )
+						if ( (($bar["start"] + $bar["length"]) > $cell_end) and ($bar["start"] < $cell_end) )
 						{
 							$split_bar = $bar;
 							$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
@@ -411,12 +411,8 @@ class gantt_chart extends class_base
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
+		$this_object = new object($arr["id"]);
+		return $this->draw_chart();
 	}
 
 	// draws given amount of times to the top of the graph, based on the start/end
