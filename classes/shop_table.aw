@@ -536,16 +536,40 @@ class shop_table extends shop_base
 
 		$data = array();
 
-		classload("planner");
-		$pl = new planner;
-		$reps = $pl->get_events(array("start" => $from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
-		if (is_array($reps))
+		if ($it["has_period"] && $it["per_cnt"] > 0)
 		{
-			foreach($reps as $time => $evnt)
+			// if objecxt has some periods attached, get those
+			classload("planner");
+			$pl = new planner;
+			$reps = $pl->get_events(array("start" => $from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
+			if (is_array($reps))
 			{
-				$data[$time] = array("item_id" => $item_id,"period" => $time, "num_sold" => 0);
+				foreach($reps as $time => $evnt)
+				{
+					$data[$time] = array("item_id" => $item_id,"period" => $time, "num_sold" => 0);
+				}
 			}
 		}
+		else
+		{
+			// if not, fake them as weeks if we know the start date
+			if ($it["per_from"] > 1)
+			{
+				// find out the difference in days between the actual date and the showable period start date
+				$diff = ($from - $it["per_from"]) / (24*3600);
+				// now find out the number of days we need to add to the showable period start date to get the correct date
+				$to_add = $diff % 7;
+				$cur_date = $from + ($to_add*24*3600);
+				$cur_date = ($cur_date < $it["per_from"] ? $it["per_from"] : $cur_date);
+				while (($cur_date + 24*3600*7) < $to)
+				{
+					$data[$cur_date] = array("item_id" => $item_id, "period" => $cur_date, "num_sold" => 0);
+					$cur_date += 24*3600*7;
+				}
+			}
+		}
+
+
 		// we must basically show the part of shop_item_period_avail that fits between $from and $to - right?
 		$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = $item_id AND period >= $from AND period <= $to ORDER BY period");
 		while ($row = $this->db_next())
