@@ -220,65 +220,80 @@ class linklist extends aw_template
 
 //see on see tasandite konfinnimise süteem
 
-		$tulpi = $ob["meta"]["tulpi"];
+		$dir = $ob["meta"]["dir"];
 
 		//delete level(s)
-		if ($ob["meta"]["kustuta"])
-		{
-			foreach($ob["meta"]["kustuta"] as $key => $val)
+			foreach($dir as $key => $val)
 			{
-				unset($tulpi[$key]);
+				if ($val["kustuta"])
+					unset($dir[$key]);
 			}
-		}
-
 		// add level
 		if($adding = (int)$ob["meta"]["add_level"])
 		{
-			$tulpi[$adding]	= $ob["meta"]["default_tulpi"];  //anname tasandile algus default tulpade arvu
-			$ob["meta"]["sortby_links"][$adding] = $ob["meta"]["default_sortby_links"];
-			$ob["meta"]["sortby_dirs"][$adding] = $ob["meta"]["default_sortby_dirs"];
-			$ob["meta"]["tulpi"][$adding] = $ob["meta"]["default_tulpi"];
-			$ob["meta"]["level_template"][$adding] = $ob["meta"]["default_template"];
-			$ob["meta"]["jrk_columns"][$adding] = $ob["meta"]["jrk_columns_template"];
+			$dir[$adding]	= $dir[0];
 		}
 	
 		$list_templates = $this->get_templates(SHOW_TPL_DIR);
 		// parse levels
-		if ($tulpi)
+
+if(!$dir[0])$dir[0]=array();
+		if ($dir)
 		{
-			foreach($tulpi as $key =>  $val)
+			foreach($dir as $key =>  $val)
 			{
-				$this->vars(array("tas" => $key,//"val" => $val,
-				"sortby_dirs" => $this->picker($ob["meta"]["sortby_dirs"][$key], $sortim),
-				"sortby_links" => $this->picker($ob["meta"]["sortby_links"][$key], $sortim),
-				"tulpi" => (int)$ob["meta"]["tulpi"][$key]?(int)$ob["meta"]["tulpi"][$key]:$ob["meta"]["default_tulpi"],
-				"jrk_columns" => checked($ob["meta"]["jrk_columns"][$key]),
-				"level_template" => $this->picker($ob["meta"]["level_template"][$key], $list_templates),
-				"sortby_jknr" => checked($ob["meta"]["sortby_jknr"][$key])));
-				$levels[$key] = $this->parse("levels");
+				$this->vars(array(
+					"tas" => $key,//"val" => $val,
+					"sortby_dirs" => $this->picker($dir[$key]["sortby_dirs"], $sortim),
+					"sortby_links" => $this->picker($dir[$key]["sortby_links"], $sortim),
+					"tulpi" => $dir[$key]["tulpi"],
+					"jrk_columns" => checked($dir[$key]["jrk_columns"]),
+					"level_template" => $this->picker($dir[$key]["level_template"], $list_templates),
+					"sortby_jknr" => checked($dir[$key]["sortby_jknr"])));
+					$levels[$key] = $this->parse("levels");
 			}
 			ksort($levels);
 			$levels = implode("",$levels);
 		}
 ///end/tasandid
 
-		//selecting wich link property we wanna see as hyperlink	
-		foreach($linkis as $key =>  $val)
+	foreach($dir as $key=>$val)
+	{
+	$level=$key;
+	$level_style="";
+		foreach($linkis as $key => $val)
 		{
 			$this->vars(array(
-					"mis" => $key,
-					"is_hyper" => checked($ob["meta"]["klikitav"][$key]),
-					"stiilid"=> $this->picker($ob["meta"]["stiil"][$key],$stiilid),
-			));
-			$klikitav.= $this->parse("klikitav");
-		}
+				"mis" => $key,
+				"level" => $level,
+				"jrk" => (int)$ob["meta"]["link"][$level][$key]["jrk"],
+				"hyper" => checked($ob["meta"]["link"][$level][$key]["hyper"]),
+				"show" => checked($ob["meta"]["link"][$level][$key]["show"]),
+				"stiilid" => $this->picker($ob["meta"]["link"][$level][$key]["style"],$stiilid),
+				"text_b" => $ob["meta"]["link"][$level][$key]["text_b"],
+				"text_a" => $ob["meta"]["link"][$level][$key]["text_a"],
+				"br" => checked($ob["meta"]["link"][$level][$key]["br"]),
 
-		$ref = $this->mk_reforb("submit", array("id" =>  $id, "return_url" => urlencode($return_url)));
+			));
+			$level_style.=$this->parse("level_style");
+		}
+			$this->vars(array(
+				"level"=>$level,
+				"level_style"=>$level_style,
+				"text_start"=>$ob["meta"]["link"][$level]["text_start"],
+				"text_end"=>$ob["meta"]["link"][$level]["text_end"],
+				));
+			$level_styles.=$this->parse("level_styles");
+	}
+
+
+//		$ref = $this->mk_reforb("submit", array("id" =>  $id, "return_url" => urlencode($return_url)));
 
 		//gets a list of templates (for linkslist "show")
 
 		$this->vars(array(
-	
+//			"level" => $level,
+			"current_level"=>$ob["meta"]["current_level"],
 				"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
 				"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
 				"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
@@ -287,13 +302,13 @@ class linklist extends aw_template
 			"dir_is_form_result" => checked($ob["meta"]["dir_is_form_result"]),
 			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
 			"default_tulpi" => $ob["meta"]["default_tulpi"],			// default column count
-			"abix" => $ob["meta"]["test"][1][2][8]."test", 
+			"abix" => $ob["meta"]["link"]["default"][jrk]."test", 
 			"is_formentry" => $ob["meta"]["is_formentry"]?checked($ob["meta"]["is_formentry"]):"",		// kas on vormisisestus (radio)
 			"is_not_formentry" => $ob["meta"]["is_formentry"]?"":checked(1),	// kas on vormisisestus (radio)
 			"vormisisestus" => $vormisisestus,				// formentry data (sub)
 			"levels" => $levels,
 			"tasand" => $ob["meta"]["tasand"]?$ob["meta"]["tasand"]:1,
-			"klikitav" => $klikitav,
+			"level_styles" => $level_styles,
 			"name" => $ob["name"],
 			"comment" => $ob["comment"],
 			"active_dirs" => checked($ob["meta"]["active_dirs"]),
@@ -339,10 +354,7 @@ class linklist extends aw_template
 		extract($arr);
 		if ($statconf)
 		{
-
-
 			return $this->mk_my_orb("stats", array_merge($from_date,$till_date,array(
-			"second" => $till_date["second"],
 			"yearly" => $yearly,
 			"monthly" => $monthly,
 			"dayly" => $dayly,
@@ -360,19 +372,25 @@ class linklist extends aw_template
 
 		if ($id)
 		{
+
 			$this->upd_object(array(
+
 				"oid" => $id,
 				"name" => $name,
 				"comment" => $comment,
 				"metadata" => array(
 					"lingiroot" => $lingiroot,
 					"path" => $path,
-"test"=>$test,
-					"tulpi" => $tulpi,
+					"test"=>$test,
+					"current_level"=>$current_level,
+
+					"dir" => $dir,
+					"link"=> $link,
+
 					"jrk_columns" => $jrk_columns,
 					"level_template" => $level_template,
-					"sortby_dirs" => $sortby_dirs,
-					"sortby_links" => $sortby_links,
+				"sortby_dirs" => $sortby_dirs,
+				"sortby_links" => $sortby_links,
 					"kustuta" => $kustuta,
 					"stiil"=>$stiil,
 					"is_formentry" => $is_formentry,
@@ -384,18 +402,20 @@ class linklist extends aw_template
 
 					"jrk_columns_default" => $jrk_columns_default,
 					"default_tulpi" => (int)$default_tulpi?(int)$default_tulpi:1,
+
+
 					"klikitav" => $klikitav,
 
-//					"tas" => $tas,
+					"tas" => $tas,
 					"add_level" => $add_level,
 
 					"active_dirs" => $active_dirs,
 					"active_links" => $active_links,
 
 					"newwindow" => $newwindow,
-					"default_template" => $default_template,
-					"default_sortby_dirs" => $default_sortby_dirs,
-					"default_sortby_links" => $default_sortby_links,
+//					"default_template" => $default_template,
+//					"default_sortby_dirs" => $default_sortby_dirs,
+//					"default_sortby_links" => $default_sortby_links,
 				)
 			));
 		}
@@ -471,14 +491,13 @@ class linklist extends aw_template
 			"link" => $this->mk_my_orb("show",array("cd" => $ob["meta"]["lingiroot"],"id" => $id))
 		);
 
-		$templiit = $ob["meta"]["level_template"][$tase]?$ob["meta"]["level_template"][$tase]:$ob["meta"]["default_template"];
+		$templiit = $ob["meta"]["dir"][$tase]["level_template"]?$ob["meta"]["dir"][$tase]["level_template"]:$ob["meta"]["dir"][$tase][0];
 		$this->read_template("show/".$templiit);
-		$order_dirs = $ob["meta"]["sortby_dirs"][$tase]?$ob["meta"]["sortby_dirs"][$tase]:$ob["meta"]["default_sortby_dirs"];
-		$order_links = $ob["meta"]["sortby_links"][$tase]?$ob["meta"]["sortby_links"][$tase]:$ob["meta"]["default_sortby_links"];
+		$order_dirs = $ob["meta"]["dir"][$tase]["sortby_dirs"]?$ob["meta"]["dir"][$tase]["sortby_dirs"]:$ob["meta"]["dir"][$tase][0];
+		$order_links = $ob["meta"]["dir"][$tase]["sortby_links"]?$ob["meta"]["dir"][$tase]["sortby_links"]:$ob["meta"]["dir"][$tase][0];
 
 		if ($ob["meta"]["path"]) 		//if YAH then parse it
 		$nms=$this->parse_YAH($YAH,"show/".$templiit);
-
 
 
 		// kui  kasutame vormisisestust
@@ -539,18 +558,18 @@ class linklist extends aw_template
 		{
 		// pagan neid tulpi, mul läks kapitaalselt juhe kokku
 		// jääb nii praegult
-			if (!$ob["meta"]["tulpi"][$tase])
+			if (!$ob["meta"]["dir"][$tase]["tulpi"])
 			{
-				$jrku=$ob["meta"]["jrk_columns_default"];
-				$tlpi=$ob["meta"]["default_tulpi"];
+				$jrku=$ob["meta"]["dir"][$tase]["jrk_columns"];
+				$tlpi=$ob["meta"]["dir"][$tase]["tulpi"];
 			}
 			else
 			{
-				if ($ob["meta"]["jrk_columns"][$tase])
+				if ($ob["meta"]["dir"][$tase]["jrk_columns"])
 				{
 					$jrku=1;
 				}
-				$tlpi=$ob["meta"]["tulpi"][$tase];
+				$tlpi=$ob["meta"]["dir"][$tase]["tulpi"];
 			}
 		///////////
 			
@@ -591,7 +610,6 @@ class linklist extends aw_template
 					$tulp = ($total % $tlpi)+1; //siin peaks kuidagi võrdselt ära jagama
 				}
 
-
 				$tulp = $tulp?$tulp:1;
 				$tasand[$tulp][$value["jrk"]].= $this->parse("dir");
 				$total++;
@@ -616,9 +634,45 @@ class linklist extends aw_template
 
 			if ($objects)
 			{
+$level=(int)$tase;
+
 				classload("extlinks");
 				$total2=0;
 				$ll = new extlinks();
+
+				//parsime css
+				foreach($ob["meta"]["link"][$level] as $key => $val)
+				{
+					$s = get_instance("css");
+					$style = $this->get_object($val["style"]);
+					if ($val["style"] && !$css[$val["style"]])
+					{
+						$css[$val["style"]]= "<style>\n".$s->_gen_css_style("style".$style["oid"],$style["meta"]["css"])."</style>";
+					}
+
+
+				}
+				$css=implode("",$css);
+
+					foreach($ob["meta"]["link"][$level] as $key => $val)
+					{
+						if (is_array($val) && $val["show"]){
+							$val["br"]=$val["br"]?"<br />":"";
+							$class=$val["style"]?"class=\"style".$val["style"]."\"":"";
+							if ($val["hyper"]){
+								$linktpl[(int)$val["jrk"]].=$val["text_b"]."<A $class HREF=\"{VAR:link}\" onMouseover=\"window.status='{VAR:url}'; return true\" {VAR:target}>{VAR:".$key."}</A>".$val["text_a"].$val["br"]."\n";
+							}
+							else 
+							{
+								$linktpl[(int)$val["jrk"]].=$val["text_b"]."<span $class>{VAR:".$key."}</span>".$val["text_a"].$val["br"]."\n";
+							}
+						}
+					};
+						ksort($linktpl);
+						$link_tpl=$ob["meta"]["link"][$level]["text_start"];
+						$link_tpl.=implode("",$linktpl);
+						$link_tpl.=$ob["meta"]["link"][$level]["text_end"];
+
 				foreach($objects as $o_key => $o_value)
 				{
 					extract($o_value); //link properties
@@ -626,20 +680,12 @@ class linklist extends aw_template
 					list($url,$target,$caption) = $ll->draw_link($o_key);
 
 					$target=$ob["meta"]["newwindow"]?"target=_blank":"";
-					$this->vars(array("plain_url" => $url));
-				//teeme lingiks kui vaja
-					$arr  = new aw_array($ob["meta"]["klikitav"]);
-					foreach($arr->get() as $val)
-					{
-						$link = $this->mk_my_orb("goto",array("id"  => $oid),"");
-						$u[$val]=$o="<A HREF=\"$link\" onMouseover=\"window.status='$url'; return true\" $target>".$$val."</A>";
-					};
-
-					@extract($u);
-					$this->vars(array(
+					$my_arr=array(
+						"link" => $this->mk_my_orb("goto",array("id"  => $oid),""),
 						"hits" => $this->get_hit($o_key),
 						"url" => $url,
-						"name" => $caption,
+//						$plain_url = $url;
+						"caption" => $caption,
 						"comment" => $comment,
 						"target" => $target,
 						"modified" => $modified,
@@ -648,21 +694,16 @@ class linklist extends aw_template
 						"modified" => $modified,
 						"created" => $created,
 						"jrk" => $jrk,
-						));
-					$links.= $this->parse("links"); //parse links
+					);
+					$links.= $this->localparse($link_tpl,$my_arr); //parse links
 				}
 			}
-		$s = get_instance("css");
 
- 		$day_style = $this->get_object($ob["meta"]["stiil"]);
-		$css = "<style>\n";
-		$css .= $s->_gen_css_style("style".$day_style["oid"],$day_style["meta"]["css"]);
-		$css .= "</style>";
 
 
 		$this->vars(array(
 			"css" => $css,
-			"abix" => $tase."<a href=# class=\"style".$ob["meta"]["stiil"]."\">stiiil</a>",
+			"abix" => "",
 			"nms" => $nms,
 			"total" => (int)$total,
 			"total2" => (int)$total2,
@@ -770,22 +811,12 @@ class linklist extends aw_template
 function write_stat($arr)
 {
 		extract($arr);
-		$in = "insert into lingikogu_stat (oid, uid, action) values ('$oid','$uid','$action')";
+		$now=time();
+		$in = "insert into lingikogu_stat (oid, uid, action,tm) values ('$oid','$uid','$action',$now)";
 		$this->db_query($in);
 }
 
 /////////////////////////////////
-
-
-/*
-	function statsu($arr)
-	{
-		extract($arr);
-//print_r($arr);
-
-		return $this->mk_my_orb("stats", array("year"=>$year,"id" => $id, "return_url" => urlencode($return_url)));
-	}
-*/
 
 
 	function stats($arr)
@@ -799,10 +830,6 @@ function add_cero($dat,$len=2,$cero="0")
 return $dat=strlen($dat)<$len?$cero.(int)$dat:$dat;
 }
 
-extract($from_date);
-$t1=$year.add_cero($month).add_cero($day).add_cero($hour).add_cero($minute).add_cero($second);
-extract($till_date,EXTR_PREFIX_ALL,"_");
-$t1=$year.add_cero($month).add_cero($day).add_cero($hour).add_cero($minute).add_cero($second);
 
 
 if (($from) && ($_till))
@@ -827,39 +854,30 @@ $q = "select * from lingikogu_stat where between '$t1' and '$t2'";
 
 
 $stat_out = $this->show_stats($id,$q);
-/*
-if (!$year)
-{
-	$second=date("s");
-	$minute=date("i");
-	$hour=date("H");
-	$day=date("d");
-	$month=date("m");
-	$year=date("Y");
-}
-*/
 
 		load_vcl("date_edit");
-		$from = new date_edit("active_until");
-		$from->configure(array(
+
+
+echo date_edit::get_timestamp($from_date);
+
+		$from_date = new date_edit("from_date",$tt);
+
+		$from_date->configure(array(
 			"day" => "",
 			"month" => "",
 			"year" => "",
 			"hour" => "",
-			"minute" => ""
+			"minute" => "",
+			"second" => "",
 		));
+
 
 		$this->vars(array(
 		"caunt"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat","caunt"),
 		"caunt_dirs"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=1","caunt"),
 		"caunt_links"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=2","caunt"),
-			"from_date" => $from_date,
-			"till_date" => $till_date,
 			"stat_out"=>$stat_out,
-			"from" => $from->gen_edit_form("from",0),
-			"to" => $from->gen_edit_form("to",0),
-
-
+			"from_date" => $from_date->gen_edit_form("from_date",0),
 			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
 			"abix" => $abix,
 			"name" => $ob["name"],
@@ -875,30 +893,6 @@ if (!$year)
 	
 	function show_stats($id,$q) //id,query,
 	{
-	/*
-
-	$second=date("s");
-	$minute=date("i");
-	$hour=date("H");
-	$day=date("d");
-	$month=date("m");
-	$year=date("Y");
-
-	$sekund="00";
-	$minut="00";
-	$tund="01";
-	$paev="11";
-	$kuu="11";
-	$aasta="2002";
-*/
-
-//$q = "select oid from lingikogu_stat where tyyp = tm between '$t1' and '$t2'"; //vahemik
-
-//$q = "select * from lingikogu_stat where tm between '$t1' and NOW()"; //vahemik
-//$q = "select oid from lingikogu_stat where tm >= $t1"; //alates
-//$q = "select oid from lingikogu_stat where tm <= $t1"; //kuni
-//$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
-//$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
 	
 	$this->db_query($q);
 
