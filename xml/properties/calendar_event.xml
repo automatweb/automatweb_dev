@@ -240,6 +240,27 @@
             <type>classificator</type>
             <caption></caption>
       </property>
+      <property>
+            <name>uimage1</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_PICTURE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+      </property>
+      <property>
+            <name>seealso</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEEALSO</reltype>
+      </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -251,5 +272,17 @@
                   <master_index>brother_of</master_index>
             </planner>
       </tableinfo>
+      <reltypes>
+            <PICTURE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </PICTURE>
+            <SEEALSO>
+                  <value>2</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Vaata lisaks</caption>
+            </SEEALSO>
+      </reltypes>
 </properties>
 
