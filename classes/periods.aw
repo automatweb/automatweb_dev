@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.20 2002/12/20 11:39:43 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.21 2003/01/14 13:43:45 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -316,6 +316,7 @@ class db_periods extends aw_template
 		$old["data"]["image"] = $img->add_upload_image("image",0,$old["data"]["image"]["id"]);
 		$old["data"]["image_link"] = $image_link;
 		$old["data"]["pyear"] = $pyear;
+		$old['data']['comment'] = $comment;
 
 		$dstr = aw_serialize($old["data"]);
 		$this->quote($dstr);
@@ -431,12 +432,13 @@ class periods extends db_periods
 		classload("image");
 		$this->vars(array(
 			"ID" => $cper["id"],
-      "description" => $cper["description"],
+			"description" => $cper["description"],
 			"plist" => $this->period_olist(),
-	    "arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
+			"arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
 			"image" => image::make_img_tag(image::check_url($cper["data"]["image"]["url"])),
 			"image_link" => $cper["data"]["image_link"],
 			"pyear" => $this->picker($cper["data"]["pyear"],array("0" => "--vali--") + $years),
+			"comment" => $cper['data']['comment'],
 			"reforb" => $this->mk_reforb("submit_add", array("id" => $id))
 		));
 		return $this->parse();
