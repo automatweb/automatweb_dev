@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.16 2003/04/15 15:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.18 2003/04/28 16:09:42 kristo Exp $
 
 /*
 
@@ -92,6 +92,32 @@ class gallery_v2 extends class_base
 		return $this->show(array(
 			"oid" => $alias["target"]
 		));
+	}
+
+	////
+	// !this gets the id of an object, and this will scan it's relations
+	// and show a gallery it finds
+	function show_aliased($args = array())
+	{
+		extract($args);
+		if (empty($args["id"]))
+		{
+			return false;
+		};
+		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . $this->clid;
+		$this->db_query($q);
+		$row = $this->db_next();
+		if (is_array($row))
+		{
+			$retval = $this->show(array(
+				"oid" => $row["target"],
+			));
+		}
+		else
+		{
+			$retval = "";
+		};
+		return $retval;
 	}
 
 	function view($args = array())
@@ -726,6 +752,8 @@ class gallery_v2 extends class_base
 		$li = get_instance("vcl/grid_editor");
 		$li->_init_table($l);
 
+		$this->has_images = false;
+
 		$this->vars(array(
 			"num_cols" => $li->get_num_cols(),
 			"layout" => $li->show_tpl($l, $oid, array(
@@ -735,6 +763,11 @@ class gallery_v2 extends class_base
 			)),
 			"name" => $ob['name']
 		));
+
+		if (!$this->has_images)
+		{
+			return "";
+		}
 		return $this->parse();
 	}
 
@@ -803,7 +836,12 @@ class gallery_v2 extends class_base
 				{
 					if ($pd[$row][$col]['img']['id'] == $id)
 					{
-						return $pd[$row][$col];
+						$retval = $pd[$row][$col];
+						// I need to know _where_ the image was y'know
+						$retval["row"] = $row;
+						$retval["col"] = $col;
+						$retval["page"] = $page;
+						return $retval;
 					}
 				}
 			}
@@ -852,6 +890,7 @@ class gallery_v2 extends class_base
 			"row" => $row,
 			"col" => $col
 		))."')";
+		$this->has_images = true;
 
 		$tp = new aw_template;
 		$tp->tpl_init("gallery");
@@ -1394,6 +1433,87 @@ class gallery_v2 extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function show_top_image($args = array())
+	{
+		extract($args);
+		if (empty($args["id"]))
+		{
+			return false;
+		};
+		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . CL_GALLERY_V2;
+		$this->db_query($q);
+		$row = $this->db_next();
+		if (empty($row))
+		{
+			return false;
+		};
+		$target = $this->get_object($args["id"]);
+		$glv = $this->get_object($row["target"]);
+
+		$this->img = get_instance("image");
+		$c_oid = $glv['oid'];
+		$retval = "";
+		if (empty($c_oid))
+		{
+			return "";
+		};
+
+		$c_objs = $this->get_contained_objects(array(
+			"oid" => $c_oid,
+		));
+
+		if (is_array($c_objs) && (sizeof($c_objs) > 0))
+		{
+			// try to locate the highest rated image
+			$where = " objects.oid IN ( " . join(",",array_keys($c_objs)) . ")";
+			$sql = "
+				SELECT
+					objects.oid as oid,
+					rating as val ,
+					objects.name as name,
+					objects.class_id as class_id,
+					hits.hits as hits,
+					images.file as img_file
+				FROM
+					objects
+				LEFT JOIN ratings ON ratings.oid = objects.oid
+				LEFT JOIN g_img_rel ON objects.oid = g_img_rel.img_id
+				LEFT JOIN hits ON hits.oid = objects.oid
+				LEFT JOIN images ON images.id = objects.oid
+				WHERE
+					$where
+				GROUP BY
+					objects.oid
+				ORDER BY rating DESC
+				LIMIT 1";
+			$this->db_query($sql);
+			$row = $this->db_next();
+			$pd = $this->_find_image($row["oid"],$glv);
+			if ($row)
+			{
+				$w = $pd['img']['sz'][0];
+				$h = $pd['img']['sz'][1]+70;
+				$link = "javascript:remote('no',$w,$h,'".$this->mk_my_orb("show_image", array(
+					"id" => $glv['oid'],
+					"page" => $pd["page"],
+					"row" => $pd["row"],
+					"col" => $pd["col"]
+				))."')";
+
+				$tp = new aw_template;
+				$tp->tpl_init("gallery");
+				$tp->read_template("show_v2_top_content.tpl");
+				$tp->vars(array(
+					"link" => $link,
+					"img" => image::make_img_tag(image::check_url($pd['tn']['url'])),
+					//"rating" => $row["val"],
+				));
+				$retval .= $tp->parse();
+			};
+		}
+		return $retval;
 	}
 }
 ?>
