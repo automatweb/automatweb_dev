@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.115 2002/10/15 20:33:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.116 2002/10/18 14:18:59 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1679,6 +1679,23 @@ class core extends db_connector
 		return $this->db_next();
 	}
 
+	function req_mk_my_orb_part($k,$v, $sep)
+	{
+		foreach($v as $k2 => $v2)
+		{
+			if (is_array($v2))
+			{
+				$stra[] = $this->req_mk_my_orb_part($k."[$k2]", $v2, $sep);
+			}
+			else
+			{
+				$stra[] = $k."[$k2]=".$v2;
+			}
+		}
+		$str = join($sep,$stra);
+		return $str;
+	}
+
 	////
 	// !my proposed version of da ORB makah!
 	// the idea is this that it determines itself whether we go through the site (index.aw)
@@ -1716,12 +1733,7 @@ class core extends db_connector
 		{
 			if (is_array($v))
 			{
-				$stra = array();
-				foreach($v as $k2 => $v2)
-				{
-					$stra[] = $k."[$k2]=".$v2;
-				}
-				$str = join($separator,$stra);
+				$str = $this->req_mk_my_orb_part($k,$v, $separator);
 			}
 			else
 			{
