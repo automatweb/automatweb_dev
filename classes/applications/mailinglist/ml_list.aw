@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.6 2004/12/23 09:20:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.7 2004/12/27 09:02:20 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
 	@default field=meta
 	@default method=serialize
+	
+	HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 	
 	------------------------------------------------------------------------
 	@default group=general
@@ -185,6 +187,21 @@ class ml_list extends class_base
 			"clid" => CL_ML_LIST,
 		));
 		lc_load("definition");
+	}
+
+	function on_mconnect_to($arr)
+	{
+		$con = &$arr["connection"];
+		if($con->prop("from.class_id") == CL_ML_LIST && $con->prop("reltype") == 6)
+		{
+			$obj = $con->from();
+			$fld = $obj->prop("msg_folder");
+			if(empty($fld))
+			{
+				$obj->set_prop("msg_folder", $con->prop("to"));
+				$obj->save();
+			}
+		}
 	}
 
 
@@ -471,6 +488,7 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])
 				{
@@ -482,7 +500,7 @@ class ml_list extends class_base
 					}
 				}
 				break;
-				
+			*/
 			case "sub_form_type":
 				$prop["options"] = array(
 					"0" => "liitumine",
@@ -605,6 +623,7 @@ class ml_list extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])
 				{
@@ -615,7 +634,7 @@ class ml_list extends class_base
 					}
 				}
 				break;
-				
+			*/
 			case "import_textfile":
 				$imp = $_FILES["import_text_file"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -700,7 +719,20 @@ class ml_list extends class_base
 		};
 	}
 	
-
+	function get_all_members($id)
+	{
+		$member_list = array();
+		$mem_list = new object_list(array(
+			"parent" => $id,
+			"class_id" => CL_ML_MEMBER,
+		));
+		foreach($mem_list->arr() as $mem)
+		{
+			$member_list[$mem->prop("name")] = $mem->prop("mail");
+		}
+		return $member_list;
+	}
+	
 	////
 	// !Imports members from a text file / or text block
 	// text(string) - member list, comma separated
@@ -710,11 +742,16 @@ class ml_list extends class_base
 		$lines = explode("\n",$arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = $list_obj->prop("def_user_folder");
+		if(!is_oid($fld) || !$this->can("add", $fld))
+		{
+			return false;
+		}
 		$fld_obj = new object($fld);
 		if($fld_obj->class_id() != CL_MENU)
 		{
 			return false;
 		}
+		$members = $this->get_all_members($fld);
 		$name = $fld_obj->name();
 		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
 		set_time_limit(0);
@@ -745,9 +782,9 @@ class ml_list extends class_base
 				$name = trim($name);
 				$addr = trim($addr);
 
-				if (is_email($addr))
+				if (is_email($addr) && !in_array($addr, $members))
 				{
-					print "OK - n:$name, a:$addr<br />";
+					print "OK - nimi: $name, aadress: $addr<br />";
 					flush();
 					$cnt++;
 					$retval = $ml_member->subscribe_member_to_list(array(
@@ -756,12 +793,18 @@ class ml_list extends class_base
 						"list_id" => $list_obj->id(),
 					));
 					usleep(500000);
+					$members[] = $addr;
+				}
+				elseif(in_array($addr, $members))
+				{
+					print "Juba olemas listis - nimi: $name, aadress: $addr<br />";
+					flush();
 				}
 				else
 				{
-					print "IGN - n:$name, a:$addr<br />";
+					print "Vale aadress - nimi: $name, aadress: $addr<br />";
 					flush();
-				};
+				}
 			};
 		};
 		print "Importisin $cnt aadressi<br>";
@@ -853,6 +896,7 @@ class ml_list extends class_base
 		$t->set_default_sorder("desc");
 		$q = "SELECT DISTINCT m.mail FROM ml_sent_mails m LEFT JOIN objects ON (objects.oid = m.mail) WHERE objects.status != 0";
 		$fld = $arr["obj_inst"]->prop("msg_folder");
+		//arr($fld);
 		$mls = array();
 		$this->db_query($q);
 		while($w = $this->db_next())
@@ -861,7 +905,7 @@ class ml_list extends class_base
 		}
 		$mails = new object_list(array(
 			"class_id" => CL_MESSAGE,
-			"parent" => (!empty($fld) ? $fld : $arr["obj_inst"]->parent()),
+			"parent" => !empty($fld) ? $fld : $arr["obj_inst"]->parent(),
 		));
 		foreach($mails->arr() as $mail)
 		{
@@ -1692,6 +1736,7 @@ class ml_list extends class_base
 		// for starters I'll use the one from the list object itself
 		#$msg_data["parent"] = $arr["obj_inst"]->parent();
 		$msg_data["mto"] = $arr["obj_inst"]->id();
+		$folder = $arr["obj_inst"]->prop("msg_folder");
 		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
 		{
 			$msg_obj = obj();
@@ -1719,7 +1764,7 @@ class ml_list extends class_base
 			$template = $o->prop("content");
 			$message = $msg_data["message"];
 			$al = get_instance("aliasmgr");
-			$al->parse_oo_aliases($msg_data["id"],&$message);
+			$al->parse_oo_aliases($msg_data["id"], &$message);
 			if ($o->prop("is_html") == 1)
 			{
 				$message = nl2br($message);
@@ -1747,7 +1792,7 @@ class ml_list extends class_base
 			$tpl_obj = new object($msg_data["template_selector"]);
 			if ($tpl_obj->prop("is_html") == 1)
 			{
-				$msg_obj->set_prop("html_mail",1024);
+				$msg_obj->set_prop("html_mail", 1024);
 			};
 			
 			$msg_obj->save();
