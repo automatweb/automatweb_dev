@@ -46,6 +46,15 @@
 			</function>
 		</action>
 
+		<action name="delete_repeater">
+                        <function name="delete_repeater">
+                                <arguments>
+                                        <required name="id" type="int"/>
+                                        <required name="cycle" type="int"/>
+                                </arguments>
+                        </function>
+                </action>
+
 		<action name="do_events" nologin="1" default="1">
 			<function name="do_events">
 				<arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.9 2003/02/05 10:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.10 2003/02/20 13:33:56 duke Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -644,6 +644,21 @@ class scheduler extends aw_template
 		$this->mk_path($obj["parent"],"<a href='$chlink'>$obj[name]</a> / <a href='$schedlink'>M‰‰ra scheduleri kellaajad</a>");
 		return $this->parse();
 	}
+
+	////
+	// !Deletes a repeater.
+	function delete_repeater($args = array())
+	{
+		extract($args);
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "repeaters" . $cycle,
+			"delete_key" => true,
+		));
+
+		return $this->mk_my_orb("set_time",array("id" => $id));
+        }
+
 
 }
 ?>
