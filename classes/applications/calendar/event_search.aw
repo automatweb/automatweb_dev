@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.26 2005/01/25 09:09:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.27 2005/01/25 10:58:36 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -741,11 +741,13 @@ class event_search extends class_base
 			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 			$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+			$search["lang_id"] = array();
+			$search["site_id"] = array();
 			$ft_fields = $ob->prop("ftsearch_fields");
 			if ($arr["fulltext"])
 			{
 				$or_parts = array("name" => "%" . $arr["fulltext"] . "%");
-				foreach($ft_fields as $ft_field)
+				foreach(safe_array($ft_fields) as $ft_field)
 				{
 					$or_parts[$ft_field] = "%" . $arr["fulltext"] . "%";
 				}
@@ -758,7 +760,11 @@ class event_search extends class_base
 			{
 				$obj = obj($arr["evt_id"]);
 				$orig = $obj->get_original();
-				$search = array("oid" => $orig->id());
+				$search = array(
+					"oid" => $orig->id(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
 			}
 			$clinf = aw_ini_get("classes");
 			$edata = array();
@@ -777,11 +783,18 @@ class event_search extends class_base
 				{
 					$ol = new object_list($search);
 					$oris = $ol->brother_ofs();
+					if($rn2)
+					{
 					$search2 = $search;
 					$search2["parent"] = $parx2;
 					$ol = new object_list($search2);
 					$oris2 = $ol->brother_ofs();
 					$ids = array_intersect($oris2, $oris);
+					}
+					else
+					{
+						$ids = $oris;
+					}
 					if(!empty($ids))
 					{
 						$ol = new object_list(array(
@@ -792,6 +805,8 @@ class event_search extends class_base
 							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
 							"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
 							"sort_by" => "planner.start",
+							"lang_id" => array(),
+							"site_id" => array(),
 						));
 					}
 					else
@@ -799,7 +814,6 @@ class event_search extends class_base
 						$ol = new object_list();
 					}
 				}
-				
 				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
