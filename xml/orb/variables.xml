@@ -4,13 +4,37 @@
 		<action name="gen_list">
 			<function name="gen_list">
 				<arguments>
-					<optiona name="parent"/>
+					<optional name="parent"/>
 				</arguments>
 			</function>
 		</action>
 		
 		<action name="list_stamps">
 			<function name="list_stamps"/>
+		</action>
+		
+		<action name="add_stamp">
+			<function name="add_stamp"/>
+		</action>
+		
+		<action name="change_stamp">
+			<function name="change_stamp">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_stamp">
+			<function name="submit_stamp"/>
+		</action>
+		
+		<action name="delete_stamp">
+			<function name="delete_stamp">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
 		</action>
 		
 	</class>
