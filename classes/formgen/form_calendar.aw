@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.5 2002/12/11 12:52:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.6 2003/01/09 13:27:15 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -816,6 +816,7 @@ class form_calendar extends form_base
 			};
 
 			$__rel = $args["post_vars"][$row["el_relation"]];
+			// gah, this sucks so much
 			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 			$_rel = (int)$m[1];
 
@@ -832,6 +833,149 @@ class form_calendar extends form_base
 		// reap the old relations, we are creating new ones anyway
 		$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
 		$this->db_query($q);
+	}
+
+	function fg_define_calendar($args = array())
+	{
+		extract($args);
+		// generates a HTML form for defining a calendar.
+		// it consists of the following elements:
+		// 1 - el_event_start
+		// 2 - el_event_end
+		// 3 - el_event_count
+		// 4 - el_event_period
+		// 5 - el_event_release
+		// all of those elements have the type select
+		
+		// additionally, I want to display one element of type 3 for each 
+		// textbox/count element in the form
+		$this->read_template("define_calendar.tpl");
+		$count_els = new aw_array($els_count);
+		$count_lines = "";
+		$picks = array("0" => "--vali--");
+		$textboxes = array("0" => "--vali--");
+		foreach($all_els as $key => $val)
+		{
+			if ( ($val["type"] == "textbox") || ($val["type"] == "textarea") || ($val["type"] == "select") )
+			{
+				if ($val["subtype"] != "count")
+				{
+					$picks[$key] = $val["name"];
+				};
+			};
+
+			if (($val["type"] == "textbox") && ($val["subtype"] != "count"))
+			{
+				$textboxes[$key] = $val["name"];
+			};
+		};
+
+		foreach($count_els->get() as $key => $val)
+		{
+			if ($key)
+			{
+				$this->vars(array(
+					"el" => $val,
+					"el_id" => $key,
+					"els" => $this->picker($arr["amount_el"][$key],$picks),
+				));
+				$count_lines .= $this->parse("count_lines");
+			};
+		};
+		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
+		$release_type = ($arr["release_type"]) ? $arr["release_type"] : 1;
+		$units = array("0" => "minut","1" => "tund","2" => "päev");
+		$this->vars(array(
+			"els_start" => $this->picker($arr["el_event_start"],$els_start),
+			"els_end" => $this->picker($arr["el_event_end"],$els_end),
+			#"els_count" => $this->picker($arr["el_event_count"],$els_count),
+			"count_lines" => $count_lines,
+			"els_period" => $this->picker($arr["el_event_period"],$els_period),
+			"els_release" => $this->picker($arr["el_event_release"],$els_release),
+			"textboxes" => $this->picker($arr["release_textbox"],$textboxes),
+			"per_type_1_check" => checked($period_type == 1),
+			"per_type_2_check" => checked($period_type == 2),
+			"rel_type_1_check" => checked($release_type == 1),
+			"rel_type_2_check" => checked($release_type == 2),
+			"per_unit_type" => $this->picker($arr["per_unit_type"],$units),
+			"release_unit_type" => $this->picker($arr["release_unit_type"],$units),
+			"per_amount" => $arr["per_amount"],
+			"reforb"        => $this->mk_reforb("submit_calendar", array("id" => $id),"form"),
+		));
+		$retval = $this->parse();
+		return $retval;
+	}
+
+	function fg_update_cal_conf($args = array())
+	{
+		// I need to pass post_vars
+		// and $this->arr
+		$post_vars = &$args["post_vars"];
+		$arr = &$args["arr"];
+
+		// this is where we have to check the types
+		$_start = date_edit::get_timestamp($post_vars[$arr["el_event_start"]]);
+		// XXX: adding 86399 is just plain stupid
+		$_end = date_edit::get_timestamp($post_vars[$arr["el_event_end"]]) + 86399;
+		// now we need to cycle over all the $this->arr["el_amount"] elements and update
+		// the bloody records
+		
+		$_types = array(
+			"minute" => "0",
+			"hour" => "1",
+			"day" => "2",
+		);
+		
+		$cal_id = (int)$args["cal_id"];
+		$cal_relation = (int)$args["cal_relation"];
+
+		$amount_els = new aw_array($arr["amount_el"]);
+		
+		$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
+		$this->db_query($q);
+
+		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
+		$release_type = ($arr["release_type"]) ? $arr["release_type"] : 1;
+	
+		$_oid = $args["id"];
+		$_eid = $args["entry_id"];
+
+		foreach($amount_els->get() as $el_with_value => $count_el_id)
+		{
+		
+			// no such thing anymore, I need to cycle over all the count elements
+			// $_cnt = $post_vars[$arr["el_event_count"]];
+			// calculate the correct data for period based on the period setting
+			if ($period_type == 1)
+			{
+				$_period = $post_vars[$arr["el_event_period"] . "_count"];
+				$_pertype = $_types[$post_vars[$arr["el_event_period"] . "_type"]];
+			}
+			elseif ($period_type == 2)
+			{
+				$_period = (int)$arr["per_amount"];
+				$_pertype = (int)$arr["per_unit_type"];
+			}
+
+			if ($release_type == 1)
+			{
+				$_release = $post_vars[$arr["el_event_release"] . "_count"];
+				$_reltype = $_types[$post_vars[$arr["el_event_release"] . "_type"]];
+			}
+			elseif ($release_type == 2)
+			{
+				$_release = $post_vars[$arr["release_textbox"]];
+				$_reltype = $arr["release_unit_type"];
+			};
+
+			$_cnt = (int)$post_vars[$el_with_value];
+
+			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,
+				max_items,period,period_cnt, release,release_cnt,entry_id,count_el_id)
+				VALUES ('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt',
+				'$_pertype','$_period','$_reltype', '$_release','$_eid','$count_el_id')";
+			$this->db_query($q);
+		};
 	}
 
 };

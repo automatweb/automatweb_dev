@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.16 2003/01/03 13:53:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.17 2003/01/09 13:27:15 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1372,32 +1372,15 @@ class form extends form_base
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
 		{
 			$fc = get_instance("formgen/form_calendar");
-			$_start = date_edit::get_timestamp($this->post_vars[$this->arr["el_event_start"]]);
-			$_end = date_edit::get_timestamp($this->post_vars[$this->arr["el_event_end"]]) + 86399;
-			$_cnt = $this->post_vars[$this->arr["el_event_count"]];
-			$_types = array(
-				"hour" => "1",
-				"day" => "2",
-			);
-			$_period = $this->post_vars[$this->arr["el_event_period"] . "_count"];
-			$_release = $this->post_vars[$this->arr["el_event_release"] . "_count"];
-			$_pertype = $_types[$this->post_vars[$this->arr["el_event_period"] . "_type"]];
-			$_reltype = $_types[$this->post_vars[$this->arr["el_event_release"] . "_type"]];
-			$_oid = $this->id;
-			$_eid = $this->entry_id;
-			
-			$cal_id = (int)$cal_id;
-			$cal_relation = (int)$cal_relation;
-
-			$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
-			$this->db_query($q);
-
-			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,max_items,period,period_cnt,
-						release,release_cnt,entry_id) VALUES 
-						('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
-						'$_release','$_eid')";
-
-			$this->db_query($q);
+			// this is where we have to check the types
+			$fc->fg_update_cal_conf(array(
+				"post_vars" => &$this->post_vars,
+				"arr" => &$this->arr,
+				"id" => &$this->id,
+				"entry_id" => &$this->entry_id,
+				"cal_id" => &$cal_id,
+				"cal_relation" => &$cal_relation,
+			));
 		}
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
 		{
@@ -5316,6 +5299,8 @@ class form extends form_base
 
 		$els_start = $els_end = $els_count = $els_period = $els_release = array("0" => " -- Vali --");
 
+
+
 		foreach($_els as $key => $val)
 		{
 			if ( ($val["type"] == "date") && ($val["subtype"] == "from") )
@@ -5343,6 +5328,22 @@ class form extends form_base
 				$els_release[$key] = $val["name"];
 			};
 
+		};
+			
+		if ($this->subtype == FSUBTYPE_CAL_CONF)
+		{
+			$fc = get_instance("formgen/form_calendar");
+			$_cont = $fc->fg_define_calendar(array(
+				"els_start" => &$els_start,
+				"els_end" => &$els_end,
+				"els_count" => &$els_count,
+				"els_period" => &$els_period,
+				"els_release" => &$els_release,
+				"arr" => &$this->arr,
+				"id" => $this->id,
+				"all_els" => &$_els,
+			));
+			return $this->do_menu_return($_cont);				
 		};
 
 		$this->get_objects_by_class(array("class" => CL_FORM));
@@ -5461,11 +5462,21 @@ class form extends form_base
 		$this->arr["event_display_table"] = $event_display_table;
 		$this->arr["event_start_el"] = $event_start_el;
 
+		// those are defined for FSUBTYPE_CAL_CONF
 		$this->arr["el_event_start"] = $el_event_start;
 		$this->arr["el_event_end"] = $el_event_end;
 		$this->arr["el_event_count"] = $el_event_count;
 		$this->arr["el_event_period"] = $el_event_period;
 		$this->arr["el_event_release"] = $el_event_release;
+
+		$this->arr["amount_el"] = $amount_el;
+		$this->arr["period_type"] = $period_type;
+		$this->arr["release_type"] = $release_type;
+
+		$this->arr["per_amount"] = $per_amount;
+		$this->arr["per_unit_type"] = $per_unit_type;
+		$this->arr["release_textbox"] = $release_textbox;
+		$this->arr["release_unit_type"] = $release_unit_type;
 
 		if ($this->subtype  & FSUBTYPE_CAL_CONF2)
 		{
