@@ -352,6 +352,7 @@ class aw_site extends class_base
 		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/templates/* ".$site['docroot']."/templates/");
 		$si->add_cmd("find ".$site['docroot']."/templates/ -type f -exec chmod 666 {} \;");
+		$si->add_cmd("find ".$site['docroot']."/templates/ -type d -exec chmod 777 {} \;");
 		$si->exec();
 		$log->add_line(array(
 			"uid" => "System",
@@ -786,7 +787,8 @@ class aw_site extends class_base
 		$site['server_ip'] = aw_ini_get('install.default_ip');
 		$site['admin_folder'] = aw_ini_get('install.admin_folder');
 		$site['db_name'] = str_replace(".","",$ob['meta']['site_url']);
-		$site['db_user'] = substr(md5(str_replace(".","",$ob['meta']['site_url'])), 0, 15);
+		// db users in mysql MUST begin with a letter, not number ...
+		$site['db_user'] = "a".substr(md5(str_replace(".","",$ob['meta']['site_url'])), 0, 14);
 		$site['db_pwd'] = generate_password();
 		$site['site_obj'] = $ob['meta'];
 		return $site;
