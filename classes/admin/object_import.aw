@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.10 2004/06/17 13:43:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.11 2004/07/08 10:59:50 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -173,6 +173,10 @@ class object_import extends class_base
 
 			case "folders":
 				$arr["obj_inst"]->set_meta("fld_values", $arr["request"]["values"]);
+				break;
+			
+			case "status":
+				$prop["value"] = STAT_ACTIVE;
 				break;
 		}
 		return $retval;
@@ -448,7 +452,6 @@ class object_import extends class_base
 		if ($o->prop("ds"))
 		{
 			set_time_limit(0);
-
 			$sc = get_instance("scheduler");
 			$sc->add(array(
 				"event" => $this->mk_my_orb("do_check_import"),
