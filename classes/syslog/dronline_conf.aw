@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.10 2003/10/30 16:08:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.11 2004/02/17 20:38:55 duke Exp $
 /*
 
 @default table=objects
@@ -88,12 +88,12 @@ class dronline_conf extends class_base
 			$prop['options'] = $ui->get_user_picker(array('add_empty' => true));
 		}
 		else
-		if ($prop['name'] == 'from' && !$arr['obj']['oid'])
+		if ($prop['name'] == 'from' && $arr['new'])
 		{
 			$prop['value'] = mktime(0,0,0,1,1,date("Y"));
 		}
 		else
-		if ($prop['name'] == 'to' && !$arr['obj']['oid'])
+		if ($prop['name'] == 'to' && !$arr['new'])
 		{
 			$prop['value'] = time();
 		}

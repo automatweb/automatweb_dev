@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.25 2004/02/17 20:42:35 duke Exp $
 
 /*
 
@@ -1240,9 +1241,9 @@ class dronline extends class_base
 			$prop['options'] = $this->tablist;
 		}
 		else
-		if ($prop['name'] == 'bg_query_status' && $arr['obj']['oid'])
+		if ($prop['name'] == 'bg_query_status' && !$arr['new'])
 		{
-			$q = 'SELECT status FROM dronline_bg_status WHERE id = '.$arr['obj']['oid'];
+			$q = 'SELECT status FROM dronline_bg_status WHERE id = '.$arr['obj_inst']->id();
 			$prop['value'] = $this->statuses[$this->db_fetch_field($q,"status")];
 		}
 		else
@@ -1251,9 +1252,9 @@ class dronline extends class_base
 			$prop['value'] = 'Uuenda p&auml;ringute&nbsp;cache';
 		}
 		else
-		if ($prop['name'] == 'bg_query_created' && $arr['obj']['oid'])
+		if ($prop['name'] == 'bg_query_created' && !$arr['new'])
 		{
-			$q = 'SELECT tm FROM dronline_bg_status WHERE id = '.$arr['obj']['oid'];
+			$q = 'SELECT tm FROM dronline_bg_status WHERE id = '.$arr['obj_inst']->id();
 			$prop['value'] = $this->time2date($this->db_fetch_field($q,"tm"),2);
 		}
 		else
@@ -1280,25 +1281,25 @@ class dronline extends class_base
 		$prop = &$arr['prop'];
 		if ($prop['name'] == 'save_as_obj')
 		{
-			if ($arr['form_data']['save_as_obj'] == 1)
+			if ($arr['request']['save_as_obj'] == 1)
 			{
 				// do_save_as_log_obj
-				$param = $arr['form_data'];
-				$param+=$arr['form_data']['extraids'];
+				$param = $arr['request'];
+				$param+=$arr['request']['extraids'];
 				$param['ret_query'] = true;
-				$param['dro_tab'] = $arr['form_data']['extraids']['dro_tab'];
-				$fn = '_do_'.$arr['form_data']['extraids']['dro_tab'];
+				$param['dro_tab'] = $arr['request']['extraids']['dro_tab'];
+				$fn = '_do_'.$arr['request']['extraids']['dro_tab'];
 
 				$q = $this->$fn($param);
 				$this->quote(&$q);
 
 				$nid = $this->new_object(array(
-					'name' => $arr['form_data']['save_as_obj_name'],
+					'name' => $arr['request']['save_as_obj_name'],
 					'class_id' => CL_DRONLINE_LOG,
-					'parent' => $arr['obj']['parent'],
+					'parent' => $arr['obj_inst']->parent(),
 					'metadata' => array(
-						'dro_type' => $arr['form_data']['extraids']['dro_tab'],
-						'cur_range' => $arr['form_data']['extraids']['cur_range'],
+						'dro_type' => $arr['request']['extraids']['dro_tab'],
+						'cur_range' => $arr['request']['extraids']['cur_range'],
 						'query' => $q,
 						'conf_desc' => $this->get_conf_desc($param)
 					)
