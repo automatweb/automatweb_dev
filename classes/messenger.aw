@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.60 2001/06/13 14:43:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.61 2001/06/13 18:26:28 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -516,12 +516,16 @@ class messenger extends menuedit_light
 		$cnt = 1;
 		$g = "";
 		$gl = "";
+		$garr = "";
+		$gd = 0;
 	
 		foreach($grps as $oid => $name)
 		{
 			$this->vars(array(
 					"oid" => $oid,
+					"gid" => $oid,
 				));
+
 			if (is_array($entries_by_parent[$oid]))
 			{
 				foreach($entries_by_parent[$oid] as $key => $gname)
@@ -529,28 +533,23 @@ class messenger extends menuedit_light
 					$this->vars(array(
 							"id" => $key,
 							"name" => $gname,
+							"gd" => $gd,
 						));
 					$gl .= $this->parse("gline");
+					$garr .= $this->parse("garr");
+					$gd++;
 				};
 			};
+
 			$this->vars(array("gline" => $gl));
 			$gl = "";
 			$g .= $this->parse("group");
 		};
-		/*
-		while($row = $this->db_next())
-		{
-			$groups[$row["oid"]] = $row["name"];
-			$this->vars(array(
-					"oid" => $row["oid"],
-					"name" => $row["name"],
-			 	));
-			$g .= $this->parse("group");
-		};
-		*/
+		$dummy = array("0" => "Kõik");
 		$this->vars(array(
-				"groups" => $this->picker(-1,$this->flatlist),
+				"groups" => $this->picker(-1,$dummy + $this->flatlist),
 				"group" => $g,
+				"garr" => $garr,
 				"hf" => $udata["home_folder"],
 			));
 		print $this->parse();
