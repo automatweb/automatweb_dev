@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.88 2003/06/04 19:19:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.89 2003/06/17 11:59:57 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -201,21 +201,15 @@ class users extends users_user
 			));
 
 			$cc = ""; $cd = ""; $cpw = "";
-			if ($users[$row["uid"]]["can_change"])
-			{
-				$cc = $this->parse("CAN_CHANGE");
-				$cpw = $this->parse("CAN_PWD");
-			}
+			$cc = $this->parse("CAN_CHANGE");
+			$cpw = $this->parse("CAN_PWD");
 
 			if ($row["join_grp"] == "")
 			{
 				$cc = "";
 			};
 
-			if ($users[$row["uid"]]["can_del"])
-			{
-				$cd = $this->parse("CAN_DEL");
-			}
+			$cd = $this->parse("CAN_DEL");
 			$this->vars(array(
 				"CAN_CHANGE" => $cc, 
 				"CAN_DEL" => $cd, 
@@ -525,10 +519,13 @@ class users extends users_user
 				}
 			}
 
+			$a_uid = $add_state["uid"];
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
-			$this->_log(ST_USERS, SA_ADD, $add_state["uid"]." was added from admin interface by ".aw_global_get("uid"));
-			return $this->mk_orb("gen_list", array());
+			$this->_log(ST_USERS, SA_ADD, $a_uid." was added from admin interface by ".aw_global_get("uid"));
+			return $this->mk_my_orb("change", array(
+				"id" => $this->get_oid_for_uid($a_uid)
+			),"user");
 		}
 		else
 		{
