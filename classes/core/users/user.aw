@@ -308,7 +308,7 @@ class user extends class_base
 	{
 		$gl = $this->users->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
 		// now, get all RELTYPE_GRP aliases and remove all others from this list
-		$als = $this->get_aliases(array(
+		/*		$als = $this->get_aliases(array(
 			"oid" => $this->users->get_oid_for_uid($uid),
 			"reltype" => RELTYPE_GRP
 		));
@@ -318,7 +318,7 @@ class user extends class_base
 			$_gid = $this->users->get_gid_for_oid($alias["target"]);
 			$_gl[$_gid] = $gl[$_gid];		
 		}
-		$gl = $_gl;
+		$gl = $_gl;*/
 
 		// get all groups this user is member of
 		$groups = $this->users->getgroupsforuser($uid);
@@ -763,6 +763,11 @@ class user extends class_base
 			'sortable' => 1,
 		));
 		return $t;
+	}
+
+	function add($arr)
+	{
+		return $this->users->add_user($arr);
 	}
 }
 ?>
