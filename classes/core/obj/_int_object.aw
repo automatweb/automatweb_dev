@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
 
@@ -1210,7 +1210,8 @@ class _int_object
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent) && $GLOBALS["object_loader"]->ds->object_exists($parent))
 			{
-				$t = obj($parent);
+				unset($t);
+				$t = new object($parent);
 				$ret[] = $t;
 				$parent = $t->parent();
 
