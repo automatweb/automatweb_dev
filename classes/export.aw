@@ -308,7 +308,7 @@ class export extends aw_template
 				@unlink($this->folder."/".$fn);
 				// ignore folders!
 				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
-				$this->db_query("DELETE FROM export_content WHERE filename LIKE '%$fn%'");
+				$this->db_query("DELETE FROM export_content WHERE filename LIKE '$fn'");
 				echo "removing file $fn <br>\n";
 				flush();
 			}
