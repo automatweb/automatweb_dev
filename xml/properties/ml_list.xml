@@ -77,6 +77,46 @@
             <caption>Vali vorm, mille sisestustest tehakse automaatselt liikmed</caption>
       </property>
       <property>
+            <name>confirm_subscribe</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>subscribing</group>
+            <caption>Liitumiseks on vaja kinnitust</caption>
+      </property>
+      <property>
+            <name>confirm_subscribe_msg</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_MESSAGE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>subscribing</group>
+            <caption>Liitumise kinnituseks saadetav kiri</caption>
+      </property>
+      <property>
+            <name>confirm_unsubscribe</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>subscribing</group>
+            <caption>Lahkumiseks on vaja kinnitust</caption>
+      </property>
+      <property>
+            <name>confirm_unsubscribe_msg</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_MESSAGE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>subscribing</group>
+            <caption>Lahkumise kinnituseks saadetav kiri</caption>
+      </property>
+      <property>
             <name>member_list</name>
             <type>text</type>
             <store>no</store>
@@ -105,6 +145,9 @@
                   <caption>Liikmed</caption>
                   <submit>no</submit>
             </members>
+            <subscribing>
+                  <caption>Liitumine/lahkumine</caption>
+            </subscribing>
       </groupinfo>
 </properties>
 

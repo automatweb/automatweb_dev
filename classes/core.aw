@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.217 2003/08/27 13:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.218 2003/08/29 11:51:28 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -73,8 +73,8 @@ class core extends acl_base
 	// no_flush - optional, if true, the cache is not flushed, thus object creation is a lot faster, 
 	//            but you must flush the cache manually later. this is useful when creating lots of objects in a row
 	// add_acl - if set to false, acl entries are not created for the object
-  //
-  // when creating an object, at least the parent and class_id values must be specified
+  	//
+  	// when creating an object, at least the parent and class_id values must be specified
 	// status defaults to 1 - not active
 	// by default all access is given to the creator of the object
 	function new_object($arr,$add_acl = true)
@@ -2312,7 +2312,7 @@ class core extends acl_base
 	{
 		extract($arr);
 
-		$s = unserialize($str);
+		$s = isset($arr["raw"]) ? $arr["raw"] : unserialize($str);
 		if (!is_array($s))
 		{
 			return false;
@@ -2332,7 +2332,7 @@ class core extends acl_base
 
 
 		$t = get_instance($fl);
-		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
+		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period, "raw" => $arr["raw"]));
 	}
 	
 	////

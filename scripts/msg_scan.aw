@@ -1,5 +1,5 @@
 <?php
-$basedir = realpath("../");
+$basedir = realpath(".");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini")));
 classload("defs");

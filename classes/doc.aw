@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.35 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.36 2003/08/29 11:51:28 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -16,31 +16,31 @@
 @property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
 @caption Pluginad
 
-@property title type=textbox size=60
+@property title type=textbox size=60 trans=1
 @caption Pealkiri
 
-@property subtitle type=textbox size=60
+@property subtitle type=textbox size=60 trans=1
 @caption Alapealkiri
 
-@property author type=textbox size=60
+@property author type=textbox size=60 trans=1
 @caption Autor
 
-@property photos type=textbox size=60
+@property photos type=textbox size=60 trans=1
 @caption Fotode autor
 
-@property keywords type=textbox size=60
+@property keywords type=textbox size=60 trans=1
 @caption Võtmesõnad
 
-@property names type=textbox size=60
+@property names type=textbox size=60 trans=1
 @caption Nimed
 
-@property lead type=textarea richtext=1 cols=60 rows=10
+@property lead type=textarea richtext=1 cols=60 rows=10 trans=1
 @caption Lead
 
-@property content type=textarea richtext=1 cols=60 rows=30
+@property content type=textarea richtext=1 cols=60 rows=30 trans=1
 @caption Sisu
 
-@property moreinfo type=textarea richtext=1 cols=60 rows=5
+@property moreinfo type=textarea richtext=1 cols=60 rows=5 trans=1
 @caption Lisainfo
 
 @property link_text type=textbox size=60
@@ -134,6 +134,9 @@
 @property user6 table=documents group=general type=textarea rows=5 cols=60
 @caption Kasutaja defineeritud 6
 
+@property language type=text group=general type=text store=no
+@caption Keel
+
 @property duration type=time_select field=end table=planner group=calendar
 @caption Kestab
 
@@ -145,6 +148,7 @@
 
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
+
 
 @property sbt type=submit value=Salvesta store=no 
 
@@ -218,6 +222,13 @@ class doc extends class_base
 				$this->gen_navtoolbar($args);
 				break;
 
+			case "language":
+				$objdata = new object($args["obj"]["oid"]);
+				$lg = get_instance("languages");
+				$lang_list = $lg->get_list();
+				$lang_id = $objdata->prop("lang_id");
+				$data["value"] = $lang_list[$lang_id];
+				break;
 		};
 		return $retval;
 	}

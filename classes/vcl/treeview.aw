@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.11 2003/06/04 13:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.12 2003/08/29 11:51:34 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -222,16 +222,17 @@ class treeview extends class_base
 			return;
 		};
 		$this->read_template("ftiens.tpl");
+		$parent = isset($args["parent"]) ? $args["parent"] : 1;
 		$tr = $this->_rec_tree_from_array(array(
-			//"parent" => $args["parent"],
-			"parent" => 1,
+			"parent" => $args["parent"],
+			//"parent" => 1,
 			"data" => &$args["data"],
 		));
 		$this->vars(array(
 			"TREE" => $tr,
-			"root" => 1,
-			"rootname" => $args["data"][0][1]["name"],
-			"rooturl" => $args["data"][0][1]["link"],
+			"root" => $parent,
+			"rootname" => $args["data"][0][$parent]["name"],
+			"rooturl" => $args["data"][0][$parent]["link"],
 			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
 			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
 		));

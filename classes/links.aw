@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.36 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.37 2003/08/29 11:51:29 duke Exp $
 
 /*
 
@@ -21,7 +21,7 @@
 @property url table=extlinks type=textbox field=url group=general
 @caption URL
 
-@property url_int_text type=text group=general
+@property url_int_text type=text group=general store=no
 @caption Saidi sisene link
 
 @property alt type=textbox table=objects field=meta method=serialize group=general search=1
@@ -54,10 +54,10 @@
 @property newwinscroll type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
 @caption Skrollbarid
 
-@property link_image type=fileupload group=Pilt
+@property link_image type=fileupload group=Pilt store=no
 @caption Pilt
 
-@property link_image_show type=text group=Pilt
+@property link_image_show type=text group=Pilt store=no
 @caption 
 
 @property link_image_check_active type=checkbox ch_value=1 field=meta table=objects method=serialize group=Pilt

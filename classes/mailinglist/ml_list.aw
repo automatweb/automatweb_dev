@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.27 2003/08/01 13:27:53 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.28 2003/08/29 11:51:33 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -28,6 +28,20 @@
 	@property automatic_form type=select editonly=1
 	@caption Vali vorm, mille sisestustest tehakse automaatselt liikmed
 
+	@default group=subscribing
+
+	@property confirm_subscribe type=checkbox ch_value=1 
+	@caption Liitumiseks on vaja kinnitust
+
+	@property confirm_subscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
+	@caption Liitumise kinnituseks saadetav kiri
+	
+	@property confirm_unsubscribe type=checkbox ch_value=1 
+	@caption Lahkumiseks on vaja kinnitust
+	
+	@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
+	@caption Lahkumise kinnituseks saadetav kiri
+
 	@property member_list type=text store=no group=members
 	@caption Liikmed
 
@@ -35,12 +49,14 @@
 	@caption Impordi liikmed tekstifailist
 	
 	@groupinfo members caption=Liikmed submit=no
+	@groupinfo subscribing caption="Liitumine/lahkumine"
 	@classinfo syslog_type=ST_MAILINGLIST
 	@classinfo relationmgr=yes
 	
 */
 define("RELTYPE_MEMBER_PARENT",1);
 define("RELTYPE_REDIR_OBJECT",2);
+define("RELTYPE_ADM_MESSAGE",3);
 
 
 class ml_list extends class_base
@@ -62,6 +78,7 @@ class ml_list extends class_base
                 return array(
                         RELTYPE_MEMBER_PARENT => "listi liikmete kataloog",
 			RELTYPE_REDIR_OBJECT => "ümbersuunamine",
+			RELTYPE_ADM_MESSAGE => "administratiivne teade",
                 );
         }
 
@@ -76,6 +93,10 @@ class ml_list extends class_base
 
 			case RELTYPE_REDIR_OBJECT:
 				$retval = array(CL_DOCUMENT);
+				break;
+			
+			case RELTYPE_ADM_MESSAGE:
+				$retval = array(CL_MESSAGE);
 				break;
 		};
 		return $retval;
@@ -252,8 +273,8 @@ class ml_list extends class_base
 		$ml_list_members = $this->get_members($args["list_id"]);
 		load_vcl("table");
 		$t = new aw_table(array(
-			"xml_def" => "mlist/member_list",
 			"layout" => "generic",
+			"xml_def" => "mlist/member_list",
 		));
 		$ml_member_inst = get_instance("mailinglist/ml_member");
 		if (is_array($ml_list_members))
@@ -723,6 +744,7 @@ class ml_list extends class_base
 				$ret+=$this->get_objects_below(array(
 					"parent" => $prnt,
 					"class" => CL_ML_MEMBER,
+					"status" => STAT_ACTIVE,
 					"full" => true,
 					"fields" => "oid,parent",
 				));
@@ -971,6 +993,10 @@ class ml_list extends class_base
 			"oid" => $list_id,
 			"clid" => $this->clid,
 		));
+		// I have to check whether subscribing requires confirmation, and if so, send out the confirm message
+		// subscribe confirm works like this - we still subscribe the member to the list, but make
+		// her status "deactive" and generate her a confirmation code
+		// confirm code is added to the metad
 		if ($args["op"] == 1)
 		{
 			$ml_member = get_instance("mailinglist/ml_member");
@@ -978,6 +1004,8 @@ class ml_list extends class_base
 				"name" => $args["name"],
 				"email" => $args["email"],
 				"list_id" => $args["id"],
+				"confirm_subscribe" => $list_obj["meta"]["confirm_subscribe"],
+				"confirm_message" => $list_obj["meta"]["confirm_subscribe_msg"],
 			));	
 		};
 		if ($args["op"] == 2)

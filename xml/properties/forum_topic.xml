@@ -45,6 +45,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <trans_id>TR_FORUM</trans_id>
       </classinfo>
 </properties>
 

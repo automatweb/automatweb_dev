@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>test</name>
+            <type>textbox</type>
+            <size>40</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Test</caption>
+      </property>
+      <classinfo>
+            <corefields>name,comment,status</corefields>
+      </classinfo>
+</properties>
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.1 2003/06/26 17:26:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.2 2003/08/29 11:51:30 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -22,6 +22,7 @@
 @caption Saada vastused meiliga
 
 @classinfo relationmgr=yes
+@classinfo trans_id=TR_FORUM
 
 */
 
@@ -32,8 +33,9 @@ class forum_topic extends class_base
 	function forum_topic()
 	{
 		$this->init(array(
-			'tpldir' => 'forum',
-			'clid' => CL_MSGBOARD_TOPIC,
+			"tpldir" => "forum",
+			"clid" => CL_MSGBOARD_TOPIC,
+			"trid" => TR_FORUM,
 		));
 	}
 

@@ -15,7 +15,7 @@ class site_content extends menuedit
 	// niisiis. vars array peaks sisaldama mingeid pre-parsed html tkke,
 	// mis vivad tulla ntx kusagilt orbi klassi seest vtm.
 	// array keydeks peaksid olema variabled template sees, mis siis asendatakse
-	// oma vï¿½rtustega
+	// oma väärtustega
 	function _gen_site_html($params)
 	{
 		extract($params);	
@@ -26,32 +26,34 @@ class site_content extends menuedit
 		classload("layout/active_page_data");
 		active_page_data::get_text_content($text);
 
-		// impordime taimeriklassi
-
 		$this->vars(array(
 			"lang_code" => aw_global_get("LC"),
 		));
 
 		$obj = $this->get_object($section);
 
-		classload("image");
+		$obj2 = obj($section);
+
+		//print_r($obj2->properties());
+
 		// this checks whether the requested object belongs to any
 		// class that can be shown directly - if so, check_object
 		// puts the result into $this->replacement. dat kind of ugly -- duke
-		$this->check_object($obj);
+		$this->check_object($obj2);
 
-		if (not($text))
+		if (empty($text) && isset($this->replacement))
 		{
 			$text = $this->replacement;
 		};
 
+		//--
 		$meta = $obj["meta"];
-		
+
 		/// Vend?
-		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
+		if ($obj2->prop("class_id") == CL_BROTHER_DOCUMENT)
 		{
-			$section=$obj["parent"];
-			$docid=$obj["brother_of"];
+			$section=$obj2->prop("parent");
+			$docid=$obj2->prop("brother_of");
 		}
 		
 		// check whether access to that menu is denied by ACL and if so
@@ -91,37 +93,35 @@ class site_content extends menuedit
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
-	
-		if ($obj["class_id"] != CL_PSEUDO)
+		if ($obj2->prop("class_id") != CL_PSEUDO)
 		{
-			$this->sel_section = $obj["parent"];
+			$this->sel_section = $obj2->prop("parent");
 		}
 		else
-		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
+		if ($obj2->prop("class_id") == CL_BROTHER_DOCUMENT)
 		{
-			$bo = $this->get_object($obj["brother_of"]);
-			$bo_meta = $this->get_object_metadata(array(
-				"metadata" => $bo["metadata"]
-			));
-			if ($bo_meta["show_real_pos"])
+			$bo = $obj2->get_original();
+			if ($bo->meta("show_real_pos"))
 			{
-				$section = $bo["parent"];
-				$this->sel_section = $bo["parent"];
+				$section = $bo->prop("parent");
+				$this->sel_section = $section;
 			}
 			else
 			{
-				$this->sel_section = $obj["parent"];
+				$this->sel_section = $obj2->prop("parent");
 			}
 		}
 		else
-		if ($obj["class_id"]  == CL_BROTHER)
+		if ($obj2->prop("class_id") == CL_BROTHER)
 		{
-			$this->sel_section = $obj["brother_of"];
+			$this->sel_section = $obj2->prop("brother_of");
 		}
 		else
 		{
 			$this->sel_section = $section;
 		}
+
+		$this->section = $section;
 
 		$this->vars(array(
 			"sel_menu_id" => $sel_menu_id,
@@ -131,6 +131,8 @@ class site_content extends menuedit
 		// build the menu chain for the requested section, this simplifies at least 
 		// users_only check and finding the correct template_set, probably also
 		// a few other functions
+
+		// duh .. this is where I need to build the menu fucking chain
 		$this->build_menu_chain($this->sel_section);
 		if ($this->properties["show_layout"])
 		{
@@ -268,11 +270,14 @@ class site_content extends menuedit
 		}
 		$this->vars(array("YAH_LINK" => $yah));
 
-		// language selecta
-//		if ($this->is_template("LANG"))
-//		{
+		if (aw_ini_get("menuedit.context_langs") == 1)
+		{
+			$this->make_context_langs();
+		}
+		else
+		{
 			$this->make_langs();
-//		}
+		};
 
 		// write info about viewing to the syslog
 		// yukk
@@ -463,11 +468,6 @@ class site_content extends menuedit
 			// www.kirjastus.ee-s on LEFT_PANE logged-i sees.
 			$lp = "";
 			$rp = "";
-			if ($this->is_template("logged.asdasdas"))
-			{
-				print "logged is inside LEFT_PANE<br />";
-
-			}
 		
 			$this->vars(array(
 				"logged" => $this->parse("logged"), 
@@ -545,6 +545,7 @@ class site_content extends menuedit
 
 		$eng = "";
 		$neng = "";
+		// this is SO not smart
 		if ($GLOBALS["lang_id"] == 4)
 		{
 			$eng = $this->parse("ENG");
@@ -1360,8 +1361,6 @@ class site_content extends menuedit
 		));
 	}
 
-
-
 	function make_yah($path)
 	{
 		// now build "you are here" links from the path
@@ -1846,7 +1845,7 @@ class site_content extends menuedit
 	{
 		if ($this->is_template("SEARCH_SEL"))
 		{
-			global $section;
+			$section = aw_global_get("section");
 			$id = (int)$section;
 			if (!$id)
 			{
@@ -1875,22 +1874,22 @@ class site_content extends menuedit
 	}
 
 	
-	function is_periodic($section,$checkobj = 1) 
+	function is_periodic($section) 
 	{
-		$mn = $this->get_object($section);
-		if ($mn["class_id"] != CL_PSEUDO)
+		// this is one weird function.
+		$retval = false;
+		$mn = new object($section);
+		if ($mn->prop("period"))
 		{
-			$mn = $this->get_object($mn["parent"]);
+			$retval = $mn->prop("period");
 		}
-		$periodic = $mn["periodic"];
-		// menyysektsioon ei ole perioodiline. Well, vaatame 
-		// siis, kas ehk dokument ise on?
-		if (!$mn && !$periodic && $checkobj == 1)
+		else
+		if ($mn->prop("class_id") != CL_PSEUDO)
 		{
-			$q = "SELECT period FROM objects WHERE oid = '$section'";
-			$periodic = $this->db_fetch_field($q,"period");
+			$mn = new object($mn->prop("parent"));
+			$retval = $mn->prop("periodic");
 		};
-		return $periodic;
+		return $retval;
 	}
 
 	function has_sub_dox($oid)
@@ -2532,11 +2531,14 @@ class site_content extends menuedit
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
 		$l = "";
+		
+
 		foreach($lar as $row)
 		{
 			$this->vars(array(
 				"name" => $row["name"],
-				"lang_id" => $row["id"]
+				"lang_id" => $row["id"],
+				"lang_url" => $this->cfg["baseurl"] . "/?set_lang_id=$row[id]",
 			));
 			if ($row["id"] == $lang_id)
 			{
@@ -2548,6 +2550,75 @@ class site_content extends menuedit
 				$l.=$this->parse("LANG");
 			}
 		}
+		$this->vars(array(
+			"LANG" => $l,
+			"SEL_LANG" => "",
+			"sel_charset" => $sel_lang["charset"]
+		));
+	}
+
+	////
+	// !basically works like the above thingie .. but only shows languages
+	// into which the current document has been translated to
+	function make_context_langs()
+	{
+		$lang_id = aw_global_get("lang_id");
+		$langs = get_instance("languages");
+		$lar = $langs->listall();
+		$l = "";
+
+		$q = sprintf("SELECT source FROM aliases WHERE target = %d AND reltype = %d",$this->section,RELTYPE_TRANSLATION);
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		if (is_array($row) && !empty($row["source"]))
+		{
+			$use_section = $row["source"];
+		}
+		else
+		{
+			$use_section = $this->section;
+		};
+
+		// well, except that .. if that object _is_ a translation .. then we
+		// need to get the aliases _from_ the original
+		$obj = new object($use_section);
+		$cs_from = $obj->connections_from(array("type" => RELTYPE_TRANSLATION));
+
+		// figure out the object id-s for translated objects
+		$rmap = array($obj->prop("lang_id") => $use_section);
+		foreach($cs_from as $item)
+		{
+			$lg = $item->prop("lang_id");
+			$oid = $item->prop("target");
+
+			$rmap[$lg] = $oid;
+		}
+
+		foreach($lar as $row)
+		{
+			// ignore languages with no content
+			if (!$rmap[$row["id"]])
+			{
+				continue;
+			};
+
+			$this->vars(array(
+				"name" => $row["name"],
+				"lang_url" => $this->cfg["baseurl"] . "/" . $rmap[$row["id"]],
+			));
+
+			if ($row["id"] == $lang_id)
+			{
+				$l.=$this->parse("SEL_LANG");
+				$sel_lang = $row;
+			}
+			else
+			{
+				$l.=$this->parse("LANG");
+			}
+		}
+
 		$this->vars(array(
 			"LANG" => $l,
 			"SEL_LANG" => "",
@@ -2804,110 +2875,109 @@ class site_content extends menuedit
 		// we will this with properties from the first element in chain who
 		// has thoses
 		$this->properties = array(
-			"tpl_dir"  => "",
-			"users_only" => 0,
-			"comment" => "",
-			"tpl_view" => "",
-			"ftpl_view" => "",
-			"tpl_lead" => "",
-			"ftpl_lead" => "",
-			"tpl_edit" => "",
-			"ftpl_edit" => "",
-			"tpl_edit_cfgform" => "",
-			"show_layout" => ""
+			"tpl_dir"  => "", // prop!
+			"users_only" => 0, // prop!
+			"comment" => "", // prop!
+			"tpl_view" => "", // prop!
+			"tpl_lead" => "",// prop!
+			"show_layout" => "" // prop!
 		);
 	
 		while($parent)
 		{
-			$obj = $this->mar[$parent];
+			$obj = new object($parent);
 			// if the object was not in the cache (which probably means it was not a menu)
 			// fetch it directly from the database
-			if (not($obj))
+			/*if (not($obj))
 			{
 				$obj = $this->get_object($parent);
 			};
+			*/
 
 			// only use metadata from menus
-			$is_menu = ($obj["class_id"] == CL_PSEUDO);
+			$is_menu = ($obj->prop("class_id") == CL_PSEUDO);
 
-			if (is_array($obj))
+			if (is_object($obj))
 			{
-				array_unshift($this->path,$obj["oid"]);
-				$this->menu_chain[$obj["oid"]] = $obj;
-				// check whether this object has any properties that 
-				// none of the previous ones had
-				$_dat = (is_array($obj["meta"])) ? array_merge($obj,$obj["meta"]) : $obj;
-				$intersect = array_intersect(array_keys($_dat),array_keys($this->properties));
-				foreach($intersect as $val)
+				array_unshift($this->path,$obj->id());
+
+				$this->menu_chain[$obj->id()] = $obj;
+
+				foreach($this->properties as $key => $val)
 				{
-					if ($is_menu && not($this->properties[$val]))
+					// check whether this object has any properties that 
+					// none of the previous ones had
+					if ($is_menu && $obj->prop($key) && empty($this->properties[$key]))
 					{
-						//print "<!-- found $val at $obj[oid] -->\n";
-						$this->properties[$val] = $_dat[$val];
+						//print "-- found $key at " . $obj->id() . " \n";
+						$this->properties[$key] = $obj->prop($key);
 					};
 				};
 			};
+
 			// also, check whether the parent of the current object is alreay handled
 			// and if so, just drop out of the cycle
-			$parent = (isset($this->menu_chain[$obj["parent"]]) && $this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
+			$parent = $obj->prop("parent");
+			//$parent = (isset($this->menu_chain[$obj["parent"]]) && $this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
 		};
-		/*
-		  print "<!--";
-		  print_r($this->properties);
-		  print "-->";
-		*/
+		  //print "<!--";
+		  //print_r($this->properties);
+		  //print "-->";
 
 	}
 	
 	function check_object($obj)
 	{
-		switch($obj["class_id"])
+		$die = false;
+		switch($obj->prop("class_id"))
 		{
 			case CL_EXTLINK:
 				$t = get_instance("links");
-				$link = $t->get_link($obj["oid"]);
-				//list($url,$target,$caption) = $t->draw_link($obj["oid"]);
+				$link = $t->get_link($obj->id());
 				header("Location: $link[url]");
-				//$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
-				exit;
+				$die = true;
 				break;
 
 			case CL_IMAGE:
 				$t = get_instance("image");
-				$idata = $t->get_image_by_id($obj["oid"]);
+				$idata = $t->get_image_by_id($obj->id());
 				$this->replacement = sprintf("<img src='%s'><br />%s",$idata["url"],$idata["comment"]);
 
 				if ($this->raw)
 				{
 					print $this->replacement;
-					exit;
+					$die = true;
 				};
 				break;
 
 			case CL_FILE:
 				$t = get_instance("file");
-				die($t->show($obj["oid"]));
+				die($t->show($obj->id()));
 				break;
 
 			case CL_TABLE:
 				$t = get_instance("table");
-				$this->replacement = $t->show(array("id" => $obj["oid"],"align" => $align));
+				$this->replacement = $t->show(array("id" => $obj->id(),"align" => $align));
 				if ($this->raw)
 				{	
 					print $this->replacement;
-					exit;
+					$die = true;
 				};
 				break;
 
 			case CL_SITE_THREEPANE:
 				$t = get_instance("site/site_threepane");
-				print $t->show(array("id" => $obj["oid"]));
-				exit;
+				print $t->show(array("id" => $obj->id()));
+				$die = true;
 				break;
 
 			default:
 				$this->replacement = "";
 
+		};
+		if ($die)
+		{
+			exit;
 		};
 	}
 

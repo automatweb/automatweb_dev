@@ -118,6 +118,7 @@
       <property>
             <name>bg_query_status</name>
             <type>text</type>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -127,11 +128,65 @@
       <property>
             <name>bg_query_created</name>
             <type>text</type>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <caption>Cache viimati muudetud</caption>
+      </property>
+      <property>
+            <name>show_dronline</name>
+            <callback>callback_do_dronline</callback>
+            <group>dronline</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_stat_time</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <group>stat_time</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_stat_addr</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <group>stat_addr</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_stat_obj</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <group>show_stat_obj</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_queries</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <group>show_queries</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>show_general</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <group>show_general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <classinfo>
             <syslog_type>ST_DRONLINE</syslog_type>
@@ -140,6 +195,24 @@
             <general>
                   <caption>Üldine</caption>
             </general>
+            <dronline>
+                  <caption>Dr.Online</caption>
+            </dronline>
+            <stat_time>
+                  <caption>Stat_aja_lõikes</caption>
+            </stat_time>
+            <stat_addr>
+                  <caption>Stat_aadresside_lõikes</caption>
+            </stat_addr>
+            <stat_obj>
+                  <caption>Stat_objektide_lõikes</caption>
+            </stat_obj>
+            <ipblock>
+                  <caption>IP_blokk</caption>
+            </ipblock>
+            <show_queries>
+                  <caption>Salvestatud_päringud</caption>
+            </show_queries>
       </groupinfo>
       <tableinfo>
             <dronline_bg_status>

@@ -18,6 +18,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="confirmsub" nologin="1">
+			<function name="confirm_subscribe">
+				<arguments>
+					<required name="code"/>
+				</arguments>
+			</function>	
+		</action>
 		
 		<action name="post_message">
 			<function name="post_message">

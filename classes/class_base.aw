@@ -1,21 +1,31 @@
 <?php
-// $Id: class_base.aw,v 2.138 2003/08/01 12:48:16 axel Exp $
+// $Id: class_base.aw,v 2.139 2003/08/29 11:51:28 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
 	@default group=general
 
-	@property name type=textbox group=general rel=1
+	@property name type=textbox rel=1 trans=1
 	@caption Nimi
 	@comment Objekti nimi
 
-	@property comment type=textbox group=general
+	@property comment type=textbox 
 	@caption Kommentaar
 	@comment Vabas vormis tekst objekti kohta
 
-	@property status type=status group=general
+	// translated objects have their own status fields .. they don't
+	// have to sync with the original .. allthu .. I do feel that
+	// we need to do this in a different way
+	@property status type=status trans=1
 	@caption Aktiivne
 	@comment Kas objekt on aktiivne 
+
+	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
+	@caption Vajab tõlget
+
+	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja tõlge
+	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 // OBJ_IS_TRANSLATED
+	@caption Tõlge kinnitatud
 
 	@groupinfo general caption=Üldine default=1
 	@classinfo trans_id=TR_CLASS_BASE
@@ -51,6 +61,9 @@ define('RELTYPE_LINK',100);
 
 // link to the config form that was used to create the object
 define('RELTYPE_CFGFORM',101);
+
+// translation
+define('RELTYPE_TRANSLATION',102);
 
 class class_base extends aw_template
 {
@@ -303,6 +316,7 @@ class class_base extends aw_template
 				"args" => &$args,
 				"form_data" => &$form_data,
 				"orb_class" => &$orb_class,
+				"clid" => $this->clid,
 			));
 		};
 		// rrrr, temporary hack
@@ -493,6 +507,8 @@ class class_base extends aw_template
 		{
 			return false;
 		};
+
+		$this->_obj = new object($args["id"]);
 
 		foreach($this->tables as $key => $val)
 		{
@@ -808,6 +824,9 @@ class class_base extends aw_template
 				);
 			};	
 		};	
+
+		// well now .. how do I propagate the changes to the original object .. if this
+		// thing is a translation?
 	}
 
 	////
@@ -894,6 +913,9 @@ class class_base extends aw_template
 		{
 			$tables["objects"] = array("index" => "oid");
 		};
+
+		// well .. this is the place where I should somehow someway leave out the
+		// "translation confirmed" property ... if this object is not a translation
 
 		foreach($this->all_props as $key => $val)
 		{
@@ -1383,22 +1405,31 @@ class class_base extends aw_template
 			};
 		}
 		else
+		if (($property["trans"] == 0) && is_object($this->_obj) && $this->_obj->prop($property["name"]) != NULL)
+		{
+			$property["value"] = $this->_obj->prop($property["name"]);
+		}
+		else
 		{
 			$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
 			if ($table == "objects")
 			{
 				if ($field == "meta")
 				{
-					if (isset($this->coredata["meta"][$property["name"]]))
+					//if (isset($this->coredata["meta"][$property["name"]]))
+					if (isset($this->data["objects"]["meta"][$property["name"]]))
 					{
-						$property["value"] = $this->coredata["meta"][$property["name"]];
+						//$property["value"] = $this->coredata["meta"][$property["name"]];
+						$property["value"] = $this->data["objects"]["meta"][$property["name"]];
 					};
 				}
 				else
 				{
-					if (isset($this->coredata[$_field]))
+					//if (isset($this->coredata[$_field]))
+					if (isset($this->data["objects"][$_field]))
 					{
-						$property["value"] = $this->coredata[$_field];
+						//$property["value"] = $this->coredata[$_field];
+						$property["value"] = $this->data["objects"][$_field];
 					};
 				};
 			}
@@ -1421,6 +1452,11 @@ class class_base extends aw_template
 					};
 				};
 			};
+		};
+		
+		if ($property["method"] == "bitmask")
+		{
+			$property["value"] = $property["value"] & $property["ch_value"];
 		};
 	}
 
@@ -1543,7 +1579,7 @@ class class_base extends aw_template
 				{
 					$name = $key;
 				};
-				if (!empty($val["field"]) && ($name != $val["field"]) && ($val["method"] != "serialize"))
+				if (!empty($val["field"]) && ($name != $val["field"]) && ($val["method"] == "direct"))
 				{
 					$_field = $val["field"];
 				}
@@ -1769,22 +1805,24 @@ class class_base extends aw_template
 			};
 		}
 
-		return aw_serialize($result, SERIALIZE_NATIVE);
+		$retval = isset($args["raw"]) ? $result : aw_serialize($result, SERIALIZE_NATIVE);
+		return $retval;
 	}
 
 	////
 	// !_unserialize replacement for class_base based objects
 	function _unserialize($args = array())
 	{
-		$raw = aw_unserialize($args["str"]);
+		$raw = isset($args["raw"]) ? $args["raw"] : aw_unserialize($args["str"]);
 		$this->init_class_base();
 
 		$this->process_data(array(
 			"parent" => $args["parent"],
 			"rawdata" => $raw,
 		));
-
-		return true;
+		
+		// object_translation depends on getting the id from here
+		return $this->id;
 	}
 
 	////
@@ -1805,7 +1843,6 @@ class class_base extends aw_template
 		// basically, if this is a new object, then I need to load all the properties 
 		// that have default values and add them to the bunch.
 
-		
 		// only create the object, if one of the tables used by the object
 		// is the objects table
 		if (empty($id))
@@ -1816,16 +1853,17 @@ class class_base extends aw_template
 				"class_id" => $this->clid,
 				"status" => !empty($status) ? $status : 1,
 				"period" => $period,
+				"lang_id" => isset($rawdata["lang_id"]) ? $rawdata["lang_id"] : false,
 			));
 			aw_session_set("added_object",$id);//axel häkkis
 			
-			if ($alias_to)
+			if ($alias_to || $rawdata["alias_to"])
 			{
 				$almgr = get_instance("aliasmgr");
 				$almgr->create_alias(array(
 					"alias" => $id,
-					"id" => $alias_to,
-					"reltype" => $reltype,
+					"id" => $rawdata["alias_to"],
+					"reltype" => $rawdata["reltype"],
 				));
 			};
 			
@@ -1864,10 +1902,20 @@ class class_base extends aw_template
 			$this->coredata = $tmp;
 		};
 
+
 		$this->load_object(array("id" => $this->id));
                 $this->load_obj_data(array("id" => $this->id));
+		
+		// load the freaking thing as an object.. so that I can 
+		// access it's properties
+
+		$obj = new object($this->id);
 
 		$metadata = array();
+
+		$sync_properties = array();
+
+		$pvalues = array();
 
 		foreach($realprops as $key => $property)
 		{
@@ -1880,7 +1928,10 @@ class class_base extends aw_template
 
 			$name = $property["name"];
 			$type = $property["type"];
-
+			$method = $property["method"];
+			$table = $property["table"];
+			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
+				
                         $xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
 			if ($new && empty($xval) && !empty($property["default"]))
@@ -1893,6 +1944,11 @@ class class_base extends aw_template
                                 // set value to 0 for unchecked checkboxes
 				$xval = (int)$xval;
                         };
+
+			if ($method == "bitmask" && empty($pvalues[$field]))
+			{
+				$pvalues[$field] = $obj->prop($field);
+			};
 
 			$property["value"] = $xval;
 
@@ -1945,6 +2001,12 @@ class class_base extends aw_template
 			};
 			*/
 
+			if (empty($property["trans"]))
+			{
+				$sync_properties[] = $property;
+			};
+			
+
 
 			if (($type == "date_select") || ($type == "datetime_select"))
 			{
@@ -1979,6 +2041,21 @@ class class_base extends aw_template
 					$metadata[$key] = image::check_url($ar["url"]);
 				};
 			};
+			if ($method == "bitmask")
+			{
+				// shift to the left, shift to the right
+				// pop, push, pop, push
+				if ( ($pvalues[$field] & $property["ch_value"]) && !($rawdata[$name] & $property["ch_value"]))
+				{
+					$pvalues[$field] -= $property["ch_value"]; 
+				}       
+				elseif (!($pvalues[$field] & $property["ch_value"]) && ($rawdata[$name] & $property["ch_value"]))
+				{
+					$pvalues[$field] += $property["ch_value"];
+				};     
+				//print "name = $property[name]<br>";
+				//print "val = $property[value]<br>";
+			};
 
 			// XXX: this is not good!
 			if ( ($type == "relpicker") && isset($property["pri"]) )
@@ -1997,9 +2074,6 @@ class class_base extends aw_template
 				};
 			}
 
-			$method = $property["method"];
-			$table = $property["table"];
-			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 
 			if ($this->is_rel)
 			{
@@ -2018,6 +2092,11 @@ class class_base extends aw_template
 			}
 			elseif ($table == "objects")
 			{
+				if ($method == "bitmask")
+				{
+					$this->coredata[$field] = $pvalues[$field];
+				} 
+				else
 				if (isset($rawdata[$name]))
 				{
 					$this->coredata[$field] = $property["value"];
@@ -2032,7 +2111,6 @@ class class_base extends aw_template
 				};
 			};
 		};
-
 
 		if (sizeof($metadata) > 0)
 		{
@@ -2072,15 +2150,53 @@ class class_base extends aw_template
 		$this->save_object(array("data" => $this->objdata));
 
 
+
+
 		if (method_exists($this->inst,"callback_post_save"))
 		{
 			$this->inst->callback_post_save(array(
 				"id" => $this->id,
 				"coredata" => $this->coredata,
 				"objdata" => $this->objdata,
+				"form_data" => &$args,
 				"new" => $new,
 			));
 		}
+		
+		/*
+		print "<pre>";
+		print_r($sync_properties);
+		print "</pre>";
+		*/
+
+		// alright then .. I'll do the object syncing here?
+		// cause .. that object class thingie feels like trying to drive a bike
+		// with square wheels -- duke
+		/*
+			1) figure out all the the sources and targets of this object
+			2) cycle over them .. and overwrite the fields that are not to 
+				be translated with the current values ... 
+			3) general nastyness
+
+			$orig = $this->db_fetch_row("SELECT source FROM aliases WHERE target = '$oid' AND reltype = " . RELTYPE_TRANSLATION);
+			 1) set base_oid to the current id
+
+			 2) set exclude list to empty array
+
+			 3) check whether base_oid is a target of any translation, if so add it to 
+			    exclude list and reset base_oid to the source of the translation
+
+			 4) get all the translation targets of the base_oid except the ones
+			    in the exclude list
+
+		 	 5) sync them .. and we should be done.
+			 	// yeah well .. that syncing operation is the meat of the whole task ...
+				// I need to overwrite all the values of not-translatable fields
+
+				// faaaak .. this is awful .. it's a freaking reentrant
+				// thing
+
+		*/
 		return true;
 	}
 		

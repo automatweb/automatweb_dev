@@ -701,7 +701,8 @@ class _int_object
 
 	function prop($param)
 	{
-		return $this->obj["properties"][$param];
+		$retval = $this->obj["properties"][$param];
+		return $retval;
 	}
 
 	function set_prop($key, $val)
@@ -851,7 +852,7 @@ class _int_object
 		$this->obj["properties"] = $this->ds->read_properties(array(
 			"properties" => $this->properties,
 			"tableinfo" => $this->tableinfo,
-			"objdata" => $this->obj
+			"objdata" => $this->obj,
 		));
 
 		foreach($this->of2prop as $key => $val)
@@ -861,6 +862,9 @@ class _int_object
 				$this->_int_sync_from_objfield_to_prop($key);
 			}
 		};
+
+		$GLOBALS["objects"][$oid] = &$this;
+		
 	}
 
 	function _int_load_properties()
@@ -887,7 +891,7 @@ class _int_object
 		{
 			if ($prop['table'] == "objects")
 			{
-				$this->of2prop[$prop['field']] = $prop['name'];
+				$this->of2prop[$prop['name']] = $prop['name'];
 			}
 		}
 

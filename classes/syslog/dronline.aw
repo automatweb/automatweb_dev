@@ -1,5 +1,9 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.19 2003/08/29 11:51:33 duke Exp $
+// dronline.aw - Dr. Online objekt
 
+// oh god, this is SO fucked up. Ok, I'll try to fix it
+// - duke
 /*
 
 @classinfo syslog_type=ST_DRONLINE
@@ -47,13 +51,40 @@
 @property rerun_queries type=checkbox ch_value=1
 @caption Uuenda p&auml;ringute&nbsp;cache kohe
 
-@property bg_query_status type=text
+@property bg_query_status type=text editonly=1
 @caption Tausta p&auml;ringute staatus
 
-@property bg_query_created type=text
+@property bg_query_created type=text editonly=1
 @caption Cache viimati muudetud
 
+@property show_dronline callback=callback_do_dronline group=dronline
+
+@property show_stat_time type=text no_caption=1 group=stat_time
+
+@property show_stat_addr type=text no_caption=1 group=stat_addr
+
+@property show_stat_obj type=text no_caption=1 group=show_stat_obj
+	
+@property show_queries type=text no_caption=1 group=show_queries
+
+@property show_general type=text no_caption=1 group=show_general
+
+@property show_tab_conf
+
 @groupinfo general caption=Üldine
+@groupinfo dronline caption=Dr.Online 
+@groupinfo stat_time caption=Stat_aja_lõikes
+@groupinfo stat_addr caption=Stat_aadresside_lõikes
+@groupinfo stat_obj caption=Stat_objektide_lõikes
+@groupinfo ipblock caption=IP_blokk
+@groupinfo show_queries caption=Salvestatud_päringud
+			
+
+*/
+
+/*
+	I need a way to include definitions from other property definitions, from other classes
+	even. Now, how do I do that?
 
 */
 
@@ -107,9 +138,9 @@ class dronline extends class_base
 
 		$this->statuses = array(
 			DRO_C_NOTCREATED => 'Cache tegemata',
-			DRO_C_OUTOFDATE => 'Cache vananenud',
-			DRO_C_READY => 'Cache valmis',
-			DRO_C_UPDATING => 'Cache uuendamisel'
+			DRO_C_OUTOFDATE  => 'Cache vananenud',
+			DRO_C_READY 	 => 'Cache valmis',
+			DRO_C_UPDATING   => 'Cache uuendamisel'
 		);
 
 		$today = mktime(0,0,0,date("m"), date("j"), date("Y"));
@@ -171,7 +202,46 @@ class dronline extends class_base
 		$this->confable_tabs = array('dronline','stat_time', 'stat_addr', 'stat_obj', 'tab_conf');
 	}
 
+<<<<<<< dronline.aw
+	////
+	// !this should create a string representation of the object
+	// parameters
+	//    oid - object's id
+	function _serialize($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($oid);
+		if (is_array($ob))
+		{
+			return aw_serialize($ob, SERIALIZE_NATIVE);
+		}
+		return false;
+	}
+
+	////
+	// !this should create an object from a string created by the _serialize() function
+	// parameters
+	//    str - the string
+	//    parent - the folder where the new object should be created
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$row = aw_unserialize($str);
+		$row['parent'] = $parent;
+		unset($row['brother_of']);
+		$this->quote(&$row);
+		$id = $this->new_object($row);
+		if ($id)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	function _change($arr)
+=======
 	function change($arr)
+>>>>>>> 1.17
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
@@ -236,6 +306,7 @@ class dronline extends class_base
 			{
 				if (in_array($dro_tab, $this->confable_tabs) && !$ob['meta']['lock_filter'])
 				{
+					// oh god, this is bad
 					$tbp->add_tab(array(
 						'active' => ($dro_tab == $tabid ? true : false),
 						'caption' => $tabname,
@@ -273,6 +344,7 @@ class dronline extends class_base
 		}
 
 		$fn = '_do_'.$dro_tab;
+		print $fn;
 		return /*$this->_do_general($arr).*/$tbp->get_tabpanel(array(
 			'content' => $this->$fn($arr)
 		));
@@ -283,115 +355,284 @@ class dronline extends class_base
 		return parent::change($arr);
 	}
 
-	function _do_dronline($arr)
+	function callback_do_dronline($args = array())
 	{
-		extract($arr);
+		extract($args);
+		$nodes = array();
 
-		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		// I have to query the dronline_conf property groups here, so that I can show links
+		// to those
 
-		$df = aw_ini_get('config.dateformats');
-		$t->define_field(array(
-			'name' => 'rec',
-			'caption' => 'Nr',
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_class_properties(array(
+			"clid" => CL_DRONLINE_CONF,
 		));
-		$t->define_field(array(
-			'name' => 'tm',
-			'caption' => 'Millal',
-			'sortable' => 1,
-			'numeric' => 1,
-			'type' => 'time',
-			'format' => $df[2],
-			'nowrap' => 1
-		));
-		$t->define_field(array(
-			'name' => 'uid',
-			'caption' => 'Kes',
-			'sortable' => 1,
-		));
-		$t->define_field(array(
-			'name' => 'ip',
-			'caption' => 'IP',
-			'sortable' => 1,
-		));
-		$t->define_field(array(
-			'name' => 'type',
-			'caption' => 'T&uuml;&uuml;p',
-			'sortable' => 1,
-		));
-		$t->define_field(array(
-			'name' => 'act_id',
-			'caption' => 'Tegevus',
-			'sortable' => 1,
-		));
-		if (aw_ini_get("syslog.has_site_id"))
+
+		$grpinfo = $cfgu->get_opt("groupinfo");
+
+		$tmp = array();
+		$tmp["no_caption"] = 1;
+
+		// noo, noo, this sucks so much
+		if ($args["request"]["subgroup"])
 		{
-			$t->define_field(array(
-				'name' => 'site_id',
-				'caption' => 'Saidi ID',
-				'sortable' => 1,
-			));
-		}
-		$t->define_field(array(
-			'name' => 'oid',
-			'caption' => 'OID',
-			'sortable' => 1,
-		));
-		$t->define_field(array(
-			'name' => 'action',
-			'caption' => 'Mida',
-			'sortable' => 1,
-		));
-
-		$ts = aw_ini_get('syslog.types');
-		$as = aw_ini_get('syslog.actions');
-
-		if ($query != '')
-		{
-			$q = $query;
+			$_caption = "Dr. Online";
 		}
 		else
 		{
-			if ($show_oid)
+			$_caption = "<b>[ Dr. Online ]</b>";
+		};
+
+		$tmp["items"][] = array(
+			"type" => "text",
+			"value" => " " . html::href(array(
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $args["request"]["id"],
+					"group" => $args["request"]["group"],
+				)),
+				"caption" => $_caption,
+			)) . " ",
+		);
+
+		foreach($grpinfo as $key => $val)
+		{
+			if ($args["request"]["subgroup"] == $key)
 			{
-				$whc = $this->get_where_clause($id, ' AND ', false, 'dronline', $def_span);
-				$whc = " WHERE syslog.oid = '$show_oid' ".$whc;
+				$_caption = "<b>[" . $val["caption"] . "]</b>";
 			}
 			else
 			{
-				$whc = $this->get_where_clause($id, ' WHERE ', false, 'dronline', $def_span);
-			}
-
-			$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id);
-			if ($ret_query)
-			{
-				return $q;
-			}
-
-			$numres = $this->db_fetch_field("SELECT count(*) AS cnt FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id), "cnt");
-			if ($numres > 1000 && $this->get_limit_clause($id,true) > 1000)
-			{
-				return "Tulemus on liiga suur! Maksimaalne kuvatav ridade arv on 1000, kuid tulemuses on $numres rida!";
-			}
+				$_caption = $val["caption"];
+			};
+			$tmp["items"][] = array(
+				"type" => "text",
+				"value" => " " . html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $args["request"]["id"],
+						"group" => $args["request"]["group"],
+						"subgroup" => $key,
+					)),
+					"caption" => $_caption,
+				)) . " ",
+			);
 		}
 
-		$this->db_query($q);
-		while ($row = $this->db_next())
+		$nodes[] = $tmp;
+			
+		// this should now contain the values for the configuration object	
+		$config = $args["obj"]["meta"]["cfgs"][$args["request"]["group"]];
+
+		if ($args["request"]["subgroup"])
 		{
-			$row['type'] = $ts[$row['type']]['name'];
-			$row['act_id'] = $as[$row['act_id']]['name'];
-			list($row['ip'],) = inet::gethostbyaddr($row['ip']);
-			$t->define_data($row);
+			// but this is not RIGHT, what I really want to do, is to
+			// load the class I need, and get a list of parsed properties
+			// from it. Now howda hell am I going to do that?
+
+
+			$def = get_instance("syslog/dronline_conf");
+			$xprops = $def->get_properties_by_group(array(
+				"classonly" => true,
+				"values" => $config,
+				"group" => $args["request"]["subgroup"],
+			));
+	
+			$nodes = array_merge($nodes,$xprops);
+			$this->subgroup = $args["request"]["subgroup"];
+		
+
+			// how on earth do i put the subgroup stuff back to form submit
 		}
+		else
+		{
+			load_vcl('table');
+			$t = new aw_table(array('prefix' => 'dronline'));
+			$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
 
-		$t->set_default_sortby('tm');
-		$t->set_default_sorder('DESC');
-		$t->sort_by();
-		$tbl = $t->draw();
+			$df = aw_ini_get('config.dateformats');
+			$t->define_field(array(
+				'name' => 'rec',
+				'caption' => 'Nr',
+			));
+			$t->define_field(array(
+				'name' => 'tm',
+				'caption' => 'Millal',
+				'sortable' => 1,
+				'numeric' => 1,
+				'type' => 'time',
+				'format' => $df[2],
+				'nowrap' => 1
+			));
+			$t->define_field(array(
+				'name' => 'uid',
+				'caption' => 'Kes',
+				'sortable' => 1,
+			));
+			$t->define_field(array(
+				'name' => 'ip',
+				'caption' => 'IP',
+				'sortable' => 1,
+			));
+			$t->define_field(array(
+				'name' => 'type',
+				'caption' => 'T&uuml;&uuml;p',
+				'sortable' => 1,
+			));
+			$t->define_field(array(
+				'name' => 'act_id',
+				'caption' => 'Tegevus',
+				'sortable' => 1,
+			));
+			if (aw_ini_get("syslog.has_site_id"))
+			{
+				$t->define_field(array(
+					'name' => 'site_id',
+					'caption' => 'Saidi ID',
+					'sortable' => 1,
+				));
+			}
+			$t->define_field(array(
+				'name' => 'oid',
+				'caption' => 'OID',
+				'sortable' => 1,
+			));
+			$t->define_field(array(
+				'name' => 'action',
+				'caption' => 'Mida',
+				'sortable' => 1,
+			));
 
-		return $this->get_sao_tb($arr, $id).$tbl;
+			$ts = aw_ini_get('syslog.types');
+			$as = aw_ini_get('syslog.actions');
+
+			if ($query != '')
+			{
+				$q = $query;
+			}
+			else
+			{
+				//if ($show_oid)
+				//{
+					//$whc = $this->get_where_clause($id, ' AND ', false, 'dronline', $def_span);
+					//$whc = " WHERE syslog.oid = '$show_oid' ".$whc;
+				//}
+				//else
+				//{
+					$whc = $this->_get_where_clause(array(
+						"meta" => &$args["obj"]["meta"],
+						"config" => &$config,
+					));
+					///, ' WHERE ', false, 'dronline', $def_span);
+				//}
+
+				$limit = $this->_get_limit_clause(array(
+					"meta" => &$args["obj"]["meta"],
+					"config" => &$config,
+				));
+
+				$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC ".$limit;
+				if ($ret_query)
+				{
+					return $q;
+				}
+
+				$numres = $this->db_fetch_field("SELECT count(*) AS cnt FROM syslog ".$whc." ORDER BY tm DESC ".$limit, "cnt");
+				if ($numres > 1000 && $this->get_limit_clause($id,true) > 1000)
+				{
+					return "Tulemus on liiga suur! Maksimaalne kuvatav ridade arv on 1000, kuid tulemuses on $numres rida!";
+				}
+			}
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$row['type'] = $ts[$row['type']]['name'];
+				$row['act_id'] = $as[$row['act_id']]['name'];
+				list($row['ip'],) = inet::gethostbyaddr($row['ip']);
+				$t->define_data($row);
+			}
+
+			$t->set_default_sortby('tm');
+			$t->set_default_sorder('DESC');
+			$t->sort_by();
+			$tbl = $t->draw();
+
+			$nodes[] = array(
+				"no_caption" => 1,
+				"value" => $tbl,
+			);
+		};
+		return $nodes;
+
 	}
+
+	function callback_mod_reforb($args = array())
+	{
+		if ($this->subgroup)
+		{
+			$args["subgroup"] = $this->subgroup;
+		};
+	}
+
+	function _get_where_clause($args = array())
+	{
+		extract($args);
+		// now I have to take 2 things into account
+		// 1) sensible defaults
+		// 2) use the defaults set by the object
+		// 3) use the configuration set by the current tab 
+		
+		
+		// now check, whether there is a configuration set for the current
+		// tab
+
+		if (is_array($config))
+		{
+			$realconf = $config;
+		}
+		else
+		{
+			$realconf = $meta;
+		};
+
+		$sql = array();
+			
+		// from and to can and probably will be overwritten by the timespan selector
+		if ($realconf['from'] > -1)
+		{
+			$sql[] = 'tm >= '.$realconf['from'];
+		};
+	
+		if ($realconf['to'] > -1)
+		{
+			$realconf[] = 'tm <= '.$realconf['to'];
+		};
+		
+		if ($realconf['user'] != '')
+		{
+			$sql[] = 'uid = \''.$realconf['user'].'\'';
+		};
+		
+		if ($realconf['address'] != '')
+		{
+			$sql[] = 'ip LIKE \'%'.$realconf['address'].'%\'';
+		};
+
+		return " WHERE " . join(" AND ",$sql);
+		
+	}
+	
+	function _get_limit_clause($args = array())
+	{
+		extract($args);
+		if (is_array($args["config"]))
+		{
+			$numlines = $args["config"]["numlines"];
+		}
+		else
+		{
+			$numlines = $args["meta"]["numlines"];
+		};
+		return " LIMIT $numlines";
+	}	
 
 	function get_where_clause($oid, $prep = ' WHERE ', $ret_conf_desc = false, $tab_id = '', $def_span = 0)
 	{
@@ -594,6 +835,9 @@ class dronline extends class_base
 
 	function get_limit_clause($id, $ret_num = false)
 	{
+		$ret = " LIMIT 500";
+		return $ret;
+
 		$ob = $this->get_object($id);
 		$conf_o = $this->get_object($ob['meta']['conf']);
 
@@ -608,6 +852,13 @@ class dronline extends class_base
 		{
 			return $ret;
 		}
+
+		if ($ret == '')
+		{
+			// default to 500, or we can get some nasty results a la
+			// SELECT * FROM syslog
+			$ret = " LIMIT 500";
+		};
 
 		if ($ret != '')
 		{
@@ -1012,6 +1263,12 @@ class dronline extends class_base
 			return $this->_do_stat_obj_show_oid($arr);
 		}
 
+		// I need a way to tell a tab that it's contents need to 
+		// contain tabs of just stuff in general from some other place
+
+		// so - I need to get an instance of dronline_conf object,
+		// and get a list of it's tabs (or rather groups), so that I 
+		// can display links to those in my own toolbar
 		if (!isset($data) || !is_array($data))
 		{
 			$data = $this->_do_stat_obj_get_data($arr);
@@ -1066,6 +1323,18 @@ class dronline extends class_base
 			'sortable' => 0,
 		));
 
+		// deem, I really really hate this kind of behaviour, we fetch the 
+		// data from somewhere into memory. All the data. 
+
+		// then we need to cycle over it and put it into the table.
+		// wouldn't it be a lot easier if I could just describe the table
+		// to the vcl object and tell him the datasource .. and then
+		// it can read data from there applying a callback function 
+		// on the go, if needed.
+
+		// of course, there is a problem with this, because if I need to
+		// data from one of the rows to alter the way the table looks
+		// then I need to have the data in the memory beforehand
 
 		$max = 1;
 		foreach($data as $row)		
@@ -1183,6 +1452,11 @@ class dronline extends class_base
 			}
 			$prop['options'] = $op;
 		}
+		else
+		if ($prop['name'] == 'show_stat_time')
+		{
+			$prop["value"] = $this->_do_stat_time(array());
+		}
 
 		if (in_array($req['dro_tab'],array('ipblock','show_queries')) && $fl)
 		{
@@ -1195,6 +1469,28 @@ class dronline extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
+		if ($prop["name"] == "show_dronline")
+		{
+			$def = get_instance("syslog/dronline_conf");
+			$form_data = $arr["form_data"];
+			if ($form_data["subgroup"])
+			{
+				$this->subgroup = $form_data["subgroup"];
+				$form_data["group"] = $form_data["subgroup"];
+				$form_data["classonly"] = 1;
+				$savedata = $def->process_form_data($form_data);
+			};
+			// now I have to merge savedata into object metainfo
+			$form_data = $arr["form_data"];
+			$meta = $arr["obj"]["meta"];
+			$meta["cfgs"][$form_data["group"]] = array_merge($meta["cfgs"][$form_data["group"]],$savedata);
+			$this->upd_object(array(
+				"oid" => $arr["obj"]["oid"],
+				"metadata" => $meta,
+			));	
+			return PROP_IGNORE;
+		}
+		else
 		if ($prop['name'] == 'save_as_obj')
 		{
 			if ($arr['form_data']['save_as_obj'] == 1)
@@ -1233,6 +1529,15 @@ class dronline extends class_base
 		}
 		return PROP_OK;
 	}
+
+	function callback_mod_retval($args = array())
+	{
+		if ($this->subgroup)
+		{
+			$args = &$args["args"];
+			$args["subgroup"] = $this->subgroup;
+		};
+	}	
 
 	function _do_show_queries($arr)
 	{
@@ -1602,6 +1907,16 @@ class dronline extends class_base
 
 		// check if the object for the prev tab already exists. if it does not, create it
 		$tcid = $this->check_hidden_conf($prev_tab, $ob);
+
+		$tablist = array();
+		foreach($this->confable_tabs as $ctab)
+		{
+			$tablist[$ctab] = $this->tablist[$ctab];
+		}
+		print "you are editing the configuration of $tablist[$prev_tab]<br>";
+		print "<pre>";
+		print_r($tablist);
+		print "</pre>";
 
 		$droc = get_instance("syslog/dronline_conf");
 		$droc->embedded = true;

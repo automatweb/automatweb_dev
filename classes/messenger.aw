@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.123 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.124 2003/08/29 11:51:29 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1467,8 +1467,6 @@ class messenger extends menuedit_light
 					"contenttype" => $row2["type"],
 				));
 			};
-			//mail("duke@struktuur.ee","att test","attaching $fname");
-
 		};
 
 		// noja lopuks siis, saadame meili minema ka

@@ -33,6 +33,7 @@
             <name>title</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>title</field>
@@ -42,6 +43,7 @@
             <name>subtitle</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>subtitle</field>
@@ -51,6 +53,7 @@
             <name>author</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>author</field>
@@ -60,6 +63,7 @@
             <name>photos</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>photos</field>
@@ -69,6 +73,7 @@
             <name>keywords</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>keywords</field>
@@ -78,6 +83,7 @@
             <name>names</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>names</field>
@@ -89,6 +95,7 @@
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>10</rows>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>lead</field>
@@ -100,6 +107,7 @@
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>30</rows>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>content</field>
@@ -111,6 +119,7 @@
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>5</rows>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>moreinfo</field>
@@ -397,6 +406,15 @@
             <cols>60</cols>
             <field>user6</field>
             <caption>Kasutaja defineeritud 6</caption>
+      </property>
+      <property>
+            <name>language</name>
+            <type>text</type>
+            <group>general</group>
+            <store>no</store>
+            <table>documents</table>
+            <field>language</field>
+            <caption>Keel</caption>
       </property>
       <property>
             <name>duration</name>

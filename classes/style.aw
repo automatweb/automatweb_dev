@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.24 2003/04/29 16:40:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.25 2003/08/29 11:51:29 duke Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -624,6 +624,7 @@ class style extends aw_template
 	function get_css($id,$a_id = 0)
 	{
 		$st = $this->mk_cache($id);
+		var_dump($st);
 		
 		$fsstr = $this->_get_css($st);
 		if ($fsstr != "")

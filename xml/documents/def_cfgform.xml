@@ -10,6 +10,11 @@
             <caption>Aktiivne</caption>
 	</property>
 	<property>
+		<name>plugins</name>
+		<group>general</group>
+		<caption>Pluginad</caption>
+	</property>
+	<property>
 		<name>title</name>
 		<size>60</size>
 		<group>general</group>

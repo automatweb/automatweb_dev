@@ -44,7 +44,6 @@ class event extends aw_template
 			$name = "";
 		};
 
-		// this wont work
 		if ($this->parent_class == CL_CALENDAR)
 		{
 			$ev_link = $this->mk_my_orb("change_event",array("id" => $e["id"],"date" => $this->date),"planner");

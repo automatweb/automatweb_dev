@@ -44,11 +44,46 @@ class _int_obj_ds_local_sql extends acl_base
 
 	function get_objdata($oid)
 	{
+		// I have to figure out right here whether this is a translation .. and if
+		// so, then we need to load the original object
+
+		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
+		// to this object .. if so, find the original
+
+		// but before doing that I also need to check whether the object can be 
+		// translated at all .. or is translated .. or whether the translation
+		// has been confirmed ... and I can't do that before .. well.. I have 
+		// some kind of flag for that purpose
+		$orig = $this->db_fetch_row("SELECT source FROM aliases WHERE target = '$oid' AND reltype = " . RELTYPE_TRANSLATION);
+		$real_oid = $oid;
+		if (is_array($orig))
+		{
+			$this->real_oid = $orig["source"];
+			$this->transl_id = $oid;
+		}
+		else
+		{
+			$lang_id = aw_global_get("lang_id");
+			$q = sprintf("SELECT target FROM aliases
+					LEFT JOIN objects ON (aliases.target = objects.oid)
+					WHERE aliases.source = %d AND aliases.reltype = %d
+						AND objects.lang_id = %d AND status = %d",
+					$oid,RELTYPE_TRANSLATION,$lang_id,STAT_ACTIVE);
+			$res = $this->db_fetch_row($q);
+			$this->transl_id = is_array($res) ? $res["target"] : NULL;
+			$this->real_oid = $oid;
+
+		}
+
 		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
 		unset($ret["metadata"]);
+		
+		//print "original " . $this->real_oid . ", t = " . $this->transl_id . "<br>";
+
 		return $ret;
 	}
+
 
 	// parameters:
 	//	properties - property array
@@ -64,7 +99,16 @@ class _int_obj_ds_local_sql extends acl_base
 		// find all the tables that the properties are in
 		$tables = array();
 		$tbl2prop = array();
-		$objtblprops = array();
+
+		// fake it
+		$tableinfo["objects"] = array(
+			"index" => "oid",
+		);
+
+		$fields = array();
+
+		$xx = array();
+
 		foreach($properties as $prop => $data)
 		{
 			if ($data["store"] == "no")
@@ -76,63 +120,62 @@ class _int_obj_ds_local_sql extends acl_base
 			{
 				$data["table"] = "objects";
 			}		
+			
+			if ($data["field"] == "meta")
+			{
+				$data["field"] = "metadata";
+			};
 
-			if ($data["table"] != "objects")
+			$tables[$data["table"]] = $data["table"];
+			$tbl2prop[$data["table"]][] = $data;
+
+			$index = $this->real_oid;
+			if (is_numeric($this->transl_id) && $data["trans"] == 1)
 			{
-				$tables[$data["table"]] = $data["table"];
-				if ($data["store"] != "no")
-				{
-					$tbl2prop[$data["table"]][] = $data;
-				}
-			}
-			else
-			{
-				$objtblprops[] = $data;
-			}
+				$index = $this->transl_id;
+			};
+
+
+			$xx[$data["table"]][$index][$data["field"]] = $data;
+
 		}
 
-		// import object table properties in the props array
-		foreach($objtblprops as $prop)
+		// and now I have to figure out how to load the translation as well .. if there is one
+		//foreach($tables as $table)
+		foreach($xx as $table => $block)
 		{
-			if ($prop["method"] == "serialize")
+			//echo "table = $table <br>";
+			foreach($block as $item_id => $fields)
 			{
-				$ret[$prop["name"]] = aw_unserialize($objdata[$prop["field"]]);
-			}
-			else
-			{
-				$ret[$prop["name"]] = $objdata[$prop["field"]];
-			}
-		}
-
-		//echo dbg::dump($tableinfo);
-		// do a query for each table
-		foreach($tables as $table)
-		{
-			//echo "table = $table <br />";
-			$fields = array();
-			foreach($tbl2prop[$table] as $prop)
-			{
-				$fields[] = $prop["field"];
-			}
-
-			if (count($fields) > 0)
-			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$objdata["brother_of"]."'";
-				//echo "q = $q <br />";
-				$data = $this->db_fetch_row($q);
-				if (is_array($data))
+				if (count($fields) > 0)
 				{
-					$ret += $data;
-				}
-
-				foreach($tbl2prop[$table] as $prop)
-				{
-					if ($prop["method"] == "serialize")
+					$q = "SELECT ".join(",", array_keys($fields))." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$item_id."'";
+					//echo "q = $q <br>";
+					$data = $this->db_fetch_row($q);
+					// put everything into return value ..
+					if (is_array($data))
 					{
-						$ret[$prop["name"]] = aw_unserialize($this->obj["properties"][$prop["name"]]);
+						$ret += $data;
+					}
+
+					// and then find serialized things and 
+					foreach($tbl2prop[$table] as $prop)
+					{
+						if ($prop["method"] == "serialize")
+						{
+							/*
+							print "hm?";
+							print "<pre>";
+							print_r($prop);
+							print_r($data);
+							print "</pre>";
+							*/
+							$tmp = aw_unserialize($data[$prop["field"]]);
+							$ret[$prop["name"]] = $tmp[$prop["name"]];
+						}
 					}
 				}
-			}
+			};
 		}
 		return $ret;
 	}
@@ -144,6 +187,7 @@ class _int_obj_ds_local_sql extends acl_base
 	//	tableinfo - tableinfo from prop reader
 	// returns:
 	//	new oid
+
 	function create_new_object($arr)
 	{
 		extract($arr);
@@ -417,7 +461,7 @@ class _int_obj_ds_local_sql extends acl_base
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
-		if ($params["class_id"])
+		if ($params["class_id"] && !is_array($params["class_id"]))
 		{
 			$classes = aw_ini_get("classes");
 			list($properties, $tableinfo) = $GLOBALS["object_loader"]->load_properties(array(
@@ -429,6 +473,7 @@ class _int_obj_ds_local_sql extends acl_base
 		$stat = false;
 		$where = array();
 		$sby = "";
+
 		foreach($params as $key => $val)
 		{
 			if ($key == "status")
@@ -482,6 +527,12 @@ class _int_obj_ds_local_sql extends acl_base
 			}
 			else
 			{
+				// pass all arguments .. &, >, < or whatever the user wants to
+				if ($key == "flags" || $key == "modified")
+				{
+					$where[$tbl][] = $tbl.".".$fld." ".$val;
+				}
+				else
 				if (strpos("%", $val) !== false)
 				{
 					$where[$tbl][] = $tbl.".".$fld." LIKE '".$val."'";

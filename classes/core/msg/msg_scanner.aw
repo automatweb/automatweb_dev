@@ -6,7 +6,9 @@ class msg_scanner extends class_base
 {
 	function msg_scanner()
 	{
-		$this->init();
+		$this->init(array(
+			"no_db" => 1,
+		));
 		$this->folder = $this->cfg["basedir"]."/xml/msgmaps";
 	}
 

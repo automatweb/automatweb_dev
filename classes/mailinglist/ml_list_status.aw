@@ -1,4 +1,6 @@
 <?php
+// @tooltip save caption="Salvesta"
+// @tooltip delete caption="Kustuta"
 
 classload("mailinglist/ml_queue");
 class ml_list_status extends ml_queue

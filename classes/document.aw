@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.207 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.208 2003/08/29 11:51:29 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -174,6 +174,7 @@ class document extends aw_template
 
 		if (not($this->can("view",$docid)) && !$no_acl_checks)
 		{
+		//	and why is this commented out?
 		//	$this->data = false;
 		//	return false;
 		}
@@ -187,39 +188,48 @@ class document extends aw_template
 			$sufix = "";
 		};
 
-		if ($docid)
+		// I could really use some kind of check in the object constructor ... 
+		// so that the object is only loaded when it has a correct class id ...
+		// it is not a good idea to try to handle some random object as a document ...
+
+		// and right now it's too damn hot (32C) .. to implement this feature
+		// into the object loader.. -- duke
+		$docobj = new object($docid);
+
+		if ($this->period > 0 && !$this->ignore_periods)
 		{
-			$q = "SELECT objects.*,documents.*,objects.period AS period FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid AND status != 0 $sufix";
-			$this->db_query($q);
+			if ($docobj->prop("period") != $this->period)
+			{
+				// maintain status quote .. e.g. do not return anything if 
+				// the document is not in the correct period or we are ignoring
+				// periods (which is the case if a menu is set to show documents
+				// from multiple periods
+				$docobj = false;
+			}
 		}
-		$data = $this->db_next();
 
-		if (gettype($data) == "array") 
+		if ($docobj->prop("status") == STAT_DELETED)
 		{
-			$data["content"] = trim($data["content"]);
-			$data["lead"] = trim($data["lead"]);
-			$data["cite"] = trim($data["cite"]);
-			$data["meta"] = aw_unserialize($data["metadata"]);
+			$docobj = false;
 		};
-		$this->dequote($data);
-		$this->data = $data;
-		return $data;
-	}
 
-	// see on lihtsalt wrapper backwards compatibility jaoks
-	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) 
-	{
-		$params["docid"] 		= $docid;
-		$params["text"] 		= $text;
-		$params["tpl"] 		= $tpl;
-		$params["leadonly"] 	= $leadonly;
-		$params["secID"] 		= $secID;
-		return $this->gen_preview($params);
+		$this->docobj = $docobj;
+		if (is_object($docobj))
+		{
+			$retval = $docobj->fetch();
+			/*
+			print "<pre>";
+			print_r($retval);
+			print "------<br>";
+			print_r($docobj->arr());
+			print "</pre>";
+			*/
+		};
+		return $retval;
 	}
 
 	////
-	// !genereerib objekti n? valmiskujul
-	// sellest saab wrapper j?rgnevale funktsioonile
+	// !genereerib objekti nö valmiskujul
 	// params: docid, text, tpl, tpls, leadonly, strip_img, secID, boldlead, tplsf, notitleimg, showlead, no_stip_lead, doc
 	// tpls - selle votmega antakse ette template source, mille sisse kood paigutada
 	// doc - kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
@@ -239,15 +249,13 @@ class document extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
-		// k?sime dokumendi kohta infot
+		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
 		if (!isset($doc) || !is_array($doc))
 		{
+			// we need to put the translation merging into this fetch function
 			$doc = $this->fetch($docid, $no_acl_checks);
-			// I hope this won't break anything. but now when you click on a brother document
-			// you sould still be left under the menu where the brother document is.
-			//	$docid = $doc["docid"];
 		};
 
 
@@ -274,7 +282,9 @@ class document extends aw_template
 		
 		// if oid is in the arguments check whether that object is attached to 
 		// this document and display it instead of document
-		#$mk_compat = true;
+
+		// this should be a more generic solution ..we should be able to show anything
+		// and not only files ...
 		$oid = aw_global_get("oid");
 		if ($oid)
 		{
@@ -338,6 +348,9 @@ class document extends aw_template
 		$doc["vars"] = $params["vars"];
 		if ($si)
 		{
+			// augh .. backwards compatiblity is a fucking bitch
+			// that parse_document thingie expects $doc _array_ .. and wants
+			// to modify it .. and allah only knows where this is used ...
 			$si->parse_document(&$doc);
 			if (!$si->can_show_document(&$doc))
 			{
@@ -1713,7 +1726,7 @@ class document extends aw_template
 		};
 
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
-		// menyy, mille juures on m??ratud edimistemplate
+		// menyy, mille juures on määratud edimistemplate
 		$_tpl = $this->get_edit_template($oob["parent"]);
 
 		$awdoc = get_instance("doc");

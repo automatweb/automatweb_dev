@@ -182,7 +182,14 @@ function drawFolder(leftSide)
   this.outputLink() 
   doc.write("<img id='folderIcon" + this.id + "' name='folderIcon" + this.id + "' src='" + this.iconSrc+"' border=0></a>") 
   doc.write("</td><td valign=middle nowrap class='fgtext_bad'>") 
-  url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.hreference+ "\";return false;";
+  if (TARGETFRAME)
+  {
+  	url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.hreference+ "\";return false;";
+  }
+  else
+  {
+	url = "window.location.href=\"" + this.reference + "\"";
+  };
   onclick = "onClick='"+url+"'";
   doc.write("<a href='#' "+onclick+">"+this.desc + "</a>");
   if (USETEXTLINKS) 
@@ -293,7 +300,14 @@ function initializeItem(level, lastNode, leftSide)
 function drawItem(leftSide) 
 { 
   this.blockStart("item")
-  url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.link+ "\";return false;";
+  if (TARGETFRAME)
+  {
+  	url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.link+ "\";return false;";
+  }
+  else
+  {
+	url = "window.location.href=\""+this.link+"\"";
+  };
   onclick = "onClick='"+url+"'";
 
   doc.write("<tr><td class='fgtext_bad'>") 

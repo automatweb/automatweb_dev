@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.5 2003/07/31 16:06:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.6 2003/08/29 11:51:32 duke Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -176,6 +176,9 @@ class object_list extends _int_obj_container_base
 				"msg" => "object_list::foreach_cb(): callback function $param[func] does not exist!"
 			));
 		}
+
+		// why not foreach($this->list as $item)? it works just as well, and is
+		// easier on the eyes -- duke
 
 		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
 		{

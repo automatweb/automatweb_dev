@@ -8,7 +8,7 @@
 <!-- SUB: LINE -->
 <tr>
 	<td class='chformleftcol' width='160' nowrap>
-	{VAR:caption}
+	{VAR:caption} 
 	</td>
 	<td class='chformrightcol'>
 	{VAR:element}

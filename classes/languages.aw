@@ -33,6 +33,7 @@ class languages extends aw_template
 	// all_data - returns all data otherwise just the stuff to stick in a listbox
 	// ignore_status - if true, returns also inactive languages
 	// addempty - if true, empty element is added in the beginning
+	// key - use that field as keys of the return array
 	function get_list($arr = array())
 	{
 		extract($arr);
@@ -46,15 +47,16 @@ class languages extends aw_template
 		{
 			$ret = array();
 		}
+		$use_key = isset($key) ? $key : "id";
 		foreach($dat as $ldat)
 		{
 			if (isset($all_data))
 			{
-				$ret[$ldat["id"]] = $ldat;
+				$ret[$ldat[$use_key]] = $ldat;
 			}
 			else
 			{
-				$ret[$ldat["id"]] = $ldat["name"];
+				$ret[$ldat[$use_key]] = $ldat["name"];
 			}
 		}
 
@@ -71,7 +73,7 @@ class languages extends aw_template
 			{
 				if ($row["status"] == 2)
 				{
-					$ret[] = $row;
+					$ret[$row["id"]] = $row;
 				}
 			}
 			return $ret;

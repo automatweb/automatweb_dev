@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.24 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.25 2003/08/29 11:51:28 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -617,12 +617,6 @@ class aw_mail {
 				$headers .= sprintf("%s: %s%s",$name,$value,CRLF);
 			};
 		}
-		if ($GLOBALS["__debug"])
-		{
-			echo("<textarea cols=80 rows=15>blj‰‰ \nto=$to \nsubj=$subject \nheaders:");
-			print_r($headers);
-			echo("email=$email</textarea>");
-		};
 
 		if (is_array($this->body_replacements))
 		{

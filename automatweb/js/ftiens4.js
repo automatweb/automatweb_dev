@@ -130,7 +130,8 @@ function drawFolder(insertAtObj)
   var leftSide = leftSideHTML(this.leftSideCoded)
 
   if (browserVersion > 0) 
-    auxEv = "<a href='javascript:clickOnNode(\""+this.getID()+"\")'>" 
+    auxEv = "<a href='javascript:clickOnNode("+this.getID()+")'>" 
+    //auxEv = "<a href='javascript:clickOnNode(\""+this.getID()+"\")'>" 
   else 
     auxEv = "<a>" 
 
@@ -292,7 +293,8 @@ function linkFolderHTML(isTextLink)
     }
 
     if (browserVersion > 0) 
-      docW = docW + "onClick='javascript:clickOnFolder(\""+this.getID()+"\")'"
+      docW = docW + "onClick='javascript:clickOnFolder("+this.getID()+")'"
+      //docW = docW + "onClick='javascript:clickOnFolder(\""+this.getID()+"\")'"
 
     docW = docW + ">"
   } 

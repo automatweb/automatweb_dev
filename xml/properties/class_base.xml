@@ -3,9 +3,10 @@
       <property>
             <name>name</name>
             <type>textbox</type>
-            <group>general</group>
             <rel>1</rel>
+            <trans>1</trans>
             <table>objects</table>
+            <group>general</group>
             <field>name</field>
             <caption>Nimi</caption>
             <comment>Objekti nimi</comment>
@@ -13,8 +14,8 @@
       <property>
             <name>comment</name>
             <type>textbox</type>
-            <group>general</group>
             <table>objects</table>
+            <group>general</group>
             <field>comment</field>
             <caption>Kommentaar</caption>
             <comment>Vabas vormis tekst objekti kohta</comment>
@@ -22,11 +23,32 @@
       <property>
             <name>status</name>
             <type>status</type>
-            <group>general</group>
+            <trans>1</trans>
             <table>objects</table>
+            <group>general</group>
             <field>status</field>
             <caption>Aktiivne</caption>
             <comment>Kas objekt on aktiivne </comment>
+      </property>
+      <property>
+            <name>needs_translation</name>
+            <type>checkbox</type>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>2</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Vajab tõlget</caption>
+      </property>
+      <property>
+            <name>is_translated</name>
+            <type>checkbox</type>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>4</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tõlge kinnitatud</caption>
       </property>
       <classinfo>
             <trans_id>TR_CLASS_BASE</trans_id>

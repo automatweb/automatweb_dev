@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.21 2003/08/01 12:48:19 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.22 2003/08/29 11:51:29 duke Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -560,6 +560,7 @@ class sys extends aw_template
 
 	}
 
+
 	function get_table($args = array())
 	{
 		extract($args);
@@ -569,7 +570,6 @@ class sys extends aw_template
 		print "</pre>";
 		exit;
 	}
-
 	function on_site_init(&$dbi, $site, $ini_opts, &$log)
 	{
 		// no need to dbsync if we are not creating a new site
@@ -595,5 +595,43 @@ class sys extends aw_template
 			));
 		}
 	}
+
+	function token_test()
+	{
+		$source = file_get_contents($this->cfg["basedir"] . "/xml/trtemplate/TR_FORUM.xml");
+		$p = xml_parser_create();
+		xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,0);
+		xml_parse_into_struct($p,$source,$vals,$index);
+		xml_parser_free($p);
+		$res = array();
+		foreach($vals as $key => $val)
+		{
+			if ($val["tag"] == "id" && $val["type"] == "complete")
+			{
+				$id = $val["value"];
+			};
+			if ($val["tag"] == "text" && $val["type"] == "complete")
+			{
+				$text = $val["value"];
+			};
+			if ($val["tag"] == "ctx" && $val["type"] == "complete")
+			{
+				$ctx = $val["value"];
+			};
+			if ($val["tag"] == "string" && $val["type"] == "close")
+			{
+				$res[$id] = array(
+					"id" => $id,
+					"text" => $text,
+					"ctx" => $ctx,
+				);
+			};
+		}
+		print "<pre>";
+		print_r(aw_ini_get("translate.ids"));
+		print_r($res);
+		print "</pre>";
+	}
+
 };
 ?>

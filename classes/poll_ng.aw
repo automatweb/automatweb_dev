@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.3 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.4 2003/08/29 11:51:29 duke Exp $
 
 /*
 
@@ -9,8 +9,10 @@
 @default field=meta
 @default method=serialize
 
-@property choices type=generated callback=callback_get_choices
+@property choices type=generated callback=callback_get_choices group=choices
 @caption Variandid
+
+@groupinfo choices caption=Vastusevariandid
 
 @classinfo relationmgr=yes
 

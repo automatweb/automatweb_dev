@@ -22,6 +22,7 @@
             <name>url_int_text</name>
             <type>text</type>
             <group>general</group>
+            <store>no</store>
             <field>url_int_text</field>
             <caption>Saidi sisene link</caption>
       </property>
@@ -129,6 +130,7 @@
             <name>link_image</name>
             <type>fileupload</type>
             <group>Pilt</group>
+            <store>no</store>
             <field>link_image</field>
             <caption>Pilt</caption>
       </property>
@@ -136,6 +138,7 @@
             <name>link_image_show</name>
             <type>text</type>
             <group>Pilt</group>
+            <store>no</store>
             <field>link_image_show</field>
             <caption></caption>
       </property>

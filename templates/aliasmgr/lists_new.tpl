@@ -1,5 +1,5 @@
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-<form name="foo" method="POST">
+<form name="foo" method="POST" id="foo">
 <tr><td class="tableborder">
 	{VAR:toolbar}
 </td>

@@ -59,6 +59,11 @@
 			</function>
 		</action>
 
+		<action name="token_test">
+			<function name="token_test">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>
 		

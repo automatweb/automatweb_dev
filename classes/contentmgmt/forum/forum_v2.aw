@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.8 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.9 2003/08/29 11:51:30 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -79,6 +79,7 @@
 	@groupinfo add_topic caption="Lisa teema" parent=container
 	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
+	@classinfo trans_id=TR_FORUM
 
 */
 
@@ -90,18 +91,23 @@ class forum_v2 extends class_base
 {
 	function forum_v2()
 	{
+		print "initing forum_v2, eh?<br>";
 		$this->init(array(
 			"tpldir" => "forum",
 			"clid" => CL_FORUM_V2,
+			"trid" => TR_FORUM,
 		));
 	}
 
 	function callback_get_rel_types()
 	{
+		// ah, but the tr function needs to know the context as well,
+		// so that it can actually return the strings from the correct
+		// catalog. now, how do I do that?
                 return array(
-                        RELTYPE_TOPIC_FOLDER => "teemade kataloog",
-			RELTYPE_ADDRESS_FOLDER => "listiliikmete kataloog",
-			RELTYPE_STYLE => "stiil",
+                        RELTYPE_TOPIC_FOLDER => $this->tr("teemade kataloog"),
+			RELTYPE_ADDRESS_FOLDER => $this->tr("listiliikmete kataloog"),
+			RELTYPE_STYLE => $this->tr("stiil"),
 		);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.18 2003/08/01 13:27:53 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.19 2003/08/29 11:51:33 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -436,27 +436,65 @@ class ml_member extends class_base
 		));
 
 		$section = aw_global_get("section");
-
+		
 		if (empty($list_obj["meta"]["def_user_folder"]))
 		{
 			return $this->cfg["baseurl"] . "/" . $section;
 		};
 
 		$fldr = $list_obj["meta"]["def_user_folder"];
+		$status = STAT_ACTIVE;
+
+
+
+		
+		// I need to validate that stuff as well
+		if (!empty($list_obj["meta"]["confirm_subscribe"]))
+		{
+			// generate the confirm code
+			$status = STAT_DEACTIVE;
+			$ts = time();
+			$hash = substr(gen_uniq_id(),0,15);
+			// now I need to generate the confirm url
+			$url = $this->mk_my_orb("confirmsub",array("hash" => $hash,"addr" => $email));
+		};
+			
+		$objname = $name . " <" . $email . ">";
+
 		if (!$this->check_member(array("email" => $email,"folder" => $fldr)))
 		{
-			$objname = $name . " <" . $email . ">";
 			$objname = htmlspecialchars($objname);
+			// Why do we duplicate name and email in object metadata?
 			$new_id = $this->new_object(array(
 				"parent" => $list_obj["meta"]["def_user_folder"],
 				"class_id" => $this->clid,
 				"name" => $objname,
+				"status" => $status,
+				"metadata" => array(
+					"name" => $name,
+					"email" => $email,
+					"hash" => $hash,
+					"time" => $ts,
+				),
 				"no_flush" => 1,
-				"metadata" => array("name" => $name,"email" => $email),
 			));
 			$q = "INSERT INTO ml_users (name,mail,id) VALUES ('$name','$email','$new_id')";
 			$this->db_query($q);
 		};
+		
+		if (!empty($list_obj["meta"]["confirm_subscribe"]) && !empty($list_obj["meta"]["confirm_subscribe_msg"]))
+		{
+			// now generate and send the bloody message
+			$msg = get_instance("messenger/mail_message");
+			$msg->process_and_deliver(array(
+				"id" => $list_obj["meta"]["confirm_subscribe_msg"],
+				"to" => $objname,
+				"replacements" => array(
+					"#list#" => parse_obj_name($list_obj["name"]),
+					"#url#" => $url,
+				),
+			));
+		}
 
 		return $this->cfg["baseurl"] . "/" . $section;
 

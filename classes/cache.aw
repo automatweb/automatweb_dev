@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.19 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.20 2003/08/29 11:51:28 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -164,6 +164,9 @@ class cache extends core
 		$dirname = str_replace(".","",$pathinfo["dirname"]);
 
 		$fqfn = $this->cfg["basedir"] . $dirname . "/" . $pathinfo["basename"];
+
+		// this is all nice and good, but I need a way to load files from the
+		// site directory as well. 
 
 		if (is_file($fqfn) && is_readable($fqfn))
 		{

@@ -4,7 +4,7 @@
             <name>choices</name>
             <type>generated</type>
             <callback>callback_get_choices</callback>
-            <group>general</group>
+            <group>choices</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -13,5 +13,10 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <choices>
+                  <caption>Vastusevariandid</caption>
+            </choices>
+      </groupinfo>
 </properties>
 
