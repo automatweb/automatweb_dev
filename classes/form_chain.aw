@@ -451,13 +451,13 @@ class form_chain extends form_base
 	{
 		extract($arr);
 
-		$e = $this->get_chain_entry($entry_id);
+/*		$e = $this->get_chain_entry($entry_id);
 		foreach($e as $fid => $fentry_id)
 		{
 			$this->delete_object($fentry_id);
-		}
+		}*/
 
-		$this->db_query("DELETE FROM form_chain_entries WHERE id = $entry_id");
+		//$this->db_query("DELETE FROM form_chain_entries WHERE id = $entry_id");
 
 		header("Location: ".$this->mk_my_orb("show_chain_entries", array("id" => $id)));
 	}

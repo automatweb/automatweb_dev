@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.65 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.66 2001/09/18 00:37:28 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1302,7 +1302,7 @@ class form extends form_base
 
 		$id = $this->id;
 
-		$q = "SELECT * FROM form_".$id."_entries WHERE id = $entry_id";
+		$q = "SELECT form_".$id."_entries.*,objects.created as created FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE id = $entry_id";
 		$this->db_query($q);
 
 		if (!($row = $this->db_next()))
@@ -1317,7 +1317,7 @@ class form extends form_base
 				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),true);
 			}
 		};
-
+		$this->entry_created = $row["created"];
 		$row["form_".$id."_entry"] = $row["id"];
 
 		// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
@@ -1857,6 +1857,7 @@ class form extends form_base
 			$ar = $this->get_forms_for_chain($chain_id);
 			reset($ar);
 			list($mid,$v) = each($ar);
+			$this->search_form = $mid;
 			// let's create the query a bit differently - join only the tables that are actually being searched from
 
 			$query = "";
@@ -2320,9 +2321,8 @@ class form extends form_base
 		else
 		{
 			// n2itame sisestusi lihtsalt yxteise j2rel 
-//			reset($matches);
-//			while(list($fid,$v) = each($matches))
-//			{
+			if ($this->form_search_only)
+			{
 				$fid = $this->search_form;
 				$t = new form();
 				reset($matches);
@@ -2331,7 +2331,23 @@ class form extends form_base
 					$t->reset();
 					$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]));
 				}
-//			}
+			}
+			else
+			{
+				$fid = $this->search_form;
+				$t = new form();
+				// need on chain entry id'd
+				$mtstr = join(",",$matches);
+				if ($mtstr != "")
+				{
+					$this->db_query("SELECT form_".$fid."_entries.id as id FROM form_chain_entries LEFT JOIN form_".$fid."_entries ON form_chain_entries.id = form_".$fid."_entries.chain_id WHERE form_chain_entries.id IN ($mtstr)");
+					while ($row = $this->db_next())
+					{
+						$t->reset();
+						$html.=$t->show(array("id" => $fid, "entry_id" => $row["id"], "op_id" => $this->arr["search_outputs"][$fid]));
+					}
+				}
+			}
 		}
 	
 		$awt->stop("form::search");
@@ -2768,12 +2784,13 @@ class form extends form_base
 
 	////
 	// !finds the first element with type $type (and subtype $subtype) in the loaded form and returns a reference to it
-	function get_element_by_type($type,$subtype = "")
+	function get_element_by_type($type,$subtype = "",$all_els = false)
 	{
 		global $awt;
 		$awt->start("form::get_element_by_type");
 		$awt->count("form::get_element_by_type");
 
+		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -2785,12 +2802,23 @@ class form extends form_base
 					if ($el->get_type() == $type && ($subtype == "" || $el->get_subtype() == $subtype))
 					{
 						$awt->stop("form::get_element_by_type");
-						return $el;
+						if ($all_els)
+						{
+							$ret[] = $el;
+						}
+						else
+						{
+							return $el;
+						}
 					}
 				}
 			}
 		}
 		$awt->stop("form::get_element_by_type");
+		if ($all_els)
+		{
+			return $ret;
+		}
 		return false;
 	}
 

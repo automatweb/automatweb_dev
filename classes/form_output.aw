@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.16 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.17 2001/09/18 00:37:28 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -1406,6 +1406,11 @@ class form_output extends form_base
 		$this->save_output($id);
 
 		return $this->mk_my_orb("translate", array("id" => $id));
+	}
+
+	function get_element_by_type($type,$subtype = "",$all_els = false)
+	{
+		return array();
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.21 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.22 2001/09/18 00:37:28 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -273,10 +273,25 @@ class form_element extends aw_template
 			$di = "";
 			if ($this->arr["type"] == "date")
 			{
+				$add_types = array("60" => "Minutit", "3600" => "Tundi", "86400" => "P&auml;eva", "604800" => "N&auml;dalat", "2592000" => "Kuud");
+				$d_el_os = $this->form->get_element_by_type("date","",true);
+				$d_els = array();
+				foreach($d_el_os as $d_el)
+				{
+					if ($d_el->get_id() != $this->get_id())	// do not let the user select the current element
+					{
+						$d_els[$d_el->get_id()] = $d_el->get_el_name();
+					}
+				}
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
 					"to_year" => $this->arr["to_year"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine"))
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine","created" => "Loomine")),
+					"def_date_num" => $this->arr["def_date_num"],
+					"add_types" => $this->picker($this->arr["def_date_add"],$add_types),
+					"date_now_checked" => checked($this->arr["def_date_type"] == "now"),
+					"date_rel_checked" => checked($this->arr["def_date_type"] == "rel"),
+					"date_rel_els" => $this->picker($this->arr["def_date_rel_el"], $d_els)
 				));
 				$di = $this->parse("DATE_ITEMS");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -557,6 +572,14 @@ class form_element extends aw_template
 			$this->arr["from_year"] = $$var;
 			$var=$base."_to_year";
 			$this->arr["to_year"] = $$var;
+			$var=$base."_def_date_type";
+			$this->arr["def_date_type"] = $$var;
+			$var=$base."_def_date_num";
+			$this->arr["def_date_num"] = $$var;
+			$var=$base."_def_date_add_type";
+			$this->arr["def_date_add"] = $$var;
+			$var=$base."_def_date_rel";
+			$this->arr["def_date_rel_el"] = $$var;
 		}
 
 		if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset" || $this->arr["type"] == "button")
@@ -1136,7 +1159,15 @@ class form_element extends aw_template
 				));
 				$fy = $this->arr["from_year"];
 				$ty = $this->arr["to_year"];
-				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+				if ($this->arr["def_date_type"] == "now")
+				{
+					$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+				}
+				else
+				{
+					$def = time();
+				}
+				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				break;
 		};
 		
@@ -1307,10 +1338,22 @@ class form_element extends aw_template
 		else
 		if ($this->arr["type"] == "date")
 		{
-			$var = $prefix.$this->id;
+			// subtle trickery here. since if this is a related date element it must get its value from the other element
+			// we just use that elements variable for that
+			$d_id = $this->id;
+			if ($this->arr["def_date_type"] == "rel")
+			{
+				$d_id = $this->arr["def_date_rel_el"];
+			}
+			$var = $prefix.$d_id;
 			global $$var;
 			$v = $$var;
-			$entry[$this->id] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+			$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+			if ($this->arr["def_date_type"] == "rel")
+			{
+				$tm+=($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+			}
+			$entry[$this->id] = $tm;
 			$this->entry = $entry[$this->id];
 			$this->entry_id = $id;
 			$awt->stop("form_element::core_process_entry");
