@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.4 2004/02/26 13:53:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.5 2004/03/09 15:35:06 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -62,6 +62,7 @@ class object_type extends class_base
 					"class_id" => CL_OBJECT_TYPE,
 					"subclass" => $arr["obj_inst"]->prop("type"),
 					"lang_id" => array(),
+					"site_id" => array(),
 				));
 				$data["options"] = $ol->names();
                                 for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
