@@ -1,10 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.69 2002/08/16 12:52:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.70 2002/08/16 15:24:38 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 
 $pi = "";
+
+global $section;
+// register_globals should be off!
+if (is_array($_SERVER))
+{
+	// alltho we only need PATH_INFO and QUERY_STRING
+	extract($_SERVER);
+};
 
 if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
 {
