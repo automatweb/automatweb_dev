@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="forum_comment" folder="contentmgmt/forum" extends="class_base">
+	</class>
+</orb>
+		
