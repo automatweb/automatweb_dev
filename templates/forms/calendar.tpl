@@ -1,51 +1,17 @@
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
-
-<!-- SUB: HAS_CALENDAR -->
-<tr>
-<td class="fform">Perioodide sisestamise vorm:</td>
-<td class="fform"><select name="period_entry_form">{VAR:period_entry_forms}</select></td>
+<tr class="aste01">
+<td class="celltext">{VAR:LC_FORMS_EV_ENTRY_FORM}:</td>
+<td class="celltext"><input type='checkbox' name='ev_entry_form' value=1 {VAR:ev_entry_form}></td>
 </tr>
-<!-- END SUB: HAS_CALENDAR -->
-
-<!-- SUB: HAS_CALENDAR1 -->
-<tr>
-<td class="fform">Perioodiühik:</td>
-<td class="fform"><select name="period_type">{VAR:period_types}</select></td>
+<tr class="aste01">
+<td class="celltext">{VAR:LC_FORMS_CALENDAR_OP}:</td>
+<td class="celltext"><select name="event_display_table" class="formselect2">{VAR:event_display_tables}</select></td>
 </tr>
-<tr>
-<td class="fform">Ühikuid:</td>
-<td class="fform"><input type="text" name="period_items" value="{VAR:period_items}" size="3"></td>
+<tr class="aste01">
+<td class="celltext">Eventi alguse määrab element:</td>
+<td class="celltext"><select name="event_start_el" class="formselect2">{VAR:event_start_els}</select></td>
 </tr>
-<tr>
-<td class="fform">Max sisestusi ühes ühikus:</td>
-<td class="fform"><input type="text" name="period_max_items" value="{VAR:period_max_items}" size="3"></td>
-</tr>
-<tr>
-<td class="fform">Deaktiveeritakse:</td>
-<td class="fform">
-	<input type="text" name="deact_before_items" value="{VAR:deact_before_items}" size="3">
-	<select name="deact_before_type">{VAR:deact_before_types}</select>
-	enne perioodiühiku algust
-</td>
-</tr>
-<!-- END SUB: HAS_CALENDAR1 -->
-
-<!-- SUB: IS_ORDER_FORM -->
-<tr>
-<td class="fform" style="font-weight: bold" colspan="2">
-Tellimisvorm: vali vorm või pärg, millesse eventid paigutatakse
-</td>
-</tr>
-<tr>
-<td class="fform" valign="top">Vormid:</td>
-<td class="fform"><input type="radio" name="of_target_type" value="form" {VAR:form_checked}><select name="of_target_form">{VAR:forms}</select></td>
-</tr>
-<tr>
-<td class="fform" valign="top">Pärjad:</td>
-<td class="fform"><input type="radio" name="of_target_type" value="chain" {VAR:chain_checked}><select name="of_target_chain">{VAR:chains}</select></td>
-</tr>
-<!-- END SUB: IS_ORDER_FORM -->
 <tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE} form'></td>
 </table>
