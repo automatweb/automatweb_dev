@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.50 2004/07/08 09:21:07 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.51 2004/07/08 13:09:10 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -901,6 +901,7 @@ class crm_company extends class_base
 	function set_property($arr)
 	{
 		$data = &$arr['prop'];
+		return PROP_OK;
 	}
 
 	function callback_pre_edit($arr)
@@ -1230,6 +1231,9 @@ class crm_company extends class_base
 		if($old_iface)
 		{
 			$this->get_all_workers_for_company(&$arr['obj_inst'],&$persons,true);
+			echo "<!-- ";
+			print_r($persons);
+			echo "-->";
 		}
 		else
 		{
@@ -1251,7 +1255,6 @@ class crm_company extends class_base
 				$persons[] = $conn->prop('to');
 			}
 		}
-
 
 		foreach($persons as $person)
 		{
@@ -1365,6 +1368,7 @@ class crm_company extends class_base
 		{
 			$data[$conn->prop('to')] = $conn->prop('to');	
 		}
+		
 		if($workers_too)
 		{
 			$conns = $obj->connections_from(array(
@@ -1375,6 +1379,7 @@ class crm_company extends class_base
 				$data[$conn->prop('to')] = $conn->prop('to');
 			}
 		}
+
 		//getting all the sections
 		$conns = $obj->connections_from(array(
 			'type' => RELTYPE_SECTION,
@@ -1802,6 +1807,7 @@ class crm_company extends class_base
 		));
 
 		$alist = array(RELTYPE_WORKERS,RELTYPE_ADDRESS,RELTYPE_JOBS);
+
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
