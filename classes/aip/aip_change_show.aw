@@ -9,9 +9,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property type type=select field=meta method=serialize
 @caption Muudatuse t&uuml;&uuml;p
 

@@ -9,9 +9,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property change_folder type=relpicker type=RELATION_CHANGE_FOLDER field=meta method=serialize
 @caption Muudatuste kataloog
 

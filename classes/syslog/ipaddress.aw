@@ -11,9 +11,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property addr type=textbox table=ipaddresses field=ip
 @caption IP Aadress
 
