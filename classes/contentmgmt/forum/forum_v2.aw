@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.29 2004/06/17 14:21:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.30 2004/07/02 16:07:57 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -97,9 +97,14 @@
 	@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Sisestusvormi elemendi stiil
 
+	@property import_xml_file type=fileupload store=no group=import
+	@caption Vali XML fail
+
 	@groupinfo contents caption=Sisu submit=no
-	@groupinfo topic_selector caption=Teemad 
 	@groupinfo styles caption=Stiilid
+	@groupinfo settings caption=Seadistused
+	@groupinfo topic_selector caption=Teemad parent=settings
+	@groupinfo import caption=Import parent=settings
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption teemade kataloog
@@ -164,6 +169,7 @@ class forum_v2 extends class_base
 				};
 				break;
 
+
 		};	
 		return $retval;
 	} 
@@ -179,11 +185,175 @@ class forum_v2 extends class_base
 				break;
 
 			case "container":
-				// now, I have to 
 				$this->update_contents($arr);
+				break;
+			
+			case "import_xml_file":
+				$tmpname = $_FILES["import_xml_file"]["tmp_name"];
+				if (is_uploaded_file($tmpname))
+				{
+					$contents = aw_unserialize(file_get_contents($tmpname));
+					$forumdata = $contents["forum"];
+					$topicdata = $contents["topics"];
+					$commentdata = $contents["comments"];
+					if (is_array($forumdata) && is_array($topicdata) && is_array($commentdata))
+					{
+						$this->obj_inst = $arr["obj_inst"];
+						$this->create_forum_from_comments($forumdata,$topicdata,$commentdata);
+					};
+				};
 				break;
 		}
 		return $retval;
+	}
+
+	function create_forum_from_comments($forumdata,$topicdata,$commentdata)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_FORUM_V2,
+			"name" => $forumdata["name"],
+		));
+		$id = $this->obj_inst->id();
+		$o = $this->obj_inst;
+		
+		print "creating forum object with name " . $forumdata["name"] . "<br>";
+		print "creating folder for topics " . $forumdata["name"] . " teemad" . "<br>";
+		print "creating topics<br>";
+
+		$o->set_name($forumdata["name"]);
+		$o->set_comment($forumdata["comment"]);
+		$o->set_prop("topics_on_page",$forumdata["topics_on_page"]);
+		$o->set_prop("comments_on_page",$forumdata["comments_on_page"]);
+
+		// does this forum have a topic folder?
+		$folder_conns = $o->connections_from(array(
+			"type" => "RELTYPE_TOPIC_FOLDER",
+		));
+
+		if (sizeof($folder_conns) == 0)
+		{
+			// create the folder then!
+			print "creating folder for topics<br>";
+			$mn = new object();
+			$mn->set_class_id(CL_MENU);
+			$mn->set_parent($o->parent());
+			$mn->set_status(STAT_ACTIVE);
+			$mn->set_name($forum_data["name"] . " teemad");
+			$mn->save();
+			$topic_folder = $mn->id();
+
+			$o->connect(array(
+				"to" => $topic_folder,
+				"reltype" => RELTYPE_TOPIC_FOLDER,
+			));
+
+			$o->set_prop("topic_folder",$topic_folder);
+			print "connecting<br>";
+		}
+		else
+		{
+			$topic_folder = $o->prop("topic_folder");
+		};
+			
+		$o->save();
+
+		// first, create a list of all topics in this folder
+		$topic_list = new object_list(array(
+			"parent" => $topic_folder,
+			"class_id" => CL_MSGBOARD_TOPIC,
+		));
+
+		$existing_topics = array();
+
+		for ($to = $topic_list->begin(); !$topic_list->end(); $to = $topic_list->next())
+		{
+			// each imported topic has its unique id in metadata
+			$import_id = $to->meta("import_id");
+			if (!empty($import_id))
+			{
+				$existing_topics[$import_id] = 1;
+			};
+		};
+
+		// there is a shitload of topics with no name, I need to take those into account
+		foreach($topicdata as $topic_id => $topic_data)
+		{
+			if ($existing_topics[$topic_id])
+			{
+				print "topic exists, not creating object<br>";
+				$comment_parent = $topic_id;
+			}
+			else
+			{
+				print "creating topic $topic_id / " . $topic_data["subject"] . "<br>";
+				//arr($topic_data);
+				$topic_obj = new object();
+				$topic_obj->set_class_id(CL_MSGBOARD_TOPIC);
+				$topic_obj->set_parent($topic_folder);
+				$topic_obj->set_name($topic_data["subject"]);
+				$topic_obj->set_comment($topic_data["comment"]);
+				// XXX: HACK: can't modify created, but need it. this is the workaround
+				$topic_obj->set_subclass($topic_data["time"]);
+				// XXX: HACK: can't modify created, but need it. this is the workaround
+				$topic_obj->set_prop("author_name",$topic_data["author"]);
+				$topic_obj->set_prop("author_email",$topic_data["email"]);
+				$topic_obj->set_status(STAT_ACTIVE);
+				$topic_obj->set_meta("import_id",$topic_id);
+				$topic_obj->save();
+				$comment_parent = $topic_obj->id();
+			};
+
+			if (is_array($commentdata[$topic_id]))
+			{
+				$existing_comments = array();
+				// first, create a list of all topics in this folder
+				$comm_list = new object_list(array(
+					"parent" => $comment_parent,
+					"class_id" => CL_COMMENT,
+				));
+
+				for ($co = $comm_list->begin(); !$comm_list->end(); $co = $comm_list->next())
+				{
+					// each imported topic has its unique id in metadata
+					$import_id = $co->meta("import_id");
+					if (!empty($import_id))
+					{
+						$existing_comments[$import_id] = 1;
+					};
+				};
+
+				foreach($commentdata[$topic_id] as $comm_id => $comments)
+				{
+					if ($existing_comments[$comm_id])
+					{
+						print "not creating existing comment<br>";
+					}
+					else
+					{
+						print "creating comment ";
+						arr($comments);
+						print "<br>";
+						$comm = new object();
+						$comm->set_parent($comment_parent);
+						$comm->set_class_id(CL_COMMENT);
+						$comm->set_name($comments["subject"]);
+						$comm->set_prop("ip",$comments["ip"]);
+						$comm->set_status(STAT_ACTIVE);
+						$comm->set_prop("uname",$comments["name"]);
+						$comm->set_prop("uemail",$comments["email"]);
+						$comm->set_prop("commtext",$comments["comment"]);
+						$comm->set_meta("import_id",$comm_id);
+						// XXX: HACK: can't modify created, but need it. this is the workaround
+						$comm->set_subclass($comments["time"]);
+						// XXX: HACK: can't modify created, but need it. this is the workaround
+						$comm->save();
+					};
+				};
+			};
+
+			print "topic loading finished<br>";
+		}
+		print "forum import finished<br>";
 	}
 
 	function callback_pre_edit($arr)
