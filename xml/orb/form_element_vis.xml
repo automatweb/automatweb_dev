@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_element_vis">
+	<class name="form_element_vis" folder="formgen">
 
 		<action name="change">
 			<function name="change">

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_alias">
+	<class name="form_alias" folder="formgen">
 		<action name="new_entry_alias">
 			<function name="new_entry_alias">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_table">
+	<class name="form_table" folder="formgen">
 
 		<action name="new">
 			<function name="new_add">

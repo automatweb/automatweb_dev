@@ -1,7 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-
-	<class name="ml_member">
+	<class name="ml_member" folder="mailinglist">
 	
 		<action name="new">
 			<function name="orb_new">

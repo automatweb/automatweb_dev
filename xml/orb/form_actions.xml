@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_actions">
+	<class name="form_actions" folder="formgen">
 		<action name="list_actions">
 			<function name="list_actions">
 				<arguments>

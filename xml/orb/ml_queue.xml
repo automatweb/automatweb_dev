@@ -1,7 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-
-	<class name="ml_queue">
+	<class name="ml_queue" folder="mailinglist">
 	
 		<action name="queue">
 			<function name="orb_queue">

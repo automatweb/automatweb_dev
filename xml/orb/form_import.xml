@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_import">
+	<class name="form_import" folder="formgen">
 		<action name="import_form_entries">
 			<function name="import_form_entries">
 				<arguments>
