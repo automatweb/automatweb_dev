@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.179 2003/12/02 16:43:39 duke Exp $
+// $Id: class_base.aw,v 2.180 2003/12/03 11:11:59 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2399,27 +2399,6 @@ class class_base extends aw_template
 				$property["value"] = $this->make_keys($rawdata[$name]);
 			};
 
-			// XXX: investigate the possibility of moving this out of class_base
-			if ($type == "imgupload")
-			{
-				if (isset($rawdata["del_" . $name]))
-				{
-					$this->obj_inst->set_meta($name . "_id",0);
-					$this->obj_inst->set_meta($name . "_url","");
-				}
-				else
-				{
-					// upload the bloody image.
-					$t = get_instance("image");
-					$key = $name . "_id";
-					$oldid = $this->obj_inst->meta($key);
-					$ar = $t->add_upload_image($name, $this->obj_inst->parent(), $oldid);
-					$this->obj_inst->set_meta($key,$ar["id"]);
-					$key = $name . "_url";
-					$this->obj_inst->set_meta($key,image::check_url($ar["url"]));
-					$heh = $this->obj_inst->meta();
-				};
-			};
 			if ($method == "bitmask")
 			{
 				// shift to the left, shift to the right

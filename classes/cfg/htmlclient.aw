@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.40 2003/12/01 17:06:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.41 2003/12/03 11:11:59 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -53,6 +53,16 @@ class htmlclient extends aw_template
 		$this->set_parse_method("eval");
 		$tpl = "default.tpl";
 		$this->read_template("default.tpl");
+		//if (aw_global_get("uid") == "duke")
+		//{
+			$script = aw_global_get("SCRIPT_NAME");
+			//$handler = empty($script) ? "index" : "orb";
+			$this->vars(array(
+				"handler" => empty($script) ? "index" : "orb",
+			));
+
+
+		//};
 		$this->orb_vars = array();
 		$this->submit_done = false;
 		$this->proplist = array();
@@ -214,11 +224,6 @@ class htmlclient extends aw_template
 				STAT_ACTIVE => "Aktiivne",
 				STAT_NOTACTIVE => "Deaktiivne",
 			);
-		};
-
-		if ($args["type"] == "imgupload")
-		{
-			$args["type"] = "fileupload";
 		};
 
 		if ($args["type"] == "colorpicker")
@@ -390,6 +395,8 @@ class htmlclient extends aw_template
 			};
 
 			$submit_handler = $txt;
+			// aha, but I have to put the linefeeds into the thing if it has been created with the plain
+			// old editor.
 			$data["cb_nobreaks[${rte}]"] = 1;
 		}
 
