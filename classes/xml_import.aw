@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.9 2003/01/29 18:00:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.10 2003/02/01 14:28:55 duke Exp $
 class xml_import extends aw_template
 {
 
@@ -392,7 +392,7 @@ class xml_import extends aw_template
 				}
 				else
 				{
-					$koormus_view = $koormus . " k";
+					$koormus_view = " " . $koormus . " k";
 				};
 				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid)
 					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
@@ -403,7 +403,7 @@ class xml_import extends aw_template
 					"tootaja_id" => $tid,
 					"info" => $eriala . $nimi . $koormus_view,
 					"tel" => $attr["tel"],
-					"ruum" => $attr["ruum"],
+					"ruum" => $koht,
 					"ysid" => $ysid,
 					"jrk" => $attr["jrk"],
 					"struktuur_id" => $attr["struktuur"],
@@ -462,7 +462,7 @@ class xml_import extends aw_template
 							else
 							if (sizeof($items) > 1)
 							{
-								usort($items, create_function('$a,$b','if ($a["jrk"] < $b["jrk"]) return 1; if ($a["jrk"] > $b["jrk"]) return -1; return 0;'));
+								usort($items, create_function('$a,$b','if ($a["jrk"] > $b["jrk"]) return 1; if ($a["jrk"] < $b["jrk"]) return -1; return 0;'));
 								$tmp = $items[0];
 								$info = array();
 								array_walk($items,create_function('$val,$key,$info','$info[] = $val["info"];'),&$info);

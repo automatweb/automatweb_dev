@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.8 2002/12/19 18:01:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.9 2003/02/01 14:28:55 duke Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -53,13 +53,8 @@ class menu_tree extends class_base
 		extract($args);
 		$obj = $this->get_obj_meta($alias["target"]);
 		$menus = $obj["meta"]["menus"];
-		global $DBUG;
-		if ($DBUG)
-		{
-			print "<pre>";
-			print_r($menus);
-			print "</pre>";
-		};
+		$tpl = ($obj["meta"]["template"]) ? $obj["meta"]["template"] : "menu_tree.tpl";
+                $tpl = str_replace("/","",$tpl);
 		$folder_list = array();
 		// FIXME: this should use menu cache 
 		if (is_array($menus))
@@ -72,7 +67,7 @@ class menu_tree extends class_base
 						"add_start_from" => true,
 						"single_tpl" => 1,
 						"tpl_name" => "content",
-						"tpl" => "menu_tree/menu_tree.tpl",
+						"tpl" => "menu_tree/$tpl",
 				)));
 				$mnl->level = 0;
 			};

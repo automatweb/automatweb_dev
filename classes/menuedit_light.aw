@@ -44,6 +44,15 @@ class menuedit_light extends aw_template
 			if ($this->tpl)
 			{
 				$this->read_template($args["tpl"]);
+				if ($this->is_template("item_L1"))
+				{
+					$this->layout_mode = 2;
+					$this->single_tpl = 0;
+                                }
+                                else
+                                {
+                                        $this->layout_mode = 1;
+                                };
 				$this->res = "";
 			}
 			else
@@ -62,6 +71,11 @@ class menuedit_light extends aw_template
 			$this->_recurse_object_list(array(
 				"parent" => $_root[$this->threadby],
 			));
+			if ($this->is_template("item_L1"))
+                        {
+                                $retval = $this->res;
+                        }
+                        else
 			if ($this->tpl)
 			{
 				$this->read_template($args["tpl"]);
@@ -99,6 +113,8 @@ class menuedit_light extends aw_template
 		$_parents = array();
 		while($row = $this->db_next())
 		{
+			$this->dequote($row);
+			$this->dequote($row);
 			$_parents[] = $row[$this->field];
 			$this->object_list[$row[$this->threadby]][$row[$this->field]] = $row;
 		};
@@ -124,8 +140,11 @@ class menuedit_light extends aw_template
 		$slice = $this->object_list[$parent];
 		if (is_array($slice) && (sizeof($slice) > 0))
 		{
+			$slicesize = sizeof($slice);
+                        $slicecounter = 0;
 			while(list($k,$v) = each($slice))
 			{
+				$slicecounter++;
 				$id = $v[$this->field];
 				$spacer = str_repeat($this->spacer,$this->level * $this->sq);
 				$name = $spacer . $v["name"];
@@ -135,6 +154,19 @@ class menuedit_light extends aw_template
 					{
 						$tpl = ($this->tpl_name) ? $this->tpl_name : $this->tlist[1][0];
 					}
+					elseif ($this->layout_mode == 2)
+                                        {
+                                                $tpl = "item_L" . $this->level;
+                                                if ( ($slicecounter == 1) && ($this->is_template($tpl . "_START")) )
+                                                {
+                                                        $tpl .= "_START";
+                                                }
+                                                else
+                                                if ( ($slicecounter == $slicesize) && ($this->is_template($tpl . "_END")) )
+                                                {
+                                                        $tpl .= "_END";
+                                                };
+                                        }
 					else
 					{
 						$tpl = $this->tlist[$this->level + 1][0];
