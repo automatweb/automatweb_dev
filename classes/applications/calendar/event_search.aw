@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.45 2005/03/18 11:34:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.46 2005/03/18 12:12:22 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -102,7 +102,7 @@ class event_search extends class_base
 	{
 		$o = $arr["obj_inst"];
 		$cfgform_id = $o->prop("event_cfgform");
-		if (is_oid($cfgform_id))
+		if (is_oid($cfgform_id) && $this->can("view", $cfgform_id))
 		{
 			$this->cfgform_id = $cfgform_id;
 		};
@@ -185,7 +185,7 @@ class event_search extends class_base
 		
 		$t->define_data(array(
 
-			"name" => t("Alguskuupï¿½v"),
+			"name" => t("Alguskuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
 				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuup&auml;ev"),
@@ -199,10 +199,10 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"name" => t("Lppkuupï¿½v"),
+			"name" => t("L&otilde;ppkuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
-				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lppkuup&auml;ev"),
+				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("L&otilde;ppkuup&auml;ev"),
 			)),
 			
 			"active" => html::checkbox(array(
@@ -418,6 +418,16 @@ html::select(array(
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "sepb",
+			"caption" => t("Eraldaja enne"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "sepa",
+			"caption" => t("Eraldaja pärast"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
 			"align" => "center",
@@ -499,6 +509,16 @@ html::select(array(
 					"name" => "${pname}[${sname}][brs]",
 					"value" => 1,
 					"checked" => ($oldvals[$sname]["brs"] == 1),
+				)),
+				"sepa" => html::textbox(array(
+					"name" => $pname."[$sname][sepa]",
+					"value" => $oldvals[$sname]["ord"],
+					"size" => 3,
+				)),
+				"sepb" => html::textbox(array(
+					"name" => $pname."[$sname][sepb]",
+					"value" => $oldvals[$sname]["sepb"],
+					"size" => 3,
 				)),
 				"ord" => html::textbox(array(
 					"name" => "${pname}[${sname}][ord]",
@@ -1269,7 +1289,7 @@ html::select(array(
 							$v = nl2br($v);
 						}
 						$aliasmrg->parse_oo_aliases($ekey, $v);
-						$val[] = $v;
+						$val[] = $tabledef[$sname]["sepb"].$v.$tabledef[$sname]["sepa"];
 					}
 					$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 					$this->vars(array(
@@ -1289,6 +1309,7 @@ html::select(array(
 				{
 					$use = true;
 				}
+				$content = "";
 				if($use)
 				{
 					if(!empty($eval["content"]))
@@ -1446,7 +1467,7 @@ html::select(array(
 				"section" => aw_global_get("section"),
 				"action" => "search",
 				"id" => $ob->id(),
-				"alias" => get_class($this),
+				"alias" => "event_search",
 			),
 			"method" => "get",
 			"form_handler" => aw_ini_get("baseurl") . "/" . aw_global_get("section"),
