@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.92 2004/03/25 09:46:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.93 2004/04/06 15:14:27 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1216,7 +1216,7 @@ class form extends form_base
 			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"]),
 			"no_use_eid_once" => checked($this->arr["no_use_eid_once"]),
 			"dont_show_trans" => checked($this->arr["dont_show_trans"]),
-			"js_default_element" => $this->picker($this->arr["js_default_element"], $this->get_all_elements()),
+			"js_default_element" => $this->picker($this->arr["js_default_element"], array("" => "") + $this->get_all_elements()),
 			"join_optimizer_pessimist" => checked($this->arr["join_optimizer_pessimist"])
 		));
 
