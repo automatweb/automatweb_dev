@@ -22,7 +22,7 @@
 <!-- END SUB: duration_cell -->
 <td style="font-size: 12px; font-weight: normal; padding: 3px; text-decoration: none;">
 <!-- SUB: d_event -->
-		{VAR:time_start} <a href="{VAR:link}">{VAR:name}</a>
+		{VAR:time_start} <input type="checkbox" name="mark[]" value="{VAR:id}"><a href="{VAR:link}">{VAR:name}</a>
 <!-- END SUB: d_event -->
 </td>
 </tr>
