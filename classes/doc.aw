@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.44 2003/10/23 11:50:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.45 2003/10/27 14:34:48 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -427,38 +427,28 @@ class doc extends class_base
 	function callback_pre_save($args = array())
 	{
 		// map title to name
-		$coredata = &$args["coredata"];
-		$objdata = &$args["objdata"]["documents"];
-		if ($objdata["title"])
+		$obj_inst = &$args["obj_inst"];
+		if (!empty($args["form_data"]["title"]))
 		{
-			$coredata["name"] = $objdata["title"];
-		};
-		if (isset($this->_modified))
-		{
-			//$coredata["modified"] = $this->_modified;
-			$objdata["modified"] = $this->_modified;
+			$obj_inst->set_name($args["form_data"]["title"]);
 		};
 		if (isset($this->_preview))
 		{
-			$objdata["dcache"] = $this->_preview;
+			$obj_inst->set_meta("dcache",$this->_preview);
 		};
 		if ($this->clear_styles)
 		{
-			$objdata["content"] = $this->_doc_strip_tags($objdata["content"]);
-			$objdata["lead"] = $this->_doc_strip_tags($objdata["lead"]);
-			$objdata["moreinfo"] = $this->_doc_strip_tags($objdata["moreinfo"]);
+			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->get_prop("content")));	
+			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->get_prop("lead")));	
+			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->get_prop("moreinfo")));	
 		};
-		/*
-		if (!$objdata["modified"] )
+
+		$old_tm = $obj_inst->prop("tm");
+		if (empty($old_tm) && !empty($args["form_data"]["tm"]))
 		{
-			$objdata["modified"] = time();
-		}
-		*/
-		
-		if (!$objdata["tm"] && !empty($args["form_data"]["tm"]))
-		{
-			$objdata["tm"] = date("d.m.y", $objdata["modified"]);
-		}
+			$obj_inst->set_prop("tm",date("d.m.y",$obj_inst->prop("modified")));
+		};
+
 
 	}
 
