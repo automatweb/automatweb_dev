@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.12 2005/02/01 19:48:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.13 2005/02/07 12:56:51 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -319,6 +319,25 @@ class mrp_case extends class_base
 
 		switch($prop["name"])
 		{
+			case "name":
+				// see if any other projects have the same name
+				$ol = new object_list(array(
+					"class_id" => CL_MRP_CASE,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"name" => $prop["value"]
+				));
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$ol->remove($arr["obj_inst"]->id());
+				}
+				if ($ol->count() > 0)
+				{
+					$prop["error"] = "Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!";
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 			case "workflow_table":
 				$this->save_workflow_data ($arr);
 				break;
