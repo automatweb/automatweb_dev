@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.239 2004/03/09 09:06:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.240 2004/03/09 15:38:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2319,7 +2319,8 @@ class document extends aw_template
 			$sortby = "percent";
 		}
 
-		if ($parent == "default")
+		$parent = (int)$parent;
+		if (!$parent  || $parent == "default")
 		{
 			$parent = $this->get_cval("search::default_group");
 		}
@@ -2828,6 +2829,8 @@ class document extends aw_template
 		));
 
 		$this->_log(ST_SEARCH, SA_DO_SEARCH, "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
+		$this->quote(&$str);
+		$this->quote(&$parent);
 		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
 		$retval = $this->parse();
