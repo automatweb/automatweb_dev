@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.50 2005/04/04 11:39:43 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.51 2005/04/04 11:59:50 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -238,49 +238,6 @@ class event_search extends class_base
 			$name = $prj_conn->prop("to.name");
 			$prj_opts[$id] = $name;
 		}
-		$rn1 = $formconfig["project1"]["rootnode"];
-		$rn1 = is_array($rn1) ? $rn1 : array($rn1); 
-		$cnt1 = count($rn1);
-		foreach($rn1 as $key => $val)
-		{
-			if(empty($val))
-			{
-				$cnt1--;
-			}
-		}
-		for($i = 0; $i <= $cnt1; $i++)
-		{
-			$datas .= html::select(array(
-				"name" => "project1[rootnode][$i]",
-				"options" => $prj_opts,
-				"value" => $rn1[$i],
-			))."<br />";
-		}
-		$rn2 = $formconfig["project2"]["rootnode"];
-		$rn2 = is_array($rn2) ? $rn2 : array($rn2);
-		$cnt2 = count($rn2);
-		foreach($rn2 as $key => $val)
-		{
-			if(empty($val))
-			{
-				$cnt2--;
-			}
-		}
-		for($i = 0; $i <= $cnt2; $i++)
-		{
-			$datas2 .= html::select(array(
-				"name" => "project2[rootnode][$i]",
-				"options" => $prj_opts,
-				"value" => $rn2[$i],
-			))."<br />";
-		}
-		/*
-		html::select(array(
-				"name" => "project2[rootnode]",
-				"options" => $prj_opts,
-				"value" => $formconfig["project2"]["rootnode"],
-			))
-		*/
 		$t->define_data(array(
 			"name" => t("Projekt 1"),
 			"caption" => html::textbox(array(
@@ -292,7 +249,12 @@ class event_search extends class_base
 				"value" => $formconfig["project1"]["active"],
 				"checked" => $formconfig["project1"]["active"],
 			)),
-			"data" => $datas,
+			"data" => html::select(array(
+				"name" => "project[rootnode]",
+				"options" => $prj_opts,
+				"multiple" => 1,
+				"value" => $formconfig["project"]["rootnode"],
+			)),
 		));
 		
 		$t->define_data(array(
@@ -301,7 +263,12 @@ class event_search extends class_base
 				"name" => "project2[caption]",
 				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : t("Projekt 2"),
 			)),
-			"data" => $datas2,
+			"data" => html::select(array(
+				"name" => "project2[rootnode]",
+				"options" => $prj_opts,
+				"multiple" => 1,
+				"value" => $formconfig["project2"]["rootnode"],
+			)),
 			"active" => html::checkbox(array(
 				"name" => "project2[active]",
 				"value" => $formconfig["project2"]["active"],
