@@ -283,27 +283,35 @@ class languages extends aw_template
 			}
 		}
 
-
-		// if at this point no language is active, then we must select one
-		if (!$lang_id)
+		if (!$lang_id && aw_ini_get("languages.default"))
 		{
-			// try to find one by looking at the preferences the user has set in his/her browser
-			$lang_id = $this->find_best();
-			// since find_best() pulls just about every trick in the book to try and find a 
-			// suitable lang_id, we will just force it to be set active, since we can't do better anyway
+			$lang_id = aw_ini_get("languages.default");
 			$this->set_active($lang_id,true);
 			$la = $this->fetch($lang_id);
 		}
 		else
 		{
-			// if a language is active, we must check if perhaps someone kas de-activated it in the mean time
-			$la = $this->fetch($lang_id);
-			if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")))
+			// if at this point no language is active, then we must select one
+			if (!$lang_id)
 			{
-				// if so, try to come up with a better one.
+				// try to find one by looking at the preferences the user has set in his/her browser
 				$lang_id = $this->find_best();
+				// since find_best() pulls just about every trick in the book to try and find a
+				// suitable lang_id, we will just force it to be set active, since we can't do better anyway
 				$this->set_active($lang_id,true);
 				$la = $this->fetch($lang_id);
+			}
+			else
+			{
+				// if a language is active, we must check if perhaps someone kas de-activated it in the mean time
+				$la = $this->fetch($lang_id);
+				if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")))
+				{
+					// if so, try to come up with a better one.
+					$lang_id = $this->find_best();
+					$this->set_active($lang_id,true);
+					$la = $this->fetch($lang_id);
+				}
 			}
 		}
 
