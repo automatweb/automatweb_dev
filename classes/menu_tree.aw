@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.10 2003/04/23 12:02:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.11 2003/05/21 15:34:35 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -54,6 +54,8 @@ class menu_tree extends class_base
 	function parse_alias($args = array())
 	{
 		extract($args);
+		$this->shown = array();
+
 		$obj = $this->get_object($alias["target"]);
 		$menus = $obj["meta"]["menus"];
 		$this->children_only = !empty($obj["meta"]["children_only"]) ? true : false;
@@ -162,12 +164,15 @@ class menu_tree extends class_base
 	function _gen_rec_list($parents = array())
 	{
 		$this->save_handle();
+	
+		$nsuo = (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"));
+
 		$plist = join(",",$parents);
-		$q = sprintf("SELECT %s,parent,name,class_id,alias,menu.link FROM objects 
+		$q = sprintf("SELECT %s,parent,name,class_id,alias,menu.link,objects.metadata as metadata FROM objects 
 				LEFT JOIN menu ON (objects.%s = menu.id)
-				WHERE class_id = '%d' AND parent IN (%s) AND status = 2 AND lang_id = %d
+				WHERE class_id = '%d' AND parent IN (%s) AND status = 2 AND lang_id = %d AND menu.type != %s
 				ORDER BY jrk",
-				OID,OID,CL_PSEUDO,$plist,aw_global_get("lang_id"));
+				OID,OID,CL_PSEUDO,$plist,aw_global_get("lang_id"), MN_FORM_ELEMENT);
 		$this->db_query($q);
 		$_parents = array();
 		while($row = $this->db_next())
@@ -175,8 +180,23 @@ class menu_tree extends class_base
 			// hmm?
 			$this->dequote($row);
 			$this->dequote($row);
-			$_parents[] = $row[OID];
-			$this->object_list[$row["parent"]][$row[OID]] = $row;
+			$can = true;
+			if ($nsuo)
+			{
+				$meta = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"]
+				));
+				if ($meta["users_only"] == 1)
+				{
+					$can = false;
+				}
+			}
+			
+			if ($can)
+			{
+				$_parents[] = $row[OID];
+				$this->object_list[$row["parent"]][$row[OID]] = $row;
+			}
 		};
 		if (sizeof($_parents) > 0)
 		{
@@ -259,14 +279,19 @@ class menu_tree extends class_base
 			}
 			else
 			{
-				$this->vars(array(
-					"url" => $url,
-					"oid" => $id,
-					"name" => parse_obj_name($v["name"]),
-					"spacer" => $spacer,
-				));
+				// check if we have already shown this one, so let's not do it again!
+				if (!isset($this->shown[$id]))
+				{
+					$this->vars(array(
+						"url" => $url,
+						"oid" => $id,
+						"name" => parse_obj_name($v["name"]),
+						"spacer" => $spacer,
+					));
 
-				$this->res .= $this->parse($tpl);
+					$this->res .= $this->parse($tpl);
+					$this->shown[$id] = $id;
+				}
 			};
 
 			$next_slice = $this->object_list[$v[OID]];
