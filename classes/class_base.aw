@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.267 2004/05/14 06:54:41 duke Exp $
+// $Id: class_base.aw,v 2.268 2004/05/18 12:03:34 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2800,6 +2800,14 @@ class class_base extends aw_template
 				// other raises an error. Then we will have the original
 				// value in the session. Is that a problem?
 			};
+
+			if (PROP_ERROR == $status)
+			{
+				$propvalues[$name]["error"] = $argblock["prop"]["error"];
+				aw_session_set("cb_values",$propvalues);
+				$status = PROP_IGNORE;
+			}
+				
 
 			if (PROP_FATAL_ERROR == $status)
 			{
