@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.13 2001/12/12 13:36:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.14 2002/01/02 18:19:55 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -59,7 +59,27 @@ class extlinks extends aw_template {
 
 		// now, match[3] contains the index inside the aliases array
 		$l = $this->extlinkaliases[$matches[3] - 1];
-		$link = $this->get_link($l["target"]);
+		list($url,$target,$caption) = $this->draw_link($l["target"]);
+		$vars = array(
+				"url" => $url,
+				"caption" => $caption,
+				"target" => $target,
+			);
+
+		if (isset($tpls["link"]))
+		{
+			$replacement = $this->localparse($tpls["link"],$vars);
+		}
+		else
+		{
+			$replacement = sprintf("<a href='%s' target='%s'>%s</a>",$url,$target,$link["name"]);
+		};
+		return $replacement;
+	}
+
+	function draw_link($target)
+	{
+		$link = $this->get_link($target);
 		if (not($link))
 		{
 			return;
@@ -86,21 +106,7 @@ class extlinks extends aw_template {
 			$url = $linksrc;
 			$target = $link["newwindow"] ? "target='_blank'" : "";
 		};
-		$vars = array(
-				"url" => $url,
-				"caption" => $link["name"],
-				"target" => $target,
-			);
-
-		if (isset($tpls["link"]))
-		{
-			$replacement = $this->localparse($tpls["link"],$vars);
-		}
-		else
-		{
-			$replacement = sprintf("<a href='%s' target='%s'>%s</a>",$url,$target,$link["name"]);
-		};
-		return $replacement;
+		return(array($url,$target,$link["name"]));
 	}
 
 	////
