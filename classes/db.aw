@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.5 2002/10/10 11:02:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.6 2002/10/10 11:10:47 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -208,6 +208,16 @@ class db_connector extends root
 	// values(array) name => value pairs of fields that need to be updated
 	// table(string) - name of the table to update
 	// can be updated to support multiple keys
+	// Example:
+	// $this->db_update_record(array
+	//	"table" => "documents",
+	//	"key" => array("docid"  => array(36,35,95)),
+	//	"values" => array("show_lead" =>  1,"show_title" => 1),
+	//  ));
+
+	//  creates and executes the following query:
+	// UPDATE documents SET show_lead = 1, show_title = 1 WHERE docid IN (36,35,95)
+
 	function db_update_record($args = array())
 	{
 		extract($args);
