@@ -81,14 +81,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="addalias">
-			<function name="addalias">
-				<arguments>
-					<required name="id"/>
-					<required name="alias"/>
-				</arguments>
-			</function>
-		</action>
+
 		<action name="sel_menus">
 			<function name="sel_menus">
 				<arguments>
@@ -96,6 +89,7 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="submit_menus">
 			<function name="submit_menus">
 				<arguments>
@@ -103,14 +97,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="delete_alias">
-			<function name="del_alias">
-				<arguments>
-					<required name="id"/>
-					<required name="docid"/>
-				</arguments>
-			</function>
-		</action>
+
 		<action name="add_bro">
 			<function name="add_bro">
 				<arguments>
@@ -118,6 +105,7 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="create_bro">
 			<function name="create_bro">
 				<arguments>
@@ -128,6 +116,7 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="archive">
 			<function name="show_archive">
 				<arguments>
@@ -136,6 +125,7 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="submit_archive">
 			<function name="submit_archive">
 				<arguments>
@@ -153,13 +143,6 @@
 
 		<action name="submit_user_docs">
 			<function name="submit_user_docs">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_select_alias">
-			<function name="submit_select_alias">
 				<arguments>
 				</arguments>
 			</function>
