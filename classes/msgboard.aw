@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.11 2001/07/27 19:39:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.12 2001/08/01 01:38:48 cvs Exp $
 
 define("PER_PAGE",10);
 define("PER_FLAT_PAGE",20);
@@ -49,12 +49,13 @@ class msgboard extends aw_template
                                                                 "key" => "votes",
                                                                 "value" => $topicvotes,
                                 ));
+				$lastkey = $key;
                         };
                 };
                 $commentvotes = $oldvotes;
                 session_register("commentvotes");
                 global $baseurl;
-                header("Location: $baseurl/comments.aw?action=topics");
+                header("Location: $baseurl/comments.aw?section=$lastkey&type=flat");
                 exit;
                 return;
         }	
@@ -274,19 +275,36 @@ class msgboard extends aw_template
 
 	function show_flat($id,$page)
 	{
+		global $HTTP_SESSION_VARS;
+		$votes = $HTTP_SESSION_VARS["commentvotes"];
+		
+		// hm. quote? id peaks olema int. ja me peaks hoopis seda kontrollima
 		$this->quote(&$id);
+				
+		$votedata = $this->get_object_metadata(array(
+					"oid" => $id,
+					"key" => "votes",
+		));
+
+		$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
+		$rate = sprintf("%0.2f",$votedata["total"] / $votecount);
 
 		$this->read_template("messages.tpl");
+
+		$this->vars(array("rate" => $rate, "topic_id" => $id));
 
 		if ($this->is_template("TOPIC"))
 		{
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
 			if (($row = $this->db_next()))
 			{
-				$this->vars(array("topic" => $row[name], "created" => $this->time2date($row[created], 2),"text" => str_replace("\n","<Br>",$row[comment]),"from" => $row[last]));
+				$this->vars(array("topic" => $row[name], "created" => $this->time2date($row[created], 5),"text" => str_replace("\n","<Br>",$row[comment]),"from" => $row[last]));
 				$top = $this->parse("TOPIC");
 			}
-			$this->vars(array("TOPIC" => $top));
+			$l = (isset($votes[$row["oid"]])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+			$this->vars(array(
+				"ALREADY_VOTED" => $l,
+				"TOPIC" => $top));
 		}
 
 
@@ -343,7 +361,11 @@ class msgboard extends aw_template
 			$ps = $this->parse("PAGES");
 		}
 
-		$this->vars(array("PAGES" => $ps, "date" => $this->time2date(time(), 2)));
+		$this->vars(array(
+			"PAGES" => $ps,
+			 "date" => $this->time2date(time(), 5),
+			));
+
 
 		$ret = $this->parse();
 		return $ret.$this->add(0,$id,$page);
@@ -514,19 +536,20 @@ class msgboard extends aw_template
 								"key" => "votes",
 				));
 				
+				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
+				
 				$this->restore_handle();
 
-				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
 				$this->vars(array(
 						"topic" => $row["name"],
 						"from" => $row["last"],
-						"created" => $this->time2date($row["created"],2), 
+						"created" => $this->time2date($row["created"],5), 
 						"text" => str_replace("\n","<br>",$row["comment"]),
 						"topic_id" => $row["oid"],
 						"cnt" => ( $nc < 1 ? "0" : $nc),
 						"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
 						"color" => ($this->line % 2) ? "#CCCCCC" : "#FFFFFF",
-						"lastmessage" => $this->time2date($lc,2),
+						"lastmessage" => $this->time2date($lc,5),
 				));
 				// priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
 				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
