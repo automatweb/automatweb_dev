@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="stat_uploader" folder="applications/stat_report" extends="class_base">
-		<action name="final" nologin="1">
-			<function name="final">
+		<action name="upload_final" nologin="1">
+			<function name="upload_final">
 				<arguments>
 				</arguments>
 			</function>
