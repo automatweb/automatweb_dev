@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.26 2003/06/18 16:59:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.27 2003/06/19 09:57:46 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -129,8 +129,8 @@
 @groupinfo settings caption=Seadistused
 @groupinfo relationmgr caption=Seostehaldur submit=no
 
-@tableinfo documents index=docid master_table=objects master_index=oid
-@tableinfo planner index=id master_table=objects master_index=oid
+@tableinfo documents index=docid master_table=objects master_index=brother_of
+@tableinfo planner index=id master_table=objects master_index=brother_of
 
 */
 
