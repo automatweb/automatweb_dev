@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.77 2004/07/16 13:09:20 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.78 2004/07/16 13:39:26 rtoomas Exp $
 
 class admin_menus extends aw_template
 {
@@ -968,7 +968,7 @@ class admin_menus extends aw_template
 		if(strtolower(aw_ini_get('db.driver'))=='mssql')
 		{
 			$q = "SELECT top $lim objects.* $query";
-		{
+		}
 		else
 		{
 			$q = "SELECT objects.* $query LIMIT $lim";
