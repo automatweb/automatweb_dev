@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.14 2001/10/18 09:07:54 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.15 2001/10/18 09:36:45 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -252,7 +252,8 @@ class gallery extends aw_template
 	function save()
 	{
 		$content = serialize($this->arr);
-		$this->db_query("UPDATE galleries SET content = '$content' WHERE id = $this->id");
+		$q = "UPDATE galleries SET content = '$content' WHERE id = $this->id";
+		$this->db_query($q);
 	}
 
 	////
@@ -347,8 +348,8 @@ class gallery extends aw_template
 				}
 			}
 		}
-		$this->arr["is_slideshow"] == $is_slideshow;
-		$this->arr["is_automatic_slideshow"] == $is_automatic_slideshow;
+		$this->arr["is_slideshow"] = $is_slideshow;
+		$this->arr["is_automatic_slideshow"] = $is_automatic_slideshow;
 		$this->save();
 		return $this->mk_orb("admin", array("id" => $id, "page" => $page));
 	}
