@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.82 2002/03/05 21:51:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.83 2002/03/11 15:42:24 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -690,8 +690,18 @@ class core extends db_connector
 	{
 		$target_data = $this->get_object($target);
 
-		$q = "INSERT INTO aliases (source,target,type,data)
-			VALUES('$source','$target','$target_data[class_id]','$extra')";
+		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$source' AND type =  '$target_data[class_id]'","idx");
+		if ($idx === "")
+		{
+			$idx = 0;
+		}
+		else
+		{
+			$idx = 1;
+		}
+
+		$q = "INSERT INTO aliases (source,target,type,data,idx)
+			VALUES('$source','$target','$target_data[class_id]','$extra','$idx')";
 
 		$this->db_query($q);
 		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
@@ -1865,6 +1875,11 @@ class core extends db_connector
 		{
 			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);
 		};
+		if ( not(is_file($arr["file"])) || not(is_readable($arr["file"])) )
+		{
+			$retval = false;
+		}
+		else
 		if (!($fh = @fopen($arr["file"],"r")))
 		{
 			$retval = false;
@@ -2023,6 +2038,7 @@ class core extends db_connector
 			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid) WHERE id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
+			$row["meta"] = aw_unserialize($row["metadata"]);
 			aw_cache_set("gm_cache",$id,$row);
 			return $row;
 		};
