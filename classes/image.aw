@@ -316,6 +316,8 @@ class image extends aw_template
 
 			if (is_uploaded_file($HTTP_POST_FILES[$name]['tmp_name']))
 			{
+				$sz = getimagesize($HTTP_POST_FILES[$name]['tmp_name']);
+
 				$fl = $_fi->_put_fs(array("type" => $HTTP_POST_FILES[$name]['type'], "content" => $this->get_file(array("file" => $HTTP_POST_FILES[$name]['tmp_name']))));
 
 				if (!$img_id)
@@ -342,7 +344,7 @@ class image extends aw_template
 			}
 		}
 
-		return array("id" => $id,"url" => $this->get_url($fl));
+		return array("id" => $id,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
 	function show($arr)
