@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.258 2004/03/28 10:17:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.259 2004/04/06 15:17:39 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2153,13 +2153,15 @@ class core extends acl_base
 			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 			"sort_by" => "objects.parent",
 			"lang_id" => array(),
+			"site_id" => array(),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"lang_id" => aw_global_get("lang_id"),
 					"type" => MN_CLIENT
 				)
-			))
+			)),
+			"sort_by" => "objects.parent, objects.jrk"
 		));
 
 
