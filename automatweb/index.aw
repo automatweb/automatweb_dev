@@ -4,10 +4,21 @@ include("admin_header.".aw_ini_get("ext"));
 classload("aw_template");
 $tt = new aw_template;
 $tt->init("");
+
 if (!$tt->prog_acl("view", PRG_MENUEDIT))
 {
 	$tt->prog_acl_error("view", PRG_MENUEDIT);
 }
+
+// let's try to make the conversion less painful for users. This is a really-really bad
+// solution (to put that stuff here), but it will be removed in a few days
+$tableinfo = $tt->db_get_table("periods");
+if (!$tableinfo["fields"]["obj_id"])
+{
+	$url = $this->mk_my_orb("convert_periods",array(),"converters");
+	header("Location: $url");
+	exit;
+};
 ?>
 <html>
 <head>
