@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.141 2003/01/14 13:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.142 2003/01/14 13:58:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1741,7 +1741,12 @@ class document extends aw_template
 		{
 			printf("using %s/%s<br>",$this->template_dir,$_tpl);
 		};
-		$this->read_adm_template($_tpl);
+
+		// try to read the template from the site, but if it does noit exist, try the admin folder
+		if ($this->read_site_template($_tpl, true) === false)
+		{
+			$this->read_adm_template($_tpl);
+		}
 
 		// $version indicates that we should load an archived copy of this document
 		if ($version)

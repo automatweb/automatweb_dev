@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.31 2002/12/06 13:59:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.32 2003/01/14 13:58:22 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -139,21 +139,11 @@ class aw_template extends acl_base
 		$this->template_filename = $this->template_dir."/".$name;
 		if (file_exists($this->template_filename))
 		{
-			global $TPL;
-			if ($TPL)
-			{
-				print "using " . $this->template_filename . "<br>";
-			};
 			$retval = $this->read_tpl(file($this->template_filename));
 		}
 		// try to load a template from aw directory then
 		elseif (file_exists($this->adm_template_dir . "/" . $name))
 		{
-			global $TPL;
-			if ($TPL)
-			{
-				print "using " . $this->adm_template_dir . "/" . $name . "<br>";
-			};
 			$retval = $this->read_tpl(file($this->adm_template_dir . "/" . $name));
 		}
 		else
@@ -181,7 +171,33 @@ class aw_template extends acl_base
 	// !Loeb template failist
 	function read_adm_template($name,$silent = 0)
 	{
+		$retval = true;
 		$this->template_filename = $this->adm_template_dir."/".$name;
+		if (file_exists($this->template_filename))
+		{
+			$retval = $this->read_tpl(file($this->template_filename));
+		}
+		else
+		{
+			if ($silent)
+			{
+				$retval = false;
+			}
+			else
+			{
+				// raise_error drops out, therefore $retval has no meaning here
+				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
+			};
+		}
+		return $retval;
+	}
+
+	////
+	// !reads the template from the site folder, even if we are in the admin interface
+	function read_site_template($name,$silent = 0)
+	{
+		$retval = true;
+		$this->template_filename = $this->template_dir."/".$name;
 		if (file_exists($this->template_filename))
 		{
 			$retval = $this->read_tpl(file($this->template_filename));
@@ -207,7 +223,7 @@ class aw_template extends acl_base
 	{
 		$retval = isset($this->v2_name_map[$name]);
 		return $retval;
-  }
+	}
 
 	function is_parent_tpl($tpl,$parent)
 	{
@@ -216,9 +232,9 @@ class aw_template extends acl_base
 	}
        
 	////
-  // !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
+	// !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
 	// muutujad yle
-  function vars($params)
+	function vars($params)
 	{
 		$this->vars = array_merge($this->vars,$params);
 	}
@@ -245,12 +261,17 @@ class aw_template extends acl_base
 	   		$this->vars[$object] .= $src;
 		}
 		return $src;
-  }
+	}
 
 	////
 	// !$arr - template content, array of lines of text
 	function read_tpl($arr)
 	{
+		global $TPL;
+		if ($TPL)
+		{
+			print "using " . $this->template_filename . "<br>";
+		};
 		$this->tpl_reset();
 		if (is_array($arr))
 		{
