@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.26 2003/03/06 19:57:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.27 2003/03/12 15:00:40 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -72,11 +72,10 @@ class html extends aw_template
 		extract($args);
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
-		$value = str_replace("\"" , "&quot;",$value);
+		$value = str_replace('"' , '&quot;',$value);
 		return "<input type=\"text\" id=\"$name\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"/>\n";
 	}
 
-	
 	////
 	// !html textarea
 	// name(string)
@@ -135,6 +134,10 @@ class html extends aw_template
 
 		if ($multiple)
 		{
+			if ($x = array_search(0,$options))
+			{
+				unset($options[$x]);
+			}
 			$options = $this->mpicker($selected,$options);
 		}
 		else
