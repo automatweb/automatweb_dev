@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.35 2004/08/25 08:35:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.36 2004/08/30 13:30:14 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1306,9 +1306,11 @@ class forum_v2 extends class_base
 		$emb["parent"] = $arr["folder"];
                 $t->id_only = true;
 		$emb["forum_id"] = $arr["id"];
+		$arr["group"] = "contents";
 		$emb["status"] = STAT_ACTIVE;
 		unset($emb["id"]);
                 $this->topic_id = $t->submit($emb);
+		$arr["topic"] = $this->topic_id;
 		return $this->finish_action($arr);
 	}
 	
@@ -1352,8 +1354,28 @@ class forum_v2 extends class_base
 	function can_admin_forum()
 	{
 		// XXX: implement a better check perhaps?
-		return $this->prog_acl_auth("view",PRG_MENUEDIT);
+		return $this->prog_acl("view",PRG_MENUEDIT);
 	}
 
+	/**  
+		
+		@attrib name=change params=name all_args="1" nologin="1"
+		
+		@param id optional type=int acl="edit"
+		@param group optional
+		@param period optional
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function change($arr)
+	{
+		return parent::change($arr);
+	}
 };
 ?>
