@@ -696,6 +696,7 @@ class _int_object
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{
+			return obj();
 			error::raise(array(
 				"id" => ERR_USER_NO_OID,
 				"msg" => "object::createdby(): the user $uid, who created the current object (".$this->obj["oid"]."), has no object!"
@@ -731,6 +732,8 @@ class _int_object
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{
+			return obj();
+
 			error::raise(array(
 				"id" => ERR_USER_NO_OID,
 				"msg" => "object::createdby(): the user $uid, who last modified the current object (".$this->obj["oid"]."), has no object!"
@@ -972,7 +975,7 @@ class _int_object
 		// see if it is a metadata prop and if so return from that - might save some prop loads
 		//$this->_int_load_property_values();
 		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
-		if ($pd && $pd["field"] == "meta")
+		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
 		{
 			return $this->obj["meta"][$pd["name"]];
 		}
@@ -1001,6 +1004,15 @@ class _int_object
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
+				if ($pd["store"] == "connect")
+				{
+					$rels = new object_list($this->connections_from(array(
+						"type" => $pd["reltype"]
+					)));
+					$val = join(",", $rels->names());
+					break;
+				}
+
 			case "oid":
 				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
 				{
