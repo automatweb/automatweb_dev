@@ -12,10 +12,10 @@
 </tr>
 <!-- END SUB: active -->
 <tr>
-	<td><a href="{VAR:self}?date={VAR:prev}{VAR:add}">Eelmine<br>nädal</a></td>
-	<td align="right"><a href="{VAR:self}?date={VAR:next}{VAR:add}">Järgmine<br>nädal</a></td>
+	<td><a href="{VAR:self}?date={VAR:prev}{VAR:add}">{VAR:LC_CALENDAR_LAST}<br>{VAR:LC_CALENDAR_WEEK}</a></td>
+	<td align="right"><a href="{VAR:self}?date={VAR:next}{VAR:add}">{VAR:LC_CALENDAR_NEXT}<br>{VAR:LC_CALENDAR_WEEK}</a></td>
 </tr>
 <tr>
-	<td colspan="2" align="center"><a href="{VAR:self}?{VAR:add}">Täna</a></td>
+	<td colspan="2" align="center"><a href="{VAR:self}?{VAR:add}">{VAR:LC_CALENDAR_TODAY}</a></td>
 </tr>
 </table>

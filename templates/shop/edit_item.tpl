@@ -58,13 +58,13 @@
 					<td class="fcaption2" colspan=2>{VAR:type}</td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2>Choose quantity form (if it is different defined by item type):</td>
+					<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_Q_FORM}:</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2><select name='cnt_form'>{VAR:cnt_form}</select></td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2>Choose formula (if it is different defined by item type):</td>
+					<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_FORMULA}:</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2><select name='item_eq'>{VAR:item_eq}</select></td>

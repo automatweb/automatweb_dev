@@ -44,18 +44,18 @@ if (document.forms[1].elements[{VAR:row}].checked)
 
 <table border="0" cellspacing="1" cellpadding="0"  width=100%>
 <tr>
-<td height="15" colspan="10" class="fgtitle">&nbsp;<b>KATEGOORIAD: 
+<td height="15" colspan="10" class="fgtitle">&nbsp;<b>{VAR:LC_FORMS_BIG_CATEGORYS}: 
 <!-- SUB: ADD_CAT -->
-<a href='forms.{VAR:ext}?type=add_category&parent={VAR:parent}'>Lisa kategooria</a>
+<a href='forms.{VAR:ext}?type=add_category&parent={VAR:parent}'>{VAR:LC_FORMS_ADD_CATEGORY}</a>
 <!-- END SUB: ADD_CAT -->
- | Määrangud | Stiilid</b></td>
+ | {VAR:LC_FORMS_SETTINGS} | {VAR:LC_FORMS_STYLES}</b></td>
 </tr>
 <tr>
-<td height="15" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
-<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-<td align="center" colspan="4" class="title">&nbsp;Tegevus&nbsp;</td>
+<td height="15" class="title">&nbsp;{VAR:LC_FORMS_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_DISCRIPTION}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_CHANGER}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_CHANGED}&nbsp;</td>
+<td align="center" colspan="4" class="title">&nbsp;{VAR:LC_FORMS_ACTION}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -84,7 +84,7 @@ if (document.forms[1].elements[{VAR:row}].checked)
 
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda kategooriat kustutada?','forms.{VAR:ext}?type=delete_category&id={VAR:category_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_CAT}?','forms.{VAR:ext}?type=delete_category&id={VAR:category_id}&parent={VAR:parent}')">{VAR:LC_FORMS_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 
@@ -116,12 +116,12 @@ if (document.forms[1].elements[{VAR:row}].checked)
 <td bgcolor="#CCCCCC">
 
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
-<tr><td class="title" align=right>Vali default stiil: </td><td
+<tr><td class="title" align=right>{VAR:LC_FORMS_CHOOSE_DEFAULT_STYLE}: </td><td
 class="fgtitle"><select class="small_button" name="def_style">
 <!-- SUB: DEF_STYLE_ITEM -->
 <option VALUE='{VAR:style_id}' {VAR:style_selected}>{VAR:style_name}
 <!-- END SUB: DEF_STYLE_ITEM -->
-</select><input class="small_button" type='submit' NAME='save' VALUE='Salvesta'></td></tr></table>
+</select><input class="small_button" type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'></td></tr></table>
 <input type='hidden' NAME='action' VALUE='set_category_style'>
 <input type='hidden' NAME='parent' VALUE='{VAR:parent}'>
 
@@ -136,17 +136,17 @@ class="fgtitle"><select class="small_button" name="def_style">
 
 <table border="0" cellspacing="1" cellpadding="0"  width=100%>
 <tr>
-	<td height="15" colspan="15" class="fgtitle">&nbsp;<b>FORMID:
+	<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_FORMS_FORMS}:
 	<!-- SUB: ADD_FORM -->
-	<a href='forms.{VAR:ext}?type=add_form&parent={VAR:parent}'>Lisa</a>
+	<a href='forms.{VAR:ext}?type=add_form&parent={VAR:parent}'>{VAR:LC_FORMS_ADD}</a>
 	<!-- END SUB: ADD_FORM -->
-	 | Määrangud
+	 | {VAR:LC_FORMS_SETTINGS}
 	<!-- SUB: CAN_IMPORT -->
-	 | <a href='forms.{VAR:ext}?type=import_forms&parent={VAR:parent}&level=0'>Impordi</a>
+	 | <a href='forms.{VAR:ext}?type=import_forms&parent={VAR:parent}&level=0'>{VAR:LC_FORMS_IMPORT}</a>
 	<!-- END SUB: CAN_IMPORT -->
-	 | <a href='javascript:doSubmit("export_forms")'>Ekspordi</a>
-	 | <a href='javascript:doSubmit("cut_forms")'>Lõika</a>
-	 | <a href='javascript:doDelete()'>Kustuta</a>
+	 | <a href='javascript:doSubmit("export_forms")'>{VAR:LC_FORMS_EXPORT}</a>
+	 | <a href='javascript:doSubmit("cut_forms")'>{VAR:LC_FORMS_CUT}</a>
+	 | <a href='javascript:doDelete()'>{VAR:LC_FORMS_DELETE}</a>
 </b></td>
 </tr>
 <tr>
@@ -155,25 +155,25 @@ class="fgtitle"><select class="small_button" name="def_style">
 <td align="center" class="title">&nbsp;FID&nbsp;</td>
 
 <!-- Nimi -->
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_NAME}&nbsp;</td>
 
 <!-- Tyyp -->
-<td align="center" class="title">&nbsp;Tüüp&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_TYPE}&nbsp;</td>
 
 <!-- Kirjeldus -->
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_DISCRIPTION}&nbsp;</td>
 
 <!-- Muudetud -->
-<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_CHANGER}&nbsp;</td>
 <!-- Muudetud -->
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_CHANGED}&nbsp;</td>
 
 <!-- Tegevus -->
-<td align="center" colspan="5" class="title">Tegevus</td>
+<td align="center" colspan="5" class="title">{VAR:LC_FORMS_ACTION}</td>
 
 <!-- Impordi Ekspordi -->
 <td align="center" colspan="2" class="title">&nbsp;<a href='#'
-onClick="selall();return false;">K&otilde;ik</a>&nbsp;</td>
+onClick="selall();return false;">{VAR:LC_FORMS_ALL}</a>&nbsp;</td>
 
 </tr>
 
@@ -201,24 +201,24 @@ onClick="selall();return false;">K&otilde;ik</a>&nbsp;</td>
 
 <td class="fgtext2">&nbsp;
 <!-- SUB: FILL -->
-<a href='forms.{VAR:ext}?type=preview&id={VAR:form_id}'>T&auml;ida</a>
+<a href='forms.{VAR:ext}?type=preview&id={VAR:form_id}'>{VAR:LC_FORMS_FILL}</a>
 <!-- END SUB: FILL -->
 &nbsp;</td>
 
 <td class="fgtext2" nowrap>&nbsp;
 <!-- SUB: VIEW_FILLED -->
-<a href='forms.{VAR:ext}?type=filled_forms&id={VAR:form_id}'>T&auml;idetud formid</a>
+<a href='forms.{VAR:ext}?type=filled_forms&id={VAR:form_id}'>{VAR:LC_FORMS_FILLED_FORMS}</a>
 <!-- END SUB: VIEW_FILLED -->
 &nbsp;</td>
 
 <td class="fgtext2">&nbsp;
 <!-- SUB: CHANGE -->
-<a href='forms.{VAR:ext}?type=grid&id={VAR:form_id}'>Toimeta</a>
+<a href='forms.{VAR:ext}?type=grid&id={VAR:form_id}'>{VAR:LC_FORMS_TOIMETA}</a>
 <!-- END SUB: CHANGE -->
 &nbsp;</td>
 
 <td class="fgtext2">&nbsp;<a
-href='forms.{VAR:ext}?type=output_list&id={VAR:form_id}'>V&auml;ljundid</a>&nbsp;</td>
+href='forms.{VAR:ext}?type=output_list&id={VAR:form_id}'>{VAR:LC_FORMS_OUTPUTS}</a>&nbsp;</td>
 
 <td class="fgtext2">&nbsp;
 <!-- SUB: ACL -->

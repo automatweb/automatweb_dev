@@ -1,7 +1,7 @@
 <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td colspan="2" class="fcaption">Vali väljundi tüüp</td>
+<td colspan="2" class="fcaption">{VAR:LC_FORMS_CHOOSE_OUTPUT_TYPE}</td>
 </tr>
 <tr>
 <td class="fcaption">HTML:</td><td class="fform"><input type='radio' NAME='type' VALUE='html' checked></td>

@@ -1,19 +1,19 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">Target:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_TARGET}:</td>
 	<td colspan=3 class="fform">{VAR:name}</td>
 </tr>
 <tr>
-	<td class="fcaption2">From:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_FROM}:</td>
 	<td colspan=3 class="fform">{VAR:from}</td>
 </tr>
 <tr>
-	<td class="fcaption2">To:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_TO}:</td>
 	<td colspan=3 class="fform">{VAR:to}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Month</td>
-	<td class="fform">Orders</td>
+	<td class="fcaption2">{VAR:LC_SHOP_MONTH}</td>
+	<td class="fform">{VAR:LC_SHOP_ORDERS}</td>
 </tr>
 <!-- SUB: MONTH -->
 <tr>
@@ -22,14 +22,14 @@
 </tr>
 <!-- END SUB: MONTH -->
 <tr>
-	<td class="fcaption2">Total:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_TOTAL}:</td>
 	<td class="fform">{VAR:t_cnt}</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=4>&nbsp;</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=4>The number of orders is <font color="#0000ff">blue</font>.</td>
+	<td class="fcaption2" colspan=4>{VAR:LC_SHOP_NUMB_OF_ORDERS} {VAR:LC_SHOP_IS} <font color="#0000ff">{VAR:LC_SHOP_BLUE}</font>.</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=4><img src='{VAR:chart}'></td>

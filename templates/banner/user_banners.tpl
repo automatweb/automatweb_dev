@@ -4,12 +4,12 @@
 	<td class="fcaption2" colspan=2 valign="top">{VAR:banner}</td>
 </tr>
 <tr>
-	<td class="fform">Vaatamisi:</td>
+	<td class="fform">{VAR:LC_BANNER_LOOKS}:</td>
 	<td class="fform">{VAR:views}</td>
 </tr>
 <!-- END SUB: LINE -->
 <tr>
-	<td class="fcaption2">Kokku vaatamisi :</td>
+	<td class="fcaption2">{VAR:LC_BANNER_LOOKS_TOGETHER} :</td>
 	<td class="fform">{VAR:t_views}</td>
 </tr>
 <tr>
@@ -23,12 +23,12 @@
 	<td class="fcaption2" colspan=2 valign="top">{VAR:banner}</td>
 </tr>
 <tr>
-	<td class="fform">Klikke:</td>
+	<td class="fform">{VAR:LC_BANNER_CLICKS}:</td>
 	<td class="fform">{VAR:clicks}</td>
 </tr>
 <!-- END SUB: CLINE -->
 <tr>
-	<td class="fcaption2">Kokku klikke :</td>
+	<td class="fcaption2">{VAR:LC_BANNER_CLICKS_TOGETHER} :</td>
 	<td class="fform">{VAR:t_clicks}</td>
 </tr>
 <!-- SUB: C_GRAPH -->

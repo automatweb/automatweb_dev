@@ -2,11 +2,11 @@
 <br>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class=title colspan=2>Vali v&auml;ljund, millega sisestust n&auml;idatakse:</td>
+<td class=title colspan=2>{VAR:LC_FORMS_CHOOSE_OUTPUT_WHICH_SHOWS}:</td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="title">Nimi</td>
-<td class="title">Kommentaar</td>
+<td class="title">{VAR:LC_FORMS_NAME}</td>
+<td class="title">{VAR:LC_FORMS_COMMENT}</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>

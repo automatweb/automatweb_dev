@@ -3,10 +3,10 @@
 <td valign="top">
 <table border="1" cellspacing="1" cellpadding="2" width="200">
 <tr>
-<td bgcolor="#ffccaa"><strong>Ürituste tüübid</strong></td>
+<td bgcolor="#ffccaa"><strong>{VAR:LC_EVENTS_TYPES}</strong></td>
 </tr>
 <tr>
-<td><a href="{VAR:self}?op=show_events">Kõik</a></td>
+<td><a href="{VAR:self}?op=show_events">{VAR:LC_EVENTS_ALL}</a></td>
 </tr>
 <!-- SUB: eventline -->
 <tr>

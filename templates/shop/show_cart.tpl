@@ -27,7 +27,7 @@
 	<!-- END SUB: ITEM -->
 </table>
 <br>
-<a href='/index.aw/3189'>Order excursion here</a><br>
+<a href='/index.aw/3189'>{VAR:LC_SHOP_ORDER_EXCURSION}</a><br>
 <b>{VAR:LC_SHOP_CART_VALUE} {VAR:t_price}</b>&nbsp;&nbsp;<input type='submit' name="Button" class="button" value='{VAR:LC_SHOP_SUBMIT}'>
 {VAR:reforb}
 </form>

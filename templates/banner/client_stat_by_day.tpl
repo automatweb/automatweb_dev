@@ -1,8 +1,8 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2" valign="top">Kuup&auml;ev</td>
-	<td class="fform">Vaatamisi</td>
-	<td class="fform">Klikke</td>
+	<td class="fcaption2" valign="top">{VAR:LC_BANNER_DATE}</td>
+	<td class="fform">{VAR:LC_BANNER_LOOKS}</td>
+	<td class="fform">{VAR:LC_BANNER_CLICKS}</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -12,23 +12,23 @@
 </tr>
 <!-- END SUB: LINE -->
 <tr>
-	<td colspan=2 class="fcaption2">Kokku vaatamisi :</td>
+	<td colspan=2 class="fcaption2">{VAR:LC_BANNER_LOOKS_TOGETHER} :</td>
 	<td class="fform">{VAR:t_views}</td>
 </tr>
 <tr>
-	<td colspan=2 class="fcaption2">Keskmiselt vaatamisi p&auml;evas:</td>
+	<td colspan=2 class="fcaption2">{VAR:LC_BANNER_AVERAGE_LOOKS_IN_DAY}:</td>
 	<td class="fform">{VAR:a_views}</td>
 </tr>
 <tr>
-	<td colspan=2 class="fcaption2">Kokku klikke:</td>
+	<td colspan=2 class="fcaption2">{VAR:LC_BANNER_CLICKS_TOGETHER}:</td>
 	<td class="fform">{VAR:t_clicks}</td>
 </tr>
 <tr>
-	<td colspan=2 class="fcaption2">Keskmiselt klikke p&auml;evas:</td>
+	<td colspan=2 class="fcaption2">{VAR:LC_BANNER_AVERAGE_CLICKS_IN_DAY}</td>
 	<td class="fform">{VAR:a_clicks}</td>
 </tr>
 <tr>
-	<td colspan=3 class="fcaption2">Vaatamised on <font color="#00ff00">rohelised</font> ja klikid on <font color="#ff0000">punased</font></td>
+	<td colspan=3 class="fcaption2">{VAR:LC_BANNER_LOOKS_ARE} <font color="#00ff00">{VAR:LC_BANNER_GREEN}</font>{VAR:LC_BANNER_CLICKS_ARE}<font color="#ff0000">{VAR:LC_BANNER_RED}</font></td>
 </tr>
 <tr>
 	<td colspan=3 class="fcaption2"><img src='{VAR:chart}'></td>

@@ -35,14 +35,14 @@
 <td bgcolor=#000000>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>OBJEKTID: 
+<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>{VAR:LC_FORMS_OBJECTS}: 
 <!-- SUB: ADD_CAT -->
-<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>Lisa</a>
+<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>{VAR:LC_FORMS_ADD}</a>
 <!-- END SUB: ADD_CAT -->
-| <a href='javascript:document.foo.submit()' class="fgtitle_link">Salvesta</a>
-| <a href="javascript:doClick()"  class="fgtitle_link" onClick="return doClick('change')">Muuda</a>
-| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('delete')">Kustuta</a>
- | <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a></b>
+| <a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_FORMS_SAVE}</a>
+| <a href="javascript:doClick()"  class="fgtitle_link" onClick="return doClick('change')">{VAR:LC_FORMS_CHANGE}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('delete')">{VAR:LC_FORMS_DELETE}</a>
+ | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_FORMS_REFRESH}</a></b>
 </b>
 </td>
 <td align=right class="fgtitle_new"><a href='bug.{VAR:ext}?op=listall' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
@@ -54,13 +54,13 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" class="title">&nbsp;</td>
-<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}'>Nimi</a>{VAR:sortedimg1}&nbsp;</td>
+<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}'>{VAR:LC_FORMS_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
 <td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=jrk&order={VAR:order2}'>Jrk</a>{VAR:sortedimg2}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}'>Muutja</a>{VAR:sortedimg3}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}'>Muudetud</a>{VAR:sortedimg4}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}'>T&uuml;&uuml;p</a>{VAR:sortedimg5}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}'>Aktiivne</a>{VAR:sortedimg6}&nbsp;</td>
-<td align="center" colspan="2" class="title">&nbsp;Vali&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}'>{VAR:LC_FORMS_CHANGER}</a>{VAR:sortedimg3}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}'>{VAR:LC_FORMS_CHANGED}</a>{VAR:sortedimg4}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}'>{VAR:LC_FORMS_TYPE}</a>{VAR:sortedimg5}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}'>{VAR:LC_FORMS_ACTIVE}</a>{VAR:sortedimg6}&nbsp;</td>
+<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_FORMS_CHOOSE}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->

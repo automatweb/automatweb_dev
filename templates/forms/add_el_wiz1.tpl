@@ -52,32 +52,32 @@ function addItem(list, text,value,sel)
 <form method=POST action='reforb.{VAR:ext}' name='f'>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td colspan=3 class="fform"><input checked type='radio' name='type' value='add'>&nbsp;Lisa uus element</td>
+	<td colspan=3 class="fform"><input checked type='radio' name='type' value='add'>&nbsp;{VAR:LC_FORMS_ADD_NEW_ELEMENT}</td>
 </tr>
 <tr>
 	<td class="fform">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	<td class="fform">Vali kataloog, kuhu element lisada:</td>
+	<td class="fform">{VAR:LC_FORMS_CHOOSE_CATALOGUE_WHERE_ADD_ELEMENT}:</td>
 	<td class="fform"><select name='parent' class='small_button'>{VAR:folders}</select></td>
 </tr>
 <tr>
 	<td class="fform">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	<td class="fform">Elemendi nimi:</td>
+	<td class="fform">{VAR:LC_FORMS_ELEMENT_NAME}:</td>
 	<td class="fform"><input type="text" name="name"></td>
 </tr>
 <tr>
-	<td colspan=3 class="fform"><input type='radio' name='type' value='select'>&nbsp;Lisa olemasolev element
-	&nbsp;&nbsp;&nbsp;Otsi:<input type='text' name='jssearch' class='small_button' onKeyDown="setTimeout('search()',10);">
+	<td colspan=3 class="fform"><input type='radio' name='type' value='select'>&nbsp;{VAR:LC_FORMS_ADD_EXISTING_ELEMENT}
+	&nbsp;&nbsp;&nbsp;{VAR:LC_FORMS_SEARCH}:<input type='text' name='jssearch' class='small_button' onKeyDown="setTimeout('search()',10);">
 	</td>
 </tr>
 <tr>
 	<td class="fform">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	<td class="fform">Vali element:</td>
+	<td class="fform">{VAR:LC_FORMS_CHOOSE_ELEMENT}:</td>
 	<td class="fform"><select size=10 class='small_button' name='el'>{VAR:elements}</select></td>
 </tr>
 <tr>
 	<td class="fform" colspan="3" align="center">
 	{VAR:reforb}
-	<input type="submit" class='small_button' value="Lisa">
+	<input type="submit" class='small_button' value="{VAR:LC_FORMS_ADD}">
 	</td>
 </tr>
 </table>

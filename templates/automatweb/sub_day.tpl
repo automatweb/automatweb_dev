@@ -5,9 +5,9 @@
 	<table border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF" width="100%">
 	<tr>
 	<td class="header1" align="center" width="20">#</td>
-	<td class="header1" align="center" width="100">Aeg</td>
-	<td class="header1" align="center" width="200">Pealkiri</td>
-	<td class="header1" align="center" width="*">Sisu</td>
+	<td class="header1" align="center" width="100">{VAR:LC_AUTOMATWEB_TIME}</td>
+	<td class="header1" align="center" width="200">{VAR:LC_AUTOMATWEB_TITLE}</td>
+	<td class="header1" align="center" width="*">{VAR:LC_AUTOMATWEB_MATTER}</td>
 	</tr>
 	<!-- SUB: line -->
 	<tr>

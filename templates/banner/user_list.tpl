@@ -3,8 +3,8 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>KASUTAJAD:&nbsp;
-<br>&nbsp;Lehek&uuml;lg: 
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_BANNER_BIG_USERS}:&nbsp;
+<br>&nbsp;{VAR:LC_BANNER_PAGE}: 
 <!-- SUB: PAGE -->
 <a href='{VAR:url}'>{VAR:from} - {VAR:to}</a> | 
 <!-- END SUB: PAGE -->
@@ -16,14 +16,14 @@
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;UID&nbsp;</td>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Eesnimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Perenimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Vanus&nbsp;</td>
-<td align="center" class="title">&nbsp;K&uuml;psised&nbsp;</td>
-<td align="center" class="title">&nbsp;Bannerid&nbsp;</td>
-<td align="center" class="title">&nbsp;Profiilid&nbsp;</td>
-<td align="center" class="title">&nbsp;Ajalugu&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_FORNAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_SURNAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_AGE}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_COOKIES&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_SMALL_BANNERS}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_PROFILES}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_BANNER_HISTORY}&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -33,9 +33,9 @@
 <td class="fgtext">&nbsp;{VAR:surname}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:age}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:buid}&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='{VAR:banners}'>Vaata</a>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='{VAR:profiles}'>Vaata</a>&nbsp;</td>
-<td class="fgtext">&nbsp;<a href='{VAR:history}'>Vaata</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:banners}'>{VAR:LC_BANNER_LOOK}</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:profiles}'>{VAR:LC_BANNER_LOOK}</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:history}'>{VAR:LC_BANNER_LOOK}</a>&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>

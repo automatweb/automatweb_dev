@@ -17,7 +17,7 @@
 </td>
 </tr>
 <tr>
-<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Save'></td>
+<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 </table>
 {VAR:reforb}

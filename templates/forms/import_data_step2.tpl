@@ -2,8 +2,8 @@
 <form action='refcheck.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
-<td class="title" colspan=2>Element</td>
-<td class="title" colspan={VAR:num_cols} align=center>Vali, milline tulp vastab elemendile.</td>
+<td class="title" colspan=2>{VAR:LC_FORMS_ELEMENT}</td>
+<td class="title" colspan={VAR:num_cols} align=center>{VAR:LC_FORMS_CHOOSE_WHICH_COLUMN_IS_EL}.</td>
 </tr>
 <!-- SUB: GRID_LINE -->
 <tr>
@@ -20,7 +20,7 @@
 <!-- END SUB: EX_COL -->
 </tr>
 <!-- END SUB: EX_LINE -->
-<tr><td colspan=2 class=plain>Vali, mis ridu ignoreerida</td><td class=plain align=center colspan={VAR:num_cols}><input class='small_button' type=submit VALUE='Impordi'></td></tr>
+<tr><td colspan=2 class=plain>{VAR:LC_FORMS_CHOOSE_WHISH_ROWS_IGNORED}</td><td class=plain align=center colspan={VAR:num_cols}><input class='small_button' type=submit VALUE='Impordi'></td></tr>
 </table>
 <input type=hidden NAME='action' VALUE='import_data_step2'>
 <input type=hidden NAME='step' VALUE='3'>

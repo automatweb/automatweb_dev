@@ -7,9 +7,9 @@
 <table border="0" cellspacing="1" cellpadding="0">
 <tr>
 <td align="center" class="title">&nbsp;ID&nbsp;</td>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
-<td align="center" colspan="1" class="title">K&otilde;ik</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_FORMS_DISCRIPTION}&nbsp;</td>
+<td align="center" colspan="1" class="title">{VAR:LC_FORMS_ALL}</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -21,7 +21,7 @@
 </tr>
 <!-- END SUB: LINE -->
 <tr>
-<td class="fgtext" colspan=4><input type='submit' CLASS='small_button' VALUE='Salvesta'></td>
+<td class="fgtext" colspan=4><input type='submit' CLASS='small_button' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 </table>
 </td></tr></table>

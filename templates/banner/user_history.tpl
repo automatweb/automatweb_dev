@@ -1,10 +1,10 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fform">Tegevus</td>
-	<td class="fform">Aeg</td>
-	<td class="fform">Banner</td>
+	<td class="fform">{VAR:LC_BANNER_ACTIVITY}Tegevus</td>
+	<td class="fform">{VAR:LC_BANNER_DATETIME}Aeg</td>
+	<td class="fform">{VAR:LC_BANNER_BANNER}Banner</td>
 	<td class="fform">IP</td>
-	<td class="fform">Asukoht</td>
+	<td class="fform">{VAR:LC_BANNER_POSITION}Asukoht</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>

@@ -7,7 +7,7 @@
 <td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='name' VALUE='{VAR:user_name}'></td>
 </tr>
 <tr>
-<td class="fcaption">E-mail:</td><td class="fform"><input type='text' NAME='email' VALUE='{VAR:user_mail}'></td>
+<td class="fcaption">E-mafdsfdsil:</td><td class="fform"><input type='text' NAME='email' VALUE='{VAR:user_mail}'></td>
 </tr>
 <tr>
 <td class="fcaption" colspan=2>Muutujad:</td>

@@ -8,19 +8,19 @@
 
 <table bgcolor=#f0f0f0 width=100% height=100% border=0>
 <tr>
-<td align=left class='fgen_text' colspan=3><a href='javascript:remote("no","200","200","pickstyle.{VAR:ext}?id={VAR:form_id}&col={VAR:col}&row={VAR:row}")'>Vali stiil</a>&nbsp;<input type='checkbox' name='chk[{VAR:row}][{VAR:col}]' value=1>&nbsp;{VAR:style_name}</td>
+<td align=left class='fgen_text' colspan=3><a href='javascript:remote("no","200","200","pickstyle.{VAR:ext}?id={VAR:form_id}&col={VAR:col}&row={VAR:row}")'>{VAR:LC_FORMS_CHOOSE_STYLE}</a>&nbsp;<input type='checkbox' name='chk[{VAR:row}][{VAR:col}]' value=1>&nbsp;{VAR:style_name}</td>
 </tr>
 
 <tr>
-	<td bgcolor=#ffffff class='fgen_text'><b>Nimi</b></td>
-	<td bgcolor=#ffffff class='fgen_text'><b>T&uuml;&uuml;p</b></td>
-	<td bgcolor=#ffffff class='fgen_text'><b>Tekst</b></td>
+	<td bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_NAME}</b></td>
+	<td bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_TYPE}</b></td>
+	<td bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_TEXT}</b></td>
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>
 	<td bgcolor=#ffffff class='fgen_text'>{VAR:el_name}</td>
 	<td bgcolor=#ffffff class='fgen_text'>{VAR:el_type}</td>
-	<td bgcolor=#ffffff class='fgen_text'>{VAR:el_text}</td>
+	<td bgcolor=#ffffff class='fgen_text'>{VAR:el_text} &nbsp;&nbsp;<input type='checkbox' name='selel[]' value='{VAR:element_id}'></td>
 </tr>
 <!-- END SUB: ELEMENT -->
 </table>
@@ -30,9 +30,9 @@
 </tr>
 <!-- END SUB: LINE -->
 </table>
-Vali stiil:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
-Vali kataloog, kuhu elemendid liigutada:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
-Vali elemendi t&uuml;&uuml;p, mis lisada:<select name='addel' class='small_button'>{VAR:types}</select><br>
-<input type='submit' value='Salvesta' class='small_button'>
+{VAR:LC_FORMS_CHOOSE_STYLE}:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
+{VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
+{VAR:LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD}:<select name='addel' class='small_button'>{VAR:types}</select><br>
+<input type='submit' value='{VAR:LC_FORMS_SAVE}' class='small_button'>
 {VAR:reforb}
 </form>

@@ -9,14 +9,14 @@
 <form action="reforb.{VAR:ext}" method="POST">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 	<tr>
-		<td class="fcaption2">From:</td>
-		<td class="fcaption2">To:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_FROM}:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_TO}:</td>
 		<!-- SUB: CUR_H -->
-		<td class="fcaption2">Price ({VAR:cur_name}):</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PRICE} ({VAR:cur_name}):</td>
 		<!-- END SUB: CUR_H -->
-		<td class="fcaption2">Weekly price:</td>
-		<td class="fcaption2">To weeks price:</td>
-		<td class="fcaption2">Delete:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_WEEK_PRICE}:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_2_WEEK_PRICE}:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_DELETE}:</td>
 	</tr>
 	<!-- SUB: PERIOD -->
 	<tr>
@@ -31,7 +31,7 @@
 	</tr>
 	<!-- END SUB: PERIOD -->
 	<tr>
-		<td class="fcaption2" colspan=8><input type='submit' value='Save'></td>
+		<td class="fcaption2" colspan=8><input type='submit' value='{VAR:LC_SHOP_SAVE}'></td>
 	</tr>
 </table>
 {VAR:reforb}

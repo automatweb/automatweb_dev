@@ -3,10 +3,10 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>PROGRAMMID:</b></td>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_ACCSESS_PROGRAMS}</b></td>
 </tr>
 <tr>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_ACCSESS_NAME}&nbsp;</td>
 <td align="center" class="title">ACL</td>
 </tr>
 <!-- SUB: LINE -->

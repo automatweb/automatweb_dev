@@ -37,7 +37,7 @@ return false;
 &nbsp;</font></td>
 <td valign=center bgcolor=#ceefef><font face = 'arial' size=1>&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda kategooriat kustutada?','forms.{VAR:ext}?type=delete_category&id={VAR:category_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('Oled kindel, et soovid seda kategooriat kustutada?','forms.{VAR:ext}?type=delete_category&id={VAR:category_id}&parent={VAR:parent}')">{VAR:LC_FORMS_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</font></td>
 <td valign=center bgcolor=#ffffff><font face = 'arial' size=1>&nbsp;
@@ -53,7 +53,7 @@ return false;
 <tr>
 <td class='plain' colspan=6 align=center>
 <!-- SUB: ADD_CAT -->
-<a href='forms.{VAR:ext}?type=add_category&parent={VAR:parent}'>Lisa</a>
+<a href='forms.{VAR:ext}?type=add_category&parent={VAR:parent}'>{VAR:LC_FORMS_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 &nbsp;</td>
 </tr>
@@ -65,7 +65,7 @@ return false;
 <!-- SUB: DEF_STYLE_ITEM -->
 <option VALUE='{VAR:style_id}' {VAR:style_selected}>{VAR:style_name}
 <!-- END SUB: DEF_STYLE_ITEM -->
-</select><input class="small_button" type='submit' NAME='save' VALUE='Salvesta'></td></tr></table>
+</select><input class="small_button" type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'></td></tr></table>
 <input type='hidden' NAME='action' VALUE='set_category_style'>
 <input type='hidden' NAME='parent' VALUE='{VAR:parent}'>
 </form>
@@ -98,7 +98,7 @@ return false;
 <td {VAR:cut_bg}><a href='forms.{VAR:ext}?type=output_list&id={VAR:form_id}'>V&auml;ljundid</a></td>
 <td {VAR:cut_bg}>
 <!-- SUB: DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda formi kustutada?','forms.{VAR:ext}?type=delete_form&id={VAR:form_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('Oled kindel, et soovid seda formi kustutada?','forms.{VAR:ext}?type=delete_form&id={VAR:form_id}&parent={VAR:parent}')">{VAR:LC_FORMS_DELETE}</a>
 <!-- END SUB: DELETE -->
 &nbsp;</td>
 <td {VAR:cut_bg}>
@@ -120,7 +120,7 @@ return false;
 <!-- END SUB: FLINE -->
 <tr><td  class="fcaption" colspan=9 align=center>
 <!-- SUB: ADD_FORM -->
-	<a href='forms.{VAR:ext}?type=add_form&parent={VAR:parent}'>Lisa</a>
+	<a href='forms.{VAR:ext}?type=add_form&parent={VAR:parent}'>{VAR:LC_FORMS_ADD}</a>
 <!-- END SUB: ADD_FORM -->
 &nbsp;</td>
 <td class="fcaption" colspan=2><input class='small_button' type='submit' NAME='export' VALUE='Ekspordi'></td>

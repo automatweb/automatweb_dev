@@ -3,7 +3,7 @@
 <td colspan="2" bgcolor="#FFCCAA" align="center"><strong>{VAR:name}</strong></td>
 </tr>
 <tr>
-<td><strong>Koht</strong></td>
+<td><strong>{VAR:LC_EVENTS_PLACE}</strong></td>
 <td><a href="{VAR:self}?op=show_location&id={VAR:pid}">{VAR:pname}</a></td>
 </tr>
 <!-- SUB: DESC -->
@@ -14,12 +14,12 @@
 </tr>
 <!-- END SUB: DESC -->
 <tr>
-<td><strong>Aeg</strong></td>
+<td><strong>{VAR:LC_EVENTS_TIMA}</strong></td>
 <td>{VAR:start} - {VAR:end}</td>
 </tr>
 <!-- SUB: CONTACT -->
 <tr>
-<td><strong>Kontakt</strong></td>
+<td><strong>{VAR:LC_EVENTS_CONTACT}</strong></td>
 <td>{VAR:contact}</td>
 </tr>
 <!-- END SUB: CONTACT -->
@@ -32,22 +32,22 @@
 <!-- SUB: PRICE -->
 <tr>
 <td colspan="2" align="center">
-Hind: <strong>{VAR:price}</strong>
+{VAR:LC_EVENTS_PRICE}: <strong>{VAR:price}</strong>
 &nbsp;
-Hind flaieriga: <strong>{VAR:priceflyer}</strong>
+{VAR:LC_EVENTS_PRICE_WITH_FLYER}: <strong>{VAR:priceflyer}</strong>
 </td>
 </tr>
 <!-- END SUB: PRICE -->
 <!-- SUB: FREE -->
 <tr>
 <td colspan="2" align="center">
-Sissep‰‰s tasuta
+{VAR:LC_EVENTS_FREE_ENTRY}
 </td>
 </tr>
 <!-- END SUB: FREE -->
 <!-- SUB: FLYER -->
 <tr>
-<td><strong>Flaieri URL</strong></td>
+<td><strong>{VAR:}Flaieri URL</strong></td>
 <td><a href="{VAR:flyer}">{VAR:flyer}</a></td>
 </tr>
 <!-- END SUB: FLYER -->

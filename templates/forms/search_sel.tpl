@@ -19,15 +19,15 @@ Lehek&uuml;lg:
 {VAR:from} - {VAR:to} |
 <!-- END SUB: SEL_PAGE -->
 
-<br>Vali milliste formide sisestustest otsitakse selle formi t&auml;itmisel:<br>
+<br>{VAR:LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL}:<br>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
 <td class="title">ID</td>
-<td class="title">Nimi</td>
-<td class="title">Kommentaar</td>
-<td class="title">Asukoht</td>
-<td class="title"><a href='#' onClick="selall();return false;">K&otilde;ik</a></td>
-<td class="title">Millist outputti kasutada</td>
+<td class="title">{VAR:LC_FORMS_NAME}</td>
+<td class="title">{VAR:LC_FORMS_COMMENT}</td>
+<td class="title">{VAR:LC_FORMS_POSITION}</td>
+<td class="title"><a href='#' onClick="selall();return false;">{VAR:LC_FORMS_ALL}</a></td>
+<td class="title">{VAR:LC_FORMS_WHAT_OUTPUT_TO_USE}</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -42,7 +42,7 @@ Lehek&uuml;lg:
 </tr>
 <!-- END SUB: LINE -->
 </table>
-<input type=submit NAME='save' VALUE='Salvesta'>
+<input type=submit NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'>
 {VAR:reforb}
 </form>
     

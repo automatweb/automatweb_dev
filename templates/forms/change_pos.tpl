@@ -1,17 +1,17 @@
 <form method=POST action='reforb.{VAR:ext}'>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td colspan=2 class="fform">Vali kataloog, kus element asub:</td>
+	<td colspan=2 class="fform">{VAR:LC_FORMS_CHOOSE_CAT_WHERE_IS_ELEMENT}:</td>
 </tr>
 <tr>
 	<td colspan=2 class="fform"><select name='parent' class='small_button'>{VAR:folders}</select></td>
 </tr>
 <tr>
-	<td class="fform">Elemendi nimi:</td>
+	<td class="fform">{VAR:LC_FORMS_ELEMENT_NAME}:</td>
 	<td class="fform"><input type="text" name="name" value="{VAR:name}"></td>
 </tr>
 <tr>
-	<td class="fform" colspan=2>Vali cell, kus element asub:</td>
+	<td class="fform" colspan=2> {VAR:LC_FORMS_CHOOSE_CELL_WHERE_ELEMENT}:</td>
 </tr>
 <tr>
 	<td class="fform" colspan=2>
@@ -34,7 +34,7 @@
 	</td>
 </tr>
 <tr>
-	<td class="fform" colspan=2>Vali cell, kuhu element kopeerida (lisatakse uued elemendid):</td>
+	<td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_CELL_WHERE_ELMENT_COPY}:</td>
 </tr>
 <tr>
 	<td class="fform" colspan=2>
@@ -57,13 +57,13 @@
 	</td>
 </tr>
 <tr>
-	<td class="fform">Mitu elementi teha:</td>
+	<td class="fform">{VAR:LC_FORMS_HOW_MANY_EL_MAKE}:</td>
 	<td class="fform"><input type='text' name='el_count' value='1' size=3></td>
 </tr>
 <tr>
 	<td class="fform" colspan="3" align="center">
 	{VAR:reforb}
-	<input type="submit" class='small_button' value="Salvesta">
+	<input type="submit" class='small_button' value="{VAR:LC_FORMS_SAVE}">
 	</td>
 </tr>
 </table>

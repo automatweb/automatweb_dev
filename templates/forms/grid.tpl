@@ -1,5 +1,5 @@
 <form action='reforb.{VAR:ext}' METHOD=post>
-<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>
+<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
 <table border=0>
 <tr>
 <td bgcolor=#d0d0d0>
@@ -14,7 +14,7 @@
 		<!-- END SUB: FIRST_C -->
 
 		<!-- SUB: DELETE_COL -->
-		<td align=right valign=bottom><input type='checkbox' NAME='dc_{VAR:form_col}' value=1>&nbsp;<a href="javascript:box2('Oled kindel, et soovid seda tulpa kustutada?','{VAR:del_col}')"><img src='/images/del_col.gif' border=0></a></td>
+		<td align=right valign=bottom><input type='checkbox' NAME='dc_{VAR:form_col}' value=1>&nbsp;<a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_COLUMN}?','{VAR:del_col}')"><img src='/images/del_col.gif' border=0></a></td>
 		<!-- END SUB: DELETE_COL -->
 		<td align=right valign=bottom><a href='{VAR:add_col}'><img src='/images/add_col.gif' border=0></a></td>
 	</tr>
@@ -47,9 +47,9 @@
 <tr>
 
 <td class='fgen_text' colspan=5>
-<a href='{VAR:admin_cell}'>Toimeta</a>
+<a href='{VAR:admin_cell}'>{VAR:LC_FORMS_TOIMETA}</a>
 |
-<a href='{VAR:add_element}'>Lisa element</a>
+<a href='{VAR:add_element}'>{VAR:LC_FORMS_ADD_ELEMENT}</a>
 <!-- SUB: SPLIT_VERTICAL -->
 &nbsp;| <a href='{VAR:split_ver}'><img alt='Jaga cell pooleks vertikaalselt' src='/images/split_cell_left.gif' border=0></a>&nbsp;
 <!-- END SUB: SPLIT_VERTICAL -->
@@ -63,9 +63,9 @@
 </tr>
 <tr>
 	<td bgcolor=#ffffff align=left class='fgen_text'><b>Jrk</b></td>
-	<td   bgcolor=#ffffff class='fgen_text'><b>Nimi</b></td>
-	<td   bgcolor=#ffffff class='fgen_text'><b>T&uuml;&uuml;p</b></td>
-	<td   bgcolor=#ffffff align=left class='fgen_text' colspan=2><b>Tekst</b></td>
+	<td   bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_NAME}</b></td>
+	<td   bgcolor=#ffffff class='fgen_text'><b>{VAR:LC_FORMS_TYPE}</b></td>
+	<td   bgcolor=#ffffff align=left class='fgen_text' colspan=2><b>{VAR:LC_FORMS_TEXT}</b></td>
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>
@@ -79,7 +79,7 @@
 <!-- SUB: ELEMENT_NOEDIT -->
 <tr>
 	<td bgcolor=#ffffff >{VAR:form_cell_text}&nbsp;&nbsp;{VAR:form_cell_order}</td>
-	<td bgcolor=#ffffff  align=right class='fgen_text'>Tekst:</td>
+	<td bgcolor=#ffffff  align=right class='fgen_text'>{VAR:}:</td>
 </tr>
 <!-- END SUB: ELEMENT_NOEDIT -->
 <tr>
@@ -98,7 +98,7 @@
 <!-- END SUB: FIRST_R -->
 
 <!-- SUB: DELETE_ROW -->
-<tr><td valign=bottom><a href="javascript:box2('Oled kindel, et soovid seda rida kustutada?','{VAR:del_row}')"><img src='/images/del_row.gif' BORDER=0></a><input type='checkbox' NAME='dr_{VAR:cell_row}' value=1></td></tr>
+<tr><td valign=bottom><a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_ROW}?','{VAR:del_row}')"><img src='/images/del_row.gif' BORDER=0></a><input type='checkbox' NAME='dr_{VAR:cell_row}' value=1></td></tr>
 <!-- END SUB: DELETE_ROW -->
 <tr><td valign=bottom><a href='{VAR:add_row}'><img src='/images/add_row.gif' BORDER=0></a></td></tr>
 </table>
@@ -109,17 +109,17 @@
 </td>
 </tr>
 </table>
-<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>
+<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
 {VAR:reforb}
 </form>
 
 <form action="reforb.{VAR:ext}" METHOD="POST">
 {VAR:addr_reforb}
-<input type="submit" class="small_sub" VALUE="Lisa"> <input type="text" NAME="count" size=2> rida. 
+<input type="submit" class="small_sub" VALUE="{VAR:LC_FORMS_ADD}"> <input type="text" NAME="count" size=2> {VAR:LC_FORMS_ROW}
 </form>
 
 <form action="reforb.{VAR:ext}" METHOD="POST">
 {VAR:addc_reforb}
-<input type="submit" class="small_sub" VALUE="Lisa"> <input type="text" NAME="count" size=2> veergu. 
+<input type="submit" class="small_sub" VALUE="{VAR:LC_FORMS_ADD}"> <input type="text" NAME="count" size=2> {VAR:LC_FORMS_COLUMN} 
 </form>
 

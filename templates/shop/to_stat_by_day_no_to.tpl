@@ -1,4 +1,4 @@
-<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
+	<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 	<td class="fcaption2">{VAR:LC_SHOP_SHOP}:</td>
 	<td colspan=3 class="fform">{VAR:name}</td>

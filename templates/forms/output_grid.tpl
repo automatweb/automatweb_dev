@@ -1,7 +1,7 @@
 <form action=reforb.{VAR:ext} method=post>
-<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>&nbsp;&nbsp;&nbsp;
+<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>&nbsp;&nbsp;&nbsp;
 <!-- SUB: PREVIEW -->
-<a href='{VAR:preview}'>Eelvaade</a>
+<a href='{VAR:preview}'>{VAR:LC_FORMS_PREVIEW}</a>
 <!-- END SUB: PREVIEW -->
 <table border=0>
 <tr>
@@ -31,31 +31,31 @@
 <tr>
 <td rowspan={VAR:num_els_plus3}>&nbsp;
 <!-- SUB: EXP_LEFT -->
-<a href='{VAR:exp_left}'><img border=0 alt='Kustuta vasak cell' src='{VAR:baseurl}/automatweb/images/left_r_arr.gif'></a>
+<a href='{VAR:exp_left}'><img border=0 alt='{VAR:LC_FORMS_DELETE_LEFT_CELL}' src='{VAR:baseurl}/automatweb/images/left_r_arr.gif'></a>
 <!-- END SUB: EXP_LEFT -->
 </td>
 <td colspan=2 align=center>&nbsp;
 <!-- SUB: EXP_UP -->
-<a href='{VAR:exp_up}'><img border=0 alt='Kustuta &uuml;lemine  cell' src='{VAR:baseurl}/automatweb/images/up_r_arr.gif'></a>
+<a href='{VAR:exp_up}'><img border=0 alt='{VAR:LC_FORMS_DELETE_UP_CELL}' src='{VAR:baseurl}/automatweb/images/up_r_arr.gif'></a>
 <!-- END SUB: EXP_UP -->
 </td>
 <td rowspan={VAR:num_els_plus3}>&nbsp;
 <!-- SUB: EXP_RIGHT -->
-<a href='{VAR:exp_right}'><img border=0 alt='Kustuta parem cell' src='{VAR:baseurl}/automatweb/images/right_r_arr.gif'></a>
+<a href='{VAR:exp_right}'><img border=0 alt='{VAR:LC_FORMS_DELETE_RIGHT_CELL}' src='{VAR:baseurl}/automatweb/images/right_r_arr.gif'></a>
 <!-- END SUB: EXP_RIGHT -->
 </td>
 </tr>
 <tr>
-<td class="fgen_text" colspan=2><a href='{VAR:ch_cell}'>Muuda</a> | <a href='{VAR:addel}'>Lisa element</a></td>
+<td class="fgen_text" colspan=2><a href='{VAR:ch_cell}'>{VAR:LC_FORMS_CHANGE}</a> | <a href='{VAR:addel}'>{VAR:LC_FORMS_ADD_ELEMENT}</a></td>
 </tr>
 <!-- SUB: ELEMENT -->
 <tr>
-<td align=right class=fgen_text>Element:</td>
+<td align=right class=fgen_text>{VAR:LC_FORMS_ELEMENT}:</td>
 <td>{VAR:el_name}</td>
 </tr>
 <!-- END SUB: ELEMENT -->
 <tr>
-<td align=right class=fgen_text>Stiil:</td>
+<td align=right class=fgen_text>{VAR:LC_FORMS_STYLE}:</td>
 <td class=fgen_text>{VAR:style_name} <input type='checkbox' name='sel[{VAR:row}][{VAR:col}]' value='1'>
 </td>
 </tr>
@@ -63,11 +63,11 @@
 <tr>
 <td colspan=2 align="center">&nbsp;
 <!-- SUB: SPLIT_VERTICAL -->
-&nbsp;| <a href='{VAR:split_ver}'><img alt='Jaga cell pooleks vertikaalselt' src='/images/split_cell_left.gif' border=0></a>&nbsp;
+&nbsp;| <a href='{VAR:split_ver}'><img alt='{VAR:LC_FORMS_DEV_CELL_VERT}' src='/images/split_cell_left.gif' border=0></a>&nbsp;
 <!-- END SUB: SPLIT_VERTICAL -->
 
 <!-- SUB: SPLIT_HORIZONTAL -->
-&nbsp;| <a href='{VAR:split_hor}'><img alt='Jaga cell pooleks horisontaalselt' src='/images/split_cell_down.gif' border=0></a>
+&nbsp;| <a href='{VAR:split_hor}'><img alt='{VAR:LC_FORMS_DEV_CELL_HOR}' src='/images/split_cell_down.gif' border=0></a>
 <!-- END SUB: SPLIT_HORIZONTAL -->
 </td>
 </tr>
@@ -75,7 +75,7 @@
 <tr>
 <td colspan=2 align=center>&nbsp;
 <!-- SUB: EXP_DOWN -->
-<a href='{VAR:exp_down}'><img border=0 alt='Kustuta alumine cell' src='/images/down_r_arr.gif'></a>
+<a href='{VAR:exp_down}'><img border=0 alt='{VAR:LC_FORMS_DELETE_LOWER_CELL}' src='/images/down_r_arr.gif'></a>
 <!-- END SUB: EXP_DOWN -->
 </td></tr>
 </table>
@@ -95,14 +95,14 @@
 <!-- END SUB: LINE -->
 </table></td></tr></table>
 <select name='selstyle' >{VAR:styles}</select><br>
-<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>
+<input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>
 {VAR:reforb}
 </form>
 <form action='reforb.{VAR:ext}' method=POST>
-<input type='submit' class='small_sub' value='Lisa'> <input type='text' name='nrows' size=3 class='small_button'> rida 
+<input type='submit' class='small_sub' value='{VAR:LC_FORMS_ADD}'> <input type='text' name='nrows' size=3 class='small_button'> {VAR:LC_FORMS_ROW_ROW} 
 {VAR:addr_reforb}
 </form>
 <form action='reforb.{VAR:ext}' method=POST>
-<input type='submit' class='small_sub' value='Lisa'> <input type='text' name='ncols' size=3 class='small_button'> tulpa 
+<input type='submit' class='small_sub' value='{VAR:LC_FORMS_ADD}'> <input type='text' name='ncols' size=3 class='small_button'> {VAR:LC_FORMS_COLUMN} 
 {VAR:addc_reforb}
 </form>

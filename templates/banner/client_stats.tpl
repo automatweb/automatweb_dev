@@ -3,18 +3,18 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>BANNERID:&nbsp;<a href='{VAR:add}'>Lisa</a></b></td>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_BANNER_BANNERS}:&nbsp;<a href='{VAR:add}'>{VAR:LC_BANNER_ADD}</a></b></td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
 <td colspan=2 class="fgtext">{VAR:img}</td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;N&auml;itamisi:&nbsp;</td>
+<td class="fgtext">&nbsp;{VAR:LC_BANNER_SHOWS}:&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:views}&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Klikke:&nbsp;</td>
+<td class="fgtext">&nbsp;{VAR:LC_BANNER_CLICKS}:&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:clics}&nbsp;</td>
 </tr>
 <tr>
@@ -22,19 +22,19 @@
 <td class="fgtext">&nbsp;{VAR:ctr}%&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;<a href='{VAR:detail}'>Detailne statistika</a>&nbsp;</td>
+<td class="fgtext">&nbsp;<a href='{VAR:detail}'>{VAR:LC_BANNER_DETAIL_STAT}</a>&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 <tr>
-<td colspan=2 class="fgtext">&nbsp;Kokku:</td>
+<td colspan=2 class="fgtext">&nbsp;{VAR:LC_BANNER_TOGETHER}:</td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;N&auml;itamisi:&nbsp;</td>
+<td class="fgtext">&nbsp;{VAR:LC_BANNER_SHOWS}</td>
 <td class="fgtext">&nbsp;{VAR:views}&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;Klikke:&nbsp;</td>
+<td class="fgtext">&nbsp;{VAR:LC_BANNER_CLICKS}:&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:clics}&nbsp;</td>
 </tr>
 <tr>
@@ -42,19 +42,19 @@
 <td class="fgtext">&nbsp;{VAR:ctr}%&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_day}'>P&auml;evade l&otilde;ikes</a>&nbsp;</td>
+<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_day}'>{VAR:LC_BANNER_BY_DAYS}</a>&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_dow}'>N&auml;dalap&auml;evade l&otilde;ikes</a>&nbsp;</td>
+<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_dow}'>{VAR:LC_BANNER_BY_WEEKDAYS</a>&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_hr}'>Tundide l&otilde;ikes</a>&nbsp;</td>
+<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_hr}'>{VAR:LC_BANNER_BY_HOURS}</a>&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_buser}'>Vaatajate statistika</a>&nbsp;</td>
+<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_buser}'>{VAR:LC_BANNER_LOOKERS_STATISTICS}</a>&nbsp;</td>
 </tr>
 <tr>
-<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_profile}'>Profiilide statistika</a>&nbsp;</td>
+<td class="fgtext" colspan=2>&nbsp;<a href='{VAR:cl_stats_by_profile}'>{VAR:LC_BANNER_PROFILE_STAT}</a>&nbsp;</td>
 </tr>
 </table>
 </td>

@@ -2,11 +2,11 @@
 <tr><td>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption">Tekst:</td>
+	<td class="fcaption">{VAR:LC_FORMS_TEXT}:</td>
 	<td class="fform">{VAR:cell_text}</td>
 </tr>
 <tr>
-	<td class="fcaption">T&uuml;&uuml;p:</td>
+	<td class="fcaption">{VAR:LC_FORM_TYPE}:</td>
 	<td class="fform">{VAR:type}</td>
 </tr>
 <!-- SUB: LISTBOX_ITEMS -->
@@ -23,46 +23,46 @@
 <!-- END SUB: MULTIPLE_ITEMS -->
 <!-- SUB: TEXTAREA_ITEMS -->
 <tr>
-<td class="fcaption">Mitu tahte lai:</td>
+<td class="fcaption">{VAR:LC_FORMS_HOW_MANY_LETTERS_WIDE}:</td>
 <td class="fform">{VAR:textarea_cols}</td>
 </tr>
 <tr>
-<td class="fcaption">Mitu tahekorgust:</td>
+<td class="fcaption">{VAR:LC_FORMS_HOW_MANY_LETTER_HIGTH}:</td>
 <td class="fform">{VAR:textarea_rows}</td>
 </tr>
 <tr>
-<td class="fcaption">Algne tekst:</td>
+<td class="fcaption">{VAR:LC_FORMS_ORIGINAL_TEXT}:</td>
 <td class="fform">{VAR:default}</td>
 </tr>
 <!-- END SUB: TEXTAREA_ITEMS -->
 <!-- SUB: GROUP -->
 <tr>
-<td class="fcaption">Grupp:</td>
+<td class="fcaption">{VAR:LC_FORMS_GROUP}:</td>
 <td class="fform">{VAR:cell_group}</td>
 </tr>
 <!-- END SUB: GROUP -->
 <!-- SUB: DEFAULT_TEXT -->
 <tr>
-<td class="fcaption">Algne tekst:</td>
+<td class="fcaption">{VAR:LC_FORMS_ORIGINAL_TEXT}:</td>
 <td class="fform">{VAR:default}</td>
 </tr>
 <!-- END SUB: DEFAULT_TEXT -->
 <!-- SUB: DEFAULT_CHECK -->
 <tr>
-<td class="fcaption">Algselt valitud:</td>
+<td class="fcaption">{VAR:LC_FORMS_ORIGINALLY_SELECTED}:</td>
 <td class="fform">{VAR:default_checked}</td>
 </tr>
 <!-- END SUB: DEFAULT_CHECK -->
 <tr>
-<td class="fcaption"><small>Seletus:</font></small></td>
+<td class="fcaption"><small>{VAR:LC_FORMS_EXPLONATION}:</font></small></td>
 <td class="fform">{VAR:cell_info}</td>
 </tr>
 <tr>
-<td class="fcaption">Nimekirjas:</td>
+<td class="fcaption">{VAR:LC_FORMS_IN_LIST}:</td>
 <td class="fform">{VAR:front_checked}</td>
 </tr>
 <tr>
-<td class="fcaption">J&auml;rjekord:</td>
+<td class="fcaption">{VAR:LC_FORMS_ORDER}:</td>
 <td class="fform">{VAR:cell_order}</td>
 </tr>
 </table>

@@ -7,16 +7,16 @@
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>ELEMENDID:
-<a href="javascript:document.f1.submit()">Salvesta</a>
-&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=change_form_cell&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>M&auml;&auml;rangud</a>
-&nbsp;|&nbsp;<a href='{VAR:cell_style}'>Stiilid</a>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_FORMS_BIG_ELEMENTS}:
+<a href="javascript:document.f1.submit()">{VAR:LC_FORMS_SAVE}</a>
+&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=change_form_cell&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>{VAR:LC_FORMS_SETTINGS}</a>
+&nbsp;|&nbsp;<a href='{VAR:cell_style}'>{VAR:LC_FORMS_STYLES}</a>
 <!-- SUB: CAN_ACTION -->
-&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=cell_actions&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>Actionid</a>
+&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=cell_actions&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>{VAR:LC_FORMS_SMALL_ACTIONS}</a>
 <!-- END SUB: CAN_ACTION -->
-&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=cell_controllers&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>Kontrollerid</a> | 
+&nbsp;|&nbsp;<a href='forms.{VAR:ext}?type=cell_controllers&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}'>{VAR:LC_FORMS_CONTROLLERS}</a> | 
 <!-- SUB: CAN_ADD -->
-<a href='{VAR:add_el}'>Lisa</a>
+<a href='{VAR:add_el}'>{VAR:LC_FORMS_ADD}</a>
 <!-- END SUB: CAN_ADD -->
 
 </b></td>
@@ -25,13 +25,13 @@
 <!-- SUB: ELEMENT_LINE -->
 <tr><td><a name='el_{VAR:after}'>{VAR:element}</td></tr>
 <tr>
-<td height="15" colspan="15" class="fgtitle"><a href="javascript:document.f1.submit()">Salvesta</a>
+<td height="15" colspan="15" class="fgtitle"><a href="javascript:document.f1.submit()">{VAR:LC_FORMS_SAVE}</a>
 <!-- SUB: EL_ADD -->
 
 <!-- SUB: EL_NLAST -->
 &nbsp;|&nbsp;<a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}&after={VAR:after}" >Lisa siia</a>
 <!-- END SUB: EL_NLAST -->
-&nbsp;|&nbsp;<a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}" >Lisa l&otilde;ppu</a>
+&nbsp;|&nbsp;<a href="forms.{VAR:ext}?type=add_element&f_id={VAR:form_id}&col={VAR:form_col}&row={VAR:form_row}" >{VAR:LC_FORMS_ADD_TO_END}</a>
 <!-- END SUB: EL_ADD -->
 
 <!-- SUB: EL_ACL -->

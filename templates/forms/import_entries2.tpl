@@ -1,7 +1,7 @@
 <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fform">Sea vastavusse failis olevad andmed ning vormi elemenedid:</td>
+<td class="fform">{VAR:LC_FORMS_MAKE_DATA_AND_FORMEL_EQU}:</td>
 </tr>
 <tr>
 <td class="fform">
@@ -11,7 +11,7 @@
 	<!-- SUB: FCOL -->
 		<td class="fform" align="center" valign="top">{VAR:cnt}<br>{VAR:val}</td>
 	<!-- END SUB: FCOL -->
-	<td class="fform">T&uuml;hi</td>
+	<td class="fform">{VAR:LC_FORMS_EMPTY}</td>
 </tr>
 <!-- SUB: ROW -->
 <tr>

@@ -2,13 +2,13 @@
 <tr><td>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-<td class="fcaption">Tekst:</td>
+<td class="fcaption">{VAR:LC_FORMS_TEXT}:</td>
 <td class="fform"><input type='text' NAME='{VAR:element_id}_text' VALUE='{VAR:element_text}'></td>
 </tr>
 <tr>
-<td class="fcaption">T&uuml;&uuml;p:</td>
+<td class="fcaption">{VAR:LC_FORMS_TYPE}:</td>
 <td class="fform"><select NAME='{VAR:element_id}_type'>
-    <option  VALUE=''>Seletus
+    <option  VALUE=''>{VAR:LC_FORMS_EXPLONATION}Seletus
     <option  VALUE=''>---------
     <option {VAR:type_active_checkbox} VALUE='checkbox'>Checkbox
     <option {VAR:type_active_radiobutton} VALUE='radiobutton'>Radiobutton
@@ -30,7 +30,7 @@
 <!-- END SUB: MULTIPLE_ITEMS -->
 <!-- SUB: GROUP -->
 <tr>
-<td class="fcaption">Grupp:</td>
+<td class="fcaption">{VAR:LC_FORMS_GROUP}:</td>
 <td class="fform"><input type='text' SIZE=1 NAME='{VAR:element_id}_group' VALUE='{VAR:element_group}'></td>
 </tr>
 <!-- END SUB: GROUP -->
@@ -41,11 +41,11 @@
 </tr>
 <!-- END SUB: VALUE -->
 <tr>
-<td class="fcaption"><small>Seletus:</small></td>
+<td class="fcaption"><small>{VAR:LC_FORMS_EXPLONATION}:</small></td>
 <td class="fform"><textarea rows=3 cols=20 NAME='{VAR:element_id}_info'>{VAR:element_info}</textarea></td>
 </tr>
 <tr>
-<td class="fcaption">J&auml;rjekord:</td>
+<td class="fcaption">{VAR:LC_FORMS_ORDER}:</td>
 <td class="fform"><input type='text' size=2 NAME='{VAR:element_id}_order' VALUE='{VAR:element_order}'></td>
 </tr>
 </table>

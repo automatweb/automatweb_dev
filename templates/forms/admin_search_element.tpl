@@ -164,11 +164,11 @@ function search(search_el,lb_el)
 <td bgcolor=#BADBAD>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-<td class="fcaption">Tekst:</td>
+<td class="fcaption">{VAR:LC_FORMS_TEXT}:</td>
 <td class="fform"><input type='text' NAME='{VAR:el_id}_text' VALUE='{VAR:el_text}'></td>
 </tr>
 <tr>
-<td class="fcaption">Element v6etud formist:</td>
+<td class="fcaption">{VAR:LC_FORMS_ELEMENT_FROM_FORM}:</td>
 <td class="fform"><select NAME='{VAR:el_id}_form' onChange="ch(document.f1.{VAR:el_id}_element, this,'{VAR:el_id}')">
 <!-- SUB: FORMSEL -->
 <option {VAR:sel_form_active} VALUE='{VAR:sel_form_value}'>{VAR:sel_form_name}
@@ -177,7 +177,7 @@ function search(search_el,lb_el)
 </td>
 </tr>
 <tr>
-<td class="fcaption">Milline valitud formist:</td>
+<td class="fcaption">{VAR:LC_FORMS_WHICH_OF_SELECTED_FORM}:</td>
 <td class="fform"><input type='text' name='{VAR:el_id}_search' onKeyDown="setTimeout('search(this,document.f1.{VAR:el_id}_element)',10);"><br><select NAME='{VAR:el_id}_element' onChange='ch_type(this,document.f1.{VAR:el_id}_form,"{VAR:el_id}")'>
 <!-- SUB: ELSEL -->
 <option {VAR:sel_el_active} VALUE='{VAR:sel_el_value}'>{VAR:sel_el_name}
@@ -186,10 +186,10 @@ function search(search_el,lb_el)
 </td>
 </tr>
 <tr>
-<td class="fcaption">Valitud elemendi tyyp:</td>
+<td class="fcaption">{VAR:LC_FORMS_CHOOSEN_ELEMENT_TYPE}:</td>
 <td class="fform">
-<SPAN ID='type_{VAR:el_id}' CLASS='type'><SPAN ID='textbox_{VAR:el_id}' CLASS='textbox'>Tektsikast</SPAN>
-<SPAN ID='textarea_{VAR:el_id}' CLASS='textarea'>Mitmerealine tekst</SPAN>
+<SPAN ID='type_{VAR:el_id}' CLASS='type'><SPAN ID='textbox_{VAR:el_id}' CLASS='textbox'>{VAR:LC_FORMS_TEXT_BOX}</SPAN>
+<SPAN ID='textarea_{VAR:el_id}' CLASS='textarea'>{VAR:LC_FORMS_MULTILINE_TEXT</SPAN>
 <SPAN ID='checkbox_{VAR:el_id}' CLASS='checkbox'>Checkbox</SPAN>
 <SPAN ID='radiobutton_{VAR:el_id}' CLASS='radiobutton'>Radiobutton</SPAN>
 <SPAN ID='listbox_{VAR:el_id}' CLASS='listbox'>Listbox</SPAN>
@@ -198,7 +198,7 @@ function search(search_el,lb_el)
 </SPAN>&nbsp;</td>
 </tr>
 <tr>
-<td class="fform" colspan=2>Kustuta see element? <input type='checkbox' name='{VAR:el_id}_del' value='1'>
+<td class="fform" colspan=2>{VAR:LC_FORMS_DELETE_THIS_ELEMENT}? <input type='checkbox' name='{VAR:el_id}_del' value='1'>
 </tr>
 </table>
 </td>

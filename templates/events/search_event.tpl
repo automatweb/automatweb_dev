@@ -9,8 +9,8 @@
 <input type="submit" value="Otsi">
 </form>
 <br>
-"j%" leiab kõik j-ga algavad üritused<br>
-"st" leiab kõik üritused, mille nimes on <i>st</i>
+"j%" {VAR:LC_EVENTS_FINDS_BEG_J}<br>
+"st" {VAR:LC_EVENTS_FINDS_ALL_INS}<i>st</i>
 <br>
 jne,jne.
 
