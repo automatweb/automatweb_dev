@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.189 2003/12/11 11:58:11 duke Exp $
+// $Id: class_base.aw,v 2.190 2003/12/14 15:24:43 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -82,7 +82,12 @@ class class_base extends aw_template
 
 	function init($arg = array())
 	{
+		global $XUL;
 		$this->output_client = "htmlclient";
+		if ($XUL)
+		{
+			$this->output_client = "xulclient";
+		};
 		$this->ds_name = "ds_local_sql";
 		$this->default_group = "general";
 		parent::init($arg);
@@ -395,12 +400,12 @@ class class_base extends aw_template
 		$this->init_class_base();
 		$this->orb_action = $args["action"];
 
-
 		$this->is_translated = 0;
 
 		// object framework does it's own quoting
 		//$this->quote($args);
 		extract($args);
+
 
 		$form_data = $args;
 
@@ -494,6 +499,10 @@ class class_base extends aw_template
 				$args["section"] = $form_data["section"];
 				$args["_alias"] = get_class($this);
 				$use_orb = false;
+			};
+			if ($form_data["XUL"])
+			{
+				$args["XUL"] = 1;
 			};
 			$retval = $this->mk_my_orb($action,$args,$orb_class);
 		};
@@ -2371,6 +2380,13 @@ class class_base extends aw_template
 			if ($property["type"] == "checkbox")
 			{
 				// set value to 0 for unchecked checkboxes
+				// well, shit, I need to figure out another way to do checkboxes
+				// because if I do not have a group identifier with me, then
+				// I might not be able to get a value for an item.
+
+				// also .. what if there are readlonly attributes on some
+				// fields .. those will then not have a value either and saving
+				// such a form would case a disaster.
 				$xval = (int)$xval;
 			};
 
