@@ -4,6 +4,30 @@
 		<action name="contacts">
 			<function name="contacts">
 				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_contact_group">
+			<function name="add_contact_group">
+				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit_contact_group">
+			<function name="edit_contact_group">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_contact_group">
+			<function name="submit_contact_group">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
@@ -11,6 +35,7 @@
 		<action name="add_contact">
 			<function name="edit_contact">
 				<arguments>
+					<optional name="folder"/>
 				</arguments>
 			</function>
 		</action>
