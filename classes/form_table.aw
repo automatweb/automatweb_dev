@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.19 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.20 2001/10/12 15:34:28 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -200,22 +200,14 @@ class form_table extends form_base
 			$lit = "";
 			foreach($lar as $la)
 			{
-				print "cxx<br>";
-				flush();
 				if ($tbo["lang_id"] == $la["id"] && $this->table["defs"][$col]["lang_title"][$la["id"]] == "")
 				{
-					print "1";
-					flush();
 					$lt = $this->table["defs"][$col]["title"];
 				}
 				else
 				{
-					print "2";
-					flush();
 					$lt = $this->table["defs"][$col]["lang_title"][$la["id"]];
 				}
-				print "vars<br>";
-				flush();
 				$this->vars(array(
 					"lang_name" => $la["name"],
 					"lang_id" => $la["id"],
@@ -224,8 +216,6 @@ class form_table extends form_base
 				$lh.=$this->parse("LANG_H");
 				$lit.=$this->parse("LANG");
 			}
-			print "ce<br>";
-			flush();
 			$this->vars(array(
 				"LANG_H" => $lh,
 				"LANG" => $lit
@@ -593,6 +583,33 @@ class form_table extends form_base
 		return $ret;
 	}
 
+	////
+	// !returns an array of menus for the loaded table where entries can be moved
+	function get_menu_picker()
+	{
+		if (is_array($this->menu_picker))
+		{
+			return $this->menu_picker;
+		}
+
+		$ret = array(0 => "");
+		if (is_array($this->table["moveto"]))
+		{
+			foreach($this->table["moveto"] as $mfid)
+			{
+				$mar = $this->get_object_chain($mfid,false,$GLOBALS["rootmenu"]);
+				$str = "";
+				foreach($mar as $oid => $row)
+				{
+					$str=$row["name"]."/".$str;
+				}
+				$ret[$mfid]=$str;
+			}
+		}
+		$this->menu_picker = $ret;
+		return $ret;
+	}
+	
 	////
 	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, presumes table is loaded already
 	function get_xml($id = 0)
