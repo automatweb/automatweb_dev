@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.39 2004/06/09 20:26:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.40 2004/06/11 11:40:48 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -85,6 +85,8 @@
 	@reltype IMAGE value=3 clid=CL_IMAGE
 	@caption pilt
 	
+	@reltype NO_SHOW_MENU value=4 clid=CL_MENU
+	@caption &auml;ra näita menüü juures
 			
 */
 class promo extends class_base
@@ -687,6 +689,15 @@ class promo extends class_base
 				}
 			}
 
+			// do ignore menus
+			foreach($o->connections_from(array("type" => "RELTYPE_NO_SHOW_MENU")) as $ignore_menu)
+			{
+				if ($inst->sel_section_real == $ignore_menu->prop("to"))
+				{
+					$show_promo = false;
+				}
+			}
+
 			if ($found == false)
 			{
 				$show_promo = false;
@@ -735,6 +746,11 @@ class promo extends class_base
 					}
 					global $awt;
 					$awt->start("promo-prev");
+					global $XX6;
+					if ($XX6)
+					{
+						arr($d);
+					};
 					$cont = $doc->gen_preview(array(
 						"docid" => $d,
 						"tpl" => $tpl_filename,

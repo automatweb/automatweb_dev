@@ -226,6 +226,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>pilt</caption>
             </IMAGE>
+            <NO_SHOW_MENU>
+                  <value>4</value>
+                  <clid>CL_MENU</clid>
+                  <caption>&amp;auml;ra näita menüü juures</caption>
+            </NO_SHOW_MENU>
       </reltypes>
 </properties>
 
