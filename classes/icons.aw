@@ -770,6 +770,9 @@ class icons extends aw_template
 	{
 		if ($clid == CL_FILE)
 		{
+			$file = strtolower($name);
+			$dotpos = strrpos($name,".");
+			$extt = substr($name, $dotpos+1);
 			return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
 		}
 		else
@@ -835,6 +838,7 @@ class icons extends aw_template
 		echo dbg::dump($d);
 		foreach($d as $ext => $dat)
 		{
+			$ext = str_replace(".", "", $ext);
 			if ($dat["id"])
 			{
 				echo "writing ftype iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif <Br>";
