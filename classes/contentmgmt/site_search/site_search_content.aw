@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.23 2004/11/16 13:57:11 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.24 2004/11/17 16:54:08 duke Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -25,14 +25,21 @@
 @property search_live type=checkbox ch_value=1
 @caption Otsing aktiivsest saidist
 
-@property default_grp type=relpicker reltype=RELTYPE_SEARCH_GRP
-@caption Vaikimisi otsingu grupp
-
-@property default_order type=select 
-@caption Vaikimisi sorteeritakse tulemused
+@property multi_groups type=checkbox ch_value=1
+@caption Otsimisel saab kasutada mitut gruppi
 
 @property per_page type=textbox size=5
 @caption Mitu tulemust lehel
+
+property default_grp type=relpicker reltype=RELTYPE_SEARCH_GRP group=searchgroups
+caption Vaikimisi otsingu grupp
+
+@property default_order type=select  group=searchgroups
+@caption Vaikimisi sorteeritakse tulemused
+
+@property grpcfg type=table group=searchgroups
+@caption Otsingugruppide konfigureerimine
+
 
 property static_gen_repeater type=relpicker reltype=RELTYPE_REPEATER group=static
 caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
@@ -46,36 +53,37 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH
 @caption otsingu grupp
+
+@groupinfo searchgroups caption="Otsingu grupid"
+@groupinfo static caption="Staatiline otsing"
 
 */
 
 define("S_ORD_TIME", 1);
 define("S_ORD_TITLE", 2);
 define("S_ORD_CONTENT", 3);
+define("S_ORD_TIME_ASC", 4);
 
 class site_search_content extends class_base
 {
 	function site_search_content()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			"tpldir" => "contentmgmt/site_search/site_search_content",
 			"clid" => CL_SITE_SEARCH_CONTENT
 		));
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "default_order":
-				$data["options"] = array(
+				$prop["options"] = array(
 					S_ORD_TIME => "Muutmise kuup&auml;eva j&auml;rgi",
 					S_ORD_TITLE => "Pealkirja j&auml;rgi",
 					S_ORD_CONTENT => "Sisu j&auml;rgi"
@@ -83,10 +91,14 @@ class site_search_content extends class_base
 				break;
 				
 			case "static_gen_link":
-				$data['value'] = html::href(array(
-					"url" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
+				$prop['value'] = html::href(array(
+					"url" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
 					"caption" => "uuenda staatiline koopia"
 				));
+				break;
+
+			case "grpcfg":
+				$this->do_grpcfg_table($arr);
 				break;
 			case "keyword_search_classes":
 				foreach (aw_ini_get("classes") as $key => $class)
@@ -103,32 +115,119 @@ class site_search_content extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function do_grpcfg_table($arr)
 	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
+		$o = $arr["obj_inst"];
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "act",
+			"caption" => "Vaikimisi",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+
+		$t->define_field(array(
+			"name" => "sorder",
+			"caption" => "Vaikimisi järjestus",
+		));
+		
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => "Pealkiri",
+		));
+
+		$conns = $o->connections_from(array(
+			"reltype" => "RELTYPE_SEARCH_GRP",
+		));
+
+		$meta = $o->meta();
+
+		$multi = $o->prop("multi_groups");
+
+		$propname = $arr["prop"]["name"];
+
+		$sort_opts = array(
+			0 => "--vali--",
+			S_ORD_TIME => "Kuupäeva järgi (uuem enne)",
+			S_ORD_TIME_ASC => "Kuupäeva järgi (vanem enne)",
+			S_ORD_TITLE => "Pealkirja j&auml;rgi",
+			S_ORD_CONTENT => "Sisu j&auml;rgi",
+		);
+
+		foreach($conns as $conn)
 		{
+			$cid = $conn->prop("to");
+			if ($multi)
+			{
+				$act = html::checkbox(array(
+					"name" => "defaultgrp[${cid}]",
+					"value" => $cid,
+					"checked" => $meta["defaultgrp"][$cid],
+				));
+			}
+			else
+			{
+				$act = html::radiobutton(array(
+					"name" => "defaultgrp",
+					"value" => $cid,
+					"checked" => $meta["defaultgrp"][$cid],
+				));
+			};
+
+			$t->define_data(array(
+				"name" => $conn->prop("to.name"),
+				"act" => $act,
+				"sorder" => html::select(array(
+					"name" => "${propname}[sorder][${cid}]",
+					"options" => $sort_opts,
+					"value" => $meta["grpcfg"]["sorder"][$cid],
+				)),
+				"caption" => html::textbox(array(
+					"name" => "${propname}[caption][${cid}]",
+					"size" => 20,
+					"value" => $meta["grpcfg"]["caption"][$cid],
+				)),
+			));
+		};
+
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		$o = $arr["obj_inst"];
+		switch($prop["name"])
+		{
+			case "grpcfg":
+				$o->set_meta("grpcfg",$prop["value"]);
+				$o->set_meta("defaultgrp",$arr["request"]["defaultgrp"]);
+				break;
+
 			case "static_gen_repeater":
 				// set it to scheduler
 				$sc = get_instance("scheduler");
-				if ($data["value"])
+				if ($prop["value"])
 				{
 					$sc->add(array(
-						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
-						"rep_id" => $data["value"]
+						"event" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
+						"rep_id" => $prop["value"]
 					));
 				}
 				else
 				{
 					$sc->remove(array(
-						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
+						"event" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
 					));
 				}
 				break;
 
 			case "reledit":
-				$val = $data["value"];
+				$val = $prop["value"];
 				$d = $val["start"]["day"];
 				$m = $val["start"]["month"];
 				$y = $val["start"]["year"];
@@ -147,7 +246,7 @@ class site_search_content extends class_base
 				// set it to scheduler
 				$sc = get_instance("scheduler");
 				$sc->add(array(
-					"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
+					"event" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
 					"time" => $stamp,
 				));
 				break;
@@ -202,7 +301,7 @@ class site_search_content extends class_base
 		lc_site_load("search_conf", $this);
 
 		$gr = $this->get_groups($ob);
-		if (!isset($group) || !$group)
+		if (empty($group))
 		{
 			$group = $ob->meta("default_grp");
 		}
@@ -229,7 +328,7 @@ class site_search_content extends class_base
 
 	/** this will get called via scheduler to generate the static content to search from 
 		
-		@attrib name=generate_static params=name nologin="1" default="0"
+		@attrib name=generate_static params=name nologin="1" 
 		
 		@param id required
 		
@@ -486,11 +585,18 @@ class site_search_content extends class_base
 	function fetch_search_results($arr)
 	{
 		extract($arr);
-		$g = get_instance("contentmgmt/site_search/site_search_content_grp");
+		$g = get_instance(CL_SITE_SEARCH_CONTENT_GRP);
+
+		// sealt tulevad ainult menüüd .. aga ma pean diilima ka teiste asjadega
+
+		// see koostab nimekirja parentitest ehk asjadest, KUST ma otsima pean
+		// aga mul on vaja mingeid callbacke, et saaks otsida ka mujalt
 		$ms = $g->get_menus(array("id" => $group));
 
+		// how do I differentiate here?
+
 		$ret = array();
-		if ($obj->meta("search_static"))
+		if (1 == $obj->prop("search_static"))
 		{
 			$ret = $this->fetch_static_search_results(array(
 				"menus" => $ms,
@@ -498,7 +604,7 @@ class site_search_content extends class_base
 			));
 		}
 
-		if ($obj->meta("search_live"))
+		if (1 == $obj->prop("search_live"))
 		{
 			$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
 				"menus" => $ms,
@@ -512,7 +618,7 @@ class site_search_content extends class_base
 		{
 			$_ret[$d["title"]] = $d;
 		}
-		
+
 		return $_ret;
 	}
 
@@ -528,6 +634,11 @@ class site_search_content extends class_base
         	return 0;
 		}
 		return ($a["modified"] > $b["modified"]) ? -1 : 1;
+	}
+	
+	function _sort_time_asc($a, $b)
+	{
+		return $a["modified"] - $b["modified"];
 	}
 
 	function _sort_content($a, $b)
@@ -550,6 +661,10 @@ class site_search_content extends class_base
 
 			case S_ORD_CONTENT:
 				usort($arr["results"], array(&$this, "_sort_content"));
+				break;
+			
+			case S_ORD_TIME_ASC:
+				usort($arr["results"], array(&$this, "_sort_time_asc"));
 				break;
 
 			case S_ORD_TIME:
@@ -645,7 +760,7 @@ class site_search_content extends class_base
 			$params["page"] = $i;
 			$this->vars(array(
 				"page" => $this->mk_my_orb("do_search", $params),
-				"page_from" => $i*$per_page,
+				"page_from" => ($i*$per_page)+1,
 				"page_to" => min(($i+1)*$per_page,$cnt)
 			));
 			if ($i == $page)
@@ -732,6 +847,7 @@ class site_search_content extends class_base
 				continue;
 			}
 
+			// whatta fuck? 
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
@@ -771,6 +887,10 @@ class site_search_content extends class_base
 			return $this->parse();
 		}
 
+		$this->vars(array(
+			"groupname" => $arr["groupname"],
+		));
+
 		$this->read_template("search_results.tpl");
 
 		$this->sort_results(array(
@@ -778,6 +898,7 @@ class site_search_content extends class_base
 			"sort_by" => $sort_by
 		));
 
+		// .. and sort order links as well
 		$this->display_pageselector(array(
 			"num_results" => count($results),
 			"cur_page" => $page,
@@ -800,12 +921,12 @@ class site_search_content extends class_base
 	{
 		$o = obj($arr["id"]);
 
-		if (!isset($arr["group"]) || !$arr["group"])
+		if (empty($arr["group"]))
 		{
 			$arr["group"] = $o->meta("default_grp");
 		}
 
-		if (!isset($arr["sort_by"]) || !$arr["sort_by"])
+		if (empty($arr["sort_by"]))
 		{
 			$arr["sort_by"] = $o->meta("default_order");
 		}
@@ -814,7 +935,7 @@ class site_search_content extends class_base
 			$arr["sort_by"] = S_ORD_TIME;
 		}
 
-		if (!isset($arr["page"]) || !$arr["page"])
+		if (empty($arr["page"]))
 		{
 			$arr["page"] = 0;
 		}
@@ -824,7 +945,7 @@ class site_search_content extends class_base
 
 	/**  
 		
-		@attrib name=do_search params=name nologin="1" default="0"
+		@attrib name=do_search params=name nologin="1" 
 		
 		@param id required
 		@param group optional
@@ -843,6 +964,7 @@ class site_search_content extends class_base
 		extract($this->set_defaults($arr));
 		$o = obj($id);
 
+		// redisplay the search form
 		$ret = $this->show(array(
 			"id" => $id,
 			"str" => $str,
@@ -851,6 +973,66 @@ class site_search_content extends class_base
 
 		$results = array();
 
+		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
+		if ($str != "")
+		{
+			$conns = $o->connections_from(array(
+				"type" => "RELTYPE_SEARCH_GRP",
+			));
+
+			$grpcfg = $o->meta("grpcfg");
+
+			foreach($conns as $conn)
+			{
+				$cid = $conn->prop("to");
+				if ($conn->prop("to.class_id") == CL_EVENT_SEARCH)
+				{
+					$t = get_instance(CL_EVENT_SEARCH);
+		
+					$clid = $o->class_id();
+					$so = $conn->to();
+					$results = $t->get_search_results(array(
+						"id" => $so->id(),
+						"str" => $str,
+					));
+				}
+				else
+				{
+					$results = $this->fetch_search_results(array(
+						"obj" => $o,
+						"str" => $str,
+						"group" => $conn->prop("to"),
+					));
+				};
+
+				$grp_sort_by = $sort_by;
+				if (!empty($grpcfg["sorder"][$cid]))
+				{
+					$grp_sort_by = $grpcfg["sorder"][$cid];
+				};
+
+					
+				$ret .= $this->display_results(array(
+					"groupname" => $grpcfg["caption"][$conn->prop("to")],
+					"results" => $results,
+					"obj" => $o, 
+					"str" => $str, 
+					"group" => $group,
+					"sort_by" => $grp_sort_by,
+					"str" => $str,
+					"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
+					"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
+					"page" => $page
+				));
+			};
+
+		};
+
+
+		// I need to embed search results here
+
+		// group can come from set_defaults as well
+		/*
 		if ($str != "" && $group)
 		{
 			$results = $this->fetch_search_results(array(
@@ -859,7 +1041,11 @@ class site_search_content extends class_base
 				"group" => $group
 			));
 		}
+		*/
 
+		// siia tuleks ilmselt ehitada hookid teistst klassidest asjade küsimiseks ..
+		// või siis vähemalt otsingutulemuste grupeerimiseks
+		/*
 		$ret .= $this->display_results(array(
 			"results" => $results,
 			"obj" => $o, 
@@ -871,6 +1057,7 @@ class site_search_content extends class_base
 			"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
 			"page" => $page
 		));
+		*/
 		
 		return $ret;
 	}
