@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.43 2003/01/10 14:31:22 duke Exp $
+// $Id: class_base.aw,v 2.44 2003/01/10 17:33:45 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -167,6 +167,7 @@ class class_base extends aliasmgr
 		));
 
 
+
 		// load the object data, if there is anything to load at all
 		foreach($this->tables as $key => $val)
 		{
@@ -234,6 +235,7 @@ class class_base extends aliasmgr
 		// output client is probably the first that should be
 		// implemented.
 		$cli = get_instance("cfg/" . $this->output_client);
+
 
 		if (is_array($this->layout))
 		{
@@ -1218,7 +1220,14 @@ class class_base extends aliasmgr
 				{
 					$name = $key;
 				};
-				$_field = ($name != $val["field"]) ? $val["field"] : $name;
+				if (($name != $val["field"]) && ($val["method"] != "serialize"))
+				{
+					$_field = $val["field"];
+				}
+				else
+				{
+					$_field = $name;
+				};
 				$resprops[$_field] = $val;
 			};
 		}
