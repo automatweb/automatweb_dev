@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.10 2001/11/08 11:57:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.11 2001/12/06 17:08:32 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -66,7 +66,15 @@ class extlinks extends aw_template {
 		$this->dequote(&$link);
 
 		global $baseurl,$ext;
-		$linksrc = sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$link["id"]);
+		if (strpos($link["url"],"@") > 0)
+		{
+			$linksrc = $link["url"];
+		}
+		else
+		{
+			$linksrc = sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$link["id"]);
+		};
+
 		if ($link["use_javascript"])
 		{
 			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",$linksrc,$link["id"],$link["newwintoolbar"],$link["newwinlocation"],$link["newwinmenu"],$link["newwinscroll"],$link["newwinwidth"],$link["newwinheight"]);
