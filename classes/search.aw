@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.57 2004/01/12 15:30:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.58 2004/01/13 07:34:39 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -423,7 +423,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							}
 							else
 							{
-								$parts["name"] = " name LIKE '%".str_replace("'", "\\'", $val)."%' ";
+								$parts["name"] = " name LIKE '%".$val."%' ";
 							}
 							$partcount++;
 						};
