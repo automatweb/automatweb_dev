@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.133 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.134 2003/11/06 15:43:23 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -160,6 +160,22 @@ class planner extends class_base
 				"4" => "month",
 				"5" => "relative",
 		);
+	}
+	
+	function my_calendar($arr)
+	{
+		$users = get_instance("users");
+		$obj_id = $users->get_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "user_calendar"));
+
+		if (empty($obj_id))
+		{
+			return "kulla mees, sa pole omale default kalendrit ju valinud?";
+		};
+		$arr["id"] = $obj_id;
+		$arr["group"] = "show_week";
+		return $this->change($arr);
 	}
 
 	function callback_get_rel_types()
