@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.27 2004/03/05 13:24:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.28 2004/03/25 15:00:29 kristo Exp $
 
 /*
 
@@ -24,7 +24,7 @@
 @property to type=date_select 
 @caption Kuni
 
-@property g_default_tab type=select
+@property g_default_tab type=select rel=1
 @caption Default tab
 
 @property save_as_obj type=checkbox ch_value=1
@@ -91,10 +91,10 @@ class dronline extends class_base
 		);
 
 		$this->date_ranges = array(
-			RNG_HOUR => 'Tundide l&otilde;ikes', 
-			RNG_DAY => 'P&auml;evade l&otilde;ikes',
-			RNG_MONTH => 'Kuude l&otilde;ikes',
-			RNG_YEAR => 'Aastate l&otilde;ikes'
+			RNG_HOUR => 'Tunnid', 
+			RNG_DAY => 'P&auml;evad',
+			RNG_MONTH => 'Kuud',
+			RNG_YEAR => 'Aastad'
 		);
 
 		$this->tablist = array(
@@ -296,8 +296,7 @@ class dronline extends class_base
 		extract($arr);
 
 		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t = new aw_table(array('prefix' => 'dronline', 'layout' => "generic"));
 
 		$df = aw_ini_get('config.dateformats');
 		$t->define_field(array(
@@ -422,7 +421,7 @@ class dronline extends class_base
 	{
 		$ob = obj($oid);
 		$tabo = $ob->meta("tab_objs");
-		if ($tab_id != '' && $tabo[$tab_id])
+		if (false && $tab_id != '' && $tabo[$tab_id] && $this->can("view", $tabo[$tab_id]))
 		{
 			$t_conf_o = obj($tabo[$tab_id]);
 		}
@@ -807,8 +806,7 @@ class dronline extends class_base
 		unset($arr['data']);
 
 		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t = new aw_table(array('prefix' => 'dronline', 'layout' => "generic"));
 
 		$df = aw_ini_get('config.dateformats');
 
@@ -866,8 +864,16 @@ class dronline extends class_base
 		$rs = array();
 		foreach($this->date_ranges as $ranid => $randesc)
 		{
+			if ($this->is_embedded)
+			{
+				$ru = aw_url_change_var("cur_range", $ranid);
+			}
+			else
+			{
+				$ru = $this->mk_my_orb('change', $arr + array('cur_range' => $ranid));
+			}
 			$this->vars(array(
-				"range_url" => $this->mk_my_orb('change', $arr + array('cur_range' => $ranid)),
+				"range_url" => $ru,
 				"range" => $randesc
 			));
 			if ($cur_range == $ranid)
@@ -885,15 +891,20 @@ class dronline extends class_base
 
 		$tb = get_instance('toolbar');
 		$tb->add_cdata($this->parse());
+	
+		if (!$this->is_embedded)
+		{
+			$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
+		}
 
-		$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
+		$tbstr = $tb->get_toolbar();
 
 		$ob = obj($id);
 		if ($arr['query'] != '' || $ob->meta('lock_q') == 1)
 		{
 			return $tbl;
 		}
-		return $tb->get_toolbar().$tbl.$this->get_js();
+		return $tbstr.$tbl.$this->get_js();
 	}
 
 	function _do_stat_addr_get_data($arr)
@@ -943,8 +954,7 @@ class dronline extends class_base
 		unset($arr['data']);
 
 		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t = new aw_table(array('prefix' => 'dronline', 'layout' => "generic"));
 
 		$df = aw_ini_get('config.dateformats');
 
@@ -974,7 +984,7 @@ class dronline extends class_base
 			'caption' => '%',
 			'sortable' => 0,
 		));
-		if ($arr['query'] == '')
+		if ($arr['query'] == '' && !$this->is_embedded)
 		{
 			$t->define_field(array(
 				'name' => 'sel',
@@ -1025,15 +1035,18 @@ class dronline extends class_base
 
 		$tb = get_instance('toolbar');
 		
-		$tb->add_button(array(
-			'name' => 'Blokeeri',
-			'tooltip' => 'Blokeeri',
-			'url' => 'javascript:document.blokk.submit()',
-			'imgover' => 'save_over.gif',
-			'img' => 'save.gif'
-		));
+		if (!$this->is_embedded)
+		{
+			$tb->add_button(array(
+				'name' => 'Blokeeri',
+				'tooltip' => 'Blokeeri',
+				'url' => 'javascript:document.blokk.submit()',
+				'imgover' => 'save_over.gif',
+				'img' => 'save.gif'
+			));
 
-		$tb->add_cdata($this->get_tb_end_cdata($arr, $id, 'blokk'),"right");
+			$tb->add_cdata($this->get_tb_end_cdata($arr, $id, 'blokk'),"right");
+		}
 
 		$ob = obj($id);
 		if ($arr['query'] != '' || $ob->meta('lock_q') == 1)
@@ -1109,8 +1122,7 @@ class dronline extends class_base
 		unset($arr['data']);
 
 		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t = new aw_table(array('prefix' => 'dronline', 'layout' => "generic"));
 
 		$df = aw_ini_get('config.dateformats');
 
@@ -1135,11 +1147,16 @@ class dronline extends class_base
 			'caption' => 'Nimi',
 			'sortable' => 1,
 		));
-		$t->define_field(array(
-			'name' => 'oppnar',
-			'caption' => 'Detailid',
-			'sortable' => 0,
-		));
+
+		if (!$this->is_embedded)
+		{
+			$t->define_field(array(
+				'name' => 'oppnar',
+				'caption' => 'Detailid',
+				'sortable' => 0,
+			));
+		}
+
 		$t->define_field(array(
 			'name' => 'cnt',
 			'caption' => 'Mitu',
@@ -1336,8 +1353,7 @@ class dronline extends class_base
 		extract($arr);
 		
 		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'dronline'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+		$t = new aw_table(array('prefix' => 'dronline', 'layout' => "generic"));
 
 		$t->define_field(array(
 			'name' => 'oid',
@@ -1541,6 +1557,11 @@ class dronline extends class_base
 
 	function get_sao_tb($arr, $id = false)
 	{
+		if ($this->is_embedded)
+		{
+			return "";
+		}
+
 		if ($arr['query'] != '')
 		{
 			return '';
@@ -1798,5 +1819,76 @@ class dronline extends class_base
 
 		return $t;
 	}
+
+	function parse_alias($arr)
+	{
+		return $this->show(array(
+			"id" => $arr["alias"]["target"],
+			"relobj_id" => $arr["alias"]["relobj_id"]
+		));
+	}
+
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+		$this->is_embedded = true;
+
+		if ($dro_tab == '')
+		{
+			if ($arr["relobj_id"])
+			{
+				$ro = obj($arr["relobj_id"]);
+				$vl = $ro->meta('values');
+				$dro_tab = $vl['CL_DRONLINE']['g_default_tab'];
+			}
+			else
+			{
+				$dro_tab = $ob->meta('g_default_tab');
+			}
+		}
+
+		$arr["cur_range"] = $GLOBALS["cur_range"];
+		if (!$arr["cur_range"])
+		{
+			$cur_range = RNG_DAY;
+			unset($arr['cur_range']);
+		}
+
+		$arr['extraids'] = array(
+			'dro_tab' => $dro_tab,
+			'cur_range' => $arr["cur_range"]
+		);
+
+		// if no conf object has been set yet, return the change form
+		if (!$ob->meta('conf'))
+		{
+			return $this->_do_general($arr);
+		}
+
+		unset($arr['class']);
+		unset($arr['action']);
+
+		$this->from_cache = false;
+		// right. now check if we should use the cache and if it exists and if it does, then use the data from cache
+		if ($ob->meta('bg_queries'))
+		{
+			$cache = aw_unserialize($this->db_fetch_field("SELECT cache_content FROM dronline_bg_status WHERE id = $id","cache_content"));
+			if (is_array($cache) && isset($cache[$dro_tab]))
+			{
+				if ($def_span)
+				{
+					$arr['data'] = $cache[$dro_tab][$def_span];
+				}
+				else
+				{
+					$arr['data'] = $cache[$dro_tab]['nospan'];
+				}
+				$this->from_cache = true;
+			}
+		}
+
+		$fn = '_do_'.$dro_tab;
+		return $this->$fn($arr);
+	}	
 }
 ?>

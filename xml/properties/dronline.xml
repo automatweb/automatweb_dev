@@ -44,6 +44,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>select</type>
+            <rel>1</rel>
             <caption>Default tab</caption>
       </property>
       <property>
