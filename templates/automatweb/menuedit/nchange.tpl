@@ -326,7 +326,7 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 	</tr>
 	<tr>
 		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><select MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
+		<td class="fgtext_g"><select class="small_button" MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
 	</tr>
 	<tr>
 		<td class="title" width=10% nowrap>&nbsp;</td>
