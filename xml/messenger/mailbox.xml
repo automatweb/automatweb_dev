@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+<header_normal   value="msgtitle"/>
+<header_sortable value="msgtitle"/>
+<header_sorted   value="msgtitle2"/>
+
+<content_style1  value="msgline2"/>
+<content_style2  value="msgline"/>
+<content_style1_selected value="msgline3"/>
+<content_style2_selected value="msgline3"/>
+<tableattribs border="0" cellspacing="1" cellpadding="0" width="100%" bgcolor="#FFFFFF"/>
+<default_order value="tm"/>
+</definitions>
+
+<action link="class=messenger&amp;action=show" field="id" caption="Ava" style="msgline2"/>
+
+<data>
+<field name="from" caption="Kellelt" sortable="1" talign="center" nowrap="1" />
+<field name="subject" caption="Teema" sortable="1" talign="center" nowrap="1"/>
+<field name="tm" caption="Aeg" talign="center" nowrap="1" sortable="1" type="time" format="H:i d-M-Y" />
+<field name="pri" caption="Pri" talign="center" nowrap="1" sortable="1"/>
+<field name="status" caption="Staatus" talign="center" sortable="1"/>
+</data>
+
+</tabledef>

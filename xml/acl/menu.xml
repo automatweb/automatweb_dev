@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<data>
+<field caption="GID" value="gid"/>
+<field caption="Grupi nimi" value="name"/>
+<field caption="Muuta" value="can_edit" special="1" help="Lubab grupi liikmel seda objekti ja koiki selle alamobjekte muuta"/>
+<field caption="Lisada" value="can_add" special="1" help="Lubab selle objekti juurde uusi objekte lisada"/>
+<field caption="ACL" value="can_admin" special="1" help="Lubab ACLi muuta"/>
+<field caption="Kustutada" value="can_delete" special="1" help="Lubab objekti ja alamobjekte kustutata" />
+<field caption="Oigusi edasi anda" value="can_delegate" special="1" help="Lubab oigusi delegeerida"/>
+<field caption="Vaadata" value="can_view" special="1" help="Lubab objekti vaadata"/>
+<field caption="Taita" value="can_fill" special="1" help="Lubab formi taita"/>
+<field caption="Eksportida" value="can_export" special="1" help="Lubab eksportida"/>
+<field caption="Importida" value="can_import" special="1" help="Lubab importida"/>
+<field caption="Actione" value="can_action" special="1" help="Lubab actione teha"/>
+<field caption="Stiile importida" value="can_import_styles" special="1" help="Lubab stiile importida"/>
+<field caption="Datat importida" value="can_import_data" special="1" help="Lubab datat importida"/>
+<field caption="Stiile exportida" value="can_export_styles" special="1" help="Lubab stiile exportida"/>
+<field caption="Datat exportida" value="can_export_data" special="1" help="Lubab datat exportida"/>
+<field caption="Valjundeid lisada" value="can_add_output" special="1" help="Lubab formi valjundi stiile lisada"/>
+<field caption="Taidetud vaadata" value="can_view_filled" special="1" help="Lubab formi sisestusi vaadata"/>
+<field caption="Aktiivsus" value="can_active" special="1" help="Lubab aktiivsust muuta"/>
+<field caption="Perioodiline" value="can_periodic" special="1" help="Lubab prioodilisust muuta"/>
+<field caption="Jarjekord" value="can_order" special="1" help="Lubab jarjekorda muuta"/>
+<field caption="Muuta liikmeid" value="can_change_members" special="1" help="Lubab selle grupi liikmeid muuta"/>
+<field caption="Copy" value="can_copy" special="1" help="Lubab kasutajaid gruppidesse panna"/>
+<field caption="Kasutajaid naha" value="can_view_users" special="1" help="Lubab selle grupi kasutajaid listis naha"/>
+<field caption="Kasutajaid muuta" value="can_change_users" special="1" help="Lubab selle grupi kasutajaid listis muuta"/>
+<field caption="Kasutajaid blokeerida" value="can_delete_users" special="1" help="Lubab selle grupi kasutajaid blokeerida"/>
+</data>

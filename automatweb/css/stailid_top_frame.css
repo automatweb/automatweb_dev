@@ -1,0 +1,58 @@
+
+.awTooted {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #000000; text-decoration: none}
+.awTootedLink { font-family: Verdana, Arial, Helvetica, sans-serif; color: #CCFFFF; text-decoration: none }
+.peaLingid {  font-weight: normal; color: #CCFFFF; text-decoration: none}
+.peaLingidText { font-family: Arial, Helvetica, sans-serif; font-size: 0.6em; font-weight: normal; color: #000000; text-decoration: none }
+.alamLingid {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #0043BF; text-decoration: none}
+.alamLingidText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #666666; text-decoration: none }
+.alamText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #000000; text-decoration: none }
+.alamTextWhite { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #FFFFFF; text-decoration: none }
+
+.mainmenu {
+
+        position: absolute;
+
+        left: 0px;
+
+        top: 0px;
+
+        width: 750px;
+
+        height: 66px;
+
+        visibility: visible;
+
+}
+
+
+.alammenyy {
+
+        position: absolute;
+
+        left: 10px;
+
+        top: 47px;
+
+        height: 21px;
+
+        width: 750px;
+
+	  font-family: Verdana, Arial, Helvetica, sans-serif;
+
+	  font-size: 0.6em;
+
+	  color: #666666;
+
+        text-decoration: none;
+
+        visibility: hidden;
+}
+
+.menyy1 {position: absolute; left: 8px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy2 {position: absolute; left: 48px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy3 {position: absolute; left: 122px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy4 {position: absolute; left: 195px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy5 {position: absolute; left: 287px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy6 {position: absolute; left: 361px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy7 {position: absolute; left: 434px; top: 27px; text-decoration: none; visibility: hidden;}
+.menyy8 {position: absolute; left: 475px; top: 27px; text-decoration: none; visibility: hidden;}

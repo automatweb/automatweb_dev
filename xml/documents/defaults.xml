@@ -1,0 +1,98 @@
+<?xml version='1.0'?>
+<doctags>
+
+<tag id='peida'>
+<![CDATA[
+]]>
+</tag>
+
+<tag id='alapealkiri'>
+<![CDATA[
+</font></td><tr><td colspan="3" bgcolor="#004040" valign="middle">
+<font face="tahoma, arial" size="2">
+<b>\1</b>
+</font></td>
+</tr><tr>
+<td colspan="3" valign="middle">
+<font face="tahoma, arial" size="2">
+]]>
+</tag>
+
+<tag id='star'>
+<![CDATA[
+<b><font size="5" face="Tahoma, Arial" color="#FF9900">\1</font></b>
+]]>
+</tag>
+
+<tag id='costar'>
+<![CDATA[
+<b><font face="Tahoma, Arial" size="4" color="#FF9900">\1</font></b>
+]]>
+</tag>
+
+<tag id='h3'>
+<![CDATA[
+<font face="Tahoma, Arial" size="3" color="#FFCC33"><b>\1</b></font>
+]]>
+</tag>
+
+<tag id='general'>
+<![CDATA[
+<font size="2" face="Tahoma, Arial"><b><font color="#CCCCCC">\1</font></b></font>
+]]>
+</tag>
+
+<tag id='label'>
+<![CDATA[
+<font size="2" face="Tahoma, Arial"><b><font color="#FFFFFF">\1</font></b></font>
+]]>
+</tag>
+
+<tag id='room'>
+<![CDATA[
+<font size="2" face="Tahoma, Arial"><u><b><font color="#FF6633">\1</font></b></u></font>
+]]>
+</tag>
+
+<tag id='special'>
+<![CDATA[
+<font size="2" face="Tahoma, Arial" color="#FFCC33"><b>\1</b></font>
+]]>
+</tag>
+
+<tag id='info'>
+<![CDATA[
+<div align="justify"><font size="1" face="Arial, Helvetica, sans-serif" color="#C0C0C0">\1</font></div>
+]]>
+</tag>
+
+<tag id='aine'>
+<![CDATA[
+<li>\1</li>
+]]>
+</tag>
+
+<tag id='vasakul'>
+<![CDATA[
+<div align="left">\1</div>
+]]>
+</tag>
+
+<tag id='keskel'>
+<![CDATA[
+<div align="center">\1</div>
+]]>
+</tag>
+
+<tag id='paremal'>
+<![CDATA[
+<div align="right">\1</div>
+]]>
+</tag>
+
+<tag id='ap'>
+<![CDATA[
+<i><b>\1</b></i>
+]]>
+</tag>
+</doctags>

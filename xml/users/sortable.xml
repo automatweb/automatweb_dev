@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<userlist>
+<field caption="#" value="rec"/>
+<field caption="UID" value="uid" keepstate="1" sortable="1"/>
+<field caption="Eesnimi" value="name" keepstate="1" sortable="1"/>
+<field caption="Perenimi" value="surname" keepstate="1" sortable="1"/>
+<field caption="Elukoht" value="place" keepstate="1" sortable="1"/>
+<field caption="Logs" value="logins" sortable="1" valign="center"/>
+<field caption="Online" value="online" valign="center"/>
+<field caption="Viimati" value="last" sortable="1"/>
+</userlist>

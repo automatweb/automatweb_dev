@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<data>
+<field caption="GID" value="gid"/>
+<field caption="Grupi nimi" value="name"/>
+<field caption="Muuta" value="can_edit" special="1" help="Lubab grupi liikmel listi muuta"/>
+<field caption="ACL" value="can_admin" special="1" help="Lubab listi ACLi muuta"/>
+<field caption="Kustutada" value="can_delete" special="1" help="Lubab listi kustutada" />
+<field caption="Vaadata" value="can_view" special="1" help="Lubab listi vaadata"/>
+<field caption="Lisada" value="can_add" special="1" help="Lubab listi liikmeid lisada"/>
+<field caption="Importida" value="can_import" special="1" help="Lubab listi liikmeid importida"/>
+</data>

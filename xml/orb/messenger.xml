@@ -1,0 +1,217 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="messenger">
+		<action name="folders">
+			<function name="show_folders">
+				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pick_users">
+			<function name="pick_users">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pick_grps">
+			<function name="pick_groups">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="folder" default="1">
+			<function name="show_mailbox">
+				<arguments>
+					<optional name="id"/>
+					<optional name="sortby"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="write">
+			<function name="gen_edit_form">
+				<arguments>
+					<optional name="attach"/>
+					<optional name="msg_edit"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit">
+			<function name="create_message">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_attach">
+			<function name="show_attach">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_folder">
+			<function name="new_folder">
+				<arguments>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_new_folder">
+			<function name="submit_new_folder">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="reply">
+			<function name="gen_edit_form">
+				<arguments>
+				<required name="reply"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="forward">
+			<function name="gen_edit_form">
+				<arguments>
+				<required name="forward"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="post">
+			<function name="send_message">
+				<arguments>
+					<optional name="id"/>
+					<optional name="cancel"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search">
+			<function name="search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_search">
+			<function name="do_search">
+				<arguments>
+					<optional name="folders"/>
+					<required name="field"/>
+					<required name="value"/>
+				</arguments>
+			</function>
+		</action>
+
+
+		<action name="show">
+			<function name="show_message">
+				<arguments>
+				<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="delete_message">
+				<arguments>
+				<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="set_folder">
+			<function name="set_folder">
+				<arguments>
+				<required name="type"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_folder">
+			<function name="submit_folder">
+				<arguments>
+				</arguments>
+
+			</function>
+		</action>
+
+		<action name="configure">
+			<function name="configure">
+				<arguments>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="rules">
+			<function name="rules">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="addrule">
+			<function name="addrule">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submitrules">
+			<function name="submitrule">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submitrule">
+			<function name="submit_rule">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="editrule">
+			<function name="addrule">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_configure">
+			<function name="submit_configure">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete_msgs">
+			<function name="delete_msgs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="move_msgs">
+			<function name="move_msgs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

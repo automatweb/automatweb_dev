@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<messenger>
+	<write>
+		<caption>Uus teade</caption>
+		<link>?class=messenger&amp;action=write</link>
+	</write>
+	<folders>
+		<caption>Folderid</caption>
+		<link>?class=messenger&amp;action=folders</link>
+		<sublinks>
+			<flist>
+				<caption>Nimekiri</caption>
+				<link>?class=messenger&amp;action=folders</link>
+			</flist>
+			<newfolder>
+				<caption>Uus folder</caption>
+				<link>?class=messenger&amp;action=new_folder</link>
+			</newfolder>
+		</sublinks>
+	</folders>
+	<configure>
+		<caption>H‰‰lestamine</caption>
+		<link>?class=messenger&amp;action=configure</link>
+		<sublinks>
+			<folders>
+				<caption>Folderite asukoht</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=folders</link>
+			</folders>
+			<signature>
+				<caption>Signatuurid</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=signature</link>
+			</signature>
+			<general>
+				<caption>‹ldine</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=general</link>
+			</general>
+		</sublinks>
+	</configure>
+	<search>
+		<caption>Otsi</caption>
+		<link>?class=messenger&amp;action=search</link>
+		<sublinks>
+			<newsearch>
+				<caption>Uus otsing</caption>
+				<link>?class=messenger&amp;action=search</link>
+			</newsearch>
+		</sublinks>
+	</search>
+	<rules>
+		<caption>Reeglid</caption>
+		<link>?class=messenger&amp;action=rules</link>
+		<sublinks>
+			<addrule>
+				<caption>Lisa reegel</caption>
+				<link>?class=messenger&amp;action=addrule</link>
+			</addrule>
+			<list>
+				<caption>Nimestik</caption>
+				<link>?class=messenger&amp;action=rules</link>
+			</list>
+		</sublinks>
+	</rules>
+</messenger>

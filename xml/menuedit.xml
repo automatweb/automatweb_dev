@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+
+<header_normal value="title"/>
+<header_sortable value="title"/>
+<header_sorted value="title"/>
+<content_style1 value="fgtext"/>
+<content_style2 value="fgtext_g"/>
+<content_style1_selected value="fgtext"/>
+<content_style2_selected value="fgtext"/>
+<tableattribs border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#e0e0e0"/>
+<default_order value="uid"/>
+
+</definitions>
+
+<actions>
+<action link="type=change" field="oid" caption="Muuda"/>
+<action link="type=delete" field="oid" caption="Kustuta"/>
+</actions>
+
+<userlist>
+<field name="icon" caption="" talign="center" align="left"/>
+<field name="name" caption="Nimi" talign="center" align="left" sortable="1" />
+<field name="jrk" caption="Jarjekord" talign="center" align="center" sortable="1" numeric="1"/>
+<field name="modifiedby" caption="Muutja" talign="center" align="center" sortable="1"/>
+<field name="modified" caption="Muudetud" talign="center" align="center" sortable="1" type="time" format="H:i d-M-Y"/>
+<field name="class_id" caption="tyyp" talign="center" align="center" sortable="1"/>
+</userlist>
+
+
+</tabledef>

@@ -1,0 +1,38 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+<titlebar style="title"/>
+<header_normal   value="ftitle2"/>
+<header_sortable value="ftitle2"/>
+<header_sorted   value="titlesel"/>
+<content_style1  value="fgtext"/>
+<content_style2  value="fgtext"/>
+<style_alfa	 value="fcontent_line2"/>
+<content_style1_selected value="fgtextsel"/>
+<content_style2_selected value="fgtextsel"/>
+<frameattribs border="0" cellspacing="0" cellpadding="0" width="100%"/>
+<framebgcolor bgcolor="#CCCCCC"/>
+<tableattribs border="0" cellspacing="1" cellpadding="2" width="100%"/>
+<default_order order="desc" value="pri"/>
+</definitions>
+
+<actions>
+<action link="class=bugtrack&amp;action=edit" field="id" caption="Muuda" style="fgtext2"/>
+<action link="class=bugtrack&amp;action=delete" field="id" caption="Kustuta" style="fgtext2"/>
+</actions>
+
+<data>
+<field name="id" caption="#" talign="center" sortable="1"/>
+<field name="title" caption="Pealkiri" talign="left" sortable="1"/>
+<field name="pri" caption="Pri" talign="center" sortable="1"/>
+<!-- <field name="pricol" caption="" talign="right" sortable="0"/> -->
+<field name="status" caption="Status" talign="center" sortable="1"/>
+<field name="tm" caption="Lisatud" talign="center" type="time" format="H:i d-M-Y" sortable="1"/>
+<field name="timeready" caption="Parandada" talign="center" type="time" format="H:i d-M-Y" sortable="1"/>
+<field name="uid" caption="Kes" talign="center" sortable="1"/>
+<field name="developer" caption="Kellele" talign="center" sortable="1"/>
+<field name="site" caption="Site" talign="center" sortable="1"/>
+</data>
+
+</tabledef>

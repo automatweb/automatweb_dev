@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="users">
+		<action name="gen_list">
+			<function name="gen_list">
+			
+			</function>
+		</action>
+		
+		<action name="add_user">
+			<function name="add_user">
+				<arguments>
+					<optional name="level"/>
+					<optional name="join_grp"/>
+				</arguments>	
+			</function>
+		</action>
+
+		<action name="submit_user">
+			<function name="submit_user">
+			
+			</function>
+		</action>
+		
+		<action name="submit_user_site">
+			<function name="submit_user_site">
+			
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="do_change">
+			<function name="do_change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_pwd">
+			<function name="change_pwd">
+				<arguments>
+					<required name="id"/>
+					<optional name="error"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_change_pwd">
+			<function name="submit_change_pwd">
+
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="gen_home_dir">
+			<function name="gen_home_dir">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="login">
+			<function name="login">
+				<arguments>
+					<required name="uid"/>
+					<required name="password"/>
+					<optional name="remote_ip"/>
+					<optional name="reforb"/>
+					<optional name="remote_host"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="logout">
+			<function name="orb_logout">
+
+			</function>
+		</action>
+	</class>
+</orb>

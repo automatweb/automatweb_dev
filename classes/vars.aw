@@ -1,0 +1,365 @@
+<?php
+
+	global $orb_defs;
+	$orb_defs["variables"] = array(
+		"new" => array("function" => "add_list", "params"=> array("parent")),
+		"submit_var" => array("function" => "add_var_submit","params" => array()),
+		"change" => array("function" => "change_list", "params"=> array("id")),
+		"delete" => array("function" => "delete_list", "params"=> array("id","parent"))
+		);
+
+
+	class variables extends aw_template
+	{
+
+		function variables()
+		{
+			$this->tpl_init("mailinglist");
+			$this->db_init();
+		}
+
+		function add_var($parent)
+		{
+			$this->read_template("add_var.tpl");
+			$this->vars(array(
+				"var_name" => "", 
+				"var_id" => "",
+				"parent" =>$parent,
+				"reforb" =>$this->mk_reforb("submit_var",array("parent" => $parent,"id" => 0))
+				));
+			return $this->parse();
+		}
+		
+		function add_var_submit($arr)
+		{
+			$this->quote(&$arr);
+			extract($arr);
+			
+			if ($id)
+			{
+				$this->upd_object(array("oid" => $id, "name" => $name));
+				$this->log_action($GLOBALS["uid"],"ml_var","Muutis meili muutujat $name");
+			}
+			else
+			{
+				$id = $this->new_object(array("parent" => $parent,"name" => $name, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
+				$this->log_action($GLOBALS["uid"],"ml_var","Lisas meili muutuja $name");
+			}
+
+			return "list.aw?type=change_var&id=$id";
+		}
+		
+		function delete_var($id)
+		{
+			$this->delete_object($id);
+			header("Location:list.aw?type=list_vars");
+		}
+		
+		function change_var($id)
+		{
+			$this->read_template("add_var.tpl");
+			
+			if (!($row = $this->get_object($id)))
+				$this->raise_error("variables->change_var(): no such variable!", true);
+			$this->parent = $row["parent"];
+			$this->vars(array(
+				"var_name" => $row[name], 
+				"var_id" => $row[oid],
+				"parent" => $row[parent],
+				"reforb" => $this->mk_reforb("submit_var",array("parent" => $row[parent],"id" => $id))
+				));
+			return $this->parse();
+		}
+
+		
+		function make_tree($selected)
+		{
+			$this->selected = $selected;
+
+			global $op,$list_folders;
+			if ($op == "close")
+				$list_folders[$selected] = 1;
+			else
+			if ($op == "open")
+				$list_folders[$selected] = 0;
+
+			$this->menucache = array();
+			$this->db_query("SELECT objects.oid as oid, 
+															objects.parent as parent,
+															objects.comment as comment,
+															objects.name as name,
+															objects.created as created,
+															objects.createdby as createdby,
+															objects.modified as modified,
+															objects.modifiedby as modifiedby,
+															objects.last as last,
+															objects.jrk as jrk
+												FROM objects 
+												WHERE objects.class_id = 24 AND objects.status != 0
+												GROUP BY objects.oid
+												ORDER BY objects.parent");
+			while ($row = $this->db_next())
+			{
+				$this->menucache[$row[parent]][] = array("data" => $row);
+			}
+
+			$this->vars(array("space_images" => "", "image" => "<img src='/images/puu_site.gif'>", "cat_id" => "1", "op" => "", "cat_name" => "Site", "NFIRST" => "", "cat_comment" => "", "modifiedby" => "", "modified" => "", "CAN_CHANGE" => "", "CAN_DELETE" => "", "CAN_ACL" => ""));
+			$ret = $this->parse("C_LINE");
+			// now recursively show the menu
+			$this->sel_level = 0;
+			$this->level =0;
+			return $ret.$this->rec_menu(1,"");
+		}
+
+		function rec_menu($parent,$space_images)
+		{
+			global $ext,$list_folders;
+
+ 			if (!is_array($this->menucache[$parent]))	// if no items on this level return immediately
+				return;
+
+			$this->level++;
+			$ret = "";
+			reset($this->menucache[$parent]);
+			$num_els = count($this->menucache[$parent]);
+			$cnt = 1;
+			while (list(,$v) = each($this->menucache[$parent]))
+			{
+				$spim = $space_images;
+
+				if ($list_folders[$v[data][oid]] == 1)	// if it's closed
+					$op = "open";
+				else
+					$op = "close";
+
+				if (is_array($this->menucache[$v[data][oid]]))	// has subitems
+				{
+					$image = "<a href='list.$ext?parent=".$v[data][oid]."&op=$op'><img src='";
+
+					if ($list_folders[$v[data][oid]] == 1)	// if closed
+						$image.="/images/puu_plus";
+					else
+						$image.="/images/puu_miinus";
+
+					if ($cnt == $num_els)
+						$image.="l.gif";
+					else
+						$image.=".gif";
+
+					$image.="' border=0>";
+				}
+				else	// does not have subitems
+				{
+					$image = "<img src='";
+					if ($cnt == $num_els)
+						$image.="/images/puu_lopp.gif";
+					else
+						$image.="/images/puu_rist.gif";
+					$image.="' border=0><a href='list.$ext?parent=".$v[data][oid]."&op=$op'>";
+				}
+
+				$image.="<img src='/images/";
+				if ($this->selected == $v[data][oid])
+					$image.="puu_folderl.gif";
+				else
+						$image.="puu_folder.gif";
+				$image.="' border=0></a>";
+
+				$this->vars(array("space_images"	=> $spim, 
+													"image"					=> $image,
+													"cat_name"			=> $v[data][name],
+													"cat_comment"		=> $v[data][comment],
+													"modifiedby"		=> $v[data][modifiedby],
+													"modified"			=> $this->time2date($v[data][modified],2),
+													"cat_id"				=> $v[data][oid],
+													"op"						=> "&op=open",
+													"parent"				=> $this->selected));
+
+				$cc = $this->parse("CAN_CHANGE");
+
+				if ($v[data][mtype] != 1)
+					$cd = $this->parse("CAN_DELETE");
+
+				$ca = $this->parse("CAN_ACL");
+
+				$this->vars(array("CAN_CHANGE"		=> $cc,
+													"CAN_DELETE"		=> $cd,
+													"CAN_ACL"				=> $ca));
+
+				$ret.=$this->parse("C_LINE");
+
+				if ($cnt == $num_els)			// if we are not at the end of this level we need to show a line, otherwise empty space.
+					$spim.="<img src='/images/puu_tyhi.gif' border=0>";
+				else
+					$spim.="<img src='/images/puu_joon.gif' border=0>";
+
+				if ($list_folders[$v[data][oid]] == 0)	// if the folder is open
+					$ret.=$this->rec_menu($v[data][oid],$spim);
+
+				$cnt++;
+			}
+			$this->level--;
+			return $ret;
+		}
+
+		function gen_list($parent)
+		{
+			$this->read_template("list_vars.tpl");
+			if ($parent < 1)
+				$parent = 1;
+
+			$l = $this->make_tree($parent);
+			$this->vars(array("C_LINE" => $l,"parent" => $parent));
+			$this->vars(array("parent" => $parent));
+			$this->vars(array("ADD_CAT" => $this->parse("ADD_CAT")));
+
+
+			$c="";
+			$this->db_query("SELECT objects.* FROM objects
+											 WHERE objects.class_id = 18 AND objects.status != 0 AND objects.parent = $parent");
+			while ($row = $this->db_next())
+			{
+				$this->vars(array("var_id" => $row[oid], "var_name" => $row[name]));
+
+				$cc = $this->parse("V_CHANGE");
+				$cd = $this->parse("V_DELETE");
+				$ca = $this->parse("V_ACL");
+
+				$this->vars(array("V_CHANGE" => $cc, "V_DELETE" => $cd, "V_ACL" => $ca));
+
+				$c.=$this->parse("LINE");
+			}
+
+			$this->vars(array("LINE" => $c));
+			return $this->parse();
+		}
+		
+
+		function list_stamps()
+		{
+			$this->read_template("list_stamps.tpl");
+			$c="";
+			$this->db_query("SELECT objects.* FROM objects 
+											 WHERE objects.class_id = 19 AND objects.status != 0");
+			while ($row = $this->db_next())
+			{
+				$this->vars(array("stamp_id" => $row[oid], "stamp_name" => $row[name]));
+
+				$vc = $this->parse("V_CHANGE");
+				$vd = $this->parse("V_DELETE");
+				$va = $this->parse("V_ACL");
+
+				$this->vars(array("V_CHANGE" => $vc, "V_DELETE" => $vd, "V_ACL" => $va));
+
+				$c.=$this->parse("LINE");
+			}
+			$this->vars(array("LINE" => $c));
+			return $this->parse();
+		}
+		
+		function add_stamp()
+		{
+			$this->read_template("add_stamp.tpl");
+			$this->vars(array("stamp_name" => "", "stamp_id" => "", "stamp_value" => ""));
+			return $this->parse();
+		}
+		
+		function add_stamp_submit($arr)
+		{
+			$this->quote(&$arr);
+			extract($arr);
+			
+			$acl = new acl;
+			if ($id != "")
+			{
+
+				$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $value));
+				$this->log_action($GLOBALS["uid"],"ml_var","Muutis stampi $name");
+			}
+			else
+			{
+				$id = $this->new_object(array("parent" => 1,"name" => $name, "class_id" => CL_MAILINGLIST_STAMP, "comment" => $value));
+				$this->log_action($GLOBALS["uid"],"ml_var","Lisas stambi $name");
+			}
+
+			return $id;
+		}
+		
+		function delete_stamp($id)
+		{
+			$this->delete_object($id);
+		}
+		
+		function change_stamp($id)
+		{
+			$this->read_template("add_stamp.tpl");
+			
+			if (!($row = $this->get_object($id)))
+				$this->raise_error("variables->change_stamp($id): no such stamp!", true);
+			
+			$this->vars(array("stamp_name" => $row[name], "stamp_id" => $row[oid], "stamp_value" => $row[comment]));
+			return $this->parse();
+		}
+
+		function db_list()
+		{
+			$this->db_query("SELECT objects.* FROM objects
+											 WHERE objects.class_id = 18 AND objects.status != 0");
+		}
+
+		function db_list_stamps()
+		{
+			$this->db_query("SELECT objects.* FROM objects
+											 WHERE objects.class_id = 19 AND objects.status != 0");
+		}
+
+		function add_cat($parent)
+		{
+			$this->read_template("add_var_cat.tpl");
+			$this->vars(array("parent" => $parent, "name" => "", "comment" => "", "id" => 0));
+			return $this->parse();
+		}
+		
+		function submit_cat(&$arr)
+		{
+			$this->quote(&$arr);
+			extract($arr);
+
+			if ($id)
+			{
+				$this->update_object($id, $name, 2, $comment);
+				$this->log_action($GLOBALS["uid"],"ml_var","Muutis meili muutujate kategooriat $name");
+			}
+			else
+			{
+				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_ML_VAR_CAT, "comment" => $comment));
+				$this->log_action($GLOBALS["uid"],"ml_var","Lisas meili muutujate kategooria $name");
+			}
+
+			return $parent;
+		}
+
+		function change_cat($id)
+		{
+			if (!($row = $this->get_object($id)))
+				$this->raise_error("variables->gen_change_html($id): No such category!", true);
+
+			$this->read_template("change_var_cat.tpl");
+
+			$this->vars(array("parent"			=> $row[parent], 
+												"name"				=> $row[name], 
+												"comment"			=> $row[comment], 
+												"id"					=> $id,
+												"created"			=> $this->time2date($row[created],2),
+												"createdby"		=> $row[createdby],
+												"modified"		=> $this->time2date($row[modified],2),
+												"modifiedby"	=> $row[modifiedby]));
+			return $this->parse();
+		}
+
+		function delete_cat($id)
+		{
+			$this->delete_object($id);
+		}
+	}
+?>

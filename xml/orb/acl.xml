@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="acl">
+		<action name="edit">
+			<function name="gen_edit_form">
+				<arguments>
+					<required name="oid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_acl">
+			<function name="submit_acl">
+				<arguments>
+					<required name="oid"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

@@ -1,0 +1,103 @@
+<?xml version='1.0'?>
+<template>
+
+<part id='location' caption='Asukoht'>
+<![CDATA[
+<tr>
+<td class="fcaption2">Asukoht</td>
+<td class="fform">
+</td>
+</tr>
+]]>
+</part>
+
+<part id='periood' caption='Periood'>
+<![CDATA[
+<tr>
+<td class="fcaption2">Periood</td>
+<td class="fform">{VAR:periood}</td>
+</tr>
+]]>
+</part>
+
+<part id='pealkiri' caption='Pealkiri'>
+<![CDATA[
+<tr>
+<td class="fcaption2">{VAR:caption}</td>
+<td class="fform"><input type="text" name="title" size="80" value="{VAR:title}"></td>
+</tr>
+]]>
+</part>
+
+<part id='tekst' caption='Autor'>
+<![CDATA[
+<tr>
+<td class="fcaption2">{VAR:caption}</td>
+<td class="fform"><input type="text" name="author" size="80" value="{VAR:author}"></td>
+</tr>
+]]>
+</part>
+
+<part id='tekst' caption='Fotod'>
+<![CDATA[
+<tr>
+<td class="fcaption2">{VAR:caption}</td>
+<td class="fform"><input type="text" name="author" size="80" value="{VAR:photos}"></td>
+</tr>
+]]>
+</part>
+
+<part id='lead' caption='Lead'>
+<![CDATA[
+<tr>
+<td class="fcaption2" valign="top">{VAR:caption}</td>
+<td class="fform">
+<textarea name="lead" cols="80" rows="5">
+{VAR:lead}
+</textarea>
+</td>
+</tr>
+]]>
+</part>
+
+<part id='content' caption='Sisu'>
+<![CDATA[
+<tr>
+<td class="fcaption2" valign="top">{VAR:caption}</td>
+<td class="fform">
+<textarea name="lead" cols="80" rows="30">
+{VAR:content}
+</textarea>
+</td>
+</tr>
+]]>
+</part>
+
+<part id='keywords' caption='Votmesonad'>
+<![CDATA[
+<tr>
+<td class="fcaption2">{VAR:caption}</td>
+<td class="fform"><input type="text" name="author" size="80" value="{VAR:keywords}"></td>
+</tr>
+]]>
+</part>
+
+<element id='checkbox'>
+<![CDATA[
+<input type='checkbox'> {VAR:caption}
+]]>
+</element>
+
+<element id='radio'>
+<![CDATA[
+<input type='radio'> {VAR:caption}
+]]>
+</element>
+
+<frame>
+<![CDATA[
+<tr>{VAR:line}</tr>
+]]>
+</frame>
+
+</template>

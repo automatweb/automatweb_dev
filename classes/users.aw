@@ -1,0 +1,705 @@
+<?php
+classload("users_user","config","form");
+
+load_vcl("table");
+
+session_register("add_state");
+
+global $orb_defs;
+
+// you know what that means
+$orb_defs["users"] = "xml";
+
+class users extends users_user
+{
+	function users()
+	{
+		$this->db_init();
+		$this->tpl_init("automatweb/users");
+	}
+
+	function gen_select_list($gid,$all,$pickable = true)
+	{
+		$pg = $this->fetchgroup($gid);
+		$can_edit = $this->can("edit",$pg[oid]);
+
+		$this->read_template("sel_list.tpl");
+
+		global $lookfor, $sortby;
+		$t = new aw_table(array("prefix" => "users","sortby" => $sortby,"lookfor" => $lookfor,"imgurl" => $GLOBALS["baseurl"]."/vcl/img", "self" => $GLOBALS["PHP_SELF"].($gid ? "?gid=$gid" : "")));
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/users/pickable.xml");
+
+		$members = $this->getgroupmembers2($gid);
+
+		if ($all)
+			$this->listall();
+		else
+			$this->listall($gid);
+		while ($row = $this->db_next())
+		{
+			$row[online] = $row[online] == 1 ? LC_YES : LC_NO;
+			$row[uuid] = $row[uid];		// blah, gotta rename it, because "uid" is a used global variable :(
+
+			// check if user is a member
+			$vl = isset($members[$row[uid]]) ? "CHECKED" : "";
+			$v2 = isset($members[$row[uid]]) ? 1 : 0;
+
+			// um_$uid shows if the user is in the group or not
+			// and us_$uid lets you change it
+			if ($can_edit && $pickable)
+				$row[check] = "<input type='hidden' NAME='um_".$row[uid]."' VALUE='$v2'><input type='checkbox' NAME='us_".$row[uid]."' VALUE='1' $vl>";
+			else
+				$row[check] = "";
+			$t->define_data($row);
+		}
+		$t->sort_by(array("field" => $sortby));
+		$this->vars(array("table"		=> $t->draw(),
+											"gid"			=> $gid,
+											"all"			=> $all,
+											"urlgrp"	=> $this->make_url(array("parent" => $gid,"all" => 0,"groups" => 0)),
+											"urlall"	=> $this->make_url(array("parent"	=> $gid,"all" => 1,"groups" => 0)),
+											"urlgrps"	=> $this->make_url(array("parent"	=> $gid,"all" => 0,"groups" => 1)),
+											"from"		=> $GLOBALS["REQUEST_URI"]));
+		$this->vars(array("CAN_EDIT"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT") : ""),
+											"CAN_EDIT_2"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT_2") : "")));
+		return $this->parse();
+	}
+
+	////
+	// !generates list of users. For internal use
+	// I made this a separate function, because I'm going to need this functionality in
+	// other places (e.g. messenger) besides the gen_list method in this file.
+
+	// returns:
+	//	array of users, in the form
+	//	array(	"uid1" => acl_array,
+	//		"uidn" => acl_array),
+
+	// where acl_array can be either empty (in case we don't care about explicit
+	// acl information) or contains the following values
+	//		can_view,
+	//		can_change,
+	//		can_del
+	// which are set to boolean true
+	
+	function _gen_usr_list($args = array())
+	{
+		extract($args);
+		global $uid;
+		$retval[$uid] = array(	"can_change" 	=> true,
+					"can_view"	=> true,
+					// no we don't let you suicide
+					// um, why not exactly? - terryf
+					"can_del"	=> false);	
+
+		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
+	
+		$q = "SELECT groups.oid,groups.gid
+			FROM groups
+			LEFT JOIN objects ON (objects.oid = groups.oid)
+			WHERE objects.status != 0";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$can_change = $this->can("change_users", $row["oid"]);
+			$can_view = $this->can("view_users", $row["oid"]);
+			$can_del = $this->can("delete_users", $row["oid"]);
+//			echo "grp $row[name] , oid = $row[oid] , can_change = $can_change <br>";
+			if ($can_change || $can_view || $can_del)
+			{
+				// add all users of this group to list of users
+				$this->save_handle();
+				$ul = $this->getgroupmembers2($row["gid"]);
+				reset($ul);
+				while (list(,$u_uid) = each($ul))
+				{
+					$retval[$u_uid] = array();
+					$retval[$u_uid]["can_view"] = ($can_view) ? true : false;
+					$retval[$u_uid]["can_change"] = ($can_change) ? true : false;
+					$retval[$u_uid]["can_del"] = ($can_del) ? true : false;
+				}
+				$this->restore_handle();
+			}
+		};
+		return $retval;
+	}
+
+	////
+	// !generates list of users
+	function gen_list($arr)
+	{
+		if (!$this->prog_acl("view", PRG_USERS))
+		{
+			$this->prog_acl_error("view", PRG_USERS);
+		}
+		$this->read_template("list.tpl");
+
+		global $lookfor, $sortby,$uid;
+		$users = $this->_gen_usr_list();
+		
+		$uid_list = array_keys($users);
+		
+		// hmpf. Huvitav, kas IN klauslil mingi suuruspiirang ka on?
+		// kui kasutajaid on ntx 2000, siis see päring voib ysna jube olla
+			$q = sprintf("SELECT * FROM users WHERE uid IN(%s) AND blocked = 0",join(",",map("'%s'",$uid_list)));
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$this->vars(array(
+					"uid"				=> $row["uid"], 
+					"logs"				=> $row["logins"],
+					"online"			=> $row["online"] == 1 ? LC_YES : LC_NO,
+					"last"				=> $this->time2date($row["lastaction"],2),
+					"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
+					"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
+					"change_pwd"			=> $this->mk_orb("change_pwd", array("id" => $row["uid"]))
+				));
+				$cc = ""; $cd = ""; $cpw = "";
+				if ($users[$row["uid"]]["can_change"])
+				{
+					$cc = $this->parse("CAN_CHANGE");
+					$cpw = $this->parse("CAN_PWD");
+				}
+				if ($users[$row["uid"]]["can_del"])
+				{
+					$cd = $this->parse("CAN_DEL");
+				}
+				$this->vars(array("CAN_CHANGE" => $cc, "CAN_DEL" => $cd, "CAN_PWD" => $cpw));
+				$l.=$this->parse("LINE");
+			}
+		$this->vars(array(
+			"LINE" => $l,
+			"add"		=> $this->mk_orb("add_user", array())));
+		$ad = "";
+		if ($this->prog_acl("add", PRG_USERS))
+		{
+			$ad = $this->parse("ADD");
+		}
+		$this->vars(array("ADD" => $ad));
+		return $this->parse();
+	}
+
+	////
+	// !generates a list of visible users, using an user-defined template 
+	function gen_plain_list($args = array())
+	{
+		extract($args);
+		$users = $this->_gen_usr_list();
+		$this->read_template($tpl);
+		$c = "";
+		foreach($users as $uuid => $acl)
+		{
+			$this->vars(array(
+				"uid" => $uuid,
+				"online" => "n/a",
+			));
+			$c .= $this->parse("line");
+		};
+		$this->vars(array("line" => $c));
+		return $this->parse();
+	}
+
+	
+
+	////
+	//! Genereerib sisselogitud kasutaja kodukataloogi
+	function gen_home_dir($args = array())
+	{
+		global $udata;
+		#$parent = $args["id"];
+		$parent = $args["id"];
+
+		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
+		$this->read_template($tpl);
+
+		// koigepealt teeme kodukataloogi id kindlaks
+		$this->db_query("SELECT menu.*,objects.* FROM menu
+					LEFT JOIN objects ON objects.oid = menu.id
+					WHERE oid = $udata[home_folder]");
+		$hf = $this->db_next();
+		$result = array();
+		$startfrom = ($parent == 0) ? $hf["oid"] : $parent;
+
+		// kasutaja grupp
+		$q = "SELECT gid FROM objects
+			LEFT JOIN groups ON (objects.oid = groups.oid)
+			WHERE objects.class_id = 38 AND objects.name = '$udata[uid]'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$usergroup = $row["gid"];
+		
+		$thisone = $this->get_object($startfrom);
+		$prnt = $this->get_object($thisone["parent"]);
+		$up = "";
+		if ($parent)
+		{
+			if ($prnt["oid"] != $hf["oid"])
+			{
+				$this->vars(array(
+					"id" => "id=$prnt[oid]",
+				));
+			};
+			$this->vars(array(
+				"name" => $prnt["name"],
+			));
+			$up = $this->parse("up");
+		}
+		$q = "SELECT objects.*,menu.* FROM objects
+			LEFT JOIN menu ON (objects.oid = menu.id)
+			WHERE objects.parent = '$startfrom' and objects.status != 0";
+		$this->db_query($q);
+		$folders = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+				"name" => $row["name"],
+				"id" => $row["oid"],
+				#"iconurl" => "images/ftv2doc.gif",
+				"iconurl" => get_icon_url($row["class_id"],0),
+			));
+			global $baseurl;
+			global $class_defs;
+			switch ($row["class_id"])
+			{
+				case CL_PSEUDO:
+					$tpl = "folder";
+					break;
+				default:
+					$inf = $class_defs[$row["class_id"]];
+					$class = $inf["file"];
+					$this->vars(array(
+						"class" => $class,
+					));
+					$tpl = "doc";
+					break;
+			};
+			$folders .= $this->parse($tpl);
+		};
+		$delete = "";
+		if ($cnt > 0)
+		{
+			$delete = $this->parse("delete");
+		};
+
+		$this->vars(array("folder" => $folders,
+				  "doc" => $docs,
+				  "name" => $thisone["name"],
+				  "parent" => $startfrom,
+				  "delete" => $delete,
+				  "usergroup" => $usergroup,
+				  "total" => $cnt,
+				  "up" => $up,
+				 ));
+		return $this->parse();
+	}
+
+	////
+	// !user changing from the admin interface
+	function change($arr)
+	{
+		global $session_filled_forms;
+		$session_filled_forms = array();
+
+		$this->do_change($arr);
+	}
+
+	function get_jf_list($join_grp)
+	{
+		$ret = array();
+		$this->db_query("SELECT id,j_name  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN." ORDER BY forms.j_order");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]] = $row["j_name"];
+		}
+		return $ret;
+	}
+
+	function get_next_jf($join_grp)
+	{
+		global $session_filled_forms;
+
+		// find all the forms in the selected join group 
+		$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
+		$jfrm = 0;
+		while ($row = $this->db_next())
+		{
+			if (!$session_filled_forms[$row[id]])
+			{
+				$jfrm = $row[id];
+				break;
+			}
+		}
+		return $jfrm;
+	}
+
+	function do_change($arr)
+	{
+		extract($arr);
+
+		$u = $this->fetch($id);
+		$fs = unserialize($u[join_form_entry]);
+
+		// iterate over the join forms
+		$jfrm = $this->get_next_jf($u[join_grp]);
+
+		if ($jfrm)
+		{
+			// show them one after another to the user
+			$orb = $this->mk_orb("show", array("id" => $jfrm, "entry_id" => $fs[$jfrm], "extraids[redirect_after]" => urlencode($this->mk_orb("do_change", array("id" => $id), "users"))),"form");
+			header("Location: $orb");
+			return $orb;
+		}
+		else
+		{
+			// also, update users join form entries
+			$this->save(array("uid" => $id, "join_form_entry" => serialize($GLOBALS["session_filled_forms"]))); 
+
+			// and when we're dont with all of them, update dyn groups and return to user list
+			$this->update_dyn_user($id);
+			$orb = $this->mk_orb("gen_list", array());
+			header("Location: $orb");
+			return $orb;
+		}
+	}
+
+	////
+	// !generates the form for changing the users ($id) password
+	function change_pwd($arr)
+	{
+		extract($arr);
+		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a>");
+		$u = $this->fetch($id);
+		$this->read_template("changepwd.tpl");
+		$this->vars(array("email" => $u[email],
+				"error" => $error,
+				"reforb" => $this->mk_reforb("submit_change_pwd", array("id" => $id))));
+		return $this->parse();
+	}
+
+	////
+	// !generates form for changing the password inside the site
+	function user_change_pwd()
+	{
+		global $uid;
+		$this->read_template("changeuserpwd.tpl");
+		return $this->parse();
+	}
+
+	////
+	// !saves the uses changed password
+	function submit_change_pwd($arr)
+	{
+		extract($arr);
+		if ($arr[pwd] != $arr[pwd2])
+		{
+			return $this->mk_orb("change_pwd", array("id" => $id, "error" => "Parolid peavad oelma samad!"));
+		}
+
+		if ($arr[pwd] != "")
+			$this->save(array("uid" => $arr[id], "password" => $arr[pwd],"email" => $arr[email]));
+		else
+			$this->save(array("uid" => $arr[id], "email" => $arr[email]));
+
+		return $this->mk_orb("gen_list", array());
+	}
+
+	////
+	// !deletes the user
+	function delete($arr)
+	{
+		extract($arr);
+		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => UID));
+		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
+		header("Location: ".$this->mk_orb("gen_list", array()));
+	}
+
+	////
+	// !adds the user and ssets all join form entries from site interface
+	function submit_user_site($arr)
+	{
+		extract($arr);
+
+		global $add_state;
+		$add_state[pass] = $pass;
+		$add_state[uid] = $a_uid;
+		$add_state[email] = $email;
+
+		if ($this->can_add($arr))
+		{
+			$jfs = serialize($this->get_join_form_entries($join_grp));
+
+			$this->add(array("join_form_entry" => $jfs, "uid" => $add_state[uid], "password" => $add_state[pass],"email" => $add_state[email], "join_grp" => $join_grp));
+			$this->update_dyn_user($add_state[uid]);
+
+			$add_state = "";
+			$GLOBALS["session_filled_forms"] = array();
+			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after_join;
+		}
+		else
+		{
+			$add_state[level] = 0;
+			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=$section";
+		}
+
+		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
+	}
+
+	////
+	// !adds the user and ssets all join form entries from admin interface
+	function submit_user($arr)
+	{
+		extract($arr);
+
+		global $add_state;
+		$add_state[pass] = $pass;
+		$add_state[uid] = $a_uid;
+		$add_state[email] = $email;
+
+		if ($this->can_add($arr))
+		{
+			$jfs = serialize($this->get_join_form_entries($join_grp));
+
+			$this->add(array("join_form_entry" => $jfs, "uid" => $add_state[uid], "password" => $add_state[pass],"email" => $add_state[email]));
+			$this->update_dyn_user($add_state[uid]);
+
+			$add_state = "";
+			$GLOBALS["session_filled_forms"] = array();
+			return $this->mk_orb("gen_list", array());
+		}
+		else
+		{
+			$add_state[level] = 0;
+		}
+
+		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
+	}
+
+	function check_chars($str)
+	{
+		$len = strlen($str);
+		for ($i=0; $i < $len; $i++)
+		{
+			$c = substr($str,$i,1);
+			if (!strstr("1234567890qwertyuiopasdfghjklzxcvbnm_",$c))
+				return false;
+		}
+
+		return true;
+	}
+
+	function can_add($arr)
+	{
+		global $add_state;
+
+		extract($arr);
+		$q = "SELECT * FROM users WHERE uid = '$a_uid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row)
+		{
+			$add_state[error] = "Selline kasutaja juba on, vali uus kasutajanimi.";
+			return false;
+		}
+
+		if (!$this->check_chars($a_uid))
+		{
+			$add_state[error] = "Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
+			return false;
+		}
+
+		if ($pass != $pass2)
+		{
+			$add_state[error] = "Parool ja parool 2x ei vasta &uuml;ksteisele!";
+			return false;
+		}
+
+		if (!$this->check_chars($pass))
+		{
+			$add_state[error] = "Passwordis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
+		return false;
+		}
+
+		if (strlen($a_uid) < 3)
+		{
+			$add_state[error] = "Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.";
+			return false;
+		}
+
+		if (strlen($pass) < 3)
+		{
+			$add_state[error] = "Password peab olema v&auml;hemalt 3 t&auml;he pikkune.";
+			return false;
+		}
+		$add_state[error] = "";
+		return true;
+	}
+
+	////
+	// !this da thang, users added from the admin interface will use this function extensively. w00p!
+	function add_user($arr)
+	{
+		extract($arr);
+		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a>");
+		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
+		global $session_filled_forms,$add_state;
+
+		if (!$level)
+		{
+			$session_filled_forms = array();
+			$this->db_query("SELECT distinct(grp) as grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.subtype=".FSUBTYPE_JOIN);
+			$jgrps = array();
+			$found = false;
+			while ($row = $this->db_next())
+			{
+				$jgrps[$row[grp]] = $row[grp];
+				$found = true;
+			}
+			if ($found)
+			{
+				$this->read_template("sel_join_grp.tpl");
+				$this->vars(array("reforb" => $this->mk_reforb("add_user", array("level" => 1)),
+													"join_grps" => $this->picker(0,$jgrps)));
+				return $this->parse();
+			}
+			else
+			{
+				$this->read_template("add.tpl");
+				$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
+													"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))));
+				return $this->parse();
+			}
+		}
+		else
+		{
+
+			// find all the forms in the selected join group 
+			$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
+			$jfrm = 0;
+			while ($row = $this->db_next())
+			{
+				if (!$session_filled_forms[$row[id]])
+				{
+					$jfrm = $row[id];
+					break;
+				}
+			}
+
+			if ($jfrm)
+			{
+				// show them one after another to the user
+				$orb = $this->mk_orb("show", array("id" => $jfrm, "extraids[redirect_after]" => urlencode($this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp), "users"))),"form");
+				header("Location: $orb");
+				return $orb;
+			}
+			else
+			{
+				// and when we're dont with all of them, let the user select username/password
+				$this->read_template("add.tpl");
+				$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
+													"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))));
+				return $this->parse();
+			}
+		}
+	}
+
+	function get_join_form($after_join)
+	{
+		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
+		global $session_filled_forms;
+
+/*		classload("config");
+		$t = new db_config;
+		$jfs = unserialize($t->get_simple_config("user_add_forms"));*/
+		$jfs = array();
+		$this->db_query("SELECT objects.*,forms.grp as grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$GLOBALS["SITE_ID"]." AND forms.subtype = ".FSUBTYPE_JOIN);
+		while ($row = $this->db_next())
+		{
+			$jfs[$row[oid]] = array("group" => $row[grp]);
+		}
+
+//			echo "<pre>",var_dump($jfs)."</pre>";
+		// nini nyyd on vaja tshekkida et kas k6ik vajalikud formid on t2idetud
+		$groups = array();
+		reset($jfs);
+		// teeme gruppide nimekirja
+		while (list($fid,$ar) = each($jfs))
+		{
+			$groups[$ar[group]][$fid] = $session_filled_forms[$fid];
+//				echo "fid $fid ", $session_filled_forms[$fid],"<br>";
+		}
+
+		// k2ime grupid l2bi ja tshekime, et kas m6ni on tervenisti t2idetud
+		$group_filled = false;
+		reset($groups);
+		while (list($group,$ar) = each($groups))
+		{
+			$all_filled = true;
+			reset($ar);
+			while (list($fid,$filled) = each($ar))
+			{
+				if (!$filled)
+					$all_filled = false;
+			}
+
+			if ($all_filled)
+			{
+				// leidsime grupi, kus k6ik on t2idetud
+				$group_filled = true;
+				$add_group = $group;
+				break;
+			}
+		}
+
+		if ($group_filled)
+		{
+			global $add_state;
+			// n2itame kasutaja tegemise formi
+			$this->read_template("add_site.tpl");
+			$this->vars(array("error" => $add_state[error], "uid" => $add_state[uid],"email" => $add_state[email],
+												"reforb"	=> $this->mk_reforb("submit_user_site", array("join_grp" => $add_group, "section" => $GLOBALS["section"], "after_join" => $after_join))));
+			return $this->parse();
+//			return $this->gen_add_form($GLOBALS["baseurl"]."/refcheck.".$GLOBALS["ext"],$add_group);
+		}
+		else
+		{
+			// kribame et mine ja t2ida k6ik regimisformid 2ra
+			$this->read_template("add_not_all_forms.tpl");
+			return $this->parse();
+		}
+	}
+
+	//// 
+	// !tagastab nimekirja formi sisestustest, mis on kasutaja t2itnud ja mis kuuluvad kasutaja liitumisformide gruppi $group
+	function get_join_form_entries($group)
+	{
+		global $session_filled_forms;
+
+		$ret = array();
+
+		$this->db_query("SELECT id,grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND subtype = ".FSUBTYPE_JOIN." AND grp = '$group'");
+		// teeme gruppide nimekirja
+		while ($row = $this->db_next())
+		{
+			$ret[$row[id]] = $session_filled_forms[$row[id]];
+		}
+		return $ret;
+	}
+
+	function do_change_site($fid)
+	{
+		$id = $GLOBALS["uid"];
+		if ($id == "")
+		{
+			return "Andmete muutmiseks peate olema sisse logitud!<br>";
+		}
+
+		$u = $this->fetch($id);
+		$fs = unserialize($u[join_form_entry]);
+
+		$t = new form;
+		return $t->gen_preview(array("id" => $fid, "entry_id" => $fs[$fid], "extraids" => array("redirect_after" => $GLOBALS["baseurl"]."/andmed?fid=$fid")));
+	}
+}
+?>

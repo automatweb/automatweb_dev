@@ -1,0 +1,813 @@
+<?php
+class db_config extends aw_template {
+	function db_config() {
+		$this->db_init();
+		$this->tpl_init("automatweb/config");
+		$this->sub_merge = 1;
+	}
+	
+	function _get_config($ckey) {
+		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
+		return $this->db_fetch_field($q,"content");
+	}
+
+	function xml_start_element($parser,$name,$attrs) { 
+		$temp = "";
+		if ($name == "FIELD") {
+			while(list($k,$v) = each($attrs)) {
+				$temp[$k] = $v;
+			};
+			$this->data[] = $temp;
+		};
+	}
+	
+	function xml_end_element($parser,$name) {
+	}
+
+	function get_config($ckey) {
+		$content = rtrim($this->_get_config($ckey));
+		return $this->__get_config($content);
+	}
+	
+	function __get_config($content) {
+		$this->data = array();
+		$xml_parser = xml_parser_create();
+		xml_set_object($xml_parser,&$this);
+		xml_set_element_handler($xml_parser,"xml_start_element","xml_end_element");
+		if (!xml_parse($xml_parser,$content)) {
+			echo(sprintf("XML error: %s at line %d",
+                                      xml_error_string(xml_get_error_code($xml_parser)),
+                                      xml_get_current_line_number($xml_parser)));
+                };
+		return $this->data;
+	}
+
+	function _set_config($ckey,$content) {
+		$this->quote($content);
+		$q = "UPDATE config
+			SET content = '$content'
+			WHERE ckey = '$ckey'";
+		$this->db_query($q);
+	}
+	
+	function set_config($ckey,$data,$delete = -1) {
+		$xml = $this->gen_xml_header();
+		$xml .= "<data>\n";
+		$rec = 0;
+		while(list($k,$v) = each($data)) {
+			if ($k == "n") {
+				// kui on uus kirje
+				$key = ++$rec;
+			} else {
+				$rec = $k;
+			};
+			$key = ($k == "n") ? $rec : $k;
+			if (strlen($v[CAPTION]) == 0) {
+				$v[CAPTION] = $v[NAME];
+			};
+			if ($delete == $k) {
+			// Kui see kirje on määratud kustutamiseks, siis me ei tee midagi
+			} else {
+				if ( strlen($v[NAME]) > 0 ) {
+					$xml .= $this->gen_xml_tag("field",array("name" => $v[NAME],
+									 "caption" => $v[CAPTION],
+									 "x" => $v[X],
+									 "y" => $v[Y]));
+				};
+			};
+		};
+		$xml .= "</data>\n";
+		#$this->quote($xml);
+		$this->_set_config($ckey,$xml);
+	}
+
+	function delete($ckey,$rec) {
+		$data = $this->get_config($ckey);
+		$this->set_config($ckey,$data,$rec);
+	}
+	
+	function set_simple_config($ckey,$value)
+	{
+		$this->_set_config($ckey,$value);
+	}
+
+	function get_simple_config($ckey)
+	{
+		return $this->_get_config($ckey);
+	}
+
+	function create_config($ckey,$value)
+	{
+		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".$GLOBALS["uid"]."')");
+	}
+
+	function gen_config()
+	{
+		$this->mk_path(0,"Saidi config");
+		$this->read_template("config.tpl");
+
+		$uadd_id = $this->get_simple_config("user_add_form");
+		$uadd = $this->get_object($uadd_id);
+
+		$usearch_id = $this->get_simple_config("user_search_form");
+		$usearch = $this->get_object($usearch_id);
+
+		$this->vars(array("join_form_name" => $uadd[name], "search_form_name" => $usearch[name]));
+		return $this->parse();
+	}
+
+	// see laseb saidile liitumisvormi valida
+	function sel_join_form()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kasutaja liitumisform");
+
+		$this->read_template("sel_form.tpl");
+		
+		$this->db_query("SELECT objects.name AS name,
+					objects.comment AS comment,
+					objects.oid AS oid,
+					forms.type AS type,
+					forms.subtype AS subtype,
+					forms.grp AS grp,
+					forms.j_order as j_order,
+					forms.j_name AS j_name
+				FROM forms
+				LEFT JOIN objects ON objects.oid = forms.id
+				WHERE objects.status != 0 AND forms.type = ".FTYPE_ENTRY);
+					
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"form_id"	=> $row["oid"],
+				"form_name" 	=> $row["name"],
+				"form_comment"	=> $row["comment"],
+				"checked" 	=> ($row["subtype"] == FSUBTYPE_JOIN) ? "checked" : "",
+				"group"		=> $row["grp"],
+				"change"	=> $this->mk_orb("change", array("id" => $row[oid]), "form"),
+				"name"		=> $row[j_name],
+				"order"		=> $row[j_order]));
+			if ($row["subtype"] == FSUBTYPE_JOIN)
+			{
+				$this->vars(array("GROUP" => $this->parse("GROUP"),
+													"ORDER" => $this->parse("ORDER"),
+													"NAME"	=> $this->parse("NAME")));
+			}
+			else
+			{
+				$this->vars(array("GROUP" => "","NAME" => "", "ORDER" => ""));
+			}
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array("LINE" => $l, "SEL_LINE" => ""));
+
+		return $this->parse();
+	}
+
+	function save_jf($arr)
+	{
+		extract($arr);
+
+		// k6igepealt v6tame k6ik maha
+		$this->db_query("UPDATE forms SET subtype = 0, grp = '' WHERE subtype = ".FSUBTYPE_JOIN);
+
+		if (is_array($sf))
+		{
+			reset($sf);
+			// fid-id on vormide id-d
+			// fg on vormide grupid
+			$this->quote($fg);
+			while(list($fid,$v) = each($sf))
+			{
+				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s' WHERE id = $fid",
+					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid]);
+				$this->db_query($q);
+			}
+		}
+	}
+
+	function sel_search_form()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kasutaja otsinguform");
+
+		$this->read_template("sel_form.tpl");
+		
+		$this->gen_form_list("sel_search",$this->get_simple_config("user_search_form"),2);
+
+		return $this->parse();
+	}
+
+	function sel_search($id)
+	{
+		$this->set_simple_config("user_search_form",$id);
+	}
+
+	function class_icons()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Klasside ikoonid");
+
+		global $class_defs;
+		$this->read_template("admin_class_icons.tpl");
+
+		$il = unserialize($this->get_simple_config("menu_icons"));
+		reset($class_defs);
+		while (list($clid,$desc) = each($class_defs))
+		{
+			$this->vars(array("name" => $desc[name], "url" => ($il[content][$clid][imgurl] == "" ? "/images/icon_aw.gif" : $il[content][$clid][imgurl]),"id" => $clid));
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array("LINE" => $l));
+		return $this->parse();
+	}
+
+	function export_class_icons($arr)
+	{
+		extract($arr);
+		if (!is_array($sel))
+			return;
+
+		$il = unserialize($this->get_simple_config("menu_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($sel);
+		while (list(,$clid) = each($sel))
+		{
+			$ret.="\x01classicon\x02\n";
+			$icon = $il[content][$clid][imgid] ? $ic->get($il[content][$clid][imgid]) : -1;
+			$ar = array("clid" => $clid, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function export_all_class_icons()
+	{
+		classload("icons");
+		$ic = new icons;
+
+		$il = unserialize($this->get_simple_config("menu_icons"));
+		global $class_defs;
+		reset($class_defs);
+		while (list($clid,$desc) = each($class_defs))
+		{
+			$ret.="\x01classicon\x02\n";
+			$icon = $il[content][$clid][imgid] ? $ic->get($il[content][$clid][imgid]) : -1;
+			$ar = array("clid" => $clid, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function import_class_icons($level)
+	{
+		if (!$level)
+		{
+			global $ext;
+			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi klasside ikoone");
+			$this->read_template("import_class_icons.tpl");
+			return $this->parse();
+		}
+		else
+		{
+			$this->do_import("classicon",set_class_icon,"class_icons","clid");
+		}
+	}
+
+	function set_class_icon($clid, $icon_id)
+	{
+		$t = new icons;
+		$ic = $t->get($icon_id);
+
+		$icons = unserialize($this->get_simple_config("menu_icons"));
+		$icons[content][$clid][imgid] = $icon_id;
+		$icons[content][$clid][imgurl] = $ic[url];
+
+		$cs = serialize($icons);
+		$this->set_simple_config("menu_icons",$cs);
+	}
+
+	function file_icons()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Failit&uuml;&uuml;pide ikoonid");
+
+		$this->read_template("file_icons.tpl");
+
+		$ar = unserialize($this->get_simple_config("file_icons"));
+		if (is_array($ar))
+		{
+			reset($ar);
+			while (list($extt,$v) = each($ar))
+			{
+				if ($v[url] == "")
+					$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+				$this->vars(array("extt" => $extt, "type" => $v[type], "url" => $v[url]));
+				$this->parse("LINE");
+			}
+		}
+		return $this->parse();
+	}
+
+	function export_file_icons($arr)
+	{
+		extract($arr);
+		if (!is_array($sel))
+			return;
+
+		$il = unserialize($this->get_simple_config("file_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($sel);
+		while (list(,$extt) = each($sel))
+		{
+			$ret.="\x01fileicon\x02\n";
+			$icon = $il[$extt][id] ? $ic->get($il[$extt][id]) : -1;
+			$ar = array("ext" => $extt, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function export_all_file_icons()
+	{
+		$il = unserialize($this->get_simple_config("file_icons"));
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($il);
+		while (list($extt,$v) = each($il))
+		{
+			$ret.="\x01fileicon\x02\n";
+			$icon = $il[$extt][id] ? $ic->get($il[$extt][id]) : -1;
+			$ar = array("ext" => $extt, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function do_import($sep,$callback,$goto,$arname)
+	{
+		global $fail;
+		if (!($f = fopen($fail,"r")))
+			$this->raise_error("Miskit l2x uploadimisel viltu",true);
+
+		$fc = fread($f,filesize($fail));
+		fclose($f);
+
+		$this->do_core_import($sep,$callback,$goto,$arname,$fc);
+	}
+
+	function do_core_import($sep,$callback,$goto,$arname,$fc)
+	{
+		classload("icons");
+		$ic = new icons;
+
+		// nyyd asume faili parsima. 
+		// splitime ta lahti, eraldajaks on string \x01$sep\x02\n
+		$arr = explode("\x01".$sep."\x02\n",$fc);
+		reset($arr);
+		list(,$v) = each($arr); // skipime tyhja
+		while (list(,$v) = each($arr))
+		{
+			$v = unserialize($v);
+			$iid = 0;
+			if (is_array($v[icon]))
+			{
+				if (!($iid = $ic->get_icon_by_file($v[icon][file])))
+					$iid = $ic->add_array($v[icon]);
+			}
+			$this->$callback($v[$arname],$iid);
+			$cnt++;
+		}
+		global $ext;
+		echo "Importisin $cnt ikooni. <a href='config.aw?type=$goto'>Tagasi</a><br>";
+	}
+
+	function import_file_icons($level)
+	{
+		if (!$level)
+		{
+			global $ext;
+			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi failide ikoone");
+			$this->read_template("import_file_icons.tpl");
+			return $this->parse();
+		}
+		else
+		{
+			$this->do_import("fileicon",set_file_icon,"file_icons","ext");
+		}
+	}
+
+	function add_filetype($error)
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=file_icons'>Failit&uuml;&uuml;pide ikoonid</a> / Lisa");
+
+		$this->read_template("add_filetype.tpl");
+		$this->vars(array("error" => $error));
+		return $this->parse();
+	}
+
+	function change_filetype($extt)
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=file_icons'>Failit&uuml;&uuml;pide ikoonid</a> / Muuda");
+
+		$this->read_template("add_filetype.tpl");
+		$ar = unserialize($this->get_simple_config("file_icons"));
+		$this->vars(array("change" => 1,"extt" => $extt,"type" => $ar[$extt][type]));
+		return $this->parse();
+	}
+
+	function submit_filetype($arr)
+	{
+		extract($arr);
+
+		$ar = unserialize($this->get_simple_config("file_icons"));
+		if (is_array($ar[$extt]) && $change != 1)
+		{
+			header("Location: conf.".$GLOBALS["ext"]."?type=add_filetype&error=Selline+t&uuml;&uuml;p+on+juba+andembaasis+olemas!");
+			die();
+		}
+
+		$ar[$extt] = array("type" => $type);
+
+		$this->set_simple_config("file_icons", serialize($ar));
+	}
+
+	function set_file_icon($extt, $icon_id)
+	{
+		if ($extt == "")
+			return;
+
+		$t = new icons;
+		$ic = $t->get($icon_id);
+
+		$icons = unserialize($this->get_simple_config("file_icons"));
+		$icons[$extt][url] = $ic[url];
+		$icons[$extt][id] = $icon_id;
+
+		$cs = serialize($icons);
+		$this->set_simple_config("file_icons",$cs);
+	}
+
+	function delete_filetype($extt)
+	{
+		$icons = unserialize($this->get_simple_config("file_icons"));
+		unset($icons[$extt]);
+		$cs = serialize($icons);
+		$this->set_simple_config("file_icons",$cs);
+	}
+
+	function program_icons()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Programmide ikoonid");
+
+		global $programs;
+		$this->read_template("admin_program_icons.tpl");
+
+		$il = unserialize($this->get_simple_config("program_icons"));
+		reset($programs);
+		while (list($id,$desc) = each($programs))
+		{
+			$this->vars(array("name" => $desc[name], "url" => ($il[$id][url] == "" ? "/images/icon_aw.gif" : $il[$id][url]),"id" => $id));
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array("LINE" => $l));
+		return $this->parse();
+	}
+
+	function export_program_icons($arr)
+	{
+		extract($arr);
+		if (!is_array($sel))
+			return;
+
+		$il = unserialize($this->get_simple_config("program_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($sel);
+		while (list(,$id) = each($sel))
+		{
+			$ret.="\x01programicon\x02\n";
+			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$ar = array("id" => $id, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function export_all_program_icons()
+	{
+		$il = unserialize($this->get_simple_config("program_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		global $programs;
+		reset($programs);
+		while (list($id,$desc) = each($programs))
+		{
+			$ret.="\x01programicon\x02\n";
+			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$ar = array("id" => $id, "icon" => $icon);
+			$ret.=serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function import_program_icons($level)
+	{
+		if (!$level)
+		{
+			global $ext;
+			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi programmide ikoone");
+			$this->read_template("import_program_icons.tpl");
+			return $this->parse();
+		}
+		else
+		{
+			$this->do_import("programicon",set_program_icon,"program_icons","id");
+		}
+	}
+
+	function set_program_icon($id, $icon_id)
+	{
+		$t = new icons;
+		$ic = $t->get($icon_id);
+
+		$icons = unserialize($this->get_simple_config("program_icons"));
+		$icons[$id][id] = $icon_id;
+		$icons[$id][url] = $ic[url];
+
+		$cs = serialize($icons);
+		$this->set_simple_config("program_icons",$cs);
+	}
+
+	function other_icons()
+	{
+		global $ext;
+		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Muud ikoonid");
+
+		$this->read_template("other_icons.tpl");
+
+		$ar = unserialize($this->get_simple_config("other_icons"));
+		$v = $ar["promo_box"];
+		if ($v[url] == "")
+			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+		$this->vars(array("type" => "promo kast", "mtype" => "promo_box", "url" => $v[url]));
+		$this->parse("LINE");
+
+		$v = $ar["brother"];
+		if ($v[url] == "")
+			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+		$this->vars(array("type" => "Vennastatud men&uuml;&uuml;", "mtype" => "brother", "url" => $v[url]));
+		$this->parse("LINE");
+
+		$this->vars(array("type" => "Kodukataloog", "mtype" => "homefolder", "url" => $v[url]));
+		$this->parse("LINE");
+
+		$v = $ar["shared_folders"];
+		if ($v[url] == "")
+			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+		$this->vars(array("type" => "Kodukataloog/SHARED FOLDERS", "mtype" => "shared_folders", "url" => $v[url]));
+		$this->parse("LINE");
+
+		$v = $ar["hf_groups"];
+		if ($v[url] == "")
+			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+		$this->vars(array("type" => "Kodukataloog/grupid", "mtype" => "hf_groups", "url" => $v[url]));
+		$this->parse("LINE");
+
+		$v = $ar["bugtrack"];
+		if ($v[url] == "")
+			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+
+		$this->vars(array("type" => "Klienditugi/BugTrack", "mtype" => "bugtrack", "url" => $v[url]));
+		$this->parse("LINE");
+
+		return $this->parse();
+	}
+
+	function set_other_icon($id, $icon_id)
+	{
+		$t = new icons;
+		$ic = $t->get($icon_id);
+
+		$icons = unserialize($this->get_simple_config("other_icons"));
+		$icons[$id][id] = $icon_id;
+		$icons[$id][url] = $ic[url];
+
+		$cs = serialize($icons);
+		$this->set_simple_config("other_icons",$cs);
+	}
+
+	function export_other_icons($arr)
+	{
+		extract($arr);
+		if (!is_array($sel))
+			return;
+
+		$il = unserialize($this->get_simple_config("other_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($sel);
+		while (list(,$id) = each($sel))
+		{
+			$ret.="\x01othericon\x02\n";
+			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$ar = array("id" => $id, "icon" => $icon);
+			$ret.= serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function export_all_other_icons()
+	{
+		$il = unserialize($this->get_simple_config("other_icons"));
+
+		header("Content-type: automatweb/icon-export");
+
+		classload("icons");
+		$ic = new icons;
+
+		reset($il);
+		while (list($id,) = each($il))
+		{
+			$ret.="\x01othericon\x02\n";
+			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$ar = array("id" => $id, "icon" => $icon);
+			$ret.= serialize($ar)."\n";
+		}
+		return $ret;
+	}
+
+	function import_other_icons($level)
+	{
+		if (!$level)
+		{
+			global $ext;
+			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi muid ikoone");
+			$this->read_template("import_other_icons.tpl");
+			return $this->parse();
+		}
+		else
+		{
+			global $fail;
+			if (!($f = fopen($fail,"r")))
+				$this->raise_error("Miskit l2x uploadimisel viltu",true);
+
+			$fc = fread($f,filesize($fail));
+			fclose($f);
+
+			$this->do_core_import_other_icons($fc);
+		}
+	}
+
+	function do_core_import_other_icons($fc)
+	{
+		classload("icons");
+		$ic = new icons;
+
+		// nyyd asume faili parsima. 
+		// splitime ta lahti, eraldajaks on string \x01$sep\x02\n
+		$arr = explode("\x01othericon\x02\n",$fc);
+		reset($arr);
+		list(,$v) = each($arr); // skipime tyhja
+		while (list(,$v) = each($arr))
+		{
+			$v = unserialize($v);
+			$iid = 0;
+			if (is_array($v[icon]))
+			{
+				if (!($iid = $ic->get_icon_by_file($v[icon][file])))
+					$iid = $ic->add_array($v[icon]);
+			}
+			$this->set_other_icon($v[id],$iid);
+			$cnt++;
+		}
+		global $ext;
+		echo "Importisin $cnt ikooni. <a href='config.aw?type=other_icons'>Tagasi</a><br>";
+	}
+
+	function import()
+	{
+		$this->read_template("import.tpl");
+		return $this->parse();
+	}
+
+	function export()
+	{
+		$this->read_template("export.tpl");
+		return $this->parse();
+	}
+
+	function do_export($arr)
+	{
+		extract($arr);
+
+		$ex = array();
+
+		if ($exp_db)
+		{
+			classload("icons");
+			$t = new icons;
+			$ex[db] = $t->export_all();
+		}
+
+		if ($exp_cl)
+		{
+			$ex[cl] = $this->export_all_class_icons();
+		}
+
+		if ($exp_ft)
+		{
+			$ex[ft] = $this->export_all_file_icons();
+		}
+
+		if ($exp_pr)
+		{
+			$ex[pr] = $this->export_all_program_icons();
+		}
+
+		if ($exp_ot)
+		{
+			$ex[ot] = $this->export_all_other_icons();
+		}
+
+		header("Content-type: aw/icon-export");
+		return serialize($ex);
+	}
+
+	function import_all_icons($level)
+	{
+		if (!$level)
+		{
+			global $ext;
+			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi k&otilde;ik ikoonid");
+			$this->read_template("import_all_icons.tpl");
+			return $this->parse();
+		}
+		else
+		{
+			global $fail;
+			if (!($f = fopen($fail,"r")))
+				$this->raise_error("Miskit l2x uploadimisel viltu",true);
+
+			$fc = fread($f,filesize($fail));
+			fclose($f);
+
+			$ar = unserialize($fc);
+			if ($ar[db] != "")
+			{
+				classload("icons");
+				$t = new icons;
+				$t->core_import($ar[db]);
+			}
+			if ($ar[cl] != "")
+			{
+				$this->do_core_import("classicon",set_class_icon,"class_icons","clid",$ar[cl]);
+			}
+			if ($ar[ft] != "")
+			{
+				$this->do_core_import("fileicon",set_file_icon,"file_icons","ext",$ar[ft]);
+			}
+			if ($ar[pr] != "")
+			{
+				$this->do_core_import("programicon",set_program_icon,"program_icons","id",$ar[pr]);
+			}
+			if ($ar[ot] != "")
+			{
+				$this->do_core_import_other_icons($ar[ot]);
+			}
+		}
+	}
+};
+?>

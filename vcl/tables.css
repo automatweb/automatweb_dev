@@ -1,0 +1,56 @@
+.ftitle_normal {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #E5E8F7;
+}
+
+.ftitle_sortable {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #AADDAA;
+}
+
+.ftitle_sorted {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #AAAADD;
+}
+
+.fcontent_line1 {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #DDDDDD;
+}
+
+.fcontent_line1_sorted {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #CCCCCC;
+}
+
+
+.fcontent_line2 {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #FFFFFF;
+}
+
+.fcontent_line2_sorted {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #EEEEEE;
+}

@@ -1,0 +1,180 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="planner">
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="redir">
+			<function name="redir">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add">
+			<function name="submit_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="addevent">
+			<function name="adm_event">
+				<arguments>
+					<required name="parent"/>
+					<required name="date"/>
+					<define name="op" value="add"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="editevent">
+			<function name="adm_event">
+				<arguments>
+					<required name="id"/>
+					<define name="op" value="edit"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="repeaters">
+			<function name="repeaters">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_adm_event">
+			<function name="submit_adm_event">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+					<optional name="disp"/>
+					<optional name="date"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="day" default="1">
+			<function name="draw_day">
+				<arguments>
+					<optional name="date"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="mark_as_closed">
+			<function name="set_status">
+				<arguments>
+					<define name="status" value="1"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import">
+			<function name="import">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="dummy">
+		'	<function name="dummy">
+				<arguments>
+					<required name="date"/>
+				</arguments>
+			</function>
+		</action>
+
+
+		<action name="show_week">
+			<function name="draw_week">
+				<arguments>
+					<optional name="date"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="overview">
+			<function name="draw_week">
+				<arguments>
+					<define name="op" value="overview"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="show_month">
+			<function name="draw_mon">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="mark_as_problem">
+			<function name="set_status">
+				<arguments>
+					<define name="status" value="2"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_event">
+			<function name="edit_event">
+				<arguments>
+					<required name="date"/>
+					<required name="time"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="edit_event">
+			<function name="edit_event">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="show_event">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_event">
+			<function name="submit_event">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_events">
+			<function name="delete_events">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="accept">
+			<function name="_unserialize">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+</orb>
+		

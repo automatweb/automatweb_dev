@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="html_frameset">
+		<action name="horiz">
+			<function name="horiz">
+				<arguments>
+					<required name="frame1"/>
+					<required name="frame2"/>
+					<required name="rows"/>
+					<optional name="name"/>
+				</arguments>
+			</function>
+		</action>
+		
+	</class>
+</orb>
+		

@@ -1,0 +1,202 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="banner">
+
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="client"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="parent"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="parent"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="showstats">
+			<function name="showstats">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="activate">
+			<function name="activate">
+				<arguments>
+					<required name="client"/>
+					<required name="banner"/>
+					<optional name="active"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="client"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="config">
+			<function name="config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_config">
+			<function name="submit_config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="buyer_banners">
+			<function name="buyer_banners">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_status_site">
+			<function name="submit_status_site">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_site">
+			<function name="change_site">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_site">
+			<function name="submit">
+				<arguments>
+					<required name="site"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_site">
+			<function name="add_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_site">
+			<function name="delete_site">
+				<arguments>
+					<required name="id"/>
+					<required name="cl_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="sel_banner_periods">
+			<function name="sel_banner_periods">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_periods">
+			<function name="submit_periods">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stat_chart">
+			<function name="stat_chart">
+				<arguments>
+					<required name="xvals"/>
+					<required name="yvals"/>
+					<required name="data"/>
+					<optional name="data2"/>
+					<optional name="data3"/>
+					<optional name="title"/>
+					<optional name="xtitle"/>
+					<optional name="ytitle"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_users">
+			<function name="show_users">
+				<arguments>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="user_banners">
+			<function name="user_banners">
+				<arguments>
+					<optional name="page"/>
+					<required name="buid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="user_profiles">
+			<function name="user_profiles">
+				<arguments>
+					<optional name="page"/>
+					<required name="buid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="user_history">
+			<function name="user_history">
+				<arguments>
+					<optional name="page"/>
+					<required name="buid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_profiles">
+			<function name="show_profiles">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		

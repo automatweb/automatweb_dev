@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="banner_profile">
+
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="parent"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+	
+	</class>
+</orb>
+		

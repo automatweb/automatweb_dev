@@ -1,5 +1,4 @@
 <?php
-// $Header
 global $orb_defs;
 $orb_defs["links"] = array("new"		=>	array("function"	=> "add",	"params"	=> array("parent"), "opt" => array("docid")),
 													 "submit"	=>	array("function"	=> "submit","params" => array("parent","id")),
@@ -15,24 +14,15 @@ class links extends extlinks
 	{
 		$this->tpl_init("automatweb/extlinks");
 		$this->db_init();
-		global $lc_extlinks;
-		if (is_array($lc_extlinks))
-		{
-			$this->vars($lc_extlinks);
-		}
-		lc_load("definition");
 	}
 
-	////
-	// !Kuvab uue lingi lisamise vormi
 	function add($arr)
 	{
 		extract($arr);
 		classload("menuedit");
 		$t = new menuedit;
-		$this->mk_path($parent, LC_LINKS_ADD);
+		$this->mk_path($parent, "Lisa link");
 		$this->read_template("nadd.tpl");
-		classload("objects");
 		$ob = new db_objects;
 		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => 0, "docid" => $docid)),
 											"parent" => $this->picker($parent,$ob->get_list()),
@@ -42,8 +32,6 @@ class links extends extlinks
 		return $this->parse();
 	}
 
-	////
-	// !Kuvab lingi muutmise vormi
 	function change($arr)
 	{
 		extract($arr);
@@ -52,7 +40,7 @@ class links extends extlinks
 		classload("menuedit");
 		$t = new menuedit;
 
-		$this->mk_path($link[parent], LC_LINKS_CHANGE);
+		$this->mk_path($link[parent], "Muuda linki");
 		$this->read_template("nadd.tpl");
 		$ob = new db_objects;
 		$this->vars(array("reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id)),
@@ -60,13 +48,6 @@ class links extends extlinks
 											"url"			=> $link[url],
 											"search_doc" => $this->mk_orb("search_doc", array()),
 											"desc"		=> $link[descript],
-											"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
-											"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
-											"newwintoolbar" => checked($link["newwintoolbar"]),
-											"newwinlocation" => checked($link["newwinlocation"]),
-											"newwinmenu" => checked($link["newwinmenu"]),
-											"newwinscroll" => checked($link["newwinscroll"]),
-											"use_javascript" => checked($link["use_javascript"]),
 											"comment"	=> $link[comment],
 											"parent"	=> $this->picker($link[parent], $ob->get_list()),
 											"extlink"	=> checked($link[type] != "int"),
@@ -77,35 +58,13 @@ class links extends extlinks
 		return $this->parse();
 	}
 
-	////
-	// !Submitib add voi change actioni tulemuse
 	function submit($arr)
 	{
-
 		extract($arr);
 		if (!$id)
 		{
-			$newlinkid = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_EXTLINK,
-				"comment" => $comment,
-			));
-
-			$this->add_link(array(
-				"id"  => $newlinkid,	
-				"oid" => $parent, 
-				"name" => $name,
-				"url" => $url,
-				"desc"  => $desc,
-				"newwindow" => $newwindow,
-				"type" => $type, 
-				"docid" => $a_docid,
-				"doclinkcollection" => $doclinkcollection,
-			));
-
-			$linkid = $newlinkid;
-
+			$newlinkid = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_EXTLINK,"comment" => $comment));
+			$this->add_link(array("id"  => $newlinkid,	"oid" => $parent, "name" => $name,"url" => $url,"desc"  => $desc,"newwindow" => $newwindow,"type" => $type, "docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
 			if ($docid)
 			{
 				$this->add_alias($docid,$newlinkid);
@@ -113,47 +72,12 @@ class links extends extlinks
 		}
 		else
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"parent" => $parent,
-				"comment" => $comment,
-			));
-
-			$linkid = $id;
-
-			$this->save_link(array(
-				"lid" => $id, 
-				"name" => $name, 
-				"url" => $url, 
-				"desc" => $desc, 
-				"newwindow" => $newwindow,
-				"type" => $type,
-				"docid" => $a_docid,
-				"doclinkcollection" => $doclinkcollection,
-			));
+			$this->upd_object(array("oid" => $id, "name" => $name, "parent" => $parent,"comment" => $comment));
+			$this->save_link(array("lid" => $id, "name" => $name, "url" => $url, "desc" => $desc, "newwindow" => $newwindow,"type" => $type,"docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
 		}
-		// tegelikult voiks metainfo salvetamise upd_object sisse panema muidugi
-		$meta = array(
-			"use_javascript" => $use_javascript,
-			"newwinwidth" => $newwinwidth,
-			"newwinheight" => $newwinheight,
-			"newwintoolbar" => $newwintoolbar,
-			"newwinlocation" => $newwinlocation,
-			"newwinmenu" => $newwinmenu,
-			"newwinscroll" => $newwinscroll
-		);
-
-		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
-
-		// arendaks miskit plugin arhitektuuri siin.
-		// ntx, klass providib vahendid linkide lisamiseks, muutmiseks ja submiti
-		// handlemiseks, aga redirectid tehaks siiski sellest klassist, mis vajab
-		// neid teenuseid. Ntx dokumendiklassi sees.
-		
 		if ($docid)
 		{
-			return $this->mk_my_orb("change", array("id" => $docid), "document");
+			return $this->mk_orb("change", array("id" => $docid), "document");
 		}
 		else
 		{
@@ -161,8 +85,6 @@ class links extends extlinks
 		}
 	}
 
-	////
-	// !Kustutab lingi objekti
 	function delete($arr)
 	{
 		extract($arr);
@@ -175,50 +97,22 @@ class links extends extlinks
 	{
 		$this->read_template("search_doc.tpl");
 		$this->vars(array("index_file" => $GLOBALS["index_file"]));
-		global $s_name, $s_content,$SITE_ID,$baseurl,$index_file,$ext,$s_class_id;
+		global $s_name, $s_content,$SITE_ID;
 		if ($s_name != "" || $s_content != "")
 		{
-			if ($s_class_id == "item")
+			$se = array();
+			if ($s_name != "")
 			{
-				$se = "";
-				if ($s_name != "")
-				{
-					$se = " AND name LIKE '%".$s_name."%' ";
-				}
-				$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.parent as parent FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_SHOP_ITEM.") $se");
+				$se[] = " name LIKE '%".$s_name."%' ";
 			}
-			else
+			if ($s_content != "")
 			{
-				$se = array();
-				if ($s_name != "")
-				{
-					$se[] = " name LIKE '%".$s_name."%' ";
-				}
-				if ($s_content != "")
-				{
-					$se[] = " content LIKE '%".$s_content."%' ";
-				}
-				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
+				$se[] = " content LIKE '%".$s_content."%' ";
 			}
+			$this->db_query("SELECT documents.title as name,objects.oid FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				if ($s_class_id == "item")
-				{
-					$url = $this->mk_site_orb(array("action" => "order_item", "item_id" => $row["oid"], "section" => $row["parent"],"class" => "shop"));
-					$url = substr($url,strlen($baseurl));
-				}
-				else
-				{
-					$url = "/".$index_file.".".$ext."/section=".$row["oid"];
-				}
-				$name = strip_tags($row["name"]);
-				$name = str_replace("'","",$name);
-				$this->vars(array(
-					"name" => $name, 
-					//"name" => htmlentities($row["name"],ENT_QUOTES), 
-					"id" => $row["oid"],
-					"url" => $url
-				));
+				$this->vars(array("name" => $row["name"], "id" => $row["oid"]));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));
@@ -228,13 +122,9 @@ class links extends extlinks
 			$s_name = "%";
 			$s_content = "%";
 		}
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("search_doc", array("reforb" => 0)),
-			"s_name"	=> $s_name,
-			"s_content"	=> $s_content,
-			"doc_sel" => checked($s_class_id != "item"),
-			"item_sel" => checked($s_class_id == "item")
-		));
+		$this->vars(array("reforb" => $this->mk_reforb("search_doc", array("reforb" => 0)),
+											"s_name"	=> $s_name,
+											"s_content"	=> $s_content));
 		return $this->parse();
 	}
 

@@ -1,8 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.11 2000/11/04 22:21:25 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
-$orb_defs["menuedit"] = "xml";
+$orb_defs["menuedit"] = array(
+				"obj_list"				=>	array("function"	=> "gen_list_objs",	"params"	=> array("parent")),
+				"new"							=>	array("function"  => "add"					, "params"	=> array("parent")),
+				"submit"					=>	array("function"	=> "nsubmit"			, "params"	=> array()),
+				"menu_list"				=>	array("function"	=> "gen_list"			, "params"	=> array("parent")),
+				"submit_order"		=>	array("function"	=> "submit_order"	, "params"	=> array("parent")),
+				"submit_order_doc"=>	array("function"	=> "submit_order2", "params"	=> array("parent")),
+				"delete"					=>	array("function"	=> "ndelete"			, "params"	=> array("parent","id")),
+				"o_delete"					=>	array("function"	=> "o_delete"			, "params"	=> array("parent")),
+				"change"					=>	array("function"	=> "change"				, "params"	=> array("parent","id")),
+				"menuedit_redirect"	=> array("function" => "command_redirect", "params" => array()),
+				"menuedit_newobj"	=> array("function" => "menuedit_newobj", "params"	=> array()),
+				"export_menus"		=> array("function" => "export_menus"		, "params"	=> array("id")),
+				"import"					=> array("function" => "import"					, "params"	=> array("parent")),
+				"submit_import"		=> array("function" => "submit_import"	, "params"	=> array("parent")),
+				"cut"							=> array("function" => "cut"						,	"params"	=> array()),
+				"copy"						=> array("function" => "copy"						,	"params"	=> array()),
+				"paste"						=> array("function" => "paste"					, "params"	=> array())
+);
 
 // muh? mes number?
 // seep see nummer mille kaudu tuntakse 2ra kui tyyp klikkid kodukataloog/SHARED_FOLDERS peale
@@ -12,7 +29,9 @@ session_register("cut_objects");
 session_register("copied_objects");
 
 lc_load("menuedit");
-classload("cache","validator","defs");
+classload("cache");
+classload("validator");
+classload("defs");
 
 	class menuedit extends aw_template
 	{
@@ -33,8 +52,8 @@ classload("cache","validator","defs");
 			reset($this->menucache[$parent]);
 			while(list(,$v) = each($this->menucache[$parent]))
 			{
-				$name = $v["data"]["name"];
-				if ($v["data"]["parent"] == 1)
+				$name = $v[data][name];
+				if ($v[data][parent] == 1)
 				{
 					$words = explode(" ",$name);
 					if (count($words) == 1)
@@ -52,14 +71,14 @@ classload("cache","validator","defs");
 				$sep = ($str == "" ? "" : " / ");
 				$tstr = $str.$sep.$name;
 
-				if (is_array($this->extrarr[$v["data"]["oid"]]))
+				if (is_array($this->extrarr[$v[data][oid]]))
 				{
-					reset($this->extrarr[$v["data"]["oid"]]);
-					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
-						$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
+					reset($this->extrarr[$v[data][oid]]);
+					while (list(,$v2) = each($this->extrarr[$v[data][oid]]))
+						$this->docs[$v2[docid]] = $tstr." / ".$v2[name];
 				}
 
-				$this->mk_folders($v["data"]["oid"],$tstr);
+				$this->mk_folders($v[data][oid],$tstr);
 			}
 		}
 
@@ -231,29 +250,15 @@ classload("cache","validator","defs");
 			// leiame, kas on tegemist perioodilise rubriigiga
  			$periodic = $this->is_periodic($section);
 
-			$this->sel_section = $section;
-	
-			$sel_menu_id = $section;
-			if (!is_array($this->mar[$sel_menu_id]))
-			{
-				$seobj = $this->get_object($sel_menu_id);
-				$sel_menu_id = $seobj["parent"];
-			}
-			$this->vars(array(
-				"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
-				"sel_menu_image" => ($this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
-				"sel_menu_id" => $sel_menu_id
-			));
-
 			// loome sisu
-			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
+			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section))
 			{
 				// tshekime et kas 2kki on selle menyy all lingikogu. kui on, siis joonistame selle.
 				$this->vars(array("doc_content" => $this->do_link_collection($section)));
 				$this->read_template($template);
 			}
 			else
-			if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
+			if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0))
 			{
 				// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
 				$this->vars(array("doc_content" => $this->do_shop($section,$sh_id)));
@@ -276,13 +281,6 @@ classload("cache","validator","defs");
 				$this->vars(array("doc_content" => $text));
 			}
 
-			// import language constants
-			lc_site_load("menuedit");
-			if (is_array($GLOBALS["lc_menuedit"]))
-			{
-				$this->vars($GLOBALS["lc_menuedit"]);
-			}
-
 			// get array with path of objects in it
 			$path = $this->get_path($section,$obj);
 
@@ -303,7 +301,7 @@ classload("cache","validator","defs");
 			$awt->start("cycle");
 			if ($GLOBALS["MENUEDIT_VER2"])
 			{
-				global $menu_defs_v2,$frontpage;
+				global $menu_defs_v2;
 
 				$awt->start("menuedit_ver2");
 				if (is_array($menu_defs_v2))
@@ -312,10 +310,6 @@ classload("cache","validator","defs");
 					while (list($id,$name) = each($menu_defs_v2))
 					{
 						$this->req_draw_menu($id,$name,&$path,false);
-						if ($this->sel_section == $frontpage)
-						{
-							$this->do_seealso_items($this->mar[$id],$name);
-						}
 					}
 				}
 				$awt->stop("menuedit_ver2");
@@ -813,7 +807,6 @@ classload("cache","validator","defs");
 					objects.last as last,
 					objects.jrk as jrk,
 					objects.alias as alias,
-					objects.brother_of as brother_of,
 					menu.link as link,
 					menu.type as mtype,
 					menu.clickable as clickable,
@@ -823,9 +816,7 @@ classload("cache","validator","defs");
 					menu.hide_noact as hide_noact,
 					menu.mid as mid,
 					menu.is_shop as is_shop,
-					menu.seealso as seealso,
-					menu.shop_id as shop_id,
-					menu.width as width
+					menu.shop_id as shop_id
 				FROM objects 
 					LEFT JOIN menu ON menu.id = objects.oid
 					WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
@@ -1066,13 +1057,13 @@ classload("cache","validator","defs");
 				$com = $all_menus ? "all_menus" : serialize($sets);
 				$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
 				$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
-				$this->_log("promo", "Muutis promo kasti $title");
+				$this->log_action($GLOBALS["uid"], "promo", "Muutis promo kasti $title");
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent,"name" => $title,"class_id" => CL_PROMO,"comment" => $all_menus ? "all_menus" : serialize($sets),"status" => 1,"last" => $type));
 				$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
-				$this->_log("promo", "Lisas promo kasti $title");
+				$this->log_action($GLOBALS["uid"], "promo", "Lisas promo kasti $title");
 			}
 			return $id;
 		}
@@ -1612,16 +1603,17 @@ classload("cache","validator","defs");
 			$can_paste = "";
 			$can_add_promo = "";
 
-			global $cut_objects;
 			// ja lühikesed muutujad imevad. so...
 			//$ca = $cp = $ap = "";
 			if ($this->can("add",$parent))
 			{
 				$can_add = $this->parse("ADD_CAT");
-				if (count($cut_objects) > 0)
-				{
-					$can_paste = $this->parse("PASTE");
-				}
+				//see kopeerimie osa siin on üsna nork. 
+				// mis siis, kui 2 kasutajat korraga koeeprida yritavad? molemad margivad mingid menyyd ära (copied = 1)
+				// ja see, kes esimesena "paste" teeb saab nad koik endale.
+
+				// yx voimalik lahendys mul on, aga see vajab pohjalikumat labimotlemist.
+				$can_paste = $this->db_fetch_field("SELECT count(*) as cnt FROM menu where is_copied = 1","cnt") ? $this->parse("PASTE") : "";
 				$can_add_promo = $this->parse("CAN_ADD_PROMO");
 			}
 			
@@ -1650,18 +1642,17 @@ classload("cache","validator","defs");
 				ORDER BY $sortby $order";
 			$this->db_query($q);
 
-			$cut = $this->parse("CUT");
-			$nocut = $this->parse("NORMAL");
-
 			while ($row = $this->db_next())
 			{
 				if (!$this->can("view",$row[oid]))
 					continue;
 
-				$r_id = ($row["class_id"] == CL_BROTHER ? $row["brother_of"] : $row["oid"]);
+				if ($row[class_id] == CL_BROTHER)
+				{
+					$row[oid] = $row[brother_of];
+				}
 
 				$this->vars(array(
-				"is_cut"				=> ($cut_objects[$row["oid"]] ? $cut : $nocut),
 				"name"					=> $row[name],
 				"menu_id"				=> $row[oid], 
 				"menu_order"		=> $row[jrk], 
@@ -1673,8 +1664,7 @@ classload("cache","validator","defs");
 				"modified"			=> $this->time2date($row[modified],2),
 				"modifiedby"		=> $row[modifiedby],
 				"delete"				=> $this->mk_orb("delete", array("parent" => $parent,"id" => $row[oid],"period" => $period)),
-				"r_menu_id"			=> $r_id,
-				"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $r_id,"period" => $period))));
+				"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $row[oid],"period" => $period))));
 
 				$this->vars(array(
 					"NFIRST" => $this->can("order",$row[oid]) ? $this->parse("NFIRST") : "",
@@ -1690,7 +1680,7 @@ classload("cache","validator","defs");
 			
 			$this->vars(array(
 				"LINE" => $l,
-				"reforb"	=> $this->mk_reforb("submit_order", array("parent" => $parent,"period" => $period,"from_menu" => 1)),
+				"reforb"	=> $this->mk_reforb("submit_order", array("parent" => $parent,"period" => $period)),
 				"order1" => $sortby == "name" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
 				"sortedimg1"	=> $sortby == "name" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
 				"order2"=> $sortby == "jrk" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
@@ -1703,9 +1693,7 @@ classload("cache","validator","defs");
 				"sortedimg5"	=> $sortby == "status" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
 				"order6"=> $sortby == "periodic" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
 				"sortedimg6"	=> $sortby == "periodic" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-				"yah"	=> $this->mk_path($parent,"",0,false),
-				"cut" => $this->mk_orb("cut_menus", array("parent" => $parent)),
-				"paste" => $this->mk_orb("paste_menus", array("parent" => $parent))
+				"yah"	=> $this->mk_path($parent,"",0,false)
 			));
 			return $this->parse();
 		}
@@ -2323,28 +2311,6 @@ classload("cache","validator","defs");
 				{
 					$nn = "number = '$number',";
 				}
-
-				global $lang_id;
-				// teeme seealso korda.
-				if (is_array($seealso))
-				{
-					$sa = unserialize($menu["seealso"]);	// v6tame vana
-					$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
-
-					reset($seealso);
-					while (list(,$sid) = each($seealso))
-					{
-						$sa[$lang_id][$sid] = $sid;					// ja paneme uued itemid asemele
-					}
-					$seealso = serialize($sa);
-				}
-				else
-				{
-					$sa = unserialize($menu["seealso"]);	// v6tame vana
-					$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
-					$seealso = serialize($sa);						
-				}
-
 				$this->upd_object($charr);
 				$this->_log("menuedit","Muutis men&uuml;&uuml;d $name");
 				$q = "UPDATE menu SET 
@@ -2360,11 +2326,9 @@ classload("cache","validator","defs");
 								is_shop = '$is_shop',
 								shop_id = '$shop',
 								links = '$links',
-								width = '$width',
 								$tt
 								$nn
 								sss = '$sss',
-								seealso = '$seealso',
 								pers = '$pers',
 								admin_feature = '$admin_feature'
 								WHERE id = '$id'";
@@ -2666,9 +2630,7 @@ classload("cache","validator","defs");
 											 menu.icon_id as icon_id,
 											 menu.admin_feature as admin_feature,
 											 menu.is_shop as is_shop,
-											 menu.shop_id as shop_id,
-											 menu.seealso as seealso,
-											 menu.width as width
+											 menu.shop_id as shop_id
 											 FROM objects 
 											 LEFT JOIN menu ON menu.id = objects.oid
 											 WHERE oid = $id");
@@ -2734,54 +2696,50 @@ classload("cache","validator","defs");
 			$sh = new shop;
 			$shs = $sh->get_list();
 
-			$sa = unserialize($row["seealso"]);
-			$oblist = $ob->get_list();
-			$this->vars(array("parent"			=> $row["parent"], 
-												"seealso"			=> $this->multiple_option_list($sa[$GLOBALS["lang_id"]],$oblist),
+			$this->vars(array("parent"			=> $row[parent], 
 												"ADMIN_FEATURE"	=> $af,
-												"name"				=> $row["name"], 
-												"number"			=> $row["number"],
-												"comment"			=> $row["comment"], 
-												"links"				=> checked($row["links"]), 
+												"name"				=> $row[name], 
+												"number"			=> $row[number],
+												"comment"			=> $row[comment], 
+												"links"				=> checked($row[links]), 
 												"id"					=> $id,
-												"active"	    => ($row["status"] == 2) ? "checked" : "",
-												"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
-												"hide_noact"   => ($row["hide_noact"] == 1) ? "checked" : "",
-												"alias"				=> $row["alias"],
-												"created"			=> $this->time2date($row["created"],2),
-												"target"		=> ($row["target"]) ? "checked" : "",
-												"autoactivate" => ($row["autoactivate"]) ? "checked" : "",
-                        "autodeactivate" => ($row["autodeactivate"]) ? "checked" : "",
+												"active"	    => ($row[status] == 2) ? "checked" : "",
+												"clickable"	    => ($row[clickable] == 1) ? "checked" : "",
+												"hide_noact"   => ($row[hide_noact] == 1) ? "checked" : "",
+												"alias"				=> $row[alias],
+												"created"			=> $this->time2date($row[created],2),
+												"target"		=> ($row[target]) ? "checked" : "",
+												"autoactivate" => ($row[autoactivate]) ? "checked" : "",
+                        "autodeactivate" => ($row[autodeactivate]) ? "checked" : "",
                         "activate_at" => $d_edit->gen_edit_form("activate_at",$activate_at),
                         "deactivate_at" => $d_edit->gen_edit_form("deactivate_at",$deactivate_at),
-												"createdby"		=> $row["createdby"],
-												"modified"		=> $this->time2date($row["modified"],2),
-												"modifiedby"	=> $row["modifiedby"],
-												"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
-												"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
-												"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
-												"section"			=> $this->multiple_option_list($sets["section"],$oblist),
-												"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
-												"link"				=> $row["link"],
-												"sep_checked"	=> ($row["type"] == 4 ? "CHECKED" : ""),
-												"mid"	=> ($row["mid"] == 1 ? "CHECKED" : ""),
-												"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
+												"createdby"		=> $row[createdby],
+												"modified"		=> $this->time2date($row[modified],2),
+												"modifiedby"	=> $row[modifiedby],
+												"tpl_edit" => $this->option_list($row[tpl_edit],$edit_templates),
+												"tpl_view" => $this->option_list($row[tpl_view],$long_templates),
+												"tpl_lead" => $this->option_list($row[tpl_lead],$short_templates),
+												"section"			=> $this->multiple_option_list($sets[section],$ob->get_list()),
+												"sss"					=> $this->multiple_option_list(unserialize($row[sss]),$ob->get_list()),
+												"link"				=> $row[link],
+												"sep_checked"	=> ($row[type] == 4 ? "CHECKED" : ""),
+												"mid"	=> ($row[mid] == 1 ? "CHECKED" : ""),
+												"doc_checked"	=> ($row[type] == 6 ? "CHECKED" : ""),
 												"sections"		=> $this->multiple_option_list($sar,$ob->get_list(false,true)),
-												"real_id"			=> $row["brother_of"],
+												"real_id"			=> $row[brother_of],
 												"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
-												"ndocs"				=> $row["ndocs"],
+												"ndocs"				=> $row[ndocs],
 												"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
-												"icon"				=> $row["icon_id"] ? 
-												"<img src='".$GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row["icon_id"]."'>" : "",
+												"icon"				=> $row[icon_id] ? 
+												"<img src='".$GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row[icon_id]."'>" : "",
 												"IS_LAST"			=> $il,
 												"shop"				=> $this->picker($row["shop_id"],$shs),
-												"is_shop"			=> checked($row["is_shop"]),
-												"width" => $row["width"]
+												"is_shop"			=> checked($row["is_shop"])
 												));
 
 			$this->vars(array(
-				"CAN_BROTHER" => $row["class_id"] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
-				"IS_BROTHER" => $row["class_id"] == CL_PSEUDO ? "" : $this->parse("IS_BROTHER"),
+				"CAN_BROTHER" => $row[class_id] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
+				"IS_BROTHER" => $row[class_id] == CL_PSEUDO ? "" : $this->parse("IS_BROTHER"),
 				"IS_SHOP"	=> ($row["is_shop"] ? $this->parse("IS_SHOP") : "")
 			));
 
@@ -2946,13 +2904,8 @@ classload("cache","validator","defs");
 				$this->level--;
 				return 0;
 			}
-
-			// make the subtemplate names for this and the next level
-			$mn = "MENU_".$name."_L".$this->level."_ITEM";
-			$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
-			$this->vars(array($mn => ""));
-
-			$in_path = in_array($this->mar[$parent]["oid"],$path);
+			
+			$in_path = in_array($row[parent],$path);
 			$parent_tpl = $this->is_parent_tpl($mn2, $mn);
 			if (!(($in_path||$this->level == 1)||$parent_tpl||$ignore_path))
 			{
@@ -2964,32 +2917,31 @@ classload("cache","validator","defs");
 				return 0;
 			}
 			
+			// make the subtemplate names for this and the next level
+			$mn = "MENU_".$name."_L".$this->level."_ITEM";
+			$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
+			$this->vars(array($mn => ""));
+
 			// go over the menus on this level
 			reset($this->mpr[$parent]);
 			while (list(,$row) = each($this->mpr[$parent]))
 			{
 				// only show content menus
-				if ($row["mtype"] != MN_CONTENT)
+				if ($row[mtype] != MN_CONTENT)
 				{
 					continue;
 				}
-				if ($row["hide_noact"])
+				if ($row[hide_noact])
 				{
 					// also go through the menus below this one to find out if there are any documents beneath those
 					// since then we must show the menu
-					if (!$this->has_sub_dox($row["oid"]))
+					if (!$this->has_sub_dox($row[oid]))
 					{
 						continue;
 					}
 				}
 
-				// check if this menu is THE selected menu
-				if ($this->sel_section == $row["oid"] && $this->is_template("MENU_".$name."_SEEALSO_ITEM"))
-				{
-					$this->do_seealso_items($row,$name);
-				}
-
-				$this->vars(array($mn2."_N" => ""));
+				$this->vars(array($mn2 => "", $mn2."_N" => ""));
 				$ap = "";
 				if ($this->is_template($mn."_N"))
 				{
@@ -3003,18 +2955,18 @@ classload("cache","validator","defs");
 					}
 				}
 
-				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
+				$n = $this->req_draw_menu($row[oid], $name, &$path,$parent_tpl);
 
 				if ($cnt == 0 && $this->is_template($mn."_BEGIN"))
 				{
 					$ap.="_BEGIN";	// first one of this level menus
 				};
-				if (in_array($row["oid"],$path) && $row["clickable"] == 1)
+				if (in_array($row[oid],$path) && $row[clickable] == 1)
 				{
 					$ap.="_SEL";		// a selected menu
 				};
 
-				if ($row["clickable"] != 1)
+				if ($row[clickable] != 1)
 				{
 					$ap.="_SEP";		// non-clickable menu
 				};
@@ -3029,7 +2981,7 @@ classload("cache","validator","defs");
 					$ap = "";	
 				};
 
-				if (is_array($this->mpr[$row["oid"]]))
+				if (is_array($this->mpr[$row[oid]]))
 				{
 					$hs = $this->parse("HAS_SUBITEMS_".$name);
 				}
@@ -3039,27 +2991,22 @@ classload("cache","validator","defs");
 				}
 				$this->vars(array("HAS_SUBITEMS_".$name => $hs));
 
-				if ($row["brother_of"])
+				if ($row[link] != "")
 				{
-					$row = $this->mar[$row["brother_of"]];
-				}
-
-				if ($row["link"] != "")
-				{
-					$link = $row["link"];
+					$link = $row[link];
 				}
 				else
 				{
 					$link = $baseurl."/";
-					$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+					$link .= ($row[alias] != "") ? $row[alias] : "index." . $ext . "/section=" . $row[oid];
 				}
 
-				$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
-				$this->vars(array("text" 		=> $row["name"],
+				$target = ($row[target] == 1) ? sprintf("target='%s'","_new") : "";
+				$this->vars(array("text" 		=> $row[name],
 													"link" 		=> $link,
-													"section"	=> $row["oid"],
+													"section"	=> $row[oid],
 													"target" 	=> $target,
-													"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
+													"image"		=> ($row[img_url] != "" ? "<img src='".$row[img_url]."' border='0'>" : "")));
 
 				$l.=$this->parse($mn.$ap);
 				$this->vars(array($mn.$ap => ""));
@@ -3069,48 +3016,6 @@ classload("cache","validator","defs");
 			$this->level--;
 			return $cnt;
 		}
-
-	////
-	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
-	function do_seealso_items($row,$name)
-	{
-		global $ext,$baseurl,$lang_id;
-		$sa = unserialize($row["seealso"]);
-		if (is_array($sa[$lang_id]))
-		{
-			reset($sa[$lang_id]);
-			while (list($said,) = each($sa[$lang_id]))
-			{
-				$samenu = $this->mar[$said];
-				if (!is_array($samenu))
-				{
-					// the menu was not loaded. load it.
-					$this->save_handle();
-					$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
-					$samenu = $this->db_next();
-					$this->mar[$said] = $samenu;
-					$this->restore_handle();
-				}
-
-				if ($samenu[link] != "")
-				{
-					$link = $samenu[link];
-				}
-				else
-				{
-					$link = $baseurl."/";
-					$link .= ($samenu[alias] != "") ? $samenu[alias] : "index." . $ext . "/section=" . $samenu[oid];
-				}
-
-				$this->vars(array(
-					"target" => $samenu["target"] ? "target=\"blank\"" : "",
-					"link" => $link,
-					"text" => $samenu["name"]
-				));
-				$this->parse("MENU_".$name."_SEEALSO_ITEM");
-			}
-		}
-	}
 
 	////
 	// !exports menu $id and all below it
@@ -3291,14 +3196,7 @@ classload("cache","validator","defs");
 			}
 		}
 
-		if ($from_menu)
-		{
-			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		}
+		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 	}
 
 	////
@@ -3361,14 +3259,7 @@ classload("cache","validator","defs");
 			}
 		}
 		$GLOBALS["copied_objects"] = array();
-		if ($from_menu)
-		{
-			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		}
+		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 	}
 
 	function o_delete($arr)
@@ -3463,8 +3354,6 @@ classload("cache","validator","defs");
 		}
 		else
 		{
-			$this->left_pane = false;
-			$this->right_pane = false;
 			return $sh_id;
 		}
 	}
@@ -3939,8 +3828,7 @@ classload("cache","validator","defs");
 	{
 		classload("shop");
 		$sh = new shop;
-		$shop = $sh->get($shop_id);
-		return $sh->show(array("parent" => $shop["root_menu"],"id" => $shop_id));
+		return $sh->show($section,$shop_id);
 	}
 }
 ?>

@@ -1,0 +1,156 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="groups">
+
+		<action name="list_grps_user">
+			<function name="list_grps_user">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_user_grp">
+			<function name="add_user_grp">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete_user_grp">
+			<function name="delete_user_grp">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_user_grp">
+			<function name="change_user_grp">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_user_grp">
+			<function name="submit_user_grp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="user_grp_members">
+			<function name="user_grp_members">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_user_grp_members">
+			<function name="submit_user_grp_members">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_user_grp_priorities">
+			<function name="submit_user_grp_priorities">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="gen_pick_list">
+			<function name="gen_pick_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="list_grps">
+			<function name="list_grps">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_priorities">
+			<function name="submit_priorities">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="gid"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+					<optional name="search_form"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_grp">
+			<function name="submit_grp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_acl_groups">
+			<function name="submit_acl_groups">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="delete_grp">
+				<arguments>
+					<required name="parent"/>
+					<required name="gid"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="mk_grpframe">
+			<function name="mk_grpframe">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="grp_members">
+			<function name="grp_members">
+				<arguments>
+					<required name="gid"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_grp_members">
+			<function name="submit_grp_members">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

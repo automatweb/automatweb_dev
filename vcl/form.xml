@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<form>
+
+<layout>
+	<row>
+		<caption value="Kasutajanimi"/>
+		<element type="text" size="30" field="uid"/>
+	</row>
+
+	<row>
+		<caption value="Parool"/>
+		<element type="password" size="30" field="password"/>
+	</row>
+
+	<row>
+		<caption value="Parool 2x"/>
+		<element type="password2" size="30" field="password2"/>
+	</row>
+</layout>
+
+</form>

@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+<header_normal   value="ftitle_normal"/>
+<header_sortable value="ftitle_sortable"/>
+<header_sorted   value="ftitle_sorted"/>
+<content_style1  value="fcontent_line1"/>
+<content_style2  value="fcontent_line2"/>
+<style_alfa	 value="fcontent_line2"/>
+<content_style1_selected value="fcontent_line1_sorted"/>
+<content_style2_selected value="fcontent_line2_sorted"/>
+<tableattribs border="0" cellspacing="1" cellpadding="2" width="700"/>
+<alpha/>
+<default_order value="id"/>
+</definitions>
+
+<actions>
+<action link="#" caption="Muuda"/>
+<action link="#" caption="Kustuta"/>
+</actions>
+
+<data>
+<field name="id" caption="ID" talign="center" sortable="1"/>
+<field name="name" caption="Nimi" talign="center" sortable="1" searchable="1" />
+<field name="pikkus" caption="Pikkus" talign="center" sortable="1" searchable="1"/>
+</data>
+
+</tabledef>
