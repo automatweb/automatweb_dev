@@ -161,7 +161,7 @@ class db_table_admin extends class_base
 		$tbp->add_tab(array(
 			'active' => true,
 			'caption' => 'Tulbad',
-			'link' => $this->ru
+			'link' => $this->REQUEST_URI
 		));
 		$tbp->add_tab(array(
 			'active' => false,
