@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.7 2004/06/04 11:43:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.8 2004/07/02 16:22:10 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
 @default table=objects
 @default group=general
 
-@property name type=textbox
+@property name type=textbox 
 @caption Pealkiri
 
 @default table=forum_comments
@@ -14,14 +14,17 @@
 @property uname type=textbox
 @caption Nimi
 
-@property uemail type=textbox
+@property uemail type=textbox 
 @caption E-post
 
-@property remember type=checkbox store=no
+@property remember type=checkbox store=no 
 @caption Jäta nimi ja e-post meelde
 
 @property commtext type=textarea 
 @caption Kommentaar
+
+@property ip type=textbox 
+@caption IP
 
 @classinfo syslog_type=ST_COMMENT no_status=1
 @tableinfo forum_comments index=id master_table=objects master_index=oid
@@ -48,9 +51,6 @@ class forum_comment extends class_base
 {
 	function forum_comment()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			'tpldir' => 'forum',
 			'clid' => CL_COMMENT
@@ -64,14 +64,14 @@ class forum_comment extends class_base
 		switch($data["name"])
 		{
 			case "uname":
-				if (!is_oid($args["obj_inst"]->id()))
+				if (is_object($args["obj_inst"]) && !is_oid($args["obj_inst"]->id()))
 				{
 					$data["value"] = $_COOKIE["aw_mb_name"];
 					$this->dequote($data["value"]);
 				};
 				break;
 			case "uemail":
-				if (!is_oid($args["obj_inst"]->id()))
+				if (is_object($args["obj_inst"]) && !is_oid($args["obj_inst"]->id()))
 				{
 					$data["value"] = $_COOKIE["aw_mb_mail"];
 					$this->dequote($data["value"]);
@@ -79,8 +79,10 @@ class forum_comment extends class_base
 				};
 				break;
 			case "comment":
+			case "ip":
 				$retval = PROP_IGNORE;
 				break;
+
 		}
 		return $retval;
 	}
