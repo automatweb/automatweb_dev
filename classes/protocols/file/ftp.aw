@@ -1,21 +1,20 @@
 <?php
-
 /*
 
 @classinfo syslog_type=ST_FTP_LOGIN
 
-@groupinfo general caption=Üldine
-
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property server type=textbox field=meta method=serialize
+@property server type=textbox 
 @caption Server
 
-@property username type=textbox field=meta method=serialize
+@property username type=textbox 
 @caption Kasutajanimi
 
-@property password type=password field=meta method=serialize
+@property password type=password 
 @caption Parool
 
 */
@@ -31,14 +30,13 @@ class ftp extends class_base
 	function ftp()
 	{
 		$this->init(array(
-			'tpldir' => 'protocols/file/ftp',
 			'clid' => CL_FTP_LOGIN
 		));
 	}
 
 	function is_available()
 	{
-		return function_exists("ftp_connect");
+		return extension_loaded("ftp");
 	}
 
 	////
