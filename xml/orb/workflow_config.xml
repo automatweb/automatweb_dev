@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="workflow_config" folder="workflow" extends="class_base">
+	</class>
+</orb>
+		
