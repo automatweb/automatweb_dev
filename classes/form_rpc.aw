@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.1 2001/07/26 21:13:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.2 2001/07/27 01:50:30 duke Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("form");
 class form_rpc extends form {
@@ -16,6 +16,7 @@ class form_rpc extends form {
 		$meta = $this->get_xml_input(array(
 			"alias" => $args["alias"],
 		));
+		
 
 		// iga vormi submitmine eraldi
 		foreach($meta["forms"] as $key => $form_id)
@@ -27,12 +28,23 @@ class form_rpc extends form {
 			{
 				if ($props["form"] == $form_id)
 				{
-					$el_values[$id] = $args["elements"][$props["name"]];
+					// radiobuttons get special handling
+					if ($props["type"] == "radiobutton")
+					{
+						$group = $props["group"];
+						if ($args["elements"]["radio_$group"] == $id)
+						{
+							$el_values["radio_group_$group"] = $args["elements"]["radio_$group"];
+						}
+					}
+					else
+					{
+						$el_values[$id] = $args["elements"][$props["name"]];
+					};
 				};
 			}
 		
 			$datablock["id"] = $form_id;
-			$datablock["parent"] = $object["parent"];
 
 			$datablock["values"] = $el_values;
  

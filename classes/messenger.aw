@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.86 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.87 2001/07/27 01:50:30 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -1990,7 +1990,7 @@ class messenger extends menuedit_light
 				$tpl = "conf_general.tpl";
 				$conf = $this->msgconf;
 				$vars = array(
-						"msg_on_page" => $this->picker($conf["msg_on_page"],array("10" => "10", "20"=>"20","30"=>"30","40"=>"40")),
+						"msg_on_page" => $this->picker($conf["msg_on_page"],array("10" => "10", "20"=>"20","30"=>"30","40"=>"40","50" => "50","75" => "75","100" => "100","200" => "200","500" => "500")),
 						"msg_store_sent" => checked($conf["msg_store_sent"]),
 						"msg_ondelete" => $this->picker($conf["msg_ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
 						"msg_confirm_send" => checked($conf["msg_confirm_send"]),

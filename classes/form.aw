@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.43 2001/07/26 21:13:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.44 2001/07/27 01:50:30 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -808,77 +808,6 @@ class form extends form_base
 		return $html;
 	}
 
-	function rpc_handle($args = array())
-	{
-		// fetchime XML sisendi andmed
-		$meta = $this->get_xml_input(array(
-				"alias" => $args["alias"],
-		));
-
-		$form_id = $meta["forms"][0];
-
-		$el_values = array();
-
-		foreach($meta["elements"] as $id => $props)
-		{
-			$el_values[$id] = $args["elements"][$props["name"]];
-		}
-
-		$el_values["form_id"] = $form_id;
-
-		$datablock = array(
-			"form_id" => $form_id,
-		);
-
-
-
-		print "<pre>";
-		print_r($retval);
-		print "</pre>";
-
-		// entry tuleb salvestada parenti RPC_ENTRIES alla
-		$retval = array(
-			"success" => "yes",
-		);
-		return $retval;
-	}
-
-	////
-	// Beginning of a saner version of process_entry. Saner because it doesn't load the values
-	// directly from the global scope
-	// arguments:
-	// id(int) - millise vormi sisse andmed laadida?
-	// parent(int) - millise objekti alla entry objekt teha
-	// entry_id(optional)(int) - kui antud, siis salvestatakse olemasolev entry üle
-	// vars(array) - pairs of element_id => value 
-	function proc_entry($args = array())
-	{
-		extract($args);
-		// load the originating form
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
-		//$this->load($id);
-		// right now we only handle new entries
-		//$entry_id = $this->new_object(array(
-		//			"parent" => $parent,
-		//			"class_id" => CL_FORM_ENTRY,
-		//			"name" => "form entry",
-		//));
-		
-		//for ($i=0; $i < $this->arr["rows"]; $i++)
-		//{
-		//	for ($a=0; $a < $this->arr["cols"]; $a++)
-		//	{
-		//		// form_cell->process_entry
-		//		$this->arr["contents"][$i][$a] -> proc_entry(&$this->entry, $entry_id);
-		//	}
-		///}
-		
-
-
-	}
-
 
 	////
 	// !saves the entry for the form $id, if $entry_id specified, updates it instead of creating a new one
@@ -905,8 +834,14 @@ class form extends form_base
 		if (!$entry_id)
 		{
 			$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
+			$params = array(
+				"parent" => $parent,
+				"0"	=> "form_entry",
+				"class_id" => CL_FORM_ENTRY,
+				"lang_id" => $lang_id,
+			);
 			// what the hell is that single "form_entry" doing there in the middle?
-			$entry_id = $this->new_object(array("parent" => $parent, "form_entry", "class_id" => CL_FORM_ENTRY));
+			$entry_id = $this->new_object($params);
 			$this->entry_id = $entry_id;
 			$new = true;
 		}
@@ -2766,13 +2701,23 @@ class form extends form_base
 		return $this->do_menu_return();
 	}
 
+	////
+	// !Salvestab vormi settingutes määratud folderite asukohad.
 	function save_folders($arr)
 	{
 		extract($arr);
 		$this->load($id);
+		
+		// ff_folder - kuhu pannakse vormi sisestused?
 		$this->arr["ff_folder"] = $ff_folder;
+
+		// kataloog, kuhu lisatakse uued elemendid
 		$this->arr["newel_parent"] = $newel_parent;
+
+		// kataloog, kuhu pannakse rebitud elemendid
 		$this->arr["tear_folder"] = $tear_folder;
+
+		// kataloogid, kuhu saab uusi elemente salvestada
 		$this->arr["el_menus"] = "";
 		if (is_array($el_menus))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.17 2001/07/26 16:49:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.18 2001/07/27 01:50:30 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -56,7 +56,6 @@ class form_base extends aw_template
 	function load($id = 0)
 	{
 		global $awt;
-		$awt->start("form:load");
 		if ($id == 0)
 		{
 			// see tuleb form klassi konstruktorist
@@ -91,7 +90,6 @@ class form_base extends aw_template
 
 		$this->normalize();
 		$this->load_elements();
-		$awt->stop("form:load");
 	}
 
 	////
@@ -1064,9 +1062,11 @@ class form_base extends aw_template
 	// I realize that this is slow, but you're welcome to improve this
 	// arguments:
 	// id(int) - id of the form, which we are to load
+	// key(int) - what value to use as the key of the resulting array. default is the name
 	function get_form_elements($args = array())
 	{
 		extract($args);
+		$arrkey = ($args["key"]) ? $args["key"] : "name";
 		$this->load($id);
 		$retval = array();
 		for ($i = 0; $i < $this->arr["rows"]; $i++)
@@ -1089,7 +1089,7 @@ class form_base extends aw_template
 					// is probably just captions 'n stuff
 					if ($val["type"])
 					{
-						$retval[$val["name"]] = $val;
+						$retval[$val[$arrkey]] = $val;
 					};
 				};
 			}

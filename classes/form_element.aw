@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.16 2001/07/27 01:50:30 duke Exp $
+// form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
 $orb_defs["form_element"] = 
@@ -8,17 +10,7 @@ class form_element extends aw_template
 {
 	function form_element()
 	{
-		$this->db_init();
-
-		$this->eltypes = array(
-			"textbox" => array("admin_func" => "admin_textbox", "save_func" => "save_textbox", "show_func" => "show_textbox", "listbox")
-		);
-
-		global $lc_form;
-		if (is_array($lc_form))
-		{
-			$this->vars($lc_form);
-		}
+		// this is an abstract class and this constructor will never be called
 	}
 
 	////
@@ -169,8 +161,11 @@ class form_element extends aw_template
 			$gp="";
 			if ($this->arr["type"] == "radiobutton")
 			{
-				$this->vars(array("default_checked"		=> checked($this->arr["default"] == 1),
-													"cell_group"				=> $this->arr["group"]));
+				$this->vars(array(
+					"default_checked"		=> checked($this->arr["default"] == 1),
+					"cell_group"				=> $this->arr["group"],
+					"ch_value" => $this->arr["ch_value"]
+				));
 				$gp = $this->parse("RADIO_ITEMS");
 			}
 			
@@ -607,6 +602,7 @@ class form_element extends aw_template
 	function get_type()		{	return $this->arr["type"]; }
 	function get_row()		{ return $this->row; }
 	function get_col()		{ return $this->col; }
+	function get_el_group()		{ return $this->arr["group"]; }
 
 	function save_short()
 	{
@@ -1078,7 +1074,9 @@ class form_element extends aw_template
 	function core_process_entry(&$entry, $id,$prefix = "")
 	{
 		//// This is called for every single element in the form.
-
+		// $this->form->post_vars sisaldab $HTTP_POST_VARS väärtusi.
+		// the following code should be fixed to use only that and
+		// not import the variables from the local scope.
 		if ($this->arr["type"] == 'link')
 		{
 			$var = $prefix.$this->id."_text";
@@ -1128,7 +1126,7 @@ class form_element extends aw_template
 		else
 		if ($this->arr["type"] == "radiobutton")
 		{
-			$var = $prefix."radio_group_".$this->arr["group"];
+			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
 		}
 		else
 		if ($this->arr["type"] == "multiple")
@@ -1160,12 +1158,11 @@ class form_element extends aw_template
 		}
 		else
 		{
-			$var = $prefix.$this->id;
+			$var = $this->form->post_vars[$prefix.$this->id];
 		}
 
-		global $$var;
-		$entry[$this->id] = $$var;
-		$this->entry = $$var;
+		$entry[$this->id] = $var;
+		$this->entry = $var;
 		$this->entry_id = $id;
 	}
 

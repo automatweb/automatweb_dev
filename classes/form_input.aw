@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.3 2001/07/27 01:50:30 duke Exp $
 // form_input.aw - Tegeleb vormi sisestustega, hetkel ainult XML.
 global $orb_defs;
 $orb_defs["form_input"] = "xml";
@@ -111,18 +111,27 @@ class form_input extends form_base
 		$f = "";
 		$els = array();
 		$elements = $meta["elements"];
-		print "<pre>";
-		print_r($meta);
-		print "</pre>";
+		global $uid;
 		if (is_array($meta["forms"]))
 		{
 			foreach($meta["forms"] as $fid)
 			{
 				$c = "";
 				$tmp = $this->get_form_elements(array("id" => $fid)); 
-				$this->vars(array("fname" => $this->name));
+
+				$this->vars(array(
+					"fname" => $this->name,
+					"form_id" => $fid,
+				));
+
 				foreach($tmp as $tkey => $tval)
 				{
+					if ($uid == "duke2")
+					{
+						print "<pre>";
+						print_r($tval);
+						print "</pre>";
+					};
 					switch($tval["type"])
 					{
 						case "submit":
@@ -132,8 +141,18 @@ class form_input extends form_base
 							break;
 
 						default:
+
+							if ($tval["name"])
+							{
+								$name = $tval["name"];
+							}
+							else
+							{
+								$name = $elements[$tval["id"]]["name"];
+							};
+
 							$this->vars(array(
-								"name" => $tval["name"],
+								"name" => $name,
 								"type" => $tval["type"],
 								"id" => $tval["id"],
 								"extname" => $elements[$tval["id"]]["name"],
@@ -163,6 +182,25 @@ class form_input extends form_base
 	{
 		extract($args);
 		$data = array();
+				
+
+		$loaded_forms = array();
+
+		$el_data = array();
+
+		// get element information for all forms
+		foreach($form as $fid)
+		{
+			// each form is loaded only once
+			if (!$loaded_forms[$fid])
+			{
+				$tmp = $this->get_form_elements(array("id" => $fid,"key" => "id"));
+				$loaded_forms[$fid] = 1;
+				// mommy, we can add arrays
+				$el_data = $el_data + $tmp;
+			};
+		};
+
 		foreach($exists as $key => $val)
 		{
 			// store only active elements
@@ -171,6 +209,8 @@ class form_input extends form_base
 				$data[$key] = array(
 						"name" => $extname[$key],
 						"type" => $type[$key],
+						"form" => $form[$key],
+						"group" => $el_data[$key]["group"],
 				);
 			};
 		};

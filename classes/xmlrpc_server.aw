@@ -179,6 +179,12 @@ class xmlrpc_server {
 	// Parsib xml-rpc requesti andmeblokiks
 	function parse_rpc_struct($args = array())
 	{
+		global $lang_id;
+		if (!$lang_id)
+		{
+			$lang_id = 1;
+		};
+
 		$this->_init_parser();
 		classload("xml_support");
 
