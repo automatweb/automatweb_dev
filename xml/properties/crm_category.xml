@@ -1,8 +1,39 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>img_upload</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <props>
+                  <num_0>file</num_0>
+                  <num_1>file_show</num_1>
+            </props>
+            <store>no</store>
+            <field>img_upload</field>
+            <caption>Pilt</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CATEGORY</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <IMAGE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </IMAGE>
+            <CATEGORY>
+                  <value>2</value>
+                  <clid>CL_CRM_CATEGORY</clid>
+                  <caption>Alam kategooria</caption>
+            </CATEGORY>
+            <CUSTOMER>
+                  <value>3</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+      </reltypes>
 </properties>
 

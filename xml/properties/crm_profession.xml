@@ -1,8 +1,31 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>name_in_plural</name>
+            <table>kliendibaas_amet</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name_in_plural</field>
+            <caption>Nimi mitmuses</caption>
+            <comment>Ametinimetus mitmuses</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>
             <no_status>1</no_status>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_amet>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_amet>
+      </tableinfo>
+      <reltypes>
+            <SIMILAR_PROFESSION>
+                  <value>1</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Sarnane amet</caption>
+            </SIMILAR_PROFESSION>
+      </reltypes>
 </properties>
 

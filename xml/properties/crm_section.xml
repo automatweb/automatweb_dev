@@ -4,5 +4,22 @@
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <SUBSECTION>
+                  <value>1</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Alamüksus</caption>
+            </SUBSECTION>
+            <MEMBER>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Liige</caption>
+            </MEMBER>
+            <PROFESSIONS>
+                  <value>3</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Üksuse võimalikud ametid</caption>
+            </PROFESSIONS>
+      </reltypes>
 </properties>
 

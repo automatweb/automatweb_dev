@@ -415,6 +415,11 @@
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Üksus</caption>
             </SECTION>
+            <HANDLER>
+                  <value>22</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Kelle kliendihaldur</caption>
+            </HANDLER>
       </reltypes>
 </properties>
 

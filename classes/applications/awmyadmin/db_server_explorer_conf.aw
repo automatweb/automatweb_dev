@@ -11,15 +11,20 @@
 	@property all_servers type=checkbox ch_value=1
 	@caption K&otilde;ik serverid
 
-	@property servers type=select multiple=1 size=5
+	@property servers type=relpicker reltype=RELTYPE_SERVER automatic=1 multiple=1 size=5
 	@caption Serverid, millest baase n&auml;idatakse
 
 	@property all_databases type=checkbox ch_value=1
 	@caption K&otilde;ik andmebaasid
 
-	@property databases type=select multiple=1 size=10
+	@property databases type=relpicker reltype=RELTYPE_DBLOGIN automatic=1 multiple=1 size=10
 	@caption Andmebaasid, mida n&auml;idatakse
 
+@reltype SERVER value=1 clid=CL_DB_SERVER_LOGIN
+@caption andmebaasi serveri login
+
+@reltype DBLOGIN value=1 clid=CL_DB_LOGIN
+@caption andmebaasi login
 
 */
 
@@ -38,13 +43,6 @@ class db_server_explorer_conf extends class_base
 		$data = &$args['prop'];
 		switch($data['name'])
 		{
-			case 'servers':
-				$data['options'] = $this->list_objects(array('class' => CL_DB_SERVER_LOGIN));
-				break;
-
-			case 'databases':
-				$data['options'] = $this->list_objects(array('class' => CL_DB_LOGIN));
-				break;
 		}
 		return PROP_OK;
 	}

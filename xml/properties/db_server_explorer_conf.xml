@@ -16,7 +16,9 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SERVER</reltype>
+            <automatic>1</automatic>
             <multiple>1</multiple>
             <size>5</size>
             <caption>Serverid, millest baase n&amp;auml;idatakse</caption>
@@ -37,7 +39,9 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DBLOGIN</reltype>
+            <automatic>1</automatic>
             <multiple>1</multiple>
             <size>10</size>
             <caption>Andmebaasid, mida n&amp;auml;idatakse</caption>
@@ -48,5 +52,17 @@
             <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
+      <reltypes>
+            <SERVER>
+                  <value>1</value>
+                  <clid>CL_DB_SERVER_LOGIN</clid>
+                  <caption>andmebaasi serveri login</caption>
+            </SERVER>
+            <DBLOGIN>
+                  <value>1</value>
+                  <clid>CL_DB_LOGIN</clid>
+                  <caption>andmebaasi login</caption>
+            </DBLOGIN>
+      </reltypes>
 </properties>
 

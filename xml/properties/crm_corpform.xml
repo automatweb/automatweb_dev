@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>shortname</name>
+            <table>kliendibaas_ettevotlusvorm</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>shortname</field>
+            <size>10</size>
+            <caption>Lühend</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -13,5 +22,12 @@
       <classinfo>
             <no_status>1</no_status>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_ettevotlusvorm>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_ettevotlusvorm>
+      </tableinfo>
 </properties>
 

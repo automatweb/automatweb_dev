@@ -57,6 +57,19 @@
             <caption>Aliastehaldur</caption>
       </property>
       <property>
+            <name>task_toolbar</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>
+            <![CDATA["Toolbar"]]>
+            </caption>
+      </property>
+      <property>
             <name>recurrence</name>
             <table>objects</table>
             <group>recurrence</group>
@@ -111,6 +124,18 @@
             <no_caption>1</no_caption>
             <caption>Kommentaarid</caption>
       </property>
+      <property>
+            <name>participant</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>cb_participant_selector</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Osalejad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -129,6 +154,9 @@
             <comments>
                   <caption>Kommentaarid</caption>
             </comments>
+            <participants>
+                  <caption>Osalejad</caption>
+            </participants>
       </groupinfo>
       <tableinfo>
             <documents>

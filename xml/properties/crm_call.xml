@@ -127,6 +127,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <CALLER>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Helistaja</caption>
+            </CALLER>
       </reltypes>
 </properties>
 

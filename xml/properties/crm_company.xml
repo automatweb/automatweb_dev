@@ -59,8 +59,7 @@
             <name>ettevotlusvorm</name>
             <table>kliendibaas_firma</table>
             <group>general</group>
-            <type>objpicker</type>
-            <clid>CL_CRM_CORPFORM</clid>
+            <type>chooser</type>
             <field>ettevotlusvorm</field>
             <caption>Õiguslik vorm</caption>
       </property>
@@ -115,13 +114,48 @@
             <caption>Kontaktisik</caption>
       </property>
       <property>
+            <name>old_human_resources</name>
+            <table>objects</table>
+            <group>oldcontacts</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>old_human_resources</field>
+            <caption>Nimekiri</caption>
+      </property>
+      <property>
+            <name>contact_toolbar</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>hbox_toolbar</parent>
+            <field>contact_toolbar</field>
+            <caption>
+            <![CDATA["The Green Button"]]>
+            </caption>
+      </property>
+      <property>
             <name>addresslist</name>
             <table>objects</table>
             <group>contacts2</group>
             <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_left</parent>
             <field>addresslist</field>
             <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>unit_listing_tree</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_left</parent>
+            <field>unit_listing_tree</field>
+            <caption>Puu</caption>
       </property>
       <property>
             <name>human_resources</name>
@@ -129,6 +163,8 @@
             <group>contacts2</group>
             <type>table</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
             <field>human_resources</field>
             <caption>Inimesed</caption>
       </property>
@@ -290,6 +326,48 @@
             <store>no</store>
             <field>jobsnotact</field>
       </property>
+      <property>
+            <name>customer_toolbar</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>customer_toolbar</field>
+            <caption>
+            <![CDATA["Klientide toolbar"]]>
+            </caption>
+      </property>
+      <property>
+            <name>customer_listing_tree</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>customer_hbox2</parent>
+            <field>customer_listing_tree</field>
+            <caption>Rühmade puu</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>customer_hbox2</parent>
+            <field>customer</field>
+            <caption>Kliendid</caption>
+      </property>
+      <property>
+            <name>buu</name>
+            <table>objects</table>
+            <group>my_customers</group>
+            <type>table</type>
+            <store>no</store>
+            <field>buu</field>
+            <caption>Buu</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -298,6 +376,11 @@
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
+            <oldcontacts>
+                  <caption>Nimekiri</caption>
+                  <parent>contacts</parent>
+                  <submit>no</submit>
+            </oldcontacts>
             <contacts2>
                   <caption>Kontaktid</caption>
                   <parent>contacts</parent>
@@ -342,12 +425,18 @@
                   <parent>personal</parent>
             </jobs>
             <relorg>
-                  <caption>Seotud organisatsioonid</caption>
+                  <caption>Kliendid</caption>
             </relorg>
             <customers>
                   <caption>Kliendid</caption>
                   <parent>relorg</parent>
+                  <submit>no</submit>
             </customers>
+            <my_customers>
+                  <caption>kliendid</caption>
+                  <parent>relorg</parent>
+                  <submit>no</submit>
+            </my_customers>
             <fcustomers>
                   <caption>Tulevased kliendid</caption>
                   <parent>relorg</parent>
@@ -493,6 +582,47 @@
                   <clid>CL_SHOP_ORDER</clid>
                   <caption>tellimus</caption>
             </ORDER>
+            <SECTION>
+                  <value>28</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Üksus</caption>
+            </SECTION>
+            <PROFESSIONS>
+                  <value>29</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Võimalikud ametinimetused</caption>
+            </PROFESSIONS>
+            <CATEGORY>
+                  <value>30</value>
+                  <clid>CL_CRM_CATEGORY</clid>
+                  <caption>Kategooria</caption>
+            </CATEGORY>
       </reltypes>
+      <layout>
+            <hbox_toolbar>
+                  <type>hbox</type>
+                  <group>contacts2</group>
+            </hbox_toolbar>
+            <hbox_others>
+                  <type>hbox</type>
+                  <group>contacts2</group>
+            </hbox_others>
+            <vbox_contacts_left>
+                  <type>vbox</type>
+                  <parent>hbox_others</parent>
+                  <group>contacts2</group>
+                  <width>30%</width>
+            </vbox_contacts_left>
+            <vbox_contacts_right>
+                  <type>vbox</type>
+                  <parent>hbox_others</parent>
+                  <group>contacts2</group>
+                  <width>70%</width>
+            </vbox_contacts_right>
+            <customer_hbox2>
+                  <type>hbox</type>
+                  <group>customers</group>
+            </customer_hbox2>
+      </layout>
 </properties>
 
