@@ -1,7 +1,4 @@
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awplanner.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 
 <form method="POST" action="reforb.{VAR:ext}" name="doc" onSubmit="doSubmit();return true;">
 

@@ -9,22 +9,12 @@ function box2(caption,url)
 	}
 }
 </script>
-
-
-
-
-
-
-
-			<!--1-->
             <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e2e2e2">
               <tr> 
                 <td>
 
-					<!--2-->
 			{VAR:TABS}
 
-					<!--4-->
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#3e5f94" height="1">
                     <tr> 
                       <td><img src="{VAR:baseurl}/img/trans.gif" width="435" height="1"></td>
@@ -36,11 +26,9 @@ function box2(caption,url)
 <!-- SUB: TOPIC -->
 <tr> 
 <td bgcolor="#ECECEC" class="text">
-
-<!--topic-->
 <a href="{VAR:threaded_topic_link}"><b>{VAR:topic}</b></a><br>
 Autor: <b>{VAR:from}</b>  ({VAR:created})<br>
-<img src="{VAR:baseurl}/img/trans.gif" border="0" width="1" height="10" alt=""><br>
+<br>
 {VAR:text}<br>
 </td>
 </tr>
@@ -49,49 +37,30 @@ Autor: <b>{VAR:from}</b>  ({VAR:created})<br>
 {VAR:rated}
 </td>
 </tr>
-
-
-<!--<tr><td bgcolor="#ECECEC" class="text"><img
-src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arvamusi</a>&nbsp;&nbsp;&nbsp;Hinne: {VAR:rate}&nbsp;</td></tr>-->
-
-<!--jooneke
-<tr><td align="right"><img src="{VAR:baseurl}/img/forum_joon2.gif" border="0" width="100%" height="2" alt=""></td></tr>-->
-							
 <!-- END SUB: TOPIC -->
 </table>
+
 <form method="POST" name="commform" action="reforb.{VAR:ext}">
 
-
-
-
-
-<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
 
 <tr> 
-<!--<td height="18" align="left" class="text"></td>-->
-
 			<TD align="right" class="textesileht">
 
 			<!-- SUB: PAGES -->
 			Vali lehekülg:&nbsp;
 
 			<!-- SUB: PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'>{VAR:ltext}</a>&nbsp;&nbsp;
+			<a href='{VAR:pagelink}'>{VAR:linktext}</a>&nbsp;&nbsp;
 			<!-- END SUB: PAGE -->
 			<!-- SUB: SEL_PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'><b>&gt;{VAR:ltext}&lt;</b></a>&nbsp;&nbsp;
+			<a href='{VAR:pagelink}'><b>&gt;{VAR:linktext}&lt;</b></a>&nbsp;&nbsp;
 			<!-- END SUB: SEL_PAGE -->
 		
 			<!-- END SUB: PAGES -->
 
 
 			</TD>
-			<!--<TD align="right">
-			
-			<input type="submit" value=" Hinda " class="mboardtextsmall">
-			<input type="hidden" name="action" value="submit_votes">
-			&nbsp;
-			</td>-->
 			</TR>
 			</TABLE>
 
@@ -101,18 +70,10 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
                 </td>
               </tr>
             </table>
-			<!--end 1-->
 
 
-
-
-
-
-<img src='{VAR:baseurl}/img/trans.gif' width="1" height="5" alt="" border="0"><br>
-
+<br>
 <a name="comments"></a>
-
-<!--begin komment-->
 
 <!-- SUB: message -->
 <table width=100% border=0 cellpadding=0 cellspacing=0 class="text">
@@ -147,7 +108,7 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
 
 </table>
 <!-- END SUB: message -->
-<!--end komment-->
+
 <!-- SUB: actions -->
 <table width="100%" border="0" cellspacing="0" cellpadding="1">
 <tr>
@@ -159,21 +120,12 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
 </table>
 <!-- END SUB: actions -->
 
-
-
-
-
-
-
 <table width="100%" border="0" cellspacing="0" cellpadding="1">
 <tr>
 <td class="text">
 
 
 {VAR:PAGES}
-
-
-
 
 </td>
 </tr>

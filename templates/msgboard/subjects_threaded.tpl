@@ -73,10 +73,10 @@ src="/img/new/nool_hall.gif">&nbsp;&nbsp;<a href="#comments">Loe selle teema arv
 			Vali lehekülg:&nbsp;
 
 			<!-- SUB: PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'>{VAR:ltext}</a>&nbsp;&nbsp;
+			<a href='{VAR:pagelink}'>{VAR:linktext}</a>&nbsp;&nbsp;
 			<!-- END SUB: PAGE -->
 			<!-- SUB: SEL_PAGE -->
-			<a href='/comments.{VAR:ext}?action=topics&page={VAR:pagenum}&forum_id={VAR:forum_id}'><b>&gt;{VAR:ltext}&lt;</b></a>&nbsp;&nbsp;
+			<a href='{VAR:pagelink}'><b>&gt;{VAR:linktext}&lt;</b></a>&nbsp;&nbsp;
 			<!-- END SUB: SEL_PAGE -->
 		
 			<!-- END SUB: PAGES -->

@@ -9,6 +9,7 @@ function save_as_obj()
 
 function sel_tmsp(form)
 {
+	alert(form);
 	tspid = form.def_span.options[form.def_span.selectedIndex].value;
 
 	url = form.def_url.value;

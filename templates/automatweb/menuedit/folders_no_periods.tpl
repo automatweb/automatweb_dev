@@ -1,8 +1,6 @@
 <html>
 <head>
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 <script src="{VAR:baseurl}/automatweb/js/ftiens4.js"></script>
 <script language=javascript>
 document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>			\

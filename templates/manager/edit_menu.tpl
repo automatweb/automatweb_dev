@@ -1,8 +1,7 @@
 <html>
 <head>
 <title></title>
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 <script src="{VAR:baseurl}/automatweb/js/mm.js"></script>
 </head>
 <body bgcolor="#eeeeee" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">

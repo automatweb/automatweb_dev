@@ -1,4 +1,183 @@
-BODY
+.caltableborderhele {
+background: #8AAABE;
+}
+
+
+.caltablebordertume {
+background: #001D45;
+}
+
+
+/* kalender paremal */
+
+
+.calmonthback {
+background: #C6C7A3;
+}
+
+.caldaysback {
+background: #F8F9D5;
+}
+
+.caldayname {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 10px;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	height: 17px;
+	color: #000000;
+	background: #FFFFFF;
+}
+
+.caldayname a {color: #000000; text-decoration: none;}
+.caldayname a:hover {color: #000000; text-decoration: none;}
+.caldayname a:visited {color: #000000; text-decoration: none;}
+.caldayname a:active {color: #000000; text-decoration: none;}
+
+
+.calday {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 10px;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	height: 17px;
+	color: #000000;
+}
+
+.calday a {color: #000000; text-decoration: none;}
+.calday a:hover {color: #450500; text-decoration: underline;}
+.calday a:visited {color: #000000; text-decoration: none;}
+.calday a:active {color: #450500; text-decoration: none;}
+
+
+.caltoday {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;	
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px;
+	height: 17px;
+	color: #000000;
+	background-image: URL('/automatweb/images/blue/cal_paev_raam.gif');
+}
+
+.caltoday a {color: #000000; text-decoration: none;}
+.caltoday a:hover {color: #450500; text-decoration: none;}
+.caltoday a:visited {color: #6D7477; text-decoration: none;}
+.caltoday a:active {color: #000000; text-decoration: none;}
+
+
+.caltodayevent {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;	
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px;
+	height: 17px;
+	color: #000000;
+	background: #FFFFFF;
+	background-image: URL('/automatweb/images/blue/cal_paev_raam.gif');
+}
+
+.caltodayevent a {color: #000000; text-decoration: none;}
+.caltodayevent a:hover {color: #450500; text-decoration: none;}
+.caltodayevent a:visited {color: #6D7477; text-decoration: none;}
+.caltodayevent a:active {color: #000000; text-decoration: none;}
+
+
+.caldayevent {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 10px;
+	font-weight: bold;	
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	height: 17px;
+	color: #000000;
+	background: #FFFFFF;
+}
+
+.caldayevent a {color: #000000; text-decoration: none;}
+.caldayevent a:hover {color: #450500; text-decoration: underline;}
+.caldayevent a:visited {color: #000000; text-decoration: none;}
+.caldayevent a:active {color: #450500; text-decoration: none;}
+
+
+
+/* end kalender paremal */
+
+
+/* kalender nädala vaate head riba */
+
+.caldayheadday {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 20px;
+	font-weight: normal;	
+	text-decoration: none;
+	text-align: left;
+	vertical-align: middle;
+	color: #000000;
+	background: BCDCF0;
+}
+
+.caldayheadday a {color: #FFFFFF; text-decoration: none;}
+.caldayheadday a:hover {color: #FFFFFF; text-decoration: underline;}
+.caldayheadday a:visited {color: #FFFFFF; text-decoration: none;}
+.caldayheadday a:active {color: #FFFFFF; text-decoration: none;}
+
+.caldayheaddate {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;	
+	text-decoration: none;
+	text-align: right;
+	vertical-align: middle;
+	color: #000000;
+	background: BCDCF0;
+}
+
+.caldayheaddate a {color: #002F8E; text-decoration: none;}
+.caldayheaddate a:hover {color: #002F8E; text-decoration: underline;}
+.caldayheaddate a:visited {color: #002F8E; text-decoration: none;}
+.caldayheaddate a:active {color: #002F8E; text-decoration: none;}
+
+/* END kalender nädala vaate head riba */
+
+
+
+
+
+
+.caleventtext {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 12px;
+	color: #000000;
+	text-decoration: none;
+}
+.caleventtext a {color: #000000; text-decoration: none;}
+.caleventtext a:hover {color: #450500; text-decoration: underline;}
+.caleventtext a:visited {color: #450500; text-decoration: underline;}
+.caleventtext a:active {color: #450500; text-decoration: underline;}
+
+.caleventtextsel {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 12px;
+	color: #FFFFFF;
+	text-decoration: none;
+	background: #A69080;
+}
+.caleventtextsel a {color: #FFFFFF; text-decoration: none;}
+.caleventtextsel a:hover {color: #FFFFFF; text-decoration: underline;}
+.caleventtextsel a:visited {color: #FFFFFF; text-decoration: underline;}
+.caleventtextsel a:active {color: #FFFFFF; text-decoration: underline;}BODY
     { scrollbar-face-color : #A4A4A4; 
 	 scrollbar-shadow-color : #A4A4A4; 
 	 scrollbar-highlight-color : #FFFFFF; 
@@ -913,3 +1092,151 @@ background-color: #cccccc;
 }
 .menueditsaoledsiin a {color: #000000; text-decoration: none;}
 .menueditsaoledsiin a:hover {color: #002884; text-decoration: underline;}
+.peaLingid {  font-weight: bold; color: #0000f0; text-decoration: none}
+.peaLingidText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; font-weight: bold; color: #000000; text-decoration: none }
+.alamLingid {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #0000f0; text-decoration: none}
+.alamLingidText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #666666; text-decoration: none }
+.alamText { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #000000; text-decoration: none }
+.alamTextWhite { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 0.6em; color: #FFFFFF; text-decoration: none }
+.muh { position: relative; visibility: visible; }
+.mainmenu {
+        position: absolute;
+        left: 10px;
+        top: 15px;
+        visibility: visible;
+}
+.alammenyy {
+        position: absolute;
+        left: 0px;
+        top: 54;
+        height: 21px;
+        width: 750px;
+		font-family: Verdana, Arial, Helvetica, sans-serif;
+		font-size: 0.6em;
+		color: #666666;
+        text-decoration: none;
+        visibility: hidden;
+}
+.menyy1 {position: absolute; left: 7px; top: 28px; text-decoration: none; visibility: hidden;}
+.menyy2 {position: absolute; left: 58px; top: 28px; text-decoration: none; visibility: hidden;}
+
+.ftitlenormal {
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #E5E8F7;
+}
+
+.ftitlesortable {
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #E5E8F7;
+}
+
+.ftitlesorted {
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 9pt;
+	color: black;
+	background: #FF966f;
+}
+
+.fcontentline1 {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 9pt;
+	color: black;
+	background: #F2F2F2;
+}
+
+.fcontentline1sorted {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 9pt;
+	color: black;
+	background: #FFE280;
+}
+
+
+.fcontentline2 {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 9pt;
+	color: black;
+	background: #FFFFFF;
+}
+
+.fcontentline2sorted {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 9pt;
+	color: black;
+	background: #ffc240 
+}
+.textsmall {
+font-family: verdana, sans-serif;
+font-size: 10px;
+color: #B58D47;
+}
+.textsmall a {color: #B58D47; text-decoration:none;}
+.textsmall a:hover {color: #000000; text-decoration:none;}
+
+
+.yah {
+font-family: verdana, sans-serif;
+font-size: 10px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #B58D47;
+}
+.yah a {color: #FFFFFF; text-decoration:none;}
+.yah a:hover {color: #000000; text-decoration:none;}
+
+.awmenuediticonsjoon1 {
+background-color: #E9EBEC;
+}
+
+.awmenuediticonsjoon2 {
+background-color: #9D8254;
+}
+
+.awmenuedittableborder {
+background-color: #E2E2DB;
+}
+
+.awmenuedittablehead {
+font-family: Arial, Verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+background-color: #478EB6;
+}
+.awmenuedittablehead a {color: #FFFFFF; text-decoration:none;}
+.awmenuedittablehead a:hover {color: #FFFFFF; text-decoration:underline;}
+
+.awmenuedittabletext {
+font-family: Arial, Verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+}
+.awmenuedittabletext a {color: #0018AF; text-decoration:none;}
+.awmenuedittabletext a:hover {color: #0018AF; text-decoration:underline;}
+
+.awformtext {
+font-family: verdana, sans-serif;
+font-size: 10px;
+}
+
+
+.awmenuedittablerow {
+background-color: #FCFCF4;
+}
+.awmenuedittablerowsel {
+background-color: #E2E2DB;
+}
+
+.cooltablerow {
+background-color: #FFFFFF;
+}
+
+.cooltablerow2 {
+background-color: #EEEEEE;
+}

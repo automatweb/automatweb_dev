@@ -16,9 +16,7 @@ window.location=url
 // -->
 </script>
 
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 <form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
 
 

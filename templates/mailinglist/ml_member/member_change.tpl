@@ -3,7 +3,7 @@
 <!-- END SUB: ITEM -->
 
 <!-- SUB: ITEM_SEL -->
-{VAR:fname} |
+<a href='{VAR:link}'>{VAR:fname}</a> |
 <!-- END SUB: ITEM_SEL -->
 
 {VAR:selecter}

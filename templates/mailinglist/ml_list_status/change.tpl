@@ -1,8 +1,8 @@
 <script language="javascript">
 function Do(what)
 {
-add.action.value=what;
-add.submit();
+document.add.action.value=what;
+document.add.submit();
 };
 </script>
 

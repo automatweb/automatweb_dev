@@ -128,3 +128,10 @@ function saveform()
 {VAR:reforb}
 </form>
 </table>
+
+<script type="text/javascript">
+// here I have to check whether this has been loaded in an iframe, and if so, resize the height 
+// in the parent accordingly. Ugh, is this possible at all?
+// alert(window.parent.frames["aliasmgr"].innerHeight);
+
+</script>
