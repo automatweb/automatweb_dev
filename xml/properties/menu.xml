@@ -267,24 +267,16 @@
       </property>
       <property>
             <name>seealso</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>15</size>
+            <type>callback</type>
+            <callback>callback_get_seealso</callback>
             <group>relations</group>
-            <method>serialize</method>
+            <store>no</store>
             <table>menu</table>
             <field>seealso</field>
             <caption>
-            <![CDATA[Vali menüüd, mille all see menüü on "vaata lisaks" menüü]]>
+            <![CDATA[Menüüd, mille all see menüü on "vaata lisaks" menüü]]>
             </caption>
-      </property>
-      <property>
-            <name>seealso_refs</name>
-            <type>hidden</type>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>relations</group>
+            <comment>Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri</comment>
       </property>
       <property>
             <name>seealso_order</name>
