@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.2 2002/06/26 11:23:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.3 2002/07/23 21:21:07 duke Exp $
 // handles xml based configuration forms
 class xmlform extends aw_template
 {
 	function xmlform($args = array())
 	{
 		$this->init("forms");
+		$this->lc_load("form","lc_form");
 	}
 
 	function gen_preview($args = array())
@@ -272,6 +273,273 @@ class xmlform extends aw_template
 
 		$this->cfg_arr["elements"][$this->rowcount][$col][$el] = $arr;
 
+	}
+
+	function test($args = array())
+	{
+		// I need to serialize and cache the data
+		// because decoding XML is expensive
+
+		// retrieve information about elements
+		$this->html = get_instance("html");
+		$data = $this->get_file(array("file" => $this->cfg["basedir"] . "/xml/config/test.xml"));
+		$this->_parse_config(array("data" => $data));
+
+		// retrieve information about layoyt map
+		$data = $this->get_file(array("file" => $this->cfg["basedir"] . "/xml/maps/test.xml"));
+
+		$this->reforb = $this->mk_reforb("submit_test",array());
+
+		$this->output = "";
+		$this->_parse_map(array("data" => $data));
+		return $this->output;
+
+	}
+
+	function submit_test($args = array())
+	{
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+
+
+	}
+	
+	function _parse_config($args = array())
+	{
+		extract($args);
+		$this->keys = array();
+		$this->parser = xml_parser_create();
+		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
+		xml_set_object($this->parser, &$this);
+		xml_set_element_handler($this->parser, "_config_tag_open", "_config_tag_close");
+		xml_parse($this->parser, $data);
+	}
+
+	function _config_tag_open($parser,$tag,$attr)
+	{
+		switch($tag)
+		{
+			case "key":
+				$this->keyname = $attr["name"];
+				$this->keytype = $attr["type"];
+				$this->args["_keyname"] = $attr["name"];
+				$this->args["_keytype"] = $attr["type"];
+				if ($attr["value"])
+				{
+					$this->value = $attr["value"];
+				}
+
+				break;
+
+			case "source":
+				$this->source = $attr;
+				break;
+
+			case "arg":
+				$this->args[$attr["name"]] = $attr["value"];
+				break;
+
+		};
+				
+	}
+	
+	function _config_tag_close($parser,$tag)
+	{
+		switch($tag)
+		{
+			case "source":
+				$meth = $this->source["method"];
+				$this->keys[$this->keyname] = $this->obj->$meth($this->args);
+				$this->args = array();
+				break;
+
+			case "key":
+				$this->_html[$this->keyname] = $this->_draw_form_element();
+				break;
+		};
+	}
+
+	function _draw_form_element($args = array())
+	{
+		$retval = "";
+		switch($this->keytype)
+		{
+			case "text":
+				$retval = $this->html->text(array(
+					"name" => $this->keyname,
+					"value" => $this->keys[$this->keyname],
+				));
+				break;
+
+			case "select":
+				$retval = $this->html->select(array(
+					"name" => $this->keyname,
+					"options" => $this->keys[$this->keyname],
+				));
+				break;
+
+			case "checkbox":
+				$retval = $this->html->checkbox(array(
+					"name" => $this->keyname,
+				));
+				break;
+
+			default:
+
+		};
+		return $retval;
+				
+
+	}
+
+	function _config_get_data($args = array())
+	{
+
+	}
+
+	function cfg_get($args = array())
+	{
+		extract($args);
+		$retval = "";
+		switch($_keyname)
+		{
+			case "default_view":
+				$values = array(
+					"a" => "kala",
+					"b" => "liha",
+					"c" => "piim",
+				);
+
+				$retval = $this->html->select(array(
+					"name" => $_keyname,
+					"options" => $values,
+					"selected" => "b",
+				));
+				break;
+			
+			case "subject":
+				$value = "sitt";
+				$retval = $this->html->text(array(
+					"name" => $_keyname,
+					"value" => $value,
+				));
+				break;
+
+
+		};
+		return $retval;
+				
+
+	}
+
+	function _parse_map($args = array())
+	{
+		extract($args);
+		$this->parser = xml_parser_create();
+		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
+		xml_set_object($this->parser, &$this);
+		xml_set_element_handler($this->parser, "_map_tag_open", "_map_tag_close");
+		xml_parse($this->parser, $data);
+	}
+
+	function _map_tag_open($parser,$tag,$attr)
+	{
+		$html_attribs = $this->_map_gen_attribs($attr);
+		switch($tag)
+		{
+			case "map":
+				if (!$this->no_form)
+				{
+					$this->output .= "<form method='get' action='reforb.aw'>\n";
+				};
+				$this->output .= "<table border='1' $html_attribs>\n";
+				$this->rows = $attr["rows"];
+				$this->cols = $attr["cols"];
+				break;
+
+			case "row":
+				$this->output .= "<tr$html_attribs>\n";
+				break;
+
+			case "col":
+				$this->output .= "<td$html_attribs>";
+				break;
+
+			case "caption":
+				$this->output .= $this->obj->vars[$attr["src"]];
+				break;
+
+			case "element":
+				$this->output .= $this->_html[$attr["src"]];
+				break;
+		};
+				
+	}
+	
+	function _map_tag_close($parser,$tag)
+	{
+		switch($tag)
+		{
+			case "col":
+				$this->output .= "</td>\n";
+				break;
+
+			case "row":
+				$this->output .= "</tr>\n";
+				break;
+
+			case "map":
+				$this->output .= "</table>\n";
+				$this->output .= $this->reforb;
+				if (!$this->no_form)
+				{
+					$this->output .= "</form>\n";
+				};
+				break;
+		};
+	}
+
+	function _map_gen_attribs($attribs = array())
+	{
+		$res = "";
+		foreach($attribs as $key => $val)
+		{
+			switch($key)
+			{
+				case "class":
+					$res .= " $key='$val'";
+					break;
+
+				default:
+			};
+		};
+
+		return $res;
+	}
+
+	////
+	// !Generates a form form elements and maps files
+	function gen_html($args = array())
+	{
+		extract($args);
+		global $awt;
+		$awt->start("gen_html");
+		$this->html = get_instance("html");
+		$this->obj = $obj;
+		$this->no_form = $no_form;
+		$data = $this->get_file(array("file" => $this->cfg["basedir"] . "/xml/forms/$form.xml"));
+		$this->_parse_config(array("data" => $data));
+
+		// retrieve information about layoyt map
+		$data = $this->get_file(array("file" => $this->cfg["basedir"] . "/xml/maps/$map.xml"));
+
+		$this->reforb = $this->mk_reforb("submit_test",array());
+
+		$this->output = "";
+		$this->_parse_map(array("data" => $data));
+		$awt->stop("gen_html");
+		return $this->output;
 	}
 };
 ?>
