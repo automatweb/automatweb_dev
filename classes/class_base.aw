@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.110 2003/06/02 14:55:24 duke Exp $
+// $Id: class_base.aw,v 2.111 2003/06/03 13:17:48 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -65,90 +65,6 @@ class class_base extends aw_template
 	}
 
 	////
-	// !Generates a form for adding an object
-	function add($args = array())
-	{
-		$this->init_class_base();
-		if (!$this->ds->ds_can_add($args))
-		{
-			die($this->ds->get_error_text());
-		};
-
-		// if you give a id of cfgform as an argument to the new action, then
-		// we attempt to use that cfgform to generate the screen
-		if (!empty($args["cfgform"]))
-		{	
-			$this->validate_cfgform($args["cfgform"]);
-		};
-
-		$this->parent = $args["parent"];
-		extract($args);
-
-		$this->id = "";
-
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"group" => isset($args["group"]) ? $args["group"] : "",
-				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-		));
-
-		$this->request = $args;
-
-		// parse the properties - resolve generated properties and
-		// do any callbacks
-
-		$resprops = $this->parse_properties(array(
-			"properties" => &$realprops,
-		));
-
-		$cli = get_instance("cfg/" . $this->output_client);
-
-		foreach($resprops as $val)
-		{
-			$cli->add_property($val);
-		};
-
-		$orb_class = $this->cfg["classes"][$this->clid]["file"];
-
-		if ($orb_class == "document")
-		{
-			$orb_class = "doc";
-		};
-	
-		$argblock = array(
-			"group" => isset($group) ? $group : "",
-			"orb_class" => $orb_class,
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-			"parent" => $parent,
-			"period" => isset($period) ? $period : "",
-			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
-			"reltype" => isset($this->request["reltype"]) ? $this->request["reltype"] : "",
-			"cfgform" => isset($this->cfgform_id) ? $this->cfgform_id : "",
-			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
-		);
-
-		if (method_exists($this->inst,"callback_mod_reforb"))
-		{
-			$this->inst->callback_mod_reforb(array(
-				"args" => &$argblock,
-			));
-		};
-
-		$cli->finish_output(array(
-			"action" => "submit",
-			"data" => $argblock,
-		));
-
-		$content = $cli->get_result();
-
-		return $this->gen_output(array(
-			"parent" => $parent,
-			"content" => $content,
-			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-		));
-	}
-
-	////
 	// !Generate a form for adding or changing an object
 	// id _always_ refers to the objects table. Always. If you want to load
 	// any other data, then you'll need to use other field name
@@ -156,49 +72,75 @@ class class_base extends aw_template
 	{
 		$this->init_class_base();
 
-		extract($args);
-			
-		// I need to get that stuff working in situations where there is
-		// no id .. login forms, and stuff like that
-		$this->id = $id;
-		$obj = $this->get_object($this->id);
+		// check whther the user can actually add the object .. hm, but isn't this
+		// handled by the acl calls in the orb definition instead?
+		$cfgform_id = "";
+		$this->subgroup = $this->reltype = "";
+		$this->is_rel = false;
 
-		$is_rel = false;
+		$this->orb_action = $args["action"];
 
-		if ($obj["class_id"] == CL_RELATION)
+		if ($args["action"] == "new")
 		{
-			$is_rel = true;
-			$def = $this->cfg["classes"][$this->clid]["def"];
-			$this->values = $obj["meta"]["values"][$def];
-			$this->values["name"] = $obj["name"];
+			// that just checks whether the parent allows to add stuff
+			// below it
+			if (!$this->ds->ds_can_add($args))
+			{
+				die($this->ds->get_error_text());
+			};
+
+
+			$this->parent = $args["parent"];
+			$this->id = "";
+			$this->reltype = isset($args["reltype"]) ? $args["reltype"] : "";
+		}
+		elseif ($args["action"] == "change")
+		{
+			$this->id = $args["id"];
+			$obj = $this->get_object($this->id);
+			$this->parent = "";
+
+
+			if ($obj["class_id"] == CL_RELATION)
+			{
+				$this->is_rel = true;
+				$def = $this->cfg["classes"][$this->clid]["def"];
+				$this->values = $obj["meta"]["values"][$def];
+				$this->values["name"] = $obj["name"];
+			};
+
+			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
 		};
 
-		$this->is_rel = $is_rel;
-
-		$this->validate_cfgform($obj["meta"]["cfgform_id"]);
-
-		// get a list of active properties for this object
-		// I need an easy way to turn off individual properties
+		$cfgform_id = $this->get_cfgform_for_object(array(
+			"meta" => $obj["meta"],
+			"args" => $args,
+		));
+		
+		$this->validate_cfgform($cfgform_id);
+		
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
-				"rel" => $is_rel,
-
+				"rel" => $this->is_rel,
 		));
-
-		$this->load_obj_data(array("id" => $this->id));
-
-		if (method_exists($this->inst,"callback_pre_edit"))
-		{
-			$this->inst->callback_pre_edit(array(
-				"id" => $this->id,
-				"coredata" => &$this->coredata,
-			));
-
-		};
-
+		
 		$this->request = $args;
+	
+		if (!empty($this->id))
+		{
+			$this->load_obj_data(array("id" => $this->id));
+
+			if (method_exists($this->inst,"callback_pre_edit"))
+			{
+				$this->inst->callback_pre_edit(array(
+					"id" => $this->id,
+					"coredata" => &$this->coredata,
+				));
+
+			};
+		};
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
@@ -206,11 +148,8 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
-
-
+		
 		// so now I have a list of properties along with their values,
-		// and some information about the layout - and I want to display
-		// that stuff now
 
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
@@ -231,21 +170,22 @@ class class_base extends aw_template
 			$orb_class = "doc";
 		};
 
-
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
-
-
+		
 		$argblock = array(
-			"id" => $id,
+			"id" => $this->id,
+			// this should refer to the active group
 			"group" => isset($group) ? $group : "",
 			"orb_class" => $orb_class,
-			"parent" => isset($parent) ? $parent : "",
-			"period" => isset($period) ? $period : "",
-			"cb_view" => isset($cb_view) ? $cb_view : "",
+			"parent" => $this->$parent,
+			"period" => isset($args["period"]) ? $args["period"] : "",
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
+			"reltype" => $this->reltype,
+			"cfgform" => isset($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
-			"subgroup" => isset($this->request["subgroup"]) ? $this->request["subgroup"] : "",
-		) + (isset($extraids) && is_array($extraids) ? array('extraids' => $extraids) : array());
+			"subgroup" => $this->subgroup,
+		) + (isset($args["extraids"]) && is_array($args["extraids"]) ? array("extraids" => $args["extraids"]) : array());
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
@@ -258,15 +198,14 @@ class class_base extends aw_template
 			"data" => $argblock,
 		));
 
-		$reforb = $cli->vars["reforb"];
-
+		extract($args);
 		if (empty($content))
 		{
 			$content = $cli->get_result();
 		};
 
 		return $this->gen_output(array(
-			"parent" => isset($parent) ? $parent : "",
+			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
@@ -278,6 +217,7 @@ class class_base extends aw_template
 	{
 		// check whether this current class is based on class_base
 		$this->init_class_base();
+		$this->orb_action = $args["action"];
 
 		$this->quote($args);
 		extract($args);
@@ -686,6 +626,23 @@ class class_base extends aw_template
 				$this->cfgform = $_tmp;
 			};
 		};
+	}
+
+	function get_cfgform_for_object($args = array())
+	{
+		// or, if configuration form should be loaded from somewhere
+		// else, this is the place to do it
+		$retval = "";
+		if (($args["args"]["action"] == "new") && !empty($args["args"]["cfgform"]))
+		{
+			$retval = $args["cfgform"];
+		};
+
+		if (($args["args"]["action"] == "change") && !empty($args["meta"]["cfgform_id"]))
+		{
+			$reval = $obj["meta"]["cfgform_id"];
+		};
+		return $retval;
 	}
 	
 	////
@@ -1298,6 +1255,12 @@ class class_base extends aw_template
 			// properties with no group end up in default group
 			$grpid = isset($property["group"]) ? $property["group"] : $this->default_group;
 
+			if (($property["type"] == "toolbar") && ($this->orb_action != "submit"))
+			{
+				classload("toolbar");
+				$property["toolbar"] = new toolbar();
+			};
+
 			if (isset($val["group"]))
 			{
 				$grpid = $val["group"];
@@ -1337,10 +1300,12 @@ class class_base extends aw_template
 
 		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
+			// load a list of properties and groups in the config form
 			$proplist = $this->cfgform["meta"]["cfg_proplist"];
 			$grplist = $this->cfgform["meta"]["cfg_groups"];
 		}
 
+		// content comes from the config form
 		if ($args["content"])
 		{
 			$_all_props = $cfgu->parse_definition(array(
@@ -1348,12 +1313,14 @@ class class_base extends aw_template
 			));
 		}
 		else
+		// this handles some embedding cases
 		if ($args["classonly"])
 		{
 			$_all_props = $cfgu->load_class_properties(array(
 				"clid" => $this->clid,
 			));
 		}
+		// and this handles the generic cases
 		else
 		{
 			$_all_props = $cfgu->load_properties(array(
@@ -1361,11 +1328,6 @@ class class_base extends aw_template
 				"filter" => $filter,
 			));
 		};
-	
-		$argblock = array(
-			"oid" => isset($this->id) ? $this->id : "",
-			"request" => isset($this->request) ? $this->request : "",
-		);
 
 		// 1) generate a list of all views
 		$this->cb_views = array();
@@ -1375,7 +1337,6 @@ class class_base extends aw_template
 
 		$cb_view = $args["cb_view"];
 
-		// ok, first add all the generated props to the props array 
 		$this->all_props = array();
 
 		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
@@ -1405,10 +1366,12 @@ class class_base extends aw_template
 			// with well working code.
 			if (!empty($this->cfgform_id))
 			{
+				// we can have as many relpickers as we want
 				if ($val["type"] == "relpicker")
 				{
-					// we can have as many relpickers as we want
 				}
+				// but for other element types we ignore things that
+				// are not defined by the class
 				else if (empty($_all_props[$val["name"]]))
 				{
 					continue;
@@ -1427,13 +1390,14 @@ class class_base extends aw_template
 				{
 					$val["caption"] = $_all_props[$k]["caption"];
 				};	
-				
+			
+				// reset the richtext attribute, if it was disabled in the config form
 				if (($_all_props[$k]["type"] == "textarea") && (empty($orig["richtext"])))
 				{
 					unset($val["richtext"]);
 				};
 			}
-
+			
 			if (empty($val["view"]))
 			{
 				$val["view"] = "";
@@ -1495,8 +1459,6 @@ class class_base extends aw_template
 		}
 
 		$this->classinfo = $cfgu->get_classinfo();
-
-		// I need to make 2 passes.
 		$grpinfo = array();
 		if (is_array($tmp_grpinfo))
 		{
@@ -1512,7 +1474,7 @@ class class_base extends aw_template
 					else
 					{
 						// grplist comes from CL_CFGFORM and can be used
-						// to override the default settings
+						// to override the default settings for a group
 
 						// XX: add a list of settings that can be overrided,
 						// allowing everything is probably not a good idea
@@ -1538,6 +1500,11 @@ class class_base extends aw_template
 		if (empty($val["type"]))
 		{
 			return false;
+		};
+
+		if ($val["type"] == "toolbar")
+		{
+			$val["value"] = $val["toolbar"]->get_toolbar();
 		};
 
 		if ($val["type"] == "date_select")
@@ -1578,8 +1545,6 @@ class class_base extends aw_template
 			$val['popup_objmgr'] = $this->mk_my_orb('search',array(
 				'check_name' => isset($val['check_name']) ? $val['check_name'] : NULL,
 				'multiple' => $val['multiple'],
-//				'check_name' => $val['check_name']
-				//'parent' => 50477,
 				"parent" => $this->parent,
 				'return_url' => 'plaa',
 				),'popup_objmgr');
@@ -1634,6 +1599,7 @@ class class_base extends aw_template
 				"val" => &$val,
 			));
 		};
+
 	}
 
 	////
@@ -1692,6 +1658,8 @@ class class_base extends aw_template
 				{
 					if (isset($this->data[$table][$field]))
 					{
+						// meaning that you cannot serialize more than one property
+						// into a single field. 
 						$property["value"] = aw_unserialize($this->data[$table][$field]);
 					};
 				}
@@ -1759,8 +1727,6 @@ class class_base extends aw_template
 				$status = $this->inst->get_property($argblock);
 			};
 
-			// I need other way to retrieve a list of dynamically
-			// generated properties from the class and display those
 			if ($status === PROP_IGNORE)
 			{
 				// do nothing
@@ -1786,10 +1752,6 @@ class class_base extends aw_template
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
-				// I need a way to figure out whether that callback method
-				// did actually set any groups or not?
-
-				// and just how exactly am I going to do that?
 				$vx = $this->inst->$meth($argblock);
 				if (is_array($vx))
 				{
