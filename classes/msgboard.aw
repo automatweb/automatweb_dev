@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.27 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.28 2002/12/02 12:19:55 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -260,7 +260,6 @@ class msgboard extends aw_template
 
 	function submit_add($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if (is_number($parent) && $comment != "" && $from != "")
@@ -516,7 +515,6 @@ class msgboard extends aw_template
 
 	function do_search2($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$this->read_template("search_results.tpl");
 		$this->vars(array("forum_id" => $forum_id));
@@ -571,7 +569,6 @@ class msgboard extends aw_template
 
 	function do_search($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 
@@ -1042,7 +1039,6 @@ class msgboard extends aw_template
 	// !Submitib uue topicu
 	function submit_topic($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$tid = $this->new_object(array(

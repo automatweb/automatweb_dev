@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.80 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.81 2002/12/02 12:19:55 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 define(WEEK,DAY * 7);
@@ -53,7 +53,6 @@ class planner extends calendar
 	// !Submitib uue kalendriobjekti
 	function submit_add($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$id = $this->new_object(array(
 			"class_id" => CL_CALENDAR,
@@ -114,7 +113,6 @@ class planner extends calendar
 	// !Submitib olemasoleva kalendriobjekti
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$this->upd_object(array(
 			"oid" => $id,
@@ -1528,7 +1526,6 @@ class planner extends calendar
 
 	function bron_add_event($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$id = $this->new_object(array(
 			"class_id" => CL_CAL_EVENT,

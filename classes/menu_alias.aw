@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.1 2002/11/15 22:23:03 duke Exp $
+// $Id: menu_alias.aw,v 2.2 2002/12/02 12:19:54 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -19,7 +19,6 @@ class menu_alias extends aw_template
 		if ($id)
 		{
 			$obj = $this->get_object($id);
-			$this->dequote($obj);
 			$title = "Muuda menüü linki";
 		}
 		else
@@ -40,7 +39,6 @@ class menu_alias extends aw_template
 
 	function submit_alias($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($id)
 		{

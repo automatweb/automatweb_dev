@@ -30,7 +30,6 @@ class db_feedback extends aw_template
 	
 	function add_feedback($data) 
 	{
-		$this->quote($data);
 		extract($data);
 		$msg = "
 Dokument: ".aw_ini_get("baseurl")."/?section=$docid\n

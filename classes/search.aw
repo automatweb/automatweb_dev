@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.13 2002/11/27 15:46:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.14 2002/12/02 12:19:55 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -37,7 +37,6 @@ class search extends aw_template
 	// !Submits a new or existing search
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 
 		if (!$args["id"])
@@ -91,7 +90,6 @@ class search extends aw_template
 
 		$_obj = $args["obj"];
 		$real_fields = array_merge($defaults,$args["s"]);
-		$this->quote($real_fields);
 		$this->sub_merge = 1;
 		extract($args);
 		extract($real_fields);
@@ -915,7 +913,6 @@ class search extends aw_template
 
 	function submit_table($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		// if we searched from a remote server we need to copy the damn things instead
 		if ($subaction == "cut" && !$s["server"])

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.5 2002/11/07 10:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.6 2002/12/02 12:19:52 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -81,7 +81,6 @@ class datasource extends aw_template
 	// !Adds new or submits changes to an existing XML import objekt
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($parent)
 		{

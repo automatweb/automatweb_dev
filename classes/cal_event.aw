@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.20 2002/11/27 20:22:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.21 2002/12/02 12:19:52 kristo Exp $
 
 class cal_event extends class_base 
 {
@@ -137,7 +137,6 @@ class cal_event extends class_base
 	// !Submitib uue kalendri eventi
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		// sellest teeme timestampi
 		$st = mktime($shour,$smin,0,$start["month"],$start["day"],$start["year"]);
@@ -982,7 +981,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 	function addalias($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);

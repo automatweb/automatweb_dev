@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.3 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.4 2002/12/02 12:19:55 kristo Exp $
 
 class variables extends aw_template
 {
@@ -26,7 +26,6 @@ class variables extends aw_template
 		
 	function add_var_submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		
 		if ($id)
@@ -380,7 +379,6 @@ class variables extends aw_template
 	// !Submits a stamp
 	function submit_stamp($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($id)
 		{
@@ -435,7 +433,6 @@ class variables extends aw_template
 	// !Submits a category
 	function submit_cat(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if ($id)

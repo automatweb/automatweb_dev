@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.5 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.6 2002/12/02 12:19:55 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -220,7 +220,6 @@ class mlist extends aw_template
 
 	function submit_member($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		$this->id = $id;
 		$va = get_instance("variables");
@@ -279,7 +278,6 @@ class mlist extends aw_template
 	// lists (array of int) - listide id-d, kuhu kasutaja liita
 	function add_user_to_lists($args = array())
 	{	
-		$this->quote($args);
 		extract($args);
 		$t = time();
 		if (is_array($list_ids))
@@ -643,7 +641,6 @@ class mlist extends aw_template
 
 	function submit_change_vars($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		$this->id = $list_id;
 		$this->l_vars = array();

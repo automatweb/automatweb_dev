@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.41 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.42 2002/12/02 12:19:53 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -48,7 +48,6 @@ class keywords extends aw_template
 	function submit($args = array())
 	{
 		extract($args);
-		$this->quote($keyword);
 		if ($add)
 		{
 			$id = $this->new_object(array(
@@ -546,7 +545,6 @@ class keywords extends aw_template
 	function update_keywords($args = array())
 	{
 		extract($args);
-		$this->quote($keywords);
 		$keywordlist = explode(",",$keywords);
 		$categories = array();
 		$klist = array();

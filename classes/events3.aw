@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.6 2002/11/07 10:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.7 2002/12/02 12:19:53 kristo Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -119,7 +119,6 @@ class events3 extends aw_template
 	// !Submits an event
 	function event_submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		// it's a new event. Register it.
 		if ($clone)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.2 2002/11/07 10:52:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.3 2002/12/02 12:19:52 kristo Exp $
 // aw_test.aw - AW remote control
 class aw_test extends aw_template 
 {
@@ -43,7 +43,6 @@ class aw_test extends aw_template
 
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($id)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.130 2002/11/29 14:40:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.131 2002/12/02 12:19:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1594,7 +1594,6 @@ class document extends aw_template
 
 	function submit_add($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		if ($docfolder)
 		{

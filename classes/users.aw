@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.59 2002/11/15 13:30:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.60 2002/12/02 12:19:55 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -70,7 +70,6 @@ class users extends users_user
 	//		"value" => "99",));
 	function set_user_config($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		// loeme vana konfi sisse
 		$old = $this->_get_user_config($uid);
@@ -1741,7 +1740,6 @@ class users extends users_user
 
 	function submit_send_hash($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if (($type == "uid") && not(is_valid("uid",$uid)))
 		{
@@ -1806,7 +1804,6 @@ class users extends users_user
 	// !Allows the user to change his/her password
 	function password_hash($args = array())
 	{	
-		$this->quote($args);
 		extract($args);
 		$uid = $u;
 		$key = $k;
@@ -1908,7 +1905,6 @@ class users extends users_user
 	// !Submits the password
 	function submit_password_hash($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 		$this->db_query($q);

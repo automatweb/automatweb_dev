@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.11 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.12 2002/12/02 12:19:53 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -331,7 +331,6 @@ class groups extends users_user
 	
 	function submit_group($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if (!$parent)
@@ -928,7 +927,6 @@ class groups extends users_user
 
 	function submit_grp($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if (!$parent)

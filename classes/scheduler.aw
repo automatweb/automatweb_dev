@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.5 2002/12/02 12:19:55 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -483,7 +483,6 @@ class scheduler extends aw_template
 
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($parent)
 		{
@@ -514,7 +513,6 @@ class scheduler extends aw_template
 	function search_objs($args = array())
 	{
 		extract($args);
-		$this->quote($args);
 
 		if ($save)
 		{

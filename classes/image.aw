@@ -32,7 +32,6 @@ class image extends aw_template
 
 	function submit($arr)
 	{
-		$this->quote($arr);
 		extract($arr);
 
 		$_fi = get_instance("file");

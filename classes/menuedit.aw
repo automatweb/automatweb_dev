@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.177 2002/11/27 08:30:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.178 2002/12/02 12:19:54 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2260,7 +2260,6 @@ class menuedit extends aw_template
 
 	function nsubmit(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$updmenus = array();

@@ -106,7 +106,6 @@ class iframe extends aw_template
 	// !Submits a new or changed iframe object
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 
 		if ($parent)

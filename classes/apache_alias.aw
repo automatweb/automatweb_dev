@@ -124,7 +124,6 @@ class apache_alias extends aw_template
 	// !Submits a new or existing alias
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 
 		if (strlen($alias) == 0)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.2 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.3 2002/12/02 12:20:01 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -63,7 +63,6 @@ class form_actions extends form_base
 	// !saves or adds the submitted action
 	function submit_action($arr)
 	{
-		$this->dequote(&$arr);
 		extract($arr);
 
 		if ($action_id)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.38 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.39 2002/12/02 12:19:55 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -190,7 +190,6 @@ class table extends aw_template
 	// !submits table configuration
 	function submit_config($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$this->load_table($id);
 		$this->set_object_metadata(array(
@@ -457,24 +456,20 @@ class table extends aw_template
 	function update_table()
 	{
 		global $text,$show_title,$footer_bold,$header_bold;
+		$this->dequote(&$text);
 		for ($i=0; $i < $this->arr["cols"]; $i++)
+		{
 			for ($a=0; $a < $this->arr["rows"]; $a++)
 			{
 				$this->arr["contents"][$a][$i]["text"] = $text[$a][$i];
 			}
-
-		//$this->arr[show_title] = $show_title;
+		}
 	}
 		
 	function submit($arr)
 	{
 		$this->load_table($arr["id"]);
 
-//			$this->arr[table_style] = $arr[table_style];
-//			$this->arr[default_style] = $arr[default_style];
-//			$this->arr[table_footer] = $arr[table_footer];
-//			$this->arr[table_header] = $arr[table_header];
-//			$this->upd_object(array("oid" => $arr[id], "name" => $arr[table_name]));
 		$this->save_table($arr);
 		$this->_log("table", "changed table $arr[table_name]");
 		return $this->mk_orb("change", array("id" => $arr["id"]));
@@ -485,16 +480,6 @@ class table extends aw_template
 		if ($update)
 		{
 			$this->update_table();
-		}
-		else
-		{
-			for ($i=0; $i < $this->arr["cols"]; $i++)
-			{
-				for ($a=0; $a < $this->arr["rows"]; $a++)
-				{
-					$this->quote(&$this->arr["contents"][$a][$i]["text"]);
-				}
-			}
 		}
 
 		$cdelete = array();
@@ -541,7 +526,6 @@ class table extends aw_template
 		
 	function save_table_settings($ar)
 	{
-		$this->quote(&$ar);
 		extract($ar);
 
 		$this->arr["t_bgcolor"] = $bgcolor;
@@ -1166,7 +1150,6 @@ class table extends aw_template
 
 	function submit_styles($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$this->load_table($id);
@@ -1178,7 +1161,6 @@ class table extends aw_template
 
 	function submit_admin($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$this->load_table($id);
@@ -2273,7 +2255,6 @@ class table extends aw_template
 	
 	function submit_add($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		
 		$this->id=$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
@@ -2326,7 +2307,6 @@ class table extends aw_template
 	// saveb tabeli ja lisab aliase
 	function submit_doc($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		
 		$tid = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
@@ -2364,7 +2344,6 @@ class table extends aw_template
 		$this->quote($row);
 		$row["lang_id"] = aw_global_get("lang_id");
 		$id = $this->new_object($row);
-		$this->quote(&$row["contents"]);
 		$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
 		return true;
 	}

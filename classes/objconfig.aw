@@ -56,7 +56,6 @@ class objconfig extends aw_template
 	// !Submits a new config object
 	function submit_add($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$parent = (int)$parent;
 		$id = $this->new_object(array(
@@ -96,7 +95,6 @@ class objconfig extends aw_template
 	// !Submits a new or changed iframe object
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$this->upd_object(array(
 			"oid" => $id,
