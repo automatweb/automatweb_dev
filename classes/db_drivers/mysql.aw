@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.15 2003/08/27 12:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.16 2003/12/03 12:14:36 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -41,7 +41,7 @@ class mysql
 
 	function db_query($qtext,$errors = true) 
 	{
-		global $DUKE;
+		global $DUKE, $INTENSE_DUKE;
 		if ( (aw_ini_get("debug_mode") != 0) && $DUKE)
 		{
 			print '<pre>';
@@ -50,6 +50,16 @@ class mysql
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		};
+		if ($INTENSE_DUKE == 1)
+		{
+			$path = $this->_dbg_backtrace();
+			print '<pre>';
+			print $path."\n";
+			print_r(preg_replace("/\t/","",$qtext));
+			print '</pre>';
+			list($micro,$sec) = split(' ',microtime());
+			$ts_s = $sec + $micro;
+		}
 		aw_global_set('qcount',aw_global_get('qcount')+1); 
 
 		if (not($this->dbh))
@@ -620,6 +630,58 @@ class mysql
 			return true;
 		}
 		return false;
+	}
+
+	function _dbg_backtrace()
+	{
+		$msg = "";
+		if (function_exists("debug_backtrace"))
+		{
+			$bt = debug_backtrace();
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = $bt[$i+1]["class"]."::".$bt[$i+1]["function"];
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					if ($bt[$i+1]["function"] != "include")
+					{
+						$fnm = $bt[$i+1]["function"];
+					}
+					else
+					{
+						$fnm = "";
+					}
+				}
+				else
+				{
+					$fnm = "";
+				}
+
+				$msg .= $fnm.":".$bt[$i]["line"]."->";
+
+				/*if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = $bt[$i]["class"]."::".$bt[$i]["function"];
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = $bt[$i]["function"];
+				}
+				else
+				{
+					$fnm2 = "";
+				}
+
+				$msg .= $fnm2;*/
+			}
+		}
+
+		return $msg;
 	}
 };
 ?>
