@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.17 2002/12/18 14:42:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.18 2002/12/18 16:58:41 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -206,7 +206,7 @@ class html extends aw_template
 		{
 			$val = $args['value'];
 		}
-		return $selector->gen_edit_form($args["name"], $val);
+		return $selector->gen_edit_form($args["name"], $val, 2001, 2004, true);
 	}
 
 	function img($args = array())
