@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.87 2003/04/16 14:10:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.88 2003/04/22 10:29:36 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -135,7 +135,7 @@ class aliasmgr extends aw_template
 			}
 		}
 		$this->cache_oo_aliases($id);
-		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
+		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->use_class);
 	}
 		
 	////
@@ -679,7 +679,7 @@ class aliasmgr extends aw_template
 	function orb_addalias($args = array())
 	{
 		$this->create_alias($args);
-		return $this->mk_my_orb("list_aliases",array("id" => $args["id"]),get_class($this->orb_class));
+		return $this->mk_my_orb("list_aliases",array("id" => $args["id"]),$this->use_class);
 	}
 
 	////

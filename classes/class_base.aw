@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.95 2003/04/16 14:10:24 duke Exp $
+// $Id: class_base.aw,v 2.96 2003/04/22 10:29:36 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -49,8 +49,7 @@ define('RELTYPE_LINK',100);
 // link to the config form that was used to create the object
 define('RELTYPE_CFGFORM',101);
 
-classload("aliasmgr");
-class class_base extends aliasmgr
+class class_base extends aw_template
 {
 	function class_base($args = array())
 	{
@@ -1914,8 +1913,9 @@ class class_base extends aliasmgr
 	// !Handles the "saving" of relation list
 	function submit_list($args = array())
 	{
-		$retval = parent::submit_list($args);
 		$this->init_class_base();
+		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
+		$retval = $almgr->submit_list($args);
 		if (method_exists($this->inst,"callback_on_submit_relation_list"))
 		{
 			$this->inst->callback_on_submit_relation_list($args);
@@ -1928,8 +1928,9 @@ class class_base extends aliasmgr
 	// selected search results
 	function orb_addalias($args = array())
 	{
-		$retval = parent::orb_addalias($args);
 		$this->init_class_base();
+		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
+		$retval = $almgr->orb_addalias($args);
 		if (method_exists($this->inst,"callback_on_addalias"))
 		{
 			$this->inst->callback_on_addalias($args);
