@@ -659,15 +659,6 @@ class site_content extends menuedit
 			$this->vars(array("IS_FRONTPAGE" => $this->parse("IS_FRONTPAGE")));
 		}
 
-		if (is_array($this->metaref) && (sizeof($this->metaref) > 0))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $section,
-				"key" => "metaref",
-				"value" => $this->metaref,
-			));
-		};
-
 		$retval = $this->parse();
 		return $this->parse() . $popups;
 	}
