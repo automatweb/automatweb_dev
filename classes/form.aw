@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.100 2002/06/18 08:49:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.101 2002/06/26 11:24:14 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -756,6 +756,10 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
+		print "<pre>";
+		print_r($this->meta);
+		print "</pre>";
+
 		classload("style");
 		$t = new style;
 		$o = new db_objects;
@@ -1179,19 +1183,15 @@ class form extends form_base
 
 		$this->entry_id = $entry_id;
 
-
 		// do we have to validate this entry against a calendar?
 		// FIXME: this check should be in the form_calendar class
-		if ($this->arr["event_check_form"])
+		if ($this->meta["calendar_chain"])
 		{
 			// we need to fetch the values of "start" and "end" and "count" elements, pass those to the
 			// form_calendar which then in turn will tell us whether that calendar has enough vacancies
 			// in the requested time slot
-			$cal_target = $this->arr["event_check_against_form"];
-
-			$cal_element = $this->arr["event_check_against_element"];
-
 			// actually I think should just be a special controller
+
 			// it has to be a separeate instance or we will lose the settings for current form
 			$qf = get_instance("form_base");
 
@@ -1222,9 +1222,9 @@ class form extends form_base
 
 			$_start = $this->post_vars[$start_el];
 			$_end = $this->post_vars[$end_el];
-			$range_start = mktime($_start["hour"],$_start["minute"],0,$_start["month"],$_start["day"],$_start["year"]);
-			$range_end = mktime($_end["hour"],$_end["minute"],-1,$_end["month"],$_end["day"],$_end["year"]);
-			$count = (int)$this->post_vars[$count_el];
+			$_range_start = mktime($_start["hour"],$_start["minute"],0,$_start["month"],$_start["day"],$_start["year"]);
+			$_range_end = mktime($_end["hour"],$_end["minute"],-1,$_end["month"],$_end["day"],$_end["year"]);
+			$_count = (int)$this->post_vars[$count_el];
 
 			// default to 1, if not set or not int, this might be a mistake
 			// though
@@ -1258,14 +1258,12 @@ class form extends form_base
 			}
 
 
-			$has_vacancies = $fc->load_cal_controller(array(
+			$has_vacancies = $fc->check_vacancies(array(
 				"id" => $cal_target,
 				"eid" => $cal_id,
-				"start" => $range_start,
-				"end" => $range_end,
-				"count" => $count,
-				"ignore" => $entry_id,
-				"check" => "vacancies",
+				"start" => $_range_start,
+				"end" => $_range_end,
+				"count" => $_count,
 			));
 
 
@@ -1275,6 +1273,11 @@ class form extends form_base
 				$this->controller_errors[$count_el][] = "The requested period does not have this many vacancies.";
 			}
 
+		}
+
+		if ($this->meta["calendar_chain"])
+		{
+			$fc = get_instance("form_calendar");
 		}
 
 
@@ -1414,6 +1417,18 @@ class form extends form_base
 				"els" => &$els,
 				"entry_id" => &$this->entry_id,
 				"entry" => &$this->entry,
+			));
+		}
+
+		// if we got there it's probably ok to save the data out to the cache too
+		if ($this->meta["calendar_chain"])
+		{
+			$fc->upd_event(array(
+				"entry_id" => $this->entry_id,
+				"cal_id" => $cal_id,
+				"start" => $_range_start,
+				"end" => $_range_end,
+				"items" => $_count,
 			));
 		}
 
@@ -2315,9 +2330,11 @@ class form extends form_base
 
 				if ($fc->chain["has_calendar"])
 				{
+					dbg("cid = $cid<br>");
 					dbg("checking calendar for $row[chain_entry_id]<br>");
 					dbg("id = " . $fc->chain["cal_form"] . "<br>");
-					$has_vacancies = $fcal->load_cal_controller(array(
+					$has_vacancies = $fcal->check_vacancies(array(
+						"cal_id" => $cid,
 						"id" => $fc->chain["cal_form"],
 						"eid" => $row["chain_entry_id"],
 						"start" => $start,
@@ -2325,8 +2342,7 @@ class form extends form_base
 						"count" => $count,
 						"check" => "vacancies",
 					));
-					// ironic, isn't it?
-					$has_vacancies = true;
+					//$has_vacancies = true;
 					if ($has_vacancies)
 					{
 						$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
@@ -5190,7 +5206,12 @@ class form extends form_base
 		else
 		if ($this->type == FTYPE_FILTER_SEARCH)
 		{
+			$arr["no_form_tags"] = $no_tags;
 			$search_res = $this->do_filter_search($entry_id, $op_id, $arr);
+			if ($no_tags)
+			{
+				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->arr["table"]."'>".$search_res;
+			}
 		}
 
 		if ($no_tags)

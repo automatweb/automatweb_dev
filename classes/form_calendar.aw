@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.3 2002/06/15 16:43:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.4 2002/06/26 11:24:15 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -341,7 +341,7 @@ class form_calendar extends form_base
 		$q = sprintf("SELECT *,objects.name AS name FROM $ft_name
 				LEFT JOIN objects ON ($ft_name.id = objects.oid)
 				LEFT JOIN form_entries ON ($ft_name.id = form_entries.id)
-				WHERE form_entries.cal_id = $cal_id AND objects.status = 2 AND objects.oid != $ignore AND (el_%s >= %d) AND (el_%s <= %d)",
+				WHERE form_entries.cal_id = '$cal_id' AND objects.status = 2 AND objects.oid != $ignore AND (el_%s >= %d) AND (el_%s <= %d)",
 				$el_end,$start,$el_start,$end);
 
 		$this->db_query($q);
@@ -354,6 +354,72 @@ class form_calendar extends form_base
 			$e_start = $row["el_" . $el_start];
 			$e_end = $row["el_" . $el_end];
 			$e_count = (int)$row["el_" . $count_el];
+
+			$dkey = date("dmY",$e_start);
+
+			$event = array(
+				"start" => $e_start,
+				"end" => $e_end,
+				"title" => $row["name"],
+				"link" => $this->mk_my_orb("show",array("id" => $cid,"entry_id" => $row["oid"]),"form_chain"),
+			);
+
+			$events[$dkey][] = $event;	
+
+			for ($xi = $e_start; $xi < $e_end; $xi = $xi + (60*60*24))
+			{
+				$dkey = date("dmY",$xi);
+				$this->raw_events[$dkey][] = $row;
+				$this->event_counts[$dkey] += $e_count;
+			}
+		
+			// update the timeline vector as well	
+			// --------------
+			// set 'em to zero, if we encounter them the first time
+			if (not($this->vector[$e_start]))
+			{
+				$this->vector[$e_start] = 0;
+			};
+			
+			if (not($this->vector[$e_end]))
+			{
+				$this->vector[$e_end] = 0;
+			};
+
+			// and now increment/decrement the value
+			$this->vector[$e_start] += $e_count;
+			$this->vector[$e_end] -= $e_count;
+		}
+
+		return $events;
+	}
+	
+	////
+	// !Fetches all form entries from a date range
+	// id(int) - form id
+	// start(int) - start of the range
+	// end(int) - end of the range
+	function _get_entries_in_range2($args = array())
+	{
+		extract($args);
+
+		$ft_name = sprintf("form_%s_entries",$id);
+
+		$q = sprintf("SELECT *,objects.name AS name FROM objects
+				LEFT JOIN calendar2event ON (objects.oid = calendar2event.entry_id)
+				WHERE calendar2event.cal_id = '$cal_id' AND objects.status = 2 AND (start >= %d) AND (end <= %d)",
+				$start,$end);
+
+		$this->db_query($q);
+		$events = array();
+		$this->raw_events = array();
+		$this->raw_headers = array();
+
+		while($row = $this->db_next())
+		{
+			$e_start = $row["start"];
+			$e_end = $row["end"];
+			$e_count = (int)$row["items"];
 
 			$dkey = date("dmY",$e_start);
 
@@ -435,6 +501,24 @@ class form_calendar extends form_base
 		return $blocks;
         }
 
+	function new_event($args = array())
+	{
+		extract($args);
+		$q = "INSERT INTO calendar2event (entry_id,cal_id,start,end,items)
+			VALUES ('$entry_id','$cal_id','$start','$end','$items')";
+		$this->db_query($q);
+	}
+
+	function upd_event($args = array())
+	{
+		extract($args);
+		$q = "DELETE FROM calendar2event WHERE entry_id = '$entry_id'";
+		$this->db_query($q);
+
+		$this->new_event($args);
+
+	}
+
 	////
 	// !Registers a new calendar (invoked from form_chain submit)
 	// cal_id - int
@@ -466,6 +550,13 @@ class form_calendar extends form_base
 		{
 			$this->new_calendar($args);
 		}
+
+		// event entry form needs to know to which calendar 
+		// it will store it's entries
+		$fb = get_instance("form_base");
+		$fb->load($form_id);
+		$fb->meta["calendar_chain"] = $cal_id;
+		$fb->save();
 	}
 
 	////
@@ -558,6 +649,121 @@ class form_calendar extends form_base
 				'$ct_max')";
 
 		$this->db_query($q);
+		//print $q;
 	}
+		
+	function _process_blocks($args = array())
+	{
+		//$shift = ($ct_tslice["type"] == "day") ? 3600 * 24 : 3600;
+		extract($args);
+		$shift = 3600;
+		$blocks = array();
+
+		// XXX 3600
+		$timeshift = $pregap * 3600;
+
+		for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
+		{
+			// if it is in range, then ..
+			if ( ($i >= $start) && ($i <= $end) )
+			{
+				$blocks[] = array(
+					"start" => $i,
+					"end" => $i+($shift * $timedef) - 1,
+					"max" => $max_items,
+				);
+			};
+		}
+		return $blocks;
+	}
+	
+	function check_vacancies($args = array())
+	{
+		$id = (int)$id;
+		extract($args);	
+		$found = false;
+		$blocks = array();
+
+		if ($eid)
+		{
+			$q = "SELECT * FROM calendar2timedef WHERE cal_id = '$eid' AND start <= '$start' AND end <= '$end'";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$found = true;
+				$new_blocks = $this->_process_blocks($row);
+				$blocks = $blocks + $new_blocks;
+			}
+			$this->vector = array();
+		
+		
+			// get events in range and build an incremental vector of all events. for
+			// example, if we have 2 events, one from 10:00-13:00 and other from
+			// 11:00-14:00, then the vector will look akin to (keys are timestamps)
+			// [10:00] -> +1
+			// [11:00] -> +1
+			// [13:00] -> -1
+			// [14:00] -> -1
+
+			// --------
+	
+			$events = $this->_get_entries_in_range2(array(
+							"start" => $start,
+							"end" => $end,
+							"cal_id" => $eid,
+			));
+
+			// now we have all the ranges (if any) and events (if any)
+			// and are going to build the events for calendar
+			ksort($this->vector);
+			$this->blocks = $blocks;
+			reset($this->blocks);
+		
+			if ( is_array($this->blocks) && (sizeof($this->blocks) > 0) )
+			{
+				array_walk($this->vector,array(&$this,"_process_frame"));
+			}
+		
+			// If I want to find vacancies, then I have to check whether each block has
+			// the required amount of blocks available:
+			
+
+			//if ($check == "vacancies")
+			//{
+				$this->has_vacancies = true;
+			//}
+			
+			// do not show usual entries		
+			//$events = array();
+
+			// no blocks, just bail out
+			if (sizeof($this->blocks) == 0)
+			{
+				$this->has_vacancies = false;
+			}
+
+			// done. now we can build the special entries for the calenar
+			
+			foreach($this->blocks as $bid => $block)
+			{
+				$dkey = date("dmY",$block["start"]);
+				$cnt = (int)$this->event_counts[$dkey];
+				//$vac = $block["max"] - $block["cnt"];
+				$vac = $block["max"] - $cnt;
+				$title = "<small>free <b>$vac of $block[max]</b></small>";
+	
+				if ($vac < $count)
+				{
+					$this->has_vacancies = false;
+				};
+	
+			};
+	
+		}
+		return $this->has_vacancies;
+		#return $found;
+
+	}
+		
 };
 ?>
