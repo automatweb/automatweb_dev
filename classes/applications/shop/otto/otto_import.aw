@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.7 2004/10/22 12:24:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.8 2004/11/03 14:52:25 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -44,11 +44,15 @@
 
 @groupinfo imgs caption="Pildid"
 
-@property imgs_csv type=textbox group=imgs
+@property imgs_csv type=textbox 
 @caption Piltide CSV faili url
 
-@property do_img_i type=checkbox ch_value=1 group=imgs
+@property do_img_i type=checkbox ch_value=1
 @caption Teosta piltide import
+
+@groupinfo folders caption="Kataloogid"
+
+@property folders type=table store=no group=folders no_caption=1
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -79,6 +83,10 @@ class otto_import extends class_base
 			case "last_import_log":
 				$prop["value"] = join("<br>\n", @file(aw_ini_get("site_basedir")."/files/import_last_log.txt"));
 				break;
+
+			case "folders":
+				$this->do_folders_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -89,7 +97,21 @@ class otto_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "folders":
+				$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
+				foreach(safe_array($arr["request"]["dat"]) as $cnt => $row)
+				{
+					foreach(explode(",", $row["pgs"]) as $pg)
+					{
+						if ($pg && $row["awfld"])
+						{
+							$this->db_query ("INSERT INTO otto_imp_t_p2p (pg,fld,lang_id)
+								VALUES('$pg','$row[awfld]','".aw_global_get("lang_id")."')
+							");
+						}
+					}
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -127,12 +149,16 @@ class otto_import extends class_base
 			$data = array();
 			foreach(explode("\n", $arr->prop("fnames")) as $fname)
 			{
-				if ($fname == "")
+				if (trim($fname) == "" )
 				{
 					continue;
 				}
 
 				$fld_url = $arr->prop("base_url")."/".trim($fname)."-2.csv";
+				if (!$this->is_csv($fld_url))
+				{
+					continue;
+				}
 				echo "from url ".$fld_url." read: <br>";
 				list(, $cur_pg) = explode(".", $fname);
 				$cur_pg = substr($cur_pg,1);
@@ -140,6 +166,7 @@ class otto_import extends class_base
 				{
 					$cur_pg = (int)$cur_pg;
 				}
+				$cur_pg = trim($cur_pg);
 
 				$first = true;
 				$num =0;
@@ -186,7 +213,7 @@ class otto_import extends class_base
 		else
 		if (!$fix_missing)
 		{
-			$this->db_query("DELETE FROM otto_prod_img");
+			//$this->db_query("DELETE FROM otto_prod_img");
 		}
 		
 		if ($fix_missing)
@@ -234,11 +261,18 @@ class otto_import extends class_base
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
 
+
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
 		
 			$html = file_get_contents($url);
 
 			// image is http://image01.otto.de:80/m2bilder/OttoDe/de_DE/images/formatb/[number].jpg
+			if (true || strpos($html,"konnten leider keine") !== false)
+			{ 
+				// read from baur.de
+				$this->read_img_from_baur($pcode);
+			}
+			else
 			if (!preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
 			{
 				echo "for product $pcode multiple images! <br>\n";
@@ -370,7 +404,7 @@ class otto_import extends class_base
 		}
 
 		echo "all done! <br>\n";
-		die();
+		//die();
 	}
 
 	function do_prod_import($o)
@@ -439,7 +473,7 @@ class otto_import extends class_base
 		$this->db_query("DELETE FROM otto_imp_t_prod");
 		$this->db_query("DELETE FROM otto_imp_t_codes");
 		$this->db_query("DELETE FROM otto_imp_t_prices");
-		$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
+		//$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
 
 		echo "from url ".$o->prop("folder_url")." read: <br>";
 
@@ -449,7 +483,7 @@ class otto_import extends class_base
 
 		$log = array();
 
-		$fp = fopen($o->prop("folder_url"), "r");
+		/*$fp = fopen($o->prop("folder_url"), "r");
 		while ($row = fgetcsv($fp,1000))
 		{
 			if ($first)
@@ -458,6 +492,7 @@ class otto_import extends class_base
 				continue;
 			}
 
+			echo "got row as ".dbg::dump($row)." <br>";
 			echo "$pg => \n";
 			$row = $this->char_replacement($row);
 			flush();
@@ -468,19 +503,25 @@ class otto_import extends class_base
 					VALUES('$pg','$row[2]','".aw_global_get("lang_id")."')
 				");
 				echo ".\n";
+				echo "imported $pg => $row[2] <br>";
 				flush();
 			}
 			echo "<br>\n";
 		}
+		die();*/
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
-			if ($fname == "")
+			if (trim($fname) == "")
 			{
 				continue;
 			}
 
 			$fld_url = $o->prop("base_url")."/".trim($fname)."-1.".$fext;
+			if (!$this->is_csv($fld_url))
+			{
+				continue;
+			}
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
@@ -488,6 +529,7 @@ class otto_import extends class_base
 			{
 				$cur_pg = (int)$cur_pg;
 			}
+			$cur_pg = trim($cur_pg);
 
 			$first = true;
 			$num = 0;
@@ -551,12 +593,16 @@ class otto_import extends class_base
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
-			if ($fname == "")
+			if (trim($fname) == "")
 			{
 				continue;
 			}
 
 			$fld_url = $o->prop("base_url")."/".trim($fname)."-2.".$fext;
+			if (!$this->is_csv($fld_url))
+			{
+				continue;
+			}
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
@@ -564,6 +610,7 @@ class otto_import extends class_base
 			{
 				$cur_pg = (int)$cur_pg;
 			}
+			$cur_pg = trim($cur_pg);
 
 			$first = true;
 			$num =0;
@@ -634,12 +681,16 @@ class otto_import extends class_base
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
-			if ($fname == "")
+			if (trim($fname) == "")
 			{
 				continue;
 			}
 
 			$fld_url = $o->prop("base_url")."/".trim($fname)."-3.".$fext;
+			if (!$this->is_csv($fld_url))
+			{
+				continue;
+			}
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
@@ -647,6 +698,7 @@ class otto_import extends class_base
 			{
 				$cur_pg = (int)$cur_pg;
 			}
+			$cur_pg = trim($cur_pg);
 
 			$first = true;
 
@@ -723,7 +775,6 @@ class otto_import extends class_base
 			$log[] = "lugesin failist $fld_url $num hinda";
 			flush();
 		}
-//die();
 		$this->db_query("SELECT * FROM otto_imp_t_codes");
 		while ($row = $this->db_next())
 		{
@@ -862,7 +913,7 @@ class otto_import extends class_base
 			$fc = preg_replace("/[0-9]/", "", $row["full_code"]);
 			if (strlen(trim($fc)) > 1)
 			{
-				$log[] = "Tootel ".$dat->name()." (".$dat->prop("user16").") on kood $row[full_code] , kus on rohkem kui &uuml;ks t&auml;ht!";
+				$log[] = "Tootel ".$dat->name()." (".trim($dat->prop("user16")).") on kood ".trim($row["full_code"])." , kus on rohkem kui &uuml;ks t&auml;ht!";
 			}
 
 
@@ -1181,6 +1232,7 @@ class otto_import extends class_base
 		//$haystack = array(chr(158),chr(158),chr(154));
 
 		$needle = array(
+			chr(235),	// zhee;
 			chr(159),	// &uuml;
 			chr(134), 	// &Uuml;
 			chr(154),	// &ouml;
@@ -1189,6 +1241,7 @@ class otto_import extends class_base
 			chr(155), 	// &otilde;
 		);
 		$haystack = array(
+			chr(158),
 			chr(252),
 			chr(220),
 			chr(246),
@@ -1262,7 +1315,7 @@ class otto_import extends class_base
 	**/
 	function pictfix($arr)
 	{
-		die($this->pictimp(array(), true));
+		$this->pictimp(array(), true);
 	}
 
 	function do_post_import_fixes($obj)
@@ -1338,7 +1391,8 @@ class otto_import extends class_base
 			$c = reset($o->connections_to(array("type" => 2, "from.class_id" => CL_SHOP_PRODUCT)));
 			if (!$c)
 			{
-				die("unconnected packaging ".$o->id()."!!!");
+				echo ("unconnected packaging ".$o->id()."!!!");
+				continue;
 			}
 			$p = $c->from();
 			$pg = $p->prop("user18");
@@ -1448,6 +1502,11 @@ class otto_import extends class_base
 			else
 				$line.=$filestr[$pos];
 		}
+
+		if (trim($line) != "")
+		{
+			$linearr[] = $line;
+		}
 		return $linearr;
 	}
 
@@ -1506,6 +1565,152 @@ class otto_import extends class_base
 
 		echo "all done. <br>\n";
 		flush();
+	}
+
+	function is_csv($url)
+	{
+		$fc = file_get_contents($url);
+		if (strpos($fc, "onLoad") !== false || strpos($fc, "javascript") !== false)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function _init_folders_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "pgs",
+			"caption" => "Lehed komaga eraldatult",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "awfld",
+			"caption" => "AW Kataloogi ID",
+			"align" => "center"
+		));
+	}
+
+	function do_folders_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_folders_tbl($t);
+
+		$data = $this->_get_fld_dat();
+
+		$cnt = 1;
+		foreach($data as $fld => $row)
+		{
+			if (!$fld)
+			{
+				continue;
+			}
+			$t->define_data(array(
+				"pgs" => html::textbox(array(
+					"name" => "dat[$cnt][pgs]",	
+					"value" => join(",", $row),
+					"size" => "80"
+				)),
+				"awfld" => html::textbox(array(
+					"name" => "dat[$cnt][awfld]",	
+					"value" => $fld,
+					"size" => "10"
+				)),
+			));
+			$cnt++;
+		}
+		$t->define_data(array(
+			"pgs" => html::textbox(array(
+				"name" => "dat[$cnt][pgs]",	
+				"value" => "",
+				"size" => "80"
+			)),
+			"awfld" => html::textbox(array(
+				"name" => "dat[$cnt][awfld]",	
+				"value" => "",
+				"size" => "10"
+			)),
+		));
+
+		$t->set_sortable(false);
+	}
+
+	function _get_fld_dat()
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
+		while ($row = $this->db_next())
+		{
+			$ret[$row["fld"]][] = $row["pg"];
+		}
+		return $ret;
+	}
+
+	function read_img_from_baur($pcode)
+	{
+		$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
+
+		$fc = file_get_contents($url);
+		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		$pcs = array_unique($mt[1]);
+
+		foreach($pcs as $n_pc)
+		{
+			$url2 = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_DisplayProductInformation-ProductRef;sid=vawch68xzhk1fe62PgtM0m08zJ5byxprRr3IpZL-?ls=0&ProductRef=".$n_pc."&SearchBack=true&SearchDetail=true";
+			$fc = file_get_contents($url2);
+
+			preg_match_all("/http\:\/\/image01(.*)jpg/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+			$pics = array_unique($mt[0]);
+			$fp = basename($pics[0], ".jpg");
+			
+			preg_match("/OpenPopUpZoom\('\d*','\d*','(.*)'\)/imsU", $fc, $mt);
+			$popurl = $mt[1];
+			
+			$fc_p = file_get_contents($popurl);
+
+			preg_match("/<frame name=\"_popcont\" src=\"(.*)\"/imsU", $fc_p, $mt);
+			$contenturl = $mt[1];
+
+			$fc_c = file_get_contents($contenturl);
+
+			preg_match_all("/http\:\/\/image01(.*)jpg/imsU", $fc_c, $mt, PREG_PATTERN_ORDER);
+			$pics = array_unique($mt[0]);
+
+			$pa = array($fp => $fp);
+			foreach($pics as $pic)
+			{
+				$tmp = basename($pic, ".jpg");
+				$pa[$tmp] = $tmp;
+			}
+
+			// now pa contains all images for this one. 
+
+			$cnt = 1;
+			// insert images in db
+			foreach($pa as $pn)
+			{
+				// check if the image combo already exists
+				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE imnr = '$pn' AND nr = '$cnt' AND pcode = '$pcode'", "imnr");
+				if (!$imnr)
+				{
+					echo "insert new image $pn <br>\n";
+					flush();
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$cnt','$pn', 2)
+					");
+					//echo "q = $q <br>";
+					$this->db_query($q);
+				}
+				else
+				{
+					echo "existing image $pn <br>\n";
+				}
+				$cnt++;
+			}
+		}
 	}
 }
 

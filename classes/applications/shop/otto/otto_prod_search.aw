@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.6 2004/10/14 13:41:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.7 2004/11/03 14:52:25 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -108,9 +108,10 @@ class otto_prod_search extends class_base
 					"name" => "%".$arr["str"]."%",
 					"user3" => "%".$arr["str"]."%",
 					"userta2" => "%".$arr["str"]."%",
-					"user20" => "%".substr($arr["str"], 0,6)."%",
+					"user20" => "%".substr($arr["str"], 0,7)."%",
 				)
-			))
+			)),
+			"price" => new obj_predicate_not(10000000)
 		);
 
 		return $this->do_draw_res($arr, $filter);
@@ -139,8 +140,7 @@ class otto_prod_search extends class_base
 			WHERE
 				o.status > 0 AND o.lang_id = ".aw_global_get("lang_id")." AND
 				pr.aw_oid IN (".$jstr.") AND
-				pi.imnr IS NOT NULL AND 
-				o.parent < 169384
+				pi.imnr IS NOT NULL
 			GROUP BY
 				pi.imnr
 		";
