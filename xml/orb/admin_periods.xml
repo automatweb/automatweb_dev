@@ -8,32 +8,6 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="add">
-			<function name="orb_add">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		<action name="submit_add">
-			<function name="orb_submit_add">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		<action name="change">
-			<function name="orb_edit">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="savestatus">
-			<function name="orb_savestatus">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="list" default="1" nologin="1" is_public="1" caption="List">
 			<function name="site_list">
 				<arguments>
