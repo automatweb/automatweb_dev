@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.71 2001/10/12 15:33:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.72 2001/10/13 17:11:00 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2142,6 +2142,20 @@ class form extends form_base
 				if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
 				{
 					// oh la la
+					if ($el->get_type() == "multiple")
+					{
+						$query.=" AND (";
+						$ec=explode(",",$el->entry);
+						reset($ec);
+						$qpts = array();
+						while (list(, $v) = each($ec))
+						{
+							$qpts[] =" form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->arr["multiple_items"][$v]."%' ";
+						}
+
+						$query.= join("OR",$qpts).")";
+					}
+					else
 					if ($el->get_type() == "checkbox")
 					{	
 						//checkboxidest ocime aint siis kui nad on tshekitud
