@@ -21,9 +21,6 @@ include ${ini_dir}/classes.ini
 # AW subprogram definitions
 include ${ini_dir}/programs.ini
 
-# default program tree
-include ${ini_dir}/program_tree.ini
-
 # server settings - paths and things
 include ${ini_dir}/server.ini
 
