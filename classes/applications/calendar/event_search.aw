@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.34 2005/01/27 10:39:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.35 2005/01/27 11:24:58 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -958,7 +958,15 @@ class event_search extends class_base
 						$v = $eval[$nms];
 						if ($nms == "start1" || $nms == "end")
 						{
+							if($skip)
+							{
+								continue;
+							}
 							$value = $tabledef[$nms]["props"];
+							if($names["start1"] && $names["end"])
+							{
+								$skip = true;
+							}
 							if(!empty($value))
 							{
 								/*
@@ -974,13 +982,16 @@ class event_search extends class_base
 								//$a = str_replace("<br />", "##", $tabledef[$nms]["props"]);
 								//$a = str_replace("<br>", "##", $a);
 								//$v= str_replace("##", "<br />", $v);
-								if(strpos($value, "#php#") !== false)
+								if($names["start1"] && $names["end"])
 								{
-									$value = str_replace("#php#", "", $value);
-									$value = str_replace("#/php#", "", $value);
-									eval($value);
+									$fs1 = explode("|", $value["start1"]);
+									$fs2 = explode("|", $value["end"]);
+									$v = date($fs1[0], $eval["start1"]).(date("m", $eval["start1"]) != date("m", $eval["end"]) || date("d", $eval["start1"]) != date("d", $eval["end"]) ? " ".$tabledef[$sname]["sep"]." ".date($fs2[0], $eval["end"]) : "")." | ".date($fs1[1], $eval["start1"])." ".$tabledef[$sname]["sep"]." ".date($fs2[1], $eval["end"]);
 								}
-								$v = date($value, $v);
+								else
+								{
+									$v = date($value, $v);
+								}
 							}
 							else
 							{
