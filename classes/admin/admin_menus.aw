@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.12 2003/06/17 12:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.13 2003/06/25 15:16:13 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -874,6 +874,10 @@ class admin_menus extends aw_template
 				status != 0 
 				$cls $ps ";
 		$this->db_query($q);
+
+		// perhaps this should even be in the config file?
+		$containers = array(CL_PSEUDO,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
+
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
@@ -884,7 +888,7 @@ class admin_menus extends aw_template
 			$can_delete = $this->can("delete", $row["oid"]);
 			$can_admin = $this->can("admin", $row["oid"]);
 
-			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER || $row["class_id"] == CL_PROMO || $row["class_id"] == CL_GROUP)
+			if (in_array($row["class_id"],$containers))
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
 				$row["is_menu"] = 1;
@@ -897,7 +901,7 @@ class admin_menus extends aw_template
 			else
 			{
 				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
-				$row["is_menu"] = 2;
+				$row["is_menu"] = 1;
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
