@@ -36,17 +36,6 @@
             <caption>Lõpeb</caption>
       </property>
       <property>
-            <name>public</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Avalik</caption>
-      </property>
-      <property>
             <name>whole_day</name>
             <table>objects</table>
             <group>general</group>
@@ -55,6 +44,27 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kestab terve päeva</caption>
+      </property>
+      <property>
+            <name>udefch1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>udeftb1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 1</caption>
       </property>
       <property>
             <name>content</name>

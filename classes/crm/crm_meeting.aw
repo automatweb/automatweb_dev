@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.21 2004/12/31 09:46:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.22 2005/01/11 11:56:36 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -21,11 +21,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property end type=datetime_select table=planner 
 @caption Lõpeb
 
-@property public type=checkbox ch_value=1 default=1 field=meta method=serialize
-@caption Avalik
-
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
+
+@property udefch1 type=checkbox ch_value=1 user=1 field=meta method=serialize
+@caption User-defined checkbox 1
+
+@property udeftb1 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 1
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu
@@ -263,19 +266,6 @@ class crm_meeting extends class_base
 		}
 		switch($data["name"])
 		{
-			case "public":
-				$rights = array();
-				if(checked($data["value"]))
-				{
-					$rights = array("can_view" => 1);
-				}
-				$nlg = $this->get_cval("non_logged_in_users_group");
-				$g_oid = users::get_oid_for_gid($nlg);
-				$group = obj($g_oid);
-				$arr["obj_inst"]->acl_set($group, $rights);
-				$arr["obj_inst"]->save();
-				break;
-				
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);

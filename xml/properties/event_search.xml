@@ -147,15 +147,14 @@
                   <caption>Sündmuse vorm</caption>
             </EVENT_CFGFORM>
             <EVENT_SOURCE>
-                  <value>2</value>
-                  <clid>CL_PROJECT</clid>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_PROJECT</num_1>
+                        <num_2>CL_PLANNER</num_2>
+                  </clid>
                   <caption>Sündmuste allikas</caption>
             </EVENT_SOURCE>
-            <PROJECT_SELECTOR>
-                  <value>3</value>
-                  <clid>CL_MENU</clid>
-                  <caption>Projekti valik</caption>
-            </PROJECT_SELECTOR>
             <EVENT_SHOW>
                   <value>4</value>
                   <clid>CL_CFGFORM</clid>

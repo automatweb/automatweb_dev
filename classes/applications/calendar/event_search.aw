@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.9 2005/01/06 13:07:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.10 2005/01/11 11:56:36 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -63,11 +63,8 @@
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
 @caption Sündmuse vorm
 
-@reltype EVENT_SOURCE value=2 clid=CL_PROJECT
+@reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PROJECT,CL_PLANNER
 @caption Sündmuste allikas
-
-@reltype PROJECT_SELECTOR value=3 clid=CL_MENU
-@caption Projekti valik
 
 @reltype EVENT_SHOW value=4 clid=CL_CFGFORM
 @caption Näitamise vorm
@@ -127,13 +124,13 @@ class event_search extends class_base
 			};
 		};
 		$arr["prop"]["options"] = $opts;
-				
+		
 	}
 
 	function gen_ftform($arr)
 	{
 		$prop = &$arr["prop"];
-		$o = $arr["obj_inst"];
+		$o = &$arr["obj_inst"];
 		$t = &$prop["vcl_inst"];
 		$formconfig = $o->meta("formconfig");
 		$t->define_field(array(
@@ -217,7 +214,7 @@ class event_search extends class_base
 		));
 		
 		$prj_conns = $o->connections_from(array(
-			"type" => "RELTYPE_PROJECT_SELECTOR",
+			"type" => "RELTYPE_EVENT_SOURCE",
 		));
 
 		$prj_opts = array("0" => t("--vali--"));
@@ -350,7 +347,6 @@ class event_search extends class_base
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
-		
 		$args = $_GET;
 		$args["id"] = $arr["alias"]["to"];
 		return $this->show($args);
@@ -514,7 +510,7 @@ class event_search extends class_base
 		$search["sort_by"] = "planner.start";
 		$search["class_id"] = array(CL_CRM_MEETING, CL_CALENDAR_EVENT);
 		$start_tm = strtotime("today 0:00");
-		$end_tm = strtotime("+30 days",$start_tm);
+		$end_tm = strtotime("+30 days", $start_tm);
 		$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
 		$ol = new object_list($search);
 		$ret = array();
@@ -604,25 +600,60 @@ class event_search extends class_base
 				"value" => $end_tm != -1 ? $end_tm : time() + (30 * 86400),
 			));
 		}
-		
-		if($formconfig["project1"]["active"])
+		$search_p1 = false;
+		$search_p2 = false;
+		if(is_oid($formconfig["project1"]["rootnode"]) && $this->can("view", $formconfig["project1"]["rootnode"]))
+		{
+			$rn1 = $formconfig["project1"]["rootnode"];
+			$tmp = obj($rn1);
+			if($tmp->class_id() == CL_MENU)
+			{
+				$search_p1 = true;
+			}
+			if($tmp->class_id() == CL_PLANNER)
+			{
+				$r = $tmp->prop("event_folder");
+				if(is_oid($r) && $this->can("view", $r))
+				{
+					$rn1 = $r;
+				}
+			}
+		}
+		if(is_oid($formconfig["project2"]["rootnode"]) && $this->can("view", $formconfig["project2"]["rootnode"]))
+		{
+			$rn2 = $formconfig["project2"]["rootnode"];
+			$tmp = obj($rn2);
+			if($tmp->class_id() == CL_MENU)
+			{
+				$search_p2 = true;
+			}
+			if($tmp->class_id() == CL_PLANNER)
+			{
+				$r = $tmp->prop("event_folder");
+				if(is_oid($r) && $this->can("view", $r))
+				{
+					$rn2 = $r;
+				}
+			}
+		}
+		if($search_p1)
 		{
 			$htmlc->add_property(array(
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
 				"type" => "select",
-				"options" => $this->_get_project_choices($formconfig["project1"]["rootnode"]),
+				"options" => $this->_get_project_choices($rn1),
 				"value" => $arr["project1"],
 			));
 		}
 		
-		if($formconfig["project2"]["active"])
+		if($search_p2)
 		{
 			$htmlc->add_property(array(
 				"name" => "project2",
 				"caption" => $formconfig["project2"]["caption"],
 				"type" => "select",
-				"options" => $this->_get_project_choices($formconfig["project2"]["rootnode"]),
+				"options" => $this->_get_project_choices($rn2),
 				"value" => $arr["project2"],
 			));
 		}
@@ -637,28 +668,60 @@ class event_search extends class_base
 		// when first viewing the page with search form
 		
 		//arr($arr);
+		/*
 		if ($start_tm != -1 && $end_tm != -1)
 		{
 			$do_search = true;
 		};
+		*/
 		$do_search = true;
 		if ($do_search)
 		{
 			$search["parent"] = array();
 			$search["sort_by"] = "planner.start";
 			$search["class_id"] = array(CL_CALENDAR_EVENT, CL_CRM_MEETING);
-			$by_parent = array();
-			$ft_fields = $ob->prop("ftsearch_fields");
-			$all_projects1 = new object_list(array(
-				"parent" => array($formconfig["project1"]["rootnode"]),
-				"class_id" => CL_PROJECT,
-			));
-			$all_projects2 = new object_list(array(
-				"parent" => array($formconfig["project2"]["rootnode"]),
-				"class_id" => CL_PROJECT,
-			));
-			$par1 = $all_projects1->ids();
-			$par2 = $all_projects2->ids();
+			$par1 = array();
+			$par2 = array();
+			if($search_p1 || $search_p2)
+			{
+				if (is_oid($arr["project1"]))
+				{
+					$search["parent"][] = $arr["project1"];
+				}
+				elseif($search_p1)
+				{
+					$all_projects1 = new object_list(array(
+						"parent" => array($formconfig["project1"]["rootnode"]),
+						"class_id" => array(CL_PROJECT, CL_PLANNER),
+					));
+					
+					$search["parent"] = $par1 = $all_projects1->ids();
+				}
+				if (is_oid($arr["project2"]))
+				{
+					$search["parent"][] = $arr["project2"];
+				}
+				elseif($search_p2)
+				{
+					$all_projects2 = new object_list(array(
+						"parent" => array($formconfig["project2"]["rootnode"]),
+						"class_id" => array(CL_PROJECT, CL_PLANNER),
+					));
+					$par2 = $all_projects2->ids();
+					$search["parent"] = array_merge($search["parent"], $par2);
+				}
+			}
+			elseif($rn1 || $rn2)
+			{
+				if($rn1)
+				{
+					$search["parent"][] = $rn1;
+				}
+				if($rn2)
+				{
+					$search["parent"][] = $rn2;
+				}
+			}
 			if ($start_tm != -1)
 			{
 				$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
@@ -666,27 +729,10 @@ class event_search extends class_base
 				$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 				$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			};
-			if (is_oid($arr["project1"]))
-			{
-				$search["parent"][] = $arr["project1"];
-			}
-			else
-			{
-				$search["parent"] = $all_projects1->ids();
-
-			};
-			if (is_oid($arr["project2"]))
-			{
-				$search["parent"][] = $arr["project2"];
-			}
-			else
-			{
-				$search["parent"] = array_merge($search["parent"],$all_projects2->ids());
-			};
-			// kuidas ma nüüd need parentid kokku laon?
+			$ft_fields = $ob->prop("ftsearch_fields");
+			// kuidas ma nd need parentid kokku laon?
 			if ($arr["fulltext"])
 			{
-				$ft_fields = $ob->meta("ftsearch_fields");
 				$or_parts = array("name" => "%" . $arr["fulltext"] . "%");
 				foreach($ft_fields as $ft_field)
 				{
@@ -702,7 +748,7 @@ class event_search extends class_base
 			$clinf = aw_ini_get("classes");
 			$edata = array();
 			$ecount = array();
-			//arr($search);
+			
 			// there is a fatal flaw in my logic
 			if (sizeof($search["parent"]) != 0)
 			{
@@ -729,7 +775,7 @@ class event_search extends class_base
 					};
 					$this->vars(array("COLHEADER" => $cdat));
 				};
-				// või siis .. näidata ainult eventeid, mis on mõlema valitud parenti all?
+				// vï¿½ siis .. nï¿½data ainult eventeid, mis on mï¿½ema valitud parenti all?
 				//arr($ol);
 				$origs = array();
 				foreach($ol->arr() as $res)
@@ -745,7 +791,7 @@ class event_search extends class_base
 					$mo = new object($mpr);
 					//print "mpr = " . $mo->id() . "/" . $mo->name() . "<br>";
 					//print "n = " . $res->name() . "<br>";
-					// iga sündmuse kohta ma pean vaatama kas ta on mind huvitava projekti all või mitte?
+					// iga sndmuse kohta ma pean vaatama kas ta on mind huvitava projekti all vï¿½ mitte?
 					$parent1 = $parent2 = "";
 					if (in_array($pr->id(),$par1))
 					{
@@ -766,7 +812,7 @@ class event_search extends class_base
 
 					if (!$edata[$orig_id])
 					{
-					   	$edata[$orig_id] = array(
+						 $edata[$orig_id] = array(
 							"event_id" => $res->id(),
 							"event" => $res->name(),
 							"parent1" => $parent1,
@@ -838,9 +884,17 @@ class event_search extends class_base
 						$v = $eval[$nms];
 						if ($nms == "start1" || $nms == "end")
 						{
-							if(!empty($tabledef[$nms]["props"]))
+							$a = $tabledef[$nms]["props"];
+							if(!empty($a))
 							{
-								$v = date($tabledef[$nms]["props"], $v);
+								//preg_match_all("/<(.*)>/", $a, $mt);
+								//arr($mt);
+								//while(strpos("<", 
+								//$a = eregi_replace("#<*>#i", '#\1#', );
+								//$a = str_replace("<br />", "##", $tabledef[$nms]["props"]);
+								//$a = str_replace("<br>", "##", $a);
+								$v = date($a, $v);
+								//$v= str_replace("##", "<br />", $v);
 							}
 							else
 							{
@@ -889,7 +943,7 @@ class event_search extends class_base
 			};
 			
 			//Navigation bar
-			
+			$arr = $arr + array("section" => aw_global_get("section"));
 			$next_month_args = $arr;
 			$prev_month_args = $arr;
 			
@@ -909,7 +963,6 @@ class event_search extends class_base
 			}
 			$next_month_args["start_date"]["day"] = 1;
 			$next_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $next_month_args["end_date"]["month"], $next_month_args["end_date"]["year"]);
-			
 			
 			if($prev_month_args["start_date"]["month"] == 1)
 			{
@@ -936,7 +989,7 @@ class event_search extends class_base
 				$week_args["end_date"]["day"] = (7 * ($i-1)) + 7;
 								
 				$this->vars(array(
-					"week_url" => $this->mk_my_orb("search", $week_args, "event_search"),
+					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
 					"week_nr" => $i,	
 				));
 				
@@ -955,8 +1008,8 @@ class event_search extends class_base
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
 				//"next_month_url" => str_replace("class", "alias", $this->mk_my_orb("search", $next_month_args, "event_search")),
-				"prev_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
-				"next_month_url" => $this->mk_my_orb("search", $next_month_args, "event_search"),
+				"prev_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $prev_month_args)),
+				"next_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $next_month_args)),
 				"next_weeks" => $res_weeks,
 			));
 			
@@ -991,7 +1044,7 @@ class event_search extends class_base
 
 		return $html;
 
-		// kuupäeva numbrid on lihtsalt selectid
+		// kuupva numbrid on lihtsalt selectid
 	}
 
 	function _get_project_choices($parent)
