@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<planner>
+	<today>
+		<caption>Täna</caption>
+		<link>?class=planner</link>
+	</today>
+	<overview>
+		<caption>Ülevaade</caption>
+		<link>?class=planner&action=overview&date={VAR:date}</link>
+	</overview>
+	<day>
+		<caption>Päev</caption>
+		<link>?class=planner&action=show_week&date={VAR:date}</link>
+	</day>
+	<month>
+		<caption>Kuu</caption>
+		<link>?class=planner&action=show_week&date={VAR:date}</link>
+	</month>
+	<add>
+		<caption>Lisa</caption>
+		<link>?class=planner&action=addevent&date={VAR:date}</link>
+	</add>
+</planner>
