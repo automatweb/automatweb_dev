@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.26 2004/12/29 14:34:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.27 2004/12/30 15:51:03 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -186,14 +186,15 @@ class webform extends class_base
 		));
 		$this->n_props = array("checkboxes", "radiobuttons");
 		$this->trans_names = array(
-			"text" => "Tekst",
-			"textbox" => "Väike tekstikast",
-			"classificator" => "Valikväli",
-			"date_select" => "Kuupäevavalik",
-			"textarea" => "Suur tekstikast",
-			"hidden" => "Peidetud väli",
-			"submit" => "Saada nupp",
-			"reset" => "Tühista nupp",
+			"text" => t("Tekst"),
+			"textbox" => t("Väike tekstikast"),
+			"checkbox" => t("Märkeruut"),
+			"classificator" => t("Valikväli"),
+			"date_select" => t("Kuupäevavalik"),
+			"textarea" => t("Suur tekstikast"),
+			"hidden" => t("Peidetud väli"),
+			"submit" => t("Saada nupp"),
+			"reset" => t("Tühista nupp"),
 		);
 		$this->def_props = array(
 			"firstname" => "Eesnimi",
@@ -669,8 +670,9 @@ class webform extends class_base
 			),
 			array(
 				"name" => "Kuva sisestaja IP ja host aadress",
-				"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "Host: ".$_SERVER["REMOTE_HOST"]."\nIP: ".$_SERVER["REMOTE_ADDR"];}',
+				"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "IP: ".$_SERVER["REMOTE_ADDR"];}',
 			),
+			//Host: ".$_SERVER["REMOTE_HOST"]."\n
 		);
 		$get_controllers = array(
 			array(

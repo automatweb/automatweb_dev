@@ -11,79 +11,67 @@ class relpicker extends  core
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
 		$val = &$arr["property"];
-
-                $options = array("0" => "--vali--");
+		$options = array("0" => "--vali--");
 		$reltype = $prop["reltype"];
-
-                // generate option list
+		// generate option list
 		if (is_array($prop["options"]))
 		{
-                        $val["type"] = "select";
-                        $val["options"] = $prop["options"];
-
+			$val["type"] = "select";
+			$val["options"] = $prop["options"];
 		}
 		else
-                // if automatic is set, then create a list of all properties of that type
-                if (isset($prop["automatic"]))
-                {
-			$clid = $arr["relinfo"][$reltype]["clid"];
-                        $val["type"] = "select";
-			if (!empty($clid))
+		{
+		// if automatic is set, then create a list of all properties of that type
+			if (isset($prop["automatic"]))
 			{
-				$olist = new object_list(array(
-					"class_id" => $clid,
-				));
-
-				$names = $olist->names();
-				asort($names);
-                        
-				$val["options"] = $options + $names;
-                        
-
+				$clid = $arr["relinfo"][$reltype]["clid"];
+				$val["type"] = "select";
+				if (!empty($clid))
+				{
+					$olist = new object_list(array(
+						"class_id" => $clid,
+					));
+					$names = $olist->names();
+					asort($names);            
+					$val["options"] = $options + $names;
+					if ($arr["id"])
+					{
+						$o = obj($arr["id"]);
+						$conn = $o->connections_from(array(
+							"type" => $reltype
+						));
+						$sel = array();
+						foreach($conn as $c)
+						{
+							$sel[$c->prop("to")] = $c->prop("to");
+						}
+						$val["value"] = $sel;
+					};
+				};
+			}
+			else
+			{
 				if ($arr["id"])
 				{
 					$o = obj($arr["id"]);
 					$conn = $o->connections_from(array(
 						"type" => $reltype
 					));
-
-					$sel = array();
-
 					foreach($conn as $c)
 					{
-						$sel[$c->prop("to")] = $c->prop("to");
+						$options[$c->prop("to")] = $c->prop("to.name");
 					}
-
-					$val["value"] = $sel;
+					$val["options"] = $options;
 				};
-			};
-                }
-                else
-		if ($arr["id"])
-                {
-                        $o = obj($arr["id"]);
-                        $conn = $o->connections_from(array(
-                                "type" => $reltype
-                        ));
-
-                        foreach($conn as $c)
-                        {
-                                $options[$c->prop("to")] = $c->prop("to.name");
-                        }
-                        $val["options"] = $options;
-		};
-
-
+			}
+		}
 		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
 		return array($val["name"] => $val);
-
 	}
 
 	function process_vcl_property($arr)
 	{
 		$property = $arr["prop"];
-
-
 		if ($property["type"] == "relpicker" && $property["automatic"] == 1)
 		{
 			$obj_inst = $arr["obj_inst"];
@@ -96,7 +84,6 @@ class relpicker extends  core
 					"type" => $property["reltype"],
 				));
 			};
-
 			// no existing connection, create a new one
 			if ($arr["new"] || sizeof($conns) == 0)
 			{
@@ -147,9 +134,7 @@ class relpicker extends  core
 					};
 				};
 			};
-
 		};
-
 	}
 };
 ?>

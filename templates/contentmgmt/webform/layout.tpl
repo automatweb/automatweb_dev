@@ -32,7 +32,7 @@ function selall()
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:capt_ord}</td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}" style="border: 3px solid blue;"></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}"></td>
 	</tr>
 	<!-- SUB: clf1 -->
 	<tr>
@@ -51,7 +51,7 @@ function selall()
 	</tr>
 	<tr>
 		<td bgcolor="{VAR:bgcolor}" colspan="5">
-		Uued variandid:
+		Uued variandid (eraldaja ;):
 		<input type="text" name="prp_metas[{VAR:prp_key}]" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:300px">
 		</td>
 	</tr>
@@ -69,13 +69,4 @@ function selall()
 	</table>
 	</fieldset>
 <!-- END SUB: group -->
-
-<!-- SUB: textarea_options -->
-<tr>
-	<td colspan="5" bgcolor="{VAR:bgcolor}">
-		<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}> RTE
-		<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}">
-	</td>
-</tr>
-<!-- END SUB: textarea_options -->
 

@@ -15,16 +15,19 @@ function selall()
 	<table border="1" style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
 		<!-- SUB: d_prp -->
 		<tr>
-			<td align="center" colspan="2">Nimi</td>
+			<td align="center">Nimi</td>
 			<td width="100"><a href="javascript:selall()">Vali</a></td>
 		</tr>
 		<!-- END SUB: d_prp -->
 		<!-- SUB: def_prop -->
 		<tr>
-			<td colspan="2">{VAR:prp_name}</td>
+			<td>{VAR:prp_name}</td>
 			<td><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
 		</tr>
 		<!-- END SUB: def_prop -->
+	</table>
+	<br />
+	<table border="1" style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
 		<!-- SUB: av_props -->
 		<tr>
 			<td width="30" align="center">Tüüp</td>
