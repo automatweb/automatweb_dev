@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.139 2002/07/23 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.140 2002/07/23 16:40:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -495,10 +495,11 @@ class menuedit extends aw_template
 
 		$cd = "";
 		$menu_defs_v2 = $this->cfg["menu_defs"];
+		$this->menu_defaults = $this->cfg["menu_defaults"];
 		if ($this->cfg["lang_defs"])
 		{
 			$menu_defs_v2 = $this->cfg["menu_defs"][aw_global_get("lang_id")];
-
+			$this->menu_defaults = $this->cfg["menu_defaults"][aw_global_get("lang_id")];
 		}
 		$frontpage = $this->cfg["frontpage"];
 		
@@ -524,6 +525,9 @@ class menuedit extends aw_template
 						$id = $_id;
 					};
 				};
+
+				// so we can get the root menu of the menu area from the menu area's name quickly
+				$this->menu_defs_name_map[$name] = $id;
 
 				$this->req_draw_menu($id,$name,&$path,false);
 				if ($this->sel_section == $frontpage)
@@ -1089,7 +1093,7 @@ class menuedit extends aw_template
 		aw_global_set("section",$realsect);
 	}
 
-	function check_section($section)
+	function check_section($section, $show_errors = true)
 	{
 		$frontpage = $this->cfg["frontpage"];
 
@@ -1188,11 +1192,18 @@ class menuedit extends aw_template
 			// - terryf
 			if (!$obj) 
 			{
-				$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS,$section));
-				// neat :), kui objekti ei leita, siis saadame 404 koodi
-				header ("HTTP/1.1 404 Not Found");
-				printf(E_ME_NOT_FOUND);
-				exit;
+				if ($show_errors)
+				{
+					$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS,$section));
+					// neat :), kui objekti ei leita, siis saadame 404 koodi
+					header ("HTTP/1.1 404 Not Found");
+					printf(E_ME_NOT_FOUND);
+					exit;
+				}
+				else
+				{
+					return false;
+				}
 			} 
 			else 
 			{
@@ -3662,9 +3673,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"sel_menu_".$name."_L".$this->level."_cnt" => 0,
 		));
 
-		$in_path = in_array($this->mar[$parent]["oid"],$path);
+		$in_path = in_array($parent,$path);
+		if ($this->menu_defaults[$name] == $parent)
+		{
+			if (!in_array($this->menu_defs_name_map[$name], $path))
+			{
+				$in_path = true;
+			}
+		}
+
 		$parent_tpl = $this->is_parent_tpl($mn2, $mn);
-		if (!(($in_path||$this->level == 1)||($parent_tpl&&$in_path)||$ignore_path))
+		if (!( ($in_path||$this->level == 1) || ($parent_tpl && $in_path) || $ignore_path))
 		{
 			// don't show unless the menu is selected (in the path)
 			// or the next level subtemplates are nested in this one
@@ -3775,7 +3794,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 
-			if (in_array($row["oid"], $path))
+			$is_sel = false;
+			if ($this->menu_defaults[$name] == $row["oid"])
+			{
+				if (!in_array($this->menu_defs_name_map[$name], $path))
+				{
+					$is_sel = true;
+				}
+			}
+
+			if (in_array($row["oid"], $path) || $is_sel)
 			{
 				$this->vars(array(
 					"sel_menu_".$name."_L".$this->level."_cnt" => $cnt,
@@ -3792,7 +3820,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if ($this->is_template($mn."_N"))
 			{
-				if (!in_array($row["parent"],$path))
+				$cont = true;
+				if ($this->menu_defaults[$name] == $row["parent"])
+				{
+					if (!in_array($this->menu_defs_name_map[$name], $path))
+					{
+						$cont = false;
+					}
+				}
+				if (!in_array($row["parent"],$path) && $cont)
 				{
 					continue;
 				}
@@ -3821,12 +3857,23 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			
 			$this_selected = false;
-//			echo "oid = $row[oid] path = <pre>",var_dump($path),"</pre> click = $row[clickable] <br>";
 			if (in_array($row["oid"],$path) && $row["clickable"] == 1)
 			{
 				$ap.="_SEL";		// a selected menu
 				$this_selected = true;
 			};
+
+			// if the current menu is set as the default active menu for this menu area
+			// and the selected path does not go through the root of this menu area, then 
+			// we should mark this menu as active
+			if ($this->menu_defaults[$name] == $row["oid"])
+			{
+				if (!in_array($this->menu_defs_name_map[$name], $path))
+				{
+					$ap.="_SEL";		// a selected menu
+					$this_selected = true;
+				}
+			}
 
 			if ($row["clickable"] != 1)
 			{
