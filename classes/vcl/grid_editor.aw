@@ -270,7 +270,7 @@ class grid_editor extends class_base
 
 		$this->_process_command($cmds);
 	
-/*		if ($params['cell_content_callback'])
+		if ($params['cell_content_callback'])
 		{
 			// call the save content handler for each cell
 			for($_row = 0; $_row < $this->arr["rows"]; $_row++)
@@ -288,7 +288,7 @@ class grid_editor extends class_base
 					$this->arr['aliases'][$map['row']][$map['col']] =  $that->$fun($parms, $map['row'], $map['col'], $post);
 				}
 			}
-		}*/
+		}
 
 		// delete selected rows/cols
 /*		$cdelete = array();
