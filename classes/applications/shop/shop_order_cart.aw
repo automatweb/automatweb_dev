@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.20 2004/11/19 08:20:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.21 2004/11/26 13:57:19 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -306,7 +306,7 @@ class shop_order_cart extends class_base
 			}
 		}
 
-		if ($arr["from"] != "confirm")
+		if ($arr["from"] != "confirm" && $arr["from"] != "")
 		{
 			$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
 		}
