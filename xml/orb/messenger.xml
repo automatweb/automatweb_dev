@@ -114,6 +114,15 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="post">
+			<function name="handle_message">
+				<arguments>
+					<required name="id"/>
+					<define name="post" value="1"/>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="search">
 			<function name="search">
