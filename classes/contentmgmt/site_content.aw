@@ -1946,6 +1946,7 @@ class site_content extends menuedit
 	{
 		$dbc = get_instance("config");
 		$url = $dbc->get_simple_config("orb_err_mustlogin");
+		aw_session_set("request_uri_before_auth",aw_global_get("REQUEST_URI"));
 		header("Location: ".$this->cfg["baseurl"]."/$url");
 		// exit from inside the class, yuck.
 		exit;
