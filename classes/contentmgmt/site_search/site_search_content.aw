@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.24 2004/11/17 16:54:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.25 2004/11/18 12:04:56 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -438,7 +438,8 @@ class site_search_content extends class_base
 				d.title as title, 
 				o.modified as modified,
 				d.lead as lead,
-				d.content as content
+				d.content as content,
+				d.tm as tm
 			 FROM 
 				objects o  
 				LEFT JOIN documents d ON o.brother_of = d.docid
@@ -465,7 +466,8 @@ class site_search_content extends class_base
 				"title" => $row["title"],
 				"modified" => $row["modified"],
 				"content" => $row["content"],
-				"lead" => $row["lead"]
+				"lead" => $row["lead"],
+				"tm" => $row["tm"]
 			);
 		}
 			
@@ -514,7 +516,7 @@ class site_search_content extends class_base
 			"class_id" => CL_KEYWORD,
 			"name" => "%$str%",
 		));
-			
+		;		
 		//If keyword not found, no point to process it futher
 		if($keyword_list->count() == 0)
 		{
@@ -528,7 +530,7 @@ class site_search_content extends class_base
 			"from" => $keyword_list->ids(),
 			"to.class_id" => $classes,
 		));
-		
+		//arr($keyword_to_file_conns);	
 		if(!$keyword_to_file_conns)
 		{
 			return;
@@ -547,11 +549,12 @@ class site_search_content extends class_base
 			"to" => $ids_list,
 			"from.class_id" => CL_DOCUMENT,
 		));
-		
+		;	
 		foreach ($aliased_docs_conns as $conn)
 		{
 			$doc_ids[] = $conn["from"];	
 		}
+		
 		if(!$doc_ids)
 		{
 			return;
@@ -561,6 +564,8 @@ class site_search_content extends class_base
 			"oid" => $doc_ids,
 			"parent" => $menus,
 		));
+	
+		
 		$ret = array();	
 		foreach ($ol->arr() as $obj)
 		{
@@ -846,14 +851,13 @@ class site_search_content extends class_base
 			{
 				continue;
 			}
-
-			// whatta fuck? 
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
 				"modified" => date("d.m.Y", $results[$i]["modified"]),
 				"content" => $this->_get_content($results[$i]["content"]),
-				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"])
+				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"]),
+				"tm" => ($results[$i]["tm"] != "" ? $results[$i]["tm"] : date("d.m.Y", $results[$i]["modified"]))
 			));
 			$res .= $this->parse("MATCH");
 		}
