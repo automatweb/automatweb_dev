@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.118 2004/11/03 12:16:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.119 2004/11/15 16:11:03 ahti Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -76,6 +76,8 @@
 	@property resize_warn type=text store=no
 	@caption Info
 
+	@reltype MOD_COMMENT value=1 clid=CL_COMMENT
+	@caption Moderaatori kommentaar
 */
 class image extends class_base
 {
