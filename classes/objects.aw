@@ -233,7 +233,7 @@ class db_objects extends aw_template
 		{
 			if ($GLOBALS["lang_menus"] == 1)
 			{
-				$aa = " AND objects.lang_id = ".$GLOBALS["lang_id"];
+				$aa = " AND (objects.lang_id = ".$GLOBALS["lang_id"]." OR menu.type = 69)";
 			}
 		}
 		$this->db_query("SELECT objects.oid as oid, 
