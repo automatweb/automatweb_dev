@@ -752,9 +752,9 @@ class bugtrack extends aw_template
 	// !Kustutab bugi
 	function orb_delete($arr) 
 	{
-		if (!$this->prog_acl("delete", PRG_BUGTRACK))
+		if (!$this->prog_acl("view", PRG_BUGTRACK))
 		{
-			$this->prog_acl_error("delete", PRG_BUGTRACK);
+			$this->prog_acl_error("view", PRG_BUGTRACK);
 		};
 		global $baseurl;
 		extract($arr);
