@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.20 2004/10/27 12:03:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.21 2004/11/11 15:08:11 ahti Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -194,7 +194,7 @@ class rate extends class_base
 				INSERT INTO ratings(oid, rating, tm, uid, ip) 
 				VALUES('$oid','$rate',".time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
 			");
-			$ro[$oid] = $rating;
+			$ro[$oid] = $rate;
 
 			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = '$oid'";
 			$this->db_query($stat_query);
