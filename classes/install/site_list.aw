@@ -636,17 +636,19 @@ class site_list extends class_base
 				continue;
 			}
 			list($servname) = explode("/",str_replace("http://", "", str_replace("https://", "", $sd["url"])));
-			echo "server = $servname <br>";
-			echo dbg::dump($this->do_orb_method_call(array(
+			$res = $this->do_orb_method_call(array(
 				"class" => "site_list",
 				"action" => "get_site_info",
 				"server" => $servname,
 				"method" => "xmlrpc",
 				"no_errors" => 1
-			)));
+			));
+			echo "server = $servname , res = ".(is_array($res) ? "yeah!" : "mkm")." <br>";
 			echo "\n";
+			$suc += is_array($res) ? 1 : 0;
 			flush();
 		}
+		echo "sucess = $suc <br>";
 	}
 }
 ?>
