@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.44 2003/12/10 13:06:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.45 2004/01/13 14:12:06 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -554,6 +554,7 @@ class htmlclient extends aw_template
 				// but what if there is more than 1 of those?
 				// attaching this might just break something somewhere
 				$arr["onclick"] = "submit_changeform();";
+				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
 				break;
 
