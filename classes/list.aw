@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.2 2001/05/18 21:33:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.3 2001/05/18 21:37:50 duke Exp $
 class mlist extends aw_template
 {
 	function mlist($id)
@@ -29,15 +29,15 @@ class mlist extends aw_template
 										 GROUP BY objects.oid");
 		while ($row = $this->db_next())
 		{
-			if ($row[is_copied] == 1)
+			if ($row["is_copied"] == 1)
 				$bgk = "class='fgtext_copied'";
 			else
-			if ($row[is_cut] == 1)
+			if ($row["is_cut"] == 1)
 				$bgk = "class='fgtext_cut'";
 			else
 				$bgk = "class='fgtext'";
 
-			$this->vars(array("user_name" => $row[name], "user_id" => $row[oid], "user_mail" => $row[mail], "row" => $cnt,
+			$this->vars(array("user_name" => $row["name"], "user_id" => $row["oid"], "user_mail" => $row["mail"], "row" => $cnt,
 													"cut"		=> $bgk));
 
 			$ch = $this->parse("U_CHANGE");
@@ -84,7 +84,7 @@ class mlist extends aw_template
 		
 			while($row = $this->db_next())
 			{
-				$this->vars(array("var_name" => $row[name], "var_id" => $row[oid], "var_value" => ""));
+				$this->vars(array("var_name" => $row["name"], "var_id" => $row["oid"], "var_value" => ""));
 				$c.=$this->parse("VARS");
 			}
 		}
@@ -185,8 +185,6 @@ class mlist extends aw_template
 	}
 			
 				
-		if
-	
 	function change_user($uid)
 	{
 		$this->read_template("add_user.tpl");
@@ -225,7 +223,7 @@ class mlist extends aw_template
 				$this->db_query("SELECT value FROM ml_var_values WHERE var_id = ".$vrow[oid]." AND user_id = $uid");
 				$row = $this->db_next();
 				
-				$this->vars(array("var_name" => $vrow[name], "var_id" => $vrow[oid], "var_value" => $row[value]));
+				$this->vars(array("var_name" => $vrow["name"], "var_id" => $vrow["oid"], "var_value" => $row["value"]));
 				$c.=$this->parse("VARS");
 
 				$this->restore_handle();
@@ -267,7 +265,7 @@ class mlist extends aw_template
 											 GROUP BY objects.oid");
 			while ($row = $this->db_next())
 			{
-				$rows[$row[oid]] = 1;		// mark all the rows that can be deleted
+				$rows[$row["oid"]] = 1;		// mark all the rows that can be deleted
 			}
 			$uidarr = explode(",",$ids);
 			reset($uidarr);
@@ -309,11 +307,11 @@ class mlist extends aw_template
 
 			// copy user variables
 			$vars = array();
-			$this->db_query("SELECT * FROM ml_var_values WHERE user_id = ".$row[oid]);
+			$this->db_query("SELECT * FROM ml_var_values WHERE user_id = ".$row["oid"]);
 			while ($vrow = $this->db_next())
-				$vars[$vrow[var_id]] = $vrow[value];
+				$vars[$vrow["var_id"]] = $vrow["value"];
 
-			$this->db_add_user(array("name" => $row[name], "email" => $row[mail]), $vars);
+			$this->db_add_user(array("name" => $row["name"], "email" => $row["mail"]), $vars);
 			$this->restore_handle();
 		}
 	}
@@ -337,7 +335,7 @@ class mlist extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			$this->delete_object($row[oid]);
+			$this->delete_object($row["oid"]);
 			$this->restore_handle();
 		}
 	}
@@ -375,8 +373,8 @@ class mlist extends aw_template
 		$this->db_query("SELECT * FROM objects WHERE class_id = 24 AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("var_name"	=> $row[name], 
-												"var_id"		=> $row[oid],
+			$this->vars(array("var_name"	=> $row["name"], 
+												"var_id"		=> $row["oid"],
 												"var_ch"		=> ($this->l_vars[$row[oid]] == 1 ? "CHECKED" : "")));
 			$line.=$this->parse("LINE");
 		}
@@ -427,7 +425,7 @@ class mlist extends aw_template
 		header("Content-type: text/plain");
 		$this->db_query("SELECT ml_users.mail as mail, objects.name as name FROM objects LEFT JOIN ml_users ON objects.oid = ml_users.id WHERE class_id = 17 AND status != 0");
 		while ($row = $this->db_next())
-			echo $row[name],",",$row[mail],"\n";
+			echo $row["name"],",",$row["mail"],"\n";
 	}
 };
 ?>
