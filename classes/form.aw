@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.142 2002/09/05 14:03:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.143 2002/09/05 16:57:17 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -133,7 +133,10 @@ class form extends form_base
 					continue;
 				}
 				
-				$els = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_elements();
+				if (is_object($this->arr["contents"][$arr["r_row"]][$arr["r_col"]]))
+				{
+					$els = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_elements();
+				}
 
 				reset($els);
 				$el = "";
@@ -1308,7 +1311,7 @@ class form extends form_base
 			$_end = (int)$this->arr["cal_end"];
 			$_max = (int)$this->arr["cal_count"];
 			$_period_cnt = (int)$this->arr["cal_period"];
-			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
+			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id' AND entry_id = '$entry_id'";
 			$this->db_query($q);
 			$relation = ($chain_entry_id) ? $chain_entry_id : $this->entry_id;
 			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)
