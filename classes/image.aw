@@ -164,16 +164,7 @@ class image extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->imagealiases) || $this->imagealiasoid != $oid)
-		{
-			$this->imagealiases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_IMAGE,
-							));
-			$this->imagealiasoid = $oid;
-			$this->image_inplace_used = false;
-		};
-		$f = $this->imagealiases[$matches[3] - 1];
+		$f = $alias;
 		if (!$f["target"])
 		{
 			// now try and list images by the old way 
@@ -186,7 +177,7 @@ class image extends aw_template
 		else
 		{
 			$idata = $this->get_image_by_id($f["target"]);
-		}		
+		}	
 
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
