@@ -231,8 +231,10 @@ class db_table_contents extends class_base
 
 		$keys = array();
 		$db->db_query('SELECT * FROM '.$ob['meta']['db_table'].' LIMIT '.($page*$per_page).','.((int)$per_page));
+		$rc = 0;
 		while ($row = $db->db_next())
 		{
+			$rc++;
 			// put together the where part for this row for the update
 			$wherepts = array();
 			// now make all cells into textboxes
@@ -240,17 +242,17 @@ class db_table_contents extends class_base
 			{
 				$wherepts[] = "$fn = '".$row[$fn]."'";
 				$row[$fn] = html::textbox(array(
-					'name' => 'values['.$row['rec'].']['.$fn.']',
+					'name' => "values['$rc']['$fn']",
 					'value' => $row[$fn],
 					'size' => min($fd['length'],50)
 				));
 			}
 			$row['sel'] = html::checkbox(array(
 				'name' => 'sel[]',
-				'value' => $row['rec'],
+				'value' => $rc,
 			));
 			$t->define_data($row);
-			$keys[$row['rec']] = join(" AND ", $wherepts);
+			$keys[$rc] = join(" AND ", $wherepts);
 		}
 		$t->sort_by();
 
@@ -337,14 +339,16 @@ class db_table_contents extends class_base
 		// and if it has, write the data
 		$q = 'SELECT * FROM '.$ob['meta']['db_table'].' LIMIT '.($page*$per_page).','.((int)$per_page);
 		$db->db_query($q);
+		$rc = 0;
 		while ($row = $db->db_next())
 		{
+			$rc++;
 			$tochange = array();
 			foreach($tbl['fields'] as $fn => $fd)
 			{
-				if ($row[$fn] != $values[$row['rec']][$fn])
+				if ($row[$fn] != $values[$rc][$fn])
 				{
-					$tochange[] = "$fn = '".$values[$row['rec']][$fn]."'";
+					$tochange[] = "$fn = '".$values[$rc][$fn]."'";
 				}
 			}
 			$tochangestr = join(" , ", $tochange);
@@ -352,9 +356,9 @@ class db_table_contents extends class_base
 			{
 				// check that we didn't mark this row to be deleted, because then we must not change it's content, because
 				// then the where part will break
-				if (!($is_del == 1 && in_array($row['rec'], $sela->get())))
+				if (!($is_del == 1 && in_array($rc, $sela->get())))
 				{
-					$q = "UPDATE ".$ob['meta']['db_table']." SET $tochangestr WHERE ".$keys[$row['rec']];
+					$q = "UPDATE ".$ob['meta']['db_table']." SET $tochangestr WHERE ".$keys[$rc];
 //					echo "q = $q <br>";
 					$db->save_handle();
 					$db->db_query($q);
