@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.65 2005/01/06 13:48:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.66 2005/01/06 15:16:18 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -267,6 +267,19 @@ class forum_v2 extends class_base
 				{
 					$topic_obj = new object($topic_id);
 					$topic_obj->delete();
+				};
+			};
+		};
+		if (isset($arr["request"]["locktoggle_selected_topics"]))
+		{
+			$topic_list = new aw_array($arr["request"]["sel_topic"]);
+			foreach($topic_list->get() as $topic_id => $foo)
+			{
+				if ($this->can("edit",$topic_id))
+				{
+					$topic_obj = new object($topic_id);
+					$topic_obj->set_prop("locked",!$topic_obj->prop("locked"));
+					$topic_obj->save();
 				};
 			};
 		};
@@ -846,10 +859,15 @@ class forum_v2 extends class_base
 			{
 				$last["created"] = $this->time2date($last["created"],2);
 			};
-		
-			
+
+			$topic_name = $subtopic_obj->name();
+			if (1 == $subtopic_obj->prop("locked"))
+			{
+				$topic_name = "[L] " . $topic_name;
+			};
+
 			$this->vars(array(
-				"name" => $subtopic_obj->name(),
+				"name" => $topic_name,
 				"comment_count" => (int)$comm_counts[$st_oid],
 				"topic_id" => $st_oid,
 				"last_date" => $last["created"],
@@ -909,6 +927,7 @@ class forum_v2 extends class_base
 			));
 			$pager = "";
 		};	
+
 	
 
 		$this->vars(array(
@@ -923,10 +942,17 @@ class forum_v2 extends class_base
 				"_alias" => get_class($this),
 			)),
 		));
-		if ($can_admin && $delete_action)
+		if ($can_admin)
 		{
+			if ($delete_action)
+			{
+				$this->vars(array(
+					"DELETE_ACTION" => $this->parse("DELETE_ACTION"),
+				));
+			};
+
 			$this->vars(array(
-				"DELETE_ACTION" => $this->parse("DELETE_ACTION"),
+				"LOCK_ACTION" => $this->parse("LOCK_ACTION"),
 			));
 		};
 		return $this->parse();
@@ -1127,84 +1153,58 @@ class forum_v2 extends class_base
 
 		$rv = $this->parse();
 
-		$this->read_template("add_comment.tpl");
-		$this->reforb_action = "submit_comment";
-		$this->_add_style("style_form_caption");
-		$this->_add_style("style_form_text");
-		$this->_add_style("style_form_element");
-		$this->vars($this->style_data);
-		//return $rv . $this->parse();
-
-		$retval = array();
-
-		
-		if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
+		if (0 == $topic_obj->prop("locked"))
 		{
-			$embedded = true;		
-		}
 
-		if ($embedded)
-		{
-			$retval["_alias"] = array(
-				"type" => "hidden",
-				"name" => "_alias",
-				"value" => 1,
-			);
-		};
-		
-		$uid = aw_global_get("uid");
-		$add = "";
-		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
-		{
+			$this->read_template("add_comment.tpl");
+			$this->reforb_action = "submit_comment";
+			$this->_add_style("style_form_caption");
+			$this->_add_style("style_form_text");
+			$this->_add_style("style_form_element");
+			$this->vars($this->style_data);
+			//return $rv . $this->parse();
+
+			$retval = array();
+
+			
+			if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
+			{
+				$embedded = true;		
+			}
+
+			if ($embedded)
+			{
+				$retval["_alias"] = array(
+					"type" => "hidden",
+					"name" => "_alias",
+					"value" => 1,
+				);
+			};
+			
+			$uid = aw_global_get("uid");
+			$add = "";
+			if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
+			{
+				$this->vars(array(
+					"author" => $uid,
+				));
+				$add = "_logged";
+			}
 			$this->vars(array(
-				"author" => $uid,
+				"a_name" => $this->parse("a_name".$add),
 			));
-			$add = "_logged";
-		}
-		$this->vars(array(
-			"a_name" => $this->parse("a_name".$add),
-		));
+
+			$rv .= $this->parse();
+		};
 			
 		$retval["contents"] = array(
 			"type" => "text",
 			"name" => "contents",
-			"value" => $rv . $this->parse(),
+			"value" => $rv,
 			"no_caption" => 1,
 		);
-
-		/*
-		$retval["comment_caption"] = array(
-			"type" => "text",
-			"name" => "comment_caption",
-			"value" => "Lisa kommentaar",
-			"no_caption" => 1,
-			"subtitle" => 1,
-		);
-		
-		$retval["comment_name"] = array(
-			"type" => "textbox",
-			"name" => "comment_name",
-			"value" => "",
-			"caption" => "Pealkiri",
-		);
-		*/
 
 		return $retval;
-		/*
-		$uid = aw_global_get("uid");
-		$add = "";
-		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
-		{
-			$this->vars(array(
-				"author" => $uid,
-			));
-			$add = "_logged";
-		}
-		$this->vars(array(
-			"a_name" => $this->parse("a_name".$add),
-		));
-		return $rv . $this->parse();
-		*/
 
 	}
 
@@ -1259,26 +1259,30 @@ class forum_v2 extends class_base
 		));
 	}
 
-	function update_container($arr)
-	{
-		print "updating container<bR>";
-		print "<pre>";
-		print_R($arr);
-		print "</pre>";
-
-	}
-
 	function callback_mod_retval($args = array())
 	{
+		$req = $args["request"];
 		if ($this->topic_id)
 		{
                 	$emb = $args["request"]["emb"];
-			$args = &$args["args"];
-			$args["folder"] = $emb["parent"];
-			$args["topic"] = $this->topic_id;
-			$args["group"] = "contents";
-			$args["page"] = $args["request"]["page"];
+			$rv_args = &$args["args"];
+			$rv_args["folder"] = $emb["parent"];
+			$rv_args["topic"] = $this->topic_id;
+			$rv_args["group"] = "contents";
+			$rv_args["page"] = $args["request"]["page"];
 		}
+		else
+		{
+			$rv_args = &$args["args"];
+			if ($req["folder"])
+			{
+				$rv_args["folder"] = $req["folder"];
+			};
+			if ($req["section"])
+			{
+				$rv_args["_alias"] = get_class($this);
+			};
+		};	
 	}
 
 	function get_topic_list($args = array())
@@ -1438,7 +1442,10 @@ class forum_v2 extends class_base
 		{
 			$arr["page"] = $request["page"];
 		};
-
+		if (is_oid($request["folder"]))
+		{
+			$arr["folder"] = $request["folder"];
+		};
 	}
 
 	function update_topic_selector($arr)
@@ -1652,10 +1659,10 @@ class forum_v2 extends class_base
 		}
                 $emb = $arr;
 		$emb["parent"] = $arr["folder"];
-                $t->id_only = true;
 		$emb["forum_id"] = $arr["id"];
 		$arr["group"] = "contents";
 		$emb["status"] = STAT_ACTIVE;
+		$emb["return"] = "id";
 		unset($emb["id"]);
                 $this->topic_id = $t->submit($emb);
 		$cb_values = $t->cb_values;
