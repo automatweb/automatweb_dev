@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.4 2004/01/13 16:24:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.5 2004/02/04 13:41:11 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -11,7 +11,7 @@ class form_alias extends form_base
 
 	/**  
 		
-		@attrib name=new_entry_alias params=name default="0"
+		@attrib name=new params=name default="0"
 		
 		@param return_url required
 		@param parent optional
@@ -27,9 +27,13 @@ class form_alias extends form_base
 		@comment
 
 	**/
+	function do_new($arr)
+	{
+		return $this->new_entry_alias($arr);
+	}
 	/**  
 		
-		@attrib name=new params=name default="0"
+		@attrib name=new_entry_alias params=name default="0"
 		
 		@param return_url required
 		@param parent optional
