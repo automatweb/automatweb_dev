@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.55 2003/05/13 14:37:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.56 2003/05/22 10:57:38 axel Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -279,7 +279,7 @@ class users_user extends aw_template
 				"key" => "act_from"
 			));
 			$act_to = $this->get_user_config(array(
-				"uid" => $uid, 
+				"uid" => $uid,
 				"key" => "act_to"
 			));
 			if ($act_from > 0 && $act_from > time())
@@ -328,6 +328,15 @@ class users_user extends aw_template
 		};
 		session_register("uid");
 		aw_global_set("uid", $uid);
+
+		$aliasmgr_hist = $this->get_user_config(array(
+			'uid' => aw_global_get('uid'),
+			'key' => 'aliasmgr_obj_history',
+		));
+		if (is_array($aliasmgr_hist))
+		{
+			aw_session_set('aliasmgr_obj_history',$aliasmgr_hist);
+		}
 
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st try to find the group based url and if that fails, then the everyone's url and then just the baseurl.

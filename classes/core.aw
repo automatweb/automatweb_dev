@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.194 2003/05/19 14:15:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.195 2003/05/22 10:57:38 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -674,7 +674,7 @@ class core extends db_connector
 	// but I will leave this in place just in case someone still
 	// needs it.
 	function add_alias($source,$target,$extra = "")
-	{
+	{die($source);
 		$this->addalias(array(
 			"id" => $source,
 			"alias" => $target,
@@ -806,7 +806,7 @@ class core extends db_connector
 			WHERE target = '$oid' ORDER BY id";
 		$this->db_query($q);
 		$aliases = array();
-		while($row = $this->db_next()) 
+		while($row = $this->db_next())
 		{
 			$aliases[]=array(
 				"type" => $row["type"],
@@ -841,7 +841,9 @@ class core extends db_connector
 	{
 		extract($arr);
 		$extra = ($arr["extra"]) ? $arr["extra"] : "";
+
 		$target_data = $this->get_object($alias);
+
 		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
 		if ($idx === "")
 		{
@@ -856,6 +858,36 @@ class core extends db_connector
 		$reltype = (int)$arr["reltype"];
 		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
 			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
+			
+		$cl = $target_data['class_id'];
+
+		if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
+		{
+			$hist[time()] = $cl;
+			array_unique($hist);
+			krsort($hist);
+			while(count($hist) > 10)
+			{
+				array_pop($hist);
+			}
+		}
+		else
+		{
+			$hist = array(time() => $cl);
+		}
+
+		aw_session_set('aliasmgr_obj_history',$hist);
+
+		$usr = get_instance('users_user');
+
+		$usr->set_user_config(array(
+			'uid' => aw_global_get('uid'),
+			'key' => 'aliasmgr_obj_history',
+			'value' => $hist
+		));
+		arr($hist);
+
+
 
 		$this->db_query($q);
 		$aliasmgr = get_instance("aliasmgr");

@@ -158,6 +158,23 @@ function selall()
 	chk_status = !chk_status;
 }
 
+function create_new_object()
+{
+	with(document.foo)
+	{
+		cl = aselect.options[aselect.selectedIndex].value;
+		if (cl == "capt_new_object")
+		{
+			alert('Vali objekti tüüp!');
+		}
+		else
+		{
+			rel_type = reltype.options[reltype.selectedIndex].value;
+			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
+		};
+	};
+};
+
 function search_selall()
 {
 	selall();
