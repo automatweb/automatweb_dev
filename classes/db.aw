@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.19 2003/04/13 17:03:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.20 2003/06/04 13:38:29 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -41,7 +41,6 @@
 	// should and will take care of connecting to correct sources 
 */
 
-#classload("root");
 class db_connector
 {
 	var $dc; # this is where we hold connections
