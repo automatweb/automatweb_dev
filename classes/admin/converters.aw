@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.36 2004/04/06 15:16:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.37 2004/05/13 14:51:55 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1183,6 +1183,7 @@ class converters extends aw_template
 		));
 		echo "got list of all menus (".$ol->count().")<br>\n";
 		flush();
+		aw_disable_acl();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			echo "menu ".$o->name()." (".$o->id().")<br>\n";
@@ -1194,6 +1195,7 @@ class converters extends aw_template
 			{
 				if ($i["id"])
 				{
+					
 					$o->connect(array(
 						"to" => $i["id"],
 						"reltype" => 14
