@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.52 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.53 2004/06/11 09:12:50 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -115,9 +115,6 @@ class table extends aw_template
 			$this->raise_error(ERR_TBL_NO_TBL,"no such table $id (tables.class->load_table)!", true);
 		}
 		
-		/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
-		$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
-
 		$this->meta = aw_unserialize($row["metadata"]);
 		$this->obj_data = $row;
 
@@ -2749,9 +2746,10 @@ class table extends aw_template
 	{
 		extract($arr);
 
-		$ob = $this->get_object($id);
-		$this->delete_object($id);
-		$this->_log(ST_AWTABLE, SA_DELETE, $ob['name']);
+		$tmp = obj($id);
+		$name = $tmp->name();
+		$tmp->delete();
+		$this->_log(ST_AWTABLE, SA_DELETE, $name);
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
 	}
 
