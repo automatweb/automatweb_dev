@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.35 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.36 2001/07/12 05:33:56 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -700,6 +700,7 @@ class core extends db_connector
 			"match" => isset($match) ? $match : 0,
 			"class" => $class,
 			"function" => $function,
+			"reset" => isset($reset) ? $reset : "",
 			"templates" => isset($templates) ? $templates : array(),
 		);
 
@@ -719,6 +720,23 @@ class core extends db_connector
 		$awt->start("parse_aliases");
 		extract($args);
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
+		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
+		foreach($this->parsers->reglist as $pkey => $parser)
+		{
+			if (sizeof($parser["parserchain"] > 0))
+			{
+				foreach($parser["parserchain"] as $skey => $sval)
+				{
+					$cls = $sval["class"];
+					$res = $sval["reset"];
+					if ($sval["reset"])
+					{
+						$this->parsers->$cls->$res();
+					};
+				};
+			};
+		}
+		
 		foreach($this->parsers->reglist as $pkey => $parser)
 		{
 			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
