@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.1 2004/07/22 11:19:01 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.2 2004/07/27 11:21:18 rtoomas Exp $
 // tax.aw - Maks 
 /*
 
 @classinfo syslog_type=ST_TAX relationmgr=yes
+@tableinfo tax index=oid master_table=objects master_index=oid 
 
 @default table=objects
 @default group=general
@@ -11,10 +12,24 @@
 @property jrk type=textbox
 @caption Järjekord
 
+@default table=tax
+
+@property tax_type type=chooser
+@caption Maksu tüüp
+
+@property tax_percentage type=textbox
+@caption Suhtarv
+
+@property tax_amount type=textbox
+@caption Tüüparv
+
 */
 
 class tax extends class_base
 {
+	var $ignore_percentage = false;
+	var $ignore_sum = false;
+	
 	function tax()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
@@ -25,23 +40,43 @@ class tax extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case 'tax_type':
+				if($prop['value'])
+				{
+					$this->ignore_percentage = true;
+					$this->ignore_sum = false;
+				}
+				else
+				{
+					$this->ignore_sum = true;
+					$this->ignore_percentage = false;
+				}
+				$prop['options'] = array(
+								'0' => 'Protsent',
+								'1' => 'Kindel arv',
+				);
+			break;
+			case 'tax_percentage':
+				if($this->ignore_percentage)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case 'tax_amount':
+				if($this->ignore_sum)
+				{
+					return PROP_IGNORE;
+				}
 		};
 		return $retval;
 	}
-	*/
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -52,16 +87,7 @@ class tax extends class_base
 		}
 		return $retval;
 	}	
-	*/
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));

@@ -1,12 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.2 2004/07/22 10:25:13 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/transaction.aw,v 1.3 2004/07/27 11:22:08 rtoomas Exp $
 // transaction.aw - Ülekanne 
 /*
 
-@classinfo syslog_type=ST_TRANSACTION relationmgr=yes
+@classinfo syslog_type=ST_TRANSACTION relationmgr=yes no_status=1 no_comment=1
 @tableinfo pank_transaction index=oid master_table=objects master_index=oid
 
-@default group=general submit=no
+@groupinfo general caption="Üldine" submit=no
+
+@default table=objects
+@default group=general
+
+//nime väljas hoian selgitust ja kasutajale näitan "nimi" asemel "Selgitus" teksti
+@property name type=textbox
+@caption Selgitus
+
 @default table=pank_transaction
 
 @property trans_from_object type=text store=no
@@ -45,6 +53,9 @@
 @property soorita type=submit store=no no_caption=1
 
 */
+
+define('PERCENTAGE_TAX', 0);
+define('SUM_TAX', 1);
 
 class transaction extends class_base
 {
@@ -111,6 +122,18 @@ class transaction extends class_base
 		{
 			switch($prop["name"])
 			{
+				case 'name':
+					if($arr['obj_inst']->prop('is_completed'))
+					{
+						$prop['type'] = 'text';
+					}
+					break;
+				case 'sum':
+					if($arr['obj_inst']->prop('is_completed'))
+					{
+						$prop['type'] = 'text';	
+					}
+					break;
 				case 'trans_from_object':
 					$prop['value'] = $this->from_object->prop('name');
 					break;
@@ -199,6 +222,19 @@ class transaction extends class_base
 			$to_account->set_prop('account_balance',$to_account->prop('account_balance')+$sum);
 			$from_account->save();
 			$to_account->save();
+
+			//have to post a message
+			//the "to" part of the transaction
+			//wants to know cos then it can
+			//collect taxes
+			//NOW I'M THINKING, THAT WHY DO I NEED TO MESSAGE?
+			$this->do_taxes(array(
+				'transaction' => &$transaction,
+				'from' => &$from_account,
+				'to' => &$to_account,
+				'do_taxes' => 1,
+			));
+			//transaction completed
 		}
 	}
 
@@ -252,6 +288,8 @@ class transaction extends class_base
 			to - account id or account object
 			sum - sum that is transfered from 
 					"from" account to "to" account.
+			name - name of the transaction
+			comment - comment of the transaction
 	**/
 	function do_transaction($arr)
 	{
@@ -264,6 +302,7 @@ class transaction extends class_base
 		
 		//init to account
 		$to_account = $arr['to'];
+
 		if(!is_object($to_account))
 		{
 			$to_account = new object($to_account);
@@ -275,6 +314,7 @@ class transaction extends class_base
 		$from_transaction->set_prop('trans_from_account', $from_account->id());
 		$from_transaction->set_prop('trans_to_account', $to_account->id());
 		$from_transaction->set_prop('is_completed',1);
+		$from_transaction->set_prop('name', $arr['name']);
 
 		$to_transaction = new object();
 		$to_transaction->set_class_id(CL_TRANSACTION);
@@ -282,6 +322,7 @@ class transaction extends class_base
 		$to_transaction->set_prop('trans_from_account', $from_account->id());
 		$to_transaction->set_prop('trans_to_account', $to_account->id());
 		$to_transaction->set_prop('is_completed',1);
+		$to_transaction->set_prop('name', $arr['name']);
 		//
 		$time = time();
 		//
@@ -292,7 +333,7 @@ class transaction extends class_base
 		$from_transaction->save();
 
 		//transactions in place, can transfer the money itself
-		$arr['sum'] = float($arr['sum']);
+		$arr['sum'] = (float)$arr['sum'];
 		$from_account->set_prop('account_balance',$from_account->prop('account_balance')-$arr['sum']);
 		$to_account->set_prop('account_balance',$to_account->prop('account_balance')+$arr['sum']);
 		//
@@ -310,21 +351,63 @@ class transaction extends class_base
 		{
 			$trans = new object($trans);
 		}
-		if($trans->prop('trans_from_account'))
-		{
-			$obj = new object($trans->prop('trans_from_account'));
-			$obj = new object($obj->parent());
-			$rtrn['from_obj'] = $obj;
-			
-			$obj = new object($trans->prop('trans_to_account'));
-			$obj = new object($obj->parent());
-			$rtrn['to_obj'] = $obj;
 
-			return $rtrn;
-		}
-		else
+		$obj = new object($trans->prop('trans_from_account'));
+		$rtrn['from_account'] = $obj;
+		$obj = new object($obj->parent());
+		$rtrn['from_obj'] = $obj;
+		
+		$obj = new object($trans->prop('trans_to_account'));
+		$rtrn['to_account'] = $obj;
+		$obj = new object($obj->parent());
+		$rtrn['to_obj'] = $obj;
+
+		return $rtrn;
+	}
+
+	function do_taxes($arr)
+	{
+		if($arr['do_taxes'])
 		{
-			return null;
+			$to_parent = new object($arr['to']->parent());
+		
+			$pank = get_instance('pank/pank');
+			$tax_to_account = $pank->get_tax_account_for_obj(&$to_parent);
+			
+			$conns = $to_parent->connections_from(array(
+							'type' => 'RELTYPE_TAX_CHAIN'
+			));
+
+			foreach($conns as $tax_chain)
+			{
+				$tax_chain = $tax_chain->to();
+				
+				$conns2 = $tax_chain->connections_from(array(
+								'type' => 'RELTYPE_TAX'
+				));
+
+				foreach($conns2 as $tax)
+				{
+					$tax2 = new object($tax->prop('to'));
+					$tax = $tax->to();
+					$sum = $arr['transaction']->prop('sum')
+								*
+							 ($tax->prop('tax_percentage')/100);
+							 
+					//summa maxu puhul võtan maha
+					//kindla summa raha, mitte protsendi :)
+					if($tax->prop('tax_type')==SUM_TAX)
+					{
+						$sum = $tax->prop('tax_amount');
+					}
+					$this->do_transaction(array(
+						'from' => &$arr['to'],
+						'to' => &$tax_to_account,
+						'sum' => $sum,
+						'name' => "Maks ".$tax->name(),
+					));
+				}
+			}
 		}
 	}
 }
