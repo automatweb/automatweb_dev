@@ -1,7 +1,7 @@
 <!-- SUB: start -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-	<td width="1" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="5" HEIGHT="32" BORDER=0 ALT=""></td>
+	<td width="1" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif"><div style="width:5px;height:32px" /></td>
 	<td height="32" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif" align="{VAR:align}">
 	<table border="0" cellpadding="0" cellspacing="0">
 	<tr>

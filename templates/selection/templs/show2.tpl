@@ -1,6 +1,6 @@
 
 
-t2<br>
+tpl show2
 <table border="1">
 <!-- SUB: object -->
 <tr>
