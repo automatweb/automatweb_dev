@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.5 2004/12/01 15:09:45 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.6 2004/12/01 15:15:41 sven Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -836,19 +836,11 @@ class event_search extends class_base
 			));
 		};
 
-<<<<<<< event_search.aw
-			$htmlc->finish_output(array("data" => array(
-                                "class" => get_class($this),
-                                "section" => aw_global_get("section"),
-                                "action" => "search",
-								"alias" => get_class($this),
-=======
 		$htmlc->finish_output(array(
 			"data" => array(
 				"class" => get_class($this),
 				"section" => aw_global_get("section"),
 				"action" => "search",
->>>>>>> 1.4
 				"id" => $ob->id(),
 			),
 			"method" => "get",
