@@ -260,7 +260,7 @@ class object_tree extends _int_obj_container_base
 		list($oids) = $GLOBALS["object_loader"]->ds->search($filter);
 		$awt->stop("ds_search");
 		$acl_oids = array();
-		foreach($oids as $oid)
+		foreach($oids as $oid => $oname)
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{

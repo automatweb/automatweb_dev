@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.25 2004/04/06 15:14:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.26 2004/05/06 10:18:11 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -262,19 +262,19 @@ class object_list extends _int_obj_container_base
 	//	$add_folders - if true, objects paths are returned instead of just names
 	function names($arr = array())
 	{
-		$ret = array();
-		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		if (isset($arr["add_folders"]) && $arr["add_folders"])
 		{
-			if (isset($arr["add_folders"]) && $arr["add_folders"])
+			$ret = array();
+			for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
 			{
 				$ret[$o->id()] = $o->path_str();
 			}
-			else
-			{
-				$ret[$o->id()] = $o->name();
-			}
+			return $ret;
 		}
-		return $ret;
+		else
+		{
+			return $this->list_names;
+		}
 	}
 
 	// returns all object id's in the current list
@@ -302,7 +302,7 @@ class object_list extends _int_obj_container_base
 		{
 			return false;
 		};
-		foreach($oids as $oid)
+		foreach($oids as $oid => $oname)
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{
@@ -327,11 +327,13 @@ class object_list extends _int_obj_container_base
 					if ($add)
 					{
 						$this->list[$oid] = $_o;
+						$this->list_names[$oid] = $oname;
 					}
 				}
 				else
 				{
 					$this->list[$oid] = $oid;
+					$this->list_names[$oid] = $oname;
 				}
 			}
 		}
@@ -341,6 +343,7 @@ class object_list extends _int_obj_container_base
 	function _int_init_empty()
 	{
 		$this->list = array();
+		$this->list_names = array();
 	}
 
 	function _int_sort_list($prop, $order)
@@ -392,6 +395,7 @@ class object_list extends _int_obj_container_base
 		foreach($oid_arr as $oid)
 		{
 			$this->list[$oid] = new object($oid);
+			$this->list_names[$oid] = $this->list[$oid]->name();
 		}
 	}
 
@@ -433,6 +437,7 @@ class object_list extends _int_obj_container_base
 		foreach($oid_l as $oid)
 		{
 			unset($this->list[$oid]);
+			unset($this->list_names[$oid]);
 		}
 	}
 }

@@ -666,11 +666,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		if ($where != "")
 		{
-			$q = "SELECT objects.oid FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT objects.oid as oid,objects.name as name FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$ret[$row["oid"]] = $row["oid"];
+				$ret[$row["oid"]] = $row["name"];
 			}
 		}
 
