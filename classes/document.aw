@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.228 2003/12/18 11:14:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.229 2003/12/29 19:36:30 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2380,7 +2380,7 @@ class document extends aw_template
 		$perstr = "";
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
-			$pei = get_instance("periods");
+			$pei = get_instance("period");
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " AND  objects.period IN (".join(",", array_keys($plist)).")";
 		}
@@ -3085,7 +3085,7 @@ class document extends aw_template
 		$perstr = "";
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
-			$pei = get_instance("periods");
+			$pei = get_instance("period");
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
 		}

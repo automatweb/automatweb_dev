@@ -478,7 +478,7 @@ class search_conf extends aw_template
 			$perstr = "";
 			if (aw_ini_get("search_conf.only_active_periods"))
 			{
-				$pei = get_instance("periods");
+				$pei = get_instance("period");
 				$plist = $pei->period_list(0,false,1);
 				$perstr = ($q_cons != "" ? " AND " : "")." objects.period IN (".join(",", array_keys($plist)).")";
 			}

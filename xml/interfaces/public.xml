@@ -4,7 +4,7 @@
 	<class id="doc" name="Dokument 2.0"/>
 	<class id="auth" name="Autentimine"/>
 	<class id="users" name="Kasutajad"/>
-	<class id="periods" name="Perioodid"/>
+	<class id="period" name="Perioodid"/>
 	<class id="contents" name="Sisukaart"/>
 	<class id="messenger_v2" name="E-post"/>
 	<class id="planner" name="Kalender"/>
