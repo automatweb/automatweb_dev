@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.21 2004/11/15 17:09:33 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.22 2004/11/16 13:53:19 sven Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -423,28 +423,32 @@ class site_search_content extends class_base
 		}
 		
 		$classes = $obj->prop("keyword_search_classes");
-		$keyword_aliased_conns = new connection();
+		$keyword_to_file_conns = new connection();
 		
-		$keyword_aliased_conns = $keyword_aliased_conns->find(array(
+		$keyword_to_file_conns = $keyword_to_file_conns->find(array(
 			"from" => $keyword_list->ids(),
 			"to.class_id" => $classes,
 		));
 		
-		if(!$keyword_aliased_conns)
+		if(!$keyword_to_file_conns)
 		{
 			return;
-		}	
-		foreach($keyword_aliased_conns as $conn)
-		{
-			$ids_list[] = $conn["from"];
 		}
+			
+		foreach($keyword_to_file_conns as $conn)
+		{
+			$ids_list[] = $conn["to"];
+		}
+		
+		//List of files oids
+		//$ids_list[]
 		
 		$aliased_docs_conns = new connection();
 		$aliased_docs_conns = $aliased_docs_conns->find(array(
 			"to" => $ids_list,
 			"from.class_id" => CL_DOCUMENT,
 		));
-		
+		arr($aliased_docs_conns);
 		foreach ($aliased_docs_conns as $conn)
 		{
 			$doc_ids[] = $conn["from"];	
