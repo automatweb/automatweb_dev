@@ -48,10 +48,6 @@ class site_content extends menuedit
 			"lang_code" => aw_global_get("LC"),
 		));
 
-		$obj = $this->get_object($section);
-
-		
-
 		//print_r($obj2->properties());
 
 		// this checks whether the requested object belongs to any
@@ -65,7 +61,7 @@ class site_content extends menuedit
 		};
 
 		//--
-		$meta = $obj["meta"];
+		$meta = $obj2->meta();
 
 		/// Vend?
 		if ($obj2->prop("class_id") == CL_BROTHER_DOCUMENT)
@@ -257,8 +253,8 @@ class site_content extends menuedit
 		// just pretend that the parent is. Hm, I think that's wrong
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
-			$seobj = $this->get_object($sel_menu_id);
-			$sel_menu_id = $seobj["parent"];
+			$seobj = obj($sel_menu_id);
+			$sel_menu_id = $seobj->parent();
 		}
 
 		if (!is_array($this->mar[$sel_menu_id]))
@@ -286,7 +282,7 @@ class site_content extends menuedit
 
 		if ($periodic && $text == "") 
 		{
-			$docc = $this->show_periodic_documents($section,$obj);
+			$docc = $this->show_periodic_documents($section,$obj2);
 			if ($GLOBALS["real_no_menus"] == 1)
 			{
 				die($docc);
@@ -454,7 +450,7 @@ class site_content extends menuedit
 		$this->do_sub_callbacks($sub_callbacks, true);
 
 	
-		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
+		$this->make_promo_boxes($obj2->class_id() == CL_BROTHER ? $obj2->brother_of() : $this->sel_section);
 
 		if ($this->is_template("POLL"))
 		{
@@ -1805,7 +1801,7 @@ class site_content extends menuedit
 					continue;
 				}
 			};
-			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+			$meta = aw_unserialize($row["metadata"]);
 
 			$found = false;
 
@@ -2250,10 +2246,10 @@ class site_content extends menuedit
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		$d->set_opt("parent",$section);
-		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT) 
+		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT) 
 		{
 			$template = $this->get_long_template($section);
-			$activeperiod = $obj["period"];
+			$activeperiod = $obj->period();
 			$cont = $d->gen_preview(array(
 				"docid" => $section,
 				"boldlead" => 1,
@@ -2385,9 +2381,9 @@ class site_content extends menuedit
 						};
 					}
 
-					$dobj = $this->get_object($did);
+					$dobj = obj($did);
 					$this->vars(array(
-						"text" => $dobj["name"],
+						"text" => $dobj->name(),
 						"link" => aw_global_get("baseurl") . "/section=$section" . "/oi
 						d=$did",
 					));
@@ -2441,8 +2437,8 @@ class site_content extends menuedit
 			// kui docid on 0, siis leiame default doku
 			if ($docid == 0)
 			{
-				$pobj = $this->get_object($section);
-				$lastar = unserialize($pobj["last"]);
+				$pobj = obj($section);
+				$lastar = unserialize($pobj->last());
 				// this is wrong, lang_id should be used
 				if (is_array($lastar))
 				{
@@ -3044,14 +3040,6 @@ class site_content extends menuedit
 		while($parent)
 		{
 			$obj = new object($parent);
-			// if the object was not in the cache (which probably means it was not a menu)
-			// fetch it directly from the database
-			/*if (not($obj))
-			{
-				$obj = $this->get_object($parent);
-			};
-			*/
-
 			// only use metadata from menus
 			$is_menu = ($obj->prop("class_id") == CL_PSEUDO);
 

@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.6 2004/04/29 12:20:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.7 2004/06/08 19:00:57 kristo Exp $
 
 /*
 	@default table=objects
@@ -122,17 +122,11 @@ class cal_event extends class_base
 		);
 
 		$calendars = array();
-		$this->get_objects_by_class(array(
-			"class" => CL_PLANNER,
-			"active" => 1,
+		$ol = new object_list(array(
+			"class_id" => CL_PLANNER,
+			"status" => STAT_ACTIVE
 		));
-		while($row = $this->db_next())
-		{
-			if ($row["name"])
-			{
-				$calendars[$row["oid"]] = $row["name"];
-			};
-		};
+		$calendars = $ol->names();
 
 		// nimekiri tundidest
 		$h_list = range(0,23);
@@ -144,7 +138,7 @@ class cal_event extends class_base
 		$smin = (sprintf("%d",$smin / 5) * 5);
 		if ($args["oid"])
 		{
-			$obj = $this->get_object($args["oid"]);
+			$obj = obj($args["oid"]);
 		};
 		$types = array("linki objektile","objekti ennast");
 		$this->vars(array(
@@ -155,8 +149,8 @@ class cal_event extends class_base
 			"showtype" => $this->picker($args["meta"]["showtype"],$types),
 			"ehour" => $this->picker($ehour,$h_list),
 			"emin" => $this->picker($emin,$m_list),
-			"object" => $obj["name"],
-			"obj_icon" => icons::get_icon_url($obj["class_id"],""),
+			"object" => $obj->name(),
+			"obj_icon" => icons::get_icon_url($obj->class_id(),""),
 			"color" => $this->picker($args["color"],$colors),
 			"calendar_url" => $this->mk_my_orb("view",array("id" => $args["folder"]),"planner"),
 			"icon_url" => icons::get_icon_url(CL_CALENDAR,""),
@@ -168,7 +162,6 @@ class cal_event extends class_base
 	function _add($args = array())
 	{
 		extract($args);
-		$par_obj = $this->get_object($parent);
 		$this->read_template("edit.tpl");
 		$this->mk_path($parent,"Lisa kalendrisündmus");
 		if ($time)
@@ -209,8 +202,8 @@ class cal_event extends class_base
 
 		if ($parent)
 		{
-			$par_obj = $this->get_object($parent);
-			$parent_class = $par_obj["class_id"];
+			$par_obj = obj($parent);
+			$parent_class = $par_obj->class_id();
 			$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $title,
@@ -240,9 +233,9 @@ class cal_event extends class_base
 				// to zero out all the information about repeaters
 				$mt = array("repcheck" => $repcheck,"repeaters" => array(),"showtype" => $showtype);
 			}
-			$obj = $this->get_object($id);
-			$par_obj = $this->get_object($obj["parent"]);
-			$parent_class = $par_obj["class_id"];
+			$obj = obj($id);
+			$par_obj = obj($obj->parent());
+			$parent_class = $par_obj->class_id();
 			$this->upd_object(array(
 				"oid" => $id,
 				"name" => $title,
@@ -289,7 +282,7 @@ class cal_event extends class_base
 	{
 		extract($args);
 		$object = $this->get_obj_meta($id);
-		$par_obj = $this->get_object($object["parent"]);
+		$par_obj = obj($object["parent"]);
 		$meta = $object["meta"];
 
 		$menubar = $this->gen_menu(array(
@@ -306,7 +299,7 @@ class cal_event extends class_base
 		$cal_link = sprintf("<a href='%s'><img border='0' src='%s'>Kalender</a>",$this->vars["calendar_url"],$this->vars["icon_url"]);
 		$this->mk_path($object["parent"],"$cal_link | Muuda kalendrisündmust");
 
-		if ($par_obj["class_id"] == CL_CALENDAR)
+		if ($par_obj->class_id() == CL_CALENDAR)
 		{
 			$rep_link = $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
 		}
@@ -358,14 +351,14 @@ class cal_event extends class_base
 
 		$obj_meta = $obj["meta"];
 
-		$par_obj = $this->get_object($obj["parent"]);
+		$par_obj = obj($obj["parent"]);
 		
 		$menubar = $this->gen_menu(array(
 			"activelist" => array("repeaters"),
 			"vars" => array("id" => $id),
 		));
 
-		$this->mk_path($par_obj["parent"],"Muuda eventit");
+		$this->mk_path($par_obj->parent(),"Muuda eventit");
 
 		// what's that?
 		$caldata = $obj_meta["calconfig"];
@@ -383,21 +376,16 @@ class cal_event extends class_base
 		{
 			$this->read_template("edit_repeater.tpl");
 			// if it is a predefined cycle, then we load it
+			$tmp = obj($id);
 			if (is_number($cycle))
 			{
-				$meta = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "repeaters" . $cycle,
-				));
+				$meta = $tmp->meta("repeaters" . $cycle);
 			}
 			// so it must be a new one
 			else
 			{
 				// we have to figure out the last cycle number in use
-				$cycle = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "cycle_counter",
-				));
+				$cycle = $tmp->meta("cycle_counter");
 				$new = 1;
 				// us the next available
 				if ($cycle)
@@ -417,7 +405,7 @@ class cal_event extends class_base
 
 			if ($meta["own_time"])
 			{
-				$reptime_val = mktime($meta[reptime][hour],$meta[reptime][minute],0,1,1,2001);
+				$reptime_val = mktime($meta["reptime"]["hour"],$meta["reptime"]["minute"],0,1,1,2001);
 			}
 			else
 			{
@@ -585,8 +573,8 @@ class cal_event extends class_base
 		// now we fetch them all back again, so that we can perform our calculations
 		$obj = $this->get_obj_meta($id);
 		$obj_meta = $obj["meta"];
-		$par_obj = $this->get_object($obj["parent"]);
-		$parent_class = $par_obj["class_id"];
+		$par_obj = obj($obj["parent"]);
+		$parent_class = $par_obj->class_id();
 		
 		// if that one was a new cycle, then we need update the object as well
 		if ($new)
@@ -602,10 +590,8 @@ class cal_event extends class_base
 		else
 		{
 			// find out how many cycles we have
-			$cycle_counter = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "cycle_counter",
-			));
+			$tmp = obj($id);
+			$cycle_counter = $tmp->meta("cycle_counter");
 		}
 	
 		// zero everything out
@@ -999,9 +985,9 @@ class cal_event extends class_base
 		extract($args);
 		$amgr = get_instance("aliasmgr");
 		$this->read_template("search_doc.tpl");
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$parent_class = $par_obj["class_id"];
+		$obj = obj($id);
+		$par_obj = obj($obj->parent());
+		$parent_class = $par_obj->class_id();
 		global $s_name, $s_comment,$s_type;
 		if ($parent_class == CL_CALENDAR)
 		{
