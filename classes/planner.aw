@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.169 2004/02/09 10:59:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.170 2004/02/11 17:15:57 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -156,8 +156,31 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
-		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING);
+		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING);
 		$this->specialgroups = array("projects","calendars");
+	}
+
+	function get_event_classes()
+	{
+		return $this->event_entry_classes;
+	}
+
+	function get_calendar_for_user($arr)
+	{
+		$uid = $arr["uid"];
+		$users = get_instance("users");
+		$user = new object($users->get_oid_for_uid($uid));
+
+		$conns = $user->connections_to(array(
+			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+		));
+		if (sizeof($conns) == 0)
+		{
+			return false;
+		};
+		list(,$conn) = each($conns);
+		$obj_id = $conn->prop("from");
+		return $obj_id;
 	}
 	
 	/**  
@@ -2690,34 +2713,6 @@ class planner extends class_base
 		));
 
 		return $this->parse();
-	}
-
-	function mk_summary_pane($arr)
-	{
-		$tasklist = new object_list(array(
-			"class_id" => CL_TASK,
-			"parent" => $arr["event_folder"],
-			"status" => STAT_ACTIVE,
-		));
-
-		foreach($tasklist->arr() as $task)
-		{
-			if ($task->is_brother())
-			{
-				$task = $task->get_original();
-				if ($task->status() != STAT_ACTIVE)
-				{
-					continue;
-				};
-			};
-			$this->vars(array(
-				"caption" => $task->prop("name"),
-				"url" => $this->mk_my_orb("change",array("id" => $this->id,"event_id" => $task->id(),"group" => "add_event"),"planner"),
-			));
-			$summary .= $this->parse("summary_line");
-		};
-
-		return $summary;
 	}
 
 	function callback_on_addalias($args = array())
