@@ -32,6 +32,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="create">
+			<function name="create_draft">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="write">
 			<function name="gen_edit_form">
