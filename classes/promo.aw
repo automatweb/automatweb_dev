@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.27 2003/04/25 08:58:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.28 2003/04/30 16:55:42 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -405,6 +405,13 @@ class promo extends class_base
 			};
 		};
 
+		// serializes makes empty array into array("0" => "0") and this is bad in this
+		// case, so we work around it
+		if (sizeof($last_menus) == 0)
+		{
+			$last_menus = "";
+		};
+
 		$this->upd_object(array(
 			"oid" => $id,
 			"metadata" => array(
@@ -474,7 +481,7 @@ class promo extends class_base
                         "title" => $alias["name"],
                         "content" => $content,
                 ));
-                return $this->parse();
+				return $this->parse();
 
 	}
 }
