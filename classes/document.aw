@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.302 2004/11/16 13:38:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.303 2004/11/18 14:07:25 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4265,37 +4265,47 @@ class document extends aw_template
 	//This could be bloody slow
 	function parse_keywords(&$content)
 	{
-		//$content_arr = split(" ", $content);
-		$content_arr = preg_split('/\s+/', $content);		
-
+		$cleaned = strip_tags($content);
+		$content_arr = preg_split('/[\s|\.|,]+/', $cleaned);		
+		$content_arr2 = $content_arr;	
+		
+		for($i=0; $i<count($content_arr); $i++)
+		{
+			$content_arr[$i] = "%$content_arr[$i]%";
+		}
+		
+			
 		//Lets find keywords in document
 		$keywords = new object_list(array(
 			"class_id" => CL_KEYWORD,
 			"keyword" => $content_arr,
 		));
-			
-		//arr($content_arr);
-		foreach ($keywords->arr() as $keyword)
-		{
-			$keys_arr[$keyword->prop("keyword")] = $keyword->id(); 
-		}
 		
+		foreach ($keywords->arr() as $keyword)
+                {
+                        $keys_arr[$keyword->id()] = strtolower($keyword->prop("keyword")); //$keyword->id();
+                }
+
 		if(!$keys_arr)
 		{
 			return;
 		}
-		foreach ($keys_arr as $key => $value)
+
+		for($i=0; $i<count($content_arr2); $i++)
 		{
-			$href = html::href(array(
-				"caption" => $key,
-				"url" => $this->mk_my_orb("show_documents", 
-				array(
-					"id" => $value,
-					"section" => aw_global_get("section"),
-				), CL_KEYWORD),
-			));
-			$content = str_replace($key, $href , $content);
+			if($keyid = array_search(strtolower($content_arr2[$i]), $keys_arr))
+			{
+				$href = html::href(array(
+					"caption" => $content_arr2[$i],
+					"url" => $this->mk_my_orb("show_documents", array(
+						"id" => $keyid,
+						"section" => aw_global_get("section"),	
+					), CL_KEYWORD),
+				));
+				$content = str_replace($content_arr2[$i], $href, $content);	
+			}
 		}
+		return $content;	
 	}
 	
 	function parse_text($text)
