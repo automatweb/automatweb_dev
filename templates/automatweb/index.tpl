@@ -70,6 +70,88 @@ function check_generic_loader()
 <!-- kas see create_objects on vajalik? -->
 <body bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="create_objects(); check_generic_loader()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
+<style type="text/css">
+
+div.menuBar,
+div.menuBar a.menuButton,
+div.menu,
+div.menu a.menuItem {
+  font-family: "MS Sans Serif", Arial, sans-serif;
+  font-size: 8pt;
+  font-style: normal;
+  font-weight: normal;
+  color: #000000;
+}
+
+div.menuBar {
+  background-color: transparent;
+  text-align: left;
+}
+
+div.menuBar a.menuButton {
+  background-color: transparent;
+  color: #000000;
+  cursor: default;
+  left: 0px;
+  margin: 1px;
+  position: relative;
+  text-decoration: none;
+  top: 0px;
+  z-index: 100;
+}
+
+div.menuBar a.menuButton:hover {
+  background-color: transparent;
+  color: #000000;
+}
+
+div.menuBar a.menuButtonActive,
+div.menuBar a.menuButtonActive:hover {
+  background-color: #a0a0a0;
+  color: #ffffff;
+  left: 1px;
+  top: 1px;
+}
+
+div.menu {
+  background-color: #d0d0d0;
+  border: 2px solid;
+  border-color: #f0f0f0 #909090 #909090 #f0f0f0;
+  left: 0px;
+  padding: 0px 1px 1px 0px;
+  position: absolute;
+  top: 0px;
+  visibility: hidden;
+  z-index: 101;
+}
+
+div.menu a.menuItem {
+  color: #000000;
+  cursor: default;
+  display: block;
+  padding: 3px 1em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+div.menu a.menuItem:hover, div.menu a.menuItemHighlight {
+  background-color: #000080;
+  color: #ffffff;
+}
+
+div.menu a.menuItem span.menuItemText {}
+
+div.menu a.menuItem span.menuItemArrow {
+  margin-right: -.75em;
+}
+
+div.menu div.menuItemSep {
+  border-top: 1px solid #909090;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 4px 2px;
+}
+
+</style>
 
 <table border=0 width="100%" cellspacing="0" cellpadding="2">
 <tr>

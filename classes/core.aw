@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.113 2002/10/15 14:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.114 2002/10/15 15:15:21 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2126,9 +2126,7 @@ class core extends db_connector
 			return false;
 		}
 
-		classload($v["file"]);
-		$t = new $v["file"];
-
+		$t = get_instance($v["file"]);
 		$s = $t->_serialize($arr);
 		if (!$s)
 		{
@@ -2411,6 +2409,36 @@ class core extends db_connector
 		}
 		asort($ret);
 		return $ret;
+	}
+
+	function get_obj_properties()
+	{
+
+		$fields = array();
+		// private flag is used to indicate that this property 
+		// should only be used for one object. You really don't
+		// want to give for example 100 objects same new name
+		// at least, I don't see a point in doing it.
+		$fields["name"] = array(
+			"type" => "text",
+			"caption" => "Nimi",
+			"value" => $args["name"],
+			"store" => "table",
+			"table" => "objects",
+			"idfield" => "oid",
+			"private" => 1,
+		);
+		$fields["comment"] = array(
+			"type" => "text",
+			"caption" => "comment",
+			"value" => $args["comment"],
+			"store" => "table",
+			"table" => "objects",
+			"idfield" => "oid",
+			"private" => 1,
+		);
+		return $fields;
+
 	}
 };
 ?>

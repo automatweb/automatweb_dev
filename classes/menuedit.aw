@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.162 2002/10/11 09:10:41 erki Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.163 2002/10/15 15:15:21 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1497,7 +1497,14 @@ class menuedit extends aw_template
 						}
 					}
 				}
-				die($ret);
+				if ($ret_data)
+				{
+					return $ret;
+				}
+				else
+				{
+					die($ret);
+				}
 			}
 		}
 		if ($ret_data)
@@ -1620,31 +1627,97 @@ class menuedit extends aw_template
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
 			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"]), "menuedit",true,true);
-			$retval = "0|0|Open|".$ourl."|list".$sep;
+			if ($type == "js")
+			{
+				$this->vars(array(
+					"link" => $ourl,
+					"text" => "Open"
+				));
+				$retval = $this->parse("MENU_ITEM");
+			}
+			else
+			{
+				$retval = "0|0|Open|".$ourl."|list".$sep;
+			}
 		}
 
 //		if ($this->can("change", $id))
 		{
 			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"]), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
-			$retval .= "1|0|Change|".$churl."|list".$sep;
+			if ($type == "js")
+			{
+				$this->vars(array(
+					"link" => $churl,
+					"text" => "Change"
+				));
+				$retval .= $this->parse("MENU_ITEM");
+			}
+			else
+			{
+				$retval .= "1|0|Change|".$churl."|list".$sep;
+			}
 		}
 
 		$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-		$retval .= "2|0|Cut|".$cuturl."|list".$sep;
+		if ($type == "js")
+		{
+			$this->vars(array(
+				"link" => $cuturl,
+				"text" => "Cut"
+			));
+			$retval .= $this->parse("MENU_ITEM");
+		}
+		else
+		{
+			$retval .= "2|0|Cut|".$cuturl."|list".$sep;
+		}
 
 		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-		$retval .= "3|0|Copy|".$copyurl."|list".$sep;
+		if ($type == "js")
+		{
+			$this->vars(array(
+				"link" => $copyurl,
+				"text" => "Copy"
+			));
+			$retval .= $this->parse("MENU_ITEM");
+		}
+		else
+		{
+			$retval .= "3|0|Copy|".$copyurl."|list".$sep;
+		}
 
 		if ($this->can("delete", $id))
 		{
 			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-			$retval .= "4|0|Delete|".$delurl."|list".$sep;
+			if ($type == "js")
+			{
+				$this->vars(array(
+					"link" => $delurl,
+					"text" => "Delete"
+				));
+				$retval .= $this->parse("MENU_ITEM");
+			}
+			else
+			{
+				$retval .= "4|0|Delete|".$delurl."|list".$sep;
+			}
 		}
 
 		if ($this->can("admin", $id))
 		{
 			$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
-			$retval .= "5|0|ACL|".$delurl."|list".$sep;
+			if ($type == "js")
+			{
+				$this->vars(array(
+					"link" => $delurl,
+					"text" => "ACL"
+				));
+				$retval .= $this->parse("MENU_ITEM");
+			}
+			else
+			{
+				$retval .= "5|0|ACL|".$delurl."|list".$sep;
+			}
 		}
 
 		if ($ret_data)
@@ -3972,16 +4045,54 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
-		$GLOBALS["copied_objects"] = array();
-
-		if ($oid)
+		// check if any objects that are to be copied need special handling
+		if (is_array($sel))
 		{
-			$r = $this->serialize(array("oid" => $oid));
-			if ($r != false)
+			foreach($sel as $oid => $one)
 			{
-				$GLOBALS["copied_objects"][$oid] = $r;
+				$ob = $this->get_object($oid);
+				if ($ob["class_id"] == CL_PSEUDO)
+				{
+					return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
+				}
 			}
 		}
+
+		// if not, just copy the damn things
+		$copied_objects = array();
+		if (is_array($sel))
+		{
+			foreach($sel as $oid => $one)
+			{
+				$r = $this->serialize(array("oid" => $oid));
+				if ($r != false)
+				{
+					$copied_objects[$oid] = $r;
+				}
+			}
+		}
+		aw_session_set("copied_objects", $copied_objects);
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+	}
+
+	function copy_feedback($arr)
+	{
+		extract($arr);
+		$this->read_template("copy_feedback.tpl");
+		$this->mk_path($parent, "Vali kuidaws objekte kopeerida");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_copy_feedback", array("parent" => $parent, "period" => $period,"sel" => $sel))
+		));
+
+		return $this->parse();
+	}
+
+	function submit_copy_feedback($arr)
+	{
+		extract($arr);
+		aw_register_default_class_member("menuedit", "serialize_submenus", $ser_submenus);
+		aw_register_default_class_member("menuedit", "serialize_subobjs",$ser_subobjs);
 
 		$copied_objects = array();
 		if (is_array($sel))
@@ -5631,7 +5742,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$ps = " AND period = '$period' ";
 		}
 
-		$this->read_template("java_popup_menu.tpl");
+		$this->read_template("js_popup_menu.tpl");
 		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $ps ");
 		while ($row = $this->db_next())
 		{
@@ -5664,10 +5775,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
 			$this->save_handle();
-			$this->vars(array(
+/*			$this->vars(array(
 				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true))
-			));
-			$this->restore_handle();
+			));*
 
 			$this->vars(array(
 				"oid" => $row["oid"],
@@ -5680,8 +5790,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"url" => $host,
 				"URLPARAM" => "",
 				"FETCHCONTENT" => ($this->cfg["fetchcontent"] ? $this->parse("FETCHCONTENT") : "")
+			));*/
+			$this->vars(array(
+				"menu_id" => "js_pop_".$row["oid"],
+				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
+				"MENU_ITEM" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true,"type" => "js"))
 			));
 			$row["java"] = $this->parse();
+
+			$this->restore_handle();
 
 			$row["name"] = "<a href=\"".$chlink."\">".($row["name"] == "" ? "(nimeta)" : $row["name"])."</a>";
 			$row["icon"] = "<img src=\"".$iu."\">";
@@ -5710,6 +5827,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		asort($types);
 
+		$this->read_template("java_popup_menu.tpl");
 
 		// make applet for adding objects
 		$this->vars(array(
@@ -5979,14 +6097,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->req_serialize_obj_tree($cur_id);
 			}
 		}
-		$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
-		while ($row = $this->db_next())
+		if ($this->serialize_subobjs)
 		{
-			$dat = $this->serialize(array("oid" => $row["oid"]));
-			if ($dat !== false)
+			$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
+			while ($row = $this->db_next())
 			{
-				$hash = $this->gen_uniq_id();
-				$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
+				$dat = $this->serialize(array("oid" => $row["oid"]));
+				if ($dat !== false)
+				{
+					$hash = $this->gen_uniq_id();
+					$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
+				}
 			}
 		}
 	}
@@ -6013,7 +6134,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		);
 		$this->ser_obj[$hash] = $dat;
 
-		$this->req_serialize_obj_tree($oid);
+		if ($this->serialize_submenus)
+		{
+			$this->req_serialize_obj_tree($oid);
+		}
+		else
+		{
+			if ($this->serialize_subobjs)
+			{
+				$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
+				while ($row = $this->db_next())
+				{
+					$dat = $this->serialize(array("oid" => $row["oid"]));
+					if ($dat !== false)
+					{
+						$hash = $this->gen_uniq_id();
+						$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
+					}
+				}
+			}
+		}
 
 		return serialize($this->ser_obj);
 	}
