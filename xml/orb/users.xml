@@ -214,5 +214,11 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="change_pwd_hash" all_args="1">
+			<function name="change_pwd_hash">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>
