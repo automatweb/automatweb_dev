@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.16 2004/03/10 15:33:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.17 2004/03/10 15:36:26 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -381,7 +381,7 @@ class livelink_import extends class_base
 			$parent = $this->parentid;
 			$modified = $this->modified;
 			$filename = $this->fileprefix . $this->filename;
-			$old = $this->db_fetch_row("SELECT modified FROM livelink_files WHERE id = '$id'");
+			$old = $this->db_fetch_row("SELECT parent,modified FROM livelink_files WHERE id = '$id'");
 			$iconurl = "";
 			if ($this->icons[$this->fext])
 			{
@@ -407,7 +407,8 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			if ($modified > $old["modified"])
+			//if ($modified > $old["modified"])
+			if (($modified > $old["modified"]) || ($parent != $old["parent"]))
 			{
 				print "updating file $filename";
 				$this->quote($name);
