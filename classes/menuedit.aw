@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.336 2004/10/29 18:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.337 2004/10/30 16:08:27 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -383,7 +383,7 @@ class menuedit extends aw_template
 		if (is_array($frontpage))
 		{
 			$frontpage = $frontpage[aw_global_get("lang_id")];
-			$GLOBALS["cfg"]["__default"]["frontpage"] = $frontpage;
+			aw_ini_set("","frontpage",$frontpage);
 			$this->cfg["frontpage"] = $frontpage;
 		}
 

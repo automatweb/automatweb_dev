@@ -290,13 +290,18 @@ function init_config($arr)
 	$GLOBALS["cfg"]["__default__short"] = $td;
 }
 
-function aw_ini_set($key,$value)
+// this will not save the new value to the ini file
+function aw_ini_set($class,$key,$value)
 {
-	// split $key in class / variable pair
-	// load config file. 
-	// find position of key
-	// replace it
-	// write config file
+	if ($class == "")
+	{
+		$GLOBALS["cfg"]["__default"][$key] = $value;
+		$GLOBALS["cfg"]["__default__short"][$key] = $value;
+	}
+	else
+	{
+		$GLOBALS["cfg"][$class][$key] = $value;
+	}
 }
 
 function aw_config_init_class(&$that)

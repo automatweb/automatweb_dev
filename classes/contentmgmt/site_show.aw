@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.93 2004/10/29 15:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.94 2004/10/30 16:08:27 kristo Exp $
 
 /*
 
@@ -2013,13 +2013,13 @@ class site_show extends class_base
 						if (aw_ini_get("ini_rootmenu"))
 						{
 							$tmp = aw_ini_get("rootmenu");
-							$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+							aw_ini_set("", "rootmenu", aw_ini_get("ini_rootmenu"));
 						}
 						$_p = $o->path();
 
 						if (aw_ini_get("ini_rootmenu"))
 						{
-							$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+							aw_ini_set("", "rootmenu", $tmp);
 						}
 						$alp = array();
 						foreach($_p as $p_o)
@@ -2302,7 +2302,7 @@ class site_show extends class_base
 		if (aw_ini_get("ini_rootmenu"))
 		{
 			$tmp = aw_ini_get("rootmenu");
-			$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+			aw_ini_set("", "rootmenu", aw_ini_get("ini_rootmenu"));
 		}
 
 		//if (is_object($this->section_obj))
@@ -2317,7 +2317,7 @@ class site_show extends class_base
 
 		if (aw_ini_get("ini_rootmenu"))
 		{
-			$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+			aw_ini_set("", "rootmenu", $tmp);
 		}
 
 		$pfp = aw_ini_get("shop.prod_fld_path");
