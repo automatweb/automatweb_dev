@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.32 2004/08/23 09:25:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.33 2004/10/05 07:19:48 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -581,6 +581,62 @@ class sys extends aw_template
 		{
 			echo "NEIN!!.";
 		}
+	}
+
+	/**
+
+		@attrib name=last_mod
+
+	**/
+	function last_mod()
+	{
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+		$t->define_field(array(
+			"name" => "class_id",
+			"caption" => "Klass",
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => "Muutja",
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => "Muutmise aeg",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i",
+			"sortable" => 1
+		));
+
+		$ol = new object_list(array(
+			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, time()-36000),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.modified DESC",
+			"limit" => 100
+		));
+		$clss = aw_ini_get("classes");
+		foreach($ol->arr() as $o)
+		{
+			$tmp = $o->modifiedby();
+			$t->define_data(array(
+				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
+				"modifiedby" => $tmp->name(),
+				"modified" => $o->modified(),
+				"class_id" => $clss[$o->class_id()]["name"]
+			));
+		}
+		$t->set_default_sortby("modified");
+		$t->set_default_sorder("desc");
+		$t->sort_by();
+		return $t->draw();
 	}
 };
 ?>
