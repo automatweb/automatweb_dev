@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.59 2002/07/19 14:49:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.60 2002/07/24 20:44:57 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -109,10 +109,13 @@ class form_element extends aw_template
 	}	
 
 	////
-	// !Loads the element from the array from inside the form
+	// !Loads the element's settings from the data array passed as $arr
+	// $form - the form this element is contained in
+	// $col - col of the element
+	// $row - row of the element
 	function load(&$arr,&$form,$col,$row)
 	{
-		$this->form = &$form;
+		$this->form =& $form;
 		$this->arr = $arr;
 		$this->id = $arr["id"];
 		$this->fid = $form->get_id();
@@ -1158,6 +1161,9 @@ class form_element extends aw_template
 		return true;
 	}
 
+	////
+	// !generates the javascript code that checks whether elements are filled or not and if some that must be are not
+	// it will not let you submit the form unless you turn off the javascript
 	function gen_check_html()
 	{
 		$lang_id = aw_global_get("lang_id");
@@ -1254,11 +1260,6 @@ class form_element extends aw_template
 		}
 	}
 
-	function set_lang_text($lid,$txt)
-	{
-		$this->arr["lang_text"][$lid] = $txt;
-	}
-
 	function get_text()		
 	{	
 		return $this->arr["text"]; 
@@ -1346,7 +1347,11 @@ class form_element extends aw_template
 
 	function get_el_lb_items()	
 	{
-		return $this->arr["listbox_items"];
+		if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+		{
+			$this->make_relation_listbox_content();
+		}
+		return is_array($this->arr["listbox_items"]) ? $this->arr["listbox_items"] : array();
 	} 
 
 	function get_thousands_sep() 
@@ -1385,6 +1390,16 @@ class form_element extends aw_template
 			return $this->arr["lb_item_controllers"];
 		}
 		return array();
+	}
+
+	function get_default_value_controller()
+	{
+		return $this->arr["default_controller"];
+	}
+
+	function get_value_controller()
+	{
+		return $this->arr["value_controller"];
 	}
 
 	////
@@ -1439,33 +1454,33 @@ class form_element extends aw_template
 		return is_array($this->arr["metadata"][$lid]) ? $this->arr["metadata"][$lid] : array();
 	}
 
-	function save_short()
+	////
+	// !saves the element properties that are on the grid editing page (name, text, grp)
+	// $dat - POST vars
+	function save_short($dat)
 	{
 		$var = "element_".$this->id."_text";
-		global $$var;
-		if (isset($$var))
+		if (isset($dat[$var]))
 		{
-			$this->arr["text"] = $$var;
+			$this->arr["text"] = $dat[$var];
 			$this->dequote($this->arr["text"]);
 		};
 
 		$var = "element_".$this->id."_grp";
-		global $$var;
 		if ($this->arr["type"] == "checkbox")
 		{
-			$this->arr["ch_grp"] = $$var;
+			$this->arr["ch_grp"] = $dat[$var];
 		}
 		else
 		{
-			$this->arr["group"] = $$var;
+			$this->arr["group"] = $dat[$var];
 		}
 
 		$var = "element_".$this->id."_name";
-		global $$var;
-		if ($$var != $this->arr["name"])
+		if ($dat[$var] != $this->arr["name"])
 		{
-			$this->arr["name"] = $$var;
-			$this->do_change_name($$var);
+			$this->arr["name"] = $dat[$var];
+			$this->do_change_name($dat[$var]);
 		}
 	}
 
@@ -1547,13 +1562,7 @@ class form_element extends aw_template
 		{
 			$this->db_query("DELETE FROM form_relations WHERE id = '".$this->arr["rel_table_id"]."'");
 		}
-
-		// remove this form from the list of forms in which the element is
-		$this->db_query("DELETE FROM element2form WHERE el_id = ".$this->id." AND form_id = ".$this->fid);
-
-		// also remove the column for this element from the form
-		$this->db_query("ALTER TABLE form_".$this->fid."_entries DROP el_".$this->id);
-		$this->db_query("ALTER TABLE form_".$this->fid."_entries DROP ev_".$this->id);
+		$this->form->del_element_cols($this->fid, $this->id);
 	}
 
 	function gen_action_html()
@@ -2747,7 +2756,7 @@ class form_element extends aw_template
 
 		// I made it a separete function because I need those valuse in exact same order in form->process_entry
 		// too - to check whether the entry falls into allowed range in a calendar
-		list($cnt,$this->arr["listbox_items"]) = $this->form->_get_relation_listbox_content($this->arr);
+		list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($this->arr);
 		$this->arr["listbox_count"] = $cnt;
 		if ($this->form->type == FTYPE_SEARCH)
 		{
@@ -2865,6 +2874,16 @@ class form_element extends aw_template
 		unset($this->arr["lb_item_controllers"][$controller]);
 	}
 
+	function remove_defvalue_controller($controller)
+	{
+		unset($this->arr["default_controller"]);
+	}
+
+	function remove_value_controller($controller)
+	{
+		unset($this->arr["value_controller"]);
+	}
+
 	function get_date_value()
 	{
 		if ($this->arr["subtype"] == "created")
@@ -2902,6 +2921,89 @@ class form_element extends aw_template
 	function get_writer_element()
 	{
 		return $this->arr["sql_writer_el"];
+	}
+
+	////
+	// !sets the element's value to $val 
+	// $val is human-readable - it tries to find the best match with the real values
+	function set_value($val)
+	{
+		switch($this->arr["type"])
+		{
+			case "checkbox":
+				if ($val === 1 || $val === 0)
+				{
+					$this->entry = $val;
+				}
+				else
+				{
+					if ($val == $this->arr["ch_value"])
+					{
+						$this->entry = 1;
+					}
+					else
+					{
+						$this->entry = 0;
+					}
+				}
+				break;
+
+			case "radiobutton":
+				if ($val === 1)
+				{
+					$this->entry = $this->id;
+				}
+				else
+				{
+					if ($val == $this->arr["ch_value"])
+					{
+						$this->entry = $this->id;
+					}
+					else
+					{
+						$this->entry = 0;
+					}
+				}
+				break;
+
+			case "listbox":
+				$lbitems = $this->get_el_lb_items();
+				foreach($lbitems as $idx => $str)
+				{
+					if ($str == $val)
+					{
+						$this->entry = "element_".$this->arr["id"]."_lbopt_".$idx;
+						return;
+					}
+				}
+				break;
+
+			case "multiple":
+				// we'll see how we need to use this, but now do just arrays
+				if (is_array($val))
+				{
+					$mulims = is_array($this->arr["multiple_items"]) ? $this->arr["multiple_items"] : array();
+
+					$this->entry = array();
+					foreach($val as $_val)
+					{
+						// and for each do the search and find the index and join them together with ,'s
+						foreach($mulims as $idx => $str)
+						{
+							if ($str == $_val)
+							{
+								$this->entry[] = $idx;
+							}
+						}
+					}
+					$this->entry = join(",", $this->entry);
+				}
+				break;
+
+			default:
+				$this->entry = $val;
+				break;
+		}
 	}
 }
 ?>
