@@ -82,7 +82,7 @@ class form_db_base extends aw_template
 				// well. but. maybe we don't need several id's after all, cause all the forms have to be related anyway
 				// so that we could save data to them and be able to pick it apart later.
 				// so what we must now do - is build a whole lotta cyclicity checking and integrity checking where you create the relations
-				// right. did that. now when you successfully save the table relations ( you shouldn't be able to save them if they
+				// right. did that. now when you successfully save the table relations ( you shouldn't be a1/10/2002ble to save them if they
 				// don't add up ) it takes a guess at what would be the best table to start from and writes that in
 				// $this->arr["save_table_start_from"] so we could easily use it here
 
@@ -601,7 +601,7 @@ class form_db_base extends aw_template
 		}
 		
 		$sql = "SELECT ".$sql_data." FROM ".$sql_join." ".$sql_where;
-		echo "sql = $sql <br>";
+//		echo "sql = $sql <br>";
 		return $sql;
 	}
 
