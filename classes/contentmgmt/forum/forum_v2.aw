@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.11 2003/12/03 12:35:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.12 2003/12/10 16:56:08 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -89,12 +89,19 @@
 	@groupinfo add_topic caption="Lisa teema" parent=container
 	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
-*/
+	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
+	@caption teemade kataloog
 
-define('RELTYPE_TOPIC_FOLDER',1);
-define('RELTYPE_ADDRESS_FOLDER',2);
-define('RELTYPE_STYLE',3);
-define('RELTYPE_STYLE_DONOR',4);
+	@reltype ADDRESS_FOLDER value=2 clid=CL_MENU
+	@caption listiliikmete kataloog
+
+	@reltype STYLE value=3 clid=CL_CSS
+	@caption Stiil
+
+	@reltype STYLE_DONOR value=4 clid=CL_FORUM_V2
+	@caption võta stiilid
+
+*/
 
 class forum_v2 extends class_base
 {
@@ -104,37 +111,6 @@ class forum_v2 extends class_base
 			"tpldir" => "forum",
 			"clid" => CL_FORUM_V2,
 		));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_TOPIC_FOLDER => "teemade kataloog",
-			RELTYPE_ADDRESS_FOLDER => "listiliikmete kataloog",
-			RELTYPE_STYLE => "stiil",
-			RELTYPE_STYLE_DONOR => "võta stiilid",
-		);
-	}
-
-	function callback_get_classes_for_relation($arr)
-	{
-		$retval = false;
-		switch($arr["reltype"])
-		{
-			case RELTYPE_TOPIC_FOLDER:
-			case RELTYPE_ADDRESS_FOLDER:
-				$retval = array(CL_MENU);
-				break;
-
-			case RELTYPE_STYLE:
-				$retval = array(CL_CSS);
-				break;
-
-			case RELTYPE_STYLE_DONOR:
-				$retval = array(CL_FORUM_V2);
-				break;
-		};
-		return $retval;
 	}
 
 	function get_property($arr)
@@ -554,9 +530,13 @@ class forum_v2 extends class_base
 		$this->_add_style("style_comment_user");
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
-		
-		$comments_on_page = !empty($args["obj"]["meta"]["topics_on_page"]) ? $args["obj"]["meta"]["topics_on_page"] : 5;
 
+		$comments_on_page = $args["obj_inst"]->prop("topics_on_page");
+		if (empty($comments_on_page))
+		{
+			$comments_on_page = 5;
+		};
+		
 		$t = get_instance("contentmgmt/forum/forum_comment");
 		$comments = $t->get_comment_list(array("parent" => $args["request"]["topic"]));
 
@@ -611,14 +591,14 @@ class forum_v2 extends class_base
 		$path = array();
 		$obj_chain = $this->get_obj_chain(array(
 			"oid" => $args["request"]["topic"],
-			"stop" => $args["obj"]["meta"]["topic_folder"],
+			"stop" => $args["obj_inst"]->prop("topic_folder"),
 		));
 		foreach($obj_chain as $key => $name)
 		{
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			}
