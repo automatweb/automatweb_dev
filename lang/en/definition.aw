@@ -1,4 +1,6 @@
 <?php
+// used in search
+define("LC_OBJECTS_ALL","all");
 define("LC_NO_DEFAULT_GROUP","Default group is missing, inform about this error to info@struktuur.ee");
 
 define("LC_ADD_BANNER","Add banner");
