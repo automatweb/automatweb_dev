@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.27 2004/05/13 08:14:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.28 2004/05/19 11:02:38 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -243,6 +243,7 @@ class treeview extends class_base
 	//		need to draw the rootnode for branches.
 	//   tree_id  - set to an unique id, if you want the tree to persist it's state
 	//	type - TREE_HTML|TREE_JS|TREE_DHTML , defaults to TREE_JS
+	//	persist_state - tries to remember tree state in kuuki
 	function start_tree($arr)
 	{
 		$this->items = array();

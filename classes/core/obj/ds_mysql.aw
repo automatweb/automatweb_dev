@@ -925,7 +925,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					if ($this->properties[$key]["store"] == "connect")
 					{
-						$str[] = "aliases_".$key.".target = '$v' ";
+						$str[] = " aliases_".$key.".target = '$v' ";
 					}
 					else
 					if (strpos("%", $v) !== false)

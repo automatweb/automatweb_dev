@@ -21,6 +21,15 @@
             <caption>Andmete kataloog</caption>
       </property>
       <property>
+            <name>data_tree_field</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmete puu struktuuri v&amp;auml;li</caption>
+      </property>
+      <property>
             <name>data_tb</name>
             <table>objects</table>
             <group>data</group>
@@ -30,12 +39,23 @@
             <field>data_tb</field>
       </property>
       <property>
+            <name>data_tree</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>datalt</parent>
+            <field>data_tree</field>
+      </property>
+      <property>
             <name>data</name>
             <table>objects</table>
             <group>data</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>datalt</parent>
             <field>data</field>
       </property>
       <classinfo>
@@ -60,5 +80,11 @@
                   <caption>andmete kataloog</caption>
             </MENU>
       </reltypes>
+      <layout>
+            <datalt>
+                  <type>hbox</type>
+                  <group>data</group>
+            </datalt>
+      </layout>
 </properties>
 
