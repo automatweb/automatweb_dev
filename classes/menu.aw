@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.27 2003/01/27 00:18:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.28 2003/01/28 16:44:30 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -682,6 +682,7 @@ class menu extends class_base
 		if ($form_data["do_export"])
 		{
 			$this->export_menus(array(
+				"id" => $form_data["id"],
 				"ex_menus" => $form_data["ex_menus"],
 				"allactive" => $form_data["allactive"],
 				"ex_icons" => $form_data["ex_icons"],
