@@ -906,6 +906,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$comparator = " >= ";
 							break;
 
+						case OBJ_COMP_BETWEEN:
+							$comparator = " > ".$v_data." AND $tf < ";
+							$v_data = $val->data2;
+							break;
+
 						default:
 							error::throw(array(
 								"id" => ERR_OBJ_COMPARATOR,
