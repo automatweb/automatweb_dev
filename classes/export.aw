@@ -1,6 +1,6 @@
 <?php
 
-classload("extlinks","config","planner");
+classload("links","config","planner");
 
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
@@ -854,7 +854,7 @@ class export extends aw_template
 			{
 				preg_match("/id=(\d*)/", $link,$mt);
 
-				$el = get_instance("extlinks");
+				$el = get_instance("links");
 				$ld = $el->get_link($mt[1]);
 				$link = $ld["url"];
 				if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)

@@ -2918,7 +2918,7 @@ class site_content extends menuedit
 		switch($obj["class_id"])
 		{
 			case CL_EXTLINK:
-				$t = get_instance("extlinks");
+				$t = get_instance("links");
 				$link = $t->get_link($obj["oid"]);
 				//list($url,$target,$caption) = $t->draw_link($obj["oid"]);
 				header("Location: $link[url]");
