@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.341 2004/12/09 16:16:00 ahti Exp $
+// $Id: class_base.aw,v 2.342 2004/12/09 17:14:21 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2895,8 +2895,9 @@ class class_base extends aw_template
 			return $res;
 		};
 
-		foreach($arr["request"] as $key => $val)
+		foreach($props as $key => $tmp)
 		{
+			$val = $arr["request"][$key];
 			$prpdata = &$props[$key];
 			if (1 == $prpdata["required"] && !$val)
 			{
