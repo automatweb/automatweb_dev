@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.8 2002/09/09 15:35:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/stat.aw,v 2.9 2002/09/13 07:56:11 duke Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -297,7 +297,7 @@ class db_stat extends aw_template
 			$cnt++;
 			$this->vars(array(
 				"cnt" => $cnt,
-				"ip"  => $row["ip"],
+				"ip"  => gethostbyaddr($row["ip"]),
 				"hits" => $row["hits"],
 				"style" => ($cnt % 2) ? "fgtext" : "fgtext2",
 				"width" => round( (200*$row["hits"]) / $top) + 1
