@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>foorum</name>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FORUM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+      </property>
+      <property>
             <name>view</name>
             <group>general</group>
             <type>text</type>
@@ -10,6 +19,14 @@
       <classinfo>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <FORUM>
+                  <value>1</value>
+                  <clid>CL_FORUM_V2</clid>
+                  <caption>foorum</caption>
+            </FORUM>
+      </reltypes>
 </properties>
 

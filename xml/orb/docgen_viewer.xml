@@ -11,7 +11,7 @@
 		<action name="frames" default="1">
 			<function name="frameset">
 				<arguments>
-					<define name="aa" value="100"/>
+					<optional name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -78,6 +78,7 @@
 		<action name="topf" >
 			<function name="topf">
 				<arguments>
+					<optional name="id" />
 				</arguments>
 			</function>
 		</action>
@@ -85,6 +86,14 @@
 		<action name="doc_class_list" >
 			<function name="doc_class_list">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="forum" >
+			<function name="forum">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
 				</arguments>
 			</function>
 		</action>

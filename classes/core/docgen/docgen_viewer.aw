@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.8 2004/05/25 13:01:55 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.9 2004/05/25 13:35:47 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -11,11 +11,16 @@
 
 /*
 
-@classinfo no_status=1 no_comment=1
+@classinfo no_status=1 no_comment=1 relationmgr=yes
 
 @default group=general 
 
+@property foorum type=relpicker reltype=RELTYPE_FORUM field=meta method=serialize table=objects
+
 @property view type=text store=no 
+
+@reltype FORUM value=1 clid=CL_FORUM_V2
+@caption foorum
 
 */
 class docgen_viewer extends class_base
@@ -35,7 +40,7 @@ class docgen_viewer extends class_base
 		{
 			case "view":
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("frames"),
+					"url" => $this->mk_my_orb("frames", array("id" => $arr["obj_inst"]->id())),
 					"caption" => "Open DocGen"
 				));
 				break;
@@ -132,7 +137,7 @@ class docgen_viewer extends class_base
 		
 		@attrib name=frames params=name default="1"
 		
-		@param aa define value="100"
+		@param id optional type=int 
 		
 		@returns
 		
@@ -140,7 +145,7 @@ class docgen_viewer extends class_base
 		@comment
 
 	**/
-	function frameset()
+	function frameset($arr)
 	{
 		$this->read_template("frameset.tpl");
 
@@ -148,7 +153,7 @@ class docgen_viewer extends class_base
 			"left" => $this->mk_my_orb("class_list"),
 			"right" => "about:blank",
 			"doclist" => $this->mk_my_orb("doclist"),
-			"topf" => $this->mk_my_orb("topf")
+			"topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
 		));
 		die($this->parse());
 	}
@@ -789,6 +794,8 @@ class docgen_viewer extends class_base
 
 		@attrib name=topf 
 
+		@param id optional
+
 	**/
 	function topf($arr)
 	{
@@ -812,11 +819,17 @@ class docgen_viewer extends class_base
 			"caption" => "Eraldi dokumentatsioon"
 		));
 
-		$ret[] = html::href(array(
-			"url" => $this->mk_my_orb("forum"),
-			"target" => "classlist",
-			"caption" => "Foorum"
-		));
+		if ($arr["id"])
+		{
+			$o = obj($arr["id"]);
+			$f_id = $o->prop("foorum");
+
+			$ret[] = html::href(array(
+				"url" => $this->mk_my_orb("change", array("id" => $f_id, "group" => "contents"), CL_FORUM_V2),
+				"target" => "list",
+				"caption" => "Foorum"
+			));
+		}
 
 
 		$this->read_template("style.tpl");
