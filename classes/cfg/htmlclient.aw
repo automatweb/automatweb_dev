@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.67 2004/06/09 09:58:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.68 2004/06/25 11:56:56 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -494,6 +494,7 @@ class htmlclient extends aw_template
 			// first pass creates contents for all boxes
 			foreach($this->layoutinfo as $key => $val)
 			{
+				// this takes care of all layout boxes with parents 
 				if (empty($val["parent"]))
 				{
 					continue;
@@ -539,9 +540,10 @@ class htmlclient extends aw_template
 				};
 				if ($type == "hbox")
 				{
-					$res .= "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0 width=100%>";
-					$res .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0 width=100%>",$val["items"]);
-					$res .= "</table></td></tr></table>";
+					$width = (int)100 / sizeof($val["items"]);
+					$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>";
+					$res .= join("</td><td valign=top width='${width}%'>",$val["items"]);
+					$res .= "</td></tr></table>";
 				};
 			};
 		};
