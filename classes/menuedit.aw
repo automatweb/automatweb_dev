@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.250 2003/03/03 10:20:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.251 2003/03/06 15:24:41 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4655,6 +4655,9 @@ class menuedit extends aw_template
 			{
 				$str.="1 ".$this->cfg["site_id"]." ".$row["parent"]."\n";
 			}
+			// this is a problem since the user can override the treetype,
+			// but this will still try to contact the java daemon if 
+			// tree_type is set to java in the ini file -- duke
 			if ($this->cfg["tree_type"] == "java" && $this->cfg["java_tree_update"])
 			{
 				$server_socket = fsockopen($this->cfg["java_tree_update_server"], $this->cfg["java_tree_update_port"],$errno,$errstr,10);
@@ -5184,8 +5187,15 @@ class menuedit extends aw_template
 
 		$this->read_template("js_popup_menu.tpl");
 
+		// do not show relation objects in the list. hm, I wonder whether
+		// I'll burn in hell for this --duke
+		$cls = " AND objects.class_id != " . CL_RELATION;
 
-		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $ps ");
+		// would be nice if we would only query the fields we actually need, otherwise
+		// we just spend a lot of memory on nothing when handling long object lists.
+		// BUT doing this right now would break the custom object list thingie ... -- duke
+
+		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $cls $ps ");
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
