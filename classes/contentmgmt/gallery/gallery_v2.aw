@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.21 2003/05/14 12:28:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.22 2003/05/15 15:05:28 kristo Exp $
 
 /*
 
@@ -963,7 +963,7 @@ class gallery_v2 extends class_base
 			));
 		}
 
-		if (count($this->_get_rate_objs($obj)) > 0)
+		if (count($this->_get_rate_objs($ob)) > 0)
 		{
 			$sc = get_instance("contentmgmt/rate/rate_scale");
 			$scale = $sc->get_scale_for_obj($pd['img']['id']);
@@ -1234,7 +1234,8 @@ class gallery_v2 extends class_base
 		$l_img = $this->_imagecreatefromstring($this->get_file(array("file" => $_img["file"])), $_img["file"]);
 
 		// this here finds the transparent color and makes it really be transparent
-		$trans = imagecolorclosestalpha($l_img, 0,0,0, 127);
+		//$trans = imagecolorclosestalpha($l_img, 0,0,0, 127);
+		$trans = imagecolorat ($l_img, 0, 0);
 		imagecolortransparent($l_img, $trans);
  
 		// now, find where to put the damn thing
