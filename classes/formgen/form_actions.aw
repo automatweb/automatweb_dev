@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.6 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.7 2003/01/09 18:01:07 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -410,7 +410,8 @@ class form_actions extends form_base
 	{
 		if ($data["list"])
 		{
-			$li = get_instance("mlist",$data["list"]);
+			$li = get_instance("mlist");
+			$li->mlist($data["list"]);
 
 			// if the checkbox is checked, then add user to list, else remove
 			// if no checkbox is set, always add
