@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.15 2004/02/17 12:10:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.16 2004/02/17 12:23:12 duke Exp $
 set_time_limit(0);
 include("const.aw");
 
@@ -68,10 +68,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if (	$_SERVER["REQUEST_METHOD"] == "POST" &&
-	(substr($content,0,5) == "http:" ||
-	(isset($vars["reforb"]) && ($vars["reforb"] == 1)))
-	&& !$vars["no_redir"]	)
+if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
 {
 	if (headers_sent())
 	{
