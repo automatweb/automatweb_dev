@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.1 2005/02/02 17:05:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.2 2005/02/09 10:27:13 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -144,7 +144,7 @@ class newsfeed extends class_base
 					"item_id" => $oid,
 					"title" => $o->name(),
 					"link" => aw_ini_get("baseurl") . "/" . $oid,
-					"art_date" => date("Y-m-d",$o->modified()),
+					"artdate" => date("Y-m-d",$o->modified()),
 					"start_date" => date("Y-m-d H:i:s",$o->modified()),
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
