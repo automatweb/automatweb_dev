@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.15 2004/12/15 12:29:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.16 2004/12/28 11:42:02 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -17,152 +17,152 @@
 @property user1 type=textbox field=aw_user1 group=data
 @caption User-defined 1
 
-@property user2 type=textbox  field=aw_user2 group=data
+@property user2 type=textbox field=aw_user2 group=data
 @caption User-defined 2
 
-@property user3 type=text  field=aw_user3 group=data
+@property user3 type=text field=aw_user3 group=data
 @caption User-defined 3
 
-@property user4 type=textbox  field=aw_user4 group=data
+@property user4 type=textbox field=aw_user4 group=data
 @caption User-defined 4
 
-@property user5 type=textbox  field=aw_user5 group=data
+@property user5 type=textbox field=aw_user5 group=data
 @caption User-defined 5
 
-@property user6 type=textbox  field=aw_user6 group=data
+@property user6 type=textbox field=aw_user6 group=data
 @caption User-defined 6
 
-@property user7 type=textbox  field=aw_user7 group=data
+@property user7 type=textbox field=aw_user7 group=data
 @caption User-defined 7
 
-@property user8 type=textbox  field=aw_user8 group=data
+@property user8 type=textbox field=aw_user8 group=data
 @caption User-defined 8
 
-@property user9 type=textbox  field=aw_user9 group=data
+@property user9 type=textbox field=aw_user9 group=data
 @caption User-defined 9
 
-@property user10 type=textbox  field=aw_user10 group=data
+@property user10 type=textbox field=aw_user10 group=data
 @caption User-defined 10
 
-@property user11 type=textbox  field=aw_user11 group=data
+@property user11 type=textbox field=aw_user11 group=data
 @caption User-defined 11
 
-@property user12 type=textbox  field=aw_user12 group=data
+@property user12 type=textbox field=aw_user12 group=data
 @caption User-defined 12
 
-@property user13 type=textbox  field=aw_user13 group=data
+@property user13 type=textbox field=aw_user13 group=data
 @caption User-defined 13
 
-@property user14 type=textbox  field=aw_user14 group=data
+@property user14 type=textbox field=aw_user14 group=data
 @caption User-defined 14
 
-@property user15 type=textbox  field=aw_user15 group=data
+@property user15 type=textbox field=aw_user15 group=data
 @caption User-defined 15
 
-@property user16 type=textbox  field=aw_user16 group=data
+@property user16 type=textbox field=aw_user16 group=data
 @caption User-defined 16
 
-@property user17 type=textbox  field=aw_user17 group=data
+@property user17 type=textbox field=aw_user17 group=data
 @caption User-defined 17
 
-@property user18 type=textbox  field=aw_user18 group=data
+@property user18 type=textbox field=aw_user18 group=data
 @caption User-defined 18
 
-@property user19 type=textbox  field=aw_user19 group=data
+@property user19 type=textbox field=aw_user19 group=data
 @caption User-defined 19
 
-@property user20 type=textbox  field=aw_user20 group=data
+@property user20 type=textbox field=aw_user20 group=data
 @caption User-defined 20
 
 
-@property userta1 type=textarea  field=aw_tauser1 group=data
+@property userta1 type=textarea field=aw_tauser1 group=data
 @caption User-defined ta 1
 
-@property userta2 type=textarea  field=aw_tauser2 group=data
+@property userta2 type=textarea field=aw_tauser2 group=data
 @caption User-defined ta 2
 
-@property userta3 type=textarea  field=aw_tauser3 group=data
+@property userta3 type=textarea field=aw_tauser3 group=data
 @caption User-defined ta 3
 
-@property userta4 type=textarea  field=aw_tauser4 group=data
+@property userta4 type=textarea field=aw_tauser4 group=data
 @caption User-defined ta 4
 
-@property userta5 type=textarea  field=aw_tauser5 group=data
+@property userta5 type=textarea field=aw_tauser5 group=data
 @caption User-defined ta 5
 
-@property userta6 type=textarea  field=aw_tauser6 group=data
+@property userta6 type=textarea field=aw_tauser6 group=data
 @caption User-defined ta 6
 
-@property userta7 type=textarea  field=aw_tauser7 group=data
+@property userta7 type=textarea field=aw_tauser7 group=data
 @caption User-defined ta 7
 
-@property userta8 type=textarea  field=aw_tauser8 group=data
+@property userta8 type=textarea field=aw_tauser8 group=data
 @caption User-defined ta 8
 
-@property userta9 type=textarea  field=aw_tauser9 group=data
+@property userta9 type=textarea field=aw_tauser9 group=data
 @caption User-defined ta 9
 
-@property userta10 type=textarea  field=aw_tauser10 group=data
+@property userta10 type=textarea field=aw_tauser10 group=data
 @caption User-defined ta 10
 
-@property uservar1 type=classificator  field=aw_varuser1 group=data reltype=RELTYPE_VARUSER1 store=connect
+@property uservar1 type=classificator field=aw_varuser1 group=data reltype=RELTYPE_VARUSER1 store=connect
 @caption User-defined var 1
 
-@property uservar2 type=classificator  field=aw_varuser2 group=data reltype=RELTYPE_VARUSER2 store=connect
+@property uservar2 type=classificator field=aw_varuser2 group=data reltype=RELTYPE_VARUSER2 store=connect
 @caption User-defined var 2
 
-@property uservar3 type=classificator  field=aw_varuser3 group=data reltype=RELTYPE_VARUSER3 store=connect
+@property uservar3 type=classificator field=aw_varuser3 group=data reltype=RELTYPE_VARUSER3 store=connect
 @caption User-defined var 3
 
-@property uservar4 type=classificator  field=aw_varuser4 group=data reltype=RELTYPE_VARUSER4 store=connect
+@property uservar4 type=classificator field=aw_varuser4 group=data reltype=RELTYPE_VARUSER4 store=connect
 @caption User-defined var 4
 
-@property uservar5 type=classificator  field=aw_varuser5 group=data reltype=RELTYPE_VARUSER5 store=connect
+@property uservar5 type=classificator field=aw_varuser5 group=data reltype=RELTYPE_VARUSER5 store=connect
 @caption User-defined var 5
 
-@property uservar6 type=classificator  field=aw_varuser6 group=data reltype=RELTYPE_VARUSER6 store=connect
+@property uservar6 type=classificator field=aw_varuser6 group=data reltype=RELTYPE_VARUSER6 store=connect
 @caption User-defined var 6
 
-@property uservar7 type=classificator  field=aw_varuser7 group=data reltype=RELTYPE_VARUSER7 store=connect
+@property uservar7 type=classificator field=aw_varuser7 group=data reltype=RELTYPE_VARUSER7 store=connect
 @caption User-defined var 7
 
-@property uservar8 type=classificator  field=aw_varuser8 group=data reltype=RELTYPE_VARUSER8 store=connect
+@property uservar8 type=classificator field=aw_varuser8 group=data reltype=RELTYPE_VARUSER8 store=connect
 @caption User-defined var 8
 
-@property uservar9 type=classificator  field=aw_varuser9 group=data reltype=RELTYPE_VARUSER9 store=connect
+@property uservar9 type=classificator field=aw_varuser9 group=data reltype=RELTYPE_VARUSER9 store=connect
 @caption User-defined var 9
 
-@property uservar10 type=classificator  field=aw_varuser10 group=data reltype=RELTYPE_VARUSER10 store=connect
+@property uservar10 type=classificator field=aw_varuser10 group=data reltype=RELTYPE_VARUSER10 store=connect
 @caption User-defined var 10
 
-@property userdate1 type=date_select  field=aw_userdate1 group=data year_from=1970 year_to=2020
+@property userdate1 type=date_select field=aw_userdate1 group=data year_from=1970 year_to=2020
 @caption User-defined date select 1
 
-@property userdate2 type=date_select  field=aw_userdate2 group=data year_from=1970 year_to=2020
+@property userdate2 type=date_select field=aw_userdate2 group=data year_from=1970 year_to=2020
 @caption User-defined date select 2
 
-@property userdate3 type=date_select  field=aw_userdate3 group=data year_from=1970 year_to=2020
+@property userdate3 type=date_select field=aw_userdate3 group=data year_from=1970 year_to=2020
 @caption User-defined date select 3
 
-@property userdate4 type=date_select  field=aw_userdate4 group=data year_from=1970 year_to=2020
+@property userdate4 type=date_select field=aw_userdate4 group=data year_from=1970 year_to=2020
 @caption User-defined date select 4
 
-@property userdate5 type=date_select  field=aw_userdate5 group=data year_from=1970 year_to=2020
+@property userdate5 type=date_select field=aw_userdate5 group=data year_from=1970 year_to=2020
 @caption User-defined date select 5
 
 @property userch1 type=textbox field=aw_userch1 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 1
 
-@property userch2 type=textbox  field=aw_userch2 group=data ch_value=1 datatype=int
+@property userch2 type=textbox field=aw_userch2 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 2
 
-@property userch3 type=text  field=aw_userch3 group=data ch_value=1 datatype=int
+@property userch3 type=text field=aw_userch3 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 3
 
-@property userch4 type=textbox  field=aw_userch4 group=data ch_value=1 datatype=int
+@property userch4 type=textbox field=aw_userch4 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 4
 
-@property userch5 type=textbox  field=aw_userch5 group=data ch_value=1 datatype=int
+@property userch5 type=textbox field=aw_userch5 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 5
 
 @property usersubtitle1 type=text store=no group=data subtitle=1
@@ -180,9 +180,43 @@
 @property usersubtitle5 type=text store=no group=data subtitle=1
 @caption Subtitle5
 
-@property udefhidden1 type=hidden field=meta method=serialize group=general table=objects
-@property udefhidden2 type=hidden field=meta method=serialize group=general table=objects
-@property udefhidden3 type=hidden field=meta method=serialize group=general table=objects
+@default table=objects
+@default method=serialize
+@default field=meta
+
+@property uservar11 type=classificator group=data reltype=RELTYPE_VARUSER11 store=connect
+@caption User-defined var 11
+
+@property uservar12 type=classificator group=data reltype=RELTYPE_VARUSER12 store=connect
+@caption User-defined var 12
+
+@property uservar13 type=classificator group=data reltype=RELTYPE_VARUSER13 store=connect
+@caption User-defined var 13
+
+@property uservar14 type=classificator group=data reltype=RELTYPE_VARUSER14 store=connect
+@caption User-defined var 14
+
+@property uservar15 type=classificator group=data reltype=RELTYPE_VARUSER15 store=connect
+@caption User-defined var 15
+
+@property uservar16 type=classificator group=data reltype=RELTYPE_VARUSER16 store=connect
+@caption User-defined var 16
+
+@property uservar17 type=classificator group=data reltype=RELTYPE_VARUSER17 store=connect
+@caption User-defined var 17
+
+@property uservar18 type=classificator group=data reltype=RELTYPE_VARUSER18 store=connect
+@caption User-defined var 18
+
+@property uservar19 type=classificator group=data reltype=RELTYPE_VARUSER19 store=connect
+@caption User-defined var 19
+
+@property uservar20 type=classificator group=data reltype=RELTYPE_VARUSER20 store=connect
+@caption User-defined var 20
+
+@property udefhidden1 type=hidden group=general
+@property udefhidden2 type=hidden group=general
+@property udefhidden3 type=hidden group=general
 
 @property usertext1 type=text store=no group=data
 @caption Usertext1
@@ -292,8 +326,38 @@
 @reltype VARUSER9 value=9 clid=CL_META
 @caption kasutajadefineeritud muutuja 9
 
-@reltype VARUSER10 value=1 clid=CL_META
+@reltype VARUSER10 value=10 clid=CL_META
 @caption kasutajadefineeritud muutuja 10
+
+@reltype VARUSER11 value=11 clid=CL_META
+@caption kasutajadefineeritud muutuja 11
+
+@reltype VARUSER12 value=12 clid=CL_META
+@caption kasutajadefineeritud muutuja 12
+
+@reltype VARUSER13 value=13 clid=CL_META
+@caption kasutajadefineeritud muutuja 13
+
+@reltype VARUSER14 value=14 clid=CL_META
+@caption kasutajadefineeritud muutuja 14
+
+@reltype VARUSER15 value=15 clid=CL_META
+@caption kasutajadefineeritud muutuja 15
+
+@reltype VARUSER16 value=16 clid=CL_META
+@caption kasutajadefineeritud muutuja 16
+
+@reltype VARUSER17 value=17 clid=CL_META
+@caption kasutajadefineeritud muutuja 17
+
+@reltype VARUSER18 value=18 clid=CL_META
+@caption kasutajadefineeritud muutuja 18
+
+@reltype VARUSER19 value=19 clid=CL_META
+@caption kasutajadefineeritud muutuja 19
+
+@reltype VARUSER20 value=20 clid=CL_META
+@caption kasutajadefineeritud muutuja 20
 
 @reltype REGISTER value=10 clid=CL_REGISTER
 @caption Seostatud register

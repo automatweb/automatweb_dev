@@ -498,270 +498,407 @@
             <caption>Subtitle5</caption>
       </property>
       <property>
+            <name>uservar11</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER11</reltype>
+            <store>connect</store>
+            <caption>User-defined var 11</caption>
+      </property>
+      <property>
+            <name>uservar12</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER12</reltype>
+            <store>connect</store>
+            <caption>User-defined var 12</caption>
+      </property>
+      <property>
+            <name>uservar13</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER13</reltype>
+            <store>connect</store>
+            <caption>User-defined var 13</caption>
+      </property>
+      <property>
+            <name>uservar14</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER14</reltype>
+            <store>connect</store>
+            <caption>User-defined var 14</caption>
+      </property>
+      <property>
+            <name>uservar15</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER15</reltype>
+            <store>connect</store>
+            <caption>User-defined var 15</caption>
+      </property>
+      <property>
+            <name>uservar16</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER16</reltype>
+            <store>connect</store>
+            <caption>User-defined var 16</caption>
+      </property>
+      <property>
+            <name>uservar17</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER17</reltype>
+            <store>connect</store>
+            <caption>User-defined var 17</caption>
+      </property>
+      <property>
+            <name>uservar18</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER18</reltype>
+            <store>connect</store>
+            <caption>User-defined var 18</caption>
+      </property>
+      <property>
+            <name>uservar19</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER19</reltype>
+            <store>connect</store>
+            <caption>User-defined var 19</caption>
+      </property>
+      <property>
+            <name>uservar20</name>
+            <group>data</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER20</reltype>
+            <store>connect</store>
+            <caption>User-defined var 20</caption>
+      </property>
+      <property>
             <name>udefhidden1</name>
             <group>general</group>
             <table>objects</table>
-            <type>hidden</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>hidden</type>
       </property>
       <property>
             <name>udefhidden2</name>
             <group>general</group>
             <table>objects</table>
-            <type>hidden</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>hidden</type>
       </property>
       <property>
             <name>udefhidden3</name>
             <group>general</group>
             <table>objects</table>
-            <type>hidden</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>hidden</type>
       </property>
       <property>
             <name>usertext1</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext1</field>
             <caption>Usertext1</caption>
       </property>
       <property>
             <name>usertext2</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext2</field>
             <caption>Usertext2</caption>
       </property>
       <property>
             <name>usertext3</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext3</field>
             <caption>Usertext3</caption>
       </property>
       <property>
             <name>usertext4</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext4</field>
             <caption>Usertext4</caption>
       </property>
       <property>
             <name>usertext5</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext5</field>
             <caption>Usertext5</caption>
       </property>
       <property>
             <name>usertext6</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext6</field>
             <caption>Usertext6</caption>
       </property>
       <property>
             <name>usertext7</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext7</field>
             <caption>Usertext7</caption>
       </property>
       <property>
             <name>usertext8</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext8</field>
             <caption>Usertext8</caption>
       </property>
       <property>
             <name>usertext9</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext9</field>
             <caption>Usertext9</caption>
       </property>
       <property>
             <name>usertext10</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext10</field>
             <caption>Usertext10</caption>
       </property>
       <property>
             <name>usertext11</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext11</field>
             <caption>Usertext11</caption>
       </property>
       <property>
             <name>usertext12</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext12</field>
             <caption>Usertext12</caption>
       </property>
       <property>
             <name>usertext13</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext13</field>
             <caption>Usertext13</caption>
       </property>
       <property>
             <name>usertext14</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext14</field>
             <caption>Usertext14</caption>
       </property>
       <property>
             <name>usertext15</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext15</field>
             <caption>Usertext15</caption>
       </property>
       <property>
             <name>usertext16</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext16</field>
             <caption>Usertext16</caption>
       </property>
       <property>
             <name>usertext17</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext17</field>
             <caption>Usertext17</caption>
       </property>
       <property>
             <name>usertext18</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext18</field>
             <caption>Usertext18</caption>
       </property>
       <property>
             <name>usertext19</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext19</field>
             <caption>Usertext19</caption>
       </property>
       <property>
             <name>usertext20</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext20</field>
             <caption>Usertext20</caption>
       </property>
       <property>
             <name>usertext21</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext21</field>
             <caption>Usertext21</caption>
       </property>
       <property>
             <name>usertext22</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext22</field>
             <caption>Usertext22</caption>
       </property>
       <property>
             <name>usertext23</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext23</field>
             <caption>Usertext23</caption>
       </property>
       <property>
             <name>usertext24</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext24</field>
             <caption>Usertext24</caption>
       </property>
       <property>
             <name>usertext25</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <store>no</store>
-            <field>usertext25</field>
             <caption>Usertext25</caption>
       </property>
       <property>
             <name>usersubmit1</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>submit</type>
             <store>no</store>
-            <field>usersubmit1</field>
             <caption>User-defined submit 1</caption>
       </property>
       <property>
             <name>userreset1</name>
             <group>data</group>
-            <table>aw_register_data</table>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
             <type>reset</type>
             <store>no</store>
-            <field>userreset1</field>
             <caption>User-defined reset 1</caption>
       </property>
       <classinfo>
@@ -828,10 +965,60 @@
                   <caption>kasutajadefineeritud muutuja 9</caption>
             </VARUSER9>
             <VARUSER10>
-                  <value>1</value>
+                  <value>10</value>
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 10</caption>
             </VARUSER10>
+            <VARUSER11>
+                  <value>11</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 11</caption>
+            </VARUSER11>
+            <VARUSER12>
+                  <value>12</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 12</caption>
+            </VARUSER12>
+            <VARUSER13>
+                  <value>13</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 13</caption>
+            </VARUSER13>
+            <VARUSER14>
+                  <value>14</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 14</caption>
+            </VARUSER14>
+            <VARUSER15>
+                  <value>15</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 15</caption>
+            </VARUSER15>
+            <VARUSER16>
+                  <value>16</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 16</caption>
+            </VARUSER16>
+            <VARUSER17>
+                  <value>17</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 17</caption>
+            </VARUSER17>
+            <VARUSER18>
+                  <value>18</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 18</caption>
+            </VARUSER18>
+            <VARUSER19>
+                  <value>19</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 19</caption>
+            </VARUSER19>
+            <VARUSER20>
+                  <value>20</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 20</caption>
+            </VARUSER20>
             <REGISTER>
                   <value>10</value>
                   <clid>CL_REGISTER</clid>
