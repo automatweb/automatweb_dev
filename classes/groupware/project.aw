@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.12 2004/03/02 14:01:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.13 2004/05/06 12:39:17 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -119,7 +119,10 @@ class project extends class_base
 		$ev_ids = array();
 		if (!empty($arr["project_id"]))
 		{
+			global $awt;
+			$awt->start("project-event-loader");
 			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
+			$awt->stop("project-event-loader");
 		}
 		else
 		if ($arr["type"] == "my_projects")
