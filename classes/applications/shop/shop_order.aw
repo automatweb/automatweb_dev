@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.15 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.16 2004/10/14 13:42:17 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -205,7 +205,6 @@ class shop_order extends class_base
 					"size" => 5
 				));
 			}
-
 			$name = $c->prop("to.name");
 			$name = html::get_change_url($c->prop("to"), array(), $name);
 
@@ -470,6 +469,8 @@ class shop_order extends class_base
 		$oi->save();
 
 		$email_subj = "Tellimus laost ".$this->order_warehouse->name();
+		$mail_from_addr = "automatweb@automatweb.com";
+		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
 		
 		if ($this->can("view", $this->order_warehouse->prop("order_center")))
 		{
@@ -481,6 +482,14 @@ class shop_order extends class_base
 				{
 					$email_subj = $cart_o->prop("email_subj");
 				}
+			}
+			if ($order_center->prop("mail_from_addr"))
+			{
+				$mail_from_addr = $order_center->prop("mail_from_addr");
+			}
+			if ($order_center->prop("mail_from_name"))
+			{
+				$mail_from_name = $order_center->prop("mail_from_name");
 			}
 		}
 
@@ -498,8 +507,8 @@ class shop_order extends class_base
 
 				$awm = get_instance("aw_mail");
 				$awm->create_message(array(
-					"froma" => "automatweb@automatweb.com",
-					"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
+					"froma" => $mail_from_addr,
+					"fromn" => $mail_from_name,
 					"subject" => $email_subj,
 					"to" => $eml->prop("mail"),
 					"body" => strip_tags(str_replace("<br>", "\n",$html)),
@@ -517,16 +526,23 @@ class shop_order extends class_base
 		//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
 		if (!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
 		{
-			$html = $this->show(array(
-				"id" => $oi->id(),
-				"template" => "show_cust.tpl"
-			));
+			if ($this->order_center->prop("mail_cust_content") != "")
+			{
+				$html = nl2br($this->order_center->prop("mail_cust_content"));
+			}
+			else
+			{
+				$html = $this->show(array(
+					"id" => $oi->id(),
+					"template" => "show_cust.tpl"
+				));
+			}
 
 		//echo "sent to $_send_to content = $html <br>";
 			$awm = get_instance("aw_mail");
 			$awm->create_message(array(
-				"froma" => "automatweb@automatweb.com",
-				"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
+				"froma" => $mail_from_addr,
+				"fromn" => $mail_from_name,
 				"subject" => $email_subj,
 				"to" => $_send_to,
 				"body" => strip_tags(str_replace("<br>", "\n",$html)),
@@ -595,8 +611,14 @@ class shop_order extends class_base
 				$product_info = $product_info->from();
 				for( $i=1; $i<21; $i++)
 				{
+					$ui = $product_info->prop("user".$i);
+					if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
+					{
+						$ui = $prod->prop("user3");
+					}
+
 					$this->vars(array(
-						'user'.$i => $product_info->prop('user'.$i)
+						'user'.$i => $ui
 					));
 				}
 				$product_info_i = $product_info->instance();
@@ -611,6 +633,7 @@ class shop_order extends class_base
 
 			$this->vars(array(
 				"name" => $prod->name(),
+				"p_name" => ($product_info ? $product_info->name() : $prod->name()),
 				"quant" => $tp[$prod->id()],
 				"price" => number_format($pr,2),
 				"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2),
@@ -622,6 +645,10 @@ class shop_order extends class_base
 
 			$p .= $this->parse("PROD");
 		}
+
+		$this->vars(array(
+			"print_link" => aw_url_change_var("print", 1)
+		));
 
 		$objs = array();
 
