@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.5 2002/12/02 11:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.6 2003/01/14 16:08:10 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -270,6 +270,7 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "file")
 		{
+			classload("file");
 			if ($this->entry["url"] != "")	
 			{
 				if ($this->arr["ftype"] == 1)
