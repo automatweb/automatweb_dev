@@ -1,5 +1,5 @@
 <?php
-// $Id: doc.aw,v 2.1 2002/11/26 12:38:02 duke Exp $
+// $Id: doc.aw,v 2.2 2002/11/26 18:42:06 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -76,21 +76,28 @@
 @property tm type=textbox size=20
 @caption Kuupäev
 
-@property referer type=generated
+@property referer type=textbox size=50 table=objects field=meta method=serialize
 @caption Ref
+
+@property refopt type=select
+@caption Ref tüüp
 
 @property sections type=select multiple=1 size=20 group=vennastamine
 @caption Sektsioonid
+
+@property aliasmgr type=aliasmgr
+@caption Aliastehaldur
 
 @classinfo toolbar=yes
 @classinfo objtable=documents
 @classinfo objtable_index=docid
 @classinfo relationmgr=yes
 @classinfo corefields=status
+@classinfo hide_tabs=yes
 
 */
 
-class doc extends aw_template
+class doc extends class_base
 {
 	function doc($args = array())
 	{
@@ -113,6 +120,10 @@ class doc extends aw_template
 				$data["options"] = array("" => "") + $options;
 				$data["selected"] = $selected;
 				break;
+
+			case "refopt":
+				$data["options"] = array("Ignoreeri","Näita","Ära näita");
+				break;
 		};
 		return $retval;
 	}
@@ -131,6 +142,7 @@ class doc extends aw_template
 				break;
 
 		};
+		return $retval;
 	}
 
 	function callback_pre_save($args = array())
@@ -155,30 +167,40 @@ class doc extends aw_template
                         "img" => "save.gif",
                 ));
 		$toolbar->add_button(array(
+                        "name" => "edit",
+                        "tooltip" => "Muuda",
+                        "url" => $this->mk_my_orb("change",array("id" => $args["id"])),
+                        "imgover" => "edit_over.gif",
+                        "img" => "edit.gif",
+                ));
+		$toolbar->add_button(array(
                         "name" => "brothering",
                         "tooltip" => "Vennastamine",
-                        "url" => "#",
+                        "url" => $this->mk_my_orb("change",array("id" => $args["id"],"group" => "vennastamine")),
 			# wtf is brothering supposed to mean?
                         "imgover" => "brothering_over.gif",
                         "img" => "brothering.gif",
                 ));
+
 		$toolbar->add_button(array(
                         "name" => "lists",
                         "tooltip" => "Teavita liste",
-                        "url" => "#",
+                        "url" => $this->mk_my_orb("notify",array("id" => $args["id"]),"keywords"),
+			"target" => "_blank",
                         "imgover" => "lists_over.gif",
                         "img" => "lists.gif",
                 ));
-		$toolbar->add_button(array(
-                        "name" => "archive",
-                        "tooltip" => "Arhiiv",
-                        "url" => "#",
-                        "imgover" => "archive_over.gif",
-                        "img" => "archive.gif",
-                ));
+//                $toolbar->add_button(array(
+//                        "name" => "archive",
+//                        "tooltip" => "Arhiiv",
+//                        "url" => "#",
+//                        "imgover" => "archive_over.gif",
+//                        "img" => "archive.gif",
+//                ));
 		$toolbar->add_button(array(
                         "name" => "preview",
                         "tooltip" => "Eelvaade",
+			"target" => "_blank",
                         "url" => aw_global_get("baseurl") . "/" . $args["id"],
                         "imgover" => "preview_over.gif",
                         "img" => "preview.gif",
