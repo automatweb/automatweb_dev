@@ -23,7 +23,7 @@ $lc_table["LC_TABLE_ADD"] = "Add";
 $lc_table["LC_TABLE_COL"] = "columns";
 $lc_table["LC_TABLE_ROW"] = "rows";
 
-$lc_table["LC_TABLE_CHANGE_TABLE"] = "Change table";
+$lc_table["LC_TABLE_CHANGE_TABLE"] = "Edit table";
 $lc_table["LC_TABLE_TEXT"] = "Text";
 $lc_table["LC_TABLE_PICTURE"] = "Image";
 $lc_table["LC_TABLE_DEL_PICT"] = "Delete image";
