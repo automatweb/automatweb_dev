@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.41 2003/12/03 11:11:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.42 2003/12/09 14:44:30 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -131,7 +131,6 @@ class htmlclient extends aw_template
 
 				$i++;
 			};
-			$args["value"] = $res;
 			$args["type"] = "text";
 		}
 		else
@@ -188,6 +187,16 @@ class htmlclient extends aw_template
 		$this->proplist[$args["name"]] = $args;
 	}
 
+	////
+	// !Shows an error indicator in the form
+	function show_error()
+	{
+		$this->vars(array(
+			"error_text" => "Viga sisendandmetes",
+		));
+		$this->error = $this->parse("ERROR");
+	}
+
 	function mod_property(&$args)
 	{
 		// that too should not be here. It only forms 2 radiobuttons ...
@@ -199,6 +208,7 @@ class htmlclient extends aw_template
 		{
 			return false;
 		};
+
 		$val = "";
 		if ($args["type"] == "status")
 		{
@@ -374,10 +384,22 @@ class htmlclient extends aw_template
 
 		$res = "";
 
+		if ($this->error)
+		{
+			$res .= $this->error;
+		};
+
 		if (sizeof($this->proplist) > 0)
 		{
 			foreach($this->proplist as $item)
 			{
+				if (!empty($item["error"]))
+				{
+					$this->vars(array(
+						"err_msg" => $item["error"],
+					));
+					$res .= $this->parse("PROP_ERR_MSG");
+				};
 				$res .= $item["html"];
 			};
 		};
