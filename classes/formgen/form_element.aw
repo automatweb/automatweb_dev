@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.20 2002/12/11 11:40:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.21 2002/12/11 12:52:07 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2305,14 +2305,39 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				if ($this->arr["visual_use_textbox"])
+				load_vcl("date_edit");
+				$de = new date_edit(time());
+				$bits = array();
+				$has_some = false;
+				if ($this->arr["has_year"])
 				{
-					$val = $this->get_val($elvalues);
-					if ($val)
-					{
-						$val = date("d/m/Y",$val);
-					};
-					$html .= "<input type='textbox' size='10' maxlength='10' name='" .$element_name . "' value='$val'>";
+					$bits["year"] = $this->arr["year_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_month"])
+				{
+					$bits["month"] = $this->arr["month_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_day"])
+				{
+					$bits["day"] = $this->arr["day_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_hr"])
+				{
+					$bits["hour"] = $this->arr["hour_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_minute"])
+				{
+					$bits["minute"] = $this->arr["minute_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_second"])
+				{
+					$bits["second"] = $this->arr["second_ord"];
+					$has_some = true;
 				}
 				else
 				{
@@ -2355,36 +2380,36 @@ class form_element extends aw_template
 						$bits["second"] = $this->arr["second_ord"];
 						$has_some = true;
 					}
-
-					uasort($bits,array($this,"_date_ord_cmp"));
-
-
-					if ($has_some)
-					{
-						$de->configure($bits);
-					}
-					else
-					{
-						$de->configure(array(
-							"year" => "",
-							"month" => "",
-							"day" => ""
-						));
-					}
-					$fy = $this->arr["from_year"];
-					$ty = $this->arr["to_year"];
-					if ($this->arr["def_date_type"] == "now")
-					{
-						$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
-					}
-					else
-					{
-						$def = time();
-					}
-	//				echo "aentry_id = $this->entry_id , $this->entry <br>";
-					$vl = $this->get_val($elvalues);
-					$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				};
+
+				uasort($bits,array($this,"_date_ord_cmp"));
+
+
+				if ($has_some)
+				{
+					$de->configure($bits);
+				}
+				else
+				{
+					$de->configure(array(
+						"year" => "",
+						"month" => "",
+						"day" => ""
+					));
+				}
+				$fy = $this->arr["from_year"];
+				$ty = $this->arr["to_year"];
+				if ($this->arr["def_date_type"] == "now")
+				{
+					$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+				}
+				else
+				{
+					$def = time();
+				}
+//				echo "aentry_id = $this->entry_id , $this->entry <br>";
+				$vl = $this->get_val($elvalues);
+				$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				break;
 				
 			case "hidden":
@@ -2611,12 +2636,6 @@ class form_element extends aw_template
 				// I don't get it
 				$var = $tm;
 			};
-
-			if ($this->arr["visual_use_textbox"])
-			{
-				list($d,$m,$y) = explode("/",$v);
-				$var = mktime(0,0,0,$m,$d,$y);
-			};
 		}
 		else
 		if ($this->arr["type"] == "timeslice")
@@ -2693,12 +2712,6 @@ class form_element extends aw_template
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user (ev_xxx)
 	function get_value($numeric = false)
 	{
-		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"])) 
-		{
-			$ret = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
-			return $ret;
-		}
-		
 		switch($this->arr["type"])
 		{
 			case "textarea":

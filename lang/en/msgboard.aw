@@ -71,6 +71,7 @@ $lc_msgboard["LC_MSGBOARD_DELETE_SELECTED"] = "Delete";
 $lc_msgboard["LC_MSGBOARD_DELETE_SELECTED_CONFIRM"] = "Delete selected topics?";
 $lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED"] = "Archive";
 $lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM"] = "Archive selected topics?";
+$lc_msgboard["LC_MSGBOARD_RESTORE_SELECTED_CONFIRM"] = "Restore selected topics?";
 
 
 define("LC_MSGBOARD_NEWTOPIC","New topic");

@@ -68,9 +68,10 @@ $lc_msgboard["LC_MSGBOARD_SEARCH_RESULTS"] = "Otsingu tulemused";
 $lc_msgboard["LC_MSGBOARD_SEARCH_RESULTS2"] = "Vastust";
 
 $lc_msgboard["LC_MSGBOARD_DELETE_SELECTED"] = "Delete";
-$lc_msgboard["LC_MSGBOARD_DELETE_SELECTED_CONFIRM"] = "Delete selected topics?";
-$lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED"] = "Archive";
-$lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM"] = "Archive selected topics?";
+$lc_msgboard["LC_MSGBOARD_DELETE_SELECTED_CONFIRM"] = "Ettevaatust! Kustutades teema jõustub see kõikidel kasutajatel. Soovid teemat kustutada?";
+$lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED"] = "Arhiveeri";
+$lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM"] = "Arhiveerida valitud teemad?";
+$lc_msgboard["LC_MSGBOARD_RESTORE_SELECTED_CONFIRM"] = "Muuta valitud teemad aktiivseks?";
 
 define("LC_MSGBOARD_NEWTOPIC","Uus teema");
 define("LC_MSGBOARD_ADDCOMMENT","Uus küsimus");
@@ -82,6 +83,6 @@ define("LC_MSGBOARD_SEARCH","Otsi");
 define("LC_MSGBOARD_NO_RESPONSE","Ainult vastamata");
 define("LC_MSGBOARD_TITLE","Foorum");
 define("LC_MSGBOARD_SORTBY_DATE","Aja järgi");
-define("LC_MSGBOARD_THREADEDLIST","Küsimused/vastused");
+define("LC_MSGBOARD_THREADEDLIST","Küsimused ja vastused");
 define("LC_MSGBOARD_ARCHIVE","Arhiiv");
 ?>

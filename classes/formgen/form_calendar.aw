@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.4 2002/12/03 13:56:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.5 2002/12/11 12:52:07 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -533,7 +533,10 @@ class form_calendar extends form_base
 				//$vac = $block["max"] - $block["cnt"];
 				$vac = $block["max"] - $cnt;
 
-				$title = "<small>free <b>$vac of $block[max]</b></small>";
+				if (!$this->cfg["hide_availability_indicator"])
+				{
+					$title = "<small>free <b>$vac of $block[max]</b></small>";
+				};
 
 				if ($vac == $block["max"])
 				{
