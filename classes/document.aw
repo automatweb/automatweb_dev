@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.186 2003/05/23 13:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.187 2003/05/28 07:52:37 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1338,6 +1338,7 @@ class document extends aw_template
 		{
 			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
 			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
+			$data["title"] = strip_tags($data["title"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
 		}
 
 		if ($data["status"] == 0)
@@ -1900,6 +1901,7 @@ class document extends aw_template
 		$keywords = $kw->get_keywords(array(
 			"oid" => $id,
 		));
+
 
 		$t = get_instance("languages");
 
@@ -2561,7 +2563,7 @@ class document extends aw_template
 	function _serialize($arr)
 	{
 		extract($arr);
-		$this->db_query("SELECT documents.*,objects.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE docid = $oid");
+		$this->db_query("SELECT documents.*,objects.*,objects.oid as oid FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $oid");
 		$row = $this->db_next();
 
 		$al = $this->get_aliases_for($oid);
@@ -2576,6 +2578,12 @@ class document extends aw_template
 	
 		$row = $ar["row"];
 
+		$is_brother = false;
+		if ($row["oid"] != $row["brother_of"])
+		{
+			$is_brother = true;
+		}
+
 		$row["oid"] = 0;
 		$row["parent"] = $parent;
 		$row["lang_id"] = aw_global_get("lang_id");
@@ -2583,7 +2591,10 @@ class document extends aw_template
 		$this->quote(&$row);
 		$id = $this->new_object($row);
 
-		$this->upd_object(array("oid" => $id, "brother_of" => $id));
+		if (!is_brother)
+		{
+			$this->upd_object(array("oid" => $id, "brother_of" => $id));
+		}
 
 		reset($this->knownfields);
 		while(list($fcap,$fname) = each($this->knownfields)) 
