@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.13 2002/12/18 12:04:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.14 2002/12/18 13:15:52 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -8,7 +8,7 @@
 // from the cfgmanager to the required form. 
 
 class htmlclient extends aw_template
-
+{
 	function htmlclient($args = array())
 	{
 		$this->init("");
@@ -40,7 +40,7 @@ class htmlclient extends aw_template
 			$res = "";
 			foreach($args["items"] as $el)
 			{
-				$this->mod_property(&$el);
+	 			$this->mod_property(&$el);
 				$res .= $this->draw_element($el);
 			};
 			$args["value"] = $res;
@@ -234,7 +234,11 @@ class htmlclient extends aw_template
 				break;
 
 			case "checkbox":
-				$retval = html::checkbox($arr);
+				$retval = html::checkbox(array(
+					'name' => $arr['name'],
+					'value' => $arr['ch_value'],
+					'checked' => ($arr['value'] == $arr['ch_value'])
+				));
 				break;
 
 			case "radiobutton":
