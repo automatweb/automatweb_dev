@@ -120,9 +120,35 @@ class layout extends class_base
 		$grid['table_style'] = $ob->meta('table_style');
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
+
 		if ($ob->prop("header") != "")
 		{
-			$tmp = nl2br($ob->prop("header")).$tmp;
+			$h_tmp = create_email_links(nl2br($ob->prop("header")));
+			if ($grid["table_style"])
+			{
+				$st = get_instance("style");
+				if (($hs = $st->get_header_style($grid["table_style"])))
+				{
+					active_page_data::add_site_css_style($hs);
+					$h_tmp = "<span class=\"st".$hs."\">".$h_tmp."</span>";
+				}
+			}
+			$tmp = $h_tmp.$tmp;
+		}
+
+		if ($ob->prop("footer") != "")
+		{
+			$h_tmp = create_email_links(nl2br($ob->prop("footer")));
+			if ($grid["table_style"])
+			{
+				$st = get_instance("style");
+				if (($hs = $st->get_footer_style($grid["table_style"])))
+				{
+					active_page_data::add_site_css_style($hs);
+					$h_tmp = "<span class=\"st".$hs."\">".$h_tmp."</span>";
+				}
+			}
+			$tmp .= $h_tmp;
 		}
 
 		$d = get_instance("document");

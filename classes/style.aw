@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.29 2004/02/25 15:39:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.30 2004/05/17 17:48:40 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -62,6 +62,8 @@ class style extends aw_template
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_CSS,
+				"site_id" => array(),
+				"lang_id" => array()
 			));
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
@@ -196,8 +198,8 @@ class style extends aw_template
 			"width"				=> $style["width"],
 			"hspace"			=> $style["hspace"],
 			"vspace"			=> $style["vspace"],
-			"header_style"	=> $this->picker($style["header_style"],$sel),
-			"footer_style"	=> $this->picker($style["footer_style"],$sel),
+			"header_style"	=> $this->picker($style["header_style"],$sel_css),
+			"footer_style"	=> $this->picker($style["footer_style"],$sel_css),
 			"even_style"	=> $this->picker($style["even_style"],$sel_css),
 			"odd_style"	=> $this->picker($style["odd_style"],$sel_css),
 			"num_frows"			=> $style["num_frows"],
