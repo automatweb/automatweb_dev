@@ -1096,6 +1096,8 @@ class grid_editor extends class_base
 		extract($params);
 
 		$this->tpl_init();
+		// hmmm?
+		$this->sub_merge = 1;
 		$this->_init_table($data);
 
 		$this->read_any_template($tpl);
