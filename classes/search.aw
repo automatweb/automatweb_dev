@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.80 2004/10/27 12:04:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.81 2004/10/28 15:08:23 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -479,13 +479,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 								if(strtolower(aw_ini_get('db.driver'))=='mssql')
 								{
 									$q = "select ".OID." from objects where class_id="
-											.CL_PSEUDO." and name like '%".$val."%'  limit 100"; 
+											.CL_MENU." and name like '%".$val."%'  limit 100"; 
 								}
 								{
 									$q = "select top 100 ".OID." from objects where class_id="
-											.CL_PSEUDO." and name like '%".$val."%' ";
+											.CL_MENU." and name like '%".$val."%' ";
 								}
-								//$q = "select ".OID." from objects where class_id=".CL_PSEUDO." and name like '%".$val."%' "; //MSSQL: limit 100";
 								$locs = $this->db_fetch_array($q);
 								if (count($locs)>0)
 								{

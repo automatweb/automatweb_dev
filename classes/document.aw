@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.288 2004/10/28 09:48:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.289 2004/10/28 15:10:25 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2274,7 +2274,7 @@ class document extends aw_template
 														menu.target as target
 											FROM objects 
 											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0  AND (objects.lang_id=".$slang_id." OR menu.type= ".MN_CLIENT.")
+											WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0  AND (objects.lang_id=".$slang_id." OR menu.type= ".MN_CLIENT.")
 											GROUP BY objects.oid
 											ORDER BY objects.parent, menu.is_l3,jrk");
 		// tsykkel yle menyyelementide

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.50 2004/06/26 07:53:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.51 2004/10/28 15:10:25 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -978,7 +978,7 @@ class keywords extends aw_template
 		if (!is_array($menu_ids))
 		{
 			$menu_ids = array();
-			$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0");
+			$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_MENU." AND status != 0");
 			while ($row = $this->db_next())
 			{
 				$menu_ids[] = $row["oid"];
