@@ -25,9 +25,6 @@ function ss(li,title)
 		<td class="celltext"><input type="text" name="s_content" size="40" value='{VAR:s_content}' class="formtext"></td>
 		</tr>
 		<tr>
-			<td colspan=2 class="celltext">{VAR:LC_EXTLINKS_SEARCHING}: <input type='radio' name='s_class_id' value='doc' {VAR:doc_sel}>{VAR:LC_EXTLINKS_SEARCH_DOCUMENTS} <input type='radio' name='s_class_id' value='item' {VAR:item_sel}> {VAR:LC_EXTLINKS_SEARCH_FROM_HEADING}</td>
-		</tr>
-		<tr>
 		    <td></td>
 			<td class="celltext"><input type="submit" class="formbutton" value="{VAR:LC_EXTLINKS_SEARCH}"></td>
 		</tr>

@@ -361,33 +361,6 @@
             <caption>Laius</caption>
       </property>
       <property>
-            <name>is_shop</name>
-            <type>checkbox</type>
-            <group>advanced</group>
-            <ch_value>1</ch_value>
-            <table>menu</table>
-            <field>is_shop</field>
-            <caption>Pood</caption>
-      </property>
-      <property>
-            <name>shop_parallel</name>
-            <type>checkbox</type>
-            <group>advanced</group>
-            <ch_value>1</ch_value>
-            <table>menu</table>
-            <field>shop_parallel</field>
-            <caption>Kaubad sbs (pood)</caption>
-      </property>
-      <property>
-            <name>shop_ignoregoto</name>
-            <type>checkbox</type>
-            <group>advanced</group>
-            <ch_value>1</ch_value>
-            <table>menu</table>
-            <field>shop_ignoregoto</field>
-            <caption>Ignoreeri järgmist (pood)</caption>
-      </property>
-      <property>
             <name>submenus_from_menu</name>
             <type>relpicker</type>
             <reltype>RELTYPE_SHOW_SUBFOLDERS_MENU</reltype>

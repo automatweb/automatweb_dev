@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.61 2003/07/17 15:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.62 2003/07/18 11:47:57 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -125,15 +125,6 @@
 	@property width type=textbox size=5 group=advanced
 	@caption Laius
 	
-	@property is_shop type=checkbox group=advanced ch_value=1
-	@caption Pood
-	
-	@property shop_parallel type=checkbox group=advanced ch_value=1
-	@caption Kaubad sbs (pood)
-	
-	@property shop_ignoregoto type=checkbox group=advanced ch_value=1
-	@caption Ignoreeri järgmist (pood)
-
 	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced field=meta method=serialize table=objects
 	@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
 
