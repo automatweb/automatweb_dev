@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.12 2004/11/09 17:45:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.13 2004/11/25 13:29:44 ahti Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -65,8 +65,8 @@ class object_type extends class_base
 					"site_id" => array(),
 				));
 				$data["options"] = $ol->names();
-                                for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-                                {
+				for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+				{
 					$flg = $o->flag(OBJ_FLAG_IS_SELECTED);
 					if ($o->flag(OBJ_FLAG_IS_SELECTED))
 					{
@@ -99,23 +99,22 @@ class object_type extends class_base
 
 			case "default_object":
 				$ol = new object_list(array(
-                                        "class_id" => $this->clid,
+					"class_id" => $this->clid,
 					"subclass" => $arr["obj_inst"]->prop("type"),
 					"lang_id" => array(),
-                                ));
+					));
 				
-                                for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-                                {
+				for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+				{
 					if ($o->flag(OBJ_FLAG_IS_SELECTED) && $o->id() != $data["value"])
-                                        {
-                                                $o->set_flag(OBJ_FLAG_IS_SELECTED, false);
-                                                $o->save();
-                                        }
-                                        else
-                                        if ($o->id() == $data["value"] && !$o->flag(OBJ_FLAG_IS_SELECTED))
-                                        {
-                                                $o->set_flag(OBJ_FLAG_IS_SELECTED, true);
-                                                $o->save();
+					{
+						$o->set_flag(OBJ_FLAG_IS_SELECTED, false);
+						$o->save();
+					}
+					elseif ($o->id() == $data["value"] && !$o->flag(OBJ_FLAG_IS_SELECTED))
+					{
+						$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+						$o->save();
 					};
 				};
 				break;
@@ -173,11 +172,10 @@ class object_type extends class_base
 
 		// I need a new method -- get_properties_by_type
 		// class_base fxt thingie needs it too to retrieve only the toolbar
-
-                $defaults = $this->get_properties_by_type(array(
-                        "clid" => $obj->prop("type"),
-                        "type" => "classificator",
-                ));
+		$defaults = $this->get_properties_by_type(array(
+			"clid" => $obj->prop("type"),
+			"type" => "classificator",
+		));
 
 		$types = array(
 			"" => "-vali-",
@@ -247,11 +245,11 @@ class object_type extends class_base
 			$clss = "doc";
 		}
 		$rv = $this->mk_my_orb("new", array(
-				"parent" => $arr["parent"],
-				"period" => aw_global_get("period"),
-				"section" => $arr["section"],
-				"cfgform" => $o->prop("use_cfgform"),
-			 ),$clss);
+			"parent" => $arr["parent"],
+			"period" => aw_global_get("period"),
+			"section" => $arr["section"],
+			"cfgform" => $o->prop("use_cfgform"),
+		),$clss);
 		return $rv;
 	}
 

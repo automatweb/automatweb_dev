@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.43 2004/11/18 17:33:37 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.44 2004/11/25 13:29:52 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -302,9 +302,9 @@ class cfgform extends class_base
 	{
 
 		error::throw_if(empty($class_id),(array(
-                        "id" => ERR_ABSTRACT,
-                        "msg" => "this is not a valid config form - class_id not specified"
-                )));
+			"id" => ERR_ABSTRACT,
+			"msg" => "this is not a valid config form - class_id not specified"
+		)));
 
 		$tmp = aw_ini_get("classes");
 		$fl = $tmp[$class_id]["file"];
@@ -336,28 +336,25 @@ class cfgform extends class_base
 				$arr["obj_inst"]->set_meta("view_controllers", $arr["request"]["view_controllers"]);		
 			break;
 			
-				
 			case "sysdefault":
 				$ol = new object_list(array(
-                                        "class_id" => $this->clid,
-                                        "subclass" => $o->subclass(),
-                                        "lang_id" => array(),
-                                ));
-
-                                foreach ($ol->arr() as $item)
-                                {
-                                        if ($item->flag(OBJ_FLAG_IS_SELECTED) && $item->id() != $data["value"])
-                                        {
-                                                $item->set_flag(OBJ_FLAG_IS_SELECTED, false);
-                                                $item->save();
-                                        }
-                                        else
-                                        if ($item->id() == $data["value"] && !$item->flag(OBJ_FLAG_IS_SELECTED))
-                                        {
-                                                $item->set_flag(OBJ_FLAG_IS_SELECTED, true);
-                                                $item->save();
-                                        };
-                                };
+					"class_id" => $this->clid,
+					"subclass" => $o->subclass(),
+					"lang_id" => array(),
+				));
+				foreach ($ol->arr() as $item)
+				{
+					if ($item->flag(OBJ_FLAG_IS_SELECTED) && $item->id() != $data["value"])
+					{
+						$item->set_flag(OBJ_FLAG_IS_SELECTED, false);
+						$item->save();
+					}
+					elseif ($item->id() == $data["value"] && !$item->flag(OBJ_FLAG_IS_SELECTED))
+					{
+						$item->set_flag(OBJ_FLAG_IS_SELECTED, true);
+						$item->save();
+					};
+				};
 				break;
 
 			case "cfg_proplist":
