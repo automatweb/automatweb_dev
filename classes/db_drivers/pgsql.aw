@@ -126,7 +126,7 @@ class pgsql
 			{
 				$this->dequote($res);
 			}
-			$res["rec"] = $this->rec_count;
+			//$res["rec"] = $this->rec_count;
 		};
 		return $res;
 	}

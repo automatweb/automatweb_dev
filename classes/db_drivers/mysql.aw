@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.12 2003/02/25 15:25:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.13 2003/03/13 15:34:42 duke Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -104,7 +104,7 @@ class mysql
 	// order, otherwise weird things could happen
 	function save_handle()
 	{
-		if (not(is_array($this->qhandles)))
+		if (empty($this->qhandles) || !is_array($this->qhandles))
 		{
 			$this->qhandles = array();
 		};
@@ -136,7 +136,7 @@ class mysql
 			{
 				$this->dequote($res);
 			}
-			$res['rec'] = $this->rec_count;
+			//$res['rec'] = $this->rec_count;
 		};
 		return $res;
 	}
