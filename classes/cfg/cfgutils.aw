@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.49 2005/02/14 15:12:53 ahti Exp $
+// $Id: cfgutils.aw,v 1.50 2005/03/31 10:09:42 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -133,12 +133,56 @@ class cfgutils extends aw_template
 
 			// XXX: I hate this parser thingie
 			$properties = $parser->get_data("/properties/property");
+			// translate
+			foreach($properties as $k => $d)
+			{
+				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["caption"]["text"] = $tmp;
+				}
+
+				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["comment"]["text"] = $tmp;
+				}
+
+				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["help"]["text"] = $tmp;
+				}
+			}
+
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$layoutinfo = $parser->get_data("/properties/layout");
 
 			$groupinfo = $parser->get_data("/properties/groupinfo");
+			foreach($groupinfo as $k => $d)
+			{
+				foreach($d as $a => $gr)
+				{
+					$tmp = t2("Grupi ".$gr[0]["caption"]["text"]." (".$a.") pealkiri");
+					if ($tmp !== NULL)
+					{
+						$groupinfo[$k][$a][0]["caption"]["text"] = $tmp;
+					}
+				}
+			}
+
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			$relinfo = $parser->get_data("/properties/reltypes");
+			foreach($relinfo[0] as $k => $dat)
+			{
+				$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
+				$tmp = t2($tmp);
+				if ($tmp !== NULL)
+				{
+					$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+				}
+			}
+
 			$forminfo = $parser->get_data("/properties/forminfo");
 			$columns = $parser->get_data("/properties/columns");
 			$tmp = array();

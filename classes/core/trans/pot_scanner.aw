@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.9 2005/03/31 08:23:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.10 2005/03/31 10:09:42 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -338,5 +338,108 @@ class pot_scanner extends core
 		}
 
 		return $strings;
+	}
+
+	function make_aw()
+	{
+		echo "creating aw files from translated po files\n\n";
+		// for each language dir
+		$langs = array();
+		$dir = aw_ini_get("basedir")."/lang/trans";
+		if ($dh = @opendir($dir)) 
+		{
+			while (false !== ($file = readdir($dh)))
+			{
+				$fn = $dir."/".$file;
+				if (is_dir($fn) && $file != "." && $file != "..")
+				{
+					if (strlen($file) == 2)
+					{
+						$langs[$file] = $file;
+					}
+				}
+			}
+		}
+
+		foreach($langs as $lang)
+		{
+			echo "scanning language $lang \n";		
+
+			// get .po files
+			$po_files = array();
+			$this->_files_from_folder($dir."/".$lang."/po", "po", $po_files);
+
+			// get .aw files
+			$aw_files = array();
+			$this->_files_from_folder($dir."/".$lang."/aw", "aw", $aw_files);
+
+			// compare times 
+			foreach($po_files as $fn => $tm)
+			{
+				$awfn = $dir."/".$lang."/aw/".basename($fn, ".po").".aw";
+
+				// if .po is newer
+				if (!isset($aw_files[$awfn]) || $aw_files[$awfn] < $tm)
+				{
+					// make new .aw file
+					$this->_make_aw_from_po($fn, $awfn);
+				}
+			}
+		}
+
+		echo "all done\n";
+	}
+
+	function _make_aw_from_po($from_file, $to_file)
+	{
+		$f = array();
+
+		$lines = file($from_file);
+		$cnt = count($lines);
+		for($i = 0; $i < $cnt;  $i++)
+		{
+			$line = $lines[$i];
+
+			if (substr($line, 0, 5) == "msgid")
+			{
+				$msgid = substr($line, 7, strlen($line)-9);
+			}
+			else
+			if (substr($line, 0, 6) == "msgstr")
+			{
+				$str = substr(trim($line), 8, strlen($line)-10);
+				while (trim($lines[$i+1]) != "")
+				{
+					$i++;
+					$line = $lines[$i];
+					$tmp = substr(trim($line), 1, strlen($line)-3);
+					if (trim($tmp) != "")
+					{
+						$str .= $tmp;
+					}
+				}
+
+				// write msgid/msgstr pair
+				if ($str != "")
+				{
+					$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($msgid)."\"] = \"".$this->_code_quote($str)."\";\n";
+				}
+			}
+		}
+
+		$fp = fopen($to_file, "w");
+		fwrite($fp, "<?php\n");
+		foreach($f as $e)
+		{
+			fwrite($fp, $e);
+		}
+		fwrite($fp, "?>");
+		fclose($fp);
+		echo "wrote file $to_file \n";
+	}
+
+	function _code_quote($str)
+	{
+		return str_replace("\"", "\\\"", $str);
 	}
 }

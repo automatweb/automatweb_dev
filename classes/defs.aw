@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.181 2005/03/22 15:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.182 2005/03/31 10:09:41 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1431,7 +1431,12 @@ if (!defined("DEFS"))
 
 	function t($s)
 	{
-		return $s;
+		return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : $s;
+	}
+
+	function t2($s)
+	{
+		return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
 	}
 
 	if (!function_exists("strptime"))
