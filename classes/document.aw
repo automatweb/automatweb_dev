@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.224 2003/12/05 13:00:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.225 2003/12/12 17:31:22 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -441,6 +441,18 @@ class document extends aw_template
 		}
 
 		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
+		
+		# translate stuff between #code# and #/code#
+		if (false !== strpos($doc["content"],"#code#"))
+		{
+		       $doc["content"] = preg_replace("/(#code#)(.+?)(#\/code#)/esm","htmlspecialchars(stripslashes('\$2'))",$doc["content"]);
+		};
+
+		if (false !== strpos($doc["content"],"#php#"))
+		{
+		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$doc["content"]);
+		};
+
 
 		// in_archive disappears if we move around in archives
 		// so we need another way to determine whether this document belongs to the active
