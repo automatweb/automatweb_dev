@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.56 2003/04/14 08:49:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.57 2003/04/15 15:04:41 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -168,10 +168,6 @@ class aw_table
 		$aw_tables = aw_global_get("aw_tables"); 
 		$sess_field_key   = $this->prefix . "_sortby";
 		$sess_field_order = $this->prefix . "_sorder";
-		if (empty($params["sorder"]))
-		{
-			$params["sorder"] = "asc";
-		};
 
 		// figure out the column by which we must sort
 		// start from the parameters
