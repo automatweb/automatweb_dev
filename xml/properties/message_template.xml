@@ -20,6 +20,15 @@
             <caption>HTML</caption>
       </property>
       <property>
+            <name>legend</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>objects</table>
             <group>general</group>

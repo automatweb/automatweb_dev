@@ -309,6 +309,16 @@
             <caption>Viimane kiri saadeti</caption>
       </property>
       <property>
+            <name>list_source</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>mail_report</group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Listi liikmete allikas</caption>
+      </property>
+      <property>
             <name>mail_report</name>
             <table>objects</table>
             <field>meta</field>
