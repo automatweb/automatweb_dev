@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.36 2005/03/29 14:05:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.37 2005/03/29 18:28:15 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -405,18 +405,17 @@ class mrp_job extends class_base
 			{
 				$prerequisite = obj ($prerequisite_oid);
 
-				if (((int) $prerequisite->prop ("state")) === MRP_STATUS_DONE)
+				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
 				{
-					$prerequisites_done = true;
-				}
-				else
-				{
+					$prerequisites_done = false;
 					$errors[] = t("Eeldustööd tegemata");
+					break;
 				}
 			}
 			else
 			{
 				$errors[] = t("Eeldustöö definitsioon on katki");
+				break;
 			}
 		}
 
