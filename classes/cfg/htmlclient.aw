@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.23 2003/03/18 13:34:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.24 2003/03/18 13:44:33 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -147,7 +147,7 @@ class htmlclient extends aw_template
 					"name" => $args["name"],
 					"size" => 7,
 					"maxlength" => 7,
-					"value" => $args["value"],
+					"value" => isset($args["value"]) ? $args["value"] : "",
 			));
 
 			$cplink = $this->mk_my_orb("colorpicker",array(),"css");
@@ -183,7 +183,10 @@ class htmlclient extends aw_template
 	{
 		$this->res .= "<tr>\n";
 		$this->res .= "\t<td class='" . $this->style1 . "' width='160' nowrap>";
-		$this->res .= "<label for='$args[name]'> " . $args["caption"] . "</label>&nbsp;";
+		if (isset($args["caption"]))
+		{
+			$this->res .= "<label for='$args[name]'> " . $args["caption"] . "</label>&nbsp;";
+		};
 		$this->res .= "</td>\n";
 
 		$this->res.= "\t<td class='" . $this->style2 . "'>";
@@ -277,8 +280,8 @@ class htmlclient extends aw_template
 				$retval = html::checkbox(array(
 					"label" => isset($arr["label"]) ? $arr["label"] : "",
 					"name" => $arr["name"],
-					"value" => $arr["ch_value"],
-					"checked" => ($arr["value"] == $arr["ch_value"])
+					"value" => isset($arr["ch_value"]) ? $arr["ch_value"] : "",
+					"checked" => isset($arr["value"]) && isset($arr["ch_value"]) && ($arr["value"] == $arr["ch_value"])
 				));
 				break;
 
