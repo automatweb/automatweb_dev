@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.19 2003/08/29 11:51:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.20 2003/10/30 13:41:39 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -606,13 +606,13 @@ class ml_member extends class_base
 		return array($mailto,$memberdata);
 	}
 
-	function callback_pre_save($args)
+	function callback_pre_save($arr)
 	{
-		$coredata = &$args["coredata"];
+		$request = $arr["request"];
 		$formdata = $args["form_data"];
-		if (!empty($formdata["name"]) && !empty($formdata["mail"]))
+		if (!empty($request["name"]) && !empty($request["mail"]))
 		{
-			$coredata["name"] = $formdata["name"] . " &lt;" .$formdata["mail"] . "&gt;";
+			$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
 		};
 	}		
 };
