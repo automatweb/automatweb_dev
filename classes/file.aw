@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.45 2003/02/26 10:42:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.46 2003/04/09 16:58:49 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -20,6 +20,9 @@
 /*
 	@default table=files
 	@default group=general
+
+	@property filename type=text store=no field=name
+	@caption Faili nimi
 
 	@property file type=fileupload 
 	@caption Vali fail
@@ -85,6 +88,12 @@ class file extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "name":
+				$retval = PROP_IGNORE;
+				break;
+			case "filename":
+				$data["value"] = $args["obj"]["name"];
+				break;
 			case "view":
 				$data["value"] = html::href(array(
 					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"],"name" => $args["obj"]["name"])),
@@ -107,6 +116,10 @@ class file extends class_base
 		$form_data = &$args["form_data"];
 		global $file, $file_type,$file_name;
 		$retval = PROP_OK;
+		if ($data["name"] == "name")
+		{
+			$retval = PROP_IGNORE;
+		};
 		if ($data["name"] == "file")
 		{
 			if (is_uploaded_file($file))
