@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.8 2003/12/03 12:15:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.9 2004/02/11 11:57:29 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -145,6 +145,9 @@ class site_translation extends class_base
 		{
 			$this->base_lang_id = $ucfg->meta("base_lang");
 		}
+
+		$l = get_instance("languages");
+		$l->set_active($this->base_lang_id);
 
 		if ($tr_o->prop("targetlang"))
 		{

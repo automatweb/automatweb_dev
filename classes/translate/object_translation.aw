@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.9 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.11 2004/02/11 11:57:29 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -41,6 +41,7 @@ class object_translation extends aw_template
 	**/
 	function create($args = array())
 	{
+		obj_set_opt("no_auto_translation", 1);
 		// steps
 		// 1 - read the original object
 		$orig = new object($args["id"]);
@@ -84,7 +85,9 @@ class object_translation extends aw_template
 		if (count($conns) > 0)
 		{
 			// it already has the translation, don't create a new one, just go to changing
-			return $this->mk_my_orb("change",array("id" => $conns[0]->prop("to"), "set_lang_id" => $conns[0]->prop("to.lang_id")),$fl);
+			reset($conns);
+			list(,$f_c) = each($conns);
+			return $this->mk_my_orb("change",array("id" => $f_c->prop("to"), "set_lang_id" => $f_c->prop("to.lang_id")),$fl);
 		}
 		// 3 - clone all the data from the original object ...
 		$orig_inst = get_instance($fl);
@@ -152,7 +155,83 @@ class object_translation extends aw_template
 
 	function translation_list($oid, $no_orig = false)
 	{
-		$obj = obj($oid);
+		// make language id => acceptlang lut
+		$l_inst = get_instance("languages");
+		$lref = $l_inst->get_list(array(
+			"key" => "id",
+			"all_data" => true
+		));
+
+		obj_set_opt("no_auto_translation", 1);
+		$orig_id = $oid;
+		$orig_obj = obj($oid);
+		$orig_lang = $l_inst->get_langid_for_code($orig_obj->lang());
+		obj_set_opt("no_auto_translation", 0);
+
+		// ok, if the obj has any connections FROM, of type RELTYPE_TRANSLATION
+		// it is the original, so get all the relations and mark the translations
+		// IF it does NOT, then find connection of type RELTYPE_ORIGINAL from the object
+		// if there is ONE, then ot points to the original. 
+		// if there are none, then the object is not translated
+		$c = new connection();
+		$conn = $c->find(array(
+			"from" => $oid,
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conn) == 0)
+		{
+			$conn = $c->find(array(
+				"from" => $oid,
+				"type" => RELTYPE_ORIGINAL
+			));
+			error::throw_if(count($conn) > 1, array(
+				"id" => ERR_TRANS,
+				"msg" => "object_translation::translation_list(): found more than one RELTYPE_ORIGINAL translation from object ".$oid
+			));
+			
+			if (count($conn) == 1)
+			{
+				reset($conn);
+				list(,$f_conn) = each($conn);
+				$conn = $c->find(array(
+					"from" => $f_conn["to"],
+					"type" => RELTYPE_TRANSLATION
+				));
+
+				$orig_id = $f_conn["to"];
+				$orig_lang = $f_conn["to.lang_id"];
+			}
+		}
+
+		if ($no_orig)
+		{
+			$ret = array();
+		}
+		else
+		{
+			$ret = array(
+				$orig_lang => $orig_id
+			);
+		}
+
+		// now $conn contains all the translation relations from the original obj to the translated objs
+		foreach($conn as $c)
+		{
+			if ($no_orig)
+			{
+				if ($c["to"] != $orig_id)
+				{
+					$ret[$c["to.lang_id"]] = $c["to"];
+				}
+			}
+			else
+			{
+				$ret[$c["to.lang_id"]] = $c["to"];
+			}
+		}
+
+
+		/*$obj = obj($oid);
 
 		// see if the object has translations
 		$conn = $obj->connections_from(array(
@@ -168,7 +247,9 @@ class object_translation extends aw_template
 			{
 				// if it has connections pointing to it, then it is, so get the translations from the original
 				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				$obj = obj($conn[0]->prop("from"));
+				reset($conn);
+				list(,$f_conn) = each($conn);
+				$obj = obj($f_conn->prop("from"));
 				$conn = $obj->connections_from(array(
 					"type" => RELTYPE_TRANSLATION
 				));
@@ -200,7 +281,7 @@ class object_translation extends aw_template
 			{
 				$ret[$c->prop("to.lang_id")] = $c->prop("to");
 			}
-		}
+		}*/
 		return $ret;
 	}
 

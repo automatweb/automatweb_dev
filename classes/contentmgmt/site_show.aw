@@ -1143,42 +1143,66 @@ class site_show extends class_base
 			$obj = $this->section_obj;
 		}
 
-		// see if the object has translations
-		$conn = $obj->connections_from(array(
-			"type" => RELTYPE_TRANSLATION
-		));
-		if (count($conn) < 1)
-		{
-			// if it has none, then try to figure out if it is a translated object
-			$conn = $obj->connections_to(array(
-				"type" => RELTYPE_TRANSLATION
-			));
-			if (count($conn) > 0)
-			{
-				// if it has connections pointing to it, then it is, so get the translations from the original
-				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$obj = obj($f_conn->prop("from"));
-				$conn = $obj->connections_from(array(
-					"type" => RELTYPE_TRANSLATION
-				));
-			}
-		}
-
+		// make language id => acceptlang lut
 		$l_inst = get_instance("languages");
 		$lref = $l_inst->get_list(array(
 			"key" => "id",
 			"all_data" => true
 		));
 
+		// ok, if the obj has any connections FROM, of type RELTYPE_TRANSLATION
+		// it is the original, so get all the relations and mark the translations
+		// IF it does NOT, then find connection of type RELTYPE_ORIGINAL from the object
+		// if there is ONE, then ot points to the original. 
+		// if there are none, then the object is not translated
+		$c = new connection();
+		$conn = $c->find(array(
+			"from" => $obj->id(),
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conn) == 0)
+		{
+			$conn = $c->find(array(
+				"from" => $obj->id(),
+				"type" => RELTYPE_ORIGINAL
+			));
+			error::throw_if(count($conn) > 1, array(
+				"id" => ERR_TRANS,
+				"msg" => "site_show::make_context_langs(): found more than one RELTYPE_ORIGINAL translation from object ".$obj->id()
+			));
+			
+			if (count($conn) == 1)
+			{
+				reset($conn);
+				list(,$f_conn) = each($conn);
+				$conn = $c->find(array(
+					"from" => $f_conn["to"],
+					"type" => RELTYPE_TRANSLATION
+				));
+
+				$orig_id = $f_conn["to"];
+				$orig_lang = $lref[$f_conn["to.lang_id"]]["acceptlang"];
+			}
+			else
+			{
+				$conn = array();
+				$orig_id = $obj->id();
+				$orig_lang = $obj->lang();
+			}
+		}
+		else
+		{
+			$orig_id = $obj->id();
+			$orig_lang = $obj->lang();
+		}
+
 		// now $conn contains all the translation relations from the original obj to the translated objs
 		$lang2trans = array(
-			$obj->lang() => $obj->id()
+			$orig_lang => $orig_id
 		);
 		foreach($conn as $c)
 		{
-			$lang2trans[$lref[$c->prop("to.lang_id")]["acceptlang"]] = $c->prop("to");
+			$lang2trans[$lref[$c["to.lang_id"]]["acceptlang"]] = $c["to"];
 		}
 
 		$lang_id = aw_global_get("LC");
@@ -1189,11 +1213,6 @@ class site_show extends class_base
 		$l = "";
 		foreach($ldat as $lc => $ld)
 		{
-			if ($lc == aw_global_get("LC"))
-			{
-				continue;
-			}
-
 			$name = $ld["name"];
 			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc];
 

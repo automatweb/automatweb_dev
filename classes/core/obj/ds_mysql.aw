@@ -155,7 +155,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($prop["method"] == "serialize")
 					{
-						if ($prop['field'] == "meta")
+						if ($prop['field'] == "meta" && $prop["table"] == "objects")
 						{
 							$prop['field'] = "metadata";
 						}
@@ -355,7 +355,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($prop['method'] == "serialize")
 					{
-						if ($prop['field'] == "meta")
+						if ($prop['field'] == "meta" && $prop["table"] == "objects")
 						{
 							$prop['field'] = "metadata";
 						}

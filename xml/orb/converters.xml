@@ -136,5 +136,13 @@
 			</function>
 		</action>
 
+		<action name="lang_new_convert" >
+			<function name="lang_new_convert">
+				<arguments>
+					<required name="parent" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.243 2004/02/09 20:51:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.244 2004/02/11 11:57:25 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1075,18 +1075,6 @@ class core extends acl_base
 			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
 	}
-
-	////
-	// !get object's hits
-	// $oid =  object id
-	function get_hit($oid)
-	{
-		if ($oid)
-		{
-		return $this->db_fetch_field("SELECT hits from hits WHERE oid = $oid","hits");
-		};
-	}
-     
 
 	////
 	// !traverses the object tree from bottom to top and returns an 

@@ -396,6 +396,18 @@ function &obj($param = NULL)
 	return new object($param);
 }
 
+/** sets an object system property 
+
+@comment
+currently possible options:
+no_auto_translation - 1/0 - if 1, no auto object translation is performed
+
+**/
+function obj_set_opt($opt, $val)
+{
+	$GLOBALS["__obj_sys_opts"][$opt] = $val;
+}
+
 function dump_obj_table($pre = "")
 {
 	echo "---------------------------------------- object table dump: <br />$pre <br />\n";

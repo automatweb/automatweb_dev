@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.4 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.5 2004/02/11 11:57:28 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -221,6 +221,16 @@ class config_login_menus extends class_base
 		$o = obj($oid);
 		$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
 
+		$o->connect(array(
+			"to" => $vars["logged_users"],
+			"reltype" => RELTYPE_FOLDER
+		));
+
+		$o->connect(array(
+			"to" => $vars["logged_admins"],
+			"reltype" => RELTYPE_FOLDER
+		));
+
 		// and manually set login menu conf as correct
 		$data = array();
 		// 2 is the gid for admins. 3 for regular users
@@ -229,8 +239,8 @@ class config_login_menus extends class_base
 			$data[$lid][2]["menu"] = $vars["logged_admins"];
 			$data[$lid][2]["pri"] = 1000;
 	
-			$data[$lid][3]["menu"] = $vars["logged_users"];
-			$data[$lid][3]["pri"] = 100;
+			$data[$lid][1]["menu"] = $vars["logged_users"];
+			$data[$lid][1]["pri"] = 100;
 
 			if ($lid == 1)
 			{

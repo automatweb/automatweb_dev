@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.207 2004/02/05 16:06:59 duke Exp $
+// $Id: class_base.aw,v 2.208 2004/02/11 11:57:25 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1227,7 +1227,7 @@ class class_base extends aw_template
 			$fval = $val["method"];
 			$_field = $val["field"];
 
-			if ($_field == "meta")
+			if ($val["table"] == "objects" && $_field == "meta")
 			{
 				$_field = "metadata";
 			};

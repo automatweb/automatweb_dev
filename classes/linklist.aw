@@ -702,7 +702,7 @@ class linklist extends class_base
 			{
 				$link+=array(
 					'link' => $val['link'],//?$val['link']:$this->mk_my_orb('goto',array('id'  => $oid, 'lkid'=>$id),''),
-					'hits' => $this->get_hit($key),
+					'hits' => "hits"//$this->get_hit($key),
 				);
 				$items[$tlp].= localparse($link_tpl,$link); //parse links
 			}
@@ -710,7 +710,7 @@ class linklist extends class_base
 			{
 				$link+=array(
 					'link' => $this->mk_my_orb('goto',array('id'  => $oid, 'lkid'=>$id),''),
-					'hits' => $this->get_hit($key),
+					'hits' => "hits"//$this->get_hit($key),
 					'caption' => $val['caption'],
 				);
 				$tlp=$jrk?$jrk:((3%$t++)+1);
@@ -755,7 +755,7 @@ class linklist extends class_base
 				$subs=$this->parse('sub_count');
 			}
 			$this->vars(array(
-				'hits' => $this->get_hit($oid),
+				'hits' => "hits"//$this->get_hit($oid),
 				'sub_count' => $subs,
 				'name' => $name,
 				'link' => $this->mk_my_orb(

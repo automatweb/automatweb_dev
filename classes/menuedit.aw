@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.312 2004/02/04 13:49:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.313 2004/02/11 11:57:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -347,18 +347,18 @@ class menuedit extends aw_template
 		{
 			if ($row)
 			{
-				if ($set_lang_id != aw_global_get("lang_id"))
-				{
-					$la = get_instance("languages");
-					$la->set_active($set_lang_id);
-					$this->lc_load("menuedit","lc_menuedit");
-					lc_site_load("menuedit",$this);
-					lc_load("definition");
-				}
-				else
-				{
-					aw_global_set("lang_id",$set_lang_id);
-				}
+				$la = get_instance("languages");
+				$la->set_active($set_lang_id);
+				$this->lc_load("menuedit","lc_menuedit");
+				lc_site_load("menuedit",$this);
+				lc_load("definition");
+				// we must reset the objcache here, because
+				// it already contains the section obj
+				// and after the language switch it contains the old language
+				// objects and that messes up the auto_translation
+				// anyway, tyhis does not add much overhead, 
+				// because here we should only have the section object loaded
+				$GLOBALS["objects"] = array();
 			}
 			else
 			{

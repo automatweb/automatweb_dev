@@ -15,8 +15,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	// metadata must be unserialized
 	function get_objdata($oid)
 	{
-		$lang_id = aw_global_get("lang_id");
+		if ($GLOBALS["__obj_sys_opts"]["no_auto_translation"] == 1)
+		{
+			return $this->contained->get_objdata($oid);
+		}
 
+		$lang_id = aw_global_get("lang_id");
 		$req_od = $this->contained->get_objdata($oid);
 
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
@@ -74,10 +78,11 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			if (count($conns2) == 1)
 			{
 				// mark the found translation connection in the cache
-				$this->objdata[$f_c["from"]]["trans_rels"][$lang_id] = $conns2[0]["to"];
 
 				reset($conns2);
 				list(, $f_c2) = each($conns2);
+
+				$this->objdata[$f_c["from"]]["trans_rels"][$lang_id] = $f_c2["to"];
 
 				// mark the translated object in the cache and link back to original
 				$this->objdata[$f_c2["to"]]["type"] = OBJ_TRANS_TRANSLATED;
@@ -85,7 +90,8 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 				// the correct object is in $f_c2["to"]
 				$ret = $this->contained->get_objdata($f_c2["to"]);
-				$ret["lang_id"] = $req_od["lang_id"];
+				// why did we do this??!? 
+				//$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
 				// just the bit about OBJ_IS_TRANSLATED
 				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
@@ -105,11 +111,55 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		}
 		else
 		{
-			// no connections, therefore it must be the correct one
-
+			// there are no translation connections to this, therefore it is the original. BUT
+			// if it is of the incorrect language, we must find if it has a translation to the current lanugage
+			// and if it does, return THAT
 			$this->objdata[$oid]["type"] = OBJ_TRANS_ORIG;
 
-			$ret = $req_od;
+			if ($req_od["lang_id"] != $lang_id)
+			{
+				$conns = $this->contained->find_connections(array(
+					"from" => $oid,
+					"type" => RELTYPE_TRANSLATION,
+					"to.lang_id" => $lang_id
+				));
+				if (count($conns) > 1)
+				{
+					error::throw(array(
+						"id" => ERR_TRANS,
+						"ds_auto_translation::get_objdata($oid): found more than one translation relation from object $oid pointing to an object with lang id $lang_id!"
+					));
+				}
+				else
+				if (count($conns) > 0)
+				{
+					reset($conns);	
+					list(, $dat) = each($conns);
+
+					$this->objdata[$oid]["trans_rels"][$lang_id] = $dat["to"];
+
+					// mark the translated object in the cache and link back to original
+					$this->objdata[$dat["to"]]["type"] = OBJ_TRANS_TRANSLATED;
+					$this->objdata[$dat["to"]]["trans_orig"] = $oid;
+
+					// the correct object is in $dat["to"]
+					$ret = $this->contained->get_objdata($dat["to"]);
+					// why did we do this?!?!
+					//$ret["lang_id"] = $req_od["lang_id"];
+					$ret["meta"] = $req_od["meta"];
+					// just the bit about OBJ_IS_TRANSLATED
+					$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
+					$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
+				}
+				else
+				{
+					$ret = $req_od;
+				}
+			}
+			else
+			{
+				$ret = $req_od;
+			}
 			return $ret;
 		}
 	}
@@ -122,9 +172,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	//	objdata - result of this::get_objdata
 	function read_properties($arr)
 	{
+		if ($GLOBALS["__obj_sys_opts"]["no_auto_translation"] == 1)
+		{
+			return $this->contained->read_properties($arr);
+		}
 		extract($arr);
 		
-		//echo "readp for $objdata[oid] <Br>";
 		$oid = $objdata["oid"];
 		if ($this->objdata[$oid]["type"] == OBJ_TRANS_TRANSLATED)
 		{
@@ -185,7 +238,9 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		if (count($conns) > 0)
 		{
 			// return the from object, cause that's the one
-			return $conns[0]["from"];
+			reset($conns);
+			list(, $dat) = each($conns);
+			return $dat["from"];
 		}
 		return $oid;
 	}
@@ -197,6 +252,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
+		if ($GLOBALS["__obj_sys_opts"]["no_auto_translation"] == 1)
+		{
+			return $this->contained->search($params);
+		}
 		// rewrite parent parameter to point to the real object
 		if (isset($params["parent"]))
 		{

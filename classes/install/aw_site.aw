@@ -253,8 +253,11 @@ class aw_site extends class_base
 					{
 						foreach($_t as $folder)
 						{
-							// make folder names more prettier for the user
-							$prop['options'][$folder] = $folder;
+							if (substr($folder, -3)  != "CVS")
+							{
+								// make folder names more prettier for the user
+								$prop['options'][$folder] = $folder;
+							}
 						}
 					}
 				}
@@ -592,6 +595,15 @@ class aw_site extends class_base
 
 		// now, create the menus based on subs in main.tpl
 		$this->_do_create_menus_from_template($dbi, $site, $ini_opts, $log, $osi_vars);		
+
+			// fix user object names
+		$dbi->db_query("SELECT uid,oid FROM users");
+		while ($row = $dbi->db_next())
+		{
+			$dbi->save_handle();
+			$dbi->db_query("UPDATE objects SET name = '$row[uid]' WHERE brother_of = '$row[oid]'");
+			$dbi->restore_handle();
+		}
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
