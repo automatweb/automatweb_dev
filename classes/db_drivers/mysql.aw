@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.18 2004/05/06 12:25:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.19 2004/05/21 11:09:33 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -252,11 +252,17 @@ class mysql
 	{
 		$this->tID = mysql_list_tables($this->db_base);
 		$this->tablecount = mysql_num_rows($this->tID);
+		$this->db_next_table(true);
 	}
 
-	function db_next_table()
+	function db_next_table($reset = false)
 	{
 		static $cnt = 0;
+		if ($reset == true)
+		{
+			$cnt = 0;
+			return;
+		}
 		$res = ($cnt < $this->tablecount) ? mysql_tablename($this->tID,$cnt) : false;
 		$cnt++;
 		return $res;
