@@ -114,7 +114,7 @@ class layout extends class_base
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
-		return $tmp;
+		return create_email_links($tmp);
 	}
 
 	////
@@ -124,7 +124,7 @@ class layout extends class_base
 		extract($arr);
 		$ob = $this->get_object($id);
 		$ge = get_instance("vcl/grid_editor");
-		return $ge->show($ob['meta']['grid'], $id);
+		return create_email_links($ge->show($ob['meta']['grid'], $id));
 	}
 
 	function get_property(&$arr)
