@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="tree_root" extends="class_base">
+	<class name="tree_root" folder="admin" extends="class_base">
 	</class>
 </orb>
 		
