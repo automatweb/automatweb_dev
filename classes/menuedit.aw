@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.110 2002/03/07 23:24:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.111 2002/03/07 23:47:29 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -639,9 +639,10 @@ class menuedit extends aw_template
 		$periodic = $mn["periodic"];
 		// menyysektsioon ei ole perioodiline. Well, vaatame 
 		// siis, kas ehk dokument ise on?
-		if (!$periodic && $checkobj == 1) {
-		$q = "SELECT period FROM objects WHERE oid = '$section'";
-		$periodic = $this->db_fetch_field($q,"period");
+		if (!$mn && !$periodic && $checkobj == 1)
+		{
+			$q = "SELECT period FROM objects WHERE oid = '$section'";
+			$periodic = $this->db_fetch_field($q,"period");
 		};
 		$awt->stop("menuedit::is_periodic");
 		return $periodic;
@@ -836,8 +837,16 @@ class menuedit extends aw_template
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
-			$me_row = $this->get_menu($section);
-			//$me_row = $this->mar[$section];
+			// avoid unneccessary query if the menu is already in the cache
+			if ($this->mar[$section])
+			{
+				$me_row = $this->mar[$section];
+			}
+			else
+			{
+				$me_row = $this->get_menu($section);
+			};
+
 			$sections = unserialize($me_row["sss"]);
 			$periods = unserialize($me_row["pers"]);
 			
@@ -4306,7 +4315,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (!is_array($this->mar[$p]))
 			{
 				//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid = $p");
-				$this->mar[$p] = $this->get_menu($p);
+				// no point in overwriting it
+				if (not($this->mar[$p]))
+				{
+					$this->mar[$p] = $this->get_menu($p);
+				};
 			}
 
 			if (isset($this->mar[$p]["is_shop"]) && $this->mar[$p]["is_shop"] == 1)
@@ -4324,6 +4337,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		else
 		{
+			// so, if that's a shop, we turn off the right pane. right.	
 			$this->right_pane = false;
 			return $sh_id;
 		}
