@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.31 2004/10/26 11:50:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.32 2004/11/30 10:30:28 kristo Exp $
 
 /*
 
@@ -115,6 +115,7 @@ class object_treeview extends class_base
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($args)
 	{
+		$this->first_folder = NULL;
 		return $this->show(array('id' => $args['alias']['target']));
 	}
 
