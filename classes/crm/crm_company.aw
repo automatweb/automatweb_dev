@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.8 2004/01/13 14:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.9 2004/01/13 17:38:10 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -271,9 +271,23 @@ class crm_company extends class_base
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
 
+		// gather a list of events to show
+		$evts = array();
+
 		foreach($conns as $conn)
 		{
-			$item = new object($conn->prop("to"));
+			$evts[$conn->prop("to")] = $conn->prop("to");
+		};
+
+		$prj = get_instance(CL_PROJECT);
+		$evts = $evts + $prj->get_events_for_participant(array(
+			"id" => $arr["obj_inst"]->id(),
+			"clid" => $this->relinfo[$args["type"]]["clid"],
+		));
+
+		foreach($evts as $obj_id)
+		{
+			$item = new object($obj_id);
 			if ($item->prop("start1") < $overview_start)
 			{
 				continue;
