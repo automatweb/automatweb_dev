@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.34 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.35 2004/08/23 09:38:02 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -781,7 +781,7 @@ class style extends aw_template
 		$o->set_class_id(CL_STYLE);
 		$o->set_comment($row["comment"]);
 		$o->set_status($row["status"]);
-		$o->set_jrk($row["jrk"]);
+		$o->set_ord($row["jrk"]);
 		$o->set_alias($row["alias"]);
 		$oid = $o->save();
 

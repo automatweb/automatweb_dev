@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.329 2004/06/26 10:52:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.330 2004/08/23 09:38:41 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -29,7 +29,7 @@ class menuedit extends aw_template
 		$o->set_parent($args["parent"]);
 		$o->set_status((isset($args["status"]) ? $args["status"] : 2));
 		$o->set_class_id(CL_MENU);
-		$o->set_jrk($args["jrk"]);
+		$o->set_ord($args["jrk"]);
 		$o->set_meta("pclass", $args["pclass"]);
 		$o->set_meta("pm_url_admin", $args["pm_url_admin"]);
 		$o->set_prop("type", $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB);
@@ -258,7 +258,13 @@ class menuedit extends aw_template
 			}
 		}
 		else
+		if ($this->cfg["log_pageviews"] == 1)
 		{
+			global $XX3;
+			if ($XX3)
+			{
+				print "hua";
+			};
 			$this->_log(ST_MENUEDIT, SA_PAGEVIEW, $log, $section);
 		}
 	}
