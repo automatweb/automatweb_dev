@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.98 2002/02/26 19:03:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.99 2002/02/27 00:09:40 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -346,79 +346,24 @@ class menuedit extends aw_template
 			"sel_menu_id" => $sel_menu_id
 		));
 
-		if ($GLOBALS["uid"] == "")
+		// build the menu chain for the requested section, this simplifies at least 
+		// users_only check and finding the correct template_set, probably also
+		// a few other functions
+		$this->build_menu_chain($this->sel_section);
+
+		// if the remote user is not logged in, check whether the requested menu
+		// or any of it's parents has the "users_only" attribute set. 
+		// If so, the user will be redirected to the correspondending error page
+		if ( aw_global_get("uid") == "" )
 		{
-			// if the section is marked "users_only" and the visitor is not logged in, 
-			// then redirect him  or her to the default error page
-			// we must go though all the parent menus also 
-			$this->tmp = $this->mar;
-			$uo_parent = $this->sel_section;
-			$uo = false;
-			while ($uo_parent)
-			{
-				if (!is_array($this->tmp[$uo_parent]) && $uo_parent)
-				{
-					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
-					//$this->mar[$uo_parent] = $this->db_next();
-					$this->tmp[$uo_parent] = $this->get_menu($uo_parent);
-				}
-				$uo_meta = $this->get_object_metadata(array(
-					"metadata" => $this->tmp[$uo_parent]["metadata"],
-				));
-				if ($uo_meta["users_only"] == 1)
-				{
-					$uo = true;
-				}
-				// awoid links to object itself
-				if ($uo_parent == $this->tmp[$uo_parent]["parent"])
-				{
-					$uo_parent = false;
-				}
-				else
-				{
-					$uo_parent = $this->tmp[$uo_parent]["parent"];
-				};
-			}
-			if ($uo)
-			{
-				classload("config");
-				$dbc = new db_config();
-				$url = $dbc->get_simple_config("orb_err_mustlogin");
-				global $baseurl;
-				header("Location: $baseurl/$url");
-				// exit from inside the class, yuck.
-				exit;
-			};
-		}
+			$this->check_users_only($this->sel_section);
+		};
 
-		// gather information about all parent objects
-		$ch = $this->get_object_chain($this->sel_section);
-		
+		// find out which template set to use for this menu
+		$tpldir = $this->find_template_set($this->sel_section);
 
-		if (!isset($tpldir))
-		{
-			$tpldir = "";
-
-			if (is_array($ch))
-			{
-				foreach($ch as $key => $val)
-				{
-					$tpldir = $this->get_object_metadata(array(
-									"metadata" => $val["metadata"],
-									"key" => "tpl_dir",
-					));
-					if ($tpldir)
-					{
-						// uh. suck. anyways, this whole gen_site_html should be split
-						// up into smaller easier to follow functions. Parts of it are
-						// already of course
-						break;
-					};
-
-				}
-			};
-		}		
-
+		// if this or one of the parent objects had the tpl_dir attribute
+		// set, reinitialize the template class
 		if ($tpldir)
 		{
 			$this->tpl_init("../$tpldir/automatweb/menuedit");
@@ -4641,6 +4586,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			while ($row = $this->db_next())
 			{
+				// some places need raw metadata, others benefit from reading
+				// the already uncompressed metainfo from the cache
+				$row["meta"] = aw_unserialize($row["metadata"]);
 				$this->mpr[$row["parent"]][] = $row;
 				$this->mar[$row["oid"]] = $row;
 			}
@@ -5715,6 +5663,86 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 		}
+	}
+
+	////
+	// !Fetches the menu chain for the current object from the menu cache for further use
+	function build_menu_chain($section)
+	{
+		$parent = $section;
+		$this->menu_chain = array();
+		while($parent)
+		{
+			$obj = $this->mar[$parent];
+			// if the object was not in the cache (which probably means it was not a menu)
+			// fetch it directly from the database
+			if (not($obj))
+			{
+				$obj = $this->get_obj_meta($uo_parent);
+			};
+
+			if (is_array($obj))
+			{
+				$this->menu_chain[$obj["oid"]] = $obj;
+			};
+			// also, check whether the parent of the current object is alreay handled
+			// and if so, just drop out of the cycle
+			$parent = ($this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
+		};
+
+	}
+
+	////
+	// !Checks whether the section or one of it's parents is marked as "users_only
+	function check_users_only($section)
+	{
+		$uo_parent = $section;
+		$found = false;
+
+		while ($uo_parent && not($found))
+		{
+			$obj = $this->menu_chain[$uo_parent];
+
+			if ($obj["meta"]["users_only"] == 1)
+			{
+				$found = true;
+			};
+
+			$uo_parent = $obj["parent"];
+		}
+
+		if ($found)
+		{
+			classload("config");
+			$dbc = new db_config();
+			$url = $dbc->get_simple_config("orb_err_mustlogin");
+			global $baseurl;
+			header("Location: $baseurl/$url");
+			// exit from inside the class, yuck.
+			exit;
+		};
+	}
+
+	////
+	// !Walks through the menu chain to figure out which template set to use
+	function find_template_set($section)
+	{
+		$parent = $section;
+		$found = false;
+		$tpldir = "";
+
+		while($parent && not($found))
+		{
+			$obj = $this->menu_chain[$parent];
+			$tpldir = $obj["meta"]["tpl_dir"];
+			if ($tpldir)
+			{
+				$found = true;
+			};
+			$parent = $obj["parent"];
+		}		
+
+		return $tpldir;
 	}
 }
 ?>
