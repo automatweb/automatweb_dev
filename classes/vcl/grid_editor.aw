@@ -1162,7 +1162,7 @@ class grid_editor extends class_base
 		$table.=$rs."</table>";
 
 		$d = get_instance("document");
-		$d->create_relative_links($tmp);
+		$d->create_relative_links($table);
 
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($oid,&$table,array("templates" => $tpls));
