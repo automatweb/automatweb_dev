@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.21 2003/04/23 17:00:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.22 2003/04/24 09:54:13 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -83,6 +83,18 @@
 @property valign type=select field=meta method=serialize group=general
 @caption Valign
 
+@property width type=textbox field=meta method=serialize group=general size=5
+@caption Laius
+
+@property w_units type=select field=meta method=serialize group=general
+@caption Laiuse &uuml;hikud
+
+@property height type=textbox field=meta method=serialize group=general size=5
+@caption K&otilde;rgus 
+
+@property h_units type=select field=meta method=serialize group=general
+@caption K&otilde;rguse &uuml;hikud
+
 @property a_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
 @caption Lingi stiil
 
@@ -94,6 +106,9 @@
 
 @property a_active_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
 @caption Lingi stiil (active)
+
+@property user_css type=textarea width=30 height=5 field=meta method=serialize group=general
+@caption Kasutaja css
 
 @property pre type=text field=meta method=serialize group=preview no_caption=1
 
@@ -646,6 +661,14 @@ class css extends class_base
 					$mask = "text-align: %s;\n";
 					break;
 				
+				case "width":
+					$mask = "width: %s".$data["w_units"].";\n";
+					break;
+
+				case "height":
+					$mask = "height: %s".$data["h_units"].";\n";
+					break;
+
 				default:
 					$ign = true;
 					break;
@@ -851,6 +874,8 @@ class css extends class_base
 
 			case "units":
 			case "lhunits":
+			case "w_units":
+			case "h_units":
 				$prop['options'] = $this->units;
 				break;
 
