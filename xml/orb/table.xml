@@ -13,6 +13,19 @@
 			</function>
 		</action>
 		
+		<action name="configure">
+			<function name="configure">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_config">
+			<function name="submit_config">
+			</function>
+		</action>
+		
 		<action name="admin">
 			<function name="gen_admin2_html">
 				<arguments>
@@ -144,9 +157,9 @@
 		</action>
 		
 		<action name="view">
-			<function name="show">
+			<function name="gen_preview">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="id"/>
 				</arguments>
 			</function>
 		</action>
