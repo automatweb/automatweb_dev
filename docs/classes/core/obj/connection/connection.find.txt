@@ -1,0 +1,19 @@
+finds connections that match the given filter
+
+<b>errors:</b>
+- if the parameter is not an array, error is thrown
+
+<b>parameters:</b>
+- array of connection parameters by what to search connections
+
+<b>returns:</b>
+array of connection objects that match the filter
+
+#php#
+<b>examples:</b>
+$conn = new connection();
+$conn->find(array(
+		"from" => 90,
+		"type" => RELTYPE_FOO
+));
+#/php#

@@ -1,0 +1,25 @@
+alters the connection parameters that are specified
+
+<b>errors:</b>
+- if the user does not have view access to the connected objects, acl error is returned
+
+<b>parameters:</b>
+- array of connection parameters to change, possible indexes are:
+from - object id
+to - object id
+reltype - connection type
+relobj_id - connection object id
+data - connection data
+cached - if the connection is cached
+
+<b>returns:</b>
+none
+
+<b>examples:</b>
+#php#
+$conn = new connection(90);
+$conn->change(array(
+		"from" => 90,
+		"reltype" => RELTYPE_FOO
+	));
+#/php#

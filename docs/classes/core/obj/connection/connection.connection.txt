@@ -1,0 +1,24 @@
+connection class - with this you can manage connections (aliases)
+normally, you do not create these objects yourself, instead you get them from the object class, from the connections() method
+
+
+<b>constructor</b>
+
+inits the connection
+
+<b>errors:</b>
+- if the parameter is not integer, error is thrown
+- if the connection does not exist in the database, error is thrown
+none
+
+<b>parameters:</b>
+- connection id, required:
+  type: integer
+
+<b>returns:</b>
+none
+
+<b>examples:</b>
+#php#
+$conn = new connection(56);
+#/php#

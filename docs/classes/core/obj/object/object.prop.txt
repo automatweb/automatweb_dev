@@ -1,0 +1,16 @@
+returns the value for the specified property for the current object
+
+<b>errors:</b>
+none
+
+<b>parameters:</b>
+- the name of the property whose value is to be returned
+type: text
+
+<b>returns:</b>
+the value of the specified proerty, NULL if no such property exists, 
+NULL if no current object is loaded
+
+<b>examples:</b>#php#
+$o = obj(56);
+$val = $o->prop("fish");#/php#

@@ -129,14 +129,22 @@ text-decoration: none;
 		<td colspan="6" width="2" height="2" bgcolor="#000000"><img src='{VAR:baseurl}/automatweb/images/trans.gif'></td>
 </tr>
 <tr>
-	<td class="text">
-		<a name='fn.{VAR:name}'></a>
-		<b>{VAR:proto}</b><br>
-		<i>{VAR:short_comment}</i><br>
-		<pre>{VAR:doc_comment}</pre>
-		<br><br><br>
+	<td class="text" colspan="6">
+		<table border="0" width="100%">
+			<tr>
+				<td class="text"><a name='fn.{VAR:name}'></a><b>{VAR:proto}</b> - <a href='{VAR:view_usage}'>View usage</a> - <a href='{VAR:view_source}'>View source</a></td>
+			</tr>
+			<tr>
+				<td class="text">
+					<i>{VAR:short_comment}</i><br>
+					<pre>{VAR:doc_comment}</pre>
+				</td>
+			</tr>
+			<tr>
+				<td class="text">{VAR:doc}</td>
+			</tr>
+		</table>
 	</td>
-	<td class="text"><a href='{VAR:view_source}'>View source</a></td>
 </tr>
 <!-- END SUB: LONG_FUNCTION -->
 </table>

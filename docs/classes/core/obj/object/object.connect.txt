@@ -1,0 +1,28 @@
+connects the object to another (creates an alias)
+
+<b>errors:</b>
+- if the user has no edit access to the current object or no view acess to the connected object, acl error is thrown
+- if no object is currently loaded, error is thrown
+- if the object to connect to cannot be loaded, error is thrown
+
+<b>parameters, passed by name:</b>
+- to, the object id to connect to, required.
+type: can be either integer, string, object instance reference or object list instance reference
+- reltype, the type of the relation, optional.
+type: integer
+- relobj_id, the id of the relation object to attach to the relation, optional
+type: id, alias or object instance reference
+- extra, extra data to pass to the connection, optional.
+type: text
+
+<b>returns:</b>
+nothing
+
+<b>examples:</b>
+#php#
+$o1 = obj(666);
+$o2 = obj(90);
+$o1->connect(array(
+	"to" => $o2
+));
+#/php#

@@ -1,0 +1,22 @@
+disconnects the object from another object (deletes alias)
+
+<b>errors</b>
+- if user has no edit acess to the current object or view object to the connected
+object, acl error is thrown
+- if no object is loaded, error is thrown
+- if the current object is not connected to the object that is specified, error is thrown
+
+<b>parameters, passed by name:</b>
+- from, the object to disconnect from, required.
+type: id, string, object instance reference or object list instance reference
+
+<b>returns:</b>
+nothing
+
+<b>examples:</b>
+
+#php#
+$o = obj(666);
+$o->connect(array("to" => 90));
+$o->disconnect(array("from" => 90));
+#/php#

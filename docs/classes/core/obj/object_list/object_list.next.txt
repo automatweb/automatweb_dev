@@ -1,0 +1,22 @@
+Returns the object at the current internal ioterator position and increments the current internal iterator by one
+
+<b>errors:</b>
+none
+
+<b>parameters:</b>
+none
+
+<b>returns:</b>
+instance at the object at the current iterator position, or NULL if iterator is
+after the last element in the list
+
+<b>examples:</b>
+#php#
+$ol = new object_list(array(
+		"status" => STAT_ACTIVE
+	));
+for ($ol->begin(); $o =& $ol->next();)
+{
+	$o->set_name("kala");
+	$o->save();
+}#/php#

@@ -1,0 +1,22 @@
+returns an array of connection objects that the current object has to other objects
+
+<b>errors:</b>
+- if no object is loaded, error is thrown
+
+<b>parameters:</b>
+- array of filter parameters, optional
+possible array members: type - connection type / class_id - connected object class / to - id of another object
+
+<b>returns:</b>
+array of connection object instances, array index is the connection id
+
+<b>examples:</b>
+
+#php#
+$o = obj(666);
+$conns = $o->connections_from();
+foreach($conns as $con)
+{
+	$con->delete();
+}
+#/php#

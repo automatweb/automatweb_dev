@@ -1,0 +1,23 @@
+returns an array of object instances that are the current objects parent objects
+
+<b>errors:</b>
+- if no object is loaded, error is thrown
+- if called statically and no parameter is passed, error is thrown
+
+<b>parameters</b>, if called statically:
+- id of the object that the path is returned for
+type: integer, string or object instance
+
+<b>returns:</b>
+array of object instances, including the current object, that make up the path,
+objects are returned starting from the tree root. array key is object id
+
+<b>examples:</b>
+#php#
+$o = obj(66);
+$path = $o->path();
+$path = object::path(66);
+foreach($path as $obj)
+{
+	echo $obj->name();
+}#/php#

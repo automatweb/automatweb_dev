@@ -1,0 +1,25 @@
+loads the connection
+
+<b>errors:</b>
+- if the parameter is not integer or array, error is thrown
+none
+
+<b>parameters:</b>
+- connection id or connection data, required:
+type: integer or array
+
+<b>returns:</b>
+none
+
+<b>examples:</b>
+#php#
+// creates a new connection with the parameters given
+// to load()
+$conn = new connection();
+$conn->load(array("from" => 12, "to" => 34));
+$conn->save();
+
+// loads connection with id 78
+$conn = new connection();
+$conn->load(78);
+#/php#

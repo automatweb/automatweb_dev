@@ -1,7 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <comment></comment>
+            <name>view</name>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>view</field>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
 </properties>
 

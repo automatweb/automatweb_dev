@@ -1,0 +1,18 @@
+returns a string that contains the names of objects in the path with / 's between them
+
+<b>errors:</b>
+- if no object is loaded, error is thrown
+
+<b>parameters</b>, passed by name:
+- max_len - reverse max length of path (items are left out from the beginning), optional
+type: integer
+
+<b>returns:</b>
+string that contains the names of objects in the path with / 's between them
+
+
+<b>examples:</b>
+#php#
+$o = obj(66);
+echo "object 66 path is :".$o->path_str();
+#/php#

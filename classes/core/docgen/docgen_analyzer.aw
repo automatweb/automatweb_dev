@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.14 2004/03/24 11:00:20 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.15 2004/04/26 10:47:47 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -56,17 +56,17 @@ class docgen_analyzer extends class_base
 						$this->last_comment_line = $this->get_line();
 						break;
 
-					case T_DOLLAR_OPEN_CURLY_BRACES:
+			/*		case T_DOLLAR_OPEN_CURLY_BRACES:
 						$this->handle_brace_begin();
-						break;
+						break;*/
 
-					case T_STRING:
+				/*	case T_STRING:
 						$this->handle_t_string($token);
 						break;
 
 					case T_VARIABLE:
 						$this->handle_variable_ref($token);
-						break;
+						break;*/
 				}
 			}
 			else
@@ -105,6 +105,8 @@ class docgen_analyzer extends class_base
 			//echo "str: ".htmlentities($ret)." , line = ".$this->cur_line."<Br>";
 			$this->cur_line += substr_count($ret, "\n");
 		}
+		// short dbg bt
+		//.echo $this->_dbg_backtrace()." <br>";;
 		return $ret;
 	}
 
@@ -214,6 +216,13 @@ class docgen_analyzer extends class_base
 				$this->data["classes"][$name]["extends"] = $extends;
 			}
 		}
+		else
+		{
+			if ($tok == "{") // class doesn't extend anything
+			{
+				$this->handle_brace_begin();
+			}
+		}
 	}
 
 	function handle_class_end()
@@ -226,18 +235,22 @@ class docgen_analyzer extends class_base
 	function handle_brace_begin()
 	{
 		$this->brace_level++;
+		//echo "brace begin, level = ".$this->brace_level." <br>";
 	}
 
 	function handle_brace_end()
 	{
+		//echo "brace end, level = ".$this->brace_level." <br>";
 		$this->brace_level--;
 		if ($this->in_class && $this->brace_level == $this->class_start_level)
 		{
+			//echo "cur level == class start level (".$this->class_start_level.") so end class <br>";
 			$this->handle_class_end();
 		}
 
 		if ($this->in_function && $this->brace_level == $this->function_start_level)
 		{
+			//echo "cur level == func start level (".$this->function_start_level.") so end func<br>";
 			$this->handle_function_end();
 		}
 	}
@@ -1066,5 +1079,58 @@ class docgen_analyzer extends class_base
 			}
 		}
 	}
+
+	function _dbg_backtrace()
+	{
+		$msg = "";
+		if (function_exists("debug_backtrace"))
+		{
+			$bt = debug_backtrace();
+			for ($i = count($bt)-1; $i > 0; $i--)
+			{
+				if ($bt[$i+1]["class"] != "")
+				{
+					$fnm = $bt[$i+1]["class"]."::".$bt[$i+1]["function"];
+				}
+				else
+				if ($bt[$i+1]["function"] != "")
+				{
+					if ($bt[$i+1]["function"] != "include")
+					{
+						$fnm = $bt[$i+1]["function"];
+					}
+					else
+					{
+						$fnm = "";
+					}
+				}
+				else
+				{
+					$fnm = "";
+				}
+
+				$msg .= $fnm.":".$bt[$i]["line"]."->";
+
+				/*if ($bt[$i]["class"] != "")
+				{
+					$fnm2 = $bt[$i]["class"]."::".$bt[$i]["function"];
+				}
+				else
+				if ($bt[$i]["function"] != "")
+				{
+					$fnm2 = $bt[$i]["function"];
+				}
+				else
+				{
+					$fnm2 = "";
+				}
+
+				$msg .= $fnm2;*/
+			}
+		}
+
+		return $msg;
+	}
+
 }
 ?>

@@ -3,17 +3,44 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.4 2004/03/24 11:00:20 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.5 2004/04/26 10:47:47 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
 **/
 
+/*
+
+@classinfo no_status=1 no_comment=1
+
+@default group=general 
+
+@property view type=text store=no 
+
+*/
 class docgen_viewer extends class_base
 {
 	function docgen_viewer()
 	{
-		$this->init("core/docgen");
+		$this->init(array(
+			"tpldir" => "core/docgen",
+			"clid" => CL_AW_DOCGEN_VIEWER
+		));
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "view":
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("frames"),
+					"caption" => "Open DocGen"
+				));
+				break;
+		}
+		return PROP_OK;
 	}
 
 	/**  
@@ -29,32 +56,75 @@ class docgen_viewer extends class_base
 	**/
 	function class_list()
 	{
-		$p = get_instance("parser");
-		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["classdir"]);
-		
-		sort($files);
-		foreach($files as $file)
-		{
-			$file = str_replace($this->cfg["basedir"]."/classes", "", $file);
-			$f .= html::href(array(
-				"url" => $this->mk_my_orb("class_info", array("file" => $file)),
-				"caption" => $file,
-				"target" => "classinfo"
-			))."<Br>";
-		}
+		$this->read_template("classlist.tpl");
 
-		die("<style type=\"text/css\">
-.text {
-font-family:  Verdana, Arial, sans-serif;
-font-size: 11px;
-color: #000000;
-line-height: 18px;
-text-decoration: none;
-}
-.text a {color: #058AC1; text-decoration:underline;}
-.text a:hover {color: #000000; text-decoration:underline;}
-</style><span class=\"text\">".$f."</span>");
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgclsss",
+			"persist_state" => true,
+			"root_name" => "Classes",
+		));
+
+		$this->ic = get_instance("icons");
+		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"]);
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => $this->cfg["classdir"]
+			))
+		));
+
+		return $this->parse();
+	}
+
+	function _req_mk_clf_tree(&$tv, $path)
+	{
+		$dc = array();
+		$fc = array();
+		$dh = opendir($path);
+		while (($file = readdir($dh)) !== false)
+		{
+			$fp = $path."/".$file;
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			{
+				if (is_dir($fp))
+				{
+					$dc[] = $file;
+				}
+				else
+				{
+					$fc[] = $file;
+				}
+			}
+		}
+		closedir($dh);
+
+		sort($dc);
+		sort($fc);
+
+		foreach($dc as $file)
+		{
+			$fp = $path."/".$file;
+			$tv->add_item($path, array(
+				"name" => $file,
+				"id" => $fp,
+				"url" => "#",
+			));
+			$this->_req_mk_clf_tree($tv, $fp);
+		}
+		foreach($fc as $file)
+		{
+			$fp = $path."/".$file;
+			$tv->add_item($path, array(
+				"name" => $file,
+				"id" => $fp,
+				"url" => $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp))),
+				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+				"target" => "classinfo"
+			));
+		}
 	}
 
 	/**  
@@ -75,7 +145,8 @@ text-decoration: none;
 
 		$this->vars(array(
 			"left" => $this->mk_my_orb("class_list"),
-			"right" => "about:blank"
+			"right" => "about:blank",
+			"doclist" => $this->mk_my_orb("doclist")
 		));
 		die($this->parse());
 	}
@@ -101,6 +172,7 @@ text-decoration: none;
 				$arg .= $this->parse("ARG");
 			}
 
+			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".basename($cur_file, ".aw").".".$func.".txt";
 			$this->vars(array(
 				"proto" => "function $func()",
 				"name" => $func,
@@ -111,12 +183,12 @@ text-decoration: none;
 				"ARG" => $arg,
 				"short_comment" => ($f_data["doc_comment"]["short_comment"] == "" ? "" : $f_data["doc_comment"]["short_comment"]."<Br>"),
 				"doc_comment" => htmlspecialchars($f_data["doc_comment_str"]),
-				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func))
+				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
+				"doc" => $this->show_doc(array("file" => $doc_file))
 			));
 			$f .= $this->parse("FUNCTION");
 			$fl .= $this->parse("LONG_FUNCTION");
 		}
-
 		if ($data["extends"] != "")
 		{
 			$this->_display_extends($data);
@@ -164,10 +236,12 @@ text-decoration: none;
 
 		$da = get_instance("core/docgen/docgen_analyzer");
 		$data = $da->analyze_file($file);
-echo dbg::dump($data);
 		foreach($data["classes"] as $class => $c_data)
 		{
-			$op .= $this->display_class($c_data, $file);
+			if ($class != "")
+			{
+				$op .= $this->display_class($c_data, $file);
+			}
 		}
 
 		return $op;
@@ -424,6 +498,153 @@ echo dbg::dump($data);
 		$this->vars(array(
 			"EXTENDER" => $ex,
 		));
+	}
+
+	/**
+
+		@attrib name=doclist
+
+		@param type optional default="classes"
+
+	**/
+	function doclist($arr)
+	{
+		extract($arr);
+		$this->read_template("doclist.tpl");
+
+		if ($type == "classes")
+		{
+			$list = $this->do_class_doclist();
+		}
+		else
+		{
+			$list = $this->do_tut_doclist();
+		}
+
+		$this->vars(array(
+			"classdoc" => $this->mk_my_orb("doclist", array("type" => "classes")),
+			"tutorials" => $this->mk_my_orb("doclist", array("type" => "tutorials")),
+			"list" => $list
+		));
+
+		return $this->parse();
+	}
+
+	function do_class_doclist()
+	{
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgdoclss",
+			"persist_state" => true,
+			"root_name" => "Classes",
+		));
+
+		$this->basedir = $this->cfg["basedir"]."/docs/classes";
+		$this->ic = get_instance("icons");
+		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
+
+		return $tv->finalize_tree(array(
+			"rootnode" => $this->basedir
+		));
+	}
+
+	function _req_mk_clfdoc_tree(&$tv, $path)
+	{
+		$dc = array();
+		$fc = array();
+		$dh = opendir($path);
+		while (($file = readdir($dh)) !== false)
+		{
+			$fp = $path."/".$file;
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			{
+				if (is_dir($fp))
+				{
+					$dc[] = $file;
+				}
+				else
+				{
+					$fc[] = $file;
+				}
+			}
+		}
+		closedir($dh);
+
+		sort($dc);
+		sort($fc);
+
+		foreach($dc as $file)
+		{
+			$fp = $path."/".$file;
+			$tv->add_item($path, array(
+				"name" => $file,
+				"id" => $fp,
+				"url" => "#",
+			));
+			$this->_req_mk_clfdoc_tree($tv, $fp);
+		}
+		foreach($fc as $file)
+		{
+			$fp = $path."/".$file;
+			$tv->add_item($path, array(
+				"name" => $file,
+				"id" => $fp,
+				"url" => $this->mk_my_orb("show_doc", array("file" => str_replace($this->basedir, "", $fp))),
+				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+				"target" => "classinfo"
+			));
+		}
+	}
+
+	function do_tut_doclist()
+	{
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgdoclss",
+			"persist_state" => true,
+			"root_name" => "Classes",
+		));
+
+		$this->basedir = $this->cfg["basedir"]."/docs/tutorials";
+		$this->ic = get_instance("icons");
+		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
+
+		return $tv->finalize_tree(array(
+			"rootnode" => $this->basedir
+		));
+	}
+
+	/** displays the documentation file $file
+
+		@attrib name=show_doc
+
+		@param file required
+
+	**/
+	function show_doc($arr)
+	{
+		extract($arr);
+		$file = preg_replace("/(\.){2,}/", "", $file);
+		if (file_exists($this->cfg["basedir"]."/docs/classes".$file))
+		{
+			$fp = $this->cfg["basedir"]."/docs/classes".$file;
+		}
+		else
+		{
+			$fp = $this->cfg["basedir"]."/docs/tutorials".$file;
+		}
+		$str = $this->get_file(array(
+			"file" => $fp
+		));
+
+		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
+		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$str);
+
+		return  nl2br($str);
 	}
 }
 ?>
