@@ -6,11 +6,11 @@
 }
 </style>
 
-<table border="0" cellpadding="0" cellspacing="10">
+<table border="0" cellpadding="0" cellspacing="10" width="100%" >
 <!-- SUB: ROW -->
 	<tr>
 		<!-- SUB: COL -->
-		<td class="mgalimg">{VAR:imgcontent}</td>
+		<td valign="top" align="center" class="mgalimg">{VAR:imgcontent}</td>
 		<!-- END SUB: COL -->
 	</tr>
 <!-- END SUB: ROW -->
