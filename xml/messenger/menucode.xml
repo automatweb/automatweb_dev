@@ -22,6 +22,20 @@
 			</newsearch>
 		</sublinks>
 	</search>
+	<contacts>
+		<caption>Kontaktid</caption>
+		<link>?class=messenger&amp;action=contacts</link>
+		<sublinks>
+			<list>
+				<caption>Nimekiri</caption>
+				<link>?class=messenger&amp;action=contacts</link>
+			</list>
+			<newcontact>
+				<caption>Lisa uus</caption>
+				<link>?class=messenger&amp;action=add_contact</link>
+			</newcontact>
+		</sublinks>
+	</contacts>
 	<configure>
 		<caption>H‰‰lestamine</caption>
 		<link>?class=messenger&amp;action=configure</link>
