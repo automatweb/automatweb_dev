@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.8 2001/05/22 02:07:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.9 2001/05/22 10:53:48 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -90,6 +90,13 @@ if (empty($basedir))
 		$basedir = "/www/automatweb_dev/public";
 	}
 };
+
+if (empty($site_basedir))
+{
+	// kui pole defineeritud, siis paneme defauldiks saidi baaskataloogi et seal v2hemalt midagi oleks. 
+	$site_basedir = $basedir;
+}
+
 // keemia. Kui oleme saidi adminnis sees, siis votame
 // templated siit
 if (strpos($PHP_SELF,"automatweb")) 
@@ -325,7 +332,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_GRAPH => array("name" => "Graafik", "file" => "graph","can_add" => 1),
 			CL_PERIODIC_SECTION => array("name" => "Dokument(p)", "file" => "document","can_add" => 0),
 			CL_SECTION_LINK => array("name" => "Sektsiooni link", "file" => "links"),
-			CL_GALLERY => array("name" => "Galerii", "file" => "galerii","can_add" => 0),
+			CL_GALLERY => array("name" => "Galerii", "file" => "gallery","can_add" => 1),
 			CL_POLL => array("name" => "Poll", "file" => "poll","can_add" => 0),
 			CL_MSGBOARD_TOPIC => array("name" => "Boardi topic", "file" => "board"),
 			CL_NAGU => array("name" => "N&auml;dala n&auml;gu","file" => "nagu"),
