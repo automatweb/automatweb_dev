@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.4 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.5 2001/06/20 06:39:30 duke Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -293,6 +293,26 @@
 					flush();
 				};
 			};
+		}
+
+		function get_members($args = array())
+		{
+			extract($args);
+			classload("defs");
+			$q = "SELECT * FROM ml_users WHERE list_id = '$list_id'";
+			$this->db_query($q);
+			$retval= array();
+			while($row = $this->db_next())
+			{
+				$maddr = trim($row["mail"]);
+				print "m = ($maddr)<br>";
+				if (is_email($maddr))
+				{
+					print "pushing $row[mail]<br>";
+					$retval[] = $row["mail"];
+				};
+			};
+			return $retval;
 		}
 
 			
