@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.40 2005/03/30 10:08:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.41 2005/03/30 13:39:43 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -720,6 +720,12 @@ class mrp_job extends class_base
 		{
 			### pause job
 			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
+
+			// save paused times for job
+			$pt = safe_array($this_object->meta("paused_times"));
+			$pt[] = array("start" => time(), "end" => NULL);
+			$this_object->set_meta("paused_times" , $pt);
+
 			$this_object->save ();
 
 			### update progress
@@ -789,6 +795,13 @@ class mrp_job extends class_base
 		{
 			### continue job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+
+			// save paused times for job
+			$pt = safe_array($this_object->meta("paused_times"));
+			$pt[count($pt)-1]["end"] = time();
+
+			$this_object->set_meta("paused_times" , $pt);
+
 			$this_object->save ();
 
 			### update progress

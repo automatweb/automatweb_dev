@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.68 2005/03/30 10:08:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.69 2005/03/30 13:39:43 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1819,6 +1819,9 @@ class mrp_workspace extends class_base
 			"parent" => $this_object->prop ("resources_folder"),
 		));
 
+
+		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
+
 		for ($category =& $toplevel_categories->begin (); !$toplevel_categories->end (); $category =& $toplevel_categories->next ())
 		{
 			$id = $category->id ();
@@ -1844,6 +1847,27 @@ class mrp_workspace extends class_base
 						array("return_url" => urlencode(aw_global_get("REQUEST_URI")))
 					)
 				));
+
+				// add reserved times for resources
+				$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
+					"mrp_resource" => $resource->id(),
+					"mrp_start" => $range_start,
+					"mrp_length" => $range_end - $range_start
+				));
+				foreach($reserved_times as $rt_start => $rt_end)
+				{
+					if ($rt_end > time())
+					{
+						$chart->add_bar(array(
+							"row" => $resource->id(),
+							"start" => $rt_start,
+							"length" => $rt_end - $rt_start,
+							"colour" => "#AAAAAA",
+							"url" => "#",
+							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
+						));
+					}
+				}
 			}
 		}
 
@@ -1920,6 +1944,24 @@ class mrp_workspace extends class_base
 			);
 
 			$chart->add_bar ($bar);
+
+			// add paused bars
+			foreach(safe_array($job->meta("paused_times")) as $pd)
+			{
+				if ($pd["start"] && $pd["end"])
+				{
+					$bar = array (
+						"row" => $resource_id,
+						"start" => $pd["start"],
+						"colour" => $colour,
+						"length" => $this->state_colours[MRP_STATUS_PAUSED],
+						"uri" => aw_url_change_var ("mrp_hilight", $project_id),
+						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
+					);
+	
+					$chart->add_bar ($bar);
+				}
+			}
 		}
 
 		### config

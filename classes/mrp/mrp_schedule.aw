@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.32 2005/03/29 20:31:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.33 2005/03/30 13:39:43 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1053,7 +1053,7 @@ class mrp_schedule extends class_base
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time);
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+// /* dbg */  echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 // /* dbg */ }
 
 		### find if period ends before another starts
@@ -1303,14 +1303,14 @@ class mrp_schedule extends class_base
 	// @param mrp_resource required type=int
 	// @param mrp_start required type=int
 	// @param mrp_length required type=int
-	function get_unavailable_periods_for_range ()
+	function get_unavailable_periods_for_range ($arr)
 	{
 		$resource_id = $arr["mrp_resource"];
 		$resource = obj ($resource_id);
 		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		$pointer = 0;
 
-		if (!is_oid($workspace))
+		if (!is_object($workspace))
 		{
 			return false;
 		}
@@ -1325,26 +1325,37 @@ class mrp_schedule extends class_base
 				"parent" => $resources_folder,
 				"class_id" => array (CL_MRP_RESOURCE,CL_MENU),
 			));
+
 			$resource_list = $resource_tree->to_list ();
-			$resource_list->filter (array (
-				"class_id" => CL_MRP_RESOURCE,
-				"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
-			));
-			$resources = $resource_list->ids ();
+			$resources = array();
+			foreach($resource_list->arr() as $resource)
+			{
+				if ($resource->class_id() == CL_MRP_RESOURCE && $resource->prop("type") != MRP_RESOURCE_NOT_SCHEDULABLE)
+				{
+					$resources[] = $resource->id();
+				}
+			}
 			$this->init_resource_data ($resources);
 			$this->initialized = true;
 		}
 
-		while ($pointer <= ($this->schedule_start + $this->schedule_length))
+		$this->unavailable_times = array();
+		$pointer = 0;
+		while ($pointer <= $this->schedule_length)
 		{
 			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
+			if ($unavailable_length == 0)
+			{
+				return $this->unavailable_times;
+			}
+			
 			$pointer = $unavailable_start + $unavailable_length + 1;
 			$unavailable_start = $this->schedule_start + $unavailable_start;
 			$unavailable_end = $unavailable_start + $unavailable_length;
 			$this->unavailable_times[$unavailable_start] = $unavailable_end;
 		}
 
-		return true;
+		return $this->unavailable_times;
 	}
 }
 
