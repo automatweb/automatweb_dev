@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.3 2004/01/14 15:02:59 rtoomas Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -24,6 +24,7 @@ class taket_search extends class_base
 			"tpldir" => "taket/taket_search",
 			"clid" => CL_TAKET_SEARCH
 		));
+		lc_site_load('taket_search',&$this);
 	}
 
 	//////
@@ -41,7 +42,7 @@ class taket_search extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+		$this->read_template("show.tpl");		
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
@@ -73,10 +74,26 @@ class taket_search extends class_base
 		//determine the xml-rpc call
 		include('IXR_Library.inc.php');
 		$client = new IXR_Client('80.235.30.13','/xmlrpc/index.php',8888);
+		if(isset($arr['kogus']) && !strstr($arr['kogus'],','))
+		{
+			$arr['kogus']=((int)$arr['kogus']<0)?1:(int)$arr['kogus'];
+		}
+		else if(isset($arr['kogus']))
+		{
+			$tmpArr=split(',',$arr['kogus']);
+			$tmpArr2=array();
+			foreach($tmpArr as $value){
+				$tmpArr2[]=(int)$value<0?1:(int)$value;
+			}
+			$arr['kogus']=implode(',',$tmpArr2);
+			unset($tmpArr2);
+			unset($tmpArr);
+		}
 		if(!$client->query('server.search',$arr['tootekood'], $arr['otsitunnus'],
 														$arr['kogus'],$arr['asendustooted'],
 														$arr['laos'],(int)($arr['start']),
-														$arr['orderBy'],$arr['direction']))
+														$arr['orderBy'],$arr['direction'],
+														$arr['osaline']))
 		{
 			//echo('Something went wrong - '.$client->getErrorCode().' : '.
 			//		$client->getErrorMessage());
@@ -105,11 +122,33 @@ class taket_search extends class_base
 		{
 			$data=array();
 		}
+
+		//if the search was done as follows:
+		//product_code & it's quantity, product_code & it's quantity etc
+		//i have to display for a found product_code _it's_ quantity
+		//so i have to some pattern matching here because i can't
+		//extract the info from the query/results
+		//build patterns:
+		$match=false;
+		if(strstr($arr['tootekood'], ','))
+		{
+			$match=true;
+			$products = split(',',$arr['tootekood']);
+			$quantities = split(',',$arr['kogus']);
+			foreach($products as $key=>$value)
+			{
+				$products[$key]=trim($value);
+				$quantities[$value] = (int)$quantities[$key];
+				$quantities[$value]=($quantities[$value])?$quantities[$value]:1;
+			}			
+		}
 		
 		$numOfRows=0;
 		$noSkipped=0;
 		$content='';
 		$hidden=array();
+		$i=0;
+		$lastQuantity=1;
 		foreach($data as $key=>$value)
 		{			
 			if(isset($value['numOfRows']))
@@ -144,30 +183,9 @@ class taket_search extends class_base
 				//echo $value['query'];
 				continue;
 			}
-			if((int)$arr['kogus'])
-			{
-				if($arr['kogus']<=$value['inStock'])
-				{
-					$value['inStock2'] = 'Olemas';
-				}
-				else
-				{
-					$value['inStock2'] = 'Ei ole';
-				}
-			}
-			else{
-				if($value['inStock']<=0)
-				{
-					$value['inStock2'] = 'Ei ole';
-				}
-				else
-				{
-					$value['inStock2'] = 'Olemas';
-				}
-			}
 		
 			if($value['hide']){
-				//echo $value['hide'].'  '.$value['inStock'].''.$value['hidden'].'<br>';
+				//echo $value['h!ide'].'  '.$value['inStock'].''.$value['hidden'].'<br>';
 				if(!$data[$key+1]['hidden']){
 					$numOfRows--;
 					continue;
@@ -199,12 +217,86 @@ class taket_search extends class_base
 			{
 				$value['price'] = number_format($value['price'],2,'.','');
 			}
-			$value['finalPrice'] = number_format($value['price']*((100-$value['discount'])/100),2,'.','');
-			$value['quantity'] = ((int)$arr['kogus'])?(int)$arr['kogus']:'1';
+
+			//if multiple quantities
+			if($match)
+			{
+				$matched=false;
+				//if matches its the mainproduct
+				foreach($products as $key2=>$value2)
+				{
+					if($arr['osaline'])
+					{
+						if(strstr(strtoupper($value['product_code']),strtoupper($value2)))
+						{
+							$value['quantity']=(int)$quantities[$key2];
+							$lastQuantity=(int)$value['quantity'];
+							$matched=true;
+						}					
+					}
+					else
+					{
+						if(strpos(strtoupper($value['product_code']),strtoupper($value2))===0)
+						{
+							$value['quantity']=(int)$quantities[$key2];
+							$lastQuantity=(int)$value['quantity'];
+							$matched=true;
+						}
+					}
+				}
+				//its a replacement for the last matched one
+				if(!$matched)
+				{
+					$value['quantity']=$lastQuantity;
+				}
+			}
+			//single product&quantity search
+			else
+			{
+				$value['quantity'] = ((int)$arr['kogus'])?(int)$arr['kogus']:'1';
+			}
+			//echo $value['quantity'].'<br>';
+			//more or the same amount is in stock that was searched
+			if($value['quantity']<=$value['inStock'])
+			{
+					$value['inStock2'] = 'Olemas';
+			}
+			//this product is out of stock
+			else
+			{
+					if($value['inStock']>0)
+					{
+						$value['inStock2'] = 'Osaliselt';
+					}
+					else
+					{
+						$value['inStock2'] = 'Ei ole';
+					}
+			}
+
+
+			$value['finalPrice'] = number_format($value['price']*((100-$value['discount'])/100),2,'.','');			
 			$value['search_code'] = str_replace(' ','&nbsp;', $value['search_code']);
 			$value['product_code'] = str_replace(' ','&nbsp;', $value['product_code']);
 			//$value['replacement'] = ($value['replacement'])?'Peatoode':'Asendus';
+			$value['i']=$i++;
 			$this->vars($value);
+
+			//
+			if($value['quantity']<=$value['inStock'])
+			{
+					$this->vars(array(
+									'quantityParsed'=>$this->parse('canSetQuantity'),
+									'karuParsed'=>$this->parse('karu')
+									));				
+			}
+			else
+			{
+					$this->vars(array(
+									'quantityParsed'=>$this->parse('cannotSetQuantity'),
+									'karuParsed'=>$this->parse('karupole')									
+									));			
+			}
 
 			//kas on asendustoode vıi mitte
 			if($value['replacement']=='K¸situd')
@@ -219,30 +311,8 @@ class taket_search extends class_base
 									'esimeneVeerg'=>$this->parse('asendustoodeblock')
 							));
 			}
-			
-			//kas otsingus oli m‰‰ratud kogus
-			if((int)$arr['kogus'])
-			{
-				//kui m‰‰ratud kogus oli v‰iksemvırdne toote kogusega
-				if((int)$arr['kogus']<=$value['inStock'])
-				{
-					$this->vars(array('karuParsed'=>$this->parse('karu')));
-				}
-				else
-				{
-					$this->vars(array('karuParsed'=>$this->parse('karupole')));
-				}	
-			}
-			else{
-				if($value['inStock']>0)
-				{
-					$this->vars(array('karuParsed'=>$this->parse('karu')));
-				}
-				else
-				{
-					$this->vars(array('karuParsed'=>$this->parse('karupole')));
-				}
-			}
+						
+
 			$content.=$this->parse('product');
 			
 			$count++;
@@ -306,7 +376,7 @@ class taket_search extends class_base
 		//hımm main.tpl'i subi TAKET_SEARCH peax vist ikkagi
 		//n‰itama antud klassi show.tpl'i	
 		$this->read_template('show.tpl');
-		//reforb
+		//reforb		
 		$this->vars(array(
 					'reforb'=>$this->mk_reforb('parse_submit_info',
 														array('no_reforb'=>true))
