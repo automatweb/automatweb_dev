@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.105 2005/01/19 12:45:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.106 2005/01/28 09:05:56 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -211,7 +211,37 @@ class users_user extends aw_template
 		// HUZZAH!
 		
 		aw_disable_acl();
-		$user_obj = &obj(users::get_oid_for_uid($uid));
+		if (!$uid)
+		{
+			error::raise(array(
+				"id" => "ERR_NO_UID",	
+				"msg" => "uid is empty!"
+			));
+		}
+		$u_oid = users::get_oid_for_uid($uid);
+		if (!$u_oid)
+		{
+			error::raise(array(
+				"id" => "ERR_NO_UID_OID",	
+				"msg" => "oid for uid is empty uid = '$uid'!"
+			));
+		}
+		$user_obj = &obj($u_oid);
+		if (!$user_obj->is_property("logins"))
+		{
+			error::raise(array(
+				"id" => "ERR_NO_PROP",
+				"msg" => "user object is not user object!!!! ".dbg::dump($user_obj)." clid = ".$user_obj->class_id()
+			));
+		}
+
+		if ($user_obj->class_id() != CL_USER)
+		{
+			error::raise(array(
+				"id" => "ERR_NO_CLASS",
+				"msg" => "user object is of wrong type! ".dbg::dump($user_obj)." props = ".dbg::dump($user_obj->properties())
+			));
+		}
 		$logins = $user_obj->prop("logins") + 1;
 		if ($logins < 2)
 		{
