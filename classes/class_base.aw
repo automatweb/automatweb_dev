@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.283 2004/06/29 11:40:04 duke Exp $
+// $Id: class_base.aw,v 2.284 2004/07/01 13:37:16 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -517,7 +517,6 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-
 
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
@@ -1634,9 +1633,9 @@ class class_base extends aw_template
 		};
 
 		// XXX: move get_html calls out of here, they really do not belong
-		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
+		if (($val["type"] == "toolbar") && is_object($val["vcl_inst"]))
 		{
-			$val["value"] = $val["toolbar"]->get_toolbar();
+			$val["value"] = $val["vcl_inst"]->get_toolbar();
 		};
 	
 		/*
@@ -1826,6 +1825,7 @@ class class_base extends aw_template
 
 		// how do I stop parsing of properties that _are_ already parsed?
 
+
 		foreach($properties as $key => $val)
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -1878,9 +1878,10 @@ class class_base extends aw_template
 				continue;
 			};
 
+
 			// eventually all VCL components will have to implement their
                         // own init_vcl_property method
-                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && empty($this->vcl_delayed_init[$val["type"]]))
+                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && !is_object($val["vcl_inst"]) && empty($this->vcl_delayed_init[$val["type"]]))
                         {
                                 $reginst = $this->vcl_register[$val["type"]];
 				if ($val["type"] == "table")
@@ -2056,16 +2057,6 @@ class class_base extends aw_template
 				$val["vcl_inst"] = new relmanager();
 			};
 
-			/*
-			if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
-			{
-				classload("vcl/table");
-				$val["vcl_inst"] = new aw_table(array(
-					"layout" => "generic",
-				));
-			};
-			*/
-			
 			if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
 			{
 				classload("vcl/calendar");
@@ -2130,6 +2121,7 @@ class class_base extends aw_template
 				// and this as well
 				continue;
 			};
+
 
 			$pname = $val["name"];
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
