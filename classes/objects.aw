@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.15 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.16 2001/07/16 06:01:38 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -234,7 +234,7 @@ class db_objects extends aw_template
 					"createdby" => $row["createdby"],
 					"modifiedby" => $row["modifiedby"],
 					"parent_name" => $row["parent_name"],
-					"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Võta see</a>" : "")));
+					"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Pick this</a>" : "")));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));

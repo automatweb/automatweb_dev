@@ -136,6 +136,10 @@ class shop_item extends shop_base
 			"minute" => ""
 		));
 
+		classload("form_base");
+		$fb = new form_base;
+		$fl = $fb->get_list(FTYPE_ENTRY,true);
+
 		$eq = $this->get_eq($itt["eq_id"]);
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
@@ -160,7 +164,9 @@ class shop_item extends shop_base
 			"per_cnt" => $o["per_cnt"],
 			"per_prices" => $this->mk_my_orb("set_per_prices", array("id" => $id)),
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"],
-			"show_free" => $this->mk_my_orb("show_free", array("id" => $id))
+			"show_free" => $this->mk_my_orb("show_free", array("id" => $id)),
+			"cnt_form" => $this->picker($o["cnt_form"], $fl),
+			"item_eq" => $this->picker($o["price_eq"], $this->listall_eqs(true)),
 		));
 		return $this->parse();
 	}
@@ -337,7 +343,7 @@ class shop_item extends shop_base
 			}
 		}
 
-		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt' WHERE id = $id");
+		$this->db_query("UPDATE shop_items SET has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt',cnt_form = '$cnt_form', price_eq = '$item_eq' WHERE id = $id");
 
 		return $this->mk_my_orb("change", array("id" => $id));
 	}

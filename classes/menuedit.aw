@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.35 2001/07/12 04:31:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.36 2001/07/16 06:01:38 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -343,6 +343,35 @@ class menuedit extends aw_template
 		{
 			reset($this->mar);
 			global $ext;
+			global $hack;
+			if (defined("HACK"))
+			{
+				if (defined("UID"))
+				{
+					$parent = LOGGED;
+					$tpl = "MENU_LOGGED_L1_ITEM";
+				}
+				else
+				{
+					$parent = LOGIN;
+					$tpl = "MENU_LOGIN_L1_ITEM";
+				};
+				$this->save_handle();
+				$q = "SELECT * FROM objects LEFT JOIN menu ON (objects.oid = menu.id)
+					WHERE objects.parent = '$parent' AND status = 2";
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					$link = (strlen($row["link"]) > 0) ? $row["link"] : "/section=$row[oid]";
+					$this->vars(array(
+							"link" => $link,
+							"text" => $row["name"],
+					));
+					$outputs[$tpl] .= $this->parse($tpl);
+				};
+				$this->restore_handle();
+			};
+					
 			while (list(,$row) = each($this->mar))
 			{
 				// find the menu this object belongs under
@@ -1073,7 +1102,6 @@ class menuedit extends aw_template
 				$mpr[] = $row["parent"];
 			}
 		}
-
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PROMO);
 		$this->db_query("SELECT objects.*, menu.* FROM objects
 				LEFT JOIN menu ON menu.id = objects.oid
@@ -1607,7 +1635,7 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$ic_url = "images/ftv2folderclosed.gif";
+				$ic_url = isset($row["icon_id"]) && $row["icon_id"] > 0 ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2folderclosed.gif";
 			}
 			$this->vars(array(
 				"is_cut"				=> ($cut_objects[$row["oid"]] ? $cut : $nocut),
@@ -1808,6 +1836,10 @@ class menuedit extends aw_template
 		));
 		
 		$this->vars(array("ADD_CAT" => $this->can("add",$parent) ? $this->parse("ADD_CAT") : ""));
+		if ($this->can("EDIT",$parent))
+		{
+			$this->vars(array("EDIT_LINKS" => $this->parse("EDIT_LINKS")));
+		};
 
 		global $class_defs;
 		$fentries = array();	
@@ -3026,7 +3058,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			
 			// only show content menus
-			if ($row["mtype"] != MN_CONTENT)
+			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT)
 			{
 				continue;
 			}
@@ -3060,10 +3092,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 
-			if (!defined("SKIP_MENU_RECURSION"))
-			{
+			//if (($GLOBALS["frontpage"] == $section))
+			//{
 				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
-			};
+			//};
 
 			if ($cnt == 0 && $this->is_template($mn."_BEGIN"))
 			{

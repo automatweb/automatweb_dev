@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.4 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.5 2001/07/16 06:01:38 kristo Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -47,7 +47,7 @@ class db_connector extends root
 			{
 				return false;
 			}
-			echo "Vigane päring";
+			echo LC_MYSQL_ERROR_QUERY;
 			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
 			// ja selle ekraanile pritsimine ei anna mitte midagi.
 

@@ -279,7 +279,7 @@ class form_element extends aw_template
 		if ($$var != $this->arr["name"])
 		{
 			$this->arr["name"] = $$var;
-			$this->upd_object(array("oid" => $this->id, "name" => $$var));
+			$this->do_change_name($$var);
 		}
 		$var=$base."_list";
 		$this->arr["join_list"] = $$var;
@@ -551,6 +551,8 @@ class form_element extends aw_template
 	function get_order()	{ return $this->arr["ord"]; }
 	function get_props()  { return $this->arr; }
 	function get_type()		{	return $this->arr["type"]; }
+	function get_row()		{ return $this->row; }
+	function get_col()		{ return $this->col; }
 
 	function save_short()
 	{
@@ -576,8 +578,40 @@ class form_element extends aw_template
 		if ($$var != $this->arr["name"])
 		{
 			$this->arr["name"] = $$var;
-			$this->upd_object(array("oid" => $this->id, "name" => $$var));
+			$this->do_change_name($$var);
 		}
+	}
+
+	function do_change_name($name)
+	{
+		$this->upd_object(array("oid" => $this->id, "name" => $name));
+		// ok now here we must fuckin load all the forms that contain this element and fuckin change all elements names in those. 
+		// shit I hate this but I suppose it's gotta be done
+		$this->save_handle();
+		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$this->id);
+		while ($drow = $this->db_next())
+		{
+			$fup = new form;
+			$fup->load($drow["form_id"]);
+			for ($row = 0;$row < $fup->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $fup->arr["cols"]; $col++)
+				{
+					if (is_array($fup->arr["elements"][$row][$col]))
+					{
+						foreach($fup->arr["elements"][$row][$col] as $k => $v)
+						{
+							if ($k == $this->id)
+							{
+								$fup->arr["elements"][$row][$col][$k]["name"] = $name;
+							}
+						}
+					}
+				}
+			}
+			$fup->save();
+		}
+		$this->restore_handle();
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.34 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.35 2001/07/16 06:01:38 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -209,7 +209,7 @@ class form extends form_base
 
 		classload("style");
 		$style = new style;
-		$stylesel = $style->get_select(0,ST_CELL);
+		$stylesel = $style->get_select(0,ST_CELL,true);
 
 		$this->vars(array("form_id" => $this->id));
 		for ($i=0; $i < $this->arr["rows"]; $i++)
@@ -263,9 +263,12 @@ class form extends form_base
 			$this->vars(array("COL" => $cols));
 			$this->parse("LINE");
 		}
+		classload("objects");
+		$ob = new db_objects;
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
-			"styles" => $this->picker(0,$stylesel)
+			"styles" => $this->picker(0,$stylesel),
+			"folders" => $this->picker(0,$ob->get_list(false,true))
 		));
 		return $this->do_menu_return();
 	}
@@ -284,6 +287,14 @@ class form extends form_base
 				if ($chk[$row][$col] == 1)
 				{
 					$this->arr["contents"][$row][$col]->set_style($setstyle,&$this);
+					if ($setfolder)
+					{
+						$els = $this->arr["contents"][$row][$col]->get_elements();
+						foreach($els as $cnt => $el)
+						{
+							$this->upd_object(array("oid" => $el["id"], "parent" => $setfolder));
+						}
+					}
 				}
 			}
 		}
@@ -335,7 +346,36 @@ class form extends form_base
 				$this->arr["contents"][$i][$a]->save_short(&$this);
 			}
 		}
+
 		$this->save();
+
+		// ok here we must do the element separation for all the checked elements
+		if (is_array($sel))
+		{
+			$this->load($id);
+			foreach($sel as $elid)
+			{
+				$inothers = false;
+				$this->db_query("SELECT * FROM element2form WHERE el_id = $elid AND form_id != $id");
+				while ($row = $this->db_next())
+				{
+					$inothers = true;
+				}
+				if ($inothers)
+				{
+					// since this element is in some other forms as well, we must create a replica and remove the old one from this form
+					$el = $this->get_element_by_id($elid);
+					
+					$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = ".$el->get_id(),"parent");
+
+					$this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid));
+
+					unset($this->arr["elements"][$el->get_row()][$el->get_col()][$elid]);
+					$el->del();	// delete the element from this form
+				}
+			}
+			$this->save();
+		}
 
 		return $this->mk_orb("change",array("id" => $this->id));
 	}
@@ -480,8 +520,14 @@ class form extends form_base
 		return $orb;
 	}
 
-	// returns array id => name of all elements in the loaded form
-	function get_all_elements()
+	////
+	// !returns array id => name of all elements in the loaded form
+	// what if I want to know the types of the elements as well?
+	// if type argument is set, then the values of the returned array are 
+	// also arrays, consiting of two elements,
+	// 1) type of the element
+	// 2) the actual name
+	function get_all_elements($args = array())
 	{
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -491,7 +537,18 @@ class form extends form_base
 				reset($elar);
 				while (list(,$el) = each($elar))
 				{
-					$ret[$el["id"]] = $el["name"];
+					if ($args["type"])
+					{
+						$block = array(
+							"name" => $el["name"],
+							"type" => $el["type"],
+						);
+						$ret[$el["id"]] = $block;
+					}
+					else
+					{
+						$ret[$el["id"]] = $el["name"];
+					};
 				}
 			}
 		}
@@ -732,7 +789,8 @@ class form extends form_base
 
 		if ($this->arr["name_el"])
 		{
-			$this->upd_object(array("oid" => $entry_id, "name" => $this->get_element_value($this->arr["name_el"]),"comment" => ""));
+			$this->entry_name = $this->get_element_value($this->arr["name_el"]);
+			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
 		}
 		$en = serialize($this->entry);
 		if ($new)
@@ -1593,7 +1651,10 @@ class form extends form_base
 		extract($arr);
 		$this->mk_path($parent,LC_FORM_ADD_FORM);
 		$this->read_template("form_add.tpl");
-		$this->vars(array("reforb"	=> $this->mk_reforb("submit_add",array("parent" => $parent, "alias_doc" => $alias_doc))));
+		$this->vars(array(
+			"forms" => $this->picker(0,$this->get_list(FTYPE_ENTRY,true)),
+			"reforb"	=> $this->mk_reforb("submit_add",array("parent" => $parent, "alias_doc" => $alias_doc))
+		));
 		return $this->parse();
 	}
 
@@ -1604,11 +1665,17 @@ class form extends form_base
 		$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM, "comment" => $comment));
 		
 		if ($type == "entry") 
+		{
 			$type = FORM_ENTRY;
+		}
 		if ($type == "search")
+		{
 			$type = FORM_SEARCH;
+		}
 		if ($type == "rating")
+		{
 			$type = FORM_RATING;
+		}
 
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
 
@@ -1623,6 +1690,42 @@ class form extends form_base
 			$this->add_alias($alias_doc, $id);
 		}
 
+		// uhm yeah. if the user selected a base form, then we must clone it and all the elements in it
+		if ($base)
+		{
+			$bf = new form;
+			$bf->load($base);
+
+			$this->arr = $bf->arr;
+			$this->arr["elements"] = array();
+			$this->arr["contents"] = array();
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col=0; $col < $this->arr["cols"]; $col++)
+				{
+					$bf->arr["contents"][$row][$col]->form = &$this;	// this is a trick to make form cells in $bf save new elements to $this
+					$bf->arr["contents"][$row][$col]->id = $id;
+
+					if (is_array($bf->arr["elements"][$row][$col]))
+					{
+						foreach($bf->arr["elements"][$row][$col] as $elid => $elval)
+						{
+							if (is_number($elid))
+							{
+								// replicate this element into this form!!
+								$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $elid", "parent");
+
+								$newel = $bf->arr["contents"][$row][$col]->do_add_element(array("parent" => $el_parent, "name" => $elval["name"], "based_on" => $elid));
+
+								$elval["id"] = $newel;
+								$this->arr["elements"][$row][$col][$newel] = $elval;
+							}
+						}
+					}
+				}
+			}
+			$this->save();
+		}
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
@@ -2265,6 +2368,7 @@ class form extends form_base
 		$menulist = $o->get_list();
 		$this->vars(array(
 			"ff_folder"	=> $this->picker($this->arr["ff_folder"], $menulist),
+			"tear_folder"	=> $this->picker($this->arr["tear_folder"], $menulist),
 			"el_menus" => $this->multiple_option_list($this->arr["el_menus"], $menulist),
 			"el_menus2" => $this->multiple_option_list($this->arr["el_menus2"], $menulist),
 			"reforb"	=> $this->mk_reforb("save_folders", array("id" => $id))
@@ -2277,6 +2381,7 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 		$this->arr["ff_folder"] = $ff_folder;
+		$this->arr["tear_folder"] = $tear_folder;
 		$this->arr["el_menus"] = "";
 		if (is_array($el_menus))
 		{

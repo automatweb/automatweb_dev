@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.5 2001/07/16 06:01:38 kristo Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 
@@ -13,7 +13,7 @@ class form_import extends form_base
 	}
 
 	////
-	// !shows form entries import form
+	// !shows the form which allows user to select a csv file and upload it.
 	function import_form_entries($arr)
 	{
 		extract($arr);
@@ -27,6 +27,8 @@ class form_import extends form_base
 		return $this->parse();
 	}
 
+	////
+	// !receives the uploaded file and moves it into a temporary directory for further processing
 	function submit_form($arr)
 	{
 		extract($arr);
@@ -39,11 +41,16 @@ class form_import extends form_base
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
 		global $tmpdir;
 		$fname = $this->gen_uniq_id();
+
+		// peaks ka kontrollima, kas tmpdir on ikka olemas ja kirjutatav
 		move_uploaded_file($file,$tmpdir."/".$fname);
 
 		return $this->mk_my_orb("select_form_els", array("id" => $id, "file" => $fname));
 	}
 
+	////
+	// !Step 2 of import, shows a combined table of the fields from the csv file and and all form
+	// elements
 	function select_form_els($arr)
 	{
 		extract($arr);
@@ -69,11 +76,15 @@ class form_import extends form_base
 			$this->parse("FCOL");
 		}
 
-		$els = $f->get_all_elements();
-		foreach($els as $elid => $elname)
+		$els = $f->get_all_elements(array("type" => 1));
+		foreach($els as $elid => $block)
 		{
+			$elname = $block["name"];
+			$eltype = $block["type"];
+			// we should really check the type of the form element
 			$this->vars(array(
 				"el_name" => $elname,
+				"el_type" => $eltype,
 				"el_id" => $elid
 			));
 			$cnt=0;
@@ -189,7 +200,7 @@ class form_import extends form_base
 		extract($arr);
 		$this->read_template("import_entries.tpl");
 		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], sprintf(LC_IMPORT_CHAIN_HEADER,$this->mk_my_orb("change", array("id" => $id),"form_chain"));
+		$this->mk_path($o["parent"], sprintf(LC_IMPORT_CHAIN_HEADER,$this->mk_my_orb("change", array("id" => $id),"form_chain")));
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_chain", array("id" => $id))
@@ -220,7 +231,7 @@ class form_import extends form_base
 		classload("form_chain");
 		$f = new form_chain;
 		$ch = $f->load_chain($id);
-		$this->mk_path($ch["parent"], sprintf(LC_FORM_IMPORT_CHAIN_ELS,$this->mk_my_orb("change", array("id" => $id),"form_chain"));
+		$this->mk_path($ch["parent"], sprintf(LC_FORM_IMPORT_CHAIN_ELS,$this->mk_my_orb("change", array("id" => $id),"form_chain")));
 		$this->read_template("import_entries2.tpl");
 
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea

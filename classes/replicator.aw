@@ -18,7 +18,6 @@ class replicator_host extends db_connector
 		
 		extract(is_array($trans)?$trans:array());
 		unset($error);
-
 		// kui on sessiooni avamise käsk
 		if ($func=="OPEN")
 		{
@@ -51,7 +50,6 @@ class replicator_host extends db_connector
 			$correcthash=md5($rec["IP"].$rec["RAND"].$this->key.$rec["RAND"]);
 
 			//echo("ip=".$rec["IP"]." rand=".$rec["RAND"]." key=".$this->key." <br>,thus, hash=$correcthash<br> client sent=$hash<br><br>");
-
 			if ($hash!=$correcthash || $rec["IP"]!=$REMOTE_ADDR)
 			{
 				$error="wrong hash";
@@ -89,7 +87,8 @@ class replicator_client extends db_connector
 	function replicator_client($url,$key)
 	{
 		global $SERVER_ADDR;
-		$this->url=$url;
+
+		$this->url=(substr($url,0,7)=="http://"?"":"http://").$url;
 		$open_result=$this->_query(array("func"=>"OPEN"));
 
 		if (!$open_result["tid"] || !$open_result["rand"])
@@ -101,25 +100,20 @@ class replicator_client extends db_connector
 			return;
 		} 
 		$this->tid=$open_result["tid"];
-		//echo "<br>making hash: rand=".$open_result["rand"]." tid=".	$open_result["tid"]." cli ip=".$SERVER_ADDR;
+		//echo "<br>making hash:md5($SERVER_ADDR.{$open_result["rand"]}.$key.{$open_result["rand"]})";//DBG
 		$this->hash=md5($SERVER_ADDR.$open_result["rand"].$key.$open_result["rand"]);
+
 
 	}
 
 	function _query($arr)
 	{
-		$q="http://".$this->url."?transaction=".urlencode(serialize($arr));
-		/*echo "<br>query=$q<br>";*/
+		$q=$this->url."?transaction=".urlencode(serialize($arr));
+		//echo "<br>query=$q<br>";//DBG
 		$ret=@file($q);
-/*		if (is_array($ret))
-		{
-			echo "<br>ret=".join("",$ret).",";print_r(unserialize(join("",$ret)));echo "<br>";
-		}
-		else 
-		{echo("pole array $ret");
-		}*/
+		//echo "<br>ret=".join("",$ret).",";print_r(unserialize(join("",$ret)));echo "<br>";//DBG
 		if (!is_array($ret))
-			return array("error"=>"httpquery failed");
+			return array("error"=>"httpquery failed ".urldecode($q));
 		return unserialize(join("",$ret));
 	}
 

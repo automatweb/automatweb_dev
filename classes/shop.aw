@@ -56,7 +56,8 @@ class shop extends shop_base
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"root" => $this->picker($parent,$ob->get_list()),
 			"of" => $this->multiple_option_list(0,$fl),
-			"forms" => $this->picker(0,$fl)
+			"forms" => $this->picker(0,$fl),
+			"commission_eq" => $this->picker(0, $this->listall_eqs(false))
 		));
 		return $this->parse();
 	}
@@ -127,7 +128,8 @@ class shop extends shop_base
 			"ch_own" => $this->mk_orb("ch_owner_data", array("id" => $id)),
 			"tables" => $this->mk_my_orb("change_tables", array("id" => $id)),
 			"o_op_id_voucher" => $oba["owner_form_op_voucher"],
-			"o_op_id_issued" => $oba["owner_form_op_issued"]
+			"o_op_id_issued" => $oba["owner_form_op_issued"],
+			"commission_eq" => $this->picker($oba["commission_eq"], $this->listall_eqs(false))
 		));
 		if ($oba["owner_form"])
 		{
@@ -178,12 +180,12 @@ class shop extends shop_base
 				$ss = ", owner_form_entry = '' ";
 			}
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued' $ss WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued',commission_eq ='$commission_eq' $ss WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP, "status" => 1, "name" => $name, "comment" => $comment));
-			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op) VALUES($id,'$root','$emails','$owner_form','$owner_form_op')");
+			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op,commission_eq) VALUES($id,'$root','$emails','$owner_form','$owner_form_op','$commission_eq')");
 		}
 
 		// update order_forms
@@ -425,7 +427,7 @@ class shop extends shop_base
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
 					// load it's cnt_form
-					$f->load($itt["cnt_form"]);
+					$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 					$selrows = $this->get_selected_rows_in_form(&$f);
@@ -482,7 +484,8 @@ class shop extends shop_base
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section,"first" => 1)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id,"section" => $section)),
 			"t_price" => $t_price,
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section,
+			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $shop_id, "section" => $section))
 		));
 		if ($items)
 		{
@@ -523,11 +526,11 @@ class shop extends shop_base
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
 
-					$old_entry = $f->get_entry($itt["cnt_form"],$ar["cnt_entry"]);
+					$old_entry = $f->get_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$ar["cnt_entry"]);
 
 					// process the entry
 					$f->process_entry(array(
-						"id" => $itt["cnt_form"],
+						"id" => $it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],
 						"entry_id" => $ar["cnt_entry"],
 						"prefix" => "entry_".$ar["cnt_entry"]."_"
 					));
@@ -560,7 +563,7 @@ class shop extends shop_base
 							$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
 							session_register("status_msg");
 							// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-							$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
+							$f->restore_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$ar["cnt_entry"],$old_entry);
 							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
 						}
 
@@ -591,7 +594,7 @@ class shop extends shop_base
 	// uses the equasion specified in $itt and if none is specified, the price specified in form $f or the item's form that is loaded
 	function calc_price($itt,$it,$count,$f)
 	{
-		$eq = $this->get_eq($itt["eq_id"]);
+		$eq = $this->get_eq($it["price_eq"] ? $it["price_eq"] : $itt["eq_id"]);
 
 		// the price might be different based on the date
 		// so if the item purchace has a date attached
@@ -617,36 +620,40 @@ class shop extends shop_base
 			$f_kaup->set_element_value_by_type("price", $el_price);
 			$f->set_element_value_by_type("price", $el_price);
 
-			$els = $this->parse_eq_variables($eq["comment"]);
-
-			$eq = $eq["comment"];
-			foreach($els as $elname)
-			{
-				if (($el = $f->get_element_by_name($elname)))
-				{
-					$elval = $el->get_value(true);
-				}
-				else
-				{
-					$el = $f_kaup->get_element_by_name($elname);
-					if ($el)
-					{
-						$elval = $el->get_value(true);
-					}
-					else
-					{
-						$elval = 0;
-					}
-				}
-				if ($elval == 0)
-				{
-					$elval = "0.0";
-				}
-				$eq = str_replace($elname,$elval,$eq);
-			}
-		//	echo "eq = $eq <br>";
-			eval("\$price = ".$eq.";");
+			$price = $this->do_parse_eq($eq,array($f,$f_kaup));
 		}
+
+		return (int)($price+0.5);
+	}
+
+	function do_parse_eq($eq,$farr)
+	{
+		$els = $this->parse_eq_variables($eq["comment"]);
+
+		$eq = $eq["comment"];
+		foreach($els as $elname)
+		{
+			$el = false;
+			$elval = "0.0";
+			foreach($farr as $f)
+			{
+				$el = $f->get_element_by_name($elname);
+				if ($el)
+				{
+					break;
+				}
+			}
+			if ($el)
+			{
+				$elval = $el->get_value(true);
+			}
+			if ($elval == 0)
+			{
+				$elval = "0.0";
+			}
+			$eq = str_replace($elname,$elval,$eq);
+		}
+		eval("\$price = ".$eq.";");
 		return $price;
 	}
 
@@ -760,7 +767,7 @@ class shop extends shop_base
 		classload("form");
 		$f = new form;
 		$f->process_entry(array("id" => $order_forms["order"][$num]["form"]));
-		$order_forms["entries"][] = array("form" => $order_forms["order"][$num]["form"], "entry" => $f->entry_id);
+		$order_forms["entries"][] = array("form" => $order_forms["order"][$num]["form"], "entry" => $f->entry_id,"name" => $f->entry_name);
 
 		// now check if we sould move on
 		if ($order_forms["order"][$num]["chk"] != 1)
@@ -797,6 +804,10 @@ class shop extends shop_base
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
+			if ($shopping_cart["order_id"])
+			{
+				$this->do_cancel_order($shopping_cart["order_id"]);
+			}
 			// leiame perioodi alguse
 			$min_p = 2147483648;
 			foreach($shopping_cart["items"] as $iid => $idata)
@@ -816,7 +827,7 @@ class shop extends shop_base
 					$itt = $this->get_item_type($it["type_id"]);
 
 					// load it's cnt_form
-					$f->load($itt["cnt_form"]);
+					$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 
@@ -884,8 +895,13 @@ class shop extends shop_base
 
 		// nyt paneme tellimusega kaasa tulnud order formid ka kirja
 		global $order_forms;
+		$ename = "";
 		foreach($order_forms["entries"] as $ar)
 		{
+			if ($ename == "")
+			{
+				$ename = $ar["name"];
+			}
 			$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id) values($ord_id,'".$ar["form"]."','".$ar["entry"]."')");
 		}
 
@@ -894,7 +910,7 @@ class shop extends shop_base
 		// items and their counts and also the order form data.
 		$mail = "Tere!\n\n kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n".$mail."\n\nKokku hind: ".$t_price;
 
-		$this->db_query("UPDATE orders SET t_price = '$t_price' WHERE id = $ord_id");
+		$this->db_query("UPDATE orders SET t_price = '$t_price', name='$ename' WHERE id = $ord_id");
 		
 		$mail.="\n\nTellija sisestas enda kohta järgmised andmed:\n\n";
 		foreach($order_forms["entries"] as $ar)
@@ -1074,7 +1090,7 @@ class shop extends shop_base
 			}
 			$this->vars(array(
 				"cnt_form" => $f->gen_preview(array(
-												"id" => $itt["cnt_form"],
+												"id" => $row["cnt_form"] ? $row["cnt_form"] : $itt["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"],
 												"form_action" => "/index.".$ext,
 												"tpl" => "show_noform.tpl")),
@@ -1095,7 +1111,7 @@ class shop extends shop_base
 			$this->vars(array("item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true))));
 			$this->vars(array(
 				"cnt_form" => $f->gen_preview(array(
-													"id" => $itt["cnt_form"],
+													"id" => $row["cnt_form"] ? $row["cnt_form"] : $itt["cnt_form"],
 													"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
 													"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent,"ignoregoto" => $ignoregoto)),
 													"form_action" => "/index.".$ext)),
@@ -1137,11 +1153,11 @@ class shop extends shop_base
 			$old_entry = false;
 			if ($shopping_cart["items"][$item_id]["cnt_entry"])
 			{
-				$old_entry = $f->get_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
+				$old_entry = $f->get_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
 			}
 
 			$f->process_entry(array(
-				"id" => $itt["cnt_form"], 
+				"id" => $it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"], 
 				"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
 			));
 			$entry_id = $f->entry_id;
@@ -1175,7 +1191,7 @@ class shop extends shop_base
 				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
 				session_register("status_msg");
 				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-				$f->restore_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				$f->restore_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
 				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
 			}
 
@@ -1308,7 +1324,11 @@ class shop extends shop_base
 				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"bill" => $this->mk_my_orb("view_bill", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
-				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section))
+				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"change" => $this->mk_my_orb("change_order", array("shop" => $id, "order_id" => $row["id"], "section" => $section,"page" => $page)),
+				"cancel"	=> $this->mk_my_orb("cancel_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
+				"order_id" => $row["id"],
+				"name" => $row["name"]
 			));
 			$is_f = "";
 			if (!isset($row["status"]))
@@ -1387,7 +1407,7 @@ class shop extends shop_base
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
 					// load it's cnt_form
-					$f->load($itt["cnt_form"]);
+					$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 					$selrows = $this->get_selected_rows_in_form(&$f);
@@ -1479,8 +1499,20 @@ class shop extends shop_base
 
 		$varbeginchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ");
 
+		$in_phpvar = false;
 		for ($i=0; $i < $len; $i++)
 		{
+			if ($inphp_var)
+			{
+				if (in_array($str[$i],$varchars))
+				{
+				}
+				else
+				{
+					$inphp_var = false;
+				}
+			}
+			else
 			if ($in_var)
 			{
 				if (in_array($str[$i],$varchars))
@@ -1503,6 +1535,15 @@ class shop extends shop_base
 					// muutuja algas
 					$cur_var.=$str[$i];
 					$in_var = true;
+				}
+				else
+				{
+					if ($str[$i] == "\$")
+					{
+						$inphp_var= true;
+						$in_var = false;
+						$cur_var = "";
+					}
 				}
 			}
 		}
@@ -1662,6 +1703,8 @@ class shop extends shop_base
 		classload("form_table");
 		$ft = new form_table;
 
+		$allitemsarr = array();
+
 		$item_form = new form;
 		$cnt_form = new form;
 		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
@@ -1681,16 +1724,19 @@ class shop extends shop_base
 				$itt = $this->get_item_type($row["item_type"]);
 				// j2relikult muutus ka itemi sisestamise form, loadime
 				$item_form->load($itt["form_id"]);
-				$cnt_form->load($itt["cnt_form"]);
 				$cur_type = $row["item_type"];
 			}
 
 			$item = $this->get_item($row["item_id"]);
+			$cnt_form->load($item["cnt_form"] ? $item["cnt_form"] : $itt["cnt_form"]);
 			$item_parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
 			$item_form->load_entry($item["entry_id"]);
 			$item_form->set_element_value_by_type("price",$row["price"]);
 
 			$cnt_form->load_entry($row["cnt_entry"]);
+
+			$allitemsarr[] = $cnt_form;
+			$allitemsarr[] = $item_form;
 
 			if ($row["period"] > 1)
 			{
@@ -1721,7 +1767,13 @@ class shop extends shop_base
 
 		classload("users");
 		$u = new users;
-
+	
+		// calc commission eq
+		if ($sh["commission_eq"])
+		{
+			$eq = $this->get_eq($sh["commission_eq"]);
+			$commission = $this->do_parse_eq($eq,$allitemsarr);
+		}
 		$f->reset();
 		$this->vars(array(
 			"ITEM" => $tx,
@@ -1734,7 +1786,9 @@ class shop extends shop_base
 			"date" => $this->time2date($order["tm"],3),
 			"owner_data" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op"])),
 			"price" => $order["t_price"],
-			"log_info" => $u->show_join_data(array("tpl" => "join_data_nopwd.tpl"))
+			"log_info" => $u->show_join_data(array("tpl" => "join_data_nopwd.tpl")),
+			"commission" => (int)(($commission)+0.5),
+			"t_price" => (int)(($order["t_price"] - $commission)+0.5)
 		));
 
 		die($this->parse());
@@ -1958,6 +2012,64 @@ class shop extends shop_base
 			return $pp_2week;
 		}
 		return $def;
+	}
+
+	////
+	// !reads in the order from the database and redirects to the shopping cart
+	function change_order($arr)
+	{
+		extract($arr);
+
+		// load the entry from the database
+		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
+		$order = $this->db_next();
+
+		$GLOBALS["shopping_cart"] = array("order_id" => $order_id,"price" => $t_price);
+
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
+		while ($row = $this->db_next())
+		{
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt"] = $row["count"];
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["price"] = $row["price"];
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["cnt_entry"] = $row["cnt_entry"];
+			$GLOBALS["shopping_cart"]["items"][$row["item_id"]]["period"] = $row["period"];
+		}
+
+		return $this->view_cart(array("shop_id" => $shop, "section" => $section));
+	}
+
+	function do_cancel_order($order_id)
+	{
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$it = $this->get_item($row["item_id"]);
+			if ($it["has_period"] && !$it["has_objs"])
+			{
+				$this->db_query("UPDATE shop_item_period_avail SET num_sold=num_sold - ".$row["count"]." WHERE item_id = ".$row["item_id"]." AND period = ".$row["period"]);
+			}
+			$this->db_query("UPDATE shop_items SET sold_items = sold_items - ".$row["count"]." WHERE id = ".$row["item_id"]);
+			$this->restore_handle();
+		}
+		$this->db_query("DELETE FROM order2item WHERE order_id = $order_id");
+		$this->db_query("DELETE FROM orders WHERE id = $order_id");
+		$this->db_query("DELETE FROM order2form_entries WHERE order_id = $order_id");
+	}
+
+	function cancel_order($arr)
+	{
+		extract($arr);
+		$this->do_cancel_order($order_id);
+		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));
+	}
+
+	function cancel_current($arr)
+	{
+		extract($arr);
+		$GLOBALS["shopping_cart"] = array();
+
+		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));
 	}
 }
 ?>

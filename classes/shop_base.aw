@@ -79,9 +79,16 @@ class shop_base extends aw_template
 		return $this->get_object($id);
 	}
 
-	function listall_eqs()
+	function listall_eqs($addempty = false)
 	{
-		$ret = array();
+		if ($addempty)
+		{
+			$ret = array(0 => "");
+		}
+		else
+		{
+			$ret = array();
+		}
 		$this->db_query("SELECT oid,name,comment FROM objects WHERE class_id = ".CL_SHOP_EQUASION." AND status != 0");
 		while ($row = $this->db_next())
 		{

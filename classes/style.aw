@@ -43,12 +43,21 @@ $style_cache = array();
 			return $this->db_next();
 		}
 
-		function get_select($parent, $type)
+		function get_select($parent, $type, $addempty = false)
 		{
 			$this->db_listall(0,$type);
-			$arr = array();
+			if ($addempty)
+			{
+				$arr = array(0 => "");
+			}
+			else
+			{
+				$arr = array();
+			}
 			while ($row = $this->db_next())
+			{
 				$arr[$row["id"]] = $row["name"];
+			}
 
 			return $arr;
 		}
@@ -514,5 +523,33 @@ $style_cache = array();
 
 			return $ret;
 		}
+
+
+	function _serialize($arr)
+	{
+		extract($arr);
+		$this->db_query("SELECT objects.*, styles.* FROM objects LEFT JOIN styles ON styles.id = objects.oid WHERE oid = $oid");
+		$row = $this->db_next();
+		if (!$row)
+		{
+			return false;
+		}
+		return serialize($row);
 	}
+
+	function _unserialize($arr)
+	{
+		extract($arr);
+
+		$row = unserialize($str);
+		// basically, we create a new object and insert the stuff in the array right back in it. 
+		$oid = $this->new_object(array("parent" => $parent, "name" => $row["name"], "class_id" => CL_STYLE, "status" => $row["status"], "comment" => $row["comment"], "last" => $row["last"], "jrk" => $row["jrk"], "visible" => $row["visible"], "period" => $period, "alias" => $row["alias"], "periodic" => $row["periodic"], "doc_template" => $row["doc_template"], "activate_at" => $row["activate_at"], "deactivate_at" => $row["deactivate_at"], "autoactivate" => $row["autoactivate"], "autodeactivate" => $row["autodeactivate"], "brother_of" => $row["brother_of"]));
+
+		// same with the style. 
+		$this->quote(&$row);
+		$this->db_query("INSERT INTO	styles(id,style,type) values($oid,'".$row["style"]."','".$row["type"]."')");
+
+		return $oid;
+	}
+}
 ?>

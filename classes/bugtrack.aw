@@ -8,6 +8,7 @@ $orb_defs["bugtrack"] = array(
 			"list"	=> array("function" => "orb_list", "params" => array(),"opt" => array("sortby","setfilt","setpage")),
 			"delete"	=> array("function" => "orb_delete", "params" => array("id")),
 			"popupfilter" => array("function" => "orb_popupfilter", "params" => array(),"opt"=>array("setfilt","value","op","expr","field","sendupdate")),
+			"submit_popupfilter" => array("function" => "orb_submit_popupfilter","params"=> array()),
 			"delegate" => array("function" => "orb_popupdelegate", "params" => array("id")),
 			"submit_delegate" => array("function" => "orb_submit_delegate", "params" => array("id","developer","status")),
 			"showcomments" => array("function" => "orb_popupshowcomments", "params" => array("id"))
@@ -20,7 +21,7 @@ class bugtrack extends aw_template
 
 	function bugtrack()
 	{
-		$this->mastersite="work.struktuur.ee";
+		$this->mastersite="http://work.struktuur.ee";
 		global $sitekeys;
 		$this->sitekeys=$sitekeys;
 	
@@ -31,6 +32,29 @@ class bugtrack extends aw_template
 
 
 		////
+		//! saitide array
+		$this->sites=array(
+			"0" => "test.kirjastus.ee",
+			"1" => "test.kroonika.ee",
+			"2" => "www.kroonika.ee",
+			"3" => "uus.nadal.ee",
+			"4" => "www.nadal.ee",
+			"5" => "www.seltskond.ee",
+			"6" => "vibe.struktuur.ee",
+			"7" => "uusvibe.struktuur.ee",
+			"8" => "www.kirjastus.ee",
+			"9" => "dev.struktuur.ee",
+			"10" => "stat.struktuur.ee",
+			"11" => "rkool.struktuur.ee",
+			"12" => "ebs.struktuur.ee",
+			"13" => "uus.anne.ee",
+			"14" => "work.struktuur.ee",
+			"15" => "www.struktuur.ee",
+			"16" => "aw",				// need kaks on minu masina jaoks
+			"17" => "awwork"
+			);
+	
+		////
 		// !Kõikvõimalikud staatused
 		$this->statlist = array(
 				"0" => "kinnitamata",
@@ -40,6 +64,11 @@ class bugtrack extends aw_template
 				"4" => "lahendatud",
 				"5" => "kinnitatud",
 				"6" => "suletud");
+
+		$a=array_flip($this->statlist);
+		$this->stat4=$a["lahendatud"];
+		$a=array_flip($this->statlist);
+		$this->stat6=$a["suletud"];
 		////
 		// !Kõikvõimalikud tulemused
 		$this->reslist = array(
@@ -75,12 +104,12 @@ class bugtrack extends aw_template
 			"4" => "Kriitiline",
 			"5" => "Blokeerib töö");
 
-		////
-		// !Tabeli väljad filtri jaoks
+
 		$this->tablefields=array("id","pri","url","tm","text","uid","title","status","sendmail2","sendmail2_mail","site","severity","developer","timeready","resol","mails","text_result","developer_mail");
+		// 2 on time
 		// 1 on integer
 		// 0 on string
-		$this->tablefieldtypes=array(1,1,0,1,0,0,0,1,1,0,0,1,0,1,1,0,0,0);
+		$this->tablefieldtypes=array(1,1,0,2,0,0,0,1,1,0,0,1,0,2,1,0,0,0);
 		
 		// millised valikud filtris <select alla tulevad
 		$this->tablefieldoptions=array(
@@ -189,7 +218,7 @@ class bugtrack extends aw_template
 			$op=strtr($op,$xlate);
 			$expr=strtr($expr,$xlate);
 			$v=strtr($v,"'","`");
-			$filta.=($filta?" $op ":"WHERE ")."$k $expr '$v'";
+			$filta.=($filta?" $op ":" ")."$k $expr '$v'";
 		};
 		return $filta;
 	}
@@ -232,11 +261,11 @@ class bugtrack extends aw_template
 			$this->prog_acl_error("view", PRG_BUGTRACK);
 		};
 		extract($args);
-		global $bugtr_filt,$bugtr_haslooked,$bugtr_page;
-		session_register("bugtr_filt","bugtr_page");
+		global $bugtr_filt,$bugtr_haslooked,$bugtr_page,$bugtr_userfilt;
+		session_register("bugtr_filt","bugtr_page","bugtr_userfilt");
 		
 
-		// default vaade on oma bugid,järjestatud aja järgi ja kiirete lehekylg
+		// default vaade on oma bugid,järjestatud aja järgi
 		if (!$bugtr_haslooked)
 		{
 			session_register("bugtr_haslooked");
@@ -260,11 +289,10 @@ class bugtrack extends aw_template
 		switch ($setfilt)
 		{
 			case "my":
-				$this->filt_delbyfield(&$bugtr_filt,"developer");
-				$this->filt_add(&$bugtr_filt,"developer","and","=",UID);
+				$bugtr_userfilt=UID;
 				break;
 			case "allusers":
-				$this->filt_delbyfield(&$bugtr_filt,"developer");
+				$bugtr_userfilt="";
 				break;
 		};
 		
@@ -288,20 +316,42 @@ class bugtrack extends aw_template
 		{
 			case "today":
 				$page="kiired";
-				$compare="<=";
-				$headerarray[$this->mk_orb("list",array("setpage"=>"others"))]="[aega on]";
+				$aeg=mktime(23,59,59,date("m",time()),date("d",time()),date("Y",time()));
+				$compare="timeready<='$aeg' AND status not in ('$this->stat4','$this->stat6')";
+				// see on tegelt jura aga muudmoodi ei saanud
+				$k6iklink="Kõik]";
+				$kiiredlink="[</a>Kiired<a>";
 				break;
 			case "others":
-				$page="aega on";
-				$compare=">";
-				$headerarray[$this->mk_orb("list",array("setpage"=>"today"))]="[kiired]";
+			default:
+				$page="kõik";
+				$compare="";
+				$k6iklink="</a>Kõik<a>]";
+				$kiiredlink="[Kiired";
 				break;
 		}
 
+		$headerarray[$this->mk_orb("list",array("setpage"=>"today"))]=$kiiredlink;
+		$headerarray[$this->mk_orb("list",array("setpage"=>"others"))]=$k6iklink;
+		
+
+		switch ($bugtr_userfilt)
+		{
+			case "":
+				$uf="";
+				$minulelink="[Minule";
+				$k6igilelink="</a>Kõigile<a>]";
+				break;
+			default:
+				$uf="developer = '$bugtr_userfilt'";
+				$minulelink="[</a>Minule<a>";
+				$k6igilelink="Kõigile]";
+				break;
+		};
 
 		$headerarray=array_merge($headerarray,array(
-			$this->mk_orb("list",array("setfilt"=>"my")) => "Minule",
-			$this->mk_orb("list",array("setfilt"=>"allusers")) => "Kõigile",
+			$this->mk_orb("list",array("setfilt"=>"my")) => $minulelink,
+			$this->mk_orb("list",array("setfilt"=>"allusers")) => $k6igilelink,
 			"javascript:remote(0,400,210,\"".$this->mk_orb("popupfilter",array())."\");" => "Filter"
 			));
 
@@ -311,24 +361,40 @@ class bugtrack extends aw_template
 			$headerarray[$this->mk_orb("new",array())] = "Lisa uus";
 		};
 
-		$t->define_header("BugTrack ($page)",$headerarray);
+		$t->define_header("BugTrack",$headerarray);
 		$t->parse_xml_def($this->basedir . "/xml/bugtrack/bugtrack.xml");
 	
 		$filta=$this->decode_filt($bugtr_filt);
 
-		// a mis aeg see siin on?? see on tööpäeva lõpu aeg
-		// need bugid mis on vaja hiljem parandada (näit. järgmine päev kell 01:00)
-		// jõuab öösel kah teha, järelikult neid "kiirete"  all ei näita
-		// tegelikult v6iks siia panna ka time()+24 tundi
-		$aeg=mktime(23,59,59,date("m",time()),date("d",time()),date("Y",time()));
-		$realfilter=($filta?"$filta AND":"WHERE")." timeready $compare $aeg";
+		
+
+		if ($compare)
+		{
+			$realfilter="WHERE ".($filta?"($filta) AND":"")." $compare".($uf?" AND $uf":"");
+		} else
+		{
+			$realfilter=$filta?
+				("WHERE (".$filta.")".($uf?" AND $uf":"")):
+				($uf?"WHERE $uf":"");
+		};
+
+		// siin võtab kommentaaride arvud
+		classload("msgboard");
+		$mb=new msgboard();
+
+		$commentarr=$mb->get_count_all("bug_%");
+		$commentnewarr=$mb->get_count_new("bug_%");
+
 		$q = "SELECT * FROM bugtrack $realfilter	ORDER BY pri DESC";
+		//echo($q);//DBG
 		$this->db_query($q);
 			
 		while($row = $this->db_next())
 		{
 			$row["status"]=$this->statlist[$row["status"]];
 			$row["__pribgcolor"]=$this->pricolor[$row["pri"]];
+			$topic="bug_".$row["id"];
+			$row["commentcount"]=(int)(isset($commentnewarr[$topic])?$commentnewarr[$topic]:$commentarr[$topic])." / ".(int)$commentarr[$topic];
 
 			//tee üle läinud teist värvi
 			if ($row["timeready"]<time())
@@ -363,6 +429,7 @@ class bugtrack extends aw_template
 	{
 		extract($arr);
 		$bug=$this->get_bug($arr["id"]);
+		
 		$this->read_template("delegate.tpl");
 		$this->vars(array(
 			"id" => $id,
@@ -375,22 +442,35 @@ class bugtrack extends aw_template
 	}
 
 
-	////
-	//! Näitab filtreerimise popup akent
-	function orb_popupfilter($arr)
+	function orb_submit_popupfilter($arr)
 	{
 		global $bugtr_filt;
+		//print_r($arr);
 		session_register("bugtr_filt");
 		extract($arr);
+
+		if ($val=="_date")
+		{
+			$val=mktime($dateval["hour"], $dateval["minute"],00, $dateval["month"],$dateval["day"],$dateval["year"]);
+		};
 		switch ($setfilt)
 		{
 			case "add":
-				$this->filt_add(&$bugtr_filt,$field,$op,$expr,$value);
+				$this->filt_add(&$bugtr_filt,$fie,$op,$expr,$val);
 				break;
 			case "clear":
 				$bugtr_filt="";
 				break;
 		};
+		return $this->mk_orb("popupfilter",array("sendupdate"=>"1"));
+
+	}
+	////
+	//! Näitab filtreerimise popup akent
+	function orb_popupfilter($arr)
+	{
+		global $bugtr_filt;
+		extract($arr);
 
 		$optionarr=array();
 		foreach($this->tablefields as $f)
@@ -409,6 +489,16 @@ class bugtrack extends aw_template
 
 		$filta=$this->decode_filt($bugtr_filt);
 
+		load_vcl("date_edit");
+		$date_edit = new date_edit(time());
+		$date_edit->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => ""
+			));
+
 		$this->read_template("filter.tpl");
 		$this->vars(array(
 			"fieldlist" => $this->picker("",$this->tablefields2names),
@@ -416,9 +506,11 @@ class bugtrack extends aw_template
 			"sendupdate" => $sendupdate,
 			"ftypes" => join(",",$this->tablefieldtypes),
 			"foptions" => join(",",$optionarr),
+			"dedit" => $date_edit->gen_edit_form("dateval",time()),
 			"sendupdateurl" =>$this->mk_orb("popupfilter",array("sendupdate"=>"1")),
-			"clearurl" => $this->mk_orb("popupfilter",array("sendupdate"=>"1","setfilt"=>"clear"))
+			"reforb" => $this->mk_reforb("submit_popupfilter", array())
 			));
+		
 		
 		return $this->parse();
 	}
@@ -429,7 +521,6 @@ class bugtrack extends aw_template
 	{
 		extract($arr);
 		$bug = $this->get_bug($id);
-		// et saaks enda pandud puuke muuta
 		if (!$this->prog_acl("admin", PRG_BUGTRACK)  && ($bug["uid"]!=UID || !UID))
 		{
 			$this->prog_acl_error("admin", PRG_BUGTRACK);
@@ -461,7 +552,8 @@ class bugtrack extends aw_template
 			"text_result" => format_text($bug["text_result"]),
 			"sendmail2"	=> ($bug["sendmail2"] == 1 ? "CHECKED" : ""),
 			"time_fixed" => $date_edit->gen_edit_form("time_fixed",$bug["timeready"]),
-			"reforb" => $this->mk_reforb("submit_edit",array("id" => $bug["id"], "ref" => "hmm??"))
+			"reforb" => $this->mk_reforb("submit_edit",array("id" => $bug["id"], "ref" => "hmm??")),
+			"backlink" => $this->mk_orb("list",array())
 			));
 		return $this->parse();
 	}
@@ -474,24 +566,23 @@ class bugtrack extends aw_template
 	////
 	// ! orb_new submit funktsioon
 	function orb_submit_new($arr)
-	{
+		{
 		if (!$this->prog_acl("add", PRG_BUGTRACK))
 		{
 			$this->prog_acl_error("add", PRG_BUGTRACK);
 		};
-		global $SERVER_NAME;
+		global $baseurl;
 		extract($arr);
 		$rc = new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
 	
 //		$this->quote($text);
 //		$arr["text"]=$text;
-		
 		$arr=array_merge($arr,array(
 			"tm"=>time(),
 			"uid"=>UID,
 			"timeready"=>mktime($time_fixed["hour"],$time_fixed["minute"],0,$time_fixed["month"],$time_fixed["day"],$time_fixed["year"]),
 			"sendmail2_mail"=>$this->get_user_mail(UID),
-			"site"=>$SERVER_NAME,
+			"site"=>$baseurl,
 			"developer_mail"=>$this->get_user_mail($arr["developer"])
 			));
 
@@ -499,12 +590,12 @@ class bugtrack extends aw_template
 
 		if ($req["error"] || !$req["id"])
 		{
-			$this->_log("error","bugtrack::replicate VIGA bugi lisamisel");
-			die("VIGA bugi lisamisel");
+			$this->_log("error","bugtrack::replicate VIGA bugi lisamisel ");
+			die("VIGA bugi lisamisel ".$req["error"]);
 		};
 
-		// pane kohalikku tabelisse kui ei ole work
-		if ($SERVER_NAME!=$this->mastersite)
+		// pane kohalikku tabelisse 
+		if ($baseurl!=$this->mastersite)
 		{
 			$arr["id"]=$req["id"];
 			$this->q_insert($arr);
@@ -514,11 +605,11 @@ class bugtrack extends aw_template
 		if ($maildev)
 		{
 			$msg = UID." lisas vea/idee lehele $url, prioriteediga $pri\n $text";
-			@mail("bugtrack@struktuur.ee",sprintf(LC_BUG_BIG_PUUK,$SERVER_NAME,$title),$msg,"From: bugtrack <bugtrack@struktuur.ee>");
+			@mail("bugtrack@struktuur.ee","Uus puuk: $baseurl $title",$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 		};
 
 		// logi 
-		$this->_log("bug",sprintf(LC_BUG_BUG_ADDED,$title));
+		$this->_log("bug","Lisas bugi $title");
 
 
 		return $this->mk_orb("list",array());
@@ -527,54 +618,13 @@ class bugtrack extends aw_template
 
 
 	////
-	// ! orb_edit submit funktsioon
-	function orb_submit_edit($arr)
+	// ! saadab parandamise kohta meili
+	function send_fixed_mail($bug)
 	{
-		global $SERVER_NAME;
-		extract($arr);
-		$bug = $this->get_bug($id);
-		// enda pandud bugi saab kaa muuta
-		if (!$this->prog_acl("admin", PRG_BUGTRACK) && ($bug["uid"]!=UID || !UID))
+		extract($bug);
+		if ($status == $this->stat4)
 		{
-			$this->prog_acl_error("admin", PRG_BUGTRACK);
-		};
-
-		$devmail=$bug["developer_mail"];
-		if ($arr["developer"]!=$bug["developer"])
-		{
-			$devmail=$this->get_user_mail($arr["developer"]);
-		};
-
-		$uusmails=$bug["mails"].($mails?($bug["mails"]?",":"").$mails:"");
-		$arr=array_merge($arr,array(
-			"timeready"=>mktime($time_fixed["hour"],$time_fixed["minute"],0,$time_fixed["month"],$time_fixed["day"],$time_fixed["year"]),
-			"mails"=>$uusmails,
-			"developer_mail"=>$devmail
-			));
-		
-///		echo("developer=".$arr["developer"]." mail=".$arr["developer_mail"]);//DBG
-		// update kohalikus tabelis kui puuk ise pole masterist pandud
-		if ($bug["site"]!=$this->mastersite)
-			$this->q_update($arr);
-
-		// master updateb saidis ja sait masteris
-		$rc=($SERVER_NAME==$this->mastersite)?
-			new replicator_client($bug["site"]."/automatweb/bugreplicate.aw",$this->sitekeys[$bug["site"]]):
-			new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
-
-		$req=$rc->query("update_bug",$arr,1);
-
-		if ($req["error"])
-		{
-			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
-			die(LC_BUG_MISTAKE);
-		};
-
-		extract($bug=array_merge($bug,$arr));
-		
-		if ($status == "4")
-		{
-			$res = $this->reslist[$resol];
+			//echo("send_fixed_mail");print_r($bug);//DBG
 			$this->read_template("mailmsg.tpl");
 					
 			$this->vars(array_merge($bug,array(
@@ -588,7 +638,7 @@ class bugtrack extends aw_template
 		
 			$msg = $this->parse();
 
-			$subject=sprintf(LC_BUG_FIXED_BUG,$site,$title);
+			$subject="Parandatud puuk: $site $title";
 			@mail("dev@struktuur.ee",$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
 			if ($bug[sendmail2])
 				@mail($bug[sendmail2_mail],$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
@@ -603,8 +653,55 @@ class bugtrack extends aw_template
 			};
 		};
 
+	}
+
+	////
+	// ! orb_edit submit funktsioon
+	function orb_submit_edit($arr)
+	{
+		global $baseurl;
+		extract($arr);
+		$bug = $this->get_bug($id);
+		// enda pandud bugi saab kaa muuta
+		if (!$this->prog_acl("admin", PRG_BUGTRACK) && ($bug["uid"]!=UID || !UID))
+		{
+			$this->prog_acl_error("admin", PRG_BUGTRACK);
+		};
+
+		$uusmails=$bug["mails"].($mails?($bug["mails"]?",":"").$mails:"");
+		$arr=array_merge($arr,array(
+			"timeready"=>mktime($time_fixed["hour"],$time_fixed["minute"],0,$time_fixed["month"],$time_fixed["day"],$time_fixed["year"]),
+			"mails"=>$uusmails,
+			"developer_mail"=>$this->get_user_mail($arr["developer"]?$arr["developer"]:$bug["developer"])
+			));
+		
+///		echo("developer=".$arr["developer"]." mail=".$arr["developer_mail"]);//DBG
+
+		// master updateb saidis ja sait masteris
+		$rc=($baseurl==$this->mastersite)?
+			new replicator_client($bug["site"]."/automatweb/bugreplicate.aw",$this->sitekeys[$bug["site"]]):
+			new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
+
+		$req=$rc->query("update_bug",$arr,1);
+
+		if ($req["error"])
+		{
+			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
+			die("VIGA bugi uuendamisel ".$req["error"]);
+		};
+
+		// järjekord peab nii olema, muidu läheb syncist välja kui tekib viga
+		// update kohalikus tabelis kui puuk ise pole masterist pandud
+		if ($bug["site"]!=$this->mastersite)
+			$this->q_update($arr);
+
+
+		extract($bug=array_merge($bug,$arr));
+		
+		$this->send_fixed_mail($bug);
+
 		// logi 
-		$this->_log("bug",LC_BUG_CHANGED_BUG4.$bug["title"]);
+		$this->_log("bug","Muutis bugi ".$bug["title"]);
 
 		return $this->mk_orb("list",array());
 		
@@ -618,7 +715,7 @@ class bugtrack extends aw_template
 		{
 			$this->prog_acl_error("admin", PRG_BUGTRACK);
 		};
-		global $SERVER_NAME;
+		global $baseurl;
 		extract($arr);
 		$bug = $this->get_bug($id);
 
@@ -628,12 +725,10 @@ class bugtrack extends aw_template
 			$arr["developer_mail"]=$this->get_user_mail($arr["developer"]);
 		};
 
-		// update kohalikus tabelis kui puuk ise pole masterist pandud
-		if ($bug["site"]!=$this->mastersite)
-			$this->q_update($arr);
+		
 		
 		// master updateb saidis ja sait masteris
-		$rc=($SERVER_NAME==$this->mastersite)?
+		$rc=($baseurl==$this->mastersite)?
 			new replicator_client($bug["site"]."/automatweb/bugreplicate.aw",$this->sitekeys[$bug["site"]]):
 			new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
 
@@ -642,13 +737,19 @@ class bugtrack extends aw_template
 		if ($req["error"])
 		{
 			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
-			die("LC_BUG_MISTAKE");
+			die("VIGA bugi uuendamisel ".$req["error"]);
 		};
 
-		// logi 
-		$this->_log("bug",LC_BUG_NOMI_BUGI.$bug["title"].$developer."-le");
 
-		// see on jura aga muudmoodi ei saanud minumeelest teha
+		// update kohalikus tabelis kui puuk ise pole masterist pandud
+		if ($bug["site"]!=$this->mastersite)
+			$this->q_update($arr);
+
+		$this->send_fixed_mail(array_merge($bug,$arr));
+
+		// logi 
+		$this->_log("bug","Määras bugi ".$bug["title"].$developer."-le");
+
 		return "<script language=\"Javascript\">
 		window.opener.location=\"".$this->mk_orb("list",array())."\";
 		window.close();
@@ -664,10 +765,10 @@ class bugtrack extends aw_template
 		{
 			$this->prog_acl_error("delete", PRG_BUGTRACK);
 		};
-		global $SERVER_NAME;
+		global $baseurl;
 		extract($arr);
 		$buk = $this->get_bug($id);
-		$this->_log("bug",LC_BUG_ERASED_BUG.$buk[title]);
+		$this->_log("bug","Kustutas bugi ".$buk[title]);
 		
 		
 
@@ -676,14 +777,12 @@ class bugtrack extends aw_template
 			$this->q_delete($arr);
 
 		// master kustutab saidist ja sait masterist
-		$rc=($SERVER_NAME==$this->mastersite)?
+		$rc=($baseurl==$this->mastersite)?
 			new replicator_client($buk["site"]."/automatweb/bugreplicate.aw",$this->sitekeys[$buk["site"]]):
 			new replicator_client($this->mastersite."/automatweb/bugreplicate.aw",$this->sitekeys[$this->mastersite]);
 
 		$req=$rc->query("delete_bug",$arr,0);		
-
-		// võiks hoopis selline lipp olla, mille järgi orb saab aru kas return on url
-		// või mitte. muidu ta võtab ainult http:/ aga mk_orb annab relatiivse urli		
+		
 		http_refresh(0,$this->mk_orb("list",array()));
 	}
 
@@ -724,8 +823,8 @@ class bugtrack extends aw_template
 	{
 		$id=(int)$arr["id"];
 		unset($arr["id"]);
-
-		// tunneb ära ainult need väljad mis tabelis on et mingit kala ei tekiks		
+		unset($arr["alertsent"]); //seda kah muuta ei saa
+		
 		$fields=array_flip($this->tablefields);
 		foreach($arr as $k => $v )
 		{
@@ -750,16 +849,13 @@ class bugtrack extends aw_template
 	// !Teeb useritest array.
 	function get_userlist($sel="")
 	{
-		if (!$this->devgroupid)
-			die(LC_BUG_MISTAKE_NOT_GROUPID);
-			
 		$this->db_query("SELECT users.uid FROM users,groupmembers where blocked != 1 AND groupmembers.gid=$this->devgroupid AND groupmembers.uid=users.uid");
 		while ($row=$this->db_next())
 		{
 			$users[$row["uid"]]=$row["uid"];
 		};
-		// see on selleks, et äkki näiteks worki tabelis pole seda inimest, kellele
-		// puuk on määratud, siis seal ei näitaks <select is muidu seda inimest yldse
+		// see on selleks, et äkki näiteks worki grupis pole seda inimest, kellele
+		// puuk on määratud, siis seal ei näitaks <select is muidu
 		if ($sel && !$users[$sel])
 			$users[$sel]=$sel;
 		return $users;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.13 2001/07/16 06:01:38 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -212,6 +212,28 @@ class form_cell extends aw_template
 			}
 			return false;
 		}
+	}
+
+	////
+	// !adds an element to this cell
+	// $parent, $name, $ord, $based_on
+	function do_add_element($arr)
+	{
+		extract($arr);
+		$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+		$this->db_query("INSERT INTO form_elements (id) values($el)");
+		$this->_do_add_element($this->id,$el);
+		$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$based_on,"props");
+		classload("xml");
+		$xml = new xml;
+		$arr = $xml->xml_unserialize(array("source" => $props));
+		$arr["id"] = $el;
+		$arr["name"] = $name;
+		$arr["ord"] = $ord;
+		$arr["linked_element"] = 0;
+		$arr["linked_form"] = 0;
+		$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
+		return $el;
 	}
 
 	function _do_add_element($fid,$el)
