@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>status</name>
-            <type>status</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>status</field>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>comment</name>
             <type>textarea</type>
             <cols>30</cols>

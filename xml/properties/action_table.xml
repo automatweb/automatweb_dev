@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>status</name>
-            <type>status</type>
-            <field>status</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>table_conf</name>
             <type>text</type>
             <callback>conf_table</callback>
