@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.64 2002/08/09 13:31:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.65 2002/08/20 12:42:38 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -44,7 +44,8 @@ class form_element extends aw_template
 			),
 			"link" => array(
 				"" => "",
-				"show_op" => "N&auml;ita pikemalt"
+				"show_op" => "N&auml;ita pikemalt",
+				"show_calendar" => "Näita kalendrit",
 			),
 			"button" => array(
 				"" => "",
@@ -2070,6 +2071,21 @@ class form_element extends aw_template
 
 			// yuck
 			case "link":
+				if ($this->arr["subtype"] == "show_calendar")
+				{
+					$_text = $this->arr["link_text"];
+					$cchain = aw_global_get("current_chain");
+					if ($cchain)
+					{
+						$_link = $this->mk_my_orb("view",array("id" => $cchain),"planner");
+					}
+					else
+					{
+						$_link = "#";
+					};
+					$html .= "<a target='_new' href='$_link'>$_text</a>";
+				}
+				else
 				if ($this->arr["subtype"] != "show_op")
 				{
 					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."' /></td></tr>";
@@ -2234,7 +2250,6 @@ class form_element extends aw_template
 	{
 		//// This is called for every single element in the form.
 		// $this->form->post_vars contains $HTTP_POST_VARS.
-
 		if ($this->arr["type"] == 'link')
 		{
 			$var = $this->form->post_vars[$prefix.$this->id."_text"];
@@ -2268,6 +2283,11 @@ class form_element extends aw_template
 		//	}
 		//}
 		//else
+		if ( ($this->arr["type"] == "listbox") && ($this->arr["subtype"] == "relation") )
+		{
+			//print "Updating relation!<br>";
+		}
+		else
 		if ($this->arr["type"] == "button")
 		{
 			$s_arr = $this->form->post_vars["submit"];

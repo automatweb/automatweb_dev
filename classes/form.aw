@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.124 2002/08/20 06:49:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.125 2002/08/20 12:42:39 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -420,7 +420,7 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
-		$this->arr["has_calendar"] = $has_calendar;
+		$this->arr["uses_calendar"] = $uses_calendar;
 
 		if ( ($this->subtype == FSUBTYPE_EMAIL_ACTION) && !$form_email_action)
 		{
@@ -697,7 +697,6 @@ class form extends form_base
 
 	////
 	// !Generates the form used in modifying the table settings
-	// TODO: move to separate class
 	function gen_settings($arr)
 	{
 		extract($arr);
@@ -707,33 +706,6 @@ class form extends form_base
 		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
-		/*
-		$els = $this->get_all_elements(array("type" => 1));
-		$date_els = array("0" => "Vali üks");
-		foreach($els as $key => $val)
-		{
-			if ($val["type"] == "date")
-			{
-				$date_els[$key] = $val["name"];
-			};
-		};
-
-		$ft = get_instance("form_table");
-		*/
-
-		// once upon a time there was a function called get_tables_for_form in the
-		// form_table class. Alas, now it's gone and there is a function with the
-		// same name in form_db_base .. which does a completely different thing.
-		// Well, anyway. the function that returns a list of tables for a form
-		// should be elsewhere. Feel free to move the following code out of here.
-		/*
-		$tables = array("0" => "Vali üks");
-		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
-                while ($row = $this->db_next())
-                {
-                        $tables[$row["table_id"]] = $row["name"];
-                }
-		*/
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -760,12 +732,7 @@ class form extends form_base
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
-			/*
-			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
-			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
-			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
-			*/
-			"has_calendar" => checked($this->arr["has_calendar"]),
+			"uses_calendar" => checked($this->arr["uses_calendar"]),
 		));
 
 		$ns = "";
@@ -1099,9 +1066,10 @@ class form extends form_base
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
+
 		// do we have to validate this entry against a calendar?
 		// FIXME: this check should be in the form_calendar class
-		if ($this->meta["calendar_chain"])
+		if ($this->xxxmeta["calendar_chain"])
 		{
 			// we need to fetch the values of "start" and "end" and "count" elements, pass those to the
 			// form_calendar which then in turn will tell us whether that calendar has enough vacancies
@@ -1326,6 +1294,63 @@ class form extends form_base
 			$this->update_entry_data($this->entry_id,$this->entry);
 			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
 		}
+
+		$eid = $this->entry_id;
+		
+		// if this form has anything to do with calendars, perform the necessary
+		// actions. If we got here, all checks have been passed.
+		if ($this->arr["uses_calendar"])
+		{
+			if ($this->subtype == FSUBTYPE_EV_ENTRY)
+			{
+				// check vacations and if found, update calendar->form relations
+				// set error messages otherwise
+
+				// note! since one event can "belong" to multiple calendars,
+				// it's possible that there is room for the event in one
+				// calendar, but is not in another
+
+				// reap the old relations, we are creating new ones anyway
+				$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
+				$this->db_query($q);
+
+				$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					$_cnt = (int)$this->post_vars[$row["el_cnt"]];
+					// default to 1. Is this correct?
+					if ($_cnt == 0)
+					{
+						$_cnt = 1;
+					};
+					$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
+					$__rel = $this->post_vars[$row["el_relation"]];
+					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+					$_rel = (int)$m[1];
+					/*
+					print "_cnt = $_cnt<br>";
+					print "start = $_start<br>";
+					print "rel = $_rel<br>";
+					*/
+					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,items,relation)
+							VALUES ('$row[cal_id]','$eid','$_start','$_cnt','$_rel')";
+					$this->db_query($q);
+					/*
+					print $q;
+					print "<pre>";
+					print_r($row);
+					print "</pre>";
+					*/
+				};
+			}
+			elseif ($this->subtype = FSUBTYPE_CAL_CONF)
+			{
+				// update timedefs
+			};
+		}
+
+
 
 		$fact = get_instance("form_actions");
 		$fact->do_actions(&$this, $this->entry_id);
@@ -5255,7 +5280,7 @@ class form extends form_base
 			$forms[$row["oid"]] = $row["name"];
 		};
 			
-		$this->get_objects_by_class(array("class" => CL_FORM_CHAIN));
+		$this->get_objects_by_class(array("class" => CL_FORM_CHAIN,"flags" => OBJ_HAS_CALENDAR));
 		while($row = $this->db_next())
 		{
 			$chains[$row["oid"]] = $row["name"];
@@ -5293,6 +5318,7 @@ class form extends form_base
 					"start" => $_els[$row["el_start"]]["name"],
 					"cnt" => $_els[$row["el_cnt"]]["name"],
 					"table" => $tables[$row["ev_table"]],
+					"rel" => $_els[$row["el_relation"]]["name"],
 					"ch_link" => $this->mk_my_orb("edit_cal_rel",array("form_id" => $id,"id" => $row["id"])),
 					"del_link" => $this->mk_my_orb("del_cal_rel",array("form_id" => $id,"id" => $row["id"])),
 				));
@@ -5383,6 +5409,7 @@ class form extends form_base
 		$this->get_objects_by_class(array(
 			"class" => CL_FORM_CHAIN,
 			"active" => true,
+			"flags" => OBJ_HAS_CALENDAR,
 		));
 
 		$target_objects = array("0" => " -- Vali üks --");
@@ -5396,6 +5423,7 @@ class form extends form_base
 
 		$els_start = array("0" => " -- Vali -- ");
 		$els_count = array("0" => " -- Vali -- ");
+		$els_relation = array("0" => " -- Vali --");
 
 		foreach($_els as $key => $val)
 		{
@@ -5407,6 +5435,11 @@ class form extends form_base
 			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
 			{
 				$els_count[$key] = $val["name"];
+			};
+			
+			if ( ($val["type"] == "listbox") && ($val["subtype"] == "relation") )
+			{
+				$els_relation[$key] = $val["name"];
 			};
 		};
 		
@@ -5429,6 +5462,7 @@ class form extends form_base
 			"target_objects" => $this->picker($item["cal_id"],$target_objects),
 			"start_els" => $this->picker($item["el_start"],$els_start),
 			"cnt_els" => $this->picker($item["el_cnt"],$els_count),
+			"relation_els" => $this->picker($item["el_relation"],$els_relation),
 			"ev_tables" => $this->picker($item["ev_table"],$tables),
 			"reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id)),
 		));
@@ -5444,13 +5478,14 @@ class form extends form_base
 				cal_id = '$cal_id',
 				el_start = '$el_start',
 				el_cnt = '$el_cnt',
-				ev_table = '$ev_table'
+				ev_table = '$ev_table',
+				el_relation = '$el_relation'
 				WHERE id = '$id'";
 		}
 		else
 		{
-			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table)
-				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table')";
+			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation)
+				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation')";
 		};
 		$this->db_query($q);
 		return $this->mk_my_orb("calendar",array("id" => $form_id));
