@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.66 2004/05/26 08:23:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.67 2004/06/09 08:01:19 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -1396,32 +1396,6 @@ class admin_menus extends aw_template
 		{
 			$callback[0]->$callback[1](array("toolbar" => &$toolbar));
 		};
-
-		// now, if we are in a auto_trans site, then the language change links point to the same parent
-		// but if not, then to the top level frame
-		$l = get_instance("languages");
-		$li = $l->get_list();
-		$tmp = array();
-		foreach($li as $lid => $ln)
-		{
-			if (aw_ini_get("config.object_translation"))
-			{
-				$url = $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "set_lang_id" => $lid));
-				$target = "";
-			}
-			else
-			{
-				$url = aw_ini_get("baseurl")."/automatweb/index.aw?set_lang_id=".$lid;
-				$target = "_top";
-			}
-			$tmp[] = html::href(array(
-				"url" => $url,
-				"target" => $target,
-				"caption" => ($lid == aw_global_get("lang_id") ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
-			));
-		}
-		$toolbar->add_cdata("<span class=\"mlang\">[".join("|", $tmp)."]</span>&nbsp;&nbsp;&nbsp;&nbsp;","right");
-
 
 		return $toolbar;
 	}

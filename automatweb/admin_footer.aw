@@ -26,8 +26,33 @@ $sf->vars(array(
 	"site_title" => $site_title,
 ));
 
+// do the language selecta
+$l = get_instance("languages");
+$li = $l->get_list();
+$tmp = array();
+foreach($li as $lid => $ln)
+{
+	if (false && aw_ini_get("config.object_translation"))
+	{
+		$url = aw_url_change_var("set_lang_id", $lid);//$l->mk_my_orb("right_frame", array("parent" => $GLOBALS["parent"], "period" => $GLOBALS["period"], "set_lang_id" => $lid), "admin_menus");
+		$target = "";
+	}
+	else
+	{
+		$url = aw_ini_get("baseurl")."/automatweb/index.aw?set_lang_id=".$lid;
+		$target = "_top";
+	}
+	$tmp[] = html::href(array(
+		"url" => $url,
+		"target" => $target,
+		"caption" => ($lid == aw_global_get("lang_id") ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
+	));
+}
+
+
 $t = new languages;
 $sf->vars(array(
+	"lang_string" => join("|", $tmp),
 	"content"	=> $content,
 	"charset" => $t->get_charset(),
 	"uid" => aw_global_get("uid"),

@@ -54,9 +54,17 @@ function check_generic_loader()
 </head>
 <body link="#0000ff" vlink="#0000ff" onLoad="create_objects(); check_generic_loader();">
 
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+	<td class="aw04yah">
 <!-- SUB: YAH -->
-<div class="aw04yah">{VAR:site_title}</div>
+{VAR:site_title}
 <!-- END SUB: YAH -->
+	</td>
+	<td width="1" nowrap align="right" class="aw04yah"><span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</tr>
+</table>
+
 
 {VAR:content}
 
