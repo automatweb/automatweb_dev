@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.7 2003/03/31 10:10:05 duke Exp $
+// $Id: ds_local_sql.aw,v 1.8 2003/06/03 13:19:14 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -44,13 +44,12 @@ class ds_local_sql extends aw_template
 	function ds_can_add($args = array())
 	{
 		$retval = true;
-		// first, check add privileges for the parent
-		if (!$this->can("add", $args["parent"]))
-		{
-			$this->acl_error("add", $args["parent"]);
-		}
 
-		// acl check was done in ds_can_add
+		// acl checks are defined in ORB, no need to duplicate those here
+
+		// btw, if class_id is pseudo, then the class_id is ignored ..
+		// maybe I should have a setting somewhere which tells me 
+		// which kind of objects can actually contain other objects?
 		$parobj = $this->get_object(array(
 			"oid" => $args["parent"],
 			"class_id" => CL_PSEUDO,
