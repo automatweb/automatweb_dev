@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.12 2004/06/08 12:08:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.13 2004/06/22 09:19:30 rtoomas Exp $
 // crm_call.aw - phone call
 /*
 
@@ -49,6 +49,8 @@
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
 
+@reltype CALLER value=2 clid=CL_CRM_PERSON
+@caption Helistaja
 
 */
 

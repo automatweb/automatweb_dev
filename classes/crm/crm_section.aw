@@ -1,12 +1,21 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.3 2004/06/17 14:33:21 duke Exp $
-// crm_section.aw - &Uuml;ksus 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.4 2004/06/22 09:19:30 rtoomas Exp $
+// crm_section.aw - Üksus
 /*
 
 @classinfo syslog_type=ST_CRM_SECTION relationmgr=yes
 
 @default table=objects
 @default group=general
+
+@reltype SUBSECTION value=1 clid=CL_CRM_SECTION
+@caption Alamüksus
+
+@reltype MEMBER value=2 clid=CL_CRM_PERSON
+@caption Liige
+
+@reltype PROFESSIONS value=3 clid=CL_CRM_PROFESSION
+@caption Üksuse võimalikud ametid
 
 */
 

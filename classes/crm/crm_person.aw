@@ -1,9 +1,12 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.31 2004/06/17 11:29:12 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.32 2004/06/22 09:19:30 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect_section_to_person)
+
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_person)
 
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -188,7 +191,7 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype CHILDREN value=5 clid=CL_CRM_PERSON
 @caption lapsed
 
-@reltype WORK value=6 clid=CL_CRM_COMPANY,CL_CRM_UNIT
+@reltype WORK value=6 clid=CL_CRM_COMPANY
 @caption töökoht
 
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
@@ -227,6 +230,11 @@ caption Andmed
 @reltype SECTION value=21 clid=CL_CRM_SECTION
 @caption Üksus
 
+//parem nimi teretulnud, person on cl_crm_company jaox
+//kliendihaldur
+@reltype HANDLER value=22 clid=CL_CRM_COMPANY
+@caption Kelle kliendihaldur
+
 */
 
 class crm_person extends class_base
@@ -247,26 +255,6 @@ class crm_person extends class_base
 		
 		switch($data["name"])
 		{
-			case 'profession':
-				/*if((int)$form['profession'])
-				{
-					//kontrollin, kas juba antud persoonil on mõne ametinimetuse juurde seos
-					$conns = $arr['obj_inst']->connections_from(array(
-						'type'=>RELTYPE_PROFESSION
-					));
-					//kui on, siis kustutan ära, sest kavatsen lisada uue
-					foreach($conns as $conn)
-					{
-						$conn->delete();
-						//$arr['obj_inst']->disconnect(array('from'=>$conn->prop('to')));
-					}
-					echo $form['profession'];
-					$arr['obj_inst']->connect(array(
-						'to'=>$form['profession'],
-						'reltype'=>RELTYPE_PROFESSION
-					));
-				}*/
-				break;
 			case "lastname":
 				if ($form['firstname'] || $form['lastname'])
 				{
@@ -288,42 +276,66 @@ class crm_person extends class_base
 		{
 			case 'rank' :
 			{
-				/*
 				//let's list the professions the organization/unit is associated with
 				$drop_down_list = array();
 				//connections from person->organization
-				$conns = $arr['obj_inst']->connections_from(array(
-					'type'=>'RELTYPE_WORK'
+				$conns = $arr['obj_inst']->connections_to(array(
+					'type'=>RELTYPE_WORK
 				));
-				$tmp_conns = $arr['obj_inst']->connections_from(array(
-					'type'=>'RELTYPE_MEMBER'
+				//connections from person->section
+				$tmp_conns = $arr['obj_inst']->connections_to(array(
+					'type'=>RELTYPE_MEMBER
 				));
-				$conns = array_merge($conns,$tmp_conns);
+				//section overrulez org, maybe person can be a member of a section and company?
+				//we'll see
+				if(sizeof($tmp_conns))
+				{
+					$conns = $tmp_conns;
+				}
+
 				foreach($conns as $conn)
 				{
-					$tmp_obj = new object($conn->prop('to'));
-					//connections from organization->profession
+					//organization || section
+					$tmp_obj = new object($conn->prop('from'));
+					//connections from organization||section->profession
 					$conns2 = $tmp_obj->connections_from(array(
-								'type'=>'RELTYPE_PROFESSION_COMP'
+								'type'=>'RELTYPE_PROFESSIONS'
 					));
 					foreach($conns2 as $conn2)
 					{
-						$tmp = new object($conn2->prop('to'));
-						if($conn2->prop('type')==CL_CRM_PROFESSION)
+						$drop_down_list[$conn2->prop('to')] = $conn2->prop('to.name');
+					}
+				}
+				//determine the selected item
+				//maybe the selected profession doesn't come from the section/org the
+				//person is member of? for backward compatibility i'll show the profession
+				//the user is already member of | this case might happen if
+				//new system is used on old data
+				$conns = $arr['obj_inst']->connections_from(array(
+					'type'=>'RELTYPE_RANK'
+				));
+				if(sizeof($conns) && is_array($arr['prop']['options']))
+				{
+					$tmp = current($conns);
+					//loop the options
+					foreach($arr['prop']['options'] as $key=>$value)
+					{
+						//match!
+						if($key==$tmp->prop('to'))
 						{
-							$drop_down_list[$tmp->id()] = $tmp->prop('name');
+							//add item, if not already present
+							if(!array_key_exists($key,$drop_down_list))
+							{
+								$drop_down_list[$key] = $tmp->prop('to.name');
+							}
 						}
 					}
 				}
-				$data['options'] = $drop_down_list;
-				//determine the selected item
-				$conns = $arr['obj_inst']->connections_from(array(
-					'type'=>'RELTYPE_PROFESSION'
-				));
+				//find the selected item in array and mark it as selected
 				if(sizeof($conns))
 				{
 					$selected='';
-					$conn = array_pop($conns);
+					$conn = current($conns);
 					foreach($drop_down_list as $key=>$value)
 					{
 						if($key==$conn->prop('to'))
@@ -333,7 +345,10 @@ class crm_person extends class_base
 						}
 					}
 					$data['value'] = $selected;
-				}*/
+				}
+				//i guess the list should be sorted
+				ksort($drop_down_list);
+				$data['options'] = &$drop_down_list;
 				break;
 			}
 			case "title":
@@ -618,6 +633,9 @@ class crm_person extends class_base
 		};
 
 		$rv = array(
+			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
+			'firstname' => $o->prop('firstname'),
+			'lastname' => $o->prop('lastname'),
 			"phone" => join(",",$phones),
 			"url" => join(",",$urls),
 			"email" => join(",",$emails),
@@ -1090,35 +1108,59 @@ class crm_person extends class_base
 	}
 
 
+	function on_connect_section_to_person($arr)
+	{
+		$conn = $arr['connection'];
+		$target_obj = $conn->to();
+		if($target_obj->class_id()==CL_CRM_PERSON)
+		{
+			$target_obj->connect(array(
+				'to' => $conn->prop('from'),
+				'reltype' => RELTYPE_MEMBER
+			));
+		}
+		
+	}
+
 	// Invoked when a connection is created from organization to person
 	// .. this will then create the opposite connection.
-        function on_connect_org_to_person($arr)
-        {
-                $conn = $arr["connection"];
-                $target_obj = $conn->to();
-                if ($target_obj->class_id() == CL_CRM_PERSON)
-                {
-                        $target_obj->connect(array(
-                                "to" => $conn->prop("from"),
-                                "reltype" => 6,
-                        ));
-                };
-        }
+	function on_connect_org_to_person($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON)
+		{
+			$target_obj->connect(array(
+			  "to" => $conn->prop("from"),
+			  "reltype" => 6,
+			));
+		};
+	}
 
-        // Invoked when a connection from organization to person is removed
-        // .. this will then remove the opposite connection as well
-        function on_disconnect_org_from_person($arr)
-        {
-                $conn = $arr["connection"];
-                $target_obj = $conn->to();
-                if ($target_obj->class_id() == CL_CRM_PERSON)
-                {
-                        $target_obj->disconnect(array(
-                                "from" => $conn->prop("from"),
-                        ));
-                };
-        }
+	// Invoked when a connection from organization to person is removed
+	// .. this will then remove the opposite connection as well
+	function on_disconnect_org_from_person($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON)
+		{
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
+		};
+	}
 
-
+	function on_disconnect_section_from_person($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_PERSON)
+		{
+			$target_obj->disconnect(array(
+		  		"from" => $conn->prop("from"),
+			));
+		};
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.1 2004/06/16 09:51:04 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.2 2004/06/22 09:19:30 rtoomas Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -7,6 +7,18 @@
 
 @default table=objects
 @default group=general
+
+@property img_upload type=releditor reltype=RELTYPE_IMAGE props=file,file_show
+@caption Pilt
+
+@reltype IMAGE value=1 clid=CL_IMAGE
+@caption Pilt
+
+@reltype CATEGORY value=2 clid=CL_CRM_CATEGORY
+@caption Alam kategooria
+
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY
+@caption Klient
 
 */
 

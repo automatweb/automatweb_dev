@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.3 2004/06/10 11:49:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.4 2004/06/22 09:19:30 rtoomas Exp $
 /*
-//	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
+	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
 
 	@default table=objects
 	@default group=general
+
+	@property shortname type=textbox field=shortname size=10 table=kliendibaas_ettevotlusvorm
+	@caption Lühend
 
 	@property comment type=textarea field=comment cols=40 rows=3
 	@caption Kommentaar
@@ -18,10 +21,11 @@
 */
 
 
-/* deprecated, drop this table i guess
+/* 
 CREATE TABLE `kliendibaas_ettevotlusvorm` (
   `oid` int(11) NOT NULL default '0',
   `name` varchar(255) default NULL,
+  `shortname` varchar(25) default,
   `vorm` varchar(255) default NULL,
   `comment` text,
   PRIMARY KEY  (`oid`),
