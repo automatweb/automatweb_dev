@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.28 2003/04/30 16:55:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.29 2003/05/21 16:32:28 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -99,7 +99,7 @@ class promo extends class_base
 				// kysime infot lyhikeste templatede kohta
 				$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 				$this->db_query($q);
-				$short_templates = array();
+				$short_templates = array("" => "Vali template");
 				while($tpl = $this->db_fetch_row()) 
 				{
 					$short_templates[$tpl["id"]] = $tpl["name"];
