@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.91 2003/03/12 15:26:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.92 2003/03/13 18:43:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1110,10 +1110,10 @@ class planner extends class_base
 			};
 		}
 		$calstring = join(",",$calendars);
-		//$q = "SELECT * FROM aliases LEFT JOIN planner ON (aliases.target = planner.id) LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
-		$q = "SELECT name,class_id,planner.*,documents.lead,documents.moreinfo FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		$q = "SELECT name,class_id,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
 		$this->db_query($q);
 		$results = array();
+		$ia = get_instance("image");
 		while($row = $this->db_next())
 		{
 			$gx = date("dmY",$row["start"]);
@@ -1124,6 +1124,18 @@ class planner extends class_base
 					"url" => "/" . $row["id"],
 					"caption" => $row["name"],
 				));
+				// find the first image
+                                $this->save_handle();
+                                $q = "SELECT target FROM aliases WHERE source = '$row[id]' AND type = 6";
+                                $this->db_query($q);
+                                $row2 = $this->db_next();
+                                if (is_array($row2))
+                                {
+                                        $imgdata = $ia->get_image_by_id($row2["target"]);
+                                        $row["imgurl"] = $imgdata["url"];
+                                };
+                                $this->restore_handle();
+
 			}
 			else
 			{
@@ -2041,7 +2053,15 @@ class planner extends class_base
                                         "lead" => $e["lead"],
                                         "moreinfo" => $e["moreinfo"],
                                         "title" => $e["title"],
+					"id" => $e["id"],
+					"content" => $e["content"],
+					"imgurl" => isset($e["imgurl"]) ? $e["imgurl"] : "/img/trans.gif",
                                 ));
+				if (!empty($e["content"]))
+				{
+					$this->vars(array("link" => $this->parse("link")));
+					$_tmp = $this->parse("link");
+				};
 				$c .= $this->ev->draw($e);
 			};
 		};
@@ -2174,6 +2194,9 @@ class planner extends class_base
 			if ($draw)
 			{
 				// draws day
+				$this->vars(array(
+					"imgurl" => "/img/trans.gif",
+				));
 				$c1 = $this->_disp_day(array("dx" => $dx));
 
 				list($day,$mon,$year) = explode("-",date("d-m-Y",$thisday));
@@ -2199,6 +2222,7 @@ class planner extends class_base
                                         "lead" => "",
                                         "moreinfo" => "",
                                         "title" => "",
+					"imgurl" => "/img/trans.gif",
                                 ));
 
 				$this->vars(array(
