@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.80 2003/02/26 11:38:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.81 2003/04/10 15:53:20 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2246,7 +2246,7 @@ class users extends users_user
 			$this->dc = $dbi->dc;
 
 			$aug = $this->addgroup(
-				$gparent,
+				0,
 				"K&otilde;ik kasutajad", 
 				GRP_REGULAR,
 				0,
