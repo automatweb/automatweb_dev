@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.7 2004/05/27 08:39:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.8 2004/05/30 13:10:18 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -402,6 +402,10 @@ class object_import extends class_base
 					else
 					{
 						$dat = obj();
+						if ($type_o->prop("use_cfgform"))
+						{
+							$dat->set_meta("cfgform_id", $type_o->prop("use_cfgform"));
+						}
 					}
 				}
 				else
