@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.28 2001/12/14 06:07:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.29 2001/12/14 12:22:51 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -233,7 +233,7 @@ class forum extends aw_template
 		$tid = $this->new_object(array(
 			"parent" => $id,
 			"name" => $topic,
-			"comment" => $text,
+			"comment" => ($text) ? $text : $comment,
 			"last" => $from,
 			"class_id" => CL_MSGBOARD_TOPIC,
 			"status" => 2,
@@ -284,7 +284,7 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"topic" => $board_obj["name"],
-			"from" => $board_obj["last"],
+			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
 			"text" => nl2br(create_links($board_obj["comment"])),
@@ -409,12 +409,12 @@ class forum extends aw_template
 	// !creates an indented list of comments
 	function rec_comments($level)
 	{
-		if (not(is_array($this->comments[$level])))
+		if (not(is_array($this->_comments[$level])))
 		{
 			return;
 		}
 
-		foreach($this->comments[$level] as $key => $val)
+		foreach($this->_comments[$level] as $key => $val)
 		{
 			$val["spacer"] = str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$this->level);
 			$val["level"] = 20 * $this->level;
@@ -807,7 +807,6 @@ class forum extends aw_template
 			}
 
 			$this->comments = $this->_get_comment_counts($blist);
-				
 			list($from,$to) = $this->_draw_pager(array(
 						"total" => sizeof($obj),
 						"onpage" => $this->topicsonpage,
@@ -828,12 +827,12 @@ class forum extends aw_template
 						// put the comments into tree
 						while($row = $this->db_next())
 						{
-							$this->comments[$row["parent"]][] = $row;
+							$this->_comments[$row["parent"]][] = $row;
 						};
 						$this->rec_comments(0);
 						$this->vars(array("message" => $this->content));
 						$this->content = "";
-						$this->comments = array();
+						$this->_comments = array();
 					}
 					$content .= $this->_draw_topic(array_merge($item,array("section" => $oid)));
 				}
@@ -909,6 +908,10 @@ class forum extends aw_template
 			$tpl_to_parse = "TOPIC";
 		};
 		$retval = $this->parse($tpl_to_parse);
+		$this->vars(array(
+			"DELETE" => "",
+			"NEW_MSGS" => "",
+		));
 		return $retval;
 	}
 	
