@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.22 2002/12/03 11:19:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.23 2003/01/24 14:37:24 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -13,10 +13,61 @@ session_register("poll_clicked");
 // and it gets better.
 //
 // the answers that actually exist can be only deducted from that table - the objects metadata
-// can containt answers in some of the languages that have been deleted from some others
+// can contain answers in some of the languages that have been deleted from some others
 // so we read the answers from the table and get the text from the objects metadata
 // 
 // why is this? well, I have said it before, and I will say it again: backwards compatibility SUCKS
+
+/*
+
+mysql> describe poll;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| id        | int(11) |      | PRI | 0       |       |
+| questions | text    | YES  |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> describe poll_answers;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int(11)      |      | PRI | NULL    | auto_increment |
+| answer  | varchar(255) | YES  |     | NULL    |                |
+| clicks  | int(11)      | YES  |     | 0       |                |
+| poll_id | int(11)      | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> describe poll_clicks;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id        | int(11)     |      | PRI | NULL    | auto_increment |
+| uid       | varchar(50) | YES  |     | NULL    |                |
+| ip        | varchar(20) | YES  |     | NULL    |                |
+| date      | int(11)     | YES  |     | NULL    |                |
+| answer_id | int(11)     | YES  |     | NULL    |                |
+| poll_id   | int(11)     | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+
+
+*/
+
+/*
+	so, the grand plan is to convert all current poll objects to new
+	object - let's call it CL_POLL and all the answers to CL_POLL_ANSWER
+
+	but I also need a way to edit all the answers at once. Don't I?
+
+	or some way to synchronize the different amounts of answers between
+	different answer variants.
+
+	how the hell do I handle this? I need one line of text for each
+	active language in the poll
+
+*/
 
 class poll extends aw_template 
 {
@@ -28,6 +79,8 @@ class poll extends aw_template
 
 	////
 	// !Displays the admin interface for the poll
+	// this goes away - since polls will become usual AW objects which can be located
+	// anywhere you want them to be located.
 	function poll_list($args = array())
 	{
 		extract($args);
@@ -57,7 +110,7 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		
 		$t->define_field(array(
 			"name" => "modified",
@@ -66,7 +119,7 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		
 		$t->define_field(array(
 			"name" => "active",
@@ -75,21 +128,21 @@ class poll extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		
 		$t->define_field(array(
 			"name" => "change",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
-    ));
+		));
 		
 		$t->define_field(array(
 			"name" => "delete",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
-    ));
+		));
 
 		$ap = $this->get_cval("active_poll_id");
 
@@ -125,6 +178,7 @@ class poll extends aw_template
 
 	////
 	// !Deletes a poll
+	// this will go away too
 	function delete($args = array())
 	{
 		extract($args);
@@ -137,6 +191,7 @@ class poll extends aw_template
 
 	////
 	// !Displays the form for adding a new poll
+	// this will be replaced by the class_base 
 	function add($args = array())
 	{
 		extract($args);
@@ -167,6 +222,7 @@ class poll extends aw_template
 
 	////
 	// !Submits a poll
+	// this will be replaced by class_base
 	function submit($arr)
 	{
 		extract($arr);
@@ -266,6 +322,7 @@ class poll extends aw_template
 
 	////
 	// !Shows the form for altering a poll
+	// this will be replaced by class_base
 	function change($args = array())
 	{
 		extract($args);
@@ -314,6 +371,8 @@ class poll extends aw_template
 		$l = get_instance("languages");
 		$ld = $l->fetch(aw_global_get("lang_id"));
 
+		// so we only show stuff for one language only
+
 		$this->vars(array(
 			"name" => $obj["meta"]["name"][aw_global_get("lang_id")],
 			"comment" => $obj["meta"]["comment"][aw_global_get("lang_id")],
@@ -333,6 +392,8 @@ class poll extends aw_template
 
 	////
 	// !Sets an active poll
+	// this .. hell ... I don't know.
+	// how on earth do I set the active poll?
 	function set_active($args = array())
 	{
 		extract($args);
@@ -480,7 +541,8 @@ class poll extends aw_template
 			{
 				$percent = str_replace(".",",",$percent);
 			}
-			$this->vars(array("answer" => $v["answer"], "percent" => $percent, "width" => $width*2));
+			$mp = $this->cfg["result_width_mp"];
+			$this->vars(array("answer" => $v["answer"], "percent" => $percent, "width" => (int)$width*$mp));
 			$as.=$this->parse("ANSWER");
 		}
 
@@ -636,14 +698,14 @@ class poll extends aw_template
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "ip",
 			"caption" => "IP",
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "date",
 			"caption" => "Kuup&auml;ev",
@@ -653,14 +715,14 @@ class poll extends aw_template
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.y / H:i"
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "answer",
 			"caption" => "Vastus",
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
-    ));
+		));
 
 		$ansa = $this->get_answers($id);
 
