@@ -1,14 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.4 2001/05/24 00:27:30 kristo Exp $
-/*       _\|/_
-         (o o)
- +----oOO-{_}-OOo----------------------------------+
- |          AW Foundation Classes                  |
- |          (C) StruktuurMeedia 2000,2001          |
- +------------------------------------------------*/
-
-$time = 0;
-// sellest klassist ehitame menyyde sistemi yles
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.5 2001/06/08 23:20:19 duke Exp $
+// aw_template.aw - Templatemootor
 class tpl
 {
 	var $name;   // siia paigutame template nime
@@ -78,18 +70,23 @@ class aw_template extends acl_base
 	}
 
 
-	// sets the root directory to read templates from
+	////
+	// !sets the root directory to read templates from
 	function set_root($path)
 	{
 		global $tpldir;
 		$this->template_dir = $tpldir . "/$path";
 	}
 
+	////
+	// !resets all templates and variables
 	function reset()
 	{
 		return $this->tpl_reset();
 	}
 
+	////
+	// !resets all templates and variables
 	function tpl_reset()
 	{
 		unset($this->tplfile);
@@ -145,19 +142,33 @@ class aw_template extends acl_base
 		return $this->option_list($active,$array);
 	}
 
+
+	////
+	// !Loeb template failist
 	function read_template($filename,$dbg = 0)
 	{
 		global $awt;
+
+		// loeme faili sisse
+		$filename = $this->template_dir . "/$filename";
+		if (!($source = $this->get_file(array("file" => $filename))))
+		{
+			$this->raise_error("Template '$filename' not found",true);
+		};
+		return $this->use_template($source);
+	}
+	
+	////
+	// !Selle abil saab sisse lugeda kusagilt mujalt (mitte failist) voetud template
+	function use_template($source)
+	{
 		if (is_object($awt))
 		{
 			$awt->start("read_template");
 		};
-		// loeme faili sisse
-		$filename = $this->template_dir . "/$filename";
-		if (!($this->tp = $this->get_file(array("file" => $filename))))
-		{
-			$this->raise_error("Template '$filename' not found",true);
-		};
+
+		$this->tp = $source;
+		
 		// paigutame arraysse 
 		$this->tlist = array();
 		$tlines = explode("\n",$this->tp);
@@ -258,6 +269,8 @@ class aw_template extends acl_base
         }
 
 
+	////
+	// !Saab kysida, kas sellise nimega template on registreeritud
         function is_template($name)
 	{
                 // wrapper backwards compatibility jaoks
@@ -274,7 +287,9 @@ class aw_template extends acl_base
 			return false;
 		};
         }
-        
+       
+       	////
+	// !Tagastab template nime jargi
 	function get_tpl_by_name($name,$c = array())
 	{
 	  $this->result = "";
@@ -322,7 +337,9 @@ class aw_template extends acl_base
     };
    }
 
-        // kirjutab muutujate väärtused üle
+	////
+        // !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
+	// muutujad yle
         function vars($params)
 	{
 		reset($params);
@@ -332,7 +349,9 @@ class aw_template extends acl_base
 		};
         }
 
-        // mergib muutujate väärtused
+	////
+        // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse
+	// väärtus
         function vars_merge($params)
 	{
                 while(list($k,$v) = each($params))
@@ -354,7 +373,8 @@ class aw_template extends acl_base
                 };
         }
 
-	// see on nüüd pisike häkk. Nimelt saab selle funktsiooni abil parsida kusagilt mujalt sissetoodud
+	////
+	// !see on nüüd pisike häkk. Nimelt saab selle funktsiooni abil parsida kusagilt mujalt sissetoodud
 	// templatekoodi (s.t. asendada selles olevad muutujanimed väärtustega).
 	// tpledit vajab seda
 	function localparse($src = "",$vars = array())
@@ -362,8 +382,8 @@ class aw_template extends acl_base
 		return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
 	}
 		
-
-	// parsib
+	////
+	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
 		// siia voib anda ette nii objekti nime, kui ka
@@ -377,16 +397,6 @@ class aw_template extends acl_base
 			$new_object = $this->get_tpl_by_name($object,array("0" => $this->construct));
 			$object = $new_object;
 		};
-
-		// kui subtemplatet on 0 baiti pikki, siis ergo seda pole ja hakkame karjuma
-		// see peaks mõnede weird-ass bugide vastu eriti aitama
-
-		// but doing this breaks a few things, so I will leave it commented out
-		// for now
-		// if (sizeof($object->source) == 0)
-		// {
-		//		$this->raise_error("non-existent subtemplate $name",true);
-		// };
 
 		// kogu asendus tehakse ühe reaga
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
@@ -414,10 +424,10 @@ class aw_template extends acl_base
         // joonistab sektsiooni
         function draw_section($params)
 	{
-                $section_id = $params[section_id];  // millist sektsiooni joonistame
-                $parent     = $params[parent];      // millisest sektsioonist joonistamist alustame
-                $use_tpl    = $params[use_tpl];     // millist templatet selleks kasutame (obj)
-                $main_tpl   = $params[main_tpl];    // millisest templatest joonistamist alustame (obj)
+                $section_id = $params["section_id"];  // millist sektsiooni joonistame
+                $parent     = $params["parent"];      // millisest sektsioonist joonistamist alustame
+                $use_tpl    = $params["use_tpl"];     // millist templatet selleks kasutame (obj)
+                $main_tpl   = $params["main_tpl"];    // millisest templatest joonistamist alustame (obj)
 
                 if ((!is_object($use_tpl)) || (!is_object($main_tpl)))
 		{
