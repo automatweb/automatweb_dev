@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.22 2002/07/17 20:29:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.23 2002/07/18 10:48:44 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -671,7 +671,6 @@ class form_chain extends form_base
 
 	////
 	// !this shows all the form $form_id entries for the chain $chain for the entry $chain_entry with form table $table
-	// table uses the url parts from $attribs
 	function show_table_for_chain_entry($arr)
 	{
 		extract($arr);
@@ -684,7 +683,7 @@ class form_chain extends form_base
 			"chain_id" => $chain_entry
 		));
 
-		$ft->start_table($table,$attribs);
+		$ft->start_table($table);
 
 		if ($this->start_el)
 		{
