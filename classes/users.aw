@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.79 2003/02/13 09:37:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.80 2003/02/26 11:38:06 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -447,6 +447,14 @@ class users extends users_user
 		{
 			$id = aw_global_get("uid");
 		}
+
+		// FIXME: _reaaaaalllyyy_ bloody inefficient way to do this
+		$uacls = $this->_gen_usr_list();
+		if (!$uacls[$id]["can_change"])
+		{
+			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
+		}
+
 		$u = $this->fetch($id);
 		$this->read_template("changepwd.tpl");
 		$this->vars(array(
@@ -462,6 +470,13 @@ class users extends users_user
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
+		// FIXME: _reaaaaalllyyy_ bloody inefficient way to do this
+		$uacls = $this->_gen_usr_list();
+		if (!$uacls[$id]["can_change"])
+		{
+			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
+		}
+
 		if ($arr["pwd"] != $arr["pwd2"])
 		{
 			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => LC_USERS_PASSW_NOT_SAME));
