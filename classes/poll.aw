@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.31 2003/02/28 14:07:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.32 2003/02/28 14:08:29 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -602,7 +602,7 @@ class poll extends aw_template
 		$na = $poll["meta"]["name"][aw_global_get("lang_id")];
 		$this->vars(array(
 			"ANSWER" => $as,
-			"question" => ($na == "" ? $poll["name"] : $na)
+			"question" => ($na == "" ? $poll["name"] : $na),
 			"date" => $this->time2date($poll["modified"],2),
 			"addcomment" => $t->add_comment(array("board" => $id)), 
 			"num_comments" => $t->get_num_comments($id), 
