@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="auth">
+
+		<action name="show_login" nologin="1">
+			<function name="show_login"/>
+		</action>
+		
+		<action name="login" nologin="1">
+			<function name="login"/>
+		</action>
+
+	</class>
+</orb>
+		
