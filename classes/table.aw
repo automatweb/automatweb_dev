@@ -1,209 +1,186 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.9 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.10 2001/09/21 22:35:06 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
+// FIXME: Convert those ORB definitions to XML
 
-$orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html",		"params"	=> array("id")),
-													 "admin"						=> array("function"	=> "gen_admin2_html",		"params"	=> array("id")),
-													 "add_col"					=> array("function"	=> "add_col",						"params"	=> array("id", "after", "num")),
-													 "del_col"					=> array("function" => "del_col",						"params"	=> array("id", "col")),
-													 "nadd_col"					=> array("function"	=> "nadd_col",					"params"	=> array("id", "after", "num")),
-													 "ndel_col"					=> array("function" => "ndel_col",					"params"	=> array("id", "col")),
-													 "add_row"					=> array("function"	=> "add_row",						"params"	=> array("id", "after", "num")),
-													 "del_row"					=> array("function" => "del_row",						"params"	=> array("id", "row")),
-													 "nadd_row"					=> array("function"	=> "nadd_row",						"params"	=> array("id", "after", "num")),
-													 "ndel_row"					=> array("function" => "ndel_row",						"params"	=> array("id", "row")),
-													 "submit"						=> array("function"	=> "submit",						"params"	=> array()),
-													 "submit_styles"		=> array("function"	=> "submit_styles",			"params"	=> array()),
-													 "submit_admin"			=> array("function"	=> "submit_admin",			"params"	=> array()),
-													 "submit_pickstyle" => array("function"	=> "submit_pickstyle",	"params"	=> array()),
-													 "styles"						=> array("function"	=> "gen_styles",				"params"	=> array("id")),
-													 "view"							=> array("function"	=> "show",							"params"	=> array("id")),
-													 "pick_style"				=> array("function" => "pick_style",				"params"	=> array("id")),
-													 "exp_right"				=> array("function"	=> "exp_right",					"params"	=> array("id","col","row","cnt")),
-													 "exp_left"					=> array("function"	=> "exp_left",					"params"	=> array("id","col","row","cnt")),
-													 "exp_up"						=> array("function"	=> "exp_up",						"params"	=> array("id","col","row","cnt")),
-													 "exp_down"					=> array("function"	=> "exp_down",					"params"	=> array("id","col","row","cnt")),
-													 "split_ver"				=> array("function"	=> "split_ver",					"params"	=> array("id","col","row")),
-													 "split_hor"				=> array("function"	=> "split_hor",					"params"	=> array("id","col","row")),
-													 "gen_import"				=> array("function"	=> "gen_import",				"params"	=> array("id")),
-													 "import"						=> array("function"	=> "import",						"params"	=> array()),
-													 "new"							=> array("function"	=> "add",								"params"	=> array("parent")),
-													 "add_doc"					=> array("function" => "add_doc",						"params"	=> array("id","parent")),
-													 "submit_doc"				=> array("function" => "submit_doc",				"params"	=> array("id","parent")),
-													 "delete"						=> array("function" => "delete",						"params"	=> array("id","parent")),
-													 "submit_add"				=> array("function" => "submit_add",				"params"	=> array())
-													 );
+$orb_defs["table"] = "xml";
  
-	classload("images");
-	classload("style");
-  lc_load("table");
-	class table extends aw_template
+classload("images","style");
+lc_load("table");
+class table extends aw_template
+{
+	var $table_id;
+	var $table_name;
+	var $arr;
+		
+	function table()
 	{
-		var $table_id;
-		var $table_name;
-		var $arr;
-			
-		function table()
-		{
-			$this->tpl_init("table_gen");
-			$this->sub_merge = 1;
-			$this->db_init();
-			$this->table_loaded = false;
-			lc_load("definition");
+		$this->tpl_init("table_gen");
+		$this->sub_merge = 1;
+		$this->db_init();
+		$this->table_loaded = false;
+		lc_load("definition");
 		global $lc_table;
 		if (is_array($lc_table))
-	{
+		{
 			$this->vars($lc_table);
 		}
-		}
+	}
 
-		////
-		// !Parsib ntx dokumendi sees olevaid tabelite aliasi lahti
-		function parse_alias($args = array())
+	////
+	// !Parsib ntx dokumendi sees olevaid tabelite aliasi lahti
+	function parse_alias($args = array())
+	{
+		extract($args);
+		// koigepealt siis kysime koigi tabelite aliased
+		if (!is_array($this->tablealiases))
 		{
-			extract($args);
-			// koigepealt siis kysime koigi tabelite aliased
-			if (!is_array($this->tablealiases))
-			{
-				$this->tablealiases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_TABLE,
-							));
-			};
-			$t = $this->tablealiases[$matches[3] - 1]; 
-			if ($matches[4] == "v")
-			{
-				$align = "left";
-			}
-			if ($matches[4] == "k")
-			{
-				$align = "center";
-			}
-			if ($matches[4] == "p")
-			{
-				$align = "right";
-			}
-			$replacement = $this->show(array("id" => $t["target"],"align" => $align));
-			return $replacement;
+			$this->tablealiases = $this->get_aliases(array(
+				"oid" => $oid,
+				"type" => CL_TABLE,
+			));
+		};
+		$t = $this->tablealiases[$matches[3] - 1]; 
+		if ($matches[4] == "v")
+		{
+			$align = "left";
 		}
+		if ($matches[4] == "k")
+		{
+			$align = "center";
+		}
+		if ($matches[4] == "p")
+		{
+			$align = "right";
+		}
+		$replacement = $this->show(array("id" => $t["target"],"align" => $align));
+		return $replacement;
+	}
 		
-		function load_table($id)
+	function load_table($id)
+	{
+		if ($this->table_loaded)
+			return;
+
+		if (!$id)
 		{
-			if ($this->table_loaded)
-				return;
+			return false;
+		};
 
-		$q = "select aw_tables.*, objects.*	from aw_tables 
-											LEFT JOIN objects on objects.oid = aw_tables.id 
-											where aw_tables.id = $id";
-			$this->db_query($q);
-			if (!($row = $this->db_next()))
-				$this->raise_error("no such table $id (tables.class->load_table)!", true);
-			
-			$this->arr = unserialize($row[contents]);
+		$q = "SELECT aw_tables.*, objects.*	FROM aw_tables 
+			LEFT JOIN objects ON objects.oid = aw_tables.id 
+			WHERE aw_tables.id = $id";
+		$this->db_query($q);
+		if (!($row = $this->db_next()))
+			return false;
+		//$this->raise_error("no such table $id (tables.class->load_table)!", true);
 
-			if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
-			{
-				$this->arr["cols"] =1;
-				$this->arr[map][0][0] = array("row" => 0, "col" => 0);
-				$this->arr["rows"] = 1;
-			}
-			$this->table_name = $row[name];
-			$this->table_comment = $row[comment];
-			$this->table_id = $id;
-			$this->table_parent = $row[parent];
+		$this->arr = unserialize($row[contents]);
 
-			// $this->table_loaded = true;
+		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
+		{
+			$this->arr["cols"] =1;
+			$this->arr[map][0][0] = array("row" => 0, "col" => 0);
+			$this->arr["rows"] = 1;
 		}
+		$this->table_name = $row[name];
+		$this->table_comment = $row[comment];
+		$this->table_id = $id;
+		$this->table_parent = $row[parent];
+
+		// $this->table_loaded = true;
+	}
 		
-		function gen_admin_html($arr)
+	function gen_admin_html($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+		$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+
+		$this->read_template("table_modify.tpl");
+
+		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
-			extract($arr);
-			$this->load_table($id);
-			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
-
-			$this->read_template("table_modify.tpl");
-	
-			for ($i=0; $i < $this->arr["rows"]; $i++)
+			$col="";
+			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
-				$col="";
-				for ($a=0; $a < $this->arr["cols"]; $a++)
-				{
-					if (!($spans = $this->get_spans($i, $a)))
-						continue;
+				if (!($spans = $this->get_spans($i, $a)))
+					continue;
 
-					$map = $this->arr[map][$i][$a];
+				$map = $this->arr[map][$i][$a];
 
-					$cell = $this->arr["contents"][$map[row]][$map[col]];
-					$scell = $this->arr["styles"][$map[row]][$map[col]];
-					
-					$this->vars(array("text"	=> $cell["text"],
-														"col"		=> $map[col],
-														"row"		=> $map[row],
-														"num_cols"	=> $scell[cols],
-														"num_rows"	=> $scell[rows]));
-					if ($scell[rows] > 1)
-						$ba = $this->parse("AREA");
-					else
-						$ba = $this->parse("BOX");
-					$this->vars(array("AREA" => $ba, "BOX" => ""));
-					$col.=$this->parse("COL");
-				}
-
-				$this->vars(array("COL"	=> $col));
-				$this->parse("LINE");
+				$cell = $this->arr["contents"][$map[row]][$map[col]];
+				$scell = $this->arr["styles"][$map[row]][$map[col]];
+		
+				$this->vars(array(
+					"text"	=> $cell["text"],
+					"col"		=> $map[col],
+					"row"		=> $map[row],
+					"num_cols"	=> $scell[cols],
+					"num_rows"	=> $scell[rows]));
+				if ($scell[rows] > 1)
+					$ba = $this->parse("AREA");
+				else
+					$ba = $this->parse("BOX");
+				$this->vars(array("AREA" => $ba, "BOX" => ""));
+				$col.=$this->parse("COL");
 			}
-			$st = new style;
-			$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
-												"table_id" => $id,
-												"change"	=> $this->mk_orb("change", array("id" => $id)),
-												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-												"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-												"view"		=> $this->mk_orb("view", array("id" => $id)),
-												"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
-												"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
-												"table_name" => $this->table_name,
-												"table_header" => $this->arr[table_header],
-												"table_footer" => $this->arr[table_footer],
-												"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
-												"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
-			$ar = $this->get_aliases_of($this->table_id);
-			reset($ar);
-			while (list(,$v) = each($ar))
-			{
-				$this->vars(array("url" => $this->mk_orb("change", array("id" => $v[id],"parent" => $v[parent]),"document"),"title" => $v[name]));
-				$this->parse("ALIAS_LINK");
-			}
-			return $this->parse();
+			$this->vars(array("COL"	=> $col));
+			$this->parse("LINE");
 		}
+		$st = new style;
+		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
+				"table_id" => $id,
+				"change"	=> $this->mk_orb("change", array("id" => $id)),
+				"styles"	=> $this->mk_orb("styles", array("id" => $id)),
+				"admin"	=> $this->mk_orb("admin", array("id" => $id)),
+				"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
+				"view"		=> $this->mk_orb("view", array("id" => $id)),
+				"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
+				"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
+				"table_name" => $this->table_name,
+				"table_header" => $this->arr[table_header],
+				"table_footer" => $this->arr[table_footer],
+				"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
+				"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
-		function gen_admin2_html($arr)
+		$ar = $this->get_aliases_of($this->table_id);
+		reset($ar);
+		while (list(,$v) = each($ar))
 		{
-			extract($arr);
-			$this->load_table($id);
-			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+			$this->vars(array("url" => $this->mk_orb("change", array("id" => $v[id],"parent" => $v[parent]),"document"),"title" => $v[name]));
+			$this->parse("ALIAS_LINK");
+		}
+		return $this->parse();
+	}
 
-			$this->read_template("admin.tpl");
-	
-			for ($col = 0; $col < $this->arr[cols]; $col++)
+	function gen_admin2_html($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+		$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+
+		$this->read_template("admin.tpl");
+
+		for ($col = 0; $col < $this->arr[cols]; $col++)
+		{
+			$fc = "";
+			if ($col == 0)
 			{
-				$fc = "";
-				if ($col == 0)
-				{
-					$this->vars(array("add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => -1, "num" => 0))));
-					$fc = $this->parse("FIRST_C");
-				}
-				$this->vars(array("FIRST_C" => $fc, 
-													"col" => $col,
-													"add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => $col,"num" => 0)),
-													"del_col"	=> $this->mk_orb("ndel_col", array("id" => $id, "col" => $col))));
-				$this->parse("DC");
+				$this->vars(array("add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => -1, "num" => 0))));
+				$fc = $this->parse("FIRST_C");
 			}
-			for ($i=0; $i < $this->arr["rows"]; $i++)
-			{
-				$col="";
+			$this->vars(array("FIRST_C" => $fc, 
+					"col" => $col,
+					"add_col" => $this->mk_orb("nadd_col", array("id" => $id, "after" => $col,"num" => 0)),
+					"del_col"	=> $this->mk_orb("ndel_col", array("id" => $id, "col" => $col))));
+			$this->parse("DC");
+		}
+		for ($i=0; $i < $this->arr["rows"]; $i++)
+		{
+			$col="";
 				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
 					if (!($spans = $this->get_spans($i, $a)))
