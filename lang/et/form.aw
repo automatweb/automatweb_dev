@@ -255,6 +255,8 @@ $lc_form["LC_FORMS_CHOOSE_TABLE"]="Vali tabel";
 $lc_form["LC_FORMS_CHOOSE_ELEMENT_WHAT_PUT_FORM_ENTRY"]="Vali element mille sisu pannakse formi sisestuse objekti nimeks";
 
 $lc_form["LC_FORMS_FORM_TRIED_FILL_USER_DATA"]="Kas formi &uuml;&uuml;ritatakse t&auml;ita kasutaja liitumisel sisestatud andmetega";
+$lc_form["LC_FORMS_FORM_HAS_ALIASMGR"]="Aliastehaldur?";
+$lc_form["LC_FORMS_FORM_INTRALINK"]="Saidi sisene link";
 $lc_form["LC_FORMS_AFTER_FILLING"]="P&auml;rast t&auml;itmist";
 $lc_form["LC_FORMS_CHANGE_INPUT"]="muuda sisestust";
 $lc_form["LC_FORMS_GOT_TO_ADDRESS"]="mine aadressile";
