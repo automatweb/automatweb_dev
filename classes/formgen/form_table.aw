@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.18 2002/12/03 15:19:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.19 2002/12/04 11:32:55 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -243,7 +243,8 @@ class form_table extends form_base
 				$this->table["change_cols"]["change"] = "change";
 				$dat["ev_change"] = $this->table["texts"]["change"][$this->lang_id];
 			}
-			foreach($this->table["change_cols"] as $chel)
+			$chcls = new aw_array($this->table["change_cols"]);
+			foreach($chcls->get() as $chel)
 			{
 				$cl = $this->get_col_for_el($chel);
 				$popdat = $this->table["defs"][$cl];
