@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.24 2003/09/08 14:47:31 duke Exp $
+// $Id: cfgutils.aw,v 1.25 2003/09/08 15:16:01 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -239,6 +239,12 @@ class cfgutils extends aw_template
 			"file" => $file,
 			"filter" => $filter,
 		));
+
+		if (empty($this->classinfo["trans"]))
+		{
+			unset($coreprops["needs_translation"]);
+			unset($coreprops["is_translated"]);
+		};
 
 		if (is_array($objprops))
 		{
