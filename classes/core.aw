@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.81 2002/02/27 20:06:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.82 2002/03/05 21:51:57 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1535,6 +1535,10 @@ class core extends db_connector
 			}
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
+		if (not($template))
+		{
+			$template = "plain.tpl";
+		};
 		return $template;
 	}
 
