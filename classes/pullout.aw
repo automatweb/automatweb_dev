@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.2 2001/12/19 00:05:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.3 2002/01/30 00:02:39 duke Exp $
 // pullout.aw - Pullout manager
 
 classload("menuedit","users");
@@ -126,19 +126,11 @@ class pullout extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->poaliases))
-		{
-			$this->poaliases = $this->get_aliases(array(
-				"oid" => $oid,
-        "type" => CL_PULLOUT,
-      ));
-		};
-    $f = $this->poaliases[$matches[3] - 1];
-    if (!$f["target"])
+    if (!$alias)
     {
 			return "";
     }
-		return $this->view(array("id" => $f["target"],"doc" => $oid));
+		return $this->view(array("id" => $alias["target"],"doc" => $oid));
 	}
 
 	function view($arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.85 2001/12/31 10:57:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.86 2002/01/30 00:02:38 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -82,18 +82,8 @@ class form extends form_base
 
 		extract($args);
 
-		if (!is_array($this->formaliases))
-		{
-			$this->formaliases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => array(CL_FORM,CL_FORM_ENTRY),
-							));
-		};
-
-		$f = $this->formaliases[$matches[3] - 1];
-		
 		$replacement = $this->gen_preview(array(
-					"id" => $f["target"],
+					"id" => $alias["target"],
 					"form_action" => "/reforb.".$GLOBALS["ext"],
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.22 2002/01/21 11:28:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.23 2002/01/30 00:02:38 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -34,15 +34,6 @@ $orb_defs["table"] ="xml";
 	function parse_alias($args = array())
 	{
 		extract($args);
-		// koigepealt siis kysime koigi tabelite aliased
-		if (!is_array($this->tablealiases))
-		{
-			$this->tablealiases = $this->get_aliases(array(
-							"oid" => $oid,
-							"type" => CL_TABLE,
-						));
-		};
-		$t = $this->tablealiases[$matches[3] - 1]; 
 		if ($matches[4] == "v")
 		{
 			$align = "left";
@@ -55,7 +46,7 @@ $orb_defs["table"] ="xml";
 		{
 			$align = "right";
 		}
-		$replacement = $this->show(array("id" => $t["target"],"align" => $align));
+		$replacement = $this->show(array("id" => $alias["target"],"align" => $align));
 		return $replacement;
 			
 	}
