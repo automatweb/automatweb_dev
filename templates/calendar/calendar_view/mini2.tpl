@@ -1,4 +1,4 @@
-<div class="minical_table">{VAR:caption}</div>
+<!--<div class="minical_table">{VAR:caption}</div>-->
 
 <table border="0" cellpadding="0" cellspacing="1" width="100%">
 

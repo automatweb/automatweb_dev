@@ -65,17 +65,31 @@
 	color: #000000;
 }
 </style>
-<br><br>
-			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
-<table border="0" width="100%">
-<tr>
-<td bgcolor="#F5F5F5">
+
+<div><small><form method="GET" name="mininavigator">
+<select id="minimon" name="minimon">{VAR:mnames}</select>
+<select id="miniyear" name="miniyear">{VAR:years}</select>
+<input type="hidden" id="mininaviurl" name="mininaviurl" value="{VAR:mininaviurl}">
+<input type="button" value="Ava" onClick="mini_navigate()">
+<script type="text/javascript">
+function mini_navigate()
+{
+	var m = document.getElementById('minimon').value;
+	var y = document.getElementById('miniyear').value;
+	var newurl = document.getElementById('mininaviurl').value + "&date=" + m + "-" + y;
+	window.location.href = newurl;
+}
+</script>
+</form></small></div>
+<div class="minical_table">
+<a href="{VAR:today_url}">Täna: {VAR:today_date}</a> <br>
+			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {DATE:act_day_tm|d.m.Y}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td bgcolor="#EFEFEF">
 	{VAR:overview}
-	<div class="midText">
-	<a href="{VAR:today_url}"><b>Täna</b></a>
-	</div>
+</td></tr></table>
+
 	{VAR:content}
-</td>
-</tr>
-</table>
+
 
