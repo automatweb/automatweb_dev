@@ -264,8 +264,31 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 	function _merge_obj_dat($original, $translated)
 	{
-		// FIXME: actually, not all metadata should be merged, just the bits that are in nit translated properties
+		// check props
+		if (!isset($GLOBALS["properties"][$original["class_id"]]))
+		{
+			$lp = array(
+				"clid" => $original["class_id"]
+			);
+			if ($original["class_id"] == CL_DOCUMENT)
+			{
+				$lp["file"] = "doc";
+			}
+
+			list($GLOBALS["properties"][$original["class_id"]], $GLOBALS["tableinfo"][$original["class_id"]], $GLOBALS["relinfo"][$original["class_id"]]) = $GLOBALS["object_loader"]->load_properties($lp);
+		}
+
+		$tm = $translated["meta"];
 		$translated["meta"] = $original["meta"];
+
+		foreach($GLOBALS["properties"][$original["class_id"]] as $pn => $pd)
+		{
+			if ($pd["trans"] == 1 && $pd["table"] == "objects" && $pd["field"] == "meta" && $pd["method"] == "serialize")
+			{
+				$translated["meta"][$pn] = $tm[$pn];
+			}
+		}
+		
 
 		// for the object flags, all flags, except for the OBJ_IS_TRANSLATED flag must be copied from the original
 		$tmpf = $translated["flags"];
