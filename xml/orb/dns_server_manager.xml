@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="add_or_update_site" nologin="1">
+		<action name="add_or_update_site" nologin="1" all_args="1">
 			<function name="add_or_update_site">
 				<arguments>
 					<required name="domain">
