@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.1 2004/05/20 08:21:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.2 2004/07/05 14:10:03 duke Exp $
 // task.aw - TODO item
 /*
 
-@classinfo syslog_type=ST_TASK relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_TASK relationmgr=yes no_status=1 
 
 @default table=objects
 @default group=general
@@ -23,11 +23,7 @@
 @default field=meta
 @default method=serialize
 
-<<<<<<< task.aw
-@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first use_form=emb
-=======
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
->>>>>>> 1.7
 @caption Kordused
 
 @property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
@@ -36,17 +32,17 @@
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
-<<<<<<< task.aw
-@groupinfo recurrence caption=Kordumine submit=no
-=======
 @property comment_list type=comments group=comments no_caption=1
 @caption Kommentaarid
 
-@groupinfo recurrence caption=Kordumine
->>>>>>> 1.7
+@property rmd type=reminder group=reminders store=no
+@caption Meeldetuletus
+
+@groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
+@groupinfo reminders caption=Meeldetuletused
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
