@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.12 2004/02/25 16:06:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.13 2004/03/01 14:06:34 kristo Exp $
 /*
 
 @default table=objects
@@ -302,17 +302,18 @@ class dronline_conf extends class_base
 	{
 		extract($arr);
 
-		$old = $this->get_object($from);
+		$old = obj($from);
 
-		$id = $this->new_object(array(
-			'parent' => $parent,
-			'class_id' => CL_DRONLINE_CONF,
-			'status' => 0,
-			'name' => $name,
-			'metadata' => $old['meta']
-		));
+		$new = new object();
+		$new->set_parent($parent);
+		$new->set_class_id(CL_DRONLINE_CONF);
+		$new->set_name($name);
+		foreach($old->meta() as $k => $v)
+		{
+			$new->set_meta($k, $v);
+		}
 
-		return $id;
+		return $new->save();
 	}
 }
 ?>

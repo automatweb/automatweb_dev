@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.25 2004/02/17 20:42:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.26 2004/03/01 14:06:34 kristo Exp $
 
 /*
 
@@ -183,11 +183,11 @@ class dronline extends class_base
 	function change($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
 		if ($dro_tab == '')
 		{
-			$dro_tab = $ob['meta']['g_default_tab'];
+			$dro_tab = $ob->meta('g_default_tab');
 		}
 		if (!$cur_range)
 		{
@@ -201,8 +201,8 @@ class dronline extends class_base
 		);
 
 		// if no conf object has been set yet, return the change form
-		$this->mk_path($ob['parent'], "Muuda dronline objekti");
-		if (!$ob['meta']['conf'])
+		$this->mk_path($ob->parent(), "Muuda dronline objekti");
+		if (!$ob->meta('conf'))
 		{
 			return $this->_do_general($arr);
 		}
@@ -218,17 +218,16 @@ class dronline extends class_base
 			$q = $this->$fn($param);
 			$this->quote(&$q);
 
-			$nid = $this->new_object(array(
-				'name' => $do_save_as_obj,
-				'class_id' => CL_DRONLINE_LOG,
-				'parent' => $ob['parent'],
-				'metadata' => array(
-					'dro_type' => $dro_tab,
-					'cur_range' => $cur_range,
-					'query' => $q,
-					'conf_desc' => $this->get_conf_desc($param)
-				)
-			));
+			$log_o = new object();
+			$log_o->set_name($do_save_as_obj);
+			$log_o->set_class_id(CL_DRONLINE_LOG);
+			$log_o->set_parent($ob->parent());
+			$log_o->set_meta('dro_type',  $dro_tab);
+			$log_o->set_meta('cur_range',  $cur_range);
+			$log_o->set_meta('query',  $q);
+			$log_o->set_meta('conf_desc',  $this->get_conf_desc($param));
+			$nid = $log_o->save();
+
 			unset($arr['do_save_as_obj']);
 			header("Location: ".$this->mk_my_orb('change', $arr));
 			die();
@@ -243,7 +242,7 @@ class dronline extends class_base
 		{
 			if ($tabid == 'tab_conf')
 			{
-				if (in_array($dro_tab, $this->confable_tabs) && !$ob['meta']['lock_filter'])
+				if (in_array($dro_tab, $this->confable_tabs) && !$ob->meta('lock_filter'))
 				{
 					$tbp->add_tab(array(
 						'active' => ($dro_tab == $tabid ? true : false),
@@ -264,7 +263,7 @@ class dronline extends class_base
 
 		$this->from_cache = false;
 		// right. now check if we should use the cache and if it exists and if it does, then use the data from cache
-		if ($ob['meta']['bg_queries'])
+		if ($ob->meta('bg_queries'))
 		{
 			$cache = aw_unserialize($this->db_fetch_field("SELECT cache_content FROM dronline_bg_status WHERE id = $id","cache_content"));
 			if (is_array($cache) && isset($cache[$dro_tab]))
@@ -421,25 +420,28 @@ class dronline extends class_base
 
 	function get_where_clause($oid, $prep = ' WHERE ', $ret_conf_desc = false, $tab_id = '', $def_span = 0)
 	{
-		$ob = $this->get_object($oid);
-		if ($tab_id != '' && $ob['meta']['tab_objs'][$tab_id])
+		$ob = obj($oid);
+		$tabo = $ob->meta("tab_objs");
+		if ($tab_id != '' && $tabo[$tab_id])
 		{
-			$conf_o = $this->get_object($ob['meta']['tab_objs'][$tab_id]);
+			$t_conf_o = obj($tabo[$tab_id]);
 		}
 		else
 		{
-			$conf_o = $this->get_object($ob['meta']['conf']);
+			$t_conf_o = obj($ob->meta('conf'));
 		}
+
+		$conf_o["meta"] = $t_conf_o->meta();
 
 		// merge configs
-		if ($ob['meta']['from'] > (400*24*3600))
+		if ($ob->meta('from') > (400*24*3600))
 		{
-			$conf_o['meta']['from'] = $ob['meta']['from'];
+			$conf_o['meta']['from'] = $ob->meta('from');
 		}
 
-		if ($ob['meta']['to'] > (400*24*3600))
+		if ($ob->meta('to') > (400*24*3600))
 		{
-			$conf_o['meta']['to'] = $ob['meta']['to'];
+			$conf_o['meta']['to'] = $ob->meta('to');
 		}
 
 		$conf_o['meta']['def_span'] = $def_span;
@@ -522,10 +524,10 @@ class dronline extends class_base
 		}
 
 		// folder filter
-		if (is_array($ob["meta"]["folder_dat"]) && count($ob["meta"]["folder_dat"]) > 0)
+		if (is_array($ob->meta("folder_dat")) && count($ob->meta("folder_dat")) > 0)
 		{
 			$fflds = array();
-			foreach($ob["meta"]["folder_dat"] as $fid => $fopt)
+			foreach($ob->meta("folder_dat") as $fid => $fopt)
 			{
 				if ($fopt["act"] == 1)
 				{
@@ -656,16 +658,17 @@ class dronline extends class_base
 
 	function get_limit_clause($id, $ret_num = false)
 	{
-		$ob = $this->get_object($id);
-		$conf_o = $this->get_object($ob['meta']['conf']);
+		$ob = obj($id);
+		$conf_o = obj($ob->meta('conf'));
 
 		// merge configs
-		if ($ob['meta']['numlines'] != 0)
+		$nl = $conf_o->meta("numlines"); 
+		if ($ob->meta('numlines') != 0)
 		{
-			$conf_o['meta']['numlines'] = $ob['meta']['numlines'];
+			$nl = $ob->meta('numlines');
 		}
 
-		$ret = $conf_o['meta']['numlines'];
+		$ret = $nl;
 		if ($ret_num)
 		{
 			return $ret;
@@ -875,8 +878,8 @@ class dronline extends class_base
 
 		$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
 
-		$ob = $this->get_object($id);
-		if ($arr['query'] != '' || $ob['meta']['lock_q'] == 1)
+		$ob = obj($id);
+		if ($arr['query'] != '' || $ob->meta('lock_q') == 1)
 		{
 			return $tbl;
 		}
@@ -1022,8 +1025,8 @@ class dronline extends class_base
 
 		$tb->add_cdata($this->get_tb_end_cdata($arr, $id, 'blokk'),"right");
 
-		$ob = $this->get_object($id);
-		if ($arr['query'] != '' || $ob['meta']['lock_q'] == 1)
+		$ob = obj($id);
+		if ($arr['query'] != '' || $ob->meta('lock_q') == 1)
 		{
 			return $tbl;
 		}
@@ -1404,20 +1407,21 @@ class dronline extends class_base
 			'ipblock' => 'Blokeeri IPd',
 		);
 
-		$ob = $this->get_object($id);
-		$conf_o = $this->get_object($ob['meta']['conf']);
+		$ob = obj($id);
+		$conf_o = obj($ob->meta('conf'));
 
-		if (is_array($conf_o['meta']['ip_block_folders']))
+		if (is_array($conf_o->meta('ip_block_folders')))
 		{
-			foreach($conf_o['meta']['ip_block_folders'] as $fld)
+			foreach($conf_o->meta('ip_block_folders') as $fld)
 			{
-				$ret += array($fld => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fld", "name"));
-				$ret += $this->get_objects_below(array(
-					'parent' => $fld,
-					'class' => CL_PSEUDO,
-					'full' => true,
-					'ret' => ARR_NAME
+				$ot = new object_tree(array(
+					"parent" => $fld,
+					"class_id" => array(CL_FOLDER, CL_IPADDRESS),
+					"site_id" => array(),
+					"lang_id" => array()
 				));
+				$ol = $ot->to_list();
+				$ret += $ol->ids();
 			}
 		}
 		return $ret;
@@ -1429,20 +1433,21 @@ class dronline extends class_base
 			'ipblock' => 'N&auml;ita IPd',
 		);
 
-		$ob = $this->get_object($id);
-		$conf_o = $this->get_object($ob['meta']['conf']);
+		$ob = obj($id);
+		$conf_o = obj($ob->meta('conf'));
 
-		if (is_array($conf_o['meta']['ip_allow_folders']))
+		if (is_array($conf_o->meta('ip_allow_folders')))
 		{
-			foreach($conf_o['meta']['ip_allow_folders'] as $fld)
+			foreach($conf_o->meta('ip_allow_folders') as $fld)
 			{
-				$ret += array($fld => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fld", "name"));
-				$ret += $this->get_objects_below(array(
-					'parent' => $fld,
-					'class' => CL_PSEUDO,
-					'full' => true,
-					'ret' => ARR_NAME
+				$ot = new object_tree(array(
+					"parent" => $fld,
+					"class_id" => array(CL_FOLDER, CL_IPADDRESS),
+					"site_id" => array(),
+					"lang_id" => array()
 				));
+				$ol = $ot->to_list();
+				$ret += $ol->ids();
 			}
 		}
 		return $ret;
@@ -1498,8 +1503,8 @@ class dronline extends class_base
 		// add save_as_obj()
 		if ($id)
 		{
-			$ob = $this->get_object($id);
-			if (!$ob['meta']['lock_q'])
+			$ob = obj($id);
+			if (!$ob->meta('lock_q'))
 			{
 				$cdata .= html::span(array(
 					'class' => 'awmenuedittabletext',
@@ -1548,17 +1553,15 @@ class dronline extends class_base
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 
-		if ($obj['meta']['bg_queries'])
+		if ($obj->meta('bg_queries'))
 		{
-			$rerun = $obj['meta']['rerun_queries'];
+			$rerun = $obj->meta('rerun_queries');
 			// clear run queries flag
-			$obj['meta']['rerun_queries'] = false;
-			$this->upd_object(array(
-				'oid' => $id,
-				'metadata' => $obj['meta']
-			));
+			$obj->set_meta('rerun_queries', false);
+			$obj->save();
+
 			$inf = $this->db_fetch_row("SELECT * FROM dronline_bg_status WHERE id = $id");
 
 			$current_key = $this->get_config_hash($id);
@@ -1666,24 +1669,23 @@ class dronline extends class_base
 
 	function check_hidden_conf($tab, $ob)
 	{
-		if ($ob['meta']['tab_objs'][$tab])
+		$tabo = $ob->meta("tab_objs");
+		if ($tabo[$tab])
 		{
-			return $ob['meta']['tab_objs'][$tab];
+			return $tabo[$tab];
 		}
 
 		// create new
 		$drc_inst = get_instance('syslog/dronline_conf');
 		$id = $drc_inst->clone(array(
-			'from' => $ob['meta']['conf'],
-			'parent' => $ob['oid'],
+			'from' => $ob->meta('conf'),
+			'parent' => $ob->id(),
 			'name' => $tab
 		));
 
-		$ob['meta']['tab_objs'][$tab] = $id;
-		$this->upd_object(array(
-			'oid' => $ob['oid'],
-			'metadata' => $ob['meta']
-		));
+		$tabo[$tab] = $id;
+		$ob->set_meta('tab_objs', $tabo);
+		$ob->save();
 
 		return $id;
 	}
@@ -1694,10 +1696,9 @@ class dronline extends class_base
 		// no we gots to show syslog conf configuration here. bijaatch
 		// I think the easiest way is to create fake delete syslog conf objs for each tab 
 		// under this object and then let the user change the conf obj for the current tab
-		$ob = $this->get_object($id);
 
 		// check if the object for the prev tab already exists. if it does not, create it
-		$tcid = $this->check_hidden_conf($prev_tab, $ob);
+		$tcid = $this->check_hidden_conf($prev_tab, obj($id));
 
 		$droc = get_instance("syslog/dronline_conf");
 		$droc->embedded = true;
