@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.35 2004/09/15 11:56:43 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.36 2004/10/14 13:35:55 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -112,7 +112,7 @@ class ml_member extends class_base
 		));
 		lc_load("definition");
 	}
-	
+	/*
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -121,10 +121,9 @@ class ml_member extends class_base
 		switch($data["name"])
 		{
 			case "udef_date1":
-			arr($data);
 				break;
 		}
-	}
+	}*/
 
 	
 	////
@@ -200,6 +199,7 @@ class ml_member extends class_base
 			$user_folders = array($user_folder);
 		};
 
+		$added = false;
 		foreach($user_folders as $user_folder)
 		{
 			if (!$this->check_member(array("email" => $email,"folder" => $user_folder)))
@@ -258,10 +258,11 @@ class ml_member extends class_base
 				
 				$member_obj->save();
 		
+				$added = true;
 			};
 		};
 		
-		if ($list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")
+		if ($added && $list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")
 		{
 			// now generate and send the bloody message
 			$msg = get_instance(CL_MESSAGE);
