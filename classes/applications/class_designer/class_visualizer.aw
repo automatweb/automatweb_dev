@@ -1,5 +1,5 @@
 <?php
-class class_visualizer extends aw_template
+class class_visualizer extends class_base
 {
 	function class_visualizer()
 	{
@@ -8,13 +8,23 @@ class class_visualizer extends aw_template
 
 	/**
 		@attrib name=view default=1
-		@param id required type=int
+		@param id optional type=int
 		@param group optional
 
 	**/
 	function view($arr)
 	{
-		$o = new object($arr["id"]);
+		$obj_id = $arr["id"];
+		if (empty($obj_id) && is_oid(aw_global_get("class")))
+		{
+			$obj_id = aw_global_get("class");
+		};
+		$this->cls_id = $obj_id;
+		$o = new object($obj_id);
+		if ($o->class_id() != CL_CLASS_DESIGNER)
+		{
+			die(t("I'm so depessed"));
+		};
 		$tree = new object_tree(array(
 			"parent" => $o->id(),
 			"class_id" => CL_PROPERTY_GROUP,
@@ -110,8 +120,9 @@ class class_visualizer extends aw_template
 					"parent" => $tab_parent,
 					"level" => $level,
 					"link" => $this->mk_my_orb("view",array(
-						"id" => $o->id(),
+						//"id" => $o->id(),
 						"group" => $gd["id"],
+						"class" => $this->cls_id,
 					)),
 				));
 			};
@@ -162,9 +173,10 @@ class class_visualizer extends aw_template
 		$cli->finish_output(array(
 			"action" => "submit",
 			"data" => array(
-				"id" => $o->id(),
+				//"id" => $o->id(),
 				"group" => $use_group,
 				"class" => get_class($this),
+				"class" => $this->cls_id,
 			),
 		));
 		$cont = $cli->get_result();
@@ -178,10 +190,145 @@ class class_visualizer extends aw_template
 	**/
 	function submit($arr)
 	{
-		print "see ei tee veel midagi :(";
-		print "<br />";
-		return $this->mk_my_orb("view",array("id" => $arr["id"],"group" => $arr["group"]),get_class($this));
+
+		// XXX: create a proper list of properties
+		$cl_obj = new object($arr["class"]);		
+		if (is_oid($arr["id"]))
+		{
+			$clx = new object($arr["id"]);
+		}
+		else
+		{
+			$clx = new object();
+			$clx->set_class_id($cl_obj->prop("reg_class_id"));
+			$clx->set_parent($arr["parent"]);
+			$clx->set_status(STAT_ACTIVE);
+		};
+		foreach($arr as $key => $val)
+		{
+			if (is_numeric($key))
+			{
+				$clx->set_meta($key,$val);
+			};
+		};
+
+		$clx->set_name($arr[$cl_obj->prop("object_name")]);
+		$clx->save();
+
+		$rv = $this->mk_my_orb("change",array("class" => $arr["class"],"group" => $arr["group"],"id" => $clx->id()),$arr["class"]);
+		//print $rv;
+		return $rv;
 
 	}
+
+	function get_class_groups($arr)
+	{
+		extract($arr);
+		$o = new object($obj_id);
+		if ($o->class_id() != CL_CLASS_DESIGNER)
+		{
+			die(t("this will not work"));
+		};
+		$tree = new object_tree(array(
+			"parent" => $o->id(),
+			"class_id" => CL_PROPERTY_GROUP,
+		));
+		$tlist = $tree->to_list();
+		$group = $arr["group"];
+		//arr($tlist);
+                $cli = get_instance("cfg/htmlclient");
+		$cf = get_instance(CL_CLASS_DESIGNER);
+		$items = $cf->elements;
+		$clinf = aw_ini_get("classes");
+		// kui gruppi pole, siis vali esimene
+		// XXX: ühendada see algoritm sellega, mis tehakse classbases
+		//$group = $arr["group"];
+		$groupitems = array();
+		//$active_groups = array();
+		foreach($tlist->arr() as $xo)
+		{
+			$parent_obj = new object($xo->parent());
+			$name = $xo->id();
+			if ($parent_obj->class_id() == CL_PROPERTY_GROUP)
+			{
+				$groupitems[$name]["parent"] = $xo->parent();
+			};
+			$groupitems[$name]["caption"] = $xo->name();
+		};
+
+		return $groupitems;
+	}
+
+	function get_group_properties($arr)
+	{
+		$element_tree = new object_tree(array(
+			"parent" => $arr["id"],
+			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+		));
+		
+		$els = $element_tree->to_list();
+		$grid2grp = array();
+		foreach($els->arr() as $el)
+		{
+			if (CL_PROPERTY_GRID == $el->class_id())
+			{
+				$grid2grp[$el->id()] = $el->parent();
+			};
+		};
+
+		$element_tree = new object_tree(array(
+			"parent" => $arr["id"],
+		));
+		$elements = $element_tree->to_list();
+		$cf = get_instance(CL_CLASS_DESIGNER);
+		$items = $cf->elements;
+		$clinf = aw_ini_get("classes");
+
+		$rv = array();
+
+		foreach($elements->arr() as $el)
+		{
+			$clid = $el->class_id();
+			if (in_array($clid,$items))
+			{
+				$eltype = $clinf[$clid]["def"];
+				$eltype = strtolower(str_replace("CL_PROPERTY_","",$eltype));
+				$sysname = strtolower(preg_replace("/\s/","_",$el->name()));
+				$propdata = array(
+					//"name" => $el->name(),
+					//"name" => $el->id(),
+					"name" => $sysname,
+					"caption" => $el->name(),
+					"type" => $eltype,
+					"group" => $grid2grp[$el->parent()],
+					"table" => "objects",
+					"field" => "meta",
+					"method" => "serialize",
+				);
+				if ($clid == CL_PROPERTY_CHOOSER)
+				{
+					$propdata["multiple"] = $el->prop("multiple");
+					$propdata["orient"] = $el->prop("orient") == 1 ? "vertical" : "";
+					$propdata["options"] = explode("\n",$el->prop("options"));
+				}
+				else
+				{
+					$ti = get_instance($clid);
+					if (method_exists($ti, "get_visualizer_prop"))
+					{
+						$ti->get_visualizer_prop($el, $propdata);
+					}
+				}
+
+				//$rv[$el->id()] = $propdata;
+				$rv[$sysname] = $propdata;
+			};
+		};
+
+		return $rv;
+
+	}
+
+	
 };
 ?>
