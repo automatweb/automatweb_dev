@@ -57,22 +57,44 @@ class acl_class extends aw_template
 			));
 		}
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "role",
-			"value" => $role
+		$meta = $this->get_object_metadata(array(
+			"oid" => $id
 		));
+		
+		$groups = $this->make_keys($groups);
 
 		$this->set_object_metadata(array(
 			"oid" => $id,
-			"key" => "chain",
-			"value" => $chain
+			"data" => array(
+				"role" => $role,
+				"chain" => $chain,
+				"groups" => $groups,
+			);
 		));
 
+		$ags = array();
+		if (is_array($meta["added_groups"]))
+		{
+			foreach($meta["added_groups"] as $gid => $gdata)
+			{
+				if ($groups[$gid] != $gid)
+				{
+					// this group was removed, so remove all acl rels for that group
+					foreach($gdata as $oid => $_gid)
+					{
+						$this->remove_acl_group_from_obj($gid,$oid);
+					}
+				}
+				else
+				{
+					$ags[$gid] = $gdata;
+				}
+			}
+		}
 		$this->set_object_metadata(array(
 			"oid" => $id,
-			"key" => "groups",
-			"value" => $this->make_keys($groups)
+			"key" => "added_groups",
+			"value" => $ags
 		));
 
 		if ($save_acl)
@@ -99,6 +121,7 @@ class acl_class extends aw_template
 		$mask = $ro->get_acl_mask($meta["role"]);
 		$aclarr = $ro->get_acl_values($meta["role"]);
 
+		$gads = $meta["added_groups"];
 		foreach($objs as $oid)
 		{
 			$o_grps = $this->get_acl_groups_for_obj($oid);
@@ -107,11 +130,18 @@ class acl_class extends aw_template
 				if (!isset($o_grps[$grp]))
 				{
 					$this->add_acl_group_to_obj($grp,$oid);
+					$gads[$grp][$oid] = $grp;
 				}
 
 				$this->save_acl_masked($oid,$grp,$aclarr,$mask);
 			}
 		}
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "added_groups",
+			"value" => $gads
+		));
 	}
 
 	function change($arr)
