@@ -294,7 +294,10 @@ class _int_object
 		$ret = array();
 		for(; $i < $cnt; $i++)
 		{
-			$ret[] = $pt[$i]->name();
+			if (is_object($pt[$i]))
+			{
+				$ret[] = $pt[$i]->name();
+			}
 		}
 		return join(" / ", $ret);
 	}
@@ -1014,6 +1017,7 @@ class _int_object
 
 		if (!$this->obj["oid"])
 		{
+			
 			$this->_int_init_new();
 
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(

@@ -97,6 +97,7 @@ class _int_obj_ds_auto_translation
 				$ret = $this->contained->get_objdata($conns2[0]["to"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
+				$ret["flags"] |= $req_od["flags"];
 				return $ret;
 			}
 			else
@@ -105,6 +106,7 @@ class _int_obj_ds_auto_translation
 				$ret = $this->contained->get_objdata($conns[0]["from"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
+				$ret["flags"] |= $req_od["flags"];
 				return $ret;
 			}
 		}

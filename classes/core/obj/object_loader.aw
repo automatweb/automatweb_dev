@@ -261,7 +261,7 @@ class _int_object_loader
 	// load properties - arr[file] , arr[clid]
 	function load_properties($arr)
 	{
-		if ($arr["file"] == "document")
+		if ($arr["file"] == "document" || $arr["file"] == "document_brother")
 		{
 			$arr["file"] = "doc";
 		}

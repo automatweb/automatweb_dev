@@ -212,25 +212,27 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
+//echo "adding,  <br>";
 		foreach($properties as $prop => $data)
 		{
+	//		echo "rpop = $prop <br>";
 			if (empty($data["table"]))
 			{
+		//		echo "no table bail <br>";
 				continue;
 			}
 			
 			if ($data["table"] == "objects")
 			{
+			//	echo "objects table bail <br>";
 				continue;
 			}
 
 			if ($data["store"] != "no")
 			{
+				//echo "set table $data[table] <br>";
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
-				if ($data["default"] != "")
-				{
-					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
-				}
+				$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
 			}
 		}
 
@@ -268,6 +270,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function save_properties($arr)
 	{
 		extract($arr);
+
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
@@ -294,6 +297,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			
 			WHERE oid = '".$objdata["oid"]."'
 		";
+
 //		echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
 
@@ -308,7 +312,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$tbls[$data["table"]][] = $data;
 			}
 		}
-		
 
 		// now save all props to tables.
 		foreach($tbls as $tbl => $tbld)
@@ -348,9 +351,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$str = aw_serialize($dat);
 				$this->quote($str);
-				$seta[$field] = $field." = '$str'";
+				$seta[$field] = $str;
 			}
-			$sets = join(",",map2("%s = '%s'",$xset));
+			$sets = join(",",map2("%s = '%s'",$seta));
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
