@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.25 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.26 2005/03/23 10:31:34 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -252,7 +252,7 @@ class shop_warehouse extends class_base
 				break;
 	
 			case "search_cur_ord_text":
-				$data["value"] = "<br><br>Hetkel pakkumises olevad tooted:";
+				$data["value"] = t("<br><br>Hetkel pakkumises olevad tooted:");
 				break;
 		};
 		return $retval;
@@ -333,7 +333,7 @@ class shop_warehouse extends class_base
 		/*$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => "save",
+			"tooltip" => t("Salvesta"),
 			"url" => "javascript:document.changeform.submit()"
 		));*/
 
@@ -342,7 +342,7 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "confirm",
 			"img" => "pdf_upload.gif",
-			"tooltip" => "Genereeri HTML pakkumine",
+			"tooltip" => t("Genereeri HTML pakkumine"),
 			"onClick" => $url,
 			"url" => "#"
 		));
@@ -350,14 +350,14 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "mail",
 			"img" => "save.gif",
-			"tooltip" => "Saada meilile",
+			"tooltip" => t("Saada meilile"),
 			"action" => "send_cur_order"
 		));
 
 		$tb->add_button(array(
 			"name" => "clear",
 			"img" => "new.gif",
-			"tooltip" => "Uus pakkumine",
+			"tooltip" => t("Uus pakkumine"),
 			"action" => "clear_order"
 		));
 	}
@@ -368,19 +368,19 @@ class shop_warehouse extends class_base
 		{
 			$t->define_field(array(
 				"name" => "page",
-				"caption" => "Lehek&uuml;lg",
+				"caption" => t("Lehek&uuml;lg"),
 				"align" => "center"
 			));
 		}
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
 			"name" => "quantity",
-			"caption" => "Kogus",
+			"caption" => t("Kogus"),
 			"align" => "center"
 		));
 	}
@@ -436,14 +436,14 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "crt_".$this->prod_type_fld,
-			"tooltip" => "Uus"
+			"tooltip" => t("Uus")
 		));
 
 		$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
 
 		$tb->add_menu_item(array(
 			"parent" => "crt_".$this->prod_type_fld,
-			"text" => "Lisa kaust",
+			"text" => t("Lisa kaust"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->prod_tree_root,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
@@ -454,14 +454,14 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "del",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta valitud",
+			"tooltip" => t("Kustuta valitud"),
 			"url" => "javascript:document.changeform.submit()"
 		));
 
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => "Lisa korvi",
+			"tooltip" => t("Lisa korvi"),
 			"action" => "add_to_cart"
 		));
 	}
@@ -629,7 +629,7 @@ class shop_warehouse extends class_base
 
 			if ($o->class_id() == CL_MENU)
 			{
-				$tp = "Kaust";
+				$tp = t("Kaust");
 			}
 			else
 			if (is_oid($o->prop("item_type")))
@@ -650,7 +650,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $o->id()
 					)),
-					"caption" => "V&otilde;ta laost"
+					"caption" => t("V&otilde;ta laost")
 				));
 			}
 
@@ -662,7 +662,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $o->id()
 					)),
-					"caption" => "Vii lattu"
+					"caption" => t("Vii lattu")
 				));
 			}
 
@@ -685,7 +685,7 @@ class shop_warehouse extends class_base
 						"id" => $o->id(),
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					), $o->class_id()),
-					"caption" => "Muuda"
+					"caption" => t("Muuda")
 				)),
 				"get" => $get,
 				"put" => $put,
@@ -721,58 +721,58 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"name" => "icon",
-			"caption" => "&nbsp;",
+			"caption" => t("&nbsp;"),
 			"sortable" => 0,
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "item_type",
-			"caption" => "T&uuml;&uuml;p",
+			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt",
-			"caption" => "Kogus laos",
+			"caption" => t("Kogus laos"),
 			"align" => "center",
 			"type" => "int"
 		));
 
 		$t->define_field(array(
 			"name" => "get",
-			"caption" => "V&otilde;ta laost",
+			"caption" => t("V&otilde;ta laost"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "put",
-			"caption" => "Vii lattu",
+			"caption" => t("Vii lattu"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "change",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "del",
-			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>Vali</a>",
+			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
 			"align" => "center",
 		));
 	}
@@ -781,7 +781,7 @@ class shop_warehouse extends class_base
 	{
 		if (!$arr["obj_inst"]->prop("conf"))
 		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioon on valimata!";
+			//$arr["prop"]["value"] =  t("VIGA: konfiguratsioon on valimata!");
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
@@ -823,12 +823,12 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "create_pkt",
-			"tooltip" => "Uus"
+			"tooltip" => t("Uus")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "create_pkt",
-			"text" => "Lisa pakett",
+			"text" => t("Lisa pakett"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->pkt_tree_root,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -903,7 +903,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $o->id()
 					)),
-					"caption" => "V&otilde;ta laost"
+					"caption" => t("V&otilde;ta laost")
 				));
 			}
 
@@ -915,7 +915,7 @@ class shop_warehouse extends class_base
 						"id" => $o->id(),
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					), CL_SHOP_PACKET),
-					"caption" => "Muuda"
+					"caption" => t("Muuda")
 				)),
 				"get" => $get,
 				"put" => html::href(array(
@@ -923,7 +923,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $o->id()
 					)),
-					"caption" => "Vii lattu"
+					"caption" => t("Vii lattu")
 				))
 			));
 		}
@@ -936,32 +936,32 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt",
-			"caption" => "Kogus laos",
+			"caption" => t("Kogus laos"),
 			"align" => "center",
 			"type" => "int"
 		));
 
 		$t->define_field(array(
 			"name" => "get",
-			"caption" => "V&otilde;ta laost",
+			"caption" => t("V&otilde;ta laost"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "put",
-			"caption" => "Vii lattu",
+			"caption" => t("Vii lattu"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "change",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center"
 		));
 	}
@@ -977,7 +977,7 @@ class shop_warehouse extends class_base
 		{
 			if ($i->class_id() == CL_SHOP_PACKET)
 			{
-				$type = "Pakett";
+				$type = t("Pakett");
 				$name = $i->path_str(array("to" => $this->config->prop("pkt_fld")));
 			}
 			else
@@ -999,7 +999,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $i->id()
 					)),
-					"caption" => "V&otilde;ta laost"
+					"caption" => t("V&otilde;ta laost")
 				));
 			}
 
@@ -1013,7 +1013,7 @@ class shop_warehouse extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"product" => $i->id()
 					)),
-					"caption" => "Vii lattu"
+					"caption" => t("Vii lattu")
 				))
 			));
 		}
@@ -1026,33 +1026,33 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "type",
-			"caption" => "T&uuml;&uuml;p",
+			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "count",
-			"caption" => "Laoseis",
+			"caption" => t("Laoseis"),
 			"type" => "int",
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "get",
-			"caption" => "V&otilde;ta laost",
+			"caption" => t("V&otilde;ta laost"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "put",
-			"caption" => "Vii lattu",
+			"caption" => t("Vii lattu"),
 			"align" => "center"
 		));
 
@@ -1068,7 +1068,7 @@ class shop_warehouse extends class_base
 
 			if ($to->prop("confirm"))
 			{
-				$stat = "Sissetulek kinnitatud";
+				$stat = t("Sissetulek kinnitatud");
 			}
 			else
 			{
@@ -1081,7 +1081,7 @@ class shop_warehouse extends class_base
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $c->prop("to.name"),
 				"view" => html::href(array(
-					"caption" => "Vaata",
+					"caption" => t("Vaata"),
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $c->prop("to")
 					), CL_SHOP_WAREHOUSE_RECEPTION)
@@ -1100,26 +1100,26 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "status",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "modifiedby",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "modified",
-			"caption" => "Millal",
+			"caption" => t("Millal"),
 			"align" => "center",
 			"type" => "time",
 			"format" => "m.d.Y H:i"
@@ -1127,7 +1127,7 @@ class shop_warehouse extends class_base
 
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata",
+			"caption" => t("Vaata"),
 			"align" => "center"
 		));
 	}
@@ -1153,12 +1153,12 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "create_reception",
-			"tooltip" => "Uus"
+			"tooltip" => t("Uus")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "create_reception",
-			"text" => "Lisa sissetulek",
+			"text" => t("Lisa sissetulek"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->reception_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -1179,7 +1179,7 @@ class shop_warehouse extends class_base
 
 			if ($to->prop("confirm"))
 			{
-				$stat = "Sissetulek kinnitatud";
+				$stat = t("Sissetulek kinnitatud");
 			}
 			else
 			{
@@ -1192,7 +1192,7 @@ class shop_warehouse extends class_base
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $c->prop("to.name"),
 				"view" => html::href(array(
-					"caption" => "Vaata",
+					"caption" => t("Vaata"),
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $c->prop("to")
 					), CL_SHOP_WAREHOUSE_EXPORT)
@@ -1211,26 +1211,26 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "status",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "modifiedby",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "modified",
-			"caption" => "Millal",
+			"caption" => t("Millal"),
 			"align" => "center",
 			"type" => "time",
 			"format" => "m.d.Y H:i"
@@ -1238,7 +1238,7 @@ class shop_warehouse extends class_base
 
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata",
+			"caption" => t("Vaata"),
 			"align" => "center"
 		));
 	}
@@ -1264,12 +1264,12 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "create_export",
-			"tooltip" => "Uus"
+			"tooltip" => t("Uus")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "create_export",
-			"text" => "Lisa v&auml;ljaminek",
+			"text" => t("Lisa v&auml;ljaminek"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->export_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -1302,7 +1302,7 @@ class shop_warehouse extends class_base
 		$e = obj();
 		$e->set_parent($this->export_fld);
 		$e->set_class_id(CL_SHOP_WAREHOUSE_EXPORT);
-		$e->set_name("Lao v&auml;ljaminek: ".$p->name());
+		$e->set_name(sprintf(t("Lao v&auml;ljaminek: %s"), $p->name()));
 		$e->save();
 
 		$e->connect(array(
@@ -1349,7 +1349,7 @@ class shop_warehouse extends class_base
 		$e = obj();
 		$e->set_parent($this->reception_fld);
 		$e->set_class_id(CL_SHOP_WAREHOUSE_RECEPTION);
-		$e->set_name("Lao sissetulek: ".$p->name());
+		$e->set_name(sprintf(t("Lao sissetulek: %s"), $p->name()));
 		$e->save();
 
 		$e->connect(array(
@@ -1379,12 +1379,12 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "create_order",
-			"tooltip" => "Uus tellimus"
+			"tooltip" => t("Uus tellimus")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "create_order",
-			"text" => "Lisa tellimus",
+			"text" => t("Lisa tellimus"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -1449,7 +1449,7 @@ class shop_warehouse extends class_base
 						"group" => "items",
 						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
-					"caption" => "Vaata"
+					"caption" => t("Vaata")
 				)),
 				"confirm" => html::checkbox(array(
 					"name" => "confirm[".$o->id()."]",
@@ -1467,32 +1467,32 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "confirm",
-			"caption" => "Kinnita",
+			"caption" => t("Kinnita"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 			"align" => "center",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Millal",
+			"caption" => t("Millal"),
 			"type" => "time",
 			"format" => "d.m.Y H:i",
 			"align" => "center",
@@ -1501,7 +1501,7 @@ class shop_warehouse extends class_base
 
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata",
+			"caption" => t("Vaata"),
 			"align" => "center"
 		));
 	}
@@ -1512,12 +1512,12 @@ class shop_warehouse extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "create_order",
-			"tooltip" => "Uus tellimus"
+			"tooltip" => t("Uus tellimus")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "create_order",
-			"text" => "Lisa tellimus",
+			"text" => t("Lisa tellimus"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
@@ -1551,7 +1551,7 @@ class shop_warehouse extends class_base
 						"group" => "items",
 						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
-					"caption" => "Vaata"
+					"caption" => t("Vaata")
 				)),
 				"price" => $o->prop("sum")
 			));
@@ -1562,24 +1562,24 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Millal",
+			"caption" => t("Millal"),
 			"type" => "time",
 			"format" => "d.m.Y H:i",
 			"align" => "center"
@@ -1587,7 +1587,7 @@ class shop_warehouse extends class_base
 
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata"
+			"caption" => t("Vaata")
 		));
 	}
 
@@ -1610,24 +1610,24 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
 			"name" => "price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 		));
 		$t->define_field(array(
 			"name" => "who",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 		));
 		$t->define_field(array(
 			"name" => "when",
-			"caption" => "Millal",
+			"caption" => t("Millal"),
 		));
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata",
+			"caption" => t("Vaata"),
 		));
 	}
 
@@ -1708,7 +1708,7 @@ class shop_warehouse extends class_base
 				"when" => $o->modified(),
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
-					"caption" => "Vaata"
+					"caption" => t("Vaata")
 				))
 			));
 		}
@@ -2010,7 +2010,7 @@ class shop_warehouse extends class_base
 		$oc = $o->prop("order_center");
 		error::raise_if(!$oc, array(
 			"id" => ERR_NO_OC,
-			"msg" => "shop_warehouse::gen_order(): no order center object selected!"
+			"msg" => t("shop_warehouse::gen_order(): no order center object selected!")
 		));
 
 		$soc = get_instance("applications/shop/shop_order_cart");
@@ -2053,14 +2053,14 @@ class shop_warehouse extends class_base
 		$tb->add_button(array(
 			"name" => "add_to_order",
 			"img" => "import.gif",
-			"tooltip" => "Lisa pakkumisse",
+			"tooltip" => t("Lisa pakkumisse"),
 			"action" => "add_to_cart"
 		));
 
 		$tb->add_button(array(
 			"name" => "go_to_order",
 			"img" => "save.gif",
-			"tooltip" => "Moodusta pakkumine",
+			"tooltip" => t("Moodusta pakkumine"),
 			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "order_current"))
 		));
 	}
@@ -2270,7 +2270,7 @@ class shop_warehouse extends class_base
 	{
 		error::raise_if(!$w->prop("conf"), array(
 			"id" => ERR_FATAL,
-			"msg" => "shop_warehouse::get_order_folder($w): the warehouse has not configuration object set!"
+			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"), $w)
 		));
 
 		$conf = obj($w->prop("conf"));
@@ -2278,7 +2278,7 @@ class shop_warehouse extends class_base
 
 		error::raise_if(empty($tmp), array(
 			"id" => ERR_FATAL,
-			"msg" => "shop_warehouse::get_order_folder($w): the warehouse configuration has no order folder set!"
+			"msg" => sprintf(t("shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"), $w)
 		));
 
 		return $tmp;
@@ -2378,7 +2378,7 @@ class shop_warehouse extends class_base
 		$awm->create_message(array(
 			"froma" => $froma,
 			"fromn" => $fromn,
-			"subject" => "Tellimus laost ".$o->name(),
+			"subject" => sprintf(t("Tellimus laost %s"), $o->name()),
 			"to" => $to,
 			"body" => strip_tags(str_replace("<br>", "\n",$html)),
 		));

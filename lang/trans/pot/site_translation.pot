@@ -1,0 +1,72 @@
+#: classes/translate/site_translation.aw:224
+msgid "ID"
+msgstr ""
+
+#: classes/translate/site_translation.aw:230
+msgid "Originaali nimi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:236
+msgid "Klass"
+msgstr ""
+
+#: classes/translate/site_translation.aw:243
+msgid "Baaskeel"
+msgstr ""
+
+#: classes/translate/site_translation.aw:250
+msgid "T&otilde;lgi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:370
+msgid "ID"
+msgstr ""
+
+#: classes/translate/site_translation.aw:376
+msgid "Originaali nimi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:382
+msgid "Klass"
+msgstr ""
+
+#: classes/translate/site_translation.aw:389
+msgid "Baaskeel"
+msgstr ""
+
+#: classes/translate/site_translation.aw:396
+msgid "Vaata t&otilde;lkeid"
+msgstr ""
+
+#: classes/translate/site_translation.aw:515
+msgid "ID"
+msgstr ""
+
+#: classes/translate/site_translation.aw:521
+msgid "Originaali nimi"
+msgstr ""
+
+#: classes/translate/site_translation.aw:527
+msgid "Klass"
+msgstr ""
+
+#: classes/translate/site_translation.aw:534
+msgid "Baaskeel"
+msgstr ""
+
+#: classes/translate/site_translation.aw:541
+msgid "Vaata t&otilde;lkeid"
+msgstr ""
+
+#: classes/translate/site_translation.aw:650
+msgid "Salvesta"
+msgstr ""
+
+#: classes/translate/site_translation.aw:671
+msgid "Salvesta"
+msgstr ""
+
+#: classes/translate/site_translation.aw:692
+msgid "Salvesta"
+msgstr ""
+

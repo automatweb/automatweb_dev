@@ -1,0 +1,36 @@
+#: classes/applications/register/register.aw:120
+msgid "Otsingu konfiguratsioon valimatta!"
+msgstr ""
+
+#: classes/applications/register/register.aw:172
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/register/register.aw:198
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/register/register.aw:204
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/register/register.aw:211
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/register/register.aw:220
+msgid "Muutja"
+msgstr ""
+
+#: classes/applications/register/register.aw:227
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/register/register.aw:236
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/register/register.aw:326
+msgid "Muuda"
+msgstr ""
+

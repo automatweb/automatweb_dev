@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.4 2004/01/09 10:30:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.5 2005/03/23 10:31:35 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -189,19 +189,19 @@ class document_import extends class_base
 		$t = new aw_table(array("layout" => "generic"));
 		$t->define_field(array(
 			"name" => "parent",
-			"caption" => "Asukoht",
+			"caption" => t("Asukoht"),
 		));
 		$t->define_field(array(
 			"name" => "title",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 		));
 		$t->define_field(array(
 			"name" => "author",
-			"caption" => "Autor",
+			"caption" => t("Autor"),
 		));
 		$t->define_field(array(
 			"name" => "content",
-			"caption" => "Sisu",
+			"caption" => t("Sisu"),
 		));
 
 		foreach($list as $doc)
@@ -265,7 +265,7 @@ class document_import extends class_base
 
 			$ret[$rt] = array(
 				'name' => $rt,
-				'caption' => "Tagi ".$tag." sisu ette pane ",
+				'caption' => sprintf(t("Tagi %s sisu ette pane "), $tag),
 				'type' => 'textbox',
 				'table' => 'objects',
 				'field' => 'meta',
@@ -277,7 +277,7 @@ class document_import extends class_base
 
 			$ret[$rt] = array(
 				'name' => $rt,
-				'caption' => "Tagi ".$tag." sisu taha pane ",
+				'caption' => sprintf(t("Tagi %s sisu taha pane "), $tag),
 				'type' => 'textbox',
 				'table' => 'objects',
 				'field' => 'meta',

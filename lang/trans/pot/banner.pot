@@ -1,0 +1,12 @@
+#: classes/applications/banner/banner.aw:127
+msgid "Banner"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:133
+msgid "N&auml;itamise t&otilde;en&auml;osuse %"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:348
+msgid "No banner location id given"
+msgstr ""
+

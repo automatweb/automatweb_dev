@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.6 2004/05/19 16:20:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.7 2005/03/23 10:31:34 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
@@ -114,58 +114,58 @@ class class_list extends class_base
 		$t->set_layout("generic");
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "id",
+			"caption" => t("id"),
 			"sortable" => 1,
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "def",
-			"caption" =>"def",
+			"caption" =>t("def"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" =>"name",
+			"caption" =>t("name"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "file",
-			"caption" =>"file",
+			"caption" =>t("file"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "can_add",
-			"caption" =>"can_add",
+			"caption" =>t("can_add"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "parents",
-			"caption" =>"parents",
+			"caption" =>t("parents"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "alias",
-			"caption" =>"alias",
+			"caption" =>t("alias"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "alias_class",
-			"caption" =>"alias_class",
+			"caption" =>t("alias_class"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "old_alias",
-			"caption" =>"old_alias",
+			"caption" =>t("old_alias"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "is_remoted",
-			"caption" =>"is_remoted",
+			"caption" =>t("is_remoted"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "subtpl_handler",
-			"caption" => "subtpl_handler",
+			"caption" => t("subtpl_handler"),
 			"sortable" => 1
 		));
 

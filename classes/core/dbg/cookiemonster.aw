@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/dbg/cookiemonster.aw,v 1.1 2004/11/07 11:55:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/dbg/cookiemonster.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
 // a class to aid in debugging - you can set cookies in your browser with this
 
 /*
@@ -47,13 +47,13 @@ class cookiemonster extends class_base
 
 				$t->define_field(array(
 					"name" => "name",
-					"caption" => "Nimi",
+					"caption" => t("Nimi"),
 					"sortable" => 1,
 				));
 
 				$t->define_field(array(
 					"name" => "value",
-					"caption" => "Väärtus",
+					"caption" => t("Väärtus"),
 					"sortable" => 1,
 				));
 

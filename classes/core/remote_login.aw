@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.1 2004/11/01 20:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -68,7 +68,7 @@ class remote_login extends class_base
 	**/
 	function getcookie($arr)
 	{
-		die("Relax, take a cookie.");
+		die(t("Relax, take a cookie."));
 	}
 };
 ?>

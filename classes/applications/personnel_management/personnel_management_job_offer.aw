@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.7 2005/03/10 12:40:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.8 2005/03/23 10:31:33 kristo Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 //HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
@@ -346,7 +346,7 @@ class personnel_management_job_offer extends class_base
 				$tb->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
-					"tooltip" => "Kustuta fail",
+					"tooltip" => t("Kustuta fail"),
 					"action" => "delete_cv_file",
 				));
 			break;
@@ -405,14 +405,14 @@ class personnel_management_job_offer extends class_base
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
-					"tooltip" => "Salvesta hinded",
+					"tooltip" => t("Salvesta hinded"),
 					"url" => "javascript:document.changeform.submit()",
 				));
 
 				$tb->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
-					"tooltip" => "Kustuta kandieerijad",
+					"tooltip" => t("Kustuta kandieerijad"),
 					"action" => "delete_rels",
 				));
 			break;
@@ -428,26 +428,26 @@ class personnel_management_job_offer extends class_base
 				
 		$table->define_field(array(
 			"name" => "nimi",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 				
 			
 		$table->define_field(array(
 			"name" => "date",
-			"caption" => "Kuupäev",
+			"caption" => t("Kuupäev"),
 			"sortable" => 1,
 		));
 
 		$table->define_field(array(
 			"name" => "kaaskiri",
-			"caption" => "Kaaskiri",
+			"caption" => t("Kaaskiri"),
 			"sortable" => 1,
 		));
 			
 		$table->define_field(array(
 			"name" => "hinne",
-			"caption" => "Hinne",
+			"caption" => t("Hinne"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"sortable" => 1,
@@ -483,13 +483,13 @@ class personnel_management_job_offer extends class_base
 			if($rel_obj->meta("kaaskiri"))
 			{
 				$kaaskiri_url = html::href(array(
-					"caption" => "kaaskiri",
+					"caption" => t("kaaskiri"),
 					"url" => $this->mk_my_orb(array("view_letter", array("id" => $rel_obj->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER)),
 				));
 			}
 			else
 			{
-				$kaaskiri_url = "Puudub";
+				$kaaskiri_url = t("Puudub");
 			}
 			
 			$table->define_data(array(							
@@ -529,7 +529,7 @@ class personnel_management_job_offer extends class_base
 		$tb->add_button(array(
 			"name" => "GEN PDF",
 			"img" => "pdf_upload.gif",
-			"tooltip" => "Genereeri pdf",
+			"tooltip" => t("Genereeri pdf"),
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 		));
 	}
@@ -616,13 +616,13 @@ class personnel_management_job_offer extends class_base
 
 		$table->define_field(array(
 			"name" => "person",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 				
 		$table->define_field(array(
 			"name" => "views",
-			"caption" => "Vaatamisi",
+			"caption" => t("Vaatamisi"),
 			"sortable" => 1,
 		));
 		

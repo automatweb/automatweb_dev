@@ -1,0 +1,4 @@
+#: classes/applications/shop/shop_product.aw:407
+msgid "shop_product::draw(): no layout set!"
+msgstr ""
+

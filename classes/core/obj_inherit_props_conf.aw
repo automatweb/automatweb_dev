@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.3 2004/10/04 12:02:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.4 2005/03/23 10:31:34 kristo Exp $
 // obj_inherit_props_conf.aw - Objekti omaduste p&auml;rimine 
 /*
 
@@ -81,7 +81,7 @@ class obj_inherit_props_conf extends class_base
 				$prop["toolbar"]->add_button(array(
 					"name" => "del",
 					"img" => "delete.gif",
-					"tooltip" => "Kustuta valitud",
+					"tooltip" => t("Kustuta valitud"),
 					"url" => "javascript:document.changeform.submit()"
 				));
 				break;
@@ -267,16 +267,16 @@ class obj_inherit_props_conf extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus"
+			"caption" => t("Omadus")
 		));
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "Omaduse t&uuml;&uuml;p",
+			"caption" => t("Omaduse t&uuml;&uuml;p"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "write_to",
-			"caption" => "Kasuta",
+			"caption" => t("Kasuta"),
 			"align" => "center"
 		));
 	}
@@ -381,22 +381,22 @@ class obj_inherit_props_conf extends class_base
 	{
 		$t->define_field(array(
 			"name" => "from_class",
-			"caption" => "Mis klassist",
+			"caption" => t("Mis klassist"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "from_prop",
-			"caption" => "Mis omadusest",
+			"caption" => t("Mis omadusest"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "to_class",
-			"caption" => "Mis klassi",
+			"caption" => t("Mis klassi"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "to_prop",
-			"caption" => "Mis omadusse",
+			"caption" => t("Mis omadusse"),
 			"align" => "center"
 		));
 
@@ -437,28 +437,28 @@ class obj_inherit_props_conf extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muutmise aeg",
+			"caption" => t("Muutmise aeg"),
 			"sortable" => 1,
 			"align" => "center",
 			"numeric" => 1,
@@ -468,7 +468,7 @@ class obj_inherit_props_conf extends class_base
 
 		$t->define_field(array(
 			"name" => "use",
-			"caption" => "Kasuta",
+			"caption" => t("Kasuta"),
 			"align" => "center",
 			"callback" => array(&$this, $fn),
 			"callb_pass_row" => true
@@ -536,7 +536,7 @@ class obj_inherit_props_conf extends class_base
 
 	function get_inherit_from_sel_props($o)
 	{
-		$ret = array("--" => "--Vali--");
+		$ret = array("--" => t("--Vali--"));
 
 		$wd = $o->meta("use_inherit_from_props");
 

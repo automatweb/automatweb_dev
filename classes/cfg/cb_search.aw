@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.26 2005/03/21 12:08:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.27 2005/03/23 10:31:34 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -148,35 +148,35 @@ class cb_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "classn",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 		));	
 
 		$t->define_field(array(
 			"name" => "property",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 		));	
 		
 		$t->define_field(array(
 			"name" => "in_form",
-			"caption" => "Näita vormis",
+			"caption" => t("Näita vormis"),
 			"align" => "center",
 		));	
 
 		$t->define_field(array(
 			"name" => "search_mult",
-			"caption" => "Otsing komaga eraldatud",
+			"caption" => t("Otsing komaga eraldatud"),
 			"align" => "center",
 		));	
 
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"align" => "center",
 		));	
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center",
 		));	
 	}
@@ -259,7 +259,7 @@ class cb_search extends class_base
 			};
 		};
 		asort($names);
-		$arr["options"] = array("0" => "--vali--") + $names;
+		$arr["options"] = array("0" => t("--vali--")) + $names;
 	}
 
 	function set_property($arr = array())
@@ -689,19 +689,19 @@ class cb_search extends class_base
 		{
 			$ret["fts_search"] = array(
 				"type" => "textbox",
-				"caption" => "T&auml;istekstiotsing",
+				"caption" => t("T&auml;istekstiotsing"),
 				"name" => "fts_search"
 			);
 
 			$ret["parent"] = array(
 				"type" => "folder_select",
-				"caption" => "Kataloog",
+				"caption" => t("Kataloog"),
 				"name" => "parent"
 			);
 
 			$ret["per_page"] = array(
 				"type" => "select",
-				"caption" => "Mitu kirjet lehel",
+				"caption" => t("Mitu kirjet lehel"),
 				"name" => "per_page",
 				"options" => array(
 					10 => "10",
@@ -728,50 +728,50 @@ class cb_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"sortable" => 1,
 			"align" => "center",
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "el",
-			"caption" => "Element",
+			"caption" => t("Element"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "Tabelis",
+			"caption" => t("Tabelis"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "is_price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorditav",
+			"caption" => t("Sorditav"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "defaultsort",
-			"caption" => "Vaikimisi sort",
+			"caption" => t("Vaikimisi sort"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "view_col",
-			"caption" => "Vaata tulp",
+			"caption" => t("Vaata tulp"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "u_name",
-			"caption" => "Tulba pealkiri",
+			"caption" => t("Tulba pealkiri"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -787,9 +787,9 @@ class cb_search extends class_base
 		// get register
 		list($props, $clid, $relinfo) = $this->get_props_from_obj($arr["obj_inst"], false);
 		$max_jrk = 0;
-		$props["change_link"]["caption"] = "Muuda";
-		$props["view_link"]["caption"] = "Vaata";
-		$props["del_link"]["caption"] = "Kustuta";
+		$props["change_link"]["caption"] = t("Muuda");
+		$props["view_link"]["caption"] = t("Vaata");
+		$props["del_link"]["caption"] = t("Kustuta");
 		foreach($props as $pn => $pd)
 		{
 			if ($pn == "needs_translation" || $pn == "is_translated")
@@ -889,7 +889,7 @@ class cb_search extends class_base
 		}
 		$htmlc->add_property(array(
 			"name" => "search",
-			"caption" => "Otsi",
+			"caption" => t("Otsi"),
 			"type" => "submit",
 			"store" => "no"
 		));
@@ -1128,27 +1128,27 @@ class cb_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "OID",
+			"caption" => t("OID"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "use",
-			"caption" => "Kasuta?",
+			"caption" => t("Kasuta?"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "subs",
-			"caption" => "K.A. Alamkataloogid?",
+			"caption" => t("K.A. Alamkataloogid?"),
 			"align" => "center"
 		));
 	}

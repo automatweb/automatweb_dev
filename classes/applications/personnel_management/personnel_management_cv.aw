@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.5 2005/03/10 12:40:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.6 2005/03/23 10:31:33 kristo Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
@@ -199,14 +199,14 @@ class personnel_management_cv extends class_base
 					return PROP_IGNORE;
 				}
 				$prop["value"] = html::href(array(
-					"caption" => "Teised arvutioskused",
+					"caption" => t("Teised arvutioskused"),
 					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "ocomp" => true), CL_PERSONNEL_MANAGEMENT_CV),
 				));
 			break;
 			case "comp_skill_label":
 				if($arr["request"]["eoid"])
 				{
-					$prop["value"] = "Arvutioskuse muutmine";
+					$prop["value"] = t("Arvutioskuse muutmine");
 				} 
 			break;
 			case "other_languages":
@@ -221,7 +221,7 @@ class personnel_management_cv extends class_base
 					return PROP_IGNORE;
 				}
 				$prop["value"] = html::href(array(
-					"caption" => "Mõni muu keel",
+					"caption" => t("Mõni muu keel"),
 					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "olang" => true), CL_PERSONNEL_MANAGEMENT_CV),
 				));
 			
@@ -239,7 +239,7 @@ class personnel_management_cv extends class_base
 				}
 				elseif(is_numeric($arr["request"]["eoid"]))
 				{
-					$prop["caption"] = "Muuda töösoovi";
+					$prop["caption"] = t("Muuda töösoovi");
 				}
 			break;
 			case "jobs_wanted_tb":
@@ -406,7 +406,7 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "pdf",
 			"img" => "pdf_upload.gif",
-			"tooltip" => "Genereeri pdf",
+			"tooltip" => t("Genereeri pdf"),
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
 		));
 	
@@ -423,7 +423,7 @@ class personnel_management_cv extends class_base
 
 		$table->define_field(array(
 			"name" => "ametinimetus",
-			"caption" => "Ametinimetus",
+			"caption" => t("Ametinimetus"),
 			"sortable" => 1
 		));
 		
@@ -451,19 +451,19 @@ class personnel_management_cv extends class_base
 
 		$table->define_field(array(
 			"name" => "kool",
-			"caption" => "Kool",
+			"caption" => t("Kool"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "periood",
-			"caption" => "Periood",
+			"caption" => t("Periood"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "type",
-			"caption" => "Hariduse liik",
+			"caption" => t("Hariduse liik"),
 			"sortable" => 1
 		));
 
@@ -523,15 +523,15 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta pingud",
+			"tooltip" => t("Kustuta &otilde;pingud"),
 			"action" => "delete_rels",
-			"confirm" => "Kas soovid kustutada valitud täienduskoolitused?"
+			"confirm" => t("Kas soovid kustutada valitud täienduskoolitused?")
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda valitud täienduskoolitust",
+			"tooltip" => t("Muuda valitud täienduskoolitust"),
 			"action" => "edit_something",
 		));
 	}
@@ -543,13 +543,13 @@ class personnel_management_cv extends class_base
 		$tb->add_menu_button(array(
    			"name" => "new",
    			"img" => "new.gif",
-   			"tooltip" => "Uus",
+   			"tooltip" => t("Uus"),
 		));
 		
 		$tb->add_menu_item(array(
     		"parent" => "new",
-    		"text" => "Töösoov",
-    		"title" => "Töösoov",
+    		"text" => t("Töösoov"),
+    		"title" => t("Töösoov"),
     		"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "eoid" => "new"), "personnel_management_cv", true, true),
     		"disabled" => false,
 		));
@@ -557,15 +557,15 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta pingud",
+			"tooltip" => t("Kustuta &otilde;pingud"),
 			"action" => "delete_rels",
-			"confirm" => "Kas soovid kustutada valitud töösoovid?"
+			"confirm" => t("Kas soovid kustutada valitud töösoovid?")
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda valitud töösoovi",
+			"tooltip" => t("Muuda valitud töösoovi"),
 			"action" => "edit_something",
 		));
 	}
@@ -576,13 +576,13 @@ class personnel_management_cv extends class_base
 		
 		$table->define_field(array(
 			"name" => "school",
-			"caption" => "Haridusasutus",
+			"caption" => t("Haridusasutus"),
 			"sortable" => 1
 		));
 		
 		$table->define_field(array(
 			"name" => "periood",
-			"caption" => "Periood",
+			"caption" => t("Periood"),
 			"sortable" => 1
 		));
 		
@@ -634,21 +634,21 @@ class personnel_management_cv extends class_base
 		$tb->add_menu_button(array(
    			"name" => "new",
    			"img" => "new.gif",
-   			"tooltip" => "Uus",
+   			"tooltip" => t("Uus"),
 		));
 
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta pingud",
+			"tooltip" => t("Kustuta &otilde;pingud"),
 			"action" => "delete_rels",
-			"confirm" => "Kas soovid kustutada valitud õpingud?"
+			"confirm" => t("Kas soovid kustutada valitud õpingud?")
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda valitud haridust",
+			"tooltip" => t("Muuda valitud haridust"),
 			"action" => "edit_something",
 		));
 
@@ -687,14 +687,14 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta keeleoskused",
+			"tooltip" => t("Kustuta keeleoskused"),
 			"action" => "delete_rels",
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda keeleoskust",
+			"tooltip" => t("Muuda keeleoskust"),
 			"action" => "edit_something",
 		));
 	}
@@ -705,13 +705,13 @@ class personnel_management_cv extends class_base
 
 		$table->define_field(array(
 			"name" => "keel",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "tase",
-			"caption" => "Tase",
+			"caption" => t("Tase"),
 			"sortable" => 1
 		));
 
@@ -747,14 +747,14 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta tkogemused",
+			"tooltip" => t("Kustuta t&ouml;&ouml;kogemused"),
 			"action" => "delete_rels",
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda tkogemust",
+			"tooltip" => t("Muuda t&ouml;&ouml;kogemust"),
 			"action" => "edit_something",
 		));
 	}
@@ -765,25 +765,25 @@ class personnel_management_cv extends class_base
 
 		$table->define_field(array(
 			"name" => "asutus",
-			"caption" => "Asutus",
+			"caption" => t("Asutus"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "ametikoht",
-			"caption" => "Ametikoht",
+			"caption" => t("Ametikoht"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "alates",
-			"caption" => "Alates",
+			"caption" => t("Alates"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "kuni",
-			"caption" => "Kuni",
+			"caption" => t("Kuni"),
 			"sortable" => 1
 		));
 
@@ -815,14 +815,14 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta arvutioskused",
+			"tooltip" => t("Kustuta arvutioskused"),
 			"action" => "delete_rels",
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda oskust",
+			"tooltip" => t("Muuda oskust"),
 			"action" => "edit_something",
 		));
 	}
@@ -854,13 +854,13 @@ class personnel_management_cv extends class_base
 
 		$table->define_field(array(
 			"name" => "oskus",
-			"caption" => "Oskus",
+			"caption" => t("Oskus"),
 			"sortable" => true,
 		));
 
 		$table->define_field(array(
 			"name" => "tase",
-			"caption" => "Tase",
+			"caption" => t("Tase"),
 			"sortable" => true,
 		));
 
@@ -1189,7 +1189,7 @@ class personnel_management_cv extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "pdf_upload.gif",
-			"tooltip" => "Genereeri pdf",
+			"tooltip" => t("Genereeri pdf"),
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
 		));
 	}
@@ -1214,13 +1214,13 @@ class personnel_management_cv extends class_base
 			
 		$table->define_field(array(
 			"name" => "who",
-			"caption" => "Kes vaatas:",
+			"caption" => t("Kes vaatas:"),
 			"sortable" => 1
 		));
 			
 		$table->define_field(array(
 			"name" => "count",
-			"caption" => "Vaatamisi",
+			"caption" => t("Vaatamisi"),
 			"sortable" => 1
 		));
 

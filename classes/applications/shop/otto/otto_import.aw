@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.23 2005/03/08 13:26:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.24 2005/03/23 10:31:34 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -485,7 +485,7 @@ class otto_import extends class_base
 					{
 						error::raise(array(
 							"id" => "ERR_NO_FETCH",
-							"msg" => "otto_import::images(): could not fetch html for url $nurl!"
+							"msg" => sprintf(t("otto_import::images(): could not fetch html for url %s!"), $nurl)
 						));
 					}
 					
@@ -1326,7 +1326,7 @@ class otto_import extends class_base
 			unlink($file);
 		}
 
-		die("all done! <br>");
+		die(t("all done! <br>"));
 	}
 
 	function conv($str)
@@ -1732,13 +1732,13 @@ class otto_import extends class_base
 	{
 		$t->define_field(array(
 			"name" => "pgs",
-			"caption" => "Lehed komaga eraldatult",
+			"caption" => t("Lehed komaga eraldatult"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "awfld",
-			"caption" => "AW Kataloogi ID",
+			"caption" => t("AW Kataloogi ID"),
 			"align" => "center"
 		));
 	}

@@ -1,0 +1,4 @@
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:344
+msgid "Nimi"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.11 2005/01/28 08:58:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.12 2005/03/23 10:31:35 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -112,24 +112,24 @@ class auth_config extends class_base
 	{
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "Serveri t&uuml;&uuml;p",
+			"caption" => t("Serveri t&uuml;&uuml;p"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "use",
-			"caption" => "Kasuta?",
+			"caption" => t("Kasuta?"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 	}

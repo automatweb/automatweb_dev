@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.26 2005/03/08 13:26:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.27 2005/03/23 10:31:34 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -196,11 +196,11 @@ class shop_order extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => "Mitu",
+			"caption" => t("Mitu"),
 			"align" => "center"
 		));
 		$t->parse_xml_def("shop/prods_table");
@@ -260,7 +260,7 @@ class shop_order extends class_base
 			$prod_conn = reset($to->connections_to(array("from.class_id" => "CL_SHOP_PRODUCT")));
 			if ($prod_conn)
 			{
-				$name = "Pakend: ".$name.",  Toode: ".html::get_change_url($prod_conn->prop("from"), array(), $prod_conn->prop("from.name"));
+				$name = t("Pakend: ").$name.",  ".t("Toode: ").html::get_change_url($prod_conn->prop("from"), array(), $prod_conn->prop("from.name"));
 			}
 
 			$t->define_data(array(
@@ -300,14 +300,14 @@ class shop_order extends class_base
 
 		error::raise_if(!$parent, array(
 			"id" => ERR_ORDER,
-			"msg" => "shop_order::do_confirm(): could not find parent folder for warehouse export!"
+			"msg" => t("shop_order::do_confirm(): could not find parent folder for warehouse export!")
 		));
 
 
 		$e = obj();
 		$e->set_class_id(CL_SHOP_WAREHOUSE_EXPORT);
 		$e->set_parent($parent);
-		$e->set_name("Lao v&auml;ljaminek tellimuse ".$o->name()." p&otilde;hjal");
+		$e->set_name(sprintf(t("Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"), $o->name()));
 		$e->set_meta("exp_content", $o->meta("ord_content"));
 		$e->save();
 
@@ -389,7 +389,7 @@ class shop_order extends class_base
 
 		$oi = obj();
 		$oi->set_parent($wh->get_order_folder($this->order_warehouse));
-		$oi->set_name("Tellimus laost ".$this->order_warehouse->name());
+		$oi->set_name(sprintf(t("Tellimus laost %s"), $this->order_warehouse->name()));
 		$oi->set_class_id(CL_SHOP_ORDER);
 		$oi->set_prop("warehouse", $this->order_warehouse->id());
 		
@@ -520,7 +520,7 @@ class shop_order extends class_base
 		$oi->set_prop("sum", $sum);
 		$oi->save();
 
-		$email_subj = "Tellimus laost ".$this->order_warehouse->name();
+		$email_subj = sprintf(t("Tellimus laost %s"), $this->order_warehouse->name());
 		$mail_from_addr = "automatweb@automatweb.com";
 		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
 		

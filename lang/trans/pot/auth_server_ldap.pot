@@ -1,0 +1,20 @@
+#: classes/core/users/auth/auth_server_ldap.aw:119
+msgid "auth_server_ldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_ldap.aw:123
+msgid "LDAP Moodul pole installeeritud!"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_ldap.aw:134
+msgid "Ei saanud &uuml;hendust LDAP serveriga %s"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_ldap.aw:175
+msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_ldap.aw:193
+msgid "Ei saanud serveriga &uuml;hendust!"
+msgstr ""
+

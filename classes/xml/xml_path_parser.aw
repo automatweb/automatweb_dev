@@ -84,7 +84,7 @@ class xml_path_parser
 			xml_get_current_line_number($parser),
 			$pref,$offender,$suf));
 			// if we do continue then the results are undefined
-			die("<br>Cannot continue like this");
+			die(t("<br>Cannot continue like this"));
 			
 		};
 		xml_parser_free($parser);

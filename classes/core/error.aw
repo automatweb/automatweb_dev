@@ -41,9 +41,12 @@ class error
 	// func - the function where access was denied
 	function throw_acl($arr)
 	{
+		$sct = isset($arr["access"]) ? "can_".$arr["access"] : t("not specified");
+		$objn = isset($arr["oid"]) ? $arr["oid"] : t("not specified");
+		$func = isset($arr["func"]) ? $arr["func"] : t("not specified");
 		error::raise(array(
 			"id" => ERR_ACL,
-			"msg" => "Acl error, access ".(isset($arr["access"]) ? "can_".$arr["access"] : "not specified")." was denied for object ".(isset($arr["oid"]) ? $arr["oid"] : "not specified")." in function ".(isset($arr["func"]) ? $arr["func"] : "not specified"),
+			"msg" => sprintf(t("Acl error, access %s was denied for object %s in function %s"), $sct,$objn, $func),
 			"fatal" => true,
 			"show" => true
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.17 2005/01/25 14:50:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.18 2005/03/23 10:31:33 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -117,7 +117,7 @@ class register extends class_base
 			case "search":
 				if (!$arr["obj_inst"]->prop("search_o"))
 				{
-					$prop["value"] = "Otsingu konfiguratsioon valimatta!";
+					$prop["value"] = t("Otsingu konfiguratsioon valimatta!");
 				}
 				else
 				{
@@ -169,7 +169,7 @@ class register extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "new",
-			"tooltip" => "Uus"
+			"tooltip" => t("Uus")
 		));
 
 		$awa = new aw_array($arr["obj_inst"]->prop("data_cfgform"));
@@ -195,20 +195,20 @@ class register extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Looja",
+			"caption" => t("Looja"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -217,14 +217,14 @@ class register extends class_base
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "d.m.Y H:i",
@@ -233,7 +233,7 @@ class register extends class_base
 
 		$t->define_field(array(
 			"name" => "change",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center"
 		));
 
@@ -323,7 +323,7 @@ class register extends class_base
 							"group" => $arr["request"]["group"],
 						))),
 					), $o->class_id()),
-					"caption" => "Muuda"
+					"caption" => t("Muuda")
 				))
 			));
 		}

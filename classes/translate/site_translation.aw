@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.14 2004/10/27 12:04:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.15 2005/03/23 10:31:35 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -221,33 +221,33 @@ class site_translation extends class_base
 
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Originaali nimi",
+			"caption" => t("Originaali nimi"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "base_lang",
-			"caption" => "Baaskeel",
+			"caption" => t("Baaskeel"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "action",
-			"caption" => "T&otilde;lgi",
+			"caption" => t("T&otilde;lgi"),
 			"align" => "center",
 		));	
 
@@ -367,33 +367,33 @@ class site_translation extends class_base
 
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Originaali nimi",
+			"caption" => t("Originaali nimi"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "base_lang",
-			"caption" => "Baaskeel",
+			"caption" => t("Baaskeel"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "action",
-			"caption" => "Vaata t&otilde;lkeid",
+			"caption" => t("Vaata t&otilde;lkeid"),
 			"sortable" => 0,
 			"align" => "center",
 		));
@@ -512,33 +512,33 @@ class site_translation extends class_base
 
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Originaali nimi",
+			"caption" => t("Originaali nimi"),
 			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "base_lang",
-			"caption" => "Baaskeel",
+			"caption" => t("Baaskeel"),
 			"sortable" => 1,
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "action",
-			"caption" => "Vaata t&otilde;lkeid",
+			"caption" => t("Vaata t&otilde;lkeid"),
 			"sortable" => 0,
 			"align" => "center",
 		));
@@ -647,7 +647,7 @@ class site_translation extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "#",
 			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
 			"img" => "save.gif",
@@ -668,7 +668,7 @@ class site_translation extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "#",
 			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
 			"img" => "save.gif",
@@ -689,7 +689,7 @@ class site_translation extends class_base
 		
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "#",
 			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
 			"img" => "save.gif",

@@ -1,0 +1,104 @@
+#: classes/cfg/cb_search.aw:151
+msgid "Klass"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:156
+msgid "Omadus"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:161
+msgid "Näita vormis"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:167
+msgid "Otsing komaga eraldatud"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:173
+msgid "Tekst"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:179
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:262
+msgid "--vali--"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:692
+msgid "T&auml;istekstiotsing"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:698
+msgid "Kataloog"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:704
+msgid "Mitu kirjet lehel"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:731
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:738
+msgid "Element"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:744
+msgid "Tabelis"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:750
+msgid "Hind"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:756
+msgid "Sorditav"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:762
+msgid "Vaikimisi sort"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:768
+msgid "Vaata tulp"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:774
+msgid "Tulba pealkiri"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:790
+msgid "Muuda"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:791
+msgid "Vaata"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:792
+msgid "Kustuta"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:892
+msgid "Otsi"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:1131
+msgid "OID"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:1138
+msgid "Nimi"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:1145
+msgid "Kasuta?"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:1151
+msgid "K.A. Alamkataloogid?"
+msgstr ""
+

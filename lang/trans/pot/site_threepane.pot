@@ -1,0 +1,8 @@
+#: classes/site/site_threepane.aw:60
+msgid "Näita saiti"
+msgstr ""
+
+#: classes/site/site_threepane.aw:194
+msgid "Metainfo"
+msgstr ""
+

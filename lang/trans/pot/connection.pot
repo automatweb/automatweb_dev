@@ -1,0 +1,48 @@
+#: classes/core/obj/connection.aw:54
+msgid "connection::constructior(%s): parameter must be numeric or array!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:73
+msgid "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:92
+msgid "connection::find(): parameter must be an array of filter parameters!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:128
+msgid "connection::change(%s): parameter must be an array!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:151
+msgid "connection::delete(): no current connection to delete!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:160
+msgid "connection::delete(): no view access for this connection (%s)!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:210
+msgid "connection::to(): no current connection!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:222
+msgid "connection::to(): no current connection!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:244
+msgid "connection::load(%s): no connection with id $id!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:253
+msgid "connection::load(%s): no view access for this connection!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:264
+msgid "connection::save(): connection must have both ends defined!"
+msgstr ""
+
+#: classes/core/obj/connection.aw:275
+msgid "connection::load(%s): no view access for this connection!"
+msgstr ""
+

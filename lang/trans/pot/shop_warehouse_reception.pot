@@ -1,0 +1,8 @@
+#: classes/applications/shop/shop_warehouse_reception.aw:79
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:84
+msgid "Mitu tuli"
+msgstr ""
+

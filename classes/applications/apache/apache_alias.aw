@@ -59,7 +59,7 @@ class apache_alias extends class_base
 			case "alias":
 				if ($prop["value"] == "")
 				{
-					$prop["error"] = "Alias ei saa olla tühi!";
+					$prop["error"] = t("Alias ei saa olla tühi!");
 					return PROP_ERROR;
 				}
 				$filt = array(
@@ -73,7 +73,7 @@ class apache_alias extends class_base
 				$ol = new object_list($filt);
 				if ($ol->count() > 0)
 				{
-					$prop["error"] = "Sellise nimega alias on juba olemas!";
+					$prop["error"] = t("Sellise nimega alias on juba olemas!");
 					return PROP_ERROR;
 				}
 				break;
@@ -81,7 +81,7 @@ class apache_alias extends class_base
 			case "dir":
 				if ($prop["value"] == "")
 				{
-					$prop["error"] = "Kataloog ei saa olla tühi!!";
+					$prop["error"] = t("Kataloog ei saa olla tühi!!");
 					return PROP_ERROR;
 				}
 				break;
@@ -94,25 +94,25 @@ class apache_alias extends class_base
 	{
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "alias",
-			"caption" => "Alias",
+			"caption" => t("Alias"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "dir",
-			"caption" => "Kataloog serveris",
+			"caption" => t("Kataloog serveris"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"align" => "center",
 			"type" => "time",
 			"numeric" => 1,
@@ -121,13 +121,13 @@ class apache_alias extends class_base
 
 		$t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Autor",
+			"caption" => t("Autor"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"align" => "center",
 			"type" => "time",
 			"numeric" => 1,
@@ -136,7 +136,7 @@ class apache_alias extends class_base
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"align" => "center"
 		));
 	}
@@ -167,7 +167,7 @@ class apache_alias extends class_base
 		$fp = @fopen($this->cfg["aliasfile"],"w");
 		if (!$fp)
 		{
-			$conf = "Faili ".$this->cfg["aliasfile"]." ei saanud kirjutamiseks avada! <br>-------------------<br><br>".$conf;
+			$conf = sprintf(t("Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"), $this->cfg["aliasfile"]).$conf;
 		}
 		else
 		{

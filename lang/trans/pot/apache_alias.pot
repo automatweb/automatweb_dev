@@ -1,0 +1,44 @@
+#: classes/applications/apache/apache_alias.aw:62
+msgid "Alias ei saa olla tühi!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:76
+msgid "Sellise nimega alias on juba olemas!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:84
+msgid "Kataloog ei saa olla tühi!!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:97
+msgid "ID"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:103
+msgid "Alias"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:109
+msgid "Kataloog serveris"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:115
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:124
+msgid "Autor"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:130
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:139
+msgid "Muutja"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:170
+msgid "Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"
+msgstr ""
+

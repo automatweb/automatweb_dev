@@ -1,0 +1,65 @@
+#: classes/core/users/group.aw:182
+msgid "Tavaline"
+msgstr ""
+
+#: classes/core/users/group.aw:183
+msgid "D&uuml;naamiline"
+msgstr ""
+
+#: classes/core/users/group.aw:192
+msgid "
+					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
+					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
+					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\">siin</a> <br />
+					n&auml;ide: <br />
+					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
+					<br />
+					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
+				"
+msgstr ""
+
+#: classes/core/users/group.aw:230
+msgid "Impordin kasutajaid ... <br />"
+msgstr ""
+
+#: classes/core/users/group.aw:388
+msgid "Muuda"
+msgstr ""
+
+#: classes/core/users/group.aw:417
+msgid "Objekti Nimi"
+msgstr ""
+
+#: classes/core/users/group.aw:426
+msgid "Objekti Asukoht"
+msgstr ""
+
+#: classes/core/users/group.aw:435
+msgid "Grupi Nimi"
+msgstr ""
+
+#: classes/core/users/group.aw:444
+msgid "&Otilde;igused"
+msgstr ""
+
+#: classes/core/users/group.aw:464
+msgid "Muuda objekti %s &otilde;igusi"
+msgstr ""
+
+#: classes/core/users/group.aw:567
+msgid "Administreerimisliidese juurkaust (%s)"
+msgstr ""
+
+#: classes/core/users/group.aw:592
+msgid "Esileht (%s)"
+msgstr ""
+
+#: classes/core/users/group.aw:613
+msgid " / Muuda"
+msgstr ""
+
+#: classes/core/users/group.aw:850
+msgid "Default &otilde;igused seose loomisel"
+msgstr ""
+

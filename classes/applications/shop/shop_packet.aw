@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.10 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.11 2005/03/23 10:31:34 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -122,12 +122,12 @@ class shop_packet extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => "Mitu paketis",
+			"caption" => t("Mitu paketis"),
 			"align" => "center"
 		));
 	}

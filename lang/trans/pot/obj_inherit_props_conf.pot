@@ -1,0 +1,56 @@
+#: classes/core/obj_inherit_props_conf.aw:84
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:270
+msgid "Omadus"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:274
+msgid "Omaduse t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:279
+msgid "Kasuta"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:384
+msgid "Mis klassist"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:389
+msgid "Mis omadusest"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:394
+msgid "Mis klassi"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:399
+msgid "Mis omadusse"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:440
+msgid "Nimi"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:447
+msgid "Klass"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:454
+msgid "Muutja"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:461
+msgid "Muutmise aeg"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:471
+msgid "Kasuta"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:539
+msgid "--Vali--"
+msgstr ""
+

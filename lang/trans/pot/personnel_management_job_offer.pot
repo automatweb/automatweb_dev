@@ -1,0 +1,48 @@
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:349
+msgid "Kustuta fail"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:408
+msgid "Salvesta hinded"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:415
+msgid "Kustuta kandieerijad"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:431
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:438
+msgid "Kuupäev"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:444
+msgid "Kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:450
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:486
+msgid "kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:492
+msgid "Puudub"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:532
+msgid "Genereeri pdf"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:619
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:625
+msgid "Vaatamisi"
+msgstr ""
+

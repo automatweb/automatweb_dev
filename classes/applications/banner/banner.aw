@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.6 2005/03/18 12:02:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.7 2005/03/23 10:31:33 kristo Exp $
 
 /*
 
@@ -124,13 +124,13 @@ class banner extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Banner",
+			"caption" => t("Banner"),
 			"width" => "90%"
 		));
 
 		$t->define_field(array(
 			"name" => "prob",
-			"caption" => "N&auml;itamise t&otilde;en&auml;osuse %",
+			"caption" => t("N&auml;itamise t&otilde;en&auml;osuse %"),
 			"align" => "center"
 		));
 	}
@@ -345,7 +345,7 @@ class banner extends class_base
 			// tagastame baasi kirjutatud htmli banneri naitamisex.
 			if (!$gid)
 			{
-				die(LC_ERROR_NO_ID);
+				die(t("No banner location id given"));
 			}
 			die($this->db_fetch_field("SELECT html FROM banner_clients WHERE id = $gid","html"));
 		}

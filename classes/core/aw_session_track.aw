@@ -22,7 +22,7 @@ class aw_session_track extends class_base
 
 		$data = $this->get_track_data();
 
-		$this->mk_path(0, "Saidid");
+		$this->mk_path(0, t("Saidid"));
 
 		$c_ts = time();
 
@@ -96,7 +96,7 @@ class aw_session_track extends class_base
 			$tot["cnt_600_sec"] += $dat["cnt_600_sec"];
 		}
 
-		$ret = "<b>KOKKU:</b><Br>Sessioone: $data[sess_cnt]<br>Tr&auml;kitud sessioone: $tot[cnt]<br>Logitud: $tot[cnt_logged]<br>60 sek: $tot[cnt_60_sec]<br>600 sek: $tot[cnt_600_sec]<br>";
+		$ret = sprintf(t("<b>KOKKU:</b><Br>Sessioone: %s<br>Tr&auml;kitud sessioone: %s<br>Logitud: %s<br>60 sek: %s<br>600 sek: %s<br>"), $data["sess_cnt"], $tot["cnt"], $tot["cnt_logged"], $tot["cnt_60_sec"], $tot["cnt_600_sec"]);
 
 		$tb->set_default_sortby("cnt");
 		$tb->set_default_sorder("desc");
@@ -108,14 +108,14 @@ class aw_session_track extends class_base
 	{
 		$t->define_field(array(
 			"name" => "url",
-			"caption" => "Sait",
+			"caption" => t("Sait"),
 			"sortable" => 1,
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt",
-			"caption" => "Mitu tr2kitud kasutajat",
+			"caption" => t("Mitu tr2kitud kasutajat"),
 			"numeric" => 1,
 			"align" => "center"
 		));
@@ -123,7 +123,7 @@ class aw_session_track extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt_logged",
-			"caption" => "Mitu sisse loginud tr2kitud kasutajat",
+			"caption" => t("Mitu sisse loginud tr2kitud kasutajat"),
 			"numeric" => 1,
 			"align" => "center"
 		));
@@ -131,7 +131,7 @@ class aw_session_track extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt_60_sec",
-			"caption" => "Viimati minuti jooksul",
+			"caption" => t("Viimati minuti jooksul"),
 			"numeric" => 1,
 			"align" => "center"
 		));
@@ -139,7 +139,7 @@ class aw_session_track extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt_600_sec",
-			"caption" => "Viimati 10 minuti jooksul",
+			"caption" => t("Viimati 10 minuti jooksul"),
 			"numeric" => 1,
 			"align" => "center"
 		));
@@ -147,7 +147,7 @@ class aw_session_track extends class_base
 		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "uid_list",
-			"caption" => "Sisse loginud kasutajad"
+			"caption" => t("Sisse loginud kasutajad")
 		));
 	}
 
@@ -169,7 +169,7 @@ class aw_session_track extends class_base
 
 		$this->mk_path(0, html::href(array(
 			"url" => $this->mk_my_orb("list"),
-			"caption" => "Saidid"
+			"caption" => t("Saidid")
 		))." / $arr[url] ");
 
 
@@ -207,7 +207,7 @@ class aw_session_track extends class_base
 			{
 				$lo = html::href(array(
 					"url" => $this->mk_my_orb("del_sess", array("sess" => $sess_file, "return_url" => urlencode(aw_global_get("REQUEST_URI")))),
-					"caption" => "Logi v&auml;lja"
+					"caption" => t("Logi v&auml;lja")
 				));
 			}
 
@@ -226,7 +226,7 @@ class aw_session_track extends class_base
 				"timestamp" => $d["aw"]["timestamp"],
 				"msg" => html::href(array(
 					"url" => "javascript:void(0)",
-					"caption" => "Saada teade",
+					"caption" => t("Saada teade"),
 					"onClick" => "u = prompt(\"Teade\");window.location=\"".$this->mk_my_orb("do_msg", array(
 							"sess" => $sess_file,
 							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
@@ -234,8 +234,8 @@ class aw_session_track extends class_base
 				)),
 				"redir" => html::href(array(
 					"url" => "javascript:void(0)",
-					"caption" => "Suuna",
-					"onClick" => "u = prompt(\"Aadress, kuhu suunata\");window.location=\"".$this->mk_my_orb("do_redir", array(
+					"caption" => t("Suuna"),
+					"onClick" => "u = prompt(\"".t("Aadress, kuhu suunata")."\");window.location=\"".$this->mk_my_orb("do_redir", array(
 							"sess" => $sess_file,
 							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					))."&redir_to=\"+u;"
@@ -258,15 +258,15 @@ class aw_session_track extends class_base
 		));
 		$t2->define_field(array(
 			"name" => "ip",
-			"caption" => "Kasutaja ip",
+			"caption" => t("Kasutaja ip"),
 		));
 		$t2->define_field(array(
 			"name" => "who",
-			"caption" => "Kellele",
+			"caption" => t("Kellele"),
 		));
 		$t2->define_field(array(
 			"name" => "msg",
-			"caption" => "Teade",
+			"caption" => t("Teade"),
 		));
 
 		foreach($msgs as $d)
@@ -284,15 +284,15 @@ class aw_session_track extends class_base
 		));
 		$t3->define_field(array(
 			"name" => "ip",
-			"caption" => "Kasutaja ip",
+			"caption" => t("Kasutaja ip"),
 		));
 		$t3->define_field(array(
 			"name" => "who",
-			"caption" => "Kellele",
+			"caption" => t("Kellele"),
 		));
 		$t3->define_field(array(
 			"name" => "url",
-			"caption" => "Kuhu suunata",
+			"caption" => t("Kuhu suunata"),
 		));
 
 		foreach($redirs as $d)
@@ -305,21 +305,21 @@ class aw_session_track extends class_base
 			));
 		}		
 		
-		return "<br>Saatmata teated: ".$t2->draw()."<br>Tegemata suunamised:".$t3->draw();
+		return sprintf(t("<br>Saatmata teated: %s <br>Tegemata suunamised: %s"), $t2->draw(), $t3->draw());
 	}
 
 	function _init_show_site_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "ip",
-			"caption" => "Kasutaja IP aadress",
+			"caption" => t("Kasutaja IP aadress"),
 			"nowrap" => 1,
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "uid",
-			"caption" => "Kasutaja",
+			"caption" => t("Kasutaja"),
 			"nowrap" => 1,
 			"sortable" => 1
 		));
@@ -329,38 +329,38 @@ class aw_session_track extends class_base
 			"type" => "time",
 			"numeric" => 1,
 			"format" => "d.m.Y H:i:s",
-			"caption" => "Millal viimati",
+			"caption" => t("Millal viimati"),
 			"nowrap" => 1,
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "msg",
-			"caption" => "Saada teade",
+			"caption" => t("Saada teade"),
 			"nowrap" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "redir",
-			"caption" => "Suuna",
+			"caption" => t("Suuna"),
 			"nowrap" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "logout",
-			"caption" => "Logi v&auml;lja",
+			"caption" => t("Logi v&auml;lja"),
 			"nowrap" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "url",
-			"caption" => "Url, mida vaadatakse",
+			"caption" => t("Url, mida vaadatakse"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "referer",
-			"caption" => "Referer",
+			"caption" => t("Referer"),
 			"sortable" => 1
 		));
 	}

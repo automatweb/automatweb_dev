@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.2 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.3 2005/03/23 10:31:34 kristo Exp $
 // aw_help.aw - Abitekst 
 /*
 
@@ -45,7 +45,7 @@ class aw_help extends class_base
 		/*
 		if(!($_GET["hclass"].$_POST["hclass"]))
 		{
-			echo "Klass on määramata";
+			echo t("Klass on määramata");
 			die();
 		}
 		
@@ -86,7 +86,7 @@ class aw_help extends class_base
 		$retval["about_tab"] = array(
 			"type" => "textarea",
 			"name" => "about_tab",
-			"caption" => "Abiinfo tabi kohta",
+			"caption" => t("Abiinfo tabi kohta"),
 			"parent" => "help_hbox_table",
 			"value" => $data["about_tab"],
 		);
@@ -95,7 +95,7 @@ class aw_help extends class_base
 			"type" => "text",
 			"subtitle" => 1,
 			"store" => "no",
-			"value" => "Klassi omaduste kirjeldused",
+			"value" => t("Klassi omaduste kirjeldused"),
 			"parent" => "help_hbox_table",
 		);
 		
@@ -125,7 +125,7 @@ class aw_help extends class_base
 	       		"type" => "textbox",
 	        	"name" => "short_alt[$key]",
 	        	"size " => 100,
-	        	"caption" => "Lühike kirjeldus",
+	        	"caption" => t("Lühike kirjeldus"),
 	        	"parent" => "help_hbox_table",
 	        	"value" => $data["short_alt"][$key],
     		);
@@ -133,7 +133,7 @@ class aw_help extends class_base
 			$retval["long_alt[$key]"] = array(
 	       		"type" => "textarea",
 	        	"name" => "long_alt[$key]",
-	        	"caption" => "Pikem kirjeldus",
+	        	"caption" => t("Pikem kirjeldus"),
 	        	"parent" => "help_hbox_table",
 	        	"value" => $data["long_alt"][$key],
 	        	"cols " => 100,
@@ -240,7 +240,7 @@ class aw_help extends class_base
 			/*case "hclass":
 				if(!$prop["value"])
 				{
-					$prop["error"] = "Klass on määramata!";
+					$prop["error"] = t("Klass on määramata!");
 					return PROP_FATAL_ERROR;
 				}
 			break;*/
@@ -303,7 +303,7 @@ class aw_help extends class_base
 						"htab" => $arr["htab"],
 					)
 				, CL_AW_HELP),
-				"caption" => "Muuda",
+				"caption" => t("Muuda"),
 			));
 		
 		
@@ -431,14 +431,14 @@ class aw_help extends class_base
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"action" => "write_to_help_file",
 		));
 		
 		$tb->add_button(array(
 			"name" => "pereview",
 			"img" => "preview.gif",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => $this->mk_my_orb("show", array(
 				"hclass" => $arr["request"]["hclass"],
 				"htab" => $arr["request"]["htab"]
@@ -460,7 +460,7 @@ class aw_help extends class_base
 			"tree_id" => "classes_tree",
 			"persist_state" => true,
   			"type" => TREE_DHTML,
-  			"root_name" => "AutomatWeb",
+  			"root_name" => t("AutomatWeb"),
   			"root_url" => $this->mk_my_orb("root_action",array()),
   			"url_target" => "list",
 		));

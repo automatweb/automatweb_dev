@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.3 2005/03/23 10:31:34 kristo Exp $
 // shop_warehouse_reception.aw - Lao sissetulek 
 /*
 
@@ -76,12 +76,12 @@ class shop_warehouse_reception extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => "Mitu tuli",
+			"caption" => t("Mitu tuli"),
 			"align" => "center"
 		));
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.29 2005/03/03 10:23:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.30 2005/03/23 10:31:34 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -146,7 +146,7 @@ class shop_order_cart extends class_base
 		// now get item layout from cart
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
-			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
+			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
 		));
 		$layout = obj($cart_o->prop("prod_layout"));
 
@@ -339,7 +339,7 @@ class shop_order_cart extends class_base
 					}
 
 					$soce[$iid] = array(
-						"msg" => $i_o->name()." peab tellima ".$mon." kaupa, hetkel kokku $cc!",
+						"msg" => sprintf(t("%s peab tellima %s kaupa, hetkel kokku %s!"), $i_o->name(),$mon, $cc),
 						"prod_name" => $i_o->name(),
 						"prod_id" => $i_o->id(),
 						"must_order_num" => $mon,
@@ -600,7 +600,7 @@ class shop_order_cart extends class_base
 			{
 				error::raise(array(
 					"id" => "ERR_NO_WAREHOOS",
-					"msg" => "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart ".$oc->id()."!"
+					"msg" => sprintf(t("shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"), $oc->id())
 				));
 			}
 			$warehouse = $oc->prop("warehouse");
@@ -775,7 +775,7 @@ class shop_order_cart extends class_base
 		// now get item layout from cart
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
-			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
+			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
 		));
 		$layout = obj($cart_o->prop("prod_layout"));
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
@@ -996,7 +996,7 @@ class shop_order_cart extends class_base
 		// now get item layout from cart
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
-			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
+			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
 		));
 		$layout = obj($cart_o->prop("prod_layout"));
 		$layout->set_prop("template", "prod_pre_confirm.tpl");

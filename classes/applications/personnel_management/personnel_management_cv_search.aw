@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.4 2005/03/10 12:40:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.5 2005/03/23 10:31:33 kristo Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -341,7 +341,7 @@ class personnel_management_cv_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 	}
 }

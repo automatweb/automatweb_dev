@@ -1,0 +1,8 @@
+#: classes/applications/shop/shop_packet.aw:125
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:130
+msgid "Mitu paketis"
+msgstr ""
+

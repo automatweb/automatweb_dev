@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.16 2005/02/17 09:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.17 2005/03/23 10:31:34 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -73,12 +73,12 @@ class language extends class_base
 		$this->adm = get_instance("admin/admin_languages");
 
 		// check if we need to upgrade
-		$tbl = $this->db_get_table("languages");
+		//$tbl = $this->db_get_table("languages");
 		/*if (!isset($tbl["fields"]["oid"]))
 		{
 			die("Keeled tuleb konvertida uuele s&uuml;steemile, seda saab teha ".html::href(array(
 				"url" => $this->mk_my_orb("lang_new_convert", array(), "converters"),
-				"caption" => "siit"
+				"caption" => t("siit")
 			)));
 		}*/
 	}
@@ -232,17 +232,17 @@ class language extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "lang",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "act",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "sel",
-			"caption" => "Valitud",
+			"caption" => t("Valitud"),
 			"align" => "center"
 		));
 
@@ -286,12 +286,12 @@ class language extends class_base
 	{
 		$t->define_field(array(
 			"name" => "text_name",
-			"caption" => "Muutuja nimi"
+			"caption" => t("Muutuja nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "text_value",
-			"caption" => "Muutuja v&auml;&auml;rtus"
+			"caption" => t("Muutuja v&auml;&auml;rtus")
 		));
 
 		$t->set_sortable(false);

@@ -1,3 +1,63 @@
+#: classes/applications/shop/shop_order_center.aw:140
+msgid "Sessionipõhine"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:141
+msgid "Kasutajapõhine"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:272
+msgid "Kataloog"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:277
+msgid "Tabeli kujundus"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:283
+msgid "Paketi kujundus"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:289
+msgid "Paketi vaate kujundus"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:295
+msgid "Paketi teise vaate kujundus"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:315
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:391
+msgid "Sorditav v&auml;li"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:397
+msgid "Kasvav / kahanev"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:415
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:894
+msgid "&nbsp"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:909
+msgid "Vali t&uuml;hjaks"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:1012
+msgid "Tellija andmete vorm valimata!"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:1039
+msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:1065
 msgid "--vali--"
 msgstr ""

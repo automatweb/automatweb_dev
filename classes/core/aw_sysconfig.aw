@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.1 2004/06/10 18:38:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
 // aw_sysconfig.aw - AW Sysconfig 
 /*
 
@@ -58,7 +58,7 @@ class aw_sysconfig extends class_base
 			$res[] = array(
 				"name" => "message",
 				"type" => "text",
-				"caption" => "Teade",
+				"caption" => t("Teade"),
 				"value" => $msg,
 			);
 			// now add a list of all attached scripts
@@ -75,7 +75,7 @@ class aw_sysconfig extends class_base
 			$res[] = array(
 				"name" => "scripts[$msg]",
 				"type" => "chooser",
-				"caption" => "Vali skriptid",
+				"caption" => t("Vali skriptid"),
 				"value" => $scripts[$msg],
 				"multiple" => 1,
 				"options" => $opts,

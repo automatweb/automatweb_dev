@@ -1,0 +1,4 @@
+#: classes/core/remote_login.aw:71
+msgid "Relax, take a cookie."
+msgstr ""
+

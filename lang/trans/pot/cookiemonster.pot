@@ -1,0 +1,8 @@
+#: classes/core/dbg/cookiemonster.aw:50
+msgid "Nimi"
+msgstr ""
+
+#: classes/core/dbg/cookiemonster.aw:56
+msgid "V‰‰rtus"
+msgstr ""
+

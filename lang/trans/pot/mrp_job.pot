@@ -1,76 +1,148 @@
-#: classes/mrp/mrp_job.aw:123
+#: classes/mrp/mrp_job.aw:128
 msgid "Uus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:124
-msgid "Töösse planeeritud"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:125
-msgid "Töös"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:126
-msgid "Katkestatud"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:127
-msgid "Valmis"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:128
-msgid "Lukustatud"
-msgstr ""
-
 #: classes/mrp/mrp_job.aw:129
-msgid "Paus"
+msgid "Planeeritud"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:130
-msgid "Kustutatud"
+msgid "Töös"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:131
-msgid "Plaanist väljas"
+msgid "Katkestatud"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:132
-msgid "Arhiveeritud"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:170
-msgid "Ressurss määramata"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:181
-msgid "Määramata"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:275
-msgid "Alusta"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:286
 msgid "Valmis"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:293
-msgid "Katkesta"
+#: classes/mrp/mrp_job.aw:133
+msgid "Lukustatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:296
-msgid "Kommentaar peab olema t&auml;idetud!"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:304
+#: classes/mrp/mrp_job.aw:134
 msgid "Paus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:311
+#: classes/mrp/mrp_job.aw:135
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:136
+msgid "Plaanist väljas"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:137
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:175
+msgid "Ressurss määramata"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:186
+msgid "Määramata"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:280
+msgid "Alusta"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:291
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:298
+msgid "Katkesta"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:301
+msgid "Kommentaar peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:309
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:316
 msgid "Vahetuse l&otilde;pp"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:320
+#: classes/mrp/mrp_job.aw:325
 msgid "J&auml;tka"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:352
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:368
+msgid "Projekt pole töös ega planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:373
+msgid "Töö pole planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:393
+msgid "Eeldustööd tegemata"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:403
+msgid "Ressurss kinni"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:428
+msgid "Projekti alustamine ebaõnnestus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:476
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:488
+msgid "Töö staatus sobimatu"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:542
+msgid "Projekti lõpetamine ebaõnnestus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:578
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:590
+msgid "Töö pole tegemisel"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:637
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:649
+msgid "Töö pole tegemisel"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:697
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:713
+msgid "Töö pole pausil"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:718
+msgid "Projekt pole jätkatav"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:766
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:778
+msgid "Töö pole tegemisel"
 msgstr ""
 

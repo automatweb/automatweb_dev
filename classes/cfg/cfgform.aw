@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.57 2005/03/18 11:42:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.58 2005/03/23 10:31:34 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -181,15 +181,15 @@ class cfgform extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 		));
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 		));
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => "Väärtus",
+			"caption" => t("Väärtus"),
 		));
 
 		$props = $this->get_props_from_cfgform(array(
@@ -279,19 +279,19 @@ class cfgform extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "act",
-			"caption" => "Süsteemi default",
+			"caption" => t("Süsteemi default"),
 			"align" => "center",
 			"width" => 85,
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
 			"name" => "group",
-			"caption" => "Grupp",
+			"caption" => t("Grupp"),
 		));
 
 		$o = $arr["obj_inst"];
@@ -328,7 +328,7 @@ class cfgform extends class_base
 				"value" => 0,
 				"checked" => 0 == $active,
 			)),
-			"name" => "Ära kasuta vormi",
+			"name" => t("Ära kasuta vormi"),
 		));
 
 		foreach($ol->arr() as $o)
@@ -361,7 +361,7 @@ class cfgform extends class_base
 
 		error::raise_if(empty($class_id),(array(
 			"id" => ERR_ABSTRACT,
-			"msg" => "this is not a valid config form - class_id not specified"
+			"msg" => t("this is not a valid config form - class_id not specified")
 		)));
 
 		$tmp = aw_ini_get("classes");
@@ -730,21 +730,21 @@ class cfgform extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "javascript:submit_changeform()",
 			"img" => "save.gif",
 		));
 		
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta valitud omadused",
+			"tooltip" => t("Kustuta valitud omadused"),
 			"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
 			"img" => "delete.gif",
 		));
 
 		$toolbar->add_separator();
 		
-		$toolbar->add_cdata("<small>Liiguta omadused gruppi:</small>");
+		$toolbar->add_cdata(t("<small>Liiguta omadused gruppi:</small>"));
 		$opts = array();
 		if (is_array($this->grplist))
 		{
@@ -755,7 +755,7 @@ class cfgform extends class_base
 		}
 		else
 		{
-			$opts["none"] = "Ühtegi gruppi pole veel!";
+			$opts["none"] = t("Ühtegi gruppi pole veel!");
 		};
 		
 		$toolbar->add_cdata(html::select(array(
@@ -765,14 +765,14 @@ class cfgform extends class_base
 		
 		$toolbar->add_button(array(
 			"name" => "move",
-			"tooltip" => "Liiguta",
+			"tooltip" => t("Liiguta"),
 			"url" => "javascript:document.changeform.subaction.value='move';submit_changeform();",
 			"img" => "save.gif",
 		));
 		
 		$toolbar->add_separator();
 
-		$toolbar->add_cdata("<small>Lisa grupp:</small>");
+		$toolbar->add_cdata(t("<small>Lisa grupp:</small>"));
 		$toolbar->add_cdata(html::textbox(array(
 			"name" => "newgrpname",
 			"size" => "20",
@@ -780,7 +780,7 @@ class cfgform extends class_base
 		
 		$toolbar->add_button(array(
 			"name" => "addgrp",
-			"tooltip" => "Lisa grupp",
+			"tooltip" => t("Lisa grupp"),
 			"url" => "javascript:document.changeform.subaction.value='addgrp';submit_changeform()",
 			"img" => "new.gif",
 		));
@@ -809,7 +809,7 @@ class cfgform extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "javascript:submit_changeform()",
 			"img" => "save.gif",
 		));
@@ -946,8 +946,8 @@ class cfgform extends class_base
 		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
 		$rv = array();
 		$tps = array(
-			"" => "vaikestiil",
-			"stacked" => "pealkiri yleval, sisu all",
+			"" => t("vaikestiil"),
+			"stacked" => t("pealkiri yleval, sisu all"),
 		);
 		foreach($grps->get() as $key => $item)
 		{
@@ -956,7 +956,7 @@ class cfgform extends class_base
 				"name" => "grpcaption[".$key."]",
 				"type" => "textbox",
 				"size" => 40,
-				"caption" => "gdata",
+				"caption" => t("gdata"),
 				"value" => $item["caption"],
 			);
 			$res["grpstyle[".$key."]"] = array(
@@ -968,7 +968,7 @@ class cfgform extends class_base
 			$items = array(
 				"type" => "text",
 				"name" => "b" . $key,
-				"caption" => "ab",
+				"caption" => t("ab"),
 				"items" => $res,
 				"no_caption" => 1,
 			);		
@@ -1197,21 +1197,21 @@ class cfgform extends class_base
 		// elements: 
 		$els = array(
 			"general" => array(
-				"navtoolbar" => array(100, "T&ouml;&ouml;riistariba"),
-				"status" => array(200,"Aktiivne"),
-				"title" => array(300, "Pealkiri"),
-				"tm" => array(400, "Kuup&auml;ev"),
-				"lead" => array(500, "Sissejuhatus"),
-				"content" => array(600, "Sisu"),
-				"moreinfo" => array(700, "Toimetamata"),
-				"sbt" => array(800, "Salvesta"),
-				"aliasmgr" => array(900, "Seostehaldur")
+				"navtoolbar" => array(100, t("T&ouml;&ouml;riistariba")),
+				"status" => array(200,t("Aktiivne")),
+				"title" => array(300, t("Pealkiri")),
+				"tm" => array(400, t("Kuup&auml;ev")),
+				"lead" => array(500, t("Sissejuhatus")),
+				"content" => array(600, t("Sisu")),
+				"moreinfo" => array(700, t("Toimetamata")),
+				"sbt" => array(800, t("Salvesta")),
+				"aliasmgr" => array(900, t("Seostehaldur"))
 			),
 			"settings" => array(
-				"show_title" => array(100, "N&auml;ita pealkirja"),
-				"showlead" => array(200, "N&auml;ita sissejuhatust"),
-				"show_print" => array(300, "N&auml;ita prindi nuppu"),
-				"title_clickable" => array(400, "Pealkiri klikitav")
+				"show_title" => array(100, t("N&auml;ita pealkirja")),
+				"showlead" => array(200, t("N&auml;ita sissejuhatust")),
+				"show_print" => array(300, t("N&auml;ita prindi nuppu")),
+				"title_clickable" => array(400, t("Pealkiri klikitav"))
 			)
 		);
 

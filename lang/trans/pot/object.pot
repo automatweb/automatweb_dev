@@ -1,0 +1,4 @@
+#: classes/core/obj/object.aw:69
+msgid "object loader is not object!!"
+msgstr ""
+

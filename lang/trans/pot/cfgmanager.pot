@@ -1,0 +1,8 @@
+#: classes/cfg/cfgmanager.aw:70
+msgid "Grupp"
+msgstr ""
+
+#: classes/cfg/cfgmanager.aw:76
+msgid "Seadete vorm"
+msgstr ""
+

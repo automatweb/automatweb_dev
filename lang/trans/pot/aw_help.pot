@@ -1,0 +1,40 @@
+#: classes/core/aw_help.aw:48
+msgid "Klass on määramata"
+msgstr ""
+
+#: classes/core/aw_help.aw:89
+msgid "Abiinfo tabi kohta"
+msgstr ""
+
+#: classes/core/aw_help.aw:98
+msgid "Klassi omaduste kirjeldused"
+msgstr ""
+
+#: classes/core/aw_help.aw:128
+msgid "Lühike kirjeldus"
+msgstr ""
+
+#: classes/core/aw_help.aw:136
+msgid "Pikem kirjeldus"
+msgstr ""
+
+#: classes/core/aw_help.aw:243
+msgid "Klass on määramata!"
+msgstr ""
+
+#: classes/core/aw_help.aw:306
+msgid "Muuda"
+msgstr ""
+
+#: classes/core/aw_help.aw:434
+msgid "Salvesta"
+msgstr ""
+
+#: classes/core/aw_help.aw:441
+msgid "Salvesta"
+msgstr ""
+
+#: classes/core/aw_help.aw:463
+msgid "AutomatWeb"
+msgstr ""
+

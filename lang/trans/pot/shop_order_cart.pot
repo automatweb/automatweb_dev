@@ -1,0 +1,20 @@
+#: classes/applications/shop/shop_order_cart.aw:149
+msgid "shop_order_cart::show(): no product layout set for cart (%s) "
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:342
+msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:603
+msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:778
+msgid "shop_order_cart::show(): no product layout set for cart (%s) "
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:999
+msgid "shop_order_cart::show(): no product layout set for cart (%s) "
+msgstr ""
+

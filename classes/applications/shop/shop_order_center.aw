@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.22 2005/03/10 14:10:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.23 2005/03/23 10:31:34 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -137,8 +137,8 @@ class shop_order_center extends class_base
 		{
 			case "cart_type":
 				$prop["options"] = array(
-					0 => "Sessionipõhine",
-					1 => "Kasutajapõhine",
+					0 => t("Sessionipõhine"),
+					1 => t("Kasutajapõhine"),
 				);
 				break;
 				
@@ -269,30 +269,30 @@ class shop_order_center extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Kataloog"
+			"caption" => t("Kataloog")
 		));
 
 		$t->define_field(array(
 			"name" => "tbl_layout",
-			"caption" => "Tabeli kujundus",
+			"caption" => t("Tabeli kujundus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "item_layout",
-			"caption" => "Paketi kujundus",
+			"caption" => t("Paketi kujundus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "item_layout_long",
-			"caption" => "Paketi vaate kujundus",
+			"caption" => t("Paketi vaate kujundus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "item_layout_long_2",
-			"caption" => "Paketi teise vaate kujundus",
+			"caption" => t("Paketi teise vaate kujundus"),
 			"align" => "center"
 		));
 
@@ -312,7 +312,7 @@ class shop_order_center extends class_base
 		$this->_oinst = &$o;
 
 		$this->tblayouts = $o->meta("tblayouts");
-		$this->tblayout_items = array("0" => "--vali--");
+		$this->tblayout_items = array("0" => t("--vali--"));
 		foreach($o->connections_from(array("type" => RELTYPE_TABLE_LAYOUT)) as $c)
 		{
 			$this->tblayout_items[$c->prop("to")] = $c->prop("to.name");
@@ -388,13 +388,13 @@ class shop_order_center extends class_base
 	{
 		$t->define_field(array(
 			"name" => "sby",
-			"caption" => "Sorditav v&auml;li",
+			"caption" => t("Sorditav v&auml;li"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "sby_ord",
-			"caption" => "Kasvav / kahanev",
+			"caption" => t("Kasvav / kahanev"),
 			"align" => "center"
 		));
 	}
@@ -412,7 +412,7 @@ class shop_order_center extends class_base
 		{
 			$elements[$pn] = $pd["caption"];
 		}
-		$elements["jrk"] = "J&auml;rjekord";
+		$elements["jrk"] = t("J&auml;rjekord");
 		
 
 		$maxi = 0;
@@ -891,7 +891,7 @@ class shop_order_center extends class_base
 	{
 		$t->define_field(array(
 			"name" => "desc",
-			"caption" => "&nbsp"
+			"caption" => t("&nbsp")
 		));
 
 		// now, for each property in the selected form do a column
@@ -906,7 +906,7 @@ class shop_order_center extends class_base
 
 		$t->define_field(array(
 			"name" => "empty",
-			"caption" => "Vali t&uuml;hjaks",
+			"caption" => t("Vali t&uuml;hjaks"),
 			"align" => "center"
 		));
 	}
@@ -1009,7 +1009,7 @@ class shop_order_center extends class_base
 	{
 		if (!is_oid($arr["obj_inst"]->prop("data_form")) || !$this->can("view", $arr["obj_inst"]->prop("data_form")))
 		{
-			$arr["prop"]["error"] = "Tellija andmete vorm valimata!";
+			$arr["prop"]["error"] = t("Tellija andmete vorm valimata!");
 			return PROP_ERROR;
 		}
 
@@ -1036,7 +1036,7 @@ class shop_order_center extends class_base
 			default:
 				error::raise(array(
 					"id" => "ERR_WRONG_MAP",
-					"msg" => "shop_order_center::get_property_map($oc_id, $type): the options for type are 'person' and 'org'"
+					"msg" => sprintf(t("shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"), $oc_id, $type)
 				));
 		}
 	}

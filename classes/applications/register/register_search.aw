@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.22 2005/02/14 15:12:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.23 2005/03/23 10:31:33 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -128,38 +128,38 @@ class register_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"sortable" => 1,
 			"align" => "center",
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "el",
-			"caption" => "Element",
+			"caption" => t("Element"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "searchable",
-			"caption" => "Otsitav",
+			"caption" => t("Otsitav"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "is_num",
-			"caption" => "Numbrite vahemiku otsing",
+			"caption" => t("Numbrite vahemiku otsing"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "is_chooser",
-			"caption" => "Valik olemasolevatest",
+			"caption" => t("Valik olemasolevatest"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "u_name",
-			"caption" => "Elemendi tekst",
+			"caption" => t("Elemendi tekst"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -176,7 +176,7 @@ class register_search extends class_base
 		$reg = obj($arr["obj_inst"]->prop("register"));
 		$props = $this->get_props_from_reg($reg);
 
-		$props[$this->fts_name]["caption"] = "T&auml;istekstiotsing";
+		$props[$this->fts_name]["caption"] = t("T&auml;istekstiotsing");
 		foreach($props as $pn => $pd)
 		{
 			if (!is_array($fdata[$pn]) || $fdata[$pn]["caption"] == "")
@@ -223,44 +223,44 @@ class register_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"sortable" => 1,
 			"align" => "center",
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "el",
-			"caption" => "Element",
+			"caption" => t("Element"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "Tabelis",
+			"caption" => t("Tabelis"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorditav",
+			"caption" => t("Sorditav"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "defaultsort",
-			"caption" => "Vaikimisi sort",
+			"caption" => t("Vaikimisi sort"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "view_col",
-			"caption" => "Vaata tulp",
+			"caption" => t("Vaata tulp"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "u_name",
-			"caption" => "Tulba pealkiri",
+			"caption" => t("Tulba pealkiri"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -766,7 +766,7 @@ class register_search extends class_base
 					{
 						$data[$v["name"]] = html::href(array(
 							"url" => $this->mk_my_orb("change", array("section" => aw_global_get("section"), "id" => $o->id()), $o->class_id()),
-							"caption" => "Muuda"
+							"caption" => t("Muuda")
 						));
 						$can_change = true;
 					}
@@ -780,7 +780,7 @@ class register_search extends class_base
 				{
 					$data[$v["name"]] = html::href(array(
 						"url" => $this->mk_my_orb("view", array("id" => $o->id(), "section" => aw_global_get("section")), $o->class_id()),
-						"caption" => "Vaata"
+						"caption" => t("Vaata")
 					));
 				}
 				else
@@ -791,8 +791,8 @@ class register_search extends class_base
 						$delurl = $this->mk_my_orb("delete", array("id" => $o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI"))));
 						$data[$v["name"]] = html::href(array(
 							"url" => "#",
-							"onClick" => "if(confirm(\"Kustutada objekt?\")){window.location=\"$delurl\";};",
-							"caption" => "Kustuta"
+							"onClick" => "if(confirm(\"".t("Kustutada objekt?")."\")){window.location=\"$delurl\";};",
+							"caption" => t("Kustuta")
 						));
 						$can_delete = true;
 					}

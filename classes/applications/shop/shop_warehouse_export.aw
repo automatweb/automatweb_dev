@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.3 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.4 2005/03/23 10:31:34 kristo Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
@@ -79,12 +79,12 @@ class shop_warehouse_export extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "count",
-			"caption" => "Mitu l&auml;ks",
+			"caption" => t("Mitu l&auml;ks"),
 			"align" => "center"
 		));
 	}

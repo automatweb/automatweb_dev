@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.14 2005/03/10 12:41:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.15 2005/03/23 10:31:34 kristo Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -67,13 +67,13 @@ class cfgmanager extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "group",
-			"caption" => "Grupp",
+			"caption" => t("Grupp"),
 		));
 
 		/*
 		$t->define_field(array(
 			"name" => "form",
-			"caption" => "Seadete vorm",
+			"caption" => t("Seadete vorm"),
 			"callback" => array(&$this, "callb_form_picker"),
 			"callb_pass_row" => true,
 		));

@@ -1,0 +1,24 @@
+#: classes/core/users/auth/auth_remote_settings.aw:122
+msgid "ID"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:130
+msgid "Aadress"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:137
+msgid "Lubatud automaatne ligip&auml;&auml;s"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:173
+msgid "Sait"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:180
+msgid "Kasutaja, kellena teise saidi kasutajad ligi saavad"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:310
+msgid "Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> "
+msgstr ""
+

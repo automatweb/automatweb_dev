@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.32 2005/03/18 13:36:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.33 2005/03/23 10:31:33 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -1024,7 +1024,7 @@ class project extends class_base
 		$tb->add_menu_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 		));
 		*/
 
@@ -1446,7 +1446,7 @@ class project extends class_base
 		$xtmp = $arr["t"]->groupinfo;
 		$tmp = array(
 			"type" => "text",
-			"caption" => "header",
+			"caption" => t("header"),
 			"subtitle" => 1,
 		);
 		$captions = array();

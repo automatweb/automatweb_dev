@@ -1,0 +1,8 @@
+#: classes/core/aw_sysconfig.aw:61
+msgid "Teade"
+msgstr ""
+
+#: classes/core/aw_sysconfig.aw:78
+msgid "Vali skriptid"
+msgstr ""
+

@@ -1,0 +1,24 @@
+#: classes/import/document_import.aw:192
+msgid "Asukoht"
+msgstr ""
+
+#: classes/import/document_import.aw:196
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/import/document_import.aw:200
+msgid "Autor"
+msgstr ""
+
+#: classes/import/document_import.aw:204
+msgid "Sisu"
+msgstr ""
+
+#: classes/import/document_import.aw:268
+msgid "Tagi %s sisu ette pane "
+msgstr ""
+
+#: classes/import/document_import.aw:280
+msgid "Tagi %s sisu taha pane "
+msgstr ""
+

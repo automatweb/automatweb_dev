@@ -179,8 +179,8 @@ class group extends class_base
 				
 			case "type":
 				$prop['options'] = array(
-					GRP_REGULAR => 'Tavaline',
-					GRP_DYNAMIC => "D&uuml;naamiline"
+					GRP_REGULAR => t('Tavaline'),
+					GRP_DYNAMIC => t("D&uuml;naamiline")
 				);
 				break;
 
@@ -189,7 +189,7 @@ class group extends class_base
 				break;
 		
 			case "import_desc":
-				$prop['value'] = "
+				$prop['value'] = t("
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
@@ -198,7 +198,7 @@ class group extends class_base
 					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
 					<br />
 					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
-				";
+				");
 				break;
 		}
 		return PROP_OK;
@@ -236,7 +236,7 @@ class group extends class_base
 			}
 
 			$us = get_instance("core/users/user");
-			echo "Impordin kasutajaid ... <br />";
+			echo t("Impordin kasutajaid ... <br />");
 			$first = true;
 			$f = fopen($imp,"r");
 			while(($row = fgetcsv($f, 10000,",")))
@@ -394,7 +394,7 @@ class group extends class_base
 		{
 			$row['obj_parent'] = $ml[$row['obj_parent']];	
 			$row["acl"] = html::href(array(
-				"caption" => "Muuda",
+				"caption" => t("Muuda"),
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
 			));
 			$t->define_data($row);
@@ -423,7 +423,7 @@ class group extends class_base
 		{
 			$t->define_field(array(
 				"name" => "obj_name",
-				"caption" => "Objekti Nimi",
+				"caption" => t("Objekti Nimi"),
 				"sortable" => 1,
 			));
 		}
@@ -432,7 +432,7 @@ class group extends class_base
 		{
 			$t->define_field(array(
 				"name" => "obj_parent",
-				"caption" => "Objekti Asukoht",
+				"caption" => t("Objekti Asukoht"),
 				"sortable" => 1,
 			));
 		}
@@ -441,7 +441,7 @@ class group extends class_base
 		{
 			$t->define_field(array(
 				"name" => "grp_name",
-				"caption" => "Grupi Nimi",
+				"caption" => t("Grupi Nimi"),
 				"sortable" => 1,
 			));
 		}
@@ -450,7 +450,7 @@ class group extends class_base
 		{
 			$t->define_field(array(
 				"name" => "acl",
-				"caption" => "&Otilde;igused",
+				"caption" => t("&Otilde;igused"),
 				"sortable" => 1,
 			));
 		}
@@ -470,7 +470,7 @@ class group extends class_base
 				'type' => 'text',
 				'store' => 'no',
 				'group' => 'objects',
-				'value' => 'Muuda objekti '.$o->name().' &otilde;igusi'
+				'value' => sprintf(t('Muuda objekti %s &otilde;igusi'), $o->name())
 			);
 			$acls["edit_acl"] = array(
 				'name' => "edit_acl",
@@ -573,7 +573,7 @@ class group extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Administreerimisliidese juurkaust ($lname)",
+				"caption" => sprintf(t("Administreerimisliidese juurkaust (%s)"), $lname),
 				"value" => $meta["admin_rootmenu2"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);
@@ -598,7 +598,7 @@ class group extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => "Esileht ($lname)",
+				"caption" => sprintf(t("Esileht (%s)"), $lname),
 				"value" => $meta["grp_frontpage"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);
@@ -619,7 +619,7 @@ class group extends class_base
 				"url" => $link,
 				"caption" => $obj->name(),
 			));
-			$title .= " / Muuda";
+			$title .= t(" / Muuda");
 		}
 		else
 		{
@@ -856,7 +856,7 @@ class group extends class_base
 			"no_caption" => 1,
 			"type" => "text",
 			"store" => "no",
-			"value" => "Default &otilde;igused seose loomisel"
+			"value" => t("Default &otilde;igused seose loomisel")
 		);
 
 		$aclids = aw_ini_get("acl.ids");

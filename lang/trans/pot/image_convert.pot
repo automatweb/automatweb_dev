@@ -1,0 +1,32 @@
+#: classes/core/converters/image_convert.aw:20
+msgid "image_covert: could not detect any supported imagehandlers!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:219
+msgid "image_convert::gd_driver::load_from_string(): could not detect image format!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:250
+msgid "image_convert::gd_driver::load_from_file(): could not detect image format!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:291
+msgid "image_convert::get(%s): unknown image type!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:321
+msgid "image_convert::save(%s,%s): unknown image type!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:392
+msgid "image_convert::load_from_file(%s): no such file!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:444
+msgid "image_convert::get(%s): unknown image type!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:476
+msgid "image_convert::save(%s, %s): unknown image type!"
+msgstr ""
+

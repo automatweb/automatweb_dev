@@ -1,0 +1,212 @@
+#: classes/applications/personnel_management/personnel_management.aw:286
+msgid "Tööotsija saab CV tähtaega ise määrata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:286
+msgid "Tööotsija ei saa CV tähtaega ise määrata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:352
+msgid "Kustuta kandidaadid"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:363
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:367
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:380
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:386
+msgid "Sündinud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:556
+msgid "Haridusliik"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:562
+msgid "X"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:592
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:598
+msgid "Tööpakkuja"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:604
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:611
+msgid "Tähtaeg"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:695
+msgid "Määramata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:829
+msgid "AutomatWeb"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:881
+msgid "Kustuta kandidaadid"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:894
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:899
+msgid "Tööpakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:900
+msgid "Tööpakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:907
+msgid "Kustuta tööpakkumised"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:919
+msgid "Default cv"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:924
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:930
+msgid "Aktiivne kuni"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:937
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:994
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1000
+msgid "Tööpakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1006
+msgid "Kuupäev"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1012
+msgid "Kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1018
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1050
+msgid "kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1091
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1097
+msgid "Ametikoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1103
+msgid "Kandideerimise lõpptähtaeg"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1148
+msgid "Uus CV"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1154
+msgid "Kustuta CV-d"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1156
+msgid "Kas soovid valitud objektid kustutada?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1162
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1168
+msgid "CV"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1169
+msgid "CV"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1182
+msgid "Kustuta CV-d"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1184
+msgid "Kas soovid valitud objektid kustutada?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1194
+msgid "Ametikoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1200
+msgid "Tähtaeg"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1207
+msgid "Kandidaate"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1214
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1240
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1240
+msgid "Mitteaktiivne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1513
+msgid "Liitu!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1521
+msgid "Uuenda andmed!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1543
+msgid "Liitu!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1551
+msgid "Uuenda andmed!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1574
+msgid "Objekt"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1581
+msgid "Asukoht"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/applications/awmyadmin/db_login.aw:51
+msgid "The admin user for the database server has not been set!"
+msgstr ""
+

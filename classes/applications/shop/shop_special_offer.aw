@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.9 2004/12/01 14:04:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.10 2005/03/23 10:31:34 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -78,23 +78,23 @@ class shop_special_offer extends class_base
 	{
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "price",
-			"caption" => "Hind"
+			"caption" => t("Hind")
 		));
 
 		$t->define_field(array(
 			"name" => "price_comment",
-			"caption" => "Hind kommentaariga",
+			"caption" => t("Hind kommentaariga"),
 			"align" => "center"
 		));
 	}
@@ -150,7 +150,7 @@ class shop_special_offer extends class_base
 
 		error::raise_if(!$ob->prop("template"), array(
 			"id" => "ERR_NO_LAYOUT",
-			"msg" => "shop_special_offer::show(): no layout set for product display in special offer!"
+			"msg" => t("shop_special_offer::show(): no layout set for product display in special offer!")
 		));
 
 		$layout = obj($ob->prop("template"));

@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.11 2005/03/02 13:11:37 kristo Exp $
+// $Id: site_threepane.aw,v 1.12 2005/03/23 10:31:35 kristo Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -57,7 +57,7 @@ class site_threepane extends class_base
 				// for existing objects
 				$data["value"] = html::href(array(
 					"url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id",
-					"caption" => "Näita saiti",
+					"caption" => t("Näita saiti"),
 					"target" => "_blank",
 				));
 				$retval = PROP_IGNORE;
@@ -191,7 +191,7 @@ class site_threepane extends class_base
 	function _gen_line($key,$name,$value)
 	{
 		return array(
-			"caption" => "Metainfo",
+			"caption" => t("Metainfo"),
 			"items" => array(
 				array(
 					"type" => "textbox",

@@ -1,0 +1,16 @@
+#: classes/applications/shop/otto/otto_import.aw:488
+msgid "otto_import::images(): could not fetch html for url %s!"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:1329
+msgid "all done! <br>"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:1735
+msgid "Lehed komaga eraldatult"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:1741
+msgid "AW Kataloogi ID"
+msgstr ""
+

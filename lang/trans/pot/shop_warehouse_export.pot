@@ -1,0 +1,8 @@
+#: classes/applications/shop/shop_warehouse_export.aw:82
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_export.aw:87
+msgid "Mitu l&auml;ks"
+msgstr ""
+

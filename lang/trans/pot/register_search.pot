@@ -1,0 +1,72 @@
+#: classes/applications/register/register_search.aw:131
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:138
+msgid "Element"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:144
+msgid "Otsitav"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:150
+msgid "Numbrite vahemiku otsing"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:156
+msgid "Valik olemasolevatest"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:162
+msgid "Elemendi tekst"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:179
+msgid "T&auml;istekstiotsing"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:226
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:233
+msgid "Element"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:239
+msgid "Tabelis"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:245
+msgid "Sorditav"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:251
+msgid "Vaikimisi sort"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:257
+msgid "Vaata tulp"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:263
+msgid "Tulba pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:769
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:783
+msgid "Vaata"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:794
+msgid "Kustutada objekt?"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:795
+msgid "Kustuta"
+msgstr ""
+

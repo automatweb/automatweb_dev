@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.3 2005/02/21 08:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.4 2005/03/23 10:31:35 kristo Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
@@ -119,7 +119,7 @@ class auth_remote_settings extends class_base
 	{
 		$t->define_field(array(
 			"name" => "site_id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"align" => "center",
 			"sortable" => 1,
 			"numeric" => 1
@@ -127,14 +127,14 @@ class auth_remote_settings extends class_base
 
 		$t->define_field(array(
 			"name" => "url",
-			"caption" => "Aadress",
+			"caption" => t("Aadress"),
 			"align" => "center",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "select",
-			"caption" => "Lubatud automaatne ligip&auml;&auml;s",
+			"caption" => t("Lubatud automaatne ligip&auml;&auml;s"),
 			"align" => "center"
 		));
 	}
@@ -170,14 +170,14 @@ class auth_remote_settings extends class_base
 	{
 		$t->define_field(array(
 			"name" => "site",
-			"caption" => "Sait",
+			"caption" => t("Sait"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "user",
-			"caption" => "Kasutaja, kellena teise saidi kasutajad ligi saavad",
+			"caption" => t("Kasutaja, kellena teise saidi kasutajad ligi saavad"),
 			"align" => "center"
 		));
 	}
@@ -307,7 +307,7 @@ class auth_remote_settings extends class_base
 		}
 		else
 		{
-			die("Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> ");
+			die(t("Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> "));
 		}
 	}
 

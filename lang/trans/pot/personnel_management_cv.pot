@@ -1,0 +1,164 @@
+#: classes/applications/personnel_management/personnel_management_cv.aw:202
+msgid "Teised arvutioskused"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:209
+msgid "Arvutioskuse muutmine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:224
+msgid "Mõni muu keel"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:242
+msgid "Muuda töösoovi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:409
+msgid "Genereeri pdf"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:426
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:454
+msgid "Kool"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:460
+msgid "Periood"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:466
+msgid "Hariduse liik"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:526
+msgid "Kustuta &otilde;pingud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:528
+msgid "Kas soovid kustutada valitud täienduskoolitused?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:534
+msgid "Muuda valitud täienduskoolitust"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:546
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:551
+msgid "Töösoov"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:552
+msgid "Töösoov"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:560
+msgid "Kustuta &otilde;pingud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:562
+msgid "Kas soovid kustutada valitud töösoovid?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:568
+msgid "Muuda valitud töösoovi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:579
+msgid "Haridusasutus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:585
+msgid "Periood"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:637
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:643
+msgid "Kustuta &otilde;pingud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:645
+msgid "Kas soovid kustutada valitud õpingud?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:651
+msgid "Muuda valitud haridust"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:690
+msgid "Kustuta keeleoskused"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:697
+msgid "Muuda keeleoskust"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:708
+msgid "Keel"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:714
+msgid "Tase"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:750
+msgid "Kustuta t&ouml;&ouml;kogemused"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:757
+msgid "Muuda t&ouml;&ouml;kogemust"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:768
+msgid "Asutus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:774
+msgid "Ametikoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:780
+msgid "Alates"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:786
+msgid "Kuni"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:818
+msgid "Kustuta arvutioskused"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:825
+msgid "Muuda oskust"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:857
+msgid "Oskus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:863
+msgid "Tase"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:1192
+msgid "Genereeri pdf"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:1217
+msgid "Kes vaatas:"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:1223
+msgid "Vaatamisi"
+msgstr ""
+

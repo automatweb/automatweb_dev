@@ -48,7 +48,7 @@ class db_login extends class_base
 			{
 				error::raise(array(
 					"id" => ERR_DB_ADMIN_NOT_SET, 
-					"msg" => 'The admin user for the database server has not been set!'
+					"msg" => t('The admin user for the database server has not been set!')
 				));
 			}
 			$found = false;
