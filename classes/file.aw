@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.55 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.56 2003/09/23 16:43:19 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,6 +59,7 @@
         @groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
+	@classinfo trans_id=TR_FILE
 
 	// miski is_aip globaases skoobis on faili salvestamisel oluline
 
@@ -78,6 +79,7 @@ class file extends class_base
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",
+			"trid" => TR_FILE,
 		));
 		lc_load("definition");
 		$this->lc_load("file","lc_file");

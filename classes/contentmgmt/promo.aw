@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.9 2003/09/22 12:08:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.10 2003/09/23 16:43:20 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -59,6 +59,8 @@
 	@groupinfo general caption=Üldine
 	@groupinfo menus caption=Kaustad
 	@groupinfo show caption=Näitamine
+
+	@classinfo trans_id=TR_PROMO
 			
 */
 define("RELTYPE_ASSIGNED_MENU",1);
@@ -70,6 +72,7 @@ class promo extends class_base
 		$this->init(array(
 			"clid" => CL_PROMO,
 			"tpldir" => "promo",
+			"trid" => TR_PROMO,
 		));
 		lc_load("definition");
 		$this->lc_load("promo","lc_promo");

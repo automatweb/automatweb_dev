@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.69 2003/09/22 10:31:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.70 2003/09/23 16:43:19 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -55,6 +55,8 @@
 
 	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda
 
+	@classinfo trans_id=TR_IMAGE
+
 */
 class image extends class_base
 {
@@ -62,7 +64,8 @@ class image extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "automatweb/images",
-			"clid" => CL_IMAGE
+			"clid" => CL_IMAGE,
+			"trid" => TR_IMAGE,
 		));
 	}
 
