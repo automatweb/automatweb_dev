@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.78 2002/01/11 12:19:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.79 2002/01/17 12:54:50 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -335,8 +335,8 @@ class document extends aw_template
 		
 		$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		
-		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
-		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);
+/*		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
+		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);*/
 			
 		if ($meta["show_last_changed"])
 		{
@@ -524,6 +524,10 @@ class document extends aw_template
 			};
 		};
 
+
+		// ok. replace <p>bla</p> with bla<br><br>
+		$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["lead"]);
+		$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["content"]);
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
@@ -3011,6 +3015,15 @@ class document extends aw_template
 					"idx" => 2,
 					"match" => "b",
 					"class" => "guestbook",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// pollid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "k",
+					"class" => "poll",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
