@@ -75,7 +75,6 @@ class objconfig extends aw_template
 	function change($args = array())
 	{
 		extract($args);
-		global $orb_defs;
 		$obj = $this->get_object($id);
 		$this->read_template("change.tpl");
 		$this->mk_path($obj["parent"],"Muuda konfiguratsiooniobjekti");
