@@ -1286,6 +1286,7 @@ class site_content extends menuedit
 			// XXX, this relation type is defined in "menu.aw", but I feel bad
 			// about including one big-ass file just to get one constant.
 			"reltype" => 5,
+			"lang_id" => aw_global_get("lang_id"),
 		));
 
 		$tmp = array();
