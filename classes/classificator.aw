@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.23 2004/08/17 11:17:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.24 2004/08/23 11:52:51 duke Exp $
 
 /*
 
@@ -75,7 +75,6 @@ class classificator extends class_base
 			"name" => $prop["name"],
 			"obj_inst" => $arr["obj_inst"],
 		));
-
 
 		$selected = false;
 		$connections = array();
@@ -196,13 +195,22 @@ class classificator extends class_base
 
 		$oft = new object($ff);
 		$clf = $oft->meta("classificator");
+		
+		$name = $arr["name"];
+		// if name is formatted like userdata[uservar1], convert it to just uservar1
+		if (false !== strpos($name,"["))
+		{
+			$name = substr($name,strpos($name,"[")+1,-1);
+		};
 
 		$clf_type = $oft->meta("clf_type");
-		$use_type = $clf_type[$arr["name"]];
+		$use_type = $clf_type[$name];
 
 		// XXX: implement some error checking
 
-		$ofto = new object($clf[$arr["name"]]);
+
+		$ofto = new object($clf[$name]);
+
 		$olx = new object_list(array(
 			"parent" => $ofto->id(),
 			"class_id" => CL_META,
