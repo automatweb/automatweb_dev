@@ -54,16 +54,6 @@
 			</function>
 		</action>
 
-		<action name="pick_folder">
-			<function name="pick_folder">
-				<arguments>
-					<optional name="id"/>
-					<required name="attach"/>
-					<required name="msg_id"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="store_attach">
 			<function name="store_attach">
 				<arguments>
