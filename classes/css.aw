@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.26 2003/07/04 14:10:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.27 2003/07/04 14:24:45 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -142,11 +142,12 @@ class css extends class_base
 			"middle" => "Keskel",
 			"bottom" => "All"
 		);
+	}
 
-		// siin peaks diferentseerima selle, kas tegu on süsteemste voi kasutaja
-		// stiilidega.
-		$udata = $this->get_user();
-		$this->rootmenu = $udata["home_folder"];
+	function get_style_data_by_id($id)
+	{
+		$style_obj = $this->get_object($id);
+		return $this->_gen_css_style("st${id}",$style_obj["meta"]["css"]);
 	}
 
 	////
