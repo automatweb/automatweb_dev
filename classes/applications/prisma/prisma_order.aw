@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.5 2004/06/09 08:11:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.6 2004/06/11 08:51:18 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -207,14 +207,21 @@ class prisma_order extends class_base
 				break;
 
 			case "priority":
-				// write priority to all events from this
-				$evids = new aw_array($arr["obj_inst"]->meta("event_ids"));
-				foreach($evids->get() as $evid)
+				if ($prop["value"] != $arr["obj_inst"]->prop("priority") && is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("confirm"))
 				{
-					$evo = obj($evid);
-					$evo->set_meta("task_priority", $prop["value"]);
-					$evo->save();
+					// write priority to all events from this
+					$evids = new aw_array($arr["obj_inst"]->meta("event_ids"));
+					foreach($evids->get() as $evid)
+					{
+						$evo = obj($evid);
+						$evo->set_meta("task_priority", $prop["value"]);
+						$evo->save();
+					}
+
+					// also, recalc times
+					$this->do_write_times_to_cal($arr);
 				}
+				// also, 
 				break;
 		}
 		return $retval;
@@ -437,6 +444,7 @@ class prisma_order extends class_base
 		{
 			//echo "time_d ".dbg::dump($time_d)." <br>";
 			$ts = $de->get_timestamp($time_d);
+			$this->glob_res_ts[$resid] = $ts;
 			//echo "got ts ".date("d.m.Y H:i", $ts)." <br>";
 
 			$reso = obj($resid);
@@ -934,7 +942,12 @@ class prisma_order extends class_base
 				$buffer_len = (((float)str_replace(",", ".", $buffer[$pred_id])) * 3600);
 
 				// min time is prev predicate time + prev predicate buffer time
-				$rgtfr = $this->req_get_time_for_resource($pred_id, $length, $order, $event_ids, $pred, $buffer);
+				$__mt = NULL;
+				if ($this->glob_res_ts[$pred_id])
+				{
+					$__mt = $this->glob_res_ts[$pred_id];
+				}
+				$rgtfr = $this->req_get_time_for_resource($pred_id, $length, $order, $event_ids, $pred, $buffer, $__mt);
 				$max_t = max($max_t, $rgtfr + $real_length + $buffer_len);
 				//echo "fir predicate $pred_id (num = $pred_num) buffer len = $buffer_len real len = $real_length rgtfr = ".date("d.m.Y H:i", $rgtfr)."<br>";
 			}
