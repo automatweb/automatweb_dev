@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.96 2004/10/05 09:22:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.97 2005/01/16 16:16:01 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -549,6 +549,7 @@ topic");
 	function show($args = array())
 	{
 		extract($args);
+		error::view_check($board);
 		$board_obj = new object($board);
 		$forum_obj = new object($board_obj->parent());
 		$this->init_forum_display(array("id" => $forum_obj->id()));
