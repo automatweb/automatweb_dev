@@ -151,7 +151,7 @@ class _int_object
 				if (count($this->connections_from($cprms)) > 0)
 				{
 					obj_set_opt("no_cache", $tmp);
-					continue;
+					return;
 				}
 				obj_set_opt("no_cache", $tmp);
 
