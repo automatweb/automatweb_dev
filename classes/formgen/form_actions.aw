@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.13 2003/07/07 13:01:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.14 2003/07/07 13:26:44 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -139,7 +139,14 @@ class form_actions extends form_base
 			}
 			else
 			{
-				$this->upd_object(array("name" => $name, "comment" => $comment ,"oid" => $action_id));
+				$this->upd_object(array(
+					"name" => $name, 
+					"comment" => $comment ,
+					"oid" => $action_id,
+					"metadata" => array(
+						"activate_on_button" => $this->make_keys($activate_on_button)
+					)
+				));
 				$this->db_query("UPDATE form_actions SET type = '$type' WHERE id = $action_id");
 				return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 			}
@@ -168,7 +175,7 @@ class form_actions extends form_base
 	function change_action($arr)
 	{
 		extract($arr);
-		$this->db_query("SELECT form_actions.*,objects.name as name, objects.comment as comment FROM form_actions
+		$this->db_query("SELECT form_actions.*,objects.name as name, objects.comment as comment, objects.metadata as metadata FROM form_actions
 										 LEFT JOIN objects ON objects.oid = form_actions.id
 										 WHERE objects.oid = $aid");
 		if (!($row = $this->db_next()))
@@ -178,6 +185,13 @@ class form_actions extends form_base
 
 		if ($level < 2)
 		{
+			$meta = aw_unserialize($row["metadata"]);
+
+			$f = get_instance("formgen/form");
+			$f->load($id);
+			$bts = $f->get_all_elements(array(
+				"typematch" => "button"
+			));
 			$this->if_init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			$this->vars(array(
 				"name"							=> $row["name"], 
@@ -187,6 +201,7 @@ class form_actions extends form_base
 				"join_list_selected"			=> checked($row["type"] == 'join_list'),
 				"email_form"					=> checked($row["type"] == 'email_form'),
 				"after_submit_controller"		=> checked($row["type"] == 'after_submit_controller'),
+				"activate_on_button" => $this->mpicker($meta["activate_on_button"], $bts),
 				"action_id"						=> $id,
 				"reforb"						=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
 			));
@@ -417,15 +432,35 @@ class form_actions extends form_base
 	// entry_id - submitted form entry id
 	function do_actions(&$form, $entry_id)
 	{
-		$this->db_query("SELECT * FROM form_actions LEFT JOIN objects ON objects.oid = form_actions.id WHERE form_id = ".$form->get_id()." AND objects.status != 0");
+		$this->db_query("SELECT *, objects.metadata as metadata FROM form_actions LEFT JOIN objects ON objects.oid = form_actions.id WHERE form_id = ".$form->get_id()." AND objects.status != 0");
 		while($row = $this->db_next())
 		{
-			$this->save_handle();
-			$fname = $this->actiontype2func[$row["type"]]["execute"];
-			$data = aw_unserialize($row["data"]);
+			$show = false;
+			$meta = aw_unserialize($row["metadata"]);
+			if (is_array($meta["activate_on_button"]) && count($meta["activate_on_button"]) > 0)
+			{
+				foreach($meta["activate_on_button"] as $btid)
+				{
+					if ($GLOBALS["HTTP_POST_VARS"]["submit"][$btid] != "")
+					{
+						$show = true;
+					}
+				}
+			}
+			else
+			{
+				$show = true;
+			}
 
-			$this->$fname($form, $data, $entry_id);
-			$this->restore_handle();
+			if ($show)
+			{
+				$this->save_handle();
+				$fname = $this->actiontype2func[$row["type"]]["execute"];
+				$data = aw_unserialize($row["data"]);
+
+				$this->$fname($form, $data, $entry_id);
+				$this->restore_handle();
+			}
 		}
 	}
 

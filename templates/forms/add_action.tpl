@@ -13,6 +13,12 @@
 <td class="celltext"><textarea NAME='comment' cols=50 rows=5 class="formtext">{VAR:comment}</textarea></td>
 </tr>
 <tr>
+<td colspan="2" class="celltext" align="right" valign="top">Action t&auml;idetakse ainult nende nuppude vajutusel (t&uuml;hjaks j&auml;ttes t&auml;idetakse k&otilde;ikide nuppude puhul):</td>
+</tr>
+<tr>
+<td colspan="2" class="celltext"><select name='activate_on_button[]' multiple class='formselect'>{VAR:activate_on_button}</select></td>
+</tr>
+<tr>
 <td class="celltext" colspan=2>{VAR:LC_FORMS_TYPE}:</td>
 </tr>
 <tr>
