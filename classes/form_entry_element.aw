@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.28 2001/07/28 12:16:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.29 2001/07/30 04:45:30 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -185,7 +185,14 @@ load_vcl("date_edit");
 
 			if ($this->arr["type"] == "link")
 			{
-				$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+				if ($this->arr["subtype"] == "show_op")
+				{
+					$html.="<a href='".$this->mk_my_orb("show_entry", array("id" => $this->form->id, "entry_id" => $this->entry_id, "op_id" => $this->arr["link_op"], "section" => $GLOBALS["section"]),"form")."'>".$this->arr["link_text"]."</a>";
+				}
+				else
+				{
+					$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+				}
 			}
 
 			if ($this->form->lang_id == $lang_id)
@@ -200,54 +207,61 @@ load_vcl("date_edit");
 			}
 			global $baseurl;
 
-			if ($this->arr["type"] != "")
+			if (!$this->arr["ignore_text"])
 			{
-				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='$baseurl/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
-				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='$baseurl/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+				if ($this->arr["type"] != "")
+				{
+					$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='$baseurl/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+					$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='$baseurl/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+				}
+				if ($this->arr["text_pos"] == "up")
+				{
+					$html = $text.$sep_ver.$html;
+				}
+				else
+				if ($this->arr["text_pos"] == "down")
+				{	
+					$html = $html.$sep_ver.$text;
+				}
+				else
+				if ($this->arr["text_pos"] == "right")
+				{
+					$html = $html.$sep_hor.$text;
+				}
+				else
+				{
+					$html = $text.$sep_hor.$html;		// default is on left of element
+				}
 			}
-			if ($this->arr["text_pos"] == "up")
-			{
-				$html = $text.$sep_ver.$html;
-			}
-			else
-			if ($this->arr["text_pos"] == "down")
-			{	
-				$html = $html.$sep_ver.$text;
-			}
-			else
-			if ($this->arr["text_pos"] == "right")
-			{
-				$html = $html.$sep_hor.$text;
-			}
-			else
-			{
-				$html = $text.$sep_hor.$html;		// default is on left of element
-			}
+
 			if ($info != "")
 			{
 				$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
 			}
 
-			if ($this->arr["sep_type"] == 1)	// reavahetus
+			if (!$this->arr["ignore_text"])
 			{
-				$html.="<br>";
-			}
-			else
-			if ($this->arr["sep_pixels"] > 0)
-			{
-				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
-			}
+				if ($this->arr["sep_type"] == 1)	// reavahetus
+				{
+					$html.="<br>";
+				}
+				else
+				if ($this->arr["sep_pixels"] > 0)
+				{
+					$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+				}
 
-			if ($this->arr["sep_type"] == 1)	// reavahetus
-			{
-				$html.="<br>";
-			}
-			else
-			// this is bad too. We need an image called transa.gif for each site.
-			// so? of course we need an image like that? what the fuck is wrong with that? - terryf
-			if ($this->arr["sep_pixels"] > 0)
-			{
-				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+				if ($this->arr["sep_type"] == 1)	// reavahetus
+				{
+					$html.="<br>";
+				}
+				else
+				// this is bad too. We need an image called transa.gif for each site.
+				// so? of course we need an image like that? what the fuck is wrong with that? - terryf
+				if ($this->arr["sep_pixels"] > 0)
+				{
+					$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+				}
 			}
 
 			return $html;

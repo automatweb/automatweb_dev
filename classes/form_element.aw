@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.17 2001/07/27 02:51:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.18 2001/07/30 04:45:30 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -62,7 +62,9 @@ class form_element extends aw_template
 												"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
 												"length"									=> $this->arr["length"],
 												"srow_grp"								=> $this->arr["srow_grp"],
-												"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form")));
+												"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form"),
+												"ignore_text" => checked($this->arr["ignore_text"])
+			));
 
 			$cd = "";
 			$cd = $this->parse("CAN_DELETE");
@@ -70,13 +72,27 @@ class form_element extends aw_template
 			$li = ""; $hl = ""; $hl2 = "";
 			if ($this->arr["type"] == "link")
 			{
-				$this->vars(array("link_text"			=> $this->arr["link_text"],
-													"link_address"	=> $this->arr["link_address"]));
+				$this->vars(array(
+					"link_text"			=> $this->arr["link_text"],
+					"link_address"	=> $this->arr["link_address"],
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","show_op" => "N&auml;ita pikemalt"))
+				));
 				$li = $this->parse("HLINK_ITEMS");
+				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 			}
 			else
+			{
 				$hl2 = $this->parse("EL_NOHLINK");
-			$hl = $this->parse("EL_HLINK");
+			}
+
+			if ($this->arr["type"] == "link" && $this->arr["subtype"] == "show_op")
+			{
+				$ops = $this->form->get_op_list($this->form->id);
+				$this->vars(array(
+					"ops" => $this->picker($this->arr["link_op"], $ops[$this->form->id])
+				));
+				$hl = $this->parse("EL_HLINK");
+			}
 
 			$this->vars(array("EL_HLINK" => $hl, "EL_NOHLINK" => $hl2));
 			$fi = "";
@@ -278,6 +294,9 @@ class form_element extends aw_template
 		$var = $base."_sort_alpha";
 		$this->arr["sort_by_alpha"] = $$var;
 
+		$var = $base."_ignore_text";
+		$this->arr["ignore_text"] = $$var;
+
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
 		$var=$base."_name";
@@ -474,6 +493,8 @@ class form_element extends aw_template
 			$this->arr["link_text"] = $$var;
 			$var=$base."_link_address";
 			$this->arr["link_address"] = $$var;
+			$var=$base."_link_op";
+			$this->arr["link_op"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'date')
@@ -637,13 +658,17 @@ class form_element extends aw_template
 		}
 	}
 
-	function do_change_name($name)
+	function do_change_name($name,$id = -1)
 	{
-		$this->upd_object(array("oid" => $this->id, "name" => $name));
+		if ($id == -1)
+		{
+			$id = $this->id;
+		}
+		$this->upd_object(array("oid" => $id, "name" => $name));
 		// ok now here we must fuckin load all the forms that contain this element and fuckin change all elements names in those. 
 		// shit I hate this but I suppose it's gotta be done
 		$this->save_handle();
-		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$this->id);
+		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$id);
 		while ($drow = $this->db_next())
 		{
 			$fup = new form;
@@ -656,7 +681,7 @@ class form_element extends aw_template
 					{
 						foreach($fup->arr["elements"][$row][$col] as $k => $v)
 						{
-							if ($k == $this->id)
+							if ($k == $id)
 							{
 								$fup->arr["elements"][$row][$col][$k]["name"] = $name;
 							}
@@ -986,9 +1011,12 @@ class form_element extends aw_template
 
 			// yuck
 			case "link":
-				$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
-				$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
-				$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
+				if ($this->arr["subtype"] != "show_op")
+				{
+					$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
+					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
+					$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
+				}
 				break;
 
 			case "date":

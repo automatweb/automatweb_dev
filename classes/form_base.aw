@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.18 2001/07/27 01:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.19 2001/07/30 04:45:30 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -383,17 +383,20 @@ class form_base extends aw_template
 			{
 				case "join_list":
 					$data = unserialize($row["data"]);
-					classload("list");
-					$li = new mlist($data["list"]);
+					if ($data["list"])
+					{
+						classload("list");
+						$li = new mlist($data["list"]);
 
-					if ($this->entry[$data["checkbox"]] == 1 || $data["checkbox"] < 1)
-					{
-						$li->db_add_user(array("name" => $this->entry[$data["name_tb"]], "email" => $this->entry[$data["textbox"]]));
+						if ($this->entry[$data["checkbox"]] == 1 || $data["checkbox"] < 1)
+						{
+							$li->db_add_user(array("name" => $this->entry[$data["name_tb"]], "email" => $this->entry[$data["textbox"]]));
+						}
+						else
+						{
+							$li->db_remove_user($this->entry[$data["textbox"]]);
+						};
 					}
-					else
-					{
-						$li->db_remove_user($this->entry[$data["textbox"]]);
-					};
 					break;
 
 				case "email":
@@ -530,11 +533,15 @@ class form_base extends aw_template
 
 	////
 	// !returns a list of all form_outputs
-	function get_op_list()
+	function get_op_list($fid = 0)
 	{
 		global $SITE_ID;
 		$ret = array();
-		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = $SITE_ID");
+		if ($fid)
+		{
+			$ss = " AND form_id = $fid ";
+		}
+		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = $SITE_ID $ss");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]][$row["op_id"]] = $row["name"];

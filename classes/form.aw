@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.47 2001/07/28 13:46:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.48 2001/07/30 04:45:30 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -303,7 +303,7 @@ class form extends form_base
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
-			"folders" => $this->picker(0,$ob->get_list(false,true)),
+			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) ? $this->arr["el_move_menus"] : $ob->get_list(false,true))),
 			"types" => $this->picker(0,$this->listall_el_types(true))
 		));
 
@@ -343,7 +343,7 @@ class form extends form_base
 
 		$this->save();
 
-/*		if (is_array($selel))
+		if (is_array($selel) && isset($diliit))
 		{
 			$this->load($id);
 			foreach($selel as $selid)
@@ -356,7 +356,7 @@ class form extends form_base
 				}
 			}
 			$this->save();
-		}*/
+		}
 		return $this->mk_my_orb("all_elements", array("id" => $id));
 	}
 
@@ -2725,6 +2725,7 @@ class form extends form_base
 			"tear_folder"	=> $this->picker($this->arr["tear_folder"], $menulist),
 			"el_menus" => $this->multiple_option_list($this->arr["el_menus"], $menulist),
 			"el_menus2" => $this->multiple_option_list($this->arr["el_menus2"], $menulist),
+			"el_move_menus" => $this->multiple_option_list($this->arr["el_move_menus"], $menulist),
 			"reforb"	=> $this->mk_reforb("save_folders", array("id" => $id))
 		));
 		return $this->do_menu_return();
@@ -2753,6 +2754,19 @@ class form extends form_base
 			foreach($el_menus as $menuid)
 			{
 				$this->arr["el_menus"][$menuid] = $menuid;
+			}
+		}
+
+		classload("objects");
+		$iobj = new db_objects;
+		$ms = $iobj->get_list();
+		// kataloogid kuhu saab elemente liigutada
+		$this->arr["el_move_menus"] = "";
+		if (is_array($el_move_menus))
+		{
+			foreach($el_move_menus as $menuid)
+			{
+				$this->arr["el_move_menus"][$menuid] = $ms[$menuid];
 			}
 		}
 
