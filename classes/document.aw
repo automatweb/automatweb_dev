@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.185 2003/05/21 12:13:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.186 2003/05/23 13:18:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -976,6 +976,7 @@ class document extends aw_template
 			"ablock"   => isset($ab) ? $ab : 0,
 			"pblock"   => isset($pb) ? $pb : 0,
 			"moreinfo" => $doc["moreinfo"],
+			"cite" => $doc["cite"],
 			"date"     => $this->time2date(time(),2),
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
@@ -983,6 +984,7 @@ class document extends aw_template
 			"long_title" => $doc["long_title"],
 			"link_text" => $doc["link_text"],
 			"modified"	=> $this->time2date($doc["modified"],2),
+			"createdby" => $doc["createdby"],
 			"date2"	=> $this->time2date($doc["modified"],8),
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
@@ -1111,6 +1113,14 @@ class document extends aw_template
 			"inst" => $this,
 		));
 
+		global $XX1;
+		if ($XX1)
+		{
+			print "<pre>";
+			print_r($plugins);
+			print "</pre>";
+		};
+
 		$plg_arg = array();
 		foreach($plugins as $plg_name)
 		{
@@ -1139,7 +1149,6 @@ class document extends aw_template
 		};
 
 		$this->vars($pvars);
- 
 
 		$retval = $this->parse();
 
@@ -1346,7 +1355,7 @@ class document extends aw_template
 		// nende sisu, mida vormis kasutati
 		while(list($fcap,$fname) = each($this->knownfields)) 
 		{
-			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last" || $fname == "moreinfo")  
+			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last" || $fname == "moreinfo" || $fname == "cite")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
 				// paneme v?ljade nimed ka kirja, et formeerida logi
@@ -1963,6 +1972,7 @@ class document extends aw_template
 											"refopts" => $this->picker($meta["refopt"],$this->refopts),
 											"dcache" => checked($meta["dcache"]),
 											"moreinfo" => $document["moreinfo"],
+											"cite" => $document["cite"],
 											));
 
 
