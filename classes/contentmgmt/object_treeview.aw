@@ -33,6 +33,9 @@
 @property show_notact type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita mitteaktiivseid objekte
 
+@property sort_by type=select field=meta method=serialize
+@caption Objekte sorteeritakse
+
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
@@ -435,11 +438,17 @@ class object_treeview extends class_base
 			$parent = $this->first_folder;
 		}
 
+		$sby = "objects.modified DESC";
+		if ($ob->prop("sort_by") != "")
+		{
+			$sby = $ob->prop("sort_by");
+		}
+
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			"class_id" => $ob->meta('clids'),
-			"sort_by" => "objects.modified DESC",
+			"sort_by" => $sby,
 			"lang_id" => array()
 		));
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
@@ -975,6 +984,14 @@ class object_treeview extends class_base
 				TREE_HTML => "HTML",
 				TREE_JS => "Javascript",
 				TREE_DHTML => "DHTML"
+			);
+		}
+		else
+		if ($prop["name"] == "sort_by")
+		{
+			$prop["options"] = array(
+				"objects.modified DESC" => "Objekti muutmise kuup&auml;eva j&auml;rgi",
+				"objects.jrk" => "Objektide j&auml;rjekorra j&auml;rgi"
 			);
 		}
 		return PROP_OK;

@@ -69,6 +69,15 @@
             <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
+            <name>sort_by</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Objekte sorteeritakse</caption>
+      </property>
+      <property>
             <name>clids</name>
             <type>callback</type>
             <callback>get_clids</callback>
