@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.6 2004/12/15 14:18:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.7 2005/01/14 08:59:26 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -15,6 +15,9 @@ the emb form. The latter I can then use for embedding cases
 
 @property time type=textbox size=5 field=meta method=serialize form=+emb
 @caption Kellaaeg
+
+@property length type=textbox size=5 field=meta method=serialize form=+emb
+@caption Pikkus (h)
 
 @property recur_type type=select field=meta method=serialize form=+emb
 @caption Korduse tüüp

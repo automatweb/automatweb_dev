@@ -29,6 +29,21 @@
             <caption>Kellaaeg</caption>
       </property>
       <property>
+            <name>length</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Pikkus (h)</caption>
+      </property>
+      <property>
             <name>recur_type</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.7 2005/01/14 07:44:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.8 2005/01/14 08:59:25 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -817,7 +817,7 @@ class mrp_workspace extends class_base
 			$resource_id = $job->prop ("resource");
 			$project_id = $job->prop ("project");
 			$start = $job->prop ("starttime");
-			$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
+			$hilight = in_array ($job->id (), safe_array($hilighted_jobs)) ? true : false;
 
 			$bar = array (
 				"row" => $resource_id,
