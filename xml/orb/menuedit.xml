@@ -153,6 +153,13 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="reset_template_sets">
+			<function name="reset_template_sets">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>

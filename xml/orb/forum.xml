@@ -198,7 +198,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_search" all_args="1" nologin="1">
+		<action name="submit_search" nologin="1" all_args="1">
 			<function name="submit_search">
 				<arguments>
 				</arguments>

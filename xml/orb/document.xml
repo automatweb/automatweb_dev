@@ -18,11 +18,12 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="lookup">
+		<action name="lookup" nologin="1">
 			<function name="lookup">
 				<arguments>
 					<required name="id"/>
 					<optional name="sortby"/>
+					<optional name="origin"/>
 				</arguments>
 			</function>
 		</action>
