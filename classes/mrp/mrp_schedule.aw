@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.31 2005/03/29 11:26:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.32 2005/03/29 20:31:59 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -35,7 +35,19 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
-define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
+
+### colours (CSS colour definition)
+define ("MRP_COLOUR_NEW", "#05F123");
+define ("MRP_COLOUR_PLANNED", "#5B9F44");
+define ("MRP_COLOUR_INPROGRESS", "#FF9900");
+define ("MRP_COLOUR_ABORTED", "#FF13F3");
+define ("MRP_COLOUR_DONE", "#996600");
+define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_ONHOLD", "#9900CC");
+define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_HILIGHTED", "#FFE706");
+define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
+define ("MRP_COLOUR_OVERDUE", "#DF0D12");
 
 ini_set ("max_execution_time", "90");
 

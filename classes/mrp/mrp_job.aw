@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.37 2005/03/29 18:28:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.38 2005/03/29 20:31:59 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -125,7 +125,20 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
-define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
+
+### colours (CSS colour definition)
+define ("MRP_COLOUR_NEW", "#05F123");
+define ("MRP_COLOUR_PLANNED", "#5B9F44");
+define ("MRP_COLOUR_INPROGRESS", "#FF9900");
+define ("MRP_COLOUR_ABORTED", "#FF13F3");
+define ("MRP_COLOUR_DONE", "#996600");
+define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_ONHOLD", "#9900CC");
+define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_HILIGHTED", "#FFE706");
+define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
+define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+
 
 class mrp_job extends class_base
 {
@@ -144,6 +157,17 @@ class mrp_job extends class_base
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+		);
+
+		$this->state_colours = array (
+			MRP_STATUS_NEW => MRP_COLOUR_NEW,
+			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
+			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
+			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
+			MRP_STATUS_DONE => MRP_COLOUR_DONE,
+			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
+			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
 
 		$this->init(array(

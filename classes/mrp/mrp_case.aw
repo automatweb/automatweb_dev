@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.45 2005/03/29 11:26:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.46 2005/03/29 20:31:59 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -223,7 +223,20 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
-define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
+
+### colours (CSS colour definition)
+define ("MRP_COLOUR_NEW", "#05F123");
+define ("MRP_COLOUR_PLANNED", "#5B9F44");
+define ("MRP_COLOUR_INPROGRESS", "#FF9900");
+define ("MRP_COLOUR_ABORTED", "#FF13F3");
+define ("MRP_COLOUR_DONE", "#996600");
+define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_ONHOLD", "#9900CC");
+define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_HILIGHTED", "#FFE706");
+define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
+define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+
 
 class mrp_case extends class_base
 {
@@ -240,6 +253,17 @@ class mrp_case extends class_base
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+		);
+
+		$this->state_colours = array (
+			MRP_STATUS_NEW => MRP_COLOUR_NEW,
+			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
+			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
+			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
+			MRP_STATUS_DONE => MRP_COLOUR_DONE,
+			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
+			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
 
 		$this->init(array(
@@ -910,41 +934,17 @@ class mrp_case extends class_base
 			$resource_id = $job->prop ("resource");
 			$resource = obj ($resource_id);
 			$disabled = false;
-			$stag = '<span>';
-			$etag = '</span>';
-			$status = $this->states[$job->prop ("state")];
 
 			switch ($job->prop ("state"))
 			{
-				case MRP_STATUS_NEW:
-					$stag = '<span style="color: green;">';
-					break;
-
-				case MRP_STATUS_PLANNED:
-					$stag = '<span style="color: blue;">';
-					break;
-
-				case MRP_STATUS_ABORTED:
-					$stag = '<span style="color: red;">';
-					break;
-
 				case MRP_STATUS_INPROGRESS:
-					$stag = '<span style="color: #D79B00;">';
-					$disabled = true;
-					break;
-
 				case MRP_STATUS_PAUSED:
-					$stag = '<span style="color: black;">';
-					$disabled = true;
-					break;
-
 				case MRP_STATUS_DONE:
-					$stag = '<span style="color: gray;">';
 					$disabled = true;
 					break;
 			}
 
-			$status = $stag . $status . $etag;
+			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites = $job->prop ("prerequisites");
@@ -1026,7 +1026,7 @@ class mrp_case extends class_base
 				) . '</span>',
 				"exec_order" => $job->prop ("exec_order"),
 				"starttime" => $planned_start,
-				"status" => $status,
+				"status" => $state,
 				"job_id" => $job_id,
 				"comment" => $comment,
 			));

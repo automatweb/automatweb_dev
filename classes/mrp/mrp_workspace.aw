@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.65 2005/03/29 11:26:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.66 2005/03/29 20:31:59 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -344,9 +344,20 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
-define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
+
+### colours (CSS colour definition)
+define ("MRP_COLOUR_NEW", "#05F123");
+define ("MRP_COLOUR_PLANNED", "#5B9F44");
+define ("MRP_COLOUR_INPROGRESS", "#FF9900");
+define ("MRP_COLOUR_ABORTED", "#FF13F3");
+define ("MRP_COLOUR_DONE", "#996600");
+define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_ONHOLD", "#9900CC");
+define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
-define ("MRP_COLOUR_OVERDUE", "#FF1111");
+define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+
 
 class mrp_workspace extends class_base
 {
@@ -358,6 +369,30 @@ class mrp_workspace extends class_base
 
 	function mrp_workspace()
 	{
+		$this->states = array (
+			MRP_STATUS_NEW => t("Uus"),
+			MRP_STATUS_PLANNED => t("Planeeritud"),
+			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_ABORTED => t("Katkestatud"),
+			MRP_STATUS_DONE => t("Valmis"),
+			MRP_STATUS_LOCKED => t("Lukustatud"),
+			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_DELETED => t("Kustutatud"),
+			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+		);
+
+		$this->state_colours = array (
+			MRP_STATUS_NEW => MRP_COLOUR_NEW,
+			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
+			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
+			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
+			MRP_STATUS_DONE => MRP_COLOUR_DONE,
+			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
+			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
+		);
+
 		$this->init(array(
 			"tpldir" => "mrp/mrp_workspace",
 			"clid" => CL_MRP_WORKSPACE
@@ -1870,14 +1905,14 @@ class mrp_workspace extends class_base
 			$start = $job->prop ("starttime");
 			$job_name = $project->name () . " - " . $resource->name ();
 
-			### set bar type
-			$type = ($job->prop ("state") == MRP_STATUS_INPROGRESS) ? "inprogress" : "";
-			$type = in_array ($job->id (), $hilighted_jobs) ? "hilighted" : $type;
+			### set bar colour
+			$colour = $this->state_colours[$job->prop ("state")];
+			$colour = in_array ($job->id (), $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
 				"row" => $resource_id,
 				"start" => $start,
-				"type" => $type,
+				"colour" => $colour,
 				"length" => $length,
 				"uri" => aw_url_change_var ("mrp_hilight", $project_id),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
@@ -1977,7 +2012,7 @@ class mrp_workspace extends class_base
 				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$navigation .= t(' &nbsp;&nbsp;Valitud projekt:').' <span style="color: #CC0000;">' . $project->name () . '</span> (' . $deselect . ')';
+			$navigation .= t(' &nbsp;&nbsp;Valitud projekt:').' <span style="color: ' . MRP_COLOUR_HILIGHTED . ';">' . $project->name () . '</span> (' . $deselect . ')';
 		}
 
 		return $navigation;
