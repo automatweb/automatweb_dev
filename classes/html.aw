@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.43 2004/01/08 15:31:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.44 2004/02/09 14:08:03 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -12,7 +12,7 @@ class html extends aw_template
 	function select($args = array())
 	{
 		extract($args);
-		$sz = $mz = $onc = "";
+		$sz = $mz = $onc = $cl = "";
 		// things that make one go humm.. -- duke
 		if (empty($selected) && isset($value))
 		{
@@ -23,6 +23,11 @@ class html extends aw_template
 		{
 			$sz = "size='$size' ";
 		};
+
+		if (!empty($class))
+		{
+			$cl = "class=\"".$class."\"";
+		}
 
 		if (isset($multiple))
 		{
@@ -59,7 +64,7 @@ class html extends aw_template
 		{
 			$onc = 'onChange="'.$onchange.'"';
 		}
-		return "<select name='$name' id='$name' $sz $mz $onc>\n$optstr</select>\n";
+		return "<select name='$name' $cl id='$name' $sz $mz $onc>\n$optstr</select>\n";
 	}
 
 	////
@@ -103,7 +108,8 @@ class html extends aw_template
 		else
 		{
 			$wrap = isset($wrap) ? $wrap : "soft";
-			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap'>$value</textarea>\n";
+			$style = isset($style) ? " style='$style' " : "";
+			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style>$value</textarea>\n";
 		};
 		return $retval;
 	}
@@ -323,7 +329,7 @@ class html extends aw_template
 		{
 			$val = $args['value'];
 		}
-		return $selector->gen_edit_form($args["name"], $val, 2001, 2004, true);
+		return $selector->gen_edit_form($args["name"], $val, 2001, 2008, true);
 	}
 	
 	////
@@ -341,7 +347,7 @@ class html extends aw_template
 		{
 			$val = $args['value'];
 		}
-		return $selector->gen_edit_form($args["name"], $val, 2001, 2004, true);
+		return $selector->gen_edit_form($args["name"], $val, 2001, 2008, true);
 	}
 
 	function img($args = array())
