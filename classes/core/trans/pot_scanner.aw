@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.7 2005/03/31 05:54:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.8 2005/03/31 06:28:16 duke Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -158,7 +158,9 @@ class pot_scanner extends core
 			foreach($strings as $string)
 			{
 				fwrite($fp, "#: ".str_replace(aw_ini_get("basedir")."/","", $file_from).":".$string["line"]."\n");
-				fwrite($fp, "msgid \"".$string["str"]."\"\n");
+				$str = $string["str"];
+				$str = str_replace('"','\"',$str);
+				fwrite($fp, "msgid \"".$str."\"\n");
 				fwrite($fp, "msgstr \"\"\n");
 				fwrite($fp, "\n");
 			}
