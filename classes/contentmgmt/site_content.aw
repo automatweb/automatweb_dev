@@ -1858,6 +1858,7 @@ class site_content extends menuedit
 								"boldlead" => 1,
 								"no_strip_lead" => 1,
 								"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
+								"vars" => array("doc_ord_num" => $d_cnt+1),
 							));
 							$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 						}
