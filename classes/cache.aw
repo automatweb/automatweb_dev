@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.8 2002/06/18 23:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.9 2002/07/17 20:31:40 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -29,7 +29,7 @@ class cache extends core
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
-				$fname.="-".$v;
+				$fname.="-".str_replace("/","_",str_replace(" ","_",$v));
 			}
 			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
 			{
@@ -38,7 +38,7 @@ class cache extends core
 			$this->put_file(array("file" => $fname, "content" => $content));
 			if ($clear_flag)
 			{
-				$this->clear_cache($oid);
+				$this->clear_cache($oid, $fname);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ class cache extends core
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
-				$fname.="-".$v;
+				$fname.="-".str_replace("/","_",str_replace(" ","_",$v));
 			}
 
 			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
@@ -81,7 +81,7 @@ class cache extends core
 				var_dump(in_array($this->referer,$this->metaref));
 			}
 
-			if ($this->cache_dirty($oid))
+			if ($this->cache_dirty($oid, $fname))
 			{
 				return false;
 			}
