@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.126 2005/01/19 22:28:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.127 2005/01/20 12:01:02 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -203,6 +203,13 @@ class image extends class_base
 			return "";
 		}
 
+		if ($alias["aliaslink"] == 1)
+		{
+			return html::href(array(
+				"url" => $idata["url"],
+				"name" => $idata["name"]
+			));
+		}
 		
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
