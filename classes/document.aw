@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.16 2001/06/05 20:25:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.17 2001/06/06 12:16:48 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -791,6 +791,10 @@ class document extends aw_template
 		{
 			$this->vars(array("EDIT" => $this->parse("EDIT")));
 		}
+		else
+		{
+			$this->vars(array("EDIT" => ""));
+		};
 
 		$sht= "";
     if ($doc["show_title"] == 1)
@@ -848,6 +852,7 @@ docid = ".$lab[$v["id"]],"tm");
 		}
 
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
+		$aliases = $this->get_aliases_for($docid);
  		if ($this->is_template("FILE"))
 		{
 			$ftypearr = array(
@@ -858,7 +863,7 @@ docid = ".$lab[$v["id"]],"tm");
 				"text/html" => "html",
 				"image/gif" => "gif",
       			);
-			 reset($aliases);
+			reset($aliases);
 			while (list(,$ar) = each($aliases))
 			{
 				if ($ar["type"] == CL_FILE)
@@ -2089,8 +2094,8 @@ docid = ".$lab[$v["id"]],"tm");
 			$tpldir = $tpldirs[$HTTP_HOST];
 		}
 		$template = $this->get_long_template($id);
-		classload("documents");
-		$t = new db_documents;
+		classload("document");
+		$t = new document;
 		$content = $t->gen_preview(array("docid" => $id, "tpl" => $template,"leadonly" => false, "stripimg" => false));
 
 		if (!$user)
