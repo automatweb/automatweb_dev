@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.40 2004/06/11 11:40:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.41 2004/06/14 14:30:16 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -745,7 +745,7 @@ class promo extends class_base
 						}
 					}
 					global $awt;
-					$awt->start("promo-prev");
+					enter_function("promo-prev");
 					global $XX6;
 					if ($XX6)
 					{
@@ -763,7 +763,7 @@ class promo extends class_base
 						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 					));
-					$awt->stop("promo-prev");
+					exit_function("promo-prev");
 					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
 				}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.65 2004/06/11 08:41:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.66 2004/06/14 14:29:58 kristo Exp $
 
 /*
 
@@ -1527,7 +1527,7 @@ class site_show extends class_base
 						$promo_done = true;
 					}
 					$fl = $cldef["file"];
-					$awt->start("mainc-$fl");
+					enter_function("mainc-$fl");
 					if (!method_exists($inst, "on_get_subtemplate_content"))
 					{
 						error::throw(array(
@@ -1539,7 +1539,7 @@ class site_show extends class_base
 						"inst" => &$this,
 						"content_for" => $ask_content
 					));
-					$awt->stop("mainc-$fl");
+					exit_function("mainc-$fl");
 				}
 				$awt->stop("mainc");
 			}
