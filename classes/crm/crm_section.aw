@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.18 2005/01/07 08:40:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.19 2005/01/21 13:09:15 duke Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -14,8 +14,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @property jrk type=textbox size=4
 @caption Järk
 
-@property has_group type=checkbox ch_value=1 field=meta method=serialize
-@caption Kas tehakse kasutajagrupp
+@property ext_id type=textbox size=4 field=subclass
+@caption Sidussüsteemi ID
 
 @property has_group type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas tehakse kasutajagrupp
@@ -270,15 +270,15 @@ class crm_section extends class_base
 	}
 
 
-   // Invoked when a connection from organization to section is removed
-   // .. this will then remove the opposite connection as well if one exists
-   function on_disconnect_org_from_section($arr)
-   {
+	// Invoked when a connection from organization to section is removed
+	// .. this will then remove the opposite connection as well if one exists
+	function on_disconnect_org_from_section($arr)
+	{
 		obj_set_opt("no_cache", 1);
-      $conn = $arr["connection"];
-      $target_obj = $conn->to();
-      if ($target_obj->class_id() == CL_CRM_SECTION)
-      {
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_SECTION)
+		{
 			if($target_obj->is_connected_to(array('from' => $conn->prop('from'))))
 			{
 				$target_obj->disconnect(array(
@@ -286,37 +286,37 @@ class crm_section extends class_base
 					"errors" => false
 				));
 			}
-      }
-   }
+		}
+	}
 
 	// Invoked when a connection is created from person to section
-   // .. this will then create the opposite connection.
-   function on_connect_person_to_section($arr)
-   {
-      $conn = $arr["connection"];
-      $target_obj = $conn->to();
-      if ($target_obj->class_id() == CL_CRM_SECTION)
-      {
-         $target_obj->connect(array(
-            "to" => $conn->prop("from"),
-            "reltype" => 2, //crm_section.reltype_section
-         ));
-      }
-   }
+	// .. this will then create the opposite connection.
+	function on_connect_person_to_section($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_SECTION)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 2, //crm_section.reltype_section
+			));
+		}
+	}
 	
 	function on_disconnect_person_from_section($arr)
 	{
-      $conn = $arr["connection"];
-      $target_obj = $conn->to();
-      if ($target_obj->class_id() == CL_CRM_SECTION)
-      {
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_SECTION)
+		{
 			if($target_obj->is_connected_to(array('to'=>$conn->prop('from'))))
 			{
 				$target_obj->disconnect(array(
 					"from" => $conn->prop("from"),
 				));
 			}
-      }
+		}
 	}
 
 }
