@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.23 2004/03/01 14:43:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.24 2004/03/01 16:59:52 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -79,9 +79,10 @@ class treeview extends class_base
 		$this->config = $args["config"];
 
 		$rootobj = obj($root);
-		if (isset($rootobj->meta("treetype")))
+		$treetype = $rootobj->meta("treetype");
+		if (!empty($treetype))
 		{
-			$type = $rootobj->meta("treetype");
+			$type = $treetype;
 		}
 		else
 		{
@@ -109,6 +110,8 @@ class treeview extends class_base
 
 		$tr = $this->generate_tree($root);
 
+		$icon_root = $rootobj->meta("icon_root");
+
 		$this->vars(array(
 			"TREE" => $tr,
 			"DOC" => "",
@@ -117,7 +120,7 @@ class treeview extends class_base
 			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
 			"rootname" => $rootobj->meta("rootcaption"),
 			"rooturl" => $this->do_item_link($rootobj),
-			"icon_root" => isset($rootobj->meta("icon_root"))? $this->mk_my_orb("show",array("id" => $rootobj->meta("icon_root")),"icons") : "/automatweb/images/aw_ikoon.gif",
+			"icon_root" => !empty($icon_root)? $this->mk_my_orb("show",array("id" => $icon_root),"icons") : "/automatweb/images/aw_ikoon.gif",
 		));
 
 		$retval = $this->parse();
