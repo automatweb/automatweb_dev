@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.35 2003/03/28 10:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.36 2003/03/28 16:48:33 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2940,8 +2940,15 @@ class form_element extends aw_template
 					}
 				}
 
-				$sp = split("_", $this->entry, 10);
-				$html = $this->arr["listbox_items"][$sp[3]];
+				if ($numeric)
+				{
+					$html = $this->entry;
+				}
+				else
+				{
+					$sp = split("_", $this->entry, 10);
+					$html = $this->arr["listbox_items"][$sp[3]];
+				}
 				break;
 
 			case "multiple":

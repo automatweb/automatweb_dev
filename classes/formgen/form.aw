@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.46 2003/03/28 10:23:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.47 2003/03/28 16:48:33 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2021,10 +2021,12 @@ class form extends form_base
 			"forms_search" => checked($this->arr["search_type"] == "forms"),
 			"chain_search" => checked($this->arr["search_type"] == "chain"),
 			"forms" => $this->multiple_option_list($this->arr["search_forms"],$this->get_flist(array("type" => FTYPE_ENTRY))),
-			"nchains" => $this->picker($this->arr["search_chain"],$this->get_chains(true))
+			"nchains" => $this->picker($this->arr["search_chain"],$this->get_chains(true)),
+			"show_csv_link" => checked($this->arr["search_show_csv_link"])
 		));
 
-		$cs = "";
+		$cs = $cs2= "";
+
 		if ($this->arr["search_chain"])
 		{
 			$forms = $this->get_forms_for_chain($this->arr["search_chain"]);
@@ -2041,10 +2043,12 @@ class form extends form_base
 			}
 
 			$this->vars(array(
-				"chain_op" => $this->picker($this->arr["search_chain_op"],$_ops)
+				"chain_op" => $this->picker($this->arr["search_chain_op"],$_ops),
+				"chain_repeater" => $this->picker($this->arr["search_chain_repeater"], array("0" => "")+$this->get_forms_for_chain($this->arr["search_chain"], true))
 			));
 
 			$cs = $this->parse("CHAIN_SEL");
+			$cs2 = $this->parse("CHAIN_SEL2");
 		}
 
 		$fs = "";
@@ -2070,6 +2074,7 @@ class form extends form_base
 		$this->vars(array(
 			"FORM_SEL" => $fs,
 			"CHAIN_SEL" => $cs,
+			"CHAIN_SEL2" => $cs2,
 			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page)),
 		));
 
@@ -2121,6 +2126,8 @@ class form extends form_base
 
 		$this->arr["search_chain"] = $search_chain;
 		$this->arr["search_chain_op"] = $chain_op;
+		$this->arr["search_chain_repeater"] = $chain_repeater;
+		$this->arr["search_show_csv_link"] = $show_csv_link;
 
 		if ($this->arr["search_type"] == "chain")
 		{
@@ -2140,6 +2147,7 @@ class form extends form_base
 			$form_selsearch_data["search_form_op"] = $this->arr["search_form_op"];
 			$form_selsearch_data["search_chain"] = $this->arr["search_chain"];
 			$form_selsearch_data["search_chain_op"] = $this->arr["search_chain_op"];
+			$form_selsearch_data["search_chain_repeater"] = $this->arr["search_chain_repeater"];
 			$status_msg = $msg;
 			aw_session_set("form_selsearch_data", $form_selsearch_data);
 			aw_session_set("status_msg", $status_msg);
@@ -2187,6 +2195,7 @@ class form extends form_base
 					$this->arr["start_search_relations_from"] = $fid;
 				}
 			}
+
 			if (!$found)
 			{
 				$this->arr["start_search_relations_from"] = 0;
@@ -2207,6 +2216,10 @@ class form extends form_base
 				reset($dat);
 				list(,$_fid) = each($dat);
 				$this->arr["start_search_relations_from"] = $_fid;
+				if ($this->arr["search_chain_repeater"])
+				{
+					$this->arr["start_search_relations_from"] = $this->arr["search_chain_repeater"];
+				}
 			}
 		}
 		return "ok";
@@ -2544,6 +2557,7 @@ class form extends form_base
 					};
 
 					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$rcid);
+					$row_count++;
 				}
 			}
 			else
@@ -2563,6 +2577,15 @@ class form extends form_base
 		if ($this->arr["show_table"])
 		{
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
+			if ($this->arr["search_show_csv_link"] == 1)
+			{
+				$result = "Leiti $row_count rida. <a href='".aw_url_change_var("get_csv_file", 1)."'>CSV</a><br>".$result;
+			}
+
+			if ($GLOBALS["get_csv_file"] == 1)
+			{
+				die($form_table->t->get_csv_file());
+			}
 		}
 
 		return $result;
