@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.16 2003/06/12 16:51:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.17 2003/07/17 12:26:46 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -275,7 +275,15 @@ class cfgform extends class_base
 		{
 			foreach($this->grplist as $key => $val)
 			{
-				$by_group[$key] = array();
+				// we should not have numeric group id-s
+				// actually it's more about a few ghosts I had lying 
+				// around, and this will get rid of them but we
+				// really don't NEED numeric group id-s
+				// /me does the jedi mind trick - duke
+				if (!is_numeric($key))
+				{
+					$by_group[$key] = array();
+				};
 			};
 		};
 
@@ -283,7 +291,10 @@ class cfgform extends class_base
 		{
 			foreach($this->prplist as $property)
 			{
-				$by_group[$property["group"]][] = $property;
+				if (!empty($property["group"]))
+				{
+					$by_group[$property["group"]][] = $property;
+				};
 			};
 		};
 
@@ -299,6 +310,10 @@ class cfgform extends class_base
 			foreach($proplist as $property)
 			{
 				$prpdata = $this->all_props[$property["name"]];
+				if (!$prpdata)
+				{
+					continue;
+				};
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
 					"prp_caption" => $property["caption"],
