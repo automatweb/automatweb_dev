@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.237 2004/02/26 13:31:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.238 2004/02/27 16:53:04 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3003,6 +3003,7 @@ class document extends aw_template
 					));
 		
 		// eventsitega seonduv kamm
+		/*
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)event_(.+?)(#)/i",
 					));
@@ -3012,6 +3013,7 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 		));
+		*/
 	}
 
 	function parse_alias($args = array())
