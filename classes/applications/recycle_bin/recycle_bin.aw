@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.1 2004/10/12 13:36:04 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.2 2004/10/12 14:25:41 sven Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -61,6 +61,11 @@ class recycle_bin extends class_base
 		));
 		
 		$table->define_field(array(
+			"name" => "restore",
+			"caption" => "Taasta",
+		));
+		
+		$table->define_field(array(
 			"name" => "class",
 			"caption" => "Klass",
 			"sortable" => 1,
@@ -105,6 +110,10 @@ class recycle_bin extends class_base
 				"modified_by" => $row["modifiedby"],
 				"oid" => $row["oid"],
 				"id" => $row["oid"],
+				"restore" => html::href(array(
+					"caption" => "Taasta",
+					"url" => $this->mk_my_orb("restore_object", array("oid" => $row["oid"]), "recycle_bin"),
+				)),
 				"class" => $classes[$row["class_id"]]["name"],
 			));	
 		}
@@ -122,6 +131,15 @@ class recycle_bin extends class_base
     	));
 	}
 
+	/**
+		@attrib name=restore_object all_args=1
+	**/
+	function restore_object($arr)
+	{
+		$query = "UPDATE objects SET status=1 WHERE oid =".$arr['oid'];
+		$this->db_query($query);
+		return $this->mk_my_orb("change", array("group" => "recycle"), "recycle_bin");
+	}
 	
 	/**
 		@attrib name=restore_objects
