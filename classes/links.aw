@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.29 2002/12/21 17:45:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.30 2003/05/19 15:40:01 duke Exp $
 
 /*
 
@@ -71,13 +71,16 @@
 
 */
 
-classload("extlinks");
-class links extends extlinks
+class links extends class_base
 {
 	function links()
 	{
-		$this->extlinks();
-		$this->init("automatweb/extlinks");
+		$this->init(array(
+			"tpldir" => "automatweb/extlinks",
+			"clid" => CL_EXTLINK
+		));
+
+		$this->lc_load("extlinks","lc_extlinks");
 	}
 
 	function search_doc($arr)
@@ -198,6 +201,7 @@ class links extends extlinks
 		{
 			$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
 			header("Location: ".$link["url"]);
+			header("Content-type: ");
 			exit;
 		};
 	}
@@ -243,6 +247,139 @@ class links extends extlinks
 		  return PROP_IGNORE;
 		}
 		return PROP_OK;
+	}
+	
+	////
+	// !Hoolitseb ntx doku sees olevate extlinkide aliaste parsimise eest (#l2#)
+	function parse_alias($args = array())
+	{
+		extract($args);
+
+		list($url,$target,$caption) = $this->draw_link($alias["target"]);
+		if ($this->img)
+		{
+			$caption = $this->img;
+		};
+		$vars = array(
+			"url" => $url,
+			"caption" => $caption,
+			"target" => $target,
+			"img" => $this->img,
+		);
+		if (isset($tpls["link"]))
+		{
+			$replacement = trim(localparse($tpls["link"],$vars));
+		}
+		else
+		{
+			if ($img)
+			{
+				$replacement = sprintf("<a href='%s' %s><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->img,$caption);
+			}
+			else
+			{
+				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+			}
+		};
+		$this->img = "";
+		return $replacement;
+	}
+	
+	function draw_link($target)
+	{
+		$link = $this->get_link($target);
+		if (not($link))
+		{
+			return;
+		}
+
+		if (strpos($link["url"],"@") > 0)
+		{
+			$linksrc = $link["url"];
+		}
+		elseif (aw_ini_get("extlinks.directlink") == 1)
+		{
+			$linksrc = $link["url"];
+		}
+		else
+		{
+			$linksrc = aw_ini_get("baseurl")."/".$link["id"];//$this->mk_my_orb("show", array("id" => $link["id"]),"links",false,true);
+		};
+
+		if ($link["link_image_check_active"] && ($link["link_image_active_until"] >= time()) )
+		{
+			$awf = get_instance("file");
+			$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$target' AND class_id = " . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+
+			if ($row && $awf->can_be_embedded(&$row))
+			{
+				$img = $awf->get_url($row["oid"],"");
+				$img = "<img border='0' src='$img' alt='$link[alt]' title='$link[alt]' />";
+			}
+			else
+			{
+				$img = "";
+			};
+
+			$this->img = $img;
+		}
+		
+		if ($link["use_javascript"])
+		{
+			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d,location=%d,menubar=%d,scrollbars=%d,width=%d,height=%d\")'",$linksrc,$link["id"],$link["newwintoolbar"],$link["newwinlocation"],$link["newwinmenu"],$link["newwinscroll"],$link["newwinwidth"],$link["newwinheight"]);
+			$url = "javascript:void(0)";
+		}
+		else
+		{
+			$url = $linksrc;
+			$target = $link["newwindow"] ? "target='_blank'" : "";
+		};
+
+
+		return(array($url,$target,$link["name"]));
+	}
+	
+	////
+	// !resetib aliased
+	function reset_aliases()
+	{
+		$this->extlinkaliases = "";
+	}
+
+	function get_link($id)
+	{
+		// bail out if no id	
+		if (not($id))
+		{
+			return;
+		};
+		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
+		$row = $this->db_fetch_row($q);
+		$row = array_merge($row,aw_unserialize($row['metadata']));
+		if ($row["type"] == "int")
+		{
+			$row["url"] = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$row["docid"];
+		}
+		return $row;
+	}
+
+  // registreerib kliki lingile
+
+	// peab ehitama ka mehhanisimi spämmimise vältimiseks
+	function add_hit($id,$host,$uid) 
+	{
+		$q = "UPDATE extlinks
+							SET hits = hits + 1
+							WHERE id = '$id'";
+		$this->db_query($q);
+		$t = time();
+		$q = "INSERT INTO extlinkstats (lid,tm,host,uid) 
+						VALUES ('$id',$t,'$host','$uid')";
+		$this->db_query($q);
+		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
+		$this->_log(ST_EXTLINK, SA_CLICK, $name, $id);
 	}
 }
 ?>
