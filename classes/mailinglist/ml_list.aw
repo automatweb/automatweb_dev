@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.72 2004/10/07 21:28:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.73 2004/10/14 13:35:26 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -789,7 +789,6 @@ class ml_list extends class_base
 			$member = &obj($memberdata["id"]);
 			if($member->created() > $arr["export_date"] or ($arr["export_date"] == -1))
 			{
-			
 			switch($arr["export_type"])
 			{
 				case ML_EXPORT_ADDR:
