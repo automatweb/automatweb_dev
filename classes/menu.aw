@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.96 2004/06/25 21:29:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.97 2004/06/25 21:37:44 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1100,14 +1100,7 @@ class menu extends class_base
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->mcaliases))
-		{
-			$this->mcaliases = $this->get_aliases(array(
-				"oid" => $oid,
-				"type" => $this->clid,
-			));
-		};
-		$f = $this->mcaliases[$matches[3] - 1];
+		$f = $alias;
 		if (!$f["target"])
 		{
 			return "";
