@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.67 2003/02/05 03:55:43 duke Exp $
+// $Id: class_base.aw,v 2.68 2003/02/11 19:18:58 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -306,6 +306,10 @@ class class_base extends aliasmgr
 		if (!$id)
 		{
 			// create the object, if it wasn't already there
+
+			// I need a nice elegant way to override the parent 
+			// so that added objects can land where I want them 
+			// to land. 
 			$id = $this->ds->ds_new_object(array(),array(
 					"parent" => $parent,
 					"name" => $name,
@@ -413,7 +417,7 @@ class class_base extends aliasmgr
 				$field = $property["field"];
 				$method = $property["method"];
 				$type = $property["type"];
-				if (($type == "text") || ($type == "callback"))
+				if ($type == "text")
 				{
 					continue;
 				};
@@ -434,14 +438,22 @@ class class_base extends aliasmgr
 				};
 				if ($type == "imgupload")
 				{
-					// upload the bloody image.
-					$t = get_instance("image");
-					$key = $name . "_id";
-					$oldid = (int)$this->coredata["meta"][$key];
-					$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
-					$metadata[$key] = $ar["id"];
-					$key = $name . "_url";
-					$metadata[$key] = image::check_url($ar["url"]);
+					if ($form_data["del_" . $name])
+					{
+						$metadata[$name . "_id"] = 0;
+						$metadata[$name . "_url"] = "";
+					}
+					else
+					{
+						// upload the bloody image.
+						$t = get_instance("image");
+						$key = $name . "_id";
+						$oldid = (int)$this->coredata["meta"][$key];
+						$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
+						$metadata[$key] = $ar["id"];
+						$key = $name . "_url";
+						$metadata[$key] = image::check_url($ar["url"]);
+					};
 				}
 				
 				// this is wrong you see, because it only allows to serialize data into

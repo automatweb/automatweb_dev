@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.33 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.34 2003/02/11 19:18:58 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -60,7 +60,7 @@
 	@property img_act type=imgupload field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
 
-	@property menu_images type=generated field=meta method=serialize callback=callback_get_menu_image group=presentation
+	@property menu_images type=callback field=meta method=serialize callback=callback_get_menu_image group=presentation
 	@caption Menüü pildid
 
 	// and now stuff that goes into menu table
@@ -480,11 +480,10 @@ class menu extends class_base
 				break;
 
 			case "menu_images":
-				$form_data = &$args["form_data"];
 				// XXX: this should be rewritten to upload one image at a time
 				if (!$this->menu_images_done)
 				{
-					$form_data["menu_images"] = $this->update_menu_images(array(
+					$data["value"] = $this->update_menu_images(array(
 						"id" => $args["obj"]["oid"],
 						"img_del" => $args["form_data"]["img_del"],
 						"img_ord" => $args["form_data"]["img_ord"],
