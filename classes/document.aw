@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.46 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.47 2001/09/21 20:19:46 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -108,7 +108,7 @@ class document extends aw_template
 			"Jrk Esileht parem" => "frontpage_right_jrk");
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array();
+		$this->metafields = array("show_print","show_last_changed");
 		lc_site_load("document",$this);
 		if (isset($GLOBALS["lc_doc"]) && is_array($GLOBALS["lc_doc"]))
 		{
@@ -300,6 +300,7 @@ class document extends aw_template
 		global $classdir,$baseurl,$ext;
 
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
+	
 
 
 		// küsime dokumendi kohta infot
@@ -318,8 +319,25 @@ class document extends aw_template
 			return false;
 		};
 		
+		$meta = $this->get_object_metadata(array("oid" => $docid));
+		
 		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
 		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);
+		
+		if ($meta["show_last_changed"])
+		{
+			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
+		};
+	
+		global $print;	
+
+		if ( ($meta["show_print"]) && (not($print)) )
+		{
+			global $REQUEST_URI;
+			$pc = localparse(PRINT_CAP,array("link" => $REQUEST_URI . "&print=1"));
+			$doc["content"] = $pc . $doc["content"];
+		};
+
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");
 		
@@ -1075,6 +1093,8 @@ class document extends aw_template
 			$this->set_object_metadata(array("oid" => $id, "key" => $m_key, "value" => $data[$m_key]));
 		}
 
+		$this->flush_cache();
+
 		// logime aktsioone
 		$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
@@ -1435,17 +1455,19 @@ class document extends aw_template
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
 										  "jrk2"  => $this->picker($document["jrk2"],$jrk),
 										  "jrk3"  => $this->picker($document["jrk3"],$jrk),
-										  "allparemal" => ($document["allparemal"] == 1) ? "checked" : "",
-										  "esilehel" => ($document["esilehel"] == 1) ? "checked" : "",
-										  "showlead" => ($document["showlead"] == 1) ? "checked" : "",
-										  "esilehel_uudis" => ($document["esilehel_uudis"] == 1) ? "checked" : "",
-											"yleval_paremal" => ($document["yleval_paremal"] == 1) ? "checked" : "",
-											"esileht_yleval" => ($document["esileht_yleval"] == 1) ? "checked" : "",
-											"show_modified" => ($document["show_modified"] == 1) ? "checked" : "",
-											"is_forum" => ($document["is_forum"] == 1) ? "checked" : "",
-											"copyright" => ($document["copyright"] == 1) ? "checked" : "",
-											"lead_comments" => ($document["lead_comments"] == 1) ? "checked" : "",
-											"show_title" => ($document["show_title"] == 1) ? "checked" : "",
+										  "allparemal" => checked($document["allparemal"] == 1),
+										  "esilehel" => checked($document["esilehel"] == 1),
+										  "showlead" => checked($document["showlead"] == 1),
+										  "esilehel_uudis" => checked($document["esilehel_uudis"] == 1),
+											"yleval_paremal" => checked($document["yleval_paremal"] == 1),
+											"esileht_yleval" => checked($document["esileht_yleval"] == 1),
+											"show_modified" => checked($document["show_modified"] == 1),
+											"is_forum" => checked($document["is_forum"] == 1),
+											"copyright" => checked($document["copyright"] == 1),
+											"lead_comments" => checked($document["lead_comments"] == 1),
+											"show_title" => checked($document["show_title"] == 1),
+											"show_print" => checked($meta["show_print"]),
+											"show_last_changed" => checked($meta["show_last_changed"]),
 											"keywords" => $keywords,
 											"title_clickable" => checked($document["title_clickable"]),
 											"newwindow" => checked($document["newwindow"]),
