@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.29 2001/10/14 13:43:24 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.30 2001/10/16 04:29:31 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -131,7 +131,7 @@ class form_element extends aw_template
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 				$relation_lb = "";
 				$relation_uniq = "";
-				if ($this->arr["subtype"] == "relation")
+				if ($this->arr["subtype"] == "relation" && !$this->form->is_form_output)
 				{
 					$this->do_search_script(true);
 					$this->vars(array(
@@ -771,6 +771,34 @@ class form_element extends aw_template
 		return $this->arr["listbox_items"];
 	} 
 
+	////
+	// !returns the name of table that the data from this element should be written to
+	function get_save_table()
+	{
+		if ($this->form->arr["save_table"] == 1)
+		{
+			return $this->arr["table"];
+		}
+		else
+		{
+			return "form_".$this->form->id."_entries";
+		}
+	}
+
+	////
+	// !returns the name of column that the data from this element should be written to
+	function get_save_col()
+	{
+		if ($this->form->arr["save_table"] == 1)
+		{
+			return $this->arr["table_col"];
+		}
+		else
+		{
+			return "ev_".$this->id;
+		}
+	}
+
 	function save_short()
 	{
 		$var = "element_".$this->id."_text";
@@ -898,11 +926,10 @@ class form_element extends aw_template
 		$this->arr["style"] = $id;
 	}
 
-	function set_entry(&$arr, $e_id,&$form)
+	function set_entry(&$arr, $e_id)
 	{
 		$this->entry = $arr[$this->id];
 		$this->entry_id = $e_id;
-		$form->values["el_".$this->id] = $this->get_value();
 	}
 
 	function gen_controller_html()
@@ -1372,9 +1399,7 @@ class form_element extends aw_template
 		{
 			if (isset($GLOBALS[$prefix."confirm"]))
 			{
-				$this->save_handle();
-				$this->upd_object(array("oid" => $id, "parent" => $this->arr["confirm_moveto"]));
-				$this->restore_handle();
+				$this->form->update_entry_object(array("oid" => $id, "parent" => $this->arr["confirm_moveto"]));
 			}
 		}
 		else

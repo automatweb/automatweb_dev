@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.73 2001/10/14 13:43:24 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.74 2001/10/16 04:29:31 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -432,15 +432,6 @@ class form extends form_base
 		$this->load($id);
 
 		$this->arr["allow_html"] = $allow_html;
-		$this->arr["bgcolor"] = $bgcolor;
-		$this->arr["border"] = $border;
-		$this->arr["cellpadding"]	= $cellpadding;
-		$this->arr["cellspacing"] = $cellspacing;
-		$this->arr["height"] = $height;
-		$this->arr["width"] = $width;
-		$this->arr["height"] = $height;
-		$this->arr["hspace"] = $hspace;
-		$this->arr["vspace"] = $vspace;
 		$this->arr["def_style"] = $def_style;
 		$this->arr["submit_text"] = $submit_text;
 		$this->arr["after_submit"] = $after_submit;
@@ -756,6 +747,10 @@ class form extends form_base
 		return $ret;
 	}
 
+	////
+	// !returns an array of references to the instances of all elements in this form
+	// well, theoretically references anyway, but php craps out here and actually, if you modify them, they get cloned 
+	// and changes end up in the cloned versions, so no changing stuff through these pointers
 	function get_all_els()
 	{
 		$ret = array();
@@ -786,27 +781,17 @@ class form extends form_base
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
 		$this->vars(array(
-			"allow_html"		=> checked($this->arr["allow_html"]),
-			"form_bgcolor"				=> $this->arr["bgcolor"],
-			"form_border"					=> $this->arr["border"],
-			"form_cellpadding"		=> $this->arr["cellpadding"],
-			"form_cellspacing"		=> $this->arr["cellspacing"],
-			"form_height"					=> $this->arr["height"],
-			"form_width"					=> $this->arr["width"],
-			"form_hspace"					=> $this->arr["hspace"],
-			"form_vspace"					=> $this->arr["vspace"],
-			"def_style"						=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
-			"submit_text"					=> $this->arr["submit_text"],
-			"after_submit_text"		=> $this->arr["after_submit_text"],
-			"after_submit_link"		=> $this->arr["after_submit_link"],
-			"as_1"								=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
-			"as_2"								=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
-			"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
-			"as_4"								=> ($this->arr["after_submit"] == 4 ? "CHECKED" : ""),
+			"allow_html"	=> checked($this->arr["allow_html"]),
+			"def_style"	=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
+			"after_submit_link"	=> $this->arr["after_submit_link"],
+			"as_1"	=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
+			"as_2"	=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
+			"as_3"	=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
+			"as_4"	=> ($this->arr["after_submit"] == 4 ? "CHECKED" : ""),
 			"ops" => $this->picker($this->arr["after_submit_op"], $ops[$id]),
-			"els"									=> $this->multiple_option_list(is_array($this->arr["name_els"]) ? $this->arr["name_els"] : $this->arr["name_el"] ,$this->get_all_elements()),
-			"try_fill"						=> checked($this->arr["try_fill"]),
-			"check_status"						=> checked($this->arr["check_status"]),
+			"els"	=> $this->multiple_option_list(is_array($this->arr["name_els"]) ? $this->arr["name_els"] : $this->arr["name_el"] ,$this->get_all_elements()),
+			"try_fill"	=> checked($this->arr["try_fill"]),
+			"check_status"	=> checked($this->arr["check_status"]),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
@@ -873,13 +858,13 @@ class form extends form_base
 				$form_action = "/reforb.".$GLOBALS["ext"];
 			}
 		}
-		//$form_action = $baseurl.$form_action;
 
 		global $section;
 		if (!isset($reforb) || $reforb == "")
 		{
 			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section));
 		}
+
 		if (isset($entry_id) && $entry_id)
 		{
 			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)  || $GLOBALS["SITE_ID"] == 11))
@@ -965,8 +950,6 @@ class form extends form_base
 			}
 		}
 
-		$this->add_hit($this->id);
-
 		$check = $this->parse("stat_check_sub");
 
 		// siia array sisse pannaxe css stiilide nimed ja id'd form_cell::gen_user_html sees, mis vaja genereerida
@@ -994,38 +977,23 @@ class form extends form_base
 			"checks"						=> $chk_js,
 			"stat_check_sub" => ($fg_check_status) ? $check : "",
 		));
-		if (isset($this->arr["tablestyle"]) &&  $this->arr["tablestyle"] != 0)
-		{
-			classload("style");
-			$st = new style;
-			$s = $st->get($this->arr["tablestyle"]);
-			$s = unserialize($s["style"]);
-			$this->vars(array(
-				"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
-				"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
-				"form_cellpadding"	=> (isset($s["cellpadding"]) && $s["cellpadding"] != "" ? " CELLPADDING='".$s["cellpadding"]."'" : ""),
-				"form_cellspacing"	=> (isset($s["cellspacing"]) && $s["cellspacing"] != "" ? " CELLSPACING='".$s["cellspacing"]."'" : ""),
-				"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : ""),
-				"form_width"				=> (isset($s["width"]) && $s["width"] != "" ? " WIDTH='".$s["width"]."'" : "" ),
-				"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : "" ),
-				"form_vspace"				=> (isset($s["vspace"]) && $s["vspace"] != "" ? " VSPACE='".$s["vspace"]."'" : ""),
-				"form_hspace"				=> (isset($s["hspace"]) && $s["hspace"] != "" ? " HSPACE='".$s["hspace"]."'" : ""),
-			));
-		}
-		else
-		{
-			$this->vars(array(
-				"form_border"				=> (isset($this->arr["border"]) && $this->arr["border"] != "" ? " BORDER='".$this->arr["border"]."'" : ""),
-				"form_bgcolor"			=> (isset($this->arr["bgcolor"]) && $this->arr["bgcolor"] !="" ? " BGCOLOR='".$this->arr["bgcolor"]."'" : ""),
-				"form_cellpadding"	=> (isset($this->arr["cellpadding"]) && $this->arr["cellpadding"] != "" ? " CELLPADDING='".$this->arr["cellpadding"]."'" : ""),
-				"form_cellspacing"	=> (isset($this->arr["cellspacing"]) && $this->arr["cellspacing"] != "" ? " CELLSPACING='".$this->arr["cellspacing"]."'" : ""),
-				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : ""),
-				"form_width"				=> (isset($this->arr["width"]) && $this->arr["width"] != "" ? " WIDTH='".$this->arr["width"]."'" : "" ),
-				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : "" ),
-				"form_vspace"				=> (isset($this->arr["vspace"]) && $this->arr["vspace"] != "" ? " VSPACE='".$this->arr["vspace"]."'" : ""),
-				"form_hspace"				=> (isset($this->arr["hspace"]) && $this->arr["hspace"] != "" ? " HSPACE='".$this->arr["hspace"]."'" : ""),
-			));
-		}
+
+		classload("style");
+		$st = new style;
+		$s = $st->get($this->arr["tablestyle"]);
+		$s = unserialize($s["style"]);
+		$this->vars(array(
+			"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
+			"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
+			"form_cellpadding"	=> (isset($s["cellpadding"]) && $s["cellpadding"] != "" ? " CELLPADDING='".$s["cellpadding"]."'" : ""),
+			"form_cellspacing"	=> (isset($s["cellspacing"]) && $s["cellspacing"] != "" ? " CELLSPACING='".$s["cellspacing"]."'" : ""),
+			"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : ""),
+			"form_width"				=> (isset($s["width"]) && $s["width"] != "" ? " WIDTH='".$s["width"]."'" : "" ),
+			"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : "" ),
+			"form_vspace"				=> (isset($s["vspace"]) && $s["vspace"] != "" ? " VSPACE='".$s["vspace"]."'" : ""),
+			"form_hspace"				=> (isset($s["hspace"]) && $s["hspace"] != "" ? " HSPACE='".$s["hspace"]."'" : ""),
+		));
+
 		$st = $this->parse();				
 		if ($css_file != "")
 		{
@@ -1089,9 +1057,9 @@ class form extends form_base
 			$this->load($id);
 		}
 
-		if ($entry_id && !$this->arr["save_table"])	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, siis ignoorime seda
-		{
-			$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $entry_id","form_id");
+		if ($entry_id && $this->arr["save_table"] != 1)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, 
+		{																						// siis ignoorime seda
+			$fid = $this->get_form_for_entry($entry_id);
 			if ($fid != $id)
 			{
 				$entry_id = false;
@@ -1102,23 +1070,20 @@ class form extends form_base
 		{
 			// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
 			// minema. parent argument overraidib selle
-			$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
+			$parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 			
 			// we override the lang_id here, because entries that have been entered over
 			// XML-RPC do not know what their language_id might be, so specify one.
-			$params = array(
+			$this->entry_id = $this->create_entry_object(array(
 				"parent" => $parent,
 				"class_id" => CL_FORM_ENTRY,
 				"lang_id" => $lang_id,
-			);
-
-			$entry_id = $this->new_object($params);
-
-			$this->entry_id = $entry_id;
+			));
 			$new = true;
 		}
 		else
 		{
+			$this->entry_id = $entry_id;
 			$new = false;
 		}
 
@@ -1133,16 +1098,83 @@ class form extends form_base
 			{
 				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
-					// form_cell->process_entry
-					$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $entry_id,$prefix);
+					// gather the data from the bunch of POST variables into $this->entry 
+					// - an array of element_id => element_data
+					$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $this->entry_id,$prefix);
 				}
 			}
 		}
 
-		// what exactly does this code do?
-		//
-		// well, you can select a bunch of elements and then the data entered in those elements will be used to neme the form_entry object.
-		// and this is where it's done - terryf
+		$this->update_entry_name($this->entry_id);
+		
+		if ($new)
+		{
+			// now write the data from the previously gathered array to the storage medium
+			// specified in the forms settings
+			$this->create_entry_data($this->entry_id,$this->entry,$chain_entry_id);
+
+			// see logimine on omal kohal ainult siis, kui täitmine toimub
+			// läbi veebi.
+			$this->_log("form","T&auml;itis formi $this->name");
+			$this->do_actions($this->entry_id);
+		}
+		else
+		{
+			// update the stored data from the gathered data
+			$this->update_entry_data($this->entry_id,$this->entry);
+			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
+		}
+
+		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
+		$GLOBALS["session_filled_forms"][$this->id] = $this->entry_id;
+
+		global $ext;
+
+		if (isset($redirect_after) && $redirect_after)
+		{
+			// if this variable has been set in extraids when showing the form, redirect to it
+			$awt->stop("form::process_entry");
+			return $redirect_after;
+		}
+
+		switch ($this->get_location())
+		{
+			case "redirect":
+				$l = $this->arr["after_submit_link"];
+				break;
+			case "search_results":
+				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
+				break;
+			case "show_op":
+				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id, "op_id" => $this->arr["after_submit_op"],"section" => $section));
+				break;
+			default:
+				if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
+				{
+					// n2itame ocingu tulemusi
+					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id,"op_id" => 1,"section" => $section));
+				}
+				else
+				{
+					$l = $this->mk_my_orb("show", array("id" => $id, "entry_id" => $this->entry_id));
+				}
+				break;
+		}
+		$awt->stop("form::process_entry");
+		return $l;
+	}
+
+	////
+	// !once upon a time a wanderer posed the question:
+	//
+	// what exactly does this code do?
+	//
+	// well, you can select a bunch of elements and then the data entered in those elements will be used to neme the form_entry object.
+	// and this is where it's done - terryf
+	//
+	// and such was the reply.
+	function update_entry_name($entry_id)
+	{
 		if (is_array($this->arr["name_els"]))
 		{
 			foreach($this->arr["name_els"] as $elid)
@@ -1160,7 +1192,7 @@ class form extends form_base
 					}
 				}
 			}
-			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
+ 			$this->update_entry_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
 		}
 		else
 		if ($this->arr["name_el"])
@@ -1177,194 +1209,12 @@ class form extends form_base
 					$this->entry_name = $el->get_value();
 				}
 			}
-			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
+			$this->update_entry_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
 		}
-		
-		$en = serialize($this->entry);
-		
-		if ($new)
-		{
-			// lisame uue entry
-			$this->db_query("INSERT INTO form_entries VALUES($entry_id, $this->id, ".time().", '$en')");
-
-			// create sql 
-			reset($this->entry);
-			$ids = "id"; $vals = "$entry_id";
-			if ($chain_entry_id)
-			{
-				$ids.=",chain_id";
-				$vals.=",".$chain_entry_id;
-			}
-
-			$first = true;
-
-			while (list($k, $v) = each($this->entry))
-			{
-				$el = $this->get_element_by_id($k);
-
-				// häkk
-				if (is_object($el))
-				{
-					$ev = $el->get_value();
-
-					$ids.=",el_$k,ev_$k";
-					// see on pildi uploadimise elementide jaoks
-					if (is_array($v))
-					{
-						$v = serialize($v);
-					}
-					$vals.=",'$v','$ev'";
-				};
-			}
-
-			$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
-			$this->db_query($sql);
-
-			// see logimine on omal kohal ainult siis, kui täitmine toimub
-			// läbi veebi.
-			$this->_log("form","T&auml;itis formi $this->name");
-			$this->do_actions($entry_id);
-		}
-		else
-		{
-			if ($this->arr["save_table"])
-			{
-				// here goes the clever bit
-				;
-			}
-			else
-			{
-				// muudame olemasolevat entryt.
-				$this->db_query("UPDATE form_entries SET form_entries.tm = ".time().", contents = '$en' WHERE id = $entry_id");
-				// create sql 
-				reset($this->entry);
-				$ids = "id = $entry_id";
-				$first = true;
-
-				while (list($k, $v) = each($this->entry))
-				{
-					$el = $this->get_element_by_id($k);
-					if ($el)
-					{
-						$ev = $el->get_value();
-						if (is_array($v))
-						{
-							$v = serialize($v);
-						}
-						$ids.=",el_$k = '$v',ev_$k = '$ev'";
-					}
-				}
-
-				$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
-				$this->db_query($sql);
-				$this->_log("form","Muutis formi $this->name sisestust $entry_id");
-			}
-		}
-		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
-		$this->entry_id = $entry_id;
-		$GLOBALS["session_filled_forms"][$this->id] = $entry_id;
-
-		global $ext;
-
-		if (isset($redirect_after) && $redirect_after)
-		{
-			// if this variable has been set in extraids when showing the form, redirect to it
-			$awt->stop("form::process_entry");
-			return $redirect_after;
-		}
-
-		switch ($this->get_location())
-		{
-			case "text":
-				$l = "forms.$ext?type=ae_text&id=$id&entry_id=$entry_id";
-				break;
-			case "redirect":
-				$l = $this->get_ae_location();
-				break;
-			case "search_results":
-				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1,"section" => $section));
-				break;
-			case "show_op":
-				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => $this->arr["after_submit_op"],"section" => $section));
-				break;
-			default:
-				if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
-				{
-					// n2itame ocingu tulemusi
-					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1,"section" => $section));
-				}
-				else
-				{
-					$l = $this->mk_my_orb("show", array("id" => $id, "entry_id" => $entry_id));
-				}
-				break;
-		}
-		$awt->stop("form::process_entry");
-		return $l;
 	}
 
 	////
-	// !delketes $entry_id of form $id and redirects to hexbin($after)
-	function delete_entry($arr)
-	{
-		extract($arr);
-		$this->delete_object($entry_id);
-		$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
-		$after = $this->hexbin($after);
-		header("Location: ".$after);
-		die();
-	}
-
-	function req_load_relations($id,&$row)
-	{
-		$this->temp_ids[$id] = $id;
-		$this->save_handle();
-		$this->db_query("SELECT * FROM form_relations WHERE form_to = $id OR form_from = $id");
-		while ($r_row = $this->db_next())
-		{
-			if ($r_row["form_from"] && $r_row["form_to"])
-			{
-				// nii. nyt on siis see form, mille entryt loaditakse on lingitud miski teise formi kylge. 
-				// j2relikult tuleb siin loadida ka see entry, mis on lingitud
-				// niisis, tuleb teha p2ring teise formi tabelisse, milles where klauslis on see v22rtus, mis k2esolevast formist valiti
-				$this->save_handle();
-				if ($r_row["el_from"])
-				{
-					$q = "SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'";
-					$this->db_query($q);
-					$er_row = $this->db_next();
-					if (is_array($er_row))
-					{
-						$er_row["form_".$r_row["form_from"]."_entry"] = $er_row["id"];
-						$row= $row+$er_row;
-					}
-					if (!in_array($r_row["form_from"],$this->temp_ids))
-					{
-						$this->req_load_relations($r_row["form_from"],&$row);
-					}
-				}
-				if ($r_row["el_to"])
-				{
-					$q = "SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'";
-					$this->db_query($q);
-					$er_row = $this->db_next();
-					if (is_array($er_row))
-					{
-						$er_row["form_".$r_row["form_to"]."_entry"] = $er_row["id"];
-						$row= $row+$er_row;
-					}
-					if (!in_array($r_row["form_to"],$this->temp_ids))
-					{
-						$this->req_load_relations($r_row["form_to"],&$row);
-					}
-				}
-				$this->restore_handle();
-			}
-		}
-		$this->restore_handle();
-	}
-
-	// laeb entry parajasti aktiivse vormi jaoks
+	// !loads entry $entry_id for the loaded form and maps the data to the form elements
 	function load_entry($entry_id,$silent_errors = false)
 	{
 		global $awt;
@@ -1372,131 +1222,22 @@ class form extends form_base
 		$awt->count("form::load_entry");
 
 		$this->entry_id = $entry_id;
-
-		$id = $this->id;
-
-		if ($this->arr["save_table"] == 1)
-		{
-			dbg("save_table<br>");
-			// whee. loeme entry_id j2rgi valitud tabelist infi
-			if (is_array($this->arr["save_tables"]))
-			{
-				$row["form_".$id."_entry"] = $entry_id;
-				foreach($this->arr["save_tables"] as $tbl => $tblcol)
-				{
-					$q = "SELECT ".$tbl.".* FROM $tbl WHERE ".$tbl.".".$tblcol." = '$entry_id' ";
-					$this->db_query($q);
-					$row = $this->db_next();
-					// now we must map the table columns to elements in the form. whee. shite.
-					$els = $this->get_all_els();
-					foreach($els as $el)
-					{
-						if ($el->arr["table"] == $tbl && $el->arr["table_col"] != "")
-						{
-							$row["el_".$el->get_id()] = $row[$el->arr["table_col"]];
-							$row["ev_".$el->get_id()] = $row[$el->arr["table_col"]];
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			$q = "SELECT form_".$id."_entries.*,objects.created as created FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE id = $entry_id";
-			$this->db_query($q);
-			dbg("load_entry_1  - ".$q."<br>");
-
-			if (!($row = $this->db_next()))
-			{
-				if ($silent_errors)
-				{
-					$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),false,true);
-					$this->entry_id = 0;
-				}
-				else
-				{
-					$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),true);
-				}
-			};
-			$this->entry_created = $row["created"];
-			$row["form_".$id."_entry"] = $row["id"];
-
-			// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
-			$this->temp_ids = array();
-
-			// we can skip relation loading when we load the search form entry, cause there are no relations created in search forms
-			if ($this->type != FTYPE_SEARCH)
-			{
-				$this->req_load_relations($id,&$row);
-			}
-
-			if ($row["chain_id"])
-			{
-				// kuna see entry on osa chaini entryst, siis tuleb laadida ka teised chaini entryd
-				$char = $this->get_chain_entry($row["chain_id"]);
-				foreach($char as $cfid => $ceid)
-				{
-					if ($ceid != $entry_id)
-					{
-						$this->db_query("SELECT * FROM form_".$cfid."_entries WHERE id = $ceid");
-						dbg("load_entry_chain_q = SELECT * FROM form_".$cfid."_entries WHERE id = $ceid <br>");
-						$crow = $this->db_next();
-						if (is_array($crow))
-						{
-							$crow["form_".$cfid."_entry"] = $crow["id"];
-							$row= $row+$crow;
-						}
-					}
-				}
-				$this->chain_entry_id = $row["chain_id"];
-			}
-			else
-			{
-				$this->chain_entry_id = 0;
-			}
-		}
-
-		$this->load_entry_from_data($row,$entry_id,$eids);
-		$awt->stop("form::load_entry");
-	}
-
-	function load_entry_from_data($row,$entry_id,$eids = array())
-	{
-		global $awt;
-		$awt->start("form::load_entry_from_data");
-		$awt->count("form::load_entry_from_data");
-
-		$this->entry_id = $entry_id;
-		reset($row);
-		$this->values = array();
-		while (list($k,$v) = each($row))
-		{
-			// pildi elementide inff on arrays serializetult
-			// selle unserializeme hiljem, elemendi juures alles
-
-			if (substr($k,0,3) == "el_")
-			{
-				//print "k = $k, v = $v<br>";
-				$key = substr($k,3);
-				$this->entry[substr($k,3)] = $v;
-			}
-			else
-			if (substr($k,0,5) == "form_")
-			{
-				$this->entry[$k] = $v;
-			}
-		};
+		// reads the data from the configured data source for the form and returns it as an array of el_id => el_value pairs
+		$this->entry = $this->read_entry_data($entry_id,$silent_errors);
+		// now $this->entry contains el_id => el_value pairs - not user values though, they are formgen values
 
 		$this->vars(array("entry_id" => $entry_id));
-
+		
+		// so we feed the data to the elements and that should be it
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col=0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id,&$this);
+				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
 			};
 		};
-		$awt->stop("form::load_entry_from_data");
+
+		$awt->stop("form::load_entry");
 	}
 
 	////
@@ -1640,7 +1381,6 @@ class form extends form_base
 					}
 				}
 
-
 				$chtml= "";
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
@@ -1654,7 +1394,7 @@ class form extends form_base
 					{
 						// now fake the correct id
 						$this->entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
-						$el->set_entry($this->entry,$this->entry_id, &$this);
+						$el->set_entry($this->entry,$this->entry_id);
 					}
 					$awt->stop("form::show::cycle::new_element");
 
@@ -1690,8 +1430,6 @@ class form extends form_base
 		$awt->stop("form::show::cycle");
 
 		// uurime v2lja outputi tabeli stiili ja kasutame seda
-		//$this->output["table_style"] = 12220;
-		//print $t_style->get_table_string($this->output["table_style"]);
 		if ($this->output["table_style"])
 		{
 			$this->vars(array(
@@ -1706,7 +1444,6 @@ class form extends form_base
 			$retval .= "<input type='button' onClick='javascript:window.close()' value='Sulge'>";
 		};
 		return $retval;
-		
 	}
 
 	////
@@ -1779,18 +1516,6 @@ class form extends form_base
 			case 4:
 				return "show_op";
 		}
-	}
-
-	function get_ae_location()
-	{
-		return $this->arr["after_submit_link"];
-	}
-
-	function ae_text()
-	{
-		$this->read_template("ae_text.tpl");
-		$this->vars(array("ae_text" => $this->arr["after_submit_text"]));
-		return $this->parse();
 	}
 
 	////
@@ -1921,7 +1646,8 @@ class form extends form_base
 		return $this->mk_orb("sel_search", array("id" => $id,"page" => $page));
 	}
 
-	// does the actual searching part and returns
+	////
+	// !does the actual searching part and returns
 	// an array, that has one entry for each form selected as a search target
 	// and that entry is an array of matching entries for that form
 	// parent(int) - millise parenti alt entrysid otsida
@@ -1933,7 +1659,6 @@ class form extends form_base
 
 		// laeb täidetud vormi andmed sisse
 		$this->load_entry($entry_id);
-
 
 		// gather all the elements of this form in an array
 		$els = array();
@@ -3240,7 +2965,7 @@ class form extends form_base
 		{
 			for ($col=0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id,&$this);
+				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
 			};
 		};
 		$awt->stop("form::set_element_value");
@@ -3553,8 +3278,19 @@ class form extends form_base
 		$o = new db_objects;
 		$menulist = $o->get_list();
 
+		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
+
+		// we must remove the current form from the list of relation forms so that the user can't relate a form to itself
+		$_tmp = array();
+		foreach($_tp as $k => $v)
+		{
+			if ($k != $id)
+			{
+				$_tmp[$k] = $v;
+			}
+		}
 		$this->vars(array(
-			"relation_forms" => $this->multiple_option_list($this->arr["relation_forms"], $this->get_list(FTYPE_ENTRY,false,true)),
+			"relation_forms" => $this->multiple_option_list($this->arr["relation_forms"], $_tmp),
 			"ff_folder"	=> $this->picker($this->arr["ff_folder"], $menulist),
 			"ne_folder"	=> $this->picker($this->arr["newel_parent"], $menulist),
 			"tear_folder"	=> $this->picker($this->arr["tear_folder"], $menulist),
@@ -4045,27 +3781,135 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"admin_tables.tpl","Muuda tabeleid");
 
+		global $status_msg;
+		$this->vars(array(
+			"status_msg" => $status_msg
+		));
+		session_unregister("status_msg");
+
+		// check if we are in the middle of an error and load the data from the session
+		global $f_t_o,$form_table_save_error;
+		if ($form_table_save_error == true)
+		{
+			if (is_array($f_t_o))
+			{
+				foreach($f_t_o as $key => $value)
+				{
+					$this->arr[$key] = $value;
+				}
+			}
+
+			session_unregister("form_table_save_error");
+			session_unregister("f_t_o");
+		}
+
 		$tables = array();
 		$tbels = array();
 		$this->db_list_tables();
 		while ($tb = $this->db_next_table())
 		{
-			$tables[$tb] = $tb;
+			if (!(substr($tb,0,5) == "form_" && substr($tb,-8) == "_entries"))
+			{
+				$tables[$tb] = $tb;
+			}
 		}
 
 		if (is_array($this->arr["save_tables"]))
 		{
+			$num_tbls = count($this->arr["save_tables"]);
+
+			if ($num_tbls > 0)
+			{
+				// teeme array valitud tabelitest, mille saab picker funxioonile ette s88ta
+				$_tables = array("" => "");
+				foreach($tables as $_tb)
+				{
+					if (isset($this->arr["save_tables"][$_tb]))
+					{
+						$_tables[$_tb] = $_tb;
+					}
+				}
+				$this->vars(array(
+					"objs_sel" => $this->picker($this->arr["save_tables_obj_tbl"],$_tables),
+				));
+
+				if ($this->arr["save_tables_obj_tbl"] != "")
+				{
+					$ta = $this->db_get_table($this->arr["save_tables_obj_tbl"]);
+					foreach($ta["fields"] as $fn => $fdata)
+					{
+						$fields[$fn] = $fn;
+					}
+					$this->vars(array(
+						"obj_column" => $this->picker($this->arr["save_tables_obj_col"],$fields)
+					));
+					$this->vars(array(
+						"OBJ_SEL" => $this->parse("OBJ_SEL")
+					));
+				}
+
+				$this->vars(array(
+					"SOME_TABLES" => $this->parse("SOME_TABLES")
+				));
+			}
+
 			foreach($this->arr["save_tables"] as $tbl => $tbcol)
 			{
+				// teeme array k6igist tabelitest peale selle
+				$_tables = array();
+				foreach($tables as $_tb)
+				{
+					if ($_tb != $tbl && isset($this->arr["save_tables"][$_tb]))
+					{
+						$_tables[$_tb] = $_tb;
+					}
+				}
+
+				// loeme tabeli tulpade inffi sisse
 				$ta = $this->db_get_table($tbl);
 				$fields = array("" => "");
 				foreach($ta["fields"] as $fn => $fdata)
 				{
 					$fields[$fn] = $fn;
 				}
+
 				$this->vars(array(
 					"table_name" => $tbl,
-					"cols" => $this->picker($tbcol,$fields)
+					"cols" => $this->picker($tbcol,$fields),
+					"rel_tbls" => $this->multiple_option_list($this->arr["save_tables_rels"][$tbl],$_tables)
+				));
+
+				$ot = "";
+				if ($num_tbls > 1)
+				{
+					$ret = "";
+					if (is_array($this->arr["save_tables_rels"][$tbl]))
+					{
+						foreach($this->arr["save_tables_rels"][$tbl] as $_tb => $_tb)
+						{
+							$ta = $this->db_get_table($_tb);
+							$fields2 = array("" => "");
+							foreach($ta["fields"] as $fn => $fdata)
+							{
+								$fields2[$fn] = $fn;
+							}
+							$this->vars(array(
+								"rel_f_cols" => $this->picker($this->arr["save_tables_rel_els"][$tbl][$_tb]["from"],$fields),
+								"rel_t_cols" => $this->picker($this->arr["save_tables_rel_els"][$tbl][$_tb]["to"],$fields2),
+								"foreign_table" => $_tb
+							));
+							$ret.=$this->parse("REL_TABLE");
+						}
+					}
+
+					$this->vars(array(
+						"REL_TABLE" => $ret
+					));
+					$ot = $this->parse("HAS_OTHER_TABLES");
+				}
+
+				$this->vars(array(
+					"HAS_OTHER_TABLES" => $ot
 				));
 				$tabel.=$this->parse("TABLE");
 			}
@@ -4090,11 +3934,223 @@ class form extends form_base
 		{
 			foreach($tables as $tbl)
 			{
-				$this->arr["save_tables"][$tbl] = $indexes[$tbl];
+				$this->arr["save_tables"][$tbl] = (string)$indexes[$tbl];
 			}
 		}
-		$this->save();
+
+		$this->arr["save_tables_obj_tbl"] = $objs_where;
+		$this->arr["save_tables_obj_col"] = $obj_column;
+
+		$this->arr["save_tables_rels"] = array();
+		if (is_array($relations))
+		{
+			foreach($relations as $tbl => $connections)
+			{
+				if (is_array($connections))
+				{
+					foreach($connections as $_tb)
+					{
+						$this->arr["save_tables_rels"][$tbl][$_tb] = $_tb;
+					}
+				}
+			}
+		}
+
+		$this->arr["save_tables_rel_els"] = array();
+		if (is_array($rel_cols))
+		{
+			foreach($rel_cols as $tbl => $_dt)
+			{
+				foreach($_dt as $_tb => $ar)
+				{
+					$this->arr["save_tables_rel_els"][$tbl][$_tb]["to"] = $ar["to"];
+					$this->arr["save_tables_rel_els"][$tbl][$_tb]["from"] = $ar["from"];
+				}
+			}
+		}
+
+		global $status_msg;
+		if (($msg = $this->check_table_relation_integrity()) == "ok")
+		{
+			$this->save();
+			$status_msg = "</font><font color=\"#000000\">Changes saved!";
+		}
+		else
+		{
+			$status_msg = $msg;
+			// and here we must stuff all that shite in the session and set a flag indicating it. hmh. 
+			// me el no laiki too much
+			$GLOBALS["f_t_o"]["save_tables_rel_els"] = $this->arr["save_tables_rel_els"];
+			$GLOBALS["f_t_o"]["save_tables_rels"] = $this->arr["save_tables_rels"];
+			$GLOBALS["f_t_o"]["save_tables_obj_tbl"] = $this->arr["save_tables_obj_tbl"];
+			$GLOBALS["f_t_o"]["save_tables_obj_col"] = $this->arr["save_tables_obj_col"];
+			$GLOBALS["f_t_o"]["save_table"] = $this->arr["save_table"];
+			$GLOBALS["f_t_o"]["save_tables"] = $this->arr["save_tables"];
+			$GLOBALS["form_table_save_error"] = true;
+			session_register("f_t_o");
+			session_register("form_table_save_error");
+		}
+		session_register("status_msg");
 		return $this->mk_my_orb("sel_tables", array("id" => $id));
+	}
+
+	////
+	// !this is the tricky bit. here we must check if the database tables' relations are complete and non-cyclic
+	// that means that no table may be related to itself either directly or indirectly and you must be able to 
+	// reach any table from any other table by crawling through the relations
+	function check_table_relation_integrity()
+	{
+		// we assume everything is fine if 
+		// a) we don't save things to existing tables
+		// b) no tables are selected as save targets
+		// c) just one table is selected
+		if ($this->arr["save_table"] != 1 || !is_array($this->arr["save_tables"]))
+		{
+			return "ok";
+		}
+
+		if (count($this->arr["save_tables"]) < 2)
+		{
+			reset($this->arr["save_tables"]);
+			list($k,$v) = each($this->arr["save_tables"]);
+			$this->arr["save_table_start_from"] = $k;
+			return "ok";
+		}
+
+		// easier said than done, that though.
+
+		// ok, so let's try to detect cycles first
+
+		// so we do that by starting from one table and following the relations and if we get back to any table we already 
+		// visited it means we have a cyclic dependency. and we don't like their kind around here. yessireee <ptui>
+		foreach($this->arr["save_tables"] as $tbl => $col)
+		{
+			$this->cyclic_used_map = array();
+			if (!$this->req_cyclic_dep($tbl))
+			{
+				return "Table $tbl has a cyclic dependency - changes not saved!";
+			}
+		}
+
+		// now try and find if the chain is broken anywhere 
+		// once again, we go crawling through the relations and mark down the tables that we reach by crawling
+		// and after we finish we check if we managed to cover all the tables. right?
+		// and as a side-effect - a very useful side-effect as I might add :) - if we succeed in touching all the tables
+		// we mark down the table where we started so we can use it later when writing stuff to the database
+		$break_table = "";
+		foreach($this->arr["save_tables"] as $tbl => $col)
+		{
+			if ($this->do_chain_dep($tbl,&$break_table))
+			{
+				// if we get here then that means that if we start from $tbl we can reach all the other tables as well 
+				// - so we mark that down, to be used l8r
+				$this->arr["save_table_start_from"] = $tbl;
+				return "ok";
+			}
+		}
+
+		// if we end up here - that means that req_chain_dep failed every time and we have a broken 
+		// relation on our hands - so we report it to the user
+		return "Table $break_table was not reachable through any relation - changes not saved!";
+	}
+
+	////
+	// !this finds out if all the tables are reachable through relations if we start from $tbl
+	// if all are reachable returns true
+	// if a table is not reachable, returns false and puts the table's name on $break_table
+	function do_chain_dep($tbl,&$break_table)
+	{
+		// reset the map
+		$this->chain_dep_map = array();
+
+		// make a local copy so we don't screw up internal pointers
+		$_tmp = $this->arr["save_tables"];	
+
+		foreach($_tmp as $_tbl => $col)
+		{
+			$this->chain_dep_map[$_tbl] = false;
+		}
+
+		// populate the map
+		$this->chain_dep_depth = 0;
+		$this->req_chain_dep($tbl);
+
+		// check if we missed any tables - but we must also check that maybe the table we started from has no relations
+		// then it would be nicer to report this table to the user, not the first - so how do we do that? maybe we should record
+		// tha maximim depth of the recursion and if it's zero, return the starting table? sounds like it might work. 
+		if ($this->chain_dep_depth == 0)
+		{
+			$break_table = $tbl;
+			return false;
+		}
+
+		// if we got somewhere, find the first random one
+		foreach($this->chain_dep_map as $tbl => $status)
+		{
+			if ($status == false)
+			{
+				// found one we missed!
+				$break_table = $tbl;
+				return false;
+			}
+		}
+		return true;
+	}
+
+	////
+	// !does the crawling through relations bit for do_chain_dep
+	function req_chain_dep($tbl)
+	{
+		// mark this table in the map
+		$this->chain_dep_map[$tbl] = true;
+
+		// make a local copy so we won't screw up internal pointers
+		$_tmp = $this->arr["save_tables_rels"][$tbl];
+		if (!is_array($_tmp))
+		{
+			// if we reached an end of relation return 
+			return;
+		}
+
+		$this->chain_dep_depth++;
+
+		// now go through all the other relations recursively
+		foreach($_tmp as $r_tbl => $r_tbl)
+		{
+			$this->req_chain_dep($r_tbl);
+		}
+	}
+
+	////
+	// !recursively crawls through database table relations and returns false if it ends up in the table it started from
+	// otherwise returns true
+	function req_cyclic_dep($tbl)
+	{
+		if ($this->cyclic_used_map[$tbl] == $tbl)
+		{
+			return false;
+		}
+
+		$this->cyclic_used_map[$tbl] = $tbl;
+
+		// make a local copy so we won't screw up internal pointers
+		$_tmp = $this->arr["save_tables_rels"][$tbl];
+		if (!is_array($_tmp))
+		{
+			// if we reached an end of relation return true, cause that means no cycle
+			return true;
+		}
+
+		foreach($_tmp as $r_tbl => $r_tbl)
+		{
+			if (!$this->req_cyclic_dep($r_tbl))
+			{
+				return false;
+			}
+		}
+
+		// what, that's it? wow. no fuckin way this will work.
+		return true;
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.38 2001/10/14 13:43:25 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.39 2001/10/16 04:29:32 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -89,13 +89,9 @@ lc_load("definition");
 
 		function gen_show_html()
 		{
-//			if (!$this->entry_id)
-//				return "";
-
 			global $awt;
 			$awt->start("form_entry_element::gen_show_html");
-		$awt->count("form_entry_element::gen_show_html");
-
+			$awt->count("form_entry_element::gen_show_html");
 
 			$t = new db_images;
 
@@ -122,6 +118,10 @@ lc_load("definition");
 					
 			if ($this->arr["type"] == "listbox")
 			{
+				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+				{
+					$this->make_relation_listbox_content();
+				}
 				$sp = split("_", $this->entry, 10);
 				if ($this->form->lang_id != $lang_id)
 				{

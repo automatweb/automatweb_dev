@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.17 2001/09/18 00:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.18 2001/10/16 04:29:32 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -11,6 +11,7 @@ class form_output extends form_base
 		$this->tpl_init("forms");
 		$this->db_init();
 		$this->sub_merge = 1;
+		$this->is_form_output = true;	// so that when something needs to tell the deifference it can
 		lc_load("definition");
 		global $lc_form;
 		if (is_array($lc_form))

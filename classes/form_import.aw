@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.7 2001/10/01 13:49:18 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.8 2001/10/16 04:29:32 kristo Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -198,8 +198,7 @@ class form_import extends form_base
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
 			$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
-			$en = serialize($entry);
-			$q = "insert into form_entries values($entry_id, $id, ".time().", '$en')";
+			$q = "insert into form_entries(id,form_id) values($entry_id, $id)";
 			$this->db_query($q);
 			
 			$sels = "id,".join(",",$rowels);
@@ -391,8 +390,7 @@ class form_import extends form_base
 				$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
 				$chentrys[$fid] = $entry_id;
 
-				$en = serialize($entry);
-				$this->db_query("insert into form_entries values($entry_id, $id, ".time().", '$en')");
+				$this->db_query("insert into form_entries(id,form_id) values($entry_id, $id)");
 				
 				$sels = "id,chain_id,".join(",",$rowels);
 				$svals = $entry_id.",".$chain_entry_id.",".join(",",$rowvals);

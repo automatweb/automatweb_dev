@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.9 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.10 2001/10/16 04:29:32 kristo Exp $
 
 global $orb_defs;
 lc_load("form");
@@ -90,15 +90,7 @@ class form_entry extends aw_template
 	
 		$oldentry = $this->get_record("form_entries","id",$eid);
 
-		$t = time();
-
-
-		$contents = $oldentry["contents"];
-		$this->quote($contents);
-
-		$q = "INSERT INTO form_entries (id,form_id,contents,tm)
-			VALUES ('$new_id','$oldentry[form_id]','$contents',$t)";
-
+		$q = "INSERT INTO form_entries(id,form_id) VALUES ('$new_id','$oldentry[form_id]')";
 		$this->db_query($q);
 
 		$ftable = sprintf("form_%s_entries",$oldentry["form_id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.21 2001/10/14 04:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.22 2001/10/16 04:29:31 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -393,11 +393,11 @@ class form_cell extends form_base
 		};
 	}
 
-	function set_entry(&$arr, $e_id,&$form)
+	function set_entry(&$arr, $e_id)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$this->arr[$i] -> set_entry(&$arr, $e_id,&$form);
+			$this->arr[$i] -> set_entry(&$arr, $e_id);
 		}
 	}
 

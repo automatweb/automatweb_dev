@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.28 2001/10/15 05:13:39 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.29 2001/10/16 04:29:31 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
 
-class form_base extends aw_template
+classload("form_db_base");
+class form_base extends form_db_base
 {
 	function form_base()
 	{
@@ -351,39 +352,9 @@ class form_base extends aw_template
 			$this->parse("GRID_SEL");
 		}
 
-		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders" || $action=="translate")
+		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders" || $action=="translate" || $action=="tables")
 		{
 			$this->parse("SETTINGS_SEL");
-		}
-
-		if ($action == "filled_forms" || $action == "import_contents" || $action == "change_entry" || $action == "show_entry")
-		{
-			$this->parse("FILLED_SEL");
-		}
-
-		if ($action == "op_list" || $action == "change_op" || $action == "add_pp" || $action == "output_grid" || $action == "output_settings" || $action == "output_meta")
-		{
-			$this->parse("OUTPUT_SEL");
-			if ($action == "change_op" || $action == "output_settings" || $action == "output_meta")
-			{
-				$this->db_query("SELECT form_entries.id AS id
-												 FROM form_entries 
-												 LEFT JOIN objects ON objects.oid = form_entries.id
-												 WHERE form_id = $this->id AND objects.status != 0
-												 ORDER BY objects.modified");	// select all form entries under the form. well this sucks ass. we gotta select them all, cause
-																							// we can't select only those that you can view in the sql. sloooooow. but what can I do?
-				$entry_id = 0;
-				while ($row = $this->db_next())
-				{
-					$entry_id = $row["id"];
-					break;
-				}
-
-				$this->vars(array("op_id"				=> $op_id,
-													"entry_id"		=> $entry_id,
-													"op_preview"	=> $this->mk_orb("show_entry", array("id" => $this->id, "op_id" => $op_id, "entry_id" => $entry_id),"form")));
-				$this->parse("OP_SEL");
-			}
 		}
 
 		if ($this->type == 2)//blah, better use the constant, man!
