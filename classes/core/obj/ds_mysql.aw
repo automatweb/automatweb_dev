@@ -558,13 +558,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$sql .= " ORDER BY a.id ";
 
-		if (aw_global_get("uid") == "duke")
-		{
-			print "<pre>";
-			print_r($sql);
-			print "</pre>";
-		};
-
 		$this->db_query($sql);
 		$ret = array();
 		while ($row = $this->db_next())
