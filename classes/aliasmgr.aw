@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.147 2004/04/29 12:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.148 2004/04/30 09:09:38 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -266,7 +266,7 @@ class aliasmgr extends aw_template
 		// lets' remove this for now. If there is a problem with alias enumeration
 		// somewhere, then it should be fixed case by case basis instead of doing
 		// it blindly over and over and over and over again
-		$this->recover_idx_enumeration($oid);
+		//$this->recover_idx_enumeration($oid);
 
 		$obj = obj($oid);
 		$als = $obj->meta("aliaslinks");
@@ -303,7 +303,8 @@ class aliasmgr extends aw_template
 
 		$by_idx = $by_alias = array();
 
-		foreach(aw_ini_get("classes") as $clid => $cldat)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]) || isset($cldat["old_alias"]))
 			{
@@ -1322,7 +1323,8 @@ HTM;
 	function get_clid_picker()
 	{
 		$ret = array();
-		foreach(aw_ini_get("classes") as $clid => $cldat)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $clid => $cldat)
 		{
 			if ($cldat["name"] != "")
 			{
