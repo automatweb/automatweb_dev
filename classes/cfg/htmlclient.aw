@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.38 2003/11/05 13:16:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.39 2003/12/01 15:52:49 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -181,25 +181,11 @@ class htmlclient extends aw_template
 		$val = "";
 		if ($args["type"] == "status")
 		{
-			if (empty($args["value"]))
-			{
-				// default to deactive
-				$args["value"] = STAT_NOTACTIVE;
-			};
-			$val .= html::radiobutton(array(
-						"name" => $args["name"],
-						"value" => STAT_ACTIVE,
-						"checked" => ($args["value"] == STAT_ACTIVE),
-						"caption" => "Jah",
-			));
-			$val .= html::radiobutton(array(
-						"name" => $args["name"],
-						"value" => STAT_NOTACTIVE,
-						"checked" => ($args["value"] == STAT_NOTACTIVE),
-						"caption" => "Ei",
-			));
-			
-			$args["value"] = $val;
+			$args["type"] = "chooser";
+			$args["options"] = array(
+				STAT_ACTIVE => "Jah",
+				STAT_NOTACTIVE => "Ei",
+			);
 		};
 		
 		if ($args["type"] == "s_status")
@@ -209,28 +195,14 @@ class htmlclient extends aw_template
 				// default to deactive
 				$args["value"] = STAT_NOTACTIVE;
 			};
+			$args["type"] = "chooser";
 			// hm, do we need STAT_ANY? or should I just fix the search
 			// do not use dumb value like 3 -- duke
-			$val .= html::radiobutton(array(
-						"name" => $args["name"],
-						"value" => 3,
-						"checked" => ($args["value"] == 3),
-						"caption" => "Kõik",
-			));
-			$val .= html::radiobutton(array(
-						"name" => $args["name"],
-						"value" => STAT_ACTIVE,
-						"checked" => ($args["value"] == STAT_ACTIVE),
-						"caption" => "Aktiivne",
-			));
-			$val .= html::radiobutton(array(
-						"name" => $args["name"],
-						"value" => STAT_NOTACTIVE,
-						"checked" => ($args["value"] == STAT_NOTACTIVE),
-						"caption" => "Deaktiivne",
-			));
-			
-			$args["value"] = $val;
+			$args["options"] = array(
+				3 => "Kõik",
+				STAT_ACTIVE => "Aktiivne",
+				STAT_NOTACTIVE => "Deaktiivne",
+			);
 		};
 
 		if ($args["type"] == "imgupload")
@@ -438,6 +410,33 @@ class htmlclient extends aw_template
 		// to register it.
 		switch($args["type"])
 		{
+			case "chooser":
+				$options = new aw_array($arr["options"]);
+				$retval = "";
+
+				foreach($options->get() as $key => $val)
+				{
+					if ($arr["multiple"])
+					{
+						$retval .= html::checkbox(array(
+							"label" => $val,
+							"name" => $arr["name"] . "[" . $key . "]",
+							"checked" => ($arr["value"][$key]),
+						));
+					}
+					else
+					{
+						$retval .= html::radiobutton(array(
+							"caption" => $val,
+							"name" => $arr["name"],
+							"value" => $key,
+							"checked" => ($arr["value"] == $key),
+						));
+					};
+						
+				};
+				break;
+
 			case "select":
 				$retval = html::select($arr);
 				break;
