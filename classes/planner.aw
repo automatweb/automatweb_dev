@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.66 2002/06/26 11:24:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.67 2002/07/17 11:04:03 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -290,6 +290,9 @@ class planner extends calendar
 
 		$object = $this->get_object($id);
 
+
+
+
 		if ($object["meta"]["confobject"])
 		{
 			$co = $this->get_object($object["meta"]["confobject"]);
@@ -327,35 +330,45 @@ class planner extends calendar
 			"type" => $type,
 		));
 
-		$this->ctrl = $ctrl;
-
 		// if ctrl is defined, then this calendar is controlled by form
 		// and we need to load events from that form
-		if ($ctrl)
+		if ($object["class_id"] == CL_CHAIN_ENTRY)
 		{
 			classload("form_calendar");
 			$fc = new form_calendar();
 
-			$fc->load($ctrl);
-			$entry_form = $fc->arr["event_entry_form"];
+			// I need to figure out the chain this entry belongs to
+			$chain = $fc->get_chain_for_chain_entry($object["oid"]);
 
-			$chains = $fc->get_chains_for_form($ctrl);
-			if (is_array($chains))
-			{
-				list($chain_id,) = each($chains);
-			}
-			else
-			{
-				print "controller form does not belong to a chain, cannot continue!<br>";
-				exit;
-			};
+			$q = "SELECT * FROM calendar2object WHERE cal_id = '$chain'";
+			$this->db_query($q);
 
-			$events = $fc->load_cal_controller(array(
-					"id" => $ctrl,
-					"eid" => $ctrle,
-					"start" => $di["start"],
-					"end" => $di["end"],
-					"chain_id" => $chain_id,
+			$row = $this->db_next();
+
+			// I know the chain to which the calendar definitions apply
+			// I need to figure out the specific 
+
+			$ctrl = $row["form_id"];
+
+			// now I need to load all the entries which fall into the 
+			// requested range
+
+			/*
+			
+			print "start = $di[start]<br>";
+			print "end = $di[end]<br>";
+			print "entry_form = $ctrl<br>";
+			print "vac_form = $row[vform_id]<br>";
+			print "oid = $object[oid]<br>";
+
+			*/
+
+
+			$events = $fc->get_events(array(
+				"eid" => $object["oid"],
+				"start" => $di["start"],
+				"end" => $di["end"],
+				"eform" => $ctrl,
 			));
 
 			$this->raw_events = $fc->raw_events;
@@ -363,7 +376,6 @@ class planner extends calendar
 			$this->cached_chain_ids = array();
 
 			$this->ft = get_instance("form_table");
-			$fc->load($entry_form);
 			$this->table_id = $fc->arr["event_display_table"];
 			$this->ft->load_table($this->table_id);
 
@@ -918,161 +930,6 @@ class planner extends calendar
 		$replacement = $this->ob->show(array("id" => $args["oid"]));
 		return $replacement;
 
-	}
-
-
-	function submit_repeaters($args = array())
-	{
-		extract($args);
-		// store them inside the object so we can use them elsewhere
-		$this->repeats = $args;
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"overwrite" => 1,
-			"key" => "repeaters",
-			"value" => $args,
-		));
-		return $this->mk_my_orb("repeaters",array("id" => $id));
-		// the "rep" variable contains the type of the repetitions
-		/*
-			1 - forever (until told otherwise)
-			2 - X times : repeats(string)
-			3 - until a date : repend(array) - day,mon,year
-
-		*/
-
-		// first, we have to find out when the event starts
-		// TODO: replace this with a call to a special function
-		$q = "SELECT * FROM planner WHERE id = '$id'";
-		$this->db_query($q);
-		$event = $this->db_next();
-
-		// remove old repeaters
-		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
-			
-
-		// at first, we find out how many events and on what days we have to create
-		if (is_array($use))
-		{
-			foreach($use as $type)
-			{
-				switch($type)
-				{
-					case "4":
-				};
-						
-
-
-			}
-		};
-		switch($rep)
-		{
-			case "3":
-				$repend_date = sprintf("%02d-%02d-%04d",$repend["day"],$repend["mon"],$repend["year"]);
-				if (!is_date($repend_date))
-				{
-					$repend_date = "31-12-2037";
-				};
-				break;
-
-			case "2":
-				// kui joudsime siia, siis on meil kordade arv $repeats muutujas ja me peame välja arvutama
-				// selle, kui kaugele tulevikku kordused lähevad
-				
-				break;
-
-			default:
-				$repend_date = "31-12-2037";
-				break;
-		};
-		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
-		$this->db_query($q);
-		// right now we will just stick with events repeating forever
-		list($d,$m,$y) = explode("-",$repend_date);
-		$rep_until = mktime(0,0,0,$m,$d,$y);
-
-		$uid = ($oid) ? "" : aw_global_get("uid");
-		// blah. But we really really don't have to do it. We only have to calculate the dates when the events take
-		// place.
-		
-		if ($use[1])
-		{
-			$_type = REP_DAY;
-			$_skip = $skip["day"];
-			$q = "INSERT INTO planner_repeaters (eid,type,skip) VALUES ('$id','$_type','$_skip')";
-			$this->db_query($q);
-		};
-
-		if ($use[5] && is_array($weekpwhen))
-		{
-			$weekpwhen = join(",",array_keys($weekpwhen));
-		}
-		else
-		{
-			$weekpwhen = "";
-		};
-
-		if ($use[2] || $weekpwhen)
-		{
-			$_type = REP_WEEK;
-			$_skip = ($weekpwhen) ? 0 : $skip["week"];
-			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen) VALUES ('$id','$_type','$_skip','$weekpwhen')";
-			$this->db_query($q);
-		};
-
-		if ($use[6] && is_array($monpwhen))
-		{
-			$monpwhen = join(",",array_keys($monpwhen));
-		}
-		else
-		{
-			$monpwhen = "";
-		};
-
-		$monpwhen2 = ($use[7]) ? $monpwhen2 : "";
-
-		if ($use[3] || $monpwhen || $monpwhen2)
-		{
-			$_type = REP_MONTH;
-			$_skip = ($monpwhen) ? 0 : $skip["month"];
-			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen,pwhen2) VALUES ('$id','$_type','$_skip','$monpwhen','$monpwhen2')";
-			$this->db_query($q);
-		};
-
-		$yearpwhen = ($use[8]) ? $yearpwhen : "";
-
-		if ($use[4] || $yearpwhen)
-		{
-			$_type = REP_YEAR;
-			$_skip = $skip["year"];
-			//$_skip = ($yearpwhen) ? 0 : $skip["year"];
-			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen) VALUES ('$id','$_type','$_skip','$yearpwhen')";
-			$this->db_query($q);
-		};
-
-		// and now we will update the record for event itself
-		$q = "UPDATE planner SET rep_until = '$rep_until' WHERE id = '$id'";
-
-		$caldata = array(
-			"pri" => $pri,
-			"use" => is_array($use) ? $use : array(),
-			"skip" => $skip,
-			"weekpwhen" => is_array($args["weekpwhen"]) ? $args["weekpwhen"] : array(),
-			"monpwhen" => is_array($args["monpwhen"]) ? $args["monpwhen"] : array(),
-			"monpwhen2" => $args["monpwhen2"],
-			"yearpwhen" => $args["yearpwhen"],
-			"rep" => $rep,
-			"repeats" => $repeats,
-			"repend" => $repend,
-		);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "calconfig",
-			"value" => $caldata,
-		));
-				
-		$this->db_query($q);
-		return $this->mk_my_orb("repeaters",array("id" => $id));
 	}
 
 	function importfile($args = array())
@@ -1757,11 +1614,6 @@ class planner extends calendar
 			foreach($this->raw_events[$args["dx"]] as $row)
 			{
 				// FIXME: bogus arguments
-				/*
-				print "<pre>";
-				print_r($row);
-				print "</pre>";
-				*/
 				// cache the results
 				$cid = $this->cached_chain_ids[$row["chain_id"]];
 				if (not($cid))
