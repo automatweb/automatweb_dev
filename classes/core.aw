@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.222 2003/09/24 16:26:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.223 2003/10/05 17:00:14 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1869,151 +1869,147 @@ class core extends acl_base
 		die();
 	}
 
-	function req_mk_my_orb_part($k,$v, $sep)
-	{
-		$stra = array();
-		foreach($v as $k2 => $v2)
-		{
-			if (is_array($v2))
-			{
-				$stra[] = $this->req_mk_my_orb_part($k."[$k2]", $v2, $sep);
-			}
-			else
-			{
-				$stra[] = $k."[$k2]=".$v2;
-			}
-		}
-		$str = join($sep,$stra);
-		return $str;
-	}
-
 	////
-	// !my proposed version of da ORB makah!
+	// !orb link maker
 	// the idea is this that it determines itself whether we go through the site (index.aw)
 	// or the orb (orb.aw) - for the admin interface
 	// you can force it to point to the admin interface
-	// this function also handles array arguments! 
+	// this function also handles array arguments!
 	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
-	// this function has became such a spaghetti, that it really should be rewritten. --duke
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array(),$separator = "&")
+
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&")
 	{
-		//global $awt;
-		//$awt->count("mk_my_orb");
-		//$awt->start("my_my_orb");
-		if ($cl_name == "")
-		{
-			$cl_name = get_class($this);
-		}
+		global $awt;
+		$awt->start("mk_my_orb");
+		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
-		preg_match("/(\w*)$/",$cl_name,$m);
-		$cl_name = $m[1];
+		$this->orb_values = array();
 
-		// this means it was not passed as an argument
-		if (is_array($use_orb))
+		if (isset($arr["section"]))
 		{
-			if (!(strpos($this->REQUEST_URI,"orb.".$this->cfg["ext"]) === false) &&  strpos($this->REQUEST_URI,"reforb.".$this->cfg["ext"]) === false)
-			{
-				$use_orb = true;
-			}
-			else
-			{
-				$use_orb = false;
-			}
-		}
-
-		// handle arrays!
-		$section = false;
-		$ura = array();
-		if (aw_global_get("cal") && empty($arr["cal"]))
-		{
-			$arr["cal"] = aw_global_get("cal");
+			$this->orb_values["section"] = $arr["section"];
 		};
-		if (aw_global_get("date") && empty($arr["date"]))
-		{
-			$arr["date"] = aw_global_get("date");
-		};
-		if (aw_global_get("trid") && empty($arr["trid"]))
-		{
-			$arr["trid"] = aw_global_get("trid");
-		};
-		foreach($arr as $k => $v)
-		{
-			if (is_array($v))
-			{
-				$str = $this->req_mk_my_orb_part($k,$v, $separator);
-			}
-			else
-			{
-				# this gets special handling
-				if ( ($k == "_alias") || (strlen($v) == 0) )
-				{
-					$str = "";
-				}
-				else
-				{
-					$str = $k."=".$v;
-				};
-			}
 
-			if ($str)
-			{
-				if ($k != "section")
-				{
-					$ura[] = $str;
-				}
-				else
-				{
-					$section = $v;
-				}
-			};
-		}
-		/*
-		print "<pre>";
-		print_r($ura);
-		print "</pre>";
-		*/
-		$urs = join($separator,$ura);
-
-		$sec = "";
-		if ($section)
+		if (isset($arr["_alias"]))
 		{
-			$sec = "section=".$section.$separator;
-		}
-
-		$qm = "?";
-		if ($separator == "/")
-		{
-			$qm = "/";
-		}
-		// now figure out if we are in the admin interface.
-		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
-		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
-		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
-		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
-		{
-			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			$this->orb_values["alias"] = $arr["_alias"];
+			unset($arr["_alias"]);
 		}
 		else
 		{
-			$uo = "/".$qm;
-			if ($use_orb)
+			$this->orb_values["class"] = $cl_name;
+		};
+		$this->orb_values["action"] = $fun;
+
+		// grr, I hate this, but I can optimize it later
+		$track_vars = array("cal","date","trid");
+		foreach($track_vars as $tvar)
+		{
+			$tvar_val = aw_global_get($tvar);
+			if ($tvar_val && empty($arr[$tvar]))
 			{
-				$uo = "/orb.".$this->cfg["ext"].$qm;
-			}
-			// user side
-			if (isset($arr["_alias"]) && $arr["_alias"])
+				$this->orb_values[$tvar] = $tvar_val;
+			};
+		};		
+
+
+		// figure out the request method once.
+		static $r_use_orb;
+		static $in_admin;
+		if (!isset($r_use_orb))
+		{
+			$r_use_orb = basename($_SERVER["SCRIPT_NAME"],".aw") == "orb";
+		};
+
+		if (!isset($in_admin))
+		{
+			$in_admin = stristr($_SERVER["REQUEST_URI"],"/automatweb") != false;
+		}
+
+		// this could probably use some more optimizing
+		$this->use_empty = false;
+
+		// flatten is not the correct term!
+		$this->process_orb_args("",$arr);
+		$res = $this->cfg["baseurl"] . "/";
+		if ($force_admin || $in_admin)
+		{
+			$res .= "automatweb/";
+			$use_orb = true;
+		};
+		if ($use_orb || $r_use_orb)
+		{
+			$res .= "orb.aw";
+		};
+		$res .= ($sep == "/") ? "/" : "?";
+		foreach($this->orb_values as $name => $value)
+		{
+			$res .= $name."=".$value.$sep;
+		};
+		$awt->stop("mk_my_orb");
+		return substr($res,0,-1);
+	}
+
+	////
+        // !creates the necessary hidden elements to put in a form that tell the orb which function to call
+        function mk_reforb($fun,$arr = array(),$cl_name = "")
+        {
+
+		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
+
+		$this->orb_values = array(
+			"class" => $cl_name,
+			"action" => $fun,
+		);
+
+		if (empty($arr["no_reforb"]))
+		{
+			$this->orb_values["reforb"] = 1;
+		};
+		
+		// grr, I hate this, but I can optimize it later
+		$track_vars = array("cal","date","trid");
+		foreach($track_vars as $tvar)
+		{
+			$tvar_val = aw_global_get($tvar);
+			if ($tvar_val && empty($arr[$tvar]))
 			{
-				$ret = $this->cfg["baseurl"].$uo.$sec."alias=$arr[_alias]".$separator."action=$fun".$separator."$urs";
+				$this->orb_values[$tvar] = $tvar_val;
+			};
+		};		
+
+		$this->use_empty = true;
+
+		// flatten is not the correct term!
+		$this->process_orb_args("",$arr);
+		$res = "";
+		foreach($this->orb_values as $name => $value)
+		{
+			$value = str_replace("\"","&amp;",$value);
+			$res .= "<input type='hidden' name='$name' value='$value' />\n";
+		};
+		return $res;
+	}
+
+	function process_orb_args($prefix,$arr)
+	{
+		foreach($arr as $name => $value)
+		{
+			if (is_array($value))
+			{
+				$_tpref = "" == $prefix ? $name : "[".$name."]";
+				$this->process_orb_args($prefix.$_tpref,$arr[$name]);
 			}
 			else
 			{
-				$ret = $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
-			};
-		}
-		//$awt->stop("my_my_orb");
-		return $ret;
+				if (!empty($value) || true == $this->use_empty)
+				{
+					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
+				};
+			}
+		};
 	}
 
 	////
@@ -2045,66 +2041,6 @@ class core extends acl_base
 		return $retval;
 	}
 
-	function req_array_reforb($k, $v)
-	{
-		$ret = "";
-		foreach($v as $_k => $_v)
-		{
-			if (is_array($_v))
-			{
-				$ret .= $this->req_array_reforb($k."[".$_k."]",$_v);
-			}
-			else
-			{
-				$ret .= "<input type='hidden' name='".$k."[".$_k."]' value=\"".str_replace("\"","&amp;",$_v)."\" />\n";
-			}
-		}
-		return $ret;
-	}
-
-	////
-	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
-	function mk_reforb($fun,$arr = array(),$cl_name = "")
-	{
-		if ($cl_name == "")
-		{
-			$cl_name = get_class($this);
-		}
-		preg_match("/(\w*)$/",$cl_name,$m);
-		$cl_name = $m[1];
-
-		$urs = "";
-		if (aw_global_get("cal") && empty($arr["cal"]))
-		{
-			$arr["cal"] = aw_global_get("cal");
-		};
-		if (aw_global_get("date") && empty($arr["date"]))
-		{
-			$arr["date"] = aw_global_get("date");
-		};
-		if (aw_global_get("trid") && empty($arr["trid"]))
-		{
-			$arr["trid"] = aw_global_get("trid");
-		};
-		$tmp = new aw_array($arr);
-		foreach($tmp->get() as $k => $v)
-		{
-			if (is_array($v))
-			{
-				$urs .= $this->req_array_reforb($k, $v);
-			}
-			else
-			{
-				$urs .= "<input type='hidden' name='$k' value=\"".str_replace("\"","&amp;",$v)."\" />\n";
-			}
-		}
-		if (!isset($arr["no_reforb"]) || $arr["no_reforb"] != true)
-		{
-			$url = "\n<input type='hidden' name='reforb' value='1' />\n";
-		}
-		$url .= "<input type='hidden' name='class' value='$cl_name' />\n<input type='hidden' name='action' value='$fun' />\n".$urs;
-		return $url;
-	}
 
 	////
 	// Tekitab lingi. duh. 
