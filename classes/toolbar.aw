@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.3 2002/10/02 11:55:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.4 2002/10/15 19:35:51 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -7,9 +7,18 @@ class toolbar extends aw_template
 	{
 		$this->init("toolbar");
 		$this->read_template("buttons.tpl");
+		// need to support 2 toolbars on one page.
+		// and this is how we do it now.
 		$this->tb_content = "";
+		$this->tb_content2 = "";
+		extract($args);
+		if (!$imgbase)
+		{
+			$imgbase = "/automatweb/images/icons";
+		};
+
 		$this->vars(array(
-			"imgbase" => $this->cfg["baseurl"] . $args["imgbase"],
+			"imgbase" => $this->cfg["baseurl"] . $imgbase,
 		));
 	}
 
@@ -19,6 +28,9 @@ class toolbar extends aw_template
 	{
 		$this->vars($args);
 		$this->tb_content .= $this->parse("smallbutton");
+		$args["name"] .= "1";
+		$this->vars($args);
+		$this->tb_content2 .= $this->parse("smallbutton");
 	}
 
 	////
@@ -27,6 +39,7 @@ class toolbar extends aw_template
 	{
 		$this->vars($args);
 		$this->tb_content .= $this->parse("smallseparator");
+		$this->tb_content2 .= $this->parse("smallseparator");
 	}
 
 	////
@@ -37,6 +50,7 @@ class toolbar extends aw_template
 			"data" => $content,
 		));
 		$this->tb_content .= $this->parse("cdata");
+		$this->tb_content2 .= $this->parse("cdata");
 	}
 
 	////
@@ -44,6 +58,14 @@ class toolbar extends aw_template
 	function get_toolbar($args = array())
 	{
 		$retval = $this->parse("start") . $this->tb_content . $this->parse("end");
+		return $retval;
+	}
+	
+	////
+	// !Returns the whole second toolbar
+	function get_toolbar2($args = array())
+	{
+		$retval = $this->parse("start") . $this->tb_content2 . $this->parse("end");
 		return $retval;
 	}
 
