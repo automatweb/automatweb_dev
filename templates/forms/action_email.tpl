@@ -9,6 +9,10 @@
 <td class="fform"><select name='op_id'>{VAR:ops}</select></td>
 </tr>
 <tr>
+<td class="fcaption">Mis men&uuml;&uuml; alla link n2itab:</td>
+<td class="fform"><select class='small_button' name='l_section'>{VAR:sec}</select></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=2><input type='submit' NAME='save_form_actions' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 </table>
