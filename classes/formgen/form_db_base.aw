@@ -737,6 +737,7 @@ class form_db_base extends aw_template
 				// the first table is the root table - not joined but the FROM table
 				$sql = $this->get_rtbl_from_tbl($jdata["from_tbl"])." AS ".$jdata["from_tbl"];
 				$prev = $jdata;
+				$this->sql_from_table = $jdata["from_tbl"];
 			}
 			else
 			{
@@ -1924,6 +1925,12 @@ class form_db_base extends aw_template
 			if ($query != "")
 			{
 				$query.=" AND ";
+			}
+			$fid = $this->table2form_map[$this->sql_from_table];
+			$dat = $this->cache_get_form_eldat($fid);
+			if ($dat["is_translatable"])
+			{
+				$query .= " ".$this->sql_from_table.".lang_id = '".aw_global_get("lang_id")."' AND ";
 			}
 			$query.=" objects.status != 0 ";
 			if ($this->arr["search_act_lang_only"])
