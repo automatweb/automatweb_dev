@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.23 2001/11/07 17:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.24 2001/12/18 00:08:22 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -13,8 +13,8 @@ class db_objects extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init();
-		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK);		
-		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK);	
+		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM);		
+		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM);	
 	lc_load("definition");
 	}
 
