@@ -30,8 +30,8 @@ class export extends aw_template
 			"application/zip" => "zip",
 			"application/msword" => "doc"
 		);
-		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
-		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?set_lang_id=2"] = "english";
 	}
 
 	function orb_export($arr)
@@ -471,6 +471,10 @@ class export extends aw_template
 			$is_print = true;
 		}
 //		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
+		if (substr($name, -4) == "html")
+		{
+				$fc .= "\n<!--  viimati genereeritud ".date("H:i d.m.Y")." kasutaja ".aw_global_get("uid")." poolt -->
+		}
 		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id, $url);
 
 //		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
@@ -1240,8 +1244,8 @@ class export extends aw_template
 		$this->hash2url = array();
 		$this->ftn_used = array();
 		$this->fta_used = array();
-		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
-		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
+		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?set_lang_id=2"] = "english";
 	}
 	
 	////
