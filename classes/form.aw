@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.107 2002/07/18 10:51:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.108 2002/07/23 05:24:12 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -758,9 +758,6 @@ class form extends form_base
 		$o = new db_objects;
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
-
-		$ft = get_instance("form_table");
-		$tables = array("0" => "Vali üks") + $ft->get_tables_for_form($id);
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -2161,6 +2158,10 @@ class form extends form_base
 	//	$entry_id - search form entry id - if not specified, assumes loaded 
 	//	$section - the active section
 	//  $no_form_tags - the <form> </form> tags will be omitted
+	//	restrict_search_el - array of element id's that should be added to the search
+	//	restrict_search_val - array of element values that should be added to the search
+	//	use_table - show results with table use_table instead of the default
+	//	search_form - use the specified form instead of the default ($id)
 	function new_do_search($arr)
 	{
 		enter_function("form::new_do_search",array());
@@ -2171,6 +2172,12 @@ class form extends form_base
 		// to figure out which one it is, to find the calendars I required
 
 		enter_function("form::new_do_search::load",array());
+		if ($search_form)
+		{
+			$id = $search_form;
+			$entry_id = 0;
+		}
+
 		if ($id)
 		{
 			$this->load($id);
@@ -2186,9 +2193,11 @@ class form extends form_base
 		{
 			// alter the loaded search entry with the data
 			$l2r = $this->get_linked2real_element_array();
+//			echo "linked 2 real = <pre>", var_dump($l2r),"</pre> <br>";
 
 			foreach($restrict_search_el as $idx => $rel)
 			{
+	//			echo "searchong restrict $rel , el in sf = ",$l2r[$rel],"<br>";
 				$el =& $this->get_element_by_id($l2r[$rel]);
 
 				if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
@@ -2220,6 +2229,8 @@ class form extends form_base
 			}
 
 			$form_table->start_table($use_table);
+			$form_table->set_opt("current_search_form", $this->id);
+			$form_table->current_search_form_inst =& $this;
 
 			$used_els = $form_table->get_used_elements();
 //			echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
@@ -2364,13 +2375,13 @@ class form extends form_base
 		}
 
 		
-		enter_function("form::new_do_search::finish_table",array());
+		enter_function("form::new_do_search::finalize_table",array());
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"])
 		{
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 		}
-		exit_function("form::new_do_search::finish_table",array());
+		exit_function("form::new_do_search::finalize_table",array());
 
 		exit_function("form::new_do_search",array());
 		return $result;
@@ -2774,8 +2785,8 @@ class form extends form_base
 
 	function do_search($entry_id, $output_id,$search_el,$search_val, $no_tags)
 	{
-		global $section,$use_table, $restrict_search_el, $restrict_search_val;
-
+		global $section,$use_table, $restrict_search_el, $restrict_search_val,$search_form;
+		
 		if ($this->arr["new_search_engine"] == 1)
 		{
 			return $this->new_do_search(array(
@@ -2784,7 +2795,8 @@ class form extends form_base
 				"restrict_search_val" => $restrict_search_val,
 				"use_table" => $use_table,
 				"section" => $section,
-				"no_form_tags" => $no_tags
+				"no_form_tags" => $no_tags,
+				"search_form" => $search_form
 			));
 		}
 
@@ -2959,7 +2971,7 @@ class form extends form_base
 							{
 								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$ft->table["texts"]["change"][$ft->lang_id]."</a>";
 
-								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$real_form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$real_form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],$ft->get_menu_picker())."</select>";
+								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$real_form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$real_form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],/*$ft->get_menu_picker()*/array())."</select>";
 							}
 							$row["ev_created"] = $this->time2date($row["created"], 2);
 							$row["ev_uid"] = $row["modifiedby"];
