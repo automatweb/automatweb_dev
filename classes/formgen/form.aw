@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.41 2003/02/18 14:10:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.42 2003/02/21 13:39:24 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -884,7 +884,6 @@ class form extends form_base
 		{
 			$this->load($id);
 		};
-
 		if (!($this->can("view",$id)))
 		{
 			$this->acl_error("view",$id);
@@ -1579,7 +1578,7 @@ class form extends form_base
 
 		if (!$no_load_entry && $id)
 		{
-			if (!($this->can("view",$id)))
+			if (!($this->can("view",$id)) && !aw_ini_get("menuedit.no_view_acl_checks"))
 			{
 				$this->acl_error("view",$id);
 			}
