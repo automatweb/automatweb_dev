@@ -306,7 +306,7 @@ class _int_object_loader
 		// so doing the caching here is just wasting memory now. 
 		// - terryf
 		$props = $this->cfgu->load_properties($arr);
-		$rv = array($props, $this->cfgu->tableinfo);
+		$rv = array($props, $this->cfgu->tableinfo, $this->cfgu->relinfo);
 		return $rv;
 	}
 
