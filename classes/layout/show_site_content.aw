@@ -1,10 +1,8 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.4 2004/04/19 12:43:02 duke Exp $
 /*
 
 @classinfo syslog_type=ST_SITE_CONTENT
-
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
