@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.136 2004/04/30 09:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.137 2004/05/06 12:28:01 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,11 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+
+	function obj_link($oid)
+	{
+		return aw_ini_get("baseurl")."/".$oid;
+	}
 
 	function create_email_links($str)
 	{
