@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.47 2005/03/23 12:18:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.48 2005/03/30 12:54:15 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -854,11 +854,11 @@ html::select(array(
 			{
 				$vars["options"] = array(0 => t("kõik"));
 				$vars["optgnames"] = $optgnames2;
-				$vars["optgroup"] = array(0 => t("kõik")) + $prj_ch2;
+				$vars["optgroup"] = $prj_ch2;
 			}
 			else
 			{
-				$vars["options"] = reset($prj_ch2);
+				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch2);
 			}
 			$htmlc->add_property($vars);
 		}
