@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.241 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.242 2004/02/06 10:39:59 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1639,7 +1639,7 @@ class core extends acl_base
 		// we replicate by POST request, cause this thing can be too long for a GET request
 		global $class,$action;
 
-		if (false && (aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
+		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
 			$socket = get_instance("socket");
