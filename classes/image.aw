@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.74 2003/10/21 21:30:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.75 2003/11/06 09:45:34 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -667,6 +667,14 @@ class image extends class_base
 			case "do_resize":
 				$this->do_resize = true;
 				break;
+
+			case "new_w":
+				$this->new_w = $prop["value"];
+				break;
+
+			case "new_h":
+				$this->new_h = $prop["value"];
+				break;
 		};
 		return $retval;
 	}
@@ -724,15 +732,15 @@ class image extends class_base
 	function callback_post_save($arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
-		if ($im['meta']['do_resize'] != '')
+		if ($this->do_resize)
 		{
 			$img = get_instance("core/converters/image_convert");
 			$img->load_from_file($im['file']);
 	
 			list($i_width, $i_height) = $img->size();
 
-			$width = $im['meta']['new_w'];
-			$height = $im['meta']['new_h'];
+			$width = $this->new_w;
+			$height = $this->new_h;
 
 			if ($width && !$height)
 			{
