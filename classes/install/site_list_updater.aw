@@ -21,11 +21,7 @@ class site_list_updater extends aw_template
 	**/
 	function on_login($arr)
 	{
-		if (!function_exists('mcrypt_module_open'))
-		{
-			return;
-		}
-		// check if there has been an update in the last hour
+		// check if there has been an update in the last 24 hours
 		// if so, do nothing
 		if ($this->_get_last_update_time() > (time() - (3600*24)))
 		{
@@ -34,16 +30,10 @@ class site_list_updater extends aw_template
 		// else
 		// update this site's info in the site list
 		// check if we have a session key for this site
-		if (!is_array($key = $this->_get_session_key()))
+		if (!($key = $this->_get_session_key()) || $key == "Array")
 		{
 			// if not, request a session key from the site list server
 			$key = $this->_init_session_key();
-		}
-
-		if ($key[0] == "")
-		{
-			// bad key, something is wroing
-			return;
 		}
 
 		// the idea behind the session key is that the first time 
@@ -76,7 +66,7 @@ class site_list_updater extends aw_template
 
 	function _get_session_key()
 	{
-		return aw_unserialize($this->get_cval("site_list_session_key".aw_ini_get("site_id")));
+		return $this->get_cval("site_list_xtea_session_key".aw_ini_get("site_id"));
 	}
 
 	function _init_session_key()
@@ -90,9 +80,7 @@ class site_list_updater extends aw_template
 				"site_id" => aw_ini_get("site_id")
 			)
 		));
-		$ds = aw_serialize($key, SERIALIZE_XML);
-		$this->quote(&$ds);
-		$this->set_cval("site_list_session_key".aw_ini_get("site_id"), $ds);
+		$this->set_cval("site_list_xtea_session_key".aw_ini_get("site_id"), $key);
 		return $key;
 	}
 
@@ -109,13 +97,8 @@ class site_list_updater extends aw_template
 
 	function _encrypt($data, $key)
 	{
-		$td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
-		mcrypt_generic_init($td, $key[0], base64_decode($key[1]));
-		$encrypted = mcrypt_generic($td, $data);
-		mcrypt_generic_deinit($td);
-		mcrypt_module_close($td);
-
-		return $encrypted;
+		$i = get_instance("protocols/crypt/xtea");
+		return $i->encrypt($data, $key);
 	}
 
 	function _do_update($data)

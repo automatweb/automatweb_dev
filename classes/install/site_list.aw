@@ -759,15 +759,11 @@ class site_list extends class_base
 		// create new key
 		$key = gen_uniq_id();
 
-		$td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
-		$iv = base64_encode(mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_DEV_RANDOM));
-		mcrypt_module_close($td);
-
 		// save to database
-		$this->db_query("UPDATE aw_site_list SET session_key = '$key', iv = '$iv' WHERE id = '$arr[site_id]'");
+		$this->db_query("UPDATE aw_site_list SET session_key = '$key' WHERE id = '$arr[site_id]'");
 
 		// return it
-		return array($key, $iv);
+		return $key;
 	}
 
 	/**
@@ -833,19 +829,14 @@ class site_list extends class_base
 
 	function _decrypt($data, $site_id)
 	{
-		$row = $this->db_fetch_row("SELECT session_key,iv FROM aw_site_list WHERE id = '$site_id'");
+		$row = $this->db_fetch_row("SELECT session_key FROM aw_site_list WHERE id = '$site_id'");
 		if (!$row)
 		{
 			return false;
 		}
 
-		$td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
-		mcrypt_generic_init($td, $row["session_key"], base64_decode($row["iv"]));
-		$decrypted = mdecrypt_generic($td, $data);
-		mcrypt_generic_deinit($td);
-		mcrypt_module_close($td);
-
-		return $decrypted;
+		$i = get_instance("protocols/crypt/xtea");
+		return $i->decrypt($data, $row["session_key"]);
 	}
 
 	/** returns the baseurl for the given site id
