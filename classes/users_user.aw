@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.73 2003/11/20 08:05:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.74 2003/12/04 11:47:17 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1224,7 +1224,6 @@ class users_user extends aw_template
 				"home_folder" => array("name" => "home_folder", "length" => 11, "type" => "int", "flags" => ""),
 				"join_grp" => array("name" => "join_grp", "length" => 200, "type" => "string", "flags" => ""),
 				"msg_inbox" => array("name" => "msg_inbox", "length" => 20, "type" => "int", "flags" => ""),
-				"messenger" => array("name" => "messenger", "length" => 65535, "type" => "blob", "flags" => ""),
 				"config" => array("name" => "config", "length" => 65535, "type" => "blob", "flags" => ""),
 			)
 		);
