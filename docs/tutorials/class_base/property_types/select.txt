@@ -6,7 +6,9 @@ Creates a menu, from which one or more options can be selected. The options will
     if set to 1, multiple options can be selected from the list
 
 <b>size</b>
-    height of the menu (how many items are shown at once)
+    height of the menu (how many items are shown at once). Only makes sense if "multiple" is set
+
+If you want to use checkboxes or radiobuttons, then "chooser" is the property type you are looking for.
 
 
 <b>Example</b> - how to define options for select property named "opsystem"
@@ -15,20 +17,20 @@ Creates a menu, from which one or more options can be selected. The options will
 function get_property($arr)
 
 {
-    $data = &$args["prop"];
+    $prop = &$arr["prop"];
     $retval = PROP_OK;
     switch($data["name"])
     {
         case "opsystem":
-            $toolbar = &$data["toolbar"];
-            $data["options"] = array(
-                            "1" => "Windows",
-                            "2" => "Linux",
-                            "3" => "Unix",
-                            "4" => "Macos",
-                            "5" => "DOS",
+            $prop["options"] = array(
+                            1 => "Windows",
+                            2 => "Linux",
+                            3 => "Unix",
+                            4 => "Macos",
+                            5 => "DOS",
                         );
             break;
     }
+    return $retval;
 };
 #/php#
