@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.11 2003/02/03 17:22:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.12 2003/02/12 13:56:20 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -142,6 +142,10 @@ class xml_import extends class_base
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_tudengid";
@@ -184,6 +188,10 @@ class xml_import extends class_base
 		//$contents = join("",file("/home/duke/struktuurid.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
@@ -304,6 +312,11 @@ class xml_import extends class_base
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
+	
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_tootajad";
@@ -485,6 +498,10 @@ class xml_import extends class_base
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_oppekavad";
@@ -517,6 +534,10 @@ class xml_import extends class_base
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_oppeasted";
@@ -549,6 +570,10 @@ class xml_import extends class_base
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		if (xml_get_error_code($parser))
+		{
+			$this->bitch_and_die($parser,$contents);
+		};
 		// R.I.P. parser
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_oppevormid";
@@ -574,6 +599,18 @@ class xml_import extends class_base
 		}
 	}
 
-
+	function bitch_and_die(&$parser,&$contents)
+	{
+		$err = xml_error_string(xml_get_error_code($parser));
+		print "Viga lähteandmetes<br>"; 
+		print "<font color='red'><strong>$err</strong></font><br>";
+		$b_idx = xml_get_current_byte_index($parser);
+		$frag = substr($contents,$b_idx - 100, 200);
+		$pref = htmlspecialchars(substr($frag,0,100));
+		$suf = htmlspecialchars(substr($frag,101));
+		$offender = htmlspecialchars(substr($frag,100,1));
+		print "Tekstifragment: <pre>" .  $pref . "<font color='red'><strong> ---&gt;&gt;$offender&lt;&lt;---</strong></font>$suf" . "</pre>";
+		die();
+	}
 }
 ?>
