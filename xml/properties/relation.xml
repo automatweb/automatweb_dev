@@ -2,7 +2,8 @@
 <properties>
       <property>
             <name>contents</name>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_get_contents</callback>
             <store>no</store>
             <group>general</group>
             <caption>Sisu</caption>
