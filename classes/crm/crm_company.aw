@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.72 2004/08/28 12:13:06 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.73 2004/08/28 13:08:54 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -269,28 +269,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 ------------ END PAKKUMISED -------------------
 
 ------------ ORGANISATSIOONI OBJEKTID ---------
-@layout objects_toolbar type=hbox group=org_objects,projects
-@layout objects_main type=hbox width=20%:80% group=org_objects,projects
-@layout objects_tree type=vbox parent=objects_main group=org_objects,projects
-@layout objects_table type=vbox parent=objects_main group=org_objects,projects
+layout objects_toolbar type=hbox group=org_objects
+layout objects_main type=hbox width=20%:80% group=org_objects
+layout objects_tree type=vbox parent=objects_main group=org_objects
+layout objects_table type=vbox parent=objects_main group=org_objects
 
-@property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
-@property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
-@property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
+property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
+property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
+property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
 ---------- END ORGANISATSIOONI OBJEKTID ---------
 
 ---------- PROJEKTID ----------------------------
-layout projects_toolbar type=hbox group=org_projects
-@layout projects_main type=hbox width=20%:80% group=org_projects
-@layout projects_tree type=vbox parent=projects_main group=org_projects
-@layout projects_table type=vbox parent=projects_main group=org_projects
+layout projects_main type=hbox width=20%:80% group=org_projects
+layout projects_tree type=vbox parent=projects_main group=org_projects
+layout projects_table type=vbox parent=projects_main group=org_projects
 
-@default group=org_projects
-@default no_caption=1
+default group=org_projects
+default no_caption=1
 
 property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_toolbar 
-@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
-@property projects_listing_table type=table no_caption=1 parent=projects_table
+property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
+property projects_listing_table type=table no_caption=1 parent=projects_table
 
 -------------------------------------------------
 
