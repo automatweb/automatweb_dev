@@ -386,7 +386,7 @@ class export extends aw_template
 			$complete = false;
 			while($cnt < 3 && !$complete)
 			{
-				$this->fetch_and_save_page($row['orig_url'], $row['lang_id'], true, $row['filename']);
+				$this->fetch_and_save_page($this->rewrite_link($row['orig_url']), $row['lang_id'], true, $row['filename']);
 				// check length
 				$len = $this->db_fetch_field("SELECT LENGTH(content) AS len FROM export_content WHERE id = $row[id]", "len");
 				$complete = $len > 300;
@@ -395,7 +395,7 @@ class export extends aw_template
 
 			if (!$complete)
 			{
-				$msg = "Lehen&uuml;&uuml;lje uuendamine eba&otilde;nnestus!!! url = $row[orig_url]";
+				$msg = "Lehek&uuml;&uuml;lje uuendamine eba&otilde;nnestus!!! url = $row[orig_url]";
 				echo "<br><br><B><font color=red>$msg</font></b><br><br>";
 				$this->err_log[] = array(
 					"tm" => time(),
@@ -661,11 +661,15 @@ class export extends aw_template
 		// now also save file to database, but only if it's a html file
 		if (substr($name, -5) == ".html" && !$no_db)
 		{
+			$fc = strip_tags($fc);
 			$this->quote($fc);
 			preg_match("/<!-- MODIFIED:(\d*) -->/U", $fc, $mt);
 			$fn = basename($name);
-			preg_match("/<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t);
-			$title = $mt_t[1];
+			
+			$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t, PREG_SET_ORDER);
+			$title = strip_tags($mt_t[$nm-1][1]);
+			
+			$url = str_replace(aw_ini_get("baseurl"), aw_ini_get("ut.static_server"), $url);
 			$this->quote(&$title);
 			$this->quote(&$url);
 			if (($id = $this->db_fetch_field("SELECT id FROM export_content WHERE filename = '$fn'","id")))
@@ -928,7 +932,7 @@ class export extends aw_template
 			));
 
 			$pl = new planner;
-			$pl->submit_add(array("parent" => $id));
+			//$pl->submit_add(array("parent" => $id));
 
 			$this->upd_object(array(
 				"oid" => $id,
@@ -1706,6 +1710,34 @@ class export extends aw_template
 		extract($arr);
 		$this->read_template("view_log.tpl");
 
+		$per_page = 50;
+
+		$total = $this->db_fetch_field("SELECT count(*) as cnt from export_log","cnt");
+		$t_pages = $total / $per_page;
+
+		$ps = array();
+		for ($i = 0; $i < $t_pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*$per_page,
+				"to" => min(($i+1)*$per_page, $total),
+				"link" => aw_url_change_var("page", $i)
+			));
+			if ($i == $page)
+			{
+				$ps[] = $this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$ps[] = $this->parse("PAGE");
+			}
+		}
+
+		$this->vars(array(
+			"PAGE" => join(" | ",$ps),
+			"SEL_PAGE" => ""
+		));
+
 		$this->db_query("
 			SELECT 
 				export_log.start AS start,
@@ -1715,7 +1747,9 @@ class export extends aw_template
 				export_log.rule_id AS rule_id
 			FROM export_log 
 				LEFT JOIN objects ON objects.oid = export_log.rule_id 
-			ORDER BY start DESC");
+			ORDER BY start DESC
+			LIMIT ".($page*50).",$per_page
+		");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -1960,16 +1994,16 @@ class export extends aw_template
 
 	function fix_fn($fn)
 	{
-		$fn = str_replace("?", "_", str_replace("ö", "o", $fn));
+		$fn = str_replace("?", "_", $fn);
 		$fn = str_replace("\n", "", str_replace("\r", "", $fn));
 		$fn = str_replace("ä","a", $fn);
-		$fn = str_replace("õ","o", $fn);
+		$fn = str_replace("ö","o", $fn);
 		$fn = str_replace("ü","u",$fn);
-		$fn = str_replace("ö","o",$fn);
+		$fn = str_replace("õ","o",$fn);
 		$fn = str_replace("Ä","A", $fn);
-		$fn = str_replace("Õ","O",$fn);
+		$fn = str_replace("Ö","O",$fn);
 		$fn = str_replace("Ü","U",$fn);
-		$fn = str_replace("Ö","O", $fn);
+		$fn = str_replace("Õ","O", $fn);
 		$fn = str_replace(chr(166),"sh", $fn);
 		$fn = str_replace("?","_", $fn);
 		$fn = str_replace("*", "_", $fn);
