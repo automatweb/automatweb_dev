@@ -486,7 +486,7 @@ class aw_session_track extends class_base
 			"file" => $fp,
 			"content" => $this->_ser_sess_str($fc)
 		));
-		
+
 		return aw_ini_get("baseurl").$arr["return_url"];
 	}
 
