@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.6 2002/12/19 18:00:40 duke Exp $
+// $Id: site_threepane.aw,v 1.7 2003/01/16 14:30:27 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -20,7 +20,7 @@
 	@property info type=generated generator=callback_get_info field=meta method=serialize
 	@caption Metainfo
 
-	@property preview editonly=1 type=text
+	@property preview editonly=1 type=text field=meta method=serialize
 	@caption Näita
 
 	@classinfo relationmgr=yes
@@ -39,6 +39,7 @@ class site_threepane extends class_base
 	function get_property($args)
 	{
 		$data = &$args["prop"];
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "preview":
@@ -47,8 +48,10 @@ class site_threepane extends class_base
 				// no need to check whether id exists, since this only called
 				// for existing objects
 				$data["value"] = html::href(array("url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id","caption" => "Näita saiti","target" => "_blank"));
+				$retval = PROP_IGNORE;
 				break;
 		};
+		return $retval;
 	}
 
 	function show($args = array())
