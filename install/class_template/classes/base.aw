@@ -1,10 +1,9 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.8 2003/06/04 14:43:08 duke Exp $
+// __classname.aw - __name 
 /*
 
 @classinfo syslog_type=__syslog_type
-
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
