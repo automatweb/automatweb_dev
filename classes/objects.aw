@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.44 2003/04/14 16:03:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.45 2003/04/17 12:50:44 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -771,7 +771,7 @@ class objects extends db_objects
 		else
 		{
 			$client_id = $site['site_obj']['select_parent_folder'];
-			echo "got client id as $client_id <br>\n";
+			//echo "got client id as $client_id <br>\n";
 			flush();
 		}
 
@@ -782,6 +782,7 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
+
 		$ini_opts["rootmenu"] = $site_folder_id;
 		$ini_opts["admin_rootmenu2"] = $site_folder_id;
 		$ini_opts["per_oid"] = $site_folder_id;
@@ -824,7 +825,7 @@ class objects extends db_objects
 		// and now import them to the new site
 		$i_p = $menus[0];
 		$mned->req_import_menus($i_p, &$menus, $awmenu_id);
-		echo "imported .. <br>\n";
+		//echo "imported .. <br>\n";
 		flush();
 
 		// create another menu with the site name and make menus under that
@@ -835,6 +836,16 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
+
+		if ($site["select_layout"])
+		{
+			$mned->set_object_metadata(array(
+				"oid" => $s_rmn_id,
+				"key" => "show_layout",
+				"value" => $site['site_obj']["select_layout"]
+			));
+		}
+
 		$ini_opts["frontpage"] = $s_rmn_id;
 
 		

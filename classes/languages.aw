@@ -429,7 +429,7 @@ class languages extends aw_template
 		// code that fixes it anyway. 
 	}
 
-	function on_site_init($dbi, $site, &$ini_opts)
+	function on_site_init($dbi, $site, &$ini_opts, &$log)
 	{
 		// no need to add languages if we are to use an existing database
 		if (!$site['site_obj']['use_existing_database'])
@@ -442,6 +442,12 @@ class languages extends aw_template
 					$status = 2;
 				}
 				$dbi->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',$status,'$ldat[acceptlang]','".time()."','".$site['site_obj']['default_user']."')");
+				$log->add_line(array(
+					"uid" => aw_global_get("uid"),
+					"msg" => "Lisas keele",
+					"comment" => $ldat["name"],
+					"result" => "OK"
+				));
 			}
 		}
 	}

@@ -33,7 +33,7 @@ class su_exec extends class_base
 		foreach($this->fc as $cmd)
 		{
 			fwrite($fp, $cmd."\n");
-			echo "wrote cmd $cmd <br>\n";
+			//echo "wrote cmd $cmd <br>\n";
 		}
 		fclose($fp);
 
@@ -41,6 +41,7 @@ class su_exec extends class_base
 		$cmdline = $this->cfg['basedir']."/scripts/install/su_exec/su_exec $fn";
 		$res = `$cmdline &`;
 	
+		//echo "exect $cmdline , res = $res <br>\n";
 		unlink($fn);
 
 		return $res;
@@ -51,6 +52,16 @@ class su_exec extends class_base
 		$nr = rand(1,100000000);
 		$c_nr = ((($nr * 2) + 13) / 2);
 		return array($nr, $c_nr);
+	}
+
+	function is_ok()
+	{
+		$fp = fileperms($this->cfg['basedir']."/scripts/install/su_exec/su_exec");
+		if ($fp == 35309)
+		{
+			return true;
+		}
+		return false;
 	}
 }
 ?>

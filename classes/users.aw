@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.81 2003/04/10 15:53:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.82 2003/04/17 12:50:44 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2224,7 +2224,7 @@ class users extends users_user
 					)
 				)
 			));
-			echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br>";
+			//echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br>";
 			$ini_opts["groups.tree_root"] = $opts["groups.tree_root"];
 			$ini_opts["groups.all_users_grp"] = $opts["groups.all_users_grp"];
 		}

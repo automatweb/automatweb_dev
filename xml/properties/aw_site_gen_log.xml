@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>show</name>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>view</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AW_SITE_GEN_LOG</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+            <view>
+                  <caption>Vaata logi</caption>
+            </view>
+      </groupinfo>
+</properties>
+

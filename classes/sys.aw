@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.17 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.18 2003/04/17 12:50:44 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -568,7 +568,7 @@ class sys extends aw_template
 		exit;
 	}
 
-	function on_site_init(&$dbi, $site, $ini_opts)
+	function on_site_init(&$dbi, $site, $ini_opts, &$log)
 	{
 		// no need to dbsync if we are not creating a new site
 		if (!$site['site_obj']['use_existing_database'])
@@ -584,6 +584,13 @@ class sys extends aw_template
 			{
 				$dbi->db_query($sql);
 			}
+
+			$log->add_line(array(
+				"uid" => aw_global_get("uid"),
+				"msg" => "L&otilde;i saidi andmebaasi tabelid",
+				"comment" => "",
+				"result" => "OK"
+			));
 		}
 	}
 };

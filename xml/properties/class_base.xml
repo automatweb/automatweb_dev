@@ -7,7 +7,7 @@
             <table>objects</table>
             <corefield>yes</corefield>
             <field>name</field>
-            <caption>Objekti nimi</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>comment</name>

@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_SITE
+@classinfo syslog_type=ST_SITE relationmgr=yes
 
 @groupinfo general caption=Üldine
 
@@ -38,6 +38,9 @@
 @property select_tpl_folders type=select multiple=1 size=20
 @caption Vali templatede kataloogid, mis uude saiti kopeerida
 
+@property select_layout type=relpicker reltype=RELATION_LAYOUT 
+@caption Vali uue saidi default layout
+
 @property gen_site type=checkbox ch_value=1
 @caption Genereeri sait!
 
@@ -48,6 +51,8 @@
 @caption Hoiatused:
 
 */
+
+define("RELATION_LAYOUT",1);
 
 class aw_site extends class_base
 {
@@ -223,6 +228,13 @@ class aw_site extends class_base
 					}
 				}
 				break;
+
+			case "select_layout":
+				if (!($arr['obj']['meta']['use_existing_database'] && $arr['obj']['meta']['select_db'] == "http://aw.struktuur.ee"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		}
 		return PROP_OK;
 	}
@@ -240,8 +252,8 @@ class aw_site extends class_base
 				$this->raise_error(ERR_SITE_CFG, "errir in site config: $this->err_str",true,false);
 			}
 				
-			echo "generating site, params: <Br>";
-			echo "site data : ".dbg::dump($site)." <br>";
+			//echo "generating site, params: <Br>";
+			//echo "site data : ".dbg::dump($site)." <br>";
 			echo "Loon saiti! \n<Br>HOIATUS! Saidi loomine v&otilde;tab paar minutit aega!<br><br>\n";
 			flush();
 
@@ -251,70 +263,104 @@ class aw_site extends class_base
 
 			// now, do the actual thing. 
 
+			// start logger
+			$log = get_instance("install/aw_site_gen_log");
+			$log->start_log(array(
+				"parent" => $ob['parent'],
+				"name" => "Saidi ".$site["url"]." loomise log"
+			));
+
 			// first, create site folders
-			$this->create_site_folders($site, $ini_opts);
+			$this->create_site_folders($site, $ini_opts, &$log);
 
 			// create site name in nameserver if it does not exist
-			$this->create_site_name($site, $ini_opts);
+			$this->create_site_name($site, $ini_opts, &$log);
 
 			// get new site_id for site
-			$this->get_site_id($site, $ini_opts);
+			$this->get_site_id($site, $ini_opts, &$log);
 
 			// now, create database
-			$this->create_site_database($site, $ini_opts);
+			$this->create_site_database($site, $ini_opts, &$log);
 
 			// now let each class that is registered handle the install process
 			// each class gets an instance of a dummy class, where it can set 
 			// properties and then those properties will get written to the ini file
-			$this->do_init_classes($site, $ini_opts);
+			$this->do_init_classes($site, $ini_opts, &$log);
 
 			// now write options to the ini file
-			$this->create_ini_file($site, $ini_opts);
+			$this->create_ini_file($site, $ini_opts, &$log);
+
+			$log->finish_log();
 
 			// now restart webserver
-			echo "restarting webserver ... <br>\n";
+			//echo "restarting webserver ... <br>\n";
 			aw_global_set("__is_install", 0);
 			flush();
 			touch("/tmp/ap_reboot");
-			echo "Valmis! sait on kasutatav 30 sekundi p&auml;rast!<br>\n";
+			echo "Valmis! sait on kasutatav 30 sekundi p&auml;rast!<br>\n<a href='".$this->mk_my_orb("change", array(
+				"id" => $log->cur_log_id,
+				"group" => "view"
+				),"aw_site_gen_log")."'>Saidi loomise logi</a>\n";
 			flush();
 			die();
 		}
 	}
 
-	function create_site_folders($site, &$ini_opts)
+	function _do_add_folder($fld, &$log)
 	{
-		echo "Loon katalooge .... <br>\n";
-		flush();
+		$si = get_instance("install/su_exec");
+		$si->add_cmd("mkdir ".$fld);
+		$si->add_cmd("chmod 777 ".$fld);
+		$si->exec();
+		$stat = "OK";
+		if (!is_dir($fld))
+		{
+			$stat = "Kataloogi ei ole!";
+		}
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Lisas kataloogi",
+			"comment" => $fld,
+			"result" => $stat
+		));
+	}
+
+	function create_site_folders($site, &$ini_opts, &$log)
+	{
+		//echo "Loon katalooge .... <br>\n";
+		//flush();
 
 		// generate the script that creates the folders for the site
-		$si = get_instance("install/su_exec");
 
 		// create the needed folders
-		$si->add_cmd("mkdir ".$site['docroot']);
-		$si->add_cmd("chmod 777 ".$site['docroot']);
+		$this->_do_add_folder($site["docroot"], &$log);
 		$ini_opts['site_basedir'] = $site['docroot'];
 
-		$si->add_cmd("mkdir ".$site['docroot']."/archive");
-		$si->add_cmd("chmod 777 ".$site['docroot']."/archive");
+		$this->_do_add_folder($site['docroot']."/archive", &$log);
 
-		$si->add_cmd("mkdir ".$site['docroot']."/files");
-		$si->add_cmd("chmod 777 ".$site['docroot']."/files");
+		$this->_do_add_folder($site['docroot']."/files", &$log);
 
-		$si->add_cmd("mkdir ".$site['docroot']."/pagecache");
-		$si->add_cmd("chmod 777 ".$site['docroot']."/pagecache");
+		$this->_do_add_folder($site['docroot']."/pagecache", &$log);
 		$ini_opts['cache.page_cache'] = "\${site_basedir}/pagecache";
 
-		$si->add_cmd("mkdir ".$site['docroot']."/public");
-		$si->add_cmd("chmod 777 ".$site['docroot']."/public");
+		$this->_do_add_folder($site['docroot']."/public", &$log);
 
-		$si->add_cmd("mkdir ".$site['docroot']."/templates");
-		$si->add_cmd("chmod 777 ".$site['docroot']."/templates");
+		$this->_do_add_folder($site['docroot']."/templates", &$log);
 		$ini_opts['tpldir'] = "\${site_basedir}/templates";
 
 		// now copy base templates to the just-created templates folder
+		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/templates/* ".$site['docroot']."/templates/");
 		$si->add_cmd("find ".$site['docroot']."/templates/ -type f -exec chmod 666 {} \;");
+		$si->exec();
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Kopeeris default kujunduse",
+			"comment" => "",
+			"result" => "OK"
+		));
+
+		
 
 		// now, if the user said, that we gots to copy some foldres from other sites, then do that as well
 		if ($site['site_obj']['use_existing_templates'] == 1)
@@ -322,8 +368,7 @@ class aw_site extends class_base
 			$this->do_copy_existing_templates($site);
 		}
 
-		$si->add_cmd("mkdir ".$site['logroot']);
-		$si->add_cmd("chmod 777 ".$site['logroot']);
+		$this->_do_add_folder($site['logroot'], &$log);
 
 		// create apache vhost file
 		$vhost_template = $this->get_file(array("file" => $this->cfg["tpldir"] . "/apache_conf/vhost.conf"));
@@ -341,15 +386,53 @@ class aw_site extends class_base
 			"content" => $vhost_conf
 		));
 			
+		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy $vhost_file_name ".$site["vhost_file"]);
+		$si->exec();
+		$stat = "OK";
+		if (!file_exists($site['vhost_file']))
+		{
+			$stat = "Faili ei ole!";
+		}
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Tegi virtualhost konfi!",
+			"comment" => $site["vhost_file"],
+			"result" => $stat
+		));
 
 		// create the link for the automatweb folder
+		$si = get_instance("install/su_exec");
 		$si->add_cmd("ln -s ".($this->cfg["basedir"]."/automatweb")." ".$site["docroot"]."/public/automatweb");
+		$si->exec();
+		$stat = "OK";
+		if (!is_link($site["docroot"]."/public/automatweb"))
+		{
+			$stat = "Linki ei ole!";
+		}
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Linkis automatweb kataloogi",
+			"comment" => $site["docroot"]."/public/automatweb",
+			"result" => $stat
+		));
 
 		// copy the default code files to public folder
 		// files: index.aw . login.aw , orb.aw, reforb.aw, site.aw, site_header.aw, site_footer.aw
-		$si->add_cmd("copy ".$this->cfg["basedir"]."/install/site_template/public/*aw ".$site["docroot"]."/public/");
+		$si = get_instance("install/su_exec");
+		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/public/* ".$site["docroot"]."/public/");
 		$si->add_cmd("chmod 666 $site[docroot]/public/*aw");
+		$si->add_cmd("chmod 777 $site[docroot]/public/css");
+		$si->add_cmd("chmod 777 $site[docroot]/public/img");
+		$si->add_cmd("chmod 666 $site[docroot]/public/img/*");
+		$si->add_cmd("chmod 666 $site[docroot]/public/css/*");
+		$si->exec();
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Kopeeris saidi koodi",
+			"comment" => "",
+			"result" => "OK"
+		));
 
 		// now, make the const.aw file from the template
 		$constaw_template = $this->get_file(array("file" => $this->cfg["tpldir"] . "/apache_conf/const.aw.tpl"));
@@ -363,13 +446,24 @@ class aw_site extends class_base
 			"file" => $constaw_file_name,
 			"content" => $constaw
 		));
+
+		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy $constaw_file_name ".$site["docroot"]."/public/const.aw");
-			
-		 //right, now exec the script 
-		 echo "execd = <pre>".$si->exec()."</pre> <br>";
+		$si->exec();
+		$stat = "OK";
+		if (!file_exists($site["docroot"]."/public/const.aw"))
+		{
+			$stat = "Faili ei ole!";
+		}
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Tegi const.aw faili",
+			"comment" => $site["docroot"]."/public/const.aw",
+			"result" => $stat
+		));
 	}
 
-	function do_init_classes($site, &$ini_opts)
+	function do_init_classes($site, &$ini_opts, &$log)
 	{
 		// ok, fuck it, we fake the site_id so that the objects all get the correct site_id
 		$osid = aw_ini_get("site_id");
@@ -397,9 +491,9 @@ class aw_site extends class_base
 			$inst = get_instance($class);
 			if (method_exists($inst, "on_site_init"))
 			{
-				echo "call on_site_init for class $class <br>\n";
-				flush();
-				$inst->on_site_init($dbi, $site, $ini_opts);
+				//echo "call on_site_init for class $class <br>\n";
+				//flush();
+				$inst->on_site_init($dbi, $site, $ini_opts, $log);
 			}
 		}
 
@@ -408,16 +502,16 @@ class aw_site extends class_base
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 	}
 
-	function create_site_name($site, &$ini_opts)
+	function create_site_name($site, &$ini_opts, &$log)
 	{
-		echo "Muudan nimeserveri konfiguratsiooni...<br>\n";
-		flush();
+		//echo "Muudan nimeserveri konfiguratsiooni...<br>\n";
+		//flush();
 
 		$mgr_server = $this->get_dns_manager_for_url($site["url"]);
-		echo "mgr_server = $mgr_server <Br>";
+		//echo "mgr_server = $mgr_server <Br>";
 		if ($mgr_server !== false)
 		{
-			echo "doing rpc call to change $site[url] 's ip to ",aw_ini_get("install.default_ip")," <br>";
+			//echo "doing rpc call to change $site[url] 's ip to ",aw_ini_get("install.default_ip")," <br>";
 			$this->do_orb_method_call(array(
 				"class" => "dns_server_manager",
 				"action" => "add_or_update_site",
@@ -431,13 +525,19 @@ class aw_site extends class_base
 		}
 		$ini_opts["baseurl"] = "http://".$site['url'];
 		$ini_opts["stitle"] = $site['url'];
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Konfigureeris nimeserveri",
+			"comment" => aw_ini_get("install.default_ip"),
+			"result" => "OK"
+		));
 	}
 
-	function create_site_database($site, &$ini_opts)
+	function create_site_database($site, &$ini_opts, &$log)
 	{
 		if ($site['site_obj']['use_existing_database'])
 		{
-			echo "reading database access data from the existing site<br>\n";
+			//echo "reading database access data from the existing site<br>\n";
 			flush();
 
 			$db_dat = $this->do_orb_method_call(array(
@@ -452,13 +552,13 @@ class aw_site extends class_base
 			$ini_opts['db.host'] = $db_dat['host'];
 			$ini_opts['db.base'] = $db_dat['base'];
 			$ini_opts['db.pass'] = $db_dat['pass'];
-			echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br>";
+			//echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br>";
 		}
 		else
 		{
-			echo "Loon andmebaasi...<br>\n";
+			//echo "Loon andmebaasi...<br>\n";
 			flush();
-			echo "creating database .. <br>";
+			//echo "creating database .. <br>";
 			$dbi = get_instance("class_base");
 			$dbi->db_connect(array(
 				'driver' => 'mysql',
@@ -470,7 +570,7 @@ class aw_site extends class_base
 
 			// create database
 			$q = "CREATE DATABASE $site[db_name]";
-			echo "exec $q <br>";
+			//echo "exec $q <br>";
 			$dbi->db_query($q);
 
 			// grant permission
@@ -480,13 +580,19 @@ class aw_site extends class_base
 					TO $site[db_user]@".aw_ini_get("install.mysql_client")." 
 					IDENTIFIED BY '$site[db_pwd]'
 			";
-			echo "exec $q <Br>";
+			//echo "exec $q <Br>";
 			$dbi->db_query($q);
 
 			$ini_opts['db.user'] = $site['db_user'];
 			$ini_opts['db.host'] = aw_ini_get("install.mysql_host");
 			$ini_opts['db.base'] = $site['db_name'];
 			$ini_opts['db.pass'] = $site['db_pwd'];
+			$log->add_line(array(
+				"uid" => aw_ini_get('install.mysql_user'),
+				"msg" => "L&otilde;i saidi andmebaasi",
+				"comment" => $site["db_name"],
+				"result" => "OK"
+			));
 		}
 	}
 
@@ -647,6 +753,13 @@ class aw_site extends class_base
 			return false;
 		}
 
+		// check if we got root access
+		$sue = get_instance("install/su_exec");
+		if (!$sue->is_ok())
+		{
+			$this->err_str = "Ei saa root kasutaja &otilde;iguseid kasutada!";
+			return false;
+		}
 		return true;
 	}
 
@@ -705,9 +818,9 @@ class aw_site extends class_base
 		return false;
 	}
 	
-	function create_ini_file($site, &$ini_opts)
+	function create_ini_file($site, &$ini_opts, &$log)
 	{
-		echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br>";
+		//echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br>";
 		// create temp ini file, then use su_exec to copy it to the correct place
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
 
@@ -721,9 +834,20 @@ class aw_site extends class_base
 		$sue->add_cmd("copy $tmpnam ".$site['docroot']."/aw.ini");
 		$sue->add_cmd("chmod 666 $site[docroot]/aw.ini");
 		$sue->exec();
+		$status = "OK";
+		if (!file_exists($site['docroot']."/aw.ini"))
+		{
+			$status = "Faili ei ole!";
+		}
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Tegi ini faili",
+			"comment" => $site['docroot']."/aw.ini",
+			"result" => $status
+		));
 	}
 
-	function get_site_id($site, &$ini_opts)
+	function get_site_id($site, &$ini_opts, &$log)
 	{		
 		$server_id = $this->do_orb_method_call(array(
 			"class" => "site_list",
@@ -734,7 +858,7 @@ class aw_site extends class_base
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com"
 		));
-		echo "got server_id = $server_id <br>";
+		//echo "got server_id = $server_id <br>";
 
 		$site_id = $this->do_orb_method_call(array(
 			"class" => "site_list",
@@ -750,8 +874,14 @@ class aw_site extends class_base
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com"
 		));
-		echo "got site id $site_id <br>";
+		//echo "got site id $site_id <br>";
 		$ini_opts["site_id"] = $site_id;
+		$log->add_line(array(
+			"uid" => aw_global_get("uid"),
+			"msg" => "K&uuml;sis uue saidi id",
+			"comment" => $site_id,
+			"result" => "OK"
+		));
 	}
 
 	function get_server_site_list()
@@ -826,11 +956,26 @@ class aw_site extends class_base
 
 			$sue->add_cmd("mkdir $to_fld");
 			$sue->add_cmd("copy $from_fld/*tpl $to_fld/");
-			echo "added cmd mkdir $to_fld <br>\n";
-			echo "addes cmd copy $from_fld/*tpl $to_fld/ <br>\n";
+			//echo "added cmd mkdir $to_fld <br>\n";
+			//echo "addes cmd copy $from_fld/*tpl $to_fld/ <br>\n";
 			flush();
 		}
 		$sue->exec();
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELATION_LAYOUT => "saidi layout"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELATION_LAYOUT)
+		{
+			return array(CL_LAYOUT);
+		}
 	}
 }
 ?>
