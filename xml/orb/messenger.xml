@@ -98,11 +98,12 @@
 			</function>
 		</action>
 
-		<action name="post">
-			<function name="send_message">
+		<action name="handle">
+			<function name="handle_message">
 				<arguments>
 					<optional name="id"/>
 					<optional name="cancel"/>
+					<optional name="save"/>
 				</arguments>
 			</function>
 		</action>
