@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.249 2003/03/03 10:16:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.250 2003/03/03 10:20:52 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -439,10 +439,10 @@ class menuedit extends aw_template
 		$this->vars(array("YAH_LINK" => $yah));
 
 		// language selecta
-		if ($this->is_template("LANG"))
-		{
+//		if ($this->is_template("LANG"))
+//		{
 			$this->make_langs();
-		}
+//		}
 
 		// write info about viewing to the syslog
 		$this->do_syslog($section);
@@ -4448,6 +4448,7 @@ class menuedit extends aw_template
 			if ($row["id"] == $lang_id)
 			{
 				$l.=$this->parse("SEL_LANG");
+				$sel_lang = $row;
 			}
 			else
 			{
@@ -4456,7 +4457,8 @@ class menuedit extends aw_template
 		}
 		$this->vars(array(
 			"LANG" => $l,
-			"SEL_LANG" => ""
+			"SEL_LANG" => "",
+			"sel_charset" => $sel_lang["charset"]
 		));
 	}
 
