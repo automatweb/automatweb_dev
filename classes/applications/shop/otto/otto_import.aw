@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.17 2005/01/21 12:55:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.18 2005/02/11 14:25:33 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -296,7 +296,7 @@ class otto_import extends class_base
 
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
 		
-			$html = file_get_contents($url);
+			$html = $this->file_get_contents($url);
 
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 			if (strpos($html,"konnten leider keine") !== false)
@@ -320,7 +320,7 @@ class otto_import extends class_base
 
 				foreach($urld as $url)
 				{
-					$html = file_get_contents($url);
+					$html = $this->file_get_contents($url);
 					if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
 					{
 						echo "total fakap <br>";
@@ -358,7 +358,7 @@ class otto_import extends class_base
 							$cnt = 1;
 							do {
 								//sleep(1);
-								$nhtml = file_get_contents($nurl);
+								$nhtml = $this->file_get_contents($nurl);
 								$ismatch = preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
 								if ($cnt > 1)
 								{
@@ -419,7 +419,7 @@ class otto_import extends class_base
 					$cnt = 1;
 					do {
 						//sleep(1);
-						$nhtml = file_get_contents($nurl);
+						$nhtml = $this->file_get_contents($nurl);
 						$ismatch = preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
 						if ($cnt > 1)
 						{
@@ -1736,14 +1736,19 @@ class otto_import extends class_base
 	{
 		$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
 
-		$fc = file_get_contents($url);
+		$fc = $this->file_get_contents($url);
+		if (strpos($fc, "leider keine Artikel gefunden") !== false)
+		{
+			return $this->read_img_from_schwab($pcode);
+		}
+
 		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 		$pcs = array_unique($mt[1]);
 
 		foreach($pcs as $n_pc)
 		{
 			$url2 = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_DisplayProductInformation-ProductRef;sid=vawch68xzhk1fe62PgtM0m08zJ5byxprRr3IpZL-?ls=0&ProductRef=".$n_pc."&SearchBack=true&SearchDetail=true";
-			$fc = file_get_contents($url2);
+			$fc = $this->file_get_contents($url2);
 
 			preg_match_all("/http\:\/\/image01(.*)jpg/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 			$pics = array_unique($mt[0]);
@@ -1752,12 +1757,12 @@ class otto_import extends class_base
 			preg_match("/OpenPopUpZoom\('\d*','\d*','(.*)'\)/imsU", $fc, $mt);
 			$popurl = $mt[1];
 			
-			$fc_p = file_get_contents($popurl);
+			$fc_p = $this->file_get_contents($popurl);
 
 			preg_match("/<frame name=\"_popcont\" src=\"(.*)\"/imsU", $fc_p, $mt);
 			$contenturl = $mt[1];
 
-			$fc_c = file_get_contents($contenturl);
+			$fc_c = $this->file_get_contents($contenturl);
 
 			preg_match_all("/http\:\/\/image01(.*)jpg/imsU", $fc_c, $mt, PREG_PATTERN_ORDER);
 			$pics = array_unique($mt[0]);
@@ -1796,6 +1801,197 @@ class otto_import extends class_base
 				$cnt++;
 			}
 		}
+	}
+
+	/**
+
+		@attrib name=swt
+
+		@param pcode required
+
+	**/
+	function swt($arr)
+	{
+		return $this->read_img_from_schwab($arr["pcode"]);
+	}
+
+	function read_img_from_schwab($pcode)
+	{
+		$url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_ParametricSearch-Progress;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?_PipelineID=search_pipe_svms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortCursorPosition=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
+		$fc = $this->file_get_contents($url);
+
+		if (strpos($fc, "Wir konnten leider keine Ergebnisse") !== false)
+		{
+			return $this->read_img_from_albamoda($pcode);
+		}
+
+		// match prod urls
+		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		$pcs = array_unique($mt[1]);
+		//echo "got pcs as ".dbg::dump($pcs)."\n";
+
+		foreach($pcs as $prodref)
+		{
+			if ($prodref == "")
+			{
+				continue;
+			}
+
+
+			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?ls=&ProductRef=".$prodref."&SearchDetail=1&aktPage=&Query_Text=371388&ArtikelID_Text=&Personen_Text=&PreisMin_Text=&PreisMax_Text=&Hersteller_Text=&Artikel_Text=&Stichwoerter_Text=&Artikel=&Hersteller=&Trend=";
+
+			$fc2 = $this->file_get_contents($prod_url);
+
+			// get first image
+			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/formatb\/(\d+).jpg/imsU", $fc2, $mt);
+			$first_im = $mt[1];
+
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			if (!$imnr)
+			{
+				echo "insert new image $first_im <br>\n";
+				flush();
+				$q = ("
+					INSERT INTO 
+						otto_prod_img(pcode, nr,imnr, server_id) 
+						values('$pcode','1','$first_im', 3)
+				");
+				//echo "q = $q <br>";
+				$this->db_query($q);
+			}
+
+			// get other images
+			preg_match_all("/jump_img\('(\d+)'\)/imsU", $fc2, $mt, PREG_PATTERN_ORDER);
+			$otherim = $mt[1];
+
+			foreach($otherim as $nr)
+			{
+				$o_url = $prod_url."&bild_nr=".$nr;
+				$fc3 = $this->file_get_contents($o_url);
+
+				preg_match("/http:\/\/image01\.otto\.de:80\/pool\/formatb\/(\d+).jpg/imsU", $fc3, $mt);
+				$im = $mt[1];
+
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "imnr");
+				if (!$imnr)
+				{
+					echo "insert new image $im <br>\n";
+					flush();
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$nr','$im', 3)
+					");
+					//echo "q = $q <br>";
+					$this->db_query($q);
+				}
+			}
+		}		
+	}
+
+	function read_img_from_albamoda($pcode)
+	{
+		$url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ParametricSearch-Progress;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?_PipelineID=search_pipe_am_de&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&_QueryClass=MallSearch.V1";
+		$fc = $this->file_get_contents($url);
+		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
+		{
+			return $this->read_img_from_heine($pcode);
+		}
+
+		// match prod urls
+		preg_match_all("/displayART\('(.*)'\)/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		$pcs = array_unique($mt[1]);
+		//echo "got pcs as ".dbg::dump($pcs)."\n";
+
+		foreach($pcs as $prodref)
+		{
+			if ($prodref == "")
+			{
+				continue;
+			}
+			$prod_url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ViewProduct-ProductRef;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?SearchArt1=".$prodref."&SearchDetail=1&ProductRef=".$prodref."&aktProductRef=".$prodref."&Query_Text=".$pcode."&OsPsCP=0&searchpipe=search_pipe_am_de";
+			$fc2 = $this->file_get_contents($prod_url);
+
+			// get first image
+			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/AlbaModaDe\/de_DE\/images\/albamoda_formatb\/(\d+).jpg/imsU", $fc2, $mt);
+			$first_im = $mt[1];
+
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			if (!$imnr)
+			{
+				echo "insert new image $first_im <br>\n";
+				flush();
+				$q = ("
+					INSERT INTO 
+						otto_prod_img(pcode, nr,imnr, server_id) 
+						values('$pcode','1','$first_im', 4)
+				");
+				//echo "q = $q <br>";
+				$this->db_query($q);
+			}
+		}
+	}
+
+	function read_img_from_heine($pcode)
+	{
+		$url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ParametricSearch-Progress;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ls=&ArtikelID_Text=".$pcode."&y=9&x=11";
+		$fc = $this->file_get_contents($url);
+
+		if (strpos($fc, "keine passenden Ergebnisse") !== false)
+		{
+			echo "NO IMAGE FOUND FOR PCODE $pcode <br>\n";
+			flush();
+			return;
+		}
+
+		// get prods
+		preg_match_all("/\?ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		$pcs = array_unique($mt[1]);
+		//echo "got pcs as ".dbg::dump($pcs)."\n";
+
+		foreach($pcs as $prodref)
+		{
+			if ($prodref == "")
+			{
+				continue;
+			}
+			$prod_url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ViewProduct-ProductRef;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ProductRef=".$prodref."&Source=Search";
+			$fc2 = $this->file_get_contents($prod_url);
+			
+
+			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt);
+			$first_im = $mt[1];
+
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			if (!$imnr)
+			{
+				echo "insert new image $first_im <br>\n";
+				flush();
+				$q = ("
+					INSERT INTO 
+						otto_prod_img(pcode, nr,imnr, server_id) 
+						values('$pcode','1','$first_im', 5)
+				");
+				//echo "q = $q <br>";
+				$this->db_query($q);
+			}
+
+		}
+	}
+
+	function file_get_contents($url)
+	{
+		for($i = 0; $i < 3; $i++)
+		{
+			$fc = @file_get_contents($url);
+			if ($fc != "")
+			{
+				return $fc;
+			}
+		}
+		echo "SITE $url seems to be <font color=red>DOWN</font> <br>\n";
+		flush();
+		return "";
 	}
 }
 
