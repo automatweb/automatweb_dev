@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.7 2002/11/14 10:15:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.8 2002/11/18 16:05:49 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -378,7 +378,7 @@ class form_table extends form_base
 						{
 							$cursums[$elid] += $dat["ev_".$elid];
 							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
-							if ($cc['el_main_types'][$elid] == 'date')
+							if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
 							{
 								$str .= $dat["el_".$elid];
 							}
@@ -1090,7 +1090,7 @@ class form_table extends form_base
 			{
 				reset($cc['els']);
 				list(,$elid) = each($cc['els']);
-				if ($cc['el_main_types'][$elid] == 'date')
+				if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
 				{
 					$numericattr = ' type="time" format="d.m.y / H:i" numeric="yes"';
 				}
