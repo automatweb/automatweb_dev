@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.112 2002/03/08 11:13:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.113 2002/03/13 14:15:25 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -568,7 +568,6 @@ class menuedit extends aw_template
 			// check menuedit access
 			if ($this->prog_acl("view", PRG_MENUEDIT))
 			{
-				$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
 				// so if this is the only document shown and the user has edit right
 				// to it, parse and show the CHANGEDOCUMENT sub
 				if ($this->can("edit",$section) && $this->active_doc)
@@ -578,6 +577,7 @@ class menuedit extends aw_template
 				$this->vars(array(
 			   		"CHANGEDOCUMENT" => $cd,
 				));
+				$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
 			}
 			else
 			{
@@ -629,7 +629,6 @@ class menuedit extends aw_template
 		}
 
 		$popups = $this->build_popups();
-
 		return $this->parse() . $popups;
 	}
 
@@ -5713,19 +5712,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$popups = "";
 		while($row = $this->db_next())
 		{
-			$meta = aw_unserialize($row["metadata"]);
+			$meta = aw_unserialize($row["meta"]);
+			global $DBUG;
 			if (is_array($meta["menus"]))
 			{
 				foreach($meta["menus"] as $key => $val)
 				{
-					if ($val == $section)
+					if ($val == $this->sel_section)
 					{
-						$popups .= "window.open('$meta[url]','popup','toolbar=0,location=0,menubar=0,scrollbars=0,width=$meta[width],height=$meta[height]');";
+						$popups .= "window.open('$meta[url]','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=$meta[width],height=$meta[height]');";
 					};
 				};
 			};
 		};
-		return (strlen($popups) > 0) ? "<script language='Javascript'>$popups</a>" : "";
+		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
+		global $DBUG;
+		if ($DBUG)
+		{
+			print "l = " . strlen($retval);
+		};
+		return $retval;
 	}
 }
 ?>
