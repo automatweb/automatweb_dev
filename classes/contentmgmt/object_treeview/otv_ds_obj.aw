@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.21 2005/01/24 12:43:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.22 2005/01/24 14:54:55 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -224,7 +224,7 @@ class otv_ds_obj extends class_base
 
 			bot id and parent are opaque strings
 	**/
-	function get_folders($ob, $tree_type)
+	function get_folders($ob, $tree_type = NULL)
 	{
 
 		if (!is_oid($ob->id()))
