@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.13 2004/10/22 14:58:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.14 2005/01/19 13:34:58 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -44,6 +44,9 @@
 
 @property fp_text table=languages type=textbox field=meta method=serialize
 @caption Esilehe nimi
+
+@property temp_redir_url table=languages type=textbox field=meta method=serialize
+@caption Ajutine AW-v&auml;line aadress sisse logimata kasutajatele
 
 @property langs type=table group=langs field=meta method=serialize store=no
 @caption Keeled

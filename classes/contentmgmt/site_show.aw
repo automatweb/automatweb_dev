@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.111 2005/01/18 10:50:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.112 2005/01/19 13:34:55 kristo Exp $
 
 /*
 
@@ -1222,6 +1222,7 @@ class site_show extends class_base
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
 		$l = "";
+		$uid = aw_global_get("uid");
 
 		if (count($lar) < 2)
 		{
@@ -1252,11 +1253,16 @@ class site_show extends class_base
 				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
 			}
 
+			$url = $this->cfg["baseurl"] . "/?set_lang_id=$row[id]";
+			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
+			{
+				$url = $row["meta"]["temp_redir_url"];
+			}
 			$this->vars(array(
 				"name" => $row["name"],
 				"lang_id" => $row["id"],
-				"lang_url" => $this->cfg["baseurl"] . "/?set_lang_id=$row[id]",
-				"link" => $this->cfg["baseurl"] . "/?set_lang_id=$row[id]",
+				"lang_url" => $url,
+				"link" => $url,
 				"target" => "",
 				"img_url" => $img_url,
 				"sel_img_url" => $sel_img_url
