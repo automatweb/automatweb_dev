@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.103 2004/09/24 09:35:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.104 2004/09/24 09:39:55 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -55,6 +55,9 @@
 	
 	@property show_lead_template type=select field=meta method=serialize group=advanced 
 	@caption Leadi template
+
+	@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=advanced
+	@caption Sisu objektist
 	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 	@caption AW Märksõnad
@@ -255,6 +258,9 @@
 
 	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE
 	@caption alammen&uuml;&uuml;d objektist
+
+	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
+        @caption Sisu objektist
 */
 
 define("IP_ALLOWED", 1);
