@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.29 2004/07/15 13:27:19 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.30 2004/07/23 08:10:13 rtoomas Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -427,7 +427,7 @@ class object_list extends _int_obj_container_base
 
 	function _int_get_at($oid)
 	{
-		if (!is_object($this->list[$oid]))
+		if (!is_object($this->list[$oid]) && is_oid($oid))
 		{
 			$this->list[$oid] = new object($oid);
 		}
