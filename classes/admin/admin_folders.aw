@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.22 2004/01/05 14:20:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.23 2004/01/09 11:40:35 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -251,19 +251,28 @@ class admin_folders extends aw_template
 		{
 			$dbp = get_instance("period",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
-			$dbp->clist(-1);
+			//$dbp->clist(-1);
 			$pl = array();
 			$actrec = 0;
 			$rc = 0;
+			$period_list = new object_list(array(
+                                "class_id" => CL_PERIOD,
+				"sort_by" => "objects.jrk DESC",
+                        ));
+
+			for ($period_obj = $period_list->begin(); !$period_list->end(); $period_obj = $period_list->next())
 			// loeme k6ik perioodid sisse
-			while ($row = $dbp->db_next())
+			//while ($row = $dbp->db_next())
 			{
 				$rc++;
-				if ($row["id"] == $act_per_id)
+				if ($period_obj->id() == $act_per_id)
 				{
 					$actrec = $rc;
 				};
-				$pl[$rc] = $row;
+				$pl[$rc] = array(
+					"id" => $period_obj->id(),
+					"name" => $period_obj->name(),
+				);
 			}
 			// leiame praegune +-3
 			$ar = array();
