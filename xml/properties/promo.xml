@@ -83,6 +83,16 @@
             <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
       </property>
       <property>
+            <name>content_all_langs</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
+      </property>
+      <property>
             <name>promo_tpl</name>
             <group>general</group>
             <type>select</type>

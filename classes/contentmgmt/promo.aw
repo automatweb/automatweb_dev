@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.43 2004/06/21 12:37:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.44 2004/07/01 18:22:11 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -31,6 +31,9 @@
 	@caption Sisu ei cacheta
 	
 	@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
+	
+	@property content_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
 	
 	@property promo_tpl type=select table=objects field=meta method=serialize
@@ -190,6 +193,13 @@ class promo extends class_base
 
 			case "trans_all_langs":
 				if (!aw_ini_get("config.object_translation"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "content_all_langs":
+				if (aw_ini_get("config.object_translation"))
 				{
 					return PROP_IGNORE;
 				}
