@@ -283,6 +283,7 @@ function classload($args)
 
 function get_instance($class,$args = array())
 {
+//	enter_function("__global::get_instance",array());
 	$classdir = aw_ini_get("classdir");
 	$ext = aw_ini_get("ext");
 	$id = sprintf("instance::%s",$class);
@@ -303,6 +304,7 @@ function get_instance($class,$args = array())
 		};
 		aw_global_set($id,$instance);
 	};
+//	exit_function("__global::get_instance",array());
 	return $instance;
 }
 
@@ -336,8 +338,8 @@ function load_vcl($lib)
 // available in parse_config, but now most of them are.
 function aw_startup()
 {
-//	list($micro,$sec) = split(" ",microtime());
-//	$ts_s = $sec + $micro;
+	list($micro,$sec) = split(" ",microtime());
+	$ts_s = $sec + $micro;
 
 	classload("languages");
 	$l = new languages;
@@ -360,9 +362,10 @@ function aw_startup()
 	$m->request_startup();
 
 
-//	list($micro,$sec) = split(" ",microtime());
-//	$ts_e = $sec + $micro;
-	//dbg1("aw_startup() took ".($ts_e - $ts_s)." seconds <br>");
+	list($micro,$sec) = split(" ",microtime());
+	$ts_e = $sec + $micro;
+	// the following breaks reforb
+	#echo("<!-- aw_startup() took ".($ts_e - $ts_s)." seconds -->\n");
 }
 
 ////
@@ -399,8 +402,15 @@ function &__get_site_instance()
 	global $__site_instance;
 	if (!is_object($__site_instance))
 	{
-		include("site.".aw_ini_get("ext"));
-		$__site_instance = new site;
+		@include("site.".aw_ini_get("ext"));
+		if (class_exists("site"))
+		{
+			$__site_instance = new site;
+		}
+		else
+		{
+			$__site_instance = false;
+		};
 	}
 	return $__site_instance;
 }
