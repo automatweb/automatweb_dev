@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.32 2003/11/27 16:10:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.33 2003/12/16 14:29:58 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -454,7 +454,7 @@ class ml_list extends class_base
 		$mq = get_instance("mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/queue");
-		$q = "SELECT * FROM ml_queue WHERE lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
+		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 && lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
                 $this->db_query($q);
                 while ($row = $this->db_next())
                 {
