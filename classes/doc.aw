@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.63 2004/02/13 10:02:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.64 2004/02/25 15:57:39 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -12,10 +12,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @default table=documents
 @default group=general
 
-@property navtoolbar type=toolbar no_caption=1 store=no
+@property navtoolbar type=toolbar no_caption=1 store=no trans=1
 @caption Toolbar
 
-@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
+@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize trans=1
 @caption Pluginad
 
 @property title type=textbox size=60 trans=1
@@ -45,44 +45,44 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property moreinfo type=textarea richtext=1 cols=60 rows=5 trans=1
 @caption Lisainfo
 
-@property link_text type=textbox size=60
+@property link_text type=textbox size=60 trans=1
 @caption URL
 
-@property is_forum type=checkbox ch_value=1
+@property is_forum type=checkbox ch_value=1 trans=1
 @caption Foorum
 
-@property showlead type=checkbox ch_value=1 default=1
+@property showlead type=checkbox ch_value=1 default=1 trans=1
 @caption Näita leadi
 
-@property show_modified type=checkbox ch_value=1
+@property show_modified type=checkbox ch_value=1 trans=1
 @caption Näita muutmise kuupäeva
 
-@property doc_modified type=hidden table=documents field=modified
+@property doc_modified type=hidden table=documents field=modified trans=1
 @caption Dok. modified
 
 //---------------
-@property no_right_pane type=checkbox ch_value=1 group=settings
+@property no_right_pane type=checkbox ch_value=1 group=settings trans=1
 @caption Ilma parema paanita
 
-@property no_left_pane type=checkbox ch_value=1 group=settings
+@property no_left_pane type=checkbox ch_value=1 group=settings trans=1
 @caption Ilma vasaku paanita
 
-@property title_clickable type=checkbox ch_value=1 group=settings
+@property title_clickable type=checkbox ch_value=1 group=settings trans=1
 @caption Pealkiri klikitav
 
-@property clear_styles type=checkbox ch_value=1 store=no
+@property clear_styles type=checkbox ch_value=1 store=no trans=1
 @caption Tühista stiilid
 
-@property link_keywords type=checkbox ch_value=1 store=no
+@property link_keywords type=checkbox ch_value=1 store=no trans=1
 @caption Lingi võtmesõnad
 
-@property esilehel type=checkbox ch_value=1 group=settings
+@property esilehel type=checkbox ch_value=1 group=settings trans=1
 @caption Esilehel
 
-@property frontpage_left type=checkbox ch_value=1
+@property frontpage_left type=checkbox ch_value=1 trans=1
 @caption Esilehel tulbas
 
-@property dcache type=checkbox store=no
+@property dcache type=checkbox store=no trans=1
 @caption Cache otsingu jaoks
 
 @property dcache_content type=hidden field=dcache 
@@ -90,67 +90,67 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property num_ratings type=hidden 
 
 
-@property show_title type=checkbox ch_value=1 default=1
+@property show_title type=checkbox ch_value=1 default=1 trans=1
 @caption Näita pealkirja
 
-@property no_search type=checkbox ch_value=1
+@property no_search type=checkbox ch_value=1 trans=1
 @caption Jäta otsingust välja
 
-@property cite type=textarea cols=60 rows=10
+@property cite type=textarea cols=60 rows=10 trans=1
 @caption Tsitaat
 
-@property tm type=textbox size=20 
+@property tm type=textbox size=20 trans=1
 @caption Kuupäev
 
-@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
+@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1 trans=1
 @caption 'Prindi' nupp
 
-@property sections type=select multiple=1 size=20 group=vennastamine store=no
+@property sections type=select multiple=1 size=20 group=vennastamine store=no trans=1
 @caption Sektsioonid
 
 @property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
 @caption Aliastehaldur
 
-@property start type=date_select table=planner group=calendar
+@property start type=date_select table=planner group=calendar trans=1
 @caption Algab (kp)
 
-@property start1 type=datetime_select field=start table=planner group=calendar
+@property start1 type=datetime_select field=start table=planner group=calendar trans=1
 @caption Algab 
 
-@property createdby table=objects field=createdby group=general type=text
+@property createdby table=objects field=createdby group=general type=text trans=1
 @caption Kes tegi
 
-@property user1 table=documents group=general type=textbox size=60
+@property user1 table=documents group=general type=textbox size=60 trans=1
 @caption Kasutaja defineeritud 1
 
-@property user2 table=documents group=general type=textarea rows=2 cols=60
+@property user2 table=documents group=general type=textarea rows=2 cols=60 trans=1
 @caption Kasutaja defineeritud 2
 
-@property user3 table=documents group=general type=textbox 
+@property user3 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 3
 
-@property user4 table=documents group=general type=textbox
+@property user4 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 4
 
-@property user5 table=documents group=general type=textbox
+@property user5 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 5
 
-@property user6 table=documents group=general type=textbox
+@property user6 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 6
 
-@property language type=text group=general type=text store=no
+@property language type=text group=general type=text store=no trans=1
 @caption Keel
 
-@property duration type=time_select field=end table=planner group=calendar
+@property duration type=time_select field=end table=planner group=calendar trans=1
 @caption Kestab
 
-@property calendar_relation type=select field=meta method=serialize group=general table=objects
+@property calendar_relation type=select field=meta method=serialize group=general table=objects trans=1
 @caption Põhikalender
 
-@property gen_static type=checkbox store=no
+@property gen_static type=checkbox store=no trans=1
 @caption Genereeri staatiline
 
-@property sbt type=submit value=Salvesta store=no 
+@property sbt type=submit value=Salvesta store=no trans=1
 
 @property cb_part type=hidden value=1 group=general,settings store=no
 @caption cb_part

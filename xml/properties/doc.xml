@@ -5,6 +5,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>navtoolbar</field>
@@ -17,6 +18,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <trans>1</trans>
             <group>general</group>
             <caption>Pluginad</caption>
       </property>
@@ -120,6 +122,7 @@
             <name>link_text</name>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>link_text</field>
@@ -129,6 +132,7 @@
             <name>is_forum</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>is_forum</field>
@@ -139,6 +143,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>showlead</field>
@@ -148,6 +153,7 @@
             <name>show_modified</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>show_modified</field>
@@ -158,6 +164,7 @@
             <type>hidden</type>
             <table>documents</table>
             <field>modified</field>
+            <trans>1</trans>
             <group>general</group>
             <caption>Dok. modified</caption>
       </property>
@@ -166,6 +173,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>settings</group>
+            <trans>1</trans>
             <table>documents</table>
             <field>no_right_pane</field>
             <caption>Ilma parema paanita</caption>
@@ -175,6 +183,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>settings</group>
+            <trans>1</trans>
             <table>documents</table>
             <field>no_left_pane</field>
             <caption>Ilma vasaku paanita</caption>
@@ -184,6 +193,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>settings</group>
+            <trans>1</trans>
             <table>documents</table>
             <field>title_clickable</field>
             <caption>Pealkiri klikitav</caption>
@@ -193,6 +203,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>clear_styles</field>
@@ -203,6 +214,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>link_keywords</field>
@@ -213,6 +225,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>settings</group>
+            <trans>1</trans>
             <table>documents</table>
             <field>esilehel</field>
             <caption>Esilehel</caption>
@@ -221,6 +234,7 @@
             <name>frontpage_left</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>frontpage_left</field>
@@ -230,6 +244,7 @@
             <name>dcache</name>
             <type>checkbox</type>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>dcache</field>
@@ -261,6 +276,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>show_title</field>
@@ -270,6 +286,7 @@
             <name>no_search</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>no_search</field>
@@ -280,6 +297,7 @@
             <type>textarea</type>
             <cols>60</cols>
             <rows>10</rows>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>cite</field>
@@ -289,6 +307,7 @@
             <name>tm</name>
             <type>textbox</type>
             <size>20</size>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>tm</field>
@@ -302,6 +321,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>1</default>
+            <trans>1</trans>
             <group>general</group>
             <caption>'Prindi' nupp</caption>
       </property>
@@ -312,6 +332,7 @@
             <size>20</size>
             <group>vennastamine</group>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <field>sections</field>
             <caption>Sektsioonid</caption>
@@ -332,6 +353,7 @@
             <type>date_select</type>
             <table>planner</table>
             <group>calendar</group>
+            <trans>1</trans>
             <field>start</field>
             <caption>Algab (kp)</caption>
       </property>
@@ -341,6 +363,7 @@
             <field>start</field>
             <table>planner</table>
             <group>calendar</group>
+            <trans>1</trans>
             <caption>Algab </caption>
       </property>
       <property>
@@ -349,6 +372,7 @@
             <field>createdby</field>
             <group>general</group>
             <type>text</type>
+            <trans>1</trans>
             <caption>Kes tegi</caption>
       </property>
       <property>
@@ -357,6 +381,7 @@
             <group>general</group>
             <type>textbox</type>
             <size>60</size>
+            <trans>1</trans>
             <field>user1</field>
             <caption>Kasutaja defineeritud 1</caption>
       </property>
@@ -367,6 +392,7 @@
             <type>textarea</type>
             <rows>2</rows>
             <cols>60</cols>
+            <trans>1</trans>
             <field>user2</field>
             <caption>Kasutaja defineeritud 2</caption>
       </property>
@@ -375,6 +401,7 @@
             <table>documents</table>
             <group>general</group>
             <type>textbox</type>
+            <trans>1</trans>
             <field>user3</field>
             <caption>Kasutaja defineeritud 3</caption>
       </property>
@@ -383,6 +410,7 @@
             <table>documents</table>
             <group>general</group>
             <type>textbox</type>
+            <trans>1</trans>
             <field>user4</field>
             <caption>Kasutaja defineeritud 4</caption>
       </property>
@@ -391,6 +419,7 @@
             <table>documents</table>
             <group>general</group>
             <type>textbox</type>
+            <trans>1</trans>
             <field>user5</field>
             <caption>Kasutaja defineeritud 5</caption>
       </property>
@@ -399,6 +428,7 @@
             <table>documents</table>
             <group>general</group>
             <type>textbox</type>
+            <trans>1</trans>
             <field>user6</field>
             <caption>Kasutaja defineeritud 6</caption>
       </property>
@@ -407,6 +437,7 @@
             <type>text</type>
             <group>general</group>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <field>language</field>
             <caption>Keel</caption>
@@ -417,6 +448,7 @@
             <field>end</field>
             <table>planner</table>
             <group>calendar</group>
+            <trans>1</trans>
             <caption>Kestab</caption>
       </property>
       <property>
@@ -426,12 +458,14 @@
             <method>serialize</method>
             <group>general</group>
             <table>objects</table>
+            <trans>1</trans>
             <caption>Põhikalender</caption>
       </property>
       <property>
             <name>gen_static</name>
             <type>checkbox</type>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>gen_static</field>
@@ -442,6 +476,7 @@
             <type>submit</type>
             <value>Salvesta</value>
             <store>no</store>
+            <trans>1</trans>
             <table>documents</table>
             <group>general</group>
             <field>sbt</field>
