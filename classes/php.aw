@@ -1,14 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.4 2002/01/16 23:02:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.5 2002/02/19 16:23:49 duke Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
-	function set($key,$val)
-	{
-		$this->$key = $val;
-	}
-
-	function php_serialize($arr)
+	function php_serialize($arr,$to_file = false)
 	{
 		if (!is_array($arr))
 		{
@@ -16,10 +11,15 @@ class php_serializer
 			return false;
 		}
 
-		return "\$arr = ".$this->req_serialize($arr).";";
+		return "\$arr = ".$this->req_serialize($arr,$to_file).";";
 	}
 
-	function req_serialize($arr)
+	function set($key,$val)
+	{
+		$this->$key = $val;
+	}
+
+	function req_serialize($arr,$to_file)
 	{
 		$str ="array(\n";
 		$td =array();
@@ -27,11 +27,18 @@ class php_serializer
 		{
 			if (is_array($v))
 			{
-				$v = $this->req_serialize($v);
+				$v = $this->req_serialize($v,$to_file);
 			}
 			else
 			{
-				$v = str_replace("\"","\\\\\"",$v);
+				if (!$to_file)
+				{
+					$v = str_replace("\"","\\\\\"",$v);
+				}
+				else
+				{
+					$v = str_replace("\"","\\\"",$v);
+				}
 				$v = str_replace("\n","\\\n",$v);
 				$v = str_replace("\r","\\\r",$v);
 				$v = str_replace("\$","\\\\\$",$v);
