@@ -1,14 +1,13 @@
 <?xml version='1.0'?>
 <tabledef>
 <data>
-<field name="mark" caption="#" talign="center" align="center"/>
-<field name="recent" caption="Uus" talign="center" align="center" width="20" nowrap="1"/>
 <field name="seen" caption="Loetud" talign="center" align="center" width="20" nowrap="1"/>
 <field name="answered" caption="Vastatud" talign="center" align="center" width="20" nowrap="1"/>
-<field name="from" caption="Kellelt" talign="center" align="center" nowrap="1"/>
-<field name="subject" caption="Teema" talign="center" align="center" nowrap="1"/>
-<field name="date" caption="Kuup&amp;auml;ev" talign="center" align="center" nowrap="1"/>
-<field name="size" caption="Suurus" talign="center" align="center" nowrap="1"/>
+<field name="from" caption="Kellelt" talign="center" nowrap="1"/>
+<field name="subject" caption="Teema" talign="center"  nowrap="1"/>
+<field name="date" caption="Kuup&amp;auml;ev" talign="center" nowrap="1"/>
+<field name="size" caption="Suurus" talign="center" nowrap="1"/>
+<field name="mark" caption="Vali" talign="center" align="center"/>
 </data>
 
 </tabledef>
