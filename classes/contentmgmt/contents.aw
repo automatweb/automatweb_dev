@@ -1,10 +1,33 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.2 2004/03/25 15:51:54 kristo Exp $
+// contents.aw - Saidi sisukord
+/*
 
-class contents extends aw_template
+@classinfo syslog_type=ST_CONTENTS relationmgr=yes no_status=1 
+
+@default table=objects
+@default group=general
+
+@property intro_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption Juhtkirja kataloog
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption kataloog
+
+*/
+
+class contents extends class_base
 {
 	function contents()
 	{
-		$this->init("contents");
+		$this->init(array(
+			"tpldir" => "contents",
+			"clid" => CL_CONTENTS
+		));
+
+		$this->mned = get_instance("contentmgmt/site_show");
+		$this->doc = get_instance("document");
+		$this->per = get_instance("period");
 	}
 
 	/**  
@@ -39,14 +62,6 @@ class contents extends aw_template
 			$tpl = "show.tpl";
 		}
 		$this->read_template($tpl);
-
-		$this->mned = get_instance("contentmgmt/site_content");
-		$this->mned->make_menu_caches();
-
-		$this->mc = get_instance("menu_cache");
-		$this->doc = get_instance("document");
-		
-		$this->per = get_instance("period");
 
 		$this->d_tpl = isset($d_tpl) && $d_tpl != "" ? $d_tpl : "lead.tpl";
 		
@@ -97,32 +112,35 @@ class contents extends aw_template
 			}
 		}
 
-		$ld = $this->get_cval("contents::document");
+		if ($arr["id"])
+		{
+			$o = obj($arr["id"]);
+			$ld = $o->prop("intro_folder");
+		}
+		else
+		{
+			$ld = $this->get_cval("contents::document");
+		}
 		if ($ld)
 		{
-				$this->doc->db_query("SELECT documents.lead AS lead,
-			documents.docid AS docid,
-			documents.title AS title,
-			documents.*,
-			objects.period AS period,
-			objects.class_id as class_id,
-			objects.parent as parent,
-			objects.period AS period
-			FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.brother_of)
-			WHERE objects.period = '".$this->period."' AND objects.parent = '$ld' AND objects.status = 2 ORDER BY objects.jrk");
-			$row = $this->doc->db_next();
-			$this->doc->save_handle();
-			$this->vars(array(
-				"last_doc" => $this->doc->gen_preview(array(
-							"docid" => $row["docid"],
-							"tpl" => "lead.tpl",
-							"doc" => $row,
-							"leadonly" => 1
-						))
+			$ol = new object_list(array(
+				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
+				"period" => $this->period, 
+				"parent" => $ld,
+				"status" => STAT_ACTIVE,
 			));
-			$this->doc->restore_handle();
+			if ($ol->count() > 0)
+			{
+				$o = $ol->begin();
+				
+				$this->vars(array(
+					"last_doc" => $this->doc->gen_preview(array(
+						"docid" => $o->id(),
+						"tpl" => "lead.tpl",
+						"leadonly" => 1
+					))
+				));
+			}
 		}
 		
 		$act_per = $this->per->get($this->period);
@@ -150,112 +168,73 @@ class contents extends aw_template
 
 	function req_menus($pid)
 	{
-		$menus = $this->mc->get_cached_menu_by_parent($pid);
-		foreach($menus as $mid => $md)
+		if (!is_oid($pid))
 		{
-			if ($this->mned->has_sub_dox($md["oid"]) || true)
-			{
-				$s = "";
+			return;
+		}
 
-				// now docs under the menu
-				$pers = "";
-				if ($this->period > 1)
-				{
-					$pers = "objects.period = '".$this->period."' AND";
-				}
-//				$this->doc->list_docs($md["oid"], $this->period, 2);
-				$q = "SELECT documents.lead AS lead,
-					documents.docid AS docid,
-					documents.title AS title,
-					documents.*,
-					objects.period AS period,
-					objects.class_id as class_id,
-					objects.parent as parent,
-					objects.period AS period
-					FROM documents
-					LEFT JOIN objects ON
-					(documents.docid = objects.brother_of)
-					WHERE $pers objects.parent = '$md[oid]' AND objects.status = 2 ORDER BY objects.jrk";
-				$this->doc->db_query($q);
-				while ($row = $this->doc->db_next())
-				{
-					$this->doc->save_handle();
-					$this->vars(array(
-						"doc" => $this->doc->gen_preview(array(
-							"docid" => $row["docid"],
-							"doc" => $row,
-							"tpl" => $this->d_tpl,
-							"leadonly" => $this->leadonly
-						))
-					));
-					$s.=$this->parse("STORY");
-					$this->doc->restore_handle();
-				}
-				$this->vars(array(
-					"menu_name" => $md["name"],
-					"menu_link" => $this->mned->make_menu_link($md),
-					"STORY" => $s
-				));
-				$this->count++;
-				if (($this->max_count > 0 ) && ($this->count > $this->max_count))
-				{
-					return;
-				}
-				if ($s != "")
-				{
-					$this->l.=$this->parse("MENU");
-				}
+		// TODO: optimize this not to recurse and use object_tree to make the contents list
+		$ol = new object_list(array(
+			"parent" => $pid,
+			"class_id" => CL_MENU,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"lang_id" => aw_global_get("lang_id"),
+					"type" => MN_CLIENT
+				)
+			)),
+			"sort_by" => "objects.parent, jrk,objects.created"
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$s = "";
+
+			// now docs under the menu
+			$filta = array(
+				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
+				"parent" => $o->id(),
+				"status" => STAT_ACTIVE,
+				"sort_by" => "objects.jrk"
+			);
+			if ($this->period > 1)
+			{
+				$filta["period"] = $this->period;
 			}
-			$this->req_menus($md["oid"]);
+
+			$docl = new object_list($filta);
+			for($d = $docl->begin(); !$docl->end(); $d = $docl->next())
+			{
+				$this->vars(array(
+					"doc" => $this->doc->gen_preview(array(
+						"docid" => $d->id(),
+						"tpl" => $this->d_tpl,
+						"leadonly" => $this->leadonly
+					))
+				));
+				$s.=$this->parse("STORY");
+			}
+			$this->vars(array(
+				"menu_name" => $o->name(),
+				"menu_link" => $this->mned->make_menu_link($o),
+				"STORY" => $s
+			));
+			$this->count++;
+			if (($this->max_count > 0 ) && ($this->count > $this->max_count))
+			{
+				return;
+			}
+			if ($s != "")
+			{
+				$this->l.=$this->parse("MENU");
+			}
+			$this->req_menus($o->id());
 		}
 	}
 
-	/**  
-		
-		@attrib name=admin params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function admin($arr)
+	function parse_alias($arr)
 	{
-		extract($arr);
-		$this->read_template("admin.tpl");
-
-		$ld = $this->get_cval("contents::document");
-
-		$ob = get_instance("objects");
-		$this->vars(array(
-			"menus" => $this->picker($ld, $ob->get_list(false,true)),
-			"reforb" => $this->mk_reforb("submit_admin")
-		));
-
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_admin params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin($arr)
-	{
-		extract($arr);
-
-		$cf = get_instance("config");
-		$cf->set_simple_config("contents::document", $menu);
-
-		return $this->mk_my_orb("admin");
+		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 }
 ?>

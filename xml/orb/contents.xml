@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="contents" folder="" extends="aw_template">
+	<class name="contents" folder="contentmgmt" extends="class_base">
 		<action name="show" default="1" nologin="1" is_public="1" caption="Show">
 			<function name="show">
 				<arguments>
@@ -8,20 +8,6 @@
 					<optional name="max" type="int"/>
 					<optional name="tpl" />
 					<optional name="d_tpl" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="admin" >
-			<function name="admin">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_admin" >
-			<function name="submit_admin">
-				<arguments>
 				</arguments>
 			</function>
 		</action>
