@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.50 2003/03/14 16:28:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.51 2003/03/18 11:51:31 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -330,14 +330,17 @@ class aw_table
 		{
 			foreach($this->sortby as $_coln => $_eln)
 			{
-				$v1 =$a[$_eln];
-				$v2 =$b[$_eln];
-				$this->u_sorder = $this->sorder[$_eln];
-				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
-				if ($v1 != $v2)
+				if (isset($a[$_eln]) && isset($b[$_eln]))
 				{
-					break;
-				}
+					$v1 = $a[$_eln];
+					$v2 = $b[$_eln];
+					$this->u_sorder = $this->sorder[$_eln];
+					$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
+					if ($v1 != $v2)
+					{
+						break;
+					}
+				};
 			}
 		}
 
@@ -816,49 +819,43 @@ class aw_table
 		};
 
 		// eraldame nime ja atribuudid
+		// moodustame atribuutidest stringi
+		$attr_list = "";
+		$name = "";
 		foreach($data as $k => $v) 
 		{
 			if ($k == "name") 
 			{
 				$name = $v;
 			} 
-			else
-			if ($k == "id") 
+			// whats up with this id?
+			elseif ($k == "id") 
 			{
-				$attribs["name"] = $v;
+				$attr_list .= " name='$v'";
 			} 
-			elseif(!empty($v))
+			elseif ($v != "")
 			{
-				$attribs[$k] = $v;
-			};
-		};
-
-		// moodustame atribuutidest stringi
-		$attr_list = "";
-		if (isset($attribs) && is_array($attribs)) 
-		{
-			foreach($attribs as $k => $v) 
-			{
-				if (isset($v))
+				if ($k == "nowrap")
 				{
-					if ($k == "nowrap")
-					{
-						$attr_list.= " $k ";
-					}
-					else
-					{
-						$attr_list .= " $k=\"$v\"";
-					}
+					$attr_list .= " $k";
 				}
+				elseif ($k == "classid")
+				{
+					$attr_list .= " class='$v'";
+				}
+				else
+				{
+					$attr_list .= " $k='$v'";
+				};
 			};
-			// see on workaround, sest "class" on reserved ja seda
-			// ei saa array indexina kasutada
-			$attr_list = str_replace("classid","class",$attr_list);
 		};
 
 		// koostame tagi
-		$retval = sprintf("<%s%s>\n",$name,$attr_list);
-
+		$retval = "";
+		if (!empty($name))
+		{
+			$retval = "<" . $name . $attr_list . ">\n";
+		};
 		// ja tagastame selle
 		return $retval;
 	}
