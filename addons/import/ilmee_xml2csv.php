@@ -4,16 +4,37 @@
 // * */4 * * * /www/automatweb_dev/scripts/php -q /www/automatweb_dev/addons/import/ilmee_xml2csv.php > /tmp/ilmee.txt 
 $table = "ilmee_data";
 # ttw needs forecast in english
-$exp_file = "ilm-eng_xml.php3";
+$path = "/~data/include/";
+$exp_file = $path . "ilm-eng_xml.php3";
 # but liiklus.ee in estonian.
 # so, if an argumeo
 
 if ($_SERVER["argv"][1] == "est")
 {
-	$exp_file = "ilm_xml.php3";
+	$exp_file = $path . "ilm_xml.php3";
 };
 
-$file = join("",file("http://ilm.ee/~data/include/$exp_file"));
+$host = "ilm.ee";
+$port = 80;
+
+
+
+$sock = @fsockopen($host,$port,&$errno, &$errstr,5);
+if (!$sock)
+{
+	die("WARNING: Connection to $host:$port failed, $errstr\n;");
+};
+// nüüd tuleb HTTP päring teha
+$data = "GET $exp_file HTTP/1.1\r\nHost: $host\r\n\r\n";
+fputs($sock, $data, strlen($data));
+fflush($sock);
+$file = fread($sock,65534);
+fclose($sock);
+
+
+var_dump($file);
+exit;
+
 $p = xml_parser_create();
 xml_parse_into_struct($p,$file,$vals,$index);
 xml_parser_free($p);
