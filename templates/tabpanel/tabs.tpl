@@ -7,21 +7,21 @@
 <tr>
 
   <!-- SUB: tab_L1 -->
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
-  <td class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
   <!-- END SUB: tab_L1 -->
 
   <!-- SUB: disabled_tab_L1 -->
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
-  <td class="aw04tab2discontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif">{VAR:caption}</td>
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2discontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif">{VAR:caption}</td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
   <!-- END SUB: disabled_tab_L1 -->
 
   <!-- SUB: sel_tab_L1 -->
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
-  <td class="aw04tab2selcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
-  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2selcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
   <!-- END SUB: sel_tab_L1 -->
 
 </tr>
@@ -43,21 +43,21 @@
 		<tr>
 	
 			<!-- SUB: tab_L2 -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
 			<!-- END SUB: tab_L2 -->
 
 			<!-- SUB: sel_tab_L2 -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b>{VAR:caption}</b></td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b>{VAR:caption}</b></td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
 			<!-- END SUB: sel_tab_L2 -->
 
 			<!-- SUB: disabled_tab_L2 -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif">disabled: {VAR:caption} |</td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <td nowrap class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif">disabled: {VAR:caption} |</td>
+		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
 			<!-- END SUB: disabled_tab_L2 -->
 
 			</tr>
