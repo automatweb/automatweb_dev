@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.57 2002/11/15 18:04:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.58 2002/11/21 15:47:06 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -601,7 +601,7 @@ if (!defined("DEFS"))
 				break;
 
 			case SERIALIZE_XML:
-				$ser = new xml;
+				$ser = new xml($flags);
 				$str = $ser->xml_serialize($arr);
 				break;
 
