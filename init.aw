@@ -252,7 +252,9 @@ function aw_config_init_class(&$that)
 function lc_load($file)
 {
 //	enter_function("__global::lc_load",array());
-	global $LC,$admin_lang_lc;
+//	global $LC,$admin_lang_lc;
+	$LC = aw_global_get("LC");
+	$admin_lang_lc = aw_global_get("admin_lang_lc");
 	if (!$admin_lang_lc)
 	{
 		$admin_lang_lc = "et";
