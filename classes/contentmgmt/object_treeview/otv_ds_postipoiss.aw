@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.4 2004/04/29 14:59:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.5 2004/04/29 15:27:38 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -200,6 +200,7 @@ class otv_ds_postipoiss extends class_base
 		$data = array();
 		foreach($values as $key => $val)
 		{
+			$val["value"] = $this->convert_unicode($val["value"]);
 			if ($val["tag"] == "teema" && $val["type"] == "open")
 			{
 				$cur = array();
@@ -312,6 +313,27 @@ class otv_ds_postipoiss extends class_base
 	function get_fields()
 	{
 		return $this->all_cols;
+	}
+	
+	function convert_unicode($source)
+	{
+		// utf8_decode doesn't work here
+		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
+		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xB6),"ö",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xA4),"ä",$retval);
+		$retval = str_replace(chr(0xC3). chr(0x96),"Ö",$retval);
+		$retval = str_replace(chr(0xC3). chr(0x95),"Õ",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xB4),"õ",$retval);
+		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
+		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA0),"&#0352;",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xA9),"&#0233;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
+
+		return $retval;
 	}
 }
 ?>
