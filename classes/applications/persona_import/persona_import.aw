@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.2 2005/01/26 16:38:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.3 2005/03/18 13:42:49 ahti Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1101,7 +1101,7 @@ class persona_import extends class_base
 	{
 		$o = $arr["obj_inst"];
 		$conns = $o->connections_from(array(
-			"type" => RELTYPE_RECURRENCE,
+			"type" => "RELTYPE_RECURRENCE",
 		));
 		// iga asja kohta on vaja teada seda, et millal ta välja kutsutakse
 		$sch = get_instance("scheduler");

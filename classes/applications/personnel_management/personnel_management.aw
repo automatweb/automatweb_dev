@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.5 2005/03/18 12:20:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.6 2005/03/18 13:42:49 ahti Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -631,7 +631,7 @@ class personnel_management extends class_base
 		$jobs_conn = new connection();
 		$jobs_list = $jobs_conn->find(array(
 			"from" => $toopakkujad_ids,
-			"type" => RELTYPE_JOBS,
+			"type" => 19, //RELTYPE_JOBS,
 			"to.status" => STAT_ACTIVE,
 			//"deadline" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 		));

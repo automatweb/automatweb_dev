@@ -745,7 +745,7 @@ class group extends class_base
 
 	function on_add_alias_to_group($arr)
 	{
-		if ($arr["connection"]->prop("reltype") == RELTYPE_MEMBER)
+		if ($arr["connection"]->prop("reltype") == 2) //RELTYPE_MEMBER
 		{
 			// get the gid to what we must add the user
 			$gid = $this->users->get_gid_for_oid($arr["connection"]->prop("from"));
@@ -758,7 +758,7 @@ class group extends class_base
 			// we must also add an alias to the user object pointing to this group
 			$user->connect(array(
 				"to" => $group->id(),
-				"reltype" => 1 // RELTYPE_GRP from user
+				"reltype" => "RELTYPE_GRP" // from user
 			));
 
 			$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
@@ -784,13 +784,13 @@ class group extends class_base
 					// add an alias to the user to all parent groups
 					$p_o->connect(array(
 						"to" => $user->id(),
-						"reltype" => RELTYPE_MEMBER
+						"reltype" => "RELTYPE_MEMBER",
 					));
 
 					// add a reverse alias to the user for all groups
 					$user->connect(array(
 						"to" => $p_o->id(),
-						"reltype" => 1 // RELTYPE_GRP from user
+						"reltype" => "RELTYPE_GRP" // from user
 					));
 				}
 			}
@@ -923,13 +923,13 @@ class group extends class_base
 			// connection from user to group
 			$user->connect(array(
 				"to" => $p_o->id(),
-				"reltype" => 1 // RELTYPE_GRP
+				"reltype" => "RELTYPE_GRP",
 			));
 
 			// connection to group from user
 			$p_o->connect(array(
 				"to" => $user->id(),
-				"reltype" => 2 // RELTYPE_MEMBER
+				"reltype" => "RELTYPE_MEMBER",
 			));
 
 			// brother under group

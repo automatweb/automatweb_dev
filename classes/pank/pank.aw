@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.6 2005/03/18 12:24:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.7 2005/03/18 13:43:30 ahti Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -744,7 +744,7 @@ class pank extends class_base
 		
 		//now we have to get all the banking information for this company
 		$conns = $company->connections_to(array(
-						'type' => RELTYPE_OWNER
+			'type' => 1 //RELTYPE_OWNER
 		));
 	
 	}

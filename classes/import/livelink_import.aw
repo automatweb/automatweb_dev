@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.23 2005/01/28 14:06:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.24 2005/03/18 13:43:30 ahti Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -155,7 +155,7 @@ class livelink_import extends class_base
 			$o = new object($id);
 			$o->connect(array(
 				"to" => $file_id,
-				"reltype" => RELTYPE_LOGFILE,
+				"reltype" => "RELTYPE_LOGFILE",
 			));
 		};
 		//print "closing logfile<br>";
