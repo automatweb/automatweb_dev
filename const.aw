@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.12 2001/05/31 13:38:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.13 2001/05/31 21:26:48 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -323,6 +323,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_DOCUMENT => array("name" => "Dokument", "file" => "document", "can_add" => 1), 
 			CL_BROTHER_DOCUMENT => array("name" => "Dokument(vend)", "file" => "document", "can_add" => 1), 
 			CL_FORM		=> array("name" => "Form", "file" => "form","can_add" => 1),
+			CL_SHOP => array("name" => "Pood", "file" => "shop", "can_add" => 1),
+			CL_SHOP_ITEM => array("name" => "Kaubaartikkel", "file" => "shop_item", "can_add" => 1),
 			CL_TABLE	=> array("name" => "Tabel", "file" => "table","can_add" => 1), 
 			CL_IMAGE	=> array("name" => "Pilt", "file" => "images", "can_add" => 0), 
 			CL_FORM_ENTRY => array("name" => "Formi sisestus", "file" => "form_entry"),
@@ -356,8 +358,6 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_BANNER_PROFILE => array("name" => "Banneri profiil", "file" => "banner_profile", "can_add" => 1),
 			CL_BANNER_BUYER => array("name" => "Banneri klient", "file" => "banner_buyer", "can_add" => 1),
 			CL_BANNER_SITE => array("name" => "Banneri sait", "file" => "banner_site", "can_add" => 1),
-			CL_SHOP => array("name" => "Pood", "file" => "shop", "can_add" => 1),
-			CL_SHOP_ITEM => array("name" => "Kaubaartikkel", "file" => "shop_item", "can_add" => 1),
 			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0),
 			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1)
 );
