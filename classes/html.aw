@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.28 2003/03/12 16:28:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.29 2003/03/13 14:48:10 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -134,7 +134,7 @@ class html extends aw_template
 
 		if ($multiple)
 		{
-			if ($x = array_search(0,$options))
+			if (is_array($options) && ($x = array_search(0,$options)))
 			{
 				unset($options[$x]);
 			}
