@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="dns">
+		<action name="query_form" nologin="1">
+			<function name="query_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="query" nologin="1">
+			<function name="query">
+				<arguments>
+					<required name="host"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
