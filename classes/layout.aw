@@ -440,6 +440,10 @@ class layout extends class_base
 	// !returns the layout data that can be fed to grid editor. useful when you can select a default layout
 	function get_layout($oid)
 	{
+		if (!is_oid($oid))
+		{
+			return array();
+		}
 		$ob = new object($oid);
 		return $ob->meta("grid");
 	}
