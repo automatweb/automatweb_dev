@@ -47,14 +47,6 @@ class site_content extends menuedit
 
 		$meta = $obj["meta"];
 		
-		////
-		// Kui ksiti infot RDF-is, siis tagastame vastava v�jundi
-		// hm. Ja tegelikult peaks selle leldse kuhugi mujale viima.
-		if (isset($format) && $format == "rss")
-		{
-			die($this->do_rdf($section,$obj,$format,$docid));
-		}
-
 		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
@@ -2781,91 +2773,6 @@ class site_content extends menuedit
 		}
 
 		return $docid;
-	}
-	
-	function do_rdf($section,$obj,$format,$docid)
-	{
-		$baseurl = $this->cfg["baseurl"];
-		$ext = $this->cfg["ext"];
-		$rdf = get_instance("rdf",array(
-			"about" => "$baseurl/index.$ext/section=$section/format=rss",
-			"title" => $obj["name"],
-			"description" => $obj["description"],
-			"link" => "$baseurl/index.$ext/section=$section",
-		));
-
-		// read all the menus and other necessary info into arrays from the database
-		$this->make_menu_caches();
-
-		// leiame, kas on tegemist perioodilise rubriigiga
-		$periodic = $this->is_periodic($section);
-
-		// loome sisu
-		$d = get_instance("document");
-		if ($periodic) 
-		{
-			// if $section is a periodic document then emulate the current period for it
-			if ($obj["class_id"] == CL_PERIODIC_SECTION)
-			{
-				$activeperiod = $obj["period"];
-			}
-			else
-			{
-				$activeperiod = aw_global_get("act_per_id");
-			}
-			$d->set_period($activeperiod);
-			$d->list_docs($section, $activeperiod,2);
-			$cont = "";
-			if ($d->num_rows() > 1) 
-			{
-				while($row = $d->db_next()) 
-				{
-					$rdf->add_item($row);
-				};
-			} 
-			// on 1 doku
-			else 
-			{
-				$q = "SELECT docid,title,lead,author FROM documents WHERE docid = '$section'";
-				$this->db_query($q);
-				$row = $this->db_next();
-				$rdf->add_item($row);
-			} 
-		}
-		else 
-		{
-			// sektsioon pole perioodiline
-			if ($docid < 1) 
-			{
-				$docid = $this->get_default_document($section);
-			};
-
-			if (is_array($docid)) 
-			{
-				// I hate this. docid on dokumendi id,
-				// ja seda ei peaks arrayna kasutama
-				reset($docid);
-				while (list(,$did) = each($docid)) 
-				{
-					$q = "SELECT * FROM documents WHERE docid = '$did'";
-					$this->db_query($q);
-					$row = $this->db_next();
-					$rdf->add_item($row);
-				} 
-			} 
-			else 
-			{
-				$q = "SELECT * FROM documents WHERE docid = '$docid'";
-				$this->db_query($q);
-				$row = $this->db_next();
-				$rdf->add_item($row);
-			}
-		}
-
-		header("Content-Type: text/xml");
-		print $rdf->gen_output();
-		// I know, I know, it's damn ugly
-		die();
 	}
 	
 	////
