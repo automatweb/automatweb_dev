@@ -58,9 +58,8 @@ class date
 
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev");
-		// array starts from 0, estonian weekdays from 1
-		$num--;
+		// date("w") returns 0 for sunday, but for historical reasons should also work with 7
+		$names = array("pühapäev","esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev");
 		return $short ? substr($names[$num],0,1) : $names[$num];
 	}
 	

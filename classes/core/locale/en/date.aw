@@ -48,8 +48,8 @@ class date
 	
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("Monday","Tueday","Wednesday","Thursday","Friday","Saturday","Sunday");
-		$num--;
+		// date("w") returns 0 for sunday, but for historical reasons 7 should also be sunday
+		$names = array("Sunday","Monday","Tueday","Wednesday","Thursday","Friday","Saturday","Sunday");
 		return $short ? substr($names[$num],0,3) : $names[$num];
 	}
 
