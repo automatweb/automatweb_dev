@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>preview</field>
+            <caption>Näita</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_WORKBENCH</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
