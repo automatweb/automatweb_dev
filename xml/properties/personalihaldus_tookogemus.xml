@@ -16,6 +16,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>date_select</type>
+            <year_from>1930</year_from>
             <caption>Alates</caption>
       </property>
       <property>
@@ -25,6 +26,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>date_select</type>
+            <year_from>1930</year_from>
             <caption>Kuni</caption>
       </property>
       <property>
