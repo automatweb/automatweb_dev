@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.23 2004/09/09 11:14:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.1 2004/11/23 12:54:55 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -8,13 +8,15 @@
 	@default method=serialize
 	@default group=general
 
-	@property menus type=select multiple=1 size=15
+	@classinfo trans=1
+
+	@property menus type=select multiple=1 size=15 trans=1
 	@caption Menüüd
 
-	@property children_only type=checkbox value=1 ch_value=1
+	@property children_only type=checkbox ch_value=1 trans=1
 	@caption Ainult alammenüüd
 
-	@property template type=select 
+	@property template type=select trans=1
 	@caption Template
 
 */
@@ -74,7 +76,6 @@ class menu_tree extends class_base
 
 		$obj = obj($alias["target"]);
 		$menus = $obj->meta("menus");
-
 		$cho = $obj->meta("children_only");
 		$this->children_only = !empty($cho) ? true : false;
 		$tpl = ($obj->meta("template") ? $obj->meta("template") : "menu_tree.tpl");

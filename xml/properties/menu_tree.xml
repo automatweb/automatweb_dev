@@ -9,6 +9,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>15</size>
+            <trans>1</trans>
             <caption>Menüüd</caption>
       </property>
       <property>
@@ -18,8 +19,8 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <value>1</value>
             <ch_value>1</ch_value>
+            <trans>1</trans>
             <caption>Ainult alammenüüd</caption>
       </property>
       <property>
@@ -29,7 +30,11 @@
             <method>serialize</method>
             <group>general</group>
             <type>select</type>
+            <trans>1</trans>
             <caption>Template</caption>
       </property>
+      <classinfo>
+            <trans>1</trans>
+      </classinfo>
 </properties>
 
