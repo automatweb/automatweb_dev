@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.50 2002/08/28 09:35:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.51 2002/08/28 10:21:40 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -1422,6 +1422,7 @@ topic");
 		};
 		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+		$c = "";
 
 		// koigepealt tuleb koostada topicute nimekiri mingi foorumi all
 		$blist[] = 0;
@@ -1447,6 +1448,28 @@ topic");
 			{
 				$blist[] = $row["oid"];
 			};
+
+			// also search topics
+			if ($this->is_template("TOPIC_EVEN") && $this->is_template("TOPIC_ODD"))
+			{
+				$matlist = array();
+				$matches = array();
+				$q = "SELECT * FROM objects WHERE parent = '$board' $status AND class_id = ".CL_MSGBOARD_TOPIC." AND
+							createdby LIKE '%$from%' AND name LIKE '%$email%' AND comment LIKE '%$comment%'";
+				$this->db_query($q);
+				while ($row = $this->db_next())
+				{
+					$matlist[] = $row["oid"];
+					$matches[] = $row;
+				}
+				$this->comments = $this->_get_comment_counts($matlist);
+
+				foreach($matches as $row)
+				{
+					$row["meta"] = aw_unserialize($row["metadata"]);
+					$c .= $this->_draw_topic(array_merge($row,array("section" => $this->section)));
+				}
+			}
 		};
 		$bjlist = join(",",$blist);
 		// valjad: from,email,subj,comment
@@ -1460,7 +1483,6 @@ topic");
 			ORDER BY time DESC";
 		$this->db_query($q);
 		$cnt = 0;
-		$c = "";
 		while($row = $this->db_next())
 		{
 			$cnt++;
@@ -1478,6 +1500,8 @@ topic");
 			"count" => $cnt,
 			"message" => $c,
 			"TABS" => $tabs,
+			"TOPIC_EVEN" => "",
+			"TOPIC_ODD" => ""
 		));
 		return $this->parse();
 
