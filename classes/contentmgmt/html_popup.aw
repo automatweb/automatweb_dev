@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.8 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.9 2005/04/04 09:30:47 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
@@ -203,7 +203,7 @@ class html_popup extends class_base
 		}
 		else
 		{
-			$url = $this->mk_my_orb("show", array("id" => $o->prop("show_obj"), "no_menus" => 1), "objects");
+			$url = $this->mk_my_orb("show", array("id" => $o->prop("show_obj"), "print" => 1), "objects");
 
 			if (!(is_oid($o->meta("show_obj")) && $this->can("view", $o->meta("show_obj"))))
 			{
@@ -216,7 +216,7 @@ class html_popup extends class_base
 			}
 			else
 			{
-				$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects");
+				$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "print" => 1), "objects");
 			}
 
 			$rv .= sprintf("<script type='text/javascript'>window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=%s,width=%s,height=%s');</script>", $url, (int)$o->prop("scrollbars"), (int)$o->prop("width"), (int)$o->prop("height"));
