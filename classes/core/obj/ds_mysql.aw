@@ -588,6 +588,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->sby = "";
 		$this->limit = "";
 
+		$this->meta_filter = array();
+
 		$where = $this->req_make_sql($params);
 
 		if (!$this->stat)
@@ -624,7 +626,31 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$ret[$row["oid"]] = $row["oid"];
+				if ($this->can("view", $row["oid"]))
+				{
+					$ret[$row["oid"]] = $row["oid"];
+				}
+			}
+		}
+
+		if (count($this->meta_filter) > 0)
+		{
+			foreach($ret as $roid)
+			{
+				$add = true;
+				$_o = new object($roid);
+				foreach($this->meta_filter as $mf_k => $mf_v)
+				{
+					if ($_o->meta($mf_k) != $mf_v)
+					{
+						$add = false;
+					}
+				}
+
+				if (!$add)
+				{
+					unset($ret[$roid]);
+				}
 			}
 		}
 		return $ret;
@@ -675,11 +701,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$tbl = $this->properties[$key]["table"];
 				$fld = $this->properties[$key]["field"];
-				if ($fld == "meta" || $this->properties[$key]["method"] == "serialize")
+				if ($fld == "meta")
+				{
+					$this->meta_filter[$key] = $val;
+					continue;
+				}
+				else
+				if ($this->properties[$key]["method"] == "serialize")
 				{
 					error::throw(array(
 						"id" => ERR_FIELD,
-						"msg" => "filter cannot contain properties ($key) that are in metadata or serialized fields!"
+						"msg" => "filter cannot contain properties ($key) that are in serialized fields other than metadata!"
 					));
 				}
 			}
