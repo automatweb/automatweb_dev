@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.3 2004/11/24 11:03:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.4 2004/12/07 13:49:16 ahti Exp $
 // rate_moderation.aw - Hindamise modereerimine 
 /*
 
@@ -71,7 +71,7 @@ class rate_moderation extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name" => "active",
-					"tooltip" => "Salvesta muudatused",
+					"tooltip" => t("Salvesta muudatused"),
 					"img" => "save.gif",
 					"action" => "mod_images",
 				));
@@ -79,21 +79,7 @@ class rate_moderation extends class_base
 		}
 		return $retval;
 	}
-
-	/*
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			case "mod_image":
-				break;
-		}
-		return $retval;
-	}
-	*/
-		
+	
 	function show_mod_table($arr)
 	{
 		$age = 600;
@@ -125,13 +111,13 @@ class rate_moderation extends class_base
 		}
 		$array = array(
 			"id" => "ID",
-			"img" => "Pilt",
-			"added" => "Lisatud",
-			"user" => "Kasutaja",
-			"name" => "Nimi",
-			"desc" => "Kirjeldus",
-			"comment" => "Kommentaar",
-			"status" => "Staatus",
+			"img" => t("Pilt"),
+			"added" => t("Lisatud"),
+			"user" => t("Kasutaja"),
+			"name" => t("Nimi"),
+			"desc" => t("Kirjeldus"),
+			"comment" => t("Kommentaar"),
+			"status" => t("Staatus"),
 		);
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
@@ -161,9 +147,9 @@ class rate_moderation extends class_base
 		$imgs = new object_list($props);
 		$img_i = get_instance(CL_IMAGE);
 		$array = array(
-			0 => "Ei muuda",
-			STAT_ACTIVE => "Aktiveeri",
-			STAT_NOTACTIVE => "Lükka tagasi",
+			0 => t("Ei muuda"),
+			STAT_ACTIVE => t("Aktiveeri"),
+			STAT_NOTACTIVE => t("Lükka tagasi",)
 		);
 		aw_session_set($pcs, $this->make_keys($imgs->ids()));
 		aw_session_set($tm, time());

@@ -58,9 +58,4 @@
 		<td align="center" valign="middle" class="rate_rowbgcolor_odd">{VAR:item7}</td>
 		<td align="center" valign="middle" class="rate_rowbgcolor_even">{VAR:item8}</td>
 	</tr>
-	<tr>
-		<td align="center" valign="middle" class="rate_rowbgcolor_odd">{VAR:item9}</td>
-		<td align="center" valign="middle" class="rate_rowbgcolor_even">{VAR:item9}</td>
-		<td align="center" valign="middle" class="rate_rowbgcolor_odd">{VAR:item10}</td>
-	</tr>
 </table>

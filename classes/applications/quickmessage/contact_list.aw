@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.4 2004/11/30 12:40:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.5 2004/12/07 13:49:17 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -80,10 +80,10 @@ class contact_list extends class_base
 				*/
 				$prop["vcl_inst"]->add_button(array(
             		"name" => "delete",
-            		"tooltip" => "Kustuta kontakte",
+            		"tooltip" => t("Kustuta kontakte"),
             		"img" => "delete.gif",
             		"action" => "delete",
-					"confirm" => "Oled kindel, et tahad valitud eemaldada?",
+					"confirm" => t("Oled kindel, et tahad valitud eemaldada?"),
         		));
 				break;
 			case "contact_list":
@@ -166,11 +166,11 @@ class contact_list extends class_base
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "E-post",
+			"caption" => t("E-post"),
 		));
 		$t->define_field(array(
 			"name" => "sendmessage",
@@ -219,7 +219,7 @@ class contact_list extends class_base
 				)),
 				"sendmessage" => html::href(array(
 					"url" => $message,
-					"caption" => "Saada sõnum",
+					"caption" => t("Saada sõnum"),
 				)),
 			));
 		}

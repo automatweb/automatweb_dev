@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.5 2004/11/30 12:40:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.6 2004/12/07 13:49:16 ahti Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
@@ -89,7 +89,7 @@ class quickmessagebox extends class_base
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name"		=> "new",
-					"tooltip"	=> "Uus kiri",
+					"tooltip"	=> t("Uus kiri"),
 					"img"		=> "class_20.gif",
 					"url"	=> html::get_change_url($arr["request"]["id"], array(
 					"group" => "newmessage",
@@ -101,7 +101,7 @@ class quickmessagebox extends class_base
 					$users = get_instance("users");
 					$tb->add_button(array(
 						"name"		=> "answer",
-						"tooltip"	=> "Vasta kirjale",
+						"tooltip"	=> t("Vasta kirjale"),
 						"img"		=> "edit.gif",
 						"url"		=> html::get_change_url($arr["request"]["id"], array(
 							"cuser" => $users->get_uid_for_oid($o->prop("user_from")),
@@ -113,7 +113,7 @@ class quickmessagebox extends class_base
 					$tb->add_separator();
 					$tb->add_button(array(
 						"name"		=> "forward",
-						"tooltip"	=> "Edasta kiri",
+						"tooltip"	=> t("Edasta kiri"),
 						"img"		=> "mail_send.gif",
 						"url"		=> html::get_change_url($arr["request"]["id"], array(
 							"mid" => $arr["request"]["mid"],
@@ -124,7 +124,7 @@ class quickmessagebox extends class_base
 					$tb->add_separator();
 					$tb->add_button(array(
 						"name"		=> "archive",
-						"tooltip"	=> "Arhiveeri valitud kirjad",
+						"tooltip"	=> t("Arhiveeri valitud kirjad"),
 						"img"		=> "archive.gif",
 						"url"		=> html::get_change_url($arr["request"]["id"], array(
 							"group" => $arr["request"]["group"],
@@ -136,7 +136,7 @@ class quickmessagebox extends class_base
 					$tb->add_separator();
 					$tb->add_button(array(
 						"name"		=> "delete",
-						"tooltip"	=> "Kustuta valitud kirjad",
+						"tooltip"	=> t("Kustuta valitud kirjad"),
 						"img"		=> "delete.gif",
 						"url"		=> "javascript:window.location='".html::get_change_url($arr["request"]["id"], array(
 							"group" => $arr["request"]["group"],
@@ -144,24 +144,24 @@ class quickmessagebox extends class_base
 							"mid" => $arr["request"]["mid"],
 							"sel[".$arr["request"]["mid"]."]" => $arr["request"]["mid"],
 						))."'",
-						"confirm" => "oled sa kindel, et tahad valitud kirja kustutada?",
+						"confirm" => t("oled sa kindel, et tahad valitud kirja kustutada?"),
 					));
 				}
 				else
 				{
 					$tb->add_button(array(
 						"name"		=> "archive",
-						"tooltip"	=> "Arhiveeri valitud kirjad",
+						"tooltip"	=> t("Arhiveeri valitud kirjad"),
 						"img"		=> "archive.gif",
 						"action"	=> "archive_message",
 					));
 					$tb->add_separator();
 					$tb->add_button(array(
 						"name"		=> "delete",
-						"tooltip"	=> "Kustuta valitud kirjad",
+						"tooltip"	=> t("Kustuta valitud kirjad"),
 						"img"		=> "delete.gif",
 						"action"	=> "delete_message",
-						"confirm" => "Oled kindel, et tahad valitud kirjad kustutada?",
+						"confirm" => t("Oled kindel, et tahad valitud kirjad kustutada?"),
 					));
 				}
 			break;
@@ -279,19 +279,19 @@ class quickmessagebox extends class_base
 			), $user_from ? $user_from : " "),
 		));
 		$t->define_data(array(
-			"name" => "Kellele",
+			"name" => t("Kellele"),
 			"content" => implode(", ", $user_to),
 		));
 		$t->define_data(array(
-			"name" => "Saadetud",
+			"name" => t("Saadetud"),
 			"content" => get_lc_date($o->created(), 7),
 		));
 		$t->define_data(array(
-			"name" => "Pealkiri",
+			"name" => t("Pealkiri"),
 			"content" => $o->prop("subject"),
 		));
 		$t->define_data(array(
-			"name" => "Sisu",
+			"name" => t("Sisu"),
 			"content" => nl2br($o->prop("content")),
 		));
 	}
@@ -332,9 +332,9 @@ class quickmessagebox extends class_base
 		$messages = array_slice($messages, ($ft_page * $r_on_page), $r_on_page);
 		$fields = array(
 			"id" => "ID",
-			"time" => "Aeg",
-			"user" => "Kasutaja",
-			"subject" => "Pealkiri",
+			"time" => t("Aeg"),
+			"user" => t("Kasutaja"),
+			"subject" => t("Pealkiri"),
 		);
 		foreach($fields as $key => $value)
 		{
@@ -374,7 +374,7 @@ class quickmessagebox extends class_base
 		$sent = aw_global_get("has_sent_message");
 		if(!empty($sent))
 		{
-			$msg = $sent == 1 ? "teadet ei õnnestunud saata, proovi uuesti" : "teade edukalt kohale toimetatud!";
+			$msg = $sent == 1 ? t("teadet ei õnnestunud saata, proovi uuesti") : t("teade edukalt kohale toimetatud!");
 			aw_session_del("has_sent_message");
 			$gotit_props["one"] = array(
 				"name" => "has_msg",
@@ -434,7 +434,7 @@ class quickmessagebox extends class_base
 				$users = get_instance("users");
 				$user_from = $users->get_uid_for_oid($o->prop("user_from"));
 				$gotit_props["subject"]["value"] = "Fwd: ".$o->prop("subject");
-				$gotit_props["content"]["value"] = $user_from." kirjutas:\n".$o->prop("content");
+				$gotit_props["content"]["value"] = $user_from." ".t("kirjutas").":\n".$o->prop("content");
 			}
 			else
 			{

@@ -73,18 +73,13 @@ class image_rate extends class_base
 	
 	function init_rate($arr)
 	{
-		//arr(aw_global_get("rated_objs"));
 		$user_id = aw_global_get("uid_oid");
 		if(!empty($user_id))
 		{
 			$user = obj($user_id);
 			$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
-			//$view = $person->meta("view_conditions");
 			$browse = $person->meta("browsing_conditions");
 		}
-		//aw_session_del("rated_objs");
-		//arr($view);
-		//arr($browse);
 		$w = "";
 		$x = array();
 		if(is_array($browse["sexorient"]))
@@ -168,11 +163,9 @@ class image_rate extends class_base
 		{
 			$var[] = $value;
 		}
-		//arr($var);
 		$true = false;
 		$count = count($var);
 		shuffle($var);
-		//arr($var);
 		while(!$true)
 		{
 			$count--;
@@ -205,16 +198,12 @@ class image_rate extends class_base
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
-		if($prop["name"] == "first1" && $this->no_picture)
-		{
-			return PROP_OK;
-		}
 		if($this->no_picture)
 		{
 			return PROP_IGNORE;
 		}
 		$params = array(
-			"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+			"id" => $_GET["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
 			"person" => $this->person_data->id(),
 		);
 		switch($prop["name"])
@@ -222,7 +211,7 @@ class image_rate extends class_base
 			case "name":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"id" => $GLOBALS["id"],
+						"id" => $_GET["id"],
 						"profile" => $this->profile_data->id(),
 						"group" => "friend_details",
 					), "commune"),
@@ -237,7 +226,7 @@ class image_rate extends class_base
 				unset($smparams["person"]);
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("change", $smparams, "commune"),
-					"caption" => "Saada sõnum",
+					"caption" => t("Saada sõnum"),
 				));
 				break;
 			case "add_friend_link":
@@ -247,7 +236,7 @@ class image_rate extends class_base
 				);
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("commaction", $afparams, "commune"),
-					"caption" => "lisa sõprade hulka",
+					"caption" => t("lisa sõprade hulka"),
 				));
 				break;
 			case "add_ignored_link":
@@ -257,7 +246,7 @@ class image_rate extends class_base
 				);
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("commaction", $aiparams, "commune"),
-					"caption" => "Ignoreeri",
+					"caption" => t("Ignoreeri"),
 				));
 				break;
 			case "add_blocked_link":
@@ -267,7 +256,7 @@ class image_rate extends class_base
 				);
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("commaction", $abparams, "commune"),
-					"caption" => "Blokeeri",
+					"caption" => t("Blokeeri"),
 				));
 				break;
 			case "contact_list_link":
@@ -277,7 +266,7 @@ class image_rate extends class_base
 				);
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("commaction", $clparams, "commune"),
-					"caption" => "Lisa kontaktidesse",
+					"caption" => t("Lisa kontaktidesse"),
 				));
 				break;
 				
@@ -301,7 +290,7 @@ class image_rate extends class_base
 			case "rate":
 				$scale = get_instance(CL_RATE_SCALE);
 				$scl = $scale->get_scale_for_obj($this->image_data->id());
-				$commune = obj($GLOBALS["id"]);
+				$commune = obj($_GET["id"]);
 				$me = obj(aw_global_get("uid_oid"));
 				$q = "SELECT SUM(sum) AS kokku FROM rate_sum WHERE oid = '".$me->id()."'";
 				$val = $this->db_fetch_field($q, "kokku");
@@ -329,24 +318,11 @@ class image_rate extends class_base
 			case "comments":
 				//var_dump(aw_global_get("uid")); //mitte sisse logituna: bool(false)
 				$prop["use_parent"] = $this->image_data->id();
-				$prop["head_text"] = "pildi";
+				$prop["head_text"] = t("pildi");
 				break;
 
 		};
 		return PROP_OK;
-	}
-	
-	function callback_check($arr)
-	{
-		if($this->no_picture)
-		{
-			return array("one" => array(
-				"name" => "first1",
-				"type" => "text",
-				"no_caption" => 1,
-				"value" => "Ei õnnestunud pilti kuvada.",
-			));
-		}
 	}
 };
 ?>

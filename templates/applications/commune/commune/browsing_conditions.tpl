@@ -3,7 +3,7 @@
 <table border="0" align="center" width="100%" class="text">
 <tr>
 <td align="center">
-<input type="submit" name="submit" value="Muuda sätteid" class="aw04formbutton" onClick="submit_changeform2('');" return false;">
+<input type="submit" name="change_options" value="Muuda sätteid" class="aw04formbutton" onClick="submit_changeform2('');" return false;">
 </td>
 </tr>
 </table>
