@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.28 2003/01/27 10:47:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.29 2003/02/03 18:14:09 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -4213,7 +4213,7 @@ class form extends form_base
 		{
 			if ($k != $id)
 			{
-				$_tmp[$k] = $v;
+				$_tmp[$k] = "(".$id.") ".$v;
 			}
 		}
 
