@@ -8,6 +8,7 @@
 					<optional name="id"/>
 					<optional name="msg_id"/>
 					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>

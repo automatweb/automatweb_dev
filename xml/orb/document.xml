@@ -5,7 +5,7 @@
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
-					<required name="period"/>
+					<optional name="period"/>
 				</arguments>
 			</function>
 		</action>

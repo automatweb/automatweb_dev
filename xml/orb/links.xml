@@ -5,7 +5,8 @@
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
-					<optional name="docid"/>
+					<optional name="alias_to"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
@@ -23,8 +24,8 @@
 			<function name="change">
 				<arguments>
 					<required name="id"/>
-					<optional name="docid"/>
 					<optional name="parent"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>

@@ -6,7 +6,7 @@
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
-					<optional name="alias_doc"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
