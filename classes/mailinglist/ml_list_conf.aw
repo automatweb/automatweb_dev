@@ -93,7 +93,9 @@ class ml_list_conf extends aw_template
 				"name_els" => $this->make_keys($name_els),
 				"form_jrk" => $jrk,
 				"mailto_el" => $mailto_el,
-				"mailto_el_form" => $mailto_el_form
+				"mailto_el_form" => $mailto_el_form,
+				"name_els_ord" => $name_els_ord,
+				"name_els_post" => $name_els_post,
 			)
 		));
 
@@ -154,7 +156,13 @@ class ml_list_conf extends aw_template
 			$this->vars(array(
 				"elname" => $eln,
 				"elid" => $elid,
-				"is_name_el" => checked($ob["meta"]["name_els"][$elid])
+				"is_name_el" => checked($ob["meta"]["name_els"][$elid]),
+				"ord" => $ob['meta']['name_els_ord'][$elid],
+				"post" => $ob['meta']['name_els_post'][$elid]
+			));
+			$this->vars(array(
+				"EL_ORD" => ($ob["meta"]["name_els"][$elid] ? $this->parse("EL_ORD") : ""),
+				"EL_SEP" => ($ob["meta"]["name_els"][$elid] ? $this->parse("EL_SEP") : "")
 			));
 			$e.= $this->parse("ELEMENT");
 		}
@@ -272,6 +280,20 @@ class ml_list_conf extends aw_template
 	{
 		$ob = $this->get_object($id);
 		$ar = new aw_array($ob["meta"]["name_els"]);
+		return $ar->get();
+	}
+
+	function get_name_els_order($id)
+	{
+		$ob = $this->get_object($id);
+		$ar = new aw_array($ob["meta"]["name_els_ord"]);
+		return $ar->get();
+	}
+
+	function get_name_els_seps($id)
+	{
+		$ob = $this->get_object($id);
+		$ar = new aw_array($ob["meta"]["name_els_post"]);
 		return $ar->get();
 	}
 
