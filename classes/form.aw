@@ -1,16 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.108 2002/07/23 05:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.109 2002/07/23 12:59:04 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
 // filling them and processing the results. It's needed to complete our plan to take over the world.
 lc_load("automatweb");
 
-classload("form_base","form_element","form_entry_element","form_search_element","form_cell","images","style","acl");
+classload("form_base","form_element","form_entry_element","form_search_element","form_cell","acl");
 classload("form_filter_search_element","form_table","form_controller");
-
-// see on kasutajate registreerimiseks. et pannaxe kirja et mis formid tyyp on t2itnud.
-session_register("session_filled_forms");
 
 // constants for get_elements_for_row - specify wheter the return array is 
 // element_name => element_value
@@ -30,23 +27,13 @@ class form extends form_base
 	{
 		$this->form_base();
 
-		$this->lc_load("form","lc_form");
-
 		$this->sub_merge = 1;
-
-		$this->typearr = array(
-			FTYPE_ENTRY => FG_ENTRY_FORM, 
-			FTYPE_SEARCH => FG_SEARCH_FORM, 
-			FTYPE_RATING => FG_RATING_FORM,
-			FTYPE_FILTER_SEARCH => "Filtri otsinguform",
-		);
 
 		// these types are used in the "add new form" page 
 		// feel free to move them to the ini file
 		$this->ftypes = array(
 			FTYPE_ENTRY => $this->vars["LC_FORMS_TYPE_ENTRY"],
 			FTYPE_SEARCH => $this->vars["LC_FORMS_TYPE_SEARCH"],
-//			FTYPE_RATING => $this->vars["LC_FORMS_TYPE_RATING"],
 			FTYPE_FILTER_SEARCH => $this->vars["LC_FORMS_TYPE_FILTER_SEARCH"],
 			FTYPE_CONFIG => $this->vars["LC_FORMS_TYPE_CONFIG"],
 		);
@@ -58,10 +45,8 @@ class form extends form_base
 
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = new form_controller;
+			$this->controller_instance = get_instance("form_controller");
 		}
-
-		lc_load("definition");
 	}
 
 	////
@@ -255,11 +240,9 @@ class form extends form_base
 		extract($arr);
 		$this->init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
 
-		classload("style");
-		$style = new style;
+		$style = get_instance("style");
 		$stylesel = $style->get_select(0,ST_CELL,true);
-		classload("css");
-		$css = new css;
+		$css = get_instance("css");
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -314,8 +297,7 @@ class form extends form_base
 			$this->vars(array("COL" => $cols));
 			$this->parse("LINE");
 		}
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
@@ -423,7 +405,6 @@ class form extends form_base
 
 		$this->arr["allow_html"] = $allow_html;
 		$this->arr["def_style"] = $def_style;
-		$this->arr["submit_text"] = $submit_text;
 		$this->arr["after_submit"] = $after_submit;
 		$this->arr["after_submit_text"] = $after_submit_text;
 		$this->arr["after_submit_link"] = $after_submit_link;
@@ -748,14 +729,14 @@ class form extends form_base
 
 	////
 	// !Generates the form used in modifying the table settings
+	// TODO: move to separate class
 	function gen_settings($arr)
 	{
 		extract($arr);
 		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
-		classload("style");
-		$t = new style;
-		$o = new db_objects;
+		$t = get_instance("style");
+		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
 
@@ -843,8 +824,7 @@ class form extends form_base
 			$this->load($id);
 		};
 
-		// XXX: 11?
-		if (!($this->can("view",$id) || $this->cfg["site_id"] == 11))
+		if (!($this->can("view",$id)))
 		{
 			$this->acl_error("view",$id);
 		}
@@ -893,7 +873,7 @@ class form extends form_base
 		else
 		if (isset($entry_id) && $entry_id)
 		{
-			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)  || $this->cfg["site_id"] == 11))
+			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)))
 			{
 				$this->acl_error("edit",$entry_id);
 			}
@@ -905,7 +885,7 @@ class form extends form_base
 			if ($load_entry_data)
 			{
 				$lf_fid = $this->get_form_for_entry($load_entry_data);
-				$lf_fm = new form;
+				$lf_fm = get_instance("form");
 				$lf_fm->load($lf_fid);
 				$lf_fm->load_entry($load_entry_data);
 				$lf_els = $lf_fm->get_all_els();
@@ -935,32 +915,27 @@ class form extends form_base
 				{
 					$elvalues = array();
 				}
-				classload("users");
-				$u = new users;
+				$u = get_instance("users");
 				$elvalues=$elvalues + $u->get_user_info(aw_global_get("uid"));
 			}
 		}
 
-		$method = $method != "" ? $method : "POST";
-		$tpl = isset($tpl) ? $tpl : "show.tpl";
-		$this->read_template($tpl,1);
+		$this->read_template((isset($tpl) ? $tpl : "show.tpl"),1);
+
 		$this->vars(array(
 			"form_id" => $id,
-			"method" => $method
+			"method" => ($method != "" ? $method : "POST")
 		));
-		$images = new db_images;
-
-		$c="";
-		$chk_js = "";
 
 		aw_global_set("fg_check_status",false);
-
 		if ($this->arr["check_status"])
 		{
 			aw_global_set("fg_check_status",true);
 			$this->vars(array("check_status_text" => $this->arr["check_status_text"]));
 		};
 
+		$c="";
+		$chk_js = "";
 		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
 			$html=$this->mk_row_html($i,$prefix,$elvalues,$no_submit);
@@ -977,31 +952,9 @@ class form extends form_base
 			}
 		}
 
-		$pic = "";
-		if ($this->entry_id)
-		{
-			$images->list_by_object($this->entry_id);
-			while ($row = $images->db_next())
-			{
-				$this->vars(array("img_idx" => $row["idx"],"img_id" => $row["oid"]));
-				$pic.=$this->parse("IMAGE");
-			}
-		}
-
-		$ip ="";
-
-		if ($this->entry_id != 0)	// images can only be added after the place is entered for the first time
-		{
-			$this->vars(array("IMAGE" => $pic, "url"	=> aw_global_get("REQUEST_URI")));
-			$ip = $this->parse("IMG_WRAP");
-		}
-
 		$this->vars(array("var_name" => "entry_id", "var_value" => $this->entry_id));
-
 		$ei = $this->parse("EXTRAIDS");
-
 		$this->vars(array("var_name" => "return_url", "var_value" => aw_global_get("REQUEST_URI")));
-
 		$ei .= $this->parse("EXTRAIDS");
 
 		if (isset($extraids) && is_array($extraids))
@@ -1014,58 +967,23 @@ class form extends form_base
 			}
 		}
 
-		$check = $this->parse("stat_check_sub");
-
-		// siia array sisse pannaxe css stiilide nimed ja id'd form_cell::gen_user_html sees, mis vaja genereerida
-		if (is_array($this->styles))
-		{
-			$css_file = "";
-			classload("css");
-			$css = new css;
-			$used = array();
-			foreach($this->styles as $stylid => $stylname)
-			{
-				if ($used[$stylid] != 1)
-				{
-					$used[$stylid] = 1;
-					$css_info = $this->get_obj_meta($stylid);
-					$css_file .= $css->_gen_css_style($stylname,$css_info["meta"]["css"]);
-				}
-			}
-		}
-
-		$this->vars(array(
-			"LINE"						=> $c,
-			"EXTRAIDS"					=> $ei,
-			"IMG_WRAP"					=> $ip, 
-			"form_action"				=> $form_action,
-			// lauri muudetud-> formtag_name on formi tagi nimi kuhu see form parsitakse
-			"formtag_name"				=> $formtag_name,
-			"submit_text"				=> isset($this->arr["submit_text"]) ? $this->arr["submit_text"] : "",
-			"reforb"						=> $reforb,
-			"checks"						=> $chk_js,
-			"stat_check_sub" => (aw_global_get("fg_check_status")) ? $check : "",
-			"ch_link" => $this->mk_my_orb("change",array("id" => $id),"form",1,1),
-		));
-
-		classload("style");
-		$st = new style;
+		$tblstring = "";
 		if ($this->arr["tablestyle"])
 		{
-			$s = $st->get($this->arr["tablestyle"]);
-			$s = unserialize($s["style"]);
+			$st = get_instance("style");
+			$tblstring = $st->get_table_string($this->arr["tablestyle"]);
 		}
 
 		$this->vars(array(
-			"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
-			"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
-			"form_cellpadding"	=> (isset($s["cellpadding"]) && $s["cellpadding"] != "" ? " CELLPADDING='".$s["cellpadding"]."'" : ""),
-			"form_cellspacing"	=> (isset($s["cellspacing"]) && $s["cellspacing"] != "" ? " CELLSPACING='".$s["cellspacing"]."'" : ""),
-			"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : ""),
-			"form_width"				=> (isset($s["width"]) && $s["width"] != "" ? " WIDTH='".$s["width"]."'" : "" ),
-			"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : "" ),
-			"form_vspace"				=> (isset($s["vspace"]) && $s["vspace"] != "" ? " VSPACE='".$s["vspace"]."'" : ""),
-			"form_hspace"				=> (isset($s["hspace"]) && $s["hspace"] != "" ? " HSPACE='".$s["hspace"]."'" : ""),
+			"tblstring" => $tblstring,
+			"LINE" => $c,
+			"EXTRAIDS" => $ei,
+			"form_action" => $form_action,
+			"formtag_name" => $formtag_name, // lauri muudetud-> formtag_name on formi tagi nimi kuhu see form parsitakse
+			"reforb" => $reforb,
+			"checks" => $chk_js,
+			"stat_check_sub" => (aw_global_get("fg_check_status")) ? $this->parse("stat_check_sub") : "",
+			"ch_link" => $this->mk_my_orb("change",array("id" => $id),"form",1,1),
 		));
 
 		if ($this->can("edit",$id))
@@ -1077,8 +995,21 @@ class form extends form_base
 
 		$st = $this->parse();				
 
-		if ($css_file != "")
+		// siia array sisse pannaxe css stiilide nimed ja id'd form_cell::gen_user_html sees, mis vaja genereerida
+		if (is_array($this->styles))
 		{
+			$css_file = "";
+			$css = get_instance("css");
+			$used = array();
+			foreach($this->styles as $stylid => $stylname)
+			{
+				if ($used[$stylid] != 1)
+				{
+					$used[$stylid] = 1;
+					$css_info = $this->get_obj_meta($stylid);
+					$css_file .= $css->_gen_css_style($stylname,$css_info["meta"]["css"]);
+				}
+			}
 			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
 		}
 
@@ -1147,12 +1078,11 @@ class form extends form_base
 		{
 			$this->load_entry($entry_id);
 		}
+		$this->entry_id = $entry_id;
 
 		// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
-
-		$this->entry_id = $entry_id;
 
 		// do we have to validate this entry against a calendar?
 		// FIXME: this check should be in the form_calendar class
@@ -1212,8 +1142,7 @@ class form extends form_base
 
 			// and now for the easy part (hah!), ask the calendar to check whether there are enough vacancies in
 			// the required time window
-			classload("form_calendar");
-			$fc = new form_calendar();
+			$fc = get_instance("form_calendar");
 
 			$cal_id = ($this->post_vars["load_chain_data"]) ? $this->post_vars["load_chain_data"] : $chain_entry_id;
 
@@ -1344,7 +1273,7 @@ class form extends form_base
 				"chain_entry_id" => $chain_entry_id,
 				"cal_id"  => $cal_id,
 			));
-			
+		
 			if ($this->type == FTYPE_CONFIG)
 			{
 				// remember obj_id
@@ -1355,7 +1284,6 @@ class form extends form_base
 			}
 
 			
-
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
@@ -1406,9 +1334,9 @@ class form extends form_base
 		}
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
-		$GLOBALS["session_filled_forms"][$this->id] = $this->entry_id;
-
-		$ext = $this->cfg["ext"];
+		$sff = aw_global_get("session_filled_forms");
+		$sff[$this->id] = $this->entry_id;
+		aw_session_set("session_filled_forms", $sff);
 
 		if (isset($redirect_after) && $redirect_after)
 		{
@@ -1511,11 +1439,10 @@ class form extends form_base
 	// if $no_load_entry == true, the loaded entry is used
 	// if $no_load_op == true, the loaded output is used
 	// optional - search_el and search_val - if then does a search using only that element and value
+	// optional - load_chain_data / load_entry_data - fills the form with values from those entries (matches element names)
 	function show($arr)
 	{
 		extract($arr);
-		// FIXME: blergh!
-		global $load_chain_data;
 		$lcd = $load_chain_data;
 
 		// if reset argument is set, zero out all data that has been gathered inside templates
@@ -1526,13 +1453,12 @@ class form extends form_base
 
 		if (!$no_load_entry && $id)
 		{
-			if (!($this->can("view",$id)  || $this->cfg["site_id"] == 11))
+			if (!($this->can("view",$id)))
 			{
 				$this->acl_error("view",$id);
 			}
 			$this->load($id);
 		}
-
 
 		// if this is a search form, then search, instead of showing the entered data
 		if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
@@ -1542,7 +1468,7 @@ class form extends form_base
 
 		if (!$no_load_op)
 		{
-			if (!($this->can("view",$op_id)  || $this->cfg["site_id"] == 11))
+			if (!($this->can("view",$op_id)))
 			{
 				$this->acl_error("view",$op_id);
 			}
@@ -1552,7 +1478,7 @@ class form extends form_base
 		// if it is set for this op that it is to be loaded from the session then get the entry id for the form
 		if ($this->output["session_value"] && !$entry_id)
 		{
-			global $session_filled_forms;
+			$session_filled_forms = aw_global_get("session_filled_forms");
 			$entry_id = $session_filled_forms[$this->output["session_form"]];
 			if (!$entry_id)
 			{
@@ -1564,7 +1490,7 @@ class form extends form_base
 				$this->raise_error(ERR_F_OP_NO_SESSION_FORM,"Sessioonist lugemise formi pole valitud v&auml;ljundile $op_id ",true);
 			}
 
-			if (!($this->can("view",$id)  || $this->cfg["site_id"] == 11))
+			if (!($this->can("view",$id)))
 			{
 				$this->acl_error("view",$id);
 			}
@@ -1573,18 +1499,11 @@ class form extends form_base
 
 		if (!$no_load_entry)
 		{
-			if (!($this->can("view",$entry_id)  || $this->cfg["site_id"] == 11))
+			if (!($this->can("view",$entry_id)))
 			{
 				$this->acl_error("view",$entry_id);
 			}
 			$this->load_entry($entry_id);
-			if (is_array($misc))
-			{
-				foreach($misc as $key => $val)
-				{
-					$this->set_element_value($key, $val);
-				};
-			}
 		}
 		else
 		{
@@ -1600,11 +1519,7 @@ class form extends form_base
 			$this->read_template("show_user.tpl");
 		}
 	
-		// I think that commenting out those 2 will give us a tiny win in the speed.
-		//$this->add_hit($entry_id);
-		//$this->add_hit($op_id);
-
-		$t_style = new style();
+		$t_style = get_instance("style");
 		// kui on tabeli stiil m22ratud v2ljundile, siis kasutame seda, kui pole, siis vaatame kas sellele formile on 
 		// m22ratud default stiil ja kui on, siis kasutame seda
 		$fcol_style = 0;
@@ -1789,7 +1704,7 @@ class form extends form_base
 
 	function get_location()
 	{
-		if ($this->type == 2)
+		if ($this->type == FTYPE_SEARCH)
 		{
 			return "search_results";
 		}
@@ -1798,8 +1713,6 @@ class form extends form_base
 		{
 			case 1:
 				return "edit";
-			case 2:
-				return "text";
 			case 3:
 				return "redirect";
 			case 4:
@@ -1907,14 +1820,17 @@ class form extends form_base
 
 		// we let the user pick one - either the form searches from a form chain 
 		// or it searches from several forms
-		// if the use picks several forms, they will be checked, whether it is possible to bind them all together via relation elements
+		// if the user picks several forms, they will be checked, whether it is possible to bind them all together via relation elements
 		// if not, the user is notified of the error and the selection will not be saved
 		// after successfully selecting some forms the user will be able to select the output to use when showing the search results
 		// 
 		// if the user picks that the form searches from a chain 
 		// he can select the chain and after saving also select the output with what the data will be shown
 
-		global $status_msg,$form_selsearch_data,$form_selsearch_error;
+		$status_msg = aw_global_get("status_msg");
+		$form_selsearch_error = aw_global_get("form_selsearch_error");
+		$form_selsearch_data  = aw_global_get("form_selsearch_data");
+
 		if ($form_selsearch_error == 1)
 		{
 			$this->arr["search_type"] = $form_selsearch_data["search_type"];
@@ -1925,12 +1841,13 @@ class form extends form_base
 			$this->vars(array(
 				"status_msg" => $status_msg
 			));
-			session_unregister("form_selsearch_error");
-			session_unregister("form_selsearch_data");
-			session_unregister("status_msg");
+			aw_session_del("form_selsearch_error");
+			aw_session_del("form_selsearch_data");
+			aw_session_del("status_msg");
 		}
 
 		$this->vars(array(
+			"use_new_search" => checked($this->arr["new_search_engine"]),
 			"forms_search" => checked($this->arr["search_type"] == "forms"),
 			"chain_search" => checked($this->arr["search_type"] == "chain"),
 			"forms" => $this->multiple_option_list($this->arr["search_forms"],$this->get_flist(array("type" => FTYPE_ENTRY))),
@@ -1984,7 +1901,6 @@ class form extends form_base
 			"FORM_SEL" => $fs,
 			"CHAIN_SEL" => $cs,
 			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page)),
-			"use_new_search" => checked($this->arr["new_search_engine"] == 1)
 		));
 
 		return $this->do_menu_return();
@@ -2021,7 +1937,7 @@ class form extends form_base
 
 		$this->load($id);
 
-		$this->arr["new_search_engine"] = $use_new_search;
+		$this->arr["new_search_engine"] = 1;
 		$this->arr["search_type"] = $search_from;
 		$this->arr["search_forms"] = array();
 		if (is_array($forms))
@@ -2049,15 +1965,16 @@ class form extends form_base
 
 		if (($msg = $this->check_search_target_form_relations()) != "ok")
 		{
-			global $status_msg,$form_selsearch_data,$form_selsearch_error;
-			$form_selsearch_error = 1;
+			$form_selsearch_data = array();
 			$form_selsearch_data["search_type"] = $this->arr["search_type"];
 			$form_selsearch_data["search_forms"] = $this->arr["search_forms"];
 			$form_selsearch_data["search_form_op"] = $this->arr["search_form_op"];
 			$form_selsearch_data["search_chain"] = $this->arr["search_chain"];
 			$form_selsearch_data["search_chain_op"] = $this->arr["search_chain_op"];
 			$status_msg = $msg;
-			session_register("status_msg","form_selsearch_data","form_selsearch_error");
+			aw_session_set("form_selsearch_data", $form_selsearch_data);
+			aw_session_set("status_msg", $status_msg);
+			aw_session_set("form_selsearch_error",1);
 		}
 		else
 		{
@@ -2135,7 +2052,7 @@ class form extends form_base
 
 		$this->req_check_stf_relations_map[$fid] = $fid;
 
-		$f = new form;
+		$f = get_instance("form");
 		$f->load($fid);
 
 		$rels = $f->get_element_by_type("listbox","relation",true);
@@ -2209,8 +2126,8 @@ class form extends form_base
 		exit_function("form::new_do_search::restrict",array());
 
 		enter_function("form::new_do_search::init_table",array());
-		$show_form = new form;	// if showing results as outputs, this will be used
-		$form_table = new form_table; // if showing results as a form_table, this will be used
+		$show_form = get_instance("form");	// if showing results as outputs, this will be used
+		$form_table = get_instance("form_table"); // if showing results as a form_table, this will be used
 
 		$used_els = array();
 		$group_els = array();
@@ -2789,6 +2706,27 @@ class form extends form_base
 		
 		if ($this->arr["new_search_engine"] == 1)
 		{
+			// convert old settings to new ones
+/*			$this->arr["new_search_engine"] = 1;
+			$this->arr["search_type"] = (!$this->arr["se_chain"] ? "forms" : "chain");
+			$this->arr["search_forms"] = array();
+			if (is_array($this->arr["search_from"]))
+			{
+				foreach($this->arr["search_from"] as $_fid => $one)
+				{
+					if ($one == 1)
+					{
+						$this->arr["search_forms"][$_fid] = $_fid;
+						$op = $this->arr["search_outputs"][$_fid];
+					}
+				}
+			}
+			$this->arr["search_form_op"] = $op;
+			$this->arr["search_chain"] = $this->arr["se_chain"];
+			$this->arr["search_chain_op"] = $op;*/
+			// well, this MIGHT do the trick - we can't know for sure, because 
+			// the previous version allowed for ambiguous settings
+
 			return $this->new_do_search(array(
 				"entry_id" => $entry_id,
 				"restrict_search_el" => $restrict_search_el, 
@@ -2799,6 +2737,7 @@ class form extends form_base
 				"search_form" => $search_form
 			));
 		}
+
 
 		$matches = $this->search($entry_id,0,$search_el,$search_val,$restrict_search_el, $restrict_search_val);
 
@@ -2825,7 +2764,7 @@ class form extends form_base
 			}
 
 			classload("form_table");
-			$ft = new form_table;
+			$ft = get_instance("form_table");
 			// This stuff is here for the numeric element type. -->
 			/*
 			$els = array();
@@ -3103,7 +3042,7 @@ class form extends form_base
 			if ($this->form_search_only)
 			{
 				$fid = $this->search_form;
-				$t = new form();
+				$t = get_instance("form");
 				reset($matches);
 				while (list(,$eid) = each($matches))
 				{
@@ -3114,7 +3053,7 @@ class form extends form_base
 			else
 			{
 				$fid = $this->search_form;
-				$t = new form();
+				$t = get_instance("form");
 				// need on chain entry id'd
 				$mtstr = join(",",$matches);
 				if ($mtstr != "")
@@ -3290,7 +3229,7 @@ class form extends form_base
 	// !Clones "this" form from another
 	function _clone_from($base,$id)
 	{
-		$bf = new form;
+		$bf = get_instance("form");
 		$bf->load($base);
 
 		$this->arr = $bf->arr;
@@ -3627,7 +3566,7 @@ class form extends form_base
 		// then we go through alla the elements in the form
 		$this->load($oid);
 
-		$fc = new form_cell;
+		$fc = get_instance("form_cell");
 
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -3966,7 +3905,7 @@ class form extends form_base
 			{
 			$this->save_handle();
 
-			$form = new form;
+			$form = get_instance("form");
 			$form->load($frow["oid"]);
 
 			echo "form ",$frow["oid"],"<br>\n";
@@ -4015,8 +3954,7 @@ class form extends form_base
 
 	function convchains()
 	{
-		classload("xml");
-		$x = new xml;
+		$x = get_instance("xml");
 		$this->db_query("DELETE FROM form2chain");
 
 		$this->db_query("SELECT * FROM form_chains");
@@ -4039,7 +3977,7 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
 		
-		$o = new db_objects;
+		$o = get_instance("objects");
 		$_menulist = $o->get_list();
 
 		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
@@ -4107,8 +4045,7 @@ class form extends form_base
 		$this->arr["relation_forms"] = $this->make_keys($relation_forms);
 
 		// kataloogid kuhu saab elemente liigutada
-		classload("objects");
-		$iobj = new db_objects;
+		$iobj = get_instance("objects");
 		$ms = $iobj->get_list();
 		$this->arr["el_move_menus"] = array();
 		if (is_array($el_move_menus))
@@ -4186,8 +4123,7 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"translate.tpl","T&otilde;gi");
 
-		classload("languages");
-		$la = new languages;
+		$la = get_instance("languages");
 		$langs = $la->listall();
 
 		foreach($langs as $lar)
@@ -4546,8 +4482,7 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
-		classload("languages");
-		$la = new languages;
+		$la = get_instance("languages");
 		$langs = $la->listall();
 
 		for ($row=0; $row < $this->arr["rows"]; $row++)
@@ -4610,7 +4545,7 @@ class form extends form_base
 		{
 			echo "form $row[oid] \n<br>";
 			flush();
-			$f = new form;
+			$f = get_instance("form");
 			$f->load($row["oid"]);
 			$f->save();
 		}
@@ -4621,7 +4556,7 @@ class form extends form_base
 		{
 			echo "form_op $row[oid] \n<br>";
 			flush();
-			$f = new form_output;
+			$f = get_instance("form_output");
 			$f->load_output($row["oid"]);
 			$f->save_output($row["oid"]);
 		}
@@ -4632,16 +4567,15 @@ class form extends form_base
 		extract($arr);
 		$this->init($id,"admin_tables.tpl","Muuda tabeleid");
 
-		global $status_msg;
 		$this->vars(array(
-			"status_msg" => $status_msg
+			"status_msg" => aw_global_get("status_msg")
 		));
-		session_unregister("status_msg");
+		aw_session_del("status_msg");
 
 		// check if we are in the middle of an error and load the data from the session
-		global $f_t_o,$form_table_save_error;
-		if ($form_table_save_error == true)
+		if (aw_global_get("form_table_save_error") == true)
 		{
+			$f_t_o = aw_global_get("f_t_o");
 			if (is_array($f_t_o))
 			{
 				foreach($f_t_o as $key => $value)
@@ -4650,8 +4584,8 @@ class form extends form_base
 				}
 			}
 
-			session_unregister("form_table_save_error");
-			session_unregister("f_t_o");
+			aw_session_del("form_table_save_error");
+			aw_session_del("f_t_o");
 		}
 
 		$tables = array();
@@ -4820,28 +4754,26 @@ class form extends form_base
 			}
 		}
 
-		global $status_msg;
 		if (($msg = $this->check_table_relation_integrity()) == "ok")
 		{
 			$this->save();
-			$status_msg = "</font><font color=\"#000000\">Changes saved!";
+			aw_session_set("status_msg","</font><font color=\"#000000\">Changes saved!");
 		}
 		else
 		{
-			$status_msg = $msg;
-			// and here we must stuff all that shite in the session and set a flag indicating it. hmh. 
-			// me el no laiki too much
-			$GLOBALS["f_t_o"]["save_tables_rel_els"] = $this->arr["save_tables_rel_els"];
-			$GLOBALS["f_t_o"]["save_tables_rels"] = $this->arr["save_tables_rels"];
-			$GLOBALS["f_t_o"]["save_tables_obj_tbl"] = $this->arr["save_tables_obj_tbl"];
-			$GLOBALS["f_t_o"]["save_tables_obj_col"] = $this->arr["save_tables_obj_col"];
-			$GLOBALS["f_t_o"]["save_table"] = $this->arr["save_table"];
-			$GLOBALS["f_t_o"]["save_tables"] = $this->arr["save_tables"];
-			$GLOBALS["form_table_save_error"] = true;
-			session_register("f_t_o");
-			session_register("form_table_save_error");
+			aw_session_set("status_msg",$msg);
+			// and here we must stuff all that shite in the session and set a flag indicating it. 
+			$f_t_o = array();
+			$f_t_o["save_tables_rel_els"] = $this->arr["save_tables_rel_els"];
+			$f_t_o["save_tables_rels"] = $this->arr["save_tables_rels"];
+			$f_t_o["save_tables_obj_tbl"] = $this->arr["save_tables_obj_tbl"];
+			$f_t_o["save_tables_obj_col"] = $this->arr["save_tables_obj_col"];
+			$f_t_o["save_table"] = $this->arr["save_table"];
+			$f_t_o["save_tables"] = $this->arr["save_tables"];
+
+			aw_session_set("f_t_o",$f_t_o);
+			aw_session_set("form_table_save_error",1);
 		}
-		session_register("status_msg");
 		return $this->mk_my_orb("sel_tables", array("id" => $id));
 	}
 
