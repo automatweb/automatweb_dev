@@ -212,6 +212,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="account_type">
+			<function name="account_type">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
