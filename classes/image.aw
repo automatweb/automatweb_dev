@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.106 2004/07/30 11:36:34 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.107 2004/08/18 07:14:13 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -984,6 +984,11 @@ class image extends class_base
 
 	function _get_conf_for_folder($pt, $apply_image = false)
 	{
+		if (!is_oid($pt))
+		{
+			return false;
+		}
+
 		$gc = get_instance("contentmgmt/gallery/gallery_conf");
 		$gc->do_check_tbl();
 
