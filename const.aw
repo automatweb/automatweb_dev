@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.26 2001/07/04 23:00:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.27 2001/07/12 04:22:49 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -142,8 +142,16 @@ include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
 $pi = "";
-(isset($PATH_INFO) ? $pi = $PATH_INFO: "");
-(isset($QUERY_STRING) ? $pi .= "?".$QUERY_STRING: "");
+
+if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
+{
+	$pi = $PATH_INFO;
+};
+if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
+{
+	$pi .= $QUERY_STRING;
+};
+
 if ($pi) 
 {
 	 if (preg_match("/[&|=]/",$pi)) 
@@ -389,7 +397,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_SHOP_EQUASION => array("name" => "Kauba hinnavalem", "file" => "shop_eq", "can_add" => 1),
 			CL_FORM_TABLE => array("name" => "Formi tabel", "file" => "form_table", "can_add" => 1),
 			CL_CURRENCY => array("name" => "Valuuta kurss", "file" => "currency", "can_add" => 1),
-			CL_FORM_CHAIN => array("name" => "Formi p&auml;rg", "file" => "form_chain", "can_add" => 1)
+			CL_FORM_CHAIN => array("name" => "Formi p&auml;rg", "file" => "form_chain", "can_add" => 1),
+			CL_PROMO => array("name" => "Promo kast", "file" => "promo", "can_add" => 0)
 );
 // kliendid. 
 // hierarhia esimene element on root
