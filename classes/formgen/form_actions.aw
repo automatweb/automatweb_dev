@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.20 2004/02/27 09:54:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.21 2004/03/17 12:55:34 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -912,6 +912,7 @@ class form_actions extends form_base
 			{
 				$froma = "automatweb@automatweb.com";
 			}
+			$froma = str_replace("\"","", $froma);
 
 			send_mail($data["email"],$subj, $msg.$app,"From: $froma\n");
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
