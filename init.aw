@@ -433,13 +433,11 @@ function get_instance($class,$args = array(), $errors = true)
 	$clid = $GLOBALS["cfg"]["class_lut"][$lib];
 	if (($rs = $GLOBALS["cfg"]["__default"]["classes"][$clid]["is_remoted"]) != "")
 	{
-		print "clid = ". var_dump($clid);
 		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
 		{
 			$proxy_file = $GLOBALS["cfg"]["__default"]["basedir"]."/classes/core/proxy_classes/".$lib.".aw";
 			$proxy_class = "__aw_proxy_".$lib;
 			include_once($proxy_file);
-			print dbg::process_backtrace(debug_backtrace());
 			return new $proxy_class($rs);
 		}
 	}
