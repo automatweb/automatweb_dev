@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.18 2003/11/28 13:52:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.19 2003/12/03 12:34:54 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -27,7 +27,7 @@
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
 
-	@property message type=textarea cols=80 rows=40 no_caption=1
+	@property message type=textarea cols=80 rows=40
 	@caption Sisu
 
 	@property attachments type=text store=no
