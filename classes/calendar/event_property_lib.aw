@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.12 2004/10/13 11:17:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.13 2004/10/28 09:46:24 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -182,13 +182,20 @@ class event_property_lib extends aw_template
 
 	function callb_human_name($arr)
 	{
-		return html::href(array(
-		 "url" => $this->mk_my_orb("change",array(
-		    "id" => $arr["id"],
-		    "return_url" => urlencode(aw_global_get("REQUEST_URI")),
-		 ),CL_CRM_PERSON),
-		 "caption" => $arr["name"],
-		));
+		if ($_GET["get_csv_file"] == 1)
+		{
+			return $arr["name"];
+		}
+		else
+		{
+			return html::href(array(
+			 "url" => $this->mk_my_orb("change",array(
+			    "id" => $arr["id"],
+		    	"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+			 ),CL_CRM_PERSON),
+			 "caption" => $arr["name"],
+			));
+		}
 	}
 
 	
@@ -216,16 +223,74 @@ class event_property_lib extends aw_template
 							'caption' => 'E-post',
 							'sortable' => '1',
 		));
+
+		$noshow = array('status', 'phone','firstname','lastname','name','email');
+
+		$datas = $arr["obj_inst"]->connections_to(array(
+			"from.class_id" => CL_CALENDAR_REGISTRATION_FORM,
+			"type" => 3 // regform.RELTYPE_DATA
+		));
+		$darr = array();
+		$fields = array();
+		$cff = get_instance("cfg/cfgform");
+		$clsfs = array();
+		foreach($datas as $d_c)
+		{
+			$to = $d_c->from();
+			$darr[$to->prop("person_id")] = $to;
+			
+			if (!$to->meta("cfgform_id"))
+			{
+				$ps = $to->get_property_list();
+			}
+			else
+			{
+				$ps = $cff->get_props_from_cfgform(array(
+					"id" => $to->meta("cfgform_id")
+				));
+			}
+			
+			foreach($to->properties() as $pn => $pv)
+			{
+				if (in_array($pn,$noshow) || !isset($ps[$pn]))
+				{
+					continue;
+				}
+
+				if (trim($pv) != "" && $ps[$pn]["type"] != "hidden")
+				{
+					$fields[$pn] = $ps[$pn]["caption"];
+				}
+				if ($ps[$pn]["type"] == "classificator")
+				{
+					$clsfs[$pn] = 1;
+				}
+			}
+		}
+
+		foreach($fields as $fld => $fld_c)
+		{
+			$table->define_field(array(
+				"name" => $fld,
+				"caption" => $fld_c,
+				"sortable" => 1,
+				"align" => "center"
+			));
+		}
+
 		$table->define_field(array(
 							'name' => 'rank',
 							'caption' => 'Ametinimetus',
 							'sortable' => '1',
 		));
-		$table->define_chooser(array(
-						'name' => 'check',
-						'field' => 'id',
-						'caption' => 'X',
-		));
+		if ($arr["request"]["get_csv_file"] != 1)
+		{
+			$table->define_chooser(array(
+							'name' => 'check',
+							'field' => 'id',
+							'caption' => 'X',
+			));
+		}
 
 		$conns = $arr['obj_inst']->connections_to(array());
 		//arr($conns);
@@ -235,14 +300,49 @@ class event_property_lib extends aw_template
 			if($conn->prop('from.class_id')==CL_CRM_PERSON)
 			{
 				$data = $person->fetch_person_by_id(array('id'=>$conn->prop('from')));
-				$table->define_data(array(
+				$dat = array(
 					'id' => $conn->prop('from'),
 					'name' => $data['name'],
 					'phone' => $data['phone'],
 					'email' => $data['email'],
 					'rank' => $data['rank'],
-				));
+					'reg_data' => $regd
+				);
+
+				$regd = "";
+				if (($_tmp = $darr[$conn->prop("from")]))
+				{
+					$regd = html::href(array(
+						"url" => $this->mk_my_orb("view", array(
+							"id" => $_tmp->id(), 
+							"cfgform" => $_tmp->meta("cfgform"),
+							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						), CL_CALENDAR_REGISTRATION_FORM),
+						"caption" => "Vaata"
+					));
+					foreach($_tmp->properties() as $pn => $pv)
+					{
+						if (!isset($dat[$pn]))
+						{
+							if ($clsfs[$pn] == 1 && is_oid($pv) && $this->can("view", $pv))
+							{
+								$pv = obj($pv);
+								$pv = $pv->name();
+							}
+							$dat[$pn] = $pv;
+						}
+					}
+				}
+				$table->define_data($dat);
 			}
+		}
+
+		if ($arr["request"]["get_csv_file"] == 1)
+		{
+			header("Content-type: application/vnd.ms-excel");
+			header("Content-disposition: inline; filename=osalejad.xls;");
+			$table->sort_by();
+			die($table->draw());
 		}
 		return array('tabel'=> array('type'=>'table','vcl_inst'=>&$table,'no_caption' => 1));
 	}
