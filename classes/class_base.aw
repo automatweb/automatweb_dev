@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.94 2003/04/15 10:15:07 duke Exp $
+// $Id: class_base.aw,v 2.95 2003/04/16 14:10:24 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -7,7 +7,7 @@
 	@default group=general
 
 	@property name type=textbox group=general
-	@caption Objekti nimi
+	@caption Nimi
 
 	@property comment type=textbox group=general
 	@caption Kommentaar
@@ -101,7 +101,6 @@ class class_base extends aliasmgr
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
-
 
 		$cli = get_instance("cfg/" . $this->output_client);
 
@@ -414,6 +413,13 @@ class class_base extends aliasmgr
 
 		foreach($realprops as $property)
 		{
+			// do not call set_property for edit_only properties when a new
+			// object is created.
+			if ($this->new && isset($property["editonly"]))
+			{
+				continue;
+			};
+
 			// that is not set for checkboxes
 			$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
 			if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
@@ -2107,142 +2113,7 @@ class class_base extends aliasmgr
 
 		return $resprops;
 	}
-
-	////	
-	// !Shows a form for editing relation properties
-	function edit_relation($args = array())
-	{
-		$this->init_class_base();
-
-		$obj = $this->get_object(array(
-			"oid" => $args["id"],
-			"class_id" => CL_RELATION,
-		));
-
-
-		$source = $this->get_object($row["source"]);
-		
-		$def = $this->cfg["classes"][$this->clid]["def"];
-		$this->values = $obj["meta"]["values"][$def];
-
-		$cfgu = get_instance("cfg/cfgutils");
-		$_all_props = $cfgu->load_class_properties(array(
-				"clid" => $this->clid,
-		));
-		$rel_properties = array();
-		foreach($_all_props as $key => $val)
-		{
-			if ($val["rel"])
-			{
-				$rel_properties[$key] = $val;
-			};
-		};
-		
-		$this->request = $args;
-		
-
-		if (sizeof($rel_properties) == 0)
-		{
-			return $this->gen_output(array(
-				"content" => "Sellel seosel pole muudatavaid omadusi",
-				"title" => "Muuda seost",
-			));
-		}
-
-		$this->groupnames = array(
-			"relation" => "Seose omadused",
-		);
-
-		$this->activegroup = "relation";
-
-		// now I have to draw a form from that data somehow.
-		// and then finally I need to decide how and when or why
-		// am I going to save that data
-		//$this->load_obj_data(array("id" => $args["id"]));
-
-
-		// parse the properties - resolve generated properties and
-		// do any callbacks
-
-		$resprops = $this->parse_properties(array(
-			"properties" => &$rel_properties,
-		));
-		
-		$cli = get_instance("cfg/" . $this->output_client);
-		foreach($resprops as $val)
-		{
-			$cli->add_property($val);
-		};
-		
-		$argblock = array(
-			"orb_class" => $this->cfg["classes"][$this->clid]["file"],
-			"id" => $args["id"],
-			"return_url" => urlencode($args["return_url"]),
-		);
-
-		$cli->finish_output(array(
-			"action" => "submit_relation",
-			"data" => $argblock,
-		));
-
-		$content = $cli->get_result();
-		
-		return $this->gen_output(array(
-			"content" => $content,
-			"title" => "Muuda seost",
-		));
-	}
 	
-	////	
-	// !Saves relation properties
-	function submit_relation($args = array())
-	{
-		$this->init_class_base();
-		// possible save scenarion.
-		// save them into object metadata under the symbolic ID for the class
-
-		$obj = $this->get_object(array(
-			"oid" => $args["oid"],
-			"class_id" => CL_RELATION,
-		));
-
-		$def = $this->cfg["classes"][$this->clid]["def"];
-		
-		$cfgu = get_instance("cfg/cfgutils");
-		$_all_props = $cfgu->load_class_properties(array(
-				"clid" => $this->clid,
-		));
-		$rel_properties = new aw_array();
-		foreach($_all_props as $key => $val)
-		{
-			if ($val["rel"])
-			{
-				$rel_properties->set_at($key,$val);
-			};
-		};
-
-		$values = array();
-
-		foreach($rel_properties->get() as $key => $val)
-		{
-			$values[$key] = $args[$key];
-		};
-
-		$old_values = $obj["meta"]["values"];
-		// overwrite the old values for this class type
-		$old_values[$def] = $values;
-
-		$this->upd_object(array(
-			"oid" => $args["id"],
-			"metadata" => array(
-				"values" => $old_values,
-			),
-		));
-		
-		return $this->mk_my_orb("edit_relation",array("id" => $args["id"],"return_url" => $args["return_url"]));
-
-	}
-
 	////
 	// !This works in 2 ways
 	// 1 - sync a single object

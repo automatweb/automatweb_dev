@@ -64,21 +64,5 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="edit_relation">
-			<function name="edit_relation">
-				<arguments>
-					<required name="id" type="int"/>
-					<optional name="return_url"/>
-				</arguments>
-'			</function>
-		</action>
-		
-		<action name="submit_relation">
-			<function name="submit_relation">
-				<arguments/>
-'			</function>
-		</action>
-
 	</class>
 </orb>
