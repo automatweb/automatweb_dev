@@ -27,7 +27,7 @@
 			</function>
 		</action>
 		
-		<action name="change">
+		<action name="change" public="1">
 			<function name="change">
 				<arguments>
 					<required name="id"/>
@@ -43,7 +43,7 @@
 			</function>
 		</action>
 		
-		<action name="change_pwd">
+		<action name="change_pwd" public="1">
 			<function name="change_pwd">
 				<arguments>
 					<optional name="id"/>
@@ -103,7 +103,7 @@
 			</function>
 		</action>
 
-		<action name="logout">
+		<action name="logout" public="1">
 			<function name="orb_logout">
 				<arguments>
 				</arguments>
@@ -214,6 +214,13 @@
 
 		<action name="save_udata">
 			<function name="submit_do_change_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_ua_form" all_args="1">
+			<function name="submit_ua_form">
 				<arguments>
 				</arguments>
 			</function>
