@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.42 2003/02/11 17:05:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.43 2003/03/12 16:44:04 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
 
-	@property file type=fileupload
+	@property file type=fileupload table=images
 	@caption Pilt
 
 	@property file_show type=text store=no
@@ -443,6 +443,7 @@ class image extends class_base
 				};
 				break;
 
+			case "file":
 			case "file2":
 				$prop["value"] = "";
 				break;
