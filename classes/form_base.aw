@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.13 2001/07/17 20:56:08 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -1074,6 +1074,24 @@ class form_base extends aw_template
 	function &get_el_arr()
 	{
 		return $this->arr["elements"];
+	}
+
+	function listall_el_types($addempty = false)
+	{
+		if ($addempty)
+		{
+			$ret = array(0 => "");
+		}
+		else
+		{
+			$ret = array();
+		}
+		$this->db_query("SELECT * FROM form_elements WHERE type_name != ''");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]] = $row["type_name"];
+		}
+		return $ret;
 	}
 }
 ?>
