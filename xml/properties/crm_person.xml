@@ -167,7 +167,7 @@
       <property>
             <name>sect</name>
             <table>kliendibaas_isik</table>
-            <group>contact</group>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
             <automatic>1</automatic>
