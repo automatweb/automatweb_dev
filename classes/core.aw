@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.193 2003/05/15 17:06:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.194 2003/05/19 14:15:38 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -700,7 +700,7 @@ class core extends db_connector
 
 		$this->db_query($q);
 		$aliasmgr = get_instance("aliasmgr");
-		$_aliases = $aliasmgr->cache_oo_aliases(array("oid" => $source));
+		$_aliases = $aliasmgr->cache_oo_aliases($source);
 
 		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
 	}
