@@ -15,36 +15,8 @@ function varvivalik()
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fform">{VAR:LC_FORMS_BACK_COL}:</td>
-<td class="fform"><input type='text' NAME='bgcolor' VALUE='{VAR:form_bgcolor}'> <a href="#" onclick="varvivalik();">{VAR:LC_FORMS_CHOOSE_COL}</a></td>
-</tr>
-<tr>
-<td class="fform">{VAR:LC_FORMS_SIDE_WIDTH}:</td>
-<td class="fform"><input type='text' NAME='border' VALUE='{VAR:form_border}'></td>
-</tr>
-<tr>
-<td class="fform">cellpadding:</td>
-<td class="fform"><input type='text' NAME='cellpadding' VALUE='{VAR:form_cellpadding}'></td>
-</tr>
-<tr>
-<td class="fform">cellspacing:</td>
-<td class="fform"><input type='text' NAME='cellspacing' VALUE='{VAR:form_cellspacing}'></td>
-</tr>
-<tr>
-<td class="fform">{VAR:LC_FORMS_HIGHT}:</td>
-<td class="fform"><input type='text' NAME='height' VALUE='{VAR:form_height}'></td>
-</tr>
-<tr>
-<td class="fform">{VAR:LC_FORMS_WITDH}:</td>
-<td class="fform"><input type='text' NAME='width' VALUE='{VAR:form_width}'></td>
-</tr>
-<tr>
-<td class="fform">Hspace:</td>
-<td class="fform"><input type='text' NAME='hspace' VALUE='{VAR:form_hspace}'></td>
-</tr>
-<tr>
-<td class="fform">Vspace:</td>
-<td class="fform"><input type='text' NAME='vspace' VALUE='{VAR:form_vspace}'></td>
+<td class="fform">Tabeli stiil:</td>
+<td class="fform"><select name='tablestyle' class='small_button'>{VAR:tablestyles}</select></td>
 </tr>
 <tr>
 <td class="fform">{VAR:LC_FORMS_DEFAULT_STYLE}:</td>
