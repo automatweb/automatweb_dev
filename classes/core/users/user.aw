@@ -957,10 +957,13 @@ class user extends class_base
 		{
 			// block user
 			$this->users->do_delete_user($this->users->get_uid_for_oid($oid));
-			$ol = new object_list(array(
-				"brother_of" => $oid
-			));
-			$ol->delete();
+			if ($this->can("view", $oid))
+			{
+				$ol = new object_list(array(
+					"brother_of" => $oid
+				));
+				$ol->delete();
+			}
 		}
 		else
 		{
@@ -1721,5 +1724,18 @@ class user extends class_base
 
 		return join("<br>", $str);
 	}
+
+	/** displays a form to let the user to change her password
+		@attrib name=change_pwd
+		
+	**/
+	function change_pwd()
+	{
+		print "changing tha password, eh?";
+		// I need to return a class_base generated form
+
+
+	}
+
 }
 ?>
