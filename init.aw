@@ -6,6 +6,7 @@
 // apparently __FILE__ does not work with Zend Encoder. But since
 // don't use that anyway, it's of no concern. At least now.
 
+// include aw const
 include_once(dirname(__FILE__)."/const.aw");
 
 class _config_dummy {};
@@ -13,8 +14,9 @@ class _config_dummy {};
 function aw_ini_get($var)
 {
 //	enter_function("__global::aw_ini_get",array());
+	/*
 	$_config_instance =& __init_config_instance();
-
+	*/
 	if (($pos = strpos($var,".")) !== false)
 	{
 		$class = substr($var,0,$pos);
@@ -24,8 +26,9 @@ function aw_ini_get($var)
 	{
 		$class = "__default";
 	}
+	return $GLOBALS["cfg"][$class][$var];
 //	exit_function("__global::aw_ini_get");
-	return $_config_instance->data[$class][$var];
+	//return $_config_instance->data[$class][$var];
 }
 
 function &__init_config_instance()
@@ -87,19 +90,27 @@ function parse_config($file)
 					// ok, do the bad eval version
 					$arrparams = substr($varname,$bpos);
 					$arrname = substr($varname,0,$bpos);
+					/*
 					if (!is_array($_config_instance->data[$varclass][$arrname]))
 					{
 						$_config_instance->data[$varclass][$arrname] = array();
 					}
 					$code = "\$_config_instance->data[\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
+					*/
+					if (!is_array($GLOBALS["cfg"][$varclass][$arrname]))
+					{
+						$GLOBALS["cfg"][$varclass][$arrname] = array();
+					}
+					$code = "\$GLOBALS[cfg][\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
 //					echo "evaling $code <br>";
 					eval($code);
 				}
 				else
 				{
 					// and stuff the thing in the array
-					$_config_instance->data[$varclass][$varname] = $varvalue;
-//					echo "setting [$varclass][$varname] to $varvalue <br>";
+					//$_config_instance->data[$varclass][$varname] = $varvalue;
+					$GLOBALS["cfg"][$varclass][$varname] = $varvalue;
+					//echo "setting [$varclass][$varname] to $varvalue <br>";
 				}
 			}
 		}
@@ -157,7 +168,8 @@ function init_config($arr)
 		$f = fopen($cache_file,"r");
 		$fc = fread($f,filesize($cache_file));
 		fclose($f);
-		$_config_instance->data = unserialize($fc);
+		//$_config_instance->data = unserialize($fc);
+		$GLOBALS["cfg"] = unserialize($fc);
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_e = $sec + $micro;
 //		echo "cache unserialize ",($ts_e - $ts_s), " seconds <br>";
@@ -174,8 +186,9 @@ function init_config($arr)
 		// and write to cache if file is specified
 		if ($cache_file)
 		{
-			$_ci =& __init_config_instance();
-			$str = serialize($_ci->data);
+			//$_ci =& __init_config_instance();
+			//$str = serialize($_ci->data);
+			$str = serialize($GLOBALS["cfg"]);
 			$f = fopen($cache_file,"w");
 			fwrite($f,$str);
 			fclose($f);
@@ -193,7 +206,8 @@ function init_config($arr)
 	if (strpos($PHP_SELF,"automatweb")) 
 	{
 		// keemia. Kui oleme saidi adminnis sees, siis votame templated siit
-		$_config_instance->data["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
+		// $_config_instance->data["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
+		$GLOBALS["cfg"]["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
 	} 
 	// kui saidi "sees", siis votame templated tolle saidi juurest, ehk siis ei puutu miskit
 
@@ -202,13 +216,15 @@ function init_config($arr)
 	if (!$GLOBALS["fastcall"])
 	{
 		// and here do the defs for classes
-		foreach($_config_instance->data["__default"]["classes"] as $clid => $cld)
+		//foreach($_config_instance->data["__default"]["classes"] as $clid => $cld)
+		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
 			define($cld["def"], $clid);
 		}
 
 		// and here do the defs for programs
-		foreach($_config_instance->data["__default"]["programs"] as $prid => $prd)
+		//foreach($_config_instance->data["__default"]["programs"] as $prid => $prd)
+		foreach($GLOBALS["cfg"]["__default"]["programs"] as $prid => $prd)
 		{
 			define($prd["def"], $prid);
 		}
@@ -227,9 +243,10 @@ function aw_ini_set($key,$value)
 function aw_config_init_class(&$that)
 {
 //	enter_function("__global::aw_config_init_class",array());
-	$_config_instance =& __init_config_instance();
+	//$_config_instance =& __init_config_instance();
 	$class = get_class($that);
-	$that->cfg = array_merge($_config_instance->data[$class],$_config_instance->data["__default"]);
+	//$that->cfg = array_merge($_config_instance->data[$class],$_config_instance->data["__default"]);
+	$that->cfg = array_merge($GLOBALS["cfg"][$class],$GLOBALS["cfg"]["__default"]);
 //	exit_function("__global::aw_config_init_class");
 }
 
