@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.1 2003/09/12 11:48:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.2 2003/10/28 16:30:27 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 
@@ -64,7 +64,12 @@ class mail_rule extends class_base
 		switch($data["name"])
 		{
 			case "target_folder":
-				$data["options"] = $this->folders;
+				$tmp = array();
+				foreach($this->folders as $key => $fld)
+				{
+					$tmp[$key] = $fld["name"];
+				};
+				$data["options"] = $tmp;
 				break;
 
 		};
