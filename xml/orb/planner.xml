@@ -100,6 +100,7 @@
 			<function name="event_repeaters">
 				<arguments>
 					<required name="id" type="int"/>
+					<optional name="stage" type="int"/>
 				</arguments>
 			</function>
 		</action>
