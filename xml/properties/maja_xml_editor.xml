@@ -40,7 +40,7 @@
             <caption>Maja nimi/aadress</caption>
       </property>
       <property>
-            <name>xml_to_db__connections</name>
+            <name>xml_to_db_connections</name>
             <table>objects</table>
             <group>db_saving_settings</group>
             <type>table</type>
@@ -61,14 +61,149 @@
             <caption>Additional info</caption>
       </property>
       <property>
-            <name>xml_content</name>
+            <name>xml_field_01</name>
             <table>objects</table>
-            <group>content_change</group>
+            <group>group_01</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parent XMl-ist</caption>
+      </property>
+      <property>
+            <name>db_table_01</name>
+            <table>objects</table>
+            <group>group_01</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <caption>Andmebaasi tabel</caption>
+      </property>
+      <property>
+            <name>content_table_01</name>
+            <table>objects</table>
+            <group>group_01</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>xml_content</field>
-            <caption>xml-i sisu tabel</caption>
+            <field>content_table_01</field>
+            <caption>Sisu tabel 01</caption>
+      </property>
+      <property>
+            <name>xml_field_02</name>
+            <table>objects</table>
+            <group>group_02</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parent XML-ist</caption>
+      </property>
+      <property>
+            <name>db_table_02</name>
+            <table>objects</table>
+            <group>group_02</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <caption>Andmebaasi tabel</caption>
+      </property>
+      <property>
+            <name>content_table_02</name>
+            <table>objects</table>
+            <group>group_02</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>content_table_02</field>
+            <caption>Sisu tabel 02</caption>
+      </property>
+      <property>
+            <name>xml_field_03</name>
+            <table>objects</table>
+            <group>group_03</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parent XML-ist</caption>
+      </property>
+      <property>
+            <name>db_table_03</name>
+            <table>objects</table>
+            <group>group_03</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <caption>Andmebaasi tabel</caption>
+      </property>
+      <property>
+            <name>content_table_03</name>
+            <table>objects</table>
+            <group>group_03</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>content_table_03</field>
+            <caption>Sisu tabel 03</caption>
+      </property>
+      <property>
+            <name>xml_field_04</name>
+            <table>objects</table>
+            <group>group_04</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>parent XML-ist</caption>
+      </property>
+      <property>
+            <name>db_table_04</name>
+            <table>objects</table>
+            <group>group_04</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <caption>Andmebaasi tabel</caption>
+      </property>
+      <property>
+            <name>content_table_04</name>
+            <table>objects</table>
+            <group>group_04</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>content_table_04</field>
+            <caption>Sisu tabel 04</caption>
+      </property>
+      <property>
+            <name>xml_field_05</name>
+            <table>objects</table>
+            <group>group_05</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>parent XML-ist</caption>
+      </property>
+      <property>
+            <name>db_table_05</name>
+            <table>objects</table>
+            <group>group_05</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <caption>Andmebaasi tabel</caption>
+      </property>
+      <property>
+            <name>content_table_05</name>
+            <table>objects</table>
+            <group>group_05</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>content_table_05</field>
+            <caption>Sisu tabel 05</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MAJA_XML_EDITOR</syslog_type>
@@ -86,6 +221,26 @@
             <content_change>
                   <caption>XML-i muutmine</caption>
             </content_change>
+            <group_01>
+                  <caption>Tab 01</caption>
+                  <parent>content_change</parent>
+            </group_01>
+            <group_02>
+                  <caption>Tab 02</caption>
+                  <parent>content_change</parent>
+            </group_02>
+            <group_03>
+                  <caption>Tab 03</caption>
+                  <parent>content_change</parent>
+            </group_03>
+            <group_04>
+                  <caption>Tab 04</caption>
+                  <parent>content_change</parent>
+            </group_04>
+            <group_05>
+                  <caption>Tab 05</caption>
+                  <parent>content_change</parent>
+            </group_05>
       </groupinfo>
       <reltypes>
             <DB_TABLE_CONTENTS>
