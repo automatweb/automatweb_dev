@@ -13,6 +13,8 @@
 <param name="x" value="0">
 <param name="y" value="20">
 <param name="onClick" value="1">
+<param name="boss" value="0"><!-- kui 1, siis tõmbab toitmise lõime käima-->
+<param name="now" value="1"><!-- kui 1, siis tõmbab kohe endale menüü sisse, muidu ootab lõime--> 
 <param name="url" value="{VAR:url}"> 
 <param name="urlparam1" value="&id={VAR:oid}">  
 <!-- SUB: URLPARAM -->
