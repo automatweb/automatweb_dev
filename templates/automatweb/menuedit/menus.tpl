@@ -13,6 +13,23 @@ if (answer)
 window.location=url
 }
 
+var chk_status = 1;
+
+function selall()
+{
+	len = document.foo.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.foo.elements[i].name.indexOf("sel") != -1)
+		{
+			document.foo.elements[i].checked=chk_status;
+			window.status = ""+i+" / "+len;
+		}
+	}
+	chk_status = !chk_status;
+	return false;
+}
+
 function cut()
 {
 	foo.action.value="cut";
@@ -203,7 +220,7 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 <td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
 <td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
 <td align="center" colspan="4" class="celltext">&nbsp;{VAR:LC_MENUEDIT_ACTION}&nbsp;</td>
-<td align="center" class="celltext"><b>&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</b></td>
+<td align="center" class="celltext"><b>&nbsp;<a href='#' onClick="selall()">{VAR:LC_MENUEDIT_CHOOSE}</a>&nbsp;</b></td>
 </tr>
 <!-- SUB: CUT -->
 aste03
@@ -218,7 +235,7 @@ aste07
 <td height="15" class="celltext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
 <td class="celltext" align=center>
 <!-- SUB: NFIRST -->
-<input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=2 MAXLENGTH=3><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>
+<input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=3 MAXLENGTH=4><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>
 <!-- END SUB: NFIRST -->
 </td>
 <td align="center" class="celltext">
