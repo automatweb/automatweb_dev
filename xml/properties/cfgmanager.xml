@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>priobj</name>
+            <type>objpicker</type>
+            <clid>CL_PRIORITY</clid>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Prioriteedi objekt</caption>
+      </property>
+      <property>
+            <name>cfgform</name>
+            <type>generated</type>
+            <generator>callback_get_groups</generator>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konfivormid</caption>
+      </property>
+</properties>
+

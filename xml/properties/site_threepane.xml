@@ -22,7 +22,8 @@
       </property>
       <property>
             <name>logo</name>
-            <type>imgupload</type>
+            <type>relpicker</type>
+            <clid>CL_IMAGE</clid>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -46,5 +47,8 @@
             <group>general</group>
             <caption>Näita</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
 </properties>
 
