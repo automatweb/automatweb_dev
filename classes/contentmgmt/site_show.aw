@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.67 2004/06/17 13:56:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.68 2004/06/25 18:18:20 kristo Exp $
 
 /*
 
@@ -1662,22 +1662,12 @@ class site_show extends class_base
 		}
 		else
 		{
-			$t = get_instance("users");
 			if ($this->is_template("JOIN_FORM"))
 			{
-				$udata = $this->get_user();
-				$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
-				$jfs = "";
-				reset($jfar);
-				while (list($fid,$name) = each($jfar))
-				{
-					$this->vars(array(
-						"form_id" => $fid, 
-						"form_name" => $name
-					));
-					$jfs.=$this->parse("JOIN_FORM");
-				}
-				$this->vars(array("JOIN_FORM" => $jfs));
+				error::throw(array(
+					"id" => "ERR_JF",
+					"msg" => "site_show::make_final_vars(): need JOIN_FORM sub back!"
+				));
 			}
 
 			if ($this->can("edit",$section) && $this->active_doc)
