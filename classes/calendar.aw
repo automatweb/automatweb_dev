@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.2 2001/06/28 22:17:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.3 2001/07/10 21:48:58 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -26,11 +26,13 @@ class calendar extends aw_template
 	function draw_month($args = array())
 	{
 		// millise kuu kohta kalendrit joonistame?
-		$year	= $args["year"];
-		$mon	= $args["mon"];
+		$year	= ($args["year"]) ? $args["year"] : date("Y");
+		$mon	= ($args["mon"]) ? $args["mon"] : date("m");
 		$contents = $args["contents"];
 		$tpl 	= ($args["tpl"]) ? $args["tpl"] : "plain.tpl";
-		$act_day 	= $args["day"];
+		$misc   = (is_array($args["misc"])) ? $args["misc"] : array();
+		$act_day = ($args["day"]) ? $args["day"] : date("d");
+
 
 		$add	= $args["add"]; // miski räga, mis linkidele otsa pannakse
 
@@ -44,8 +46,6 @@ class calendar extends aw_template
 		// template sisse
 		$this->tpl_reset();
 		$this->read_template($tpl);
-
-		
 		
 		// blatant hack. 	
 		// leiame selle kuu jaoks uue algus ja lopukuupäeva.
@@ -77,7 +77,7 @@ class calendar extends aw_template
 		// initsialieerime muutuja, mille sisse joonistame ühe nädala
 		$line = "";
 
-		$this->vars(array("year" => $year,"mon" => $mon,"add" => $add));
+		$baselink = $misc + array("year" => $year,"mon" => $mon);
 			
 		for ($day = $start; $day <= $end; $day++)
 		{
@@ -95,8 +95,11 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
-			$this->vars(array("nday" => $day,
-					"day" => $day));
+			$this->vars(array(
+				"nday" => $day,
+				"daylink" => $this->mk_link($baselink + array("day" => $day)),
+				"day" => $day,
+			));
 			$tpl = ($day == $act_day) ? "week.activecell" : "week.cell";
 			if (($day <= 0) || ($day > $days_in_mon))
 			{
@@ -123,7 +126,10 @@ class calendar extends aw_template
 
 		$this->vars(array(
 			"caption" => $mname . date(" Y",mktime(0,0,0,$mon,1,$year)),
+			"prev" => $this->mk_link($misc + array("year" => $prevyear,"mon" => $prevmon)),
+			"next" => $this->mk_link($misc + array("year" => $nextyear,"mon" => $nextmon)),
 			"week" => $month,
+			"prefix" => $prefix,
 			"prevmon" => $prevmon,
 			"prevyear" =>$prevyear,
 			"nextmon" => $nextmon,
