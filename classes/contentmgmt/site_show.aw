@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.109 2004/12/22 19:15:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.110 2004/12/27 12:40:38 kristo Exp $
 
 /*
 
@@ -228,7 +228,7 @@ class site_show extends class_base
 				{
 					// check whether this object has any properties that 
 					// none of the previous ones had
-					if (empty($this->properties[$key]) && $obj->class_id() == CL_MENU && $obj->prop($key))
+					if (empty($this->properties[$key]) && ($obj->class_id() == CL_MENU || $key == "users_only") && $obj->prop($key))
 					{
 						$this->properties[$key] = $obj->prop($key);
 					}
@@ -1069,6 +1069,8 @@ class site_show extends class_base
 		$prev = false;
 		$show_obj_tree = false;
 
+		$sfo = NULL;
+
 		for ($i=0; $i < $cnt; $i++)
 		{
 			if (!aw_ini_get("menuedit.long_menu_aliases"))
@@ -1111,6 +1113,18 @@ class site_show extends class_base
 			if ($show_obj_tree)
 			{
 				$link = $ot_inst->get_yah_link($ot_id, $ref);
+			}
+
+			if (is_oid($sfo))
+			{
+				$sfo_o = obj($sfo);
+				$sfo_i = $sfo_o->instance();
+				$link = $sfo_i->make_menu_link($ref, $sfo_o);
+			}
+
+			if (is_oid($ref->prop("submenus_from_obj")) && $this->can("view", $ref->prop("submenus_from_obj")))
+			{
+				$sfo = $ref->prop("submenus_from_obj");
 			}
 
 			// now. if the object in the path is marked to use site tree as
@@ -1766,6 +1780,7 @@ class site_show extends class_base
 			"site_title_yah" => $site_title_yah,
 			"active_document_title" => $adt,
 			"current_period" => aw_global_get("current_period"),
+			"cur_section" => aw_global_get("section")
 		));
 
 		// insert sel images
