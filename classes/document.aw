@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.89 2002/02/01 09:24:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.90 2002/02/13 00:14:17 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -435,10 +435,19 @@ class document extends aw_template
 		if ($GLOBALS["show_all"])
 		{
 			$doc["content"] = str_replace("#edasi#", "",$doc["content"]);
+			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
+			{
+				$doc["content"] = substr($doc["content"],$pp+8);
+			}
 		}
 		else
 		{
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
+			{
+				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$GLOBALS["baseurl"]."/index.aw/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+			}
+
+			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
 				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$GLOBALS["baseurl"]."/index.aw/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
@@ -3007,6 +3016,10 @@ class document extends aw_template
 		if ($meta[$d["target"]])
 		{
 			$replacement = "<a href='/?class=objects&action=show&id=$d[target]'>$d[name]</a>";
+		}
+		elseif ($alias["aliaslink"] == 1)
+		{
+			$replacement = sprintf("<a href='/?section=%d'>%s</a>",$d["target"],$d["name"]);
 		}
 		else
 		{
