@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.72 2005/03/30 18:02:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.73 2005/03/31 20:04:20 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1892,6 +1892,7 @@ class mrp_workspace extends class_base
 							"row" => $resource->id(),
 							"start" => $rt_start,
 							"length" => $rt_end - $rt_start,
+							"nostartmark" => true,
 							"colour" => MRP_COLOUR_PAUSED,
 							"url" => "#",
 							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
@@ -1983,8 +1984,9 @@ class mrp_workspace extends class_base
 					$bar = array (
 						"row" => $resource_id,
 						"start" => $pd["start"],
-						"colour" => $colour,
-						"length" => $this->state_colours[MRP_STATUS_PAUSED],
+						"nostartmark" => true,
+						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
+						"length" => ($pd["end"] - $pd["start"]),
 						"uri" => aw_url_change_var ("mrp_hilight", $project_id),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
 					);
