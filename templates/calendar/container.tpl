@@ -76,6 +76,24 @@ function navigate_to()
 	var naviurl = '{VAR:naviurl}' + '&date=' + m + '-' + y;
 	window.location = naviurl;
 };
+
+function hilight_event(el,tgt)
+{
+	tgtel = document.getElementById(tgt);
+	// tgtel on div, mille taustavärvi on vaja muuta
+	if (el.checked)
+	{
+		tgtel.setAttribute('oldback',tgtel.style.backgroundColor);
+		tgtel.style.backgroundColor = "#FFF3C6";
+	}
+	else
+	{
+		tgtel.style.backgroundColor = tgtel.getAttribute('oldback');
+	};
+	//alert(tgtel);
+
+
+}
 </script>
 
 
