@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.41 2005/02/07 15:32:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.42 2005/03/11 16:30:33 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -410,7 +410,7 @@ class releditor extends core
 		// and how do I get values for those?
 
 		// and how do I show the selected row?
-		
+
 		if (!$arr["new"])
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
@@ -431,6 +431,7 @@ class releditor extends core
 					$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
 				};
 				$target = $conn->to();
+				$clinst = $target->instance();
 				$rowdata = array(
 					"id" => $conn->prop("to"),
 					"conn_id" => $conn->id(),
@@ -445,16 +446,37 @@ class releditor extends core
 				$export_props = array();
 				foreach($property_list as $_pn => $_pd)
 				{
-					$export_props[$_pn] = $target->prop($_pn);
+					if (empty($fdata[$_pn]))
+					{
+						continue;
+					};
+					$prop = $_pd;
+					$prop["value"] = $target->prop($_pn);
+					// now lets call get_property on that beast
+					$test = $clinst->get_property(array(
+						"prop" => &$prop,
+						"obj_inst" => $target,
+					));
+					if (PROP_OK != $test)
+					{
+						continue;
+					};
 					if ($_pd["type"] == "date_select")
 					{
-						$export_props[$_pn] = date("d.m.Y", $export_props[$_pn]);
+						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
 					else
 					if ($_pd["type"] == "datetime_select")
 					{
-						$export_props[$_pn] = date("d.m.Y H:i", $export_props[$_pn]);
+						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
+					else
+					if ($_pd["type"] == "select" && is_array($prop["options"]))
+					{
+						$prop["value"] = $prop["options"][$prop["value"]];
+
+					};
+					$export_props[$_pn] = $prop["value"];
 				}
 				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
