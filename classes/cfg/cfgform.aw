@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.22 2003/11/05 13:16:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.23 2003/11/05 15:04:39 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -262,7 +262,7 @@ class cfgform extends class_base
 		{
 			$obj_inst->set_prop("subclass",$arr["form_data"]["subclass"]);
 		};
-		if (isset($this->cfg_proplist))
+		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
 			uasort($this->cfg_proplist,array($this,"__sort_props_by_ord"));
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
