@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.31 2004/12/17 12:24:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.32 2005/01/06 13:12:34 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -767,6 +767,17 @@ class planner extends class_base
 		// now, just add another
 		foreach($xtmp as $key => $val)
 		{
+			$gmp = $arr["t"]->get_property_group(array(
+				"group" => $key,
+				"cfgform_id" => $arr["cfgform_id"],
+			));
+
+			if (sizeof($gmp) == 0)
+			{
+				continue;
+			};
+
+
 			if ($this->event_id && ($key != $this->emb_group))
 			{
 				$new_group = ($key == "general") ? "" : $key;
@@ -774,6 +785,7 @@ class planner extends class_base
 					"url" => aw_url_change_var("cb_group",$new_group),
 					"caption" => $val["caption"],
 				));
+				
 			}
 			else
 			{
@@ -878,6 +890,7 @@ class planner extends class_base
 				$t->id = $this->event_id;
 
 				// aga vaata see koht siin peaks arvestama ka seadete vormi, nicht war?
+
 				$all_props = $t->get_property_group(array(
 					"group" => $emb_group,
 					"cfgform_id" => $event_cfgform,
@@ -894,6 +907,7 @@ class planner extends class_base
 				//$resprops = array();
 				$resprops["capt"] = $this->do_group_headers(array(
 					"t" => &$t,
+					"cfgform_id" => $event_cfgform,
 				));
 
 				foreach($xprops as $key => $val)
@@ -1341,8 +1355,10 @@ class planner extends class_base
 				"name" => "create_event",
 				"tooltip" => t("Uus"),
 			));
+			$conn_count = 0;
 			foreach($conns as $conn)
 			{
+				$conn_count++;
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
@@ -1357,8 +1373,10 @@ class planner extends class_base
 			// now I need to figure out which other classes are valid for that relation type
 			$clidlist = $this->event_entry_classes;
 			$tmp = aw_ini_get("classes");
-			foreach($clidlist as $clid)
-			{	//Show only if has configform
+			if ($conn_count == 0)
+			{
+				foreach($clidlist as $clid)
+				{	//Show only if has configform
 				if(($clid == CL_CALENDAR_EVENT) && ($arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
 				{
 					continue;
@@ -1377,6 +1395,7 @@ class planner extends class_base
 					)),
 					"text" => $tmp[$clid]["name"],
 				));
+			};
 			};
 
 			$dt = date("d-m-Y",time());
