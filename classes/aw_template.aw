@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.50 2003/09/17 14:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.51 2003/10/05 17:20:07 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -40,6 +40,8 @@ class aw_template extends core
 		$this->sub_merge = 0;
 
 		$this->_init_vars();
+
+		$this->use_eval = false;
 	}
 
 	function _init_vars()
@@ -53,6 +55,14 @@ class aw_template extends core
 			"status_msg" => aw_global_get("status_msg"),
 			"baseurl" => $this->cfg["baseurl"]
 		);
+	}
+
+	function set_parse_method($method = "")
+	{
+		if ($method == "eval")
+		{
+			$this->use_eval = true;
+		};
 	}
 
 	////
@@ -288,12 +298,22 @@ class aw_template extends core
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
+		global $awt;
+		$awt->start("parse");
 		$tmp = isset($this->v2_name_map[$object]) ? $this->v2_name_map[$object] : "";
 		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
-		$src = localparse($val, $this->vars);
-
-		// võtame selle maha ka
-		aw_session_del("status_msg", true);
+		if ($this->use_eval)
+		{
+			$cval = $this->c_templates[$tmp];
+			$vars = $this->vars;
+			eval("\$src=\"" . $cval . "\";");
+		}
+		else
+		{
+			$src = localparse($val, $this->vars);
+		};
+		// võtame selle maha ka .. this is NOT a good place for that
+		//aw_session_del("status_msg", true);
 
 		if ($this->sub_merge == 1)
 		{
@@ -303,6 +323,7 @@ class aw_template extends core
 			}
 	   		$this->vars[$object] .= $src;
 		}
+		$awt->stop("parse");
 		return $src;
 	}
 
@@ -352,6 +373,12 @@ class aw_template extends core
 				// found an end of this subtemplate, 
 				// finish and exit
 				$this->v2_templates[$fq_name] = $cur_src;
+				if ($this->use_eval)
+				{
+					$xsrc = str_replace("\"","\\\"",$cur_src);
+					$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".\$vars[\$1].\"",$xsrc);
+				};
+
 				$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
 				$this->v2_name_map[$cur_name] = $fq_name;
 				$this->v2_name_map[$parent_name.".".$cur_name] = $fq_name;
@@ -365,6 +392,11 @@ class aw_template extends core
 			}
 		}
 		$this->v2_templates[$fq_name] = $cur_src;
+		if ($this->use_eval)
+		{
+			$xsrc = str_replace("\"","\\\"",$cur_src);
+			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".\$vars[\$1].\"",$xsrc);
+		};
 		$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
 		$this->v2_name_map[$cur_name] = $fq_name;
 		$this->v2_name_map[$fq_name] = $fq_name;
