@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.224 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.225 2003/02/06 08:15:38 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4383,8 +4383,12 @@ class menuedit extends aw_template
 	{
 		$si_parent = $sel_menu_id;
 		$imgs = false;
-// why the fuck did I put this in?!?!
-//		return false;
+		$smi = "";
+		// why the fuck did I put this in?!?!
+
+		// I don't know, but we need SEL_MENU_IMAGE for director, so I'm
+		// making this work again. -- duke
+		//return false;
 		while ($sel_image == "" && $si_parent)
 		{
 			$sel_menu_meta = $this->mar[$si_parent]["meta"];
@@ -4398,7 +4402,12 @@ class menuedit extends aw_template
 			if ($sel_menu_meta["img_act_url"] != "")
 			{
 				$sel_image = "<img name='sel_menu_image' src='".image::check_url($sel_menu_meta["img_act_url"])."' border='0'>";
-				$sel_image_url = $sel_menu_meta["img_act_url"];
+				$this->vars(array(
+                                        "url" => image::check_url($sel_menu_meta["img_act_url"])
+                                ));
+                                $smi .= $this->parse("SEL_MENU_IMAGE");
+                                break;
+
 			}
 			$si_parent = $this->mar[$si_parent]["parent"];
 		}
