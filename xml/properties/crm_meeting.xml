@@ -5,7 +5,7 @@
             <type>datetime_select</type>
             <field>start</field>
             <table>planner</table>
-            <group>calendar</group>
+            <group>general</group>
             <caption>Algab </caption>
       </property>
       <property>
@@ -13,7 +13,7 @@
             <type>time_select</type>
             <field>end</field>
             <table>planner</table>
-            <group>calendar</group>
+            <group>general</group>
             <caption>Kestab</caption>
       </property>
       <property>
@@ -21,7 +21,7 @@
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>objects</table>
+            <table>documents</table>
             <group>general</group>
             <field>content</field>
             <caption>Sisu</caption>
@@ -31,13 +31,13 @@
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>objects</table>
+            <table>planner</table>
+            <field>description</field>
             <group>general</group>
-            <field>summary</field>
             <caption>Kokkuvõte</caption>
       </property>
       <classinfo>
-            <syslog_type>ST_KOHTUMINE</syslog_type>
+            <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>
