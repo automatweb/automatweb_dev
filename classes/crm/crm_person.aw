@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.44 2004/07/05 09:41:18 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.45 2004/07/05 14:05:46 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -278,12 +278,12 @@ class crm_person extends class_base
 			case 'rank' :
 			{
 				//let's list the professions the organization/unit is associated with
-				$drop_down_list = array();
 				//if the person is associated with a section then show the professions
 				//from the section and if not then show all the professions in the system
 				$conns = $arr['obj_inst']->connections_to(array(
 					'type'=> RELTYPE_SECTION
 				));
+
 				if(sizeof($conns))
 				{
 					foreach($conns as $conn)
@@ -311,7 +311,6 @@ class crm_person extends class_base
 						$drop_down_list[$o->id()] = $o->prop('name');
 					}
 				}
-
 				/*if(sizeof($drop_down_list))
 					{
 					//determine the selected item
@@ -362,7 +361,9 @@ class crm_person extends class_base
 				*/
 				//i guess the list should be sorted
 				asort($drop_down_list);
-				array_unshift($drop_down_list, '--vali--');
+				$drop_down_list = array_reverse($drop_down_list,true);
+				$drop_down_list[] = '--vali--';
+				$drop_down_list = array_reverse($drop_down_list,true);
 				$data['options'] = &$drop_down_list;
 				break;
 			}
