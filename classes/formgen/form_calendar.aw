@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.28 2003/06/04 14:05:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.29 2003/07/07 17:13:05 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -923,6 +923,8 @@ class form_calendar extends form_base
 
 // vana veateade: $this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 
+				$this->vac = $vac;
+
 				if ($vac < 0)
 				{
 					if (empty($relval["el_allow_exceed"]))
@@ -936,9 +938,14 @@ class form_calendar extends form_base
 						$this->fatal = false;
 						$msg = "On request!";
 					}
+					$this->msg = $msg;
 					// where do we put the error message?
 					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
 					$this->controller_errors[$err_el][] = $msg;
+
+
+
+					
 				};
 			};
 			$this->restore_handle();
@@ -1222,7 +1229,8 @@ class form_calendar extends form_base
 				$_reltype = $arr["release_unit_type"];
 			};
 
-			$_cnt = (int)$post_vars[$el_with_value];
+			//$_cnt = (int)$post_vars[$el_with_value];
+			$_cnt = (int)$args["els"][$el_with_value]["value"];
 
 			if ($_cnt > 0)
 			{
