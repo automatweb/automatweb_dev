@@ -27,14 +27,19 @@
 									</table>
 									<br>
 
-
-
-
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
+										<tr>
+											<td class="celltext">Nimi:</td><td class="celltext"><input type="text" name="name" value="{VAR:name}" class="formtext"></td>
+										</tr>
 										<tr>
 											<td class="celltext">Login objekt:</td><td class="celltext"><select name='login_obj' class="formselect">{VAR:login_objs}</select></td>
 										</tr>
-										<tr>
+									</table>
+									{VAR:search}
+
+									{VAR:res}
+
+<!--										<tr>
 											<td class="celltext">T&uuml;&uuml;p:</td><td class="celltext"><select NAME='s_class' class="formselect">{VAR:classes}</select></td>
 										</tr>
 										<tr>
@@ -65,7 +70,7 @@
 												</table>
 											</td>
 										</tr>
-									</table>
+									</table>-->
 
 
 
