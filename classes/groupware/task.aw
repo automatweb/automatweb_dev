@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.3 2003/11/27 12:35:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.4 2004/01/29 14:31:51 duke Exp $
 // task.aw - Toimetus 
 
 /*
@@ -13,7 +13,7 @@
 @default table=objects
 @default group=general
 
-@property done type=checkbox ch_value=1 field=status 
+@property is_done type=checkbox field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
 
 @property start1 type=datetime_select field=start table=planner
@@ -53,22 +53,5 @@ class task extends class_base
 		};
 		return $retval;
 	}
-
-	function set_property($arr = array())
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-                {
-			case "done":
-				if (empty($data["value"]))
-				{
-					$data["value"] = STAT_ACTIVE;
-				};
-				break;
-
-		}
-		return $retval;
-	}	
 }
 ?>
