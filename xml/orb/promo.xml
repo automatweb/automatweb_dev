@@ -1,11 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="promo" extends="class_base">
-		<action name="convert">
-			<function name="convert">
-				<arguments/>
-			</function>
-		</action>
 
 	</class>
 </orb>

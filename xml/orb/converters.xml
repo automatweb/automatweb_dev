@@ -15,6 +15,12 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="promo_convert">
+			<function name="promo_convert">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>
 		
