@@ -1,21 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.9 2004/10/13 11:06:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.10 2004/11/17 16:48:49 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
 
-@default table=objects
 @default group=general
+@default table=planner
 
-@property start1 type=datetime_select field=start table=planner
+@property start1 type=datetime_select field=start 
 @caption Algab
 
-@property end type=datetime_select field=end table=planner
+@property end type=datetime_select field=end 
 @caption Lõpeb
 
-@default field=meta
-@default method=serialize
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -95,6 +93,10 @@
 @property utextvar10 type=classificator
 @caption 
 
+@default field=meta
+@default method=serialize
+@default table=objects
+
 @property uimage1 type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb
 @caption
 
@@ -124,21 +126,6 @@ class calendar_event extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
-		};
-		return $retval;
-	}
-	*/
 
 	function set_property($arr = array())
 	{
@@ -148,8 +135,34 @@ class calendar_event extends class_base
 		{
 
 		}
+		$meta = $arr["obj_inst"]->meta();
+		if (substr($prop["name"],0,1) == "u")
+		{
+			if ($meta[$prop["name"]])
+			{
+				$arr["obj_inst"]->set_meta($prop["name"],"");
+			};
+		};
 		return $retval;
 	}	
+
+	function get_property($arr)
+	{
+		$retval = PROP_OK;
+		$prop = &$arr["prop"];
+		if ($arr["obj_inst"])
+		{
+			$meta = $arr["obj_inst"]->meta();
+			if (substr($prop["name"],0,1) == "u")
+			{
+				if (!empty($meta[$prop["name"]]))
+				{
+					$prop["value"] = $meta[$prop["name"]];
+				};
+			};
+		};
+		return $retval;
+	}
 	
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -166,13 +179,68 @@ class calendar_event extends class_base
 
 	function request_execute($o)
 	{
-		return $this->show(array("id" => $o->id()));
+		//if ($_GET["exp"] == 1)
+		//{
+			return $this->show2(array("id" => $o->id()));
+		//}
+		//else
+		//{
+		//	return $this->show(array("id" => $o->id()));
+		//};
+	}
+
+	function show2($arr)
+	{
+		$ob = new object($arr["id"]);
+		$cform = $ob->meta("cfgform_id");
+		// feega hea .. nüüd on vaja veel nimed saad
+		$cform_obj = new object($cform);
+		$output_form = $cform_obj->prop("use_output");
+		if (is_oid($output_form))
+		{
+			$cform = $output_form;
+		};
+		$t = get_instance(CL_CFGFORM);
+		$props = $t->get_props_from_cfgform(array("id" => $cform));
+		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		$htmlc->start_output();
+
+		foreach($props as $propname => $propdata)
+		{
+		  	$value = $ob->prop($propname);
+			if ($propdata["type"] == "datetime_select")
+			{
+				if ($value == -1)
+				{
+					continue;
+				};
+				$value = date("d-m-Y H:i",$value);	
+			};
+
+			if (!empty($value))
+			{
+			   $htmlc->add_property(array(
+			      "name" => $propname,
+			      "caption" => $propdata["caption"],
+			      "value" => $value,
+			      "type" => "text",
+			   ));
+			};
+		};
+		$htmlc->finish_output(array("submit" => "no"));
+
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
+		));
+	
+		return $html;
 	}
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
+		// nii .. kuidas ma siin saan ära kasutada classbaset mulle vajaliku vormi genereerimiseks?
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 		$this->vars(array(
