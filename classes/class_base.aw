@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.305 2004/10/08 18:48:15 kristo Exp $
+// $Id: class_base.aw,v 2.306 2004/10/12 17:12:55 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -114,6 +114,8 @@ class class_base extends aw_template
 			"treeview" => "vcl/treeview",
 			"toolbar" => "vcl/toolbar",
 			"translator" => "vcl/translator",
+			"project_selector" => "applications/groupware/vcl/project_selector",
+			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			//"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -1913,10 +1915,13 @@ class class_base extends aw_template
 				{
                                 	$ot = get_instance($reginst);
 				};
+
                                 if (is_callable(array($ot,"init_vcl_property")))
                                 {
                                         $res = $ot->init_vcl_property(array(
+						// property is deprecated, since all other places use just "prop"
                                                 "property" => &$val,
+						"prop" => &$val,
 						"id" => $this->id,
                                                 "clid" => $this->clid,
                                                 "obj_inst" => &$this->obj_inst,
@@ -3027,6 +3032,7 @@ class class_base extends aw_template
 			$type = $property["type"];
 
                         $argblock = array(
+				// prop is deprecated, use property instead
                                 "prop" => &$property,
 				"request" => &$rawdata,
                                 "new" => $new,
