@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.16 2002/03/13 13:41:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.17 2002/05/08 20:23:39 duke Exp $
 // mysql.aw - MySQL draiver
-include("$classdir/root.$ext");
-class db_connector extends root 
+class mysql 
 {
 	var $dbh; #database handle
 	var $db_base; #name of the database
@@ -12,13 +11,19 @@ class db_connector extends root
 
 	function db_init() 
 	{
+		/*
 		global $db_core;
 		$this->dbh = $db_core->dbh;
 		$this->db_base = $db_core->db_base;
 		$this->watch = 1;
+		*/
 		lc_load("definition");
 	}
 		
+
+	////
+	// !We need to be able to create multiple connections
+	// even better, connections might go to different databases
 	function db_connect($server,$base,$username,$password) 
 	{
 		global $DEBUG;
@@ -42,26 +47,28 @@ class db_connector extends root
 
 	function db_query($qtext,$errors = true) 
 	{
-		global $qcount,$qarr,$awt;
-		global $SITE_ID;
 		global $DUKE;
 		if ($DUKE)
 		{
 			print "<pre>";
 			print_r($qtext);
 			print "</pre>";
+			list($micro,$sec) = split(" ",microtime());
+			$ts_s = $sec + $micro;
 		};
-		$qcount++; $qarr[] = $qtext;
-//		dbg("<!-- $qcount : $qtext -->\n\n");
+		aw_global_set("qcount",aw_global_get("qcount")+1); 
 
 		if (not($this->dbh))
 		{
-			print "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator immediately";
-			exit;
-		};
-		if (is_object($awt)) 
-		{
-			$awt->start("querys");
+			// try to acquire the database handle
+			$this->db_init();
+			// if still not available, raise error. well, ok, we could try to re-connect to the db as well, but
+			// if we couldn't do this the first time around, we probably won't be able to this time either
+			if (not($this->dbh))
+			{
+				print "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator 	immediately";
+				exit;
+			}
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
 		if (!$this->qID ) 
@@ -74,7 +81,7 @@ class db_connector extends root
 			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
 			// ja selle ekraanile pritsimine ei anna mitte midagi.
 
-			if (strlen($qtext) > 500000)
+			if (strlen($qtext) > 5000)
 			{
 				$qtext = substr($qtext,0,5000) . "....(truncated)";
 			};
@@ -91,22 +98,43 @@ class db_connector extends root
 			$this->num_fields = @mysql_num_fields($this->qID);
 		};
 		$this->rec_count = 0;
-		if (is_object($awt)) 
+		if ($DUKE)
 		{
-			$awt->stop("querys");
-		};
+			list($micro,$sec) = split(" ",microtime());
+			$ts_e = $sec + $micro;
+			echo "query took ".($ts_e - $ts_s)." seconds <br>";
+		}
 		return true;
 	}
+
+	////
+	// !saves query handle in the internal stack
+	// it's your task to make sure you call those functions in correct
+	// order, otherwise weird things could happen
+	function save_handle()
+	{
+		if (not(is_array($this->qhandles)))
+		{
+			$this->qhandles = array();
+		};
+
+		array_push($this->qhandles,$this->qID);
+	}
+
+	////
+	// !restores query handle from internal check
+	function restore_handle()
+	{
+		if (is_array($this->qhandles))
+		{
+			$this->qID = array_pop($this->qhandles);
+		};
+	}
+		
 
 	function db_next($deq = true) 
 	{
 		# this function cannot be called before a query is made
-		global $awt;
-		if (is_object($awt)) 
-		{
-			$awt->start("db_next");
-			$awt->count("db_next");
-		};
 		// don't need numeric indices
 		$res = @mysql_fetch_array($this->qID,MYSQL_ASSOC);
 		if ($res) 
@@ -117,10 +145,6 @@ class db_connector extends root
 				$this->dequote($res);
 			}
 			$res["rec"] = $this->rec_count;
-		};
-		if (is_object($awt)) 
-		{
-			$awt->stop("db_next");
 		};
 		return $res;
 	}
