@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.24 2003/10/06 09:58:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.25 2003/11/10 19:19:25 duke Exp $
 
 class icons extends aw_template
 {
@@ -767,7 +767,7 @@ class icons extends aw_template
 
 	////
 	// !Tagastab mingile klassile vastava ikooni
-	function get_icon_url($clid,$name)
+	function get_icon_url($clid,$name = "")
 	{
 		if ($clid == CL_FILE)
 		{
