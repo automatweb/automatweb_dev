@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.75 2002/09/05 09:30:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.76 2002/09/05 14:01:58 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -328,13 +328,9 @@ class planner extends calendar
 			"type" => $type,
 		));
 
+		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
 		if ($object["class_id"] == CL_FORM_CHAIN)
 		{
-			/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
-			// retrieve all entries that belong to this calendar.
-			classload("form_calendar");
-			$fc = new form_calendar();
-
 			$fch = get_instance("form_chain");
 			$fch->load_chain($object["oid"]);
 
@@ -345,6 +341,32 @@ class planner extends calendar
 			$row = $this->db_next();
 			$ev_table = $row["ev_table"];
 
+
+		}
+		elseif ($object["class_id"] == CL_FORM)
+		{
+			$vac_cont = $object["oid"];
+			$q = "SELECT ev_table FROM calendar2forms WHERE cal_id = '$object[oid]'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$ev_table = $row["ev_table"];
+
+		}
+		else
+		// otherwise just load the plain old event objects
+		{
+			$events = $this->get_events2(array(
+				"start" => $di["start"],
+				"end" => $di["end"],
+				"folder" => $id,
+			));
+		};
+
+		if ($ev_table)
+		{
+			// retrieve all entries that belong to this calendar.
+			classload("form_calendar");
+			$fc = new form_calendar();
 			$events = $fc->get_events(array(
 				"eid" => $object["oid"],
 				"start" => $di["start"],
@@ -356,7 +378,6 @@ class planner extends calendar
 			$this->raw_events = $fc->raw_events;
 			$this->raw_headers = $fc->raw_headers;
 			$this->cached_chain_ids = array();
-
 			$this->ft = get_instance("form_table");
 			$this->table_id = $ev_table;
 			// event_display_table can be empty
@@ -364,16 +385,6 @@ class planner extends calendar
 			{
 				$this->ft->load_table($this->table_id);
 			};
-
-		}
-		else
-		// otherwise just load the plain old event objects
-		{
-			$events = $this->get_events2(array(
-				"start" => $di["start"],
-				"end" => $di["end"],
-				"folder" => $id,
-			));
 		};
 		
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
