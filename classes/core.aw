@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.224 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.225 2003/10/14 10:25:58 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2487,12 +2487,12 @@ class core extends acl_base
 	// (see on muiltiple select boxide jaoks abix)
 
 	// rootobj - mis objektist alustame
-	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
+	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1) 
 	{
 		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
 
 		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
-		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid");
+		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid")."::onlyact::".$onlyact;
 
 		if (!$ignore_langmenus)
 		{
@@ -2520,13 +2520,22 @@ class core extends acl_base
 
 		$x_mar = array();
 
+		if ($onlyact == 1)
+		{
+			$bb = " AND objects.status = ".STAT_ACTIVE;
+		}
+		else
+		{
+			$bb = " AND objects.status != 0 ";
+		}
+
 		// and finally, the database
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
 														objects.name as name
 											FROM objects 
 											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE objects.class_id = 1 AND objects.status != 0 $aa
+											WHERE objects.class_id = 1 $bb $aa
 											GROUP BY objects.oid
 											ORDER BY objects.parent,jrk");
 		while ($row = $this->db_next())
