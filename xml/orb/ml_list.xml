@@ -14,6 +14,7 @@
 			<function name="subscribe">
 				<arguments>
 					<required name="id" type="int"/>
+					<required name="rel_id" type="int"/>
 				</arguments>
 			</function>
 		</action>
