@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.25 2003/04/11 15:06:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.26 2003/04/21 10:47:59 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -325,7 +325,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$this->obj_ref = $_obj;
 				if ($args["clid"] == "document")
 				{
-					$mn = get_instance("menuedit");
+					$mn = get_instance("admin/admin_menus");
 					$parent = (int)$parent;
 					$toolbar = $mn->rf_toolbar(array(
 						"parent" => $parent,
@@ -383,11 +383,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					case "location":
 						if ($val == 0)
 						{
-							$tmp = join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;')));
+							/*$tmp = join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;')));
 							if (!empty($tmp))
 							{
 								$_part = " parent IN ($tmp) ";
-							};
+							};*/
 						}
 						else
 						{
@@ -432,11 +432,23 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					case "class_id":
 						if (is_array($val))
 						{
-							$xval = join(",",$val);
-							$parts["class_id"] = " class_id IN ($xval) ";
-							$partcount++;
+							$tmp = array();
+							foreach($val as $_v)
+							{
+								if ($_v != 0)
+								{
+									$tmp[] = $_v;
+								}
+							}
+							$xval = join(",",$tmp);
+							if ($xval != "")
+							{
+								$parts["class_id"] = " class_id IN ($xval) ";
+								$partcount++;
+							}
 						}
-						elseif ($val != 0)
+						else
+						if ($val != 0)
 						{
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
@@ -722,7 +734,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		if (!$args["clid"])
 		{
-			$mn = get_instance("menuedit");
+			$mn = get_instance("admin/admin_menus");
 			
 			$toolbar = $mn->rf_toolbar(array(
 				"parent" => $parent,
@@ -904,10 +916,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if (!$fields["lang_id"])
 		{
 			$lg = get_instance("languages");
+			$li = $lg->get_list(array("addempty" => true, "ignore_status" => true));
 			$fields["lang_id"] = array(
 				"type" => "select",
 				"caption" => "Keel",
-				"options" => $lg->get_list(array("addempty" => true)),
+				"options" => $li,
 				"selected" => $args["s"]["lang_id"],
 			);
 		};
