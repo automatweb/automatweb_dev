@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.259 2004/04/06 15:17:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.260 2004/04/27 13:22:24 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1564,7 +1564,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent())
+				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent() && aw_ini_get("site_id") != 138)
 				{
 					header("Location: $u");
 					die();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.88 2004/04/06 15:17:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.89 2004/04/27 13:22:24 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -661,12 +661,10 @@ class image extends class_base
 				{
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
-						"type" => $prop["value"]["type"],
-						"content" => $prop["value"]["contents"],
+						"type" => "image/jpg",
+						"content" => base64_decode($prop["value"]["contents"]),
 					));
-					$arr["obj_inst"]->set_name($prop["value"]["name"]);
 					$prop["value"] = $fl;
-					
 				}
 				else
 				{

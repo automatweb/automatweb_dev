@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.261 2004/04/27 11:42:38 duke Exp $
+// $Id: class_base.aw,v 2.262 2004/04/27 13:22:24 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2502,16 +2502,10 @@ class class_base extends aw_template
 					$src = $this->get_file(array(
 						"file" => $val["value"],
 					));
-					if (aw_global_get("__is_rpc_call"))
-					{
-						$result[$name] = array("base64" => $src);
-					}
-					else
-					{
-						$result[$name] = $src;
-					};
-					$mimeinfo = get_instance("core/aw_mime_types");
-					$result[$name . "_type"] = $mimeinfo->type_for_file($val["value"]);
+					$result[$name] = array(
+						"type" => "imagetype",
+						"contents" => base64_encode($src)
+					);
 				}
 				else
 				{
@@ -3534,7 +3528,7 @@ class class_base extends aw_template
 		$cfg_flags = array(
 			"classinfo_fixed_toolbar" => "fixed_toolbar",
 			"classinfo_allow_rte" => "allow_rte",
-			"classinfo" => "disable_relationmgr",
+			"classinfo_disable_relationmgr" => "disable_relationmgr",
 		);
 		$rv = false;
 		if ($this->can("view", $id))
@@ -3549,7 +3543,7 @@ class class_base extends aw_template
 			{
 				$this->classinfo[$val] = $cfgform_obj->prop($key);
 			};
-			
+
 			// sometimes the grplist is empty in config form.
 			// I don't know why, but it is, and in this case
 			// I'll load the groups from the file

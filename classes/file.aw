@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.71 2004/03/12 11:31:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.72 2004/04/27 13:22:25 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -569,6 +569,19 @@ class file extends class_base
 			$mimeregistry = get_instance("core/aw_mime_types");
 			$fc["type"] = $mimeregistry->type_for_ext($pi["extension"]);
 		}
+		global $XX3;
+		if ($XX3)
+		{
+			print strlen($fc["content"]);
+			print " / ";
+			$c = $fc["content"];
+			print md5($c);
+			/*
+			print "<pre>";
+			print_r($fc);
+			print "</pre>";
+			*/
+		};
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
 		//header("Content-Disposition: inline; filename=\"$fc[name]\"");
