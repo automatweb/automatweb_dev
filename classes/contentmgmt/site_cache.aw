@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.14 2004/05/04 12:08:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.15 2004/05/18 12:48:09 duke Exp $
 
 class site_cache extends aw_template
 {
@@ -24,7 +24,7 @@ class site_cache extends aw_template
 			$arr["content_only"] = 1;
 		}
 		else
-		if ($content = $this->get_cached_content($arr))
+		if (($content = $this->get_cached_content($arr)))
 		{
 			return $this->do_final_content_checks($content);
 		}
@@ -92,7 +92,12 @@ class site_cache extends aw_template
 		$cp = $this->get_cache_params($arr);
 		
 		$cache = get_instance("cache");
-		return $cache->get(aw_global_get("section"), $cp);
+		$tmp = $cache->get(aw_global_get("section"), $cp);
+		if ($GLOBALS["INTENSE_CACHE"] == 1)
+		{
+			echo "look for pagecache ".aw_global_get("section")." cp = ".dbg::dump($cp)." <br>";
+		}
+		return $tmp;
 	}
 
 	function set_cached_content($arr, $content)
@@ -158,9 +163,15 @@ class site_cache extends aw_template
 
 	function do_final_content_checks($res)
 	{
-		$res = preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
-		$ds = get_instance('contentmgmt/document_statistics');
-		$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
+		if (strpos($res,"[ss") !== false)
+		{
+			$res = preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
+		};
+		if (strpos($res,"[document_statistics") !== false)
+		{
+			$ds = get_instance('contentmgmt/document_statistics');
+			$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
+		};
 		return $res;
 	}
 }
