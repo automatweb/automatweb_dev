@@ -25,6 +25,37 @@ var chk_status = true;
 
 	function doSubmit(act)
 	{
+		if ( (act == "configure") || (act == "change") )
+		{
+			sel_item = 0;
+			for (i = 0; i < document.foo.oid.length; i++)
+			{
+				if (document.foo.oid[i].checked == true)
+				{
+					sel_item = document.foo.oid[i].value;
+				};
+			};
+			if (sel_item == 0)
+			{
+				for (i = 0; i < document.foo.elements.length; i++)
+				{
+					if (document.foo.elements[i].type == "checkbox"
+						&& document.foo.elements[i].name.indexOf("sel") == 0
+                                		&& document.foo.elements[i].checked 
+						&& sel_item == 0)
+					{
+						sel_item = document.foo.elements[i].value;
+					};
+				};
+			};
+			if (sel_item == 0)
+                        {
+
+				alert('Vali objekt, mille omadusi muuta soovid');
+				return false;
+			};
+			
+		};
 		document.foo.action.value="menuedit_redirect";
 		document.foo.subaction.value=act;
 		document.foo.submit();
@@ -240,7 +271,7 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:bas
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:document.foo.submit()" onClick="return doSubmit('change')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--settings--><a
-href="javascript:document.foo.submit()" onClick="return doSubmit('configure')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('settings','','{VAR:baseurl}/automatweb/images/blue/awicons/settings_over.gif',1)"><img name="settings" alt="" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/settings.gif" width="25" height="25"><!--show--><IMG
+href="javascript:document.foo.submit()" onClick="return doSubmit('configure')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('settings','','{VAR:baseurl}/automatweb/images/blue/awicons/settings_over.gif',1)"><img name="settings" alt="Konfigureeri" title="Konfigureeri" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/settings.gif" width="25" height="25"><!--show--><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:window.parent.objects.location.href=show()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('show','','{VAR:baseurl}/automatweb/images/blue/awicons/show_over.gif',1)"><img name="show" alt="{VAR:LC_MENUEDIT_SHOW}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/show.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
 SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG
@@ -338,7 +369,7 @@ onClick="sel_type={VAR:class_id};sel_form={VAR:form_id};sel_entry={VAR:oid};mk_o
 onClick="sel_type={VAR:class_id};cur_arr=0;sel_form=0;cl();"
 <!-- END SUB: NFE -->
 >&nbsp;</td>
-<td class="celltext">&nbsp;<input type="checkbox" NAME="sel[{VAR:oid}]" VALUE=1>&nbsp;</td>
+<td class="celltext">&nbsp;<input type="checkbox" NAME="sel[{VAR:oid}]" VALUE="{VAR:oid}">&nbsp;</td>
 <!--<td class="celltext">&nbsp;<input type="radio" name="default" value="{VAR:oid}" {VAR:checked}>&nbsp;</td>-->
 </tr>
 <!-- END SUB: LINE -->
