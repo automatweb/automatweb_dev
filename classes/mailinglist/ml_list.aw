@@ -185,8 +185,8 @@ class ml_list extends aw_template
 			"variable" => $varparse,
 			"automatic_form" => $this->picker($row["meta"]["automatic_form"], $fl),
 			"ufc" => $this->picker($row["meta"]["user_form_conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
-			"user_folders" => $this->mpicker($row["meta"]["user_folders"], $this->get_all_user_folders()),
-			"def_user_folder" => $this->picker($row["meta"]["def_user_folder"], $this->get_all_user_folders()),
+			"user_folders" => $this->mpicker($row["meta"]["user_folders"], $this->get_all_user_folders_defined()),
+			"def_user_folder" => $this->picker($row["meta"]["def_user_folder"], $this->get_all_user_folders_defined()),
 			"reforb" => $this->mk_reforb("submit_omadused",array("id" => $id)),
 		));
 
@@ -540,6 +540,12 @@ class ml_list extends aw_template
 	function get_all_user_folders()
 	{
 		return $this->list_ob["meta"]["user_folders"];
+	}
+
+	function get_all_user_folders_defined()
+	{
+		$ufc_inst = get_instance("mailinglist/ml_list_conf");
+		return $ufc_inst->get_folders_by_id($this->list_ob["meta"]["user_form_conf"]);
 	}
 
 	function get_mailto_element($lid = 0)
