@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.69 2004/03/16 10:30:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.70 2004/06/09 15:31:57 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -636,6 +636,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				if ($query)
 				{
 					$this->db_query($query);
+					print "1";
 					$partcount = 1;
 				}
 				elseif ($partcount == 0)
@@ -662,6 +663,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			$obj_list = array();
 
+			$is_remote = false;
 			// we need to make the object change links point to the remote server if specified. so fake it. 
 			if ($args["s"]["server"])
 			{
@@ -670,16 +672,28 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$old_bu = $this->cfg["baseurl"];
 				$this->cfg["baseurl"] = "http://".$serv;
 				$obj_list = $this->_get_s_parent($args);
+				$is_remote = true;
 			}
 
 			//while($row = $this->db_next())
 			while($row = $this->get_next())
 			{
-				if (!$this->can("view",$row["oid"])) continue;
+				// after all, what good does a local acl check do for a remote object?
+				if (!$is_remote && !$this->can("view",$row["oid"]))
+				{
+					continue;
+				};
 
-				$row_o = obj($row["oid"]);				
-				$row["location"] = $row_o->path_str();
-				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
+				if (!$is_remote)
+				{
+					$row_o = obj($row["oid"]);				
+					$row["location"] = $row_o->path_str();
+					$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
+				}
+				else
+				{
+					$row["location"] = $serv;
+				};
 
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
