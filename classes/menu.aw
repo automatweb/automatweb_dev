@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.79 2003/12/02 10:34:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.80 2003/12/05 12:29:38 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -209,7 +209,7 @@
 	@caption IP aadress ligipääsu piiramiseks
 
 	@reltype ACL_GROUP value=7 clid=CL_GROUP
-	@caption &Otilde;iguste Grupp
+	@caption Kasutajagrupp
 
 	@reltype OBJ_TREE value=8 clid=CL_OBJECT_TREE
 	@caption objektide nimekiri
