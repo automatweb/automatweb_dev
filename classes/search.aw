@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.1 2002/09/25 16:36:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.2 2002/09/25 22:44:27 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -78,6 +78,10 @@ class search extends aw_template
 		if ($args["obj"])
 		{
 			$_obj = get_instance($args["obj"]);
+			if (!$_obj)
+			{
+				$this->raise_error(ERR_CORE_NO_FILE,"Cannot create an instance of $args[obj]",true);
+			};
 		};
 
 		if (is_object($_obj) && method_exists($_obj,"_gen_s_path"))
@@ -91,6 +95,15 @@ class search extends aw_template
 		};
 
 		$this->mk_path($path_parent,$path_text);
+
+		if (is_object($_obj) && method_exists($_obj,"_get_s_header"))
+		{
+			$header = $_obj->_get_s_header($args);
+		}
+		else
+		{
+			$header = "";
+		};
 
 		// perform the actual search
 		if ($search)
@@ -263,11 +276,11 @@ class search extends aw_template
 		};
 
 		$this->vars(array(
-			"table" => $table,
+			"table" => "<form name='searchform' method='get'>" . $table . "</form>",
 			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid)),
 		));
 
-		return $this->parse();
+		return $header . $this->parse();
 	}
 
 	// generates contents for the class picker drop-down menu
