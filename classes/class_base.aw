@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.134 2003/07/17 15:50:15 duke Exp $
+// $Id: class_base.aw,v 2.135 2003/07/21 14:48:53 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -14,8 +14,8 @@
 	@comment Vabas vormis tekst objekti kohta
 
 	@property status type=status group=general
-	@caption Staatus
-	@comment Kas objekt on aktiivne või mitte
+	@caption Aktiivne
+	@comment Kas objekt on aktiivne 
 
 	@groupinfo general caption=Üldine default=1
 	@classinfo trans_id=TR_CLASS_BASE
@@ -1447,6 +1447,25 @@ class class_base extends aw_template
 			{
 				$this->get_value(&$val);
 			};
+
+			if (is_object($this->tr))
+			{
+				$prop_id = md5($val["caption"]);
+				if (!empty($val["comment"]))
+				{
+					$comm_id = md5($val["comment"]);
+					$commtrans = $this->tr->get_by_id($comm_id);
+					if (!empty($commtrans))
+					{
+						$val["comment"] = $commtrans;
+					};
+				};
+				$trans = $this->tr->get_by_id($prop_id);
+				if (!empty($trans))
+				{
+					$val["caption"] = $trans;
+				};
+			}
 
 			$argblock["prop"] = &$val;
 
