@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.38 2003/09/16 12:20:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.39 2003/09/17 14:53:50 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
+
+@classinfo trans=1
 
 @default table=documents
 @default group=general
@@ -227,7 +229,7 @@ class doc extends class_base
 				$objdata = new object($args["obj"]["oid"]);
 				$lg = get_instance("languages");
 				$lang_list = $lg->get_list();
-				$lang_id = $objdata->prop("lang_id");
+				$lang_id = $lg->get_langid_for_code($objdata->lang());
 				$data["value"] = $lang_list[$lang_id];
 				break;
 		};
