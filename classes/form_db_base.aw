@@ -491,17 +491,22 @@ class form_db_base extends aw_template
 		// first the where part - these _must_ be called in this order cause they init member variables that they use
 		$sql_where = $this->get_sql_where_clause();
 
+//		echo "sw = $sql_where <br>";
 		// now put all the joins into sql
 		$sql_join = $this->get_sql_joins_for_search($used_els,$this->arr["start_search_relations_from"]);
+//		echo "sj = $sql_join <br>";
 
 		// now get fetch data part
 		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els, $group_els);
+//		echo "sd = $sql_data <br>";
 
 		// this adds deleted object checking if the form entries have objects attached
 		$sql_where = $this->get_sql_where_objects_part($sql_where);
+//		echo "sw = $sql_where <br>";
 
 		// if we are showing a form table and it has groupings set, they will end up here and this turns them into sql
 		$sql_grpby = $this->get_sql_grpby($group_els);
+//		echo "sg = $sql_grpby <br>";
 
 		$sql = "SELECT ".$sql_data." FROM ".$sql_join.$sql_where.$sql_grpby;
 		if ($GLOBALS["fg_dbg"]) 
@@ -1464,6 +1469,7 @@ class form_db_base extends aw_template
 	// sort_by_alpha - if true, results will be sorted 
 	// rel_unique - if true, only distinct values are returned
 	// ret_values - if set, the return value is just the result array
+	// ret_ids - if set, array index is entry_id
 	function get_entries_for_element($args)
 	{
 		extract($args);
@@ -1491,17 +1497,19 @@ class form_db_base extends aw_template
 			$order_by = " ORDER BY $rel_el ";
 		}
 
+		$gpby = "";
 		if ($rel_unique == 1)
 		{
-			$rel_el = "distinct(".$rel_el.")";
-			$id_col = "";
+//			$rel_el = "distinct(".$rel_el.")";
+//			$id_col = "";
+			$gpby = " GROUP BY $rel_el ";
 		}
 
-		$q = "SELECT $id_col $rel_el as el_val FROM ".$rel_tbl.$join.$order_by;
+		$q = "SELECT $id_col $rel_el as el_val FROM ".$rel_tbl.$join.$gpby.$order_by;
 		if ($GLOBALS["fg_dbg"] == 2) echo "_grlc q = $q <br>";
 
 		// try to read the result from the cache
-		if (($ret = aw_cache_get("get_entries_for_element_cache", $q.((int)$ret_values))))
+		if (($ret = aw_cache_get("get_entries_for_element_cache", $q.((int)$ret_values).((int)$ret_ids))))
 		{
 			return $ret;
 		}
@@ -1512,7 +1520,14 @@ class form_db_base extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$result[$cnt++] = $row["el_val"];
+			if ($ret_ids)
+			{
+				$result[$row["id"]] = $row["el_val"];
+			}
+			else
+			{
+				$result[$cnt++] = $row["el_val"];
+			}
 		}
 
 		$this->restore_handle();

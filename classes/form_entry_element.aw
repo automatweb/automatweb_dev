@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.55 2002/07/24 20:36:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.56 2002/08/08 13:58:26 duke Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -24,6 +24,9 @@ class form_entry_element extends form_element
 		$this->lc_load("form","lc_form");
 
 		$this->read_template("admin_element.tpl");
+		$this->vars(array(
+			"cell_id"									=> "element_".$this->id, 
+		));
 
 		// here we create the listboxes for selecting tables
 		if (is_array($this->form->arr["save_tables"]))

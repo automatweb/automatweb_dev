@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.61 2002/07/31 10:03:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.62 2002/08/08 13:58:26 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1739,8 +1739,10 @@ class form_element extends aw_template
 
 			case "listbox":
 				// kui seoseelement siis feigime sisu
+				$rel = false;
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
+					$rel = true;
 					$this->make_relation_listbox_content();
 				}
 				$html .="<select $disabled $stat_check name='".$prefix.$elid."'";
@@ -1751,7 +1753,7 @@ class form_element extends aw_template
 				$html.=">";
 				$cnt = $this->arr["listbox_count"];
 
-				if ($lang_id != $this->form->lang_id)
+				if ($lang_id != $this->form->lang_id && !$rel)
 				{
 					$larr = $this->arr["listbox_lang_items"][$lang_id];
 				}
@@ -1779,7 +1781,8 @@ class form_element extends aw_template
 					}
 				}
 
-				for ($b=0; $b < $cnt; $b++)
+//				for ($b=0; $b < $cnt; $b++)
+				foreach($larr as $b => $value)
 				{	
 					$_v = "element_".$this->id."_lbopt_".$b;
 
@@ -1787,7 +1790,9 @@ class form_element extends aw_template
 		
 					if (is_array($larr))
 					{
-						list($key,$value) = each($larr);
+//						list($key,$value) = each($larr);
+						$key = $b;
+						
 
 						// now check all listbox item controllers for this lb item and if any of them fail, don't show item
 						$controllers_ok = true;
@@ -2518,7 +2523,7 @@ class form_element extends aw_template
 			{
 				if ($v != "")
 				{
-					$ar[$cnt++] = $v;
+					$ar[$k] = $v;
 				}
 			}
 
@@ -2528,13 +2533,11 @@ class form_element extends aw_template
 				{
 					uksort($ar,array($this,"__lb_sort"));
 				}
-				$cnt=0;
 				$ordar = $this->arr["listbox_order"];
 				foreach( $ar as $k => $v)
 				{
-					$this->arr["listbox_items"][$cnt] = $v;
-					$this->arr["listbox_order"][$cnt] = $ordar[$k];
-					$cnt++;
+					$this->arr["listbox_items"][$k] = $v;
+					$this->arr["listbox_order"][$k] = $ordar[$k];
 				}
 			}
 		}
@@ -2756,7 +2759,9 @@ class form_element extends aw_template
 
 		// I made it a separete function because I need those valuse in exact same order in form->process_entry
 		// too - to check whether the entry falls into allowed range in a calendar
-		list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($this->arr);
+		$opts = $this->arr;
+		$opts["ret_ids"] = true;
+		list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($opts);
 		$this->arr["listbox_count"] = $cnt;
 		if ($this->form->type == FTYPE_SEARCH)
 		{

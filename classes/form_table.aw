@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.46 2002/08/02 14:36:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.47 2002/08/08 13:58:27 duke Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -331,6 +331,10 @@ class form_table extends form_base
 				if ($dat["sort_el"])
 				{
 					$ret[$this->table["rgrps_forms"][$dat["sort_el"]]][$dat["sort_el"]] = $dat["sort_el"];
+				}
+				if ($dat["search_val_el"])
+				{
+					$ret[$this->table["rgrps_forms"][$dat["search_val_el"]]][$dat["search_val_el"]] = $dat["search_val_el"];
 				}
 				if (is_array($dat["data_els"]))
 				{
@@ -943,6 +947,12 @@ class form_table extends form_base
 				{
 					$this->table["rgrps_forms"][$dat["sort_el"]] = $els[$dat["sort_el"]];
 					$this->table["rgrps_el_types"][$dat["sort_el"]] = $elsubtypes[$els[$dat["sort_el"]]][$dat["sort_el"]]["subtype"];
+				}
+
+				if ($dat["search_val_el"])
+				{
+					$this->table["rgrps_forms"][$dat["search_val_el"]] = $els[$dat["search_val_el"]];
+					$this->table["rgrps_el_types"][$dat["search_val_el"]] = $elsubtypes[$els[$dat["search_val_el"]]][$dat["search_val_el"]]["subtype"];
 				}
 
 				if (is_array($dat["data_els"]))
@@ -2027,6 +2037,10 @@ class form_table extends form_base
 
 	function do_parse_ftbl_alias($id)
 	{
+		if (!$GLOBALS["match_form"] || !$GLOBALS["match_entry"])
+		{
+			$this->raise_error(ERR_FG_TBL_NOSEARCHTBL, "Can't show output alias in form table, no matching form or entry set - outputs can only be shown if doing a search from a previous table", true);
+		}
 		$finst = get_instance("form");
 		return $finst->show(array(
 			"id" => $GLOBALS["match_form"],

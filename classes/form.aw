@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.116 2002/08/02 13:34:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.117 2002/08/08 13:58:25 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -422,6 +422,8 @@ class form extends form_base
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["event_display_table"] = $event_display_table;
 		$this->arr["event_start_el"] = $event_start_el;
+
+		$this->subtype = 0;
 
 		if ($ev_entry_form)
 		{
@@ -5331,7 +5333,7 @@ class form extends form_base
 			{
 				$chelinst =& $ef->get_element_by_id($ch_el);
 //				echo "changing element $ch_el value to $ch_el_val , prev value = ", $chelinst->get_val()," <br>";
-				$ef->set_element_value($ch_el, $ch_el_val);
+				$ef->set_element_value($ch_el, $ch_el_val, true);
 				$ef->entry[$ch_el] = $ch_el_val;
 			}
 			$ef->process_entry(array(
