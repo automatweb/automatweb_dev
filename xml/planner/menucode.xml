@@ -6,18 +6,18 @@
 	</today>
 	<overview>
 		<caption>Ülevaade</caption>
-		<link>?class=planner&action=overview&date={VAR:date}</link>
+		<link>?class=planner&amp;action=overview&amp;date={VAR:date}</link>
 	</overview>
 	<day>
 		<caption>Päev</caption>
-		<link>?class=planner&action=show_week&date={VAR:date}</link>
+		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
 	</day>
 	<month>
 		<caption>Kuu</caption>
-		<link>?class=planner&action=show_week&date={VAR:date}</link>
+		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
 	</month>
 	<add>
 		<caption>Lisa</caption>
-		<link>?class=planner&action=addevent&date={VAR:date}</link>
+		<link>?class=planner&amp;action=addevent&amp;date={VAR:date}</link>
 	</add>
 </planner>
