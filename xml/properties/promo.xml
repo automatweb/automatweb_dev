@@ -53,6 +53,16 @@
             <caption>Lingi kirjeldus</caption>
       </property>
       <property>
+            <name>is_dyn</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisu ei cacheta</caption>
+      </property>
+      <property>
             <name>no_title</name>
             <group>show</group>
             <table>objects</table>

@@ -120,6 +120,22 @@
             <type>text</type>
             <caption>Testi filtreid</caption>
       </property>
+      <property>
+            <name>rule_editor</name>
+            <table>objects</table>
+            <group>rules</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_RULE</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>rule_from</num_0>
+                  <num_1>rule_subject</num_1>
+                  <num_2>target_folder</num_2>
+            </props>
+            <caption>Reeglid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MESSENGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -129,6 +145,10 @@
                   <caption>Kirjad</caption>
                   <submit>no</submit>
             </main_view>
+            <rules>
+                  <caption>Ruulid</caption>
+                  <submit>no</submit>
+            </rules>
       </groupinfo>
       <reltypes>
             <MAIL_IDENTITY>
