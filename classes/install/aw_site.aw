@@ -401,6 +401,9 @@ class aw_site extends class_base
 				$inst->on_site_init($dbi, $site, $ini_opts);
 			}
 		}
+
+		$dbi->db_query("UPDATE objects SET lang_id = 1");
+
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 	}
 
