@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.217 2003/11/05 13:44:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.218 2003/11/05 14:45:28 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -688,13 +688,16 @@ class document extends aw_template
 		}; 
 
 		// where do I put that shit? that break conversion thingie?
-		if (!$doc["nobreaks"] || !$doc["meta"]["cb_nobreaks"]["contentxxx"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
+		if ($doc["nobreaks"] || $doc["meta"]["cb_nobreaks"]["content"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
 			// fuckwits ... meeza thinks we should do the replacements when we are saving the
 			// document .. no? ... cause this nobreak thingie will cause me all kinds of 
 			// problems later on.
-			//$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
 		}
+		else
+		{
+			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
+		};
 
 		$pb = "";
 

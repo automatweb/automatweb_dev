@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.48 2003/11/05 13:44:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.49 2003/11/05 14:45:28 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -478,7 +478,7 @@ class doc extends class_base
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
-			"target" => "_self",
+			"target" => "contentarea",
 			"url" => "javascript:parent.contentarea.submit_changeform();",
                         "img" => "save.gif",
                 ));
