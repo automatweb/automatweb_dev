@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.36 2001/06/28 22:17:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.37 2001/06/29 00:00:22 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -157,7 +157,7 @@ class planner extends calendar {
 		return $this->change($args);
 	}
 
-	function export_event($args = array())
+	function _serialize_event($args = array())
 	{
 		extract($args);
 		$q = "SELECT * FROM planner WHERE id = '$id'";
@@ -176,20 +176,29 @@ class planner extends calendar {
 		$data = $xml->xml_serialize(array("data" => $block));
 		
 		classload("messenger","file");
-		$msng = new messenger();
-		$msg_id = $msng->init_message();
+		if ($new)
+		{
+			$msng = new messenger();
+			$msg_id = $msng->init_message();
+		};
 		$awf = new file();
+		$name = ($row["title"]) ? $row["title"] : "event";
 		$awf->put(array(
 				"store" => "fs",
-				"filename" => "event.xml",
+				"filename" => "$name.xml",
 				"type" => "text/aw-event",
 				"content" => $data,
 				"parent" => $msg_id,
 			));
-			
-		// step 1, create a new empty message object
-		// step 2, create a file from this event
-		// step 3, bounce the user into the editor
+	}
+
+	function export_event($args = array())
+	{
+		extract($args);
+
+		$args["new"] = true;
+		$this->_serialize_event($args);
+		
 		return $this->mk_site_orb(array(
 				"class" => "messenger",
 				"action" => "edit",
@@ -1389,7 +1398,8 @@ class planner extends calendar {
 	function draw_day($args = array())
 	{
 		extract($args);
-	
+		$this->tpl_init("objects");
+		$this->read_template("events.tpl");
 		$date = ($date) ? $date : date("d-m-Y");
 		$slice_id = join("",explode("-",$date));
 
@@ -1404,15 +1414,54 @@ class planner extends calendar {
 				"uid" => UID,
 			));
 
-		foreach($events[$slice_id] as $key => $val)
-		{
-			print $val["title"] . "<br>";
-			print date("d-m-Y H:i",$val["start"]) . "<br>";
-			print date("d-m-Y H:i",$val["end"]) . "<br>";
+		$c = "";
 
+		if (!is_array($events[$slice_id]))
+		{
+			$events[$slice_id] = array();
 		};
 
-		print $retval;
+		foreach($events[$slice_id] as $key => $val)
+		{
+			$this->vars(array(
+					"start" => date("H:i",$val["start"]),
+					"end" => date("H:i",$val["end"]),
+					"title" => $val["title"],
+					"oid" => $val["oid"],
+				));
+			$c .= $this->parse("line");
+		};
+		
+		$thiswday = get_lc_weekday($this->_convert_wday(date("w",$di["start"])));
+
+		$longname = date("d",$di["start"]) . ". " . get_lc_month(date("m",$di["start"]));
+		
+		$this->vars(array(
+				"msgid" => $msgid,
+				"line" => $c,
+				"today" => $thiswday . ", " . $longname,
+				"prev" => $di["prev"],
+				"next" => $di["next"],
+				"reforb" => $this->mk_reforb("submit_pick_msg_event",array("msgid" => $msgid)),
+		));
+		print $this->parse();
+		exit;
+	}
+
+	function submit_pick_msg_event($args = array())
+	{
+		extract($args);
+		if (is_array($check))
+		{
+			foreach($check as $id)
+			{
+				$this->_serialize_event(array(
+							"id" => $id,
+							"msg_id" => $msgid,
+				));
+			};
+		};
+		print "<script language='javascript'>window.close()</script>";
 		exit;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.11 2001/06/28 20:00:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.12 2001/06/29 00:00:22 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -25,7 +25,7 @@ class db_objects extends aw_template
 		switch($type)
 		{
 			case "top":
-				$retval .= "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='#'>Kalender</a>";
+				$retval .= "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'>Kalender</a>";
 
 				break;
 
@@ -103,7 +103,7 @@ class db_objects extends aw_template
 			default:
 				global $baseurl;
 				$frames = array(
-					"test1" => "$baseurl/?class=objects&action=browser&type=top",
+					"test1" => "$baseurl/?class=objects&action=browser&type=top&msgid=$msgid",
 					"content" => "$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid",
 					"test3" => "$baseurl/?class=objects&action=browser&type=bottom",
 				);
