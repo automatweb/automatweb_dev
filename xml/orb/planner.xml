@@ -16,9 +16,27 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="new_alias">
+			<function name="add_alias">
+				<arguments>
+					<required name="parent"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
 		
 		
 		<action name="change">
+			<function name="view">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="configure">
 			<function name="change">
 				<arguments>
 					<required name="id" type="int"/>
