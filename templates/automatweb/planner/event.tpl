@@ -29,6 +29,10 @@
 <td class="fgtitle"><input type="text" name="place" size="30" maxlength="60" value="{VAR:place}"></td>
 </tr>
 <tr>
+<td class="fgtitle"><strong>Värv</strong></td>
+<td class="fgtitle"><select name="color">{VAR:color}</select></td>
+</tr>
+<tr>
 <td class="fgtitle"><strong>Osalejad (kasutajad)</strong></td>
 <td class="fgtitle"><input type="text" name="users" size="30" value="{VAR:users}"></td>
 </tr>
