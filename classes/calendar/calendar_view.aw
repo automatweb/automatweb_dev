@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.26 2005/03/07 16:41:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.27 2005/03/07 17:11:14 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -345,7 +345,7 @@ class calendar_view extends class_base
 		$target_doc = $this->target_doc;
 		// now for each of those bloody things I need to figure out the date range as well
 		$conns = $this->obj_inst->connections_from(array(
-			"type" => RELTYPE_EVENT_SOURCE,
+			"type" => "RELTYPE_EVENT_SOURCE",
 		));
 
 		$overview = array();
