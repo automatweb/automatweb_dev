@@ -731,10 +731,12 @@ class linklist extends class_base
 		{
 			extract($value);
 			//leiame alammenüüs olevate objektidearvu // praegu leitakse alamenüüde arv, aga vaest oleks mõttekas leida (ka) linkide arv
-			$sub_count = $this->count_objects(array(
-				'class' => CL_PSEUDO,
-				'parent' => $oid,
+			$ol = new object_list(array(
+				"class_id" => CL_PSEUDO,
+				"parent" => $oid,
 			));
+			$sub_count = $ol->count();
+
 			if ($sub_count)
 			{
 				$this->vars(array('count'=>$sub_count));
