@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.48 2004/04/12 13:48:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.49 2004/04/21 08:46:32 kristo Exp $
 
 /*
 
@@ -595,7 +595,7 @@ class site_show extends class_base
 				{
 					// oh. damn. this is sneaky. what if the brother is not active - we gits to check for that and if it is, then
 					// use the brother
-					if ($o->class_id() != CL_DOCUMENT)
+					if ($o->class_id() != CL_DOCUMENT && $this->can("view", $o->brother_of()))
 					{
 						$bo = obj($o->brother_of());
 						if ($bo->status() != STAT_ACTIVE)
@@ -1814,7 +1814,14 @@ class site_show extends class_base
 				}
 				else
 				{
-					$link .= "index.".$this->cfg["ext"]."?section=".$o->id().$this->add_url;
+					if (aw_ini_get("menuedit.menuedit.show_real_location"))
+					{
+						$link .= "index.".$this->cfg["ext"]."?section=".$o->brother_of().$this->add_url;
+					}
+					else
+					{
+						$link .= "index.".$this->cfg["ext"]."?section=".$o->id().$this->add_url;
+					}
 				}
 			}
 			else
@@ -1823,17 +1830,17 @@ class site_show extends class_base
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
-				                if (aw_ini_get("ini_rootmenu"))
-				                {
-				                        $tmp = aw_ini_get("rootmenu");
-				                        $GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
-				                }						
+						if (aw_ini_get("ini_rootmenu"))
+						{
+							$tmp = aw_ini_get("rootmenu");
+							$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+						}
 						$_p = $o->path();
 
-				                if (aw_ini_get("ini_rootmenu"))
-				                {
-				                        $GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
-                				}						
+						if (aw_ini_get("ini_rootmenu"))
+						{
+							$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+						}
 						$alp = array();
 						foreach($_p as $p_o)
 						{
@@ -1856,7 +1863,7 @@ class site_show extends class_base
 				}
 				else
 				{
-					$oid = ($o->class_id() == 39) ? $o->brother_of() : $o->id();
+					$oid = ($o->class_id() == 39 || aw_ini_get("menuedit.show_real_location")) ? $o->brother_of() : $o->id();
 					$link .= $oid;
 				};
 			};
@@ -1936,6 +1943,7 @@ class site_show extends class_base
 
 		$tpl = $path."/".$tpl;
 		$fn = "compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+
 
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);
@@ -2118,6 +2126,7 @@ class site_show extends class_base
 		$this->_init_path_vars($arr);
 		$tpl_dir = dirname($template);
 		$tpl_fn = basename($template);
+
 		$cname = $this->cache_compile_template($tpl_dir, $tpl_fn, $mdefs, true);
 		$tmp = $this->do_draw_menus(array(), $cname, $tpl_dir, $tpl_fn);
 		return $tmp;

@@ -72,6 +72,8 @@ class site_template_compiler extends aw_template
 			24 => "OP_IF_SUBMENUS",
 			25 => "OP_GET_OBJ_SUBMENUS"
 		);
+
+		$this->id_func = (aw_ini_get("menuedit.show_real_location") == 1 ? "brother_of" : "id");
 	}
 
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
@@ -876,7 +878,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
 		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
-		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"colour\" => ".$o_name."->prop(\"color\"),\n";
 		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
 		$this->brace_level--;
@@ -1008,7 +1010,7 @@ class site_template_compiler extends aw_template
 
 		$ret  .= $this->_gi()."\$__list_filter = array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"parent\" => \$parent_obj->id(),\n";
+		$ret .= $this->_gi()."\"parent\" => \$parent_obj->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 
@@ -1147,7 +1149,7 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "not_in_path")
 			{
-				$ret = "((\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->id()) && \$this->_helper_is_in_path(".$o_name."->parent())) && ";
+				$ret = "((\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->".$this->id_func."()) && \$this->_helper_is_in_path(".$o_name."->parent())) && ";
 			}
 		}
 		else
@@ -1167,11 +1169,11 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "is_in_path")
 			{
-				$ret = "(\$this->_helper_is_in_path(".$o_name."->id())) && ";
+				$ret = "(\$this->_helper_is_in_path(".$o_name."->".$this->id_func."())) && ";
 			}
 			else
 			{
-				$ret = "(".$o_name."->id() == ".$arr["value"].") && ";
+				$ret = "(".$o_name."->".$this->id_func."() == ".$arr["value"].") && ";
 			}
 		}
 		else
@@ -1179,11 +1181,11 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "is_in_path")
 			{
-				$ret = "(\$this->_helper_is_in_path(\$prev_obj->id())) && ";
+				$ret = "(\$this->_helper_is_in_path(\$prev_obj->".$this->id_func."())) && ";
 			}
 			else
 			{
-				$ret = "(\$prev_obj->id() == ".$arr["value"].") && ";
+				$ret = "(\$prev_obj->".$this->id_func."() == ".$arr["value"].") && ";
 			}
 		}
 		else
@@ -1525,12 +1527,12 @@ class site_template_compiler extends aw_template
 		$ret = "";
 		
 		$ret .= $this->_gi()."\$has_lugu = \"\";\n";
-		$ret .= $this->_gi()."if (".$o_name."->meta(\"show_lead\") && (!aw_ini_get(\"menuedit.show_lead_in_menu_only_active\") || \$this->_helper_is_in_path(".$o_name."->id())))\n";
+		$ret .= $this->_gi()."if (".$o_name."->meta(\"show_lead\") && (!aw_ini_get(\"menuedit.show_lead_in_menu_only_active\") || \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())))\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\$xdat = new object_list(array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"parent\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"parent\" => ".$o_name."->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 		$ret .= $this->_gi()."\"period\" => aw_global_get(\"act_per_id\"),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PERIODIC_SECTION, CL_DOCUMENT),\n";
@@ -1541,12 +1543,21 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."for(\$o =& \$xdat->begin(); !\$xdat->end(); \$o =& \$xdat->next())\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+		$ret .= $this->_gi()."\$__tmp_tpl = \"nadal_film_side_lead.tpl\";\n";
+		$ret .= $this->_gi()."if (".$o_name."->prop(\"show_lead_template\"))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$tmp_o = obj(".$o_name."->prop(\"show_lead_template\"));\n";
+		$ret .= $this->_gi()."\$__tmp_tpl = \$tmp_o->prop(\"filename\");\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
 		$ret .= $this->_gi()."\$done = \$this->doc->gen_preview(array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"docid\" => \$o->id(), \n";
-		$ret .= $this->_gi()."\"tpl\" => \"nadal_film_side_lead.tpl\",\n";
+		$ret .= $this->_gi()."\"docid\" => \$o->".$this->id_func."(), \n";
+		$ret .= $this->_gi()."\"tpl\" => \$__tmp_tpl,\n";
 		$ret .= $this->_gi()."\"leadonly\" => 1, \n";
-		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"strip_img\" => 0\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
