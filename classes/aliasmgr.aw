@@ -1,586 +1,436 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.50 2001/08/27 14:02:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.0 2001/11/08 10:30:53 duke Exp $
 
-// used to specify how get_oo_aliases should return the list
-define("GET_ALIASES_BY_CLASS",1);
-define("GET_ALIASES_FLAT",2);
+// yup, this class is really braindead at the moment and mostly a copy of
+// the current alias manager inside the document class, but I will optimize
+// this a later.
+global $orb_defs;
+$orb_defs["aliasmgr"] = "xml";
 
-class aliasmgr extends aw_template 
-{
+class aliasmgr extends aw_template {
 	function aliasmgr($args = array())
 	{
 		extract($args);
-		$this->init("aliasmgr");
-
+		$this->db_init();
+		$this->tpl_init("aliasmgr");
 		$this->contents = "";
-		$this->lc_load("aliasmgr","lc_aliasmgr");
+
 	}
-
-	////
-	// !Allows to search for objects to include in the document
-	// intended to replace pickobject.aw
-	function search($args = array())
+		
+	function _init_aliases($args = array())
 	{
-		extract($args);
-		$this->read_template("search.tpl");
-		$search = get_instance("search");
-		$args["clid"] = "aliasmgr";
-		$form = $search->show($args);
+		$this->defs = array();
+		$obj = $this->get_object($this->id);
+		$this->parent = $obj["parent"];
 
-		$toolbar = get_instance("toolbar");
-		$buttons = "";
+		// yes, we define all aliases separately, so later on
+		// we can create policys about what type of aliases to show
+		// depending on different conditions (site policy, menu 
+		// properties).
+		$this->defs["images"] = array(
+				"alias" => "p",
+				"title" => "Pildid",
+				"table" => "images",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->id),"images"),
+		);
+
+		$this->defs["links"] = array(
+				"alias" => "l",
+				"title" => "Lingid",
+				"table" => "extlinks",
+				"addlink" => $this->mk_my_orb("new", array("docid" => $this->id, "parent" => $this->parent),"links"),
+		);
 		
-		$buttons .= $toolbar->gen_button(array(
-			"name" => "new",
-			"tooltip" => "Lisa uus objekt",
-			"url" => "javascript:redir()",
-			"imgover" => "automatweb/images/blue/awicons/new_over.gif",
-			"img" => "automatweb/images/blue/awicons/new.gif",
-		));
-
-		$buttons .= $toolbar->gen_separator();
+		$this->defs["tables"] = array(
+				"alias" => "t",
+				"title" => "Tabelid",
+				"table" => "tables",
+				"addlink" => $this->mk_my_orb("add_doc", array("id" => $this->id, "parent" => $this->parent),"table"),
+		);
 		
-		$buttons .= $toolbar->gen_button(array(
-			"name" => "refresh",
-			"tooltip" => "Reload",
-			"url" => "javascript:window.location.reload()",
-			"imgover" => "automatweb/images/blue/awicons/refresh_over.gif",
-			"img" => "automatweb/images/blue/awicons/refresh.gif",
-		));
+		$this->defs["forms"] = array(
+				"alias" => "f",
+				"title" => "Vormid",
+				"table" => "forms",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form"),
+		);
 		
-		$buttons .= $toolbar->gen_button(array(
-			"name" => "save",
-			"tooltip" => "Tee valitud objektidele aliased",
-			"url" => "javascript:aw_save()",
-			"imgover" => "automatweb/images/blue/awicons/save_over.gif",
-			"img" => "automatweb/images/blue/awicons/save.gif",
-		));
-		$id = $args["docid"];
-		$obj = $this->get_object($id);
+		$this->defs["files"] = array(
+				"alias" => "v",
+				"title" => "Failid",
+				"table" => "files",
+				"addlink" => $this->mk_my_orb("new",array("id" => $this->id, "parent" => $this->parent),"file"),
+		);
+		
+		$this->defs["graphs"] = array(
+				"alias" => "g",
+				"title" => "Graafikud",
+				"table" => "graphs",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"graph"),
+		);
+		
+		$this->defs["galleries"] = array(
+				"alias" => "y",
+				"title" => "Galeriid",
+				"table" => "galleries",
+				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"gallery"),
+		);
+		
+		$this->defs["form_chains"] = array(
+				"alias" => "c",
+				"title" => "Vormipärjad",
+				"table" => "formchains",
+				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_chain"),
+		);
 
-		// generate a list of class => name pairs
-		$aliases = array();
-		$classes = $this->cfg["classes"];
-		foreach($classes as $clid => $cldat)
-		{
-			if (isset($cldat["alias"]))
-			{
-				$aliases[$cldat["file"]] = $cldat["name"];
-			}
-		}
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1, "search" => 1, "docid" => $docid)),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
-			"buttons" => $buttons,
-			"form" => $form,
-			"table" => $search->get_results(),
-			"aliases" => $this->picker(-1,$aliases),
-		));
-		$results = $search->get_results();
-		return $this->parse();
-	}	
+		$this->defs["link_collections"] = array(
+				"alias" => "x",
+				"title" => "Lingikogu oksad",
+				"table" => "link_collections",
+				"addlink" => $this->mk_orb("pick_branch",array("parent" => $this->id),"link_collection"),
+		);
 
-	function search_callback_get_fields(&$fields,$args)
-	{
-		$fields = array();
-		$this->make_alias_classarr();
-		asort($this->classarr);
-		$fields["class_id"] = array(
-			"type" => "select",
-			"caption" => "Klass",
-			"options" => $this->classarr,
-			"selected" => $args["class_id"],
+		$this->defs["forums"] = array(
+				"alias" => "o",
+				"title" => "Foorumid",
+				"table" => "forums",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
 		);
 	}
 
-	function search_callback_modify_data($row,$args)
-	{
-		$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
-		$url = "#";
-		$row["name"] = "<a href='$url'>$row[name]</a>";
-	}
-
 	////
-	// !Submits the alias list
-	function submit_list($args = array())
+	// !This is the main function which lists all the aliases
+	// id(int) - the object (right now only document is supported)
+	// that we will use to display aliases for
+	function list_aliases($args = array())
 	{
 		extract($args);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "aliaslinks",
-			"value" => $link,
-			"overwrite" => 1,
-		));
-		$this->cache_oo_aliases($id);
-		return $this->mk_my_orb("list_aliases",array("id" => $id));
-	}
-		
-	////
-	// !Gets all aliases for an object
-	// params:
-	//   oid - the object whose aliases we must return
-	//   ret_type - if GET_ALIASES_BY_CLASS, return array is indexed by class and index, otherwise just index, default is GET_ALIASES_BY_CLASS
-	//   filter - array(classref,funcref) - if defined, this is called for each returned record
-	//   modifier(string) - allows to modify the sql clause to return only the data you need
-	function get_oo_aliases($args = array())
-	{
-		extract($args);
-		$oid = (int)$oid;
-		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
-
-		$obj = $this->get_object($oid);
-		// with this you can alter the sql clause to fetch only the data you are
-		// actually going to use
-		$modifier = ($modifier) ? $modifier : "aliases.*";
-		$q = "SELECT $modifier, objects.class_id AS class_id, objects.name AS name
-			FROM aliases
-			LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE source = '$oid' ORDER BY aliases.id";
-		$this->db_query($q);
-		$retval = array();
-		while($row = $this->db_next())
-		{
-			$row["aliaslink"] = $obj["meta"]["aliaslinks"][$row["target"]];
-			if ($filter)
-			{
-				$row = &$filter[0]->$filter[1]($row);
-				if (is_array($row))
-				{
-					$retval = $retval + $row;
-				};
-			}
-			elseif ($ret_type == GET_ALIASES_BY_CLASS)
-			{
-				$retval[$row["class_id"]][] = $row;
-			}
-			else
-			{
-				$retval[] = $row;
-			};
-		};
-		return $retval;
-	}
-
-	////
-	// !Parses all embedded objects inside another document
-	// arguments:
-	// oid(int) - document id
-	// source - document content
-	// args[meta][aliases] - optional, if set, result of get_oo_aliases for object $oid
-	function parse_oo_aliases($oid,&$source,$args = array())
-	{
-		extract($args);
-		if (is_array($meta["aliases"]))
-		{
-			$aliases = $meta["aliases"];
-		}
-		else
-		{
-			$aliases = $this->get_oo_aliases(array("oid" => $oid));
-			// write the aliases into metainfo for faster access later on
-			if (is_array($aliases))
-			{
-				$this->set_object_metadata(array(
-					"oid" => $oid,
-					"key" => "aliases",
-					"value" => $aliases,
-				));
-			};
-		};
-
-		$by_alias = array();
-		foreach($this->cfg["classes"] as $clid => $cldat)
-		{
-			$li = explode(",", $cldat["alias"]);
-			foreach($li as $lv)
-			{
-				$by_alias[$lv]["file"] = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
-				$by_alias[$lv]["class_id"] = $clid;
-			}
-		}
-
-		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
-
-		if (is_array($matches))
-		{
-			// we gather all aliases in here, grouped by class so we gan give them to parse_alias_list()
-			$toreplace = array();
-			foreach ($matches as $key => $val)
-			{
-				$clid = $by_alias[$val[2]]["class_id"];
-				$idx = $val[3] - 1;
-				$target = $aliases[$clid][$idx]["target"];
-
-				$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
-				$toreplace[$clid][$val[0]]["val"] = $val;
-			}
-
-			// here we do the actual parse/replace bit
-			foreach($toreplace as $clid => $claliases)
-			{
-				$emb_obj_name = "emb" . $clid;
-				$cldat = $this->cfg["classes"][$clid];
-				$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
-
-				if ($class_name)
-				{
-					// load and create the class needed for that alias type
-					$$emb_obj_name = get_instance($class_name);
-				}
-
-				if (method_exists($$emb_obj_name, "parse_alias_list"))
-				{
-					// if the class supports alias list parsing, do it
-					$repl = $$emb_obj_name->parse_alias_list(array(
-						"oid" => $oid,
-						"aliases" => $claliases,
-						"tpls" => &$args["templates"],
-					));
-					if (is_array($repl))
-					{
-						foreach($repl as $aname => $avalue)
-						{
-							$inplace = false;
-							if (is_array($avalue))
-							{
-								$replacement = $avalue["replacement"];
-								$inplace = $avalue["inplace"];
-							}
-							else
-							{
-								$replacement = $avalue;
-							}
-
-							if ($inplace)
-							{
-								$this->tmp_vars = array($inplace => $replacement);
-								$replacement = "";
-							};
-								
-							$source = str_replace($aname,$replacement,$source);
-						}
-					}
-				}
-				else
-				{
-					// if not, then parse all the aliases one by one
-					foreach($claliases as $avalue => $adata)
-					{
-						// if nothing comes up, we just replace it with a empty string
-						$replacement = "";
-
-						if (method_exists($$emb_obj_name,"parse_alias"))
-						{
-							$repl = $$emb_obj_name->parse_alias(array(
-								"oid" => $oid,
-								"matches" => $adata["val"],
-								"alias" => $adata,
-								"tpls" => &$args["templates"],
-							));
-					
-							$inplace = false;
-							if (is_array($repl))
-							{
-								$replacement = $repl["replacement"];
-								$inplace = $repl["inplace"];
-							}
-							else
-							{
-								$replacement = $repl;
-							}
-
-							if ($inplace)
-							{
-								$this->tmp_vars = array($inplace => $replacement);
-								$replacement = "";
-							};
-								
-							$source = str_replace($avalue,$replacement,$source);
-						}
-					}
-				}
-			}
-		};
-	}
-
-	////
-	// Returns the variables createad by parse_oo_alias
-	function get_vars()
-	{
-		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();
-	}
-
-	function _init_la_tbl()
-	{
+		$this->id = $id;
+		$this->_init_aliases();
+		$this->table = $table;
+		$this->sortby = $sortby;
+		$this->sort_order = $sort_order;
+		$this->read_template("lists.tpl");
 		load_vcl("table");
+
 		$this->t = new aw_table(array(
 			"prefix" => "images",
+			"imgurl"    => $GLOBALS["baseurl"]."/img",
+			"tbgcolor" => "#C3D0DC",
 		));
-		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$this->t->define_field(array(
-			"name" => "icon",
-			"caption" => "",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"width" => "30",
-			//"sortable" => 1,
-    ));
+
+		$this->t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$this->t->set_header_attribs(array(
+			"id" => $this->id,
+			"class" => "aliasmgr",
+			"action" => "list_aliases",
+		));
 		$this->t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
-			//"nowrap" => "1",
+			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+                ));
 		$this->t->define_field(array(
-			"name" => "comment",
-			"caption" => "Muu info",
+			"name" => "description",
+			"caption" => "Kirjeldus",
 			"talign" => "center",
-			//"nowrap" => "1",
+			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+                ));
 		$this->t->define_field(array(
 			"name" => "alias",
 			"caption" => "Alias",
 			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
-			//"nowrap" => "1",
-    ));
-		$this->t->define_field(array(
-			"name" => "link",
-			"caption" => "Link",
-			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
 			"nowrap" => "1",
-    ));
+                ));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => "Muutja",
-			"align" => "center",
 			"talign" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+                ));
 		$this->t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
 			"talign" => "center",
-			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-			"numeric" => 1,
-			"type" => "time",
-			"format" => "d.m.y / H:i"
-    ));
-		$this->t->define_field(array(
-			"name" => "title",
-			"caption" => "Tüüp",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-			"sortable" => 1,
-    ));
-		$this->t->define_field(array(
-			"caption" => "<a href='javascript:void(0)' onClick='selall()'>Vali</a>",
-			"name" => "check",
-			"width" => 20,
-			"align" => "center",
-		));
-	}
+                ));
 
-	////
-	// !the new alias lister
-	// params:
-	//   id - the object whose aliases we will observe
-	function new_list_aliases($args)
-	{
-		extract($args);
-		$this->read_template("lists_new.tpl");
-		$obj = $this->get_object($id);
-
-		// init vcl table to $this->t and define columns
-		$this->_init_la_tbl();
-
-		// creates $this->typearr
-		$this->make_alias_typearr();
-		// creates $this->aliasarr
-		$this->make_alias_classarr();
-
-		// this will be an array of class => name pairs for all object types that can be embedded
-		$aliases = array();
-		$types = array();
-		$classes = $this->cfg["classes"];
-		foreach($classes as $clid => $cldat)
-		{
-			if (isset($cldat["alias"]))
-			{
-				if ($cldat["alias_class"])
-				{
-					$cldat["file"] = $cldat["alias_class"];
-					$classes[$clid]["file"] = $cldat["alias_class"];
-				}
-				$aliases[$cldat["file"]] = $cldat["name"];
-				$types[] = $clid;
-			}
-		}
-
-		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $id)));
-
-		// fetch a list of all the aliases for this object
-		$alist = $this->get_aliases(array(
-			"oid" => $id,
-			"type" => $types
-		));
-		
-		$chlinks = array();
-		foreach($alist as $alias)
-		{
-			$aclid = $alias["class_id"];
-			list($astr) = explode(",",$classes[$aclid]["alias"]);
-			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
-			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
-			$chlinks[$alias["target"]] = $ch;
-
-			$alias["icon"] = sprintf("<img src='%s'>",get_icon_url($aclid,""));
-			$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
-			$alias["link"] = sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$alias["target"],checked($obj["meta"]["aliaslinks"][$alias["target"]]));
-			$alias["title"] = $classes[$aclid]["name"];
-			$alias["check"] = sprintf("<input type='checkbox' name='check' value='%d'>",$alias["target"]);
-			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
-
-			$this->t->define_data($alias);
-		}
-
-		$this->t->set_default_sortby("title");
-		$this->t->sort_by();
+		$this->_link_aliases();
+		$this->_link_collection_aliases();
+		$this->_forum_aliases();
+		$this->_img_aliases();
+		$this->_table_aliases();
+		$this->_form_aliases();
+		$this->_form_chain_aliases();
+		$this->_file_aliases();
+		$this->_graph_aliases();
+		$this->_gallery_aliases();
 		$this->vars(array(
-			"table" => $this->t->draw(),
-			"id" => $id,
-			"parent" => $obj["parent"],
-			"return_url" => $return_url,
-			"aliases" => $this->picker("",$aliases),
-			"reforb" => $this->mk_reforb("submit_list",array("id" => $id)),
-			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
+			"table" => $this->contents,
 		));
-			
 		return $this->parse();
 	}
-
-	////
-	// !deletes aliases (separated by ;'s) 
-	// params:
-	//   id - list of aliases
-	//   oid - the object where to delete aliases from
-	function del_alias($arr)
+		
+	// 
+	// Every alias class has its own subroutine to draw the according table
+	//
+	/////
+	// !This one handles all the images
+	function _img_aliases($args = array())
 	{
-		extract($arr);
-		$ids = explode(";",$id);
-		foreach($ids as $real_id)
+		classload("images");
+		$img = new db_images;
+		$this->_initialize($this->defs["images"]);
+		$img->list_by_object($this->id,0);
+		while($row = $img->db_next())
 		{
-			$this->delete_alias($oid,$real_id);
-		};
-		header("Location: ".$this->mk_my_orb("list_aliases", array("id" => $oid),"aliasmgr"));
-	}
-
-	////
-	// !adds the specified alias to the object
-	// parameters
-	//   id - the object to which the alias is added
-	//   alias - id of the object to add as alias
-	function addalias($arr)
-	{
-		extract($arr);
-		$aliases = explode(",",$alias);
-		foreach($aliases as $onealias)
-		{
-			$_al = (int)$onealias;
-			if ($_al > 0)
-			{
-				$al = $this->get_object($_al);
-			}
-			// let the correct class override the alias adding if it wants to
-			// if the class does not handle it, it falls back on core::addalias
-			$cl = $this->cfg["classes"][$al["class_id"]]["file"];
-			if ($cl != "")
-			{
-				$inst = get_instance($cl);
-				$inst->addalias(array("id" => $id,"alias" => $onealias));
-			}
-			else
-			{
-				$this->add_alias($id,$alias);
-			}
-		};
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
-	}
-
-	////
-	// !puts all alias classes into $this->typearr
-	function make_alias_typearr()
-	{
-		$this->typearr = array();
-
-		$classes = $this->cfg["classes"];
-		foreach($classes as $clid => $cldat)
-		{
-			if (isset($cldat["alias"]))
-			{
-				$this->typearr[] = $clid;
-			}
-		}
-	}
-
-	function make_alias_classarr()
-	{
-		$this->classarr = array();
-
-		$classes = $this->cfg["classes"];
-		foreach($classes as $clid => $cldat)
-		{
-			if (isset($cldat["alias"]))
-			{
-				$this->classarr[$clid] = $cldat["name"];
-			}
-		}
-	}
-
-	////
-	// !returns an array of alias id => alias name (#blah666#) for object $oid
-	function get_alias_list_for_obj_as_aliasnames($oid)
-	{
-		$cnts = array();
-		$ret = array();
-
-		$aliases = $this->get_aliases_for($oid);
-		foreach($aliases as $ad)
-		{
-			list($astr) = explode(",",$this->cfg["classes"][$ad["class_id"]]["alias"]);
-			$ret[$ad["id"]] = "#".$astr.(++$cnts[$ad["class_id"]])."#";
-		}
-		return $ret;
-	}
-
-	////
-	// !updates the alias list cache for object $oid
-	function cache_oo_aliases($oid)
-	{
-		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
-
-		// paneme aliases kirja
-    if (is_array($_aliases))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $oid,
-				"key" => "aliases",
-				"value" => $_aliases,
+			$this->t->define_data(array(
+				"name" => $row["name"],
+				"alias" => sprintf("#p%d#",$row["idx"]),
+				"comment" => $row["comment"],
+				"modified"    => $this->time2date($row["modified"],2),
+				"modifiedby" => $row["modifiedby"],
 			));
-    };
+		}
+		$this->_finalize($this->defs["images"]);
 	}
-}
+
+	function _link_aliases($args = array())
+	{
+		$this->_initialize($this->defs["links"]);
+		$links = $this->get_aliases_for($this->id,CL_EXTLINK,$_sby, $s_link_order,array("extlinks" => "extlinks.id = objects.oid"));
+		$lc = 0;
+		$linklist = array();
+		reset($links);
+		$lc = 0;
+		while (list(,$v) = each($links))
+		{	
+			$lc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"address"             => $v["url"],
+				"alias"               => "#l".$lc."#",	
+			));
+		};
+		$this->_finalize(array("title" => "Lingid"));
+	}
+	
+	function _form_aliases($args = array())
+	{
+		$this->_initialize($this->defs["forms"]);	
+		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
+		$fc = 0;
+		$formlist = array();
+		reset($forms);
+		while (list(,$v) = each($forms))
+		{
+			$fc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#f".$fc."#","comment" => $v["comment"],
+				"id"                  => $v["id"],		
+			));
+		};
+		$this->_finalize(array("title" => "Vormid"));
+	}
+
+	function _file_aliases($args = array())
+	{
+
+		$this->_initialize($this->defs["files"]);
+		$files = $this->get_aliases_for($this->id,CL_FILE,$s_file_sortby, $s_file_order);
+		$fic = 0;
+		$filelist = array();
+		reset($files);
+		while (list(,$v) = each($files))
+		{
+			$fic++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#v".$fic."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+		}
+		$this->_finalize(array("title" => "Failid"));
+	}
+
+	function _table_aliases($args = array())
+	{
+		$this->_initialize($this->defs["tables"]);
+		$tables = $this->get_aliases_for($this->id,CL_TABLE,$x,$y);
+		$tc = 0;
+		while (list(,$v) = each($tables))
+		{
+			$tc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#t".$tc."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+		}
+		$this->_finalize(array("title" => "Tabelid"));
+	}
+
+	function _form_chain_aliases($args = array())
+	{
+		$this->_initialize($this->defs["form_chains"]);
+		$ffl = "";
+		$chains = $this->get_aliases_for($this->id,CL_FORM_CHAIN,$s_chain_sortby, $s_chain_order);
+		$cc = 0;
+		$chainlist = array();
+		reset($chains);
+		while (list(,$v) = each($chains))
+		{
+			$cc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#c".$cc."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+		};
+		$this->_finalize(array("title" => "Vormipärjad"));
+	}
+
+	function _gallery_aliases($args = array())
+	{
+		$this->_initialize($this->defs["galleries"]);
+		$galleries = $this->get_aliases_for($this->id,CL_GALLERY,$s_gallery_sortby, $s_gallery_order);
+		$galc = 0;
+		$gallist = array();
+		reset($galleries);
+		while (list(,$v) = each($galleries))
+		{
+			$galc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#y".$galc."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+		}
+		$this->_finalize(array("title" => "Galeriid"));
+	}
+
+
+	function _link_collection_aliases($args = array())
+	{
+		$this->_initialize($this->defs["link_collections"]);
+		$link_collections = $this->get_aliases_for($id,CL_LINK_COLLECTION,0,0);
+		$lcoll = "";
+
+		if (is_array($link_collections))
+		{
+			$c = "";
+			$lcc = 0;
+
+			foreach($link_collections as $key => $val)
+			{
+				$lcc++;
+				$this->t->define_data(array(
+					"name" => $val["name"],
+					"comment" => $val["comment"],
+					"alias" => "#x$lcc#",
+					"modified" => $this->time2date($val["modified"],2),
+					"modifiedby" => $val["modifiedby"],
+				));	
+			}
+		}
+		$this->_finalize(array("title" => "Lingikogu oksad"));
+	}
+	
+	function _forum_aliases($args = array())
+	{
+		$this->_initialize($this->defs["forums"]);
+		$forums = $this->get_aliases_for($this->id,CL_FORUM,0,0);
+		$lcoll = "";
+
+		$this->vars(array(
+			"addlink" => $this->mk_my_orb("new",array("parent" => $id),"forum"),
+		));
+
+
+		if (is_array($forums) && (sizeof($forums) > 0))
+		{
+			$c = "";
+			$fcc = 0;
+
+			foreach($forums as $key => $val)
+			{
+				$fcc++;
+				$this->t->define_data(array(
+					"name" => $val["name"],
+					"comment" => $val["comment"],
+					"alias" => "#o$fcc#",
+					"edlink" => $this->mk_my_orb("edit_properties",array("id" => $val["oid"]),"forum"),
+					"modified" => $this->time2date($val["modified"],2),
+					"modifiedby" => $val["modifiedby"],
+				));
+			};
+		};
+		$this->_finalize(array("title" => "Foorumid"));
+	}
+
+	function _graph_aliases($args = array())
+	{
+		$this->_initialize($this->defs["graphs"]);
+		$graphs = $this->get_aliases_for($this->id,CL_GRAPH,$s_graph_sortby, $s_graph_order);
+		$gc = 0;
+		$graphlist = array();
+		reset($graphs);
+		while (list(,$v) = each($graphs))
+		{
+			$gc++;
+			$this->t->define_data(array(
+				"name"                => $v["name"],
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#g".$gc."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+		};
+		$this->_finalize(array("title" => "Graafikud"));
+	}
+	
+	function _initialize($args = array())
+	{
+		$this->t->reset_data();
+		$this->t->set_attribs(array("prefix" => $args["table"]));
+		$this->t->set_header_attribs(array("table" => $args["table"]));
+		$this->vars(array(
+			"add_link" => $args["addlink"],
+		));
+	}
+
+	function _finalize($args = array())
+	{
+		if ($this->table == $args["table"])
+		{
+			$this->t->sort_by(array("field" => $this->sortby));
+		}
+
+		$this->vars(array(
+			"contents" => $this->t->draw(),
+			"title" => $args["title"],
+		));
+
+		$this->contents .= $this->parse("table");
+	}
+};
 ?>
