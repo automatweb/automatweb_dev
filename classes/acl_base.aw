@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.56 2004/03/10 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.57 2004/03/10 12:34:00 kristo Exp $
 
 lc_load("definition");
 
@@ -40,7 +40,7 @@ class acl_base extends db_connector
 		return $ret;
 	}
 
-	function add_acl_group_to_obj($gid,$oid,$aclarr = array())
+	function add_acl_group_to_obj($gid,$oid,$aclarr = array(), $invd = true)
 	{
 		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
 		if (sizeof($aclarr) == 0)
@@ -49,9 +49,12 @@ class acl_base extends db_connector
 			$aclarr = $this->cfg["acl"]["default"];
 		};
 		$this->save_acl($oid,$gid,$aclarr);		
-		aw_session_set("__acl_cache", array());
-		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		if ($invd)
+		{
+			aw_session_set("__acl_cache", array());
+			$c = get_instance("cache");
+			$c->file_invalidate_regex("acl-cache(.*)");
+		}
 	}
 
 	function remove_acl_group_from_obj($gid,$oid)
@@ -359,7 +362,7 @@ class acl_base extends db_connector
 			{
 				$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
 			};
-			$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr);
+			$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr, false);
 			//$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
 		}
 	}
