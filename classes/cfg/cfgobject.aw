@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.7 2004/04/30 08:47:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.8 2004/06/08 19:26:58 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -28,13 +28,12 @@ class cfgobject extends aw_template
 		$this->read_template("add.tpl");
 		$clid = array();
 		$l = "";
-		$this->get_objects_by_class(array(
-			"class" => CL_CFGFORM,
+		$ol = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
-		while($row = $this->db_next())
-		{
-			$cfgforms[$row["oid"]] = $row["name"];
-		};
+		$cfgforms = $ol->names();
 
 		$this->mk_path($parent,"Lisa uus konfiobjekt");
 		$toolbar = get_instance("toolbar");
@@ -71,8 +70,8 @@ class cfgobject extends aw_template
 	function change($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],"Muuda konfiobjekti");
+		$obj = obj($id);
+		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
 
 		$toolbar = get_instance("toolbar");
 		$toolbar->add_button(array(
@@ -95,9 +94,9 @@ class cfgobject extends aw_template
 		// generate lists of objects
 		$o = array();
 		$cx = get_class_picker(array("field" => "file"));
-		if (is_array($obj["meta"]["objects"]))
+		if (is_array($obj->meta("objects")))
 		{
-			$oids = join(",",$obj["meta"]["objects"]);
+			$oids = join(",",$obj->meta("objects"));
 			$q = "SELECT class_id,oid,name,modified,modifiedby FROM objects WHERE oid IN ($oids)";
 			$this->db_query($q);
 			while($row = $this->db_next())
@@ -114,14 +113,14 @@ class cfgobject extends aw_template
 			};
 		};
 
-		$cfgformid = (int)$obj["meta"]["cfgform"];
+		$cfgformid = (int)$obj->meta("cfgform");
 		$c = "";
 		if ($cfgformid)
 		{
 			$html = get_instance("html");
 			$cp = get_class_picker(array("index" => "file"));
-			$cfgform = $this->get_object($cfgformid);
-			$cfgproperties = new aw_array($cfgform["meta"]["properties"]);
+			$cfgform = obj($cfgformid);
+			$cfgproperties = new aw_array($cfgform->meta("properties"));
 			// cycle over all the properties this configuration form has
 			foreach($cfgproperties->get() as $clid => $cl_properties)
 			{
@@ -143,38 +142,39 @@ class cfgobject extends aw_template
 					// should we ignore it?
 					$type = $props[$pkey]["type"];
 					$name = sprintf("properties[%s][%s]",$clid,$pkey);
-					$checked = $obj["meta"]["properties"][$clid][$pkey];
+					$tmp = $obj->meta("properties");
+					$checked = $tmp[$clid][$pkey];
 					if ($type == "checkbox")
 					{
 						$el = $html->checkbox(array(
-									"name"  => $name, 
-									"value" => 1,
-									"checked" => $checked,
+							"name"  => $name, 
+							"value" => 1,
+							"checked" => $checked,
 						));
 					}
 					elseif ($type == "select")
 					{
 						$el = $html->select(array(
-								"name" => $name,
-								"selected" => $obj["meta"]["properties"][$clid][$pkey],
-								"options" => $props[$pkey]["options"],
+							"name" => $name,
+							"selected" => $tmp[$clid][$pkey],
+							"options" => $props[$pkey]["options"],
 						));
 
 					}
 					elseif ($type == "time_select")
 					{
 						$el = $html->time_select(array(
-								"name" => $name,
-								"value" => $obj["meta"]["properties"][$clid][$pkey],
+							"name" => $name,
+							"value" => $tmp[$clid][$pkey],
 						));
 
 					}
 					else
 					{
 						$el = $html->text(array(
-									"name"  => $name,
-									"size" => $props[$pkey]["size"],
-									"value" => $obj["meta"]["properties"][$clid][$pkey],
+							"name"  => $name,
+							"size" => $props[$pkey]["size"],
+							"value" => $tmp[$clid][$pkey],
 						));
 					};
 					$this->vars(array(
@@ -196,14 +196,14 @@ class cfgobject extends aw_template
 
 
 		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
+			"name" => $obj->name(),
+			"comment" => $obj->comment(),
 			"toolbar" => $toolbar->get_toolbar(),
 			"toolbar2" => $toolbar->get_toolbar(array("id" => "booyaka")),
 			"class_container" => $c,
 			"oline" => $o,
 			"search_url" => $this->mk_my_orb("search",array("id" => $id)),
-			"priority" => $obj["meta"]["priority"],
+			"priority" => $obj->meta("priority"),
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
 		return $this->parse();
@@ -226,26 +226,23 @@ class cfgobject extends aw_template
 		$clidlist = $this->_remap_classes();
 		if ($id)
 		{
-			$obj = $this->get_object($id);
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"metadata" => array(
-					"properties" => $properties,
-					"priority" => $priority,
-				),
-			));
+			$obj = obj($id);
+			$obj->set_name($name);
+			$obj->set_comment($comment);
+			$obj->set_meta("properties", $properties);
+			$obj->set_meta("priority", $priority);
+			$obj->save();
+
 			// this is where I need to write the code to update the properties
 			// of all the objects that this configuration object affects
 
 			// I have to cycle over all the properties that this configuration
 			// object has and calculate the values
-			$cfgformid = $obj["meta"]["cfgform"];
+			$cfgformid = $obj->meta("cfgform");
 			if ($cfgformid)
 			{
-				$cfgform = $this->get_object($cfgformid);
-				$cfgproperties = new aw_array($cfgform["meta"]["properties"]);
+				$cfgform = obj($cfgformid);
+				$cfgproperties = new aw_array($cfgform->meta("properties"));
 			};
 
 			$props_to_set = array();
@@ -289,7 +286,7 @@ class cfgobject extends aw_template
 			};
 
 			// and now I need to update all the relevant objects
-			$objects = $obj["meta"]["objects"];
+			$objects = $obj->meta("objects");
 
 			if (is_array($objects))
 			{
@@ -306,12 +303,12 @@ class cfgobject extends aw_template
 					$this->save_handle();
 
 					if ($props_to_set[$row["class_id"]])
-                              {
-                                    $this->upd_object(array(
-                                          "oid" => $row["oid"],
-                                          "metadata" => $props_to_set[$row["class_id"]],
-                                    ));
-                              };
+					{
+						$this->upd_object(array(
+							"oid" => $row["oid"],
+							"metadata" => $props_to_set[$row["class_id"]],
+						));
+					};
 
 					$this->restore_handle();
 
@@ -392,14 +389,14 @@ class cfgobject extends aw_template
 	function search($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 
 		$search = get_instance("search");
-		$args["clid"] = "cfgobject";
+		$args["clid"] = CL_CFGOBJECT;
 		$form = $search->show($args);
 
 		$this->read_template("search.tpl");
-		$this->mk_path($obj["parent"],"Muuda konfiobjekti");
+		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
 		
 		$toolbar = get_instance("toolbar");
 		$toolbar->add_button(array(
@@ -468,14 +465,9 @@ class cfgobject extends aw_template
 	function save_objects($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		$old_objs = $obj["meta"]["objects"];
-		$this->upd_object(array(
-			"oid" => $id,
-			"metadata" => array(
-				"objects" => array_merge($old_objs,$sel),
-			),
-		));
+		$obj = obj($id);
+		$obj->set_meta(array_merge($obj->meta("objects"),$sel));
+		$obj->save();
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
