@@ -1031,7 +1031,7 @@ class site_template_compiler extends aw_template
 		$ret  .= $this->_gi()."\$__list_filter = array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"parent\" => \$parent_obj->".$this->id_func."(),\n";
-		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
+		$ret .= $this->_gi()."\"class_id\" => array(CL_MENU,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 
 		$ret .= $this->_gi()."new object_list_filter(array(\n";

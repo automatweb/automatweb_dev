@@ -95,7 +95,7 @@ class site_content extends menuedit
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
-		if ($obj2->prop("class_id") != CL_PSEUDO)
+		if ($obj2->prop("class_id") != CL_MENU)
 		{
 			$this->sel_section = $obj2->prop("parent");
 		}
@@ -2012,7 +2012,7 @@ class site_content extends menuedit
 			$retval = $mn->prop("period");
 		}
 		else
-		if ($mn->prop("class_id") != CL_PSEUDO)
+		if ($mn->prop("class_id") != CL_MENU)
 		{
 			$mn = new object($mn->prop("parent"));
 			$retval = $mn->prop("periodic");
@@ -2756,7 +2756,7 @@ class site_content extends menuedit
 	{
 		$obj = obj($section);
 
-		if ($obj->class_id() != CL_PSEUDO)
+		if ($obj->class_id() != CL_MENU)
 		{
 			$obj = obj($obj->parent());
 		}
@@ -3024,7 +3024,7 @@ class site_content extends menuedit
 		{
 			$obj = new object($parent);
 			// only use metadata from menus
-			$is_menu = ($obj->prop("class_id") == CL_PSEUDO);
+			$is_menu = ($obj->prop("class_id") == CL_MENU);
 
 			if (is_object($obj))
 			{
