@@ -628,9 +628,9 @@ function toggle_file_link_newwin()
 <!-- SUB: HAS_CONTROLLER -->
 <tr>
 <td class="fgtext">Vali elemendi sisestuse kontroller(id):</td>
-<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_entry_controllers[]'>{VAR:entry_controllers}</select></td>
+<td class="fgtext"><select size="10" multiple CLASS="small_button" NAME='{VAR:cell_id}_entry_controllers[]'>{VAR:entry_controllers}</select></td>
 <td class="fgtext">Vali elemendi n&auml;itamise kontroller(id):</td>
-<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
+<td class="fgtext"><select size="10" multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
 </tr>
 <!-- END SUB: HAS_CONTROLLER -->
 
@@ -639,7 +639,7 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">Vali elemendi n&auml;itamise kontroller(id):</td>
-<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
+<td class="fgtext"><select size="10" multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
 </tr>
 <!-- END SUB: HAS_ONLY_SHOW_CONTROLLER -->
 
