@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.199 2003/01/06 11:15:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.200 2003/01/07 17:03:29 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4029,9 +4029,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			global $fail;
 
-			$f = fopen($fail, "r");
-			$d = fread($f,filesize($fail));
-			fclose($f);
+			$f = @fopen($fail, "r");
+			if ($f)
+			{
+				$d = fread($f,filesize($fail));
+				fclose($f);
+			}
+			else
+			{
+				return $this->mk_my_orb("import",array("parent" => $parent));
+			};
 
 			$menus = unserialize($d);
 			$i_p = $menus[0];
