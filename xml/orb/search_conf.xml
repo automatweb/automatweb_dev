@@ -1,0 +1,43 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="search_conf">
+
+		<action name="search" nologin="1">
+			<function name="search">
+				<arguments>
+					<optional name="s_parent"/>
+					<optional name="s_keywords"/>
+					<optional name="sstring_title"/>
+					<optional name="sstring"/>
+					<optional name="t2c_log"/>
+					<optional name="c2k_log"/>
+					<optional name="search"/>
+					<optional name="page"/>
+					<optional name="t_type"/>
+					<optional name="c_type"/>
+					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="upd_dox" nologin="1">
+			<function name="upd_dox">
+				<arguments>
+					<optional name="s_parent"/>
+					<optional name="s_keywords"/>
+					<optional name="sstring_title"/>
+					<optional name="sstring"/>
+					<optional name="t2c_log"/>
+					<optional name="c2k_log"/>
+					<optional name="search"/>
+					<optional name="page"/>
+					<optional name="t_type"/>
+					<optional name="c_type"/>
+					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
