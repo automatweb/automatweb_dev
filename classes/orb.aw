@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.47 2003/07/17 15:57:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.48 2003/07/17 16:00:34 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -85,6 +85,13 @@ class orb extends aw_template
 		};
 
 		$fun = $orb_defs[$class][$action];
+		// oh the irony
+                if (!$fun && $action == "view")
+                {
+                        $action = "change";
+                };
+                $fun = $orb_defs[$class][$action];
+
 		if (is_array($fun))
 		{
 			$found = true;
