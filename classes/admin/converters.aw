@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.8 2003/06/04 14:03:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.9 2003/06/04 19:17:14 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -318,6 +318,318 @@ class converters extends aw_template
 		};
 		
 		
+	}
+
+	function groups_convert()
+	{
+		// basically, move all groups objects to some rootmenu and that seems to be it.
+		$rootmenu = aw_ini_get("groups.tree_root");
+		// now, get all top-level groups.
+		$this->db_query("SELECT gid,oid,type,search_form FROM groups WHERE (parent IS NULL or parent = 0) AND type IN(".GRP_REGULAR.",".GRP_DYNAMIC.")");
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			if ($row["type"] == GRP_DYNAMIC)
+			{
+				$found = false;
+				$aliases = $this->get_aliases_for($row["oid"]);
+				foreach($aliases as $alias)
+				{
+					if ($alias["id"] == $row["search_form"])
+					{
+						$found = true;
+					}
+				}
+		
+				if (!$found)
+				{
+					// we must add an alias to the group object for the search form
+					$this->addalias(array(
+						"id" => $row["oid"],
+						"alias" => $row["search_form"],
+						"reltype" => 1
+					));
+				}
+			}
+			$sql = "UPDATE objects SET parent = $rootmenu WHERE oid = $row[oid]";
+			$this->db_query($sql);
+			echo "grupp: $row[gid] , oid = $row[oid] <br>\n";
+			flush();
+
+			// now we must also create brothers of all the group members below this group
+			$u_objs = array();
+			$sql = "SELECT oid, brother_of FROM objects WHERE parent = $row[oid] AND class_id = ".CL_USER." AND status != 0";
+//			echo "sql = $sql <br>";
+			$this->db_query($sql);
+			while($urow = $this->db_next())
+			{
+				if (isset($u_objs[$urow["brother_of"]]))
+				{
+					// delete duplicates
+					$this->save_handle();
+					$this->delete_object($urow["oid"], false, false);
+					$this->restore_handle();
+				}
+				else
+				{
+					$u_objs[$urow["brother_of"]] = $urow["oid"];
+				}
+			}
+	
+			// now get oids of group members
+			$g_objs = array();
+			$sql = "SELECT oid FROM users u LEFT JOIN groupmembers m ON m.uid = u.uid WHERE m.gid = $row[gid] AND oid IS NOT NULL AND oid > 0";
+			$this->db_query($sql);
+			while($grow = $this->db_next())
+			{
+				$g_objs[$grow["oid"]] = $grow["oid"];
+			}
+
+			// now, remove the ones that are not in the group
+			foreach($u_objs as $real => $bro)
+			{
+				if (!isset($g_objs[$real]))
+				{
+					$this->delete_object($bro, false, false);
+					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
+					echo "deleted bro for $o_uid (oid = $real) <br>\n";
+					flush();
+				}
+			}
+
+//			echo "u_objs = ".dbg::dump($u_objs)." <br>";
+			// and add bros for the ones that are missing
+			foreach($g_objs as $real)
+			{
+//				echo "real = $real <br>\n";
+//				flush();
+				if (!isset($u_objs[$real]))
+				{
+					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
+					$_t = $this->new_object(array(
+						"parent" => $row["oid"],
+						"class_id" => CL_USER,
+						"brother_of" => $real,
+						"name" => $o_uid,
+						"no_flush" => 1,
+						"status" => STAT_ACTIVE
+					));
+					echo "lisasin kasutaja venna $o_uid parent = $row[oid] , oid is $_t<br>\n";
+					flush();
+				}
+			}
+
+			// and also create aliases to all the members of the group in the group
+			
+			$sql = "SELECT users.uid, users.oid FROM groupmembers left join users on users.uid = groupmembers.uid WHERE groupmembers.gid = ".$row["gid"];
+			$this->db_query($sql);
+			while ($trow = $this->db_next())
+			{
+				if (!$trow["oid"])
+				{
+					continue;
+				}
+				$this->save_handle();
+
+				// delete old aliases for this user.
+				$this->db_query("DELETE FROM aliases WHERE target = $trow[oid] and source = $row[oid]");
+
+				$this->addalias(array(
+					"id" => $row["oid"],
+					"alias" => $trow["oid"],
+					"reltype" => 2
+				));
+
+				$this->restore_handle();
+			}
+
+			$this->_rec_groups_convert($row["gid"], $row["oid"]);
+			$this->restore_handle();
+		}
+	}
+
+	function _rec_groups_convert($pgid, $poid)
+	{
+		$this->db_query("SELECT gid,oid FROM groups WHERE parent = $pgid AND type IN(".GRP_REGULAR.",".GRP_DYNAMIC.")");
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			if ($row["type"] == GRP_DYNAMIC)
+			{
+				$found = false;
+				$aliases = $this->get_aliases_for($row["oid"]);
+				foreach($aliases as $alias)
+				{
+					if ($alias["id"] == $row["search_form"])
+					{
+						$found = true;
+					}
+				}
+		
+				if (!$found)
+				{
+					// we must add an alias to the group object for the search form
+					$this->addalias(array(
+						"id" => $row["oid"],
+						"alias" => $row["search_form"],
+						"reltype" => 1
+					));
+				}
+			}
+			$sql = "UPDATE objects SET parent = $poid WHERE oid = $row[oid]";
+			$this->db_query($sql);
+			echo "grupp $row[gid] <br>\n";
+			flush();
+
+			// now we must also create brothers of all the group members below this group
+			$u_objs = array();
+			$sql = "SELECT oid, brother_of FROM objects WHERE parent = $row[oid] AND class_id = ".CL_USER." AND status != 0";
+			$this->db_query($sql);
+			while($urow = $this->db_next())
+			{
+				if (isset($u_objs[$urow["brother_of"]]))
+				{
+					// delete duplicates
+					$this->save_handle();
+					$this->delete_object($urow["oid"], false, false);
+					$this->restore_handle();
+				}
+				else
+				{
+					$u_objs[$urow["brother_of"]] = $urow["oid"];
+				}
+			}
+
+			// now get oids of group members
+			$g_objs = array();
+			$sql = "SELECT oid FROM users u LEFT JOIN groupmembers m ON m.uid = u.uid WHERE m.gid = $row[gid] AND oid IS NOT NULL AND oid > 0";
+			$this->db_query($sql);
+			while($grow = $this->db_next())
+			{
+				$g_objs[$grow["oid"]] = $grow["oid"];
+			}
+
+			// now, remove the ones that are not in the group
+			foreach($u_objs as $real => $bro)
+			{
+				if (!isset($g_objs[$real]))
+				{
+					$this->delete_object($bro, false, false);
+					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
+					echo "deleted bro for $o_uid (oid = $real) <br>\n";
+					flush();
+				}
+			}
+
+			// and add bros for the ones that are missing
+			foreach($g_objs as $real)
+			{
+				if (!isset($u_objs[$real]))
+				{
+					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
+					$this->new_object(array(
+						"parent" => $row["oid"],
+						"class_id" => CL_USER,
+						"brother_of" => $real,
+						"name" => $o_uid,
+						"status" => STAT_ACTIVE,
+						"no_flush" => 1
+					));
+					echo "lisasin kasutaja venna $o_uid <br>\n";
+					flush();
+				}
+			}
+
+			// and also create aliases to all the members of the group in the group
+			$sql = "SELECT users.uid, users.oid FROM groupmembers left join users on users.uid = groupmembers.uid WHERE groupmembers.gid = ".$row["gid"];
+			$this->db_query($sql);
+			while ($trow = $this->db_next())
+			{
+				if (!$trow["oid"])
+				{
+					continue;
+				}
+				$this->save_handle();
+
+				// delete old aliases for this user.
+				$this->db_query("DELETE FROM aliases WHERE target = $trow[oid] and source = $row[oid]");
+
+				$this->addalias(array(
+					"id" => $row["oid"],
+					"alias" => $trow["oid"],
+					"reltype" => 2
+				));
+				$this->restore_handle();
+			}
+
+			$this->_rec_groups_convert($row["gid"], $row["oid"]);
+			$this->restore_handle();
+		}
+	}
+
+	///////////////////////////////
+	function convert_acl_to_classbase()
+	{
+		// go over all acl objects and make aliases for the selected roles/chains/groups
+		$objs = $this->list_objects(array(
+			"class" => CL_ACL,
+			"return" => ARR_ALL
+		));
+		foreach($objs as $obj)
+		{
+			echo "converting object $obj[name] ($obj[oid]) <br>\n";
+			$obj["meta"] = $this->get_object_metadata(array(
+				"metadata" => $obj["metadata"]
+			));
+			flush();
+			// ah, fuck it. 1st, delete all aliases
+			$this->db_query("DELETE FROM aliases WHERE source = $obj[oid]");
+
+			// now, add them back
+			if ($obj["meta"]["role"])
+			{
+//				echo "role = ".$obj["meta"]["role"]." <br>";
+				core::addalias(array(
+					"id" => $obj["oid"],
+					"alias" => $obj["meta"]["role"],
+					"reltype" => 2
+				));
+			}
+			if ($obj["meta"]["chain"])
+			{
+//				echo "chain = ".$obj["meta"]["chain"]." <br>";
+				core::addalias(array(
+					"id" => $obj["oid"],
+					"alias" => $obj["meta"]["chain"],
+					"reltype" => 1
+				));
+			}
+			$_ar = new aw_array($obj["meta"]["groups"]);
+
+			foreach($_ar->get() as $gid)
+			{
+//				echo "gid = $gid <br>";
+				$u = get_instance("users");
+				core::addalias(array(
+					"id" => $obj["oid"],
+					"alias" => $u->get_oid_for_gid($gid),
+					"reltype" => 3
+				));
+				// also, add alias to acl object from group
+				// but only if it does not exist
+				$row = $this->db_fetch_row("SELECT * FROM aliases WHERE source = ".$u->get_oid_for_gid($gid)." AND target = ".$obj['oid']);
+				if (!is_array($row))
+				{
+					core::addalias(array(
+						"id" => $u->get_oid_for_gid($gid),
+						"alias" => $obj['oid'],
+						"reltype" => 3
+					));
+					echo "add alias to group ".$u->get_oid_for_gid($gid)." <br>";
+				}
+			}
+		}
+		die("Valmis!");
 	}
 };
 ?>
