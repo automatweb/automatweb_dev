@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.23 2003/02/26 15:58:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.24 2003/04/29 16:40:43 duke Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -101,8 +101,9 @@ class style extends aw_template
 	function change($arr)
 	{
 		extract($arr);
+		$obj = $this->get_object($id);
 
-		$this->mk_path($parent,LC_STYLE_CHANGE_STYLE);
+		$this->mk_path($obj["parent"],LC_STYLE_CHANGE_STYLE);
 
 		$this->style = $this->get($id);
 		switch($this->style["type"])
