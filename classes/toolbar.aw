@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.21 2004/01/13 14:13:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.22 2004/01/21 17:15:28 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -53,6 +53,10 @@ class toolbar extends aw_template
 		if ($arr["onClick"])
 		{
 			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
+		};
+		if (!empty($arr["link"]))
+		{
+			$arr["url"] = $arr["link"];
 		};
 		$this->vars($arr);
 		$tpl = isset($arr["disabled"]) && $arr["disabled"] ? "MENU_ITEM_DISABLED" : "MENU_ITEM";
