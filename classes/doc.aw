@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.41 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.42 2003/10/16 14:38:52 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -11,9 +11,6 @@
 
 @property navtoolbar type=toolbar no_caption=1 store=no
 @caption Toolbar
-
-@property active type=checkbox ch_value=2 table=objects field=status
-@caption Aktiivne
 
 @property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
 @caption Pluginad
@@ -242,12 +239,14 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			/*
 			case "active":
 				if (empty($data["value"]))
 				{
 					$data["value"] = STAT_NOTACTIVE;
 				};
 				break;
+			*/
 
 			case "sections":
 				$this->update_brothers(array(
@@ -460,6 +459,7 @@ class doc extends class_base
 		{
 			$objdata["tm"] = date("d.m.y", $objdata["modified"]);
 		}
+
 	}
 
 	function callback_post_save($args = array())
