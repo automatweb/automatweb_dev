@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.241 2003/02/21 13:30:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.242 2003/02/25 11:47:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2112,9 +2112,22 @@ class menuedit extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			//$q = "SELECT count(*) AS cnt FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status = 2 AND menu.type = " . MN_ADMIN1 . " AND objects.parent = '$row[oid]' AND objects.lang_id = ".aw_global_get("lang_id");
-			$q = "SELECT count(*) AS cnt FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status = 2 AND menu.type = " . MN_ADMIN1 . " AND objects.parent = '$row[oid]'";
-			$subcnt = $this->db_fetch_field($q,"cnt");
+			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
+			{
+				continue;
+			}
+
+			$subcnt = 0;
+			$q = "SELECT * FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status = 2 AND menu.type = " . MN_ADMIN1 . " AND objects.parent = '$row[oid]'";
+			$this->db_query($q);
+			while ($_row = $this->db_next())
+			{
+				if ($_row["admin_feature"] && !$this->prog_acl("view", $_row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
+				{
+					continue;
+				}
+				$subcnt++;
+			}
 
 
 			$this->restore_handle();
