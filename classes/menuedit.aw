@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.296 2003/07/01 10:05:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.297 2003/07/07 15:00:37 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -341,7 +341,18 @@ class menuedit extends aw_template
 		{
 			if ($row)
 			{
-				aw_global_set("lang_id",$set_lang_id);
+				if ($set_lang_id != aw_global_get("lang_id"))
+				{
+					$la = get_instance("languages");
+					$la->set_active($set_lang_id);
+					$this->lc_load("menuedit","lc_menuedit");
+					lc_site_load("menuedit",$this);
+					lc_load("definition");
+				}
+				else
+				{
+					aw_global_set("lang_id",$set_lang_id);
+				}
 			}
 			else
 			{
@@ -370,7 +381,6 @@ class menuedit extends aw_template
 		// so that http://site/alias and http://site/alias/ both work
 		if (substr($section,-1) == "/")
 		{
-
 			$section = substr($section,0,-1);
 		};
 
@@ -391,35 +401,35 @@ class menuedit extends aw_template
 		if (!is_number($section)) 
 		{
 
-			// first I have to check whether the alias contains /-s and if so, split
-			// the url into pieces
-			$sections = explode("/",$section);
-
-			// if it contains a single $section, it is now located in $sections[0]
-			
-			// oh boy, that hurt. we accepted random crap as section name and then
-			// fed it directly to the SQL server (get_object_by_alias)
-			// so now we check whether the name contains anything besides alphanumeric and _
-			// and if so, log it as crack attempt
-
-			// and if that check is not good enough, we need something like "is_valid_section"
-
-			// yeah, well, /\W/ match is way too strict - I can't use blah.html as the alias for instance
-			// $this->quote(&$alias) will prevent doing any bad things in the sql - terryf
-			$prnt = 0;
-			$obj = true;
-			foreach($sections as $skey => $sval)
+			if ($this->cfg['recursive_aliases'])
 			{
-				global $DBUG;
-				if ($DBUG)
+				// first I have to check whether the alias contains /-s and if so, split
+				// the url into pieces
+				$sections = explode("/",$section);
+	
+				// if it contains a single $section, it is now located in $sections[0]
+			
+				// oh boy, that hurt. we accepted random crap as section name and then
+				// fed it directly to the SQL server (get_object_by_alias)
+				// so now we check whether the name contains anything besides alphanumeric and _
+				// and if so, log it as crack attempt
+	
+				// and if that check is not good enough, we need something like "is_valid_section"
+
+				// yeah, well, /\W/ match is way too strict - I can't use blah.html as the alias for instance
+				// $this->quote(&$alias) will prevent doing any bad things in the sql - terryf
+				$prnt = 0;
+				$obj = true;
+				foreach($sections as $skey => $sval)
 				{
-					print "checking $sval<br>";
-				}
-				if ($obj !== false)
-				{
-					// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
-					if ($this->cfg['recursive_aliases'])
+					global $DBUG;
+					if ($DBUG)
 					{
+						print "checking $sval<br>";
+					}
+					if ($obj !== false)
+					{
+						// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
 						// vaatame, kas selle nimega aliast on?
 						$obj = $this->_get_object_by_alias($sval,$prnt);
 
@@ -442,16 +452,16 @@ class menuedit extends aw_template
 						else
 						{
 							$prnt = $obj["oid"];
-						};
+						}
 					}
-					else
-					{
-						// vaatame, kas selle nimega aliast on?
-						$obj = $this->_get_object_by_alias($sval);
-						$prnt = $obj["oid"];
-					}
-				};
-			};
+				}
+			}
+			else
+			{
+				// vaatame, kas selle nimega aliast on?
+				$this->quote(&$section);
+				$obj = $this->_get_object_by_alias($section);
+			}
 
 			// nope. mingi skriptitatikas? voi cal6
 			// inside joked ruulivad exole duke ;)
