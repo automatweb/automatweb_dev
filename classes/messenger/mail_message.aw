@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.14 2003/11/08 08:01:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.15 2003/11/09 22:24:49 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -20,6 +20,9 @@
 
 	@property name type=textbox size=80 table=objects
 	@caption Teema
+
+	@property date type=text store=no
+	@caption Kuupäev
 
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
@@ -223,6 +226,17 @@ class mail_message extends class_base
 				if ($this->state == "show")
 				{
 					$data["type"] = "text";
+				};
+				break;
+
+			case "date":
+				if ($this->state == "show")
+				{
+					$data["value"] = $this->msgdata["date"];
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				};
 				break;
 	
