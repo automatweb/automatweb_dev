@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.73 2004/05/12 10:54:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.74 2004/05/14 08:35:26 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -140,6 +140,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property user6 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 6
+
+@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=general
+@caption Kasutaja defineeritud checkbox 1
 
 @property language type=text group=general type=text store=no trans=1
 @caption Keel
