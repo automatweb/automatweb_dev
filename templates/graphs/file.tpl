@@ -2,7 +2,7 @@
 <input type="hidden" name="MAX_FILE_SIZE" value="20000000">
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption">{VAR:LC_GRAPH_CHOOSE_FILE}</td>
+	<td class="fcaption2">{VAR:LC_GRAPH_CHOOSE_FILE}</td>
 	<td class="fform"><input type="file" size="40" name="file"></td>
 </tr>
 <tr>

@@ -7,7 +7,7 @@
 	</b></td>
 </tr>
 <tr>
-	<td valign=middle><img src='orb.aw?class=graph&action=show&id={VAR:id}&tibi={VAR:fine}'>&nbsp;
+	<td class="fcaption2" valign=middle><img src='orb.aw?class=graph&action=show&id={VAR:id}&tibi={VAR:fine}'>&nbsp;
 	</td>
 </tr>
 </TABLE>

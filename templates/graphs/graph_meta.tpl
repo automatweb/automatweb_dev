@@ -11,13 +11,13 @@
 <form method="post" action="reforb.{VAR:ext}">
 <TABLE border=0>
 <TR>
-	<TD class="fcaption">{VAR:LC_GRAPH_NAME}:<TD class="fcaption"><input type="text" name="name" value="{VAR:name}">
+	<TD class="fcaption2">{VAR:LC_GRAPH_NAME}:<TD class="fcaption2"><input type="text" name="name" value="{VAR:name}">
 <TR>
-	<TD class="fcaption">{VAR:LC_GRAPH_COMM}:<TD class="fcaption"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'>{VAR:comment}</textarea></tr>
+	<TD class="fcaption2">{VAR:LC_GRAPH_COMM}:<TD class="fcaption2"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'>{VAR:comment}</textarea></tr>
 <TR>
-	<TD class="fcaption">{VAR:LC_GRAPH_TYPE}:<td class="fcaption">&nbsp;{VAR:type}&nbsp;
+	<TD class="fcaption2">{VAR:LC_GRAPH_TYPE}:<td class="fcaption2">&nbsp;{VAR:type}&nbsp;
 <TR>
-	<TD class="fcaption">{VAR:LC_GRAPH_DATA}:<td class="fcaption">&nbsp;{VAR:andmed}&nbsp;
+	<TD class="fcaption2">{VAR:LC_GRAPH_DATA}:<td class="fcaption2">&nbsp;{VAR:andmed}&nbsp;
 
 	</TABLE>   
 <input type="submit" name="Submit" value="{VAR:LC_GRAPH_SAVE}">
