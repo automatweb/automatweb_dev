@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.12 2004/02/11 11:50:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.13 2004/05/10 11:08:48 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -379,8 +379,8 @@ class form_output extends form_base
 		$this->vars(array(
 			"ADD_2_LINE" => $a2,
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
-			"forms" => $this->multiple_option_list($fos, $this->get_list(FTYPE_ENTRY,true,true)),
-			"forms2" => $this->multiple_option_list($bof, $this->get_list(FTYPE_ENTRY,true,true)),
+			"forms" => $this->multiple_option_list($fos, $this->get_list(FTYPE_ENTRY,true,false)),
+			"forms2" => $this->multiple_option_list($bof, $this->get_list(FTYPE_ENTRY,true,false)),
 			"styles" => $this->picker($table_style,$st->get_select(0,ST_TABLE)),
 			"meth" => "POST",
 			"name" => $name,
