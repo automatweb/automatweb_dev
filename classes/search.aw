@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.24 2003/04/07 17:19:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.25 2003/04/11 15:06:19 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -353,7 +353,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
-			$this->t = new aw_table();
+			$this->t = new aw_table(array("layout" => "generic"));
 
 			$this->_init_os_tbl();
 
