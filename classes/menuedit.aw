@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.65 2001/11/07 17:33:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.66 2001/11/14 15:48:02 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -502,6 +502,7 @@ class menuedit extends aw_template
 		{
 			$this->make_langs();
 		}
+
 
 		// write info about viewing to the syslog
 		$this->do_syslog(&$this->mar,&$path,count($path)-1,$section);
@@ -2196,7 +2197,8 @@ class menuedit extends aw_template
 		else
 		{
 			$this->listacl("objects.class_id = ".CL_PERIODIC_SECTION." AND objects.status != 0 AND objects.parent = $parent");
-			$this->db_query("SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE objects.class_id = ".CL_PERIODIC_SECTION." AND objects.status != 0 AND objects.parent = $parent AND objects.period = $period ORDER BY $sortby $order");
+			$q  = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (objects.class_id = ".CL_PERIODIC_SECTION." OR objects.class_id = ".CL_BROTHER_DOCUMENT.") AND objects.status != 0 AND objects.parent = $parent AND objects.period = $period ORDER BY $sortby $order";
+			$this->db_query($q);
 		}
 		$total = 0; 
 		$ffound = false;
@@ -2769,6 +2771,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"key" => "menu_images",
 				"value" => $timgar,
 			));
+
+			if ($timgar[0]["id"])
+			{
+				$tt = "img_id = ".$timgar[0]["id"].",img_url = '".$timgar[0]["url"]."',";
+			}
 
 			if ($number > 0)
 			{
@@ -4470,7 +4477,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"section" => $section,
 					"no_strip_lead" => $GLOBALS["no_strip_lead"],
 					"notitleimg" => 0,
-					"tpl" => $tpl
+					"tpl" => $tpl,
+					"boldlead" => $GLOBALS["boldlead"]
 				));
 				if ($d->no_left_pane)
 				{
