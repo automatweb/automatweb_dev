@@ -50,6 +50,10 @@
 <tr>
 <td class="fgen_text" colspan=2><a href='{VAR:ch_cell}'>{VAR:LC_FORMS_CHANGE}</a> | <a href='{VAR:addel}'>{VAR:LC_FORMS_ADD_ELEMENT}</a></td>
 </tr>
+<tr>
+<td class=fgen_text>Nimi</td>
+<td class=fgen_text>Tekst</td>
+</tr>
 <!-- SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text><input class='tekstikast_n' size=15 type='text' NAME='names[{VAR:row}][{VAR:col}][{VAR:el_cnt}]' VALUE='{VAR:el_name}'></td>
