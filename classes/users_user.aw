@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.2 2001/05/19 21:32:51 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -364,7 +365,7 @@ class users_user extends aw_template {
 
 		$q = "UPDATE groups SET modified = ".time().", modifiedby = '".$GLOBALS["uid"]."', $sets WHERE gid = '".$data[gid]."'";
 		$this->db_query($q);
-		$this->log_action($GLOBALS["uid"],"group",$GLOBALS["uid"] . " muutis grupi \"$data[gid]\" andmeid");
+		$this->_log("group",$GLOBALS["uid"] . " muutis grupi \"$data[gid]\" andmeid");
 	}
 
 	function listgroups($gorderby = -1,$gsorder = -1,$type = -1,$type2 = -1,$parent=-1) 
@@ -416,7 +417,7 @@ class users_user extends aw_template {
 		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
 			VALUES('$gname',$t,'$uid',$t,'$uid','$type','$data',$parent,$priority,$oid,$search_form)";
 		$this->db_query($q);
-		$this->log_action($GLOBALS["uid"],"group",$GLOBALS["uid"] . " lisas uue grupi - $gname");
+		$this->_log("group",$GLOBALS["uid"] . " lisas uue grupi - $gname");
 		return $this->db_fetch_field("SELECT MAX(gid) AS gid FROM groups", "gid");
 	}
 
@@ -499,8 +500,7 @@ class users_user extends aw_template {
 				$this->db_query($q);
 			};
 		};
-		global $uid;
-		$this->log_action($uid,"group","Kustutas grupist $gid kasutajad ".join(",",$users));
+		$this->_log("group","Kustutas grupist $gid kasutajad ".join(",",$users));
 	}
 
 	function is_member($uuid, $gid)
@@ -545,8 +545,7 @@ class users_user extends aw_template {
 				}
 			};
 		};
-		global $uid;
-		$this->log_action($uid,"group","Lisas gruppi $gid kasutajad ".join(",",$users));
+		$this->_log("group","Lisas gruppi $gid kasutajad ".join(",",$users));
 	}
 
 	function getgroupsforuser($uid)
@@ -591,7 +590,7 @@ class users_user extends aw_template {
 		// ja v6tame teistelt k6ik 6igused kodukataloomale 2ra
 		$this->deny_obj_access($hfid);
 
-		$this->log_action($GLOBALS["uid"],"user",$GLOBALS["uid"]." lisas kasutaja $uid");
+		$this->_log("user",$GLOBALS["uid"]." lisas kasutaja $uid");
 	}
 
 	function deletegroup($gid)
