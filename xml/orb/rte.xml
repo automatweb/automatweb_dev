@@ -1,5 +1,12 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="rte" folder="vcl" extends="class_base">
+		<action name="table_dialog" all_args="1">
+			<function name="table_dialog">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
