@@ -15,10 +15,11 @@
 </tr>
 <tr>
 <td>
-	Parool: 
+	Parool:
 </td>
 <td>
-	<input type="password" name="password" size="40">
+	<input type="password" name="password" size="40"">
+	<img src='http://www.automatweb.com/img/logo_black.gif' height=1 width=1 onload="document.forms[0].elements['uid'].focus()">
 </td>
 </tr>
 <td colspan="2" align="center">
