@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.25 2002/02/07 08:04:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.26 2002/02/15 15:10:39 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -90,6 +90,7 @@ class form_table extends form_base
 							foreach($ar as $elid)
 							{
 								$this->table["defs"][$r_c]["el"][$elid] = $elid;
+								$this->table["defs"][$r_c]["link_el"] = $link_columns[$col];
 								if (is_number($elid) && isset($els[$elid]))
 								{
 									$this->table["defs"][$r_c]["el_forms"][$elid] = $els[$elid];
@@ -230,6 +231,7 @@ class form_table extends form_base
 				"column" => $col,
 				"sortable" => checked($this->table["defs"][$col]["sortable"]),
 				"elements" => $this->multiple_option_list($this->table["defs"][$col]["el"],$els),
+				"link_elements" => $this->picker($this->table["defs"][$col]["link_el"],$els),
 				"add_col" => $this->mk_my_orb("add_col", array("id" => $id,"after" => $col)),
 				"del_col" => $this->mk_my_orb("del_col", array("id" => $id,"col" => $col)),
 				"doelsearch" => checked($this->table["defs"][$col]["doelsearch"])
@@ -471,6 +473,20 @@ class form_table extends form_base
 					}
 				}
 				$dat["ev_col_".$col] = join(",",$str);
+				if ($this->table["defs"][$col]["link_el"])
+				{
+					$dat["ev_col_".$col] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_col_".$col]."</a>";
+				}
+			}
+			else
+			{
+				if ($this->table["defs"][$col]["link_el"])
+				{
+					foreach($cc["el"] as $_elid => $elid)
+					{
+						$dat["ev_".$elid] = "<a href='".$dat["ev_".$this->table["defs"][$col]["link_el"]]."'>".$dat["ev_".$elid]."</a>";
+					}
+				}
 			}
 		}
 
