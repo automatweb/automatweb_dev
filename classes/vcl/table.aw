@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.36 2004/12/20 11:05:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.37 2005/02/09 13:07:33 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -401,68 +401,45 @@ class aw_table extends aw_template
 			{
 				$this->u_sorder = $this->sorder[$_eln];
 				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
-				//if (isset($a[$_eln]) && isset($b[$_eln]))
-				//{
-					$v1 = $a[$_eln];
-					$v2 = $b[$_eln];
-					//$this->u_sorder = $this->sorder[$_eln];
-					//$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
-					if ($v1 != $v2)
-					{
-						break;
-					}
-				//};
+				$v1 = $a[$_eln];
+				$v2 = $b[$_eln];
+				if ($v1 != $v2)
+				{
+					break;
+				}
 			}
 		}
 
 		if (isset($this->sort_flag) && ($this->sort_flag == SORT_NUMERIC))
 		{
-			$_a = strtolower(strip_tags($v1));
-			$_b = strtolower(strip_tags($v2));
-			if (((int)$_a) == ((int)$_b))
-			{
-				if ($GLOBALS["vcl_sort_dbg"] == 1)
-				{
-					echo "compare integers $v1 , $v2 , ret equal <br>";
-				}
-				return 0;
-			}
+			$_a = (float)strtolower(strip_tags($v1));
+			$_b = (float)strtolower(strip_tags($v2));
 
 			if ($this->u_sorder == "asc")
 			{
-				$ret = ((int)$_a) < ((int)$_b) ? -1 : 1;
-				if ($GLOBALS["vcl_sort_dbg"] == 1)
+				if ($_a < $_b)
 				{
-					echo "compare integers $v1 , $v2 , ";
-					if ($ret == -1)
-					{
-						echo " $v1 less than  $v2 <br>";
-					}
-					if ($ret == 1)
-					{
-						echo " $v1 greater than  $v2 <br>";
-					}
+					return -1;
 				}
-				//return ((int)$v1) < ((int)$v2) ? -1 : 1;
-				return $ret; 
+				else
+				if ($_a > $_b)
+				{
+					return 1;
+				}
+				return 0;
 			}
 			else
 			{
-				$ret = ((int)$_a) > ((int)$_b) ? -1 : 1;
-				if ($GLOBALS["vcl_sort_dbg"] == 1)
+				if ($_a > $_b)
 				{
-					echo "compare integers $v1 , $v2 , ret $v1 less than $v2 <br>";
-					if ($ret == -1)
-					{
-						echo " $v1 greater than  $v2 <br>";
-					}
-					if ($ret == 1)
-					{
-						echo " $v1 less than  $v2 <br>";
-					}
+					return -1;
 				}
-				//return ((int)$v1) > ((int)$v2) ? -1 : 1;
-				return $ret;
+				else
+				if ($_a < $_b)
+				{
+					return 1;
+				}
+				return 0;
 			}
 		}
 		else
@@ -470,22 +447,6 @@ class aw_table extends aw_template
 			$_a = strtolower(strip_tags($v1));
 			$_b = strtolower(strip_tags($v2));
 			$ret = strcoll($_a, $_b);
-			if ($GLOBALS["vcl_sort_dbg"] == 1)
-			{
-				echo "compare strings $_a , $_b";
-				if ($ret == -1)
-				{
-					echo " $_a greater than  $_b <br>";
-				}
-				if ($ret == 1)
-				{
-					echo " $_a less than  $_b <br>";
-				}
-				if ($ret == 0)
-				{
-					echo " $_a equal to  $_b <br>";
-				}
-			}
 			if (isset($this->u_sorder) && ($this->u_sorder == "asc"))
 			{
 				return $ret;
