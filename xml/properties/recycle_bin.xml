@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>toolbar</name>
+            <table>objects</table>
+            <group>recycle</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>toolbar</field>
+      </property>
+      <property>
+            <name>recycle_table</name>
+            <table>objects</table>
+            <group>recycle</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>recycle_table</field>
+      </property>
+      <classinfo>
+            <no_yah>1</no_yah>
+      </classinfo>
+      <groupinfo>
+            <recycle>
+                  <submit>no</submit>
+                  <caption>Kustutatud objektid</caption>
+            </recycle>
+      </groupinfo>
+</properties>
+
