@@ -149,7 +149,7 @@ class ob_gen extends aw_template
 					$values[]="'".$val."'";
 				}
 			}
-
+$timed=time();
 			if ($oid)
 			{
 				$fields[]="oid";
@@ -169,10 +169,12 @@ class ob_gen extends aw_template
 		$oid=$oid?$oid:$this->db_last_insert_id;
 				$this->newcount++;
 /**/
-		return array('oid'=>$oid, "msg"=>$object['name']." / ".$msg, );
+		return array('oid'=>$oid, "msg"=>$msg,"timed"=>$timed,);
 	}
 
 
+//see on kirvemeetodil tabeli normaliseerimine
+/*
 	function normalizer($arr)
 	{
 		extract($arr);
@@ -219,11 +221,26 @@ $mitu=0;
 		echo "</pre>";			
 		die();
 	}
-	
+*/
+	function write_log($source_id,$generator_oid,$object_oid,$timed,$msg="",$source_info="",$object_info="")
+	{
+
+		$q="insert into ob_gen_log (source_id,generator_oid,object_oid,timed,msg,source_info,object_info)
+		values('$source_id','$generator_oid','$object_oid','$timed','$msg','$source_info','$object_info')";
+		$this->db_query($q);
+		
+	}
+
+	function display_log($source_id,$gen_oid,$ob_oid,$timed,$msg,$source_info="",$object_info="")
+	{
+		echo "$source_id ($object_info) => made object: $object_oid / message: $msg <br />";
+	}
+
 	function generate_objects($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
+//print_r($ob['meta']['log']);
 //		echo "<pre>";
 		$alg=0;
 		$lopp=$ob['meta']['limit'];
@@ -243,8 +260,6 @@ $mitu=0;
 		{
 			//setup log
 		}
-
-
 
 		do
 		{
@@ -297,9 +312,7 @@ $mitu=0;
 					foreach($whats as $what)
 					{
 $c=0;
-//for ($j=0;$j<(count($ob['meta']['add'][$what][$field]));$j++)
 for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
-//for ($j=0;$j<2;$j++)
 {
 						
 						if ($ob['meta'][$what][$field][$c]){
@@ -337,18 +350,33 @@ $c++;
 
 					}
 				}
-					$ok=$this->create_my_object(array(
-						"object" =>(array)$object + (array)$object_data,
-						"meta" => $meta,
-						"sql" =>array(
-							"table_name" => $ob['meta']['sisu_table'],
-							"data" => $sisu,
-						),
-					));
+				$gen_ob=$this->create_my_object(array(
+					"object" =>(array)$object + (array)$object_data,
+					"meta" => $meta,
+					"sql" =>array(
+						"table_name" => $ob['meta']['sisu_table'],
+						"data" => $sisu,
+					),
+				));
 
-					echo "created: ".$ok['oid']." : ".$ok['msg']."<br>";
-					flush();
-					set_time_limit (30);
+				$msg=$gen_ob['oid']?"":"!!!could not make object";
+				
+				if (($ob['meta']['log']['log_warnings']&&$msg)||($ob['meta']['log']['made_objects']&&$gen_ob['oid']))
+				{
+					if($ob['meta']['log']['db_table'])
+					{
+						$this->write_log($row['id'],$ob['oid'],$gen_ob['oid'],
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log']['a_source_field']]);
+					}
+					if($ob['meta']['log']['display'])
+					{
+						$this->display_log($row['id'],$ob['oid'],$gen_ob['oid'],
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log']['a_source_field']]);
+					}
+				}
+
+				flush();
+				set_time_limit (30);
 
 				$count2++;
 			}
@@ -546,7 +574,7 @@ $c++;
 			"ob_conf_table" => $this->ob_conf_table($data),
 			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
 			"genereeri" => $this->mk_my_orb("generate_objects", array("id" => $id)),
-			"genereeri5" => $this->mk_my_orb("generate_objects", array("id" => $id, "test_limit" => 10)),
+			"genereeri5" => $this->mk_my_orb("generate_objects", array("id" => $id, "test_limit" => 3)),
 			"normalizer" => $this->mk_my_orb("normalizer", array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do" => "ob_conf","return_url" => urlencode($return_url)))
 		));
@@ -675,9 +703,9 @@ $c++;
 			"display" => checked($ob['meta']['log']['display']),
 			"db_table" => checked($ob['meta']['log']['db_table']),
 			"made_objects" => checked($ob['meta']['log']['made_objects']),
-			"a_source_field" => checked($ob['meta']['log']['a_source_field']),
+			"a_source_field" => $this->picker($ob['meta']['log']['a_source_field'],$this->db_get_fieldnames($ob['meta']['source_table'],true)),
  			"log_warnings" => checked($ob['meta']['log']['log_warnings']),
-//			"" => $ob['meta'][],
+
 			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent" => $parent, "do" => "log_setup","return_url" => urlencode($return_url)))
 		));
