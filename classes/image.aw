@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.128 2005/01/20 12:06:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.129 2005/01/21 13:13:21 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -160,22 +160,6 @@ class image extends class_base
 		};
 		return $retval;
 	}
-
-/*	function parse_alias_list($arr)
-	{
-		extract($arr);
-		$ret = array();
-		foreach($aliases as $akey => $adat)
-		{
-			$ret[$akey] = $this->parse_alias(array(
-				"oid" => $oid,
-				"matches" => $adat["val"],
-				"alias" => $adat,
-				"tpls" => &$tpls
-			));
-		}
-		return $ret;
-	}*/
 
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
@@ -668,6 +652,7 @@ class image extends class_base
 				}
 				return PROP_IGNORE;
 				break;
+			/*
 			case "file_show":
 			case "file_show2":
 				$propname = ($prop["name"] == "file_show") ? "file" : "file2";
@@ -681,6 +666,7 @@ class image extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
+			*/
 
 			case "file":
 			case "file2":
