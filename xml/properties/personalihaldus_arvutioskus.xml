@@ -2,20 +2,22 @@
 <properties>
       <property>
             <name>oskus</name>
-            <type>classificator</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>classificator</type>
+            <orient>vertical</orient>
             <caption>Oskus</caption>
       </property>
       <property>
             <name>tase</name>
-            <type>classificator</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>classificator</type>
+            <orient>vertical</orient>
             <caption>Tase</caption>
       </property>
       <classinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_arvutioskus.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_arvutioskus.aw,v 1.2 2004/03/17 21:57:35 sven Exp $
 // personalihaldus_arvutioskus.aw - Arvutioskus 
 /*
 
@@ -10,10 +10,10 @@
 @default field=meta
 @default method=serialize
 
-@property oskus type=classificator
+@property oskus type=classificator  orient=vertical
 @caption Oskus
 
-@property tase type=classificator
+@property tase type=classificator  orient=vertical
 @caption Tase
 */
 
