@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.34 2002/06/13 23:56:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.35 2002/06/26 11:21:48 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -657,8 +657,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["url"],
 			));
 			$v["url"] = $url;
@@ -676,8 +674,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$link = sprintf("<a href='%s'>%s</a>",$url,strip_tags($v["name"]));
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["url"],
 			));
 			$v["url"] = $url;
@@ -698,8 +694,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -719,8 +713,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -738,8 +730,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -757,8 +747,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -776,8 +764,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -795,8 +781,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -814,8 +798,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -833,8 +815,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -852,8 +832,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
@@ -866,14 +844,12 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		reset($forms);
 		while (list(,$v) = each($forms))
 		{
-			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form");
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"form");
 			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],		
 			));
@@ -893,8 +869,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],		
 			));
@@ -914,8 +888,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],		
 			));
@@ -934,8 +906,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -957,8 +927,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -978,8 +946,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -1001,8 +967,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -1023,8 +987,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -1047,8 +1009,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"description" 	      => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -1077,8 +1037,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 				$this->t->define_data(array(
 					"name" => $link,
 					"description" => $val["comment"],
-					"modified" => $this->time2date($val["modified"],2),
-					"modifiedby" => $val["modifiedby"],
 				));	
 				$this->_common_parts($val);
 			}
@@ -1110,8 +1068,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 					"name" => $link,
 					"comment" => $val["comment"],
 					"edlink" => $this->mk_my_orb("change",array("id" => $val["oid"]),"forum"),
-					"modified" => $this->time2date($val["modified"],2),
-					"modifiedby" => $val["modifiedby"],
 				));
 				$this->_common_parts($val);
 			};
@@ -1131,8 +1087,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
-				"modified"            => $this->time2date($v["modified"],2),
-				"modifiedby"          => $v["modifiedby"],
 				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
@@ -1165,6 +1119,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->chlinks[$this->counter] = $args["url"];
 		$this->dellinks[$id] = $id;
 		$this->t->merge_data(array(
+			"modified"            => $this->time2date($v["modified"],2),
+			"modifiedby"          => $v["modifiedby"],
 			"title" => $this->defs[$this->def_id]["title"],
 			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$id),
 			"link" => sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$id,$this->aliaslinks[$id] ? "checked" : ""),
@@ -1336,5 +1292,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	{
 		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();
 	}
+
 };
 ?>
