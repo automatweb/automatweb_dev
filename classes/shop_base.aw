@@ -249,32 +249,6 @@ class shop_base extends aw_template
 		}
 	}
 
-	function do_menu($items)
-	{
-		global $action;
-		$im = "";
-		foreach($items as $iid => $idata)
-		{
-			$this->vars(array(
-				"url"	=> $idata["url"],
-				"text" => $idata["name"]
-			));
-			if ($action == $iid)
-			{
-				$im.=$this->parse("SEL_ITEM");
-			}
-			else
-			{
-				$im.=$this->parse("ITEM");
-			}
-		}
-		$this->vars(array(
-			"ITEM" => $im,
-			"SEL_ITEM" => ""
-		));
-		return $this->parse();
-	}
-
 	function listall_shop_tables()
 	{
 		$ret = array();
