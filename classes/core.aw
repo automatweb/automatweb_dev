@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.251 2004/03/05 13:24:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.252 2004/03/09 15:38:57 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -449,8 +449,13 @@ class core extends acl_base
 				$ip = aw_global_get("REMOTE_ADDR");
 			}
 			$t = time();
+			$this->quote(&$text);
+			$this->quote(&$oid);
+			$this->quote(&$type);
+			$ref = aw_global_get("HTTP_REFERER");
+			$this->quote(&$ref);
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
-			$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,aw_global_get("HTTP_REFERER"));
+			$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,$ref);
 			if (aw_ini_get("tafkap"))
 			{
 				$fields[] = "tafkap";
@@ -545,7 +550,7 @@ class core extends acl_base
 			return;
 		}
 		aw_global_set("old_cache_flushed", 1);
-		$q = "UPDATE objects SET cachedirty = 1, cachedata = ''";
+		$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0";
 		$this->db_query($q);
 	}
 		
@@ -651,7 +656,7 @@ class core extends acl_base
 	// needs it.
 	function add_alias($source,$target,$extra = "")
 	{
-		$this->addalias(array(
+		return $this->addalias(array(
 			"id" => $source,
 			"alias" => $target,
 			"extra" => $extra,
@@ -885,7 +890,11 @@ class core extends acl_base
 
 		$this->db_query($q);
 
+		$ret = $this->db_last_insert_id();
+
 		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
+
+		return $ret;
 	}
 
 	////
