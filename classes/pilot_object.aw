@@ -69,7 +69,7 @@ class pilot_object extends class_base
 	**/
 	function form($args)
 	{
-		$form = $this->get_object($args['id']);
+		$form = obj($args['id']);
 		
 		if (!empty($args['feedback_cl']))
 		{
@@ -87,14 +87,14 @@ class pilot_object extends class_base
 
 		//arr($data,1);
 		//return localparse(implode('', file(aw_ini_get('tpldir').'/pilot_object/templs/'.$form['meta']['template'])),$data);
-		return localparse(implode('', file($this->cfg['tpldir'].'/pilot_object/templs/'.$form['meta']['template'])),$data);
+		return localparse(implode('', file($this->cfg['tpldir'].'/pilot_object/templs/'.$form->meta('template'))),$data);
 	}
 
 	function get_property($args)
 	{
 		$data = &$args['prop'];
 		$retval = PROP_OK;
-		$meta = $args['obj']['meta'];
+		$meta = $args['obj_inst']->meta();
 		//arr($args,1);
 		switch($data["name"])
 		{
@@ -161,21 +161,22 @@ class pilot_object extends class_base
 	function obj_parse($val)
 	{
 
-		$data = $this->get_object($val['object']);
+		$data = obj($val['object']);
 		
-		$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ?
-		$this->cfg['classes'][$data['class_id']]['alias_class']	:
- 		$this->cfg['classes'][$data['class_id']]['file'];
+		$tdata = array();
+		$tdata['class_file'] =  (isset($this->cfg['classes'][$data->class_id()]['alias_class'])) ?
+		$this->cfg['classes'][$data->class_id()]['alias_class']	:
+ 		$this->cfg['classes'][$data->class_id()]['file'];
 
-		$inst = get_instance($data['class_file']);
+		$inst = get_instance($tdata['class_file']);
 		$edata = array();
 		if (method_exists($this,'get_extra_data'))
 		{
 			$edata = $inst->get_extra_data($val['object']);
 		}
-		$data = array_merge($data, $edata);
+		$tdata = array_merge($data->arr(), $edata, $tdata);
 
-		$this->vars($data);
+		$this->vars($tdata);
 		return $this->parse('object');
 	}
 
@@ -196,15 +197,14 @@ class pilot_object extends class_base
 			$args['obj']['oid'] = $args['id'];
 		}
 		
-		$obj = $this->get_object($args['obj']['oid']);
+		$obj = obj($args['obj']['oid']);
 
-		if (!is_numeric($obj['meta']['pilot']))
+		if (!is_numeric($obj->meta('pilot')))
 		{
 			return 'valimi pilootobjekt määramata!';
 		}
 
-		$pilot = $this->get_object($obj['meta']['pilot']);
-		//arr($pilot,1);
+		$pilot = obj($obj->meta('pilot'));
 		$se = get_instance('kliendibaas/selection');
 		$arr = $se->get_selection($args['obj']['oid'],'active');
 
@@ -218,14 +218,14 @@ class pilot_object extends class_base
 		uasort($arr, array ($this, 'cmp_obj'));
 
 
-		if (!$pilot['meta']['output_as'])
+		if (!$pilot->meta('output_as'))
 		{
 			return '2pilootobjekti väljund määramata!';
 
 		}
-		elseif($pilot['meta']['output_as'] == 'templates')
+		elseif($pilot->meta('output_as') == 'templates')
 		{
-			$this->read_template('templs/'.$pilot['meta']['templates']);
+			$this->read_template('templs/'.$pilot->meta('templates'));
 			foreach($arr as $key => $val)
 			{
 				$str .= $this->obj_parse($val);
