@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.6 2001/05/16 06:17:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.7 2001/05/16 23:26:41 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -159,6 +159,7 @@ class planner extends calendar {
 			reset($repeaters);
 			while(list($key,$rep) = each($repeaters))
 			{
+				$rep["end"] = $events2[$rep["eid"]]["rep_until"];
 				$sx = strtotime("+$i days",$rep["start"]);
 				$ddiff2 = $this->get_day_diff($rep["start"],$di["start"]);
 				$j = $i + $ddiff2 + 1;
@@ -188,38 +189,81 @@ class planner extends calendar {
 				else
 				// Lisa see eventite plaani
 				{
-					if ($rep["type"] == REP_DAY)
+					$more = true;
+					$yearpwhen = "";
+					switch($rep["type"])
 					{
-						if (($ddiff % $rep["skip"]) == 0)
-						{
-							$events[$s1][$rep["start"]] = $events2[$rep["eid"]];
-							// now, I do realize, that this is a bit 
-							// ineffective, but until I can code this better
-							// we are going to sort the list right here
-							//ksort($events[$s1][$rep["start"]]);
-							ksort($events[$s1]);
-						};
-					}
-					elseif ($rep["type"] == REP_WEEK)
-					{
-						$wx = date("w",strtotime("+$i days",$di["start"]));
-						$sz = date("dmY",strtotime("+$i days",$di["start"]));
-						if ($wx == 0)
-						{
-							$wx = 7;
-						};
-						$wxl = explode(",",$rep["pwhen"]);
-						$wxl = array_flip($wxl);
-						// so we are supposed to do something with 
-						// repeaters that have the type "week"
+						case REP_YEAR:
+							if ($rep["skip"] > 0)
+							{
+								$startyear = date("Y",$di["start"]);	
+								$thisyear = date("Y",strtotime("+$i days",$di["start"]));
+								if ( (($thisyear - $startyear) % $rep["skip"]) != 0)
+								{
+									// we are looking at a year we are not really interested in
+									$more = false;
+								};
+								$yearpwhen = $rep["pwhen"];
+							};
+							break;
 
-						// well. right now are only going to use pwhen
-						if (isset($wxl[$wx]))
-						{
-							$events[$sz][$rep["start"]] = $events2[$rep["eid"]];
-							ksort($events[$sz]);
-						};
-					};
+						case REP_MONTH:
+							// jätkame töötlemist, if we have the required data
+							if ($more && (($rep["skip"] > 0) || ($yearpwhen)) )
+							{
+								$startmon = date("m",$di["start"]);
+								$thismon = date("m",strotime("+$i days",$di["start"]));
+							};
+								
+							// kui olid määratud mingid kindlad päevad kuu sees, siis kasutame
+							// ka neid
+							if (1)
+							{
+								foreach($useddays as $uday)
+								{
+									if (!$events[$s1][$rep["start"]])
+									{
+										$events[$s1][$rep["start"]] = $events2[$rep["eid"]];
+										ksort($events[$s1]);
+									};
+								};
+							};
+							break;
+
+
+						case REP_DAY:
+							if (($ddiff % $rep["skip"]) == 0)
+							{
+								$events[$s1][$rep["start"]] = $events2[$rep["eid"]];
+								// now, I do realize, that this is a bit 
+								// ineffective, but until I can code this better
+								// we are going to sort the list right here
+								//ksort($events[$s1][$rep["start"]]);
+								ksort($events[$s1]);
+							};
+							break;
+
+						case REP_WEEK:
+							$wx = date("w",strtotime("+$i days",$di["start"]));
+							$sz = date("dmY",strtotime("+$i days",$di["start"]));
+							if ($wx == 0)
+							{
+								$wx = 7;
+							};
+							$wxl = explode(",",$rep["pwhen"]);
+							$wxl = array_flip($wxl);
+							// so we are supposed to do something with 
+							// repeaters that have the type "week"
+
+							// well. right now are only going to use pwhen
+							if (isset($wxl[$wx]))
+							{
+								$events[$sz][$rep["start"]] = $events2[$rep["eid"]];
+								ksort($events[$sz]);
+							};
+							break;
+
+					}; // switch
 				};
 			}
 		};
@@ -331,12 +375,15 @@ class planner extends calendar {
 					}
 					else
 					{
-						$this->vars(array("element" => "&nbsp;",
-									"dayname" => "",
-									"showday" => "",
-									"bgcolor" => "#ffffff"));
+						$this->vars(array(
+								"element" => "&nbsp;",
+								"dayname" => "",
+								"showday" => "",
+								"bgcolor" => "#ffffff"
+						));
 						$c1 .= $this->parse("line.subline");
 					};
+
 					if ($wx == 7)
 					{
 						$this->vars(array("subline" => $c1));
@@ -576,9 +623,10 @@ class planner extends calendar {
 				"title" => $row["title"],
 				"wd" => $rep["pwhen"],
 				"caption" => $caption,
-				"repeat_value" => $rep["duration"],
-				"repeat_type" => $rep["dur_type"],
-				"repeat" => $rep["forever"],
+				"rep_type" => $row["rep_type"],
+				"rep_dur" => $row["rep_dur"],
+				"rep_forever" => $row["rep_forever"],
+				"rep_until" => $row["rep_until"],
 				"repcheck" => ($rc > 0) ? "checked" : "",
 				"color" => $this->picker($row["color"],$colors),
 				"description" => $row["description"],
@@ -638,6 +686,49 @@ class planner extends calendar {
 				{
 					$private = 0;
 				};
+				if ($rep_forever)
+				{
+					// well. as you can see not exactly forever. But hey.
+					$rep_until = strtotime("+30 years",$start);
+				}
+				else
+				{
+					switch($rep_type)
+					{
+						case "1":
+							$units = "days";
+							break;
+
+						case "2":
+							$units = "weeks";
+							break;
+
+						case "3":
+							$units = "months";
+							break;
+
+						case "4":
+							$units = "years";
+							break;
+					};
+					$rep_until = strtotime("+$rep_dur $units",$start);
+				};
+				if (!$rep_type)
+				{
+					$rep_type = 0;
+				};
+
+				if (!$rep_forever)
+				{
+					$rep_forever = 0;
+				};
+
+				if (!$rep_dur)
+				{
+					$rep_dur = 0;
+				};
+
+					
 				$q = "UPDATE planner SET
 					start = '$start',
 					end = '$end',
@@ -648,6 +739,7 @@ class planner extends calendar {
 					rep_type = '$rep_type',
 					rep_dur = '$rep_dur',
 					rep_forever = '$rep_forever',
+					rep_until = '$rep_until',
 					reminder = '$reminder',
 					description = '$description'
 				WHERE id = '$id'";
@@ -664,8 +756,8 @@ class planner extends calendar {
 			),true);
 
 			$q = "INSERT INTO planner 
-				(id,start,end,title,place,private,reminder,description)
-				VALUES ('$id','$start','$end','$title','$place','$private','$reminder','$description')";
+				(id,start,end,title,place,private,reminder,description,rep_type,rep_dur,rep_forever,rep_until)
+				VALUES ('$id','$start','$end','$title','$place','$private','$reminder','$description','$rep_type','$rep_dur','$rep_forever','$rep_until')";
 			$status_msg = "Event on lisatud";
 		};
 		$this->db_query($q);
@@ -835,6 +927,19 @@ class planner extends calendar {
 		return $days;
 	}
 
+	////
+	// Takes 2 timestamps and calculates the difference between them in months
+	function get_mon_diff($time1,$time2)
+	{
+		$date1 = date("d-m-Y",$time1);
+		$date2 = date("d-m-Y",$time2);
+		$d1 = explode('-', $date1);
+		$d2 = explode('-', $date2);
+		$diff = ($d2[2] * 12 + $d2[1]) - ($d1[2] * 12 + $d1[1]) - 1;
+		return $diff;
+	}
+
+
 	function _convert_wday($daycode)
 	{
 		return ($daycode == 0) ? 7 : $daycode;
@@ -887,7 +992,7 @@ class planner extends calendar {
 		// be a monster SQL clause and at this moment I do not
 		// think I would be able to do this.
 		$q = "SELECT * FROM planner_repeaters
-			WHERE cid = '$id'";
+			WHERE cid = '$id' ORDER BY eid,type DESC";
 		$this->db_query($q);
 		$res = array();
 		while($row = $this->db_next())
@@ -1115,6 +1220,7 @@ class planner extends calendar {
 			),
 		);
 		load_vcl("smenu");
+		$this->tpl_init("automatweb/planner");
 		$this->read_template("navigator.tpl");
 		$smenu = new smenu(array(
 			"tpl_act" => $this->templates["active_menu"],
