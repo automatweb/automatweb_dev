@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.108 2005/02/01 14:58:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.109 2005/02/10 11:35:01 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -304,6 +304,12 @@ class users_user extends aw_template
 		if ($this->url[0] == "/")
 		{
 			$this->url = $this->cfg["baseurl"].$this->url;
+		}
+
+		$si = __get_site_instance();
+		if (is_object($si) && method_exists($si, "on_login"))
+		{
+			$si->on_login();
 		}
 
 		return $this->url;
