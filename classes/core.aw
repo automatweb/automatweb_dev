@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.43 2001/07/27 19:40:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.44 2001/07/27 19:42:03 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -389,9 +389,13 @@ class core extends db_connector
 			"created" => time(),
 			"modifiedby" => $uid,
 			"modified" => time(),
-			"lang_id" => $lang_id,
 			"site_id" => $SITE_ID,
 		);
+
+		 if (!$values["lang_id"])
+		{
+			$values["lang_id"] = $lang_id;
+		};
 
 		// array array_merge (array array1, array array2 [, array ...])
 		// If the input arrays have the same string keys,
