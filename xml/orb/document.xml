@@ -98,25 +98,6 @@
 			</function>
 		</action>
 
-		<action name="add_bro">
-			<function name="add_bro">
-				<arguments>
-					<required name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="create_bro">
-			<function name="create_bro">
-				<arguments>
-					<required name="parent"/>
-					<required name="id"/>
-					<optional name="s_name"/>
-					<optional name="s_content"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="archive">
 			<function name="show_archive">
 				<arguments>

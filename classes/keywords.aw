@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.38 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.39 2002/09/27 07:11:04 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 classload("defs");
 
@@ -915,8 +915,8 @@ class keywords extends aw_template
 			$bros[$row["parent"]][$row["brother_of"]] = $row;
 		}
 
-		classload("document");
-		$d = new document;
+		classload("document_brother");
+		$d = new document_brother;
 
 		// now go through all the menus and for each menu check the brother documents that are created from keywords and
 		// delete/create them as necessary
