@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.8 2004/04/30 08:48:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.9 2004/06/17 13:57:17 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -245,6 +245,35 @@ class object_type extends class_base
 				"cfgform" => $o->prop("use_cfgform"),
 			 ),$clss);
 		return $rv;
+	}
+
+	/** reads the properties from the object type $o and returns them. honors cfgforms
+	**/
+	function get_properties($o)
+	{
+		// get a list of properties in both classes
+		$cfgx = get_instance("cfg/cfgutils");
+		$ret = $cfgx->load_properties(array(
+			"clid" => $o->subclass(),
+		));
+
+		if ($o->prop("use_cfgform"))
+		{
+			$class_i = get_instance($o->subclass() == CL_DOCUMENT ? "doc" : $o->subclass());
+			$tmp = $class_i->load_from_storage(array(
+				"id" => $o->prop("use_cfgform")
+			));
+
+			$dat = array();
+			foreach($tmp as $pn => $pd)
+			{
+				$dat[$pn] = $ret[$pn];
+				$dat[$pn]["caption"] = $pd["caption"];
+			}
+			$ret = $dat;
+		}
+
+		return $ret;
 	}
 }
 ?>
