@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.20 2004/02/25 15:38:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.21 2004/03/10 17:24:34 duke Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -367,10 +367,7 @@ class object_list extends _int_obj_container_base
 	{
 		if (!is_object($this->list[$oid]))
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
-			{
-				$this->list[$oid] = new object($oid);
-			}
+			$this->list[$oid] = new object($oid);
 		}
 		return $this->list[$oid];
 	}
