@@ -420,6 +420,11 @@ function get_instance($class,$args = array())
 		}
 	}
 
+	if (aw_global_get("__is_install") && method_exists($instance, "init"))
+	{
+		$instance->init();
+	}
+
 	exit_function("__global::get_instance",array());
 	return $instance;
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.112 2004/03/23 12:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.113 2004/03/23 12:48:40 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1343,19 +1343,34 @@ class users extends users_user
 			// create default group
 			$this->dc = $dbi->dc;
 
+			obj_set_opt("no_cache", 1);
+			echo "adding groups... <br>\n";
+			flush();
+
 			$aug = $this->addgroup(0,"K&otilde;ik kasutajad", GRP_REGULAR,0,1000,0,$ini_opts["groups.tree_root"]);
 			$ini_opts["groups.all_users_grp"] = $aug;
 
 			$admg = $this->addgroup(0,"Administraatorid", GRP_REGULAR,0,10000,0,$ini_opts["groups.tree_root"]);
+			echo "Administraatorid <br>\n";
+			flush();
 
 			// give admins access to admin interface
+
+			
+			aw_global_set("__in_post_message", 1);
 			$admo = obj($this->get_oid_for_gid($admg));
 			$admo->set_prop("can_admin_interface", 1);
 			$admo->save();
 
 			$this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
+			echo "Toimetajad <br>\n";
+			flush();
 			$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
+			echo "Kliendid <br>\n";
+			flush();
 			$this->addgroup(0,"Partnerid", GRP_REGULAR,0,3000,0,$ini_opts["groups.tree_root"]);
+			echo "Partnerid <br>\n";
+			flush();
 
 			// create default user
 			$this->add(array(
@@ -1365,12 +1380,20 @@ class users extends users_user
 				"use_md5_passwords" => true,
 				"obj_parent" => $ini_opts["users.rootmenu"]
 			));
+			echo "Adding users... <br>\n";
+			flush();
 
 			// add user to admin group
 			$this->add_users_to_group_rec($admg,array($site["site_obj"]["default_user"]),true,true,false);
-
+			echo "adding user to groups! <br>\n";
+			flush();
 			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($admg));
+			echo "administrator <br>\n";
+			flush();
 			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($aug));
+			echo "all users <br>\n";
+			flush();
+			aw_global_set("__in_post_message", 0);
 			$ini_opts["auth.md5_passwords"] = 1;
 		}
 	}
