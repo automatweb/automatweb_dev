@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.36 2001/07/17 06:49:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.37 2001/07/17 07:33:55 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -380,14 +380,14 @@ class form extends form_base
 					"row"						=> $arr["r_row"]
 				));	
 
-				if ($el == "")
+/*				if ($el == "")
 				{
 					$se = "<img src='/images/transa.gif' height=1 width=1 border=0>";
 				}
 				else
-				{
+				{*/
 					$se = $this->parse("SOME_ELEMENTS");
-				}
+//				}
 
 				$this->vars(array("SOME_ELEMENTS" => $se));
 
@@ -401,8 +401,10 @@ class form extends form_base
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_all_els", array("id" => $id)),
 			"styles" => $this->picker(0,$stylesel),
-			"folders" => $this->picker(0,$ob->get_list(false,true))
+			"folders" => $this->picker(0,$ob->get_list(false,true)),
+			"types" => $this->picker(0,$this->listall_el_types(true))
 		));
+
 		return $this->do_menu_return();
 	}
 
@@ -427,6 +429,11 @@ class form extends form_base
 						{
 							$this->upd_object(array("oid" => $el["id"], "parent" => $setfolder));
 						}
+					}
+					if ($addel)
+					{
+						// we must add an element of the specified type to this cell
+						$this->arr["contents"][$row][$col]->do_add_element(array("parent" => $this->arr["newel_parent"], "name" => "uus_element_".(++$newelcnt), "based_on" => $addel));
 					}
 				}
 			}
