@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.296 2004/11/03 14:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.297 2004/11/05 14:14:25 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4262,7 +4262,7 @@ class document extends aw_template
 		{
 			$find = sprintf("#%s#(.*)#\\/%s#",$tag,$tag);
 			$val = trim($val);
-			$text = preg_replace("/" . $find . "/isU",$val,$text);
+			$text = preg_replace("/" . $find . "/ismU",$val,$text);
 		};
 		return $text;
 	}
