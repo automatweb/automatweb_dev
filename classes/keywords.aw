@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.19 2001/05/24 11:36:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.20 2001/05/24 19:56:28 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -482,6 +482,12 @@ class keywords extends aw_template {
 				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
 		));
 		return $this->parse();
+	}
+
+	function show_interests_form2($args = array())
+	{
+		$ret = "move along, move along, there is nothing to see here";
+		return $ret;
 	}
 };
 ?>

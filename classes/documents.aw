@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.13 2001/05/24 11:36:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.14 2001/05/24 19:56:28 duke Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -985,6 +985,15 @@ class db_documents extends aw_template
 			$t_int_form = $kw->show_interests_form($maat[1],$maat[2]);
 
 			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
+		}
+
+		if (!(strpos($doc["huvid_check"],"#huvid_check#") == false))
+		{
+			preg_match("/#huvid_check#/",$doc["content"], $maat);
+			classload("keywords");
+			$kw = new keywords;
+			$t_int_form = $kw->show_interests_form2();
+			$doc["content"] = preg_replace("/#huvid_check#/",$t_int_form,$doc["content"]);
 		}
 
 		$awt->stop("db_documents->gen_preview()::misc_replaces");
