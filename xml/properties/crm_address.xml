@@ -9,6 +9,16 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>email</name>
+            <type>textbox</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <table>kliendibaas_address</table>
+            <group>general</group>
+            <field>email</field>
+            <caption>Meiliaadress</caption>
+      </property>
+      <property>
             <name>aadress</name>
             <type>textbox</type>
             <size>50</size>
@@ -93,15 +103,6 @@
             <caption>Piipar</caption>
       </property>
       <property>
-            <name>e_mail</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>e_mail</field>
-            <caption>E-mail</caption>
-      </property>
-      <property>
             <name>kodulehekylg</name>
             <type>relpicker</type>
             <reltype>RELTYPE_WWW</reltype>
@@ -120,10 +121,25 @@
             <group>general</group>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>xmail</name>
+            <type>relmanager</type>
+            <table>kliendibaas_address</table>
+            <field>e_mail</field>
+            <group>settings</group>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <props>mail</props>
+            <caption>Meiliaadressid</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <settings>
+                  <caption>Seadistused</caption>
+            </settings>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_address>
                   <index>oid</index>
@@ -157,7 +173,7 @@
             </BELONGTO>
             <EMAIL>
                   <value>5</value>
-                  <clid>CL_EXTLINK</clid>
+                  <clid>CL_ML_MEMBER</clid>
                   <caption>E-mail</caption>
             </EMAIL>
             <WWW>

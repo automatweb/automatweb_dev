@@ -7,7 +7,10 @@
             <no_caption>1</no_caption>
             <group>
                   <num_0>general</num_0>
-                  <num_1>overview</num_1>
+                  <num_1>all_actions</num_1>
+                  <num_2>meetings</num_2>
+                  <num_3>tasks</num_3>
+                  <num_4>calls</num_4>
             </group>
             <editonly>1</editonly>
             <table>objects</table>
@@ -54,8 +57,8 @@
       </property>
       <property>
             <name>ettevotlusvorm</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ETTEVOTLUSVORM</reltype>
+            <type>objpicker</type>
+            <clid>CL_CRM_CORPFORM</clid>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>ettevotlusvorm</field>
@@ -115,29 +118,96 @@
             <type>chooser</type>
             <orient>vertical</orient>
             <table>kliendibaas_firma</table>
+            <editonly>1</editonly>
             <group>general</group>
             <field>firmajuht</field>
             <caption>Organisatsiooni juht</caption>
       </property>
       <property>
-            <name>progress</name>
-            <type>text</type>
-            <callback>callback_org_actions</callback>
+            <name>human_resources</name>
+            <type>table</type>
             <store>no</store>
+            <group>humanres</group>
             <no_caption>1</no_caption>
             <table>objects</table>
-            <group>overview</group>
-            <field>progress</field>
+            <field>human_resources</field>
+            <caption>Inimesed</caption>
+      </property>
+      <property>
+            <name>org_actions</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>all_actions</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>objects</table>
+            <field>org_actions</field>
             <caption>org_actions</caption>
+      </property>
+      <property>
+            <name>org_calls</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>calls</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>objects</table>
+            <field>org_calls</field>
+            <caption>Kõned</caption>
+      </property>
+      <property>
+            <name>org_meetings</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>meetings</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>objects</table>
+            <field>org_meetings</field>
+            <caption>Kohtumised</caption>
+      </property>
+      <property>
+            <name>org_tasks</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>tasks</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>objects</table>
+            <field>org_tasks</field>
+            <caption>Toimetused</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <humanres>
+                  <caption>Inimesed</caption>
+            </humanres>
             <overview>
                   <caption>Seotud tegevused</caption>
             </overview>
+            <all_actions>
+                  <caption>Kõik</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </all_actions>
+            <calls>
+                  <caption>Kõned</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </calls>
+            <meetings>
+                  <caption>Kohtumised</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </meetings>
+            <tasks>
+                  <caption>Toimetused</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </tasks>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -197,6 +267,11 @@
                   <clid>CL_CRM_CALL</clid>
                   <caption>Kõne</caption>
             </CALL>
+            <TASK>
+                  <value>13</value>
+                  <clid>CL_TASK</clid>
+                  <caption>Toimetus</caption>
+            </TASK>
       </reltypes>
 </properties>
 

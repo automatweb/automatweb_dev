@@ -82,16 +82,6 @@
             <caption>Hüüdnimi</caption>
       </property>
       <property>
-            <name>messenger</name>
-            <type>textbox</type>
-            <size>30</size>
-            <maxlength>200</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>messenger</field>
-            <caption>Msn/yahoo/aol/icq</caption>
-      </property>
-      <property>
             <name>birthday</name>
             <type>textbox</type>
             <size>10</size>
@@ -184,18 +174,60 @@
             <table>objects</table>
             <field>comment</field>
             <group>general</group>
-            <caption>Kommentaar</caption>
+            <caption>Kontaktandmed</caption>
       </property>
       <property>
-            <name>progress</name>
-            <type>text</type>
-            <callback>callback_org_actions</callback>
+            <name>email</name>
+            <type>textbox</type>
             <store>no</store>
-            <no_caption>1</no_caption>
             <table>kliendibaas_isik</table>
-            <group>overview</group>
-            <field>progress</field>
+            <group>contact</group>
+            <field>email</field>
+            <caption>E-post</caption>
+      </property>
+      <property>
+            <name>org_actions</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>all_actions</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>kliendibaas_isik</table>
+            <field>org_actions</field>
             <caption>org_actions</caption>
+      </property>
+      <property>
+            <name>org_calls</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>calls</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>kliendibaas_isik</table>
+            <field>org_calls</field>
+            <caption>Kõned</caption>
+      </property>
+      <property>
+            <name>org_meetings</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>meetings</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>kliendibaas_isik</table>
+            <field>org_meetings</field>
+            <caption>Kohtumised</caption>
+      </property>
+      <property>
+            <name>org_tasks</name>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <group>tasks</group>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <table>kliendibaas_isik</table>
+            <field>org_tasks</field>
+            <caption>Toimetused</caption>
       </property>
       <property>
             <name>forms</name>
@@ -231,8 +263,28 @@
       </classinfo>
       <groupinfo>
             <overview>
-                  <caption>Seotud tegevused</caption>
+                  <caption>Tegevused</caption>
             </overview>
+            <all_actions>
+                  <caption>Kõik</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </all_actions>
+            <calls>
+                  <caption>Kõned</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </calls>
+            <meetings>
+                  <caption>Kohtumised</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </meetings>
+            <tasks>
+                  <caption>Toimetused</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </tasks>
             <forms>
                   <caption>Väljundid</caption>
             </forms>
@@ -240,6 +292,9 @@
                   <caption>Visiitkaart</caption>
                   <submit>no</submit>
             </show>
+            <contact>
+                  <caption>Kontaktandmed</caption>
+            </contact>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -279,16 +334,21 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>ametinimetus</caption>
             </RANK>
-            <ISIK_KOHTUMINE>
+            <MEETING>
                   <value>8</value>
                   <clid>CL_CRM_MEETING</clid>
                   <caption>kohtumine</caption>
-            </ISIK_KOHTUMINE>
-            <ISIK_KONE>
+            </MEETING>
+            <CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
                   <caption>kõne</caption>
-            </ISIK_KONE>
+            </CALL>
+            <TASK>
+                  <value>9</value>
+                  <clid>CL_TASK</clid>
+                  <caption>toimetus</caption>
+            </TASK>
       </reltypes>
 </properties>
 
