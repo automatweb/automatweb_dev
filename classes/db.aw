@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.8 2002/11/07 10:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.9 2002/11/24 15:21:03 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -134,6 +134,11 @@ class db_connector extends root
 		return $this->dc[$this->default_cid]->db_fetch_field($qtext,$field);
 	}
 
+	function db_fetch_array($qtext="") 
+	{
+		return $this->dc[$this->default_cid]->db_fetch_array($qtext);
+	}
+
 	function quote(&$arr)
 	{
 		return $this->dc[$this->default_cid]->quote($arr);
@@ -236,24 +241,166 @@ class db_connector extends root
 
 		$fields = join(",",map2(" %s = '%s' ",$values));
 
-		$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
-
-		//print "executing $q<br>";
-		$this->db_query($q);
-
+		if ($fields)
+		{
+			$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
+			$this->db_query($q);
+		};
 	}
 
-        ////
-        // !fetchib kirje suvalisest tabelist
-        function get_record($table,$field,$selector)
-        {
-                $q = "SELECT * FROM $table WHERE $field = '$selector'";
-                $this->db_query($q);
-                return $this->db_fetch_row();
-        }
+	////
+	// !fetchib kirje suvalisest tabelist
+	function get_record($table,$field,$selector)
+	{
+		$q = "SELECT * FROM $table WHERE $field = '$selector'";
+		$this->db_query($q);
+		return $this->db_fetch_row();
+	}
 
+	////
+	// !selects a list of databases from the server, the list can be retrieved by calling db_next_database()
+	function db_list_databases()
+	{
+		return $this->dc[$this->default_cid]->db_list_databases();
+	}
 
-		
+	////
+	// !returns the next database from the list created by db_list_databases()
+	function db_next_database()
+	{
+		return $this->dc[$this->default_cid]->db_next_database();
+	}
 
+	////
+	// !tries to create the database in the server
+	// parameters:
+	//   name - the name of the database
+	//   user - the user that will get access to the database
+	//   host - the host from where the access will be granted
+	//   pass - the password for the database
+	function db_create_database($arr)
+	{
+		return $this->dc[$this->default_cid]->db_create_database($arr);
+	}
+
+	////
+	// !returns a list of all available database drivers on the system
+	function list_db_drivers()
+	{
+		$ret = array();
+		if ($dir = @opendir($this->cfg["classdir"]."/db_drivers")) 
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (substr($file, strlen($file) - (strlen($this->cfg["ext"])+1)) == ".".$this->cfg["ext"])
+				{
+					$cln = basename($file,".".$this->cfg["ext"]);
+					$ret[$cln] = $cln;
+				}
+			}  
+			closedir($dir);
+		}
+		asort($ret);
+		return $ret;
+	}
+
+	////
+	// !returns server status - the fields returned are server-specific
+	function db_server_status()
+	{
+		return $this->dc[$this->default_cid]->db_server_status();
+	}
+
+	////
+	// !returns information about the specified table - the fields returned are server specific
+	function db_get_table_info($tbl)
+	{
+		return $this->dc[$this->default_cid]->db_get_table_info($tbl);
+	}
+
+	function db_list_flags()
+	{
+		return $this->dc[$this->default_cid]->db_list_flags();
+	}
+
+	function db_list_field_types()
+	{
+		return $this->dc[$this->default_cid]->db_list_field_types();
+	}
+
+	////
+	// !adds a column to table $tbl
+	// params
+	//   tbl - the table to add to
+	//   coldat - new column properties array(name, type, length, null, default, extra)
+	function db_add_col($tbl,$coldat)
+	{
+		return $this->dc[$this->default_cid]->db_add_col($tbl,$coldat);
+	}
+
+	////
+	// !change a column in table $tbl
+	// params
+	//   tbl - the table where the column is
+	//   col - the column to change
+	//   coldat - new column properties array(name, type, length, null, default, extra)
+	function db_change_col($tbl, $col, $newdat)
+	{
+		return $this->dc[$this->default_cid]->db_change_col($tbl, $col, $newdat);
+	}
+
+	////
+	// !drops column $col from table $tbl 
+	function db_drop_col($tbl,$col)
+	{
+		return $this->dc[$this->default_cid]->db_drop_col($tbl,$col);
+	}
+
+	////
+	// !lists indexes for table $tbl
+	function db_list_indexes($tbl)
+	{
+		return $this->dc[$this->default_cid]->db_list_indexes($tbl);
+	}
+
+	////
+	// !fetches next index from list created by db_list_indexes
+	// returns:
+	//  array - 
+	//		index_name - the name of the index
+	//		col_name - the name of the column that the index is created on
+	//		unique - if true, values in index must be unique
+	function db_next_index()
+	{
+		return $this->dc[$this->default_cid]->db_next_index();
+	}
+
+	////
+	// !adds an index to table $tbl
+	// idx_dat must be an array that defines index properties - 
+	//   name - the name of the index
+	//   col - the column on what to create the index
+	function db_add_index($tbl, $idx_dat)
+	{
+		return $this->dc[$this->default_cid]->db_add_index($tbl, $idx_dat);
+	}
+
+	////
+	// !drops index $name from table $tbl
+	function db_drop_index($tbl, $name)
+	{
+		return $this->dc[$this->default_cid]->db_drop_index($tbl, $name);
+	}
+
+	////
+	// !if no error has occurred, returns false
+	// otherwise, returns array -
+	//  error_cmd - the query that produced the error
+	//  error_code - the db-specific error code 
+	//	error_string - the error string returned by the database
+	function db_get_last_error()
+	{
+		return $this->dc[$this->default_cid]->db_get_last_error();
+	}
 };
 ?>
