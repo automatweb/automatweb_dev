@@ -608,6 +608,14 @@ function toggle_file_link_newwin()
 <td class="fgtext">Mitu liidetakse/lahutatakse</td>
 <td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_up_down_count' value='{VAR:up_down_count}' size='2'></td>
 </tr>
+<!-- SUB: HAS_ADD_SUB_BUTTONS -->
+<tr>
+<td class="fgtext">Liitmise nupu pilt: </td>
+<td class="fgtext">{VAR:up_button_img} <input type='file' class='small_button' name='{VAR:cell_id}_up_button_img'> Kas kasutada? <input type="checkbox" name="{VAR:cell_id}_up_button_use_img" value="1" {VAR:up_button_use_img}></td>
+<td class="fgtext">Llahutamise nupu pilt: </td>
+<td class="fgtext">{VAR:down_button_img} <input type='file' class='small_button' name='{VAR:cell_id}_down_button_img'> Kas kasutada? <input type="checkbox" name="{VAR:cell_id}_down_button_use_img" value="1" {VAR:down_button_use_img}></td>
+</tr>
+<!-- END SUB: HAS_ADD_SUB_BUTTONS -->
 <tr>
 <td class="fgtext">Form, kus on mitu liita/lahtuada element: </td>
 <td class="fgtext"><select class='small_button' name="{VAR:cell_id}_up_down_count_el_form">{VAR:udcel_forms}</select></td>

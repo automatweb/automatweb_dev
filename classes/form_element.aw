@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.81 2002/10/04 13:04:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.82 2002/10/08 07:41:46 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -465,12 +465,17 @@ class form_element extends aw_template
 					"up_down_count" => $this->arr["up_down_count"],
 					"udcel_forms" => $this->picker($this->arr["up_down_count_el_form"], $this->form->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true))),
 					"udcel_els" => $this->picker($this->arr["up_down_count_el_el"], $udcel_els),
+					"up_button_img" => image::make_img_tag(image::check_url($this->arr["up_button_img"]["url"])),
+					"down_button_img" => image::make_img_tag(image::check_url($this->arr["down_button_img"]["url"])),
+					"up_button_use_img" => checked($this->arr["up_button_use_img"]),
+					"down_button_use_img" => checked($this->arr["down_button_use_img"]),
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
 					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
+					"HAS_ADD_SUB_BUTTONS" => ($this->arr["up_down_button"] ? $this->parse("HAS_ADD_SUB_BUTTONS") : ""),
 				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -1118,6 +1123,17 @@ class form_element extends aw_template
 			$this->arr["up_down_count_el_form"] = $$var;
 			$var=$base."_up_down_count_el_el";
 			$this->arr["up_down_count_el_el"] = $$var;
+
+			$var=$base."_up_button_use_img";
+			$this->arr["up_button_use_img"] = $$var;
+			$var=$base."_down_button_use_img";
+			$this->arr["down_button_use_img"] = $$var;
+
+			$img = get_instance("image");
+			$var=$base."_up_button_img";
+			$this->arr["up_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["up_button_img"]["id"]);
+			$var=$base."_down_button_img";
+			$this->arr["down_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["down_button_img"]["id"]);
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -2035,8 +2051,25 @@ class form_element extends aw_template
 						// the data where the value for the element should be, gets passed as $udcnt_values 
 						$udcnt = (int)$udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
 					}
-					$aft = "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");' value='+'>";
-					$aft .= "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");' value='-'>";
+					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");";
+					if ($this->arr["up_button_use_img"] && $this->arr["up_button_img"]["id"])
+					{
+						$aft = "<input type='image' src='".image::check_url($this->arr["up_button_img"]["url"])."' onClick='$onc'>";
+					}
+					else
+					{
+						$aft = "<input type='button' onClick='$onc' value='+'>";
+					}
+
+					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");";
+					if ($this->arr["down_button_use_img"] && $this->arr["down_button_img"]["id"])
+					{
+						$aft = "<input type='image' src='".image::check_url($this->arr["down_button_img"]["url"])."' onClick='$onc'>";
+					}
+					else
+					{
+						$aft .= "<input type='button' onClick='$onc' value='-'>";
+					}
 				}
 				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />$aft\n";
 				break;
