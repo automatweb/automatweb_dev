@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.24 2004/12/23 15:43:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.25 2005/01/22 12:16:09 ahti Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -714,15 +714,17 @@ class object_import extends class_base
 					{
 						$line[$idx] = $this->_get_date_value($line[$idx], $dateformat[$pn]);
 					}
-
-					$dat->set_prop($pn, $line[$idx]);
-					if ($properties[$pn]["store"] == "connect" && $line[$idx])
+					if($dat->is_property($pn))
 					{
-						$rid = $relinfo[$properties[$pn]["reltype"]]["value"];
-						$dat->connect(array(
-							"to" => $line[$idx],
-							"reltype" => $rid
-						));
+						$dat->set_prop($pn, $line[$idx]);
+						if ($properties[$pn]["store"] == "connect" && $line[$idx])
+						{
+							$rid = $relinfo[$properties[$pn]["reltype"]]["value"];
+							$dat->connect(array(
+								"to" => $line[$idx],
+								"reltype" => $rid
+							));
+						}
 					}
 				}
 				$line = $linebak;
