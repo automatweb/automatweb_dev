@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.87 2004/02/23 16:39:48 sven Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.88 2004/02/25 15:53:39 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -206,21 +206,26 @@ define("FORM_USES_CALENDAR",58);
 // object flags - bitmask
 define("OBJ_FLAGS_ALL", (1 << 30)-1);	// this has all the flags checked, so you can build masks, by negating this
 
-define("OBJ_HAS_CALENDAR",1);
+define("OBJ_HAS_CALENDAR",1 << 0);
 // this will be set for objects that need to be translated
-define("OBJ_NEEDS_TRANSLATION",2);
+define("OBJ_NEEDS_TRANSLATION",1 << 1);
 // this will be set for objects whose translation has been checked/confirmed
-define("OBJ_IS_TRANSLATED",4);
+define("OBJ_IS_TRANSLATED",1 << 2);
 // this will be used for objects with calendar functionality
-define("OBJ_IS_DONE",8);
+define("OBJ_IS_DONE",1 << 3);
 // if you need to select an active object from a bunch of objects, then this flag marks the active object
-define("OBJ_FLAG_IS_SELECTED", 16);
+define("OBJ_FLAG_IS_SELECTED", 1 << 4);
+// this says that the object is part of the auto-object translation. in addition to this it can have the NEEDS_TRANSLATION ot IS_TRANSLATED
+define("OBJ_HAS_TRANSLATION", 1 << 5);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
 // for CL_BROTHER_DOCUMENT 
 define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
 
+// always-defined reltypes
+define("RELTYPE_BROTHER", 10000);
+define("RELTYPE_ACL", 10001);
 
 //Date formats
 define("LC_DATE_FORMAT_SHORT", 1); // For example: 20.06.88 or 05.12.98 
