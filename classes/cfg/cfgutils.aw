@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.8 2002/12/19 18:06:54 duke Exp $
+// $Id: cfgutils.aw,v 1.9 2002/12/20 14:01:01 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -123,7 +123,17 @@ class cfgutils extends aw_template
 			// XXX: this means that we cannot specify any names or groups
 			// in the class_base definition - those will simply be overwritten
 			$this->classinfo = $classinfo[0];
-			$this->groupinfo = $groupinfo[0];
+			if (is_array($this->groupinfo))
+			{
+				if (is_array($groupinfo[0]))
+				{
+					$this->groupinfo = $this->groupinfo + $groupinfo[0];
+				};
+			}
+			else
+			{
+				$this->groupinfo = $groupinfo[0];
+			};
 			$this->tableinfo = $tableinfo[0];
                 };
 		$res = array();
@@ -151,6 +161,7 @@ class cfgutils extends aw_template
                         die("Invalid clid - $file<bR>");
                 };
 		$objprops = $this->load_class_properties(array("file" => $file));
+
 		if (is_array($this->groupinfo))
 		{
 			$tmp = array();
@@ -161,6 +172,17 @@ class cfgutils extends aw_template
 			};
 		};
 		$this->groupinfo = $tmp;
+		if (is_array($objprops))
+		{
+			foreach($objprops as $objprop)
+			{
+				if (!$this->groupinfo[$objprop["group"]])
+				{
+					$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
+				};
+			};
+		};
+
 		if (is_array($this->tableinfo))
 		{
 			$tmp = array();
