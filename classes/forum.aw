@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.31 2002/01/07 10:01:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.32 2002/01/07 13:13:02 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -31,10 +31,174 @@ class forum extends aw_template
 		}
 	}
 
-	////
-	// Järgmised 2 funktsiooni tegelevad foorumi objektidega
-	////
+	function change_rates($args = array())
+	{
+		extract($args);
+		$this->read_template("edit_ratings.tpl");
+		$title = "Muuda foorumit";
+		$_tmp = $this->get_object($id);
+		$meta = $this->get_object_metadata(array(
+			"oid" => $id,
+		));
+		$parent = $tmp["parent"];
+		$this->mk_path($parent, $title);
+		$c = "";
+		if (is_array($meta["rates"]))
+		{
+			$ords = array();
+			foreach($meta["rates"] as $key => $rate)
+			{
+				$ords[$key] = $rate["ord"];
+			};
+			asort($ords);
 
+			foreach($ords as $key => $val)
+			{
+				$this->vars(array(
+					"id" => $key,
+					"ord" => $meta["rates"][$key]["ord"],
+					"name" => $meta["rates"][$key]["name"],
+					"rate" => $meta["rates"][$key]["rate"],
+				));
+
+				$c .= $this->parse("rateline");
+			};
+		};
+		$this->vars(array(
+			"topics_link" => $this->mk_my_orb("topics",array("id" => $id)),
+			"new_rate_link" => $this->mk_my_orb("add_rate",array("id" => $id)),
+			"rateline" => $c,
+			"change_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
+			"reforb" => $this->mk_reforb("submit_rates",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	function submit_rates($args = array())
+	{
+		extract($args);
+		$rates = array();
+		if (is_array($rate_name))
+		{
+			foreach($rate_name as $key => $val)
+			{
+				if ($delete && $rate_check[$key])
+				{
+				}
+				else
+				{
+					$rates[$key] = array("ord" => $rate_order[$key],"name" => $val,"rate" => $rate_value[$key]);
+				};
+			};
+
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "rates",
+				"value" => $rates,
+			));
+		};
+		return $this->mk_my_orb("change_rates",array("id" => $id));
+	}
+
+	function add_rate($args = array())
+	{
+		extract($args);
+		$this->mk_path(0,"Lisa hinne");
+		$this->read_template("add_rate.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_rate",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	function submit_rate($args = array())
+	{
+		extract($args);
+		$old_rates = $this->get_object_metadata(array(
+			"oid" => $id,
+			"key" => "rates",
+		));
+		$old_rates[] = array("name" => $name,"rate" => $rate);
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "rates",
+			"value" => $old_rates,
+		));
+		return $this->mk_my_orb("change_rates",array("id" => $id));
+	}
+
+
+	
+	////
+	// !Displays the form for configuring the form
+	function change($arr)
+	{
+		extract($arr);
+		$this->read_template("add_forum.tpl");
+		// if parent is defined, then we are about to add a new forum,
+		if ($parent)
+		{
+			$pobj = $this->get_object($parent);
+			// FIXME: if we entered this function from the objects list,
+			// we redirect the user to the topic list, becase the Big Pointy
+			// Haired boss wants it that way. And besides, this is temporary
+			// (yeah, right) anyway, until we figure out something better.
+			if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
+			{
+				header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
+				exit;
+			};
+			
+			$title = "Lisa foorum";
+		
+			$meta = array();
+		}
+		// otherwise we are modifying an existing forum
+		else
+		{
+			$obj = $this->get_object($id);
+			$pobj = $this->get_object($obj["parent"]);
+			$title = "Muuda foorumit";
+			$this->mk_path($parent, $title);
+			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
+		};
+	
+		if ($pobj["class_id"] == CL_DOCUMENT)
+		{
+			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
+	
+		}
+		else
+		{
+			$this->mk_path($pobj["oid"], $title);
+		};
+
+		global $template_sets;
+		$this->vars(array(
+			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
+			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
+			// oh god, this sucks, but alas .. positioned arguments suck too
+			"url" => str_replace("/automatweb","",$this->mk_my_orb("topics",array("id" => $id),"forum",false)),
+		));
+
+		$url = ($id) ? $this->parse("URL") : "";
+
+		$this->vars(array(
+			"name" => $obj["name"],
+			"comment" => $obj["comment"],
+			"comments" => checked($meta["comments"]),
+			"template" => $this->picker($meta["template"],$template_sets),
+			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
+			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
+			"rated" => checked($meta["rated"]),
+			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent)),
+			"URL" => $url,
+			"EDIT" => $this->parse("EDIT"),
+		));
+		$this->parse("CHANGE");
+		return $this->parse();
+	}
 	
 	////
 	// !Creates a new forum or updates configuration for an existing one
@@ -87,75 +251,6 @@ class forum extends aw_template
 		};
 		return $retval;
 	}
-	
-	////
-	// !Displays the form for changing the forum properties
-	function change($arr)
-	{
-		extract($arr);
-		$this->read_template("add_forum.tpl");
-		// if parent is defined, then we are about to add a new forum,
-		if ($parent)
-		{
-			$pobj = $this->get_object($parent);
-			// UGLY HACK: if we entered this function from the objects list,
-			// we redirect the user to the topic list, becase the Big Pointy
-			// Haired boss wants it that way. And besides, this is temporary
-			// (yeah, right) anyway, until we figure out something better.
-			if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
-			{
-				header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
-				exit;
-			};
-			
-			$title = "Lisa foorum";
-		
-			$meta = array();
-		}
-		// otherwise we are modifying an existing forum
-		else
-		{
-			$obj = $this->get_object($id);
-			$pobj = $this->get_object($obj["parent"]);
-			$title = "Muuda foorumit";
-			$this->mk_path($parent, $title);
-			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
-		};
-	
-		if ($pobj["class_id"] == CL_DOCUMENT)
-		{
-			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
-	
-		}
-		else
-		{
-			$this->mk_path($pobj["oid"], $title);
-		};
-
-		global $template_sets;
-		$this->vars(array(
-			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
-			// oh god, this sucks, but alas .. positioned arguments suck too
-			"url" => str_replace("/automatweb","",$this->mk_my_orb("topics",array("id" => $id),"forum",false)),
-		));
-
-		$url = ($id) ? $this->parse("URL") : "";
-
-		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"comments" => checked($meta["comments"]),
-			"template" => $this->picker($meta["template"],$template_sets),
-			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"rated" => checked($meta["rated"]),
-			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent)),
-			"URL" => $url,
-			"EDIT" => $this->parse("EDIT"),
-		));
-		$this->parse("CHANGE");
-		return $this->parse();
-	}
 
 	////
 	// !Displays tabs 
@@ -170,9 +265,16 @@ class forum extends aw_template
 		$id = $this->forum_id;
 		$board = $this->board;
 		$from = $this->from;
+		// oh god, I hate this
+		global $REQUEST_URI;
+		if (strpos($REQUEST_URI,"automatweb"))
+		{
+			array_push($args,"configure");
+		};
 
 		$tabs = array(
 			"newtopic" => $this->mk_my_orb("add_topic",array("id" => $id,"_alias" => "forum","section" => $this->section)),
+			"configure" => $this->mk_my_orb("change",array("id" => $id,"_alias" => "forum","section" => $this->section)),
 			"addcomment" => $this->mk_my_orb("addcomment",array("board" => $board,"_alias" => "forum","section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 			"props_link" => $this->mk_my_orb("change",array("id" => $id)),
@@ -191,6 +293,7 @@ class forum extends aw_template
 			"newtopic" => "Uus teema",
 			"addcomment" => "Uus küsimus",
 			"flat" => "Teemade nimekiri",
+			"configure" => "Konfigureeri",
 			"threadedsubjects" => "Ainult pealkirjad",
 			"mark_all_read" => "Kõik loetuks",
 			"search" => "Otsi",
@@ -339,6 +442,8 @@ class forum extends aw_template
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
 		$aw_mb_last[$board_obj["parent"]] = time();
+		$meta = $this->get_object_metadata(array("oid" => $forum_obj["oid"]));
+		$board_meta = $this->get_object_metadata(array("oid" => $board));
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
@@ -352,7 +457,6 @@ class forum extends aw_template
 		$this->forum_id = $id;
 
 		$content = "";
-			
 
 		$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"flatcomments");
 		if ($addcomment)
@@ -362,6 +466,11 @@ class forum extends aw_template
 		elseif ($no_response)
 		{
 			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"no_response");
+		};
+		$rated = "";
+		if ($meta["rated"])
+		{
+			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
 		};
 		$this->read_template("messages.tpl");
 
@@ -408,6 +517,7 @@ class forum extends aw_template
 			"topic" => $board_obj["name"],
 			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
 			"created" => $this->time2date($board_obj["created"],2),
+			"rated" => $rated,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
 			"text" => nl2br(create_links($board_obj["comment"])),
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show")),
@@ -488,7 +598,7 @@ class forum extends aw_template
 	function submit_vote($args = array())
 	{
 		extract($args);
-		global $forum_votes;
+		//global $forum_votes;
 		if (not($forum_votes[$args["board"]]))
 		{
 			$forum_votes[$args["board"]] = rand();
@@ -521,12 +631,23 @@ class forum extends aw_template
 		extract($args);
 		$board_obj = $this->get_object($board);
 		$forum_obj = $this->get_object($board_obj["parent"]);
+		$meta = $this->get_object_metadata(
+			array("oid" => $forum_obj["oid"],
+		));
+		$board_meta = $this->get_object_metadata(array("oid" => $board));
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->forum_id = $forum_obj["oid"];
 		$this->board = $board;
 		
 		$this->_query_comments(array("board" => $board));
+	
+		$rated = "";
+		if ($meta["rated"])
+		{
+			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
+		};
+	
 		if ($no_comments)
 		{
 			$tabs = $this->tabs(array("addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
@@ -577,6 +698,7 @@ class forum extends aw_template
 			"topic" => $board_obj["name"],
 			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
 			"created" => $this->time2date($board_obj["created"],2),
+			"rated" => $rated,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
 			"text" => nl2br(create_links($board_obj["comment"])),
 		));
@@ -615,6 +737,42 @@ class forum extends aw_template
 		};
 		return $this->mk_my_orb($act,array("board" => $board,"_alias" => "forum", "section" => $this->section));
 	}
+
+	function _draw_ratings($args = array(),$board_meta = array())
+	{
+		$this->read_template("rate.tpl");
+		$c = "";
+		if (is_array($args))
+		{
+			foreach($args as $key => $val)
+			{
+				$this->vars(array(
+					"value" => $key,
+					"name" => $val["name"],
+				));
+				$c .= $this->parse("rate");
+			}
+		};
+	
+		if ($board_meta["voters"] > 0)
+		{
+			$ratings = sprintf("%0.02f",$board_meta["votesum"] / $board_meta["voters"]);
+		}
+		else
+		{
+			$ratings = "0.00";
+		};
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_vote",array("board" => $this->board)),
+			"rating" => $ratings,
+			"rate" => $c,
+		));
+
+		return $this->parse();
+	}
+
+
 
 	////
 	// !creates an indented list of comments
@@ -755,7 +913,7 @@ class forum extends aw_template
 			"email" => $args["email"],
 			"icons" => $args["icons"],
 			"parent" => $args["parent"],
-			"subj" => $args["subj"],
+			"subj" => ($args["subj"]) ? $args["subj"] : "(nimetu)",
 			"id" => $args["id"],
 			"new" => $new,
 			"time" => $this->time2date($args["time"],2),
@@ -1258,7 +1416,7 @@ class forum extends aw_template
 		};
 
 		$this->vars(array(
-			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
+			"topic" => ($args["name"]) ? $args["name"] : "(nimetu)",
 			"created" => $this->time2date($args["created"],2),
 			"created_date" => $this->time2date($args["created"],8),
 			"from" => $args["createdby"],
