@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.201 2003/01/08 11:00:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.202 2003/01/11 17:30:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -83,6 +83,7 @@ class menuedit extends aw_template
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
+
 
 		// at this point $section is already numeric,
 		// we checked it in $this->request_startup()
@@ -188,11 +189,6 @@ class menuedit extends aw_template
 	{
 		extract($params);	
 		$template = isset($template) && $template != "" ? $template : "main.tpl";
-		global $DBG;
-		if ($DBG)
-		{
-			print "tpl = $template<br>";
-		}
 		$docid = isset($docid) ? $docid : 0;
 
 		// impordime taimeriklassi
@@ -230,7 +226,7 @@ class menuedit extends aw_template
 			$section=$obj["parent"];
 			$docid=$obj["brother_of"];
 		}
-
+		
 		classload("image");
 		$_t = aw_global_get("act_period");
 		$this->vars(array(
@@ -259,6 +255,7 @@ class menuedit extends aw_template
 
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
+
 		
 		if ($obj["class_id"] == CL_DOCUMENT || $obj["class_id"] == CL_PERIODIC_SECTION)
 		{
@@ -1031,6 +1028,13 @@ class menuedit extends aw_template
 		}
 		else
 		{
+		global $XXX;
+		if ($XXX)
+		{
+			print "<pre>";
+			var_dump($realsect);
+			print "</pre>";
+		};
 			$_obj = $this->get_object($realsect);
 			$set_lang_id = $_obj["lang_id"];
 		};
@@ -1075,6 +1079,7 @@ class menuedit extends aw_template
 
 			$section = substr($section,0,-1);
 		};
+
 
 		if ($section == "")
 		{
@@ -1186,7 +1191,6 @@ class menuedit extends aw_template
 				$section = $frontpage;
 			}
 		};
-
 		return $section;
 	}
 
@@ -5148,6 +5152,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		$si_parent = $sel_menu_id;
 		$imgs = false;
+		return false;
 		while ($sel_image == "" && $si_parent)
 		{
 			$sel_menu_meta = $this->mar[$si_parent]["meta"];
@@ -5755,6 +5760,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function new_right_frame($arr)
 	{
 		extract($arr);
+		if (!$this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$this->acl_error("view", PRG_MENUEDIT);
+		}
+
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
 		$parent = $parent ? $parent : $this->cfg["rootmenu"];
@@ -5794,7 +5804,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"uid" => aw_global_get("uid"),
 			"key" => "addobject_type",
 		));
-			
+
 		$this->read_template("js_popup_menu.tpl");
 
 
