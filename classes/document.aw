@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.241 2004/03/09 18:23:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.242 2004/03/10 15:25:06 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -775,12 +775,35 @@ class document extends aw_template
 		{
 			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
 			{
-				$x = $this->get_relations_by_field(array(
-					"field"    => "name",
-					"keywords" => strip_tags($doc["photos"]),
-					"section"  => $this->cfg["link_authors_section"]
+				// 1. create a list of possibly interesting objects from the menu
+				// which should contain documents about a photographer
+
+				// using object_list makes this fast, because the results are cached
+				$photo_obj_list = new object_list(array(
+					"class_id" => array(CL_MENU,CL_DOCUMENT),
+					"parent" => $this->cfg["link_authors_section"],
+					"lang_id" => array(),
 				));
 				$authors = array();
+				$x = array();
+
+				// now figure out the real object id for each author
+				// XXX: should this work with multiple authors too? It doesn't now
+				for ($po = $photo_obj_list->begin(); !$photo_obj_list->end(); $po = $photo_obj_list->next())
+				{
+					if (stristr($po->name,$doc["photos"]) !== false)
+					{
+						$x[$doc["photos"]] = $po->id();
+					};
+
+				};
+
+				// Nothing was found, craft a special array required by the following block of code
+				// (remains from ancient AW)
+				if (sizeof($x) == 0)
+				{
+					$x[$doc["author"]] = "";
+				};
 				while(list($k,$v) = each($x)) 
 				{
 					if ($this->cfg["link_default_link"] != "")
@@ -838,17 +861,41 @@ class document extends aw_template
 		}
 				
 		$ab = "";
-		// I hate the next block of code
+
 		if ($doc["author"]) 
 		{
 			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
 			{
-				$x = $this->get_relations_by_field(array(
-					"field"    => "name",
-					"keywords" => $doc["author"],
-					"section"  => $this->cfg["link_authors_section"]
+				// 1. create a list of possibly interesting objects from the menu
+				// which should contain documents about an author
+
+				// using object_list makes this fast, because the results are cached
+				$author_obj_list = new object_list(array(
+					"class_id" => array(CL_MENU,CL_DOCUMENT),
+					"parent" => $this->cfg["link_authors_section"],
+					"lang_id" => array(),
 				));
 				$authors = array();
+				$x = array();
+
+				// now figure out the real object id for each author
+				// XXX: should this work with multiple authors too? It doesn't now
+				for ($ao = $author_obj_list->begin(); !$author_obj_list->end(); $ao = $author_obj_list->next())
+				{
+					if (stristr($ao->name,$doc["author"]) !== false)
+					{
+						$x[$doc["author"]] = $ao->id();
+					};
+
+				};
+
+				// Nothing was found, craft a special array required by the following block of code
+				// (remains from ancient AW)
+				if (sizeof($x) == 0)
+				{
+					$x[$doc["author"]] = "";
+				};
+
 				while(list($k,$v) = each($x)) 
 				{
 					if ($this->cfg["link_default_link"] != "")
