@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.80 2004/08/17 10:06:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.81 2004/10/08 15:59:17 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -1096,7 +1096,7 @@ class admin_menus extends aw_template
 			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 			$row["icon"] = '<img alt="'.$comment.'" src="'.$iu.'">';
 			$this->t->set_default_sortby("name");
-			$caption = ($row["name"] == '' ? "(nimeta)" : $row["name"]);
+			$caption = parse_obj_name($row["name"]);
 
 			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
 
