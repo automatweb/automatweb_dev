@@ -37,7 +37,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Isikuobjektide kataloog</caption>
+            <caption>Isikute kaust</caption>
       </property>
       <property>
             <name>show_content</name>
@@ -140,7 +140,7 @@
             <FOLDER>
                   <value>4</value>
                   <clid>CL_MENU</clid>
-                  <caption>kataloog</caption>
+                  <caption>isikute kaust</caption>
             </FOLDER>
       </reltypes>
 </properties>
