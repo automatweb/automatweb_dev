@@ -21,7 +21,7 @@ class shop_eq extends shop_base
 	{
 		extract($arr);
 		$this->read_template("add_eq.tpl");
-		$this->mk_path($parent, "Lisa valem");
+		$this->mk_path($parent, LC_SHOP_EQ_ADD_FORMULA);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
@@ -55,7 +55,7 @@ class shop_eq extends shop_base
 		extract($arr);
 		$this->read_template("add_eq.tpl");
 		$eq = $this->get_eq($id);
-		$this->mk_path($eq["parent"], "Muuda valemit");
+		$this->mk_path($eq["parent"], LC_SHOP_EQ_CHANGE_FORMULA);
 
 		$this->vars(array(
 			"name" => $eq["name"],

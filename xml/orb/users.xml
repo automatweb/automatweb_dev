@@ -117,5 +117,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="settings">
+			<function name="settings">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -153,6 +153,13 @@ function idxforvalue(el,val)
 	<td class="fcaption2" colspan=2><select name='commission_eq'>{VAR:commission_eq}</select></td>
 </tr>
 
+<!--<tr>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_NUMP_EQ}:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><select name='nump_eq'>{VAR:nump_eq}</select></td>
+</tr>-->
+
 <tr>
 	<td class="fform" align="center" colspan="2"><input type="submit" value="{VAR:LC_SHOP_SAVE}">
 	</td>

@@ -122,6 +122,21 @@ function del_form()
 	return true;
 }
 
+var sel_chain = 0;
+
+function del_chain()
+{
+	if (!sel_chain)
+	{
+		alert('Vali form, mille aliast kustutada soovid!');
+		window.location="#";
+		return true;
+	}
+
+	window.location="orb.{VAR:ext}?class=document&action=delete_alias&docid={VAR:id}&id="+sel_chain;
+	return true;
+}
+
 var sel_file = 0;
 
 function ch_file()

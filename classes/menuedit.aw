@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.36 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.37 2001/07/18 16:22:30 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3025,6 +3025,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$check_acl = true;
 			};
 		}
+		
 
 		// make the subtemplate names for this and the next level
 		$mn = "MENU_".$name."_L".$this->level."_ITEM";

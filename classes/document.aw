@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.36 2001/07/16 14:35:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.37 2001/07/18 16:22:30 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -334,10 +334,23 @@ class document extends aw_template
 		$this->add_hit($docid);
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
-		if (strpos($doc["content"], "#telekava_") === false)
-		{}
-		else
+		if (!(strpos($doc["content"], "#telekava_") === false))
+		{
 			return $this->telekava_doc($doc["content"]);
+		}
+
+		// vaatame kas vaja poolitada kui arhiivis oleme
+		if ($GLOBALS["in_archive"])
+		{
+			$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
+		}
+		else
+		{
+			if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
+			{
+				$doc["content"] = substr($doc["content"],0,$pp)."<br><B>Edasi loe ajakirjast!</b></font>";
+			}
+		}
 
 		// laeme vajalikud klassid
 		classload("acl","form","table","extlinks","images","gallery");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.13 2001/07/17 20:56:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -1012,10 +1012,14 @@ class form_base extends aw_template
 	function get_elements_for_forms($arr)
 	{
 		$ret = array();
-		$this->db_query("SELECT el_id,objects.name as name FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN (".join(",",$arr).")");
-		while ($row = $this->db_next())
+		$sss = join(",",$arr);
+		if ($sss != "")
 		{
-			$ret[$row["el_id"]] = $row["name"];
+			$this->db_query("SELECT el_id,objects.name as name FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN (".$sss.")");
+			while ($row = $this->db_next())
+			{
+				$ret[$row["el_id"]] = $row["name"];
+			}
 		}
 		return $ret;
 	}
@@ -1090,6 +1094,85 @@ class form_base extends aw_template
 		while ($row = $this->db_next())
 		{
 			$ret[$row["id"]] = $row["type_name"];
+		}
+		return $ret;
+	}
+
+	////
+	// !creates a list of all elements to be put in a listbox for the suer to select which one he wants to add
+	function listall_elements()
+	{
+		$this->db_query("SELECT objects.oid as oid, 
+														objects.parent as parent,
+														objects.name as name
+											FROM objects 
+											LEFT JOIN menu ON menu.id = objects.oid
+											WHERE objects.class_id = 1 AND objects.status != 0 
+											GROUP BY objects.oid
+											ORDER BY objects.parent, jrk");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row;
+		}
+		
+		// teeme olemasolevatest elementidest array
+		$elarr = array();
+		for ($row = 0; $row < $this->form->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->form->arr["cols"]; $col++)
+			{
+				if (is_array($this->form->arr["elements"][$row][$col]))
+				{
+					reset($this->form->arr["elements"][$row][$col]);
+					while (list($eid,) = each($this->form->arr["elements"][$row][$col]))
+					{
+						$elarr[$eid] = $eid;
+					}
+				}
+			}
+		}
+
+		$check_parent = false;
+		if (is_array($this->form->arr["el_menus2"]) && count($this->form->arr["el_menus2"]) > 0)
+		{
+			$check_parent = true;
+		}
+
+		$ar = array(0 => "");
+		$this->db_query("SELECT oid,name,parent FROM objects WHERE objects.class_id= ".CL_FORM_ELEMENT." AND status != 0 ");
+		while ($row = $this->db_next())
+		{
+			if (!$elarr[$row["oid"]])
+			{
+				if ($check_parent)
+				{
+					// if this element does not exist in this form yet
+					// add it to the select list.
+					if (in_array($row["parent"],$this->form->arr["el_menus2"]))
+					{
+						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+					}
+				}
+				else
+				{
+						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+				}
+			}
+		}
+
+		return $ar;
+	}
+
+	////
+	// !creats the full path of an element from an array of all menus ($arr) and the record of the element ($el)
+	function mk_element_path(&$arr, &$el)
+	{
+		$parent = $el["parent"];
+		$ret = "";
+		while ($parent > 1)
+		{
+			$ret =$arr[$parent]["name"]."/".$ret;
+			$parent = $arr[$parent]["parent"];
 		}
 		return $ret;
 	}

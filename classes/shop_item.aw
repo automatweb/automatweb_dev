@@ -27,7 +27,7 @@ class shop_item extends shop_base
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent, "Lisa kaup");
+		$this->mk_path($parent, LC_SHOP_ITEM_ADD_PRODUCT);
 		if ($step < 2)
 		{
 			$this->read_template("add_item_form.tpl");
@@ -111,7 +111,7 @@ class shop_item extends shop_base
 		
 		$itt = $this->get_item_type($o["type_id"]);
 
-		$this->mk_path($o["parent"],"Muuda kaupa");
+		$this->mk_path($o["parent"],LC_SHOP_ITEM_CHANGE_PRODUCT);
 
 		$this->read_template("edit_item.tpl");
 
@@ -357,6 +357,10 @@ class shop_item extends shop_base
 		$this->mk_path($it["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda</a> / Muuda hindu");
 		$this->read_template("set_per_prices.tpl");
 
+		classload("currency");
+		$cur = new currency;
+		$cur_list = $cur->get_list();
+
 		load_vcl("date_edit");
 		$de = new date_edit(time());
 		$de->configure(array(
@@ -364,6 +368,14 @@ class shop_item extends shop_base
 			"month" => "",
 			"day" => ""
 		));
+
+		foreach($cur_list as $oid => $name)
+		{
+			$this->vars(array(
+				"cur_name" => $name
+			));
+			$this->parse("CUR_H");
+		}
 
 		$count = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM  shop_item2per_prices WHERE item_id = $id", "cnt");
 		$num_pages = $count / PR_PER_PAGE;
@@ -395,11 +407,23 @@ class shop_item extends shop_base
 			$this->vars(array(
 				"from" => $de->gen_edit_form("from[".$row["id"]."]",$row["tfrom"]),
 				"to" => $de->gen_edit_form("to[".$row["id"]."]",$row["tto"]),
-				"price" => $row["price"],
 				"id" => $row["id"],
 				"week_check" => checked($row["per_type"] == PRICE_PER_WEEK),
 				"2week_check" => checked($row["per_type"] == PRICE_PER_2WEEK)
 			));
+			$prices = unserialize($row["price"]);
+			$cc = "";
+			foreach($cur_list as $oid => $c_name)
+			{
+				$price = is_array($prices) ? $prices[$oid] : $row["price"];
+
+				$this->vars(array(
+					"cur_id" => $oid,
+					"price" => $price
+				));
+				$cc.=$this->parse("CUR");
+			}
+			$this->vars(array("CUR" => $cc));
 			$per.=$this->parse("PERIOD");
 		}
 
@@ -413,6 +437,16 @@ class shop_item extends shop_base
 				"week_check" => "",
 				"2week_check" => ""
 			));
+			$cc = "";
+			foreach($cur_list as $oid => $c_name)
+			{
+				$this->vars(array(
+					"cur_id" => $oid,
+					"price" => 0
+				));
+				$cc.=$this->parse("CUR");
+			}
+			$this->vars(array("CUR" => $cc));
 			$per.=$this->parse("PERIOD");
 		}
 
@@ -430,12 +464,14 @@ class shop_item extends shop_base
 		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $id");
 		while ($row = $this->db_next())
 		{
-			if (isset($price[$row["id"]]))
+			if (isset($price_type[$row["id"]]))
 			{
 				$tfrom = mktime(0,0,0,$from[$row["id"]]["month"],$from[$row["id"]]["day"],$from[$row["id"]]["year"]);
 				$tto = mktime(0,0,0,$to[$row["id"]]["month"],$to[$row["id"]]["day"],$to[$row["id"]]["year"]);
 				$this->save_handle();
-				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$price[$row["id"]]."',per_type = '".$price_type[$row["id"]]."' WHERE id = ".$row["id"]);
+				$pricsstr = serialize($price[$row["id"]]);
+				$this->quote(&$pricsstr);
+				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$pricsstr."',per_type = '".$price_type[$row["id"]]."' WHERE id = ".$row["id"]);
 				$this->restore_handle();
 			}
 		}
@@ -448,12 +484,14 @@ class shop_item extends shop_base
 			}
 		}
 
-		if ($price[0] > 0)
+		if ($price_type[0] > 0)
 		{
 			// lisame uue ka
 			$tfrom = mktime(0,0,0,$from[0]["month"],$from[0]["day"],$from[0]["year"]);
 			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
-			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type) VALUES($id,$tfrom,$tto,'".$price[0]."','".$price_type[0]."')");
+			$pricsstr = serialize($price[0]);
+			$this->quote(&$pricsstr);
+			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type) VALUES($id,$tfrom,$tto,'".$pricsstr."','".$price_type[0]."')");
 		}
 		return $this->mk_my_orb("set_per_prices", array("id" => $id,"page" => $page));
 	}
@@ -512,13 +550,17 @@ class shop_item extends shop_base
 
 		if ($it["has_period"])
 		{
+			$shop = $this->find_shop_id($it["parent"]);
+
 			$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = $id ");
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
 					"period" => $this->time2date($row["period"], 5),
+					"period_end" => $this->time2date($row["period"]+24*7*3600, 5),
 					"num_sold" => $row["num_sold"],
-					"free" => $it["max_items"] - $row["num_sold"]
+					"free" => $it["max_items"] - $row["num_sold"],
+					"view" => $this->mk_my_orb("admin_item_orders", array("id" => $shop,"period" => $row["period"],"item_id" => $id),"shop")
 				));
 				$this->parse("LINE");
 			}

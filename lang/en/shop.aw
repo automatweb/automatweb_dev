@@ -63,4 +63,5 @@ $lc_shop["LC_SHOP_ORDERS_NUMBER_IS"] = "Orders number is";
 $lc_shop["LC_SHOP_BLUE"] = "blue";
 
 $lc_shop["LC_SHOP_SHOW_FREE"] = "Show item reservations";
+$lc_shop["LC_SHOP_NUMP_EQ"] = "Passenger count equasion";
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.29 2001/07/16 23:34:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.30 2001/07/18 16:22:26 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -394,7 +394,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_FORM_TABLE => array("name" => LC_CONST_FORM_TABLE, "file" => "form_table", "can_add" => 1),
 			CL_CURRENCY => array("name" => LC_CONST_RATE_OF_EXCHANGE, "file" => "currency", "can_add" => 1),
 			CL_FORM_CHAIN => array("name" => LC_CONST_FORM_WREATH, "file" => "form_chain", "can_add" => 1),
-			CL_PROMO => array("name" => LC_CONST_PROMOBOX, "file" => "promo", "can_add" => 0)
+			CL_PROMO => array("name" => LC_CONST_PROMOBOX, "file" => "promo", "can_add" => 0),
+			CL_FORM_XML_OUTPUT => array("name" => "XML väljund", "file" => "form_output", "can_add" => 0)
 );
 // kliendid. 
 // hierarhia esimene element on root

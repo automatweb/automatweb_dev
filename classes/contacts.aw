@@ -35,13 +35,13 @@ class contacts extends aw_template {
  
 		$addr = rawurldecode($addr);
 		$this->dequote($addr);
-		preg_match("/(.+?)[<|\(|\[](.+?)[>|\)|\]]/",$addr,$matches);
-		$name = str_replace("\"","",$matches[1]);
-		list($name,$surname) = explode(" ",$name);
+		//preg_match("/(.+?)[<|\(|\[](.+?)[>|\)|\]]/",$addr,$matches);
+		//$name = str_replace("\"","",$matches[1]);
+		//list($name,$surname) = explode(" ",$name);
 		$elvalues = array(
 				"name" => $name,
 				"surname" => $surname,
-				"email" => $matches[2],
+				"email" => $addr,
 				"grupp" => $this->flatlist,
 			);
 		$form = $f->gen_preview(array(

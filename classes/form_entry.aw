@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.5 2001/07/18 16:13:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.6 2001/07/18 16:22:30 kristo Exp $
 
 global $orb_defs;
 
@@ -39,6 +39,8 @@ class form_entry extends aw_template
 	function get_entry($args = array())
 	{
 		extract($args);
+		classload("xml");
+		$xml = new xml();
 		// koigepealt teeme kindlaks, millise vormi juurde see entry kuulub
 		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = '$eid'","form_id");
 		

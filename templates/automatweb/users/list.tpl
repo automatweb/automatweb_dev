@@ -32,6 +32,9 @@
 <!-- END SUB: CAN_CHANGE -->
 </td>
 <td class="fgtext2">&nbsp;
+<a href='{VAR:settings}'>M&auml;&auml;rangud</a>
+</td>
+<td class="fgtext2">&nbsp;
 <!-- SUB: CAN_PWD -->
 <a href='{VAR:change_pwd}'>Muuda passwordi</a>
 <!-- END SUB: CAN_PWD -->

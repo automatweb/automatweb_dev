@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.13 2001/07/17 20:54:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -236,7 +236,8 @@ class users extends users_user
 					"last"				=> $this->time2date($row["lastaction"],2),
 					"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
 					"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
-					"change_pwd"			=> $this->mk_orb("change_pwd", array("id" => $row["uid"]))
+					"change_pwd"			=> $this->mk_orb("change_pwd", array("id" => $row["uid"])),
+					"settings" => $this->mk_my_orb("settings", array("id" => $row["uid"]))
 				));
 				$cc = ""; $cd = ""; $cpw = "";
 				if ($users[$row["uid"]]["can_change"])
@@ -697,37 +698,37 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_IS_ALREADY_USER</font></b>";
+			$add_state[error] = "<b><font color='red'>Selline kasutaja juba on, vali uus kasutajanimi.</font></b>";
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_USERNAME_COND</font></b>";
+			$add_state[error] = "<b><font color='red'>Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_DONT_SAME</font></b>";
+			$add_state[error] = "<b><font color='red'>Paroolid ei kattu!</font></b>";
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_COND</font></b>";
+			$add_state[error] = "<b><font color='red'>Paroolis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu</font></b>";
 		return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_USERNAME_THREE_LETTERS</font></b>";
+			$add_state[error] = "<b><font color='red'>Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_THREE_LETTERS</font></b>";
+			$add_state[error] = "<b><font color='red'>Parool peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
 			return false;
 		}
 		$add_state[error] = "";
@@ -1062,6 +1063,21 @@ class users extends users_user
 		$ret = $sys->check_admin_templates("automatweb/users", array("sel_list.tpl","list.tpl","changepwd.tpl","sel_join_grp.tpl","add.tpl"));
 		$ret.= $sys->check_orb_defs(array("users"));
 		return $ret;
+	}
+
+	function get_join_entries($uid = "")
+	{
+		if ($uid == "")
+		{
+			$uid = $GLOBALS["uid"];
+		}
+		$udata = $this->fetch($uid);
+		$ar = unserialize($udata["join_form_entry"]);
+		if (!is_array($ar))
+		{
+			$ar = array();
+		}
+		return $ar;
 	}
 }
 ?>

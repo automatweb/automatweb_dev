@@ -361,70 +361,70 @@ class search_conf extends aw_template
 		$sel_parent = $search_list[$s_parent];
 		if ($t_type == 1)
 		{
-			$s = "mõni sõna";
+			$s = LC_SEARCH_CONF_SOME_WORD;
 		}
 		else
 		if ($t_type == 2)
 		{
-			$s = "kõiki sõnu";
+			$s = LC_SEARCH_CONF_ALL_WORDS;
 		}
 		else
 		if ($t_type == 3)
 		{
-			$s = "fraas";
+			$s = LC_SEARCH_CONF_PHRASE;
 		}
 		if ($sstring_title != "")
 		{
-			$l="pealkirjas ".$s." stringist '$sstring_title'";
+			$l=LC_SEARCH_CONF_IN_TITLE.$s.sprintf(LC_SEARCH_CONF_FROM_STRING,$sstring_title);
 			if ($sstring != "")
 			{
 				if ($t2c_log == "OR")
 				{
-					$l.=" või ";
+					$l.=LC_SEARCH_CONF_OR;
 				}
 				else	// AND
 				{
-					$l.=" ja ";
+					$l.=LC_SEARCH_CONF_AND;
 				}
 			}
 		}
 
 		if ($c_type == 1)
 		{
-			$s = "mõni sõna";
+			$s = LC_SEARCH_CONF_SOME_WORD;
 		}
 		else
 		if ($c_type == 2)
 		{
-			$s = "kõik sõnad";
+			$s = LC_SEARCH_CONF_ALL_WORDS;
 		}
 		else
 		if ($c_type == 3)
 		{
-			$s = "fraas";
+			$s = LC_SEARCH_CONF_PHRASE;
 		}
 		if ($sstring != "")
 		{
-			$l.="sisus ".$s." stringist '$sstring'";
+			$l.=LC_SEARCH_CONF_IN_SUBJECT.$s.sprintf(LC_SEARCH_CONF_FROM_STRING,$sstring);
 			if ($sel_keys != "")
 			{
 				if ($c2k_log == "OR")
 				{
-					$l.=" või ";
+					$l.=LC_SEARCH_CONF_OR;
 				}
 				else	// AND
 				{
-					$l.=" ja ";
+					$l.=LC_SEARCH_CONF_AND;
 				}
 			}
 		}
 
 		if ($sel_keys)
 		{
-			$l.=" keywordidega ";
+			$l.=LC_SEARCH_CONF_WITH_KEYWORD;
 			$l.=join(",",$this->map("%s",$keys));
 		}
-		$this->_log("search","Otsis $sel_parent alt, $l , vastuseks saadi $cnt dokumenti");
+		$this->_log("search",sprintf(LC_SEARCH_CONF_LOOK_ANSWER,$sel_parent,$l,$cnt));
 	}
 
 	function do_sorting($pa)

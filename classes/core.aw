@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.39 2001/07/17 02:00:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.40 2001/07/18 16:22:30 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -149,7 +149,7 @@ class core extends db_connector
 			$this->db_query($q);
 			$retval = true;
 		};
-		return true;
+		return $retval;
 	}
 
 	////

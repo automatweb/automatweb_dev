@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.6 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.7 2001/07/18 16:22:30 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -119,7 +119,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"Muuda tabelit");
+			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 
 			$this->read_template("table_modify.tpl");
 	
@@ -182,7 +182,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"Muuda tabelit");
+			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 
 			$this->read_template("admin.tpl");
 	
@@ -695,7 +695,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"Muuda tabelit");
+			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 
 			$this->read_template("styles.tpl");
 /*			echo "<table border=1>";
@@ -741,32 +741,32 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 					$sh = ""; $sv = "";
 					if ($spans[rowspan] > 1)
 					{
-						$sh = "&nbsp;| <a href='javascript:split_hor($i,$a)'><img alt='Jaga cell pooleks horisontaalselt' src='/images/split_cell_down.gif' border=0></a>";
+						$sh = "&nbsp;| <a href='javascript:split_hor($i,$a)'><img alt='LC_TABLE_DEVIDE_CELL_HOR' src='/images/split_cell_down.gif' border=0></a>";
 					}
 					if ($spans[colspan] > 1)
 					{
-						$sv = "<a href='javascript:split_ver($i,$a)'><img alt='Jaga cell pooleks vertikaalselt' src='/images/split_cell_left.gif' border=0></a>&nbsp;";
+						$sv = "<a href='javascript:split_ver($i,$a)'><img alt='LC_TABLE_DEVIDE_CELL_VER' src='/images/split_cell_left.gif' border=0></a>&nbsp;";
 					}
 
 					$eu = "";
 					if ($i != 0)
 					{
-						$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='Kustuta &uuml;lemine  cell' src='/images/up_r_arr.gif'></a>&nbsp;";
+						$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='LC_TABLE_DELETE_UPPER_CELL' src='/images/up_r_arr.gif'></a>&nbsp;";
 					}
 					$el = "";
 					if ($a != 0)
 					{
-						$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='Kustuta vasak cell' src='/images/left_r_arr.gif'></a>";
+						$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='LC_TABLE_DELETE_LEFT_CELL' src='/images/left_r_arr.gif'></a>";
 					}
 					$er = "";
 					if (($a+$spans[colspan]) != $this->arr[cols])
 					{
-						$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='Kustuta parem cell' src='/images/right_r_arr.gif'></a>";
+						$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='LC_TABLE_DELETE_RIGHT_CELL' src='/images/right_r_arr.gif'></a>";
 					}
 					$ed = "";
 					if (($i+$spans[rowspan]) != $this->arr[rows])
 					{
-						$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='Kustuta alumine cell' src='/images/down_r_arr.gif'></a>";
+						$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='LC_TABLE_DELETE_LOWER_CELL' src='/images/down_r_arr.gif'></a>";
 					}
 	
 					$map = $this->arr[map][$i][$a];
@@ -1519,7 +1519,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$doc = $this->get_object($id);
-			$this->mk_path($parent,"<a href='".$this->mk_orb("change", array("id" => $id),"document")."'>".$doc[name]."</a> / Lisa tabel");
+			$this->mk_path($parent,"<a href='".$this->mk_orb("change", array("id" => $id),"document")."'>".$doc[name].LC_TABLE_ADD_TABLE);
 			$this->read_template("table_add.tpl");
 		  $this->vars(array("reforb" => $this->mk_reforb("submit_doc", array("parent" => $parent,"id" => $id))));
 			return $this->parse();

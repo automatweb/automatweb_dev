@@ -96,5 +96,36 @@ class shop_base extends aw_template
 		}
 		return $ret;
 	}
+
+	function find_shop_id($section)
+	{
+		// now here's the possibility that $shop was omitted. therefore we must figure it out ourself
+		// we do that by loading all the root folders for all the shops
+		// and then traversing the object tree from the current point upwards until we hit a shop root folder.
+		// what if we don't ? hm. well. error message sounds l33t :p
+		$shfolders = array();
+		$this->db_query("SELECT id,root_menu FROM objects,shop WHERE objects.oid = shop.id AND objects.status != 0 AND objects.class_id = ".CL_SHOP);
+		while ($row = $this->db_next())
+		{
+			$shfolders[$row["root_menu"]] = $row["id"];
+		}
+
+		$oc = $this->get_object_chain($section);
+		foreach($oc as $oid => $orow)
+		{
+			if ($shfolders[$oid])
+			{
+				// and we found a matching root folder!
+				$shop = $shfolders[$oid];
+				break;
+			}
+		}
+
+		if (!$shop)
+		{
+			$this->raise_error("can't find the matching shop for the item!", true);
+		}
+		return $shop;
+	}
 }
 ?>

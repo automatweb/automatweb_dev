@@ -7,7 +7,7 @@
 <td class="fcaption">Kommentaar:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment>{VAR:comment}</textarea></td>
 </tr>
 <tr>
-<td class="fcaption">Vali formid:</td><td class="fform"><select name='forms[]' multiple>{VAR:forms}</select></td>
+<td class="fcaption">Vali formid:</td><td class="fform"><select name='forms[]' size="20" multiple>{VAR:forms}</select></td>
 </tr>
 <!-- SUB: admin -->
 <tr>

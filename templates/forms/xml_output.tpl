@@ -2,7 +2,7 @@
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption" colspan="5">
-<a href="#" onClick="document.savexml.submit()">Salvesta</a>
+<a href="javascript:document.savexml.submit()">Salvesta</a>
 |
 <a href="{VAR:edurl}">Muuda väljundit</a>
 </td>

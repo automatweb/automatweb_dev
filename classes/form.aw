@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.37 2001/07/17 07:33:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.38 2001/07/18 16:22:30 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -125,36 +125,10 @@ class form extends form_base
 	{
 		$eid = $args[0];
 		$alias = $args[1];
-		classload("xml");
-		$xml = new xml();
-		// koigepealt teeme kindlaks, millise vormi juurde see entry kuulub
-		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = '$eid'","form_id");
-		$ftable = "form_" . $fid . "_entries";
-		$q = "SELECT * FROM $ftable WHERE id = '$eid'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		if ($row["chain_id"])
-		{
-			$this->save_handle();
-			$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
-			$this->db_query($q);
-			$crow = $this->db_next();
-			$els = $xml->xml_unserialize(array("source" => $crow["ids"]));
-			$this->restore_handle();
-		}
-		else
-		{
-			$els = array($fid => $eid);
-		};
 
-		$block = array();
-		foreach($els as $form_id => $entry_id)
-		{
-			$q = "SELECT * FROM form_" . $form_id . "_entries WHERE id = '$entry_id'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			$block = $block + $row;
-		};
+		classload("form_entry");
+		$form_entry = new form_entry();
+		$block = $form_entry->get_entry(array("eid" => $eid));
 
 		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
 		$this->db_query($q);
@@ -191,8 +165,6 @@ class form extends form_base
 			"type" => "struct",
 		);
 		return $retval;
-
-
 	}
 			
 	////
@@ -929,7 +901,15 @@ class form extends form_base
 
 		if ($this->arr["name_el"])
 		{
-			$this->entry_name = $this->get_element_value($this->arr["name_el"]);
+			$el = $this->get_element_by_id($this->arr["name_el"]);
+			if ($el->get_type() == "")
+			{
+				$this->entry_name = $el->get_text();
+			}
+			else
+			{
+				$this->entry_name = $el->get_value();
+			}
 			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
 		}
 		$en = serialize($this->entry);
@@ -1858,6 +1838,7 @@ class form extends form_base
 								$newel = $bf->arr["contents"][$row][$col]->do_add_element(array("parent" => $el_parent, "name" => $elval["name"], "based_on" => $elid));
 
 								$elval["id"] = $newel;
+								$elval["ver2"] = true;
 								$this->arr["elements"][$row][$col][$newel] = $elval;
 							}
 						}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.2 2001/07/12 04:23:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.3 2001/07/18 16:22:28 kristo Exp $
 // noja tekalt voib selle ju taiesti vabalt adminni index.aw sisse integreerida
 // voi mis?
 include("const.aw");
@@ -12,6 +12,7 @@ if (!$t->prog_acl("view", PRG_MENUEDIT))
 	include("sorry.aw");
 	exit;
 }
+
 $orb = new orb(array(
 	"class" => $class,
 	"action" => $action,

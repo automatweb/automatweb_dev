@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.11 2001/07/17 03:18:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.12 2001/07/18 16:22:30 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -263,7 +263,6 @@ class form_output extends form_base
 					$f->load($bfid);
 
 					$base_row = $this->output["rows"];
-//					$base_col = $this->output["cols"]; // the op expands down so we don't need to add to the column
 	
 					$this->output["rows"] += $f->arr["rows"];
 					$this->output["cols"] = max($f->arr["cols"],$this->output["cols"]);
@@ -279,7 +278,7 @@ class form_output extends form_base
 							$num=0;
 							foreach($elarr as $el)
 							{
-								$this->output[$base_row+$row][$base_col+$col]["els"][$num] = $el->get_id();
+								$this->output[$base_row+$row][$base_col+$col]["elements"][$num] = $el->get_props();
 								$num++;
 							}
 							$this->output[$base_row+$row][$base_col+$col]["el_count"] = $num;
@@ -310,6 +309,12 @@ class form_output extends form_base
 	function change($arr)
 	{
 		extract($arr);
+		$object = $this->get_object($id);
+		if ($object["class_id"] == CL_FORM_XML_OUTPUT )
+		{
+			return $this->mk_my_orb("edit_xml",array("id" => $id));
+		};
+
 		$this->load_output($id);
 		$this->read_template("add_output.tpl");
 		$this->mk_path($this->parent, LC_FORM_OUTPUT_CHANGE_OUT_STYLE);
@@ -396,11 +401,10 @@ class form_output extends form_base
 				$cell = $this->output[$rrow][$rcol];
 
 				$element="";
-				for ($i=0; $i < $cell["el_count"]+1; $i++)
+				for ($i=0; $i < $cell["el_count"]; $i++)
 				{
 					$this->vars(array(
-						"elsel" => $this->picker($cell["els"][$i],$elarr),
-						"element_id" => $rrow."_".$rcol."_".$i
+						"el_name" => $cell["elements"][$i]["name"]
 					));
 					$element.=$this->parse("ELEMENT");
 				}
@@ -419,8 +423,8 @@ class form_output extends form_base
 					"exp_down"	=> $this->mk_orb("exp_down", array("id" => $op_id, "col" => $col, "row" => $row)),
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
-					"stylesel" => $this->picker($cell["style"],$style_select),
 					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $col, "row" => $row)),
+					"addel" => $this->mk_my_orb("add_el", array("id" => $id, "col" => $col, "row" => $row)),
 					"style_name" => $style_select[$cell["style"]]
 				));
 
@@ -522,33 +526,9 @@ class form_output extends form_base
 		{
 			for ($col=0; $col < $this->output["cols"]; $col++)
 			{
-				$cell = &$this->output[$row][$col];
-
-/*				$var = "stylesel_".$row."_".$col;
-				$cell["style"] = $$var;
-
-				for ($i=0; $i < $cell["el_count"]+1; $i++)
-				{
-					$var = "elsel_".$row."_".$col."_".$i;
-					$cell["els"][$i] = $$var;
-					$ls = $$var;
-				}
-				if ($ls != 0)
-				{
-					$cell["el_count"]++;
-				}
-				else
-				if ($cell["els"][$cell["el_count"]-1] == 0)
-				{
-					$cell["el_count"]--;
-				}
-
-				if ($cell["el_count"] < 0)
-				{
-					$cell["el_count"] = 0;
-				}*/
 				if ($sel[$row][$col] == 1)
 				{
+					$cell = &$this->output[$row][$col];
 					$cell["style"] = $selstyle;
 				}
 			}
@@ -565,28 +545,26 @@ class form_output extends form_base
 
 		$cell = &$this->output[$row][$col];
 
-		$var = "stylesel_".$row."_".$col;
-		$cell["style"] = $$var;
+		for ($i=0; $i < $cell["el_count"]; $i++)
+		{
+			$el = new form_search_element;
+			$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 
-		for ($i=0; $i < $cell["el_count"]+1; $i++)
-		{
-			$var = "elsel_".$row."_".$col."_".$i;
-			$cell["els"][$i] = $$var;
-			$ls = $$var;
-		}
-		if ($ls != 0)
-		{
-			$cell["el_count"]++;
-		}
-		else
-		if ($cell["els"][$cell["el_count"]-1] == 0)
-		{
-			$cell["el_count"]--;
-		}
-
-		if ($cell["el_count"] < 0)
-		{
-			$cell["el_count"] = 0;
+			if ($el->save(&$arr) == false)
+			{
+				// we must delete the element from this op.
+				unset($this->output[$this->row][$this->col][$i]);
+				// we must also shift all other elements up one 
+				for ($a=$i; $a < $cell["el_count"]; $a++)
+				{
+					$cell["elements"][$a-1] = $cell["elements"][$a];
+				}
+				$cell["el_count"] --;
+			}
+			else
+			{
+				$cell["elements"][$i] = $el->get_props();
+			}
 		}
 		
 		$this->save_output($id);
@@ -804,42 +782,70 @@ class form_output extends form_base
 	function ch_cell($arr)
 	{
 		extract($arr);
-		$this->read_template("ch_op_cell.tpl");
+		$this->read_template("admin_cell.tpl");
 
 		$this->load_output($id);
 
 		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_CHANGE_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id)),$this->mk_my_orb("admin_op",array("id" => $id))));
 		$op_id = $id;
 
-		$elarr = $this->mk_elarr($id);
+		$this->vars(array(
+			"add_element" => $this->mk_orb("add_element", array("id" => $id, "col" => $col, "row" => $row, "after" => -1)),
+			"cell_style"	=> $this->mk_orb("sel_cell_style", array("id" => $id, "col" => $col, "row" => $row),"form"),
+			"form_id" => $this->output_id, 
+			"form_col" => $col, 
+			"form_row" => $row, 
+		));
 
-		$cell = $this->output[$row][$col];
-
+		$cell = &$this->output[$row][$col];
 		$element="";
-		for ($i=0; $i < $cell["el_count"]+1; $i++)
+		for ($i=0; $i < $cell["el_count"]; $i++)
 		{
+			$el = new form_search_element;
+			$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 			$this->vars(array(
-				"elsel" => $this->picker($cell["els"][$i],$elarr),
-				"element_id" => $row."_".$col."_".$i
+				"element" => $el->gen_admin_html(),
+				"after" => $el->get_id(),
 			));
-			$element.=$this->parse("ELEMENT");
-		}
 
-		$style = new style;
-		$style_select = $style->get_select(0,ST_CELL);
+			$this->vars(array(
+				"EL_NLAST" => ($i == ($cell["el_count"]-1) ? "" : $this->parse("EL_NLAST"))
+			));
+			$this->vars(array(
+				"EL_ADD" => $this->parse("EL_ADD"),
+				"EL_ACL" => $this->parse("EL_ACL")
+			));
+
+			$ell.=$this->parse("ELEMENT_LINE");
+		}
+		$this->vars(array("ELEMENT_LINE" => $ell));
 
 		$this->vars(array(
-			"cell_id" => ($row."_".$col), 
-			"ELEMENT" => $element,
-			"stylesel" => $this->picker($cell["style"],$style_select),
-			"reforb"	=> $this->mk_reforb("submit_admin_cell", array("id" => $id, "row" => $row,"col" => $col))
+			"add_el" => $this->mk_orb("add_element", array("id" => $id, "row" => $row, "col" => $col))
 		));
+
+		$ca = $this->parse("CAN_ADD");
+		$caa = $this->parse("CAN_ACTION");
+
+		$this->vars(array(
+			"CAN_ADD" => $ca,
+			"CAN_ACTION"=>$caa,
+			"reforb"	=> $this->mk_reforb("submit_admin_cell", array("id" => $this->output_id, "row" => $row, "col" => $col),"form_output")
+		));
+
 		return $this->parse();
+	}
+
+	////
+	// !fake function to support form_element embedding
+	function get_search_targets()
+	{
+		return $this->get_op_forms($this->output_id);
 	}
 
 	function mk_elarr($id)
 	{
-		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
+		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi sees
 		$elarr = array("0" => "");
 		$op_forms = $this->get_op_forms($id);
 		$fidstring = join(",",$this->map2("%s",$op_forms));
@@ -893,6 +899,70 @@ class form_output extends form_base
 		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
 
 		return $ret;
+	}
+
+	////
+	// !Adds an element to the end of celll $row $col
+	function add_element($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
+
+		if (!$wizard_step)
+		{
+			$this->read_template("add_el_wiz1.tpl");
+
+			classload("objects");
+			$o = new db_objects;
+			$mlist = $o->get_list();
+			
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("add_element", array("id" => $id, "row" => $row, "col" => $col,"wizard_step" => 1),"form_output"),
+				"folders"		=> $this->picker($this->parent, $mlist),
+				"elements"	=> $this->picker(0,$this->listall_elements(&$this))
+			));
+			return $this->parse();
+		}
+		else
+		{
+			global $HTTP_POST_VARS;
+			extract($HTTP_POST_VARS);
+
+			if ($type == "add")
+			{
+				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+				$this->db_query("INSERT INTO form_elements (id) values($el)");
+			}
+			else
+			{
+				if ($el)
+				{
+					$oo = $this->get_object($el);
+					$name = $oo["name"];
+					$ord = $oo["jrk"];
+				}
+			}
+		
+			if ($el)
+			{
+				// add the element into the form.
+				// but! use the props saved in the form_elements table to create them with the right config right away!
+				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
+				classload("xml");
+				$xml = new xml;
+				$arr = $xml->xml_unserialize(array("source" => $props));
+				$arr["id"] = $el;
+				$arr["name"] = $name;
+				$arr["ord"] = $ord;
+				$arr["linked_element"] = 0;
+				$arr["linked_form"] = 0;
+				$this->output[$row][$col]["el_count"]++;	// don't change the order of this and the next one :)
+				$this->output[$row][$col]["elements"][$this->output[$row][$col]["el_count"]-1] = $arr;
+				$this->save_output($id);
+			}
+			return $this->mk_orb("ch_cell", array("id" => $id, "row" => $row, "col" => $col));
+		}
 	}
 }
 ?>

@@ -227,6 +227,16 @@
 			</function>
 		</action>
 
+		<action name="add_element">
+			<function name="add_element">
+				<arguments>
+					<required name="id"/>
+					<required name="row"/>
+					<required name="col"/>
+				</arguments>
+			</function>
+		</action>
+		
 	</class>
 </orb>
 		

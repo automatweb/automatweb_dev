@@ -28,7 +28,7 @@ class tvkavad extends aw_template
 		{
 			$hr = (int)($v[kell] / 3600);
 			$min = ($v[kell] - ($hr * 3600)) / 60;
-			$this->vars(array("kanal_id" => $v[kanal_id], "kanal" => $v[name], "kell" => sprintf("%02.0f:%02.0f",$hr, $min), "pealkiri" => $v[pealkiri], "kirjeldus" => $v[comment],"v2rv" => ($cnt & 1 ? "Valge" : "Hall")));
+			$this->vars(array("kanal_id" => $v[kanal_id], "kanal" => $v[name], "kell" => sprintf("%02.0f:%02.0f",$hr, $min), "pealkiri" => $v[pealkiri], "kirjeldus" => $v[comment],"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
@@ -72,7 +72,7 @@ class tvkavad extends aw_template
 
 			$hr = (int)($row[kell] / 3600);
 			$min = ($row[kell] - ($hr * 3600)) / 60;
-			$this->vars(array("kell" => sprintf("%02.0f:%02.0f",$hr, $min), "title" => $row[pealkiri], "comment" => $row[comment],"v2rv" => ($cnt & 1 ? "Valge" : "Hall")));
+			$this->vars(array("kell" => sprintf("%02.0f:%02.0f",$hr, $min), "title" => $row[pealkiri], "comment" => $row[comment],"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
@@ -119,7 +119,7 @@ class tvkavad extends aw_template
 		$this->db_query("SELECT * FROM tv_kanalid");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("kanal_id" => $row[id], "kanal" => $row[name], "kuup" => $date,"v2rv" => ($cnt & 1 ? "Valge" : "Hall")));
+			$this->vars(array("kanal_id" => $row[id], "kanal" => $row[name], "kuup" => $date,"v2rv" => ($cnt & 1 ? LC_TVKAVAD_COLOR_WHITE : LC_TVKAVAD_COLOR_GREY)));
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}

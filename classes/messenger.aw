@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.84 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.85 2001/07/18 16:22:30 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -447,6 +447,14 @@ class messenger extends menuedit_light
 				"talign" => "left",
 				"sortable" => 1,
 		));
+
+		$t->define_field(array(
+				"name" => "attach",
+				"caption" => "A",
+				"sortable" => 1,
+				"talign" => "center",
+				"align" => "center",
+		));
 		
 		$t->define_field(array(
 				"name" => "when",
@@ -543,7 +551,8 @@ class messenger extends menuedit_light
 							"check" => sprintf("<input type='checkbox' name='check[%d]' value='1'>",$msg["id"]),
 							"from" => $msg["from"],
 							"id" => $msg["oid"],
-							"subject" => $subject . $msg["attach"],
+							"attach" => $msg["attach"],
+							"subject" => $subject,
 							"when" => $tm2,
 							"style" => ($msg["status"]) ? "textsmall" : "textsmallbold",
 						));

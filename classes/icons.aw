@@ -15,7 +15,7 @@ class icons extends aw_template
 	{	
 		$this->read_template("icon_list.tpl");
 		global $ext;
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG,config.$ext));
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG,"config.$ext"));
 
 		if ($grp)
 		{

@@ -67,4 +67,5 @@ $lc_shop["LC_SHOP_ORDERS_NUMBER_IS"] = "Tellimuste arv on";
 $lc_shop["LC_SHOP_BLUE"] = "sinine";
 
 $lc_shop["LC_SHOP_SHOW_FREE"] = "N&auml;ita kauba tellimusi";
+$lc_shop["LC_SHOP_NUMP_EQ"] = "Reisijate arvu valem";
 ?>

@@ -16,7 +16,7 @@ class shop_stat extends shop
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa poe statistika");
+		$this->mk_path($parent,LC_SHOP_STAT_ADD_SHOP_STAT);
 		$this->read_template("shop_stat_add.tpl");
 
 		
@@ -80,7 +80,7 @@ class shop_stat extends shop
 	{
 		extract($arr);
 		$st = $this->get($id);
-		$this->mk_path($st["parent"], "Poodide statisika");
+		$this->mk_path($st["parent"], LC_SHOP_STAT_SHOPS_STAT);
 		$this->read_template("show_shop_stat.tpl");
 
 		load_vcl("date_edit");
@@ -144,7 +144,7 @@ class shop_stat extends shop
 	{
 		extract($arr);
 		$st = $this->get($id);
-		$this->mk_path($st["parent"], "Muuda poe statistikat");
+		$this->mk_path($st["parent"], LC_SHOP_STAT_CHANGE_SHOP_STAT);
 		$this->read_template("shop_stat_add.tpl");
 
 		$this->vars(array(
@@ -334,7 +334,7 @@ class shop_stat extends shop
 		$sh = $this->get($id);
 		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
 
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id)).LC_SHOP_STAT_BY_WEEKDAYS);
 
 		$days = array(0 => LC_SUNDAY, 1 => LC_MONDAY, 2 => LC_TUESDAY, 3 => LC_WEDNESDAY, 4 => LC_THURSDAY, 5 => LC_FRIDAY, 6 => LC_SATURDAY);
 
@@ -435,7 +435,7 @@ class shop_stat extends shop
 		$sh = $this->get($id);
 		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
 
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / Tundide kaupa");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id)).LC_SHOP_STAT_BY_HOUR);
 
 		for ($i=0; $i < 24; $i++)
 		{

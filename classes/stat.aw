@@ -235,7 +235,7 @@ class db_stat extends aw_template
 		$this->vars(array("total" => $total,
 				  "hits_line" => $c,
 				  "uniqid" => $this->uniqid,
-				  "lefttitle" => ($days <= 1) ? "Vaatamised tundide lõikes" : "Vaatamised päevade lõikes"));
+				  "lefttitle" => ($days <= 1) ? LC_STAT_LOOKS_BY_HOURS : LC_STAT_LOOKS_BY_DAYS));
 
 		$res = $this->parse("hits");
 		#$res = $dir;

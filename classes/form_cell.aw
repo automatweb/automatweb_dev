@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.13 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -11,7 +11,7 @@
 // no public interface here. everything goes through form.aw
 // why? iizi. cause the element properies are saved in the form and therefore the form must always be loaded
 // so we have to go through form->load to get the cells' elements.
-class form_cell extends aw_template
+class form_cell extends form_base
 {
 	function form_cell()
 	{
@@ -79,12 +79,10 @@ class form_cell extends aw_template
 		$this->read_template("admin_cell.tpl");
 		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FORM_CHANGE_CELL);
 
-		classload("objects");
-		$o = new db_objects;
-		$this->vars(array("footer" =>"",
-											"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $this->col, "row" => $this->row, "after" => -1)),
-											"cell_style"	=> $this->mk_orb("sel_cell_style", array("id" => $this->id, "col" => $this->col, "row" => $this->row),"form"),
-											"sections" => $this->picker($this->parent, $o->get_list())));
+		$this->vars(array(
+			"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $this->col, "row" => $this->row, "after" => -1)),
+			"cell_style"	=> $this->mk_orb("sel_cell_style", array("id" => $this->id, "col" => $this->col, "row" => $this->row),"form")
+		));
 
 		$this->vars(array("form_id" => $this->id, "form_col" => $this->col, "form_row" => $this->row, "parent" => $this->id));
 
@@ -232,6 +230,7 @@ class form_cell extends aw_template
 		$arr["ord"] = $ord;
 		$arr["linked_element"] = 0;
 		$arr["linked_form"] = 0;
+		$arr["type_name"] = "";
 		$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
 		return $el;
 	}
@@ -377,85 +376,6 @@ class form_cell extends aw_template
 		$this->vars(array("reforb" => $this->mk_reforb("save_cell_style", array("id" => $this->id, "col" => $this->col, "row" => $this->row),"form"),
 											"stylessel"	=> $this->option_list($this->get_style(),$t->get_select(0,ST_CELL))));
 		return $this->parse();
-	}
-
-	////
-	// !creats the full path of an element from an array of all menus ($arr) and the record of the element ($el)
-	function mk_element_path(&$arr, &$el)
-	{
-		$parent = $el["parent"];
-		$ret = "";
-		while ($parent > 1)
-		{
-			$ret =$arr[$parent]["name"]."/".$ret;
-			$parent = $arr[$parent]["parent"];
-		}
-		return $ret;
-	}
-
-	////
-	// !creates a list of all elements to be put in a listbox for the suer to select which one he wants to add
-	function listall_elements()
-	{
-		$this->db_query("SELECT objects.oid as oid, 
-														objects.parent as parent,
-														objects.name as name
-											FROM objects 
-											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE objects.class_id = 1 AND objects.status != 0 
-											GROUP BY objects.oid
-											ORDER BY objects.parent, jrk");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["oid"]] = $row;
-		}
-		
-		// teeme olemasolevatest elementidest array
-		$elarr = array();
-		for ($row = 0; $row < $this->form->arr["rows"]; $row++)
-		{
-			for ($col = 0; $col < $this->form->arr["cols"]; $col++)
-			{
-				if (is_array($this->form->arr["elements"][$row][$col]))
-				{
-					reset($this->form->arr["elements"][$row][$col]);
-					while (list($eid,) = each($this->form->arr["elements"][$row][$col]))
-					{
-						$elarr[$eid] = $eid;
-					}
-				}
-			}
-		}
-
-		$check_parent = false;
-		if (is_array($this->form->arr["el_menus2"]) && count($this->form->arr["el_menus2"]) > 0)
-		{
-			$check_parent = true;
-		}
-
-		$ar = array(0 => "");
-		$this->db_query("SELECT oid,name,parent FROM objects WHERE objects.class_id= ".CL_FORM_ELEMENT." AND status != 0 ");
-		while ($row = $this->db_next())
-		{
-			if (!$elarr[$row["oid"]])
-			{
-				if ($check_parent)
-				{
-					// if this element does not exist in this form yet
-					// add it to the select list.
-					if (in_array($row["parent"],$this->form->arr["el_menus2"]))
-					{
-						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
-					}
-				}
-				else
-				{
-						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
-				}
-			}
-		}
-
-		return $ar;
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.11 2001/07/12 23:21:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.12 2001/07/18 16:22:30 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -132,7 +132,7 @@ class aw_template extends acl_base
 		$res = "";
 		while(list($k,$v) = each($array))
 		{
-			$selected = $active[$k] ? " selected " : "";
+			$selected = isset($active[$k]) ? " selected " : "";
 			$res .= sprintf("<option %s value='%s'>%s</option>\n",$selected,$k,$v);
 		};
 		return $res;

@@ -299,6 +299,11 @@ class shop extends shop_base
 		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ORDER BY objects.jrk");
 		while ($row = $this->db_next())
 		{
+			if (!$this->can("view",$row["oid"]))
+			{
+				continue;
+			};
+
 			if ($row["link"] != "")
 			{
 				$link = $row["link"];
@@ -358,6 +363,7 @@ class shop extends shop_base
 			return $this->order_item(array("shop" => $id, "section" => $section, "parallel" => true));
 		}
 
+
 		global $shopping_cart;
 		$section = $this->do_shop_menus($id,$section);
 
@@ -368,9 +374,13 @@ class shop extends shop_base
 
 		$min_p = $this->get_cart_min_period();
 		$has_items = false;
-		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2");
+		$q = "SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2";
+		$this->db_query($q);
+
+		$c = "";
 		while ($row = $this->db_next())
 		{
+			$this->save_handle();
 			if (!$this->is_item_available($row,1,new form(), $min_p))
 			{
 				continue;
@@ -378,6 +388,7 @@ class shop extends shop_base
 			$itt = $ityp->get_item_type($row["type_id"]);
 
 			$it_price = $this->get_list_price($row["oid"],$row["price"]);
+			$this->restore_handle();
 
 			$f = new form;
 			$f->load($itt["form_id"]);
@@ -394,7 +405,7 @@ class shop extends shop_base
 			));
 			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
 																																			// et saada korvi hind = baashind + selle lehe asjade hind
-			$this->parse("ITEM");
+			$c .= $this->parse("ITEM");
 			$has_items = true;
 		}
 
@@ -402,6 +413,7 @@ class shop extends shop_base
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section)),
+			"ITEM" => $c,
 			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item"),
 			"HAS_ITEMS" => ($has_items ? $this->parse("HAS_ITEMS") : ""),
 			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $id, "section" => $section))
@@ -898,12 +910,20 @@ class shop extends shop_base
 					$mail.=LC_SHOP_ORDER_TYPE;
 					$rowhtml = "";
 
+					if ($itt["has_voucher"])
+					{
+						$mail.="Hotel: ".($this->db_query("SELECT name FROM objects WHERE oid = ".$it["parent"],"name"))."\n";
+					}
 					foreach($selrows as $rownum)
 					{
 						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
 						$mail.=$f->mk_show_text_row($rownum)."\n";
 					}
-					$mail.="Hind: ".$ar["price"]."\n\n";
+					$mail.="Hind: ".$ar["price"]."\n";
+					if ($ar["period"] > 1)
+					{
+						$mail.="Kuupäev: ".$this->time2date($ar["period"], 5)."\n\n";
+					}
 					$t_price += $ar["price"];
 				}
 			}
@@ -936,7 +956,7 @@ class shop extends shop_base
 				{
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
-					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$min_p."','".$it["type_id"]."','".$itt["jrk"]."')");
+					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".($ar["period"] < 2 ? $min_p : $ar["period"])."','".$it["type_id"]."','".$itt["jrk"]."')");
 				}
 			}
 		}
@@ -1877,7 +1897,16 @@ class shop extends shop_base
 
 		classload("users");
 		$u = new users;
-	
+		$ar = $u->get_join_entries();
+		foreach($ar as $foid => $eid)
+		{
+			$f = new form;
+			$f->load($foid);
+			$f->load_entry($eid);
+			$tmp = $f;
+			$tmp->allah = $eid;
+			$allitemsarr[] = $tmp;
+		}
 		// calc commission eq
 		if ($sh["commission_eq"])
 		{
@@ -2102,11 +2131,21 @@ class shop extends shop_base
 			if ($row["per_type"] == PRICE_PER_WEEK)
 			{
 				$pp_week =  $row["price"];
+				$tp = unserialize($pp_week);
+				if (is_array($tp))
+				{
+					$pp_week = $tp["2346"];
+				}
 			}
 			else
 			if ($row["per_type"] == PRICE_PER_2WEEK)
 			{
 				$pp_2week = $row["price"];
+				$tp = unserialize($pp_2week);
+				if (is_array($tp))
+				{
+					$pp_2week = $tp["2346"];
+				}
 			}
 		}
 		$this->restore_handle();
@@ -2164,12 +2203,12 @@ class shop extends shop_base
 		while ($row = $this->db_next())
 		{
 			$GLOBALS["order_forms"]["entries"][] =array("num" => $row["num"], "form" => $row["form_id"], "entry" => $row["entry_id"], "name" => $row["name"]);
-			$GLOBALS["order_forms"]["current_cnt"]++;
 			if ($cur_form != $row["form_id"])
 			{
 				$cur_form = $row["form_id"];
 				$GLOBALS["order_forms"]["current_cnt"]=0;
 			}
+			$GLOBALS["order_forms"]["current_cnt"]++;
 		}
 
 		global $order_forms;

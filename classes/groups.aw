@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.6 2001/07/18 16:22:30 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -893,6 +893,10 @@ class groups extends users_user
 												"change"			=> $this->mk_orb("change", array("gid" => $row[gid],"parent" => $row[parent])),
 												"delete"			=> $this->mk_orb("delete", array("gid" => $row[gid], "parent" => $parent)),
 												"chmembers"		=> $this->mk_orb("grp_members", array("gid" => $row[gid]))));
+			$cc = "";
+			$cd = "";
+			$ca = "";
+			$nf = "";
 			if ($this->can("edit", $row[oid]))
 			{
 				$cc = $this->parse("CAN_CHANGE");

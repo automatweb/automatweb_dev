@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.41 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.42 2001/07/18 16:22:30 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -299,7 +299,7 @@ class planner extends calendar {
 		};
 		$this->db_query($q);
 		global $status_msg;
-		$status_msg = "TODO on salvestatud";
+		$status_msg = LC_PLANNER_TODO_SAVED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array("action" => "todo","parent" => $parent));
 	}
@@ -876,7 +876,7 @@ class planner extends calendar {
 
 			$q = "INSERT INTO planner (id,uid,start) VALUES ('$id','$uid','$start')";
 			$this->db_query($q);
-			$status_msg = "Event on lisatud";
+			$status_msg = LC_PLANNER_EVENT_ADDED;
 			$retval = $this->mk_my_orb("editevent",array("id" => $id));
 			return $retval;
 		};
@@ -914,7 +914,7 @@ class planner extends calendar {
 		}
 		else
 		{
-			$caption = "Lisa uus event";
+			$caption = LC_PLANNER_ADD_NEW_EVENT;
 			$shour = 9;
 			$delbut = "";
 			$dhour = 1;
@@ -1310,7 +1310,7 @@ class planner extends calendar {
 			$q = "INSERT INTO planner 
 				(id,uid,start,end,title,place,private,reminder,description,rep_type,rep_dur,rep_forever,rep_until)
 				VALUES ('$id','$uid','$start','$end','$title','$place','$private','$reminder','$description','$rep_type','$rep_dur','$rep_forever','$rep_until')";
-			$status_msg = "Event on lisatud";
+			$status_msg = LC_PLANNER_EVENT_ADDED;
 		};
 		$this->db_query($q);
 
@@ -1629,27 +1629,27 @@ class planner extends calendar {
 		$navs = array(
 			"today" => array(
 				"link" => "$baseurl/?class=planner",
-				"caption" => " Täna ",
+				"caption" => LC_PLANNER_TODAY,
 			),
 			"overview" => array(
 				"link" => "$baseurl/?class=planner&action=overview",
-				"caption" => " Ülevaade ",
+				"caption" => LC_PLANNER_OVERVIEW,
 			),
 			"day" => array(
 				"link" => "$baseurl/?class=planner",
-				"caption" => " Päev ",
+				"caption" => LC_PLANNER_DAY,
 			),
 			"week" => array(
 				"link" => "$baseurl/?class=planner&action=show_week",
-				"caption" => " Nädal ",
+				"caption" => LC_PLANNER_WEEK,
 			),
 			"month" => array(
 				"link" => "$baseurl/?class=planner&action=show_month",
-				"caption" => " Kuu ",
+				"caption" => LC_PLANNER_MONTH,
 			),
 			"add" => array(
 				"link" => "$baseurl/?class=planner&action=add_event",
-				"caption" => " Lisa uus ",
+				"caption" => LC_PLANNER_ADD_NEW,
 			),
 		);
 		load_vcl("smenu");
@@ -1976,7 +1976,7 @@ class planner extends calendar {
 		$this->db_query($q);
 		global $status_msg;
 		$date = date("d-m-Y",$start);
-		$status_msg = "Sündmus on lisatud";
+		$status_msg = LC_PLANNER_EVENT_ADDED2;
 		session_register("status_msg");
 		$retval = $this->mk_site_orb(array(
 			"class" => "planner",

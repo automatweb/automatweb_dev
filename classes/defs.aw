@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.22 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.23 2001/07/18 16:22:30 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -283,7 +283,7 @@ function is_valid($set,$string)
 		$valid = !(strpos($checkagainst,$string[$i]) === false);
 		if (!$valid)
 		{
-			echo "invd char = ", $string[$i],"<br>";
+//			echo "invd char = ", $string[$i],"<br>";
 		}
 		$i++;
 	};

@@ -492,18 +492,132 @@ define("LC_MESSENGER_NEW_FOLDER","Uus folder");
 define("LC_MYSQL_ERROR_QUERY","Vigane päring");
 
 //objects.aw
-define("LC_OBJECTS_TO_WHO", "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'>Kalender</a>");
-define("LC_OBJECTS_TO_WHO","'>Võta see</a>");
-define("LC_OBJECTS_TO_WHO","K&otilde;ik");
+define("LC_OBJECTS_OBJECTS_CAL", "<a href=%s>Objektid</a>&nbsp; &nbsp;<a href=%s>Kalender</a>");
+define("LC_OBJECTS_TAKE_THIS","'>Võta see</a>");
+define("LC_OBJECTS_ALL","K&otilde;ik");
 
+//periods.aw
+define("LC_PERIODS_ACTIVATED_PERIOD","aktiveeris perioodi %s");
 
-define("LC_OBJECTS_TO_WHO","Kellele");
-define("LC_OBJECTS_TO_WHO","Kellele");
-define("LC_OBJECTS_TO_WHO","Kellele");
-define("LC_OBJECTS_TO_WHO","Kellele");
-define("LC_OBJECTS_TO_WHO","Kellele");
-define("LC_OBJECTS_TO_WHO","Kellele");
+//planner.aw
+define("LC_PLANNER_TODO_SAVED","TODO on salvestatud");
+define("LC_PLANNER_EVENT_ADDED","Event on lisatud");
+define("LC_PLANNER_ADD_NEW_EVENT","Lisa uus event");
+define("LC_PLANNER_TODAY"," Täna ");
+define("LC_PLANNER_OVERVIEW"," Ülevaade ");
+define("LC_PLANNER_DAY"," Päev ");
+define("LC_PLANNER_WEEK"," Nädal ");
+define("LC_PLANNER_MONTH"," Kuu ");
+define("LC_PLANNER_ADD_NEW"," Lisa uus ");
+define("LC_PLANNER_EVENT_ADDED2","Sündmus on lisatud");
 
+//promo.aw
+define("LC_PROMO_TODAY","Lisa promo kast");
+define("LC_PROMO_FRONTPAGE","Esileht");
+define("LC_PROMO_CHANGED_PROMO_BOX","Muutis promo kasti %s");
+define("LC_PROMO_ADD_TO_PROMO_BOX","Lisas promo kasti %s");
+define("LC_PROMO_CHANGE_PROMO_BOX","Muuda promo kasti");
+define("LC_PROMO_ADD_NEW"," Lisa uus ");
 
+//search_conf.aw
+define("LC_SEARCH_CONF_SOME_WORD","mõni sõna");
+define("LC_SEARCH_CONF_ALL_WORDS","kõiki sõnu");
+define("LC_SEARCH_CONF_PHRASE","fraas");
+define("LC_SEARCH_CONF_IN_TITLE","pealkirjas ");
+define("LC_SEARCH_CONF_OR"," või ");
+define("LC_SEARCH_CONF_AND"," ja ");
+define("LC_SEARCH_CONF_IN_SUBJECT","sisus ");
+define("LC_SEARCH_CONF_WITH_KEYWORD"," keywordidega ");
+define("LC_SEARCH_CONF_LOOK_ANSWER","Otsis %s alt, %s , vastuseks saadi %s dokumenti");
+define("LC_SEARCH_CONF_FROM_STRING"," stringist '%s'");
+
+//shop.aw
+define("LC_SHOP_HI_USER","Tere!\n\n kasutaja %s (ip aadress: ");
+define("LC_SHOP_TIME",") kell ");
+define("LC_SHOP_ORDERED_PRODUCT"," tellis järgmised tooted: \n\n");
+define("LC_SHOP_TOTAL_PRICE","\n\nKokku hind: ");
+define("LC_SHOP_BILL_NR","\n\nArve number: ");
+define("LC_SHOP_ORDERES_DATA","\n\nTellija sisestas enda kohta järgmised andmed:\n\n");
+define("LC_SHOP_ORDER","Tellimus");
+define("LC_SHOP_ORDER_ABOLISH","Tellimus tühistati");
+define("LC_SHOP_ORDER_NAME","Nimi: ");
+define("LC_SHOP_ORDER_TYPE","Kogus ja tüüp: \n");
+define("LC_SHOP_ORDER_USER","\n\nKasutaja ");
+define("LC_SHOP_ABOLISH_ORDER"," tühistas tellimuse nr %s \n");
+
+//shop_eq.aw
+define("LC_SHOP_EQ_ADD_FORMULA","Lisa valem");
+define("LC_SHOP_EQ_CHANGE_FORMULA","Muuda valemit");
+
+//SHOP_ITEM.aw
+define("LC_SHOP_ITEM_ADD_PRODUCT","Lisa kaup");
+define("LC_SHOP_ITEM_CHANGE_PRODUCT","Muuda kaupa");
+
+//shop_stat.aw
+define("LC_SHOP_STAT_ADD_SHOP_STAT","Lisa poe statistika");
+define("LC_SHOP_STAT_SHOPS_STAT","Poodide statisika");
+define("LC_SHOP_STAT_CHANGE_SHOP_STAT","Muuda poe statistikat");
+define("LC_SHOP_STAT_BY_WEEKDAYS","'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
+define("LC_SHOP_STAT_BY_HOUR","'>Statistika</a> / Tundide kaupa");
+
+//stat.aw
+define("LC_STAT_LOOKS_BY_HOURS","Vaatamised tundide lõikes");
+define("LC_STAT_LOOKS_BY_DAYS","Vaatamised päevade lõikes");
+
+//style.aw
+define("LC_STYLE_TABLE_STYLE","Tabeli stiil");
+define("LC_STYLE_CELL_STYLE","Celli stiil");
+define("LC_STYLE_ELEMENT_STYLE","Elemendi stiil");
+define("LC_STYLE_STYLES","Stiilid");
+define("LC_STYLE_CHANGE_STYLE","Muuda stiili");
+define("LC_STYLE_ADD_STYLE","Lisa stiil");
+
+//syslog.aw
+define("LC_SYSLOG_ALL","K&otilde;ik");
+
+//table.aw
+define("LC_TABLE_CHANGE_TABLE","Muuda tabelit");
+define("LC_TABLE_DEVIDE_CELL_HOR","Jaga cell pooleks horisontaalselt");
+define("LC_TABLE_DEVIDE_CELL_VER","Jaga cell pooleks vertikaalselt");
+define("LC_TABLE_DELETE_UPPER_CELL","Kustuta &uuml;lemine  cell");
+define("LC_TABLE_DELETE_LEFT_CELL","Kustuta vasak cell");
+define("LC_TABLE_DELETE_RIGHT_CELL","Kustuta parem cell");
+define("LC_TABLE_DELETE_LOWER_CELL","Kustuta alumine cell");
+define("LC_TABLE_ADD_TABLE","</a> / Lisa tabel");
+
+//tests.aw
+define("LC_TESTS_QUESTIONS","K&uuml;simused");
+define("LC_TESTS_QUEST_ADD","'>K&uuml;simused</a> / Lisa");
+define("LC_TESTS_QUEST_CHANGE","'>K&uuml;simused</a> / Muuda");
+define("LC_TESTS_FILLED","T&auml;idetud");
+define("LC_TESTS_APPRAISE","Hinnatud");
+define("LC_TESTS_ADD","'>Testid</a> / Lisa");
+
+//tvkavad.aw
+define("LC_TVKAVAD_COLOR_WHITE","Valge");
+define("LC_TVKAVAD_COLOR_GREY","Hall");
+
+//USERS.AW
+define("LC_USERS_FOLDER_ADDED","Folder lisatud");
+define("LC_USERS_USERS","'>Kasutajad</a>");
+define("LC_USERS_PASSW_NOT_SAME","Paroolid peavad olema samad!");
+//define("LC_USERS_IS_ALREADY_USER","Selline kasutaja juba on, vali uus kasutajanimi.");
+//define("LC_USERS_USERNAME_COND","Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.");
+//define("LC_USERS_PASSW_DONT_SAME","Paroolid ei kattu!");
+//define("LC_USERS_PASSW_COND","Paroolis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.");
+//define("LC_USERS_USERNAME_THREE_LETTERS","Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.");
+//define("LC_USERS_PASSW_THREE_LETTERS","Parool peab olema v&auml;hemalt 3 t&auml;he pikkune.");
+define("LC_USERS_NOT_LOGGED_IN","Andmete muutmiseks peate olema sisse logitud!<br>");
+
+//vars.aw
+define("LC_VARS_CHANGED_VAR","Muutis meili muutujat %s");
+define("LC_VARS_ADD_VAR","Lisas meili muutuja %s");
+define("LC_VARS_CHANGED_STAMP","Muutis stampi $name");
+define("LC_VARS_ADD_STAMP","Lisas stambi $name");
+define("LC_VARS_CHANGED_CAT","Muutis meili muutujate kategooriat $name");
+define("LC_VARS_ADD_CAT","Lisas meili muutujate kategooria $name");
+
+define("LC_VARS_","Lisas stambi $name");
+define("LC_VARS_","Muutis meili muutujate kategooriat $name");
 
 ?>
