@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.16 2001/08/02 03:04:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.17 2001/08/02 03:40:44 duke Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -61,6 +61,40 @@ class db_config extends aw_template
 	}
 
 	////
+	// Votab argumentidena gidlisti, ning üritab tagastada oige login menüü
+	// aadressi.
+	function get_login_menus($args = array())
+	{
+		$data = $this->_get_login_menus();
+		$cur_pri = 0;
+		$cur_menu = false;
+
+		if (is_array($data))
+		{
+			foreach($data["menu"] as $key => $val)
+			{
+				if ( ($data["pri"][$key] >= $cur_pri) && ($args[$key]))
+				{
+					$cur_pri = $data["pri"][$key];
+					$cur_menu = $val;
+				};
+			};
+		};
+		return $cur_menu;
+
+	}
+
+	function _get_login_menus($args = array())
+	{
+		$xmldata = $this->get_simple_config("login_menus");
+		classload("xml");
+		$xml = new xml();
+		$data = $xml->xml_unserialize(array("source" => $xmldata));
+		return $data;
+	}
+	
+
+	////
 	// !Kuvab dünaamiliste gruppide nimekirja ja lubab igale login menüü valida
 	function login_menus($args = array())
 	{
@@ -70,17 +104,20 @@ class db_config extends aw_template
 		{
 			$this->raise_error("LOGIN_MENUS on defineerimata.",true);
 		};
+		
+		$data = $this->_get_login_menus();
 
-		$xmldata = $this->get_simple_config("login_menus");
-		classload("xml");
-		$xml = new xml();
-		$data = $xml->xml_unserialize(array("source" => $xmldata));
 
 		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO));
 
 		$menus = array();
 
 		$menus[0] = "määramata";
+
+		if (is_array($data["pri"]))
+		{
+			asort($data["pri"]);
+		};
 
 		foreach($obj as $key => $val)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.12 2001/08/02 01:15:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.13 2001/08/02 03:40:44 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -424,6 +424,24 @@ class users_user extends aw_template
 			$ss
 			GROUP BY groups.gid
 			$sufix";
+		$this->db_query($q);
+	}
+	
+	// This should eventually replace the previous function
+	// argumendid:
+	// type(int or array) - mis tyypi gruppe listida?
+	function list_groups($args = array())
+	{
+		extract($args);
+		if (is_array($type))
+		{
+			$w_type = join(" OR ",$this->map("type = '%d'",$type));
+		}
+		else
+		{
+			$w_type = " type = $type";
+		};
+		$q = "SELECT * FROM groups WHERE $w_type";
 		$this->db_query($q);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.47 2001/07/30 18:36:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.48 2001/08/02 03:40:44 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -253,7 +253,8 @@ class core extends db_connector
 			$q = "SELECT * FROM users WHERE uid = '$uid'";
 			$this->db_query($q);
 			$row = $this->db_next();
-			$row["password"] = "";
+			// ok, yeah, dude, NII seda kala kyll ei tuleks parandada!
+//			$row["password"] = "";
 			$users_cache[$uid] = $row;
 		}
 		else
@@ -342,16 +343,48 @@ class core extends db_connector
 
 	////
 	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
+	// FIXME: see, kuidas kasutaja login from praegu leitakse, on ysna random?
+	// mida eelistada? dyn gruppe (mille pri on 0)? , tavalisi, mille pri on kõrge?
+	// This function shouldn't be in the core, I think, since it's called only once,
+	// from the site_header
 	function get_gids_by_uid($uid)
 	{
-		$q = "SELECT gid FROM groupmembers WHERE uid = '$uid'";
+		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
+			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'
+			ORDER BY priority";
 		$this->db_query($q);
 		$retval = array();
 		while($row = $this->db_next())
 		{
-			$retval[] = $row["gid"];
+			$retval[$row["gid"]] = $row["gid"];
+		};
+
+		// oh, yes, this is higly not logical, to do this here,
+		// but for now, this will do
+		classload("config");
+		$config = new config();
+
+		$this->login_menu = $config->get_login_menus($retval);
+
+		if ($this->login_menu)
+		{
+			global $menu_defs_v2;
+			$_tmp = array_flip($menu_defs_v2);
+			if ($_tmp["LOGGED"])
+			{
+			// nullime senise LOGGED menüü
+					unset($menu_defs_v2[$_tmp["LOGGED"]]);
+			}
+			$menu_defs_v2[$this->login_menu] = "LOGGED";
 		};
 		return $retval;
+	}
+
+	////
+	// !Tagastab kasutaja login menüü id
+	function get_login_menu()
+	{
+		return $this->login_menu;
 	}
 
 	////
