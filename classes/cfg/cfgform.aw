@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.19 2003/09/02 12:59:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.20 2003/10/02 11:08:30 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -7,7 +7,7 @@
 	@default table=objects
 	@default group=general
 
-	@property subclass type=select 
+	@property subclass type=select newonly=1
 	@caption Klass
 
 	@property ctype type=text editonly=1 field=subclass
@@ -22,13 +22,13 @@
 	@property preview type=text store=no editonly=1
 	@caption Definitsioon
 
-	@property navtoolbar type=toolbar group=layout store=no no_caption=1
+	@property navtoolbar type=toolbar group=layout store=no no_caption=1 editonly=1
 	@caption Toolbar
 
 	@property layout type=callback callback=callback_gen_layout store=no group=layout no_caption=1
 	@caption Layout
 	
-	@property availtoolbar type=toolbar group=avail store=no no_caption=1
+	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
 	@caption Av. Toolbar
 
 	@property availprops type=callback callback=callback_gen_avail_props store=no group=avail no_caption=1
@@ -40,6 +40,9 @@
 	@property cfg_groups type=hidden field=meta method=serialize
 	@caption Grupid
 
+	@property subaction type=hidden store=no group=layout,avail
+	@caption Subaction (sys)
+
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
 
@@ -49,7 +52,7 @@
 define(RELTYPE_PROP_GROUP,1);
 class cfgform extends class_base
 {
-	function cfgform($args = array())
+	function cfgform($arr = array())
 	{
 		$this->init(array(
 			"clid" => CL_CFGFORM,
@@ -64,10 +67,10 @@ class cfgform extends class_base
                 );
         }
 
-	function callback_get_classes_for_relation($args = array())
+	function callback_get_classes_for_relation($arr)
         {
 		$retval = false;
-		switch($args["reltype"])
+		switch($arr["reltype"])
 		{
                         case RELTYPE_PROP_GROUP:
                                 $retval = array(CL_MENU);
@@ -76,9 +79,9 @@ class cfgform extends class_base
 		return $retval;
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -92,42 +95,30 @@ class cfgform extends class_base
 				$data["value"] = "";
 				break;
 
-			case "extract":
-				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("extract",array("id" => $args["obj"]["oid"])),
-					"caption" => $data["caption"],
-				));
-				break;
-
 			case "subclass":
-				$retval = PROP_IGNORE;
-				if (empty($args["obj"]))
+				$cx = get_instance("cfg/cfgutils");
+				$class_list = new aw_array($cx->get_classes_with_properties());
+				$cp = get_class_picker(array("field" => "def"));
+				foreach($class_list->get() as $key => $val)
 				{
-					$retval = PROP_OK;
-					$cx = get_instance("cfg/cfgutils");
-					$class_list = new aw_array($cx->get_classes_with_properties());
-					$cp = get_class_picker(array("field" => "def"));
-					foreach($class_list->get() as $key => $val)
-					{
-						$data["options"][$key] = $val;
-					};	
-				};
+					$data["options"][$key] = $val;
+				};	
 				break;
 
 			case "ctype":
 				classload("icons");
 				$iu = html::img(array(
-					"url" => icons::get_icon_url($args["obj"]["subclass"],""),
+					"url" => icons::get_icon_url($arr["obj_inst"]->prop("subclass"),""),
 				));
-				$data["value"] = $iu . " " . $this->cfg["classes"][$args["obj"]["subclass"]]["name"];
+				$data["value"] = $iu . " " . $this->cfg["classes"][$arr["obj_inst"]->prop("subclass")]["name"];
 				break;
 
 			case "navtoolbar":
-				$this->gen_navtoolbar($args);
+				$this->gen_navtoolbar($arr);
 				break;
 			
 			case "availtoolbar":
-				$this->gen_availtoolbar($args);
+				$this->gen_availtoolbar($arr);
 				break;
 		};
 		return $retval;
@@ -135,26 +126,31 @@ class cfgform extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		$this->_init_cfgform_data($arr["coredata"]);
+		$this->_init_cfgform_data($arr["obj_inst"]);
 	}
 
 	function _init_cfgform_data($obj)
 	{
-		$fl = $this->cfg["classes"][$obj["subclass"]]["file"];
+		$this->_init_properties($obj->prop("subclass"));
+
+		$this->grplist = $obj->meta("cfg_groups");
+		$this->prplist = $obj->meta("cfg_proplist");
+	}
+
+	function _init_properties($class_id)
+	{
+		$fl = $this->cfg["classes"][$class_id]["file"];
 		if ($fl == "document")
 		{
 			$fl = "doc";
 		};
 		$inst = get_instance($fl);
 		$this->all_props = $inst->get_all_properties();
-
-		$this->grplist = $obj["meta"]["cfg_groups"];
-		$this->prplist = $obj["meta"]["cfg_proplist"];
 	}
 
-	function set_property($args)
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 
 		switch($data["name"])
@@ -193,23 +189,21 @@ class cfgform extends class_base
 			case "subclass":
 				// do not overwrite subclass if it was not in the form
 				// hum .. this is temporary fix of course. yees --duke
-				if (empty($args["form_data"]["subclass"]))
+				if (empty($arr["form_data"]["subclass"]))
 				{
 					$retval = PROP_IGNORE;
 				}
 				// cfg_proplist is in "formdata" only if this a serialized object
-				// being unserialized
-				elseif ($args["new"] && empty($args["form_data"]["cfg_proplist"]))
+				// being unserialized. for example, if we are copying this object
+				// over xml-rpc
+				elseif ($arr["new"] && empty($arr["form_data"]["cfg_proplist"]))
 				{
 					// fool around a bit to get the correct data
-					$subclass = $args["form_data"]["subclass"];
-					$obj = array(
-						"subclass" => $args["form_data"]["subclass"],
-					);
+					$subclass = $arr["form_data"]["subclass"];
 
 					// now that's the tricky part ... this thingsbum overrides
 					// all the settings in the document config form
-					$this->_init_cfgform_data($obj);
+					$this->_init_properties($subclass);
 					if ($subclass == CL_DOCUMENT)
 					{
 						$cfgu = get_instance("cfg/cfgutils");
@@ -222,11 +216,11 @@ class cfgform extends class_base
 				break;
 
 			case "availprops":
-				$this->add_new_properties($args);
+				$this->add_new_properties($arr);
 				break;
 
 			case "layout":
-				$this->save_layout($args);
+				$this->save_layout($arr);
 				break;
 		}
 		return $retval;
@@ -237,39 +231,40 @@ class cfgform extends class_base
 		// right now I can load whatever I want, but I really should validate that stuff
 		// first .. and keep in mind that I want to have as many relation pickers
 		// as I want to.
-
 		$cfgu = get_instance("cfg/cfgutils");
 		list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $contents));
 		$this->cfg_proplist = $proplist;
 		$this->cfg_groups = $grplist;
 	}
 		
-	function callback_pre_save($args = array())
+	function callback_pre_save($arr)
 	{
-		$coredata = &$args["coredata"];
+		$obj_inst = $arr["obj_inst"];
+
+		// if we are unzerializing the object, then we need to set the 
+		// subclass as well.
 		if (isset($args["form_data"]["subclass"]))
 		{
-			$coredata["subclass"] = $args["form_data"]["subclass"];
+			$obj_inst->set_prop("subclass",$arr["form_data"]["subclass"]);
 		};
 		if (isset($this->cfg_proplist))
 		{
 			uasort($this->cfg_proplist,array($this,"__sort_props_by_ord"));
-			$coredata["metadata"]["cfg_proplist"] = $this->cfg_proplist;
+			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
 		};
 		if (isset($this->cfg_groups))
 		{
-			$coredata["metadata"]["cfg_groups"] = $this->cfg_groups;
+			$obj_inst->set_meta("cfg_groups",$this->cfg_groups);
 		};
 		return true;
 	}
 
 	////
 	// !
-	function callback_gen_layout($args = array())
+	function callback_gen_layout($arr = array())
 	{
 		$this->read_template("layout.tpl");
-		$used_props = array();
-		$by_group = array();
+		$used_props = $by_group = array();
 
 		if (is_array($this->grplist))
 		{
@@ -333,7 +328,7 @@ class cfgform extends class_base
 			"group" => $c,
 		));
 
-		$item = $args["prop"];
+		$item = $arr["prop"];
 		$item["value"] = $this->parse();
 		return array($item);
 	}
@@ -345,7 +340,7 @@ class cfgform extends class_base
 
 	////
 	// !
-	function callback_gen_avail_props($args = array())
+	function callback_gen_avail_props($arr = array())
 	{
 		$this->read_template("avail_props.tpl");
 		$used_props = array();
@@ -382,131 +377,117 @@ class cfgform extends class_base
 			"avail" => $this->parse("avail"),
 		));
 
-		$item = $args["prop"];
+		$item = $arr["prop"];
 		$item["value"] = $this->parse();
 		return array($item);
 	}
 
 	function gen_navtoolbar($arr)
 	{
-		$id = $arr["obj"]["oid"];
-		if ($id)
+		// which links do I need on the toolbar?
+		// 1- lisa grupp
+		$toolbar = &$arr["prop"]["toolbar"];
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:submit_changeform()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+		
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => "Kustuta valitud omadused",
+			"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
+			"imgover" => "delete_over.gif",
+			"img" => "delete.gif",
+		));
+
+		$toolbar->add_separator();
+		
+		$toolbar->add_cdata("<small>Liiguta omadused gruppi:</small>");
+		$opts = array();
+		if (is_array($this->grplist))
 		{
-			// which links do I need on the toolbar?
-			// 1- lisa grupp
-			$toolbar = &$arr["prop"]["toolbar"];
-
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"url" => "javascript:document.changeform.submit()",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
-			
-			$toolbar->add_button(array(
-				"name" => "delete",
-				"tooltip" => "Kustuta valitud omadused",
-				"url" => "javascript:document.changeform.subaction.value='delete';document.changeform.submit();",
-				"imgover" => "delete_over.gif",
-				"img" => "delete.gif",
-			));
-
-			$toolbar->add_separator();
-			
-			$toolbar->add_cdata("<small>Liiguta omadused gruppi:</small>");
-			$opts = array();
-			if (is_array($this->grplist))
+			foreach($this->grplist as $key => $grpdata)
 			{
-				foreach($this->grplist as $key => $grpdata)
-				{
-					$opts[$key] = $grpdata["caption"];
-				};
-			}
-			else
-			{
-				$opts["none"] = "Ühtegi gruppi pole veel!";
+				$opts[$key] = $grpdata["caption"];
 			};
-			
-			$toolbar->add_cdata(html::select(array(
-				"options" => $opts,
-				"name" => "target",
-			)));
-			
-			$toolbar->add_button(array(
-				"name" => "move",
-				"tooltip" => "Liiguta",
-				"url" => "javascript:document.changeform.subaction.value='move';document.changeform.submit();",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
-			
-			$toolbar->add_separator();
-
-			$toolbar->add_cdata("<small>Lisa grupp:</small>");
-			$toolbar->add_cdata(html::textbox(array(
-				"name" => "newgrpname",
-				"size" => "20",
-			)));
-			
-			$toolbar->add_button(array(
-				"name" => "addgrp",
-				"tooltip" => "Lisa grupp",
-				"url" => "javascript:document.changeform.subaction.value='addgrp';document.changeform.submit()",
-				"imgover" => "new_over.gif",
-				"img" => "new.gif",
-			));
-
-			$toolbar->add_separator();
-			$add_grp_url = $this->mk_my_orb("add_grp",array("id" => $id));
-			//$toolbar->add_cdata($add_grp_url);
-
-
-
 		}
+		else
+		{
+			$opts["none"] = "Ühtegi gruppi pole veel!";
+		};
+		
+		$toolbar->add_cdata(html::select(array(
+			"options" => $opts,
+			"name" => "target",
+		)));
+		
+		$toolbar->add_button(array(
+			"name" => "move",
+			"tooltip" => "Liiguta",
+			"url" => "javascript:document.changeform.subaction.value='move';submit_changeform();",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+		
+		$toolbar->add_separator();
+
+		$toolbar->add_cdata("<small>Lisa grupp:</small>");
+		$toolbar->add_cdata(html::textbox(array(
+			"name" => "newgrpname",
+			"size" => "20",
+		)));
+		
+		$toolbar->add_button(array(
+			"name" => "addgrp",
+			"tooltip" => "Lisa grupp",
+			"url" => "javascript:document.changeform.subaction.value='addgrp';submit_changeform()",
+			"imgover" => "new_over.gif",
+			"img" => "new.gif",
+		));
 	}
 	
 	function gen_availtoolbar($arr)
 	{
-		$id = $arr["obj"]["oid"];
-		if ($id)
+		$toolbar = &$arr["prop"]["toolbar"];
+		$opts = array();
+		if (is_array($this->grplist))
 		{
-			$toolbar = &$arr["prop"]["toolbar"];
-			$opts = array();
-			if (is_array($this->grplist))
+			foreach($this->grplist as $key => $grpdata)
 			{
-				foreach($this->grplist as $key => $grpdata)
-				{
-					$opts[$key] = $grpdata["caption"];
-				};
-			}
-			else
-			{
-				$opts["none"] = "Ühtegi gruppi pole veel!";
+				$opts[$key] = $grpdata["caption"];
 			};
-
-			$toolbar->add_cdata(html::select(array(
-				"options" => $opts,
-				"name" => "target",
-			)));
-
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"url" => "javascript:document.changeform.submit()",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
 		}
+		else
+		{
+			$opts["none"] = "Ühtegi gruppi pole veel!";
+		};
+
+		$toolbar->add_cdata(html::select(array(
+			"options" => $opts,
+			"name" => "target",
+		)));
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:submit_changeform()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
 	}
 
 	function add_new_properties($arr)
 	{
 		$target = $arr["form_data"]["target"];
 		// first check, whether a group with that id exists
-		if (isset($arr["obj"]["meta"]["cfg_groups"][$target]))
+		$_tgt = $arr["obj_inst"]->meta("cfg_groups");
+		if (isset($_tgt[$target]))
 		{
-			$this->_init_cfgform_data($arr["obj"]);
+			$this->_init_cfgform_data($arr["obj_inst"]);
 			// and now I just have to modify the proplist, eh?
 			$prplist = $this->prplist;
 			$mark = $arr["form_data"]["mark"];
@@ -531,7 +512,7 @@ class cfgform extends class_base
 	function save_layout($arr)
 	{
 		$subaction = $arr["form_data"]["subaction"];
-		$this->_init_cfgform_data($arr["obj"]);
+		$this->_init_cfgform_data($arr["obj_inst"]);
 		switch($subaction)
 		{
 			case "addgrp":
@@ -604,10 +585,5 @@ class cfgform extends class_base
 		};
 	}	
 
-	function callback_mod_reforb($args = array())
-	{
-		// we use this to make the toolbar magic work
-		$args["subaction"] = "";
-	}
 };
 ?>
