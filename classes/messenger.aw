@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.33 2001/05/28 22:44:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.34 2001/05/29 00:06:51 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -578,6 +578,24 @@ class messenger extends menuedit_light
 			{
 				$page = $pages;
 			};
+
+			$prev = $next = "";
+			if ($page > 1)
+			{
+				$prevpage = $page - 1;
+				$pg = "?class=messenger&action=folder&id=$folder&page=$prevpage";
+				$this->vars(array("pg" => $pg));
+				$prev = $this->parse("prev");
+			};
+
+			if ($page < $pages)
+			{
+				$nextpage = $page + 1;
+				$pg = "?class=messenger&action=folder&id=$folder&page=$nextpage";
+				$this->vars(array("pg" => $pg));
+				$next = $this->parse("next");
+			};
+				
 			
 			$cp = "";
 			for ($i = 1; $i <= $pages; $i++)
@@ -637,6 +655,8 @@ class messenger extends menuedit_light
 			"message_count" => verbalize_number($cnt),
 			"folder_name" => $folder_name,
 			"page" => $cp,
+			"prev" => $prev,
+			"next" => $next,
 			"reforb" => $this->mk_reforb("mailbox_op",array("active_folder" => $args["id"])),
 			"menu" => $menu,
 		));
