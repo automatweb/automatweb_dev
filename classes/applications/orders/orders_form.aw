@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.5 2004/12/06 14:08:30 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.6 2005/01/16 16:54:06 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -192,7 +192,7 @@ class orders_form extends class_base
 		{
 			$order = new object();
 			$order->set_class_id(CL_ORDERS_ORDER);
-			$order->set_parent($arr["oid"]);
+			$order->set_parent($arr["oid"] ? $arr["oid"] : $arr["id"]);
 			$order->save();
 
 			$_SESSION["order_cart_id"] = $order->id();
