@@ -17,6 +17,7 @@ class form_filter_search_element extends form_search_element
 		
 		$this->gen_partcache();
 
+		$partcache = aw_global_get("partcache");
 		$this->vars(array(
 			"parts" => $this->picker($this->arr["part"]==""?-1:$this->arr["part"], $partcache),
 		));
