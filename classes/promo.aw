@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.23 2003/01/30 19:10:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.24 2003/01/30 19:15:29 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -204,32 +204,38 @@ class promo extends class_base
 		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
 		// and from this array, I need to get the list of objects that
 		// have the reltype RELTYPE_ASSIGNED_MENU
-		$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_ASSIGNED_MENU) return true;'));
-
-		// now get those objects and put them into table
-		$q = sprintf("SELECT oid,name,status FROM objects
-				LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
-
-		$this->db_query($q);
-		while($row = $this->db_next())
+		if (is_array($alias_reltype))
 		{
-			// it shouldn't be too bad, cause get_object is cached.
-			// still, it sucks.
-			$this->save_handle();
-			$chain = $this->get_obj_chain(array(
-				"oid" => $row["oid"],
-			));
-			$path = join("/",array_slice($chain,-3));
-			$this->restore_handle();
-			$this->t->define_data(array(
-				"oid" => $row["oid"],
-				"name" => $path . "/" . $row["name"],
-				"check" => html::checkbox(array(
-					"name" => "include_submenus[$row[oid]]",
-					"value" => $row["oid"],
-					"checked" => $section_include_submenus[$row["oid"]],
-				)),
-			));
+			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_ASSIGNED_MENU) return true;'));
+		};
+
+		if (sizeof($menu_ids) > 0)
+		{
+			// now get those objects and put them into table
+			$q = sprintf("SELECT oid,name,status FROM objects
+					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// it shouldn't be too bad, cause get_object is cached.
+				// still, it sucks.
+				$this->save_handle();
+				$chain = $this->get_obj_chain(array(
+					"oid" => $row["oid"],
+				));
+				$path = join("/",array_slice($chain,-3));
+				$this->restore_handle();
+				$this->t->define_data(array(
+					"oid" => $row["oid"],
+					"name" => $path . "/" . $row["name"],
+					"check" => html::checkbox(array(
+						"name" => "include_submenus[$row[oid]]",
+						"value" => $row["oid"],
+						"checked" => $section_include_submenus[$row["oid"]],
+					)),
+				));
+			};
 		};
 		
 		$nodes[$prop["name"]] = array(
@@ -279,27 +285,34 @@ class promo extends class_base
 		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
 		// and from this array, I need to get the list of objects that
 		// have the reltype RELTYPE_DOC_SOURCE
-		$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_DOC_SOURCE) return true;'));
-
-		// now get those objects and put them into table
-		$q = sprintf("SELECT oid,name,status FROM objects
-				LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
-
-		$this->db_query($q);
-		while($row = $this->db_next())
+		if (is_array($alias_reltype))
 		{
-			// it shouldn't be too bad, cause get_object is cached.
-			// still, it sucks.
-			$this->save_handle();
-			$chain = $this->get_obj_chain(array(
-				"oid" => $row["oid"],
-			));
-			$this->restore_handle();
-			$path = join("/",array_slice($chain,-3));
-			$this->t->define_data(array(
-				"oid" => $row["oid"],
-				"name" => $path . "/" . $row["name"],
-			));
+			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_DOC_SOURCE) return true;'));
+		};
+
+		if (sizeof($menu_ids) > 0)
+		{
+
+			// now get those objects and put them into table
+			$q = sprintf("SELECT oid,name,status FROM objects
+					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// it shouldn't be too bad, cause get_object is cached.
+				// still, it sucks.
+				$this->save_handle();
+				$chain = $this->get_obj_chain(array(
+					"oid" => $row["oid"],
+				));
+				$this->restore_handle();
+				$path = join("/",array_slice($chain,-3));
+				$this->t->define_data(array(
+					"oid" => $row["oid"],
+					"name" => $path . "/" . $row["name"],
+				));
+			};
 		};
 		
 		$nodes[$prop["name"]] = array(
