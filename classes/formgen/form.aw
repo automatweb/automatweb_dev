@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.72 2003/07/01 10:37:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.73 2003/07/01 11:07:46 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5871,15 +5871,15 @@ class form extends form_base
 
 		if (($butt_delete != "" || $butt_delete_x > 0) && is_array($sel))
 		{
-			foreach($sel as $id => $one)
+			foreach($sel as $_id => $one)
 			{
 				if ($one == 1)
 				{
 					if (!$form_id_for_entries)
 					{
-						$form_id_for_entries = $this->get_form_for_entry($id);
+						$form_id_for_entries = $this->get_form_for_entry($_id);
 					}
-					$this->do_delete_entry($form_id_for_entries, $id);
+					$this->do_delete_entry($form_id_for_entries, $_id);
 				}
 			}
 		}
