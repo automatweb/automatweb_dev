@@ -1,11 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.19 2003/06/03 16:43:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.20 2003/06/04 16:47:00 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
 
 @default table=documents
 @default group=general
+
+@property navtoolbar type=toolbar no_caption=1 store=no
+@caption Toolbar
+
+@property active type=checkbox ch_value=2 table=objects field=status
+@caption Aktiivne
 
 @property title type=textbox size=60
 @caption Pealkiri
@@ -44,13 +50,13 @@
 @caption Näita muutmise kuupäeva
 
 //---------------
-@property no_right_pane type=checkbox ch_value=1
+@property no_right_pane type=checkbox ch_value=1 group=settings
 @caption Ilma parema paanita
 
-@property no_left_pane type=checkbox ch_value=1
+@property no_left_pane type=checkbox ch_value=1 group=settings
 @caption Ilma vasaku paanita
 
-@property title_clickable type=checkbox ch_value=1
+@property title_clickable type=checkbox ch_value=1 group=settings
 @caption Pealkiri klikitav
 
 @property clear_styles type=checkbox ch_value=1 store=no
@@ -59,13 +65,13 @@
 @property link_keywords type=checkbox ch_value=1 store=no
 @caption Lingi võtmesõnad
 
-@property esilehel type=checkbox ch_value=1
+@property esilehel type=checkbox ch_value=1 group=settings
 @caption Esilehel
 
 @property frontpage_left type=checkbox ch_value=1
 @caption Esilehel tulbas
 
-@property dcache
+@property dcache type=checkbox store=no
 @caption Cache otsingu jaoks
 
 @property show_title type=checkbox ch_value=1
@@ -107,15 +113,17 @@
 @property calendar_relation type=select field=meta method=serialize group=general table=objects
 @caption Põhikalender
 
+@property gen_static type=checkbox store=no
+@caption Genereeri staatiline
+
 @property sbt type=submit value=Salvesta store=no 
 
 @groupinfo calendar caption=Kalender
+@groupinfo vennastamine caption=Vennastamine
+@groupinfo settings caption=Seadistused
 
 @tableinfo documents index=docid master_table=objects master_index=oid
 @tableinfo planner index=id master_table=objects master_index=oid
-
-@classinfo toolbar=yes
-@classinfo corefields=status
 
 */
 
@@ -136,6 +144,12 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "name":
+			case "comment":
+			case "status":
+				$retval = PROP_IGNORE;
+				break;
+
 			case "sections":
 				$d = get_instance("document");
 				list($selected,$options) = $this->get_brothers(array(
@@ -160,6 +174,10 @@ class doc extends class_base
 					"minute" => $_tmp % 3600,
 				);
 				break;
+	
+			case "navtoolbar":
+				$this->gen_navtoolbar($args);
+				break;
 
 		};
 		return $retval;
@@ -171,6 +189,13 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "active":
+				if (empty($data["value"]))
+				{
+					$data["value"] = STAT_NOTACTIVE;
+				};
+				break;
+
 			case "sections":
 				$this->update_brothers(array(
 					"id" => $args["obj"]["oid"],
@@ -188,6 +213,84 @@ class doc extends class_base
 
 			case "link_calendars":
 				$this->update_link_calendars($args);
+				break;
+
+			case "link_keywords":
+				if (!empty($args["obj"]["oid"]))
+				{
+					$kw = get_instance("keywords");
+					if (isset($args["form_data"]["keywords"]))
+					{
+						$kw->update_keywords(array(
+							"keywords" => $args["form_data"]["keywords"],
+							"oid" => $args["obj"]["oid"],
+						));
+					}
+					else
+					{
+						$kw->update_relations(array(
+							"id" => $args["obj"]["oid"],
+							"data" => $args["form_data"]["content"],
+						));
+						// also update keyword brother docs
+						$kw->update_menu_keyword_bros(array("doc_ids" => array($args["obj"]["oid"])));
+					};
+				};
+				break;
+
+			case "tm":
+				$modified = time();
+				$tm = $data["value"];
+				list($_date, $_time) = explode(" ", $tm);
+				list($hour, $min) = explode(":", $_time);
+				list($day,$mon,$year) = explode("/",$_date);
+
+				$ts = mktime($hour,$min,0,$mon,$day,$year);
+				if ($ts)          
+				{
+					$modified = $ts;
+				}
+				else
+				{
+					// 2kki on punktidega eraldatud
+					list($day,$mon,$year) = explode(".",$_date);
+					$ts = mktime($hour,$min,0,$mon,$day,$year);
+					if ($ts)
+					{        
+						$modified = $ts;
+					}                
+					else
+					{    
+                                       		// 2kki on hoopis - 'ga eraldatud?
+						list($day,$mon,$year) = explode("-",$_date);
+						$ts = mktime($hour,$min,0,$mon,$day,$year);
+						if ($ts)       
+						{
+							$modified = $ts;
+						}
+					}
+				};
+				// we need this later too
+				$this->_modified = $modified;
+				break;
+
+			case "dcache":
+				if (aw_ini_get("document.use_dcache"))
+				{
+					$dcx = get_instance("document");
+					$preview = $dcx->gen_preview(array("docid" => $args["obj"]["oid"]));
+					$this->quote($preview);
+					$this->_preview = $preview;
+				};
+				break;
+
+			case "gen_static":
+				if (!empty($data["value"]) && !empty($args["obj"]["oid"]))
+				{
+					$dcx = get_instance("document");
+					// but this dies anyway
+					$dcx->gen_static_doc($args["obj"]["oid"]);
+				};
 				break;
 
 			case "calendar_relation":
@@ -264,12 +367,26 @@ class doc extends class_base
 		{
 			$coredata["name"] = $objdata["title"];
 		};
+		if (isset($this->_modified))
+		{
+			$coredata["modified"] = $this->_modified;
+			$objdata["modified"] = $this->_modified;
+		};
+		if (isset($this->_preview))
+		{
+			$objdata["dcache"] = $this->_preview;
+		};
 		if ($this->clear_styles)
 		{
 			$objdata["content"] = $this->_doc_strip_tags($objdata["content"]);
 			$objdata["lead"] = $this->_doc_strip_tags($objdata["lead"]);
 			$objdata["moreinfo"] = $this->_doc_strip_tags($objdata["moreinfo"]);
 		};
+	}
+
+	function callback_post_save($args = array())
+	{
+		$this->flush_cache();
 	}
 
 	function _doc_strip_tags($arg)
@@ -282,9 +399,9 @@ class doc extends class_base
 		return $arg;
 	}
 
-	function callback_get_toolbar($args = array())
+	function gen_navtoolbar($args = array())
 	{
-		$toolbar = &$args["toolbar"];
+		$toolbar = &$args["prop"]["toolbar"];
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
@@ -319,13 +436,13 @@ class doc extends class_base
                 ));
 		*/
 
-		if (!empty($args["id"]))
+		if (!empty($args["obj"]["oid"]))
 		{
 			$toolbar->add_button(array(
 				"name" => "preview",
 				"tooltip" => "Eelvaade",
 				"target" => "_blank",
-				"url" => aw_global_get("baseurl") . "/" . $args["id"],
+				"url" => aw_global_get("baseurl") . "/" . $args["obj"]["oid"],
 				"imgover" => "preview_over.gif",
 				"img" => "preview.gif",
 			));
@@ -432,6 +549,11 @@ class doc extends class_base
 		$retval["doc_default"] = array(
 			"caption" => "Dokument",
 			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
+		);
+
+		$retval["ng_doc"] = array(
+			"caption" => "Dokument 2.0",
+			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"doc"),
 		);
 
 		foreach($cfgforms as $key => $val)
