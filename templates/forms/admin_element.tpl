@@ -315,6 +315,15 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: BUTTON_SUB_URL -->
 
+<!-- SUB: BUTTON_SUB_ORDER -->
+<tr>
+<td class="fgtext">Form, millele suunatakse:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_order_form' >{VAR:order_form}</select></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_SUB_ORDER -->
+
 <!-- SUB: BUTTON_CONFIRM_TYPE -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_FOLDER_TO_MOVE}:</td>
