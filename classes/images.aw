@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.4 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.5 2001/06/05 09:49:06 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -11,11 +11,40 @@ $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=
 
 
 // wrapper, et saax asja orbiga kasutada
+// why the flying fuck do we have 2 classes in here? What the fuck is going on?
 class images extends aw_template
 {
 	function images()
 	{
 		$this->di = new db_images;
+	}
+
+	///
+	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
+	function parse_alias($args = array())
+	{
+		extract($args);
+		$idata = $this->di->get_img_by_oid($oid,$matches[3]);
+		$replacement = "";
+		if ($idata)
+		{
+			$vars = array(
+					"imgref" => $idata["url"],
+					"imgcaption" => $idata["comment"],
+					"align" => $align[$matches[3]],
+					"plink" => $idata["link"],
+			);
+ 
+			if ($idata["link"] != "")
+			{
+				$replacement = $this->localparse($tpls["image_linked"],$vars);
+			}
+			else
+			{
+				$replacement = $this->localparse($tpls["image"],$vars);
+			}	
+		};
+		return $replacement;
 	}
 
 	function add($arr)
