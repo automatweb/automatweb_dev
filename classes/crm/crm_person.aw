@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.27 2004/05/14 09:10:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.28 2004/05/20 11:22:44 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -39,7 +39,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disc
 property messenger type=textbox size=30 maxlength=200
 caption Msn/yahoo/aol/icq
 
-@property birthday type=date_select year_from=1930 year_to=2010
+@property birthday type=date_select year_from=1930 year_to=2010 default=-1
 @caption Sünnipäev
 
 @property social_status type=chooser 
