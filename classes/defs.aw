@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.138 2004/05/19 16:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.139 2004/06/09 13:04:17 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1089,6 +1089,42 @@ if (!defined("DEFS"))
 			
 				$msg .= " <br><br>\n\n";
 			}
+			return $msg;
+		}
+
+		function short_backtrace()
+		{
+			$msg = "";
+			if (function_exists("debug_backtrace"))
+			{
+				$bt = debug_backtrace();
+				for ($i = count($bt); $i >= 0; $i--)
+				{
+					if ($bt[$i+1]["class"] != "")
+					{
+						$fnm = $bt[$i+1]["class"]."::".$bt[$i+1]["function"];
+					}
+					else
+					if ($bt[$i+1]["function"] != "")
+					{
+						if ($bt[$i+1]["function"] != "include")
+						{
+							$fnm = $bt[$i+1]["function"];
+						}
+						else
+						{
+							$fnm = "";
+						}
+					}
+					else
+					{
+						$fnm = "";
+					}
+
+					$msg .= $fnm.":".$bt[$i]["line"]."->";
+				}
+			}
+
 			return $msg;
 		}
 	}
