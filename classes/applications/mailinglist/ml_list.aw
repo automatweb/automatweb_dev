@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.9 2005/01/05 12:08:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.10 2005/01/06 09:43:08 dragut Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1858,6 +1858,9 @@ class ml_list extends class_base
         //              [mto] => mailing list oid (int) (required)
         //              [return] => id  // if this is set, it gives back created object id
         //                              // else it gives back the redirection url
+	//		[submit_post_message] => 0|1 (int) // if 0, then the message wouldn't
+	//						   // be sent right away
+	//						   // submit_post_message method will not be called
         //      )
 
 	function send_message($arr)
@@ -1878,13 +1881,13 @@ class ml_list extends class_base
 			),
 			"obj_inst" => obj($arr['mto']),
 		));
-/*
-		$this->submit_post_message(array(
-			"list_id" => $arr['mto'],
-			"id" => $arr['id'],
-		));
-*/
-
+		if($arr['submit_post_message'] == 1)
+		{
+			$this->submit_post_message(array(
+				"list_id" => $arr['mto'],
+				"id" => $arr['id'],
+			));
+		}
 	}
 
 	/** delete members from list
