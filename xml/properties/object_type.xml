@@ -9,5 +9,25 @@
             <group>general</group>
             <caption>Objektitüüp</caption>
       </property>
+      <property>
+            <name>use_cfgform</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_CFGFORM</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasuta seadete vormi</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <OBJECT_CFGFORM>
+                  <value>1</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </OBJECT_CFGFORM>
+      </reltypes>
 </properties>
 
