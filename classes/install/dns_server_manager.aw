@@ -98,6 +98,11 @@ class dns_server_manager extends class_base
 		// find the line that contains only a string of numbers of the correct length (10)
 		foreach($lines as $lineno => $line)
 		{
+			if (strpos($line, ";") !== false)
+			{
+				// strip comments
+				$line = preg_replace("/(.*);(.*)/","\\1", $line);
+			}
 			if (strlen(trim($line)) == 10 && strspn(trim($line), "0123456789") == strlen(trim($line)))
 			{
 				// found line
