@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.7 2001/10/09 11:24:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.1 2002/10/29 10:30:42 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -126,7 +126,6 @@ class form_element extends aw_template
 
 	function do_core_admin()
 	{
-		load_vcl("date_edit");
 		$de = new date_edit(0);
 		$de->configure(array(
 			"year" => "",
@@ -177,9 +176,6 @@ class form_element extends aw_template
 				"search_all_text"					=> checked($this->arr["search_all_text"]),
 				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
 				"search_logical"					=> checked($this->arr["search_logical"]),
-				"search_separate_words_sep" => $this->arr["search_separate_words_sep"],
-				"search_field_in_set"			=> checked($this->arr["search_field_in_set"]),
-				"link_newwindow"					=> checked($this->arr["link_newwindow"])
 			));
 	
 			$this->vars(array(
@@ -450,7 +446,6 @@ class form_element extends aw_template
 				{
 					$udcel_els = array(0 => "");
 				}
-				classload("image");
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
@@ -799,17 +794,10 @@ class form_element extends aw_template
 		global $$var;
 		$this->arr["search_separate_words"] = $$var;
 
-		$var = $base."_search_separate_words_sep";
-		global $$var;
-		$this->arr["search_separate_words_sep"] = $$var;
-
 		$var = $base."_search_logical";
 		global $$var;
-		$this->arr["search_logical"] = $$var;
 
-		$var = $base."_search_field_in_set";
-		global $$var;
-		$this->arr["search_field_in_set"] = $$var;
+		$this->arr["search_logical"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
@@ -1165,8 +1153,6 @@ class form_element extends aw_template
 			$this->arr["clink_target"] = $$var;
 			$var=$base."_clink_no_orb";
 			$this->arr["clink_no_orb"] = $$var;
-			$var=$base.'_link_newwindow';
-			$this->arr['link_newwindow'] = $$var;
 		}
 
 		if ($this->arr["type"] == 'timeslice')
@@ -1713,11 +1699,7 @@ class form_element extends aw_template
 		$this->entry_id = $e_id;
 		if ($this->arr["type"] == "file" || $this->arr["type"] == "link")
 		{
-			$tmp = aw_unserialize($this->entry);
-			if ($tmp !== false)
-			{
-				$this->entry = $tmp;
-			}
+			$this->entry = aw_unserialize($this->entry);
 		}
 	}
 
@@ -2157,8 +2139,6 @@ class form_element extends aw_template
 						$butt = $this->arr["lang_button_text"][$lang_id];
 					}
 
-					get_instance("image");
-
 					if ($this->arr["button_img"]["use"] == 1)
 					{
 						$btype = "image";
@@ -2272,7 +2252,6 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				load_vcl("date_edit");
 				$de = new date_edit(time());
 				$bits = array();
 				$has_some = false;
