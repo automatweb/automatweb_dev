@@ -18,7 +18,7 @@
 <!-- SUB: LANG_H -->
 <td class="fform">{VAR:LC_FORMS_NAME} {VAR:lang_name}</td>
 <!-- END SUB: LANG_H -->
-<td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td>
+<td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td><td class="fform">Korduv?</td>
 </tr>
 <!-- SUB: FORM -->
 <tr>
@@ -27,6 +27,7 @@
 <!-- END SUB: LANG -->
 <td class="fform"><input type='text' name='fjrk[{VAR:form_id}]' value='{VAR:fjrk}' size=3 class='small_button'></td>
 <td class="fform"><input type='checkbox' name='fgoto[{VAR:form_id}]' value='1' {VAR:fgoto} class='small_button'></td>
+<td class="fform"><input type='checkbox' name='rep[{VAR:form_id}]' value='1' {VAR:rep} class='small_button'></td>
 </tr>
 <!-- END SUB: FORM -->
 <tr>
