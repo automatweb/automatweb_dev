@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.210 2003/09/12 11:56:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.211 2003/09/16 12:21:11 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -48,10 +48,7 @@ class document extends aw_template
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt","dcache");
-
-		// for referer checks
-		$this->refopts = array("Ignoreeri","Näita","Ära näita");
+		$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
 
 		lc_site_load("document",$this);
 
@@ -295,32 +292,6 @@ class document extends aw_template
 		{
 			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		};
-
-		// kas on vaja rakendada refereridel p?hinevat kontrolli?
-		if ($meta["refopt"] > 0)
-		{
-			$referer = aw_global_get("referer");
-			$docref = explode(",",$meta["referer"]);
-			$match = in_array($referer,$docref);
-
-			$this->referer = $meta["referer"];
-			$this->refopt = $meta["refopt"];
-
-			// kui referer matchib ja on k?stud mitte n?idata, siis
-			// dropime v?lja
-			if ($match && ($meta["refopt"] == 2))
-			{
-				return false;
-			};
-
-			// kui referer ei matchi ja on k?stud n?idata, siis
-			// dropime ka v?lja
-			if (not($match) && ($meta["refopt"] == 1))
-			{
-				return false;
-			}
-
-		}
 
 		$si = __get_site_instance();
 		//hook for site specific document parsing
@@ -1692,8 +1663,6 @@ class document extends aw_template
 											"frontpage_center_bottom_jrk" => $document["frontpage_center_bottom_jrk"],
 											"frontpage_right_jrk" => $document["frontpage_right_jrk"],
 											"no_last" => checked($document["no_last"]),
-											"referer" => $meta["referer"],
-											"refopts" => $this->picker($meta["refopt"],$this->refopts),
 											"dcache" => checked($meta["dcache"]),
 											"moreinfo" => $document["moreinfo"],
 											"cite" => $document["cite"],
