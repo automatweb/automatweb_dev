@@ -11,6 +11,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>utr_toolbar</field>
             <caption>TB</caption>
@@ -26,6 +27,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>tr_toolbar</field>
             <caption>TB</caption>
@@ -41,6 +43,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>inp_toolbar</field>
             <caption>TB</caption>
@@ -48,18 +51,18 @@
       <property>
             <name>baselang</name>
             <type>select</type>
-            <group>general</group>
             <store>no</store>
             <table>objects</table>
+            <group>general</group>
             <field>baselang</field>
             <caption>Baaskeel</caption>
       </property>
       <property>
             <name>targetlang</name>
             <type>select</type>
-            <group>general</group>
             <store>no</store>
             <table>objects</table>
+            <group>general</group>
             <field>targetlang</field>
             <caption>Sihtkeel</caption>
       </property>
@@ -67,20 +70,20 @@
             <name>targetlang_all</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
+            <group>general</group>
             <caption>Kas kasutada k&amp;otilde;iki keeli sihtkeelteks</caption>
       </property>
       <property>
             <name>translated_all_langs</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
+            <group>general</group>
             <caption>Kas objekt ilmub T&amp;otilde;lgitud tabi alla ainult siis kui on t&amp;otilde;litud k&amp;otilde;kidesse keeltesse</caption>
       </property>
       <property>
@@ -207,5 +210,12 @@
                   <submit>no</submit>
             </tr_all>
       </groupinfo>
+      <reltypes>
+            <CLASS>
+                  <value>1</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>klass</caption>
+            </CLASS>
+      </reltypes>
 </properties>
 
