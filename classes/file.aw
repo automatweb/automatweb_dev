@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.26 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.27 2002/07/02 12:51:14 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,6 +59,10 @@ class file extends aw_template
 				die($fi["content"]);
 			}
 		}
+		elseif ($fi["meta"]["show_framed"] == 1)
+		{
+			$replacement = $fi["content"];
+		}
 		else
 		{
 			if ($fi["newwindow"])
@@ -92,7 +96,7 @@ class file extends aw_template
 		$prefix = substr($filename,0,1);
 		if (!is_dir($site_basedir . "/files/" . $prefix))
 		{
-			mkdir($site_basedir . "/files/" . $prefix,0777);
+			mkdir($site_basedir . "/files/" . $prefix,0705);
 		}
 
 		$file = $site_basedir . "/files/" . $prefix . "/" . "$filename.$minor";
@@ -142,7 +146,8 @@ class file extends aw_template
 				"comment" => $comment,
 				"metadata" => array(
 					"act_time" => $act_time,
-					"j_time" => $j_time
+					"j_time" => $j_time,
+					"show_framed" => $show_framed,
 				)
 			));
 			$this->db_query("INSERT INTO files(id,file,showal,type,newwindow) 
@@ -162,6 +167,7 @@ class file extends aw_template
 			}
 			$co["metadata"]["act_time"] = $act_time;
 			$co["metadata"]["j_time"] = $j_time;
+			$co["metadata"]["show_framed"] = $show_framed;
 
 			$upd = array();
 			if ($fs != "")
@@ -395,7 +401,8 @@ class file extends aw_template
 					"showal" => $show,
 					"type" => $file_type,
 					"newwindow" => $newwindow,
-					"j_time" => $de->get_timestamp($j_time)
+					"j_time" => $de->get_timestamp($j_time),
+					"show_framed" => $show_framed,
 				));
 
 				// id on dokumendi ID, kui fail lisatakse doku juurde
@@ -414,7 +421,8 @@ class file extends aw_template
 			// or any other object? We need a better solution for this.
 			$orb_urls = array(
 				// saidi seest lisati doku juurde fail
-				"user" => $this->mk_site_orb(array("class" => "document","action" => "change","id" => $id)),
+				//"user" => $this->mk_site_orb(array("class" => "document","action" => "change","id" => $id)),
+				"user" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr",false,1),
 
 				// aw-st lisati doku juurde fail
 				"awdoc" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr"),
@@ -491,6 +499,7 @@ class file extends aw_template
 			"j_date" => $de->gen_edit_form("j_time", $fi["meta"]["j_time"]),
 			"comment" => $fi["comment"],
 			"checked" => checked($fi["showal"]), 
+			"show_framed" => checked($fi["meta"]["show_framed"]),
 			"newwindow" => checked($fi["newwindow"])
 		));
 		return $this->parse();
@@ -514,6 +523,7 @@ class file extends aw_template
 				"comment" => $comment,
 				"showal" => $show,
 				"newwindow" => $newwindow,
+				"show_framed" => $show_framed,
 				"act_time" => $de->get_timestamp($act_time),
 				"j_time" => $de->get_timestamp($j_time)
 			));
@@ -530,7 +540,8 @@ class file extends aw_template
 				"type" => $file_type,
 				"newwindow" => $newwindow,
 				"act_time" => $de->get_timestamp($act_time),
-				"j_time" => $de->get_timestamp($j_time)
+				"j_time" => $de->get_timestamp($j_time),
+				"show_framed" => $show_framed,
 			));
 			$this->_log("fail","Muutis faili $pid");
 		}
@@ -556,7 +567,8 @@ class file extends aw_template
 			}
 			else
 			{
-				$retval = $this->mk_my_orb("obj_list", array("parent" => $parent),"menuedit");
+				//$retval = $this->mk_my_orb("obj_list", array("parent" => $parent),"menuedit");
+				$retval = $this->mk_my_orb("change",array("id" => $id));
 			}
 		};
 		return $retval;
