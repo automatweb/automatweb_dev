@@ -1,0 +1,103 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mlist">
+		<action name="list_members">
+			<function name="list_members">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_member">
+			<function name="add_member">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_member">
+			<function name="change_member">
+				<arguments>
+					<required name="id"/>
+					<required name="user_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_member">
+			<function name="submit_member"/>
+		</action>
+		
+		<action name="cut">
+			<function name="cut"/>
+		</action>
+		
+		<action name="copy">
+			<function name="copy"/>
+		</action>
+		
+		<action name="delete">
+			<function name="delete"/>
+		</action>
+		
+		<action name="paste">
+			<function name="paste">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="import_members">
+			<function name="import_members">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="import_members_submit">
+			<function name="import_members_submit"/>
+		</action>
+		
+		<action name="export_members">
+			<function name="export_members">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="checkit">
+			<function name="checkit">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="del_user">
+			<function name="del_user">
+				<arguments>
+					<required name="list_id"/>
+					<required name="user_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change_vars">
+			<function name="change_vars">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_change_vars">
+			<function name="submit_change_vars"/>
+		</action>
+
+	</class>
+</orb>
