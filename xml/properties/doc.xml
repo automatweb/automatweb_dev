@@ -239,6 +239,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <default>1</default>
             <caption>Võtmesõnad lingina</caption>
       </property>
       <property>
