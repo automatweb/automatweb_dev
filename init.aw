@@ -443,7 +443,7 @@ function aw_startup()
 	// reset aw_cache_* function globals
 	$GLOBALS["__aw_cache"] = array();
 
-	classload("defs");
+	classload("defs", "core/error");
 	_aw_global_init();
 
 	$l = get_instance("languages");
