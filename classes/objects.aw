@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.43 2003/02/06 15:32:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.44 2003/04/14 16:03:17 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -818,7 +818,7 @@ class objects extends db_objects
 			"ex_icons" => 1
 		));
 
-		// temporarily put back real site id so we can fetch all the correct menus
+		// reset to new site id
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
 		// and now import them to the new site
