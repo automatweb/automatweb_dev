@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>login</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LOGIN</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>AW Login</caption>
+      </property>
+      <property>
+            <name>activate</name>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+      </property>
+      <property>
+            <name>urls</name>
+            <type>callback</type>
+            <callback>callback_get_urls</callback>
+            <store>no</store>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>P&amp;auml;ringud</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AW_TEST</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <reltypes>
+            <LOGIN>
+                  <value>1</value>
+                  <clid>CL_AW_LOGIN</clid>
+                  <caption>aw login</caption>
+            </LOGIN>
+      </reltypes>
+</properties>
+

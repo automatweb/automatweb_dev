@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.3 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.4 2004/02/27 13:04:05 kristo Exp $
 class aw_graph extends aw_template
 {
 	function aw_graph()
@@ -25,35 +25,35 @@ class aw_graph extends aw_template
 
 	// for internal use
 	function _xml_start_element($parser,$name,$attribs)
-  {
+	{
 		switch($name)
-    {
+		{
 			// telgede info
-      case "AXIS":
+			case "AXIS":
 				$this->axis[$attribs[NAME]] = $attribs;
-        break;
+				break;
 
-      // üldine info graafikute kohta
-      case "GENERAL":
+			// üldine info graafikute kohta
+			case "GENERAL":
 				$this->config = $attribs;
-        break;
+			break;
 
 			case "BORDER":
 				$this->border = $attribs;
 				break;
 
 			default:
-        // do nothing
-    };
+				// do nothing
+		};
 	}
 
 	function _xml_end_element($parser,$name)
-  {
-  }
+	{
+	}
 
-  function _xml_data_handler($parser,$data)
-  {
-  }
+	function _xml_data_handler($parser,$data)
+	{
+	}
 
 	// graafiku kuju defineeritakse XML faili abil
 	function parse_xml_def($file)

@@ -1,195 +1,146 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.7 2004/02/25 16:03:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.8 2004/02/27 13:04:05 kristo Exp $
 // aw_test.aw - AW remote control
-class aw_test extends aw_template 
+
+/*
+
+@classinfo syslog_type=ST_AW_TEST relationmgr=yes no_status=1 no_comment=1
+
+@default table=objects
+@default field=meta
+@default method=serialize
+@default group=general
+
+@property login type=relpicker reltype=RELTYPE_LOGIN 
+@caption AW Login
+
+@property activate type=text store=no editonly=1
+
+
+@property urls type=callback callback=callback_get_urls store=no
+@caption P&auml;ringud
+
+@reltype LOGIN value=1 clid=CL_AW_LOGIN
+@caption aw login
+
+*/
+
+class aw_test extends class_base
 {
 	function aw_test($args = array())
 	{
 		extract($args);
-		$this->init("automatweb/aw_test");
-	}
-	
-	/**  
-		
-		@attrib name=new params=name default="0"
-		
-		@param parent required type=int acl="add"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function add($arr)
-	{
-		return $this->change($arr);
+		$this->init(array(
+			"tpldir" => "automatweb/aw_test",
+			"clid" => CL_AW_TEST
+		));
+		$this->num = 15;
 	}
 
-	/**  
-		
-		@attrib name=change params=name default="0"
-		
-		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function change($args = array())
+	function callback_get_urls($arr)
 	{
-		extract($args);
-		if ($parent)
+		$acts = array();
+		$values = $arr["obj_inst"]->meta("urls");
+		for($i = 0; $i < $this->num; $i++)
 		{
-			$act = "Lisa AW testobjekt";
+			$rt = 'url_'.$i;
+
+			$acts[$rt] = array(
+				'name' => $rt,
+				'caption' => "Url $i",
+				'type' => 'textbox',
+				'value' => $values[$i],
+				'group' => $arr["prop"]["group"],
+			);
 		}
-		else
-		{
-			$act = "Muuda AW testobjekti";	
-			$obj = $this->get_obj_meta($id);
-			$meta = $obj["meta"];
-			$parent = $obj["parent"];
-		};
-		$this->read_template("change.tpl");
-		$this->mk_path($parent,$act);
-		$this->get_objects_by_class(array("class" => CL_AW_LOGIN));
-		$logins = array();
-		while($row = $this->db_next())
-		{
-			$logins[$row["oid"]] = $row["name"];
-		};
 
-		$this->vars(array(
-			"name" => $obj["name"],
-			"login" => $this->picker(-1,$logins),
-			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
-		));
-		return $this->parse();
-	}
+		return $acts;
+	}	
 
-
-	/**  
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit($args = array())
+	function get_property($arr)
 	{
-		extract($args);
-		if ($id)
+		$prop =& $arr["prop"];
+		switch ($prop["name"])
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_AW_TEST,
-			));
-		};
-
-		return $this->mk_my_orb("change",array("id" => $id));
-	}
-
-	////
-	// !This is the place where the user can choose a host, username, password and requests to test
-	function config($args = array())
-	{
-		extract($args);
-		$this->read_adm_template("config.tpl");
-		$num = 15;
-		$q = "";
-		$awf = get_instance("file");
-		$dat = $awf->get_special_file(array(
-			"name" => "testsuite.ser",
-		));
-		$data = aw_unserialize($dat);
-		for ($i = 0; $i < $num; $i++)
-		{
-			$this->vars(array(
-				"id" => $id,
-				"query" => $data["qs"][$i],
-			));
-			$q .= $this->parse("QUERY");
-		};
-
-		$this->vars(array(
-			"QUERY" => $q,
-			"server" => ($data["server"]) ? $data["server"] : "aw.struktuur.ee",
-			"reforb" => $this->mk_reforb("submit_config",array()),
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Submits the config
-	function submit_config($args = array())
-	{
-		extract($args);
-		$block = array("server" => $server,"qs" => $query);
-		$contents = aw_serialize($block,SERIALIZE_PHP);
-		$awf = get_instance("file");
-		$awf->put_special_file(array(
-			"name" => "testsuite.ser",
-			"content" => $contents,
-		));
-
-		// that's the name of the query button and if it's set then it means we have to do the test run
-		if ($do_query)
-		{
-			print "starting test run, please be patient, it _will_ take some time<br />";
-			$this->handshake(array(
-				"host" => $server,
-			));
-
-			$this->login(array(
-				"host" => $server,
-				"uid" => $uid,
-				"password" => $password,
-			));
-
-			print "<pre>";
-			print "Sending requests now\n";
-
-			if (is_array($query))
-			{
-				foreach($query as $key => $val)
+			case "activate":
+				if (!$arr["obj_inst"]->prop("login"))
 				{
-					if (strlen($val) > 0)
-					{
-						print "Sending $val";
-						flush();
-						$this->send_request(array(
-							"host" => $server,
-							"req" => $val,
-						));
-						print "-------------------------------------------------------\n";
-						flush();
-					};
+					return PROP_IGNORE;
+				}
+				$prop['value'] = html::href(array(
+					"url" => $this->mk_my_orb("activate", array("id" => $arr["obj_inst"]->id())),
+					"caption" => "K&auml;ivita"
+				));
+				break;
+		}
+		
+		return PROP_OK;
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+
+		switch ($prop["name"])
+		{
+			case "urls":
+				$urls = array();
+				for($i = 0; $i < $this->num; $i++)
+				{
+					$urls[$i] = $arr["request"]["url_".$i];
+				}
+				$arr["obj_inst"]->set_meta("urls", $urls);
+				break;
+		}
+
+		return PROP_OK;
+	}
+
+	/** runs the test
+	
+		@attrib name=activate
+
+		@param id required type=int acl=view
+
+	**/
+	function activate($args = array())
+	{
+		extract($args);
+
+		$o = obj($id);
+		
+		$rl = get_instance("remote_login");
+		list($server, $this->cookie) = $rl->login_from_obj($o->prop("login"));
+
+		print "<pre>";
+		print "Sending requests now\n";
+
+		$query = $o->meta("urls");
+		if (is_array($query))
+		{
+			foreach($query as $key => $val)
+			{
+				if (strlen($val) > 0)
+				{
+					print "Sending $val";
+					flush();
+					$this->send_request(array(
+						"host" => $server,
+						"req" => $val,
+					));
+					print "-------------------------------------------------------\n";
+					flush();
 				};
 			};
+		};
 
-			print "All requests sent\n";
-			print "</pre>";
+		print "All requests sent\n";
+		print "</pre>";
 			
-			$this->logout(array(
-				"host" => $server,
-			));
-			exit;
-		}
-		return $this->mk_my_orb("config",array());
+		$this->logout(array(
+			"host" => $server,
+		));
+		exit;
 	}
 
 
@@ -362,10 +313,5 @@ class aw_test extends aw_template
 		print "</pre>";
 		flush();
 	}
-		
-
-
-
-
 };
 ?>
