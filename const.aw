@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.33 2001/08/01 23:23:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.34 2001/08/02 00:26:48 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -31,16 +31,13 @@ if (empty($tpldirs))
 	$tpldirs["ebs.elkdata.com"] = $sitedir . "/../templates";
 }
 
-// et siis selline muutuja
-$siteconfig["uus.anne.ee"] = "/www/aw_anne/public/const.aw";
-
 // temp kataloogi asukoht. nuh et kui kunagi asi windowsi peal k2ima hakkab, siis saax selle siit 2r muuta.
 $tmpdir = "/tmp";
 
 // saidi siseste linkide jaox
 if (empty($index_file))
 {
-$index_file = "index";
+	$index_file = "index";
 }
 
 // kasutatakse saidi juurde kuuluvate objektide idenfitiseerimiseks
@@ -164,24 +161,11 @@ if ($pi)
 	};
 };
 
-// menu definitions, max - maximum depth of menu, can_l3 - whether you can insert "level 3" items in the menu
-// umm. imho on see vale lähenemine
-// miskid hardcoded id-d. BAD.
-// njah. a selle v6ib dynaamilisex teha. et andmebaasi kirjutada ja yle webi konffida nyyd. kuna menyyeditor v6tab nyyd
-// alamtemplated selle j2rgi, mis siin kirjas on. 
 if (isset($menu_defs) && !is_array($menu_defs))
 {
 	$menu_defs = array();
 }
-									 									 									 
-//------------------------------------------------------------------------------
-// alfabeet - user for various tables
-$alfa = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O",
-                "P","Q","R","S","T","U","V","W","X","Y","Z");
-// ----------------------------------------------------------------------------
 
-// nyyd on voimalik laadida ka mitu librat yhe calliga 
-// a la classload("users","groups","someothershit");
 
 // sellest saab lahti, kui igalpool include("const.aw") asendada include_once("const.aw")-ga
 if (function_exists("classload")) 
@@ -219,6 +203,8 @@ else
 		}
 	}
 
+	// nyyd on voimalik laadida ka mitu librat yhe calliga 
+	// a la classload("users","groups","someothershit");
 	function classload($args)
 	{
 		$arg_list = func_get_args();
@@ -505,6 +491,7 @@ define("PRG_EKOMAR",41);
 define("PRG_KEYWORD",42);
 define("PRG_CONF_JOIN_MAIL",43);
 define("PRG_CSS_EDITOR",44);
+define("PRG_LOGIN_MENU",45); // vastavalt grupile login menüü määramine
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -535,6 +522,7 @@ PRG_EVENT_PLACES			=> array("name" => MN_EVENT_PLACES,			"url" => "orb.$ext?clas
 PRG_GALERII						=> array("name" => MN_GALERII,					"url" => "galerii.aw"),
 PRG_KROONIKA_BANNER		=> array("name" => MN_KROONIKA_BANNER,	"url" => "banner.aw?op=banner"),
 PRG_KROONIKA_ESIKAAS	=> array("name" => MN_KROONIKA_ESIKAAS, "url" => "banner.aw?op=kaas"),
+PRG_LOGIN_MENU				=> array("name" => "Login menüüd", 			"url" => "orb.$ext?class=config&action=login_menus"),
 PRG_JOINFORM					=> array("name" => MN_JOIN_FORM,				"url" => "config.aw?type=join_form"),
 PRG_ICONDB						=> array("name" => MN_ICON_DB,					"url" => "config.aw?type=icon_db"),
 PRG_CLASS_ICONS				=> array("name" => MN_CLASS_ICONS,			"url" => "config.aw?type=class_icons"),
