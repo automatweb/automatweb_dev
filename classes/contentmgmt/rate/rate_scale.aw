@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.4 2004/02/11 20:14:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.5 2004/02/12 20:15:44 duke Exp $
 
 /*
 
@@ -72,14 +72,14 @@ class rate_scale extends class_base
 			case "nr_from":
 			case "nr_to":
 			case "nr_step":
-				if ("" == $arr["obj_inst"]->prop("type_nr"))
+				if (1 != $arr["obj_inst"]->prop("type_nr"))
 				{
 					return PROP_IGNORE;
 				}
 				break;
 
 			case "ud_scale":
-				if ("" == $arr["obj_inst"]->prop("type_ud"))
+				if (2 == $arr["obj_inst"]->prop("type_ud"))
 				{
 					return PROP_IGNORE;
 				}
@@ -109,7 +109,7 @@ class rate_scale extends class_base
 		$this->db_query("DELETE FROM rate2clid WHERE rate_id = '$id'");
 		if ($d->count() == 0)
 		{
-			$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$rate_clid"')");
+			$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$rate_clid."')");
 		}
 	}
 
@@ -153,10 +153,10 @@ class rate_scale extends class_base
 	function _get_scale($id)
 	{
 		$ret = array();
-		$ob = $this->get_object($id);
-		if ($ob['meta']['type_nr'] == 1)
+		$ob = new object($id);
+		if ($ob->prop('type_nr') == 1)
 		{
-			for ($i = $ob['meta']['nr_from']; $i <= $ob['meta']['nr_to']; $i += $ob['meta']['nr_step'])
+			for ($i = $ob->prop('nr_from'); $i <= $ob->prop('nr_to'); $i += $ob->prop('nr_step'))
 			{
 				$ret[$i] = $i;
 			}
