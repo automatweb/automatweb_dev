@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.8 2004/12/17 13:05:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.9 2005/01/06 13:07:34 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -13,11 +13,17 @@
 @property event_cfgform type=relpicker reltype=RELTYPE_EVENT_CFGFORM
 @caption Kasutatav vorm
 
-@property show_current_mont type=checkbox ch_value=1 field=meta method=serialize
-@caption Naita vaikimisi antud kuu sündmusi
+@property use_output type=relpicker reltype=RELTYPE_EVENT_SHOW
+@caption Näitamise vorm
 
+@property show_type type=select field=meta method=serialize
+@caption Näita vaikimisi sündmusi
 
 @default group=ftsearch
+
+@property navigator_range type=chooser orient=vertical
+@caption Ajavahemiku navigaator
+
 @property ftsearch_fields type=chooser multiple=1 orient=vertical
 @caption Vabateksti väljad
 
@@ -29,14 +35,30 @@
 @property search_form type=callback callback=callback_search_form store=no
 @caption Otsinguvorm
 
-@default group=ftresults
-@property result_table type=table 
-@caption Tulemuste tabel
+@default group=styles
+
+@property month_navigator_style type=relpicker reltype=RELTYPE_STYLE
+@caption Kuu navigaatori stiil
+
+@property week_navigator_style type=relpicker reltype=RELTYPE_STYLE
+@caption Nädala navigaatori stiil
+
+@property sform_table_style type=relpicker reltype=RELTYPE_STYLE
+@caption Otsinguvormi tabeli stiil
+
+@property sform_submit_style type=relpicker reltype=RELTYPE_STYLE
+@caption Otsinguvormi nupu stiil
 
 @groupinfo ftsearch caption="Vabateksti otsing"
 @groupinfo ftform caption="Otsinguvorm seadistamine"
 @groupinfo ftsearch caption="Otsinguvorm"
+@groupinfo styles caption="Stiilid"
+
 @groupinfo ftresults caption="Tulemuste seadistamine"
+@default group=ftresults
+
+@property result_table type=table 
+@caption Tulemuste tabel
 
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
 @caption Sündmuse vorm
@@ -49,6 +71,9 @@
 
 @reltype EVENT_SHOW value=4 clid=CL_CFGFORM
 @caption Näitamise vorm
+
+@reltype STYLE value=5 clid=CL_CSS
+@caption Stiil
 
 */
 
@@ -64,7 +89,7 @@ class event_search extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "applications/calendar",
-			"clid" => CL_EVENT_SEARCH
+			"clid" => CL_EVENT_SEARCH,
 		));
 
 		$this->fields = array("fulltext","start_date","end_date","project1","project2", "active", "format");
@@ -134,13 +159,14 @@ class event_search extends class_base
 		
 		$t->define_field(array(
 			"name" => "active",
-			"caption" => "Aktiivne",
+			"caption" => t("Aktiivne"),
 		));
 		
 		$t->set_sortable(false);
 		
 		$t->define_data(array(
-			"type" => t("Tekstiotsing"),
+			//"type" => 
+			"name" => t("Tekstiotsing"),
 			"caption" => html::textbox(array(
 				"name" => "fulltext[caption]",
 				"value" => $formconfig["fulltext"]["caption"] ? $formconfig["fulltext"]["caption"] : ("Tekstiotsing"),
@@ -163,7 +189,7 @@ class event_search extends class_base
 		
 		$t->define_data(array(
 
-			"type" => t("Alguskuupäev"),
+			"name" => t("Alguskuupäev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
 				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuupäev"),
@@ -177,7 +203,7 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"type" => t("Lõppkuupäev"),
+			"name" => t("Lõppkuupäev"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
 				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lõppkuupäev"),
@@ -204,7 +230,7 @@ class event_search extends class_base
 		};
 		
 		$t->define_data(array(
-			"type" => t("Projekt 1"),
+			"name" => t("Projekt 1"),
 			"caption" => html::textbox(array(
 				"name" => "project1[caption]",
 				"value" => $formconfig["project1"]["caption"] ? $formconfig["project1"]["caption"] : t("Projekt 1"),
@@ -222,7 +248,7 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"type" => t("Projekt 2"),
+			"name" => t("Projekt 2"),
 			"caption" => html::textbox(array(
 				"name" => "project2[caption]",
 				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : t("Projekt 2"),
@@ -238,6 +264,19 @@ class event_search extends class_base
 				"checked" => $formconfig["project2"]["active"],
 			))
 		));
+		$t->define_data(array(
+			"name" => t("Otsi nupp"),
+			"caption" => html::textbox(array(
+				"name" => "search_btn[caption]",
+				"value" => $formconfig["search_btn"]["caption"] ? $formconfig["search_btn"]["caption"] : t("Otsi nupp"),
+			)),
+			"data" => "",
+			"active" => html::checkbox(array(
+				"name" => "search_btn[active]",
+				"value" => $formconfig["search_btn"]["active"],
+				"checked" => $formconfig["search_btn"]["active"],
+			))
+		));
 
 	}
 
@@ -247,6 +286,18 @@ class event_search extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "navigator_range":
+				$prop["options"] = array(
+					0 => "Kuu navigaator",
+					1 => "Nädala navigaator",
+				);
+				break;
+			case "show_type":
+				$prop["options"] = array(
+					0 => "Kuu järgi",
+					1 => "Päeva järgi",
+				);
+				break;
 			case "ftsearch_fields":
 				$this->gen_ftsearch_fields($arr);
 				break;
@@ -254,13 +305,55 @@ class event_search extends class_base
 			case "ftform":
 				$this->gen_ftform($arr);
 				break;
-
+				
 			case "result_table":
 				$retval = $this->gen_result_table($arr);
 				break;
-
 		};
 		return $retval;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		$o = &$arr["obj_inst"];
+		switch($prop["name"])
+		{
+			case "ftform":
+				$fdata = array();
+				
+				foreach($this->fields as $fname)
+				{
+					if ($arr["request"][$fname])
+					{
+						$fdata[$fname] = $arr["request"][$fname];
+					};
+				};
+				$o->set_meta("formconfig", $fdata);
+				break;
+
+			case "result_table":
+				$o->set_meta("result_table", $arr["request"]["result_table"]);
+				break;
+		}
+		return $retval;
+	}	
+
+	////////////////////////////////////
+	// the next functions are optional - delete them if not needed
+	////////////////////////////////////
+
+	////
+	// !this will be called if the object is put in a document by an alias and the document is being shown
+	// parameters
+	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	function parse_alias($arr)
+	{
+		
+		$args = $_GET;
+		$args["id"] = $arr["alias"]["to"];
+		return $this->show($args);
 	}
 
 	function gen_result_table($arr)
@@ -288,15 +381,33 @@ class event_search extends class_base
 			"caption" => t("Jrk"),
 			"align" => "center",
 		));
-
+		$t->define_field(array(
+			"name" => "props",
+			"caption" => t("Seaded"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "sep",
+			"caption" => t("Väljade eraldaja"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "fields",
+			"caption" => t("Lisaväljad"),
+		));
+		
 		$oldvals = $o->meta("result_table");
 
 		$tc = get_instance(CL_CFGFORM);
 		$cform_obj = new object($this->cfgform_id);
 		$use_output = $cform_obj->prop("use_output");
 
-
-		if (!is_oid($use_output))
+		$prop_output = $arr["obj_inst"]->prop("use_output");
+		if(is_oid($prop_output))
+		{
+			$use_output = $prop_output;
+		}
+		elseif (!is_oid($use_output))
 		{
 			$arr["prop"]["error"] = t("Väljundvorm on valimata");
 			return PROP_ERROR;
@@ -308,15 +419,24 @@ class event_search extends class_base
 		$props = $tc->get_props_from_cfgform(array("id" => $use_output));
 
 		$props["name"]["name"] = "name";
-
+		$names = array();
+		foreach($props as $prz)
+		{
+			$names[$prz["name"]] = $prz["name"];
+		}
 		foreach($props as $prop)
 		{
 			$sname = $prop["name"];
-			$t->define_data(array(
+			$prps = array(
 				"caption" => html::textbox(array(
 					"name" => "${pname}[${sname}][caption]",
 					"value" => empty($oldvals[$sname]["caption"]) ? $prop["caption"] : $oldvals[$sname]["caption"],
 					"size" => 20,
+				)),
+				"sep" => html::textbox(array(
+					"name" => "${pname}[${sname}][sep]",
+					"value" => $oldvals[$sname]["sep"],
+					"size" => 2,
 				)),
 				"name" => $prop["name"],
 				"active" => html::checkbox(array(
@@ -329,59 +449,37 @@ class event_search extends class_base
 					"value" => $oldvals[$sname]["ord"],
 					"size" => 2,
 				)),
-					
-			));
-
-
+			);
+			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select")
+			{
+				$prps["props"] = html::textbox(array(
+					"name" => "${pname}[${sname}][props]",
+					"value" => $oldvals[$sname]["props"],
+					"size" => 15,
+				));
+			}
+			//arr($oldvals[$sname]["fields"]);
+			$nums = count($oldvals[$sname]["fields"]);
+			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
+			{
+				if(empty($v))
+				{
+					$nums--;
+				}
+			}
+			for($i = 0; $i <= $nums; $i++)
+			{
+				$prps["fields"] .= html::select(array(
+					"name" => "${pname}[${sname}][fields][$i]",
+					"options" => array(0 => "-- vali --") + $names,
+					"value" => $oldvals[$sname]["fields"][$i],
+				))."<br />";
+			}
+			$t->define_data($prps);
 		};
 		$t->set_sortable(false);
-
 	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		$o = $arr["obj_inst"];
-		switch($prop["name"])
-		{
-			case "ftform":
-				$o = $arr["obj_inst"];
-				$fdata = array();
-				
-				foreach($this->fields as $fname)
-				{
-					if ($arr["request"][$fname])
-					{
-						$fdata[$fname] = $arr["request"][$fname];
-					};
-				};
-				$o->set_meta("formconfig",$fdata);
-				break;
-
-			case "result_table":
-				$o->set_meta("result_table",$arr["request"]["result_table"]);
-				break;
-
-		}
-		return $retval;
-	}	
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		$args = $_GET;
-		$args["id"] = $arr["alias"]["to"];
-		return $this->show($args);
-	}
-
+	
 	function get_search_results($arr)
 	{
 		// 1. pane kokku object list
@@ -390,11 +488,11 @@ class event_search extends class_base
 		$ft_fields = $ob->prop("ftsearch_fields");
 		$all_projects1 = new object_list(array(
 			"parent" => array($formconfig["project1"]["rootnode"]),
-			"class_id" => CL_PROJECT,
+			"class_id" => array(CL_PROJECT, CL_PLANNER),
 		));
 		$all_projects2 = new object_list(array(
 			"parent" => array($formconfig["project2"]["rootnode"]),
-			"class_id" => CL_PROJECT,
+			"class_id" => array(CL_PROJECT, CL_PLANNER),
 		));
 		$par1 = $all_projects1->ids();
 		$par2 = $all_projects2->ids();
@@ -414,7 +512,7 @@ class event_search extends class_base
 		       "conditions" => $or_parts,
 	       ));
 		$search["sort_by"] = "planner.start";
-		$search["class_id"] = array(CL_CALENDAR_EVENT);
+		$search["class_id"] = array(CL_CRM_MEETING, CL_CALENDAR_EVENT);
 		$start_tm = strtotime("today 0:00");
 		$end_tm = strtotime("+30 days",$start_tm);
 		$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
@@ -449,7 +547,7 @@ class event_search extends class_base
 		// vormigenekas
 		// projektivalikute asemel kuvatakse 
 		$ob = new object($arr["id"]);
-		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		$htmlc = get_instance("cfg/htmlclient", array("template" => "webform.tpl"));
 		$htmlc->start_output();
 
 		$formconfig = $ob->meta("formconfig");
@@ -461,11 +559,12 @@ class event_search extends class_base
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 		
-		
+		$sd = $ob->prop("show_type") == 1 ? date('d') : 1;
+		$ed = $ob->prop("show_type") == 1 ? date('d') : 31;
 		if($start_tm ==-1 || !$end_tm ==-1)
 		{
-			$start_tm = mktime(0,0,0,date('m'), 1, date('Y'));
-			$end_tm = mktime(0,0,0,date('m'), 31, date('Y'));
+			$start_tm = mktime(0,0,0,date('m'), $sd, date('Y'));
+			$end_tm = mktime(0,0,0,date('m'), $ed, date('Y'));
 			
 			$arr["start_date"]["month"] = date('m');
 			$arr["start_date"]["year"] = date('Y');
@@ -542,13 +641,12 @@ class event_search extends class_base
 		{
 			$do_search = true;
 		};
-		//$do_search = true;
-		
+		$do_search = true;
 		if ($do_search)
 		{
 			$search["parent"] = array();
 			$search["sort_by"] = "planner.start";
-			$search["class_id"] = array(CL_CALENDAR_EVENT);
+			$search["class_id"] = array(CL_CALENDAR_EVENT, CL_CRM_MEETING);
 			$by_parent = array();
 			$ft_fields = $ob->prop("ftsearch_fields");
 			$all_projects1 = new object_list(array(
@@ -563,7 +661,10 @@ class event_search extends class_base
 			$par2 = $all_projects2->ids();
 			if ($start_tm != -1)
 			{
-				$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
+				$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+				$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+				$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+				$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			};
 			if (is_oid($arr["project1"]))
 			{
@@ -582,7 +683,6 @@ class event_search extends class_base
 			{
 				$search["parent"] = array_merge($search["parent"],$all_projects2->ids());
 			};
-
 			// kuidas ma nüüd need parentid kokku laon?
 			if ($arr["fulltext"])
 			{
@@ -602,6 +702,7 @@ class event_search extends class_base
 			$clinf = aw_ini_get("classes");
 			$edata = array();
 			$ecount = array();
+			//arr($search);
 			// there is a fatal flaw in my logic
 			if (sizeof($search["parent"]) != 0)
 			{
@@ -612,7 +713,7 @@ class event_search extends class_base
 				*/
 				$this->read_template("search_results.tpl");
 				$tabledef = $ob->meta("result_table");
-				
+				//arr($tabledef);
 				uasort($tabledef,array($this,"__sort_props_by_ord"));
 				// first I have to sort the bloody thing in correct order
 				//$this->sub_merge = 1;
@@ -681,13 +782,17 @@ class event_search extends class_base
 					$ecount[$orig->id()]++;
 				};
 			};
-
-			$blist = new object_list(array(
-				"brother_of" => $origs,
-			));
+			$blist = array();
+			if(!empty($origs))
+			{
+				$fls = new object_list(array(
+					"brother_of" => $origs,
+				));
+				$blist = $fls->arr();
+			}
+			enter_function("event_search::search_speed");
 			$pr1 = $formconfig["project1"]["rootnode"];
-			
-			foreach($blist->arr() as $b_o)
+			foreach($blist as $b_o)
 			{
 				if (!is_oid($b_o->parent()) || !$this->can("view", $b_o->parent()))
 				{
@@ -704,61 +809,66 @@ class event_search extends class_base
 					};
 				};
 			};
-
+			exit_function("event_search::search_speed");
 			//arr($edata);
 			$res = "";
 			
 			$aliasmrg = get_instance("aliasmgr");
-							
+			//arr($result_table);
+			//arr($edata);
+			//arr($tabledef);
+			//arr($tabledef);
 			foreach($edata as $ekey => $eval)
 			{
-				//if (!empty($eval["parent1"]) && !empty($eval["parent2"]))
-				//{
-					$cdat = "";
-					foreach($tabledef as $sname => $propdef)
+				$cdat = "";
+				foreach($tabledef as $sname => $propdef)
+				{
+					if(!$propdef["active"])
 					{
-						if ($propdef["active"])
+						continue;
+					}
+					$names = array_merge($sname, safe_array($tabledef[$sname]["fields"]));
+					$val = array();
+					foreach($names as $nms)
+					{
+						if(empty($nms))
 						{
-							$val = $eval[$sname];
-							if ($sname == "start1")
+							continue;
+						}
+						$v = $eval[$nms];
+						if ($nms == "start1" || $nms == "end")
+						{
+							if(!empty($tabledef[$nms]["props"]))
 							{
-								
-								if($formconfig["start_date"]["format"] == 1)
-								{
-									$val = date("d-m-Y",$val)."&nbsp;&nbsp;|&nbsp;&nbsp;".date("H:m",$val)." - ".date("H:m", $eval["end"]);
-								}
-								else
-								{
-									$val = date("d-m-Y",$val);
-								}
-							};
-							if ($sname == "end")
-							{
-								$val = date("d-m-Y",$val);
-							};
-							if($sname == "time")
-							{
-								$val = date("H:m", $eval["start1"]). " - " .date("H:m", $eval["end"]);
+								$v = date($tabledef[$nms]["props"], $v);
 							}
-							if ($sname == "name")
+							else
 							{
-								$val = html::href(array(
-									"url" => aw_ini_get("baseurl") . "/" . $eval["event_id"],
-									"caption" => $val,
-								));
-							};
-							
-							$aliasmrg->parse_oo_aliases($ekey,$val);
-							
-							$this->vars(array("cell" => $val));
-						 	//print "exporting $sname" . $eval[$sname];
-							$cdat .= $this->parse("CELL");
-						};
-						$this->vars(array("CELL" => $cdat));
-				};
-				$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
+								$v = date("d-m-Y", $v);
+							}
+						}
+						$aliasmrg->parse_oo_aliases($ekey, $v);
+						$val[] = $v;
+					}
+					$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
+					//arr($val);
+					$this->vars(array("cell" => $val));
+					//print "exporting $sname" . $eval[$sname];
+					$cdat .= $this->parse("CELL");
+					$this->vars(array("CELL" => $cdat));
+				}
+				if(!empty($eval["content"]))
+				{
+					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
+					$content = $eval["content"];
+				}
+				elseif(!empty($eval["utextarea1"]))
+				{
+					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
+					$content = $eval["utextarea1"];
+				}
 				$this->vars(array(
-					"fulltext" => $eval["utextarea1"],
+					"fulltext" => $content,
 				));
 				
 				$i++;
@@ -844,6 +954,7 @@ class event_search extends class_base
 			$this->vars(array(
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
+				//"next_month_url" => str_replace("class", "alias", $this->mk_my_orb("search", $next_month_args, "event_search")),
 				"prev_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
 				"next_month_url" => $this->mk_my_orb("search", $next_month_args, "event_search"),
 				"next_weeks" => $res_weeks,
@@ -878,7 +989,6 @@ class event_search extends class_base
 			"form_only" => 1
 		));
 
-		
 		return $html;
 
 		// kuupäeva numbrid on lihtsalt selectid
@@ -892,7 +1002,7 @@ class event_search extends class_base
 		};
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"class_id" => CL_PROJECT,
+			"class_id" => array(CL_PROJECT, CL_PLANNER),
 		));
 		return array("0" => t("kõik")) + $ol->names();
 
