@@ -491,10 +491,15 @@ function savemenu() {
 		<td class="celltext"><select name=admin_feature><option value=0>{VAR:admin_feature}</select></td>
 	</tr>
 <!-- END SUB: ADMIN_FEATURE -->
+
 <!-- SUB: PMETHOD -->
 	<tr>
 		<td class="celltext">&nbsp;Meetod:&nbsp;</td>
 		<td class="celltext"><select name="pclass">{VAR:pclasses}</select></td>
+	</tr>
+	<tr>
+		<td class="celltext">&nbsp;URL viitab:&nbsp;</td>
+		<td class="celltext"><input type="checkbox" name="pm_url_admin" value="1" {VAR:pm_url_admin}> Adminni <input type="checkbox" name="pm_url_menus" value="1" {VAR:pm_url_menus}> Men&uuml;&uuml;d</td>
 	</tr>
 	<!--
 	<tr>
