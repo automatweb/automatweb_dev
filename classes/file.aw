@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.70 2004/02/11 17:22:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.71 2004/03/12 11:31:21 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -129,7 +129,7 @@ class file extends class_base
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
-		$form_data = &$arr["form_data"];
+		$request = &$arr["request"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -182,7 +182,6 @@ class file extends class_base
 						$mimeregistry = get_instance("core/aw_mime_types");
 
 						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
-						//$form_data["type"] = $realtype;
 
 						$data["value"] = $fs;
 						$arr["obj_inst"]->set_name($file_name);
