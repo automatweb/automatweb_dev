@@ -82,7 +82,7 @@ function check_generic_loader()
 {VAR:content}
 </table>
 <div align="center">
-<font face="Verdana,Arial,Helvetica,sans-serif" size="-2" color="#8AABBE">AutomatWeb&trade;<br><br></font>
+<font face="Verdana,Arial,Helvetica,sans-serif" size="-2" color="#8AABBE">AutomatWeb&reg;<br><br></font>
 </div>
 </center>
 </body>
