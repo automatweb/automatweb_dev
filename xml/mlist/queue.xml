@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<tabledef>
+
+<definitions>
+<titlebar style="title"/>
+<header_normal   value="title"/>
+<header_sortable value="title"/>
+<header_sorted   value="titlesel"/>
+<content_style1  value="fgtext"/>
+<content_style2  value="fgtext"/>
+<style_alfa	 value="fcontent_line2"/>
+<content_style1_selected value="fgtextsel"/>
+<content_style2_selected value="fgtextsel"/>
+<frameattribs border="0" cellspacing="0" cellpadding="0" width="100%"/>
+<framebgcolor bgcolor="#CCCCCC"/>
+<tableattribs border="0" cellspacing="1" cellpadding="2" width="100%"/>
+<default_order order="desc" value="start_at"/>
+</definitions>
+
+<actions>
+</actions>
+
+<data>
+<field name="qid" caption="#" talign="center" sortable="1" type="int"/>
+<field name="lid" caption="List" talign="center" sortable="1"/>
+<field name="mid" caption="Meil" talign="center" sortable="1"/>
+<field name="status" caption="Olek" talign="center" sortable="1"/>
+<field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-M-y" sortable="1"/>
+<field name="last_sent" caption="Viimane" talign="center" type="time" format="H:i d-M-y" sortable="1"/>
+<field name="patch_size" caption="Korraga" talign="center" sortable="1" type="int"/>
+<field name="delay" caption="Oota" talign="center" sortable="1" type="int"/>
+<field name="protsent" caption="Valmis" talign="center" sortable="1"/>
+<field name="vali" caption="Vali" talign="center"/>
+</data>
+
+</tabledef>
