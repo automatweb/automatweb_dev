@@ -1431,7 +1431,7 @@ class grid_editor extends class_base
 				$st = $this->lrow_style;
 			}
 
-			if (!$st && $this->arr["table_style"] && $this->num_lrows && $col >= ($this->arr["cols"] - $this->num_lcols))
+			if (!$st && $this->arr["table_style"] && $this->num_lcols && $col >= ($this->arr["cols"] - $this->num_lcols))
 			{
 				$st = $this->lcol_style;
 			}
