@@ -234,7 +234,7 @@ class _int_object_loader
 		$t_oid = $GLOBALS["objects"][$oid]->save();
 		if ($t_oid != $oid)
 		{
-			// reloacate the object in the global list
+			// relocate the object in the global list
 			$GLOBALS["objects"][$t_oid] = $GLOBALS["objects"][$oid];
 			unset($GLOBALS["objects"][$oid]);
 		}
