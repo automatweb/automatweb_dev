@@ -186,7 +186,7 @@ class rate extends class_base
 			
 			if ($type == RATING_AVERAGE)
 			{
-				return rount($avg,2);
+				return round($avg,2);
 			}
 			else
 			if ($type == RATING_VIEWS)
