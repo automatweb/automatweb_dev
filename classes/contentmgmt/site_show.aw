@@ -996,6 +996,25 @@ class site_show extends class_base
 		return count($this->path) - ($pos+1);
 	}
 
+	function _helper_get_login_menu_id()
+	{
+		if (!$this->current_login_menu_id)
+		{
+			$cfg = get_instance("config");
+			$_id = $cfg->get_login_menus();
+			if ($_id)
+			{
+				$this->current_login_menu_id = $_id;
+			}
+			else
+			{
+				$this->current_login_menu_id = array_search("LOGGED", aw_ini_get("menuedit.menu_defs"));
+			}
+			
+		}
+		return $this->current_login_menu_id;
+	}
+
 	function do_draw_menus($arr)
 	{
 		if (!isset($arr["compiled_filename"]) || $arr["compiled_filename"] == "")

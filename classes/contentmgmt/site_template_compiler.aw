@@ -8,7 +8,7 @@ define("OP_SHOW_ITEM", 4);		// params { tpl (fully qualified name)}
 define("OP_LOOP_LIST_BEGIN", 5);		// params { a_parent, level, in_parent_tpl}
 
 // list filter creation
-define("OP_LIST_BEGIN", 6);		// params { a_parent, level }
+define("OP_LIST_BEGIN", 6);		// params { a_parent, level, a_parent_p_fn}
 define("OP_LIST_FILTER", 7);	// params { prop, value }
 define("OP_LIST_END", 8);		// params {}
 
@@ -115,6 +115,16 @@ class site_template_compiler extends aw_template
 
 		foreach($this->menu_areas as $area => $adat)
 		{
+			if ($area == "LOGGED")
+			{
+				$adat["a_parent_p_fn"] = "\$this->_helper_get_login_menu_id()";
+			}
+			else
+			{
+				$adat["a_parent_p_fn"] = $adat["parent"];
+			}
+
+			ksort($adat["levels"]);
 			foreach($adat["levels"] as $level => $ldat)
 			{
 				if (isset($this->no_top_level_code_for[$area][$level]))
@@ -165,6 +175,7 @@ class site_template_compiler extends aw_template
 			"op" => OP_LIST_BEGIN,
 			"params" => array(
 				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
 				"level" => $level,
 				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
 			)
@@ -465,7 +476,7 @@ class site_template_compiler extends aw_template
 		$this->brace_level++;
 		if ($arr["level"] == 1)
 		{
-			$ret .= $this->_gi()."\"parent\" => ".$arr["a_parent"].",\n";
+			$ret .= $this->_gi()."\"parent\" => ".$arr["a_parent_p_fn"].",\n";
 		}
 		else
 		{

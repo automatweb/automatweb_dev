@@ -127,7 +127,8 @@ class site_cache extends aw_template
 	function get_cached_compiled_filename($arr)
 	{
 		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template::".str_replace(".","_",$arr["template"]);
-		if (file_exists($fn) && is_readable($fn))
+		$tpl = $this->site_template_dir."/".$arr["template"];
+		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
 		{
 			return $fn;
 		}
