@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.7 2002/12/19 18:03:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.8 2003/08/22 09:04:12 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -70,10 +70,10 @@ class pullout extends class_base
 	function parse_alias($args = array())
 	{
 		extract($args);
-    if (!$alias)
-    {
+		if (!$alias)
+		{
 			return "";
-    }
+		}
 		return $this->view(array("id" => $alias["target"],"doc" => $oid));
 	}
 
@@ -96,6 +96,14 @@ class pullout extends class_base
 					$found = true;
 				}
 			}
+			if (count($meta["groups"]) < 1)
+			{
+				$found = true;
+			}
+		}
+		else
+		{
+			$found = true;
 		}
 
 		if (!$found || $meta["docs"] == $oid)
