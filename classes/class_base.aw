@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.20 2002/12/18 13:17:27 kristo Exp $
+// $Id: class_base.aw,v 2.21 2002/12/18 14:42:49 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -454,6 +454,7 @@ class class_base extends aliasmgr
 //                        die("Nothing to save! Error in the code?<br>");
 //                };
 
+		load_vcl('date_edit');
 		foreach($resprops as $property)
 		{
 			$name = $property["name"];
@@ -465,6 +466,11 @@ class class_base extends aliasmgr
 			if ($type == "text")
 			{
 				continue;
+			};
+			if ($type == "date_select")
+			{
+				// turn the array into a timestamp
+				$savedata[$name] = date_edit::get_timestamp($savedata[$name]);
 			};
 			if (($type == "select") && $property["multiple"])
 			{
@@ -906,7 +912,7 @@ class class_base extends aliasmgr
 	// !Figures out the value for property
 	function get_value(&$property)
 	{
-		$field = ($property["field"]) ? $property["field"] : $property["name"];
+		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
 		if ($property["table"] == "objects")
 		{
 			if ($field == "meta")
