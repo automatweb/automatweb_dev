@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.63 2004/09/09 11:06:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.64 2004/09/10 08:52:58 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -315,7 +315,14 @@ class ml_list extends class_base
 			$allow = true;
 		};
 		
-		$args["email"] = $args["mail"];
+		if (empty($args["email"]))
+		{
+			$args["email"] = $args["mail"];
+		}
+		if (empty($args["mail"]))
+		{
+			$args["mail"] = $args["email"];
+		}
 		$request = $args;
 		if (is_array($args["udef_txbox"]))
 		{
