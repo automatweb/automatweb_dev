@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.69 2001/06/21 16:52:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.70 2001/06/21 18:21:04 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1490,7 +1490,7 @@ class messenger extends menuedit_light
 					"subject" => $subject,
 					"to" => $dto,
 					"cc" => $dcc,
-					"message" => $message,
+					"message" => stripslashes($message),
 					"msg_id" => $msg_id,
 				));
 					
@@ -1521,9 +1521,10 @@ class messenger extends menuedit_light
 					$this->deliver(array(
 						"identity" => $identity,
 						"subject" => $subject,
-						"to" => $to,
+						"to" => "",
 						"message" => $message,
 						"msg_id" => $msg_id,
+						"alist" => $members,
 					));
 				};
 			};
@@ -1596,7 +1597,24 @@ class messenger extends menuedit_light
 		};
 
 		// noja lopuks siis, saadame meili minema ka
-		$this->awm->gen_mail();
+		if (is_array($alist) && sizeof($alist) > 0)
+		{
+			foreach($alist as $addr)
+			{
+				$this->awm->set_header("To",$addr);
+				$this->awm->gen_mail();
+				print ".";
+				flush();
+			}
+			print "<br>";
+			print sizeof($alist) . " kirja saadetud<br>";
+			print "<a href='?class=messenger'>tagasi messengeri</a>";
+			exit;
+		}
+		else
+		{
+			$this->awm->gen_mail();
+		};
 	}
 	
 	////
@@ -1617,7 +1635,12 @@ class messenger extends menuedit_light
 		classload("file");
 		$awf = new file();
 		$count = 0;
-	
+		
+		if (!is_array($attach))
+		{
+			return 0;
+		};
+
 		foreach($attach as $idx => $tmpname)
 		{
 			// opera paneb siia tyhja stringi, mitte none
