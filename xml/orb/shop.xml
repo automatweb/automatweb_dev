@@ -169,6 +169,8 @@
 					<required name="id"/>
 					<optional name="section"/>
 					<optional name="page"/>
+					<optional name="s_name"/>
+					<optional name="search"/>
 				</arguments>
 			</function>
 		</action>
@@ -293,6 +295,13 @@
 					<required name="num"/>
 					<required name="c_num"/>
 					<required name="eid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convorders">
+			<function name="convorders">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
