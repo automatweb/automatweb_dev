@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.8 2004/07/08 11:34:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.9 2004/07/08 12:32:04 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -407,6 +407,12 @@ class register_search extends class_base
 		{
 			$cff = obj($cfid);
 			$class_id = $cff->prop("ctype");
+
+			$cfgu = get_instance("cfg/cfgutils");
+			$f_props = $cfgu->load_properties(array(
+				"clid" => $class_id
+			));
+
 			$class_i = get_instance($class_id);
 			$tmp = $class_i->load_from_storage(array(
 				"id" => $cff->id()
@@ -417,6 +423,7 @@ class register_search extends class_base
 				if ($v["name"] != "needs_translation" && $v["name"] != "is_translated")
 				{
 					$properties[$k] = $v;
+					$properties[$k]["type"] = $f_props[$k]["type"];
 				}
 			}
 		}
@@ -482,19 +489,11 @@ class register_search extends class_base
 			);
 		}
 
-		#echo dbg::dump($tmp);
 		$i = get_instance($clid);
 		$xp = $i->parse_properties(array(
 			"properties" => $tmp,
 			"name_prefix" => "rsf"
 		));
-		/*
-		$xp = $i->process_properties(array(
-			"properties" => $tmp,
-			"name_prefix" => "rsf"
-		));
-		*/
-		//arr($xp);
 
 		$xp["search_butt"] = array(
 			"name" => "search_butt",
@@ -577,12 +576,16 @@ class register_search extends class_base
 			"class_id" => CL_REGISTER_DATA,
 			"register_id" => $reg->id()
 		);
-
 		foreach($props as $pn => $pd)
 		{
 			if ($request["rsf"][$pn] != "")
 			{
 				if (is_array($request["rsf"][$pn]))
+				{
+					$filter[$pn] = $request["rsf"][$pn];
+				}
+				else
+				if ($pd["type"] == "classificator")
 				{
 					$filter[$pn] = $request["rsf"][$pn];
 				}
@@ -634,7 +637,6 @@ class register_search extends class_base
 			$filter["sort_by"] = "objects.name ASC ";
 		}
 
-
 		if (count($filter) > 3 || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
@@ -653,7 +655,6 @@ class register_search extends class_base
 				{
 					$filter["limit"] = ($request["ft_page"] * $ppg).",".$ppg;
 				}
-
 				$ret = new object_list($filter);
 			}
 			else

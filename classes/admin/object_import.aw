@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.11 2004/07/08 10:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.12 2004/07/08 12:32:01 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -479,7 +479,7 @@ class object_import extends class_base
 			$data_rows = $ds_i->get_objects($ds_o);
 
 			// read props
-			list($properties) = $GLOBALS["object_loader"]->load_properties(array(
+			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
 				"clid" => $class_id
 			));
 
@@ -577,6 +577,14 @@ class object_import extends class_base
 					}
 
 					$dat->set_prop($pn, $line[$idx]);
+					if ($properties[$pn]["store"] == "connect" && $line[$idx])
+					{
+						$rid = $relinfo[$properties[$pn]["reltype"]]["value"];
+						$dat->connect(array(
+							"to" => $line[$idx],
+							"reltype" => $rid
+						));
+					}
 				}
 				$line = $linebak;
 
