@@ -56,20 +56,16 @@ class workflow extends class_base
 		));
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
         {
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$name = $data["name"];
 		$retval = PROP_OK;
-		if ($name == "alias" || $name == "jrk")
-		{
-			return PROP_IGNORE;
-		};
 		switch($name)
 		{
 			case "preview":
 				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("view",array("id" => $args["obj"]["oid"])),
+					"url" => $this->mk_my_orb("view",array("id" => $arr["obj_inst"]->id())),
                                 	"caption" => "Näita",
                                 	"target" => "_blank",
 				));
@@ -79,22 +75,22 @@ class workflow extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
                 $retval = PROP_OK;
                 switch($data["name"])
                 {
 			case "show_entities":
-				if ($args["form_data"]["subgroup"] == "add_entity")
+				if ($arr["request"]["subgroup"] == "add_entity")
 				{
-					$this->create_entity($args);
+					$this->create_entity($arr);
 				}
 				else
 				{
 					// advance existing entities - if there is anything
 					// to advance at all
-					$this->process_entities($args);
+					$this->process_entities($arr);
 				}
 				break;
 		};
@@ -104,9 +100,9 @@ class workflow extends class_base
 	function callback_mod_retval($arr = array())
 	{
 		$args = &$arr["args"];
-		if (isset($arr["form_data"]["treeroot"]))
+		if (isset($arr["request"]["treeroot"]))
 		{
-			$args["treeroot"] = $arr["form_data"]["treeroot"];
+			$args["treeroot"] = $arr["request"]["treeroot"];
 		};
 	}
 
@@ -114,59 +110,48 @@ class workflow extends class_base
 	{
 		// try and load the configuration object
 		$retval = PROP_OK;
-		$this->cfg_obj = $this->get_object(array(
-			"oid" => $args["obj"]["meta"]["config"],
-			"clid" => CL_WORKFLOW_CONFIG,
-		));
 
-		if (!$this->cfg_obj)
+		$cfgid = $args["obj_inst"]->prop("config");
+
+
+		if (empty($cfgid))
 		{
 			$data["error"] = "Konfiguratsiooniobjekt on valimata!";
 			return PROP_ERROR;
 		};
 		
-		$this->treeview_conf = $this->get_object(array(
-			"oid" => $this->cfg_obj["meta"]["treeview_conf"],
-			"clid" => CL_TREEVIEW,
-		));
+		$this->cfg_obj = new object($cfgid);
+
+		$this->treeview_conf_id = $this->cfg_obj->prop("treeview_conf");
 		
-		if (!$this->treeview_conf)
+		if (empty($this->treeview_conf_id))
 		{
 			$data["error"] = "Puu konfiguratsioon on valimata!";
 			return PROP_ERROR;
 		};
 
+		$this->treeview_conf = new object($this->treeview_conf_id);
+
 		return $retval;
 
 	}
 
-	function satisfy_any($args = array())
+	function satisfy_any($arr)
 	{
-		$this->save_handle();
 		if (isset($args["action"]) && empty($this->actions[$args["action"]]))
 		{
-			$this->actions[$args["action"]] = $this->get_object(array(
-				"oid" => $args["action"],
-				"class_id" => CL_ACTION,
-			));	
+			$this->actions[$args["action"]] = new object($args["action"]);
 		};	
 		
 		if (isset($args["actor"]) && empty($this->actors[$args["actor"]]))
 		{
-			$this->actors[$args["actor"]] = $this->get_object(array(
-				"oid" => $args["actor"],
-				"class_id" => CL_ACTOR,
-			));	
+			$this->actors[$args["actor"]] =  new object($args["actor"]);
 		};	
 		
 		if (isset($args["process"]) && empty($this->processes[$args["process"]]))
 		{
-			$this->processes[$args["process"]] = $this->get_object(array(
-				"oid" => $args["process"],
-				"class_id" => CL_PROCESS,
-			));	
+			$this->processes[$args["process"]] = new object($args["process"]);
 		};	
-		$this->restore_handle();
 	}
 
 
@@ -178,19 +163,20 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$actor_rootmenu = $this->get_object(array(
-			"oid" => $this->cfg_obj["meta"]["actor_rootmenu"],
-			"clid" => CL_PSEUDO,
-		));
+		$actor_rootmenu_id = $this->cfg_obj->prop("actor_rootmenu");
 
-		if (!$actor_rootmenu)
+		if (empty($actor_rootmenu_id))
 		{
 			$data["error"] = "Tegijate rootmenüü on valimata!";
 			return PROP_ERROR;
+		}
+		else
+		{
+			$actor_rootmenu = new object($actor_rootmenu_id);
 		};
 	
-		$this->clidlist = array(CL_PSEUDO,CL_ACTOR);	
-		$thtml = $this->_build_tree($actor_rootmenu["oid"]);
+		$this->clidlist = array(CL_MENU,CL_ACTOR);	
+		$thtml = $this->_build_tree($actor_rootmenu->id());
 
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -219,19 +205,18 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$action_rootmenu = $this->get_object(array(
-			"oid" => $this->cfg_obj["meta"]["action_rootmenu"],
-			"clid" => CL_PSEUDO,
-		));
+		$action_rootmenu_id = $this->cfg_obj->prop("action_rootmenu");
 
-		if (!$action_rootmenu)
+		if (empty($action_rootmenu_id))
 		{
 			$data["error"] = "Tegevuste rootmenüü on valimata!";
 			return PROP_ERROR;
-		};
+		}
 
-		$this->clidlist = array(CL_PSEUDO,CL_ACTION);
-		$thtml = $this->_build_tree($action_rootmenu["oid"]);
+		$action_rootmenu = new object($action_rootmenu_id);
+
+		$this->clidlist = array(CL_MENU,CL_ACTION);
+		$thtml = $this->_build_tree($action_rootmenu->id());
 
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -275,19 +260,18 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$entity_rootmenu = $this->get_object(array(
-			"oid" => $this->cfg_obj["meta"]["entity_rootmenu"],
-			"clid" => CL_PSEUDO,
-		));
+		$entity_rootmenu_id = $this->cfg_obj->prop("entity_rootmenu");
 
-		if (!$entity_rootmenu)
+		if (empty($entity_rootmenu))
 		{
 			$data["error"] = "Olemite rootmenüü on valimata!";
 			return PROP_ERROR;
 		};
 
+		$entity_rootmenu = new object($entity_rootmenu_id);
 
-		$this->entity_rootmenu_id = $entity_rootmenu["oid"];
+
+		$this->entity_rootmenu_id = $entity_rootmenu->id();
 
 		if (!empty($args["request"]["treeroot"]))
 		{
@@ -295,22 +279,20 @@ class workflow extends class_base
 		}
 		else
 		{
-			$this->req_treeroot = $entity_rootmenu["oid"];
+			$this->req_treeroot = $entity_rootmenu->id();
 		};
-			
-		$this->treeroot_obj = $this->get_object(array(
-			"oid" => $this->req_treeroot,
-		));
 
-		$treeroot_clid = $this->treeroot_obj["class_id"];
+		$this->treeroot_obj = new object($this->req_treeroot);
+			
+		$treeroot_clid = $this->treeroot_obj->class_id();
 		$this->treeurl = $this->mk_my_orb("view",array(
-			"id" => $args["obj"]["oid"],
+			"id" => $args["obj_inst"]->id(),
 			"group" => "show_entities",
 		));
-		$this->clidlist = array(CL_PSEUDO,CL_ENTITY);
+		$this->clidlist = array(CL_MENU,CL_ENTITY);
 		$this->parent_list = array();
 
-		$thtml = $this->_build_tree($entity_rootmenu["oid"]);
+		$thtml = $this->_build_tree($entity_rootmenu->id());
 
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -345,26 +327,25 @@ class workflow extends class_base
 
 		if ($treeroot_clid == CL_ENTITY)
 		{
-			$_tmp = $this->get_object(array(
-				"oid" => $this->req_treeroot,
-			));
+			$_tmp = new object($this->req_treeroot);
 
-			$types[$this->req_treeroot] = $_tmp["name"];
+			$types[$this->req_treeroot] = $_tmp->name();
 
 			// here I have to query the entities by their respective type...
 			// oh man .. how do I do that?
 		}
 		else
 		{
-			$_entities = $this->get_objects_below(array(
+			$entity_list = new object_list(array(
 				"parent" => $this->parent_list,
-				"class" => CL_ENTITY,
+				"class_id" => CL_ENTITY,
 			));
 
-			foreach($_entities as $key => $val)
+			for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 			{
-				$types[$val["oid"]] = $val["name"];
-			}
+				$types[$o->id()] = $o->name();
+			};
+
 		};
 
 		$typelist = array_keys($types);
@@ -396,7 +377,7 @@ class workflow extends class_base
 					continue;
 				};
 
-				if ($treeroot_clid["class_id"] == CL_PSEUDO && (empty($types[$typ])))
+				if ($treeroot_clid["class_id"] == CL_MENU && (empty($types[$typ])))
 				{
 					continue;
 				};
@@ -477,7 +458,6 @@ class workflow extends class_base
 			"url" => "",
 			"onClick" => "return buttonClick(event, 'add_entity');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 		
@@ -486,7 +466,6 @@ class workflow extends class_base
 			"tooltip" => "Salvesta",
 			"url" => "javascript:document.changeform.submit();",
 			"img" => "save.gif",
-			"imgover" => "save_over.gif",
 			"class" => "menuButton",
 		));
 		$this->read_template("entity_list.tpl");
@@ -614,12 +593,12 @@ class workflow extends class_base
 				$this->under_treeroot = true;
 			};
 
-			if ($this->under_treeroot && ($row["class_id"] == CL_PSEUDO))
+			if ($this->under_treeroot && ($row["class_id"] == CL_MENU))
 			{
 				$this->parent_list[] = $row["oid"];
 			};
 
-			$row["icon_url"] = ($row["class_id"] == CL_PSEUDO) ? "" : $this->ic->get_icon_url($row["class_id"],"");
+			$row["icon_url"] = ($row["class_id"] == CL_MENU) ? "" : $this->ic->get_icon_url($row["class_id"],"");
 
                         $this->tree[$pid][$this->id] = $row;
 			$this->oidlist[] = $row["oid"];
@@ -637,21 +616,14 @@ class workflow extends class_base
 	function callback_add_entity(&$data)
 	{
 		// load the entity
-		$entity_obj = $this->get_object(array(
-			"oid" => $data["request"]["entity_id"],
-			"class_id" => CL_ENTITY,
-		));
+		$entity_obj = new object($data["request"]["entity_id"]);
 		// now I need to figure out which configuration form 
 		// is used by that entity
 		
 		// and then load that and display the stuff to the user
-		$cfgform_id = $entity_obj["meta"]["entity_cfgform"];
+		$cfgform_id = $entity_obj->prop("entity_cfgform");
 
-		$cfgform_obj = $this->get_object(array(
-			"oid" => $entity_obj["meta"]["entity_cfgform"],
-			"class_id" => CL_CFGFORM,
-			"subclass" => CL_DOCUMENT,
-		));
+		$cfgform_obj = new object($cfgform_id);
 
 		// and somehow I have to stick the contents of the process list
 		// and actor list to the top of that list
@@ -751,16 +723,16 @@ class workflow extends class_base
 			return $status;
 		};
 
-		$process_rootmenu = $this->get_object(array(
-			"oid" => $this->cfg_obj["meta"]["process_rootmenu"],
-			"clid" => CL_PSEUDO,
-		));
+		$process_rootmenu_id = new object($this->cfg_obj->prop("process_rootmenu"));
 
-		if (!$process_rootmenu)
+		if (empty($process_rootmenu_id))
 		{
 			$data["error"] = "Protsesside rootmenüü on valimata!";
 			return PROP_ERROR;
 		};
+
+		$process_rootmenu = new object($process_rootmenu_id);
+
 		
 		if (!empty($args["request"]["treeroot"]))
 		{
@@ -768,20 +740,18 @@ class workflow extends class_base
 		}
 		else
 		{
-			$this->req_treeroot = $process_rootmenu["oid"];
+			$this->req_treeroot = $process_rootmenu->id();
 		};
 
-		$this->treeroot_obj = $this->get_object(array(
-			"oid" => $this->req_treeroot,
-		));
+		$this->treeroot_obj = new object($this->req_treeroot);
 
-		$treeroot_clid = $this->treeroot_obj["class_id"];
+		$treeroot_clid = $this->treeroot_obj->class_id();
 		$this->treeurl = $this->mk_my_orb("view",array(
-			"id" => $args["obj"]["oid"],
+			"id" => $args["obj_inst"]->id(),
 			"group" => "show_processes",
 		));
 
-		$this->clidlist = array(CL_PSEUDO);
+		$this->clidlist = array(CL_MENU);
 		$this->parent_list = array();
 
 		$this->items = array();
@@ -789,30 +759,29 @@ class workflow extends class_base
 		$this->items[] = array("name" => "Tugiprotsessid");
 		
 			
-		$thtml = $this->_build_tree($process_rootmenu["oid"]);
+		$thtml = $this->_build_tree($process_rootmenu->id());
 
 		load_vcl("table");
 		$this->t = new aw_table(array(
 			"xml_def" => "workflow/process_list",
 			"layout" => "generic",
 		));
-		
-		$processes = $this->get_objects_below(array(
+
+		$processes =  new object_list(array(
 			"parent" => $this->parent_list,
-			"class" => CL_PROCESS,
+			"class_id" => CL_PROCESS,
 		));
 		
-		$ed_url = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","subgroup" => "mod_process"));
-
-
-		foreach($processes as $key => $val)
+		$ed_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "mod_process"));
+                        
+		for($o = $processes->begin(); !$processes->end(); $o = $processes->next())
 		{
-			$ra = $val["meta"]["root_action"];
+			$ra = $val->prop("root_action");
 			$this->satisfy_any(array("action" => $ra));
 			$val["root_action"] = $this->actions[$ra]["name"];
 			$val["name"] = html::href(array(
-				"url" => $ed_url . "&oid=$val[oid]",
-				"caption" => $val["name"],
+				"url" => $ed_url . "&oid=" . $o->id(),
+				"caption" => $o->name(),
 			));
 			$this->t->define_data($val);
 		}
@@ -827,9 +796,8 @@ class workflow extends class_base
 		$tb->add_button(array(
 			"name" => "add",
 			"tooltip" => "Uus protsess",
-			"url" => $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","subgroup" => "add_process")),
+			"url" => $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","subgroup" => "add_process")),
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 
@@ -845,12 +813,9 @@ class workflow extends class_base
 	function callback_add_process($args = array())
 	{
 		$this->read_template("process_wrapper.tpl");
-		$this->cfg_obj = $this->get_object(array(
-			"oid" => $args["obj"]["meta"]["config"],
-			"clid" => CL_WORKFLOW_CONFIG,
-		));
-		$return_url = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","b1" => 1));
-		$process_rootmenu_id = $this->cfg_obj["meta"]["process_rootmenu"];
+		$this->cfg_obj = new object($args["obj_inst"]->prop("config"));
+		$return_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","b1" => 1));
+		$process_rootmenu_id = $this->cfg_obj->prop("process_rootmenu");
 		$this->vars(array(
 			"add_process_link" => $this->mk_my_orb("new",array("parent" => $process_rootmenu_id,"return_url" => urlencode($return_url)),"process"),
 		));
@@ -865,14 +830,11 @@ class workflow extends class_base
 	function callback_mod_process($args = array())
 	{
 		$this->read_template("process_wrapper.tpl");
-		$this->cfg_obj = $this->get_object(array(
-			"oid" => $args["obj"]["meta"]["config"],
-			"clid" => CL_WORKFLOW_CONFIG,
-		));
-		$return_url = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","b1" => 1));
-		$process_rootmenu_id = $this->cfg_obj["meta"]["process_rootmenu"];
+		$this->cfg_obj = new object($args["obj_inst"]->prop("config"));
+		$return_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","b1" => 1));
+		$process_rootmenu_id = $this->cfg_obj->prop("process_rootmenu");
 		$this->vars(array(
-			"add_process_link" => $this->mk_my_orb("change",array("id" => $args["oid"],"return_url" => urlencode($return_url),"id" => $args["request"]["oid"]),"process"),
+			"add_process_link" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"return_url" => urlencode($return_url)),"process"),
 		));
 		$data = array(
 			"value" => $this->parse(),
@@ -908,23 +870,23 @@ class workflow extends class_base
 		// and create a relation between that and the entity
 
 		// and then I should be on my way 
-		if (!$args["form_data"]["entity_process"])
+		if (!$args["request"]["entity_process"])
 		{
 			die("you did not pick a process<br />");
 		};
 
-		$proc_obj = $this->get_object(array(
-			"oid" => $args["form_data"]["entity_process"],
-			"class_id" => CL_PROCESS,
-		));
+		$proc_obj = new object($args["request"]["entity_process"]);
 
 		// this sorts the data by tables
+
+		/*
 		$def = get_instance("doc");
 		$res = $def->process_form_data(array(
 			"group" => "general",
 			"group_by" => "table",
-			"form_data" => $args["form_data"],
+			"request" => $args["rquest"],
 		));
+		*/
 
 		$objdata = $res["objects"];
 		$cldata = $res["documents"];
@@ -933,19 +895,11 @@ class workflow extends class_base
 		unset($objdata["meta"]);
 
 		// now I have to figure out the parent
-		$obj = $this->get_object($args["obj"]["oid"]);
-		if (!$obj)
-		{
-			die("could not load workflow object<br />");
-		};
+		$obj = new object($args["obj_inst"]->id());
 
-		$cf_obj = $this->get_object($obj["meta"]["config"]);
-		if (!$cf_obj)
-		{
-			die("could not load configuration object for workflow<br />");
-		};
+		$cf_obj = new object($obj->prop("config"));
 
-		$entity_root = $cf_obj["meta"]["entity_rootmenu"];
+		$entity_root = $cf_obj->prop("entity_rootmenu");
 		// I should try and load the entity objet to see whether it
 		// really is a menu
 		if (!$entity_root)
@@ -1014,13 +968,10 @@ class workflow extends class_base
 			"process" => $_entity_process,
 		);
 
-		$this->upd_object(array(
-			"oid" => $_entity_id,
-			"metadata" => array(
-				"current_logtrail" => $current_logtrail,
-			),
-		));
-		
+		$ent_obj = new object($_entity_id);
+
+		$ent_obj->set_meta("current_logtrail",$current_logtrail);
+
 		// now let's retrieve the process object
 
 		// now I have to create the relations between
@@ -1085,13 +1036,9 @@ class workflow extends class_base
 			"process" => $_entity_process,
 		);
 
-		// and update the current thingy
-		$this->upd_object(array(
-			"oid" => $_entity_id,
-			"metadata" => array(
-				"current_logtrail" => $current_logtrail,
-			),
-		));
+		$ent_obj = new object($_entity_id);
+		$ent_obj->set_meta("current_logtrail",$current_logtrail);
+
 	}
 
 	function gen_view_toolbar($args = array())
@@ -1102,7 +1049,6 @@ class workflow extends class_base
 			"tooltop" => "Uus",
 			"url" => "#",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 		return $tb;
@@ -1152,17 +1098,15 @@ class workflow extends class_base
 
 	function process_entities($args = array())
 	{
-		$to_advance = new aw_array($args["form_data"]["advance"]);
+		$to_advance = new aw_array($args["request"]["advance"]);
 		foreach($to_advance->get() as $key => $val)
 		{
 			// advance those entities to the next stadium
 			if ($val > 0)
 			{
-				$ent = $this->get_object(array(
-					"oid" => $key,
-				));
+				$ent = new object($key);
 
-				$ctrail = $ent["meta"]["current_logtrail"];
+				$ctrail = $ent->meta("current_logtrail");
 
 				$this->process_entity(array(
 					"entity_id" => $key,
@@ -1175,27 +1119,6 @@ class workflow extends class_base
 		};
 	}
 	
-
-	function callback_gen_path($args = array())
-	{
-		$obj = $this->get_object($args["id"]);
-		$name = isset($obj["name"]) ? $obj["name"] : "";
-		return "Vaata workflow objekti '$name'";
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
-	}
 
 }
 ?>
