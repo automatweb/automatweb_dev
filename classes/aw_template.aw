@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.63 2004/08/16 09:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.64 2004/09/04 18:06:00 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -294,6 +294,12 @@ class aw_template extends core
 	function template_has_var($varname,$tplname = "MAIN")
 	{
 		return strpos($this->v2_templates[$tplname],"{VAR:" . $varname . "}") !== false; 
+	}
+
+	function template_has_var_full($varname)
+	{
+		$tmp = join("\n", $this->v2_arr);
+		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
 	}
 
 	function is_parent_tpl($tpl,$parent)
