@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.76 2003/02/18 09:09:08 duke Exp $
+// $Id: class_base.aw,v 2.77 2003/02/19 14:58:10 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -246,6 +246,7 @@ class class_base extends aliasmgr
 			"cb_view" => $cb_view,
 			"alias_to" => $this->request["alias_to"],
 			"return_url" => urlencode($this->request["return_url"]),
+			"subgroup" => $this->request["subgroup"],
 		) + (is_array($extraids) ? array('extraids' => $extraids) : array());
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
@@ -278,6 +279,8 @@ class class_base extends aliasmgr
 	{
 		// check whether this current class is based on class_base
 		$this->init_class_base();
+
+		$this->quote($args);
 
 		extract($args);
 
@@ -592,10 +595,12 @@ class class_base extends aliasmgr
 			"content" => $args["content"],
 		));
 
+
 		if (isset($args["group_by"]))
 		{
 			// right now this is the only group option I support anyway
 			$group_by = "table";
+
 		};
 
 		$savedata = array();
@@ -639,7 +644,14 @@ class class_base extends aliasmgr
 
 			if (isset($group_by))
 			{
-				$savedata[$property[$group_by]][$name] = $val;
+				if ($method == "serialize")
+				{
+					$savedata[$property[$group_by]][$field][$name] = $val;
+				}
+				else
+				{
+					$savedata[$property[$group_by]][$name] = $val;
+				};
 			}
 			else
 			{
@@ -1577,8 +1589,6 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-			// this doesn't let me use layout
-			#if ($val["generator"] && method_exists($this->inst,$val["generator"]))
 			if ($val["callback"] && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
@@ -1587,6 +1597,7 @@ class class_base extends aliasmgr
 				{
 					foreach($vx as $ekey => $eval)
 					{
+						$this->convert_element(&$eval);
 						$resprops[$ekey] = $eval;
 					};
 				}
