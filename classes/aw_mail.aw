@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.11 2001/06/21 19:48:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.12 2001/06/25 11:27:49 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -332,17 +332,19 @@ class aw_mail {
 		if ($encoding == BASE64)
 		{
 			$emsg = base64_encode($data);
-			$emsg = chunk_split($emsg);
+			$emsg = chunk_split($emsg,76,CRLF);
 		}
 		else
 		{
 			$emsg = $data;
 		};
+
+		$emsg = trim($emsg);
 	
 
 		if (preg_match("!^".TEXT."!i", $contenttype) && !preg_match("!;charset=!i", $contenttype))
 		{
-			$contenttype .= ";\r\n\tcharset=".CHARSET ;
+			$contenttype .= ";" . CRLF . " charset=".CHARSET ;
 		};
 
 		if ($args["body"])
@@ -357,9 +359,13 @@ class aw_mail {
 				$this->headers["Content-Disposition"] = $disp;	
 			};		
 
+			$pref = "Content-Type: text/plain; charset=ISO-8859-1" . CRLF;
+			$pref .= "Content-Transfer-Encoding: 8bit";
+			
+
 			//$this->headers["Content-Type"] = $contenttype;
 			$this->headers["Content-Transfer-Encoding"] = $encoding;
-			$this->mimeparts[0] = "\n\n" . $emsg . "\n\n";
+			$this->mimeparts[0] = $pref . CRLF . CRLF . $emsg . CRLF;
 		}
 		else
 		{	
@@ -410,7 +416,7 @@ class aw_mail {
 			$name = basename($path);
 		};
 
-		$contenttype .= ";\r\n\tname=".$name;
+		$contenttype .= ";" . CRLF . " name=\"".$name . "\"";
 		$data = fread($fp, filesize($path));
 		return $this->attach(array(
 				"data" => $data,
@@ -440,13 +446,13 @@ class aw_mail {
 		{
 			//$c_ver = "MIME-Version: 1.0".CRLF;
 			$this->headers["MIME-Version"] = "1.0";
-			$this->headers["Content-Type"] = "multipart/mixed;\n\tboundary=\"$boundary\"";
+			$this->headers["Content-Type"] = "multipart/mixed;" . CRLF . " boundary=\"$boundary\"";
 			$this->headers["Content-Transfer-Encoding"] = "8bit";
 			if ($c_desc)
 			{
 				$this->headers["Content-Description"] = $c_desc;
 			};
-			$warning = CRLF.WARNING.CRLF.CRLF ;
+			$warning = WARNING.CRLF;
 			
 			// Since we are here, it means we do have attachments => body must become
 			// and attachment too.
@@ -496,12 +502,12 @@ class aw_mail {
 		$subject = $this->headers["Subject"];
 		unset($this->headers["To"]);
 		unset($this->headers["Subject"]);
-		$this->set_header("Message-Id",$this->gen_message_id());
+		#$this->set_header("Message-Id",$this->gen_message_id());
 		foreach($this->headers as $name => $value)
 		{
 			if ($value)
 			{
-				$headers .= sprintf("%s: %s\n",$name,$value);
+				$headers .= sprintf("%s: %s%s",$name,$value,CRLF);
 			};
 		}
 		mail($to,$subject,$email,$headers);
