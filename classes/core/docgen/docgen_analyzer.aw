@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.9 2004/02/06 10:07:50 duke Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.10 2004/02/19 23:23:22 duke Exp $
 
 	@comment 
 	analyses aw code
@@ -904,5 +904,46 @@ class docgen_analyzer extends class_base
 		}
 		echo ("all done\n");
 	}
+
+	/**
+		@attrib name=search_method
+		@param method required 
+	**/
+	function search_method($arr)
+	{
+		set_time_limit(0);
+		$method = $arr["method"];
+		$p = get_instance("parser");
+		$files = array();
+		$p->_get_class_list(&$files, $this->cfg["classdir"]);
+		
+		sort($files);
+		$found = 0;
+		foreach($files as $file)
+		{
+			$fdat = $this->analyze_file($file,true);
+			$bn = basename($file,".aw");
+			$check = $fdat["classes"][$bn]["functions"][$method];
+			if ($check)
+			{
+				print "fl = $file<br>";
+				$start = $check["start_line"];
+				$offset = $check["end_line"] - $start;
+				$fc = join("",array_slice(file($file),$start-1,$offset+1));
+				$fc = "<" . "?\n" . $fc . "\n" . "?" . ">"; 
+				print "<pre>";
+				print highlight_string($fc,true);
+				//print_r($fdat["classes"][$bn]["functions"][$method]);
+				print "</pre>";
+				$found++;
+			};
+
+
+
+		}
+		print "Found $found instances<br>";
+	}
+
+
 }
 ?>
