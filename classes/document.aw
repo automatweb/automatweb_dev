@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.56 2001/11/12 22:45:53 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.57 2001/11/12 23:12:36 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -335,8 +335,19 @@ class document extends aw_template
 		if ( ($meta["show_print"]) && (not($print)) )
 		{
 			global $REQUEST_URI;
-			$pc = localparse(PRINT_CAP,array("link" => $REQUEST_URI . "&print=1"));
-			$doc["content"] = $pc . $doc["content"];
+			if (defined("PRINT_CAP"))
+			{
+				$pc = localparse(PRINT_CAP,array("link" => $REQUEST_URI . "&print=1"));
+				$doc["lead"] = $pc . $doc["lead"];
+			}
+			else
+			{
+				$this->vars(array("docid" => $docid));
+				$_tmp = $this->parse("PRINTANDSEND");
+				$this->vars(array("PRINTANDSEND" => $_tmp));
+			};
+				
+
 		};
 
 		$this->tpl_reset();
@@ -629,21 +640,24 @@ class document extends aw_template
 
 		// tekitame keywordide lingid
 		// this should be toggled with a preference in site config
-		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
-		$this->db_query($q);
-		while ($row = $this->db_next())
+		if (defined("KEYWORD_RELATIONS"))
 		{
-			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
-		}
-		
-		if (is_array($keywords))
-		{
-			// performs the actual search and replace
-			foreach ($keywords as $k_key => $k_val)
+			$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
+			$this->db_query($q);
+			while ($row = $this->db_next())
 			{
-				$doc["content"] = preg_replace("/\s$k_key\s/i",$k_val," " . $doc["content"] . " ");
-			};
+				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+			}
+		
+			if (is_array($keywords))
+			{
+				// performs the actual search and replace
+				foreach ($keywords as $k_key => $k_val)
+				{
+					$doc["content"] = preg_replace("/\s$k_key\s/i",$k_val," " . $doc["content"] . " ");
+				};
 
+			}
 		}
 	
 		// v6tame pealkirjast <p> maha
@@ -3084,7 +3098,6 @@ class document extends aw_template
 			}
 		}
 
-<<<<<<< document.aw
 		if (is_array($ord) && $save != "")
 		{
 			foreach($ord as $docid => $_ord)
@@ -3104,9 +3117,6 @@ class document extends aw_template
 			}
 		}
 		return $this->mk_my_orb("list_user_docs",array("parent" => $parent,"section" => $section));
-	}
-=======
-		return $this->mk_my_orb("list_user_docs");
 	}
 
 	function lookup($args = array())
