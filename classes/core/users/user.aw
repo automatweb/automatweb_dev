@@ -202,18 +202,6 @@ class user extends class_base
 					"key" => "act_to",
 				));
 				break;
-			case "kliendibaas":
-				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
-					"key" => "kliendibaas",
-				));
-				break;
-			case "user_calendar":
-				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
-					"key" => "user_calendar",
-				));
-				break;
 
 			case "pwd_status":
 				$prop['value'] = aw_global_get("status_msg");
