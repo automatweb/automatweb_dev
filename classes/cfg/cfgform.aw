@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.12 2003/04/24 07:47:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.13 2003/05/06 13:51:22 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -117,6 +117,10 @@ class cfgform extends class_base
 
 	function _load_xml_definition($contents)
 	{
+		// right now I can load whatever I want, but I really should validate that stuff
+		// first .. and keep in mind that I want to have as many relation pickers
+		// as I want to.
+
 		$cfgu = get_instance("cfg/cfgutils");
 		list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $contents));
 		$this->cfg_proplist = $proplist;
@@ -343,7 +347,10 @@ class cfgform extends class_base
 	function callback_gen_group_list($args = array())
 	{
 		load_vcl("table");
-                $t = new aw_table(array("xml_def" => "cfgforms/grplist"));
+                $t = new aw_table(array(
+			"layout" => "generic",
+			"xml_def" => "cfgforms/grplist",
+		));
 		$grplist = $args["obj"]["meta"]["cfg_groups"];
 		foreach($grplist as $key => $val)
 		{
@@ -368,7 +375,10 @@ class cfgform extends class_base
 	function callback_gen_property_list($args = array())
 	{
 		load_vcl("table");
-                $t = new aw_table(array("xml_def" => "cfgforms/prplist"));
+                $t = new aw_table(array(
+			"layout" => "generic",
+			"xml_def" => "cfgforms/prplist",
+		));
 		$prplist = $args["obj"]["meta"]["cfg_proplist"];
 		// oh, but I need the whole list of properties here
 		foreach($prplist as $key => $val)
