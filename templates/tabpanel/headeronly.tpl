@@ -65,39 +65,21 @@ background-color: #478EB6;
 	<table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<!-- SUB: tab_L1 -->
-			<td>
-			<table border=0 cellpadding=0 cellspacing=0>
-			<tr><td><div style="width:1px;height:20px" /></td>
-			<td valign="top" class="awtab"><div style="width:10px;height:20px" /></td>
-			<td nowrap valign="middle" class="awtab"><a href="{VAR:link}">{VAR:caption}</a></td>
-			<td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
-			<td><div style="width:1px;height:20px" /></td>
-			</tr></table>
-			</td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
 		<!-- END SUB: tab_L1 -->
 		
 		<!-- SUB: disabled_tab_L1 -->
-			<td>
-			<table border=0 cellpadding=0 cellspacing=0>
-			<tr><td><div style="width:1px;height:20px" /></td>
-			<td valign="top" class="awtab"><div style="width:10px;height:20px" /></td>
-			<td nowrap valign="middle" class="awtabdis">{VAR:caption}</td>
-			<td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
-			<td><div style="width:1px;height:20px" /></td>
-			</tr></table>
-			</td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2discontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif">{VAR:caption}</td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
 		<!-- END SUB: disabled_tab_L1 -->
 
 		<!-- SUB: sel_tab_L1 -->
-			<td>
-			<table border=0 cellpadding=0 cellspacing=0><tr>
-			<td><div style="width:1px;height:20px" /></td>
-			<td valign="top" class="awtabsel"><div style="width:10px;height:20px" /></td>
-			<td nowrap valign="middle" class="awtabsel"><a href="{VAR:link}">{VAR:caption}</a></td>
-			<td valign="top" width="10" class="awtabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
-			<td><div style="width:1px;height:20px" /></td>
-			</tr></table>
-			</td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+		  <td class="aw04tab2selcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_back.gif"><a href="{VAR:link}">{VAR:caption}</a></td>
+		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
 		<!-- END SUB: sel_tab_L1 -->
 
 	</tr>
