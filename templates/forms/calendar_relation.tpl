@@ -26,6 +26,24 @@
 </td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Vormitabel kalendris:</td>
+<td class="celltext" colspan="2"><select name="ev_table" {VAR:tables_disabled}>{VAR:ev_tables}</select></td>
+</tr>
+<tr class="aste02">
+<td class="celltext" colspan="3">Kogus ja seoseelemendid</td>
+</tr>
+<!-- SUB: count_line -->
+<tr class="aste01">
+<td class="celltext">{VAR:count_el_name}</td>
+<td class="celltext" colspan="2"><select name="amount_el[{VAR:count_el_id}]">{VAR:cnt_els}</select></td>
+</tr>
+<!-- END SUB: count_line -->
+<tr class="aste01">
+<td class="celltext"><input type="text" name="amount_number[0]" value="{VAR:amount_number}" size="4"></td>
+<td class="celltext" colspan="2"><select name="amount_el2[0]">{VAR:cnt_els2}</select></td>
+</tr>
+<!--
+<tr class="aste01">
 <td class="celltext" rowspan="2" valign="top">Sündmuste arv:</td>
 <td class="celltext"><input type="radio" name="cnt_type" value="1" {VAR:cnt_type_el}> Vali element</td>
 <td class="celltext"><select name="el_cnt" {VAR:count_disabled}>{VAR:cnt_els}</select></td>
@@ -34,10 +52,7 @@
 <td class="celltext"><input type="radio" name="cnt_type" value="2" {VAR:cnt_type_cnt}> või sisesta sündmuste arv</td>
 <td class="celltext"><input type="text" name="count" size="3" value="{VAR:count}"></td>
 </tr>
-<tr class="aste01">
-<td class="celltext">Vormitabel kalendris:</td>
-<td class="celltext" colspan="2"><select name="ev_table" {VAR:tables_disabled}>{VAR:ev_tables}</select></td>
-</tr>
+-->
 <tr class="aste01">
 <td class="celltext" colspan="3" align="center"><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
