@@ -206,7 +206,6 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			return false;
 		}
-		$GLOBALS["object_loader"]->ds->dequote(&$dat);
 		$str = "<?php\n";
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
 		$str .= "?>";
