@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.96 2002/07/17 20:31:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.97 2002/07/19 10:51:57 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -546,6 +546,12 @@ class core extends db_connector
 		{
 			$this->raise_error(ERR_CORE_NO_OID,LC_CORE_CALLED_WITHOUT_ID,0);
 		};
+
+		if ($params["oid"] == $params["parent"])
+		{
+			$this->raise_error(ERR_CORE_NO_OID,"Object can't be it's own parent",0);
+		};
+
 		$params["modifiedby"] = aw_global_get("uid");
 		$params["modified"] = time();
 		$params["cachedirty"] = 1;
