@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.146 2003/12/03 13:58:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.147 2003/12/08 11:14:39 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -382,22 +382,22 @@ class planner extends class_base
 			if (empty($project))
 			{
 				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND planner.start >= '${_start}' AND planner.end <= '${_end}' AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
 			}
 			else
 			{
 				$add = " AND objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add AND planner.start >= '${_start}' AND planner.end <= '${_end}'");
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL)");
 			};
 		}
 		else
 		if (!empty($project))
 		{
-			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND planner.end <= '${_end}' objects.status != 0";
+			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) objects.status != 0";
 		}
 		else
 		{
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND planner.start >= '${_start}' AND planner.end <= '${_end}' AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
 
 
 		};
