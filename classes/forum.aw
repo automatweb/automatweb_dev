@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.74 2003/05/29 13:56:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.75 2003/05/29 15:34:38 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -464,6 +464,7 @@ topic");
 	// !Lisab uue topicu
 	function submit_topic($args = array())
 	{
+		$this->quote($args);
 		extract($args);
 		$tid = $this->new_object(array(
 			"parent" => $id,
