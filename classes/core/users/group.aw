@@ -585,6 +585,11 @@ class group extends class_base
 		// and make it really a part of those groups
 		foreach(array_reverse($o->path()) as $p_o)
 		{
+			if ($p_o->id() == $arr["oid"])
+			{
+				continue;
+			}
+
 			if ($p_o->class_id() == CL_GROUP)
 			{
 				$p_gid = $this->users->get_gid_for_oid($p_o->id());
@@ -712,9 +717,10 @@ class group extends class_base
 				{
 					continue;
 				}
-				
+
 				if ($p_o->class_id() == CL_GROUP)
 				{
+
 					// add a brother below all parent groups
 					$user->create_brother($p_o->id());
 
