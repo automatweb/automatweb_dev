@@ -2341,11 +2341,15 @@ class site_content extends menuedit
 			{
 				$htmlf.="&aw_uid=".$uid;
 			}
-			$f = fopen($htmlf,"r");
-			$fc = fread($f,100000);
-			fclose($f);
+			// duhhh!! always check whether fopen succeeds!!
+			$f = @fopen($htmlf,"r");
+			if ($f)
+			{
+				$fc = fread($f,100000);
+				fclose($f);
 
-			$fc = str_replace("[ss]","[ss".$gid."]",$fc);
+				$fc = str_replace("[ss]","[ss".$gid."]",$fc);
+			};
 
 			$this->vars(array("banner_".$name => $fc));
 		}
