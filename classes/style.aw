@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.41 2004/11/26 14:03:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.42 2004/12/09 18:30:10 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -331,6 +331,10 @@ class style extends aw_template
 
 	function get_table_string($id)
 	{
+		if (!is_oid($id) || !$this->can("view", $id))
+		{
+			return false;
+		}
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
@@ -505,6 +509,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+			if (!is_oid($id) || !$this->can("view", $id))
+			{
+				return false;
+			}
 			$tmp = obj($id);
 			return $tmp->prop("frow_style");
 		}
@@ -517,6 +525,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+			if (!is_oid($id) || !$this->can("view", $id))
+			{
+				return false;
+			}
 			$tmp = obj($id);
 			return $tmp->prop("fcol_style");
 		}
@@ -529,6 +541,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("num_frows");
 		}
@@ -541,6 +557,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("num_fcols");
 		}
@@ -553,6 +573,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("lrow_style");
 		}
@@ -565,6 +589,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("lcol_style");
 		}
@@ -577,6 +605,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("num_lrows");
 		}
@@ -589,6 +621,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+                        if (!is_oid($id) || !$this->can("view", $id))
+                        {
+                                return false;
+                        }
 			$tmp = obj($id);
 			return $tmp->prop("num_lcols");
 		}
@@ -698,6 +734,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+			if (!is_oid($id) || !$this->can("view", $id))
+			{
+				return false;
+			}
 			$tmp = obj($id);
 			return $tmp->prop("odd_style");
 		}
@@ -709,6 +749,10 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+			if (!is_oid($id) || !$this->can("view", $id))
+			{
+				return false;
+			}
 			$tmp = obj($id);
 			return $tmp->prop("even_style");
 		}
