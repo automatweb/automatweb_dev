@@ -14,9 +14,9 @@
 
 */
 
-class site_content extends class_base
+class show_site_content extends class_base
 {
-	function site_content()
+	function show_site_content()
 	{
 		$this->init(array(
 			'clid' => CL_SITE_CONTENT
