@@ -18,10 +18,12 @@ class form_alias extends form_base
 
 		if ($form_submit)
 		{
+			global $HTTP_GET_VARS;
 			$f = new form;
 			$f->process_entry(array(
 				"id" => $sf,
-				"entry_id" => $entry_id
+				"entry_id" => $entry_id,
+				"values" => $HTTP_GET_VARS
 			));
 
 			$entry_id = $f->entry_id;
