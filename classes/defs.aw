@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.85 2003/03/13 15:25:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.86 2003/03/17 13:33:08 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -58,8 +58,8 @@ if (!defined("DEFS"))
 		// kogu asendus tehakse ühe reaga
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
-		$src = preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
-		return preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
+		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
+		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 
 	//// 
