@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.8 2004/04/05 13:41:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.9 2004/04/06 08:23:05 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -196,7 +196,8 @@ class document_statistics extends class_base
 
 	function parse_alias($arr)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
+		// don't show immediately, mark as to be shown
+		return "[document_statistics".$arr["alias"]["target"]."]";
 	}
 
 	function show($arr)
@@ -206,7 +207,7 @@ class document_statistics extends class_base
 		classload("vcl/table");
 		$t = new aw_table();
 
-		$st = $this->get_stat_arr($ob);
+		$st = $this->get_stat_arr($ob, $arr["yesterday"]);
 				
 
 		$this->read_template("show.tpl");
@@ -311,23 +312,32 @@ class document_statistics extends class_base
 			returns an array of document id => hit count 
 			taking into account the display statistics from the object passed as a parameter
 	**/
-	function get_stat_arr($obj)
+	function get_stat_arr($obj, $yesterday = false)
 	{
 		$timespan = $obj->prop("timespan");
 		$count = $obj->prop("count");
+
+		if ($yesterday)
+		{
+			$rtm = mktime(23, 59, 59, date("m"), date("d")-1, date("Y"));
+		}
+		else
+		{
+			$rtm = time();
+		}
 
 		classload("date_calc");
 		if ($timespan == "week")
 		{
 			$fc = array();
 			$tm = get_week_start();
-			while ($tm < time())
+			while ($tm < $rtm)
 			{
 				$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $tm).".txt";
 				$tmp = explode("\n", $this->get_file(array("file" => $fp)));
 				if (is_array($tmp))
 				{
-					$fc += $tmp;
+					$fc = array_merge($fc, $tmp);
 				}
 				$tm += 24*3600;
 			}
@@ -337,13 +347,13 @@ class document_statistics extends class_base
 		{
 			$fc = array();
 			$tm = get_month_start();
-			while ($tm < time())
+			while ($tm < $rtm)
 			{
 				$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $tm).".txt";
 				$tmp = explode("\n", $this->get_file(array("file" => $fp)));
 				if (is_array($tmp))
 				{
-					$fc += $tmp;
+					$fc = array_merge($fc, $tmp);
 				}
 				$tm += 24*3600;
 			}
@@ -351,7 +361,7 @@ class document_statistics extends class_base
 		else
 		{
 			// day
-			$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d").".txt";
+			$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $rtm).".txt";
 			$fc = explode("\n", $this->get_file(array("file" => $fp)));
 		}
 
@@ -450,18 +460,44 @@ class document_statistics extends class_base
 
 	function callback_post_save($arr)
 	{
-		if ($arr["obj_inst"]->prop("mail_to") != "")
-		{
-			$body = nl2br($arr["obj_inst"]->prop("mail_content"));
-			$body = str_replace("#sisu#", $this->show(array("id" => $arr["obj_inst"]->id())), $body);
+		// register in scheduler
+		$sched = get_instance("scheduler");
+		$sched->add(array(
+			"event" => $this->mk_my_orb("do_send_mail", array("id" => $arr["obj_inst"]->id())),
+			"time" => mktime(8,0,0, date("m"), date("d")+1, date("Y"))
+		));
+	}
 
-			foreach(explode(",", $arr["obj_inst"]->prop("mail_to")) as $mail_to)
+	/** sends e-mail woth statistics. called via scheduler 8:00 AM every day
+		
+		@attrib name=do_send_mail
+
+		@param id required type=int acl=view
+
+	**/
+	function do_send_mail($arr)
+	{
+		$o = obj($arr["id"]);
+
+		// add back to scheduler
+		$sched = get_instance("scheduler");
+		$sched->add(array(
+			"event" => $this->mk_my_orb("do_send_mail", array("id" => $o->id())),
+			"time" => mktime(8,0,0, date("m"), date("d")+1, date("Y"))
+		));
+
+		if ($o->prop("mail_to") != "")
+		{
+			$body = nl2br($o->prop("mail_content"));
+			$body = str_replace("#sisu#", $this->show(array("id" => $o->id(), "yesterday" => true)), $body);
+
+			foreach(explode(",", $o->prop("mail_to")) as $mail_to)
 			{
 				$awm = get_instance("aw_mail");
 				$awm->create_message(array(
 					"froma" => "automatweb@am.ee",
 					"fromn" => "AutomatWeb",
-					"subject" => $arr["obj_inst"]->prop("mail_subj"),
+					"subject" => $o->prop("mail_subj"),
 					"to" => $mail_to,
 					"body" => strip_tags(str_replace("<br>", "\n", $body))
 				));

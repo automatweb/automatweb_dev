@@ -118,7 +118,10 @@ class site_cache extends aw_template
 
 	function do_final_content_checks($res)
 	{
-		return preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
+		$res = preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
+		$ds = get_instance('contentmgmt/document_statistics');
+		$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
+		return $res;
 	}
 }
 ?>
