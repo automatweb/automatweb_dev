@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.20 2003/01/13 21:42:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.21 2003/01/13 22:43:10 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1189,11 +1189,17 @@ class form extends form_base
 			// check vacations and if found, update calendar->form relations
 			// set error messages otherwise
 			$fcal = get_instance("formgen/form_calendar");
+			$els = $this->get_form_elements(array(
+                                "use_loaded" => true,
+                                "key" => "id",
+                        ));
+
 			$errors = $fcal->check_calendar(array(
 				"id" => $id,
 				"post_vars" => $this->post_vars,
 				"entry_id" => $entry_id,
 				"chain_entry_id" => $chain_entry_id,
+				"els" => $els,
 			));
 
 			// if any of the vacancy checks failed,
@@ -1361,11 +1367,16 @@ class form extends form_base
 		// actions. If we got here, all checks have been passed.
 		if (!$no_process_entry && ($this->subtype & FSUBTYPE_EV_ENTRY))
 		{
+			$els = $this->get_form_elements(array(
+                                "use_loaded" => true,
+                                "key" => "id",
+                        ));
 			$fcal->make_event_relations(array(
 				"id" => $id,
 				"post_vars" => $this->post_vars,
 				"eid" => $eid,
 				"chain_entry_id" => $chain_entry_id,
+				"els" => $els,
 			));
 
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.9 2003/01/13 21:42:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.10 2003/01/13 22:43:10 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -593,7 +593,7 @@ class form_calendar extends form_base
 		};
 
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
-			 WHERE oid = '$contr' AND relation IN ($rel2) AND count_el_id = '$el_count'
+			 WHERE oid = '$contr' AND relation IN ($rel) AND txtid = '$txtid'
 				AND start <= '$_end' AND end >= '$_start'";
 
 		$this->db_query($q);
@@ -689,6 +689,13 @@ class form_calendar extends form_base
                                                 $req_items = 1;
                                         };
                                         $relrow["req_items"] = $req_items;
+					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
+                                        if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
+                                        {
+                                                $relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_ite
+ms"][$m[1]];
+                                                $rels[] = $relrow;
+                                        };
                                         $rels[] = $relrow;
                                 };
                         };
@@ -750,7 +757,7 @@ class form_calendar extends form_base
 						"cal_id" => $row["cal_id"],
 						"entry_id" => $args["entry_id"],
 						"req_items" => $relval["req_items"],
-						"el_count" => $relval["el_count"],
+						"txtid" => $relval["txtid"],
 						"rel" => $_rel,
 						"rel2" => $rel2,
 						"id" => $id,
@@ -808,6 +815,12 @@ class form_calendar extends form_base
                                                 $count = 1;
                                         };
                                         $relrow["count"] = $count;
+					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
+                                        if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
+                                        {
+                                                $relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
+                                                $rels[] = $relrow;
+                                        };
                                         $rels[] = $relrow;
                                 };
                         };
@@ -822,26 +835,26 @@ class form_calendar extends form_base
 			{
 				$_end = (int)date_edit::get_timestamp($args["post_vars"][$row["el_end"]]);
 			};
-
-			if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
-			{
-				$_rel = $chain_entry_id;
-				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
-					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
-				$this->db_query($q);
-			};
-
+			
 			foreach($rels as $reval)
 			{
+				$_cnt = $reval["count"];
+				$txtid = $reval["txtid"];
+				if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
+				{
+					$_rel = $chain_entry_id;
+					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
+						VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
+					$this->db_query($q);
+				};
+
 				//$__rel = $args["post_vars"][$row["el_relation"]];
 				// gah, this sucks so much
 				//preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 				//$_rel = (int)$m[1];
 				$_rel = $reval["el_relation"];
-			
-
-				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
-					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
+				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
+					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
 				$this->db_query($q);
 			};
 			$this->restore_handle();
