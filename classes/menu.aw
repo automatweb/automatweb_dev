@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.117 2004/12/09 17:04:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.118 2005/01/26 11:03:52 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -199,6 +199,9 @@
 	@property frontpage type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
 	@caption Esilehel
 
+	@property seealso_docs_t type=table group=seealso_docs no_caption=1
+	@caption Vaatalisaks dokumendid
+
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
@@ -210,6 +213,7 @@
 	@groupinfo relations caption="Vaata lisaks" parent=menus
 	@groupinfo brothers caption=Vennastamine parent=menus
 	@groupinfo docs_from caption="Sisu asukoht" parent=menus
+	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
 	@groupinfo presentation caption=Pildid
 	@groupinfo show caption=Näitamine
 	@groupinfo import_export caption=Eksport submit=no
@@ -611,6 +615,10 @@ class menu extends class_base
 				));
 				$data["options"] = array("" => "") +$ol->names();
 				break;
+
+			case "seealso_docs_t":
+				$this->_do_seealso_docs_t($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -937,6 +945,10 @@ class menu extends class_base
 						return PROP_FATAL_ERROR;
 					}
 				}
+				break;
+
+			case "seealso_docs_t":
+				$arr["obj_inst"]->set_meta("sad_opts", $arr["request"]["sad_opts"]);
 				break;
 		};
 		return $retval;
@@ -1335,20 +1347,100 @@ class menu extends class_base
 	//	currently handles SEEALSO_DOCUMENT only
 	function on_get_subtemplate_content($arr)
 	{
-		$str = "";
+		$str = array();
 		$sect = obj(aw_global_get("section"));
+		$sad_opts = $sect->meta("sad_opts");
 		foreach($sect->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
 		{
+			$tpl = isset($sad_opts[$c->prop("to")]["tpl"]) ? $sad_opts[$c->prop("to")]["tpl"] : "SEEALSO_DOCUMENT";
+
 			$d = get_instance("document");
-			$str .= $d->gen_preview(array(
+			$str[$tpl] .= $d->gen_preview(array(
 				"docid" => $c->prop("to"),
 				"tpl" => "seealso_document.tpl"
 			));
 		}
 
-		$arr["inst"]->vars(array(
-			"SEEALSO_DOCUMENT" => $str
+		// also parents
+		$pt = $sect->path();
+		foreach($pt as $o)
+		{
+			if ($o->id() == $sect->id())
+			{
+				continue;
+			}
+			
+			$sad_opts = $o->meta("sad_opts");
+			foreach(safe_array($sad_opts) as $docid => $dat)
+			{
+				if ($dat["submenus"] == $docid)
+				{
+					$tpl = isset($dat["tpl"]) ? $dat["tpl"] : "SEEALSO_DOCUMENT";
+
+					$d = get_instance("document");
+					$str[$tpl] .= $d->gen_preview(array(
+						"docid" => $docid,
+						"tpl" => "seealso_document.tpl"
+					));
+				}
+			}
+		}
+
+		foreach($str as $tpl => $docs)
+		{
+			$arr["inst"]->vars(array(
+				$tpl => $docs
+			));
+		}
+	}
+
+	function _init_seealso_docs_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "doc",
+			"caption" => "Dokument",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "doc_subs",
+			"caption" => "ka alammen&uuml;&uuml;de juures",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "tpl",
+			"caption" => "Vali asukoht",
+			"align" => "center"
 		));
 	}
+
+	function _do_seealso_docs_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_seealso_docs_t($t);
+
+		$sad_opts = $arr["obj_inst"]->meta("sad_opts");
+		$tpls = aw_ini_get("menu.seealso_doc_tpls");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
+		{
+			$t->define_data(array(
+				"doc" => html::get_change_url($c->prop("to"), array(), $c->prop("to.name")),
+				"doc_subs" => html::checkbox(array(
+					"name" => "sad_opts[".$c->prop("to")."][submenus]",
+					"value" => $c->prop("to"),
+					"checked" => $sad_opts[$c->prop("to")]["submenus"]
+				)),
+				"tpl" => html::select(array(
+					"name" => "sad_opts[".$c->prop("to")."][tpl]",
+					"options" => $tpls,
+					"selected" => $sad_opts[$c->prop("to")]["tpl"]
+				))
+			));
+		}
+	}
+
 };
 ?>

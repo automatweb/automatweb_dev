@@ -564,6 +564,16 @@
             <ch_value>1</ch_value>
             <caption>Esilehel</caption>
       </property>
+      <property>
+            <name>seealso_docs_t</name>
+            <table>menu</table>
+            <group>seealso_docs</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>seealso_docs_t</field>
+            <caption>Vaatalisaks dokumendid</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -593,6 +603,10 @@
                   <caption>Sisu asukoht</caption>
                   <parent>menus</parent>
             </docs_from>
+            <seealso_docs>
+                  <caption>Vaata lisaks dokumendid</caption>
+                  <parent>menus</parent>
+            </seealso_docs>
             <presentation>
                   <caption>Pildid</caption>
             </presentation>
