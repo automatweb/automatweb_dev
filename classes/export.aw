@@ -158,21 +158,25 @@ class export extends aw_template
 
 			$link = substr($fc,$begin,($end-$begin));
 
-			$link = $this->rewrite_link($link);
-
-//			echo "link = $link <br>";
-			if (!isset($this->hashes[$link]))
+			$_link = $this->rewrite_link($link);
+			if ($_link == false)
 			{
-//				echo "found link $link , fetching it..<br>\n";
-//				flush();
-				$this->fetch_and_save_page($link);
+				// external link
+				$this->hashes[$link] = $this->real_url;
+				$fc = substr($fc,0,$begin).$this->hashes[$link].substr($fc,$end);
 			}
+			else
+			{
+				$link = $_link;
+				if (!isset($this->hashes[$link]))
+				{
+					$this->fetch_and_save_page($link);
+				}
 
-			// find the file extension for the link
-			$_ext = $this->get_ext_for_link($link);
-
-//			echo "rewrote link $link to ".$this->hashes[$link].".".$_ext." <br>\n";
-			$fc = substr($fc,0,$begin).$this->hashes[$link].".".$_ext.substr($fc,$end);
+				$_ext = $this->get_ext_for_link($link);
+//				echo "replacing ",substr($fc,$begin,($end-$begin))," with ".$this->hashes[$link].".".$_ext." <Br>";
+				$fc = substr($fc,0,$begin).$this->hashes[$link].".".$_ext.substr($fc,$end);
+			}
 		}
 	}
 
@@ -218,10 +222,12 @@ class export extends aw_template
 	function rewrite_link($link)
 	{
 		global $baseurl,$ext,$frontpage;
+//		echo "rewrite_link($link) <Br>";
 		// here we check the link for weirdness:
 		// if it is == $baseurl, we need to rewrite it to $baseurl/index.aw?section=$frontpage
 		if ($link == $baseurl)
 		{
+//			echo "link is baseurl <br>";
 			$link = $baseurl."/index.".$ext."?section=".$frontpage;
 		}
 
@@ -230,6 +236,7 @@ class export extends aw_template
 		if (strpos($link,"index.".$ext."/section=") !== false)
 		{
 			$link = str_replace("index.".$ext."/section=","index.".$ext."?section=",$link);
+//			echo "replacing /, rewriting link to  $link<br>";
 		}
 
 		$ud = parse_url($link);
@@ -237,6 +244,7 @@ class export extends aw_template
 		{
 			// we found a section link $baseurl/section
 			$link = $baseurl."/index.".$ext."?section=".substr($ud["path"],1);
+//			echo "found site/666 link, rewrote to $link <br>";
 		}
 
 		// rewrite indexx.aw links to their real address
@@ -246,6 +254,22 @@ class export extends aw_template
 			$el = new extlinks;
 			$ld = $el->get_link(substr($ud["query"],strlen("id=")));
 			$link = $ld["url"];
+			// siin peab tshekkima et link poleks kuskile mujale saidile
+			// hm, kui link ei alga http:// asjaga, siis pole ta kindlasti muule saidile
+			// kui algab, siis leiame sealt urli ja vaatame, kas domeen on sama, mis baseurlis olev. 
+			if (substr($link,0,strlen("http://")) == "http://")
+			{
+				// v6ib olla teisele saidile, uurime domeeni v2lja. 
+				$_ud = parse_url($link);
+				$_bud = parse_url($baseurl);
+				if ($_ud["host"] != $_bud["host"])
+				{
+					// we have outside link
+					$this->real_url = $link;
+					return false;
+				}
+			}
+
 			if (strpos($link,$baseurl) === false && $link[0] == "/")
 			{
 				$link = $baseurl.$link;
@@ -264,6 +288,13 @@ class export extends aw_template
 			$link = $baseurl."/".str_replace("/","&",$link);
 //			echo "rewrote gallery link to $link <br>\n";
 		}
+
+		if ($link[0] == "/")
+		{
+			$link = $baseurl.$link;
+//			echo " slash link , rewrote to $link <br>";
+		}
+//		echo "returning $link <Br>";
 		return $link;
 	}
 
@@ -292,6 +323,12 @@ class export extends aw_template
 			}
 
 			$pos = strpos(strtolower($fc),"src='/");
+			if ($pos !== false)
+			{
+				return $pos+5;
+			}
+
+			$pos = strpos(strtolower($fc),"lue=\"/");
 			if ($pos !== false)
 			{
 				return $pos+5;
