@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.12 2003/03/18 12:12:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.13 2003/08/01 13:12:28 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -78,10 +78,7 @@ class toolbar extends aw_template
 					{
 						$val["name"] .= $args["id"];
 					};
-					if (isset($args["target"]))
-					{
-						$val["target"] = $args["target"];
-					};
+					$val["target"] = isset($args["target"]) ? $args["target"] : "";
 					if (empty($val["onClick"]))
 					{
 						$val["onClick"] = "";
