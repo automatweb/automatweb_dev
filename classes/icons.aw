@@ -770,16 +770,7 @@ class icons extends aw_template
 	{
 		if ($clid == CL_FILE)
 		{
-			enter_function("file_icon::test");
-			$extt = substr($name,strrpos($name,".")+1);
-			$test = @fopen(aw_ini_get("icons.server")."/ftype_".$extt.".gif", "r");
-			if ($test)
-			{
-				fclose($test);
-				exit_function("file_icon::test");
-				return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
-			}
-			exit_function("file_icon::test");
+			return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
 		}
 		else
 		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
@@ -804,7 +795,7 @@ class icons extends aw_template
 		$fc = fread($d, filesize(aw_ini_get("basedir")."/automatweb/images/icon_aw.gif"));
 		fclose($d);
 
-		/*reset($this->cfg["classes"]);
+		reset($this->cfg["classes"]);
 		while (list($clid,$desc) = each($this->cfg["classes"]))
 		{
 			if ($il["content"][$clid]["imgurl"] == "")
@@ -837,9 +828,9 @@ class icons extends aw_template
 				fwrite($f, $ic["file"]);
 				fclose($f);
 			}
-		}*/
+		}
 
-		/*$c = get_instance("config");
+		$c = get_instance("config");
 		$d = unserialize($c->get_simple_config("file_icons"));
 		echo dbg::dump($d);
 		foreach($d as $ext => $dat)
@@ -870,10 +861,10 @@ class icons extends aw_template
 				fwrite($f, $fc);
 				fclose($f);
 			}
-		}*/
+		}
 
 		// other icons
-		/*$ar = unserialize($c->get_simple_config("other_icons"));
+		$ar = unserialize($c->get_simple_config("other_icons"));
 		$v = $ar["promo_box"];
 		if (!$v["id"])
 		{
@@ -993,7 +984,7 @@ class icons extends aw_template
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
 			fclose($f);
-		}*/
+		}
 
 		$ar = aw_unserialize($c->get_simple_config("program_icons"));
 		foreach($this->cfg["programs"] as $prid => $pd)
