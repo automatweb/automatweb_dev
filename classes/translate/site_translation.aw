@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.11 2004/02/25 15:53:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.12 2004/06/09 08:03:02 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -322,6 +322,7 @@ class site_translation extends class_base
 			));
 		};
 
+		$t->sort_by();
 		return $t->draw();
 	}
 	
@@ -465,6 +466,7 @@ class site_translation extends class_base
 			}
 		};
 
+		$t->sort_by();
 		return $t->draw();
 	}
 
@@ -624,6 +626,7 @@ class site_translation extends class_base
 			));
 		};
 
+		$t->sort_by();
 		return $t->draw();
 	}
 
