@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.9 2001/05/17 10:49:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.10 2001/05/17 11:48:26 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -50,6 +50,21 @@ class planner extends calendar {
 		return $this->mk_orb("change",array("id" => $id));
 	}
 
+
+	function user_planner($args = array())
+	{
+		$this->tpl_init("planner");
+		$args["act"] = "show";
+		return $this->change($args);
+	}
+
+	function admin_planner($args = array())
+	{
+		$this->tpl_init("automatweb/planner");
+		$args["act"] = "change";
+		return $this->change($args);
+	}
+	
 	////
 	// !Kuvab kalendri muutmiseks (eelkoige adminnipoolel)
 	// id - millist kalendrit näidata
@@ -70,16 +85,15 @@ class planner extends calendar {
 		// X marks the spot
 		$xdate = $d . $m . $y;
 
-		$this->tpl_init("automatweb/planner");
 		$this->mk_path($object["parent"],CAL_CH_TITLE);
 
 		// menüü def
 		$menu = array(
-			"today" => "?class=planner&action=change&id=$id",
-			"overview" => "?class=planner&action=change&disp=overview&id=$id&date=$date",
-			"day" => "?class=planner&action=change&id=$id&date=$date",
-			"week" => "?class=planner&action=change&disp=week&id=$id&date=$date",
-			"month" => "?class=planner&action=change&disp=month&id=$id&date=$date",
+			"today" => "?class=planner&action=$act&id=$id",
+			"overview" => "?class=planner&action=$act&disp=overview&id=$id&date=$date",
+			"day" => "?class=planner&action=$act&id=$id&date=$date",
+			"week" => "?class=planner&action=$act&disp=week&id=$id&date=$date",
+			"month" => "?class=planner&action=$act&disp=month&id=$id&date=$date",
 			"new" => "?class=planner&action=addevent&parent=$id&date=$date",
 		);
 
