@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.162 2004/10/29 16:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.163 2004/11/01 13:29:32 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -333,7 +333,7 @@ if (!defined("DEFS"))
 				'min' => 3,
 				'max' => 255),
 			'uid'	=> array(
-				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
+				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM.',
 				'min' => 3,
 				'max' => 30)
 			);
