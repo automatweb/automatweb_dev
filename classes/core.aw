@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.62 2001/10/30 17:02:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.63 2001/11/04 18:00:45 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1416,7 +1416,7 @@ class core extends db_connector
 		if (is_array($use_orb))
 		{
 			global $REQUEST_URI;
-			if (!(strpos($REQUEST_URI,"orb.".$ext) === false))
+			if (!(strpos($REQUEST_URI,"orb.".$ext) === false) &&  strpos($REQUEST_URI,"reforb.".$ext) === false)
 			{
 				$use_orb = true;
 			}
@@ -1498,7 +1498,7 @@ class core extends db_connector
 
 		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false))
 		{
-			$retval = $GLOBALS["baseurl"]."/automatweb/orb.$ext?$parts";
+			$retval = $GLOBALS["baseurl"]."/automatweb/?$parts";
 		}
 		else
 		{
