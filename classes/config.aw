@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.10 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.11 2001/06/18 21:02:37 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -12,110 +12,30 @@ class db_config extends aw_template
 		$this->tpl_init("automatweb/config");
 		$this->sub_merge = 1;
 	}
-	
-	function _get_config($ckey) 
-	{
-		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
-		$ret = $this->db_fetch_field($q,"content");
-		return $ret;
-	}
 
-	function xml_start_element($parser,$name,$attrs) 
-	{ 
-		$temp = "";
-		if ($name == "FIELD") {
-			while(list($k,$v) = each($attrs)) {
-				$temp[$k] = $v;
-			};
-			$this->data[] = $temp;
-		};
-	}
-	
-	function xml_end_element($parser,$name) 
-	{
-	}
-
-	function get_config($ckey) 
-	{
-		$content = rtrim($this->_get_config($ckey));
-		return $this->__get_config($content);
-	}
-	
-	function __get_config($content) 
-	{
-		$this->data = array();
-		$xml_parser = xml_parser_create();
-		xml_set_object($xml_parser,&$this);
-		xml_set_element_handler($xml_parser,"xml_start_element","xml_end_element");
-		if (!xml_parse($xml_parser,$content)) {
-			echo(sprintf("XML error: %s at line %d",
-                                      xml_error_string(xml_get_error_code($xml_parser)),
-                                      xml_get_current_line_number($xml_parser)));
-                };
-		return $this->data;
-	}
-
-	function _set_config($ckey,$content) 
+	function set_simple_config($ckey,$value)
 	{
 		// 1st, check if the necessary key exists
 		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
 		if ($ret == false)
 		{
 			// no such key, so create it
-			$this->db_query("INSERT INTO config(ckey) VALUES('$ckey')");
+			$this->create_config($ckey,$value);
 		}
-
-		$this->quote($content);
-		$q = "UPDATE config
-			SET content = '$content'
-			WHERE ckey = '$ckey'";
-		$this->db_query($q);
-	}
-	
-	function set_config($ckey,$data,$delete = -1) {
-		$xml = $this->gen_xml_header();
-		$xml .= "<data>\n";
-		$rec = 0;
-		while(list($k,$v) = each($data)) {
-			if ($k == "n") {
-				// kui on uus kirje
-				$key = ++$rec;
-			} else {
-				$rec = $k;
-			};
-			$key = ($k == "n") ? $rec : $k;
-			if (strlen($v[CAPTION]) == 0) {
-				$v[CAPTION] = $v[NAME];
-			};
-			if ($delete == $k) {
-			// Kui see kirje on määratud kustutamiseks, siis me ei tee midagi
-			} else {
-				if ( strlen($v[NAME]) > 0 ) {
-					$xml .= $this->gen_xml_tag("field",array("name" => $v[NAME],
-									 "caption" => $v[CAPTION],
-									 "x" => $v[X],
-									 "y" => $v[Y]));
-				};
-			};
-		};
-		$xml .= "</data>\n";
-		#$this->quote($xml);
-		$this->_set_config($ckey,$xml);
-	}
-
-	function delete($ckey,$rec) {
-		$data = $this->get_config($ckey);
-		$this->set_config($ckey,$data,$rec);
-	}
-	
-	function set_simple_config($ckey,$value)
-	{
-		$this->_set_config($ckey,$value);
+		else
+		{
+			$this->quote($content);
+			$q = "UPDATE config
+				SET content = '$value'
+				WHERE ckey = '$ckey'";
+			$this->db_query($q);
+		}
 	}
 
 	function get_simple_config($ckey)
 	{
-		return $this->_get_config($ckey);
+		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
+		return $this->db_fetch_field($q,"content");
 	}
 
 	function create_config($ckey,$value)
