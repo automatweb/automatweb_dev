@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.54 2001/09/12 19:10:33 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.55 2001/09/13 19:04:32 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1112,12 +1112,12 @@ class menuedit extends aw_template
 				if ($pstr != "")
 				{
 					$pstr = "objects.parent IN ($pstr)";
+					$ordby = "objects.modified DESC";
 				}
 				else
 				{
 					$pstr = "objects.parent = $obj[oid]";
 				};
-				$ordby = "objects.modified DESC";
 			}
 			else
 			{
@@ -4163,6 +4163,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$ya = "";  
 		$show = false;
 		$cnt = count($path);
+		global $DEBUG;
+		if ($DEBUG)
+		{
+			print "<pre>";
+			print_r($path);
+			print "</pre>";
+		};
 		for ($i=0; $i < $cnt; $i++)	
 		{
 			if ($show)
@@ -4311,9 +4318,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		if ($this->is_template("SEARCH_SEL"))
 		{
+			global $section,$frontpage;
+			$id = $section;
+			if (!$id)
+			{
+				$id=$frontpage;
+			}
 			classload("search_conf");
 			$t = new search_conf;
-			$this->vars(array("search_sel" => $this->option_list(0,$t->get_search_list())));
+			$this->vars(array(
+				"search_sel" => $this->option_list(0,$t->get_search_list()),
+				"section" => $id,
+			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
 		}
 	}
