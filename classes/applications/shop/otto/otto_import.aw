@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.3 2004/09/09 10:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.4 2004/10/14 13:31:32 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -19,6 +19,9 @@
 @property prod_folder type=relpicker reltype=RELTYPE_FOLDER
 @caption Toodete kataloog
 
+@property file_ext type=textbox
+@caption Failide laiend
+
 @property do_i type=checkbox ch_value=1
 @caption Teosta import
 
@@ -30,6 +33,9 @@
 
 @property restart_prod_i type=checkbox ch_value=1
 @caption Alusta toodete importi algusest
+
+@property last_import_log type=text store=no
+@caption Viimase impordi logi
 
 @groupinfo files caption="Failid"
 
@@ -62,7 +68,9 @@ class otto_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "last_import_log":
+				$prop["value"] = join("<br>\n", @file(aw_ini_get("site_basedir")."/files/import_last_log.txt"));
+				break;
 		};
 		return $retval;
 	}
@@ -105,7 +113,6 @@ class otto_import extends class_base
 	function pictimp($arr,$fix_missing = false)
 	{
 		set_time_limit(0);
-		$folder = "/www/otto.struktuur.ee/public/vv_pimg";
 
 		if (is_object($arr))
 		{
@@ -120,10 +127,28 @@ class otto_import extends class_base
 				$fld_url = $arr->prop("base_url")."/".trim($fname)."-2.csv";
 				echo "from url ".$fld_url." read: <br>";
 				list(, $cur_pg) = explode(".", $fname);
-				$cur_pg = (int)substr($cur_pg,1);
+				$cur_pg = substr($cur_pg,1);
+				if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+				{
+					$cur_pg = (int)$cur_pg;
+				}
 
 				$first = true;
 				$num =0;
+
+				// fucking mackintosh
+				if (count(file($fld_url)) == 1)
+				{
+					$lines = $this->mk_file($fld_url, "\t");
+					if (count($lines) > 1)
+					{
+						$tmpf = tempnam("/tmp", "aw-ott-imp-5");
+						$fp = fopen($tmpf,"w");
+						fwrite($fp, join("\n", $lines));
+						fclose($fp);
+						$fld_url = $tmpf;
+					}
+				}
 
 				$fp = fopen($fld_url, "r");
 				while ($row = fgetcsv($fp,1000,"\t"))
@@ -134,6 +159,7 @@ class otto_import extends class_base
 						continue;
 					}
 					$row = $this->char_replacement($row);
+					$row[4] = str_replace(".","", $row[4]);
 					$row[4] = substr(str_replace(" ","", $row[4]), 0, 6);
 					$data[] = $row[4];
 				}
@@ -144,9 +170,9 @@ class otto_import extends class_base
 			$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
 		}
 
-		if (!$fix_missing && file_exists(aw_ini_get("site_basedir")."/files/status.txt"))
+		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"))
 		{
-			$skip_to = $this->get_file(array("file" => aw_ini_get("site_basedir")."/files/status.txt"));
+			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 		else
@@ -200,7 +226,7 @@ class otto_import extends class_base
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
 
-			$url = "http://ww2.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
+			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
 		
 			$html = file_get_contents($url);
 
@@ -326,7 +352,7 @@ class otto_import extends class_base
 					}
 				}
 			}
-			$stat = fopen(aw_ini_get("site_basedir")."/files/status.txt","w");
+			$stat = fopen($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt","w");
 		
 			fwrite($stat, $pcode);
 			fclose($stat);
@@ -381,7 +407,7 @@ class otto_import extends class_base
 		set_time_limit(0);
 		if ($o->prop("restart_pict_i"))
 		{
-			unlink(aw_ini_get("site_basedir")."/files/status.txt");
+			@unlink($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt");
 		}
 		if ($o->prop("do_pict_i"))
 		{
@@ -393,23 +419,27 @@ class otto_import extends class_base
 		$imp_stat_file = aw_ini_get("site_basedir")."/files/impstatus.txt";
 		if ($o->prop("restart_prod_i"))
 		{
-			unlink($imp_stat_file);
+			@unlink($imp_stat_file);
 		}
 
 		if (file_exists($imp_stat_file))
 		{
-			$skip_to = $this->get_file(array("file" => aw_ini_get("site_basedir")."/files/status.txt"));
+			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 
 		$this->db_query("DELETE FROM otto_imp_t_prod");
 		$this->db_query("DELETE FROM otto_imp_t_codes");
 		$this->db_query("DELETE FROM otto_imp_t_prices");
-		$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
+		$this->db_query("DELETE FROM otto_imp_t_p2p");
 
 		echo "from url ".$o->prop("folder_url")." read: <br>";
 
+		$fext = ($o->prop("file_ext") != "" ? $o->prop("file_ext") : "xls");
+
 		$first = true;
+
+		$log = array();
 
 		$fp = fopen($o->prop("folder_url"), "r");
 		while ($row = fgetcsv($fp,1000))
@@ -426,8 +456,8 @@ class otto_import extends class_base
 			foreach(explode(",",$row[1]) as $pg)
 			{
 				$this->db_query("
-					INSERT INTO otto_imp_t_p2p(pg,fld, lang_id)
-					VALUES('$pg','$row[2]','".aw_global_get("lang_id")."')
+					INSERT INTO otto_imp_t_p2p(pg,fld)
+					VALUES('$pg','$row[2]')
 				");
 				echo ".\n";
 				flush();
@@ -442,13 +472,31 @@ class otto_import extends class_base
 				continue;
 			}
 
-			$fld_url = $o->prop("base_url")."/".trim($fname)."-1.csv";
+			$fld_url = $o->prop("base_url")."/".trim($fname)."-1.".$fext;
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
-			$cur_pg = (int)substr($cur_pg,1);
+			$cur_pg = substr($cur_pg,1);
+			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+			{
+				$cur_pg = (int)$cur_pg;
+			}
 
 			$first = true;
 			$num = 0;
+
+			// fucking mackintosh
+			if (count(file($fld_url)) == 1)
+			{
+				$lines = $this->mk_file($fld_url, "\t");
+				if (count($lines) > 1)
+				{
+					$tmpf = tempnam("/tmp", "aw-ott-imp");
+					$fp = fopen($tmpf,"w");
+					fwrite($fp, join("\n", $lines));
+					fclose($fp);
+					$fld_url = $tmpf;
+				}
+			}
 
 			$fp = fopen($fld_url, "r");
 			while ($row = fgetcsv($fp,1000,"\t"))
@@ -469,10 +517,12 @@ class otto_import extends class_base
 				if ($row[2] == "")
 				{
 					echo "ERROR ON LINE $num title ".$row[2]." <br>";
+					$log[] = "VIGA real $num failis $fld_url nimi: ".$row[2];
 				}
 				$num++;
 			}
 			echo ".. got $num titles <br>";
+			$log[] = "lugesin failist $fld_url $num toodet";
 		}
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
@@ -482,13 +532,30 @@ class otto_import extends class_base
 				continue;
 			}
 
-			$fld_url = $o->prop("base_url")."/".trim($fname)."-2.csv";
+			$fld_url = $o->prop("base_url")."/".trim($fname)."-2.".$fext;
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
-			$cur_pg = (int)substr($cur_pg,1);
+			$cur_pg = substr($cur_pg,1);
+			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+			{
+				$cur_pg = (int)$cur_pg;
+			}
 
 			$first = true;
 			$num =0;
+
+			if (count(file($fld_url)) == 1)
+			{
+				$lines = $this->mk_file($fld_url, "\t");
+				if (count($lines) > 1)
+				{
+					$tmpf = tempnam("/tmp", "aw-ott-imp");
+					$fp = fopen($tmpf,"w");
+					fwrite($fp, join("\n", $lines));
+					fclose($fp);
+					$fld_url = $tmpf;
+				}
+			}
 
 			$fp = fopen($fld_url, "r");
 			while ($row = fgetcsv($fp,1000,"\t"))
@@ -500,8 +567,10 @@ class otto_import extends class_base
 				}
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
+				$full_code = str_replace(".","", $row[4]);
 				$full_code = str_replace(" ","", $row[4]);
-				$row[4] = substr(str_replace(" ","", $row[4]), 0, 6);
+
+				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 6);
 				$color = $row[3];
 				if ($row[2] != "")
 				{
@@ -515,12 +584,14 @@ class otto_import extends class_base
 				if (!$row[4])
 				{
 					echo "ERROR ON LINE $num code ".$row[4]." <br>";
+					$log[] = "VIGA real $num failis $fld_url kood: $row[4]";
 				}
 			}
 			echo ".. got $num codes <br>\n";
+			$log[] = "lugesin failist $fld_url $num koodi";
 			flush();
 		}
-
+//die();
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
 			if ($fname == "")
@@ -528,12 +599,29 @@ class otto_import extends class_base
 				continue;
 			}
 
-			$fld_url = $o->prop("base_url")."/".trim($fname)."-3.csv";
+			$fld_url = $o->prop("base_url")."/".trim($fname)."-3.".$fext;
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
-			$cur_pg = (int)substr($cur_pg,1);
+			$cur_pg = substr($cur_pg,1);
+			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+			{
+				$cur_pg = (int)$cur_pg;
+			}
 
 			$first = true;
+
+			if (count(file($fld_url)) == 1)
+			{
+				$lines = $this->mk_file($fld_url, "\t");
+				if (count($lines) > 1)
+				{
+					$tmpf = tempnam("/tmp", "aw-ott-imp-3");
+					$fp = fopen($tmpf,"w");
+					fwrite($fp, join("\n", $lines));
+					fclose($fp);
+					$fld_url = $tmpf;
+				}
+			}
 
 			$num = 0;
 			$fp = fopen($fld_url, "r");
@@ -567,6 +655,8 @@ class otto_import extends class_base
 				if (!$row[5])
 				{
 					echo "ERROR ON LINE $num price = $row[5] (orig = $orig)<br>".dbg::dump($orow);
+					$log[] = "VIGA real $num hind = $row[5]";
+
 					for ($i = 0; $i < strlen($orig); $i++)
 					{
 						echo "at pos ".$i." cahar = ".ord($orig{$i})." v = ".$orig{$i}." <br>";
@@ -575,6 +665,7 @@ class otto_import extends class_base
 				$num++;
 			}
 			echo ".. got $num prices <br>\n";
+			$log[] = "lugesin failist $fld_url $num hinda";
 			flush();
 		}
 //die();
@@ -693,7 +784,7 @@ class otto_import extends class_base
 			}
 
 			// try find correct folder
-			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".aw_global_get("lang_id"), "fld");
+			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]'", "fld");
 			if ($try_fld)
 			{
 				echo "found parent for prod as $try_fld <br>\n";
@@ -712,6 +803,13 @@ class otto_import extends class_base
 			$dat->set_prop("user18", $row["pg"]);
 			$dat->set_prop("user19", $row["nr"]);
 
+			// log prods with codes that have more than one char
+			$fc = preg_replace("/[0-9]/", "", $row["full_code"]);
+			if (strlen(trim($fc)) > 1)
+			{
+				$log[] = "Tootel ".$dat->name()." (".$dat->prop("user16").") on kood $row[full_code] , kus on rohkem kui &uuml;ks t&auml;ht!";
+			}
+
 
 			$dat->save();
 
@@ -728,11 +826,34 @@ class otto_import extends class_base
 			$found = array();
 
 			$lowest = 10000000;
+			$typestr_a = array($orig_row["s_type"]);
+
+			if (strpos($orig_row["s_type"], "+") !== false)
+			{
+				$typestr_a += explode("+", $orig_row["s_type"]);
+			}
+			$typestr = join(",", map("'%s'", $typestr_a));
+
 			// now, for each price, create packaging objects
-			echo "q = "."SELECT * FROM otto_imp_t_prices WHERE pg = $row[pg] AND nr = '$row[nr]' AND type = '".$orig_row["s_type"]."' <br>";
-			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = $row[pg] AND nr = '$row[nr]' AND type = '".$orig_row["s_type"]."'");
-			$sizes = false;
+			echo "q = "."SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' AND type IN ($typestr) <br>";
+			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' AND type IN ($typestr) ");
+			$rows = array();
 			while ($row = $this->db_next())
+			{
+				$rows[] = $row;
+			}
+
+			if (count($rows) == 0)
+			{
+				$tmp = $this->db_fetch_row("SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' ");
+				if ($tmp)
+				{
+					$rows[] = $tmp;
+				}
+			}
+	
+			$sizes = false;
+			foreach($rows as $row)
 			{
 				// gotta split the sizes and do one packaging for each
 				$s_tmpc = explode(",", $row["size"]);
@@ -820,6 +941,7 @@ class otto_import extends class_base
 			{
 				echo "no size, setting status to not active <br>";
 				$dat->set_status(STAT_NOTACTIVE);
+				$log[] = "Panin toote ".$dat->name()." (".$dat->prop("user16").") staatuse mitteakttivseks, kuna ei leidnud &uuml;htegi suurust! ";
 			}
 
 			$dat->save();
@@ -836,6 +958,8 @@ class otto_import extends class_base
 		}
 
 		echo "hear hear. prods done. <br>\n";
+		$log[] = "importisin $items_done toodet";
+		
 		flush();
 		// to make packages, group by image number and for all images where cnt > 1 create a package for all those prods
 
@@ -925,6 +1049,13 @@ class otto_import extends class_base
 
 		// fix-missing images
 		echo "try fix missing images! <br>";
+
+		$lf = aw_ini_get("site_basedir")."/files/import_last_log.txt";
+		$this->put_file(array(
+			"file" => $lf,
+			"content" => join("\n", $log)
+		));
+
 		$this->pictfix(array());
 
 		$this->fix_image_codes();
@@ -934,8 +1065,6 @@ class otto_import extends class_base
 		// clear cache
 		$cache = get_instance("maitenance");
 		$cache->cache_clear(array("clear" => 1));
-
-		die("all done! <br>");
 	}
 
 	function conv($str)
@@ -946,32 +1075,25 @@ class otto_import extends class_base
 
 	function char_replacement($str)
 	{
-		/* l2ti t2hed  
-		,
-		,chr(226)
-		,chr(238)
-		,chr(239)
-		,chr(231)
-		
+		//$needle = array('Î','Ï',chr(137));
+		//$haystack = array(chr(158),chr(158),chr(154));
 
-		Andmete allikaks oli:
-		Impordifail: http://terryf.struktuur.ee/str/otto/import/data/LAT.T004-11.txt
-		Tekst saidil (skrolli alla): http://otto-latvia.struktuur.ee/134393
-		kooditabel: http://www.science.co.il/Language/Character-Code.asp?s=1257
-		*/
-		if (aw_global_get("lang_id") == 6)
-		{
-			/*$needle = array('‰','Ç','¥','?','ï','?');
-			$haystack = array('š',chr(226),chr(238),chr(239),chr(231),chr(240));
-		*/
-			$needle = array(chr(137),chr(207),chr(199),chr(239),'?',chr(165),chr(183),chr(204),chr(191));
-			$haystack = array('ð','þ',chr(226),chr(231),chr(239),chr(238),chr(208),chr(219),chr(242));
-		}
-		else
-		{
-			$needle = array('Î','Ï',chr(137));
-			$haystack = array(chr(158),chr(158),chr(154));
-		}
+		$needle = array(
+			chr(159),	// &uuml;
+			chr(134), 	// &Uuml;
+			chr(154),	// &ouml;
+			chr(138),	// &auml;
+			chr(205),	// &Otilde;
+			chr(155), 	// &otilde;
+		);
+		$haystack = array(
+			chr(252),
+			chr(220),
+			chr(246),
+			chr(228),
+			chr(213),
+			chr(245),
+		);
 		if(is_array($str))
 		{
 			foreach($str as $key=>$value)
@@ -993,20 +1115,42 @@ class otto_import extends class_base
 	**/
 	function submit_add_cart($arr)
 	{
+		if (strpos($arr["return_url"], "?") === false)
+		{
+			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."?afto=1";
+		}
+		else
+		{
+			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."&afto=1";
+		}
+
 		// rewrite some vars that are hard to rewire in js and forward to shop order cart
 		$vars = $arr;
-		$vars["order_data"] = array();
-		$vars["order_data"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
-		$vars["order_data"][$arr["add_to_cart"]]["size"] = $arr["size_name"];
-		/*$vars["ord_content"] = array();
-		$vars["ord_content"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
-		$vars["ord_content"][$arr["add_to_cart"]]["size"] = $arr["size_name"];*/
-		$vars["add_to_cart"] = array();
-		$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
+		if ($arr["spid"])
+		{
+			$vars["order_data"] = array();
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["color"] = ($arr["order_data_color".$arr["spid"]] != "" ? $arr["order_data_color".$arr["spid"]] : "---");
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["size"] = $arr["size_name".$arr["spid"]];
+			$vars["order_data"][$arr["add_to_cart".$arr["spid"]]]["url"] = $retval;
+
+			$vars["add_to_cart"] = array();
+			$vars["add_to_cart"][$arr["add_to_cart".$arr["spid"]]] = $arr["add_to_cart_count".$arr["spid"]];
+		}
+		else
+		{
+			$vars["order_data"] = array();
+			$vars["order_data"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
+			$vars["order_data"][$arr["add_to_cart"]]["size"] = $arr["size_name"];
+			$vars["order_data"][$arr["add_to_cart"]]["url"] = $retval;
+
+			$vars["add_to_cart"] = array();
+			$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
+		}
 
 		$i = get_instance("applications/shop/shop_order_cart");
 		$i->submit_add_cart($vars);
-		return aw_ini_get("baseurl").$arr["return_url"]."&afto=1";
+
+		return $retval;
 	}
 
 	/** 
@@ -1147,6 +1291,60 @@ class otto_import extends class_base
 		}
 
 		return $s_tmp;
+	}
+
+	function mk_file($file,$separator)
+	{
+		$filestr = file_get_contents($file);
+
+		$len = strlen($filestr);
+		$linearr = array();
+		$in_cell = false;
+		for ($pos=0; $pos < $len; $pos++)
+		{
+			if ($filestr[$pos] == "\"")	
+			{
+				if ($in_cell == false)
+				{
+					// pole celli sees ja jutum2rk. j2relikult algab quoted cell
+					$in_cell = true;
+					$line.=$filestr[$pos];
+				}
+				else
+				if ($in_cell == true && ($filestr[$pos+1] == $separator || $filestr[$pos+1] == "\n" || $filestr[$pos+1] == "\r"))
+				{
+					// celli sees ja jutum2rk ja j2rgmine on kas semikas v6i reavahetus, j2relikult cell l6peb
+					$in_cell = false;
+					$line.=$filestr[$pos];
+				}
+				else
+				{
+					// dubleeritud jutum2rk
+					$line.=$filestr[$pos];
+				}
+			}
+			else
+			if ($filestr[$pos] == $separator && $in_cell == false)
+			{
+				// semikas t2histab celli l6ppu aint siis, kui ta pole jutum2rkide vahel
+				$in_cell = false;
+				$line.=$filestr[$pos];
+			}
+			else
+			if (($filestr[$pos] == "\n" || $filestr[$pos] == "\r") && $in_cell == false)
+			{
+				// kui on reavahetus ja me pole quotetud celli sees, siis algab j2rgmine rida
+
+				// clearime j2rgneva l2bu ka 2ra
+				if ($filestr[$pos+1] == "\n" || $filestr[$pos+1] == "\r")
+					$pos++;
+				$linearr[] = $line;
+				$line = "";
+			}
+			else
+				$line.=$filestr[$pos];
+		}
+		return $linearr;
 	}
 }
 

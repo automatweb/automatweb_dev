@@ -29,6 +29,15 @@
             <caption>Toodete kataloog</caption>
       </property>
       <property>
+            <name>file_ext</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Failide laiend</caption>
+      </property>
+      <property>
             <name>do_i</name>
             <table>objects</table>
             <group>general</group>
@@ -67,6 +76,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Alusta toodete importi algusest</caption>
+      </property>
+      <property>
+            <name>last_import_log</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+			<store>no</store>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Vimase impordi log</caption>
       </property>
       <property>
             <name>fnames</name>
