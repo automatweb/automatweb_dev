@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.250 2004/04/07 19:41:27 duke Exp $
+// $Id: class_base.aw,v 2.251 2004/04/13 12:20:07 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -107,6 +107,7 @@ class class_base extends aw_template
 			"classificator" => "classificator",
 			"comments" => "vcl/comments",
 			"container" => "vcl/container",
+			"table" => "vcl/table",
 		);
 		parent::init($arg);
 	}
@@ -1531,12 +1532,14 @@ class class_base extends aw_template
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
 		};
-		
+	
+		/*
 		if (($val["type"] == "table") && is_object($val["vcl_inst"]))
 		{
 			$val["vcl_inst"]->sort_by();
 			$val["value"] = $val["vcl_inst"]->draw();
 		};
+		*/
 
 		if (($val["type"] == "relmanager") && is_object($val["vcl_inst"]))
 		{
@@ -1744,6 +1747,7 @@ class class_base extends aw_template
                                                 "property" => &$val,
                                                 "clid" => $this->clid,
                                                 "obj_inst" => &$this->obj_inst,
+						"columns" => $this->columninfo,
                                         ));
 
                                         if (is_array($res))
@@ -1923,6 +1927,7 @@ class class_base extends aw_template
 				$val["vcl_inst"] = new relmanager();
 			};
 
+			/*
 			if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
 			{
 				classload("vcl/table");
@@ -1930,6 +1935,7 @@ class class_base extends aw_template
 					"layout" => "generic",
 				));
 			};
+			*/
 			
 			if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
 			{
@@ -3533,6 +3539,7 @@ class class_base extends aw_template
 
 		$this->groupinfo = $cfgu->get_groupinfo();
 		$this->forminfo = $cfgu->get_forminfo();
+		$this->columninfo = $cfgu->get_columninfo();
 		if (!is_array($this->classinfo))
 		{
 			$this->classinfo = array();
