@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.113 2003/11/12 15:30:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.114 2003/12/03 12:33:06 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -354,7 +354,7 @@ if (!defined("DEFS"))
 	function arr($arr,$die=false)
 	{
 		echo '<pre>';
-//		print_r($arr);
+		print_r($arr);
 		echo '</pre>';
 		if ($die) die('<hr />');
 		return $arr;
