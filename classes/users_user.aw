@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.15 2001/08/23 10:34:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.16 2001/08/25 15:14:12 cvs Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -811,18 +811,12 @@ class users_user extends aw_template
 			$jfs = unserialize($user[join_form_entry]);
 
 			$in = false;
-			reset($mt);
-			while(list($efid, $ar) = each($mt))
+			$efid = $f->search_form;
+			while(list(,$v) = each($mt))
 			{
-				if (is_array($ar))
+				if ($jfs[$efid] == $v)
 				{
-					while(list(,$v) = each($ar))
-					{
-						if ($jfs[$efid] == $v)
-						{
-							$in = true;
-						}
-					}
+					$in = true;
 				}
 			}
 
