@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.104 2003/04/09 13:40:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.105 2003/04/11 11:15:49 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -280,7 +280,7 @@ class planner extends class_base
 		));
 
 
-		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = '$folder' AND objects.status = 2";
+		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = '$folder' AND objects.status != 0";
 		$this->db_query($q);
 		$events = array();
 		// we sure pass around a LOT of data
@@ -1336,7 +1336,7 @@ class planner extends class_base
 			};
 		}
 		$calstring = join(",",$calendars);
-		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') AND (start <= '$end'))";
+		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') AND (start <= '$end')) AND objects.status != 0";
 		$this->db_query($q);
 		$results = array();
 		$ia = get_instance("image");
@@ -1345,7 +1345,7 @@ class planner extends class_base
 		if (($type == "day") && ($count == 0) && $conf["only_days_with_events"])
 		{
 			// this is where I have to find the next active event
-			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND (start >= '$start') LIMIT 1";
+			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE status != 0 AND parent IN ($calstring) AND (start >= '$start') LIMIT 1";
 			$this->db_query($q);
 			$next_active = true;
 
