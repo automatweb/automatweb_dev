@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.18 2004/04/07 13:48:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.19 2004/04/12 13:35:52 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -27,7 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disc
 @property title type=textbox size=5 maxlength=10
 @caption Tiitel
 
-@property gender type=textbox size=5 maxlength=10
+@property gender type=chooser 
 @caption Sugu
 
 @property personal_id type=textbox size=13 maxlength=11
@@ -54,7 +54,7 @@ caption Msn/yahoo/aol/icq
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
 
-@property picture type=relpicker reltype=RELTYPE_PICTURE
+@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb 
 @caption Pilt/foto
 
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
@@ -104,24 +104,26 @@ caption Msn/yahoo/aol/icq
 @groupinfo calls caption="Kõned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
-
-@default group=forms
-@default field=meta
-@default table=objects
-@default method=serialize
 @groupinfo forms caption=Väljundid
 
-@property forms type=relpicker reltype=RELTYPE_BACKFORMS
-@caption tagasiside vormid
+default group=forms
+default field=meta
+default table=objects
+default method=serialize
+
+property forms type=relpicker reltype=RELTYPE_BACKFORMS
+caption tagasiside vormid
 selection.aw
 
-@property templates type=select
-@caption templiidid
+@property templates type=select group=forms table=objects field=meta method=serialize
+@caption Väljund
 
-@default group=show
+default group=show
 groupinfo show caption=Visiitkaart submit=no
 @groupinfo contact caption=Kontaktandmed
 property dokus type=text callback=show_isik
+
+// 1 - make it display my documents - how on earth am I going to do that?
 
 @classinfo no_status=1
 
@@ -211,7 +213,7 @@ class crm_person extends class_base
 	function crm_person()
 	{
 		$this->init(array(
-			"tpldir" => "isik",
+			"tpldir" => "crm/person",
 			"clid" => CL_CRM_PERSON,
 		));
 	}
@@ -244,10 +246,10 @@ class crm_person extends class_base
 		switch($data["name"])
 		{
 			case "templates":
-				$tpls = $this->get_directory(array(
-					"dir" => $this->cfg["tpldir"]."/isik/visit/",
-				));
-				$data['options'] = $tpls;
+				$data["options"] = array(
+					"1" => "Pilt, kontakt, artiklid",
+					"2" => "kontakt",
+				);
 				break;
 
 			case "forms":
@@ -256,6 +258,13 @@ class crm_person extends class_base
 
 			case "navtoolbar":
 				$this->isik_toolbar($arr);
+				break;
+
+			case "gender":
+				$data["options"] = array(
+					"1" => "mees",
+					"2" => "naine",
+				);
 				break;
 
 			case "email":
@@ -731,10 +740,78 @@ class crm_person extends class_base
 		return $this->show(array('id' => $args['id']));
 	}
 
-	function parse_alias($args)
+	function parse_alias($arr)
 	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		// okey, I need to determine whether that template has a place for showing
+		// a list of authors documents. If it does, then I need to create that list
+		extract($arr);
+		$to = new object($arr["alias"]["target"]);
+		switch($to->prop("templates"))
+		{
+			case 1:
+				$template = "pic_documents.tpl";
+				break;
+	
+			default:
+				$template = "pic_documents.tpl";
+				break;
+		};
+		$this->read_template($template);
+		$pdat = $this->fetch_person_by_id(array(
+			"id" => $to->id(),
+		));
+		$this->vars(array(
+			"name" => $to->name(),
+			"phone" => $pdat["phone"],
+			"email" => $pdat["email"],
+		));
+		if ($this->template_has_var("imgurl"))
+		{
+			$conns = $to->connections_from(array(
+				"type" => RELTYPE_PICTURE,
+			));
+			$imgurl = "";
+			$img_inst = get_instance(CL_IMAGE);
+			foreach($conns as $conn)
+			{
+				$imgurl = $img_inst->get_url_by_id($conn->prop("to"));
+			};
+			$this->vars(array(
+				"imgurl" => html::img(array("url" => $imgurl)),
+			));
+		};
+		if ($this->is_template("DOCLIST"))
+		{
+			$at = get_instance(CL_AUTHOR);
+			$doc_ids = $at->get_author_doc_ids(array(
+				"author" => $to->prop("name"),
+			));
+			$docs = "";
+			if (sizeof($doc_ids) > 0)
+			{
+				$doc_list = new object_list(array(
+					"oid" => $doc_ids,
+				));
+
+				for($o = $doc_list->begin(); !$doc_list->end(); $o = $doc_list->next())
+				{
+					$this->vars(array(
+						"url" => html::href(array(
+							"url" => aw_ini_get("baseurl") . "/" . $o->id(),
+							"caption" => $o->prop("title"),
+						)),
+					));
+					$docs .= $this->parse("ITEM");
+				};
+			};
+			$this->vars(array(
+				"ITEM" => $docs,
+			));
+			$this->vars(array(
+				"DOCLIST" => $this->parse("DOCLIST"),
+			));
+		};
+		return $this->parse();
 	}
 
 	////
