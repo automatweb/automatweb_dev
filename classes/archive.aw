@@ -91,6 +91,25 @@ class archive extends aw_template {
 			"content" => $args["content"],
 		));
 	}
+
+	////
+	// !Listib arhiivi sisu
+	function get($args = array())
+	{
+		$this->_calc_path($args);
+		$res = array();
+                if ($dir = @opendir($this->fullpath)) {
+                        while ($file = readdir($dir)) {
+				$full = $this->fullpath . "/$file";
+				if (is_file($full))
+				{
+					$res[] = stat($full);
+				};
+                        }
+                        closedir($dir);
+                };
+		return $res;
+	}
 	
 	////
 	// !Tagastab arhiivist mingi objekti mingi versioon
