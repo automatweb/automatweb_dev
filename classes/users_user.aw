@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.58 2003/06/17 12:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.59 2003/06/17 13:40:18 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -300,6 +300,12 @@ class users_user extends aw_template
 			{
 				$msg = "Vigane kasutajanimi või parool";
 			}
+
+			$_msg = aw_ini_get("users.login_failed_msg");
+			if ($_msg != "")
+			{
+				$msg = $_msg;
+			}			
 			header("Refresh: 1;url=".$this->cfg["baseurl"]."/login.".$this->cfg["ext"]);
 			print $msg;
 			exit;
@@ -339,7 +345,7 @@ class users_user extends aw_template
 		{
 			$this->url = $this->get_cval("after_login");
 		}
-		$this->url = (strlen($this->url) > 0) ? $this->url : $this->cfg["baseurl"];
+		$this->url = (strlen($this->url) > 0) ? $this->url : ($return != "" ? $return : $this->cfg["baseurl"]);
 		$this->login_successful = true;
 		if ($this->url[0] == "/")
 		{
