@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.54 2003/05/04 18:52:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.55 2003/05/22 12:52:59 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -61,6 +61,12 @@ class image extends class_base
 
 	function get_image_by_id($id)
 	{
+		// it shouldn't be, but it is an array, if a period is loaded
+		// from a stale cache.
+		if (is_array($id))
+		{
+			return false;
+		}
 		if (!($row = aw_cache_get("get_image_by_id",$id)))
 		{
 			$q = "SELECT objects.*,images.* FROM images
@@ -136,6 +142,7 @@ class image extends class_base
 
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
+		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
 		if ($idata)
 		{
 			$alt = $idata["meta"]["alt"];
@@ -144,11 +151,12 @@ class image extends class_base
 				$size = getimagesize($idata["meta"]["file2"]);
 			};
 			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
-			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]+10).",height=".($size[1]+10)."');";
+			//$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]+10).",height=".($size[1]+10)."');";
 			$vars = array(
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
 				"align" => $align[$matches[4]],
+				"alignstr" => $alstr[$matches[4]],
 				"plink" => $idata["link"],
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
 				"img_name" => $idata["name"],
@@ -156,7 +164,10 @@ class image extends class_base
 				"bigurl" => $idata["big_url"],
 				"big_width" => isset($size[0]) ? $size[0] : "",
 				"big_height" => isset($size[1]) ? $size[1] : "",
-				"bi_link" => $bi_link
+				"w_big_width" => isset($size[0]) ? $size[0]+10 : "",
+				"w_big_height" => isset($size[1]) ? $size[1]+10 : "",
+				"bi_show_link" => $bi_show_link,
+				"bi_link" => $bi_link,
 			);
  
 			if ($this->is_flash($idata["file"]))
