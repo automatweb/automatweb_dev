@@ -433,7 +433,14 @@ function not($arg)
 
 function load_vcl($lib)
 {
-	include_once($GLOBALS["cfg"]["__default"]["basedir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
+	if ($lib == "table")
+	{
+		include_once($GLOBALS["cfg"]["__default"]["classdir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
+	}
+	else
+	{
+		include_once($GLOBALS["cfg"]["__default"]["basedir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
+	};
 }
 
 
