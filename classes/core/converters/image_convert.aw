@@ -20,14 +20,9 @@ class image_convert extends class_base
 			$this->raise_error(ERR_IMAGE_DRIVER, "image_covert: could not detect any supported imagehandlers!");
 		}
 
-		$driver = "_int_image_convert_driver_".$driver;
+		//$driver = "_int_image_convert_driver_".$driver;
 
-		error::raise_if(!class_exists($driver), array(
-			"id" => "ERR_IMAGE_DRIVER",
-			"msg" => "image_covert: could not detect any supported imagehandlers!"
-		));
-
-		$this->driver = new $driver;
+		//$this->driver = new $driver;
 	}
 
 	// this is here, because the authors of the php gd module are stupid idiots.
@@ -89,6 +84,16 @@ class image_convert extends class_base
 			}
 		}
 
+		if ($driver == "")
+		{
+			return "";
+			$this->raise_error(ERR_IMAGE_DRIVER, "image_covert: could not detect any supported imagehandlers!");
+		}
+
+		$driver = "_int_image_convert_driver_".$driver;
+
+		$this->driver = new $driver;
+		$this->dirver->ref =& $this;
 		return $driver;
 	}
 
@@ -181,6 +186,7 @@ class image_convert extends class_base
 class _int_image_convert_driver_gd extends aw_template
 {
 	var $image;
+	var $ref;
 
 	function _int_image_convert_driver_gd()
 	{
