@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.18 2002/12/18 13:16:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.19 2002/12/18 18:43:19 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -159,7 +159,7 @@
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 */
-class menu extends aw_template
+class menu extends class_base
 {
 	function menu($args = array())
 	{
@@ -313,6 +313,7 @@ class menu extends aw_template
 			// do something
 			$node["caption"] = "Pilt #" . ($i+1);
 			$node["items"] = array();
+			$node["group"] = "presentation";
 			
 			$val = $data["value"][$i];
 
