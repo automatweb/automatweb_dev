@@ -243,7 +243,6 @@
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
       </classinfo>
       <tableinfo>
             <planner>
