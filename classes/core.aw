@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.121 2002/11/06 11:22:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.122 2002/11/07 23:03:50 kristo Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -521,6 +521,10 @@ class core extends db_connector
 			));
 		}
 
+		if (!isset($arr["brother_of"]))
+		{
+			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
+		}
 		$this->flush_cache();
 		return $oid;
 	}
@@ -1249,7 +1253,7 @@ class core extends db_connector
 		if ($no_cache)
 		{
 			$_t = $this->get_record("objects","oid",$oid);
-			if ($_t["brother_of"] != $_t["oid"])
+			if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
 			{
 				// brother object, so we gots to read the real objets metadata
 				$_tt = $this->get_record("objects","oid",$_t["brother_of"]);
