@@ -1,6 +1,5 @@
 <?php
 session_name("automatweb");
-session_cache_limiter("public");
 session_start();
 classload("aw_template");
 classload("defs");
