@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.30 2001/07/18 16:22:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.31 2001/07/26 12:54:10 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -274,22 +274,27 @@ define("CL_STYLE",11);
 define("CL_FORM_OUTPUT",12);
 define("CL_FILLED_FORM_FOLDER",13);
 define("CL_FORM_ACTION",14);
+
 define("CL_MAILINGLIST",15);
 define("CL_MAILINGLIST_CATEGORY",16);
 define("CL_MAILINGLIST_MEMBER",17);
 define("CL_MAILINGLIST_VARIABLE",18);
 define("CL_MAILINGLIST_STAMP",19);
 define("CL_EMAIL",20);
+
 define("CL_EXTLINK",21);
+
 define("CL_PROMO",22);
 define("CL_PROMO_ARTICLE",23);
+
 define("CL_ML_VAR_CAT",24);
 define("CL_MAIL_LINK",25);
 define("CL_MAIL",26);
 define("CL_MAIL_FOLDER",27);
+
 define("CL_GRAPH",28);
 define("CL_PERIODIC_SECTION",29);
-define("CL_SECTION_LINK",30);
+//define("CL_SECTION_LINK",30);	// deprecated or something?
 define("CL_GALLERY",31);
 define("CL_POLL",33);
 define("CL_MSGBOARD_TOPIC",34);
@@ -307,6 +312,7 @@ define("CL_TEST_TEEMA",43);
 define("CL_TEST",44);
 
 define("CL_FORM_XML_OUTPUT",45);
+define("CL_FORM_XML_INPUT",46); // XML sisend .. yle xml-rpc muutmiseks
 
 // yuck.
 define("CL_GUESTBOOK",49);
@@ -345,6 +351,9 @@ define("CL_FORM_TABLE",66);  // otsinguformi tulemuste kuvamise tabel
 define("CL_CURRENCY",67);  // otsinguformi tulemuste kuvamise tabel
 
 define("CL_FORM_CHAIN",68);  // formi p2rg
+define("CL_FORUM",69); // 68 sest siis ei teki probleeme kui dev versioon siia ymber t6sta, mida ma p2rast teen ka, aga pearu ei j6ua
+
+define("CL_OBJECT_VOTE",70); // mingi tunnuse alusesl grupeeritud objektide poolt hääletamine
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -372,7 +381,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_MAIL => array("name" => LC_CONST_EMAIL, "file" => "mail","can_add" => 0),
 			CL_GRAPH => array("name" => LC_CONST_GRAPH, "file" => "graph","can_add" => 1),
 			CL_PERIODIC_SECTION => array("name" => LC_CONST_DOCUMENT_P, "file" => "document","can_add" => 0),
-			CL_SECTION_LINK => array("name" => LC_CONST_SECTION_LINK, "file" => "links"),
+	//		CL_SECTION_LINK => array("name" => LC_CONST_SECTION_LINK, "file" => "links"),
 			CL_GALLERY => array("name" => LC_CONST_GALLERY, "file" => "gallery","can_add" => 1),
 			CL_POLL => array("name" => LC_CONST_POLL, "file" => "poll","can_add" => 0),
 			CL_MSGBOARD_TOPIC => array("name" => LC_CONST_BOARD_TOPIC, "file" => "board"),
@@ -395,7 +404,10 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_CURRENCY => array("name" => LC_CONST_RATE_OF_EXCHANGE, "file" => "currency", "can_add" => 1),
 			CL_FORM_CHAIN => array("name" => LC_CONST_FORM_WREATH, "file" => "form_chain", "can_add" => 1),
 			CL_PROMO => array("name" => LC_CONST_PROMOBOX, "file" => "promo", "can_add" => 0),
-			CL_FORM_XML_OUTPUT => array("name" => "XML väljund", "file" => "form_output", "can_add" => 0)
+			CL_FORM_XML_OUTPUT => array("name" => "XML väljund", "file" => "form_output", "can_add" => 0),
+			CL_FORM_XML_INPUT => array("name" => "XML sisend", "file" => "form_input", "can_add" => 1),
+			CL_FORUM => array("name" => "Foorum", "file" => "forum", "can_add" => 1),
+			CL_OBJECT_VOTE => array("name" => "Objektide hääletus","file" => "object_vote","can_add" => 1),
 );
 // kliendid. 
 // hierarhia esimene element on root
