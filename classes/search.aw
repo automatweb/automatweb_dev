@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.4 2002/10/08 14:24:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.5 2002/10/10 13:19:41 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -99,13 +99,8 @@ class search extends aw_template
 		else
 		{
 			$this->read_template("full.tpl");
-			$mn = get_instance("menuedit");
 			$parent = (int)$parent;
 			
-			$toolbar = $mn->rf_toolbar(array(
-				"parent" => $parent,
-				"callback" => array($this,"modify_toolbar"),
-			));
 
 			$url = $this->mk_my_orb("search",array("parent" => $parent));
 			$this->parent = $parent;
@@ -115,6 +110,7 @@ class search extends aw_template
 		// perform the actual search
 		if ($search)
 		{
+
 			$obj_list = $this->get_menu_list(false,true);
 			load_vcl("table");
 			$this->t = new aw_table(array(
@@ -294,6 +290,14 @@ class search extends aw_template
 				$table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
 			};
 
+			if ($results > 0)
+			{
+				// I use that in modify_toolbar to determine whether
+				// to show the "create object group" and "assign configuration"
+				// buttons
+				$this->has_results = 1;
+			};
+
 		};
 
 		$fields = array();
@@ -371,7 +375,19 @@ class search extends aw_template
 
 		if ($args["clid"])
 		{
-			$table = "<form name='searchform' method='get'>" . $table . "</form>";
+			$header = $this->search_callback(array("name" => "table_header","args" => $args));
+			if (!$header)
+			{
+				$header = "<form name='searchform'>";
+			};
+			
+			$footer = $this->search_callback(array("name" => "table_footer","args" => $args));
+			if (!$footer)
+			{
+				$footer = "</form>";
+			};
+
+			$table = $header . $table . $footer;
 		}
 		else
 		{
@@ -398,6 +414,16 @@ class search extends aw_template
 			));
 		};
 
+		if (!$args["clid"])
+		{
+			$mn = get_instance("menuedit");
+			
+			$toolbar = $mn->rf_toolbar(array(
+				"parent" => $parent,
+				"callback" => array($this,"modify_toolbar"),
+			));
+		};
+
 		$this->table = $table;
 
 		$this->vars(array(
@@ -411,7 +437,7 @@ class search extends aw_template
 
 	function modify_toolbar($args)
 	{
-		if (is_object($args["toolbar"]))
+		if ($this->has_results && is_object($args["toolbar"]))
 		{
 			$args["toolbar"]->add_separator();
 
@@ -422,7 +448,7 @@ class search extends aw_template
                                 "imgover" => "save_over.gif",
                                 "img" => "save.gif",
                         ));
-
+			
 		};
 	}
 
@@ -531,18 +557,7 @@ class search extends aw_template
 	// generates contents for the class picker drop-down menu
 	function _get_s_class_id($val)
 	{
-		$tar = array(0 => " " . LC_OBJECTS_ALL);
-		reset($this->cfg["classes"]);
-		while (list($v,) = each($this->cfg["classes"]))
-		{
-			$name = $this->cfg["classes"][$v]["name"];
-			// skip the objects with no name
-			if (strlen($name) > 0)
-			{
-				$tar[$v] = $this->cfg["classes"][$v]["name"];
-			};
-		}
-		asort($tar);
+		$tar = array(0 => LC_OBJECTS_ALL) + $this->get_class_picker();
 		return $tar;
 	}
 
@@ -657,7 +672,7 @@ class search extends aw_template
 	function search_callback($args = array())
 	{
 		$prefix = "search_callback_";
-		$allowed = array("get_fields","get_query","get_table_defs","modify_data");
+		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer");
 		if (!is_object($this->obj_ref))
 		{
 			return false;
@@ -758,6 +773,11 @@ class search extends aw_template
                                 "class_id" => CL_OBJECT_CHAIN,
 				"metadata" => array("objs" => $sel,"s" => $s),
                         ));
+		}
+		elseif ($subaction == "assign_config")
+		{
+			$ac = get_instance("cfgobject");
+			die($ac->assign($args));
 		};
 
 		unset($args["class"]);
@@ -767,6 +787,15 @@ class search extends aw_template
 		unset($args["reforb"]);
 		$retval = $this->mk_my_orb("search",$args);
 		return $retval;
+	}
+
+	function assign_config($args = array())
+	{
+		print "inside cfgobject->assign_config<br>";
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+
 	}
 }
 ?>
