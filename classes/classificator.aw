@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.17 2004/07/02 12:13:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.18 2004/07/02 12:38:09 duke Exp $
 
 /*
 
@@ -273,6 +273,15 @@ class classificator extends class_base
 		$active_object_id = $ot->get_obj_for_class(array(
 			"clid" => $arr["clid"],
 		));
+		
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$custom_ff = $arr["obj_inst"]->meta("object_type");
+			if (is_oid($custom_ff))
+			{
+				$active_object_id = $custom_ff;
+			};
+		};
 
 		$c_obj = new object($active_object_id);
 		$clinf = $c_obj->meta("classificator");
