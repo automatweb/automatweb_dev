@@ -24,5 +24,13 @@
 			</function>
 		</action>
 
+		<action name="search_method" >
+			<function name="search_method">
+				<arguments>
+					<required name="method" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
