@@ -19,6 +19,14 @@
 			</function>
 		</action>
 
+		<action name="export_event">
+			<function name="export_event">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_todo_item">
 			<function name="submit_todo_item">
 				<arguments>
