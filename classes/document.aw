@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.258 2004/05/21 11:11:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.259 2004/06/02 10:54:06 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1183,8 +1183,24 @@ class document extends aw_template
 			header("X-AW-Document-Title: ".($pagetitle != "" ? $pagetitle : strip_tags($title)));
 		}
 
+		$sel_lang_img_url = "";
+		if ($this->template_has_var("sel_lang_img_url"))
+		{
+			$l = get_instance("languages");
+			$ldata = $l->fetch(aw_global_get("lang_id"));
+			$sel_lang_img = $ldata["meta"]["lang_img"];
+
+			$i = get_instance("image");
+			$sel_lang_img_url = html::img(array(
+				"url" => $i->get_url_by_id($sel_lang_img)
+			));
+		}
+
+		$l = get_instance(CL_LANGUAGE);
+		$l->do_insert_texts($this);
 
 		$this->vars(array(
+			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,
 			"doc_mod" => $doc["doc_modified"],
 			"date_est" => $date_est,
