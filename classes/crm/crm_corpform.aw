@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.3 2004/06/10 11:49:25 duke Exp $
 /*
 //	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
 
@@ -35,7 +35,7 @@ class crm_corpform extends class_base
 	function crm_corpform()
 	{
 		$this->init(array(
-			'clid' => CL_CORPFORM,
+			'clid' => CL_CRM_CORPFORM,
 		));
 	}
 
