@@ -13,6 +13,10 @@
 	<td class="celltext">{VAR:LC_FILE_NOW}?</td>
 	<td class="celltext"><input type="checkbox" class="formtext" name="show" value=1 {VAR:checked}></td>
 </tr>
+<tr class="aste01">
+	<td class="celltext">{VAR:LC_FILE_SITE_FRAME}?</td>
+	<td class="celltext"><input type="checkbox" name="show_framed" value=1 {VAR:show_framed}></td>
+</tr>
 <tr>
 	<td class="celltext">{VAR:LC_FILE_NEW_WIN}?</td>
 	<td class="celltext"><input type="checkbox" class="formtext" name="newwindow" value=1 {VAR:newwindow}></td>
