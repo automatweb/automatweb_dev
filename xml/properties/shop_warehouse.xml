@@ -179,6 +179,26 @@
             <no_caption>1</no_caption>
             <field>order_current_table</field>
       </property>
+      <property>
+            <name>order_current_org</name>
+            <table>objects</table>
+            <group>order_current</group>
+            <type>popup_search</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <clid>CL_CRM_COMPANY</clid>
+            <caption>Tellija organisatsioon</caption>
+      </property>
+      <property>
+            <name>order_current_form</name>
+            <table>objects</table>
+            <group>order_current</group>
+            <type>callback</type>
+            <callback>callback_get_order_current_form</callback>
+            <store>no</store>
+            <field>order_current_form</field>
+            <caption>Tellimuse info vorm</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
             <relationmgr>yes</relationmgr>

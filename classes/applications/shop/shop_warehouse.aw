@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.9 2004/06/09 12:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.10 2004/06/14 14:28:57 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -72,6 +72,11 @@
 @property order_current_toolbar type=toolbar no_caption=1 group=order_current store=no
 @property order_current_table type=table store=no group=order_current no_caption=1
 
+@property order_current_org type=popup_search field=meta method=serialize group=order_current clid=CL_CRM_COMPANY
+@caption Tellija organisatsioon
+
+@property order_current_form type=callback callback=callback_get_order_current_form store=no group=order_current
+@caption Tellimuse info vorm
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -186,6 +191,10 @@ class shop_warehouse extends class_base
 
 			case "order_current_table":
 				$this->do_order_cur_table($arr);
+				break;
+
+			case "order_current_org":
+				$prop["options"];
 				break;
 		};
 		return $retval;
@@ -1621,6 +1630,59 @@ class shop_warehouse extends class_base
 	function __ta_sb_cb($a, $b)
 	{
 		return ($a == $b ? 0 : ((strlen($a) < strlen($b)) ? -1 : 1));
+	}
+
+	function callback_get_order_current_form($arr)
+	{
+		$ret = array();
+
+		$o = $arr["obj_inst"];
+
+		// get order center
+		if (!$o->prop("order_center"))
+		{
+			return $ret;
+		}
+		$oc = obj($o->prop("order_center"));
+
+		// get data form from that
+		if (!$oc->prop("data_form"))
+		{
+			return $ret;
+		}
+
+		// get props from conf form
+		$cff = obj($oc->prop("data_form"));
+		$class_id = $cff->prop("ctype");
+		if (!$class_id)
+		{
+			return $ret;
+		}
+		$class_i = get_instance($class_id);
+		$cf_ps = $class_i->load_from_storage(array(
+			"id" => $cff->id()
+		));
+
+
+		// get all props
+		$cfgx = get_instance("cfg/cfgutils");
+		$all_ps = $cfgx->load_properties(array(
+			"clid" => $class_id,
+		));
+
+		// rewrite names as user_data[prop]
+		foreach($cf_ps as $pn => $pd)
+		{
+			if ($pn == "is_translated" || $pn == "needs_translation")
+			{
+				continue;
+			}
+			$ret[$pn] = $all_ps[$pn];
+			$ret[$pn]["caption"] = $pd["caption"];
+			$ret[$pn]["name"] = "user_data[$pn]";
+		}
+
+		return $ret;
 	}
 
 	///////////////////////////////////////////////

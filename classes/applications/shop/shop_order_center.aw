@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.6 2004/06/09 12:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.7 2004/06/14 14:28:57 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -19,7 +19,7 @@
 @property pdf_template type=textbox table=objects field=meta method=serialize
 @caption PDF Template faili nimi
 
-@property data_form type=relpicker reltype=RELTYPE_REGISTER_FORM table=objects field=meta method=seralize
+@property data_form type=relpicker reltype=RELTYPE_ORDER_FORM table=objects field=meta method=serialize
 @caption Tellija andmete vorm
 
 @property only_active_items type=checkbox ch_value=1 table=objects field=meta method=serialize
@@ -46,8 +46,8 @@
 @reltype CART value=4 clid=CL_SHOP_ORDER_CART
 @caption ostukorv
 
-@reltype REGISTER_FORM value=5 clid=CL_CFGFORM
-@caption registri vorm tellija andmete jaoks
+@reltype ORDER_FORM value=5 clid=CL_CFGFORM
+@caption vorm tellija andmete jaoks
 */
 
 class shop_order_center extends class_base
