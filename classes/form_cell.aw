@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.23 2001/11/02 11:35:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.24 2001/11/14 22:20:03 lauri Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -138,6 +138,8 @@ class form_cell extends form_base
 			$ret[$i]["text"] = $this->arr[$i]->get_text();
 			$ret[$i]["name"] = $this->arr[$i]->get_el_name();
 			$ret[$i]["type"] = $this->arr[$i]->get_type();
+			// subtype vaja teada int sortimise jaoks form_tables
+			$ret[$i]["subtype"] = $this->arr[$i]->get_subtype();
 			$ret[$i]["id"] = $this->arr[$i]->get_id();
 			$ret[$i]["order"] = $this->arr[$i]->get_order();
 			$ret[$i]["group"] = $this->arr[$i]->get_el_group();
@@ -351,13 +353,14 @@ class form_cell extends form_base
 				{
 					$styl = "formstyle".$form_style_count;
 					$this->form->styles[$style_id] = $styl;
+					$form_style_count++;
 				}
 				else
 				{
 					$styl = $this->form->styles[$style_id];
 				}
 			}
-			$cs.="<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\" $styl>".$c."</td>";
+			$cs.="<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\" class=\"$styl\">".$c."</td>";
 		}
 		else
 		{
