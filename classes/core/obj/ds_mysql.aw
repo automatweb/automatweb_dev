@@ -1086,8 +1086,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$fld = $this->properties[$key]["field"];
 				if ($fld == "meta")
 				{
-					$this->meta_filter[$key] = $val;
-					continue;
+					if ($this->properties[$key]["store"] != "connect")
+					{
+						$this->meta_filter[$key] = $val;
+						continue;
+					}
 				}
 				else
 				if ($this->properties[$key]["method"] == "serialize")
@@ -1106,13 +1109,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			$tf = $tbl.".".$fld;
 
-
 			if ($this->properties[$key]["store"] == "connect")
 			{
 				// join aliases as many-many relation and filter by that
+				if ($tbl == "objects")
+				{
+					$idx = "brother_of";
+				}
+				else
+				{
+					$idx = $this->tableinfo[$tbl]["index"];
+				}
 				$this->alias_joins[$key] = array(
 					"name" => "aliases_".$key,
-					"on" => $tbl.".".$this->tableinfo[$this->properties[$key]["table"]]["index"]." = "."aliases_".$key.".source"
+					"on" => $tbl.".".$idx." = "."aliases_".$key.".source"
 				);
 			}
 
