@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.174 2004/02/23 15:26:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.175 2004/03/02 16:50:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -341,6 +341,9 @@ class planner extends class_base
 		
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
+
+		// "my_projects" is misleading, what it actually does is that it includes
+		// events from projects that the owner of the current calendar participiates in
 		if ($obj->prop("my_projects") == 1)
 		{
 			$project = aw_global_get("project");
@@ -364,6 +367,7 @@ class planner extends class_base
 					$user_ids[] = $owner->prop("to");
 				};
 
+				// XXX: get_events_from_projects should use current date range as well
 				$event_ids = $event_ids + $prj->get_events_from_projects(array(
 					"user_ids" => $user_ids,
 					"project_id" => aw_global_get("project"),
@@ -401,6 +405,7 @@ class planner extends class_base
 			$parstr = "objects.parent IN (" . join(",",$folders) . ")";
 		};
 
+		$this->folders = $folders;
 
 		// that is the basic query
 		// I need to add different things to it
@@ -446,8 +451,10 @@ class planner extends class_base
 	function _init_event_source($args = array())
 	{
 		extract($args);
+
 		classload("icons");
 		classload("date_calc");
+
 		$prj = get_instance("groupware/project");
 		$di = get_date_range(array(
 			"date" => isset($date) ? $date : date("d-m-Y"),
@@ -465,38 +472,8 @@ class planner extends class_base
 			$this->content_gen_method = $pm;
 		};
 
-		$folder = (int)$obj->meta("event_folder");
-		
-		$section = aw_global_get("section");
-
-
-		$this->prevref = $this->mk_my_orb("change",array(
-			"section" => $section,
-			"id" => $id,
-			"group" => "show_" . $type,
-			"date" => $di["prev"],
-			"id" => $id,
-			"ctrl" => $ctrl,
-		));
-
-		$this->nextref = $this->mk_my_orb("change",array(
-			"section" => $section,
-			"id" => $id,
-			"group" => "show_" . $type,
-			"date" => $di["next"],
-			"id" => $id,
-			"ctrl" => $ctrl,
-		));
-
-		$_start = $di["start"];
-		$_end = $di["end"];
-
-
 		$events = $this->get_event_list($args);
 		$reflist = array();
-		// now, if a project has been requested from the URL, I need to do additional filtering for each object
-
-		// we sure pass around a LOT of data
 		$this->events_done = true;
 		$rv = array();
 		foreach($events as $event)
@@ -763,6 +740,7 @@ class planner extends class_base
 					$t->obj_inst = $event_obj;
 				};		
 
+
 				$xprops = $t->parse_properties(array(
 						"properties" => $all_props,
 						"name_prefix" => "emb",
@@ -850,6 +828,10 @@ class planner extends class_base
 			{
 				$t->obj_inst = $event_obj;
 				//$t->id = $obj_to_load;
+			}
+			else
+			{
+				$t->obj_inst = new object;
 			};
 
 			// see gruppide tegemine on vaja kuidagi paremini tööle saada junõu
@@ -1718,9 +1700,12 @@ class planner extends class_base
 
 	function get_tasklist($arr = array())
 	{
+		// right, this thing only takes tasks from the calendar's own folder
+		// but should take events from all folders
 		$tasklist = new object_list(array(
 			"class_id" => CL_TASK,
 			"parent" => $this->calendar_inst->prop("event_folder"),
+			//"parent" => $this->folder,
 			"flags" => array(
 				"mask" => OBJ_IS_DONE,
 				"flags" => 0,
