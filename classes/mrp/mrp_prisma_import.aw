@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.8 2005/02/17 10:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.9 2005/02/17 12:21:51 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -47,7 +47,7 @@ class mrp_prisma_import extends class_base
 			"allahindlus" => "Allahindlus",
 			"vahendustasu" => "Vahendustasu",
 			"myygi_hind" => "Muugi hind",
-			"salves_priority" => "prioriteet"
+			"sales_priority" => "prioriteet"
 		);
 
 	}
@@ -490,6 +490,10 @@ class mrp_prisma_import extends class_base
 		$sets = array();
 		foreach($this->prj_flds as $prop => $fld)
 		{
+			if ($fld == "prioriteet")
+			{
+				continue;
+			}
 			$val = $o->prop($prop);
 			$this->quote(&$val);
 			if ($fld == "TööAlgus" || $fld == "TellimuseTähtaeg")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.23 2005/02/17 10:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.24 2005/02/17 12:21:51 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1228,6 +1228,7 @@ class mrp_case extends class_base
 			$t->define_data($row);
 		}
 		$t->set_default_sortby("tm");
+		$t->set_default_sorder("desc");
 		$t->sort_by();
 	}
 
