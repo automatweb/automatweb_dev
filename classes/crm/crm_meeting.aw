@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.7 2004/03/08 16:49:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.8 2004/03/23 16:18:45 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 
@@ -38,11 +38,13 @@
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
-// releditor needs a feature where it will load the first item of the requested relation type
+@property comment_list type=comments group=comments no_caption=1
+@caption Kommentaarid
 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
+@groupinfo comments caption=Kommentaarid
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of

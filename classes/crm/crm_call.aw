@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.10 2004/03/09 13:04:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.11 2004/03/23 16:18:45 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -36,9 +36,13 @@
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
+@property comment_list type=comments group=comments no_caption=1
+@caption Kommentaarid
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
+@groupinfo comments caption=Kommentaarid
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
