@@ -11,6 +11,16 @@
             <caption>S&amp;uuml;ndmus millele registreeruda</caption>
       </property>
       <property>
+            <name>form</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WEBFORM</reltype>
+            <caption>Registreerumisvorm</caption>
+      </property>
+      <property>
             <name>ot</name>
             <table>objects</table>
             <group>general</group>
@@ -27,6 +37,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
+            <datatype>int</datatype>
             <caption>Maksimaalne registreerujate arv</caption>
       </property>
       <property>
@@ -47,15 +58,6 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Kuva dokumendis s&amp;uuml;ndmuse sisu</caption>
-      </property>
-      <property>
-            <name>link_caption</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lingi nimi</caption>
       </property>
       <property>
             <name>redirect</name>
@@ -159,6 +161,11 @@
                   <clid>CL_MENU</clid>
                   <caption>isikute kaust</caption>
             </FOLDER>
+            <WEBFORM>
+                  <value>5</value>
+                  <clid>CL_WEBFORM</clid>
+                  <caption>Sündmuse vorm</caption>
+            </WEBFORM>
       </reltypes>
 </properties>
 
