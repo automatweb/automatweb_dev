@@ -21,5 +21,8 @@ $sf->vars(array(
 
 echo $sf->parse();
 
+$apd = get_instance("layout/active_page_data");
+echo $apd->on_shutdown_get_styles();
+
 aw_shutdown();
 ?>
