@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.28 2003/01/12 12:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.29 2003/01/26 18:38:06 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1513,6 +1513,8 @@ class form_table extends form_base
 		$this->table["change_cols"] = $this->make_keys($settings["change_cols"]);
 		$this->table["user_entries_except_grps"] = $this->make_keys($user_entries_except_grps);
 		$this->table["show_second_table_aliases"] = $this->make_keys($settings["show_second_table_aliases"]);
+		$this->dequote(&$settings["header"]);
+		$this->dequote(&$settings["footer"]);
 		$this->table["header"] = $settings["header"];
 		$this->table["footer"] = $settings["footer"];
 		$this->table["no_titlebar"] = $settings["no_titlebar"];
