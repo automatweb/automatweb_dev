@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.4 2004/06/09 08:11:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.5 2004/06/17 14:36:59 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends core
 {
@@ -10,15 +10,37 @@ class event_property_lib extends core
 
 	function project_selector($arr)
 	{
+		// see annab connectionid kõigist projektidest, mis viitavad sellele sündmusele
+		// which of course is bad.
+
+		// I need a list of all brothers of this object!
+		// so that I can show active ones
 		$e_conns = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_PROJECT,
 		));
 
+		$orig = $arr["obj_inst"]->get_original();
+
+		$olist = new object_list(array(
+			"brother_of" => $orig->id(),
+		));
+
+		$prjlist = array();
+		for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
+		{
+			$xlist[$o->parent()] = 1;
+		};
+
+		//arr($xlist);
+		//arr($olist);
+
+		/*
 		$prjlist = array();
 		foreach($e_conns as $conn)
 		{
 			$prjlist[$conn->prop("from")] = 1;
 		};
+		*/
 
 		$users = get_instance("users");
 		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
@@ -31,6 +53,10 @@ class event_property_lib extends core
 
 		foreach($conns as $conn)
 		{
+			/*
+			print $conn->prop("from");
+			print "<br>";
+			*/
 			$all_props["prj_" . $conn->prop("from")] = array(
 				"type" => "checkbox",
 				"name" => "prj" . "[" .$conn->prop("from") . "]",
@@ -38,7 +64,7 @@ class event_property_lib extends core
 					"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
 					"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
 				)),
-				"ch_value" => $prjlist[$conn->prop("from")],
+				"ch_value" => $xlist[$conn->prop("from")],
 				"value" => 1,
 			);
 		};
@@ -57,6 +83,19 @@ class event_property_lib extends core
 		$e_conns = $event_obj->connections_to(array(
 			"from.class_id" => CL_PROJECT,
 		));
+
+		$orig = $arr["obj_inst"]->get_original();
+
+		$olist = new object_list(array(
+			"brother_of" => $orig->id(),
+		));
+
+		$xlist = array();
+		for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
+		{
+			$xlist[$o->id()] = $o->parent();
+		};
+
 		$awt->stop("retr-project-connections");
 
 		$new_ones = array();
@@ -68,16 +107,17 @@ class event_property_lib extends core
 		$prj_inst = get_instance(CL_PROJECT);
 		$awt->start("disconnect-from-project");
 
-		foreach($e_conns as $conn)
+		//foreach($e_conns as $conn)
+		foreach($xlist as $obj_id => $folder_id)
 		{
-			if (!$new_ones[$conn->prop("from")])
+			if (!$new_ones[$obj_id])
 			{
 				$prj_inst->disconnect_event(array(
-					"id" => $conn->prop("from"),
-					"event_id" => $event_obj->id(),
+					//"id" => $conn->prop("from"),
+					"event_id" => $obj_id,
 				));
 			};
-			unset($new_ones[$conn->prop("from")]);
+			unset($new_ones[$obj_id]);
 		};
 		$awt->stop("disconnect-from-project");
 		$awt->start("connect-to-project");
@@ -91,12 +131,6 @@ class event_property_lib extends core
 		};
 
 		$awt->stop("connect-to-project");
-		if (aw_global_get("uid") == "duke")
-		{
-			print "<pre>";
-			print_r($awt->summaries());
-			print "</pre>";
-		};
 
 	}
 
