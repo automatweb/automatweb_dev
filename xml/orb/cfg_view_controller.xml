@@ -3,4 +3,3 @@
 	<class name="cfg_view_controller" folder="cfg" extends="class_base">
 	</class>
 </orb>
-		
