@@ -117,13 +117,13 @@ class site_template_compiler extends aw_template
 			$area = $parts[1];
 			$level = substr($parts[2], 1);
 
-			if (!array_search($area, $mdefs))
+			if (!$this->_mf_srch($area, $mdefs))
 			{
 				continue;
 			}
 
 			$this->menu_areas[$area]["levels"][$level]["templates"][] = $parts;
-			$this->menu_areas[$area]["parent"] = array_search($area, $mdefs);
+			$this->menu_areas[$area]["parent"] = $this->_mf_srch($area, $mdefs);
 			foreach($parts as $part)
 			{
 				$this->menu_areas[$area]["levels"][$level]["all_opts"][$part] = $part;
@@ -295,6 +295,18 @@ class site_template_compiler extends aw_template
 				$this->menu_areas[$area]["levels"][($level-1)]["no_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
 			}
 		}
+	}
+
+	function _mf_srch($area, $defs)
+	{
+		foreach($defs as $mdid => $md)
+		{
+			if (in_array($area, explode(",", $md)))
+			{
+				return $mdid;
+			}
+		}
+		return false;
 	}
 
 	function compile_template_parts()
