@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.26 2004/08/26 13:38:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.27 2004/10/21 16:08:07 ahti Exp $
 
 /*
 
@@ -71,6 +71,10 @@ class classificator extends class_base
 		{
 			$this->view = 1;
 		};
+		if($prop["recursive"] == 1)
+		{
+			$this->recursive = 1;
+		}
 		list($choices,$name,$use_type) = $this->get_choices(array(
 			"clid" => $arr["clid"],
 			"name" => $prop["name"],
@@ -213,12 +217,23 @@ class classificator extends class_base
 		$ofto = new object($clf[$name]);
 
 		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
-
-		$olx = new object_list(array(
-			"parent" => $parent,
-			"class_id" => CL_META,
-			"lang_id" => array(),
-		));
+		if($this->recursive == 1)
+		{
+			$asd = new object_tree(array(
+				"parent" => $parent,
+				"class_id" => CL_META,
+				"lang_id" => array(),
+			));
+			$olx = $asd->to_list();
+		}
+		else
+		{
+			$olx = new object_list(array(
+				"parent" => $parent,
+				"class_id" => CL_META,
+				"lang_id" => array(),
+			));
+		}
 
 		return array($olx,$ofto->name(),$use_type);
 
