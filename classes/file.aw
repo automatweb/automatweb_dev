@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.88 2004/08/12 14:08:38 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.89 2004/09/09 11:15:09 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -354,10 +354,14 @@ class file extends class_base
 			}
 			else
 			{
-				$replacement = html::img(array(
-					"url" => $icon,
-					'border' => 0,
-				)) . " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
+				if (!aw_ini_get("file.no_icon"))
+				{
+					$replacement = html::img(array(
+						"url" => $icon,
+						'border' => 0,
+					));
+				}
+				$replacement .= " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 			}
 		}
 		return $replacement;
