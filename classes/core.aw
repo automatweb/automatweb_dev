@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.158 2003/02/25 12:01:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.159 2003/02/25 12:25:59 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2402,6 +2402,8 @@ class core extends db_connector
 			return $dat;
 		}
 
+		$x_mar = array();
+
 		// and finally, the database
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
@@ -2417,16 +2419,37 @@ class core extends db_connector
 			{
 				$ret[$row["parent"]][] = $row;
 			}
+			else
+			{
+				$x_mar[$row['oid']] = $row;
+			}
+		}
+
+		if ($rootobj == -1)
+		{
+			$rootobj = $admin_rootmenu;
+		}
+
+		// here we will make the parent of all objects that don't have parents in the tree,
+		// but have them in the excluded list, to be the root
+		// why is this? well, because then the folders that are somewhere deep in the tree and that the user
+		// has can_view acces for, but not their parent folders, can still see them
+		foreach($ret as $prnt => $data)
+		{
+			foreach($data as $d_idx => $d_row)
+			{
+				if (isset($x_mar[$d_row["parent"]]))
+				{
+					$d_row["parent"] = $rootobj;
+					$ret[$rootobj][] = $d_row;
+				}
+			}
 		}
 
 		$tt = array();
 		if ($empty)
 		{
 			$tt[] = "";
-		}
-		if ($rootobj == -1)
-		{
-			$rootobj = $admin_rootmenu;
 		}
 		$this->mkah(&$ret,&$tt,$rootobj,"");
 
