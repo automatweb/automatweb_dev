@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.11 2004/06/02 14:37:23 duke Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.12 2004/06/16 10:04:31 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -72,6 +72,16 @@ class docgen_viewer extends class_base
 			"root_name" => "Classes",
 			"url_target" => "list"
 		));
+
+		/* 	lihtsalt nii infi m6ttes - kui keegi hakkab seda puud siin feikima samasuguseks nagu on rohelise nupu puu
+			siis juhtub kaks asja: 
+				- see aptch reverditakse
+				- ta j22b cvs commit accessist ilma
+
+			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta. 
+
+			- terryf.
+		*/
 
 		$this->ic = get_instance("icons");
 		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"]);
