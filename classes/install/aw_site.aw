@@ -1037,6 +1037,7 @@ class aw_site extends class_base
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
 
 		$ini_opts["document.no_static_forms"] = 1;
+		$ini_opts["menuedit.promo_lead_only"] = 1;
 
 		if ($ini_opts["tpldir"] == "")
 		{
