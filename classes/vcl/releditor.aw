@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.34 2004/11/01 15:44:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.35 2004/11/23 16:26:46 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -516,11 +516,11 @@ class releditor extends core
 		$el_count = 0;
 
 		foreach($props as $item)
-                {
+		{
 			// if that property is in the list of the class properties, then
 			// process it
-                        if (!empty($use_form) || in_array($item["name"],$proplist))
-                        {
+			if (!empty($use_form) || in_array($item["name"],$proplist))
+			{
 				if ($item["type"] == "fileupload")
 				{
 					$name = $item["name"];
@@ -529,7 +529,7 @@ class releditor extends core
 					$filetype = $_fileinf["type"][$name];
 					$tmpname = $_fileinf["tmp_name"][$name];
 					// tundub, et polnud sellist faili, eh?
-					if (empty($tmpname) || !is_uploaded_file($tmpname))
+					if(empty($tmpname) || !is_uploaded_file($tmpname))
 					{
 					}
 					else
@@ -554,9 +554,8 @@ class releditor extends core
 						$el_count++;
 					};
 				};
-
-                        };
-                };
+			};
+		};
 
 		// TODO: make it give feedback to the user, if an object can not be added
 		if ($el_count > 0)
