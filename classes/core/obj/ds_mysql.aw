@@ -259,7 +259,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function save_properties($arr)
 	{
 		extract($arr);
-
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
@@ -344,7 +343,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
-				//echo "q = <pre>". htmlentities($q)."</pre> <br />";
+//				echo "q = <pre>". htmlentities($q)."</pre> <br />";
 				$this->db_query($q);
 			}
 		}
