@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.90 2002/02/18 13:34:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.91 2002/02/21 15:45:37 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -428,12 +428,28 @@ class form extends form_base
 		$this->arr["after_submit"] = $after_submit;
 		$this->arr["after_submit_text"] = $after_submit_text;
 		$this->arr["after_submit_link"] = $after_submit_link;
+
+		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
 		if (is_array($entry_name_el))
 		{
 			foreach($entry_name_el as $elid)
 			{
 				$this->arr["name_els"][$elid] = $elid;
+			}
+		}
+
+		if (join(",",$this->map("%s",$old_namels)) != join(",",$this->map("%s",$this->arr["name_els"])))
+		{
+			// now go through all entries and rename them
+			$this->db_query("SELECT oid FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND form_entries.form_id = ".$this->id." AND status != 0");
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();
+				$this->entry_name = "";
+				$this->load_entry($row["oid"]);
+				$this->update_entry_name($row["oid"]);
+				$this->restore_handle();
 			}
 		}
 
