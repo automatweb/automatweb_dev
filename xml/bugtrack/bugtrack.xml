@@ -14,7 +14,7 @@
 <frameattribs border="0" cellspacing="0" cellpadding="0" width="100%"/>
 <framebgcolor bgcolor="#CCCCCC"/>
 <tableattribs border="0" cellspacing="1" cellpadding="2" width="100%"/>
-<default_order order="desc" value="pri"/>
+<default_order order="asc" value="tm"/>
 </definitions>
 
 <actions>
