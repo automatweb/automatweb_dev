@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.107 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.108 2002/03/07 22:08:12 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -339,7 +339,6 @@ class menuedit extends aw_template
 		{
 			$this->users_only_redir();
 		};
-
 		// if the tpl_dir property is set, reinitialize the template class
 		if ($this->properties["tpl_dir"])
 		{
@@ -3464,9 +3463,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// mitte teha jarjest uusi valju juurde - duke
 			// 
 			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
+			/*
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
+			*/
+			// it's already uncompressed, use it
+			$meta = $row["meta"];
 
 			// see on siis nädala parema paani leadide näitamine
 			// nõme häkk. FIX ME.
@@ -3904,6 +3907,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$this->save_handle();
 					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
 					//$samenu = $this->db_next();
+
 					$samenu = $this->get_menu($said);
 					$this->mar[$said] = $samenu;
 					$this->restore_handle();
@@ -3919,9 +3923,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$link .= ($samenu["alias"] != "") ? $samenu["alias"] :  $samenu["oid"];
 				}
 
+				/*
 				$meta = $this->get_object_metadata(array(
 					"metadata" => $samenu["metadata"],
 				));
+				*/
+				// use uncompressed version
+				$meta = $samenu["meta"];
 
 				if (!($meta["users_only"] == 1 && $GLOBALS["uid"] == ""))
 				{
@@ -4250,6 +4258,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// some places need raw metadata, others benefit from reading
 				// the already uncompressed metainfo from the cache
 				$row["meta"] = aw_unserialize($row["metadata"]);
+				$row["mtype"] = $row["type"];
+				// Maybe this means that some people come with knives after me sometimes,
+				// but I'm pretty sure that we do not need to save unpacked metadata
+				// in the cache, since it's available in $row[meta] anyway
+				unset($row["metadata"]);
 				$this->mpr[$row["parent"]][] = $row;
 				$this->mar[$row["oid"]] = $row;
 			}
@@ -5235,9 +5248,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$imgs = false;
 		while ($sel_image == "" && $si_parent)
 		{
+			/*
 			$sel_menu_meta = $this->get_object_metadata(array(
 				"metadata" => $this->mar[$si_parent]["metadata"],
 			));
+			*/
+			$sel_menu_meta = $this->mar[$si_parent]["meta"];
 			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
 			{
 				$imgs = true;
@@ -5434,7 +5450,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"tpl_edit" => "",
 			"ftpl_edit" => "",
 		);
-
+	
 		while($parent)
 		{
 			$obj = $this->mar[$parent];
@@ -5442,8 +5458,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// fetch it directly from the database
 			if (not($obj))
 			{
-				$obj = $this->get_obj_meta($uo_parent);
+				$obj = $this->get_obj_meta($parent);
 			};
+
+			// only use metadata from menus
+			$is_menu = ($obj["class_id"] == CL_PSEUDO);
 
 			if (is_array($obj))
 			{
@@ -5455,7 +5474,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$intersect = array_intersect(array_keys($_dat),array_keys($this->properties));
 				foreach($intersect as $val)
 				{
-					if (not($this->properties[$val]))
+					if ($is_menu && not($this->properties[$val]))
 					{
 						//print "<!-- found at $obj[oid] -->\n";
 						$this->properties[$val] = $_dat[$val];
@@ -5470,7 +5489,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		  print "<!--";
 		  print_r($this->properties);
 		  print "-->";
-		 */
+		*/
 
 	}
 
@@ -5647,8 +5666,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			case CL_EXTLINK:
 				classload("extlinks");
 				$t = new extlinks();
-				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
-				header("Location: $url");
+				$link = $t->get_link($obj["oid"]);
+				//list($url,$target,$caption) = $t->draw_link($obj["oid"]);
+				header("Location: $link[url]");
 				//$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 				exit;
 				break;
