@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.75 2004/06/11 09:17:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.76 2004/06/11 09:54:06 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -387,12 +387,9 @@ class doc extends class_base
 					$target_relation = $this->db_fetch_field($q,"target");
 
 					// now I have to figure out the event folder for that planner
-					$pl = $this->get_object(array(
-						"oid" => $target_relation,
-						"clid" => CL_PLANNER,
-					));
+					$pl = new object($target_relation);
 
-					$fldr = $pl["meta"]["event_folder"];
+					$fldr = $pl->prop("event_folder");
 
 					if (is_numeric($fldr))
 					{
@@ -591,7 +588,7 @@ class doc extends class_base
 		{
 			return;
 		}
-		$obj = $this->get_object($id);
+		$obj = new object($id);
 
 		$sar = array(); $oidar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = '$id' AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
@@ -641,7 +638,15 @@ class doc extends class_base
 		{
 			if ($oid != $id)	// no recursing , please
 			{
-				$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER_DOCUMENT,"status" => $obj["status"],"brother_of" => $id,"name" => $obj["name"],"comment" => $obj["comment"],"period" => $obj["period"]));
+				$noid = $this->new_object(array(
+					"parent" => $oid,
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => $obj->status(),
+					"brother_of" => $id,
+					"name" => $obj->name(),
+					"comment" => $obj->comment(),
+					"period" => $obj->period(),
+				));
 			}
 		}
 	}
@@ -722,11 +727,6 @@ class doc extends class_base
 		$retval = "";
 		if (isset($args["id"]))
 		{
-			$obj = $this->get_object(array(
-				"oid" => $args["id"],
-				"class_id" => CL_DOCUMENT,
-			));
-
 			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND type = %d AND pri = 1",
 					$args["id"],CL_IMAGE);
 		
