@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.13 2002/09/05 14:04:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.14 2002/09/05 18:16:52 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -764,6 +764,7 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$this->save_handle();
 			if ($row["count"] > 0)
 			{
 				$_cnt = $row["count"];
@@ -792,18 +793,20 @@ class form_calendar extends form_base
 			if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
 			{
 				$_rel = $chain_entry_id;
-			}
-			else
-			{
-				$__rel = $args["post_vars"][$row["el_relation"]];
-				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-				$_rel = (int)$m[1];
+				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
+				$this->db_query($q);
 			};
 
-			list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+			$__rel = $args["post_vars"][$row["el_relation"]];
+			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+			$_rel = (int)$m[1];
+
 			$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
 				VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
 			$this->db_query($q);
+			$this->restore_handle();
+
 		};
 	}
 
