@@ -288,7 +288,6 @@
             <name>tm</name>
             <type>textbox</type>
             <size>20</size>
-            <newonly>1</newonly>
             <table>documents</table>
             <group>general</group>
             <field>tm</field>
