@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.3 2004/12/01 10:59:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.4 2004/12/14 10:05:02 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -347,7 +347,7 @@ class css extends class_base
 
 		$retval .= "}\n";
 
-		if ($has_border || trim($data["padding"]) != "" || trim($data["margin"]) != "")
+		if ($has_border || trim($data["padding"]) != "" || trim($data["margin"]) != "" || trim($data["fgcolor"]) != "")
 		{
 			$retval .= ".$name td {\n";
 			if (trim($data["border"]) != "")
@@ -362,6 +362,10 @@ class css extends class_base
 					$retval .= "$data[bordercolor]";
 				}
 				$retval .= ";\n";
+			}
+			if (trim($data["fgcolor"]) != "")
+			{
+				$retval .= "\tcolor: ".($data["fgcolor"]{0} == "#" ? "" : "#").$data["fgcolor"].";\n";
 			}
 			$retval .= " }\n";
 		}
