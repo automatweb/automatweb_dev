@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.70 2002/09/04 07:35:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.71 2002/09/04 17:43:47 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -222,6 +222,16 @@ class form_element extends aw_template
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["link"])
 				));
 				$li = $this->parse("HLINK_ITEMS");
+				if ($this->arr["subtype"] == "show_calendar")
+				{
+					$this->vars(array(
+						"clink_targets" => $this->picker($this->arr["clink_target"],array("form" => "Vorm","form_chain" => "Vormipärg")),
+						"clink_no_orb" => checked($this->arr["clink_no_orb"]),
+					));
+					$this->vars(array(
+						"CALENDAR_LINK" => $this->parse("CALENDAR_LINK"),
+					));
+				};
 				$this->vars(array(
 					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
@@ -1091,6 +1101,10 @@ class form_element extends aw_template
 			$this->arr["link_address"] = $$var;
 			$var=$base."_link_op";
 			$this->arr["link_op"] = $$var;
+			$var=$base."_clink_target";
+			$this->arr["clink_target"] = $$var;
+			$var=$base."_clink_no_orb";
+			$this->arr["clink_no_orb"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'timeslice')
@@ -2139,11 +2153,21 @@ class form_element extends aw_template
 				if ($this->arr["subtype"] == "show_calendar")
 				{
 					$_text = $this->arr["link_text"];
-					$cchain = aw_global_get("current_chain");
-					if ($cchain)
+					if ($this->arr["clink_target"] == "form_chain")
+					{
+						$cal_id = aw_global_get("current_chain");
+						$ctrl = aw_global_get("current_chain_entry");
+					}
+					else
+					{
+						$cal_id = $this->id;
+						$ctrl = $this->entry_id;
+					};
+					$orb = !($this->arr["clink_no_orb"]);
+					if ($cal_id)
 					{
 						// somehow I must be able to configure the appearance of this link (aw or not aw, orb or not orb)
-						$_link = $this->mk_my_orb("view",array("id" => $cchain,"ctrl" => $this->entry_id),"planner",0,1);
+						$_link = $this->mk_my_orb("view",array("id" => $cal_id,"ctrl" => $ctrl),"planner",0,$orb);
 					}
 					else
 					{
