@@ -56,5 +56,12 @@
                   <caption>Sisu</caption>
             </content>
       </groupinfo>
+      <reltypes>
+            <TRANSFORM>
+                  <value>1</value>
+                  <clid>CL_DATA_FILTER</clid>
+                  <caption>andmete muundaja</caption>
+            </TRANSFORM>
+      </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.7 2005/02/23 13:00:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.8 2005/03/08 13:29:58 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -36,6 +36,10 @@
 
 	@reltype DB_LOGIN value=1 clid=CL_DB_LOGIN 
 	@caption andmebaasi login
+
+	@reltype TRANSFORM value=2 clid=CL_DATA_FILTER
+	@caption andmete muundaja
+
 */
 
 class db_table_contents extends class_base
@@ -465,6 +469,13 @@ class db_table_contents extends class_base
 			}
 		}
 
+		foreach($o->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
+		{
+			$tr = $c->to();
+			$tr_i = $tr->instance();
+			$tr_i->transform($tr, $ret);
+		}
+
 		return $ret;
 	}
 
@@ -493,6 +504,13 @@ class db_table_contents extends class_base
 		while ($row = $db->db_next())
 		{
 			$ret[] = $row;
+		}
+
+		foreach($o->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
+		{
+			$tr = $c->to();
+			$tr_i = $tr->instance();
+			$tr_i->transform($tr, $ret);
 		}
 
 		return $ret;

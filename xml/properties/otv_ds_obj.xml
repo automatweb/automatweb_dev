@@ -117,6 +117,11 @@
                   <clid>CL_META</clid>
                   <caption>Muutuja</caption>
             </META>
+            <TRANSFORM>
+                  <value>7</value>
+                  <clid>CL_DATA_FILTER</clid>
+                  <caption>andmete muundaja</caption>
+            </TRANSFORM>
       </reltypes>
 </properties>
 

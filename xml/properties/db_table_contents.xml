@@ -121,6 +121,11 @@
                   <clid>CL_DB_LOGIN</clid>
                   <caption>andmebaasi login</caption>
             </DB_LOGIN>
+            <TRANSFORM>
+                  <value>2</value>
+                  <clid>CL_DATA_FILTER</clid>
+                  <caption>andmete muundaja</caption>
+            </TRANSFORM>
       </reltypes>
 </properties>
 

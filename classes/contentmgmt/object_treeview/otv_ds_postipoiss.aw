@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.19 2005/02/21 08:54:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.20 2005/03/08 13:29:57 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -25,6 +25,8 @@
 @property ct type=table group=content store=no
 @caption Sisu
 
+@reltype TRANSFORM value=1 clid=CL_DATA_FILTER
+@caption andmete muundaja
 */
 
 class otv_ds_postipoiss extends class_base
