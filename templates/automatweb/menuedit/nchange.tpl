@@ -278,12 +278,14 @@ function savemenu() {
 }
 </script>
 
+<!--<body onLoad="javascript:onOff('bob1284','dip1284','visible','dd1284');">-->
+
 
 <form action='reforb.{VAR:ext}' name="menuinfo" method=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='1000000'>
 
 
-<table border=0 width="780" cellspacing="0" cellpadding="2">
+<table border=0 width="100%" cellspacing="0" cellpadding="2">
 <tr>
 <td align="left" class="sitehead">Objekti m‰‰rangud</td>
 <td align="right" class="sitehead"><!--<a href="javascript:self.close();"><IMG SRC="images/close.gif" WIDTH="14" HEIGHT="13" BORDER=0 ALT="Close window"></a>--></td>
@@ -293,7 +295,7 @@ function savemenu() {
 <IMG SRC="images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
 
 
-<table width="780" cellspacing="0" cellpadding="1">
+<table width="100%" cellspacing="0" cellpadding="1">
 <tr><td class="tableborder">
 
 
