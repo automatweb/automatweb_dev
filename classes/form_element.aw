@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.55 2002/06/28 18:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.56 2002/07/12 06:26:53 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -169,6 +169,10 @@ class form_element extends aw_template
 				"default_controller" 			=> $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
 				"value_controller" 				=> $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
 				"disabled" 								=> checked($this->arr["disabled"]),
+			));
+	
+			$this->vars(array(
+				"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
 			));
 
 			// now do element metadata
@@ -356,14 +360,20 @@ class form_element extends aw_template
 					"textarea_rows_name"	=> "element_".$this->id."_ta_rows",
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
+					"check_length" => checked($this->arr["check_length"]),
+					"max_length" => $this->arr["max_length"],
+					"check_length_error" => $this->arr["check_length_error"],
 					"textarea_cols"	=> $this->arr["ta_cols"],
 					"textarea_rows"	=> $this->arr["ta_rows"],
 					"is_wysiwyg" => checked($this->arr["wysiwyg"] == 1)
 				));
+
 				$ta = $this->parse("TEXTAREA_ITEMS");
+
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
+					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
 				));
 			}
 
@@ -392,12 +402,16 @@ class form_element extends aw_template
 					"activity_months" => checked($this->arr["activity_type"] == "months"),
 					"activity_date" => checked($this->arr["activity_type"] == "date"),
 					"thousands_sep" => $this->arr["thousands_sep"],
+					"check_length" => checked($this->arr["check_length"]),
+					"max_length" => $this->arr["max_length"],
+					"check_length_error" => $this->arr["check_length_error"],
 
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
+					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
 				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -904,6 +918,12 @@ class form_element extends aw_template
 			$this->arr["must_error"] = $$var;
 			$var=$base."_wysiwyg";
 			$this->arr["wysiwyg"] = $$var;
+			$var=$base."_check_length";
+			$this->arr["check_length"] = $$var;
+			$var=$base."_max_length";
+			$this->arr["max_length"] = $$var;
+			$var=$base."_check_length_error";
+			$this->arr["check_length_error"] = $$var;
 		}
 
 		if ($this->arr["type"] == "radiobutton")
@@ -982,6 +1002,12 @@ class form_element extends aw_template
 			$this->arr["period_items"] = $$var;
 			$var=$base."_max_period_items";
 			$this->arr["max_period_items"] = $$var;
+			$var=$base."_check_length";
+			$this->arr["check_length"] = $$var;
+			$var=$base."_max_length";
+			$this->arr["max_length"] = $$var;
+			$var=$base."_check_length_error";
+			$this->arr["check_length_error"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -1124,6 +1150,17 @@ class form_element extends aw_template
 		}
 
 		$mue = str_replace("\"","\\\"",$mue);
+		
+		if ($this->form->lang_id == $lang_id)
+		{
+			$cle = $this->arr["check_length_error"];
+		}
+		else
+		{
+			$cle = $this->arr["check_length_error"][$lang_id];
+		}
+
+		$cle = str_replace("\"","\\\"",$cle);
 
 		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
 		{
@@ -1136,16 +1173,29 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
-			return  $str."{ alert(\"".$mue."\");return false; }}\n";
+			//return  $str."{ alert(\"".$mue."\");return false; }}\n";
+			$str .= "{ alert(\"".$mue."\");return false; }}\n";
 		}
-		else
+		//else
+		if (($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea") && isset($this->arr["check_length"]) && $this->arr["check_length"] == 1)
+		{
+			$max_len = $this->arr["max_length"];
+			$str .= "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
+			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
+			$str .=$this->id;
+			$str .= "\" && document.fm_".$this->fid.".elements[i].value.length > $max_len)";
+			//return  $str."{ alert(\"".$mue."\");return false; }}\n";
+			$str .= "{ alert(\"".$cle."\");return false; }}\n";
+		}
+		//else
 		if ($this->arr["type"] == "listbox" && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
 			$str .= "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
-			return  $str."{ alert(\"".$mue."\");return false; }}\n";
+			//return  $str."{ alert(\"".$mue."\");return false; }}\n";
+			$str .= "{ alert(\"".$mue."\");return false; }}\n";
 		}
 
 		return $str;
