@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.38 2001/07/16 14:35:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.39 2001/07/17 02:00:56 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -59,18 +59,39 @@ class core extends db_connector
 	function get_object_metadata($args = array())
 	{
 		extract($args);
-		$odata = $this->_get_object_metadata($oid);
+		// if metadata is defined in the arguments, we will not read
+		// the object into memory.
+		if ($args["metadata"])
+		{
+			$odata["metadata"] = $args["metadata"];
+		}
+		else
+		{
+			$odata = $this->_get_object_metadata($oid);
+		};
 		if (!$odata)
 		{
 			return false;
 		};
+
 		// load, and parse the information
 		classload("xml");
 		$xml = new xml(array("ctag" => "metadata"));
 		$metadata = $xml->xml_unserialize(array(
 					"source" => $odata["metadata"],
 		));
-		return $metadata[$key];
+		
+		// if key is defined, return only that part of the metainfo
+		if ($args[$key])
+		{	
+			$retval = $metadata[$key];
+		}
+		// otherwise the whole thing
+		else
+		{
+			$retval = $metadata;
+		};
+		return $retval;
 	}
 
 	function _get_object_metadata($oid)
@@ -97,7 +118,14 @@ class core extends db_connector
 		$this->quote($args);
 		extract($args);
 		// loeme vana metadata sisse
-		$old = $this->_get_object_metadata($oid);
+		if ($args["metadata"])
+		{
+			$old["metadata"] = $args["metadata"];
+		}
+		else
+		{
+			$old = $this->_get_object_metadata($oid);
+		};
 		if (!$old)
 		{
 			return false;
@@ -110,9 +138,17 @@ class core extends db_connector
 
 		$metadata[$key] = $value;
 		$newmeta = $xml->xml_serialize($metadata);
-		$this->quote($newmeta);
-		$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
-		$this->db_query($q);
+		if ($args["metadata"])
+		{
+			$retval = $newmeta;
+		}
+		else
+		{
+			$this->quote($newmeta);
+			$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
+			$this->db_query($q);
+			$retval = true;
+		};
 		return true;
 	}
 
@@ -335,7 +371,7 @@ class core extends db_connector
 				"status","hits","lang_id","comment","last","modifiedby",
 				"jrk","period","alias","periodic","site_id","activate_at",
 				"deactivate_at","autoactivate","autodeactivate","brother_of",
-				"cache_dirty",
+				"cache_dirty","metadata",
 			);
 
 		// vahetame key=>value paarid ära
