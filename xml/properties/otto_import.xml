@@ -148,7 +148,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>7 pildiga lehehed</caption>
+            <caption>7 pildiga lehed</caption>
       </property>
       <property>
             <name>force_inf_view</name>
@@ -166,7 +166,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>10 pildiga lehehed</caption>
+            <caption>10 pildiga lehed</caption>
       </property>
       <property>
             <name>force_8_view</name>
@@ -175,7 +175,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>8 pildiga lehehed</caption>
+            <caption>8 pildiga lehed</caption>
       </property>
       <property>
             <name>force_no_side_view</name>
