@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.7 2004/11/05 12:27:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.8 2004/11/23 10:47:37 kristo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -190,6 +190,7 @@ class shop_special_offer extends class_base
 					"prod" => $prod,
 					"prodat" => $prodat,
 					"plut" => $plut,
+					"price" => $prodat[$pid]["price"]
 				);
 
 				$html .= $prod_i->do_draw_product($param);
