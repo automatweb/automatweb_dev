@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.72 2003/11/07 21:30:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.73 2003/11/09 18:40:09 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -183,14 +183,26 @@
 	@groupinfo ip caption="IP Aadressid"
 
 	@tableinfo menu index=id master_table=objects master_index=oid
-*/
 
-define("RELTYPE_PICTURES_MENU",1);
-define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
-define("RELTYPE_SHOW_AS_CALENDAR",3);
-define("RELTYPE_SHOW_AS_LAYOUT",4);
-define("RELTYPE_SEEALSO",5);
-define("RELTYPE_IP",6);
+	@reltype PICTURES_MENU value=1 clid=CL_MENU
+	@caption võta pildid menüült
+
+	@reltype SHOW_SUBFOLDERS_MENU value=2 clid=CL_MENU
+	@caption võta alamkasutad menüült
+
+	@reltype SHOW_AS_CALENDAR value=3 clid=CL_PLANNER
+	@caption võta objekte kalendrist
+
+	@reltype SHOW_AS_LAYOUT value=4 clid=CL_LAYOUT
+	@caption kasuta saidi näitamisel layouti
+
+	@reltype SEEALSO value=5 clid=CL_MENU
+	@caption vaata lisaks
+
+	@reltype IP value=6 clid=CL_IPADDRESS
+	@caption IP aadress ligipääsu piiramiseks
+			
+*/
 
 define("IP_ALLOWED", 1);
 define("IP_DENIED", 2);
@@ -910,46 +922,11 @@ class menu extends class_base
 		return $bsar;
 	}
 
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_PICTURES_MENU => "v&otilde;ta pildid men&uuml;&uuml;lt",
-			RELTYPE_SHOW_SUBFOLDERS_MENU => "võta alamkaustad men&uuml;&uuml;lt",
-			RELTYPE_SHOW_AS_CALENDAR => "võta objekte kalendrist",
-			RELTYPE_SHOW_AS_LAYOUT => "kasuta saidi n&auml;itamisel layouti",
-			RELTYPE_SEEALSO => "vaata lisaks",
-			RELTYPE_IP => "IP aadress ligip&auml;&auml;su piiramiseks",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_PICTURES_MENU:
-			case RELTYPE_SHOW_SUBFOLDERS_MENU:
-			case RELTYPE_SEEALSO:
-				$retval = array(CL_MENU);
-				break;
-			case RELTYPE_SHOW_AS_CALENDAR:
-				$retval = array(CL_PLANNER);
-				break;
-			case RELTYPE_SHOW_AS_LAYOUT:
-				$retval = array(CL_LAYOUT);
-				break;
-			case RELTYPE_IP:
-				$retval = array(CL_IPADDRESS);
-				break;
-		};
-		return $retval;
-	}
-
 	function callback_on_submit_relation_list($args)
 	{
 		$obj =& obj($args["id"]);
 		$co = $obj->connections_from(array(
-			"type" => RELTYPE_ID
+			"type" => RELTYPE_IP,
 		));
 
 		$_allow = $obj->meta("ip_allow");
