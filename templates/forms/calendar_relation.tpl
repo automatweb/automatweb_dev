@@ -16,6 +16,10 @@
 <td class="celltext"><select name="el_start">{VAR:start_els}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Sündmuse lõpu element:</td>
+<td class="celltext"><select name="el_end">{VAR:end_els}</select></td>
+</tr>
+<tr class="aste01">
 <td class="celltext">Sündmuste arvu element:</td>
 <td class="celltext"><select name="el_cnt">{VAR:cnt_els}</select></td>
 </tr>

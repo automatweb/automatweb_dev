@@ -80,6 +80,11 @@
 											<select class="formselect" name="cols[{VAR:col_id}][link_el]" size="10">{VAR:link}</select>
 											<!-- END SUB: SEL_LINK -->
 
+											<!-- SUB: SEL_FORMEL -->
+											Vali element:<Br>
+											<select class="formselect" name="cols[{VAR:col_id}][formel]" size="10">{VAR:formels}</select>
+											<!-- END SUB: SEL_FORMEL -->
+
 											<!-- SUB: SEL_SETTINGS -->
 											Tulba m‰‰rangud:
 											<table border="0">

@@ -563,6 +563,12 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
+<tr>
+<td class="fgtext">Liitmise/lahutamise nupud: </td>
+<td class="fgtext"><input type='checkbox' class='small_button' name='{VAR:cell_id}_up_down_button' {VAR:up_down_button}></td>
+<td class="fgtext">Mitu liidetakse/lahutatakse</td>
+<td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_up_down_count' value='{VAR:up_down_count}' size='2'></td>
+</tr>
 <!-- END SUB: IS_NUMBER -->
 
 <!-- SUB: HAS_SIMPLE_CONTROLLER -->

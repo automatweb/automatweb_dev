@@ -85,6 +85,7 @@ Kalendri vorm<br>
 <select name="cal_form">{VAR:cal_forms}</select>
 </td>
 </tr>
+-->
 <tr>
 <td class="fform" width="30%">
 Kalendri kontrollervorm<br>
@@ -94,6 +95,7 @@ Kalendri kontrollervorm<br>
 <select name="cal_controller">{VAR:cal_controllers}</select>
 </td>
 </tr>
+<!--
 <tr>
 <td class="fform" width="30%">
 Eventite sisestusvorm<br>

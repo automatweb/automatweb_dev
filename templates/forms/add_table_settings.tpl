@@ -304,6 +304,10 @@
 											<tr>
 												<td class="celltext" colspan="2">Footer:<br><textarea class="formtext" name="settings[footer]" cols="50" rows="5">{VAR:footer}</textarea></td>
 											</tr>
+
+											<tr>
+												<td class="celltext" colspan="2">Ostukorv, kuhu kaubad lisatakse: <select class="formselect" name="settings[shop_basket]">{VAR:shop_basket}</select></td>
+											</tr>
 <!-- END SUB: CHANGE -->
 
 										</table>

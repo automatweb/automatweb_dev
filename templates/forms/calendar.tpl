@@ -36,6 +36,7 @@
 <td class="celltext" align="center">Objekt</td>
 <td class="celltext" align="center">Seoseelement</td>
 <td class="celltext" align="center">Algus</td>
+<td class="celltext" align="center">Lõpp</td>
 <td class="celltext" align="center">Arv</td>
 <td class="celltext" align="center">Tabel</td>
 <td class="celltext" colspan="2" align="center">Tegevus</td>
@@ -45,6 +46,7 @@
 <td class="celltext">{VAR:name}</td>
 <td class="celltext">{VAR:rel}</td>
 <td class="celltext">{VAR:start}</td>
+<td class="celltext">{VAR:end}</td>
 <td class="celltext">{VAR:cnt}</td>
 <td class="celltext">{VAR:table}</td>
 <td class="celltext"><a href="{VAR:ch_link}">Muuda</a></td>
