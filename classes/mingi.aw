@@ -4,18 +4,23 @@ class mingi extends aw_template
 {
 	function mingi()
 	{
+		enter_function("mingi::mingi",array());
 		$this->init("mingi");
+		exit_function("mingi::mingi");
 	}
 
 	function orb_teeseda($arr)
 	{
+		enter_function("mingi::orb_teeseda",array());
 		extract($arr);
 
+		exit_function("mingi::orb_teeseda");
 		return "blabla";
 	}
 
 	function add($arr)
 	{
+		enter_function("mingi::add",array());
 		extract($arr);
 		$this->mk_path($parent, "Lisa miski");
 		$this->read_template("add.tpl");
@@ -24,11 +29,13 @@ class mingi extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to))
 		));
 
+		exit_function("mingi::add");
 		return $this->parse();
 	}
 
 	function submit($arr)
 	{
+		enter_function("mingi::submit",array());
 		extract($arr);
 
 		if ($id)
@@ -58,11 +65,13 @@ class mingi extends aw_template
 			}
 		}
 
+		exit_function("mingi::submit");
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function change($arr)
 	{
+		enter_function("mingi::change",array());
 		extract($arr);
 
 		$dat = $this->get_object($id);
@@ -76,11 +85,13 @@ class mingi extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
 
+		exit_function("mingi::change");
 		return $this->parse();
 	}
 
 	function parse_alias($arr)
 	{
+		enter_function("mingi::parse_alias",array());
 		extract($arr);
 
 		$dat = $this->get_object($alias["target"]);
@@ -92,6 +103,7 @@ class mingi extends aw_template
 			"age" => $dat["meta"]["age"]
 		));
 
+		exit_function("mingi::parse_alias");
 		return $this->parse();
 	}
 }
