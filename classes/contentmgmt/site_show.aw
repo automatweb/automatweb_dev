@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.91 2004/10/27 08:49:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.92 2004/10/27 12:03:59 kristo Exp $
 
 /*
 
@@ -2257,7 +2257,9 @@ class site_show extends class_base
 	{
 		$this->section_obj = obj(aw_global_get("section"));
 
-		if ($this->section_obj->class_id() && isset($this->cfg["classes"][$this->section_obj->class_id()]))
+		$clss = aw_ini_get("classes");
+
+		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]))
 		{
 			$obj_inst = $this->section_obj->instance();
 			if (method_exists($obj_inst, "request_execute"))

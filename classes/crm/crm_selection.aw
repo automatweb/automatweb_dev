@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.15 2004/07/02 09:40:32 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.16 2004/10/27 12:03:36 kristo Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -181,6 +181,7 @@ class crm_selection extends class_base
 			"field" => "id",
 		));
 
+		$clss = aw_ini_get("classes");
 		if (is_array($objects))
 		{
 			foreach ($objects as $object)
@@ -197,7 +198,7 @@ class crm_selection extends class_base
 					"status" => $object["status"],
 					"jrk" => $object["jrk"],
 					"clid" => $item->class_id(),
-					"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
+					"class_id" => $clss[$item->class_id()]["name"],
 				));
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.85 2004/10/25 14:52:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.86 2004/10/27 12:04:04 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -40,7 +40,8 @@ class admin_menus extends aw_template
 	{
 		$cldata = array();
 		$n2id = array();
-		foreach($this->cfg["classes"] as $clid => $_cldata)
+		$clss = aw_ini_get("classes");
+		foreach($clss as $clid => $_cldata)
 		{
 			if (!empty($_cldata["name"]) && $_cldata["can_add"])
 			{
@@ -84,10 +85,11 @@ class admin_menus extends aw_template
 	{
 		$ret = "";
 		# see teeb esimese taseme klassid
-		if (is_array($this->cfg["classes"]) && $prnt == 0)
+		$clss = aw_ini_get("classes");
+		if (is_array($clss) && $prnt == 0)
 		{
 			$tcnt = 0;
-			foreach($this->cfg["classes"] as $clid => $cldata)
+			foreach($clss as $clid => $cldata)
 			{
 				if (isset($cldata["parents"]))
 				{
@@ -122,9 +124,9 @@ class admin_menus extends aw_template
 		}
 
 		# see hoolitseb s
-		if (is_array($this->cfg["classes"]) && $prnt != 0)
+		if (is_array($clss) && $prnt != 0)
 		{
-			foreach($this->cfg["classes"] as $clid => $cldata)
+			foreach($clss as $clid => $cldata)
 			{
 				if (!empty($cldata["parents"]) && $cldata["can_add"])
 				{
@@ -560,6 +562,8 @@ class admin_menus extends aw_template
 		$cache = get_instance("cache");
 		$langs = get_instance("languages");
 
+		$clss = aw_ini_get("classes");
+
 		if (is_array($cut_objects))
 		{
 			reset($cut_objects);
@@ -569,7 +573,7 @@ class admin_menus extends aw_template
 				{
 					// so, let the object update itself when it is being cut-pasted, if it so desires
 					$o = obj($oid);
-					if ($this->cfg["classes"][$o->class_id()]["file"] != "")
+					if ($clss[$o->class_id()]["file"] != "")
 					{
 						$inst = $o->instance();
 						if (method_exists($inst, "cut_hook"))
@@ -1046,6 +1050,7 @@ class admin_menus extends aw_template
 		$this->set_parse_method("eval");
 		$this->read_template($tpl);
 
+		$clss = aw_ini_get("classes");
 
 		while ($row = $this->db_next())
 		{
@@ -1066,7 +1071,7 @@ class admin_menus extends aw_template
 			}
 			else
 			{
-				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
+				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$clss[$row["class_id"]]["file"]);
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
@@ -1130,7 +1135,7 @@ class admin_menus extends aw_template
 			}
 			else
 			{
-				$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
+				$row["class_id"] = $clss[$row["class_id"]]["name"];
 			}
 						
 						

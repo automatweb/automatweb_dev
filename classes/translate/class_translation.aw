@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.3 2004/03/16 10:29:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.4 2004/10/27 12:04:30 kristo Exp $
 // translation.aw - Tõlge 
 /*
 
@@ -88,7 +88,8 @@ class class_translation extends class_base
 
 			case "info":
 				$langs = aw_ini_get("languages.list");
-				$data["value"] = "Keel: " . $args["obj_inst"]->prop("lang_code"). "<br>" . "Klass: " . $this->cfg["classes"][$args["obj_inst"]->subclass()]["name"];
+				$clss = aw_ini_get("classes");
+				$data["value"] = "Keel: " . $args["obj_inst"]->prop("lang_code"). "<br>" . "Klass: " . $clss[$args["obj_inst"]->subclass()]["name"];
 				break;
 
 		}
@@ -103,10 +104,11 @@ class class_translation extends class_base
 
 		$retval = array();
 
+		$clss = aw_ini_get("classes");
 		foreach($conns as $id => $item)
 		{
 			$target_obj = $item->to();
-			$classinf = $this->cfg["classes"][$target_obj->class_id()];
+			$classinf = $clss[$target_obj->class_id()];
 			$retval["prev" . $id] = array(
 				"type" => "text",
 				"caption" => $classinf["name"] . " eelvaade",
@@ -150,7 +152,8 @@ class class_translation extends class_base
 				
 		}
 
-		$classname = $this->cfg["classes"][$subclass]["name"];
+		$clss = aw_ini_get("classes");
+		$classname = $clss[$subclass]["name"];
 
 		foreach($groupinfo as $key => $val)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.79 2004/10/15 12:08:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.80 2004/10/27 12:04:15 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -692,7 +692,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$is_remote = true;
 			}
 
-			//while($row = $this->db_next())
+			$clss = aw_ini_get("classes");
 			while($row = $this->get_next())
 			{
 				// after all, what good does a local acl check do for a remote object?
@@ -715,7 +715,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$row["lang"] = $row_o->lang();
 
 				$this->rescounter++;
-				$type = $this->cfg["classes"][$row["class_id"]]["name"];
+				$type = $clss[$row["class_id"]]["name"];
 				if (!$row["name"])
 				{
 					$row["name"] = "(nimetu)";
@@ -729,7 +729,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				));
 				if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
 				{
-					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
+					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $clss[$row["class_id"]]["file"]) . "'>$row[name]</a>";
 				};
 
 				// trim the location to show only up to 3 levels
@@ -749,7 +749,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				{
 					$row["name"] = html::href(array(
 						"caption" => $row["name"],
-						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $this->cfg["classes"][$row["class_id"]]["file"])
+						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $clss[$row["class_id"]]["file"])
 					));
 				}
 			
@@ -782,14 +782,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
 				$table .= $this->t->draw();
 				$table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
-			};
-
-			if ($results > 0)
-			{
-				// I use that in modify_toolbar to determine whether
-				// to show the "create object group" and "assign configuration"
-				// buttons
-				$this->has_results = 1;
 			};
 
 		};
@@ -1019,7 +1011,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 			$toolbar = $mn->rf_toolbar(array(
 				"parent" => $parent,
-				"callback" => array($this,"modify_toolbar"),
 				"no_save" => 1,
 				"sel_count" => count($sel_objs)
 			));
@@ -1068,21 +1059,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		return $ret;
         }
 
-
-	function modify_toolbar($args)
-	{
-		return false;
-		if ($this->has_results && is_object($args["toolbar"]))
-		{
-			$args["toolbar"]->add_separator();
-
-			$url = "javascript:mk_group('Objektigrupi nimi:')";
-			$link = "<a href=\"$url\" class=\"fgtext\">Moodusta objektigrupp</a>";
-
-                        $args["toolbar"]->add_cdata($link);
-
-		};
-	}
 
 	function get_results()
 	{
@@ -1889,11 +1865,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		get_instance("icons");
 
-		//while($row = $this->db_next())
+		$clss = aw_ini_get("classes");
 		while($row = $this->get_next())
 		{
 			$this->rescounter++;
-			$type = $this->cfg["classes"][$row["class_id"]]["name"];
+			$type = $clss[$row["class_id"]]["name"];
 			$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
 			if (!$row["name"])
 			{
@@ -1908,7 +1884,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			));
 			if (!isset($args["clid"]) || ($args["clid"] == "aliasmgr"))
 			{
-				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
+				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $clss[$row["class_id"]]["file"]) . "'>$row[name]</a>";
 			};
 
 			// trim the location to show only up to 3 levels
@@ -1952,13 +1928,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			};
 		};
 
-		if ($results > 0)
-		{
-			// I use that in modify_toolbar to determine whether
-			// to show the "create object group" and "assign configuration"
-			// buttons
-			$this->has_results = 1;
-		};
 	}
 
 	/**  

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.2 2004/06/04 10:27:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.3 2004/10/27 12:04:21 kristo Exp $
 // workflow_resource.aw - Ressurss 
 /*
 
@@ -105,9 +105,10 @@ class workflow_resource extends class_base
 			));
 
 
+			$clss = aw_ini_get("classes");
 			for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
 			{
-				$clinf = $this->cfg["classes"][$o->class_id()];
+				$clinf = $clss[$o->class_id()];
 				$t->add_item(array(
 					"timestamp" => $o->prop("start1"),
 					"data" => array(

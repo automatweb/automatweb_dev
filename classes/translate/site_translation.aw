@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.13 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.14 2004/10/27 12:04:30 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -308,7 +308,8 @@ class site_translation extends class_base
 				continue;
 			}
 
-			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
+			$clss = aw_ini_get("classes");
+			$clfile = $clss[$item->class_id()]["file"];
 			$t->define_data(array(
 				"id" => $item->id(),
 				"name" => html::href(array(
@@ -451,7 +452,8 @@ class site_translation extends class_base
 
 			if ($show)
 			{
-				$clfile = $this->cfg["classes"][$item->class_id()]["file"];
+				$clss = aw_ini_get("classes");
+				$clfile = $clss[$item->class_id()]["file"];
 				$t->define_data(array(
 					"id" => $item->id(),
 					"name" => html::href(array(
@@ -459,7 +461,7 @@ class site_translation extends class_base
 						"caption" => $item->name(),
 						"target" => "_blank"
 					)),
-					"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
+					"class_id" => $clss[$item->class_id()]["name"],
 					"base_lang" => $this->base_lang_code,
 					"action" => join(" | ", $lch),
 				));
@@ -612,7 +614,8 @@ class site_translation extends class_base
 			}
 	
 
-			$clfile = $this->cfg["classes"][$item->class_id()]["file"];
+			$clss = aw_ini_get("classes");
+			$clfile = $clss[$item->class_id()]["file"];
 			$t->define_data(array(
 				"id" => $item->id(),
 				"name" => html::href(array(
@@ -620,7 +623,7 @@ class site_translation extends class_base
 					"caption" => $item->name(),
 					"target" => "_blank"
 				)),
-				"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
+				"class_id" => $clss[$item->class_id()]["name"],
 				"base_lang" => $this->base_lang_code,
 				"action" => join(" | ", $lch),
 			));

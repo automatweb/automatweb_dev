@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.19 2004/10/08 15:24:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.20 2004/10/27 12:03:46 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -59,6 +59,7 @@ class rate extends class_base
 			'tpldir' => 'contentmgmt/rate',
 			'clid' => CL_RATE
 		));
+		$this->classes = aw_ini_get("classes");
 	}
 	
 	function get_property(&$arr)
@@ -382,7 +383,7 @@ class rate extends class_base
 		{
 			return image::make_img_tag($this->img->get_url($dat['img_file']));
 		}
-		return $this->mk_my_orb("change", array("id" => $dat["oid"]), basename($this->cfg["classes"][$dat["class_id"]]["file"]));
+		return $this->mk_my_orb("change", array("id" => $dat["oid"]), basename($this->classes[$dat["class_id"]]["file"]));
 	}
 }
 ?>

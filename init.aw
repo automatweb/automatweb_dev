@@ -294,7 +294,9 @@ function aw_config_init_class(&$that)
 {
 //	enter_function("__global::aw_config_init_class",array());
 	$class = get_class($that);
-	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$GLOBALS["cfg"]["__default"]);
+	$td = $GLOBALS["cfg"]["__default"];
+	unset($td["classes"]);
+	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$td);
 	$that->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	$that->cfg["config"] = $GLOBALS["cfg"]["config"];
 //	exit_function("__global::aw_config_init_class");

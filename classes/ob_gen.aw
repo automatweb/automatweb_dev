@@ -205,7 +205,8 @@ class ob_gen extends class_base
 				}
 
 				$list_classes[]=' - ';
-				foreach ($this->cfg['classes'] as $key => $val)
+				$clss = aw_ini_get("classes");
+				foreach ($clss as $key => $val)
 				{
 					if ($val['name'])
 					{

@@ -139,12 +139,17 @@ class menu_gen extends class_base
 			case 'show_all_objects':
 				$objects=$this->find_objects_under_parent($meta['analyse_this'],$meta['sub_menus'],'',ARR_ALL);
 
+				$clss = aw_ini_get("classes");
 				foreach($objects as $val)
 				{
 					if ($val['class_id'] == CL_PSEUDO)
-					$str.='<b>'.$val['name'].'</b> - '.$this->cfg['classes'][$val['class_id']]['name'].'<br />';
+					{
+						$str.='<b>'.$val['name'].'</b> - '.$clss[$val['class_id']]['name'].'<br />';
+					}
 					else
-					$str.=$val['name'].' - '.$this->cfg['classes'][$val['class_id']]['name'].'<br />';
+					{
+						$str.=$val['name'].' - '.$clss[$val['class_id']]['name'].'<br />';
+					}
 				}
 				$data['value'] = 'NB! neid objekte liigutatakse!!!(va kataloogid)<br /><br />'.$str.
 				'<br /><b>need kataloogid luuakse</b> <br />'.implode('<br />',$this->complete_names($this->catalogs_to_make($meta),$meta['prefix'],$meta['sufix']));
@@ -242,7 +247,8 @@ class menu_gen extends class_base
 
 		if ($tyyp == 'CLASS_ID')
 		{
-			foreach($this->cfg['classes'] as $val)
+			$clss = aw_ini_get("classes");
+			foreach($clss as $val)
 			{
 //				$CREATE[$val[]]=$val['name'];
 			}

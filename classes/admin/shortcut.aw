@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.5 2004/08/23 09:37:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.6 2004/10/27 12:04:04 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -42,7 +42,9 @@ class shortcut extends class_base
 	{
 		$val = obj($args['id']);
 		$val2 = obj($val->brother_of());
-		$cldat = $this->cfg['classes'][$val2->class_id()];
+
+		$clss = aw_ini_get("classes");
+		$cldat = $clss[$val2->class_id()];
 
 		if ($cldat['alias_class'])
 		{

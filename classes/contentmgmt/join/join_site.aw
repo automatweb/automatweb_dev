@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.12 2004/08/23 09:34:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.13 2004/10/27 12:03:53 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -383,9 +383,11 @@ class join_site extends class_base
 		$required = $arr["obj_inst"]->meta("required");
 		$visible = $arr["obj_inst"]->meta("visible");
 
+		$clss = aw_ini_get("classes");
+
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
-			$cln = basename($this->cfg["classes"][$clid]["file"]);
+			$cln = basename($clss[$clid]["file"]);
 
 			// get properties for clid
 			$cfgu = get_instance("cfg/cfgutils");
@@ -395,7 +397,7 @@ class join_site extends class_base
 			));
 
 			$prop["vcl_inst"]->define_data(array(
-				"prop" => "<b>".$this->cfg["classes"][$clid]["name"]."</b>",
+				"prop" => "<b>".$clss[$clid]["name"]."</b>",
 				"visible" => "",
 				"required" => ""
 			));
@@ -474,7 +476,7 @@ class join_site extends class_base
 
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
-			$cln = basename($this->cfg["classes"][$clid]["file"]);
+			$cln = basename($clss[$clid]["file"]);
 
 			// get properties for clid
 			$cfgu = get_instance("cfg/cfgutils");
@@ -484,7 +486,7 @@ class join_site extends class_base
 			));
 
 			$prop["vcl_inst"]->define_data(array(
-				"prop" => "<b>".$this->cfg["classes"][$clid]["name"]."</b>",
+				"prop" => "<b>".$clss[$clid]["name"]."</b>",
 				"visible" => "",
 				"required" => ""
 			));
@@ -613,12 +615,14 @@ class join_site extends class_base
 		}
 		$je = aw_global_get("join_err");
 
+		$clss = aw_ini_get("classes");
+
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
-			$cln = basename($this->cfg["classes"][$clid]["file"]);
+			$cln = basename($clss[$clid]["file"]);
 
-			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
+			$clss[$clid] = $clss[$clid]["name"];
 
 			if (!$first)
 			{
@@ -1054,13 +1058,15 @@ class join_site extends class_base
 
 		$sessd = aw_global_get("site_join_status");
 
+		$clss = aw_ini_get("classes");
+
 		$tp = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
 			// get properties for clid
 			$props = $cfgu->load_properties(array(
-				"file" => basename($this->cfg["classes"][$clid]["file"]),
+				"file" => basename($clss[$clid]["file"]),
 				"clid" => $clid
 			));
 			$relinfo = $cfgu->relinfo;
@@ -1252,12 +1258,14 @@ class join_site extends class_base
 		$visible = $ob->meta("visible");
 		$cfgu = get_instance("cfg/cfgutils");
 
+		$clss = aw_ini_get("classes");
+
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
-			$cln = basename($this->cfg["classes"][$clid]["file"]);
+			$cln = basename($clss[$clid]["file"]);
 
-			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
+			$clss[$clid] = $clss[$clid]["name"];
 
 			// get properties for clid
 			$props = $cfgu->load_properties(array(

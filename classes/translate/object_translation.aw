@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.16 2004/10/05 09:15:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.17 2004/10/27 12:04:30 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -78,7 +78,8 @@ class object_translation extends aw_template
 			$dstlang_id = $langinfo[$args["dstlang"]]["id"];
 		};
 
-		$fl = $this->cfg["classes"][$orig->prop("class_id")]["file"];
+		$clss = aw_ini_get("classes");
+		$fl = $clss[$orig->prop("class_id")]["file"];
 		if ($fl == "document")
 		{
 			$fl = "doc";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.9 2004/10/08 18:48:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.10 2004/10/27 12:03:49 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -463,7 +463,7 @@ class otv_ds_obj extends class_base
 					}
 					else
 					{
-						$ret[$t->id()][$ff_n] = $this->cfg["classes"][$t->class_id()]["name"];
+						$ret[$t->id()][$ff_n] = $classlist[$t->class_id()]["name"];
 					}
 				}
 			}

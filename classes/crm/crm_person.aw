@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.61 2004/10/15 15:08:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.62 2004/10/27 12:03:31 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -774,6 +774,7 @@ class crm_person extends class_base
 		));
 
 		$menudata = '';
+		$clss = aw_ini_get("classes");
 		if (is_array($action))
 		{
 			foreach($action as $key => $val)
@@ -783,7 +784,7 @@ class crm_person extends class_base
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
 						'title' => 'Kalender määramata',
-						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
+						'text' => 'Lisa '.$clss[$val["clid"]]["name"],
 						'disabled' => true,
 					));
 				}
@@ -799,11 +800,11 @@ class crm_person extends class_base
 							'clid' => $val["clid"],
 							'group' => 'add_event',
 							'action' => 'change',
-							'title' => $this->cfg["classes"][$val["clid"]]["name"].': '.$args['obj_inst']->name(),
+							'title' => $clss[$val["clid"]]["name"].': '.$args['obj_inst']->name(),
 							'parent' => $parents[$val['reltype']],///?
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 						)),
-						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
+						'text' => 'Lisa '.$clss[$val["clid"]]["name"],
 					));
 				}
 			};
@@ -1360,7 +1361,7 @@ class crm_person extends class_base
 
 		$overview_start = $range["overview_start"];
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);

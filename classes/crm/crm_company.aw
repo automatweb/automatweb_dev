@@ -1974,7 +1974,7 @@ class crm_company extends class_base
 
 		$overview_start = $range["overview_start"];
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
@@ -2351,6 +2351,8 @@ class crm_company extends class_base
 			$parents[RELTYPE_CALL] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $parents[RELTYPE_TASK] = $user_calendar->prop('event_folder');
 		}
 
+		$clss = aw_ini_get("classes");
+
 		$toolbar->add_menu_button(array(
 			"name" => "main_menu",
 			"tooltip" => "Uus",
@@ -2359,13 +2361,13 @@ class crm_company extends class_base
 		$toolbar->add_sub_menu(array(
 			"parent" => "main_menu",
 			"name" => "calendar_sub",
-			"text" => $this->cfg["classes"][CL_PLANNER]["name"],
+			"text" => $clss[CL_PLANNER]["name"],
 		));
 		
 		$toolbar->add_sub_menu(array(
 			"parent" => "main_menu",
 			"name" => "firma_sub",
-			"text" => $this->cfg["classes"][$this->clid]["name"],
+			"text" => $clss[$this->clid]["name"],
 		));
 
 		//3 == crm_company.reltype_address=3 //
@@ -2377,7 +2379,7 @@ class crm_company extends class_base
 			{
 				foreach($clids as $clid)
 				{
-					$classinf = $this->cfg["classes"][$clid];
+					$classinf = $clss[$clid];
 
 					$url = $this->mk_my_orb('new',array(
 						'alias_to' => $args['obj_inst']->id(),
@@ -2415,7 +2417,7 @@ class crm_company extends class_base
 			{
 				foreach($clids as $clid)
 				{
-					$classinf = $this->cfg["classes"][$clid];
+					$classinf = $clss[$clid];
 					$url = $this->mk_my_orb('new',array(
 						// alright then. so what do those things to? 
 						// they add a relation between the object created through

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.8 2004/10/08 01:32:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.9 2004/10/27 12:04:38 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -263,7 +263,8 @@ class prisma_order extends class_base
 
 			for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
 			{
-				$clinf = $this->cfg["classes"][$o->class_id()];
+				$clss = aw_ini_get("classes");
+				$clinf = $clss[$o->class_id()];
 
 				$j_id = $o->meta("job_id");
 				$j_o = obj($j_id);

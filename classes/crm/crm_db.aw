@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.11 2004/06/10 12:29:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.12 2004/10/27 12:03:31 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -805,7 +805,7 @@ class crm_db extends class_base
 	{
 		$toolbar = &$args["prop"]["toolbar"];                
 		if (empty($args["new"]))
-                {
+		{
 			$crm_db = $args["obj_inst"];
 
 			$parents[CL_CRM_COMPANY] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
@@ -819,11 +819,13 @@ class crm_db extends class_base
 				array('clid' => CL_CRM_COMPANY),
 			);
 			$menudata = '';
+			$clss = aw_ini_get("classes");
+
 			if (is_array($alist))
 			{
 				foreach($alist as $key => $val)
 				{
-					$classinf = $this->cfg["classes"][$val["clid"]];
+					$classinf = $clss[$val["clid"]];
 					if (!$parents[$val['clid']])
 					{
 						$toolbar->add_menu_item(array(
@@ -959,11 +961,12 @@ class crm_db extends class_base
 
 			);
 			$menudata = '';
+			$clss = aw_ini_get("classes");
 			if (is_array($alist))
 			{
 				foreach($alist as $key => $val)
 				{
-					$classinf = $this->cfg["classes"][$val["class_id"]];
+					$classinf = $clss[$val["class_id"]];
 					if (!$parents[$val['class_id']])
 					{
 						$toolbar->add_menu_item(array(
@@ -997,8 +1000,8 @@ class crm_db extends class_base
 	// !Tegevusalade toolbar
 	function teg_toolbar(&$args)
 	{
-                if (empty($args["new"]))
-                {
+		if (empty($args["new"]))
+		{
 			$toolbar = &$args["prop"]["toolbar"];
 			$crm_db = $args["obj_inst"];
 
@@ -1014,11 +1017,13 @@ class crm_db extends class_base
 			));
 
 			$menudata = '';
+			$clss = aw_ini_get("classes");
+
 			if (is_array($alist))
 			{
 				foreach($alist as $key => $val)
 				{
-					$classinf = $this->cfg["classes"][$val["clid"]];
+					$classinf = $clss[$val["clid"]];
 					if (!$parents[$val['clid']])
 					{
 						$toolbar->add_menu_item(array(

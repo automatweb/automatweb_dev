@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/swot/Attic/swot.aw,v 1.7 2003/12/07 15:27:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/swot/Attic/swot.aw,v 1.8 2004/10/27 12:04:27 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SWOT relationmgr=yes no_status=1
@@ -92,8 +92,9 @@ class swot extends class_base
 
 		$tb = new aw_table(array("layout" => "generic",'prefix' => "sw_".$clid));
 
+		$clss = aw_ini_get("classes");
 		$tb->define_field(array(
-			"caption" => $this->cfg["classes"][$clid]["name"],
+			"caption" => $clss[$clid]["name"],
 			"name" => "name",
 			"sortable" => 1
 		));
@@ -113,7 +114,7 @@ class swot extends class_base
 		{
 			$s_row = array();
 			$s_row["name"] = html::href(array(
-				'url' => $this->mk_my_orb("change", array("id" => $sobj->id()),$this->cfg["classes"][$clid]["file"]),
+				'url' => $this->mk_my_orb("change", array("id" => $sobj->id()),$clss[$clid]["file"]),
 				'caption' => $sobj->name(),
 			));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.5 2004/06/25 20:13:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.6 2004/10/27 12:04:38 kristo Exp $
 // prisma_center.aw -  
 /*
 
@@ -302,7 +302,8 @@ class prisma_center extends class_base
 				continue;
 			}
 			$r_o = obj($e->prop("obj_id"));
-			$fl = $this->cfg["classes"][$r_o->class_id()]["file"];
+			$clss = aw_ini_get("classes");
+			$fl = $clss[$r_o->class_id()]["file"];
 			if ($fl == "document")
 			{
 				$fl = "doc";
@@ -450,7 +451,8 @@ class prisma_center extends class_base
 		$en_inst->set_prop("obj_id", $cl_o->id());
 		$en_inst->save();
 
-		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id()), $this->cfg["classes"][$entity_type->prop("entity_cfgform")]["class"]));
+		$clss = aw_ini_get("classes");
+		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id()), $clss[$entity_type->prop("entity_cfgform")]["class"]));
 		die();
 	}
 
@@ -486,7 +488,8 @@ class prisma_center extends class_base
 		$cl_o->set_meta("entity_instance", $en_inst->id());
 		$cl_o->save();
 
-		$fl = $this->cfg["classes"][$cfgform->prop("subclass")]["file"];
+		$clss = aw_ini_get("classes");
+		$fl = $clss[$cfgform->prop("subclass")]["file"];
 		if ($fl == "document")
 		{
 			$fl = "doc";
