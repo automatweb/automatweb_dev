@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.140 2003/11/19 16:05:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.141 2003/11/19 17:59:52 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -402,7 +402,7 @@ class planner extends class_base
 		// also include events from any projects the user participates in
 		$project = aw_global_get("project");
 		$additional_ids = $prj->get_events_from_projects(array(
-			"project" => aw_global_get("project"),
+			"project_id" => aw_global_get("project"),
 		));
 
 		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
@@ -420,7 +420,7 @@ class planner extends class_base
 				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add");
 			};
 		}
-			
+
 		$this->db_query($q);
 		$events = array();
 		// now, if a project has been requested from the URL, I need to do additional filtering for each object
@@ -449,7 +449,7 @@ class planner extends class_base
 				"group" => "add_event",
 				"event_id" => $row["oid"],
 			));
-			if ($row["class_id"] == CL_BROTHER_DOCUMENT)
+			if ($row["brother_of"] != $row["oid"])
 			{
 				$this->save_handle();
 				$real_obj = $this->get_object($row["brother_of"]);
@@ -459,7 +459,6 @@ class planner extends class_base
 			$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
 			$events[$gx][$row["brother_of"]] = $row;
 		};
-		// nüüd tuleks veel konnektsioone ka arvestada .. oh, god this sucks
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
 		return $events;
