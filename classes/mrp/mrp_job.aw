@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.19 2005/03/16 12:10:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.20 2005/03/18 13:30:13 ahti Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -235,12 +235,12 @@ class mrp_job extends class_base
 		else
 		{
 			$this_object =& $arr["obj_inst"];
-			$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT, "class_id" => CL_MRP_CASE));
+			$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT", "class_id" => CL_MRP_CASE));
 
 			foreach ($connections as $connection)
 			{
 				$project = $connection->to();
-				$project_connections = $project->connections_from(array ("type" => RELTYPE_MRP_OWNER, "class_id" => CL_MRP_WORKSPACE));
+				$project_connections = $project->connections_from(array ("type" => "RELTYPE_MRP_OWNER", "class_id" => CL_MRP_WORKSPACE));
 
 				foreach ($project_connections as $project_connection)
 				{
@@ -267,7 +267,7 @@ class mrp_job extends class_base
 			$this_object =& $arr["obj_inst"];
 		}
 
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT, "class_id" => CL_MRP_CASE));
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT", "class_id" => CL_MRP_CASE));
 
 		foreach ($connections as $connection)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.34 2005/03/15 14:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.35 2005/03/18 13:30:13 ahti Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -489,7 +489,7 @@ class mrp_case extends class_base
 			$projects_folder = $workspace->prop ("projects_folder");
 			$this_object->connect (array (
 				"to" => $workspace,
-				"reltype" => RELTYPE_MRP_OWNER,
+				"reltype" => "RELTYPE_MRP_OWNER",
 			));
 			$this_object->set_parent ($projects_folder);
 			$this_object->save ();
@@ -546,7 +546,7 @@ class mrp_case extends class_base
 			$this_object =& $arr["obj_inst"];
 		}
 
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_OWNER, "class_id" => CL_MRP_WORKSPACE));
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_OWNER", "class_id" => CL_MRP_WORKSPACE));
 
 		foreach ($connections as $connection)
 		{
@@ -570,7 +570,7 @@ class mrp_case extends class_base
 		$hilighted_jobs = array ();
 
 		### add row dfn-s, resource names
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$project_resources = array ();
 		$project_start = "NA";
 
@@ -827,7 +827,7 @@ class mrp_case extends class_base
 		$table->set_default_sorder ("asc");
 
 		### define data for each connected job
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 
 		foreach ($connections as $connection)
 		{
@@ -955,7 +955,7 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$orders = array ();
 		$errors = false;
-		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$jobs = array ();
 
 		foreach ($connections as $connection)
@@ -1054,7 +1054,7 @@ class mrp_case extends class_base
 							if (is_oid ($value))
 							{
 								### delete currently used/connected resource
-								$connections = $job->connections_from(array ("type" => RELTYPE_MRP_RESOURCE, "class_id" => CL_MRP_RESOURCE));
+								$connections = $job->connections_from(array ("type" => "RELTYPE_MRP_RESOURCE", "class_id" => CL_MRP_RESOURCE));
 
 								foreach ($connections as $connection)
 								{
@@ -1063,7 +1063,7 @@ class mrp_case extends class_base
 
 								$job->connect (array (
 									"to" => obj ($value),
-									"reltype" => RELTYPE_MRP_RESOURCE,
+									"reltype" => "RELTYPE_MRP_RESOURCE",
 								));
 								$job->set_prop ("resource", $value);
 								$job->save ();
@@ -1111,7 +1111,7 @@ class mrp_case extends class_base
 			$this_object =& $arr["obj_inst"];
 		}
 
-		$connections = $this_object->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$workflow = array ();
 
 		foreach ($connections as $connection)
@@ -1238,7 +1238,7 @@ class mrp_case extends class_base
 	{
 		$this_object =& $arr["obj_inst"];
 		$workspace =& $this->get_current_workspace ($arr);
-		$connections = $this_object->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $this_object->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$resource_id = $arr["mrp_new_job_resource"];
 		$job_number = (count ($connections) + 1);
 
@@ -1288,17 +1288,17 @@ class mrp_case extends class_base
 		{
 			$job->connect (array (
 				"to" => $resource,
-				"reltype" => RELTYPE_MRP_RESOURCE,
+				"reltype" => "RELTYPE_MRP_RESOURCE",
 			));
 		}
 
 		$job->connect (array (
 			"to" => $this_object,
-			"reltype" => RELTYPE_MRP_PROJECT,
+			"reltype" => "RELTYPE_MRP_PROJECT",
 		));
 		$this_object->connect (array (
 			"to" => $job,
-			"reltype" => RELTYPE_MRP_PROJECT_JOB,
+			"reltype" => "RELTYPE_MRP_PROJECT_JOB",
 		));
 
 		return true;
@@ -1441,7 +1441,7 @@ class mrp_case extends class_base
 		$project->save ();
 
 		### delete project's jobs
-		$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB));
+		$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB"));
 
 		foreach ($connections as $connection)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.46 2005/03/16 12:10:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.47 2005/03/18 13:30:13 ahti Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1365,7 +1365,7 @@ class mrp_workspace extends class_base
 
 			if (!$planned_date)
 			{
-				$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+				$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 				$jobs = count ($connections);
 
 				$list = new object_list (array (
