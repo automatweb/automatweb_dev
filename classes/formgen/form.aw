@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.30 2003/02/03 18:14:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.31 2003/02/06 15:30:29 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1250,14 +1250,6 @@ class form extends form_base
 				}
 			}
 
-			if ($this->type == FTYPE_CONFIG)
-			{
-				$this->set_object_metadata(array(
-					"oid" => $obj_id,
-					"data" => $this->config_keys,
-				));
-			};
-
 			$controllers_ok = true;
 			$controller_warnings_ok = true;
 			foreach($this->controller_queue as $ctrl)
@@ -1353,15 +1345,6 @@ class form extends form_base
 				"cal_id"  => $cal_id,
 			));
 		
-			if ($this->type == FTYPE_CONFIG)
-			{
-				// remember obj_id
-				$q = "UPDATE form_entries SET
-					obj_id = '$obj_id'
-					WHERE id = '$this->entry_id'";
-				$this->db_query($q);
-			}
-
 			$this->is_new_entry = true;
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
@@ -1475,10 +1458,6 @@ class form extends form_base
 				{
 					// n2itame ocingu tulemusi
 					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id,"op_id" => 1,"section" => $section));
-				}
-				elseif ($this->type == FTYPE_CONFIG)
-				{
-					$l = $this->mk_my_orb("change",array("id" => $obj_id),"objconfig");
 				}
 				else
 				{
@@ -3399,30 +3378,6 @@ class form extends form_base
 		// put perhaps this is useful somewhere else as well
 		$this->arr["el_default_folder"] = $el_default_folder;
 
-		if ($type == FTYPE_CONFIG)
-		{
-			$this->arr["config_file"] = $config_file;
-
-			// call xmlform to create the elements
-			$xf = get_instance("xmlform");
-			$cfg_arr = $xf->gen_fg_elements(array(
-				"form_id" => $id,
-				"config_file" => $config_file,
-				"parent" => $el_default_folder,
-			));
-			$this->arr = $cfg_arr + $this->arr;
-
-			// XXX: register the config form
-			$ac = get_instance("config");
-			$cfgforms = $ac->get_simple_config("config_forms");
-			$config_forms = aw_unserialize($cfgforms);
-			$config_forms[$id] = $name;
-			$cfgforms = aw_serialize($config_forms);
-			$this->quote($cfgforms);
-			$ac->set_simple_config("config_forms",$cfgforms);
-			
-		}
-
 		// add the type of the form to the log message as well
 		$this->_log(ST_FORM, SA_ADD, $this->ftypes[$type] ." ". $name, $id);
 
@@ -3436,7 +3391,7 @@ class form extends form_base
 
 		// unless it's a config form in which case I don't really want to clone it. At least not right
 		// now -- duke
-		if ($base && ($type != FTYPE_CONFIG))
+		if ($base)
 		{
 			// don't you like this a lot better? :) -- duke
 			// why yes. yes I do :) -- terryf

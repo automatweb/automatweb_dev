@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.27 2003/01/27 14:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.28 2003/02/06 15:30:29 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2781,41 +2781,7 @@ class form_element extends aw_template
 		$this->entry = $var;
 		$this->entry_id = $id;
 
-		if ($this->arr["config_key"] && ($this->form->type == FTYPE_CONFIG))
-		{
-			if ($this->arr["type"] == "date")
-			{
-				$cval = $tm;
-			}
-			// extract the bloody id from the listbox
-			elseif ($this->arr["type"] == "listbox")
-			{
-				$parts = explode("_lbopt_",$var);
-				$cval = $parts[1];
-			}
-			else
-			{
-				$cval = $var;
-			};
-
-			$pos = strpos($this->arr["config_key"],"[");
-			if (strpos($this->arr["config_key"],"[") !== false)
-			{
-				$ck = $this->arr["config_key"];
-				$estr = "\$this->form->config_keys" . $ck . "=$cval;";
-				if ($cval)
-				{
-					eval($estr);
-				};
-			}
-			else
-			{
-				$this->form->config_keys[$this->arr["config_key"]] = $cval;
-			};
-
-		}
-
-			$var = $this->form->post_vars[$prefix.$this->id];
+		$var = $this->form->post_vars[$prefix.$this->id];
 //		echo "id = ",$this->id," entry = ", $var ,"<br>";
 		if ($this->form->arr["has_controllers"])
 		{
