@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.51 2004/06/11 11:43:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.52 2004/06/11 16:25:13 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -80,6 +80,9 @@
 	
 	------------------------------------------------------------------------
 	@default group=write_mail
+
+	@property mail_toolbar type=toolbar no_caption=1
+	@caption Maili toolbar
 
 	@property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 	@caption Maili kirjutamine
@@ -360,9 +363,37 @@ class ml_list extends class_base
 		}
 		return $retval;
 	}
+	
+	/** previews a mailing list message 
+		
+		@attrib name=msg_preview  
+		
+		@param id required type=int 
+		@param msg_id required type=int 
+		
+	**/
+	function msg_preview($arr)
+	{	
+		extract($arr);
+		$msg_obj = new object($arr["msg_id"]);
+		$message = nl2br($msg_obj->prop("message"));
+		$al = get_instance("aliasmgr");
+		$al->parse_oo_aliases($msg_obj->id(),&$message);
+		if (is_oid($msg_obj->meta("template_selector")))
+		{
+			$tpl_obj = new object($msg_obj->meta("template_selector"));
+			$tpl_content = $tpl_obj->prop("content");
+			$tpl_content = str_replace("#content#",$message,$tpl_content);
+			print $tpl_content;
+		}
+		else
+		{
+			print $message;
 
-	
-	
+		};
+		#arr($msg_obj->properties());
+		#arr($msg_obj->meta());
+	}
 
 	function get_property($arr)
 	{
@@ -396,6 +427,37 @@ class ml_list extends class_base
 
 			case "mail_subject":
 				$data["value"] = $this->gen_mail_subject($arr);
+				break;
+
+			case "mail_toolbar":
+				$tb = &$data["toolbar"];
+				$tb->add_button(array(
+					"name" => "save",
+					"img" => "save.gif",
+					"tooltip" => "Salvesta",
+					"action" => "submit",
+				));
+				if (is_oid($arr["request"]["msg_id"]))
+				{
+					$tb->add_button(array(
+						"name" => "preview",
+						"img" => "preview.gif",
+						"tooltip" => "Eelvaade",
+						"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("msg_preview",array(
+								"id" => $arr["obj_inst"]->id(),
+								"msg_id" => $arr["request"]["msg_id"],
+						),$this->clid,false,true) . "','mpreview',800,600)",
+					));
+				};
+				/*
+				$tb->add_separator();
+				$tb->add_button(array(
+					"name" => "send",
+					"img" => "mail_send.gif",
+					"tooltip" => "Saada",
+					"confirm" => "Saata kiri ära?",
+				));
+				*/
 				break;
 
 			case "mail_start_date":
@@ -517,6 +579,10 @@ class ml_list extends class_base
 			$arr["action"] = "export_members";
 			$arr["args"]["filename"] = "members.txt";
 			$arr["args"]["export_type"] = $this->export_type;
+		};
+		if (isset($this->edit_msg))
+		{
+			$arr["args"]["msg_id"] = $this->edit_msg;
 		};
 	}
 	
@@ -1017,7 +1083,7 @@ class ml_list extends class_base
 		{
 			$refresh_rate = 30;
 			header("Refresh: $refresh_rate; url=$url");
-			$str = " , värskendan iga ${refresh_rate} sekundi järel";
+			$str = ", värskendan iga ${refresh_rate} sekundi järel";
 		};
 		return "Liikmeid: $member_count, saadetud: $served_count $str";
 	}
@@ -1073,14 +1139,23 @@ class ml_list extends class_base
 
 	function callback_gen_write_mail($arr)
 	{
-		// haudi, haudi. now I have to embed the form of mail writer into here somehow	
-
-		// you see, there _is_ NO connection whatsoever
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$all_props = $writer->get_property_group(array(
 			"group" => "general",
 		));
+
+		if (is_oid($arr["request"]["msg_id"]))
+		{
+			$msg_obj = new object($arr["request"]["msg_id"]);
+		}
+		else
+		{
+			$msg_obj = new object();
+			$msg_obj->set_class_id(CL_MESSAGE);
+			$msg_obj->set_parent($arr["obj_inst"]->parent());
+			$msg_obj->save();
+		};
 
 		$templates = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_TEMPLATE",
@@ -1100,8 +1175,16 @@ class ml_list extends class_base
 				"name" => "template_selector",
 				"options" => $options,
 				"caption" => "Vali template",
+				"value" => $msg_obj->meta("template_selector"),
 			);
 		}
+		
+		$filtered_props["send_away"] = array(
+			"name" => "send_away",
+			"type" => "checkbox",
+			"ch_value" => 1,
+			"caption" => "Saada peale salvestamist ära",
+		);
 
 		// narf, can I make this work better perhaps? I really do hate callback ..
 		// and I want to embed a new object. And I have to functionality in form
@@ -1120,7 +1203,20 @@ class ml_list extends class_base
 			};
 		};
 
+
+		$filtered_props["id"] = array(
+			"name" => "id",
+			"type" => "hidden",
+			"value" => $msg_obj->id(),
+		);
+
+		$filtered_props["relmgr"] = array(
+			"name" => "relmgr",
+			"type" => "aliasmgr",
+		);
+
 		$xprops = $writer->parse_properties(array(
+				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
 				"name_prefix" => "emb",
 		));
@@ -1133,16 +1229,23 @@ class ml_list extends class_base
 		$msg_data = $arr["request"]["emb"];
 		// 1. create an object. for this I need to know the parent
 		// for starters I'll use the one from the list object itself
-		$msg_data["parent"] = $arr["obj_inst"]->parent();
+		#$msg_data["parent"] = $arr["obj_inst"]->parent();
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 
-		if (is_oid($msg_data["template_selector"]))
+		if ($msg_data["send_away"] == 1 && is_oid($msg_data["template_selector"]))
 		{
 			// use that template then!
 			// 1. load it
 			$o = new object($msg_data["template_selector"]);
 			$template = $o->prop("content");
-			$template = str_replace("#content#",$msg_data["message"],$template);
+			$message = $msg_data["message"];
+			$al = get_instance("aliasmgr");
+			$al->parse_oo_aliases($msg_data["id"],&$message);
+			if ($o->prop("is_html") == 1)
+			{
+				$message = nl2br($message);
+			};
+			$template = str_replace("#content#",$message,$template);
 			$msg_data["message"] = $template;
 		};
 
@@ -1154,10 +1257,31 @@ class ml_list extends class_base
 		// no, it fucking does not!
 		$message_id = $writer->submit($msg_data);
 
-		// XXX: work out a way to save the message and not send it immediately
-		$writer->send_message(array(
-			"id" => $message_id,
-		));
+		if (is_oid($msg_data["template_selector"]))
+		{
+			$msg_obj = new object($message_id);
+			$msg_obj->set_meta("template_selector",$msg_data["template_selector"]);
+
+			$tpl_obj = new object($msg_data["template_selector"]);
+			if ($tpl_obj->prop("is_html") == 1)
+			{
+				$msg_obj->set_prop("html_mail",1024);			
+			};
+			
+			$msg_obj->save();
+		};
+
+		if ($msg_data["send_away"] == 1)
+		{
+			// XXX: work out a way to save the message and not send it immediately
+			$writer->send_message(array(
+				"id" => $message_id,
+			));
+		}
+		else
+		{
+			$this->edit_msg = $message_id;
+		}
 
 		// 
 	}
