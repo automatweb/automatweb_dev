@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.56 2001/08/16 11:06:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.57 2001/08/17 01:13:26 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -343,14 +343,6 @@ class form extends form_base
 				if ($chk[$row][$col] == 1)
 				{
 					$this->arr["contents"][$row][$col]->set_style($setstyle,&$this);
-					if ($setfolder)
-					{
-						$els = $this->arr["contents"][$row][$col]->get_elements();
-						foreach($els as $cnt => $el)
-						{
-							$this->upd_object(array("oid" => $el["id"], "parent" => $setfolder));
-						}
-					}
 					if ($addel)
 					{
 						// we must add an element of the specified type to this cell
@@ -360,6 +352,16 @@ class form extends form_base
 			}
 		}
 
+		if (is_array($selel))
+		{
+			foreach($selel as $selid)
+			{
+				if ($setfolder)
+				{
+					$this->upd_object(array("oid" => $selid, "parent" => $setfolder));
+				}
+			}
+		}
 		$this->save();
 
 		if (is_array($selel) && isset($diliit))
@@ -1943,6 +1945,14 @@ class form extends form_base
 						}
 					}
 					else
+					if ($el->get_type() == "radiobutton")
+					{
+						if ($el->get_value(true) == 1)
+						{
+							$query.="AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." LIKE '%".$el->get_value()."%')";
+						}
+					}
+					else
 					if ($el->get_type() == "date")
 					{
 						if ($el->get_subtype() == "from")
@@ -2184,17 +2194,18 @@ class form extends form_base
 		else
 		{
 			// n2itame sisestusi lihtsalt yxteise j2rel 
-			reset($matches);
-			while(list($fid,$v) = each($matches))
-			{
+//			reset($matches);
+//			while(list($fid,$v) = each($matches))
+//			{
+				$fid = $this->search_form;
 				$t = new form();
-				reset($v);
-				while (list(,$eid) = each($v))
+				reset($matches);
+				while (list(,$eid) = each($matches))
 				{
 					$t->reset();
 					$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]));
 				}
-			}
+//			}
 		}
 	
 		$awt->stop("form::search");
