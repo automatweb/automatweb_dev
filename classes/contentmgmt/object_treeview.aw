@@ -287,8 +287,8 @@ class object_treeview extends class_base
 				"type" => $this->cfg["classes"][$od->class_id()]["name"],
 				"add_date" => $this->time2date($od->created(), 2),
 				"mod_date" => $this->time2date($od->modified(), 2),
-				"adder" => $adder->name(),
-				"modder" => $modder->name(),
+				"adder" => is_object($adder) ? $adder->name() : "",
+				"modder" => is_object($modder) ? $modder->name() : "",
 				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
 				"bgcolor" => $this->_get_bgcolor($ob, $this->cnt),
 				"acl_obj" => $od,
@@ -390,7 +390,7 @@ class object_treeview extends class_base
 		else
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
-		if (!$ob->meta('show_folders'))
+		if (!$ob->meta('show_folders') && $_GET["tv_sel"])
 		{
 			$parent = $folders;
 		}
@@ -434,6 +434,27 @@ class object_treeview extends class_base
 			"lang_id" => array()
 		));
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
+
+		if ($ob->prop("groupfolder_acl"))
+		{
+			$r_ol = new object_list();
+			// if groupfolder acl, remove all folders that are not in folder list
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				if ($o->class_id() == CL_MENU)
+				{
+					if ($folders[$o->id()])
+					{
+						$r_ol->add($o);
+					}
+				}
+				else
+				{
+					$r_ol->add($o);
+				}
+			}
+			$ol = $r_ol;
+		}
 
 		$awa = new aw_array($parent);
 		foreach($awa->get() as $p_id)

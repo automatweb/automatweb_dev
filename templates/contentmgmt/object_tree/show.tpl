@@ -1,7 +1,8 @@
+<form name="objlist" action="{VAR:baseurl}/orb.{VAR:ext}" method="POST">
+
 <script src="{VAR:baseurl}/automatweb/js/popup_menu.js" type="text/javascript"></script>
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/obj_tree.css" />
 
-<form name="objlist" action="{VAR:baseurl}/orb.{VAR:ext}" method="POST">
 
 <style type='text/css'>
 .fgtext_bad {
@@ -20,7 +21,6 @@ text-decoration: none;
 <!-- SUB: FOLDERS -->
 
 <!-- END SUB: FOLDERS -->
-<br>
 <table border="0" width="100%" cellpadding="3" cellspacing="0">
 	<tr bgcolor="{VAR:header_bgcolor}">
 		<!-- SUB: HEADER_icon -->
