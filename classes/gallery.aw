@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.7 2001/08/15 12:35:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.8 2001/08/15 12:40:22 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -388,8 +388,12 @@ class gallery extends aw_template
 						$url = "javascript:rremote(\"$baseurl/col=$col/row=$row/page=$page\",$xsize,$ysize)";
 						$target = "";
 					}
+
+					// strip the beginning of a posible absolute url
+					$tnurl = preg_replace("/^http:\/\/.*\//","/",$cell["tnurl"]);
+					print $tnurl;
 					$this->vars(array(
-						"tnurl" => $cell["tnurl"], 
+						"tnurl" => $tnurl, 
 						"caption" => $cell["caption"], 
 						"date" => $cell["date"],
 						"url" => $url,
