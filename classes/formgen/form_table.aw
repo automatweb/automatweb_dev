@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.34 2003/02/02 15:23:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.35 2003/02/10 14:09:14 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -861,14 +861,18 @@ class form_table extends form_base
 						{
 							$rgroupdat["ev_col_".$cl][$datel]["el"] = "ev_".$datel;
 							$rgroupdat["ev_col_".$cl][$datel]["sep"] = $dat["data_els_seps"][$datel];
+							$rgroupdat["ev_col_".$cl][$datel]["sep_after"] = $dat["data_els_seps_after"][$datel];
 							$rgroupdat["ev_".$dat["el"]][$datel]["el"] = "ev_".$datel;
 							$rgroupdat["ev_".$dat["el"]][$datel]["sep"] = $dat["data_els_seps"][$datel];
+							$rgroupdat["ev_".$dat["el"]][$datel]["sep_after"] = $dat["data_els_seps_after"][$datel];
 						}
 					}
 					$rgroupby_sep["ev_col_".$cl]["pre"] = $dat["pre_sep"];
 					$rgroupby_sep["ev_col_".$cl]["after"] = $dat["after_sep"];
+					$rgroupby_sep["ev_col_".$cl]["mid_sep"] = $dat["mid_sep"];
 					$rgroupby_sep["ev_".$dat["el"]]["pre"] = $dat["pre_sep"];
 					$rgroupby_sep["ev_".$dat["el"]]["after"] = $dat["after_sep"];
+					$rgroupby_sep["ev_".$dat["el"]]["mid_sep"] = $dat["mid_sep"];
 				}
 			}
 		}
@@ -1778,6 +1782,7 @@ class form_table extends form_base
 					"data_els" => $this->mpicker($dat["data_els"], $els),
 					"pre_sep" => $dat["pre_sep"],
 					"after_sep" => $dat["after_sep"],
+					"mid_sep" => $dat["mid_sep"]
 				));
 				$del = "";
 				if (is_array($dat["data_els"]))
@@ -1787,7 +1792,8 @@ class form_table extends form_base
 						$this->vars(array(
 							"del" => $_del,
 							"del_name" => $els[$_del],
-							"del_sep" => $dat["data_els_seps"][$_del]
+							"del_sep" => $dat["data_els_seps"][$_del],
+							"del_sep_after" => $dat["data_els_seps_after"][$_del]
 						));
 						$del.=$this->parse("DATEL");
 					}
@@ -2803,18 +2809,6 @@ class form_table extends form_base
 
 			case "delete":
 				$after_show = $this->ru;
-				if ($chain_id)
-				{
-					$after_show = $this->mk_my_orb("show",
-						array(
-							"id" => $chain_id,
-							"form_id" => $form_id,
-							"entry_id" => $chain_entry_id,
-							"section" => $section
-						),
-					"form_chain");
-				}
-
 				$link = $this->mk_my_orb(
 					"delete_entry", 
 					array(
