@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.245 2004/03/16 11:30:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.246 2004/03/16 12:09:41 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -352,7 +352,7 @@ class document extends aw_template
 			// augh .. backwards compatiblity is a fucking bitch
 			// that parse_document thingie expects $doc _array_ .. and wants
 			// to modify it .. and allah only knows where this is used ...
-			$si->parse_document(&$doc);
+			global $awt;
 			if (!$si->can_show_document(&$doc))
 			{
 				return "";
@@ -453,11 +453,14 @@ class document extends aw_template
 		lc_site_load("document", &$this);
 		$this->vars(array("imurl" => "/images/trans.gif"));
 		// import charset for print
-		$_langs = get_instance("languages");
-		$_ld = $_langs->fetch(aw_global_get("lang_id"));
-		$this->vars(array(
-			"charset" => $_ld["charset"]
-		));
+		if ($this->template_has_var("charset"))
+		{
+			$_langs = get_instance("languages");
+			$_ld = $_langs->fetch(aw_global_get("lang_id"));
+			$this->vars(array(
+				"charset" => $_ld["charset"]
+			));
+		};
 
 		// load localization settings and put them in the template
 		lc_site_load("document",$this);
@@ -728,7 +731,7 @@ class document extends aw_template
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		$al = get_instance("aliasmgr");
-		
+
 		if (!isset($text) || $text != "undef") 
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
@@ -997,14 +1000,21 @@ class document extends aw_template
 		{
 			$lc = $this->parse("lead_comments");
 		}
+		
+		classload("image");
 
-		if ($doc["parent"])
+
+		if (($this->template_has_var("parent_id") || $this->template_has_var("parent_name") || $this->template_has_var("menu_image") || $this->template_has_var("menu_addr")) && $doc["parent"])
 		{
 			$mcache = get_instance("menu_cache");
 			$mn = $mcache->get_cached_menu($doc["parent"]);
 			$this->vars(array(
 				"parent_name" => $mn["name"],
-				"parent_id" => $doc["parent"]
+				"parent_id" => $doc["parent"],
+				// mn is only defined, if get_cached_menu is invoked
+				// so I move those over here
+				"menu_image" => image::check_url($mn["img_url"]),
+				"menu_addr"	=> $mn["link"],
 			));
 		}
 
@@ -1025,7 +1035,6 @@ class document extends aw_template
 			// switch back to estonian
 			setlocale(LC_CTYPE, $old_loc);
 		}
-		classload("image");
 
 		if (!$doc["tm"])
 		{
@@ -1051,7 +1060,6 @@ class document extends aw_template
 			"print_date_est" => $date_est_print,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
-			"menu_image" => image::check_url($mn["img_url"]),
 			"text"  => $doc["content"],
 			"secid" => isset($secID) ? $secID : 0,
 			"docid" => $r_docid,
@@ -1077,7 +1085,6 @@ class document extends aw_template
 			"FORUM_ADD" => $fr,
 			"LANG" => $langs,
 			"SEL_LANG" => "",
-			"menu_addr"	=> $mn["link"],
 			"lead_br"	=> $doc["lead"] != "" ? "<br />" : "",
 			"doc_count" => $this->doc_count++,
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
@@ -1120,6 +1127,9 @@ class document extends aw_template
 			$this->vars(array("HAS_CHANNEL" => $this->parse("HAS_CHANNEL")));
 		}
 
+		global $awt;
+		$awt->start("tsah");
+
 		$this->vars(array(
 			"SHOW_TITLE" 	=> ($doc["show_title"] == 1) ? $this->parse("SHOW_TITLE") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
@@ -1127,7 +1137,7 @@ class document extends aw_template
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : "")
 			));
-		
+
 		// keeleseosed
 		if ($this->is_template("LANG_BRO"))
 		{
