@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.159 2003/02/21 13:30:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.160 2003/02/27 12:42:27 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -340,7 +340,7 @@ class document extends aw_template
 		
 		// if oid is in the arguments check whether that object is attached to 
 		// this document and display it instead of document
-		$mk_compat = true;
+		#$mk_compat = true;
 		$oid = aw_global_get("oid");
 		if ($oid)
 		{
@@ -401,7 +401,7 @@ class document extends aw_template
 		//hook for site specific document parsing
 		$doc["tpl"] = $tpl;
 		$doc["leadonly"] = $leadonly;
-		$doc["tpldir"] = $this->template_dir;
+		$doc["tpldir"] = &$this->template_dir;
 		if ($si)
 		{
 			$si->parse_document(&$doc);
@@ -759,7 +759,7 @@ class document extends aw_template
 			$mb = get_instance("forum");
 			$doc["lead"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["lead"]);
 		}
-
+		
 
 		// used in am - shows all documents whose author field == current documents title field
 		if (!(strpos($doc["content"], "#autori_dokumendid#") === false))
@@ -774,7 +774,7 @@ class document extends aw_template
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		$al = get_instance("aliasmgr");
-
+		
 		if (!isset($text) || $text != "undef") 
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
@@ -838,6 +838,7 @@ class document extends aw_template
 			 	$pb = $this->parse("pblock");
 			};
 		};
+
 
 		/*
 		$t = get_instance("msgboard");
@@ -912,7 +913,6 @@ class document extends aw_template
 				$ab = $this->parse("ablock");
 			};
 		};
-
 		$points = $doc["num_ratings"] == 0 ? 3 : $doc["rating"] / $doc["num_ratings"];
 		$pts = "";
 		for ($i=0; $i < $points; $i++)
@@ -1191,13 +1191,13 @@ class document extends aw_template
 			{
 				// fields may contain HTML and we don't want that
 				$v = trim(strip_tags($v));
-				if (is_array($section))
+				if (is_array($section) && (sizeof($section) > 0))
 				{
 					$prnt = "parent IN (".join(",",$section).")";
 				}
 				else
 				{
-					$prnt = "parent = $section";
+					$prnt = "parent = " . (int)$section;
 				}
 				$q = "SELECT oid FROM objects
 							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_PSEUDO;
