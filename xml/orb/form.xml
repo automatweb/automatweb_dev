@@ -239,7 +239,7 @@
 			<function name="show">
 				<arguments>
 					<optional name="id"/>
-					<required name="op_id"/>
+					<required name="op_id" type="int"/>
 					<optional name="entry_id"/>
 					<optional name="search_el"/>
 					<optional name="search_val"/>

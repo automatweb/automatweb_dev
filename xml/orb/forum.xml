@@ -73,6 +73,7 @@
 					<required name="board" type="int"/>
 					<optional name="section"/>
 					<optional name="cid" type="int"/>
+					<optional name="from" type="int"/>
 					<optional name="no_comments"/>
 				</arguments>
 			</function>
