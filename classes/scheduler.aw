@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.5 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.6 2002/12/06 10:08:14 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -202,6 +202,8 @@ class scheduler extends aw_template
 		{
 			return;
 		}
+
+		$evnt["event"] = str_replace("/automatweb","",$evnt["event"]);
 
 		preg_match("/^http:\/\/(.*)\//U",$evnt["event"], $mt);
 		$url = $mt[1];
