@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.5 2003/07/31 16:06:09 duke Exp $
+// object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
 {
@@ -117,7 +119,7 @@ class object_list extends _int_obj_container_base
 			));
 		}
 
-		for($this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		for($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
 		{
 			if (isset($param["params"]))
 			{
@@ -147,10 +149,14 @@ class object_list extends _int_obj_container_base
 			));
 		}
 
+		// what is this supposed to mean? I just want to iterate over the damn objects
+		// and not save them --duke
+		/*
 		if (!isset($param["save"]))
 		{
 			$param["save"] = true;
 		}
+		*/
 
 		if (is_array($param["func"]))
 		{
@@ -161,17 +167,17 @@ class object_list extends _int_obj_container_base
 					"msg" => "object_list::foreach_cb(): callback method ".$param["func"][1]." does not exist in class ".get_class($param["func"][1])."!"
 				));
 			}
-			else
-			if ($param["func"] == "" || !function_exists($param["func"]))
-			{
-				error::throw(array(
-					"id" => ERR_PARAM,
-					"msg" => "object_list::foreach_cb(): callback function $param[func] does not exist!"
-				));
-			}
+		}
+		else
+		if ($param["func"] == "" || !function_exists($param["func"]))
+		{
+			error::throw(array(
+				"id" => ERR_PARAM,
+				"msg" => "object_list::foreach_cb(): callback function $param[func] does not exist!"
+			));
 		}
 
-		for ($this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
 		{
 			if (is_array($param["func"]))
 			{
