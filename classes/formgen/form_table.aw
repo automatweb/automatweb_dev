@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.10 2002/11/19 11:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.11 2002/11/26 12:26:20 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -477,6 +477,7 @@ class form_table extends form_base
 										$el_ref->onclick = $burl;
 									};
 
+									$el_ref->form->set_form_html_name($this->get_html_name_for_tbl_form());
 									$str .= $el_ref->gen_user_html_not(
 										"",
 										array($el_ref->get_el_name() => $bcount),
