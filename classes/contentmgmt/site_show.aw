@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.85 2004/09/22 07:43:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.86 2004/09/24 08:27:54 kristo Exp $
 
 /*
 
@@ -541,7 +541,7 @@ class site_show extends class_base
 							"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 							"sort_by" => "objects.parent"
 						));
-						$sections += $ot->ids();
+						$sections += $this->make_keys($ot->ids());
 					}
 				}
 			};
@@ -621,6 +621,7 @@ class site_show extends class_base
 			{
 				$filter["lang_id"] = array();
 			}
+
 			$documents = new object_list($filter);
 
 			$rsid = aw_ini_get("site_id");
@@ -1773,7 +1774,7 @@ class site_show extends class_base
 			// www.kirjastus.ee-s on LEFT_PANE logged-i sees.
 			$lp = "";
 			$rp = "";
-		
+
 			$this->vars(array(
 				"logged" => $this->parse("logged"), 
 				"logged1" => $this->parse("logged1"),
@@ -1902,14 +1903,14 @@ class site_show extends class_base
 				));
 	
 				// check acl
-				if ($_act == "new" && !$this->can("add", aw_global_get("section")))
+				/*if ($_act == "new" && !$this->can("add", aw_global_get("section")))
 				{
 					$this->skip = true;
 				}
 				if ($_act == "change" && !$this->can("edit", aw_global_get("section")))
 				{
 					$this->skip = true;
-				}
+				}*/
 				$values = array();
 				$err = false;
 				$mv = new aw_array($meth["values"]);
