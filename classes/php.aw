@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.16 2002/12/05 08:25:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.17 2003/01/23 16:36:13 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -34,7 +34,7 @@ class php_serializer
 			else
 			{
 				$v = str_replace("\\","\\\\",$v);
-				$v = "'".str_replace("'","\'", $v)."'";
+				$v = "'".str_replace("'","\\\'", $v)."'";
 			}
 
 			if ($this->no_index)
