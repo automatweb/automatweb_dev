@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.7 2002/01/21 11:28:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.8 2002/01/23 14:51:07 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -54,7 +54,7 @@ class css extends aw_template {
 				"4" => "sans-serif",
 				"5" => "monospace",
 				"6" => "cursive",
-				"7" => "Trebuchet,Tahoma,sans-serif"
+				"7" => "Trebuchet MS,Tahoma,sans-serif"
 		);
 
 		$this->units = array(
