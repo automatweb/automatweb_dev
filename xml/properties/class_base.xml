@@ -19,15 +19,6 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>alias</name>
-            <type>textbox</type>
-            <group>general</group>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>alias</field>
-            <caption>Alias</caption>
-      </property>
-      <property>
             <name>status</name>
             <type>status</type>
             <group>general</group>
@@ -35,16 +26,6 @@
             <corefield>yes</corefield>
             <field>status</field>
             <caption>Staatus</caption>
-      </property>
-      <property>
-            <name>jrk</name>
-            <type>textbox</type>
-            <size>4</size>
-            <group>general</group>
-            <table>objects</table>
-            <corefield>yes</corefield>
-            <field>jrk</field>
-            <caption>Jrk</caption>
       </property>
       <groupinfo>
             <general>
