@@ -791,6 +791,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$this->joins = array();
 
+		$this->has_data_table_filter = false;
+
 		$where = $this->req_make_sql($params);
 
 		if (!$this->stat)
@@ -945,6 +947,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->used_tables[$tbl] = $tbl;
 			}
 
+			if ($tbl != "objects")
+			{
+				$this->has_data_table_filter = true;
+			}
 			$tf = $tbl.".".$fld;
 
 
@@ -1416,7 +1422,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$join_strategy = "obj";
 		}
 
-		if ($join_strategy == "obj")
+		if ($join_strategy == "obj" || !$this->has_data_table_filter)
 		{
 			// make joins
 			$js = array();
