@@ -3,4 +3,3 @@
 	<class name="survey" folder="applications/survey" extends="class_base">
 	</class>
 </orb>
-		
