@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.6 2004/12/15 12:27:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.7 2004/12/20 11:00:20 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -232,16 +232,28 @@ class object_export extends class_base
 	function _init_exp_table(&$t, $o)
 	{
 		$props = $this->get_properties_from_obj($o);
-
 		$awa = new aw_array($o->meta("dat"));
 		foreach($awa->get() as $pn => $pd)
 		{
 			if ($pd["visible"])
 			{
-				$t->define_field(array(
+				$prps = array(
 					"name" => $pn,
-					"caption" => $pd["caption"]
-				));
+					"caption" => $pd["caption"],
+				);
+				if($props[$pn]["type"] == "date_select")
+				{
+					$prps["type"] = "time";
+					$prps["format"] = "d-M-y";
+					$prps["numeric"] = 1;
+				}
+				if($props[pn]["type"] == "datetime_select")
+				{
+					$prps["type"] = "time";
+					$prps["format"] = "H:i d-M-y";
+					$prps["numeric"] = 1;
+				}
+				$t->define_field($prps);
 			}
 		}
 	}
