@@ -81,9 +81,12 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:bas
 	<!-- SUB: CELL -->
 	<td align=center class="aste01">
 		<table border=0 cellpadding=1 cellspacing=1>
+			<!-- SUB: HAS_IMG -->
 			<tr>
 				<td colspan=2 align=center class="celltext"><img src='{VAR:imgurl}'><input type='checkbox' name='erase_{VAR:row}_{VAR:col}' value=1>{VAR:LC_GALLERY_DELETE}</td>
 			</tr>
+			<!-- END SUB: HAS_IMG -->
+
 			<!-- SUB: BIG -->
 			<tr>
 				<td colspan=2 align=center class="celltext"><a href='{VAR:bigurl}'>{VAR:LC_GALLERY_IMAGE}</a></td>
