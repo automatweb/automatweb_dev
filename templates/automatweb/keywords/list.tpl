@@ -12,13 +12,14 @@
 <td align="center"  class="title">&nbsp;Võtmesõna&nbsp;</td>
 <td align="center" class="title">&nbsp;Dokumente&nbsp;</td>
 <td align="center" class="title">&nbsp;Huvilisi&nbsp;</td>
-<td align="center" class="title">&nbsp;Tegevus&nbsp;</td>
+<td align="center" class="title" width="*">&nbsp;&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
 <td class="fgtext">&nbsp;{VAR:keyword}&nbsp;</td>
-<td align="center" class="fgtext">&nbsp;{VAR:doc_count}&nbsp;</td>
-<td align="center" class="fgtext">&nbsp;{VAR:people_count}&nbsp;</td>
+<td align="center" class="fgtext">&nbsp;<a href="{VAR:self}?class=keywords&action=doclist&id={VAR:id}">{VAR:doc_count}</a>&nbsp;</td>
+<td align="center" class="fgtext">&nbsp;<a href="{VAR:self}?class=keywords&action=listmembers&id={VAR:list_id}">{VAR:people_count}</a>&nbsp;</td>
+<td class="fgtext" align="center">&nbsp;&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>
