@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.108 2002/07/18 21:57:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.109 2002/07/23 05:25:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -84,7 +84,7 @@ class document extends aw_template
 			"Jrk Esileht keskel all" => "frontpage_center_bottom_jrk",
 			"Jrk Esileht parem" => "frontpage_right_jrk",
 			"no_last" => "no_last",
-			"dcache" =>  "Dok. cache",
+			"Dok. cache" =>  "dcache",
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
@@ -745,6 +745,14 @@ class document extends aw_template
 		    "oid" => $docid,
         "text" => $doc["content"],
       ));
+
+			// this damn ugly-ass hack is here because we need to be able to put the last search value
+			// from form_table to document title
+			if (aw_global_get("set_doc_title") != "")
+			{
+				$doc["title"] = aw_global_get("set_doc_title");
+				aw_global_set("set_doc_title","");
+			}
 
 			$this->vars($al->get_vars());
 		}; 
@@ -1610,7 +1618,10 @@ class document extends aw_template
 		$vlist = array();
 		while(list($k,$v) = each($this->knownfields)) 
 		{
-			$flist[] = $v;
+			if ($v != "dcache")
+			{
+				$flist[] = $v;
+			};
 			switch($v)
 			{
 				case "title":
@@ -1644,6 +1655,8 @@ class document extends aw_template
 					{
 						$vlist[] = "'" . $defaults[$v] . "'";
 					}
+					break;
+				case "dcache":	
 					break;
 				default:
 					$vlist[] = "'" . $defaults[$v] . "'";
@@ -2663,6 +2676,7 @@ class document extends aw_template
 			$this->cfg["baseurl"] = $bs;
 			$this->vars(array("baseurl" => $bs));
 		}
+
 		// genereerime listi koikidest menyydest, samasugune kood on ka
 		// mujal olemas, kas ei voiks seda kuidagi yhtlustada?
 
@@ -2846,6 +2860,7 @@ class document extends aw_template
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
 		dbg("search_q = $q <br>");
+		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -2855,9 +2870,10 @@ class document extends aw_template
 			};
 			// find number of matches in document for search string, for calculating percentage
 			// if match is found in title, then multiply number by 5, to emphasize importance
-			$si = __get_site_instance();
-			//hook for site specific document parsing
+			
+			// hook for site specific document parsing
 			$si->parse_search_result_document(&$row);
+
 			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 			$max_count = max($c,$max_count);
 
