@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.26 2004/07/23 08:01:49 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.27 2004/09/04 17:42:08 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1710,6 +1710,11 @@ class vcl_table extends aw_table
 			{
 				$data[$v["name"]] = $o->prop($v["name"]);
 			}			
+
+			if ($this->use_chooser)
+			{
+				$data[$this->chooser_config["field"]] = $o->id();
+			}
 
 			$this->define_data($data);
 		}
