@@ -17,8 +17,8 @@ class brother_support
 		if ($arr["connection"]->prop("reltype") == RELTYPE_BROTHER)
 		{
 			$ol = new object_list(array(
-				"parent" => $arr["connection"]->prop("to"),
-				"brother_of" => $arr["connection"]->prop("from")
+				"parent" => $arr["connection"]->prop("from"),
+				"brother_of" => $arr["connection"]->prop("to")
 			));
 			for($o =& $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
@@ -31,11 +31,11 @@ class brother_support
 	{
 		// now, get the alias. if it has reltype of RELTYPE_BROTHER, then add a brother below the folder
 		// the connection points to
-		if ($arr["connection"]->prop("reltype") == RELTYPE_PROTHER)
+		if ($arr["connection"]->prop("reltype") == RELTYPE_BROTHER)
 		{
 			$to = $arr["connection"]->to();
 			$from = $arr["connection"]->from();
-			$from->create_brother($to->id());
+			$to->create_brother($from->id());
 		}
 	}
 }
