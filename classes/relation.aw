@@ -79,6 +79,10 @@ class relation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "status":
+				$data["value"] = STAT_ACTIVE;
+				break;
+
 			case "contents":
 				$relobj = $this->get_object(array(
 					"oid" => $args["obj"]["oid"],
