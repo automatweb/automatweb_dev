@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.18 2003/04/29 15:40:30 duke Exp $
+// $Id: cfgutils.aw,v 1.19 2003/05/06 13:52:27 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -288,21 +288,35 @@ class cfgutils extends aw_template
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 
 			// config forms have no business with other stuff in the properties definition
-			$safe_nodes = array("name","caption","group","size","cols","rows","richtext");
+			// e.g. they cannot decide where the contents of their values are saved, because
+			// config form definitions can be uploaded by the user and if some kind of moron
+			// decides to experiment with those, then it can have catastrophous results for AW
+
+			// so we at least _try_ to protect ourselves against attacks like this
+			$safe_nodes = array("name","caption","group","size","cols","rows","richtext","value","ch_value");
+
+			// unless! it's a relpicker, in which case I will allow additional field types
+			$relpicker_safenodes = array("type","clid","reltype","pri");
+
 			$magic = array_flip($safe_nodes);
 
 			foreach($properties as $key => $val)
 			{
 				// xml_path_parser sucks donkey balls :(
 				$xval = $this->normalize_text_nodes($val);
-				$tmp = array_intersect(array_keys($xval),array_values($safe_nodes));
+				$use_safenodes = $safe_nodes;
+				if ($xval["type"] == "relpicker")
+				{
+					$use_safenodes = array_merge($use_safenodes,$relpicker_safenodes);
+				};
+				$tmp = array_intersect(array_keys($xval),array_values($use_safenodes));
 				// compact does not work on arrays :(
 				// so, do not use the variables defined in safe_nodes in here
 				extract($xval);
 				$tmp2 = compact($tmp);
 				$proplist[$xval["name"]] = compact($tmp);
 			}
-			
+
 			if (is_array($groupinfo[0]))
 			{	
 				foreach($groupinfo[0] as $key => $val)
