@@ -811,56 +811,105 @@ class shop_admin extends shop_base
 
 				$cur_order = 0;
 				$cnt = 1;
+
+				$o2fe = array();
 				$this->db_query("SELECT * FROM order2form_entries WHERE order_id IN ($oids) order by order_id,name");
 				while ($row = $this->db_next())
 				{
-					if ($orders[$row["order_id"]]["to"] < 2)
+					$o2fe[$row["order_id"]][] = $row;
+				}
+
+				// now figure out by what we sort
+				if ($sortby == "hotel")
+				{
+					if ($sort_type == "desc")
 					{
-						$orders[$row["order_id"]]["to"] = $orders[$row["order_id"]]["from"];
+						uasort($orders,array($this,"__cmp_hotel_rev"));
+					}
+					else
+					{
+						uasort($orders,array($this,"__cmp_hotel"));
+					}
+				}
+				else
+				{
+					if ($sort_type == "desc")
+					{
+						ksort($orders,SORT_NUMERIC);
+					}
+					else
+					{
+						krsort($orders,SORT_NUMERIC);
+					}
+				}
+
+				foreach($orders as $_ordid => $ordata)
+				{
+					if ($ordata["to"] < 2)
+					{
+						$ordata["to"] = $ordata["from"];
 					}
 
-					$f = new form;
-					$this->vars(array(
-						"nr" => $cnt++,
-						"name" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"], "op_id" => $sh_ofs[$row["form_id"]]["op_id_search"])),
-						"from" => $this->time2date($orders[$row["order_id"]]["from"],5),
-						"to" => $this->time2date($orders[$row["order_id"]]["to"],5),
-						"num_items" => (int)$cnt_data[$row["order_id"]],
-						"ord_id" => $row["order_id"],
-						"room" => $orders[$row["order_id"]]["room"],
-						"hotel" => $orders[$row["order_id"]]["hotel"],
-						"view_order" => $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $row["order_id"]), "shop", false,true),
-					));
-					$no1 = "";
-					$no2 = "";
-					if ($row["order_id"] != $cur_order)
+					if (is_array($o2fe[$_ordid]))
 					{
-						$f = new form;
-						$info = "";
-						if ($orders[$row["order_id"]]["hotel_op_id"] != "" && (int)$orders[$row["order_id"]]["hotel_form_id"] > 0 && (int)$orders[$row["order_id"]]["hotel_op_id"] > 0)
+						foreach($o2fe[$_ordid] as $row)
 						{
-							$info = $f->show(array(
-								"id" => (int)$orders[$row["order_id"]]["hotel_form_id"], 
-								"entry_id" => (int)$orders[$row["order_id"]]["hotel_entry_id"],
-								"op_id" => (int)$orders[$row["order_id"]]["hotel_op_id"]
+							$f = new form;
+							$this->vars(array(
+								"nr" => $cnt++,
+								"name" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"], "op_id" => $sh_ofs[$row["form_id"]]["op_id_search"])),
+								"from" => $this->time2date($ordata["from"],5),
+								"to" => $this->time2date($ordata["to"],5),
+								"num_items" => (int)$cnt_data[$_ordid],
+								"ord_id" => $_ordid,
+								"room" => $ordata["room"],
+								"hotel" => $ordata["hotel"],
+								"view_order" => $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $_ordid), "shop", false,true),
 							));
+							$no1 = "";
+							$no2 = "";
+							if ($_ordid != $cur_order)
+							{
+								$f = new form;
+								$info = "";
+								if ($ordata["hotel_op_id"] != "" && (int)$ordata["hotel_form_id"] > 0 && (int)$ordata["hotel_op_id"] > 0)
+								{
+									$info = $f->show(array(
+										"id" => (int)$ordata["hotel_form_id"], 
+										"entry_id" => (int)$ordata["hotel_entry_id"],
+										"op_id" => (int)$ordata["hotel_op_id"]
+									));
+								}
+								$this->vars(array("info" => $info));
+								$no1 = $this->parse("N_ORD1");
+								$no2 = $this->parse("N_ORD2");
+								$cur_order = $row["order_id"];
+							}
+							$this->vars(array(
+								"N_ORD1" => $no1,
+								"N_ORD2" => $no2
+							));
+							$ps.=$this->parse("PASSENGER");
 						}
-						$this->vars(array("info" => $info));
-						$no1 = $this->parse("N_ORD1");
-						$no2 = $this->parse("N_ORD2");
-						$cur_order = $row["order_id"];
 					}
-					$this->vars(array(
-						"N_ORD1" => $no1,
-						"N_ORD2" => $no2
-					));
-					$ps.=$this->parse("PASSENGER");
 				}
 			}
+			if ($sort_type == "asc")
+			{
+				$sort_type = "desc";
+			}
+			else
+			{
+				$sort_type = "asc";
+			}
+			unset($arr["sortby"]);
+			unset($arr["sort_type"]);
 			$this->vars(array(
 				"PASSENGER" => $ps,
 				"sel_item" => $parent_names[$art]."/".$all_items[$art]["name"],
-				"print_url" => $this->mk_my_orb("passengers_detail", $arr+array("print" => true), "",false, true)
+				"print_url" => $this->mk_my_orb("passengers_detail", $arr+array("print" => true,"sortby" => "id","sort_type" => $sort_type), "",false, true),
+				"sortid_url" => $this->mk_my_orb("passengers_detail", $arr+array("sortby" => "id","sort_type" => $sort_type), "",false, true),
+				"sorthotel_url" => $this->mk_my_orb("passengers_detail", $arr+array("sortby" => "hotel","sort_type" => $sort_type), "",false, true)
 			));
 		}
 		return $this->parse();
@@ -1113,6 +1162,16 @@ class shop_admin extends shop_base
 		}
 		$this->vars(array("OD" => $tt));
 		return $this->parse();
+	}
+
+	function __cmp_hotel($a,$b)
+	{
+		return strcmp($a["hotel"],$b["hotel"]);
+	}
+
+	function __cmp_hotel_rev($a,$b)
+	{
+		return -strcmp($a["hotel"],$b["hotel"]);
 	}
 }
 
