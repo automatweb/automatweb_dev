@@ -19,7 +19,8 @@
                   <num_0>grp_customers</num_0>
                   <num_1>grp_projects</num_1>
                   <num_2>grp_resources</num_2>
-                  <num_3>grp_users</num_3>
+                  <num_3>grp_users_tree</num_3>
+                  <num_4>grp_users_mgr</num_4>
             </group>
             <type>text</type>
             <no_caption>1</no_caption>
@@ -34,7 +35,8 @@
                   <num_0>grp_customers</num_0>
                   <num_1>grp_projects</num_1>
                   <num_2>grp_resources</num_2>
-                  <num_3>grp_users</num_3>
+                  <num_3>grp_users_tree</num_3>
+                  <num_4>grp_users_mgr</num_4>
             </group>
             <type>text</type>
             <no_caption>1</no_caption>
@@ -174,7 +176,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users</group>
+            <group>grp_users_tree</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -185,8 +187,8 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users</group>
-            <type>text</type>
+            <group>grp_users_tree</group>
+            <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
@@ -196,7 +198,40 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_users</group>
+            <group>grp_users_tree</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>user_mgr_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users_mgr</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>box</parent>
+      </property>
+      <property>
+            <name>user_mgr_tree</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users_mgr</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>user_mgr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users_mgr</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -349,6 +384,15 @@
             <grp_users>
                   <caption>Kasutajad</caption>
             </grp_users>
+            <grp_users_tree>
+                  <caption>Kasutajate puu</caption>
+                  <parent>grp_users</parent>
+            </grp_users_tree>
+            <grp_users_mgr>
+                  <caption>Kasutajate rollid</caption>
+                  <parent>grp_users</parent>
+                  <submit>no</submit>
+            </grp_users_mgr>
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>

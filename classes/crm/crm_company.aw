@@ -659,6 +659,7 @@ class crm_company extends class_base
 					'org_id' => '',
 				)),
 				'oid' => $conn->prop('to'),
+				"class_id" => $conn->prop("to.class_id")
 			);
 			//i know, i know, this function is getting really bloated
 			//i just don't know yet, how to refactor it nicely, until then
@@ -755,7 +756,8 @@ class crm_company extends class_base
 					'id' => ++$node_id,
 					'name' => $name,
 					'iconurl' =>' images/scl.gif',
-					'url'=>$url
+					'url'=>$url,
+					"class_id" => $tmp_obj->class_id()
 				)
 			);
 		}	
@@ -1039,22 +1041,7 @@ class crm_company extends class_base
 			//END OF CONTACTS SEARCH
 			case "unit_listing_tree":
 			{
-				$tree_inst = &$arr['prop']['vcl_inst'];
-				$node_id = 0;
-				$this->active_node = (int)$arr['request']['unit'];
-				if(is_oid($arr['request']['cat']))
-				{
-					$this->active_node = $arr['request']['cat'];
-				}
-				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
-				$this->generate_tree(array(
-							'tree_inst' => &$tree_inst,
-							'obj_inst' => $arr['obj_inst'],
-							'node_id' => &$node_id,
-							'conn_type' => 'RELTYPE_SECTION',
-							'attrib' => 'unit',
-							'leafs' => true,
-				));
+				$this->_do_unit_listing_tree($arr);
 				break;
 			}
 			
@@ -2794,7 +2781,10 @@ class crm_company extends class_base
 		
 		foreach($arr['check'] as $key=>$value)
 		{
-			$main_obj->disconnect(array('from'=>$value));
+			if ($main_obj->is_connected_to(array("to" => $value)))
+			{
+				$main_obj->disconnect(array('from'=>$value));
+			}
 		}
 
 		return $this->mk_my_orb('change',array(
@@ -3161,7 +3151,8 @@ class crm_company extends class_base
 				'parent' => $arr['obj_inst']->id(),
 				'alias_to' => $alias_to,
 				'reltype' => $this->reltype_workers,
-				'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				"class" => "crm_company"
 			))
 		));
 		
@@ -3201,7 +3192,7 @@ class crm_company extends class_base
 	
 		//uus kõne
 		$tb->add_button(array(
-			'name' => 'Kõne',
+			'name' => 'Kone',
 			'img' => 'class_223.gif',
 			'tooltip' => t('Tee kõne'),
 			'action' => 'submit_new_call'
@@ -4956,6 +4947,25 @@ class crm_company extends class_base
 			"scrollbars" => "auto"
 		));
 		return $roles;
+	}
+
+	function _do_unit_listing_tree($arr)
+	{
+		$tree_inst = &$arr['prop']['vcl_inst'];
+		$node_id = 0;
+		$this->active_node = (int)$arr['request']['unit'];
+		if(is_oid($arr['request']['cat']))
+		{
+			$this->active_node = $arr['request']['cat'];
+		}
+		$this->generate_tree(array(
+			'tree_inst' => &$tree_inst,
+			'obj_inst' => $arr['obj_inst'],
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_SECTION',
+			'attrib' => 'unit',
+			'leafs' => true,
+		));
 	}
 }
 ?>
