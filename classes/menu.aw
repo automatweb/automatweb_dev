@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.119 2005/01/26 11:26:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.120 2005/01/27 12:31:48 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1375,11 +1375,6 @@ class menu extends class_base
 					$str[$tpl][$docid] = $doco->ord();
 				}
 			}
-		}
-
-		if (aw_global_get("uid") == "kix")
-		{
-			echo dbg::dump($str);
 		}
 
 		$tmp = array();
