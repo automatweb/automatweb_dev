@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.53 2004/12/02 14:36:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.54 2004/12/09 11:28:31 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1396,6 +1396,13 @@ class forum_v2 extends class_base
 		);
 		$this->embedded = true;
 
+		global $XX5;
+		if ($XX5)
+		{
+			//phpinfo();
+			//arr($_GET);
+		};
+
 		// nii. see paneb selle paika. Ja nüt, mk_my_orb peaks suutma detectida kas 
 		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
 		// ah? mis?
@@ -1411,6 +1418,7 @@ class forum_v2 extends class_base
 				"page" => $_GET["page"],
 				"c" => $_GET["c"],
 				"cb_part" => 1,
+				"form_embedded" => 1,
 				"fxt" => 1,
 				"group" => "contents",
 				//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
@@ -1516,7 +1524,7 @@ class forum_v2 extends class_base
 		$class = aw_global_get("class");
 		// XXX: are we embedded? I know, this sucks :(
 		$form_handler = "";
-		if (empty($class))
+		if (empty($_GET["class"]))
 		{
 			$form_handler = aw_ini_get("baseurl") . "/" . aw_global_get("section");
 		};
