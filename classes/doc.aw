@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.43 2003/10/23 11:23:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.44 2003/10/23 11:50:03 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -711,19 +711,23 @@ class doc extends class_base
 	function get_planners_with_folders($args = array())
 	{
 		$retval = array();
+
 		$this->get_objects_by_class(array(
 			"class" => CL_PLANNER,
 			"active" => true,
 			"fields" => "oid,name,metadata",
 			"orderby" => "name",
 		));
+
 		while($row = $this->db_next())
 		{
+
 			$row["meta"] = aw_unserialize($row["metadata"]);
 			// aight, this is where I could use $obj->get_property_value("xxx");
 			// but since I don't have it yet, this will do -- duke
 
 			// display only the calendars which have an event folder defined
+
 			if (!empty($row["meta"]["event_folder"]))
 			{
 				$retval[] = array(
@@ -756,7 +760,7 @@ class doc extends class_base
 			$folderdat = $this->get_object($row["event_folder"]);
 			$retval["cal_" . $row["oid"]] = array(
 				"type" => "checkbox",
-				"name" => $args["prop"]["name"] . "[]",
+				"name" => $args["prop"]["name"] . "[" .$row["oid"] . "]",
 				"caption" => html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $row["oid"]),"planner"),
 					"caption" => "<font color='black'>" . $row["name"] . "</font>",
