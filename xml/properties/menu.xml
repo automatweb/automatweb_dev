@@ -426,8 +426,8 @@
             <name>ndocs</name>
             <type>textbox</type>
             <size>3</size>
+            <group>relations</group>
             <table>menu</table>
-            <group>show</group>
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
