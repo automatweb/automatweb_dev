@@ -62,6 +62,18 @@
 	<td class="celltext" align="right">Sessiooni formid:</td>
 	<td class="celltext"><select class="formselect2" name="session_form">{VAR:session_form}</select></td>
 </tr>
+<tr>
+	<td class="celltext" colspan="2">Vali kataloogid, kuhu elemente lisatakse:</td>
+</tr>
+<tr>
+	<td class="celltext" colspan="2"><select name="el_menus[]" multiple=1>{VAR:el_menus}</select></td>
+</tr>
+<tr>
+	<td class="celltext" colspan="2">Vali kataloogid, kust elemente v&otilde;etakse:</td>
+</tr>
+<tr>
+	<td class="celltext" colspan="2"><select name="el_menus2[]" multiple=1>{VAR:el_menus2}</select></td>
+</tr>
 <!-- SUB: CHANGE -->
 <tr>
 <td class="celltext" colspan=2><a href='{VAR:admin}'>{VAR:LC_FORMS_ADMIN}</a></td>
