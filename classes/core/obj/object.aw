@@ -117,6 +117,11 @@ class object
 		return $GLOBALS["objects"][$this->oid]->path_str($param);
 	}
 
+	function is_property($param)
+	{
+		return $GLOBALS["objects"][$this->oid]->is_property($param);
+	}
+
 	function can($param)
 	{
 		return $GLOBALS["objects"][$this->oid]->can($param);
