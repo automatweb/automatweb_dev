@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.40 2005/01/18 12:09:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.41 2005/02/07 12:10:08 ahti Exp $
 
 /*
 
@@ -478,8 +478,8 @@ class object_treeview extends class_base
 			"sort_by" => $sby,
 			"lang_id" => array()
 		));
+		aw_global_set("ot_sort_by", $ob->prop("sort_by"));
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
-
 		if ($ob->prop("groupfolder_acl"))
 		{
 			$r_ol = new object_list();
@@ -516,6 +516,7 @@ class object_treeview extends class_base
 
 	function _obj_list_sorter($a, $b)
 	{
+		$sort_by = aw_global_get("ot_sort_by");
 		if ($a->class_id() == CL_MENU && $b->class_id() != CL_MENU)
 		{
 			return -1;
@@ -528,6 +529,10 @@ class object_treeview extends class_base
 		else
 		if ($a->class_id() != CL_MENU && $b->class_id() != CL_MENU)
 		{
+			if(strpos($sort_by, "jrk") !== false)
+			{
+				return $a->ord() > $b->ord();
+			}
 			return $a->modified() < $b->modified();
 		}
 		else
