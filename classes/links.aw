@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.30 2003/05/19 15:40:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.31 2003/06/10 15:44:13 duke Exp $
 
 /*
 
@@ -27,16 +27,16 @@
 @property url_int_text type=text group=general
 @caption Saidi sisene link
 
-@property alt type=textbox table=objects field=meta method=serialize group=general
+@property alt type=textbox table=objects field=meta method=serialize group=general search=1
 @caption Alt tekst
 
-@property newwindow type=checkbox ch_value=1 table=extlinks field=newwindow group=general
+@property newwindow type=checkbox ch_value=1 table=extlinks field=newwindow group=general search=1
 @caption Uues aknas
 
 @property doclinkcollection type=checkbox ch_value=1 table=extlinks field=doclinkcollection group=general
 @caption Dokumendi lingikogusse
 
-@property use_javascript type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript
+@property use_javascript type=checkbox ch_value=1 table=objects field=meta method=serialize group=Javascript search=1
 @caption Kasuta javascripti
 
 @property newwinwidth type=textbox ch_value=1 table=objects field=meta method=serialize group=Javascript
@@ -156,37 +156,6 @@ class links extends class_base
 			"item_sel" => checked($s_class_id == "item")
 		));
 		return $this->parse();
-	}
-
-	function _serialize($arr)
-	{
-		extract($arr);
-		$this->db_query("
-			SELECT 
-				extlinks.url as e_url,
-				extlinks.name as e_name,
-				extlinks.hits as e_hits,
-				extlinks.oid as e_oid,
-				extlinks.newwindow as e_newwindow,
-				extlinks.doclinkcollection as e_doclinkcollection,
-				objects.* 
-			FROM extlinks 
-				LEFT JOIN objects ON objects.oid = extlinks.id 
-			WHERE id = $oid");
-		$row = $this->db_next();
-		return serialize($row);
-	}
-
-	function _unserialize($arr)
-	{
-		extract($arr);
-
-		$row = unserialize($str);
-		$row["parent"] = $parent;
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		$this->db_query("INSERT INTO extlinks(id,url,name,hits,oid,newwindow,doclinkcollection) VALUES($id,'".$row["e_url"]."','".$row["e_name"]."','".$row["e_hits"]."','".$row["e_oid"]."','".$row["e_newwindow"]."','".$row["e_doclinkcollection"]."')");
-		return true;
 	}
 
 	function show($arr)
