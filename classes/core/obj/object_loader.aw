@@ -251,6 +251,7 @@ class _int_object_loader
 
 		// write the current time as last modification time of any object.
 		$this->cache->file_set("objlastmod", time());
+		$this->cache->file_invalidate("menuedit-menu_cache-lang-".aw_global_get("lang_id")."-site_id-".aw_ini_get("site_id")."-period-".aw_global_get("act_per_id"));
 
 		return $t_oid;
 	}
@@ -272,6 +273,9 @@ class _int_object_loader
 
 		// copy the object to the new place
 		$GLOBALS["objects"][$t_oid] = $t_o;
+
+		$this->cache->file_set("objlastmod", time());
+		$this->cache->file_invalidate("menuedit-menu_cache-lang-".aw_global_get("lang_id")."-site_id-".aw_ini_get("site_id")."-period-".aw_global_get("act_per_id"));
 
 		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid

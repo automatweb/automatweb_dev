@@ -128,7 +128,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$tp["site_id"] = aw_ini_get("site_id");
 		}
 		$query_hash = "search-".md5(serialize($tp));
-		
+
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{
@@ -182,7 +182,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$this->cache->file_invalidate($cfn."-$func-$oid");
 		}
 		$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
-		$this->cache->flush_cache();
+		$this->cache->file_invalidate_regex("connection(.*)");
+		if ($GLOBALS["cfg"]["cache"]["use_page_cache"])
+		{
+			$this->cache->flush_cache();
+		}
 	}
 
 	function object_exists($oid)
