@@ -62,8 +62,9 @@ function navigate_to()
 </script>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
+<!--
 <tr>
-<td align="right" style="font-size: 10px;">
+<td align="right" style="font-size: 10px;" colspan="3">
 <a href="{VAR:today_url}">Täna</a>
 <!-- SUB: PAGE -->
 <a href="{VAR:link}">{VAR:text}</a> 
@@ -74,9 +75,31 @@ function navigate_to()
 <!-- END SUB: SEL_PAGE -->
 </td>
 </tr>
+-->
 <tr>
 <td class="caldayheadday">
 <a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
+<td style="background: #BCDCF0; font-size: 10px;">
+<a href="{VAR:today_url}">Täna</a>
+<!-- SUB: PAGE -->
+<a href="{VAR:link}">{VAR:text}</a> 
+<!-- END SUB: PAGE -->
+
+<!-- SUB: SEL_PAGE -->
+[ {VAR:text} ] 
+<!-- END SUB: SEL_PAGE -->
+</td>
+<td align="right" style="background: #BCDCF0">
+<form id='naviform' style='display: inline'>
+<select id='navi_month' name='month' style="border: 1px solid gray">
+{VAR:mnames}
+</select>
+<select id='navi_year' name='year'>
+{VAR:years}
+</select>
+<input type="button" value="Go!" onClick='navigate_to()'>
+</form>
+</td>
 </tr>
 </table>
 <table border="0" cellspacing="0">
@@ -86,31 +109,11 @@ function navigate_to()
 </td>
 <td valign="top" width="10%">
 {VAR:overview}
-<!--
-</td>
-</tr>
-<tr>
-<td align="center" valign="top" width="10%">
--->
-<form id='naviform' style='display: inline'>
-<select id='navi_month' name='month'>
-{VAR:mnames}
-</select>
-<select id='navi_year' name='year'>
-{VAR:years}
-</select>
-<input type="button" value="Go!" onClick='navigate_to()'>
-</form>
-</center>
-<!--
-</td>
-</tr>
-<tr>
-<td valign="top" width="10%">
--->
 <!-- SUB: TASKS -->
 <span style="font-size: 10px;">
-<center><b>{VAR:tasks_title}</b></center>
+<div class="minical_header">
+<center>{VAR:tasks_title}</center>
+</div>
 <!-- SUB: TASK -->
 <div style="margin: 2px; border: 1px solid #CCC; background: #EEE;">
 <a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a>

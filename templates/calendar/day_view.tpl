@@ -1,10 +1,8 @@
 <table border="0" style="border-collapse: collapse;" width="100%" height="100%">
 <tr>
-<td valign="top" style="border: 1px solid gray;">
+<td valign="top">
 <small>
-	<!-- SUB: EVENT -->
-		<strong>{VAR:time}</strong> - {VAR:name}<br>
-	<!-- END SUB: EVENT -->
+	{VAR:EVENT}
 </small>
 </td>
 </tr>

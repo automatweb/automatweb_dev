@@ -11,9 +11,7 @@
 <td valign="top" style="border: 1px solid #CCC;">
 <span style="font-size: 11px;">
 <p>
-	<!-- SUB: EVENT -->
-		<strong>{VAR:time}</strong> - {VAR:name}<br>
-	<!-- END SUB: EVENT -->
+	{VAR:EVENT}
 </span>
 </td>
 </tr>
@@ -30,9 +28,7 @@
 <td valign="top" style="border: 1px solid #CCC; background: #F6F6F6;">
 <span style="font-size: 11px;">
 <p>
-	<!-- SUB: EVENT -->
-		<strong>{VAR:time}</strong> - {VAR:name}<br>
-	<!-- END SUB: EVENT -->
+	{VAR:EVENT}
 </span>
 </td>
 </tr>
