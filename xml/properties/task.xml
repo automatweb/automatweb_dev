@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>info_on_object</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>info_on_object</field>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
             <name>is_done</name>
             <table>objects</table>
             <group>general</group>

@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>info_on_object</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>info_on_object</field>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
             <name>is_done</name>
             <table>objects</table>
             <group>general</group>
@@ -157,6 +166,58 @@
             <no_caption>1</no_caption>
             <caption>Osalejad</caption>
       </property>
+      <property>
+            <name>search_contact_firstname</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>search_contact_lastname</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>search_contact_code</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Isikukood</caption>
+      </property>
+      <property>
+            <name>search_contact_button</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <action>search_contacts</action>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>search_contact_results</name>
+            <table>objects</table>
+            <group>participants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Tulemuste tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -180,6 +241,7 @@
             </comments>
             <participants>
                   <caption>Osalejad</caption>
+                  <submit>no</submit>
             </participants>
       </groupinfo>
       <tableinfo>
