@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.5 2004/10/29 18:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.6 2004/11/01 10:41:57 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -274,7 +274,9 @@ class auth_config extends class_base
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
-			"name" => $cred["uid"]
+			"name" => $cred["uid"],
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 		if ($ol->count())
 		{
