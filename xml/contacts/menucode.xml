@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<contacts>
+	<add>
+		<caption>Uus kontakt</caption>
+		<link>?class=contacts&amp;action=add&amp;{VAR:folder}</link>
+	</add>
+	<addgroup>
+		<caption>Uus grupp</caption>
+		<link>?class=contacts&amp;action=add_group&amp;{VAR:folder}</link>
+	</addgroup>
+	<list>
+		<caption>Nimekiri</caption>
+		<link>?class=contacts</link>
+	</list>
+	<search>
+		<caption>Otsi</caption>
+		<link>?class=contacts&amp;action=search</link>
+	</search>
+</contacts>
