@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.60 2002/10/09 09:51:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.61 2002/10/16 13:54:05 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -394,6 +394,7 @@ class form_table extends form_base
 						else
 						if ($elid == "formel")
 						{
+							enter_function("form_table::row_data::formel", array());
 							if (!is_array($cc["basket"]))
 							{
 								$this->raise_error(ERR_FG_TBL_NOBASKET, "Column $col for form table $this->table_id has a count element selected, but no basket! You must also select a basket, where the ordered items will be stored!", true);
@@ -405,6 +406,7 @@ class form_table extends form_base
 
 								// now, if we have a controller set for this basket
 								$ctrl_ok = true;
+								enter_function("form_table::row_data::eval_controller", array());
 								if (is_array($cc["basket_controller"][$element_id]))
 								{
 									// eval it. and if it returns false, then we must not show this basket's count element
@@ -412,15 +414,19 @@ class form_table extends form_base
 									// and then the entry for the current row
 									foreach($cc["basket_controller"][$element_id] as $ctrlid)
 									{
-										$curfinst = $this->cache_get_form_instance($this->form_for_entry_id);
-										$curfinst->load_entry($dat["entry_id"]);
+										$curfinst =& $this->cache_get_form_instance($this->form_for_entry_id);
+
+										$curfinst->read_elements_from_q_result($dat, $curfinst->entry);
+										$curfinst->read_entry_from_array($dat["entry_id"]);
+
 										$ctrl_ok &= $this->controller_instance->eval_controller($ctrlid, "", $curfinst);
-										$curfinst->unload_entry();
 									}
 								}
+								exit_function("form_table::row_data::eval_controller", array());
 
 								if ($ctrl_ok)
 								{
+									enter_function("form_table::row_data::showbasketadd", array());
 									// this is the form where the count element will come from
 									$form_id = $cc["el_forms"][$element_id];
 									$form =& $this->cache_get_form_instance($form_id);
@@ -445,7 +451,7 @@ class form_table extends form_base
 
 									if (isset($cc["link_popup"]) && $cc["link_popup"])
 									{
-										$burl = sprintf("ft_popup('%s','popup',%d,%d,%d,%d,%d,%d);return false;",
+										$burl = sprintf("ft_popup('%s','popup$bid',%d,%d,%d,%d,%d,%d);return false;",
 											$burl,
 											$cc["link_popup_scrollbars"],
 											!$cc["link_popup_fixed"],
@@ -464,12 +470,15 @@ class form_table extends form_base
 										"ftbl_el[$col][".$this->form_for_entry_id."][".$dat["entry_id"]."]",
 										$dat
 									);
+									exit_function("form_table::row_data::showbasketadd", array());
 								}
 							}
+							exit_function("form_table::row_data::formel", array());
 						}
 						else
 						if ($elid == "formel_price")
 						{
+							enter_function("form_table::row_data::formel_price", array());
 							reset($cc["formel"]);
 //							list(,$element_id) = each($cc["formel"]);
 							setlocale(LC_ALL, 'et_EE');
@@ -491,6 +500,7 @@ class form_table extends form_base
 									$str .= (double)$dat["ev_".$element_id]*(double)$basket_count;
 								}
 							}
+							exit_function("form_table::row_data::formel_price", array());
 						}
 					}
 				}
@@ -551,6 +561,7 @@ class form_table extends form_base
 	// !reads the loaded entries from array of forms $forms and adds another row of data to the table
 	function row_data_from_form($forms,$special = "")
 	{
+		enter_function("form_table::row_data_from_form", array());
 		$dat = array();
 		foreach($forms as $form)
 		{
@@ -563,6 +574,7 @@ class form_table extends form_base
 			{
 				for ($col = 0; $col < $form->arr["cols"]; $col++)
 				{
+					$elar = array();
 					$form->arr["contents"][$row][$col]->get_els(&$elar);
 					reset($elar);
 					while (list(,$el) = each($elar))
@@ -573,6 +585,7 @@ class form_table extends form_base
 				}
 			}
 		}
+		exit_function("form_table::row_data_from_form");
 		return $this->row_data($dat);
 	}
 
@@ -598,7 +611,10 @@ class form_table extends form_base
 			// because we got to load it's value from the database...
 			if ($this->table["defs"][$i]["els"]["formel"] == "formel")
 			{
-				foreach($this->table["defs"][$i]["formel"] as $element_id)
+				// if baskets are in the table, we should load all elements from the db, because controllers might need 
+				// any element and this way we can avoid doing load_entry for each row for evaling controllers
+				return false;
+/*				foreach($this->table["defs"][$i]["formel"] as $element_id)
 				{
 					$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
 					$form =& $this->cache_get_form_instance($form_id);
@@ -618,7 +634,7 @@ class form_table extends form_base
 							}
 						}
 					}
-				}
+				}*/
 			}
 		}
 		
