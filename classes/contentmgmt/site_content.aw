@@ -170,6 +170,7 @@ class site_content extends menuedit
 		$d = get_instance("document");
 		$this->doc = get_instance("document");
 		
+		$sel_menu_id = $this->sel_section;
 		
 		// so, if the current object is not a menu,
 		// just pretend that the parent is. Hm, I think that's wrong
@@ -178,10 +179,7 @@ class site_content extends menuedit
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
-		
 
-		$sel_menu_id = $this->sel_section;
-		
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$this->mar[$sel_menu_id] = $this->get_menu($sel_menu_id);
@@ -196,6 +194,10 @@ class site_content extends menuedit
 		if (!$this->mar[$sel_menu_id]["left_pane"])
 		{
 			$this->left_pane = false;
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "sel menu = $sel_menu_id ".dbg::dump($this->left_pane)." menu = ".dbg::dump($this->mar[$sel_menu_id]);
+		}
 		}
 
 		if (!$this->mar[$sel_menu_id]["right_pane"])
@@ -313,7 +315,7 @@ class site_content extends menuedit
 			while (list($id,$name) = each($menu_defs))
 			{
 				$nx = $name;
-				dbg::p("drawing $id,$name<br />");
+				$this->current_menu_level_parent = $id;
 
 				// SIC! check whether login menus are defined and
 				// if so, overwrite the one defined in aw.ini
@@ -625,6 +627,21 @@ class site_content extends menuedit
 
 
 		$this->level++;
+
+		// calculate how many current menu levels are in the path
+		$levels_in_path = 0;
+		$count_levels = false;
+		foreach($path as $_lv => $_id)
+		{
+			if ($count_levels)
+			{
+				$levels_in_path++;
+			}
+			if ($_id == $this->current_menu_level_parent)
+			{
+				$count_levels = true;
+			}
+		}
 
 		// needed to make creating links containing hiearchical aliases work
 		if (not(is_array($this->menu_aliases)))
@@ -1194,7 +1211,19 @@ class site_content extends menuedit
 			// on defineeritud $no_show_users_only
 			if ($selonly && $row["name"] != "" && !$noshowu && !$this->skip)
 			{
-				if ($this->is_template($mn.$ap))
+				$final_show = true;
+				if ($this->is_template($mn."_HIDE_NOTACT"))
+				{
+					// now, if this is defined, then if the menu is in the path
+					// or if no menu from that level is selected
+					
+					if ($levels_in_path >= $this->level && !in_array($row["oid"], $path))
+					{
+						$final_show = false;
+					}
+				}
+
+				if ($this->is_template($mn.$ap) && $final_show)
 				{
 					if ($is_mid)
 					{
@@ -1668,8 +1697,7 @@ class site_content extends menuedit
 			$doc->doc_count = 0;
 
 			$show_promo = false;
-
-
+			
 			if ($meta["all_menus"])
 			{
 				$show_promo = true;
