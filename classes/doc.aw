@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.90 2004/11/18 11:38:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.91 2004/11/26 14:04:51 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -205,6 +205,16 @@ class doc extends class_base
 
 	function get_property($arr)
 	{
+		// let site mod props
+		$si = __get_site_instance();
+		if ($si)
+		{
+			$meth = "get_property_doc_".$arr["prop"]["name"];
+			if (method_exists($si, $meth))
+			{
+				$si->$meth($arr);
+			}
+		}
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
