@@ -4,6 +4,22 @@
 
 {VAR:content}
 
+<!-- SUB: ERROR -->
+<tr>
+	<td colspan="2" bgcolor="red" align="center"><span style='color: white; font-weight: bold;'>{VAR:error_text}</span></td>
+</tr>
+<!-- END SUB: ERROR -->
+
+<!-- SUB: PROP_ERR_MSG -->
+<tr>
+	<td class="chformleftcol" width='160'>
+	</td>
+	<td class='chformrightcol'>
+<span style='color: red'>{VAR:err_msg}</span>
+	</td>
+</tr>	
+<!-- END SUB: PROP_ERR_MSG -->
+
 <!-- SUB: LINE -->
 <tr>
         <td class='chformleftcol' width='160' nowrap>
