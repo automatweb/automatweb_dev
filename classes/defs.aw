@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.98 2003/07/02 11:48:47 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.99 2003/07/14 14:46:27 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -169,6 +169,31 @@ if (!defined("DEFS"))
 		$text = str_replace("\n\n","<p>",$text);
 		$text = str_replace("\n","<br>",$text);
 		return $text;
+	}
+
+	////
+	// !checks if the parameter is an oid
+	function is_oid($oid)
+	{
+		return is_numeric($oid);
+	}
+
+	//// 
+	// !checks if the parameter is a valid class_id
+	function is_class_id($clid)
+	{
+		if (!is_numeric($clid))
+		{
+			return false;
+		}
+
+		$clss = aw_ini_get("classes");
+		if (!isset($clss[$clid]))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	////
