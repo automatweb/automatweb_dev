@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.37 2004/02/05 13:27:15 duke Exp $
+// $Id: cfgutils.aw,v 1.38 2004/02/11 10:57:09 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -215,6 +215,10 @@ class cfgutils extends aw_template
 		$res = array();
 
 		$do_filter = false;
+		if (empty($filter["form"]))
+		{
+			$filter["form"] = "";
+		};
 
 		if (isset($filter) && is_array($filter) && sizeof($filter) > 0)
 		{
@@ -237,7 +241,7 @@ class cfgutils extends aw_template
 					$pass = 0;
 					foreach($filter as $key => $val)
 					{
-						if ($_tmp[$key] == $val)
+						if ($_tmp[$key] == $val || $_tmp[$key] == "all")
 						{
 							$pass++;
 						}
