@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.12 2003/02/12 13:56:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.13 2003/04/04 15:04:12 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -111,6 +111,7 @@ class xml_import extends class_base
 		print "Retrieving data:<br>";
 		flush();
 		// retrieve data
+		$method = $obj["meta"]["import_function"];
 		$ds = get_instance("datasource");
 		$src_data = $ds->retrieve(array("id" => $obj["meta"]["datasource"]));
 		print "Got " . strlen($src_data) . " bytes of data<br>";
@@ -127,7 +128,6 @@ class xml_import extends class_base
 		*/
 		print "Invoking import function<br>";
 		flush();
-		$method = $obj["meta"]["import_function"];
 		$this->$method(array("source" => $src_data));
 		print "Finished!!!<bR>";
 		flush();
@@ -201,6 +201,8 @@ class xml_import extends class_base
 		$lastlevel = 0;
 		$ylem_list = array();
 		$ylem_ilist = array();
+		$str_level = 1;
+		$counter = 0;
 		foreach($values as $key => $val)
 		{
 			/*
@@ -215,7 +217,6 @@ class xml_import extends class_base
 					
 				if ($val["type"]  ==  "open")
 				{
-
 					if ($val["level"] == 2)
 					{
 						$osakond = $this->convert_unicode($val["attributes"]["nimetus"]);
@@ -235,6 +236,7 @@ class xml_import extends class_base
 						print "</pre>";
 					print "<b>popping</b><br>";
 						*/
+					$str_level--;
 					array_pop($ylem_list);
 					array_pop($ylem_ilist);
 				};
@@ -281,9 +283,25 @@ class xml_import extends class_base
 						
 
 					$jrknimetus = sprintf("%02d%s",$jrk,$nimetus);
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus')";
+					if ($str_level > 3)
+					{
+						$t3_ylem = $t3taseme_ylem_id;
+					}
+					else
+					{
+						$t3_ylem = '';
+					};
+						
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus,3taseme_ylem_id)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem')";
+					$counter++;
+					if ($str_level == 3)
+					{
+						$t3taseme_ylem_id = $real_ylem_id;
+					};
 					print $q;
+					print "<h1>$str_level</h1>";
+					
 					$this->db_query($q);
 					print "<br>";
 					$lastlevel = $val["level"];
@@ -297,11 +315,13 @@ class xml_import extends class_base
 					/*
 					print "<b>pushing</b><br>";
 					*/
+					$str_level++;
 					array_push($ylem_list,$ylem_name);
 					array_push($ylem_ilist,$yid);
 				};
 			} 
 		}
+		print "<h1>$counter</h1>";
 	}
 	
 	function import_tootajad($args = array())
