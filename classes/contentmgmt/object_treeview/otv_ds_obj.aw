@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.11 2004/11/16 11:16:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.12 2004/11/29 13:21:32 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -28,7 +28,7 @@
 @caption Kataloogid
 
 @reltype FOLDER value=1 clid=CL_MENU
-@caption kataloog
+@caption objektide asukoht
 
 @reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption lisatav objektit&uuml;&uuml;p

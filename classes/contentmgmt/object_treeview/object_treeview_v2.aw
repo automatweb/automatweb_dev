@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.23 2004/11/26 13:56:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.24 2004/11/29 13:21:32 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -101,10 +101,9 @@ class object_treeview_v2 extends class_base
 		{
 			case "tree_type":
 				$prop["options"] = array(
-					TREE_HTML => "HTML",
-					TREE_JS => "Javascript",
 					TREE_DHTML => "DHTML"
 				);
+				$prop["value"] = TREE_DHTML;
 				break;
 
 			case "sortbl":
