@@ -461,6 +461,12 @@ function aw_startup()
 	$l = get_instance("languages");
 	$l->request_startup();
 
+	// check multi-lang frontpage
+	if (is_array($GLOBALS["cfg"]["__default"]["frontpage"]))
+	{
+		$GLOBALS["cfg"]["__default"]["frontpage"] = $GLOBALS["cfg"]["__default"]["frontpage"][aw_global_get("lang_id")];
+	}
+
 	$LC = aw_global_get("LC");
 
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
