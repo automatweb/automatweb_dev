@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.23 2002/09/25 15:01:09 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.1 2002/10/29 10:09:07 kristo Exp $
+classload("formgen/form_base");
 class form_output extends form_base 
 {
 	function form_output()
@@ -11,7 +11,7 @@ class form_output extends form_base
 
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = get_instance("form_controller");
+			$this->controller_instance = get_instance("formgen/form_controller");
 		}
 		$this->style_instance = get_instance("style");
 	}
@@ -272,7 +272,7 @@ class form_output extends form_base
 				$a2.=$this->parse("ADD_2_LINE");
 				$bof[$bf] = $bf;
 
-				$f = new form;
+				$f = get_instance("formgen/form");
 				$f->load($bf);
 				$els+=$f->get_all_elements();
 			}
@@ -319,8 +319,7 @@ class form_output extends form_base
 				// if the user selected a form to base this op on, make it look like the form.
 				$ord = (is_array($ord)) ? $ord : array();
 				asort($ord);
-				classload("form");
-				$f = new form;
+				$f = get_instance("formgen/form");
 				$this->output= array();
 				foreach($ord as $bfid => $or)
 				{
@@ -1440,8 +1439,7 @@ class form_output extends form_base
 	{
 		extract($args);
 
-		classload("form");
-		$fo = new form;
+		$fo = get_instance("formgen/form");
 		$replacement = $fo->show(array(
 			"op_id" => $alias["target"],
 		));
