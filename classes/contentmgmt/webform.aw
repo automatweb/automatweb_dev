@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.39 2005/01/12 16:18:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.40 2005/01/12 17:04:39 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -683,7 +683,7 @@ class webform extends class_base
 			),
 			array(
 				"name" => "Sisesta dokumendi pealkiri",
-				"formula" => 'if(empty($prop["value"])){if(is_oid($request["doc_id"]) && $this->can("view", $request["doc_id"]){$doc = obj($request["doc_id"]);$request[$prop["value"]] = $doc->name();}}',
+				"formula" => 'if(empty($prop["value"])){if(is_oid($request["doc_id"]) && $this->can("view", $request["doc_id"])){$doc = obj($request["doc_id"]);$request[$prop["name"]] = $doc->name();}}',
 			),
 			//Host: ".$_SERVER["REMOTE_HOST"]."\n
 		);
