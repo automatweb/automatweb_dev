@@ -266,15 +266,6 @@ class process extends workflow_common
 		$metadata["action_info"] = $writeout;
 	}
 
-	function callback_pre_save($args = array())
-	{
-		if ($args["form_data"]["action_order"])
-		{
-			$coredata = &$args["coredata"];
-			$coredata["metadata"]["action_order"] = $args["form_data"]["action_order"];
-		};
-	}
-	
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
