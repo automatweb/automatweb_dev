@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.3 2004/06/11 08:52:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.4 2004/06/15 08:49:29 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -69,18 +69,17 @@ class shortcut extends class_base
 	{
 		$val = obj($args['id']);
 		
-		$noid = $this->new_object(array(
-			"parent" => $val->parent(),
-			"class_id" => CL_SHORTCUT,
-			"status" => $val->status(),
-			"brother_of" => $val->id(),
-			"name" => $val->name().' (kiirviide)',
-			"comment" => $val->comment(),
-			"jrk" => $val->jrk(),
-		));
+		$o = obj();
+		$o->set_name($val->name().' (kiirviide)');
+		$o->set_parent($val->parent());
+		$o->set_class_id(CL_SHORTCUT);
+		$o->set_status($val->status());
+		$o->set_comment($val->comment());
+		$o->set_jrk($val->jrk());
+		$noid = $o->save();
+
 		header('Location:'.aw_global_get('HTTP_REFERER'));
 		die;
-		//return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}	
 }
 ?>
