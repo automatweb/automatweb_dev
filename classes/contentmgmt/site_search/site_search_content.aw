@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.16 2004/11/02 11:22:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.17 2004/11/09 15:46:59 sven Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -11,6 +11,13 @@
 @default group=general
 
 @groupinfo static caption="Staatiline otsing"
+@groupinfo keywords caption="Märksõnade järgi otsing"
+
+@property do_keyword_search type=checkbox group=keywords field=meta method=serialize ch_value=1
+@caption Otsing märksõnadest
+
+@property keyword_search_classes type=select multiple=1 group=keywords field=meta method=serialize
+@caption Klassid
 
 @property search_static type=checkbox ch_value=1
 @caption Otsing staatilisse koopiasse
@@ -81,6 +88,17 @@ class site_search_content extends class_base
 					"caption" => "uuenda staatiline koopia"
 				));
 				break;
+			case "keyword_search_classes":
+				foreach (aw_ini_get("classes") as $key => $class)
+				{
+					if($class["alias"])
+					{
+						$options[$key] = $class["name"];
+					}
+				}
+				asort($options);
+				$data["options"] = $options;
+			break;
 		};
 		return $retval;
 	}
@@ -351,6 +369,11 @@ class site_search_content extends class_base
 				"lead" => $row["lead"]
 			);
 		}
+		
+		if($arr["obj"]->prop("do_keyword_search"))
+		{
+			$ret = $ret + $this->search_keywords($str, $menus, $arr["obj"]);
+		}
 		return $ret;
 	}
 
@@ -375,7 +398,65 @@ class site_search_content extends class_base
 
 		return $ret;
 	}
-
+	
+	function search_keywords($str, $menus, $obj)
+	{
+		$keyword_list = new object_list(array(
+			"class_id" => CL_KEYWORD,
+			"name" => "%$str%",
+		));
+		
+		//If keyword not found, no point to process it futher
+		if($keyword_list->count() == 0)
+		{
+			return;
+		}
+		
+		//This is temporary... it comes from search config in the future
+		$classes = $obj->prop("keyword_search_classes");
+		arr(CL_FILE);	
+		$keyword_aliased_conns = new connection();
+		
+		$keyword_aliased_conns = $keyword_aliased_conns->find(array(
+			"to" => $keyword_list->ids(),
+			"from.class_id" => $classes,
+		));
+		
+		foreach($keyword_aliased_conns as $conn)
+		{
+			$ids_list[] = $conn["from"];
+		}
+		
+		$aliased_docs_conns = new connection();
+		$aliased_docs_conns = $aliased_docs_conns->find(array(
+			"to" => $ids_list,
+			"from.class_id" => CL_DOCUMENT,
+		));
+		
+		foreach ($aliased_docs_conns as $conn)
+		{
+			$doc_ids[] = $conn["from"];	
+		}
+		
+		$ol = new object_list(array(
+			"oid" => $doc_ids,
+			"parent" => $menus,
+		));
+		
+		foreach ($ol->arr() as $obj)
+		{
+			$ret[] = array(
+				"url" => $this->cfg["baseurl"]."/".$obj->id(),
+				"title" => $obj->name(),
+				"modified" => $obj->modified("modified"),
+				"content" => $obj->prop("content"),
+				"lead" => $obj->prop("lead"),
+			);
+		}
+		return $ret;
+	}
+	
+	
 	////
 	// !returns an array of results matching the search
 	// params:
@@ -401,10 +482,10 @@ class site_search_content extends class_base
 		{
 			$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
 				"menus" => $ms,
-				"str" => $str
+				"str" => $str,
+				"obj" => $arr["obj"],
 			)));
 		}
-
 		// make sure we only get unique titles in results
 		$_ret = array();
 		foreach($ret as $d)
