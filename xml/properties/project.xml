@@ -69,6 +69,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Fail</caption>
             </PRJ_FILE>
+            <TAX_CHAIN>
+                  <value>5</value>
+                  <clid>CL_TAX_CHAIN</clid>
+                  <caption>Maksu pärg</caption>
+            </TAX_CHAIN>
       </reltypes>
 </properties>
 
