@@ -520,5 +520,15 @@
 			</function>
 		</action>
 
+		<action name="delete_entry" >
+			<function name="delete_entry">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<required name="entry_id" type="int" acl="delete"/>
+					<required name="after" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

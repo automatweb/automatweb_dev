@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.88 2004/02/11 11:50:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.89 2004/03/03 08:28:47 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -7421,6 +7421,20 @@ class form extends form_base
 			));
 		}
 		return $arr["return_url"];
+	}
+
+	/** deletes the form entry
+
+		@attrib name=delete_entry
+
+		@param id required type=int acl=view
+		@param entry_id required type=int acl=delete
+		@param after required
+
+	**/
+	function delete_entry($arr)
+	{
+		return parent::delete_entry($arr);
 	}
 };	// class ends
 ?>
