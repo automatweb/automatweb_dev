@@ -88,16 +88,6 @@
             <caption>Lisainfo</caption>
       </property>
       <property>
-            <name>img1</name>
-            <type>relpicker</type>
-            <clid>CL_IMAGE</clid>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>Pilt</caption>
-      </property>
-      <property>
             <name>is_forum</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
