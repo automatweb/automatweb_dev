@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.173 2005/01/21 12:56:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.174 2005/01/28 14:07:32 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -208,6 +208,14 @@ if (!defined("DEFS"))
 			$pwd .= $chars{rand(0,strlen($chars)-1)};
 		}
 		return $pwd;
+	}
+
+	function create_safe_links($src)
+	{
+		// create link if it already is not part of an <a tag 
+		// but how the f*** do I do that	
+		$src = preg_replace("/(([a-zA-Z0-9 >]))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\/%-]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
+		return $src;
 	}
 
 	////
