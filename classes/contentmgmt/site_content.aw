@@ -194,10 +194,6 @@ class site_content extends menuedit
 		if (!$this->mar[$sel_menu_id]["left_pane"])
 		{
 			$this->left_pane = false;
-		if (aw_global_get("uid") == "kix")
-		{
-			echo "sel menu = $sel_menu_id ".dbg::dump($this->left_pane)." menu = ".dbg::dump($this->mar[$sel_menu_id]);
-		}
 		}
 
 		if (!$this->mar[$sel_menu_id]["right_pane"])
