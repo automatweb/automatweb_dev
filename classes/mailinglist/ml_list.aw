@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.44 2004/02/18 07:54:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.45 2004/02/25 15:45:55 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -986,10 +986,10 @@ class ml_list extends class_base
 		{
 			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message")
 			{
-				if ($prop["name"] == "mfrom")
+				if ($id == "mfrom")
 				{
 					$prop["type"] = "textbox";
-				};
+				};				
 				$filtered_props[$id] = $prop;
 			};
 		};

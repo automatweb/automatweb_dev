@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.24 2004/02/16 10:44:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.25 2004/02/25 15:45:56 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -173,7 +173,8 @@ class ml_member extends class_base
 			$member_obj->delete();
 		};
 
-		return $this->cfg["baseurl"] . "/" . $section;
+		// fuck me plenty
+		return isset($args["ret_status"]) ? $check : $this->cfg["baseurl"] . "/" . $section;
 	}
 
 	////

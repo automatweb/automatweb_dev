@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.23 2004/02/05 16:46:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.24 2004/02/25 15:45:56 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -557,7 +557,9 @@ class ml_queue extends aw_template
 	function do_queue_item($msg)
 	{
 		$this->awm->clean();
-		$is_html=$msg["type"] & MSG_HTML;
+		$msgobj = new object($msg["mail"]);
+		$is_html = $msgobj->prop("html_mail") == 1024;
+		//$is_html=$msg["type"] & MSG_HTML;
 		$message = $msg["message"];
 
 		// compatiblity with old messenger .. yikes
@@ -567,12 +569,14 @@ class ml_queue extends aw_template
 			"subject" => $msg["subject"],
 			"To" => $msg["target"],
 			"Sender"=>"bounces@struktuur.ee",
-			"body" => $is_html?strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"))):$message,
+			"body" => $is_html ? strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"))) : $message,
 		));
 
 		if ($is_html)
 		{
-			$this->awm->htmlbodyattach(array("data"=>$message));
+			$this->awm->htmlbodyattach(array(
+				"data"=>$message,
+			));
 		};
 
 		$this->awm->gen_mail();
@@ -619,11 +623,6 @@ class ml_queue extends aw_template
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 
-		$msg_meta = $this->get_object_metadata(array(
-			"oid" => $arr["mail_id"],
-			"key" => "msg",
-		));
-
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
 		$def_user_folder = $list_obj->prop("def_user_folder");
@@ -632,6 +631,7 @@ class ml_queue extends aw_template
 		$this->db_query($q);
 		// 3) calls preprocess_one_message for each one
 		print "preprocessing<br>";
+		set_time_limit(0);
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -683,7 +683,7 @@ class ml_queue extends aw_template
 		$this->quote($vars);
 		$qid = $arr["qid"];
 
-		$target = $arr["name"] . "<" . $arr["mail"] . ">";
+		$target = $arr["name"] . " <" . $arr["mail"] . ">";
 		$this->quote($target);
 
 		$mid = $arr["mail_id"];
