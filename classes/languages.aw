@@ -54,6 +54,31 @@ class languages extends aw_template
 		return aw_cache_get("languages",$id);
 	}
 
+	////
+	// !trying to unify names here. 
+	// all_data - returns all data otherwise just the stuff to stick in a listbox
+	// ignore_status - if true, returns also inactive languages
+	function get_list($arr = array())
+	{
+		extract($arr);
+		$dat = $this->listall($ignore_status);
+
+		$ret = array();
+		foreach($dat as $ldat)
+		{
+			if ($all_data)
+			{
+				$ret[$ldat["id"]] = $ldat;
+			}
+			else
+			{
+				$ret[$ldat["id"]] = $ldat["name"];
+			}
+		}
+
+		return $ret;
+	}
+
 	function listall($ignore_status = false)
 	{
 		$lar = aw_cache_get_array("languages");
@@ -136,6 +161,13 @@ class languages extends aw_template
 		if (($l["status"] != 2 && aw_global_get("uid") == "") && !$force_act)
 		{
 			return false;
+		}
+		$q = "SELECT acceptlang FROM languages WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row)
+		{
+			aw_session_set("LC",$row["acceptlang"]);
 		}
 		$this->db_query("UPDATE users SET lang_id = $id WHERE uid = '".aw_global_get("uid")."'");
 		aw_session_set("lang_id", $id);
