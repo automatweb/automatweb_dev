@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.128 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.129 2005/04/05 08:52:12 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -368,11 +368,6 @@ class menu extends class_base
 				$data["options"] = $m->get_type_sel();
 				break;
 
-			case "tpl_edit":
-				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $ob->id()));
-				break;
-			
 			case "tpl_lead":
 				$tplmgr = get_instance("templatemgr");
 				$data["options"] = $tplmgr->get_template_list(array("type" => 1, "menu" => $ob->id()));
