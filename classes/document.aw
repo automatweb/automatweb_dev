@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.229 2003/12/29 19:36:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.230 2004/01/06 12:03:47 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -713,6 +713,11 @@ class document extends aw_template
 			$this->vars($al->get_vars());
 		}; 
 
+		if (trim($doc["user3"]) != "" && strpos($doc["user3"],"#") !== false)
+		{
+			$al->parse_oo_aliases($doc["docid"],&$doc["user3"],array("templates" => &$this->templates,"meta" => &$meta));
+		}
+
 		// where do I put that shit? that break conversion thingie?
 		if ($doc["nobreaks"] || $doc["meta"]["cb_nobreaks"]["content"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
@@ -926,6 +931,7 @@ class document extends aw_template
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
 		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est_print = date("d", time()).". ".get_est_month(date("m", time()))." ".date("Y", time());
 
 		$r_docid = $docid;
 
@@ -936,7 +942,9 @@ class document extends aw_template
 		}
 
 		$this->vars(array(
+			"doc_modified" => $_date,
 			"date_est" => $date_est,
+			"print_date_est" => $date_est_print,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
@@ -971,7 +979,13 @@ class document extends aw_template
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
 			"site_title" => strip_tags($doc["title"]),
-			"link" => ""
+			"link" => "",
+			"user1" => $doc["user1"],
+			"user2" => $doc["user2"],
+			"user3" => $doc["user3"],
+			"user4" => $doc["user4"],
+			"user5" => $doc["user5"],
+			"user6" => $doc["user6"],
 		));
 
 		if (is_object($si) && method_exists($si,"get_document_vars"))
@@ -2149,6 +2163,7 @@ class document extends aw_template
 		if ($str == "")
 		{
 			$this->read_template("search_none.tpl");
+			lc_site_load("document",$this);
 			return $this->parse();
 		}
 
