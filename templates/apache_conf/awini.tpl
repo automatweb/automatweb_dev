@@ -25,3 +25,6 @@ amenustart = 5
 
 # nujah, seda v6iks ka ju kysida tegelt
 stitle = Autom@web
+
+# use MD5 passwords
+auth.md5_passwords = 1
