@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.123 2002/08/09 13:51:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.118 2002/08/12 12:55:24 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -74,7 +74,7 @@ class form extends form_base
 	function gen_grid($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
+		$this->init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
 
 		for ($a=0; $a < $this->arr["cols"]; $a++)
 		{
@@ -239,7 +239,7 @@ class form extends form_base
 	function gen_all_elements($arr)
 	{
 		extract($arr);
-		$this->if_init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
+		$this->init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
 
 		$style = get_instance("style");
 		$stylesel = $style->get_select(0,ST_CELL,true);
@@ -420,12 +420,20 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
-		$this->arr["has_calendar"] = $has_calendar;
+		$this->arr["event_display_table"] = $event_display_table;
+		$this->arr["event_start_el"] = $event_start_el;
 
-		if ( ($this->subtype == FSUBTYPE_EMAIL_ACTION) && !$form_email_action)
+		$this->subtype = 0;
+
+		if ($ev_entry_form)
 		{
-			$this->subtype = 0;
-		};
+			$this->subtype = FSUBTYPE_EV_ENTRY;
+		}
+		
+		if ($email_form_action)
+		{
+			$this->subtype = FSUBTYPE_EMAIL_ACTION;
+		}
 
 		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
@@ -701,13 +709,12 @@ class form extends form_base
 	function gen_settings($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
+		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
 		$t = get_instance("style");
 		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
-		/*
 		$els = $this->get_all_elements(array("type" => 1));
 		$date_els = array("0" => "Vali üks");
 		foreach($els as $key => $val)
@@ -719,21 +726,18 @@ class form extends form_base
 		};
 
 		$ft = get_instance("form_table");
-		*/
 
 		// once upon a time there was a function called get_tables_for_form in the
 		// form_table class. Alas, now it's gone and there is a function with the
 		// same name in form_db_base .. which does a completely different thing.
 		// Well, anyway. the function that returns a list of tables for a form
 		// should be elsewhere. Feel free to move the following code out of here.
-		/*
 		$tables = array("0" => "Vali üks");
 		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
                 while ($row = $this->db_next())
                 {
                         $tables[$row["table_id"]] = $row["name"];
                 }
-		*/
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -749,6 +753,7 @@ class form extends form_base
 			"check_status"	=> checked($this->arr["check_status"]),
 			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
 			"has_controllers"	=> checked($this->arr["has_controllers"]),
+			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
 			"email_form_action" => checked($this->subtype == FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
@@ -760,12 +765,8 @@ class form extends form_base
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
-			/*
-			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
-			*/
-			"has_calendar" => checked($this->arr["has_calendar"]),
 		));
 
 		$ns = "";
@@ -791,7 +792,7 @@ class form extends form_base
 	function form_aliasmgr($args = array())
 	{
 		extract($args);
-		$this->if_init($id,"aliasmgr.tpl", $this->vars["LC_FORMS_ALIASMGR"]);
+		$this->init($id,"aliasmgr.tpl", $this->vars["LC_FORMS_ALIASMGR"]);
 		$this->vars(array(
 			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
@@ -1712,7 +1713,7 @@ class form extends form_base
 	function exp_cell_down($arr)
 	{
 		extract($arr);
-		$this->if_init($id);
+		$this->init($id);
 		$this->map_exp_down($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 		$this->save();
 		$orb = $this->mk_orb("change", array("id" => $this->id));
@@ -1795,7 +1796,7 @@ class form extends form_base
 	function gen_search_sel($arr)
 	{
 		extract($arr);
-		$this->if_init($id, "search_sel.tpl", "Vali otsitavad formid");
+		$this->init($id, "search_sel.tpl", "Vali otsitavad formid");
 
 		$this->vars(array("LINE" => "")); $cnt=0;
 
@@ -3530,7 +3531,7 @@ class form extends form_base
 	function change_el_pos($arr)
 	{
 		extract($arr);
-		$this->if_init($id, "", "<a href='".$this->mk_orb("change", array("id" => $id)).LC_FORM_CHANGE_FORM_CHOOSE_EL_LOC);
+		$this->init($id, "", "<a href='".$this->mk_orb("change", array("id" => $id)).LC_FORM_CHANGE_FORM_CHOOSE_EL_LOC);
 		$el =&$this->get_element_by_id($el_id);
 		return $el->change_pos($arr,&$this);
 	}
@@ -3641,7 +3642,7 @@ class form extends form_base
 	function metainfo($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"metainfo.tpl","Muutis formi $this->name metainfot");
+		$this->init($id,"metainfo.tpl","Muutis formi $this->name metainfot");
 		$row = $this->get_object($this->id);
 
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
@@ -4033,7 +4034,7 @@ class form extends form_base
 	function set_folders($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
+		$this->init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
 		
 		$o = get_instance("objects");
 		$_menulist = $o->get_list();
@@ -4179,7 +4180,7 @@ class form extends form_base
 	function translate($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"translate.tpl","T&otilde;gi");
+		$this->init($id,"translate.tpl","T&otilde;gi");
 
 		$la = get_instance("languages");
 		$langs = $la->listall();
@@ -4623,7 +4624,7 @@ class form extends form_base
 	function tables($arr)
 	{
 		extract($arr);
-		$this->if_init($id,"admin_tables.tpl","Muuda tabeleid");
+		$this->init($id,"admin_tables.tpl","Muuda tabeleid");
 
 		$this->vars(array(
 			"status_msg" => aw_global_get("status_msg")
@@ -4646,18 +4647,14 @@ class form extends form_base
 			aw_session_del("f_t_o");
 		}
 
-		// make a list of forms so we can name formgen tables as the name of the form
-		$forms = $this->get_flist();
-
 		$tables = array();
 		$tbels = array();
 		$this->db_list_tables();
 		while ($tb = $this->db_next_table())
 		{
-			$_tb = $this->get_fg_tblname($tb);
-			if ($_tb)
+			if (!(substr($tb,0,5) == "form_" && substr($tb,-8) == "_entries"))
 			{
-				$tables[$tb] = $_tb;
+				$tables[$tb] = $tb;
 			}
 		}
 
@@ -4669,15 +4666,11 @@ class form extends form_base
 			{
 				// teeme array valitud tabelitest, mille saab picker funxioonile ette s88ta
 				$_tables = array("" => "");
-				foreach($tables as $_tb => $_temp)
+				foreach($tables as $_tb)
 				{
 					if (isset($this->arr["save_tables"][$_tb]))
 					{
-						$__tb = $this->get_fg_tblname($_tb);
-						if ($__tb)
-						{
-							$_tables[$_tb] = $__tb;
-						}
+						$_tables[$_tb] = $_tb;
 					}
 				}
 				$this->vars(array(
@@ -4689,7 +4682,7 @@ class form extends form_base
 					$ta = $this->db_get_table($this->arr["save_tables_obj_tbl"]);
 					foreach($ta["fields"] as $fn => $fdata)
 					{
-						$fields[$fn] = $this->get_fg_colname($fn);
+						$fields[$fn] = $fn;
 					}
 					$this->vars(array(
 						"obj_column" => $this->picker($this->arr["save_tables_obj_col"],$fields)
@@ -4712,7 +4705,7 @@ class form extends form_base
 				{
 					if ($_tb != $tbl && isset($this->arr["save_tables"][$_tb]))
 					{
-						$_tables[$_tb] = $this->get_fg_tblname($_tb);
+						$_tables[$_tb] = $_tb;
 					}
 				}
 
@@ -4721,12 +4714,11 @@ class form extends form_base
 				$fields = array("" => "");
 				foreach($ta["fields"] as $fn => $fdata)
 				{
-					$fields[$fn] = $this->get_fg_colname($fn);
+					$fields[$fn] = $fn;
 				}
 
 				$this->vars(array(
 					"table_name" => $tbl,
-					"usr_table_name" => $this->get_fg_tblname($tbl),
 					"cols" => $this->picker($tbcol,$fields),
 					"rel_tbls" => $this->multiple_option_list($this->arr["save_tables_rels"][$tbl],$_tables)
 				));
@@ -4743,12 +4735,12 @@ class form extends form_base
 							$fields2 = array("" => "");
 							foreach($ta["fields"] as $fn => $fdata)
 							{
-								$fields2[$fn] = $this->get_fg_colname($fn);
+								$fields2[$fn] = $fn;
 							}
 							$this->vars(array(
 								"rel_f_cols" => $this->picker($this->arr["save_tables_rel_els"][$tbl][$_tb]["from"],$fields),
 								"rel_t_cols" => $this->picker($this->arr["save_tables_rel_els"][$tbl][$_tb]["to"],$fields2),
-								"foreign_table" => $this->get_fg_tblname($_tb)
+								"foreign_table" => $_tb
 							));
 							$ret.=$this->parse("REL_TABLE");
 						}
@@ -5009,7 +5001,7 @@ class form extends form_base
 	{
 		$page=(int)$page;
 		extract($arr);
-		$this->if_init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
+		$this->init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
 
 		$this->vars(array("LINE" => "")); $cnt=0;
 
@@ -5173,94 +5165,9 @@ class form extends form_base
 	function gen_calendar($args = array())
 	{
 		extract($args);
-		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
-	
-		// -----------------------
-		$_els = $this->get_all_elements(array("type" => 1));
-
-		$els_start = array("0" => " -- Vali -- ");
-		$els_end   = array("0" => " -- Vali -- ");
-		$els_count = array("0" => " -- Vali -- ");
-		$els_period = array("0" => " -- Vali --");
-		$els_release = array("0" => " -- Vali --");
-
-		foreach($_els as $key => $val)
-		{
-			if ( ($val["type"] == "date") && ($val["subtype"] == "from") )
-			{
-				$els_start[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "date") && ($val["subtype"] == "to") )
-			{
-				$els_end[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
-			{
-				$els_count[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "timeslice") && ($val["subtype"] == "period") )
-			{
-				$els_period[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "timeslice") && ($val["subtype"] == "release") )
-			{
-				$els_release[$key] = $val["name"];
-			};
-
-		};
-
-
-		$start_disabled = $end_disabled = $count_disabled = $period_disabled = $release_disabled = false;
-		
-		if (sizeof($els_start) == 1)
-		{
-			$els_start = array("0" => "n/a");
-			$start_disabled = true;
-		};
-		
-		if (sizeof($els_end) == 1)
-		{
-			$els_start = array("0" => "n/a");
-			$end_disabled = true;
-		};
-		
-		if (sizeof($els_count) == 1)
-		{
-			$els_count = array("0" => "n/a");
-			$count_disabled = true;
-		};
-		
-		if (sizeof($els_period) == 1)
-		{
-			$els_period = array("0" => "n/a");
-			$period_disabled = true;
-		};
-		
-		if (sizeof($els_release) == 1)
-		{
-			$els_release = array("0" => "n/a");
-			$release_disabled = true;
-		};
-
-		$ft = get_instance("form_table");
-
-		// once upon a time there was a function called get_tables_for_form in the
-		// form_table class. Alas, now it's gone and there is a function with the
-		// same name in form_db_base .. which does a completely different thing.
-		// Well, anyway. the function that returns a list of tables for a form
-		// should be elsewhere. Feel free to move the following code out of here.
-		$tables = array("0" => "Vali üks");
-		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
-                while ($row = $this->db_next())
-                {
-                        $tables[$row["table_id"]] = $row["name"];
-                }
-		// ------------------------
-
+		$this->init($id,"calendar.tpl", "Kalendrisätungid");
+		$period_types = array("hour" => "tund", "day" => "päev", "week" => "nädal", "month" => "kuu");
+		$deact_types = array("hour" => "tundi", "day" => "päeva", "week" => "nädalat", "month" => "kuud");
 
 		$this->get_objects_by_class(array("class" => CL_FORM));
 		$forms = $chains = array();
@@ -5276,42 +5183,24 @@ class form extends form_base
 		};
 
 		$of_target_type = ($this->arr["of_target_type"]) ? $this->arr["of_target_type"] : "form";
-
+		
 		$this->vars(array(
-			"role_general" => checked($this->subtype == 0),
-			"role_entry" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
-			"role_define" => checked($this->subtype == FSUBTYPE_CAL_CONF),
-			"role_general_val" => 0,
-			"role_entry_val" => FSUBTYPE_EV_ENTRY,
-			"role_define_val" => FSUBTYPE_CAL_CONF,
-			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
-			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
-			"start_disabled" => disabled($start_disabled),
-			"end_disabled" => disabled($end_disabled),
-			"count_disabled" => disabled($count_disabled),
-			"period_disabled" => disabled($period_disabled),
-			"release_disabled" => disabled($release_disabled),
-			"els_start" => $this->picker($this->arr["el_event_start"],$els_start),
-			"els_end" => $this->picker($this->arr["el_event_end"],$els_end),
-			"els_count" => $this->picker($this->arr["el_event_count"],$els_count),
-			"els_period" => $this->picker($this->arr["el_event_period"],$els_period),
-			"els_release" => $this->picker($this->arr["el_event_release"],$els_release),
-			//---------------
+			"period_entry_forms" => $this->picker($this->arr["period_entry_form"],$forms),
+			"forms" => $this->picker($this->arr["of_target_form"],$forms),
+			"chains" => $this->picker($this->arr["of_target_chain"],$chains),
+			"form_checked" => checked($of_target_type == "form"),
+			"chain_checked" => checked($of_target_type == "chain"),
 			"reforb"	=> $this->mk_reforb("submit_calendar", array("id" => $this->id))
 		));
 		$res = "";
-		switch($this->subtype)
+		if ($this->arr["has_calendar"])
 		{
-			case FSUBTYPE_EV_ENTRY:
-				$this->parse("ENTRY");
-				break;
+			$this->parse("HAS_CALENDAR");
+		};
 
-			case FSUBTYPE_CAL_CONF:
-				$this->parse("DEFINE");
-				break;
-
-			default:
-				$this->parse("GENERAL");
+		if ($this->arr["is_order_form"])
+		{
+			$this->parse("IS_ORDER_FORM");
 		};
 		
 		return $this->do_menu_return();				
@@ -5322,16 +5211,10 @@ class form extends form_base
 		$this->quote($args);
 		extract($args);
 		$this->load($id);
-		$this->arr["event_display_table"] = $event_display_table;
-		$this->arr["event_start_el"] = $event_start_el;
-
-		$this->arr["el_event_start"] = $el_event_start;
-		$this->arr["el_event_end"] = $el_event_end;
-		$this->arr["el_event_count"] = $el_event_count;
-		$this->arr["el_event_period"] = $el_event_period;
-		$this->arr["el_event_release"] = $el_event_release;
-
-		$this->subtype = $calendar_role;
+		$this->arr["period_entry_form"] = $period_entry_form;
+		$this->arr["of_target_form"] = $of_target_form;
+		$this->arr["of_target_chain"] = $of_target_chain;
+		$this->arr["of_target_type"] = $of_target_type;
 		$this->save();
 		return $this->mk_my_orb("calendar",array("id" => $id));
 
@@ -5496,65 +5379,6 @@ class form extends form_base
 			}
 		}
 		return $ret;
-	}
-
-	////
-	// !this checks if the table $tb is a formgen created table and if so, returns the form's name
-	// this is used when showing the user the tables where the form should write from/to
-	function get_fg_tblname($tb)
-	{
-		if (!(substr($tb,0,5) == "form_" && substr($tb,-8) == "_entries"))
-		{
-			return $tb;
-		}
-		else
-		{
-			// get form id 
-			preg_match("/form_(\d*)_entries/", $tb, $mt);
-			if (!isset($this->form_name_cache))
-			{
-				$this->form_name_cache = $this->get_flist();
-			}
-
-			if (isset($this->form_name_cache[$mt[1]]))
-			{
-				return "form::".$this->form_name_cache[$mt[1]];
-			}
-		}
-		return false;
-	}
-
-	////
-	// !this checks if the column $col is a formgen created table column and if so, returns the element's name
-	// this is used when showing the user the tables where the form should write from/to
-	function get_fg_colname($col)
-	{
-		$el = false;
-		if (substr($col, 0, 3) == "el_")
-		{
-			$el = true;
-			$prefix = "el_";
-		}
-		else
-		if (substr($col, 0, 3) == "ev_")
-		{
-			$el = true;
-			$prefix = "ev_";
-		}
-
-		if ($el)
-		{
-			if (!isset($this->form_element_name_cache))
-			{
-				$this->form_element_name_cache = $this->list_objects(array("class" => CL_FORM_ELEMENT));
-			}
-
-			if (isset($this->form_element_name_cache[substr($col, 3)]))
-			{
-				$col = $prefix.$this->form_element_name_cache[substr($col, 3)];
-			}
-		}
-		return $col;
 	}
 };	// class ends
 ?>
