@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.17 2004/12/22 12:01:02 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.18 2004/12/22 12:16:35 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1145,7 +1145,7 @@ class webform extends class_base
 					"name" => $pn."_err",
 					"type" => "text",
 					"store" => "no",
-					"value" => "<font color=red style=".$sel_styles["error"].">".$errs[$pn]["msg"]."</font>",
+					"value" => "<font color=red class=\"".$sel_styles["error"]."\">".$errs[$pn]["msg"]."</font>",
 					"no_caption" => 1,
 				);
 			}
