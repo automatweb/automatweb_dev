@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.54 2004/08/18 17:25:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.55 2004/08/19 08:04:04 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2051,5 +2051,31 @@ class crm_person extends class_base
 		}
 	}
 
+	/** returns a list of company id's that the given person works for
+
+		@param person required
+
+		@comment
+			person - person storage object to find companies for
+
+
+	**/
+	function get_all_employers_for_person($person)
+	{
+		$c = new connection();
+		$list = $c->find(array(
+			"type" => 8, // crm_company.RELTYPE_WORKERS,
+			"from.class_id" => CL_CRM_COMPANY,
+			"to.class_id" => CL_CRM_PERSON,
+			"to" => $person->id()
+		));
+		
+		$ret = array();
+		foreach($list as $item)
+		{
+			$ret[$item["from"]] = $item["from"];
+		}
+		return $ret;
+	}
 }
 ?>
