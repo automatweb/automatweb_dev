@@ -351,20 +351,33 @@ function toggle_year()
 	
 
 </script>
-<table border="0" cellspacing="0" cellpadding="1" width="100%">
-<form method="POST" name="repeater">
+<table border="0" cellspacing="0" cellpadding="1">
+<form method="POST" action="reforb.{VAR:ext}" name="repeater">
+<tr>
+<td colspan="3">
+<table width="100%" border="0">
+<tr>
+<td class="header1" align="center">
+<a href="{VAR:change_link}">Muuda</a>
+</td>
+<td class="header1" align="center">
+&gt;Kordused&lt;
+</td>
+</tr>
+</table>
+</td>
 <!-- days -->
 <tr>
 <td align="center" rowspan="3" width="15" valign="top"><input type="checkbox" onClick="check_day_state(99)" name="region1" value="1" class="repform" {VAR:region1} {VAR:region1_disabled}></td>
 <td align="center" width="15"><input type="radio" onClick="check_day_state(0)" name="day" value="1" class="repform" {VAR:day1}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EVERY} <input type="text" name="dayskip" class="repform" value="{VAR:dayskip}" size="2" maxlength="2"> {VAR:LC_PLANNER_AFTER_DAY}
+	Iga <input type="text" name="dayskip" class="repform" value="{VAR:dayskip}" size="2" maxlength="2"> päeva järel:
 </td>
 </tr>
 <tr>
 <td align="center" width="15"><input type="radio" onClick="check_day_state(1)" name="day" value="2" {VAR:day2}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EV_WEEK_THOSE_DAYS}:
+	Iga nädala nendel päevadel:
 	<input type="checkbox" name="wday[1]" value="1" {VAR:wday1}>E |
 	<input type="checkbox" name="wday[2]" value="2" {VAR:wday2}> T |
 	<input type="checkbox" name="wday[3]" value="3" {VAR:wday3}>K |
@@ -377,7 +390,7 @@ function toggle_year()
 <tr>
 <td align="center" width="15"><input type="radio" onClick="check_day_state(2)" name="day" value="3" {VAR:day3}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EV_MONTH_THOSE_DAYS} (nt 9,19,29) <input type="text" size="20" class="repform" name="monpwhen2" value="{VAR:monpwhen2}">
+	Iga kuu nendel päevadel (nt 9,19,29): <input type="text" size="20" class="repform" name="monpwhen2" value="{VAR:monpwhen2}">
 </td>
 </tr>
 <!-- days end -->
@@ -392,13 +405,13 @@ function toggle_year()
 
 <td align="center" width="15"><input type="radio" onClick="check_week_state(0)" name="week" value="1" class="repform" {VAR:week1}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EVERY} <input type="text" name="weekskip" value="{VAR:weekskip}" size="2" class="repform" maxlength="2"> {VAR:LC_PLANNER_AFTER_WEEK}
+	Iga <input type="text" name="weekskip" value="{VAR:weekskip}" size="2" class="repform" maxlength="2"> nädala järel
 </td>
 </tr>
 <tr bgcolor="#EEEEEE">
 <td align="center" width="15"><input type="radio" onClick="check_week_state(1)" name="week" value="2" {VAR:week2}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EV_MONTH_THOSE_WEEKS}:
+	Iga kuu nendel päevadel
 	<input type="checkbox" name="mweek[1]" value="1" {VAR:mweek1}>1 |
 	<input type="checkbox" name="mweek[2]" value="2" {VAR:mweek2}>2 |
 	<input type="checkbox" name="mweek[3]" value="2" {VAR:mweek3}>3 |
@@ -418,13 +431,13 @@ function toggle_year()
 <td align="center" rowspan="2" width="15" valign="top"><input type="checkbox" onClick="check_mon_state(99)" name="region3" value="1" class="repform" {VAR:region3}></td>
 <td align="center" width="15"><input type="radio" onClick="check_mon_state(0)" name="month" class="repform" value="1" {VAR:month1}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EVERY}<input type="text" value="{VAR:monthskip}" name="monthskip" size="2" class="repform" maxlength="2"> {VAR:LC_PLANNER_AFTER_MONTH}
+	Iga<input type="text" value="{VAR:monthskip}" name="monthskip" size="2" class="repform" maxlength="2"> kuu järel
 </td>
 </tr>
 <tr bgcolor="#EEEEEE">
 <td align="center" width="15"><input type="radio" onClick="check_mon_state(1)" name="month" class="repform" value="2" {VAR:month2}></td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EV_YEAR_THOSE_MONTHS} <input type="text" size="20" class="repform" name="yearpwhen" value="{VAR:yearpwhen}">
+ Iga aasta nendel kuudel <input type="text" size="20" class="repform" name="yearpwhen" value="{VAR:yearpwhen}">
 </td>
 </tr>
 <!-- months end -->
@@ -438,7 +451,7 @@ function toggle_year()
 <td align="center" width="15" valign="top"><input type="checkbox" name="region4" value="1" onClick="toggle_year()" class="repform" {VAR:region4}></td>
 <td align="center" width="15">&nbsp;</td>
 <td class="reptext">
-	{VAR:LC_PLANNER_EVERY} <input type="text" value="{VAR:yearskip}" size="2" name="yearskip" class="repform" maxlength="2"> {VAR:LC_PLANNER_AFTER_YEAR}
+	Iga  <input type="text" value="{VAR:yearskip}" size="2" name="yearskip" class="repform" maxlength="2"> aasta järel.
 </td>
 </tr>
 <!-- end years -->
@@ -450,16 +463,16 @@ function toggle_year()
 <!-- repeat types -->
 <tr>
 <td colspan="3" valign="top" class="reptext">
-<input type="radio" name="rep" value="1" checked>{VAR:LC_PLANNER_REPEAT_UNTIL_SAID} (forever)<br>
-<input type="radio" name="rep" value="2">{VAR:LC_PLANNER_RESERVE}<input type="text" class="repform" value="6" name="repeats" size="2"> {VAR:LC_PLANNER_ORDER_TIME}<br>
-<input type="radio" name="rep" value="3">{VAR:LC_PLANNER_REPEAT_UNTIL}
+<input type="radio" name="rep" value="1" checked>Korda, kuni teisiti öeldakse (forever)<br>
+<input type="radio" name="rep" value="2">Reserveeri<input type="text" class="repform" value="6" name="repeats" size="2"> järjestikust aega<br>
+<input type="radio" name="rep" value="3">Kuni
 {VAR:repend}
 </td>
 </tr>
 <!-- repeat types end -->
 <tr bgcolor="#EEEEEE">
 <td class="reptext" align="center" colspan="3">
-<input type="submit" value="{VAR:LC_PLANNER_SAVE}">
+<input type="submit" value="Salvesta">
 {VAR:reforb}
 </td>
 </tr>
