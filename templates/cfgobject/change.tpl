@@ -7,7 +7,7 @@ function show_search()
 <form name="clform" method="POST" action="reforb.{VAR:ext}">
 {VAR:toolbar}
 <fieldset>
-<legend class="fgtext"><strong>Objekti andmed</strong></legend>
+<legend accesskey=x class="fgtext"><strong>Objekti andmed</strong></legend>
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
 <td class="fgtext">Nimi</td>
@@ -29,29 +29,50 @@ function show_search()
 <!-- SUB: class_container -->
 <fieldset>
 <legend class="fgtext"><strong>{VAR:clname}<strong></legend>
+<table border="0" cellspacing="0" cellpadding="0"
+<tr>
+<td valign="top" width="300">
 <table border="0" cellspacing="1" cellpadding="2">
 <!-- SUB: line -->
 <tr>
-<td class="fgtext">{VAR:pname}</td>
-<td class="fgtext"><input type='checkbox' name='properties[{VAR:clid}][{VAR:pkey}]' value="1" {VAR:checked}></td>
+<td class="fgtext" width="250">{VAR:pname}</td>
+<td class="fgtext">
+	{VAR:el}
+</td>
 </tr>
 <!-- END SUB: line -->
 </table>
-</fieldset>
-<!-- END SUB: class_container -->
-<table>
+</td>
+<td width="50">
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;
+</td>
+<td valign="top">
+<!-- objektide tabel algab -->
+<table border="0" cellspacing="1" width="400" cellpadding="2" bgcolor="#CCCCCC">
+<!-- SUB: objline -->
 <tr>
-<td class="fgtext" colspan="2">
-Objektid, millele see konfiobjekt kehtib
+<td class="fgtext">
+{VAR:oid}
+</td>
+<td class="fgtext" width="190">
+{VAR:name}
+</td>
+<td class="fgtext">
+{VAR:modified}
+</td>
+<td class="fgtext">
+{VAR:modifiedby}
 </td>
 </tr>
-<!-- SUB: oline -->
-<tr>
-<td class="fgtext">{VAR:oid}</td>
-<td class="fgtext">{VAR:name}</td>
-</tr>
-<!-- END SUB: oline -->
+<!-- END SUB: objline -->
 </table>
+<!-- objektide tabel lõpeb -->
+</td>
+</tr>
+</table>
+</fieldset>
+<!-- END SUB: class_container -->
 </fieldset>
 {VAR:reforb}
 </form>
