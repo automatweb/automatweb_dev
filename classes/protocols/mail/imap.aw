@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.9 2003/10/28 15:18:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.10 2003/10/28 15:51:29 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -225,15 +225,15 @@ class imap extends class_base
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
 					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
-					$addrinf = $this->_extract_address($message->from);
 					//print "fetch done, processing<br>";
 					//flush();
 					$message = $overview[0];
+					$addrinf = $this->_extract_address($message->from);
 					$rkey = $message->uid;
 					$req_msgs[$rkey] = array(
 						"from" => $message->from,
 						"froma" => $addrinf["addr"],
-						"fromn" => $addrinf["name"],
+						"fromn" => quoted_printable_decode($addrinf["name"]),
 						"subject" => $this->_parse_subj($message->subject),
 						"date" => $message->date,
 						"tstamp" => strtotime($message->date),
