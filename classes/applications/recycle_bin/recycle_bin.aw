@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.11 2005/01/28 11:13:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.12 2005/01/28 11:16:19 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -269,7 +269,7 @@ class recycle_bin extends class_base
     		"img" => "del_all.gif",
     		"tooltip" => "T&uuml;hjenda",
     		"action" => "clear_all",
-			"confirm" => "Kas olete 100% kindel et soovite K&Otilde;IK objektid kustutada?"
+			"confirm" => "Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!"
     	));
 	}
 
@@ -414,6 +414,9 @@ class recycle_bin extends class_base
 				$sql = "DELETE FROM $tbl WHERE $inf[index] = '$id' LIMIT 1";
 				$this->db_query($sql);
 			}
+
+			// also, aliases
+			$this->db_query("DELETE FROM aliases WHERE source = '$id' OR target = '$id'");
 		}
 
 		return aw_ini_get("baseurl").$arr["return_url"];
