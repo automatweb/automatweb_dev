@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.20 2003/10/02 11:08:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.21 2003/10/02 14:00:31 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -135,6 +135,7 @@ class cfgform extends class_base
 
 		$this->grplist = $obj->meta("cfg_groups");
 		$this->prplist = $obj->meta("cfg_proplist");
+
 	}
 
 	function _init_properties($class_id)
@@ -294,6 +295,7 @@ class cfgform extends class_base
 		};
 
 		$c = "";
+		$cnt = 0;
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
@@ -304,6 +306,7 @@ class cfgform extends class_base
 			$sc = "";
 			foreach($proplist as $property)
 			{
+				$cnt++;
 				$prpdata = $this->all_props[$property["name"]];
 				if (!$prpdata)
 				{
@@ -311,12 +314,21 @@ class cfgform extends class_base
 				};
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
+					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
 					"prp_caption" => $property["caption"],
 					"prp_type" => $prpdata["type"],
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
 				));
 				$sc .= $this->parse("property");
+				if ($this->is_template($prpdata["type"]."_options"))
+				{
+					$this->vars(array(
+						"richtext_checked" => checked($property["richtext"] == 1),
+						"richtext" => $property["richtext"],
+					));
+					$sc .= $this->parse($prpdata["type"]."_options");
+				};
 			};
 			$this->vars(array(
 				"property" => $sc,
@@ -335,6 +347,10 @@ class cfgform extends class_base
 
 	function __sort_props_by_ord($el1,$el2)
 	{
+		if (empty($el1["ord"]) && empty($el2["ord"]))
+		{
+			return 0;
+		};
 		return (int)($el1["ord"] - $el2["ord"]);
 	}
 
@@ -564,7 +580,6 @@ class cfgform extends class_base
 					{
 						$grplist[$key]["caption"] = $val;
 					};
-					$this->cfg_groups = $grplist;
 				};
 
 				if (is_array($arr["form_data"]["prpnames"]))
@@ -574,8 +589,24 @@ class cfgform extends class_base
 						$prplist[$key]["caption"] = $val;
 						$prplist[$key]["ord"] = $arr["form_data"]["prop_ord"][$key];
 					};
-					$this->cfg_proplist = $prplist;
 				};
+
+				if (is_array($arr["form_data"]["prpconfig"]))
+				{
+					foreach($arr["form_data"]["xconfig"] as $key => $val)
+					{
+						foreach($val as $key2 => $val2)
+						{
+							if ($val2 != $arr["form_data"]["prpconfig"][$key][$key2])
+							{
+								$prplist[$key][$key2] = $arr["form_data"]["prpconfig"][$key][$key2];
+							};
+						};
+					};
+				};
+
+				$this->cfg_groups = $grplist;
+				$this->cfg_proplist = $prplist;
 
 				break;
 
