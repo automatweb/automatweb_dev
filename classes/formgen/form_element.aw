@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.13 2002/11/29 15:29:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.14 2002/11/29 15:35:55 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2183,8 +2183,8 @@ class form_element extends aw_template
 
 					if ($this->arr["button_img"]["use"] == 1)
 					{
-						$btype = "image border=\"0\"";
-						$bsrc  = "src=\"".image::check_url($this->arr["button_img"]["url"])."\" alt=\"$butt\"";
+						$btype = "image";
+						$bsrc  = "src=\"".image::check_url($this->arr["button_img"]["url"])."\" alt=\"$butt\" border=\"0\"";
 					}
 					else
 					{
