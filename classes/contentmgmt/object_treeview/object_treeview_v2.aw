@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.35 2004/12/28 09:48:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.36 2005/01/04 10:02:13 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -456,6 +456,14 @@ class object_treeview_v2 extends class_base
 		if ($last_o)
 		{
 			if (!$d_inst->check_acl("add", $d_o, $last_o["id"]))
+			{
+				$ob->set_prop("show_add", false);
+			}
+		}
+		else
+		if ($_GET["tv_sel"])
+		{
+			if (!$d_inst->check_acl("add", $d_o, $_GET["tv_sel"]))
 			{
 				$ob->set_prop("show_add", false);
 			}
