@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.44 2004/03/11 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.45 2004/04/06 15:15:16 kristo Exp $
 
 /*
 
@@ -59,13 +59,15 @@ class site_show extends class_base
 			return $this->_show_type($arr);
 		}
 
+		global $awt;
+		$awt->start("xshow");
+
 		// init left pane/right pane
 		$this->left_pane = (isset($arr["no_left_pane"]) && $arr["no_left_pane"] == true) ? false : true;
 		$this->right_pane = (isset($arr["no_right_pane"]) && $arr["no_right_pane"] == true) ? false : true;
 
 		//print "aa";
 		//flush();
-
 
 		$this->section_obj = obj(aw_global_get("section"));
 
@@ -131,6 +133,7 @@ class site_show extends class_base
 		$this->do_check_properties(&$arr);
 
 		$apd = get_instance("layout/active_page_data");
+		$awt->stop("xshow");
 		return $this->do_show_template($arr).$apd->on_shutdown_get_styles();
 	}
 
@@ -452,6 +455,11 @@ class site_show extends class_base
 			$obj = $this->section_obj;
 		}
 
+		if (!is_oid($obj->id()))
+		{
+			return false;
+		}
+
 		// if it is a document, use this one. 
 		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION) || $obj->class_id() == CL_BROTHER_DOCUMENT)
 		{
@@ -692,6 +700,8 @@ class site_show extends class_base
 
 	function _int_show_documents($docid)
 	{
+		global $awt;
+		$awt->start("int-show-doc");
 		$d = get_instance("document");
 		$d->set_opt("parent", $this->sel_section);
 		$ct = "";
@@ -732,7 +742,9 @@ class site_show extends class_base
 		} 
 		else 
 		{
+			$awt->start("get-long");
 			$template = $this->get_long_template($this->section_obj->id());
+			$awt->stop("get-long");
 
 			if ($docid)
 			{
@@ -740,6 +752,7 @@ class site_show extends class_base
 				$d->set_opt("cnt_documents",1);
 				$d->set_opt("shown_document",$docid);
 
+				$awt->start("gen-preview");
 				$ct = $d->gen_preview(array(
 					"docid" => $docid,
 					"section" => $this->section_obj->id(),
@@ -778,8 +791,10 @@ class site_show extends class_base
 				{
 					$blocks = $blocks + $d->blocks;
 				}
+				$awt->stop("gen-preview");
 			}
 		}
+		$awt->stop("int-show-doc");
 		upd_instance("document",$d);
 
 		$vars = array();
@@ -1105,15 +1120,40 @@ class site_show extends class_base
 
 		if (count($lar) < 2)
 		{
+			// crap, we need to insert the sel lang acharset here at least!
+			$sel_lang = $lar[aw_global_get("lang_id")];
+			$this->vars(array(
+				"sel_charset" => $sel_lang["charset"],
+				"se_lang_id" => $lang_id,
+				"lang_code" => $sel_lang["acceptlang"]
+			));
 			return "";
 		}		
 
 		foreach($lar as $row)
 		{
+			$sel_img_url = "";
+			$img_url = "";
+			
+			// if the language has an image
+			if ($row["meta"]["lang_img"])
+			{
+				if ($lang_id == $row["id"] && $row["meta"]["lang_img_act"])
+				{
+					$sel_img_url = $this->image->get_url_by_id($row["meta"]["lang_img_act"]);
+				}
+
+				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
+			}
+
 			$this->vars(array(
 				"name" => $row["name"],
 				"lang_id" => $row["id"],
 				"lang_url" => $this->cfg["baseurl"] . "/?set_lang_id=$row[id]",
+				"link" => $this->cfg["baseurl"] . "/?set_lang_id=$row[id]",
+				"target" => "",
+				"img_url" => $img_url,
+				"sel_img_url" => $sel_img_url
 			));
 			if ($row["id"] == $lang_id)
 			{
@@ -1126,6 +1166,10 @@ class site_show extends class_base
 					$l.=$this->parse("SEL_LANG");
 				}
 				$sel_lang = $row;
+				$this->vars(array(
+					"sel_lang_img_url" => $img_url,
+					"sel_lang_sel_img_url" => $sel_img_url,
+				));
 			}
 			else
 			{
@@ -1421,9 +1465,14 @@ class site_show extends class_base
 					}
 				}
 
+				global $awt;
+				$awt->start("mainc");
+
 				if (count($ask_content) > 0)
 				{
 					$inst = get_instance($cldef["file"]);
+					$fl = $cldef["file"];
+					$awt->start("mainc-$fl");
 					if (!method_exists($inst, "on_get_subtemplate_content"))
 					{
 						error::throw(array(
@@ -1435,7 +1484,9 @@ class site_show extends class_base
 						"inst" => &$this,
 						"content_for" => $ask_content
 					));
+					$awt->stop("mainc-$fl");
 				}
+				$awt->stop("mainc");
 			}
 		}
 	}
@@ -1455,14 +1506,15 @@ class site_show extends class_base
 	function make_banners()
 	{
 		$banner_defs = aw_ini_get("menuedit.banners");
-		$banner_server = aw_ini_get("menuedit.banner_server");
-		$ext = $this->cfg["ext"];
-		$uid = aw_global_get("uid");
 
 		if (!is_array($banner_defs))
 		{
 			return;
 		}
+		
+		$banner_server = aw_ini_get("menuedit.banner_server");
+		$ext = $this->cfg["ext"];
+		$uid = aw_global_get("uid");
 
 		reset($banner_defs);
 		while (list($name,$gid) = each($banner_defs))
@@ -1588,7 +1640,6 @@ class site_show extends class_base
 			{
 				$this->vars(array("MENUEDIT_ACCESS" => ""));
 			}
-
 
 			// god dammit, this sucks. aga ma ei oska seda kuidagi teisiti lahendada
 			// konkreetselt sonnenjetis on logged LEFT_PANE sees,
@@ -1884,6 +1935,7 @@ class site_show extends class_base
 
 	function do_show_template($arr)
 	{
+		global $awt;
 		$tpldir = "../".str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
@@ -1907,10 +1959,12 @@ class site_show extends class_base
 
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 		
+		$awt->start("do-show-template");
 		if (($docc = $this->do_show_documents($arr)) != "")
 		{
 			return $docc;
 		}
+		$awt->stop("do-show-template");
 		$this->import_class_vars($arr);
 
 		// here we must find the menu image, if it is not specified for this menu,
@@ -1928,8 +1982,11 @@ class site_show extends class_base
 		};
 
 		// execute menu drawing code
+		$awt->start("part2");
 		$this->do_draw_menus($arr);
+		$awt->stop("part2");
 
+		$awt->start("part3");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array(), true);
 
 		$this->exec_subtemplate_handlers($arr);
@@ -1937,6 +1994,8 @@ class site_show extends class_base
 		$this->make_banners();
 
 		$this->make_final_vars();		
+		$awt->stop("part3");
+
 
 		return $this->parse().$this->build_popups();
 	}
