@@ -9,10 +9,6 @@ filter parameters for bitmask properties/fields can be array("mask" => OBJ_FLAG_
 mask specifies the mask to compare against and flags specify the flags that must be present or not
 after the mask is applied to the bits
 
-- whether to filter the current list (true) or create a new one (false), optional,
-defaults to creating a new one
-type: boolean
-
 <b>returns:</b>
 number of objects in the list after filtering
 
@@ -26,11 +22,6 @@ $ol = new object_list(array(
 
 $ol->filter(array(
 		"status" => STAT_ACTIVE
-	)), false); 
-// filters the current list for all objects that are active
-
-$ol->filter(array(
-		"status" => STAT_ACTIVE
-	)), true); 
+	)); 
 // returns all active objects in the system
 #/php#
