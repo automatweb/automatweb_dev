@@ -5,6 +5,7 @@
 <link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/mm.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 
@@ -86,6 +87,8 @@ function check_generic_loader()
 <div align="center">
 <font face="Verdana,Arial,Helvetica,sans-serif" size="-2" color="#8AABBE">AutomatWeb&reg;<br><br></font>
 </div>
+<script>
+</script>
 </center>
 </body>
 </html>
