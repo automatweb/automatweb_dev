@@ -262,6 +262,170 @@
             <caption>Toimetused</caption>
       </property>
       <property>
+            <name>education_main</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>education_main</field>
+      </property>
+      <property>
+            <name>job_experiences</name>
+            <table>kliendibaas_isik</table>
+            <group>experiences</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>job_experiences</field>
+      </property>
+      <property>
+            <name>previous_jobs_tb</name>
+            <table>kliendibaas_isik</table>
+            <group>experiences</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>previous_jobs_tb</field>
+      </property>
+      <property>
+            <name>previous_jobs_table</name>
+            <table>kliendibaas_isik</table>
+            <group>experiences</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>previous_jobs_table</field>
+      </property>
+      <property>
+            <name>tookogemused_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>experiences</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_PREVIOUS_JOB</reltype>
+            <props>
+                  <num_0>organisation</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+                  <num_4>duties</num_4>
+            </props>
+            <store>no</store>
+            <field>tookogemused_edit</field>
+      </property>
+      <property>
+            <name>education_tb</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>education_tb</field>
+      </property>
+      <property>
+            <name>education_table</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>education_table</field>
+      </property>
+      <property>
+            <name>add_edu_table</name>
+            <table>kliendibaas_isik</table>
+            <group>add_edu</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>add_edu_table</field>
+      </property>
+      <property>
+            <name>add_edu_editor</name>
+            <table>kliendibaas_isik</table>
+            <group>add_edu</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_ADD_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+                  <num_4>subject</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>subject</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+            </table_fields>
+            <field>add_edu_editor</field>
+      </property>
+      <property>
+            <name>basic_education_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <reltype>RELTYPE_BASIC_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+            </props>
+            <field>basic_education_edit</field>
+      </property>
+      <property>
+            <name>secondary_education_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <reltype>RELTYPE_SECONDARY_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+            </props>
+            <field>secondary_education_edit</field>
+      </property>
+      <property>
+            <name>higher_education_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <reltype>RELTYPE_HIGHER_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+                  <num_4>additonal_info</num_4>
+            </props>
+            <field>higher_education_edit</field>
+      </property>
+      <property>
+            <name>vocational_education_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <reltype>RELTYPE_VOCATIONAL_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+                  <num_4>additonal_info</num_4>
+            </props>
+            <field>vocational_education_edit</field>
+      </property>
+      <property>
             <name>templates</name>
             <table>objects</table>
             <group>forms</group>
@@ -316,6 +480,25 @@
             <forms>
                   <caption>Väljundid</caption>
             </forms>
+            <cv>
+                  <caption>Elulugu</caption>
+            </cv>
+            <education>
+                  <caption>Hariduskäik</caption>
+                  <parent>cv</parent>
+            </education>
+            <add_edu>
+                  <caption>Täienduskoolitus</caption>
+                  <parent>cv</parent>
+            </add_edu>
+            <experiences>
+                  <caption>Töökogemused</caption>
+                  <parent>cv</parent>
+            </experiences>
+            <recommends>
+                  <caption>Soovitajad</caption>
+                  <parent>cv</parent>
+            </recommends>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -390,11 +573,6 @@
                   <clid>CL_PROFILE</clid>
                   <caption>Profiil</caption>
             </PROFILE>
-            <CV>
-                  <value>19</value>
-                  <clid>CL_CV</clid>
-                  <caption>CV</caption>
-            </CV>
             <ORDER>
                   <value>20</value>
                   <clid>CL_SHOP_ORDER</clid>
@@ -405,16 +583,60 @@
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Üksus</caption>
             </SECTION>
-            <CLIENT_IM_HANDLING>
+            <HANDLER>
                   <value>22</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>Haldab klienti</caption>
-            </CLIENT_IM_HANDLING>
-            <CLIENT_IM_SELLING_TO>
+            </HANDLER>
+            <EDUCATION>
                   <value>23</value>
-                  <clid>CL_CRM_COMPANY</clid>
-                  <caption>Vastutab müügi eest</caption>
-            </CLIENT_IM_SELLING_TO>
+                  <clid>CL_CRM_PERSON_EDUCATION</clid>
+                  <caption>Haridus</caption>
+            </EDUCATION>
+            <DRIVING_LICENSE>
+                  <value>24</value>
+                  <clid>CL_CRM_DRIVING_LICENSE</clid>
+                  <caption>Juhiluba</caption>
+            </DRIVING_LICENSE>
+            <PREVIOUS_JOB>
+                  <value>26</value>
+                  <clid>CL_CRM_PERSON_PREVIOUS_JOB</clid>
+                  <caption>Töökogemus</caption>
+            </PREVIOUS_JOB>
+            <LANGUAGE_SKILL>
+                  <value>27</value>
+                  <clid>CL_CRM_PERSON_LANGUAGE</clid>
+                  <caption>Keeleoskus</caption>
+            </LANGUAGE_SKILL>
+            <BASIC_EDUCATION>
+                  <value>28</value>
+                  <clid>CL_CRM_PERSON_BASIC_EDUCATION</clid>
+                  <caption>Põhiharidus</caption>
+            </BASIC_EDUCATION>
+            <HIGHER_EDUCATION>
+                  <value>29</value>
+                  <clid>CL_CRM_PERSON_HIGHER_EDUCATION</clid>
+                  <caption>Kõrgharidus</caption>
+            </HIGHER_EDUCATION>
+            <VOCATIONAL_EDUCATION>
+                  <value>30</value>
+                  <clid>CL_CRM_PERSON_VOCATIONAL_EDUCATION</clid>
+                  <caption>Kutseharidus</caption>
+            </VOCATIONAL_EDUCATION>
+            <SECONDARY_EDUCATION>
+                  <value>31</value>
+                  <clid>CL_CRM_PERSON_SECONDARY_EDUCATION</clid>
+                  <caption>Keskharidus</caption>
+            </SECONDARY_EDUCATION>
+            <ADD_EDUCATION>
+                  <value>32</value>
+                  <clid>CL_CRM_PERSON_ADD_EDUCATION</clid>
+                  <caption>Täienduskoolitus</caption>
+            </ADD_EDUCATION>
+            <PROGRAMMING_SKILLS>
+                  <value>33</value>
+                  <clid>CL_CRM_PERSON_PROGRAMMING_SKILLS</clid>
+                  <caption>Programmeerimisoskus</caption>
+            </PROGRAMMING_SKILLS>
       </reltypes>
 </properties>
 
