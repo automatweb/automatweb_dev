@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.31 2004/02/11 11:57:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.32 2004/02/17 15:07:08 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -25,7 +25,7 @@ class converters extends aw_template
 	**/
 	function menu_convimages()
 	{
-		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu on menu.id = objects.oid WHERE class_id = ".CL_PSEUDO." AND status != 0");
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu on menu.id = objects.oid WHERE class_id = ".CL_MENU." AND status != 0");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -966,7 +966,7 @@ class converters extends aw_template
 
 	function _copy_makes_brother_menu()
 	{
-		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0 AND brother_of != oid");
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_MENU." AND status != 0 AND brother_of != oid");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -1210,7 +1210,11 @@ class converters extends aw_template
 	{
 		// see annab mulle kõik aadressiobjektid, millel on seos URL objektiga
 		set_time_limit(0);
-		$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 21 and aliases.reltype = 6 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
+		// 21 / 6 / 16 is URL
+		// 219 / 9 / 17 is phone (but really fax)
+		// 219 / 78 / 17 , is phone
+		//$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 21 and aliases.reltype = 6 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
+		$q = "select aliases.id,aliases.source as oldsource,aliases2.source as newsource,aliases.target as newtarget from aliases,objects,aliases as aliases2,objects as objects2  where aliases.source = objects.oid and aliases2.target = objects.oid and aliases2.source = objects2.oid and objects2.class_id = 129 and aliases.type = 219 and aliases.reltype = 7 and aliases2.reltype = 3 and objects.class_id = 146 and objects.status != 0";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -1218,7 +1222,8 @@ class converters extends aw_template
 			// read old relation, fix it.
 			$id = $row["id"];
 			$newsource = $row["newsource"];
-			$q = "UPDATE aliases SET source = '$newsource', reltype = 16 WHERE id = '$id'";
+			//$q = "UPDATE aliases SET source = '$newsource', reltype = 16 WHERE id = '$id'";
+			$q = "UPDATE aliases SET source = '$newsource', reltype = 17 WHERE id = '$id'";
 			print $q;
 			print "<br>";
 			$this->db_query($q);
@@ -1270,10 +1275,10 @@ class converters extends aw_template
 		{
 			$this->save_handle();
 			// now I need to create the new links
-			if ($row["oid"] != 90281 && $row["oid"] != 92648)
-			{
+			//if ($row["oid"] != 90281 && $row["oid"] != 92648)
+			//{
 				//continue;
-			};
+			//};
 			print "<pre>";
 			print_r($row);
 			print "</pre>";
@@ -1380,6 +1385,44 @@ class converters extends aw_template
 		};
 
 		print "orgs done<br>";
+	}
+
+	/**  
+		
+		@attrib name=confirm_crm_choices
+
+	*/
+	function confirm_crm_choices($arr)
+	{
+		// go over all objects, figure out the ones that do not have a confirmed relation
+		// and if there are any .. then confirm those thingies
+
+		// phone_id / 17
+		// url_id / 16
+		// email_id / 15
+		// telefax_id / 18
+
+		$q = "SELECT oid,target
+			FROM kliendibaas_firma,aliases
+			WHERE kliendibaas_firma.oid = aliases.source AND telefax_id = 0 AND aliases.reltype = 18";
+		$this->db_query($q);
+		$qs = array();
+		while($row = $this->db_next())
+		{
+			$pid = $row["target"];
+			$oid = $row["oid"];
+			$qs[] = "UPDATE kliendibaas_firma SET telefax_id = $pid WHERE oid = $oid";
+		};
+
+		// phone_id, url_id, email_id, fax_id
+		foreach($qs as $q)
+		{
+			print $q;
+			flush();
+			$this->db_query($q);
+		};
+		print "all done<br>";
+
 	}
 
 	/**  
