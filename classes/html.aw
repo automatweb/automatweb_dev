@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.59 2004/11/16 13:43:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.60 2004/11/22 14:05:31 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -294,7 +294,33 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
-		$selector->configure(array("day" => 1,"month" => 1,"year" => 1,"hour" => 1, "minute" => 1));
+		$set = array();
+		if (!empty($args["day"]) && $args["day"] == "text")
+		{
+			$set["day_textbox"] = 1;
+		}
+		else
+		{
+			$set["day"] = 1;
+		};
+		if (!empty($args["month"]) && $args["month"] == "text")
+		{
+			$set["month_textbox"] = 1;
+		}
+		else
+		{
+			$set["month"] = 1;
+		};
+		$set["year"] = 1;
+		$set["hour"] = 1;
+		$set["minute"] = 1;
+		/*	unset($set["day"]);
+			"year" =>1,
+			"hour" => 1,
+			"minute" => 1,
+			*/
+
+		$selector->configure($set);
 		if (is_array($args['value']))
 		{
 			$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
