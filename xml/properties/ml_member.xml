@@ -1,28 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>conf_obj</name>
-            <type>objpicker</type>
-            <clid>CL_ML_LIST_CONF</clid>
-            <field>meta</field>
-            <method>serialize</method>
-            <newonly>1</newonly>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Vali konfiguratsioon</caption>
-      </property>
-      <property>
-            <name>fchange</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Muuda</caption>
-      </property>
-      <property>
             <name>name</name>
             <type>textbox</type>
             <table>ml_users</table>
