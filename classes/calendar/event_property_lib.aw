@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.15 2004/12/08 07:29:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.16 2005/01/11 13:44:49 ahti Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -249,14 +249,12 @@ class event_property_lib extends aw_template
 					"id" => $to->meta("cfgform_id")
 				));
 			}
-			
 			foreach($to->properties() as $pn => $pv)
 			{
 				if (in_array($pn,$noshow) || !isset($ps[$pn]))
 				{
 					continue;
 				}
-
 				if (trim($pv) != "" && $ps[$pn]["type"] != "hidden")
 				{
 					$fields[$pn] = $ps[$pn]["caption"];
@@ -267,7 +265,6 @@ class event_property_lib extends aw_template
 				}
 			}
 		}
-
 		foreach($fields as $fld => $fld_c)
 		{
 			$table->define_field(array(
@@ -291,13 +288,14 @@ class event_property_lib extends aw_template
 				'caption' => 'X',
 			));
 		}
-
+		$table->set_sortable(false);
 		$conns = $arr['obj_inst']->connections_to(array());
 		//arr($conns);
+		$cls = get_instance(CL_CLASSIFICATOR);
 		foreach($conns as $conn)
 		{
 			$person = get_instance(CL_CRM_PERSON);
-			if($conn->prop('from.class_id')==CL_CRM_PERSON)
+			if($conn->prop('from.class_id') == CL_CRM_PERSON)
 			{
 				$data = $person->fetch_person_by_id(array('id'=>$conn->prop('from')));
 				$dat = array(
@@ -324,10 +322,25 @@ class event_property_lib extends aw_template
 					{
 						if (!isset($dat[$pn]))
 						{
-							if ($clsfs[$pn] == 1 && is_oid($pv) && $this->can("view", $pv))
+							if ($clsfs[$pn] == 1)
 							{
-								$pv = obj($pv);
-								$pv = $pv->name();
+								list($choices,,) = $cls->get_choices(array(
+									"clid" => $_tmp->class_id(),
+									"name" => $pn,
+									"obj_inst" => $_tmp,
+								));
+								$choices = $choices->names();
+								$vals = array();
+								$val = is_array($pv) ? $pv : array($pv);
+								foreach($val as $valx)
+								{
+									$vals[] = $choices[$valx];
+								}
+								$pv = implode(", ", $vals);
+							}
+							if($ps[$pn]["type"] == "date_select")
+							{
+								$pv = $pv["day"].".".$pv["month"].".".$pv["year"];
 							}
 							$dat[$pn] = $pv;
 						}
