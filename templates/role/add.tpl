@@ -65,5 +65,6 @@ href="#" onClick="this.document.aa.save_acl.value=1;this.document.aa.submit();">
 </td>
 </tr>
 </table>
+<input type='hidden' name='save_acl' value='0'>
 {VAR:reforb}
 </form>
