@@ -28,12 +28,20 @@ class PieGraph extends TTGraph
 			$data = explode (",", $d);
 			$sum=0;
 			$this->count=count($data);
-			if ($this->count) {
-				for($i=0;($i<sizeof($data))&&($sum+=$data[$i]);$i++);
-				if($sum <= 0) { $sum = 1; }
+			if ($this->count) 
+			{
+				foreach($data as $k=>$v)
+				{
+					$sum+=$v;
+				}
+				if($sum <= 0) 
+				{ 
+					$sum = 1; 
+				}
+				reset($data);
 				while (list($k,$v)=each($data))
 				{
-					$degrees[$k]=round((abs($v)/$sum)*360);
+					$degrees[$k]=round(((double)abs($v)/(double)$sum)*360.0);
 				}
 				$this->dataset=$degrees;
 			}

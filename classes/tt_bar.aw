@@ -112,6 +112,11 @@ class BarGraph extends TTGraph
 		imagestring($this->image,2,$centerx,$y,$label,$color);
 	}
 
+	function makeGraph($values,$colorarr)
+	{
+		return $this->makeBar($values,$colorarr);
+	}
+
 	function makeBar($values,$colorarr)
 	{	
 		$ycnt=count($values);

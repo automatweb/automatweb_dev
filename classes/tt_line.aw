@@ -20,6 +20,11 @@ class LineGraph extends TTGraph
 		lc_load("definition");
 	}
 
+	function makeGraph($values,$colorarr)
+	{
+		return $this->makeLine($values,$colorarr);
+	}
+
 	//Joonistab base pildi peale jooned, sisendiks tahab saada väärtusi arrayna ja värvi
 	function makeLine($values,$_col="000000")
 	{	
@@ -33,7 +38,10 @@ class LineGraph extends TTGraph
 		$minHeight = $this->imageHeight - $this->getTriple();
 		$maxValue = $this->maxValue;
 
-		$yp = (($minHeight - $maxHeight))/(($this->maxValue - $this->minValue));
+		if (($this->maxValue - $this->minValue) > 0)
+		{
+			$yp = (($minHeight - $maxHeight))/(($this->maxValue - $this->minValue));
+		}
 		$height = abs((abs($values[0] - $this->minValue)*$yp)-$minHeight);
 		$beginx=$nextCol + ($this->colSize/2);
 		$beginy=$height;

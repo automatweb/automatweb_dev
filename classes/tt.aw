@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.5 2002/01/31 00:11:52 kristo Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
@@ -303,53 +303,46 @@ class TTGraph
 	
 	function parseData($xvalues,$yvalues) 
 	{
-		$max=-999999999999999999999999;
-		$min=999999999999999999999999;
-			//Siin siis v6etakse y väärtused ette.
+		$max=-999999999999;
+		$min=999999999999;
+		$ycnt=0;
 				while(list(,$v) = each($yvalues)) 
 				{
-					//Kui on array kurrentne y väärtus
 					if (is_array($v))
-					{
-						//siis vaatame mis v2rk on siis selle väärtusega mis array oli
+					{					
+						$ycnt++;
 						while(list($ke,$val) = each($v)) 
 						{
 							if (!$val==""){
 								if ($max < $val) $max = $val;
 								if ($min > $val) $min = $val;
+
 							}
-//							echo "$ke = $val<br>";
-							//kui see ka veel array on siis on ikka päris perse lahti. lasta siis olla. miski debug v2rk vist :)
-							//see on tegelikult päris huvitav koht siin
+//							echo "$ke = $val<br>";						
 							if (is_array($val))
-							{					
+							{
 							while(list($kee,$va) = each($val)) 
 							{
-//								echo "$kee = $va<br>";		
+//								echo "$kee = $va<br>";						
 							}}
 
 						}
-					//Ahah. esimene level on kohe data. teeme siin siis kerge tsekid ja vaatame kas tasub maxi ja minni muuta.
 					} else {
 							if (!$v==""){
-								$v = (double) $v;
 								if ($max < $v) $max = $v;
 								if ($min > $v) $min = $v;
 							}
-							//echo "mh1 = $v , samas min = $min ja max = $max<br>";
+//							echo "mh1 = $v<br>";						
 					}
 				}
-
-/*		$t=pow(10,(strlen((string) $max)-1));
-		$maxv=(ceil($max/$t))*$t;
-		$t=pow(10,(strlen((string) $min)-1));
-		$minv=(floor($min/$t))*$t;
-*/
+		if (!is_array($values["ydata_0"])) $ycnt=1;
+		$this->ycnt=$ycnt;
 		$xItemCount = count($xvalues);
 		$colSize = ($this->imageWidth - (2 * ($this->getTriple()))-3)/$xItemCount;
 		$this->colSize = $colSize;
 		$this->xItemCount = $xItemCount;
-		$this->minValue=$min;
+		//Set this here zero for now... until someone dares to write a negative values algorith.
+		$this->minValue=0;
 		$this->maxValue=$max;
 //		print("colsize: $colSize<br>xitemcount: $xItemCount<br>minval: $min<br>maxval: $max<br>");
 //exit;		
