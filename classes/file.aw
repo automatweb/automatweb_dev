@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.19 2001/11/20 17:52:17 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.20 2001/11/24 11:01:49 lauri Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -313,9 +313,15 @@ class file extends aw_template
 		if ($file != "none")
 		{
 			// fail sisse
-			$fc = $this->get_file(array(
-				"file" => $file,
-			));
+			if (!is_uploaded_file($file))//source tasuta jagamine on bad imho. lauri
+			{
+				$fc="Mida sa üritad??";
+			} else
+			{
+				$fc = $this->get_file(array(
+					"file" => $file,
+				));
+			};
 
 			if ($msg_id)
 			{
@@ -449,7 +455,7 @@ class file extends aw_template
 		extract($arr);
 		global $file, $file_type,$file_name;
 
-		if ($file == "none")
+		if ($file == "none" || !is_uploaded_file($file)) //source tasuta jagamine on bad imho. lauri
 		{
 			// uut failinime ei määratud, muudame infot
 			$this->upd_object(array(
