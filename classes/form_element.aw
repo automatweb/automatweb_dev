@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.74 2002/09/09 12:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.75 2002/09/30 06:54:58 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1892,7 +1892,7 @@ class form_element extends aw_template
 							{
 								// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
 								// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
-								if ($this->form->type == FTYPE_SEARCH && $b == ($cnt-1))
+								if (($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH )&& $b == ($cnt-1))
 								{
 									$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts."</option>\n";
 								}
@@ -2894,7 +2894,7 @@ class form_element extends aw_template
 		$opts["ret_ids"] = true;
 		list($cnt,$this->arr["listbox_items"]) = $this->form->get_entries_for_element($opts);
 		$this->arr["listbox_count"] = $cnt;
-		if ($this->form->type == FTYPE_SEARCH)
+		if ($this->form->type == FTYPE_SEARCH || $this->form->type == FTYPE_FILTER_SEARCH)
 		{
 			$this->arr["listbox_count"] = $cnt+1;
 			$this->arr["listbox_items"][$cnt] = "";
@@ -2988,7 +2988,7 @@ class form_element extends aw_template
 				$this->form->controller_queue[] = array(
 					"ctrlid" => $ctrlid, 
 					"val" => $this->get_controller_value(), 
-					"el_id" => $this->id
+					"el_id" => $this->id,
 				);
 			}
 		}
