@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.4 2002/11/11 11:06:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.5 2002/11/12 17:57:29 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -521,6 +521,15 @@ class form_table extends form_base
 				{
 					$linktext = $str;
 					$ar = new aw_array($cc["alias"]);
+					foreach($ar->get() as $aid)	
+					{
+						$alias_data = $cc["alias_data"][$aid];
+						if ($alias_data["class_id"] == CL_IMAGE)
+						{
+							$linktext = $this->get_image_alias_url($str, $alias_data["target"], $col, $noshowstr);
+						}
+					}
+					$ar = new aw_array($reset_aliases[$col]);
 					foreach($ar->get() as $aid)	
 					{
 						$alias_data = $cc["alias_data"][$aid];
