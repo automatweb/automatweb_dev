@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.5 2005/03/17 13:42:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.6 2005/03/21 12:50:39 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
@@ -75,8 +75,8 @@ class property_table extends class_base
 
 			case "demo_data_source":
 				$prop["options"] = array(
-					"user" => "Kasutaja poolt sisestatud andmed",
-					"rels" => "Seostatud objektid"
+					"user" => t("Kasutaja poolt sisestatud andmed"),
+					"rels" => t("Seostatud objektid")
 				);
 				break;
 
@@ -87,7 +87,7 @@ class property_table extends class_base
 				}
 				$do = $this->_get_designer($arr["obj_inst"]);
 				$ol = new object_list($do->connections_from(array("type" => "RELTYPE_RELATION")));
-				$prop["options"] = $ol->names();
+				$prop["options"] = array("" => t("--vali--")) + $ol->names();
 				break;
 	
 			case "default_sort_col":
@@ -156,34 +156,34 @@ class property_table extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "Jrk",
+			"caption" => t("Jrk"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "parent",
-			"caption" => "&Uuml;lemtulp",
+			"caption" => t("&Uuml;lemtulp"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "width",
-			"caption" => "Laius",
+			"caption" => t("Laius"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorteeritav",
+			"caption" => t("Sorteeritav"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "align",
-			"caption" => "Joondamine",
+			"caption" => t("Joondamine"),
 			"align" => "center",
 		));
 
@@ -211,10 +211,6 @@ class property_table extends class_base
 			"name" => $arr["prop"]["name"],
 			"ol" => $ol
 		));
-
-
-		// XXX: object_list kõigist veergudest ja lisaks üks tühi rida
-
 	}
 
 
@@ -247,7 +243,6 @@ class property_table extends class_base
 			$o->set_prop("align",$coldat["align"]);
 			$o->set_prop("c_parent", $coldat["parent"]);
 
-			//print "creating new column object from the following data<br>";
 			$o->save();
 		};
 	}
@@ -607,14 +602,14 @@ class property_table extends class_base
 	{
 		$t->define_field(array(
 			"name" => "col",
-			"caption" => "Tulp",
+			"caption" => t("Tulp"),
 			"align" => "center",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 			"align" => "center",
 			"sortable" => 1
 		));

@@ -151,4 +151,66 @@ class pot_scanner extends core
 			fclose($fp);
 		}
 	}
+
+	function warning_scan()
+	{
+		echo "scanning files for places that should have translation strings\n\n";
+
+		// gather list of classes
+		$classes = $this->_get_class_list();
+
+		foreach($classes as $class => $tm)
+		{
+			$this->scan_file_warn($class);
+		}
+		echo "finished with ".$this->warn_cnt." warnings \n\n";
+	}
+
+	function scan_file_warn($from_file)
+	{
+		$fc = file($from_file);
+		
+		// "caption" => "Foo"
+		foreach($fc as $ln => $line)
+		{
+			// only apply for classes that extend from class_base
+			if (preg_match("/class(.*)extends(.*)/ims", $line, $mt))
+			{
+				if (trim($mt[2]) != "class_base")
+				{
+					return;
+				}
+			}
+
+			if (preg_match("/\"caption\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated caption ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/die(\s*)\(['|\"](.*)['|\"]\)/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / die() with untranslated string ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/raise_error\((.*),['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / error message with untranslated string ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/\"msg\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated message ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/\"tooltip\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated tooltip ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+		}
+	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.5 2005/03/18 11:43:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.6 2005/03/21 12:50:39 kristo Exp $
 
 /*
 @default group=search
@@ -168,13 +168,11 @@ class search_v2 extends class_base
 					"site_id" => array(),
 					"lang_id" => array()
 				));
-                        	$prop["options"] =  array("" => "") + $ol->names();
+				$prop["options"] =  array("" => "") + $ol->names();
 				break;
 
 			case "class_id":
 				$prop["options"] = $this->_get_s_class_id();
-
-
 				break;
 
 			case "status":
@@ -187,7 +185,7 @@ class search_v2 extends class_base
 
 			case "lang_id":
 				$lg = get_instance("languages");
-                        	$prop["options"] = $lg->get_list(array("ignore_status" => true));
+				$prop["options"] = $lg->get_list(array("ignore_status" => true));
 				break;
 	
 
@@ -210,12 +208,12 @@ class search_v2 extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "icon",
-			"caption" => "",
+			"caption" => t(""),
 			"align" => "center",
 		));
 		$t->define_field(array(

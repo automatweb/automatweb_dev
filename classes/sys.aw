@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.47 2005/02/21 08:56:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.48 2005/03/21 12:50:39 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -136,7 +136,7 @@ class sys extends aw_template
 		$fp=fsockopen($server,$port,&$this->errno, &$this->errstr);
 		if (!$fp)
 		{
-			$this->raise_error(ERR_DBSYNC_NOSERVER,"Failed opening connection to server $server",true);
+			$this->raise_error(ERR_DBSYNC_NOSERVER,sprintf(t("Failed opening connection to server %s"), $server),true);
 		};
 
 		$request = $url;
@@ -146,7 +146,7 @@ class sys extends aw_template
 
 		if (!fputs($fp, $op, strlen($op))) 
 		{
-			$this->errstr="Write error";
+			$this->errstr=t("Write error");
 			return 0;
 	    }
 		$ipd="";
@@ -499,7 +499,7 @@ class sys extends aw_template
 
 			$log->add_line(array(
 				"uid" => aw_global_get("uid"),
-				"msg" => "L&otilde;i saidi andmebaasi tabelid",
+				"msg" => t("L&otilde;i saidi andmebaasi tabelid"),
 				"comment" => "",
 				"result" => "OK"
 			));
@@ -555,7 +555,7 @@ class sys extends aw_template
 			}
 		}
 
-		die("all done! ");
+		die(t("all done! "));
 	}
 
 	/** checks if any objects of the given class exist in the current database
@@ -600,19 +600,19 @@ class sys extends aw_template
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 		));
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 		));
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muutmise aeg",
+			"caption" => t("Muutmise aeg"),
 			"type" => "time",
 			"numeric" => 1,
 			"format" => "d.m.Y H:i",
@@ -779,7 +779,7 @@ class sys extends aw_template
 			$o->set_name($cldata["name"]);
 			$o->save();
 		}
-		die("all done!! database seems to be relatively ok!");
+		die(t("all done!! database seems to be relatively ok!"));
 	}
 
 	/** tests sites in site list. will only be called from register site
@@ -839,7 +839,7 @@ class sys extends aw_template
 		{
 			send_mail("dev@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
 		}
-		die("All done");
+		die(t("All done"));
 	}
 };
 ?>

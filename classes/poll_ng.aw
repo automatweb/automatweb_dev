@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.11 2005/03/18 11:40:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.12 2005/03/21 12:50:39 kristo Exp $
 
 /*
 
@@ -37,7 +37,7 @@ class poll_ng extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -45,13 +45,13 @@ class poll_ng extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 			"nowrap" => "1",
 		));
 		$this->t->define_field(array(
 			"name" => "clicks",
-			"caption" => "Klikke",
+			"caption" => t("Klikke"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -59,7 +59,7 @@ class poll_ng extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "percent",
-			"caption" => "Protsent",
+			"caption" => t("Protsent"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -78,7 +78,7 @@ class poll_ng extends class_base
 	
 		$node = array(
 			"type" => "text",
-			"caption" => "Variandid",
+			"caption" => t("Variandid"),
 			"value" => $this->t->draw(),
 		);
 		$retval[] = $node;
@@ -141,7 +141,7 @@ class poll_ng extends class_base
 		$tmp_o = obj($oid);
 		if (count($tmp_o->connections_from(array("to" => $poll))) < 1)
 		{
-			die ("there is no relation between those objects");
+			die (t("there is no relation between those objects"));
 		};
 		// no check, whether this poll actually has a choice with this id
 		// poll <==> choice
@@ -153,7 +153,7 @@ class poll_ng extends class_base
 		));
 		if (count($conn) < 1)
 		{
-			die ("invalid choice");
+			die (t("invalid choice"));
 		};
 
 		// everything seems OK, record the vote
