@@ -10,15 +10,20 @@ class icons extends aw_template
 		$this->sub_merge = 1;
 	}
 
-	function gen_db($page)
+	function gen_db($page,$grp)
 	{	
 		$this->read_template("icon_list.tpl");
 		global $ext;
 		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Ikoonide baas");
 
+		if ($grp)
+		{
+			$ss = "WHERE grp_id = $grp";
+		}
+
 		$start = $page*PER_PAGE;
 		$end = ($page+1)*PER_PAGE;
-		$this->db_query("SELECT * FROM icons ORDER BY id");
+		$this->db_query("SELECT * FROM icons $ss ORDER BY id");
 		$n = 0;
 		while ($row = $this->db_next())
 		{
@@ -31,11 +36,16 @@ class icons extends aw_template
 		}
 
 		// make pageselector
-		$total = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM icons", "cnt");
+		$total = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM icons $ss", "cnt");
 		$pages = $total/PER_PAGE;
 		for ($i=0; $i < $pages; $i++)
 		{
-			$this->vars(array("from" => $i*PER_PAGE, "to" => min($total,($i+1)*PER_PAGE), "num" => $i));
+			$this->vars(array(
+				"from" => $i*PER_PAGE, 
+				"to" => min($total,($i+1)*PER_PAGE), 
+				"num" => $i,
+				"grp" => $grp
+			));
 			if ($i == $page && $page != "all")
 			{
 				$p.=$this->parse("SEL_PAGE");
@@ -56,6 +66,15 @@ class icons extends aw_template
 			"ALL" => $all,
 			"ALL_SEL" => ""
 		));
+
+		// make grp listbox
+		$icarr = array(0 => "");
+		$this->db_query("SELECT * from icon_grps");
+		while ($row = $this->db_next())
+		{
+			$icarr[$row["id"]] = $row["name"];
+		}
+		$this->vars(array("grps" => $this->picker($grp,$icarr)));
 		return $this->parse();
 	}
 
@@ -376,7 +395,8 @@ class icons extends aw_template
 				$this->raise_error("Unable to create temp directory $tdir !", true);
 			}
 
-			$op = `/usr/bin/unzip -o -j -d $dir $fail`;
+			global $unzip_path;
+			$op = `$unzip_path -o -j -d $dir $fail`;
 			echo "<pre>".$op."</pre><br>";
 			flush();
 
@@ -491,12 +511,76 @@ class icons extends aw_template
 						$op = `$convert_dir -crop 16x16 $nm $nm`;
 						echo "crop result: $op <br>";
 					}
+
+					if ($mat[1] == "32" && $mat[2] == "32")
+					{
+						// uh, kui leiame 32x32 ikooni, siis konverdime selle 16x16x ja impordime ikka
+						$found = true;
+						$c_file = $file;
+						echo "found!<br>";
+						// now replace file.ico with file.gif
+						unlink($icon);
+						rename($fi,$idir."/".$nname);						
+						echo "deleted $icon and moved $fi to ",$idir."/".$nname,"<br>";
+						$c_file = $nname;
+						// now also crop the image to the right size
+						$nm = $idir."/".$nname;
+						$op = `$convert_dir -size 16x16 $nm $nm`;
+						echo "crop result: $op <br>";
+						$op = `$convert_dir -crop 16x16 $nm $nm`;
+						echo "size result: $op <br>";
+					}
 				}
 				echo "deleting ",$tdir."/".$file,"<br>";
 				@unlink($tdir."/".$file);
 			}
 		}
 		return $c_file;
+	}
+
+	////
+	// !aads the selected icons to a new group
+	function grp_icons($arr)
+	{
+		extract($arr);
+		global $ext;
+		if(is_array($sel))
+		{
+			$ics = join("|",$sel);
+		}
+		header("Location: config.$ext?type=ic_grp_name&ics=$ics");
+		die();
+	}
+
+	////
+	// !asks user new grp name
+	function ic_grp_name($ics)
+	{
+		$this->read_template("add_icon_grp.tpl");
+
+		$this->vars(array("ics" => $ics));
+		return $this->parse();
+	}
+
+	////
+	// !creates the new group of icons
+	function submit_ic_grp($arr)
+	{
+		extract($arr);
+		$ics = explode("|",$ics);
+		$id = $this->db_fetch_field("SELECT max(id) as id FROM icon_grps","id")+1;
+		$this->db_query("INSERT INTO icon_grps(id,name) values($id,'$name')");
+		$ics = join(",",$ics);
+		$this->db_query("update icons set grp_id = $id where id in($ics)");
+		return $id;
+	}
+
+	////
+	// !deletes icon group $id
+	function del_grp($id)
+	{
+		$this->db_query("UPDATE icons SET grp_id = 0 WHERE grp_id = '$id'");
+		$this->db_query("DELETE FROM icon_grps WHERE id = $id");
 	}
 }
 ?>

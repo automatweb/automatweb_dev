@@ -762,6 +762,31 @@ switch($action)
 		header("Location: config.$ext?type=icon_db");
 		break;
 
+	case "grp_icons":
+		classload("icons");
+		$t = new icons;
+		$t->grp_icons($HTTP_POST_VARS);
+		die();
+		break;
+
+	case "submit_ic_grp":
+		classload("icons");
+		$t = new icons;
+		$id = $t->submit_ic_grp($HTTP_POST_VARS);
+		header("Location: config.$ext?type=icon_db&grp=$id");
+		break;
+
+	case "sel_grp":
+		header("Location: config.$ext?type=icon_db&grp=$grp");
+		break;
+
+	case "del_grp":
+		classload("icons");
+		$t = new icons;
+		$t->del_grp($grp);
+		header("Location: config.$ext?type=icon_db");
+		break;
+
 	default:
 		include("sorry.aw");
 	};	

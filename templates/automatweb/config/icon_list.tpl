@@ -12,6 +12,18 @@ function del_ic()
 {
 document.boo.action.value='del_icons';document.boo.submit();
 }
+function grp_ic()
+{
+document.boo.action.value='grp_icons';document.boo.submit();
+}
+function sel_grp()
+{
+document.boo.action.value='sel_grp';document.boo.submit();
+}
+function del_grp()
+{
+document.boo.action.value='del_grp';document.boo.submit();
+}
 </script>
 <form name='boo' action='refcheck.{VAR:ext}' method=post>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
@@ -19,22 +31,26 @@ document.boo.action.value='del_icons';document.boo.submit();
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>IKOONID:&nbsp;<a href='config.{VAR:ext}?type=add_icon'>Lisa</a> | <a href='config.{VAR:ext}?type=add_icon_zip'>Uploadi zip</a>
+<td height="15" colspan="5" class="fgtitle">&nbsp;<b>IKOONID:&nbsp;<a href='config.{VAR:ext}?type=add_icon'>Lisa</a> | <a href='config.{VAR:ext}?type=add_icon_zip'>Uploadi zip</a>
 <br>&nbsp;Lehek&uuml;lg: 
 <!-- SUB: PAGE -->
-<a href='config.{VAR:ext}?type=icon_db&page={VAR:num}'>{VAR:from} - {VAR:to}</a> | 
+<a href='config.{VAR:ext}?type=icon_db&page={VAR:num}&grp={VAR:grp}'>{VAR:from} - {VAR:to}</a> | 
 <!-- END SUB: PAGE -->
 
 <!-- SUB: SEL_PAGE -->
 {VAR:from} - {VAR:to} |
 <!-- END SUB: SEL_PAGE -->
 <!-- SUB: ALL -->
-<a href='config.{VAR:ext}?type=icon_db&page=all'>K&otilde;ik</a>
+<a href='config.{VAR:ext}?type=icon_db&page=all&grp={VAR:grp}'>K&otilde;ik</a>
 <!-- END SUB: ALL -->
 <!-- SUB: ALL_SEL -->
 K&otilde;ik
 <!-- END SUB: ALL_SEL -->
 </b></td>
+<td height="15" colspan="2" class="fgtitle">
+<a href='javascript:sel_grp()'>Vali</a>:<select name='grp'>{VAR:grps}</select><br>
+<a href='javascript:del_grp()'>Kustuta valitud grupp</a>
+</td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;Nimi&nbsp;</td>
@@ -62,7 +78,7 @@ K&otilde;ik
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='javascript:del_ic()'>Kustuta</a></td>
+<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='javascript:del_ic()'>Kustuta</a><br><a href='javascript:grp_ic()'>Grupeeri</a></td>
 </tr>
 </table>
 </td>

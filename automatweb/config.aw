@@ -37,7 +37,7 @@ switch($type)
 		{
 			$tt->prog_acl_error("view", PRG_ICONDB);
 		}
-		$content = $t->gen_db($page);
+		$content = $t->gen_db($page,$grp);
 		break;
 
 	case "add_icon_zip":
@@ -171,6 +171,10 @@ switch($type)
 		$t->set_menu_icon($id,$icon_id);
 		$obj = $t->get_object($id);
 		header("Location: ".$t->mk_orb("change", array("id" => $id, "parent" => $obj[parent])));
+		break;
+
+	case "ic_grp_name":
+		$content = $t->ic_grp_name($ics);
 		break;
 
 	default:

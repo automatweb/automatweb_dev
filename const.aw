@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.9 2001/05/22 10:53:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.10 2001/05/24 01:14:59 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -36,11 +36,6 @@ $siteconfig["uus.anne.ee"] = "/www/aw_anne/public/const.aw";
 
 // temp kataloogi asukoht. nuh et kui kunagi asi windowsi peal k2ima hakkab, siis saax selle siit 2r muuta.
 $tmpdir = "/tmp";
-
-// koht, kus asub ikoonide convertimisex kasutatav proge
-$convert_dir = "/usr/X11R6/bin/convert";
-// piltide identimisex kasutatav proge
-$identify_dir = "/usr/bin/X11/identify";
 
 // saidi siseste linkide jaox
 if (empty($index_file))
@@ -85,9 +80,21 @@ if (empty($admin_rootmenu2))
 if (empty($basedir))
 {
 	$basedir = "/www/apache/domains/sam.elkdata.com/htdocs/automatweb_dev"; 								// the root of all evil ;)
+	$convert_dir = "/usr/X11R6/bin/convert";
+	// piltide identimisex kasutatav proge
+	$identify_dir = "/usr/bin/X11/identify";
+	// kus zipide lahtipakkija asub
+	$unzip_path = "/usr/local/bin/unzip";
+
 	if (!file_exists($basedir."/COPYING"))
 	{
 		$basedir = "/www/automatweb_dev/public";
+		// koht, kus asub ikoonide convertimisex kasutatav proge
+		$convert_dir = "/usr/X11R6/bin/convert";
+		// piltide identimisex kasutatav proge
+		$identify_dir = "/usr/bin/X11/identify";
+		// kus zipide lahtipakkija asub
+		$unzip_path = "/usr/bin/unzip";
 	}
 };
 
