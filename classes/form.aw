@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.35 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.36 2001/07/17 06:49:36 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -60,6 +60,139 @@ class form extends form_base
 		$f = $this->formaliases[$matches[3] - 1];
 		$replacement = $this->gen_preview(array("id" => $f["target"], "form_action" => "/reforb.".$GLOBALS["ext"]));
 		return $replacement;
+	}
+
+	////
+	// !
+	function rpc_listentries($args = array())
+	{
+		preg_match("/^(\w*)/",$args[0],$matches);
+		$alias = $matches[1];
+		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
+		$this->db_query($q);
+		$entry_list = array();
+		classload("xml");
+		$xml = new xml();
+		$blacklist = array();
+		$row = $this->db_next();
+		if ($row)
+		{
+			$xdata = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"],
+			));
+			if (is_array($xdata["forms"]))
+			{
+				foreach($xdata["forms"] as $key => $val)
+				{
+					$q = "SELECT * FROM form_" . $val . "_entries";
+					$this->db_query($q);
+					// if the entry is a part of form_chain, 
+					while($row = $this->db_next())
+					{
+						if (!$blacklist[$row["id"]])
+						{
+							$entry_list[] = $row["id"];
+						};
+
+						if ($row["chain_id"])
+						{
+							$this->save_handle();
+							$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
+							$this->db_query($q);
+							$crow = $this->db_next();
+							$blacklist = $blacklist + array_flip($xml->xml_unserialize(array("source" => $crow["ids"])));
+							$this->restore_handle();
+						};
+					};
+				};
+			};
+			$retval = array(
+					"data" => $entry_list,
+					"type" => "array",
+			);
+		}
+		else
+		{
+			$retval = array(
+					"error" => "Name/alias not found",
+					"errno" => "1",
+			);
+		};
+		return $retval;
+	}
+
+	function rpc_getentry($args = array())
+	{
+		$eid = $args[0];
+		$alias = $args[1];
+		classload("xml");
+		$xml = new xml();
+		// koigepealt teeme kindlaks, millise vormi juurde see entry kuulub
+		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = '$eid'","form_id");
+		$ftable = "form_" . $fid . "_entries";
+		$q = "SELECT * FROM $ftable WHERE id = '$eid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row["chain_id"])
+		{
+			$this->save_handle();
+			$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
+			$this->db_query($q);
+			$crow = $this->db_next();
+			$els = $xml->xml_unserialize(array("source" => $crow["ids"]));
+			$this->restore_handle();
+		}
+		else
+		{
+			$els = array($fid => $eid);
+		};
+
+		$block = array();
+		foreach($els as $form_id => $entry_id)
+		{
+			$q = "SELECT * FROM form_" . $form_id . "_entries WHERE id = '$entry_id'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$block = $block + $row;
+		};
+
+		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
+		$this->db_query($q);
+		
+		$row = $this->db_next();
+			
+		$xdata = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"],
+		));
+
+		$jrk = $xdata["data"]["jrk"];
+		$active = $xdata["data"]["active"];
+		$tags = $xdata["data"]["tag"];
+
+		$this->pstruct = array();
+
+		asort($jrk);
+		
+		foreach($jrk as $key => $val)
+		{
+			if ($active[$key])
+			{
+				$idx = "el_" . $key;
+				$keyblock = array(
+						"name" => $tags[$key],
+						"value" => $block[$idx],
+				);
+				$this->pstruct[] = $keyblock;
+			};
+		};
+
+		$retval = array(
+			"data" => $this->pstruct,
+			"type" => "struct",
+		);
+		return $retval;
+
+
 	}
 			
 	////
