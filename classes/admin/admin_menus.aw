@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.14 2003/06/26 16:50:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.15 2003/06/26 18:22:20 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -888,6 +888,7 @@ class admin_menus extends aw_template
 			$can_delete = $this->can("delete", $row["oid"]);
 			$can_admin = $this->can("admin", $row["oid"]);
 
+			$row["is_menu"] = 0;
 			if (in_array($row["class_id"],$containers))
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
@@ -901,7 +902,6 @@ class admin_menus extends aw_template
 			else
 			{
 				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
-				$row["is_menu"] = 1;
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
@@ -1054,7 +1054,7 @@ class admin_menus extends aw_template
 
 		$this->t->sort_by(array(
 			"field" => array("is_menu", $sortby),
-			"sorder" => array("is_menu" => "asc", $sortby => $sort_order)
+			"sorder" => array("is_menu" => "desc", $sortby => $sort_order)
 		));
 
 		$this->read_template("right_frame.tpl");
