@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.12 2003/04/17 16:16:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.14 2003/05/06 13:54:24 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -33,9 +33,6 @@
 
 @property moreinfo type=textarea richtext=1 cols=60 rows=5
 @caption Lisainfo
-
-@property img1 type=relpicker clid=CL_IMAGE table=objects field=meta method=serialize
-@caption Pilt
 
 @property is_forum type=checkbox ch_value=1
 @caption Foorum
@@ -101,7 +98,7 @@
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
 
-@property main_calendar type=select field=meta method=serialize group=general table=objects
+@property calendar_relation type=select field=meta method=serialize group=general table=objects
 @caption Põhikalender
 
 @property sbt type=submit value=Salvesta store=no 
@@ -144,7 +141,7 @@ class doc extends class_base
 				$data["options"] = array("Ignoreeri","Näita","Ära näita");
 				break;
 
-			case "main_calendar":
+			case "calendar_relation":
 				$data["options"] = $this->calendar_list;
 				break;
 
@@ -177,21 +174,35 @@ class doc extends class_base
 				$this->update_link_calendars($args);
 				break;
 
-			case "main_calendar":
+			case "calendar_relation":
 				// I need to create a brother here
 				// to $data["value"];
-				$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE relobj_id = $data[value]";
-				$target_data = $this->db_fetch_row($q);
-				$meta = aw_unserialize($target_data["metadata"]);
-				if (!empty($meta["event_folder"]))
+				// I need to figure out to which calendar that relation object belongs to
+				if (!empty($data["value"]))
 				{
-					$this->new_object(array(
-						"parent" => $meta["event_folder"],
-						"class_id" => CL_BROTHER_DOCUMENT,
-						"status" => STAT_ACTIVE,
-						"brother_of" => $args["obj"]["oid"],
+					$q = "SELECT aliases2.target AS target FROM aliases
+						LEFT JOIN aliases AS aliases2 ON (aliases.target = aliases2.relobj_id)
+						WHERE aliases.relobj_id = $data[value]";
+					$target_relation = $this->db_fetch_field($q,"target");
+
+					// now I have to figure out the event folder for that planner
+					$pl = $this->get_object(array(
+						"oid" => $target_relation,
+						"clid" => CL_PLANNER,
 					));
-				}
+
+					$fldr = $pl["meta"]["event_folder"];
+
+					if (is_numeric($fldr))
+					{
+						$this->new_object(array(
+							"parent" => $fldr,
+							"class_id" => CL_BROTHER_DOCUMENT,
+							"status" => STAT_ACTIVE,
+							"brother_of" => $args["obj"]["oid"],
+						));
+					}
+				};
 				break;
 
 			case "clear_styles":
@@ -431,7 +442,8 @@ class doc extends class_base
 				"class_id" => CL_DOCUMENT,
 			));
 
-			if (isset($obj["meta"]["img1"]))
+
+			if (!empty($obj["meta"]["img1"]))
 			{
 				$awi = get_instance("image");
 				$picdata = $awi->get_image_by_id($obj["meta"]["img1"]);
@@ -484,6 +496,10 @@ class doc extends class_base
 
 		foreach($this->get_planners_with_folders() as $row)
 		{
+			if ($row["event_folder"] == $args["obj"]["parent"])
+			{
+				continue;
+			};
 			$folderdat = $this->get_object($row["event_folder"]);
 			$retval["cal_" . $row["oid"]] = array(
 				"type" => "checkbox",
@@ -501,6 +517,8 @@ class doc extends class_base
 	{
 		// first, get rid of all brothers
 		$event_id = $args["obj"]["oid"];
+
+		$ev_doc = $this->get_object($event_id);
 		
 		$bs = $this->_get_brother_documents($event_id);
 		$to_delete = $bs;
@@ -517,6 +535,7 @@ class doc extends class_base
 						$this->new_object(array(
 							"parent" => $row["event_folder"],
 							"class_id" => CL_BROTHER_DOCUMENT,
+							"name" => $ev_doc["name"],
 							"status" => STAT_ACTIVE,
 							"brother_of" => $event_id,
 						));
@@ -543,9 +562,9 @@ class doc extends class_base
 	function set_calendars($args = array())
 	{
 		$cal_list = join(",",$args);
-		$q = "SELECT source,target,relobj_id,objects.name FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE target IN ($cal_list)";
+		$q = "SELECT source,target,relobj_id,objects.name FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($cal_list)";
 		$this->db_query($q);
-		$this->calendar_list = array();
+		$this->calendar_list = array("" => "");
 		while($row = $this->db_next())
 		{
 			$this->calendar_list[$row["relobj_id"]] = parse_obj_name($row["name"]);
