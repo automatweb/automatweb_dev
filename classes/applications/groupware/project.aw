@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.28 2005/01/17 16:43:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.29 2005/03/10 09:09:38 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -881,6 +881,10 @@ class project extends class_base
 			$ox = $ol->arr();
 			foreach($ox as $brot)
 			{
+				if (!$this->can("view", $brot->parent()))
+				{
+					continue;
+				}
 				// et siis teeme uue nimekirja kõigist objektidest, jees?
 				$prnt = new object($brot->parent());
 				$pid = $prnt->id();
