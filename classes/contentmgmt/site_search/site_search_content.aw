@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.36 2005/01/28 13:59:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.37 2005/02/15 15:35:19 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -331,6 +331,11 @@ class site_search_content extends class_base
 		$s_gr = "";
 		foreach($gr as $gid => $gname)
 		{
+			if (count($gr) == 1 && $gid == $ob->meta("default_grp"))
+			{
+				// no show group selecta if there is only one group and it is selected
+				break;
+			}
 			$this->vars(array(
 				"group" => $gid,
 				"name" => $gname,
