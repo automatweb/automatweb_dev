@@ -20,7 +20,7 @@
 <td class="fgtext">&nbsp;{VAR:uid}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:name}&nbsp;</td>
 <td class="fgtext">&nbsp;{VAR:email}&nbsp;</td>
-<td class="fgtext">&nbsp;{VAR:joindate}&nbsp;</td>
+<td class="fgtext">&nbsp;{VAR:tm}&nbsp;</td>
 <td class="fgtext" align="center">&nbsp;&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
