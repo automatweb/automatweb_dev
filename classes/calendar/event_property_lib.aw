@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.10 2004/10/06 15:24:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.11 2004/10/08 16:04:41 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -201,16 +201,8 @@ class event_property_lib extends aw_template
 			$event_obj->create_brother($new_id);
 
 			// aga vend tuleb luua iga keele alla kuhu sündmus pandud on!
-
 			// ja tuleks ka kontrollida kas see seos on juba olemas või ei
-
 			// seos projektist sündmusse
-			/*
-			$prj_inst->connect_event(array(
-				"id" => $new_id,
-				"event_id" => $event_obj->id(),
-			));
-			*/
 
 			foreach($transx as $trans_item)
 			{
