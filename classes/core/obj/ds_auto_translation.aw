@@ -93,14 +93,14 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		$conns = safe_array($this->conn_by_to[$conn_oid][RELTYPE_TRANSLATION]);
 
-		if (count($conns) > 1)
+		/*if (count($conns) > 1)
 		{
 			error::raise(array(
 				"id" => ERR_TRANS,
 				"msg" => "ds_auto_translation::get_objdata($oid): found more than one translation relation to object $oid!"
 			));
 		}
-		else
+		else*/
 		if (count($conns) > 0)
 		{
 			// we found that there are some connections to this object with translation reltype
@@ -151,15 +151,15 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				echo __LINE__."::incorrect language, get original and trace from that original = $f_c[from], read connections from that <br>";
 			}
 
-			if (count($conns2) > 1)
+			/*if (count($conns2) > 1)
 			{
 				error::raise(array(
 					"id" => ERR_TRANS,
 					"ds_auto_translation::get_objdata($oid): found more than one translation relation from object $conns2[0][from] pointing to an object with lang id $lang_id!"
 				));
 			}
-			else
-			if (count($conns2) == 1)
+			else*/
+			if (count($conns2) > 0)
 			{
 				// mark the found translation connection in the cache
 
@@ -214,14 +214,14 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 					}
 				}
 
-				if (count($conns) > 1)
+				/*if (count($conns) > 1)
 				{
 					error::raise(array(
 						"id" => ERR_TRANS,
 						"msg" => "ds_auto_translation::get_objdata($oid): found more than one translation relation from object $oid pointing to an object with lang id $lang_id!"
 					));
 				}
-				else
+				else*/
 				if (count($conns) > 0)
 				{
 					reset($conns);	
