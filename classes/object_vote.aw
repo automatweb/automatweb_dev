@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.5 2003/05/13 12:58:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.6 2004/06/11 09:15:08 kristo Exp $
 
 class object_vote extends aw_template
 {
@@ -95,10 +95,8 @@ class object_vote extends aw_template
 		extract($args);
 		$SITE_ID = $this->cfg["site_id"];
 		$this->read_template("list_contents.tpl");
-		$meta = $this->get_object_metadata(array(
-			"oid" => $id,
-			"key" => "object_vote",
-		));
+		$tmp = obj($id);
+		$meta = $tmp->meta("object_vote");
 		$check = $meta["check"];
 		$jrk = $meta["jrk"];
 		$cluster = $this->get_object($id);
@@ -151,9 +149,8 @@ class object_vote extends aw_template
 		$this->db_query($q);
 		$row = $this->db_next();
 		$id = $row["oid"];
-		$meta = $this->get_object_metadata(array(
-			"oid" => $id,
-		));
+		$tmp = obj($id);
+		$meta = $tmp->meta();
 
 		$votes = $meta["votes"];
 		$check = $meta["object_vote"]["check"];
@@ -215,11 +212,10 @@ class object_vote extends aw_template
 		$this->db_query($q);
 		$row = $this->db_next();
 		$id = $row["oid"];
-		$xmeta = $this->get_object_metadata(array(
-			"oid" => $id,
-			"metadata" => $row["metadata"],
-			"key" => "votes",
-		));
+
+		$tmp = obj($id);
+		$xmeta = $tmp->meta("votes");
+
 		$votes = $xmeta;
 		$votes[$args["vote"]] += 1;
 		$votes["total"] += 1;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.10 2003/08/27 11:56:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.11 2004/06/11 09:13:24 kristo Exp $
 // sitemap.aw - Site Map
 
 // DEPRECATED - duke's new menu tree showing class deprecates this one. 
@@ -23,9 +23,7 @@ class sitemap extends aw_template
 			$can = true;
 			if (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"))
 			{
-				$meta = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"]
-				));
+				$meta = aw_unserialize($row["metadata"]);
 				if ($meta["users_only"] == 1)
 				{
 					$can = false;
@@ -79,9 +77,7 @@ class sitemap extends aw_template
 		reset($ar);
 		while (list(,$row) = each($ar))
 		{
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"]
-			));
+			$meta = aw_unserialize($row["metadata"]);
 
 			if (!($meta["users_only"] == 1 && aw_global_get("uid") ==""))
 			{

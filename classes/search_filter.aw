@@ -166,7 +166,6 @@ class search_filter extends aw_template
 
         function __load_data()
         {
-                //$this->data=$this->get_object_metadata(array("oid" => $this->id,"key" => "data"));
                 $kala=$this->obj_get_meta(array("oid" => $this->id));
                 $this->data=$kala["data"];
                 //echo("loaddata<pre>");print_r($this->data);echo("</pre>");
@@ -180,7 +179,6 @@ class search_filter extends aw_template
 
         function __load_filter()
         {
-                //$this->filter=$this->get_object_metadata(array("oid" => $this->id,"key" => "filter"));
                 $kala=$this->obj_get_meta(array("oid" => $this->id));
                 $this->filter=$kala["filter"];
                 if ($GLOBALS["shit"])
@@ -220,7 +218,9 @@ class search_filter extends aw_template
                 while ($r = $this->db_next())
                 {
                         $this->save_handle();
-                        $arr=$this->get_object_metadata(array("oid" => $r["oid"]));
+						$tmp = obj($r["oid"]);
+						$arr = $tmp->meta();
+
                         echo("doing id".$r["oid"]."<br />");
                         if (is_array($arr))
                         {
