@@ -2,7 +2,7 @@
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">
-	Nimi:
+	{VAR:LC_MENUEDIT_NAME}
 </td>
 <td class="fform">
 	<input type='text' NAME='name' VALUE='{VAR:name}' size="50">
@@ -18,7 +18,7 @@
 </tr>
 <tr>
 <td class="fcaption">
-	Klass:
+	{VAR:LC_MENUEDIT_CLASS}
 </td>
 <td class="fform">
 	<select name="class_id">
@@ -27,7 +27,7 @@
 </td>
 <tr>
 <td class="fcaption">
-	Kommentaar:
+	{VAR:LC_MENUEDIT_COMMENT}
 </td>
 <td class="fform">
 <textarea NAME='comment' cols=50 rows=5>
@@ -37,7 +37,7 @@
 </tr>
 <tr>
 <td class="fcaption" colspan=2>
-<input class='small_button' type='submit' VALUE='Save'>
+<input class='small_button' type='submit' VALUE='{VAR:LC_MENUEDIT_SAVE}'>
 </td>
 </tr>
 </table>

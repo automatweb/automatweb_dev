@@ -30,14 +30,14 @@
 <td bgcolor=#000000>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>OBJEKTID: 
+<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>{VAR:LC_MENUEDIT_OBJECTS}: 
 <!-- SUB: ADD_CAT -->
-<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>Lisa</a>
+<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>{VAR:LC_MENUEDIT_ADD}</a>
 <!-- END SUB: ADD_CAT -->
-| <a href='javascript:document.foo.submit()' class="fgtitle_link">Salvesta</a>
-| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('change')">Muuda</a>
-| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('delete')">Kustuta</a>
- | <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a></b>
+| <a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('change')">{VAR:LC_MENUEDIT_CHANGE}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('delete')">{VAR:LC_MENUEDIT_DELETE}</a>
+ | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></b>
 </b>
 </td>
 <td align=right class="fgtitle_new"><a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
@@ -49,20 +49,20 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" class="title">&nbsp;</td>
-<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}&period={VAR:period}'>Nimi</a>{VAR:sortedimg1}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=jrk&order={VAR:order2}&period={VAR:period}'>Jrk</a>{VAR:sortedimg2}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}&period={VAR:period}'>Aktiivne</a>{VAR:sortedimg6}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>Muutja</a>{VAR:sortedimg3}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}&period={VAR:period}'>Muudetud</a>{VAR:sortedimg4}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}&period={VAR:period}'>T&uuml;&uuml;p</a>{VAR:sortedimg5}&nbsp;</td>
-<td align="center" class="title">&nbsp;Lead?&nbsp;</td>
-<td align="center" class="title">&nbsp;Foorum?&nbsp;</td>
-<td align="center" class="title">&nbsp;Esilehel&nbsp;</td>
-<td align="center" class="title">&nbsp;Paremal&nbsp;</td>
-<td align="center" class="title">&nbsp;Text OK?&nbsp;</td>
-<td align="center" class="title">&nbsp;Pildid OK?&nbsp;</td>
-<td align="center" class="title">&nbsp;Link&nbsp;</td>
-<td align="center" colspan="2" class="title">&nbsp;Vali&nbsp;</td>
+<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg6}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_TYPE}</a>{VAR:sortedimg5}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_LEAD}?&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_FORUM}?&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_FRONTPAGE}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_RIGHT}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_TEXT} OK?&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_PICTURES} OK?&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_LINK}&nbsp;</td>
+<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->

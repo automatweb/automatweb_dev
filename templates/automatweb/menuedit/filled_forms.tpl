@@ -8,13 +8,13 @@
 	{
 		if (document.foo.op_id.options.selectedIndex < 0)
 		{
-			alert('Vali listboksist v2ljundi stiil!');
+			alert('{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}');
 			return "#";
 		}
 
 		if (!sel_entry)
 		{
-			alert('Vali formi sisestus!');
+			alert('{VAR:LC_MENUEDIT_FORMS_CHOOSE_ENTRY}');
 			return "#";
 		}
 		op_id = document.foo.op_id.options[document.foo.op_id.options.selectedIndex].value;
@@ -90,9 +90,9 @@ function mk_ops()
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>T&auml;IDETUD FORMID: 
- | <a href="javascript:window.parent.objects.location.href=doSubmit('show_entry');" class="fgtitle_link" >N&auml;ita</a>
- | <a href="javascript:window.parent.objects.location.href=doSubmit('show');"  class="fgtitle_link" >Muuda</a>
- | <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a></b>
+ | <a href="javascript:window.parent.objects.location.href=doSubmit('show_entry');" class="fgtitle_link" >{VAR:LC_MENUEDIT_SHOW}</a>
+ | <a href="javascript:window.parent.objects.location.href=doSubmit('show');"  class="fgtitle_link" >{VAR:LC_MENUEDIT_MODIFY}</a>
+ | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></b>
 </b>
 </td>
 <td align=right class="fgtitle_new"><a href='bug.{VAR:ext}?op=listall' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
@@ -103,11 +103,11 @@ function mk_ops()
 </table>
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" class="title">&nbsp;T&auml;itja&nbsp;</td>
-<td align="center" class="title">&nbsp;Vatamisi&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-<td align="center" class="title">&nbsp;Formi nimi&nbsp;</td>
-<td align="center" colspan="2" class="title">&nbsp;Vali&nbsp;</td>
+<td height="15" class="title">&nbsp;{VAR:LC_MENUEDIT_FORM_FILLER}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_FORM_VIEWS}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_MODIFIED}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_FORM_NAME}&nbsp;</td>
+<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -122,7 +122,7 @@ function mk_ops()
 <!-- END SUB: LINE -->
 
 <tr>
-<td height="15" colspan=6 class="fgtext">Vali v&auml;ljundi stiil, millega formi sisestust n&auml;idatakse: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
+<td height="15" colspan=6 class="fgtext">{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
 </tr>
 
 </table>

@@ -64,22 +64,22 @@ function select_all()
 <table border="0" cellspacing="1" cellpadding="0" width="100%">
 <form name="picker" method="get">
 <tr>
-<td class="fgtitle" colspan="3"><strong>Stiil</strong></td>
+<td class="fgtitle" colspan="3"><strong>{VAR:LC_MENUEDIT_STYLE}</strong></td>
 </tr>
 <tr>
 <td bgcolor="#FFFFFF" class="checkbox">
-<input type="radio" name="style" value="radio" checked> Radiobuttonid
+<input type="radio" name="style" value="radio" checked> {VAR:LC_MENUEDIT_RADIOBUTTONS}
 </td>
 <td class="checkbox" bgcolor="#FFFFFF">
-<input type="radio" name="style" value="checkbox"> Checkboxid
+<input type="radio" name="style" value="checkbox"> {VAR:LC_MENUEDIT_CHECKBOXES}
 </td>
 <td class="checkbox" bgcolor="#FFFFFF">
-<input type="radio" name="style" value="dropdown"> Dropdown
+<input type="radio" name="style" value="dropdown"> {VAR:LC_MENUEDIT_LISTBOX}
 </td>
 </tr>
 <tr>
-<td class="fgtitle" colspan="3" align="center">'{VAR:objname}' &nbsp; <strong><font color="red">{VAR:total}</font></strong> objekt &nbsp;
-<strong><a href="javascript:submitsection()">[Lisa]</a></strong></td>
+<td class="fgtitle" colspan="3" align="center">'{VAR:objname}' &nbsp; <strong><font color="red">{VAR:total}</font></strong> {VAR:LC_MENUEDIT_OBJECT} &nbsp;
+<strong><a href="javascript:submitsection()">[{VAR:LC_MENUEDIT_ADD}]</a></strong></td>
 </tr>
 <input type="hidden" name="type" value="submit_popup_section">
 <input type="hidden" name="source" value="{VAR:source}">

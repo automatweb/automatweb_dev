@@ -59,13 +59,13 @@
 		{
 			if (document.foo.op_id.options.selectedIndex < 0)
 			{
-				alert('Vali listboksist v2ljundi stiil!');
+				alert('{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}');
 				return "#";
 			}
 
 			if (!sel_entry)
 			{
-				alert('Vali formi sisestus!');
+				alert('{VAR:LC_MENUEDIT_FORMS_CHOOSE_ENTRY}');
 				return "#";
 			}
 			op_id = document.foo.op_id.options[document.foo.op_id.options.selectedIndex].value;
@@ -155,20 +155,20 @@ function cl()
 <td bgcolor=#000000>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>OBJEKTID: 
+<td height="15" colspan="9" class="fgtitle_new">&nbsp;<b>{VAR:LC_MENUEDIT_OBJECTS}: 
 <!-- SUB: ADD_CAT -->
-<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>Lisa</a>
+<select class="fgtitle_button" name="type">{VAR:types}</select>&nbsp;<a class="fgtitle_link" href='javascript:doSubmit2()'>{VAR:LC_MENUEDIT_ADD}</a>
 <!-- END SUB: ADD_CAT -->
-| <a href='javascript:document.foo.submit()' onClick="return seif()" class="fgtitle_link">Salvesta</a>
-| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('change')">Muuda</a>
-| <a href="javascript:window.parent.objects.location.href=show()"  class="fgtitle_link" >N&auml;ita</a>
-| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return ddelete()">Kustuta</a>
+| <a href='javascript:document.foo.submit()' onClick="return seif()" class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('change')">{VAR:LC_MENUEDIT_CHANGE}</a>
+| <a href="javascript:window.parent.objects.location.href=show()"  class="fgtitle_link" >{VAR:LC_MENUEDIT_SHOW}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return ddelete()">{VAR:LC_MENUEDIT_DELETE}</a>
 | <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return cut()">Cut</a>
 | <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return copy()">Copy</a>
 <!-- SUB: PASTE -->
 | <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return paste()">Paste</a>
 <!-- END SUB: PASTE -->
-| <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a></b>
+| <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></b>
 </b>
 </td>
 <td align=right class="fgtitle_new"><a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a>&nbsp;</td>
@@ -180,15 +180,15 @@ function cl()
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" class="title">&nbsp;</td>
-<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}&period={VAR:period}'>Nimi</a>{VAR:sortedimg1}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=jrk&order={VAR:order2}&period={VAR:period}'>Jrk</a>{VAR:sortedimg2}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}&period={VAR:period}'>Aktiivne</a>{VAR:sortedimg6}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>Muutja</a>{VAR:sortedimg3}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}&period={VAR:period}'>Muudetud</a>{VAR:sortedimg4}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}&period={VAR:period}'>T&uuml;&uuml;p</a>{VAR:sortedimg5}&nbsp;</td>
+<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=status&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg6}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_TYPE}</a>{VAR:sortedimg5}&nbsp;</td>
 <td align="center" class="title">&nbsp;Link&nbsp;</td>
 
-<td align="center" colspan="2" class="title">&nbsp;Vali&nbsp;</td>
+<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</td>
 <td align="center" class="title">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: CUT -->
@@ -237,7 +237,7 @@ onClick="sel_type={VAR:class_id};cur_arr=0;sel_form=0;cl();"
 </tr>
 <!-- SUB: FORMS_SHOWN -->
 <tr>
-<td height="15" colspan=11 class="fgtext">Vali v&auml;ljundi stiil, millega formi sisestust n&auml;idatakse: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
+<td height="15" colspan=11 class="fgtext">{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
 </tr>
 <!-- END SUB: FORMS_SHOWN -->
 
