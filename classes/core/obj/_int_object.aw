@@ -2,6 +2,8 @@
 
 /*
 
+this message will get called whenever an object is saved as the class_id as the message type parameter
+and the object's id as the "oid" parameter
 EMIT_MESSAGE(MSG_STORAGE_SAVE)
 
 */
@@ -1054,6 +1056,10 @@ class _int_object
 			"properties" => $this->properties,
 			"tableinfo" => $this->tableinfo,
 			"propvalues" => $this->obj["properties"]
+		));
+
+		post_message_with_param(MSG_STORAGE_SAVE, $this->obj["class_id"], array(
+			"oid" => $this->obj["oid"]
 		));
 
 		return $this->obj["oid"];

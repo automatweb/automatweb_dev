@@ -21,19 +21,20 @@ class msg_scanner extends class_base
 		$parser->_get_class_list(&$files, $this->cfg["classdir"]);
 
 		// scan them for all dispatched / recieved messages
-		list($messages, $recievers) = $this->_scan_files($files);
+		list($messages, $recievers, $recievers_param) = $this->_scan_files($files);
 
 		// check the maps for validity
-		$this->_check_message_maps($messages, $recievers);
+		$this->_check_message_maps($messages, $recievers, $recievers_param);
 
 		// generate one xml file for each message that lists the recievers of that message
-		$this->_save_message_maps($messages, $recievers);
+		$this->_save_message_maps($messages, $recievers, $recievers_param);
 	}
 
 	function _scan_files($files)
 	{
 		$messages = array();
 		$recievers = array();
+		$recievers_param = array();
 		foreach($files as $file)
 		{
 			$blen = strlen($this->cfg["basedir"]."/classes")+1;
@@ -59,11 +60,23 @@ class msg_scanner extends class_base
 					$recievers[trim($m[1])][$class] = trim($m[2]);
 				}
 			}
+
+			if (preg_match_all("/HANDLE_MESSAGE_WITH_PARAM\((.*),(.*),(.*)\)/U",$fc, $mt, PREG_SET_ORDER))
+			{
+				foreach($mt as $m)
+				{
+					if (isset($recievers_param[trim($m[1])][$class][trim($m[2])]))
+					{
+						die("ERROR: function ".$recievers[trim($m[1])][$class][trim($m[2])]." already defined as message handler\n       for message $m[1] with param $m[2], can not define several recievers\n       for one message with same param in the same class!\n\n");
+					}
+					$recievers_param[trim($m[1])][$class][trim($m[2])] = trim($m[3]);
+				}
+			}
 		}
-		return array($messages, $recievers);
+		return array($messages, $recievers, $recievers_param);
 	}
 
-	function _check_message_maps($messages, $recievers)
+	function _check_message_maps($messages, $recievers, $recievers_param)
 	{
 		foreach($recievers as $msg => $cldat)
 		{
@@ -88,9 +101,36 @@ class msg_scanner extends class_base
 				}
 			}
 		}
+
+		foreach($recievers_param as $msg => $cldat)
+		{
+			if (!in_array($msg, $messages))
+			{
+				$clstr = join(",",array_keys($cldat));
+				if (count(array_keys($cldat)) > 1)
+				{
+					$mul = "es:";
+				}
+				echo "ERROR: message $msg is not defined, but recieved by class$mul $clstr!\n\n";
+				die();
+			}
+
+			foreach($cldat as $class => $hdat)
+			{
+				foreach($hdat as $param => $handler)
+				{
+					$inst = get_instance($class);
+					if (!method_exists($inst, $handler))
+					{
+						echo "ERROR: class $class defines function $handler as message handler for message $msg (with param $param),\n       but the function does not exist in that class!\n\n";
+						die();
+					}
+				}
+			}
+		}
 	}
 
-	function _save_message_maps($messages, $recievers)
+	function _save_message_maps($messages, $recievers, $recievers_param)
 	{
 		$this->_delete_old_maps();
 
@@ -102,6 +142,14 @@ class msg_scanner extends class_base
 			foreach($m_recvs->get() as $class => $func)
 			{
 				$r[] = array("class" => $class, "func" => $func);
+			}
+			$m_recvs = new aw_array($recievers_param[$msg]);
+			foreach($m_recvs->get() as $class => $fdat)
+			{
+				foreach($fdat as $param => $func)
+				{
+					$r[] = array("class" => $class, "func" => $func, "param" => $param);
+				}
 			}
 
 			// serialize

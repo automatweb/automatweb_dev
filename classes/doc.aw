@@ -1,8 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.50 2003/11/06 12:40:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.51 2003/11/11 13:24:44 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
+
 
 @classinfo trans=1
 
@@ -875,6 +878,8 @@ class doc extends class_base
 		return $inst->get_subtemplates_regex("plugin\.(\w*)");
 	}
 
-
+	function on_save_document($params)
+	{
+	}
 };
 ?>

@@ -37,6 +37,45 @@ class msg_dispatch extends class_base
 		}
 	}
 
+	////
+	// !this delivers posted messages with a parameter
+	// parameters:
+	//	msg - message 
+	//	param - the parameter through which message recievers are filtered
+	//	params - array of parameters
+	function post_message_with_param($arr)
+	{
+		error::throw_if(!isset($arr["msg"]), array(
+			"id" => ERR_NO_MSG, 
+			"msg" => "msg_dispatch::post_message - no message posted!"
+		));
+
+		error::throw_if(!isset($arr["param"]), array(
+			"id" => ERR_NO_MSG, 
+			"msg" => "msg_dispatch::post_message - no parameter for message posted!"
+		));
+
+		$handlers = $this->_get_handlers_for_message($arr["msg"]);
+		foreach($handlers as $handler)
+		{
+			if (defined($handler["param"]))
+			{
+				$handler["param"] = constant($handler["param"]);
+			}
+			if ($handler["param"] == $arr["param"])
+			{
+				$class = $handler["class"];
+				$func = $handler["func"];
+				$inst = get_instance($handler["class"]);
+				error::throw_if(!method_exists($inst, $func), array(
+					"id" => ERR_NO_HANDLER_FUNC,
+					"msg" => "msg_dispatch::post_message - no handler function ($func) in class ($class) for message $arr[msg]!"
+				));
+				$inst->$func($arr["params"]);
+			}
+		}
+	}
+
 	function _get_handlers_for_message($msg)
 	{
 		$msg = str_replace(".", "", $msg);
