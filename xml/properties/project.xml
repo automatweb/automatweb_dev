@@ -15,6 +15,17 @@
                   <value>2</value>
                   <caption>kasutaja</caption>
             </PARTICIPANT>
+            <PRJ_EVENT>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_CRM_CALL</num_1>
+                        <num_2>CL_CRM_OFFER</num_2>
+                        <num_3>CL_CRM_DEAL</num_3>
+                        <num_4>CL_CRM_MEETING</num_4>
+                  </clid>
+                  <caption>Sündmus</caption>
+            </PRJ_EVENT>
       </reltypes>
 </properties>
 

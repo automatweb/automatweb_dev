@@ -263,6 +263,20 @@
             <caption>Nav. toolbar</caption>
       </property>
       <property>
+            <name>project</name>
+            <type>hidden</type>
+            <group>
+                  <num_0>show_day</num_0>
+                  <num_1>show_week</num_1>
+                  <num_2>show_month</num_2>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <caption>Projekti ID</caption>
+      </property>
+      <property>
             <name>show_day</name>
             <callback>callback_show_day</callback>
             <group>show_day</group>
