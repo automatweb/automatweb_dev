@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.69 2001/12/05 21:43:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.70 2001/12/11 12:51:24 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -644,6 +644,15 @@ class document extends aw_template
 					"function" => "parse_alias",
 				));
 		
+		// formi entryd
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "m",
+					"class" => "menu_chain",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
 		// keywordide list. bijaatch!
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)huvid(.+?)(#)/i",
@@ -941,6 +950,7 @@ class document extends aw_template
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
 			"modified"	=> $this->time2date($doc["modified"],2),
+			"date2"	=> $this->time2date($doc["modified"],8),
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
 			"link_text"	=> $doc["link_text"],
@@ -1486,7 +1496,17 @@ class document extends aw_template
 	{
 		extract($arr);
 
-		global $per_oid,$period;
+		// ok, instead of all this, just add the damn thing and redirect to changing.
+		$ret = $this->submit_add(array(
+			"section" => $section,
+			"period" => $period,
+			"parent" => $parent,
+			"user" => $user
+		));
+		header("Location: ".$ret);
+		die();
+
+/*		global $per_oid,$period;
 
 		$this->mk_path($parent,LC_DOCUMENT_ADD_DOC);
 		$this->tpl_init("automatweb/documents");
@@ -1520,7 +1540,7 @@ class document extends aw_template
 			"reforb"	=> $this->mk_reforb("submit_add", array("parent" => $parent, "period" => $period, "user" => $user)),
 			"docfolders" => $this->picker($parent,$_df)
 		));
-		return $this->parse();
+		return $this->parse();*/
 	}
 
 	function submit_add($arr)
@@ -1716,8 +1736,6 @@ class document extends aw_template
 		$this->vars(array(
 			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
-		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
-		$this->mk_alias_lists($id);
 		classload("keywords");
 		$kw = new keywords();
 		$keywords = $kw->get_keywords(array(
