@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.37 2003/02/25 18:24:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.38 2003/02/25 18:30:37 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -512,7 +512,7 @@ class orb extends aw_template
 					{
 						if (!$this->can($aclid, $varvalue))
 						{
-							$this->raise_error(ERR_ACL, "ORB: Parameter acl check failed for access $aclid for parameter $varname with value $varvalue!",false, true);
+							$this->raise_error(ERR_ACL, "ORB: Parameter acl check failed for access $aclid for parameter $varname with value $varvalue!",true, false);
 						}
 					}
 				}
