@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.3 2004/11/30 10:16:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.4 2004/11/30 14:42:39 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -26,7 +26,7 @@
 @groupinfo preview caption="Eelvaade" submit=no
 @groupinfo show_entries caption="Sisestused" submit=no
 @groupinfo entries caption="Näita sisestusi" submit=no parent=show_entries
-@groupinfo search caption="Otsing" parent=show_entries submit=no
+@groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
 @groupinfo controllers caption="Kontrollerid" submit=no
 @groupinfo set_controllers caption="Salvestamine" parent=controllers
 @groupinfo get_controllers caption="Näitamine" parent=controllers
@@ -51,6 +51,9 @@
 
 @property entries type=table group=entries no_caption=1
 @caption Sisestused
+
+@property search type=text store=no no_caption=1 group=search
+@caption Otsing
 
 @property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER field=meta method=serialize group=styles
 @caption Stiilide kaust
@@ -108,6 +111,9 @@
 
 @reltype CONTROLLER_FOLDER value=10 clid=CL_MENU
 @caption Kontrollerite kaust
+
+@reltype OBJECT_EXPORT value=11 clid=CL_OBJECT_EXPORT
+@caption Objektide eksport
 */
 
 class webform extends class_base
@@ -161,11 +167,20 @@ class webform extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "search":
+				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
+				$s = get_instance(CL_REGISTER_SEARCH);
+				$prop["value"] = $s->show(array(
+					"id" => $register->prop("search_o"),
+					"no_form" => 1,
+				));
+				break;
 			case "entries_toolbar":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
-				$register_search = $register->get_first_obj_by_reltype("RELTYPE_SEARCH");
-				$toolbar = &$arr["prop"]["toolbar"];
-				$toolbar->add_button(array(
+				$object_export = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_EXPORT");
+				$register_search = $register->prop("search_o");
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
 					"name" => "search",
 					"tooltip" => "Otsi",
 					"url" => html::get_change_url($arr["obj_inst"]->id(), array(
@@ -173,22 +188,33 @@ class webform extends class_base
 					)),
 					"img" => "search.gif",
 				));
-				$toolbar->add_button(array(
+				$tb->add_button(array(
 					"name" => "change",
 					"tooltip" => "Muuda otsingu seadeid",
-					"url" => html::get_change_url($register_search->id(), array(
+					"url" => html::get_change_url($register->prop("search_o"), array(
 						"return_url" => urlencode(html::get_change_url($arr["obj_inst"]->id(), array(
 							"group" => $arr["request"]["group"],
 						))),
 					)),
 					"img" => "../blue/obj_settings.gif",
 				));
-				$toolbar->add_button(array(
+				$tb->add_button(array(
 					"name" => "delete",
 					"tooltip" => "Kustuta valitud sisestused",
 					"action" => "remove_entries",
 					"img" => "delete.gif",
 					"confirm" => "Oled kindel, et tahad valitud sisestused kustutada?",
+				));
+				$tb->add_button(array(
+					"name" => "delete",
+					"tooltip" => "Ekspordi objektid",
+					"url" => html::get_change_url($object_export->id(), array(
+						"group" => "mktbl",
+						"return_url" => urlencode(html::get_change_url($arr["obj_inst"]->id(), array(
+							"group" => $arr["request"]["group"],
+						))),
+					)),
+					"img" => "ftype_xls.gif",
 				));
 				break;
 			case "def_caption_style":
@@ -233,16 +259,16 @@ class webform extends class_base
 				break;
 			case "navtoolbar":
 				//$this->cfgform_i->gen_navtoolbar($arr);
-				$toolbar = &$arr["prop"]["toolbar"];
+				$tb = &$prop["vcl_inst"];
 
-				$toolbar->add_button(array(
+				$tb->add_button(array(
 					"name" => "save",
 					"tooltip" => "Salvesta",
 					"url" => "javascript:submit_changeform()",
 					"img" => "save.gif",
 				));
 				
-				$toolbar->add_button(array(
+				$tb->add_button(array(
 					"name" => "delete",
 					"tooltip" => "Kustuta valitud omadused",
 					"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
@@ -372,6 +398,27 @@ class webform extends class_base
 				$register->connect(array(
 					"to" => $register_search->id(),
 					"reltype" => "RELTYPE_SEARCH",
+				));
+				$object_export = obj();
+				$object_export->set_class_id(CL_OBJECT_EXPORT);
+				$object_export->set_parent($arr["obj_inst"]->id());
+				$object_export->set_status(STAT_ACTIVE);
+				$object_export->set_name("object_export_".$arr["obj_inst"]->id());
+				$object_export->set_prop("object_type", $object_type->id());
+				$object_export->set_prop("root_folder", $dir->id());
+				$object_export->set_prop("csv_separator", ",");
+				$object_export->save();
+				$arr["obj_inst"]->connect(array(
+					"to" => $object_export->id(),
+					"reltype" => "RELTYPE_OBJECT_EXPORT",
+				));
+				$object_export->connect(array(
+					"to" => $dir->id(),
+					"reltype" => "RELTYPE_FOLDER",
+				));
+				$object_export->connect(array(
+					"to" => $object_type->id(),
+					"reltype" => "RELTYPE_OBJECT_TYPE",
 				));
 				$set_controllers = array(
 					array(
@@ -567,7 +614,7 @@ class webform extends class_base
 
 	function callback_props($arr)
 	{
-		$no_props = array("status", "comment", "name");
+		$no_props = array("status", "comment", "name", "register_id");
 		//arr($this->cfgform_i->all_props);
 		$this->read_template("avail_props.tpl");
 		$prp_count = array();
@@ -1112,7 +1159,6 @@ class webform extends class_base
 			$o->set_status(STAT_ACTIVE);
 			$o->set_meta("cfgform_id", $cfgform->id());
 			$o->set_meta("object_type", $object_type->id());
-			$o->set_prop("register_id", $register->id());
 			$o->save();
 			$cls = get_instance(CL_CLASSIFICATOR);
 			$relprops = $this->get_properties_by_type(array(
@@ -1146,28 +1192,22 @@ class webform extends class_base
 				}
 				$o->set_prop($key, $val);
 			}
-			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
-			{
-				$name .= " ".$args[$key];
-			}
-			$o->set_name(trim($name));
-			$o->save();
-			$emails = $obj_inst->connections_from(array(
-				"type" => "RELTYPE_EMAIL",
-			));
 			$body = "";
+			// this stuff we won't translate
+			$no_trans = array("submit", "reset", "text", "hidden");
+			// lets translate this stuff to real things
 			foreach($arr as $key => $val)
 			{
 				if($prplist[$key]["type"] == "date_select")
 				{
-					$val = $val["day"].".".$val["month"].".".$val["year"];
+					$arr[$key] = $val["day"].".".$val["month"].".".$val["year"];
 				}
 				if($prplist[$key]["type"] == "classificator")
 				{
 					list($choices,,) = $cls->get_choices(array(
 						"clid" => CL_REGISTER_DATA,
 						"name" => $key,
-						"obj_inst" => $obj_inst,
+						"obj_inst" => $o,
 					));
 					$choices = $choices->names();
 					$vals = array();
@@ -1176,10 +1216,24 @@ class webform extends class_base
 					{
 						$vals[] = $choices[$valx];
 					}
-					$val = implode(", ", $vals);
+					$arr[$key] = implode(", ", $vals);
 				}
-				$body .= "$key: $val\n";
+				if(!in_array($prplist[$key]["type"], $no_trans))
+				{
+					$body .= $prplist[$key]["caption"].": ".$arr[$key]."\n";
+				}
 			}
+			$name = "";
+			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
+			{
+				$name .= " ".$arr[$key];
+			}
+			$o->set_name(trim($name));
+			$o->set_prop("register_id", $register->id());
+			$o->save();
+			$emails = $obj_inst->connections_from(array(
+				"type" => "RELTYPE_EMAIL",
+			));
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($emails as $eml)
 			{

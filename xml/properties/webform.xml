@@ -112,6 +112,16 @@
             <caption>Sisestused</caption>
       </property>
       <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search</field>
+            <caption>Otsing</caption>
+      </property>
+      <property>
             <name>style_folder</name>
             <table>objects</table>
             <group>styles</group>
@@ -233,6 +243,7 @@
             <search>
                   <caption>Otsing</caption>
                   <parent>show_entries</parent>
+                  <submit_method>get</submit_method>
                   <submit>no</submit>
             </search>
             <controllers>
@@ -299,6 +310,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kontrollerite kaust</caption>
             </CONTROLLER_FOLDER>
+            <OBJECT_EXPORT>
+                  <value>11</value>
+                  <clid>CL_OBJECT_EXPORT</clid>
+                  <caption>Objektide eksport</caption>
+            </OBJECT_EXPORT>
       </reltypes>
 </properties>
 
