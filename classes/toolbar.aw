@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.22 2004/01/21 17:15:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.23 2004/01/26 17:30:28 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -91,6 +91,18 @@ class toolbar extends aw_template
 		if (empty($args["img"]))
 		{
 			$args["type"] = "text_button";
+		};
+		if (isset($args["action"]))
+		{
+			$args["url"] = "javascript:submit_changeform('$args[action]');";
+		};
+		if (isset($args["confirm"]))
+		{
+			if (substr($args["url"],0,1) == "j")
+			{
+				$args["url"] = substr($args["url"],strlen("javascript:"));
+			};
+			$args["url"] = "javascript:if(confirm('$args[confirm]'))" . "{" . $args[url] . "};";
 		};
 		$this->matrix[$args["name"]] = $args;
 	}
