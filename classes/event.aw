@@ -66,6 +66,7 @@ class event extends aw_template
 			"caption" => $e["caption"],
 			"color" => $e["color"],
 			"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
+			"time_start" => date("H:i",$e["start"]),
 			"event_link" => ($e["link"]) ? $e["link"] : $ev_link,
 			"target" => $e["target"],
 			"id" => $e["id"],
