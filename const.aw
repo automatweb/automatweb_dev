@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.50 2001/11/20 13:40:22 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.51 2001/11/20 16:26:31 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ else
 			preg_match("/(\w*)$/",$lib,$m);
 			$lib = $m[1];
 			$lib = "$classdir/$lib.$ext";
-			include_once($lib);
+			@include_once($lib);
 		};
 	}
 	////
