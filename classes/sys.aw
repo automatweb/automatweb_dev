@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.29 2004/05/13 14:52:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.30 2004/06/09 08:12:00 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -188,7 +188,9 @@ class sys extends aw_template
 			"star.automatweb.com" => "star.automatweb.com",
 			"arin.struktuur.ee" => "arin.struktuur.ee",
 			"www.ut.ee" => "www.ut.ee",
-			"intranet.automatweb.com" => "intranet.automatweb.com"
+			"intranet.automatweb.com" => "intranet.automatweb.com",
+			"www.notar.ee" => "www.notar.ee",
+			"prisma.struktuur.ee" => "prisma.struktuur.ee"
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
