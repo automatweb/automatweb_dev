@@ -104,26 +104,13 @@ class search_conf extends aw_template
 
 	function get_search_list()
 	{
-		$c = new db_config;
-		$conf = unserialize($c->get_simple_config("search_conf"));
-		if (is_array($conf[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]]["names"]))
+		$grps = $this->get_groups();
+		$ret = array();
+		foreach($grps as $grpid => $gdata)
 		{
-			// we must sort the damn thing now
-			$tmp = $conf[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]]["order"];
-			if (is_array($tmp))
-			{
-				asort($tmp,SORT_NUMERIC);
-				reset($tmp);
-				$ret = array();
-				while (list($id,) = each($tmp))
-					$ret[$id] = $conf[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]]["names"][$id];
-			}
-			else
-				$ret = $conf[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]]["names"];
-			return $ret;
+			$ret[$grpid] = $gdata["name"];
 		}
-		else
-			return array();
+		return $ret;
 	}
 
 	////
@@ -594,6 +581,136 @@ class search_conf extends aw_template
 			flush();
 			$this->restore_handle();
 		}
+	}
+
+	function change($arr)
+	{
+		$this->read_template("change.tpl");
+
+		$grps = $this->get_groups();
+		foreach($grps as $grpid => $grpdata)
+		{
+			$this->vars(array(
+				"grpid" => $grpid,
+				"name" => $grpdata["name"],
+				"ord" => $grpdata["ord"],
+				"change" => $this->mk_my_orb("change_grp", array("id" => $grpid)),
+				"delete" => $this->mk_my_orb("delete_grp", array("id" => $grpid))
+			));
+			$l.=$this->parse("LINE");
+		}
+
+		end($grps);
+		list($id,$dat) = each($grps);
+		$id++;
+
+		$this->vars(array(
+			"add" => $this->mk_my_orb("change_grp", array("id" => $id)),
+			"LINE" => $l
+		));
+		return $this->parse();
+	}
+
+	function change_grp($arr)
+	{
+		extract($arr);
+		$grps = $this->get_groups();
+		$this->read_template("change_grp.tpl");
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("change", array())."'>Gruppide nimekiri</a> / Muuda gruppi");
+
+		classload("objects");
+		$o = new objects;
+		$ml = $o->get_list();
+
+		$this->vars(array(
+			"name" => $grps[$id]["name"],
+			"ord" => $grps[$id]["ord"],
+			"id" => $id,
+			"menus" => $this->multiple_option_list($grps[$id]["menus"],$ml),
+			"reforb" => $this->mk_reforb("submit_change_grp", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	function submit_change_grp($arr)
+	{
+		extract($arr);
+
+		$grps = $this->get_groups();
+
+		$grps[$id]["name"] = $name;
+		$grps[$id]["ord"] = $ord;
+		$grps[$id]["menus"] = array();
+		if (is_array($menus))
+		{
+			foreach ($menus as $mid)
+			{
+				$grps[$id]["menus"][$mid] = $mid;
+			}
+		}
+		
+		$this->save_grps($grps);
+
+		return $this->mk_my_orb("change_grp", array("id" => $id));
+	}
+
+	function _grp_sort($a,$b)
+	{
+		if ($a["ord"] == $b["ord"])
+		{
+			return 0;
+		}
+		return $a["ord"] < $b["ord"] ? -1 : 1;
+	}
+
+	function save_grps($grps)
+	{
+		// here we must first sort the $grps array based on user entered order
+		uasort($grps,array($this,"_grp_sort"));
+
+		$lgps = $this->get_groups();
+		$lgps[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]] = $grps;
+		classload("xml");
+		$x = new xml;
+		$dat = $x->xml_serialize($lgps);
+		$this->quote(&$dat);
+		classload("config");
+		$c = new config;
+		$c->set_simple_config("search_grps", $dat);
+	}
+
+	function get_groups()
+	{
+		classload("config");
+		$c = new config;
+		$dat = $c->get_simple_config("search_grps");
+		classload("xml");
+		$x = new xml;
+		$ret = $x->xml_unserialize(array("source" => $dat));
+		$r = $ret[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]];
+		if (!is_array($r))
+		{
+			return array();
+		}
+		else
+		{
+			return $r;
+		}
+	}
+
+	function delete_grp($arr)
+	{
+		extract($arr);
+		$grps = $this->get_groups();
+		unset($grps[$id]);
+		$this->save_grps($grps);
+		header("Location: ".$this->mk_my_orb("change", array()));
+	}
+
+	function get_menus_for_grp($gp)
+	{
+		$grps = $this->get_groups();
+		return $grps[$gp]["menus"];
 	}
 }
 ?>
