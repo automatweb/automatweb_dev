@@ -61,7 +61,7 @@ class ml_mail extends aw_template
 	function orb_change($ar)
 	{
 		extract($ar);
-		$d = get_instance("msg_sql");
+		$d = get_instance("messenger/mail_message");
 		$msg = $d->msg_get(array("id" => $id));
 		$this->mk_path($msg["parent"],"Muuda meili");
 		$this->read_template("ml_mail_change.tpl");
@@ -393,7 +393,7 @@ class ml_mail extends aw_template
 		//võta need elemendid, mis on siin listis kasutusel
 		$vars = $ml_list_inst->get_all_varnames($lid);
 		
-		$d = get_instance("msg_sql");
+		$d = get_instance("messenger/mail_message");
 		$msg = $d->msg_get(array("id" => $mid));// mid on message id
 
 		//tee awm objekt

@@ -575,7 +575,7 @@ class ml_queue extends aw_template
 		// võta meil
 		if (!isset($this->d))
 		{
-			$this->d = get_instance("msg_sql");
+			$this->d = get_instance("messenger/mail_message");
 		};
 
 		$msg = $this->d->msg_get(array("id" => $mid));
