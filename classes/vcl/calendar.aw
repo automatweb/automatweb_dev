@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.35 2004/12/01 12:16:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.36 2004/12/13 14:18:14 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -228,6 +228,14 @@ class vcalendar extends aw_template
 	function get_html($arr = array())
 	{
 		global $awt;
+		/*
+		if (aw_global_get("uid") == "duke")
+		{
+			print "bljäää3";
+			print $this->range["viewtype"];
+			flush();
+		};
+		*/
 		$awt->start("gen-calendar-html");
 		$this->styles = array();
 		if (is_array($arr["style"]))
@@ -598,6 +606,10 @@ class vcalendar extends aw_template
 
 		//dbg::p5($this->range);
 		list($d,$m,$y) = explode("-",date("d-m-Y",$this->range["timestamp"]));
+		if ($GLOBALS["DX"] == 1)
+		{
+			arr($this->items);
+		};
 
 		for ($i = 1; $i <= 12; $i++)
 		{
@@ -609,7 +621,7 @@ class vcalendar extends aw_template
 			// nüüd on mul vaja iga kuu kohta algust ja lõppu
 
 			$ms = mktime(0,0,0,$i,1,$y);
-			$me = mktime(0,0,0,$i+1,0,$y);
+			$me = mktime(23,59,59,$i+1,0,$y);
 
 			$et = "";
 
@@ -618,6 +630,7 @@ class vcalendar extends aw_template
 			for ($j = $ms; $j <= $me; $j = $j + 86400)
 			{
 				$dstamp = date("Ymd",$j);
+
 				$events_for_day = "";
 				if (is_array($this->items[$dstamp]))
 				{
