@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.73 2002/08/29 03:07:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.74 2002/09/04 13:01:47 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -188,6 +188,17 @@ define("FSUBTYPE_EMAIL_ACTION",4);
 
 // kas seda vormi kasutatakse kalendri ajavahemike defineerimiseks?
 define("FSUBTYPE_CAL_CONF",8);
+
+// kui see on otsinguvorm, siis kas otsingutulemusi filtreeritakse
+// läbi kalendri?
+define("FSUBTYPE_CAL_SEARCH",16);
+
+// like CAL_CONF, but data is entered directly 
+define("FSUBTYPE_CAL_CONF2",32);
+
+// sum of all form & calendar settings, used to figure out
+// whether a form has any relation to a calendar
+define("FORM_USES_CALENDAR",58);
 
 
 // object flags - bitmask
