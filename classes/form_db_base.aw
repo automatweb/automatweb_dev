@@ -384,6 +384,14 @@ class form_db_base extends aw_template
 	function delete_entry($arr)
 	{
 		extract($arr);
+		$this->do_delete_entry($id, $entry_id);
+		$after = $this->hexbin($after);
+		header("Location: ".$after);
+		die();
+	}
+
+	function do_delete_entry($id, $entry_id)
+	{
 		if ($this->id != $id)
 		{
 			$this->load($id);
@@ -392,9 +400,6 @@ class form_db_base extends aw_template
 		{
 			$this->delete_object($entry_id);
 			$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
-			$after = $this->hexbin($after);
-			header("Location: ".$after);
-			die();
 		}
 	}
 
