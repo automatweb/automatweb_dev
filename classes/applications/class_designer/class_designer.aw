@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.8 2005/03/30 21:53:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.9 2005/04/01 14:55:20 duke Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -718,6 +718,17 @@ class class_designer extends class_base
 				$grps .= "@groupinfo $grpid caption=\"$name\"\n";
 			};
 		};
+		
+		if ($c->prop("relationmgr") == 1)
+		{
+			$gpblock .= "\n\t\t\tcase 'relationmgr':\n";
+			$gpblock .= "\t\t\t\t\$this->configure_relationmgr(\$arr);\n";
+			$gpblock .= "\t\t\t\t\$retval = PROP_OK;\n";
+			$gpblock .= "\t\t\t\tbreak;\n";
+		
+			$methods .= $this->generate_relationmgr_config($arr["obj_inst"]->id());
+
+		};
 		$methods .= "\tfunction callback_pre_save(\$arr)\n";
 		$methods .= "\t{\n";
 		$methods .= "\t\t\$o = \$arr[\"obj_inst\"];\n";
@@ -731,6 +742,45 @@ class class_designer extends class_base
 		$clsrc = str_replace("//-- methods --//",$methods,$clsrc);
 		$clsrc = str_replace("@default group=general",$rv . $grps,$clsrc);
 		return $clsrc;
+	}
+
+	/** generates code for configuring relation manager
+	**/
+	function generate_relationmgr_config($id)
+	{
+		$o = new object($id);
+		//$clsid = aw_global_get("class");
+		$clsid = $o->id();
+		$clso = new object($clsid);
+		// iga seostatud objekt annab ühe välja vasakusse selecti
+		$conns = $clso->connections_from(array(
+			"type" => "RELTYPE_RELATION",
+		));
+		$classes = aw_ini_get("classes");
+		$export_rels = array();
+		$export_rel_names = array();
+		$rv = "\tfunction configure_relationmgr(\$arr)\n";
+		$rv .= "\t{\n";
+		foreach($conns as $conn)
+		{
+			$relobj = $conn->to();
+			$rel_id = $relobj->id();
+			// iga iga relobj käest saame selle juurde kuuluva parempoolse selecti sisu
+			$rclasses = $relobj->prop("r_class_id");
+			//$export_rels[$relobj->id()]["capt_new_object"] = "Objekti tüüp";
+			foreach($rclasses as $rclass)
+			{
+				$export_rels[$rel_id][$rclass] = $classes[$rclass]["name"];
+				$rv .= "\t\t\$arr['prop']['configured_rels'][$rel_id][$rclass] = '" . $classes[$rclass]["name"] . "';\n";
+				
+			};
+			$rv .= "\t\t\$arr['prop']['configured_rel_names'][" . $rel_id ."] = '" . $relobj->name() . "';\n";
+			//$export_rel_names[$rel_id] = $relobj->name();
+		};
+			
+		$rv .= "\t}\n\n";
+		return $rv;
+
 	}
 
 	function _valid_id($src)
