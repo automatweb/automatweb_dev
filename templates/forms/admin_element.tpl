@@ -203,6 +203,15 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: LB_MUL_DS -->
 
+<!-- SUB: MULTIPLE_OPTS -->
+<tr>
+	<td class="fgtext">Valitud ridade eraldaja:</td>
+	<td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_mul_items_sep' value='{VAR:mul_items_sep}' size="3"></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: MULTIPLE_OPTS -->
+
 
 <!-- SUB: LISTBOX_SORT -->
 <tr>

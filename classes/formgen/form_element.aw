@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.29 2003/02/07 19:00:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.30 2003/02/18 14:06:04 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -348,6 +348,7 @@ class form_element extends aw_template
 			}
 
 			$mu = "";
+			$mul_opts = "";
 			if ($this->arr["type"] == "multiple")
 			{
 				for ($b=0; $b < ($this->arr["multiple_count"]+1); $b++)
@@ -365,9 +366,12 @@ class form_element extends aw_template
 					$mu.=$this->parse("MULTIPLE_ITEMS");
 				}
 				$this->vars(array(
-					"lb_size" => $this->arr["mb_size"]
+					"lb_size" => $this->arr["mb_size"],
+					"mul_items_sep" => $this->arr['mul_items_sep']
 				));
+				$mul_opts = $this->parse("MULTIPLE_OPTS");
 			}
+			$this->vars(array("MULTIPLE_OPTS" => $mul_opts));
 
 			if ($this->arr["type"] == "listbox" || $this->arr["type"] == "multiple")
 			{
@@ -1060,6 +1064,9 @@ class form_element extends aw_template
 			$this->sort_multiple();
 
 			$this->import_m_data();
+
+			$var = $base."_mul_items_sep";
+			$this->arr["mul_items_sep"]= $$var;
 		}
 
 		if ($this->arr["type"] == "textarea")
@@ -2859,11 +2866,12 @@ class form_element extends aw_template
 
 			case "multiple":
 				$ec=explode(",",$this->entry);
-				reset($ec);
-				while (list(, $v) = each($ec))
+				$_t = array();
+				foreach($ec as $v)
 				{
-					$html .= ($this->arr["multiple_items"][$v]." ");
+					$_t[] = $this->arr["multiple_items"][$v];
 				}
+				$html .= join($this->arr['mul_items_sep'], $_t);
 				break;
 
 			case "checkbox":
