@@ -10,11 +10,15 @@
 	</overview>
 	<day>
 		<caption>Päev</caption>
-		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=day&amp;date={VAR:date}</link>
 	</day>
+	<week>
+		<caption>Nädal</caption>
+		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
+	</week>
 	<month>
 		<caption>Kuu</caption>
-		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=show_month&amp;date={VAR:date}</link>
 	</month>
 	<add>
 		<caption>Lisa</caption>
