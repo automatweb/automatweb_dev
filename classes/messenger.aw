@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.28 2001/05/27 01:14:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.29 2001/05/27 02:55:00 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -157,6 +157,8 @@ class msg_sql_driver extends db_connector
 		return $retval;
 	}
 
+	//// 
+	// !Purges marked message
 	function msg_delete($args = array())
 	{
 		extract($args);
@@ -171,6 +173,8 @@ class msg_sql_driver extends db_connector
 		$this->db_query($q);
 	}
 
+	////
+	// !Counts unread messages
 	function count_unread($args = array())
 	{
 		extract($args);
@@ -311,6 +315,10 @@ class messenger extends menuedit_light
 
 	////
 	// !Joonistab XML-is defineeritud menüü
+	// argumendid:
+	// activelist(array), levelite kaupa info selle kohta, millised elemendid aktiivsed on
+	// veel natuke, ja selle koodi voib siit välja visata, ning eraldi klassiks
+	// vormistada. 
 	function gen_msg_menu($args = array())
 	{
 		global $basedir;
@@ -320,38 +328,56 @@ class messenger extends menuedit_light
 				));
 		classload("xml");
 		$xml = new xml();
-		$menudefs = $xml->xml_unserialize(array(
+		$this->menudefs = $xml->xml_unserialize(array(
 					"source" => $menudef,
 		));
-		$l1 = $l2 = "";
+		
 		$this->read_template("menus.tpl");
-		foreach($menudefs as $key => $val)
+	
+		// seda teeme selleks, et funktsioonile saaks activelist argumendi ette anda
+		// kujul array("foo","bar"). Ntx.
+		$nil = array();
+		$nil[] = "";
+
+		$this->activelist = array_merge($nil,$args["activelist"]);
+		$this->level = 1;
+	
+		// genereerime menüü
+		$this->_gen_msg_menu($this->menudefs);
+		
+		$retval = $this->parse();
+		return $retval;
+	}
+
+	////
+	// !Kutsutakse välja gen_msg_menu seest, ning kutsub iseennast rekursiivselt välja
+	function _gen_msg_menu($menudefs = array())
+	{
+		// foreach-i ei saa rekursiivsete funktsioonide sees kasutada, sest see loob iga
+		// kord uue koopia arrayst
+		while(list($key,$val) = each($menudefs))
 		{
+			if ($this->activelist[$this->level] == $key)
+			{
+				$tpl = "level" . $this->level . "_act";
+			}
+			else
+			{
+				$tpl = "level" . $this->level;
+			};
+			$var = "level" . $this->level;
 			$this->vars(array(
 					"link" => $val["link"],
 					"caption" => $val["caption"],
 				));
-			$tpl = ($key == $args["l1"]) ? "level1_act" : "level1";
-			$l1 .= $this->parse($tpl);
-			if (is_array($val["sublinks"]) && ($key == $args["l1"]))
-			{
-				foreach($val["sublinks"] as $k1 => $v1)
-				{
-					$this->vars(array(
-						"link" => $v1["link"],
-						"caption" => $v1["caption"],
-					));
-					$tpl = ($k1 == $args["l2"]) ? "level2_act" : "level2";
-					$l2 .= $this->parse($tpl);
-				};
+			$this->vars_merge(array($var => $this->parse($tpl)));
+			if (is_array($val["sublinks"]) && ($key == $this->activelist[$this->level]))
+			{	
+				$this->level++;
+				$this->_gen_msg_menu($val["sublinks"]);
+				$this->level--;
 			};
 		};
-		$this->vars(array(
-				"level1" => $l1,
-				"level2" => $l2,
-		));
-		$retval = $this->parse();
-		return $retval;
 	}
 
 	////
@@ -423,9 +449,9 @@ class messenger extends menuedit_light
 			$retval .= "<a href='?class=messenger'>Kliki siia</a>";
 			return $retval;
 		};
+
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "folders",
-				"l2" => "flist",
+				"activelist" => array("configure","folders2","flist"),
 				));
 		$flist = $this->_folder_list();
 		$this->read_template("folders.tpl");
@@ -487,19 +513,23 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$folder = $id;
-		$menu = $this->gen_msg_menu(array());
-		$this->read_template("mailbox.tpl");
 
 		$inbox = $this->user["msg_inbox"];
-		if (!$id)
-		{
-			$id = $this->msgconf["msg_default_folder"];
-		};
-		if (!$id)
-		{
-			$id = $inbox;
-		};
 
+		$mactive = array();
+	
+		if (!$id)
+		{
+			$mactive = array("inbox");
+			$id = $this->msgconf["msg_defaultfolder"];
+			$folder = $id;
+			//$id = $inbox;
+		};
+		$menu = $this->gen_msg_menu(array(
+						"activelist" => $mactive,
+					));
+
+		$this->read_template("mailbox.tpl");
 		$fld_info = $this->get_object($folder);
 		$folder_name = $fld_info["name"];
 
@@ -705,7 +735,7 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "write",
+				"activelist" => array("write"),
 				));
 	
 		if ($args["reply"])
@@ -1018,8 +1048,7 @@ class messenger extends menuedit_light
 	function search($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "search",
-				"l2" => "newsearch",
+				"activelist" => array("search","newsearch"),
 				));
 		$flist = $this->_folder_list();
 		$this->read_template("search.tpl");
@@ -1045,7 +1074,7 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "search",
+				"activelist" => array("search"),
 				));
 		//$folder_list = $this->_folder_list();
 		if (!is_array($folders))
@@ -1290,8 +1319,7 @@ class messenger extends menuedit_light
 		// Menüü koostamine
 		$page = ($page) ? $page : "general"; // see viimane kehtib by default
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "configure",
-				"l2" => $page,
+				"activelist" => array("configure",$page),
 				));
 
 		$vars = array();
@@ -1580,8 +1608,7 @@ class messenger extends menuedit_light
 	function configure_pop3($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "configure",
-				"l2" => "accounts",
+				"activelist" => array("configure","accounts"),
 				));
 		extract($args);
 		$pop3conf = $this->msgconf["msg_pop3servers"];
@@ -1798,8 +1825,7 @@ class messenger extends menuedit_light
 	function rules($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "rules",
-				"l2" => "list",
+				"activelist" => array("configure","rules","list"),
 				));
 		$fields = array("mfrom" => "Kellelt",
 				"subject" => "Teema",
@@ -1864,8 +1890,7 @@ class messenger extends menuedit_light
 	function addrule($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "rules",
-				"l2" => "addrule",
+				"activelist" => array("configure","rules","addrule"),
 				));
 		$fields = array("mfrom" => "Kellelt",
 				"message" => "Sisu",
@@ -1951,8 +1976,7 @@ class messenger extends menuedit_light
 	function new_folder($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"l1" => "folders",
-				"l2" => "newfolder",
+				"activelist" => array("configure","folders2","newfolder"),
 				));
 		$this->read_template("addfolder.tpl");
 		$parent = $this->user["home_folder"];
