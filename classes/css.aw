@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.2 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.3 2001/08/23 17:48:16 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -97,15 +97,34 @@ class css extends aw_template {
 			));
 		return $retval;
 	}
-		
 
 	////
-	// !Kuvab koigi olemasolevate stiiligruppide nimestiku, default on alati esindatud.
-	// how the hell do we differentiate the different styles between system and the user?
-	function css_list_groups($args = array())
+	// !Küsib nime uue stiili jaoks, mis menueditist sisestati
+	function css_new($args = array())
+	{
+		extract($args);
+		$this->read_template("add.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_new",array("parent" => $parent)),
+		));
+		return $this->parse();
+	}
+
+	function css_submit_new($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_CSS));
+		return $this->mk_orb("change",array("id" => $oid));
+	}
+
+	////
+	// !Kuvab süsteemsete ja kasutaja stiiligruppde nimekirja
+	// lubab sealt valida ühe, ning selle kasutusele võtta
+	function css_active_list($args = array())
 	{
 		$menu = $this->css_draw_menu(array(
-				"activelist" => array("my","mygroups",
+				"activelist" => array("list")
 				));
 
 		classload("users");
@@ -126,8 +145,12 @@ class css extends aw_template {
 			"0" => "default",
 		);
 
+		// koigepealt kuvame stiiligrupid, mis on süsteemi all
+		global $rootmenu;
+		// ja seejärel need, mis on kasutaja all
 		$groups = $this->get_objects_below(array(
-				"parent" => $this->rootmenu,
+				//"parent" => $this->rootmenu,
+				"parent" => $rootmenu,
 				"class" => CL_CSS_GROUP,
 				"active" => $active,
 		));
@@ -178,15 +201,15 @@ class css extends aw_template {
 		$this->css_sync(array("gid" => $use));
 		return $this->mk_my_orb("list",array());
 	}
-
+	
 	////
-	// !Kuvab globaalsete stiilide nimekirja, koos näidetega.
-	// probleem siin on selles, et kuidas ignoreerida potentsiaalselt laetud
-	// default stiile?
-	function css_globals($args = array())
+	// !Kuvab kasutaja oma stiilide nimekirja, igayhe juures on link
+	// nende muutmise peale.
+	function css_mylist($args = array())
 	{
 		$menu = $this->css_draw_menu(array(
-				"activelist" => "globals",
+				"activelist" => array("my","mylist"),
+				
 				));
 
 		extract($args);
@@ -212,13 +235,99 @@ class css extends aw_template {
 	}
 
 	////
+	// !Joonistab menüü süsteemsete stiilidega. phuk it
+	function css_syslist($args = array())
+	{
+		extract($args);
+		
+		$menu = $this->css_draw_menu(array(
+				"activelist" => array("list"),
+				"vars" => array("glist" => "syslist","stylist" => "syslist_styles"),
+			));
+
+
+		$this->read_template("syslist.tpl");
+
+		$u = new config();
+		$sys_css = $u->get_simple_config("sys_css");
+
+		if (!$group_in_use)
+		{
+			$group_in_use = "default";
+		};
+
+		$lx = array(
+			"0" => array(
+				"name" => "default",
+				"comment" => "Default. süsteemne stiil",
+				"status" => 2,
+				"oid" => 0,
+				"modifiedby" => "system"),
+				
+		);
+	
+		global $rootmenu;
+		$styles = $this->get_objects_below(array(
+				"parent" => $rootmenu,
+				"class" => CL_CSS_GROUP,
+		));
+
+		$lx = array_merge($lx,$styles);
+
+		$l = "";
+		$cnt = 0;
+		
+		foreach($lx as $key => $val)
+		{
+			$this->vars(array(
+				"name" => $val["name"],
+				"comment" => $val["comment"],
+				"modifiedby" => $val["modifiedby"],
+				"active" => checked($val["status"] == 2),
+				"use" => checked($val["oid"] == $sys_css),
+				"cnt" => ++$cnt,
+				"link_edgroup" => $this->mk_orb("group_contents",array("gid" => $val["oid"])),
+				"oid" => $val["oid"],
+			));
+			$l .= $this->parse("line");
+		}
+
+		$this->vars(array(
+			"line" => $l,
+			"link_addgroup" => $this->mk_orb("add_group",array("type" => "system")),
+			"reforb" => $this->mk_reforb("syslist_submit",array()),
+			"menu" => $menu,
+		));
+
+		return $this->parse();
+	}
+
+	function css_syslist_submit($args = array())
+	{
+		extract($args);
+		global $rootmenu;
+		$q = "UPDATE objects SET status = 1 WHERE parent = '$rootmenu' AND class_id = " . CL_CSS_GROUP;
+		$this->db_query($q);
+		if (is_array($active))
+		{
+			$actlist = join(",",$active);
+			$q = "UPDATE objects SET status = 2 WHERE parent = '$rootmenu' AND class_id = " . CL_CSS_GROUP . " AND oid IN ($actlist)";
+			$this->db_query($q);
+		};
+		
+		$u = new config();
+		$sys_css = $u->set_simple_config("sys_css",$use);
+		return $this->mk_orb("syslist",array());
+	}
+
+	////
 	// !Kuvab uue grupi lisamise vormi.
 	function css_add_group($args = array())
 	{
 		extract($args);
 		$this->read_template("addgroup.tpl");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_add_group",array()),
+			"reforb" => $this->mk_reforb("submit_add_group",array("type" => $type)),
 		));
 		return $this->parse();
 	}
@@ -226,19 +335,52 @@ class css extends aw_template {
 	function css_submit_add_group($args = array())
 	{
 		extract($args);
+
+		if ($type == "system")
+		{
+			$redir_action = "syslist";
+			global $rootmenu;
+		}
+		elseif ($type == "user")
+		{
+			$redir_action = "list";
+			$rootmenu = $this->rootmenu;
+		}
+		else
+		{
+			$this->raise_error("Wrong type for css_submit_add_group",true);
+		};
+		
 		$this->quote($name);
 		$gid = $this->new_object(array(
 			"name" => $name,
-			"parent" => $this->rootmenu,
+			"parent" => $rootmenu,
 			"class_id" => CL_CSS_GROUP,
 		));
-		return $this->mk_my_orb("list",array());
+
+		return $this->mk_my_orb($redir_action,array());
 	}
 
 	////
-	// !Kuvab nimekirja mille abil saad süsteemi ja oma stiilid vastavusse seada
-	function css_list($args = array())
+	// !Kuvab stiiligrupi sisu, ehk siis nimekirja, kus ühel pool on süsteemi 
+	// poolt defineeritud stiilid ja teisel pool on sinu omad.
+	function css_group_contents($args = array())
 	{
+
+		extract($args);
+		// loeme grupi info sisse
+		global $rootmenu;
+		$css_ginfo = $this->get_object($gid);
+
+		if ( ($css_ginfo["parent"] == $rootmenu) || ($gid == 0) )
+		{
+			print "sys style<br>";
+		}
+		else
+		{
+			print "user style<br>";
+		};
+
 		$menu = $this->css_draw_menu(array(
 				"activelist" => "globals",
 			));
@@ -391,6 +533,10 @@ class css extends aw_template {
 	function _gen_css_style($name,$data = array())
 	{
 		$retval = ".$name {\n";
+		if (!(is_array($data)))
+		{
+			return false;
+		};
 		foreach($data as $key => $val)
 		{
 			switch($key)
@@ -502,11 +648,12 @@ class css extends aw_template {
 	{
 		$this->read_template("edit.tpl");
 		extract($args);	
-		if ($oid)
+		if ($id)
 		{
-			$obj = $this->get_obj_meta($oid);
+			$obj = $this->get_obj_meta($id);
 			$gid = $obj["parent"];
 			$css_data = $obj["meta"]["css"];
+			$this->mk_path($obj["parent"]);
 		}
 		else
 		{
@@ -541,7 +688,7 @@ class css extends aw_template {
 			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
 			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
 			"link_groups" => $this->mk_my_orb("list",array()),
-			"reforb" => $this->mk_reforb("submit",array("oid" => $oid,"gid" => $gid)),
+			"reforb" => $this->mk_reforb("submit",array("oid" => $id,"gid" => $gid)),
 		));
 		return $this->parse();
 	}
@@ -592,7 +739,7 @@ class css extends aw_template {
 
 		$this->css_sync(array("gid" => $gid));
 
-		return $this->mk_my_orb("edit",array("oid" => $oid));
+		return $this->mk_my_orb("change",array("id" => $oid));
 	}
 
 	////
