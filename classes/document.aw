@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.99 2002/06/26 11:10:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.100 2002/07/11 20:57:25 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -319,9 +319,11 @@ class document extends aw_template
 			return $this->do_form_show($params);
 		}
 
+		
 		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
+
 		if (!isset($doc) || !is_array($doc))
 		{
 			$doc = $this->fetch($docid);
@@ -335,6 +337,27 @@ class document extends aw_template
 		{
 			return false;
 		};
+		
+		// if oid is in the arguments check whether that object is attached to 
+		// this document and display it instead of document
+		$mk_compat = true;
+		$oid = aw_global_get("oid");
+		if ($oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '$docid' AND target = '$oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($oid);
+				$doc["content"] = $fl["content"];
+				$doc["lead"] = "";
+				$doc["title"] = "";
+				$doc["meta"]["show_print"] = 1;
+				$mk_compat = false;
+			};
+		}
 
 
 		if ($doc["meta"])
@@ -393,6 +416,13 @@ class document extends aw_template
 		$this->no_right_pane = $doc["no_right_pane"];
 		$this->no_left_pane = $doc["no_left_pane"];
 
+	
+		// use special template for printing if one is set in the cfg file
+		if (aw_global_get("print") && ($this->cfg["print_tpl"]) )
+		{
+			$tpl = $this->cfg["print_tpl"];
+		}
+
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
 		if (isset($tpls) && strlen($tpls) > 0) 
@@ -435,7 +465,22 @@ class document extends aw_template
 			}
 			else
 			{
-				$this->vars(array("docid" => $docid));
+				$request_uri = aw_global_get("REQUEST_URI");
+				$pos = strpos($request_uri, "&");
+				if ($pos === false)
+				{ 
+					$link = $request_uri . "?print=1";
+				}
+				else
+				{
+					$link = $request_uri . "&print=1";
+				}
+				$this->vars(array(
+					"docid" => $docid,
+					//"printlink" => $this->mk_my_orb("print",array("section" => $docid,"oid" => $oid),"document",0,1),
+					"printlink" => $link,
+				));
+				aw_global_set("no_menus",1);
 				$_tmp = $this->parse("PRINTANDSEND");
 				$this->vars(array("PRINTANDSEND" => $_tmp));
 			};
@@ -453,8 +498,11 @@ class document extends aw_template
 		// I don't think we should do that here
 		// $this->add_hit($docid);
 
-		$this->mk_ns4_compat(&$doc["lead"]);
-		$this->mk_ns4_compat(&$doc["content"]);
+		if ($mk_compat)
+		{
+			$this->mk_ns4_compat(&$doc["lead"]);
+			$this->mk_ns4_compat(&$doc["content"]);
+		}
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc["content"], "#telekava_") === false))
@@ -1254,7 +1302,7 @@ class document extends aw_template
 		// logime aktsioone
 		$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
-		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]));
+		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]),"",false,true);
 	}
 
 	function select_alias($docid, $entry_id)
@@ -3204,6 +3252,17 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "show_join_data",
 					));
+		
+		// detailed search
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)search_conf(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "search_conf",
+					"reg_id" => $mp,
+					"function" => "search",
+					));
 
 		// parooli meeldetuletus. bijaatch!
 		$mp = $this->register_parser(array(
@@ -3259,13 +3318,13 @@ class document extends aw_template
 	
 	////
 	// !Makes a slice of text NS4 compatible - e.g. makes it look ok.
-	// and yes, NS4 is a steaming pile of crap and should die. NS6 is so much better
+	// and yes, NS4 is a steaming pile of crap and should die. Mozilla is so much better
 	function mk_ns4_compat(&$text)
 	{
 		if ( (substr_count($text,"<P>") > 1) || (substr_count($text,"<p>") > 1) )
 		{
-			$text = str_replace("</p>","<br><br>",$text);	
-			$text = str_replace("</P>","<br><br>",$text);	
+			$text = str_replace("</p>","<br /><br />",$text);	
+			$text = str_replace("</P>","<br /><br />",$text);	
 		}
 		else
 		{
