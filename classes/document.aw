@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.79 2002/01/17 12:54:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.80 2002/01/18 18:55:32 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -404,6 +404,26 @@ class document extends aw_template
 		
 		$this->add_hit($docid);
 
+		// ok. replace <p>bla</p> with bla<br><br>
+		if (substr_count($doc["lead"],"<P>") > 1)
+		{
+			$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["lead"]);
+		}
+		else
+		{
+			$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1",$doc["lead"]);
+		}
+
+		if (substr_count($doc["content"],"<P>") > 1)
+		{
+			$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["content"]);
+		}
+		else
+		{
+			$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1",$doc["content"]);
+		}
+
+
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc["content"], "#telekava_") === false))
 		{
@@ -524,10 +544,6 @@ class document extends aw_template
 			};
 		};
 
-
-		// ok. replace <p>bla</p> with bla<br><br>
-		$doc["lead"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["lead"]);
-		$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1<br><br>",$doc["content"]);
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
