@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.21 2003/01/13 22:43:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.22 2003/01/15 10:10:07 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1165,7 +1165,7 @@ class form extends form_base
 		{	
 			$fid = $this->get_form_for_entry($entry_id);
 			// ja kui pole siis ignoorime seda
-			if ($fid != $id)
+			if ($fid != $id && $fid != "")
 			{
 				$entry_id = false;
 			}
@@ -1177,6 +1177,7 @@ class form extends form_base
 			$this->load_entry($entry_id);
 		}
 		$this->entry_id = $entry_id;
+		aw_global_set("form_last_proc_entry_id", $entry_id);
 
 		// ff_folder on vormi konfist m‰‰ratud folderi id, mille alla entry peaks
 		// minema. parent argument overraidib selle
