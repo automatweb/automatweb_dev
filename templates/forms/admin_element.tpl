@@ -149,8 +149,8 @@ function toggle_file_link_newwin()
 <tr>
 	<td class="fgtext">{VAR:LC_FORMS_ONLY_UNIC}:</td>
 	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_unique' {VAR:unique}></td>
-	<td class="fgtext">&nbsp;</td>
-	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">Ainult kasutaja enda sisestused:</td>
+	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_user_entries_only' {VAR:user_entries_only}></td>
 </tr>
 <!-- END SUB: SEARCH_RELATION -->
 
@@ -568,6 +568,12 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input type='checkbox' class='small_button' name='{VAR:cell_id}_up_down_button' {VAR:up_down_button}></td>
 <td class="fgtext">Mitu liidetakse/lahutatakse</td>
 <td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_up_down_count' value='{VAR:up_down_count}' size='2'></td>
+</tr>
+<tr>
+<td class="fgtext">Form, kus on mitu liita/lahtuada element: </td>
+<td class="fgtext"><select class='small_button' name="{VAR:cell_id}_up_down_count_el_form">{VAR:udcel_forms}</select></td>
+<td class="fgtext">Element, kus on mitu liita/lahtuada element: </td>
+<td class="fgtext"><select class='small_button' name="{VAR:cell_id}_up_down_count_el_el">{VAR:udcel_els}</select></td>
 </tr>
 <!-- END SUB: IS_NUMBER -->
 
