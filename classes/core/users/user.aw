@@ -425,21 +425,7 @@ class user extends class_base
 
 		// get a list of all groups, so we can throw out the dynamic groups
 		$gl = $this->users->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
-		// now, get all RELTYPE_GRP aliases and remove all others from this list
-		$als = $this->get_aliases(array(
-			"oid" => $id,
-			"reltype" => RELTYPE_GRP
-		));
-		$_gl = array();
-		$_groups = array();
-		foreach($als as $alias)
-		{
-			$_gid = $this->users->get_gid_for_oid($alias["target"]);
-			$_gl[$_gid] = $gl[$_gid];
-			$_groups[$_gid] = $groups[$_gid];
-		}
-		$gl = $_gl;
-		$groups = $_groups;
+
 
 		// now, go over both lists and get rid of the dyn groups
 		$_member = array();
@@ -467,7 +453,58 @@ class user extends class_base
 		{
 			if ($member[$gid] != 1 && $is && isset($gl[$gid]))
 			{
-				$this->users->remove_users_from_group_rec($gid, array($uid));
+				$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
+
+				$group = obj($this->users->get_oid_for_gid($gid));
+				$user = obj($this->users->get_oid_for_uid($uid));
+
+				// do the group add trick
+				// now, delete the user from the group
+				if ($group->is_connected_to(array("to" => $user->id())))
+				{
+					$group->disconnect(array(
+						"from" => $user->id()
+					));
+				}
+
+				// delete user bros
+				$ol = new object_list(array(
+					"parent" => $group->id(),
+					"brother_of" => $user->id()
+				));
+				$ol->delete();
+
+				// get all groups below the removed group
+				$ot = new object_tree(array(
+					"parent" => $group->id(),
+					"class_id" => CL_GROUP
+				));
+				$ol = $ot->to_list();
+				for($item = $ol->begin(); !$ol->end(); $item = $ol->next())
+				{
+					// remove all brothers from those groups
+					$user_brothers = new object_list(array(
+						"parent" => $item->id(),
+						"brother_of" => $user->id()
+					));
+					$user_brothers->delete();
+
+					// remove all aliases from those groups to this user
+					if ($item->is_connected_to(array("to" => $user->id())))
+					{
+						$item->disconnect(array(
+							"from" => $user->id()
+						));
+					}
+
+					// also remove all aliases from user to the group
+					if (count($user->connections_from(array("to" => $item->id()))) > 0)
+					{
+						$user->disconnect(array(
+							"from" => $item->id()
+						));
+					}
+				}
 			}
 		}
 
@@ -476,7 +513,31 @@ class user extends class_base
 		{
 			if ($is && !$groups[$gid])
 			{
-				$this->users->add_users_to_group_rec($gid, array($uid));
+				$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
+
+				$group = obj($this->users->get_oid_for_gid($gid));
+				$user = obj($this->users->get_oid_for_uid($uid));
+
+				// get groups
+				$grps = $group->path();
+				foreach($grps as $p_o)
+				{
+					if ($p_o->class_id() == CL_GROUP)
+					{
+						$user->connect(array(
+							"to" => $p_o->id(),
+							"reltype" => RELTYPE_GRP
+						));
+
+						// add reverse alias to group
+						$p_o->connect(array(
+							"to" => $user->id(),
+							"reltype" => 2 // RELTYPE_MEMBER from group
+						));
+
+						$user->create_brother($p_o->id());
+					}
+				}
 			}
 		}
 	}
