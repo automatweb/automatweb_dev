@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.112 2005/01/19 13:34:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.113 2005/01/20 10:12:32 kristo Exp $
 
 /*
 
@@ -101,6 +101,7 @@ class site_show extends class_base
 		$apd = get_instance("layout/active_page_data");
 		$awt->start("xshow2");
 		$rv = $this->do_show_template($arr);
+
 		$awt->stop("xshow2");
 		$rv .= $apd->on_shutdown_get_styles();
 		return $rv;
@@ -2282,7 +2283,6 @@ class site_show extends class_base
 			$this->make_langs();
 		};
 		
-
 		// execute menu drawing code
 		$awt->start("part2");
 		$this->do_draw_menus($arr);
@@ -2303,7 +2303,7 @@ class site_show extends class_base
 		$awt->start("part6");
 		$this->make_final_vars();		
 		$awt->stop("part6");
-	
+
 		$rv = $this->parse();
 
 
@@ -2373,7 +2373,7 @@ class site_show extends class_base
 		}
 
 		$content_from_obj = $this->section_obj->prop("get_content_from");
-		if (is_oid($content_from_obj))
+		if (is_oid($content_from_obj) && $this->can("view", $content_from_obj))
 		{
 			$content_obj = obj($content_from_obj);
 			$content_obj_inst = $content_obj->instance();
@@ -2382,7 +2382,7 @@ class site_show extends class_base
 				$arr["text"] = $content_obj_inst->request_execute($content_obj);
 			};
 
-		};
+		}
 
 		// until we can have class-static variables, this actually SETS current text content
 		classload("layout/active_page_data");
