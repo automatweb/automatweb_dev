@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.32 2004/12/10 11:13:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.33 2004/12/10 14:57:03 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -335,15 +335,14 @@ class object_treeview_v2 extends class_base
 
 // if meta data fields are used as folders, then i need to do
 // some filtering according to $_GET['tv_sel']
+
+// damn - it doesn't work the way i'd like to :S
 				if(($d_o->prop("use_meta_as_folders") == 1) && empty($_GET['char']))
 				{
-//				arr($ol_value);
+
 					if(!empty($_GET['tv_sel']) && ($fld[$_GET['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
 					{
-
-
 						unset($ol[$ol_key]);
-
 					}
 				}
 // if there is char param set in the url, then filter objects by this fields value which is set by
@@ -351,7 +350,7 @@ class object_treeview_v2 extends class_base
 				if(!empty($_GET['char']))
 				{
 					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
-					if((strlen($_GET['char']) == 1) && ($f[0] != $_GET['char']))
+					if((strlen($_GET['char']) == 1) && ($f{0} != $_GET['char']))
 					{
 						unset($ol[$ol_key]);
 					}
@@ -470,15 +469,10 @@ class object_treeview_v2 extends class_base
 		{
 			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 			{
-				$group_header_color_code = $ob->prop("group_header_bgcolor");
-				if(!empty($group_header_color_code) && $group_header_color_code[0] != "#")
-				{
-					$group_header_color_code = "#".$group_header_color_code;
-				}
 				$this->vars(array(
 					"content" => $odata[$ob->prop("group_in_table")],
 					"cols_count" => $sel_cols_count,
-					"group_bgcolor" => $group_header_color_code,
+//					"group_bgcolor" => $group_header_color_code,
 				));
 				$c .= $this->parse("FILE_GROUP");
 			}
@@ -627,7 +621,7 @@ class object_treeview_v2 extends class_base
 			"name" => "fields",
 			"caption" => "Milliste v&auml;ljade sisu n&auml;idata",
 			"sortable" => 1,
-			
+
 		));
 	}
 
@@ -655,7 +649,7 @@ class object_treeview_v2 extends class_base
 		foreach($cold as $colid => $coln)
 		{
 			$text = $editable = $fields = "";
-			
+
 
 			if ($cols[$colid])
 			{
@@ -774,7 +768,7 @@ class object_treeview_v2 extends class_base
 		}
 
 		$group_css = "textmiddle";
-		if ($o->prop("header_css"))
+		if ($o->prop("group_css"))
 		{
 			$group_css = "st".$o->prop("group_css");
 			active_page_data::add_site_css_style($o->prop("group_css"));
@@ -788,26 +782,37 @@ class object_treeview_v2 extends class_base
 			active_page_data::add_site_css_style($o->prop("table_css"));
 		}
 
-		$header_bg = "#E0EFEF";
+		$header_bg = "";
 		if ($o->prop("title_bgcolor"))
 		{
 			$header_bg = $o->prop("title_bgcolor");
-			if($header_bg[0] != "#")
+			if($header_bg{0} != "#")
 			{
 				$header_bg = "#".$o->prop("title_bgcolor");
 			}
-			else
+/*			else
 			{
 				$header_bg = $o->prop("title_bgcolor");
 			}
+*/
 		}
 
+		$group_header_bg = "";
+		if($o->prop("group_header_bgcolor"))
+		{
+			$group_header_bg = $o->prop("group_header_bgcolor");
+			if(!empty($group_header_bg) && $group_header_bg{0} != "#")
+			{
+				$group_header_bg = "#".$group_header_bg;
+			}
+		}
 		$this->vars(array(
 			"css_class" => $style,
 			"table_css_class" => $table_css,
 			"header_css_class" => $header_css,
 			"group_css_class" => $group_css,
-			"header_bgcolor" => $header_bg
+			"header_bgcolor" => $header_bg,
+			"group_header_bgcolor" => $group_header_bg,
 		));
 	}
 
