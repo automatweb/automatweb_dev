@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.34 2005/01/06 13:59:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.35 2005/01/06 15:28:57 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -14,7 +14,7 @@
 @caption Initsialiseeri objekt
 
 @property form_type type=select newonly=1 method=serialize field=meta
-@caption Vormi t&uump;&uump;p
+@caption Vormi t&uuml;&uuml;p
 
 @property form_type_value type=text editonly=1
 @caption Vormi t&uuml;&uuml;p
@@ -270,13 +270,13 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmusele registreerimine");
 				break;
 				
 			case "form_type":
 				$prop["options"] = array(
 					CL_REGISTER_DATA => t("Tavaline vorm"),
-					CL_CALENDAR_REGISTRATION_FORM => t("Sündmuse vorm"),
+					CL_CALENDAR_REGISTRATION_FORM => t("Sündmusele registreerimine"),
 				);
 				break;
 				
@@ -1249,6 +1249,7 @@ class webform extends class_base
 
 	function show($arr)
 	{
+		$this->read_template("show_form.tpl");
 		$obj_inst = obj($arr["id"]);
 		$ftype = $obj_inst->prop("form_type");
 		$this->get_rel_props(array(
@@ -1295,6 +1296,10 @@ class webform extends class_base
 					return $form_conf_i->parse();
 				}
 				$ef_id = $form_conf->id();
+				if($form_conf->prop("show_content") == 1)
+				{
+					$this->_insert_event_inf($event, $form_conf);
+				}
 			}
 		}
 		$rval = $this->draw_cfgform_from_ot(array(
@@ -1474,7 +1479,6 @@ class webform extends class_base
 		$html = $htmlc->get_result(array(
 			"raw_output" => 1,
 		));
-		$this->read_template("show_form.tpl");
 		$this->vars(array(
 			"faction" => $arr["action"],
 			"form" => $html,
@@ -1628,6 +1632,27 @@ class webform extends class_base
 			}
 		}
 		return $rval;
+	}
+	
+	function _insert_event_inf($e, $o)
+	{
+		$start = $e->class_id() == CL_CRM_MEETING ? $e->prop("start") : $e->prop("start");
+		$end = $e->prop("end");
+		$this->vars(array(
+			"ev_title" => $e->name(),
+			"ev_start" => locale::get_lc_date($start, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
+			"ev_end" => locale::get_lc_date($end, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
+			"ev_content" => nl2br($e->prop("content"))
+		));
+
+		$ct = "";
+		if ($o->prop("show_content") == 1)
+		{
+			$ct = $this->parse("SHOW_CONTENT");
+		}
+		$this->vars(array(
+			"SHOW_CONTENT" => $ct
+		));
 	}
 
 	/**  
