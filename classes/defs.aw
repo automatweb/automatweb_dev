@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.56 2002/11/12 18:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.57 2002/11/15 18:04:52 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -9,6 +9,7 @@ if (!defined("DEFS"))
 	define("SERIALIZE_XML",2);
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
+	define("SERIALIZE_XMLRPC", 5);
 
 	classload("xml","php");
 
@@ -564,6 +565,22 @@ if (!defined("DEFS"))
 		}
 	}
 
+	// logs the query, if user has a cookie named log_query
+	function log_query($msg)
+	{
+		$uid = aw_global_get("uid");
+		$logfile = "/www/log/mysql-" . $uid . ".log";
+
+		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["log_query"]))
+		{
+			$fp = fopen($logfile,"a");
+			flock($fp, LOCK_EX);
+			fwrite($fp,$msg . "\n\n-----------------------------------\n\n");
+			flock($fp, LOCK_UN);
+			fclose($fp);
+		}
+	}
+
 
 	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
 	{
@@ -591,6 +608,10 @@ if (!defined("DEFS"))
 			case SERIALIZE_NATIVE:
 				$str = serialize($arr);
 				break;
+
+			case SERIALIZE_XMLRPC:
+				$ser = get_instance("orb/xmlrpc");
+				$str = $ser->xmlrpc_serialize($arr);
 		}
 
 		return $str;
@@ -614,6 +635,12 @@ if (!defined("DEFS"))
 			// php serializer
 			$p = new php_serializer;
 			$retval = $p->php_unserialize($str);
+		}
+		else
+		if ($str{0} == "<")
+		{
+			$ser = get_instance("orb/xmlrpc");
+			$retval = $ser->xmlrpc_unserialize($str);
 		}
 		else
 		{
