@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.3 2002/07/16 19:54:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.4 2002/07/17 10:47:56 duke Exp $
 class xml_import extends aw_template
 {
 
@@ -113,6 +113,11 @@ class xml_import extends aw_template
 		$src_data = $ds->retrieve(array("id" => $obj["meta"]["datasource"]));
 		print "Got " . strlen($src_data) . " bytes of data<br>";
 		flush();
+		if (strlen($src_data) < 100)
+		{
+			print "Didn't got enough data from the datasource<br>";
+			exit;
+		};
 		print "<pre>";
 		print htmlspecialchars($src_data);
 		print "</pre>";
