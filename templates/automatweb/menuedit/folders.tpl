@@ -30,11 +30,12 @@ function MM_swapImage() { //v3.0
 }
 
 USETEXTLINKS = 1
-ICONPATH = '/automatweb/images/'
+ICONPATH = '{VAR:baseurl}/automatweb/images/'
 PERSERVESTATE = 0
 LINKTARGET = 'list'
+SHOWNODE = ''
 
-pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}", "images/aw_ikoon.gif")
+pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}", "{VAR:baseurl}/automatweb/images/aw_ikoon.gif")
 <!-- SUB: TREE -->
 	pr_{VAR:id} = insFld(pr_{VAR:parent}, gFld("{VAR:name}", "{VAR:url}","{VAR:iconurl}"));
 <!-- END SUB: TREE -->
