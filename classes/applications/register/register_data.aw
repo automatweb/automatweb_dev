@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.29 2005/01/31 15:23:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.30 2005/01/31 18:29:21 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1195,7 +1195,7 @@ class register_data extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		// if there is some address set in registri obj. where the should be redirected, then
+		// if there is some address set in register obj. where the user should be redirected, then
 		// lets do it 
 		if (!empty($arr['request']['register_id']))
 		{
