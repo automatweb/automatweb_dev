@@ -87,17 +87,19 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 <tr>
 
 <td colspan=6 class="fgtitle">
-<b>DR. ONLINE @ {VAR:pstring}<br><a href='javascript:show_all()'>{VAR:LC_SYSLOG_ALL}</a> |
-<a href='javascript:show_yesterday()'>{VAR:LC_SYSLOG_YESTERDAY}</a> |
-<a href='javascript:show_today()'>{VAR:LC_SYSLOG_TODAYS}</a> |
+<b>DR. ONLINE @ {VAR:pstring}<br><a href='javascript:show_all()'>K&otilde;ik</a> |
+<a href='javascript:show_yesterday()'>Eilsed</a> |
+<a href='javascript:show_today()'>T&auml;nased</a> |
 <a href='javascript:document.subb.submit()'>Reload</a> |
-<a href='javascript:show_stat()'>{VAR:LC_SYSLOG_STATISTICS}</a> |
-<a href='{VAR:self}?display=block'>IP block</a>
-</b> {VAR:LC_SYSLOG_RENEWED_EVERY}
+<a href='javascript:show_stat()'>Statistika</a> |
+<a href='{VAR:self}?display=block'>IP block</a> | 
+<a href='{VAR:self}?display=site_id'>Saidid</a> | 
+<a href='{VAR:baseurl}'>Esilehele</a> 
+</b> Uuendatakse iga
 <input type="text" name="update" size="4"  class="plain_el" value="{VAR:update}">
-{VAR:LC_SYSLOG_MINUTE_SHOW}
+minuti järel. N&auml;idatakse
 <input type="text" name="number" size="4" class="plain_el" value="{VAR:number}">
-{VAR:LC_SYSLOG_ROW}</font>
+rida</font>
 </td>
 </tr>
 
@@ -115,8 +117,8 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 <td valign=bottom class="fgtitle">
 <table border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="plain">{VAR:LC_SYSLOG_FROM}</td>
-	<td class="plain">{VAR:LC_SYSLOG_TILL}</td>
+	<td class="plain">Alates</td>
+	<td class="plain">Kuni</td>
 </tr>
 <tr>
 	<td class="plain">
@@ -130,16 +132,16 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 </td>
 
 <td valign=bottom class="fgtitle">
-{VAR:LC_SYSLOG_USER}<br>
+Kasutaja<br>
 <select name='user' class='plain_el'>{VAR:user}</select><br>
 </td>
 <td valign=bottom class="fgtitle">
-{VAR:LC_SYSLOG_ADDRESS}<br>
+Aadress<br>
 <input type='text' NAME='ip_addr' VALUE='{VAR:ip_addr}' class='plain_el' size=20>
 </td>
 
 <td valign=bottom class="fgtitle">
-{VAR:LC_SYSLOG_USER} (c)<br>
+Kasutaja (c)<br>
 <input type='text' NAME='uid_c' CLASS='plain_el' size=12 VALUE='{VAR:uid_c}'>
 </td>
 
@@ -149,7 +151,7 @@ E-mail (c)<br>
 </td>
 
 <td valign=bottom class="fgtitle">
-{VAR:LC_SYSLOG_WHAT_DID}<br>
+Mida tegi<br>
 <input type='text' NAME='act' CLASS='plain_el' size=50 VALUE='{VAR:act}'>
 </td>
 </tr>

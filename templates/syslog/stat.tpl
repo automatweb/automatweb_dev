@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>{VAR:LC_SYSLOG_STATISTICS}</title>
+<title>Statistika</title>
 <link rel="stylesheet" href="css/site.css">
 <script language="Javascript">
 function ipexplorer(ip)
@@ -25,16 +25,16 @@ function compare()
 <td class="fgtitle">
 <b>
 <a href="{VAR:self}">DR. ONLINE</a> |
-<a href="{VAR:today}">{VAR:LC_SYSLOG_TODAY}</a> |
-<a href="{VAR:thisweek}">{VAR:LC_SYSLOG_THIS_WEEK}</a> |
-<a href="{VAR:thismonth}">{VAR:LC_SYSLOG_THIS_MONTH}</a> |
-<a href="#" onClick="javascript:compare()">{VAR:LC_SYSLOG_COMPARE_PERIODS1}</a>
+<a href="{VAR:today}">Täna</a> |
+<a href="{VAR:thisweek}">See nädal</a> |
+<a href="{VAR:thismonth}">See kuu</a> |
+<a href="#" onClick="javascript:compare()">Võrdle perioode</a>
 </b><br>
-{VAR:LC_SYSLOG_FROM} (pp-kk-aaaa):
+Alates (pp-kk-aaaa):
 <input type="text" size="10" maxlength="10" name="from" value="{VAR:from}">
-{VAR:LC_SYSLOG_TILL} (pp-kk-aaaa):
+Kuni (pp-kk-aaaa):
 <input type="text" size="10" maxlength="10" name="to" value="{VAR:to}">
-<input type="submit" value="{VAR:LC_SYSLOG_SHOW}">
+<input type="submit" value="Näita">
 <input type="hidden" name="display" value="stat">
 </td>
 </tr>
