@@ -13,6 +13,8 @@
 @property active type=checkbox ch_value=2 table=objects field=status
 @caption Aktiivne
 
+@property nobreaks type=hidden table=documents
+
 @property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize
 @caption Pluginad
 

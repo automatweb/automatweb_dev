@@ -20,6 +20,13 @@
             <caption>Aktiivne</caption>
       </property>
       <property>
+            <name>nobreaks</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>nobreaks</field>
+      </property>
+      <property>
             <name>plugins</name>
             <table>objects</table>
             <group>general</group>
