@@ -28,10 +28,7 @@ Vali milliste formide sisestustest otsitakse selle formi t&auml;itmisel:<br>
 <td class="plain">{VAR:form_comment}</td>
 <td class="plain">{VAR:form_location}</td>
 <td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}></td>
-<td class="chkbox"><SELECT class='small_button' NAME='sel_{VAR:form_id}'>
-<!-- SUB: OP_ITEM -->
-<option VALUE='{VAR:op_id}' {VAR:op_selected}>{VAR:op_name}
-<!-- END SUB: OP_ITEM -->
+<td class="chkbox"><SELECT class='small_button' NAME='sel_{VAR:form_id}'>{VAR:ops}</select>
 </td>
 </tr>
 <!-- END SUB: LINE -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.8 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.9 2001/06/21 07:37:28 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -954,6 +954,53 @@ class form_base extends aw_template
 		}
 
 		$map = $nm;
+	}
+
+	function load_table($id)
+	{
+		$this->db_query("SELECT objects.*,form_tables.* FROM objects LEFT JOIN form_tables ON form_tables.id = objects.oid WHERE oid = $id");
+		$row = $this->db_next();
+		$this->table_name = $row["name"];
+		$this->table_comment = $row["comment"];
+		$this->table_id = $id;
+		$this->table_parent = $row["parent"];
+
+		classload("xml");
+		$x = new xml;
+
+		$this->table = $x->xml_unserialize(array("source" => $row["content"]));
+		$this->table["cols"] = $row["num_cols"];
+
+		if ($this->table["cols"] < 1)
+		{
+			$this->table["cols"] = 1;
+		}
+	}
+
+	////
+	// !returns an array of id => name of all elements in the forms whose id's are in $arr
+	function get_elements_for_forms($arr)
+	{
+		$ret = array();
+		$this->db_query("SELECT el_id,objects.name as name FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN (".join(",",$arr).")");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["el_id"]] = $row["name"];
+		}
+		return $ret;
+	}
+
+	////
+	// !returns an array of all form tables
+	function get_list_tables()
+	{
+		$ret = array();
+		$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_FORM_TABLE." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row["name"];
+		}
+		return $ret;
 	}
 }
 ?>

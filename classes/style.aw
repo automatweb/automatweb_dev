@@ -406,15 +406,96 @@ $style_cache = array();
 
 			if (isset($style_cache[$id]))
 			{
-				$st = $style_cache[$id];
+				$stl = $style_cache[$id];
 			}
 			else
 			{
 				$st = $this->get($id);
-				$st = unserialize($st["style"]);
-				$style_cache[$id] = $st;
+				$stl = unserialize($st["style"]);
+				$stl["name"] = $st["name"];
+				$style_cache[$id] = $stl;
 			}
-			return $st;
+			return $stl;
+		}
+
+		////
+		// !returns the css definition that matches style $id
+		function get_css($id)
+		{
+			$st = $this->mk_cache($id);
+			
+			$fstr = array();
+			if ($st["font1"] != "")		
+			{
+				$fstr[] = $st["font1"];
+			}
+			if ($st["font2"] != "")		
+			{
+				$fstr[] = $st["font2"];
+			}
+			if ($st["font3"] != "")
+			{
+				$fstr[] = $st["font3"];
+			}
+			$fstyles = array();
+			$fstr = join(",", $fstr);
+			if ($fstr != "")
+			{
+				$fstyles[] = "font-family: ".$fstr.";";
+			}
+
+			if ($st["fontsize"] != "")
+			{
+				$fstyles[] = "font-size: ".(4+$st["fontsize"]*3)."pt;";
+			}
+
+			if ($st["color"] != "")
+			{
+				$fstyles[] = "color: ".$st["color"].";";
+			}
+
+			if ($st["fontstyle"] == "bold")
+			{
+				$fstyles[] = "font-weight: bold;";
+			}
+			else
+			if ($st["fontstyle"] == "italic")
+			{
+				$fstyles[] = "font-style: italic;";
+			}
+			else
+			if ($st["fontstyle"] == "underline")
+			{
+				$fstyles[] = "text-decoration: underline;";
+			}
+
+			if (isset($st["bgcolor"]) && $st["bgcolor"] != "")
+			{
+				$fstyles[] = "background-color: ".$st["bgcolor"].";";
+			}
+			if (isset($st["align"]) && $st["align"] != "")
+			{
+				$fstyles[] = "text-align: ".$st["align"].";";
+			}
+			if (isset($st["valign"]) && $st["valign"] != "")
+			{
+				$fstyles[] = "vertical-align: ".$st["valign"].";";
+			}
+			if (isset($st["height"]) && $st["height"] != "")
+			{
+				$fstyles[] = "height: ".$st["height"].";";
+			}
+			if (isset($st["width"]) && $st["width"] != "")
+			{
+				$fstyles[] = "width: ".$st["width"].";";
+			}
+
+			$fsstr = join("\n",$fstyles);
+			if ($fsstr != "")
+			{
+				$str = ".style_".$id." { \n".$fsstr." \n} \n";
+			}
+			return $str;
 		}
 	}
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.24 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.25 2001/06/21 07:37:25 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -310,6 +310,8 @@ $orb_defs["form"] = "xml";
 			$this->arr["ff_folder"] = $ff_folder;
 			$this->arr["name_el"] = $entry_name_el;
 			$this->arr["try_fill"] = $try_fill;
+			$this->arr["show_table"] = $show_table;
+			$this->arr["table"] = $table;
 			$this->save();
 			return $this->mk_orb("table_settings", array("id" => $id));
 		}
@@ -519,14 +521,25 @@ $orb_defs["form"] = "xml";
 				"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
 				"ff_folder"						=> $this->picker($this->arr["ff_folder"], $o->get_list()),
 				"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements()),
-				"try_fill"						=> checked($this->arr["try_fill"])
+				"try_fill"						=> checked($this->arr["try_fill"]),
+				"show_table_checked" => checked($this->arr["show_table"]),
+				"tables" => $this->picker($this->arr["table"],$this->get_list_tables())
 			));
 			$ns = "";
 			if ($this->type != 2)
+			{
 				$ns = $this->parse("NOSEARCH");
+			}
+			else
+			{
+				$ns = $this->parse("SEARCH");
+			}
 
-			$this->vars(array("NOSEARCH" => $ns,
-												"reforb"	=> $this->mk_reforb("save_settings", array("id" => $this->id))));
+			$this->vars(array(
+				"NOSEARCH" => $ns,
+				"SEARCH" => "",
+				"reforb"	=> $this->mk_reforb("save_settings", array("id" => $this->id))
+			));
 			return $this->do_menu_return();				
 		}
 
@@ -1056,7 +1069,9 @@ $orb_defs["form"] = "xml";
 		function get_location()
 		{
 			if ($this->type == 2)
+			{
 				return "search_results";
+			}
 
 			switch($this->arr["after_submit"])
 			{
@@ -1116,45 +1131,27 @@ $orb_defs["form"] = "xml";
 	
 			$this->vars(array("LINE" => "")); $cnt=0;
 
-			$this->db_query("SELECT forms.*,objects.parent as parent,objects.name as name, objects.comment as comment 
-											 FROM forms 
-											 LEFT JOIN objects ON objects.oid = forms.id
-											 WHERE objects.status != 0 AND forms.type = 1
-											 GROUP BY objects.oid");
+			$ops = $this->get_op_list();
+
+			$this->db_query("SELECT oid,parent,name,comment FROM objects LEFT JOIN forms ON forms.id = objects.oid WHERE status != 0 AND class_id = ".CL_FORM." AND forms.type = ".FTYPE_ENTRY);
 			while($row = $this->db_next())
 			{
-				$this->save_handle();
-
-				// read all the form's outputs
-				$this->db_query("SELECT form_output.*, objects.name as name
-												 FROM form_output 
-												 LEFT JOIN objects ON objects.oid = form_output.id
-												 WHERE objects.status != 0 AND objects.parent = ".$row[id]."
-												 GROUP BY objects.oid");
-				$ol = ""; 
-				while ($orow = $this->db_next())
-				{
-					$this->vars(array("op_id"				=> $orow["id"], 
-														"op_name"			=> $orow["name"], 
-														"op_selected" => ($this->arr["search_outputs"][$row["id"]] == $orow["id"] ? "SELECTED" : "")));
-					$ol.=$this->parse("OP_ITEM");
-				}
-
-				$this->vars(array("form_name"			=> $row["name"], 
-													"form_comment"	=> $row["comment"], 
-													"form_location" => $row["parent"], 
-													"form_id"				=> $row["id"],
-													"row"						=> $cnt,
-													"checked"				=> ($this->arr["search_from"][$row["id"]] == 1 ? "CHECKED" : ""),
-													"OP_ITEM"				=> $ol));
+				$this->vars(array(
+					"form_name"	=> $row["name"], 
+					"form_comment" => $row["comment"], 
+					"form_location" => $row["parent"], 
+					"form_id" => $row["oid"],
+					"row"	=> $cnt,
+					"checked" => checked($this->arr["search_from"][$row["oid"]] == 1),
+					"ops" => $this->picker($this->arr["search_outputs"][$row["oid"]],$ops[$row["oid"]])
+				));
 				$this->parse("LINE");
-				$this->parse("SELLINE");
 				$cnt+=2;
-				$this->restore_handle();
 			}
 
-			$this->vars(array("form_id" => $this->id,
-												"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id))));
+			$this->vars(array(
+				"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id))
+			));
 
 			return $this->do_menu_return();
 		}
@@ -1238,15 +1235,71 @@ $orb_defs["form"] = "xml";
 		function do_search($entry_id, $output_id)
 		{
 			$matches = $this->search($entry_id);
-			reset($matches);
-			while(list($fid,$v) = each($matches))
+			if ($this->arr["show_table"])
 			{
-				$t = new form();
-				reset($v);
-				while (list(,$eid) = each($v))
+				if (!$this->arr["table"])
 				{
-					$t->reset();
-					$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]));
+					$this->raise_error("No table selected for showing data!",true);
+				}
+
+				classload("form_table");
+				$ft = new form_table;
+				$xml = $ft->get_xml($this->arr["table"]);
+
+				// siin peame k6igepealt genereerima tabelit defineeriva xmli
+				// siis selle tabeligenekale ette s88tma
+				// ja siis rea kaupa data talle ette s88tma
+				load_vcl("table");
+				$t = new aw_table(array(
+					"prefix" => "fg_".$entry_id,
+					"self" => $PHP_SELF,
+					"imgurl" => $baseurl . "/automatweb/images"
+				));
+				$t->parse_xml_def_string($xml);
+				$t->set_header_attribs(array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id));
+
+				$form = new form;
+				reset($matches);
+				while(list($fid,$v) = each($matches))
+				{
+					$form->load($fid);
+					foreach($v as $eid)
+					{
+						$form->load_entry($eid);
+						$rds = array();
+						$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $eid), "form_entry")."'>Muuda</a>";
+						$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]))."'>Vaata</a>";
+						for ($row = 0; $row < $form->arr["rows"]; $row++)
+						{
+							for ($col = 0; $col < $form->arr["cols"]; $col++)
+							{
+								$form->arr["contents"][$row][$col]->get_els(&$elar);
+								reset($elar);
+								while (list(,$el) = each($elar))
+								{
+									$rds["el_".$el->get_id()] = $el->get_value();
+								}
+							}
+						}
+						$t->define_data($rds);
+					}
+				}
+				$t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+				return $ft->get_css().$t->draw();
+			}
+			else
+			{
+				// n2itame sisestusi lihtsalt yxteise j2rel 
+				reset($matches);
+				while(list($fid,$v) = each($matches))
+				{
+					$t = new form();
+					reset($v);
+					while (list(,$eid) = each($v))
+					{
+						$t->reset();
+						$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]));
+					}
 				}
 			}
 		

@@ -154,13 +154,7 @@
 		{
 			if ($this->arr["linked_element"] > 0)
 			{
-				global $formcache;
-				if (!isset($formcache[$this->arr["linked_form"]]))
-				{
-					$formcache[$this->arr["linked_form"]] = new form;
-					$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
-				}
-				$form = &$formcache[$this->arr["linked_form"]];
+				$form = &$this->get_cached_form();
 
 				$t = $form->get_element_by_id($this->arr["linked_element"]);
 
@@ -189,16 +183,11 @@
 		function process_entry(&$entry, $id)
 		{
 			if (!$this->arr["linked_element"])
-				return;
-
-			global $formcache;
-			if (!isset($formcache[$this->arr["linked_form"]]))
 			{
-				$formcache[$this->arr["linked_form"]] = new form;
-				$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
+				return;
 			}
-			$form = &$formcache[$this->arr["linked_form"]];
 
+			$form = &$this->get_cached_form();
 			$t = $form->get_element_by_id($this->arr["linked_element"]);
 			if ($t->get_type() != "listbox")
 			{
@@ -214,10 +203,16 @@
 				global $$var;
 
 				if ($$var == "element_".$this->arr["linked_element"]."_lbopt_".$t->arr["listbox_count"])
+				{
 					$entry[$this->id] = "";
+				}
 				else
+				{
 					$entry[$this->id] = $$var;
+				}
 			}
+			$this->entry = $entry[$this->id];
+			$this->entry_id = $id;
 		}
 
 		function gen_show_html()
@@ -225,18 +220,34 @@
 			if (!$this->entry_id)
 				return "";
 
+			$form = &$this->get_cached_form();
+			$t = $form->get_element_by_id($this->arr["linked_element"]);
+			$t->entry = $this->entry;
+			$t->entry_id = $this->entry_id;
+			return $t->gen_show_html();
+		}
+
+		function get_value()
+		{
+			if (!$this->entry_id)
+				return "";
+
+			$form = &$this->get_cached_form();
+			$t = $form->get_element_by_id($this->arr["linked_element"]);
+			$t->entry = $this->entry;
+			$t->entry_id = $this->entry_id;
+			return $t->get_value();
+		}
+
+		function &get_cached_form()
+		{
 			global $formcache;
 			if (!isset($formcache[$this->arr["linked_form"]]))
 			{
 				$formcache[$this->arr["linked_form"]] = new form;
 				$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
 			}
-			$form = &$formcache[$this->arr["linked_form"]];
-
-			$t = $form->get_element_by_id($this->arr["linked_element"]);
-			$t->entry = $this->entry;
-			$t->entry_id = $this->entry_id;
-			return $t->gen_show_html();
+			return $formcache[$this->arr["linked_form"]];
 		}
 	}
 ?>

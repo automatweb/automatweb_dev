@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.3 2001/06/21 07:37:28 kristo Exp $
 
 global $orb_defs;
 
@@ -23,14 +23,14 @@ class form_entry extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$f = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $id", "form_id");
+		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $id", "form_id");
 
 		$o = $this->get_object($id);
 		$this->mk_path($o["parent"], "Muuda formi sisestust");
 
-		classload("orb");
-		$orb = new orb(array("class" => "form", "action" => "show", "vars" => array("id" => $f, "entry_id" => $id)));
-		return $orb->get_data();
+		classload("form");
+		$f = new form;
+		return $f->gen_preview(array("id" => $fid, "entry_id" => $id));
 	}
 }
 ?>

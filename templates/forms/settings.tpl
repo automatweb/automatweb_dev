@@ -68,15 +68,21 @@ function varvivalik()
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='1' {VAR:as_1}>muuda sisestust</td>
 <td class="fform">&nbsp;</td>
 </tr>
-<!--<tr>
-<td class="fform"><input type='radio' NAME='after_submit' VALUE='2' {VAR:as_2}>n&auml;ita teksti:</td>
-<td class="fform"><textarea NAME='after_submit_text' cols=40 rows=10>{VAR:after_submit_text}</textarea></td>
-</tr>-->
 <tr>
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>mine aadressile:</td>
 <td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'></td>
 </tr>
 <!-- END SUB: NOSEARCH -->
+
+<!-- SUB: SEARCH -->
+<tr>
+<td class="fform" colspan=2>Kas otsingu tulemusi n&auml;idatakse tabelina? <input type='checkbox' NAME='show_table' value='1' {VAR:show_table_checked}></td>
+</tr>
+<tr>
+<td class="fform">Vali tabel:</td>
+<td class="fform"><select name='table'>{VAR:tables}</select></td>
+</tr>
+<!-- END SUB: SEARCH -->
 <tr>
 <td class="fform" colspan=2>Vali element mille sisu pannakse formi sisestuse objekti nimeks</td>
 </tr>
