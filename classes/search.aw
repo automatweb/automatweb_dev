@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.3 2001/08/27 14:01:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.1 2002/09/25 16:36:40 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -64,33 +64,33 @@ class search extends aw_template
 			"modifiedby" => "",
 			"active" => "",
 			"alias" => "",
-			"redir_target" => "",
                 );
 		$_obj = $args["obj"];
 		$real_fields = array_merge($defaults,$args);
 		$this->quote($real_fields);
 		$this->sub_merge = 1;
 		extract($real_fields);
+		$this->read_template("objects.tpl");
 		$c = "";
 		$table = "";
-		$this->read_template("full.tpl");
-
+	
 		// create an instance of a object for callbacks 
-		if ($args["clid"])
+		if ($args["obj"])
 		{
-			$_obj = get_instance($args["clid"]);
-			if (!$_obj)
-			{
-				$this->raise_error(ERR_CORE_NO_FILE,"Cannot create an instance of $clid",true);
-			};
-			$this->obj_ref = $_obj;
-			$this->read_template("objects.tpl");
+			$_obj = get_instance($args["obj"]);
+		};
+
+		if (is_object($_obj) && method_exists($_obj,"_gen_s_path"))
+		{
+			list($path_parent,$path_text) = $_obj->_gen_s_path($args);
 		}
 		else
 		{
-			$url = $this->mk_my_orb("search",array());
-			$this->mk_path(-1,"<a href='$url'>Objektiotsing</a>");
+			$path_parent = 0;
+			$path_text = "Otsing";
 		};
+
+		$this->mk_path($path_parent,$path_text);
 
 		// perform the actual search
 		if ($search)
@@ -192,14 +192,7 @@ class search extends aw_template
 					
 			};
 
-			$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
-
-			if ($query)
-			{
-				$this->db_query($query);
-				$partcount = 1;
-			}
-			elseif ($partcount == 0)
+			if ($partcount == 0)
 			{
 				$table = "<span style='font-family: Arial; font-size: 12px; color: red;'>Defineerige otsingutingimused</span>";
 			}
@@ -222,14 +215,13 @@ class search extends aw_template
 				};
 				$row["type"] = $type;
 				$row["location"] = $obj_list[$row["parent"]];
-				$this->search_callback(array(
-					"name" => "modify_data",
-					"data" => &$row,
-					"args" => $args,
-				));
-				if (!$args["clid"])
+				if (is_object($_obj) && method_exists($_obj,"_gen_s_chlink"))
 				{
-					$row["name"] = "<a href='" . $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
+					$row["change"] = $_obj->_gen_s_chlink($args + $row);
+				}
+				else
+				{
+					$row["change"] = "<a href='" . $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>Muuda</a>";
 				};
 				$this->t->define_data($row);
 				$results++;
@@ -244,170 +236,38 @@ class search extends aw_template
 
 		};
 
-		$fields = array();
 
-		$this->search_callback(array("name" => "get_fields","fields" => &$fields,"args" => $args));
-
-		$this->modify_fields($args,&$fields);
-		
-		//foreach($real_fields as $key => $val)
-		foreach($fields as $key => $val)
+		foreach($real_fields as $key => $val)
 		{
-			if (is_array($fields[$key]))
+			$tpl = "f_" . $key;
+			$mkey = "_get_s_" . $key;
+			if (is_object($_obj) && (method_exists($_obj,$mkey)))
 			{
-				$fieldref = $fields[$key];
-				switch($fieldref["type"])
-				{
-					case "select":
-						$items = $this->picker($fieldref["selected"],$fieldref["options"]);
-						$element = "<select name='$key' onChange='$fieldref[onChange]'>$items</select>";
-						$caption = $fieldref["caption"];
-						break;
-					
-					case "multiple":
-						if (is_array($fieldref["selected"]))
-						{
-							$sel = array_flip($fieldref["selected"]);
-						}
-						else
-						{
-							$sel = array();
-						};
-						//$items = $this->mpicker($fieldref["selected"],$fieldref["options"]);
-						$items = $this->mpicker($sel,$fieldref["options"]);
-						$element = sprintf("<select multiple size='5' name='%s[]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
-						$caption = $fieldref["caption"];
-						break;
-
-					case "textbox":
-						$element = "<input type='text' name='$key' size='40' value='$fieldref[value]'>";
-						$caption = $fieldref["caption"];
-						break;
-
-					case "checkbox":
-						$element = "<input type='checkbox' name='$key' $fieldref[checked]>";
-						$caption = $fieldref["caption"];
-						break;
-
-					default:
-						$element = "n/a";
-						$caption = "n/a";
-						break;
-				};
-
-				$this->vars(array(
-						"caption" => $caption,
-						"element" => $element,
-				));
-
-				$c .= $this->parse("field");
+				$value = $_obj->$mkey($val);
+			}
+			else
+			if (method_exists($this,$mkey))
+			{
+				$value = $this->$mkey($val);
+			}
+			else
+			{
+				$value = $val;
 			};
-		};
 
-		if ($args["clid"])
-		{
-			$table = "<form name='searchform' method='get'>" . $table . "</form>";
-		}
-		else
-		{
 			$this->vars(array(
-				"redir_target" => $this->_get_s_redir_target(),
+				$key => $value,
 			));
-		};
 
-		$this->table = $table;
+			$c .= $this->parse($tpl);
+		};
 
 		$this->vars(array(
 			"table" => $table,
 			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid)),
 		));
 
-		return $header . $this->parse();
-	}
-
-
-	function get_results()
-	{
-		return $this->table;
-	}
-
-	function modify_fields($args = array(),&$fields)
-	{
-
-		if (!$fields["name"])
-		{
-			$fields["name"] = array(
-				"type" => "textbox",
-				"caption" => "Nimi",
-				"value" => $args["name"],
-			);
-		};
-
-		if (!$fields["comment"])
-		{
-			$fields["comment"] = array(
-				"type" => "textbox",
-				"caption" => "Kommentaar",
-				"value" => $args["comment"],
-			);
-		};
-
-		if (!$fields["class_id"])
-		{
-			$fields["class_id"] = array(
-				"type" => "select",
-				"caption" => "Tüüp",
-				"options" => $this->_get_s_class_id($args["class_id"]),
-				"selected" => $args["class_id"],
-				"onChange" => "refresh_page(this)",
-			);
-		};
-
-		if (!$fields["parent"])
-		{
-			$fields["parent"] = array(
-				"type" => "select",
-				"caption" => "Asukoht",
-				"options" => $this->_get_s_parent($args["parent"]),
-				"selected" => $args["parent"],
-			);
-		};
-
-		if (!$fields["createdby"])
-		{
-			$fields["createdby"] = array(
-				"type" => "textbox",
-				"caption" => "Looja",
-				"value" => $args["createdby"],
-			);
-		};
-
-		if (!$fields["modifiedby"])
-		{
-			$fields["modifiedby"] = array(
-				"type" => "textbox",
-				"caption" => "Muutja",
-				"value" => $args["modifiedby"],
-			);
-		};
-
-		if (!$fields["active"])
-		{
-			$fields["active"] = array(
-				"type" => "checkbox",
-				"caption" => "Aktiivne",
-				"checked" => checked($args["active"]),
-			);
-		};
-
-		if (!$fields["alias"])
-		{
-			$fields["alias"] = array(
-				"type" => "textbox",
-				"caption" => "Alias",
-				"value" => $args["alias"],
-			);
-		};
+		return $this->parse();
 	}
 
 	// generates contents for the class picker drop-down menu
@@ -425,26 +285,18 @@ class search extends aw_template
 			};
 		}
 		asort($tar);
-		return $tar;
+		return $this->picker($val,$tar);
 	}
 
 	function _get_s_parent($val)
 	{
 		$li = array("0" => "igalt poolt") + $this->get_menu_list(false,true);
-		return $li;
+		return $this->picker($val,$li);
 	}
 
-	function _get_s_redir_target()
+	function _get_s_active($val)
 	{
-		$this->vars(array(
-			"clid" => 7,
-			"url" => $this->mk_my_orb("docsearch",array(),"document"),
-		));
-		$retval = $this->parse("redir_target");
-		$this->vars(array(
-			"redir_target" => "",
-		));
-		return $retval;
+		return checked($val);
 	}
 
 	function _init_os_tbl()
@@ -525,64 +377,10 @@ class search extends aw_template
 		
 		$this->t->define_field(array(
 			"name" => "change",
-			"caption" => "",
-			"align" => "center",
+			"caption" => "Muuda",
 			"talign" => "center",
 		));
 	}
 
-	////
-	// !Callback funktsioonid
-	function search_callback($args = array())
-	{
-		$prefix = "search_callback_";
-		$allowed = array("get_fields","get_query","get_table_defs","modify_data");
-		if (!is_object($this->obj_ref))
-		{
-			return false;
-		};
-
-		// paranoia? maybe. but still, do not let the user use random functions
-		// from the caller.
-		if (!in_array($args["name"],$allowed))
-		{
-			$retval = false;
-		};
-			
-		$name = $prefix . $args["name"];
-
-		if (method_exists($this->obj_ref,$name))
-		{
-			if ($args["data"])
-			{
-				// data is defined for modify_data and works directly
-				// on the data fetched from the database and not on a copy
-
-				// still, if it's done otherwise in the future, return
-				// the possible value as well
-				$retval = $this->obj_ref->$name(&$args["data"],$args["args"]);
-			}
-			elseif ($name == "search_callback_get_fields")
-			{
-				$retval = $this->obj_ref->$name(&$args["fields"],$args["args"]);
-			}
-			elseif ($name == "search_callback_get_query")
-			{
-				$retval = $this->obj_ref->$name($args["args"],$args["parts"]);
-			}
-			else
-			{
-				$retval = $this->obj_ref->$name($args["args"]);
-			};
-
-		}
-		else
-		{
-			$retval = false;
-		};
-
-		return $retval;
-
-	}
 }
 ?>

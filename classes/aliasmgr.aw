@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.46 2002/09/17 11:00:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.47 2002/09/25 16:36:40 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -25,6 +25,8 @@ class aliasmgr extends aw_template
 		extract($args);
 		$this->read_template("search_doc.tpl");
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("list_aliases", array("id" => $docid))."'>Tagasi</a>");
+		$search = get_instance("search");
+		return $search->show(array("docid" => $docid, "name" => $name,"comment" => $comment, "obj" => "aliasmgr"));
 		$this->make_alias_typearr();
 
     if ($s_name != "" || $s_comment != "" || $s_type > 0)
@@ -86,6 +88,23 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		));
 		return $this->parse();
 	}	
+
+	function _get_s_class_id($val)
+	{
+		$this->make_alias_classarr();
+		asort($this->classarr);
+		return $this->picker($val,$this->classarr);
+	}
+
+	function _gen_s_chlink($args)
+	{
+		return "<a href='" . $this->mk_my_orb("addalias",array("id" => $args["docid"], "alias" => $args["oid"]),"aliasmgr") . "'>Võta see</a>";
+	}
+
+	function _gen_s_path($args)
+	{
+		return array(0,"<a href='".$this->mk_my_orb("list_aliases", array("id" => $args["docid"]))."'>Tagasi</a> / Otsi objekti");
+	}
 	
 	////
 	// !Submits the alias list
