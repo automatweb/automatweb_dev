@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.9 2004/06/09 11:44:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.10 2004/06/17 13:46:51 kristo Exp $
 // language.aw - Keel 
 /*
 
-@classinfo syslog_type=ST_LANGUAGE relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_LANGUAGE relationmgr=yes no_status=1 no_comment=1 
 
 @default table=objects
 @default group=general
@@ -12,11 +12,11 @@
 
 @tableinfo languages index=oid master_table=objects master_index=oid
 
-@property lang_status table=languages type=status field=status
-@caption Aktiivne
-
 @property lang_name table=languages type=textbox field=name
 @caption Nimi
+
+@property lang_status table=languages type=status field=status
+@caption Aktiivne
 
 @property lang_sel_lang type=select store=no
 @caption Keel
@@ -88,6 +88,10 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "name":
+				return PROP_IGNORE;
+				break;
+
 			case "lang_site_id":
 				$prop["options"] = $this->adm->_get_sl();
 				$prop["value"] = $this->make_keys(explode(",",$prop["value"]));
