@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.33 2004/11/25 12:20:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.34 2004/11/26 14:08:29 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -25,6 +25,14 @@ class vcalendar extends aw_template
 		if (is_object($this->evt_tpl) && $feature == "first_image")
 		{
 			if ($this->evt_tpl->template_has_var("first_image"))
+			{
+				$retval = true;
+			}
+		};
+
+		if ($feature == "project_media")
+		{
+			if ($this->evt_tpl->is_template("project_media"))
 			{
 				$retval = true;
 			}
@@ -283,6 +291,7 @@ class vcalendar extends aw_template
 		// this one draws overview months... teheheheeee
 		// if overview_func is not defined, then no overview thingie will be drawn
 		// it's that easy.
+		enter_function("vcl/calendar::get_html::overview");
 		if ($this->overview_func)
 		{
 
@@ -348,6 +357,7 @@ class vcalendar extends aw_template
 			};
 			$awt->stop("draw-s-month");
 		};
+		exit_function("vcl/calendar::get_html::overview");
 
 
 		$this->read_template($this->container_template);
@@ -1041,6 +1051,16 @@ class vcalendar extends aw_template
 				"COMMENT" => $this->evt_tpl->parse("COMMENT"),
 			));
 		}
+
+		if ($this->evt_tpl->is_template("project_media"))
+		{
+			$this->evt_tpl->vars($evt["media"]);
+			$x = $this->evt_tpl->parse("project_media");
+			$this->evt_tpl->vars(array(
+				"project_media" => $x,
+			));
+		};
+
 		return $this->evt_tpl->parse();
 	}
 
