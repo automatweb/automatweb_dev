@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.20 2004/11/10 14:51:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.21 2004/11/15 17:09:33 sven Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -426,9 +426,10 @@ class site_search_content extends class_base
 		$keyword_aliased_conns = new connection();
 		
 		$keyword_aliased_conns = $keyword_aliased_conns->find(array(
-			"to" => $keyword_list->ids(),
-			"from.class_id" => $classes,
+			"from" => $keyword_list->ids(),
+			"to.class_id" => $classes,
 		));
+		
 		if(!$keyword_aliased_conns)
 		{
 			return;
