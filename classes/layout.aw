@@ -15,10 +15,10 @@
 @default field=meta
 @default method=serialize
 
-@property rows type=textbox group=general size=3
+@property rows type=textbox group=general size=3 store=no
 @caption Ridu
 
-@property columns type=textbox group=general size=3
+@property columns type=textbox group=general size=3 store=no
 @caption Tulpi
 
 @property cell_style_folders type=relpicker reltype=RELTYPE_CELLSTYLE_FOLDER group=settings multiple=1
@@ -54,10 +54,14 @@
 @property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 group=general
 @caption Millistes kataloogides n&auml;idatakse
 
-*/
+@reltype CELLSTYLE_FOLDER value=1 clid=CL_PSEUDO
+@caption celli stiilide kataloog
 
-define("RELTYPE_CELLSTYLE_FOLDER",1);
-define("RELTYPE_SHOW_FOLDER",2);
+@reltype SHOW_FOLDER value=2 clid=CL_PSEUDO
+@caption näita selles kataloogis
+			
+
+*/
 
 class layout extends class_base
 {
@@ -296,27 +300,6 @@ class layout extends class_base
 			"oid" => $oid
 		));
 	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_CELLSTYLE_FOLDER => "celli stiilide kataloog",
-			RELTYPE_SHOW_FOLDER => "n&auml;ita selles kataloogis",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_CELLSTYLE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-		if ($args["reltype"] == RELTYPE_SHOW_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-	}
-
 
 	////
 	// !returns the layout data that can be fed to grid editor. useful when you can select a default layout

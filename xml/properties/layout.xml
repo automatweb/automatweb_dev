@@ -4,20 +4,22 @@
             <name>rows</name>
             <type>textbox</type>
             <group>general</group>
-            <method>serialize</method>
             <size>3</size>
+            <store>no</store>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Ridu</caption>
       </property>
       <property>
             <name>columns</name>
             <type>textbox</type>
             <group>general</group>
-            <method>serialize</method>
             <size>3</size>
+            <store>no</store>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Tulpi</caption>
       </property>
       <property>
@@ -25,46 +27,46 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CELLSTYLE_FOLDER</reltype>
             <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
             <multiple>1</multiple>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Stiilide kataloogid</caption>
       </property>
       <property>
             <name>grid</name>
             <type>callback</type>
             <group>layout</group>
-            <method>serialize</method>
-            <field>meta</field>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tabel</caption>
       </property>
       <property>
             <name>grid_styles</name>
             <type>callback</type>
             <group>styles</group>
-            <method>serialize</method>
-            <field>meta</field>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Stiilid</caption>
       </property>
       <property>
             <name>table_style</name>
             <type>select</type>
             <group>settings</group>
-            <method>serialize</method>
-            <field>meta</field>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tabeli stiil</caption>
       </property>
       <property>
             <name>grid_aliases</name>
             <type>callback</type>
             <group>aliases</group>
-            <method>serialize</method>
-            <field>meta</field>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Aliased</caption>
       </property>
       <property>
@@ -74,24 +76,25 @@
             <store>no</store>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Aliaste manager</caption>
       </property>
       <property>
             <name>grid_preview</name>
             <type>callback</type>
             <group>preview</group>
-            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Eelvaade</caption>
       </property>
       <property>
             <name>import_file</name>
             <type>fileupload</type>
             <group>import</group>
-            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Uploadi .csv fail</caption>
       </property>
       <property>
@@ -99,9 +102,9 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>import</group>
-            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Kas eemaldame tühjad read lõpust</caption>
       </property>
       <property>
@@ -109,9 +112,9 @@
             <type>textbox</type>
             <size>1</size>
             <group>import</group>
-            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Mis märgiga on tulbad eraldatud?</caption>
       </property>
       <property>
@@ -120,10 +123,10 @@
             <reltype>RELTYPE_SHOW_FOLDER</reltype>
             <multiple>1</multiple>
             <rel>1</rel>
-            <method>serialize</method>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
       </property>
       <classinfo>
@@ -150,5 +153,17 @@
                   <caption>Eelvaade</caption>
             </preview>
       </groupinfo>
+      <reltypes>
+            <CELLSTYLE_FOLDER>
+                  <value>1</value>
+                  <clid>CL_PSEUDO</clid>
+                  <caption>celli stiilide kataloog</caption>
+            </CELLSTYLE_FOLDER>
+            <SHOW_FOLDER>
+                  <value>2</value>
+                  <clid>CL_PSEUDO</clid>
+                  <caption>näita selles kataloogis</caption>
+            </SHOW_FOLDER>
+      </reltypes>
 </properties>
 
