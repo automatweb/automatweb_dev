@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.45 2004/08/19 11:33:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.46 2004/09/09 11:11:44 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -736,10 +736,13 @@ class promo extends class_base
 					obj_set_opt("no_auto_translation", 1);
 					obj_set_opt("no_cache", 1);
 				}
+
 				$docid = $inst->get_default_document(array(
 					"obj" => $o,
 					"all_langs" => true
 				));
+
+
 				if ($o->prop("trans_all_langs"))
 				{
 					obj_set_opt("no_auto_translation", 0);

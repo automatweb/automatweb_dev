@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.63 2004/06/19 19:16:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.64 2004/09/09 11:13:22 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -62,6 +62,7 @@ class orb extends aw_template
 		
 		// laeme selle klassi siis
 		$orb_defs = $this->try_load_class($class);
+
 
 		$this->orb_defs = $orb_defs;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.107 2004/08/18 07:14:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.108 2004/09/09 11:14:46 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -241,7 +241,6 @@ class image extends class_base
 			else
 			if ($idata["link"] != "")
 			{
-		//		echo "has link! <br>";
 				if ($idata["big_url"] != "" && isset($tpls["image_big_linked"]))
 				{
 					$replacement = localparse($tpls["image_big_linked"],$vars);
@@ -290,6 +289,7 @@ class image extends class_base
 					}
 					$inplace = 0;
 				};
+
 				if (isset($tpls[$tpl]))
 				{
 					$replacement = localparse($tpls[$tpl],$vars);
@@ -324,6 +324,7 @@ class image extends class_base
 				};
 			}	
 		}
+
 		$retval = array(
 				"replacement" => trim($replacement),
 				"inplace" => trim($inplace),
