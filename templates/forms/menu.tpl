@@ -138,6 +138,9 @@ function toggle1(layer1,layer2) {
 <!-- SUB: RELS -->
 <a class="alamlingid" href='{VAR:joins}'>Seosed</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: RELS -->
+
+<a class="alamlingid" href='{VAR:export}'>Ekspordi</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
+
 </div>
 <!-- end# menu 2 -->
 
