@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="cfgobject">
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="search" all_args="1">>
+			<function name="search">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="save_objects">
+			<function name="save_objects">
+				<arguments/>
+			</function>
+		</action>
+</class>
+</orb>
+		
