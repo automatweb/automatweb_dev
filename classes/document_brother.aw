@@ -83,6 +83,9 @@
 @property dcache type=checkbox store=no
 @caption Cache otsingu jaoks
 
+@property dcache_save type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize trans=1
+@caption Cache otsingu jaoks (salvestub)
+
 @property dcache_content type=hidden field=dcache 
 @property rating type=hidden 
 @property num_ratings type=hidden 

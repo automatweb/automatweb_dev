@@ -246,6 +246,17 @@
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
+            <name>dcache_save</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <trans>1</trans>
+            <caption>Cache otsingu jaoks (salvestub)</caption>
+      </property>
+      <property>
             <name>dcache_content</name>
             <table>documents</table>
             <group>general</group>
