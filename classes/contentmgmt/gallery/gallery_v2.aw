@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.11 2003/04/09 13:03:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.12 2003/04/10 12:13:40 kristo Exp $
 
 /*
 
@@ -591,30 +591,14 @@ class gallery_v2 extends class_base
 		return $cf->get_image_folder($this->_get_conf_for_folder($obj['parent']));
 	}
 
-	function show($arr)
+	function _show_rate_objs($ob)
 	{
-		extract($arr);
-		global $page;
-		
-		$ob = $this->get_object($oid);
-
-		if ($page < 1 || $page > $ob['meta']['num_pages'])
-		{
-			$page = 1;
-		}
-
-		$c = $ob['meta']['page_data'][$page]['content'];
-		$l = $ob['meta']['page_data'][$page]['layout'];
-
-		$this->read_any_template("show_v2.tpl");
-
-		// ok, do draw, first draw all rate objs
 		$rate = array();
 		$rateobjs = $this->_get_rate_objs($ob);
 		foreach($rateobjs as $oid => $name)
 		{
 			$this->vars(array(
-				"link" => $this->mk_my_orb("show", array("id" => $oid, "section" => aw_global_get("section")), "rate"),
+				"link" => $this->mk_my_orb("show", array("id" => $oid, "section" => aw_global_get("section"), "gallery_id" => $ob["oid"]), "rate"),
 				"name" => $name
 			));
 			$rate[] = $this->parse("RATE_OBJ");
@@ -623,7 +607,10 @@ class gallery_v2 extends class_base
 			"RATE_OBJ" => join($this->parse("RATE_OBJ_SEP"), $rate),
 			"RATE_OBJ_SEP" => ""
 		));
+	}
 
+	function _show_pageselector($ob, $page, $callback = "_page_has_images")
+	{
 		// now pageselector
 		$pages = array();
 		$ps_back = "";
@@ -635,7 +622,7 @@ class gallery_v2 extends class_base
 		$cur_sp = 0;
 		for($pg = 1; $pg <= $num_pages; $pg++)
 		{
-			if (!$this->_page_has_images($ob, $pg))
+			if (!$this->$callback($ob, $pg))
 			{
 				continue;
 			}
@@ -687,6 +674,33 @@ class gallery_v2 extends class_base
 				"HAS_PAGESEL" => $this->parse("HAS_PAGESEL")
 			));
 		}
+	}
+
+	function show($arr)
+	{
+		extract($arr);
+		global $page;
+
+		if (empty($ob))
+		{		
+			$ob = $this->get_object($oid);
+		}
+
+		if ($page < 1 || $page > $ob['meta']['num_pages'])
+		{
+			$page = 1;
+		}
+
+		$c = $ob['meta']['page_data'][$page]['content'];
+		$l = $ob['meta']['page_data'][$page]['layout'];
+
+		$this->read_any_template("show_v2.tpl");
+
+		// ok, do draw, first draw all rate objs
+		$this->_show_rate_objs($ob);
+
+		$this->_show_pageselector($ob, $page);
+
 		// now all images 
 		$this->rating = get_instance("contentmgmt/rate/rate");
 
@@ -708,6 +722,100 @@ class gallery_v2 extends class_base
 		));
 		return $this->parse();
 	}
+
+	////
+	// !shows gallery, but with images reordered - image order is in order array - image id's are in there
+	// parameters:
+	//	id - gallery id
+	//	order - array of image ids, the order they are shown in
+	function show_ordered($arr)
+	{
+		extract($arr);
+		global $page;
+
+		$ob = $this->get_object($id);
+
+		$newd = array();
+		$used = array();
+
+		// reorder images as per order
+		for($_page = 1; $_page <= $ob['meta']['num_pages']; $_page++)
+		{
+			$pd_l = $ob['meta']['page_data'][$_page]['layout'];
+			$newd[$_page]['layout'] = $pd_l;
+			for($row = 0; $row < $pd_l['rows']; $row++)
+			{
+				for($col = 0; $col < $pd_l['cols']; $col++)
+				{
+					list($imid) = each($order);
+					$used[$imid] = $imid;
+					// now find the image in the current gallery
+					$dat = $this->_find_image($imid, $ob);
+					if (is_array($dat))
+					{
+						$newd[$_page]['content'][$row][$col] = $dat;
+					}
+					else
+					{
+						$dat = $this->_find_next_unused($used, $ob);
+						$used[$dat['img']['id']] = $dat['img']['id'];
+						$newd[$_page]['content'][$row][$col] = $dat;
+					}
+				}
+			}
+		}
+
+		$ob['meta']['page_data'] = $newd;
+		$arr['ob'] = $ob;
+
+		return $this->show($arr);		
+	}
+
+	function _find_image($id, $ob)
+	{
+		if (!$id)
+		{
+			return false;
+		}
+
+		for($page = 1; $page <= $ob['meta']['num_pages']; $page++)
+		{
+			$pd_l = $ob['meta']['page_data'][$page]['layout'];
+			$pd = $ob['meta']['page_data'][$page]['content'];
+			for($row = 0; $row < $pd_l['rows']; $row++)
+			{
+				for ($col = 0; $col < $pd_l['cols']; $col++)
+				{
+					if ($pd[$row][$col]['img']['id'] == $id)
+					{
+						return $pd[$row][$col];
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	function _find_next_unused($used, $ob)
+	{
+		for($page = 1; $page <= $ob['meta']['num_pages']; $page++)
+		{
+			$pd_l = $ob['meta']['page_data'][$page]['layout'];
+			$pd = $ob['meta']['page_data'][$page]['content'];
+			for($row = 0; $row < $pd_l['rows']; $row++)
+			{
+				for ($col = 0; $col < $pd_l['cols']; $col++)
+				{
+					if (!isset($used[$pd[$row][$col]['img']['id']]))
+					{
+						return $pd[$row][$col];
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 
 	function _get_show_cell_content($params, $row, $col)
 	{
@@ -1274,6 +1382,32 @@ class gallery_v2 extends class_base
 		{
 			return array(CL_FTP_LOGIN);
 		}
+	}
+
+	function get_contained_objects($arr)
+	{
+		extract($arr);
+		$ret = array();
+
+		$ob = $this->get_object($oid);
+
+		$_pd = new aw_array($ob['meta']['page_data']);
+		foreach($_pd->get() as $page => $pd)
+		{
+			$_ct = new aw_array($pd['content']);
+			foreach($_ct->get() as $row => $cd)
+			{
+				$_cd = new aw_array($cd);
+				foreach($_cd->get() as $col => $cell)
+				{
+					if ($cell["img"]["id"])
+					{
+						$ret[$cell["img"]["id"]] = $cell["img"]["id"];
+					}
+				}
+			}
+		}
+		return $ret;
 	}
 }
 ?>

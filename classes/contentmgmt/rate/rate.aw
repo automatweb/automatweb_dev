@@ -250,6 +250,13 @@ class rate extends class_base
 		
 		$ob = $this->get_object($id);
 
+		if (!empty($gallery_id))
+		{
+			// we we need to show results in the gallery, read objects from that
+			$ob['meta']['objects_from'] = OBJECTS_FROM_OID;
+			$ob['meta']['objects_from_oid'] = $gallery_id;
+		}
+
 		// get list of all objects that this rating applies to
 		$oids = array();
 		if ($ob['meta']['objects_from'] == OBJECTS_FROM_CLID)
@@ -335,10 +342,10 @@ class rate extends class_base
 				hits.hits as hits,
 				images.file as img_file
 			FROM 
-				ratings
-				LEFT JOIN objects ON ratings.oid = objects.oid
-				LEFT JOIN hits ON hits.oid = ratings.oid
-				LEFT JOIN images ON images.id = ratings.oid
+				objects 
+				LEFT JOIN ratings ON ratings.oid = objects.oid
+				LEFT JOIN hits ON hits.oid = objects.oid
+				LEFT JOIN images ON images.id = objects.oid
 			WHERE
 				$where
 			GROUP BY 
@@ -347,22 +354,38 @@ class rate extends class_base
 			LIMIT ".(int)($ob['meta']['top'])."
 		";
 		$this->db_query($sql);
-		while ($row = $this->db_next())
+		if (!empty($gallery_id))
 		{
-			$this->vars(array(
-				"rating" => $row['val'],
-				"view" => $this->_get_link($row),
-				"hits" => $row['hits'],
-				"place" => $cnt++
+			$imorder = array();
+			while($row = $this->db_next())
+			{
+				$imorder[$row["oid"]] = $row["oid"];
+			}
+			$gi = get_instance("contentmgmt/gallery/gallery_v2");
+			return $gi->show_ordered(array(
+				"id" => $gallery_id,
+				"order" => $imorder
 			));
-			$l .= $this->parse("LINE");
 		}
-		$this->vars(array(
-			"LINE" => $l,
-			"name" => $ob['name'],
-			"count" => $ob['meta']['top']
-		));
-		return $this->parse();
+		else
+		{
+			while ($row = $this->db_next())
+			{
+				$this->vars(array(
+					"rating" => $row['val'],
+					"view" => $this->_get_link($row),
+					"hits" => $row['hits'],
+					"place" => $cnt++
+				));
+				$l .= $this->parse("LINE");
+			}
+			$this->vars(array(
+				"LINE" => $l,
+				"name" => $ob['name'],
+				"count" => $ob['meta']['top']
+			));
+			return $this->parse();
+		}
 	}
 
 	function _get_link($dat)

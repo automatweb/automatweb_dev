@@ -16,6 +16,7 @@
 			<function name="show">
 				<arguments>
 					<required name="id"/>
+					<optional name="gallery_id"/>
 				</arguments>
 			</function>
 		</action>
