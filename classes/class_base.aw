@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.258 2004/04/22 12:44:08 duke Exp $
+// $Id: class_base.aw,v 2.259 2004/04/26 10:23:20 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1730,6 +1730,7 @@ class class_base extends aw_template
 			$this->obj_inst = $args["obj_inst"];
 			$this->id = $this->obj_inst->id();
 		};
+				
 
 
 		// only relation object uses this. But hey, if the relation object
@@ -1759,6 +1760,8 @@ class class_base extends aw_template
 		$this->cfgu = get_instance("cfg/cfgutils");
 
 		$remap_children = false;
+
+		// how do I stop parsing of properties that _are_ already parsed?
 		
 		foreach($properties as $key => $val)
 		{
@@ -1806,7 +1809,7 @@ class class_base extends aw_template
 
 			// eventually all VCL components will have to implement their
                         // own init_vcl_property method
-                        if ($this->vcl_register[$val["type"]])
+                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]))
                         {
                                 $reginst = $this->vcl_register[$val["type"]];
 				if ($val["type"] == "table")
@@ -1966,6 +1969,7 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+
 			// XXX: need to get rid of that "text" index
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
 			{
@@ -2052,9 +2056,10 @@ class class_base extends aw_template
 
 			$argblock["prop"] = &$val;
 			
-			if ($val["type"] == "relmanager")
+			if ($val["type"] == "relmanager" && empty($val["_parsed"]))
 			{
 				$target_reltype = @constant($val["reltype"]);
+				$argblock["prop"]["relx"] = $val["reltype"];
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$val["vcl_inst"]->init_rel_manager($argblock);
@@ -2084,6 +2089,8 @@ class class_base extends aw_template
 			{
 				$status = $this->inst->get_property($argblock);
 			};
+			
+			$val["_parsed"] = 1;
 
 			if ($status === PROP_IGNORE)
 			{
@@ -2210,6 +2217,7 @@ class class_base extends aw_template
 		}
 
 		$awt->stop("parse-properties");
+
 
 		return $resprops;
 	}
@@ -3201,6 +3209,7 @@ class class_base extends aw_template
 			));
 
 
+
 			// if there is a bug in config form which caused the groupdata
 			// to be empty, then this is the place where we should fix it.	
 		}
@@ -3260,6 +3269,13 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
+
+					global $CFG_DEBUG;
+					if ($CFG_DEBUG)
+					{
+						print "loading cfgform " . $found_form;
+						print "<br>";
+					};
 
 				};
 
@@ -3521,7 +3537,7 @@ class class_base extends aw_template
 			{
 				$this->classinfo[$val] = $cfgform_obj->prop($key);
 			};
-
+			
 			// sometimes the grplist is empty in config form.
 			// I don't know why, but it is, and in this case
 			// I'll load the groups from the file
@@ -3580,13 +3596,13 @@ class class_base extends aw_template
 	}
 
 	// Defaults always get loaded, even if only for validation purposes
-	function load_defaults($arr)
+	function load_defaults($arr = array())
 	{
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$defaults = $cfgu->load_properties(array(
 			"file" => empty($arr["clid"]) ? $arr["clfile"] : "",
-			"clid" => $arr["clid"],
+			"clid" => !empty($arr["clid"]) ? $arr["clid"] : $this->clid,
 			"filter" => $arr["filter"],
 		));
 
