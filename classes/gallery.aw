@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.3 2001/06/05 16:50:19 duke Exp $
+// gallery.aw - galeriide haldus
 classload("images");
 
 global $orb_defs;
@@ -16,6 +18,23 @@ class gallery extends aw_template
 			$this->load($id,$GLOBALS["page"]);
 		}
 	}
+
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->galaliases))
+		{
+			$this->galaliases = $this->get_aliases(array(
+								"oid" => $oid,
+								"type" => CL_GALLERY,
+						));
+		};
+		$g = $this->galaliases[$matches[3] - 1];
+		$this->load($g["target"],$GLOBALS["page"]);
+		$replacement = $this->show($GLOBALS["page"]);
+		return $replacement;
+	}
+		
 
 	////
 	// !generates the form for adding a gallery
