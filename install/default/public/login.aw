@@ -3,7 +3,7 @@ include("const.aw");
 include("site_header.".aw_ini_get("ext"));
 
 $te = new aw_template;
-$te->tpl_init("");
+$te->init("");
 $te->read_template("login.tpl");
 
 $m = new menuedit(aw_ini_get("per_oid"));
