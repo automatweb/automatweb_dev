@@ -866,7 +866,10 @@ class search_filter extends aw_template
 		};
 		
 		$parse.= $this->ft->get_css();
-		$parse.="<form action='reforb.".$this->cfg["ext"]."' method='POST'>\n";
+		if (!$no_form_tags)
+		{
+			$parse.="<form action='reforb.".$this->cfg["ext"]."' method='POST'>\n";
+		}
 		if ($this->ft->table["submit_top"])
 		{
 			$parse.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
@@ -887,7 +890,10 @@ class search_filter extends aw_template
 			$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
 		};
 
-		$parse.=$this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+		if (!$no_form_tags)
+		{
+			$parse.=$this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+		}
 
 		// Siin hakkab näitama statistika tabelit all
 		if ($this->data["stat_show"] && $this->data["stat_id"])
@@ -911,7 +917,10 @@ class search_filter extends aw_template
 			};
 			$parse.=$tbl->show(array("id" => $this->data["stat_id"],"is_filter" => 1));
 		};
-		$parse.="</form>";
+		if (!$no_form_tags)
+		{
+			$parse.="</form>";
+		}
 		if (!$no_menu && !$GLOBALS["section"])
 		{
 			$parse=$this->make_upper_menu($arr,"search").$parse;
