@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.97 2005/01/16 16:16:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.1 2005/03/17 19:08:05 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
