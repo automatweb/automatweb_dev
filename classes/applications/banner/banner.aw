@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.3 2004/04/15 08:40:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.4 2004/05/12 13:41:39 kristo Exp $
 
 /*
 
@@ -405,7 +405,7 @@ class banner extends class_base
 	function error_banner()
 	{
 		header("Content-type: image/gif");
-		readfile($this->cfg["baseurl"]."/images/transa.gif");
+		readfile($this->cfg["baseurl"]."/automatweb/images/trans.gif");
 		die();
 	}
 
