@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.8 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.9 2005/03/29 05:52:58 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -139,13 +139,61 @@ class rte extends class_base
 
 		$toolbar->add_separator();
 
+		$toolbar->add_menu_button(array(
+			"name" => "table_props",
+			"tooltip" => t("Tabel"),
+			"img" => "rte_table.gif",
+			//"img" => "rte_table_props.gif",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Lisa tabel"),
+			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}table_dialog();",
+		));
+		
+		$toolbar->add_menu_separator(array("parent" => "table_props"));
+
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Lisa tulp"),
+			"url" => "javascript:{$js_url_prefix}insert_column();",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Lisa rida"),
+			"url" => "javascript:{$js_url_prefix}insert_row();",
+		));
+
+		$toolbar->add_menu_separator(array("parent" => "table_props"));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Kustuta tulp"),
+			"url" => "javascript:{$js_url_prefix}delete_column();",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Kustuta rida"),
+			"url" => "javascript:{$js_url_prefix}delete_row();",
+		));
+		
+
+		$toolbar->add_separator();
+
+
 		$toolbar->add_button(array(
 			"name" => "source",
 			"tooltip" => T("HTML"),
 			"target" => "_self",
 			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 		));
-		
+
+		$this->get_styles_from_site();
+
+               
 	       	/*
                 $toolbar->add_separator();
 		$this->read_template("stylebox.tpl");
@@ -163,6 +211,17 @@ class rte extends class_base
 			"url" => "javascript:${js_url_prefix}clearstyles()",
 			"side" => "right",
 		));
+	}
+
+	function get_styles_from_site($arr = array())
+	{
+	//	$contents = file_get_contents(aw_ini_get("site_basedir") . "/public/css/styles.css");
+		// now I need to parse things out of this place
+	//	print "<pre>";
+	//	print $contents;
+	//	print "</pre>";
+
+
 	}
 
 	function draw_editor($arr)

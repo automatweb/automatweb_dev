@@ -4,6 +4,7 @@
 var rte_styles = "{VAR:rte_styles}";
 var sel_el = "{VAR:name}_edit";
 var rte_list = Array();
+var mozbr = browser.isGecko ? "<br />" : ""
 function write_editor(el_name,width,height)
 {
 	val = document.forms['changeform'].elements[el_name].value;
@@ -107,13 +108,6 @@ function apply_editor_style(doc,val,iframe)
 	//doc.writeln("<body style='border: 1px; margin: 1px;'>");
 	doc.write("<body class='text'>");
 	doc.write(val);
-	// val = val.replace(/\r/,"");
-	// siin tuleb teha asendus .. v.a. juhul kui tegemist on lõpetava <b> tagiga, siis
-	// me asendust ei tee.
-	// kui on midagi muudd peale >, siis whitespacet ja siis reavahe, siis asenda
-	//val = val.replace(/([|^>|^>\s+])[\r\n|\n]/gi,"$1<br>\r\n")
-	//doc.write(val.replace(/><br>/gi,">"))
-	//doc.write(val.replace(/\n/gi,"<br>\n"));
 	doc.writeln("</body></html>");
 	doc.close();
 };
@@ -306,6 +300,189 @@ function createRange(sel)
 	}
 };
 
+function table_dialog()
+{
+	victim = document.getElementById(sel_el).contentWindow;
+	window.open("/automatweb/orb.aw?class=css&action=table_dialog","insert_table","width=360,height=180");
+
+};
+
+function get_closest_tag(tagName)
+{
+        var editor = sel_el;
+        var ancestors = get_all_ancestors(sel_el);
+        var ret = null;
+        tagName = ("" + tagName).toLowerCase();
+        for (var i in ancestors) {
+                var el = ancestors[i];
+                if (el.tagName.toLowerCase() == tagName) {
+                        ret = el;
+                        break;
+                }
+        }
+        return ret;
+};
+
+function insert_row()
+{
+	// nii, mul on vaja lähimat tr tagi
+	var sel = getSelection();
+	var tr = get_closest_tag("tr");
+	if (tr)
+	{
+		var otr = tr.cloneNode(true);
+		clear_row(otr);
+		tr.parentNode.insertBefore(otr,tr.nextSibling);
+	}
+
+
+};
+
+function delete_row()
+{
+	var tr = get_closest_tag("tr");
+	if (tr) {
+		var par = tr.parentNode;
+		if (par.rows.length > 1) {
+			// set the caret first to a position that doesn't
+			// disappear.
+			select_next_node(tr);
+			par.removeChild(tr);
+		}
+	}
+}
+
+function insert_column()
+{
+	var td = get_closest_tag("td");
+	if (td) {
+		var rows = td.parentNode.parentNode.rows;
+		var index = td.cellIndex;
+		for (var i = rows.length; --i >= 0;) {
+			var tr = rows[i];
+			var ref = tr.cells[index + 1];
+			victim = document.getElementById(sel_el).contentWindow;
+			var otd = victim.document.createElement("td");
+			otd.setAttribute("class","text");
+			otd.innerHTML = mozbr;
+			tr.insertBefore(otd, ref);
+		}
+	}
+}
+
+function delete_column()
+{
+	var td = get_closest_tag("td");
+	if (td) {
+		var index = td.cellIndex;
+		if (td.parentNode.cells.length > 1) {
+			// set the caret first to a position that doesn't disappear
+			select_next_node(td);
+			var rows = td.parentNode.parentNode.rows;
+			for (var i = rows.length; --i >= 0;) {
+				var tr = rows[i];
+				tr.removeChild(tr.cells[index]);
+			}
+		}
+	}
+}
+
+function get_all_ancestors(el)
+{
+        //var p = sel_el.getParentElement();
+        var p = get_parent_element();
+        var a = [];
+        while (p && (p.nodeType == 1) && (p.tagName.toLowerCase() != 'body')) {
+                a.push(p);
+                p = p.parentNode;
+        }
+        a.push(document.getElementById(sel_el).contentWindow.document.body);
+        return a;
+};
+
+function get_parent_element()
+{
+        var sel = getSelection();
+        var range = createRange(sel);
+        if (browser.isIE5up) {
+                switch (sel.type) {
+                    case "Text":
+                    case "None":
+                        // It seems that even for selection of type "None",
+                        // there _is_ a parent element and it's value is not
+                        // only correct, but very important to us.  MSIE is
+                        // certainly the buggiest browser in the world and I
+                        // wonder, God, how can Earth stand it?
+                        return range.parentElement();
+                    case "Control":
+                        return range.item(0);
+                    default:
+                        return this._doc.body;
+                }
+        } else try {
+                var p = range.commonAncestorContainer;
+                if (!range.collapsed && range.startContainer == range.endContainer &&
+                    range.startOffset - range.endOffset <= 1 && range.startContainer.hasChildNodes())
+                        p = range.startContainer.childNodes[range.startOffset];
+                /*
+                alert(range.startContainer + ":" + range.startOffset + "\n" +
+                      range.endContainer + ":" + range.endOffset);
+                */
+                while (p.nodeType == 3) {
+                        p = p.parentNode;
+                }
+                return p;
+        } catch (e) {
+                return null;
+        }
+};
+
+function select_next_node(el)
+{
+	var node = el.nextSibling;
+        while (node && node.nodeType != 1) {
+       	 node = node.nextSibling;
+        }
+                if (!node) {
+                        node = el.previousSibling;
+                        while (node && node.nodeType != 1) {
+                                node = node.previousSibling;
+                        }
+                }
+                if (!node) {
+                        node = el.parentNode;
+                }
+                select_node_contents(node);
+};
+
+function select_node_contents(node)
+{
+        var range;
+        var collapsed = (typeof pos != "undefined");
+        if (browser.isIE5up) {
+        	document.getElementById(sel_el).contentWindow.document.body.createTextRange();
+                range.moveToElementText(node);
+                (collapsed) && range.collapse(pos);
+                range.select();
+        } else {
+                var sel = getSelection();
+                range = createRange();
+                range.selectNodeContents(node);
+                (collapsed) && range.collapse(pos);
+                sel.removeAllRanges();
+                sel.addRange(range);
+        }
+};
+
+function clear_row(tr)
+{
+	var tds = tr.getElementsByTagName("td");
+	for (var i = tds.length; --i >= 0;) {
+		var td = tds[i];
+		td.rowSpan = 1;
+		td.innerHTML = mozbr;
+	}
+}
 
 
 

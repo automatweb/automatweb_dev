@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.8 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.9 2005/03/29 05:54:08 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -183,6 +183,17 @@ class css extends class_base
 			$this->tpl_init("automatweb");
 		}
 		$this->read_template("colorpicker.tpl");
+		die($this->parse());
+	}
+
+	/**
+		@attrib name=table_dialog all_args="1"
+
+	**/
+	function table_dialog($arr)
+	{
+		$this->tpl_init("automatweb");
+		$this->read_template("insert_table.tpl");
 		die($this->parse());
 	}
 
