@@ -770,68 +770,6 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 	border-width: 0px 0px 0px 0px; 
 }
 
-.messengermenu {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.7em;
-text-decoration: none;
-}
-.messengermenu a {color: #FFFFFF;}
-.messengermenu a:hover {color: #FFCC00;}
-
-
-.messengermenusub {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.6em;
-font-weight: bold;
-text-decoration: none;
-}
-
-.messengermenulevel3 {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.6em;
-text-decoration: none;
-}
-
-.messengermenulevel3act {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.6em;
-font-weight: bold;
-text-decoration: none;
-}
-
-.messengermenulevel3act a {color: #000000;}
-.messengermenulevel3act a:hover {color: #000033;}
-
-.messengermenusub2title {
-font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-color: #000033;
-font-size: 0.6em;
-font-weight: bold;
-text-decoration: none;
-}
-
-.messengermenusub2 {
-font-family: Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 0.8em;
-text-decoration: none;
-}
-
-.messengermenusub2selected {
-font-family: Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 1.8em;
-text-decoration: none;
-font-weight: bold;
-}
-
-.messengermenusub a {color: #929FB3;}
-.messengermenusub a:hover {color: #39537C;}
-
 
 .titlesel {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -1026,18 +964,19 @@ font-size: 10px;
 background-color: #FCFCF4;
 }
 .awmenuedittablerowsel {
-background-color: #E2E2DB;
+background-color: #F2E2DB;
+/*background-color: #E2E2DB;*/
 }
 
-.cooltablerow {
-background-color: #FFFFFF;
+.awmenuedittablerowsel {
+background-color: #F2E2DB;
+/*background-color: #E2E2DB;*/
 }
 
-.cooltablerow2 {
-background-color: #EEEEEE;
+.awmenuedittablerowactive {
+background-color: #12E2DB;
+/*background-color: #E2E2DB;*/
 }
-
-
 
 div.menuBar,
 div.menuBar a.menuButton,
