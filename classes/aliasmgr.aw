@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.159 2004/11/03 12:17:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.160 2004/11/21 19:01:13 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -247,7 +247,7 @@ class aliasmgr extends aw_template
 		// url into the new url as a return_url
 
 		// except that if there already is one, then add do it. eh?
-		return $this->mk_my_orb($act,array("id" => $id,"group" => $group,"return_url" => urlencode($return_url)),$this->use_class);
+		return $this->mk_my_orb($act,array("id" => $id,"group" => $group,"return_url" => $return_url),$this->use_class);
 	}
 		
 	////
