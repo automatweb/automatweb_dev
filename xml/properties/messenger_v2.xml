@@ -1,0 +1,70 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>fromname</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kellelt</caption>
+      </property>
+      <property>
+            <name>config</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_CONFIG</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>write_mail</name>
+            <type>callback</type>
+            <callback>callback_write_mail</callback>
+            <no_caption>1</no_caption>
+            <group>write_mail</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Uus kiri</caption>
+      </property>
+      <property>
+            <name>mail_toolbar</name>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <group>message_view</group>
+            <store>no</store>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Msg. toolbar</caption>
+      </property>
+      <property>
+            <name>message_view</name>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <group>message_view</group>
+            <store>no</store>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirjad</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MESSENGER</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <message_view>
+                  <caption>Kirjad</caption>
+                  <submit>no</submit>
+            </message_view>
+            <write_mail>
+                  <caption>Uus kiri</caption>
+                  <submit>no</submit>
+            </write_mail>
+      </groupinfo>
+</properties>
+

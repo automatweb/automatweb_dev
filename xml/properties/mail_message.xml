@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>uidl</name>
+            <type>textbox</type>
+            <table>messages</table>
+            <group>general</group>
+            <field>uidl</field>
+            <caption>UIDL</caption>
+      </property>
+      <property>
             <name>mfrom</name>
             <type>textbox</type>
             <size>80</size>
@@ -39,10 +47,9 @@
       </property>
       <property>
             <name>send</name>
-            <type>text</type>
+            <type>submit</type>
             <value>Saada</value>
             <store>no</store>
-            <editonly>1</editonly>
             <table>messages</table>
             <group>general</group>
             <field>send</field>
