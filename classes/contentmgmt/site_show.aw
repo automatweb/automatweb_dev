@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.88 2004/10/13 13:36:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.89 2004/10/14 13:39:52 kristo Exp $
 
 /*
 
@@ -1842,15 +1842,14 @@ class site_show extends class_base
 			{
 				continue;
 			}
-			//$url = $o->prop("show_obj") ?  obj_link($o->prop("show_obj")) : $o->meta("url");
 			$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects");
-			$ar = new aw_array($o->meta("menus"));
+
 			$sh = false;
-			foreach($ar->get() as $key => $val)
+			foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
 			{
-				if ($val == $this->sel_section)
+				if ($c->prop("to") == $this->sel_section)
 				{
-					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
 					$sh = true;
 					$_SESSION["popups_shown"][$o->id()] = 1;
 				}
@@ -1866,7 +1865,7 @@ class site_show extends class_base
 				{
 					if ($ssi[$p_o->parent()])
 					{
-						$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+						$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
 						$_SESSION["popups_shown"][$o->id()] = 1;
 					}
 				}
