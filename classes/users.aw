@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.114 2004/03/23 15:25:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.115 2004/03/30 12:33:18 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1133,6 +1133,7 @@ class users extends users_user
 			}
 			$gidlist = array();
 			$gidlist_pri = array();
+			$gidlist_pri_oid = array();
 			$gidlist_oid = array();
 			$gl = $this->get_gids_by_uid($uid,true);
 			foreach($gl as $gid => $gd)
@@ -1141,6 +1142,7 @@ class users extends users_user
 				$gidlist_pri[(int)$gid] = (int)$gd["priority"];
 				if ($gd["oid"])
 				{
+					$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
 					$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
 				}
 			}
@@ -1151,6 +1153,7 @@ class users extends users_user
 			}
 			aw_global_set("gidlist", $gidlist);
 			aw_global_set("gidlist_pri", $gidlist_pri);
+			aw_global_set("gidlist_pri_oid", $gidlist_pri_oid);
 			aw_global_set("gidlist_oid", $gidlist_oid);
 			$this->touch($uid);
 
