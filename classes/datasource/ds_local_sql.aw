@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.9 2003/08/27 12:25:02 kristo Exp $
+// $Id: ds_local_sql.aw,v 1.10 2003/10/29 15:01:34 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -36,103 +36,6 @@ class ds_local_sql extends aw_template
 			};
 			$retval = $tmp;
 		}
-		return $retval;
-	}
-
-	////
-	// !Checks whether it is possible to add an object with the given data
-	function ds_can_add($args = array())
-	{
-		$retval = true;
-
-		// acl checks are defined in ORB, no need to duplicate those here
-
-		// btw, if class_id is pseudo, then the class_id is ignored ..
-		// maybe I should have a setting somewhere which tells me 
-		// which kind of objects can actually contain other objects?
-		$parobj = $this->get_object(array(
-			"oid" => $args["parent"],
-			"class_id" => CL_PSEUDO,
-		));
-
-		if (!$parobj)
-		{
-			$this->_errortext = "Objekte saab lisada ainult menüüde alla";
-			$retval = false;
-		}
-
-		return $retval;
-	}
-
-	////
-	// !Stores an object
-	// how do I know whether the action was successful?
-	function ds_save_object($args = array(),$data = array())
-	{
-
-		if (isset($args["table"]) && isset($args["idfield"]))
-		{
-			$this->db_update_record(array(
-				"table" => $args["table"],
-				"key" => array($args["idfield"] => $args["id"]),
-				"values" => $data,
-				"replace" => $args["replace"],
-			));
-			
-		}
-		else
-		{
-			// don't save the object if the edit privilege is gone
-			if (!$this->can("edit", $args["id"]))
-			{
-				$this->acl_error("edit", $args["id"]);
-			}
-
-			$data["oid"] = $data["id"];
-			unset($data["id"]);
-			// update an existing object
-			$pos = strpos($data["name"], "'");
-			if ($pos !== false)
-			{
-				if ($data["name"]{$pos-1} != "\\")
-				{
-					$this->quote(&$data["name"]);
-				}
-			}
-
-			$pos = strpos($data["comment"], "'");
-			if ($pos !== false)
-			{
-				if ($data["comment"]{$pos-1} != "\\")
-				{
-					$this->quote(&$data["comment"]);
-				}
-			}
-
-			$this->upd_object($data);
-			$retval = true;
-
-		};
-	}
-
-	function ds_new_object($args = array(),$data = array())
-	{
-		// create object, all checks are already done
-		extract($args);
-		$retval = true;
-		if ($table && $idfield)
-		{
-			$q = sprintf("INSERT INTO %s (%s) VALUES (%d)",$table,$idfield,$id);
-			$this->db_query($q);
-		}
-		else
-		{
-			if ($data["period"])
-			{
-				$data["periodic"] = 1;
-			};
-			$retval = $this->new_object($data);
-		};
 		return $retval;
 	}
 
