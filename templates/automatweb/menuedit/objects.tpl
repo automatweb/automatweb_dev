@@ -39,7 +39,7 @@ var chk_status = true;
 		return true;
 	}
 
-	function cut()
+	function awcut()
 	{
 		document.foo.action.value="cut";
 		document.foo.subaction.value="";
@@ -47,7 +47,7 @@ var chk_status = true;
 		return true;
 	}
 
-	function copy()
+	function awcopy()
 	{
 		document.foo.action.value="copy";
 		document.foo.subaction.value="";
@@ -63,7 +63,7 @@ var chk_status = true;
 		return true;
 	}
 
-	function paste()
+	function awpaste()
 	{
 		document.foo.action.value="paste";
 		document.foo.subaction.value="";
@@ -251,11 +251,11 @@ name="new" alt="{VAR:LC_MENUEDIT_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_MENUEDIT_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
 SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:document.foo.submit()"  onClick="return cut()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('cut','','{VAR:baseurl}/automatweb/images/blue/awicons/cut_over.gif',1)"><img name="cut" alt="Cut" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/cut.gif" width="25" height="25"></a><IMG
+href="javascript:document.foo.submit()"  onClick="return awcut()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('cut','','{VAR:baseurl}/automatweb/images/blue/awicons/cut_over.gif',1)"><img name="cut" alt="Cut" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/cut.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:document.foo.submit()" onClick="return copy()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copy','','{VAR:baseurl}/automatweb/images/blue/awicons/copy_over.gif',1)"><img name="copy" alt="Copy" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/copy.gif" width="25" height="25"></a><IMG
+href="javascript:document.foo.submit()" onClick="return awcopy()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copy','','{VAR:baseurl}/automatweb/images/blue/awicons/copy_over.gif',1)"><img name="copy" alt="Copy" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/copy.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:document.foo.submit()" onClick="return paste()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('paste','','{VAR:baseurl}/automatweb/images/blue/awicons/paste_over.gif',1)"><img name="paste" alt="Paste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/paste.gif" width="25" height="25"></a><IMG
+href="javascript:document.foo.submit()" onClick="return awpaste()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('paste','','{VAR:baseurl}/automatweb/images/blue/awicons/paste_over.gif',1)"><img name="paste" alt="Paste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/paste.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:document.foo.submit()" onClick="return ddelete()"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><IMG
