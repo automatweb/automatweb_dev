@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.117 2003/06/03 16:52:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.118 2003/06/04 11:22:56 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -480,7 +480,6 @@ class planner extends class_base
 			$t = new doc();
 			$t->cfgform = $frm;
 			$t->cfgform_id = $frm["oid"];
-
 			$t->init_class_base();
 
 			$emb_group = "general";
@@ -489,16 +488,8 @@ class planner extends class_base
 				$emb_group = $args["request"]["cb_group"];
 			};
 
-
-
-
 			$t->role = "obj_edit";
-		
-			$all_props = $t->get_active_properties(array(
-				"group" => $emb_group,
-			));
-
-			// sorry ass attempt to get editing of linked documents to work
+			
 			$obj_to_load = $this->event_id;
 
 			if ($ev_data["class_id"] == CL_BROTHER_DOCUMENT)
@@ -506,11 +497,20 @@ class planner extends class_base
 				$obj_to_load = $ev_data["brother_of"];
 			};
 
+			$t->id = $obj_to_load;
+
+			$all_props = $t->get_active_properties(array(
+				"group" => $emb_group,
+			));
+			
+
 			if ($this->event_id)
 			{
 				$t->load_obj_data(array("id" => $obj_to_load));
-				$t->id = $obj_to_load;
+				//$t->id = $obj_to_load;
 			};
+
+			// sorry ass attempt to get editing of linked documents to work
 			$xprops = array();
 			$xtmp = $t->groupinfo;
 			$tmp = array(
@@ -2245,7 +2245,7 @@ class planner extends class_base
 					$rstart = $val["start"] - ($val["start"] % $step);
 
 					// let's fool around a bit
-					$end = !empty($val["end"]) ? $val["end"] : $val["start"] + 7200;
+					$end = !empty($val["end"]) ? $val["end"] : $val["start"] + 2700;
 
 					$nextcolor = $colors->next();
 					if (!$nextcolor)
