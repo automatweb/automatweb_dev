@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.8 2003/08/22 09:04:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.9 2003/08/26 10:49:26 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
+	@classinfo relationmgr=yes
+	
 	@default table=objects
 	@default field=meta
 	@default method=serialize
@@ -11,7 +13,7 @@
 	@property groups type=select multiple=1 size=15
 	@caption Vali grupid, kellele pullouti näidatakse
 
-	@property docs type=objpicker clid=CL_DOCUMENT
+	@property docs type=relpicker reltype=RELTYPE_DOCUMENT
 	@caption Vali dokument, mida näidata
 
 	@property align type=select
@@ -27,6 +29,8 @@
 	@caption Template
 */
 				
+define("RELTYPE_DOCUMENT", 1);
+
 class pullout extends class_base
 {
 	function pullout()
@@ -135,5 +139,13 @@ class pullout extends class_base
 		}
 		return $ret;
 	}
+
+        function callback_get_rel_types()
+        {
+                return array(
+                        RELTYPE_DOCUMENT => "n&auml;idatav dokument",
+                );
+        }
+	
 }
 ?>
