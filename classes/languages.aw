@@ -130,7 +130,11 @@ class languages extends aw_template
 		{
 			aw_session_set("LC",$row["acceptlang"]);
 		}
-		$this->db_query("UPDATE users SET lang_id = $id WHERE uid = '".aw_global_get("uid")."'");
+		$uid = aw_global_get("uid");
+		if (!empty($uid))
+		{
+			$this->db_query("UPDATE users SET lang_id = $id WHERE uid = '$uid'");
+		};
 		aw_session_set("lang_id", $id);
 
 		// milleks see cookie vajalik oli?
