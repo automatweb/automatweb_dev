@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.68 2004/03/12 11:29:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.69 2004/03/24 17:21:48 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -57,7 +57,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property showlead type=checkbox ch_value=1 default=1 trans=1
 @caption Näita leadi
 
-@property show_modified type=checkbox ch_value=1 trans=1
+@property show_modified type=checkbox ch_value=1 trans=1 default=1
 @caption Näita muutmise kuupäeva
 
 @property doc_modified type=hidden table=documents field=modified trans=1
@@ -195,7 +195,12 @@ class doc extends class_base
 			case "tm":
 				if ($arr["new"])
 				{
-					$data["value"] = date("d.m.Y");
+					$format = aw_ini_get("document.date_format");
+					if (empty($format))
+					{
+						$format = "d.m.Y";
+					};
+					$data["value"] = date($format);
 				};
 				break;
 
@@ -484,6 +489,7 @@ class doc extends class_base
 			$toolbar->add_button(array(
 				"name" => "preview",
 				"tooltip" => "Eelvaade",
+				"target" => "_blank",
 				"url" => aw_global_get("baseurl") . "/" . $arr["obj_inst"]->id(),
 				"img" => "preview.gif",
 			));
