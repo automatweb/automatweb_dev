@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.185 2004/06/17 11:24:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.186 2004/06/17 14:32:07 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -130,9 +130,13 @@ class planner extends class_base
 		return $this->event_entry_classes;
 	}
 
-	function get_calendar_for_user($arr)
+	function get_calendar_for_user($arr = array())
 	{
 		$uid = $arr["uid"];
+		if (empty($uid))
+		{
+			$uid = aw_global_get("uid");
+		};
 		$users = get_instance("users");
 		$user = new object($users->get_oid_for_uid($uid));
 
