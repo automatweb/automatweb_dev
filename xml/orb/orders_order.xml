@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="orders_order" folder="applications/orders" extends="class_base">
+		<action name="add_to_cart" nologin="1" all_args="1">
+			<function name="add_to_cart">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit" nologin="1" all_args="1">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_persondata_form" nologin="1">
+			<function name="do_persondata_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_persondata_submit" nologin="1" all_args="1">
+			<function name="do_persondata_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change" nologin="1" all_args="1">
+			<function name="change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_order" nologin="1">
+			<function name="send_order">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

@@ -1,0 +1,130 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>orderform</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_ORDERFORM</reltype>
+            <method>serialize</method>
+            <caption>Tellimuse seadetevorm</caption>
+      </property>
+      <property>
+            <name>itemform</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_ITEMFORM</reltype>
+            <method>serialize</method>
+            <caption>Tellimuse rea seadetevorm</caption>
+      </property>
+      <property>
+            <name>ordemail</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_MAIL</reltype>
+            <method>serialize</method>
+            <caption>Mail tellijale</caption>
+      </property>
+      <property>
+            <name>thankudoc</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_THANKU</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokument kuhu suunata peale esitamist</caption>
+      </property>
+      <property>
+            <name>postal_fee</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Postikulu</caption>
+      </property>
+      <property>
+            <name>orders_post_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mail kuhu tellimus saata</caption>
+      </property>
+      <property>
+            <name>orders_to_mail</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <ch_value>1</ch_value>
+            <caption>Saada e-mail tellijale</caption>
+      </property>
+      <property>
+            <name>orders_post_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kliendile saatja(e-mail)</caption>
+      </property>
+      <property>
+            <name>ordering</name>
+            <table>objects</table>
+            <group>ordering</group>
+            <type>callback</type>
+            <no_caption>1</no_caption>
+            <callback>do_order_form</callback>
+            <field>ordering</field>
+      </property>
+      <classinfo>
+            <syslog_type>ST_ORDERS_FORM</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <ordering>
+                  <caption>Tellimine</caption>
+                  <submit>no</submit>
+            </ordering>
+            <config>
+                  <caption>Seaded</caption>
+            </config>
+      </groupinfo>
+      <reltypes>
+            <ORDERFORM>
+                  <value>1</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Tellimuse seadetevorm</caption>
+            </ORDERFORM>
+            <ITEMFORM>
+                  <value>2</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Tellimuse rea seadetevorm</caption>
+            </ITEMFORM>
+            <THANKU>
+                  <value>3</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </THANKU>
+            <MAIL>
+                  <value>5</value>
+                  <clid>CL_MESSAGE</clid>
+                  <caption>Mail</caption>
+            </MAIL>
+            <ADDORDER>
+                  <value>4</value>
+                  <clid>CL_ORDERS_ITEM</clid>
+                  <caption>Tellimuse lisa</caption>
+            </ADDORDER>
+      </reltypes>
+</properties>
+
