@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.236 2004/03/16 10:35:32 duke Exp $
+// $Id: class_base.aw,v 2.237 2004/03/16 13:10:02 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -59,6 +59,14 @@ define('PROP_ERROR',3);
 // something went very very wrong,
 // notify the user and DO NOT display the form/save the object
 define('PROP_FATAL_ERROR',4);
+
+
+// block showing contents of a single tab. callback_pre_edit uses this
+define('CB_ERROR',1);
+
+// block showing the entire form, could be used to report nicely
+// formatted error messages back user. Not used yet.
+define('CB_FATAL_ERROR',2);
 
 // reltypes starting from id-s with 100 are reserved and should not be used
 // anywhere else
@@ -169,6 +177,8 @@ class class_base extends aw_template
 	**/
 	function change($args = array())
 	{
+		global $awt;
+		$awt->start("cb-change");
 		$this->init_class_base();
 
 		$cb_values = aw_global_get("cb_values");
@@ -194,6 +204,7 @@ class class_base extends aw_template
 		};
 
 		$use_form = $args["form"];
+
 
 		if (empty($use_form))
 		{
@@ -222,6 +233,7 @@ class class_base extends aw_template
 			$this->set_classinfo(array("name" => "no_yah", "value" => 1));
 		};
 
+
 		// now i need to do something with that translation thingie
 
 		// yees, this means that other forms besides add and edit cannot use custom config forms
@@ -234,6 +246,7 @@ class class_base extends aw_template
 				"args" => $args,
 			));
 		};
+
 
 		$this->use_form = $use_form;
 
@@ -272,6 +285,7 @@ class class_base extends aw_template
 
 		// Now I need to deal with relation elements
 		$properties = $this->get_property_group2($filter);
+		$awt->start("shit");
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -315,6 +329,7 @@ class class_base extends aw_template
 		};
 	
 		$this->request = $args;
+		$gdata = !empty($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->use_group];
 
 		if (!empty($this->id))
 		{
@@ -322,16 +337,26 @@ class class_base extends aw_template
 			// only for existing objects
 			if (method_exists($this->inst,"callback_pre_edit"))
 			{
-				$this->inst->callback_pre_edit(array(
+				$fstat = $this->inst->callback_pre_edit(array(
 					"id" => $this->id,
 					"request" => $this->request,
 					"obj_inst" => &$this->obj_inst,
+					"group" => $this->use_group,
 				));
+
+				if (is_array($fstat) && !empty($fstat["error"]))
+				{
+					$properties = array();
+					$properties["error"] = array(
+						"type" => "text",
+						"error" => $fstat["errmsg"],
+					);
+					$gdata["submit"] = "no";
+				};
 
 			};
 		};
-		
-		$gdata = !empty($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->use_group];
+
 
 		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
 
@@ -399,10 +424,14 @@ class class_base extends aw_template
 		// and the only user of that is the crm_company class. Would be _really_ nice
 		// to beg rid of all that shit
 		$this->inst->relinfo = $this->relinfo;
+		$awt->stop("shit");
 
+		$awt->start("parse-properties");
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
+		$awt->stop("parse-properties");
+		$awt->start("add-property");
 
 		// what exactly is going on with that subgroup stuff?
 		if (isset($resprops["subgroup"]))
@@ -427,6 +456,7 @@ class class_base extends aw_template
 		{
 			$cli->add_property($val);
 		};
+		$awt->stop("add-property");
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
 		if (empty($orb_class))
@@ -488,6 +518,8 @@ class class_base extends aw_template
 			$method = "GET";
 		};
 
+
+		$awt->start("final-bit");
 		$cli->finish_output(array(
 			"method" => $method,
 			"action" => $submit_action,
@@ -514,6 +546,8 @@ class class_base extends aw_template
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
 		));
+		$awt->stop("final-bit");
+		$awt->stop("cb-change");
 		return $rv;
 	}
 
@@ -1679,6 +1713,7 @@ class class_base extends aw_template
 						$resprops[$rkey] = $rval;
 					};
 				};
+
 
 			}
 			elseif ($val["type"] == "form")
@@ -3000,6 +3035,11 @@ class class_base extends aw_template
 			$filter["rel"] = 1;
 		};
 
+		if (empty($arr["clid"]) && !empty($this->clid))
+		{
+			$arr["clid"] = $this->clid;
+		};
+
 		// XXX: add some checks
 		$all_properties = $this->load_defaults(array(
 			"clid" => $arr["clid"],
@@ -3129,6 +3169,7 @@ class class_base extends aw_template
 			};
 
 			$propdata = array_merge($all_properties[$key],$val);
+
 
 			if (is_array($first_subgrp) && !is_array($propdata["group"]) && $first_subgrp[$propdata["group"]])
 			{
@@ -3300,7 +3341,7 @@ class class_base extends aw_template
 			"clid" => $arr["clid"],
 			"filter" => $arr["filter"],
 		));
-	
+
 		$this->groupinfo = $cfgu->get_groupinfo();
 		$this->forminfo = $cfgu->get_forminfo();
 		if (!is_array($this->classinfo))
