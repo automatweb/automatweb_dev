@@ -36,18 +36,12 @@ class relation extends class_base
 			die("this relation object has no subclass, please run converters->convert_aliases()");
 		};
 		
+		$reldata = $this->db_fetch_row("SELECT target FROM aliases WHERE relobj_id = '$relobj[oid]'");
+
 		$cldef = $this->cfg["classes"][$relobj["subclass"]];
 		$values = $relobj["meta"]["values"][$cldef["def"]];
 
 		$cfgu = get_instance("cfg/cfgutils");
-		// I need a way to load all the groups as well from that bloody class
-		$rel_properties = $cfgu->load_class_properties(array(
-			"clid" => $relobj["subclass"],
-			"filter" => array("rel" => 1,"group" => $args["request"]["group"]),
-		));
-
-		$this->groupinfo = $cfgu->groupinfo;
-
 
 
 		$t = get_instance($cldef["file"]);
@@ -58,6 +52,7 @@ class relation extends class_base
 
 		$resprops = $t->parse_properties(array(
 			"properties" => &$rel_properties,
+			"target_obj" => $reldata["target"],
 		));
 
 		return $resprops;
