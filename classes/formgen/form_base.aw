@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.6 2002/12/30 11:02:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.7 2002/12/30 11:38:39 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -337,7 +337,7 @@ class form_base extends form_db_base
 			$this->parse("GRID_SEL");
 		}
 
-		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar","new_cal_rel","edit_cal_rel")))
+		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar","new_cal_rel","edit_cal_rel","joins")))
 		{
 			$this->parse("SETTINGS_SEL");
 		}
@@ -345,6 +345,7 @@ class form_base extends form_db_base
 		if ($this->type == FTYPE_SEARCH)
 		{
 			$this->parse("SEARCH_SEL");
+			$this->parse("RELS");
 		} 
 		else
 		if ($this->type == FTYPE_FILTER_SEARCH)
