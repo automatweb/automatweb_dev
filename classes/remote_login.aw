@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.6 2002/10/09 09:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.7 2002/10/16 13:51:20 kristo Exp $
 // remote_login.aw - AW remote login
 classload("socket");
 
@@ -30,7 +30,8 @@ class remote_login extends aw_template
 
 		$this->mk_path($parent,$act);
 		$this->vars(array(
-			"server" => $obj["name"],
+			"name" => $obj["name"],
+			"server" => $meta["server"],
 			"uid" => $meta["login_uid"],
 			"password" => $meta["login_password"],
 			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
@@ -46,14 +47,14 @@ class remote_login extends aw_template
 		{
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $server,
+				"name" => $name,
 			));
 		}
 		else
 		{
 			$id = $this->new_object(array(
 				"parent" => $parent,
-				"name" => $server,
+				"name" => $name,
 				"class_id" => CL_AW_LOGIN,
 			));
 		};
@@ -63,6 +64,7 @@ class remote_login extends aw_template
 			"data" => array(
 				"login_uid" => $uid,
 				"login_password" => $password,
+				"server" => $server
 			),
 		));
 		return $this->mk_my_orb("change",array("id" => $id));
@@ -127,11 +129,7 @@ class remote_login extends aw_template
 		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
-//		$op .= "Keep-Alive: 5\r\n";
 		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n\r\n";
-//		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
-//		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
-
 		if (!$silent)
 		{
 			print "<pre>";
@@ -139,8 +137,6 @@ class remote_login extends aw_template
 		}
 
 		$socket->write($op);
-//		$socket->write($request);
-	
 		$ipd = "";
 		while($data = $socket->read())
 		{
@@ -201,17 +197,17 @@ class remote_login extends aw_template
 		$ob = $this->get_object($id);
 		$this->handshake(array(
 			"silent" => true,
-			"host" => $ob["name"]
+			"host" => $ob["meta"]["server"]
 		));
 
 		$this->login(array(
-			"host" => $ob["name"],
+			"host" => $ob["meta"]["server"],
 			"uid" => $ob["meta"]["login_uid"],
 			"password" => $ob["meta"]["login_password"],
 			"silent" => true
 		));
 
-		return array($ob["name"],$this->cookie);
+		return array($ob["meta"]["server"],$this->cookie);
 	}
 
 	function getcookie($arr)
