@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.11 2004/03/25 17:35:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.12 2004/03/25 19:39:25 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -35,7 +35,7 @@ class releditor extends aw_template
 
 		// form is a single form, which can be used to edit a single connection. It
 		// is also the default
-		$visual = isset($prop["visual"]) && $prop["visual"] == "manager" ? "manager" : "form";
+		$visual = isset($prop["mode"]) && $prop["mode"] == "manager" ? "manager" : "form";
 
 		if (!is_array($props) && empty($prop["use_form"]))
 		{
@@ -223,12 +223,16 @@ class releditor extends aw_template
 		{
 			$obj_inst = new object();
 		};
+	
+		// so that the object can access the source object
+		aw_global_set("from_obj",$arr["obj_inst"]->id());
 
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => "cba_emb",
 			"obj_inst" => $obj_inst,
 		));
+
 		$awt->stop("init-rel-editor");
 		
 		return $xprops;
