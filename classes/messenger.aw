@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.22 2001/05/24 10:36:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.23 2001/05/24 14:47:32 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -682,20 +682,22 @@ class messenger extends menuedit_light
 		$this->quote($args);
 		extract($args);
 
-		$etargets = explode(",",$etargets);
+		#$etargets = explode(",",$etargets);
 
-		if ($etargets[0])
+		$external = false;
+		if ($etargets)
 		{
-			foreach($etargets as $aadress)
-			{
-				$from = $udata["email"];
-				$message = stripslashes($message);
-				mail($aadress,$subject,$message,"From: $from");
-			};
-			return $this->mk_site_orb(array(
-				"action" => "folder",
+			$external = true;
+			classload("aw_mail");
+			$awm = new aw_mail();
+			$awm->create(array(
+					"froma" => $udata["email"],
+					"subject" => $subject,
+					"to" => $etargets,
+					"body" => stripslashes($message),
 				));
-		}
+		};
+			
 
 		// koigepealt siis serializeme lisatud failid äsjakirjutatud kirjale külge
 		foreach($attach as $idx => $tmpname)
@@ -712,13 +714,30 @@ class messenger extends menuedit_light
                                 $row["class_id"] = CL_FILE;
                                 $row["name"] = basename($attach_name[$idx]);
                                 $row["content"] = $fc;
-                                $ser = serialize($row);
-                                $this->quote($ser);
-				$this->quote($ser);
-				$q = "INSERT INTO msg_objects (message_id,content)
-						VALUES('$msg_id','$ser')";
-				$this->db_query($q);
+				if ($external)
+				{
+					$awm->fattach(array(
+						"data" => $tmpname,
+						"contenttype" => $attach_type[$idx],
+					));
+				}
+				else
+				{
+                                	$ser = serialize($row);
+					$this->quote($ser);
+					$this->quote($ser);
+					$q = "INSERT INTO msg_objects (message_id,content)
+							VALUES('$msg_id','$ser')";
+					$this->db_query($q);
+				};
 			}
+		};
+		
+		if ($external)
+		{
+			return $this->mk_site_orb(array(
+				"action" => "folder",
+			));
 		};
 		
 		$uid = UID;
