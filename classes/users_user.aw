@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.22 2001/12/18 00:06:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.23 2002/01/31 00:11:16 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -675,7 +675,7 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
 
 		// teeme kasutaja
-		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp')");
+		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,created_hour,created_day,created_week,created_month,created_year) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')");
 
 		// teeme default grupi
 		$oid = $this->new_object(array("name" => $uid, "class_id" => CL_USER_GROUP, "status" => 2));
