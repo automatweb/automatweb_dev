@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.46 2002/09/04 14:20:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.47 2002/09/04 17:45:24 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -311,7 +311,7 @@ class form_base extends form_db_base
 		$this->vars(array(
 			"form_id"					=> $this->id, 
 			"change"					=> $this->mk_my_orb("change", array("id" => $this->id),"form"),
-			"show"						=> $this->mk_my_orb("show", array("id" => $this->id),"form"),
+			"show"						=> $this->mk_my_orb("preview_form", array("id" => $this->id),"form"),
 			"table_settings"	=> $this->mk_my_orb("table_settings", array("id" => $this->id),"form"),
 			"all_elements"		=> $this->mk_my_orb("all_elements", array("id" => $this->id),"form"),
 			"actions"					=> $this->mk_my_orb("list_actions", array("id" => $this->id),"form_actions"),
@@ -326,7 +326,7 @@ class form_base extends form_db_base
 			"calendar" => $this->mk_my_orb("calendar",array("id" => $this->id),"form"),
 		));
 
-		if (in_array($action, array("change","show","all_elements","sel_search","sel_filter_search","form_aliasmgr")))
+		if (in_array($action, array("change","preview_form","all_elements","sel_search","sel_filter_search","form_aliasmgr")))
 		{
 			$this->parse("GRID_SEL");
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.137 2002/09/04 11:53:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.138 2002/09/04 17:45:24 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -723,6 +723,9 @@ class form extends form_base
 		// clause) to figure out the type of the form -- duke
 
 		$keys = array(0,FSUBTYPE_EV_ENTRY,FSUBTYPE_CAL_CONF,FSUBTYPE_CAL_SEARCH,FSUBTYPE_CAL_CONF2);
+
+		$sx = FSUBTYPE_EV_ENTRY + FSUBTYPE_CAL_CONF + FSUBTYPE_CALSEARCH + FSUBTYPE_CAL_CONF2;
+		$_sel_role = (int)$this->subtype & $sx;
 		foreach($keys as $_role)
 		{
 			if ((int)$this->subtype & $_role)
@@ -730,7 +733,7 @@ class form extends form_base
 				$sel_role = $_role;
 			};
 		};
-
+		
 		// let form_base->do_menu know that it needs to draw the calendar tab
 		if ($sel_role)
 		{
@@ -1039,6 +1042,18 @@ class form extends form_base
 		}
 
 		return $st;
+	}
+	
+	////
+	// !Generates a preview of the form and adds the formgen menubars to it	
+	function preview_form($args = array())
+	{
+		extract($args);
+		$this->if_init($id,"show.tpl", "Eelvaade");
+		$this->vars(array(
+			"LINE" => $this->gen_preview(array("id" => $id)),
+		));
+		return $this->do_menu_return();				
 	}
 
 	////
@@ -1398,9 +1413,11 @@ class form extends form_base
 			$_max = (int)$this->arr["cal_count"];
 			$_period_cnt = (int)$this->arr["cal_period"];
 			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
+			$entry_id = $this->entry_id;
 			$this->db_query($q);
-			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
-				VALUES ('$id','$id','$entry_id','$_start','$_end','$max','2','$_period_cnt')";
+			$cal_relation = (int)$cal_relation;
+			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,entry_id,start,end,max_items,period,period_cnt)
+				VALUES ('$id','$cal_relation','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt')";
 			$this->db_query($q);
 		};
 
@@ -1507,6 +1524,7 @@ class form extends form_base
 			$this->update_entry_object($uar);
 		}
 	}
+
 
 	////
 	// !shows entry $entry_id of form $id using output $op_id
