@@ -516,25 +516,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if ($arr["from"])
 		{
 			$awa = new aw_array($arr["from"]);
-			$sql .= " AND source IN ('".$awa->to_sql()."') ";
+			$sql .= " AND source IN (".$awa->to_sql().") ";
 		}
 
 		if ($arr["to"])
 		{
 			$awa = new aw_array($arr["to"]);
-			$sql .= " AND target IN ('".$awa->to_sql()."') ";
+			$sql .= " AND target IN (".$awa->to_sql().") ";
 		}
 
 		if ($arr["type"])
 		{
 			$awa = new aw_array($arr["type"]);
-			$sql .= " AND reltype IN ('".$awa->to_sql()."') ";
+			$sql .= " AND reltype IN (".$awa->to_sql().") ";
 		}
 
 		if ($arr["class"])
 		{
 			$awa = new aw_array($arr["class"]);
-			$sql .= " AND type IN ('".$awa->to_sql()."') ";
+			$sql .= " AND type IN (".$awa->to_sql().") ";
 		}
 
 		foreach($arr as $k => $v)
@@ -557,6 +557,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$sql .= " ORDER BY a.id ";
+
+		if (aw_global_get("uid") == "duke")
+		{
+			print "<pre>";
+			print_r($sql);
+			print "</pre>";
+		};
 
 		$this->db_query($sql);
 		$ret = array();
