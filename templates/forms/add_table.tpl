@@ -37,6 +37,9 @@
 <td class="fform">{VAR:LC_FORMS_LINK_STYLE}:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
 </tr>
 <tr>
+<td class="fform">Grupi rea stiil:</td><td class="fform"><select name='group_style'>{VAR:group_style}</select></td>
+</tr>
+<tr>
 <td class="fform">{VAR:LC_FORMS_PRINT_BUTTON}</td><td class="fform"><input type="checkbox" name="print_button" value="1" {VAR:print_button}></td>
 </tr>
 <tr>
@@ -104,6 +107,14 @@
 <tr>
 	<td class="fform">{VAR:LC_FORMS_CHOOSE_CHANGE_EL}:</td>
 	<td class="fform"><select name="changecol">{VAR:c_elements}</select></td>
+</tr>
+<tr>
+	<td class="fform">Vaikimisi on sorditud:</td>
+	<td class="fform"><select name="defaultsort">{VAR:ds_elements}</select></td>
+</tr>
+<tr>
+	<td class="fform">Grupeeri:</td>
+	<td class="fform"><select name="group_el">{VAR:g_elements}</select></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
