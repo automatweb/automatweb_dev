@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.7 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.8 2002/02/18 13:44:07 kristo Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -624,7 +624,7 @@ lc_load("graph");
 						));
 					$this->vars(array("reforb" => $this->mk_reforb("savedata",array("id" => $id))));
 					return $this->parse();
-				} else $this->raise_error(LC_GRAPH_IMP_INS,TRUE);
+				} else $this->raise_error(ERR_GRAPH_IMP,LC_GRAPH_IMP_INS,TRUE);
 			
 		}
 		//Salvestab kasutaja andmed
