@@ -29,6 +29,11 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Roll</caption>
             </PROFESSIONS>
+            <JOB_OFFER>
+                  <value>4</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
+                  <caption>Tööpakkumine</caption>
+            </JOB_OFFER>
       </reltypes>
 </properties>
 

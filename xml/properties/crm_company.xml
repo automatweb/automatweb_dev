@@ -456,14 +456,14 @@
             <caption>Firmajuht</caption>
       </property>
       <property>
-            <name>customer_search_</name>
+            <name>customer_search_field</name>
             <table>objects</table>
             <group>customers</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
             <parent>vbox_customers_right</parent>
-            <field>customer_search_</field>
+            <field>customer_search_field</field>
             <caption>Põhitegevus</caption>
       </property>
       <property>
@@ -500,6 +500,17 @@
             <caption>Tänav/Küla</caption>
       </property>
       <property>
+            <name>customer_search_only</name>
+            <table>objects</table>
+            <group>customers</group>
+            <orient>vertical</orient>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_only</field>
+            <caption>Valim</caption>
+      </property>
+      <property>
             <name>customer_search_submit</name>
             <table>objects</table>
             <group>customers</group>
@@ -509,6 +520,18 @@
             <parent>vbox_customers_right</parent>
             <field>customer_search_submit</field>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>customer_search_add</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>submit</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <action>create_new_company</action>
+            <field>customer_search_add</field>
+            <caption>Lisa</caption>
       </property>
       <property>
             <name>customer_search</name>
@@ -768,6 +791,16 @@
                   <clid>CL_CRM_CATEGORY</clid>
                   <caption>Kategooria</caption>
             </CATEGORY>
+            <MAINTAINER>
+                  <value>31</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Persoon, kellele firma on klient</caption>
+            </MAINTAINER>
+            <SELLER>
+                  <value>32</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Persoon, kes müüs</caption>
+            </SELLER>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -777,7 +810,7 @@
             <hbox_others>
                   <type>hbox</type>
                   <group>contacts2</group>
-                  <width>15%:30%:55%</width>
+                  <width>20%:80%</width>
             </hbox_others>
             <vbox_contacts_left>
                   <type>vbox</type>

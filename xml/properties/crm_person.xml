@@ -405,11 +405,16 @@
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Üksus</caption>
             </SECTION>
-            <HANDLER>
+            <CLIENT_IM_HANDLING>
                   <value>22</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>Kelle kliendihaldur</caption>
-            </HANDLER>
+                  <caption>Haldab klienti</caption>
+            </CLIENT_IM_HANDLING>
+            <CLIENT_IM_SELLING_TO>
+                  <value>23</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Vastutab müügi eest</caption>
+            </CLIENT_IM_SELLING_TO>
       </reltypes>
 </properties>
 
