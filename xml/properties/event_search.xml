@@ -51,6 +51,17 @@
             <caption>Vabateksti v&amp;auml;jad</caption>
       </property>
       <property>
+            <name>ftsearch_fields2</name>
+            <table>objects</table>
+            <group>ftsearch</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Vabateksti v&amp;auml;jad 2</caption>
+      </property>
+      <property>
             <name>ftform</name>
             <table>objects</table>
             <group>ftform</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.49 2005/04/02 23:02:01 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.50 2005/04/04 11:39:43 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -26,6 +26,9 @@
 
 @property ftsearch_fields type=chooser multiple=1 orient=vertical
 @caption Vabateksti v&auml;jad
+
+@property ftsearch_fields2 type=chooser multiple=1 orient=vertical
+@caption Vabateksti v&auml;jad 2
 
 @default group=ftform
 @property ftform type=table no_caption=1
@@ -89,7 +92,7 @@ class event_search extends class_base
 			"clid" => CL_EVENT_SEARCH,
 		));
 
-		$this->fields = array("fulltext","start_date","end_date","project1","project2", "active", "format");
+		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format");
 	}
 
 	function callback_search_form($arr)
@@ -161,7 +164,6 @@ class event_search extends class_base
 		$t->set_sortable(false);
 		
 		$t->define_data(array(
-			//"type" => 
 			"name" => t("Tekstiotsing"),
 			"caption" => html::textbox(array(
 				"name" => "fulltext[caption]",
@@ -171,6 +173,18 @@ class event_search extends class_base
 				"name" => "fulltext[active]",
 				"value" => $formconfig["fulltext"]["active"],
 				"checked" => $formconfig["fulltext"]["active"],
+			)),
+		));
+		$t->define_data(array(
+			"name" => t("Tekstiotsing 2"),
+			"caption" => html::textbox(array(
+				"name" => "fulltext2[caption]",
+				"value" => $formconfig["fulltext2"]["caption"] ? $formconfig["fulltext2"]["caption"] : ("Tekstiotsing 2"),
+			)),
+			"active" => html::checkbox(array(
+				"name" => "fulltext2[active]",
+				"value" => $formconfig["fulltext2"]["active"],
+				"checked" => $formconfig["fulltext2"]["active"],
 			)),
 		));
 		
@@ -261,7 +275,7 @@ class event_search extends class_base
 			))."<br />";
 		}
 		/*
-html::select(array(
+		html::select(array(
 				"name" => "project2[rootnode]",
 				"options" => $prj_opts,
 				"value" => $formconfig["project2"]["rootnode"],
@@ -329,6 +343,7 @@ html::select(array(
 				);
 				break;
 			case "ftsearch_fields":
+			case "ftsearch_fields2":
 				$this->gen_ftsearch_fields($arr);
 				break;
 
@@ -557,6 +572,7 @@ html::select(array(
 		$t->set_sortable(false);
 	}
 	
+	/*
 	function get_search_results($arr)
 	{
 		// 1. pane kokku object list
@@ -613,6 +629,7 @@ html::select(array(
 		// 2. tagasta tulemused
 
 	}
+	*/
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
@@ -658,6 +675,15 @@ html::select(array(
 				"caption" => $formconfig["fulltext"]["caption"],
 				"type" => "textbox",
 				"value" => $arr["fulltext"],
+			));
+		}
+		if($formconfig["fulltext2"]["active"])
+		{
+			$htmlc->add_property(array(
+				"name" => "fulltext2",
+				"caption" => $formconfig["fulltext2"]["caption"],
+				"type" => "textbox",
+				"value" => $arr["fulltext2"],
 			));
 		}
 		
@@ -821,7 +847,6 @@ html::select(array(
 		}
 		if($search_p1)
 		{
-			//"options" => $prj_ch1,
 			$vars = array(
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
@@ -843,7 +868,6 @@ html::select(array(
 		
 		if($search_p2)
 		{
-			//"options" => $prj_ch2,
 			$vars = array(
 				"name" => "project2",
 				"caption" => $formconfig["project2"]["caption"],
@@ -963,12 +987,25 @@ html::select(array(
 			$search["lang_id"] = array();
 			$search["site_id"] = array();
 			$ft_fields = $ob->prop("ftsearch_fields");
+			$ft_fields2 = $ob->prop("ftsearch_fields2");
 			if ($arr["fulltext"])
 			{
-				$or_parts = array("name" => "%" . $arr["fulltext"] . "%");
+				$or_parts = array();
 				foreach(safe_array($ft_fields) as $ft_field)
 				{
 					$or_parts[$ft_field] = "%" . $arr["fulltext"] . "%";
+				}
+				$search[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => $or_parts,
+				));
+			}
+			if ($arr["fulltext2"])
+			{
+				$or_parts = array();
+				foreach(safe_array($ft_fields2) as $ft_field)
+				{
+					$or_parts[$ft_field] = "%" . $arr["fulltext2"] . "%";
 				}
 				$search[] = new object_list_filter(array(
 					"logic" => "OR",
