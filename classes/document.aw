@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.65 2001/11/28 17:01:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.66 2001/12/03 15:29:35 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -485,7 +485,10 @@ class document extends aw_template
 				{
 					$txt = "<b>";
 				};
-				$txt .= $doc["lead"] . "<br>";
+				if ($doc["lead"] != "")
+				{
+					$txt .= $doc["lead"] . "<br>";
+				}
 				if ($boldlead) 
 				{
 					$txt .= "</b>";
@@ -687,26 +690,21 @@ class document extends aw_template
 		// this should be toggled with a preference in site config
 		if (defined("KEYWORD_RELATIONS"))
 		{
-//			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+			$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+			};
 		}
-		
+
 		if (is_array($keywords))
 		{
 			// performs the actual search and replace
 			foreach ($keywords as $k_key => $k_val)
 			{
-				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
-			}
-	
-			if (is_array($keywords))
-			{
-				// performs the actual search and replace
-				foreach ($keywords as $k_key => $k_val)
-				{
-					$doc["content"] = preg_replace("/$k_key/i",$k_val," " . $doc["content"] . " ");
-				};
-
-			}
+				$doc["content"] = preg_replace("/$k_key/i",$k_val," " . $doc["content"] . " ");
+			};
 		}
 	
 		// v6tame pealkirjast <p> maha
@@ -1073,7 +1071,7 @@ class document extends aw_template
 				$v = trim($v);
 				$q = "SELECT docid FROM documents
 							LEFT JOIN objects ON (documents.docid = objects.oid)
-							WHERE parent = $section AND $field LIKE '$v'";
+							WHERE parent = $section AND $field LIKE '$v' AND objects.status = 2";
 				$retval[$v] = $this->db_fetch_field($q,"docid");
 			}; // eow
 			return $retval;
@@ -3367,7 +3365,7 @@ class document extends aw_template
 	{
 		global $SITE_ID;
 		extract($args);
-		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id = " . CL_DOCUMENT . " AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
+		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
 		$retval = "";
 		load_vcl("table");
 
