@@ -101,7 +101,10 @@ class layout extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		$ob = $this->get_object($alias["target"]);
+		$ge = get_instance("vcl/grid_editor");
+		$ob['meta']['grid']['table_style'] = $ob['meta']['table_style'];
+		return $ge->show($ob['meta']['grid'], $alias["target"], &$tpls);
 	}
 
 	////
@@ -110,7 +113,6 @@ class layout extends class_base
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-
 		$ge = get_instance("vcl/grid_editor");
 		return $ge->show($ob['meta']['grid'], $id);
 	}
@@ -216,8 +218,8 @@ class layout extends class_base
 		// make style pick list
 		// folders:
 		$styles = array();
-		$folders = $ob['meta']['cell_style_folders'];
-		foreach($folders as $fld)
+		$folders = new aw_array($ob['meta']['cell_style_folders']);
+		foreach($folders->get() as $fld)
 		{
 			$styles += $this->list_objects(array(
 				"parent" => $fld,
