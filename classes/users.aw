@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.18 2001/08/08 06:08:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.19 2001/08/08 11:07:35 cvs Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -965,28 +965,33 @@ class users extends users_user
 		}
 
 		$udata = $this->get_user(array("uid" => $uuid));
-		$jf = unserialize($udata["join_form_entry"]);
-		if (is_array($jf))
+		if ($udata)
 		{
-			$f = new form();
-			foreach($jf as $joinform => $joinentry)
+			$jf = unserialize($udata["join_form_entry"]);
 			{
-				$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml));
+				$f = new form();
+				if (is_array($jf))
+				{
+					foreach($jf as $joinform => $joinentry)
+					{
+						$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml));
+					};
+				}
 			};
-		};
-		if ($nohtml)
-		{
-			$this->read_template("show_join_data_nohtml.tpl");
+			if ($nohtml)
+			{
+				$this->read_template("show_join_data_nohtml.tpl");
+			}
+			else
+			{
+				$this->read_template($tpl);
+			}
+			$this->vars(array(
+				"username" => $uuid,
+				"password" => $udata["password"]
+			));
+			$ret.=$this->parse();
 		}
-		else
-		{
-			$this->read_template($tpl);
-		}
-		$this->vars(array(
-			"username" => $uuid,
-			"password" => $udata["password"]
-		));
-		$ret.=$this->parse();
 		return $ret;
 	}
 
