@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.5 2002/11/19 15:22:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.6 2002/11/21 17:21:40 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -79,6 +79,11 @@ class htmlclient extends aw_template
 		// which could as well be done some place else
 		if ($args["type"] == "status")
 		{
+			if (!$args["value"])
+			{
+				// default to deactive
+				$args["value"] = 1;
+			};
 			$val .= $this->html->radiobutton(array(
 						"name" => $args["name"],
 						"value" => 2,
