@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/education.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/education.aw,v 1.2 2004/03/17 22:25:12 sven Exp $
 // education.aw - Education 
 /*
 
@@ -11,7 +11,7 @@
 @property kool type=textbox field=meta method=serialize
 @caption Haridusasutus
 
-@property eriala type=classificator field=meta method=serialize
+@property eriala type=classificator field=meta method=serialize orient=vertical
 @caption Eriala
 
 @property algusaasta type=select field=meta method=serialize
@@ -20,21 +20,23 @@
 @property loppaasta type=select field=meta method=serialize
 @caption L&otilde;petamise aasta
 
-@property teaduskond type=classificator field=meta method=serialize
+@property teaduskond type=classificator field=meta method=serialize orient=vertical
 @caption Teaduskond
 
-@property oppekava type=classificator field=meta method=serialize
+@property oppekava type=classificator field=meta method=serialize orient=vertical
 @caption Õppekava
 
-@property oppeaste type=classificator field=meta method=serialize
+@property oppeaste type=classificator field=meta method=serialize orient=vertical
 @caption Õppeaste
 
-@property oppevorm type=classificator field=meta method=serialize
+@property oppevorm type=classificator field=meta method=serialize orient=vertical
 @caption Õppevorm
 
 @property lisainfo_edu type=textarea field=meta method=serialize
 @caption Lisainfo
 
+@property client_status type=classificator orient=vertical
+@caption Kliendi staatus
 */
 
 class education extends class_base

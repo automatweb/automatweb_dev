@@ -2,84 +2,98 @@
 <properties>
       <property>
             <name>kool</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Haridusasutus</caption>
       </property>
       <property>
             <name>eriala</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <orient>vertical</orient>
             <caption>Eriala</caption>
       </property>
       <property>
             <name>algusaasta</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Sisseastumis aasta</caption>
       </property>
       <property>
             <name>loppaasta</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>L&amp;otilde;petamise aasta</caption>
       </property>
       <property>
             <name>teaduskond</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <orient>vertical</orient>
             <caption>Teaduskond</caption>
       </property>
       <property>
             <name>oppekava</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <orient>vertical</orient>
             <caption>Õppekava</caption>
       </property>
       <property>
             <name>oppeaste</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <orient>vertical</orient>
             <caption>Õppeaste</caption>
       </property>
       <property>
             <name>oppevorm</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <orient>vertical</orient>
             <caption>Õppevorm</caption>
       </property>
       <property>
             <name>lisainfo_edu</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>client_status</name>
             <table>objects</table>
             <group>general</group>
-            <caption>Lisainfo</caption>
+            <type>classificator</type>
+            <orient>vertical</orient>
+            <field>client_status</field>
+            <caption>Kliendi staatus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_EDUCATION</syslog_type>

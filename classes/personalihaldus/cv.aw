@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/cv.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/cv.aw,v 1.2 2004/03/17 22:20:17 sven Exp $
 // cv.aw - CV 
 /*
 @classinfo syslog_type=ST_CV relationmgr=yes
@@ -53,16 +53,16 @@
 
 //////////////////// TAB TÖÖSOOV \\\\\\\\\\\\\\\\\\\\\\\\\
 
-@property valdkond type=classificator group=toosoov method=serialize multiple=1
+@property valdkond type=classificator group=toosoov method=serialize multiple=1 orient=vertical
 @caption Tegevusala
 
 @property liik type=classificator multiple=1 group=toosoov method=serialize
 @caption T&ouml;&ouml; liik
 
-@property asukoht type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LINN group=toosoov method=serialize
+@property asukoht type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LINN group=toosoov method=serialize orient=vertical
 @caption Linnad
 
-@property koormus type=classificator group=toosoov method=serialize multiple=1
+@property koormus type=classificator group=toosoov method=serialize multiple=1 orient=vertical
 @caption T&ouml;&ouml; koormus 
 
 @property job_addinfo type=textarea group=toosoov field=addinfo table=staff_cv
