@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.44 2003/01/10 17:33:45 duke Exp $
+// $Id: class_base.aw,v 2.45 2003/01/15 16:20:39 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -562,17 +562,20 @@ class class_base extends aliasmgr
 		// only classes which have defined properties
 		// can use class_base
 		$cfgu = get_instance("cfg/cfgutils");
-		$has_properties = $cfgu->has_properties(array("file" => get_class($this->orb_class)));
+		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+		//$has_properties = $cfgu->has_properties(array("file" => get_class($orb_class)));
+		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (!$has_properties)
 		{
-			die("this class does not have any defined properties ");
+			die(sprintf("this class (%s) does not have any defined properties ",$orb_class));
 		};
 
 		// some day I might want to be able to edit remote objects
 		// and this is how I will do it (unless I get a better idea)
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
-		$clid = $this->orb_class->get_opt("clid");
+		#$clid = $this->orb_class->get_opt("clid");
+		$clid = $this->clid;
 		$clfile = $this->cfg["classes"][$clid]["file"];
 
 		// temporary - until we are sure that will will not go back to
