@@ -55,6 +55,15 @@
             <field>send</field>
             <caption>Saada</caption>
       </property>
+      <property>
+            <name>aliasmgr</name>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <table>messages</table>
+            <group>general</group>
+            <field>aliasmgr</field>
+            <caption>Aliased</caption>
+      </property>
       <tableinfo>
             <messages>
                   <index>id</index>
