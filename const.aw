@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.60 2002/03/04 20:21:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.61 2002/03/12 23:14:08 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -456,6 +456,8 @@ define("CL_MENU_ALIAS",89); // menüü alias .. doku/tabeli sisse menüü kutsumisek
 define("CL_AW_LOGIN",90); // login objekt
 define("CL_AW_TEST",91); // testkomplekt
 
+define("CL_CHAIN_ENTRY",92);	// formi p2rja sisestuse objekt
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -528,6 +530,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_CAL_EVENT => array("name" => "Kalendri event", "file" => "cal_event", "can_add" => 1),
 			CL_AW_LOGIN => array("name" => "AW login", "file" => "remote_login", "can_add" => 1),
 			CL_AW_TEST => array("name" => "AW test", "file" => "aw_test", "can_add" => 1),
+			CL_CHAIN_ENTRY => array("name" => "P&auml;rja sisestus", "file" => "form_chain", "can_add" => 0)
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -591,13 +594,12 @@ define("PRG_LISTS",15);
 define("PRG_VARS",16);
 define("PRG_STAMPS",17);
 define("PRG_CODESTAT",18);
-define("PRG_AWMAIL",19);
+// 19 used to be PRG_AWMAIL, which is obsolete now. Feel free to grab it
 define("PRG_QUIZ",20);
 define("PRG_EVENTS",21);
 define("PRG_EVENT_PLACES",22);
 define("PRG_GALERII",23);
-define("PRG_KROONIKA_BANNER",24);
-define("PRG_KROONIKA_ESIKAAS",25);
+// 24 and 25 were used for the old Kroonika, both are free now
 define("PRG_JOINFORM",26);
 define("PRG_ICONDB",27);
 define("PRG_CLASS_ICONS",28);
@@ -651,17 +653,14 @@ PRG_POLL							=> array("name" => MN_POLL,							"url" => "orb.aw?class=poll&act
 PRG_SEARCH						=> array("name" => MN_SEARCH,						"url" => "orb.aw?class=search_conf&action=change"),
 PRG_PERIODS						=> array("name" => MN_PERIODS,					"url" => "periods.$ext"),
 PRG_TESTS							=> array("name" => MN_TESTS,						"url" => "orb.$ext?class=tests&action=list_testid"),
-PRG_LISTS							=> array("name" => MN_LISTS,						"url" => "list.$ext"),
-PRG_VARS							=> array("name" => MN_VARS,							"url" => "list.$ext?type=list_vars"),
+PRG_LISTS							=> array("name" => MN_LISTS,						"url" => "orb.$ext?class=lists&action=gen_list"),
+PRG_VARS							=> array("name" => MN_VARS,							"url" => "orb.$ext?class=variables&action=gen_list"),
 PRG_STAMPS						=> array("name" => MN_STAMPS,						"url" => "list.$ext?type=list_stamps"),
 PRG_CODESTAT					=> array("name" => MN_CODESTAT,					"url" => "showstats.$ext"),
-PRG_AWMAIL						=> array("name" => MN_AWMAIL,						"url" => "mail.html"),
 PRG_QUIZ							=> array("name" => MN_QUIZ,							"url" => "orb.$ext?class=quiz&action=upload"),
 PRG_EVENTS						=> array("name" => MN_EVENTS,						"url" => "orb.$ext?class=events&action=list_events"),
 PRG_EVENT_PLACES			=> array("name" => MN_EVENT_PLACES,			"url" => "orb.$ext?class=events&action=list_places"),
 PRG_GALERII						=> array("name" => MN_GALERII,					"url" => "galerii.aw"),
-PRG_KROONIKA_BANNER		=> array("name" => MN_KROONIKA_BANNER,	"url" => "banner.aw?op=banner"),
-PRG_KROONIKA_ESIKAAS	=> array("name" => MN_KROONIKA_ESIKAAS, "url" => "banner.aw?op=kaas"),
 PRG_LOGIN_MENU				=> array("name" => "Login menüüd", 			"url" => "orb.$ext?class=config&action=login_menus"),
 PRG_JOINFORM					=> array("name" => MN_JOIN_FORM,				"url" => "config.aw?type=join_form"),
 PRG_ICONDB						=> array("name" => MN_ICON_DB,					"url" => "config.aw?type=icon_db"),
@@ -917,5 +916,6 @@ $error_types = array(
 $mysqldump_path = "/usr/local/bin/mysqldump";
 $gzip_path = "/bin/gzip";
 $tar_path = "/bin/tar";
+$zip_path = "/usr/bin/zip";
 
 ?>
