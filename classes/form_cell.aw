@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.27 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.28 2002/06/13 22:02:24 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -165,83 +165,86 @@ class form_cell extends form_base
 
 	////
 	// !Adds a new element in the folder $parent and associates it with the currently loaded form also. 
-	function add_element($wizard_step)
+	// if wizard_step is not set then we are coming from the "add new element" link and have to let the
+	// user make a choice what element she wants to add
+
+	// if wizard_step is set, then she already made her choice and we can probably just add the element
+	function add_element()
 	{
 		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
-		if (!$wizard_step)
-		{
-			$this->read_template("add_el_wiz1.tpl");
+		$this->read_template("add_el_wiz1.tpl");
 
-			classload("objects");
-			$o = new db_objects;
-			if (!(is_array($this->form->arr["el_menus"]) && count($this->form->arr["el_menus"]) > 0))
-			{
-				$mlist = $o->get_list();
-			}
-			else
-			{
-				$tlist = $o->get_list();
-				foreach($this->form->arr["el_menus"] as $menuid)
-				{
-					$mlist[$menuid] = $tlist[$menuid];
-				}
-			}
-			
-			$this->vars(array(
-				"reforb"		=> $this->mk_reforb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col,"wizard_step" => 1),"form"),
-				"folders"		=> $this->picker($this->parent, $mlist),
-				"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))
-			));
-			return $this->parse();
+		classload("objects");
+		$o = new db_objects;
+		if (!(is_array($this->form->arr["el_menus"]) && count($this->form->arr["el_menus"]) > 0))
+		{
+			$mlist = $o->get_list();
 		}
 		else
 		{
-			global $HTTP_POST_VARS;
-			extract($HTTP_POST_VARS);
-
-			if ($type == "add")
+			$tlist = $o->get_list();
+			foreach($this->form->arr["el_menus"] as $menuid)
 			{
-				// add new element
-				// form elements are weird things.
-				// namely. they are at the same time menus AND form elements. 
-				// so each element is written in three places
-				// objects table, class_id = CL_PSEUDO 
-				// menu table with type MN_FORM_ELEMENT
-				// form_elements table that is used to remember the elements proiperties when the element is insertet into another form
-				// the actual info about how the element is to be shown is written into the form's array. whee. 
-				// and also element2form table contains all element -> table relationships
-				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
-//				$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
-				$this->db_query("INSERT INTO form_elements (id) values($el)");
+				$mlist[$menuid] = $tlist[$menuid];
 			}
-			else
-			{
-				if ($el)
-				{
-					$oo = $this->get_object($el);
-					$name = $oo["name"];
-					$ord = $oo["jrk"];
-				}
-			}
+		}
 		
+		$this->vars(array(
+			"reforb"		=> $this->mk_reforb("submit_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form"),
+			"folders"		=> $this->picker($this->parent, $mlist),
+			"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !add_element submit handler
+	function submit_element($args = array())
+	{
+		extract($args);
+
+		if ($type == "add")
+		{
+			// add new element
+			// form elements are weird things.
+			// namely. they are at the same time menus AND form elements. 
+			// so each element is written in three places
+			// objects table, class_id = CL_PSEUDO 
+			// menu table with type MN_FORM_ELEMENT
+			// form_elements table that is used to remember the elements proiperties when the element is inserted into another form
+			// the actual info about how the element is to be shown is written into the form's array. whee. 
+			// and also element2form table contains all element -> table relationships
+			$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+//			$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
+			$this->db_query("INSERT INTO form_elements (id) values($el)");
+		}
+		// the other choice is most likely "select" which ment that the user selected an already existing element
+		else
+		{
 			if ($el)
 			{
-				$this->_do_add_element($this->id,$el);
-				// add the element into the form.
-				// but! use the props saved in the form_elements table to create them with the right config right away!
-				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
-				$arr = aw_unserialize($props);
-				$arr["id"] = $el;
-				$arr["name"] = $name;
-				$arr["ord"] = $ord;
-				$arr["linked_element"] = 0;
-				$arr["linked_form"] = 0;
-				$arr["linked_element"] = 0;
-				$arr["rel_table_id"] = 0;
-				$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
-				$this->form->save();
+				$oo = $this->get_object($el);
+				$name = $oo["name"];
+				$ord = $oo["jrk"];
 			}
-			return false;
+		}
+		
+		if ($el)
+		{
+			$this->_do_add_element($this->id,$el);
+			// add the element into the form.
+			// but! use the props saved in the form_elements table to create them with the right config right away!
+			$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
+			$arr = aw_unserialize($props);
+			$arr["id"] = $el;
+			$arr["name"] = $name;
+			$arr["ord"] = $ord;
+			$arr["linked_element"] = 0;
+			$arr["linked_form"] = 0;
+			$arr["linked_element"] = 0;
+			$arr["rel_table_id"] = 0;
+			$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
+			$this->form->save();
 		}
 	}
 
@@ -281,15 +284,19 @@ class form_cell extends form_base
 		if (is_number($el))
 		{
 			// we must also update the form_$id_entries table
-			$this->db_query("ALTER TABLE form_".$fid."_entries add el_$el text");
-			$this->db_query("ALTER TABLE form_".$fid."_entries add ev_$el text");
+			// sigh. would be really nice if we could have element of another type - integer for example
+			// that would make some searches really faster
+			$this->db_query("ALTER TABLE form_".$fid."_entries ADD el_$el TEXT");
+			$this->db_query("ALTER TABLE form_".$fid."_entries ADD ev_$el TEXT");
 
 			// add indexes to form tables aswell
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX el_$el(el_$el(10))");
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX ev_$el(ev_$el(10))");
+			// can't add these - mysql has a limit of 10 indexes per table :((
+			// so we can't have more than 5 elements per form when we do this :((
+//			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX el_$el(el_$el(10))");
+//			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX ev_$el(ev_$el(10))");
 
 			// and add this form to the list of forms in which the element is
-			$this->db_query("INSERT INTO element2form(el_id,form_id) values($el,$fid)");
+			$this->db_query("INSERT INTO element2form(el_id,form_id) VALUES ($el,$fid)");
 		}
 	}
 
