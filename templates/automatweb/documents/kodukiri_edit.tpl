@@ -401,13 +401,12 @@ href="orb.{VAR:ext}?class=document&action=archive&docid={VAR:id}">Arhiiv</a></td
 <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;">
 
 <input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}')">-->
-
-
+<small><a target="almgr" href="{VAR:aliasmgr_link}">tagasi aliastehaldurisse</a></small>
 
 <table width="100%" border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td>
-<iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">
+<iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}" name="almgr">
 </iframe>
 </td>
 </tr>
