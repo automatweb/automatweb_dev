@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.4 2004/01/13 14:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.5 2004/01/13 15:34:23 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 
@@ -36,5 +36,16 @@ class crm_meeting extends class_base
 			"clid" => CL_CRM_MEETING,
 		));
 	}
+
+	function parse_alias($arr)
+	{
+		$target = new object($arr["alias"]["target"]);
+		return html::href(array(
+			//"url" => aw_ini_get("baseurl") . "/" . $target->id(),
+			"url" => $this->mk_my_orb("change",array("id" => $target->id()),$target->class_id(),true,true),
+			"caption" => $target->name(),
+		));
+	}
+
 };
 ?>
