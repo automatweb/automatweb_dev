@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.9 2001/05/25 15:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.10 2001/05/25 17:40:08 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -13,12 +13,15 @@ class core extends db_connector
 {
 	var $errmsg;		
 
-	function core()
+	function core_init()
 	{
 		// globaalsed muutujad impordime siin, niimoodi saab vältita koiki neid globaalsete
 		// muutujate sissetoomist all over the field.
-
 		// ja seda ka kuniks meil paremat lahendust pole
+
+		// s.t. nii peaks tehtama, aga samas ei tehta, kuna seda konstruktorit siin
+		// ei kutsuta jargnevatest välja. Kuigi peaks
+		// ntx $this->core_init();
 		global $basedir;
 		$this->basedir = $basedir;
 	}
@@ -49,43 +52,26 @@ class core extends db_connector
 	}
 
 	////
-	// !järgmised 4 funktsiooni on vajalikud ntx siis, kui on tarvis ühe objekti
+	// järgmised 2 funktsiooni on vajalikud ntx siis, kui on tarvis ühe objekti
 	// juures korraga 2 või enamat päringut kasutada. Enne uue sisestamist tuleb
 	// siis lihtsalt vana handle ära seivida
-	// -------------------------------------------------------------------------
-	// samas, seda saab kindlasti ka paremini teha, ntx kasutada
-	// sissehitatud pinu handlete jaoks
-  // get query handle
-	function get_handle()
-	{
-		return $this->qID;
-	}
 
 	////
-	// !set query handle
-	function set_handle($qID)
-	{
-		$this->qID = $qID;
-	}
-
-	////
-	// !need on tegelikult analoogid eelmisele, aga kasutavad objekti sisseehitatud
-	// pinu qID salvestamiseks
+	// !Salvestab query handle sisemise pinu sisse
 	function save_handle()
 	{
 		$this->_push($this->qID,"qID");
 	}
 
+	////
+	// !Taastab query handle pinu seest
 	function restore_handle()
 	{
 		$this->qID = $this->_pop("qID");
 	}
 
 	////
-	// !write to syslog. the other way.
-	// nimelt uid-d pole ju vaja igalt poolt siia ette anda, selle voime
-	// globaalsest skoobist importida. Aga kuna log_action funktsiooni
-	// kasutatakse nii paljudes kohtades, siis tegin uue funktsiooni
+	// !write to syslog. 
 	function _log($type,$action,$oid = 0)
 	{
 		global $uid;
@@ -164,11 +150,9 @@ class core extends db_connector
 		else
 		if ($row)
 		{
-			// inbox ja draft defauldivad kodukataloogida, kui neid pole määratud
+			// inbox defauldib kodukataloogile, kui seda määratud pole
 			$inbox = $row["msg_inbox"] ? $row["msg_inbox"] : $row["home_folder"];
-			$draft = $row["msg_draft"] ? $row["msg_draft"] : $row["home_folder"];
 			$row["msg_inbox"] = $inbox;
-			$row["msg_draft"] = $draft;
 			$retval = $row;
 		};
 		return $row;	
@@ -176,6 +160,8 @@ class core extends db_connector
 
 	////
 	// !Tagastab formaaditud timestambi
+	// Tekalt voiks defineerida mingid konstandid nende numbrite asemele
+	// See parandaks loetavust
 	function time2date($timestamp = "",$format = 0)
 	{
 		switch($format)
@@ -250,7 +236,8 @@ class core extends db_connector
 	}
 
 	////
-	// !adds a new object, inserts all fields that are given in the array and puts default values for all others
+	// !adds a new object, inserts all fields that are given in the array and puts default
+	// values for all others
 	// lang_id,site_id,created,createdby,modified,modifiedby are set to correct values
 	function new_object($arr,$add_acl = true)
 	{
@@ -344,12 +331,18 @@ class core extends db_connector
 	// see sai mingis erilises deprekahoos kirjutet. tegelt voiks ymber nimetada.
 	//
 	// gee, you think? - terryf
+	// yeah. duke
 	function situ_tais()
+	{
+		return $this->flush_cache();
+	}
+
+	function flush_cache()
 	{
 		$q = "UPDATE objects SET cachedirty = 1 WHERE objects.site_id = ".$GLOBALS["SITE_ID"]." or objects.site_id IS NULL";
 		$this->db_query($q);
 	}
-
+		
 	////
 	// !uus ja parem objekti uuendamise funktsioon, votab andmed ette arrayst
 	// ja uuendab ainult neid, mida ette anti
@@ -379,7 +372,7 @@ class core extends db_connector
 	////
 	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid)
-  {
+	{
 		if (isset($GLOBALS["cahe_dirty_cache"][$oid]))
 		{
 			return $GLOBALS["cahe_dirty_cache"][$oid];
@@ -392,15 +385,15 @@ class core extends db_connector
 			$GLOBALS["cahe_dirty_cache"][$oid] = $row["cachedirty"];
 			return ($row["cachedirty"] == 1) ? true : false;
 		}
-  }
+	}
 
 	////
 	// !sets objects $oid's cache dirty flag to false
-  function clear_cache($oid)
-  {
+	function clear_cache($oid)
+	{
 		$q = "UPDATE objects SET cachedirty = 0 WHERE oid = '$oid'";
-    $this->db_query($q);
-  }
+		$this->db_query($q);
+	}
 
 	////
 	// !lisab objektile aliase
@@ -412,7 +405,8 @@ class core extends db_connector
 	{
 		$target_data = $this->get_object($target);
 
-		$q = "INSERT INTO aliases (source,target,type,data)	VALUES('$source','$target','$target_data[class_id]','$extra')";
+		$q = "INSERT INTO aliases (source,target,type,data)
+			VALUES('$source','$target','$target_data[class_id]','$extra')";
 
 		$this->db_query($q);
 		$this->_log("alias","Lisas objektile $source aliase");
@@ -452,7 +446,7 @@ class core extends db_connector
 		$aliases = array();
 		while($row = $this->db_next()) 
 		{
-			$row[id] = $row[target];
+			$row["id"] = $row["target"];
 			$aliases[]=$row;
 		};
 		$awt->stop("core->get_aliases_for()");
@@ -471,7 +465,12 @@ class core extends db_connector
 		$aliases = array();
 		while($row = $this->db_next()) 
 		{
-			$aliases[]=array("type" => $row[type],"name" => $row[name], "data" => $row[data],"id" => $row[source],"parent" => $row[parent]);
+			$aliases[]=array(
+				"type" => $row["type"],
+				"name" => $row["name"], 
+				"data" => $row["data"],
+				"id" => $row["source"],
+				"parent" => $row["parent"]);
 		};
 		return $aliases;
 	}
@@ -485,13 +484,13 @@ class core extends db_connector
 
 	////
 	// !lisab objektile yhe vaatamise
-  function add_hit($oid) 
+	function add_hit($oid) 
 	{
 		if ($oid) 
 		{
-	    $this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
+			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
-  }
+	}
      
 	////
 	// !imcrements the objects cached hit count by one
@@ -508,7 +507,8 @@ class core extends db_connector
 	// array of all objects in the path
 	// params:
 	//	$oid = object to start from
-	//	$check_objs = if this is false, then only menu objects are traversed, if this is true, all objects
+	//	$check_objs = if this is false, then only menu objects are traversed,
+	//		if this is true, all objects
 	//	$rootobj = the oid of the object where to stop traversing, ie the root of the tree
 	function get_object_chain($oid,$check_objs = false, $rootobj = 0) 
 	{
@@ -588,7 +588,10 @@ class core extends db_connector
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = $class AND status != 0  GROUP BY objects.oid");
+		$this->db_query("SELECT objects.*
+					FROM objects
+					WHERE class_id = $class AND status != 0
+					GROUP BY objects.oid");
 	}
 
 	////
@@ -614,7 +617,7 @@ class core extends db_connector
 	function get_last($oid) 
 	{
 		$row = $this->get_object($oid);
-		return unserialize($row[last]);
+		return unserialize($row["last"]);
 	}
 
 	////
@@ -667,10 +670,10 @@ class core extends db_connector
 		else
 		{
 			do { 
-				$this->db_query("select template.filename as filename, objects.parent as parent from menu left join template on template.id = menu.tpl_lead left join objects on objects.oid = menu.id where menu.id = $section", "filename");
+				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 				$row = $this->db_next();
-				$template = $row[filename];
-				$section = $row[parent];
+				$template = $row["filename"];
+				$section = $row["parent"];
 			} while ($template == "" && $section > 1);
 			$GLOBALS["lead_template_cache"][$section] = $template;
 		}
@@ -689,14 +692,14 @@ class core extends db_connector
 		$awt->count("core->get_long_template()");
 		// chekime et kui ette anti dokument, siis ei hakkax seda menyy tabelist otsima
 		$obj = $this->get_object($section);	
-		if ($obj[class_id] == CL_PERIODIC_SECTION || $obj[class_id] == CL_DOCUMENT)
-			$section = $obj[parent];
+		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT)
+			$section = $obj["parent"];
 
 		do { 
-			$this->db_query("select template.filename as filename, objects.parent as parent from menu left join template on template.id = menu.tpl_view left join objects on objects.oid = menu.id where menu.id = $section", "filename");
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 			$row = $this->db_next();
-			$template = $row[filename];
-			$section = $row[parent];
+			$template = $row["filename"];
+			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
 		$awt->stop("core->get_long_template()");
 		return $template;
@@ -709,10 +712,10 @@ class core extends db_connector
 	function get_edit_template($section)
 	{
 		do { 
-			$this->db_query("select template.filename as filename, objects.parent as parent from menu left join template on template.id = menu.tpl_edit left join objects on objects.oid = menu.id where menu.id = $section");
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
 			$row = $this->db_next();
-			$template = $row[filename];
-			$section = $row[parent];
+			$template = $row["filename"];
+			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
 		return $template;
 	}
@@ -779,6 +782,8 @@ class core extends db_connector
 
 		// now figure out if we are in the admin interface. 
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
+		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
+		// url-il? - duke
 		if (substr($GLOBALS["REQUEST_URI"],0,11) == "/automatweb" || $force_admin)
 		{
 			// admin side.
@@ -795,6 +800,8 @@ class core extends db_connector
 	// !old version of orb url maker, use mk_my_orb instead 
 	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
 	// the best solution, but for now, it works
+
+	// Kas seda kasutatkse veel? - duke
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
 	{
 		global $ext;
