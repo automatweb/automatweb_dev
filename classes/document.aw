@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.112 2002/07/24 06:20:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.113 2002/07/24 20:48:57 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -921,6 +921,17 @@ class document extends aw_template
 		}
 
 		$title = $doc["title"];
+		if ($this->cfg["capitalize_title"])
+		{
+			// switch to estonian locale
+			$old_loc = setlocale(LC_CTYPE,0);	
+			setlocale(LC_CTYPE, 'et_EE');
+
+			$title = strtoupper($title);
+
+			// switch back to estonian
+			setlocale(LC_CTYPE, $old_loc);
+		}
 		$this->vars(array(
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
