@@ -562,12 +562,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
-				if ($objdata["brother_of"] == 13083)
-				{
-					print dbg::process_backtrace(debug_backtrace());
-					print $q;
-				};
-//				echo "q = <pre>". htmlentities($q)."</pre> <br />";
 				$this->db_query($q);
 			}
 		}
