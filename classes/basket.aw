@@ -378,7 +378,7 @@ class basket extends aw_template
 					"entry_id" => $basket["of_entry"],
 					"op_id" => $ob["meta"]["order_form_op"]
 				));
-				$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $basket);
+				$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $basket, true);
 			}
 
 			foreach($mls as $ml)
@@ -427,7 +427,7 @@ class basket extends aw_template
 		die();
 	}
 
-	function _draw_basket_ft($ob, $basket)
+	function _draw_basket_ft($ob, $basket, $is_mail = false)
 	{
 		// start drawing the set table
 		if (!$ob["meta"]["ftbl"])
@@ -440,7 +440,7 @@ class basket extends aw_template
 
 		// start drawing the basket
 		$ft = get_instance("formgen/form_table");
-		$ft->start_table($ob["meta"]["ftbl"]);
+		$ft->start_table($is_mail ? $ob["meta"]["order_ftbl"] : $ob["meta"]["ftbl"]);
 		foreach($basket["items"] as $iid => $icnt)
 		{
 			$fid = $basket["form_ids"][$iid];
