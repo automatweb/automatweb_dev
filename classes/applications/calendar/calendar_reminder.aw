@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder.aw,v 1.3 2004/10/08 01:32:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder.aw,v 1.1 2004/10/18 13:27:18 duke Exp $
 // calendar_reminder.aw - Kalendri meeldetuletus 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder_rule.aw,v 1.1 2004/06/22 14:29:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder_rule.aw,v 1.1 2004/10/18 13:27:18 duke Exp $
 // calendar_reminder_rule.aw - Meeldetuletuse reegel 
 /*
 
