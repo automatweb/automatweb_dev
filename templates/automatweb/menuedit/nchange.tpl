@@ -24,38 +24,6 @@ else
 
 
 <!-- L1_MENU_LINE1 -->
-#bob1286 { position: relative; visibility: visible;}
-#dip1286 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
-
-#dd1286  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
-<!-- L1_MENU_LINE1 -->
-
-
-<!-- L1_MENU_LINE1 -->
-#bob1287 { position: relative; visibility: visible;}
-#dip1287 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
-
-#dd1287  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
-<!-- L1_MENU_LINE1 -->
-
-
-<!-- L1_MENU_LINE1 -->
-#bob1288 { position: relative; visibility: visible;}
-#dip1288 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
-
-#dd1288  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
-<!-- L1_MENU_LINE1 -->
-
-
-<!-- L1_MENU_LINE1 -->
-#bob1289 { position: relative; visibility: visible;}
-#dip1289 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
-
-#dd1289  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
-<!-- L1_MENU_LINE1 -->
-
-
-<!-- L1_MENU_LINE1 -->
 #bob1290 { position: relative; visibility: visible;}
 #dip1290 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
 
@@ -69,12 +37,6 @@ else
 #dd1291  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
 <!-- L1_MENU_LINE1 -->
 
-<!--  L1_MENU_LINE1 -->
-#bob1292 { position: relative; visibility: visible;}
-#dip1292 { position: absolute; visibility: hidden; left: 0px; top: 0px;}
-
-#dd1292  { position: absolute; visibility: hidden; left: 0px; top: -1px;}
-<!--  L1_MENU_LINE1 -->
 
 <!-- L1_MENU_LINE1 -->
 #bob1293 { position: relative; visibility: visible;}
@@ -123,60 +85,11 @@ function hideAll()
 <!-- L1_MENU_LINE2 -->
 
 
-<!-- L1_MENU_LINE2 -->
-	if (document.all)
-	{
-		document.all.dip1286.style.visibility = 'hidden';
-		document.all.dd1286.style.visibility = 'hidden';
-	}
-	else
-	{
-		document.bob1286.document.dip1286.visibility = 'hidden';
-		document.down.document.dd1286.visibility = 'hidden';
-	}
-<!-- L1_MENU_LINE2 -->
 
 
-<!-- L1_MENU_LINE2 -->
-	if (document.all)
-	{
-		document.all.dip1287.style.visibility = 'hidden';
-		document.all.dd1287.style.visibility = 'hidden';
-	}
-	else
-	{
-		document.bob1287.document.dip1287.visibility = 'hidden';
-		document.down.document.dd1287.visibility = 'hidden';
-	}
-<!-- L1_MENU_LINE2 -->
 
 
-<!-- L1_MENU_LINE2 -->
-	if (document.all)
-	{
-		document.all.dip1288.style.visibility = 'hidden';
-		document.all.dd1288.style.visibility = 'hidden';
-	}
-	else
-	{
-		document.bob1288.document.dip1288.visibility = 'hidden';
-		document.down.document.dd1288.visibility = 'hidden';
-	}
-<!-- L1_MENU_LINE2 -->
 
-
-<!-- L1_MENU_LINE2 -->
-	if (document.all)
-	{
-		document.all.dip1289.style.visibility = 'hidden';
-		document.all.dd1289.style.visibility = 'hidden';
-	}
-	else
-	{
-		document.bob1285.document.dip1289.visibility = 'hidden';
-		document.down.document.dd1289.visibility = 'hidden';
-	}
-<!-- L1_MENU_LINE2 -->
 
 
 <!-- L1_MENU_LINE2 -->
@@ -207,18 +120,6 @@ function hideAll()
 <!-- L1_MENU_LINE2 -->
 
 
-<!-- L1_MENU_LINE2 -->
-	if (document.all)
-	{
-		document.all.dip1292.style.visibility = 'hidden';
-		document.all.dd1292.style.visibility = 'hidden';
-	}
-	else
-	{
-		document.bob1292.document.dip1292.visibility = 'hidden';
-		document.down.document.dd1292.visibility = 'hidden';
-	}
-<!-- L1_MENU_LINE2 -->
 
 <!-- L1_MENU_LINE2 -->
 	if (document.all)
@@ -326,79 +227,22 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1285','dip1285','visible','dd1285');">{VAR:LC_MENUEDIT_MENU_TEMPLATES}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1285','dip1285','visible','dd1285');">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1285"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_TEMPLATES}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1285"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 2 templates -->
 
 
-		<!-- 3 automaatsed tegevused -->
-		<td height="29" class="tableinside" valign="bottom">
-			<span id="bob1286">
-			<script language=javascript>
-				if (document.all)
-					document.write("<table border=0 cellpadding=0 cellspacing=0>");
-				else
-					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1286','dip1286','visible','dd1286');">{VAR:LC_MENUEDIT_MENU_AUTOMATIC}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
-			
+	
+	
 
-				<span id="dip1286"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_AUTOMATIC}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
-			</span>
-		</td>
-		<!-- 3 automaatsed tegevused -->
-
-		<!-- 9 -->
-		<td height="29" class="tableinside" valign="bottom">
-			<span id="bob1287">
-			<script language=javascript>
-				if (document.all)
-					document.write("<table border=0 cellpadding=0 cellspacing=0>");
-				else
-					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1287','dip1287','visible','dd1287');">{VAR:LC_MENUEDIT_MENU_LOOK_MORE}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
-			
-
-				<span id="dip1287"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_LOOK_MORE}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
-			</span>
-		</td>
-		<!-- 9  END -->
-
-		<!-- 4 VENNASTAMINE -->
-		<td height="29" class="tableinside" valign="bottom">
-			<span id="bob1288">
-			<script language=javascript>
-				if (document.all)
-					document.write("<table border=0 cellpadding=0 cellspacing=0>");
-				else
-					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1288','dip1288','visible','dd1288');">{VAR:LC_MENUEDIT_BROTHERING}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
-			
-
-				<span id="dip1288"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_BROTHERING}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
-			</span>
-		</td>
-		<!-- 4 END VENNASTAMINE  -->
+	
 
 
-		<!-- 5 DOKUMENDID -->
-		<td height="29" class="tableinside" valign="bottom">
-			<span id="bob1289">
-			<script language=javascript>
-				if (document.all)
-					document.write("<table border=0 cellpadding=0 cellspacing=0>");
-				else
-					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1289','dip1289','visible','dd1289');">{VAR:LC_MENUEDIT_DOCUMENTS}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
-			
-
-				<span id="dip1289"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_DOCUMENTS}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
-			</span>
-		</td>
-		<!-- 5 ENDDOKUMENDID  -->
+	
 
 
 		<!-- 6 PICTURE -->
@@ -434,21 +278,6 @@ function savemenu() {
 		</td>
 		<!-- 7 EXPORT  -->
 
-		<!-- 8 SHOP -->
-		<td height="29" class="tableinside" valign="bottom">
-			<span id="bob1292">
-			<script language=javascript>
-				if (document.all)
-					document.write("<table border=0 cellpadding=0 cellspacing=0>");
-				else
-					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1292','dip1292','visible','dd1292');">{VAR:LC_MENUEDIT_CHOOSE_SHOP}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
-			
-
-				<span id="dip1292"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_CHOOSE_SHOP}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
-			</span>
-		</td>
-		<!-- 8 SHOP  -->
 
 		<!-- 9 KEYWORDS -->
 		<td height="29" class="tableinside" valign="bottom">
@@ -474,10 +303,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1294','dip1294','visible','dd1294');">Muu stuff</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1294','dip1294','visible','dd1294');">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1294"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">Muu stuff</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1294"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 10 MUUD MAARANGUD  -->
@@ -513,11 +342,11 @@ function savemenu() {
 
 
 
-<table border="0" cellspacing="0" cellpadding="0" width=780>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr>
 <td class="tableborder">
 
-<table border="0" cellspacing="1" cellpadding="0" width=780>
+<table border="0" cellspacing="1" cellpadding="0" width="100%">
 <tr>
 <td class="celltitlenormal" height="20">
 <!--{VAR:LC_MENUEDIT_OBJECT}:-->
@@ -529,16 +358,16 @@ function savemenu() {
 		
 
 </td>
-<td class="celltitle">
-<b>{VAR:LC_MENUEDIT_SETTINGS}:</b>
-</td>
 </tr>
 
 <tr>
 <td class="cell" valign="top">
 
 
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
+<table border="0" cellspacing="1" cellpadding="1">
+<tr><td class="cell" valign="top">
+
+		<table border=0 cellspacing=0 cellpadding=3>
 
 		<tr class="aste07">
 			<td class="celltext" align="right">&nbsp;{VAR:LC_MENUEDIT_NAME}:&nbsp;</td>
@@ -550,7 +379,7 @@ function savemenu() {
 		</tr>
 		<tr class="aste07">
 			<td class="celltext" align="right">&nbsp;Alias:&nbsp;</td>
-			<td class="celltext"><input type='text' NAME='alias' VALUE='{VAR:alias}' size=50></td>
+			<td class="celltext"><input type='text' NAME='alias' VALUE='{VAR:alias}' size=35></td>
 		</tr>
 
 		<tr>
@@ -571,41 +400,30 @@ function savemenu() {
 	
 		<tr class="aste07">
 			<td class="celltext"  align="right" valign="top">&nbsp;{VAR:LC_MENUEDIT_COMMENT}:&nbsp;</td>
-			<td class="celltext"><textarea NAME='comment' cols=50 rows=3>{VAR:comment}</textarea></td>
+			<td class="celltext"><textarea NAME='comment' cols=30 rows=3>{VAR:comment}</textarea></td>
 		</tr>
 
 
 				<tr>
-			<td class="celltext" width=10% nowrap align="right">&nbsp;&nbsp;</td>
+			<td class="celltext" nowrap align="right">&nbsp;&nbsp;</td>
 			<td class="celltext">&nbsp;</td>
 		</tr>
 
-	<tr>
-		<td class="celltext" width=10% nowrap >Keywords (META):</td>
-		<td class="celltext" colspan=10><input type="text" name="keywords" size="50" value="{VAR:keywords}"></td>
-	</tr>
-	<tr>
-		<td class="celltext" width=10% nowrap >Description (META):</td>
-		<td class="celltext" colspan=10><input type="text" name="description" size="50" value="{VAR:description}"></td>
-	</tr>
+	
 
-				<tr class="aste06">
-			<td class="celltext" width=10% nowrap align="right">&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+			<tr class="aste06">
+			<td class="celltext" nowrap align="right">&nbsp;<font color="red">Legend:</font>&nbsp;</td>
 			<td class="celltext">&nbsp;</td>
-		</tr>
+			</tr>
 		
-	</table>
+		</table>
 
-</td>
-<td valign="top" class="cell">
-
-
+		</td>
+		<td valign="top" class="aste06">
 
 
-
-
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<table width="100%" border="0" cellspacing="0" cellpadding="3">
+			<tr><td colspan="2" class="celltext"><b>{VAR:LC_MENUEDIT_SETTINGS}:</b></td></tr>
 
 	<tr>
 		<td class="aste04" width="1%"><input type="checkbox" name="active" {VAR:active}></td>
@@ -642,6 +460,10 @@ function savemenu() {
 
 </table>
 
+		</td>
+		</tr>
+		</table>
+
 
 </td>
 </tr>
@@ -667,7 +489,7 @@ function savemenu() {
 
 <!-- 2 TEMPLATED -->
 <span id="dd1285">
-<table border="0" cellspacing="0" cellpadding="1" width=780>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr><td class="tableborder">
 
 	<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -675,215 +497,166 @@ function savemenu() {
 
 	<tr><td class="tableinside">
 
-		<table border=0 cellspacing=0 cellpadding=3 width=100%>
-		<tr class="aste01">
-		<td class="celltext" width=18% align="right">&nbsp;Template set:&nbsp;</td>
+
+	
+
+
+		<table border=0 cellspacing=0 cellpadding=10 width="100%">
+		<tr><td colspan="2">
+		
+		
+		<!--templated-->
+		<table border=0 cellspacing=1 cellpadding=3 class="aste06">
+		<tr><td colspan="2" class="celltext">
+		
+		<b>{VAR:LC_MENUEDIT_MENU_TEMPLATES}</b>
+		</td></tr>
+		<tr>
+		<td class="celltext" align="right">&nbsp;Template set:&nbsp;</td>
 		<td class="celltext"><select name="tpl_dir">{VAR:tpl_dir}</select></td>
 		</tr>
 		<tr>
-		<td class="celltext" width=18% align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_EDIT}:&nbsp;</td>
+		<td class="celltext" align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_EDIT}:&nbsp;</td>
 		<td class="celltext"><select name="tpl_edit">{VAR:tpl_edit}</select></td>
 		</tr>
-		<tr class="aste01">
-		<td class="celltext" width=18% align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_SHOW}:&nbsp;</td>
+		<tr>
+		<td class="celltext" align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_SHOW}:&nbsp;</td>
 		<td class="celltext"><select name="tpl_view"><option value="0">Default</option>{VAR:tpl_view}</select></td>
 		</tr>
 		<tr>
-		<td class="celltext" width=18% nowrap align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_SHORT}:&nbsp;</td>
+		<td class="celltext" nowrap align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_SHORT}:&nbsp;</td>
 		<td class="celltext"><select name="tpl_lead"><option value="0">Default</option>{VAR:tpl_lead}</select></td>
 		</tr>
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;</td></tr>
+		</table>
+
+		<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="10" BORDER=0 ALT=""><br>
+
+
+		<!--automaatsed tegevused-->
+		<table border=0 cellspacing=1 cellpadding=3 class="aste06">
 		<tr>
-		<td class="celltext" width=18% nowrap>&nbsp;&nbsp;</td>
+		<td colspan="2" class="celltext"><b>{VAR:LC_MENUEDIT_MENU_AUTOMATIC}</b></td>
+		</tr>
+
+		<tr>
+		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_ACTIVATE}:&nbsp;</td>
+		<td class="celltext">&nbsp;<input type="checkbox" name="autoactivate" {VAR:autoactivate}>&nbsp;{VAR:activate_at}</td>
+		</tr>
+		<tr>
+		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_DEACTIVATE}:&nbsp;</td>
+		<td class="celltext">&nbsp;<input type="checkbox" name="autodeactivate" {VAR:autodeactivate}>&nbsp;{VAR:deactivate_at}</td>
+		</tr>
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;</td></tr>
+		</table>
+
+		<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="10" BORDER=0 ALT=""><br>
+
+
+		<!--vennastamine-->
+
+		<table border=0 cellspacing=1 cellpadding=3 class="aste06">
+		<tr><td class="celltext"><b>
+		{VAR:LC_MENUEDIT_BROTHERING}
+		</b></td></tr>
+
+		<tr>
+		<td class="celltext">&nbsp;&nbsp;</td>
 		<td class="celltext">&nbsp;</td>
-		</tr>	
-		<tr class="aste06">
-		<td class="celltext" width=18% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		</tr>
+		<tr>
+		<td class="celltext">&nbsp;&nbsp;</td>
+		<td class="celltext">&nbsp;<select MULTIPLE SIZE=20 class='small_button' name="sections[]">{VAR:sections}</select></td>
+		</tr>
+		<tr>
+		<td class="celltext" nowrap>&nbsp;</td>
 		<td class="celltext">&nbsp;</td>
+		</tr>
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_MENU_SECTIONS}</td>
 		</tr>
 		</table>
 
-	</td></tr></table>
+		<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="10" BORDER=0 ALT=""><br>
+
+		<!--dokumendid-->
+
+		<table border=0 cellspacing=1 cellpadding=3 class="aste06">
+		<tr><td colspan="2" class="celltext">
+		<b>{VAR:LC_MENUEDIT_DOCUMENTS}</b>
+		</td></tr>
+
+		<tr>
+		<td class="celltext">&nbsp;&nbsp;</td>
+		<td class="celltext"><select MULTIPLE SIZE=20 class='small_button' name="sss[]">{VAR:sss}</select></td>
+		</tr>
+
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_LAST_DOCUMENTS}</td>
+		</tr>
+
+		<tr>
+		<td class="celltext">&nbsp;&nbsp;</td>
+		<td class="celltext"><select MULTIPLE SIZE=5 class='small_button' name="pers[]">{VAR:pers}</select></td>
+		</tr>
+
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_LAST_DOCUMENTS}</td>
+		</tr>
+		</table>	
+
+		<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="10" BORDER=0 ALT=""><br>
+
+
+		<!--Vaata lisaks-->
+
+		<table border=0 cellspacing=0 cellpadding=3 class="aste06">
+		<tr><td colspan="2" class="celltext"><b>{VAR:LC_MENUEDIT_MENU_LOOK_MORE}</b></td></tr>
+		<tr>
+		<td class="celltext">&nbsp;J&auml;rjekorranumber:&nbsp;</td>
+		<td class="celltext">&nbsp;<input size=3 class='small_button' type='text' name='seealso_order' value='{VAR:seealso_order}'></td>
+		</tr>
+		<tr>
+		<td class="celltext">&nbsp;&nbsp;</td>
+		<td class="celltext">&nbsp;<select class="small_button" MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
+		</tr>
+		<tr>
+		<td class="celltext" nowrap>&nbsp;</td>
+		<td class="celltext">&nbsp;</td>
+		</tr>
+		<tr class="aste05">
+		<td class="celltext"  nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
+		<td class="celltext">&nbsp;Vali men&uuml;&uuml;d mille all k&auml;esolev men&uuml;&uuml; on vaata lisaks men&uuml;&uuml;</td>
+		</tr>
+		</table>
+
+
+
+		</td></tr>
+		
+		</table>
+
+	</td></tr>
+	</table>
 </td></tr></table>
 </span>
 <!-- 2 END TEMPLATED -->
 
-<!-- 3 AUTOMAATSED TEGEVUSED -->
-<span id="dd1286">
-<table border="0" cellspacing="0" cellpadding="1" width=780>
-<tr>
-<td class="tableborder">
-
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-<tr><td class="celltitle" height="20">&nbsp;ID:&nbsp;{VAR:id}</td></tr>
-<tr>
-<td class="tableinside">
-
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
-
-	<tr>
-		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_ACTIVATE}:&nbsp;</td>
-		<td class="celltext">&nbsp;<input type="checkbox" name="autoactivate" {VAR:autoactivate}>&nbsp;{VAR:activate_at}</td>
-	</tr>
-	<tr>
-		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_DEACTIVATE}:&nbsp;</td>
-		<td class="celltext">&nbsp;<input type="checkbox" name="autodeactivate" {VAR:autodeactivate}>&nbsp;{VAR:deactivate_at}</td>
-	</tr>
-	<tr>
-		<td class="celltext" width=10% nowrap>&nbsp;</td>
-		<td class="celltext">&nbsp;</td>
-	</tr>
-	<tr class="aste06">
-		<td class="celltext" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="celltext">&nbsp;</td>
-	</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
 
 
 
-</span>
-<!-- 3 END AUTOMAATSED TEGEVUSED -->
-
-<!-- 9 VAATA LISAKS-->
-<span id="dd1287">
-<table border="0" cellspacing="0" cellpadding="1" width=780>
-<tr>
-<td class="tableborder">
-
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-<tr><td class="celltitle" height="20">&nbsp;ID:&nbsp;{VAR:id}</td></tr>
-<tr>
-<td class="tableinside">
-
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
-
-	<tr>
-		<td class="celltext">&nbsp;J&auml;rjekorranumber:&nbsp;</td>
-		<td class="celltext">&nbsp;<input size=3 class='small_button' type='text' name='seealso_order' value='{VAR:seealso_order}'></td>
-	</tr>
-	<tr>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext">&nbsp;<select class="small_button" MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
-	</tr>
-	<tr>
-		<td class="celltext" width=10% nowrap>&nbsp;</td>
-		<td class="celltext">&nbsp;</td>
-	</tr>
-	<tr class="aste06">
-		<td class="celltext" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="celltext">&nbsp;Vali men&uuml;&uuml;d mille all k&auml;esolev men&uuml;&uuml; on vaata lisaks men&uuml;&uuml;</td>
-	</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-
-</span>
-<!-- 9 END VAATA LISAKS-->
-
-<!-- 4 VENNASTAMINE -->
-<span id="dd1288">
-<table border="0" cellspacing="0" cellpadding="1" width=780>
-<tr>
-<td class="tableborder">
-
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-<tr><td class="celltitle" height="20">&nbsp;ID:&nbsp;{VAR:id}</td></tr>
-<tr>
-<td class="tableinside">
-
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
-
-	<tr>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext">&nbsp;<select MULTIPLE SIZE=20 name="sections[]">{VAR:sections}</select></td>
-	</tr>
-	<tr>
-		<td class="celltext" width=10% nowrap>&nbsp;</td>
-		<td class="celltext">&nbsp;</td>
-	</tr>
-	<tr class="aste06">
-		<td class="celltext" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_MENU_SECTIONS}</td>
-	</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-
-</span>
-<!-- 4 END VENNASTAMINE-->
-
-<!-- 5 DOKUMENDID -->
-<span id="dd1289">
-<table border="0" cellspacing="0" cellpadding="1" width=780>
-<tr>
-<td class="tableborder">
-
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-<tr><td class="celltitle" height="20">&nbsp;ID:&nbsp;{VAR:id}</td></tr>
-<tr>
-<td class="tableinside">
-
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
-
-	<tr>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext"><select MULTIPLE SIZE=20 class='small_button' name="sss[]">{VAR:sss}</select></td>
-	</tr>
-
-	<tr class="aste06">
-		<td class="celltext" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_LAST_DOCUMENTS}</td>
-	</tr>
-
-	<tr>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext"><select MULTIPLE SIZE=5 class='small_button' name="pers[]">{VAR:pers}</select></td>
-	</tr>
-
-	<tr class="aste06">
-		<td class="celltext" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="celltext">&nbsp;{VAR:LC_MENUEDIT_LAST_DOCUMENTS}</td>
-	</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-
-</span>
-<!-- 5 END DOKUMENDID-->
 
 <!-- 6 PICTURE -->
 <span id="dd1290">
 
-<table border="0" cellspacing="0" cellpadding="1" width=780>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
 <td class="tableborder">
 
@@ -940,7 +713,7 @@ function savemenu() {
 <!-- 7 EXPORT -->
 <span id="dd1291">
 
-<table border="0" cellspacing="0" cellpadding="1" width=780>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
 <td class="tableborder">
 
@@ -978,45 +751,15 @@ function savemenu() {
 </span>
 <!-- 7 END EXPORT-->
 
-<!-- 8 SHOP -->
-<span id="dd1292">
-
-<table border="0" cellspacing="0" cellpadding="1" width=780>
-<tr>
-<td class="tableborder">
-
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-<tr><td class="celltitle" height="20">&nbsp;ID:&nbsp;{VAR:id}</td></tr>
-<tr>
-<td class="tableinside">
-
-<table border=0 cellspacing=0 cellpadding=3 width=100%>
-
-	<tr>
-		<td class="celltext" width="10%" valign="top">&nbsp;{VAR:LC_MENUEDIT_CHOOSE_SHOP}:&nbsp;</td>
-		<td class="celltext">&nbsp;<select name='shop' size=10 class='small_button'>{VAR:shop}</select></td>
-	</tr>
-
-</table>
-
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-
-
-</span>
-<!-- 8 END SHOP-->
+<!-- 8 SHOP
+{VAR:LC_MENUEDIT_CHOOSE_SHOP}:<select name='shop' size=10 class='small_button'>{VAR:shop}</select>
+8 END SHOP-->
 
 
 <!-- 9 KEYWORDS -->
 <span id="dd1293">
 
-<table border="0" cellspacing="0" cellpadding="1" width=780>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
 <td class="tableborder">
 
@@ -1030,8 +773,17 @@ function savemenu() {
 <table border=0 cellspacing=0 cellpadding=3 width=100%>
 
 	<tr>
-		<td class="celltext" width="10%" valign="top">{VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}:</td>
+		<td class="celltext" width="10%" valign="top">AW {VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}:</td>
 		<td class="celltext"><select name='grkeywords[]' size=10 class='small_button' multiple>{VAR:grkeywords}</select></td>
+	</tr>
+
+	<tr>
+		<td class="celltext" width=10% nowrap >Keywords (META):</td>
+		<td class="celltext" colspan=10><input type="text" name="keywords" size="50" value="{VAR:keywords}"></td>
+	</tr>
+	<tr>
+		<td class="celltext" width=10% nowrap >Description (META):</td>
+		<td class="celltext" colspan=10><input type="text" name="description" size="50" value="{VAR:description}"></td>
 	</tr>
 
 </table>
@@ -1050,7 +802,7 @@ function savemenu() {
 <!-- 10 MUUD MAARANGUD -->
 <span id="dd1294">
 
-<table border="0" cellspacing="0" cellpadding="1" width=780>
+<table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
 <td class="tableborder">
 
@@ -1151,7 +903,7 @@ function savemenu() {
 </tr>
 -->
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <script language="javascript">
 onOff('bob1284','dip1284','visible','dd1284');
 </script>

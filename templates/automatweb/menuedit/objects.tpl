@@ -369,7 +369,7 @@ onClick="sel_type={VAR:class_id};cur_arr=0;sel_form=0;cl();"
 <!-- SUB: FORMS_SHOWN -->
 
 <tr>
-<td height="10" class="celltext">{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
+<td height="10" colspan="10" class="celltext">{VAR:LC_MENUEDIT_FORMS_CHOOSE_OUTPUT}: <select class='small_button' name='op_id' onFocus="mk_ops()"><option value=''><option value=''><option value=''><option value=''></select></td>
 </tr>
 
 <!-- END SUB: FORMS_SHOWN -->

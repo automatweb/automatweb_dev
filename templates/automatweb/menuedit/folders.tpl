@@ -4,30 +4,36 @@
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <script src="{VAR:baseurl}/automatweb/js/ftiens4.js"></script>
+
+
+
+
 <script language=javascript>
 document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>			\
 		<tr>																																																			\
-			<td bgcolor=\"#000000\">																																								\
-				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=100%>																		\
+			<td class=\"tableborder\">																																								\
+				<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\" width=100%>																		\
+					<tr>																																																			\
+						<td class=\"tableshadow\">																																								\
+								<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=100%><tr><td class=\"tableinside\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">																		\
 		<form action='menuedit.{VAR:ext}' method='get' name='pfft'>																								\
 					<tr>																																																\
-						<td height=\"20\" colspan=\"11\" class=\"fgtitle_new\" align=center><span class=\"fgtitle_text\"><select class='small_button' name='period'>{VAR:periods}</select><a class='fgtitle_link' href='javascript:document.pfft.submit()'><font size=1 face=arial>&nbsp;{VAR:LC_MENUEDIT_REFRESH}</font></a><input type='hidden' name='type' value='folders'></span>															\
+						<td class=\"tableinside\" height=\"20\" colspan=\"11\" align=center><select class='formselect' name='period'>{VAR:periods}</select></td><td class=\"tableinside\"><a href='javascript:document.pfft.submit()' onMouseOut=\"MM_swapImgRestore()\" onMouseOver=\"MM_swapImage('refresh','','images/blue/awicons/refresh_over.gif',1)\"><img name='refresh' alt='{VAR:LC_MENUEDIT_REFRESH}' border='0' SRC='{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif' width='25' height='25'></a><input type='hidden' name='type' value='folders'>															\
 						</td>																																															\
 					</tr>																																																\
 				</form>																																																\
-				</table>																																															\
+				</table></td></tr></table>																																															\
 			</td>																																																		\
 		</tr>																																																			\
-		<tr>																																																			\
-			<td bgcolor='#CCCCCC'>																																									\
-				<table border=0 cellpadding=0 cellspacing=0 width=100% height=100%>																		\
-					<tr>																																																\
-						<td class=\"title\" align='center'>[{VAR:uid} @ {VAR:date}]</td>																	\
-					</tr>																																																\
-				</table>																																															\
+			</table>																																																	\
 			</td>																																																		\
 		</tr>																																																			\
 		</table>																																																	\
+						<table border=0 cellpadding=0 cellspacing=0 width=100%>																		\
+					<tr>																																																\
+						<td align='center'><font face=verdana size=1><b>[{VAR:uid} @ {VAR:date}]</b></font></td>																	\
+					</tr>																																																\
+				</table>																																															\
 		");
 
 pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "menuedit_right.{VAR:ext}?parent={VAR:root}","images/aw_ikoon.gif")
