@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.238 2003/02/21 05:13:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.239 2003/02/21 05:15:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2077,6 +2077,16 @@ class menuedit extends aw_template
 								$iconurl = $d_row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$d_row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
 							}
 
+							$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != ".MN_ADMIN1.") AND objects.parent = '$d_row[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
+							$this->db_query($q);
+							$subcnt = 0;
+							while ($drow = $this->db_next())
+							{
+								if ($this->can("view", $drow["oid"]))
+								{
+									$subcnt++;
+								}
+							}
 							$url = $this->mk_my_orb("right_frame",array("parent" => $d_row["oid"], "period" => $period));
 							$this->_send_branch_line($d_row["oid"],$subcnt,$d_row["name"],$url,$iconurl);
 						}
