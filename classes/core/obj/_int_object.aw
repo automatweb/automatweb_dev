@@ -18,8 +18,6 @@ class _int_object
 
 	function _int_object($param = NULL)
 	{
-		$this->ds = new _int_obj_ds_local_sql;
-
 		if ($param != NULL)
 		{
 			$this->load($param);
@@ -180,7 +178,7 @@ class _int_object
 		}
 
 		$ret = array();
-		$cs = $this->ds->find_connections($filter);
+		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
 			if ($this->can("view", $c_d["source"]) && $this->can("view", $c_d["target"]))
@@ -834,7 +832,7 @@ class _int_object
 
 	function _int_load($oid)
 	{
-		if (!$this->ds->can("view", $oid))
+		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -845,11 +843,11 @@ class _int_object
 		$this->_init_empty();
 
 		// now. we gots to find the class_id of the object
-		$this->obj = $this->ds->get_objdata($oid);
+		$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
 
 		$this->_int_load_properties();
 
-		$this->obj["properties"] = $this->ds->read_properties(array(
+		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
 			"properties" => $this->properties,
 			"tableinfo" => $this->tableinfo,
 			"objdata" => $this->obj,
@@ -920,7 +918,7 @@ class _int_object
 		{
 			$this->_int_init_new();
 
-			$this->obj["oid"] = $this->ds->create_new_object(array(
+			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
 				"objdata" => $this->obj,
 				"properties" => $this->properties,
 				"tableinfo" => $this->tableinfo
@@ -932,7 +930,7 @@ class _int_object
 		}
 
 		// now, save objdata
-		$this->ds->save_properties(array(
+		$GLOBALS["object_loader"]->ds->save_properties(array(
 			"objdata" => $this->obj,
 			"properties" => $this->properties,
 			"tableinfo" => $this->tableinfo,
@@ -975,7 +973,7 @@ class _int_object
 
 	function _int_can($param)
 	{
-		return $this->ds->can($param, $this->obj["oid"]);
+		return $GLOBALS["object_loader"]->ds->can($param, $this->obj["oid"]);
 	}
 
 	function _int_can_save()
@@ -986,14 +984,14 @@ class _int_object
 			// acl
 			if ($this->obj["oid"])
 			{
-				if ($this->ds->can("edit", $this->obj["oid"]))
+				if ($this->_int_can("edit"))
 				{
 					return true;	
 				}
 			}
 			else
 			{
-				if ($this->ds->can("add", $this->obj["parent"]))
+				if ($GLOBALS["object_loader"]->ds->can("add", $this->obj["parent"]))
 				{
 					return true;	
 				}

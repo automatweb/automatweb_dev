@@ -5,7 +5,6 @@ class connection
 	////////////////////////////
 	// private variables
 
-	var $ds;		// data source
 	var $conn;		// int connection data
 		
 
@@ -26,8 +25,6 @@ class connection
 
 			$this->load($id);
 		}
-
-		$this->ds = new _int_obj_ds_local_sql;
 	}
 
 	function load($param)
@@ -59,7 +56,7 @@ class connection
 				"msg" => "connection::find($from, $to): from and to parameters must be oids!"
 			));
 		}
-		return $this->ds->finnd_connection($from, $to);
+		return $GLOBALS["object_loader"]->ds->finnd_connection($from, $to);
 	}
 
 	function change($param)
@@ -72,6 +69,10 @@ class connection
 			));
 		}
 
+		if (!is_array($this->conn))
+		{
+			$this->conn = array();
+		}
 		$this->conn += $param;
 
 		$this->_int_save();
@@ -88,7 +89,7 @@ class connection
 		}
 
 		// now, check acl - both ends must be visible for the connection to be deleted
-		if (!($this->ds->can("view", $this->conn["source"]) || $this->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -96,7 +97,7 @@ class connection
 			));
 		}
 
-		$this->ds->delete_connection($this->conn["id"]);
+		$GLOBALS["object_loader"]->ds->delete_connection($this->conn["id"]);
 	}
 
 	function id()
@@ -126,7 +127,7 @@ class connection
 
 	function _int_load($id)
 	{
-		$this->conn = $this->ds->read_connection($id);
+		$this->conn = $GLOBALS["object_loader"]->ds->read_connection($id);
 		if ($this->conn === false)
 		{
 			error::throw(array(
@@ -136,7 +137,7 @@ class connection
 		}
 		
 		// now, check acl - both ends must be visible for the connection to be shown
-		if (!($this->ds->can("view", $this->conn["source"]) || $this->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -156,7 +157,7 @@ class connection
 		}
 
 		// now, check acl - both ends must be visible for the connection to be changed
-		if (!($this->ds->can("view", $this->conn["source"]) || $this->ds->can("view", $this->conn["target"])))
+		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["source"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["target"])))
 		{
 			error::throw(array(
 				"id" => ERR_ACL,
@@ -165,7 +166,7 @@ class connection
 		}
 
 		// now that everything is ok, save the damn thing
-		$this->ds->save_connection($this->conn);
+		$GLOBALS["object_loader"]->ds->save_connection($this->conn);
 	}
 }
 

@@ -2,6 +2,7 @@
 classload(
 	"core/obj/_int_obj_container_base", 
 	"core/obj/_int_object", 
+	"core/obj/ds_base",
 	"core/obj/ds_local_sql",
 	"core/obj/connection",
 	"core/obj/object_loader", 
@@ -12,7 +13,6 @@ classload(
 // TODO:
 // cache properties by type
 // cache tableinfo by type, don't use member vars. 
-// cache ds, don't use member
 // access ini settings directly?
 
 // god damn, this is a fucking great idea!
@@ -349,7 +349,7 @@ function &obj($param = NULL)
 	return new object($param);
 }
 
-function dump_obj_table($pre)
+function dump_obj_table($pre = "")
 {
 	echo "---------------------------------------- object table dump: <br />$pre <br />\n";
 	foreach($GLOBALS["objects"] as $oid => $obj)

@@ -8,7 +8,7 @@ class _int_object_loader
 
 	function _int_object_loader()
 	{
-		$this->ds = new _int_obj_ds_local_sql;
+		$this->ds = new _int_obj_ds_mysql;
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
 	}

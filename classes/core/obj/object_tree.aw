@@ -4,8 +4,6 @@ class object_tree extends _int_obj_container_base
 {
 	/////////////////////////////////////////////
 	// private variables
-	var $ds;	// data source
-
 	var $tree;	// array - tree structure, 2 level - level one is parent, level 2 is oid => object
 
 	////////////////////////////////////////////
@@ -20,8 +18,6 @@ class object_tree extends _int_obj_container_base
 				"msg" => "object_tree:conectructor(): if you specify a parameter, it must be a filter array!"
 			));
 		}
-
-		$this->ds = new _int_obj_ds_local_sql;
 
 		$this->_int_init_empty();		
 
@@ -254,7 +250,7 @@ class object_tree extends _int_obj_container_base
 
 	function _int_req_filter($filter)
 	{
-		$oids = $this->ds->search($filter);
+		$oids = $GLOBALS["object_loader"]->ds->search($filter);
 		foreach($oids as $oid)
 		{
 			$o = new object($oid);

@@ -1,16 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.6 2003/08/29 11:51:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.7 2003/09/03 12:31:57 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
 {
-	var $ds;	// data source
 	var $list;	// array of objects in the current list
 
 	function object_list($param = NULL)
 	{
-		$this->ds = new _int_obj_ds_local_sql;
-
 		if ($param != NULL)
 		{
 			$this->filter($param);
@@ -233,7 +230,7 @@ class object_list extends _int_obj_container_base
 	{
 		$this->_int_init_empty();
 
-		$oids = $this->ds->search($filter);
+		$oids = $GLOBALS["object_loader"]->ds->search($filter);
 		foreach($oids as $oid)
 		{
 			$this->list[$oid] = new object($oid);
