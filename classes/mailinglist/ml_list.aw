@@ -539,7 +539,8 @@ class ml_list extends aw_template
 
 	function get_all_user_folders()
 	{
-		return $this->list_ob["meta"]["user_folders"];
+		$ar = new aw_array($this->list_ob["meta"]["user_folders"]);
+		return $ar->get();
 	}
 
 	function get_all_user_folders_defined()
