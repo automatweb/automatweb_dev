@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.248 2004/04/07 16:44:36 duke Exp $
+// $Id: class_base.aw,v 2.249 2004/04/07 17:17:41 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -106,6 +106,7 @@ class class_base extends aw_template
 		$this->vcl_register = array(
 			"classificator" => "classificator",
 			"comments" => "vcl/comments",
+			"container" => "vcl/container",
 		);
 		parent::init($arg);
 	}
