@@ -1887,7 +1887,7 @@ class form_db_base extends aw_template
 			$join = "";
 			if ($el_sort_by)
 			{
-				$order_by = $inst["els"][$el_sort_by]["table"].".".$inst["els"][$el_sort_by]["col"];
+				$order_by = " order by ".$inst["els"][$el_sort_by]["table"].".".$inst["els"][$el_sort_by]["col"];
 			}
 		}
 		else
@@ -1922,13 +1922,18 @@ class form_db_base extends aw_template
 			
 			if ($el_sort_by)
 			{
-				$order_by = "order by el_".$el_sort_by;
+				$order_by = " order by el_".$el_sort_by;
 			}
 		}
 
 		if ($sort_by_alpha && $rel_el != "" && $order_by == "")
 		{
 			$order_by = " ORDER BY $rel_el ";
+		}
+		else
+		if ($sort_by_alpha && $rel_el && $order_by != "")
+		{
+			$order_by .= ", $rel_el ";
 		}
 
 		$gpby = "";
