@@ -35,7 +35,7 @@
       <property>
             <name>def_layout</name>
             <type>relpicker</type>
-            <reltype>RELATION_LAYOUT</reltype>
+            <reltype>RELTYPE_LAYOUT</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
