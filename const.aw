@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.39 2001/09/12 19:39:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.40 2001/09/18 00:26:44 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -418,7 +418,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_SHOP => array("name" => LC_CONST_SHOP, "file" => "shop", "can_add" => 1),
 			CL_SHOP_ITEM => array("name" => LC_CONST_GOODS_ART, "file" => "shop_item", "can_add" => 1),
 			CL_TABLE	=> array("name" => LC_CONST_TABLE, "file" => "table","can_add" => 1), 
-			CL_IMAGE	=> array("name" => LC_CONST_PICT, "file" => "images", "can_add" => 0), 
+			CL_IMAGE	=> array("name" => LC_CONST_PICT, "file" => "images", "can_add" => 1), 
 			CL_FORM_ENTRY => array("name" => LC_CONST_FORM_ENTRY, "file" => "form_entry"),
 			CL_FORM_ELEMENT => array("name" => LC_CONST_FORM_ELEMENT, "file" => "form_element_vis"),
 			CL_STYLE	=> array("name" => LC_CONST_STYLE, "file" => "style","class" => "style", "can_add" => 1), 
@@ -563,6 +563,7 @@ define("PRG_CONFIG_ERRORS",48);	// sisselogimist vajavate veateadete konfimine
 define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
 define("PRG_SYSCONF",50); // konfiguratsioonieditor
 define("PRG_CONFIG_REDIRECT",51);	// sisselogimist vajavate veateadete konfimine
+define("PRG_TPLEDIT",52); // templateeditor
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -579,7 +580,7 @@ PRG_FORMGEN						=> array("name" => MN_FORMGEN,					"url" => "forms.$ext"),
 PRG_GRAPH							=> array("name" => MN_GRAPH,						"url" => "graph.$ext"),
 PRG_FACE							=> array("name" => MN_FACE,							"url" => "nagu.$ext"),
 PRG_POLL							=> array("name" => MN_POLL,							"url" => "poll.$ext"),
-PRG_SEARCH						=> array("name" => MN_SEARCH,						"url" => "search_conf.$ext"),
+PRG_SEARCH						=> array("name" => MN_SEARCH,						"url" => "orb.aw?class=search_conf&action=change"),
 PRG_PERIODS						=> array("name" => MN_PERIODS,					"url" => "periods.$ext"),
 PRG_TESTS							=> array("name" => MN_TESTS,						"url" => "orb.$ext?class=tests&action=list_testid"),
 PRG_LISTS							=> array("name" => MN_LISTS,						"url" => "list.$ext"),
@@ -617,7 +618,8 @@ PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor",				"url" => "orb.a
 PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
 PRG_SYSCONF				=> array("name" => "Automatweb config", "url" => "orb.aw?class=sysconf&action=edit"),
 PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors"),
-PRG_CONFIG_REDIRECT => array("name" => "Config/suunamine", "url" => "orb.aw?class=config&action=grp_redirect")
+PRG_CONFIG_REDIRECT => array("name" => "Config/suunamine", "url" => "orb.aw?class=config&action=grp_redirect"),
+PRG_TPLEDIT => array("name" => "TemplateEditor", "url" => "orb.aw?class=tpledit&action=browse"),
 );
 
 // formide tyybid
