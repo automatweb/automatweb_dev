@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.111 2002/03/07 23:47:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.112 2002/03/08 11:13:02 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -463,7 +463,10 @@ class menuedit extends aw_template
 		$section_subitems = sizeof($this->mpr[$section]);
 
 		$this->section = $section;
+		
+		// eek.
 
+		$cd = "";
 		global $menu_defs_v2,$frontpage;
 
 		if (isset($menu_defs_v2) && is_array($menu_defs_v2))
@@ -506,6 +509,8 @@ class menuedit extends aw_template
 		}
 
 
+
+
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 		
 		if ($this->is_template("POLL"))
@@ -538,27 +543,7 @@ class menuedit extends aw_template
 			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
-
-		// sucks.
-		if ($this->mar[$section]["parent"] == 34506 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 34506 || $section == $GLOBALS["frontpage"])
-		{
-			$this->vars(array(
-				"IS_AWCOM_FRONTPAGE" => $this->parse("IS_AWCOM_FRONTPAGE"),
-				"MOSTIMP" => '<span class="pealkiri2">'.$this->mar["34506"]["name"].'</span>'
-			));
-		}
-
-		// what's that for?
-		if (is_array($vars))
-		{
-			$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
-			$this->vars($vars);
-		}
-
-		// eek.
-
-		$cd = "";
-
+		
 		if (aw_global_get("uid") == "")
 		{
 			$login = $this->parse("login");
@@ -588,8 +573,11 @@ class menuedit extends aw_template
 				// to it, parse and show the CHANGEDOCUMENT sub
 				if ($this->can("edit",$section) && $this->active_doc)
 				{
-					$cd = $this->parse("CHANGEDDOCUMENT");
+					$cd = $this->parse("CHANGEDOCUMENT");
 				};
+				$this->vars(array(
+			   		"CHANGEDOCUMENT" => $cd,
+				));
 			}
 			else
 			{
@@ -604,6 +592,24 @@ class menuedit extends aw_template
 				"login" => ""
 			));
 		};
+		
+
+		// sucks.
+		if ($this->mar[$section]["parent"] == 34506 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 34506 || $section == $GLOBALS["frontpage"])
+		{
+			$this->vars(array(
+				"IS_AWCOM_FRONTPAGE" => $this->parse("IS_AWCOM_FRONTPAGE"),
+				"MOSTIMP" => '<span class="pealkiri2">'.$this->mar["34506"]["name"].'</span>'
+			));
+		}
+
+		// what's that for?
+		if (is_array($vars))
+		{
+			$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
+			$this->vars($vars);
+		}
+
 
 		$lp = "";
 		$rp = "";
@@ -624,9 +630,6 @@ class menuedit extends aw_template
 
 		$popups = $this->build_popups();
 
-		$this->vars(array(
-			   "CHANGEDOCUMENT" => $cd,
-		));
 		return $this->parse() . $popups;
 	}
 
