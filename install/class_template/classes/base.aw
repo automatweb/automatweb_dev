@@ -2,7 +2,12 @@
 
 /*
 
+@classinfo syslog_type=__syslog_type
+
+@groupinfo general caption=Üldine
+
 @default table=objects
+@default group=general
 
 @property status type=status field=status
 @caption Staatus
