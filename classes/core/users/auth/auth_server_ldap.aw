@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.5 2004/10/28 17:29:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.6 2004/11/01 12:29:24 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -188,7 +188,7 @@ class auth_server_ldap extends class_base
 		{
 			for($a = 0; $a < $info[$i]["samaccountname"]["count"]; $a++)
 			{
-				if ($info[$i]["samaccountname"][$a] == $cred["uid"])
+				if (strtolower($info[$i]["samaccountname"][$a]) == strtolower($cred["uid"]))
 				{
 					$ret = true;
 				}
