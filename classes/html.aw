@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.19 2002/12/19 15:17:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.20 2003/01/09 15:56:15 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -140,6 +140,10 @@ class html extends aw_template
 		if (!$value)
 		{
 			$value = 1;
+		};
+		if ($label)
+		{
+			$caption = $label;
 		};
 		if ($caption)
 		{
