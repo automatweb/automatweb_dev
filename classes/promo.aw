@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.35 2003/06/17 11:58:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.36 2003/06/19 09:55:41 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -51,7 +51,7 @@
 	@tableinfo menu index=id master_table=objects master_index=oid
 
 	@groupinfo general caption=Üldine
-	@groupinfo menus caption=Menüüd
+	@groupinfo menus caption=Kaustad
 	@groupinfo show caption=Näitamine
 			
 */
@@ -504,6 +504,20 @@ class promo extends class_base
 		else
 		{
 			$def = new aw_array($me->get_default_document($alias["target"],true));
+		}
+
+		$_ob = aw_ini_get("menuedit.document_list_order_by");
+		if ($_ob != "")
+		{
+			$_ids = $def->to_sql();
+			$_q = "SELECT objects.oid as oid FROM objects  LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.oid IN ($_ids) ORDER BY $_ob";
+			$this->db_query($_q);
+			$def = array();
+			while ($row = $this->db_next())
+			{
+				$def[] = $row["oid"];
+			}
+			$def = new aw_array($def);
 		}
 
 		$ndocs = $this->db_fetch_field("SELECT ndocs FROM menu WHERE id = '$alias[target]'", "ndocs");
