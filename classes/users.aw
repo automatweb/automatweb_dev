@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.32 2002/02/13 12:44:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.33 2002/02/13 22:02:26 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects");
 
@@ -1895,8 +1895,14 @@ class users extends users_user
 
 	function submit_send_hash($args = array())
 	{
-		$this->quote($args);
 		extract($args);
+		if (not(is_valid("uid",$uid)))
+		{
+			global $status_msg;
+			$status_msg = "Vigane kasutajanimi";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
 		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -1948,6 +1954,15 @@ class users extends users_user
 	{	
 		$this->quote($args);
 		extract($args);
+		if (not(is_valid("uid",$uid)))
+		{
+			$this->read_adm_template("hash_results.tpl");
+			$this->vars(array(
+				"msg" => "Vigane kasutajanimi",
+			));
+			return $this->parse();
+		};
+
 		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = '0'";
 		$this->db_query($q);
 		$row = $this->db_next();
