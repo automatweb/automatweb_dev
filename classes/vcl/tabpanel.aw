@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.1 2002/11/04 21:03:37 duke Exp $
+// $Id: tabpanel.aw,v 1.2 2002/11/26 12:37:00 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -44,8 +44,13 @@ class tabpanel extends aw_template
 			$tabs = $this->parse("tabs");
 		};
 
+		$toolbar = $args["toolbar"];
+		$toolbar2 = $args["toolbar2"];
+
 		$this->vars(array(
 			"tabs" => $tabs,
+			"toolbar" => $toolbar,
+//                        "toolbar2" => $toolbar2,
 			"content" => $args["content"],
 		));
 		return $this->parse();
