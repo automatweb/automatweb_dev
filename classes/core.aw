@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.175 2003/04/11 06:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.176 2003/04/11 16:15:10 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2527,18 +2527,22 @@ class core extends db_connector
 		foreach($cls as $clid => $cld)
 		{
 
-			if (isset($cld['field']) && ($cld['field'] != ""))
+			// what field? it's file
+			//if (isset($cld['field']) && ($cld['field'] != ""))
+			if (isset($cld['file']) && ($cld['file'] != ""))
 			{
 				$clname = $cld[$field];
-/*			if ($cld["parents"] != "")
-			{
-				list($prnt) = explode(",",$cld["parents"]);
-				while($prnt)
+				/*
+				if ($cld["parents"] != "")
 				{
-					$clname = $clfs[$prnt]["name"]."/".$clname;
-					$prnt =$clfs[$prnt]["parent"];
+					list($prnt) = explode(",",$cld["parents"]);
+					while($prnt)
+					{
+						$clname = $clfs[$prnt]["name"]."/".$clname;
+						$prnt =$clfs[$prnt]["parent"];
+					}
 				}
-			}*/
+				*/
 				if (isset($index))
 				{
 					$ret[$cld[$index]] = $clname;
