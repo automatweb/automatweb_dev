@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.28 2004/05/06 12:03:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.29 2004/05/24 10:53:43 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -183,8 +183,9 @@ class mail_message extends class_base
 			$target_obj = new object($to_addr);
 			if ($target_obj->prop("class_id") == CL_ML_LIST)
 			{
-				$lists = array(":" . $target_obj->prop("name"));
-				$to_addr = join(",",$lists);
+				#$lists = array(":" . $target_obj->prop("name"));
+				$lists = $target_obj->id();
+				#$to_addr = join(",",$lists);
 			};
 			$to_list = true;
 		};
