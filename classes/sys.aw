@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.25 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.26 2004/02/25 16:01:38 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -468,27 +468,6 @@ class sys extends aw_template
 		}
 	}
 
-	/**  
-		
-		@attrib name=get_table params=name default="0"
-		
-		@param name required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function get_table($args = array())
-	{
-		extract($args);
-		$table = $this->db_get_table("objects");
-		print "<pre>";
-		print_r($table);
-		print "</pre>";
-		exit;
-	}
 	function on_site_init(&$dbi, $site, $ini_opts, &$log)
 	{
 		// no need to dbsync if we are not creating a new site

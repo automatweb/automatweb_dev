@@ -43,13 +43,5 @@
 			</function>
 		</action>
 
-		<action name="get_table" >
-			<function name="get_table">
-				<arguments>
-					<required name="name" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
