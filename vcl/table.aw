@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.34 2002/10/16 15:43:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.35 2002/10/18 08:22:58 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -928,7 +928,7 @@ class aw_table
 
 				if ($attrs["header_normal"] != "")
 				{
-					$this->col_styles[$attrs["name"]]["headder_normal"] = $attrs["header_normal"];
+					$this->col_styles[$attrs["name"]]["header_normal"] = $attrs["header_normal"];
 				}
 				if ($attrs["header_sortable"] != "")
 				{
