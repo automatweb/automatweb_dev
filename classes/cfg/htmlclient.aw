@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.75 2004/10/14 11:59:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.76 2004/10/19 13:18:12 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -489,6 +489,11 @@ class htmlclient extends aw_template
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($name);
 		}
+		elseif($this->tplmode =="groups" && $this->sub_tpl->is_template($arr["name"]))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($arr["name"]);
+		}
 		else
 		{
 			$this->vars($tpl_vars);
@@ -511,6 +516,11 @@ class htmlclient extends aw_template
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($tpl);
 		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($args["name"]);
+		}
 		else
 		{
 			$this->vars($tpl_vars);
@@ -530,6 +540,11 @@ class htmlclient extends aw_template
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($name);
 		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($args["name"]);
+		}
 		else
 		{
 			$this->vars($tpl_vars);
@@ -548,6 +563,11 @@ class htmlclient extends aw_template
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($name);
+		}
+		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($args["name"]);
 		}
 		else
 		{
@@ -933,6 +953,7 @@ class htmlclient extends aw_template
 			{
 				if($this->tplmode == "groups")
 				{
+					//arr($this->get_prop_names());
 					$rv = $this->sub_tpl->parse();
 				}
 				else
