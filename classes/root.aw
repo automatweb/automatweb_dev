@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.12 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.13 2002/06/26 11:10:58 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -47,6 +47,9 @@ class root
 	// now I have not even the faintest idea, what this
 	// function is supposed to do? is this right?
 	// or is something broken somewhere?
+	//
+	// this is used in form_db_base.aw for generating the sql join from the form relation tree 
+	// and it seems correct to me - terryf
 	function _clear_stack($stack = "root")
 	{
 		$tmp = $this->stacks[$stack];
