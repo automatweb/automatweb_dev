@@ -1,5 +1,7 @@
 <form name="clform" method="POST" action="reforb.{VAR:ext}">
 {VAR:toolbar}
+<fieldset>
+<legend class="fgtext"><strong>Objekti andmed</strong></legend>
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
 <td class="fgtext">Nimi</td>
@@ -16,5 +18,6 @@
 <td class="fgtext"><select name="cfgform">{VAR:cfgforms}</select></td>
 </tr>
 </table>
+</fieldset>
 {VAR:reforb}
 </form>
