@@ -72,4 +72,5 @@ include ${ini_dir}/base.ini
 include ${ini_dir}/add_tree_conf.ini
 include ${ini_dir}/aw_session_track.ini
 include ${ini_dir}/document_statistics.ini
+include ${ini_dir}/virus_scanner.ini
 include ${ini_dir}/newsfeed.ini
