@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.33 2004/06/11 09:11:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.34 2004/08/03 10:25:39 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -23,7 +23,7 @@ class cache extends core
 	//               idee on selles, et siis saab yhele objektile ka mitu cachet teha.
 	function set($oid,$arr,$content,$clear_flag = true)
 	{
-		if ($this->cfg["use_page_cache"] && !aw_global_get("uid"))
+		if ($this->cfg["use_page_cache"] && !aw_global_get("uid") && !aw_global_get("no_cache"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
 			reset($arr);
