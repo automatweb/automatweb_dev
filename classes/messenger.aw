@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.16 2001/05/23 06:54:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.17 2001/05/23 07:05:58 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -446,9 +446,13 @@ class messenger extends menuedit_light
 		$this->read_template("mailbox.tpl");
 
 		$inbox = $this->user["msg_inbox"];
-		if (!$folder)
+		if (!$id)
 		{
-			$folder = $this->conf["default_folder"];
+			$id = $this->msgconf["msg_default_folder"];
+		};
+		if (!$id)
+		{
+			$id = $inbox;
 		};
 
 		$fld_info = $this->get_object($folder);
