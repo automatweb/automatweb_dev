@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.53 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.54 2001/09/17 13:20:33 cvs Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -364,10 +364,10 @@ class core extends db_connector
 		classload("config");
 		$config = new config();
 
-		global $menu_defs_v2;
+		global $menu_defs_v2,$lang_id;
 
+		global $DEBUG;
 		$this->login_menu = $config->get_login_menus($retval);
-
 		global $uid;
 
 		if ($this->login_menu)
@@ -491,6 +491,8 @@ class core extends db_connector
 	{
 		$q = "UPDATE objects SET cachedirty = 1 WHERE objects.site_id = ".$GLOBALS["SITE_ID"]." or objects.site_id IS NULL";
 		$this->db_query($q);
+		$GLOBALS["cahe_dirty_cache"] = array();
+
 	}
 		
 	////
@@ -535,6 +537,7 @@ class core extends db_connector
 					"parent" => $parent,
 					"class" => $class,
 					"type" => $type,
+					"lang_id" => $lang_id,
 					"active" => $active,
 					"orderby" => $orderby,
 			));
@@ -1074,6 +1077,8 @@ class core extends db_connector
 
 		$astr = ($active) ? " AND status = 2 " : "";
 
+		$cstr = ($lang_id) ? " AND lang_id = $lang_id " : "";
+
 		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
 		
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
@@ -1082,7 +1087,7 @@ class core extends db_connector
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
 				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $typestr $ostr";
+				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $cstr $typestr $ostr";
 		}
 		else
 		{

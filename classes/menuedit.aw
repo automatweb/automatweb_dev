@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.55 2001/09/13 19:04:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.56 2001/09/17 13:20:33 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -132,14 +132,22 @@ class menuedit extends aw_template
 		{
 			$cp[] = $GLOBALS["page"];
 		}
+		
 		$cp[] = $GLOBALS["lang_id"];
+
+		$not_cached = false;
+
 		if ($GLOBALS["docid"])
 		{
 			$cp[] = $GLOBALS["docid"];
-		}
-	
-		// format=rss ntx
-		if (!($res = $this->cache->get($section,$cp)) || $params["format"])
+			if ($this->cache_dirty($GLOBALS["docid"]))
+			{
+				$not_cached = true;
+				$this->clear_cache($GLOBALS["docid"]);
+			}; 
+		};
+
+		if (!($res = $this->cache->get($section,$cp)) || $params["format"] || $not_cached)
 		{
 			// seda objekti pold caches
 			$res = $this->_gen_site_html($params);
@@ -282,6 +290,7 @@ class menuedit extends aw_template
 		}
 
 		$sel_menu_id = $section;
+
 
 		if ($GLOBALS["uid"] == "")
 		{
