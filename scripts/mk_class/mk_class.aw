@@ -245,6 +245,7 @@ if ($class['folder'] != "")
 $fc = str_replace("__classdef", $class['def'], file_get_contents("install/class_template/classes/base.aw"));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
+$fc = str_replace("__name", $class['name'], $fc);
 file_put_contents("classes/$clnf",str_replace("__classname", $class['file'], $fc));
 echo "created classes/$clnf...\n";
 
