@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.14 2003/06/06 15:26:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.15 2003/06/17 12:01:40 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -322,8 +322,44 @@ class converters extends aw_template
 
 	function groups_convert()
 	{
+		$uroot = aw_ini_get("users.root_folder");
+		if (!$uroot)
+		{
+			$this->raise_error(ERR_NO_USERS_ROOT,"Kasutajate rootketaloog on m&auml;&auml;ramata!", true);
+		}
+
+			
+		aw_global_set("__from_raise_error",1);
+		$this->db_query("ALTER TABLE users add oid int");
+		aw_global_set("__from_raise_error",1);
+		$this->db_query("ALTER TABLE users add index oid(oid)");
+
+		// 1st, let's do users
+		$q = 'select oid, uid from users';
+		$arr = $this->db_fetch_array($q);
+		foreach($arr as $val)
+		{
+			if (!is_numeric($val['oid']))
+			{
+				$oid = $this->new_object(array(
+					"name" => $val['uid'], 
+					"class_id" => CL_USER, 
+					"status" => 2,
+					"parent" => $uroot
+				));
+				if (is_numeric($oid))
+				{
+					$this->db_query('update users set oid='.$oid.' where uid="'.$val['uid'].'"');
+				}
+			}
+		}
+
 		// basically, move all groups objects to some rootmenu and that seems to be it.
 		$rootmenu = aw_ini_get("groups.tree_root");
+		if (!$rootmenu)
+		{
+			$this->raise_error(ERR_NO_USERS_ROOT,"Kasutajate rootketaloog on m&auml;&auml;ramata!", true);
+		}
 		// now, get all top-level groups.
 		$this->db_query("SELECT gid,oid,type,search_form FROM groups WHERE (parent IS NULL or parent = 0) AND type IN(".GRP_REGULAR.",".GRP_DYNAMIC.")");
 		while($row = $this->db_next())
