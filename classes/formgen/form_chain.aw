@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.16 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.17 2004/06/19 18:09:27 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -119,7 +119,7 @@ class form_chain extends form_base
 			$o->set_name($name);
 			$o->set_comment($comment);
 			$o->set_status(STAT_ACTIVE);
-			$o->set_clas_id(CL_FORM_CHAIN);
+			$o->set_class_id(CL_FORM_CHAIN);
 			$o->set_flags($flags);
 			$id = $o->save();
 			$this->db_query("INSERT INTO form_chains(id,content) VALUES($id,'$content')");
