@@ -22,6 +22,9 @@ class contents extends aw_template
 
 		$this->period = aw_global_get("act_per_id");
 
+		$this->count = 0;
+		$this->max_count = $arr["max"];
+
 		// this will not work if there are different menu areas for 
 		// different languages .e.g menuedit.menu_defs[1][YLEMINE] = 66
 		// menuedit.menu_defs[2][YLEMINE] = 88
@@ -144,6 +147,11 @@ class contents extends aw_template
 					"menu_link" => $this->mned->make_menu_link($md),
 					"STORY" => $s
 				));
+				$this->count++;
+				if (($this->max_count > 0 ) && ($this->count > $this->max_count))
+				{
+					return;
+				}
 				$this->l.=$this->parse("MENU");
 			}
 			$this->req_menus($md["oid"]);
