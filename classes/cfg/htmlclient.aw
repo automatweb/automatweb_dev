@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.15 2003/01/09 17:21:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.16 2003/01/09 22:02:00 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -72,15 +72,6 @@ class htmlclient extends aw_template
 
 	function mod_property(&$args)
 	{
-		//if ($args["type"] == "checkbox")
-		//{
-		//	if (!$args["checked"])
-		//	{
-		//		$args["checked"] = $args["value"];
-		//	};
-		//	$args["value"] = 1;
-		//};
-
 		// that too should not be here. It only forms 2 radiobuttons ...
 		// which could as well be done some place else
 		if ($args["type"] == "status")
@@ -122,19 +113,25 @@ class htmlclient extends aw_template
 
 			$cplink = $this->mk_my_orb("colorpicker",array(),"css");
 
-			$script = "";
-			$script .= "<script type='text/javascript'>\n";
-			$script .= "var element = 0;\n";
-			$script .= "function set_color(clr) {\n";
-			$script .= "document.forms[0].$args[name].value=clr;\n";
-			$script .= "}\n";
+			static $colorpicker_script_done = 0;
 
-			$script .= "function colorpicker(el) {\n";
-			$script .= "element = el;\n";
-			$script .= "aken=window.open('$cplink','colorpickerw','HEIGHT=220,WIDTH=310');\n";
-			$script .= "aken.focus();\n";
-			$script .= "};\n";
-			$script .= "</script>";
+			$script = "";
+			if (!$colorpicker_script_done)
+			{
+				$script .= "<script type='text/javascript'>\n";
+				$script .= "var element = 0;\n";
+				$script .= "function set_color(clr) {\n";
+				$script .= "document.getElementById(element).value=clr;\n";
+				$script .= "}\n";
+
+				$script .= "function colorpicker(el) {\n";
+				$script .= "element = el;\n";
+				$script .= "aken=window.open('$cplink','colorpickerw','height=220,width=310');\n";
+				$script .= "aken.focus();\n";
+				$script .= "};\n";
+				$script .= "</script>";
+				$colorpicker_script_done = 1;
+			};
 
 			$tx = "<a href=\"javascript:colorpicker('$args[name]')\">Vali</a>";
 	
