@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.143 2003/11/26 14:42:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.144 2003/11/27 12:35:58 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2803,6 +2803,14 @@ class planner extends class_base
 
 		foreach($tasklist->arr() as $task)
 		{
+			if ($task->is_brother())
+			{
+				$task = $task->get_original();
+				if ($task->status() != STAT_ACTIVE)
+				{
+					continue;
+				};
+			};
 			$this->vars(array(
 				"caption" => $task->prop("name"),
 				"url" => $this->mk_my_orb("change",array("id" => $this->id,"event_id" => $task->id(),"group" => "add_event"),"planner"),
