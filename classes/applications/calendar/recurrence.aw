@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.2 2004/10/27 11:45:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.3 2004/10/29 08:01:26 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -455,12 +455,13 @@ class recurrence extends class_base
 	{
 		$time = ($arr["time"]) ? $arr["time"] : time();
 		$o = new object($arr["id"]);
-		$q = "SELECT recur_start FROM recurrence WHERE recur_id = ". $o->id() . " AND recur_start >= " . $time . " LIMIT 1";
+		$q = "SELECT recur_start FROM recurrence WHERE recur_id = ". $o->id() . " AND recur_start >= " . $time . " ORDER BY recur_start LIMIT 1";
 		$this->db_query($q);
 		$row = $this->db_next();
 		return is_array($row) ? $row["recur_start"] : false;
 
 	}
+
 
 
 	/* Now that I have to basic functionality working pretty much fine, I need to figure out a
