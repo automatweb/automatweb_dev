@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.184 2004/06/15 08:51:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.185 2004/06/17 11:24:30 rtoomas Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -746,6 +746,7 @@ class planner extends class_base
 
 		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
 		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
+		preg_match('/alias_to_org_arr=(.*)$/', $gl, $s);
 
 		if (is_numeric($o[1]) && is_numeric($r[1]))
 		{
@@ -755,7 +756,18 @@ class planner extends class_base
 				"reltype" => $r[1],
 			));
 			aw_session_del('org_action');
-
+			if(strlen($s[1]))
+			{
+				$aliases = unserialize(urldecode($s[1]));
+				foreach($aliases as $key=>$value)
+				{
+					$tmp_o = new object($value);
+					$tmp_o->connect(array(
+						'to' => $this->event_id,
+						'reltype' => $r[1],
+					));
+				}
+			}
 			post_message_with_param(
 				MSG_EVENT_ADD,
 				$org_obj->class_id(),
@@ -765,11 +777,6 @@ class planner extends class_base
 				)
 			);
 		}
-
-
-
-
-		
 		return PROP_OK;
 	}
 
