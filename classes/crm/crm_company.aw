@@ -75,6 +75,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 @caption User-defined TA 5
 
+------ Yldine - kasutajate seaded grupp
+
+@property do_create_users type=checkbox ch_value=1 table=objects field=meta method=serialize group=user_settings
+@caption Kas isikud on kasutajad
+
 --------------------------------------
 @default group=oldcontacts
 
@@ -325,6 +330,8 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @groupinfo cedit caption="Üldkontaktid" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
+@groupinfo user_settings caption="Kasutajate seaded" parent=general
+
 
 @groupinfo people caption="Inimesed"
 
@@ -452,6 +459,9 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 
 @reltype SECTION_WEBSIDE value=35 clid=CL_CRM_MANAGER
 @caption Üksus veebis
+
+@reltype GROUP value=36 clid=CL_GROUP
+@caption organisatsiooni grupp
 
 @classinfo no_status=1
 			
@@ -3784,6 +3794,12 @@ class crm_company extends class_base
 			$person = new object($value);
 			$person->set_prop('work_contact',$arr['id']);
 			$person->save();
+			
+			// run user creation
+			$cuc = get_instance("crm/crm_user_creator");
+			$cuc->on_save_person(array(
+				"oid" => $person->id()
+			));
 		}
 
 		return $this->mk_my_orb('change',array(

@@ -128,6 +128,24 @@
             <caption>Pilt/foto</caption>
       </property>
       <property>
+            <name>username</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>text</type>
+            <store>no</store>
+            <field>username</field>
+            <caption>Kasutaja</caption>
+      </property>
+      <property>
+            <name>password</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>kliendibaas_isik</table>
             <group>description</group>

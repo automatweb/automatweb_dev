@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.63 2004/11/07 11:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.64 2004/11/09 10:27:28 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -60,6 +60,12 @@ caption Pildi/foto url
 
 @property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file 
 @caption Pilt/foto
+
+@property username type=text store=no
+@caption Kasutaja
+
+@property password type=password table=objects field=meta method=serialize
+@caption Parool
 
 //@property profession type=select store=no edit_only=1
 //@caption Ametinimetus
@@ -670,6 +676,25 @@ class crm_person extends class_base
 					return PROP_IGNORE;
 				}
 			break;
+
+			case "password":
+				if ($this->has_user($arr["obj_inst"]))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "username":
+				if (!($tmp = $this->has_user($arr["obj_inst"])))
+				{
+					return PROP_IGNORE;
+				}
+				$data["value"] = html::get_change_url(
+					$tmp->id(),
+					array(),
+					$tmp->name()
+				);
+				break;
 		}
 		return $retval;
 
@@ -2145,6 +2170,25 @@ class crm_person extends class_base
 			$ret[$item["from"]] = $item["from"];
 		}
 		return $ret;
+	}
+
+	function has_user($o)
+	{
+		obj_set_opt("no_cache", 1);
+		$c = new connection();
+		$res = $c->find(array(
+			"to" => $o->id(),
+			"from.class_id" => CL_USER,
+			"type" => 2 // CL_USER.RELTYPE_PERSON
+		));
+		obj_set_opt("no_cache", 0);
+
+		if (count($res))
+		{
+			$tmp = reset($res);
+			return obj($tmp["from"]);
+		}
+		return false;
 	}
 }
 ?>

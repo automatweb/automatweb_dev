@@ -45,6 +45,11 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Sarnane amet</caption>
             </SIMILARPROFESSION>
+            <GROUP>
+                  <value>2</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>grupp</caption>
+            </GROUP>
       </reltypes>
 </properties>
 

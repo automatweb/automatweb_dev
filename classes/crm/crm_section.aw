@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.15 2004/10/29 16:13:29 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.16 2004/11/09 10:27:28 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -25,6 +25,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @reltype JOB_OFFER value=4 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 @caption Tööpakkumine
+
+@reltype GROUP value=5 clid=CL_GROUP
+@caption grupp
+
 */
 
 class crm_section extends class_base

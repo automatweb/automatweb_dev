@@ -34,6 +34,11 @@
                   <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
                   <caption>Tööpakkumine</caption>
             </JOB_OFFER>
+            <GROUP>
+                  <value>5</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>grupp</caption>
+            </GROUP>
       </reltypes>
 </properties>
 

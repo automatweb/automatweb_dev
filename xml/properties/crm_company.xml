@@ -179,6 +179,16 @@
             <caption>User-defined TA 5</caption>
       </property>
       <property>
+            <name>do_create_users</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas isikud on kasutajad</caption>
+      </property>
+      <property>
             <name>addresslist</name>
             <table>objects</table>
             <group>oldcontacts</group>
@@ -801,6 +811,10 @@
                   <caption>Lisainfo</caption>
                   <parent>general</parent>
             </add_info>
+            <user_settings>
+                  <caption>Kasutajate seaded</caption>
+                  <parent>general</parent>
+            </user_settings>
             <people>
                   <caption>Inimesed</caption>
             </people>
@@ -1076,6 +1090,11 @@
                   <clid>CL_CRM_MANAGER</clid>
                   <caption>Üksus veebis</caption>
             </SECTION_WEBSIDE>
+            <GROUP>
+                  <value>36</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>organisatsiooni grupp</caption>
+            </GROUP>
       </reltypes>
       <layout>
             <hbox_toolbar>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.6 2004/09/20 16:45:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.7 2004/11/09 10:27:29 kristo Exp $
 // crm_profession.aw - Ameti nimetus 
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
@@ -21,6 +21,9 @@
 
 @reltype SIMILARPROFESSION value=1 clid=CL_CRM_PROFESSION
 @caption Sarnane amet
+
+@reltype GROUP value=2 clid=CL_GROUP
+@caption grupp
 
 */
 
