@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.43 2005/03/15 11:01:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.44 2005/03/15 14:08:58 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
 EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
-@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes
+@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"
@@ -196,6 +196,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 @default group=grp_printer_current,grp_printer_old,grp_printer_done
 	@property printer_jobs type=table no_caption=1
 
+	@property printer_legend type=text 
+	@caption Legend
+
 	// these are shown when a job is selected
 	@property pj_case_header type=text no_caption=1 store=no
 
@@ -329,6 +332,12 @@ define ("MRP_COLOUR_OVERDUE", "#FF1111");
 
 class mrp_workspace extends class_base
 {
+	var $pj_colors = array(
+		"done" => "#BADBAD",
+		"can_start" => "#eff6d5",
+		"can_not_start" => "#ffe1e1"
+	);
+
 	function mrp_workspace()
 	{
 		$this->init(array(
@@ -590,6 +599,16 @@ class mrp_workspace extends class_base
 					return PROP_IGNORE;
 				}
 				$this->_printer_jobs($arr);
+				break;
+
+			case "printer_legend":
+				if ($arr["request"]["pj_job"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>Valmis</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>T&ouml;&ouml;s / v&otilde;ib alustada</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>Ei saa alustada</span>&nbsp;&nbsp;";
 				break;
 
 			case "sp_name":
@@ -2472,6 +2491,7 @@ class mrp_workspace extends class_base
 			"align" => "center",
 			"format" => "d.m.Y H:i",
 			"numeric" => 1,
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2480,6 +2500,7 @@ class mrp_workspace extends class_base
 			"caption" => t("Pikkus"),
 			"align" => "center",
 			"numeric" => 1,
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2490,6 +2511,15 @@ class mrp_workspace extends class_base
 			"align" => "center",
 			"format" => "d.m.Y H:i",
 			"numeric" => 1,
+			"chgbgcolor" => "bgcol",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"chgbgcolor" => "bgcol",
+			"align" => "center",
 			"sortable" => 1
 		));
 
@@ -2497,6 +2527,7 @@ class mrp_workspace extends class_base
 			"name" => "customer",
 			"caption" => t("Klient"),
 			"align" => "center",
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2504,6 +2535,7 @@ class mrp_workspace extends class_base
 			"name" => "project",
 			"caption" => t("Projekt"),
 			"align" => "center",
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2511,6 +2543,7 @@ class mrp_workspace extends class_base
 			"name" => "resource",
 			"caption" => t("Ressurss"),
 			"align" => "center",
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2518,6 +2551,7 @@ class mrp_workspace extends class_base
 			"name" => "worker",
 			"caption" => t("Teostaja"),
 			"align" => "center",
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 
@@ -2525,6 +2559,7 @@ class mrp_workspace extends class_base
 			"name" => "job",
 			"caption" => t("Ava"),
 			"align" => "center",
+			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
 	}
@@ -2548,6 +2583,9 @@ class mrp_workspace extends class_base
 		));
 
 		$workers = $this->get_workers_for_resources($res);
+
+		$mrp_job = get_instance(CL_MRP_JOB);
+		$mrp_case = get_instance(CL_MRP_CASE);
 
 		foreach($jobs as $job)
 		{
@@ -2578,6 +2616,22 @@ class mrp_workspace extends class_base
 				);
 			}
 
+			if ($job->prop("state") == MRP_STATUS_DONE)
+			{
+				// dark green
+				$bgcol = $this->pj_colors["done"];
+			}
+			else
+			if ($job->prop("state") == MRP_STATUS_INPROGRESS || $mrp_case->can_start_job(array("project" => $job->prop("project"), "job" => $job->id())))
+			{
+				// light green
+				$bgcol = $this->pj_colors["can_start"];
+			}
+			else
+			{
+				// light red
+				$bgcol = $this->pj_colors["can_not_start"];
+			}
 			$t->define_data(array(
 				"tm" => $job->prop("starttime"),
 				"tm_end" => $job->prop("starttime") + $job->prop("length"),
@@ -2600,7 +2654,9 @@ class mrp_workspace extends class_base
 					),
 					$proj->name()
 				),
-				"customer" => $custo
+				"customer" => $custo,
+				"status" => $mrp_job->states[$job->prop("state")],
+				"bgcol" => $bgcol
 			));
 		}
 
@@ -3095,29 +3151,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-	{
+		{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-		{
+			{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-		}
+			}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-	}
+			}
 			if ($arr["request"]["cs_phone"] != "")
-	{
+			{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-	}
+		}
 
 		foreach($results->arr() as $cust)
-	{
+		{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),

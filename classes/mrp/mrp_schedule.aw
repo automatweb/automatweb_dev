@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.17 2005/03/15 11:01:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.18 2005/03/15 14:08:58 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
 HANDLE_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED, create)
 
-@classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes
+@classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general

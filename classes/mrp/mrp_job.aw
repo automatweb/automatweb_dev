@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.17 2005/03/15 11:01:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.18 2005/03/15 14:08:58 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -142,6 +142,10 @@ class mrp_job extends class_base
 		MRP_STATUS_INPROGRESS => "Töös",
 		MRP_STATUS_ABORTED => "Katkestatud",
 		MRP_STATUS_DONE => "Valmis",
+		MRP_STATUS_LOCKED => "Lukustatud",
+		MRP_STATUS_OVERDUE => "&Uuml;le t&auml;htaja",
+		MRP_STATUS_DELETED => "Kustutatud",
+		MRP_STATUS_ONHOLD => "Peatatud"
 	);
 
 	function mrp_job ()
@@ -281,12 +285,16 @@ class mrp_job extends class_base
 
 		if ($this_object->prop ("state") != MRP_STATUS_INPROGRESS)
 		{
-			$toolbar->add_button(array(
-				"name" => "start",
-				//"img" => "new.gif",
-				"tooltip" => "Alusta",
-				"action" => "start",
-			));
+			$mc = get_instance(CL_MRP_CASE);
+			if ($mc->can_start_job(array("project" => $this_object->prop("project"), "job" => $this_object->id())))
+			{
+				$toolbar->add_button(array(
+					"name" => "start",
+					//"img" => "new.gif",
+					"tooltip" => "Alusta",
+					"action" => "start",
+				));
+			}
 		}
 
 		if ($this_object->prop ("state")  == MRP_STATUS_INPROGRESS)
@@ -365,6 +373,10 @@ class mrp_job extends class_base
 		$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 		$this_object->save ();
 
+		// set resource as in use
+		$resi = get_instance(CL_MRP_RESOURCE);
+		$resi->start_job(array("resource" => $this_object->prop("resource")));
+
 		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
 	}
@@ -386,6 +398,10 @@ class mrp_job extends class_base
 
 		$this_object->set_prop ("state", MRP_STATUS_DONE);
 		$this_object->save ();
+
+		// set resource as free
+		$resi = get_instance(CL_MRP_RESOURCE);
+		$resi->stop_job(array("resource" => $this_object->prop("resource")));
 
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log(
@@ -446,6 +462,10 @@ class mrp_job extends class_base
 
 		$this_object->set_prop ("state", MRP_STATUS_ABORTED);
 		$this_object->save ();
+
+		// set resource as free
+		$resi = get_instance(CL_MRP_RESOURCE);
+		$resi->stop_job(array("resource" => $this_object->prop("resource")));
 
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.33 2005/03/15 12:26:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.34 2005/03/15 14:08:58 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -8,7 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
-@classinfo syslog_type=ST_MRP_CASE relationmgr=yes
+@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 
@@ -1531,6 +1531,23 @@ class mrp_case extends class_base
 			return false;
 		}
 
+		if ($job->prop("state") == MRP_STATUS_DONE)
+		{
+			return false;
+		}
+
+		// check if resource is available
+		$resi = get_instance(CL_MRP_RESOURCE);
+		if (!$resi->can_start_job(array("resource" => $job->prop("resource"))))
+		{
+			return false;
+		}
+
+		if (trim($job->prop ("prerequisites")) == "")
+		{
+			return true;
+		}
+
 		### check if all prerequisite jobs are done
 		$prerequisites = explode (",", $job->prop ("prerequisites"));
 		$applicable_states = array (
@@ -1541,7 +1558,7 @@ class mrp_case extends class_base
 		{
 			$prerequisite = obj ($prerequisite_oid);
 
-			if (!in_array ($prerequisite->prop ("state"), $applicable_states))
+			if (!in_array($prerequisite->prop ("state"), $applicable_states))
 			{
 				return false;
 			}

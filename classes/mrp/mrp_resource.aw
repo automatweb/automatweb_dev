@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.21 2005/03/15 11:59:52 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.22 2005/03/15 14:08:58 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
 EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht" submit=no
@@ -777,11 +777,6 @@ class mrp_resource extends class_base
 
 		switch ($resource->prop ("state"))
 		{
-			case MRP_STATUS_RESOURCE_AVAILABLE:
-				$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
-				$resource->save ();
-				return MRP_STATUS_RESOURCE_AVAILABLE;
-
 			case MRP_STATUS_RESOURCE_INUSE:
 				return MRP_STATUS_RESOURCE_INUSE;
 				break;
@@ -790,8 +785,11 @@ class mrp_resource extends class_base
 				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
 				break;
 
+			case MRP_STATUS_RESOURCE_AVAILABLE:
 			default:
-				return false;
+				$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+				$resource->save ();
+				return MRP_STATUS_RESOURCE_AVAILABLE;
 		}
 	}
 
@@ -834,7 +832,7 @@ class mrp_resource extends class_base
     @attrib name=is_available
 	@param resource required type=int
 **/
-	function start_job ($arr)
+	function can_start_job ($arr)
 	{
 		if (is_oid ($arr["resource"]))
 		{
@@ -847,13 +845,13 @@ class mrp_resource extends class_base
 
 		switch ($resource->prop ("state"))
 		{
-			case MRP_STATUS_RESOURCE_AVAILABLE:
-				return true;
-
 			case MRP_STATUS_RESOURCE_INUSE:
 			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
-			default:
 				return false;
+
+			case MRP_STATUS_RESOURCE_AVAILABLE:
+			default:
+				return true;
 		}
 	}
 }

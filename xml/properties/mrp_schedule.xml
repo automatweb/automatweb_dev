@@ -3,6 +3,7 @@
       <classinfo>
             <syslog_type>ST_MRP_SCHEDULE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
 </properties>
 

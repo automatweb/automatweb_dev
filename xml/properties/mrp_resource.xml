@@ -162,6 +162,7 @@
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <grp_resource_schedule>
