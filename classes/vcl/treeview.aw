@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.39 2005/01/25 12:30:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.40 2005/02/15 12:57:47 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -415,7 +415,7 @@ class treeview extends class_base
 		foreach($this->items[$parent] as $row)
 		{
 			$sub = $this->req_finalize_tree($row['id']);
-			if (isset($row["iconurl"]))
+			if (!empty($row["iconurl"]))
 			{
 				$row["icon"] = $row["iconurl"];
 			};
@@ -683,13 +683,18 @@ class treeview extends class_base
 		foreach($data as $item)
 		{
 			$subres = $this->draw_dhtml_tree($item["id"]);
+			// subress will be empty string, if draw_dhtml_tree finds no
+			// elements under the requested node
+				
+			$in_path = in_array($item["id"],$this->r_path);
 
-			if (isset($item["iconurl"]))
+			if (!empty($item["iconurl"]))
 			{
 				$iconurl = $item["iconurl"];
 			}
-			elseif (in_array($item["id"],$this->r_path))
+			elseif ($in_path)
 			{
+				// XXX: make it possible to set open/closed icons from the code
 				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/open_folder.gif";
 			}
 			else
@@ -700,6 +705,7 @@ class treeview extends class_base
 			$name = $item["name"];
 			if ($item["id"] == $this->selected_item)
 			{
+				// XXX: Might want to move this into the template
 				$name = "<strong>$name</strong>";
 			};
 
@@ -711,7 +717,7 @@ class treeview extends class_base
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),
-				'menu_level' => $this->level,
+				"menu_level" => $this->level,
 			));
 
 
@@ -728,10 +734,10 @@ class treeview extends class_base
 			{
 				$this->vars(array(
 					"SINGLE_NODE" => $subres,
-					"display" => in_array($item["id"],$this->r_path) ? "block" : "none",
-					"data_loaded" => in_array($item["id"],$this->r_path) ? "true" : "false",
-					"node_image" => in_array($item["id"],$this->r_path) ? $this->cfg["baseurl"] . "/automatweb/images/minusnode.gif" : $this->cfg["baseurl"] . "/automatweb/images/plusnode.gif",
-					'menu_level' => $this->level,
+					"display" => $in_path ? "block" : "none",
+					"data_loaded" => $in_path ? "true" : "false",
+					"node_image" => $in_path ? $this->cfg["baseurl"] . "/automatweb/images/minusnode.gif" : $this->cfg["baseurl"] . "/automatweb/images/plusnode.gif",
+					"menu_level" => $this->level,
 				));
 				$tmp = $this->parse("SUB_NODES");
 				$this->vars(array(
