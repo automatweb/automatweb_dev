@@ -87,7 +87,7 @@ class ftp extends class_base
 
 	////
 	// !returns the contents of file $file in the current server
-	function get($file)
+	function o_get($file)
 	{
 		if (!$this->handle)
 		{
@@ -103,6 +103,18 @@ class ftp extends class_base
 		$fc = file_get_contents($fn);
 		unlink($fn);
 		return $fc;
+	}
+
+	function get($url)
+	{
+		$this->last_url = $url;
+		return file_get_contents($url);
+	}
+
+	function get_type()
+	{
+		$mt = get_instance("core/aw_mime_types");
+		return $mt->type_for_file($this->last_url);
 	}
 }
 ?>
