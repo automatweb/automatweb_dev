@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.51 2001/08/23 19:43:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.52 2001/09/12 14:57:41 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -193,36 +193,11 @@ class menuedit extends aw_template
 		// for example the document class does the same, most objecst should
 		// already be cached.
 
-		// gather information about all parent objects
-		$ch = $this->get_object_chain($section);
 
-		$tpldir = "";
-
-		if (is_array($ch))
-		{
-			foreach($ch as $key => $val)
-			{
-				$tpldir = $this->get_object_metadata(array(
-								"metadata" => $val["metadata"],
-								"key" => "tpl_dir",
-				));
-
-				if ($tpldir)
-				{
-					// uh. suck. anyways, this whole gen_site_html should be split
-					// up into smaller easier to follow functions. Parts of it are
-					// already of course
-					break;
-				};
-
-			}
-		};
-				
 		// this should be replaced with calls to php_serialize, since it's faster
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $obj["metadata"],
 		));
-	
 		////
 		// Kui küsiti infot RDF-is, siis tagastame vastava väljundi
 		// hm. Ja tegelikult peaks selle üleüldse kuhugi mujale viima.
@@ -231,19 +206,6 @@ class menuedit extends aw_template
 			die($this->do_rdf($section,$obj,$format,$docid));
 		}
  
-		// if the section is marked "users_only" and the visitor is not logged in, 
-		// then redirect him  or her to the default error page
-		if ( ($meta["users_only"] == 1) && (!defined("UID")) )
-		{
-			classload("config");
-			$dbc = new db_config();
-			$url = $dbc->get_simple_config("orb_err_mustlogin");
-			global $baseurl;
-			header("Location: $baseurl/$url");
-			// exit from inside the class, yuck.
-			exit;
-		};
-
 		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
@@ -251,7 +213,10 @@ class menuedit extends aw_template
 			$docid=$obj["brother_of"];
 		}
 
-		
+
+		$this->vars(array(
+						"per_string" => $GLOBALS["act_period"]["description"],
+		));
 		if (!$this->can("view", $section))
 		{
 			// kui kastuajal pole selle men&uuml;&uuml; vaatamise &otilde;igust, siis vaatame et millisesse persesse ta saata tuleb
@@ -300,17 +265,6 @@ class menuedit extends aw_template
 		// read all the menus and other necessary info into arrays from the database
 		$this->make_menu_caches();
 
-		if ($tpldir)
-		{
-			$this->tpl_init("../$tpldir/automatweb/menuedit");
-		};
-
-		$this->read_template($template);
-
-		classload("periods","document");
-		$d = new document();
-		$this->doc = new document();
-		
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
@@ -325,15 +279,91 @@ class menuedit extends aw_template
 
 		$sel_menu_id = $section;
 
+		if ($GLOBALS["uid"] == "")
+		{
+			// if the section is marked "users_only" and the visitor is not logged in, 
+			// then redirect him  or her to the default error page
+			// we must go though all the parent menus also 
+			$uo_parent = $this->sel_section;
+			$uo = false;
+			while ($uo_parent)
+			{
+				$uo_meta = $this->get_object_metadata(array(
+					"metadata" => $this->mar[$uo_parent]["metadata"],
+				));
+				if ($uo_meta["users_only"] == 1)
+				{
+					$uo = true;
+				}
+				$uo_parent = $this->mar[$uo_parent]["parent"];
+			}
+			if ($uo)
+			{
+				classload("config");
+				$dbc = new db_config();
+				$url = $dbc->get_simple_config("orb_err_mustlogin");
+				global $baseurl;
+				header("Location: $baseurl/$url");
+				// exit from inside the class, yuck.
+				exit;
+			};
+		}
+
+		// gather information about all parent objects
+		$ch = $this->get_object_chain($this->sel_section);
+
+		$tpldir = "";
+
+		if (is_array($ch))
+		{
+			foreach($ch as $key => $val)
+			{
+				$tpldir = $this->get_object_metadata(array(
+								"metadata" => $val["metadata"],
+								"key" => "tpl_dir",
+				));
+
+				if ($tpldir)
+				{
+					// uh. suck. anyways, this whole gen_site_html should be split
+					// up into smaller easier to follow functions. Parts of it are
+					// already of course
+					break;
+				};
+
+			}
+		};
+
+		if ($tpldir)
+		{
+			$this->tpl_init("../$tpldir/automatweb/menuedit");
+		};
+
+
+		$this->read_template($template);
+
+		classload("periods","document");
+		$d = new document();
+		$this->doc = new document();
+		
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
 		
+		// here we must find the menu image, if it is not specified for this menu, then use the parent's and so on.
+		$sel_image = "";
+		$si_parent = $sel_menu_id;
+		while ($sel_image == "" && $si_parent)
+		{
+			$sel_image = isset($this->mar[$si_parent]["img_url"]) && $this->mar[$si_parent]["img_url"] != "" ? "<img src='".$this->mar[$si_parent]["img_url"]."' border='0'>" : "";
+			$si_parent = $this->mar[$si_parent]["parent"];
+		}
+
 		$this->vars(array(
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
-			"sel_menu_image" => (isset($this->mar[$sel_menu_id]["img_url"]) && $this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
+			"sel_menu_image" => $sel_image,
 			"sel_menu_id" => $sel_menu_id
 		));
 		
@@ -381,6 +411,7 @@ class menuedit extends aw_template
 		if ($text == "")
 		{
 			// sektsioon pole perioodiline
+			//$docc = $this->show_documents($section,$docid,$template);
 			$docc = $this->show_documents($section,$docid,$template);
 			if ($this->mar[$sel_menu_id]["no_menus"] == 1)
 			{
@@ -443,6 +474,10 @@ class menuedit extends aw_template
 				while (list($id,$name) = each($menu_defs_v2))
 				{
 					global $DEBUG;
+					if ($DEBUG)
+					{
+						print "drawing $id,$name<br>";
+					};
 					$this->req_draw_menu($id,$name,&$path,false);
 					if ($this->sel_section == $frontpage)
 					{
@@ -739,6 +774,7 @@ class menuedit extends aw_template
 				}
 			}
 
+
 			$this->vars(array("MENU_menyy1_L2_ITEM_MID" => $midd));
 
 			if ($has_mid)
@@ -769,6 +805,7 @@ class menuedit extends aw_template
 			}
 		} // end MENUEDIT_VER2
 
+
 		$this->make_promo_boxes($this->sel_section);
 		$this->make_poll();
 		$this->make_search();
@@ -776,7 +813,7 @@ class menuedit extends aw_template
 
 		$this->make_banners();
 
-		$cd = ($this->can("edit",$section)) ? $this->parse("CHANGEDOCUMENT") : "";
+		$cd = ($this->can("edit",$section) && $this->active_doc && $GLOBALS["uid"] != "") ? $this->parse("CHANGEDOCUMENT") : "";
 		global $sstring;
 		$this->vars(array(
 			"ss" => $this->gen_uniq_id(),		// bannerite jaox
@@ -1060,9 +1097,35 @@ class menuedit extends aw_template
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
+			$this->db_query("SELECT * FROM menu WHERE id = $section");
+			$me_row = $this->db_next();
+			$sections = unserialize($me_row["sss"]);
+			$periods = unserialize($me_row["pers"]);
+			
+			if (is_array($sections))
+			{
+				$pstr = join(",",$sections);
+				if ($pstr != "")
+				{
+					$pstr = "objects.parent IN ($pstr)";
+				}
+				else
+				{
+					$pstr = "objects.parent = $obj[oid]";
+				};
+			}
+			else
+			{
+				$pstr = "objects.parent = $obj[oid]";
+			};
+			if ($me_row["ndocs"] > 0)
+			{
+				$lm = "LIMIT ".$me_row["ndocs"];
+			};
+
 			$docid = array();
 			$cnt = 0;
-			$this->db_query("SELECT oid FROM objects WHERE (parent = $obj[oid] AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND parent = $obj[oid]) ORDER BY jrk");
+			$this->db_query("SELECT oid FROM objects WHERE ($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr) ORDER BY jrk $lm");
 			while ($row = $this->db_next())
 			{
 				$docid[$cnt++] = $row["oid"];
@@ -2110,7 +2173,8 @@ class menuedit extends aw_template
 				"sortedimg5"	=> $sortby == "class_id" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
 				"order6"			=> $sortby == "status" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
 				"sortedimg6"	=> $sortby == "status" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
-				"lang_name" => $la->get_langid()
+				"lang_name" => $la->get_langid(),
+				"yah"	=> $this->mk_path($parent,"",0,false),
 		));
 
 		if (!$period && !$popup)
@@ -2700,6 +2764,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->db_query($q);
 			};
 		};
+
+		$this->flush_cache();
+		
 		return $this->mk_orb("menu_list", array("parent" => $arr["parent"],"period" => $arr["period"]));
 	}
 
@@ -2873,7 +2940,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $row["metadata"],
 		));
-
 		if ($row["class_id"] == CL_PROMO)
 		{
 			classload("promo");
@@ -3186,6 +3252,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->level++;
 
 		$cnt = 0;
+		global $DEBUG;
 
 		if (!isset($this->mpr[$parent]) || !is_array($this->mpr[$parent]))
 		{
@@ -3443,13 +3510,33 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"cnt" => $cnt
 			));
 	
-			if ($is_mid)
+			// ok, menyyd ei n2idata juhul, kui ta pole selektitud ja template MENU_BLAH_L5666_ITEM_SELONLY on defineeritud
+			$istplso = $this->is_template($mn."_SELONLY");
+			$issel = $this->sel_section != $row["parent"];
+			$selonly = !($istplso && $issel);
+			// - va juhul kui sel tasemel, mis aktiivne on pol yhtegi menyyd, siis n2idatakse eelmise taseme omi
+			if ($this->mar[$this->sel_section]["parent"] == $row["parent"])
 			{
-				$l_mid.=$this->parse($mn.$ap);
+				// see on aktiivne tase - 1
+				if (!is_array($this->mpr[$this->sel_section]))
+				{
+					$selonly = true;
+				}
 			}
-			else
+
+			$noshowu = $GLOBALS["uid"] == "" && $meta["users_only"] && $GLOBALS["no_show_users_only"] == true;
+			// v6i menyy nimi on tyhi, v6i menyyle on 8eldud et users only ja kasutraja pole sisse loginud const.aw sees 
+			// on defineeritud $no_show_users_only
+			if ($selonly && $row["name"] != "" && !$noshowu)
 			{
-				$l.=$this->parse($mn.$ap);
+				if ($is_mid)
+				{
+					$l_mid.=$this->parse($mn.$ap);
+				}
+				else
+				{
+					$l.=$this->parse($mn.$ap);
+				}
 			}
 			$this->vars(array($mn.$ap => ""));
 			if (!$no_mid)
@@ -3519,12 +3606,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$link .= ($samenu["alias"] != "") ? $samenu["alias"] : "index." . $ext . "/section=" . $samenu["oid"];
 				}
 
-				$this->vars(array(
-					"target" => $samenu["target"] ? "target=\"blank\"" : "",
-					"link" => $link,
-					"text" => str_replace("&nbsp;","",strip_tags($samenu["name"]))
+				$meta = $this->get_object_metadata(array(
+					"metadata" => $samenu["metadata"],
 				));
-				$this->parse("MENU_".$name."_SEEALSO_ITEM");
+
+				if (!($meta["users_only"] == 1 && $GLOBALS["uid"] == ""))
+				{
+					$this->vars(array(
+						"target" => $samenu["target"] ? "target=\"blank\"" : "",
+						"link" => $link,
+						"text" => str_replace("&nbsp;","",strip_tags($samenu["name"]))
+					));
+					$this->parse("MENU_".$name."_SEEALSO_ITEM");
+				}
 			}
 		}
 	}
@@ -3588,7 +3682,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		/// now all menus are in the array with all the other stuff, 
 		// so now export it.
-		header("Content-type: aw/menuexport");
+		header("Content-type: x-automatweb/menu-export");
 		echo serialize($menus);
 		die();
 	}
@@ -3819,6 +3913,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		while ($row = $this->db_next())
 		{
+			if ($DEBUG)
+				print "*";
 			$this->mpr[$row["parent"]][] = $row;
 			$this->mar[$row["oid"]] = $row;
 		}
@@ -4071,7 +4167,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$ya.=$this->parse("YAH_LINK");
 			}
 			// don't show things that are before $frontpage
-			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["frontpage"])
+			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["rootmenu"])
 			{
 				$show = true;
 			}
@@ -4092,6 +4188,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$lai = "AND objects.lang_id = ".$GLOBALS["lang_id"];
 		}
+		if (defined("PROMO_LEAD_ONLY"))
+		{
+			$leadonly = 1;
+		}
+		else
+		{
+			$leadonly = -1;
+		};
 		$q = "SELECT objects.*, template.filename as filename,menu.link as link
 				FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
@@ -4115,13 +4219,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					reset($docid);
 					while (list(,$d) = each($docid))
 					{
-						$pr_c.=str_replace("\r","",str_replace("\n","",$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1))));
+						$pr_c.=str_replace("\r","",str_replace("\n","",$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1))));
 					}
 				}
 				else
 				{
-					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
 				}
+
+				global $DEBUG;
+				if ($DEBUG)
+				{
+					print $pr_c;
+				};
 
 				$this->vars(array("title" => $row["name"], "content" => $pr_c,"url" => $row["link"]));
 				$ap = "";
@@ -4163,6 +4273,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						$left_promo .= $this->parse("LEFT_PROMO");
 					}
 				}
+				// nil the variables that were imported for promo boxes
+				// if we dont do that we can get unwanted copys of promo boxes
+				// in places we dont want them
+				$this->vars(array("title" => "", "content" => "","url" => ""));
 				$this->restore_handle();
 			}
 		};
