@@ -38,10 +38,21 @@
 
 		<action name="submit_post_message">
 			<function name="submit_post_message">
-				<arguments>
-				</arguments>
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="delete_members" all_args="1">
+			<function name="delete_members">
+				<arguments/>
+			</function>
+		</action>
+		
+		<action name="delete_queue_items" all_args="1">
+			<function name="delete_queue_items">
+				<arguments/>
 			</function>
 		</action>
 
-		</class>
-	</orb>
+	</class>
+</orb>
