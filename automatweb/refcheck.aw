@@ -326,13 +326,6 @@ switch($action)
 		header("Location: search_conf.$ext?level=$level");
 		break;
 
-	case "submit_poll":
-		classload("poll");
-		$t = new poll;
-		$id = $t->submit($HTTP_POST_VARS);
-		header("Location: poll.$ext?type=change&id=$id");
-		break;
-
 	case "admin_languages":
 		classload("languages");
 		$t = new languages;
