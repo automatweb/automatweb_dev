@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.33 2003/01/14 14:06:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.34 2003/01/26 21:15:05 duke Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -111,6 +111,7 @@ class aw_template extends acl_base
 		{
 			return false;
 		};
+		$active = array_flip($active);
 		while(list($k,$v) = each($array))
 		{
 			$selected = isset($active[$k]) ? " selected " : "";
