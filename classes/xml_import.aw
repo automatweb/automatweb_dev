@@ -1,27 +1,11 @@
 <?php
-// $Id: xml_import.aw,v 2.8 2002/12/19 18:01:51 duke Exp $
-/*
-	@default table=objects
-	@default group=general
-	@property datasource type=objpicker clid=CL_DATASOURCE field=meta method=serialize
-	@caption XML datasource
-
-	@property import_function type=select field=meta method=serialize
-	@caption Impordifunktsioon
-
-	@property run_import type=text editonly=1
-	@caption Käivita import
-
-*/
-class xml_import extends class_base
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.9 2003/01/29 18:00:44 duke Exp $
+class xml_import extends aw_template
 {
 
 	function xml_import($args = array())
 	{
-		$this->init(array(
-			"tpldir" => "xml_import",
-			"clid" => CL_XML_IMPORT,
-		));
+		$this->init("xml_import");
 		$this->methods = array(
 			"import_tudengid" => "import_tudengid",
 			"import_struktuurid" => "import_struktuurid",
@@ -30,43 +14,91 @@ class xml_import extends class_base
 			"import_oppeasted" => "import_oppeasted",
 			"import_oppevormid" => "import_oppevormid",
 		);
+		set_time_limit(90);
 	}
 
-//                        $this->vars(array(
-//                                "rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
-//                        ));
-
-	function get_property($args)
+	////
+	// !Displays form for adding new or modifying an existing XML import objekt
+	function change($args = array())
 	{
-		$data = &$args["prop"];
-		switch($data["name"])
+		extract($args);
+		$this->read_template("change.tpl");
+		$datasources = array();
+		$this->get_objects_by_class(array(
+				"class" => CL_DATASOURCE,
+		));
+
+		while($row = $this->db_next())
 		{
-			case "import_function":
-                                $data["options"] = $this->methods;
-                                break;
+			$datasources[$row["oid"]] = $row["name"];
+		}
 
-			case "run_import":
-                                classload("html");
-                                $id = $args["obj"]["oid"];
-                                if ($id)
-                                {
-					$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
-                                        $data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
-                                };
-                                break;
-
-			
-
+		if ($parent)
+		{
+			$caption = "Lisa uus XML import objekt";
+			$prnt = $parent;
+			$chn = "";
+			$meta = array();
+		}
+		else
+		{
+			$caption = "Muuda XML import objekti";
+			$obj = $this->get_object($id);
+			$meta = $obj["meta"];
+			$this->vars(array(
+				"rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
+			));
+			$chn = $this->parse("change");
+			$prnt = $obj["parent"];
 		};
+
+		$this->mk_path($prnt,$caption);
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
+			"name" => $obj["name"],
+			"change" => $chn,
+			"datasources" => $this->picker($meta["datasource"],$datasources),
+			"run_import" => $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1),
+			"import_functions" => $this->picker($meta["import_function"],$this->methods),
+		));
+		return $this->parse();
 	}
 
-	function set_property($args = array())
+	////
+	// !Adds new or submits changes to an existing XML import objekt
+	function submit($args = array())
 	{
-		if ($args["prop"]["name"] == "run_import")
+		$this->quote($args);
+		extract($args);
+		if ($parent)
 		{
-			$retval = PROP_IGNORE;
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_XML_IMPORT,
+				"name" => $name,
+				"status" => 2,
+			));
+			$this->_log("xml_import","Lisas XML import objekti nimega '$name'",$id);
+		}
+		else
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+			));
+			$this->_log("xml_import","Muutis XML import objekti nimega '$name'",$id);
 		};
-		return $retval;
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => array(
+				"datasource" => $datasource,
+				"import_function" => $import_function,
+			),
+		));
+
+		return $this->mk_my_orb("change",array("id" => $id));
+
 	}
 
 	////
@@ -74,12 +106,13 @@ class xml_import extends class_base
 	function repeaters($args = array())
 	{
 		extract($args);
-		$ce = get_instance("cal_event");
-		$html = $ce->repeaters(array(
-			"id" => $id,
-			"cycle" => $cycle,
+		classload("cal_event");
+                $ce = new cal_event();
+                $html = $ce->repeaters(array(
+                        "id" => $id,
+                        "cycle" => $cycle,
 			"hide_menubar" => true,
-    ));
+                ));
 		$this->read_template("repeaters.tpl");
 		$this->vars(array(
 			"ch_link" => $this->mk_my_orb("change",array("id" => $id)),
@@ -119,9 +152,11 @@ class xml_import extends class_base
 			print "Didn't got enough data from the datasource<br>";
 			exit;
 		};
+		/*
 		print "<pre>";
 		print htmlspecialchars($src_data);
 		print "</pre>";
+		*/
 		print "Invoking import function<br>";
 		flush();
 		$method = $obj["meta"]["import_function"];
@@ -235,7 +270,7 @@ class xml_import extends class_base
 					$nimetus = $this->convert_unicode($attr["nimetus"]);
 					$id = $attr["id"];
 					$kood = $attr["kood"];
-					$aadress = $attr["aadress"];
+					$aadress = $this->convert_unicode($attr["aadress"]);
 					$email = $attr["email"];
 					$veeb = $attr["veeb"];
 					$telefon = $attr["telefon"];
@@ -269,8 +304,9 @@ class xml_import extends class_base
 					};
 						
 
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk')";
+					$jrknimetus = sprintf("%02d%s",$jrk,$nimetus);
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus')";
 					print $q;
 					$this->db_query($q);
 					print "<br>";
@@ -306,6 +342,8 @@ class xml_import extends class_base
 		$this->db_query($q);
 		$q = "DELETE FROM ut_ametid";
 		$this->db_query($q);
+		$q = "DELETE FROM tootajad_view";
+		$this->db_query($q);
 		foreach($values as $token)
 		{
 			if ( ($token["tag"] == "tootaja") && ($token["type"] == "open") )
@@ -313,12 +351,18 @@ class xml_import extends class_base
 				$t_attr = $token["attributes"];
 				// lisame uue töötaja baasi
 				$this->quote($t_attr);
+				// collect the data for later use
 				$enimi = $this->convert_unicode($t_attr["enimi"]);
 				$pnimi = $this->convert_unicode($t_attr["pnimi"]);
-				$q = "INSERT INTO ut_tootajad (id,enimi,pnimi,veeb,ruum,markus) 
-					VALUES ('$t_attr[id]','$enimi','$pnimi','$t_attr[veeb]','$t_attr[ruum]','$t_attr[markus]')";
-				print $q;
-				$this->db_query($q);
+				$tid = $t_attr["id"];
+				$veeb = $t_attr["veeb"];
+				$ruum = $t_attr["ruum"];
+				$email = $t_attr["email"];
+				$markus = $this->convert_unicode($t_attr["markus"]);
+				$mobiil = $t_attr["mobiil"];
+				$sisetel = $t_attr["sisetel"];
+				$pritel = $t_attr["pritel"];
+				$tootajad_view = array();
 			}
 
 			if ( ($token["tag"] == "amet") && ($token["type"] == "complete") )
@@ -326,11 +370,113 @@ class xml_import extends class_base
 				$attr = $token["attributes"];
 				$this->quote($attr);
 				$nimi = $this->convert_unicode($attr["nimi"]);
-				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id)
+				$ysid = $attr["ysid"];
+				$eriala = $this->convert_unicode($attr["eriala"]);
+				$markus = $this->convert_unicode($attr["markus"]);
+				$koht = $this->convert_unicode($attr["koht"]);
+
+				$koht = preg_replace("/\s$/","&nbsp;",$koht);
+				$eriala = preg_replace("/\s$/","&nbsp;",$eriala);
+
+				/*
+				Lisaks tuleb koormuse import ümber teha selliselt, et kui koormus on 1,
+				 siis jäetakse koormus_view lahter tühjaks. kui koormus on
+				midagi muud, kui 1, siis kirjutatakse sama väärtus nii tulpa koormus kui
+				koormus_view, koormus_view lahtrisse lisatakse veel ka
+				tühik ja täht "k".
+				*/
+				$koormus = (float)$attr["koormus"];
+				if ($koormus == 1)
+				{
+					$koormus_view = "";
+				}
+				else
+				{
+					$koormus_view = $koormus . " k";
+				};
+				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid)
 					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
-						'$attr[markus]','$t_attr[id]')";
+						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid')";
 				print $q;
 				$this->db_query($q);
+				$tootajad_view[$attr[struktuur]][] = array(
+					"tootaja_id" => $tid,
+					"info" => $eriala . $nimi . $koormus_view,
+					"tel" => $attr["tel"],
+					"ruum" => $attr["ruum"],
+					"ysid" => $ysid,
+					"jrk" => $attr["jrk"],
+					"struktuur_id" => $attr["struktuur"],
+				);
+					
+			}
+
+			if ( ($token["tag"] == "kraad") && ($token["type"] == "complete") )
+			{
+				$attr = $token["attributes"];
+				$_haru = $this->convert_unicode($attr["haru"]);
+				$_kraad = $this->convert_unicode($attr["kraad"]);
+				if ($_haru)
+				{
+					$kraad[] = "$_kraad ($_haru)";
+				}
+				else
+				{
+					$kraad[] = "$_kraad";
+				};
+
+			}
+
+			if ( ($token["tag"] == "tootaja") && ($token["type"] == "close") )
+			{
+				$q = "SELECT * FROM ut_tootajad WHERE id = '$tid'";
+				$this->db_query($q);
+				$row = $this->db_next();
+				$row = false;
+				$realkraad = join(", ",$kraad);
+				if (!$row)
+				{
+					$q = "INSERT INTO ut_tootajad (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
+						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad')";
+					print $q;
+					print "<br>";
+					$this->db_query($q);
+				};
+				$kraad = array();
+
+				if (is_array($tootajad_view))
+				{
+					foreach($tootajad_view as $str_id => $items)
+					{
+							if (sizeof($items) == 1)
+							{
+								// just write it out
+								$fieldnames = join(",",array_keys($items[0]));
+								$fieldvalues = join(",",map("'%s'",array_values($items[0])));
+								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
+								$this->db_query($q);
+								print $q;
+								print "<br>";
+								flush();
+							}
+							else
+							if (sizeof($items) > 1)
+							{
+								usort($items, create_function('$a,$b','if ($a["jrk"] < $b["jrk"]) return 1; if ($a["jrk"] > $b["jrk"]) return -1; return 0;'));
+								$tmp = $items[0];
+								$info = array();
+								array_walk($items,create_function('$val,$key,$info','$info[] = $val["info"];'),&$info);
+								$tmp["info"] = join(", ",$info);
+								$fieldnames = join(",",array_keys($tmp));
+								$fieldvalues = join(",",map("'%s'",array_values($tmp)));
+								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
+								$this->db_query($q);
+								print $q;
+								print "<br>";
+								flush();
+							}
+					};
+				}
 			}
 			print "<bR>";
 
@@ -345,6 +491,7 @@ class xml_import extends class_base
 		$retval = str_replace(chr(0xC3). chr(0xA4),"ä",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x96),"Ö",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x95),"Õ",$retval);
+		$retval = str_replace(chr(0xC3). chr(0xB4),"õ",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xA0),"&Scaron;",$retval);
