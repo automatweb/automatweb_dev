@@ -25,7 +25,8 @@ class export extends aw_template
 			"image/pjpeg" => "jpg",
 			"application/pdf" => "pdf",
 			"application/x-javascript" => "js",
-			"application/zip" => "zip"
+			"application/zip" => "zip",
+			"application/msword" => "doc"
 		);
 	}
 
@@ -64,6 +65,7 @@ class export extends aw_template
 			$fn_type = 3;
 		}
 
+		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
 		$o = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_export"),
@@ -80,7 +82,8 @@ class export extends aw_template
 			"fn_type_3" => checked($fn_type == FN_TYPE_HASH),
 			"fn_type_4" => checked($fn_type == FN_TYPE_ALIAS),
 			"gen_url" => $this->mk_my_orb("do_export"),
-			"rules" => $this->mk_my_orb("rules")
+			"rules" => $this->mk_my_orb("rules"),
+			"rule_folders" => $this->multiple_option_list($fr,$o->get_list()),
 		));
 		return $this->parse();
 	}
@@ -98,6 +101,9 @@ class export extends aw_template
 		$c->set_simple_config("export::automatic",$automatic);
 		$c->set_simple_config("export::static_site",$static_site);
 		$c->set_simple_config("export::fn_type",$fn_type);
+		$str = aw_serialize($this->make_keys($rule_folders));
+		$this->quote(&$str);
+		$c->set_simple_config("export::rule_folders",$str);
 
 		$sched = get_instance("scheduler");
 		$sched->remove(array(
@@ -590,10 +596,17 @@ class export extends aw_template
 		extract($arr);
 		$this->read_template("add_rule.tpl");
 		$this->mk_path($parent,"Lisa");
-
 		$o = get_instance("objects");
+		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
+		$lst = $o->get_list();
+		$ls = array();
+		foreach($fr as $mnid)
+		{
+			$ls[$mnid] = $lst[$mnid];
+		}
+
 		$this->vars(array(
-			"menus" => $this->multiple_option_list(array(),$o->get_list()),
+			"menus" => $this->multiple_option_list(array(),$ls),
 			"reforb" => $this->mk_reforb("submit_rule", array("parent" => $parent))
 		));
 		return $this->parse();
@@ -606,6 +619,7 @@ class export extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array(
+				"oid" => $id,
 				"name" => $name,
 				"metadata" => array(
 					"menus" => $this->make_keys($menus)
@@ -614,13 +628,21 @@ class export extends aw_template
 		}
 		else
 		{
-			$pl = new planner;
-			$pl->submit_add(array("parent" => 1));
-
 			$id = $this->new_object(array(
 				"name" => $name,
+				"parent" => $parent,
+				"class_id" => CL_EXPORT_RULE,
 				"metadata" => array(
 					"menus" => $this->make_keys($menus),
+				)
+			));
+
+			$pl = new planner;
+			$pl->submit_add(array("parent" => $id));
+
+			$this->upd_object(array(
+				"oid" => $id,
+				"metadata" => array(
 					"cal_id" => $pl->id,
 					"event_id" => $pl->bron_add_event(array("parent" => $pl->id,"start" => time(), "end" => time()+1))
 				)
@@ -637,9 +659,16 @@ class export extends aw_template
 		$this->mk_path($this->loaded_rule["parent"],"Muuda ekspordi ruuli");
 		$this->read_template("add_rule.tpl");
 		$o = get_instance("objects");
+		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
+		$lst = $o->get_list();
+		$ls = array();
+		foreach($fr as $mnid)
+		{
+			$ls[$mnid] = $lst[$mnid];
+		}
 		$this->vars(array(
 			"name" => $this->loaded_rule["name"],
-			"menus" => $this->multiple_option_list($this->loaded_rule["meta"]["menus"],$o->get_list()),
+			"menus" => $this->multiple_option_list($this->loaded_rule["meta"]["menus"],$ls),
 			"reforb" => $this->mk_reforb("submit_rule", array("id" => $id)),
 			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->loaded_rule["meta"]["event_id"]),"cal_event",false,true),
 			"do_rule" => $this->mk_my_orb("do_export", array("rule_id" => $id))
