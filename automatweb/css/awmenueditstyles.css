@@ -1,0 +1,60 @@
+.textsmall {
+font-family: verdana, sans-serif;
+font-size: 10px;
+color: #B58D47;
+}
+.textsmall a {color: #B58D47; text-decoration:none;}
+.textsmall a:hover {color: #000000; text-decoration:none;}
+
+
+.yah {
+font-family: verdana, sans-serif;
+font-size: 10px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #B58D47;
+}
+.yah a {color: #FFFFFF; text-decoration:none;}
+.yah a:hover {color: #000000; text-decoration:none;}
+
+.awmenuediticonsjoon1 {
+background-color: #E9EBEC;
+}
+
+.awmenuediticonsjoon2 {
+background-color: #9D8254;
+}
+
+.awmenuedittableborder {
+background-color: #E2E2DB;
+}
+
+.awmenuedittablehead {
+font-family: Arial, Verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+background-color: #478EB6;
+}
+.awmenuedittablehead a {color: #FFFFFF; text-decoration:none;}
+.awmenuedittablehead a:hover {color: #FFFFFF; text-decoration:underline;}
+
+.awmenuedittabletext {
+font-family: Arial, Verdana, sans-serif;
+font-size: 11px;
+color: #000000;
+}
+.awmenuedittabletext a {color: #0018AF; text-decoration:none;}
+.awmenuedittabletext a:hover {color: #0018AF; text-decoration:underline;}
+
+.awformtext {
+font-family: verdana, sans-serif;
+font-size: 10px;
+}
+
+
+.awmenuedittablerow {
+background-color: #FCFCF4;
+}
+.awmenuedittablerowsel {
+background-color: #E2E2DB;
+}
