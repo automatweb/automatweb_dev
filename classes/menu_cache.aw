@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.8 2002/07/23 05:21:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.9 2002/08/29 03:11:41 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -173,6 +173,16 @@ class menu_cache extends aw_template
 	function get_cached_menu($oid)
 	{
 		return $this->mar[$oid];
+	}
+
+	function get_cached_menu_by_parent($parent)
+	{
+		$ret =  $this->mpr[$parent];
+		if (!is_array($ret))
+		{
+			return array();
+		}
+		return $ret;
 	}
 }
 ?>
