@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.152 2004/01/07 15:31:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.153 2004/01/13 14:13:34 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -112,7 +112,7 @@ define("REP_YEAR",4);
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
 @caption võta sündmusi
 
-@reltype EVENT value=3 clid=CL_TASK
+@reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
 @caption sündmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
