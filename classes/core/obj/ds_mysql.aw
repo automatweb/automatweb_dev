@@ -112,7 +112,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			if ($prop["method"] == "bitmask")
 			{
-				$ret[$prop["name"]] = $objdata[$prop["field"]] & $prop["ch_value"];
+				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
 			}
 			else
 			{
@@ -341,9 +341,27 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
 					else
+					if ($prop['method'] == "bitmask")
 					{
-						$fld = ($prop["method"] == "bitmask") ? $prop["field"] : $prop["name"];
-						$str = $propvalues[$fld];
+						$val = $propvalues[$prop["name"]];
+	
+						if (!isset($seta[$prop["field"]]))
+						{	
+							// jost objects.flags support for now
+							$seta[$prop["field"]] = $objdata["flags"];
+						}
+
+						// make mask for the flag - mask value is the previous field value with the
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
+						// add the value
+						$mask |= $val;
+						
+						$seta[$prop["field"]] = $mask;;
+					}
+					else
+					{
+						$str = $propvalues[$prop["name"]];
 						$this->quote(&$str);
 	
 						$seta[$prop["field"]] = $str;
@@ -439,7 +457,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				a.reltype as `reltype`,
 				a.pri as pri,
 				o_t.lang_id as `to.lang_id`,
-				o_s.lang_id as `from.lang_id` ";
+				o_s.lang_id as `from.lang_id`,
+				o_t.flags as `to.flags`,
+				o_s.flags as `from.flags`,
+				o_t.modified as `to.modified`,
+				o_s.modified as `from.modified`,
+				o_t.name as `to.name`,
+				o_s.name as `from.name`
+		";
 	}
 
 	// arr - { [from], [to], [type], [class], [to.obj_table_field], [from.obj_table_field] }
@@ -533,6 +558,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		foreach($params as $key => $val)
 		{
+			if ($val === "ignore")
+			{
+				continue;
+			}
+
 			if ($key == "status")
 			{
 				$stat = true;
@@ -662,6 +692,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function delete_object($oid)
 	{
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
+		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
 	}
 }
 
