@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.1 2004/11/23 12:54:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.2 2004/12/27 12:42:03 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -321,6 +321,22 @@ class menu_tree extends class_base
 			{
 				$url = $v->prop("link");
 				$id = $url;
+			}
+
+			if (!is_oid($v->prop("submenus_from_obj")))
+			{
+				$pt = array_reverse($v->path());
+				foreach($pt as $p_o)
+				{
+					if (is_oid($p_o->prop("submenus_from_obj")) && $this->can("view", $p_o->prop("submenus_from_obj")))
+					{
+						$sfo = $p_o->prop("submenus_from_obj");
+						$sfo_o = obj($sfo);
+						$sfo_i = $sfo_o->instance();
+						$url = $sfo_i->make_menu_link($v, $sfo_o);
+						break;
+					}
+				}
 			}
 
 			if ($this->children_only && $v->id() == $this->start_from)
