@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.36 2004/02/25 16:10:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.37 2004/03/01 12:15:01 kristo Exp $
 
 /*
 
@@ -35,6 +35,7 @@ class site_show extends class_base
 		$this->init("automatweb/menuedit");
 		$this->cache = get_instance("cache");
 		$this->image = get_instance("image");
+		$this->doc = get_instance("document");
 	}
 
 	////
@@ -1739,7 +1740,17 @@ class site_show extends class_base
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
-						$tmp = array();
+						$_p = $o->path();
+						$alp = array();
+						foreach($_p as $p_o)
+						{
+							if ($p_o->alias() != "")
+							{
+								$alp[] = $p_o->alias();
+							}
+						}
+						
+/*						$tmp = array();
 						if (!is_array($this->menu_aliases))
 						{
 							$this->menu_aliases = array();
@@ -1750,14 +1761,17 @@ class site_show extends class_base
 							{
 								$tmp[] = $_al;
 							}
-						}
-						$link .= join("/",$tmp);
+						}*/
+						$link .= join("/",$alp);
 						if (sizeof($tmp) > 0)
 						{
 							$link .= "/";
 						};
 					}
-					$link .= $o->alias();
+					else
+					{
+						$link .= $o->alias();
+					}
 				}
 				else
 				{
