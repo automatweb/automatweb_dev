@@ -1969,18 +1969,19 @@ font-weight: bold;
 color:#000000;
 }
 
-.aw04kalendertextsmall {
+.aw04kalendertask {
 font-family: Arial, verdana, sans-serif;
 font-size: 11px;
 color: #000000;
+background: #FFFFFF;
 }
 
-.aw04kalendertextsmall a {
+.aw04kalendertask a {
 color: #000000;
 text-decoration:none;
 }
 
-.aw04kalendertextsmall a:hover {
+.aw04kalendertask a:hover {
 color: #0017AF;
 text-decoration:underline;
 }

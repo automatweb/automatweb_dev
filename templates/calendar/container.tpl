@@ -153,7 +153,7 @@ function navigate_to()
 		<table border="0" cellpadding="0" cellspacing="1">
 
 		<!-- SUB: TASK -->
-		<tr><td class="minical_cell"><span class="aw04kalendertextsmall"><a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a></span></td></tr>
+		<tr><td class="aw04kalendertask"><a href="{VAR:task_url}">{VAR:task_name}</a></td></tr>
 		<!-- END SUB: TASK -->
 
 		</table>
