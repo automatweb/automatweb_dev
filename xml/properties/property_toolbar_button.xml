@@ -57,6 +57,7 @@
             <parent>hbox2</parent>
             <no_caption>1</no_caption>
             <store>no</store>
+            <caption>Puu</caption>
       </property>
       <property>
             <name>men_list</name>
@@ -65,9 +66,10 @@
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
-            <no_caption>1</no_caption>
             <parent>hbox2</parent>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <caption>Tabel</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TOOLBAR_BUTTON</syslog_type>
@@ -92,6 +94,7 @@
             <vbox1>
                   <type>vbox</type>
                   <group>men_props</group>
+                  <width>30%:70%</width>
             </vbox1>
             <hbox2>
                   <type>hbox</type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.2 2005/03/03 18:03:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.3 2005/03/07 16:00:31 kristo Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -72,6 +72,68 @@ class property_toolbar extends class_base
 		$propdata["type"] = "text";
 		$propdata["value"] = $t->get_toolbar();
 		$propdata["no_caption"] = 1;
+	}
+
+	function generate_get_property($arr)
+	{
+		$el = obj($arr["id"]);
+		$pn = $arr["name"];
+
+		$ret = array(
+			"get_property" => "\t\t\tcase \"$pn\":\n\t\t\t\t\$this->generate_$pn(\$arr);\n\t\t\t\tbreak;\n\n",
+			"generate_methods" => array(
+				"generate_$pn"
+			)
+		);
+
+		$buttons = new object_list($el->connections_from(array(
+			"type" => RELTYPE_BUTTON
+		)));
+		foreach($buttons->arr() as $b)
+		{
+			$i = $b->instance();
+			$i->get_generate_methods($pn, $b, $ret["generate_methods"]);
+		}
+
+		return $ret;
+	}
+
+	function generate_method($arr)
+	{
+		$el = obj($arr["id"]);
+		$meth = $arr["name"];
+
+		if (substr($meth, 0, 2) == "on")
+		{
+			// button submit handler
+			$ret = "";
+			$ret .= "\t/** submit handler for toolbar button  \n";
+			$ret .= "\t\n";
+			$ret .= "\t\t@attrib name=$meth\n";
+			$ret .= "\t\n";
+			$ret .= "\t**/\n";
+			$ret .= "\tfunction $meth(\$arr)\n";
+			$ret .= "\t{\n";
+			$ret .= "\t\t/* Handle submitted data here */\n";
+			$ret .= "\t\treturn \$arr[\"return_url\"];\n";
+			$ret .= "\t}\n";
+			$ret .= "\n";
+			return $ret;
+		}
+
+		$content = "";
+		$content .= "\t\t\$t =& \$arr[\"prop\"][\"vcl_inst\"];\n\n";
+
+		$buttons = new object_list($el->connections_from(array(
+			"type" => RELTYPE_BUTTON
+		)));
+		foreach($buttons->arr() as $b)
+		{
+			$i = $b->instance();
+			$content .= $i->get_method_contents($b, $meth);
+		}
+
+		return "\tfunction $meth(\$arr)\n\t{\n$content\t}\n\n";
 	}
 }
 ?>

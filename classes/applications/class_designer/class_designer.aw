@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.4 2005/03/04 13:56:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.5 2005/03/07 16:00:31 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.177 2005/03/04 13:56:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.178 2005/03/07 16:00:31 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -11,11 +11,21 @@ if (!defined("DEFS"))
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
 
+	/** use this to get the correct return_url argument for GET requests
+
+		@attrib api=1
+
+	**/
 	function get_ru()
 	{
 		return urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
 	}
 
+	/** use this to get the correct return_url argument for POST requests
+
+		@attrib api=1
+
+	**/
 	function post_ru()
 	{
 		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");

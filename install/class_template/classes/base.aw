@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.16 2004/03/26 12:15:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.17 2005/03/07 16:00:31 kristo Exp $
 // __classname.aw - __name 
 /*
 
@@ -22,34 +22,32 @@ class __classname extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+/* get_property */
 		};
 		return $retval;
 	}
-	*/
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+/* set_property */
 		}
 		return $retval;
 	}	
-	*/
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["return_url"] = post_ru();
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -75,5 +73,7 @@ class __classname extends class_base
 		));
 		return $this->parse();
 	}
+
+/* methods */
 }
 ?>
