@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.4 2003/01/17 12:34:09 duke Exp $
+// $Id: tabpanel.aw,v 1.5 2003/03/05 17:03:51 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -9,8 +9,8 @@ class tabpanel extends aw_template
 	{
 		$this->init("tabpanel");
 		$this->read_template("tabs.tpl");
-		$this->tabs = "";
-		$this->tabcount = 0;
+		$this->tabs = array();
+		$this->tabcount = array();
 		$this->hide_one_tab = 0;
 	}
 
@@ -21,7 +21,7 @@ class tabpanel extends aw_template
 	// link(string)
 	function add_tab($args = array())
 	{
-		if ($args["active"])
+		if (isset($args["active"]) && $args["active"])
 		{
 			$subtpl = "sel_tab";
 		}
@@ -29,8 +29,22 @@ class tabpanel extends aw_template
 		{
 			$subtpl = "tab";
 		};
+
+		if (isset($args["disabled"]) && $args["disabled"])
+		{
+			$subtpl = "disabled_tab";
+		};
+
+		if (isset($args["level"]) && $args["level"])
+		{
+			$level = $args["level"];
+		}
+		else
+		{
+			$level = 1;
+		};
 		// now link? so let's show the tab as disabled
-		if (strlen($args["link"]) == 0)
+		if (isset($args["link"]) && strlen($args["link"]) == 0)
 		{
 			$subtpl = "disabled_tab";
 		};
@@ -38,8 +52,8 @@ class tabpanel extends aw_template
 			"caption" => $args["caption"],
 			"link" => $args["link"],
 		));
-		$this->tabcount++;
-		$this->tabs .= $this->parse($subtpl);
+		$this->tabcount[$level]++;
+		$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
 	}
 
 	////
@@ -48,19 +62,24 @@ class tabpanel extends aw_template
 	function get_tabpanel($args = array())
 	{
 		$tabs = "";
-		if (($this->tabcount > 1) || !$this->hide_one_tab)
+		foreach($this->tabcount as $level => $val)
 		{
-			$this->vars(array(
-				"tab" => $this->tabs,
-			));
-			$tabs = $this->parse("tabs");
+			if (($val > 1) || !$this->hide_one_tab)
+			{
+				$this->vars(array(
+					"tab_L" . $level  => $this->tabs[$level],
+				));
+				$this->vars(array(
+					"tabs_L" . $level => $this->parse("tabs_L" . $level),
+				));
+			};
 		};
 
 		$toolbar = $args["toolbar"];
 		$toolbar2 = $args["toolbar2"];
 
 		$this->vars(array(
-			"tabs" => $tabs,
+			//"tabs" => $tabs,
 			"toolbar" => $toolbar,
 //                        "toolbar2" => $toolbar2,
 			"content" => $args["content"],
