@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.7 2001/07/04 23:03:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.8 2001/07/12 04:25:30 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -231,6 +231,12 @@ class aw_table
 			print "Don't know what to do";
 			return;
 		};
+
+/*		if (sizeof($this->data) == 0)
+		{
+			return "Andmed puuduvad";
+		};*/
+
 		global $PHP_SELF;
 		$tbl = "";
 		reset($this->rowdefs);
@@ -427,6 +433,19 @@ class aw_table
 					$cell_attribs = array("name"    => "td",
 							      "classid" => $style,
 							      "bgcolor" => $bgcolor);
+
+					if ($this->actionrows)
+					{
+						$cell_attribs["rowspan"]=$this->actionrows;
+					};
+					
+					// eri värvi cellide jaoks muutus
+					if ($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]])
+					{
+						$cell_attribs["style"]="background:".$v[$v1["chgbgcolor"]];
+					};
+
+					
 					if ($v1["align"]) {
 						$cell_attribs["align"] = $v1["align"];
 					};
@@ -469,7 +488,8 @@ class aw_table
 						$val = date($v1["format"],$val);
 					};
 
-					if (!$val) {
+					if (!$val && $v1["type"]!="int") 
+					{
 						$val = "&nbsp;";
 					};
 
@@ -478,18 +498,43 @@ class aw_table
 				};
 
 				// joonistame actionid
-				reset($this->actions);
-				$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
-				while(list($ak,$av) = each($this->actions)) {
-					$tbl .= $this->opentag(array("name" => "td",
-								     "classid" => ($av["style"]) ? $av["style"] : $style,
-								     "align" => "center"));
-					$tbl .= "<a href='$this->self?" . $av["link"] . "&id=" . $v[$av["field"]] . "'>$av[caption]</a>";
-					$tbl .= $this->closetag(array("name" => "td"));
-				};
+				$actionridu=$this->actionrows?$this->actionrows:1;
+
+				for ($arow=1;$arow<=$actionridu;$arow++)
+				{
+					// uutele actioni ridadele tuleb teha uus <tr>
+					if ($arow>1)
+					{
+						$tbl.= $this->opentag(array("name"=>"tr"));
+					};
+					// joonistame actionid
+					reset($this->actions);
+					$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
+					while(list($ak,$av) = each($this->actions)) 
+					{
+						// joonista ainult need actionid, mis siia ritta kuuluvad
+						if ($this->actionrows?( $arow==$av["row"] || ($arow==1 && !$av["row"]) ):1)
+						{
+							$tdtag=array("name"=>"td",
+								"classid" => ($av["style"]) ? $av["style"] : $style,
+								"align" => "center");
+
+							$av["cspan"]?$tdtag["colspan"]=$av["cspan"]:"";
+							$av["rspan"]?$tdtag["rowspan"]=$av["rspan"]:"";
+
+							$tbl .= $this->opentag($tdtag);
+
+							$tbl.=$av["remote"]?
+								"<a href='javascript:remote(0,".$av["remote"].",\"$this->self?".$av["link"]."&id=".$v[$av["field"]].'");\'>'.$av["caption"]."</a>":
+								"<a href='$this->self?" . $av["link"] . "&id=" . $v[$av["field"]] . "'>$av[caption]</a>";
+
+							$tbl .= $this->closetag(array("name" => "td"));
+						};
+					};
 
 				// rida lopeb
 				$tbl .= $this->closetag(array("name" => "tr"));
+				};
 			};
 		};
 		// sisu joonistamine lopeb
@@ -661,6 +706,10 @@ class aw_table
 			// kas tähestikku ka näitame?
 			case "alpha":
 				$this->alpha = true;
+				break;
+
+			case "actionrows":
+				$this->actionrows = $attrs["value"];
 				break;
 
 			// väljad
