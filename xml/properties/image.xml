@@ -32,6 +32,14 @@
             <caption>Eelvaade</caption>
       </property>
       <property>
+            <name>file2_del</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>img2</group>
+            <store>no</store>
+            <caption>Kustuta suur pilt</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <field>comment</field>

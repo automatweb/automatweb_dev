@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.52 2003/04/28 14:06:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.53 2003/05/02 13:22:24 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -15,6 +15,9 @@
 
 	@property file_show2 type=text group=img2 store=no
 	@caption Eelvaade
+
+	@property file2_del type=checkbox ch_value=1 group=img2 store=no
+	@caption Kustuta suur pilt
 
 	@property comment table=objects field=comment type=textbox
 	@caption Pildi allkiri
@@ -552,17 +555,24 @@ class image extends class_base
 		else
 		if ($prop['name'] == 'file2')
 		{
-			global $file2,$file2_type;
-			$_fi = get_instance("file");
-			if (is_uploaded_file($file2))
+			if ($arr["form_data"]["file2_del"] == 1)
 			{
-				$fl = $_fi->_put_fs(array("type" => $file2_type, "content" => $this->get_file(array("file" => $file2))));
-				$prop["value"] = $fl;
+				$prop['value'] = '';
 			}
 			else
 			{
-				$retval = PROP_IGNORE;
-			};
+				global $file2,$file2_type;
+				$_fi = get_instance("file");
+				if (is_uploaded_file($file2))
+				{
+					$fl = $_fi->_put_fs(array("type" => $file2_type, "content" => $this->get_file(array("file" => $file2))));
+					$prop["value"] = $fl;
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+			}
 		};
 		return $retval;
 	}
