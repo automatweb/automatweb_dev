@@ -232,7 +232,7 @@ class search_conf extends aw_template
 			else
 			if ($grps[$s_parent]["static_search"])
 			{
-				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page, $arr, $s_parent);
+				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page, $arr, $s_parent, $t_type);
 			}
 
 
@@ -929,7 +929,7 @@ class search_conf extends aw_template
 		return $this->parse();
 	}
 
-	function do_static_search($str, $page,$arr, $s_parent)
+	function do_static_search($str, $page,$arr, $s_parent, $t_type)
 	{
 		$p_arr = $this->get_parent_arr($s_parent);
 		$p_arr_str = join(",",$p_arr);
