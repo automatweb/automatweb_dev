@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.29 2001/07/02 03:56:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.30 2001/07/02 04:10:23 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1216,6 +1216,7 @@ $orb_defs["form"] = "xml";
 			}
 
 			reset($this->arr["search_from"]);
+			$this->cached_results = array();
 
 			// loop through all the forms that are selected as search targets
 			while (list($id,$v) = each($this->arr["search_from"]))
@@ -1245,7 +1246,10 @@ $orb_defs["form"] = "xml";
 				$matches = array();
 				$this->db_query($query);
 				while ($row = $this->db_next())
+				{
 					$matches[] = $row["id"];
+					$this->cached_results[$id][$row["oid"]] = $row;
+				}
 
 				$ret[$id] = $matches;
 			}
