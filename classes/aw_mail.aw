@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.20 2002/12/02 17:47:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.21 2002/12/03 12:28:05 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -411,7 +411,7 @@ class aw_mail {
 		$atc="Content-Type: multipart/alternative;".CRLF." boundary=\"$boundary\"".CRLF.CRLF;
 
 		$plain = strtr($this->body,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
-		$plain = strip_html($plain);
+		$plain = $this->strip_html($plain);
 				
 		$atc.="Content-Type: text/plain; charset=".CHARSET . CRLF;
 		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$plain.CRLF.CRLF;
