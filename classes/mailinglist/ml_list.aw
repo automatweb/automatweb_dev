@@ -168,11 +168,15 @@ class ml_list extends aw_template
 		));
 
 		$fl = array("0" => "");
-		$ll = $this->get_forms_for_list($id);
-		$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".join(",",$ll).")");
-		while ($_row = $this->db_next())
+		$ll = new aw_array($this->get_forms_for_list($id));
+		$llstr = join(",",$ll->get());
+		if ($llstr != "")
 		{
-			$fl[$_row["oid"]] = $_row["name"];
+			$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".$llstr.")");
+			while ($_row = $this->db_next())
+			{
+				$fl[$_row["oid"]] = $_row["name"];
+			}
 		}
 		$this->vars(array(
 			"toolbar" => $tb->get_toolbar(),
@@ -525,9 +529,9 @@ class ml_list extends aw_template
 		return aw_global_get("route_back");
 	}
 
-	function load_list($id)
+	function load_list($id, $nocache = false)
 	{
-		$this->list_ob = $this->get_object($id);
+		$this->list_ob = $this->get_object($id, $nocache);
 		$ufc_inst = get_instance("mailinglist/ml_list_conf");
 		$this->formid = $ufc_inst->get_forms_by_id($this->list_ob["meta"]["user_form_conf"]);
 		return $this->list_ob;
@@ -550,12 +554,17 @@ class ml_list extends aw_template
 		return $ret;
 	}
 
+	function flush_member_cache($id)
+	{
+		aw_cache_set("ml_list::get_members", $id, false);
+	}
+
 	function get_members($id)
 	{
-		if (($ret = aw_cache_get("ml_list::get_members", $id)))
+/*		if (is_array($ret = aw_cache_get("ml_list::get_members", $id)))
 		{
 			return $ret;
-		}
+		}*/
 		$ret = array();
 
 		$ob = $this->load_list($id);
@@ -610,14 +619,39 @@ class ml_list extends aw_template
 		$this->load_list($lid);
 		$folder = $this->list_ob["meta"]["def_user_folder"];
 
+//		echo "try add user for list $lid base on $mid <br>";
+
+		// check if this member exists in this list already
+		$members = $this->get_members($lid);
+//		echo "members for list eq ".join(",", array_keys($members))." checking new member $mid<br>";
+		$found = false;
+		foreach($members as $_mmid => $mdat)
+		{
+			$checkoid = $mdat["oid"];
+			if ($mdat["brother_of"])
+			{
+				$checkoid = $mdat["brother_of"];
+			}
+			if ($checkoid == $mid)
+			{
+//				echo "found $mid for $checkoid <Br>";
+				$found = true;
+			}
+		}
 		$mdat = $this->get_object($mid);
 
-		$this->new_object(array(
-			"parent" => $folder,
-			"name" => $mdat["name"],
-			"class_id" => CL_ML_MEMBER,
-			"brother_of" => $mdat["oid"]
-		));
+		if (!$found)
+		{
+			$id = $this->new_object(array(
+				"parent" => $folder,
+				"name" => $mdat["name"],
+				"class_id" => CL_ML_MEMBER,
+				"brother_of" => ($mdat["brother_of"] ? $mdat["brother_of"] : $mdat["oid"])
+			));
+//			echo "not found, adding $mdat[name] <Br>";
+			$mlm = get_instance("mailinglist/ml_member");
+			$mlm->update_member_name($id);
+		}
 	}
 
 	function remove_member_from_list($arr)
@@ -682,11 +716,18 @@ class ml_list extends aw_template
 				$cr = true;
 			}
 		}
-		if ($cr)
-		{
-			$rule_inst = get_instance("mailinglist/ml_rule");
-			$rule_inst->exec_dynamic_rules();
-		}
+	}
+
+	function get_default_user_folder($id)
+	{
+		$this->load_list($id);
+		return $this->list_ob["meta"]["def_user_folder"];
+	}
+
+	function get_conf_id($id)
+	{
+		$this->load_list($id);
+		return $this->list_ob["meta"]["user_form_conf"];
 	}
 };
 ?>

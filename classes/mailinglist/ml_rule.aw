@@ -28,9 +28,7 @@ class ml_rule extends aw_template
 	//! Näitab ruuli muutmise lehte
 	function orb_change($arr)
 	{
-		is_array($arr)? extract($arr) : $parent=$arr;
-
-		$this->mk_path($parent,"Muuda ruuli");
+		extract($arr);
 		$this->read_template("rule_change.tpl");
 
 		if ($id)
@@ -38,11 +36,13 @@ class ml_rule extends aw_template
 			$ob = $this->get_object($id);
 			$name = $ob["name"];
 			$r = $this->db_fetch_row("SELECT * FROM ml_rules WHERE rid='$id'");
+			$parent = $ob["parent"];
 		} 
 		else
 		{
 			$r=array();
 		};
+		$this->mk_path($parent,"Muuda ruuli");
 		
 		$this->ml = get_instance("mailinglist/ml_list");
 		$this->fr = get_instance("formgen/form");
@@ -379,10 +379,15 @@ class ml_rule extends aw_template
 			return;
 		};
 
+//		echo "match rules! <br>";
 		$matches=array();
 		if (is_array($members))
 		{
-			$oidinclause="objects.oid IN (".join(",",$members).")";
+			$memstr = join(",",$members);
+			if ($memstr != "")
+			{
+				$oidinclause="objects.oid IN (".$memstr.")";
+			}
 		} 
 		else
 		{
@@ -405,6 +410,7 @@ class ml_rule extends aw_template
 				continue;	// handle old rules. handle them by ignoring them is what I mean.
 			}
 
+//			echo "<b> matching rule $id!</b> <br>";
 			//ehita query
 			$wi=array();//where osad
 			$w=&$wi;
@@ -418,22 +424,16 @@ class ml_rule extends aw_template
 
 			if (($r["trig"] & T_ENTRY) && $r["trig_entry"])
 			{
-				$this->ml = get_instance("mailinglist/ml_list");
-				$this->fr = get_instance("formgen/form");
-				$this->conf = get_instance("mailinglist/ml_list_conf");
-				$this->fr->load($this->conf->get_user_search_form($r_ob["meta"]["conf"]));
-				$matchedids=$this->fr->search($r["trig_entry"]);
-			
-				// now we got the matched entry id's, but we gots to convert them to list member id's
-				if (is_array($matchedids) && sizeof($matchedids))
+//				echo "match T_ENTRY <br>";
+				$_tmp = $this->do_entry_trigger(array(
+					"rule" => $id
+				));
+
+				$tmpstr = join(",",$_tmp);
+				if ($tmpstr != "")
 				{
-					$_tmp = array();
-					$this->db_query("SELECT member_id FROM ml_member2form_entry WHERE entry_id = '".join(",",$matchedids)."'");
-					while ($_row = $this->db_next())
-					{
-						$_tmp[] = $_row["member_id"];
-					}
-					$w[]="objects.oid IN (".join(",",$_tmp).")";
+//				echo "entries not members = $tmpstr <br>";
+					$w[]="objects.oid IN (".$tmpstr.")";
 				} 
 				else
 				{
@@ -443,6 +443,7 @@ class ml_rule extends aw_template
 
 			if ($r["trig"] & T_INLIST)
 			{
+//				echo "match T_INLIST <br>";
 				list($lid,$gid)=explode(":",$r["trig_inlist"]);
 				if ($gid==0)
 				{
@@ -462,18 +463,21 @@ class ml_rule extends aw_template
 
 			if ($r["trig"] & T_MAILSENT)
 			{
+//				echo "match T_MAILSENT <br>";
 				$t["ml_sent_mails"]=1;
 				$w[]="ml_sent_mails.mail = '".$r["trig_mailsent"]."'";
 			};
 
 			if ($r["trig"] & T_MAILSENTAT)
 			{
+//				echo "match T_MAILSENTAT <br>";
 				$t["ml_sent_mails"]=1;
 				$w[]="ml_sent_mails.tm >= '".$r["trig_mailsentat"]."' AND ml_sent_mails.tm <= '".$r["trig_mailsentat2"]."'";
 			};
 
 			if ($r["trig"] & T_MAILSUBJ)
 			{
+//				echo "match T_MAILSUBJ <br>";
 				$t["ml_sent_mails"]=1;
 				// protsendid võib siit ära võtta kui kasutajad nad ruuli edimise juures sisste trükix
 				$w[]="ml_sent_mails.subject LIKE '%".$r["trig_mailsubj"]."%'";
@@ -481,6 +485,7 @@ class ml_rule extends aw_template
 
 			if ($r["trig"] & T_USEDVARS)
 			{
+//				echo "match T_USEDVARS <br>";
 				$t["ml_sent_mails"]=1;
 				if (!isset($this->ml))
 				{
@@ -495,6 +500,10 @@ class ml_rule extends aw_template
 			};
 
 			$tables=array("objects");
+			if (!sizeof($wi))
+			{
+				continue;
+			}
 			$wi[]="objects.class_id = '".CL_ML_MEMBER."'";
 			$wi[]="objects.status != '0'";
 
@@ -511,7 +520,7 @@ class ml_rule extends aw_template
 			};
 
 			//debug
-			//echo("<b>rule=$id</b><br>tables=<pre>");print_r($tables);echo("</pre>where=<pre>");print_r($w);echo("</pre><br>");//dbg
+//			echo("<b>rule=$id</b><br>tables=<pre>");print_r($tables);echo("</pre>where=<pre>");print_r($w);echo("</pre><br>");//dbg
 
 			
 
@@ -521,7 +530,7 @@ class ml_rule extends aw_template
 
 			
 			$q="SELECT DISTINCT(objects.oid) AS oid FROM ".join(",",$tables)." WHERE $wis ";
-			//echo("q=$q<br>");//dbg
+//			echo("q=$q<br>");//dbg
 			$this->db_query($q);
 
 			while($match = $this->db_next())
@@ -542,7 +551,7 @@ class ml_rule extends aw_template
 			$matches["rarr"]=$rarr;
 		};
 		//debug
-		//echo("matchez=<pre>");print_r($matches);echo("</pre>");//dbg
+//		echo("matchez=<pre>");print_r($matches);echo("</pre>");//dbg
 
 		if (!is_array($matches))
 		{
@@ -585,7 +594,7 @@ class ml_rule extends aw_template
 
 			foreach($midarr as $mid)
 			{
-				//echo("<b>executing  * rule $rid on $mid:</b>".$r["action"]."<br>");//dbg
+//				echo("<b>executing  * rule $rid on $mid:</b>".$r["action"]."<br>");//dbg
 				switch ($r["action"])
 				{
 					case A_ADDLIST:
@@ -596,6 +605,7 @@ class ml_rule extends aw_template
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
 						$lgroup=(int)$lgroup;// et määramata lgroup muutux nullix
+//						echo "exec rule , addlist mid = $mid , lid = $lid <br>";
 						$this->ml->add_member_to_list(array("mid" => $mid,"lid" => $lid,"grp" => $lgroup, "__norules" => 1));
 						//echo("A_ADDLIST $mid $lid $lgroup<br>");//dbg
 						break;
@@ -609,7 +619,7 @@ class ml_rule extends aw_template
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
 						$this->ml->remove_member_from_list(array("mid" => $mid,"lid" => $lid,"__norules" => 1));
-						//echo("A_DELLIST $mid $lid<br>");//dbg
+//						echo("A_DELLIST $mid $lid<br>");//dbg
 						break;
 
 					case A_DELETE:
@@ -619,11 +629,11 @@ class ml_rule extends aw_template
 						};
 						$this->mlmember->orb_delete(array("id" => $mid,"_inner_call" => 1));*/
 						$this->delete_object($mid);
-						//echo("A_DELETE $mid<br>");//dbg
+//						echo("A_DELETE $mid<br>");//dbg
 						break;
 
 					case A_DONTSEND:
-						//echo("A_DONTSEND $mid ".$r["actionid"]."<br><pre>");//dbg
+//						echo("A_DONTSEND $mid ".$r["actionid"]."<br><pre>");//dbg
 						$avoidmessages=$this->get_object_metadata(array("oid" => $mid,"key" => "avoidmessages"));
 						//print_r($avoidmessages);//dbg
 						if (!is_Array($avoidmessages))
@@ -728,10 +738,216 @@ class ml_rule extends aw_template
 		{
 			$rarr[] = $row["rid"];
 		}
+//		echo "exec dyn rules eq ".join(",", $rarr)." <Br>";
 		$rule_inst = get_instance("mailinglist/ml_rule");
 		$mt = $rule_inst->match_rules($rarr);
 		$rule_inst->execute_rules($mt);
 	}
-}
 
+	function do_entry_trigger($arr)
+	{
+		extract($arr);
+		$r = $this->db_fetch_row("SELECT * FROM ml_rules WHERE rid = '$rule'");
+		$r_ob = $this->get_object($rule);
+		$this->fr = get_instance("formgen/form");
+		$this->conf = get_instance("mailinglist/ml_list_conf");
+		$this->fr->load($this->conf->get_user_search_form($r_ob["meta"]["conf"]));
+		$matchedids=$this->fr->search($r["trig_entry"]);
+
+		// ok, th eproblem is that if the search form searched from a chain, then
+		// the entry id's in matchedids are for the forst form in the chain. damnit.
+		// so we have to create the members so that all the form entries in the chain entry
+		// are put as member form entries. 
+		// 
+		// so we check if the results are indeed for a chain
+		// and then do things a bit differently. 
+		// 
+		if (count($matched_chain_ids = $this->fr->get_last_search_chain_entry_ids()))
+		{
+			return $this->do_entry_trigger_for_chain(array(
+				"rule" => $rule,
+				"r" => $r,
+				"r_ob" => $r_ob,
+				"chain_ids" => $matched_chain_ids
+			));
+		}
+
+		$this->save_handle();
+
+//		echo "matched entries for entry $r[trig_entry] = ".join(",", $matchedids)." search form eq ",$this->conf->get_user_search_form($r_ob["meta"]["conf"]),"<br>";
+		// now we got the matched entry id's, but we gots to convert them to list member id's. 
+		// except of course if they are not members yet, we will have to create them. damnit!
+		if (is_array($matchedids) && sizeof($matchedids))
+		{
+			$todo = $this->make_keys($matchedids);
+			$_tmp = array();
+			$_usedeids = array();
+			$this->db_query("SELECT member_id, entry_id FROM ml_member2form_entry LEFT JOIN objects ON objects.oid = ml_member2form_entry.member_id WHERE entry_id IN(".join(",",$matchedids).") AND objects.status != 0");
+			while ($_row = $this->db_next())
+			{
+//				echo "found member for id $_row[entry_id] $_row[member_id] <Br>";
+				if (!$_usedeids[$_row["entry_id"]])
+				{
+					$_usedeids[$_row["entry_id"]] = 1;
+					$_tmp[] = $_row["member_id"];
+					unset($todo[$_row["entry_id"]]);
+				}
+			}
+			if ($r["action"] == A_ADDLIST)
+			{
+//				echo "action addlist <br>";
+				$_usedeids = array();
+				list($a_lid,$a_lgroup)=explode(":",$r["actionid"]);
+				$ml_list_inst = get_instance("mailinglist/ml_list");
+				$m_parent = $ml_list_inst->get_default_user_folder($a_lid);
+				$_list_forms = $ml_list_inst->get_forms_for_list($a_lid);
+				foreach($todo as $fentry_id)
+				{
+					if (!$_usedeids[$fentry_id])
+					{
+//						echo "proc $fentry_id <br>";
+						$_usedeids[$fentry_id] = 1;
+
+						$_formid = $this->fr->get_form_for_entry($fentry_id);
+						if ($_list_forms[$_formid])
+						{
+							// here we gots to create the member for the list, because later we can only create members from other members
+							// ie - create brother objects. here we gots to create the real member objects
+							$mem_inst = get_instance("mailinglist/ml_member");
+							$n_m_id = $mem_inst->create_member(array(
+								"parent" => $m_parent,
+								"entries" => array(
+									$_formid => $fentry_id
+								),
+								"conf" => $ml_list_inst->get_conf_id($a_lid)
+							));
+							$_tmp[] = $n_m_id;
+//							echo "creating new now member for entry $fentry_id parent $m_parent mid = $n_m_id <br>";
+						}
+						else
+						{
+//							echo "form not in list forms ".join(",",$_list_forms)." <br>";
+						}
+					}
+				}
+			}
+		}
+		$this->restore_handle();
+		$ml_list_inst = get_instance("mailinglist/ml_list");
+		$ml_list_inst->flush_member_cache($a_lid);
+		return $_tmp;
+	}
+
+	function do_entry_trigger_for_chain($arr)
+	{
+		extract($arr);
+		$this->save_handle();
+		$ret = array();
+
+//		echo "matched entries are chain entries ! <br>\n";
+		list($a_lid, $a_lgid) = explode(":", $r["actionid"]);
+//		echo "lid = $a_lid , lgid = $a_lgid <br>\n";
+//		flush();
+		$ml_list_inst = get_instance("mailinglist/ml_list");
+		$m_parent = $ml_list_inst->get_default_user_folder($a_lid);
+		$_list_forms = $ml_list_inst->get_forms_for_list($a_lid);
+
+		// find the form that contains the email element
+		// get if from the conf object
+		$cf_inst = get_instance("mailinglist/ml_list_conf");
+		$email_form = $cf_inst->get_form_for_email_element($r_ob["meta"]["conf"]);
+//		echo "email form eq $email_form  <br>\n";
+//		flush();
+
+		// if the result is a chain, then go over all chain entries 
+		// and for each chain entry, get all form entries for the form that contains the e-mail element
+		// now, for each entry check if the member already exists
+		// if not, create it
+		$chain_inst = get_instance("formgen/form_chain");
+		$form_inst = get_instance("formgen/form");
+		
+		foreach($chain_ids as $cheid)
+		{
+			$chain_id = $this->db_fetch_field("SELECT chain_id FROM form_chain_entries WHERE id = '$cheid'", "chain_id");
+			$forms_in_chain = $form_inst->get_forms_for_chain($chain_id);
+//			echo "chain entry id $cheid is from chain $chain_id , forms in chain = ".join(",", $forms_in_chain)." <br>\n";
+//			flush();
+
+			$forms_in_list = array();
+			foreach($forms_in_chain as $ficid)
+			{
+				if ($_list_forms[$ficid] && $ficid != $email_form)
+				{
+					$forms_in_list[$ficid] = $ficid;
+				}
+			}
+//			echo "forms in list = ".join("," , $forms_in_list)." <br>\n";
+//			flush();
+
+			// we also have to filter the dudes by list membership, because then the rule won't match if the dude is in any list!
+			// filter them by the target list
+/*			$members = $ml_list_inst->get_members($a_lid);
+			$membersstr = join(",", array_keys($members));
+			if ($membersstr != "")
+			{
+				$membersstr = "AND member_id IN
+			}
+			else
+			{
+				$membersstr = "AND 0";
+			}*/
+
+			$entries = $this->make_keys($form_inst->get_form_entries_for_chain_entry($cheid, $email_form));
+			$entriesstr = join(",",$entries);
+			if ($entriesstr != "")
+			{
+//				echo "checking against entries eq ".join(",",$entries)." <br>";
+				$q = "SELECT member_id, entry_id FROM ml_member2form_entry LEFT JOIN objects ON objects.oid = ml_member2form_entry.member_id WHERE entry_id IN(".join(",",$entries).") AND objects.status != 0";
+				$this->db_query($q);
+//				echo "q = $q <br>\n";
+//				flush();
+				while ($row = $this->db_next())
+				{
+					unset($entries[$row["entry_id"]]);
+//					echo "unset entries $row[entry_id] <br>\n";
+					$ret[] = $row["member_id"];
+//					echo "found member for entry $row[entry_id] member = $row[member_id] <br>\n";
+//					flush();
+				}
+			}
+
+//			echo "entries eq ".join(",",$this->map2("%s => %s", $entries))." <br>";
+			// now all the entries that are in $entries have no corresponding members, we gotta create them
+			$usedeids = array();
+			foreach($entries as $eid)
+			{
+				if (!$usedeids[$eid])
+				{
+					$usedeids[$eid] = 1;
+					
+					$memberentries = array($email_form => $eid);
+					foreach($forms_in_list as $flid)
+					{
+						list(,$_eid) = each($form_inst->get_form_entries_for_chain_entry($cheid, $flid));
+						$memberentries[$flid] = $_eid;
+					}
+
+					$mem_inst = get_instance("mailinglist/ml_member");
+					$n_m_id = $mem_inst->create_member(array(
+						"parent" => $m_parent,
+						"entries" => $memberentries,
+						"conf" => $ml_list_inst->get_conf_id($a_lid)
+					));
+					$ret[] = $n_m_id;
+//					echo "created new member ($n_m_id) under $m_parent entries = ".join(",", $this->map2("%s = %s ", $memberentries))." <br>\n";
+//					flush();
+				}
+			}
+		}
+
+		$ml_list_inst->flush_member_cache($a_lid);
+		$this->restore_handle();
+		return $ret;
+	}
+}
 ?>

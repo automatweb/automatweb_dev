@@ -69,15 +69,31 @@ class ml_list_conf extends aw_template
 			));
 		}
 
+		$user_form = $this->make_keys($user_form);
+		if ($mailto_el)
+		{
+			foreach($user_form as $ufid)
+			{
+				$finst = get_instance("formgen/form");
+				$finst->load($ufid);
+				if (is_object($finst->get_element_by_id($mailto_el)))
+				{
+					$mailto_el_form = $ufid;
+					break;
+				}
+			}
+		}
+
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"data" => array(
-				"user_form" => $this->make_keys($user_form),
+				"user_form" => $user_form,
 				"user_search_form" => $user_search_form,
 				"folders" => $this->make_keys($folder),
 				"name_els" => $this->make_keys($name_els),
 				"form_jrk" => $jrk,
-				"mailto_el" => $mailto_el
+				"mailto_el" => $mailto_el,
+				"mailto_el_form" => $mailto_el_form
 			)
 		));
 
@@ -269,6 +285,12 @@ class ml_list_conf extends aw_template
 	{
 		$ob = $this->get_object($id);
 		return $ob["meta"]["user_search_form"];
+	}
+
+	function get_form_for_email_element($id)
+	{
+		$ob = $this->get_object($id);
+		return $ob["meta"]["mailto_el_form"];	
 	}
 }
 ?>

@@ -36,8 +36,8 @@ class ml_member extends aw_template
 				"conf_obj" => $conf
 			)
 		));
-		$rule_inst = get_instance("mailinglist/ml_rule");
-		$rule_inst->exec_dynamic_rules();
+//		$rule_inst = get_instance("mailinglist/ml_rule");
+//		$rule_inst->exec_dynamic_rules();
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
@@ -103,8 +103,8 @@ class ml_member extends aw_template
 			"metadata" => $ob["meta"]
 		));
 
-		$rule=get_instance("mailinglist/ml_rule");
-		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
+//		$rule=get_instance("mailinglist/ml_rule");
+//		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
 
 		$this->_log("mlist","muutis liiget $namestr");
 		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
@@ -294,6 +294,16 @@ class ml_member extends aw_template
 	function create_member($arr)
 	{
 		extract($arr);
+		if (!$parent)
+		{
+//			echo "create_member::no_parent! <Br>";
+			return;
+		}
+		if (!$conf)
+		{
+//			echo "create_member::no_conf! <Br>";
+			return;
+		}
 		$id = $this->new_object(array(
 			"parent" => $parent,
 			"class_id" => CL_ML_MEMBER,
@@ -305,6 +315,7 @@ class ml_member extends aw_template
 		$dat = array("conf_obj" => $conf);
 		foreach($entries as $fid => $eid)
 		{
+//			echo "create member = $fid => $eid <br>";
 			$dat["form_entries"][$fid] = $eid;
 			$this->db_query("INSERT INTO ml_member2form_entry (member_id, form_id, entry_id) VALUES('$id', '$fid', '$eid')");
 		}
