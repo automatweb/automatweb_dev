@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.9 2003/02/01 13:33:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.10 2003/03/18 16:18:59 duke Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -31,7 +31,7 @@ class aw_orb extends aw_template
 
 		foreach($values as $key => $val)
 		{
-			$attr = $val["attributes"];
+			$attr = isset($val["attributes"]) ? $val["attributes"] : array();
 			if ( ($val["tag"] == "class") && ($val["type"] == "complete") && $attr['id'] != '')
 			{
 				$pm = $this->get_public_methods(array(
@@ -61,9 +61,10 @@ class aw_orb extends aw_template
 		$pmethods = array();
 		foreach($orb_defs[$id] as $key => $val)
 		{
-			if (is_array($val) && $val["public"])
+			if (is_array($val) && isset($val["is_public"]))
 			{
-				$pmethods[$id . "/" . $key] = $name . "/" . $val["function"];
+				$caption = isset($val["caption"]) ? $val["caption"] : $val["function"];
+				$pmethods[$id . "/" . $key] = $name . " / " . $caption;
 			}
 		};
 
