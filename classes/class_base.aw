@@ -1,7 +1,7 @@
 <?php
-// $Id: class_base.aw,v 2.327 2004/11/29 03:10:20 ahti Exp $
+// $Id: class_base.aw,v 2.328 2004/11/30 20:37:19 kristo Exp $
 // the root of all good.
-// 
+// <<<<<
 // ------------------------------------------------------------------
 // Do not be writink any HTML in this class, it defeats half
 // of the purpose of this class. If you really absolutely
@@ -294,7 +294,6 @@ class class_base extends aw_template
 			));
 		};
 
-
 		$this->use_form = $use_form;
 
 		//$cfgform_id = $args["cfgform"];
@@ -358,10 +357,16 @@ class class_base extends aw_template
 			};
 		}
 			
+		if (!aw_ini_get("config.object_translation"))
+		{
+			unset($properties["is_translated"]);
+			unset($properties["needs_translation"]);
+		}
 		// XXX: temporary -- duke
 		if ($args["fxt"])
 		{
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
+			$this->set_classinfo(array("name" => "relationmgr","value" => 0));
 		}
 
 		if (!empty($args["form"]))
