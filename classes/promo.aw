@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.25 2003/02/28 13:15:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.26 2003/04/23 09:14:34 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -69,8 +69,6 @@ class promo extends class_base
 		$this->lc_load("promo","lc_promo");
 	}
 
-	// now, how do I convert the old style promo boxes to this new style?
-	// I think the best way is to detect it, when I open the promo box for editing
 	function callback_get_rel_types()
 	{
 		return array(
@@ -126,21 +124,6 @@ class promo extends class_base
 				));
 				break;
 
-			case "xxx_last_menus":
-				$ob = get_instance("objects");
-				$menu = $ob->get_list();
-				$menu[0] = "";
-				$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
-				$data["options"] = $menu;
-				break;
-
-			case "xxx_section":
-				$ob = get_instance("objects");
-				$menu = $ob->get_list();
-				$menu[0] = "";
-				$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
-				$data["options"] = $menu;
-				break;
 		}
 		return $retval;
 	}
@@ -155,14 +138,6 @@ class promo extends class_base
 			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
 		};
 
-		if ($data["name"] == "last_menus")
-		{
-			/*
-			print "<pre>";
-			print_r($args);
-			print "</pre>";
-			*/
-		};
 		return $retval;
 
 	}
@@ -190,7 +165,6 @@ class promo extends class_base
                         "name" => "name",
                         "caption" => "Nimi",
                         "talign" => "center",
-                        //"nowrap" => "1",
                 ));
                 $this->t->define_field(array(
                         "name" => "check",
@@ -198,7 +172,6 @@ class promo extends class_base
                         "talign" => "center",
 			"width" => 80,
 			"align" => "center",
-                        //"nowrap" => "1",
                 ));
 
 		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
@@ -271,16 +244,6 @@ class promo extends class_base
                         //"nowrap" => "1",
                         "sortable" => 1,
                 ));
-		/*
-                $this->t->define_field(array(
-                        "name" => "check",
-                        "caption" => "mitu viimast",
-                        "talign" => "center",
-			"width" => 60,
-			"align" => "center",
-                        //"nowrap" => "1",
-                ));
-		*/
 
 		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
 		// and from this array, I need to get the list of objects that
@@ -334,7 +297,7 @@ class promo extends class_base
 		$check2 = aw_unserialize($menu["sss"]);
 		if (is_array($check1) || is_array($check2))
 		{
-			$convert_url = $this->mk_my_orb("convert",array());
+			$convert_url = $this->mk_my_orb("promo_convert",array(),"converters");
 			print "See objekt on vanas formaadis. Enne kui seda muuta saab, tuleb kõik süsteemis olevad promokastis uude formaati konvertida. <a href='$convert_url'>Kliki siia</a> konversiooni alustamiseks";
 			exit;
 		};
@@ -482,77 +445,6 @@ class promo extends class_base
 		));
 	}
 
-	function convert($args = array())
-	{
-		$q = sprintf("SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = %d AND site_id = %d",CL_PROMO,aw_ini_get("site_id"));
-		$this->db_query($q);
-		// so, basically, if I load a CL_PROMO object and discover that it's
-		// comment field is serialized - I will have to convert all promo
-		// boxes in the system.
-
-		// menu.sss tuleb ka unserialiseerida, saadud asjad annavad meile
-		// last_menus sisu
-
-		// so, how on earth do i make a callback into this class
-
-		$convert = false;
-
-		while($row = $this->db_next())
-		{
-			print "doing $row[oid]<br>";
-			$this->save_handle();
-			$meta_add = aw_unserialize($row["comment"]);
-			$last_menus = aw_unserialize($row["sss"]);
-			$meta = aw_unserialize($row["metadata"]);
-			if (is_array($last_menus) || is_array($meta_add))
-			{
-				$convert = true;
-			};
-			$meta["last_menus"] = $last_menus;
-			$meta["section"] = $meta_add["section"];
-			if ($meta_add["right"])
-			{
-				$meta["type"] = 1;
-			}
-			elseif ($meta_add["up"])
-			{
-				$meta["type"] = 2;
-			}
-			elseif ($meta_add["down"])
-			{
-				$meta["type"] = 3;
-			}
-			elseif ($meta_add["scroll"])
-			{
-				$meta["type"] = "scroll";
-			}
-			else
-			{
-				$meta["type"] = 0;
-			};
-			$meta["all_menus"] = $meta_add["all_menus"];
-			$comment = $meta_add["comment"];
-			// reset sss field of menu table
-			if ($convert)
-			{
-				$q = "UPDATE menu SET sss = '' WHERE id = '$row[oid]'";
-				$this->db_query($q);
-
-				$this->upd_object(array(
-					"oid" => $row["oid"],
-					"comment" => $comment,
-					"metadata" => $meta,
-				));
-			};
-			print "<pre>";
-			print_r($meta);
-			print "</pre>";
-			$this->restore_handle();
-			print "done<br>";
-			sleep(1);
-			flush();
-		};
-	}
 
 	function parse_alias($args = array())
 	{
