@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.1 2002/03/12 23:42:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.2 2002/03/13 00:34:17 duke Exp $
 lc_load("mailinglist");
 
 	class variables extends aw_template
@@ -102,7 +102,21 @@ lc_load("mailinglist");
 				$this->menucache[$row[parent]][] = array("data" => $row);
 			}
 
-			$this->vars(array("space_images" => "", "image" => "<img src='/images/puu_site.gif'>", "cat_id" => "1", "op" => "", "cat_name" => "Site", "NFIRST" => "", "cat_comment" => "", "modifiedby" => "", "modified" => "", "CAN_CHANGE" => "", "CAN_DELETE" => "", "CAN_ACL" => ""));
+			$this->vars(array(
+				"space_images" => "",
+				"image" => "<img src='/images/puu_site.gif'>",
+				"cat_id" => "1",
+				"op" => "",
+				"cat_name" => "Site",
+				"NFIRST" => "", 
+				"cat_comment" => "", 
+				"modifiedby" => "", 
+				"modified" => "", 
+				"open_link"		=> $this->mk_my_orb("gen_list",array("parent" => 1,"op" => "")),
+				"CAN_CHANGE" => "", 
+				"CAN_DELETE" => "", 
+				"CAN_ACL" => "",
+			));
 			$ret = $this->parse("C_LINE");
 			// now recursively show the menu
 			$this->sel_level = 0;
@@ -133,7 +147,7 @@ lc_load("mailinglist");
 
 				if (is_array($this->menucache[$v[data][oid]]))	// has subitems
 				{
-					$image = "<a href='list.$ext?parent=".$v[data][oid]."&op=$op'><img src='";
+					$image = "<a href='orb.$ext?class=variables&action=gen_list&parent=".$v[data][oid]."&op=$op'><img src='";
 
 					if ($list_folders[$v[data][oid]] == 1)	// if closed
 						$image.="/images/puu_plus";
@@ -154,7 +168,7 @@ lc_load("mailinglist");
 						$image.="/images/puu_lopp.gif";
 					else
 						$image.="/images/puu_rist.gif";
-					$image.="' border=0><a href='list.$ext?parent=".$v[data][oid]."&op=$op'>";
+					$image.="' border=0><a href='orb.$ext?class=variables&action=gen_list&parent=".$v[data][oid]."&op=$op'>";
 				}
 
 				$image.="<img src='/images/";
@@ -170,6 +184,9 @@ lc_load("mailinglist");
 													"cat_comment"		=> $v[data][comment],
 													"modifiedby"		=> $v[data][modifiedby],
 													"modified"			=> $this->time2date($v[data][modified],2),
+													"change_link" => $this->mk_my_orb("change_cat",array("id" => $v[data][oid])),
+													"delete_link" => $this->mk_my_orb("delete_cat",array("id" => $v[data][oid])),
+													"open_link"		=> $this->mk_my_orb("gen_list",array("parent" => $v[data][oid],"op" => "open")),
 													"cat_id"				=> $v[data][oid],
 													"op"						=> "&op=open",
 													"parent"				=> $this->selected));
@@ -201,17 +218,22 @@ lc_load("mailinglist");
 			return $ret;
 		}
 
+		////
+		// generates a list of variables
 		function gen_list($args = array())
 		{
 			extract($args);
-			global $site_title;
-			$site_title = "Muutujate nimekiri";
+			$this->mk_path(0,"Muutujate nimekiri");
 			$this->read_template("list_vars.tpl");
 			if ($parent < 1)
 				$parent = 1;
 
 			$l = $this->make_tree($parent);
-			$this->vars(array("C_LINE" => $l,"parent" => $parent));
+			$this->vars(array(
+				"C_LINE" => $l,
+				"parent" => $parent,
+				"add_link" => $this->mk_my_orb("add_cat",array("parent" => $parent)),
+				));
 			$this->vars(array("parent" => $parent));
 			$this->vars(array("ADD_CAT" => $this->parse("ADD_CAT")));
 
@@ -232,7 +254,9 @@ lc_load("mailinglist");
 				$c.=$this->parse("LINE");
 			}
 
-			$this->vars(array("LINE" => $c));
+			$this->vars(array(
+				"LINE" => $c,
+				));
 			return $this->parse();
 		}
 		
@@ -345,13 +369,21 @@ lc_load("mailinglist");
 			));
 		}
 
-		function add_cat($parent)
+		////
+		// !displays the form for adding a new category
+		function add_cat($args = array())
 		{
+			extract($args);
+			$this->mk_path(0,"<a href='orb.aw?class=variables&action=gen_list&parent=$parent'>Muutujad</a> / Lisa kategooria");
 			$this->read_template("add_var_cat.tpl");
-			$this->vars(array("parent" => $parent, "name" => "", "comment" => "", "id" => 0));
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("submit_cat",array("parent" => $parent)),
+			));
 			return $this->parse();
 		}
-		
+	
+		////
+		// !Submits a category
 		function submit_cat(&$arr)
 		{
 			$this->quote(&$arr);
@@ -359,39 +391,58 @@ lc_load("mailinglist");
 
 			if ($id)
 			{
-				$this->upd_object(array("oid" => $id, "name" => $name, "status" => 2, "comment" => $comment));
+				$this->upd_object(array(
+					"oid" => $id,
+					"name" => $name,
+					"status" => 2,
+					"comment" => $comment,
+				));
 				$this->_log("ml_var",sprintf(LC_VARS_CHANGED_CAT,$name));
 			}
 			else
 			{
-				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_ML_VAR_CAT, "comment" => $comment));
+				$id = $this->new_object(array(
+					"parent" => $parent,
+					"name" => $name,
+					"class_id" => CL_ML_VAR_CAT,
+					"comment" => $comment,
+				));
+				
 				$this->_log("ml_var",sprintf(LC_VARS_ADD_CAT,$name));
 			}
+			return $this->mk_my_orb("change_cat",array("id" => $id));
 
-			return $parent;
 		}
 
-		function change_cat($id)
+		//// 
+		// !Displays the form for changing a category
+		function change_cat($args = array())
 		{
+			extract($args);
 			if (!($row = $this->get_object($id)))
 				$this->raise_error(ERR_ML_VAR_NO_CAT,"variables->gen_change_html($id): No such category!", true);
+			$this->mk_path(0,"<a href='orb.aw?class=variables&action=gen_list&parent=$row[parent]'>Muutujad</a> / Muuda kategooria");
 
 			$this->read_template("change_var_cat.tpl");
 
-			$this->vars(array("parent"			=> $row[parent], 
-												"name"				=> $row[name], 
-												"comment"			=> $row[comment], 
-												"id"					=> $id,
-												"created"			=> $this->time2date($row[created],2),
-												"createdby"		=> $row[createdby],
-												"modified"		=> $this->time2date($row[modified],2),
-												"modifiedby"	=> $row[modifiedby]));
+			$this->vars(array("parent"			=> $row["parent"], 
+												"name"				=> $row["name"], 
+												"comment"			=> $row["comment"], 
+												"created"			=> $this->time2date($row["created"],2),
+												"createdby"		=> $row["createdby"],
+												"modified"		=> $this->time2date($row["modified"],2),
+												"modifiedby"	=> $row["modifiedby"],
+												"reforb" =>  $this->mk_reforb("submit_cat",array("id" => $id)),
+			));
 			return $this->parse();
 		}
 
-		function delete_cat($id)
+		// deletes a category from list
+		function delete_cat($args = array())
 		{
-			$this->delete_object($id);
+			extract($args);
+			$this->delete_object($id,CL_ML_VAR_CAT);
+			return $this->mk_my_orb("gen_list",array("parent" => 1));
 		}
 
 	function check_environment(&$sys, $fix = false)
