@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.51 2003/01/17 15:38:11 duke Exp $
+// $Id: class_base.aw,v 2.52 2003/01/17 15:41:57 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1128,9 +1128,17 @@ class class_base extends aliasmgr
 
 			$options = array("0" => "--vali--");
 			// generate option list
+			if (constant($val["reltype"]))
+			{
+				$reltype = constant($val["reltype"]);
+			}
+			else
+			{
+				$reltype = $val["reltype"];
+			};
 			foreach($objlist->get() as $okey => $oval)
 			{
-				if ($reltypes[$oval["target"]] == $val["reltype"])
+				if ($reltypes[$oval["target"]] == $reltype)
 				{
 					$options[$oval["target"]] = $oval["name"];
 				};
