@@ -623,6 +623,7 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4
 			
 			<input type="checkbox" value=1 name="users_only" {VAR:users_only}>Users only&nbsp;
 
+			<input type="checkbox" value=1 name="sort_by_name" {VAR:sort_by_name}>Sordi nime j&auml;rgi&nbsp;
 
 
 			

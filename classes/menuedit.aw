@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.157 2002/09/30 06:39:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.158 2002/10/01 11:09:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -2157,7 +2157,8 @@ class menuedit extends aw_template
 					"pm_url_admin" => $pm_url_admin,
 					"pm_url_menus" => $pm_url_menus,
 					"objtbl_conf" => $objtbl_conf,
-					"add_tree_conf" => $add_tree_conf
+					"add_tree_conf" => $add_tree_conf,
+					"sort_by_name" => $sort_by_name
 				),
 			));
 			
@@ -2741,7 +2742,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"ftpl_view_id" => (int)$meta["ftpl_view"],
 			"aip_filename" => $meta["aip_filename"],
 			"objtbl_conf" => $this->picker($meta["objtbl_conf"], $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true))),
-			"add_tree_conf" => $this->picker($meta["add_tree_conf"], $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true)))
+			"add_tree_conf" => $this->picker($meta["add_tree_conf"], $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true))),
+			"sort_by_name" => checked($meta["sort_by_name"])
 		));
 
 		$op_list = $fb->get_op_list();
@@ -2925,8 +2927,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
-		$total = sizeof($this->mpr[$parent]) - 1;
-		while (list(,$row) = each($this->mpr[$parent]))
+
+		$tmp = $this->mpr[$parent];
+		if ($this->mar[$parent]["meta"]["sort_by_name"])
+		{
+			uasort($tmp, create_function('$a,$b','if ($a["name"] > $b["name"]) { return 1;} else if ($a["name"] < $b["name"]) { return -1;} else {return 0;}'));
+		}
+
+		$total = sizeof($tmp) - 1;
+		while (list(,$row) = each($tmp))
 		{
 			$bro = false;
 			$row["mtype"] = $row["type"];
@@ -3850,6 +3859,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
+		$GLOBALS["copied_objects"] = array();
+
+		if ($oid)
+		{
+			$r = $this->serialize(array("oid" => $oid));
+			if ($r != false)
+			{
+				$GLOBALS["copied_objects"][$oid] = $r;
+			}
+		}
+
 		$copied_objects = array();
 		if (is_array($sel))
 		{
@@ -3905,6 +3925,34 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->invalidate_menu_cache($updmenus);
 
+		$GLOBALS["copied_objects"] = array();
+		if ($from_menu)
+		{
+			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
+		}
+		else
+		{
+			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
+		}
+	}
+
+	function o_delete($arr)
+	{
+		extract($arr);
+		if (is_array($sel))
+		{
+			reset($sel);
+			while (list($ooid,) = each($sel))
+			{
+				$this->delete_object($ooid);
+				$this->delete_aliases_of($ooid);
+			}
+		}
+		if ($oid)
+		{
+			$this->delete_object($oid);
+		}
+		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
@@ -4369,6 +4417,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// get list of documents in this promo box
 				$pr_c = "";
 				$docid = $this->get_default_document($row["oid"],true);
+				global $XXX;
+				if ($XXX)
+				{
+					print "<pre>";
+					print_r($docid);
+					print "</pre>";
+				};
 				if (is_array($docid))
 				{
 					reset($docid);
