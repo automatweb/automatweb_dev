@@ -250,11 +250,11 @@ class rate extends class_base
 		
 		$ob = $this->get_object($id);
 
-		if (!empty($gallery_id))
+		if (!empty($from_oid))
 		{
 			// we we need to show results in the gallery, read objects from that
 			$ob['meta']['objects_from'] = OBJECTS_FROM_OID;
-			$ob['meta']['objects_from_oid'] = $gallery_id;
+			$ob['meta']['objects_from_oid'] = $from_oid;
 		}
 
 		// get list of all objects that this rating applies to
@@ -354,18 +354,17 @@ class rate extends class_base
 			LIMIT ".(int)($ob['meta']['top'])."
 		";
 		$this->db_query($sql);
-		if (!empty($gallery_id))
+		if (!empty($from_oid))
 		{
 			$imorder = array();
 			while($row = $this->db_next())
 			{
 				$imorder[$row["oid"]] = $row["oid"];
 			}
-			$gi = get_instance("contentmgmt/gallery/gallery_v2");
-			return $gi->show_ordered(array(
-				"id" => $gallery_id,
-				"order" => $imorder
-			));
+			// Maybe I should split this function in 2 instead,
+			// but the mere thought of that makes my head hurt, so I'm
+			// not touching this right now.
+			return $imorder;
 		}
 		else
 		{
