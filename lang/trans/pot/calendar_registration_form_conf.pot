@@ -1,0 +1,27 @@
+#: classes/applications/calendar/calendar_registration_form_conf.aw:143
+msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>
+					#date# - kohtumise kuup&auml;ev<br>
+					#time_from# - kohtumise alguskellaaeg<br>
+					#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:148
+msgid "&Auml;ra kuva"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:149
+msgid "Kuva dokumendis s&uuml;ndmuse infot"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:218
+msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:237
+msgid "calendar_registration_form::show(%s): event and object type must be related!"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:594
+msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
+msgstr ""
+

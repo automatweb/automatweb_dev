@@ -1,0 +1,16 @@
+#: classes/contentmgmt/timing.aw:187
+msgid "Eemalda valitud objektid"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:199
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:200
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:201
+msgid "Tüüp"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/contentmgmt/site_show.aw:2330
+msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
+msgstr ""
+

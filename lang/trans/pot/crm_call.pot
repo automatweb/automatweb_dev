@@ -1,0 +1,12 @@
+#: classes/crm/crm_call.aw:207
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/crm/crm_call.aw:216
+msgid "Otsi"
+msgstr ""
+
+#: classes/crm/crm_call.aw:225
+msgid "Salvesta"
+msgstr ""
+

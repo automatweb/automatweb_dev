@@ -1,0 +1,16 @@
+#: classes/admin/add_tree_conf.aw:61
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:66
+msgid "N&auml;htav"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:72
+msgid "Kasutatav"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:79
+msgid "Aliasena lisatav"
+msgstr ""
+

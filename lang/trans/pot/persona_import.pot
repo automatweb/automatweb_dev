@@ -1,0 +1,8 @@
+#: classes/applications/persona_import/persona_import.aw:90
+msgid "Käivita import"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:120
+msgid "You forgot to enter server data"
+msgstr ""
+

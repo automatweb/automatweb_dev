@@ -1,0 +1,24 @@
+#: classes/contentmgmt/links.aw:121
+msgid "Vali see"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:125
+msgid "Nimetus"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:130
+msgid "Asukoht"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:135
+msgid "Looja"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:140
+msgid "Viimati muudetud"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:166
+msgid "Vali see"
+msgstr ""
+

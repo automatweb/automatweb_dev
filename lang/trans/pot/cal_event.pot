@@ -1,0 +1,40 @@
+#: classes/calendar/cal_event.aw:42
+msgid "korduste kontroller"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:118
+msgid "must"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:119
+msgid "punane"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:120
+msgid "roheline"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:121
+msgid "sinine"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:143
+msgid "linki objektile"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:143
+msgid "objekti ennast"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:166
+msgid "Lisa kalendrisündmus"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:311
+msgid "%s | Muuda kalendrisündmust"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:372
+msgid "Muuda eventit"
+msgstr ""
+

@@ -1,0 +1,16 @@
+#: classes/applications/groupware/project.aw:171
+msgid "Nädala vaade"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:1059
+msgid "Alamprojekt"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:1164
+msgid "Etendus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:1388
+msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
+msgstr ""
+

@@ -1,0 +1,24 @@
+#: classes/crm/crm_phone.aw:45
+msgid "tööl"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:46
+msgid "kodus"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:47
+msgid "lühinumber"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:48
+msgid "mobiil"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:49
+msgid "faks"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:50
+msgid "skype"
+msgstr ""
+

@@ -1,0 +1,28 @@
+#: classes/vcl/calendar.aw:495
+msgid "Päev"
+msgstr ""
+
+#: classes/vcl/calendar.aw:496
+msgid "Nädal"
+msgstr ""
+
+#: classes/vcl/calendar.aw:497
+msgid "Kuu"
+msgstr ""
+
+#: classes/vcl/calendar.aw:498
+msgid "Ülevaade"
+msgstr ""
+
+#: classes/vcl/calendar.aw:540
+msgid "Toimetused"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1210
+msgid "Eelmine kuu"
+msgstr ""
+
+#: classes/vcl/calendar.aw:1211
+msgid "Järgmine kuu"
+msgstr ""
+

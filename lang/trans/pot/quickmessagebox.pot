@@ -1,0 +1,76 @@
+#: classes/applications/quickmessage/quickmessagebox.aw:92
+msgid "Uus kiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:104
+msgid "Vasta kirjale"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:116
+msgid "Edasta kiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:127
+msgid "Arhiveeri valitud kirjad"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:139
+msgid "Kustuta valitud kirjad"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:147
+msgid "oled sa kindel, et tahad valitud kirja kustutada?"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:154
+msgid "Arhiveeri valitud kirjad"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:161
+msgid "Kustuta valitud kirjad"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:164
+msgid "Oled kindel, et tahad valitud kirjad kustutada?"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:282
+msgid "Kellele"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:286
+msgid "Saadetud"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:290
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:294
+msgid "Sisu"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:335
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:336
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:337
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:377
+msgid "teadet ei õnnestunud saata, proovi uuesti"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:377
+msgid "teade edukalt kohale toimetatud!"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:437
+msgid "kirjutas"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/admin/shortcut.aw:75
+msgid " (kiirviide)"
+msgstr ""
+

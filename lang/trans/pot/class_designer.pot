@@ -1,0 +1,36 @@
+#: classes/applications/class_designer/class_designer.aw:306
+msgid "Save"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:316
+msgid "Cut"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:326
+msgid "Paste"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:335
+msgid "Delete"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:338
+msgid "Kustutada valitud objektid?"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:348
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:354
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:359
+msgid "Tüüp"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:364
+msgid "Muuda"
+msgstr ""
+

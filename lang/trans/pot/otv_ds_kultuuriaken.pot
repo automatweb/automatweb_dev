@@ -1,0 +1,20 @@
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:95
+msgid "Impordi s&uuml;ndmused"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:99
+msgid "Impordi Kultuuriakna s&uuml;ndmused"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:168
+msgid "Parent"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:173
+msgid "XML v&auml;lja sisu"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:200
+msgid "XML v&auml;li"
+msgstr ""
+

@@ -1,0 +1,44 @@
+#: classes/contentmgmt/site_search/site_search_content.aw:86
+msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:87
+msgid "koos k&otilde;igi s&otilde;nadega"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:88
+msgid "t&auml;pne fraas"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:92
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:107
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:108
+msgid "Pealkirja j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:109
+msgid "Sisu j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:116
+msgid "uuenda staatiline koopia"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:138
+msgid "&Uuml;ksk&otilde;ik milline s&otilde;na"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:139
+msgid "K&otilde;ik s&otilde;nad"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:140
+msgid "Fraas"
+msgstr ""
+

@@ -1,0 +1,8 @@
+#: classes/contentmgmt/newsfeed.aw:58
+msgid "RSS 2.0"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:59
+msgid "Atom (implementeerimata)"
+msgstr ""
+

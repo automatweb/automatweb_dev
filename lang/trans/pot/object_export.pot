@@ -1,0 +1,24 @@
+#: classes/admin/object_export.aw:92
+msgid "Ekspordi CSV fail"
+msgstr ""
+
+#: classes/admin/object_export.aw:103
+msgid "Ekspordi XLS fail"
+msgstr ""
+
+#: classes/admin/object_export.aw:137
+msgid "Element"
+msgstr ""
+
+#: classes/admin/object_export.aw:142
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/admin/object_export.aw:148
+msgid "Eksporditav"
+msgstr ""
+
+#: classes/admin/object_export.aw:153
+msgid "Tulba pealkiri"
+msgstr ""
+

@@ -1,0 +1,32 @@
+#: classes/crm/crm_org_search.aw:93
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:99
+msgid "Õiguslik vorm"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:105
+msgid "Aadress"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:111
+msgid "E-post"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:117
+msgid "WWW"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:122
+msgid "Telefon"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:128
+msgid "Juht"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:375
+msgid "Otsing ei leidnud ühtegi objekti"
+msgstr ""
+

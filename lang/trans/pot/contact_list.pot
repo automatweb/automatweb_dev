@@ -1,0 +1,20 @@
+#: classes/applications/quickmessage/contact_list.aw:83
+msgid "Kustuta kontakte"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:86
+msgid "Oled kindel, et tahad valitud eemaldada?"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:169
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:173
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:222
+msgid "Saada sõnum"
+msgstr ""
+

@@ -1,0 +1,44 @@
+#: classes/applications/calendar/recurrence.aw:147
+msgid "esimesel"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:148
+msgid "teisel"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:149
+msgid "kolmandal"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:150
+msgid "neljandal"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:151
+msgid "viimasel"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:158
+msgid "päev"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:159
+msgid "nädal"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:160
+msgid "kuu"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:161
+msgid "aasta"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:162
+msgid "minut"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:163
+msgid "tund"
+msgstr ""
+

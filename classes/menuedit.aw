@@ -1,12 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.346 2005/03/17 19:18:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.347 2005/03/21 11:07:09 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
 {
-	// this will be set to document id if only one document is shown, a document which can be edited
-	var $active_doc = false;
-
 	function menuedit()
 	{
 		$this->init("automatweb/menuedit");
@@ -20,7 +17,7 @@ class menuedit extends aw_template
 	////   
 	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest   
 	// uue folderi lisamiseks kodukataloogi alla   
-	// skip_invalidate   
+	// no_flush
 	function add_new_menu($args = array())
 	{   
 		// ja eeldame, et meil on v?emalt parent ja name olemas.   
@@ -35,8 +32,6 @@ class menuedit extends aw_template
 		$o->set_prop("type", $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB);
 		$o->set_prop("link", $args["link"]);
 		$newoid = $o->save();
-
-		$this->_log(ST_MENU, SA_ADD, $args["name"], $newoid);   
 
 		if (!$args['no_flush'])   
 		{   

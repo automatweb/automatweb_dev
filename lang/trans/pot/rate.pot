@@ -1,0 +1,32 @@
+#: classes/contentmgmt/rate/rate.aw:72
+msgid "Klassi järgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:73
+msgid "Kataloogi järgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:74
+msgid "Objektist"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:103
+msgid "K&otilde;rgeima hinde j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:104
+msgid "Keskmise hinde j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:105
+msgid "Vaatamiste j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:106
+msgid "Madalaima hinde j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:107
+msgid "V&auml;him vaadatud"
+msgstr ""
+

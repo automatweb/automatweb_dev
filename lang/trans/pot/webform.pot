@@ -1,0 +1,172 @@
+#: classes/contentmgmt/webform.aw:221
+msgid "Tekst"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:222
+msgid "V&auml;ike tekstikast"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:223
+msgid "Valikv&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:224
+msgid "Kuup&auml;evavalik"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:225
+msgid "Liitu mailinglistiga"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:226
+msgid "Suur tekstikast"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:227
+msgid "Peidetud v&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:228
+msgid "Saada nupp"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:229
+msgid "T&uuml;hista nupp"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:230
+msgid "Prindi nupp"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:233
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:234
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:235
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:236
+msgid "Aadress"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:237
+msgid "Telefon"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:238
+msgid "Faks"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:239
+msgid "E-post"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:242
+msgid "Tavaline vorm"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:243
+msgid "S&uuml;ndmusele registreerimine"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:244
+msgid "Toode"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:314
+msgid "Elementide kohale"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:315
+msgid "Vormi kohale"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:316
+msgid "Vormi alla"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:812
+msgid "Otsi"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:820
+msgid "Muuda otsingu seadeid"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:830
+msgid "Kustuta valitud sisestused"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:833
+msgid "Oled kindel, et tahad valitud sisestused kustutada?"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:837
+msgid "Ekspordi objektid"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1073
+msgid "-- vali --"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1074
+msgid "Mitmerealine rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1075
+msgid "Rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1076
+msgid "M&auml;rkeruut"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1077
+msgid "Raadionupp"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1080
+msgid "--vali--"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1081
+msgid "Järjekord (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1082
+msgid "Järjekord (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1083
+msgid "Nimi (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1084
+msgid "Nimi (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1085
+msgid "Loomisaeg (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1086
+msgid "Loomisaeg (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1088
+msgid "horisontaalne"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1088
+msgid "vertikaalne"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1479
+msgid "Registreeru"
+msgstr ""
+

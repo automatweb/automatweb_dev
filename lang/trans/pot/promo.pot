@@ -1,0 +1,84 @@
+#: classes/contentmgmt/promo.aw:138
+msgid "Vali template"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:155
+msgid "Vasakul"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:156
+msgid "Paremal"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:157
+msgid "Üleval"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:158
+msgid "All"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:159
+msgid "Skrolliv"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:175
+msgid "J&auml;rjekorra j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:176
+msgid "Loomise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:177
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:178
+msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:179
+msgid "Objekti nime j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:180
+msgid "Kalendris valitud aja j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:186
+msgid "Suurem (uuem) enne"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:187
+msgid "V&auml;iksem (vanem) enne"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:243
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:251
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:256
+msgid "k.a. alammenüüd"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:290
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:299
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:306
+msgid "Pane pealkirjaks"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:313
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+

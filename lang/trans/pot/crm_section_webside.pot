@@ -1,0 +1,16 @@
+#: classes/crm/crm_section_webside.aw:104
+msgid "Piltidega vaade"
+msgstr ""
+
+#: classes/crm/crm_section_webside.aw:105
+msgid "Tabelina"
+msgstr ""
+
+#: classes/crm/crm_section_webside.aw:135
+msgid "Nimi"
+msgstr ""
+
+#: classes/crm/crm_section_webside.aw:141
+msgid "Järjekord"
+msgstr ""
+

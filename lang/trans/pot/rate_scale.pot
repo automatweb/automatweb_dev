@@ -1,0 +1,4 @@
+#: classes/contentmgmt/rate/rate_scale.aw:195
+msgid "ei hinda"
+msgstr ""
+

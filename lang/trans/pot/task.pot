@@ -1,0 +1,12 @@
+#: classes/applications/groupware/task.aw:184
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:193
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:202
+msgid "Salvesta"
+msgstr ""
+

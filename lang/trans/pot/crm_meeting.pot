@@ -1,0 +1,16 @@
+#: classes/crm/crm_meeting.aw:227
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:229
+msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:237
+msgid "Otsi"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:246
+msgid "Salvesta"
+msgstr ""
+

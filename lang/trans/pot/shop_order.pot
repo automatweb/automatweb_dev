@@ -1,0 +1,8 @@
+#: classes/applications/shop/shop_order.aw:98
+msgid "Eemalda tellimusest tooted"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:99
+msgid "Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"
+msgstr ""
+

@@ -1,0 +1,64 @@
+#: classes/search_v2.aw:139
+msgid "Otsi"
+msgstr ""
+
+#: classes/search_v2.aw:146
+msgid "Lõika"
+msgstr ""
+
+#: classes/search_v2.aw:152
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/search_v2.aw:158
+msgid "Kustuta"
+msgstr ""
+
+#: classes/search_v2.aw:182
+msgid "Kõik"
+msgstr ""
+
+#: classes/search_v2.aw:183
+msgid "Aktiivsed"
+msgstr ""
+
+#: classes/search_v2.aw:184
+msgid "Deaktiivsed"
+msgstr ""
+
+#: classes/search_v2.aw:223
+msgid "Nimi"
+msgstr ""
+
+#: classes/search_v2.aw:227
+msgid "Keel"
+msgstr ""
+
+#: classes/search_v2.aw:232
+msgid "Tüüp"
+msgstr ""
+
+#: classes/search_v2.aw:236
+msgid "Asukoht"
+msgstr ""
+
+#: classes/search_v2.aw:240
+msgid "Loodud"
+msgstr ""
+
+#: classes/search_v2.aw:246
+msgid "Looja"
+msgstr ""
+
+#: classes/search_v2.aw:250
+msgid "Muudetud"
+msgstr ""
+
+#: classes/search_v2.aw:256
+msgid "Muutja"
+msgstr ""
+
+#: classes/search_v2.aw:262
+msgid "Vali"
+msgstr ""
+

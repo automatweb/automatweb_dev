@@ -1,0 +1,20 @@
+#: classes/admin/admin_languages.aw:30
+msgid "Keeled"
+msgstr ""
+
+#: classes/admin/admin_languages.aw:85
+msgid "Keeled"
+msgstr ""
+
+#: classes/admin/admin_languages.aw:85
+msgid "Lisa"
+msgstr ""
+
+#: classes/admin/admin_languages.aw:116
+msgid "Keeled"
+msgstr ""
+
+#: classes/admin/admin_languages.aw:116
+msgid "Muuda"
+msgstr ""
+

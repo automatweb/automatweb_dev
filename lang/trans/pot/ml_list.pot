@@ -1,0 +1,56 @@
+#: classes/applications/mailinglist/ml_list.aw:414
+msgid "Sellise aadressiga inimene on juba listiga liitunud"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:951
+msgid "ID"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:955
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:959
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1005
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1007
+msgid "Eemaldan valitud kirjad?"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1017
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1019
+msgid "Kustutada need liikmed?"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1155
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1287
+msgid "kõik"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1622
+msgid "jah"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1622
+msgid "ei"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1763
+msgid "Saada peale salvestamist ära"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1793
+msgid "Asenduste legend"
+msgstr ""
+

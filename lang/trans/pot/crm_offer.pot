@@ -1,0 +1,100 @@
+#: classes/crm/crm_offer.aw:125
+msgid "Koostamisel"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:126
+msgid "Saadetud"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:127
+msgid "Esitletud"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:128
+msgid "Tagasilükatud"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:129
+msgid "Positiivelt lõppenud"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:264
+msgid "Salvesta valitud paketid pakkumisse"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:336
+msgid "Pakett"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:342
+msgid "Hind"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:376
+msgid "Otsing"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:382
+msgid "Nimetus"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:388
+msgid "Otsi"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:399
+msgid "Otsingutulemused"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:424
+msgid "Kustuta valitud paketid"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:426
+msgid "Soovid kustutada valitud paketid?"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:432
+msgid "Otsi pakette"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:441
+msgid "Liida paketid pakkumisse"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:510
+msgid "Toode"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:515
+msgid "Hind"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:596
+msgid "Algstaatus"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:602
+msgid "Lõppstaatus"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:608
+msgid "Muutuse aeg"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:614
+msgid "Muutja"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:645
+msgid "Pakett"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:652
+msgid "Hind"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:690
+msgid "Kokku"
+msgstr ""
+

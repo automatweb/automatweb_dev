@@ -1,0 +1,4 @@
+#: classes/applications/shop/shop_order_center.aw:1065
+msgid "--vali--"
+msgstr ""
+

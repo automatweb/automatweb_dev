@@ -1,0 +1,4 @@
+#: classes/admin/config/config_login_menus.aw:146
+msgid " menyy"
+msgstr ""
+

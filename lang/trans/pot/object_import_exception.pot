@@ -1,0 +1,8 @@
+#: classes/admin/object_import_exception.aw:74
+msgid "Mis asendada"
+msgstr ""
+
+#: classes/admin/object_import_exception.aw:79
+msgid "Millega asendada"
+msgstr ""
+

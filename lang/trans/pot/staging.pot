@@ -1,0 +1,24 @@
+#: classes/applications/calendar/staging.aw:118
+msgid "Originaalobjekt"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:126
+msgid "Koopia"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:129
+msgid " (Aktiivne)"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:147
+msgid "Uued"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:156
+msgid "Uus %s"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:166
+msgid "Tee sündmus %s"
+msgstr ""
+

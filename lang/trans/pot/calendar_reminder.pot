@@ -1,0 +1,4 @@
+#: classes/applications/calendar/calendar_reminder.aw:110
+msgid "Hei, varsti algab %s, täpsemalt kell %s, vaata et sa ära ei unusta!"
+msgstr ""
+

@@ -1,0 +1,84 @@
+#: classes/mrp/mrp_workspace.aw:2019
+msgid "Salvesta"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2044
+msgid "Nimi"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2051
+msgid "Vali ressurss"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2057
+msgid "N&auml;ita k&otilde;ikide ressurside t&ouml;id"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2063
+msgid "N&auml;ita osakonna ressurside t&ouml;id"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2069
+msgid "Muuda"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2238
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2243
+msgid "Lisa kategooria"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2255
+msgid "Lisa klient"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2267
+msgid "Kustuta"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2490
+msgid "Algus"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2501
+msgid "Pikkus"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2510
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2521
+msgid "Staatus"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2529
+msgid "Klient"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2537
+msgid "Projekt"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2545
+msgid "Ressurss"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2553
+msgid "Teostaja"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2561
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:2641
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:3153
+msgid "Logi v&auml;lja"
+msgstr ""
+

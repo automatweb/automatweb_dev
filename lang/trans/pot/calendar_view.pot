@@ -1,0 +1,72 @@
+#: classes/calendar/calendar_view.aw:115
+msgid "Kuuvaade & nädala sündmused"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:116
+msgid "Kuukalender"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:117
+msgid "Algavad sündmused"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:118
+msgid "Nädala vaade"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:119
+msgid "Järgmised sündmused"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:120
+msgid "Grupeeri allika järgi"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:131
+msgid "päev"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:132
+msgid "nädal"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:133
+msgid "kuu"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:134
+msgid "Järgmised"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:173
+msgid "Nimi"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:178
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:183
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:189
+msgid "Jrk"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:194
+msgid "Seaded"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:199
+msgid "Väljade eraldaja"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:204
+msgid "Lisaväljad"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:220
+msgid "Väljundvorm on valimata"
+msgstr ""
+

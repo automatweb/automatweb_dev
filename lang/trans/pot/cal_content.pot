@@ -1,0 +1,12 @@
+#: classes/calendar/cal_content.aw:45
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:69
+msgid "/ Vaata"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:87
+msgid "Klass on valimata, midagi pole näidata"
+msgstr ""
+

@@ -1,0 +1,100 @@
+#: classes/document.aw:408
+msgid "Viimati muudetud:"
+msgstr ""
+
+#: classes/document.aw:610
+msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
+msgstr ""
+
+#: classes/document.aw:634
+msgid "Loe edasi"
+msgstr ""
+
+#: classes/document.aw:1055
+msgid "Vaata lisaks:"
+msgstr ""
+
+#: classes/document.aw:1060
+msgid "Samal teemal:"
+msgstr ""
+
+#: classes/document.aw:1104
+msgid "Vaata lisaks:"
+msgstr ""
+
+#: classes/document.aw:1109
+msgid "Samal teemal:"
+msgstr ""
+
+#: classes/document.aw:2031
+msgid "staatiline"
+msgstr ""
+
+#: classes/document.aw:2032
+msgid "Jah"
+msgstr ""
+
+#: classes/document.aw:2032
+msgid "Ei"
+msgstr ""
+
+#: classes/document.aw:2033
+msgid "Jah"
+msgstr ""
+
+#: classes/document.aw:2033
+msgid "Ei"
+msgstr ""
+
+#: classes/document.aw:3047
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/document.aw:3054
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/document.aw:3062
+msgid "Autor"
+msgstr ""
+
+#: classes/document.aw:3585
+msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
+msgstr ""
+
+#: classes/document.aw:3615
+msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
+msgstr ""
+
+#: classes/document.aw:3616
+msgid "tagasi dokumendi muutmise juurde"
+msgstr ""
+
+#: classes/document.aw:3626
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/document.aw:3632
+msgid "Lead"
+msgstr ""
+
+#: classes/document.aw:3638
+msgid "Sisu"
+msgstr ""
+
+#: classes/document.aw:3644
+msgid "Autor"
+msgstr ""
+
+#: classes/document.aw:3654
+msgid "Periood"
+msgstr ""
+
+#: classes/document.aw:3714
+msgid "Objektiotsing"
+msgstr ""
+
+#: classes/document.aw:3714
+msgid "Dokumentide otsing"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/crm/crm_address.aw:136
+msgid "tel:"
+msgstr ""
+

@@ -1,0 +1,16 @@
+#: classes/doc.aw:298
+msgid "puudub"
+msgstr ""
+
+#: classes/doc.aw:591
+msgid "Salvesta"
+msgstr ""
+
+#: classes/doc.aw:601
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/doc.aw:764
+msgid "Dokument 2.0"
+msgstr ""
+

@@ -1,0 +1,8 @@
+#: classes/contentmgmt/forum/forum_v2.aw:198
+msgid "Teemade kaust on valimata"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1551
+msgid "Uus teema"
+msgstr ""
+

@@ -1,0 +1,20 @@
+#: classes/calendar/event_property_lib.aw:218
+msgid "Nimi"
+msgstr ""
+
+#: classes/calendar/event_property_lib.aw:225
+msgid "Telefon"
+msgstr ""
+
+#: classes/calendar/event_property_lib.aw:231
+msgid "E-post"
+msgstr ""
+
+#: classes/calendar/event_property_lib.aw:236
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/calendar/event_property_lib.aw:373
+msgid "osalejad.xls"
+msgstr ""
+

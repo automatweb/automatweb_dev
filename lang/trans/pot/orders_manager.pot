@@ -1,0 +1,8 @@
+#: classes/applications/orders/orders_manager.aw:63
+msgid "Kustuta tellimusi"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:65
+msgid "Oled kindel, et soovid valitud tellimused kustutada?"
+msgstr ""
+

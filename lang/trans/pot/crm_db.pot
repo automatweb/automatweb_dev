@@ -1,0 +1,144 @@
+#: classes/crm/crm_db.aw:346
+msgid "Tegevusala"
+msgstr ""
+
+#: classes/crm/crm_db.aw:351
+msgid "Organisatsioone"
+msgstr ""
+
+#: classes/crm/crm_db.aw:356
+msgid "Vali"
+msgstr ""
+
+#: classes/crm/crm_db.aw:723
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/crm/crm_db.aw:729
+msgid "Reg nr."
+msgstr ""
+
+#: classes/crm/crm_db.aw:735
+msgid "Põhitegevus"
+msgstr ""
+
+#: classes/crm/crm_db.aw:741
+msgid "Õiguslik vorm"
+msgstr ""
+
+#: classes/crm/crm_db.aw:747
+msgid "Aadress"
+msgstr ""
+
+#: classes/crm/crm_db.aw:753
+msgid "Linn/Vald/Alev"
+msgstr ""
+
+#: classes/crm/crm_db.aw:759
+msgid "Maakond"
+msgstr ""
+
+#: classes/crm/crm_db.aw:765
+msgid "E-post"
+msgstr ""
+
+#: classes/crm/crm_db.aw:771
+msgid "Kodulehekülg"
+msgstr ""
+
+#: classes/crm/crm_db.aw:776
+msgid "Telefon"
+msgstr ""
+
+#: classes/crm/crm_db.aw:782
+msgid "Organisatsiooni juht"
+msgstr ""
+
+#: classes/crm/crm_db.aw:821
+msgid "Uus"
+msgstr ""
+
+#: classes/crm/crm_db.aw:839
+msgid "Kaust määramata"
+msgstr ""
+
+#: classes/crm/crm_db.aw:840
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/crm/crm_db.aw:853
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/crm/crm_db.aw:869
+msgid "Kasutaja kalender"
+msgstr ""
+
+#: classes/crm/crm_db.aw:881
+msgid "Ava valim"
+msgstr ""
+
+#: classes/crm/crm_db.aw:889
+msgid "Kustuta"
+msgstr ""
+
+#: classes/crm/crm_db.aw:891
+msgid "Kustutada valitud organisatsioonid?"
+msgstr ""
+
+#: classes/crm/crm_db.aw:901
+msgid "-- vali valim --"
+msgstr ""
+
+#: classes/crm/crm_db.aw:925
+msgid "Lisa valitud valimisse"
+msgstr ""
+
+#: classes/crm/crm_db.aw:927
+msgid "Paiguta valitud organisatsioonid sellesse valimisse?"
+msgstr ""
+
+#: classes/crm/crm_db.aw:948
+msgid "Lisa uus objekt"
+msgstr ""
+
+#: classes/crm/crm_db.aw:980
+msgid "%s kaust määramata"
+msgstr ""
+
+#: classes/crm/crm_db.aw:981
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1021
+msgid "Lisa"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1036
+msgid "Kaust määramata"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1037
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1050
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1066
+msgid "Kasutaja kalender"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1090
+msgid "- lisa uude valimisse -"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1107
+msgid "Lisa valitud valimisse"
+msgstr ""
+
+#: classes/crm/crm_db.aw:1117
+msgid "Muuda valimit"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/image.aw:646
+msgid "Piltide automaatset suurendamist kontrollib objekt "
+msgstr ""
+

@@ -60,4 +60,7 @@ remoting:
 class:
 	@scripts/php -C -n -q -d safe_mode=Off -d memory_limit=200M -d max_execution_time=200 -d register_argc_argv=1 scripts/mk_class/mk_class.aw
 
+pot:
+	@scripts/php -C -n -q -d safe_mode=Off -d memory_limit=200M -d max_execution_time=800 -d register_argc_argv=1 scripts/trans/mk_pot.aw
+	
 all: ini properties msg orb remoting

@@ -1,0 +1,20 @@
+#: classes/applications/shop/shop_warehouse.aw:476
+msgid "Lisa uus tootegrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:487
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:508
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:518
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:522
+msgid "Muuda"
+msgstr ""
+

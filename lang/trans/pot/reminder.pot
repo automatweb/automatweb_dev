@@ -1,0 +1,24 @@
+#: classes/contentmgmt/reminder.aw:180
+msgid "Eemalda valitud objektid"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:192
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:193
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:194
+msgid "Tüüp"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:270
+msgid "aw"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:271
+msgid "Meeldetuletus"
+msgstr ""
+

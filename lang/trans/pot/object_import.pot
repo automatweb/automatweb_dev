@@ -1,0 +1,128 @@
+#: classes/admin/object_import.aw:128
+msgid "%s, kell %s, kasutaja %s &otilde;igustes."
+msgstr ""
+
+#: classes/admin/object_import.aw:145
+msgid "Import k&auml;ivitati %s."
+msgstr ""
+
+#: classes/admin/object_import.aw:146
+msgid "Hetkel on imporditud %s rida. <br>"
+msgstr ""
+
+#: classes/admin/object_import.aw:147
+msgid "Viimane muudatus toimis kell %s <br>"
+msgstr ""
+
+#: classes/admin/object_import.aw:150
+msgid "J&auml;tka importi kohe"
+msgstr ""
+
+#: classes/admin/object_import.aw:246
+msgid "Kataloog"
+msgstr ""
+
+#: classes/admin/object_import.aw:252
+msgid "V&auml;&auml;rtus, mille puhul pannakse sellesse kataloogi"
+msgstr ""
+
+#: classes/admin/object_import.aw:304
+msgid "Omadus"
+msgstr ""
+
+#: classes/admin/object_import.aw:310
+msgid "Imporditav?"
+msgstr ""
+
+#: classes/admin/object_import.aw:316
+msgid "V&auml;&auml;rtus k&auml;sitsi"
+msgstr ""
+
+#: classes/admin/object_import.aw:322
+msgid "Oman erandeid?"
+msgstr ""
+
+#: classes/admin/object_import.aw:328
+msgid "Erandid"
+msgstr ""
+
+#: classes/admin/object_import.aw:334
+msgid "Kuup&auml;eva formaat"
+msgstr ""
+
+#: classes/admin/object_import.aw:351
+msgid "--vali--"
+msgstr ""
+
+#: classes/admin/object_import.aw:456
+msgid "&Auml;ra impordi"
+msgstr ""
+
+#: classes/admin/object_import.aw:553
+msgid "Importi alustati uuesti realt %s"
+msgstr ""
+
+#: classes/admin/object_import.aw:621
+msgid "created uniqueness filter for %s objects. <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:634
+msgid "impordin rida %s... <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:653
+msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
+msgstr ""
+
+#: classes/admin/object_import.aw:764
+msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:776
+msgid "Imporditud %s objekti"
+msgstr ""
+
+#: classes/admin/object_import.aw:783
+msgid "Valmis! <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:799
+msgid "Import edukalt l&otilde;ppenud"
+msgstr ""
+
+#: classes/admin/object_import.aw:916
+msgid "create uniq filter for delete <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:922
+msgid "got filter <Br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:933
+msgid "unset keys <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:953
+msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:954
+msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
+msgstr ""
+
+#: classes/admin/object_import.aw:960
+msgid "delete object %s <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:966
+msgid "delete done. <br>\n"
+msgstr ""
+
+#: classes/admin/object_import.aw:968
+msgid "Edukalt kustutatud %s objekti!"
+msgstr ""
+
+#: classes/admin/object_import.aw:1006
+msgid "Importi alustati "
+msgstr ""
+

@@ -1,0 +1,32 @@
+#: classes/admin/object_type.aw:181
+msgid "-vali-"
+msgstr ""
+
+#: classes/admin/object_type.aw:182
+msgid "multiple select"
+msgstr ""
+
+#: classes/admin/object_type.aw:183
+msgid "select"
+msgstr ""
+
+#: classes/admin/object_type.aw:184
+msgid "checkboxid"
+msgstr ""
+
+#: classes/admin/object_type.aw:185
+msgid "radiobuttons"
+msgstr ""
+
+#: classes/admin/object_type.aw:201
+msgid "Oks"
+msgstr ""
+
+#: classes/admin/object_type.aw:209
+msgid "Tüüp"
+msgstr ""
+
+#: classes/admin/object_type.aw:231
+msgid "K&otilde;ik"
+msgstr ""
+

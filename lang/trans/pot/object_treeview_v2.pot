@@ -1,0 +1,16 @@
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:240
+msgid "Tabel"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:730
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1247
+msgid "Kustuta"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1252
+msgid "Oled kindel et tahad objekte kustutada?"
+msgstr ""
+

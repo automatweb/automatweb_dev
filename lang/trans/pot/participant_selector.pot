@@ -1,0 +1,20 @@
+#: classes/applications/calendar/vcl/participant_selector.aw:34
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/calendar/vcl/participant_selector.aw:42
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/calendar/vcl/participant_selector.aw:48
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/calendar/vcl/participant_selector.aw:54
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/calendar/vcl/participant_selector.aw:95
+msgid "osalejad.xls"
+msgstr ""
+

@@ -1,0 +1,8 @@
+#: classes/file.aw:106
+msgid "fail puudub"
+msgstr ""
+
+#: classes/file.aw:948
+msgid "Need either id or parent"
+msgstr ""
+

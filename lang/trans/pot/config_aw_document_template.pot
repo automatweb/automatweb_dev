@@ -1,0 +1,8 @@
+#: classes/admin/config/config_aw_document_template.aw:44
+msgid "Lead"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:45
+msgid "Vaatamine"
+msgstr ""
+

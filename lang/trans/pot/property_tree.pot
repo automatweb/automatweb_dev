@@ -1,0 +1,16 @@
+#: classes/applications/class_designer/property_tree.aw:99
+msgid "Lisa uus oks"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:105
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:111
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:112
+msgid "Oled kindel et soovid valitud objekte kustutada?"
+msgstr ""
+

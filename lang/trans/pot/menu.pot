@@ -1,0 +1,204 @@
+#: classes/menu.aw:388
+msgid "kasuta parenti valikut"
+msgstr ""
+
+#: classes/menu.aw:424
+msgid "(no icon set)"
+msgstr ""
+
+#: classes/menu.aw:454
+msgid "Väli"
+msgstr ""
+
+#: classes/menu.aw:458
+msgid "Järjekord"
+msgstr ""
+
+#: classes/menu.aw:463
+msgid "J&auml;rjekorra j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:464
+msgid "Loomise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:465
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:466
+msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:467
+msgid "Kalendris valitud aja j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:468
+msgid "Nime j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:472
+msgid "Suurem (uuem) enne"
+msgstr ""
+
+#: classes/menu.aw:473
+msgid "V&auml;iksem (vanem) enne"
+msgstr ""
+
+#: classes/menu.aw:516
+msgid "J&auml;rjekorra j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:517
+msgid "Loomise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:518
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:519
+msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:520
+msgid "Kalendris valitud aja j&auml;rgi"
+msgstr ""
+
+#: classes/menu.aw:526
+msgid "Suurem (uuem) enne"
+msgstr ""
+
+#: classes/menu.aw:527
+msgid "V&auml;iksem (vanem) enne"
+msgstr ""
+
+#: classes/menu.aw:535
+msgid "OID"
+msgstr ""
+
+#: classes/menu.aw:542
+msgid "Nimi"
+msgstr ""
+
+#: classes/menu.aw:562
+msgid "IP Nimi"
+msgstr ""
+
+#: classes/menu.aw:568
+msgid "IP Aadress"
+msgstr ""
+
+#: classes/menu.aw:574
+msgid "Lubatud"
+msgstr ""
+
+#: classes/menu.aw:580
+msgid "Keelatud"
+msgstr ""
+
+#: classes/menu.aw:643
+msgid "Vali pilt.."
+msgstr ""
+
+#: classes/menu.aw:662
+msgid "Muuda"
+msgstr ""
+
+#: classes/menu.aw:696
+msgid "NR"
+msgstr ""
+
+#: classes/menu.aw:702
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/menu.aw:708
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/menu.aw:714
+msgid "Vali Pilt"
+msgstr ""
+
+#: classes/menu.aw:735
+msgid "Vali menüüd"
+msgstr ""
+
+#: classes/menu.aw:745
+msgid "Märgi kõik menüüd aktiivseks"
+msgstr ""
+
+#: classes/menu.aw:752
+msgid "Ekspordi ikoonid"
+msgstr ""
+
+#: classes/menu.aw:757
+msgid "Ekspordi"
+msgstr ""
+
+#: classes/menu.aw:776
+msgid "Vali meetod"
+msgstr ""
+
+#: classes/menu.aw:789
+msgid "Vali meetodiga seotud objekt"
+msgstr ""
+
+#: classes/menu.aw:799
+msgid "Vali meetodiga seotud grupp"
+msgstr ""
+
+#: classes/menu.aw:808
+msgid "Meetod viitab adminni"
+msgstr ""
+
+#: classes/menu.aw:816
+msgid "Meetodi väljundi kuvamisel näidatakse menüüsid"
+msgstr ""
+
+#: classes/menu.aw:963
+msgid "Selline alias on juba olemas!"
+msgstr ""
+
+#: classes/menu.aw:996
+msgid "-- vali --"
+msgstr ""
+
+#: classes/menu.aw:1076
+msgid "Muuda"
+msgstr ""
+
+#: classes/menu.aw:1080
+msgid "Lisa"
+msgstr ""
+
+#: classes/menu.aw:1089
+msgid "--vali--"
+msgstr ""
+
+#: classes/menu.aw:1109
+msgid "--vali--"
+msgstr ""
+
+#: classes/menu.aw:1223
+msgid "ID"
+msgstr ""
+
+#: classes/menu.aw:1231
+msgid "Nimi"
+msgstr ""
+
+#: classes/menu.aw:1275
+msgid "ID"
+msgstr ""
+
+#: classes/menu.aw:1283
+msgid "Nimi"
+msgstr ""
+
+#: classes/menu.aw:1288
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+

@@ -1,0 +1,44 @@
+#: classes/applications/commune/rate_moderation.aw:74
+msgid "Salvesta muudatused"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:114
+msgid "Pilt"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:115
+msgid "Lisatud"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:116
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:117
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:118
+msgid "Kirjeldus"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:119
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:120
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:150
+msgid "Ei muuda"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:151
+msgid "Aktiveeri"
+msgstr ""
+
+#: classes/applications/commune/rate_moderation.aw:152
+msgid "Lükka tagasi"
+msgstr ""
+

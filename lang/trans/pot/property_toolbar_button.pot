@@ -1,0 +1,8 @@
+#: classes/applications/class_designer/property_toolbar_button.aw:389
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:396
+msgid "Kustuta"
+msgstr ""
+

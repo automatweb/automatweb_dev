@@ -1,0 +1,24 @@
+#: classes/applications/commune/image_rate.aw:229
+msgid "Saada sõnum"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:239
+msgid "lisa sõprade hulka"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:249
+msgid "Ignoreeri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:259
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:269
+msgid "Lisa kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:321
+msgid "pildi"
+msgstr ""
+

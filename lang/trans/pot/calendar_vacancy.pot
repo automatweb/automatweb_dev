@@ -1,0 +1,24 @@
+#: classes/applications/calendar/calendar_vacancy.aw:143
+msgid "Uus kohtumine"
+msgstr ""
+
+#: classes/applications/calendar/calendar_vacancy.aw:150
+msgid "Uus k&otilde;ne"
+msgstr ""
+
+#: classes/applications/calendar/calendar_vacancy.aw:157
+msgid "Uus toimetus"
+msgstr ""
+
+#: classes/applications/calendar/calendar_vacancy.aw:236
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/applications/calendar/calendar_vacancy.aw:245
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/calendar/calendar_vacancy.aw:254
+msgid "Salvesta"
+msgstr ""
+

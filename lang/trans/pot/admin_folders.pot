@@ -1,0 +1,16 @@
+#: classes/admin/admin_folders.aw:134
+msgid "<b>AutomatWeb</b>"
+msgstr ""
+
+#: classes/admin/admin_folders.aw:329
+msgid "Mitteperioodilised"
+msgstr ""
+
+#: classes/admin/admin_folders.aw:339
+msgid "Reload"
+msgstr ""
+
+#: classes/admin/admin_folders.aw:345
+msgid "Logi v&auml;lja"
+msgstr ""
+

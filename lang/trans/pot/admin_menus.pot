@@ -1,0 +1,104 @@
+#: classes/admin/admin_menus.aw:239
+msgid "Ava"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:249
+msgid "Muuda"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:257
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:266
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:274
+msgid "Kustutada valitud objektid?"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:278
+msgid "Kustuta"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:516
+msgid "Vali kuidas objekte kopeerida"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:705
+msgid "Menyyde importimisel tekkis viga real %s "
+msgstr ""
+
+#: classes/admin/admin_menus.aw:722
+msgid "Menyyde importimisel ei leidnud parent menyyd real %s "
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1162
+msgid "Link"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1177
+msgid "Mitteaktiivne"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1177
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1281
+msgid "Uus"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1323
+msgid "Salvesta"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1331
+msgid "Otsi"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1341
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1348
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1357
+msgid "Kleebi"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1365
+msgid "Kustuta"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1372
+msgid "Muuda"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1381
+msgid "Uuenda"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1388
+msgid "Impordi"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1394
+msgid "Suured ikoonid"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1395
+msgid "Väiksed ikoonid"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1396
+msgid "Detailne vaade"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1519
+msgid "Valitud pole &uuml;htegi objekti!"
+msgstr ""
+
