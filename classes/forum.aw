@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.14 2001/11/15 12:08:00 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.15 2001/11/15 12:10:10 kristo Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -293,7 +293,7 @@ class forum extends aw_template
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
 			"comment" => $args["comment"],
-			//"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"]))),
+			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"])),
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
 		));

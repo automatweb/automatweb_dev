@@ -5,7 +5,7 @@
 <div align="left">{VAR:LC_MSGBOARD_SUBJECT}</div>
 </td>
 <td class="fgtext">
-<input type="text" name="topic" size="40">
+<input type="text" name="topic" size="40" value='{VAR:name}'>
 </td>
 </tr>
 <tr>
@@ -13,8 +13,7 @@
 {VAR:LC_MSGBOARD_COMMENTARY}
 </td>
 <td class="fgtext">
-<textarea name="comment" cols="40" rows="5">
-</textarea>
+<textarea name="comment" cols="40" rows="5">{VAR:comment}</textarea>
 </td>
 </tr>
 <tr>
