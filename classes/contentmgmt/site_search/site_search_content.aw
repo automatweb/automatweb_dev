@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.39 2005/03/03 12:38:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.40 2005/03/08 14:35:20 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -89,7 +89,7 @@ class site_search_content extends class_base
 		);
 
 		$this->limit_opts = array(
-			"0" => "K&otilde;ik", 
+			"0" => t("K&otilde;ik"), 
 			"20" => "20", 
 			"50" => "50",
 			"100" => "100"
@@ -104,16 +104,16 @@ class site_search_content extends class_base
 		{
 			case "default_order":
 				$prop["options"] = array(
-					S_ORD_TIME => "Muutmise kuup&auml;eva j&auml;rgi",
-					S_ORD_TITLE => "Pealkirja j&auml;rgi",
-					S_ORD_CONTENT => "Sisu j&auml;rgi"
+					S_ORD_TIME => t("Muutmise kuup&auml;eva j&auml;rgi"),
+					S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
+					S_ORD_CONTENT => t("Sisu j&auml;rgi")
 				);
 				break;
 				
 			case "static_gen_link":
 				$prop['value'] = html::href(array(
 					"url" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
-					"caption" => "uuenda staatiline koopia"
+					"caption" => t("uuenda staatiline koopia")
 				));
 				break;
 
@@ -135,9 +135,9 @@ class site_search_content extends class_base
 			case "default_search_opt":
 				$prop["options"] = array(
 					0 => "--",
-					S_OPT_ANY_WORD => "&Uuml;ksk&otilde;ik milline s&otilde;na",
-					S_OPT_ALL_WORDS => "K&otilde;ik s&otilde;nad",
-					S_OPT_PHRASE => "Fraas"
+					S_OPT_ANY_WORD => t("&Uuml;ksk&otilde;ik milline s&otilde;na"),
+					S_OPT_ALL_WORDS => t("K&otilde;ik s&otilde;nad"),
+					S_OPT_PHRASE => t("Fraas")
 				);
 				break;
 		};
@@ -316,6 +316,29 @@ class site_search_content extends class_base
 		return $rret;
 	}
 
+	function _init_trans()
+	{
+		if (isset($GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_ANY_WORD"]))
+		{
+			$this->search_opts[S_OPT_ANY_WORD] = $GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_ANY_WORD"];
+		}
+
+		if (isset($GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_ALL_WORDS"]))
+		{
+			$this->search_opts[S_OPT_ALL_WORDS] = $GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_ALL_WORDS"];
+		}
+
+		if (isset($GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_PHRASE"]))
+		{
+			$this->search_opts[S_OPT_PHRASE] = $GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_S_OPT_PHRASE"];
+		}
+
+		if (isset($GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_LIMIT_ALL"]))
+		{
+			$this->limit_opts[0] = $GLOBALS["lc_search_conf"]["LC_SEARCH_CONF_LIMIT_ALL"];
+		}
+	}
+
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
@@ -324,6 +347,8 @@ class site_search_content extends class_base
 		$ob = new object($id);
 		$this->read_template("search.tpl");
 		lc_site_load("search_conf", $this);
+
+		$this->_init_trans();
 
 		$gr = $this->get_groups($ob);
 		if (empty($group))
