@@ -77,7 +77,11 @@
 							{VAR:productParsed}
 
 							<!-- SUB: cannotSetQuantity -->
-								<td class="listItemSec" >{VAR:quantity}&nbsp;</td>								
+                        <td class="listItemSec" valign='middle'>
+									<input id="koguseId{VAR:i}" name='quantity[{VAR:i}]' type="text" class="formBox" size="2" value='{VAR:quantity}'>
+									<!-- a href="javascript:void()" onClick='addOne(document.getElementById("koguseId{VAR:i}"))'><img src="img/sym_inc.gif" width="7" height="7" border="0"></a>
+									<a href="javascript:void()" onClick='subtractOne(document.getElementById("koguseId{VAR:i}"))'><img src="img/sym_deg.gif" width="7" height="7" border="0"></a -->
+                            <input type='hidden' name='productId[{VAR:i}]' value='{VAR:product_code}'></td>
 							<!-- END SUB: cannotSetQuantity -->
 
 							<!-- SUB: canSetQuantity -->
@@ -94,11 +98,10 @@
 									<img src="img/karu.gif" width="13" height="10" border="0"></td -->
 								<td align='center' class='listItemSec' valign='middle'><input type='checkbox' name='valitud[{VAR:i}]' id='valitud{VAR:i}' value='1'></td>
 									<!-- END SUB: karu -->
-									<!-- SUB: karupole -->
-									<td align='center' class='listItemSec' valign='middle'>&nbsp;<!-- input type='checkbox' name='valitud[{VAR:i}]' value='1' --></td>
-                        <!-- td align="center" class="listItemSec">
-									<img src="img/karu_pole.gif" width="13" height="10" border="0"></td -->
-									<!-- END SUB: karupole -->
+								
+								<!-- SUB: karupole -->
+								<td align='center' class='listItemSec' valign='middle'><input type='checkbox' name='valitud[{VAR:i}]' id='valitud{VAR:i}' value='1'></td>
+								<!-- END SUB: karupole -->
 
 							<tr>
 								<td colspan=10 align='right'><input class='formButton' type='submit' value='{VAR:trans_add_to_cart}'></td>
@@ -106,7 +109,6 @@
                       <tr>
 							 	<td height=30 class="listItem" colspan="10" align='middle'>
 									<input type='hidden' id='newasendustooted' value='{VAR:asendustooted}'>
-									<input type='hidden' id='newotsitunnus' value='{VAR:otsitunnus}'>
 									<input type='hidden' id='newkogus' value='{VAR:kogus}'>
 									<input type='hidden' id='newlaos' value='{VAR:laos}'>
 									<input type='hidden' id='newtootekood' value='{VAR:tootekood}'>

@@ -9,7 +9,7 @@
 	function fillSearchForm(){
 		//hiddenSearchForm
 		document.hiddenSearchForm.tootekood.value=document.getElementById('newtootekood').value;
-		document.hiddenSearchForm.otsitunnus.value=document.getElementById('newotsitunnus').value;
+		//document.hiddenSearchForm.otsitunnus.value=document.getElementById('newotsitunnus').value;
 		document.hiddenSearchForm.kogus.value=document.getElementById('newkogus').value;
 		document.hiddenSearchForm.asendustooted.value=document.getElementById('newasendustooted').value;
 		document.hiddenSearchForm.laos.value=document.getElementById('newlaos').value;
@@ -19,7 +19,7 @@
 		
 		//search form
 		document.searchForm.tootekood.value=document.getElementById('newtootekood').value;
-		document.searchForm.otsitunnus.value=document.getElementById('newotsitunnus').value;
+		//document.searchForm.otsitunnus.value=document.getElementById('newotsitunnus').value;
 		document.searchForm.kogus.value=document.getElementById('newkogus').value;
 		document.searchForm.asendustooted.checked=(document.getElementById('newasendustooted').value==1)?true:false;
 		document.searchForm.laos.checked=(document.getElementById('newlaos').value==1)?true:false;
@@ -29,7 +29,7 @@
 	}
 
 	function submitSearchFormExtended(product_code, quantity){
-		document.hiddenSearchForm.otsitunnus.value='';
+		//document.hiddenSearchForm.otsitunnus.value='';
 		document.hiddenSearchForm.laos.checked=false;
 		document.hiddenSearchForm.asendustooted.checked=false;
 		document.hiddenSearchForm.osaline.checked=false;
@@ -39,7 +39,7 @@
 	}
 </script>
 <form name='hiddenSearchForm' action='index.aw' method='POST'>
-<input type='hidden' name='otsitunnus'>
+<!-- input type='hidden' name='otsitunnus' -->
 <input type='hidden' name='tootekood'>
 <input type='hidden' name='laos'>
 <input type='hidden' name='kogus'>
@@ -67,23 +67,23 @@
 {VAR:trans_dont_search_replacements}&nbsp;&nbsp;</td>
                           </tr>
                         <tr>
-                          <td class=formText nowrap>{VAR:trans_searchcode}</td>
+                          <td class=formText nowrap>{VAR:trans_choose_quantity}</td>
                           <td nowrap class=formCheck>
 								  	<input type='checkbox' name='osaline' value='1' id='osaline'>
 {VAR:trans_search_partial_code}</td>
                          </tr>
                         <tr>
-                          <td nowrap><input class=formBox size=25 name="otsitunnus" id='otsitunnus'></td>
+                          <td nowrap><input name="kogus" class=formBox id="kogus" size=25><!-- input class=formBox size=25 name="otsitunnus" id='otsitunnus' --></td>
                           <td nowrap class=formCheck>
 								  	<input type='checkbox' name='laos' value='1' id='laos'>
 {VAR:trans_search_only_instock}</td>
                         </tr>
                         <tr>
-                          <td class=formText nowrap>{VAR:trans_choose_quantity}</td>
+                          <td class=formText nowrap><!-- i>{VAR:trans_choose_quantity}</i --></td>
                           <td>&nbsp;</td>
                         </tr>
                         <tr>
-                          <td nowrap><input name="kogus" class=formBox id="kogus" size=25>&nbsp;&nbsp;</td>
+                          <td nowrap>&nbsp;&nbsp;</td>
 									<td colspan=2>
 										<table cellpadding=0 cellspacing=0 border=0 width="100%">
 											<tr>
