@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="calendar">
+		<function name="month">
+			<arguments>
+				<optional name="date"/>
+			</arguments>
+		</function>
+	</class>
+</orb>
+		
