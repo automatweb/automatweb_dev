@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.102 2003/05/12 16:37:12 duke Exp $
+// $Id: class_base.aw,v 2.103 2003/05/16 09:51:09 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1269,7 +1269,8 @@ class class_base extends aw_template
 					};
 				};
 
-				if (($property["type"] != "text") && ($property["type"] != "callback") && ($property["store"] != "no"))
+				//if (($property["type"] != "text") && ($property["type"] != "callback") && ($property["store"] != "no"))
+				if (($property["type"] != "callback") && ($property["store"] != "no"))
 				{
 					$realfields[$property["table"]][$_field] = $fval;
 				};
