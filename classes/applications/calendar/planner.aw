@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.5 2004/08/26 13:47:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.6 2004/08/30 12:59:37 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -77,11 +77,41 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property confirm_vacancies type=checkbox group=create_vacancies store=no no_caption=1 
 	@caption Kinnita vabad ajad
 
+	@default group=views
+	@default store=no
+	
+	@property search type=hidden store=no
+	
+	@property event_search_name type=textbox
+	@caption Sündmuse nimi
+	
+	@property event_search_content type=textbox
+	@caption Sündmuse sisu
+	
+	@property event_search_comment type=textbox
+	@caption Sündmuse kommentaar
+	
+	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical
+	@caption Sündmuse tüüp
+	
+	@property event_search_done type=checkbox
+	@caption Tehtud sündmus
+	
+	@property event_search_all type=checkbox
+	@caption Otsi kõigist kalendritest
+	
+	@property event_search_button type=submit
+	@caption Otsi
+
+	@property event_search_results_table type=table store=no no_caption=1
+	
+	
+	
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=Üldine parent=general
 	@groupinfo advanced caption=Sisuseaded parent=general
 	@groupinfo vac_settings caption="Vabad ajad" parent=general
-	@groupinfo views caption=Sündmused submit=no
+	@groupinfo views caption=Sündmused submit=no submit_method=get
 	@groupinfo vacancies caption="Vabad ajad" 
 	@groupinfo create_events caption="Sündmuste lisamine" parent=vacancies
 	@groupinfo create_vacancies caption="Vabad ajad" parent=vacancies
@@ -269,6 +299,10 @@ class planner extends class_base
 				break;
 
 			case "calendar_contents":
+				if($arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
 				$this->gen_calendar_contents($arr);
 				break;
 
@@ -279,6 +313,71 @@ class planner extends class_base
 			case "create_event_table":
 				$this->create_event_table($arr);
 				break;
+						case "event_search_name":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			
+			case "event_search_content":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_comment":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_type":
+				
+				$data["options"] = array(
+					CL_CRM_OFFER => "Pakkumine",
+					CL_CRM_CALL => "Kõne",
+					CL_TASK => "Toimetus",
+					CL_CRM_MEETING => "Kohtumine",				
+				);
+				
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_done":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_all":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_button":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "event_search_results_table":
+				if($arr["request"]["search"] == 1 &&($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
+				{
+					$results = $this->do_event_search($arr["request"]);
+					$this->do_events_results_table($arr, $results);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "search":
+				$data["value"] = $arr["request"]["search"];
+			break;
 
 		}
 		return $retval;
@@ -1216,6 +1315,13 @@ class planner extends class_base
 			$dt = date("d-m-Y",time());
 
 			$toolbar->add_button(array(
+				"name" => "search",
+				"tooltip" => "Otsi kalendri sündmust",
+				"url" => aw_url_change_var(array("search" => 1)),
+				"img" => "search.gif",
+			));
+			
+			$toolbar->add_button(array(
 				"name" => "today",
 				"tooltip" => "Täna",
 				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day","date" => $dt)) . "#today",
@@ -1733,8 +1839,97 @@ class planner extends class_base
 			"field" => "start1",
 		));
 		*/
-
 	}
 
+	function do_events_results_table(&$arr, &$data)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "name",
+			"caption" => "Sündmuse nimi",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "type",
+			"caption" => "Sündmuse tüüp",
+			"sortable" => 1,
+		));
+			
+		$table->define_field(array(
+			"name" => "date",
+			"caption" => "Kuupäev",
+			"sortable" => "1",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.y",
+			"align" => "center",
+		));
+		
+		$classes = aw_ini_get("classes");		
+		foreach ($data->arr() as $result)
+		{
+			$table->define_data(array(
+				"name" => html::get_change_url($result->id(), array(), $result->name()),
+				"type" => $classes[$result->class_id()]["name"],
+				"date" => $result->prop("start1"),
+			));
+		}
+	}
+	
+	/**
+		@attrib name=do_event_search
+	**/
+	function do_event_search($arr)
+	{
+		//IF search from all calenders
+		if($arr["event_search_all"])
+		{
+			$calender_list = new object_list(array(
+				"class_id" => CL_PLANNER,
+			));
+			
+			$list = array();
+			foreach ($calender_list->arr() as $cal)
+			{
+				$list = $list + $this->get_event_list(array(
+					"id" => $cal->id(),
+					"start" => 1,
+				));
+			}
+		}
+		else
+		{
+			$list = $this->get_event_list(array(
+				"id" => $arr["id"],
+				"start" => 1,
+			));
+		}
+		
+		$params = array(
+			"oid" => array_keys($list),
+			"name" => "%".$arr["event_search_name"]."%",
+			"comment" => "%".$arr["event_search_comment"]."%",
+			"content" => "%".$arr["event_search_content"]."%",
+		);
+		
+		if($arr["event_search_done"])
+		{
+			$params["is_done"] = OBJ_IS_DONE;
+		}
+		
+		if($arr["event_search_type"])
+		{
+			$params["class_id"] = $arr["event_search_type"];
+		}
+		else
+		{
+			$params["class_id"] = $this->event_entry_classes;
+		} 
+
+		$event_ol = new object_list($params);
+		return $event_ol;
+	}
 };
 ?>
