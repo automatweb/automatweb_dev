@@ -10,13 +10,13 @@
 <table border="0" cellspacing="2" cellpadding="0">
 <tr>
 <td class="header1" align="center">
-<strong><a href="{VAR:self}?class=planner&action=change&id={VAR:id}&disp={VAR:disp}&date={VAR:prev}">&lt;&lt;</a></strong>
+<strong><a href="{VAR:self}?{VAR:prev}">&lt;&lt;</a></strong>
 </td>
 <td class="header1">&nbsp;</td>
 <td class="header1" align="center"><strong>{VAR:caption}</strong></td>
 <td class="header1">&nbsp;</td>
 <td class="header1" align="center">
-<strong><a href="{VAR:self}?class=planner&action=change&id={VAR:id}&disp={VAR:disp}&date={VAR:next}">&gt;&gt;</a></strong>
+<strong><a href="{VAR:self}?{VAR:next}">&gt;&gt;</a></strong>
 </td>
 </tr>
 <form method="POST" action="reforb.{VAR:ext}">
