@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.31 2005/01/05 11:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.32 2005/01/05 11:42:11 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -14,10 +14,10 @@
 @caption Initsialiseeri objekt
 
 @property form_type type=select newonly=1 method=serialize field=meta
-@caption Vormi tp
+@caption Vormi t&uump;&uump;p
 
 @property form_type_value type=text editonly=1
-@caption Vormi tp
+@caption Vormi t&uuml;&uuml;p
 
 @property def_name type=textbox method=serialize field=meta
 @caption Saatja nimi
@@ -26,10 +26,10 @@
 @caption Saatja e-mail
 
 @property obj_name type=select multiple=1 size=3 field=meta method=serialize
-@caption Millised sisestatud v�rtused pannakse nimeks
+@caption Millised sisestatud v&auml;&auml;rtused pannakse nimeks
 
 @property redirect type=textbox field=meta method=serialize
-@caption Kuhu suunata peale t�tmist
+@caption Kuhu suunata peale t&auml;tmist
 
 ------------- end: general -------------
 
@@ -151,7 +151,7 @@
 @caption Meiliaadress
 
 @reltype OBJECT_TYPE value=6 clid=CL_OBJECT_TYPE
-@caption Objekti tp
+@caption Objekti t&uuml;&uuml;p
 
 @reltype REGISTER value=7 clid=CL_REGISTER
 @caption Register
@@ -169,10 +169,10 @@
 @caption Objektide eksport
 
 @reltype CAL_REG_FORM value=12 clid=CL_CALENDAR_REGISTRATION_FORM
-@caption Sndmuse vorm
+@caption S&uuml;ndmuse vorm
 
 @reltype CAL_REG_FORM_CONF value=13 clid=CL_CALENDAR_REGISTRATION_FORM_CONF
-@caption Sndmuse vormi konf
+@caption S&uuml;ndmuse vormi konf
 
 */
 
