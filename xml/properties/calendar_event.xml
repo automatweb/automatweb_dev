@@ -256,6 +256,29 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SEEALSO</reltype>
       </property>
+      <property>
+            <name>recurrence</name>
+            <group>recurrence</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>start</num_0>
+                  <num_1>recur_type</num_1>
+                  <num_2>end</num_2>
+                  <num_3>weekdays</num_3>
+                  <num_4>interval_daily</num_4>
+                  <num_5>interval_weekly</num_5>
+                  <num_6>interval_montly</num_6>
+                  <num_7>interval_yearly</num_7>
+                  <num_8></num_8>
+            </props>
+            <store>no</store>
+            <caption>Kordused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -264,6 +287,9 @@
             <projects>
                   <caption>Projektid</caption>
             </projects>
+            <recurrence>
+                  <caption>Kordumine</caption>
+            </recurrence>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -283,6 +309,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Vaata lisaks</caption>
             </SEEALSO>
+            <RECURRENCE>
+                  <value>3</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
       </reltypes>
 </properties>
 
