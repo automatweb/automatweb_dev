@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.57 2002/02/05 02:33:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.58 2002/02/12 10:45:21 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -9,6 +9,7 @@ define("AW_VERSION","2.0.0");
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
+
 $pi = "";
 
 if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
@@ -19,6 +20,9 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 {
 	$pi .= "?".$QUERY_STRING;
 };
+
+global $uid;
+$uid1 = $HTTP_SESSION_VARS["uid"];
 
 if ($pi) 
 {
@@ -46,6 +50,12 @@ if (isset($__udat))
 	parse_str($ret,$AW_GET_VARS);
 	extract($AW_GET_VARS);
 }
+
+// NEVER EVER accept and UID argument from url
+if ($uid != $uid1)
+{
+	$uid = $uid1;
+};
 
 
 // right. here comes the error handler! badaboom!
@@ -705,4 +715,5 @@ $smtp_server = "www.kirjastus.ee";
 // for CL_BROTHER_DOCUMENT 
 define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
 
+$error_log_site = "aw.struktuur.ee";
 ?>
