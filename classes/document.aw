@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.146 2003/01/24 12:58:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.147 2003/01/24 13:41:52 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -136,8 +136,8 @@ class document extends aw_template
 			};
 		};
 		$row = $this->get_menu($parent);
-		$sections = unserialize($row["sss"]);
-		$periods = unserialize($row["pers"]);
+		$sections = $row["meta"]["sss"];
+		$periods = $row["meta"]["pers"];
 		
 		if (is_array($sections))
 		{
@@ -721,9 +721,17 @@ class document extends aw_template
 		// this is useless. do we use that code anywhere?
 		if (!(strpos($doc["content"], "#board_last5#") === false))
 		{
-			$mb = get_instance("msgboard");
+			$mb = get_instance("forum");
 			$doc["content"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["content"]);
 		}
+		
+		// this is useless. do we use that code anywhere?
+		if (!(strpos($doc["lead"], "#board_last5#") === false))
+		{
+			$mb = get_instance("forum");
+			$doc["lead"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["lead"]);
+		}
+
 
 		// used in am - shows all documents whose author field == current documents title field
 		if (!(strpos($doc["content"], "#autori_dokumendid#") === false))
