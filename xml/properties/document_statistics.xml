@@ -54,6 +54,35 @@
             <method>serialize</method>
             <caption>Milliseid perioode kasutada</caption>
       </property>
+      <property>
+            <name>mail_to</name>
+            <table>objects</table>
+            <group>mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meiliaadressid</caption>
+      </property>
+      <property>
+            <name>mail_subj</name>
+            <table>objects</table>
+            <group>mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirja teema</caption>
+      </property>
+      <property>
+            <name>mail_content</name>
+            <table>objects</table>
+            <group>mail</group>
+            <type>textarea</type>
+            <rows>25</rows>
+            <cols>70</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirja sisu</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DOCUMENT_STATISTICS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -63,6 +92,9 @@
             <folders>
                   <caption>Kataloogid ja perioodid</caption>
             </folders>
+            <mail>
+                  <caption>E-mail</caption>
+            </mail>
       </groupinfo>
       <reltypes>
             <SHOW_FOLDER>
