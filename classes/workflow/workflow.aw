@@ -136,39 +136,8 @@ class workflow extends class_base
 			return PROP_ERROR;
 		};
 
-		//$this->load_objects();
 		return $retval;
 
-	}
-
-	function load_objects()
-	{
-
-		// retrieve the bloody objects
-		$this->get_objects_by_class(array(
-			"class" => array(CL_ACTION,CL_ACTOR,CL_PROCESS),
-			"active" => 1,
-		));
-
-		$this->actions = $this->actors = $this->processes = array();
-
-		while($row = $this->db_next())
-		{
-			switch($row["class_id"])
-			{
-				case CL_ACTION:
-					$this->actions[$row["oid"]] = $row;
-					break;
-				
-				case CL_ACTOR:
-					$this->actors[$row["oid"]] = $row;
-					break;
-				
-				case CL_PROCESS:
-					$this->processes[$row["oid"]] = $row;
-					break;
-			};
-		}
 	}
 
 	function satisfy_any($args = array())
@@ -219,21 +188,9 @@ class workflow extends class_base
 			$data["error"] = "Tegijate rootmenüü on valimata!";
 			return PROP_ERROR;
 		};
-
-		// I need an iframe with tree on the left
-		// and a table with objects to the right
-
-		$treeview = get_instance("vcl/treeview");
-		$tconfig = $this->treeview_conf["meta"];
-		$tconfig["root"] = $actor_rootmenu["oid"];
-		$tconfig["clid"] = array(CL_PSEUDO,CL_ACTOR);
-
-		$thtml = $treeview->generate(array(
-			"config" => $tconfig,
-			"callback_modify_node" => array(&$this,"treeview_modify_actor_node"),
-			"linktarget" => "_self",
-		));
-
+	
+		$this->clidlist = array(CL_PSEUDO,CL_ACTOR);	
+		$thtml = $this->_build_tree($actor_rootmenu["oid"]);
 
 		load_vcl("table");
 		$this->t = new aw_table(array("xml_def" => "workflow/actor_list"));
@@ -270,20 +227,8 @@ class workflow extends class_base
 			return PROP_ERROR;
 		};
 
-		// I need an iframe with tree on the left
-		// and a table with objects to the right
-
-		$treeview = get_instance("vcl/treeview");
-		$tconfig = $this->treeview_conf["meta"];
-
-		$tconfig["root"] = $action_rootmenu["oid"];
-		$tconfig["clid"] = array(CL_PSEUDO,CL_ACTION);
-
-		$thtml = $treeview->generate(array(
-			"config" => $tconfig,
-			"callback_modify_node" => array(&$this,"treeview_modify_action_node"),
-			"linktarget" => "_self",
-		));
+		$this->clidlist = array(CL_PSEUDO,CL_ACTION);
+		$thtml = $this->_build_tree($action_rootmenu["oid"]);
 
 		load_vcl("table");
 		$this->t = new aw_table(array("xml_def" => "workflow/action_list"));
@@ -335,45 +280,34 @@ class workflow extends class_base
 			return PROP_ERROR;
 		};
 
-		// I need an iframe with tree on the left
-		// and a table with objects to the right
-		$treeview = get_instance("vcl/treeview");
-		$tconfig = $this->treeview_conf["meta"];
-		$tconfig["root"] = $entity_rootmenu["oid"];
-		$this->entity_rootmenu_id = $entity_rootmenu["oid"];
-		$tconfig["clid"] = array(CL_PSEUDO,CL_ENTITY);
 
-		$this->entity_parent_list = array();
+		$this->entity_rootmenu_id = $entity_rootmenu["oid"];
 
 		if (!empty($args["request"]["treeroot"]))
 		{
-			$this->treeroot_obj = $this->get_object(array(
-				"oid" => $args["request"]["treeroot"],
-			));
-			$treeroot_clid = $this->treeroot_obj["class_id"];
-			$this->treeroot = $this->treeroot_obj["oid"];
+			$this->req_treeroot = $args["request"]["treeroot"];
 		}
 		else
 		{
-			$this->treeroot = 0;
-			$treeroot_clid = 0;
-			$this->treeroot_obj = array();
+			$this->req_treeroot = $entity_rootmenu["oid"];
 		};
-	
-		$this->treeurl = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_entities"));
-
-		$thtml = $treeview->generate(array(
-			"config" => $tconfig,
-			"callback_modify_node" => array(&$this,"treeview_modify_entity_node"),
-			"linktarget" => "_self",
-			"shownode" => $this->treeroot,
+			
+		$this->treeroot_obj = $this->get_object(array(
+			"oid" => $this->req_treeroot,
 		));
+
+		$treeroot_clid = $this->treeroot_obj["class_id"];
+		$this->treeurl = $this->mk_my_orb("view",array(
+			"id" => $args["obj"]["oid"],
+			"group" => "show_entities",
+		));
+		$this->clidlist = array(CL_PSEUDO,CL_ENTITY);
+		$this->parent_list = array();
+
+		$thtml = $this->_build_tree($entity_rootmenu["oid"]);
 
 		load_vcl("table");
 		$this->t = new aw_table(array("xml_def" => "workflow/entity_list"));
-
-		// oh god dammit, do I really have to load _all_ the objects?
-		// I guess so
 
 		$types = array();
 
@@ -400,39 +334,28 @@ class workflow extends class_base
 			};
 		};
 
-		// create a list of entity types
-		if (sizeof($this->entity_parent_list) > 0)
+		if ($treeroot_clid == CL_ENTITY)
 		{
-			if ($treeroot_clid == CL_ENTITY)
-			{
-				$_tmp = $this->get_object(array(
-					"oid" => $this->treeroot,
-				));
+			$_tmp = $this->get_object(array(
+				"oid" => $this->req_treeroot,
+			));
 
-				$types[$this->treeroot] = $_tmp["name"];
+			$types[$this->req_treeroot] = $_tmp["name"];
+
+			// here I have to query the entities by their respective type...
+			// oh man .. how do I do that?
+		}
+		else
+		{
+			$_entities = $this->get_objects_below(array(
+				"parent" => $this->parent_list,
+				"class" => CL_ENTITY,
+			));
+
+			foreach($_entities as $key => $val)
+			{
+				$types[$val["oid"]] = $val["name"];
 			}
-			else
-			{
-				// yeah, tahan teen parenti integeriks, tahan teen arrayks,
-				// tahan kuulan transistorit, tahan söön kisselli
-				if ($treeroot_clid == CL_PSEUDO)
-				{
-					$parent = $this->treeroot_obj["oid"];
-				}
-				else
-				{
-					$parent = $this->entity_parent_list;
-				};
-				$_entities = $this->get_objects_below(array(
-					"parent" => $parent,
-					"class" => CL_ENTITY,
-				));
-
-				foreach($_entities as $key => $val)
-				{
-					$types[$val["oid"]] = $val["name"];
-				}
-			};
 		};
 
 		$typelist = array_keys($types);
@@ -459,7 +382,7 @@ class workflow extends class_base
 			{
 
 				$typ = $entity2type[$row["oid"]];
-				if ($treeroot_clid == CL_ENTITY && ($typ != $this->treeroot))
+				if ($treeroot_clid == CL_ENTITY && ($typ != $this->req_treeroot))
 				{
 					continue;
 				};
@@ -468,7 +391,6 @@ class workflow extends class_base
 				{
 					continue;
 				};
-				
 
 				// now, for each object I also have to figure out which config form it uses
 				// or in this context entity type
@@ -603,6 +525,100 @@ class workflow extends class_base
 		return array($data,$tmp);
 	}
 
+	function _build_tree($parent)
+	{
+		$this->tree = array();
+		$this->oidlist = array();
+
+		$row = $this->get_object(array(
+			"oid" => $parent,
+		));
+
+		if ($this->req_treeroot == $parent)
+		{
+			$this->parent_list[] = $parent;
+			$this->under_treeroot = true;
+			$this->treeroot = $parent;
+		}
+		else
+		{
+			$this->under_treeroot = false;
+		};
+	
+		$row["link"] = $this->treeurl;
+		$this->id = 1;
+		/*
+		if (is_array($this->items))
+		{
+			foreach($this->items as $key => $val)
+			{
+				$this->tree[0][$this->id] = $val;
+				$this->id++;
+			};
+		};
+		*/
+		$this->tree[0][$this->id] = $row;
+		$this->parent2id = array($parent => $this->id);
+		$this->ic = get_instance("icons");
+		$this->_rec_build_tree($parent);
+		
+		$treeview = get_instance("vcl/treeview");
+		return $treeview->create_tree_from_array(array(
+			"parent" => 0,
+			"data" => $this->tree,
+			"shownode" => $this->treeroot,
+			"linktarget" => "_self",
+		));
+
+	}
+	
+	function _rec_build_tree($parent)
+	{
+		$_objlist = $this->get_objects_by_class(array(
+			"parent" => $parent,
+			"class" => $this->clidlist,
+			"fields" => "oid,name,parent,class_id",
+		));
+
+                while ($row = $this->db_next())
+                {
+                        $row["name"] = str_replace("\"","&quot;", $row["name"]);
+			$this->id++;
+			$this->parent2id[$row["oid"]] = $this->id;
+			$pid = $this->parent2id[$row["parent"]];
+
+			$row["link"] = $this->treeurl . "&treeroot=" . $row["oid"];
+			if ($row["oid"] == $this->req_treeroot)
+			{
+				$row["name"] = "<span style='background: #ccc'>" . $row["name"] . "</span>";
+			};
+
+			if ($row["oid"] == $this->req_treeroot)
+			{
+				$this->treeroot = $this->id;
+				$this->under_treeroot = true;
+			};
+
+			if ($this->under_treeroot && ($row["class_id"] == CL_PSEUDO))
+			{
+				$this->parent_list[] = $row["oid"];
+			};
+
+			$row["icon_url"] = ($row["class_id"] == CL_PSEUDO) ? "" : $this->ic->get_icon_url($row["class_id"],"");
+
+                        $this->tree[$pid][$this->id] = $row;
+			$this->oidlist[] = $row["oid"];
+                        $this->save_handle();
+                        $this->_rec_build_tree($row["oid"]);
+			if ($row["oid"] == $this->req_treeroot)
+			{
+				$this->under_treeroot = false;
+			};
+                        $this->restore_handle();
+                }
+
+	}	
+
 	function callback_add_entity(&$data)
 	{
 		// load the entity
@@ -669,7 +685,6 @@ class workflow extends class_base
 	function callback_entity_log($args = array())
 	{
 		$data = array();
-		$this->load_objects();
 		$data["type"] = "text";
 		$data["caption"] = "Log";
 		$oid = $args["request"]["oid"];
@@ -679,6 +694,12 @@ class workflow extends class_base
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$this->satisfy_any(array(
+				"actor" => $row["actor_id"],
+				"action" => $row["action_id"],
+				"process" => $row["process_id"],
+			));
+
 			$this->t->define_data(array(
 				"tm" => $this->time2date($row["tm"]),
 				"actor" => $this->actors[$row["actor_id"]]["name"],
@@ -692,34 +713,6 @@ class workflow extends class_base
 
 	}
 
-	////
-	// !Modifies the nodes of the entity tree if needed
-	function treeview_modify_entity_node($args = array())
-	{
-		if ($args["class_id"] == CL_PSEUDO)
-		{
-			$this->entity_parent_list[] = $args["oid"];
-		};
-		$data = &$args;
-		if ($args["oid"] == $this->entity_rootmenu_id)
-		{
-			$data["link"] = $this->treeurl;
-		}
-		else
-		if ($args["class_id"] == CL_PSEUDO || $args["class_id"] == CL_ENTITY)
-		{
-			$data["link"] = $this->treeurl . "&treeroot=" . $args["oid"];
-			if ($args["oid"] == $this->treeroot)
-			{
-				$data["name"] = "<span style='background: #ccc'>" . $data["name"] . "</span>";
-			};
-		}
-		else
-		{
-			$data["link"] = "#";
-		};
-	}
-	
 	function callback_show_processes($args = array())
 	{
 		// transparent redirect to the "add new entity" form
@@ -753,72 +746,57 @@ class workflow extends class_base
 			$data["error"] = "Protsesside rootmenüü on valimata!";
 			return PROP_ERROR;
 		};
-
-		// I need an iframe with tree on the left
-		// and a table with objects to the right
-
-		$treeview = get_instance("vcl/treeview");
-		$tconfig = $this->treeview_conf["meta"];
-		$tconfig["root"] = $process_rootmenu["oid"];
-		$this->process_rootmenu_id = $tconfig["root"];
-		$tconfig["clid"] = array(CL_PSEUDO);
 		
 		if (!empty($args["request"]["treeroot"]))
 		{
-			$this->treeroot_obj = $this->get_object(array(
-				"oid" => $args["request"]["treeroot"],
-			));
-			$this->treeroot = $this->treeroot_obj["oid"];
+			$this->req_treeroot = $args["request"]["treeroot"];
 		}
 		else
 		{
-			$this->treeroot = 0;
+			$this->req_treeroot = $process_rootmenu["oid"];
 		};
 
-		$this->treeurl = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes"));
-
-		$thtml = $treeview->generate(array(
-			"config" => $tconfig,
-			"callback_modify_node" => array(&$this,"treeview_modify_process_node"),
-			"linktarget" => "_self",
-			#"shownode" => $this->treeroot,
+		$this->treeroot_obj = $this->get_object(array(
+			"oid" => $this->req_treeroot,
 		));
 
+		$treeroot_clid = $this->treeroot_obj["class_id"];
+		$this->treeurl = $this->mk_my_orb("view",array(
+			"id" => $args["obj"]["oid"],
+			"group" => "show_processes",
+		));
+
+		$this->clidlist = array(CL_PSEUDO);
+		$this->parent_list = array();
+
+		$this->items = array();
+		$this->items[] = array("name" => "Põhiprotsessid");
+		$this->items[] = array("name" => "Tugiprotsessid");
+		
+			
+		$thtml = $this->_build_tree($process_rootmenu["oid"]);
 
 		load_vcl("table");
 		$this->t = new aw_table(array("xml_def" => "workflow/process_list"));
 		
-		// generate a list of all entities below this folder
-		if (sizeof($this->process_parent_list) > 0)
+		$processes = $this->get_objects_below(array(
+			"parent" => $this->parent_list,
+			"class" => CL_PROCESS,
+		));
+		
+		$ed_url = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","subgroup" => "mod_process"));
+
+
+		foreach($processes as $key => $val)
 		{
-			if ($this->treeroot)
-			{
-				$parent = $this->treeroot;
-			}
-			else
-			{
-				$parent = $this->process_parent_list;
-			};
-			$processes = $this->get_objects_below(array(
-				"parent" => $parent,
-				"class" => CL_PROCESS,
+			$ra = $val["meta"]["root_action"];
+			$this->satisfy_any(array("action" => $ra));
+			$val["root_action"] = $this->actions[$ra]["name"];
+			$val["name"] = html::href(array(
+				"url" => $ed_url . "&oid=$val[oid]",
+				"caption" => $val["name"],
 			));
-			
-			$ed_url = $this->mk_my_orb("view",array("id" => $args["obj"]["oid"],"group" => "show_processes","subgroup" => "mod_process"));
-
-
-			foreach($processes as $key => $val)
-			{
-				$ra = $val["meta"]["root_action"];
-				$this->satisfy_any(array("action" => $ra));
-				$val["root_action"] = $this->actions[$ra]["name"];
-				$val["name"] = html::href(array(
-					"url" => $ed_url . "&oid=$val[oid]",
-					"caption" => $val["name"],
-				));
-				$this->t->define_data($val);
-			}
-
+			$this->t->define_data($val);
 		}
 		
 		$tb = get_instance("toolbar");
@@ -846,54 +824,6 @@ class workflow extends class_base
 		return array($data);
 	}
 	
-	function treeview_modify_process_node($args = array())
-	{
-		if ($args["class_id"] == CL_PSEUDO)
-		{
-			$this->process_parent_list[] = $args["oid"];
-		};
-		$data = &$args;
-		if ($args["class_id"] == CL_PSEUDO)
-		{
-			if ($args["oid"] == $this->process_rootmenu_id)
-			{
-				$data["link"] = $this->treeurl;
-			}
-			else
-			{
-				$data["link"] = $this->treeurl . "&treeroot=" . $args["oid"];
-			};
-			if ($args["oid"] == $this->treeroot)
-			{
-				$data["name"] = "<span style='background: #ccc'>" . $data["name"] . "</span>";
-			};
-		}
-		else
-		{
-			$data["link"] = "#";
-		};
-	}
-	
-	function treeview_modify_actor_node($args = array())
-	{
-		if ($args["class_id"] == CL_PSEUDO)
-		{
-			$this->actor_parent_list[] = $args["oid"];
-		};
-		$data = &$args;
-		$data["link"] = "#";
-	}
-	
-	function treeview_modify_action_node($args = array())
-	{
-		if ($args["class_id"] == CL_PSEUDO)
-		{
-			$this->action_parent_list[] = $args["oid"];
-		};
-		$data = &$args;
-		$data["link"] = "#";
-	}
-
 	function callback_add_process($args = array())
 	{
 		$this->read_template("process_wrapper.tpl");
