@@ -4,7 +4,7 @@
 var rte_styles = "{VAR:rte_styles}";
 var sel_el = "{VAR:name}_edit";
 var rte_list = Array();
-var mozbr = browser.isGecko ? "<br />" : ""
+var mozbr = browser.isGecko ? "<br />" : "";
 function write_editor(el_name,width,height)
 {
 	val = document.forms['changeform'].elements[el_name].value;
@@ -192,7 +192,7 @@ function insertNodeAtSelection(toBeInserted)
 	sel.addRange(range);
 };
 
-function insertHTML(html)
+function replaceHTML(html)
 {
 	var sel = getSelection();
 	var range = createRange(sel);
@@ -214,6 +214,19 @@ function insertHTML(html)
 
 	}
 };
+
+function insertHTML(html) {
+	var victim = document.getElementById(sel_el).contentWindow;
+	victim.focus();
+	if (browser.isIE5up) {
+		var range = victim.document.selection.createRange();
+		range.pasteHTML(html);
+		range.collapse(false);
+		range.select();
+	} else {
+		victim.document.execCommand('insertHTML', false, html);
+	}
+}
 
 // now I need a list of all textareas
 function clearstyles()
@@ -251,7 +264,7 @@ function surroundHTML(startTag, endTag)
 	var html = getSelectedHTML();
 	// the following also deletes the selection
 	//this.insertHTML(startTag + html + endTag);
-	this.insertHTML(startTag + html + endTag);
+	this.replaceHTML(startTag + html + endTag);
 };
 
 /// Retrieve the selected block
@@ -304,6 +317,7 @@ function table_dialog()
 {
 	victim = document.getElementById(sel_el).contentWindow;
 	window.open("/automatweb/orb.aw?class=css&action=table_dialog","insert_table","width=360,height=180");
+	//victim.open("/automatweb/orb.aw?class=css&action=table_dialog","insert_table","width=360,height=180");
 
 };
 
@@ -484,8 +498,29 @@ function clear_row(tr)
 	}
 }
 
+function split_row()
+{
+	var td = get_closest_tag("td");
+	if (td)
+	{
+		var n = parseInt("" + td.rowSpan);
+		var nc = parseInt("" + td.colSpan);
+		td.rowSpan = 1;
+		tr = td.parentNode;
+		var itr = tr.rowIndex;
+		var trs = tr.parentNode.rows;
+		var index = td.cellIndex;
+		while (--n > 0) {
+			tr = trs[++itr];
+			victim = document.getElementById(sel_el).contentWindow;
+			var otd = victim.document.createElement("td");
+			otd.colSpan = td.colSpan;
+			otd.innerHTML = mozbr;
+			tr.insertBefore(otd, tr.cells[index]);
+		}
 
-
+	};
+}
 </script>
 
 <style>
