@@ -47,6 +47,8 @@ class archive extends aw_template {
 	{
 		$this->id = sprintf("%04d",$args["oid"]);
 
+		$this->path_parts = array();
+
 		for ($i = 0; $i < ARC_DEPTH; $i++ )
 		{
 			$this->path_parts[] = substr($this->id,$i * 2,2);
@@ -113,10 +115,18 @@ class archive extends aw_template {
 	
 	////
 	// !Tagastab arhiivist mingi objekti mingi versioon
+	// argumendid:
+	// oid (int) - objekti ID, mille arhiivi lugeda
+	// version (timestamp) - millist konkreetset versiooni lugeda
 	function checkout($args = array())
 	{
 		extract($args);
-
+		$this->_calc_path($args);
+		$fname = $this->fullpath . "/$version";
+		$retval = $this->get_file(array(
+			"file" => $fname,
+		));
+		return $retval;
 	}
 
 	////
