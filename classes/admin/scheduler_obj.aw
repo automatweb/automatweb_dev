@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.1 2004/04/15 06:21:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.2 2004/10/28 09:47:35 kristo Exp $
 // scheduler.aw - Scheduler
 
 // okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
@@ -45,7 +45,9 @@ class scheduler_obj extends class_base
 {
 	function scheduler_obj()
 	{
-		$this->init("");
+		$this->init(array(
+			"clid" => CL_SCHEDULER
+		));
 	}
 
 	function set_property($arr)
