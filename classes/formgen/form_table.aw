@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.12 2002/11/27 10:34:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.13 2002/11/27 10:43:56 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -548,19 +548,33 @@ class form_table extends form_base
 					}
 					if (isset($cc["link_popup"]) && $cc["link_popup"])
 					{
-						$str = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
-							$dat["ev_".$cc["link_el"]],
-							$cc["link_popup_scrollbars"],
-							!$cc["link_popup_fixed"],
-							$cc["link_popup_toolbar"],
-							$cc["link_popup_addressbar"],
-							$cc["link_popup_width"],
-							$cc["link_popup_height"]
-						)."\">".$linktext."</a>";
+						if ($dat["ev_".$cc["link_el"]] != "")
+						{
+							$str = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+								$dat["ev_".$cc["link_el"]],
+								$cc["link_popup_scrollbars"],
+								!$cc["link_popup_fixed"],
+								$cc["link_popup_toolbar"],
+								$cc["link_popup_addressbar"],
+								$cc["link_popup_width"],
+								$cc["link_popup_height"]
+							)."\">".$linktext."</a>";
+						}
+						else
+						{
+							$str = "";
+						}
 					}
 					else
 					{
-						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
+						if ($dat["ev_".$cc["link_el"]] != "")
+						{
+							$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
+						}
+						else
+						{
+							$str = "";
+						}
 					}
 				}
 				else
