@@ -104,7 +104,6 @@
 				<arguments>
 					<optional name="date"/>
 					<define name="disp" value="week"/>
-					<required name=
 				</arguments>
 			</function>
 		</action>
