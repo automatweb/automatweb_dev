@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.151 2002/09/04 07:33:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.152 2002/09/09 12:46:27 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -225,7 +225,7 @@ class menuedit extends aw_template
 			$res = $this->_gen_site_html($params);
 			$construct = get_instance("construct");
 			$construct->dump();
-			if ($use_cache)
+			if ($use_cache && !aw_global_get("no_cache_content"))
 			{
 				$this->cache->set($section,$cp,$res);
 			};

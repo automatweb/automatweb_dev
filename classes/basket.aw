@@ -234,6 +234,9 @@ class basket extends aw_template
 		// read in the basket's config
 		$ob = $this->get_basket($id);
 
+		// make sure the document won't get cached
+		aw_global_set("no_cache_content",1);
+
 		// get the current basket
 		$tmp = aw_global_get("shop_basket");
 		$basket = $tmp[$this->current_basket_id];
