@@ -1,5 +1,4 @@
 <?php
-
 if ($alias && $alias != "forum_v2")
 {
 	$class = $alias;
@@ -16,8 +15,10 @@ else
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 }
 
+
 // get an instance if the site class
 $si =&__get_site_instance();
+
 
 // if we are drawing the site's front page
 if ((!$section || $section == aw_ini_get("frontpage")) && !$class) 

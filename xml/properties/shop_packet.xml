@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>item_count</name>
+            <type>hidden</type>
+            <table>aw_shop_packets</table>
+            <field>aw_count</field>
+            <group>general</group>
+            <caption>Mitu laos</caption>
+      </property>
+      <property>
+            <name>separate_items</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>aw_shop_packets</table>
+            <field>separate_items</field>
+            <group>general</group>
+            <caption>Kas tooted on eraldi</caption>
+      </property>
+      <property>
+            <name>packet</name>
+            <group>packet</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <table>objects</table>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_PACKET</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <packet>
+                  <caption>Paketi sisu</caption>
+            </packet>
+      </groupinfo>
+      <tableinfo>
+            <aw_shop_packets>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_shop_packets>
+      </tableinfo>
+      <reltypes>
+            <PRODUCT>
+                  <value>1</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>paketi toode</caption>
+            </PRODUCT>
+      </reltypes>
+</properties>
+

@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>confirm</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kinnita</caption>
+      </property>
+      <property>
+            <name>income</name>
+            <group>income</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <table>objects</table>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_WAREHOUSE_RECEPTION</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <income>
+                  <caption>Sissetuleku sisu</caption>
+            </income>
+      </groupinfo>
+      <reltypes>
+            <PRODUCT>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PACKET</num_1>
+                  </clid>
+                  <caption>sissetulnud toode</caption>
+            </PRODUCT>
+      </reltypes>
+</properties>
+

@@ -316,10 +316,6 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>isik</caption>
             </PERSON>
-            <USER_DATA>
-                  <value>3</value>
-                  <caption>Andmed</caption>
-            </USER_DATA>
       </reltypes>
 </properties>
 

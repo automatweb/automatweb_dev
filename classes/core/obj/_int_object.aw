@@ -355,7 +355,7 @@ class _int_object
 			}
 		}
 
-		$pt = $this->path();
+		$pt = $this->path($param);
 		$i = 0;
 		$cnt = count($pt);
         	if (isset($param["max_len"]))
@@ -1210,14 +1210,15 @@ class _int_object
 			{
 				unset($t);
 				$t = new object($parent);
-				$ret[] = $t;
-				$parent = $t->parent();
 
 				if (is_oid($param["to"]) && $t->id() == $param["to"])
 				{
 					$add = false;
 					break;
 				}
+
+				$ret[] = $t;
+				$parent = $t->parent();
 			}
 			else
 			{
