@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.174 2003/04/07 10:18:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.175 2003/04/11 06:48:48 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1566,7 +1566,18 @@ class core extends db_connector
 			$udata = $this->get_user(array("uid" => $uid));
 			$head="From: $uid<".$udata["email"].">\n";
 		}
-		mail("vead@struktuur.ee", $subj, $content,$head);
+
+		$send_mail = true;
+
+		if ($err_type == 30 && strpos($HTTP_SERVER_VARS["HTTP_USER_AGENT"], "Microsoft-WebDAV-MiniRedir") !== false)
+		{
+			$send_mail = false;
+		}
+
+		if ($send_mail)
+		{		
+			mail("vead@struktuur.ee", $subj, $content,$head);
+		}
 
 		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
 		// we replicate by POST request, cause this thing can be too long for a GET request
