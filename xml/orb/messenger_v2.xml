@@ -11,6 +11,22 @@
 				</arguments>		
 			</function>
 		</action>
+
+		<action name="run_filters" nologin="1">
+			<function name="run_filters">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="test_filters">
+			<function name="test_filters">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
