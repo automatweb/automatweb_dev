@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.60 2004/12/16 16:27:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.61 2005/01/04 11:18:03 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -147,7 +147,7 @@
 	@reltype STYLE_DONOR value=4 clid=CL_FORUM_V2
 	@caption Stiilidoonor
 
-	@reltype FORUM_ADMIN value=5 clid=CL_USER
+	@reltype FORUM_ADMIN value=5 clid=CL_USER,CL_GROUP
 	@caption Administraator
 
 */
@@ -1734,15 +1734,20 @@ class forum_v2 extends class_base
 	**/
 	function _can_admin($forum_id)
 	{
+		// admin can be either CL_USER or CL_GROUP, check for both
 		$uid_oid = aw_global_get("uid_oid");
 		if (empty($uid_oid))
 		{
 			return false;
 		};
+
+		$gids = aw_global_get("gidlist_oid");
+		$check_ids = array($uid_oid) + $gids;
+
 		$c = new connection();
 		$conns = $c->find(array(
 			"from" => $forum_id,
-			"to" => $uid_oid,
+			"to" => $check_ids,
 			"type" => RELTYPE_FORUM_ADMIN,
 		));
 
