@@ -42,6 +42,16 @@
             <caption>Juhtumite juurmenüü</caption>
       </property>
       <property>
+            <name>entity_instance_rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
+            <group>config_entity</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Juhtumite sisestuste juurmenüü</caption>
+      </property>
+      <property>
             <name>process_rootmenu</name>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>

@@ -145,6 +145,18 @@ class workflow extends class_base
 
 		$this->entity_rootmenu = new object($entity_rootmenu_id);
 
+
+		$entity_instance_rootmenu_id = $this->cfg_obj->prop("entity_instance_rootmenu");
+
+		if (empty($entity_rootmenu_id))
+		{
+			$data["error"] = "Juhtumite sisestuste rootmenüü on valimata!";
+			return PROP_ERROR;
+		};
+
+		$this->entity_instance_rootmenu = new object($entity_instance_rootmenu_id);
+
+
 		$action_rootmenu_id = $this->cfg_obj->prop("action_rootmenu");
 
 		if (empty($action_rootmenu_id))
@@ -622,6 +634,44 @@ class workflow extends class_base
 
 	function callback_add_entity(&$data)
 	{
+		if (!$data["request"]["entity_id"])
+		{
+			die("you did not pick a process<br />");
+		};
+
+		$tdata = array();
+		$this->init_callback_view(&$tdata, $data);
+
+		// load entity_type
+		$entity_type = obj($data["request"]["entity_id"]);
+
+		// load cfgform so we can get the class_id
+		$cfgform = obj($entity_type->prop("entity_cfgform"));
+
+		// create class object
+		$cl_o = obj();
+		$cl_o->set_class_id($cfgform->prop("subclass"));
+		$cl_o->set_parent($this->entity_instance_rootmenu->id());
+		$cl_o->save();
+
+		$en_inst = obj();
+		$en_inst->set_class_id(CL_WORKFLOW_ENTITY_INSTANCE);
+		$en_inst->set_parent($this->entity_instance_rootmenu->id());
+		$en_inst->set_prop("entity_type", $data["request"]["entity_id"]);
+		$en_inst->set_prop("obj_id", $cl_o->id());
+		$en_inst->save();
+
+		$fl = $this->cfg["classes"][$cfgform->prop("subclass")]["file"];
+		if ($fl == "document")
+		{
+			$fl = "doc";
+		}
+		$ru = $this->mk_my_orb("change", array("id" => $data["request"]["id"], "group" => "show_entities", "cb_view" => "show"));
+
+		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id(),"cfgform" => $cfgform->id(), "return_url" => urlencode($ru)), $fl));
+		die();
+		return;
+
 		// load the entity
 		$entity_obj = new object($data["request"]["entity_id"]);
 		// now I need to figure out which configuration form 
@@ -910,6 +960,35 @@ class workflow extends class_base
 
 	function create_entity($args = array())
 	{
+		die("create ent");
+		if (!$args["request"]["entity_id"])
+		{
+			die("you did not pick a process<br />");
+		};
+
+		$data = array();
+		$this->init_callback_view(&$data, $args);
+
+		// load entity_type
+		$entity_type = obj($args["request"]["entity_id"]);
+
+		// create class object
+		$cl_o = obj();
+		$cl_o->set_class_id($entity_type->prop("entity_cfgform"));
+		$cl_o->set_parent($this->entity_instance_rootmenu->id());
+		$cl_o->save();
+
+		$en_inst = obj();
+		$en_inst->set_class_id(CL_WORKFLOW_ENTITY_INSTANCE);
+		$en_inst->set_parent($this->entity_instance_rootmenu->id());
+		$en_inst->set_prop("entity_type", $args["request"]["entity_id"]);
+		$en_inst->set_prop("obj_id", $cl_o->id());
+		$en_inst->save();
+
+		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id()), $this->cfg["classes"][$entity_type->prop("entity_cfgform")]["class"]));
+		die();
+
+		/*
 		// now I have to process $args[form_data] and create the entity object
 
 		// then load the chosen process object and create a relation between
@@ -919,23 +998,18 @@ class workflow extends class_base
 		// and create a relation between that and the entity
 
 		// and then I should be on my way 
-		if (!$args["request"]["entity_process"])
-		{
-			die("you did not pick a process<br />");
-		};
 
 		$proc_obj = new object($args["request"]["entity_process"]);
 
 		// this sorts the data by tables
 
-		/*
-		$def = get_instance("doc");
-		$res = $def->process_form_data(array(
-			"group" => "general",
-			"group_by" => "table",
-			"request" => $args["rquest"],
-		));
-		*/
+		//
+		//$def = get_instance("doc");
+		//$res = $def->process_form_data(array(
+		//	"group" => "general",
+		//	"group_by" => "table",
+		//	"request" => $args["rquest"],
+		//));
 
 		$objdata = $res["objects"];
 		$cldata = $res["documents"];
@@ -980,11 +1054,9 @@ class workflow extends class_base
 		$t->id_only = true;
 		$_entity_id = $t->submit($emb);
 
-		/*
-		$objdata["parent"] = $entity_root;
-		$objdata["name"] = $cldata["title"];
-		$objdata["class_id"] = CL_DOCUMENT;
-		*/
+		//$objdata["parent"] = $entity_root;
+		//$objdata["name"] = $cldata["title"];
+		//$objdata["class_id"] = CL_DOCUMENT;
 
 		// I need to create a new 
 
@@ -1068,11 +1140,6 @@ class workflow extends class_base
 		// 2 - the action inside that process where the entity is currently assigned to
 		// 3 - and remember, I need to store the ID-s
 
-		/*
-		print "<h1>---</h1>";
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
 		*/
 	}
 
@@ -1224,19 +1291,44 @@ class workflow extends class_base
 
 			$mod = $e->modifiedby();
 
+			// get entity instance real object
+			if (!$e->prop("obj_id"))
+			{
+				continue;
+			}
+			$r_o = obj($e->prop("obj_id"));
+			$fl = $this->cfg["classes"][$r_o->class_id()]["file"];
+			if ($fl == "document")
+			{
+				$fl = "doc";
+			}
+			$name = html::href(array(
+				"url" => $this->mk_my_orb("change", array("id" => $r_o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI"))), $fl),
+				"caption" => parse_obj_name($r_o->name())
+			));
+
 			$cur_state = $wfe->get_current_state($e->id());
 
+			$nacts = array(0 => "") + $wfe->get_possible_next_states($e->id());
+			if (count($nacts) < 2)
+			{
+				$na = "Protsess on l&otilde;ppenud!";
+			}
+			else
+			{
+				$na = html::select(array(
+					"name" => "next_action[".$e->id()."]",
+					"options" => $nacts
+				));
+			}
 			$t->define_data(array(
-				"name" => $e->name(),
+				"name" => $name,
 				"type" => $type_o->name(),
 				"actor" => $actor_o->name(),
 				"modifiedby" => $mod->name(),
 				"process" => $process_o->name(),
 				"action" => $cur_state->name(),
-				"next_action" => html::select(array(
-					"name" => "next_action[".$e->id()."]",
-					"options" => array(0 => "") + $wfe->get_possible_next_states($e->id())
-				))
+				"next_action" => $na
 			));
 		}
 

@@ -23,6 +23,9 @@
 @property entity_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_entity
 @caption Juhtumite juurmenüü
 
+@property entity_instance_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_entity
+@caption Juhtumite sisestuste juurmenüü
+
 @property process_rootmenu type=relpicker reltype=RELTYPE_ROOTMENU group=config_process
 @caption Protsesside juurmenüü
 
