@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.83 2004/12/27 12:43:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.84 2005/01/21 13:14:32 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -645,7 +645,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				if ($query)
 				{
 					$this->db_query($query);
-					print "1";
 					$partcount = 1;
 				}
 				elseif ($partcount == 0)
@@ -1799,8 +1798,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// first check, whether the caller has a do_search callback,
 		// if so, we assume that it knows what it's doing and simply
 		// call it.
-		print "1";
-		flush();
 		$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
 
 		// if not, use our own (old?) search method
@@ -1810,8 +1807,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			if ($query)
 			{
-				print "2";
-				flush();
 				$this->db_query($query);
 				$partcount = 1;
 			}
