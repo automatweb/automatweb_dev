@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.6 2004/12/20 10:34:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.7 2004/12/20 10:35:39 ahti Exp $
 // reminder.aw - Meeldetuletus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
@@ -259,8 +259,9 @@ class reminder extends class_base
 			$body = $subject." ".$this->mk_my_orb("change", array("id" => $obz->prop("to")), $obz->prop("to.class_id"), true);
 			foreach($emls as $addr)
 			{
+				$froma = $obj_inst->prop("sender");
 				$awm->create_message(array(
-					"froma" => t("aw").str_replace("http://", "@", aw_ini_get("baseurl")),
+					"froma" => (!empty($froma) ? $froma : t("aw").str_replace("http://", "@", aw_ini_get("baseurl"))),
 					"subject" => t("Meeldetuletus").": ".$obj_inst->name(),
 					"to" => $addr,
 					"body" => $body,
