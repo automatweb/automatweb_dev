@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.3 2004/09/03 15:50:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.4 2004/10/11 12:59:48 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -189,7 +189,7 @@ class contact_list extends class_base
 				), "commune");
 				$message = $this->mk_my_orb("change",array(
 					"id" => $arr["commune"],
-					"user" => $contact["name"],
+					"cuser" => $contact["name"],
 					"group" => "newmessage",
 				),"commune");
 			}
@@ -199,7 +199,7 @@ class contact_list extends class_base
 					"id" => $contact["profile"],
 				),"profile");
 				$message = $this->mk_my_orb("change",array(
-					"user" => $contact["name"],
+					"cuser" => $contact["name"],
 					"group" => "newmessage",
 				),"quickmessage");
 			}

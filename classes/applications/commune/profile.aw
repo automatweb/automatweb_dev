@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.4 2004/09/02 11:16:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.5 2004/10/11 12:59:48 ahti Exp $
 // profile.aw - Profiil 
 /*
 
@@ -14,7 +14,7 @@
 @property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta
 @caption Seadete haldur
 
-@property avatar_image type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta
+@property avatar_image type=relpicker reltype=RELTYPE_AVATAR method=serialize field=meta
 @caption Avatar
 
 //isikul peaks olema üks profiil, mis on vaikimisi aktiivne, mida sisse logimisel esimesena näidatakse
@@ -235,6 +235,9 @@ explain aw_profiles;
 
 @reltype IMAGE value=12 clid=CL_IMAGE
 @caption Pilt
+
+@reltype AVATAR value=20 clid=CL_IMAGE
+@caption Avatar
 
 ----------------------
 
@@ -491,7 +494,7 @@ class profile extends class_base
 		));
 
 		$t->define_chooser(array(
-			"name" => "selected",
+			"name" => "sel",
 			"field" => "id",
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.7 2004/09/20 14:45:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.8 2004/10/11 12:59:47 ahti Exp $
 // commune.aw - Kommuun
 /*
 
@@ -241,7 +241,7 @@
 
 @groupinfo rate caption="Hinda" no_submit=1 parent=ratings tabgroup=left
 
-@property rate_content type=callback callback=callback_rate_content group=rate no_caption=1 store=no
+@property rate type=callback callback=callback_rate group=rate no_caption=1 store=no
 @caption Hindamine või vaatamine
 
 
@@ -325,15 +325,17 @@
 
 @groupinfo my_communities caption="Minu kogukonnad" parent=communities tabgroup=left submit=no
 
-@property my_communtities type=text group=my_communities store=no no_caption=1
+@property my_communities_toolbar type=toolbar group=my_communities no_caption=1
+@caption Minu kogukondade toolbar
+
+@property my_communities type=table group=my_communities store=no no_caption=1
 @caption Minu kogukonnad
 
 
 @groupinfo categories caption="Kategooriad" parent=communities tabgroup=left submit=no
 
-@property categories type=text group=categories store=no no_caption=1
+@property categories type=treeview group=categories no_caption=1
 @caption Kategooriad
-
 
 @groupinfo community_search caption="Otsing" parent=communities tabgroup=left submit=no
 
@@ -351,7 +353,6 @@
 
 @property my_statistics type=text group=my_statistics store=no no_caption=1
 @caption Minu statistika
-
 
 @groupinfo general_statistics caption="Üldstatistika" parent=statistics tabgroup=left submit=no
 
@@ -395,6 +396,9 @@
 ------------------- properties : end -------------------------
 
 --------- folders ----------------------
+
+@property pic_folder type=relpicker reltype=RELTYPE_PIC_FOLDER method=serialize field=meta group=general table=objects 
+@caption Piltide kataloog
 
 @property persons_folder type=relpicker reltype=RELTYPE_PERSONS_FOLDER method=serialize field=meta group=general table=objects 
 @caption Isikute kataloog
@@ -441,18 +445,20 @@
 --------- reltypes : end --------------------------
 
 --------- folders ----------------------
+@reltype PIC_FOLDER value=25 clid=CL_MENU
+@caption Piltide kataloog
 
 @reltype PERSONS_FOLDER value=11 clid=CL_MENU
-@caption isikute kataloog
+@caption Isikute kataloog
 
 @reltype COMMUNITIES_FOLDER value=12 clid=CL_MENU
-@caption kogukondade kataloog
+@caption Kogukondade kataloog
 
 @reltype ORGANIZATIONS_FOLDER value=13 clid=CL_MENU
-@caption organisatsioonide kataloog
+@caption Organisatsioonide kataloog
 
 @reltype PROFILES_FOLDER value=14 clid=CL_MENU
-@caption profiilide kataloog
+@caption Profiilide kataloog
 
 --------- folders : end ----------------------
 
@@ -640,7 +646,6 @@ class commune extends class_base
 	
 	function callback_pre_edit($arr)
 	{
-	
 		$commune_view_actions = array("profile","friends","communities","pictures");
 		//if (method_exists($this, "show_".$commact))
 		if ($commact = $arr["request"]["commact"] and in_array($commact, $commune_view_actions))
@@ -673,11 +678,13 @@ class commune extends class_base
 		switch($prop["name"])
 		{
 			case "fake10":
-				$prop["value"] = "ma veel teen sulle horoskoopi, neeger";
+				$prop["value"] = "siia tuleb horoskoop";
 				break;
+				
 			case "my_forum_topics":
 				$this->my_forum_topics($arr);
 				break;
+				
 			case "tabpanel":
 				if (is_oid($arr["obj_inst"]->id()))
 				{
@@ -702,12 +709,14 @@ class commune extends class_base
 					"action_menu" => '',//$this->render_actions($arr),
 				));
 				break;
+				
 			case "inbox_toolbar":
 			case "outbox_toolbar":
 			case "archive_toolbar":
 				$tb = get_instance(CL_QUICKMESSAGEBOX);
 				$tb->get_property($arr);
 				break;
+				
 			case "archive":
 			case "inbox":
 			case "outbox":
@@ -719,10 +728,12 @@ class commune extends class_base
 						$boxprop = array("user_from");
 						$archive = false;
 					break;
+					
 					case "inbox":
 						$boxprop = array("user_to");
 						$archive = false;
 					break;
+					
 					case "archive":
 						$boxprop = array("user_from", "user_to");
 						$archive = true;
@@ -767,6 +778,7 @@ class commune extends class_base
 					"confirm" => "soovid tõesti valitud kommentaarid kustutada?",
         		));
 				break;
+				
 			case "friend_groups_toolbar":
 				$tb = &$prop["vcl_inst"];
 				if($this->common["f_group"])
@@ -774,6 +786,7 @@ class commune extends class_base
 					// this i gotta think through, to avoid confusion -- ahz
 				}
 				break;
+				
 			case "friend_groups_head":
 				if($this->common["f_group"])
 				{
@@ -786,9 +799,11 @@ class commune extends class_base
 				}
 				$prop["value"] = $groupname;
 				break;
+				
 			case "friend_groups":
 				$this->show_friend_groups($arr);
 				break;
+				
 			case "address_book_toolbar":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
@@ -807,26 +822,21 @@ class commune extends class_base
 						)),
         		));
 				break;
+				
 			case "address_book":
-				$user = $this->get_user();
-				$contact_list = $user->connections_to(array(
-					"type" => 1, //RELTYPE_LIST_OWNER
-					"from.class_id" => 811,
-				));
-				foreach($contact_list as $tlist)
+				if($list = $this->get_contact_list())
 				{
-					//arr($tlist);
-					$list = $tlist->from();
+					$contact_list = get_instance(CL_CONTACT_LIST);
+					$vars = array(
+						"obj_inst" => $list,
+						"commune" => $this->common["obj_inst"]->id(),
+						"vcl_inst" => &$arr["prop"]["vcl_inst"],
+						"include" => true,
+					);
+					$contact_list->show_contact_list($vars);
 				}
-				$contact_list = get_instance(CL_CONTACT_LIST);
-				$vars = array(
-					"obj_inst" => $list,
-					"commune" => $this->common["obj_inst"]->id(),
-					"vcl_inst" => &$arr["prop"]["vcl_inst"],
-					"include" => true,
-				);
-				$contact_list->show_contact_list($vars);
 				break;
+				
 			case "blocked_list_toolbar":
 			case "ignored_list_toolbar":
 			case "friend_list_toolbar":
@@ -866,37 +876,40 @@ class commune extends class_base
 						)),
         		));
 				break;
+				
 			/*
 			case "profile_search":
 				$this->profile_search($arr);
 				break;
 			*/
+			
 			case "prof_comments":
 				$this->show_prof_comments($arr);
 				break;
+				
 			case "blocked_list":
 			case "ignored_list":
 			case "friend_list":
 				$this->show_list($arr);
 				break;
+				
 			case "browsing_conditions":
 				$this->browsing_conditions($arr);
 				break;
+				
 			case "message_conditions":
 				$this->message_conditions($arr);
 				break;
+				
 			case "view_conditions":
 				$this->view_conditions($arr);
 				break;
-			case "rateform":
-				break;
+				
 			case "f_switch_profile":
 			case "l_switch_profile":
 			case "c_switch_profile":
 			case "switch_profile":
 				$prop["value"] = $this->show_switch_profile($arr);
-				break;
-			case "rate_content":
 				break;
 			
 			case "friends_panel":
@@ -912,14 +925,13 @@ class commune extends class_base
 				//töötab ainult admin poolel
 				//echo dbg::process_backtrace(debug_backtrace());
 				$prop["value"] = $this->render_friends_panel($profile, $arr["request"]["ft_page"]);
-				
 				break;
+				
 			case "all_profiles":
 				$this->do_tbl_my_profiles($arr);
 				break;
-			case "profile_settings":
-				break;
-			case "profile_toolbar":
+				
+			case "all_profiles_toolbar":
 				$tb = &$prop["vcl_inst"];
 				
 				//$o = &$arr["obj_inst"];
@@ -952,9 +964,11 @@ class commune extends class_base
         		));
 				
 				break;
+				
 			case "show_image_comments":
 				$this->do_tbl_image_comments($arr);
 				break;
+				
 			case "image_comments_toolbar":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
@@ -968,6 +982,7 @@ class commune extends class_base
 				$person->set_meta("img_id",$arr["request"]["img_id"]);
 				$person->save();
 				break;
+				
 			/*
 			case "prof_comments":
 				$profile = $this->get_active_profile();
@@ -976,6 +991,7 @@ class commune extends class_base
 				$prop["heading"] = $person->prop("firstname")." ".$person->prop("lastname");
 				break;
 			*/
+			
 			case "profile_change_toolbar":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
@@ -986,15 +1002,10 @@ class commune extends class_base
 				));
 
 				$tb->add_separator();
-
 				$tb->add_cdata("<small>Vali profiil:</small>");
-
 				$connected_profiles = $this->get_connections_to_profiles();
-
 				$active_profile = $this->get_active_profile();
-
 				$selected_profile = $this->common["my_profile"] ? $this->common["my_profile"]->id() : $active_profile->id();
-
 				$sel_options = array();
 				foreach($connected_profiles as $conns)
 				{
@@ -1004,11 +1015,11 @@ class commune extends class_base
 					"name" => "profile_oid",
 					"options" => $sel_options,
 					"selected" => $selected_profile,
-					"onchange" => "window.location = '".aw_url_change_var(array("my_profile" => ""))."&my_profile=' + this.options[this.selectedIndex].value;"
+					"onchange" => "window.location = '".html::get_change_url($arr["obj_inst"]->id(), array(
+						"my_profile" => ""))."&my_profile=' + this.options[this.selectedIndex].value;",
+						"group" => "me",
 				)));
-
 				$tb->add_separator();
-
 				if($prop["group"] == "profile_change")
 				{
 					$tb->add_button(array(
@@ -1018,8 +1029,6 @@ class commune extends class_base
 						"action" => "",
 					));
 				}
-
-
 				$tb->add_button(array(
 					"name" => "delete_profile",
 					"tooltip" => "Kustuta käesolev profiil",
@@ -1028,6 +1037,7 @@ class commune extends class_base
 					"confirm" => "Olete Te kindel, et soovite kustutada käesolevat profiili?",
 				));
 				break;
+				
 			case "profile_comments":
 				if(!$this->common["profile"])
 				{
@@ -1039,11 +1049,32 @@ class commune extends class_base
 				//$person = $this->get_person();
 				$prop["heading"] = $person->prop("firstname")." ".$person->prop("lastname");
 				break;
+				
 			case "profile_header":
 				$prop["value"] = $this->render_profile_header($arr);
 				break;
+				
 			case "forum":
 				$prop["value"] = $this->show_forum($arr);
+				break;
+				
+			case "my_communities_toolbar":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name"		=> "hide",
+					"tooltip"	=> "Eemalda ennast valitud kogukondades",
+					"img"		=> "delete.gif",
+					"action"	=> "remove_from_community",
+					"confirm"	=> "oled ikka kindel?",
+				));
+				break;
+				
+			case "my_communities":
+				$this->show_communities($arr);
+				break;
+				
+			case "categories":
+				$this->show_categories($arr);
 				break;
 
 		};
@@ -1060,17 +1091,21 @@ class commune extends class_base
 			case "message_conditions":
 				$this->update_message_conditions($arr);
 				break;
+				
 			case "forum_settings":
 					$user = $this->get_user();
 					$user->set_meta("forum_view", $arr["request"]["days"]);
 					$user->save();
 				break;
+				
 			case "browsing_conditions":
 				$this->update_browsing_conditions($arr);
 				break;
+				
 			case "view_conditions":
 				$this->update_view_conditions($arr);
 				break;
+				
 			case "profile_change":
 				$this->update_profile($arr);
 				break;
@@ -1081,6 +1116,7 @@ class commune extends class_base
 
 			case "rate_content":
 			case "rateform":
+			case "rate":
 				$this->add_rate($arr);
 				break;
 
@@ -1117,7 +1153,6 @@ class commune extends class_base
 				break;
 				
 			case "all_profiles":
-				
 				//miks ei tööta????
 				//aw_session_set("active_profile_id", $active_profile_id);
 				//debug:
@@ -1126,14 +1161,135 @@ class commune extends class_base
 				//sessioone ei saa kasutada. nt see ei tööta:
 				//aw_session_set('kala', 1);
 				//echo 'aw_global_get:'.aw_global_get('kala');
-				
 				$person = $this->get_person();
 				$person->set_meta("active_profile", $arr["request"]["active_profile"]);
 				$person->save();
-
 				break;
 		};
 		return $rv;
+	}
+	
+	function show_categories($arr)
+	{
+		$tree = &$arr["prop"]["vcl_inst"];
+		/*
+		$tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"root_name" => "Kategooriad",
+			"root_url" => "",
+		));
+		*/
+		$ot = get_instance(CL_OBJECT_TYPE);
+		$ff = $ot->get_obj_for_class(array(
+			"clid" => clid_for_name("community"),
+		));
+		if(!empty($ff))
+		{
+			$fo = obj($ff);
+			if($com = $fo->get_first_obj_by_reltype("RELTYPE_META_ELEMENTS"))
+			{
+				$tree->add_item(0, array(
+					"name" => $com->name(),
+					"id" => $com->id(),
+					//"url" => "tiit",
+				));
+				$this->_make_categories_tree($com->id(), &$tree);
+				return;
+			}
+		}
+		$tree->add_item(0, array(
+			"name" => "Ühtegi kategooriat pole veel defineeritud",
+			"id" => 1,
+		));
+	}
+	
+	function _make_categories_tree($parent, $tree)
+	{
+		$childs = new object_list(array(
+			"parent" => $parent,
+			"class_id" => CL_META,
+		));
+		foreach($childs->arr() as $child)
+		{
+			// as an idea, here should be the counter how many communities fall in that category,
+			// but frankly it seems, that it is currently impossible to do :/ -- ahz
+			$cons = $child->connections_to(array(
+				"type" => 6,
+				"from.class_id" => CL_COMMUNITY,
+			));
+			//echo count($cons);
+			$asd = count($cons);
+			//$asd = rand(0, 100);
+			$tree->add_item($parent, array(
+			"name" => $child->name()."($asd)",
+			"id" => $child->id(),
+		));
+			$this->_make_categories_tree($child->id(), &$tree);
+		}
+	}
+	
+	function show_communities($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+		$t->define_field(array(
+			"name" => "category",
+			"caption" => "Kategooriad",
+		));
+		$t->define_field(array(
+			"name" => "members",
+			"caption" => "Liikmeid",
+			"type" => "int",
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => "Sinu staatus",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$types = array(
+			4 => "tavaliige", //4
+			3 => "moderaator", //3
+		);
+		$user = $this->get_user();
+		$communities = $user->connections_to(array(
+			"type" => array(3, 4),
+			"from.class_id" => CL_COMMUNITY,
+		));
+		foreach($communities as $community)
+		{
+			$cats = array();
+			$com = $community->from();
+			$members = $com->connections_from(array(
+				"type" => array(3, 4),
+			));
+			foreach($com->prop("category") as $cat)
+			{
+				$cat_o = obj($cat);
+				$cats[] = $cat_o->name();
+			}
+			$t->define_data(array(
+				"id" => $com->id(),
+				"name" => html::href(array(
+					"caption" => $com->name(),
+					"url" => html::get_change_url($com->id(), array(
+						"group" => "content",
+					)),
+				)),
+				"category" => implode(", ", $cats),
+				"members" => count($members),
+				"status" => $types[$community->prop("reltype")],
+			));
+		}
 	}
 	
 	function show_forum($arr)
@@ -1260,7 +1416,7 @@ class commune extends class_base
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_contact", 
 					"group" => "address_book", 
-					"user" => $creator->id(),
+					"cuser" => $creator->id(),
 				), 0, "commaction"),
 			));
 			$t->data[$id]["blist"] = html::href(array(
@@ -1268,7 +1424,7 @@ class commune extends class_base
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_blocked",
 					"group" => "blocked_list",
-					"user" => $creator->id(),
+					"cuser" => $creator->id(),
 				), 0, "commaction"),
 			));
 			$t->data[$id]["ilist"] = html::href(array(
@@ -1276,7 +1432,7 @@ class commune extends class_base
 				"url" => $this->mk_comm_orb(array(
 					"commact" => "add_ignored",
 					"group" => "ignored_list",
-					"user" => $creator->id(),
+					"cuser" => $creator->id(),
 				), 0, "commaction"),
 			));
 		}
@@ -1493,7 +1649,7 @@ class commune extends class_base
 					)),
 					"sendmessage" => html::href(array(
 						"url" => $this->mk_comm_orb(array(
-							"user" => $creator->name(),
+							"cuser" => $creator->name(),
 							"group" => "newmessage",
 						)),
 						"caption" => "Saada sõnum",
@@ -1526,7 +1682,7 @@ class commune extends class_base
 					)),
 					"sendmessage" => html::href(array(
 						"url" => $this->mk_comm_orb(array(
-							"user" => $creator->name(),
+							"cuser" => $creator->name(),
 							"group" => "newmessage",
 						)),
 						"caption" => "Saada sõnum",
@@ -1574,7 +1730,10 @@ class commune extends class_base
 			$t->define_data(array(
 				"name" => html::href(array(
 					"caption" => $group_obj->prop("name"),
-					"url" => aw_url_change_var(array("f_group" =>$group->id())),
+					"url" => html::get_change_url($arr["obj_inst"]->id(), array(
+						"f_group" =>$group->id(),
+						"group" => "friend_groups",
+					)),
 				)),
 				"count" => count($count),
 			));
@@ -1582,7 +1741,10 @@ class commune extends class_base
 		$t->define_data(array(
 			"name" => html::href(array(
 				"caption" => "üldine",
-				"url" => aw_url_change_var(array("f_group" => "general")),
+				"url" => html::get_change_url($arr["obj_inst"]->id(), array(
+						"f_group" =>$group->id(),
+						"group" => "general",
+					)),
 			)),
 			"count" => $all_friends,
 		));
@@ -1719,6 +1881,7 @@ class commune extends class_base
 			"reltype" => "RELTYPE_FRIEND",
 			"sort_by" => "created",
 		*/
+		//arr($clist);
 		foreach($clist as $citem)
 		{
 			
@@ -1803,7 +1966,7 @@ class commune extends class_base
 		));
 		}
 		$t->define_field(array(
-			"name" => "selected",
+			"name" => "sel",
 			"sortable" => "1",
 		));
 		//hangime ühendused kõigile profiilidele
@@ -1870,6 +2033,85 @@ class commune extends class_base
 				$t->define_data($vars);
 			}
 		}
+	}
+	
+	function on_get_subtemplate_content($arr)
+	{
+		$objs = new object_list(array(
+			"class_id" => CL_COMMUNE,
+		
+		));
+		$obj = reset($objs->arr());
+		$arr["inst"]->vars(array(
+			"MYAVATAR" => $this->render_context_panel($obj),
+			"MYPANEL" => $this->render_my_panel($obj),
+		));
+	}
+	
+	function render_my_panel($obj)
+	{
+		$this->sub_merge = 1;
+		$this->read_template("my_panel.tpl");
+		if($profile = $this->get_active_profile())
+		{
+			$inst = get_instance(CL_IMAGE);
+			$friends = $profile->connections_from(array(
+				"type" => "RELTYPE_FRIEND",
+				//"sort_by" => 
+			));
+			//$this->common["obj_inst"]->id()
+			$friends = array_slice($friends, 0, 3);
+			//arr($friends);
+			$cont = array();
+			foreach($friends as $friend)
+			{
+				$prof = $friend->to();
+				$img = $prof->get_first_obj_by_reltype("RELTYPE_IMAGE");
+				if(!is_object($img))
+				{
+					$url = "http://epood.primeframe.ee/img/products/puudub.gif";
+				}
+				else
+				{
+					$imgdata = $inst->get_image_by_id($img->id());
+					$url = $imgdata["url"];
+				}
+				$cont[] = html::get_change_url($obj->id(), array(
+					"group" => "friend_details",
+					"profile" => $prof->id(),
+				), html::img(array(
+					"url" => $url,
+					"border" => 0,
+				)));
+			}
+			$this->vars(array(
+				"link" => html::get_change_url($obj->id(), array("group" => "prof_friends")),
+				"title" => "Minu sõbrad",
+				"content" => implode(" ", $cont),
+			));
+			$this->parse("item");
+			$user = $this->get_user();
+			$comms = $user->connections_to(array(
+				"type" => array(3, 4),
+				"from.class_id" => CL_COMMUNITY,
+			));
+			//arr($comms);
+			$comms = array_slice($comms, 0, 3); 
+			$cont = array();
+			foreach($comms as $comm)
+			{
+				$com = $comm->from();
+				$cont[] = html::get_change_url($com->id(), array("group" => "content"), $com->name());
+			}
+			$this->vars(array(
+				"title" => "Minu kogukonnad",
+				"link" => html::get_change_url($obj->id(), array("group" => "my_communities")),
+				"content" => implode("<br />\n", $cont),
+			));
+			$this->parse("item");
+		}
+		return $this->parse();
+		//return "sõbrad ja kogukonnad";
 	}
 	
 	function render_context_panel($arr)
@@ -2016,7 +2258,7 @@ class commune extends class_base
 			"caption" => "Vaikeprofiil",
 		));
 		$t->define_chooser(array(
-			"name" => "selected",
+			"name" => "sel",
 			"field" => "id",
 		));
 
@@ -2165,8 +2407,7 @@ class commune extends class_base
 	// a check to check that it's not me.. don't ask -- ahz
 	function is_not_me($id)
 	{
-		$users = get_instance("users");
-		if($id == $users->get_oid_for_uid(aw_global_get("uid")) or !is_oid($id))
+		if($id == aw_global_get("uid_oid"))
 		{
 			return false;
 		}
@@ -2229,7 +2470,7 @@ class commune extends class_base
 	function add_contact($arr)
 	{
 		//arr($arr);
-		if($this->can("view", $arr["user"]))
+		if($this->can("view", $arr["cuser"]))
 		{
 			$user = $this->get_user();
 			$contact_list = $user->connections_to(array(
@@ -2241,105 +2482,12 @@ class commune extends class_base
 				$list = $tlist->from();
 			}
 			$list->connect(array(
-				"to" => $arr["user"],
+				"to" => $arr["cuser"],
 				"reltype" => "RELTYPE_ADDED_USER",
 			));
 		}
 	}
 	
-	/**
-		@attrib name=commaction
-
-		@param id required type=int acl=view
-		@param commact required
-		@param profile optional type=int acl=view
-		@param user optional type=int acl=view
-		@param group optional
-	**/
-	function commaction($arr)
-	{
-		//arr($arr);
-		/*
-		Array
-		(
-			[id] => 536
-			[commact] => add_friend
-			[profile] => 111
-			[user] => 1
-		)
-		*/
-		$this->callback_on_load(array("request" => $arr));
-		
-		switch($arr["commact"])
-		{
-			case "add_contact":
-				$this->add_contact($arr);
-				return $this->mk_comm_orb(array("group" => $arr["group"]));
-				break;
-			case "add_blocked":
-			case "add_ignored":
-			case "add_friend":
-				$names = array("add_friend", "add_ignored", "add_blocked");
-				$vars = array(
-					$names[0] => array(
-						"type" => 0,
-						"group" => "friend_list",
-					 ),
-					$names[1] => array(
-						"type" => 1,
-						"group" => "ignored_list",
-					 ),
-					$names[2] => array(
-						"type" => 2,
-						"group" => "blocked_list",
-					 ),
-				);
-				if($arr["commact"] == "add_friend")
-				{
-					$vars[$arr["commact"]]["profile"] = $arr["profile"];
-				}
-				else
-				{
-					$vars[$arr["commact"]]["user"] = $arr["user"];
-				}
-				//confirmation page??
-				//arr($arr);
-				$this->add_connection($vars[$arr["commact"]]);
-				return $this->mk_comm_orb(array("group" => $vars[$arr["commact"]]["group"]));
-				break;
-			/*
-			case "new_profile":
-				$this->new_profile($arr);
-				return $this->mk_comm_orb(array("group" => "friends"));
-				break;
-			*/
-			case "do_a_thing":
-				$this->do_a_thing($arr);
-				break;
-			
-			case "profile":
-			
-				return $this->mk_comm_orb(array(
-					"id" => $arr["id"],
-					"commact" => "profile",
-					"profile" => $arr["profile"],
-					"group" => $arr["group"],
-				));
-
-				switch ($arr["group"])
-				{
-					case "profile":
-					case "profile_view":
-					case "profile_change":
-						break;
-				}
-				
-				break;
-		}
-		//echo aw_global_get('REQUEST_URI'));
-		return aw_global_get("HTTP_REFERER");
-	}
-
 	function mk_comm_orb($params, $obj_inst_id = 0, $action = "change")
 	{
 		if(empty($obj_inst_id))
@@ -2365,7 +2513,6 @@ class commune extends class_base
 	
 	function get_link_for_obj($obj)
 	{
-		//http://rate.automatweb.com/automatweb/orb.aw?class=admin_menus&action=right_frame&parent=1132
 		$str = "";
 		$params = array("id" => $obj->id());
 		
@@ -2954,14 +3101,14 @@ class commune extends class_base
 				$new = true;
 				$target = $ims[$i-1]->to();
 				$comment = $target->comment();
+				$imgdata = $ti->get_image_by_id($target->id());
 				$rv["st".$i] = array(
 					"type" => "text",
 					"name" => "st".$i,
 					"caption" => "Pilt",
 					"value" => html::img(array(
-						"url" => $ti->get_url_by_id($target->id()),
+						"url" => $imgdata["big_url"],
 					)),
-					
 				);
 				$key = $target->id();
 				// but the key _needs_ to be unique!
@@ -3240,8 +3387,9 @@ class commune extends class_base
 	    return $retval;
 	}
 
-	function callback_rate_content($arr)
+	function callback_rate($arr)
 	{
+		//aw_session_del("last_rated_oid");
 		$retval = array();
 		$retval["rateform"] = array(
 			"type" => "form",
@@ -3249,13 +3397,77 @@ class commune extends class_base
 			"caption" => "Pildi hindamine",
 			"sclass" => "applications/commune/image_rate",
 			"sform" => "rate",
-		); 
+		);
+	
+		$last_rated_oid = aw_global_get("last_rated_oid");
+		if(!empty($last_rated_oid))
+		{
+			$this->read_template("last_rated.tpl");
+			$i = get_instance(CL_IMAGE);
+			$imgdata = $i->get_image_by_id($last_rated_oid);
+			$img_o = obj($last_rated_oid);
+			$prof = reset($img_o->connections_to(array(
+				"type" => 12,
+				"from.class_id" => CL_PROFILE,
+			)));
+			$profile = $prof->from();
+			$person = $this->get_person_for_profile($profile);
+			$name = $person->prop("firstname")." ".$person->prop("lastname");
+			$prof_view_url = $this->mk_comm_orb(array(
+				"profile" => $profile->id(),
+				//"commact" => "profile",
+				"group" => "friend_details",
+			));
+			$rt = get_instance(CL_RATE);
+			$last_rated_mark = aw_global_get("last_rated_mark");
+			$last_rated_comment = aw_global_get("last_rated_comment");
+			//echo $last_rated_mark;
+			$rows = 3;
+			$type = "";
+			if(!empty($last_rated_mark))
+			{
+				$this->vars(array(
+					"mark" => $last_rated_mark,
+				));
+				$type = $this->parse("rated");
+				$rows++;
+			}
+			if(!empty($last_rated_comment))
+			{
+				$this->vars(array(
+					"comment" => $last_rated_comment,
+				));
+				$rows++;
+				$type .= $this->parse("commented");
+			}
+			if(empty($last_rated_mark) && empty($last_rated_comment))
+			{
+				$type = $this->parse("void");
+				$rows = 4;
+			}
+			$prop = array(
+				"image" => html::img(array(
+					"url" => $imgdata["url"],
+				)),
+				"rows" => $rows,
+				"name" => $this->render_link($name, $prof_view_url),
+				"title" => $img_o->comment(),
+				"rating" => $rt->get_rating_for_object($last_rated_oid),
+				"type" => $type,
+			);
+			$this->vars($prop);
+			$retval["lastrate"] = array(
+				"type" => "text",
+				"no_caption" => 1,
+				"value" => $this->parse(),
+			);
+		}
 		//sclass=applications/commune/image_rate sform=rate
 	    return $retval;
 	}
 
 	// praegu ei kasutata, kuna hindamine on formis. vbl tulevikus vaja hindamine formist välja võtta.
-	function callback_rate($arr)
+	function callback_rate2($arr)
 	{
 		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status = 2 ORDER BY rand()";
 		$this->db_query($q);
@@ -3341,10 +3553,8 @@ class commune extends class_base
 	function get_user()
 	{
 		//kui kasutaja ei ole sisse loginud, siis aw_global_get("uid") ei ole määratud.
-		if($uid = aw_global_get("uid"))
+		if($oid = aw_global_get("uid_oid"))
 		{
-			$users = get_instance("users");
-			$oid = $users->get_oid_for_uid($uid);
 			return obj($oid);
 		}
 		return false;
@@ -3416,6 +3626,44 @@ class commune extends class_base
 		//$us = get_instance(CL_USER);
 		//$person = obj($us->get_current_person());
 		//return $person;
+	}
+	
+	function get_contact_list()
+	{
+		if($user = $this->get_user())
+		{
+			/*$list = reset(new object_list(array(
+				
+			)));*/
+			$contact_list = $user->connections_to(array(
+				"type" => 1, //RELTYPE_LIST_OWNER
+				"from.class_id" => 811,
+			));
+			foreach($contact_list as $tlist)
+			{
+				//arr($tlist);
+				$list = $tlist->from();
+			}
+			if(is_object($list))
+			{
+				return $list;
+			}
+			else
+			{
+				// create new person
+				$list = new object();
+				$list->set_class_id(CL_CONTACT_LIST);
+				$list->set_parent($this->common["obj_inst"]->prop("persons_folder"));
+				$list->set_status(STAT_ACTIVE);
+				$list->save();
+				$list->connect(array(
+					"to" => $user->id(),
+					"reltype" => "RELTYPE_OWNER", //2,
+				));
+				return $list;
+			}
+		}
+		return false;
 	}
 	
 	function get_active_profile()
@@ -3673,7 +3921,7 @@ class commune extends class_base
 			else
 			{
 				$aiparams = $params;
-				$aiparams["user"] = $user->id();
+				$aiparams["cuser"] = $user->id();
 				$aiparams["commact"] = "add_ignored";
 				$rval["addignored"] = array(
 					"type" => "text",
@@ -3701,7 +3949,7 @@ class commune extends class_base
 			}
 			else
 			{
-				$params["user"] = $user->id();
+				$params["cuser"] = $user->id();
 				$params["commact"] = "add_blocked";
 				$rval["addblocked"] = array(
 					"type" => "text",
@@ -3766,31 +4014,27 @@ class commune extends class_base
 		// now I have got saving working properly .. I only need to add those elements to the classbase
 		// generated form. How?
 	}
-
-	function oid_is_this_persons_profile($arr = array())
-	{
-		extract($arr);
-		$person = $this->get_person();
-		if($conns = $person->connections_from(array("id" => $oid)))
-		{
-			arr($conns);
-		}
-	}
 	
 	function add_rate($arr)
 	{
-		if (!empty($arr["request"]["rateform"]["img_id"]))
+		aw_session_del("last_rated_mark");
+		aw_session_del("last_rated_comment");
+		$mark = "";
+		$comment = "";
+		if (!empty($arr["request"]["rateform"]["rate"]))
 		{
 			// XXX: check whether this is a valid image to be voted for
 			$rt = get_instance(CL_RATE);
 			$rt->add_rate(array(
-				"oid" => $arr["request"]["rateform"]["img_id"],
+ 				"oid" => $arr["request"]["rateform"]["img_id"],
 				"rate" => $arr["request"]["rateform"]["rate"],
 				"no_redir" => 1,
 			));
 
 			//from core. gets param oid - that object gets one hit plus:
 			$this->add_hit($arr["request"]["rateform"]["img_id"]);
+			$mark = $arr["request"]["rateform"]["rate"];
+			//echo $mark;
 		};
 
 		if (!empty($arr["request"]["rateform"]["comments"]["comment"]))
@@ -3802,9 +4046,12 @@ class commune extends class_base
 				"commtext" => $commdata["comment"],
 				"return" => "id",
 			));
+			$comment = $arr["request"]["rateform"]["comments"]["comment"];
+			//echo $comment;
 		};
-		
 		aw_session_set("last_rated_oid", $arr["request"]["rateform"]["img_id"]);
+		aw_session_set("last_rated_mark", $mark);
+		aw_session_set("last_rated_comment", $comment);
 	}
 
 	function update_my_images($arr)
@@ -3850,15 +4097,17 @@ class commune extends class_base
 				$tn = $tmp_name["file"];
 				if (is_uploaded_file($tn))
 				{
-					// only add an image if a file is present
-					$argblock = array(
-						"file" => array(
+					$file = array(
 							"name" => $_FILES["newimage"]["name"][$key]["file"],
 							"contents" => base64_encode(file_get_contents($tn)),
 							"type" => $_FILES["newimage"]["type"][$key]["file"],
-						),
+					);
+					// only add an image if a file is present
+					$argblock = array(
+						"file" => $file,
+						"file2" => $file,
 						"comment" => $arr["request"]["newimage"][$key]["comment"],
-						"parent" => $profile_obj->id(),
+						"parent" => $arr["obj_inst"]->prop("pic_folder"),
 						"return" => "id",
 					);
 					
@@ -4626,6 +4875,7 @@ class commune extends class_base
 		@attrib name=delete_profile all_args="1"
 		@param id required type=int acl=view
 		@param group optional
+		@param sel required
 		@param return_url optional
 	**/
 	function delete_profile($arr)
@@ -4636,7 +4886,7 @@ class commune extends class_base
 		{
 			return $r_url;
 		}
-		if(is_array($arr["selected"]))
+		if(is_array($arr["sel"]))
 		{
 			$ol = new object_list();
 			$ol->add($arr["selected"]);
@@ -4777,7 +5027,7 @@ class commune extends class_base
 	
 	/**
 		@attrib name=hide_prof_com all_args="1"
-		@param selected required type=int acl=view
+		@param sel required type=int acl=view
 		@param profile_id required
 		@param group optional
 		@param return_url optional
@@ -4803,7 +5053,7 @@ class commune extends class_base
 	
 	/**
 		@attrib name=delete_prof_com all_args="1"
-		@param selected required type=int acl=view
+		@param sel required type=int acl=view
 		@param profile_id required
 		@param group optional
 		@param return_url optional
@@ -4821,7 +5071,7 @@ class commune extends class_base
 	
 	/**
 		@attrib name=delete_comments all_args="1"
-		@param selected required type=int acl=view
+		@param sel required type=int acl=view
 		@param img_id required
 		@param group optional
 		@param return_url optional
@@ -4888,6 +5138,15 @@ class commune extends class_base
 	}
 
 	/**
+		@attrib name=hit_that_shit
+	**/
+	function hit_that_shit($arr)
+	{
+		aw_session_del("last_rated_oid");
+		return "sessioon läinud";
+	}
+	
+	/**
 		@attrib name=delete_message
 		@param sel required type=int acl=delete
 	**/
@@ -4895,6 +5154,99 @@ class commune extends class_base
 	{
 		$ins = get_instance(CL_QUICKMESSAGEBOX);
 		return $ins->delete_message($arr);
+	}
+	
+	/**
+		@attrib name=commaction
+
+		@param id required type=int acl=view
+		@param commact required
+		@param profile optional type=int acl=view
+		@param cuser optional type=int acl=view
+		@param group optional
+	**/
+	function commaction($arr)
+	{
+		//arr($arr);
+		/*
+		Array
+		(
+			[id] => 536
+			[commact] => add_friend
+			[profile] => 111
+			[user] => 1
+		)
+		*/
+		$this->callback_on_load(array("request" => $arr));
+		
+		switch($arr["commact"])
+		{
+			case "add_contact":
+				$this->add_contact($arr);
+				return $this->mk_comm_orb(array("group" => $arr["group"]));
+				break;
+			case "add_blocked":
+			case "add_ignored":
+			case "add_friend":
+				$names = array("add_friend", "add_ignored", "add_blocked");
+				$vars = array(
+					$names[0] => array(
+						"type" => 0,
+						"group" => "friend_list",
+					 ),
+					$names[1] => array(
+						"type" => 1,
+						"group" => "ignored_list",
+					 ),
+					$names[2] => array(
+						"type" => 2,
+						"group" => "blocked_list",
+					 ),
+				);
+				if($arr["commact"] == "add_friend")
+				{
+					$vars[$arr["commact"]]["profile"] = $arr["profile"];
+				}
+				else
+				{
+					$vars[$arr["commact"]]["user"] = $arr["cuser"];
+				}
+				//confirmation page??
+				arr($vars[$arr["commact"]]);
+				$this->add_connection($vars[$arr["commact"]]);
+				return $this->mk_comm_orb(array("group" => $vars[$arr["commact"]]["group"]));
+				break;
+			/*
+			case "new_profile":
+				$this->new_profile($arr);
+				return $this->mk_comm_orb(array("group" => "friends"));
+				break;
+			*/
+			case "do_a_thing":
+				$this->do_a_thing($arr);
+				break;
+			
+			case "profile":
+			
+				return $this->mk_comm_orb(array(
+					"id" => $arr["id"],
+					"commact" => "profile",
+					"profile" => $arr["profile"],
+					"group" => $arr["group"],
+				));
+
+				switch ($arr["group"])
+				{
+					case "profile":
+					case "profile_view":
+					case "profile_change":
+						break;
+				}
+				
+				break;
+		}
+		//echo aw_global_get('REQUEST_URI'));
+		return aw_global_get("HTTP_REFERER");
 	}
 	
 	/**
@@ -4909,141 +5261,300 @@ class commune extends class_base
 	}
 	
 	/**
-		@attrib name=change nologin=1 all_args=1 is_public=1 caption="Kommuuni sisu"
-		@param id required type=int acl=view
+		@attrib name=remove_from_community all_args="1"
+		@param id required type=int
+		@param sel required type=int acl=view
 		@param group optional
+		@param return_url optional
 	**/
-	function change($arr)
+	function remove_from_community($arr)
 	{
-		if (strpos($_SERVER["REQUEST_URI"],"/automatweb") !== false)
+		$user = $this->get_user();
+		if(is_array($arr["sel"]))
 		{
-			return parent::change($arr);
+			foreach($arr["sel"] as $sel)
+			{
+				$conn = $user->connections_to(array(
+					"from" => $sel,
+					"class_id" => CL_COMMUNITY,
+					"type" => array(3, 4, 5),
+				));
+				
+				// as an idea, there should be only one connections to the user, 
+				// but then again, who knows.. -- ahz
+				if(count($conn) > 0)
+				{
+					$community = get_instance(CL_COMMUNITY);
+					foreach($conn as $con)
+					{
+						//arr($con);
+						$args = $arr;
+						unset($args["sel"]);
+						$args["sel"][] = $user->id();
+						$args["group"] = $con->prop("reltype");
+						$args["id"] = $sel;
+						$community->remove_con($args);
+					}
+				}
+			}
+		}
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+	}
+
+	/**  
+		
+		@attrib name=change params=name all_args=1 nologin=1 is_public=1 caption="Kommuuni sisu"
+		
+		@param id optional type=int acl=view
+		@param group optional
+		@param period optional
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		@comment
+
+	**/
+	function change($args = array())
+	{
+		if(strpos($_SERVER["REQUEST_URI"],"/automatweb") !== false)
+		{
+			return parent::change($args);
         }
-		switch($arr["group"])
-		{
-			case "ratings":
-				$action = "public_rate";
-				//$rval = $this->public_rate($arr);
-				break;
-			case "friend_details":
-				$action = "public_show_profile";
-				break;
-			default:
-				$action = "show_nothing";
-				//$rval = "this is the solution for all our problems.";
-				break;
-		}
+		enter_function("cb-change");
+		$this->init_class_base();
+
+		$this->subgroup = $this->reltype = "";
+		$this->is_rel = false;
+
+		$this->orb_action = $args["action"];
 		
-		// and don't even try to tell me that this is not faster x 2 then do_orb_method_call -- ahz
-		$rval = $this->method_call(array(
-			"action" => $action,
-			"params" => $arr,
-			"class" => "commune",
-		));
-		return $rval;
-	}
+		$this->is_translated = 0;
 
-	
-	function method_call($arr)
-	{
-		$rval = "";
-		$orb = get_instance("orb");
-		extract($arr);
-
-		if(!isset($action))
+		if (empty($args["action"]))
 		{
-			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,true, false);
-		}
-
-		// get orb defs for the class
-		$orb_defs = $orb->try_load_class("commune");
-
-		// check params
-		$params = $orb->check_method_params($orb_defs, $params, "commune", $action);
-		$arr["params"] = $params;
-
-		$orb->do_orb_acl_checks($orb_defs["commune"][$action], $params);
-		if(method_exists($this, $action))
-		{
-			$rval = $this->$action($params);
-		}
-		return $rval;
-	}
-
-	/**
-		@attrib name=public_rate nologin=1 caption="Hindamine"
-	**/
-	function public_rate($arr)
-	{
-		$rval = $this->parse_properties(array(
-			"properties" => $this->callback_rate_content($arr),
-		)); 
-		//arr($rval);
-		//die();
-		$htmlc = get_instance("cfg/htmlclient");
-		$htmlc->start_output();
-		foreach($rval as $val)
-		{
-			$htmlc->add_property($val);
-		}
-		$htmlc->finish_output();
-
-		$html = $htmlc->get_result(array(
-			"raw_output" => 1
-		));
-		return $html;
-	}
-	
-	/**
-		@attrib name=show_nothing nologin=1
-	**/
-	function show_nothing($arr)
-	{
-		return "..and what?!?";
-	}
-
-	/**
-		@attrib name=public_show_profile caption="Näita profiili" nologin=1
-		@param profile required type=int acl=view
-	**/
-	function public_show_profile($arr)
-	{
-		//echo dbg::process_backtrace(debug_backtrace());
-		$this->read_template("show_profile.tpl");
-
-		$profile_o = obj($arr["profile"]);
+			$args["action"] = "change";
+		};
 		
-		$person_o = $profile_o->get_first_obj_by_reltype("RELTYPE_PERSON");
-		$person_props = $this->get_parsed_viewable_props_for(array(
-			"obj" => $person_o,
-			"fields" => $this->fields_from_person,
-		));
-
-		foreach($person_props as $pn => $pd)
+		if (method_exists($this->inst,"callback_on_load"))
 		{
-				$this->vars(array(
-					"prop_caption" => $pd["caption"],
-					"prop_value" => $pd["value"],
-				));
-				$this->vars(array(
-					"person.".$pn => $this->parse("property_item"),
-				));
-		}
-		$profile_props = $this->get_parsed_viewable_props_for(array(
-			"obj" => $profile_o,
-			"fields" => $this->show_fields_from_profile,
-		));
-		foreach($profile_props as $pn => $pd)
-		{
-			$this->vars(array(
-				"prop_caption" => $pd["caption"],
-				"prop_value" => $pd["value"],
-			));
-			$this->vars(array(
-				"profile.".$pn => $this->parse("property_item"),
+			$this->inst->callback_on_load(array(
+				"request" => $args,
 			));
 		}
-		return $this->parse();
+
+		if ($args["no_active_tab"])
+		{
+			$this->no_active_tab = 1;
+		};
+
+		if (empty($args["form"]))
+		{
+			if (($args["action"] == "change") || ($args["action"] == "view"))
+			{
+				$this->load_storage_object($args);
+				if ($this->obj_inst->class_id() == CL_RELATION)
+				{
+					// this is a relation!
+					$this->is_rel = true;
+					$def = $this->_ct[$this->clid]["def"];
+					$meta = $this->obj_inst->meta("values");
+					$this->values = $meta[$def];
+					$this->values["name"] = $this->obj_inst->name();
+				};
+
+			};
+		}
+
+		$this->use_form = $use_form;
+
+		$filter = array(
+			"clid" => $this->clid,
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+		);
+
+		$properties = $this->get_property_group($filter);
+		
+		if(array_key_exists("name", $properties))
+		{
+			header("location:".aw_ini_get("baseurl"));
+			die();
+		}
+
+		$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
+		$this->set_classinfo(array("name" => "layout", "value" => ""));
+		
+		if (!empty($args["form"]))
+		{
+			$onload_method = $this->forminfo(array(
+				"form" => $args["form"],
+				"attr" => "onload",
+			));
+
+			if (method_exists($this->inst, $onload_method))
+			{
+				$this->inst->$onload_method($args);
+			}
+		};
+	
+		$this->request = $args;
+
+		if(method_exists($this->inst,"callback_pre_edit"))
+		{
+			$fstat = $this->inst->callback_pre_edit(array(
+				"id" => $this->id,
+				"request" => $this->request,
+				"obj_inst" => &$this->obj_inst,
+				"group" => $this->use_group,
+			));
+
+			if (is_array($fstat) && !empty($fstat["error"]))
+			{
+				$properties = array();
+				$properties["error"] = array(
+					"type" => "text",
+					"error" => $fstat["errmsg"],
+				);
+				$gdata["submit"] = "no";
+			}
+		}
+		
+		$resprops = $this->parse_properties(array(
+			"properties" => &$properties,
+		));
+		if(array_key_exists("submit", $this->groupinfo[$args["group"]]))
+		{
+			if($this->groupinfo[$args["group"]]["submit"] == "no")
+			{
+				$lm = 1;
+			}
+		}
+		foreach($resprops as $prop)
+		{
+			if($prop["type"] == "toolbar")
+			{
+				$lm = 1;
+				break;
+			}
+		}
+
+		if (!empty($lm))
+		{
+			$gdata["submit"] = "no";
+		};
+		
+		$template = $this->forminfo(array(
+			"form" => $args["form"],
+			"attr" => "template",
+		));
+		$o_arr = array(
+			"tpldir" => "applications/commune/commune", 
+			"tabs" => false,
+		);
+		if (!empty($template))
+		{
+			$o_arr["template"] = $template;
+		}
+		$cli = get_instance("cfg/htmlclient", $o_arr);
+
+		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
+		{
+			$tmp = array();
+			// export only layout information for the current group
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if ($val["group"] == $this->use_group)
+				{
+					$tmp[$key] = $val;
+
+
+				};
+			};
+			$cli->set_layout($tmp);
+		};
+
+		$this->inst->relinfo = $this->relinfo;
+
+		enter_function("parse-properties");
+
+		exit_function("parse-properties");
+		enter_function("add-property");
+
+		foreach($resprops as $val)
+		{
+			$cli->add_property($val);
+		};
+		exit_function("add-property");
+		
+		$argblock = array(
+			"id" => $this->id,
+			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->use_group,
+			"orb_class" => "commune",
+			"section" => $_REQUEST["section"],
+		);
+
+		if (method_exists($this->inst,"callback_mod_reforb"))
+		{
+			$this->inst->callback_mod_reforb(&$argblock,$this->request);
+
+		};
+
+		$submit_action = "submit";
+
+		$form_submit_action = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "onsubmit",
+		));
+
+		if (!empty($form_submit_action))
+		{
+			$submit_action = $form_submit_action;
+		}
+
+		// forminfo can override form post method
+		$form_submit_method = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "method",
+		));
+
+		$method = "POST";
+		if (!empty($form_submit_method))
+		{
+			$method = "GET";
+		};
+
+		if (!empty($gdata["submit_method"]))
+		{
+			$method = "GET";
+			$submit_action = $args["action"];
+		};
+
+		if (!empty($gdata["submit_action"]))
+		{
+			$submit_action = $gdata["submit_action"];
+		}	
+
+		if ($method == "GET")
+		{
+			$argblock["no_reforb"] = 1;
+		};
+
+		enter_function("final-bit");
+		
+		$cli->finish_output(array(
+			"method" => $method,
+			"action" => $submit_action,
+			// hm, dat is weird!
+			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
+			"data" => $argblock,
+		));
+		$rv = $cli->get_result();
+		
+		exit_function("final-bit");
+		exit_function("cb-change");
+		return $rv;
 	}
 }
 ?>

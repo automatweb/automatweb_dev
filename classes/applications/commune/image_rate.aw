@@ -77,19 +77,24 @@ class image_rate extends class_base
 	}
 	function init_rate($arr)
 	{
-		$user_i = get_instance(CL_USER);
-		$user = obj($user_i->get_current_user());
-		$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
-		$view = $person->meta("view_conditions");
-		$message = $person->meta("message_conditions");
-		$browse = $person->meta("browsing_conditions");
+		$uid = aw_global_get("uid");
+		if(!empty($uid))
+		{
+			$user_i = get_instance(CL_USER);
+			$user = obj($user_i->get_current_user());
+			$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+			$view = $person->meta("view_conditions");
+			$message = $person->meta("message_conditions");
+			$browse = $person->meta("browsing_conditions");
+		}
 		//arr($browse);
 
 		// this is the place where aw-s functionality fails in speed, and hack comes along
 		// and a really ugly hack that is... -- ahz
-		$q = "count(*) as total";
+		//$q = "count(*) as total";
 		$q = "profile2image.*";
 		$q = "SELECT $q FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
+		///$q = "select * from profile2image where img_id='924'";
 		if(!empty($browse["sexorient"]))
 		{
 			$w = " and aw_profiles.sexual_orientation = '".$browse["sexorient"]."'"; 
@@ -151,6 +156,7 @@ class image_rate extends class_base
 			$true = false;
 			shuffle($var);
 			$row = $var[0];
+			//echo $row["img_id"];
 			if($this->can("view", $row["img_id"]))
 			{
 				$true = true;
@@ -202,7 +208,7 @@ class image_rate extends class_base
 				$user = $this->profile_data->createdby();
 				$params = array(
 					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"user" => $user->name(),
+					"cuser" => $user->name(),
 					"group" => "newmessage",
 				);
 				$prop["value"] = html::href(array(
@@ -226,7 +232,7 @@ class image_rate extends class_base
 				$user = $this->profile_data->createdby();
 				$params = array(
 					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"user" => $user->id(),
+					"cuser" => $user->id(),
 					"commact" => "add_ignored",
 					"group" => "ignored_list",
 				);
@@ -239,7 +245,7 @@ class image_rate extends class_base
 				$user = $this->profile_data->createdby();
 				$params = array(
 					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"user" => $user->id(),
+					"cuser" => $user->id(),
 					"commact" => "add_blocked",
 					"group" => "blocked_list",
 				);
@@ -252,7 +258,7 @@ class image_rate extends class_base
 				$user = $this->profile_data->createdby();
 				$params = array(
 					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
-					"user" => $user->id(),
+					"cuser" => $user->id(),
 					"commact" => "add_contact",
 					"group" => "address_book",
 				);
@@ -267,7 +273,7 @@ class image_rate extends class_base
 				$imgdata = $i->get_image_by_id($this->image_data->id());
 
 				$prop["value"] .= html::img(array(
-					"url" => $imgdata["url"],
+					"url" => $imgdata["big_url"],
 				));
 				break;
 				

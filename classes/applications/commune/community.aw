@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.5 2004/09/03 15:50:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.6 2004/10/11 12:59:48 ahti Exp $
 // community.aw - Kogukond 
 /*
 
@@ -12,77 +12,86 @@
 
 -------------------------------------
 
-@groupinfo forum caption="Foorum" submit=no
+@groupinfo general2 caption="Üldised seaded" parent=general
 
-@property forum type=text group=forum store=no no_caption=1
-@caption Foorum
+@property owner type=hidden store=no newonly=1 group=general2
+
+@property category type=classificator reltype=RELTYPE_CATEGORIES orient=vertical multiple=1 recursive=1 group=general2
+@caption Kategooriad
 
 
-@groupinfo calendar caption="Kalender"
-
-@groupinfo calendar_view caption="Sisuvaade" parent=calendar submit=no
-
-@property calendar_view_toolbar type=toolbar group=calendar_view no_caption=1
-@caption Kalendri toolbar
-
-@property calendar_view type=calendar group=calendar_view store=no no_caption=1
-@caption Kalender
-
-@groupinfo add_event caption="Lisa sündmus" parent=calendar
-
-@property add_event type=callback callback=callback_add_event group=add_event no_caption=1
-@caption Lisa sündmus
-
-@groupinfo settings caption="Seaded"
-
-@groupinfo forum_settings caption="Foorumi seaded" parent=settings
+@groupinfo forum_settings caption="Foorumi seaded" parent=general
 
 @property forum_settings type=callback callback=callback_forum_settings group=forum_settings
 @caption Foorumi seaded
 
-@groupinfo calendar_settings caption="Kalendri seaded" parent=settings
+
+@groupinfo calendar_settings caption="Kalendri seaded" parent=general
 
 @property calendar_settings type=callback callback=callback_calendar_settings group=calendar_settings store=no
 @caption Kalendri seaded
 
-@property categories type=relpicker reltype=RELTYPE_CATEGORIES group=settings
+
+@groupinfo content caption="Sisu" submit=no
+
+@property content type=callback callback=callback_content group=content no_caption=1
+@caption Sisu
 
 
+@groupinfo connected caption="Seotud isikud" submit=no
 
-@groupinfo moderators caption="Moderaatorid" submit=no
+
+@groupinfo members caption="Liikmed" submit=no parent=connected
+
+@property members_toolbar type=toolbar group=members no_caption=1
+@caption Liikmete toolbar
+
+@property members type=table group=members no_caption=1
+@caption Liikmed
+
+
+@groupinfo moderators caption="Moderaatorid" submit=no parent=connected
 
 @property moderators_toolbar type=toolbar group=moderators no_caption=1
 @caption Moderaatorite toolbar
 
-@property moderators type=table group=moderators
+@property moderators type=table group=moderators no_caption=1
 @caption Moderaatorid
 
-//@property forum_settings type=text group=forum_settings store=no
-//@property forum2 type=relpicker reltype=RELTYPE_FORUM group=settings
-//@property calendar_settings type=text group=calendar_settings store=no
-//@property calendar2 type=relpicker reltype=RELTYPE_CALENDAR group=settings
+
+@groupinfo blocked caption="Blokeeritud" submit=no parent=connected
+
+@property blocked_toolbar type=toolbar group=blocked no_caption=1
+@caption Blokeeritute toolbar
+
+@property blocked type=table group=blocked no_caption=1
+@caption Blokeeritud
 
 -------------------------------------
-@reltype MODERATOR value=3 clid=CL_USER
-@caption moderaator
 
-@reltype MEMBER value=4 clid=CL_PROFILE
-@caption kogukonna liige
+@reltype MODERATOR value=3 clid=CL_USER
+@caption Moderaator
+
+@reltype MEMBER value=4 clid=CL_USER
+@caption Kogukonna liige
 
 @reltype BLOCKED value=5 clid=CL_USER
-@caption blokeeritud kasutaja
+@caption Blokeeritud kasutaja
 
 @reltype FORUM value=1 clid=CL_FORUM_V2
-@caption foorum
+@caption Foorum
 
 @reltype CALENDAR value=2 clid=CL_PLANNER
-@caption kalender
+@caption Kalender
+
+@reltype CALENDAR_VIEW value=8 clid=CL_CALENDAR_VIEW
+@caption Kalendri vaade
 
 @reltype CATEGORIES value=6 clid=CL_META
-@caption kogukondade kategooriad
+@caption Kogukondade kategooriad
 
 @reltype CFG_MANAGER value=7 clid=CL_CFGMANAGER
-@caption seadete haldur
+@caption Seadete haldur
 
 */
 
@@ -90,6 +99,7 @@ class community extends class_base
 {
 	var $calendar;
 	var $self = false;
+	var $types = array();
 	
 	function community()
 	{
@@ -99,6 +109,11 @@ class community extends class_base
 			"tpldir" => "applications/commune/community",
 			"clid" => CL_COMMUNITY
 		));
+		$types = array(
+			"members" => "MEMBER",
+			"moderators" => "MODERATOR",
+			"blocked" => "BLOCKED",
+		);
 	}
 	
 	function callback_on_load($arr)
@@ -111,60 +126,55 @@ class community extends class_base
 		}
 	}
 	
-	function callback_mod_retval($arr)
-	{
-		$arr["args"]["event_id"] = aw_global_get("event_id");
-	}
-	
-	function callback_mod_tab($args)
-	{
-		if ($args["activegroup"] != "add_event" && $args["id"] == "add_event")
-		{
-			return false;
-		};
-
-		if ($args["activegroup"] == "add_event" && $args["id"] == "add_event")
-		{
-			$link = &$args["link"];
-			$link = $this->mk_my_orb("change",$args["request"]);
-		};
-	}
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "calendar_view":
-				$this->gen_events($arr);
-				break;
-			case "forum":
-				$prop["value"] = $this->gen_forum($arr);
-				break;
+			case "blocked_toolbar":
+			case "members_toolbar":
 			case "moderators_toolbar":
+				$var = array(
+					"members_toolbar" => array(
+						"blocked" => "Blokeeri", 
+						"moderator" => "Tee moderaatoriks",
+					),
+					"blocked_toolbar" => array(
+						"member" => "Tee liikmeks", 
+						"moderator" => "Tee moderaatoriks",
+					),
+					"moderators_toolbar" => array(
+						"member" => "Tee liikmeks", 
+						"blocked" => "Blokeeri",
+					),
+				);
 				$tb = &$prop["vcl_inst"];
-				$tb->add_button(array(
-					"name" => "add",
-					"tooltip" => "Lisa moderaator",
-					"img" => "new.gif",
-					"url" => html::get_change_url($arr["obj_inst"]->id(),array(
-						"group" => "moderators",
-					)),
-				));
-				$tb->add_separator();
+				foreach($var[$prop["name"]] as $key => $opt)
+				{
+					$tb->add_button(array(
+						"name" => "add_".$key,
+						"tooltip" => $opt,
+						"img" => "new.gif",
+						"action" => "add_".$key,
+					));
+					$tb->add_separator();
+				}
 				$tb->add_button(array(
 					"name" => "delete",
-					"tooltip" => "Eemalda moderaator",
+					"tooltip" => "Eemalda ".$var[$prop["name"]],
 					"img" => "delete.gif",
-					"action" => "delete_mod",
+					"action" => "remove_con",
 				));
 				break;
-			case "moderators":
-				$this->show_moderators_table($arr);
+			case "members":
+				$this->show_mod_table($arr, "MEMBER");
 				break;
-			case "calendar_view_toolbar":
-				$this->gen_navtoolbar($arr);
+			case "blocked":
+				$this->show_mod_table($arr, "BLOCKED");
+				break;
+			case "moderators":
+				$this->show_mod_table($arr, "MODERATOR");
 				break;
 		}
 		return $retval;
@@ -176,135 +186,101 @@ class community extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "owner":
+				$arr["obj_inst"]->connect(array(
+					"to" => aw_global_get("uid_oid"),
+					"reltype" => "RELTYPE_MODERATOR",
+				));
+				$forum = new object();
+				$forum->set_class_id(CL_FORUM);
+				$forum->set_status(STAT_ACTIVE);
+				$forum->set_parent($arr["obj_inst"]->id());
+				$forum->save();
+				$arr["obj_inst"]->connect(array(
+					"to" => $forum->id(),
+					"reltype" => "RELTYPE_FORUM",
+				));
+				$cal_view = new object();
+				$cal_view->set_class_id(CL_CALENDAR_VIEW);
+				$cal_view->set_status(STAT_ACTIVE);
+				$cal_view->set_parent($arr["obj_inst"]->id());
+				$cal_view->save();
+				$arr["obj_inst"]->connect(array(
+					"to" => $cal_view->id(),
+					"reltype" => "RELTYPE_CALENDAR_VIEW",
+				));
+				$calendar = new object();
+				$calendar->set_class_id(CL_CALENDAR);
+				$calendar->set_status(STAT_ACTIVE);
+				$calendar->set_parent($arr["obj_inst"]->id());
+				$calendar->save();
+				$arr["obj_inst"]->connect(array(
+					"to" => $calendar->id(),
+					"reltype" => "RELTYPE_CALENDAR",
+				));
+				$cal_view->connect(array(
+					"to" => $forum->id(),
+					"reltype" => "RELTYPE_EVENT_SOURCE",
+				));
+				break;
+			case "category":
+				$this->add_category_connections($arr);
+				break;
 			case "forum_settings":
 				$this->save_forum_settings($arr);
 				break;
 			case "calendar_settings":
 				$this->save_calendar_settings($arr);
 				break;
-			case "add_event":
-				$cal_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-				$cal = $cal_o->instance();
-				$cal->register_event_with_planner(array(
-					"obj_inst" => &$cal_o,
-					"request" => &$arr["request"],
-				));
-				break;
 		}
 		return $retval;
 	}
-	
-	function gen_navtoolbar($arr)
+	function callback_content($arr)
 	{
-		$id = $this->self;
-		$toolbar = &$arr["prop"]["vcl_inst"];
-		// would be nice to have a vcl component for doing drop-down menus
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_EVENT_ENTRY,
-		));
-		$toolbar->add_menu_button(array(
-			"name" => "create_event",
-			"tooltip" => "Uus",
-		));
-		foreach($conns as $conn)
-		{
-			$toolbar->add_menu_item(array(
-				"parent" => "create_event",
-				"link" => $this->mk_my_orb("change",array(
-					"id" => $id,
-					"group" => "add_event",
-					"cfgform_id" => $conn->prop("to"),
-				)),
-				"text" => $conn->prop("to.name"),
-			));
-		};
+		$this->read_template("show_content.tpl");
 		
-		
-		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY,CL_CALENDAR_EVENT);
-		
-		// now I need to figure out which other classes are valid for that relation type
-		$clidlist = $this->event_entry_classes;
-		$tmp = aw_ini_get("classes");
-		foreach($clidlist as $clid)
-		{	//Show only if has configform
-			if(($clid == CL_CALENDAR_EVENT) && ( $arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
-			{
-				continue;
-			}
-			//Dont show at all
-			if($clid == CL_CRM_OFFER)
-			{
-				continue;
-			}
-			$toolbar->add_menu_item(array(
-				"parent" => "create_event",
-				"link" => $this->mk_my_orb("change",array(
-					"id" => $id,
-					"group" => "add_event",
-					"clid" => $clid,
-				)),
-				"text" => $tmp[$clid]["name"],
-			));
-		};
-		
-		$dt = date("d-m-Y",time());
-		
-		$toolbar->add_button(array(
-			"name" => "today",
-			"tooltip" => "Täna",
-			"url" => $this->mk_my_orb("change",array(
-				"id" => $id,
-				"group" => $arr["request"]["group"],
-				"viewtype" => "day",
-				"date" => $dt,
-				)
-			) . "#today",
-			"img" => "icon_cal_today.gif",
-			"class" => "menuButton",
-		));
-	}
-	
-	function callback_add_event($arr)
-	{
-		$cal_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-		$cal = get_instance(CL_PLANNER);
-		//arr($cal_o->properties());
-		//$cal_o->set_meta("cfgform_id", "");
-		//$cal_o->save();
-		return $cal->callback_get_add_event(array(
-			"obj_inst" => $cal_o,
-			"request" => array(
-				//"cfgform_id" => $this->get_cfgform(126),
-				"cb_group" => $arr["request"]["cb_group"],
-				"clid" => $arr["request"]["clid"],
-				"event_id" => $arr["request"]["event_id"],
+		$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
+		$forum_i = $forum->instance();
+		$args = array(
+			"alias" => array(
+				//"relobj_id" => rel_id, 
+				"target" => $forum->id(),
 			),
+		);
+		// yeehaw
+		$cal_view = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR_VIEW");
+		$cal_view_i = $cal_view->instance(); 
+		$this->vars(array(
+			"forum" => $forum_i->parse_alias($args),
+			"calendar" => $cal_view_i->parse_alias(array("obj_inst" => $cal_view)),
 		));
+		//
+		return array("el1" => array("type" => "text", "value" => $this->parse(), "no_caption" => 1));
 	}
 	
-	function gen_forum($arr)
+	function add_category_connections($arr)
 	{
-		$cforum = reset($arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_FORUM",
-		)));
-		$forumi = get_instance(CL_FORUM_V2);
-		arr($cforum);
-		return $forumi->change(array(
-			"id" => $cforum->prop("to"),
-			"action" => isset($arr["request"]["action"]) ? $arr["request"]["action"] : "view",
-			"rel_id" => $cforum->prop("relobj_id"),
-			"folder" => $_GET["folder"],
-			"topic" => $_GET["topic"],
-			"page" => $_GET["page"],
-			"c" => $_GET["c"],
-			"cb_part" => 1,
-			"fxt" => 1,
-			"group" => "contents",
-			//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
+		$cons = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_CATEGORIES",
 		));
+		foreach($cons as $con)
+		{
+			$arr["obj_inst"]->disconnect(array(
+				"from" => $con->prop("to"),
+				"reltype" => "RELTYPE_CATEGORIES", 
+			));
+		}
+		foreach($arr["prop"]["value"] as $value)
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $value,
+				"reltype" => "RELTYPE_CATEGORIES",
+			));
+		}
+		//arr($arr);
 	}
 	
-	function show_moderators_table($arr)
+	function show_mod_table($arr, $type)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
@@ -330,7 +306,7 @@ class community extends class_base
 		));
 		
 		$moderators = &$arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MODERATOR",
+			"type" => "RELTYPE_".$type,
 		));
 		$tmp = $arr["obj_inst"]->createdby();
 		foreach($moderators as $mod)
@@ -343,15 +319,16 @@ class community extends class_base
 				//arr($mod);
 				$person = $moderator->get_first_obj_by_reltype("RELTYPE_PERSON");
 				$profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
+				
+				//arr($profile);
 				$active_profile = $person->meta("active_profile");
+				//echo $active_profile;
 				$t->define_data(array(
 					"id" => $moderator->id(),
 					"user" => $moderator->name(),
 					"person" => html::href(array(
 						"caption" => $person->name(),
-						"url" => $this->mk_my_orb("change", array(
-							"id" => $active_profile,
-						), CL_PROFILE),
+						"url" => html::get_change_url($active_profile),
 					)),
 					"add_time" => $this->time2date($con->created(), 2),
 				));
@@ -373,193 +350,189 @@ class community extends class_base
 	
 	function callback_forum_settings($arr)
 	{
-		$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
-		$t = get_instance(CL_FORUM_V2);
-		$all_props = $t->get_property_group(array(
-			"cfgform_id" => $this->get_cfgform(211),
-			"group" => "general",
-		));
-		
-		$xprops = $t->parse_properties(array(
-			"obj_inst" => $forum,
-			"properties" => $all_props,
-			"name_prefix" => "forum",
-		));
-		
-		$xprops["forum_comments_on_page"]["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
-		$xprops["forum_topics_on_page"]["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
-		$xprops["forum_topic_depth"]["options"] = array("0" => "0","1" => "1","2" => "2","3" => "3","4" => "4","5" => "5"); 
-		
+		if($forum = obj($arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM")))
+		{
+			$t = $forum->instance();
+			$all_props = $t->get_property_group(array(
+				"cfgform_id" => $this->get_cfgform(211),
+				"group" => "general",
+			));
+			
+			$xprops = $t->parse_properties(array(
+				"obj_inst" => $forum,
+				"properties" => $all_props,
+				"name_prefix" => "forum",
+			));
+			
+			$xprops["forum_comments_on_page"]["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+			$xprops["forum_topics_on_page"]["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+			$xprops["forum_topic_depth"]["options"] = array("0" => "0","1" => "1","2" => "2","3" => "3","4" => "4","5" => "5"); 
+		}
 		return $xprops;
 	}
 	
 	function save_forum_settings($arr)
 	{
-		$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
-		$forum_i = $forum->instance();
-		$props = $arr["request"]["forum"];
-		$props["id"] = $forum->id();
-		$props["return"] = "id";
-		$props["cfgform"] = $this->get_cfgform(211);
-		$props["group"] = "general";
-		$forum_i->submit($props);
+		if($forum = obj($arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM")))
+		{
+			$forum_i = $forum->instance();
+			$props = $arr["request"]["forum"];
+			$props["id"] = $forum->id();
+			$props["return"] = "id";
+			$props["cfgform"] = $this->get_cfgform(211);
+			$props["group"] = "general";
+			$forum_i->submit($props);
+		}
 	}
 	
 	function callback_calendar_settings($arr)
 	{
-		$calendar = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-		$t = get_instance(CL_PLANNER);
-		$all_props = $t->get_property_group(array(
-			"cfgform_id" => $this->get_cfgform(126),
-			"group" => "advanced",
-		));
-		$xprops = $t->parse_properties(array(
-			"obj_inst" => $calendar,
-			"properties" => $all_props,
-			"name_prefix" => "calendar",
-		));
-		$xprops["calendar_navigator_months"]["options"] = array(1 => 1, 2 => 2, 3 => 3 );
-		$daynames = explode("|",LC_WEEKDAY);
-		for ($i = 1; $i <= 7; $i++)
+		$props = "";
+		if($calendar = obj($arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 		{
-			$xprops["calendar_workdays"]["options"][$i] = $daynames[$i];
+			$t = $calendar->instance();
+			$all_props = $t->get_property_group(array(
+				"cfgform_id" => $this->get_cfgform(126),
+				"group" => "advanced",
+			));
+			$xprops = $t->parse_properties(array(
+				"obj_inst" => $calendar,
+				"properties" => $all_props,
+				"name_prefix" => "calendar",
+			));
+			$xprops["calendar_navigator_months"]["options"] = array(1 => 1, 2 => 2, 3 => 3 );
+			$daynames = explode("|",LC_WEEKDAY);
+			for ($i = 1; $i <= 7; $i++)
+			{
+				$xprops["calendar_workdays"]["options"][$i] = $daynames[$i];
+			}
 		}
 		return $xprops;
 	}
 
 	function save_calendar_settings($arr)
 	{
-		$cal = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-		$cal_i = $cal->instance();
-		$props = $arr["request"]["calendar"];
-		$props["id"] = $cal->id();
-		//arr($cal->properties());
-		$props["return"] = "id";
-		$props["cfgform"] = $this->get_cfgform(126);
-		$props["group"] = "advanced";
-		$cal_i->submit($props);
+		if($cal = obj($arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+		{
+			$cal_i = $cal->instance();
+			$props = $arr["request"]["calendar"];
+			$props["id"] = $cal->id();
+			//arr($cal->properties());
+			$props["return"] = "id";
+			$props["cfgform"] = $this->get_cfgform(126);
+			$props["group"] = "advanced";
+			$cal_i->submit($props);
+		}
 	}
 
-	function get_tasklist()
+	/**
+		@attrib name=add_blocked all_args="1"
+		@param sel required type=int acl=view
+		@param id required type=int acl=view
+		@param group optional
+	**/
+	function add_blocked($arr)
 	{
-		$tasklist = $this->get_messages();
-		$rv = array();
-		foreach($tasklist->arr() as $task)
-		{
-			$rv[] = array(
-				"name" => $task->prop("name"),
-				"url" => html::get_change_url($this->self, array(
-					"group" => "calendar_view",
-					"viewtype" => "day",
-					"date" => date("d-m-Y", $task->prop("start1")),
-				)),
-			);
-		}
-		return $rv;
+		return $this->_add_con($arr, "blocked");
 	}
-	
-	function get_overview($arr = array())
+
+	/**
+		@attrib name=add_moderator all_args="1"
+		@param sel required type=int acl=view
+		@param id required type=int acl=view
+		@param group optional
+	**/
+	function add_moderator($arr)
 	{
-		$rv = array();
-		//$folder = $this->calendar->get_first_obj_by_reltype("RELTYPE_EVENT_FOLDER");
-		$messages = $this->get_messages();
-		/*
-		$messages = new object_list(array(
-			"parent" => $folder->id(),
-		));
-		*/
-		foreach($messages->arr() as $element)
-		{
-			//if($element->prop("start1") >= $arr["start"] && $element->prop("start1") <= $arr["end"])
-			//{
-			$rv[$element->prop("start1")] = 1;
-			//} 
-		}
-		return $rv;
-	}
-	function get_messages()
-	{
-		return new object_list(array(
-			"class_id" => CL_TASK,
-			"parent" => $this->calendar->prop("event_folder"),
-			"flags" => array(
-				"mask" => OBJ_IS_DONE,
-				"flags" => 0,
-			),
-		));
-	}
-	function get_me_my_messages($arr)
-	{
-		$rv = array();
-		$messages = $this->get_messages();
-		classload("icons");
-		foreach($messages->arr() as $element)
-		{
-			if($element->prop("start1") >= $arr["start"] && $element->prop("start1") <= $arr["end"])
-			{
-				$rv[] = array(
-					"start" => $element->prop("start1"),
-					"name" => $element->name(),
-					"icon" => icons::get_icon_url($element->class_id()),
-					"link" => aw_url_change_var(array(
-						"group" => "add_event",
-						"event_id" => $element->id(),
-					)),
-					"comment" => $element->comment(),
-				);
-			}
-		}
-		return $rv;
-	}
-	function gen_events($arr)
-	{
-		$this->calendar = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-		$t = &$arr["prop"]["vcl_inst"];
-		$t->configure(array(
-			"tasklist_func" => array(&$this,"get_tasklist"),
-			"overview_func" => array(&$this,"get_overview"),
-		));
-		$range = $t->get_range(array(
-			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : "month",
-		));
-		
-		$events = $this->get_me_my_messages($range);
-		foreach($events as $event)
-		{
-			$t->add_item(array(
-				"timestamp" => $event["start"],
-				"data" => array(
-					"name" => $event["name"],
-					"icon" => $event["icon"],
-					"link" => $event["link"],
-					"comment" => $event["comment"],
-				),
-			));
-		}
+		return $this->_add_con($arr, "moderators");
 	}
 	
 	/**
-		@attrib name=delete_mod all_args="1"
+		@attrib name=add_member all_args="1"
 		@param sel required type=int acl=view
-		@param id required type=int
+		@param id required type=int acl=view
 		@param group optional
 	**/
-	function delete_mod($arr)
+	function add_member($arr)
 	{
+		return $this->_add_con($arr, "members");
+	}
+	
+	function _add_con($arr, $opt)
+	{
+			$opts = array(
+			"moderators" => array(4, 5),
+			"blocked" => array(3, 4),
+			"members" => array(3, 5),
+		);
+		$rels = array(
+			"moderators" => "MODERATOR",
+			"blocked" => "BLOCKED",
+			"members" => "MEMBER",
+		);
+		if(is_array($arr["sel"]))
+		{
+			foreach($arr["sel"] as $sel)
+			{
+				$com = obj($arr["id"]);
+				$sel_o = obj($sel);
+				$cons = $sel_o->connections_to(array(
+					"type" => $opts[$opt],
+					"class_id" => CL_COMMUNITY,
+				));
+				
+				// if community is connected to user, disconnect him before -- ahz
+				if(count($cons) > 0)
+				{
+					
+					foreach($cons as $con)
+					{
+						$com->disconnect(array(
+							"from" => $con->prop("to"),
+							"reltype" => $con->prop("reltype"),
+						));
+					}
+				}
+				
+				$com->connect(array(
+					"to" => $sel,
+					"reltype" => "RELTYPE_".$rels[$opt],
+				));
+			}
+		}
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+	}
+	
+	/**
+		@attrib name=remove_con all_args="1"
+		@param sel required type=int acl=view
+		@param id required type=int acl=view
+		@param group optional
+	**/
+	function remove_con($arr)
+	{
+		$types = array(
+			"members" => "MEMBER", //4
+			"moderators" => "MODERATOR", //3
+			"blocked" => "BLOCKED", //5
+			4 => "MEMBER", //4
+			3 => "MODERATOR", //3
+			5 => "BLOCKED", //5
+		);
 		if(is_array($arr["sel"]))
 		{
 			foreach($arr["sel"] as $sel)
 			{
 				$com = obj($arr["id"]);
 				$com->disconnect(array(
-					"reltype" => "RELTYPE_MODERATOR",
+					"reltype" => "RELTYPE_".$types[$arr["group"]],
 					"from" => $sel,
 				));
 			}
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
 	}
+	
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -567,10 +540,10 @@ class community extends class_base
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
-	//    alias - array of 0alias data, the important bit is $alias[target] which is the id of the object to show
+	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
-		arr($arr);
+		//arr($arr);
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
@@ -584,6 +557,253 @@ class community extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+	
+	/**
+		@attrib name=change nologin=1 all_args=1 is_public=1 caption="Kogukonna sisu"
+		@param id required type=int acl=view
+		@param group optional
+	**/
+	function change($args = array())
+	{
+		if(strpos($_SERVER["REQUEST_URI"],"/automatweb") !== false)
+		{
+			return parent::change($args);
+        }
+		
+		enter_function("cb-change");
+		$this->init_class_base();
+
+		$this->subgroup = $this->reltype = "";
+		$this->is_rel = false;
+
+		$this->orb_action = $args["action"];
+		
+		$this->is_translated = 0;
+
+		if (empty($args["action"]))
+		{
+			$args["action"] = "change";
+		};
+		
+		if (method_exists($this->inst,"callback_on_load"))
+		{
+			$this->inst->callback_on_load(array(
+				"request" => $args,
+			));
+		}
+
+		if ($args["no_active_tab"])
+		{
+			$this->no_active_tab = 1;
+		};
+
+		if (empty($args["form"]))
+		{
+			if (($args["action"] == "change") || ($args["action"] == "view"))
+			{
+				$this->load_storage_object($args);
+				if ($this->obj_inst->class_id() == CL_RELATION)
+				{
+					// this is a relation!
+					$this->is_rel = true;
+					$def = $this->_ct[$this->clid]["def"];
+					$meta = $this->obj_inst->meta("values");
+					$this->values = $meta[$def];
+					$this->values["name"] = $this->obj_inst->name();
+				};
+
+			};
+		}
+
+		$this->use_form = $use_form;
+
+		$filter = array(
+			"clid" => $this->clid,
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+		);
+
+		$properties = $this->get_property_group($filter);
+		
+		if(array_key_exists("name", $properties))
+		{
+			header("location:".aw_ini_get("baseurl"));
+			die();
+		}
+
+		$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
+		$this->set_classinfo(array("name" => "layout", "value" => ""));
+		
+		if (!empty($args["form"]))
+		{
+			$onload_method = $this->forminfo(array(
+				"form" => $args["form"],
+				"attr" => "onload",
+			));
+
+			if (method_exists($this->inst, $onload_method))
+			{
+				$this->inst->$onload_method($args);
+			}
+		};
+	
+		$this->request = $args;
+
+		if(method_exists($this->inst,"callback_pre_edit"))
+		{
+			$fstat = $this->inst->callback_pre_edit(array(
+				"id" => $this->id,
+				"request" => $this->request,
+				"obj_inst" => &$this->obj_inst,
+				"group" => $this->use_group,
+			));
+
+			if (is_array($fstat) && !empty($fstat["error"]))
+			{
+				$properties = array();
+				$properties["error"] = array(
+					"type" => "text",
+					"error" => $fstat["errmsg"],
+				);
+				$gdata["submit"] = "no";
+			}
+		}
+		
+		$resprops = $this->parse_properties(array(
+			"properties" => &$properties,
+		));
+		if(array_key_exists("submit", $this->groupinfo[$args["group"]]))
+		{
+			if($this->groupinfo[$args["group"]]["submit"] == "no")
+			{
+				$lm = 1;
+			}
+		}
+		foreach($resprops as $prop)
+		{
+			if($prop["type"] == "toolbar")
+			{
+				$lm = 1;
+				break;
+			}
+		}
+
+		if (!empty($lm))
+		{
+			$gdata["submit"] = "no";
+		};
+		
+		$template = $this->forminfo(array(
+			"form" => $args["form"],
+			"attr" => "template",
+		));
+		$o_arr = array(
+			"tpldir" => "applications/commune/commune", 
+			"tabs" => false,
+		);
+		if (!empty($template))
+		{
+			$o_arr["template"] = $template;
+		}
+		$cli = get_instance("cfg/htmlclient", $o_arr);
+
+		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
+		{
+			$tmp = array();
+			// export only layout information for the current group
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if ($val["group"] == $this->use_group)
+				{
+					$tmp[$key] = $val;
+
+
+				};
+			};
+			$cli->set_layout($tmp);
+		};
+
+		$this->inst->relinfo = $this->relinfo;
+
+		enter_function("parse-properties");
+
+		exit_function("parse-properties");
+		enter_function("add-property");
+
+		foreach($resprops as $val)
+		{
+			$cli->add_property($val);
+		};
+		exit_function("add-property");
+		
+		$argblock = array(
+			"id" => $this->id,
+			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->use_group,
+			"orb_class" => "community",
+			"section" => $_REQUEST["section"],
+		);
+
+		if (method_exists($this->inst,"callback_mod_reforb"))
+		{
+			$this->inst->callback_mod_reforb(&$argblock,$this->request);
+
+		};
+
+		$submit_action = "submit";
+
+		$form_submit_action = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "onsubmit",
+		));
+
+		if (!empty($form_submit_action))
+		{
+			$submit_action = $form_submit_action;
+		}
+
+		// forminfo can override form post method
+		$form_submit_method = $this->forminfo(array(
+			"form" => $use_form,
+			"attr" => "method",
+		));
+
+		$method = "POST";
+		if (!empty($form_submit_method))
+		{
+			$method = "GET";
+		};
+
+		if (!empty($gdata["submit_method"]))
+		{
+			$method = "GET";
+			$submit_action = $args["action"];
+		};
+
+		if (!empty($gdata["submit_action"]))
+		{
+			$submit_action = $gdata["submit_action"];
+		}	
+
+		if ($method == "GET")
+		{
+			$argblock["no_reforb"] = 1;
+		};
+
+		enter_function("final-bit");
+		
+		$cli->finish_output(array(
+			"method" => $method,
+			"action" => $submit_action,
+			// hm, dat is weird!
+			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
+			"data" => $argblock,
+		));
+		$rv = $cli->get_result();
+		
+		exit_function("final-bit");
+		exit_function("cb-change");
+		return $rv;
 	}
 }
 ?>
