@@ -333,7 +333,7 @@
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <value>1</value>
+            <default>1</default>
             <table>menu</table>
             <field>clickable</field>
             <caption>Klikitav</caption>
