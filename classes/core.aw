@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.153 2003/02/13 14:22:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.154 2003/02/13 14:42:21 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -247,10 +247,10 @@ class core extends db_connector
 			$this->raise_error(ERR_CORE_NO_OID,"core::delete_object() - no oid specified",false, true);
 		};
 
-		if (!$this->can("delete", $oid))
+		/*		if (!$this->can("delete", $oid))
 		{
 			$this->raise_error(ERR_ACL_ERR, "core::delete_object() - no can_delete access for $oid!", true, false);
-		}
+		}*/
 
 		$obj = $this->get_object($oid);
 		$this->_log(ST_CORE, SA_DELETE, "$obj[name], id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
@@ -1524,7 +1524,7 @@ class core extends db_connector
 		// we replicate by POST request, cause this thing can be too long for a GET request
 		global $class,$action;
 
-		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
+		if (false && (aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
 			$socket = get_instance("socket");
