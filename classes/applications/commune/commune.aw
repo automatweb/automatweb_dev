@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.5 2004/09/02 11:16:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.6 2004/09/03 15:50:12 ahti Exp $
 // commune.aw - Kommuun
 /*
 
@@ -2458,8 +2458,14 @@ class commune extends class_base
 		$profile_o = $this->get_active_profile();
 		$prof_cls_i = get_instance(CL_PROFILE);
 		$prof_cls_i->init_class_base();
+		/*
 		$props = $prof_cls_i->get_property_group(array(
-			"group" => "settings_harjumused",
+			"group" => "settings",
+		));
+		*/
+		$props = $this->get_properties_by_name(array(
+			"clfile" => "profile",
+			"props" => "sexual_orientation",
 		));
 		// selle asemel et näha hullumoodi vaeva, otsides andmebaasist
 		// maksimaalset ja minimaalset vanust, teeb hoopis 1 - 100
@@ -3166,8 +3172,7 @@ class commune extends class_base
 			// props --------------------------------------------
 			$prof_view_url = $this->mk_comm_orb(array(
 				"profile" => $profile->id(),
-				"commact" => "profile",
-				"group" => "prof_friends",
+				"group" => "friend_details",
 			));
 			$name_link = $this->render_link($name, $prof_view_url);
 
@@ -4075,7 +4080,7 @@ class commune extends class_base
 			}
 		}
  		$profile_props["user_field1"] = $usr["year"].$usr["month"].$usr["day"];
-		$groups = array("yldandmed", "valimus", "harrastused", "harjumused", "kool_too");
+		//$groups = array("yldandmed", "valimus", "harrastused", "harjumused", "kool_too");
 		$profile_props["return"] = "id";
 		
 		if($this->common["my_profile"])
@@ -4103,13 +4108,16 @@ class commune extends class_base
 		$profile_i = get_instance(CL_PROFILE);
 		//arr($profile_props);
 		$profile->set_meta("occupation", $profile_props["occupation"]);
-		
+		/*
 		// there has GOT TO BE BETTER WAY then THIS :| -- ahz
 		foreach($groups as $group)
 		{
-			$profile_props["group"] = "settings_".$group;
-			$profile_id = $profile_i->submit($profile_props);
+			
 		}
+		*/
+		//$profile_props["group"] = "settings";
+		$profile_props["cb_existing_props_only"] = 1;
+		$profile_id = $profile_i->submit($profile_props);
 
 		if ($new)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.2 2004/08/25 07:13:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.3 2004/09/03 15:50:13 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -153,7 +153,7 @@ class contact_list extends class_base
 			$contacts[$user_o->id()] = array(
 				"name" => $user_o->name(),
 				"email" => $user_o->prop("email"),
-				"profile" => $profile->id(),
+				"profile" => is_object($profile) ? $profile->id() : "",
 			);
 		}
 		$t = &$arr["vcl_inst"];
