@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.5 2001/05/30 02:49:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.6 2001/06/04 07:38:00 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -67,7 +67,7 @@ class file extends aw_template
 	function get($args = array())
 	{
 		extract($args);
-		$q = "SELECT * FROM files WHERE id = '$id'";
+		$q = "SELECT *,objects.name AS oname FROM files LEFT JOIN objects ON (files.id = objects.oid) WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
 		$fname = $row["file"];
@@ -77,10 +77,31 @@ class file extends aw_template
 						"file" => $file,
 			));
 		$retval = array(
+				"name" => $row["oname"],
 				"type" => $row["type"],
 				"file" => $contents,
 			);
 		return $retval;
+	}
+
+	////
+	// !Teeb failiobjekist koopia uue parenti alla
+	// argumendid:
+	// id - faili id, millest koopia teha
+	// parent - koht, mille alla koopia teha
+	function cp($args = array())
+	{
+		extract($args);
+		$old = $this->get(array("id" => $id));
+		$this->put(array(
+				"store" => "fs",
+				"parent" => $parent,
+				"filename" => $old["name"],
+				"type" => $old["type"],
+				"content" => $old["file"],
+		));
+		// well, we should be done by now
+				
 	}
 
 	////
