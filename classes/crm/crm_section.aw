@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.8 2004/07/02 14:58:58 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.9 2004/07/05 06:14:56 rtoomas Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -97,11 +97,11 @@ class crm_section extends class_base
 	/*
 		$id - object id
 	*/
-	function get_professions($id, $recrusive = false)
+	function get_professions($id, $recursive = false)
 	{
 		static $rtrn;
 		
-		if($recrusive == false)
+		if($recursive == false)
 		{
 			$obj = new object($id);
 			$rtrn = array();
@@ -114,7 +114,7 @@ class crm_section extends class_base
 			}
 		}
 		else
-		{	//Case recrusve
+		{	//Case recursion
 			$obj = new object($id);
 			$conns = $obj->connections_from(array(
 				'type' => 'RELTYPE_PROFESSIONS'
@@ -136,7 +136,7 @@ class crm_section extends class_base
 		return $rtrn;
 	}
 	
-	function get_section_job_ids_recrusive($unit_id)
+	function get_section_job_ids_recursive($unit_id)
 	{
 		static $jobs_ids;
 		
@@ -152,7 +152,7 @@ class crm_section extends class_base
 		{
 			foreach ($sub_sections as $sub_section)
 			{
-				$this->get_section_job_ids_recrusive($sub_section->prop("to"));				
+				$this->get_section_job_ids_recursive($sub_section->prop("to"));				
 			}
 		}
 		return $jobs_ids;
