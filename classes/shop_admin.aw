@@ -509,7 +509,7 @@ class shop_admin extends shop_base
 				
 					$this->vars(array(
 						"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."/".$i_arr["name"],
-						"table" => $st->show(array("id" => $tablesfortypes[$i_arr["type_id"]], "item_id" => $i_id,"from" => $t_from, "to" => $t_to))
+						"table" => $st->show(array("id" => $tablesfortypes[$i_arr["type_id"]], "item_id" => $i_id,"from" => $t_from, "to" => $t_to,"show_type" => "periods"))
 					));
 					$tb.=$this->parse("DATE_TABLE");
 				}

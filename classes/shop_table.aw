@@ -159,6 +159,11 @@ class shop_table extends shop_base
 	function show($arr)
 	{
 		extract($arr);
+		if ($show_type == "periods")
+		{
+			return $this->show_periods($arr);
+		}
+
 		$sht = $this->get_table($id);
 		$this->read_template("show_table.tpl");
 		$this->mk_path($sht["parent"], "Vaata tabelit");
@@ -211,7 +216,7 @@ class shop_table extends shop_base
 		// k6igepealt loeme kauba sisestuse sisse ja liidame selle iga kord andmetega kokku
 		if ($by_item_id)
 		{
-			// kui teeme kauga kohta, siis loeme aint yhe
+			// kui teeme kauba kohta, siis loeme aint yhe
 			$this->db_query("SELECT * FROM form_".$typ["form_id"]."_entries WHERE id = ".$it["entry_id"]);
 			$itdata[$sht["table"]["item"]] = $this->db_next();
 		}
@@ -327,8 +332,9 @@ class shop_table extends shop_base
 		{
 			$time_clause = "AND (order2item.period >= $from AND order2item.period <= $to)";
 		}
+
 		$q = "SELECT parent_object.name as parent_name,objects.name as item_name, order2item.*,AVG(order2item.price) as avg_price,SUM(order2item.price) as sum_price $tos FROM order2item LEFT JOIN form_".$typ["cnt_form"]."_entries ON form_".$typ["cnt_form"]."_entries.id = order2item.cnt_entry LEFT JOIN objects ON objects.oid = order2item.item_id LEFT JOIN objects as parent_object ON parent_object.oid = objects.parent WHERE $clause $time_clause AND parent_object.status != 0 AND objects.status != 0 GROUP BY ".$group_by;
-//		echo "q = $q <Br>\n";
+		dbg("q = $q <Br>\n");
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -435,6 +441,299 @@ class shop_table extends shop_base
 		}
 		$this->vars(array("LINE" => $li));
 		return $this->parse();
+	}
+
+	////
+	// !displays the shop table for detailed reservations - by period
+	// parameters:
+	//	id - table_id
+	//	item_id - shop_item id for what the table is shown
+	//	from - from date as unix timestamp
+	//	to - to date as unix timestamp
+	function show_periods($arr)
+	{
+		extract($arr);
+		$sht = $this->get_table($id);
+		$it = $this->get_item($item_id);
+		$typ = $this->get_item_type($it["type_id"]);
+		$this->read_template("show_table.tpl");
+		$this->mk_path($sht["parent"], "Vaata tabelit");
+
+		$cnt_form = $it["cnt_form"] ? $it["cnt_form"] : $typ["cnt_form"];
+
+		$parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name");
+
+		$q = "SELECT * FROM form_".$typ["form_id"]."_entries WHERE id = ".$it["entry_id"];
+		$this->db_query($q);
+		$itdata = $this->db_next();
+
+		for ($i=0; $i < $sht["table"]["nnum_cols"]; $i++)
+		{
+			$this->vars(array(
+				"title" => $sht["table"]["titles"][$i],
+			));
+			$he.=$this->parse("TITLE");
+		}
+		$this->vars(array("TITLE" => $he));
+
+		$f2 = new form;
+		$f2->load($cnt_form);
+		$tosum = $this->get_tosum_elements($sht,$f2,$typ);
+
+		$period_data = array();				// mitu kohta perioodil broneeritud on
+		$period_price_sum = array();	// perioodi hindade summa
+		$period_price_cnt = array();	// palju perioodis broneeritud on - esimesest erinev sest see 
+																	// loetakse lihtsalt kokku ja ei tekitada lisan2dalaid vahele - keskmise arvutamiseks on see
+
+		// see tagastab array tellimustest selles perioodis selle kauba kohta
+		$order_arr = $this->get_orders_for_period($from,$to,$item_id,$cnt_form);
+
+		// nyt tuleb kokku liita tellimused - et teada saada palju kokku on broneeritud jne.
+		// siin tuleb juurde feikida mitmen2dalaste reiside hotellide asjad - juhul kui item 
+		// on ilma voucherita
+		// krt kirjuta siin andmebaasi ymber :( a muud varianti ka ei n2e
+		foreach($order_arr as $order_id => $order_data)
+		{
+			if (!is_array($order_data["items"]))
+			{
+				continue;
+			}
+
+			$weeks = ($order_data["order"]["max_p"] - $order_data["order"]["min_p"]) / (24*3600*7);
+			if ($weeks < 1)
+			{
+				$weeks = 1;
+			}
+		
+			foreach($order_data["items"] as $item)
+			{
+				$period_price_sum[$item["period"]] += $item["price"];
+				$period_price_cnt[$item["period"]] += $item["count"];
+
+				if ($typ["has_voucher"] == 1)
+				{
+					// hotell - tuleb k6ik n2dalad kirja panna ja kokku liita eraldi
+					for ($i=0; $i < $weeks; $i++)
+					{
+						foreach($tosum as $tselid)
+						{
+							$period_data[$order_data["order"]["min_p"]+($i * 24*3600*7)][$tselid] += $item["ev_".$tselid];
+						}
+					}
+				}
+				else
+				{
+					// miski muu - paneme aint tellitud p2eva kohta kirja
+					foreach($tosum as $tselid)
+					{
+						$period_data[$item["period"]][$tselid] += $item["ev_".$tselid];
+					}
+				}
+			}
+		}
+
+		$place_arr = $this->get_place_counts($item_id);
+
+		// we must basically show the part of shop_item_period_avail that fits between $from and $to - right?
+		$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = $item_id AND period >= $from AND period <= $to ORDER BY period");
+		while ($row = $this->db_next())
+		{
+			$col = "";
+			for ($i=0; $i < $sht["table"]["nnum_cols"]; $i++)
+			{
+				$vals = array();
+				if (is_array($sht["table"]["rows"][$i]))
+				{
+					foreach($sht["table"]["rows"][$i] as $elid => $one)
+					{
+						if ($one != 1)
+						{
+							continue;
+						}
+
+						if ($elid == $sht["table"]["start_el"])
+						{
+							$vals[] = $this->time2date($row["period"], 5);
+						}
+						else
+						{
+							if (($itmp = $this->find_num_places($place_arr,$row["period"])) != false)
+							{
+								$i_total = $itmp;
+							}
+							else
+							{
+								$i_total = $it["max_items"];
+							}
+							$i_used = $row["num_sold"];
+
+							if ($elid == "used")
+							{
+								$vals[] = $i_total - $i_used;
+							}
+							else
+							if ($elid == "total")
+							{
+								$vals[] = $i_total;
+							}
+							else
+							if ($elid == "parent")
+							{
+								$vals[] = $parent_name;
+							}
+							else
+							if ($elid == "price")
+							{
+								if ($period_price_cnt[$row["period"]] > 0)
+								{
+									$vals[] = floor(((double)$period_price_sum[$row["period"]] / (double)$period_price_cnt[$row["period"]])*100.0)/100.0;
+								}
+								else
+								{
+									$vals[] = 0;
+								}
+							}
+							else
+							if ($elid == "bron")
+							{
+								$vals[] = $i_used;
+							}
+							else
+							if ($elid == "f_percent")
+							{
+								if ($i_total < 1)
+								{
+									$vals[] = "0";
+								}
+								else
+								{
+									$vals[] = floor(((100.0 * $i_used) / $i_total)*100.0)/100.0;
+								}
+							}
+							else
+							if ($elid == "money")
+							{
+								$vals[] = (double)$period_price_sum[$row["period"]];
+							}
+							else
+							if ($elid == "name")
+							{
+								$vals[] = $it["name"];
+							}
+							else
+							if ($elid == "i_id")
+							{
+								$vals[] = $row["item_id"];
+							}
+							else
+							if (isset($row["ev_".$elid]))
+							{
+								$vals[] = $row["ev_".$elid];
+							}
+							else
+							if (isset($itdata["ev_".$elid]))
+							{
+								$vals[] = $itdata["ev_".$elid];
+							}
+							else
+							{
+								$vals[] = (int)$period_data[$row["period"]][$elid];
+							}
+						}
+					}
+				}
+				$_ct = join(",",$vals);
+				if ($_ct == "")
+				{
+					$_ct = "&nbsp;";
+				}
+				$this->vars(array(
+					"content" => $_ct
+				));
+				$col.=$this->parse("COL");
+			}
+			$this->vars(array(
+				"COL" => $col
+			));
+			$li.=$this->parse("LINE");
+		}
+		$this->vars(array("LINE" => $li));
+		return $this->parse();
+	}
+
+	function get_orders_for_period($from,$to,$item_id,$cnt_form)
+	{
+		$ret = array();
+		$this->save_handle();
+
+		$ids = array();
+		$this->db_query("SELECT * FROM orders WHERE min_p >= $from AND min_p <= $to");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]]["order"] = $row;
+			$ids[] = $row["id"];
+		}
+
+		$idss = join(",",$ids);
+		if ($idss != "")
+		{
+			$this->db_query("SELECT order2item.*,form_".$cnt_form."_entries.* FROM order2item LEFT JOIN form_".$cnt_form."_entries ON form_".$cnt_form."_entries.id = order2item.cnt_entry WHERE order_id IN ($idss) AND item_id = $item_id ");
+			while ($row = $this->db_next())
+			{
+				$ret[$row["order_id"]]["items"][] = $row;
+			}
+		}
+		$this->restore_handle();
+		return $ret;
+	}
+
+	function get_tosum_elements($sht,$f2,$typ)
+	{
+		// leiame elemendid, mida on vaja p2rida
+		// k2ime kogu tabla l2bi ja tshekime v2lja
+		$tosum = array();
+		for ($i=0; $i < $sht["table"]["nnum_cols"]; $i++)
+		{
+			if (is_array($sht["table"]["rows"][$i]))
+			{
+				foreach($sht["table"]["rows"][$i] as $elid => $one)
+				{
+					if ($f2->get_element_by_id($elid))
+					{
+						$tosum[] = $elid;
+					}
+				}
+			}
+		}
+		return $tosum;
+	}
+
+	////
+	// !returns all periodic place counts for item
+	function get_place_counts($item_id)
+	{
+		$ret = array();
+		// tables only show 1-week place counts
+		$this->db_query("SELECT * FROM shop_item2per_places WHERE item_id = $item_id AND per_type = 1 ORDER BY tfrom");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]] = $row;
+		}
+		return $ret;
+	}
+
+	////
+	// !finds the correct number of places for $period, expects cached period count values in $arr
+	function find_num_places($arr,$period)
+	{
+		foreach($arr as $id => $row)
+		{
+			if ($row["tfrom"] <= $period && $period <= $row["tto"])
+			{
+				return $row["max_items"];
+			}
+		}
+		return false;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.38 2001/10/14 16:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.39 2001/10/15 04:50:47 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -1035,7 +1035,7 @@ class shop extends shop_base
 			$ord_id = $canceled_order_id;
 		}
 
-		$this->db_query("INSERT INTO orders(id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
+		$this->db_query("INSERT INTO orders(id,tm,user,ip,shop_id,day,month,wd,hr,min_p,max_p) VALUES($ord_id,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr','$min_p','$max_p')");
 
 		// kirjutame baasi alles siin, p2rast kontrollimist et kas k6ik ikka olemas on
 		global $shopping_cart;
@@ -1330,6 +1330,7 @@ class shop extends shop_base
 		{
 			$it = $this->get_item($item_id,true);
 			$itt = $this->get_item_type($it["type_id"]);
+			$cnt_form = $it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"];
 
 			classload("form");
 			$f = new form;
@@ -1337,11 +1338,11 @@ class shop extends shop_base
 			$old_entry = false;
 			if ($shopping_cart["items"][$item_id]["cnt_entry"])
 			{
-				$old_entry = $f->get_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
+				$old_entry = $f->get_entry($cnt_form,$shopping_cart["items"][$item_id]["cnt_entry"]);
 			}
 
 			$f->process_entry(array(
-				"id" => $it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"], 
+				"id" => $cnt_form, 
 				"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
 			));
 			$entry_id = $f->entry_id;
@@ -1375,7 +1376,7 @@ class shop extends shop_base
 				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE." ".$this->time2date($iperiod,5);
 				session_register("status_msg");
 				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-				$f->restore_entry($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				$f->restore_entry($cnt_form,$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
 				return $this->mk_my_orb("show", array("id" => $shop, "section" => $section));
 			}
 
@@ -2739,6 +2740,21 @@ class shop extends shop_base
 		}
 		unset($order_forms["entries"][$num]);
 		header("Location: ".$this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section,"num" => 0)));
+	}
+
+	function convorders()
+	{
+		$this->db_query("SELECT * FROM orders");
+		while ( $row = $this->db_next())
+		{
+			echo "order $row[id] <br>";
+			$this->save_handle();
+			$this->db_query("SELECT max(period) as max_p, min(period) as min_p FROM order2item WHERE order_id = $row[id]");
+			$pow = $this->db_next();
+			$this->db_query("UPDATE orders SET min_p = $pow[min_p] , max_p = $pow[max_p] WHERE id = $row[id]");
+			echo "q = UPDATE orders SET min_p = $pow[min_p] , max_p = $pow[max_p] WHERE id = $row[id] <br>";
+			$this->restore_handle();
+		}
 	}
 }
 ?>
