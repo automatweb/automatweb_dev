@@ -1,13 +1,13 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; background-color: #FFFFFF; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/img/add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
+<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/automatweb/images/forum_add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
 </td>
 </tr>
 <tr>
 <td class="{VAR:style_forum_yah}">
 <strong>{VAR:path}</strong>
 </td>
-<td class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF">
+<td class="{VAR:style_caption}">
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->
@@ -22,11 +22,11 @@
 	<td colspan=2 align="center" class="{VAR:style_caption}">Teemad</td>
 	<td align="center" class="{VAR:style_caption}">Vastuseid</td>
 	<td align="center" class="{VAR:style_caption}">Autor</td>
-	<td align="center" class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF">Viimane vastus</td>
+	<td align="center" class="{VAR:style_caption}">Viimane vastus</td>
 </tr>
 <!-- SUB: SUBTOPIC -->
 <tr>
-	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/img/arrow_sm.gif"></center></td>
+	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/automatweb/images/forum_arrow_sm.gif"></center></td>
 	<td class="{VAR:style_topic_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a></td>
 	<td align="center" class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
 	<td align="center" class="{VAR:style_topic_author}">{VAR:author}</td>

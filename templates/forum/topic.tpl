@@ -1,13 +1,13 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; background-color: #FFFFFF; padding-left:10px;" colspan="2"><a href="#kommentaar"><img src="{VAR:baseurl}/img/add_comment.gif" align="absmiddle" border="0" alt="Lisa kommentaar"></a> <a href="#kommentaar">Lisa kommentaar</a>
+<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="#kommentaar"><img src="{VAR:baseurl}/automatweb/images/forum_add_comment.gif" align="absmiddle" border="0" alt="Lisa kommentaar"></a> <a href="#kommentaar">Lisa kommentaar</a>
 </td>
 </tr>
 <tr>
 <td class="{VAR:style_forum_yah}">
 <strong>{VAR:path}</strong>
 </td>
-<td nowrap class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF">
+<td nowrap class="{VAR:style_caption}">
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->

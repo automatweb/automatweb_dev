@@ -3,7 +3,7 @@
 	<td colspan="3" class="{VAR:style_caption}" align="center">Foorum</td>
 	<td class="{VAR:style_caption}" align="center">Teemasid</td>
 	<td class="{VAR:style_caption}" align="center">Postitusi</td>
-	<td class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF "align="center">Viimane</td>
+	<td class="{VAR:style_caption}" align="center">Viimane</td>
 </tr>
 {VAR:forum_contents}
 <!-- SUB: FOLDER -->
