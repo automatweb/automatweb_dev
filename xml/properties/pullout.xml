@@ -62,5 +62,12 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <DOCUMENT>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>n&amp;auml;idatav dokument</caption>
+            </DOCUMENT>
+      </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.11 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.12 2004/02/25 15:54:28 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -27,10 +27,12 @@
 
 	@property template type=select
 	@caption Template
+
+@reltype DOCUMENT value=1 clid=CL_DOCUMENT
+@caption n&auml;idatav dokument
+
 */
 				
-define("RELTYPE_DOCUMENT", 1);
-
 class pullout extends class_base
 {
 	function pullout()
@@ -57,8 +59,14 @@ class pullout extends class_base
 				break;
 
 			case "groups":
-				$u = get_instance("users");
-				$data["options"] = $u->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$data["options"] = $ol->names(array(
+					"add_folders" => true
+				));
 				break;
 
 			case "template":
@@ -84,23 +92,21 @@ class pullout extends class_base
 	function view($arr)
 	{
 		extract($arr);
-		$o = $this->get_object($id);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $o["metadata"]
-		));
+		$o = obj($id);
 
-		$gidlist = aw_global_get("gidlist");
+		$gidlist = aw_global_get("gidlist_oids");
 		$found = false;
-		if (is_array($meta["groups"]))
+		$mg = $o->meta("groups");
+		if (is_array($mg))
 		{
-			foreach($meta["groups"] as $gid)
+			foreach($mg as $gid)
 			{
 				if ($gidlist[$gid] == $gid)
 				{
 					$found = true;
 				}
 			}
-			if (count($meta["groups"]) < 1)
+			if (count($mg) < 1)
 			{
 				$found = true;
 			}
@@ -109,41 +115,42 @@ class pullout extends class_base
 		{
 			$found = true;
 		}
-		if (count($meta["groups"]) < 1)
+
+		if (count($mg) < 1)
 		{
 			$found = true;
 		}
 
-		if (!$found || $meta["docs"] == $oid)
+		if (!$found || $o->meta("docs") == $oid)
 		{
 			return "";
 		}
 
 		$do = get_instance("document");
-		if ($meta["template"] == "")
+		if ($o->meta("template") == "")
 		{
 			if ($GLOBALS["print"] == 1)
 			{
-				$meta["template"] = "print.tpl";
+				$o->set_meta("template","print.tpl");
 			}
 			else
 			{
-				$meta["template"] = "plain.tpl";
+				$o->set_meta("template","plain.tpl");
 			}
 		}
 		$old_print = $GLOBALS["print"];
 		$GLOBALS["print"] = 0;
 		$_GET["print"] = 0;
 		aw_global_set("print", 0);
-		$this->read_template($meta["template"]);
+		$this->read_template($o->meta("template"));
 		$this->vars(array(
-			"width" => $meta["width"],
-			"align" => $meta["align"],
-			"right" => $meta["right"],
+			"width" => $o->meta("width"),
+			"align" => $o->meta("align"),
+			"right" => $o->meta("right"),
 			"content" => $do->gen_preview(array(
-				"docid" => $meta["docs"]
+				"docid" => $o->meta("docs")
 			)),
-			"title" => $o["name"]
+			"title" => $o->name()
 		));
 		$GLOBALS["print"] = $old_print;
 		$_GET["print"] = $old_print;
@@ -154,20 +161,17 @@ class pullout extends class_base
 	function get_template_picker()
 	{
 		$ret = array();
-		$this->db_query("SELECT name,filename FROM template WHERE type = 3");
-		while ($row = $this->db_next())
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CONFIG_AW_DOCUMENT_TEMPLATE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$ret[$row["filename"]] = $row["name"];
+			$ret[$o->prop("filename")] = $o->name();
 		}
 		return $ret;
 	}
-
-        function callback_get_rel_types()
-        {
-                return array(
-                        RELTYPE_DOCUMENT => "n&auml;idatav dokument",
-                );
-        }
-	
 }
 ?>
