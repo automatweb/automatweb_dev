@@ -247,7 +247,10 @@ class object_tree extends _int_obj_container_base
 		$filter["parent"] = $GLOBALS["object_loader"]->param_to_oid($filter["parent"]);
 
 		$this->_int_init_empty();
+		global $awt;
+		$awt->start("_int_req_filter");
 		$this->_int_req_filter($filter);
+		$awt->stop("_int_req_filter");
 	}
 
 	function _int_req_filter($filter)
@@ -266,7 +269,7 @@ class object_tree extends _int_obj_container_base
 				$acl_oids[] = $oid;
 			}
 		}
-		if (sizeof($oids) > 0)
+		if (sizeof($acl_oids) > 0)
 		{
 			$filter["parent"] = $acl_oids;
 			$this->_int_req_filter($filter);
