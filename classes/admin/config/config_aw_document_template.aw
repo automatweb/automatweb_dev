@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.6 2004/12/02 15:30:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.7 2004/12/07 11:35:36 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template 
 /*
 
@@ -16,7 +16,7 @@
 @property filename type=textbox table=template field=filename
 @caption Template fail
 
-@property t_id type=hidden table=template field=id datatype=int
+@property t_id type=hidden table=template field=id 
 @property t_name type=hidden table=template field=name
 @property t_site_id type=hidden table=template field=site_id datatype=int
 

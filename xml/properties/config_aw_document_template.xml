@@ -23,7 +23,6 @@
             <group>general</group>
             <type>hidden</type>
             <field>id</field>
-            <datatype>int</datatype>
       </property>
       <property>
             <name>t_name</name>
