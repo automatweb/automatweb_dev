@@ -130,5 +130,37 @@
                   <submit>no</submit>
             </main_view>
       </groupinfo>
+      <reltypes>
+            <MAIL_IDENTITY>
+                  <value>1</value>
+                  <clid>CL_MESSENGER_IDENTITY</clid>
+                  <caption>messengeri identiteet</caption>
+            </MAIL_IDENTITY>
+            <MAIL_SOURCE>
+                  <value>2</value>
+                  <clid>CL_PROTO_IMAP</clid>
+                  <caption>mailikonto</caption>
+            </MAIL_SOURCE>
+            <MAIL_CONFIG>
+                  <value>3</value>
+                  <clid>CL_MESSENGER_CONFIG</clid>
+                  <caption>messengeri konfiguratsioon</caption>
+            </MAIL_CONFIG>
+            <FOLDER>
+                  <value>4</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </FOLDER>
+            <ADDRESS>
+                  <value>5</value>
+                  <clid>CL_ML_LIST</clid>
+                  <caption>adressaat</caption>
+            </ADDRESS>
+            <RULE>
+                  <value>6</value>
+                  <clid>CL_MAIL_RULE</clid>
+                  <caption>maili ruul</caption>
+            </RULE>
+      </reltypes>
 </properties>
 
