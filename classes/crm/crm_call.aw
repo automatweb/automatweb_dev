@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.4 2003/12/11 14:21:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.5 2004/01/09 13:56:52 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -20,6 +20,9 @@
 @property content type=textarea cols=60 rows=30 field=description
 @caption Sisu
 
+@property aliasmgr type=aliasmgr no_caption=1
+@caption Aliastehaldur
+
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
 
@@ -33,5 +36,15 @@ class crm_call extends class_base
 			"clid" => CL_CRM_CALL
 		));
 	}
+
+	function parse_alias($arr)
+	{
+		// shows a phone call
+		$obj = new object($arr["id"]);
+		$done = $obj->prop("is_done");
+		$done .= $obj->prop("name");
+		return $done;
+	}
+
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.2 2003/12/09 18:34:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.3 2004/01/09 13:56:52 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 
@@ -19,6 +19,9 @@
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte
+
+@property aliasmgr type=aliasmgr no_caption=1
+@caption Aliastehaldur
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
