@@ -291,16 +291,23 @@ function get_instance($class,$args = array())
 		preg_match("/(\w*)$/",$class,$m);
 		$lib = $m[1];
 		$lib = "$classdir/$lib.$ext";
-		include_once($lib);
-		if (sizeof($args) > 0)
+		@include_once($lib);
+		if (class_exists($class))
 		{
-			$instance = new $class($args);
+			if (sizeof($args) > 0)
+			{
+				$instance = new $class($args);
+			}
+			else
+			{
+				$instance = new $class();
+			};
+			aw_global_set($id,$instance);
 		}
 		else
 		{
-			$instance = new $class();
+			$instance = false;
 		};
-		aw_global_set($id,$instance);
 	};
 //	exit_function("__global::get_instance",array());
 	return $instance;
