@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.92 2004/05/18 14:20:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.93 2004/05/18 14:27:59 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -781,7 +781,7 @@ class image extends class_base
 			}
 			$img->load_from_file($im['file']);
 	
-			list($i_width, $i_height) = $img->size();
+			list($i_height, $i_width) = $img->size();
 
 			$width = $this->new_w;
 			$height = $this->new_h;
