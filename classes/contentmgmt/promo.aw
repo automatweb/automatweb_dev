@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.54 2004/12/01 11:08:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.55 2004/12/31 10:13:49 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -784,6 +784,7 @@ class promo extends class_base
 
 
 				$d_cnt = 0;
+				$d_total = count($docid);
 				foreach($docid as $d)
 				{
 					if (($d_cnt % 2)  == 1)
@@ -805,6 +806,7 @@ class promo extends class_base
 						"no_strip_lead" => 1,
 						"no_acl_checks" => $no_acl_checks,
 						"vars" => array("doc_ord_num" => $d_cnt+1),
+						"not_last_in_list" => (($d_cnt+1) < $d_total)
 					));
 					exit_function("promo-prev");
 					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
