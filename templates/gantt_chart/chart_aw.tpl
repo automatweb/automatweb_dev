@@ -3,39 +3,26 @@
 <td class="awmenuedittableframeclass">
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-	<td class="awmenuedittablehead" align="center">{VAR:row_dfn}</td>
-	<td colspan="{VAR:columns}" valign="top">
+	<td class="awmenuedittablehead" align="center" rowspan="{VAR:row_dfn_span}">{VAR:row_dfn}</td>
 
-<table border="0" width="100%" style="height: 100%" cellspacing="0" cellpadding="0">
-	<tr>
 	<!-- SUB: column_head_link -->
-	<td class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};"><a href="{VAR:uri}" target="{VAR:target}" style="white-space: nowrap;">{VAR:title}</a></td>
+	<td colspan="{VAR:subdivisions}" class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};"><a href="{VAR:uri}" target="{VAR:target}" style="white-space: nowrap;">{VAR:title}</a></td>
 	<!-- END SUB: column_head_link -->
 	<!-- SUB: column_head -->
-	<td class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};">{VAR:title}</td>
+	<td colspan="{VAR:subdivisions}" class="awmenuedittablehead VclGanttChartHeader" align="center" style="width: {VAR:column_width};">{VAR:title}</td>
 	<!-- END SUB: column_head -->
 	</tr>
 
 	<!-- SUB: subdivision_row -->
 	<tr>
 	<!-- SUB: subdivision_head -->
-	<td valign="top">
-
-		<table border="0" width="100%" cellspacing="0" cellpadding="0">
-			<tr>
 				<!-- SUB: subdivision -->
 				<td class="awmenuedittablehead VclGanttChartTimespan" align="left">{VAR:time}</td>
 				<!-- END SUB: subdivision -->
-			</tr>
-		</table>
-
-	</td>
 	<!-- END SUB: subdivision_head -->
 	</tr>
 	<!-- END SUB: subdivision_row -->
-</table>
 
-	</td>
 </tr>
 
 <!-- SUB: data_row -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.11 2005/03/31 20:05:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.12 2005/04/02 00:47:54 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -42,6 +42,7 @@ class gantt_chart extends class_base
 	// int subdivisions - number of subdivisions in column (e.g. 24 hours for a column depicting one day). default is 1 (meaning subdivision & column coincide).
 	// int column_length - length of one division in seconds. default is 86400.
 	// int width - chart width in pixels. default is 1000.
+	// int row_height - row height in pixels. default is 12.
 	// string row_dfn - title for row-titles column. default is "Ressurss".
 	// string style - style to use (default| ... ).
 	// bool row_anchors - make hyperlinks of row names (not impl. yet).
@@ -57,6 +58,7 @@ class gantt_chart extends class_base
 		$this->chart_id = empty ($arr["chart_id"]) ? "0" : (string) $arr["chart_id"];
 		$this->style = empty ($arr["style"]) ? "default" : (string) $arr["style"];
 		$this->row_dfn = empty ($arr["row_dfn"]) ? "Ressurss" : (string) $arr["row_dfn"];
+		$this->row_height = empty ($arr["row_height"]) ? 12 : (int) $arr["row_height"];
 		$this->timespans = empty ($arr["timespans"]) ? 0 : (int) $arr["timespans"];
 		$this->timespan_range = empty ($arr["timespan_range"]) ? 86400 : (int) $arr["timespan_range"];
 		$this->end = (int) ($this->start + count ($this->columns) * $this->column_length);
@@ -141,7 +143,7 @@ class gantt_chart extends class_base
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
-		$this->data[$row][$start] = array (
+		$this->data[$row][] = array (
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
@@ -160,6 +162,8 @@ class gantt_chart extends class_base
 		$this->vars = array (
 			"chart_id" => $this->chart_id,
 			"chart_width" => $this->chart_width,
+			"row_height" => $this->row_height,
+			"row_text_height" => ($this->row_height - 1),
 		);
 		$style = $this->parse ();
 
@@ -210,7 +214,7 @@ class gantt_chart extends class_base
 						{
 							$bar = array_shift ($this->data[$row["name"]]);
 
-							if (($bar["start"] >= $cell_end) or !$bar)
+							if (($bar["start"] >= $cell_end) or !$bar or ((($cell_end - $bar["start"]) / $this->scale_quotient) < 0.6))
 							{
 								### no bars or no bars left in cell
 								array_unshift ($this->data[$row["name"]], $bar);
@@ -351,6 +355,7 @@ class gantt_chart extends class_base
 						"uri" => $definition["uri"],
 						"target" => $definition["target"],
 						"column_width" => $this->cell_width,
+						"subdivisions" => $this->subdivisions,
 					));
 					$header_row .= $this->parse ("column_head_link");
 				}
@@ -359,6 +364,7 @@ class gantt_chart extends class_base
 					$this->vars (array (
 						"title" => $definition["title"],
 						"column_width" => $this->cell_width,
+						"subdivisions" => $this->subdivisions,
 					));
 					$header_row .= $this->parse ("column_head");
 				}
@@ -386,6 +392,7 @@ class gantt_chart extends class_base
 		$this->vars (array (
 			"chart_id" => $this->chart_id,
 			"row_dfn" => $this->row_dfn,
+			"row_dfn_span" => ($this->timespans ? 2 : 1),
 			"columns" => count ($this->columns) * $this->subdivisions,
 			"subdivision_row" => $timespans,
 			"column_head" => $header_row,
@@ -460,8 +467,63 @@ class gantt_chart extends class_base
 	{
 		foreach ($this->data as $row => $data)
 		{
-			ksort ($this->data[$row], SORT_NUMERIC);
+			usort ($this->data[$row], array ($this, "bar_start_sort"));
+
+			$tmp = $this->data[$row];
+			$key = 0;
+
+			while (isset($this->data[$row][$key]))
+			{
+				$key2 = $key + 1;
+				$overlap_end = 0;
+
+				while ( isset($this->data[$row][$key2]) and ($this->data[$row][$key2]["start"] < ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"])) )
+				{
+					$overlap_end = max ($overlap_end, ($this->data[$row][$key2]["start"] + $this->data[$row][$key2]["length"]));
+
+					if ($this->data[$row][$key2 + 1]["start"] > $overlap_end)
+					{
+						break;
+					}
+					else
+					{
+						$key2++;
+					}
+				}
+
+				if ($overlap_end)
+				{
+					if ($overlap_end < ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"]))
+					{
+						$remainder = $this->data[$row][$key];
+						$remainder["start"] = $overlap_end;
+						$remainder["length"] = ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"]) - $overlap_end;
+						array_splice ($this->data[$row], $key2, 1, array ($this->data[$row][$key2], $remainder));
+					}
+
+					if ($this->data[$row][$key]["start"] == $this->data[$row][$key + 1]["start"])
+					{
+						unset ($this->data[$row][$key]);
+					}
+					else
+					{
+						$this->data[$row][$key]["length"] = $this->data[$row][$key + 1]["start"] - $this->data[$row][$key]["start"];
+					}
+				}
+
+				$key++;
+			}
 		}
+	}
+
+	function bar_start_sort ($a, $b)
+	{
+		if ($a["start"] == $b["start"])
+		{
+			return 0;
+		}
+
+		return ($a["start"] > $b["start"] ? 1 : -1);
 	}
 
 	function sort_data_old()

@@ -50,7 +50,8 @@ a.VclGanttChartBarLink:hover span
 .VclGanttChartRowName
 {
 	background-color: #EEEEEE;
-	font-weight: bold;
+	font-family : Verdana, Arial, Helvetica, Geneva, sans-serif;
+	font-size: {VAR:row_text_height}px;
 	white-space: nowrap;
 	padding-right: 3px;
 	padding-left: 3px;
@@ -63,7 +64,7 @@ a.VclGanttChartBarLink:hover span
 {
 	position: relative;
 	border: none;
-	height: 12px;
+	height: {VAR:row_height}px;
 	margin: 0px;
 }
 
