@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.93 2004/05/20 10:53:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.94 2004/06/11 08:44:51 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -407,7 +407,8 @@ class menu extends class_base
 					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
 					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
 					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
-					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
+					'planner.start' => "Kalendris valitud aja j&auml;rgi",
 				);
 				break;
 
