@@ -65,6 +65,40 @@
             <group>general</group>
             <caption>Uues aknas</caption>
       </property>
+      <property>
+            <name>cur_data</name>
+            <type>text</type>
+            <group>resize</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Praegune pilt</caption>
+      </property>
+      <property>
+            <name>new_w</name>
+            <type>textbox</type>
+            <group>resize</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>6</size>
+            <caption>Uus laius</caption>
+      </property>
+      <property>
+            <name>new_h</name>
+            <type>textbox</type>
+            <group>resize</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>6</size>
+            <caption>Uus k&amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>do_resize</name>
+            <type>submit</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>resize</group>
+            <value>Muuda</value>
+      </property>
       <classinfo>
             <syslog_type>ST_IMAGE</syslog_type>
       </classinfo>
@@ -72,6 +106,9 @@
             <img2>
                   <caption>Suur_pilt</caption>
             </img2>
+            <resize>
+                  <caption>Muuda suurust</caption>
+            </resize>
       </groupinfo>
       <tableinfo>
             <images>

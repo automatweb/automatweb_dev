@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.14 2003/04/11 06:44:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.15 2003/04/15 15:51:36 kristo Exp $
 
 /*
 
@@ -1165,42 +1165,8 @@ class gallery_v2 extends class_base
 
 	function _imagecreatefromstring($str, $orig_filename)
 	{
-		if (function_exists("imagecreatefromstring"))
-		{
-			return imagecreatefromstring($str);
-		}
-		else
-		{
-			// save temp file
-			$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
-			$this->put_file(array(
-				"file" => $orig_filename,
-				"content" => $str
-			));
-			$_o = strtolower($orig_filename);
-			$ext = substr($_o, strrpos($_o, ".")+1);
-			if ($ext == "jpg" || $ext == "jpeg" || $ext == "pjpeg")
-			{
-				$img = imagecreatefromjpeg($tn);
-			}
-			else
-			if ($ext == "png")
-			{
-				$img = imagecreatefrompng($tn);
-			}
-			else
-			if ($ext == "gif")
-			{
-				$img = imagecreatefromgif($tn);
-			}
-			else
-			{
-				// try jpeg for default
-				$img = imagecreatefromjpeg($tn);
-			}
-			unlink($tn);
-			return $img;
-		}
+		$imi = get_instance("image");
+		return $imi->_imagecreatefromstring($str, $orig_filename);
 	}
 
 	function _do_logo($img, $conf_o, $p = "")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.45 2003/03/14 13:35:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.46 2003/04/15 15:51:36 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -29,9 +29,21 @@
 	@caption Uues aknas
 
 	@groupinfo img2 caption=Suur_pilt
+	@groupinfo resize caption="Muuda suurust"
 	@classinfo syslog_type=ST_IMAGE
 		
 	@tableinfo images index=id master_table=objects master_index=oid	
+
+	@property cur_data type=text group=resize field=meta method=serialize
+	@caption Praegune pilt
+
+	@property new_w type=textbox group=resize field=meta method=serialize size=6
+	@caption Uus laius
+
+	@property new_h type=textbox group=resize field=meta method=serialize size=6
+	@caption Uus k&otilde;rgus
+
+	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda
 
 */
 class image extends class_base
@@ -449,6 +461,15 @@ class image extends class_base
 			case "file2":
 				$prop["value"] = "";
 				break;
+
+			case "cur_data":
+				$imd = $this->get_image_by_id($arr['obj']['oid']);
+				if ($imd['file'] != '')
+				{
+					$sz = getimagesize($imd['file']);
+					$prop['value'] = "Laius: ".$sz[0]." <br>K&otilde;rgus: ".$sz[1]." <br>";
+				};
+				break;
 		};
 
 		return $retval;
@@ -539,6 +560,117 @@ class image extends class_base
 		}
 		$sz = getimagesize($fl);
 		return array("id" => $oid,"url" => $this->get_url($fl), "sz" => $sz);
+	}
+
+	function callback_post_save($arr)
+	{
+		$im = $this->get_image_by_id($arr["id"]);
+		if ($im['meta']['do_resize'] != '')
+		{
+			$img = $this->_imagecreatefromstring($this->get_file(array("file" => $im['file'])), $im['file']);
+		
+			$sz = getimagesize($im['file']);
+			$i_width = $sz[0];
+			$i_height = $sz[1];
+
+			$width = $im['meta']['new_w'];
+			$height = $im['meta']['new_h'];
+
+			if ($width && !$height)
+			{
+				if ($width{strlen($width)-1} == "%")
+				{
+					$height = $width;
+				}
+				else
+				{
+					$ratio = $width / $i_width;
+					$height = (int)($i_height * $ratio);
+				}
+			}
+
+			if (!$width && $height)
+			{
+				if ($height{strlen($height)-1} == "%")
+				{
+					$width = $height;
+				}
+				else
+				{
+					$ratio = $height / $i_height;
+					$width = (int)($i_width * $ratio);
+				}
+			}
+
+			if ($width{strlen($width)-1} == "%")
+			{
+				$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
+			}
+			if ($height{strlen($height)-1} == "%")
+			{
+				$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
+			}
+
+			$n_img = imagecreatetruecolor($width, $height);
+			imagecopyresampled($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
+			imagedestroy($img);
+
+			ob_start();
+			imagejpeg($n_img);
+			$fc = ob_get_contents();
+			ob_end_clean();
+
+			$this->put_file(array(
+				"file" => $im['file'],
+				"content" => $fc
+			));
+		}
+
+		$this->set_object_metadata(array(
+			"oid" => $arr["id"],
+			"key" => "do_resize",
+			"value" => ""
+		));
+	}
+
+	function _imagecreatefromstring($str, $orig_filename)
+	{
+		if (function_exists("imagecreatefromstring"))
+		{
+			return imagecreatefromstring($str);
+		}
+		else
+		{
+			// save temp file
+			$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
+			$this->put_file(array(
+				"file" => $orig_filename,
+				"content" => $str
+			));
+			$_o = strtolower($orig_filename);
+			$ext = substr($_o, strrpos($_o, ".")+1);
+			if ($ext == "jpg" || $ext == "jpeg" || $ext == "pjpeg")
+			{
+				$img = imagecreatefromjpeg($tn);
+			}
+			else
+			if ($ext == "png")
+			{
+				$img = imagecreatefrompng($tn);
+			}
+			else
+			if ($ext == "gif")
+			{
+				$img = imagecreatefromgif($tn);
+			}
+			else
+			{
+				// try jpeg for default
+				$img = imagecreatefromjpeg($tn);
+			}
+			unlink($tn);
+			return $img;
+		}
 	}
 }
 ?>
