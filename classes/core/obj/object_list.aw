@@ -71,14 +71,17 @@ class object_list extends _int_obj_container_base
 
 	function begin()
  	{
+		// here's how begin/next are supposed to work:
+		// begin returns the first item, does not advance iterator
+		// next 1st advances the iterator, them returns current item
+		// then end will be correct even for 1 element lists!
 		reset($this->list);
-		return $this->next();
+		return current($this->list);
 	}
 
 	function next()
 	{
-		list(, $ret) = each($this->list);
-		return $ret;
+		return next($this->list);
 	}
 
 	function end()
