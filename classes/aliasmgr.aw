@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.73 2003/02/13 16:19:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.74 2003/02/13 17:04:46 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -29,7 +29,10 @@ class aliasmgr extends aw_template
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
-		$args["clid"] = "aliasmgr";
+
+		$this->clid_list = $clid_list;
+		
+		$args["clid"] = &$this;
 		$form = $search->show($args);
 		$this->search = &$search;
 
@@ -38,6 +41,10 @@ class aliasmgr extends aw_template
 		$obj = $this->get_object($id);
 
 		$this->reltype = $reltype;
+		if (is_object($this->ref))
+		{
+			$this->ref = $ref;
+		};
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id, "reltype" => $reltype),$this->use_class),
@@ -53,7 +60,7 @@ class aliasmgr extends aw_template
 	function search_callback_get_fields(&$fields,$args)
 	{
 		$fields = array();
-		$this->make_alias_classarr();
+		$this->make_alias_classarr($this->clid_list);
 		asort($this->classarr);
 		$fields["special"] = "n/a";
 		$fields["class_id"] = array(
@@ -591,7 +598,7 @@ class aliasmgr extends aw_template
 		}
 	}
 
-	function make_alias_classarr()
+	function make_alias_classarr($clid_list = false)
 	{
 		$this->classarr = array();
 
@@ -600,7 +607,18 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				$this->classarr[$clid] = $cldat["name"];
+				if (is_array($clid_list))
+				{
+					if (in_array($clid,$clid_list))
+					{
+						$this->classarr[$clid] = $cldat["name"];
+					}
+				}
+				else
+				{
+					$this->classarr[$clid] = $cldat["name"];
+				};
+			
 			}
 		}
 	}
