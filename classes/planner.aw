@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.123 2003/06/19 12:29:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.124 2003/06/19 15:39:53 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -49,11 +49,14 @@
 	@property use_tabpanel type=checkbox ch_value=1 default=1 group=advanced
 	@caption Kalendri näitamisel kasutatakse 'tabpanel' komponenti
 
-	@property items_on_line type=textbox size=4 group=advanced rel=1 
+	@property items_on_line type=textbox size=4 group=special rel=1 
 	@caption Max. cell'e reas
 
 	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
 	@caption Suund
+
+	@property range_start type=date_select group=advanced rel=1
+	@caption Alates
 
 	@property event_time_item type=textbox size=4 group=advanced rel=1
 	@caption Mitu päeva
@@ -91,6 +94,7 @@
 	@groupinfo views caption=Vaated
 	@groupinfo general2 caption=Üldine parent=general
 	@groupinfo advanced caption=Seaded parent=general
+	@groupinfo special caption=Spetsiaalne parent=general
 	@groupinfo add_event caption=Lisa_sündmus
 
 */
@@ -138,10 +142,10 @@ class planner extends class_base
 			
 		$this->viewtypes = array(
 				"0" => "default",
-				"1" => "day",
-				"3" => "week",
-				"4" => "month",
-				"5" => "relative",
+				"1" => "päev",
+				"3" => "nädal",
+				"4" => "kuu",
+				"5" => "suhteline",
 		);
 	}
 
@@ -888,8 +892,8 @@ class planner extends class_base
 			"type" => $type,
 			"direction" => $this->conf["event_direction"],
 			"event_time_item" => $this->conf["event_time_item"],
+			"range_start" => $this->conf["range_start"],
 		));
-
 
 		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
 		if ($object["class_id"] == CL_FORM_CHAIN)
@@ -1019,11 +1023,16 @@ class planner extends class_base
 			case "day":
 				$this->type = CAL_SHOW_DAY;
 				$tpl = is_array($this->conf) ? "disp_day2.tpl" : "disp_day.tpl";
-				$content = $this->disp_day(array(
-					"events" => $events,
-					"di" => $di,
-					"tpl" => $tpl,
-				));
+				for ($i = $di["start"]; $i <= $di["end"]; $i = $i + 86400)
+				{
+					$tmp_di = $di;
+					$tmp_di["start"] = $i;
+					$content .= $this->disp_day(array(
+						"events" => $events,
+						"di" => $tmp_di,
+						"tpl" => $tpl,
+					));
+				}
 				$caption = sprintf("%s, %d.%s %d",
 					ucfirst(get_lc_weekday($di["start_wd"])),
 					date("d",$di["start"]),
@@ -1858,7 +1867,7 @@ class planner extends class_base
 			$section = aw_global_get("section");
 			$d = get_instance("document");
 			$cntr = 0;
-	
+
 			foreach($events as $key => $e)
 			{
 				$cntr++;
@@ -2213,6 +2222,16 @@ class planner extends class_base
 		$dx = date("dmY",$thisday);
 		$d = date("d",$thisday);
 		$dm = date("d-m-Y",$thisday);
+		$m = date("m",$thisday);
+				
+		$wd_name = get_lc_weekday($i);
+
+		$lcw = substr($wd_name,0,1);
+		$this->vars(array(
+			"weekday_name" => ucfirst($wd_name),
+			"daynum" => $d,
+			"month_name" => get_lc_month($m),
+		));
 
 		$dcell = "";
 
