@@ -295,7 +295,7 @@ class site_content extends menuedit
 		$section_subitems = sizeof($this->mpr[$section]);
 
 		$this->section = $section;
-		
+
 		$cd = "";
 		$cd2 = "";
 		$menu_defs = aw_ini_get("menuedit.menu_defs");
@@ -718,9 +718,6 @@ class site_content extends menuedit
 
 		reset($this->mpr[$parent]);
 
-		// find out how many menus do we have so we know when to use
-		// the _END moficator
-
 		$tmp = $this->mpr[$parent];
 		if (isset($this->mar[$parent]["meta"]["sort_by_name"]) && $this->mar[$parent]["meta"]["sort_by_name"])
 		{
@@ -730,7 +727,10 @@ class site_content extends menuedit
 		$second = false;
 		$second_n = false;
 
+		// find out how many menus do we have so we know when to use
+		// the _END moficator
 		$total = sizeof($tmp) - 1;
+
 		while (list(,$row) = each($tmp))
 		{
 			$bro = false;
@@ -1284,7 +1284,12 @@ class site_content extends menuedit
 		$menus = $this->get_aliases_of(array(
 			"oid" => $row["oid"],
 			// XXX, this relation type is defined in "menu.aw", but I feel bad
-			// about including one big-ass file just to get one constant.
+			// about including one big-ass file just to get one constant. - duke
+			//
+			// actually, this is not the only place that has problems with that. so, 
+			// maybe we should define those somewhere else, where every class has access if they want?
+			// like menu.aw.const - defines constants for menu.aw class, and const_load("menu") includes that?
+			// whadaya think?
 			"reltype" => 5,
 			"lang_id" => aw_global_get("lang_id"),
 		));
@@ -1292,15 +1297,15 @@ class site_content extends menuedit
 		$tmp = array();
 		$subtpl = "MENU_${name}_SEEALSO_ITEM";
 
+		$mc = get_instance("menu_cache");
+	
 		// get_aliases_of ensures that return value is always array
 		foreach($menus as $said => $foo)
 		{
-			$samenu = $this->mar[$said];
-			if (!is_array($samenu))
+			$samenu = $mc->get_cached_menu($said);
+			if ($samenu["status"] != STAT_ACTIVE)
 			{
-				// the menu was not loaded. load it.
-				$samenu = $this->get_menu($said);
-				$this->mar[$said] = $samenu;
+				continue;
 			}
 
 			$link = $this->make_menu_link($samenu);
