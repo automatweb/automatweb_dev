@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.77 2001/12/18 10:55:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.78 2001/12/19 00:11:45 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2796,16 +2796,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				classload("images");
 				$t = new db_images;
 				$im = $t->_upload(array("filename" => $img_act, "file_type" => $img_act_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img_act_id",
-					"value" => $im["id"],
-				));
 				$img = $t->get_img_by_id($im["id"]);
 				$this->set_object_metadata(array(
 					"oid" => $id,
-					"key" => "img_act_url",
-					"value" => $img["url"],
+					"data" => array(
+						"img_act_id" => $im["id"],
+						"img_act_url" => $img["url"],
+					),
 				));
 			}
 			if ($img2 != "none" && $img2 != "")
@@ -2813,16 +2810,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				classload("images");
 				$t = new db_images;
 				$im = $t->_upload(array("filename" => $img2, "file_type" => $img2_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img2_id",
-					"value" => $im["id"],
-				));
 				$img = $t->get_img_by_id($im["id"]);
 				$this->set_object_metadata(array(
 					"oid" => $id,
-					"key" => "img2_url",
-					"value" => $img["url"],
+					"data" => array(
+						"img2_id" => $im["id"],
+						"img2_url" => $img["url"],
+					),
 				));
 			}
 			if ($img3 != "none" && $img3 != "")
@@ -2830,16 +2824,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				classload("images");
 				$t = new db_images;
 				$im = $t->_upload(array("filename" => $img3, "file_type" => $img3_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img3_id",
-					"value" => $im["id"],
-				));
 				$img = $t->get_img_by_id($im["id"]);
 				$this->set_object_metadata(array(
 					"oid" => $id,
-					"key" => "img3_url",
-					"value" => $img["url"],
+					"data" => array(
+						"img3_id" => $im["id"],
+						"img3_url" => $img["url"],
+					),
 				));
 			}
 
@@ -2960,13 +2951,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			$this->set_object_metadata(array(
 				"oid" => $id,
-				"key" => "seealso_refs",
-				"value" => $sas,
-			));
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "seealso_order",
-				"value" => $seealso_order,
+				"data" => array(
+					"seealso_refs" => $sas,
+					"seealso_order" => $seealso_order,
+				),
 			));
 
 			$this->upd_object($charr);
