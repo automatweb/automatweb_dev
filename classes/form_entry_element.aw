@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.40 2001/10/24 09:03:24 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.41 2001/10/29 17:48:05 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -125,6 +125,7 @@ lc_load("definition");
 					$this->make_relation_listbox_content();
 				}
 				$sp = split("_", $this->entry, 10);
+				$sp[3] = (int)$sp[3];
 				if ($this->form->lang_id != $lang_id)
 				{
 					$html=$this->arr["listbox_lang_items"][$lang_id][$sp[3]];
