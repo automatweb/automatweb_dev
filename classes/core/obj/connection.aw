@@ -266,12 +266,12 @@ class connection
 				}
 				if ($GLOBALS["object_loader"]->ds->can("add", $to->parent()))
 				{
-					$o->set_parent($from->parent());
+					$o->set_parent($to->parent());
 				}
 				else
 				if ($GLOBALS["object_loader"]->ds->can("add", $to->id()))
 				{
-					$o->set_parent($from->id());
+					$o->set_parent($to->id());
 				}
 				else
 				{
