@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.139 2003/08/29 11:51:28 duke Exp $
+// $Id: class_base.aw,v 2.140 2003/09/08 11:20:45 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -154,6 +154,7 @@ class class_base extends aw_template
 					"id" => $this->id,
 					"coredata" => &$this->coredata,
 					"data" => &$this->data,
+					"request" => $this->request,
 				));
 
 			};
@@ -1024,6 +1025,14 @@ class class_base extends aw_template
 				classload("toolbar");
 				$property["toolbar"] = new toolbar();
 			};
+			
+			if (($property["type"] == "table") && ($this->orb_action != "submit"))
+			{
+				load_vcl("table");
+				$property["obj_inst"] = new aw_table(array(
+					"layout" => "generic",
+				));
+			};
 
 			// properties with no group end up in default group
 			if (isset($val["group"]))
@@ -1276,6 +1285,11 @@ class class_base extends aw_template
 		if ($val["type"] == "toolbar")
 		{
 			$val["value"] = $val["toolbar"]->get_toolbar();
+		};
+		
+		if ($val["type"] == "table")
+		{
+			$val["value"] = $val["obj_inst"]->draw();
 		};
 
 		if ($val["type"] == "date_select")
