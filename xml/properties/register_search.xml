@@ -145,6 +145,11 @@
                   <clid>CL_REGISTER</clid>
                   <caption>register millest otsida</caption>
             </REGISTER>
+            <SEARCH_FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kaust millest otsida</caption>
+            </SEARCH_FOLDER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.23 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.24 2005/04/04 08:42:49 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -56,6 +56,9 @@
 
 @reltype REGISTER value=1 clid=CL_REGISTER
 @caption register millest otsida
+
+@reltype SEARCH_FOLDER value=2 clid=CL_MENU
+@caption kaust millest otsida
 
 
 */
@@ -525,11 +528,18 @@ class register_search extends class_base
 			}
 		}
 
-		$i = get_instance($clid);
-		$xp = $i->parse_properties(array(
-			"properties" => $tmp,
-			"name_prefix" => "rsf"
-		));
+/*		if ($clid)
+		{*/
+			$i = get_instance($clid);
+			$xp = $i->parse_properties(array(
+				"properties" => $tmp,
+				"name_prefix" => "rsf"
+			));
+/*		}
+		else
+		{
+			$xp = $tmp;
+		}*/
 
 		$xp["search_butt"] = array(
 			"name" => "search_butt",
@@ -617,6 +627,11 @@ class register_search extends class_base
 
 		$props = $this->get_props_from_reg($reg);
 
+		$reg_flds = $reg_i->_get_reg_folders($reg);
+		foreach($o->connections_from(array("type" => "RELTYPE_SEARCH_FOLDER")) as $c)
+		{
+			$reg_flds[] = $c->prop("to");
+		}
 		$filter = array(
 			"class_id" => CL_REGISTER_DATA,
 			"status" => $o->prop("show_only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE),
@@ -624,7 +639,7 @@ class register_search extends class_base
 				"logic" => "OR", 
 				"conditions" => array(
 					"register_id" => $reg->id(),
-					"parent" => $reg_i->_get_reg_folders($reg)
+					"parent" => $reg_flds
 				)
 			))
 			
@@ -661,7 +676,7 @@ class register_search extends class_base
 		if ($request["rsf"][$this->fts_name] != "")
 		{
 			$tmp = array();
-			foreach($props as $pn => $pd)
+			foreach($f_props as $pn => $pd)
 			{
 				if ($pn == "status" || $pn == "register_id" || $f_props[$pn]["store"] == "no" || $f_props[$pn]["field"] == "meta"
 || $f_props[$pn]["type"] == "submit" || !isset($f_props[$pn]))
@@ -671,7 +686,7 @@ class register_search extends class_base
 
 				if ($f_props[$pn]["type"] == "classificator")
 				{
-					$tmp["CL_REGISTER_DATA.".$f_props[$pn]["reltype"].".name"] = "%".$request["rsf"][$this->fts_name]."%";
+				//	$tmp["CL_REGISTER_DATA.".$f_props[$pn]["reltype"].".name"] = "%".$request["rsf"][$this->fts_name]."%";
 				}
 				else
 				{
@@ -857,12 +872,18 @@ class register_search extends class_base
 
 			// this is an expensive query, so cache the results
 			$c = get_instance("cache");
-			$cfn = "register_search_mod_chooser_p_".$pn;
+			$cfn = "register_".$reg->id()."_search_mod_chooser_p_".$pn;
 
 			if (!($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
 			{
-				$this->db_query("SELECT distinct($p[field]) as val FROM $p[table] 
-					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")");
+				$q = "SELECT distinct($p[field]) as val FROM $p[table] 
+					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")";
+
+				if (aw_global_get("uid") == "meff")
+				{
+		//			echo "q = $q <br>";
+				}
+				$this->db_query($q);
 				while ($row = $this->db_next())
 				{
 					$opts[$row["val"]] = $row["val"];
