@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.47 2001/11/09 05:42:38 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.48 2001/11/09 22:47:44 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -417,6 +417,8 @@ define("CL_TEMPLATE",79); // metaobjekt templatefaili jaoks, used to keep track 
 define("CL_HTML_POPUP",80); // html popup
 define("CL_LINK_COLLECTION",81); // lingikogu (dokualiase jaoks)
 
+define("CL_KEYWORD",82); // for keywords
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -478,6 +480,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1),
 			CL_SEARCH_FILTER => array("name" => "Otsimise filter", "file" => "search_filter", "can_add" => 1),
 			CL_HTML_POPUP => array("name" => "HTML popup", "file" => "html_popup", "can_add" => 1),
+			CL_KEYWORD => array("name" => "AW võtmesõna", "file" => "keywords", "can_add" => 1),
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -588,7 +591,7 @@ PRG_USERS							=> array("name" => MN_USERS,						"url" => "orb.$ext?class=users
 PRG_GROUPS						=> array("name" => MN_GROUPS,						"url" => "orb.$ext?class=groups&action=mk_grpframe&parent=0"),
 PRG_CONFIG						=> array("name" => MN_CONFIG,						"url" => "config.$ext"),
 PRG_LANG							=> array("name" => MN_LANG,							"url" => "languages.$ext"),
-PRG_BUGTRACK					=> array("name" => MN_BUGTRACK,					"url" => "orb.aw?action=list&class=bugtrack&filt=all"),
+PRG_BUGTRACK					=> array("name" => MN_BUGTRACK,					"url" => "orb.aw?action=list&class=bugtrack"),
 PRG_FORMGEN						=> array("name" => MN_FORMGEN,					"url" => "forms.$ext"),
 PRG_GRAPH							=> array("name" => MN_GRAPH,						"url" => "graph.$ext"),
 PRG_FACE							=> array("name" => MN_FACE,							"url" => "nagu.$ext"),
