@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.2 2004/07/05 14:10:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.3 2004/08/01 20:36:36 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -13,6 +13,9 @@
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algus
+
+@property whole_day type=checkbox ch_value=1 field=meta method=serialize
+@caption Kestab terve päeva
 
 @property content type=textarea cols=60 rows=30 field=description table=planner
 @caption Sisu
@@ -97,6 +100,13 @@ class task extends class_base
 			case "calendar_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_calendar_selector($arr);
+				break;
+
+			case "whole_day":
+				list($m,$d,$y) = explode("-",date("m-d-Y"));
+				$daystart = mktime(9,0,0,$m,$d,$y);
+				$dayend = mktime(17,0,0,$m,$d,$y);
+				$arr["obj_inst"]->set_prop("start1",$daystart);
 				break;
 		};
 		return $retval;
