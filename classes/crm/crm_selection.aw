@@ -134,6 +134,9 @@ class crm_selection extends class_base
 		$objects = $this->get_selection($arr["obj_inst"]->id());
 		$t = &$arr["prop"]["vcl_inst"];
 
+		// I need a way to let the table know that the incoming data is already 
+		// sorted.
+
 		$t->set_default_sortby('jrk');
 
 		$t->define_field(array(
@@ -149,6 +152,7 @@ class crm_selection extends class_base
 			'caption' => 'jrk',
 			'width' => '20',
 			'sortable' => '1',
+			'numeric' => 1,
 			'callback' => array(&$this, 'callb_jrk'),
 			'callb_pass_row' => true,
 		));
