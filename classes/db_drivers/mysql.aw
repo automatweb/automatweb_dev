@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.2 2002/11/07 10:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.3 2002/11/12 12:49:11 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -418,7 +418,7 @@ class mysql
 		return $tables;
 	}
 
-	function db_get_table($args = array())
+/*	function db_get_table($args = array())
 	{
 		extract($args);
 		$tables = array();
@@ -518,6 +518,6 @@ class mysql
 		print "<pre>";
 		print htmlspecialchars($result);
 		print "</pre>";
-	}
+	}*/
 };
 ?>
