@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.55 2004/03/09 15:39:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.56 2004/03/16 11:29:27 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -260,6 +260,14 @@ class aw_template extends core
 	{
 		$retval = isset($this->v2_name_map[$name]);
 		return $retval;
+	}
+
+	////
+	// !Checks whether a template contains a variable placeholder or not
+	// useful to avoid executing unneccessary code
+	function template_has_var($varname,$tplname = "MAIN")
+	{
+		return strpos($this->v2_templates[$tplname],"{VAR:" . $varname . "}") !== false; 
 	}
 
 	function is_parent_tpl($tpl,$parent)
