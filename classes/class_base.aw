@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.343 2004/12/15 12:26:38 ahti Exp $
+// $Id: class_base.aw,v 2.344 2004/12/17 12:11:57 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -335,6 +335,7 @@ class class_base extends aw_template
 
 		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group($filter);
+
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -2376,8 +2377,8 @@ class class_base extends aw_template
 								"name" => "grp_" . $grp_id,
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
-								"target" => "contentarea",
-								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
+								"target" => "_top",
+								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases")) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id)),
 							));
 							
 						}
@@ -3693,6 +3694,7 @@ class class_base extends aw_template
 			"filter" => $filter,
 		));
 
+
 		// I could use a different approach here ... for example, if I'm saving then
 		// only the properties that should be saved should be returned. or not?
 
@@ -4198,6 +4200,7 @@ class class_base extends aw_template
 			"clid" => !empty($arr["clid"]) ? $arr["clid"] : $this->clid,
 			"filter" => $arr["filter"],
 		));
+
 
 		$this->groupinfo = $cfgu->get_groupinfo();
 		$this->forminfo = $cfgu->get_forminfo();
