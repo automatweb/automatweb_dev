@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.16 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.17 2004/06/08 19:05:47 duke Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -165,16 +165,16 @@ class remote_login extends class_base
 
 	function login_from_obj($id)
 	{
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 		$this->handshake(array(
 			"silent" => true,
-			"host" => $ob["meta"]["server"]
+			"host" => $ob->prop("server"),
 		));
 
 		$this->login(array(
-			"host" => $ob["meta"]["server"],
-			"uid" => $ob["meta"]["login_uid"],
-			"password" => $ob["meta"]["login_password"],
+			"host" => $ob->prop("server"),
+			"uid" => $ob->prop("login_uid"),
+			"password" => $ob->prop("login_password"),
 			"silent" => true
 		));
 
@@ -183,8 +183,8 @@ class remote_login extends class_base
 
 	function get_server($id)
 	{
-		$ob = $this->get_object($id);
-		return $ob["meta"]["server"];
+		$ob = new object($id);
+		return $ob->prop("server");
 	}
 
 	/**  
