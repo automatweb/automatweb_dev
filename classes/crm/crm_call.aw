@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.7 2004/01/15 15:34:22 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -33,8 +33,22 @@ class crm_call extends class_base
 	function crm_call()
 	{
 		$this->init(array(
+			"tpldir" => "crm/call",
 			"clid" => CL_CRM_CALL
 		));
+	}
+
+	function request_execute($obj)
+	{
+		classload("icons");
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"name" => $obj->name(),
+			"icon" => icons::get_icon_url($obj),
+			"time" => date("d-M-y H:i",$obj->prop("start1")),
+			"content" => nl2br($obj->prop("content")),
+		));
+		return $this->parse();
 	}
 
 	function parse_alias($arr)
