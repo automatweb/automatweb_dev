@@ -1,21 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="users" folder="" extends="users_user">
-		<action name="gen_list" all_args="1">
-			<function name="gen_list">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change" >
-			<function name="change">
-				<arguments>
-					<optional name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="do_change" >
 			<function name="do_change">
 				<arguments>
@@ -40,33 +25,9 @@
 			</function>
 		</action>
 
-		<action name="delete" >
-			<function name="delete">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_user_site" nologin="1">
 			<function name="submit_user_site">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_user" >
-			<function name="submit_user">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_user" >
-			<function name="add_user">
-				<arguments>
-					<optional name="level" />
-					<optional name="join_grp" />
 				</arguments>
 			</function>
 		</action>
@@ -93,14 +54,6 @@
 			</function>
 		</action>
 
-		<action name="settings" >
-			<function name="settings">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_user_info" >
 			<function name="submit_user_info">
 				<arguments>
@@ -110,56 +63,6 @@
 
 		<action name="show_user_info" >
 			<function name="show_user_info">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_settings" >
-			<function name="submit_settings">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="user_stats" >
-			<function name="user_stats">
-				<arguments>
-					<optional name="s_uid" />
-					<optional name="from" />
-					<optional name="to" />
-					<optional name="stat_type" />
-					<optional name="stat_span" />
-					<optional name="graph_type" default="BarGraph"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="convusers" >
-			<function name="convusers">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="convsyslog" >
-			<function name="convsyslog">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="user_acl" >
-			<function name="user_acl">
-				<arguments>
-					<required name="s_uid" />
-					<optional name="page" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_user_acl" >
-			<function name="submit_user_acl">
 				<arguments>
 				</arguments>
 			</function>
@@ -206,13 +109,6 @@
 			</function>
 		</action>
 
-		<action name="submit_ua_form" all_args="1">
-			<function name="submit_ua_form">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="createpwd" >
 			<function name="createpwd">
 				<arguments>
@@ -229,21 +125,6 @@
 
 		<action name="pwconv" >
 			<function name="pwconv">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="import" >
-			<function name="import">
-				<arguments>
-					<optional name="gid" type="int"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_import" >
-			<function name="submit_import">
 				<arguments>
 				</arguments>
 			</function>

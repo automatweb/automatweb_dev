@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_class.aw,v 2.12 2004/02/12 09:28:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_class.aw,v 2.13 2004/02/27 11:20:43 kristo Exp $
 /* 
 
 @classinfo syslog_type=ST_ACL relationmgr=yes
@@ -53,7 +53,6 @@ class acl_class extends class_base
 			return false;	
 		};
 
-		var_dump($o->prop("role"));
 		$meta = $o->meta();
 
 		$oc = get_instance("object_chain");
@@ -102,9 +101,9 @@ class acl_class extends class_base
 	function get_acls_for_role($role)
 	{
 		$objs = new object_list(array(
-                        "class_id" => CL_ACL,
-                        "lang_id" => array(),
-                ));
+			"class_id" => CL_ACL,
+			"lang_id" => array(),
+		));
 	
 		$ret = array();
 		for($o = $objs->begin(); !$objs->end(); $o = $objs->next())
@@ -173,9 +172,9 @@ class acl_class extends class_base
 	function get_acls_for_group($gid)
 	{
 		$objs = new object_list(array(
-                        "class_id" => CL_ACL,
-                        "lang_id" => array(),
-                ));
+			"class_id" => CL_ACL,
+			"lang_id" => array(),
+		));
 
 		$ret = array();
 		for($o = $objs->begin(); !$objs->end(); $o = $objs->next())

@@ -189,11 +189,6 @@ class bugtrack extends aw_template
 	**/
 	function orb_new($arr) 
 	{
-		if (!$this->prog_acl("add", PRG_BUGTRACK))
-		{
-			$this->prog_acl_error("add", PRG_BUGTRACK);
-		};
-
 		load_vcl("date_edit");
 		$date_edit = new date_edit(time());
 		$date_edit->configure(array(
@@ -256,10 +251,6 @@ class bugtrack extends aw_template
 	**/
 	function orb_list($args)
 	{
-		if (!$this->prog_acl("view", PRG_BUGTRACK))
-		{
-			$this->prog_acl_error("view", PRG_BUGTRACK);
-		};
 		$this->read_template("list.tpl");
 		extract($args);
 		global $bugtr_filt;
@@ -407,10 +398,6 @@ class bugtrack extends aw_template
 		extract($arr);
 
 		$bug = $this->get_bug($id);
-		if (!$this->prog_acl("admin", PRG_BUGTRACK)  && ($bug["uid"]!=aw_global_get("uid") || !aw_global_get("uid")))
-		{
-			$this->prog_acl_error("admin", PRG_BUGTRACK);
-		};
 
 		load_vcl("date_edit");
 		$date_edit = new date_edit(time());
@@ -493,10 +480,6 @@ class bugtrack extends aw_template
 	**/
 	function orb_submit_new($arr)
 	{
-		if (!$this->prog_acl("add", PRG_BUGTRACK))
-		{
-			$this->prog_acl_error("add", PRG_BUGTRACK);
-		};
 		extract($arr);
 
 		$rc = new replicator_client($this->cfg["mastersite"]."/automatweb/bugreplicate.aw",$this->sitekeys[$this->cfg["mastersite"]]);
@@ -596,12 +579,6 @@ class bugtrack extends aw_template
 
 		$bug = $this->get_bug($id);
 		
-		// enda pandud bugi saab kaa muuta
-		if (!$this->prog_acl("admin", PRG_BUGTRACK) && ($bug["uid"]!=aw_global_get("uid") || !aw_global_get("uid")))
-		{
-			$this->prog_acl_error("admin", PRG_BUGTRACK);
-		};
-		
 		$developer=join(",",is_array($developer)?$developer:array());
 		$arr=array_merge($arr,array(
 			"developer" => $developer,
@@ -655,10 +632,6 @@ class bugtrack extends aw_template
 	**/
 	function orb_submit_delegate($arr)
 	{
-		if (!$this->prog_acl("admin", PRG_BUGTRACK))
-		{
-			$this->prog_acl_error("admin", PRG_BUGTRACK);
-		};
 		extract($arr);
 		$bug = $this->get_bug($id);
 
@@ -716,10 +689,6 @@ class bugtrack extends aw_template
 	**/
 	function orb_delete($arr) 
 	{
-		if (!$this->prog_acl("admin", PRG_BUGTRACK)  && ($bug["uid"]!=aw_global_get("uid") || !aw_global_get("uid")))
-		{
-			$this->prog_acl_error("admin", PRG_BUGTRACK);
-		};
 		extract($arr);
 		if (is_array($sel))
 		{
@@ -1820,16 +1789,10 @@ class bugtrack extends aw_template
 			$this->mk_my_orb("filters",array(),"",false,true) => "Filtrid",
 		));
 
-		if ($this->prog_acl("add", PRG_BUGTRACK))
-		{
-			$headerarray[$this->mk_my_orb("new",array(),"",false,true)] = "Lisa uus";
-		};
+		$headerarray[$this->mk_my_orb("new",array(),"",false,true)] = "Lisa uus";
 
-		if ($this->prog_acl("admin", PRG_BUGTRACK))
-		{
-			$headerarray['javascript:Do("delete")'] = "Kustuta";
-			$headerarray['javascript:DoDelegate()'] = "Määra";
-		};
+		$headerarray['javascript:Do("delete")'] = "Kustuta";
+		$headerarray['javascript:DoDelegate()'] = "Määra";
 
 		$headerarray[$this->mk_my_orb("search", array(),"",false,true)] = "Otsi";
 		$headerarray[$this->mk_my_orb("user_settings", array(),"",false,true)] = "M&auml;&auml;rangud";

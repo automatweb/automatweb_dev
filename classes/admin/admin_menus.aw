@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.52 2004/02/13 11:38:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.53 2004/02/27 11:20:43 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -319,16 +319,6 @@ class admin_menus extends aw_template
 			$this->vars(array(
 				"link" => $delurl,
 				"text" => "Kustuta"
-			));
-			$retval .= $this->parse("MENU_ITEM");
-		}
-
-		if ($this->can("admin", $id))
-		{
-			$delurl = "javascript:go_acl(".$id.")";
-			$this->vars(array(
-				"link" => $delurl,
-				"text" => "&Otilde;igused"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -1165,7 +1155,6 @@ class admin_menus extends aw_template
 			}
 
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
-			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=default.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
 			
 			if ($this->co_id)
 			{

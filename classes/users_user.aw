@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.81 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.82 2004/02/27 11:20:43 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -123,56 +123,6 @@ class users_user extends aw_template
 	}
 
 	////
-	// !do query to list all users. ig gid is set, only users from that group will be listed
-	function listall($gid= 0) 
-	{
-		if ($gid)
-		{
-			$q = "SELECT * FROM users
-						LEFT JOIN groupmembers ON groupmembers.uid = users.uid
-						WHERE groupmembers.gid = $gid AND blocked != 1
-						ORDER BY users.uid";
-		}
-		else
-		{
-			$q = "SELECT * FROM users WHERE blocked != 1 ORDER BY uid";
-		}
-		$this->db_query($q);
-	}
-
-	////
-	// !Listib koik grupid, kontrollib ka n2gemis6igust, tagastab array 
-	function listall_acl() 
-	{
-		$users = array("'".aw_global_get("uid")."'");
-		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
-		while ($row = $this->db_next())
-		{
-			// add all users of this group to list of users
-			$this->save_handle();
-			$ul = $this->getgroupmembers2($row["gid"]);
-			reset($ul);
-			while (list(,$u_uid) = each($ul))
-			{
-				$users[] = "'".$u_uid."'";
-			}
-			$this->restore_handle();
-		}
-	
-		$ret = array();
-		$uss = join(",",$users);
-		if ($uss != "")
-		{
-			$this->db_query("SELECT uid FROM users WHERE uid IN($uss) AND blocked = 0");
-			while ($row = $this->db_next())
-			{
-				$ret[$row["uid"]] = $row["uid"];
-			}
-		}
-		return $ret;
-	}
-
-	////
 	// !Kinky - touch user. Anyway. Seab users tabelis lastaction valja hetke timestambiks
 	// Saab kasutada selleks, et teha kindlaks kui kaua kasutaja on idle istunud
 	function touch($user) 
@@ -187,16 +137,6 @@ class users_user extends aw_template
 			aw_session_set("last_touch",$t);
 		};
 	}
-
-	////
-	// !Tagastab koigi registreeritud kasutajate arvu
-	function count() 
-	{
-		$q = "SELECT count(*) AS total,SUM(online) AS online FROM users";
-		$this->db_query($q);
-		$row = $this->db_fetch_row();
-		return $row;
-	}	
 
 	////
 	// !Logib kasutaja sisse
@@ -391,11 +331,9 @@ class users_user extends aw_template
 				lastaction = $t
 			WHERE uid = '$uid'";
 		$this->db_query($q);
-    aw_global_set("uid","");
-    aw_session_set("uid","");
+		aw_global_set("uid","");
+		aw_session_set("uid","");
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
-
-		
 	}
 
 	////
@@ -418,7 +356,6 @@ class users_user extends aw_template
 	////
 	// Küsib info mingit kasutaja kohta
 	// DEPRECATED. core->get_user on parem
-
 	function fetch($uid) 
 	{
 		return $this->get_user(array(
@@ -606,20 +543,6 @@ class users_user extends aw_template
 		return $retval;
 	}
 
-	function getgroupmembers($name)
-	{
-		$this->db_query("SELECT groupmembers.* FROM groupmembers
-					LEFT JOIN users ON users.uid = groupmembers.uid
-					LEFT JOIN groups ON groupmembers.gid = groups.gid
-					WHERE groups.name = '$name' AND users.blocked < 1");
-		$ret = array();
-		while($row = $this->db_next())
-		{
-			$ret[$row["uid"]] = $row["uid"];
-		}
-		return $ret;
-	}
-
 	////
 	// !Grupi kasutjate nimekiri, returns array[uid] = uid
 	function getgroupmembers2($gid)
@@ -637,7 +560,7 @@ class users_user extends aw_template
 	}
 
 	// removes the user from this group and all below it
-	function remove_users_from_group_rec($gid,$users,$checkdyn = false, $normalize = true)
+	function remove_users_from_group_rec($gid,$users,$checkdyn = false)
 	{
 		$this->remove_users_from_group($gid,$users,$checkdyn);
 
@@ -647,11 +570,6 @@ class users_user extends aw_template
 		while(list(,$v) = each($grps))
 		{
 			$this->remove_users_from_group($v,$users,$checkdyn);
-		}
-
-		if ($normalize)
-		{
-			$this->normalize_user_objects();
 		}
 	}
 
@@ -683,16 +601,6 @@ class users_user extends aw_template
 
 				$q = "DELETE FROM groupmembers WHERE uid = '$k' AND gid IN ($gstr)";
 				$this->db_query($q);
-
-				//magistrali korral võtan javaga yhendust
-				if($this->cfg["site_id"]==12)
-				{
-					$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-					//teatan, et grupist $gid kustutati user $k 
-					$str="1 ".$this->cfg["site_id"]." ".$k." ".$gid."\n";
-					fputs($acl_server_socket,$str);
-					fclose($acl_server_socket);
-				}
 			};
 		};
 		$this->_log(ST_GROUPS, SA_CHANGE_GRP_USERS, "Kustutas grupist $gid kasutajad ".join(",",$users));
@@ -706,7 +614,7 @@ class users_user extends aw_template
 	}
 
 	// recursively addss users to group, iow adds the user to this group and all above it
-	function add_users_to_group_rec($gid,$users,$permanent = false,$check = true, $normalize = true)
+	function add_users_to_group_rec($gid,$users,$permanent = false,$check = true)
 	{
 		$grps = array();
 		$this->getgroupsabove($gid,&$grps);
@@ -873,12 +781,10 @@ class users_user extends aw_template
 		$this->delete_object($this->grpcache[$gid]["oid"]);
 		$this->db_query("DELETE FROM groups WHERE gid = $gid");
 		$this->db_query("DELETE FROM groupmembers WHERE gid = $gid");
-//		$this->db_query("DELETE FROM groupmembergroups WHERE parent = $gid OR child = $gid");
 		$this->db_query("DELETE FROM acl WHERE gid = $gid");
 
 		$this->_log(ST_USERS, SA_DELETE_GRP, $this->grpcache[$gid]["name"]);
 
-		
 		if (!is_array($this->grpcache[$gid]))
 		{
 			return;
@@ -1064,7 +970,6 @@ class users_user extends aw_template
 				$this->remove_users_from_group_rec($v,$auid, false, true);
 			}
 		}
-		$this->normalize_user_objects();
 	}
 
 	function getpermanentmembers($gid)
@@ -1136,7 +1041,7 @@ class users_user extends aw_template
 			{
 				error::throw(array(
 					"id" => ERR_GROUP_HIER,
-					"msg" => "Error in group hierarchy, count of 100 exceeded! $gid"
+					"msg" => "Error in group hierarchy, count of 100 exceeded! probably offending group - $gid"
 				));
 			}
 		}
@@ -1154,38 +1059,6 @@ class users_user extends aw_template
 			$this->grpcache[$row["parent"]][] = $row;
 			$this->grpcache2[$row["gid"]] = $row;
 		}
-	}
-
-	function get_member_groups_for_gid($gid)
-	{
-		$ret = array();
-		$this->db_query("SELECT * FROM groupmembergroups WHERE parent = $gid");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["child"]] = $row;
-		}
-
-		return $ret;
-	}
-
-	function add_grpgrp_relation($parent,$child)
-	{
-		$this->db_query("INSERT INTO groupmembergroups(parent,child,created,createdby)
-					VALUES($parent,$child,".time().",'".aw_global_get("uid")."')");
-
-		$this->_log(ST_GROUPS, SA_GRP_ADD_SUBGRP, "lisas grupi $parent sisse grupi $child");
-		$uarr = $this->getgroupmembers2($child);
-		$this->add_users_to_group_rec($parent,$uarr);
-	}
-
-	function remove_grpgrp_relation($parent,$child)
-	{
-		$this->db_query("DELETE FROM groupmembergroups
-					WHERE parent = $parent AND child = $child");
-
-		$this->_log(ST_GROUPS, SA_GRP_DEL_SUBGRP, "kustutas grupi $parent seest grupi $child");
-		$uarr = $this->getgroupmembers2($child);
-		$this->remove_users_from_group_rec($parent,$uarr);
 	}
 
 	function get_grp_parent_grps($gid)
@@ -1206,15 +1079,6 @@ class users_user extends aw_template
 		}
 
 		return $ret;
-	}
-
-	////
-	// returns the level the group is at in the groups hierarchy
-	function get_grp_level($gid)
-	{
-		$gar = array();
-		$this->getgroupsabove($gid,$gar);
-		return count($gar);
 	}
 
 	function find_group_login_redirect($uuid)
@@ -1286,148 +1150,6 @@ class users_user extends aw_template
 		};
 
 		return $retval;
-	}
-
-	////
-	// !this makes sure all user - brother objects are in their correct places for all group objects
-	// this should be called, when user/group tables change, to update object table
-	function normalize_user_objects()
-	{
-		set_time_limit(0);	// for a large number of users, this can take quite a while.
-		// first, get all groups that are of the correct type
-		$group_objs = $this->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
-
-		foreach($group_objs as $gid => $dat)
-		{
-			$this->_normalize_group_object($dat);
-		}
-	}
-
-	function _normalize_group_object($gd)
-	{
-		//echo "normalize group object for group $gd[name] , gid = $gd[gid] <br />";
-		// get all users oids that are in this group
-		$members = array();
-		$sql = "
-			SELECT 
-				u.oid as oid 
-			FROM 
-				groupmembers m 
-				LEFT JOIN users u ON u.uid = m.uid 
-			WHERE 
-				m.gid = $gd[gid] AND
-				u.oid IS NOT NULL AND 
-				u.oid > 0 AND
-				u.blocked != 1
-		";
-		$this->db_query($sql);
-		while($row = $this->db_next())
-		{
-			$members[$row["oid"]] = $row["oid"];
-		}
-
-		// now, get all user-bro objects that are under this groups' object
-		$u_objs = array();
-		$r_u_o = array();
-		$this->db_query("SELECT oid,brother_of FROM objects WHERE class_id = ".CL_USER." AND parent = '$gd[oid]' AND status != 0");
-		while ($row = $this->db_next())
-		{
-			$u_objs[$row["oid"]] = $row;
-			$r_u_o[$row["brother_of"]] = $row;
-		}
-
-		// now, diff the two lists
-		// first, remove all duplicates from u_objs
-		$_u_objs = array();
-		$used = array();
-		foreach($u_objs as $oid => $d)
-		{
-			if (isset($used[$d["brother_of"]]))
-			{
-				$this->delete_object($oid, false, false);
-//				echo "found duplicate in group $gd[name] , oid = $oid <br />";
-			}
-			else
-			{
-				$_u_objs[$oid] = $d;
-			}
-			$used[$d["brother_of"]] = 1;
-		}
-
-		// now, remove all objects that are users that are not in this group
-		foreach($u_objs as $oid => $d)
-		{
-//			echo "real object under group object is $oid , brother of $d[brother_of] <br />";
-			if (!isset($members[$d["brother_of"]]))
-			{
-				$this->delete_object($oid, false, false);
-//				echo "deleteing object $oid from group $gd[name] <br />";
-			}
-		}
-
-		// and now add all thad are members, but are not in object list
-		foreach($members as $oid)
-		{
-			if (!isset($r_u_o[$oid]))
-			{
-//				echo "did not find object $oid under $gd[oid] <br />";
-				$o_uid = $this->get_uid_for_oid($oid);
-				$_t = $this->new_object(array(
-					"parent" => $gd["oid"],
-					"class_id" => CL_USER,
-					"brother_of" => $oid,
-					"name" => $o_uid,
-					"status" => STAT_ACTIVE,
-					"no_flush" => 1
-				));
-//				echo "adding uid $o_uid to group $gd[name] (oid = $oid) , new oid = $_t <br />";
-			}
-		}
-
-		// right, now check the aliases for the group object
-		$q = "
-			SELECT 
-				aliases.target as id,
-				objects.oid,
-				objects.brother_of
-			FROM aliases
-				LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE 
-				aliases.source = '$gd[oid]' AND 
-				aliases.reltype = '2'
-		";
-		$this->db_query($q);
-		$aliases = array();
-		while($row = $this->db_next())
-		{
-			$aliases[$row["brother_of"]] = $row;
-		}
-
-		// check if there are any aliases that are for members no longer in the group
-		foreach($aliases as $alias)
-		{
-			if (!isset($members[$alias["id"]]))
-			{
-//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[oid] <br />";
-				$this->delete_alias($gd["oid"], $alias["oid"], true, true);
-			}
-		}
-
-		// now, go over members and check if any aliases are missing
-		foreach($members as $member)
-		{
-			if (!isset($aliases[$member]))
-			{
-//				echo "did not find member $member in aliases for group $gd[oid] $gd[name], adding alias<br />";
-				// add the user as alias
-				core::addalias(array(
-					"id" => $gd["oid"],
-					"alias" => $member,
-					"reltype" => 2, // RELTYPE_MEMBER in group.aw
-					"no_cache" => true
-				));
-			}
-		}
 	}
 
 	function do_delete_user($uid)

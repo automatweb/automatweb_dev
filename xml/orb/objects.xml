@@ -1,25 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="objects" folder="" extends="db_objects">
-		<action name="search" >
-			<function name="search">
-				<arguments>
-					<optional name="stype" type="int"/>
-					<optional name="target" type="int"/>
-					<optional name="otype" type="int"/>
-					<optional name="one" type="int"/>
-					<optional name="return_url" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="search_submit" >
-			<function name="search_submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
@@ -73,6 +54,14 @@
 					<optional name="ignore_langmenus" />
 					<optional name="empty" />
 					<optional name="rootobj" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="serialize" nologin="1">
+			<function name="orb_serialize">
+				<arguments>
+					<required name="oid" />
 				</arguments>
 			</function>
 		</action>

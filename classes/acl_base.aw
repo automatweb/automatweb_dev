@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.48 2004/02/03 16:31:20 kristo Exp $
-
-define("DENIED",0);
-define("ALLOWED",1);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.49 2004/02/27 11:20:43 kristo Exp $
 
 lc_load("definition");
 
@@ -14,6 +11,8 @@ class acl_base extends db_connector
 		// oi kakaja huinja, bljat. 
 		// the point is, that php can only handle 32-bit integers, but mysql can handle 64-bit integers
 		// and so, we do the packing/unpacking to integer in the database. whoop-e
+		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
+		// anyone wanna rewrite it? ;) - terryf
 		$qstr = array();
 		reset($this->cfg["acl"]["ids"]);
 		while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
@@ -46,6 +45,8 @@ class acl_base extends db_connector
 		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
 		$this->save_acl($oid,$gid,$this->cfg["acl"]["default"]);		// set default acl to the new relation
 		aw_session_set("__acl_cache", array());
+		$c = get_instance("cache");
+		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 
 	function remove_acl_group_from_obj($gid,$oid)
@@ -404,22 +405,40 @@ class acl_base extends db_connector
 		}
 		else
 		{
-			$prog_cache = aw_global_get("prog_cache");
-			if (!is_array($prog_cache))
-			{
-				$c = get_instance("config");
-				$prog_cache = aw_unserialize($c->get_simple_config("accessmgr"));
-				aw_global_set("prog_cache",$prog_cache);
-			}
-			return $this->can($right,$prog_cache[$progid]);
-		};
-	}
+			// the only program you can ask for is PRG_MENUEDIT 
+			error::throw_if($progid != PRG_MENUEDIT, array(
+				"id" => ERR_PROG_ACL,
+				"msg" => "acl_base::prog_acl($right, $progid): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
+			));
 
-	////
-	// !generates an error message to the user and exits aw
-	function prog_acl_error($right,$prog)
-	{
-		die("Sorry, but you do not have $right access to program ".$this->cfg["programs"][$prog]["name"]."<br />");
+			$can_adm = false;
+			$can_adm_max = 0;
+
+			$gl = aw_global_get("gidlist_oid");
+			foreach($gl as $g_oid)
+			{
+				$o = obj($g_oid);
+				if ($o->prop("priority") > $can_adm_max)
+				{
+					$can_adm = $o->prop("can_admin_interface");
+					$can_adm_max = $o->prop("priority");
+				}
+			}
+
+			// ok, if we are returning false, send an error e-mail, so that we can fix the situation
+			if (!$can_adm)
+			{
+				error::throw(array(
+					"id" => ERR_NOTICE,
+					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly!",
+					"fatal" => false,
+					"show" => false
+				));
+			}
+
+			// FIXME: after I have checked all the relevant checkboxes for all the sites, this should return $can_adm
+			return $can_adm;
+		};
 	}
 
 	////

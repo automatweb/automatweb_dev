@@ -9,6 +9,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_GROUP, on_delete_grp)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_GROUP, on_add_alias_to_group)
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_GROUP, on_remove_alias_from_group)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_GROUP, on_add_alias_for_group)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias_for_group)
 */
 
 /*
@@ -56,6 +60,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_GROUP, on_remove_ali
 @property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
 @caption Admin rootmen&uuml;&uuml;
 
+@property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
+@caption Kas saab administreerimiskeskkonda
+
+@property default_acl type=callback callback=callback_get_default_acl store=no rel=1
+@caption Default ACL
+
 @property data type=text group=dyn_search no_caption=1
 
 @property import type=fileupload store=no group=import
@@ -73,6 +83,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_GROUP, on_remove_ali
 @property obj_acl type=callback callback=get_acls store=no
 
 @property gp_parent type=hidden field=parent table=groups
+@property gp_gid type=hidden field=gid table=groups
 
 @reltype SEARCHFORM value=1 clid=CL_FORM
 @caption otsinguvorm
@@ -106,6 +117,13 @@ class group extends class_base
 	
 		switch($prop['name'])
 		{
+			case "name":
+				if ($arr["obj_inst"]->class_id() == CL_RELATION)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "data":
 				$f = get_instance("formgen/form");
 				$prop['value'] = $f->gen_preview(array(
@@ -285,8 +303,47 @@ class group extends class_base
 				$this->save_acl($ea, $gid, $acl);
 			}
 		}
+		else
+		if ($prop["name"] == "default_acl")
+		{
+			$this->_do_save_def_acl($arr);
+		}
 
 		return PROP_OK;
+	}
+
+	function _do_save_def_acl($arr)
+	{
+		$da = array();
+		$aclids = aw_ini_get("acl.ids");
+		foreach($aclids as $acln)
+		{
+			$da[$acln] = $arr["request"]["acl_".$acln];
+		}
+
+		if ($arr["obj_inst"]->class_id() == CL_RELATION)
+		{
+			// FIXME: classbase will automatically give the connection as a parameter, but 
+			// currently we do this ourselves
+			if ($arr["obj_inst"]->meta("conn_id"))
+			{
+				$c = new connection($arr["obj_inst"]->meta("conn_id"));
+			}
+			else
+			{
+				$c = new connection();
+				list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
+				$c = new connection($c_d["id"]);
+			}
+
+			// now set the real acl from the connection
+			$grp = $c->to();
+			$this->save_acl($c->prop("from"), $grp->prop("gp_gid"), $da);
+		}
+		else
+		{
+			$arr["obj_inst"]->set_meta("default_acl", $da);
+		}
 	}
 
 	function callback_mod_retval($arr)
@@ -758,6 +815,93 @@ class group extends class_base
 		if ($gid)
 		{
 			$this->users->deletegroup($gid);
+		}
+	}
+
+	function callback_get_default_acl($arr)
+	{
+		$ret = array();
+
+		if ($arr["obj_inst"]->class_id() != CL_RELATION)
+		{
+			$da = $arr["obj_inst"]->meta("default_acl");
+		}
+		else
+		{
+			// handle relation objects
+			// FIXME: classbase will automatically give the connection as a parameter, but 
+			// currently we do this ourselves
+			if ($arr["obj_inst"]->meta("conn_id"))
+			{
+				$c = new connection($arr["obj_inst"]->meta("conn_id"));
+			}
+			else
+			{
+				$c = new connection();
+				list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
+				$c = new connection($c_d["id"]);
+			}
+
+			// now get the real acl from the connection
+			$grp = $c->to();
+			$acld = $this->get_acl_for_oid_gid($c->prop("from"), $grp->prop("gp_gid"));
+			$aclids = aw_ini_get("acl.ids");
+			$da = array();
+			foreach($aclids as $aclid)
+			{
+				$da[$aclid] = ($acld[$aclid] == aw_ini_get("acl.allowed") ? 1 : 0);
+			}
+		}
+
+		$ret["acl_INFO_TEXT"] = array(
+			"name" => "acl_INFO_TEXT",
+			"no_caption" => 1,
+			"type" => "text",
+			"store" => "no",
+			"value" => "Default &otilde;igused"
+		);
+
+		$aclids = aw_ini_get("acl.ids");
+		$aclns = aw_ini_get("acl.names");
+		foreach($aclids as $acln)
+		{
+			$ret["acl_".$acln] = array(
+				"name" => "acl_".$acln,
+				"caption" => $aclns[$acln],
+				"type" => "checkbox",
+				"ch_value" => 1,
+				"store" => "no",
+				"value" => $da[$acln]
+			);
+		}
+
+		return $ret;
+	}
+
+	function on_add_alias_for_group($arr)
+	{
+		if ($arr["connection"]->prop("reltype") == RELTYPE_ACL)
+		{
+			// handle acl add
+			$from = $arr["connection"]->from();
+			$grp = $arr["connection"]->to();
+			$gid = $grp->prop("gp_gid");
+			
+			$this->add_acl_group_to_obj($gid, $from->id());
+			$this->save_acl($from->id(), $gid, $grp->meta("default_acl"));
+		}
+	}
+
+	function on_remove_alias_for_group($arr)
+	{
+		if ($arr["connection"]->prop("reltype") == RELTYPE_ACL)
+		{
+			// handle acl add
+			$from = $arr["connection"]->from();
+			$grp = $arr["connection"]->to();
+			$gid = $grp->prop("gp_gid");
+			
+			$this->remove_acl_group_from_obj($gid, $from->id());
 		}
 	}
 }

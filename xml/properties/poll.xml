@@ -39,6 +39,7 @@
             <type>callback</type>
             <callback>callback_get_answers</callback>
             <store>no</store>
+            <editonly>1</editonly>
             <group>general</group>
             <field>answers</field>
             <caption>Vastused</caption>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.26 2004/02/10 15:10:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.27 2004/02/27 11:20:43 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -481,11 +481,6 @@ class admin_folders extends aw_template
 			}
 			
 
-			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
-			{
-				continue;
-			}
-			
 			// ugly-ass hack, but can't really think of anything else right now
 			if ($row["admin_feature"] == PRG_GROUPS && aw_ini_get("groups.tree_root"))
 			{
@@ -505,11 +500,6 @@ class admin_folders extends aw_template
 
 			$this->rec_admin_tree(&$arr,$row["oid"]);
 
-			if ($row["admin_feature"] == 4)
-			{
-				$this->mk_grp_tree($row["oid"]);
-			}
-
 			$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? icons::get_feature_icon_url($row["admin_feature"]) : "");
 			// as far as I know, this works everywhere
 			$blank = "about:blank";
@@ -523,63 +513,6 @@ class admin_folders extends aw_template
 				"parent" => $px,
 				"iconurl" => $iconurl,
 				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank),
-			));
-		}
-		return $ret;
-	}
-
-	function mk_grp_tree($parent)
-	{
-		$t = get_instance("groups");
-		$t->listgroups("parent","asc",0,2);
-		$grar = array();
-		while ($row = $t->db_next())
-		{
-			$grar[$row["gid"]] = $row;
-		}
-
-		reset($grar);
-		while (list($gid,$row) = each($grar))
-		{
-			// we must convert the parent member so that it actually points to
-			// the parent OBJECT not the parent group
-			$puta = isset($row["parent"]) ? $row["parent"] : 0;
-			$row["parent"] = isset($grar[$puta]["oid"]) ? $grar[$puta]["oid"] : 0;
-
-			if ($row["parent"] == 0)
-			{
-				$row["parent"] = $parent;
-			}
-			$grpcache[$row["parent"]][] = $row;
-		}
-		$ret = $this->rec_grp_tree(&$grpcache,$parent);
-		return $ret;
-	}
-
-	function rec_grp_tree(&$arr,$parent)
-	{
-		if (!isset($arr[$parent]) || !is_array($arr[$parent]))
-		{
-			return "";
-		}
-
-		$ret = "";
-		reset($arr[$parent]);
-		while (list(,$row) = each($arr[$parent]))
-		{
-			if (!$this->can("view",$row["oid"]) /*|| $row["gid"] == aw_ini_get("groups.all_users_grp")*/)
-			{
-				continue;
-			}
-
-			$this->rec_grp_tree(&$arr,$row["oid"]);
-
-			$this->tree->add_item($parent."ad",array(
-				"id" => $row["oid"]."ad",
-				"name" => $row["name"],
-				"parent" => $row["parent"],
-				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]),"admin_menus"),
-				"iconurl" => $this->cfg["baseurl"]."/automatweb/images/ftv2doc.gif",
 			));
 		}
 		return $ret;

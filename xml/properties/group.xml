@@ -89,6 +89,27 @@
             <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
+            <name>can_admin_interface</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <table>objects</table>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kas saab administreerimiskeskkonda</caption>
+      </property>
+      <property>
+            <name>default_acl</name>
+            <type>callback</type>
+            <callback>callback_get_default_acl</callback>
+            <store>no</store>
+            <rel>1</rel>
+            <table>groups</table>
+            <group>general</group>
+            <field>default_acl</field>
+            <caption>Default ACL</caption>
+      </property>
+      <property>
             <name>data</name>
             <type>text</type>
             <group>dyn_search</group>
@@ -145,6 +166,13 @@
             <name>gp_parent</name>
             <type>hidden</type>
             <field>parent</field>
+            <table>groups</table>
+            <group>objects</group>
+      </property>
+      <property>
+            <name>gp_gid</name>
+            <type>hidden</type>
+            <field>gid</field>
             <table>groups</table>
             <group>objects</group>
       </property>

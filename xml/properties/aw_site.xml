@@ -117,6 +117,26 @@
             <caption>Genereeri sait!</caption>
       </property>
       <property>
+            <name>upd_site</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Uuenda saidi m&amp;auml;&amp;auml;rangud!</caption>
+      </property>
+      <property>
+            <name>ch_warnings</name>
+            <type>text</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Uuendamise hoiatused</caption>
+      </property>
+      <property>
             <name>site_errmsg</name>
             <type>text</type>
             <table>objects</table>

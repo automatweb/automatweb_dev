@@ -49,6 +49,12 @@
 @property gen_site type=checkbox ch_value=1
 @caption Genereeri sait!
 
+@property upd_site type=checkbox ch_value=1
+@caption Uuenda saidi m&auml;&auml;rangud!
+
+@property ch_warnings type=text store=no
+@caption Uuendamise hoiatused
+
 @property site_errmsg type=text
 @caption Miks saiti ei saa genereerida
 
@@ -97,7 +103,38 @@ class aw_site extends class_base
 				$prop['value'] = $this->warning_str;
 				break;
 
+			case "upd_site":
+				if (!$arr["obj_inst"]->meta("site_id"))
+				{
+					return PROP_IGNORE;
+				}
+
+				$this->ch_warnings = array();
+				$changes = $this->_get_changes($arr["obj_inst"], $this->ch_warnings);
+
+				if (!$changes)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "ch_warnings":
+				if (is_array($this->ch_warnings) && count($this->ch_warnings) > 0)
+				{
+					$prop['value'] = join("<br>", $this->ch_warnings);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "gen_site":
+				if ($arr["obj_inst"]->meta("site_id"))
+				{
+					return PROP_IGNORE;
+				}
+
 				if ($arr['obj_inst']->id())
 				{
 					$site = $this->get_site_def($arr['obj_inst']->id());
@@ -297,6 +334,15 @@ class aw_site extends class_base
 	{
 		extract($arr);
 		$ob = obj($id);
+		if ($ob->meta('upd_site') && $arr["request"]["group"] == "general")
+		{
+			$site = $this->get_site_def($id);
+			$this->_do_update_site($ob);
+			$ob->set_meta("upd_site", 0);
+			$ob->set_meta("old_site_opts", $site);
+			$ob->save();
+		}
+		else
 		if ($ob->meta('gen_site') && $arr["request"]["group"] == "general")
 		{
 			$site = $this->get_site_def($id);
@@ -344,6 +390,12 @@ class aw_site extends class_base
 
 			$log->finish_log();
 
+			// set the site id to the current object so we only let the user change it
+			$ob->set_meta("site_id", $ini_opts["site_id"]);
+			$ob->set_meta("gen_site", 0);
+			$ob->set_meta("old_site_opts", $site);
+			$ob->save();
+
 			// now restart webserver
 			//echo "restarting webserver ... <br />\n";
 			aw_global_set("__is_install", 0);
@@ -387,8 +439,6 @@ class aw_site extends class_base
 		// create the needed folders
 		$this->_do_add_folder($site["docroot"], &$log);
 		$ini_opts['site_basedir'] = $site['docroot'];
-
-		$this->_do_add_folder($site['docroot']."/archive", &$log);
 
 		$this->_do_add_folder($site['docroot']."/files", &$log);
 
@@ -1077,76 +1127,84 @@ class aw_site extends class_base
 		));
 	}
 
-	function do_copy_existing_templates($site)
+	function do_copy_existing_templates($site, $do_css = true, $do_perms = true, $do_tpls = true)
 	{
 		//echo "copy existing templates! <br>";
 		// get list of all folders
 		$fmap = array();
 
-		foreach($site['site_obj']['select_tpl_sites'] as $sn)
-		{
-			$sn = str_replace("http://","",$sn);
-			$_t = $this->do_orb_method_call(array(
-				"class" => "objects",
-				"action" => "aw_ini_get_mult",
-				"method" => "xmlrpc",
-				"server" => $sn,
-				"params" => array(
-					"vals" => array(
-						"site_basedir",
-						"tpldir"
-					)
-				),
-				"no_errors" => true
-			));
+		$sue = get_instance("install/su_exec");
 
-			if (is_array($_t))
+		if ($do_tpls)
+		{
+			foreach($site['site_obj']['select_tpl_sites'] as $sn)
 			{
-				foreach($_t as $n => $base_folder)
+				$sn = str_replace("http://","",$sn);
+				$_t = $this->do_orb_method_call(array(
+					"class" => "objects",
+					"action" => "aw_ini_get_mult",
+					"method" => "xmlrpc",
+					"server" => $sn,
+					"params" => array(
+						"vals" => array(
+							"site_basedir",
+							"tpldir"
+						)
+					),
+					"no_errors" => true
+				));
+
+				if (is_array($_t))
 				{
-					if ($n == "site_basedir")
+					foreach($_t as $n => $base_folder)
 					{
-						$fmap[] = $base_folder;
-					}
-					else
-					if ($n == "tpldir")
-					{
-						$template_folder = $base_folder;
+						if ($n == "site_basedir")
+						{
+							$fmap[] = $base_folder;
+						}
+						else
+						if ($n == "tpldir")
+						{
+							$template_folder = $base_folder;
+						}
 					}
 				}
 			}
-		}
 
-		$sue = get_instance("install/su_exec");
-		if ($site["site_obj"]["tpls_are_linked"] == 1)
-		{
-			$sue->add_cmd("ln -s $template_folder ".$site['docroot']."/templates");
-			$ini_opts['tpldir'] = "\${site_basedir}/templates";
-		}
-		else
-		{
-			foreach($site['site_obj']['select_tpl_folders'] as $from_fld)
+			if ($site["site_obj"]["tpls_are_linked"] == 1)
 			{
-				//echo "from_fld = $from_fld <br>";
-				$to_fld = $from_fld;
-				foreach($fmap as $base)
+				$sue->add_cmd("ln -s $template_folder ".$site['docroot']."/templates");
+				$ini_opts['tpldir'] = "\${site_basedir}/templates";
+			}
+			else
+			{
+				$ttt = $site['site_obj']['select_tpl_folders'];
+				sort($ttt);
+				foreach($ttt as $from_fld)
 				{
-					$to_fld = str_replace($base, "", $to_fld);
+					//echo "from_fld = $from_fld <br>";
+					$to_fld = $from_fld;
+					foreach($fmap as $base)
+					{
+						$to_fld = str_replace($base, "", $to_fld);
+					}
+
+					$to_fld = $site['docroot']."/".$to_fld;
+					//echo "got to_fld as $to_fld <br>";
+
+					$sue->add_cmd("mkdir $to_fld");
+					$sue->add_cmd("copy $from_fld/*tpl $to_fld/");
+					//echo "added cmd mkdir $to_fld <br />\n";
+					//echo "addes cmd copy $from_fld/*tpl $to_fld/ <br />\n";
+					flush();
 				}
-
-				$to_fld = $site['docroot']."/".$to_fld;
-				//echo "got to_fld as $to_fld <br>";
-
-				$sue->add_cmd("mkdir $to_fld");
-				$sue->add_cmd("copy $from_fld/*tpl $to_fld/");
-				//echo "added cmd mkdir $to_fld <br />\n";
-				//echo "addes cmd copy $from_fld/*tpl $to_fld/ <br />\n";
-				flush();
+				$sue->add_cmd("find $site[docroot]/templates -type d -exec chmod 777 {} \;");
+				$sue->add_cmd("find $site[docroot]/templates -type f -exec chmod 666 {} \;");
 			}
 		}
 
 		// also, if selected, copy images and css files.
-		if ($site["site_obj"]["select_imgcss_sites"] != "")
+		if ($site["site_obj"]["select_imgcss_sites"] != "" && $do_css)
 		{
 			$sn = str_replace("http://","",$site["site_obj"]["select_imgcss_sites"]);
 			$_t = $this->do_orb_method_call(array(
@@ -1173,13 +1231,14 @@ class aw_site extends class_base
 			}
 		}
 
-		$sue->add_cmd("find $site[docroot]/templates -type d -exec chmod 777 {} \;");
-		$sue->add_cmd("find $site[docroot]/templates -type f -exec chmod 666 {} \;");
+		if ($do_perms)
+		{
 
-		$sue->add_cmd("chmod 777 $site[docroot]/public/css");
-		$sue->add_cmd("chmod 777 $site[docroot]/public/img");
-		$sue->add_cmd("chmod 666 $site[docroot]/public/img/*");
-		$sue->add_cmd("chmod 666 $site[docroot]/public/css/*");
+			$sue->add_cmd("chmod 777 $site[docroot]/public/css");
+			$sue->add_cmd("chmod 777 $site[docroot]/public/img");
+			$sue->add_cmd("chmod 666 $site[docroot]/public/img/*");
+			$sue->add_cmd("chmod 666 $site[docroot]/public/css/*");
+		}
 
 		$sue->exec();
 	}
@@ -1347,6 +1406,312 @@ class aw_site extends class_base
 			$do->set_name("pealkiri");
 			$do->save();
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "db" && $arr["obj_inst"]->meta("site_id"))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	function _get_changes($o, &$warnings)
+	{
+		$changes = false;
+
+		$old = $o->meta("old_site_opts");
+
+		if ($o->prop("site_url") != $old["url"])
+		{
+			$changes = true;
+			$warnings[] = "Saidi url muutus ".$old["url"]." => ".$o->prop("site_url");
+		}
+
+		if ($o->prop("use_existing_templates") != $old["site_obj"]["use_existing_templates"])
+		{
+			$changes = true;
+			$warnings[] = "HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated &uuml;le!";
+			$warnings[] = "Templated muutusid default templatedest teise saidi omadeks!";
+		}
+
+		if ($o->prop("select_tpl_folders") != $old["site_obj"]["select_tpl_folders"])
+		{
+			$changes = true;
+			$warnings[] = "Templatede kataloogide nimekiri muutus!";
+		}
+
+		if ($o->prop("tpls_are_linked") != $old["site_obj"]["tpls_are_linked"])
+		{
+			$changes = true;
+			$warnings[] = "Templatede linkimine muutus!";
+		}
+
+		if ($o->prop("select_imgcss_sites") != $old["site_obj"]["select_imgcss_sites"])
+		{
+			$changes = true;
+			$warnings[] = "Piltide ja css sait muutus (".$old["site_obj"]["select_imgcss_sites"]." => ".$o->prop("select_imgcss_sites").")!";
+		}
+
+		return $changes;
+	}
+
+	function _do_update_site($o)
+	{
+		// get old defs
+		$old = $o->meta("old_site_opts");
+
+		// check if template sources are modified	
+		if ($o->prop("use_existing_templates"))
+		{
+			$do_copy_existing_tpls = false;
+			if ($o->prop("use_existing_templates") != $old["site_obj"]["use_existing_templates"])
+			{
+				$do_copy_existing_tpls = true;
+			}
+			else
+			if ($o->prop("select_tpl_folders") != $old["site_obj"]["select_tpl_folders"])	
+			{
+				$do_copy_existing_tpls = true;
+			}
+
+			if ($do_copy_existing_tpls)
+			{
+				$this->_do_copy_existing_tpls($o);
+			}
+		}
+
+		if ($o->prop("select_imgcss_sites") != $old["site_obj"]["select_imgcss_sites"])
+		{
+			$this->_do_change_imgcss($o);
+		}
+	
+		// check if url changed
+		if ($o->prop("site_url") != $old["url"])
+		{
+			$this->_do_change_url($o, $old["url"]);
+		}
+	}
+
+	/** changes the site's url from $old_url => $o->prop("site_url")
+
+		@comment
+			renames everything - apache vhost, basedir, the works
+	*/
+	function _do_change_url($o, $old_url)
+	{
+		// get old basedir
+		$sn = str_replace("/", "", str_replace("http://","",$old_url));
+		$nu = str_replace("/", "", str_replace("http://","",$o->prop("site_url")));
+
+		$_t = $this->do_orb_method_call(array(
+			"class" => "objects",
+			"action" => "aw_ini_get_mult",
+			"method" => "xmlrpc",
+			"server" => $sn,
+			"params" => array(
+				"vals" => array(
+					"site_basedir",
+					"cache.page_cache",
+				)
+			),
+			"no_errors" => true
+		));
+
+		$cache = $_t["cache.page_cache"]."/*";
+		$sb = $_t["site_basedir"];
+
+		// clear pagecache
+		$sue = get_instance("install/su_exec");
+		echo "cache = $cache , pg = ".$_t["cache.page_cache"]." <br>";
+		if ($cache == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
+		{
+			error::throw(array(
+				"id" => ERR_XLMRPC,
+				"msg" => "aw_site::_do_change_url($old_url): pagecache folder is empty or bad ( ".$_t["cache.page_cache"]." )!"
+			));
+		}
+		$sue->add_cmd("rm -rf $cache");
+	
+		// rewrite apache vhost file
+		$vhname = aw_ini_get("install.vhost_folder").$sn;
+		$vhname_to = aw_ini_get("install.vhost_folder").$nu;
+
+		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_vhost");
+		$fc = str_replace($sn, $nu, $this->get_file(array("file" => $vhname)));
+		$this->put_file(array(
+			"file" => $tmpnam,
+			"content" => $fc
+		));
+		$sue->add_cmd("move $tmpnam $vhname");
+
+		// rename in server:
+
+		//	- apache vhost
+		$sue->add_cmd("move $vhname $vhname_to ");
+
+
+		//	- basedir
+		$sb_to = aw_ini_get("install.docroot").$nu;
+		$sue->add_cmd("move $sb $sb_to ");
+
+		//	- log folder
+		$vhname = aw_ini_get("install.logroot").$sn;
+		$vhname_to = aw_ini_get("install.logroot").$nu;
+		$sue->add_cmd("move $vhname $vhname_to ");
+	
+		// rewrite ini file 
+		$inif = $sb."/aw.ini";
+		$inif_nu = $sb_to."/aw.ini";
+		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
+		$fc = str_replace($sn, $nu, $this->get_file(array("file" => $inif)));
+		$this->put_file(array(
+			"file" => $tmpnam,
+			"content" => $fc
+		));
+		$sue->add_cmd("move $tmpnam $inif_nu");
+		$sue->exec();
+
+		// add url to nameserver
+		$mgr_server = $this->get_dns_manager_for_url($nu);
+		if ($mgr_server !== false)
+		{
+			$this->do_orb_method_call(array(
+				"class" => "dns_server_manager",
+				"action" => "add_or_update_site",
+				"params" => array(
+					"domain" => $nu,
+					"ip" => aw_ini_get("install.default_ip")
+				),
+				"method" => "xmlrpc",
+				"server" => $mgr_server
+			));
+		}
+
+		// change url in site list
+		$this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "update_site",
+			"params" => array(
+				"id" => $o->meta("site_id"),
+				"name" => $nu,
+				"url" => "http://".$nu,
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+
+		// restart apache
+		touch("/tmp/ap_reboot");
+		echo "Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n";
+		flush();
+	}
+
+	/** changes the public/img public/css folder contents to the contents of the new location
+	*/
+	function _do_change_imgcss($o)
+	{
+		// ok, get the base folder
+		$sn = str_replace("http://","",$o->prop("site_url"));
+		$_t = $this->do_orb_method_call(array(
+			"class" => "objects",
+			"action" => "aw_ini_get_mult",
+			"method" => "xmlrpc",
+			"server" => $sn,
+			"params" => array(
+				"vals" => array(
+					"site_basedir",
+					"cache.page_cache",
+				)
+			),
+			"no_errors" => true
+		));
+
+		$img = $_t["site_basedir"]."/public/img";
+		$css = $_t["site_basedir"]."/public/css";
+
+		$cache = $_t["cache.page_cache"]."/*";
+
+		if ($cache == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
+		{
+			error::throw(array(
+				"id" => ERR_XLMRPC,
+				"msg" => "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (".$_t["cache.page_cache"].")!"
+			));
+		}
+
+		if ($css == "/*" || $img == "/*" || $_t["site_basedir"] == "" || !is_dir($_t["site_basedir"]) || strpos($_t["site_basedir"], $sn) === false)
+		{
+			error::throw(array(
+				"id" => ERR_XLMRPC,
+				"msg" => "aw_site::_do_change_imgcss(): basedir is empty or bad ($_t[site_basedir])!"
+			));
+		}
+		$sue = get_instance("install/su_exec");
+		$sue->add_cmd("rm -rf $css/*");
+		$sue->add_cmd("rm -rf $img/*");
+		$sue->add_cmd("rm -rf $cache");
+		$sue->exec();
+
+		$def = $this->get_site_def($o->id());
+		$this->do_copy_existing_templates($def, true, false, false);
+
+		// clear out pagecache
+		
+	}
+
+	/** deletes the old templates from the site and copies new ones
+	*/
+	function _do_copy_existing_tpls($o)
+	{
+		// ok, get the template folder
+		$sn = str_replace("http://","",$o->prop("site_url"));
+		$_t = $this->do_orb_method_call(array(
+			"class" => "objects",
+			"action" => "aw_ini_get_mult",
+			"method" => "xmlrpc",
+			"server" => $sn,
+			"params" => array(
+				"vals" => array(
+					"tpldir",
+					"cache.page_cache"
+				)
+			),
+			"no_errors" => true
+		));
+		$t = $_t["tpldir"];
+		
+		echo "got tpldir as $t <Br>";
+
+		if (is_link($t))
+		{
+			echo "unlink $t <br>";
+			unlink($t);
+		}
+		else
+		{
+			echo "rm -rf $t <br>";
+			if ($t == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
+			{
+				error::throw(array(
+					"id" => ERR_XLMRPC,
+					"msg" => "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (".$_t["cache.page_cache"].")!"
+				));
+			}
+			$sue = get_instance("install/su_exec");
+			$sue->add_cmd("rm -rf $t");
+			$sue->exec();
+		}
+
+		$cache = $_t["cache.page_cache"]."/*";
+		$sue = get_instance("install/su_exec");
+		$sue->add_cmd("rm -rf $cache");
+		$sue->exec();
+
+		$def = $this->get_site_def($o->id());
+		$this->do_copy_existing_templates($def, false,false, true);
 	}
 }
 ?>

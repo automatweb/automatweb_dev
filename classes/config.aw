@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.54 2004/02/25 16:34:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.55 2004/02/27 11:20:43 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -788,32 +788,6 @@ class config extends db_config
 		$this->quote($cs);
 		$this->set_simple_config("class_cfgforms",$cs);
 		return $this->mk_my_orb("class_cfgforms",array());
-	}
-
-	// see laseb kontakti formi valida
-	function sel_contact_form()
-	{
-		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_CONTACT_INPUT_FORM,"config.".$this->cfg["ext"]));
-
-		$this->read_template("sel_form.tpl");
-		
-		$cf = $this->get_simple_config("contact_form");
-
-		$fb = get_instance("formgen/form_base");
-		$fa = $fb->get_list(FTYPE_ENTRY);
-		reset($fa);
-		while (list($fid,$name) = each($fa))
-		{
-			$this->vars(array(
-				"form_id"	=> $row["oid"],
-				"form_name" 	=> $row["name"],
-				"checked" 	=> checked($cf == $row["oid"])
-			));
-			$l.=$this->parse("LINE");
-		}
-		$this->vars(array("LINE" => $l, "SEL_LINE" => ""));
-
-		return $this->parse();
 	}
 
 	/**  
