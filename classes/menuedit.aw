@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.78 2001/12/19 00:11:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.79 2002/01/03 10:00:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -232,6 +232,8 @@ class menuedit extends aw_template
 		// impordime taimeriklassi
 		global $test;
 		global $baseurl;
+		global $awt;
+		$awt->start("sh");
 
 		global $lang_id;
 		$lang_code = ($lang_id == 2) ? "en" : "et";
@@ -460,6 +462,7 @@ class menuedit extends aw_template
 		//	$this->read_template($template);
 		//}
 		//else
+
 		if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 		{
 			// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
@@ -546,6 +549,7 @@ class menuedit extends aw_template
 
 		if ($GLOBALS["MENUEDIT_VER2"])
 		{
+			$awt->start("step4");
 			global $menu_defs_v2,$frontpage;
 
 
@@ -585,6 +589,7 @@ class menuedit extends aw_template
 				}
 
 			}
+			$awt->stop("step4");
 		}
 		else
 		// I dream of the day when this block of code disappears
@@ -906,7 +911,6 @@ class menuedit extends aw_template
 		} // end MENUEDIT_VER2
 
 
-
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 		$this->make_poll();
 		$this->make_search();
@@ -930,6 +934,15 @@ class menuedit extends aw_template
 			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
+
+		if ($this->mar[$section]["parent"] == 34506 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 34506 || $section == $GLOBALS["frontpage"])
+		{
+			$this->vars(array(
+				"IS_AWCOM_FRONTPAGE" => $this->parse("IS_AWCOM_FRONTPAGE"),
+				"MOSTIMP" => '<span class="pealkiri2">'.$this->mar["34506"]["name"].'</span>'
+			));
+		}
+
 		if (is_array($vars))
 		{
 			$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
@@ -1426,9 +1439,14 @@ class menuedit extends aw_template
 		else
 		{
 			global $SITE_ID;
+			global $DBG;
 			if ($SITE_ID == 88)
 			{
 				$this->read_template("folders_no_periods.tpl");
+			}
+			elseif ($DBG)
+			{
+				$this->read_template("folders_new.tpl");
 			}
 			else
 			{
@@ -2554,6 +2572,17 @@ class menuedit extends aw_template
 
 		if (!$this->can("add",$parent))
 			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+
+		// just add the damn thing and be don withit
+		$id = $this->new_object(array(
+			"parent" => $parent, 
+			"name" => "", 
+			"class_id" => CL_PSEUDO, 
+			"comment" => "","status" => 1
+		));
+		$this->db_query("INSERT INTO menu (id,link,type,is_l3,left_pane,right_pane) VALUES($id,'$link',".MN_CONTENT.",0,1,1)");
+		header("Location: ".$this->mk_my_orb("change", array("id" => $id, "parent" => $parent,"period" => $period)));
+		die();
 
 		global $ext;
 		$this->mk_path($parent,LC_MENUEDIT_ADD);
@@ -3747,9 +3776,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// mitte teha jarjest uusi valju juurde - duke
 			// 
 			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
+			$awt->start("get_meta");
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
+			$awt->stop("get_meta");
 
 			// see on siis nädala parema paani leadide näitamine
 			// nõme häkk. FIX ME.
@@ -3870,12 +3901,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// keskel olevad menyyd peavad ignoreerima seda et neid igaljuhul n2idatakse
 				$no_mid = true;
 				continue;
-			}
+			}*/
 			if ($row["mid"] == 1)
 			{
 				$ap.="_MID";		// menu in center
 				$is_mid = true;
-			};*/
+			};
 
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)
 			{
@@ -3981,6 +4012,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if (in_array($row["oid"],$path))	// this menu is selected
 				{
 					$this->vars(array("HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL")));
+					if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID"))
+					{
+						$_hm = false;
+						foreach($this->mpr[$row["oid"]] as $_row)
+						{
+							if ($row["mid"] == 1)
+							{
+								$_hm = true;
+							}
+						}
+						if ($_hm)
+						{
+							$hslm = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID");
+						}
+					}
+					$this->vars(array(
+						"HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID" => $hslm
+					));
 				}
 			}
 			else
@@ -3992,8 +4041,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"HAS_SUBITEMS_".$name => $hs,
 				"NO_SUBITEMS_".$name => "",
 				"HAS_SUBITEMS_".$name."_L".$this->level => $hsl,
-				"NO_SUBITEMS_".$name."_L".$this->level => ""
+				"NO_SUBITEMS_".$name."_L".$this->level => "",
 			));
+
 
 
 			// ok, menyyd ei n2idata juhul, kui ta pole selektitud ja template MENU_BLAH_L5666_ITEM_SELONLY on defineeritud
@@ -4786,9 +4836,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
+		$awt->start("promo-cycle");
 		while ($row = $this->db_next())
 		{
+			$awt->start("get-promo-meta");
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+			$awt->stop("get-promo-meta");
 
 			global $gidlist;
 			$found = false;
@@ -4836,6 +4889,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				};
 
 				$this->vars(array(
+					"comment" => $ar["comment"],
 					"title" => $row["name"], 
 					"content" => $pr_c,
 					"url" => $row["link"],
@@ -4847,6 +4901,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if ($ar["scroll"] == 1)
 				{
 					$use_tpl = "SCROLL_PROMO";
+				}
+				else
+				if ($ar["down"] == 1)
+				{
+					$use_tpl = "DOWN_PROMO";
+				}
+				else
+				if ($ar["up"] == 1)
+				{
+					$use_tpl = "UP_PROMO";
 				}
 				elseif ($ar["right"] == 1)
 				{
@@ -4894,6 +4958,30 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					}
 				}
 				else
+				if ($ar["up"] == 1)
+				{
+					if ($this->is_template("UP_PROMO".$ap))
+					{
+						$right_promo .= $this->parse("UP_PROMO".$ap);
+					}
+					else
+					{
+						$right_promo .= $this->parse("UP_PROMO");
+					}
+				}
+				else
+				if ($ar["down"] == 1)
+				{
+					if ($this->is_template("DOWN_PROMO".$ap))
+					{
+						$right_promo .= $this->parse("DOWN_PROMO".$ap);
+					}
+					else
+					{
+						$right_promo .= $this->parse("DOWN_PROMO");
+					}
+				}
+				else
 				{
 					if ($this->is_template("LEFT_PROMO".$ap))
 					{
@@ -4911,6 +4999,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->restore_handle();
 			}
 		};
+
+		$awt->stop("promo-cycle");
 
 		$this->vars(array(
 			"LEFT_PROMO" => $left_promo,
@@ -4947,8 +5037,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			classload("search_conf");
 			$t = new search_conf;
+			$def = $section;
+			$sl = $t->get_search_list(&$def);
 			$this->vars(array(
-				"search_sel" => $this->option_list(0,$t->get_search_list()),
+				"search_sel" => $this->option_list($def,$sl),
 				"section" => $id,
 			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
