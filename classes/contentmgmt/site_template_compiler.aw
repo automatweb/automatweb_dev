@@ -1291,7 +1291,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"),\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1308,7 +1308,7 @@ class site_template_compiler extends aw_template
 		$res .= $this->_gi()."if (".$cache_name.")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"), ".$content_name.");\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 		$this->brace_level --;
