@@ -13,16 +13,16 @@
 
 <!-- END SUB: start -->
 
-<!-- SUB: smallbutton -->
+<!-- SUB: button -->
 <td valign='middle'><a href="{VAR:url}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}"></a></td>
 <td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
-<!-- END SUB: smallbutton -->
+<!-- END SUB: button -->
 
 
-<!-- SUB: smallseparator -->
+<!-- SUB: separator -->
 <td valign='middle'><IMG SRC="{VAR:baseurl}/automatweb/images/icons/seperator.gif" WIDTH="2" HEIGHT="22" BORDER=0 ALT=""></td>
 <td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
-<!-- END SUB: smallseparator -->
+<!-- END SUB: separator -->
 
 
 <!-- SUB: cdata -->
