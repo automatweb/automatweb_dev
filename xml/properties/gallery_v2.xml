@@ -220,6 +220,7 @@
       <classinfo>
             <syslog_type>ST_GALLERY</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <general>
@@ -259,5 +260,12 @@
                   <caption>Eelvaade</caption>
             </preview>
       </groupinfo>
+      <reltypes>
+            <FTP_LOGIN>
+                  <value>1</value>
+                  <clid>CL_FTP_LOGIN</clid>
+                  <caption>ftp login</caption>
+            </FTP_LOGIN>
+      </reltypes>
 </properties>
 

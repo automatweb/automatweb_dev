@@ -29,5 +29,8 @@
             <field>run_import</field>
             <caption>Käivita import</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
 </properties>
 

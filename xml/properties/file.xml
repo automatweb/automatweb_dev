@@ -99,7 +99,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
-            <trans_id>TR_FILE</trans_id>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <settings>

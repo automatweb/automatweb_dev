@@ -132,6 +132,7 @@
       <classinfo>
             <syslog_type>ST_LAYOUT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <settings>
@@ -156,12 +157,12 @@
       <reltypes>
             <CELLSTYLE_FOLDER>
                   <value>1</value>
-                  <clid>CL_PSEUDO</clid>
+                  <clid>CL_MENU</clid>
                   <caption>celli stiilide kataloog</caption>
             </CELLSTYLE_FOLDER>
             <SHOW_FOLDER>
                   <value>2</value>
-                  <clid>CL_PSEUDO</clid>
+                  <clid>CL_MENU</clid>
                   <caption>näita selles kataloogis</caption>
             </SHOW_FOLDER>
       </reltypes>

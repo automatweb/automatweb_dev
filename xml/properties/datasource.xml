@@ -37,5 +37,8 @@
             <method>serialize</method>
             <caption>Faili url</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
 </properties>
 
