@@ -77,7 +77,7 @@ ini { per_oid=${site_root} }
 
 ini { menuedit.menu_defs[${logged}]="LOGGED" }
 
-ini { users.rootmenu=${users} }
+ini { users.root_folder=${users} }
 
 ini { groups.tree_root=${grps} }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.120 2004/06/19 20:02:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.121 2004/06/21 11:26:03 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1401,7 +1401,7 @@ class users extends users_user
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug,
 				"use_md5_passwords" => true,
-				"obj_parent" => $ini_opts["users.rootmenu"]
+				"obj_parent" => $ini_opts["users.root_folder"]
 			));
 			echo "Adding users... <br>\n";
 			flush();
