@@ -61,7 +61,7 @@ foldersTree = pr_{VAR:root};
 							<td background="images/awmenueditor_iconbar_back.gif"><table background="images/awmenueditor_iconbar_back.gif" border="0" cellspacing="0" cellpadding="0">
                 <form action='orb.{VAR:ext}' method='get' name='pfft'>
                 <tr>
-									<td height="20" colspan="11" background="images/awmenueditor_iconbar_back.gif" align=center><select class='formselect' name='period'>{VAR:periods}</select></td><td class="tableinside"><a href='javascript:document.pfft.submit()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','images/blue/awicons/refresh_over.gif',1)"><img name='refresh' alt='{VAR:LC_MENUEDIT_REFRESH}' border='0' SRC='{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif' width='25' height='25'></a><input type='hidden' name='action' value='folders'><input type='hidden' name='class' value='menuedit'></td>
+									<td height="20" colspan="11" background="images/awmenueditor_iconbar_back.gif" align=center><select class='formselect' name='period'>{VAR:periods}</select></td><td class="tableinside"><a href='javascript:document.pfft.submit()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','images/blue/awicons/refresh_over.gif',1)"><img name='refresh' alt='{VAR:LC_MENUEDIT_REFRESH}' border='0' SRC='{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif' width='25' height='25'></a><input type='hidden' name='action' value='folders'><input type='hidden' name='class' value='admin_folders'></td>
                 </tr>
                 </form>
 								</table>
