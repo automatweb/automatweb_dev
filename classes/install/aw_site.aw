@@ -292,7 +292,7 @@ class aw_site extends class_base
 
 		// create the needed folders
 		$si->add_cmd("mkdir ".$site['docroot']);
-		$si->add_cmd("chmod 775 ".$site['docroot']);
+		$si->add_cmd("chmod 777 ".$site['docroot']);
 		$ini_opts['site_basedir'] = $site['docroot'];
 
 		$si->add_cmd("mkdir ".$site['docroot']."/archive");
@@ -306,14 +306,15 @@ class aw_site extends class_base
 		$ini_opts['cache.page_cache'] = "\${site_basedir}/pagecache";
 
 		$si->add_cmd("mkdir ".$site['docroot']."/public");
-		$si->add_cmd("chmod 775 ".$site['docroot']."/public");
+		$si->add_cmd("chmod 777 ".$site['docroot']."/public");
 
 		$si->add_cmd("mkdir ".$site['docroot']."/templates");
-		$si->add_cmd("chmod 775 ".$site['docroot']."/templates");
+		$si->add_cmd("chmod 777 ".$site['docroot']."/templates");
 		$ini_opts['tpldir'] = "\${site_basedir}/templates";
 
 		// now copy base templates to the just-created templates folder
 		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/templates/* ".$site['docroot']."/templates/");
+		$si->add_cmd("find ".$site['docroot']."/templates/ -type f -exec chmod 666 {} \;");
 
 		// now, if the user said, that we gots to copy some foldres from other sites, then do that as well
 		if ($site['site_obj']['use_existing_templates'] == 1)
