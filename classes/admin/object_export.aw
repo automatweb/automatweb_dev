@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.8 2004/12/29 14:34:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.9 2005/01/07 09:17:24 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -17,7 +17,7 @@
 @caption Kaust, kust objektid v&otilde;tta
 
 @property csv_separator type=textbox size=1
-@caption CSV Faili tulpade erladaja
+@caption CSV Faili tulpade eraldaja
 
 @groupinfo mktbl caption="Koosta tabel"
 @default group=mktbl

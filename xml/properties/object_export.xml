@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>1</size>
-            <caption>CSV Faili tulpade erladaja</caption>
+            <caption>CSV Faili tulpade eraldaja</caption>
       </property>
       <property>
             <name>mktbl</name>
