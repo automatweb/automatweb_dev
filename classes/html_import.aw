@@ -1,11 +1,42 @@
 <?php
+
 define("PREFIX","html_import_"); // sql tabelitele ette, et mingit jama ei tekiks
+
+
 
 // todo
 // logi, ja võimalus importi pauseda, ning jätkata
 // update võimalus, andmete uuendamiseks, lisamiseks
 // optional: andmete päritolu veeru lisamine
-// 
+//
+/*
+
+foreach ($failid as $key => $val)
+{
+
+	$on=$this->db_fetch_field("select count(*) as olemas  from logi where sourcefail='$fail'", 'olemas');
+	if ($on>0 && !$update)
+	{
+		siis skip 
+		 return skipping;
+	}
+	if (!$update)
+	{
+		$this->db_query("update ...where unikaalne veerg=$asi");
+		return updated
+	}
+	else
+	{
+		$this->db_query("isert ...");
+		return last insert id
+	}
+
+}
+
+*/
+
+
+
 class html_import extends aw_template
 {
 	////////////////////////////////////
@@ -107,7 +138,11 @@ class html_import extends aw_template
 		$q="create table ".PREFIX.$tablename." ($cols \n)";
 		if ($create)
 		{
-			$this->db_query($q);
+			$ii=$this->db_query($q);
+			if (!$ii) 
+			{
+				return false;
+			}
 		}
 		return str_replace(",",",\n",$q);
 	}
@@ -139,6 +174,7 @@ class html_import extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
+
 		classload("linklist");				
 
 		if ($ob["meta"]["file_list"])
@@ -156,7 +192,7 @@ class html_import extends aw_template
 
 		if (!$files) 
 		{
-			die("could not get files, check if if they relly excist and can be opened");
+			die("could not get files, check if if they really excist and can be opened");
 		}
 
 		//tabeli jrk nr
@@ -203,7 +239,10 @@ class html_import extends aw_template
 					}
 //print_r($tbl);
 
-					switch ($ob["meta"]["output"])
+
+					$exec=($ob["meta"]["output"]=="mk_my_table")?true:false;
+					$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,$exec);
+/*					switch ($ob["meta"]["output"])
 					{
 						case "mk_my_table":
 							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,true);
@@ -213,7 +252,7 @@ class html_import extends aw_template
 							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true);
 						break;
 						
-					}
+					}*/
 					echo "<br>OK ".trim($file)."<br>";
 				}
 				else
@@ -227,53 +266,20 @@ class html_import extends aw_template
 
 			}
 		}
-		echo "total: ".(int)$total."\n\r";
+		echo "#total: ".(int)$total."\n\r";
 		if ($ob["meta"]["output"]=="mk_my_table")
 			echo "kui errorit ei tekkinud, siis andmed läksid vist baasi";
 		if ($ob["meta"]["output"]=="mk_my_query")
 			echo "";
-
 		echo "</pre></body></html>";
 		die();
-	}
-
-	////
-	// ! see on prosta tabel andmete näitamiseks 
-	//
-	function show_data($table,$limit=10)
-	{
-		$str.="<tr>";		
-		$rr = $this->db_fetch_field("select count(*) from $table","count(*)");
-		//		$rr=$this->db_next();
-		$str.="<td colspan=4>total in table:".(int)$rr.", showing first $limit</td>";
-		$str.="</tr>";
-		$this->db_query("select * from $table limit $limit");		
-		$str.="<tr>";
-		foreach ($this->db_get_fields() as $key => $val)
-		{
-			$arr=(array)$val;
-			$str.="<th><b>&nbsp;".$arr["name"]."</th>";
-		}
-		$str.="</tr>";
-		while ($row = $this->db_next())
-		{
-			$i=0;
-			$str.="<tr>";
-			foreach ($row as $key => $val)
-			{
-				$i++;
-				if ($i != count($row))
-				$str.="<td>&nbsp;".((substr($val,0,50)==$val)?$val:substr($val,0,50)." ...")."</td>";
-			}
-			$str.="</tr>";
-		}
-		return $str;
 	}
 
 
 	////
 	// ! does the specified ruul really work
 	//  well it does if it looks pink
+	// oid - required
 	function ruul_test($arr)
 	{
 		extract($arr);
@@ -302,14 +308,14 @@ class html_import extends aw_template
 		die();
 	}
 
+
 //teeme pinu et siis kui mingi tabel on tabeli sees, algus ja lõpu id oleks õige
 	function caunt($link,$end,$aktiivne="")
 	{
 		if ($end)
 		{
 			$m=array_pop($this->pinu) ;
-			$html="</table></tend $m>";
-			return $html;
+			return "</table></tend $m>";
 		}
 		else
 		{	
@@ -324,7 +330,7 @@ class html_import extends aw_template
 	}
 
 	////
-	// !this gets called when the user clicks on change object 
+	// ! setting up the data destination table
 	// parameters:
 	// id - the id of the object to change
 	// return_url - optional, if set, "back" link should point to it
@@ -347,16 +353,11 @@ class html_import extends aw_template
 
 		if (is_int(strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
 		{
-			$import_link=$this->my_link("IMPORT",$this->mk_my_orb("tiri",array("id"=>$id)),"target=_blank");
+			$import_link=html::href(array('target'=>'_blank','caption'=>'IMPORT', 'url'=>$this->mk_my_orb("tiri",array("id"=>$id))));
 		}
 		else
 		{
 			$import_link="unikaalne string puudu või vale";
-		}
-
-		if ($drop_table)
-		{
-			$this->drop_table($ob["meta"]["mk_my_table"]);
 		}
 
 		if ($empty_table)
@@ -376,18 +377,57 @@ class html_import extends aw_template
 
 		if ($tbl_exists)
 		{
-			$empty_link=$this->my_link("EMPTY",$this->mk_my_orb("sql_data", array("id" => $id, "empty_table" => "yes", "return_url" => urlencode($return_url))));
-			$drop_link=$this->my_link("DROP",$this->mk_my_orb("sqlconf", array("id" => $id, "drop_table" => "yes", "return_url" => urlencode($return_url))));
-			$some_data=$this->show_data(PREFIX.$ob["meta"]["mk_my_table"],20);
+			$empty_link = html::href(array(
+				'caption'=>'EMPTY', 
+				'url'=>$this->mk_my_orb("sql_data", array(
+					"id" => $id, 
+					"empty_table" => "yes", 
+					"return_url" => urlencode($return_url))
+				),
+			));
+				
+			$drop_link=html::href(array(
+				'caption'=>'DROP', 
+				'url'=>$this->mk_my_orb("sqlconf", array(
+					"id" => $id, 
+					"drop_table" => "yes", 
+					"return_url" => urlencode($return_url))
+				),
+			));
+
+			if (!$ob['meta']['db_table_contents'])
+			{
+				$ob['meta']['db_table_contents']=$this->new_object(array(
+					"parent" => $parent,
+					"name" => "html_import_".$ob["meta"]["mk_my_table"],
+					"class_id" => CL_DB_TABLE_CONTENTS,
+					"comment" => "generated by html_import",
+					"metadata" => array(
+						'status' => 2,
+						'db_base' =>55970,
+						'db_table' => PREFIX.$ob["meta"]["mk_my_table"],
+						'per_page' => 20,
+					)
+				));
+
+				$this->set_object_metadata(array( //$overwrite
+					"oid" => $id,
+					"key" => "db_table_contents",
+					"value" => $ob['meta']['db_table_contents'],
+				));
+			}
+			$view_table_content=$this->mk_my_orb("content", array('id'=>$ob['meta']['db_table_contents'], "return_url" => urlencode($return_url)),'db_table_contents');
 		}
 
 		$this->vars(array(
+			"db_table_contents" => $ob['meta']['db_table_contents'],
 			"table_name"=>PREFIX.$ob["meta"]["mk_my_table"],
 			"import"=> $import_link,
 			"empty_table"=>$empty_link,
 			"create_table"=>$create_link,
 			"drop_table"=>$drop_link,
-			"some_data"=>$some_data,
+//			"table_content"=>html::href(array('target'=>'_blank','caption'=>'VAATA TABELI SISU', 'url'=>$view_table_content)),
+			"table_content"=>$view_table_content,
 			"toolbar" => $this->my_toolbar(array("id"=>$id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sql_data", "return_url" => urlencode($return_url))),
 		));
@@ -414,77 +454,129 @@ class html_import extends aw_template
 		}
 		$this->read_template("sqlconf.tpl");
 		$tyyp=array("varchar"=>"varchar","text"=>"text","int"=>"int");
-//		$link=$this->mk_my_orb("sqlconf", array("id" => $id, "return_url" => urlencode($return_url)));
 
 		$ruul=$ob["meta"]["ruul"];
-//print_r(	
+
 		$sql_ruul=$ob["meta"]["sql_ruul"];
-				if ($ruul)
-				foreach($ruul as $key=>$val)
-				{
-					if ((($ruul[$key]["end"]||$ruul[$key]["begin"])||!$ob["meta"]["single"])&&$ruul[$key]["mk_field"])
-					{	$this->vars(array(
-						"ruul"=>$key,
-						"mis"=>"sql_ruul",
-						"mk_field"=>$ruul[$key]["mk_field"],
-						"desc"=>$ruul[$key]["desc"],
-						"unique"=>checked($sql_ruul[$key]["unique"]),
-						"type"=>$this->picker($sql_ruul[$key]["type"],$tyyp),
-						"strip_html"=>checked($sql_ruul[$key]["strip_html"]),
-						"size"=>(int)$sql_ruul[$key]["size"],
-//						""=>$sql_ruul[$key][""],
-					));
-					$ruulid.=$this->parse("ruul");
-					}
+		
+		if ($ruul)
+		{
+
+			load_vcl("table");
+			$t = new aw_table(array(
+				"prefix" => "html_tbl_conf", 
+			));
+	
+			$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+	
+			$t->define_field(array(
+				"name" => "comment",
+				"caption" => "kommentaar",
+			));
+			$t->define_field(array(
+				"name" => "sqlfield",
+				"caption" => "sql veerg",
+			));
+			$t->define_field(array(
+				"name" => "unique",
+				"caption" => "unikaalne",
+			));
+			$t->define_field(array(
+				"name" => "strip_html",
+				"caption" => "strip html",
+			));
+			$t->define_field(array(
+				"name" => "fieldtype",
+				"caption" => "veeru tüüp",
+			));
+			$t->define_field(array(
+					"name" => "size",
+				"caption" => "suurus",
+			));
+						
+			foreach($ruul as $key=>$val)
+			{
+				if ((($ruul[$key]["end"] || $ruul[$key]["begin"]) || !$ob["meta"]["single"]) && $ruul[$key]["mk_field"])
+				{	
+					$mis="sql_ruul[$key]";
+					$data[]=array(
+						"comment" => $ruul[$key]["desc"],
+						"sqlfield" => $ruul[$key]["mk_field"],
+						"unique"=>html::checkbox(array('name'=>$mis."[unique]",'value'=>1,'checked'=>$sql_ruul[$key]["unique"])),
+						"strip_html"=>html::checkbox(array('name'=>$mis."[strip_html]", 'value' => 1,'checked' => $sql_ruul[$key]["strip_html"])),
+						"fieldtype" => html::select(array('name' => $mis."[type]", 'options' => $tyyp, 	'selected' => $sql_ruul[$key]["type"])),
+						"size"=>html::textbox(array('name'=>$mis."[size]", 'size'=>5,'maxlength' => 5, 'value' => $sql_ruul[$key]['size'])),
+					);
 				}
+			}
+			$arr = new aw_array($data);
+			foreach($arr->get() as $row)
+			{
+				$t->define_data(
+					$row
+				); 
+			} 
+			$t->sort_by(); 
+			$ruuls_table=$t->draw();
+		}
+
 		$examples=explode("\n",$ob["meta"]["example"]);
 		$html=$this->getfile($examples[0]);
-
-		if (is_int(strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
-		{
-			$import_link=$this->my_link("IMPORT",$this->mk_my_orb("tiri",array("id"=>$id)),"target=_blank");
-		}
-		else
-		{
-			$import_link="unikaalne string puudu või vale";
-		}
 
 		if ($drop_table)
 		{
 			$this->drop_table($ob["meta"]["mk_my_table"]);
+
+			$this->set_object_metadata(array( //$overwrite
+				"oid" => $id,
+				"key" => "db_table_contents",
+				"value" => "",
+			));
 		}
 
-		$this->db_list_tables();
-		while ($tb = $this->db_next_table())
-		{
-			if ($tb==PREFIX.$ob["meta"]["mk_my_table"])
-			{
-				$tbl_exists=true;
-				break 1;
-			}
-		}
+		$tbl_exists=$this->db_get_table(PREFIX.$ob["meta"]["mk_my_table"]);
+
 
 		if ($create_table)
 		{
-			$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"],$create_table);
-			$tbl_exists=1;
+			$tbl_exists=$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"],$create_table);
 		}
+
 		if (!$tbl_exists)
 		{
-			$create_link=$this->my_link("CREATE",$this->mk_my_orb("sqlconf", array("id" => $id, "create_table" => "yes", "return_url" => urlencode($return_url))));
+			$create_link=html::href(array(
+				'caption'=>'CREATE', 
+				'url'=>$this->mk_my_orb("sqlconf", array(
+					"id" => $id, 
+					"create_table" => "yes", 
+					"return_url" => urlencode($return_url)
+				)),
+			));
 			$show_my_create=$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"]);
 		}
 
 		if ($tbl_exists)
 		{
 			$show_create=$this->db_fetch_field("show create table ".PREFIX.$ob["meta"]["mk_my_table"],"Create Table");
-		}
 
+		}
+//todo db_show_create_table()
+/*
+
+		
+	function db_show_create_table()
+	{
+		return $this->db_fetch_field('SHOW CREATE TABLE '.$name, 'Create Table');
+	}
+
+
+		*/
 		$this->vars(array(
+			"ruuls_table"=>$ruuls_table,
 			"create_table"=>$create_link,
 			"add_id"=>checked($ob["meta"]["add_id"]),
 			"mk_table"=>$show_my_create,
-			"got_table"=>$show_create,
+			"got_table"=>$show_create,//$tbl_exists,//
 			"ruul"=>$ruulid,
 			"toolbar" => $this->my_toolbar(array("id"=>$id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sqlconf", "return_url" => urlencode($return_url))),
@@ -493,14 +585,6 @@ class html_import extends aw_template
 	}
 
 	
-	////
-	// !mabe there is function like that, I could not find one
-	function my_link($caption,$url,$more="")
-	{
-		return "<a href=\"$url\" $more>$caption</a>";
-	}
-	
-
 	function output_conf($arr)
 	{
 		extract($arr);
@@ -709,10 +793,13 @@ class html_import extends aw_template
 			}
 		}
 
+//echo aw_ini_get('db.base');
 
+//CL_DB_LOGIN
 
 
 		$this->vars(array(
+			"database"=>$ob["meta"]["database"],
 			"match"=>$ob["meta"]["match"],
 			"ruul"=>$ruulid,
 			"reset"=> "<a href='$link&reset=1'>reset</a>",
