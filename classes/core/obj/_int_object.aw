@@ -1279,8 +1279,6 @@ class _int_object
 			$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
 		}
 
-		$this->_int_load_properties();
-
 		$this->_int_load_property_values();
 
 		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested

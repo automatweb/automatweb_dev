@@ -236,7 +236,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
 				if (aw_global_get("uid") == "kix")
 				{
-					//echo "q = $q <br />";
+				//	echo "q = $q <br />";
 				}
 				
 				if (isset($this->read_properties_data_cache[$object_id]))
@@ -422,7 +422,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$q = "SELECT objects.* ";
 				if (count($fields) > 0)
 				{
-					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.oid = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
+					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
 					$q .= " objects.oid ";
 				}
 				else
