@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.49 2004/07/26 13:07:43 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.50 2004/08/18 12:40:03 sven Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -352,6 +352,19 @@ class html extends aw_template
 	{
 		extract($args);
 		return '<span class="'.$class.'">'.$content.'</span>';
+	}
+	
+	function get_change_url($oid, $params = false)
+	{
+		$obj = &obj($oid);
+		$params["id"] = $obj->id();
+		$url = $this->mk_my_orb("change", $params, $obj->class_id());
+		return $url;
+	}
+	
+	function get_new_url($class_id, $params)
+	{
+		return $this->mk_my_orb("new", $params, $class_id);	
 	}
 };
 ?>
