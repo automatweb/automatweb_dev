@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.10 2004/10/07 21:31:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.11 2004/10/18 20:39:23 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -240,6 +240,7 @@ class calendar_view extends class_base
 		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
 		$arr["cal_inst"]->vars($this->vars);
+
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
@@ -281,6 +282,7 @@ class calendar_view extends class_base
 					$data = $event;
 					$evt_obj = new object($event["id"]);
 					$data = $evt_obj->properties() + $data;
+					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
 					$arr["cal_inst"]->add_item(array(
 						"timestamp" => $event["start"],
@@ -299,37 +301,37 @@ class calendar_view extends class_base
 		$events = array();
 		$o = $arr["obj_inst"];
 		$range = $arr["range"];
-		if ($o->class_id() == CL_PLANNER)
+		$clid = $o->class_id();
+
+		switch($clid)
 		{
-			$pl = get_instance(CL_PLANNER);
-			$events = $pl->_init_event_source(array(
-				"id" => $o->id(),
-				"type" => $range["viewtype"],
-				"flatlist" => 1,
-				"date" => date("d-m-Y",$range["timestamp"]),
-			));
-		};
-		
-		if ($o->class_id() == CL_DOCUMENT_ARCHIVE)
-		{
-			$da = get_instance(CL_DOCUMENT_ARCHIVE);
+			case CL_PLANNER:
+				$pl = get_instance(CL_PLANNER);
+				$events = $pl->_init_event_source(array(
+					"id" => $o->id(),
+					"type" => $range["viewtype"],
+					"flatlist" => 1,
+					"date" => date("d-m-Y",$range["timestamp"]),
+				));
+				break;
 
-			$events = $da->get_events(array(
-				"id" => $o->id(),
-				"range" => $range,
-			));	
+			case CL_DOCUMENT_ARCHIVE:
+				$da = get_instance(CL_DOCUMENT_ARCHIVE);
+				$events = $da->get_events(array(
+					"id" => $o->id(),
+					"range" => $range,
+				));	
+				break;
 
-		};
+			case CL_PROJECT:
+				$pr = get_instance(CL_PROJECT);
 
-		if ($o->class_id() == CL_PROJECT)
-		{
-			$pr = get_instance(CL_PROJECT);
-
-			$events = $pr->get_events(array(
-				"id" => $o->id(),
-				"range" => $range,
-				"status" => $arr["status"],
-			));
+				$events = $pr->get_events(array(
+					"id" => $o->id(),
+					"range" => $range,
+					"status" => $arr["status"],
+				));
+				break;
 		};
 
 		return $events;
@@ -353,31 +355,19 @@ class calendar_view extends class_base
 		// figure out correct tpldir
 		$tpldir = "calendar/calendar_view";
 		$use_template = isset($arr["use_template"]) ? $arr["use_template"] : $this->obj_inst->prop("use_template");
-		#print $use_template;
-		if ($use_template == "month")
-		{
-			$tpldir = "calendar/calendar_view/month";
-		};
 
-		if ($use_template ==  "weekview")
-		{
-			$tpldir = "calendar/calendar_view/week";
-		};
+		$use2dir = array(
+			"month" => "calendar/calendar_view/month",
+			"weekview" => "calendar/calendar_view/week",
+			"year" => "calendar/calendar_view/year",
+			"day" => "calendar/calendar_view/day",
+			"last_events" => "calendar/calendar_view/last_events", 
+		);
 
-		if ($use_template == "year")
+		if ($use2dir[$use_template])
 		{
-			$tpldir = "calendar/calendar_view/year";
+			$tpldir = $use2dir[$use_template];
 		};
-
-		if ($use_template == "day")
-		{
-			$tpldir = "calendar/calendar_view/day";
-		};
-		
-		if($use_template == "last_events")
-		{
-			$tpldir = "calendar/calendar_view/last_events";
-		}
 		
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
@@ -449,7 +439,6 @@ class calendar_view extends class_base
 			$exp_args["limit_events"] = $this->obj_inst->prop("num_next_events");
 		};
 
-
 		if ($arr["obj_inst"])
 		{
 			$exp_args["oid"] = $arr["obj_inst"]->id();
@@ -461,53 +450,33 @@ class calendar_view extends class_base
 
 		$style = array();
 
-		// XXX: fuck this
+		// export all defined styles to the active page and the
+		// current template
+		$style_props = array(
+			"minical_day_with_events",
+			"minical_day_without_events",
+			"minical_day_today",
+			"minical_day_active",
+			"minical_day_deactive",
+			"minical_title",
+			"minical_background",
+		);
 
-		if ($this->obj_inst->prop("minical_day_with_events") != 0)
+		$props = $this->obj_inst->properties();
+		foreach($style_props as $style_prop)
 		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_with_events"));
-			$style["minical_day_with_events"] = "st" . $this->obj_inst->prop("minical_day_with_events");
-		};
-		
-		if ($this->obj_inst->prop("minical_day_without_events") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_without_events"));
-			$style["minical_day_without_events"] = "st" . $this->obj_inst->prop("minical_day_without_events");
-		};
-		
-		if ($this->obj_inst->prop("minical_day_today") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_today"));
-			$style["minical_day_today"] = "st" . $this->obj_inst->prop("minical_day_today");
-		};
-		
-		if ($this->obj_inst->prop("minical_day_active") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_active"));
-			$style["minical_day_active"] = "st" . $this->obj_inst->prop("minical_day_active");
-		};
-		
-		if ($this->obj_inst->prop("minical_day_deactive") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_deactive"));
-			$style["minical_day_deactive"] = "st" . $this->obj_inst->prop("minical_day_deactive");
-		};
-		
-		if ($this->obj_inst->prop("minical_title") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_title"));
-			$style["minical_title"] = "st" . $this->obj_inst->prop("minical_title");
-		};
-
-		if ($this->obj_inst->prop("minical_background") != 0)
-		{
-			active_page_data::add_site_css_style($this->obj_inst->prop("minical_background"));
-			$style["minical_background"] = "st" . $this->obj_inst->prop("minical_background");
-		};
+			$prop_value = $props[$style_prop];
+			if (0 != $prop_value)
+			{
+				active_page_data::add_site_css_style($prop_value);
+				$style[$style_prop] = "st" . $prop_value;
+			};
+		}
 
 		$args = array(
 			"style" => $style,
 		);
+
 		
 		if ($this->obj_inst->prop("use_template") ==  "weekview")
 		{
