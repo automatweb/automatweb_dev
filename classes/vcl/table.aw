@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.32 2004/11/19 11:59:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.33 2004/12/03 09:15:30 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -84,6 +84,16 @@ class aw_table extends aw_template
 		$this->d_row_cnt++;
 	}
 
+	function set_data($idx, $row)
+	{
+		$this->data[$idx] = $row;
+	}
+
+	function get_data()
+	{
+		return $this->data;
+	}
+
 	////
 	// !Clear the data
 	function clear_data()
@@ -120,6 +130,12 @@ class aw_table extends aw_template
 	{
 		$this->chooser_config = $arr;
 		$this->use_chooser = true;
+	}
+
+	function remove_chooser()
+	{
+		$this->chooser_config = NULL;
+		$this->use_chooser = false;
 	}
 
 	////
@@ -1745,7 +1761,7 @@ class vcl_table extends aw_table
 				}
 				else
 				{
-					$val = $o->prop($v["name"]);
+					$val = $o->prop_str($v["name"]);
 				}
 
 				if (isset($args["change_col"]) && $args["change_col"] == $v["name"])
