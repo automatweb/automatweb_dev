@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.44 2003/04/21 08:02:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.45 2003/06/19 16:05:59 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -230,7 +230,10 @@ class orb extends aw_template
 		{
 			$t = new $class;
 			// ja kutsume funktsiooni v2lja
-			$t->set_opt("orb_class",&$this->orb_class);
+			if (method_exists($t, "set_opt"))
+			{
+				$t->set_opt("orb_class",&$this->orb_class);
+			}
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
