@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.105 2002/02/27 23:37:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.106 2002/02/28 00:25:04 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -642,7 +642,8 @@ class menuedit extends aw_template
 	{
 		global $awt;
 		$awt->start("menuedit::is_periodic");
-		$mn = $this->get_menu($section);
+		//$mn = $this->get_menu($section);
+		$mn = $this->mar[$section];
 		$periodic = $mn["periodic"];
 		// menyysektsioon ei ole perioodiline. Well, vaatame 
 		// siis, kas ehk dokument ise on?
@@ -783,25 +784,7 @@ class menuedit extends aw_template
 				objects.metadata as metadata,
 				objects.class_id as class_id,
 				objects.comment as comment,
-				menu.link as link,
-				menu.links as links,
-				menu.type as mtype,
-				menu.tpl_view as tpl_view,
-				menu.tpl_lead as tpl_lead,
-				menu.tpl_edit as tpl_edit,
-				menu.clickable as clickable,
-				menu.target as target,
-				menu.ndocs as ndocs,
-				menu.img_url as img_url,
-				menu.hide_noact as hide_noact,
-				menu.mid as mid,
-				menu.is_shop as is_shop,
-				menu.seealso as seealso,
-				menu.shop_id as shop_id,
-				menu.width as width,
-				menu.right_pane as right_pane,
-				menu.left_pane as left_pane,
-				menu.no_menus as no_menus
+				menu.*
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
@@ -861,7 +844,8 @@ class menuedit extends aw_template
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
-			$me_row = $this->get_menu($section);
+			//$me_row = $this->get_menu($section);
+			$me_row = $this->mar($section);
 			$sections = unserialize($me_row["sss"]);
 			$periods = unserialize($me_row["pers"]);
 			
@@ -2201,7 +2185,8 @@ class menuedit extends aw_template
 		global $ext;
 		$this->mk_path($parent,LC_MENUEDIT_ADD);
 		$this->read_template("nadd.tpl");
-		$par_info = $this->get_menu($parent);
+		//$par_info = $this->get_menu($parent);
+		$par_info = $this->mar($parent);
 		if ((($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		#if ((($parent == 1) || ($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		{
