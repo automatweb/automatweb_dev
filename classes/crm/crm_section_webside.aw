@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.2 2004/09/15 12:50:33 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.3 2004/09/18 13:36:06 sven Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -182,14 +182,24 @@ class crm_section_webside extends class_base
 			$person_tpl = "show_plain.tpl";
 		}
 		
-		$this->read_template("frame.tpl");
+		if($ob->prop("view") == 0)
+		{
+			$frm_tpl = "frame.tpl";
+			$this->read_template($frm_tpl);
+		}
+		else
+		{
+			$frm_tpl = "frame2.tpl";
+			$this->read_template($frm_tpl);	
+		}
+		
 		foreach ($workers->arr() as $worker)
 		{
 			$cur_col++;
 			$this->vars(array(
 				"person" => $this->parse_person($worker, $person_tpl),
 			));
-			$this->read_template("frame.tpl");
+			$this->read_template($frm_tpl);
 			$person_list .= $this->parse("persons");
 			//Parse new row
 			if($cur_col == $cols && $ob->prop("view") != 1)
