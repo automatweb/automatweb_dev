@@ -4,8 +4,6 @@
 
 /*
 
-@classinfo objtable=images
-@classinfo objtable_index=id
 @default group=general
 
 @property ffile type=fileupload
@@ -25,6 +23,8 @@
 
 @property newwindow type=checkbox ch_value=1 table=images field=newwindow
 @caption Uues aknas
+	
+@tableinfo images index=id master_table=objects master_index=oid	
 
 */
 class image extends class_base
@@ -341,6 +341,16 @@ class image extends class_base
 			print "access denied;";
 		};
 		die();
+	}
+
+	function view($args = array())
+	{
+		$idata = $this->get_image_by_id($args["id"]);
+		$this->mk_path($idata["parent"],"Vaata pilti");
+		$retval = html::img(array(
+			"url" => $idata["url"],
+		));
+		return $retval;
 	}
 
 	////
