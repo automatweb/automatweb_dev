@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.103 2004/07/13 08:35:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.104 2004/07/21 12:19:53 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -368,9 +368,8 @@ class image extends class_base
 	{
 		$img_id = (int)$img_id;
 
-		global $HTTP_POST_FILES;
 		$_fi = get_instance("file");
-		if ($HTTP_POST_FILES[$name]['tmp_name'] != "" && $HTTP_POST_FILES[$name]['tmp_name'] != "none")
+		if ($_FILES[$name]['tmp_name'] != "" && $_FILES[$name]['tmp_name'] != "none")
 		{
 			if (!$img_id)
 			{
@@ -378,19 +377,19 @@ class image extends class_base
 				$img_obj->set_parent($parent);
 				$img_obj->set_class_id(CL_IMAGE);
 				$img_obj->set_status(STAT_ACTIVE);
-				$img_obj->set_name($HTTP_POST_FILES[$name]["name"]);
+				$img_obj->set_name($_FILES[$name]["name"]);
 				$img_obj->save();
 				$img_id = $img_obj->id();
 			}
 
-			if (is_uploaded_file($HTTP_POST_FILES[$name]['tmp_name']))
+			if (is_uploaded_file($_FILES[$name]['tmp_name']))
 			{
-				$sz = getimagesize($HTTP_POST_FILES[$name]['tmp_name']);
+				$sz = getimagesize($_FILES[$name]['tmp_name']);
 
 				$fl = $_fi->_put_fs(array(
-					"type" => $HTTP_POST_FILES[$name]['type'],
+					"type" => $_FILES[$name]['type'],
 					"content" => $this->get_file(array(
-						"file" => $HTTP_POST_FILES[$name]['tmp_name'],
+						"file" => $_FILES[$name]['tmp_name'],
 					)),
 				));
 
@@ -429,7 +428,7 @@ class image extends class_base
 
 	/**  
 		
-		@attrib name=show params=name nologin="1" default="0"
+		@attrib name=show params=name nologin="1" 
 		
 		@param file required
 		
@@ -522,7 +521,7 @@ class image extends class_base
 
 	/**  
 		
-		@attrib name=view params=name nologin="1" default="0"
+		@attrib name=view params=name nologin="1" 
 		
 		@param id required type=int
 		
@@ -684,13 +683,12 @@ class image extends class_base
 		{
 			case "file":
 				$set = false;
-				global $file,$file_type;
-				if (is_uploaded_file($file))
+				if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 				{
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
-						"type" => $file_type,
-						"content" => $this->get_file(array("file" => $file)),
+						"type" => $_FILES["file"]["type"],
+						"content" => $this->get_file(array("file" => $_FILES["file"]["tmp_name"])),
 					));
 					$prop["value"] = $fl;
 					$set = true;
@@ -719,7 +717,6 @@ class image extends class_base
 				{
 					$retval = PROP_IGNORE;
 				};
-
 				break;
 
 			case "file2":
@@ -729,13 +726,12 @@ class image extends class_base
 				}
 				else
 				{
-					global $file2,$file2_type;
-					if (is_uploaded_file($file2))
+					if (is_uploaded_file($_FILES["file2"]["tmp_name"]))
 					{
 						$_fi = get_instance("file");
 						$fl = $_fi->_put_fs(array(
-							"type" => $file2_type,
-							"content" => $this->get_file(array("file" => $file2)),
+							"type" => $_FILES["file2"]["type"],
+							"content" => $this->get_file(array("file" => $_FILES["file2"]["tmp_name"])),
 						));
 						$prop["value"] = $fl;
 					}
@@ -887,7 +883,7 @@ class image extends class_base
 
 	/**  
 		
-		@attrib name=show_big params=name nologin="1" default="0"
+		@attrib name=show_big params=name nologin="1" 
 		
 		@param id required type=int
 		
@@ -1062,6 +1058,45 @@ class image extends class_base
 		}
 
 		$img->save($file, IMAGE_JPEG);
+	}
+
+	function make_img_tag_wl($id)
+	{
+		$that = get_instance("image");
+		$u = $that->get_url_by_id($id);
+
+		$o = obj($id);
+		$imagetag = image::make_img_tag($u, $o->name());
+
+		if ($o->prop("file2") != "")
+		{
+			$size = @getimagesize($o->prop("file2"));
+
+			$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
+			$bi_link = "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
+
+			$imagetag = html::href(array(
+				"url" => "#",
+				"onClick" => $bi_link,
+				"caption" => $imagetag
+			));
+		}
+
+		return $imagetag;
+	}
+
+	function get_on_click_js($id)
+	{
+		$o = obj($id);
+		if ($o->prop("file2") == "")
+		{
+			return "";
+		}
+
+		$that = new image;
+		$size = @getimagesize($o->prop("file2"));
+		$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
+		return  "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
 	}
 }
 ?>
