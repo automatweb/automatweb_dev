@@ -1,22 +1,8 @@
 <?php
-
-define("LC_EVENT_ADDED","Event is added to dayplanner");
-define("LC_NOT_SORTED","not sorted");
-define("LC_TASKS_TRANSPORTED","%i tasks where moved to other holder");
-define("LC_ADD_DODO","Add TODO");
-define("LC_CHANGE_DODO","Change TODO");
-define("LC_CHANGE_EVENT","Change event");
-define("LC_DAY_IS_SAVED"," dayplan is saved");
-define("LC_EVENT_ERASED","Event is deleted");
-define("LC_EVENT_CHANGED_SAVED","Event changes are saved");
 define("LC_NO_DEFAULT_GROUP","Default group is missing, inform about this error to info@struktuur.ee");
 
-define("LC_BROKEN_TEMPLATE","Broken template. Tried to close '%s' while '%s' was open");
-//define("LC_NOT_FOUND_TEMPLATE","Template '$filename' not found");
 define("LC_ADD_BANNER","Add banner");
 define("LC_ERROR_NO_ID","error, no client id!");
-//define("LC_LOCATION","Location: ");
-//define("LC_CONTENT_TYPE","Content-type: ");
 define("LC_CHANGE_BANNER","Change banner");
 define("LC_USER_LOOKS","Users looks to banner");
 define("LC_SUNDAY1","Sunday");
@@ -35,8 +21,6 @@ define("LC_LOOKED_BANNER","Looked banner");
 define("LC_KLIKKED_BANNER","Clicked banner");
 define("LC_ADD_BANNER_CLIENT","Add banner client");
 define("LC_CHANGE_BANNER_CLIENT","Change banner client");
-//define("LC_LOCATION","Location: ");
-//define("LC_CONTENT_TYPE","Content-type: ");
 define("LC_CHANGE_BANNER","Change banner");
 define("LC_USER_LOOKS","Users banner clicks");
 
@@ -60,22 +44,6 @@ define("LC_FRIDAY1","Friday");
 define("LC_SATURDAY1","Saturday");
 define("LC_BANNER","Banner");
 
-/*define("LC_TEST_PUBL","test.kirjastus.ee");
-define("LC_TEST_KROONIKA","test.kroonika.ee");
-define("LC_KROONIKA","www.kroonika.ee");
-define("LC_NEW_WEEK_EE","uus.nadal.ee");
-define("LC_WWW_WEEK_EE","www.nadal.ee");
-define("LC_WWW_SELTSKOND_EE","www.seltskond.ee");
-define("LC_VIBE_STRUKT","vibe.struktuur.ee");
-define("LC_NEWVIBE_STRUKT","uusvibe.struktuur.ee");
-define("LC_WWW_PUBL_EE","www.kirjastus.ee");
-define("LC_DEV_STKRUKT_EE","dev.struktuur.ee");
-define("LC_STAT_STRUKT_EE","stat.struktuur.ee");
-define("LC_RKOOL_STRUKT_EE","rkool.struktuur.ee");
-define("LC_EBS_STRUKT_EE","ebs.struktuur.ee");
-define("LC_NEW_ANNE_EE","uus.anne.ee");
-define("LC_WORK_STRUKT_EE","work.struktuur.ee");
-define("LC_WWW_STRUKT_EE","www.struktuur.ee");*/
 define("LC_BUG_NOT_RATIF","not affirmed");
 define("LC_BUG_NEW","new");
 define("LC_BUG_QUO","adjudged");
@@ -98,9 +66,7 @@ define("LC_BUG_BIG_WEAKNESS","Great dearth");
 define("LC_BUG_SMALL_WEAKNESS","Small dearth");
 define("LC_BUG_ELEMENTARY","Elementary");
 define("LC_BUG_PROPOSITION","Proposal");
-//define("LC_BUG_MAIL","bugtrack@struktuur.ee");
 define("LC_BUG_BIG_PUUK","New puuk: %s %s");
-//define("LC_BUG_FROM1","From: bugtrack <bugtrack@struktuur.ee>");
 define("LC_BUG_FOR_ME","Bugs for me");
 define("LC_BUG_ALL_BUG","All bugs");
 define("LC_BUG_ADD_NEW","Add new");
@@ -109,9 +75,7 @@ define("LC_BUG_READ_BUG_FROM_FILE","Read bugs from files to work");
 define("LC_BUG_JUTT1","$uid checked error/idea $url, with priority $pri solved. Conclusion: ");
 define("LC_BUG_JUTT2","\n\n---------------------------------------------\n\nActivity was: \n\n");
 define("LC_BUG_JUTT3","\n---------------------------------------------\n\nError portrait was:\n\n");
-//define("LC_BUG_MAIL2","dev@struktuur.ee");
 define("LC_BUG_FIXED_BUG","Fixed puuk: %s %s");
-//define("LC_BUG_FROM_TRACK","From: bugtrack <dev@struktuur.ee>");
 define("LC_BUG_MESSAGE_FROM_BUG","Message about fixed bug: ");
 define("LC_BUG_BUG_ADDED","Add bug %s");
 define("LC_BUG_CHANGED_BUG","Changed bug $title");
@@ -475,11 +439,6 @@ define("LC_MESSENGER_NEW_FOLDER","New folder");
 //mysql.aw
 define("LC_MYSQL_ERROR_QUERY","Error in query");
 
-//objects.aw
-define("LC_OBJECTS_OBJECTS_CAL", "<a href=%s>Objektid</a>&nbsp; &nbsp;<a href=%s>Calendar</a>");
-define("LC_OBJECTS_TAKE_THIS","'>Choose this</a>");
-define("LC_OBJECTS_ALL","All");
-
 //periods.aw
 define("LC_PERIODS_ACTIVATED_PERIOD","aktivated period %s");
 
@@ -569,14 +528,6 @@ define("LC_TABLE_DELETE_LEFT_CELL","Delete left cell");
 define("LC_TABLE_DELETE_RIGHT_CELL","Delete right cell");
 define("LC_TABLE_DELETE_LOWER_CELL","Delete lower cell");
 define("LC_TABLE_ADD_TABLE","Add table");
-
-//tests.aw
-define("LC_TESTS_QUESTIONS","Questions");
-define("LC_TESTS_QUEST_ADD","'>Questions</a> / Add");
-define("LC_TESTS_QUEST_CHANGE","'>Questions</a> / Change");
-define("LC_TESTS_FILLED","Filled");
-define("LC_TESTS_APPRAISE","Priced");
-define("LC_TESTS_ADD","'>Texts</a> / Add");
 
 //tvkavad.aw
 define("LC_TVKAVAD_COLOR_WHITE","White");

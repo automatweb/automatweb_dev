@@ -1,22 +1,8 @@
 <?php
-
-define("LC_EVENT_ADDED","S¸ndmus on p‰evaplaani lisatud");
-define("LC_NOT_SORTED","sorteerimata");
-define("LC_TASKS_TRANSPORTED","%i taski viidi teise folderisse");
-define("LC_ADD_DODO","Lisa TODO");
-define("LC_CHANGE_DODO","Muuda TODO-d");
-define("LC_CHANGE_EVENT","Muuda eventit");
-define("LC_DAY_IS_SAVED"," p‰evaplaan on salvestatud");
-define("LC_EVENT_ERASED","Event on kustutatud");
-define("LC_EVENT_CHANGED_SAVED","Eventi muudatused on salvestatud");
 define("LC_NO_DEFAULT_GROUP","Teil on default grupp puudu, palun teatage sellest veast kohe info@struktuur.ee");
 
-define("LC_BROKEN_TEMPLATE","Broken template. Tried to close '%s' while '%s' was open");
-//define("LC_NOT_FOUND_TEMPLATE","Template '$filename' not found");
 define("LC_ADD_BANNER","Lisa banner");
 define("LC_ERROR_NO_ID","viga, kliendi id'd pole!");
-//define("LC_LOCATION","Location: ");// standartne HTTP header, seda ei saa t6likda ja kasutaja seda ei n2e kunagi
-//define("LC_CONTENT_TYPE","Content-type: ");	// standartne HTTP header, seda ei saa t6likda ja kasutaja seda ei n2e kunagi
 define("LC_CHANGE_BANNER","Muuda bannerit");
 define("LC_USER_LOOKS","Kasutaja banneri vaatamisi");
 define("LC_SUNDAY1","Puhapaev");
@@ -35,8 +21,6 @@ define("LC_LOOKED_BANNER","Vaatas bannerit");
 define("LC_KLIKKED_BANNER","Klikkis bannerile");
 define("LC_ADD_BANNER_CLIENT","Lisa banneri klient");
 define("LC_CHANGE_BANNER_CLIENT","Muuda banneri klienti");
-//define("LC_LOCATION","Location: ");
-//define("LC_CONTENT_TYPE","Content-type: ");
 define("LC_CHANGE_BANNER","Muuda bannerit");
 define("LC_USER_LOOKS","Kasutaja banneri vaatamisi");
 
@@ -60,23 +44,6 @@ define("LC_FRIDAY1","Reede");
 define("LC_SATURDAY1","Laupaev");
 define("LC_BANNER","Banner");
 
-// neid ka ei leidnud kuskilt, kus neid vaja on? ja need ei ole ka ju erinevates keeltes erinevad, niiet siia faili pole neil asja
-/*define("LC_TEST_PUBL","test.kirjastus.ee");
-define("LC_TEST_KROONIKA","test.kroonika.ee");
-define("LC_KROONIKA","www.kroonika.ee");
-define("LC_NEW_WEEK_EE","uus.nadal.ee");
-define("LC_WWW_WEEK_EE","www.nadal.ee");
-define("LC_WWW_SELTSKOND_EE","www.seltskond.ee");
-define("LC_VIBE_STRUKT","vibe.struktuur.ee");
-define("LC_NEWVIBE_STRUKT","uusvibe.struktuur.ee");
-define("LC_WWW_PUBL_EE","www.kirjastus.ee");
-define("LC_DEV_STKRUKT_EE","dev.struktuur.ee");
-define("LC_STAT_STRUKT_EE","stat.struktuur.ee");
-define("LC_RKOOL_STRUKT_EE","rkool.struktuur.ee");
-define("LC_EBS_STRUKT_EE","ebs.struktuur.ee");
-define("LC_NEW_ANNE_EE","uus.anne.ee");
-define("LC_WORK_STRUKT_EE","work.struktuur.ee");
-define("LC_WWW_STRUKT_EE","www.struktuur.ee");*/
 define("LC_BUG_NOT_RATIF","kinnitamata");
 define("LC_BUG_NEW","uus");
 define("LC_BUG_QUO","m‰‰ratud");
@@ -99,9 +66,7 @@ define("LC_BUG_BIG_WEAKNESS","Suur puudus");
 define("LC_BUG_SMALL_WEAKNESS","V‰ike puudus");
 define("LC_BUG_ELEMENTARY","Elementaarne");
 define("LC_BUG_PROPOSITION","Ettepanek");
-//define("LC_BUG_MAIL","bugtrack@struktuur.ee"); // hmhm, eimailiaadresse pole ka vaja t6lkida
 define("LC_BUG_BIG_PUUK","Uus puuk: %s %s");
-//define("LC_BUG_FROM1","From: bugtrack <bugtrack@struktuur.ee>");	// mailiaadressid v6ix konfitavad olla kuskilt, aga see pole 6ige koht sellex
 define("LC_BUG_FOR_ME","Minule m‰‰ratud bugid");
 define("LC_BUG_ALL_BUG","Kıik bugid");
 define("LC_BUG_ADD_NEW","Lisa uus");
@@ -110,9 +75,7 @@ define("LC_BUG_READ_BUG_FROM_FILE","Loe bugid failidest work'i");
 define("LC_BUG_JUTT1","$uid m2rkis vea/idee $url, prioriteediga $pri lahendatuks. J‰reldus: ");
 define("LC_BUG_JUTT2","\n\n---------------------------------------------\n\nTegevuseks m‰rgiti: \n\n");
 define("LC_BUG_JUTT3","\n---------------------------------------------\n\nVea kirjeldus oli:\n\n");
-//define("LC_BUG_MAIL2","dev@struktuur.ee");
 define("LC_BUG_FIXED_BUG","Parandatud puuk: %s %s");
-//define("LC_BUG_FROM_TRACK","From: bugtrack <dev@struktuur.ee>");
 define("LC_BUG_MESSAGE_FROM_BUG","Teade parandatud bugi kohta: ");
 define("LC_BUG_BUG_ADDED","Lisas bugi %s");
 define("LC_BUG_ERASED_BUG","Kustutas bugi ");
@@ -175,7 +138,6 @@ define("LC_CURRENCY_CHANGE","Muuda valuutat");
 
 //defs.aw
 
-//define("LC_DEFS_HTTP","HTTP/1.1 404 Not Found");	// standartne header, pole vaja t6lkida
 define("LC_DEFS_NOT_FOUND","<html><head>\n<title>404 Not Found</title>\n</head></body>\n");
 define("LC_DEFS_NOT_FOUND2","<h1>Not Found</h1>\n");
 define("LC_DEFS_REG_URL","the requested URL ");
@@ -493,11 +455,6 @@ define("LC_MESSENGER_NEW_FOLDER","Uus folder");
 //mysql.aw
 define("LC_MYSQL_ERROR_QUERY","Vigane p‰ring");
 
-//objects.aw
-define("LC_OBJECTS_OBJECTS_CAL", "<a href=%s>Objektid</a>&nbsp; &nbsp;<a href=%s>Kalender</a>");
-define("LC_OBJECTS_TAKE_THIS","'>Vıta see</a>");
-define("LC_OBJECTS_ALL","K&otilde;ik");
-
 //periods.aw
 define("LC_PERIODS_ACTIVATED_PERIOD","aktiveeris perioodi %s");
 
@@ -587,14 +544,6 @@ define("LC_TABLE_DELETE_LEFT_CELL","Kustuta vasak cell");
 define("LC_TABLE_DELETE_RIGHT_CELL","Kustuta parem cell");
 define("LC_TABLE_DELETE_LOWER_CELL","Kustuta alumine cell");
 define("LC_TABLE_ADD_TABLE","</a> / Lisa tabel");
-
-//tests.aw
-define("LC_TESTS_QUESTIONS","K&uuml;simused");
-define("LC_TESTS_QUEST_ADD","'>K&uuml;simused</a> / Lisa");
-define("LC_TESTS_QUEST_CHANGE","'>K&uuml;simused</a> / Muuda");
-define("LC_TESTS_FILLED","T&auml;idetud");
-define("LC_TESTS_APPRAISE","Hinnatud");
-define("LC_TESTS_ADD","'>Testid</a> / Lisa");
 
 //tvkavad.aw
 define("LC_TVKAVAD_COLOR_WHITE","Valge");
