@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.40 2002/02/18 17:44:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.41 2002/02/19 16:57:03 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -510,24 +510,25 @@ if (!defined("DEFS"))
 		return $str;
 	}
 
-	function aw_unserialize($str)
+	function aw_unserialize($str,$dequote = 0)
 	{
 		if (substr($str,0,14) == "<?xml version=")
 		{
 			$x = new xml;
-			return $x->xml_unserialize(array("source" => $str));
+			$retval = $x->xml_unserialize(array("source" => $str));
 		}
 		else
 		if (substr($str,0,6) == "\$arr =")
 		{
 			// php serializer
 			$p = new php_serializer;
-			return $p->php_unserialize($str);
+			$retval = $p->php_unserialize($str);
 		}
 		else
 		{
-			return unserialize($str);
+			$retval = unserialize($str);
 		}
+		return ($dequote) ? stripslashes($retval) : $retval;
 	}
 
 	function &_aw_global_init()
@@ -543,6 +544,14 @@ if (!defined("DEFS"))
 			{
 				aw_global_set($var,$GLOBALS[$var]);
 			}
+
+			if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
+			{
+				foreach($GLOBALS["HTTP_SESSION_VARS"] as $key => $val)
+				{
+					aw_global_set($key,$val);
+				}
+			}
 		}
 		return $aw_globals_instance;
 	}
@@ -554,13 +563,13 @@ if (!defined("DEFS"))
 	function &aw_global_get($var)
 	{
 		$inst =& _aw_global_init(); 
-		return $inst->$var;
+		return $inst->vars[$var];
 	}
 
 	function aw_global_set($var,$val)
 	{
 		$inst =& _aw_global_init(); 
-		$inst->$var = $val;
+		$inst->vars[$var] = $val;
 	}
 
 	function &_aw_cache_init()
@@ -579,19 +588,19 @@ if (!defined("DEFS"))
 	function &aw_cache_get($cache,$key)
 	{
 		$inst =& _aw_cache_init();
-		return $inst->$cache[$key];
+		return $inst->caches[$cache][$key];
 	}
 
 	function aw_cache_set($cache,$key,$val)
 	{
 		$inst =& _aw_cache_init();
-		$inst->$cache[$key] = $val;
+		$inst->caches[$cache][$key] = $val;
 	}
 
 	function aw_cache_flush($cache)
 	{
 		$inst =& _aw_cache_init();
-		$inst->$cache = array();
+		$inst->caches[$cache] = false;
 	}
 };
 
