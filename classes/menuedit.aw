@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.233 2003/02/12 12:36:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.234 2003/02/19 16:22:57 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5060,22 +5060,6 @@ class menuedit extends aw_template
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
 			$this->save_handle();
-/*			$this->vars(array(
-				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true))
-			));*
-
-			$this->vars(array(
-				"oid" => $row["oid"],
-				"name" => "",
-				"bgcolor" => $row["cutcopied"],
-				"icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"width" => "16",
-				"height" => "16",
-				"icon_over" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"url" => $host,
-				"URLPARAM" => "",
-				"FETCHCONTENT" => ($this->cfg["fetchcontent"] ? $this->parse("FETCHCONTENT") : "")
-			));*/
 			$this->vars(array(
 				"menu_id" => "js_pop_".$row["oid"],
 				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
@@ -5090,9 +5074,29 @@ class menuedit extends aw_template
 			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
 			$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
 			$row["hidden_jrk"] = $row["jrk"];
-			$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
-			$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
-			$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
+			if ($can_change)
+			{
+				$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
+			}
+
+			if ($can_change)
+			{
+				$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
+			}
+			else
+			{
+				$row["status"] = $row["status"] == 1 ? "Mitteaktiivne" : "Aktiivne";
+			}
+
+			if ($can_change)
+			{
+				$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
+			}
+			else
+			{
+				$row["select"] = "&nbsp;";
+			}
+
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
 			$row["delete"] = $can_delete ? "<a href=\"javascript:box2('Oled kindel, et soovid seda objekti kustutada?','$dellink')\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_delete.gif\" border=\"0\"></a>" : "";
 			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
