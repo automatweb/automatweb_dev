@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.133 2002/08/28 04:38:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.134 2002/08/29 03:17:31 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2163,7 +2163,7 @@ class form extends form_base
 				$use_table = $this->arr["table"];
 			}
 
-			$form_table->start_table($use_table);
+			$form_table->start_table($use_table, $this->arr["start_search_relations_from"]);
 			$form_table->set_opt("current_search_form", $this->id);
 			$form_table->current_search_form_inst =& $this;
 
