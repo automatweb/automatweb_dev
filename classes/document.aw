@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.250 2004/04/12 10:09:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.251 2004/04/15 07:06:50 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -750,10 +750,11 @@ class document extends aw_template
 		if (!isset($text) || $text != "undef") 
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
+			
 			$doc["content"] = $this->parse_aliases(array(
-		    "oid" => $docid,
-        "text" => $doc["content"],
-      ));
+				"oid" => $docid,
+				"text" => $doc["content"],
+			));
 
 			// this damn ugly-ass hack is here because we need to be able to put the last search value
 			// from form_table to document title
@@ -1133,7 +1134,7 @@ class document extends aw_template
 			));
 		}
 
-		if ($leadonly > -1 && $doc["title_clickable"])
+		if ($doc["title_clickable"])
 		{
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		}

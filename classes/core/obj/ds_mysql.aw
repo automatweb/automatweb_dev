@@ -571,6 +571,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$sql .= " AND relobj_id IN (".$awa->to_sql().") ";
 		}
 
+		if ($arr["idx"])
+		{
+			$awa = new aw_array($arr["idx"]);
+			$sql .= " AND idx IN (".$awa->to_sql().") ";
+		}
+
 		foreach($arr as $k => $v)
 		{
 			if (substr($k, 0, 3) == "to.")
