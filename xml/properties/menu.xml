@@ -517,21 +517,13 @@
             <caption>Eksport</caption>
       </property>
       <property>
-            <name>sort_by</name>
-            <table>objects</table>
+            <name>sorter</name>
+            <table>menu</table>
             <group>show</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Dokumente j&amp;auml;rjestatakse</caption>
-      </property>
-      <property>
-            <name>sort_ord</name>
-            <table>objects</table>
-            <group>show</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <field>sorter</field>
+            <caption>Dokumentide järjestamine</caption>
       </property>
       <property>
             <name>ip</name>
