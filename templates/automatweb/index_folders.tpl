@@ -23,5 +23,7 @@ window.location=url
 <script type="text/javascript" src="js/cbobjects.js">
 </script>
 </head>
+<body>
 {VAR:content}
+</body>
 </html>

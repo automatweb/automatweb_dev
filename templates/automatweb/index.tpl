@@ -3,10 +3,13 @@
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
 <title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
 <link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" />
+
+<!-- SUB: aw_styles -->
+<!-- END SUB: aw_styles -->
+
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/mm.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 
 
@@ -73,7 +76,8 @@ function check_generic_loader()
 // -->
 </script>
 </head>
-<body onmousedown="activate_window();" bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="update_window_title();create_objects(); check_generic_loader();">
+<body link="#0000ff" vlink="#0000ff" onmousedown="activate_window();" onLoad="update_window_title();create_objects(); check_generic_loader();">
+<!-- SUB: YAH -->
 <table border="0" width="100%" cellspacing="0" cellpadding="2" style="border-bottom:solid 2px white;">
 <tr>
 <td align="left" class="yah">&nbsp;
@@ -81,14 +85,12 @@ function check_generic_loader()
 </td>
 </tr>
 </table>
-<table border="0" cellpadding="0" cellspacing="0">
+<!-- END SUB: YAH -->
 {VAR:content}
-</table>
+<!--
 <div align="center">
 <font face="Verdana,Arial,Helvetica,sans-serif" size="-2" color="#8AABBE">AutomatWeb&reg;<br><br></font>
 </div>
-<script>
-</script>
-</center>
+-->
 </body>
 </html>
