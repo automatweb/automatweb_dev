@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.1 2003/03/13 13:41:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.2 2003/04/23 14:01:38 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -20,6 +20,7 @@ class gallery extends aw_template
 	{
 		extract($args);
 		global $page,$section;
+		$this->matches = $matches;
 		$this->load($alias["target"],$page);
 		return $this->show(array("page" => $page,"section" => $section));
 	}
@@ -507,6 +508,10 @@ class gallery extends aw_template
 			}
 			$this->read_template("show.tpl");
 
+			$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
+			$this->vars(array(
+				"align" => $align[$this->matches[4]],
+			));
 			for ($row = 0; $row < $this->arr[$page-1]["rows"]; $row++)
 			{
 				$c = "";
@@ -598,7 +603,15 @@ class gallery extends aw_template
 			$this->vars(array("url" => $baseurl."/page=".($page+1)));
 			$nx = $this->parse("NEXT");
 		}
-		$this->vars(array("PAGE_SEL" => "", "LINE" => $l,"PAGE" => $p,"sel_page" => $page,"PREVIOUS" => $pr, "NEXT" => $nx));
+
+		$this->vars(array(
+			"PAGE_SEL" => "", 
+			"LINE" => $l,
+			"PAGE" => $p,
+			"sel_page" => $page,
+			"PREVIOUS" => $pr, 
+			"NEXT" => $nx,
+		));
 
 		if ($this->arr["pages"] > 1)
 		{
