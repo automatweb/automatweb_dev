@@ -159,7 +159,6 @@ class shop extends aw_template
 	// !shows the shop $id on the suer side, items under category $parent
 	function show($arr)
 	{
-//		$parent,$id
 		extract($arr);
 		$this->read_template("show_shop.tpl");
 
@@ -168,7 +167,7 @@ class shop extends aw_template
 
 		classload("form");
 
-		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE parent = $parent AND class_id = ".CL_SHOP_ITEM." AND status = 2");
+		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $parent AND class_id = ".CL_SHOP_ITEM." AND status = 2");
 		while ($row = $this->db_next())
 		{
 			$f = new form;
@@ -737,12 +736,43 @@ class shop extends aw_template
 	function order_item($arr)
 	{
 		extract($arr);
+
+		if (!$shop)
+		{
+			// now here's the possibility that $shop was omitted. therefore we must figure it out ourself
+			// we do that by loading all the root folders for all the shops
+			// and then traversing the object tree from the current point upwards until we hit a shop root folder.
+			// what if we don't ? hm. well. error message sounds l33t :p
+			$shfolders = array();
+			$this->db_query("SELECT id,root_menu FROM objects,shop WHERE objects.oid = shop.id AND objects.status != 0 AND objects.class_id = ".CL_SHOP);
+			while ($row = $this->db_next())
+			{
+				$shfolders[$row["root_menu"]] = $row["id"];
+			}
+
+			$oc = $this->get_object_chain($section);
+			foreach($oc as $oid => $orow)
+			{
+				if ($shfolders[$oid])
+				{
+					// and we found a matching root folder!
+					$shop = $shfolders[$oid];
+					break;
+				}
+			}
+
+			if (!$shop)
+			{
+				$this->raise_error("can't find the matching shop for the item!", true);
+			}
+		}
+
 		$this->read_template("order_item.tpl");
-		$parent = $this->do_shop_menus($shop,$parent);
+		$parent = $this->do_shop_menus($shop,$section);
 
 		classload("form");
 
-		$row = $this->get_item($item_id);
+		$row = $this->get_item($item_id,true);
 
 		global $shopping_cart,$ext;
 
@@ -764,9 +794,14 @@ class shop extends aw_template
 	}
 
 	////
-	// !returns the shop item $id
-	function get_item($id)
+	// !returns the shop item $id, if $check is true we detect if the object is a brother and revert to the real one
+	function get_item($id,$check = false)
 	{
+		if ($check)
+		{
+			$o = $this->get_object($id);
+			$id = $o["brother_of"];
+		}
 		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE id = $id");
 		return $this->db_next();
 	}
@@ -779,7 +814,7 @@ class shop extends aw_template
 		extract($arr);
 		global $shopping_cart;
 	
-		$it = $this->get_item($item_id);
+		$it = $this->get_item($item_id,true);
 
 		classload("form");
 		$f = new form;

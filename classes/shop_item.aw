@@ -55,12 +55,23 @@ class shop_item extends aw_template
 		}
 		else
 		{
+			$this->read_template("edit_item.tpl");
+
 			classload("form");
 			$f = new form;
-			return $f->gen_preview(array(
-				"id" => $form_id,
-				"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "fid" => $form_id,"op_id" => $op_id,"op_id_l" => $op_id_l,"cnt_form" => $cnt_form))
+
+			classload("objects");
+			$o = new db_objects;
+
+			$this->vars(array( 
+				"item" => $f->gen_preview(array(
+										"id" => $form_id,
+										"reforb" => $this->mk_reforb("submit", 
+																	array("parent" => $parent, "fid" => $form_id,"op_id" => $op_id,"op_id_l" => $op_id_l,"cnt_form" => $cnt_form))
+									)),
+				"menus" => $this->multiple_option_list(array(),$o->get_list())
 			));
+			return $this->parse();
 		}
 	}
 
@@ -88,6 +99,9 @@ class shop_item extends aw_template
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP_ITEM, "status" => 2, "name" => $f->get_element_value_by_name("nimi")));
 			$price = $f->get_element_value_by_type("price");
 			$this->db_query("INSERT INTO shop_items(id,form_id,entry_id,op_id,price,op_id_l,cnt_form) values($id,'$fid','$eid','$op_id','$price','$op_id_l','$cnt_form')");
+
+			// now also set the item to be a brother of itself, so we can user brother_of for joining purposes l8r
+			$this->upd_object(array("oid" => $id, "brother_of" => $id));
 		}
 		return $this->mk_orb("change", array("id" => $id));
 	}
@@ -97,16 +111,103 @@ class shop_item extends aw_template
 	function change($arr)
 	{
 		extract($arr);
+		$o = $this->get_object($id);
+		$id = $o["brother_of"];	// this is in case we clicked on a brother to change it, we must revert to the real object
+
 		$o = $this->get($id);
+
 		$this->mk_path($o["parent"],"Muuda kaupa");
+
+		$this->read_template("edit_item.tpl");
 
 		classload("form");
 		$f = new form;
-		return $f->gen_preview(array(
-			"id" => $o["form_id"],
-			"entry_id" => $o["entry_id"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
+
+		classload("objects");
+		$ob = new db_objects;
+
+		$this->vars(array( 
+			"item" => $f->gen_preview(array(
+										"id" => $o["form_id"],
+										"entry_id" => $o["entry_id"],	
+										"reforb" => $this->mk_reforb("submit", array("id" => $id))
+								)),
+			"menus" => $this->multiple_option_list($this->get_brother_list($id),$ob->get_list()),
+			"reforb" => $this->mk_reforb("submit_bros", array("id" => $id))
 		));
+		return $this->parse();
+	}
+
+	////
+	// !returns an array of all the brothers of this item
+	function get_brother_list($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT parent,oid FROM objects WHERE class_id = ".CL_SHOP_ITEM." AND status != 0 AND brother_of = $id");
+		while ($row = $this->db_next())
+		{
+			if ($row["oid"] != $id)
+			{
+				$ret[$row["parent"]] = $row["parent"];
+			}
+		}
+		return $ret;
+	}
+
+	////
+	// !saves the brothers of the shop_item
+	function submit_bros($arr)
+	{
+		extract($arr);
+		$o = $this->get($id);
+		// ok so how do we do this? well. what if, for each brother of this, 
+		// we create a CL_SHOP_ITEM and set it's brother_of to point to this item
+		// let's try this shit.
+
+		if (is_array($menus))
+		{
+			$brol = $this->get_brother_list($id);
+			foreach($menus as $menu_id)
+			{
+				$selmenus[$menu_id] = $menu_id;
+			}
+
+			foreach($menus as $menu_id)
+			{
+				// if the menu is not a brother yet, add it
+				if ($brol[$menu_id] != $menu_id)
+				{
+					// create a new object for the brother
+					$oid = $this->new_object(array(
+						"parent" => $menu_id,
+						"class_id" => CL_SHOP_ITEM,
+						"name" => $o["name"],
+						"status" => $o["status"],
+						"brother_of" => $id
+					));
+					// and mark it down
+					$brol[$menu_id] = $menu_id;
+				}
+			}
+
+			// now we must see if any elements were removed
+			// and since $selmenus contains all the menus that were selected
+			// and $brol contains all the menus that have brothers ($brol is greater or equal to $selmenus)
+			// we simply do an array_diff on them and find out the menus that changed.
+			$toremove = array_diff($brol,$selmenus); // $brol - $selmenus :)
+			foreach($toremove as $menu_id)
+			{
+				// now we must delete the brother for this object that is present under menu $menu_id
+				$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id AND parent = $menu_id ");
+			}
+			// and now the brothers should be up to date....
+		}
+		else
+		{
+			// just delete all brothaz
+			$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id");
+		}
+		return $this->mk_orb("change", array("id" => $id));
 	}
 
 	function get($id)

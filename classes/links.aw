@@ -98,22 +98,46 @@ class links extends extlinks
 	{
 		$this->read_template("search_doc.tpl");
 		$this->vars(array("index_file" => $GLOBALS["index_file"]));
-		global $s_name, $s_content,$SITE_ID;
+		global $s_name, $s_content,$SITE_ID,$baseurl,$index_file,$ext,$s_class_id;
 		if ($s_name != "" || $s_content != "")
 		{
-			$se = array();
-			if ($s_name != "")
+			if ($s_class_id == "item")
 			{
-				$se[] = " name LIKE '%".$s_name."%' ";
+				$se = "";
+				if ($s_name != "")
+				{
+					$se = " AND name LIKE '%".$s_name."%' ";
+				}
+				$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.parent as parent FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_SHOP_ITEM.") $se");
 			}
-			if ($s_content != "")
+			else
 			{
-				$se[] = " content LIKE '%".$s_content."%' ";
+				$se = array();
+				if ($s_name != "")
+				{
+					$se[] = " name LIKE '%".$s_name."%' ";
+				}
+				if ($s_content != "")
+				{
+					$se[] = " content LIKE '%".$s_content."%' ";
+				}
+				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			}
-			$this->db_query("SELECT documents.title as name,objects.oid FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row["name"], "id" => $row["oid"]));
+				if ($s_class_id == "item")
+				{
+					$url = $this->mk_site_orb(array("action" => "order_item", "item_id" => $row["oid"], "section" => $row["parent"],"class" => "shop"));
+				}
+				else
+				{
+					$url = $baseurl."/".$index_file.$ext."/section=".$row["oid"];
+				}
+				$this->vars(array(
+					"name" => htmlentities($row["name"],ENT_QUOTES), 
+					"id" => $row["oid"],
+					"url" => $url
+				));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));
@@ -123,9 +147,13 @@ class links extends extlinks
 			$s_name = "%";
 			$s_content = "%";
 		}
-		$this->vars(array("reforb" => $this->mk_reforb("search_doc", array("reforb" => 0)),
-											"s_name"	=> $s_name,
-											"s_content"	=> $s_content));
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("search_doc", array("reforb" => 0)),
+			"s_name"	=> $s_name,
+			"s_content"	=> $s_content,
+			"doc_sel" => checked($s_class_id != "item"),
+			"item_sel" => checked($s_class_id == "item")
+		));
 		return $this->parse();
 	}
 
