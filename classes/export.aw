@@ -131,23 +131,12 @@ class export extends aw_template
 		return str_replace("%s", date("s"),$str);
 	}
 
-	function do_export($arr)
+	function init_settings()
 	{
-		extract($arr);
-
-		$folder = $this->rep_dates($this->get_cval("export::folder"));
-		$zip_file = $this->rep_dates($this->get_cval("export::zip_file"));
-		$aw_zip_folder = $this->get_cval("export::aw_zip_folder");
-		$aw_zip_fname = $this->rep_dates($this->get_cval("export::aw_zip_fname"));
-		$automatic = $this->get_cval("export::automatic");
 		$this->fn_type = $this->get_cval("export::fn_type");
 
-		if ($rule_id)
-		{
-			$this->load_rule($rule_id);
-		}
-
 		// take the folder thing and add the date to it so we can make several copies in the same folder
+		$folder = $this->rep_dates($this->get_cval("export::folder"));
 		@mkdir($folder,0777);
 		if (!is_dir($folder))
 		{
@@ -155,12 +144,6 @@ class export extends aw_template
 		}
  		$this->folder = $folder;
 
-		// ok, this is the complicated bit. 
-		// so, how do we do this? first. forget the time limit, this is gonna take a while.
-		set_time_limit(0);
-
-		echo "exporting site to folder $this->folder ... <br><br>\n\n";
-		flush();
 		$this->hashes = array();
 
 		// import exclusion list
@@ -168,6 +151,30 @@ class export extends aw_template
 		{
 			$this->exclude_urls = $this->cfg["exclude_urls"];
 		}
+	}
+
+	function do_export($arr)
+	{
+		extract($arr);
+
+		$zip_file = $this->rep_dates($this->get_cval("export::zip_file"));
+		$aw_zip_folder = $this->get_cval("export::aw_zip_folder");
+		$aw_zip_fname = $this->rep_dates($this->get_cval("export::aw_zip_fname"));
+		$automatic = $this->get_cval("export::automatic");
+
+		$this->init_settings();
+
+		if ($rule_id)
+		{
+			$this->load_rule($rule_id);
+		}
+
+		// ok, this is the complicated bit. 
+		// so, how do we do this? first. forget the time limit, this is gonna take a while.
+		set_time_limit(0);
+
+		echo "exporting site to folder $this->folder ... <br><br>\n\n";
+		flush();
 
 		if ($rule_id)
 		{
@@ -268,7 +275,7 @@ class export extends aw_template
 		die();
 	}
 
-	function fetch_and_save_page($url, $lang_id)
+	function fetch_and_save_page($url, $lang_id, $single_page_only = false)
 	{
 		$_url = $url;
 //		echo "fetch_and_save_page($url, $lang_id) <br>";
@@ -319,7 +326,7 @@ class export extends aw_template
 		flush();
 
 		// now. convert all the links in the page
-		$this->convert_links($fc,$t_lang_id);
+		$this->convert_links($fc,$t_lang_id, $single_page_only);
 
 		$this->save_file($fc,$name);
 
@@ -328,7 +335,7 @@ class export extends aw_template
 		return $f_name;
 	}
 
-	function convert_links(&$fc,$lang_id)
+	function convert_links(&$fc,$lang_id, $single_page_only)
 	{
 //		echo "convert_links(fc,$lang_id) <br>";
 		// uukay. so the links we gotta convert are identified by having $baseurl in them. so look for that
@@ -381,7 +388,7 @@ class export extends aw_template
 			else
 			{
 				// fetch the page
-				if ($this->rule_id && $this->is_out_of_rule($link))
+				if (($this->rule_id && $this->is_out_of_rule($link)) || $single_page_only)
 				{
 					$link = $this->add_session_stuff($link, $lang_id);
 
@@ -748,79 +755,57 @@ class export extends aw_template
 			{
 				if (!is_number($secid))
 				{
-					// no need to fetch alias, we already got it!
-					$mn = $secid;
+					// secid is alias, resolve it to numeric 
+					$mned = get_instance("menuedit");
+					$secid = $mned->check_section($secid,false);
 				}
-				else
+
+				$mn = "";
+				$cnt = 0;
+
+				// we need to check if the section is not a document
+				$obj = $this->get_object($secid);
+				if ($obj["class_id"] == CL_DOCUMENT)
 				{
-					$mn = "";
-					$cnt = 0;
-
-/*					if ($secid == 642)
-					{
-						echo "doing 642! <br>";
-						$dbg = true;
-					}*/
-					// we need to check if the section is not a document
-					$obj = $this->get_object($secid);
-					if ($obj["class_id"] == CL_DOCUMENT)
-					{
-						$mn = strip_tags($obj["name"])."/";
-						$secid = $obj["parent"];
-/*						if ($dbg)
-						{
-							echo "got parent for doc $secid <br>";
-						}*/
-					}
-
-					// here we need to find all the aliases of the menus upto $rootmenu as well and
-					// add them together
-					while ($secid && ($secid != 1) && $secid != $this->cfg["rootmenu"]) 
-					{
-						$sec = $this->menu_cache->get_cached_menu($secid);
-						$secid = $sec["parent"];
-						if ($sec["alias"] != "")
-						{
-							$mn = $sec["alias"]."/".$mn;
-						}
-						else
-						{
-							$mn = $sec["oid"]."/".$mn;
-						}
-/*						if ($dbg)
-						{
-							echo "loop: secid = $secid mn = $mn <br>";
-						}*/
-						
-						$cnt++;
-						if ($cnt > 10)
-						{
-							break;
-						}
-					}
-
-					if ($mn[0] == "/")
-					{
-						$mn = substr($mn,1);
-					}
-					if (substr($mn,strlen($mn)-1) == "/")
-					{
-						$mn = substr($mn,0,strlen($mn)-1);
-					}
-					$mn = str_replace("õ", "o", $mn);
-					$mn = str_replace("ä", "a", $mn);
-					$mn = str_replace("ö", "o", $mn);
-					$mn = str_replace("ü", "u", $mn);
-					$mn = str_replace("Õ", "O", $mn);
-					$mn = str_replace("Ä", "A", $mn);
-					$mn = str_replace("Ö", "O", $mn);
-					$mn = str_replace("Ü", "U", $mn);
-					$mn = strip_tags($mn);
-/*					if ($dbg)
-					{
-						echo "final mn = $mn <br>";
-					}*/
+					$mn = strip_tags($obj["name"])."/";
+					$secid = $obj["parent"];
 				}
+
+				// here we need to find all the aliases of the menus upto $rootmenu as well and
+				// add them together
+				while ($secid && ($secid != 1) && $secid != $this->cfg["rootmenu"]) 
+				{
+					$sec = $this->menu_cache->get_cached_menu($secid);
+					$secid = $sec["parent"];
+					if ($sec["alias"] != "")
+					{
+						$mn = $sec["alias"]."/".$mn;
+					}
+					
+					$cnt++;
+					if ($cnt > 10)
+					{
+						break;
+					}
+				}
+
+				if ($mn[0] == "/")
+				{
+					$mn = substr($mn,1);
+				}
+				if (substr($mn,strlen($mn)-1) == "/")
+				{
+					$mn = substr($mn,0,strlen($mn)-1);
+				}
+				$mn = str_replace("õ", "o", $mn);
+				$mn = str_replace("ä", "a", $mn);
+				$mn = str_replace("ö", "o", $mn);
+				$mn = str_replace("ü", "u", $mn);
+				$mn = str_replace("Õ", "O", $mn);
+				$mn = str_replace("Ä", "A", $mn);
+				$mn = str_replace("Ö", "O", $mn);
+				$mn = str_replace("Ü", "U", $mn);
+				$mn = strip_tags($mn);
 
 				if ($mn != "")
 				{
@@ -832,12 +817,7 @@ class export extends aw_template
 						$res = $_res.",".($cnt++);
 					}
 					$this->fta_used[$res] = true;
-//					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br>";
 					$this->hash2url[$lang_id][$url] = $res;
-/*					if ($dbg)
-					{
-						echo "final return = $res <br>";
-					}*/
 					return $res;
 				}
 			}
@@ -945,6 +925,15 @@ class export extends aw_template
 		{
 			return false;
 		}
+	}
+
+	function exp_reset()
+	{
+		$this->hashes = array();
+		$this->link2type = array();
+		$this->hash2url = array();
+		$this->ftn_used = array();
+		$this->fta_used = array();
 	}
 }
 ?>
