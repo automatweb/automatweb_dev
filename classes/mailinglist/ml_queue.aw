@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.25 2004/03/30 11:43:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.26 2004/06/11 12:31:15 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -9,6 +9,20 @@ define("ML_QUEUE_READY",2);
 define("ML_QUEUE_SENDING",3);
 define("ML_QUEUE_STOPPED",4);
 define("ML_QUEUE_PROCESSING",5);
+
+/*
+	@default field=meta
+	@default method=serialize
+
+	@tableinfo ml_queue index=qid master_table=objects master_index=brother_of
+
+	@property q_status type=textbox
+	@caption Staatus
+
+
+
+
+*/
 
 // see aid, mida siin pruugitakse on ml_avoidmids tabeli kirje id
 class ml_queue extends aw_template
@@ -670,6 +684,9 @@ class ml_queue extends aw_template
 		$message = $this->replace_tags($message,$data);
 		$subject = $this->replace_tags($arr["msg"]["subject"],$data);
 		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"],$data);
+
+		$mailfrom = trim($mailfrom);
+		$subject = trim($subject);
 
 		$used_vars=array_keys($this->used_variables);
 
