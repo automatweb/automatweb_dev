@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.102 2004/09/20 14:45:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.103 2004/09/24 09:35:53 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -98,7 +98,7 @@
 	@property docs_per_period type=textbox size=3 group=docs_from table=objects field=meta method=serialize
 	@caption Dokumente perioodist
 
-	// ----------------
+	// -----------------
 
 	@property sa_manager type=relmanager reltype=RELTYPE_SEEALSO group=relations store=no
 	@caption Seosehaldur
