@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.16 2003/01/06 11:10:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.17 2003/02/10 14:03:39 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -143,7 +143,10 @@ class menu_cache extends aw_template
 			}
 		}
 		else
-    {
+		{
+			$this->mar = array();
+			$this->mpr = array();
+			$this->subs = array();
 			$cached = array();
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
@@ -169,7 +172,7 @@ class menu_cache extends aw_template
 				$c_d .= "\n".$php->php_serialize($this->subs,true);
 
 				$c_d .= "\n?>";
-       	$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID."::period::".$this->period,$c_d);
+				$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID."::period::".$this->period,$c_d);
 			};
 		}
 	}
