@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.0 2001/05/31 23:51:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.1 2001/06/01 06:23:19 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends db_connector
 {
@@ -18,8 +18,8 @@ class msg_sql_driver extends db_connector
 		$q = sprintf("SELECT *,objects.* 
 				FROM messages
 				LEFT JOIN objects ON (messages.id = objects.oid)
-				WHERE id = '%d' AND uid = '%s'",
-				$args["id"],UID);
+				WHERE id = '%d'",
+				$args["id"]);
 		$this->db_query($q);
 		$row = $this->db_next();
 		return $row;
