@@ -101,5 +101,33 @@
 			</function>
 		</action>
 
+		<action name="convert_crm_relations2" nologin="1">
+			<function name="convert_crm_relations2">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convert_crm_relations" nologin="1">
+			<function name="convert_crm_relations">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convert_person_org_relations" >
+			<function name="convert_person_org_relations">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convert_docs_from_menu" nologin="1">
+			<function name="convert_docs_from_menu">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
