@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.64 2004/09/09 11:13:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.65 2004/09/09 15:02:16 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -895,6 +895,7 @@ class orb extends aw_template
 
 	////
 	// !Returns a list of methods inside a class matching a flag
+	// added a param: if no_id is set to true, then it will not added that ugly class id to key -- ahz
 	function get_methods_by_flag($args = array())
 	{
 		extract($args);
@@ -906,7 +907,7 @@ class orb extends aw_template
 			if (is_array($val) && isset($val[$flag]))
 			{
 				$caption = isset($val["caption"]) ? $val["caption"] : $val["function"];
-				$methods[$id . "/" . $key] = $name . " / " . $caption;
+				$methods[(($no_id) ? "" : ($id . "/")) . $key] = $name . " / " . $caption;
 			}
 		};
 
