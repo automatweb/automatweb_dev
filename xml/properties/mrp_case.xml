@@ -1,16 +1,35 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>header</name>
+            <group>
+                  <num_0>grp_general</num_0>
+                  <num_1>grp_case_data</num_1>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>header</field>
+      </property>
+      <property>
             <name>name</name>
-            <group>general</group>
+            <group>grp_general</group>
             <type>textbox</type>
             <table>objects</table>
             <field>name</field>
             <caption>Projekti nr.</caption>
       </property>
       <property>
+            <name>comment</name>
+            <group>grp_general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>comment</field>
+            <caption>Projekti nimetus</caption>
+      </property>
+      <property>
             <name>starttime</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>datetime_select</type>
             <field>starttime</field>
@@ -18,7 +37,7 @@
       </property>
       <property>
             <name>due_date</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>datetime_select</type>
             <field>due_date</field>
@@ -26,7 +45,7 @@
       </property>
       <property>
             <name>project_priority</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>textbox</type>
             <field>project_priority</field>
@@ -34,7 +53,7 @@
       </property>
       <property>
             <name>state</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>text</type>
             <field>state</field>
@@ -42,7 +61,7 @@
       </property>
       <property>
             <name>customer</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_CUSTOMER</reltype>
@@ -51,14 +70,14 @@
       </property>
       <property>
             <name>extern_id</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>mrp_case</table>
             <type>hidden</type>
             <field>extern_id</field>
       </property>
       <property>
             <name>planned_date</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -69,7 +88,7 @@
       </property>
       <property>
             <name>sales_priority</name>
-            <group>general</group>
+            <group>grp_general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -348,16 +367,6 @@
             <caption>Katkestamise põhjus</caption>
       </property>
       <property>
-            <name>used_materials</name>
-            <group>grp_case_material</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <caption>Kasutatav materjal</caption>
-      </property>
-      <property>
             <name>user_comments</name>
             <group>grp_case_comments</group>
             <table>objects</table>
@@ -435,15 +444,17 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <grp_general>
+                  <caption>&amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </grp_general>
             <grp_case_data>
                   <caption>Projekti andmed</caption>
+                  <parent>general</parent>
             </grp_case_data>
             <grp_case_details>
                   <caption>Projekti kirjeldus</caption>
             </grp_case_details>
-            <grp_case_material>
-                  <caption>Kasutatav materjal</caption>
-            </grp_case_material>
             <grp_case_workflow>
                   <caption>Ressursid ja töövoog</caption>
             </grp_case_workflow>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.30 2005/02/16 09:09:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.31 2005/02/16 15:04:26 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -101,6 +101,9 @@
 
 	@property workspace_configmanager type=relpicker reltype=RELTYPE_MRP_WORKSPACE_CFGMGR clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
+
+	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER 
+	@caption Projekti headeri kontroller
 
 	@property title_sceduler_parameters type=text store=no subtitle=1
 	@caption Planeerija parameetrid
@@ -239,6 +242,8 @@
 @reltype MRP_OWNER clid=CL_CRM_COMPANY value=4
 @caption Keskkonna omanik (Organisatsioon)
 
+@reltype MRP_HEADER_CONTROLLER clid=CL_FORM_CONTROLLER value=5
+@caption Projekti headeri kontroller
 */
 
 ### resource types
@@ -1597,11 +1602,7 @@ class mrp_workspace extends class_base
 	function submit_delete_relations($arr)
 	{
 		$this->_delegate_co($arr, "submit_delete_relations");
-		return $this->mk_my_orb("change", array(
-			"id" => $oo->id(),
-			"group" => "grp_users",
-			"unit" => $arr["unit"],
-		));
+		return urldecode($arr["return_url"]);
 	}
 
 	function callback_mod_reforb(&$arr)

@@ -365,6 +365,16 @@
             <caption>Keskkonna seadetehaldur</caption>
       </property>
       <property>
+            <name>case_header_controller</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_HEADER_CONTROLLER</reltype>
+            <caption>Projekti headeri kontroller</caption>
+      </property>
+      <property>
             <name>title_sceduler_parameters</name>
             <table>objects</table>
             <field>meta</field>
@@ -844,6 +854,11 @@
                   <value>4</value>
                   <caption>Keskkonna omanik (Organisatsioon)</caption>
             </MRP_OWNER>
+            <MRP_HEADER_CONTROLLER>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <value>5</value>
+                  <caption>Projekti headeri kontroller</caption>
+            </MRP_HEADER_CONTROLLER>
       </reltypes>
 </properties>
 

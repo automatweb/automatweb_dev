@@ -2770,7 +2770,7 @@ class crm_company extends class_base
 			$main_obj = new object($arr['unit']);
 		}
 	
-		if (is_array($check))
+		if (is_array($arr["check"]))
 		{
 			foreach($arr['check'] as $key=>$value)
 			{

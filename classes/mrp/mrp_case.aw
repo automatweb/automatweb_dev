@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.19 2005/02/11 11:22:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.20 2005/02/16 15:04:26 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -11,18 +11,25 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 
-@groupinfo grp_case_data caption="Projekti andmed"
+@groupinfo grp_general caption="&Uuml;ldine" parent=general
+@groupinfo grp_case_data caption="Projekti andmed" parent=general
 @groupinfo grp_case_details caption="Projekti kirjeldus"
-@groupinfo grp_case_material caption="Kasutatav materjal"
+groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
-@default group=general
+@default group=grp_general
+
+	@property header type=text store=no no_caption=1 group=grp_general,grp_case_data
+
 	@property name type=textbox table=objects field=name
 	@caption Projekti nr.
+
+	@property comment type=textbox table=objects field=comment
+	@caption Projekti nimetus
 
 @default table=mrp_case
 	@property starttime type=datetime_select
@@ -147,9 +154,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 	@caption Katkestamise põhjus
 
 
-@default group=grp_case_material
-	@property used_materials type=table store=no
-	@caption Kasutatav materjal
+default group=grp_case_material
+	property used_materials type=table store=no
+	caption Kasutatav materjal
 
 
 @default group=grp_case_comments
@@ -249,6 +256,14 @@ class mrp_case extends class_base
 
 		switch($prop["name"])
 		{
+			case "header":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = $this->_get_header($arr);
+				break;
+
 			case "state":
 				$states = array (
 					MRP_STATUS_NEW => "Uus",
@@ -618,6 +633,11 @@ class mrp_case extends class_base
 			"caption" => "Järelpuhver (h)",
 		));
 		$table->define_field(array(
+			"name" => "comment",
+			"caption" => "Kommentaar",
+			"align" => "center"
+		));
+		$table->define_field(array(
 			"name" => "status",
 			"caption" => "Staatus",
 		));
@@ -708,6 +728,16 @@ class mrp_case extends class_base
 				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			), "mrp_job");
 
+			$comment = "";
+			if ($job->prop("comment") != "")
+			{
+				$comment = html::href(array(
+					"url" => "#",
+					"caption" => "JAH",
+					"title" => $job->prop("comment")
+				));
+			}
+
 			$table->define_data(array(
 				"open" => html::href(array(
 					"caption" => "Ava",
@@ -754,6 +784,7 @@ class mrp_case extends class_base
 				"starttime" => $planned_start,
 				"status" => $status,
 				"job_id" => $job_id,
+				"comment" => $comment
 			));
 		}
 	}
@@ -1250,6 +1281,30 @@ class mrp_case extends class_base
 		{
 			return safe_array($ws->meta("sales_pri"));
 		}
+	}
+
+	function _get_header($arr)
+	{
+		$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		if ($ws)
+		{
+			if (is_oid($ws->prop("case_header_controller")) && $this->can("view", $ws->prop("case_header_controller")))
+			{
+				$ctr = obj($ws->prop("case_header_controller"));
+				$i = $ctr->instance();
+				$res = $i->eval_controller($ctr->id(), $arr["obj_inst"]);
+				return $res;
+			}
+		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "grp_case_details")
+		{
+			return false;
+		}
+		return true;
 	}
 }
 

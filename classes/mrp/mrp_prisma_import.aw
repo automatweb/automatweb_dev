@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.6 2005/02/16 13:48:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.7 2005/02/16 15:04:26 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -468,7 +468,14 @@ class mrp_prisma_import extends class_base
 		foreach($this->prj_flds as $p => $f)
 		{
 //			echo "set prop $p => ".$dat[$f]." <br>";
-			$o->set_prop($p, $dat[$f]);
+			if ($p == "comment")
+			{
+				$o->set_comment($dat[$f]);
+			}
+			else
+			{
+				$o->set_prop($p, $dat[$f]);
+			}
 		}
 	}
 

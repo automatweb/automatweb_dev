@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.14 2005/02/15 11:59:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.15 2005/02/16 15:04:26 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
 @classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes
 
 @groupinfo grp_resource_schedule caption="Kalender"
-@groupinfo grp_resource_joblist caption="Tööleht"
+@groupinfo grp_resource_joblist caption="Tööleht" submit=no
 @groupinfo grp_resource_settings caption="Seaded"
 @groupinfo grp_resource_unavailable caption="Tööajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
@@ -31,14 +31,11 @@
 
 
 @default group=grp_resource_joblist
-	@property job_list type=table store=no editonly=1
+	@property job_list type=table store=no editonly=1 no_caption=1
 	@caption Tööleht
 
 
 @default group=grp_resource_settings
-	@property operator type=relpicker reltype=RELTYPE_MRP_OPERATOR
-	@caption Ressursi kasutaja
-
 	@property default_pre_buffer type=textbox
 	@caption Vaikimisi eelpuhveraeg (h)
 
@@ -66,9 +63,6 @@
 	@caption Kinnised p&auml;evad (formaat: kuupäev.kuu; kuupäev.kuu; ...)
 
 // --------------- RELATION TYPES ---------------------
-
-@reltype MRP_OPERATOR value=1 clid=CL_MRP_RESOURCE_OPERATOR
-@caption Ressursi operaator
 
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
 @caption Ressursi kalender
@@ -228,23 +222,33 @@ class mrp_resource extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 
 		$table->define_field(array(
+			"name" => "client",
+			"caption" => "Klient",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$table->define_field(array(
 			"name" => "project",
 			"caption" => "Projekt",
-			"sortable" => 1
+			"sortable" => 1,
+			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "name",
 			"caption" => "Töö",
-			"sortable" => 1
+			"sortable" => 1,
+			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "starttime",
 			"caption" => "Alustamisaeg",
-			"sortable" => 1
+			"sortable" => 1,
+			"align" => "center"
 		));
 		$table->define_field(array(
 			"name" => "modify",
 			"caption" => "Ava",
+			"align" => "center"
 		));
 
 		$table->set_default_sortby ("starttime");
@@ -263,8 +267,18 @@ class mrp_resource extends class_base
 		foreach ($jobs as $job_id => $job)
 		{
 			$starttime = date (MRP_DATE_FORMAT, $job->prop ("starttime"));
-			// $project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
-			$project = is_object ($project) ? $project->name () : "...";
+			$project = $client = "";
+			if (is_oid ($job->prop ("project") && $this->can("view", $job->prop("project"))))
+			{
+				$p = obj($job->prop("project"));
+				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $p->name());
+
+				if (is_oid($p->prop("customer") && $this->can("view", $p->prop("customer"))))
+				{
+					$c = obj($p->prop("customer"));
+					$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
+				}
+			}
 
 			$change_url = $this->mk_my_orb ("change", array (
 				"id" => $job_id,
@@ -280,6 +294,7 @@ class mrp_resource extends class_base
 				"project" => $project,
 				"name" => $job->name (),
 				"starttime" => $starttime,
+				"client" => $client
 			));
 		}
 	}

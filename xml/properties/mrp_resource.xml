@@ -39,17 +39,8 @@
             <type>table</type>
             <store>no</store>
             <editonly>1</editonly>
+            <no_caption>1</no_caption>
             <caption>Tööleht</caption>
-      </property>
-      <property>
-            <name>operator</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_resource_settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MRP_OPERATOR</reltype>
-            <caption>Ressursi kasutaja</caption>
       </property>
       <property>
             <name>default_pre_buffer</name>
@@ -174,6 +165,7 @@
             </grp_resource_schedule>
             <grp_resource_joblist>
                   <caption>Tööleht</caption>
+                  <submit>no</submit>
             </grp_resource_joblist>
             <grp_resource_settings>
                   <caption>Seaded</caption>
@@ -191,11 +183,6 @@
             </grp_resource_unavailable_una>
       </groupinfo>
       <reltypes>
-            <MRP_OPERATOR>
-                  <value>1</value>
-                  <clid>CL_MRP_RESOURCE_OPERATOR</clid>
-                  <caption>Ressursi operaator</caption>
-            </MRP_OPERATOR>
             <MRP_SCHEDULE>
                   <value>2</value>
                   <clid>CL_PLANNER</clid>
