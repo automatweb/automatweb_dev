@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.68 2004/10/08 07:56:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.69 2004/10/08 15:23:01 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -529,6 +529,7 @@ class form_table extends form_base
 							$__show_link = true;
 							if (strpos($__link_url, "class=file/action=preview/id=") !== false)
 							{
+								$__link_url = file::check_url($__link_url);
 								if (preg_match("/class=file\/action=preview\/id=(\d+)/ims", $__link_url, $_file_ids))
 								{
 									if (!$this->can("view", trim($_file_ids[1])))
