@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.40 2002/07/24 09:44:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.41 2002/07/24 13:20:48 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -554,14 +554,14 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
-			"nowrap" => "1",
+			//"nowrap" => "1",
 			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
 			"name" => "description",
 			"caption" => "Muu info",
 			"talign" => "center",
-			"nowrap" => "1",
+			//"nowrap" => "1",
 			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
