@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.28 2003/10/05 17:26:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.29 2003/10/22 13:25:23 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -444,7 +444,6 @@ class admin_menus extends aw_template
 		$this->invalidate_menu_cache();
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent));
-//		return $url = "javascript:go_go(".$parent.",'')";
 	}
 
 	function req_import_menus($i_p, &$menus, $parent)
@@ -618,20 +617,41 @@ class admin_menus extends aw_template
 		}
 		aw_session_set("cut_objects",array());
 
+		$conns = $obj_id_map = array();
 		if (is_array($copied_objects))
 		{
 			reset($copied_objects);
 			while (list($oid,$str) = each($copied_objects))
 			{
-				$this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
+				$id = $this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
+				$obj_id_map[$oid] = $id;
+				if (is_array($str["connections"]))
+				{
+					$conns[$id] = $str["connections"];
+				};
 			}
 		}
 
+		// now, cycle over those and create the bloody relations and be done with it
+		foreach($conns as $obj_id => $connections)
+		{
+			foreach($connections as $connection)
+			{
+				// now, create the alias?
+				$obj_inst = new object($obj_id);
+				$obj_inst->connect(array(
+					"to" => $obj_id_map[$connection["to"]],
+					"reltype" => $connection["reltype"],
+				));
+			}
+
+
+		};
+
 		$this->invalidate_menu_cache();
 
-		$GLOBALS["copied_objects"] = array();
+		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
-		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	function o_delete($arr)
@@ -653,7 +673,6 @@ class admin_menus extends aw_template
 		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 		aw_session_set("copied_objects",array());
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
-		//return "javascript:go_go(".$parent.",'".$period."')";
 	}
 
 	function make_menu_caches($where = "objects.status = 2")
@@ -1088,6 +1107,7 @@ class admin_menus extends aw_template
 			$num_records++;
 
 		}
+
 		$this->get_add_menu(array(
 			"id" => $parent,
 			"ret_data" => true,
@@ -1105,7 +1125,7 @@ class admin_menus extends aw_template
 			$menu_data = "";
 			foreach($item_collection as $el_id => $el_data)
 			{
-				// if this el_id has children, make it a submenu
+				//if this el_id has children, make it a submenu
 				$children = isset($this->add_menu[$el_id]) ? sizeof($this->add_menu[$el_id]) : 0;
 				if (isset($el_data["separator"]))
 				{
@@ -1159,7 +1179,7 @@ class admin_menus extends aw_template
 		{
 			$this->vars(array(
 				'caption' => $val['caption'],
-			//	'title' => $val['title'],
+				'title' => $val['title'],
 				'url' => preg_replace('/&view_type=[^&$]*/','',aw_global_get('REQUEST_URI')).'&view_type='.$key,
 			));
 			$items .= $this->parse('MENU_ITEM');
