@@ -795,10 +795,10 @@ class user extends class_base
 	function _serialize($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($oid);
+		$ob = obj($oid);
 		if (is_array($ob))
 		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
+			return aw_serialize($ob->fetch(), SERIALIZE_NATIVE);
 		}
 		return false;
 	}
@@ -897,13 +897,13 @@ class user extends class_base
 		$ea = $arr["request"]["edit_acl"];
 		if ($ea)
 		{
-			$o = $this->get_object($ea);
+			$o = obj($ea);
 			$acls["acl_desc"] = array(
 				'name' => "acl_desc",
 				'type' => 'text',
 				'store' => 'no',
 				'group' => 'objects',
-				'value' => 'Muuda objekti '.$o[name].' &otilde;igusi'
+				'value' => 'Muuda objekti '.$o->name().' &otilde;igusi'
 			);
 			$acls["edit_acl"] = array(
 				'name' => "edit_acl",

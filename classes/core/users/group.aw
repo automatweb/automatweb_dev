@@ -381,15 +381,20 @@ class group extends class_base
 		
 		foreach(array_unique($roles) as $role)
 		{
-			$r_o = $this->get_object($role);
-			$r_o["name"] = html::href(array(
-				"url" => $this->mk_my_orb("change", array("id" => $role), "role"),
-				"caption" => $r_o["name"]
-			));
-			$r_o["del"] = html::href(array(
-				'url' => $this->mk_my_orb("remove_role_from_group", array("role_id" => $role, "gid" => $gid)),
-				'caption' => "Eelmalda"
-			));
+			$r_o = obj($role);
+			$mb = $r_o->modifiedby();
+			$tmp = array(
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $role), "role"),
+					"caption" => $r_o->name()
+				)),
+				"modifiedby" => $mb->name(),
+				"modified" => $r_o->modified(),
+				"del" => html::href(array(
+					'url' => $this->mk_my_orb("remove_role_from_group", array("role_id" => $role, "gid" => $gid)),
+					'caption' => "Eelmalda"
+				))
+			);
 			$t->define_data($r_o);
 		}
 		$t->set_default_sortby("name");
@@ -516,13 +521,13 @@ class group extends class_base
 		$ea = $arr["request"]["edit_acl"];
 		if ($ea)
 		{
-			$o = $this->get_object($ea);
+			$o = obj($ea);
 			$acls["acl_desc"] = array(
 				'name' => "acl_desc",
 				'type' => 'text',
 				'store' => 'no',
 				'group' => 'objects',
-				'value' => 'Muuda objekti '.$o[name].' &otilde;igusi'
+				'value' => 'Muuda objekti '.$o->name().' &otilde;igusi'
 			);
 			$acls["edit_acl"] = array(
 				'name' => "edit_acl",
