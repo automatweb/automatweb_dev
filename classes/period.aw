@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.19 2004/03/18 14:49:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.20 2004/03/18 16:19:50 duke Exp $
 // period.aw - periods 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property comment type=textbox
 	@caption Kommentaar (teema)
+	
+	@property perimage type=releditor reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+	@caption Pilt2
 
 	@property status type=status
 	@caption Arhiivis
@@ -28,8 +31,9 @@
 	@default field=meta
 	@default method=serialize
 
-	@property image type=relpicker reltype=RELTYPE_IMAGE 
-	@caption Pilt
+	/@property image type=relpicker reltype=RELTYPE_IMAGE 
+	/@caption Pilt
+
 
 	@property image_link type=textbox 
 	@caption Pildi link
@@ -50,10 +54,12 @@
 	@classinfo relationmgr=yes
 	@groupinfo activity caption=Aktiivsus
 
+	@reltype IMAGE value=1 clid=CL_IMAGE
+	@caption Perioodi pilt
+
 */
 
 // perioodi pilt
-define(RELTYPE_IMAGE,1); 
 
 class period extends class_base
 {
@@ -166,14 +172,6 @@ class period extends class_base
 		return array(
 			RELTYPE_IMAGE => "perioodi pilt",
 		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_IMAGE)
-		{
-			return array(CL_IMAGE);
-		}
 	}
 
 	function callback_post_save($arr)
@@ -524,6 +522,13 @@ class period extends class_base
 
 		if ($_t["data"]["image"]["url"] != "")
 		{
+			// so this is where it's done... eh
+			// how do I convert this thing to an usual promo box?
+
+			// so .. I need a special kind of promo box, that displays the
+			// the active period as it's contents
+
+			// so .. can I create a separate object out of it? Then what about the cache?
 			$arr["inst"]->vars(array(
 				"HAS_PERIOD_IMAGE" => $arr["inst"]->parse("HAS_PERIOD_IMAGE")
 			));
