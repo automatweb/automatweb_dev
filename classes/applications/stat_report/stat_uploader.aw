@@ -6,6 +6,9 @@
 @default group=general
 @default form=stat
 
+@property header type=text no_caption=1
+@caption Header
+
 @property reg type=textbox 
 @caption Äriregistrikood
 
@@ -114,6 +117,8 @@ class stat_uploader extends class_base
 		$authfile = aw_ini_get("site_basedir") . "/ettevotted.csv";
 		$authcontents = file_get_contents($authfile);
 
+		$authcontents = str_replace("\"","",$authcontents);
+
 		$mx = preg_match("/^$reg,(.*)$/m",$authcontents,$m);
 		$this->password = trim($m[1]);
 
@@ -184,7 +189,7 @@ class stat_uploader extends class_base
 			// now fetch the file and do something with it
 			$pi = pathinfo($filename);
 			$ext = $pi["extension"];
-			$n_basename = $reg . "_" . $arr["report_type"] . "#" . date("YmdHi");
+			$n_basename = $reg . "_" . $arr["report_type"] . "#" . date("YmdHis");
 			$new_name = $this->filestore . "/" . $n_basename . "." . $ext;
 			$stat = move_uploaded_file($filedat["tmp_name"],$new_name);
 			chmod($new_name,0666);
@@ -240,7 +245,7 @@ class stat_uploader extends class_base
 		$prop = &$arr["prop"];
 		$rv = PROP_OK;
 		switch($prop["name"])
-		{
+		{ 
 			case "report_type":
 				$prop["options"] = $this->choices;
 				if (!empty($_GET["statement"]))
