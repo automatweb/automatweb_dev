@@ -37,6 +37,15 @@
             <caption>Pilt</caption>
       </property>
       <property>
+            <name>but_confirm</name>
+            <table>objects</table>
+            <group>but_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kinnitus</caption>
+      </property>
+      <property>
             <name>men_toolbar</name>
             <table>objects</table>
             <group>men_props</group>
@@ -94,13 +103,11 @@
             <vbox1>
                   <type>vbox</type>
                   <group>men_props</group>
-                  <width>30%:70%</width>
             </vbox1>
             <hbox2>
                   <type>hbox</type>
                   <group>men_props</group>
                   <parent>vbox1</parent>
-                  <width>30%:70%</width>
             </hbox2>
       </layout>
 </properties>
