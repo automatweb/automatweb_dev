@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.83 2002/01/24 04:17:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.84 2002/01/24 14:02:40 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -5003,6 +5003,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if ($row["link"] != "")
 				{
 					$ap = "_LINKED";
+				}
+				if ($this->used_promo_tpls[$use_tpl] != 1)
+				{
+					$ap.="_BEGIN";
+					$this->used_promo_tpls[$use_tpl] = 1;
 				}
 				if ($ar["scroll"] == 1)
 				{
