@@ -1124,7 +1124,7 @@ class workflow extends class_base
 			$mod = $e->modifiedby();
 
 			// get entity instance real object
-			if (!$e->prop("obj_id"))
+			if (!$e->prop("obj_id") || !$this->can("view", $e->prop("obj_id")))
 			{
 				continue;
 			}

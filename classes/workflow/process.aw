@@ -307,6 +307,7 @@ class process extends class_base
 
 		$conns = $args["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_ACTION,
+			"sort_by" => "to.jrk"
 		));
 
 		if (sizeof($conns) == 0)
