@@ -32,4 +32,7 @@ properties:
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
 
+class:
+	@scripts/php -q scripts/mk_class/mk_class.aw
+
 all: ini properties
