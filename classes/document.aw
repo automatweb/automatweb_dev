@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.160 2003/02/27 12:42:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.161 2003/03/05 16:53:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -440,11 +440,11 @@ class document extends aw_template
 		else
 		if (isset($tplsf) && strlen($tplsf) > 0) 
 		{
-			$this->read_template($tplsf);
+			$this->read_any_template($tplsf);
 		} 
 		else 
 		{
-			$this->read_template($tpl);
+			$this->read_any_template($tpl);
 		};
 
 		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
