@@ -101,7 +101,12 @@ class doc_event extends core
 		// because then I might want to do the exact same thing for galleries .. to help me
 		// decide which is the correct gallery that should be used
 
-		$fsql = $fwhere = "";
+		$fsql = $fwhere = $lmt = "";
+		if (($args["type"] == "relative") && is_numeric($args["conf"]["event_max_items"]))
+		{
+			$lmt = " LIMIT " . ($args["conf"]["event_max_items"]);
+			$max_items = $args["conf"]["event_max_items"];
+		}
 		// XXX: temporary
 		if ($cl == "gallery_v2")
 		{
@@ -135,6 +140,9 @@ class doc_event extends core
 			"fwhere" => $fwhere,
 		));
 
+		// for relative events, I do not know where our range starts or end, this 
+		// means I have to calculate the prev/next links _after_ I'm done with my cycle
+
 		$prev = $this->db_next();
 
 		$order = ($args["conf"]["event_direction"] == 1) ? "DESC" : "";
@@ -147,7 +155,8 @@ class doc_event extends core
 			LEFT JOIN documents ON (objects.brother_of = documents.docid)
 			$fsql 
 			WHERE $fwhere objects.parent IN ($calstring) AND ((start >= '$start') AND (start <= '$end')) AND objects.status != 0
-			ORDER BY planner.start $order,objects.created";
+			GROUP BY objects.brother_of
+			ORDER BY planner.start $order,objects.created $lmt";
 		$this->db_query($q);
 		$results = array();
 		$count = $this->num_rows();
@@ -183,10 +192,22 @@ class doc_event extends core
 		};
 
 		$xstart = 0;
+		$ccounter = 0;
 
 		while($row = $this->db_next())
 		{
+			$ccounter++;
 			$xstart = $row["start"];
+			if (($args["type"] == "relative") && ($ccounter == 1))
+			{
+				$rel_next_start = $row["start"];
+			};
+
+			if (($args["type"] == "relative") && ($ccounter == $count))
+			{
+				$rel_prev_start = $row["start"];
+			};
+
 			if ($next_active)
 			{
 				$this->start_time = $row["start"];
@@ -279,23 +300,35 @@ class doc_event extends core
 		}
 
 		$this->next_event = $this->prev_event = "";
-
-		if ($this->start_time)
+		
+		if ($this->start_time || $rel_next_start)
 		{
 			classload("date_calc");
+
 			$range = get_date_range(array(
-				"time" => $this->start_time,
+				"time" => ($type == "relative") ? $rel_next_start : $this->start_time,
 				"type" => $type,
+				"direction" => 1,
 			));
-		
+
 			$this->_get_next_event(array(
 				"calstring" => $calstring,
 				"start" => $range["end"],
 				"fsql" => $fsql,
 				"fwhere" => $fwhere,
+				"limit" => ($type == "relative") ? $max_items : 0,
 			));
 
 			$next = $this->db_next();
+
+			if ($rel_prev_start)
+			{
+				$range = get_date_range(array(
+					"time" => $rel_prev_start,
+					"type" => "relative",
+					"direction" => 0,
+				));
+			};
 
 			$this->_get_prev_event(array(
 				"calstring" => $calstring,
@@ -324,7 +357,15 @@ class doc_event extends core
 	function _get_next_event($args = array())
 	{
 		extract($args);
-		$q = "SELECT name,class_id,parent,metadata,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) $fsql WHERE $fwhere objects.status != 0 AND parent IN ($calstring) AND (start > '$start') ORDER BY planner.start,objects.created LIMIT 1";
+		if (!empty($limit))
+		{
+			$limit = "LIMIT " . ($limit - 1) . ",1";
+		}
+		else
+		{
+			$limit = "LIMIT 1";
+		};
+		$q = "SELECT name,class_id,parent,metadata,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) $fsql WHERE $fwhere objects.status != 0 AND parent IN ($calstring) AND (start > '$start') GROUP BY objects.brother_of ORDER BY planner.start,objects.created $limit";
 		$this->db_query($q);
 	}
 
@@ -333,7 +374,7 @@ class doc_event extends core
 	function _get_prev_event($args = array())
 	{
 		extract($args);
-		$q = "SELECT name,class_id,parent,metadata,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) $fsql WHERE $fwhere objects.status != 0 AND parent IN ($calstring) AND (start < '$start') ORDER BY planner.start DESC,objects.created LIMIT 1";
+		$q = "SELECT name,class_id,parent,metadata,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) $fsql WHERE $fwhere objects.status != 0 AND parent IN ($calstring) AND (start < '$start') GROUP BY objects.brother_of ORDER BY planner.start DESC,objects.created LIMIT 1";
 		$this->db_query($q);
 	}
 

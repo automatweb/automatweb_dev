@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.101 2003/06/03 15:17:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.102 2003/06/03 16:51:06 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -455,6 +455,7 @@ class aliasmgr extends aw_template
 
 							$from_cache = false;
 						}
+
 						$source = str_replace($avalue,$replacement,$source);
 						$this->write_alias_cache($adata, $$emb_obj_name, &$cache_inst, $replacement, $from_cache);
 					}
@@ -464,7 +465,7 @@ class aliasmgr extends aw_template
 	}
 
 	////
-	// Returns the variables createad by parse_oo_alias
+	// Returns the variables created by parse_oo_alias
 	function get_vars()
 	{
 		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();
@@ -474,7 +475,6 @@ class aliasmgr extends aw_template
 	{
 		load_vcl("table");
 		$this->t = new aw_table(array(
-			"prefix" => "images",
 			"layout" => "generic"
 		));
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
@@ -490,14 +490,12 @@ class aliasmgr extends aw_template
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
-			//"nowrap" => "1",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "comment",
 			"caption" => "Muu info",
 			"talign" => "center",
-			//"nowrap" => "1",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
@@ -507,7 +505,6 @@ class aliasmgr extends aw_template
 			"width" => 50,
 			"align" => "center",
 			"class" => "celltext",
-			//"nowrap" => "1",
 		));
 		$this->t->define_field(array(
 			"name" => "link",
@@ -648,10 +645,6 @@ class aliasmgr extends aw_template
 		{
 			$aclid = $alias["class_id"];
 			list($astr) = explode(",",$classes[$aclid]["alias"]);
-			// oh no. this is BAD. if I have a document with a lot of images
-			// for example and delete one of those - ALL other images
-			// will shift. I mean, fuck
-			//$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
 			$astr = sprintf("#%s%d#",$astr,$alias["idx"]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
@@ -1248,6 +1241,10 @@ HTM;
 			$q = "ALTER TABLE aliases ADD reltype bigint unsigned not null";
 			$this->db_query($q);
 		}; 
+		if (!$table["fields"]["pri"])
+		{
+			$this->db_query("ALTER TABLE aliases ADD pri int unsigned not null default 0");
+		};
 	}
 	
 	////

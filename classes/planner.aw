@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.116 2003/06/03 16:43:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.117 2003/06/03 16:52:12 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -907,6 +907,7 @@ class planner extends class_base
 			"type" => $type,
 			"direction" => $this->conf["event_direction"],
 		));
+
 
 		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
 		if ($object["class_id"] == CL_FORM_CHAIN)
