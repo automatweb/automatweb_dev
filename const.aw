@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.40 2001/09/18 00:26:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.41 2001/09/21 10:51:45 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -407,6 +407,9 @@ define("CL_SHOP_TABLE",75);
 define("CL_CSS_GROUP",76); // Oh yeah, I know it should be next to CL_CSS
 
 define("CL_SEARCH_FILTER",78);
+
+define("CL_TEMPLATE",79); // metaobjekt templatefaili jaoks, used to keep track of changes
+				// and archives
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
