@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.56 2004/11/04 12:48:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.57 2004/11/04 12:57:33 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -77,7 +77,7 @@ class html extends aw_template
 		extract($args);
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
-		if($args["do_not_fuck_the_id"] = 1)
+		if($args["id_no_change"] = 1)
 		{
 			$id = $name;
 		}
