@@ -14,7 +14,7 @@ function selall()
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>KLASSIDE IKOONID:&nbsp; <a href='orb.aw?class=icons&action=save_class_icons'>ekspordi</a></b></td>
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>KLASSIDE IKOONID:&nbsp;</b></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;Nimi&nbsp;</td>
