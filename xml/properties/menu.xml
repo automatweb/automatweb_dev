@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>target</name>
+            <type>checkbox</type>
+            <group>general</group>
+            <ch_value>1</ch_value>
+            <search>1</search>
+            <table>menu</table>
+            <field>target</field>
+            <caption>Uues aknas</caption>
+      </property>
+      <property>
             <name>users_only</name>
             <type>checkbox</type>
             <field>meta</field>
@@ -261,33 +271,14 @@
             <caption>Vali programm</caption>
       </property>
       <property>
-            <name>pclass</name>
-            <type>select</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <name>pmethod_properties</name>
+            <type>callback</type>
+            <callback>callback_get_pmethod_options</callback>
             <group>general</group>
-            <caption>Vali meetod</caption>
-      </property>
-      <property>
-            <name>pm_url_admin</name>
-            <type>checkbox</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <ch_value>1</ch_value>
-            <caption>Meetod viitab adminni</caption>
-      </property>
-      <property>
-            <name>pm_url_menus</name>
-            <type>checkbox</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <ch_value>1</ch_value>
-            <caption>Meetodi väljundi kuvamisel menüüde näitamine</caption>
+            <store>no</store>
+            <table>menu</table>
+            <field>pmethod_properties</field>
+            <caption>Avaliku meetodi seaded</caption>
       </property>
       <property>
             <name>clickable</name>
@@ -306,16 +297,6 @@
             <table>menu</table>
             <field>no_menus</field>
             <caption>Ilma menüüdeta</caption>
-      </property>
-      <property>
-            <name>target</name>
-            <type>checkbox</type>
-            <group>general</group>
-            <ch_value>1</ch_value>
-            <search>1</search>
-            <table>menu</table>
-            <field>target</field>
-            <caption>Uues aknas</caption>
       </property>
       <property>
             <name>mid</name>
@@ -475,6 +456,7 @@
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>
             <corefields>name,comment,alias,status,jrk</corefields>
+            <syslog_type>ST_MENU</syslog_type>
       </classinfo>
       <groupinfo>
             <general>
@@ -497,7 +479,7 @@
                   <caption>Näitamine</caption>
             </show>
             <import_export>
-                  <caption>Import/Eksport</caption>
+                  <caption>Eksport</caption>
                   <submit>no</submit>
             </import_export>
       </groupinfo>
