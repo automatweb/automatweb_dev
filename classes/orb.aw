@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.1 2001/05/18 23:38:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.2 2001/05/21 01:50:45 duke Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -20,7 +20,7 @@ class orb extends aw_template {
 		// kui see on false, siis oli viga.
 
 		extract($args);
-			
+
 		$fatal = true;
 
 		$this->db_init();
@@ -61,6 +61,13 @@ class orb extends aw_template {
 		};
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
+
+
+		if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
+		{
+			$this->raise_error(E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+		};
+
 
 		// action defineeritud?
 		if (!isset($action))
