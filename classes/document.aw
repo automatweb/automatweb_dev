@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.149 2003/02/03 15:15:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.150 2003/02/06 10:02:47 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -697,7 +697,6 @@ class document extends aw_template
 		if (strpos($doc['content'], "#reg#") !== false)
 		{
 			$uid = aw_global_get("uid");
-			var_dump($uid);
 			if (aw_global_get("uid"))
 			{
 				$doc["content"] = str_replace("#reg#","",$doc["content"]);
