@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.2 2005/01/26 23:36:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.3 2005/01/27 21:23:35 duke Exp $
 
 /*
 @default group=search
@@ -69,10 +69,23 @@ class search_v2 extends class_base
 	{
 		$this->do_search = false;
 		$parts = array();
-		if (!empty($arr["name"]))
+		$string_fields = array("name","createdby","modifiedby","comment","alias");
+		$numeric_fields = array("oid","status","lang_id");
+		foreach($string_fields as $string_field)
 		{
-			$parts["name"] = "%" . $arr["name"] . "%";
+			if (!empty($arr[$string_field]))
+			{
+				$parts[$string_field] = "%" . $arr[$string_field] . "%";
 
+			};
+		};
+
+		foreach($numeric_fields as $numeric_field)
+		{
+			if (!empty($arr[$numeric_field]))
+			{
+				$parts[$numeric_field] = $arr[$numeric_field];
+			};
 		};
 
 		if (!empty($arr["class_id"]))
@@ -83,7 +96,7 @@ class search_v2 extends class_base
 			};
 		};
 
-
+		$this->server_id = false;
 		if (!empty($arr["server"]))
 		{
 			$this->server_id = $arr["server"];
@@ -257,14 +270,17 @@ class search_v2 extends class_base
 				"lang_id" => array(),
 				"site_id" => array(),
 			);
-			if ($this->qparts["name"])
+			foreach($this->qparts as $qkey => $qvalue)
 			{
-				$s_args["name"] = $this->qparts["name"];
+				$s_args[$qkey] = $qvalue;
 			};
-			if ($this->qparts["class_id"])
+
+			// 3 - ignore status
+			if ($s_args["status"] == 3)
 			{
-				$s_args["class_id"] = $this->qparts["class_id"];
+				unset($s_args["status"]);
 			};
+
 			$s_args["limit"] = 500;
 
 			$_tmp = $this->_search_mk_call("objects", "storage_query", $s_args);
@@ -278,7 +294,11 @@ class search_v2 extends class_base
 				$type = $clinf[$item["class_id"]]["name"];
 				$icon = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($item["class_id"]));
 				$t->define_data(array(
-					"name" => $item["name"],
+					"name" => html::href(array(
+						"caption" => $item["name"],
+						"url" => $this->mk_my_orb("change",array("id" => $id),$item["class_id"]),
+					)),
+					"lang_id" => $item["lang_id"],
 					"oid" => $id,
 					"icon" => $icon,
 					"created" => $item["created"],
@@ -286,6 +306,7 @@ class search_v2 extends class_base
 					"modifiedby" => $item["modifiedby"],
 					"modified" => $item["modified"],
 					"class_id" => $clinf[$item["class_id"]]["name"],
+					"location" => $item["path_str"],
 				));
 				//$o_data = $this->_search_mk_call("objects","get_object",array("id" => $item));
 				//arr($o_data);
@@ -339,5 +360,5 @@ class search_v2 extends class_base
 
 
 
-}
+};
 ?>
