@@ -506,6 +506,7 @@ class bugtrack extends aw_template
 		// pane kohalikku tabelisse 
 		if ($baseurl!=$this->mastersite)
 		{
+			//echo("localid".$req["id"]);//dbg
 			$arr["id"]=$req["id"];
 			$this->q_insert($arr);
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.12 2001/09/14 19:10:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.13 2001/10/02 10:16:58 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -258,8 +258,6 @@ class gallery extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
-/*		echo "submit! \n<br>";
-		flush();*/
 		$this->load($id,$page);
 		if ($page < 1)
 		{

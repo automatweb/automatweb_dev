@@ -227,6 +227,8 @@ function del_gallery()
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
 	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	| 'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
+	| Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>
 		</td>
 	</tr>
 </table>

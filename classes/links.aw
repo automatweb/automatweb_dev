@@ -61,6 +61,8 @@ class links extends extlinks
 											"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
 											"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
 											"newwintoolbar" => checked($link["newwintoolbar"]),
+											"newwinlocation" => checked($link["newwinlocation"]),
+											"newwinmenu" => checked($link["newwinmenu"]),
 											"use_javascript" => checked($link["use_javascript"]),
 											"comment"	=> $link[comment],
 											"parent"	=> $this->picker($link[parent], $ob->get_list()),
@@ -97,6 +99,8 @@ class links extends extlinks
 			"newwinwidth" => $newwinwidth,
 			"newwinheight" => $newwinheight,
 			"newwintoolbar" => $newwintoolbar,
+			"newwinlocation" => $newwinlocation,
+			"newwinmenu" => $newwinmenu,
 		);
 
 		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));

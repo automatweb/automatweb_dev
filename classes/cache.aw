@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.2 2001/10/02 10:16:58 cvs Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud muutujas PAGE_CACHE
@@ -58,7 +58,7 @@ class cache extends core
 
 			if ($this->cache_dirty($oid))
 			{
-//				echo "<!-- SS NO cache dirty! $oid ",join(",",$arr)," -->\n";
+				#echo "<!-- SS NO cache dirty! $oid ",join(",",$arr)," -->\n";
 				return false;
 			}
 			else
@@ -66,19 +66,19 @@ class cache extends core
 				$content = $this->get_file(array("file" => $fname));
 				if ($content == false)
 				{
-//					echo "<!-- SS NO cache content! $oid ",join(",",$arr)," -->\n";
+					#echo "<!-- SS NO cache content! $oid ",join(",",$arr)," -->\n";
 					return false;
 				} 
 				else 
 				{
-//					echo "<!-- SS using cache! $oid ",join(",",$arr)," , file $fname -->\n";
+					#echo "<!-- SS using cache! $oid ",join(",",$arr)," , file $fname -->\n";
 					return $content;
 				};
 			};
 		}
 		else
 		{
-//			echo "<!-- SS NO cache! $oid ",join(",",$arr)," -->\n";
+			#echo "<!-- SS NO cache! $oid ",join(",",$arr)," -->\n";
 			return false;
 		};
 	}

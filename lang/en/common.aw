@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.5 2001/07/16 06:01:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.6 2001/10/02 10:16:59 cvs Exp $
 // kuude nimed
 define("LC_M1","january");
 define("LC_M2","february");
@@ -131,5 +131,6 @@ define("LC_CONST_FORM_TABLE", "Form table");
 define("LC_CONST_RATE_OF_EXCHANGE", "Rate of exchange");
 define("LC_CONST_FORM_WREATH", "Form chain");
 define("LC_CONST_PROMOBOX", "Promo box");
+
 
 ?>

@@ -10,11 +10,13 @@ var chk_status = true;
 
 	function selall()
 	{
-		for (i=0; i < document.foo.elements.length; i++)
+		len = document.foo.elements.length;
+		for (i=0; i < len; i++)
 		{
-			if (document.foo.elements[i].type == "checkbox" && document.foo.elements[i].name.indexOf("sel") != -1)
+			if (document.foo.elements[i].name.indexOf("sel") != -1)
 			{
 				document.foo.elements[i].checked=chk_status;
+				window.status = ""+i+" / "+len;
 			}
 		}
 		chk_status = !chk_status;

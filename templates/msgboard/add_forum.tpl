@@ -12,6 +12,10 @@
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
+<td class="fcaption">Template:</td>
+<td class="fform"><select name="template">{VAR:template}</td>
+</tr>
+<tr>
 <td class="fcaption">Kommenteeritav:</td><td class="fform"><input type="checkbox" name="comments" value=1 {VAR:comments}></td>
 </tr>
 <tr>

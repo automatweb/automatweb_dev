@@ -8,6 +8,7 @@ define("MN_PERIODIC","Nonperiodic");
 define("MN_E_NO_HOMEFOLDER","No home folder defined for '%s'");
 
 global $lc_menuedit;
+$lc_menuedit["LC_JOIN_LIST"] = "Join mailinglist";
 $lc_menuedit["LC_MENUEDIT_CLASS"] = "Class";
 $lc_menuedit["LC_MENUEDIT_COMMENT"] = "Comment";
 $lc_menuedit["LC_MENUEDIT_SAVE"] = "Save";

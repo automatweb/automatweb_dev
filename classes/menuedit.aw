@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.58 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.59 2001/10/02 10:16:58 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -147,11 +147,22 @@ class menuedit extends aw_template
 			}; 
 		};
 
+		$use_cache = true;
+
+		if ($params["print"])
+		{
+			$not_cached = true;
+			$use_cache = false;
+		};
+
 		if (!($res = $this->cache->get($section,$cp)) || $params["format"] || $not_cached)
 		{
 			// seda objekti pold caches
 			$res = $this->_gen_site_html($params);
-			$this->cache->set($section,$cp,$res);
+			if ($use_cache)
+			{
+				$this->cache->set($section,$cp,$res);
+			};
 			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
@@ -226,7 +237,6 @@ class menuedit extends aw_template
 		}
 
 		global $DEBUG;
-
 
 
 		$this->vars(array(
@@ -304,6 +314,11 @@ class menuedit extends aw_template
 			$uo = false;
 			while ($uo_parent)
 			{
+				if (!is_array($this->mar[$uo_parent]) && $uo_parent)
+				{
+					$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
+					$this->mar[$uo_parent] = $this->db_next();
+				}
 				$uo_meta = $this->get_object_metadata(array(
 					"metadata" => $this->mar[$uo_parent]["metadata"],
 				));
@@ -496,8 +511,8 @@ class menuedit extends aw_template
 		{
 			// sektsioon pole perioodiline
 			//$docc = $this->show_documents($section,$docid,$template);
-			$docc = $this->show_documents($section,$docid,$template);
-			if ($this->mar[$sel_menu_id]["no_menus"] == 1)
+			$docc = $this->show_documents($section,$docid,$xtemplate);
+			if ( ($this->mar[$sel_menu_id]["no_menus"] == 1) || ($params["print"]) )
 			{
 				$this->no_index_template = true;
 				return $docc;
@@ -521,6 +536,7 @@ class menuedit extends aw_template
 			$this->vars(array("doc_content" => $text));
 		}
 
+//		die();
 		// import language constants
 		lc_site_load("menuedit",$this);
 

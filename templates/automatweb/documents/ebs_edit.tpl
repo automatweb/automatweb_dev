@@ -251,6 +251,8 @@ function del_gallery()
  						Pealkiri klikitav:	<input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>
  						Uues aknas:	<input type='checkbox' name="newwindow" {VAR:newwindow} value=1>
  						V&auml;lista otsingust:	<input type='checkbox' name="no_search" {VAR:no_search} value=1>
+					  Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
+					  Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
 					</td>
 				</tr>
 			</table>

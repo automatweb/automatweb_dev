@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.20 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.21 2001/10/02 10:16:58 cvs Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -276,6 +276,16 @@ class msgboard extends aw_template
 			$this->db_query("INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')");
 			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM comments","id");
 
+			// if it is under a topic object, update the topic objects modified date if the configuration says so.
+			if ($GLOBALS["msgboard_topic_order_by_last_message"] && is_number($section))
+			{
+				$t_ob = $this->get_object($section);
+				if ($t_ob["class_id"] == CL_MSGBOARD_TOPIC)
+				{
+					$this->upd_object(array("oid" => $section));
+				}
+			}
+
 			// now check if we must send this comment to somebody
 			// make list of all the messages above this one
 			$p = $parent;
@@ -422,6 +432,11 @@ class msgboard extends aw_template
 
 		$this->vars(array("topic_id" => $id,"forum_id" => $forum_id));
 		$l = (isset($votes[$id])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+
+		if (not($meta["rated"]))
+		{
+			$l = "";
+		};
 				
 
 		$this->vars(array(
@@ -576,8 +591,14 @@ class msgboard extends aw_template
 		global $HTTP_SESSION_VARS;
 		$votes = $HTTP_SESSION_VARS["commentvotes"];
 
+		$obj = $this->get_obj_meta($forum_id);
+		if ($obj["meta"]["template"])
+		{
+			$this->tpl_init("../" . $obj["meta"]["template"] . "/msgboard");
+		};
 		$this->read_template("list_topics.tpl");
-		$this->vars(array("forum_id" => $forum_id));
+		global $section;
+		$this->vars(array("forum_id" => $forum_id,"section" => $section));
 
 		$this->db_query("SELECT COUNT(id) as cnt ,board_id, MAX(time) as mtime FROM comments GROUP BY board_id");
 		while ($row = $this->db_next())
@@ -614,9 +635,15 @@ class msgboard extends aw_template
 			$can_delete = true;
 		}
 		$this->line = 0;
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  AND parent = $forum_id ORDER BY objects.created DESC");
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  AND parent = $forum_id ORDER BY objects.modified DESC");
+
+		global $forum_parents;
+		global $section;
+	
 		while ($row = $this->db_next())
 		{
+		
+			$forum_parents[$row[oid]] = $section;
 			if ($cnt >= ($page * TOPICS_PER_PAGE) && $cnt <= (($page+1) * TOPICS_PER_PAGE))
 			{
 				$nc = $numcomments[$row[oid]]["cnt"];
@@ -665,6 +692,7 @@ class msgboard extends aw_template
 			$cnt++;
 		}
 		$this->vars(array("TOPIC_EVEN" => $l, "TOPIC_ODD" => "", "DELETE" => ""));
+		session_register("forum_parents");
 		return $this->parse();
 	}
 
@@ -858,7 +886,8 @@ class msgboard extends aw_template
 	{
 		$this->read_template("add_topic.tpl");
 		$this->vars(array(
-			"forum_id" => $forum_id
+			"forum_id" => $forum_id,
+			"section" => $GLOBALS["section"],
 		));
 		return $this->parse();
 	}
@@ -895,10 +924,10 @@ class msgboard extends aw_template
 	function mk_last5()
 	{
 		$this->read_template("last5.tpl");
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  ORDER BY objects.created DESC LIMIT 5");
+		$this->db_query("SELECT objects.*,count(comments.id) as msgcnt FROM objects LEFT JOIN comments ON comments.board_id = objects.oid WHERE class_id = ".CL_MSGBOARD_TOPIC." AND objects.status = 2  GROUP BY objects.oid ORDER BY objects.modified DESC LIMIT 5");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("topic_id" => $row[oid], "name" => $row[name]));
+			$this->vars(array("topic_id" => $row[oid], "name" => $row[name],"msgs" => $row["msgcnt"]));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));

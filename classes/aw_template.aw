@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.17 2001/10/02 10:05:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.18 2001/10/02 10:16:58 cvs Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -127,6 +127,10 @@ class aw_template extends acl_base
 	function multiple_option_list($active,$array)
 	{
 		$res = "";
+		if (not(is_array($array)))
+		{
+			return false;
+		};
 		while(list($k,$v) = each($array))
 		{
 			$selected = isset($active[$k]) ? " selected " : "";
@@ -348,7 +352,7 @@ class aw_template extends acl_base
   function vars($params)
 	{
 		$this->vars = array_merge($this->vars,$params);
-	 }
+	}
 
 	////
   // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse

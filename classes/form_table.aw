@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.18 2001/09/24 09:15:00 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.19 2001/10/02 10:16:58 cvs Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -200,14 +200,22 @@ class form_table extends form_base
 			$lit = "";
 			foreach($lar as $la)
 			{
+				print "cxx<br>";
+				flush();
 				if ($tbo["lang_id"] == $la["id"] && $this->table["defs"][$col]["lang_title"][$la["id"]] == "")
 				{
+					print "1";
+					flush();
 					$lt = $this->table["defs"][$col]["title"];
 				}
 				else
 				{
+					print "2";
+					flush();
 					$lt = $this->table["defs"][$col]["lang_title"][$la["id"]];
 				}
+				print "vars<br>";
+				flush();
 				$this->vars(array(
 					"lang_name" => $la["name"],
 					"lang_id" => $la["id"],
@@ -216,6 +224,8 @@ class form_table extends form_base
 				$lh.=$this->parse("LANG_H");
 				$lit.=$this->parse("LANG");
 			}
+			print "ce<br>";
+			flush();
 			$this->vars(array(
 				"LANG_H" => $lh,
 				"LANG" => $lit

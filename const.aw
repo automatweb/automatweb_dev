@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.43 2001/10/02 10:05:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.44 2001/10/02 10:16:57 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -266,7 +266,6 @@ else
 			include_once($lib);
 		};
 	}
-	
 	////
 	// !A neat little functional programming function
 	function not($arg)
@@ -571,7 +570,6 @@ define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
 define("PRG_SYSCONF",50); // konfiguratsioonieditor
 define("PRG_CONFIG_REDIRECT",51);	// sisselogimist vajavate veateadete konfimine
 define("PRG_TPLEDIT",52); // templateeditor
-
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"

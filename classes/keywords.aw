@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.31 2001/08/08 09:12:56 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.32 2001/10/02 10:16:58 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -713,15 +713,17 @@ class keywords extends aw_template {
 
 		$cats = join(",",array_keys($act));
 				
-		$q = "SELECT category_id FROM keywords WHERE list_id IN ($cats)";
-		$this->db_query($q);
-
 		$cids = array();
-
-		while($row = $this->db_next())
+  	if ($cats != "")
 		{
-			$cids[$row["category_id"]] = 1;
-		};
+			$q = "SELECT category_id FROM keywords WHERE list_id IN ($cats)";
+			$this->db_query($q);
+
+			while($row = $this->db_next())
+			{
+				$cids[$row["category_id"]] = 1;
+			};
+		}
 
 		extract($args);
 		$this->read_template("categories.tpl");

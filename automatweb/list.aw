@@ -150,7 +150,7 @@ switch($type) {
 		$t = new mlist($id);
 		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
 		$site_title = "<a href='list.$ext?parent=$pid'>Listid</a> / Listi ".$t->name." liikmed";
-		$content = $t->list_users();
+		$content = $t->list_users($id);
 		break;
 				
 	case "add_user":

@@ -277,13 +277,12 @@ function doSubmit()
 <tr>
 <td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
 <td class="hele_hall_taust">
-<textarea name="lead" cols="100" rows="5" class='tekstikast'>{VAR:lead}</textarea>
+<textarea name="lead" cols="70" rows="5">{VAR:lead}</textarea>
 </td>
 </tr>
 <tr>
 <td class="hele_hall_taust" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
-<td class="hele_hall_taust">
-<textarea name="content" cols="100" rows="30" class='tekstikast'>{VAR:content}</textarea>
+<td class="hele_hall_taust"><textarea name="content" cols="70" rows="30">{VAR:content}</textarea>
 </td>
 </tr>
 <input type='hidden' name='nobreaks' value='{VAR:nobreaks}'>

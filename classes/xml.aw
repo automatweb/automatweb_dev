@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.6 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.7 2001/10/02 10:16:58 cvs Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 // now, I'm working on adding XML-RPC format support for this.
@@ -160,14 +160,14 @@ class xml {
 	function xml_unserialize($args = array())
 	{
 		global $awt;
-		$awt->start("xml::xml_unserialize");
-		$awt->count("xml::xml_unserialize");
+		//$awt->start("xml::xml_unserialize");
+		//$awt->count("xml::xml_unserialize");
 
 		$source = $args["source"];
 		$retval = array();
 		$ckeys = array();
 		
-		$awt->start("xml::xml_unserialize::parsers");
+		//$awt->start("xml::xml_unserialize::parsers");
 		// parsimist enam kiiremaks ei saa, see toimub enivei PHP siseselt
 		$parser = xml_parser_create();
 		
@@ -181,9 +181,9 @@ class xml {
 		// Good parser. Now go back where you came from
 		xml_parser_free($parser);
 
-		$awt->stop("xml::xml_unserialize::parsers");
+		//$awt->stop("xml::xml_unserialize::parsers");
 
-		$awt->start("xml::xml_unserialize::php");
+		//$awt->start("xml::xml_unserialize::php");
 
 		$datablock = "";
 		$ckeys = array();
@@ -194,9 +194,9 @@ class xml {
 			{
 				continue;
 			};
-			$awt->start("xml::unserialize::datacycles");
+			//$awt->start("xml::unserialize::datacycles");
 			$tag = $v1["tag"];
-			$awt->start("xml::unserialize::prefix_replace");
+			//$awt->start("xml::unserialize::prefix_replace");
 			
 			$tag = preg_replace("/^" . $this->num_prefix . "/","",$tag);
 
@@ -205,13 +205,11 @@ class xml {
 			//	$tag = str_replace($this->num_prefix,"",$tag);
 			//};
 
-			$awt->stop("xml::unserialize::prefix_replace");
+			//$awt->stop("xml::unserialize::prefix_replace");
 		
 			// kui lopetet tag, siis on meil väärtus käes, ja rohkem pole vaja midagi teha
 			if ($v1["type"]	== "complete")
 			{
-				$awt->start("xml::unserialize::complete_tag");
-				$awt->count("xml_complete_tags");
 				$path1 = $path . "[\"" . $tag . "\"]";
 
 				// value algusest ja lõpust liigne räga maha
@@ -221,7 +219,6 @@ class xml {
 				$value = str_replace("\\","\\\\",$value);
 				$value = str_replace("\"","\\\"",$value);
 				$datablock .= "\$retval" . $path1 . "=\"$value\";\n";
-				$awt->stop("xml::unserialize::complete_tag");
 			}
 			elseif ($v1["type"] == "open")
 			{
@@ -234,13 +231,8 @@ class xml {
 				$path = join("",$ckeys);
 			};
 			// ülejäänud tage ignoreeritakse
-			$awt->stop("xml::unserialize::datacycles");
 		}
-		$awt->start("xml::unserialize::eval");
 		eval($datablock);
-		$awt->stop("xml::unserialize::eval");
-		$awt->stop("xml::xml_unserialize::php");
-		$awt->stop("xml::xml_unserialize");
 		return $retval;
 	}
 };
