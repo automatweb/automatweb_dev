@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.65 2005/03/18 12:22:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.66 2005/03/20 14:22:44 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -110,14 +110,20 @@
 @caption Grupeeriva rea stiil
 
 @groupinfo columns caption=Tulbad
-@default group=columns
-@property columns type=table no_caption=1
-@caption Tulbad
+@groupinfo columns_def caption="Tulpade defineerimine" parent=columns
+@default group=columns_def
+	@property columns type=table no_caption=1
+	@caption Tulbad
+
+@groupinfo columns_modify caption="Andmete muundamine" parent=columns
+@default group=columns_modify
+	@property columns_modify type=table no_caption=1
+	@caption Tulbade andmete muundamine
 
 @groupinfo inherit caption="P&auml;rimine"
 
-@property is_inheritable type=checkbox ch_value=1 field=meta method=serialize group=inherit
-@caption Kasutatav p&auml;rimiseks
+	@property is_inheritable type=checkbox ch_value=1 field=meta method=serialize group=inherit
+	@caption Kasutatav p&auml;rimiseks
 
 @groupinfo search caption="Otsing" submit_method=get
 
@@ -134,6 +140,9 @@
 
 @reltype SEARCH value=3 clid=CL_OBJECT_TREEVIEW_V2_SEARCH
 @caption otsing
+
+@reltype TRANSFORM value=4 clid=CL_OTV_DATA_FILTER
+@caption andmete muundaja
 
 */
 
@@ -330,6 +339,10 @@ class object_treeview_v2 extends class_base
 			case "search_res":
 				$this->_search_res($arr);
 				break;
+
+			case "columns_modify":
+				$this->_columns_modify($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -379,6 +392,10 @@ class object_treeview_v2 extends class_base
 
 			case "group_table":
 				$arr['obj_inst']->set_meta("saved_groups", $arr['request']['group_field']);
+				break;
+
+			case "columns_modify":
+				$arr["obj_inst"]->set_meta("transform_cols", $arr["request"]["transform_cols"]);
 				break;
 		}
 		return $retval;
@@ -1315,6 +1332,8 @@ class object_treeview_v2 extends class_base
 			"NO_TOOLBAR" => $no_tb
 		));
 
+		$trs = safe_array($parms['tree_obj_ih']->meta("transform_cols"));
+		$tr_i = get_instance(CL_OTV_DATA_FILTER);
 		// columns
 		$str = "";
 		foreach($col_list as $colid => $coln)
@@ -1322,6 +1341,14 @@ class object_treeview_v2 extends class_base
 			if ($sel_cols[$colid] == 1)
 			{
 				$content = (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid]);
+				if (isset($trs[$colid]) && count($trs[$colid]))
+				{
+					foreach($trs[$colid] as $tr_id)
+					{
+						$tr_i->transform(obj($tr_id), $content);
+					}
+				}
+
 				if ($edit_columns[$colid] == 1)
 				{
 					$content = html::textbox(array(
@@ -2033,6 +2060,50 @@ class object_treeview_v2 extends class_base
 				"vcl_inst" => &$arr["prop"]["vcl_inst"]
 			)
 		));
+	}
+
+	function _init_columns_modify_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "col",
+			"caption" => "Tulp",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "tr",
+			"caption" => "Muundaja",
+			"align" => "center"
+		));
+	}
+
+	function _columns_modify($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_columns_modify_t($t);
+
+		$cols = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"]
+		));
+
+		$trs = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TRANSFORM")));
+		$trs = $trs->names();
+		$trs = array("" => "") + $trs;
+
+		$tr_sets = $arr["obj_inst"]->meta("transform_cols");
+
+		foreach($cols as $coln => $colstr)
+		{
+			$t->define_data(array(
+				"col" => $colstr,
+				"tr" => html::select(array(
+					"name" => "transform_cols[$coln]",
+					"multiple" => 1,
+					"value" => $tr_sets[$coln],
+					"options" => $trs
+				))
+			));
+		}
 	}
 }
 ?>

@@ -300,13 +300,24 @@
       <property>
             <name>columns</name>
             <table>objects</table>
-            <group>columns</group>
+            <group>columns_def</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Tulbad</caption>
+      </property>
+      <property>
+            <name>columns_modify</name>
+            <table>objects</table>
+            <group>columns_modify</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tulbade andmete muundamine</caption>
       </property>
       <property>
             <name>is_inheritable</name>
@@ -354,6 +365,14 @@
             <columns>
                   <caption>Tulbad</caption>
             </columns>
+            <columns_def>
+                  <caption>Tulpade defineerimine</caption>
+                  <parent>columns</parent>
+            </columns_def>
+            <columns_modify>
+                  <caption>Andmete muundamine</caption>
+                  <parent>columns</parent>
+            </columns_modify>
             <inherit>
                   <caption>P&amp;auml;rimine</caption>
             </inherit>
@@ -383,6 +402,11 @@
                   <clid>CL_OBJECT_TREEVIEW_V2_SEARCH</clid>
                   <caption>otsing</caption>
             </SEARCH>
+            <TRANSFORM>
+                  <value>4</value>
+                  <clid>CL_OTV_DATA_FILTER</clid>
+                  <caption>andmete muundaja</caption>
+            </TRANSFORM>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.2 2005/03/08 14:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.3 2005/03/20 14:22:44 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -171,7 +171,7 @@ class otv_data_filter extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["return_url"] = post_ru();
+		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_pre_save($arr)
@@ -194,14 +194,18 @@ class otv_data_filter extends class_base
 			$repl .= "str_replace($from, $to,"; 
 		}
 
+		$code2 = "";
+
 		if (($num = (count($dat) + count($dat2))))
 		{
 			$code .= "\$data[\$k] = ".$repl."\$v".str_repeat(")", $num).";";
+			$code2 = "\$data = ".$repl."\$data".str_repeat(")", $num).";";
 		}
 
 		$code .= "}";
 
 		$arr["obj_inst"]->set_meta("code", $code);
+		$arr["obj_inst"]->set_meta("code2", $code2);
 	}
 
 	function _code_escape($str)
@@ -220,10 +224,17 @@ class otv_data_filter extends class_base
 	**/
 	function transform($o, &$data)
 	{
-		$code = $o->meta("code");
-		if ($code != "")
+		if (is_array($data))
 		{
-			eval($code);
+			$code = $o->meta("code");
+			if ($code != "")
+			{
+				eval($code);
+			}
+		}
+		else
+		{
+			eval($o->meta("code2"));
 		}
 	}
 }
