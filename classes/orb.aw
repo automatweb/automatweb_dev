@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.57 2004/03/23 13:01:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.58 2004/05/12 06:37:49 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -31,6 +31,11 @@ class orb extends aw_template
 		// optional
 		// d) silent. veateateid ei väljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
+
+		if ($args["class"] == "periods")
+		{
+			$args["class"] = "period";
+		}
 
 		extract($args);
 		$action = $vars["action"];
