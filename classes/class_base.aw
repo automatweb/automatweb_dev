@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.322 2004/11/19 08:23:19 kristo Exp $
+// $Id: class_base.aw,v 2.323 2004/11/22 12:20:00 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -830,7 +830,7 @@ class class_base extends aw_template
 			if (!empty($request["section"]))
 			{
 				$args["section"] = $request["section"];
-				$args["_alias"] = get_class($this);
+				//$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
 			if ($request["XUL"])
@@ -1916,13 +1916,16 @@ class class_base extends aw_template
 
 		$remap_children = false;
 		
-		if($controllers = $this->get_all_view_controllers($this->cfgform_id))
+		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
 			$this->process_view_controllers(&$properties, $controllers, $argblock);
 		}
-		
 		// how do I stop parsing of properties that _are_ already parsed?
-		
+
+		// 
+
+		$resprops = array();
+
 		foreach($properties as $key => $val)
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -2827,7 +2830,7 @@ class class_base extends aw_template
 
 	function get_all_view_controllers($config_id)
 	{
-		if (!$this->can("view", $config_id))
+		if (!is_oid($config_id) || !$this->can("view", $config_id))
 		{
 			return false;
 		}
@@ -3005,6 +3008,7 @@ class class_base extends aw_template
 		{
 			$filter["cfgform_id"] = $args["cfgform"];
 			$this->cfgform_id = $args["cfgform"];
+
 		}
 		else
 		{
@@ -3018,6 +3022,18 @@ class class_base extends aw_template
 		else
 		{
 			$properties = $this->get_property_group($filter);
+		};
+
+		if ($this->new && is_array($this->_cfg_props))
+		{
+			foreach($this->_cfg_props as $key => $val)
+			{
+				if (!empty($val["default"]))
+				{
+					$o->set_prop($key,$val["default"]);
+				};
+			};
+
 		};
 
 		$errors = $this->validate_data(array(
@@ -3656,6 +3672,7 @@ class class_base extends aw_template
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
+
 			global $CFG_DEBUG;
 			if ($CFG_DEBUG)
 			{
@@ -3747,6 +3764,8 @@ class class_base extends aw_template
 			};
 		};
 
+		$this->_cfg_props = $cfg_props;
+
 		// I need group and caption from each one
 
 		// alright, I need to do this in a better way. perhaps like the way it was done in the tree
@@ -3781,6 +3800,18 @@ class class_base extends aw_template
 			$this->grpmap[$parent][$gkey] = $ginfo;
 		};
 
+		if (aw_global_get("uid") == "duke")
+		{
+			//print "clinf = ";
+			if ($this->classinfo["relationmgr"] == "yes")
+			{
+				$this->groupinfo["list_aliases"] = array("caption" => "Seostehaldur"); 
+			};
+			//arr($this->grpmap);
+			//arr($this->groupinfo);
+			//arr($this->classinfo);
+		};
+
 		// what the fuck do I need first_subgrp for?
 		$first_subgrp = array();
 		$groupmap = $rgroupmap = array();
@@ -3804,7 +3835,6 @@ class class_base extends aw_template
 		// groupinfo contains a flat list of all groups
 		// I need to figure out which group should I actually be using
 		// if there is one in the url and it actually exists, then use it
-
 
 		if (isset($this->groupinfo[$arr["group"]]))
 		{
@@ -4171,11 +4201,12 @@ class class_base extends aw_template
 		$rv = array();
 		// the rationale is this .. all first level groups are always visible
 		$visible_groups = array();
+
 		foreach($this->grpmap[0] as $gkey => $gval)
 		{
 			$visible_groups[] = $gkey;
 		};
-
+		
 		foreach($this->active_groups as $act_group)
 		{
 			if (isset($this->grpmap[$act_group]))
@@ -4186,6 +4217,7 @@ class class_base extends aw_template
 				};
 			};
 		}
+
 
 		$rv = array();
 		foreach($visible_groups as $vgr)
