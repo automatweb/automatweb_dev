@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.0 2001/07/28 22:30:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.1 2001/07/29 19:07:00 duke Exp $
 global $orb_defs; 
 $orb_defs["object_vote"] = "xml";
 
@@ -160,17 +160,20 @@ class  object_vote extends aw_template
 		$id = $row["oid"];
 		$meta = $this->get_object_metadata(array(
 				"oid" => $id,
-				"key" => "object_vote",
+				//"key" => "object_vote",
 		));
+
 		$votes = $meta["votes"];
 		$check = $meta["object_vote"]["check"];
-		$jrk = $meta["object_vote"]["jrk"];
+		$jrk = $meta["jrk"];
 		$lx = array();
+
 		foreach($check as $key => $val)
 		{
 			$lx[$key] = $jrk[$key];
 
 		}
+
 		asort($lx);
 		$docs = join(",",array_keys($lx));
 		$q = "SELECT * FROM documents WHERE docid IN ($docs)";
@@ -228,7 +231,7 @@ class  object_vote extends aw_template
 				"metadata" => $row["metadata"],
 				"key" => "votes",
 		));
-		$votes = $xmeta["votes"];
+		$votes = $xmeta;
 		$votes[$args["vote"]] += 1;
 		$votes["total"] += 1;
 		$this->set_object_metadata(array(
