@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.54 2004/03/01 12:12:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.55 2004/03/01 16:34:00 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1006,7 +1006,7 @@ class admin_menus extends aw_template
 			if (in_array($row["class_id"],$containers))
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
-				$comment = $row["comment"];
+				$comment = strip_tags($row["comment"]);
 				$row["is_menu"] = 1;
 			}
 			else
@@ -1126,6 +1126,9 @@ class admin_menus extends aw_template
 			$row['icon_url'] = $iu;
 			$row['caption'] = $caption;
 			$row['chlink'] = $chlink;
+
+			$row["comment"] = strip_tags($row["comment"]);
+
 
 			$this->vars($row);
 			$the_icons .= $this->parse('ICON');
