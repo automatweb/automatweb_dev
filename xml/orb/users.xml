@@ -176,10 +176,28 @@
 		</action>
 
 		<action name="submit_user_acl">
-			<function name="submit_user_acl">
+			<function name="submit_user_acl"/>
+		</action>
+
+		<action name="send_hash" nologin="1">
+			<function name="send_hash"/>
+		</action>
+		
+		<action name="submit_send_hash" nologin="1">
+			<function name="submit_send_hash"/>
+		</action>
+
+		<action name="pwhash" nologin="1">
+			<function name="password_hash">
 				<arguments>
+					<required name="key"/>
+					<required name="uid"/>
 				</arguments>
 			</function>
+		</action>
+
+		<action name="submit_password_hash" nologin="1">
+			<function name="submit_password_hash"/>
 		</action>
 
 	</class>
