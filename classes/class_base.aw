@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.124 2003/06/19 11:44:29 duke Exp $
+// $Id: class_base.aw,v 2.125 2003/06/19 15:44:41 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -222,6 +222,8 @@ class class_base extends aw_template
 
 		$this->quote($args);
 		extract($args);
+
+		$form_data = $args;
 
 		// I need to know the id of the configuration form, so that I 
 		// can load it. Reason being, the properties can be grouped
