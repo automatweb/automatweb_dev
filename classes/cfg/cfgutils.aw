@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.48 2004/12/27 12:42:47 kristo Exp $
+// $Id: cfgutils.aw,v 1.49 2005/02/14 15:12:53 ahti Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -113,8 +113,8 @@ class cfgutils extends aw_template
 	function load_class_properties($args = array())
 	{
 		$this->_init_clist();
-                extract($args);
-                // here be cache.
+		 extract($args);
+		 // here be cache.
 		if (!$file)
 		{
 			$file = $this->clist[$clid];
@@ -398,9 +398,9 @@ class cfgutils extends aw_template
 		$proplist = $grplist = array();
 		if (isset($args["xml_definition"]))
 		{
-                        $parser = get_instance("xml/xml_path_parser");
-                        $parser->parse_data(array("content" => $args["xml_definition"]));
-                        $properties = $parser->get_data("/properties/property");
+			$parser = get_instance("xml/xml_path_parser");
+			$parser->parse_data(array("content" => $args["xml_definition"]));
+			$properties = $parser->get_data("/properties/property");
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$this->classinfo = $classinfo[0];
@@ -436,11 +436,10 @@ class cfgutils extends aw_template
 			}
 
 			if (is_array($groupinfo[0]))
-			{	
+			{
 				foreach($groupinfo[0] as $key => $val)
 				{
 					$grplist[$key] = $this->normalize_text_nodes($val[0]);
-
 				};
 			};
 		}
@@ -449,15 +448,13 @@ class cfgutils extends aw_template
 
 	function parse_definition($args = array())
 	{
-                if ($args["content"])
-                {
-                        $parser = get_instance("xml/xml_path_parser");
-
-                        $parser->parse_data(array("content" => $args["content"]));
+		if ($args["content"])
+		{
+			$parser = get_instance("xml/xml_path_parser");
+			$parser->parse_data(array("content" => $args["content"]));
 
 			// how on earth do I invoke functions on 
-
-                        $properties = $parser->get_data("/properties/property");
+			$properties = $parser->get_data("/properties/property");
 
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$groupinfo = $parser->get_data("/properties/groupinfo");

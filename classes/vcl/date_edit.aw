@@ -9,9 +9,9 @@ class date_edit
 
 	// kui aega ette ei anta, siis kuvame selleks kuupäeva
 	// ööpäev hiljem dokumendi avamisest. See on üsna suvaline muidugi
-	function date_edit($varname = "",$timestamp = "+24h")
+	function date_edit($varname = "", $timestamp = "+24h")
 	{
-		$this->init($varname,$timestamp);
+		$this->init($varname, $timestamp);
 		// default to all shown
 		$this->configure(array(
 			"year" => "",
@@ -22,12 +22,12 @@ class date_edit
 		));
 	}
 
-	function set($field,$value)
+	function set($field, $value)
 	{
 		$this->$field = $value;
 	}
 
-	function init($varname,$timestamp)
+	function init($varname, $timestamp)
 	{
 		$this->varname = $varname;
 		if ($timestamp == "+24h")
@@ -36,7 +36,7 @@ class date_edit
 		};
 		$this->timestamp = $timestamp;
 		$this->step = 5;
-		$this->classid="";
+		$this->classid = "";
 	}
 
 	////
@@ -60,13 +60,13 @@ class date_edit
 		};
 		if (isset($fields["classid"]))
 		{
-			$this->classid=$fields["classid"];
+			$this->classid = $fields["classid"];
 			unset($fields["classid"]);
 		};
 		$this->fields = $fields;
 	}
 
-	function gen_edit_form($varname,$timestamp,$range1 = 2003 , $range2 = 2010,$add_empty = false)
+	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false)
 	{
 		if (is_array ($varname))
 		{
@@ -145,7 +145,16 @@ class date_edit
 						"11" => LC_M11,
 						"12" => LC_M12
 					);
-					while(list($mk,$mv) = each($mnames))
+					if($this->mon_for)
+					{
+						$mnames = array();
+						$tmp = range(1, 12);
+						foreach($tmp as $val)
+						{
+							$mnames[$val < 10 ? "0".$val : $val] = $val < 10 ? "0".$val : $val;
+						}
+					}
+					foreach($mnames as $mk => $mv)
 					{
 						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp != -1),$mv);
 					};

@@ -109,9 +109,17 @@ function selall()
 	<!-- END SUB: CLF3 -->
 	<!-- SUB: CLF4 -->
 	<tr>
-		<td bgcolor="{VAR:bgcolor}">Vaikimisi kuupäev:</td>
-		<td bgcolor="{VAR:bgcolor}" colspan="4">
-		{VAR:time_select}
+		<td bgcolor="{VAR:bgcolor}" colspan="3">
+		Vaikimisi kuupäev: {VAR:time_select}
+		</td>
+		<td bgcolor="{VAR:bgcolor}" colspan="2">
+		Aasta alates: {VAR:year_from}
+		Aasta kuni: {VAR:year_to}
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="{VAR:bgcolor}" colspan="5">
+		Kuu formaat: {VAR:mon_for}
 		</td>
 	</tr>
 	<!-- END SUB: CLF4 -->

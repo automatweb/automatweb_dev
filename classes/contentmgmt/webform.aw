@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.61 2005/02/14 13:41:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.62 2005/02/14 15:12:53 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1060,6 +1060,8 @@ class webform extends class_base
 		}
 		$c = "";
 		$cnt = 0;
+		
+		// lotsa needed options for various things
 		$capt_opts = array(
 			0 => "Vasakul",
 			"right" => "Paremal",
@@ -1083,11 +1085,15 @@ class webform extends class_base
 			"objects.created ASC" => t("Loomisaeg (kasvav)"),
 			"objects.created DESC" => t("Loomisaeg (kahanev)"),
 		);
+		$prp_orient = array(0 => t("horisontaalne"), "vertical" => t("vertikaalne"));
+		$year_sels = $this->make_keys(range(1902, 2037));
+		$mon_fors = array(0 => "Sõnaline", 1 => "Numbriline");
+		
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
 		$clf_type = $object_type->meta("clf_type");
 		$classificator = $object_type->meta("classificator");
-		$prp_orient = array(0 => t("horisontaalne"), "vertical" => t("vertikaalne"));
+		
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
@@ -1214,6 +1220,21 @@ class webform extends class_base
 						"time_select" => html::date_select(array(
 							"name" => "prp_opts[".$prpdata["name"]."][defaultx]",
 							"value" => $property["defaultx"] ? $property["defaultx"] : time(),
+						)),
+						"year_from" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][year_from]",
+							"options" => $year_sels,
+							"value" => $property["year_from"] ? $property["year_from"] : date("Y") - 5,
+						)),
+						"year_to" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][year_to]",
+							"options" => $year_sels,
+							"value" => $property["year_to"] ? $property["year_to"] : date("Y") + 5,
+						)),
+						"mon_for" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][mon_for]",
+							"options" => $mon_fors,
+							"value" => $property["mon_for"],
 						)),
 					));
 					$clf4 = $this->parse("CLF4");
@@ -1496,6 +1517,7 @@ class webform extends class_base
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
 		$ret = $errs2 = $errs1 = $sbz = array();
 		$no_sbt = true;
+		$chk_prps = array("default" => "defaultx", "year_from" => "year_from", "year_to" => "year_to", "mon_for" => "mon_for");
 		foreach($els as $pn => $pd)
 		{
 			$pd["value"] = $values[$pn];
@@ -1514,9 +1536,15 @@ class webform extends class_base
 			{
 				$pd["sort_by"] = $all_props[$pn]["sort_by"];
 			}
-			if($pd["type"] == "date_select" && $all_props[$pn]["defaultx"])
+			if($pd["type"] == "date_select")
 			{
-				$pd["default"] = $all_props[$pn]["defaultx"];
+				foreach($chk_prps as $ke => $vad)
+				{
+					if($all_props[$pn][$vad])
+					{
+						$pd[$ke] = $all_props[$pn][$vad];
+					}
+				}
 			}
 			$num = 0;
 			if (isset($errs[$pn]))
