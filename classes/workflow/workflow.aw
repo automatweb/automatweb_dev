@@ -193,7 +193,10 @@ class workflow extends class_base
 		$thtml = $this->_build_tree($actor_rootmenu["oid"]);
 
 		load_vcl("table");
-		$this->t = new aw_table(array("xml_def" => "workflow/actor_list"));
+		$this->t = new aw_table(array(
+			"xml_def" => "workflow/actor_list",
+			"layout" => "generic",
+		));
 
 		$tb = $this->gen_view_toolbar();
 		
@@ -231,7 +234,10 @@ class workflow extends class_base
 		$thtml = $this->_build_tree($action_rootmenu["oid"]);
 
 		load_vcl("table");
-		$this->t = new aw_table(array("xml_def" => "workflow/action_list"));
+		$this->t = new aw_table(array(
+			"xml_def" => "workflow/action_list",
+			"layout" => "generic",
+		));
 		
 		$tb = $this->gen_view_toolbar();
 		
@@ -307,7 +313,10 @@ class workflow extends class_base
 		$thtml = $this->_build_tree($entity_rootmenu["oid"]);
 
 		load_vcl("table");
-		$this->t = new aw_table(array("xml_def" => "workflow/entity_list"));
+		$this->t = new aw_table(array(
+			"xml_def" => "workflow/entity_list",
+			"layout" => "generic",
+		));
 
 		$types = array();
 
@@ -562,6 +571,12 @@ class workflow extends class_base
 		$this->ic = get_instance("icons");
 		$this->_rec_build_tree($parent);
 		
+		/*
+		print "<pre>";
+		print_r($this->tree);
+		print "</pre>";
+		*/
+	
 		$treeview = get_instance("vcl/treeview");
 		return $treeview->create_tree_from_array(array(
 			"parent" => 0,
@@ -777,7 +792,10 @@ class workflow extends class_base
 		$thtml = $this->_build_tree($process_rootmenu["oid"]);
 
 		load_vcl("table");
-		$this->t = new aw_table(array("xml_def" => "workflow/process_list"));
+		$this->t = new aw_table(array(
+			"xml_def" => "workflow/process_list",
+			"layout" => "generic",
+		));
 		
 		$processes = $this->get_objects_below(array(
 			"parent" => $this->parent_list,
@@ -870,6 +888,7 @@ class workflow extends class_base
 			"id" => $args["id"],
 			"oid" => $args["oid"],
 			"cb_view" => "show",
+			"action" => "change",
 			"group" => $args["group"],
 			"sgid" => $args["sgid"],
 			"subgroup" => $args["subgroup"],
