@@ -3,31 +3,31 @@
 /*
 
 this message will get posted whenever an alias is about to be deleted
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_DELETE)
 
 this message will get posted whenever an alias is about to be deleted
 the message parameter will be the class id of the "from" object
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_DELETE_FROM)
 
 this message will get posted whenever an alias is about to be deleted
 the message parameter will be the class id of the "to" object
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_DELETE_TO)
 
 this message will get posted after a new alias is created
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_ADD)
 
 this message will get posted after a new alias is created
 the message will have the class id of the object for the "to" end as the message parameter
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_ADD_TO)
 
 this message will get posted after a new alias is created
 the message will have the class id of the object for the "from" end as the message parameter
-the message will get the connection object as the "conenction" parameter
+the message will get the connection object as the "connection" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_ADD_FROM)
 
 */
