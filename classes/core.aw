@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.290 2004/08/16 12:30:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.291 2004/08/23 09:42:11 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -152,6 +152,11 @@ class core extends acl_base
 	// !Margib koik saidi objektid dirtyks
 	function flush_cache()
 	{
+		if (!aw_ini_get("cache.use_html_cache"))
+		{
+			return;
+		}
+
 		if (aw_global_get("old_cache_flushed"))
 		{
 			return;
@@ -165,25 +170,22 @@ class core extends acl_base
 	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid, $fname = "")
 	{
+		if (!aw_ini_get("cache.use_html_cache"))
+		{
+			return true;
+		}
+
 		$q = "SELECT cachedirty,cachedata FROM objects WHERE oid = '$oid'";
 		$this->db_query($q);
 		$row = $this->db_next();
 
 		if ($fname == "")
 		{
-			if ($GLOBALS["INTENSE_CACHE"] == 1)
-			{
-				echo "cache_dirty no fname , ret = ".$row["cachedirty"]." <br>";
-			}
 			return ($row["cachedirty"] == 1) ? true : false;
 		}
 		else
 		{
 			$dat = aw_unserialize($row["cachedata"]);
-			if ($GLOBALS["INTENSE_CACHE"] == 1)
-			{
-				echo "cache_dirty oid = $oid fname = $fname , dat = ".dbg::dump($dat)." retv = ".dbg::dump(!$dat[$fname])." <br>";
-			}
 			return !$dat[$fname];
 		}
 	}
@@ -192,6 +194,10 @@ class core extends acl_base
 	// !sets objects $oid's cache dirty flag to false
 	function clear_cache($oid, $fname = "")
 	{
+		if (!aw_ini_get("cache.use_html_cache"))
+		{
+			return;
+		}
 		$ccd = $this->db_fetch_field("SELECT cachedata FROM objects WHERE oid = '$oid'","cachedata");
 		$dat = aw_unserialize($ccd);
 		if ($fname != "")
@@ -200,10 +206,6 @@ class core extends acl_base
 		}
 		$ds = aw_serialize($dat);
 		$this->quote($ds);
-		if ($GLOBALS["INTENSE_CACHE"] == 1)
-		{
-			echo "clear_cache oid = $oid fname = $fname , dat = ".dbg::dump($dat)." <br>";
-		}
 		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
 		//XXX the following query was commented out on eau, have to watch out for this one
 
@@ -762,7 +764,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent() && aw_ini_get("site_id") != 138)
+				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && aw_global_get("uid") != "root" && !headers_sent() && aw_ini_get("site_id") != 138)
 				{
 					header("Location: $u");
 					die();
@@ -1334,7 +1336,7 @@ class core extends acl_base
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => $rootobj,
-			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+			"status" => ($onlyact ? STAT_ACTIVE : array(STAT_NOTACTIVE, STAT_ACTIVE)),
 			"sort_by" => "objects.parent",
 			"lang_id" => array(),
 			"site_id" => array(),
