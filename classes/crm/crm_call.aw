@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.24 2005/03/24 10:02:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.25 2005/04/05 07:17:32 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -246,12 +246,18 @@ class crm_call extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 
-		//the person who added the task will be a participant, whether he likes it
+			switch($data["name"])
+		{
+		};
+		return $retval;
+	}
+
+	function callback_post_save($arr)
+	{	//the person who added the task will be a participant, whether he likes it
 		//or not
 		if($arr['new'])
 		{
 			//
-			$arr['obj_inst']->save();
 			$user = get_instance(CL_USER);
 			$person = new object($user->get_current_person());
 			$person->connect(array(
@@ -260,10 +266,8 @@ class crm_call extends class_base
 			));
 		}
 
-		switch($data["name"])
-		{
-		};
-		return $retval;
+
+
 	}
 
 
