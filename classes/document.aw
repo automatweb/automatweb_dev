@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.183 2003/05/15 17:15:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.184 2003/05/20 11:20:19 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -537,8 +537,8 @@ class document extends aw_template
 		// period vars
 		$this->vars(array(
 			"act_per_id" => $pdat['id'],
-			"act_per_name" => $pdat['description'],
-			"act_per_comment" => $pdat['data']['comment'],
+			"act_per_name" => $pdat['name'],
+			"act_per_comment" => $pdat['comment'],
 			"act_per_image_url" => ($pdat['data']['image']['url']) ? $pdat['data']['image']['url'] : "/automatweb/images.trans.gif",
 		));
 		
@@ -697,33 +697,6 @@ class document extends aw_template
 			$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
 		}		
 	
-		// if you put #reg# inside document, then not logged in users only see the document
-		// up to that alias, the rest of the text starting from this alias is replaced
-		// with a login box	
-		if (strpos($doc['content'], "#reg#") !== false)
-		{
-			$uid = aw_global_get("uid");
-			if (aw_global_get("uid"))
-			{
-				$doc["content"] = str_replace("#reg#","",$doc["content"]);
-			}
-			else
-			{
-				$li = get_instance("aw_template");
-				$li->init("automatweb/documents");
-				$li->read_template("reg.tpl");
-				$li->vars(array(
-					"reforb" => $this->mk_reforb("login",array(),"auth"),
-				));
-			
-				global $request_uri_before_auth;
-				$request_uri_before_auth = aw_global_get("REQUEST_URI");
-				session_register("request_uri_before_auth");
-
-				$doc['content'] = preg_replace("/#reg#(.*)$/s", $li->parse(), $doc['content']);
-			};
-		}		
-
 		if (isset($params["vars"]) && is_array($params["vars"]))
 		{
 			$this->vars($params["vars"]);
