@@ -1890,7 +1890,9 @@ class bugtrack extends aw_template
 
 	function add_error($arr)
 	{
+		$this->quote(&$arr);
 		extract($arr);
+		
 		$this->db_query("INSERT INTO bugtrack_errors (type_id,message,site,content,tm,err_uid) 
 																					VALUES ('$err_type','$err_msg','$site_url','$err_content','".time()."','$err_uid')");
 
