@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.28 2005/02/23 11:30:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.29 2005/03/03 10:23:52 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -580,7 +580,7 @@ class shop_order_cart extends class_base
 				"payment" => $cart["payment"],
 				"payment_type" => $cart["payment_method"]
 			));
-			//$this->clear_cart($oc);
+			$this->clear_cart($oc);
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
 		}
 		else
