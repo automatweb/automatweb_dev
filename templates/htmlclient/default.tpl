@@ -1,4 +1,4 @@
-<form action='orb.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
+<form action='{VAR:handler}.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
 <table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>
 
