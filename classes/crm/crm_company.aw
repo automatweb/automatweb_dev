@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.19 2004/04/13 13:28:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.20 2004/04/26 09:32:09 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -76,7 +76,7 @@ caption Õiguslik vorm
 @caption E-posti aadressid
 
 @property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
-@caption Fax
+@caption Faks
 
 @default group=tasks_overview
 
@@ -180,7 +180,7 @@ groupinfo humanres caption="Inimesed" submit=no
 @reltype TELEFAX value=18 clid=CL_CRM_PHONE
 @caption Fax
 
-@reltype JOBS value=19 clid=CL_JOB_OFFER
+@reltype JOBS value=19 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 @caption T&ouml;&ouml;pakkumine
 
 @reltype TOOPAKKUJA value=20 clid=CL_CRM_COMPANY
@@ -788,27 +788,30 @@ class crm_company extends class_base
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
-			foreach($clids as $clid)
+			if (is_array($clids))
 			{
-				$classinf = $this->cfg["classes"][$clid];
+				foreach($clids as $clid)
+				{
+					$classinf = $this->cfg["classes"][$clid];
 
-				$url = $this->mk_my_orb('new',array(
-					'alias_to' => $args['obj_inst']->id(),
-					'reltype' => $val,
-					'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
-					'parent' => $parents[$val],
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-				),$clid);
+					$url = $this->mk_my_orb('new',array(
+						'alias_to' => $args['obj_inst']->id(),
+						'reltype' => $val,
+						'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
+						'parent' => $parents[$val],
+						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					),$clid);
 
-				$has_parent = isset($parents[$val]) && $parents[$val];
-				$disabled = $has_parent ? false : true;
-				$toolbar->add_menu_item(array(
-					"parent" => "firma_sub",
-					"text" => 'Lisa '.$classinf["name"],
-					"link" => $has_parent ? $url : "",
-					"title" => $has_parent ? "" : "Kataloog määramata",
-					"disabled" => $has_parent ? false : true,
-				));
+					$has_parent = isset($parents[$val]) && $parents[$val];
+					$disabled = $has_parent ? false : true;
+					$toolbar->add_menu_item(array(
+						"parent" => "firma_sub",
+						"text" => 'Lisa '.$classinf["name"],
+						"link" => $has_parent ? $url : "",
+						"title" => $has_parent ? "" : "Kataloog määramata",
+						"disabled" => $has_parent ? false : true,
+					));
+				};
 			};
 		};
 
@@ -823,45 +826,48 @@ class crm_company extends class_base
 		{
 			$clids = $this->relinfo[$val]["clid"];
 			$reltype = $this->relinfo[$val]["value"];
-			foreach($clids as $clid)
+			if (is_array($clids))
 			{
-				$classinf = $this->cfg["classes"][$clid];
-				$url = $this->mk_my_orb('new',array(
-					// alright then. so what do those things to? 
-					// they add a relation between the object created through
-					// the planner and this object
+				foreach($clids as $clid)
+				{
+					$classinf = $this->cfg["classes"][$clid];
+					$url = $this->mk_my_orb('new',array(
+						// alright then. so what do those things to? 
+						// they add a relation between the object created through
+						// the planner and this object
 
 
-					// can I do that with messages instead? and if I can, how
-					// on earth am I going to do that?
+						// can I do that with messages instead? and if I can, how
+						// on earth am I going to do that?
 
-					// I'm adding an event object to a calendar, how do I know
-					// that I will have to attach it to an organization as well?
-					
-					// Maybe I should attach it directly to the organization and
-					// then send a message somehow that it should be put in my
-					// calendar as well .. hm that actually does sound
-					// like a solution.
-					'alias_to_org' => $args['obj_inst']->id(),
-					'reltype_org' => $reltype,
-					'class' => 'planner',
-					'id' => $this->cal_id,
-					'group' => 'add_event',
-					'clid' => $clid,
-					'action' => 'change',
-					'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
-					'parent' => $parents[$reltype],
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-				));
-				$has_parent = isset($parents[$val]) && $parents[$val];
-				$disabled = $has_parent ? false : true;
-				$toolbar->add_menu_item(array(
-					"parent" => "calendar_sub",
-					"title" => $has_parent ? "" : "Kalender või kalendri sündmuste kataloog määramata",
-					"text" => "Lisa ".$classinf["name"],
-					"disabled" => $has_parent ? false : true,
-					"link" => $has_parent ? $url : "",
-				));
+						// I'm adding an event object to a calendar, how do I know
+						// that I will have to attach it to an organization as well?
+						
+						// Maybe I should attach it directly to the organization and
+						// then send a message somehow that it should be put in my
+						// calendar as well .. hm that actually does sound
+						// like a solution.
+						'alias_to_org' => $args['obj_inst']->id(),
+						'reltype_org' => $reltype,
+						'class' => 'planner',
+						'id' => $this->cal_id,
+						'group' => 'add_event',
+						'clid' => $clid,
+						'action' => 'change',
+						'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
+						'parent' => $parents[$reltype],
+						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					));
+					$has_parent = isset($parents[$val]) && $parents[$val];
+					$disabled = $has_parent ? false : true;
+					$toolbar->add_menu_item(array(
+						"parent" => "calendar_sub",
+						"title" => $has_parent ? "" : "Kalender või kalendri sündmuste kataloog määramata",
+						"text" => "Lisa ".$classinf["name"],
+						"disabled" => $has_parent ? false : true,
+						"link" => $has_parent ? $url : "",
+					));
+				};
 			};
 		};
 			
