@@ -1,5 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.2 2004/10/08 15:59:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.3 2004/10/18 14:56:25 duke Exp $
+/*
+EMIT_MESSAGE(MSG_TRANSLATION_UPDATED)
+*/
 class translator extends  core
 {
 	function translator()
@@ -106,8 +109,32 @@ class translator extends  core
 	{
 		$eldata = $arr["prop"]["value"];
                 $o = $arr["obj_inst"];
+		$orig = $o->get_original();
 
+		$prnt = new object($orig->parent());
+
+		$brothers = new object_list(array(
+			"brother_of" => $orig->id(),
+		));
+		$brotlist = array();
+		foreach($brothers->arr() as $brot)
+		{
+			$brotlist[$brot->parent()] = 1;
+		};
                 obj_set_opt("no_auto_translation", 1);
+
+		$tr_conns = $prnt->connections_from(array(
+			"type" => RELTYPE_TRANSLATION, 
+		));
+                
+
+		$tr_parents = array();
+
+		foreach($tr_conns as $tr_conn)
+		{
+                        $to = $tr_conn->to();
+			$tr_parents[$to->lang()] = $to->id();
+		};
 
                 $tr_conns = $o->connections_from(array(
                         "type" => RELTYPE_TRANSLATION,
@@ -120,6 +147,8 @@ class translator extends  core
                         $to = $tr_conn->to();
                         $translated[$to->lang()] = $to;
                 };
+		
+		obj_set_opt("no_auto_translation", 0);
 
                 $act_lang = $o->lang();
                 $o->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
@@ -137,11 +166,22 @@ class translator extends  core
                         {
                                 if (!$translated[$lang])
                                 {
+					$new = true;
                                         $clone = new object($o->properties());
+					if ($tr_parents[$lang])
+					{
+						$clone->set_parent($tr_parents[$lang]);
+					}
+					else
+					if ($translated[$lang])
+					{
+						$clone->set_parent($translated[$lang]->prop("to"));
+					}
                                 }
                                 else
                                 {
                                         $clone = new object($translated[$lang]);
+					$new = false;
                                 };
 
                                 $fields_with_values = 0;
@@ -168,11 +208,9 @@ class translator extends  core
                                 }
                                 else
                                 {
+					//print "setting lang to $lang";
                                         $clone->set_lang($lang);
 
-                                        // needed for ds_auto_translation
-					
-					// ja vot -- siit ongi puudu koopiate tõlkimine
                                         $clone->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
                                         $clone->save_new();
 
@@ -186,66 +224,28 @@ class translator extends  core
                                                 "reltype" => RELTYPE_ORIGINAL,
                                         ));
                                 };
+
+				if ($new)
+				{
+					foreach($brotlist as $brot => $savi)
+					{
+						// so I get the real object
+						$bof = new object($brot);
+						$clid = $clone->create_brother($bof->id());
+						$clone_obj = new object($clid);
+						$clone_obj->set_lang($lang);
+						$clone_obj->save();
+
+					};
+				};
                         };
                 };
 
-		// nii aga nüüd on vaja sisse lugeda ka objekti koopiad ja ka nende tõlked uuendada. mnjaa. vot.
-		// või siis vajadusel tõlke objektid tekitada
+		$o->save();
 
-		// now - ask for all existing translations
-		$trans_conns = $o->connections_from(array(
-			"type" => RELTYPE_TRANSLATION,
+		post_message_with_param(MSG_TRANSLATION_UPDATED,$o->class_id(),array(
+			"oid" => $o->id(),
 		));
-
-		$translation_objects = array();
-
-		foreach($trans_conns as $trans_conn)
-		{
-			$translation_objects[$trans_conn->prop("lang.id")] = $trans_conn->to();
-		};
-		
-
-		$clones = $o->connections_from(array(
-			"type" => "RELTYPE_COPY",
-		));
-
-		//arr($translation_objects);
-
-		foreach($clones as $clone)
-		{
-
-			$clone_obj = $clone->to();
-
-
-			/*
-			print "<h2>clone</h2>";
-			arr($clone);
-
-			$clone_trans = $clone_obj->connections_from(array(
-				"type" => "RELTYPE_TRANSLATION",
-			));
-			*/
-
-			// see on vist sünkroniseerimiseks mõeldud eks?
-
-			// aga kuidas ma neid sünkroniseerin?
-
-			/*
-			print "<h2>trans</h2>";
-			arr($clone_trans);
-			*/
-			// now figure out which translations does the clone have
-
-			// update existing ones
-			// create new ones .. 
-
-			// simpel, isn't it?
-
-
-		};
-                obj_set_opt("no_auto_translation", 0);
-
-
 	}
 };
 ?>
