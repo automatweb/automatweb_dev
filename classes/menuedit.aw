@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.123 2002/07/10 17:08:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.124 2002/07/11 20:39:14 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -500,6 +500,19 @@ class menuedit extends aw_template
 			{
 				$nx = $name;
 				dbg("drawing $id,$name<br>");
+
+				// SIC! check whether login menus are defined and
+				// if so, overwrite the one defined in aw.ini
+				if ($name == "LOGGED")
+				{
+					$cfg = get_instance("config");
+					$_id = $cfg->get_login_menus();
+					if ($_id)
+					{
+						$id = $_id;
+					};
+				};
+
 				$this->req_draw_menu($id,$name,&$path,false);
 				if ($this->sel_section == $frontpage)
 				{
@@ -1047,6 +1060,14 @@ class menuedit extends aw_template
 		{
 			$this->raw = 1;
 			// cut the minus sign
+			$section = substr($section,0,-1);
+		};
+		
+		// cut the / from the end
+		// so that http://site/alias and http://site/alias/ both work
+		if (substr($section,-1) == "/")
+		{
+
 			$section = substr($section,0,-1);
 		};
 
@@ -2566,7 +2587,8 @@ class menuedit extends aw_template
 					"ftpl_edit" => $ftpl_edit,
 					"ftpl_lead" => $ftpl_lead,
 					"ftpl_view" => $ftpl_view,
-					"aip_filename" => $arr["aip_filename"]
+					"aip_filename" => $arr["aip_filename"],
+					"pclass" => $pclass,
 				),
 			));
 			
@@ -3273,6 +3295,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $row["metadata"],
 		));
+
 		if ($row["class_id"] == CL_PROMO)
 		{
 			classload("promo");
@@ -3289,14 +3312,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->read_template("nchange.tpl");
 		};
 
-		global $DBG;
-		if ($DBG)
-		{
-			print "<pre>";
-			var_dump($row);
-			print "</pre>";
-		}
-	
 		// kysime infot adminnitemplatede kohta
 		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
 		$this->db_query($q);
@@ -3347,6 +3362,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array("admin_feature" => $this->picker($row["admin_feature"],$this->get_feature_sel())));
 			$af = $this->parse("ADMIN_FEATURE");
 		}
+
+		$pm = "";
+		if ($row["type"]  == MN_PMETHOD)
+		{
+			$aw_orb = get_instance("aw_orb");
+			$pclasses = array("0" => "--choose--") + $aw_orb->get_public_classes();
+			$this->vars(array(
+				"pclasses" => $this->picker($meta["pclass"],$pclasses),
+				"pmethods" => "",
+			));
+
+			$pm = $this->parse("PMETHOD");
+		};
+
 		classload("images");
 		$t = new db_images;
 		$num_menu_images = $this->cfg["num_menu_images"];
@@ -3404,7 +3433,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"70" => LC_MENUEDIT_SECTION,
 			"71" => LC_MENUEDIT_ADMINN_MENU,
 			"72" => LC_MENUEDIT_DOCUMENT,
-			"75" => LC_MENUEDIT_CATALOG
+			"75" => LC_MENUEDIT_CATALOG,
+			"77" => LC_MENUEDIT_PMETHOD,
 		);
 
 		$this->vars(array(
@@ -3417,6 +3447,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"seealso_order" => $meta["seealso_order"],
 			"color" => $meta["color"],
 			"ADMIN_FEATURE"	=> $af,
+			"PMETHOD" => $pm,
 			"name"				=> htmlentities($row["name"]), 
 			"number"			=> $row["number"],
 			"comment"			=> $row["comment"], 
@@ -3721,10 +3752,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			
 			// only show content menus
-			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB)
+			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB && $row["mtype"] != MN_PMETHOD)
 			{
 				continue;
 			}
+
 
 			if ($row["hide_noact"] || $this->cfg["all_menus_makdp"] == true)
 			{
@@ -4004,7 +4036,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$noshowu = aw_global_get("uid") == "" && $meta["users_only"] && $this->cfg["no_show_users_only"] == true;
 			// v6i menyy nimi on tyhi, v6i menyyle on 8eldud et users only ja kasutraja pole sisse loginud const.aw sees 
 			// on defineeritud $no_show_users_only
-			if ($selonly && $row["name"] != "" && !$noshowu)
+			if ($selonly && $row["name"] != "" && !$noshowu && !$this->skip)
 			{
 				if ($this->is_template($mn.$ap))
 				{
@@ -4085,7 +4117,49 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !Creates a link for the menu
 	function make_menu_link(&$row)
 	{
-		if ($row["link"] != "")
+		$this->skip = false;
+		if ($row["mtype"] == MN_PMETHOD)
+		{
+			// I should retrieve orb definitions for the requested class
+			// to figure out which arguments it needs and then provide
+			// those
+			$pclass = $row["meta"]["pclass"];
+			if ($pclass)
+			{
+				list($_cl,$_act) = explode("/",$pclass);
+				$aw_orb = get_instance("aw_orb");
+				$meth = $aw_orb->get_public_method(array(
+					"id" => $_cl,
+					"action" => $_act,
+				));
+				$values = array();
+				$err = false;
+				foreach($meth["required"] as $key => $val)
+				{
+					if (in_array($key,array_keys($meth["values"])))
+					{
+						$values[$key] = $meth["values"][$key];
+					}
+					else
+					{
+						$err = true;
+					};
+				};
+				if (not($err))
+				{
+					$link = $this->mk_my_orb($_act,$values,$_cl,1,1);
+				}
+				else
+				{
+					$this->skip = true;
+				};
+			}
+			else
+			{
+				$link = "";
+			};
+		}
+		else if ($row["link"] != "")
 		{
 			$link = $row["link"];
 		}
@@ -4577,7 +4651,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function show_periodic_documents($section,$obj)
 	{
-		$d = new document();
+		$d = get_instance("document");
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
@@ -4599,6 +4673,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$activeperiod = aw_global_get("act_per_id");
 			$d->set_period($activeperiod);
 			$d->list_docs($section, $activeperiod,2);
+
+			// I need to  know that for the public method menus
+			$d->set_opt("cnt_documents",$d->num_rows);
+
 			if ($d->num_rows > 1)		// the database driver sets this
 			{
 				$template = $this->get_lead_template($section);
@@ -4621,6 +4699,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$row = $d->db_next();
 				$template = $this->get_long_template($section);
+				$d->set_opt("shown_document",$row["docid"]);
 				$cont = $d->gen_preview(array(
 					"docid" => $row["docid"],
 					"boldlead" => 1,
@@ -4632,13 +4711,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
 		}
+		upd_distance("document",$d);
 		return $cont;
 	}
 
 	function show_documents($section,$docid,$template = "")
 	{
-		classload("document");
-		$d = new document();
+		//classload("document");
+		//$d = new document();
+		$d = get_instance("document");
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if ($docid < 1) 
 		{
@@ -4659,6 +4740,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if (is_array($docid)) 
 		{
 			$template = $this->get_lead_template($section);
+			
+			// I need to  know that for the public method menus
+			$d->set_opt("cnt_documents",sizeof($docid));
+		
 			$template = $template == "" ? "plain.tpl" : $template;
 			$template2 = file_exists($this->cfg["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 			$ct = ""; 
@@ -4704,6 +4789,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if ($docid)
 			{
+				$d->set_opt("cnt_documents",1);
+				$d->set_opt("shown_document",$docid);
+
 				$ct = $d->gen_preview(array(
 					"docid" => $docid,
 					"section" => $section,
@@ -4756,6 +4844,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 		$this->metaref = $metaref;
+		upd_instance("document",$d);
 		return $ct;
 	}
 
