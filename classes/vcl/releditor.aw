@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.14 2004/04/19 13:12:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.15 2004/04/26 10:48:51 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -61,6 +61,9 @@ class releditor extends aw_template
 		$edit_id = $arr["request"][$this->elname];
 
 		$found = true;
+		
+		$cache_inst = get_instance("cache");
+		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
 
 		if (!empty($edit_id) && is_oid($edit_id))
 		{
@@ -69,6 +72,7 @@ class releditor extends aw_template
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
+
 			foreach($conns as $conn)
 			{
 				if ($conn->prop("to") == $edit_id)
@@ -170,19 +174,29 @@ class releditor extends aw_template
 			{
 				$obj_inst = new object($edit_id);
 			}
-			else if ($prop["rel_id"] == "first")
+			else if (!empty($prop["rel_id"]))
 			{
-				// take the first
+			//else if ($prop["rel_id"] == "first")
+			//{
 				$o = $arr["obj_inst"];
 				if (is_oid($o->id()))
 				{
 					$conns = $o->connections_from(array(
 						"type" => $prop["reltype"],
 					));
-					$key = reset($conns);
-					if ($key)
+					// take the first
+					if ($prop["rel_id"] == "first")
 					{
-						$obj_inst = $key->to();
+						$key = reset($conns);
+						if ($key)
+						{
+							$obj_inst = $key->to();
+						};
+					}
+					else
+					if ($conns[$prop["rel_id"]])
+					{
+						$obj_inst = $conns[$prop["rel_id"]]->to();
 					};
 				};
 			};
@@ -227,15 +241,22 @@ class releditor extends aw_template
 		// so that the object can access the source object
 		aw_global_set("from_obj",$arr["obj_inst"]->id());
 
+
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => "cba_emb",
 			"obj_inst" => $obj_inst,
 		));
-
+		
 		$awt->stop("init-rel-editor");
 		
 		return $xprops;
+	}
+
+	function parse_releditor($arr)
+	{
+
+
 	}
 
 	function init_rel_toolbar($arr)
@@ -300,7 +321,6 @@ class releditor extends aw_template
 			"name" => "check",
 		));
 
-		// hookei. And pray god, please tell me, which fields to I put into that table?
 		// and how do I get values for those?
 
 		// and how do I show the selected row?
@@ -347,6 +367,7 @@ class releditor extends aw_template
 		{
 			$use_clid = $clid;
 		};
+
 		$clinst = get_instance($use_clid);
 
 		$emb = $arr["request"]["cba_emb"];
@@ -426,15 +447,40 @@ class releditor extends aw_template
 
 		$obj_id = $clinst->submit($emb);
 
-		$obj->connect(array(
-			"to" => $obj_id,
-			"reltype" => $arr["prop"]["reltype"],
-		));
+		if ($prop["rel_id"] == "first" && empty($emb["id"]))
+		{
+			// I need to disconnect, no?
+			$old = $obj->connections_from(array(
+				"type" => $arr["prop"]["reltype"],
+			));
+
+			foreach($old as $conn)
+			{
+				$obj->disconnect(array(
+					"from" => $conn->prop("to"),
+				));
+			};
+		};
+
+		if (empty($emb["id"]))
+		{
+			$obj->connect(array(
+				"to" => $obj_id,
+				"reltype" => $arr["prop"]["reltype"],
+			));
+		};
+		
+		$obj->save();
+
+		$cache_inst = get_instance("cache");
+		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
+
+
 	}
 
 	function get_html()
 	{
-		return "here be releditor";
+		//return "here be releditor";
 		//return $this->t->draw();
 	}
 
