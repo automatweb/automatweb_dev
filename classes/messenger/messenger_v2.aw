@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.22 2003/12/03 15:18:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.23 2003/12/08 08:02:21 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -40,9 +40,6 @@ caption Identiteet
 @caption Kirjad
 
 // muu mudru
-
-property main_view type=callback callback=callback_gen_main_view no_caption=1 group=main_view 
-caption Peavaade
 
 @property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
 @caption Outbox
@@ -212,6 +209,10 @@ class messenger_v2 extends class_base
 
 			// right now it only deals with a single server.
 			$_sdat =$conns[0];
+			if (empty($_sdat))
+			{
+				die("Ühtegi sobivat IMAP sissepääsu ei leitud");
+			};
 			$sdat = new object($_sdat->to());
 
 			$this->_name = $sdat->prop("name");
@@ -484,7 +485,6 @@ class messenger_v2 extends class_base
 		));
 
 		$toolbar->add_separator();
-
 	
 		$_tmp = array("0" => "Vii kirjad");
 		foreach($this->mailboxlist as $item)
@@ -544,42 +544,6 @@ class messenger_v2 extends class_base
 
 		return $this->parse();
 	}
-
-	////
-	// !this is the main function that will generate different views .. and really all
-	// the other stuff we are going to possibly need
-	function callback_gen_main_view($arr)
-	{
-		// okey, lets try this thing out
-		// I'm going to return different sets of properties each time
-
-		// would be nice if I could get a list of all active properties
-
-		$prop1 = $this->all_props["mail_toolbar"];
-		$prop2 = $this->all_props["msg_cont"];
-		$prop3 = $this->all_props["treeview"];
-		$prop3["group"] = $arr["request"]["group"];
-		$prop3["cb_view"] = $arr["request"]["cb_view"];
-		if ($arr["request"]["msgid"])
-		{
-			$prop4 = $this->all_props["message_view"];
-		}
-		else
-		if ($arr["request"]["write"])
-		{
-			$prop4 = $this->all_props["write_mail"];
-		}
-		else
-		{
-			$prop4 = $this->all_props["message_list"];
-		};
-
-		$rv = array($prop1,$prop2,$prop3,$prop4);
-
-		return $rv;
-
-	}
-	
 
 	function schedule_filtering($arr)
 	{
@@ -781,11 +745,15 @@ class messenger_v2 extends class_base
 		if (!empty($this->redir_to_mailbox))
 		{
 			$args["mailbox"] = $this->redir_to_mailbox;
-		}
+		};
 		if (!empty($this->redir_to_group))
 		{
 			$args["group"] = $this->redir_to_group;
-		}
+		};
+		if (!empty($arr["request"]["ft_page"]))
+		{
+			$args["ft_page"] = $arr["request"]["ft_page"];
+		};
 	}
 
 	function _get_identity_list($arr)
