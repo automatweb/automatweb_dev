@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.34 2004/08/23 09:37:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.35 2004/08/26 14:34:22 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -778,7 +778,11 @@ class cfgform extends class_base
 			"clid" => $cf->prop("subclass"),
 		));
 
-		$class_i = get_instance($cf->prop("subclass"));
+		$subclass = $cf->prop("subclass");
+		// XXX: can be removed once doc and document are merged
+		$inst_name = ($subclass == CL_DOCUMENT) ? "doc" : $subclass;
+
+		$class_i = get_instance($inst_name);
 		$tmp = $class_i->load_from_storage(array(
 			"id" => $cf->id()
 		));
