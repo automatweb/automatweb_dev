@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.8 2001/05/25 20:27:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.9 2001/06/10 22:45:34 duke Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -173,12 +173,13 @@ class mlist extends aw_template
 	{	
 		$this->quote($args);
 		extract($args);
+		$t = time();
 		if (is_array($list_ids))
 		{
 			foreach($list_ids as $val)
 			{
-				$q = "INSERT INTO ml_users (name,mail,list_id,uid)
-					VALUES('$name','$email','$val','$uid')";
+				$q = "INSERT INTO ml_users (name,mail,list_id,uid,tm)
+					VALUES('$name','$email','$val','$uid',$t)";
 				$this->db_query($q);
 			}
 		};
