@@ -53,7 +53,9 @@ class msgboard extends aw_template
     $commentvotes = $oldvotes;
     session_register("commentvotes");
     global $baseurl;
-    header("Location: $baseurl/comments.aw?action=topics");
+
+	global $HTTP_REFERER;
+    header("Location: $HTTP_REFERER");
 		exit;
     return;
   }	
@@ -82,7 +84,7 @@ class msgboard extends aw_template
 
 		$this->read_template("messages.tpl");
 		$this->vars(array("forum_id" => $forum_id));
-
+	
 		if ($this->is_template("TOPIC"))
 		{
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
@@ -292,9 +294,21 @@ class msgboard extends aw_template
 	function show_flat($id,$page,$forum_id)
 	{
 		$this->quote(&$id);
+		global $HTTP_SESSION_VARS;
+		$votes = $HTTP_SESSION_VARS["commentvotes"];
+		
+		$votedata = $this->get_object_metadata(array(
+					"oid" => $id,
+					"key" => "votes",
+		));
+
+		$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
 
 		$this->read_template("messages.tpl");
-		$this->vars(array("forum_id" => $forum_id));
+		$this->vars(array(
+			"forum_id" => $forum_id,
+			"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
+		));
 
 		if ($this->is_template("TOPIC"))
 		{
@@ -361,7 +375,16 @@ class msgboard extends aw_template
 			$ps = $this->parse("PAGES");
 		}
 
-		$this->vars(array("PAGES" => $ps, "date" => $this->time2date(time(), 2)));
+		$this->vars(array("topic_id" => $id));
+		$l = (isset($votes[$id])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+				
+
+		$this->vars(array(
+			"PAGES" => $ps,
+			"ALREADY_VOTED" => $l,
+			"date" => $this->time2date(time(), 2),
+
+		));
 
 		$ret = $this->parse();
 		return $ret.$this->add(0,$id,$page,$forum_id);
@@ -489,6 +512,11 @@ class msgboard extends aw_template
 		$this->db_query("DELETE FROM comments WHERE id = $id");
 	}
 
+	function rename_topic($name,$id)
+	{
+		print "renaming forum $id to $name<br>";
+	}
+
 	function list_topics($forum_id)
 	{
 		global $page;
@@ -527,6 +555,11 @@ class msgboard extends aw_template
 		}
 		$this->vars(array("PAGES" => $pages));
 
+		$can_delete = false;
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$can_delete = true;
+		}
 		$this->line = 0;
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2  AND parent = $forum_id ORDER BY objects.created DESC");
 		while ($row = $this->db_next())
@@ -555,7 +588,7 @@ class msgboard extends aw_template
 					"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
 					"lastmessage" => $this->time2date($lc,2)
 				));
-				$dt = $GLOBALS["uid"] != "" ? $this->parse("DELETE") : "";
+				$dt = $GLOBALS["uid"] != "" && $can_delete ? $this->parse("DELETE") : "";
 
 				$this->save_handle();
 				if ($aw_mb_last[$row[oid]] < 1)
@@ -789,7 +822,7 @@ class msgboard extends aw_template
 			mail(
 				MSGBOARD_MAIL_TOPIC_TO,
 				MSGBORARD_NOTIFY_SUBJ,
-				sprintf(MSGBOARD_NOTIFY_BODY,$from,$topic,($baseurl."/comments.$ext?section=".$tid."&type=threaded&forum_id=$forum_id"))
+				sprintf(MSGBOARD_NOTIFY_BODY,$from,$topic,($baseurl."/comments.$ext?section=".$tid."&type=flat&forum_id=$forum_id"))
 			);
 		}
 	}
@@ -905,6 +938,12 @@ class msgboard extends aw_template
 
 		$subj = strpos($subj,"Re:")===false ? "Re: ".$subj : $subj;
 		$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
+
+		
+		$l = (isset($votes[$row["oid"]])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+		$this->vars(array(
+			"ALREADY_VOTED" => $l,
+		));
 
 		$this->vars(array("a_subj" => $subj, "a_comment" => $comment,
 											"topic_id" => $id, "msg_id" => $msg ? $msg : 0));
