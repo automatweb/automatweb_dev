@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.33 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.34 2005/03/02 13:47:39 kristo Exp $
 
 /*
 
@@ -62,9 +62,6 @@
 @reltype FOLDER value=1 clid=CL_MENU
 @caption filtri kataloog
 
-@reltype LANGUAGE value=2 clid=CL_LANGUAGE
-@caption filtri keel
-
 */
 
 define("RNG_HOUR", 1);
@@ -109,9 +106,8 @@ class dronline extends class_base
 			'ipblock' => 'IP Blokk',
 			//'show_queries' => 'Salvestatud p&auml;ringud',
 			'general' => 'M&auml;&auml;rangud',
-			'tab_conf' => 'P&auml;ringud',
+			//'tab_conf' => 'P&auml;ringud',
 			'folders' => "Kataloogid",
-			'languages' => "Keeled",
 			'aliasmgr' => "Seostehaldur",
 		);
 
@@ -141,8 +137,8 @@ class dronline extends class_base
 				"text" => "T&auml;na"
 			),
 			"2" => array(
-				"from" => ($today-24*3600),
-				"to" => $today,
+				"from" => (get_day_start()-24*3600),
+				"to" => get_day_start(),
 				"text" => "Eile"
 			),
 			"3" => array(
@@ -429,15 +425,7 @@ class dronline extends class_base
 	function get_where_clause($oid, $prep = ' WHERE ', $ret_conf_desc = false, $tab_id = '', $def_span = 0)
 	{
 		$ob = obj($oid);
-		$tabo = $ob->meta("tab_objs");
-		if (false && $tab_id != '' && $tabo[$tab_id] && $this->can("view", $tabo[$tab_id]))
-		{
-			$t_conf_o = obj($tabo[$tab_id]);
-		}
-		else
-		{
-			$t_conf_o = obj($ob->meta('conf'));
-		}
+		$t_conf_o = obj($ob->meta('conf'));
 
 		$conf_o["meta"] = $t_conf_o->meta();
 
@@ -464,7 +452,7 @@ class dronline extends class_base
 		if ($mt['def_span'])
 		{
 			$sql[] = 'syslog.tm >= '.$this->def_spans[$mt['def_span']]['from'];
-			$sql[] = 'syslog.tm <= '.(get_day_start($this->def_spans[$mt['def_span']]['to']) + 24 * 3600);
+			$sql[] = 'syslog.tm <= '.$this->def_spans[$mt['def_span']]['to'];
 			$this->vars(array(
 				"desc" => "M&auml;&auml;ratud vahemik:",
 				"value" => $this->def_spans[$mt['def_span']]["text"]
@@ -859,6 +847,7 @@ class dronline extends class_base
 			$t->define_data($row);
 		}
 		$t->set_default_sortby('tm');
+		$t->set_default_sorder('desc');
 		$t->sort_by();
 		$tbl = $t->draw();
 		
@@ -1704,49 +1693,6 @@ class dronline extends class_base
 		");
 	}
 
-	function check_hidden_conf($tab, $ob)
-	{
-		$tabo = $ob->meta("tab_objs");
-		if ($tabo[$tab])
-		{
-			return $tabo[$tab];
-		}
-
-		// create new
-		$drc_inst = get_instance('syslog/dronline_conf');
-		$id = $drc_inst->clone(array(
-			'from' => $ob->meta('conf'),
-			'parent' => $ob->id(),
-			'name' => $tab
-		));
-
-		$tabo[$tab] = $id;
-		$ob->set_meta('tab_objs', $tabo);
-		$ob->save();
-
-		return $id;
-	}
-
-	function _do_tab_conf($arr)
-	{
-		extract($arr);
-		// no we gots to show syslog conf configuration here. bijaatch
-		// I think the easiest way is to create fake delete syslog conf objs for each tab 
-		// under this object and then let the user change the conf obj for the current tab
-
-		// check if the object for the prev tab already exists. if it does not, create it
-		$tcid = $this->check_hidden_conf($prev_tab, obj($id));
-
-		$retu = urlencode($this->mk_my_orb("change", array("id" => $id, "dro_tab" => $prev_tab)));
-		header("Location: ".html::get_change_url($tcid, array("return_url" => $retu)));
-		die();
-
-		$droc = get_instance("syslog/dronline_conf");
-		$droc->embedded = true;
-		aw_register_default_class_member('dronline_conf', 'embedded', true);
-		return $droc->change(array("id" => $tcid,"group" => $dro_c_tab));
-	}
-
 	function _do_aliasmgr($arr)
 	{
 		$arr["no_op"] = 1;
@@ -1786,34 +1732,6 @@ class dronline extends class_base
 		));
 	}
 
-	function _do_languages($arr)
-	{
-		$t = $this->_get_languages_table();
-		$o = obj($arr["id"]);
-		$fdat = $o->meta("lang_dat");
-
-		foreach($o->connections_from(array("type" => RELTYPE_LANGUAGE)) as $c)
-		{
-			$to = $c->to();
-			$t->define_data(array(
-				"fld" => $to->path_str(),
-				"act" => html::checkbox(array(
-					"name" => "act[".$to->id()."]",
-					"value" => 1,
-					"checked" => ($fdat[$to->id()]["act"])
-				)),
-			));
-		}
-
-		return html::form(array(
-			"method" => "POST",
-			"action" => aw_ini_get("baseurl")."/automatweb/orb.".aw_ini_get("ext"),
-			"content" => $t->draw().html::submit(array(
-				"value" => "Salvesta"
-			)).$this->mk_reforb("submit_act_lang", array("id" => $arr["id"]))
-		));
-	}
-
 	/** saves folder filter table content
 
 		@attrib name=submit_act_tbl
@@ -1834,26 +1752,6 @@ class dronline extends class_base
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "folders", "dro_tab" => "folders"));
 	}
 
-	/** saves lang filter table content
-
-		@attrib name=submit_act_lang
-
-	**/
-	function submit_act_lang($arr)
-	{
-		$o = obj($arr["id"]);
-		$fd = array();
-		foreach($o->connections_from(array("type" => RELTYPE_LANGUAGE)) as $c)
-		{
-			$to = $c->to();
-			$fd[$to->id()]["act"] = $arr["act"][$to->id()];
-			$fd[$to->id()]["sub"] = $arr["sub"][$to->id()];
-		}
-		$o->set_meta("lang_dat", $fd);
-		$o->save();
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "languages", "dro_tab" => "languages"));
-	}
-
 	function _get_folders_table()
 	{
 		load_vcl("table");
@@ -1872,24 +1770,6 @@ class dronline extends class_base
 		$t->define_field(array(
 			"name" => "sub",
 			"caption" => "k.a. alammen&uuml;&uuml;d",
-			"align" => "center"
-		));
-
-		return $t;
-	}
-
-	function _get_languages_table()
-	{
-		load_vcl("table");
-		$t = new aw_table(array("layout" => "generic"));
-		$t->define_field(array(
-			"name" => "fld",
-			"caption" => "Keel"
-		));
-
-		$t->define_field(array(
-			"name" => "act",
-			"caption" => "Aktiivne",
 			"align" => "center"
 		));
 

@@ -1685,6 +1685,10 @@ class _int_object
 			{
 				$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
 			}
+			if (!$type)
+			{
+				$type = 10000;
+			}
 			$nm = $tmpo->name();
 
 			$GLOBALS["object_loader"]->ds->delete_object($oid);

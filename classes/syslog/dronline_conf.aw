@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.18 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.19 2005/03/02 13:47:39 kristo Exp $
 /*
 
 @default table=objects
@@ -120,13 +120,15 @@ class dronline_conf extends class_base
 			{
 				return PROP_IGNORE;
 			}
+			$sl = get_instance("install/site_list");
+
 			$opts = array('' => 'K&otilde;ik saidid');
 			$this->db_query("SELECT distinct(site_id) as site_id FROM syslog");
 			while ($row = $this->db_next())
 			{
 				if ($row['site_id'])
 				{
-					$opts[$row['site_id']] = $row['site_id'];
+					$opts[$row['site_id']] = $sl->get_url_for_site($row['site_id']);
 				}
 			}
 			$prop['options'] = $opts;

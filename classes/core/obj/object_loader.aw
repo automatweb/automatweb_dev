@@ -519,6 +519,11 @@ class _int_object_loader extends core
 			$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
 		}
 
+		if (!$type)
+		{
+			$type = 10000;
+		}
+
 		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
 	}
 }

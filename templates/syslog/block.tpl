@@ -26,17 +26,17 @@ Blokeeri IP aadresse statistikast
 		<td colspan="2" class="header">IP blocker</td>
 	</tr>
 	<tr>
-		<td class="line" align="center"><strong>IP</strong></center></td>
-		<td class="line" align="center"><strong>Aktiivne</strong></center></td>
+		<td class="awmenuedittablehead" align="center"><strong>IP</strong></center></td>
+		<td class="awmenuedittablehead" align="center"><strong>Aktiivne</strong></center></td>
 	</tr>
 	<!-- SUB: line -->
 	<tr>
-		<td class="line">{VAR:ip}</td>
-		<td class="line" align="center"><input type="checkbox" name="check[{VAR:id}]" value="1" {VAR:checked}></td>
+		<td class="awmenuedittabletext">{VAR:ip}aaa</td>
+		<td class="awmenuedittabletext" align="center"><input type="checkbox" name="check[{VAR:id}]" value="1" {VAR:checked}></td>
 	</tr>
 	<!-- END SUB: line -->
 	<tr>
-		<td class="line" align="center">
+		<td class="awmenuedittabletext" align="center">
 		<input type="text" name="new" size="20"><input type="submit" value="Lisa/Salvesta">
 		{VAR:reforb}
 		</td>
