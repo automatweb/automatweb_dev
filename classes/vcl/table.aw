@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.31 2004/11/02 09:53:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.32 2004/11/19 11:59:31 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -980,9 +980,15 @@ class aw_table extends aw_template
 						{
 							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
 						};
+						$stl = "";
+						if (!empty($this->chooser_config["chgbgcolor"]))
+						{
+							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
+						}
+
 						if($chooser_value)
 						{
-							$tbl .= "<td align='center'><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick}></td>";				
+							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick}></td>";				
 						}
 						else
 						{
