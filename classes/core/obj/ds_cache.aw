@@ -116,6 +116,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		$this->_clear_cache($oid);
 		$this->_clear_cache(0, "connection");
+		// on delete we also have to clear the acl cache for that object
+		$this->cache->file_invalidate_regex("acl-cache-".$oid."(.*)");
+		aw_cache_flush("__aw_acl_cache");
 		return $this->contained->delete_object($oid);
 	}
 

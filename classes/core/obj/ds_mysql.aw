@@ -563,6 +563,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_s.name as `from.name`,
 				o_t.class_id as `to.class_id`,
 				o_s.class_id as `from.class_id`,
+				o_t.jrk as `to.jrk`,
+				o_s.jrk as `from.jrk`,
 				o_t.status as `to.status`,
 				o_s.status as `from.status`
 		";
