@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.211 2004/02/12 12:56:07 duke Exp $
+// $Id: class_base.aw,v 2.212 2004/02/13 16:36:52 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -203,16 +203,16 @@ class class_base extends aw_template
 				// I absolutely freaking _HATE_ this magic with $this->values, it shucks
 				// so much.
 
-				/*
 				if ($this->obj_inst->class_id() == CL_RELATION)
 				{
+					// this is a relation!
 					$this->is_rel = true;
 					$def = $this->cfg["classes"][$this->clid]["def"];
 					$meta = $this->obj_inst->meta("values");
 					$this->values = $meta[$def];
 					$this->values["name"] = $this->obj_inst->name();
+					//$use_form = "rel";
 				};
-				*/
 
 			};
 		}
@@ -1876,6 +1876,7 @@ class class_base extends aw_template
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$relres = $val["vcl_inst"]->init_rel_editor($argblock);
+
 				if (is_array($relres))
 				{
 					foreach($relres as $rkey => $rval)
@@ -1884,6 +1885,7 @@ class class_base extends aw_template
 						$resprops[$rkey] = $rval;
 					};
 				};
+
 			}
 			else
 			{
@@ -1995,7 +1997,7 @@ class class_base extends aw_template
 			
 			if ($val["type"] == "relmanager")
 			{
-				$target_reltype = constant($val["reltype"]);
+				$target_reltype = @constant($val["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$val["vcl_inst"]->init_rel_manager($argblock);
@@ -2104,6 +2106,12 @@ class class_base extends aw_template
 				$resprops[$_field] = $val;
 			};
 		}
+
+		/*
+		print "<pre>";
+		print_r($resprops);
+		print "</pre>";
+		*/
 
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
@@ -2457,6 +2465,7 @@ class class_base extends aw_template
 	function process_data($args = array())
 	{
 		extract($args);
+
 		$this->init_class_base();
 
 		// and this of course should handle both creating new objects and updating existing ones
@@ -2640,7 +2649,6 @@ class class_base extends aw_template
                         $argblock = array(
                                 "prop" => &$property,
                                 "obj" => &$this->coredata,
-                                //"metadata" => &$metadata,
                                 "form_data" => &$rawdata,
 				"request" => &$rawdata,
                                 "new" => $new,
@@ -2696,7 +2704,6 @@ class class_base extends aw_template
 			if ($property["type"] == "releditor")
 			{
 				/// XXX: right now I can only have one type of rel editor
-				$cba_emb = $args["cba_emb"];	
 				classload("vcl/releditor");
 				$vcl_inst = new releditor();
 
@@ -2704,6 +2711,7 @@ class class_base extends aw_template
 				$target_reltype = constant($property["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+
 
 				$vcl_inst->process_releditor($argblock);
 			};
@@ -2779,7 +2787,6 @@ class class_base extends aw_template
 				// XXX: would be nice if this could return an error message as well
 				$vcl_inst->process_relmanager($argblock);
 			};
-
 
 			if (($type == "select") && isset($property["multiple"]))
 			{
