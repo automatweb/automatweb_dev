@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.29 2002/12/21 17:44:18 kristo Exp $
+// $Id: class_base.aw,v 2.30 2002/12/23 13:24:53 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -76,6 +76,8 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 		));
 		
+		$this->request = $args;
+
 		// parse the properties - resolve generated properties and
 		// do any callbacks
 		$resprops = $this->parse_properties(array(
@@ -208,6 +210,8 @@ class class_base extends aliasmgr
 				"object" => $this->coredata,
 			));
 		};
+
+		$this->request = $args;
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
@@ -713,7 +717,7 @@ class class_base extends aliasmgr
 		$_all_props = $cfgu->load_properties(array(
 			"clid" => $this->clid,
 		));
-
+	
 		// ok, first add all the generated props to the props array 
 		$all_props = array();
 		foreach($_all_props as $k => $val)
@@ -761,6 +765,7 @@ class class_base extends aliasmgr
 				};
 			};
 		};
+
 
 		if (!$use_group)
 		{
@@ -1088,23 +1093,24 @@ class class_base extends aliasmgr
 		$argblock = array(
 			"obj" => &$this->coredata,
 			"objdata" => &$this->objdata,
+//			"request" => $this->request
 		);
 
-                foreach($properties as $key => $val)
-                {
+		foreach($properties as $key => $val)
+		{
 			$name = $val["name"];
-                        if (is_array($val))
-                        {
-                                $this->get_value(&$val);
-                        };
+			if (is_array($val))
+			{
+				$this->get_value(&$val);
+			};
 
 			$argblock["prop"] = &$val;
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
-                        if ($callback)
-                        {
-                                $status = $this->inst->get_property($argblock);
-                        };
+			if ($callback)
+			{
+				$status = $this->inst->get_property($argblock);
+			};
 
 			// I need other way to retrieve a list of dynamically
 			// generated properties from the class and display those
@@ -1129,19 +1135,18 @@ class class_base extends aliasmgr
 					{
 						$resprops[$ekey] = $eval;
 					};
-//                                        $resprops[$name]["items"] = $vx;
 				}
 			}
 			elseif ($val["type"] == "hidden")
 			{
 				// do nothing
 			}
-                        else
-                        {
+			else
+			{
 				$this->convert_element(&$val);
-                                $resprops[$name] = $val;
-                        };
-                }
+				$resprops[$name] = $val;
+			};
+		}
 		return $resprops;
 	}
 
