@@ -493,22 +493,13 @@ class site_show extends class_base
 						if ($lm_sub[$_sm])
 						{
 							// include submenus in document sources
-						  $ot = new object_tree(array(
-								 "class_id" => CL_MENU,
-								 "parent" => $_sm,
-								 "status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-								 "sort_by" => "objects.parent"
-						  ));
-						  $sections = $sections + $ot->ids();
-
-			
-							/*
-							$_sm_list = $this->get_menu_list(false, false, $_sm, true, true);
-							foreach($_sm_list as $_sm_i => $ttt)
-							{
-								$sections[$_sm_i] = $_sm_i;
-							}
-							*/
+							$ot = new object_tree(array(
+								"class_id" => CL_MENU,
+								"parent" => $_sm,
+								"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+								"sort_by" => "objects.parent"
+							));
+							$sections = $sections + $ot->ids();
 						}
 					}
 				}
