@@ -1184,7 +1184,7 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "is_in_path")
 			{
-				$ret = "(\$this->_helper_is_in_path(\$prev_obj->".$this->id_func."())) && ";
+				$ret = "(\$prev_obj && \$this->_helper_is_in_path(\$prev_obj->".$this->id_func."())) && ";
 			}
 			else
 			{
