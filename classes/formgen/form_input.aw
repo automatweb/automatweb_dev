@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/Attic/form_input.aw,v 1.1 2002/10/29 10:09:53 kristo Exp $
 // form_input.aw - Tegeleb vormi sisestustega, hetkel ainult XML.
-
+classload("formgen/form_base")
 class form_input extends form_base 
 {
 	function form_input($args = array())
@@ -178,8 +178,7 @@ class form_input extends form_base
 		}
 		elseif ($cs["class_id"] == CL_FORM_CHAIN)
 		{
-			classload("form_chain");
-			$t = new form_chain();
+			$t = get_instance("formgen/form_chain");
 			$t->load_chain($cs["oid"]);
 			$farr = $t->chain["forms"];
 		};
