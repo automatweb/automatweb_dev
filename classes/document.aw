@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.22 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.23 2001/06/15 11:54:11 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -563,6 +563,17 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "pwd_remind",
 					));
+
+		// linkide parsimine
+		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/",$doc["content"],$matches))
+		{
+			$doc["content"] = str_replace($matches[0],"<a href='#" . $matches[2] . "'>$matches[4]</a>",$doc["content"]);
+		};
+
+		while(preg_match("/(#)(s)(\d+?)(#)/",$doc["content"],$matches))
+		{
+			$doc["content"] = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$doc["content"]);
+		};
 	
 
 		if ($notitleimg != 1)
