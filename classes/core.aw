@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.119 2002/11/04 20:48:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.120 2002/11/04 21:24:27 duke Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -2546,6 +2546,7 @@ class core extends db_connector
 	{
 		$this->check_class();
 		$cfg = get_instance("cfg/cfgmanager");
+		$args["clid"] = $this->clid;
 		return $cfg->submit($args);
 	}
 
