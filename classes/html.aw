@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.13 2002/11/27 15:21:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.14 2002/12/17 16:13:06 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -36,7 +36,7 @@ class html extends aw_template
 		};
 		return "<select name='$name' id='$name' $sz $mz>\n$options</select>\n";
 	}
-	
+
 	////
 	// !html text input
 	// name(string)
@@ -66,7 +66,7 @@ class html extends aw_template
 			$args["type"] = "richtext";
 			$args["width"] = $cols * 10;
 			$args["height"] = $rows * 10;
-			$args["value"] = str_replace("\"","&quot;",$args["value"]);
+			$args["value"] = str_replace("\"" , "&quot;",$args["value"]);
 			$retval = html::richtext($args);
 		}
 		else
@@ -76,7 +76,7 @@ class html extends aw_template
 		};
 		return $retval;
 	}
-	
+
 	////
 	// !html password input
 	// name(string)
@@ -141,7 +141,7 @@ class html extends aw_template
 		$checked = checked($checked);
 		return "<input type='radio' name='$name' value='$value' $checked/>\n $caption";
 	}
-	
+
 	////
 	// !Submit button
 	// value(string)
@@ -149,6 +149,16 @@ class html extends aw_template
 	{
 		extract($args);
 		return "<input type='submit' value='$value' />\n";
+	}
+
+	////
+	// !Simple button
+	// value(string)
+	// onclick(string)
+	function button($args = array())
+	{
+		extract($args);
+		return "<input type='button' value='$value' onClick=\"".$onclick."\" />\n";
 	}
 
 	////
