@@ -28,8 +28,15 @@ class db_server_explorer extends class_base
 
 	function submit($arr)
 	{
-		parent::submit($arr);
-		return $this->mk_my_orb('change_conf', array('id' => $arr['id']));
+		$ret = parent::submit($arr);
+		if (!$arr['id'])
+		{
+			return $ret;
+		}
+		else
+		{
+			return $this->mk_my_orb('change_conf', array('id' => $arr['id']));
+		}
 	}
 
 	////
