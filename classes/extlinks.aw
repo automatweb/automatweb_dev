@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.9 2001/10/03 13:07:41 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.10 2001/11/08 11:57:31 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -59,6 +59,10 @@ class extlinks extends aw_template {
 		// now, match[3] contains the index inside the aliases array
 		$l = $this->extlinkaliases[$matches[3] - 1];
 		$link = $this->get_link($l["target"]);
+		if (not($link))
+		{
+			return;
+		}
 		$this->dequote(&$link);
 
 		global $baseurl,$ext;
@@ -113,7 +117,13 @@ class extlinks extends aw_template {
 		$this->_log("link",sprintf(LC_EXTLINKS_CHANGED_LINK,$name));
 	}
 
-	function get_link($id) {
+	function get_link($id)
+	{
+		// bail out if no id	
+		if (not($id))
+		{
+			return;
+		};
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
