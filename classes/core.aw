@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.196 2003/05/22 13:06:34 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.197 2003/05/27 10:01:53 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -674,7 +674,7 @@ class core extends db_connector
 	// but I will leave this in place just in case someone still
 	// needs it.
 	function add_alias($source,$target,$extra = "")
-	{die($source);
+	{
 		$this->addalias(array(
 			"id" => $source,
 			"alias" => $target,
