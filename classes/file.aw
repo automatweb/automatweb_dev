@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.58 2003/10/05 18:06:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.59 2003/10/05 20:33:26 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -89,7 +89,11 @@ class file extends class_base
 				$retval = PROP_IGNORE;
 				break;
 			case "filename":
-				$data["value"] = $arr["obj_inst"]->prop("name");
+				classload("icons");
+				$name = $arr["obj_inst"]->prop("name");
+				$data["value"] = html::img(array(
+					"url" => icons::get_icon_url(CL_FILE,$name),
+				))." ".$name;
 				break;
 			case "view":
 				$fname = basename($arr["obj_inst"]->prop("file"));

@@ -770,13 +770,11 @@ class icons extends aw_template
 	{
 		if ($clid == CL_FILE)
 		{
-			$file = strtolower($name);
-			$dotpos = strrpos($name,".");
-			$extt = substr($name, $dotpos+1);
-			return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
+			$pi = pathinfo($name);
+			return aw_ini_get("icons.server")."/ftype_".$pi["extension"].".gif";
 		}
 		else
-		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "hf_groups" || $clid == "bugtrack" )
+		if (in_array($clid,array("promo_box","brother","conf_icon_other","conf_icon_programs","conf_icon_classes","conf_icon_ftypes","conf_icons","conf_jf","conf_users","conf_icon_import","conf_icon_db","homefolder","hf_groups","bugtrack")))
 		{
 			return aw_ini_get("icons.server")."/iother_".$clid.".gif";
 		}
