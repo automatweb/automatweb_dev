@@ -154,20 +154,7 @@ class languages extends aw_template
 		$this->db_query("SELECT DISTINCT(site_id) AS site_id FROM objects");
 		while ($row = $this->db_next())
 		{
-			if ($row["site_id"] != 0)
-			{
-				// get site name from site server
-				$sd = $this->do_orb_method_call(array(
-					"class" => "site_list", 
-					"action" => "get_site_data", 
-					"params" => array(
-						"site_id" => $row["site_id"]
-					),
-					"method" => "xmlrpc",
-					"server" => "register.automatweb.com"
-				));
-				$ret[$row["site_id"]] = $sd["name"];
-			}
+			$ret[$row["site_id"]] = $row["site_id"];
 		}
 		return $ret;
 	}
@@ -441,7 +428,12 @@ class languages extends aw_template
 		{
 			foreach($this->cfg["list"] as $lid => $ldat)
 			{
-				$dbi->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',1,'$ldat[acceptlang]','".time()."','".$site['site_obj']['default_user']."')");
+				$status = 1;
+				if ($lid == 1)
+				{
+					$status = 2;
+				}
+				$dbi->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',$status,'$ldat[acceptlang]','".time()."','".$site['site_obj']['default_user']."')");
 			}
 		}
 	}
