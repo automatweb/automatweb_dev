@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.70 2003/03/27 15:40:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.71 2003/03/27 18:23:49 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -81,11 +81,9 @@ class forum extends class_base
 	function init_forum_display($args = array())
 	{
 		$forum_obj = $this->get_object($args["id"]);
-		if (isset($forum_obj["meta"]["language"]) && $forum_obj["meta"]["language"] != 0)
+		if (!empty($forum_obj["meta"]["language"])) 
 		{
-			$lx = get_instance("languages");
-			$ldata = $lx->fetch($forum_obj["meta"]["language"]);
-			$this->lc_load("msgboard","lc_msgboard",$ldata["acceptlang"]);
+			$this->lc_load("msgboard","lc_msgboard",$forum_obj["meta"]["language"]);
 
 		};
 	}
@@ -2043,9 +2041,10 @@ topic");
 
 	function callback_get_languages($args = array())
 	{
-		$lx = get_instance("languages");
-		$xlist = array("0" => "default") + $lx->get_list();
-		$retval = array();
+		$xlist = array();
+		$xlist[0] = "default";
+		$xlist["et"] = "Eesti (et)";
+		$xlist["en"] = "Inglise (en)";
 		foreach($xlist as $key => $val)
 		{
 			$retval[] = array(
