@@ -34,6 +34,9 @@ ICONPATH = '{VAR:baseurl}/automatweb/images/'
 PERSERVESTATE = 0
 LINKTARGET = 'list'
 SHOWNODE = ''
+HIGHLIGHT = 1;
+HIGHLIGHT_COLOR = '#0000FF';
+HIGHLIGHT_BG = '#EEEEEE';
 
 pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}", "{VAR:baseurl}/automatweb/images/aw_ikoon.gif")
 <!-- SUB: TREE -->
