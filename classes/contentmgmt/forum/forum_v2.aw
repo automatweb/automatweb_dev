@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.23 2004/02/13 13:45:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.24 2004/02/26 13:45:18 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1165,7 +1165,7 @@ class forum_v2 extends class_base
 
 	/**  
 		
-		@attrib name=add_topic params=name all_args="1" default="0"
+		@attrib name=add_topic params=name all_args="1" nologin="1"
 		
 		
 		@returns
@@ -1194,7 +1194,7 @@ class forum_v2 extends class_base
 
 	/**  
 		
-		@attrib name=submit_topic params=name all_args="1" default="0"
+		@attrib name=submit_topic params=name all_args="1" nologin="1"
 		
 		
 		@returns
@@ -1222,7 +1222,7 @@ class forum_v2 extends class_base
 	
 	/**  
 		
-		@attrib name=submit_comment params=name all_args="1" default="0"
+		@attrib name=submit_comment params=name all_args="1" nologin="1"
 		
 		
 		@returns
