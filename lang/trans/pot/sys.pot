@@ -1,0 +1,40 @@
+#: classes/sys.aw:139
+msgid "Failed opening connection to server %s"
+msgstr ""
+
+#: classes/sys.aw:149
+msgid "Write error"
+msgstr ""
+
+#: classes/sys.aw:502
+msgid "L&otilde;i saidi andmebaasi tabelid"
+msgstr ""
+
+#: classes/sys.aw:558
+msgid "all done! "
+msgstr ""
+
+#: classes/sys.aw:603
+msgid "Nimi"
+msgstr ""
+
+#: classes/sys.aw:607
+msgid "Klass"
+msgstr ""
+
+#: classes/sys.aw:611
+msgid "Muutja"
+msgstr ""
+
+#: classes/sys.aw:615
+msgid "Muutmise aeg"
+msgstr ""
+
+#: classes/sys.aw:782
+msgid "all done!! database seems to be relatively ok!"
+msgstr ""
+
+#: classes/sys.aw:842
+msgid "All done"
+msgstr ""
+

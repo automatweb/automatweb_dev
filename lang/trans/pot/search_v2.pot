@@ -14,51 +14,59 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/search_v2.aw:182
+#: classes/search_v2.aw:180
 msgid "Kõik"
 msgstr ""
 
-#: classes/search_v2.aw:183
+#: classes/search_v2.aw:181
 msgid "Aktiivsed"
 msgstr ""
 
-#: classes/search_v2.aw:184
+#: classes/search_v2.aw:182
 msgid "Deaktiivsed"
 msgstr ""
 
-#: classes/search_v2.aw:223
+#: classes/search_v2.aw:211
+msgid "ID"
+msgstr ""
+
+#: classes/search_v2.aw:216
+msgid ""
+msgstr ""
+
+#: classes/search_v2.aw:221
 msgid "Nimi"
 msgstr ""
 
-#: classes/search_v2.aw:227
+#: classes/search_v2.aw:225
 msgid "Keel"
 msgstr ""
 
-#: classes/search_v2.aw:232
+#: classes/search_v2.aw:230
 msgid "Tüüp"
 msgstr ""
 
-#: classes/search_v2.aw:236
+#: classes/search_v2.aw:234
 msgid "Asukoht"
 msgstr ""
 
-#: classes/search_v2.aw:240
+#: classes/search_v2.aw:238
 msgid "Loodud"
 msgstr ""
 
-#: classes/search_v2.aw:246
+#: classes/search_v2.aw:244
 msgid "Looja"
 msgstr ""
 
-#: classes/search_v2.aw:250
+#: classes/search_v2.aw:248
 msgid "Muudetud"
 msgstr ""
 
-#: classes/search_v2.aw:256
+#: classes/search_v2.aw:254
 msgid "Muutja"
 msgstr ""
 
-#: classes/search_v2.aw:262
+#: classes/search_v2.aw:260
 msgid "Vali"
 msgstr ""
 

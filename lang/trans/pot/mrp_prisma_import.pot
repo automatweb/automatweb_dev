@@ -1,0 +1,4 @@
+#: classes/mrp/mrp_prisma_import.aw:104
+msgid "all done"
+msgstr ""
+

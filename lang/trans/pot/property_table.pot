@@ -1,0 +1,44 @@
+#: classes/applications/class_designer/property_table.aw:78
+msgid "Kasutaja poolt sisestatud andmed"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:79
+msgid "Seostatud objektid"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:90
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:159
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:165
+msgid "&Uuml;lemtulp"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:170
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:175
+msgid "Laius"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:180
+msgid "Sorteeritav"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:186
+msgid "Joondamine"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:605
+msgid "Tulp"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:612
+msgid "Omadus"
+msgstr ""
+

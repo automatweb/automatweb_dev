@@ -211,6 +211,24 @@ class pot_scanner extends core
 				echo "$from_file:".($ln+1)." / untranslated tooltip ->\n".trim($line)."\n";
 				$this->warn_cnt++;
 			}
+			else
+			if (preg_match("/\"text\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated menu item text ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/\"confirm\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated confirm ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
+			else
+			if (preg_match("/\"title\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
+			{
+				echo "$from_file:".($ln+1)." / untranslated title ->\n".trim($line)."\n";
+				$this->warn_cnt++;
+			}
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.48 2005/03/21 13:21:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.49 2005/03/21 15:26:56 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -479,8 +479,8 @@ class mrp_workspace extends class_base
 				}
 				break;
 			case "legend":
-				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;</span> &Uuml;le t&auml;htaja planeeritud</div>';
-				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;</span> &Uuml;le t&auml;htaja l&auml;inud</div>';
+				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja planeeritud").'</div>';
+				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja l&auml;inud").'</div>';
 				break;
 
 			### users tab
@@ -560,9 +560,9 @@ class mrp_workspace extends class_base
 
 			case "parameter_timescale_unit":
 				$prop["options"] = array (
-					"86400" => "Päev",
-					"60" => "Minut",
-					"1" => "Sekund",
+					"86400" => t("Päev"),
+					"60" => t("Minut"),
+					"1" => t("Sekund"),
 				);
 				break;
 
@@ -572,7 +572,7 @@ class mrp_workspace extends class_base
 					"mrp_workspace" => $this_object->id (),
 				), "mrp_schedule");
 				$plan_href = html::href(array(
-					"caption" => "[Planeeri]",
+					"caption" => t("[Planeeri]"),
 					"url" => $plan_url,
 					)
 				);
@@ -616,9 +616,9 @@ class mrp_workspace extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>Valmis</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>T&ouml;&ouml;s / v&otilde;ib alustada</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>Ei saa alustada</span>&nbsp;&nbsp;";
+				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("T&ouml;&ouml;s / v&otilde;ib alustada")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada")."</span>&nbsp;&nbsp;";
 				break;
 
 			case "sp_name":
@@ -647,9 +647,9 @@ class mrp_workspace extends class_base
 
 			case "sp_status":
 				$prop["options"] = array(
-					MRP_STATUS_DONE => "Tehtud",
-					MRP_STATUS_ABORTED => "Katkestatud",
-					MRP_STATUS_PLANNED => "Avatud"
+					MRP_STATUS_DONE => t("Tehtud"),
+					MRP_STATUS_ABORTED => t("Katkestatud"),
+					MRP_STATUS_PLANNED => t("Avatud")
 				);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
@@ -806,26 +806,26 @@ class mrp_workspace extends class_base
 
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "operator",
-			"caption" => "Operaator",
+			"caption" => t("Operaator"),
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "status",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "modify",
-			"caption" => "Ava",
+			"caption" => t("Ava"),
 		));
 		$table->define_field(array(
 			"name" => "order",
-			"caption" => "Jrk.",
+			"caption" => t("Jrk."),
 			"callback" => array (&$this, "order_field_callback"),
 			"callb_pass_row" => false,
 			"sortable" => 1
@@ -869,7 +869,7 @@ class mrp_workspace extends class_base
 
 			$table->define_data (array (
 				"modify" => html::href (array (
-					"caption" => "Ava",
+					"caption" => t("Ava"),
 					"url" => $change_url,
 					)
 				),
@@ -918,16 +918,16 @@ class mrp_workspace extends class_base
 		$toolbar->add_menu_button(array(
 			"name" => "add",
 			"img" => "new.gif",
-			"tooltip" => "Lisa uus",
+			"tooltip" => t("Lisa uus"),
 		));
 		$toolbar->add_menu_item(array(
 			"parent" => "add",
-			"text" => "Ressurss",
+			"text" => t("Ressurss"),
 			"link" => $add_resource_url,
 		));
 		$toolbar->add_menu_item(array(
 			"parent" => "add",
-			"text" => "Ressurssikategooria",
+			"text" => t("Ressurssikategooria"),
 			"link" => $add_category_url,
 		));
 
@@ -935,14 +935,14 @@ class mrp_workspace extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "cut",
-			"tooltip" => "L&otilde;ika",
+			"tooltip" => t("L&otilde;ika"),
 			"action" => "cut_resources",
 			"img" => "cut.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "copy",
-			"tooltip" => "Kopeeri",
+			"tooltip" => t("Kopeeri"),
 			"action" => "copy_resources",
 			"img" => "copy.gif",
 		));
@@ -952,7 +952,7 @@ class mrp_workspace extends class_base
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
-				"tooltip" => "Kleebi",
+				"tooltip" => t("Kleebi"),
 				"action" => "paste_resources",
 				"img" => "paste.gif",
 			));
@@ -963,9 +963,9 @@ class mrp_workspace extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"action" => "delete",
-			"confirm" => "Kustutada kõik valitud ressursid?",
+			"confirm" => t("Kustutada kõik valitud ressursid?"),
 		));
 	}
 
@@ -981,14 +981,14 @@ class mrp_workspace extends class_base
 		$toolbar->add_button(array(
 			"name" => "add",
 			"img" => "new.gif",
-			"tooltip" => "Lisa uus projekt",
+			"tooltip" => t("Lisa uus projekt"),
 			"url" => $add_project_url,
 		));
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta valitud projekt(id)",
-			"confirm" => "Kustutada kõik valitud projektid?",
+			"tooltip" => t("Kustuta valitud projekt(id)"),
+			"confirm" => t("Kustutada kõik valitud projektid?"),
 			"action" => "delete",
 		));
 	}
@@ -1106,31 +1106,31 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Kõik plaanisolevad" . "(" . $count_projects_planned . ")",
+			"name" => t("Kõik plaanisolevad") . "(" . $count_projects_planned . ")",
 			"id" => "planned",
 			"url" => $url_projects_planned,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Hetkel töösolevad" . "(" . $count_projects_in_work . ")",
+			"name" => t("Hetkel töösolevad") . "(" . $count_projects_in_work . ")",
 			"id" => "inwork",
 			"url" => $url_projects_in_work,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Planeeritud üle tähtaja" . "(" . $count_projects_planned_overdue . ")",
+			"name" => t("Planeeritud üle tähtaja") . "(" . $count_projects_planned_overdue . ")",
 			"id" => "planned_overdue",
 			"url" => $url_projects_planned_overdue,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Üle tähtaja" . "(" . $count_projects_overdue . ")",
+			"name" => t("Üle tähtaja") . "(" . $count_projects_overdue . ")",
 			"id" => "overdue",
 			"url" => $url_projects_overdue,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Uued" . "(" . $count_projects_new . ")",
+			"name" => t("Uued") . "(" . $count_projects_new . ")",
 			"id" => "new",
 			"url" => $url_projects_new,
 		));
@@ -1142,19 +1142,19 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Katkestatud" . "(" . $count_projects_aborted . ")",
+			"name" => t("Katkestatud") . "(" . $count_projects_aborted . ")",
 			"id" => "aborted",
 			"url" => $url_projects_aborted,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Kõik projektid",
+			"name" => t("Kõik projektid"),
 			"id" => "all",
 			"url" => $url_projects_all,
 		));
 
 		$tree->add_item (0, array (
-			"name" => "Allhanket&ouml;&ouml;d",
+			"name" => t("Allhanket&ouml;&ouml;d"),
 			"id" => "subcontracts",
 			"url" => $url_subcontract_jobs,
 		));
@@ -1179,20 +1179,20 @@ class mrp_workspace extends class_base
 
 		$table->define_field (array (
 			"name" => "customer",
-			"caption" => "Klient",
+			"caption" => t("Klient"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "name",
-			"caption" => "Projekt",
+			"caption" => t("Projekt"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 			"numeric" => 1
 		));
 		$table->define_field (array (
 			"name" => "starttime",
-			"caption" => "Materjalide saabumine",
+			"caption" => t("Materjalide saabumine"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
@@ -1204,7 +1204,7 @@ class mrp_workspace extends class_base
 		));
 		$table->define_field(array(
 			"name" => "due_date",
-			"caption" => "Tähtaeg",
+			"caption" => t("Tähtaeg"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
@@ -1220,7 +1220,7 @@ class mrp_workspace extends class_base
 				$table->define_field(array(
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
-					"caption" => "Prioriteet",
+					"caption" => t("Prioriteet"),
 					"callback" => array (&$this, "priority_field_callback"),
 					"callb_pass_row" => false,
 					"sortable" => 1,
@@ -1232,7 +1232,7 @@ class mrp_workspace extends class_base
 				$table->define_field (array (
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
-					"caption" => "Prioriteet",
+					"caption" => t("Prioriteet"),
 					"sortable" => 1,
 				));
 				break;
@@ -1240,22 +1240,22 @@ class mrp_workspace extends class_base
 
 		$table->define_field(array(
 			"name" => "sales_priority",
-			"caption" => "Müügi prioriteet",
+			"caption" => t("Müügi prioriteet"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
 		$table->define_field(array(
 			"name" => "modify",
 			"chgbgcolor" => "bgcolour_overdue",
-			"caption" => "Ava",
+			"caption" => t("Ava"),
 		));
 
 		if ($list_request != "search")
 		{
-		$table->define_chooser(array(
-			"name" => "selection",
-			"field" => "project_id",
-		));
+			$table->define_chooser(array(
+				"name" => "selection",
+				"field" => "project_id",
+			));
 		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
@@ -1447,19 +1447,19 @@ class mrp_workspace extends class_base
 
 		$table->define_field (array (
 			"name" => "customer",
-			"caption" => "Klient",
+			"caption" => t("Klient"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "project",
-			"caption" => "Projekt",
+			"caption" => t("Projekt"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "resource",
-			"caption" => "Teostaja",
+			"caption" => t("Teostaja"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
@@ -1468,7 +1468,7 @@ class mrp_workspace extends class_base
 			// "type" => "time",
 			// "format" => MRP_DATE_FORMAT,
 			// "numeric" => 1,
-			// "caption" => "Kokkulepitud algusaeg",
+			// "caption" => t("Kokkulepitud algusaeg"),
 			// "chgbgcolor" => "bgcolour_overdue",
 			// "sortable" => 1,
 		// ));
@@ -1477,14 +1477,14 @@ class mrp_workspace extends class_base
 			"type" => "time",
 			"format" => MRP_DATE_FORMAT,
 			"numeric" => 1,
-			"caption" => "Planeeritud algusaeg",
+			"caption" => t("Planeeritud algusaeg"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
 		$table->define_field(array(
 			"name" => "modify",
 			"chgbgcolor" => "bgcolour_overdue",
-			"caption" => "Ava",
+			"caption" => t("Ava"),
 		));
 
 		$table->set_default_sortby ("scheduled_date");
@@ -1757,37 +1757,37 @@ class mrp_workspace extends class_base
 
 		$start_nav[] = html::href (array (
 			"caption" => "<<",
-			"title" => "5 tagasi",
+			"title" => t("5 tagasi"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start - 5*$period_length)),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => "Eelmine",
+			"caption" => t("Eelmine"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start - $period_length)),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => "Täna",
+			"caption" => t("Täna"),
 			"url" => aw_url_change_var ("mrp_chart_start", $this->get_week_start ()),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => "Järgmine",
+			"caption" => t("Järgmine"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + $period_length + 1)),
 		));
 		$start_nav[] = html::href (array (
 			"caption" => ">>",
-			"title" => "5 edasi",
+			"title" => t("5 edasi"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + 5*$period_length)),
 		));
 
-		$navigation = '&nbsp;&nbsp;Periood: ' . implode (" ", $start_nav) . ' &nbsp;&nbsp;Päevi perioodis: ' . implode (" ", $length_nav);
+		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
 
 		if (is_oid ($arr["request"]["mrp_hilight"]))
 		{
 			$project = obj ($arr["request"]["mrp_hilight"]);
 			$deselect = html::href (array (
-				"caption" => "Kaota valik",
+				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$navigation .= ' &nbsp;&nbsp;Valitud projekt: <span style="color: #CC0000;">' . $project->name () . '</span> (' . $deselect . ')';
+			$navigation .= t(' &nbsp;&nbsp;Valitud projekt:').' <span style="color: #CC0000;">' . $project->name () . '</span> (' . $deselect . ')';
 		}
 
 		return $navigation;
@@ -2330,35 +2330,35 @@ class mrp_workspace extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "address",
-			"caption" => "Aadress",
+			"caption" => t("Aadress"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "phone",
-			"caption" => "Telefon",
+			"caption" => t("Telefon"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "E-mail",
+			"caption" => t("E-mail"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "priority",
-			"caption" => "Prioriteet",
+			"caption" => t("Prioriteet"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -2403,20 +2403,20 @@ class mrp_workspace extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Number",
+			"caption" => t("Number"),
 			"align" => "center",
 			"sortable" => 1,
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => "Kommentaar",
+			"caption" => t("Kommentaar"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "start",
-			"caption" => "Algus",
+			"caption" => t("Algus"),
 			"align" => "center",
 			"sortable" => 1,
 			"type" => "time",
@@ -2425,7 +2425,7 @@ class mrp_workspace extends class_base
 		));
 		$t->define_field(array(
 			"name" => "end",
-			"caption" => "T&auml;htaeg",
+			"caption" => t("T&auml;htaeg"),
 			"align" => "center",
 			"sortable" => 1,
 			"type" => "time",
@@ -2434,7 +2434,7 @@ class mrp_workspace extends class_base
 		));
 		$t->define_field(array(
 			"name" => "planned",
-			"caption" => "Planeeritud",
+			"caption" => t("Planeeritud"),
 			"align" => "center",
 			"sortable" => 1,
 			"type" => "time",
@@ -2717,7 +2717,7 @@ class mrp_workspace extends class_base
 		{
 			if ($all_res[$prof->id()] == 1)
 			{
-				return "K&otilde;ik ressursid";
+				return t("K&otilde;ik ressursid");
 			}
 		}
 
@@ -2726,7 +2726,7 @@ class mrp_workspace extends class_base
 		{
 			if ($dept_res[$prof->id()] == 1)
 			{
-				return "Osakonna ressursid";
+				return t("Osakonna ressursid");
 			}
 		}
 
@@ -3214,29 +3214,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-	{
+		{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-		{
+			{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-		}
+			}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-	}
+			}
 			if ($arr["request"]["cs_phone"] != "")
-	{
+			{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-	}
+		}
 
 		foreach($results->arr() as $cust)
-	{
+		{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),
@@ -3244,7 +3244,7 @@ class mrp_workspace extends class_base
 				"email" => $cust->prop_str("email_id"),
 				"oid" => $cust->id(),
 				"priority" => $cust->prop("priority")
-		));
+			));
 		}
 	}
 }

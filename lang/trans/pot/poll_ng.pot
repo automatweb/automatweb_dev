@@ -1,0 +1,28 @@
+#: classes/poll_ng.aw:40
+msgid "ID"
+msgstr ""
+
+#: classes/poll_ng.aw:48
+msgid "Nimi"
+msgstr ""
+
+#: classes/poll_ng.aw:54
+msgid "Klikke"
+msgstr ""
+
+#: classes/poll_ng.aw:62
+msgid "Protsent"
+msgstr ""
+
+#: classes/poll_ng.aw:81
+msgid "Variandid"
+msgstr ""
+
+#: classes/poll_ng.aw:144
+msgid "there is no relation between those objects"
+msgstr ""
+
+#: classes/poll_ng.aw:156
+msgid "invalid choice"
+msgstr ""
+

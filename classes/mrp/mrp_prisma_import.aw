@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.12 2005/03/15 14:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.13 2005/03/21 15:26:56 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -101,7 +101,7 @@ class mrp_prisma_import extends class_base
 		$this->_imp_proj($db, $co);
 
 		aw_restore_messages();
-		die("all done");
+		die(t("all done"));
 	}
 
 	function _imp_cust_cat($db, $co)
@@ -385,9 +385,9 @@ class mrp_prisma_import extends class_base
 				$row["TööAlgus"] = get_day_start($row["TööAlgus"]) + 16 * 3600;
 			}
 			if ((get_day_start($row["TellimuseTähtaeg"]) - $row["TellimuseTähtaeg"]) < 120)
-                        {
-                                $row["TellimuseTähtaeg"] = get_day_start($row["TellimuseTähtaeg"]) + 16 * 3600;
-                        }
+			{
+				$row["TellimuseTähtaeg"] = get_day_start($row["TellimuseTähtaeg"]) + 16 * 3600;
+			}
 			$proj[$row["TellimuseNr"]] = $row;
 		}
 

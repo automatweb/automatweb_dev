@@ -1,20 +1,20 @@
-#: classes/mrp/mrp_case.aw:1368
+#: classes/mrp/mrp_case.aw:1370
 msgid "Millal"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1378
+#: classes/mrp/mrp_case.aw:1380
 msgid "T&ouml;&ouml"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1385
+#: classes/mrp/mrp_case.aw:1387
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1392
+#: classes/mrp/mrp_case.aw:1394
 msgid "sisu"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1399
+#: classes/mrp/mrp_case.aw:1401
 msgid "Kommentaar"
 msgstr ""
 
