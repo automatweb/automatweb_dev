@@ -1,0 +1,24 @@
+#: classes/applications/orders/orders_form.aw:803
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:852
+msgid "Kauba t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:858
+msgid "Min. Kuud"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:864
+msgid "Max. Kuud"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:870
+msgid "Esmase sissemakse %"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:876
+msgid "Intressi %"
+msgstr ""
+

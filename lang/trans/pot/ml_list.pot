@@ -1,5 +1,85 @@
+#: classes/applications/mailinglist/ml_list.aw:255
+msgid "Tagasi"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:255
+msgid "Saada teade"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:332
+msgid "saatis meili %s listi %s:%s"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:414
 msgid "Sellise aadressiga inimene on juba listiga liitunud"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:502
+msgid "Kasutajanimi"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:503
+msgid "Nimi Perenimi"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:547
+msgid "liitumine"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:548
+msgid "lahkumine"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:585
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:599
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:609
+msgid "Saada"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:610
+msgid "Saata kiri ära?"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:642
+msgid "Midagi pole veel saadetud"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:661
+msgid "nimi,aadress"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:662
+msgid "nimi &lt;aadress&gt;"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:663
+msgid "aadress"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:664
+msgid "Kõik andmed"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:723
+msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:740
+msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:752
+msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:763
+msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:951
@@ -12,6 +92,10 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:959
 msgid "Loodud"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:992
+msgid "(pealkiri puudub)"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:1005
@@ -30,8 +114,24 @@ msgstr ""
 msgid "Kustutada need liikmed?"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:1150
+msgid "Liitumisinfo"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:1155
 msgid "Muuda"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1189
+msgid "Vaata"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1237
+msgid "Uus kiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1247
+msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:1287
@@ -46,11 +146,46 @@ msgstr ""
 msgid "ei"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:1663
+msgid "Liikmeid: %s, saadetud: %s %s"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1745
+msgid " - vali - "
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1754
+msgid "Vali template"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:1763
 msgid "Saada peale salvestamist ära"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:1780
+msgid "Saatja e-maili aadress"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1785
+msgid "Saatja nimi"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:1793
 msgid "Asenduste legend"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:1794
+msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
+							#username# - AutomatWebi kasutajanimi<br />
+							#name# - Listi liikme nimi<br />
+							#subject# - Kirja teema<br />
+							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
+							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
+							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
+							Näiteks: http://www.struktuur.ee/aw#traceid#"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:2067
+msgid "all done"
 msgstr ""
 

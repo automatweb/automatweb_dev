@@ -1,0 +1,32 @@
+#: classes/applications/orders/orders_order.aw:151
+msgid "Toode"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:156
+msgid "Toote kood"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:161
+msgid "Värv"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:166
+msgid "Suurus"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:171
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:176
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:443
+msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:463
+msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
+msgstr ""
+

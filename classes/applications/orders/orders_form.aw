@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.11 2005/03/21 12:00:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.12 2005/03/22 15:47:59 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -800,7 +800,7 @@ class orders_form extends class_base
 					"url" => $this->mk_my_orb("delete_from_order",array(
 						"id" => $item->id(),
 					), CL_ORDERS_FORM),
-					"caption" => "Kustuta")),
+					"caption" => t("Kustuta"))),
 				"delete_url" => $this->mk_my_orb("delete_from_order",array(
 						"id" => $item->id(),
 					), CL_ORDERS_FORM),	
@@ -849,31 +849,31 @@ class orders_form extends class_base
 	{
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "Kauba t&uuml;&uuml;p",
+			"caption" => t("Kauba t&uuml;&uuml;p"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "min_mons", 
-			"caption" => "Min. Kuud",
+			"caption" => t("Min. Kuud"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "max_mons",
-			"caption" => "Max. Kuud",
+			"caption" => t("Max. Kuud"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "prepayment",
-			"caption" => "Esmase sissemakse %",
+			"caption" => t("Esmase sissemakse %"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "interest",
-			"caption" => "Intressi %",
+			"caption" => t("Intressi %"),
 			"align" => "center"
 		));
 	}

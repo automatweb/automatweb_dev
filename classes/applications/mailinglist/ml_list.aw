@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.23 2005/03/22 15:38:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.24 2005/03/22 15:47:59 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -252,7 +252,7 @@ class ml_list extends class_base
 				"id" => $targets,
 			));
 		}
-		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
+		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>".t("Tagasi")."</a>&nbsp;/&nbsp;".t("Saada teade"));
 
 		$this->read_template("post_message.tpl");
 
@@ -329,7 +329,7 @@ class ml_list extends class_base
 		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
 		$this->db_query($q);
 		
-		$this->_log(ST_MAILINGLIST, SA_SEND, "saatis meili $id listi ".$v["name"].":$gname", $lid);
+		$this->_log(ST_MAILINGLIST, SA_SEND, sprintf(t("saatis meili %s listi %s:%s"),$id, $v["name"], $gname) ,$lid);
 		return aw_global_get("route_back");
 	}
 
@@ -499,8 +499,8 @@ class ml_list extends class_base
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = nl2br($msg_obj->prop("msg_contener_content"));
 		
-		$message = str_replace("#username#", "Kasutajanimi", $message);
-		$message = str_replace("#name#", "Nimi Perenimi", $message);
+		$message = str_replace("#username#", t("Kasutajanimi"), $message);
+		$message = str_replace("#name#", t("Nimi Perenimi"), $message);
 		
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
@@ -544,8 +544,8 @@ class ml_list extends class_base
 			*/
 			case "sub_form_type":
 				$prop["options"] = array(
-					"0" => "liitumine",
-					"1" => "lahkumine",
+					"0" => t("liitumine"),
+					"1" => t("lahkumine"),
 				);
 				break;
 
@@ -639,7 +639,7 @@ class ml_list extends class_base
 				{
 					if ($row["last_sent"] == 0)
 					{
-						$prop["value"] = "Midagi pole veel saadetud";
+						$prop["value"] = t("Midagi pole veel saadetud");
 					}
 					else
 					{
@@ -658,10 +658,10 @@ class ml_list extends class_base
 
 			case "export_type":
 				$prop["options"] = array(
-					ML_EXPORT_CSV => "nimi,aadress",
-					ML_EXPORT_NAMEADDR => "nimi &lt;aadress&gt;",
-					ML_EXPORT_ADDR => "aadress",
-					ML_EXPORT_ALL => "Kõik andmed",
+					ML_EXPORT_CSV => t("nimi,aadress"),
+					ML_EXPORT_NAMEADDR => t("nimi &lt;aadress&gt;"),
+					ML_EXPORT_ADDR => t("aadress"),
+					ML_EXPORT_ALL => t("Kõik andmed"),
 				);
 				$prop["value"] = 1;
 				break;
@@ -720,7 +720,7 @@ class ml_list extends class_base
 					"text" => $contents,
 				)))
 				{
-					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -737,7 +737,7 @@ class ml_list extends class_base
 					"text" => $contents,
 				)))
 				{
-					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -749,7 +749,7 @@ class ml_list extends class_base
 					"text" => $prop["value"],
 				)))
 				{
-					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -760,7 +760,7 @@ class ml_list extends class_base
 					"text" => $prop["value"],
 				)))
 				{
-					$prop["error"] = "Selle toimingu jaoks peab listiliikmete allikas olema kaust";
+					$prop["error"] = t("Selle toimingu jaoks peab listiliikmete allikas olema kaust");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -989,7 +989,7 @@ class ml_list extends class_base
 					"name" => html::get_change_url($arr["obj_inst"]->id(), array(
 						"group" => "write_mail",
 						"msg_id" => $mail->id(),
-					), ($mail->name() ? $mail->name() : "(pealkiri puudub)")),
+					), ($mail->name() ? $mail->name() : t("(pealkiri puudub)"))),
 					"created" => $mail->created(),
 				));
 			}
@@ -1661,7 +1661,7 @@ class ml_list extends class_base
 			header("Refresh: $refresh_rate; url=$url");
 			$str = ", värskendan iga ${refresh_rate} sekundi järel";
 		}
-		return "Liikmeid: $member_count, saadetud: $served_count $str";
+		return sprintf(t("Liikmeid: %s, saadetud: %s %s"), $member_count, $served_count, $str);
 	}
 
 	function callback_mod_tab($arr)
@@ -1743,7 +1743,7 @@ class ml_list extends class_base
 		// insert a template selector, if there are any templates available
 		if (sizeof($templates) > 0)
 		{
-			$options = array(0 => " - vali - ");
+			$options = array(0 => t(" - vali - "));
 			foreach($templates as $template)
 			{
 				$options[$template->prop("to")] = $template->prop("to.name");
@@ -1778,12 +1778,12 @@ class ml_list extends class_base
 			{
 				if ($id == "mfrom")
 				{
-					$prop["caption"] = "Saatja e-maili aadress";
+					$prop["caption"] = t("Saatja e-maili aadress");
 					$prop["type"] = "textbox";
 				}
 				elseif($id == "mfrom_name")
 				{
-					$prop["caption"] = "Saatja nimi";
+					$prop["caption"] = t("Saatja nimi");
 					$prop["type"] = "textbox";
 				}
 				elseif($id == "message")
@@ -1792,14 +1792,14 @@ class ml_list extends class_base
 						"type" => "text",
 						"name" => "legend",
 						"caption" =>  t("Asenduste legend"),
-						"value" => "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
+						"value" => t("Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
 							#subject# - Kirja teema<br />
 							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
 							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
 							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
-							Näiteks: http://www.struktuur.ee/aw#traceid#",
+							Näiteks: http://www.struktuur.ee/aw#traceid#"),
 					);
 				}
 				$filtered_props[$id] = $prop;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.3 2005/03/18 16:04:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.4 2005/03/22 15:47:59 kristo Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -26,8 +26,6 @@ class orders_manager extends class_base
 {
 	function orders_manager()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"clid" => CL_ORDERS_MANAGER
 		));
@@ -71,11 +69,11 @@ class orders_manager extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "orderer",
-			"caption" => "Tellija"
+			"caption" => t("Tellija")
 		));
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => "Kuupäev",
+			"caption" => t("Kuupäev"),
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "H:i d-m-y",
@@ -84,7 +82,7 @@ class orders_manager extends class_base
 		));
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => "Vaata tellimust",
+			"caption" => t("Vaata tellimust"),
 			"width" => 80,
 		));
 		$t->define_chooser(array(
@@ -110,7 +108,7 @@ class orders_manager extends class_base
 				"orderer" => $person_name,
 				"date" => $order->created(),
 				"view" => html::href(array(
-					"caption" => "Vaata tellimust",
+					"caption" => t("Vaata tellimust"),
 					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "return_url" => get_ru()), CL_ORDERS_ORDER)
 				)),
 			));
@@ -206,37 +204,37 @@ class orders_manager extends class_base
 
 		$ex_props = array(
 			"item" => array(
-				"name" => "Toote nimi", 
-				"product_code" => "Kood", 
-				"product_color" => "V&auml;rvus",
-				"product_size" => "Suurus",
-				"product_count" => "Kogus",
-				"product_price" => "Hind",
-				"product_page" => "Lehek&uuml;lg",
-				"product_image" => "Pilt"
+				"name" => t("Toote nimi"), 
+				"product_code" => t("Kood"), 
+				"product_color" => t("V&auml;rvus"),
+				"product_size" => t("Suurus"),
+				"product_count" => t("Kogus"),
+				"product_price" => t("Hind"),
+				"product_page" => t("Lehek&uuml;lg"),
+				"product_image" => t("Pilt")
 			),
 			"person" => array(
-				"firstname" => "Eesnimi",
-				"lastname" => "Perekonnanimi",
-				"comment" => "Aadress",
-				"birthday" => "S&uuml;nnip&auml;ev",
-				"email" => "E-mail",
-				"phone" => "Telefon",
+				"firstname" => t("Eesnimi"),
+				"lastname" => t("Perekonnanimi"),
+				"comment" => t("Aadress"),
+				"birthday" => t("S&uuml;nnip&auml;ev"),
+				"email" => t("E-mail"),
+				"phone" => t("Telefon"),
 			),
 			"order" => array(
-				"udef_textbox1" => "Kliendi number",
-				"udef_textbox2" => "Postiindeks",
-				"udef_textbox3" => "Linn",
-				"udef_textbox4" => "Telefon t&ouml;&ouml;l",
-				"udef_textbox5" => "Mobiil",
-				"udef_textbox6" => "Kliendo t&uuml;&uuml;p",
+				"udef_textbox1" => t("Kliendi number"),
+				"udef_textbox2" => t("Postiindeks"),
+				"udef_textbox3" => t("Linn"),
+				"udef_textbox4" => t("Telefon t&ouml;&ouml;l"),
+				"udef_textbox5" => t("Mobiil"),
+				"udef_textbox6" => t("Kliendo t&uuml;&uuml;p"),
 			)
 		);
 
 		$lines = array();
 		$sep = ",";
 		$first = true;
-		$header = array("OID", "Millal");
+		$header = array(t("OID"), t("Millal"));
 
 		// foreach orders
 		foreach($ol->arr() as $order)
@@ -289,7 +287,7 @@ class orders_manager extends class_base
 		$this->set_cval("orders_manager::today_counter", $counter);
 		
 
-		die("all done!");
+		die(t("all done!"));
 	}
 }
 ?>
