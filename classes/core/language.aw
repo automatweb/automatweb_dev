@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.15 2005/01/28 13:59:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.16 2005/02/17 09:47:51 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -194,7 +194,9 @@ class language extends class_base
 				return PROP_IGNORE;
 
 			case "lang_site_id":
-				$prop["value"] = join(",", array_keys(is_array($prop["value"]) ? $prop["value"] : array()));
+				$prop["value"] = join(",", array_values(is_array($prop["value"]) ? $prop["value"] : array()));
+				$arr["obj_inst"]->set_prop("lang_site_id", $prop["value"]);
+				return PROP_IGNORE;
 				break;
 
 			case "texts":
@@ -216,7 +218,6 @@ class language extends class_base
 			$arr["obj_inst"]->set_prop("lang_id", $id);
 		}
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
-		$arr["obj_inst"]->set_prop("lang_site_id", join(",", array_keys(is_array($prop["value"]) ? $arr["obj_inst"]->prop("lang_site_id") : array())));
 		$arr["obj_inst"]->set_status($arr["obj_inst"]->prop("lang_status"));
 	}
 
