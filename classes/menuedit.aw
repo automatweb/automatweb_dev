@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.50 2001/08/22 23:12:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.51 2001/08/23 19:43:37 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -185,9 +185,40 @@ class menuedit extends aw_template
 		// impordime taimeriklassi
 		global $test;
 		global $baseurl;
+
 		
 		$obj = $this->get_object($section);
 
+		// this should be inexpensive, since it caches all the object, and if 
+		// for example the document class does the same, most objecst should
+		// already be cached.
+
+		// gather information about all parent objects
+		$ch = $this->get_object_chain($section);
+
+		$tpldir = "";
+
+		if (is_array($ch))
+		{
+			foreach($ch as $key => $val)
+			{
+				$tpldir = $this->get_object_metadata(array(
+								"metadata" => $val["metadata"],
+								"key" => "tpl_dir",
+				));
+
+				if ($tpldir)
+				{
+					// uh. suck. anyways, this whole gen_site_html should be split
+					// up into smaller easier to follow functions. Parts of it are
+					// already of course
+					break;
+				};
+
+			}
+		};
+				
+		// this should be replaced with calls to php_serialize, since it's faster
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $obj["metadata"],
 		));
@@ -268,6 +299,11 @@ class menuedit extends aw_template
 
 		// read all the menus and other necessary info into arrays from the database
 		$this->make_menu_caches();
+
+		if ($tpldir)
+		{
+			$this->tpl_init("../$tpldir/automatweb/menuedit");
+		};
 
 		$this->read_template($template);
 
@@ -2280,9 +2316,21 @@ class menuedit extends aw_template
 			$meta = $this->get_object_metadata(array(
 				"metadata" => $menu["metadata"],
 			));
- 
-			$meta["users_only"] = $arr["users_only"];
-			$meta["show_lead"] = $arr["show_lead"];
+
+			if ($arr["users_only"])
+			{
+				$meta["users_only"] = $arr["users_only"];
+			};
+
+			if ($arr["show_lead"])
+			{
+				$meta["show_lead"] = $arr["show_lead"];
+			};
+
+			if ($arr["tpl_dir"])
+			{
+				$meta["tpl_dir"] = $arr["tpl_dir"];
+			};
 
 			// 2 updates, this is so wrong.
 			$this->set_object_metadata(array(
@@ -2295,6 +2343,12 @@ class menuedit extends aw_template
 				"oid" => $id,
 				"key" => "show_lead",
 				"value" => $arr["show_lead"],
+			));
+			
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "tpl_dir",
+				"value" => $arr["tpl_dir"],
 			));
 
 			$sar = array(); $oidar = array();
@@ -2910,6 +2964,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
+		global $template_sets;
 		$this->vars(array("parent"			=> $row["parent"], 
 											"SA_ITEM"			=> $sal,
 											"image_act"		=> $img2,
@@ -2938,6 +2993,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"tpl_edit" => $this->option_list($row["tpl_edit"],$edit_templates),
 											"tpl_view" => $this->option_list($row["tpl_view"],$long_templates),
 											"tpl_lead" => $this->option_list($row["tpl_lead"],$short_templates),
+											"tpl_dir" => $this->picker($meta["tpl_dir"],$template_sets),
 											"section"			=> $this->multiple_option_list($sets["section"],$oblist),
 											"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
 											"link"				=> $row["link"],
@@ -3320,6 +3376,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$hs = $this->parse("HAS_SUBITEMS_".$name);
 				$hsl = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level);
+				if (in_array($row["oid"],$path))	// this menu is selected
+				{
+					$this->vars(array("HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL")));
+				}
 			}
 			else
 			{
@@ -3401,6 +3461,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$l2.=$this->parse($mn."2".$ap);
 				$this->vars(array($mn."2".$ap => ""));
 				$second = true;
+			}
+
+			// ok, here's the tricky bit
+			// if the next level subtemplate is nested in this levels subtemplate, then we must clear the variable in tehe
+			// template parser for the next level 
+			// cause if we don't and the next item on this level has no subitems
+			// it will get this item's parsed submenus below it. 
+			if ($parent_tpl)
+			{
+				$this->vars(array("MENU_".$name."_L".($this->level+1)."_ITEM" => ""));
 			}
 			$cnt++;
 		}
