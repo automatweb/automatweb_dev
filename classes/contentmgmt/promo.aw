@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.20 2003/12/04 16:37:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.21 2003/12/24 11:13:08 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -398,7 +398,6 @@ class promo extends class_base
 		$def = new aw_array($ss->get_default_document(array(
 			"obj" => obj($alias["target"])
 		)));
-		$_ob = aw_ini_get("menuedit.document_list_order_by");
 		if ($ob->prop("sort_by"))
 		{
 			$_ob = $ob->prop("sort_by")." ".$ob->prop("sort_ord");
@@ -413,7 +412,6 @@ class promo extends class_base
 			
 			$def = new aw_array($ol->ids());
 		}
-
 
 		$ndocs = $ob->prop("ndocs");
 		if ($ndocs)
@@ -626,6 +624,7 @@ class promo extends class_base
 						"boldlead" => $this->cfg["boldlead"],
 						"no_strip_lead" => 1,
 						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
+						"vars" => array("doc_ord_num" => $d_cnt+1),
 					));
 					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
@@ -636,7 +635,8 @@ class promo extends class_base
 					"title" => $o->name(), 
 					"content" => $pr_c,
 					"url" => $o->prop("link"),
-					"link_caption" => $o->meta("link_caption")
+					"link_caption" => $o->meta("link_caption"),
+					"promo_doc_count" => (int)$d_cnt,
 				));
 
 				// which promo to use? we need to know this to use

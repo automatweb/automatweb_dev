@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.1 2003/12/18 11:14:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.2 2003/12/24 11:13:08 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -53,8 +53,11 @@ class config_login_menus extends class_base
 		switch($data["name"])
 		{
 			case "login_menus":
-				$arr["obj_inst"]->set_meta("lm", $lm);
-				$this->_set_active_menus($arr["obj_inst"]);
+				$arr["obj_inst"]->set_meta("lm", $arr["request"]["lm"]);
+				if ($arr["obj_inst"]->flag(OBJ_FLAG_IS_SELECTED))
+				{
+					$this->_set_active_menus($arr["obj_inst"]);
+				}
 				break;
 
 			case "activity":
@@ -103,7 +106,7 @@ class config_login_menus extends class_base
 		
 	}
 
-	function callback_get_login_menus()
+	function callback_get_login_menus($arr)
 	{
 		// foreach group add relpicker
 		$ret = array();
@@ -111,8 +114,7 @@ class config_login_menus extends class_base
 		$us = get_instance("users");
 		$gl = $us->get_group_list(array("type" => array(GRP_DYNAMIC, GRP_REGULAR)));
 
-		$conf = get_instance("config");
-		$lm = $conf->_get_login_menus();
+		$lm = $arr["obj_inst"]->meta("lm");
 
 		$node = array();
 		$node["caption"] = "<b>Grupp</b>";
@@ -148,14 +150,14 @@ class config_login_menus extends class_base
 				"type" => "textbox",
 				"size" => 4,
 				"name" => "lm[$gid][pri]",
-				"value" => $lm[aw_global_get("lang_id")][$gid]["pri"]
+				"value" => $lm[$gid]["pri"]
 			);
 			array_push($node["items"], $tmp);
 
 			$tmp = array(
 				"type" => "relpicker",
 				"name" => "lm[$gid][menu]",
-				"value" => $lm[aw_global_get("lang_id")][$gid]["menu"],
+				"value" => $lm[$gid]["menu"],
 				"reltype" => RELTYPE_FOLDER
 			);
 			array_push($node["items"], $tmp);
