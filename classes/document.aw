@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.126 2002/11/20 13:15:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.127 2002/11/21 12:44:32 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2648,6 +2648,8 @@ class document extends aw_template
 
 		// oh crap. siin peab siis failide seest ka otsima. 
 		$mtfiles = array();
+		// this query is _very_ expensive, if there are lots of records in
+		// the files table OTOH, it's quite hard to "fix" this as it is -- duke
 		$this->db_query("SELECT id FROM files WHERE files.showal = 1 AND files.content LIKE '%$str%' ");
 		while ($row = $this->db_next())
 		{
@@ -2678,6 +2680,8 @@ class document extends aw_template
 
 		// nini. otsime tabelite seest ka.
 		$mts = array();
+		// expensive as well. We need a better way to do searches - shurely there
+		// are some good algoritms for that? -- duke
 		$this->db_query("SELECT id FROM aw_tables WHERE contents LIKE '%$str%'");
 		while ($row = $this->db_next())
 		{
