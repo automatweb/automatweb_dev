@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.11 2002/09/04 13:05:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.12 2002/09/26 16:09:40 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -7,13 +7,13 @@ class php_serializer
 	{
 		if (!is_array($arr))
 		{
-			//echo "php::php_serialize($arr): can only serialize arrays!";
 			return false;
 		}
 
 		$arrname = ($this->arr_name != "" ? $this->arr_name : "arr");
 
-		return "\$".$arrname." = ".$this->req_serialize($arr,$to_file||$this->to_file).";";
+		$dat = "\$".$arrname." = ".$this->req_serialize($arr,$to_file||$this->to_file).";";
+		return $dat;
 	}
 
 	function set($key,$val)
@@ -48,7 +48,6 @@ class php_serializer
 				$v = str_replace("\n","\\\n",$v);
 				$v = str_replace("\r","\\\r",$v);
 				$v = str_replace("\$","\\\\\$",$v);
-				// $v = "\"$v\"";
 				if ($v)
 				{
 					$v = "\"$v\"";
@@ -67,7 +66,6 @@ class php_serializer
 			}
 			else
 			{
-				//$td[] = "\"$k\""."=>".$v."\n";
 				if ($v)
 				{
 					$td[] = "'$k'"."=>".$v;
