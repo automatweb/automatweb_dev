@@ -63,8 +63,19 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function save_properties($arr)
 	{
-		$this->_clear_cache($arr["objdata"]["oid"]);
-		return $this->contained->save_properties($arr);
+		$ret = $this->contained->save_properties($arr);
+		// fetch brothers and clear cache for all of them
+
+		list($tarr) = $this->contained->search(array(
+			"brother_of" => $arr["objdata"]["brother_of"],
+		));
+
+		$char = array_keys($tarr);
+		foreach($char as $obj_id)
+		{
+			$this->_clear_cache($obj_id);
+		}
+		return $ret;
 	}
 
 	function read_connection($id)
