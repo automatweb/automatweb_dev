@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.13 2002/09/26 16:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.14 2002/10/16 13:50:22 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -156,7 +156,7 @@ class style extends aw_template
 		
 		$fonts = array("" => "", "arial" => "Arial","times" => "Times", "verdana" => "Verdana","tahoma" => "Tahoma", "geneva"  => "Geneva", "helvetica" => "Helvetica", "Trebuchet MS" => "Trebuchet MS");
 
-		$fontsizez = array("-1" => -1, "0" => 0, "1" => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5);
+		$fontsizez = array("" => "","-1" => -1, "0" => 0, "1" => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5);
 
 		$fontstyles = array('normal' => "Tavaline", 'bold' => "Bold",'italic' => "Italic", 'underline' => "Underline");
 
