@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.16 2005/01/25 07:42:46 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.17 2005/01/25 14:50:14 dragut Exp $
 // register.aw - Register 
 /*
 
@@ -48,17 +48,17 @@
 @property data_tree type=text store=no no_caption=1 parent=datalt
 @property data type=table store=no no_caption=1 parent=datalt
 
-@groupinfo mail_send_settings caption="e-maili saatmise seaded"
+@groupinfo mail_send_settings caption="E-maili saatmise seaded"
 @default group=mail_send_settings
 
 @property mail_address_to type=relpicker multiple=1 reltype=RELTYPE_MAIL
-@caption e-maili aadress, (to)
+@caption E-maili aadress, (to)
 
 @property mail_address_from type=relpicker reltype=RELTYPE_MAIL
-@caption e-maili aadress, (from)
+@caption E-maili aadress, (from)
 
 @property mail_subject type=textbox
-@caption subject
+@caption Subject
 
 @groupinfo search caption="Otsing" submit_method=get submit=no
 @default group=search

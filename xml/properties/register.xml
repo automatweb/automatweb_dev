@@ -129,7 +129,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_MAIL</reltype>
-            <caption>e-maili aadress, (to)</caption>
+            <caption>E-maili aadress, (to)</caption>
       </property>
       <property>
             <name>mail_address_from</name>
@@ -139,7 +139,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MAIL</reltype>
-            <caption>e-maili aadress, (from)</caption>
+            <caption>E-maili aadress, (from)</caption>
       </property>
       <property>
             <name>mail_subject</name>
@@ -148,7 +148,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>subject</caption>
+            <caption>Subject</caption>
       </property>
       <property>
             <name>search</name>
@@ -170,7 +170,7 @@
                   <caption>Andmed</caption>
             </data>
             <mail_send_settings>
-                  <caption>e-maili saatmise seaded</caption>
+                  <caption>E-maili saatmise seaded</caption>
             </mail_send_settings>
             <search>
                   <caption>Otsing</caption>
