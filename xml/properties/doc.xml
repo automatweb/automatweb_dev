@@ -443,6 +443,16 @@
             <caption>Kasutaja defineeritud 6</caption>
       </property>
       <property>
+            <name>ucheck1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja defineeritud checkbox 1</caption>
+      </property>
+      <property>
             <name>language</name>
             <table>documents</table>
             <group>general</group>
