@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.9 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.10 2002/05/08 20:33:14 duke Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -9,39 +9,11 @@ class root
 {
 	// siin asuvad mõned sagedamini kasutataivamad funktsioonid
 	var $errorlevel;
-	// siia me salvestame erinevad stackid
-	var $stacks = array("root" => array("subcount" => 0));
 	function root()
 	{
 		$this->errorlevel = 0;
 		$this->stacks = array();
 		lc_load("definition");
-	}
-
-	//  siit algavad pinu funktsioonid
-	//-----------------------------------------------------
-	//	kood voimaldab kasutada mitut pinu,
-	//	kui pinufunktsioonile pinu ID-d ette ei anta
-	//	siis, kasutatakse meelevaldselt välja mõeldud nime
-	//			'root'
-
-	////
-	// !Pushes a variable onto the stock
-	function _push($item,$stack = "root")
-	{
-		if ( not(is_array($this->stacks[$stack])) )
-		{
-			$this->stacks[$stack] = array();
-		};
-
-		array_push($this->stacks[$stack],$item);
-	}
-
-	////
-	// !Pops a variable from the stack
-	function _pop($stack = "root")
-	{
-		return array_pop($this->stacks[$stack]);
 	}
 
 	////
@@ -76,7 +48,7 @@ class root
 	// TODO: viia defs.aw-sse
 	function make_url($arr)
 	{
-		global $HTTP_GET_VARS,$PHP_SELF;
+		global $HTTP_GET_VARS;
 		$ura = $HTTP_GET_VARS;
 		reset($arr);
 		while (list($k,$v) = each($arr))
@@ -84,7 +56,7 @@ class root
 			$ura[$k] = $v;
 		};
 		$urs = join("&",$this->map2("%s=%s",$ura));
-		return $PHP_SELF."?".$urs;
+		return aw_global_get("PHP_SELF")."?".$urs;
 	}
 
 	////
