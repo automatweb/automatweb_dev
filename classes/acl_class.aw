@@ -1,56 +1,67 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_class.aw,v 2.12 2004/02/12 09:28:17 duke Exp $
 /* 
 
 @classinfo syslog_type=ST_ACL relationmgr=yes
 
-@groupinfo general caption=Üldine
 @default group=general
 @default table=objects
+@default field=meta
+@default method=serialize
 
-@property chain field=meta method=serialize type=relpicker reltype=RELATION_CHAIN
+@property chain type=relpicker reltype=RELTYPE_CHAIN
 @caption Vali p&auml;rg
 
-@property role field=meta method=serialize type=relpicker reltype=RELATION_ROLE
+@property role type=relpicker reltype=RELTYPE_ROLE
 @caption Vali roll
 
-@property groups field=meta method=serialize type=relpicker multiple=1 reltype=RELATION_GROUP
+@property groups type=relpicker multiple=1 reltype=RELTYPE_GROUP
 @caption Vali grupid
 
-@property priority field=meta method=serialize type=textbox
+@property priority type=textbox
 @caption Prioriteet
 
-@property update_acl field=meta method=serialize type=checkbox ch_value=1 store=no 
+@property update_acl type=checkbox ch_value=1 store=no 
 @caption Uuenda ACL
 
-*/
+@reltype CHAIN value=1 clid=CL_OBJECT_CHAIN
+@caption pärg
 
-define("RELATION_CHAIN", 1);
-define("RELATION_ROLE", 2);
-define("RELATION_GROUP", 3);
+@reltype ROLE value=2 clid=CL_ROLE
+@caption roll
+
+@reltype GROUP value=3 clid=CL_GROUP
+@caption grupp
+
+*/
 
 class acl_class extends class_base
 {
 	function acl_class()
 	{
 		$this->init(array(
-			"tpldir" => "automatweb/acl",
 			"clid" => CL_ACL
 		));
 	}
 
 	function update_acl($id)
 	{
-		$o = $this->get_object($id);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $o["metadata"]
-		));
+		$o = new object($id);
+		// cannot operate if those are not, so bail out
+		if (!is_oid($o->prop("chain")) || !is_oid($o->prop("role")))
+		{
+			return false;	
+		};
+
+		var_dump($o->prop("role"));
+		$meta = $o->meta();
 
 		$oc = get_instance("object_chain");
-		$objs = new aw_array($oc->get_objects_in_chain($meta["chain"]));
+		$objs = new aw_array($oc->get_objects_in_chain($o->prop("chain")));
 
 		$ro = get_instance("role");
-		$mask = $ro->get_acl_mask($meta["role"]);
-		$aclarr = $ro->get_acl_values($meta["role"]);
+		$mask = $ro->get_acl_mask($o->prop("role"));
+		$aclarr = $ro->get_acl_values($o->prop("role"));
 
 		$u = get_instance("users");
 		$_gads = new aw_array($meta["added_groups"]);
@@ -64,7 +75,7 @@ class acl_class extends class_base
 		foreach($objs->get() as $oid)
 		{
 			$o_grps = $this->get_acl_groups_for_obj($oid);
-			$mg = new aw_array($meta["groups"]);
+			$mg = new aw_array($o->prop("groups"));
 			foreach($mg->get() as $grp)
 			{
 				$grp = $u->get_gid_for_oid($grp);
@@ -72,7 +83,7 @@ class acl_class extends class_base
 				// ok, before we do this, we must check if another acl object, that
 				// has a higher priority, includes this folder<->group relation
 				// and if one is found, then we must not set the acl.
-				if (!$this->higher_priority_acl_exists($id,$meta["priority"], $oid, $grp))
+				if (!$this->higher_priority_acl_exists($id,$o->prop("priority"), $oid, $grp))
 				{
 					if (!isset($o_grps[$grp]))
 					{
@@ -85,29 +96,22 @@ class acl_class extends class_base
 			}
 		}
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "added_groups",
-			"value" => $gads
-		));
+		$o->set_meta("added_groups",$gads);
 	}
 
 	function get_acls_for_role($role)
 	{
-		$objs = $this->list_objects(array(
-			"class" => CL_ACL,
-			"return" => ARR_ALL
-		));
-
+		$objs = new object_list(array(
+                        "class_id" => CL_ACL,
+                        "lang_id" => array(),
+                ));
+	
 		$ret = array();
-		foreach($objs as $oid => $odata)
+		for($o = $objs->begin(); !$objs->end(); $o = $objs->next())
 		{
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $odata["metadata"]
-			));
-			if ($meta["role"] == $role)
+			if ($o->prop("role") == $role)
 			{
-				$ret[$oid] = $oid;
+				$ret[$o->id()] = $o->id();
 			}
 		}
 		return $ret;
@@ -118,19 +122,16 @@ class acl_class extends class_base
 		if (!isset($this->acl_object_cache))
 		{
 			$this->acl_object_cache = array();
-			$ol = $this->list_objects(array(
-				"class" => CL_ACL,
-				"return" => ARR_ALL
+			$ol = new object_list(array(
+				"class_id" => CL_ACL,
+				"lang_id" => array(),
 			));
-			foreach($ol as $obj)
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
-				if ($obj['oid'] != $cur_acl)
+				if ($o->id() != $cur_acl)
 				{
-					$obj['meta'] = $this->get_object_metadata(array(
-						'metadata' => $obj['metadata']
-					));
-					$this->acl_object_cache[$obj['oid']] = new acl_class;
-					$this->acl_object_cache[$obj['oid']]->acl_obj = $obj;
+					$this->acl_object_cache[$o->id()] = new acl_class;
+					$this->acl_object_cache[$o->id()]->acl_obj = $o;
 				}
 			}
 		}
@@ -147,19 +148,17 @@ class acl_class extends class_base
 
 	function get_priority()
 	{
-		return $this->acl_obj['meta']['priority'];
+		return $this->acl_obj->prop("priority");
 	}
 
 	function relation_exists($oid, $grp)
 	{
-		$meta = $this->acl_obj['meta'];
-
 		$oc = get_instance("object_chain");
-		$objs = new aw_array($oc->get_objects_in_chain($meta["chain"]));
+		$objs = new aw_array($oc->get_objects_in_chain($this->acl_obj->prop("chain")));
 
 		foreach($objs->get() as $_oid)
 		{	
-			$gpa = new aw_array($meta["groups"]);
+			$gpa = new aw_array($this->acl_obj->prop("groups"));
 			foreach($gpa->get() as $_grp)
 			{
 				if ($oid == $_oid && $grp == $_grp)
@@ -173,20 +172,18 @@ class acl_class extends class_base
 
 	function get_acls_for_group($gid)
 	{
-		$objs = $this->list_objects(array(
-			"class" => CL_ACL,
-			"return" => ARR_ALL
-		));
+		$objs = new object_list(array(
+                        "class_id" => CL_ACL,
+                        "lang_id" => array(),
+                ));
 
 		$ret = array();
-		foreach($objs as $oid => $odata)
+		for($o = $objs->begin(); !$objs->end(); $o = $objs->next())
 		{
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $odata["metadata"]
-			));
-			if ($meta["groups"][$gid] == $gid)
+			$grps = $o->prop("groups");
+			if ($grps[$gid] == $gid)
 			{
-				$ret[$oid] = $oid;
+				$ret[$o->id()] = $o->id();
 			}
 		}
 		return $ret;
@@ -194,52 +191,25 @@ class acl_class extends class_base
 
 	function get_roles_for_acl($oid)
 	{
-		$ob = $this->get_object($oid);
-		return $ob['meta']['role'];
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELATION_CHAIN => "p&auml;rg",
-			RELATION_ROLE => "roll",
-			RELATION_GROUP => "grupp"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELATION_CHAIN)
-		{
-			return array(CL_OBJECT_CHAIN);
-		}
-		if ($args["reltype"] == RELATION_ROLE)
-		{
-			return array(CL_ROLE);
-		}
-		if ($args["reltype"] == RELATION_GROUP)
-		{
-			return array(CL_GROUP);
-		}
+		$ob = new object($oid);
+		return $ob->prop("role");
 	}
 
 	////
 	// !removes group $gid from acl object $acl
 	function remove_group_from_acl($acl, $gid)
 	{
-		$ob = $this->get_object($acl);
-		unset($ob['meta']['groups'][$gid]);
-		$this->set_object_metadata(array(
-			"oid" => $acl,
-			"key" => "groups",
-			"value" => $ob['meta']['groups']
-		));
+		$ob = new object($acl);
+		$grps = $ob->prop("groups");
+		unset($grps[$gid]);
+		$ob->set_prop("groups",$grps);
 	}
 
 	function set_property($arr)
 	{
 		$prop =& $arr["prop"];
-		$meta =& $arr["metadata"];
+
+		$meta = $arr["obj_inst"]->meta();
 
 		switch($prop["name"])
 		{
@@ -263,11 +233,10 @@ class acl_class extends class_base
 						}
 					}
 				}
-				$meta["added_groups"] = $ags;
 				break;
 
 			case "update_acl":
-				if ($arr["form_data"]["update_acl"] == 1 && $arr["obj"]["oid"])
+				if ($arr["request"]["update_acl"] == 1 && is_oid($arr["obj_inst"]->id()))
 				{
 					$this->_do_update_acl = 1;
 				}
@@ -280,7 +249,7 @@ class acl_class extends class_base
 	{
 		if ($this->_do_update_acl)
 		{
-			$this->update_acl($arr["id"]);
+			$this->update_acl($arr["obj_inst"]->id());
 		}
 	}
 }
