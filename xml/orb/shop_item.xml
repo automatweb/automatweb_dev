@@ -6,10 +6,7 @@
 			<function name="add">
 				<arguments>
 					<optional name="step"/>
-					<optional name="form_id"/>
-					<optional name="op_id"/>
-					<optional name="op_id_l"/>
-					<optional name="cnt_form"/>
+					<optional name="type"/>
 					<required name="parent"/>
 				</arguments>
 			</function>
