@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.164 2003/03/05 16:48:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.165 2003/03/12 12:04:32 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1141,7 +1141,7 @@ class core extends db_connector
 			else 
 			{
 				$parent = $row["parent"];
-				if (is_array($chain[$row["oid"]]))
+				if (isset($chain[$row["oid"]]) && is_array($chain[$row["oid"]]))
 				{
 					// if we have been here before, we have a cyclic path.. baad karma.
 					return $chain;
@@ -1695,56 +1695,6 @@ class core extends db_connector
 		return $template;
 	}
 
-	////
-	// !finds the edit template for menu $section
-	// if the template is not set for this menu, traverses the object tree upwards 
-	// until it finds a menu for which it is set
-	function get_edit_template($section)
-	{
-		do { 
-			// for edit templates the type is 0
-			// this probably breaks the formgen edit templates, but detecting it this way
-			// caused major breakage, I got showing templates if I tried to edit documents
-			$section = (int)$section;
-			
-			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE template.type = 0 AND menu.id = $section");
-			$row = $this->db_next();
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"]
-			));
-
-			if ((int)$meta["template_type"] == TPLTYPE_TPL)
-			{
-				$template = $row["filename"];
-			}
-			else
-			{
-				$template = $meta["ftpl_edit"];
-			}
-			
-			if (not($row))
-			{
-				$prnt = $this->get_object($section);
-				$section = $prnt["parent"];
-			}
-			else
-			{
-				$section = $row["parent"];
-			};
-		} while ($template == "" && $section > 1);
-		if ($template == "")
-		{
-			//$this->raise_error(ERR_CORE_NOTPL,"You have not selected an document editing template for this menu!",true);
-			// just default to that
-			global $DBG;
-			if ($DBG)
-			{
-				print "not found, defaulting to edit<br>";
-			}
-			$template = "edit.tpl";
-		}
-		return $template;
-	}
 
 	////
 	// !prints an error message about the fact that the user has no access to do this
