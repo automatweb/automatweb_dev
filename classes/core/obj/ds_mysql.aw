@@ -1129,8 +1129,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$this->joins[] = $str;
 
-				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON objects_".$join["to_class"].".target = ";
+				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON aliases_".$join["from_class"].".target = ";
 				$str .= " objects_".$join["to_class"].".oid ";
+				$prev_clid = $join["to_class"];
 				$this->joins[] = $str;
 			}
 			else	// via prop
