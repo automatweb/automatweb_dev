@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.28 2004/03/08 20:05:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.29 2004/03/16 13:42:31 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -181,6 +181,10 @@ class toolbar extends aw_template
 					if (empty($val["onClick"]))
 					{
 						$val["onClick"] = "";
+					};
+					if (empty($val["tooltip"]))
+					{
+						$val["tooltip"] = "";
 					};
 					$this->vars($val);
 					$tpl = $val["type"];
