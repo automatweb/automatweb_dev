@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.4 2002/11/18 18:46:33 kristo Exp $
+// $Id: treeview.aw,v 1.5 2002/12/19 17:59:55 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -22,7 +22,7 @@
 	@property icon_folder_closed type=objpicker clid=CL_ICON field=meta method=serialize
 	@caption Kinnise kausta ikoon
 */
-class treeview extends aw_template
+class treeview extends class_base
 {
 	function treeview($args = array())
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Id: page.aw,v 1.1 2002/11/07 12:40:13 duke Exp $
+// $Id: page.aw,v 1.2 2002/12/19 17:59:55 duke Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
@@ -21,7 +21,7 @@
 	@caption Eelvaade
 
 */
-class page extends aw_template
+class page extends class_base
 {
 	function page()
 	{

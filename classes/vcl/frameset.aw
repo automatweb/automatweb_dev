@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.4 2002/11/14 15:36:36 duke Exp $
+// $Id: frameset.aw,v 1.5 2002/12/19 17:59:55 duke Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -62,7 +62,7 @@ of the NOFRAMES element.
 */
 
 /* this class should allow the user to create whatever frameset she wants*/
-class frameset extends aw_template
+class frameset extends class_base
 {
 	function frameset($args = array())
 	{
