@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.73 2003/11/09 18:40:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.74 2003/11/09 18:46:38 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -245,7 +245,7 @@ class menu extends class_base
 				break;
 
 			case "tpl_dir":
-				$template_sets = $this->cfg["template_sets"];
+				$template_sets = aw_ini_get("menuedit.template_sets");
 				$data["options"] = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
 				break;
 			
