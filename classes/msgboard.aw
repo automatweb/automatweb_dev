@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.10 2001/07/26 16:49:57 duke Exp $
-lc_load("msgboard");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.11 2001/07/27 19:39:08 duke Exp $
+
 define("PER_PAGE",10);
 define("PER_FLAT_PAGE",20);
 define("TOPICS_PER_PAGE",7);
@@ -11,13 +11,53 @@ class msgboard extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("msgboard");
-		lc_load("definition");
-		global $lc_msgboard;
-		if (is_array($lc_msgboard))
-		{
-			$this->vars($lc_msgboard);
-		}
 	}
+
+	function submit_votes($args = array())
+        {
+                if ($GLOBALS["uid"] == "fubar")
+                {
+                        $this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
+                };
+                classload("users");
+                $u = new users();
+                extract($args);
+                global $HTTP_SESSION_VARS;
+                global $commentvotes;
+                $oldvotes = array();
+                //$oldvotes = $u->get_user_config(array(
+                //                              "uid" => UID,
+                //                              "key" => "commentvotes",
+                //));
+                $oldvotes = $HTTP_SESSION_VARS["commentvotes"];
+                if (is_array($vote))
+                {
+                        foreach($vote as $key => $val)
+                        {
+                                $topicvotes = $this->get_object_metadata(array(
+                                                                        "oid" => $key,
+                                                                        "key" => "votes",
+                                ));
+
+                                $oldvotes[$key] = $val;
+
+				$topicvotes["votes"] = $topicvotes["votes"] + 1;
+                                $topicvotes["total"] = $topicvotes["total"] + $val;
+
+                                $this->set_object_metadata(array(
+                                                                "oid" => $key,
+                                                                "key" => "votes",
+                                                                "value" => $topicvotes,
+                                ));
+                        };
+                };
+                $commentvotes = $oldvotes;
+                session_register("commentvotes");
+                global $baseurl;
+                header("Location: $baseurl/comments.aw?action=topics");
+                exit;
+                return;
+        }	
 
 
 	function show($id,$page)
@@ -428,6 +468,10 @@ class msgboard extends aw_template
 
 	function list_topics()
 	{
+		classload("users");
+		$u = new users();
+		global $HTTP_SESSION_VARS;
+		$votes = $HTTP_SESSION_VARS["commentvotes"];
 		global $page;
 		$this->read_template("list_topics.tpl");
 
@@ -436,8 +480,7 @@ class msgboard extends aw_template
 			$numcomments[$row[board_id]] = array("cnt" => $row[cnt], "mtime" => $row[mtime]);
 
 		global $aw_mb_last;
-		// lauri muudetud --> stripslashes()
-		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
+		$aw_mb_last = unserialize($aw_mb_last);
 
 		$count = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE class_id = ".CL_MSGBOARD_TOPIC." AND status = 2 ","cnt");
 		if ($count > TOPICS_PER_PAGE)
@@ -461,10 +504,30 @@ class msgboard extends aw_template
 		{
 			if ($cnt >= ($page * TOPICS_PER_PAGE) && $cnt <= (($page+1) * TOPICS_PER_PAGE))
 			{
-				$nc = $numcomments[$row[oid]]["cnt"];
-				$lc = $numcomments[$row[oid]]["mtime"];
-				$this->vars(array("topic" => $row[name], "from" => $row[last],"created" => $this->time2date($row[created],2), "text" => str_replace("\n","<br>",$row[comment]),"topic_id" => $row[oid],"cnt" => ( $nc < 1 ? "0" : $nc),
-													"lastmessage" => $this->time2date($lc,2)));
+				$nc = $numcomments[$row["oid"]]["cnt"];
+				$lc = $numcomments[$row["oid"]]["mtime"];
+				// FIXME: We already have the data from the previous query
+				$this->save_handle();
+
+				$votedata = $this->get_object_metadata(array(
+								"oid" => $row["oid"],
+								"key" => "votes",
+				));
+				
+				$this->restore_handle();
+
+				$votecount = ($votedata["votes"]) ? $votedata["votes"] : 1;
+				$this->vars(array(
+						"topic" => $row["name"],
+						"from" => $row["last"],
+						"created" => $this->time2date($row["created"],2), 
+						"text" => str_replace("\n","<br>",$row["comment"]),
+						"topic_id" => $row["oid"],
+						"cnt" => ( $nc < 1 ? "0" : $nc),
+						"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
+						"color" => ($this->line % 2) ? "#CCCCCC" : "#FFFFFF",
+						"lastmessage" => $this->time2date($lc,2),
+				));
 				// priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
 				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
 
@@ -475,7 +538,7 @@ class msgboard extends aw_template
 				}
 				else
 				{
-					$tm = $aw_mb_last[$row[oid]];
+					$tm = $aw_mb_last[$row["oid"]];
 					$nnew = $this->db_fetch_field("SELECT count(*) as cnt FROM comments WHERE comments.time >= $tm AND board_id = '".$row[oid]."'","cnt");
 					$nc = $nnew > 0 ? $this->parse("NEW_MSGS") : "";
 				}
@@ -483,11 +546,15 @@ class msgboard extends aw_template
 
 				$this->vars(array("DELETE" => $dt,"NEW_MSGS" => $nc));
 				$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
+				//if (defined("UID"))
+				//{
+					$l .= (isset($votes[$row["oid"]])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+				//};
 				$this->line++;
 			}
 			$cnt++;
 		}
-		$this->vars(array("TOPIC_EVEN" => $l, "TOPIC_ODD" => "", "DELETE" => ""));
+		$this->vars(array("TOPIC_EVEN" => $l));
 		return $this->parse();
 	}
 
@@ -855,15 +922,12 @@ class msgboard extends aw_template
 			$board[$row["board_id"]]=$row["board_id"];
 		};
 
-		if (is_array($board))
+		foreach ($board as $k => $v)
 		{
-			foreach ($board as $k => $v)
+			if ($a[$v])
 			{
-				if ($a[$v])
-				{
-					$tm= $a[$v];
-					$arr[$v]=$this->db_fetch_field("SELECT COUNT(*) as cnt FROM comments WHERE board_id= '$v' AND comments.time>= '$tm'","cnt");
-				};
+				$tm= $a[$v];
+				$arr[$v]=$this->db_fetch_field("SELECT COUNT(*) as cnt FROM comments WHERE board_id= '$v' AND comments.time>= '$tm'","cnt");
 			};
 		};
 
