@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.95 2004/07/02 16:07:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.96 2004/10/05 09:22:41 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1410,11 +1410,11 @@ topic");
 				VALUES ('$parent','$board','$name','$email','$comment','$subj',
 						$t,'$site_id', '$ip')";
 			};
-			$tmp = obj($board);
-			$tmp->save();
 
 			$this->db_query($q);
 
+			// need to flush cache here
+			$this->flush_cache();	
 		}
 		if (not($act))
 		{
@@ -1921,6 +1921,7 @@ topic");
 	function _draw_all_topics($args = array())
 	{
 		extract($args);
+		// alright, seda pole vaja siis ümber teha
 		$ol = new object_list(array(
 			"parent" => $id,
 			"class_id" => CL_MSGBOARD_TOPIC,
@@ -1989,13 +1990,6 @@ topic");
 
 		// mille vastu võrrelda=
 		$check_against = ($args["modified"] > $args["created"]) ? $args["modified"] : $args["created"];
-		global $DBUG;
-		if ($DBUG)
-		{
-			print "<pre>";
-			print "ca = " . $this->last_read[$args["oid"]] . "<br />";
-			print "</pre>";
-		}
 		$mark = ($check_against > $this->last_read[$args["oid"]]) ? $this->parse("NEW_MSGS") : "";
 
 		if ($this->cfg["track_users"])
@@ -2010,12 +2004,6 @@ topic");
 			
 			
 			$total_msgs = (int)$this->comments[$args["oid"]];
-
-			global $DBUG;
-			if ($DBUG)
-			{
-				print "read = $read_msgs, total = $total_msgs<br />";
-			}
 
 			if ($read_msgs < $total_msgs)
 			{
