@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.229 2003/02/06 18:07:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.230 2003/02/10 14:04:45 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -261,7 +261,7 @@ class menuedit extends aw_template
 		$periodic = $this->is_periodic($section);
 
 		
-		if ($obj["class_id"] == CL_DOCUMENT || $obj["class_id"] == CL_PERIODIC_SECTION)
+		if ($obj["class_id"] != CL_PSEUDO)
 		{
 			$this->sel_section = $obj["parent"];
 		}
@@ -455,6 +455,7 @@ class menuedit extends aw_template
 		$this->section = $section;
 		
 		$cd = "";
+		$cd2 = "";
 		$menu_defs_v2 = $this->cfg["menu_defs"];
 		$this->menu_defaults = $this->cfg["menu_defaults"];
 		if ($this->cfg["lang_defs"])
@@ -590,9 +591,11 @@ class menuedit extends aw_template
 			if ($this->can("edit",$section) && $this->active_doc)
 			{
 				$cd = $this->parse("CHANGEDOCUMENT");
+				$cd2 = $this->parse("CHANGEDOCUMENT2");
 			};
 			$this->vars(array(
 				"CHANGEDOCUMENT" => $cd,
+				"CHANGEDOCUMENT2" => $cd2,
 			));
 
 			$cd = "";
@@ -3794,7 +3797,7 @@ class menuedit extends aw_template
 	{
 		// now find the path through the menu
 		$path = array();
-		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT)
+		if ($obj["class_id"] != CL_PSEUDO)
 		{
 			$sec = $obj["parent"];
 			$section = $obj["parent"];
