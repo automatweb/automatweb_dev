@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.5 2005/01/05 10:16:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.6 2005/02/03 15:38:55 ahti Exp $
 
 /*
 
@@ -185,12 +185,23 @@ class classificator extends class_base
 		// it where the classificator is defined. ajee!
 	}
 
-	// this will eventually replace delayed vcl property thingie
-	function _get_vcl_property($arr)
+	// this gives the actual value to property in action=view
+	// and we'll make it so, so easy...
+	function get_vcl_property($arr)
 	{
-		print "siin ei ole kala";
-
-
+		$vals = array();
+		
+		$prop = &$arr["property"];
+		$options = safe_array($prop["options"]);
+		$values = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);
+		foreach($options as $key => $opt)
+		{
+			if(in_array($key, $values))
+			{
+				$vals[$key] = $opt;
+			}
+		}
+		$arr["property"]["value"] = implode(", ", $vals);
 	}
 
 	function get_choices($arr)

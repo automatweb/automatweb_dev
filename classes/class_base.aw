@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.360 2005/01/27 11:18:08 duke Exp $
+// $Id: class_base.aw,v 2.361 2005/02/03 15:38:55 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -231,6 +231,11 @@ class class_base extends aw_template
 		{
 			$args["action"] = "view";
 		};
+		
+		if($args["no_buttons"])
+		{
+			$this->no_buttons = true;
+		}
 
 		if (1 == $args["view"])
 		{
@@ -2030,8 +2035,15 @@ class class_base extends aw_template
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
 		$has_rte = false;
+		$skip_types = array("button", "submit", "reset");
 		foreach($properties as $key => $val)
 		{
+			// if the action is view and there is set that no buttons should be shown,
+			// then skip the buttons
+			if($this->view && $this->no_buttons && in_array($val["type"], $skip_types))
+			{
+				continue;
+			}
 			if ($val["editonly"] == 1 && empty($this->id))
 			{
 				continue;
@@ -2183,12 +2195,6 @@ class class_base extends aw_template
 			};
 
 
-			if ($val["name"] == "tabpanel" && $this->view)
-			{
-				continue;
-			};
-
-
 			// XXX: need to get rid of that "text" index
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
 			{
@@ -2305,7 +2311,6 @@ class class_base extends aw_template
 				$awt->stop("get_property_${pname}");
 			};
 
-		
 			$val["_parsed"] = 1;
 
 			if ($status === PROP_IGNORE)
@@ -2326,7 +2331,6 @@ class class_base extends aw_template
 			}
 			else
 			{
-			
 				if ($this->vcl_register[$val["type"]] && isset($this->vcl_delayed_init[$val["type"]]))
 				{
 					$reginst = $this->vcl_register[$val["type"]];
@@ -2352,9 +2356,7 @@ class class_base extends aw_template
 							};
 						};
 					};
-
 					continue;
-
 				};
 
 				if ($this->vcl_register[$val["orig_type"]] && isset($this->vcl_has_getter[$val["orig_type"]]))
@@ -2366,10 +2368,11 @@ class class_base extends aw_template
 						$ot->get_vcl_property(array(
 							"property" => &$val,
 						));
+						$resprops[$key] = $val;
 					};
 					continue;
 				};
-
+				
 				if ($val["type"] == "releditor")
 				{
 					if (!is_object($val["vcl_inst"]))
@@ -2463,7 +2466,6 @@ class class_base extends aw_template
 				$resprops[$name] = $val;
 			};
 		}
-		
 		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
 			$this->process_view_controllers(&$resprops, $controllers, $argblock);
