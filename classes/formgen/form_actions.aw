@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.19 2004/02/23 08:53:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.20 2004/02/27 09:54:04 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -783,10 +783,20 @@ class form_actions extends form_base
 
 		if ($data['link_caption'] != '')
 		{
+			if ($data["from_email_el"])
+			{
+				$froma = $f->get_element_value($data["from_email_el"]);
+				$fromn = $from;
+			}
+			else
+			{
+				$froma = "automatweb@automatweb.com";
+				$fromn = "AutomatWeb";
+			}
 			$awm = get_instance("aw_mail");
 			$awm->create_message(array(
-				"froma" => "automatweb@automatweb.com",
-				"fromn" => "AutomatWeb",
+				"froma" => $froma,
+				"fromn" => $fromn,
 				"subject" => $subj,
 				"to" => $data['email'],
 				"body" => $msg.$app.$link_url,
@@ -836,10 +846,20 @@ class form_actions extends form_base
 			else
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{
+				if ($data["from_email_el"])
+				{
+					$froma = $f->get_element_value($data["from_email_el"]);
+					$fromn = $from;
+				}
+				else
+				{
+					$froma = "automatweb@automatweb.com";
+					$fromn = "AutomatWeb";
+				}
 				$awm = get_instance("aw_mail");
 				$awm->create_message(array(
-					"froma" => "automatweb@automatweb.com",
-					"fromn" => "AutomatWeb",
+					"froma" => $froma,
+					"fromn" => $fromn,
 					"subject" => $subj,
 					"to" => $_to,
 					"body" => $msg.$app.$link_url,
@@ -883,10 +903,20 @@ class form_actions extends form_base
 		else
 		{
 			$app .= $link_url;
-			send_mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+
+			if ($data["from_email_el"])
+			{
+				$froma = $f->get_element_value($data["from_email_el"]);
+			}
+			else
+			{
+				$froma = "automatweb@automatweb.com";
+			}
+
+			send_mail($data["email"],$subj, $msg.$app,"From: $froma\n");
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{
-				send_mail($_to,$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+				send_mail($_to,$subj, $msg.$app,"From: $froma\n");
 			}
 		}
 	}
