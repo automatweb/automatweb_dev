@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list_report.aw,v 1.5 2003/06/11 17:25:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list_report.aw,v 1.6 2003/06/13 18:12:03 duke Exp $
 // ml_list_report - listi raport
 
 /*
@@ -47,8 +47,8 @@ class ml_list_report extends class_base
 		));
 
 		$id = $args["obj"]["oid"];
-		
-		if (empty($args["request"][$mail_id]))
+
+		if (empty($args["request"]["mail_id"]))
 		{
 			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report_mails.xml");
 			if (is_array($args["obj"]["meta"]["lists"]))
@@ -77,12 +77,13 @@ class ml_list_report extends class_base
 		else
 		{
 			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report.xml");
+			$_mid = $args["request"]["mail_id"];
 			$q = "
 				SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id
 				FROM ml_sent_mails 
 				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
 				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-				WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).") AND mail = '$args[request][$mail_id]'
+				WHERE lid IN (".join(",", $args["obj"]["meta"]["lists"]).") AND mail = '$_mid'
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
