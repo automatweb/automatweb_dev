@@ -1,13 +1,20 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>start1</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>start</field>
+            <caption>Algab</caption>
+      </property>
+      <property>
             <name>utextbox1</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext1</caption>
       </property>
       <property>
             <name>utextbox2</name>
@@ -16,7 +23,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext2</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox3</name>
@@ -25,7 +32,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext3</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox4</name>
@@ -34,7 +41,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext4</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox5</name>
@@ -43,7 +50,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext5</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox6</name>
@@ -52,7 +59,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext6</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox7</name>
@@ -61,7 +68,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext7</caption>
+            <caption></caption>
       </property>
       <property>
             <name>utextbox8</name>
@@ -70,7 +77,25 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Utext8</caption>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextbox9</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextbox10</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption></caption>
       </property>
       <property>
             <name>utextarea1</name>
@@ -79,11 +104,146 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <caption>Utextarea1</caption>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextarea2</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextarea3</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextarea4</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextarea5</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar1</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar2</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar3</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar4</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar5</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar6</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar7</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar8</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar9</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
+      </property>
+      <property>
+            <name>utextvar10</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption></caption>
       </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </planner>
+      </tableinfo>
 </properties>
 
