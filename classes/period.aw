@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.17 2004/01/22 13:45:07 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.18 2004/03/16 10:30:53 duke Exp $
 // period.aw - periods 
 /*
 
@@ -125,7 +125,7 @@ class period extends class_base
 		switch($data["name"])
 		{
 			case "activity":
-				$this->activate_period($arr["form_data"]["activeperiod"],$this->oid);
+				$this->activate_period($arr["request"]["activeperiod"],$this->oid);
 				break;
 		};
 		return $retval;
