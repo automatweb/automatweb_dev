@@ -11,7 +11,7 @@ onmouseout="document.getElementById('dra{VAR:oid}').style.border='1px dotted whi
 <img
 class="menuButton"
 href="" title=""
-ondblclick="document.loaction='{VAR:chlink}';"
+ondblclick="document.location='{VAR:chlink}';"
 onmouseover="buttonMouseover(event, 'mi{VAR:oid}');"
 src="{VAR:icon_url}"
 height="24" border="0"/>
