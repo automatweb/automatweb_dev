@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.4 2002/12/02 11:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.5 2003/07/01 10:56:17 kristo Exp $
 
 classload("formgen/form_element");
 class form_search_element extends form_element
@@ -61,7 +61,10 @@ class form_search_element extends form_element
 				// add an empty element to the listbox so we can tell the difference, 
 				// if nothing was selected and we can then ignore the lb in the search
 				$this->arr["listbox_items"][$this->arr["listbox_count"]] = "";
-				$this->arr["listbox_default"] = $this->arr["listbox_count"];
+				if (!$this->arr["listbox_default"])
+				{
+					$this->arr["listbox_default"] = $this->arr["listbox_count"];
+				}
 				$this->arr["listbox_count"]++;
 			}
 			$r = $this->do_core_userhtml($prefix,$elvalues,$no_submit);
