@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.42 2002/07/31 10:03:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.43 2002/08/01 15:14:08 duke Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -28,6 +28,7 @@ class form_table extends form_base
 		$this->buttons = array("save" => "Salvesta", "add" => "Lisa", "delete" => "Kustuta", "move" => "Liiguta");
 		$this->ru = aw_global_get("REQUEST_URI");
 		$this->image = get_instance("image");
+		$this->uid = aw_global_get("uid");
 	}
 
 	////
@@ -51,6 +52,46 @@ class form_table extends form_base
 		$this->t = new aw_table(array("prefix" => "fg_".$id));
 		$this->t->parse_xml_def_string($this->get_xml($id));
 		$this->set_numeric_fields_in_table();
+
+		enter_function("form_table::groupsettings");
+		$this->in_show_all_entries_groups = false;
+		if (is_array($this->table["user_entries_except_grps"]) && count($this->table["user_entries_except_grps"]) > 0)
+		{
+			if (count(array_intersect($this->table["user_entries_except_grps"],aw_global_get("gidlist"))) > 0)
+			{
+				$this->in_show_all_entries_groups = true;
+			}
+		}
+
+		$this->show_modifiedby = array();
+
+		// find in which group settings group the current user is
+		if (is_array($this->table["grpsettings"]))
+		{
+			$pri = -100000000;
+			$show_grps = array();
+			$found = false;
+			foreach($this->table["grpsettings"] as $gst)
+			{
+				$diff = array_intersect(aw_global_get("gidlist"), $gst["from_grps"]);
+				if ($gst["pri"] >= $pri && count($diff) > 0)
+				{
+					$show_grps = $gst["to_grps"];
+					$found = true;
+				}
+			}
+			if ($found)
+			{
+				// now figure out the list of users in the selected groups, so we can do the row_data check quickly
+				$us = get_instance("users");
+				foreach($show_grps as $gid)
+				{
+					$this->show_modifiedby += $us->getgroupmembers2($gid);
+				}
+			}
+		}
+
+		exit_function("form_table::groupsettings");
 
 		// this is for no_show_oneliners 
 		$this->num_lines = 0;
@@ -89,6 +130,24 @@ class form_table extends form_base
 	function row_data(&$dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
 		enter_function("form_table::row_data", array());
+
+		// check if we should perhaps not show the damn entry
+		if (isset($this->table["has_grpsettings"]) && $this->table["has_grpsettings"])
+		{
+			if ($this->show_modifiedby[$dat["createdby"]] != $dat["createdby"])
+			{
+				return;
+			}
+		}
+		else
+		if ($this->table["user_entries"])
+		{
+			if ($dat["createdby"] != $this->uid && !$this->in_show_all_entries_groups)
+			{
+				return;
+			}
+		}
+
 		if ($form_id != 0)
 		{
 			// here also make the view and other links
@@ -110,7 +169,7 @@ class form_table extends form_base
 				$_caption = $dat["ev_".$v_el];
 
 				$popdat = $this->table["defs"][$cl];
-				if ($popdat["link_popup"])
+				if (isset($popdat["link_popup"]) && $popdat["link_popup"])
 				{
 					$show_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",
 						$show_link_popup,
@@ -121,16 +180,30 @@ class form_table extends form_base
 					);
 				};
 
-				$dat["ev_".$v_el] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
+				// I don't see _targetwin being defined anywhere and this causes a warning
+				//$dat["ev_".$v_el] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
+				$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
+
 			}
 
 			$del_link = $this->get_link("delete", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
 			$dat["ev_delete"] = "<a href='".$del_link."'>".$this->table["texts"]["delete"][$this->lang_id]."</a>";
 
-			$dat["ev_created"] = $this->time2date($dat["created"], 2);
-			$dat["ev_uid"] = $dat["modifiedby"];
-			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
-			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked($this->table["sel_def"])." VALUE='1'>";
+			if (isset($dat["created"]))
+			{
+				$dat["ev_created"] = $this->time2date($dat["created"], 2);
+			};
+
+			if (isset($dat["modifiedby"]))
+			{
+				$dat["ev_uid"] = $dat["modifiedby"];
+			};
+
+			if (isset($dat["modified"]))
+			{
+				$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
+			};
+			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked(isset($this->table["sel_def"]) && ($this->table["sel_def"]))." VALUE='1'>";
 			$dat["ev_jrk"] = "[__jrk_replace__]";
 		}
 
@@ -170,12 +243,12 @@ class form_table extends form_base
 				$str = $this->process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue);
 
 				// and then, finally some misc settings
-				if ($cc["link_el"])
+				if (isset($cc["link_el"]))
 				{
 					$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$str."</a>";
 				}
 				else
-				if ($this->table["defs"][$col]["is_email"])
+				if (isset($this->table["defs"][$col]["is_email"]))
 				{
 					$str = "<a href='mailto:".$str."'>".$str."</a>";
 				}
@@ -336,10 +409,12 @@ class form_table extends form_base
 		));
 
 		$tbl = $this->get_css();
-		$tbl.=$this->get_js();
+		$tbl.= $this->get_js();
 
 		// here. add the table header aliases to the table string
 		$tbl .= $this->render_aliases($this->table["table_header_aliases"]);
+
+		$tbl .= $this->do_pageselector(nl2br($this->table["header"]));
 
 		if (!$no_form_tags)
 		{
@@ -364,6 +439,8 @@ class form_table extends form_base
 			);
 			$tbl.="</form>";
 		}
+
+		$tbl .= $this->do_pageselector(nl2br($this->table["footer"]));
 
 		if ($this->table["no_show_empty"] && $this->num_lines < 1)
 		{
@@ -791,6 +868,7 @@ class form_table extends form_base
 		$this->table["empty_table_text"] = $settings["empty_table_text"];
 		$this->table["empty_table_alias"] = $settings["empty_table_alias"];
 		$this->table["no_grpels_in_restrict"] = $settings["no_grpels_in_restrict"];
+		$this->table["has_grpsettings"] = $settings["has_grpsettings"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
 		$this->table["languages"] = $this->make_keys($settings["languages"]);
 		$this->table["moveto"] = $this->make_keys($settings["folders"]);
@@ -798,6 +876,8 @@ class form_table extends form_base
 		$this->table["change_cols"] = $this->make_keys($settings["change_cols"]);
 		$this->table["user_entries_except_grps"] = $this->make_keys($user_entries_except_grps);
 		$this->table["show_second_table_aliases"] = $this->make_keys($settings["show_second_table_aliases"]);
+		$this->table["header"] = $settings["header"];
+		$this->table["footer"] = $settings["footer"];
 
 		if (!is_array($defsort))
 		{
@@ -923,6 +1003,9 @@ class form_table extends form_base
 			"doc_title_is_yah_upper" => checked($this->table["doc_title_is_yah_upper"]),
 			"doc_title_is_yah_nolast" => checked($this->table["doc_title_is_yah_nolast"]),
 			"doc_title_is_yah_sep" => $this->table["doc_title_is_yah_sep"],
+			"has_grpsettings" => checked($this->table["has_grpsettings"]),
+			"header" => htmlentities($this->table["header"]),
+			"footer" => htmlentities($this->table["footer"]),
 			"reforb" => $this->mk_reforb("new_submit_settings", array("id" => $id))
 		));
 
@@ -1105,6 +1188,11 @@ class form_table extends form_base
 		}
 
 		$items["new_change_translate"] = array("name" => "T&otilde;lgi", "url" => $this->mk_my_orb("new_change_translate", array("id" => $this->table_id), "",false,true));
+
+		if ($this->table["has_grpsettings"])
+		{
+			$items["has_grpsettings"] = array("name" => "Gruppide m&auml;&auml;rangud", "url" => $this->mk_my_orb("change_grpsettings", array("id" => $this->table_id), "",false,true));
+		}
 
 		$this->vars(array(
 			"menu" => $tpl->do_menu($items)
@@ -1537,7 +1625,7 @@ class form_table extends form_base
 		$cl = false;
 		for ($_i = 0; $_i < $this->table["cols"]; $_i++)
 		{
-			if ($this->table["defs"][$_i]["els"][$el])
+			if (isset($this->table["defs"][$_i]["els"][$el]) && $this->table["defs"][$_i]["els"][$el])
 			{
 				$cl = $_i;
 			}
@@ -1692,7 +1780,11 @@ class form_table extends form_base
 		$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
 		$url .= "&restrict_search_yah[]=".urlencode($textvalue);
 
-		$url.="&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
+		$url.="&tbl_sk=".$new_sk."&old_sk=";
+		if (isset($GLOBALS["tbl_sk"]))
+		{
+			$url .= $GLOBALS["tbl_sk"];
+		};
 		$url.="&match_form=".$form_id."&match_entry=".$row_data["entry_id"];
 
 		// AND if there is a form selected as aliase for this column, then we must specify it as the new search form
@@ -1900,6 +1992,97 @@ class form_table extends form_base
 		}
 		aw_global_set("print", $print);
 		return $tbl;
+	}
+
+	function change_grpsettings($arr)
+	{
+		extract($arr);
+		$this->read_template("add_table_grpsettings.tpl");
+		$this->load_table($id);
+		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->do_menu();
+
+		$gp = get_instance("users");
+		$grplist = $gp->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+
+		$l = "";
+		if (is_array($this->table["grpsettings"]))
+		{
+			foreach($this->table["grpsettings"] as $idx => $gsettings)
+			{
+				$this->vars(array(
+					"from_grps" => $this->mpicker($gsettings["from_grps"],$grplist),
+					"to_grps" => $this->mpicker($gsettings["to_grps"],$grplist),
+					"pri" => $gsettings["pri"],
+					"num" => $idx
+				));
+				$l.=$this->parse("GRPSETTING");
+			}
+		}
+
+		$this->vars(array(
+			"from_grps" => $this->mpicker(array(), $grplist),
+			"to_grps" => $this->mpicker(array(), $grplist),
+			"pri" => "",
+			"num" => $idx+1
+		));
+		$l.=$this->parse("GRPSETTING");
+
+		$this->vars(array(
+			"GRPSETTING" => $l,
+			"reforb" => $this->mk_reforb("submit_grpsettings", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	function submit_grpsettings($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		$this->table["grpsettings"] = array();
+		if (is_array($grpsettings))
+		{
+			foreach($grpsettings as $gst)
+			{
+				$gst["from_grps"] = $this->make_keys($gst["from_grps"]);
+				$gst["to_grps"] = $this->make_keys($gst["to_grps"]);
+
+				if (count($gst["from_grps"]) > 0)
+				{
+					$this->table["grpsettings"][] = $gst;
+				}
+			}
+		}
+
+		$this->save_table_settings();
+		return $this->mk_my_orb("change_grpsettings", array("id" => $id));
+	}
+
+	function do_pageselector($txt)
+	{
+		if (strpos($txt, "#lk#") !== false)
+		{
+			$pgsel = "";
+			if ($this->table["has_pages"])
+			{
+				if ($this->table["has_pages_type"] == "text")	// text pageselector
+				{
+					$pgsel = "pgsel_text";
+				}
+				else	// listbox pageselector
+				{
+					$pgsel = "pgsel_lb";
+				}
+			}
+			$txt = str_replace("#lk#", $pgsel, $txt);
+		}
+		return $txt;
+	}
+
+	function set_num_rows($num)
+	{
+		$this->data_num_rows = $num;
 	}
 }
 ?>
