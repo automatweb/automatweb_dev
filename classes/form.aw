@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.93 2002/03/08 12:10:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.94 2002/03/08 14:37:18 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1324,6 +1324,7 @@ class form extends form_base
 			return $parse;
 		}
 
+
 		if (!$no_load_op)
 		{
 			if (!($this->can("view",$op_id)  || $GLOBALS["SITE_ID"] == 11))
@@ -2167,17 +2168,16 @@ class form extends form_base
 					$query.=" AND ($chqs)";
 				}
 			}
-
 			// now compose the complete query
 			if ($query == "")
 			{
 				// return all the chain entries for the first form in the chain
-				$query = "SELECT distinct(chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON objects.oid = form_".$mid."_entries.chain_id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0";
+				$query = "SELECT distinct(chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON ch_objs.oid = form_".$mid."_entries.chain_id WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0";
 			}
 			else
 			{
 				// join all the necessary forms together
-				$query = "SELECT distinct(form_".$mid."_entries.chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON objects.oid = form_".$mid."_entries.chain_id ".join(" ",map2("LEFT JOIN form_%s_entries ON form_%s_entries.chain_id = form_".$mid."_entries.chain_id",$forms_in_q))." WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0 ".$query;
+				$query = "SELECT distinct(form_".$mid."_entries.chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id LEFT JOIN objects AS ch_objs ON ch_objs.oid = form_".$mid."_entries.chain_id ".join(" ",map2("LEFT JOIN form_%s_entries ON form_%s_entries.chain_id = form_".$mid."_entries.chain_id",$forms_in_q))." WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL AND ch_objs.status != 0 ".$query;
 			}
 
 			$this->main_search_form = $mid;
@@ -2550,7 +2550,6 @@ class form extends form_base
 					$joss = join(" ",$joins);
 					$chenrties = array();
 					$q = "SELECT form_chain_entries.id as chain_entry_id,uid as modifiedby, tm as created, tm as modified  $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
-					dbg("q = $q <br>");
 					$this->db_query($q);
 					$cnt = 0;
 					$used_ids = array();
@@ -2577,14 +2576,14 @@ class form extends form_base
 							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>Vaata</a>";		
 							if ($this->can("delete", $row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 							{
-								$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+								$row["ev_delete"] = "<a href='javascript:box2(\"Kas oled kindel et tahad kustutada?\",\"".$this->mk_my_orb(
 									"delete_entry", 
 										array(
 											"id" => $fid,
-											"entry_id" => $row["entry_id"], 
+											"entry_id" => $row["chain_entry_id"], 
 											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
 										),
-									"form")."'>Kustuta</a>";
+									"form")."\")'>Kustuta</a>";
 							}
 							if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
 							{
@@ -2657,7 +2656,7 @@ class form extends form_base
 
 			if ($GLOBALS["get_csv_file"])
 			{
-				header('Content-type: Application/Octet-stream"');
+				header('Content-type: application/octet-stream');
 				header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
 				print $ft->t->get_csv_file();
 				die();
@@ -2680,7 +2679,7 @@ class form extends form_base
 				$tbl = $tbl . "<div align=right><a href='$link' target='_new'><img src='/img/print.gif' border='0' title='Print'></a></div>";
 			}
 
-			if ($GLOBALS["SITE_ID"] == 14)
+			if ($GLOBALS["SITE_ID"] == 50)
 			{
 				global $REQUEST_URI;
 				$url = "&nbsp;&nbsp;<a href='".$REQUEST_URI."&get_csv_file=1' target=_blank>CSV</a><br>";

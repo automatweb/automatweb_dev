@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.13 2002/03/08 12:10:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.14 2002/03/08 14:37:18 cvs Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -407,7 +407,7 @@ class form_import extends form_base
 				$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
 				$chentrys[$fid] = $entry_id;
 
-				$this->db_query("insert into form_entries(id,form_id) values($entry_id, $id)");
+				$this->db_query("insert into form_entries(id,form_id) values($entry_id, $fid)");
 				
 				$_rowels = join(",",$rowels);
 				if ($_rowels != "")

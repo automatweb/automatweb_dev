@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.15 2002/03/08 12:10:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.16 2002/03/08 14:37:18 cvs Exp $
 // form_chain.aw - form chains
 lc_load("form");
 global $orb_defs;
@@ -482,6 +482,7 @@ class form_chain extends form_base
 		foreach($e as $fid => $fentry_id)
 		{
 			$this->delete_object($fentry_id);
+			$this->db_query("UPDATE form_".$fid."_entries SET chain_id = NULL WHERE id = $fentry_id");
 		}
 
 		// now delete chain entry object
@@ -524,6 +525,31 @@ class form_chain extends form_base
 				}
 
 				$this->db_query("UPDATE form_chain_entries SET id = $chain_entry_id WHERE id = $erow[id] AND chain_id = $row[oid]");
+				$this->restore_handle();
+			}
+			$this->restore_handle();
+		}
+	}
+
+	function delreplicas()
+	{
+		set_time_limit(0);
+		// for each form
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
+		while ($row = $this->db_next())
+		{
+			echo "form $row[oid] <br>";
+			flush();
+			$this->save_handle();
+			// for each entry
+			$this->db_query("SELECT id FROM form_".$row["oid"]."_entries");
+			while ($erow = $this->db_next())
+			{
+				echo "entry $erow[id] <br>";
+				flush();
+				// update form_entries table's form_id
+				$this->save_handle();
+				$this->db_query("UPDATE form_entries SET form_id = $row[oid] WHERE id = $erow[id]");
 				$this->restore_handle();
 			}
 			$this->restore_handle();
