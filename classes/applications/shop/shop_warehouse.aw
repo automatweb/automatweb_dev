@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.8 2004/05/30 13:09:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.9 2004/06/09 12:53:45 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -12,6 +12,9 @@
 
 @property conf type=relpicker reltype=RELTYPE_CONFIG table=aw_shop_warehouses field=aw_config 
 @caption Konfiguratsioon
+
+@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER table=objects field=meta method=serialize
+@caption Tellimiskeskkond tellimuste jaoks
 
 /////////// products tab
 @groupinfo products caption="Tooted" submit=no
@@ -53,6 +56,7 @@
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
 @groupinfo order_orderer_cos parent=order caption="Tellijad"
+@groupinfo order_current parent=order caption="Praegune tellimus"
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
 @property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
@@ -64,6 +68,10 @@
 
 @property order_orderer_cos_tree type=text store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 @property order_orderer_cos type=table store=no parent=hbox_oc group=order_orderer_cos no_caption=1
+
+@property order_current_toolbar type=toolbar no_caption=1 group=order_current store=no
+@property order_current_table type=table store=no group=order_current no_caption=1
+
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -86,6 +94,9 @@
 
 @reltype EMAIL value=6 clid=CL_ML_MEMBER
 @caption saada tellimused
+
+@reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
+@caption tellimiskeskkond
 
 */
 
@@ -168,6 +179,14 @@ class shop_warehouse extends class_base
 			case "order_orderer_cos_tree":
 				$this->do_order_orderer_cos_tree($arr);
 				break;
+
+			case "order_current_toolbar":
+				$this->do_order_cur_tb($arr);
+				break;
+
+			case "order_current_table":
+				$this->do_order_cur_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -193,9 +212,80 @@ class shop_warehouse extends class_base
 			case "products_list":
 				$this->do_del_prod($arr);
 				break;
+
+			case "order_current_table":
+				$this->save_ord_cur_tbl($arr);
+				break;
 		}
 		return $retval;
 	}	
+
+	function save_ord_cur_tbl($arr)
+	{
+		$soc = get_instance("applications/shop/shop_order_cart");
+		$awa = new aw_array($arr["request"]["quant"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			$soc->set_item($iid, $quant);
+		}
+	}
+
+	function do_order_cur_tb($data)
+	{
+		$tb =& $data["prop"]["toolbar"];
+
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => "save",
+			"url" => "javascript:document.changeform.submit()"
+		));
+
+		$tb->add_button(array(
+			"name" => "confirm",
+			"img" => "save.gif",
+			"tooltip" => "Loo tellimus",
+			"url" => $this->mk_my_orb("gen_order", array("id" => $data["obj_inst"]->id()))
+		));
+	}
+
+	function _init_order_cur_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+
+		$t->define_field(array(
+			"name" => "quantity",
+			"caption" => "Kogus",
+			"align" => "center"
+		));
+	}
+
+	function do_order_cur_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_order_cur_table($t);
+
+		// stick the order in the table
+		$soc = get_instance("applications/shop/shop_order_cart");
+		foreach($soc->get_items_in_cart() as $iid => $quant)
+		{
+			$item = obj($iid);
+			$t->define_data(array(
+				"name" => html::href(array(
+					"caption" => $item->name(),
+					"url" => $this->mk_my_orb("change", array("id" => $iid), $item->class_id())
+				)),
+				"quantity" => html::textbox(array(
+					"name" => "quant[$iid]",
+					"value" => $quant,
+					"size" => 5
+				))
+			));
+		}
+	}
 
 	function do_del_prod($arr)
 	{
@@ -223,6 +313,13 @@ class shop_warehouse extends class_base
 			"img" => "delete.gif",
 			"tooltip" => "Kustuta valitud",
 			"url" => "javascript:document.changeform.submit()"
+		));
+
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => "Lisa korvi",
+			"action" => "add_to_cart"
 		));
 	}
 
@@ -306,11 +403,18 @@ class shop_warehouse extends class_base
 		$this->_init_prod_list_list_tbl($tb);
 
 		// get items 
-		$ot = new object_tree(array(
-			"parent" => $this->prod_tree_root,
-			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
-		));
+		if (!$_GET["tree_filter"])
+		{
+			$ot = new object_tree();
+		}
+		else
+		{
+			$ot = new object_tree(array(
+				"parent" => $_GET["tree_filter"],
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			));
+		}
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
@@ -364,8 +468,14 @@ class shop_warehouse extends class_base
 				))
 			));
 		}
-		
-		return $tb->draw();
+
+				
+
+		return $tb->draw(array(
+			"pageselector" => "text",
+			"records_per_page" => 50,
+			"has_pages" => 1
+		));
 	}
 
 	function _init_prod_list_list_tbl(&$t)
@@ -1523,16 +1633,22 @@ class shop_warehouse extends class_base
 
 		@param id required
 		@param parent optional
+		@param only_active optional
 	**/
 	function get_packet_list($arr)
 	{
 		$wh = obj($arr["id"]);
 		$conf = obj($wh->prop("conf"));
 
+		$status = array(STAT_ACTIVE, STAT_NOTACTIVE);
+		if (!empty($arr["only_active"]))
+		{
+			$status = STAT_ACTIVE;
+		}
 		$ot = new object_tree(array(
 			"parent" => (!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")),
 			"class_id" => array(CL_MENU,CL_SHOP_PACKET),
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			"status" => $status
 		));
 
 		$ret = array();
@@ -1593,6 +1709,53 @@ class shop_warehouse extends class_base
 		));
 
 		return $tmp;
+	}
+
+	/** adds the selected items to the basket
+
+		@attrib name=add_to_cart
+
+		@param id required type=ind acl=view
+		@param sel optional
+	**/
+	function add_to_cart($arr)
+	{
+		$soc = get_instance("applications/shop/shop_order_cart");
+
+		$awa = new aw_array($arr["sel"]);
+		foreach($awa->get() as $iid)
+		{
+			$soc->add_item($iid, 1);
+		}
+
+		return $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"tree_filter" => $arr["tree_filter"],
+			"group" => $arr["group"]
+		));
+	}
+
+	/** finishes the order 
+
+		@attrib name=gen_order
+
+		@param id required type=int acl=view
+	**/
+	function gen_order($arr)
+	{
+		$o = obj($arr["id"]);
+		$oc = $o->prop("order_center");
+		error::throw_if(!$oc, array(
+			"id" => ERR_NO_OC,
+			"msg" => "shop_warehouse::gen_order(): no order center object selected!"
+		));
+
+		$soc = get_instance("applications/shop/shop_order_cart");
+		$ordid = $soc->do_create_order_from_cart($oc, $arr["id"]);
+		$soc->clear_cart();
+		return $this->mk_my_orb("gen_pdf", array(
+			"id" => $ordid
+		), "applications/shop/shop_order");
 	}
 }
 ?>

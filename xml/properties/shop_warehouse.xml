@@ -10,6 +10,16 @@
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
+            <name>order_center</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDER_CENTER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimiskeskkond tellimuste jaoks</caption>
+      </property>
+      <property>
             <name>products_toolbar</name>
             <table>objects</table>
             <group>products</group>
@@ -151,6 +161,24 @@
             <no_caption>1</no_caption>
             <field>order_orderer_cos</field>
       </property>
+      <property>
+            <name>order_current_toolbar</name>
+            <table>objects</table>
+            <group>order_current</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>order_current_toolbar</field>
+      </property>
+      <property>
+            <name>order_current_table</name>
+            <table>objects</table>
+            <group>order_current</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>order_current_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -195,6 +223,10 @@
                   <parent>order</parent>
                   <caption>Tellijad</caption>
             </order_orderer_cos>
+            <order_current>
+                  <parent>order</parent>
+                  <caption>Praegune tellimus</caption>
+            </order_current>
       </groupinfo>
       <tableinfo>
             <aw_shop_warehouses>
@@ -239,6 +271,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>saada tellimused</caption>
             </EMAIL>
+            <ORDER_CENTER>
+                  <value>6</value>
+                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <caption>tellimiskeskkond</caption>
+            </ORDER_CENTER>
       </reltypes>
       <layout>
             <hbox_oc>

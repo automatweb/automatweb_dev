@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.6 2004/06/04 11:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.7 2004/06/09 12:53:45 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -249,11 +249,15 @@ class shop_order_cart extends class_base
 		}
 	}
 
-	function do_create_order_from_cart($oc)
+	function do_create_order_from_cart($oc, $warehouse = NULL)
 	{
 		$so = get_instance("applications/shop/shop_order");
 		$oc = obj($oc);
-		$so->start_order(obj($oc->prop("warehouse")), $oc);
+		if ($warehouse === NULL)
+		{
+			$warehouse = $oc->prop("warehouse");
+		}
+		$so->start_order(obj($warehouse), $oc);
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
 		foreach($awa->get() as $iid => $quant)
@@ -274,6 +278,18 @@ class shop_order_cart extends class_base
 		$_SESSION["cart"]["items"][$iid] += $quant;
 	}
 
+	function set_item($iid, $quant)
+	{
+		if ($quant == 0)
+		{
+			unset($_SESSION["cart"]["items"][$iid]);
+		}
+		else
+		{
+			$_SESSION["cart"]["items"][$iid] = $quant;
+		}
+	}
+
 	function get_cart_value()
 	{
 		$total = 0;
@@ -287,6 +303,25 @@ class shop_order_cart extends class_base
 		}
 
 		return $total;
+	}
+
+	function get_items_in_cart()
+	{
+		$awa = new aw_array($_SESSION["cart"]["items"]);
+		$ret = array();
+		foreach($awa->get() as $iid => $q)
+		{
+			if ($q > 0)
+			{
+				$ret[$iid] = $q;
+			}
+		}
+		return $ret;
+	}
+
+	function clear_cart()
+	{
+		unset($_SESSION["cart"]);
 	}
 }
 ?>

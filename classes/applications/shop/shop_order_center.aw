@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.5 2004/06/04 11:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.6 2004/06/09 12:53:45 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -15,6 +15,15 @@
 
 @property cart type=relpicker reltype=RELTYPE_CART table=aw_shop_order_center field=aw_cart_id
 @caption Ostukorv
+
+@property pdf_template type=textbox table=objects field=meta method=serialize
+@caption PDF Template faili nimi
+
+@property data_form type=relpicker reltype=RELTYPE_REGISTER_FORM table=objects field=meta method=seralize
+@caption Tellija andmete vorm
+
+@property only_active_items type=checkbox ch_value=1 table=objects field=meta method=serialize
+@caption Ainult aktiivsed tooted
 
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
@@ -37,6 +46,8 @@
 @reltype CART value=4 clid=CL_SHOP_ORDER_CART
 @caption ostukorv
 
+@reltype REGISTER_FORM value=5 clid=CL_CFGFORM
+@caption registri vorm tellija andmete jaoks
 */
 
 class shop_order_center extends class_base
@@ -370,7 +381,8 @@ class shop_order_center extends class_base
 
 		$pl = $wh->get_packet_list(array(
 			"id" => $wh_id,
-			"parent" => $section
+			"parent" => $section,
+			"only_active" => $soc->prop("only_active_items")
 		));
 
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));

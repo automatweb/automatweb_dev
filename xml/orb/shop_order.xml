@@ -9,5 +9,13 @@
 			</function>
 		</action>
 
+		<action name="gen_pdf" >
+			<function name="gen_pdf">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.3 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.4 2004/06/09 12:53:45 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -475,8 +475,16 @@ class shop_order extends class_base
 		$this->vars(array(
 			"PROD" => $p,
 			"total" => number_format($total,2),
-			"id" => $o->id()
+			"id" => $o->id(),
+			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id()))
 		));
+
+		if (!$arr["is_pdf"])
+		{
+			$this->vars(array(
+				"IS_NOT_PDF" => $this->parse("IS_NOT_PDF")
+			));
+		}
 
 		return $this->parse();
 	}
@@ -510,6 +518,40 @@ class shop_order extends class_base
 	function get_items_from_order($ord)
 	{
 		return $ord->meta("ord_content");
+	}
+
+	/** generates a pdf from the order
+
+		@attrib name=gen_pdf
+
+		@param id required type=int acl=view
+
+	**/
+	function gen_pdf($arr)
+	{
+		$arr["is_pdf"] = 1;
+		$html = $this->show($arr);
+
+		$o = obj($arr["id"]);
+		if ($o->prop("oc"))
+		{
+			$oc_o = obj($o->prop("oc"));
+			$tpl = $oc_o->prop("pdf_template");
+			if ($tpl != "")
+			{
+				$this->read_template($tpl);
+				$this->vars(array(
+					"content" => $html
+				));
+				$html = $this->parse();
+			}
+		}
+
+		header("Content-type: application/pdf");
+		$conv = get_instance("core/converters/html2pdf");
+		die($conv->convert(array(
+			"source" => $html
+		)));
 	}
 }
 ?>
