@@ -371,6 +371,8 @@ class aw_session_track extends class_base
 		$cnt = 0;
 		$cnt_suc = 0;
 
+		$restrict_url = aw_ini_get("aw_session_track.restrict_url");
+
 		$track_data = array();
 
 		while (($file = readdir($dh)) !== false) 
@@ -395,6 +397,10 @@ class aw_session_track extends class_base
 							if ($vn == "aw_session_track")
 							{
 								if (!empty($arr["server"]) && $vv["server"]["site"] != $arr["server"])
+								{
+									continue;
+								}
+								if ($restrict_url != "" && $vv["server"]["site"] != $restrict_url)
 								{
 									continue;
 								}
