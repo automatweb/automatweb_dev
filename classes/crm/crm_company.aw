@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.64 2004/08/18 11:45:19 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.65 2004/08/18 13:20:06 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -458,50 +458,68 @@ class crm_company extends class_base
 	}
 
 	/*
-		$tree -> the treeview object
-		$obj -> the rootnode
-		$type1 -> what type of connections are allowed
-		$skip -> a type can have many "to" object types, if any of them
-					should be skipped, then $skip does the trick
-		$attrib -> the node link can have some extra attributes
-		$leafs -> if leafs should be shown (not exactly what the description implies)
+		arr[]
+			tree_inst -> the treeview object
+			obj_inst -> the root object
+			conn_type -> what type of connections are allowed
+			skip -> a type can have many "to" object types, if any of them
+						should be skipped, then $skip does the trick
+			attrib -> the node link can have some extra attributes
+			leafs -> if leafs should be shown (not exactly what the description implies)
+			style -> css style added to the node - sound funny - yeah, it is
 	*/
-	function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs, $style=false)
+	//function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs, $style=false)
+	function generate_tree($arr)
 	{
 		//all connections from the currrent object
 		//different reltypes
-		$tmp_type = $type1;
+		extract($arr);
+		$tree = &$arr['tree_inst'];
+		$obj = &$arr['obj_inst'];
+		$node_id = &$arr['node_id'];
+		$attrib = &$arr['attrib'];
+		$tmp_type = $conn_type;
+
+		if(sizeof($arr['skip']))
+		{
+			$skip = &$arr['skip'];
+		}
+		else
+		{
+			$skip = array();
+		}
+
 		$customer_reltype = 3;//crm_category.reltype_customer 
 		if($obj->prop('class_id')==CL_CRM_COMPANY)
 		{
 			$customer_reltype = 22; //crm_company.reltye_customer
-			if($type1=='RELTYPE_CATEGORY')
+			if($conn_type=='RELTYPE_CATEGORY')
 			{
-				$type1 = $this->crm_company_reltype_category;
+				$conn_type = $this->crm_company_reltype_category;
 			}
 			else
 			{
-				$type1 = $this->crm_company_reltype_section;
+				$conn_type = $this->crm_company_reltype_section;
 			}
 		}
 		else if($obj->prop('class_id')==CL_CRM_SECTION)
 		{
-			if($type1=='RELTYPE_CATEGORY')
+			if($conn_type=='RELTYPE_CATEGORY')
 			{
-				$type1 = $this->crm_category_reltype_category;
+				$conn_type = $this->crm_category_reltype_category;
 			}
 			else
 			{
-				$type1 = $this->crm_section_reltype_section;
+				$conn_type = $this->crm_section_reltype_section;
 			}
 		}
 	
 		$conns = $obj->connections_from(array(
-			'type'=>$type1,
+			'type'=>$conn_type,
 			'sort_by' => 'from.jrk',
 			'sort_dir' => 'asc',
 		));
-		$conns = $conns;
+
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -559,7 +577,16 @@ class crm_company extends class_base
 
 			//add another item to the tree
 			$tree->add_item($this_level_id,$tree_node_info);
-			$this->generate_tree(&$tree,&$tmp_obj,&$node_id,$tmp_type,&$skip, &$attrib, $leafs);
+			//$this->generate_tree(&$tree,&$tmp_obj,&$node_id,$tmp_type,&$skip, &$attrib, $leafs);
+			$this->generate_tree(array(
+						'tree_inst' => &$tree,
+						'obj_inst' => &$tmp_obj,
+						'node_id' => &$node_id,
+						'conn_type' => $tmp_type,
+						'skip' => &$skip,
+						'attrib' => &$attrib,
+						'leafs' => $leafs
+			));
 		}
 		//if leafs
 		if($leafs)
@@ -632,12 +659,15 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
 	
-
-		if($arr['request']['group']=='relorg')
+		/*
+			weird shiznit, one day its to show the search
+			the other day is not to show the search
+		*/
+		/*if($arr['request']['group']=='relorg')
 		{
 			$this->show_customer_search=true;
 			$arr['request']['no_results'] = 1;
-		}
+		}*/
 
 		switch($data['name'])
 		{
@@ -858,7 +888,15 @@ class crm_company extends class_base
 				{
 					$this->active_node = $arr['request']['cat'];
 				}
-				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+				$this->generate_tree(array(
+							'tree_inst' => &$tree_inst,
+							'obj_inst' => $arr['obj_inst'],
+							'node_id' => &$node_id,
+							'conn_type' => 'RELTYPE_SECTION',
+							'attrib' => 'unit',
+							'leafs' => true,
+				));
 				break;
 			}
 			
@@ -866,7 +904,15 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
-				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+				$this->generate_tree(array(
+							'tree_inst' => &$tree_inst,
+							'obj_inst' => $arr['obj_inst'],
+							'node_id' => &$node_id,
+							'conn_type' => 'RELTYPE_SECTION',
+							'attrib' => 'unit',
+							'leafs' => true,
+				));
 			break;
 
 			case "customer_listing_tree":
@@ -875,8 +921,18 @@ class crm_company extends class_base
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
 				$tree_inst->set_only_one_level_opened(1);
-				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
-													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
+				/*$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
+													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');*/
+				$this->generate_tree(array(
+							'tree_inst' => &$tree_inst,
+							'obj_inst' => $arr['obj_inst'],
+							'node_id' => &$node_id,
+							'conn_type' => 'RELTYPE_CATEGORY',
+							'skip' => array(CL_CRM_COMPANY),
+							'attrib' => 'category',
+							'leafs' => false,
+							'style' => 'nodetextbuttonlike',
+				));
 				break;
 			}
 			case "my_customers_listing_tree":
@@ -884,8 +940,18 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];	
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
-				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
-													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
+				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
+				//									'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
+				$this->generate_tree(array(
+							'tree_inst' => &$tree_inst,
+							'obj_inst' => $arr['obj_inst'],
+							'node_id' => &$node_id,
+							'conn_type' => 'RELTYPE_CATEGORY',
+							'skip' => array(CL_CRM_COMPANY),
+							'attrib' => 'category',
+							'leafs' => 'false',
+							'style' => 'nodetextbuttonlike',
+				));
 				
 				//need to delete every category of the tree that the person doesn't
 				//have a relation with
@@ -1896,6 +1962,7 @@ class crm_company extends class_base
 						'group' => $arr['group'],
 						'customer_search' => 1,
 						'unit' => $arr['unit'],
+						'category' => $arr['category'],
 						'no_results' => 1
 						),
 					'crm_company');
