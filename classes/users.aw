@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.136 2005/03/03 13:00:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.137 2005/03/18 11:44:33 ahti Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1507,7 +1507,7 @@ class users extends users_user
 			$o = obj($osi_vars["aw_obj_priv"]);
 			$o->connect(array(
 				"to" => $this->get_oid_for_gid($nlg),
-				"reltype" => RELTYPE_ACL
+				"reltype" => RELTYPE_ACL,
 			));
 			$this->save_acl($o->id(), $nlg, array());
 
@@ -1572,13 +1572,13 @@ class users extends users_user
 		$u_o->create_brother($g_oid);
 		$u_o->connect(array(
 			"to" => $g_oid,
-			"reltype" => 1 // RELTYPE_GRP from user
+			"reltype" => "RELTYPE_GRP" // from user
 		));
 
 		$g_o = obj($g_oid);
 		$g_o->connect(array(
 			"to" => $u_o->id(),
-			"reltype" => 2 // RELTYPE_MEMBER from group
+			"reltype" => "RELTYPE_MEMBER" // from group
 		));
 	}
 
