@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.135 2004/04/29 12:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.136 2004/04/30 09:09:11 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -858,6 +858,9 @@ if (!defined("DEFS"))
 		aw_global_set("uid", $uid);
 		$us = get_instance("users");
 		$us->request_startup();
+		// also, flush acl cache !
+		aw_cache_flush("aclcache");
+		aw_cache_flush("__aw_acl_cache");
 	}
 
 	function aw_restore_user()
@@ -869,6 +872,17 @@ if (!defined("DEFS"))
 		}
 		__aw_int_do_switch_user(array_pop($old_uids));
 		aw_global_set("old_uids", $old_uids);
+	}
+
+	function aw_disable_acl()
+	{
+		$GLOBALS["__aw_disable_acl"] = $GLOBALS["cfg"]["acl"]["no_check"];
+		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
+	}
+
+	function aw_restore_acl()
+	{
+		$GLOBALS["cfg"]["acl"]["no_check"] = $GLOBALS["__aw_disable_acl"];
 	}
 
 	////
