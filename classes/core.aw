@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.182 2003/04/24 09:35:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.183 2003/04/25 16:29:54 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1485,29 +1485,33 @@ class core extends db_connector
 		$content.= "is_rpc_call = $is_rpc_call\n";
 		$content.= "rpc_call_type = $rpc_call_type\n";
 		global $HTTP_COOKIE_VARS;
+		$content .= "\n\nCookie vars\n";
 		foreach($HTTP_COOKIE_VARS as $k => $v)
 		{
-			$content.="HTTP_COOKIE_VARS[$k] = $v \n";
+			$content.="$k = $v \n";
 		}
 		global $HTTP_GET_VARS;
+		$content .= "\n\nGet vars\n";
 		foreach($HTTP_GET_VARS as $k => $v)
 		{
-			$content.="HTTP_GET_VARS[$k] = $v \n";
+			$content.="$k = $v \n";
 		}
 		global $HTTP_POST_VARS;
+		$content .= "\n\nPost vars\n";
 		foreach($HTTP_POST_VARS as $k => $v)
 		{
-			$content.="HTTP_POST_VARS[$k] = $v \n";
+			$content.="$k = $v \n";
 		}
+		$keys = array("DOCUMENT_ROOT","HTTP_ACCEPT_LANGUAGE","HTTP_HOST","HTTP_REFERER","HTTP_USER_AGENT","REMOTE_ADDR",
+			"SCRIPT_FILENAME","SCRIPT_URI","SCRIPT_URL","REQUEST_METHOD","QUERY_STRING");
 		global $HTTP_SERVER_VARS;
+		$content.="\n\nHelpful server vars:\n\n";
 		foreach($HTTP_SERVER_VARS as $k => $v)
 		{
-			// we will not send out the password or the session key
-			if ( ($k == "PHP_AUTH_PW") || ($k == "automatweb") )
+			if (in_array($k,$keys))
 			{
-				continue;
+				$content.="$k = $v \n";
 			};
-			$content.="HTTP_SERVER_VARS[$k] = $v \n";
 		}
 
 		// try to find the user's email;
