@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.219 2003/02/01 13:34:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.220 2003/02/02 16:11:19 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -23,6 +23,35 @@ class menuedit extends aw_template
 		lc_site_load("menuedit",$this);
 		lc_load("definition");
 	}
+
+	////   
+	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest   
+	// uue folderi lisamiseks kodukataloogi alla   
+	// skip_invalidate   
+	function add_new_menu($args = array())   
+	{   
+		// ja eeldame, et meil on vähemalt parent ja name olemas.   
+		$this->quote($args["name"]);   
+		$newoid = $this->new_object(array(   
+			"name" => $args["name"],   
+			"parent" => $args["parent"],   
+			"status" => (isset($args["status"]) ? $args["status"] : 2),   
+			"class_id" => CL_PSEUDO,   
+			"jrk" => $args["jrk"],   
+			'no_flush' => $args['no_flush'],   
+		));   
+		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;   
+		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);   
+		$this->db_query($q);   
+		$this->_log(ST_MENUEDIT, SA_ADD, $args["name"], $newoid);   
+
+		if (!$args['no_flush'])   
+		{   
+			$this->invalidate_menu_cache(array($newoid));   
+		}   
+
+		return $newoid;   
+	} 
 
 	// parameetrid:
 	// section - millist naidata?
@@ -610,7 +639,12 @@ class menuedit extends aw_template
 			$rp = $this->parse("NO_RIGHT_PANE");
 		}
 		
-		$this->vars(array("LEFT_PANE" => $lp, "RIGHT_PANE" => $rp));
+		$this->vars(array(
+			"LEFT_PANE" => $lp, 
+			"RIGHT_PANE" => $rp,
+			"NO_LEFT_PANE" => "",
+			"NO_RIGHT_PANE" => ""
+		));
 		
 		if (is_array($vars))
 		{
