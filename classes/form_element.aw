@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.65 2002/08/20 12:42:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.66 2002/08/21 10:21:57 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2069,7 +2069,6 @@ class form_element extends aw_template
 				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value='' />\n";
 				break;
 
-			// yuck
 			case "link":
 				if ($this->arr["subtype"] == "show_calendar")
 				{
@@ -2077,7 +2076,8 @@ class form_element extends aw_template
 					$cchain = aw_global_get("current_chain");
 					if ($cchain)
 					{
-						$_link = $this->mk_my_orb("view",array("id" => $cchain),"planner");
+						// somehow I must be able to configure the appearance of this link (aw or not aw, orb or not orb)
+						$_link = $this->mk_my_orb("view",array("id" => $cchain,"ctrl" => $this->entry_id),"planner",0,0);
 					}
 					else
 					{
@@ -2283,11 +2283,13 @@ class form_element extends aw_template
 		//	}
 		//}
 		//else
-		if ( ($this->arr["type"] == "listbox") && ($this->arr["subtype"] == "relation") )
-		{
+
+//// oh no you don't! this broke saving form entries that had relation listboxes in them!
+//		if ( ($this->arr["type"] == "listbox") && ($this->arr["subtype"] == "relation") )
+//		{
 			//print "Updating relation!<br>";
-		}
-		else
+//		}
+//		else
 		if ($this->arr["type"] == "button")
 		{
 			$s_arr = $this->form->post_vars["submit"];
