@@ -1,13 +1,4 @@
-<table border="0" cellspacing="1" cellpadding="0" width=100%>
-<tr>
-<form method="POST" action="{VAR:baseurl}/automatweb/reforb.{VAR:ext}" name="csslist">
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor:&nbsp;
-<b><a href="{VAR:link_sys_styles}">Süsteemsed stiilid</a> | <a href="{VAR:link_my_styles}">Minu stiilid</a> |
-<a href="javascript:document.csslist.submit()"><font color="red">Salvesta</font></a></b>
-</td>
-</tr>
-</table>
-<br>
+{VAR:menu}
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td bgcolor="#CCCCCC">

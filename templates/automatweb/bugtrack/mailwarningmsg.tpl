@@ -3,6 +3,6 @@ mis oli vaja parandada juba {VAR:timeready} ei ole ikka veel parandatud!
 
 Vea sisestas {VAR:uid} {VAR:tm}
 
-----------------------------------------
+--------------------------------------------
 Vea kirjeldus on:
 {VAR:text}

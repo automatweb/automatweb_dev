@@ -46,7 +46,7 @@ $vars = array(
 			"menubar"			=> (isset($menubar) ? $menubar : ""),
 			"jsinclude"  			=> (isset($js_include) ? $js_include : ""),
 			"qcount"				=> $qcount,
-		 	"timers"				=> join(" | ",$timers_arr),
+		 	"timers"				=> join("\n",$timers_arr),
 			"charset"				=> $t->get_charset());
 $sf->vars($vars);
 echo $sf->parse();

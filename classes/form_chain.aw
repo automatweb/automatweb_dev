@@ -206,6 +206,10 @@ class form_chain extends form_base
 	// entry_id - the chain entry id
 	function show($arr)
 	{
+		global $awt;
+		$awt->start("form_chain::show");
+		$awt->count("form_chain::show");
+
 		extract($arr);
 		$ch = $this->load_chain($id);
 
@@ -276,6 +280,7 @@ class form_chain extends form_base
 			"SEL_FORM" => "",
 			"SEP" => ""
 		));
+		$awt->stop("form_chain::show");
 		return $this->parse();
 	}
 
@@ -339,6 +344,10 @@ class form_chain extends form_base
 
 	function show_chain_entries($arr)
 	{
+		global $awt;
+		$awt->start("form_chain::show_chain_entries");
+		$awt->count("form_chain::show_chain_entries");
+
 		extract($arr);
 		$ob = $this->load_chain($id);
 		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id)).LC_FORM_CHAIN_CHANGE_WREATH_INPUT);
@@ -355,6 +364,7 @@ class form_chain extends form_base
 			));
 			$this->parse("LINE");
 		}
+		$awt->stop("form_chain::show_chain_entries");
 		return $this->parse();
 	}
 

@@ -5,20 +5,20 @@
 
 			<table border="0" cellspacing="1" cellpadding="0" width=100%>
 				<tr>
-					<td height="15" colspan="11" class="fgtitle">&nbsp;<b>KASUTAJAD:
+					<td height="15" colspan="11" class="fgtitle">&nbsp;<b>USERS:
 					<!-- SUB: CAN_EDIT -->
-						<a href='{VAR:urlgrp}'>Selle grupi</a>&nbsp;|&nbsp;<a href='{VAR:urlall}'>Lisa juurde</a>&nbsp;|&nbsp;<a href='{VAR:urlgrps}'>Grupid</a>
+						<a href='{VAR:urlgrp}'>This group</a>&nbsp;|&nbsp;<a href='{VAR:urlall}'>Add new</a>&nbsp;|&nbsp;<a href='{VAR:urlgrps}'>Groups</a>
 					<!-- END SUB: CAN_EDIT -->
 					</b></td>
 				</tr>
 				<tr>
-					<td align="center" class="title">&nbsp;Vali&nbsp;</td>
-					<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-					<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
-					<td align="center" class="title">&nbsp;T&uuml;&uuml;p&nbsp;</td>
-					<td align="center" class="title">&nbsp;Liimeid&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
+					<td align="center" class="title">&nbsp;Choose&nbsp;</td>
+					<td align="center" class="title">&nbsp;Name&nbsp;</td>
+					<td align="center" class="title">&nbsp;Priority&nbsp;</td>
+					<td align="center" class="title">&nbsp;Type;</td>
+					<td align="center" class="title">&nbsp;Members&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changer&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changed&nbsp;</td>
 				</tr>
 
 			<!-- SUB: LINE -->
@@ -50,7 +50,7 @@
 		</td>
 	</tr>
 </table>
-<input type='submit' class='small_button' VALUE='Salvesta'>
+<input type='submit' class='small_button' VALUE='Save'>
 <input type='hidden' NAME='action' VALUE='submit_grp_groups'>
 <input type='hidden' NAME='from' VALUE='{VAR:from}'>
 <input type='hidden' NAME='parent' VALUE='{VAR:parent}'>

@@ -1,7 +1,7 @@
 <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fcaption">{VAR:LC_PROMO_CHOOSE_SECTION}:</td><td class="fform"><SELECT NAME='section[]' SIZE=20 MULTIPLE>{VAR:section}</select></td>
+<td class="fcaption">{VAR:LC_PROMO_CHOOSE_SECTION}:</td><td class="fform"><SELECT NAME='section[]' SIZE=20 class='small_button' MULTIPLE>{VAR:section}</select></td>
 </tr>
 <tr>
 <td class="fcaption">{VAR:LC_PROMO_TITLE}:</td><td class="fform"><input type='text' NAME='title' VALUE='{VAR:title}'></td>

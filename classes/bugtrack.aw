@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.8 2001/07/28 03:27:10 duke Exp $
-// bugtrack.aw - Bugtr‰kker
 global $orb_defs;
-$orb_defs["bugtrack"] = array(
+$orb_defs["bugtrack"] = "xml"/*array(
 			"new"	=> array("function" => "orb_new", "params" => array()),
 			"submit_new" => array("function" => "orb_submit_new", "params" => array()),
 			"edit"	=> array("function" => "orb_edit", "params" => array("id")),
@@ -14,7 +12,7 @@ $orb_defs["bugtrack"] = array(
 			"delegate" => array("function" => "orb_popupdelegate", "params" => array("id")),
 			"submit_delegate" => array("function" => "orb_submit_delegate", "params" => array("id","developer","status")),
 			"showcomments" => array("function" => "orb_popupshowcomments", "params" => array("id"))
-);
+)*/;
 
 
 classload("aw_template","replicator");
@@ -26,40 +24,20 @@ class bugtrack extends aw_template
 		$this->mastersite="http://work.struktuur.ee";
 		global $sitekeys;
 		$this->sitekeys=$sitekeys;
+		if (!isset($sitekeys) || !is_array($sitekeys))
+		{
+			$this->raise_error("Sitekeys array on m‰‰ramata! See tuleb panna saidi const.aw-sse",true);
+		};
 	
 		////
 		//! mis on developerite grupi id
 		global $bugtrack_developergid;
-		if (!isset($bugtrack_developergid))
+		if (!isset($bugtrack_developergid) || $bugtrack_developergid=="")
 		{
 			$this->raise_error("developerite grupi GID on defineerimata",true);
 		};
 		$this->devgroupid=$bugtrack_developergid;
 
-
-		////
-		//! saitide array
-		$this->sites=array(
-			"0" => "test.kirjastus.ee",
-			"1" => "test.kroonika.ee",
-			"2" => "www.kroonika.ee",
-			"3" => "uus.nadal.ee",
-			"4" => "www.nadal.ee",
-			"5" => "www.seltskond.ee",
-			"6" => "vibe.struktuur.ee",
-			"7" => "uusvibe.struktuur.ee",
-			"8" => "www.kirjastus.ee",
-			"9" => "dev.struktuur.ee",
-			"10" => "stat.struktuur.ee",
-			"11" => "rkool.struktuur.ee",
-			"12" => "ebs.struktuur.ee",
-			"13" => "uus.anne.ee",
-			"14" => "work.struktuur.ee",
-			"15" => "www.struktuur.ee",
-			"16" => "aw",				// need kaks on minu masina jaoks
-			"17" => "awwork"
-			);
-	
 		////
 		// !Kıikvıimalikud staatused
 		$this->statlist = array(
@@ -73,7 +51,6 @@ class bugtrack extends aw_template
 
 		$a=array_flip($this->statlist);
 		$this->stat4=$a["lahendatud"];
-		$a=array_flip($this->statlist);
 		$this->stat6=$a["suletud"];
 		////
 		// !Kıikvıimalikud tulemused
@@ -345,13 +322,16 @@ class bugtrack extends aw_template
 		{
 			case "":
 				$uf="";
-				$minulelink="[Minule";
-				$k6igilelink="</a>Kıigile<a>]";
+				$minulelink="[Minu";
+				$k6igilelink="</a>Kıigi<a>]";
 				break;
 			default:
-				$uf="developer = '$bugtr_userfilt'";
-				$minulelink="[</a>Minule<a>";
-				$k6igilelink="Kıigile]";
+				// muutsin siit nii, et n‰eb endale m‰‰ratud ja enda pandud 
+				// buge kuna keegi kaebas, et enda pandud buge ei n‰e
+				// lauri 31 jul 2001.
+				$uf="(developer = '$bugtr_userfilt' OR uid = '$bugtr_userfilt' )";
+				$minulelink="[</a>Minu<a>";
+				$k6igilelink="Kıigi]";
 				break;
 		};
 
@@ -543,6 +523,7 @@ class bugtrack extends aw_template
 			));
 		$this->read_template("edit.tpl");
 		$this->vars(array("uid" => $bug["uid"],
+			"iframesrc" => "comments.aw?section=bug_".$id,
 			"url" => $bug["url"],
 			"id"  => $bug["id"],
 			"prilist" => $this->picker($bug["pri"],$this->prilist),

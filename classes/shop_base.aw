@@ -34,7 +34,9 @@ class shop_base extends aw_template
 			return $this->type_cache[$id];
 		}
 		$this->db_query("SELECT objects.*,shop_item_types.* FROM objects LEFT JOIN shop_item_types ON shop_item_types.id = objects.oid WHERE oid = $id");
-		return $this->db_next();
+		$ret =  $this->db_next();
+		$this->type_cache[$id] = $ret;
+		return $ret;
 	}
 
 	////
@@ -135,6 +137,24 @@ class shop_base extends aw_template
 			$this->raise_error("can't find the matching shop for the item!", true);
 		}
 		return $shop;
+	}
+
+	function listall_items($type = FOR_SELECT)
+	{
+		$ret = array();
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_SHOP_ITEM." AND status = 2");
+		while ($row = $this->db_next())
+		{
+			if ($type == FOR_SELECT)
+			{
+				$ret[$row["oid"]] = $row["name"];
+			}
+			else
+			{
+				$ret[$row["oid"]] = $row;
+			}
+		}
+		return $ret;
 	}
 }
 ?>

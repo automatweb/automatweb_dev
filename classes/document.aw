@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.41 2001/08/08 07:44:18 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.42 2001/08/12 23:21:14 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -117,8 +117,6 @@ class document extends aw_template
 
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
-		global $awt;
-		$awt->start("db_documents->list_docs()");
 		if ($period == -1)
 		{
 			if ($this->period > 0)
@@ -190,12 +188,10 @@ class document extends aw_template
 			WHERE $pstr && $rstr $v
 			ORDER BY objects.period DESC,objects.jrk $lm";
 		$this->db_query($q);
-		$awt->stop("db_documents->list_docs()");
 	}
 
 	function fetch($docid,$field = "main") 
 	{
-		global $awt;
 		if ($this->period > 0) 
 		{
 			$sufix = " && objects.period = " . $this->period;
@@ -204,7 +200,6 @@ class document extends aw_template
 		{
 			$sufix = "";
 		};
-		$awt->start("doc_fetch");
 		$q = "SELECT documents.*,
 			objects.*
 			FROM documents
@@ -212,7 +207,6 @@ class document extends aw_template
 			(documents.docid = objects.oid)
 			WHERE docid = '$docid' $sufix";
 		$this->db_query($q);
-		$awt->stop("doc_fetch");
 		$data = $this->db_fetch_row();
 		
 		if (!$data)
@@ -230,7 +224,6 @@ class document extends aw_template
 					(documents.docid = objects.oid)
 				WHERE docid = '".$oo["brother_of"]."' $sufix";
 			$this->db_query($q);
-			$awt->stop("doc_fetch");
 			$data = $this->db_fetch_row();
 		}
 
@@ -275,15 +268,11 @@ class document extends aw_template
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
 		
-		global $classdir,$baseurl,$ext,$awt;
-
-		$awt->count("db_documents->gen_preview()");
-		$awt->start("doc_gen_preview");
+		global $classdir,$baseurl,$ext;
 
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 
-		$awt->start("gen_preview1");
-	
+
 		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
@@ -298,7 +287,6 @@ class document extends aw_template
 			return false;
 		};
 		
-		$awt->start("db_documents->gen_preview()::starter");
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");
 		
@@ -359,9 +347,6 @@ class document extends aw_template
 		$img = new db_images;
 		$retval = "";
 		$used = array();
-
-		$awt->stop("db_documents->gen_preview()::starter");
-		$awt->start("db_documents->gen_preview()::leadonly_bit");
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
@@ -424,7 +409,6 @@ class document extends aw_template
 				$doc["content"] = $txt;
 			};
 		};
-		$awt->stop("db_documents->gen_preview()::leadonly_bit");
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
@@ -2324,6 +2308,7 @@ class document extends aw_template
 		$row = $ar["row"];
 
 		$row["parent"] = $parent;
+		$row["lang_id"] = $GLOBALS["lang_id"];
 		$id = $this->new_object($row);
 
 		reset($this->knownfields);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.7 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.8 2001/08/12 23:21:14 kristo Exp $
 
 lc_load("form");
 	class form_search_element extends form_element
@@ -90,6 +90,10 @@ lc_load("form");
 
 		function gen_user_html_not($prefix = "",$elvalues = array(),$no_submit = false)		// function that doesn't use templates
 		{
+			global $awt;
+			$awt->start("form_search_element::gen_user_html_not");
+		$awt->count("form_search_element::gen_user_html_not");
+
 			if ($this->arr["ver2"])	// backward compatibility sucks ass, but whut can I do...
 			{
 				if ($this->get_type() == 'listbox')
@@ -100,7 +104,9 @@ lc_load("form");
 					$this->arr["listbox_default"] = $this->arr["listbox_count"];
 					$this->arr["listbox_count"]++;
 				}
-				return $this->do_core_userhtml($prefix,$elvalues,$no_submit);
+				$r = $this->do_core_userhtml($prefix,$elvalues,$no_submit);
+				$awt->stop("form_search_element::gen_user_html_not");
+				return $r;
 			}
 			else
 			{
@@ -126,30 +132,49 @@ lc_load("form");
 							$t->arr["text"] = $this->arr["text"];
 
 						if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
-							return $t->gen_user_html_not(&$images);
+						{
+							$r =  $t->gen_user_html_not(&$images);
+							$awt->stop("form_search_element::gen_user_html_not");
+							return $r;
+						}
 						else
+						{
+							$awt->stop("form_search_element::gen_user_html_not");
 							return "";
+						}
 					}
 					else
 					{
+						$awt->stop("form_search_element::gen_user_html_not");
 						return "";
 					}
 				}
 				else
+				{
+					$awt->stop("form_search_element::gen_user_html_not");
 					return "";
+				}
 			}
+			$awt->stop("form_search_element::gen_user_html_not");
 		}
 
 		function process_entry(&$entry, $id)
 		{
+			global $awt;
+			$awt->start("form_search_element::process_entry");
+		$awt->count("form_search_element::process_entry");
+
 			if ($this->arr["ver2"])	// backward compatibility is a bitch
 			{
-				return $this->core_process_entry(&$entry,$id);
+				$r=  $this->core_process_entry(&$entry,$id);
+				$awt->stop("form_search_element::process_entry");
+				return $r;
 			}
 			else
 			{
 				if (!$this->arr["linked_element"])
 				{
+					$awt->stop("form_search_element::process_entry");
 					return;
 				}
 
@@ -180,6 +205,7 @@ lc_load("form");
 				$this->entry = $entry[$this->id];
 				$this->entry_id = $id;
 			}
+			$awt->stop("form_search_element::process_entry");
 		}
 
 		function gen_show_html()
@@ -187,11 +213,17 @@ lc_load("form");
 			if (!$this->entry_id)
 				return "";
 
+			global $awt;
+			$awt->start("form_search_element::gen_show_html");
+		$awt->count("form_search_element::gen_show_html");
+
 			$form = &$this->get_cached_form();
 			$t = $form->get_element_by_id($this->arr["linked_element"]);
 			$t->entry = $this->entry;
 			$t->entry_id = $this->entry_id;
-			return $t->gen_show_html();
+			$r = $t->gen_show_html();
+			$awt->stop("form_search_element::gen_show_html");
+			return $r;
 		}
 
 		function &get_cached_form()

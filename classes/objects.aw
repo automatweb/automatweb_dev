@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.18 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.19 2001/08/12 23:21:14 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -528,7 +528,7 @@ class objects extends db_objects
 			{
 				$ses="AND ".$ses;
 			}
-			$this->db_query("SELECT objects.*,o_p.name as parent_name FROM objects, objects as o_p WHERE o_p.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses");
+			$this->db_query("SELECT objects.*,o_p.name as parent_name,o_p_p.name as parent_parent_name,o_p_p_p.name as parent_parent_parent_name FROM objects, objects as o_p,objects as o_p_p,objects as o_p_p_p  WHERE o_p.oid = objects.parent AND o_p_p.oid = o_p.parent AND o_p_p_p.oid = o_p_p.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses");
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
@@ -540,7 +540,10 @@ class objects extends db_objects
 					"createdby" => $row["createdby"],
 					"modifiedby" => $row["modifiedby"],
 					"parent_name" => $row["parent_name"],
-					"oid" => $row["oid"]
+					"oid" => $row["oid"],
+					"class_id" => $row["class_id"],
+					"parent_parent_name" => $row["parent_parent_name"],
+					"parent_parent_parent_name" => $row["parent_parent_parent_name"]
 				));
 				$l.=$this->parse("LINE");
 			}
@@ -596,6 +599,32 @@ class objects extends db_objects
 				if ($text[$oid] != $name)
 				{
 					$this->upd_object(array("oid" => $oid, "name" => $text[$oid]));
+					if ($class_id[$oid] == CL_FORM_ELEMENT)
+					{
+						$this->db_query("SELECT * FROM element2form WHERE el_id = ".$oid);
+						while ($drow = $this->db_next())
+						{
+							$fup = new form;
+							$fup->load($drow["form_id"]);
+							for ($row = 0;$row < $fup->arr["rows"]; $row++)
+							{
+								for ($col = 0; $col < $fup->arr["cols"]; $col++)
+								{
+									if (is_array($fup->arr["elements"][$row][$col]))
+									{
+										foreach($fup->arr["elements"][$row][$col] as $k => $v)
+										{
+											if ($k == $oid)
+											{
+												$fup->arr["elements"][$row][$col][$k]["name"] = $name;
+											}
+										}
+									}
+								}
+							}
+							$fup->save();
+						}
+					}
 				}
 			}
 		}
@@ -605,6 +634,17 @@ class objects extends db_objects
 			foreach($sel as $oid => $one)
 			{
 				$this->upd_object(array("oid" => $oid, "parent" => $moveto));
+			}
+		}
+
+		if (is_array($sel) && $delete != "")
+		{
+			foreach($sel as $oid => $one)
+			{
+				if ($one == 1)
+				{
+					$this->delete_object($oid);
+				}
 			}
 		}
 

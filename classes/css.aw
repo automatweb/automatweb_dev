@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.1 2001/08/03 03:18:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.2 2001/08/12 23:21:14 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -17,12 +17,20 @@
 
 // Tööle hakkab see nii, et tehakse cachesse fail, mis siis html-i alguses sisse loetakse
 
+// default stiilid loetakse koigepealt sisse, seejärel overraiditakse need custom stylesheediga.
+
 // font-family: serif|sans-serif|monospace|cursive
 // font-style: normal|italic
 // font-weight: normal|bold|bolder
 // font-size: XX px|pt|in|em|cm|mm
 // color: #RRGGBB
 // background: #RRGGBB
+
+// stiilid jaotuvad gruppidesse, igas grupis voib olla iga systeemse stiili jaoks
+// oma custom stiili defineeritud.
+
+// lisaks on kasutajatel olemas oma grupid, mille elemente saab jagada teiste kasutajatega, 
+// ja nii edasi ja nii tagasi
 
 global $orb_defs;
 $orb_defs["css"] = "xml";
@@ -54,6 +62,7 @@ class css extends aw_template {
 				"mm" => "millimeetrit",
 		);
 
+		// siin on süsteemsed stiilid defineeritud.
 		$this->styles = array(
 			"0" => "ftitle",
 			"1" => "fcaption",
@@ -64,24 +73,189 @@ class css extends aw_template {
 			"6" => "fgtext",
 		);
 
+		// siin peaks diferentseerima selle, kas tegu on süsteemste voi kasutaja
+		// stiilidega.
+		global $udata;
+		$this->rootmenu = $udata["home_folder"];
+
 
 	}
 
+	////
+	// !Joonistab Editori menüü
+	function css_draw_menu($args = array())
+	{
+		extract($args);
+		global $basedir,$ext;
+		load_vcl("xmlmenu");
+		$xm = new xmlmenu();
+		$retval = $xm->build_menu(array(
+				"vars" => array_merge($vars,array("ext" => $ext)),
+				"xml" => $basedir . "/xml/css_editor.xml",
+				"tpl" => $this->template_dir . "/menus.tpl",
+				"activelist" => $activelist,
+			));
+		return $retval;
+	}
+		
+
+	////
+	// !Kuvab koigi olemasolevate stiiligruppide nimestiku, default on alati esindatud.
+	// how the hell do we differentiate the different styles between system and the user?
+	function css_list_groups($args = array())
+	{
+		$menu = $this->css_draw_menu(array(
+				"activelist" => array("my","mygroups",
+				));
+
+		classload("users");
+		$u = new users();
+		$group_in_user = $u->get_user_config(array(
+						"uid" => UID,
+						"key" => "automatweb_css_group",
+				));
+
+
+		if (!$group_in_use)
+		{
+			$group_in_use = "default";
+		};
+
+		$this->read_template("grouplist.tpl");
+		$lx = array(
+			"0" => "default",
+		);
+
+		$groups = $this->get_objects_below(array(
+				"parent" => $this->rootmenu,
+				"class" => CL_CSS_GROUP,
+				"active" => $active,
+		));
+
+		foreach($groups as $key => $val)
+		{
+			$lx[$key] = $val["name"];
+		}
+
+		$c = "";
+		foreach($lx as $key => $nam)
+		{
+			$cnt++;
+			$this->vars(array(
+				"cnt" => $cnt,
+				"gname" => $nam,
+				"gid" => $key,
+				"checked" => ($group_in_use == $key) ? "checked" : "",
+				"link_edgroup" => $this->mk_my_orb("group_content_list",array("gid" => $key)),
+			));
+
+			$c .= $this->parse("line");
+		};
+
+		$this->vars(array(
+			"line" => $c,
+			"link_add" => $this->mk_my_orb("add_group",array()),
+			"reforb" => $this->mk_reforb("submit_list",array()),
+			"menu" => $menu,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Salvestab gruppde nimekirja
+	function css_submit_list_groups($args = array())
+	{
+		extract($args);
+		classload("users");
+		$u = new users();
+
+		$u->set_user_config(array(
+				"uid" => UID,
+				"key" => "automatweb_css_group",
+				"value" => $use,
+		));
+		
+		$this->css_sync(array("gid" => $use));
+		return $this->mk_my_orb("list",array());
+	}
+
+	////
+	// !Kuvab globaalsete stiilide nimekirja, koos näidetega.
+	// probleem siin on selles, et kuidas ignoreerida potentsiaalselt laetud
+	// default stiile?
+	function css_globals($args = array())
+	{
+		$menu = $this->css_draw_menu(array(
+				"activelist" => "globals",
+				));
+
+		extract($args);
+		$this->read_template("global_list.tpl");
+		$c = "";
+		$cnt = 0;
+		foreach($this->styles as $key => $val)
+		{
+			$this->vars(array(
+				"cnt" => ++$cnt,
+				"sys_style" => $val,
+				"description" => "puudub",
+			));
+
+			$c .= $this->parse("line");
+		}
+
+		$this->vars(array(
+			"line" => $c,
+			"menu" => $menu,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Kuvab uue grupi lisamise vormi.
+	function css_add_group($args = array())
+	{
+		extract($args);
+		$this->read_template("addgroup.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_add_group",array()),
+		));
+		return $this->parse();
+	}
+
+	function css_submit_add_group($args = array())
+	{
+		extract($args);
+		$this->quote($name);
+		$gid = $this->new_object(array(
+			"name" => $name,
+			"parent" => $this->rootmenu,
+			"class_id" => CL_CSS_GROUP,
+		));
+		return $this->mk_my_orb("list",array());
+	}
 
 	////
 	// !Kuvab nimekirja mille abil saad süsteemi ja oma stiilid vastavusse seada
 	function css_list($args = array())
 	{
+		$menu = $this->css_draw_menu(array(
+				"activelist" => "globals",
+			));
 
-		classload("config","xml");
-		$conf = new config();
+
+		extract($args);
+		classload("users","xml");
+		$u = new config();
 		$xml = new xml();
 
-		$custom_css_xml = $conf->get_simple_config("custom_css");
-		$custom_css = $xml->xml_unserialize(array("source" => $custom_css_xml));
-		
+		$custom_css = $u->get_simple_config(array(
+					"uid" => UID,
+					"key" => "custom_css",
+		));
+
 		$this->read_template("list.tpl");
-		$styles = $this->_get_my_styles(array("active" => true));
+		$styles = $this->_get_my_styles(array("active" => true,"parent" => $gid));
 		$my_styles = array("0" => "default");
 		if (is_array($my_styles))
 		{
@@ -111,9 +285,11 @@ class css extends aw_template {
 		
 		$this->vars(array(
 			"line" => $c,
-			"link_sys_styles" => $this->mk_my_orb("list",array()),
-			"link_my_styles" => $this->mk_my_orb("my_list",array()),
-			"reforb" => $this->mk_reforb("submit_list",array()),
+			"link_groups" => $this->mk_my_orb("list",array()),
+			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
+			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
+			"reforb" => $this->mk_reforb("submit_group_content_list",array("gid" => $gid)),
+			"menu" => $menu,
 		));
 
 		return $this->parse();
@@ -122,13 +298,28 @@ class css extends aw_template {
 	function css_sync($args = array())
 	{
 		// loeme koigepealt koik css stiilid sisse
-		classload("config","xml","file");
-		$conf = new config();
+		classload("users","xml","file");
+		$u = new users();
 		$xml = new xml();
 
-		$custom_css_xml = $conf->get_simple_config("custom_css");
-		$custom_css = $xml->xml_unserialize(array("source" => $custom_css_xml));
+		$use_group = $u->get_user_config(array(
+					"uid" => UID,
+					"key" => "automatweb_css_group",
+				));
+		if (not($use_group == $args["gid"]))
+		{
+			// don't do anything since this is not the css currently in use
+			return;
+		};
 
+		$meta = $this->get_object_metadata(array(
+						"oid" => $args["gid"],
+						"key" => "custom_css",
+		));
+		$custom_css_xml = $meta;
+		$this->dequote($custom_css_xml);
+		$custom_css = $xml->xml_unserialize(array("source" => $custom_css_xml));
+		
 		$css_file = "";
 
 		foreach($custom_css as $key => $val)
@@ -139,10 +330,12 @@ class css extends aw_template {
 				$css_file .= $this->_gen_css_style($key,$css_info["meta"]["css"]);
 			};
 		}
-		
+
 		$awf = new file();
+		$uid = UID;
 		$success =$awf->put_special_file(array(
-			"name" => "custom.css",
+			"name" => "$uid.css",
+			"path" => "css",
 			"content" => $css_file,
 			"sys" => true,
 		));
@@ -154,48 +347,22 @@ class css extends aw_template {
 	function submit_css_list($args = array())
 	{
 		extract($args);
-		classload("xml","config","file");
+		classload("xml","users","file");
 		$xml = new xml();
 		
-		// salvestame ära ka 
-		$conf = new config();
-
 		$custom_css = $xml->xml_serialize($style);
 		$this->quote($custom_css);
-		$conf->set_simple_config("custom_css",$custom_css);
-
-		$styles = $this->_get_my_styles();
-		$css_data = array();
-
-		foreach($styles as $key => $val)
-		{
-			$tmp = $xml->xml_unserialize(array("source" => $val["metadata"]));
-			$css_data[$key] = $tmp["css"];
-		};
-
-		$css_info = "";
-
-		foreach($style as $key => $val)
-		{
-			// kui on määratud stiil, siis
-			if ($val)
-			{
-				$css_info .= $this->_gen_css_style($key,$css_data[$val]);
-			};
-		};
-
-
-		$awf = new file();
-		$success =$awf->put_special_file(array(
-			"name" => "custom.css",
-			"content" => $css_info,
-			"sys" => true,
+		
+		$this->set_object_metadata(array(
+			"oid" => $gid,
+			"key" => "custom_css",
+			"value" => $custom_css,
 		));
-		if (not($success))
-		{
-			$this->raise_error("CSS faili kirjutamine ei õnnestunud, kontrollige kataloogi oigusi",true);
-		};
-		return $this->mk_my_orb("list",array());
+
+
+		$this->css_sync(array("gid" => $gid));
+
+		return $this->mk_my_orb("group_content_list",array("gid" => $gid));
 	}
 
 	////
@@ -206,12 +373,11 @@ class css extends aw_template {
 
 		if (not($parent))
 		{
-			global $rootmenu;
-			$parent = $rootmenu;
+			$parent = $this->rootmenu;
 		};
 		
 		$styles = $this->get_objects_below(array(
-				"parent" => $rootmenu,
+				"parent" => $parent,
 				"class" => CL_CSS,
 				"active" => $active,
 		));
@@ -274,9 +440,10 @@ class css extends aw_template {
 	// ja olemasolevaid muuta
 	function css_my_list($args = array())
 	{
+		extract($args);
 		$this->read_template("my_list.tpl");
 
-		$styles = $this->_get_my_styles();
+		$styles = $this->_get_my_styles(array("parent" => $gid));
 
 		if (is_array($styles))
 		{
@@ -301,11 +468,11 @@ class css extends aw_template {
 
 		$this->vars(array(
 			"line" => $c,
-			"link_sys_styles" => $this->mk_my_orb("list",array()),
-			"link_add_style" => $this->mk_my_orb("add",array()),
-			"reforb" => $this->mk_reforb("submit_my_list",array()),
+			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
+			"link_add_style" => $this->mk_my_orb("add",array("gid" => $gid)),
+			"link_groups" => $this->mk_my_orb("list",array()),
+			"reforb" => $this->mk_reforb("submit_my_list",array("gid" => $gid)),
 		));
-
 		return $this->parse();
 	}
 
@@ -324,7 +491,7 @@ class css extends aw_template {
 			$q = "UPDATE objects SET status = 2 WHERE oid IN ($oidlist)";
 			$this->db_query($q);
 		};
-		return $this->mk_my_orb("my_list",array());
+		return $this->mk_my_orb("my_list",array("gid" => $gid));
 	}
 
 	////
@@ -338,6 +505,7 @@ class css extends aw_template {
 		if ($oid)
 		{
 			$obj = $this->get_obj_meta($oid);
+			$gid = $obj["parent"];
 			$css_data = $obj["meta"]["css"];
 		}
 		else
@@ -357,8 +525,10 @@ class css extends aw_template {
 			$c .= $this->parse("family");
 		};
 			
+		$styl = $this->_gen_css_style("demo",$css_data);
 
 		$this->vars(array(
+			"styl" => $styl,
 			"name" => $obj["name"],
 			"family" => $c,
 			"italic" => ($css_data["fstyle"] == "italic") ? "checked" : "",
@@ -368,9 +538,10 @@ class css extends aw_template {
 			"bgcolor" => $css_data["bgcolor"],
 			"size" => $css_data["size"],
 			"units" => $this->picker($css_data["units"],$this->units),
-			"link_sys_styles" => $this->mk_my_orb("list",array()),
-			"link_my_styles" => $this->mk_my_orb("my_list",array()),
-			"reforb" => $this->mk_reforb("submit",array("oid" => $oid)),
+			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
+			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
+			"link_groups" => $this->mk_my_orb("list",array()),
+			"reforb" => $this->mk_reforb("submit",array("oid" => $oid,"gid" => $gid)),
 		));
 		return $this->parse();
 	}
@@ -381,7 +552,7 @@ class css extends aw_template {
 	function css_submit($args = array())
 	{
 		// by default lisame uue stiili saidi root objecti alla
-		global $rootmenu;
+		$rootmenu = $this->rootmenu;
 		
 		$block = array();
 
@@ -395,11 +566,12 @@ class css extends aw_template {
 		$block["bgcolor"] = $args["bgcolor"];
 
 		$oid = $args["oid"];
+		$gid = $args["gid"];
 
 		if (not($oid))
 		{
 			$oid = $this->new_object(array(
-				"parent" => $rootmenu,
+				"parent" => $gid,
 				"name" => $args["name"],
 				"class_id" => CL_CSS,
 				),false);
@@ -418,7 +590,7 @@ class css extends aw_template {
 				"value" => $block,
 		));
 
-		$this->css_sync();
+		$this->css_sync(array("gid" => $gid));
 
 		return $this->mk_my_orb("edit",array("oid" => $oid));
 	}

@@ -18,15 +18,21 @@ function varvivalik(which)
  	aken.focus()
 }
 </script>
+<style>
+{VAR:styl}
+</style>
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor:&nbsp;
-<b><a href="{VAR:link_sys_styles}">Süsteemsed stiilid</a> | <a href="{VAR:link_my_styles}">Minu stiilid</a> |
+<b><a href="{VAR:link_groups}">Grupid</a> | <a href="{VAR:link_sys_styles}">Süsteemsed stiilid</a> | <a href="{VAR:link_my_styles}">Minu stiilid</a> |
 <a href="javascript:document.cssedit.submit()"><font color="red">Salvesta</font></b>
 </td>
 </tr>
 </table>
 <br>
+<table border="0" cellspacing="2" cellpadding="2" width="100%">
+<tr>
+<td valign="top" rowspan="2">
 <table border="0" cellspacing="0" cellpadding="0">
 <form method="POST" action="{VAR:baseurl}/automatweb/reforb.{VAR:ext}" name="cssedit">
 <tr>
@@ -84,3 +90,33 @@ function varvivalik(which)
 </table>
 {VAR:reforb}
 </form>
+</td>
+<form>
+<td valign="top" bgcolor="#CCCCCC" align="center">
+<font color="#FFFFFF"><big><b>PREVIEW</b></big></font>
+</td>
+</tr>
+<tr>
+<td valign="top" class="demo">
+Sample text here and sample form elements below<p>
+<a href="#" class="demo">Näitelink</a><p>
+<input type="text" class="demo" size="30" width="30"><br>
+<input class="demo" type="checkbox">&nbsp;&nbsp;
+<input class="demo" type="checkbox">&nbsp;&nbsp;
+<input class="demo" type="checkbox">
+<p>
+<input class="demo" type="radio">&nbsp;&nbsp;
+<input class="demo" type="radio">&nbsp;&nbsp;
+<input class="demo" type="radio">&nbsp;&nbsp;
+<p>
+<input type="button" class="demo" value=" Nupp ">
+<p>
+<select class="demo" size="3">
+<option>üks
+<option>kaks
+<option>kolm
+</select>
+</td>
+</tr>
+</form>
+</table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.32 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.33 2001/08/12 23:21:14 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -133,13 +133,13 @@ class shop extends shop_base
 			"root" => $this->picker($oba["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"of" => $this->multiple_option_list($ofa,$fl),
-			"stat_by_turnover" => $this->mk_orb("turnover_stat", array("id" => $id)),
-			"orders" => $this->mk_orb("admin_orders", array("id" => $id)),
+			"stat_by_turnover" => $this->mk_my_orb("turnover_stat", array("id" => $id)),
+			"orders" => $this->mk_my_orb("admin_orders", array("id" => $id)),
 			"emails" => $oba["emails"],
 			"forms" => $this->picker($oba["owner_form"], $fl),
 			"o_form_id" => $oba["owner_form"],
 			"o_op_id" => $oba["owner_form_op"],
-			"ch_own" => $this->mk_orb("ch_owner_data", array("id" => $id)),
+			"ch_own" => $this->mk_my_orb("ch_owner_data", array("id" => $id)),
 			"tables" => $this->mk_my_orb("change_tables", array("id" => $id)),
 			"o_op_id_voucher" => $oba["owner_form_op_voucher"],
 			"o_op_id_issued" => $oba["owner_form_op_issued"],
@@ -213,7 +213,7 @@ class shop extends shop_base
 				$this->db_query("INSERT INTO shop2order_form(shop_id,of_id,repeat,op_id) values($id,$of_id,'".$of_rep[$of_id]."','".$of_op[$of_id]."')");
 			}
 		}
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	////
@@ -222,7 +222,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Change shop owners data");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Change shop owners data");
 
 		classload("form");
 		$f = new form;
@@ -246,7 +246,7 @@ class shop extends shop_base
 
 		$this->db_query("UPDATE shop SET owner_form_entry = ".$f->entry_id." WHERE id = $id");
 
-		return $this->mk_orb("ch_owner_data", array("id" => $id));
+		return $this->mk_my_orb("ch_owner_data", array("id" => $id));
 	}
 
 	////
@@ -930,6 +930,21 @@ class shop extends shop_base
 					$min_p = $idata["period"];
 				}
 			}
+
+			$has_items = false;
+			reset($shopping_cart["items"]);
+			while (list($item_id,$ar) = each($shopping_cart["items"]))
+			{
+				if ($ar["cnt"] > 0)
+				{
+					$has_items = true;
+				}
+			}	
+			if (!$has_items)
+			{
+				die(LC_NO_ITEMS_IN_CART);
+			}
+
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
@@ -980,6 +995,10 @@ class shop extends shop_base
 					$t_price += $ar["price"];
 				}
 			}
+		}
+		else
+		{
+			die(LC_ORDER_EMPTY);
 		}
 
 		// save the user info
@@ -1068,7 +1087,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("turnover_stat.tpl");
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Statistics");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Statistics");
 
 		load_vcl("date_edit");
 		$de = new date_edit(time());
@@ -1384,7 +1403,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("admin_orders.tpl");
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Orders");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Orders");
 
 		$ss = "";
 		if ($filter_uid && !is_admin())
@@ -1429,7 +1448,8 @@ class shop extends shop_base
 				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"bill" => $this->mk_my_orb("view_bill", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
-				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"confirmation" => $this->mk_my_orb("view_confirmation", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+			"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
 				"change" => $this->mk_my_orb("change_order", array("shop" => $id, "order_id" => $row["id"], "section" => $section,"page" => $page)),
 				"cancel"	=> $this->mk_my_orb("cancel_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"order_id" => $row["id"],
@@ -1466,7 +1486,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("admin_orders.tpl");
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Orders");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Orders");
 
 		// make pageselector
 		$cnt = $this->db_fetch_field("SELECT count(distinct(order_id)) as cnt FROM order2item WHERE item_id = $item_id AND period = $period","cnt");
@@ -1516,6 +1536,7 @@ class shop extends shop_base
 				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
 				"bill" => $this->mk_my_orb("view_bill", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
+				"confirmation" => $this->mk_my_orb("view_confirmation", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
 				"vouchers" => $this->mk_my_orb("list_vouchers", array("shop" => $id, "order_id" => $row["id"], "section" => $section)),
 				"change" => $this->mk_my_orb("change_order", array("shop" => $id, "order_id" => $row["id"], "section" => $section,"page" => $page)),
 				"cancel"	=> $this->mk_my_orb("cancel_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section,"page" => $page)),
@@ -1550,7 +1571,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$this->db_query("UPDATE orders SET status = ".ORD_FILLED." WHERE id = $order_id");
-		header("Location: ".$this->mk_orb("order_history", array("id" => $shop,"section" => $section,"page" => $page)));
+		header("Location: ".$this->mk_my_orb("order_history", array("id" => $shop,"section" => $section,"page" => $page)));
 		die();
 	}
 
@@ -1568,7 +1589,7 @@ class shop extends shop_base
 		{
 			$id = 0;
 		}
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Orders</a> / View order");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / <a href='".$this->mk_my_orb("admin_orders", array("id" => $shop))."'>Orders</a> / View order");
 
 		// load the entry from the database
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
@@ -1645,6 +1666,7 @@ class shop extends shop_base
 			"ip"	=> $order["ip"],
 			"inf_form" => $tx,
 			"bill" => $this->mk_my_orb("view_bill", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
+			"confirmation" => $this->mk_my_orb("view_confirmation", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section, "page" => $page)),
 			"price" => $order["t_price"]
 		));
@@ -2012,6 +2034,136 @@ class shop extends shop_base
 		die($this->parse());
 	}
 
+
+////
+	// !shows the confirmation for order $order_id to user
+	function view_confirmation($arr)
+	{
+		extract($arr);
+		$sh = $this->get($shop);
+		$this->read_template("confirmation.tpl");
+
+		// load the entry from the database
+		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
+		$order = $this->db_next();
+
+		$type2table = $this->get_tables_for_types($shop);
+
+		$cur_type = 0;
+		$first = true;
+
+		classload("form_table");
+		$ft = new form_table;
+
+		$allitemsarr = array();
+
+		$item_form = new form;
+		$cnt_form = new form;
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			if ($cur_type != $row["item_type"])
+			{
+				if (!$first)
+				{
+					// l6petame vana tabeli
+					$tx.=$ft->finish_table();
+				}
+				// ja alustame uut
+				$ft->start_table($type2table[$row["item_type"]],array("shop" => $shop, "order_id" => $order_id, "section" => $section,"class" =>  "shop", "action" => "view_confirmation"));
+
+				$itt = $this->get_item_type($row["item_type"]);
+				// j2relikult muutus ka itemi sisestamise form, loadime
+				$item_form->load($itt["form_id"]);
+				$cur_type = $row["item_type"];
+			}
+
+			$item = $this->get_item($row["item_id"]);
+			$cnt_form->load($item["cnt_form"] ? $item["cnt_form"] : $itt["cnt_form"]);
+			$item_parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
+			$item_form->load_entry($item["entry_id"]);
+			$item_form->set_element_value_by_type("price",$row["price"]);
+
+			$cnt_form->load_entry($row["cnt_entry"]);
+
+			if ($row["period"] > 1)
+			{
+				// if there is a period set in the cart for this item, we must replace the date in the item's form 
+				// with the selected period
+				$el = $item_form->get_element_by_type("date", "from");
+				$item_form->set_element_value($el->get_id(),$row["period"]);
+			}
+
+			$tmp = $cnt_form;
+			$tmp->ee = "aa".$item["entry_id"];	// make fucking sure we get a copy
+
+			$allitemsarr[] = $tmp;
+
+			$tmp = $item_form;
+			$tmp->ee = "cc".$item["entry_id"];	// make fucking sure we get a copy
+			$allitemsarr[] = $tmp;
+
+			$ft->row_data_from_form(array(&$item_form,&$cnt_form),$item_parent_name);
+
+			$first = false;
+			$this->restore_handle();
+		}
+		$tx.=$ft->finish_table();
+
+		$f = new form;
+		$txx = "";
+		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$f->reset();
+			$this->save_handle();
+			$op_id = $this->db_fetch_field("SELECT op_id FROM shop2order_form where shop_id = $shop AND of_id = ".$row["form_id"],"op_id");
+			$txx.=$f->show(array("id" => $row["form_id"],"entry_id" => $row["entry_id"], "op_id" => $op_id));
+			$this->restore_handle();
+		}
+
+		classload("users");
+		$u = new users;
+		$ar = $u->get_join_entries();
+		foreach($ar as $foid => $eid)
+		{
+			$f = new form;
+			$f->load($foid);
+			$f->load_entry($eid);
+			$tmp = $f;
+			$tmp->allah = $eid;
+			$allitemsarr[] = $tmp;
+		}
+		// calc commission eq
+		if ($sh["commission_eq"])
+		{
+			$eq = $this->get_eq($sh["commission_eq"]);
+			$commission = $this->do_parse_eq($eq,$allitemsarr);
+		}
+		$f->reset();
+		$this->vars(array(
+			"ITEM" => $tx,
+			"user" => $order["user"],
+			"time" => $this->time2date($order["tm"],3),
+			"ip"	=> $order["ip"],
+			"number" => $order["id"],
+			"inf_form" => $txx,
+			"confirmation" => $this->mk_my_orb("view_confirmation", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
+			"date" => $this->time2date($order["tm"],3),
+			"owner_data" => $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op"])),
+			"price" => $order["t_price"],
+			"log_info" => $u->show_join_data(array("tpl" => "join_data_nopwd.tpl")),
+			"commission" => (int)(($commission)+0.5),
+			"t_price" => (int)(($order["t_price"] - $commission)+0.5)
+		));
+
+		die($this->parse());
+	}
+
+
+
+
 	////
 	// !lets the user change the tables with what the bill is created for shop $id
 	function change_tables($arr)
@@ -2208,7 +2360,7 @@ class shop extends shop_base
 		$u_cur = $u->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "user_currency"));
 
 		$this->save_handle();
-		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $item_id AND tfrom <= $start AND tto >= $end ");
+		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $item_id AND tfrom <= $start AND tto >= $start ");
 		while ($row = $this->db_next())
 		{
 			if ($row["per_type"] == PRICE_PER_WEEK)

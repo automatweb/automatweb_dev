@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.6 2001/08/12 23:21:14 kristo Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 // now, I'm working on adding XML-RPC format support for this.
@@ -28,6 +28,10 @@ class xml {
 	// !Genereerib parameetrige pohjal tag-i
 	function xml_gen_tag($args = array())
 	{
+		global $awt;
+		$awt->start("xml::xml_gen_tag");
+		$awt->count("xml::xml_gen_tag");
+
 		// nende m‰rkide puhul kasutame tagi v‰‰rtuse esitamisel CDATA notatsiooni,
 		// vastasel juhul lihtsalt v‰ljastame stringi
 		$specials = array("<",">","\"");
@@ -73,6 +77,7 @@ class xml {
 		{
 			$retval = $spacer . "<$tag>" . $value . "</$tag>" . "\n";
 		};
+		$awt->stop("xml::xml_gen_tag");
 		return $retval;
 	}
 
@@ -81,10 +86,16 @@ class xml {
 	// arg - array
 	function xml_serialize($arg = array())
 	{
+		global $awt;
+		$awt->start("xml::xml_serialize");
+		$awt->count("xml::xml_serialize");
+
 		$tmp = $this->_xml_serialize($arg);
-		return $this->_complete_definition(array(
+		$r = $this->_complete_definition(array(
 							"data" => $tmp,
 						));
+		$awt->stop("xml::xml_serialize");
+		return $r;
 	}
 
 	////
@@ -101,6 +112,10 @@ class xml {
 			return;
 		};
 	
+		global $awt;
+		$awt->start("xml::_xml_serialize");
+		$awt->count("xml::_xml_serialize");
+
 		$tmp = "";
 		$realval = "";
 	
@@ -135,6 +150,7 @@ class xml {
 			};
 			$tmp = $realval;
 		};
+		$awt->stop("xml::_xml_serialize");
 		return $tmp;
 	}
 
@@ -143,15 +159,21 @@ class xml {
 	// source - xml
 	function xml_unserialize($args = array())
 	{
+		global $awt;
+		$awt->start("xml::xml_unserialize");
+		$awt->count("xml::xml_unserialize");
+
 		$source = $args["source"];
 		$retval = array();
 		$ckeys = array();
 		
+		$awt->start("xml::xml_unserialize::parsers");
+		// parsimist enam kiiremaks ei saa, see toimub enivei PHP siseselt
 		$parser = xml_parser_create();
 		
 		// keerame tag-ide suurt‰htedeks konvertimise maha
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-	
+
 		// kui tahad aru saada mida see funktsioon ja j‰rgnevad read teevad, siis debuukimise ajal
 		xml_parse_into_struct($parser,$source,&$keys,&$values);
 		// void siin teha midagi sellist: print_r($keys), print_r($values);
@@ -159,58 +181,66 @@ class xml {
 		// Good parser. Now go back where you came from
 		xml_parser_free($parser);
 
+		$awt->stop("xml::xml_unserialize::parsers");
+
+		$awt->start("xml::xml_unserialize::php");
+
+		$datablock = "";
+		$ckeys = array();
+
 		foreach($keys as $k1 => $v1)
 		{
-			// level1 on root tag, seega, meid huvitavad tagid algavad levelist 2
-			if ($v1["level"] >= 2)
+			if ( ($v1["type"] == "cdata") || ($v1["level"] < 2) )
 			{
-				$tag = $v1["tag"];
-				if (strpos($tag,$this->num_prefix) == 0)
-				{
-					// puudus. See asendab koik num_prefixid tagis.
-					// Aga ma usun, et see pole takistus
-					$tag = str_replace($this->num_prefix,"",$tag);
-				};
-		
-				// kui lopetet tag, siis on meil v‰‰rtus k‰es, ja rohkem pole vaja midagi teha
-				if ($v1["type"]	== "complete")
-				{
-					// arvutame path-i v‰lja
-					// kui $ckeys on array("yx","kax","kolm"), siis $pathi v‰‰rtuseks saab ["yx"]["kax"]["kolm"]
-					reset($ckeys);
-					$path = "";
-					if (sizeof($ckeys) > 0)
-					{
-						while(list(,$cval) = each($ckeys))
-						{
-							$path .= sprintf("[\"%s\"]",$cval);
-						};
-					};
-					// lopuks liidame sinna otsa hetkel k‰siloleva tagi
-					$path .= "[\"" . $tag . "\"]";
-
-					// value algusest ja lıpust liigne r‰ga maha
-					$value = trim(isset($v1["value"]) ? $v1["value"] : "");
-
-					// moodustame evali jaoks rea
-					$value = str_replace("\\","\\\\",$value);
-					$value = str_replace("\"","\\\"",$value);
-					$line = "\$retval" . $path . "=\"$value\";";
-
-					// and here we go. It might be ugly, but at the moment I don't care
-					eval($line); 
-				}
-				elseif ($v1["type"] == "open")
-				{
-					array_push($ckeys,$tag);
-				}
-				elseif ($v1["type"] == "close")
-				{
-					$void = array_pop($ckeys);
-				};
-				// ¸lej‰‰nud tage ignoreeritakse
+				continue;
 			};
+			$awt->start("xml::unserialize::datacycles");
+			$tag = $v1["tag"];
+			$awt->start("xml::unserialize::prefix_replace");
+			
+			$tag = preg_replace("/^" . $this->num_prefix . "/","",$tag);
+
+			//if (strpos($tag,$this->num_prefix) == 0)
+			//{
+			//	$tag = str_replace($this->num_prefix,"",$tag);
+			//};
+
+			$awt->stop("xml::unserialize::prefix_replace");
+		
+			// kui lopetet tag, siis on meil v‰‰rtus k‰es, ja rohkem pole vaja midagi teha
+			if ($v1["type"]	== "complete")
+			{
+				$awt->start("xml::unserialize::complete_tag");
+				$awt->count("xml_complete_tags");
+				$path1 = $path . "[\"" . $tag . "\"]";
+
+				// value algusest ja lıpust liigne r‰ga maha
+				$value = trim(isset($v1["value"]) ? $v1["value"] : "");
+
+				// moodustame evali jaoks rea
+				$value = str_replace("\\","\\\\",$value);
+				$value = str_replace("\"","\\\"",$value);
+				$datablock .= "\$retval" . $path1 . "=\"$value\";\n";
+				$awt->stop("xml::unserialize::complete_tag");
+			}
+			elseif ($v1["type"] == "open")
+			{
+				array_push($ckeys,sprintf("[\"%s\"]",$tag));
+				$path = join("",$ckeys);
+			}
+			elseif ($v1["type"] == "close")
+			{
+				$void = array_pop($ckeys);
+				$path = join("",$ckeys);
+			};
+			// ¸lej‰‰nud tage ignoreeritakse
+			$awt->stop("xml::unserialize::datacycles");
 		}
+		$awt->start("xml::unserialize::eval");
+		eval($datablock);
+		$awt->stop("xml::unserialize::eval");
+		$awt->stop("xml::xml_unserialize::php");
+		$awt->stop("xml::xml_unserialize");
 		return $retval;
 	}
 };

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.7 2001/07/29 02:44:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.8 2001/08/12 23:21:14 kristo Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -33,8 +33,7 @@ class db_connector extends root
 
 	function db_query($qtext,$errors = true) 
 	{
-		global $awt;
-		global $qcount,$qarr;
+		global $qcount,$qarr,$awt;
 		global $SITE_ID;
 		$qcount++; $qarr[] = $qtext;
 		if (is_object($awt)) 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.2 2001/08/08 07:07:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.3 2001/08/12 23:21:14 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -390,6 +390,7 @@ class events extends aw_template {
 		$this->quote($args);
 
 		extract($args);
+		$q = "";
 
 		if ($page == 1)
 		{

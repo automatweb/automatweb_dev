@@ -78,5 +78,10 @@
 	{VAR:reforb}
 	</td>
 </tr>
+<tr>
+<td width="100%" colspan="2">
+<iframe src="{VAR:iframesrc}" Style="width:100%;height:500">
+</td>
+</tr>
 </table>
 </form>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.29 2001/07/30 04:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.30 2001/08/12 23:21:14 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -54,8 +54,13 @@ load_vcl("date_edit");
 
 		function gen_show_html()
 		{
-			if (!$this->entry_id)
-				return "";
+//			if (!$this->entry_id)
+//				return "";
+
+			global $awt;
+			$awt->start("form_entry_element::gen_show_html");
+		$awt->count("form_entry_element::gen_show_html");
+
 
 			$t = new db_images;
 
@@ -264,6 +269,7 @@ load_vcl("date_edit");
 				}
 			}
 
+			$awt->stop("form_entry_element::gen_show_html");
 			return $html;
 		}
 

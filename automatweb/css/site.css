@@ -36,13 +36,7 @@
         text-decoration: none;
 		background: #f5f5f5;
 }
-.fcaption {
-        font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color: black;
-        text-decoration: none;
-        background: #EEEEEE;
-}
+
 .fcaption3 {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-size: 8pt;
@@ -132,13 +126,6 @@
 	font-size: 0.6em;
 	background: #FFCCCC;
 };
-.fcaption {
-	font-family: Verdana,Arial,Helvetica,sans-serif;
-        font-size: 8pt;
-        color:black;
-        text-decoration: none;
-        background: #EEEEEE;
-}
 .fcaptionclean {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-size: 10pt;

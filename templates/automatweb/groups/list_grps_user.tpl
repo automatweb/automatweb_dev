@@ -8,13 +8,13 @@
 					<td height="15" colspan="11" class="fgtitle">&nbsp;<b>GRUPID: <a href='{VAR:addgrp}'>Lisa</a></b></td>
 				</tr>
 				<tr>
-					<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-					<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
-					<td align="center" class="title">&nbsp;T&uuml;&uuml;p&nbsp;</td>
-					<td align="center" class="title">&nbsp;Liimeid&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-					<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+					<td align="center" class="title">&nbsp;Name&nbsp;</td>
+					<td align="center" class="title">&nbsp;Priority&nbsp;</td>
+					<td align="center" class="title">&nbsp;Type&nbsp;</td>
+					<td align="center" class="title">&nbsp;Members&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changer&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changed&nbsp;</td>
+					<td align="center" colspan="3" class="title">&nbsp;Action&nbsp;</td>
 				</tr>
 
 			<!-- SUB: LINE -->
@@ -33,7 +33,7 @@
 			<!-- END SUB: LINE -->
 				<tr>
 					<td class="fgtext">&nbsp;</td>
-					<td class="fgtext"><input type='submit' VALUE='Salvesta' class='small_button'></td>
+					<td class="fgtext"><input type='submit' VALUE='Save' class='small_button'></td>
 					<td class="fgtext">&nbsp;</td>
 					<td class="fgtext">&nbsp;</td>
 					<td class="fgtext">&nbsp;</td>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.2 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.3 2001/08/12 23:21:14 kristo Exp $
 // events2.aw - FormGen based events
 global $orb_defs;
 $orb_defs["events2"] = "xml";
@@ -33,13 +33,11 @@ class events2 extends aw_template {
 				break;
 
 			default:
-			
 				list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
-				
-				// õudne
-				$q = "UPDATE form_12168_entries 
-					SET  el_12064 = '$start'
-					WHERE id = '12212'";
+			
+				$q = "UPDATE form_12438_entries 
+					SET  el_12064 = '$start',el_12065 = '$end'
+					WHERE id = '13421'";
 
 				$this->db_query($q);
 				
@@ -47,11 +45,11 @@ class events2 extends aw_template {
 				$f = new form();
 		
 				$lines = $f->show(array(
-						"id" => 12168,
-						"entry_id" => 12212,
+						"id" => 12438,
+						"entry_id" => 13421,
 						"op_id" => 12163,
 				));
-
+				
 				list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
 
 				$retval = $lines;
@@ -105,7 +103,7 @@ class events2 extends aw_template {
 					"year" => $year,
 					"mon" => $mon,
 					"day" => $day,
-					"misc" => array("section" => 20),
+					"misc" => array("section" => "events"),
 		));
 				
 		$start = $range["start"];

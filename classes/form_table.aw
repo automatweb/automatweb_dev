@@ -55,6 +55,8 @@ class form_table extends form_base
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+			$forms = $this->get_forms_for_table($id);
+			$els = $this->get_elements_for_forms($forms,true);
 
 			$this->load_table($id);
 			$this->table["defs"] = array();
@@ -67,6 +69,10 @@ class form_table extends form_base
 						foreach($ar as $elid)
 						{
 							$this->table["defs"][$col]["el"][$elid] = $elid;
+							if (is_number($elid) && isset($els[$elid]))
+							{
+								$this->table["defs"][$col]["el_forms"][$elid] = $els[$elid];
+							}
 						}
 					}
 					$this->table["defs"][$col]["lang_title"] = $names[$col];
@@ -131,6 +137,8 @@ class form_table extends form_base
 			$this->table["user_button_bottom"] = $user_button_bottom;
 			$this->table["user_button_text"] = $user_button_text;
 			$this->table["user_button_url"] = $user_button_url;
+			$this->table["view_col"] = $viewcol;
+			$this->table["change_col"] = $changecol;
 			classload("xml");
 			$x = new xml;
 			$co = $x->xml_serialize($this->table);
@@ -265,6 +273,34 @@ class form_table extends form_base
 			$this->parse("ROW");
 		}
 
+		$vc = "";
+		foreach($els as $elid => $elname)
+		{
+			$this->vars(array(
+				"el_id" => $elid,
+				"checked" => checked($this->table["view_col"] == $elid)
+			));
+			$vc.=$this->parse("VCOL");
+		}
+		$this->vars(array(
+			"VCOL" => $vc,
+			"v_view_checked" => checked($this->table["view_col"] == "view")
+		));
+
+		$cc = "";
+		foreach($els as $elid => $elname)
+		{
+			$this->vars(array(
+				"el_id" => $elid,
+				"checked" => checked($this->table["change_col"] == $elid)
+			));
+			$cc.=$this->parse("CCOL");
+		}
+		$this->vars(array(
+			"CCOL" => $cc,
+			"v_change_checked" => checked($this->table["view_col"] == "change")
+		));
+
 		classload("style");
 		$s = new style;
 		classload("objects");
@@ -301,12 +337,17 @@ class form_table extends form_base
 	// !returns an array of forms that this table gets elements from
 	function get_forms_for_table($id)
 	{
+		global $awt;
+		$awt->start("form_table::get_forms_for_table");
+		$awt->count("form_table::get_forms_for_table");
+
 		$ret = array();
 		$this->db_query("SELECT * FROM form_table2form WHERE table_id = $id");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]] = $row["form_id"];
 		}
+		$awt->stop("form_table::get_forms_for_table");
 		return $ret;
 	}
 
@@ -315,6 +356,10 @@ class form_table extends form_base
 	// $header_attribs = an array of get items in the url, used to sort the table
 	function start_table($id,$header_attribs)
 	{
+		global $awt;
+		$awt->start("form_table::start_table");
+		$awt->count("form_table::start_table");
+
 		load_vcl("table");
 		$this->t = new aw_table(array(
 			"prefix" => "fg_".$id,
@@ -323,12 +368,17 @@ class form_table extends form_base
 		));
 		$this->t->parse_xml_def_string($this->get_xml($id));
 		$this->t->set_header_attribs($header_attribs);
+		$awt->stop("form_table::start_table");
 	}
 
 	////
 	// !adds another row of data to the table
 	function row_data($dat)
 	{
+		global $awt;
+		$awt->start("form_table::row_data");
+		$awt->count("form_table::row_data");
+
 		// hmph. here we must preprocess the data if any columns have more than 1 elements assigned to them, cause then the column names will be el_col_[col_number] not element names
 		for ($col = 0; $col < $this->arr["cols"]; $col++)
 		{
@@ -344,12 +394,17 @@ class form_table extends form_base
 			}
 		}
 		$this->t->define_data($dat);
+		$awt->stop("form_table::row_data");
 	}
 
 	////
 	// !reads the loaded entries from array of forms $forms and adds another row of data to the table
 	function row_data_from_form($forms,$special = "")
 	{
+		global $awt;
+		$awt->start("form_table::row_data_from_form");
+		$awt->count("form_table::row_data_from_form");
+
 		$rds = array();
 		foreach($forms as $form)
 		{
@@ -370,12 +425,17 @@ class form_table extends form_base
 			}
 		}
 		$this->t->define_data($rds);
+		$awt->stop("form_table::row_data_from_form");
 	}
 
 	////
 	// !draws the table and returns the html for the current table
 	function finish_table()
 	{
+		global $awt;
+		$awt->start("form_table::finish_table");
+		$awt->count("form_table::finish_table");
+
 		if (is_object($this->t))
 		{
 			$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
@@ -383,6 +443,7 @@ class form_table extends form_base
 			$contents = $this->t->draw();
 			return $this->get_css().$contents;
 		}
+		$awt->stop("form_table::finish_table");
 		return "";
 	}
 
@@ -395,6 +456,11 @@ class form_table extends form_base
 		{
 			return $this->show_user_form_entries($arr);
 		}
+
+		global $awt;
+		$awt->start("form_table::show_user_entries");
+		$awt->count("form_table::show_user_entries");
+
 
 		global $section;
 		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
@@ -465,6 +531,7 @@ class form_table extends form_base
 		}
 		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 		$tbl.="</form>";
+		$awt->stop("form_table::show_user_entries");
 		return $tbl;
 	}
 
@@ -472,6 +539,10 @@ class form_table extends form_base
 	// !shows all the entries for the logged in user of form ($form_id) with table $table_id
 	function show_user_form_entries($arr)
 	{
+		global $awt;
+		$awt->start("form_table::show_user_form_entries");
+		$awt->count("form_table::show_user_form_entries");
+
 		extract($arr);
 
 		global $section;
@@ -519,13 +590,40 @@ class form_table extends form_base
 		}
 		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 		$tbl.="</form>";
+		$awt->stop("form_table::show_user_form_entries");
 		return $tbl;
+	}
+
+	////
+	// !returns an array of forms used in the table. each entry in the array is an array of elements in that form that are used
+	// assumes the table is loaded already.
+	function get_used_elements()
+	{
+		global $awt;
+		$awt->start("form_table::get_used_elements");
+		$ret = array();
+		for ($i=0; $i < $this->table["cols"]; $i++)
+		{
+			if (is_array($this->table["defs"][$i]["el_forms"]))
+			{
+				foreach($this->table["defs"][$i]["el_forms"] as $elid => $fid)
+				{
+					$ret[$fid][$elid] = $elid;
+				}
+			}
+		}
+		$awt->stop("form_table::get_used_elements");
+		return $ret;
 	}
 
 	////
 	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, presumes table is loaded already
 	function get_xml($id = 0)
 	{
+		global $awt;
+		$awt->start("form_table::get_xml");
+		$awt->count("form_table::get_xml");
+
 		if ($id)
 		{
 			$this->load_table($id);
@@ -591,11 +689,16 @@ class form_table extends form_base
 			}
 			$xml.="/>\n";
 		}
+		$awt->stop("form_table::get_xml");
 		return $xml.="\n</data></tabledef>";
 	}
 
 	function get_css($id = 0)
 	{
+		global $awt;
+		$awt->start("form_table::get_css");
+		$awt->count("form_table::get_css");
+
 		if ($id)
 		{
 			$this->load_table($id);
@@ -633,6 +736,7 @@ class form_table extends form_base
 			$op.= $s->get_css($this->table["content_sorted_style2"]);
 		}
 		$op.="</style>\n";
+		$awt->stop("form_table::get_css");
 		return $op;
 	}
 }

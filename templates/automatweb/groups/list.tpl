@@ -7,19 +7,19 @@
 				<tr>
 					<td height="15" colspan="11" class="fgtitle">&nbsp;<b>GRUPID: 
 						<!-- SUB: CAN_ADD -->
-							<a href='groups.{VAR:ext}?type=add&parent={VAR:parent}&grp_level={VAR:grp_level}'>Lisa</a> | 
+							<a href='groups.{VAR:ext}?type=add&parent={VAR:parent}&grp_level={VAR:grp_level}'>Add</a> | 
 						<!-- END SUB: CAN_ADD -->		
-							<a href='javascript:boo.submit()'>Salvesta</a>
+							<a href='javascript:boo.submit()'>Save</a>
 					</b></td>
 				</tr>
 				<tr>
-					<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-					<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
-					<td align="center" class="title">&nbsp;T&uuml;&uuml;p&nbsp;</td>
-					<td align="center" class="title">&nbsp;Liimeid&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-					<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+					<td align="center" class="title">&nbsp;Name&nbsp;</td>
+					<td align="center" class="title">&nbsp;Priority&nbsp;</td>
+					<td align="center" class="title">&nbsp;Type&nbsp;</td>
+					<td align="center" class="title">&nbsp;Members&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changer&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changed&nbsp;</td>
+					<td align="center" colspan="3" class="title">&nbsp;Action&nbsp;</td>
 				</tr>
 
 			<!-- SUB: LINE -->
@@ -49,7 +49,7 @@
 					&nbsp;</td>
 					<td class="fgtext2">&nbsp;
 						<!-- SUB: CAN_DELETE -->
-						<a href="javascript:box2('Oled kindel, et soovid seda gruppi  kustutada?','groups.{VAR:ext}?type=delete&gid={VAR:gid}&parent={VAR:parent}')">Kustuta</a>
+						<a href="javascript:box2('Are You sure You wish to delete this group?','groups.{VAR:ext}?type=delete&gid={VAR:gid}&parent={VAR:parent}')">Delete</a>
 						<!-- END SUB: CAN_DELETE -->
 					&nbsp;</td>
 					<td class="fgtext2">&nbsp;

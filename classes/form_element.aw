@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.18 2001/07/30 04:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.19 2001/08/12 23:21:14 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -19,12 +19,21 @@ class form_element extends aw_template
 	{
 		// this looks horribly ineffective to me? repeat all the form data inside each element?
 		// the language constants, the remaining crap. HOLY CRAP.
+		//
+		// erm, dude, ever heard of REFERENCES? 
+		// and if you're thinking of $this->arr then that only contains info about this element
+		//  - terryf
+		global $awt;
+		$awt->start("form_element::load");
+		$awt->count("form_element::load");
+
 		$this->form = &$form;
 		$this->arr = $arr;
 		$this->id = $arr["id"];
 		$this->fid = $form->get_id();
 		$this->col = $col;
 		$this->row = $row;
+		$awt->stop("form_element::load");
 	}
 
 
@@ -203,7 +212,8 @@ class form_element extends aw_template
 			{
 				$this->vars(array(
 					"default_checked"	=> checked($this->arr["default"] == 1),
-					"ch_value" => $this->arr["ch_value"]
+					"ch_value" => $this->arr["ch_value"],
+					"ch_grp" => $this->arr["ch_grp"]
 				));
 				$dc = $this->parse("CHECKBOX_ITEMS");
 			}
@@ -469,6 +479,12 @@ class form_element extends aw_template
 			$this->arr["ch_value"] = $$var;
 		}
 
+		if ($this->arr["type"] == "checkbox")
+		{
+			$var = $base."_ch_grp";
+			$this->arr["ch_grp"] = $$var;
+		}
+
 		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "listbox")
 		{
 			$var=$base."_must_fill";
@@ -542,7 +558,10 @@ class form_element extends aw_template
 
 	function gen_check_html()
 	{
-		global $lang_id;
+		global $lang_id,$awt;
+		$awt->start("form_element::gen_check_html");
+		$awt->count("form_element::gen_check_html");
+
 		if ($this->form->lang_id == $lang_id)
 		{
 			$mue = $this->arr["must_error"];
@@ -557,6 +576,7 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
+			$awt->stop("form_element::gen_check_html");
 			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
 		else
@@ -566,8 +586,10 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
+			$awt->stop("form_element::gen_check_html");
 			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
+		$awt->stop("form_element::gen_check_html");
 		return "";
 	}
 
@@ -613,6 +635,7 @@ class form_element extends aw_template
 		return $this->arr["text"]; 
 	}
 
+	function get_ch_grp() { return $this->arr["ch_grp"]; }
 	function get_el_name()		{	return $this->arr["name"]; }
 	function get_style()	{	return $this->arr["style"]; }
 	function get_type()		{	return $this->arr["type"]; }
@@ -841,6 +864,10 @@ class form_element extends aw_template
 
 	function do_core_userhtml($prefix,$elvalues,$no_submit)
 	{
+		global $awt;
+		$awt->start("form_element::do_core_userhtml");
+		$awt->count("form_element::do_core_userhtml");
+
 		$html="";
 		global $lang_id;
 		if ($this->form->lang_id == $lang_id)
@@ -1028,7 +1055,7 @@ class form_element extends aw_template
 				));
 				$fy = $this->arr["from_year"];
 				$ty = $this->arr["to_year"];
-				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005));
+				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				break;
 		};
 		
@@ -1069,6 +1096,7 @@ class form_element extends aw_template
 		{
 			$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
 		}
+		$awt->stop("form_element::do_core_userhtml");
 		return $html;
 	}
 
@@ -1076,7 +1104,10 @@ class form_element extends aw_template
 	// tagastab mingi elemendi väärtuse
 	function get_val($elvalues = array())
 	{
-		global $lang_id;
+		global $lang_id,$awt;
+		$awt->start("form_element::get_val");
+		$awt->count("form_element::get_val");
+
 
 		// kui entry on laetud, siis voetakse see sealt.
 		if ($this->entry_id)
@@ -1101,11 +1132,17 @@ class form_element extends aw_template
 				$val = $this->arr["default"];
 			}
 		}
+		$awt->stop("form_element::get_val");
 		return $val;
 	}
 
 	function core_process_entry(&$entry, $id,$prefix = "")
 	{
+		global $awt;
+		$awt->start("form_element::core_process_entry");
+		$awt->count("form_element::core_process_entry");
+
+
 		//// This is called for every single element in the form.
 		// $this->form->post_vars sisaldab $HTTP_POST_VARS väärtusi.
 		// the following code should be fixed to use only that and
@@ -1119,6 +1156,7 @@ class form_element extends aw_template
 			$entry[$this->id] = array("text" => $$var, "address" => $$var2);
 			$this->entry_id = $id;
 			$this->entry = $entry[$this->id];
+			$awt->stop("form_element::core_process_entry");
 			return;
 		}
 		else
@@ -1154,6 +1192,7 @@ class form_element extends aw_template
 				$this->entry = $entry[$this->id];
 				$this->entry_id = $id;
 			}
+			$awt->stop("form_element::core_process_entry");
 			return;
 		}
 		else
@@ -1179,6 +1218,7 @@ class form_element extends aw_template
 			}
 			$this->entry = $entry[$this->id];
 			$this->entry_id = $id;
+			$awt->stop("form_element::core_process_entry");
 			return;
 		}
 		else
@@ -1190,6 +1230,7 @@ class form_element extends aw_template
 			$entry[$this->id] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 			$this->entry = $entry[$this->id];
 			$this->entry_id = $id;
+			$awt->stop("form_element::core_process_entry");
 			return;
 		}
 		else
@@ -1200,12 +1241,17 @@ class form_element extends aw_template
 		$entry[$this->id] = $var;
 		$this->entry = $var;
 		$this->entry_id = $id;
+		$awt->stop("form_element::core_process_entry");
 	}
 
 	////
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user
 	function get_value($numeric = false)
 	{
+		global $awt;
+		$awt->start("form_element::get_value");
+		$awt->count("form_element::get_value");
+
 		switch($this->arr["type"])
 		{
 			case "textarea":
@@ -1280,6 +1326,7 @@ class form_element extends aw_template
 				$html = $this->entry["address"];
 				break;
 		};
+		$awt->stop("form_element::get_value");
 		return $html;
 	}
 

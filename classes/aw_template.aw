@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.12 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.13 2001/08/12 23:21:13 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -149,8 +149,6 @@ class aw_template extends acl_base
 	// !Loeb template failist
 	function read_template($filename,$dbg = 0)
 	{
-		global $awt;
-
 		// loeme faili sisse
 		$filename = $this->template_dir . "/$filename";
 		if (!($source = $this->get_file(array("file" => $filename))))
@@ -166,10 +164,10 @@ class aw_template extends acl_base
 	// !Selle abil saab sisse lugeda kusagilt mujalt (mitte failist) voetud template
 	function use_template($source)
 	{
-		if (isset($awt) && is_object($awt))
+	/*	if (isset($awt) && is_object($awt))
 		{
 			$awt->start("read_template");
-		};
+		};*/
 
 		$this->tp = $source;
 		
@@ -266,10 +264,10 @@ class aw_template extends acl_base
     };
     $last = array_pop($construct);
     $this->construct = $last;
-		if (isset($awt) && is_object($awt))
+/*		if (isset($awt) && is_object($awt))
 		{
 			$awt->stop("read_template");
-		};
+		};*/
     return $last;
   }
 

@@ -17,6 +17,30 @@
 		document.foo.submit();
 		return true;
 	}
+
+	function cut()
+	{
+		document.foo.action.value="cut";
+		document.foo.subaction.value="";
+		document.foo.submit();
+		return true;
+	}
+
+	function copy()
+	{
+		document.foo.action.value="copy";
+		document.foo.subaction.value="";
+		document.foo.submit();
+		return true;
+	}
+
+	function paste()
+	{
+		document.foo.action.value="paste";
+		document.foo.subaction.value="";
+		document.foo.submit();
+		return true;
+	}
 </script>
 </head>
 <body>
@@ -37,6 +61,11 @@
 | <a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
 | <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('change')">{VAR:LC_MENUEDIT_CHANGE}</a>
 | <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return doSubmit('delete')">{VAR:LC_MENUEDIT_DELETE}</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return cut()">Cut</a>
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return copy()">Copy</a>
+<!-- SUB: PASTE -->
+| <a href="javascript:document.foo.submit()"  class="fgtitle_link" onClick="return paste()">Paste</a>
+<!-- END SUB: PASTE -->
  | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></b>
 </b>
 </td>
@@ -91,7 +120,7 @@
 <td align="center" class="fgtext" nowrap>&nbsp;<a target='_blank' href='{VAR:link}'>Link</a>&nbsp;</td>
 
 <td class="fgtext2">&nbsp;<input type="radio" name="oid" value="{VAR:oid}">&nbsp;</td>
-<td class="fgtext2">&nbsp;<input type="checkbox" NAME="sel_{VAR:oid}" VALUE=1>&nbsp;</td>
+<td class="fgtext2">&nbsp;<input type="checkbox" NAME="sel[{VAR:oid}]" VALUE=1>&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>

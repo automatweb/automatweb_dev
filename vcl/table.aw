@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.8 2001/07/12 04:25:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.9 2001/08/12 23:21:34 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -54,7 +54,8 @@ class aw_table
 	}
 
 	// see on alternatiiv. Soovitav on kasutada funktsiooni parse_xml_def
-	function define_row($data) {
+	function define_row($data) 
+	{
 		// $data peab sisaldama järgmist inffi:
 		//	name - välja nimi data sees
 		//	caption - välja pealkiri
@@ -63,13 +64,15 @@ class aw_table
 		// kui see on esimene definitsioon, siis votame
 		// selle ka defaultiks, s.t. sorteeritakse esimesena
 		// defineeritud kui teisiti pole määratud
-		if ($this->first) {
+		if ($this->first) 
+		{
 			$this->default_order = $data["name"];
 			$this->first = false;
 		};
 	}
 
-	function define_data($row) {
+	function define_data($row) 
+	{
 		// sisestame andmed
 		$this->data[] = $row;
 	}
@@ -98,13 +101,14 @@ class aw_table
 	}
 
 
-	function sort_by($params) {
+	function sort_by($params) 
+	{
 		// määrame ära sorteeritava välja
 		// paramteetrid: 
 		//		field
-		global $aw_tables; // see peaks olema array,
+		global $aw_tables,$awt; // see peaks olema array,
 				   // kus on regitud erinevate tabelite andmed
-
+		$awt->start("table::sort_by");
 		reset($this->data);
 		$newdata = array();
 		$sess_field_key   = $this->prefix . "_sortby";
@@ -221,16 +225,22 @@ class aw_table
 			}
 		};
 		$this->data = $newdata;
+		$awt->stop("table::sort_by");
 	
 	}
 
 
-	function draw() {
+	function draw() 
+	{
 		// väljastab tabeli
-		if (!is_array($this->rowdefs)) {
+		if (!is_array($this->rowdefs)) 
+		{
 			print "Don't know what to do";
 			return;
 		};
+
+		global $awt;
+		$awt->start("table::draw");
 
 /*		if (sizeof($this->data) == 0)
 		{
@@ -555,6 +565,7 @@ class aw_table
 			$tbl .= $this->closetag(array("name" => "form"));
 
 		// tagastame selle käki
+		$awt->stop("table::draw");
 		return $tbl;
 	}
 

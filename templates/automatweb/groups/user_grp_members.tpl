@@ -1,9 +1,9 @@
 <form action='reforb.{VAR:ext}' method="POST" name='boo'>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-	<td class="fcaption">Kasutajad:</td>
+	<td class="fcaption">All users:</td>
 	<td class="fcaption">&nbsp;</td>
-	<td class="fform">Valitud:</td>
+	<td class="fform">Members of this group:</td>
 </tr>
 <tr>
 	<td class="fcaption"><select name='users[]' style="width:200px" multiple size=12><option value=''>-----------------------------------------</select></td>
@@ -16,7 +16,7 @@
 	<td class="fform"><select name='members[]' style="width:200px" multiple size=12><option value=''>-----------------------------------------</select></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=3><input class='small_button' type='submit' VALUE='Salvesta' onClick="selectall(document.boo.elements[1])"></td>
+<td class="fcaption" colspan=3><input class='small_button' type='submit' VALUE='Save' onClick="selectall(document.boo.elements[1])"></td>
 </tr>
 </table>
 {VAR:reforb}

@@ -242,6 +242,8 @@ function del_gallery()
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
 	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	| T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
+<!--	| Ilma parema paanita:	<input type='checkbox' name="no_left_pane" value=1 {VAR:no_left_pane}>-->
 		</td>
 	</tr>
 </table>

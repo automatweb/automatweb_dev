@@ -44,6 +44,10 @@ class languages extends aw_template
 
 	function fetch($id,$lang = "")
 	{
+		if (!$id)
+		{
+			return false;
+		}
 		$ss = "";
 		if ($lang != "")
 		{

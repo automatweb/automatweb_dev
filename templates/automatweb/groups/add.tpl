@@ -1,10 +1,10 @@
 <form action='refcheck.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='name' ></td>
+<td class="fcaption">Name:</td><td class="fform"><input type='text' NAME='name' ></td>
 </tr>
 <tr>
-<td class="fcaption">T&uuml;&uuml;p:</td><td class="fform"><select name='type'><option value=0>Grupp<option value=2>Dyn. Grupp</select></td>
+<td class="fcaption">Type:</td><td class="fform"><select name='type'><option value=0>Group<option value=2>Dyn. Group</select></td>
 </tr>
 <tr>
 <td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Save'></td>

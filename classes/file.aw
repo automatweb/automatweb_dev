@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.13 2001/08/03 03:18:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.14 2001/08/12 23:21:14 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -132,6 +132,7 @@ class file extends aw_template
 	// argumendid:
 	// name(string) - faili nimi
 	// data(string) - faili sisu
+	// path(string) - path alates "files" kataloogist
 	// sys(bool) - kas panna faili systeemi juurde?
 	function put_special_file($args = array())
 	{
@@ -142,6 +143,11 @@ class file extends aw_template
 		else
 		{
 			$path = SITE_DIR . "/files";
+		};
+
+		if ($args["path"])
+		{
+			$path .= "/" . $args["path"];
 		};
 
 		$success =$this->put_file(array(

@@ -21,7 +21,7 @@
 </tr>
 <tr>
 	<td class="fcaption2">Mis men&uuml;&uuml; all objekt on:</td>
-	<td class="fform" width=70%><select name='s[parent]'>{VAR:parents}</select></td>
+	<td class="fform" width=70%><select class='small_button' name='s[parent]'>{VAR:parents}</select></td>
 </tr>
 <tr>
 	<td class="fcaption2">Kelle poolt loodud:</td>
@@ -62,13 +62,13 @@
 <!-- SUB: LINE -->
 <tr>
 	<td class="fcaption2" >{VAR:oid}</td>
-	<td class="fcaption2" ><input type='text' class='tekstikast_n' name='text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='old_text[{VAR:oid}]' value='{VAR:name}'></td>
+	<td class="fcaption2" ><input type='text' class='tekstikast_n' name='text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='old_text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='class_id[{VAR:oid}]' value='{VAR:class_id}'></td>
 	<td class="fcaption2" >{VAR:type}</td>
 	<td class="fcaption2" nowrap>{VAR:created}</td>
 	<td class="fcaption2" >{VAR:createdby}</td>
 	<td class="fcaption2" nowrap>{VAR:modified}</td>
 	<td class="fcaption2" >{VAR:modifiedby}</td>
-	<td class="fcaption2" >{VAR:parent_name}</td>
+	<td class="fcaption2" >{VAR:parent_parent_parent_name} / {VAR:parent_parent_name} / {VAR:parent_name}</td>
 	<td class="fcaption2" ><input type='checkbox' name='sel[{VAR:oid}]' value=1></td>
 	<td class="fcaption2" ><a href='{VAR:change}'>Muuda</a></td>
 </tr>
@@ -78,7 +78,8 @@
 	<td class='fcaption2' colspan=9><select name='moveto' class='small_button'>{VAR:moveto}</select></td>
 </tr>
 <tr>
-	<td class='fcaption2' colspan=10><input class='small_button' type='submit' value='Salvesta'></td>
+	<td class='fcaption2' colspan=2><input class='small_button' type='submit' value='Salvesta'></td>
+	<td class='fcaption2' colspan=10><input class='small_button' type='submit' value='Kustuta' name="delete"></td>
 </tr>
 </table>
 {VAR:reforb}

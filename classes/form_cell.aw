@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.17 2001/07/27 02:51:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.18 2001/08/12 23:21:14 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -36,6 +36,10 @@ class form_cell extends form_base
 	// creates the correct element based on form type
 	function mk_element($type, &$r, &$form)
 	{
+		global $awt;
+		$awt->start("form_cell::mk_element");
+		$awt->count("form_cell::mk_element");
+
 		switch($type)
 		{
 			case FORM_ENTRY:
@@ -53,10 +57,15 @@ class form_cell extends form_base
 		$tmp->load(&$r,&$form,$this->col, $this->row);
 		$this->arr[$this->cnt] = $tmp;
 		$this->cnt++;
+		$awt->stop("form_cell::mk_element");
 	}
 
 	function load(&$form, $row, $col)
 	{
+		global $awt;
+		$awt->start("form_cell::load");
+		$awt->count("form_cell::load");
+
 		$this->type = $form->get_type();
 		$this->col = $col;
 		$this->row = $row;
@@ -80,6 +89,7 @@ class form_cell extends form_base
 		}
 
 		$this->style = isset($arr[$row][$col]["style"]) ? $arr[$row][$col]["style"] : 0;
+		$awt->stop("form_cell::load");
 	}
 
 	////
@@ -119,6 +129,10 @@ class form_cell extends form_base
 
 	function get_elements()
 	{
+		global $awt;
+		$awt->start("form_cell::get_elements");
+		$awt->count("form_cell::get_elements");
+
 		$ret = array();
 		for ($i=0; $i < $this->cnt; $i++)
 		{
@@ -130,6 +144,7 @@ class form_cell extends form_base
 			$ret[$i]["group"] = $this->arr[$i]->get_el_group();
 			$ret[$i]["lb_items"] = $this->arr[$i]->get_el_lb_items();
 		}
+		$awt->stop("form_cell::get_elements");
 		return $ret;
 	}
 
@@ -292,6 +307,10 @@ class form_cell extends form_base
 
 	function gen_user_html_not($def_style, $colspan, $rowspan,$prefix = "",$elvalues,$no_submit=false)
 	{
+		global $awt;
+		$awt->start("form_cell::gen_user_html_not");
+		$awt->count("form_cell::gen_user_html_not");
+
 		$el = 0;
 		$c = "";
 		$cs = "";
@@ -328,6 +347,7 @@ class form_cell extends form_base
 
 		$cs.= "</td>";
 		
+		$awt->stop("form_cell::gen_user_html_not");
 		return $cs;
 	}
 	
@@ -351,6 +371,10 @@ class form_cell extends form_base
 
 	function get_els(&$arr)
 	{
+		global $awt;
+		$awt->start("form_cell::get_els");
+		$awt->count("form_cell::get_els");
+
 		if (!is_array($arr))
 		{
 			$arr = array();
@@ -359,6 +383,7 @@ class form_cell extends form_base
 		{
 			$arr[] = &$this->arr[$i];
 		}
+		$awt->stop("form_cell::get_els");	
 	}
 
 	function get_style()

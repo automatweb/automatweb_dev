@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.49 2001/08/03 03:18:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.50 2001/08/12 23:21:14 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -343,10 +343,10 @@ class core extends db_connector
 
 	////
 	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
-	// FIXME: see, kuidas kasutaja login from praegu leitakse, on ysna random?
-	// mida eelistada? dyn gruppe (mille pri on 0)? , tavalisi, mille pri on kõrge?
 	// This function shouldn't be in the core, I think, since it's called only once,
 	// from the site_header
+	// 
+	// - yeah. good point. - terryf
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
@@ -364,11 +364,14 @@ class core extends db_connector
 		classload("config");
 		$config = new config();
 
+		global $menu_defs_v2;
+
 		$this->login_menu = $config->get_login_menus($retval);
+
+		global $uid;
 
 		if ($this->login_menu)
 		{
-			global $menu_defs_v2;
 			$_tmp = array_flip($menu_defs_v2);
 			if ($_tmp["LOGGED"])
 			{
@@ -523,6 +526,7 @@ class core extends db_connector
 	// class(int) - milline klass meid huvitab?
 	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
 	// active(bool) - kui true, siis tagastakse ainult need objektid, mis on aktiivse
+	// orderby(string) - millise välja järgi tulemus järjestada?
 	function get_objects_below($args = array())
 	{
 		extract($args);
@@ -532,6 +536,7 @@ class core extends db_connector
 					"class" => $class,
 					"type" => $type,
 					"active" => $active,
+					"orderby" => $orderby,
 			));
 			
 		while($row = $this->db_next())
@@ -612,8 +617,6 @@ class core extends db_connector
 	// !koostab aliaste nimekirja objekti jaoks
 	function get_aliases_for($oid,$type = -1,$sortby = "", $order = "",$join = "") 
 	{
-		global $awt;
-		$awt->start("core->get_aliases_for()");
 		$ss = "";
 		if ($type != -1)
 		{
@@ -641,7 +644,6 @@ class core extends db_connector
 			$row["id"] = $row["target"];
 			$aliases[]=$row;
 		};
-		$awt->stop("core->get_aliases_for()");
 		return $aliases;
 	}
 
@@ -796,9 +798,7 @@ class core extends db_connector
 	// oid(int) - objekti id, mille juurde see kuulub
 	function parse_aliases($args = array())
 	{
-		global $awt;
 		$this->blocks = array();
-		$awt->start("parse_aliases");
 		extract($args);
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
@@ -883,7 +883,6 @@ class core extends db_connector
 				};
 			};
 		};
-		$awt->stop("parse_aliases");
 		return $text;
 	}
 
@@ -1074,6 +1073,8 @@ class core extends db_connector
 		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
 
 		$astr = ($active) ? " AND status = 2 " : "";
+
+		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
 		
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
 		if ($class == CL_PSEUDO)
@@ -1081,13 +1082,13 @@ class core extends db_connector
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
 				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $typestr";
+				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $typestr $ostr";
 		}
 		else
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0 $pstr $astr";
+					WHERE class_id = $class AND status != 0 $pstr $astr $ostr";
 		};
 		$this->db_query($q);
 	}
@@ -1186,9 +1187,7 @@ class core extends db_connector
 	// until it finds a menu for which it is set
 	function get_lead_template($section)
 	{
-		global $awt,$lead_template_cache;
-		$awt->start("core->get_lead_template()");
-		$awt->count("core->get_lead_template()");
+		global $lead_template_cache;
 		if ($lead_template_cache[$section] != "")
 		{
 			$template = $lead_template_cache[$section];
@@ -1204,7 +1203,6 @@ class core extends db_connector
 			} while ($template == "" && $section > 1);
 			$GLOBALS["lead_template_cache"][$section] = $template;
 		}
-		$awt->stop("core->get_lead_template()");
 		return $template;
 	}
 
@@ -1214,9 +1212,6 @@ class core extends db_connector
 	// until it finds a menu for which it is set
 	function get_long_template($section)
 	{
-		global $awt;
-		$awt->start("core->get_long_template()");
-		$awt->count("core->get_long_template()");
 		// chekime et kui ette anti dokument, siis ei hakkax seda menyy tabelist otsima
 		$obj = $this->get_object($section);	
 		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT)
@@ -1229,7 +1224,6 @@ class core extends db_connector
 			$template = isset($row["filename"]) ? $row["filename"] : "";
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
-		$awt->stop("core->get_long_template()");
 		return $template;
 	}
 
@@ -1289,6 +1283,7 @@ class core extends db_connector
 		}
 
 		// handle arrays!
+		$section = false;
 		$ura = array();
 		foreach($arr as $k => $v)
 		{
@@ -1305,9 +1300,23 @@ class core extends db_connector
 			{
 				$str = $k."=".$v;
 			}
-			$ura[] = $str;
+
+			if ($k != "section")
+			{
+				$ura[] = $str;
+			}
+			else
+			{
+				$section = $v;
+			}
 		}
 		$urs = join("&",$ura);
+
+		$sec = "";
+		if ($section)
+		{
+			$sec = "section=".$section."&";
+		}
 
 		// now figure out if we are in the admin interface. 
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
@@ -1316,12 +1325,12 @@ class core extends db_connector
 		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
-			return $GLOBALS["baseurl"]."/automatweb/orb.$ext?class=$cl_name&action=$fun&$urs";
+			return $GLOBALS["baseurl"]."/automatweb/orb.$ext?".$sec."class=$cl_name&action=$fun&$urs";
 		}
 		else
 		{
 			// user side
-			return $GLOBALS["baseurl"]."/?class=$cl_name&action=$fun&$urs";
+			return $GLOBALS["baseurl"]."/?".$sec."class=$cl_name&action=$fun&$urs";
 		}
 	}
 
@@ -1468,6 +1477,7 @@ class core extends db_connector
 		};
 
 		$file = $arr["file"];
+
 
 		// jama on selles, et "w" modes avamine truncateb olemasoleva faili,
 		// ja sellest voib tekkida jamasid... see, et mitu inimest korraga sama

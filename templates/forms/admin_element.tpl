@@ -225,6 +225,12 @@ function setsel(el,val)
 <td class="fgtext">{VAR:LC_FORMS_CHECKBOX_VALUE}</td>
 <td class="fgtext"><input type='text' name='{VAR:cell_id}_ch_value' value='{VAR:ch_value}' class='small_button'></td>
 </tr>
+<tr>
+<td class="fgtext">Grupp:</td>
+<td class="fgtext"><input class='small_button' type='text' NAME='{VAR:cell_id}_ch_grp' VALUE='{VAR:ch_grp}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: CHECKBOX_ITEMS -->
 
 <!-- SUB: PRICE_ITEMS -->

@@ -3,7 +3,7 @@
 	<class name="users">
 		<action name="gen_list">
 			<function name="gen_list">
-			
+				<optional name="page"/>
 			</function>
 		</action>
 		

@@ -12,7 +12,7 @@
 <td class="fcaption">Password 2x:</td><td class="fform"><input type='password' NAME='pwd2' ></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Salvesta!'></td>
+<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Save!'></td>
 </tr>
 </table>
 {VAR:reforb}

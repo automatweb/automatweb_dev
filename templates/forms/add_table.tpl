@@ -99,6 +99,23 @@
 <td class="fform" align="center"><input type='checkbox' name='addaf[{VAR:column}]' VALUE='1'></td>
 </tr>
 <!-- END SUB: ROW -->
+<tr>
+<td class="fform">Vaatamine:</td>
+<!-- SUB: VCOL -->
+<td align="center" class="fform"><input type='radio' name='viewcol' value='{VAR:el_id}' {VAR:checked}></td>
+<!-- END SUB: VCOL -->
+<td class="fform">&nbsp;</td>
+<td align="center" class="fform"><input type='radio' name='viewcol' value='view' {VAR:v_view_checked}></td>
+<td class="fform" colspan="20">&nbsp;</td>
+</tr>
+<tr>
+<td class="fform">Muutmine:</td>
+<!-- SUB: CCOL -->
+<td align="center" class="fform"><input type='radio' name='changecol' value='{VAR:el_id}' {VAR:checked}></td>
+<!-- END SUB: CCOL -->
+<td align="center" class="fform"><input type='radio' name='changecol' value='change' {VAR:v_change_checked}></td>
+<td class="fform" colspan="20">&nbsp;</td>
+</tr>
 </table>
 </td>
 </tr>

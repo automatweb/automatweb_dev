@@ -17,50 +17,46 @@ class msgboard extends aw_template
 	}
 
 	function submit_votes($args = array())
-        {
-                if ($GLOBALS["uid"] == "fubar")
-                {
-                        $this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
-                };
-                classload("users");
-                $u = new users();
-                extract($args);
-                global $HTTP_SESSION_VARS;
-                global $commentvotes;
-                $oldvotes = array();
-                //$oldvotes = $u->get_user_config(array(
-                //                              "uid" => UID,
-                //                              "key" => "commentvotes",
-                //));
-                $oldvotes = $HTTP_SESSION_VARS["commentvotes"];
-                if (is_array($vote))
-                {
-                        foreach($vote as $key => $val)
-                        {
-                                $topicvotes = $this->get_object_metadata(array(
-                                                                        "oid" => $key,
-                                                                        "key" => "votes",
-                                ));
+  {
+		if ($GLOBALS["uid"] == "fubar")
+    {
+			$this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
+    };
+    classload("users");
+    $u = new users();
+    extract($args);
+    global $HTTP_SESSION_VARS;
+    global $commentvotes;
+    $oldvotes = array();
+    $oldvotes = $HTTP_SESSION_VARS["commentvotes"];
+    if (is_array($vote))
+    {
+			foreach($vote as $key => $val)
+      {
+				$topicvotes = $this->get_object_metadata(array(
+					"oid" => $key,
+          "key" => "votes",
+        ));
 
-                                $oldvotes[$key] = $val;
+        $oldvotes[$key] = $val;
 
 				$topicvotes["votes"] = $topicvotes["votes"] + 1;
-                                $topicvotes["total"] = $topicvotes["total"] + $val;
+        $topicvotes["total"] = $topicvotes["total"] + $val;
 
-                                $this->set_object_metadata(array(
-                                                                "oid" => $key,
-                                                                "key" => "votes",
-                                                                "value" => $topicvotes,
-                                ));
-                        };
-                };
-                $commentvotes = $oldvotes;
-                session_register("commentvotes");
-                global $baseurl;
-                header("Location: $baseurl/comments.aw?action=topics");
-                exit;
-                return;
-        }	
+        $this->set_object_metadata(array(
+					"oid" => $key,
+          "key" => "votes",
+          "value" => $topicvotes,
+        ));
+      };
+    };
+    $commentvotes = $oldvotes;
+    session_register("commentvotes");
+    global $baseurl;
+    header("Location: $baseurl/comments.aw?action=topics");
+		exit;
+    return;
+  }	
 
 	function show($id,$page,$forum_id)
 	{
@@ -203,7 +199,7 @@ class msgboard extends aw_template
 			"page" => $page,
 			"forum_id" => $forum_id
 		));
-		$this->situ_tais();
+		$this->flush_cache();
 		return $this->parse();
 	}
 
@@ -283,13 +279,13 @@ class msgboard extends aw_template
 		{
 			return false;
 		}
-		$this->situ_tais();
+		$this->flush_cache();
 		return $id;
 	}
 
 	function get_num_comments($id)
 	{
-		$this->quote(&$section);
+		$this->quote(&$id);
 		return $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM comments WHERE board_id = '$id'", "cnt");
 	}
 

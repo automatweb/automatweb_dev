@@ -236,6 +236,7 @@ function del_gallery()
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}> |
 	Esilehel: <input type='checkbox' NAME='esilehel' VALUE=1 {VAR:esilehel}> <select name="jrk1">{VAR:jrk1}</select>|
 	All paremal: <input type='checkbox' NAME='esilehel_uudis' VALUE=1 {VAR:esilehel_uudis}> <select name="jrk2">{VAR:jrk2}</select>|
+	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
 		</td>
 	</tr>
 </table>

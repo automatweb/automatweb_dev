@@ -133,9 +133,6 @@ class search_conf extends aw_template
 		extract($arr);
 		$this->read_template("search.tpl");
 
-		global $awt;
-		$awt->start("search");
-
 		classload("keywords");
 		$k = new keywords;
 
@@ -356,7 +353,6 @@ class search_conf extends aw_template
 
 			// logime ka et tyyp otsis ja palju leidis.
 			$this->do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt);
-			$awt->stop("search");
 		}
 		return $this->parse();
 	}

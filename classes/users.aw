@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.19 2001/08/08 11:07:35 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.20 2001/08/12 23:21:14 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -7,6 +7,8 @@ load_vcl("table");
 session_register("add_state");
 
 global $orb_defs;
+
+define("PER_PAGE", 20);
 
 // you know what that means
 $orb_defs["users"] = "xml";
@@ -20,17 +22,6 @@ class users extends users_user
 		lc_load("definition");
 	}
 
-	// users tabelis on väli config, tyypi text, kuhu saab salvestada
-	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
-	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
-	// selle handlemisega.
-	////
-	// !Loeb kasutaja konfiguratsiooni sisse
-	// uid - kasutaja
-	// key - key, mille sisu teada soovitakse
-	// $data = $users->get_user_config(array(
-	//		"uid" => "duke",
-	//		"key" => "coolness_factor",));
 
 	function rpc_getuser($args = array())
 	{
@@ -45,7 +36,18 @@ class users extends users_user
 		$block["created"] = $row["created"];
 		return $block;
 	}
-
+	
+	// users tabelis on väli config, tyypi text, kuhu saab salvestada
+	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
+	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
+	// selle handlemisega.
+	////
+	// !Loeb kasutaja konfiguratsiooni sisse
+	// uid - kasutaja
+	// key - key, mille sisu teada soovitakse
+	// $data = $users->get_user_config(array(
+	//		"uid" => "duke",
+	//		"key" => "coolness_factor",));
 	function get_user_config($args = array())
 	{
 		extract($args);
@@ -224,9 +226,35 @@ class users extends users_user
 		
 		$uid_list = array_keys($users);
 		
+		$page = $arr["page"];
+
+		$num_users = count($uid_list);
+		$pages = $num_users / PER_PAGE;
+		for ($i=0; $i < $pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*PER_PAGE,
+				"to" => min(($i+1)*PER_PAGE, $num_users),
+				"link" => $this->mk_orb("gen_list", array("page" => $i))
+			));
+			if ($i == $page)
+			{
+				$pg.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pg.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array("PAGE" => $pg, "SEL_PAGE" => ""));
+
+		if ($page < 1)
+		{
+			$page = 0;
+		}
 		// hmpf. Huvitav, kas IN klauslil mingi suuruspiirang ka on?
 		// kui kasutajaid on ntx 2000, siis see päring voib ysna jube olla
-			$q = sprintf("SELECT * FROM users WHERE uid IN(%s) AND blocked = 0",join(",",map("'%s'",$uid_list)));
+			$q = sprintf("SELECT * FROM users WHERE uid IN(%s) AND blocked = 0 order by uid LIMIT %s,%s",join(",",map("'%s'",$uid_list)),$page*PER_PAGE,PER_PAGE);
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{

@@ -42,6 +42,8 @@ Lehek&uuml;lg:
 </tr>
 <!-- END SUB: LINE -->
 </table>
+Otsi ainult formist, mitte p&auml;rgadest: <input type='checkbox' name='formsonly' value=1 {VAR:formsonly}><br><br>
+otsi p&auml;rjast: <select name='se_chain'>{VAR:chains}</select><Br><br>
 <input type=submit NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'>
 {VAR:reforb}
 </form>

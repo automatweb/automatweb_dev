@@ -2,7 +2,8 @@
 <form method="POST" action="{VAR:baseurl}/automatweb/reforb.{VAR:ext}" name="csslist">
 <tr>
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor (minu stiilid):&nbsp;
-<b><a href="{VAR:link_sys_styles}">Süsteemsed stiilid</a> |
+<b><a href="{VAR:link_groups}">Grupid</a> |
+<a href="{VAR:link_sys_styles}">Grupi stiilid</a> |
 <a href="{VAR:link_add_style}">Lisa uus</a> |
 <a href="javascript:document.csslist.submit()"><font color="red">Salvesta</font></b>
 </td>

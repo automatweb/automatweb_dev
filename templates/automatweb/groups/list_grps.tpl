@@ -28,12 +28,12 @@ window.location=url
 <td bgcolor=#000000>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle_new" background="images/uus_sinine.gif" >&nbsp;<b>GRUPID: 
+<td height="15" colspan="11" class="fgtitle_new" background="images/uus_sinine.gif" >&nbsp;<b>GROUPS: 
 <!-- SUB: ADD_CAT -->
-<a href='{VAR:addgrp}' class="fgtitle_link">Lisa</a>
+<a href='{VAR:addgrp}' class="fgtitle_link">Add</a>
 <!-- END SUB: ADD_CAT -->
-| <a href='javascript:foo.submit()' class="fgtitle_link">Salvesta</a>
-| <a href='#' onClick='window.location.reload()' class="fgtitle_link">V&auml;rskenda</a></b>
+| <a href='javascript:foo.submit()' class="fgtitle_link">Save</a>
+| <a href='#' onClick='window.location.reload()' class="fgtitle_link">Refresh</a></b>
 </td>
 <td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
 </td>
@@ -48,13 +48,13 @@ window.location=url
 </tr>
 
 <tr>
-<td height="15" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
-<td align="center" class="title">&nbsp;T&uuml;&uuml;p&nbsp;</td>
-<td align="center" class="title">&nbsp;Liikmeid&nbsp;</td>
-<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+<td height="15" class="title">&nbsp;Name&nbsp;</td>
+<td align="center" class="title">&nbsp;Priority&nbsp;</td>
+<td align="center" class="title">&nbsp;Type;p&nbsp;</td>
+<td align="center" class="title">&nbsp;Members&nbsp;</td>
+<td align="center" class="title">&nbsp;Changer&nbsp;</td>
+<td align="center" class="title">&nbsp;Changed&nbsp;</td>
+<td align="center" colspan="3" class="title">&nbsp;Action&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -71,13 +71,12 @@ window.location=url
 <td align="center" class="fgtext" nowrap>&nbsp;{VAR:modified}&nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_CHANGE -->
-<a href='{VAR:change}'>Muuda</a>
+<a href='{VAR:change}'>Change</a>
 <!-- END SUB: CAN_CHANGE -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda gruppi 
-kustutada?','{VAR:delete}')">Kustuta</a>
+<a href="javascript:box2('Are You sure You wish to delete this group?','{VAR:delete}')">Delete</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;

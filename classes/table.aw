@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.8 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.9 2001/08/12 23:21:14 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -214,7 +214,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 					$cell = $this->arr["contents"][$map[row]][$map[col]];
 					$scell = $this->arr["styles"][$map[row]][$map[col]];
 					
-					$this->vars(array("text"	=> substr($cell["text"],0,10),
+					$this->vars(array("text"	=> htmlentities(substr($cell["text"],0,10)),
 														"col"		=> $map[col],
 														"row"		=> $map[row],
 														"rows"	=> ($scell[rows] < 1 ? 1 : $scell[rows]),
@@ -1566,6 +1566,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 			$row = unserialize($str);
 			$row["parent"] = $parent;
 			$id = $this->new_object($row);
+			$this->quote(&$row["contents"]);
 			$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
 			return true;
 		}

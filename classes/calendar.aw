@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.5 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.6 2001/08/12 23:21:14 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -29,6 +29,9 @@ class calendar extends aw_template
 
 	function draw_month($args = array())
 	{
+		// whatta hell? I'm a dreaming or what?
+		// debuukisin natuke ja mulle tundub, et ntx vibe eventite
+		// lehel kutsutakse seda funktsiooni 5(!) korda
 		// millise kuu kohta kalendrit joonistame?
 		$year	= ($args["year"]) ? $args["year"] : date("Y");
 		$mon	= ($args["mon"]) ? $args["mon"] : date("m");
@@ -141,7 +144,8 @@ class calendar extends aw_template
 			"mon"	=> $mon,
 			"year"	=> $year,
 			"add" => $add));
-		return $this->parse();
+		$retval = $this->parse();
+		return $retval;
 	}
 
 	//// 
@@ -314,8 +318,17 @@ class calendar extends aw_template
 	function get_date_range($args = array())
 	{
 		extract($args);
-		list($d,$m,$y) = split("-",$date);
+		if ($date)
+		{
+			list($d,$m,$y) = split("-",$date);
+		}
+		else
+		{
+			list($d,$m,$y) = split("-",date("d-m-Y",$time));
+		};
+			
 		$timestamp = mktime(0,0,0,$m,$d,$y);
+
 		switch($type)
 		{
 			case "month":
@@ -372,6 +385,7 @@ class calendar extends aw_template
 				break;
  
 		};
+
 		$arr = array(
 			"start" => $start_ts,
 			"end" => $end_ts,

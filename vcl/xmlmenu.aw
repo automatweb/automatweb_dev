@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.3 2001/06/22 03:57:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.4 2001/08/12 23:21:34 kristo Exp $
 // xmlmenu.aw - xml-i ja aw_template abil menüüde genereerimise skript
 classload("defs");
 class xmlmenu {
@@ -57,6 +57,7 @@ class xmlmenu {
 		$template = get_file(array(
 			"file" => $tpl,
 		));
+
 		$this->load_from_memory(array(
 					"template" => $template,
 					"xmldef" => $menudef,

@@ -4,7 +4,7 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" class="fgtext">&nbsp;Admin liidese keel:&nbsp;</td>
+<td height="15" class="fgtext">&nbsp;Admin language:&nbsp;</td>
 <td height="15" class="fgtext">&nbsp;
 <!-- SUB: LANG -->
 {VAR:lang_name} <input type='radio' name='adminlang' VALUE='{VAR:lang_id}' {VAR:checked}>
@@ -12,7 +12,7 @@
 </td>
 </tr>
 <tr>
-<td height="15" class="fgtext">&nbsp;Aktiivne valuuta:&nbsp;</td>
+<td height="15" class="fgtext">&nbsp;Default currency:&nbsp;</td>
 <td height="15" class="fgtext">&nbsp;
 <!-- SUB: CUR -->
 {VAR:cur_name} <input type='radio' name='currency' VALUE='{VAR:cur_id}' {VAR:checked}>
@@ -20,7 +20,7 @@
 </td>
 </tr>
 <tr>
-<td height="15" class="fgtext" colspan=2>&nbsp;<input class='small_button' type='submit' value='Salvesta'>&nbsp;</td>
+<td height="15" class="fgtext" colspan=2>&nbsp;<input class='small_button' type='submit' value='Save'>&nbsp;</td>
 </tr>
 </table>
 </td>

@@ -8,13 +8,13 @@
 					<td height="15" colspan="11" class="fgtitle">&nbsp;<b>GRUPID: <a href="javascript:document.foo.submit()">Lisa grupid</a></b></td>
 				</tr>
 				<tr>
-					<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-					<td align="center" class="title">&nbsp;Vali&nbsp;</td>
-					<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
-					<td align="center" class="title">&nbsp;T&uuml;&uuml;p&nbsp;</td>
-					<td align="center" class="title">&nbsp;Liimeid&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-					<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
+					<td align="center" class="title">&nbsp;Name&nbsp;</td>
+					<td align="center" class="title">&nbsp;Choose&nbsp;</td>
+					<td align="center" class="title">&nbsp;Prioritynbsp;</td>
+					<td align="center" class="title">&nbsp;Type&nbsp;</td>
+					<td align="center" class="title">&nbsp;Members&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changer&nbsp;</td>
+					<td align="center" class="title">&nbsp;Changed&nbsp;</td>
 				</tr>
 
 			<!-- SUB: LINE -->
@@ -46,7 +46,7 @@
 		</td>
 	</tr>
 </table>
-<input type='submit' class='small_button' VALUE='Lisa grupid'><input type='hidden' NAME='action' VALUE='submit_acl_groups'>
+<input type='submit' class='small_button' VALUE='Add groups'><input type='hidden' NAME='action' VALUE='submit_acl_groups'>
 <input type='hidden' NAME='from' VALUE='{VAR:from}'>
 <input type='hidden' NAME='oid' VALUE='{VAR:oid}'>
 </form>

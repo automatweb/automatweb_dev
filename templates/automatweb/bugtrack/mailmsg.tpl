@@ -2,9 +2,9 @@
 (pealkiri:{VAR:title} ,url:{VAR:url}, prioriteet:{VAR:pri} ) lahendatuks.
 
 Järeldus: {VAR:res}.
-----------------------------------------
+--------------------------------------------
 Tegevuseks märkis:
 {VAR:text_result}
-----------------------------------------
+--------------------------------------------
 Vea kirjeldus oli:
 {VAR:text}

@@ -203,6 +203,17 @@
 			</function>
 		</action>
 
+		<action name="view_confirmation">
+			<function name="view_confirmation">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+
 		<action name="change_tables">
 			<function name="change_tables">
 				<arguments>
@@ -255,7 +266,7 @@
 				<arguments>
 					<required name="shop"/>
 					<required name="order_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 					<optional name="page"/>
 				</arguments>
 			</function>

@@ -1,14 +1,50 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="css">
+		<action name="globals">
+			<function name="css_globals">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="list">
-			<function name="css_list">
+			<function name="css_list_groups">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
 		<action name="submit_list">
+			<function name="css_submit_list_groups">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_group">
+			<function name="css_add_group">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_group">
+			<function name="css_submit_add_group">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="group_content_list">
+			<function name="css_list">
+				<arguments>
+					<required name="gid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_group_content_list">
 			<function name="submit_css_list">
 				<arguments>
 				</arguments>
@@ -18,6 +54,7 @@
 		<action name="my_list">
 			<function name="css_my_list">
 				<arguments>
+					<required name="gid"/>
 				</arguments>
 			</function>
 		</action>
@@ -32,6 +69,7 @@
 		<action name="add">
 			<function name="css_edit">
 				<arguments>
+					<required name="gid"/>
 				</arguments>
 			</function>
 		</action>

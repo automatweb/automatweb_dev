@@ -29,7 +29,7 @@
 <textarea class='small_button' name="text[{VAR:row}][{VAR:col}]" cols="{VAR:num_cols}" rows="{VAR:num_rows}">{VAR:text}</textarea>
 <!-- END SUB: AREA -->
 <!-- SUB: BOX -->
-<input type='text' class='small_button' SIZE='{VAR:num_cols}' NAME='text[{VAR:row}][{VAR:col}]' VALUE='{VAR:text}'>
+<input type='text' class='small_button' SIZE='{VAR:num_cols}' NAME='text[{VAR:row}][{VAR:col}]' VALUE="{VAR:text}">
 <!-- END SUB: BOX -->
 </td>
 <!-- END SUB: COL -->

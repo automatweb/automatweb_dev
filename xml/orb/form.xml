@@ -374,6 +374,13 @@
 			</function>
 		</action>
 
+		<action name="convindexes">
+			<function name="convindexes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

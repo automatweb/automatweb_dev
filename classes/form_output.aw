@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.14 2001/07/30 04:46:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.15 2001/08/12 23:21:14 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -603,11 +603,11 @@ class form_output extends form_base
 			if ($el->save(&$arr) == false)
 			{
 				// we must delete the element from this op.
-				unset($this->output[$this->row][$this->col][$i]);
+//				unset($this->output[$row][$col]["elements"][$i]);
 				// we must also shift all other elements up one 
-				for ($a=$i; $a < $cell["el_count"]; $a++)
+				for ($a=$i; $a < $cell["el_count"]-1; $a++)
 				{
-					$cell["elements"][$a-1] = $cell["elements"][$a];
+					$cell["elements"][$a] = $cell["elements"][$a+1];
 				}
 				$cell["el_count"] --;
 			}
@@ -625,6 +625,10 @@ class form_output extends form_base
 	// !saves the current state of the loaded form output
 	function save_output($id)
 	{
+		global $awt;
+		$awt->start("form_output::save_output");
+		$awt->count("form_output::save_output");
+
 		// saveme xml
 		classload("xml");
 		$x = new xml;
@@ -633,6 +637,7 @@ class form_output extends form_base
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->upd_object(array("oid" => $id));
 		$this->_log("form",sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name));
+		$awt->stop("form_output::save_output");
 	}
 
 	////
