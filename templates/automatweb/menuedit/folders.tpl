@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/awmenueditstyles.css">
 <script src="{VAR:baseurl}/automatweb/js/ua.js"></script>
-<script src="{VAR:baseurl}/automatweb/js/ftiens_new.js"></script>
+<script src="{VAR:baseurl}/automatweb/js/ftiens4.js"></script>
 <script language="javascript">
 function MM_swapImgRestore() { //v3.0
   var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
@@ -30,13 +30,16 @@ function MM_swapImage() { //v3.0
 }
 
 USETEXTLINKS = 1
-pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}","images/aw_ikoon.gif")
+ICONPATH = '/automatweb/images/'
+PERSERVESTATE = 0
+LINKTARGET = 'list'
 
+pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "{VAR:rooturl}", "images/aw_ikoon.gif")
 <!-- SUB: TREE -->
 	pr_{VAR:id} = insFld(pr_{VAR:parent}, gFld("{VAR:name}", "{VAR:url}","{VAR:iconurl}"));
 <!-- END SUB: TREE -->
 <!-- SUB: DOC -->
-	pr_{VAR:id} = insDoc(pr_{VAR:parent}, gLnk("{VAR:name}", "{VAR:name}","{VAR:url}","{VAR:iconurl}"));
+	pr_{VAR:id} = insDoc(pr_{VAR:parent}, gLnk("R", "{VAR:name}","{VAR:url}","{VAR:iconurl}"));
 <!-- END SUB: DOC -->
 
 foldersTree = pr_{VAR:root};
