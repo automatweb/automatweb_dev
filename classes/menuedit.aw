@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.260 2003/03/12 16:19:44 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.261 2003/03/13 08:00:29 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1585,7 +1585,7 @@ class menuedit extends aw_template
 				)) + array($atc_root => $atc_root);
 
 				$objs = array();
-				$mns = join(",",$mn);
+				$mns = join(",",array_keys($mn));
 				if ($mns != "")
 				{
 					$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND parent IN (".$mns.") ORDER BY jrk");
@@ -5369,7 +5369,8 @@ class menuedit extends aw_template
 
 
 			// each parent starts a new menu
-			foreach($by_parent as $item_id => $item_collection)
+			$bp = new aw_array($by_parent);
+			foreach($bp->get() as $item_id => $item_collection)
 			{
 				$menu_data = "";
 				foreach($item_collection as $el_id => $el_data)
