@@ -48,9 +48,26 @@
             <type>select</type>
             <caption>Joondamine</caption>
       </property>
+      <property>
+            <name>c_parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PARENT</reltype>
+            <caption>&amp;Uuml;lemtulp</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TABLE_COLUMN</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <PARENT>
+                  <value>1</value>
+                  <clid>CL_PROPERTY_TABLE_COLUMN</clid>
+                  <caption>&amp;uuml;lemtulp</caption>
+            </PARENT>
+      </reltypes>
 </properties>
 

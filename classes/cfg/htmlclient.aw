@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.98 2005/03/10 12:44:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.99 2005/03/10 15:28:41 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -824,9 +824,15 @@ class htmlclient extends aw_template
 							{
 								$width = 'width="'.$width_array[$key].'"';
 							}
-							$tmp_html.='<td valign=top '.$width.'>'.$value.'</td>';
+							$tmp_html.='<td nowrap valign=top '.$width.'>'.$value.'</td>';
 						}
-						$res.="<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr>$tmp_html</tr></table>";
+						if ($_GET["XX5"])
+						{
+							print "<pre>";
+							print htmlspecialchars($tmp_html);
+							print "</pre>";
+						};
+						$res.="<table border=5 cellpadding=5 cellspacing=5 width='100%'><tr>$tmp_html</tr></table>";
 					}
 					else
 					{

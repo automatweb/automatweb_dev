@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table_column.aw,v 1.2 2005/03/03 15:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table_column.aw,v 1.3 2005/03/10 15:28:41 kristo Exp $
 // property_table_column.aw - Tabeli veerg 
 /*
 
@@ -25,6 +25,12 @@
 
 @property align type=select
 @caption Joondamine
+
+@property c_parent type=relpicker reltype=RELTYPE_PARENT
+@caption &Uuml;lemtulp
+
+@reltype PARENT value=1 clid=CL_PROPERTY_TABLE_COLUMN
+@caption &uuml;lemtulp
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.2 2005/03/03 15:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.3 2005/03/10 15:28:41 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
@@ -77,6 +77,12 @@ class property_table extends class_base
 			"caption" => "Jrk",
 			"align" => "center",
 		));
+
+		$t->define_field(array(
+			"name" => "parent",
+			"caption" => "&Uuml;lemtulp",
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "caption",
 			"caption" => "Pealkiri",
@@ -113,6 +119,7 @@ class property_table extends class_base
 				"key" => $o->id(),
 				"name" => $arr["prop"]["name"],
 				"data" => $o->properties(),
+				"ol" => $ol
 			));
 		};
 
@@ -120,6 +127,7 @@ class property_table extends class_base
 			"t" => &$t,
 			"key" => "new",
 			"name" => $arr["prop"]["name"],
+			"ol" => $ol
 		));
 
 
@@ -155,7 +163,8 @@ class property_table extends class_base
 			$o->set_prop("width",$coldat["width"]);
 			$o->set_prop("sortable",$coldat["sortable"]);
 			$o->set_prop("align",$coldat["align"]);
-			
+			$o->set_prop("c_parent", $coldat["parent"]);
+
 			//print "creating new column object from the following data<br>";
 			$o->save();
 		};
@@ -175,6 +184,11 @@ class property_table extends class_base
 				"name" => "${name}[${key}][ord]",
 				"size" => 2,
 				"value" => $arr["data"]["ord"],
+			)),
+			"parent" => html::select(array(
+				"name" => "${name}[${key}][parent]",
+				"value" => $arr["data"]["c_parent"],
+				"options" => array("" => "") + $arr["ol"]->names()
 			)),
 			"width" => html::textbox(array(
 				"name" => "${name}[${key}][width]",
@@ -215,14 +229,19 @@ class property_table extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			$t->define_field(array(
+			$dd = array(
 				"name" => $o->name(),
 				"caption" => $o->name(),
 				"sortable" => $o->prop("sortable"),
 				"width" => $o->prop("width"),
 				"nowrap" => $o->prop("nowrap"),
-				"align" => $o->prop("align")
-			));
+				"align" => $o->prop("align"),
+			);
+			if ($o->prop("c_parent"))
+			{
+				$dd["parent"] = $o->prop_str("c_parent");
+			}
+			$t->define_field($dd);
 		}
 
 		$dd = safe_array($arr["obj_inst"]->meta("demo_data"));
@@ -276,9 +295,9 @@ class property_table extends class_base
 		$el = new object($arr["id"]);
 		$sys_name = $arr["name"];
 		$gpblock = "";
-		$gpblock .= "case \"${sys_name}\":\n";
+		$gpblock .= "\t\t\tcase \"${sys_name}\":\n";
 		$gpblock .= "\t\t\t\t\$this->generate_${sys_name}(\$arr);\n";
-		$gpblock .= "\t\t\t\tbreak;\n";
+		$gpblock .= "\t\t\t\tbreak;\n\n";
 		return array(
 			"get_property" => $gpblock,
 			"generate_methods" => array("generate_${sys_name}"),
@@ -293,7 +312,10 @@ class property_table extends class_base
 			"parent" => $arr["id"],
 			"class_id" => CL_PROPERTY_TABLE_COLUMN,
 		));
-		$rv = "function $name(\$arr)\n";
+		$els->sort_by(array(
+			"prop" => "ord"
+		));
+		$rv = "\tfunction $name(\$arr)\n";
 		$rv .= "\t{\n";
 		$rv .= "\t\t" . '$t = &$arr["prop"]["vcl_inst"];' . "\n";
 		foreach($els->arr() as $el)
@@ -302,16 +324,26 @@ class property_table extends class_base
 			$rv .= "\t\t" . '$t->define_field(array(' . "\n";
 			$rv .= "\t\t\t" . '"name" => "' . $sys_name . '",' . "\n";
 			$rv .= "\t\t\t" . '"caption" => "' . $el->name() . '",' . "\n";
-			$rv .= "\t\t\t" . '"width" => "' . $el->prop("width") . '",' . "\n";
-			$rv .= "\t\t\t" . '"sortable" => "' . $el->prop("sortable") . '",' . "\n";
+			if ($el->prop("width"))
+			{
+				$rv .= "\t\t\t" . '"width" => "' . $el->prop("width") . '",' . "\n";
+			}
+			if ($el->prop("sortable"))
+			{
+				$rv .= "\t\t\t" . '"sortable" => "' . $el->prop("sortable") . '",' . "\n";
+			}
 			if ($el->prop("align") != "")
 			{
 				$rv .= "\t\t\t" . '"align" => "' . $el->prop("align") . '",' . "\n";
 			}
+			if ($el->prop("c_parent") != "")
+			{
+				$rv .= "\t\t\t" . '"parent" => "' . $el->prop_str("c_parent") . '",' . "\n";
+			}
 			$rv .= "\t\t" . ');' . "\n";
 			
 		};
-		$rv .= "\t};\n";
+		$rv .= "\t};\n\n";
 		return $rv;
 	}
 
@@ -320,6 +352,10 @@ class property_table extends class_base
 		$t = new vcl_table();
 		$table_items = new object_list(array(
 			"parent" => $el->id(),
+			"class_id" => CL_PROPERTY_TABLE_COLUMN
+		));
+		$table_items->sort_by(array(
+			"prop" => "ord"
 		));
 		foreach($table_items->arr() as $table_item)
 		{
@@ -332,6 +368,10 @@ class property_table extends class_base
 			if ($table_item->prop("sortable"))
 			{
 				$celldata["sortable"] = 1;
+			};
+			if ($table_item->prop("c_parent"))
+			{
+				$celldata["parent"] = $table_item->prop_str("c_parent");
 			};
 
 			if ($table_item->prop("align") != "")

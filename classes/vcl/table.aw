@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.40 2005/02/17 13:13:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.41 2005/03/10 15:28:41 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -479,6 +479,13 @@ class aw_table extends aw_template
 		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : "";
 		$tbl = "";
 
+		foreach($this->rowdefs as $rd)
+		{
+			$this->sh_counts_by_parent[$rd["name"]] = $this->_get_sh_count_by_parent($rd["name"]);
+		}
+		$this->_get_max_level_cnt("");
+		$this->max_sh_count = $this->_max_gml-1;
+
 		if (!empty($this->table_header))
 		{
 			$tbl .= $this->table_header;
@@ -587,101 +594,7 @@ class aw_table extends aw_template
 		// if we show title under grouping elements, then we must not show it on the first line!
 		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]))
 		{
-			// make header!
-			$tbl .= "<tr>\n";
-			foreach($this->rowdefs as $k => $v)
-			{
-				$style = false;
-				if (isset($v["sortable"]))
-				{
-					if (isset($this->sortby[$v["name"]]))
-					{
-						$style_key = "header_sorted";
-					}
-					else
-					{
-						$style_key = "header_sortable";
-					};
-				}
-				else
-				{
-					$style_key = "header_normal";
-				};
-				$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
-				if (!$style)
-				{
-					$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
-				}
-				$tbl.=$this->opentag(array(
-					"name" => "td",
-					"classid"=> $style,
-					"align" => isset($v["talign"]) ? $v["talign"] : "center",
-					"valign" => isset($v["tvalign"]) ? $v["tvalign"] : "",
-					"bgcolor" => isset($this->tbgcolor) ? $this->tbgcolor : "",
-					"nowrap" => isset($v["nowrap"]) ? 1 : "",
-					"width" => isset($v["width"]) ? $v["width"] : "",
-				));
-
-				// if the column is sortable, turn it into a link
-				if (isset($v["sortable"]))
-				{
-					// by default (the column is not sorted) don't show any arrows
-					$sufix = "";
-					// by default, if a column is not sorted and you click on it, it should be sorted asc
-					$so = "asc";
-
-					// kui on sorteeritud selle välja järgi
-					if (isset($this->sortby[$v["name"]]))
-					{
-						$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
-						$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
-					}
-
-					$url = $REQUEST_URI;
-					$url = preg_replace("/sortby=[^&$]*/","",$url);
-					$url = preg_replace("/sort_order=[^&$]*/","",$url);
-					$url = preg_replace("/&{2,}/","&",$url);
-					$url = str_replace("?&", "?",$url);
-					$sep = (strpos($url,"?") === false) ?	"?" : "&";
-					$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
-
-					$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
-				}
-				else
-				{
-					$tbl .= $v["caption"];
-				};
-				$tbl .= "</td>\n";
-			};
-
-			// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
-			if (is_array($this->actions) && (sizeof($this->actions) > 0))
-			{
-				$tbl .= $this->opentag(array(
-					"name" => "td",
-					"align" => "center",
-					"classid" => $this->header_normal,
-					"colspan" => sizeof($this->actions)
-				));
-				$tbl .= "Tegevused";
-				$tbl .= "</td>\n";
-			};
-
-			if ($this->use_chooser)
-			{
-				$tbl .= $this->opentag(array(
-					"name" => "td",
-					"align" => "center",
-					"classid" => $this->header_normal,
-				));	
-				$name = $this->chooser_config["name"];
-				$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : "X";
-				$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
-				$tbl .= "</td>";
-			};
-
-			// header kinni
-			$tbl .= "</tr>";
+			$tbl .= $this->_req_draw_header("");
 		}
 
 		$this->lgrpvals = array();
@@ -737,6 +650,10 @@ class aw_table extends aw_template
 				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
+					if ($this->sh_counts_by_parent[$v1["name"]] > 0)
+					{
+						continue;
+					}
 					$rowspan = 1;
 					$style = false;
 					if (isset($this->vgroupby) && is_array($this->vgroupby))
@@ -1740,6 +1657,176 @@ class vcl_table extends aw_table
 
 			$this->define_data($data);
 		}
+	}
+
+	function _req_draw_header($parent)
+	{
+		$this->_sh_req_level++;
+		$tbl = "";
+		$subs = array();
+		// make header!
+		$tbl .= "<tr>\n";
+		foreach($this->rowdefs as $k => $v)
+		{
+			if (!(($parent == "" && empty($v["parent"])) || isset($parent[$v["parent"]])))
+			{
+				continue;
+			}
+
+			$subs[$v["name"]] = $v["name"];
+		}
+
+		if (!count($subs))
+		{
+			$this->_sh_req_level--;
+			return "";
+		}
+
+		$tbl2 = $this->_req_draw_header($subs);
+
+		foreach($this->rowdefs as $k => $v)
+		{
+			if (!(($parent == "" && empty($v["parent"])) || isset($parent[$v["parent"]])))
+			{
+				continue;
+			}
+
+			$style = false;
+			if (isset($v["sortable"]))
+			{
+				if (isset($this->sortby[$v["name"]]))
+				{
+					$style_key = "header_sorted";
+				}
+				else
+				{
+					$style_key = "header_sortable";
+				};
+			}
+			else
+			{
+				$style_key = "header_normal";
+			};
+			$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
+			if (!$style)
+			{
+				$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+			}
+
+			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
+			$tbl.=$this->opentag(array(
+				"name" => "td",
+				"classid"=> $style,
+				"align" => isset($v["talign"]) ? $v["talign"] : "center",
+				"valign" => isset($v["tvalign"]) ? $v["tvalign"] : "",
+				"bgcolor" => isset($this->tbgcolor) ? $this->tbgcolor : "",
+				"nowrap" => isset($v["nowrap"]) ? 1 : "",
+				"width" => isset($v["width"]) ? $v["width"] : "",
+				"colspan" => ($sh_cnt > 0 ? $sh_cnt : 1),
+				"rowspan" => ($sh_cnt == 0 ? $this->max_sh_count - ($this->_sh_req_level-1) : 1)
+			));
+
+			// if the column is sortable, turn it into a link
+			if (isset($v["sortable"]))
+			{
+				// by default (the column is not sorted) don't show any arrows
+				$sufix = "";
+				// by default, if a column is not sorted and you click on it, it should be sorted asc
+				$so = "asc";
+
+				// kui on sorteeritud selle välja järgi
+				if (isset($this->sortby[$v["name"]]))
+				{
+					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
+					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
+				}
+
+				$url = $REQUEST_URI;
+				$url = preg_replace("/sortby=[^&$]*/","",$url);
+				$url = preg_replace("/sort_order=[^&$]*/","",$url);
+				$url = preg_replace("/&{2,}/","&",$url);
+				$url = str_replace("?&", "?",$url);
+				$sep = (strpos($url,"?") === false) ?	"?" : "&";
+				$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
+
+				$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
+			}
+			else
+			{
+				$tbl .= $v["caption"];
+			};
+			$tbl .= "</td>\n";
+		};
+
+		// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
+		if (is_array($this->actions) && (sizeof($this->actions) > 0))
+		{
+			$tbl .= $this->opentag(array(
+				"name" => "td",
+				"align" => "center",
+				"classid" => $this->header_normal,
+				"colspan" => sizeof($this->actions)
+			));
+			$tbl .= "Tegevused";
+			$tbl .= "</td>\n";
+		};
+
+		if ($this->use_chooser)
+		{
+			$tbl .= $this->opentag(array(
+				"name" => "td",
+				"align" => "center",
+				"classid" => $this->header_normal,
+			));	
+			$name = $this->chooser_config["name"];
+			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : "X";
+			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
+			$tbl .= "</td>";
+		};
+
+		// header kinni
+		$tbl .= "</tr>";
+
+		$this->_sh_req_level--;
+		return $tbl.$tbl2;
+	}
+
+	function _get_sh_count_by_parent($parent)
+	{
+		$ret = 0;
+		foreach($this->rowdefs as $rd)
+		{
+			if ($rd["parent"] == $parent)
+			{
+				$tmp = $this->_get_sh_count_by_parent($rd["name"]);
+				if ($tmp == 0)
+				{
+					$ret++;
+				}
+				else
+				{
+					$ret += $tmp;
+				}
+			}
+		}
+		return $ret;
+	}
+
+	function _get_max_level_cnt($parent)
+	{
+		$this->_gml++;
+		if ($this->_gml > $this->_max_gml)
+		{
+			$this->_max_gml = $this->_gml;
+		}
+		foreach($this->rowdefs as $rd)
+		{
+			if ($rd["parent"] == $parent)
+			{
+				$this->_get_max_level_cnt($rd["name"]);
+			}
+		}
+		$this->_gml--;
 	}
 };
 ?>
