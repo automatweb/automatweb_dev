@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.80 2003/12/05 12:29:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.81 2003/12/05 16:25:37 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1010,6 +1010,53 @@ class menu extends class_base
 				)),
 			));
 		}
+	}
+	
+	////
+	// !Aliaste parsimine
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->mcaliases))
+		{
+			$this->mcaliases = $this->get_aliases(array(
+				"oid" => $oid,
+				"type" => $this->clid,
+			));
+		};
+		$f = $this->mcaliases[$matches[3] - 1];
+		if (!$f["target"])
+		{
+			return "";
+		}
+		$target = $f;
+
+		$o = obj($target["oid"]);
+
+		if ($o->prop("link") != "")
+		{
+			$link = $o->prop("link");
+		}	
+		else
+		{
+			$link = $this->cfg["baseurl"]."/".$target["oid"];
+		}
+
+		$ltarget = "";
+		if ($o->prop("target"))
+		{
+			$ltarget = "target='_blank'";
+		}
+
+		if (aw_global_get("section") == $target["oid"])
+		{
+			$ret = sprintf("<a $ltarget class=\"sisutekst-sel\" href='$link'>%s</a>",$target["name"]);
+		}
+		else
+		{
+			$ret = sprintf("<a $ltarget class=\"sisutekst\" href='$link'>%s</a>",$target["name"]);
+		}
+		return $ret;
 	}
 };
 ?>
