@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.42 2004/12/16 19:33:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.43 2004/12/31 09:49:53 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -30,9 +30,9 @@ class vcalendar extends aw_template
 			}
 		};
 
-		if ($feature == "project_media")
+		if (is_object($this->evt_tpl) && $feature == "project_media")
 		{
-			if (is_object($this->evt_tpl) && $this->evt_tpl->is_template("project_media"))
+			if ($this->evt_tpl->is_template("project_media"))
 			{
 				$retval = true;
 			}
