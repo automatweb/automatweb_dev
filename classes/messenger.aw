@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.8 2001/05/23 03:33:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.9 2001/05/23 03:39:48 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -517,26 +517,16 @@ class messenger extends menuedit_light
 					$pref = "<b>";
 					$suf = "</b>";
 				};
-				$msg["status"] = ($msg["status"]) ? "loetud" : "lugemata";
+				// kui status == true, siis on teade loetud
+				$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
 				$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
 				$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
 				$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 				$msg["cnt"] = $cnt;
 				$msg["tm"] = $this->time2date($row["tm"]);
 				$this->vars($msg);
-				//$this->vars(array(
-				//	"from"		=> $msg["modifiedby"],
-				//	"subject"	=> $msg["subject"],
-				//	"id"		=> $msg["id"],
-				//	"tm"		=> $this->time2date($msg["tm"]),
-				//	"pri"		=> $msg["pri"],
-				//	"status"	=> ($msg["status"]) ? "loetud" : "lugemata",
-				//));
-				//$c .= $this->parse("line");
 				$c .= $this->parse("line");
 			};
-			#$t->sort_by(array("field" => $sortby));
-			#$c = $t->draw();
 		};
 
 		$this->vars(array(
