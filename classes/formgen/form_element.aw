@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.45 2003/05/27 17:02:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.46 2003/05/29 13:27:41 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -206,9 +206,9 @@ class form_element extends aw_template
 
 			// now do element metadata
 			$mtd = "";
-			if (is_array($this->arr["metadata"][$this->form->lang_id]))
+			if (is_array($this->arr["metadata"][aw_global_get("lang_id")]))
 			{
-				foreach($this->arr["metadata"][$this->form->lang_id] as $mn => $mv)
+				foreach($this->arr["metadata"][aw_global_get("lang_id")] as $mn => $mv)
 				{
 					$this->vars(array(
 						"metadata_name" => $mn,
@@ -936,7 +936,7 @@ class form_element extends aw_template
 		$this->arr['hidden'] = $$var;
 
 		// metadata
-		$this->arr["metadata"] = array();
+		$this->arr["metadata"][aw_global_get("lang_id")] = array();
 		$varn = $base."_metadata_name";
 		$varv = $base."_metadata_value";
 		$varv = $$varv;
@@ -944,7 +944,7 @@ class form_element extends aw_template
 		{
 			if ($vl != "")
 			{
-				$this->arr["metadata"][$this->form->lang_id][$vl] = $varv[$nr];
+				$this->arr["metadata"][aw_global_get("lang_id")][$vl] = $varv[$nr];
 			}
 		}
 
@@ -1702,7 +1702,8 @@ class form_element extends aw_template
 		{
 			$lid = aw_global_get("lang_id");
 		}
-		return is_array($this->arr["metadata"][$lid]) ? $this->arr["metadata"][$lid] : array();
+		$d_lid = $this->form->lang_id;
+		return is_array($this->arr["metadata"][$lid]) ? $this->arr["metadata"][$lid] : (is_array($this->arr["metadata"][$d_lid]) ? $this->arr["metadata"][$d_lid] : array());
 	}
 
 	function get_up_down_count_el_form()
