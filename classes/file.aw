@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.23 2002/02/12 23:37:02 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.24 2002/03/04 20:20:53 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -529,6 +529,8 @@ class file extends aw_template
 			extract($id);
 		}
 		// allow only integer id-s
+
+		// bu. aga kui fail on failisysteemis? then what?
 		$this->db_query(sprintf("SELECT files.* FROM files WHERE id = %d",$id));
 		$o = $this->db_next();
 		if ($o)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.59 2002/02/15 17:34:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.60 2002/03/04 20:21:08 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -630,6 +630,9 @@ define("PRG_CONFIG_SITES",55);// saitide tegemine
 define("PRG_CONFIG_DOCFOLDERS",56); // dokumendi liigutamsie kataloogide vailimine
 define("PRG_CONFIG_FORMS",57);	// formi elementide tyypide config
 define("PRG_AUTOMATED_TEST",58); // interface for automated test suite
+define("PRG_AIP_PDF", 59);	// aipi jaoks pdf failide upload / automaatne synkro
+define("PRG_BACKUP", 60); // baasist / saidist backupi tegemise progis
+define("PRG_SITE_EXPORT",61); // saidist staatilise koopia tegemine
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -689,7 +692,10 @@ PRG_DOCMGR						=> array("name" => "Document manager",	"url" => "orb.aw?class=do
 PRG_CONFIG_SITES			=> array("name" => "Config/saidid",			"url" => "orb.aw?class=config&action=sites"),
 PRG_CONFIG_DOCFOLDERS	=> array("name" => "Config/dokumendi kataloogid",			"url" => "orb.aw?class=config&action=docfolders"),
 PRG_CONFIG_FORMS			=> array("name" => "Config/FormGen",		"url" => "orb.aw?class=form_config&action=config"),
-PRG_AUTOMATED_TEST			=> array("name" => "Automated testsuite",		"url" => "orb.aw?class=remote&action=config"),
+PRG_AUTOMATED_TEST		=> array("name" => "Automated testsuite",		"url" => "orb.aw?class=remote&action=config"),
+PRG_AIP_PDF						=> array("name" => "AIP pdf upload",		"url" => "orb.aw?class=aip_pdf&action=listfiles"),
+PRG_BACKUP						=> array("name" => "Backup",						"url" => "orb.aw?class=backup&action=backup"),
+PRG_SITE_EXPORT				=> array("name" => "Saidi staatiline koopia",  "url" => "orb.aw?class=export&action=export")
 );
 
 // formide tyybid
@@ -810,6 +816,9 @@ define("ERR_ARC_NOWRITE",85);
 define("ERR_ACL_EHIER",86);
 define("ERR_ACL_NOGRP",87);
 define("ERR_ACL_ERR",88);
+define("ERR_MNEDIT_TXTIMP",89);
+define("ERR_MNEDIT_TXTIMP_PARENT",90);
+define("ERR_SITEXPORT_NOFOLDER",91);
 
 $error_types = array(
 	ERR_ML_VAR_NO_VAR => "ERR_ML_VAR_NO_VAR",
@@ -900,5 +909,13 @@ $error_types = array(
 	ERR_ACL_EHIER => "ERR_ACL_EHIER",
 	ERR_ACL_NOGRP => "ERR_ACL_NOGRP",
 	ERR_ACL_ERR => "ERR_ACL_ERR",
+	ERR_MNEDIT_TXTIMP => "ERR_MNEDIT_TXTIMP",
+	ERR_MNEDIT_TXTIMP_PARENT => "ERR_MNEDIT_TXTIMP_PARENT",
+	ERR_SITEXPORT_NOFOLDER => "ERR_SITEXPORT_NOFOLDER"
 );
+
+$mysqldump_path = "/usr/local/bin/mysqldump";
+$gzip_path = "/bin/gzip";
+$tar_path = "/bin/tar";
+
 ?>

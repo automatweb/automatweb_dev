@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.5 2002/02/19 16:23:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.6 2002/03/04 20:20:53 duke Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -21,7 +21,7 @@ class php_serializer
 
 	function req_serialize($arr,$to_file)
 	{
-		$str ="array(\n";
+		$str ="array(";
 		$td =array();
 		foreach($arr as $k => $v)
 		{
@@ -61,8 +61,8 @@ class php_serializer
 	{
 		global $awt;
 		$awt->start("php::php_unserialize");
+		$awt->count("php::unser");
 //		echo "str = <pre>$str</pre> <br>";
-
 		eval($str);
 		$awt->stop("php::php_unserialize");
 		return $arr;

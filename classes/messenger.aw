@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.95 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.96 2002/03/04 20:20:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -1001,6 +1001,7 @@ class messenger extends menuedit_light
 			$switch="html";
 			$switchval="2";
 		};
+
 
 		if ($this->msgconf["msg_confirm_send"])
 		{

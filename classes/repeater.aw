@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.5 2002/03/04 20:20:53 duke Exp $
 class repeater {
 	////
 	// !Konstruktor.
@@ -247,67 +247,4 @@ class repeater {
         }
 
 };
-// siia peab moodustuma array koigist objektidest
-/*
-[aasta]->[kuu]->[päev] .. hmmm?
-nope, pigem tuleks välja arvutada vahemikud, mil eventid esinevad.
-ja siis vastavalt sellele neid kas splittida voi joinida.
-
-// tyybid tuleks ette anda kindlas jarjekorras. aastad enne, siis kuud.
-
-step 1)
-	koigepealt loome hiigelsuure timegapi eventi alguspäevast
-	kuni repeaterite lopuni.
-
-step 2)
-	Impordime repeateri tyypi year (8,4)
-	tsykkel yle koigi aastate, alates eventi algusest kuni
-
-<terryf> mmkay. j2relikult seal on 365*2036 riad?
-<terryf> mmkay. j2relikult seal on 365*36 riad?
-<duke9> eiei
-<terryf> ai ok
-<terryf> jah
-<terryf> seal on aint korduse p2evad
-<duke9> tegemist on arvupaaridega
-<duke9> ntx .. koigepealt on 14.juuni.2001 - 31.dets.2037
-<duke9> timestampidena
-<duke9> siis .. kui oli defineeritud repeater tyypi aasta
-<duke9> ja ntx skip = 1 (ehk iga aasta)
-<duke9> well
-<duke9> siis ei ole vaja midagi teha
-<duke9> aga kui oli skip 2 (yle yhe aasta)
-<terryf> aaaa
-<terryf> ok
-<duke9> siis tuleb selle arvupaari asemele (2037-2001) / 2 
-<terryf> nyyd ma saan aru
-<duke9> arvupaari
-<terryf> jaja. kaval
-<duke9> mis siis algavad vastava aasta esimese sekundiga .. ja lopevad viimasega
-<duke9> vmt.
-<terryf> mhmh. a see k6lab p2ris eduliselt
-<duke9> nuh .. ja kui aasta tyypi repeaterit yldse polnud, siis me ei tee midagi. .. eks
-<duke9> edasi tulevad kuud.
-<duke9> kaime need vektorid labi
-<duke9> ja kui vaja, siis teeme jalle tykkideks.
-<duke9> kui ntx ainult repeater tyypi paev .. ja skip on 1
-<duke9> siis .. on meil ikkagi tegemist yheainsa arvupaariga
-<duke9> seega .. ysna effektiivne?
-<duke9> samas .. kui skip on 2 .. 
-<duke9> siis on neid arvupaare .. ikka paris palju
-<duke9> (2037 - 2001) * 365 / 2
-<duke9> ehk 6570
-<duke9> samas timestamp on palju .. 4 baiti?
-<terryf> a nuh, kui sa nad kuidagi mingisse lahedasse andmestruktuuri torkad, kust kiirelt vahemikku leida saab, siis pole hullu ju..
-<duke9> noh .. jah
-<duke9> ja pealegi .. see 6570 on worst case scenario
-<terryf> mhmh
-<duke9> repeater, mis kestab igavesti (yeah, right) iga 2 päeva tagant
-<duke9> koik teised votavad vahem ruumi.
-<terryf> ei, v2ga kuul
-<terryf> t6esti. I'm impressed
-<duke9> ja noh. kui meil 64 bitised arvutid levima hakkavad, siis voib uue algoritmi valja moelda.
-<duke9> hm. thank you. I guess.
-
-*/
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.16 2002/02/19 00:39:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.17 2002/03/04 20:20:53 duke Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -181,6 +181,7 @@ class acl_base extends core
 										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") 
 										 ORDER BY groups.priority DESC
 										 LIMIT 1";
+						
 //		echo "q = $q <br>";
 		$this->db_query($q);
 		$row = $this->db_next();

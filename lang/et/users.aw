@@ -8,6 +8,7 @@ define("USR_LOGGED_OUT","Logis välja");
 
 // errors
 define("E_USR_UID_TOO_SHORT","Liiga lühike kasutajanimi, uid=%s, pass=%s");
+define("E_USR_EXISTS","Kasutaja '%s' on juba olemas");
 define("E_USR_PASS_TOO_SHORT","Liiga lühike parool, uid=%s, pass=%s");
 define("E_USR_USER_UNKNOWN","Tundmatu kasutaja, uid=%s, pass=%s");
 define("E_USR_WRONG_PASS","Vale parool, uid=%s, pass=%s");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.33 2002/02/13 22:02:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.34 2002/03/04 20:20:53 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects");
 
@@ -80,9 +80,14 @@ class users extends users_user
 
 	function _get_user_config($uid)
 	{
-		$q = "SELECT config FROM users WHERE uid = '$uid'";
-		$this->db_query($q);
-		return $this->db_next();
+		$row = aw_cache_get("users_cache",$uid);
+		if (not(is_array($row)))
+		{
+			$q = "SELECT config FROM users WHERE uid = '$uid'";
+			$this->db_query($q);
+			$row = $this->db_next();
+		};
+		return $row;
 	}
 
 	////

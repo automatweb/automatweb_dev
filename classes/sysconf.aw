@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.0 2001/10/01 14:03:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.1 2002/03/04 20:20:53 duke Exp $
 // sysconf.aw - const.aw web frontend
 global $orb_defs;
 $orb_defs["sysconf"] = "xml";
 classload("aw_template");
-header("loll");
 if (!defined("sysconf_loaded"))
 {
 define("sysconf_loaded",1);

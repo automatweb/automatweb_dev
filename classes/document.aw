@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.90 2002/02/13 00:14:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.91 2002/03/04 20:20:53 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -245,9 +245,10 @@ class document extends aw_template
 		classload("rdf");
 		global $baseurl;
 		global $stitle;
+		global $ext;
 		$rdf = new rdf(array(
-			"about" => "$baseurl/index.aw/format=rss",
-			"link" => "$baseurl/index.aw",
+			"about" => "$baseurl/index.$ext/format=rss",
+			"link" => "$baseurl/index.$ext",
 			"title" => $stitle,
 			"description" => PUBLISHER,
                 ));
@@ -373,6 +374,7 @@ class document extends aw_template
 				
 
 		};
+
 
 		$this->tpl_reset();
 		
@@ -665,11 +667,13 @@ class document extends aw_template
 			};
 		};
 
+		/*
 		classload("msgboard");
 		$t = new msgboard;
-		$nc = $t->get_num_comments($docid);
+		$nc = $t->get_num_comments($doc["docid"]);
 		$nc = $nc < 1 ? "0" : $nc;
 		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
+		*/
 
 		// <mail to="bla@ee">lahe tyyp</mail>
     		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
@@ -858,7 +862,7 @@ class document extends aw_template
 		
 		// I kinda hate this part, mime registry should really be somewhere else
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
-		$aliases = $this->get_aliases_for($docid);
+		$aliases = $this->get_aliases_for($doc["docid"]);
  		if ($this->is_template("FILE"))
 		{
 			$ftypearr = array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.19 2002/02/07 09:42:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.20 2002/03/04 20:20:27 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -296,11 +296,11 @@ class aw_table
 
 			if ($sorder == "asc")
 			{
-				return ((int)$v1) > ((int)$v2) ? -1 : 1;
+				return ((int)$v1) < ((int)$v2) ? -1 : 1;
 			}
 			else
 			{
-				return ((int)$v1) < ((int)$v2) ? -1 : 1;
+				return ((int)$v1) > ((int)$v2) ? -1 : 1;
 			}
 		}
 		else

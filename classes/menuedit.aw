@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.106 2002/02/28 00:25:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.107 2002/03/04 20:20:53 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -156,7 +156,7 @@ class menuedit extends aw_template
 		{
 			$cp[] = $GLOBALS["page"];
 		}
-		
+
 		$cp[] = $GLOBALS["lang_id"];
 
 		$not_cached = false;
@@ -244,6 +244,13 @@ class menuedit extends aw_template
 		));
 		
 		$obj = $this->get_object($section);
+
+		$this->check_object($obj);
+
+		if (not($text))
+		{
+			$text = $this->replacement;
+		};
 
 		// this should be inexpensive, since it caches all the object, and if 
 		// for example the document class does the same, most objecst should
@@ -430,8 +437,9 @@ class menuedit extends aw_template
 		lc_site_load("menuedit",$this);
 
 		// get array with path of objects in it
-		#$path = $this->get_path($section,$obj);
-		$path = $this->path;
+		$path = $this->get_path($section,$obj);
+		//$path = $this->path;
+		$this->path = $path;
 
 		// you are here links		
 		$this->vars(array("YAH_LINK" => $this->make_yah($this->path)));
@@ -499,8 +507,9 @@ class menuedit extends aw_template
 
 		}
 
-		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 
+		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
+		
 		if ($this->is_template("POLL"))
 		{
 			$this->make_poll();
@@ -844,8 +853,8 @@ class menuedit extends aw_template
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
-			//$me_row = $this->get_menu($section);
-			$me_row = $this->mar($section);
+			$me_row = $this->get_menu($section);
+			//$me_row = $this->mar[$section];
 			$sections = unserialize($me_row["sss"]);
 			$periods = unserialize($me_row["pers"]);
 			
@@ -952,6 +961,7 @@ class menuedit extends aw_template
 		$awt->start("menuedit::do_syslog");
 		// now build the string to put in syslog
 		$log = "";
+		$names = array();
 		foreach($this->path as $val)
 		{
 			$names[] = $this->menu_chain[$val]["name"];
@@ -967,6 +977,16 @@ class menuedit extends aw_template
 		global $awt;
 		$awt->start("menuedit::check_section");
 		global $frontpage;
+
+		// kui sektsiooni viimane märk on "-", paneme selle objekti sees püsti
+		// raw flagi
+		if (substr($section,-1) == "-")
+		{
+			$this->raw = 1;
+			// cut the minus sign
+			$section = substr($section,0,-1);
+		};
+
 		if ($section == "")
 		{
 			$awt->stop("menuedit::check_section");
@@ -2274,6 +2294,11 @@ class menuedit extends aw_template
 				$meta["description"] = $arr["description"];
 			}
 
+			if ($arr["aip_filename"])
+			{
+				$meta["aip_filename"] = $arr["aip_filename"];
+			}
+
 			// 2 updates, this is so wrong.
 			$this->set_object_metadata(array(
 				"oid" => $id,
@@ -2288,7 +2313,8 @@ class menuedit extends aw_template
 					"template_type" => $template_type,
 					"ftpl_edit" => $ftpl_edit,
 					"ftpl_lead" => $ftpl_lead,
-					"ftpl_view" => $ftpl_view
+					"ftpl_view" => $ftpl_view,
+					"aip_filename" => $arr["aip_filename"]
 				),
 			));
 			
@@ -3153,6 +3179,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"ftpl_edit_id" => (int)$meta["ftpl_edit"],
 			"ftpl_lead_id" => (int)$meta["ftpl_lead"],
 			"ftpl_view_id" => (int)$meta["ftpl_view"],
+			"aip_filename" => $meta["aip_filename"]
 		));
 
 		$op_list = $fb->get_op_list();
@@ -3415,6 +3442,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
 			$bro = false;
+			$row["mtype"] = $row["type"];
 			// here we fake the brother menus
 			if ($row["class_id"] == CL_BROTHER)
 			{
@@ -4015,16 +4043,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function submit_import($arr)
 	{
 		extract($arr);
-		global $fail;
 
-		$f = fopen($fail, "r");
-		$d = fread($f,filesize($fail));
-		fclose($f);
+		if ($file_type == "text")
+		{
+			$this->do_text_import($arr);
+		}
+		else
+		{
+			global $fail;
 
-		$menus = unserialize($d);
-		$i_p = $menus[0];
+			$f = fopen($fail, "r");
+			$d = fread($f,filesize($fail));
+			fclose($f);
 
-		$this->req_import_menus($i_p, &$menus, $parent);
+			$menus = unserialize($d);
+			$i_p = $menus[0];
+
+			$this->req_import_menus($i_p, &$menus, $parent);
+		}
 
 		$this->invalidate_menu_cache();
 
@@ -4305,11 +4341,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
 		{
+			/*
 			$template = $this->_get_template_filename($this->properties["tpl_view"]);
 			if (not($template))
 			{
 				$template = $this->properties["ftpl_view"];
 			};
+			*/
+			$template = $this->get_long_template($section);
 			$activeperiod = $obj["period"];
 			$cont = $d->gen_preview(array(
 						"docid" => $section,
@@ -4325,11 +4364,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$d->list_docs($section, $activeperiod,2);
 			if ($d->num_rows > 1)		// the database driver sets this
 			{
+				/*
 				$template = $this->_get_template_filename($this->properties["tpl_lead"]);
 				if (not($template))
 				{
 					$template = $this->properties["ftpl_lead"];
 				};
+				*/
+				$template = $this->get_lead_template($section);
 				while($row = $d->db_next()) 
 				{
 					$d->save_handle();
@@ -4347,11 +4389,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			else 
 			{
 				$row = $d->db_next();
+				/*
 				$template = $this->_get_template_filename($this->properties["tpl_view"]);
 				if (not($template))
 				{
 					$template = $this->properties["ftpl_view"];
 				};
+				*/
+				$template = $this->get_long_template($section);
 				$cont = $d->gen_preview(array(
 							"docid" => $row["docid"],
 							"boldlead" => 1,
@@ -4367,6 +4412,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function show_documents($section,$docid,$template = "")
 	{
 		global $awt;
+		global $DEBUG;
 		$awt->start("menuedit::show_documents");
 		classload("document");
 		$d = new document();
@@ -4383,19 +4429,25 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// mingitest artiklis esinevatest asjadest. You name it.
 		$this->blocks = array();
 
+		/*
 		$template = $this->_get_template_filename($this->properties["tpl_view"]);
 		if (not($template))
 		{
 			$template = $this->properties["ftpl_view"];
 		};
+		*/
+		$template = $this->get_long_template($section);
 		
 		if (is_array($docid)) 
 		{
+			/*
 			$template = $this->_get_template_filename($this->properties["tpl_lead"]);
 			if (not($template))
 			{
 				$template = $this->properties["ftpl_lead"];
 			};
+			*/
+			$template = $this->get_lead_template($section);
 			$template = $template == "" ? "plain.tpl" : $template;
 			$template2 = file_exists($GLOBALS["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 			$ct = ""; 
@@ -4506,7 +4558,56 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $path;
 	}
 
-	function make_yah($path)
+	 function make_yah($path)
+	{
+		global $awt;
+		$awt->start("menuedit::make_yah");
+		// now build "you are here" links from the path
+		$ya = "";  
+		$show = false;
+		$cnt = count($path);
+		global $DEBUG;
+		if ($DEBUG)
+		{
+			print "<pre>";
+			print_r($path);
+			print "</pre>";
+		};
+		for ($i=0; $i < $cnt; $i++)	
+		{
+			if ($show)
+			{
+				$link = "/".$this->mar[$path[$i+1]]["oid"];
+				if ($this->mar[$path[$i+1]]["link"] != "")
+				{
+					$link = $this->mar[$path[$i+1]]["link"];
+				}
+
+				$this->vars(array(
+					"link" => $link,
+					"text" => str_replace("&nbsp;","",strip_tags($this->mar[$path[$i+1]]["name"])), 
+					"ysection" => $this->mar[$path[$i+1]]["oid"]
+				));
+
+				if ($this->mar[$path[$i+1]]["clickable"] == 1)
+				{
+					$ya.=$this->parse("YAH_LINK");
+				}
+			}
+			// don't show things that are before $frontpage
+			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["rootmenu"])
+			{
+				$show = true;
+			}
+		}
+		$awt->stop("menuedit::make_yah");
+		return $ya;
+	}
+
+
+
+
+	function make_yah2($path)
 	{
 		global $awt;
 		$awt->start("menuedit::make_yah");
@@ -4560,11 +4661,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$right_promo = "";
 		$left_promo = "";
 		$scroll_promo = "";
+		/*
 		$template = $this->_get_template_filename($this->properties["tpl_lead"]);
 		if (not($template))
 		{
 			$template = $this->properties["ftpl_lead"];
 		};
+		*/
+		$template = $this->get_lead_template($section);
 		if ($GLOBALS["lang_menus"])
 		{
 			$lai = "AND objects.lang_id = ".$GLOBALS["lang_id"];
@@ -4584,11 +4688,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
+		global $gidlist;
 		while ($row = $this->db_next())
 		{
+			if (not($row["filename"]))
+			{
+				continue;
+			};
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 
-			global $gidlist;
 			$found = false;
 			if (!is_array($meta["groups"]) || count($meta["groups"]) < 1)
 			{
@@ -4619,13 +4727,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					reset($docid);
 					while (list(,$d) = each($docid))
 					{
+						if ($row["filename"])
+						{
 						$pr_c.=str_replace("\r","",str_replace("\n","",$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1))));
+						}
 					}
 				}
 				else
 				{
 					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
-						
 						
 				}
 
@@ -5427,5 +5537,150 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$row = $this->db_next();
 		return $row["filename"];
 	}
+
+	////
+	// !imports menus from text file. file format description is at http://aw.struktuur.ee/index.aw?section=38624
+	function do_text_import($arr)
+	{
+		global $fail;
+		if (is_uploaded_file($fail))
+		{
+			$c = file($fail);
+			$cnt = 0;
+			$levels = array("" => $parent); // here we keep the info about the numbering of the levels => menu id's
+			foreach($c as $row)
+			{
+				$cnt++;
+				// parse row and create menu.
+				if (!preg_match("/([0-9\.]+)(.*)\[(.*)\]/",$row,$mt))
+				{
+					if (!preg_match("/([0-9\.]+)(.*)/",$row,$mt))
+					{
+						$this->raise_error(ERR_MNEDIT_TXTIMP,"Menyyde importimisel tekkis viga real $cnt ",true);
+					}
+				}
+				// now parse the position in the structure from the numbers.
+				$pos = strrpos($mt[1],".");
+				$_pt = substr($mt[1],0,$pos);
+				if ($_pt == "")
+				{
+					$_parent = $arr["parent"];
+				}
+				else
+				{
+					$_parent = $levels[$_pt];
+				}
+
+				if ($_pt != "" && !$_parent)
+				{
+					$this->raise_error(ERR_MNEDIT_TXTIMP_PARENT,"Menyyde importimisel ei leidnud parent menyyd real $cnt ",true);
+				}
+				else
+				{
+					// parse the menu options
+					$opts = trim($mt[3]);
+					$mopts = array();
+					if ($opts != "")
+					{
+						// whee. do a preg_match for every option. 
+						$mopts["act"] = preg_match("/\+act/",$opts);
+						if (preg_match("/\+comment=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["comment"] = $mmt[1];
+						}
+						if (preg_match("/\+alias=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["alias"] = $mmt[1];
+						}
+						$mopts["per"] = preg_match("/\+per/",$opts);
+						if (preg_match("/\+link=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["link"] = $mmt[1];
+						}
+						$mopts["click"] = preg_match("/\+click/",$opts);
+						$mopts["target"] = preg_match("/\+target/",$opts);
+						$mopts["mid"] = preg_match("/\+mid/",$opts);
+						$mopts["makdp"] = preg_match("/\+makdp/",$opts);
+						if (preg_match("/\+width=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["width"] = $mmt[1];
+						}
+						$mopts["rp"] = preg_match("/\+rp/",$opts);
+						$mopts["lp"] = preg_match("/\+lp/",$opts);
+						if (preg_match("/\+fn=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["fn"] = $mmt[1];
+						}
+					}
+
+					// now create the damn thing.
+					$id = $this->new_object(array(
+						"parent" => $_parent,
+						"class_id" => CL_PSEUDO,
+						"name" => trim($mt[2]),
+						"comment" => $mopts["comment"],
+						"status" => ($mopts["act"] ? 2 : 1),
+						"alias" => $mopts["alias"],
+						"jrk" => substr($mt[1],($pos > 0 ? $pos+1 : 0))
+					));
+
+					if ($mopts["fn"] != "")
+					{
+						$this->set_object_metadata(array(
+							"oid" => $id,
+							"key" => "aip_filename",
+							"value" => $mopts["fn"]
+						));
+					}
+					$this->db_query("INSERT INTO menu (id,type,link,clickable,target,mid,hide_noact,width,right_pane,left_pane)
+						VALUES($id,".MN_CONTENT.",'".$mopts["link"]."','".$mopts["click"]."','".$mopts["target"]."','".$mopts["mid"]."','".$mopts["makdp"]."','".$mopts["width"]."','".(!$mopts["rp"])."','".(!$mopts["lp"])."')");
+					$levels[$mt[1]] = $id;
+				}
+			}
+		}
+	}
+
+	function check_object($obj)
+	{
+		switch($obj["class_id"])
+		{
+			case CL_EXTLINK:
+				classload("extlinks");
+				$t = new extlinks();
+				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
+				header("Location: $url");
+				//$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+				exit;
+				break;
+
+			case CL_IMAGE:
+				classload("image");
+				$t = new image();
+				$idata = $t->get_image_by_id($obj["oid"]);
+				$this->replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				if ($this->raw)
+				{
+					print $this->replacement;
+					exit;
+				};
+				break;
+
+			case CL_TABLE:
+				classload("table");
+				$t = new table();
+				$this->replacement = $t->show(array("id" => $obj["oid"],"align" => $align));
+				if ($this->raw)
+				{	
+					print $this->replacement;
+					exit;
+				};
+				break;
+
+			default:
+				$this->replacement = "";
+
+		};
+	}
+	
 }
 ?>
