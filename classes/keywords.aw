@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.29 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.30 2001/08/08 00:21:25 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -694,6 +694,27 @@ class keywords extends aw_template {
 
 	function show_categories($args = array())
 	{
+		classload("list");
+		$mlist = new mlist();
+		$kw = new keywords();
+		$act = $mlist->get_user_lists(array(
+				"uid" => UID,
+			));
+		global $ext;
+		//$kwlist = $this->get_all_keywords(array("beg" => $beg));
+
+		$cats = join(",",array_keys($act));
+				
+		$q = "SELECT category_id FROM keywords WHERE list_id IN ($cats)";
+		$this->db_query($q);
+
+		$cids = array();
+
+		while($row = $this->db_next())
+		{
+			$cids[$row["category_id"]] = 1;
+		};
+
 		extract($args);
 		$this->read_template("categories.tpl");
 		$q = "SELECT * FROM keywordcategories ORDER BY name";
@@ -704,6 +725,7 @@ class keywords extends aw_template {
 			$this->vars(array(
 					"id" => $row["id"],
 					"name" => $row["name"],	
+					"checked" => ($cids[$row["id"]]) ? "checked" : "",
 			));
 			$c .= $this->parse("line");
 		};
