@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.22 2004/01/22 09:56:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.24 2004/02/13 12:12:47 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -114,13 +114,26 @@ class promo extends class_base
 				break;
 	
 			case "type":
-				$data["options"] = array(
-					"0" => "Vasakul",
-					"1" => "Paremal",
-					"2" => "Üleval",
-					"3" => "All",
-					"scroll" => "Skrolliv",
-				);
+				$pa = aw_ini_get("promo.areas");
+				if (is_array($pa) && count($pa) > 0)
+				{
+					$opts = array();
+					foreach($pa as $pid => $pd)
+					{
+						$opts[$pid] = $pd["name"];
+					}
+				}
+				else
+				{
+					$opts = array(
+						"0" => "Vasakul",
+						"1" => "Paremal",
+						"2" => "Üleval",
+						"3" => "All",
+						"scroll" => "Skrolliv",
+					);
+				}
+				$data["options"] = $opts;
 				break;
 
 			case "groups":
@@ -405,10 +418,11 @@ class promo extends class_base
 		if (($_ob != "") && (sizeof($def->get()) > 0))
 		{
 			$ol = new object_list(array(
-				"class_id" => CL_DOCUMENT,
+				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
 				"oid" => $def->get(),
 				"sort_by" => $_ob,
 			));
+			
 			
 			$def = new aw_array($ol->ids());
 		}
@@ -644,13 +658,25 @@ class promo extends class_base
 
 				// which promo to use? we need to know this to use
 				// the correct SHOW_TITLE subtemplate
-				$templates = array(
-					"scroll" => "SCROLL_PROMO",
-					"0" => "LEFT_PROMO",
-					"1" => "RIGHT_PROMO",
-					"2" => "UP_PROMO",
-					"3" => "DOWN_PROMO",
-				);
+				$pa = aw_ini_get("promo.areas");
+				if (is_array($pa) && count($pa) > 0)
+				{
+					$templates = array();
+					foreach($pa as $pid => $pd)
+					{
+						$templates[$pid] = $pd["def"]."_PROMO";
+					}
+				}
+				else
+				{
+					$templates = array(
+						"scroll" => "SCROLL_PROMO",
+						"0" => "LEFT_PROMO",
+						"1" => "RIGHT_PROMO",
+						"2" => "UP_PROMO",
+						"3" => "DOWN_PROMO",
+					);
+				}
 	
 				$use_tpl = $templates[$o->meta("type")];
 				if (!$use_tpl)

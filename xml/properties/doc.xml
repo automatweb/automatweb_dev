@@ -468,6 +468,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
             <calendar>

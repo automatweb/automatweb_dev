@@ -139,6 +139,7 @@
             <name>link_image</name>
             <type>fileupload</type>
             <store>no</store>
+            <editonly>1</editonly>
             <group>Pilt</group>
             <table>objects</table>
             <field>meta</field>

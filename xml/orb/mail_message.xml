@@ -20,5 +20,56 @@
 			</function>
 		</action>
 
+		<action name="create_draft" >
+			<function name="create_draft">
+				<arguments>
+					<required name="msgrid" type="int"/>
+					<optional name="cb_part" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="register_event" >
+			<function name="register_event">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_delete" >
+			<function name="mail_delete">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_send" >
+			<function name="mail_send">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_reply" >
+			<function name="mail_reply">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_reply_all" >
+			<function name="mail_reply_all">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_forward" >
+			<function name="mail_forward">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

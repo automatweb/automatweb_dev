@@ -1239,37 +1239,70 @@ class aw_site extends class_base
 			}
 		}
 
-		// make demo promo boxes 
-		$tpl = new aw_template;
-		$tpl->read_tpl(file($site["docroot"]."/templates/automatweb/menuedit/main.tpl"));
-		$tpls = $tpl->get_subtemplates_regex("(.*_PROMO)");
-		$_tpls = array();
- 		foreach($tpls as $tpl)
+		$_pa = $this->do_orb_method_call(array(
+			"class" => "objects",
+			"action" => "aw_ini_get_mult",
+			"method" => "xmlrpc",
+			"server" => $site["url"],
+			"params" => array(
+				"vals" => array(
+					"promo.areas",
+				)
+			),
+			"no_errors" => true
+		));
+		$pa = $_pa["promo.areas"];
+		if (is_array($pa) && count($pa) > 0)
 		{
-			list($tpl) = array_reverse(explode(".", $tpl));
-			if (substr($tpl, -5) == "PROMO")
+			$templates = $pa;
+		}
+		else
+		{
+			// make demo promo boxes 
+			$tpl = new aw_template;
+			$tpl->read_tpl(file($site["docroot"]."/templates/automatweb/menuedit/main.tpl"));
+			$tpls = $tpl->get_subtemplates_regex("(.*_PROMO)");
+			$_tpls = array();
+ 			foreach($tpls as $tpl)
 			{
-				$_tpls[] = $tpl;
+				list($tpl) = array_reverse(explode(".", $tpl));
+				if (substr($tpl, -5) == "PROMO")
+				{
+					$_tpls[] = $tpl;
+				}
+			}
+			$tpls = array_unique($_tpls);
+
+			$_templates = array(
+				"SCROLL_PROMO" => "scroll",
+				"LEFT_PROMO" => "0",
+				"RIGHT_PROMO" => 1,
+				"UP_PROMO" => "2", 
+				"DOWN_PROMO" => "3",
+			);
+
+			$_templates_n = array(
+				"SCROLL_PROMO" => "Skrolliv",
+				"LEFT_PROMO" => "Vasak",
+				"RIGHT_PROMO" => "Parem",
+				"UP_PROMO" => "&Uuml;lemine", 
+				"DOWN_PROMO" => "Alumine",
+			);
+
+			$templates = array();
+			foreach($tpls as $tpl)
+			{
+				list($pre) = explode("_", $tpl);
+				$templates[$_templates[$tpl]]["def"] = $pre;
+				$templates[$_templates[$tpl]]["name"] = $_templates_n[$tpl];
 			}
 		}
-		$tpls = array_unique($_tpls);
-		
-		$templates = array(
-			"scroll" => "SCROLL_PROMO",
-			"0" => "LEFT_PROMO",
-			"1" => "RIGHT_PROMO",
-			"2" => "UP_PROMO",
-			"3" => "DOWN_PROMO",
-		);
 
-		foreach($tpls as $tpl)
+		$ini_opts["promo.areas"] = $templates;		
+
+		foreach($templates as $id => $dat)
 		{
-			list($pre) = explode("_", $tpl);
-			
-			$astr = strtoupper($pre{0}).strtolower(substr($pre, 1));
-			$astr = str_replace("6", "&otilde;", $astr);
-			$astr = str_replace("y", "&uuml;", $astr);
-			$astr = str_replace("Y", "&Uuml;", $astr);
+			$astr = $dat["name"];
 
 			$o = obj();
 			$o->set_class_id(CL_PROMO);
@@ -1277,7 +1310,7 @@ class aw_site extends class_base
 			$o->set_status(STAT_ACTIVE);
 			$o->set_name($astr." konteiner");
 			$o->set_prop("tpl_lead", 2);
-			$o->set_prop("type", array_search($tpl, $templates));
+			$o->set_prop("type", $id);
 			$o->set_prop("all_menus", 1);
 			$o->save();
 
