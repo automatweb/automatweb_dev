@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.47 2004/01/16 13:51:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.49 2004/02/05 15:33:58 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1283,16 +1283,16 @@ class admin_menus extends aw_template
 			$sortby = "hidden_jrk";
 		};
 
-		if (!$sort_order)
+		if (!$GLOBALS["sort_order"])
 		{
-			$sort_order = "asc";
+			$GLOBALS["sort_order"] = "asc";
 		};
 
 		$this->t->set_numeric_field("hidden_jrk");
 
 		$this->t->sort_by(array(
 			"field" => array("is_menu", $sortby, "name"),
-			"sorder" => array("is_menu" => "desc", $sortby => $sort_order, "name" => "asc")
+			"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"], "name" => "asc")
 		));
 
 		$this->read_template("right_frame.tpl");
@@ -1461,7 +1461,7 @@ class admin_menus extends aw_template
 			$tmp[] = html::href(array(
 				"url" => $url,
 				"target" => $target,
-				"caption" => ($lid == aw_global_get("lang_id") ? "<b>".$ln."</b>" : $ln)
+				"caption" => ($lid == aw_global_get("lang_id") ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
 			));
 		}
 		$toolbar->add_cdata("<span class=\"mlang\">[".join("|", $tmp)."]</span>&nbsp;&nbsp;&nbsp;&nbsp;","right");
@@ -1536,7 +1536,9 @@ class admin_menus extends aw_template
 		if (is_array($sel))
 		{
 			$ol = new object_list(array(
-				"oid" => array_keys($sel)
+				"oid" => array_keys($sel),
+				"site_id" => array(),
+				"lang_id" => array()
 			));
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
