@@ -1,0 +1,22 @@
+<SCRIPT language=JavaScript>
+
+function SendValues()
+{
+	len = document.resulttable.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.resulttable.elements[i].name.indexOf('sel') != -1)
+		{
+			if (document.resulttable.elements[i].checked)
+			{
+				str = 'selval[' + document.resulttable.elements[i].value + ']';
+				label = document.resulttable.elements[str].value;
+				opener.put_value(document.resulttable.elements[i].value, label);
+			}
+		}
+	}
+	window.close();
+}
+</SCRIPT>
+
+<input type=button name=subm value=ok onclick='SendValues()'>
