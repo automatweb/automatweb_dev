@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.40 2003/10/02 10:03:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.41 2003/11/05 13:09:39 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -97,7 +97,8 @@ class html extends aw_template
 			$args["width"] = $cols;
 			$args["height"] = $rows;
 			$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
-			$retval = html::richtext($args);
+			$rte = get_instance("vcl/rte");
+			$retval = $rte->draw_editor($args);
 		}
 		else
 		{
@@ -363,27 +364,6 @@ class html extends aw_template
 		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
 		$title = isset($title) ? " alt='$title' title='$title' " : "";
 		return "<a href='$url' $target $title $onClick>$caption</a>";
-	}
-
-	function richtext($args = array())
-	{
-		// richtext editors are inside a template
-		static $rtcounter = 0;
-		$rtcounter++;
-		$awt = get_instance("aw_template");
-		$awt->init(array("tpldir" => "html"));
-		$retval = "";
-		$awt->vars($args);
-		$awt->read_template("aw_richtexteditor.tpl");
-		if ($rtcounter == 1)
-		{
-			$this->rt_elements = array($args["name"]);
-			$retval .= $awt->parse("writer");
-			$retval .= $awt->parse("toolbar");
-		};
-		#$retval .= $this->parse("field");
-		$retval .= $awt->parse("field");
-		return $retval;
 	}
 
 	////
