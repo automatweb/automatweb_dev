@@ -2027,12 +2027,11 @@ class bugtrack extends aw_template
 			$nc[$row["type_id"]] = $row["cnt"];
 		}
 
-		global $error_types;
-		foreach($error_types as $tid => $tname)
+		foreach($this->cfg["errors"] as $tid => $tdat)
 		{
 			$this->vars(array(
 				"type_id" => $tid,
-				"type_name" => $tname,
+				"type_name" => $tdat["name"],
 				"comment" => $this->mk_my_orb("err_type_comment", array("type_id" => $tid)),
 				"num_comments" => (int)$nc[$tid]
 			));
@@ -2066,7 +2065,7 @@ class bugtrack extends aw_template
 		$this->vars(array(
 			"COMMENT" => $l,
 			"type_id" => $type_id,
-			"type_name" => $GLOBALS["error_types"][$type_id],
+			"type_name" => $this->cfg["errors"][$type_id]["name"],
 			"reforb" => $this->mk_reforb("submit_err_type_comment", array("type_id" => $type_id)),
 			"back" => $this->mk_my_orb("show_types")
 		));

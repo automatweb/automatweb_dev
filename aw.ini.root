@@ -25,6 +25,9 @@ include ${ini_dir}/program_tree.ini
 # server settings - paths and things
 include ${ini_dir}/server.ini
 
+# errors
+include ${ini_dir}/errors.ini
+
 # class specific stuff
 
 include ${ini_dir}/db.ini
