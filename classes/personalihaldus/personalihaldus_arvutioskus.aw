@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_arvutioskus.aw,v 1.2 2004/03/17 21:57:35 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_arvutioskus.aw,v 1.3 2004/04/15 15:19:42 kristo Exp $
 // personalihaldus_arvutioskus.aw - Arvutioskus 
 /*
 
@@ -32,7 +32,6 @@ class personalihaldus_arvutioskus extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
-	/*
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -43,7 +42,6 @@ class personalihaldus_arvutioskus extends class_base
 		};
 		return $retval;
 	}
-	*/
 
 	/*
 	function set_property($arr = array())

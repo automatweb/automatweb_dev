@@ -1,5 +1,5 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.6 2004/04/07 10:18:24 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.7 2004/04/15 15:19:42 kristo Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
 
@@ -21,6 +21,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_c
 
 @reltype VALDKONNAD value=20 clid=CL_META
 @caption Tegevusvaldkonnad
+
+@reltype JOIN_OBJ value=21 clid=CL_JOIN_SITE
+@caption liitumisvorm
+
 //////////////////////////TOOLBARS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 @property navtoolbar_job_seeker type=toolbar no_caption=1 store=no group=cv_nimekiri,tootsijad_nimekiri,tootsijad_valdkonnad
@@ -72,14 +76,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_c
 @property treeview type=text parent=manager store=no group=toopakkumised_cats
 @property catjoblist type=table parent=manager store=no group=toopakkumised_cats
 
+@layout hbox1 type=hbox group=mycvs
+@layout vbox1 type=vbox group=mycvs parent=hbox1
+@layout vbox2 type=vbox group=mycvs parent=hbox1
 
 /////////////////////////MINU PROFIIL TÖÖOTSIJA\\\\\\\\\\\\\\\\\\\\\\\
-@property my_personal_toolbar type=toolbar group=mycvs no_caption=1
+@property my_personal_toolbar type=toolbar group=mycvs no_caption=1 parent=vbox2
 @property my_personal_toolbar_mycandits type=toolbar group=my_candits no_caption=1
 
-@property mycvs type=table group=mycvs no_caption=1
+
+@property my_join type=callback group=my_join callback=callback_get_join
+
+@property mycvs type=table group=mycvs no_caption=1 parent=vbox2
 @property my_candits type=table group=my_candits no_caption=1
-@property my_personal_info type=table group=mycvs no_caption=1
+@property my_personal_info type=table group=mycvs no_caption=1 parent=vbox2
 ________________________________________________________________
 @property my_personal_info_username type=text group=my_personal_info store=no
 @caption Kasutajanimi
@@ -96,8 +106,11 @@ ________________________________________________________________
 @property my_personal_info_id type=textbox group=my_personal_info store=no
 @caption Isikukood
 
-@property my_default_cv type=select group=mycvs
+@property my_default_cv type=select group=mycvs parent=vbox2
 @caption Minu cv vaikimisi
+
+@property container1 type=container content=menu_area group=mycvs parent=vbox1
+@caption Shalla lalla
 
 @property my_personal_info_password type=textbox group=my_personal_info store=no
 @caption Parool
@@ -116,7 +129,7 @@ ________________________________________________________________________
 
 ///////////////////////////TAB PROPS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
-@groupinfo my_profile caption="Minu profiil"
+@groupinfo my_profile caption="Minu profiil" default=1
 @groupinfo org_profile caption="Organisatsiooni profiil"
 @groupinfo tootsijad caption="T&ouml;&ouml;otsijad" 
 @groupinfo toopakkujad caption="T&ouml;&ouml;pakkujad"
@@ -132,6 +145,7 @@ ________________________________________________________________________
 @groupinfo cv_nimekiri caption="CV nimekiri" submit=no parent=tootsijad
 
 
+@groupinfo my_join caption="Liitu kasutajaks" parent=my_profile
 @groupinfo mycvs caption="Minu CV-d" parent=my_profile submit=no
 @groupinfo my_candits caption="Kandideerin" parent=my_profile submit=no
 @groupinfo my_personal_info caption="Minu andmed" parent=my_profile
@@ -447,6 +461,11 @@ class personalikeskkond extends class_base
 	
 	function get_cvs_of_person(&$person)
 	{
+		// again, this might not be an object. --duke.
+		if (!is_object($person))
+		{
+			return array();
+		};
 		$cv_conns = $person->connections_from(array("type" => 19)); 
 		foreach ($cv_conns as $cv_conn)
 		{
@@ -884,21 +903,25 @@ class personalikeskkond extends class_base
 				"tooltip" => "Salvesta",
 				"action" => "save_changes",
 		));
-		
-		
-		$tb->add_menu_item(array(
-    		"parent" => "new",
-    		"text" => "CV",
-    		"title" => "CV",
-    				
-    		"url" => $this->mk_my_orb("new", array(
-    								"parent" => $my_person_obj->prop("parent"),
-    								"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-									"alias_to" => $my_person_obj->id(),
-									"reltype" => RELTYPE_CV,
-    							), "cv"),
-    		"disabled" => false,
-		));
+
+		// it this is empty, then accessing "parent" property throws a fatal error, 
+		// -- duke
+		if (is_object($my_person_obj))
+		{
+				$tb->add_menu_item(array(
+					"parent" => "new",
+					"text" => "CV",
+					"title" => "CV",
+							
+					"url" => $this->mk_my_orb("new", array(
+											"parent" => $my_person_obj->prop("parent"),
+											"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+											"alias_to" => $my_person_obj->id(),
+											"reltype" => RELTYPE_CV,
+										), "cv"),
+					"disabled" => false,
+				));
+		};
 	}
 	
 	function navtoolbar_job_seeker(&$arr)
@@ -1530,16 +1553,73 @@ class personalikeskkond extends class_base
 				$this->my_profile->set_prop("gender", $data["value"]);
 				$this->my_profile->save();
 			break;
+
+			case "my_join":
+				$c = reset($arr["obj_inst"]->connections_from(array("type" => 21 /* RELTYPE_JOIN_OBJ */)));
+				if ($c)
+				{
+					$tmp = $arr["request"];
+					$tmp["id"] = $c->prop("to");
+					if (!empty($arr["request"]["join_butt"]))
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$url = $ji->submit_join_form($tmp);
+						if ($url != "")
+						{
+							header("Location: $url");
+							die();
+						}
+					}
+					else
+					if (!empty($arr["request"]["upd_butt"]))
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$ji->submit_update_form($tmp);
+					}
+				}
+				break;
 		}
 		return $retval;
 	}	
 	
 	function parse_alias($arr)
 	{
-		return $this->change(array(
-			"id" => $arr["alias"]["target"]
-		));
+		// XXX: this is temporary
+		$this->hide_general = true;
+		$this->hide_relationmgr = true;
+		$v_arr = $_GET;
+		$v_arr["id"] = $arr["alias"]["target"];
+		return $this->change($v_arr);
 	}
 	
+	function callback_get_join($arr)
+	{
+		$c = reset($arr["obj_inst"]->connections_from(array("type" => 21 /* RELTYPE_JOIN_OBJ */)));
+		if ($c)
+		{
+			$join = $c->to();
+	
+			$ji = get_instance("contentmgmt/join/join_site");
+			$pps = $ji->get_elements_from_obj($join);
+			if (aw_global_get("uid") == "")
+			{	
+				$pps["join_butt"] = array(
+					"name" => "join_butt",
+					"type" => "submit",
+					"caption" => "Liitu!"
+				);
+			}
+			else
+			{
+				$pps["upd_butt"] = array(
+					"name" => "upd_butt",
+					"type" => "submit",
+					"caption" => "Uuenda andmed!"
+				);
+			}
+			return $pps;
+		}
+		return array();
+	}
 }
 ?>

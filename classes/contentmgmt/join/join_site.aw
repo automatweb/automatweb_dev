@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.2 2004/03/25 09:43:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.3 2004/04/15 15:19:42 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -653,8 +653,6 @@ class join_site extends class_base
 	**/
 	function submit_join_form($arr)
 	{
-		// ok, fuck-o-'s, if $add == 1, we are adding, else changing the user data
-
 		$obj = obj($arr["id"]);
 
 		// update session data in sess[site_join_status]
@@ -878,6 +876,167 @@ class join_site extends class_base
 			if ($ri->match_rule_to_user($rule, $user))
 			{
 				$gi->add_user_to_group($user, obj($rule->prop("rule_to_grp")));
+			}
+		}
+	}
+
+	function get_elements_from_obj($ob)
+	{
+		$visible = $ob->meta("visible");
+		$required = $ob->meta("required");
+		$propn = $ob->meta("propn");
+
+		$cfgu = get_instance("cfg/cfgutils");
+
+		if (aw_global_get("uid") != "")
+		{
+			$us = get_instance("users");
+			$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
+		}		
+
+		$clss = array();
+		// for each cfgform related
+		foreach($this->_get_clids($ob) as $clid)
+		{
+			$cln = basename($this->cfg["classes"][$clid]["file"]);
+
+			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
+
+			$np = array();
+			
+			// get properties for clid
+			$props = $cfgu->load_properties(array(
+				"file" => $cln,
+				"clid" => $clid
+			));
+
+			$data_o = false;
+			// get data object if user is logged
+			if ($u_o)
+			{
+				if ($clid == CL_USER)
+				{
+					$data_o = $u_o;
+				}
+				else
+				if ($clid == CL_CRM_PERSON)
+				{
+					$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+					if ($c)
+					{
+						$data_o = $c->to();
+					}
+				}
+				else
+				if ($clid == CL_CRM_COMPANY)
+				{
+					$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+					if ($c)
+					{
+						$tmp = $c->to();
+						$c = reset($tmp->connections_from(array("type" => 6 /* RELTYPE_WORK from crm_person */)));
+						if ($c)
+						{
+							$data_o = $c->to();
+						}
+					}
+				}
+			}
+
+			$tp = array();
+			foreach($props as $pid => $prop)
+			{	
+				if ($visible[$clid][$prop["name"]])
+				{
+					// set value in property
+					if ($data_o)
+					{
+						$prop["value"] = $data_o->prop($pid);
+					}
+					$tp[$pid] = $prop;
+				}
+			}
+		}
+
+		return $tp;
+	}
+
+	function submit_update_form($arr)
+	{
+		$obj = obj($arr["id"]);
+
+		$us = get_instance("users");
+		$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
+
+		// update data objects
+		$this->_do_update_data_objects($obj, $u_o, $arr);
+
+		// apply rules on add
+		$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_o->id());
+	}
+
+	function _do_update_data_objects($ob, $u_o, $data)
+	{
+		// for each cfgform related
+		foreach($this->_get_clids($ob) as $clid)
+		{
+			$cln = basename($this->cfg["classes"][$clid]["file"]);
+
+			$clss[$clid] = $this->cfg["classes"][$clid]["name"];
+
+			$np = array();
+			
+			// get properties for clid
+			$props = $cfgu->load_properties(array(
+				"file" => $cln,
+				"clid" => $clid
+			));
+
+			// find the correct data object
+			$data_o = false;
+
+			// if it's user, then we gots it
+			if ($clid == CL_USER)
+			{
+				$data_o = $u_o;
+			}
+			else
+			if ($clid == CL_CRM_PERSON)
+			{
+				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+				if ($c)
+				{
+					$data_o = $c->to();
+				}
+			}
+			else
+			if ($clid == CL_CRM_COMPANY)
+			{
+				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+				if ($c)
+				{
+					$tmp = $c->to();
+					$c = reset($tmp->connections_from(array("type" => 6 /* RELTYPE_WORK from crm_person */)));
+					if ($c)
+					{
+						$data_o = $c->to();
+					}
+				}
+			}
+
+
+			if ($data_o)
+			{
+				$tp = array();
+				foreach($props as $pid => $prop)
+				{	
+					if ($visible[$clid][$prop["name"]])
+					{
+						$data_o->set_prop($pid, $data[$pid]);
+					}
+				}
+
+				$data_o->save();
 			}
 		}
 	}
