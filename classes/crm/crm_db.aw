@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.5 2003/12/09 18:34:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.6 2004/01/06 13:23:53 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -452,7 +452,8 @@ class crm_db extends class_base
 		if (is_oid($obj->prop('contact')))
 		{
 			$addr_obj = new object($obj->prop('contact'));
-			$url_obj = new object($addr_obj->prop("kodulehekylg"));
+			$url_id = (int)$addr_obj->prop("kodulehekylg");
+			$url_obj = new object($url_id);
 			$kodulehekylg = $url_obj->prop("url");
 			$linn_id = $addr_obj->prop("linn");
 		}
@@ -1204,8 +1205,8 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta",
-			"url" => "javascript:void()",
-			"onClick" => "javascript:document.changeform.action.value='process_organizations'; document.changeform.submit();",
+			//"url" => "javascript:void(0);",
+			"url" => "javascript:document.changeform.action.value='process_organizations'; document.changeform.submit();",
 			"img" => "delete.gif",
 		));
 		
@@ -1241,7 +1242,7 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => 'go_add',
 			"tooltip" => "Lisa valitud valimisse",
-			"url" => "javascript:void();",
+			"url" => "javascript:void(0);",
 			"img" => "import.gif",
 			"side" => "right",
 			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
@@ -1251,7 +1252,7 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => 'change_it',
 			"tooltip" => 'Muuda valimit',
-			"url" => "javascript:void();",
+			"url" => "javascript:void(0);",
 			"img" => "edit.gif",
 			"side" => "right",
 			'onClick' => "JavaScript:if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
@@ -1436,7 +1437,7 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => 'go_add',
 			"tooltip" => "Lisa valitud valimisse",
-			"url" => "javascript:void();",
+			"url" => "javascript:void(0);",
 			"img" => "import.gif",
 			"side" => "right",
 			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
@@ -1446,7 +1447,7 @@ class crm_db extends class_base
 		$toolbar->add_button(array(
 			"name" => 'change_it',
 			"tooltip" => 'Muuda valimit',
-			"url" => "javascript:void();",
+			"url" => "javascript:void(0);",
 			"img" => "edit.gif",
 			"side" => "right",
 'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
