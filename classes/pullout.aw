@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.2 2001/12/19 00:05:09 duke Exp $
+// pullout.aw - Pullout manager
 
 classload("menuedit","users");
 
@@ -64,38 +66,14 @@ class pullout extends aw_template
 
 		$this->set_object_metadata(array(
 			"oid" => $id,
-			"key" => "groups",
-			"value" => $this->make_keys($groups)
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "docs",
-			"value" => $docs
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "align",
-			"value" => $align
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "width",
-			"value" => $width
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "right",
-			"value" => $right
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "template",
-			"value" => $template
+			"data" => array(
+				"groups" => $this->make_keys($groups),
+				"docs" => $docs,
+				"align" => $align,
+				"width" => $width,
+				"right" => $right,
+				"template" => $template,
+			),
 		));
 
 		if ($alias_to)
