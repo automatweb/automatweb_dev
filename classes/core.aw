@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.76 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.77 2002/02/18 13:37:25 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -141,6 +141,8 @@ class core extends db_connector
 				$metadata = array();
 			};
 		}
+		
+
 
 		if (is_array($data))
 		{
@@ -154,6 +156,11 @@ class core extends db_connector
 		{
 			// nothing to do, return
 			return false;
+		};
+		
+		if ($delete_key)
+		{
+			unset($metadata[$key]);
 		};
 		
 		$newmeta = aw_serialize($metadata,SERIALIZE_PHP);
@@ -576,7 +583,7 @@ class core extends db_connector
 	{
 		if (!$params["oid"])
 		{
-			$this->raise_error(LC_CORE_CALLED_WITHOUT_ID,0);
+			$this->raise_error(ERR_CORE_NO_OID,LC_CORE_CALLED_WITHOUT_ID,0);
 		};
 		$params["modifiedby"] = UID;
 		$params["modified"] = time();
@@ -1185,7 +1192,7 @@ class core extends db_connector
 		if (isset($class_id) && ($objcache[$oid]["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
-			$this->raise_error("get_object: $oid ei ole tüüpi $class_id",true);
+			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
 		}
 
 		return $objcache[$oid];
@@ -1366,7 +1373,7 @@ class core extends db_connector
 	// $msg - teate tekst
 	// $fatal - katkestada töö?
 	// $silent - logida viga, aga jätkata tööd
-	function raise_error($msg, $fatal = false, $silent = false) 
+	function raise_error($err_type,$msg, $fatal = false, $silent = false) 
 	{
 		$this->errmsg[] = $msg;
 		$this->errorlevel++;
@@ -1374,7 +1381,9 @@ class core extends db_connector
 		$this->_log("error",$msg);	
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$GLOBALS["baseurl"];
+		header("X-AW-Error: 1");
 		$content = "\nVeateade: ".$msg;
+		$content.= "\nKood: ".$err_type;
 		$content.= "\nfatal = ".($fatal ? "Jah" : "Ei" )."\n";
 		$content.= "PHP_SELF = ".$GLOBALS["PHP_SELF"]."\n";
 		$content.= "lang_id = ".$GLOBALS["lang_id"]."\n";
@@ -1415,6 +1424,35 @@ class core extends db_connector
 			$head="From: $uid<".$udata["email"].">\n";
 		}
 		mail("vead@struktuur.ee", $subj, $content,$head);
+
+		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
+		// we replicate by POST request, cause this thing can be too long for a GET request
+		global $error_log_site,$ext,$baseurl,$class,$action;
+
+		if (!($class == "bugtrack" && $action="add_error"))
+		{
+			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
+			classload("socket");
+			$socket = new socket(array(
+				"host" => $error_log_site,
+				"port" => 80,
+			));
+
+			$req = "class=bugtrack&action=add_error";
+			$req.= "&site_url=".urlencode($baseurl);
+			$req.= "&err_type=".$err_type;
+			$req.= "&err_msg=".urlencode($msg);
+			$req.= "&err_uid=".$GLOBALS["uid"];
+			$req.= "&err_content=".urlencode($content);
+
+			$op = "POST http://$error_log_site/reforb.aw HTTP/1.0\r\n";
+			$op .= "Host: $error_log_site\r\n";
+			$op .= "Content-type: application/x-www-form-urlencoded\r\n";
+			$op .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+			$socket->write($op);
+			$socket->write($req);
+			$socket->close();
+		}
 
 		if ($silent)
 		{
@@ -1530,7 +1568,7 @@ class core extends db_connector
 		} while ($template == "" && $section > 1);
 		if ($template == "")
 		{
-			$this->raise_error("You have not selected an document editing template for this menu!",true);
+			$this->raise_error(ERR_CORE_NOTPL,"You have not selected an document editing template for this menu!",true);
 		}
 		return $template;
 	}
@@ -1825,7 +1863,7 @@ class core extends db_connector
 	{
 		if (!$arr["file"])
 		{
-			$this->raise_error(LC_CORE_GET_FILE_NO_NAME,true);
+			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);
 		};
 		if (!($fh = @fopen($arr["file"],"r")))
 		{
@@ -1846,7 +1884,7 @@ class core extends db_connector
 	{
 		if (not($arr["file"]))
 		{
-			$this->raise_error(LC_CORE_PUT_FILE_NO_NAME,true);
+			$this->raise_error(ERR_CORE_NOFILENAME,LC_CORE_PUT_FILE_NO_NAME,true);
 		};
 
 		$file = $arr["file"];
@@ -1858,7 +1896,7 @@ class core extends db_connector
 		// üldjuhul me kasutame random nimedega faile.
 		if (not(($fh = fopen($file,"w"))))
 		{
-			$this->raise_error("Couldn't open file '$file' for writing",true);
+			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,"Couldn't open file '$file' for writing",true);
 		};
 		fwrite($fh,$arr["content"]);
 		fclose($fh);
