@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.10 2003/06/17 12:00:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.11 2003/06/26 15:31:45 kristo Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -422,6 +422,10 @@ class admin_folders extends aw_template
 			if ($row["admin_feature"] == PRG_GROUPS && aw_ini_get("groups.tree_root"))
 			{
 				$row["link"] = $this->mk_my_orb("right_frame", array("parent" => aw_ini_get("groups.tree_root")), "admin_menus");
+			}
+			if ($row["admin_feature"] == PRG_USERS && aw_ini_get("users.root_folder"))
+			{
+				$row["link"] = $this->mk_my_orb("right_frame", array("parent" => aw_ini_get("users.root_folder")), "admin_menus");
 			}
 			$this->vars(array(
 				"name"		=> $row["name"],
