@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.75 2004/05/11 07:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.76 2004/05/12 13:52:09 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -89,7 +89,12 @@ class file extends class_base
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
+
 			case "filename":
+				if ($arr["new"])
+				{
+					$retval = PROP_IGNORE;
+				}
 				classload("icons");
 
 				$fname = basename($arr["obj_inst"]->prop("file"));
@@ -756,6 +761,46 @@ class file extends class_base
 	function request_execute($obj)
 	{
 		return $this->show($obj->id());
+	}
+
+	function get_fields($o)
+	{
+		// $o is file object
+		// assume it is a csv file
+		// parse it and return first row.
+		$fp = fopen($o->prop("file"),"r");
+		$line = fgetcsv($fp, 100000);
+		$ret = array();
+		if(is_array($line))
+		{
+			foreach($line as $idx => $txt)
+			{
+				$ret[$idx+1] = $txt;
+			}
+		}
+
+		return $ret;
+	}
+
+	function get_objects($o)
+	{
+		$ret = array();
+		$fp = fopen($o->prop("file"),"r");
+		while ($line = fgetcsv($fp, 100000))
+		{
+			$dat = array();
+			foreach($line as $idx => $val)
+			{
+				$dat[$idx+1] = $val;
+			}
+			$ret[] = $dat;
+		}
+		return $ret;
+	}
+
+	function get_folders($o)
+	{
+		return $this->get_objects($o);
 	}
 };
 ?>
