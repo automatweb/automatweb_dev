@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.38 2004/09/09 20:28:45 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.39 2004/09/09 20:33:59 sven Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -103,11 +103,34 @@
 	@property import_xml_file type=fileupload store=no group=import
 	@caption Vali XML fail
 
+	--------------MEILISEADED-------------
+	@default group=mail_settings
+	
+	@property answers_to_mail type=checkbox field=meta method=serialize ch_value=1
+	@caption Soovi korral vastused meiliga
+	
+	@property mail_from type=textbox field=meta method=serialize
+	@caption Kellelt
+	comment Default on kommenteerija nimi
+	
+	@property mail_address type=textbox field=meta method=serialize
+	@caption E-maili aadress kellelt
+	comment Default - Kommenteerija e-mail
+	
+	@property mail_subject type=textbox field=meta method=serialize
+	@caption Maili subject
+	@comment Kui määramata, siis foorumi topic
+	-----------------------------------------
+	
+	@property mail_from type=textbox field=meta method=serialize
+	@caption E-mail kellelt
+	
 	@groupinfo contents caption=Sisu submit=no
 	@groupinfo styles caption=Stiilid
 	@groupinfo settings caption=Seadistused
 	@groupinfo topic_selector caption=Teemad parent=settings
 	@groupinfo import caption=Import parent=settings
+	@groupinfo mail_settings caption="Meiliseaded" parent=settings
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption teemade kataloog
@@ -1326,14 +1349,22 @@ class forum_v2 extends class_base
 	**/
 	function submit_comment($arr)
 	{
+		//arr($arr);
 		$t = get_instance(CL_COMMENT);
+		$topic = get_instance(CL_MSGBOARD_TOPIC);
+		
                 $emb = $arr;
                 $t->id_only = true;
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
 		$emb["status"] = STAT_ACTIVE;
-                $this->comm_id = $t->submit($emb);
-
+        $this->comm_id = $t->submit($emb);
+		
+        $topic->mail_subscribers(array(
+        	"id" => $arr["topic"],
+        	"message" => $arr["commtext"],
+        	"forum_id" => $arr["id"],
+        ));
 		return $this->finish_action($arr);
 	}
 
