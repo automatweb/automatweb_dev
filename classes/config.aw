@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.58 2004/06/26 10:03:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.59 2004/10/05 09:25:12 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -50,8 +50,22 @@ class db_config extends aw_template
 		$data = $_data[aw_global_get("lang_id")];
 		if (!is_array($data))
 		{
-			return;
+			if (is_array($_data))
+			{
+				foreach($_data as $k => $v)
+				{
+					if (is_array($v))
+					{
+						$data = $v;
+					}
+				}
+			}
 		};
+
+		if (!is_array($data))
+		{
+			return;
+		}
 
 		$gids = aw_global_get("gidlist");
 		$cur_pri = -1;
