@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.67 2005/01/16 16:46:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.68 2005/02/09 15:56:29 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -1019,10 +1019,11 @@ class forum_v2 extends class_base
 				{
 					continue;
 				};
+
 				$this->vars(array(
 					"id" => $comment["oid"],
 					"name" => $comment["name"],
-					"commtext" => nl2br($comment["commtext"]),
+					"commtext" => $this->_filter_output($comment["commtext"]),
 					"date" => $this->time2date($comment["created"],2),
 					"createdby" => $comment["createdby"],
 					"uname" => $comment["uname"],
@@ -1132,7 +1133,7 @@ class forum_v2 extends class_base
 			"name" => $topic_obj->name(),
 			"createdby" => $topic_obj->prop("author_name"),
 			"date" => $this->time2date($topic_obj->created(),2),
-			"comment" => $topic_obj->comment(),
+			"comment" => $this->_filter_output($topic_obj->comment()),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
 		));
@@ -1824,6 +1825,17 @@ class forum_v2 extends class_base
 
 		};
 
+	}
+
+	function _filter_output($text)
+	{
+		if (false !== strpos($text,"#php#"))
+		{
+			$text = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$text);
+		};
+		$text = preg_replace("/\r([^<])/m","<br />\n\$1",$text);
+		//$text = nl2br($text);
+		return $text;
 	}
 };
 ?>
