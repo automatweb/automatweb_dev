@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.40 2005/01/24 12:10:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.41 2005/01/24 12:12:15 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1584,7 +1584,7 @@ class planner extends class_base
 		
 		$def = $arr["obj_inst"]->prop("default_view");
 		$view = $_REQUEST["viewtype"];
-		if($this->can("edit", $arr["obj_inst"]->id()) && ((($def == 1 || $def == 3) && ($view != $this->viewtypes[4] && $view != $this->viewtypes[5])) || ($view == $this->viewtypes[3] || $view ==  $this->viewtypes[1])))
+		if($this->can("edit", $arr["obj_inst"]->id()) && ((($def == 1 || $def == 3) && ($view != $this->viewtypes[4])) || ($view == $this->viewtypes[3] || $view == $this->viewtypes[1] || $view == $this->viewtypes[5])))
 		{
 			$arr["prop"]["vcl_inst"]->adm_day = 1;
 		}
