@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.16 2004/09/01 15:38:22 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.17 2004/09/03 09:36:25 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1945,12 +1945,17 @@ class planner extends class_base
 			));
 			
 			$par_href = "";
+			$sep = "";
 			foreach ($participants as $participant)
 			{
-				$par_href.= " ".html::href(array(
-					"caption" => $participant->prop("from.name"),
-					"url" => html::get_change_url($participant->prop("from")),
-				));
+				if(!$tmp_not_first)
+				{
+					$par_href.= $sep.html::href(array(
+						"caption" => $participant->prop("from.name"),
+						"url" => html::get_change_url($participant->prop("from")),
+					));
+				}
+				$sep = ",";
 			}
 			
 			$iconurl = icons::get_icon_url($result->class_id());
@@ -1963,6 +1968,7 @@ class planner extends class_base
 			$author_person_id = $user_inst->get_person_for_user($author_user);
 			$author_person_obj = &obj($author_person_id);
 			
+			$comment = "";
 			if($result->comment())
 			{
 				$comment = " /<i>".$result->comment()."</i>";
@@ -2003,7 +2009,7 @@ class planner extends class_base
 				"participants" => $par_href,
 			));
 		}
-		$table->set_default_sortby("modified");
+		$table->set_default_sortby("date");
 		$table->set_default_sorder("desc");
 	}
 	
@@ -2064,6 +2070,7 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
+		arr($params);
 		$event_ol = new object_list($params);
 		return $event_ol;
 	}
