@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.67 2003/10/28 12:40:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.68 2003/10/28 12:46:14 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -407,14 +407,8 @@ class aw_table
 		}
 		else
 		{
-			$_a = $v1;
-			$_b = $v2;
-			/*
-			$_a = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1));
-			$_b = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2));
-			*/
-			$_a = strip_tags($_a);
-			$_b = strip_tags($_b);
+			$_a = strtolower(strip_tags($v1));
+			$_b = strtolower(strip_tags($v2));
 			$ret = strcoll($_a, $_b);
 			if ($GLOBALS["vcl_sort_dbg"] == 1)
 			{
