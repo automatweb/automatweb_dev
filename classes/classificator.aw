@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.7 2004/03/18 11:32:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.8 2004/03/18 12:37:36 duke Exp $
 
 /*
 
@@ -76,14 +76,17 @@ class classificator extends class_base
 
 		if ($prop["store"] == "connect")
 		{
-			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => constant($prop["reltype"]),
-			));
-
-			foreach($conns as $conn)
+			if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
-				$selected = $conn->prop("to");
-				$connections[$selected] = $selected;
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => constant($prop["reltype"]),
+				));
+
+				foreach($conns as $conn)
+				{
+					$selected = $conn->prop("to");
+					$connections[$selected] = $selected;
+				};
 			};
 
 			if ($use_type == "checkboxes")
@@ -152,11 +155,19 @@ class classificator extends class_base
 		$property = $arr["prop"];
 
 		$items = new aw_array($property["value"]);
-			
-		// first I need a list of old connections.
-		$oldconns = $arr["obj_inst"]->connections_from(array(
-			"type" => constant($property["reltype"]),
-		));
+
+		$connections = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			// first I need a list of old connections.
+			$oldconns = $arr["obj_inst"]->connections_from(array(
+				"type" => constant($property["reltype"]),
+			));
+			foreach($oldconns as $conn)
+			{
+				$connections[$conn->prop("to")] = $conn->prop("to");
+			};
+		};
 
 		list($choices,,) = $this->get_choices(array(
 			"clid" => $arr["clid"],
@@ -166,11 +177,6 @@ class classificator extends class_base
 		$ids = $this->make_keys($choices->ids());
 
 		// I need to list the choices
-		$connections = array();
-		foreach($oldconns as $conn)
-		{
-			$connections[$conn->prop("to")] = $conn->prop("to");
-		};
 
 		foreach($items->get() as $item)
 		{
@@ -207,15 +213,6 @@ class classificator extends class_base
 
 			// XXX: would be nice if connect would recognize symbolic reltypes
 			// and this belongs to some place else, don't you think so?
-
-			// XXX: I need a method to synchronize data inside the form
-			// and in my class. Because I might not always have all the connections
-			// I have been using and then I'm going to get a lot of shit!
-
-			// thing is .. I do not want to save those things into form, instead
-			// I need to do my thing where I need it
-			// I need
-
 	}
 
 	////
