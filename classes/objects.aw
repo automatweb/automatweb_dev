@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.27 2002/01/07 19:36:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.28 2002/01/22 14:04:35 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -665,6 +665,141 @@ class objects extends db_objects
 		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 
 		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"]));
+	}
+
+
+	////
+	// !Displays an object. Any object.
+	function show($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		if (not($obj))
+		{
+			return false;
+		};
+		// shouldn't we check ACL here?
+		switch($obj["class_id"])
+		{
+			case CL_EXTLINK:
+				classload("extlinks");
+				$t = new extlinks();
+				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
+				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
+				break;
+
+			case CL_IMAGE:
+				classload("image");
+				$t = new image();
+				$idata = $t->get_image_by_id($obj["oid"]);
+				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				break;
+			case CL_TABLE:
+				classload("table");
+				$t = new table();
+				$replacement = $t->show(array("id" => $obj["oid"],"align" => $align));
+				break;
+
+			case CL_FORM_ENTRY:
+				classload("form");
+				$t = new form();
+				$frm = $t->get_form_for_entry($obj["oid"]);
+				$ops = $t->get_op_list($frm);
+				list($x,$y) = each($ops);
+				list($id,$name) = each($y);
+
+				$replacement = $t->show(array(
+					"id" => $frm,
+					"entry_id" => $obj["oid"],
+					"op_id" => $id,
+				));
+				break;
+			
+			case CL_FORM:
+				classload("form");
+				$t = new form();
+				$replacement = $t->gen_preview(array(
+					"id" => $obj["oid"],
+					"form_action" => "/reforb.".$GLOBALS["ext"],
+				));
+				break;
+			
+			case CL_FORM_CHAIN:
+				classload("form_chain");
+				$t = new form_chain();
+				$replacement = $t->show(array(
+					"id" => $obj["oid"],
+				));
+				break;
+
+			case CL_GRAPH:
+				$replacement = "<img src='/graphs.aw?type=show&id=$obj[oid]'>";
+				break;
+
+			case CL_GALLERY:
+				classload("gallery");
+				$t = new gallery();
+				$t->load($obj["oid"],$GLOBALS["page"]);
+				$replacement = $t->show($GLOBALS["page"]);
+				break;
+
+			case CL_FILE:
+				classload("file");
+				$t = new file;
+				$fi = $t->get_file_by_id($obj["oid"]);
+				if ($fi["showal"] == 1)
+				{
+					// n2itame kohe
+					// kontrollime koigepealta, kas headerid on ehk väljastatud juba.
+					// dokumendi preview vaatamisel ntx on.
+					if ($fi["type"] == "text/html")
+					{
+						if (!headers_sent())
+						{
+							header("Content-type: text/html");
+						};
+
+						$replacement = $fi["content"];
+					}
+					else
+					{
+						header("Content-type: ".$fi["type"]);
+						die($fi["content"]);
+					}
+				}
+				else
+				{
+					if ($fi["newwindow"])
+					{
+						$ss = "target=\"_new\"";
+					}
+
+					$comment = $fi["comment"];
+					if ($comment == "")
+					{
+						$comment = $fi["name"];
+					}
+
+					$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$obj["oid"]."/".urlencode($fi["name"])."'>$comment</a>";
+				}	
+				break;
+
+
+			case CL_DOCUMENT:
+				classload("document");
+				$t = new document();
+				$replacement = $t->gen_preview(array("docid" => $obj["oid"]));
+				break;
+
+			case CL_PSEUDO:
+				$replacement = "<a href='/index.aw?section=$obj[oid]'>$obj[name]</a>";
+				break;
+
+			default:
+				$replacement = "This object class has no output yet<br>";
+		}
+		return $replacement;
+
 	}
 }
 
