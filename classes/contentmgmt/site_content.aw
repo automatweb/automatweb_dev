@@ -1328,7 +1328,7 @@ class site_content extends menuedit
 					$this->vars(array(
 						"target" => $samenu["target"] ? "target=\"_blank\"" : "",
 						"link" => $link,
-						"text" => $samenu["name"]//str_replace("&nbsp;","",strip_tags($samenu["name"]))
+						"text" => str_replace("&nbsp;"," ",strip_tags($samenu["name"]))
 					));
 					$this->parse("MENU_".$name."_SEEALSO_ITEM");
 				}
@@ -1350,6 +1350,11 @@ class site_content extends menuedit
 
 		for ($i=0; $i < $cnt; $i++)	
 		{
+			if (!aw_ini_get("menuedit.long_menu_aliases"))
+			{
+				$alias_path = array();
+			}
+
 			if ($show)
 			{
 				$ref = $this->mar[$path[$i+1]];
@@ -1385,7 +1390,7 @@ class site_content extends menuedit
 
 				$this->vars(array(
 					"link" => $link,
-					"text" => str_replace("&nbsp;","",strip_tags($this->mar[$path[$i+1]]["name"])), 
+					"text" => str_replace("&nbsp;"," ",strip_tags($this->mar[$path[$i+1]]["name"])), 
 					"ysection" => $this->mar[$path[$i+1]]["oid"]
 				));
 
