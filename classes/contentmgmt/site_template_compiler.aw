@@ -30,6 +30,11 @@ define("OP_SHOW_ITEM_INSERT", 18);			// params { tpl (fully qualified name), has
 
 define("OP_INSERT_SEL_IDS", 19);
 
+define("OP_IF_OBJ_TREE", 20);		// params { a_parent, level}
+define("OP_GET_OBJ_TREE_LIST", 21);	// params { a_parent, level, a_parent_p_fn}
+
+define("OP_LIST_INIT", 22);	// params { a_parent, level, a_parent_p_fn}
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -54,7 +59,10 @@ class site_template_compiler extends aw_template
 			16 => "OP_AREA_CACHE_SET",
 			17 => "OP_CHECK_NO_SUBITEMS_SEL",
 			18 => "OP_SHOW_ITEM_INSERT",
-			19 => "OP_INSERT_SEL_IDS"
+			19 => "OP_INSERT_SEL_IDS",
+			20 => "OP_IF_OBJ_TREE",
+			21 => "OP_GET_OBJ_TREE_LIST",
+			22 => "OP_LIST_INIT"
 		);
 	}
 
@@ -364,10 +372,36 @@ class site_template_compiler extends aw_template
 		// for each make the appropriate list
 		// and then display it
 		// 
-		// that was all nice and dany, except for the littel detail that it *didn't fucking work*
+		// that was all nice and dandy, except for the littel detail that it *didn't fucking work*
 		// problem was - if you had a _sel template, then the selected menu has to use that
 		// and it might be in the middle somewhere, and then the different-list-for-each-option-combo broke down
 		// so now we do the one-list-per-area-level and then if's to match the correct template to the current obj
+
+		// if the menu has the object_tree property set, the list has to come from the object tree, so check
+
+		$this->ops[] = array(
+			"op" => OP_LIST_INIT,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_IF_OBJ_TREE,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"level" => $level
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_START_BLK,
+			"params" => array()
+		);
+
 		$this->ops[] = array(
 			"op" => OP_LIST_BEGIN,
 			"params" => array(
@@ -382,6 +416,37 @@ class site_template_compiler extends aw_template
 			"op" => OP_LIST_END,
 			"params" => array()
 		);
+
+		$this->ops[] = array(
+			"op" => OP_END_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_IF_ELSE,
+			"params" => array()
+		);
+		
+		$this->ops[] = array(
+			"op" => OP_START_BLK,
+			"params" => array()
+		);
+
+		$this->ops[] = array(
+			"op" => OP_GET_OBJ_TREE_LIST,
+			"params" => array(
+				"a_parent" => $adat["parent"],
+				"a_parent_p_fn" => $adat["a_parent_p_fn"],
+				"level" => $level,
+				"in_parent_tpl" => $ldat["inside_parent_menu_tpl"]
+			)
+		);
+
+		$this->ops[] = array(
+			"op" => OP_END_BLK,
+			"params" => array()
+		);
+
 
 		$this->ops[] = array(
 			"op" => OP_LOOP_LIST_BEGIN,
@@ -696,11 +761,13 @@ class site_template_compiler extends aw_template
 		$list_name = $dat["list_name"];
 		$o_name = $dat["o_name"];
 		$content_name = $dat["content_name"];
+		$inst_name = $dat["inst_name"];
+		$fun_name = $dat["fun_name"];
 
 		$ret  = $this->_gi()."\$this->vars(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
-		$ret .= $this->_gi()."\"link\" => \$this->make_menu_link($o_name),\n";
+		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
 		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
@@ -803,10 +870,11 @@ class site_template_compiler extends aw_template
 		end($this->list_name_stack);
 		$dat = current($this->list_name_stack);
 		$content_name = $dat["content_name"];
+		$o_name = $dat["o_name"];
 
 		$ret = "";
 		// TODO: this could be optimized out for non - login menus
-		$ret .= $this->_gi()."if (!\$this->skip)\n";
+		$ret .= $this->_gi()."if (!(\$this->skip || (".$o_name."->prop(\"users_only\") && aw_global_get(\"uid\") == \"\")))\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
@@ -817,49 +885,9 @@ class site_template_compiler extends aw_template
 
 	function _g_op_list_begin($arr)
 	{
-		// we can include constants in the code, this will 
-		// get executed in aw ...
-
-		// insert new list item in the list name stack
-		$list_name = "\$list_".$arr["a_parent"]."_".$arr["level"];
-		$o_name = "\$o_".$arr["a_parent"]."_".$arr["level"];
-		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
-		$loop_counter_name = "\$i_".$arr["a_parent"]."_".$arr["level"];
-
-		array_push($this->list_name_stack, array(
-			"list_name" => $list_name,
-			"o_name" => $o_name,
-			"content_name" => $content_name,
-			"loop_counter_name" => $loop_counter_name
-		));
-
-
-		$ret = "";
-
-		// also set the area as visible, because if we get here in execution, it is visible.
-		$ret .= $this->_gi()."\$this->menu_levels_visible[".$arr["a_parent"]."][".$arr["level"]."] = 1;\n";
-
-		if ($arr["level"] == 1)
-		{
-			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
-		}
-		else
-		{
-			// here find_parent will fail for menus that are shown even if they are not in the path
-			// BUT! we don't need to get their id from the path anyway, 
-			// because we are inside a loop that has the parent object as the current object!
-			// so, we just get it from that!
-			if ($arr["in_parent_tpl"])
-			{
-				$parent_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
-				$ret .= $this->_gi()."\$parent_obj = ".$parent_o_name.";\n";
-			}
-			else
-			{
-				$ret .= $this->_gi()."\$parent_obj = new object(\$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."));\n";
-			}
-		}
-
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$list_name = $dat["list_name"];
 
 		$ret  .= $this->_gi()."$list_name = new object_list(array(\n";
 		$this->brace_level++;
@@ -880,9 +908,14 @@ class site_template_compiler extends aw_template
 		end($this->list_name_stack);
 		$dat = current($this->list_name_stack);
 		$list_name = $dat["list_name"];
+		$inst_name = $dat["inst_name"];
+		$fun_name = $dat["fun_name"];
 
 		$this->brace_level--;
 		$ret  = $this->_gi()."));\n";
+
+		$ret .= $this->_gi()."$inst_name =& \$this;\n";		
+		$ret .= $this->_gi()."$fun_name = \"make_menu_link\";\n";
 		return $ret;
 	}
 
@@ -1090,7 +1123,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show::menu_area_cache::lid::\".aw_global_get(\"lang_id\").\"::section::\".aw_global_get(\"section\").\"::".$arr["a_parent"]."::level::".$arr["level"]."\",\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1100,9 +1133,16 @@ class site_template_compiler extends aw_template
 	{
 		$dat = current($this->list_name_stack);
 		$content_name = $dat["content_name"];
+		$cache_name = $dat["cache_name"];
 
 		$res = "";
-		$res .= $this->_gi()."\$this->cache->file_set(\"site_show::menu_area_cache::lid::\".aw_global_get(\"lang_id\").\"::section::\".aw_global_get(\"section\").\"::".$arr["a_parent"]."::level::".$arr["level"]."\", ".$content_name.");\n";
+
+		$res .= $this->_gi()."if (".$cache_name.")\n";
+		$res .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
+		$this->brace_level --;
+		$res .= $this->_gi()."}\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 
@@ -1150,6 +1190,102 @@ class site_template_compiler extends aw_template
 		}
 
 		return $res;
+	}
+
+	function _g_op_if_obj_tree($arr)
+	{
+		$ret = "";
+
+		$o_name = "\$o_".$arr["a_parent"]."_".$arr["level"];
+
+		$p_v_name = "\$ot_".$arr["a_parent"]."_".($arr["level"] > 0 ? $arr["level"]-1 : $arr["level"]);
+		
+		$add = "";
+		if ($arr["level"] > 0)
+		{
+			$add = " || (".$p_v_name.")";
+		}
+	
+		$ret .= $this->_gi()."if (!(\$parent_obj->prop(\"show_object_tree\") $add))\n";
+		return $ret;
+	}
+
+	function _g_op_get_obj_tree_list($arr)
+	{
+		$ret = "";
+
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$list_name = $dat["list_name"];
+		$inst_name = $dat["inst_name"];
+		$fun_name = $dat["fun_name"];
+		$cache_name = $dat["cache_name"];
+		$p_v_name = "\$ot_".$arr["a_parent"]."_".$arr["level"];
+
+		$ret .= $this->_gi()."\$o_treeview = get_instance(\"contentmgmt/object_treeview\");\n";
+		$ret .= $this->_gi().$list_name." = \$o_treeview->get_folders_as_object_list(\$parent_obj);\n";
+
+		$ret .= $this->_gi()."$inst_name =& \$o_treeview;\n";		
+		$ret .= $this->_gi()."$fun_name = \"make_menu_link\";\n";		
+		$ret .= $this->_gi().$p_v_name." = true;\n";
+		$ret .= $this->_gi().$cache_name." = false;\n";
+
+		return $ret;
+	}
+
+	function _g_op_list_init($arr)
+	{
+		// we can include constants in the code, this will 
+		// get executed in aw ...
+
+		// insert new list item in the list name stack
+		$list_name = "\$list_".$arr["a_parent"]."_".$arr["level"];
+		$o_name = "\$o_".$arr["a_parent"]."_".$arr["level"];
+		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
+		$loop_counter_name = "\$i_".$arr["a_parent"]."_".$arr["level"];
+		$inst_name = "\$inst_".$arr["a_parent"]."_".$arr["level"];
+		$fun_name = "\$fun_".$arr["a_parent"]."_".$arr["level"];
+		$cache_name = "\$use_cache_".$arr["a_parent"]."_".$arr["level"];
+
+		array_push($this->list_name_stack, array(
+			"list_name" => $list_name,
+			"o_name" => $o_name,
+			"content_name" => $content_name,
+			"loop_counter_name" => $loop_counter_name,
+			"inst_name" => $inst_name,
+			"fun_name" => $fun_name,
+			"cache_name" => $cache_name
+		));
+
+
+		$ret = "";
+
+		// also set the area as visible, because if we get here in execution, it is visible.
+		$ret .= $this->_gi()."\$this->menu_levels_visible[".$arr["a_parent"]."][".$arr["level"]."] = 1;\n";
+
+		if ($arr["level"] == 1)
+		{
+			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
+		}
+		else
+		{
+			// here find_parent will fail for menus that are shown even if they are not in the path
+			// BUT! we don't need to get their id from the path anyway, 
+			// because we are inside a loop that has the parent object as the current object!
+			// so, we just get it from that!
+			if ($arr["in_parent_tpl"])
+			{
+				$parent_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
+				$ret .= $this->_gi()."\$parent_obj = ".$parent_o_name.";\n";
+			}
+			else
+			{
+				$ret .= $this->_gi()."\$parent_obj = new object(\$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."));\n";
+			}
+		}
+
+		$ret .= $this->_gi().$cache_name." = true;\n";
+		return $ret;
 	}
 }
 ?>

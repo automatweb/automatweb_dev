@@ -19,14 +19,29 @@
 @property show_folders type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita katalooge
 
+@property show_add type=checkbox ch_value=1 field=meta method=serialize
+@caption N&auml;ita toolbari
+
 @property js_tree type=checkbox ch_value=1 field=meta method=serialize
 @caption Puu puhul kasuta javascripti
+
+@property groupfolder_acl type=checkbox ch_value=1 field=meta method=serialize
+@caption &Otilde;igused piiratud grupi kataloogide j&auml;rgi
+
+@property show_notact type=checkbox ch_value=1 field=meta method=serialize
+@caption N&auml;ita mitteaktiivseid objekte
 
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
+
+@reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
+@caption lisatav objektit&uuml;&uuml;p
+
+@reltype ALL_ACCESS_GRP value=3 clid=CL_GROUP
+@caption projekti haldaja grupp
 
 */
 
@@ -48,8 +63,7 @@ class object_treeview extends class_base
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($args)
 	{
-		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		return $this->show(array('id' => $args['alias']['target']));
 	}
 
 	function show($arr)
@@ -98,14 +112,45 @@ class object_treeview extends class_base
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
 			classload("icons", "image");
+			$act = "";
+			if ($this->can("edit", $od->id()))
+			{
+				$act .= html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $od->id(), "section" => $od->parent()), $this->cfg["classes"][$od->class_id()]["file"]),
+					"caption" => html::img(array(
+						"border" => 0,
+						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif"
+					))
+				));
+			}
+			if ($this->can("delete", $od->id()))
+			{
+				if ($act != "")
+				{
+					$act .= " ";
+				}
+				$act .= html::href(array(
+					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")))),
+					"caption" => html::img(array(
+						"border" => 0,
+						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif"
+					))
+				));
+			}
+			$adder = $od->createdby();
+			$modder = $od->modifiedby();
 			$this->vars(array(
 				"show" => $url,
 				"name" => $od->name(),
 				"target" => $target,
 				"comment" => $od->comment(),
 				"type" => $this->cfg["classes"][$od->class_id()]["name"],
-				"add_date" => $this->time2date($od->modified(), 2),
-				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name()))
+				"add_date" => $this->time2date($od->created(), 2),
+				"mod_date" => $this->time2date($od->modified(), 2),
+				"adder" => $adder->name(),
+				"modder" => $modder->name(),
+				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
+				"act" => $act
 			));
 
 			if ($this->is_template("FILE_ODD"))
@@ -131,7 +176,12 @@ class object_treeview extends class_base
 			"FILE_ODD" => ""
 		));
 
-		return $this->parse();
+		$res = $this->parse();
+		if ($ob->prop("show_add") && count($fld))
+		{
+			$res = $this->_get_add_toolbar($ob).$res;
+		}
+		return $res;
 	}
 
 	function _get_objects($ob, $folders)
@@ -163,7 +213,7 @@ class object_treeview extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"status" => STAT_ACTIVE,
+			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			"class_id" => $ob->meta('clids'),
 			"sort_by" => "objects.modified DESC"
 		));
@@ -179,13 +229,33 @@ class object_treeview extends class_base
 		$sub = $ob->meta("include_submenus");
    		$igns = $ob->meta("ignoreself");
 
+		$glo = aw_global_get("gidlist_oid");
+
+		// check if the user is an admin
+		$is_admin = false;
+		$adm_c = $ob->connections_from(array(
+			"type" => RELTYPE_ALL_ACCESS_GRP
+		));
+		foreach($adm_c as $adm_conn)
+		{
+			$adm_g = $adm_conn->prop("to");
+			if (isset($glo[$adm_g]))
+			{
+				$is_admin = true;
+			}
+		}
+
 		$conns = $ob->connections_from(array(
 			"type" => RELTYPE_FOLDER
 		));
 		foreach($conns as $conn)
 		{
 			$c_o = $conn->to();
-
+			if (!isset($this->first_folder))
+			{
+				$this->first_folder = $c_o->id();
+			}
+			
 			$cur_ids = array();
 
 			if ($sub[$c_o->id()])
@@ -198,21 +268,41 @@ class object_treeview extends class_base
 				$cur_ids = $_ot->ids();
 			}
 
-//			if (!$igns[$c_o->id()])
-//			{
+			if (!$igns[$c_o->id()])
+			{
 				$cur_ids[] = $c_o->id();
-//			}
+			}
 
 			foreach($cur_ids as $c_id)
 			{
-				$ret[$c_id] = $c_id;
+				$add = $is_admin;
+				if (!$is_admin)
+				{
+					$c_id_o = obj($c_id);
+					$c_id_gr = $c_id_o->connections_from(array(
+						"type" => RELTYPE_ACL_GROUP
+					));
+					foreach($c_id_gr as $c_id_gr_c)
+					{
+						if (isset($glo[$c_id_gr_c->prop("to")]))
+						{
+							$add = true;
+							break;
+						}
+					}
+				}
+
+				if ($add)
+				{
+					$ret[$c_id] = $c_id;
+				}
 			}
 		}
 
-		if (count($ret) < 1)
+/*		if (count($ret) < 1)
 		{
 			$ret[$ob->parent()] = $ob->parent();
-		}
+		}*/
 		return $ret;
 	}
 
@@ -232,12 +322,8 @@ class object_treeview extends class_base
 			"root_icon" => "",
 			"type" => ($ob->meta('js_tree') ? TREE_JS : TREE_HTML)
 		));
-		// now, insert all folders defined
-		// but first, leave out all folders that are set don't show self
-		$ar = new aw_array($ob->meta('ignoreself'));
-		$ignoreself = $ar->get();
 
-		
+		// now, insert all folders defined
 		foreach($folders as $fld)
 		{
 			$i_o = obj($fld);
@@ -271,7 +357,23 @@ class object_treeview extends class_base
 			));
 		}
 		$tv->set_selected_item($GLOBALS["tv_sel"]);
-		return $tv->finalize_tree();
+
+		$pms = array();
+		// here's the trick. if the treeview is set to show_as_treeview for any section and we got here via an orb action in the url
+		// then show the tree from the current section
+		// 
+		// hehe, heuristics rule ;)
+		$t_c = $ob->connections_to(array(
+			"type" => 8,	// RELTYPE_OBJ_TREE from menu
+			"from.class_id" => CL_MENU
+		));
+		
+		if (isset($GLOBALS["class"]) && count($t_c) > 0)
+		{
+			$pms["rootnode"] = aw_global_get("section");
+		}
+		
+		return $tv->finalize_tree($pms);
 	}
 
 	function get_clids($arr)
@@ -399,6 +501,124 @@ class object_treeview extends class_base
 			"value" => $this->t->draw(),
 		);
 		return $nodes;
+	}
+
+	function _get_add_toolbar($ob)
+	{
+		$this->tpl_init("automatweb/menuedit");
+		$this->read_template("js_add_menu.tpl");
+
+		$types_c = $ob->connections_from(array(
+			"type" => RELTYPE_ADD_TYPE
+		));
+
+		$menu = "";
+		$classes = aw_ini_get("classes");
+
+		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
+		$ot = get_instance("admin/object_type");
+		foreach($types_c as $c)
+		{
+			$c_o = $c->to();
+			$this->vars(array(
+				"url" => $this->mk_my_orb("new", array("parent" => $parent, "section" => $parent), $classes[$c_o->prop("type")]["file"]),
+				"caption" => $classes[$c_o->prop("type")]["name"]
+			));
+			$menu .= $this->parse("MENU_ITEM");
+		}
+		$this->vars(array(
+			"menu_id" => "aw_menu_0",
+			"MENU_ITEM" => $menu
+		));
+		$this->vars(array("MENU" => $this->parse("MENU")));
+		
+		
+
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "add",
+			"tooltop" => "Uus",
+			"url" => "#",
+			"onClick" => "return buttonClick(event, 'aw_menu_0');",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+			"class" => "menuButton",
+		));
+		return $this->parse().$tb->get_toolbar();
+	}
+
+	function obj_delete($arr)
+	{
+		error::throw_if(!$arr["id"], array(
+			"id" => ERR_PARAM,
+			"msg" => "object_treeview::obj_delete(): no ibject id specified!"
+		));
+
+		$o = obj($arr["id"]);
+		$o->delete();
+	
+		return $arr["return_url"];
+	}
+
+	function get_folders_as_object_list($object)
+	{
+		$t_id = $object->prop("show_object_tree");
+		$first_level = true;
+		if (!$t_id)
+		{
+			$pa = $object->path();
+			foreach($pa as $p_o)
+			{
+				$t_id = $p_o->prop("show_object_tree");
+				if ($t_id)
+				{
+					break;
+				}
+			}
+			$first_level = false;
+		}
+		$this->tree_ob = obj($t_id);
+	
+		$ol = new object_list();
+
+		$folders = $this->_get_folders($this->tree_ob);
+		foreach($folders as $fld)
+		{
+			$i_o = obj($fld);
+			$parent = 0;
+			if (in_array($i_o->parent(),$folders))
+			{
+				$parent = $i_o->parent();
+			}
+			
+			if ($first_level)
+			{
+				if ($parent == 0)
+				{
+					$ol->add($fld);
+				}
+			}
+			else
+			{
+				if ($parent == $object->id())
+				{
+					$ol->add($fld);
+				}
+			}
+		}
+
+		return $ol;
+	}
+
+	function make_menu_link($sect_obj)
+	{
+		$link = $this->mk_my_orb("show", array("id" => $this->tree_ob->id(), "tv_sel" => $sect_obj->id(), "section" => $sect_obj->id()));;
+		return $link;
+	}
+
+	function get_yah_link($tree, $cur_menu)
+	{
+		return $this->mk_my_orb("show", array("id" => $tree, "tv_sel" => $cur_menu->id(), "section" => $cur_menu->id()));
 	}
 }
 ?>
