@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.319 2004/04/29 12:20:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.320 2004/05/04 07:53:16 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -708,7 +708,12 @@ class menuedit extends aw_template
 	{
 		// that sucks. We really need to rewrite that
 		// I mean we always read information about _all_ the popups
-		$pl = new object_list(array(
+		$ss = get_instance("contentmgmt/site_show");
+		$tmp = array();
+		$ss->_init_path_vars($tmp);
+		$ss->sel_section = $ss->_get_sel_section(aw_global_get("section"));
+		return $ss->build_popups();
+		/*$pl = new object_list(array(
 			"status" => STAT_ACTIVE,
 			"class_id" => CL_HTML_POPUP
 		));
@@ -757,7 +762,7 @@ class menuedit extends aw_template
 			}
 		}
 		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		return $retval;
+		return $retval;*/
 	}
 
 	function get_path($section,$obj)

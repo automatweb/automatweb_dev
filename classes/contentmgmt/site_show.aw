@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.53 2004/04/30 08:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.54 2004/05/04 07:53:17 kristo Exp $
 
 /*
 
@@ -1717,16 +1717,41 @@ class site_show extends class_base
 		// I mean we always read information about _all_ the popups
 		$pl = new object_list(array(
 			"status" => STAT_ACTIVE,
-			"class_id" => CL_HTML_POPUP
+			"class_id" => CL_HTML_POPUP,
+			"site_id" => array(),
 		));
 		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
+			if ($o->prop("only_once") && $_SESSION["popups_shown"][$o->id()] == 1)
+			{
+				continue;
+			}
+			$url = $o->prop("show_obj") ?  obj_link($o->prop("show_obj")) : $o->meta("url");
 			$ar = new aw_array($o->meta("menus"));
+			$sh = false;
 			foreach($ar->get() as $key => $val)
 			{
 				if ($val == $this->sel_section)
 				{
-					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $o->meta("url"), $o->meta("width"), $o->meta("height"));
+					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					$sh = true;
+					$_SESSION["popups_shown"][$o->id()] = 1;
+				}
+			}
+
+			if (!$sh && is_array($o->meta("section_include_submenus")) && count($o->meta("section_include_submenus")) > 0)
+			{
+				$path = obj($this->sel_section);
+				$path = $path->path();
+				$ssi = $o->meta("section_include_submenus");
+
+				foreach($path as $p_o)
+				{
+					if ($ssi[$p_o->parent()])
+					{
+						$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+						$_SESSION["popups_shown"][$o->id()] = 1;
+					}
 				}
 			}
 		}

@@ -30,6 +30,16 @@ class site_content extends menuedit
 			return $this->do_pdf($params);
 		}
 
+		$obj2 = obj($section);
+		if ($text == "")
+		{
+			$__i = $obj2->instance();
+			if (method_exists($__i, "request_execute"))
+			{
+				$text = $__i->request_execute($obj2);
+			}
+		}
+
 		// until we can have class-static variables, this actually SETS current text content
 		classload("layout/active_page_data");
 		active_page_data::get_text_content($text);
@@ -40,7 +50,7 @@ class site_content extends menuedit
 
 		$obj = $this->get_object($section);
 
-		$obj2 = obj($section);
+		
 
 		//print_r($obj2->properties());
 
@@ -443,7 +453,7 @@ class site_content extends menuedit
 
 		$this->do_sub_callbacks($sub_callbacks, true);
 
-		
+	
 		$this->make_promo_boxes($obj["class_id"] == CL_BROTHER ? $obj["brother_of"] : $this->sel_section);
 
 		if ($this->is_template("POLL"))
@@ -1754,10 +1764,6 @@ class site_content extends menuedit
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
-		if (aw_global_get("uid") == "duke")
-		{
-			print "doing promo boxes";
-		};
 		$doc = get_instance("document");
 
 		# reset period, or we don't see contents of promo boxes under periodic menus:
