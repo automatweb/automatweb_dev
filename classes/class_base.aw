@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.180 2003/12/03 11:11:59 duke Exp $
+// $Id: class_base.aw,v 2.181 2003/12/03 12:30:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -158,6 +158,7 @@ class class_base extends aw_template
 		));
 
 		$this->validate_cfgform($cfgform_id);
+
 
 		if ($this->classinfo["fixed_toolbar"])
 		{
@@ -525,6 +526,11 @@ class class_base extends aw_template
 			{
 				$this->classinfo["allow_rte"] = 1;
 			};
+			
+			if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
+			{
+				$this->classinfo["disable_relationmgr"] = 1;
+			};
 
 		}
 		elseif ($this->clid == CL_DOCUMENT)
@@ -889,6 +895,12 @@ class class_base extends aw_template
 			};
 		};
 
+		if (1 == $this->classinfo["disable_relationmgr"])
+		{
+			$this->classinfo["relationmgr"] = false;
+		};
+
+
 		// XX: I need a better way to handle relationmgr, it should probably be a special
 		// property type instead of being hardcoded.
 
@@ -915,13 +927,6 @@ class class_base extends aw_template
 		};
 
 		$vars = array();
-		if (isset($this->classinfo["toolbar"]))
-		{
-			$this->gen_toolbar();
-			$vars = array(
-				"toolbar" => $this->toolbar,
-			);
-		};
 
 		$vars["content"] = $args["content"];
 
@@ -1229,8 +1234,13 @@ class class_base extends aw_template
 				"filter" => $filter,
 			));
 		};
+
+		if (!is_array($this->classinfo))
+		{
+			$this->classinfo = array();
+		};
 		
-		$this->classinfo = $cfgu->get_classinfo();
+		$this->classinfo = $this->classinfo + $cfgu->get_classinfo();
 		$this->relinfo = $cfgu->get_relinfo();
 		if (is_array($this->classconfig))
 		{
@@ -1346,7 +1356,6 @@ class class_base extends aw_template
 			$argblock = array(
 				"id" => isset($this->id) ? $this->id : "",
 				"obj" => &$this->coredata,
-				"objdata" => &$this->objdata,
 			);
 
 			// generated elements count as one for this purpose
@@ -1638,7 +1647,6 @@ class class_base extends aw_template
 
 		$argblock = array(
 			"obj" => &$this->coredata,
-			"objdata" => &$this->objdata,
 			"request" => isset($this->request) ? $this->request : "",
 			"data" => &$this->data,
 			"obj_inst" => &$this->obj_inst,
@@ -1887,7 +1895,7 @@ class class_base extends aw_template
 			}
 		}
 
-		// now check, whether any properties had parents. if so, remap them
+		// now check whether any properties had parents. if so, remap them
 		if ($remap_children)
 		{
 			$tmp = $resprops;
@@ -1902,30 +1910,6 @@ class class_base extends aw_template
 		}
 
 		return $resprops;
-	}
-
-	function gen_toolbar($args = array())
-	{
-		$toolbar = get_instance("toolbar");
-		if (method_exists($this->inst,"callback_get_toolbar"))
-		{
-			$this->inst->callback_get_toolbar(array(
-				"toolbar" => &$toolbar,
-				"id" => $this->id,
-			));
-		};
-		if ($this->cfgform_id)
-		{
-			$toolbar->add_cdata(html::href(array(
-				"url" => $this->mk_my_orb("change",array("id" => $this->cfgform_id),"cfgform"),
-				"caption" => "Aktiivne konfivorm: " . $this->cfgform["name"],
-				"target" => "_blank",
-			)));
-		};
-		$this->toolbar = $toolbar->get_toolbar();
-		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
-
-
 	}
 
 	// wrappers for alias manager
@@ -2340,7 +2324,6 @@ class class_base extends aw_template
                         $argblock = array(
                                 "prop" => &$property,
                                 "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
                                 "metadata" => &$metadata,
                                 "form_data" => &$rawdata,
 				"request" => &$rawdata,
@@ -2490,7 +2473,6 @@ class class_base extends aw_template
 		{
 			$this->inst->callback_pre_save(array(
 				"id" => $this->id,
-				"objdata" => &$this->objdata,
 				"form_data" => &$args,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
@@ -2529,7 +2511,6 @@ class class_base extends aw_template
 			$this->inst->callback_post_save(array(
 				"id" => $this->id,
 				"obj_inst" => $this->obj_inst,
-				"objdata" => $this->objdata,
 				"form_data" => &$args,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
