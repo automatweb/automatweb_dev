@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.49 2003/06/12 14:18:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.50 2003/07/01 10:22:45 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -192,7 +192,13 @@ class file extends class_base
 					header("Content-type: text/html");
 				};
     
-				$replacement = $fi["content"];
+				// so what if we have it twice?
+				$this->dequote(&$fi["content"]);
+				$fi["content"] .= "</body>";
+				preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
+				// return only the body of the file
+	     		$replacement = str_replace("\n","",$map[2]);
+//				$replacement = $fi["content"];
 			}
 			// embed xml files
 			elseif ($fi["type"] == "text/xml")
@@ -479,7 +485,11 @@ class file extends class_base
 		{
 			// file saved in filesystem - fetch it
 			$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
-			$ret["content"] = $this->get_file(array("file" => $file));
+			$tmp = $this->get_file(array("file" => $file));
+			if ($tmp !== false)
+			{
+				$ret["content"] = $tmp;
+			}
 		}
 		else
 		{
