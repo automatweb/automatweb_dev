@@ -253,6 +253,12 @@ switch($type) {
 		print "\n\n";
 		exit;
 
+	case "del_comp":
+		$t = new mlist($lid);
+		$t->del_user($usid);
+		header("Location: list.$ext?type=checkit&id=$lid");
+		break;
+
 	case "list_lists":
 	default:
 		$site_title = "Listide nimekiri";
