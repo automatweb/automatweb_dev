@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.45 2003/05/08 10:22:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.46 2003/05/13 15:05:24 duke Exp $
 
 class db_config extends aw_template 
 {
@@ -239,68 +239,6 @@ class config extends db_config
 		$this->quote(&$ss);
 		$this->set_simple_config("login_grp_redirect", $ss);
 		return $this->mk_my_orb("grp_redirect", array());
-	}
-
-	////
-	// !lets the user pick which folders to let the users move documents to
-	function docfolders($arr)
-	{
-		extract($arr);
-		$this->read_template("docfolders.tpl");
-
-		$langs = get_instance("languages");
-		$la = $langs->fetch(aw_global_get("lang_id"));
-		$LC=$la["acceptlang"];
-
-		$df = $this->get_simple_config("docfolders".$LC);
-		$xml = get_instance("xml");
-		$_df = $xml->xml_unserialize(array("source" => $df));
-
-		$ndf = array();
-
-		foreach($_df as $dfid => $dfname)
-		{
-			$ndf[$dfid] = $dfid;
-		}
-
-		$ob = get_instance("objects");
-		$this->vars(array(
-			"folders" => $this->multiple_option_list($ndf,$ob->get_list(false,false,$this->cfg["rootmenu"])),
-			"reforb" => $this->mk_reforb("submit_docfolders",array())
-		));
-		return $this->parse();
-	}
-
-	////
-	// !saves the user picked document moving folders
-	function submit_docfolders($arr)
-	{
-		extract($arr);
-
-		$ob = get_instance("objects");
-		$obl = $ob->get_list(false,false,$this->cfg["rootmenu"]);
-
-		$_df = array();
-		if (is_array($docfolders))
-		{
-			foreach($docfolders as $dfid)
-			{
-				$_df[$dfid] = $obl[$dfid];
-			}
-		}
-
-		$xml = get_instance("xml");
-		$df = $xml->xml_serialize($_df);
-
-		$this->quote(&$df);
-
-		$langs = get_instance("languages");
-		$la = $langs->fetch(aw_global_get("lang_id"));
-		$LC=$la["acceptlang"];
-
-		$this->set_simple_config("docfolders".$LC, $df);
-
-		return $this->mk_my_orb("docfolders");
 	}
 
 	function set_menu_icon($arr)
