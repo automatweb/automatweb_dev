@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.155 2004/01/15 14:37:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.156 2004/01/19 11:13:53 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -189,27 +189,22 @@ class planner extends class_base
 		return $this->change($arr);
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case 'user_calendar':
-				$this->users = get_instance("users");
-				
-				if ($args['obj'][OID] ==
-					$this->users->get_user_config(array(
-						"uid" => aw_global_get("uid"),
-						"key" => "user_calendar",
-				)))
-				{
-					$data['checked'] = true;
-					
-				}
-				$data['ch_value'] = $args['obj'][OID];
-				aw_session_set('user_calendar',$data['checked'] ? $args['obj'][OID] : '');
-			break;
+			case "user_calendar":
+				$users = get_instance("users");
+				$obj_id = $arr["obj_inst"]->id();
+
+				$data["value"] = $users->get_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "user_calendar",
+				));
+				$data["ch_value"] = $arr["obj_inst"]->id();
+				break;
 
 			case "default_view":
 				$data["options"] = $this->viewtypes;
@@ -226,7 +221,7 @@ class planner extends class_base
 				break;
 
 			case "navtoolbar":
-				$this->gen_navtoolbar($args);
+				$this->gen_navtoolbar($arr);
 				break;
 
 			case "workdays":
@@ -257,35 +252,24 @@ class planner extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-			$data = &$args["prop"];
-			$retval = PROP_OK;
-			$form = &$args["form_data"];		
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
 
-			switch($data["name"])
-			{
-			case 'user_calendar':
-				$this->users = get_instance("users");
-
-				$kb = $this->users->get_user_config(array(
+		switch($data["name"])
+		{
+			case "user_calendar":
+				$users = get_instance("users");
+				$users->set_user_config(array(
 					"uid" => aw_global_get("uid"),
 					"key" => "user_calendar",
+					"value" => $data["value"],
 				));
-				if(($kb == $args['obj'][OID]) || ($kb == ''))
-				{
-					$this->users->set_user_config(array(
-						"uid" => aw_global_get("uid"),
-						"key" => "user_calendar",
-						"value" => $form['user_calendar'],
-					));
-					aw_session_set('user_calendar', $form['user_calendar']);
-				}
-
-			break;	
+				break;	
 	
 			case "add_event":
-				$this->register_event_with_planner($args);
+				$this->register_event_with_planner($arr);
 				break;
 
 			case "calendar_relation":
@@ -774,7 +758,7 @@ class planner extends class_base
 				};
 			};
 		}
-		elseif ($event_cfgform)
+		else/*if ($event_cfgform)*/
 		{
 			aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 			$ev_data = $this->get_object($event_id);
@@ -1049,6 +1033,19 @@ class planner extends class_base
 		$gl = aw_global_get('org_action');
 
 		// so this has something to do with .. connectiong some obscure object to another .. eh?
+
+		// this deals with creating of one additional connection .. hm. I wonder whether
+		// there is a better way to do that.
+
+		// tolle uue objekti juurest luuakse seos äsja loodud eventi juurde jah?
+
+		// aga kui ma lisaks lihtsalt sündmuse isiku juurde?
+		// ja see tekiks automaatselt parajasti sisse logitud kasutaja kalendrisse,
+		// kui tal selline olemas on? See oleks ju palju parem lahendus.
+		// aga kuhu kurat ma sellisel juhul selle sündmuse salvestan?
+		// äkki ma saan seda nii teha, et isiku juures üldse sündmust ei salvestata,
+		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
+
 		preg_match('/alias_to_org=(\w*)/', $gl, $o);
 		preg_match('/reltype_org=(\w*)/', $gl, $r);
 		if (is_numeric($o[1]) && is_numeric($r[1]))
