@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.16 2003/02/07 16:17:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.17 2003/02/07 16:21:11 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -798,25 +798,29 @@ class form_calendar extends form_base
 			// calendar2form_relations
 			$this->save_handle();
 			// now I need to fetch all the records for this from form the
-                        // calendar2form_relations table
-                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
-                        $this->db_query($q);
-                        $rels = array();
-                        while($relrow = $this->db_next())
-                        {
-                                if ($relrow["el_count"])
-                                {
-                                        $count = $args["post_vars"][$relrow["el_count"]];
-                                        if ($count == 0)
-                                        {
-                                                // default to 1. is this good?
-                                                $count = 1;
-                                        };
-                                        $relrow["count"] = $count;
-                                        $relrow["txtid"] = $args["post_vars"][$relrow["el_relation"]];
-									   $rels[] = $relrow;
-                                };
-                        };
+			// calendar2form_relations table
+			$q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
+			$this->db_query($q);
+			$rels = array();
+			while($relrow = $this->db_next())
+			{
+				if ($relrow["el_count"])
+				{
+					$count = $args["post_vars"][$relrow["el_count"]];
+					if ($count == 0)
+					{
+						// default to 1. is this good?
+						$count = 1;
+					};
+					$relrow["count"] = $count;
+					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
+					if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))	 
+					{	 
+						$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];	 
+						$rels[] = $relrow;	     
+					 };
+				};
+			};
 
 			$_start = (int)date_edit::get_timestamp($args["post_vars"][$row["el_start"]]);
 
