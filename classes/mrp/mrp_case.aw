@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.59 2005/04/05 19:29:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.60 2005/04/06 09:24:33 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -646,22 +646,21 @@ class mrp_case extends class_base
 			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
 		// ));
 		$res = $this->db_fetch_array (
-			"SELECT `planned_length` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 ".
-			"ORDER BY `planned_length` DESC ".
+			"SELECT job.planned_length FROM mrp_job as job ".
+			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
+			"job.length > 0 ".
+			"ORDER BY job.planned_length DESC ".
 			"LIMIT  1".
 		"");
 		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
 
 		$jobs = $this->db_fetch_array (
-			"SELECT `oid` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 AND ".
-			"`starttime` > " . ($range_start - $max_length) . " AND ".
-			"`starttime` < " . $range_end . " AND ".
-			"`resource` != 0 AND ".
-			"`resource` IS NOT NULL".
+			"SELECT job.oid FROM mrp_job as job ".
+			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
+			"job.length > 0 AND ".
+			"job.starttime > " . ($range_start - $max_length) . " AND ".
+			"job.starttime < " . $range_end . " AND ".
+			"job.resource > 0 ".
 		"");
 
 		foreach ($jobs as $job)

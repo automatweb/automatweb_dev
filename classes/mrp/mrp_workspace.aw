@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.81 2005/04/06 07:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.82 2005/04/06 09:24:33 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -940,18 +940,39 @@ class mrp_workspace extends class_base
 
 			if ($project_id)
 			{
+				$project = obj ($project_id);
+
+				switch ($project->prop ("state"))
+				{
+					case MRP_STATUS_PLANNED:
+						$starttime_column = "starttime";
+						break;
+					case MRP_STATUS_INPROGRESS:
+					case MRP_STATUS_DONE:
+					case MRP_STATUS_ARCHIVED:
+						$starttime_column = "started";
+						break;
+				}
+
 				$this_object = obj($arr["args"]["id"]);
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
-					"state" => new obj_predicate_not (MRP_STATUS_DELETED),//!!! muud applicable stated ka
 					"parent" => $this_object->prop ("jobs_folder"),
-					"exec_order" => 1,
+					"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+					"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+					$starttime_prop => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 					"project" => $project_id,
 				));
-				if ($list->count())
+				$list->sort_by (array(
+					"prop" => $starttime_prop,
+					"order" => "asc" ,
+				));
+				$list->begin();
+				$first_job = $list->next();
+
+				if (is_object ($first_job))
 				{
-					$first_job = $list->begin ();
-					$project_start = $first_job->prop ("starttime");
+					$project_start = $first_job->prop ($starttime_prop);
 					$project_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
 					$arr["args"]["mrp_chart_start"] = $project_start;
 				}
@@ -1991,13 +2012,13 @@ class mrp_workspace extends class_base
 
 		### get jobs in requested range & add bars
 		$res = $this->db_fetch_array (
-			"SELECT `planned_length` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 ".
-			"ORDER BY `planned_length` DESC ".
-			"LIMIT  1".
+			"SELECT MAX(job.planned_length), MAX(job.finished-job.started) FROM mrp_job as job ".
+			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
+			"job.length > 0 AND ".
+			"job.resource > 0 ".
 		"");
-		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
+		rsort ($res[0]);
+		$max_length = reset ($res[0]);
 
 		### job states that are shown in chart past
 		$applicable_states = array (
@@ -3182,8 +3203,8 @@ class mrp_workspace extends class_base
 					break;
 			}
 
-			$len  = sprintf("%02d", floor($length / 3600)).":";
-			$len .= sprintf("%02d", floor(($length % 3600) / 60));
+			$len  = sprintf ("%02d", floor($length / 3600)).":";
+			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
 
 			### ...
 			$t->define_data(array(

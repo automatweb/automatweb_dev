@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.39 2005/04/05 19:29:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.40 2005/04/06 09:24:34 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -336,7 +336,7 @@ class mrp_schedule extends class_base
 
 /*
 			### reserve locked jobs and nonschedulable resources' jobs, if any
-			$this->db_query ("SELECT `oid`,`starttime`,`length`,`resource` FROM `" . $this->jobs_table . "` where (`state`=" . MRP_STATUS_LOCKED . " OR `resource` NOT IN (" . implode (",", $this->schedulable_resources) . ")) AND (`starttime`> " . $this->schedule_start . ") AND `length` > 0");
+			$this->db_query ("SELECT job.oid,job.starttime,job.length,job.resource FROM " . $this->jobs_table . " as job where (job.state=" . MRP_STATUS_LOCKED . " OR job.resource NOT IN (" . implode (",", $this->schedulable_resources) . ")) AND (job.starttime > " . $this->schedule_start . ") AND job.length > 0");
 
 			while ($job = $this->db_next ())
 			{
@@ -396,13 +396,11 @@ class mrp_schedule extends class_base
 			MRP_STATUS_ABORTED,
 		);
 
-		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE " .
-		"`state` IN (" . implode (",", $applicable_states) . ") AND " .
-		// "`length` > 0 AND " .
-		"`project` != 0 AND " .
-		"`resource` != 0 AND " .
-		"`project` IS NOT NULL AND " .
-		"`resource` IS NOT NULL " .
+		$this->db_query ("SELECT job.* FROM " . $this->jobs_table . " as job WHERE " .
+		"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+		// "job.length > 0 AND " .
+		"job.project > 0 AND " .
+		"job.resource > 0 " .
 		"");
 
 
