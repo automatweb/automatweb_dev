@@ -82,6 +82,7 @@ class site_content extends menuedit
 		$this->left_pane = (isset($no_left_pane) && $no_left_pane == true) ? false : true;
 		$this->right_pane = (isset($no_right_pane) && $no_right_pane == true) ? false : true;
 
+
 		// read all the menus and other necessary info into arrays from the database
 		dbg::p("active language for menus is ".aw_global_get("lang_id")."<br>");
 
@@ -177,9 +178,15 @@ class site_content extends menuedit
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
+		
 
 		$sel_menu_id = $this->sel_section;
 		
+		if (!is_array($this->mar[$sel_menu_id]))
+		{
+			$this->mar[$sel_menu_id] = $this->get_menu($sel_menu_id);
+		};
+
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
 		$this->dequote($this->properties["comment"]);
 		$this->vars(array(
@@ -482,7 +489,7 @@ class site_content extends menuedit
 		$this->vars(array(
 			"CHANGEDOCUMENT_NOLOGIN" => $cd_n
 		));
-		
+
 		if ($this->left_pane)
 		{
 			$lp = $this->parse("LEFT_PANE");
