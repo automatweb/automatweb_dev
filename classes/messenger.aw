@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.110 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.111 2002/12/02 18:54:09 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -847,6 +847,7 @@ class messenger extends menuedit_light
 	// !Kuvab uue teate sisestamise/muutmise vormi
 	function gen_edit_form($args = array())
 	{
+		classload('icons');
 		extract($args);
 		$menu = $this->gen_msg_menu(array(
 			"activelist" => array("write"),
@@ -964,7 +965,7 @@ class messenger extends menuedit_light
 			$this->vars(array(
 				"cnt" => $c,
 				"msgid" => $msg_id,
-				"icon" => get_icon_url($row["class_id"],""),
+				"icon" => icons::get_icon_url($row["class_id"],""),
 				"name" => $row["name"],
 				"get_attach" => $this->mk_my_orb("get_attach", array("msgid" => $msg_id, "attnum" => $c))
 			));
@@ -1933,6 +1934,7 @@ class messenger extends menuedit_light
 	// !Kuvab teate
 	function show_message($args = array())
 	{
+		classload('icons');
 		$menu = $this->gen_msg_menu(array(
 			"title" => "read",
 		));
@@ -1969,7 +1971,7 @@ class messenger extends menuedit_light
 				$evars = array("start" => date("H:i d-m-Y",$edata["data"]["start"]),
 					"end" => date("H:i d-m-Y",$edata["data"]["end"]),
 					"name" => $edata["data"]["title"],
-					"icon" => get_icon_url(CL_CAL_EVENT,""),
+					"icon" => icons::get_icon_url(CL_CAL_EVENT,""),
 					"id" => $row["oid"],
 					"cnt" => $c,
 				);
@@ -1983,7 +1985,7 @@ class messenger extends menuedit_light
 					"msg_id" => $id,
 					"cnt" => $c,
 					"msgid" => $args["id"],
-					"icon" => get_icon_url(CL_FILE,$row["name"]),
+					"icon" => icons::get_icon_url(CL_FILE,$row["name"]),
 					"name" => $this->MIME_decode($row["name"]),
 					"get_attach" => $this->mk_my_orb("get_attach", array("msgid" => $args["id"], "attnum" => $c)),
 					"pick_folder" => $this->mk_my_orb("pick_folder", array("type" => "popup", "attach" => $row["id"], "msg_id" => $id))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.5 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.6 2002/12/02 18:54:09 kristo Exp $
 // that's your basic file manager with 2 frames class. On the left side is a
 // menu tree just like in /automatweb right now, on the right side we show objects
 // someday this can perhaps replace the current menuedit framework
@@ -160,6 +160,7 @@ class manager extends aw_template
 		$q = "SELECT * FROM objects WHERE class_id = " . CL_FILE . " AND parent = '$parent' ORDER BY name";
 		$this->db_query($q);
 		$awf = get_instance("file");
+		classload('icons');
 		while($row = $this->db_next())
 		{
 			$oid = $row["oid"];
@@ -167,7 +168,7 @@ class manager extends aw_template
 			$dlink = $awf->get_url($row["oid"],$row["name"]);
 			$active = checked($row["status"] == 2);
 			$t->define_data(array(
-				"folder" => "<img src='" . get_icon_url($row["class_id"],$row["name"]) . "'>",
+				"folder" => "<img src='" . icons::get_icon_url($row["class_id"],$row["name"]) . "'>",
 				"name" => "<a href='$dlink'>$row[name]</a>",
 				"ord" => "<input type='textbox' name='ord[$oid]' size='2' value='$row[jrk]'>",
 				"active" => "<input type='checkbox' value='2' name='active[$oid]' $active>",

@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.21 2002/12/02 12:19:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.22 2002/12/02 18:54:09 kristo Exp $
 
 class cal_event extends class_base 
 {
@@ -35,6 +35,7 @@ class cal_event extends class_base
 	// !Fills the event editing form with data
 	function _fill_event_form($args = array())
 	{
+		classload('icons');
 		load_vcl("date_edit");
 		$start = new date_edit("start");
 		$start->configure(array("day" => 1,"month" => 2,"year" => 3));
@@ -94,10 +95,10 @@ class cal_event extends class_base
 			"ehour" => $this->picker($ehour,$h_list),
 			"emin" => $this->picker($emin,$m_list),
 			"object" => $obj["name"],
-			"obj_icon" => get_icon_url($obj["class_id"],""),
+			"obj_icon" => icons::get_icon_url($obj["class_id"],""),
 			"color" => $this->picker($args["color"],$colors),
 			"calendar_url" => $this->mk_my_orb("view",array("id" => $args["folder"]),"planner"),
-			"icon_url" => get_icon_url(CL_CALENDAR,""),
+			"icon_url" => icons::get_icon_url(CL_CALENDAR,""),
 		));
 	}
 

@@ -763,5 +763,53 @@ class icons extends aw_template
 		}
 		return $retval;
 	}
+
+	////
+	// !Tagastab mingile klassile vastava ikooni
+	function get_icon_url($clid,$name)
+	{
+		if (!is_array(aw_global_get("d_icon_cache")))
+		{
+			$c = get_instance("config");
+			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
+		}
+		$d_icon_cache = aw_global_get("d_icon_cache");
+		$i = $d_icon_cache["content"][$clid]["imgurl"];
+
+		if ($clid == CL_FILE)
+		{
+			if (!is_array(aw_global_get("d_fileicon_cache")))
+			{
+				$c = get_instance("config");
+				aw_global_set("d_fileicon_cache",unserialize($c->get_simple_config("file_icons")));
+			}
+			$d_fileicon_cache = aw_global_get("d_fileicon_cache");
+			$extt = substr($name,strpos($name,"."));
+			if ($d_fileicon_cache[$extt]["url"] != "")
+			{
+				$i = $d_fileicon_cache[$extt]["url"];
+			}
+		}
+
+		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
+		{
+			if (!is_array(aw_global_get("d_othericon_cache")))
+			{
+				$c = get_instance("config");
+				aw_global_set("d_othericon_cache",unserialize($c->get_simple_config("other_icons")));
+			}
+			$d_othericon_cache = aw_global_get("d_othericon_cache");
+			if ($d_othericon_cache[$clid]["url"] != "")
+			{
+				$i = $d_othericon_cache[$clid]["url"];
+			}
+			else
+			{
+				$i = "/automatweb/images/ftv2doc.gif";
+			}
+		}
+		$retval = $i == "" ? "/automatweb/images/icon_aw.gif" : $i;
+		return icons::check_url($retval);
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.63 2002/12/02 17:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.64 2002/12/02 18:54:09 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -50,23 +50,10 @@ if (!defined("DEFS"))
 		xml_parser_free($parser);
 		return array($values,$tags);
 	};
-	 
-	// debuukimisel on see funktsioon abiks
-	function dump_struct($data)
-	{
-		print "<pre>";
-		print_r($data);
-		print "</pre>";
-		// kui on array, siis resetime selle pointeri, sest print_r jätab selle array lõppu
-		if (is_array($data))
-		{
-			reset($data);
-		};
-	}
 
-	// asendab numbri vastava stringiga, kui number < 11, 
-	// see on meffi idee ja X-i juures seda ka kasutatakse
-	// arvud saab loomulikult lokaliseeritud
+	////
+	// !replaces the number with the corresponding string, 
+	// if number < 11, otherwise returns the number. the strings are localized
 	function verbalize_number($number)
 	{
 		$strings = array("0",LC_D1,LC_D2,LC_D3,LC_D4,LC_D5,LC_D6,LC_D7,LC_D8,LC_D9,LC_D10);
@@ -79,55 +66,6 @@ if (!defined("DEFS"))
 			$ret = $strings[$number];
 		};
 		return $ret;
-	}
-
-	////
-	// !Tagastab mingile klassile vastava ikooni
-	function get_icon_url($clid,$name)
-	{
-		if (!is_array(aw_global_get("d_icon_cache")))
-		{
-			$c = get_instance("config");
-			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
-		}
-		$d_icon_cache = aw_global_get("d_icon_cache");
-		$i = $d_icon_cache["content"][$clid]["imgurl"];
-
-		if ($clid == CL_FILE)
-		{
-			if (!is_array(aw_global_get("d_fileicon_cache")))
-			{
-				$c = get_instance("config");
-				aw_global_set("d_fileicon_cache",unserialize($c->get_simple_config("file_icons")));
-			}
-			$d_fileicon_cache = aw_global_get("d_fileicon_cache");
-			$extt = substr($name,strpos($name,"."));
-			if ($d_fileicon_cache[$extt]["url"] != "")
-			{
-				$i = $d_fileicon_cache[$extt]["url"];
-			}
-		}
-
-		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
-		{
-			if (!is_array(aw_global_get("d_othericon_cache")))
-			{
-				$c = get_instance("config");
-				aw_global_set("d_othericon_cache",unserialize($c->get_simple_config("other_icons")));
-			}
-			$d_othericon_cache = aw_global_get("d_othericon_cache");
-			if ($d_othericon_cache[$clid]["url"] != "")
-			{
-				$i = $d_othericon_cache[$clid]["url"];
-			}
-			else
-			{
-				$i = "/automatweb/images/ftv2doc.gif";
-			}
-		}
-		$retval = $i == "" ? "/automatweb/images/icon_aw.gif" : $i;
-		classload("icons");
-		return icons::check_url($retval);
 	}
 
 	////
@@ -464,6 +402,14 @@ if (!defined("DEFS"))
 	function is_admin()
 	{
 		return (stristr(aw_global_get("REQUEST_URI"),"/automatweb")!=false);
+	}
+
+	// debuukimisel on see funktsioon abiks
+	function dump_struct($data)
+	{
+		print "<pre>";
+		var_dump($data);
+		print "</pre>";
 	}
 
 	////

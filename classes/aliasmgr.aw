@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.65 2002/11/27 14:14:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.66 2002/12/02 18:54:09 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -407,6 +407,7 @@ class aliasmgr extends aw_template
 	function new_list_aliases($args)
 	{
 		extract($args);
+		classload('icons');
 		$this->read_template("lists_new.tpl");
 		$obj = $this->get_object($id);
 		$this->id = $id;
@@ -466,7 +467,7 @@ class aliasmgr extends aw_template
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
 
-			$alias["icon"] = sprintf("<img src='%s'>",get_icon_url($aclid,""));
+			$alias["icon"] = sprintf("<img src='%s'>",icons::get_icon_url($aclid,""));
 			$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			$alias["link"] = sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$alias["target"],checked($obj["meta"]["aliaslinks"][$alias["target"]]));
 			$alias["title"] = $classes[$aclid]["name"];

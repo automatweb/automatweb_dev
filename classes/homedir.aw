@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.7 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.8 2002/12/02 18:54:09 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
 classload("users");
@@ -42,6 +42,7 @@ class homedir extends users
 	//! Genereerib sisselogitud kasutaja kodukataloogi
 	function gen_home_dir($args = array())
 	{
+		classload('icons');
 		$udata = $this->get_user();
 		$baseurl = $this->cfg["baseurl"];
 		$parent = $args["id"];
@@ -143,7 +144,7 @@ class homedir extends users
 			$this->vars(array(
 				"name" => ($row["name"]) ? $row["name"] : "(nimetu)",
 				"id" => $row["oid"],
-				"iconurl" => get_icon_url($row["class_id"],0),
+				"iconurl" => icons::get_icon_url($row["class_id"],0),
 				"color" => ($cnt % 2) ? "#FFFFFF" : "#EEEEEE",
 				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
 				"preview" => $preview,

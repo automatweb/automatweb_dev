@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.178 2002/12/02 12:19:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.179 2002/12/02 18:54:09 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -8,6 +8,7 @@
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
 
+classload('icons');
 class menuedit extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1332,7 +1333,7 @@ class menuedit extends aw_template
 			"name" => $hf["name"],
 			"id" => $hf["oid"], 
 			"parent" => $admin_rootmenu2,
-			"iconurl" => $this->get_icon_url("homefolder",""),
+			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]))
 		));
 		$hft = $this->parse("TREE");
@@ -1360,7 +1361,7 @@ class menuedit extends aw_template
 			"name"=> "SHARED FOLDERS",
 			"id" => SHARED_FOLDER_ID,		
 			"parent" => $hf["oid"],
-			"iconurl" => $this->get_icon_url("shared_folders",""),
+			"iconurl" => icons::get_icon_url("shared_folders",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => SHARED_FOLDER_ID))
 		));
 		if ($shares != "")
@@ -1388,7 +1389,7 @@ class menuedit extends aw_template
 			"name"		=> "GROUPS",
 			"id"			=> "gr_".$dgid,
 			"parent"	=> $hf["oid"],
-			"iconurl" => $this->get_icon_url("hf_groups",""),
+			"iconurl" => icons::get_icon_url("hf_groups",""),
 			"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $dgid),"groups")
 		));
 		if ($grptree != "")
@@ -1779,7 +1780,7 @@ class menuedit extends aw_template
 			{
 
 				$url = $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]));
-				$iconurl = $this->get_icon_url("homefolder","");
+				$iconurl = icons::get_icon_url("homefolder","");
 				// allpool peab ka acli kontrollima :(
 				$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != " . MN_ADMIN1 . ") AND objects.parent = '$hf[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
 				$this->db_query($q);
@@ -1885,12 +1886,12 @@ class menuedit extends aw_template
 				{
 					if ($row["class_id"] == CL_PROMO)
 					{
-						$iconurl = $this->get_icon_url("promo_box","");
+						$iconurl = icons::get_icon_url("promo_box","");
 					}
 					else
 					if ($row["class_id"] == CL_BROTHER)
 					{
-						$iconurl = $this->get_icon_url("brother","");
+						$iconurl = icons::get_icon_url("brother","");
 					}
 					else
 					{
@@ -2165,12 +2166,12 @@ class menuedit extends aw_template
 				{
 					if ($row["class_id"] == CL_PROMO)
 					{
-						$url = $this->get_icon_url("promo_box","");
+						$url = icons::get_icon_url("promo_box","");
 					}
 					else
 					if ($row["class_id"] == CL_BROTHER)
 					{
-						$url = $this->get_icon_url("brother","");
+						$url = icons::get_icon_url("brother","");
 					}
 					else
 					{
@@ -2230,11 +2231,6 @@ class menuedit extends aw_template
 		$i = $this->pr_icons[$fid]["url"];
 		classload("icons");
 		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);
-	}
-
-	function get_icon_url($clid,$name)
-	{
-		return get_icon_url($clid,$name);
 	}
 
 	function add($arr)
@@ -5855,7 +5851,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$row["cutcopied"] = "#FCFCF4";
 			}
-			$iu = $this->get_icon_url($row["class_id"],$row["name"]);
+			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 
 			$row["lang_id"] = $lar[$row["lang_id"]];
 

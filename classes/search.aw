@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.14 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.15 2002/12/02 18:54:10 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -72,6 +72,7 @@ class search extends aw_template
 	// 	obj - reference to caller
 	function show($args = array())
 	{
+		classload('icons');
 		$this->db_rows = array();
 		// all the required fields and their default values
 		$defaults = array(
@@ -326,7 +327,7 @@ class search extends aw_template
 			{
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
-				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",get_icon_url($row["class_id"],""));
+				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
 				if (!$row["name"])
 				{
 					$row["name"] = "(nimetu)";

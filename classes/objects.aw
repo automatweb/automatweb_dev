@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.39 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.40 2002/12/02 18:54:09 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -12,6 +12,7 @@ class db_objects extends aw_template
 
 	function hf_search($args = array())
 	{
+		classload('icons');
 		$this->tpl_init("objects");
 		extract($args);
 		if (!is_array($folders))
@@ -41,7 +42,7 @@ class db_objects extends aw_template
 			$this->vars(array(
 				"name" => $row["name"],
 				"oid" => $row["oid"],
-				"icon" => get_icon_url($row["class_id"],$row["name"]),
+				"icon" => icons::get_icon_url($row["class_id"],$row["name"]),
 			));
 			$c .= $this->parse("object");
 		};
