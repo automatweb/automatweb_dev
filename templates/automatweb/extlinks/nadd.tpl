@@ -13,7 +13,7 @@ function setLink(li,title)
 	<td class="fform"><input type="text" name="url" size="40" value='{VAR:url}'></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2><input type='hidden' name='type' value='ext'><a href="javascript:remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+	<td class="fcaption2" colspan=2><input type='hidden' name='type' value='ext'><a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_EXTLINKS_INSIDE_WEB}</a></td>
 </tr>
 <tr>
 	<td class="fcaption2">{VAR:LC_EXTLINKS_NAME}</td>
@@ -30,7 +30,7 @@ function setLink(li,title)
 	<td class="fform"><input type="checkbox" name="newwindow" value=1 {VAR:newwindow}></td>
 </tr>
 <tr>
-	<td class="fcaption2">{VAR:LC_DOCUMENT_DOC_LC}?</td>
+	<td class="fcaption2">{VAR:LC_EXTLINKS_DOC_LC}?</td>
 	<td class="fform"><input type="checkbox" name="doclinkcollection" value=1 {VAR:doclinkcollection}></td>
 </tr>
 <tr>
