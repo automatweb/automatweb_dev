@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.209 2003/07/14 14:46:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.210 2003/07/16 15:26:05 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -489,32 +489,39 @@ class core extends acl_base
 	//   $this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
 	function _log($type,$action,$text,$oid = 0)
 	{
-		$this->quote($text);
-
-		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
-		if (!inet::is_ip($ip))
+		if (empty($this->dc))
 		{
-			$ip = aw_global_get("REMOTE_ADDR");
+			print "SYSLOG: $text\n";
 		}
-		$t = time();
-		$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
-		$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,aw_global_get("HTTP_REFERER"));
-		if (aw_ini_get("tafkap"))
+		else
 		{
-			$fields[] = "tafkap";
-			$values[] = aw_global_get("tafkap");
-		};
+			$this->quote($text);
 
-		if (aw_ini_get("syslog.has_site_id") == 1)
-		{
-			$fields[] = "site_id";
-			$values[] = $this->cfg["site_id"];
-		};
-		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-		if (!$this->db_query($q,false))
-		{
-			die("cannot write to syslog: " . $this->db_last_error["error_string"]);
-		};
+			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+			if (!inet::is_ip($ip))
+			{
+				$ip = aw_global_get("REMOTE_ADDR");
+			}
+			$t = time();
+			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
+			$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,aw_global_get("HTTP_REFERER"));
+			if (aw_ini_get("tafkap"))
+			{
+				$fields[] = "tafkap";
+				$values[] = aw_global_get("tafkap");
+			};
+
+			if (aw_ini_get("syslog.has_site_id") == 1)
+			{
+				$fields[] = "site_id";
+				$values[] = $this->cfg["site_id"];
+			};
+			$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
+			if (!$this->db_query($q,false))
+			{
+				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
+			};
+		}
 	}
 
 	//// 
