@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.64 2005/01/06 12:06:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.65 2005/01/06 13:48:02 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -1461,26 +1461,28 @@ class forum_v2 extends class_base
 		$this->inst->embedded = true;
 		$this->embedded = true;
 
-		// nii. see paneb selle paika. Ja nüt, mk_my_orb peaks suutma detectida kas 
-		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
-		// ah? mis?
-		$act = isset($_GET["action"]) ? $_GET["action"] : "change";
+		// XXX: temporary workaround to make embedded forum work correctly
+		parse_str(aw_global_get("REQUEST_URI"),$req_args);
+		$act = isset($req_args["action"]) ? $req_args["action"] : "change";
+		$group = isset($req_args["group"]) ? $req_args["group"] : "contents";
+
+
 		if (method_exists($this, $act))
 		{
-			return $this->$act(array(
+			$args = array(
 				"id" => $alias["target"],
-				"action" => isset($_GET["action"]) ? $_GET["action"] : "view",
+				"action" => $act,
 				"rel_id" => $args["alias"]["relobj_id"],
-				"folder" => $_GET["folder"],
-				"topic" => $_GET["topic"],
-				"page" => $_GET["page"],
-				"c" => $_GET["c"],
+				"folder" => $req_args["folder"],
+				"topic" => $req_args["topic"],
+				"page" => $req_args["page"],
+				"c" => $req_args["c"],
 				"cb_part" => 1,
 				"form_embedded" => 1,
 				"fxt" => 1,
-				"group" => "contents",
-				//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
-			));
+				"group" => $group,
+			);
+			return $this->$act($args);
 		}
 	}
 
