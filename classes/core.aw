@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.17 2001/06/01 02:47:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.18 2001/06/01 06:23:10 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -56,7 +56,7 @@ class core extends db_connector
 	//					"key" => "notes",));
 	function get_object_metadata($args = array())
 	{
-		extact($args);
+		extract($args);
 		$odata = $this->_get_object_metadata($oid);
 		if (!$odata)
 		{
