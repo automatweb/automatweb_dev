@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.11 2004/04/15 09:04:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.12 2004/04/30 08:47:22 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -496,7 +496,7 @@ class document_statistics extends class_base
 
 	/** sends e-mail woth statistics. called via scheduler 8:00 AM every day
 		
-		@attrib name=do_send_mail
+		@attrib name=do_send_mail nologin="1"
 
 		@param id required type=int acl=view
 
