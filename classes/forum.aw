@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.10 2001/11/12 23:32:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.11 2001/11/13 00:01:06 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -94,6 +94,10 @@ class forum extends aw_template
 		extract($args);
 		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+		global $HTTP_COOKIE_VARS;
+		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
+		$aw_mb_last[$board_obj["parent"]] = time();
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->_query_comments(array("board" => $board));
@@ -154,6 +158,7 @@ class forum extends aw_template
 			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => $this->section)),
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $this->section)),
 			"flat_link" => $this->mk_my_orb("show",array("board" => $board,"section" => $this->section)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id)),
 			"VOTE_FOR_TOPIC" => $voteblock,
 			"TOPIC" => $this->parse("TOPIC"),
@@ -215,11 +220,12 @@ class forum extends aw_template
 		$this->rec_comments(0);
 		$this->vars(array(
 			"message" => $this->content,
-			"flat_link" => $this->mk_my_orb("show",array("board" => $board)),
-			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board)),
-			"forum_link" => $this->mk_my_orb("topics",array("id" => $forum_obj["oid"])),
+			"flat_link" => $this->mk_my_orb("show",array("board" => $board,"section" => $this->section)),
+			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => $this->section)),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $forum_obj["oid"],"section" => $this->section)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
 		));
-		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent));
+		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $this->section));
 	}
 
 	function rec_comments($level)
@@ -255,7 +261,7 @@ class forum extends aw_template
 			$this->read_template("messages.tpl");
 			$content = $this->display_comment($row);
 		}
-		return $this->parse() . $this->add_comment(array("parent" => $parent));
+		return $this->parse() . $this->add_comment(array("parent" => $parent,"section" => $section));
 	}
 
 	////
@@ -273,8 +279,8 @@ class forum extends aw_template
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
 			"comment" => $args["comment"],
-			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"])),
-			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from)),
+			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
+			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
 		));
 
 		if ($this->is_template("SHOW_COMMENT") && ($this->cid == $args["id"]))
@@ -316,6 +322,11 @@ class forum extends aw_template
 		$site_id = $GLOBALS["SITE_ID"];
 		$ip = $GLOBALS["REMOTE_ADDR"];
 		$t = time();
+		// yeah, legacy code sucks, but we support it anyway
+		if (not($name))
+		{
+			$name = $from;
+		};
 		$q = "INSERT INTO comments (parent, board_id, name, email, comment, subj,
 					time, site_id, ip)
 			VALUES ('$parent','$board','$name','$email','$comment','$subj',
