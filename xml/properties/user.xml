@@ -137,7 +137,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd</field>
-            <caption>Password</caption>
+            <caption>Salasõna</caption>
       </property>
       <property>
             <name>passwd_again</name>
@@ -146,7 +146,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd_again</field>
-            <caption>Password veelkord</caption>
+            <caption>Salasõna uuesti</caption>
       </property>
       <property>
             <name>password</name>
