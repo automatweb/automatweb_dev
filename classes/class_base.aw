@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.80 2003/03/05 17:03:16 duke Exp $
+// $Id: class_base.aw,v 2.81 2003/03/12 13:16:45 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -62,6 +62,7 @@ class class_base extends aliasmgr
 		$this->output_client = "htmlclient";
 		$this->ds_name = "ds_local_sql";
 		$this->default_group = "general";
+		//error_reporting(E_ALL);
 		parent::init($arg);
 	}
 
@@ -491,13 +492,13 @@ class class_base extends aliasmgr
 					if (isset($savedata[$name]))
 					{
 						$_field = ($name != $field) ? $field : $name;
-						$objdata[$_field] = $savedata[$name];
+						$objdata[$table][$_field] = $savedata[$name];
 					};
 				};
 			};
 		};
 
-		
+	
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
@@ -532,9 +533,7 @@ class class_base extends aliasmgr
 
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 
-
 		$this->save_object(array("data" => $objdata));
-
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
@@ -824,9 +823,18 @@ class class_base extends aliasmgr
 		if (isset($this->request["return_url"]))
 		{
 			$parent = -1;
+			if (strpos($this->request["return_url"],"b1=1"))
+			{
+				$target = "_top";
+			}
+			else
+			{
+				$target = "_self";
+			};
 			$title = html::href(array(
 				"url" => $this->request["return_url"],
 				"caption" => "Tagasi",
+				"target" => $target,
 			)) . " / " . $title;
 		};
 
@@ -854,7 +862,7 @@ class class_base extends aliasmgr
 		{
 			if ($this->id)
 			{
-				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key,"cb_view" => $args["cb_view"]),get_class($this->orb_class));
+				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key,"cb_view" => $args["cb_view"],"return_url" => urlencode($this->request["return_url"])),get_class($this->orb_class));
 			}
 			else
 			{
@@ -868,6 +876,7 @@ class class_base extends aliasmgr
 					"caption" => &$val,
 					"id" => $key,
 					"tp" => &$this->tp,
+					"coredata" => $this->coredata,
 				);
 	
 				$res = true;	
@@ -892,7 +901,7 @@ class class_base extends aliasmgr
 			$link = "";
 			if (isset($this->id))
 			{
-				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),get_class($this->orb_class));
+				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id,"return_url" => urlencode($this->request["return_url"])),get_class($this->orb_class));
 			};
 			$this->tp->add_tab(array(
 				"link" => $link,
@@ -948,29 +957,32 @@ class class_base extends aliasmgr
 	// !Saves the object
 	function save_object($args = array())
 	{
+		$id = $this->id;
 		if (is_array($this->tableinfo))
 		{
-			list($table,$data) = each($this->tableinfo);
-			$idfield = $data["index"];
-		};
-		$id = $this->id;
-		if ($table && $idfield)
-		{
-			// create the new record
-			if ($this->new)
+			foreach($this->tableinfo as $table => $data)
 			{
-				$this->ds->ds_new_object(array(
-					"table" => $table,
-					"idfield" => $idfield,
-					"id" => $id,
-				));
-			};
+				$idfield = $data["index"];
+				if (isset($table) && isset($idfield))
+				{
+					// create the new record
+					if ($this->new)
+					{
+						$this->ds->ds_new_object(array(
+							"table" => $table,
+							"idfield" => $idfield,
+							"id" => $id,
+						));
+					};
 
-			$this->ds->ds_save_object(array(
-				"table" => $table,
-				"idfield" => $idfield,
-				"id" => $id),$args["data"]
-			);
+					$this->ds->ds_save_object(array(
+						"table" => $table,
+						"idfield" => $idfield,
+						"replace" => true,
+						"id" => $id),$args["data"][$table]
+					);
+				};	
+			};	
 		};
 	}
 
@@ -982,11 +994,11 @@ class class_base extends aliasmgr
 		// properties are all saved in a single file, so sadly
 		// we do need to load them all
 		$this->get_all_properties(array(
-			"classonly" => $args["classonly"],
-			"cb_view" => $args["cb_view"],
-			"content" => $args["content"],
+			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
+			"content" => isset($args["content"]) ? $args["content"] : "",
 		));
-
+		
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -1000,7 +1012,7 @@ class class_base extends aliasmgr
 			// has been set to default, if so, use it
 			foreach($this->groupinfo->get() as $gkey => $ginfo)
 			{
-				if ($ginfo["default"])
+				if (isset($ginfo["default"]))
 				{
 					$use_group = $gkey;
 				};
@@ -1037,7 +1049,7 @@ class class_base extends aliasmgr
 
 		foreach($this->all_props as $key => $val)
 		{
-			if ($val["view"] && !$this->cb_views[$val["view"]])
+			if (isset($val["view"]) && !$this->cb_views[$val["view"]])
 			{
 				$this->cb_views[$val["view"]] = 1;
 			};
@@ -1083,48 +1095,35 @@ class class_base extends aliasmgr
 				"class_id" => CL_CFGFORM,
 			));
 
-			// XXX: property_list should be an array of
-			// keys, not key => 1 pairs
-
 			// oh, and I need to deal with groups in here as well
 
 			// btw, some clients will probably want the contents
 			// of all tabs
-			$property_list = $cfgform["meta"]["property_list"];
-			$layout = $cfgform["meta"]["layout"];
-			$groupinfo = array();
-			// I need to create a flat property list from all the stuff in the layout
-			if (!$property_list)
+			$row = array();
+			$t = get_instance("doc");
+			$xprops = $t->get_properties_by_group(array(
+                                "content" => $cfgform["meta"]["xml_definition"],
+                                "group" => "general",
+                                "values" => array("id" => $this->id) + $row,
+                        ));
+
+			// yuck.
+			unset($xprops["sbt"]);
+
+			$_tmp = array();
+
+			$cfgu = get_instance("cfg/cfgutils");
+
+			foreach($t->tableinfo as $key => $val)
 			{
-				$this->default_group = "";
-				foreach($layout as $key => $val)
-				{
-					if (!$this->default_group)
-					{
-						$this->default_group = $key;
-					};
+				$_tmp[$key] = $cfgu->normalize_text_nodes($val[0]);
+			};
+			$this->tableinfo = $_tmp;
 
-					$groupinfo[$key] = array(
-						"caption" => $val["caption"],
-					);
+			$this->all_props = $xprops;
+			$property_list = $xprops;
 
-					foreach($val as $skey => $items)
-					{
-						if (is_array($items))
-						{
-							foreach($items as $item)
-							{
-								$property = $item;
-								$name = $item["name"];
-								$property = $all_props[$name];
-								$property["group"] = $key;
-								$property_list[$name] = $property;
-							};
-						};
-					};
-				};
-
-			}
+			$this->groupnames = array("general" => "Üldine");
 		};
 
 		$retval = array();
@@ -1158,7 +1157,7 @@ class class_base extends aliasmgr
 				$tables[$property["table"]] = $this->tableinfo[$property["table"]];
 			};
 
-			$fval = ($property["method"]) ? $property["method"] : "direct";
+			$fval = isset($property["method"]) ? $property["method"] : "direct";
 			$_field = $property["field"];
 			if ($_field == "meta")
 			{
@@ -1229,7 +1228,7 @@ class class_base extends aliasmgr
 	
 		$argblock = array(
 			'oid' => $this->id,
-			'request' => $this->request,
+			'request' => isset($this->request) ? $this->request : "",
 		);
 
 		// 1) generate a list of all views
@@ -1244,6 +1243,10 @@ class class_base extends aliasmgr
 		$this->all_props = array();
 		foreach($_all_props as $k => $val)
 		{
+			if (empty($val["view"]))
+			{
+				$val["view"] = "";
+			};
 			if ($val["view"])
 			{
 				$this->cb_views[$val["view"]] = 1;
@@ -1265,7 +1268,7 @@ class class_base extends aliasmgr
 			$_grplist = explode(",",$val["group"]);
 			foreach($_grplist as $_grp)
 			{
-				if ($group_el_cnt[$_grp])
+				if (isset($group_el_cnt[$_grp]))
 				{
 					$group_el_cnt[$_grp]++;
 				}
@@ -1468,6 +1471,7 @@ class class_base extends aliasmgr
 	function get_value(&$property)
 	{
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
+		$table = $property["table"];
 		if (!$this->id && $property["default"])
 		{
 			$property["value"] = $property["default"];
@@ -1503,17 +1507,17 @@ class class_base extends aliasmgr
 			{
 				if ($property["method"] == "serialize")
 				{
-					if (isset($this->objdata[$field]))
+					if (isset($this->data[$table][$field]))
 					{
-						$property["value"] = aw_unserialize($this->objdata[$field]);
+						$property["value"] = aw_unserialize($this->data[$table][$field]);
 					};
 				}
 				else
 				{
 					$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
-					if (isset($this->objdata[$_field]))
+					if (isset($this->data[$table][$_field]))
 					{
-						$property["value"] = $this->objdata[$_field];
+						$property["value"] = $this->data[$table][$_field];
 					};
 				};
 			};
@@ -1553,13 +1557,10 @@ class class_base extends aliasmgr
 		$retval = false;
 		if ($this->clid == CL_DOCUMENT)
 		{
-			// first, check the parent menu
-			if ($this->parent)
-			{
-				$parobj = $this->get_object($this->parent);
-				$retval = (int)$parobj["meta"]["tpl_edit_cfgform"];
-			};
-
+			$m = get_instance("menuedit");
+			$obj = $this->get_object($this->id);
+			$m->build_menu_chain($obj["parent"]);
+			$retval = (int)$m->properties["tpl_edit_cfgform"];
 		};
 		if ($this->clid == CL_PSEUDO)
 		{
@@ -1751,6 +1752,7 @@ class class_base extends aliasmgr
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
+		$this->request = $args;
 
 		$this->id = $args["id"];
 
@@ -1782,6 +1784,7 @@ class class_base extends aliasmgr
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
+		$this->request = $args;
 		
 		$reltypes = $this->get_rel_types();
 		
