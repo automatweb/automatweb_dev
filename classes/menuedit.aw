@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.195 2002/12/30 11:33:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.196 2002/12/30 14:50:41 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4326,6 +4326,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if ($d->num_rows() > 1)		// the database driver sets this
 			{
+				$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
 				$template = $this->get_lead_template($section);
 				while($row = $d->db_next()) 
 				{
