@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.10 2005/01/07 09:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.11 2005/01/12 11:10:40 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -283,11 +283,10 @@ class object_export extends class_base
 		{
 			$filt["parent"] = $arr["obj_inst"]->prop("root_folder");
 		}
-		if (!$arr["request"]["do_exp"] || !$arr["request"]["xls"])
+		if (!$arr["request"]["do_exp"] && !$arr["request"]["xls"])
 		{
 			$filt["limit"] = 10;
 		}
-
 		$ol = new object_list($filt);
 		$t->data_from_ol($ol);
 
