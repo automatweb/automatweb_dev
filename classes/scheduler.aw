@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.2 2002/07/23 21:20:34 duke Exp $
+// scheduler.aw - Scheduler
 
 classload("planner","file","aw_test");
 class scheduler extends aw_template
@@ -382,6 +384,37 @@ class scheduler extends aw_template
 		));
 
 		return $this->parse();
+	}
+
+	////
+	// !Displays UI for adding or editing a scheduler object
+	function change($args = array())
+	{
+		extract($args);
+		if ($parent)
+		{
+			$caption = "Lisa uus scheduler";
+			$obj = array("parent" => $parent);
+		}
+		else
+		{
+			$caption = "Muuda scheduleri";
+			$obj = $this->get_object($id);
+		};
+		$this->mk_path($obj["parent"],$caption);
+		$iface = get_instance("interface");
+		$rv = $iface->_get_if(array("name" => "scheduled"));
+		print "<pre>";
+		print_r($args);
+		print_r($rv);
+		print "</pre>";
+		// we have to provide fields for entering name and comment
+		// for the scheduler object.
+		$this->read_template("change.tpl");
+		return $this->parse();
+
+		// and then allow for searching different objects, which could
+		// _then_ be selected for importing.
 	}
 }
 ?>
