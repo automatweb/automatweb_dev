@@ -756,7 +756,7 @@ class search_conf extends aw_template
 
 //		end($grps);
 //		list($id,$dat) = each($grps);
-		$id = max(array_keys($grps))+1;
+		$id = @max(array_keys($grps))+1;
 
 		$this->vars(array(
 			"add" => $this->mk_my_orb("change_grp", array("id" => $id)),
