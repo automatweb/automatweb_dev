@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.286 2004/10/18 13:50:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.287 2004/10/22 15:02:11 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1232,7 +1232,8 @@ class document extends aw_template
 
 		if ($GLOBALS["DD"] == 1)
 		{
-			echo "for doc $doc[docid] tm = ".$doc["tm"]."  den = $date_est_n<br>";
+			echo "for doc $doc[docid] tm = ".$doc["tm"]."  den = $date_est_n odtm = $orig_doc_tm <br>";
+			
 		}
 
 
@@ -1355,14 +1356,17 @@ class document extends aw_template
 		}
 
 		$this->vars(array(
+			"HAS_MODIFIED" => ($orig_doc_tm != "" ? $this->parse("HAS_MODIFIED") : "")
+		));
+
+		$this->vars(array(
 			"SHOW_TITLE" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE") : "",
 			"SHOW_TITLE2" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE2") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
-			"HAS_MODIFIED" => ($orig_doc_tm != "" ? $this->parse("HAS_MODIFIED") : "")
-			));
+		));
 
 
 		// keeleseosed
