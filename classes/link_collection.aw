@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.4 2001/12/04 14:07:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.5 2001/12/04 15:08:29 duke Exp $
 // link_collection.aw - Lingikogude haldus
 global $orb_defs;
 lc_load("linkcollection");
@@ -23,8 +23,8 @@ class link_collection extends aw_template {
 	{
 		extract($args);
 		$par_obj = $this->get_object($parent);
-		$this->mk_path($par_obj["parent"],"Lisa lingikogu oks");
 		$this->read_template("pick_collection.tpl");
+		$this->mk_path($par_obj["parent"],sprintf("<a href='%s'>%s</a> / Lisa lingikogu oks",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$par_obj["name"]));
 		// Yes, this is really scary but I need to know where all the link
 		// collections are 
 		classload("menuedit");
@@ -62,27 +62,62 @@ class link_collection extends aw_template {
 		$this->read_template("pick_branch.tpl");
 		classload("menuedit_light");
 		$mnl = new menuedit_light();
+		$in_collection = true;
+		$par_obj = $this->get_object($parent);
+		$this->mk_path($par_obj["parent"],sprintf("<a href='%s'>%s</a> / Muuda lingikogu oksa",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$par_obj["name"]));
+		if (not($collection))
+		{
+			$_tmp = $this->get_object($id);
+			$chain = $this->get_object_chain($_tmp["last"]);
+			if (is_array($chain))
+			{
+				while($in_collection && (list($key,$val) = each($chain)))
+				{
+					// stop processing when we find the actual link collection
+					// AND use the "YAH_BEGIN" subtemplate for the FIRST element
+					// remember, path elements come in in reverse order
+					$in_collection = ($val["links"] > 0) ? false : true;
+					if (not($in_collection))
+					{
+						$collection = $val["oid"];
+					};
+				};
+			};
+		};
 		$branch_list = $mnl->gen_rec_list(array(
 			"start_from" => $collection,
 			"add_start_from" => true,
 		));
 		$c = "";
+
 		if (is_array($branch_list))
 		{
 			foreach($branch_list as $key => $val)
 			{
+				if ($id)
+				{
+					$checked = ($_tmp["last"] == $key) ? "checked" : "";
+				}
+				else
+				{
+					$checked = (strlen($c) == 0) ? "checked" : "";
+				};
+
 				$this->vars(array(
 					"key" => $key,
 					"value" => $val,
 					// select the first branch by default
-					"checked" => (strlen($c) == 0) ? "checked" : "",
+					"checked" => $checked,
 				));
+
 				$c .= $this->parse("line");
 			};
 		};
 		$this->vars(array(
+			"name" => $_tmp["name"],
+			"comment" => $_tmp["comment"],
 			"line" => $c,
-			"reforb" => $this->mk_reforb("submit_branch",array("collection" => $collection,"parent" => $parent)),
+			"reforb" => $this->mk_reforb("submit_branch",array("collection" => $collection,"parent" => $parent,"id" => $id)),
 		));
 		return $this->parse();
 	}
@@ -96,19 +131,32 @@ class link_collection extends aw_template {
 
 		// CL_LINK_COLLECTION - nimi on täbar... actually it means
 		// a branch of a link collection
-		$id = $this->new_object(array(
-			"parent" => $parent,
-			"name" => $name,
-			"comment" => $comment,
-			"status" => 2,
-			"last" => $branch,
-			"class_id" => CL_LINK_COLLECTION,
-		));
 
-		$this->add_alias($parent,$id);
+		if ($id)
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+				"last" => $branch,
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"status" => 2,
+				"last" => $branch,
+				"class_id" => CL_LINK_COLLECTION,
+			));
+			$this->add_alias($parent,$id);
+		};
+
 
 		// salvestan lingikogu aliase
-		return $this->mk_orb("list_aliases",array("id" => $parent),"aliasmgr");
+		return $this->mk_orb("pick_branch",array("id" => $id,"parent" => $parent),"link_collection");
 	}
 
 
