@@ -133,6 +133,7 @@ class search_conf extends aw_template
 		@attrib name=search params=name nologin="1" default="0"
 		
 		@param s_parent optional
+		@param s_parent_arr optional
 		@param s_keywords optional
 		@param sstring_title optional
 		@param sstring_author optional
@@ -197,7 +198,7 @@ class search_conf extends aw_template
 			$this->vars(array(
 				"sp_val" => $sl_idx,
 				"sp_text" => $sl_val,
-				"sp_sel" => checked(($s_parent ? $s_parent == $sl_idx : $first) )
+				"sp_sel" => (is_array($s_parent_arr) ? checked(in_array($sl_idx, $s_parent_arr)) : checked(($s_parent ? $s_parent == $sl_idx : $first) ))
 			));
 			$sp.=$this->parse("SEARCH_PARENT");
 			$first = false;
@@ -299,7 +300,7 @@ class search_conf extends aw_template
 			else
 			if ($grps[$s_parent]["static_search"])
 			{
-				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page, $arr, $s_parent, $t_type);
+				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page, $arr, $s_parent, $t_type, $s_parent_arr);
 			}
 
 
@@ -486,7 +487,7 @@ class search_conf extends aw_template
 			}
 
 			// get all the parents under what the document can be
-			$p_arr = $this->get_parent_arr($s_parent);
+			$p_arr = $this->get_parent_arr($s_parent, $s_parent_arr);
 			
 			$_tpstr = join(",",$p_arr);
 			if ($_tpstr != "")
@@ -783,7 +784,7 @@ class search_conf extends aw_template
 		return $this->parse("PAGESELECTOR");
 	}
 
-	function get_parent_arr($parent)
+	function get_parent_arr($parent, $s_parent_arr)
 	{
 		if ($this->cfg["lang_menus"] == 1)
 		{
@@ -806,15 +807,27 @@ class search_conf extends aw_template
 
 		// $parent is the id of the menu group, not the parent menu
 		// so now we figure out the parent menus and do rec_list for all of them 
-		$mens = $this->get_menus_for_grp($parent);
-		$this->marr = $mens;
-		if (is_array($mens))
-		{
-			foreach($mens as $mn)
+                if (!is_array($s_parent_arr))
+                {
+                        $s_parent_arr =array($parent);
+                }		
+
+                $this->marr = array();
+                foreach($s_parent_arr as $parent)
+                {
+			$mens = $this->get_menus_for_grp($parent);
+			if (is_array($mens))
 			{
-				$this->rec_list($mn);
+				$this->marr += $mens;
+				if (is_array($mens))
+				{
+					foreach($mens as $mn)
+					{
+						$this->rec_list($mn);
+					}
+				};
 			}
-		};
+		}
 		return (is_array($this->marr)) ? $this->marr : array(0);
 	}
 
@@ -1158,9 +1171,9 @@ class search_conf extends aw_template
 		return $this->parse();
 	}
 
-	function do_static_search($str, $page,$arr, $s_parent, $t_type)
+	function do_static_search($str, $page,$arr, $s_parent, $t_type, $s_parent_arr)
 	{
-		$p_arr = $this->get_parent_arr($s_parent);
+		$p_arr = $this->get_parent_arr($s_parent, $s_parent_arr);
 		$p_arr_str = join(",",$p_arr);
 		if ($p_arr_str != "")
 		{

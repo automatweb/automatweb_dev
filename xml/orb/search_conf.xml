@@ -5,6 +5,7 @@
 			<function name="search">
 				<arguments>
 					<optional name="s_parent" />
+					<optional name="s_parent_arr" />
 					<optional name="s_keywords" />
 					<optional name="sstring_title" />
 					<optional name="sstring_author" />
