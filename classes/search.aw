@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.60 2004/01/15 19:06:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.61 2004/01/20 17:19:38 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -398,6 +398,18 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$this->rescounter = 0;
 
+		$sel_objs = aw_global_get("cut_objects");
+		if (!is_array($sel_objs))
+		{
+			$sel_objs = array();
+		}
+		$t = aw_global_get("copied_objects");
+		if (!is_array($t))
+		{
+			$t = array();
+		}
+		$sel_objs+=$t;
+
 		// perform the actual search
 		if ($search)
 		{
@@ -706,6 +718,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $this->cfg["classes"][$row["class_id"]]["file"])
 					));
 				}
+			
+				if (isset($sel_objs[$row["oid"]]))
+				{
+					$row["cutcopied"] = "#E2E2DB";
+				}
+				else
+				{
+					$row["cutcopied"] = "#FCFCF4";
+				}
+
 				$this->t->define_data($row);
 				$results++;
 			};
@@ -954,11 +976,18 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if (!$args["clid"])
 		{
 			$mn = get_instance("admin/admin_menus");
+
+			$sel_objs = aw_global_get("cut_objects");
+			if (!is_array($sel_objs))
+			{
+				$sel_objs = array();
+			}
 			
 			$toolbar = $mn->rf_toolbar(array(
 				"parent" => $parent,
 				"callback" => array($this,"modify_toolbar"),
 				"no_save" => 1,
+				"sel_count" => count($sel_objs)
 			));
 
 			// override the search button with our own
@@ -1254,6 +1283,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"align" => "center",
 			"nowrap" => "1",
 			"width" => "30",
+			"chgbgcolor" => "cutcopied",
 		));
 
 		$this->t->define_field(array(
@@ -1263,6 +1293,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"align" => "center",
 			"nowrap" => "1",
 			"width" => "30",
+			"chgbgcolor" => "cutcopied",
 		));
 			
 
@@ -1271,6 +1302,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "Nimi",
 			"talign" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
 		));
 			
 		$this->t->define_field(array(
@@ -1279,6 +1311,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"talign" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
 		));
 			
 		$this->t->define_field(array(
@@ -1286,6 +1319,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "Asukoht",
 			"talign" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
 		));
 			
 		$this->t->define_field(array(
@@ -1296,7 +1330,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"numeric" => 1,
 			"nowrap" => "1",
 			"type" => "time",
-			"format" => "d.m.y / H:i"
+			"format" => "d.m.y / H:i",
+			"chgbgcolor" => "cutcopied",
 		));
 
 		$this->t->define_field(array(
@@ -1304,6 +1339,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "Looja",
 			"talign" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
 		));
 
 		$this->t->define_field(array(
@@ -1314,7 +1350,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"nowrap" => "1",
 			"numeric" => 1,
 			"type" => "time",
-			"format" => "d.m.y / H:i"
+			"format" => "d.m.y / H:i",
+			"chgbgcolor" => "cutcopied",
 		));
 			
 		$this->t->define_field(array(
@@ -1322,6 +1359,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "Muutja",
 			"talign" => "center",
 			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
 		));
 		
 		$this->t->define_field(array(
@@ -1329,6 +1367,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"caption" => "<a href='javascript:selall(\"sel\")'>Vali</a>",
 			"align" => "center",
 			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
 		));
 	}
 
@@ -1497,7 +1536,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$ac = get_instance("cfg/cfgobject");
 			die($ac->assign($args));
-		};
+		}
+		else
+		if ($subaction == "paste")
+		{
+			$am = get_instance("admin/admin_menus");
+			$am->paste($args);
+		}
+
 
 		unset($args["class"]);
 		unset($args["action"]);
