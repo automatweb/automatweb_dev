@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.1 2001/05/19 23:35:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.2 2001/05/21 04:01:06 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -276,15 +276,16 @@ class form_base extends aw_template
 			$this->parse("OUTPUT_SEL");
 			if ($action == "change_op" || $action == "output_settings" || $action == "output_meta")
 			{
-				$this->db_query("SELECT objects.* 
-												 FROM objects 
-												 WHERE parent = $this->id AND class_id = 8 
+				$this->db_query("SELECT form_entries.id AS id
+												 FROM form_entries 
+												 LEFT JOIN objects ON objects.oid = form_entries.id
+												 WHERE form_id = $this->id AND objects.status != 0
 												 ORDER BY objects.modified");	// select all form entries under the form. well this sucks ass. we gotta select them all, cause
 																							// we can't select only those that you can view in the sql. sloooooow. but what can I do?
 				$entry_id = 0;
 				while ($row = $this->db_next())
 				{
-					$entry_id = $row[oid];
+					$entry_id = $row["id"];
 					break;
 				}
 

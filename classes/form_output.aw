@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.1 2001/05/19 21:53:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.2 2001/05/21 04:01:06 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = 
@@ -266,7 +266,7 @@ class form_output extends form_base
 					reset($elarr);
 					while (list($k, $v) = each($elarr))
 					{
-						$elsel.="<option VALUE='".$v->get_id()."' ".($this->output[$arr[r_row]][$arr[r_col]][els][$i] == $v->get_id() ? " SELECTED " : "").">".($v->get_text() == "" ? $v->get_type() : $v->get_text());
+						$elsel.="<option VALUE='".$v->get_id()."' ".($this->output[$arr[r_row]][$arr[r_col]][els][$i] == $v->get_id() ? " SELECTED " : "").">".($v->get_el_name());
 					}
 					$elmnt .= "<tr><td align=right class=plain>Element:</td><td><select class='small_button'	name='elsel_".$arr[r_row]."_".$arr[r_col]."_".$i."'>$elsel</select></td></tr>";		// ok, we shouldn't probably do this, but what the heck
 				}
