@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.53 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.54 2001/09/12 19:10:33 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -133,6 +133,10 @@ class menuedit extends aw_template
 			$cp[] = $GLOBALS["page"];
 		}
 		$cp[] = $GLOBALS["lang_id"];
+		if ($GLOBALS["docid"])
+		{
+			$cp[] = $GLOBALS["docid"];
+		}
 	
 		// format=rss ntx
 		if (!($res = $this->cache->get($section,$cp)) || $params["format"])
