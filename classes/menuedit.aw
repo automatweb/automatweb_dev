@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.91 2002/02/01 12:00:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.92 2002/02/07 08:43:18 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -261,7 +261,7 @@ class menuedit extends aw_template
 		{
 			die($this->do_rdf($section,$obj,$format,$docid));
 		}
-
+ 
 		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
@@ -346,10 +346,8 @@ class menuedit extends aw_template
 			"sel_menu_id" => $sel_menu_id
 		));
 
-
 		if ($GLOBALS["uid"] == "")
 		{
-			$this->tmp = $this->mar;
 			// if the section is marked "users_only" and the visitor is not logged in, 
 			// then redirect him  or her to the default error page
 			// we must go though all the parent menus also 
@@ -357,20 +355,20 @@ class menuedit extends aw_template
 			$uo = false;
 			while ($uo_parent)
 			{
-				if (!is_array($this->tmp[$uo_parent]) && $uo_parent)
+				if (!is_array($this->mar[$uo_parent]) && $uo_parent)
 				{
 					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
 					//$this->mar[$uo_parent] = $this->db_next();
-					$this->tmp[$uo_parent] = $this->get_menu($uo_parent);
+					$this->mar[$uo_parent] = $this->get_menu($uo_parent);
 				}
 				$uo_meta = $this->get_object_metadata(array(
-					"metadata" => $this->tmp[$uo_parent]["metadata"],
+					"metadata" => $this->mar[$uo_parent]["metadata"],
 				));
 				if ($uo_meta["users_only"] == 1)
 				{
 					$uo = true;
 				}
-				$uo_parent = $this->tmp[$uo_parent]["parent"];
+				$uo_parent = $this->mar[$uo_parent]["parent"];
 			}
 			if ($uo)
 			{
@@ -421,14 +419,14 @@ class menuedit extends aw_template
 		classload("periods","document");
 		$d = new document();
 		$this->doc = new document();
-
-		// FSCK	
+		
+		
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
-
+		
 		// here we must find the menu image, if it is not specified for this menu, then use the parent's and so on.
 		$this->do_menu_images($sel_menu_id);
 
@@ -571,7 +569,9 @@ class menuedit extends aw_template
 					{
 						print "drawing $id,$name<br>";
 					};
+					$awt->start("menuedit::rdrawmenu");
 					$this->req_draw_menu($id,$name,&$path,false);
+					$awt->stop("menuedit::rdrawmenu");
 					if ($this->sel_section == $frontpage)
 					{
 						$this->do_seealso_items($this->mar[$id],$name);
@@ -1209,7 +1209,7 @@ class menuedit extends aw_template
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
-			ORDER BY objects.parent, jrk,objects.created";
+				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 		$awt->stop("menuedit::db_listall_lite");
 	}
@@ -4069,26 +4069,51 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if ($has_image)
 			{
+				$_hi = "";
+				if ($this->is_template("HAS_IMAGE"))
+				{
+					$_hi =  $this->parse($mn.$ap.".HAS_IMAGE");
+				}
 				$this->vars(array(
-					"HAS_IMAGE" => $this->parse($mn.$ap.".HAS_IMAGE"),
+					"HAS_IMAGE" => $_hi,
 					"NO_IMAGE" => ""
 				));
 			}
 			else
 			{
+				$_hi = "";
+				if ($this->is_template("NO_IMAGE"))
+				{
+					$_hi = $this->parse($mn.$ap.".NO_IMAGE");
+				}
 				$this->vars(array(
 					"HAS_IMAGE" => "",
-					"NO_IMAGE" => $this->parse($mn.$ap.".NO_IMAGE")
+					"NO_IMAGE" => $_hi 
 				));
 			}
 
 			if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
 			{
-				$hs = $this->parse("HAS_SUBITEMS_".$name);
-				$hsl = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level);
+				$hs = "";
+				if ($this->is_template("HAS_SUBITEMS_".$name))
+				{
+					$this->parse("HAS_SUBITEMS_".$name);
+				}
+				$hsl = "";
+				if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level))
+				{
+					$hsl = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level);
+				}
 				if (in_array($row["oid"],$path))	// this menu is selected
 				{
-					$this->vars(array("HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL")));
+					$_tmp = "";
+					if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
+					{
+						$_tmp = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
+					}
+					$this->vars(array(
+							"HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $_tmp
+					));
 					if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID"))
 					{
 						$_hm = false;
@@ -4111,8 +4136,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			else
 			{
-				$hs = $this->parse("NO_SUBITEMS_".$name);
-				$hsl = $this->parse("NO_SUBITEMS_".$name."_L".$this->level);
+				$hs = "";
+				if ($this->is_template("NO_SUBITEMS_".$name))
+				{
+					$hs = $this->parse("NO_SUBITEMS_".$name);
+				}
+				$hsl = "";
+				if ($this->is_template("NO_SUBITEMS_".$name."_L".$this->level))
+				{
+					$hsl = $this->parse("NO_SUBITEMS_".$name."_L".$this->level);
+				}
 			}
 			$this->vars(array(
 				"HAS_SUBITEMS_".$name => $hs,
@@ -4142,13 +4175,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// on defineeritud $no_show_users_only
 			if ($selonly && $row["name"] != "" && !$noshowu)
 			{
-				if ($is_mid)
+				if ($this->is_template($mn.$ap))
 				{
-					$l_mid.=$this->parse($mn.$ap);
-				}
-				else
-				{
-					$l.=$this->parse($mn.$ap);
+					if ($is_mid)
+					{
+						$l_mid.=$this->parse($mn.$ap);
+					}
+					else
+					{
+						$l.=$this->parse($mn.$ap);
+					}
 				}
 			}
 			$this->vars(array(
@@ -4162,14 +4198,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if ($this->is_template($mn."2"))
 			{
-				$l2.=$this->parse($mn."2".$ap);
+				if ($this->is_template($mn."2".$ap))
+				{
+					$l2.=$this->parse($mn."2".$ap);
+				}
 				$this->vars(array($mn."2".$ap => ""));
 				$second = true;
 			}
 
 			if ($this->is_template($mn."_N2") && $this->sel_section == $row["parent"])
 			{
-				$l2.=$this->parse($mn."_N2".$ap);
+				if ($this->is_template($mn."_N2".$ap))
+				{
+					$l2.=$this->parse($mn."_N2".$ap);
+				}
 				$this->vars(array($mn."_N2".$ap => ""));
 				$second_n = true;
 			}
@@ -4561,11 +4603,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->db_prep_listall("objects.status = 2");
 			$this->db_listall_lite("objects.status = 2");
 
-			$cnt = 0;
-
 			while ($row = $this->db_next())
 			{
-				$cnt++;
 				$this->mpr[$row["parent"]][] = $row;
 				$this->mar[$row["oid"]] = $row;
 			}
@@ -5492,7 +5531,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$smi .= $this->parse("SEL_MENU_IMAGE");
 			}
 		}
-
 		$this->vars(array(
 			"SEL_MENU_IMAGE" => $smi,
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
