@@ -38,18 +38,34 @@ Pealkirjaga: $title\n
 Arvamust avaldas:\n
 Nimi: $eesnimi $perenimi
 $gender
-E-post: $mail
-Koduleht: $homepage
-Tegevusala: " . $this->ala[$ala] . "
+E-post: $mail";
+		if ($homepage)
+		{
+			$msg .= "Koduleht: $homepage\n";
+		}
+		if ($ala)
+		{
+			$msg .= "Tegevusala: " . $this->ala[$ala] . "\n";
+		}
 
-Tekst: " . $this->tekst[$tekst] . "
-Kujundus: " . $this->kujundus[$kujundus] . "
-Struktuur: " . $this->struktuur[$struktuur] . "
-Tehnika: 
-";
+		if ($tekst)
+		{
+			$msg .= "Tekst: " . $this->tekst[$tekst] . "\n";
+		}
+
+		if ($kujundus)
+		{
+			$msg .= "Kujundus: " . $this->kujundus[$kujundus] . "\n";
+		}
+		if ($struktuur)
+		{
+			$msg .= "Struktuur: " . $this->struktuur[$struktuur] . "\n";
+		}
+
 		$tsum = 0;
 		if (is_array($tehnika)) 
 		{
+			$msg .= "Tehnika: \n";
 			while(list($k,$v) = each($tehnika)) 
 			{
 				$msg .= $this->tehnika[$v] . "\n";
