@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.300 2004/09/09 14:59:32 duke Exp $
+// $Id: class_base.aw,v 2.301 2004/09/14 09:18:00 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3215,23 +3215,6 @@ class class_base extends aw_template
 				};     
 			};
 
-
-			// XXX: this is not good!
-			if (!$new &&  ($type == "relpicker") && isset($property["pri"]) )
-			{
-				$realclid =  constant($property["clid"]);
-				// first zero out all other pri fields
-				$q = sprintf("UPDATE aliases SET pri = 0 WHERE source = %d AND type = %d",
-					$this->id,$realclid);
-				$this->db_query($q);
-				if (!empty($property["value"]))
-				{
-					// and now .. if a value is set, update the pri of _that_
-					$q = sprintf("UPDATE aliases SET pri = %d WHERE source = %d AND target = %d AND type = %d",
-					$property["pri"],$this->id,$property["value"],$realclid);
-					$this->db_query($q);
-				};
-			}
 
 			if ($this->is_rel)
 			{
