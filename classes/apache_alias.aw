@@ -128,18 +128,18 @@ class apache_alias extends aw_template
 
 		if (strlen($alias) == 0)
 		{
-			$error .= "Alias ei saa olla tühi!<br>";
+			$error .= "Alias ei saa olla tühi!<br />";
 		};
 
 		if (strlen($dir) == 0)
 		{
-			$error .= "Kataloog ei saa olla tühi!<br>";
+			$error .= "Kataloog ei saa olla tühi!<br />";
 		};
 
 		$check = $this->get_record("apache_aliases","alias",$alias);
 		if ($check && ($check["id"] != $id))
 		{
-			$error .= "Sellise nimega alias on juba olemas!<br>";
+			$error .= "Sellise nimega alias on juba olemas!<br />";
 		};
 
 		if ($error)

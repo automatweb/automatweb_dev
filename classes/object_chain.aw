@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.11 2003/02/25 13:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.12 2003/08/01 12:48:16 axel Exp $
 // object_chain.aw - Objektipärjad
 
 class object_chain extends aw_template
@@ -204,7 +204,7 @@ class object_chain extends aw_template
 
 			$q = "SELECT oid FROM objects WHERE $sst $sic $st $sidf $sidt $sidp AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
 			$this->db_query($q);
-//			echo "q = $q <br>";
+//			echo "q = $q <br />";
 			while ($row = $this->db_next())
 			{
 				if (!in_array($row["oid"], $toar) && $this->can("view", $row["oid"]))

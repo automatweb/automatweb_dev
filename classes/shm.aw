@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shm.aw,v 2.3 2002/09/26 16:04:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shm.aw,v 2.4 2003/08/01 12:48:18 axel Exp $
 // shm.aw - shared memory functions here
 // all variable keys should be SHM_BASE + number
 
@@ -90,10 +90,10 @@ class shm
 	// !dumps all variables in shared memory to the user
 	function dump_all_vars()
 	{
-		echo "keylist = <pre>", var_dump($this->keylist),"</pre> <br>";
+		echo "keylist = <pre>", var_dump($this->keylist),"</pre> <br />";
 		foreach($this->keylist as $key)
 		{
-			echo "key = $key , var = <pre>", var_dump($this->get($key)),"</pre> <br>";
+			echo "key = $key , var = <pre>", var_dump($this->get($key)),"</pre> <br />";
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.43 2003/06/12 16:59:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.44 2003/08/01 12:48:17 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -586,7 +586,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$where = join(" AND ",$parts);
 					// limit the results to 500
 					$q = "SELECT * FROM objects WHERE $where LIMIT 500";
-//					echo "s_q = $q <br>";
+//					echo "s_q = $q <br />";
 					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
 					if (is_array($_tmp))
@@ -611,6 +611,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			//while($row = $this->db_next())
 			while($row = $this->get_next())
 			{
+				if (!$this->can("view",$row["oid"])) continue;
+				
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
 				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
@@ -1340,7 +1342,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					{
 						$copied_objects[$oid] = $r;
 						$ra = aw_unserialize($r);
-//					echo "r = $r <br>ra = <pre>", var_dump($ra),"</pre> <br>";
+//					echo "r = $r <br />ra = <pre>", var_dump($ra),"</pre> <br />";
 					}
 				}
 			}
@@ -1384,7 +1386,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function assign_config($args = array())
 	{
-		print "inside cfgobject->assign_config<br>";
+		print "inside cfgobject->assign_config<br />";
 		print "<pre>";
 		print_r($args);
 		print "</pre>";
@@ -1617,7 +1619,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				};
 				$where = join(" AND ",$parts);
 				$q = "SELECT *,objects.name AS name FROM objects $join WHERE $where";
-//					echo "s_q = $q <br>";
+//					echo "s_q = $q <br />";
 				$_tmp = array();
 				$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
 				if (is_array($_tmp))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.46 2003/07/10 12:23:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.47 2003/08/01 12:48:19 axel Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -275,7 +275,7 @@ class table extends aw_template
 			if (is_array($flt->data["statdata"]))
 				foreach($flt->data["statdata"] as $alias => $dta)
 				{
-					$blah.="#$alias&nbsp;&nbsp;".$dta["display"]."<br>";
+					$blah.="#$alias&nbsp;&nbsp;".$dta["display"]."<br />";
 				};
 			$this->vars(array("extdata" => $blah));
 			$extdata=$this->parse("extdata");
@@ -1303,7 +1303,7 @@ class table extends aw_template
 	// lauri kirjutatud jura
 	function filter_eval($str)
 	{
-		//echo("<b>eval=$str</b><br>");//dbg
+		//echo("<b>eval=$str</b><br />");//dbg
 		if ($str[0]!="=")
 		{
 			return $str;
@@ -1420,7 +1420,7 @@ class table extends aw_template
 		else
 		if ($str[1]=="#")
 		{
-			//echo("al ".substr($str,2,strlen($str)-2)."<br>");//dbg
+			//echo("al ".substr($str,2,strlen($str)-2)."<br />");//dbg
 			
 			$evl=$this->fl_external[substr($str,2,strlen($str)-2)];
 		}
@@ -1446,7 +1446,7 @@ class table extends aw_template
 				};
 			};
 		};
-		//echo("ans=$evl<br>");//dbg
+		//echo("ans=$evl<br />");//dbg
 		return $evl;
 	}
 
@@ -1494,7 +1494,7 @@ class table extends aw_template
 
 		if ($this->arr["show_title"])
 		{
-			$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br>";
+			$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br />";
 		}
 		
 		$stc = get_instance("style"); 
@@ -1634,7 +1634,7 @@ class table extends aw_template
 		}
 		if ($this->meta["last_changed"])
 		{
-			$footer .= "<br><small><i>Muudetud: <span align='right'>" . $this->time2date($this->obj_data["modified"],4) . "</span></i></small>";
+			$footer .= "<br /><small><i>Muudetud: <span align='right'>" . $this->time2date($this->obj_data["modified"],4) . "</span></i></small>";
 		};
 		if ($footer != "")
 		{
@@ -2284,7 +2284,7 @@ class table extends aw_template
 
 	function proc_text($txt)
 	{
-		$txt = str_replace("\n", "<br>", $txt);
+		$txt = str_replace("\n", "<br />", $txt);
 		if ($txt == " ")
 		{
 			return "&nbsp;";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.14 2003/05/08 10:26:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.15 2003/08/01 12:48:17 axel Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -188,7 +188,7 @@ class scheduler extends aw_template
 		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-36000)))
 		{
 			// they are so just bail out
-			echo "bailing for lock file ",$this->cfg["lock_file"],"<br>\n";
+			echo "bailing for lock file ",$this->cfg["lock_file"],"<br />\n";
 			return;
 		}
 
@@ -204,11 +204,11 @@ class scheduler extends aw_template
 		{
 			if (isset($evnt["time"]) && (time() > $evnt["time"]))
 			{
-				echo "exec event $evnt[event] <br>";
+				echo "exec event $evnt[event] <br />";
 				$this->do_and_log_event($evnt);
 			}
 		}
-		echo "unlinking ",$this->cfg["lock_file"]," <Br>";
+		echo "unlinking ",$this->cfg["lock_file"]," <br />";
 		unlink($this->cfg["lock_file"]);
 	}
 
@@ -225,18 +225,18 @@ class scheduler extends aw_template
 		preg_match("/^http:\/\/(.*)\//U",$ev_url, $mt);
 		$url = $mt[1];
 
-		echo "url = $url <br>";
+		echo "url = $url <br />";
 		$awt = get_instance("aw_test");
 		$awt->handshake(array("host" => $url));
 
 		if ($evnt["uid"] && $evnt["password"])
 		{
 			// we must log in 
-			echo "logging in as $url $evnt[uid] $evnt[password] <br>";
+			echo "logging in as $url $evnt[uid] $evnt[password] <br />";
 			$awt->login(array("host" => $url, "uid" => $evnt["uid"], "password" => $evnt["password"]));
 		}
 
-		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br>";
+		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br />";
 		$req = $awt->do_send_request(array("host" => $url, "req" => substr($ev_url,strlen("http://")+strlen($url))));
 
 		if ($evnt["uid"] && $evnt["password"])

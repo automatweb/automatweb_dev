@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.50 2003/07/23 11:39:27 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.51 2003/08/01 12:48:16 axel Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -456,7 +456,7 @@ class objects extends db_objects
 			case CL_IMAGE:
 				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
-				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				$replacement = sprintf("<img src='%s'><br />%s",$idata["url"],$idata["comment"]);
 				break;
 			case CL_TABLE:
 				$t = get_instance("table");
@@ -600,7 +600,7 @@ class objects extends db_objects
 
 			default:
 				$this->has_output = false;
-				$replacement = $obj["class_id"] . " This object class has no output yet<br>";
+				$replacement = $obj["class_id"] . " This object class has no output yet<br />";
 		}
 		return $replacement;
 
@@ -716,7 +716,7 @@ class objects extends db_objects
 		else
 		{
 			$client_id = $site['site_obj']['select_parent_folder'];
-			//echo "got client id as $client_id <br>\n";
+			//echo "got client id as $client_id <br />\n";
 			flush();
 		}
 
@@ -774,7 +774,7 @@ class objects extends db_objects
 		$am->dc = $dbi->dc;	// fake the db connection
 
 		$am->req_import_menus($i_p, &$menus, $awmenu_id);
-		//echo "imported .. <br>\n";
+		//echo "imported .. <br />\n";
 		flush();
 
 		// create another menu with the site name and make menus under that

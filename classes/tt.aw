@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.7 2003/08/01 12:48:19 axel Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
@@ -361,12 +361,12 @@ class TTGraph
 							$min = $val;
 						}
 					}
-//							echo "$ke = $val<br>";						
+//							echo "$ke = $val<br />";						
 					if (is_array($val))
 					{
 						while(list($kee,$va) = each($val)) 
 						{
-	//								echo "$kee = $va<br>";						
+	//								echo "$kee = $va<br />";						
 						}
 					}
 				}
@@ -378,7 +378,7 @@ class TTGraph
 					if ($max < $v) $max = $v;
 					if ($min > $v) $min = $v;
 				}
-//							echo "mh1 = $v<br>";						
+//							echo "mh1 = $v<br />";						
 			}
 		}
 		if (!is_array($values["ydata_0"])) 
@@ -393,7 +393,7 @@ class TTGraph
 		//Set this here zero for now... until someone dares to write a negative values algorith.
 		$this->minValue=0;
 		$this->maxValue=$max;
-//		print("colsize: $colSize<br>xitemcount: $xItemCount<br>minval: $min<br>maxval: $max<br>");
+//		print("colsize: $colSize<br />xitemcount: $xItemCount<br />minval: $min<br />maxval: $max<br />");
 //exit;		
 	}
 

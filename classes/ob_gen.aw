@@ -573,7 +573,7 @@ break;
 //print_r($ob['meta']['log']);
 //		echo "<pre>";
 		$alg=$alg?$alg:0;
-		if ($alg>0) echo "continuing imort from $alg<br>";else echo "stating import from 0<br>";
+		if ($alg>0) echo "continuing imort from $alg<br />";else echo "stating import from 0<br />";
 //die();
 //	echo 	"starting from: ".$this->db_fetch_field("select max(source_id)as maks from ob_gen_log where generator_oid=$id","maks");
 

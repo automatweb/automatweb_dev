@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.63 2003/07/22 12:10:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.64 2003/08/01 12:48:16 axel Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -183,7 +183,7 @@ class image extends class_base
 			else
 			if ($idata["link"] != "")
 			{
-		//		echo "has link! <br>";
+		//		echo "has link! <br />";
 				if ($idata["big_url"] != "" && isset($tpls["image_big_linked"]))
 				{
 					$replacement = localparse($tpls["image_big_linked"],$vars);
@@ -204,7 +204,7 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br />%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
@@ -251,7 +251,7 @@ class image extends class_base
 					}
 					if (!empty($idata["comment"]))
 					{
-						$replacement .= "<BR>".$idata["comment"];
+						$replacement .= "<br />".$idata["comment"];
 					};
 					//$replacement .= "</td></tr></table>";
 				};
@@ -543,7 +543,7 @@ class image extends class_base
 				if ($imd['file'] != '')
 				{
 					$sz = getimagesize($imd['file']);
-					$prop['value'] = "Laius: ".$sz[0]." <br>K&otilde;rgus: ".$sz[1]." <br>";
+					$prop['value'] = "Laius: ".$sz[0]." <br />K&otilde;rgus: ".$sz[1]." <br />";
 				};
 				break;
 		};

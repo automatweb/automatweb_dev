@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.17 2003/06/10 15:44:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.18 2003/08/01 12:48:20 axel Exp $
 /*
         @default table=objects
         @default group=general
@@ -109,17 +109,17 @@ class xml_import extends class_base
 			return false;
 		};
 
-		print "Retrieving data:<br>";
+		print "Retrieving data:<br />";
 		flush();
 		// retrieve data
 		$method = $obj["meta"]["import_function"];
 		$ds = get_instance("datasource");
 		$src_data = $ds->retrieve(array("id" => $obj["meta"]["datasource"]));
-		print "Got " . strlen($src_data) . " bytes of data<br>";
+		print "Got " . strlen($src_data) . " bytes of data<br />";
 		flush();
 		if (strlen($src_data) < 100)
 		{
-			print "Didn't got enough data from the datasource<br>";
+			print "Didn't got enough data from the datasource<br />";
 			exit;
 		};
 		/*
@@ -127,10 +127,10 @@ class xml_import extends class_base
 		print htmlspecialchars($src_data);
 		print "</pre>";
 		*/
-		print "Invoking import function<br>";
+		print "Invoking import function<br />";
 		flush();
 		$this->$method(array("source" => $src_data));
-		print "Finished!!!<bR>";
+		print "Finished!!!<br />";
 		flush();
 		exit;
 	}
@@ -175,7 +175,7 @@ class xml_import extends class_base
 				$q = "INSERT INTO ut_tudengid (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta,nimi)
 					VALUES('$id','$enimi','$pnimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta','$nimi')";
 				print $q;
-				print "<br>";
+				print "<br />";
 				$this->db_query($q);
 			};
 
@@ -207,7 +207,7 @@ class xml_import extends class_base
 		foreach($values as $key => $val)
 		{
 			/*
-			print "lastlevel = $lastlevel<br>";
+			print "lastlevel = $lastlevel<br />";
 			print "<pre>";
 			print_r($val);
 			print "</pre>";
@@ -271,12 +271,12 @@ class xml_import extends class_base
 					if ($str_level > 3)
 					{
 						$t3_ylem = $t3taseme_ylem_id;
-						print "t3<br>";
+						print "t3<br />";
 					}
 					else
 					{
 						$t3_ylem = $real_ylem_id;
-						print "real_ylem<br>";
+						print "real_ylem<br />";
 					};
 
 					if ($str_level < 4)
@@ -296,14 +296,14 @@ class xml_import extends class_base
 						$t3taseme_ylem_id = $real_ylem_id;
 						$t3taseme_id = $id;
 					};
-					print "id = $id, kood = $kood, nimetus = $nimetus, aadress = $aadress, email=$email, veeb = $veeb, telefon = $telefon, faks = $faks<br>";
-					print "osakond = $osakond, real_ylem_id = $real_ylem_id, real_ylem_name = $real_ylem_name<br>";
-					print "jrk = $jrk, jrknimetus = $jrknimetus, t3_ylem = $t3_ylem, t3_sort = $t3_sort<br>";
+					print "id = $id, kood = $kood, nimetus = $nimetus, aadress = $aadress, email=$email, veeb = $veeb, telefon = $telefon, faks = $faks<br />";
+					print "osakond = $osakond, real_ylem_id = $real_ylem_id, real_ylem_name = $real_ylem_name<br />";
+					print "jrk = $jrk, jrknimetus = $jrknimetus, t3_ylem = $t3_ylem, t3_sort = $t3_sort<br />";
 					#print $q;
 					print "<h1>$str_level</h1>";
 					
 					$this->db_query($q);
-					print "<br>";
+					print "<br />";
 					$lastlevel = $val["level"];
 				};
 
@@ -313,7 +313,7 @@ class xml_import extends class_base
 					$ylem_name = $this->convert_unicode($attr["nimetus"]);
 					$yid = $val["attributes"]["id"];
 					/*
-					print "<b>pushing</b><br>";
+					print "<b>pushing</b><br />";
 					*/
 					$str_level++;
 					array_push($ylem_list,$ylem_name);
@@ -451,7 +451,7 @@ class xml_import extends class_base
 					$q = "INSERT INTO ut_tootajad (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
 						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad')";
 					print $q;
-					print "<br>";
+					print "<br />";
 					$this->db_query($q);
 				};
 				$kraad = array();
@@ -468,7 +468,7 @@ class xml_import extends class_base
 								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
 								$this->db_query($q);
 								print $q;
-								print "<br>";
+								print "<br />";
 								flush();
 							}
 							else
@@ -484,13 +484,13 @@ class xml_import extends class_base
 								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
 								$this->db_query($q);
 								print $q;
-								print "<br>";
+								print "<br />";
 								flush();
 							}
 					};
 				}
 			}
-			print "<bR>";
+			print "<br />";
 
 		}
 		// kahjuks ma ei saa mysql-ist kätte ainult neid, millel count=0, niet ma teen
@@ -513,7 +513,7 @@ class xml_import extends class_base
 		{
 			$this->db_query($query);
 		};
-		print "all done!<br>";
+		print "all done!<br />";
 
 	}
 
@@ -611,7 +611,7 @@ class xml_import extends class_base
 				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste)
 					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url_str','$oppeaste')";				
 				print $q;
-				print "<br>";
+				print "<br />";
 				$nimetus = $nimetus_en = $oppeaste = $id = $kood = "";
 				$this->db_query($q);
 
@@ -649,7 +649,7 @@ class xml_import extends class_base
 				$q = "INSERT INTO ut_oppeasted (id,nimetus,jrk)
 					VALUES('$id','$nimetus','$jrk')";
 				print $q;
-				print "<br>";
+				print "<br />";
 				$this->db_query($q);
 			};
 
@@ -685,7 +685,7 @@ class xml_import extends class_base
 				$q = "INSERT INTO ut_oppevormid (id,nimetus,jrk)
 					VALUES('$id','$nimetus','$jrk')";
 				print $q;
-				print "<br>";
+				print "<br />";
 				$this->db_query($q);
 			};
 
@@ -697,8 +697,8 @@ class xml_import extends class_base
 	function bitch_and_die(&$parser,&$contents)
 	{
 		$err = xml_error_string(xml_get_error_code($parser));
-		print "Viga lähteandmetes<br>"; 
-		print "<font color='red'><strong>$err</strong></font><br>";
+		print "Viga lähteandmetes<br />"; 
+		print "<font color='red'><strong>$err</strong></font><br />";
 		$b_idx = xml_get_current_byte_index($parser);
 		$frag = substr($contents,$b_idx - 100, 200);
 		$pref = htmlspecialchars(substr($frag,0,100));

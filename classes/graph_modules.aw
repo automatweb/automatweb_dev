@@ -63,7 +63,7 @@ class graph_modules extends aw_template
 				if ($i<2)
 				{
 					$buffer = fgets($f, 4096);
-					//echo $buffer."<BR><BR>";
+					//echo $buffer."<br /><br />";
 				} 
 				else if ($i==2)
 				{
@@ -114,7 +114,7 @@ class graph_modules extends aw_template
 /*				print($arr_date[$i]." ");
 				echo $arr_rows[$i]." ";
 				echo $arr_words[$i]." ";
-				echo $arr_bytes[$i]."<br>";
+				echo $arr_bytes[$i]."<br />";
 */			}
 	
 			$ydata=array(				

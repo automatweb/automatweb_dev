@@ -72,8 +72,8 @@
 */
 
 
-define('DOCUT',"<br><br>idee siis selline et teeb mingi parenti<br>alla mingi reegli järgi unniku katalooge<br> ntx A..Z või 0..9, või JAN..DEC, E..P vms<br>
- ja siis kui vaja on siis jaotab parenti all olevad<br> objektid vastavatesse kataloogidesse (ntx nime järgi)<br>");
+define('DOCUT',"<br /><br />idee siis selline et teeb mingi parenti<br />alla mingi reegli järgi unniku katalooge<br /> ntx A..Z või 0..9, või JAN..DEC, E..P vms<br />
+ ja siis kui vaja on siis jaotab parenti all olevad<br /> objektid vastavatesse kataloogidesse (ntx nime järgi)<br />");
 
 class menu_gen extends class_base
 {
@@ -142,12 +142,12 @@ class menu_gen extends class_base
 				foreach($objects as $val)
 				{
 					if ($val['class_id'] == CL_PSEUDO)
-					$str.='<b>'.$val['name'].'</b> - '.$this->cfg['classes'][$val['class_id']]['name'].'<br>';
+					$str.='<b>'.$val['name'].'</b> - '.$this->cfg['classes'][$val['class_id']]['name'].'<br />';
 					else
-					$str.=$val['name'].' - '.$this->cfg['classes'][$val['class_id']]['name'].'<br>';
+					$str.=$val['name'].' - '.$this->cfg['classes'][$val['class_id']]['name'].'<br />';
 				}
-				$data['value'] = 'NB! neid objekte liigutatakse!!!(va kataloogid)<br><br>'.$str.
-				'<br><b>need kataloogid luuakse</b> <br>'.implode('<br />',$this->complete_names($this->catalogs_to_make($meta),$meta['prefix'],$meta['sufix']));
+				$data['value'] = 'NB! neid objekte liigutatakse!!!(va kataloogid)<br /><br />'.$str.
+				'<br /><b>need kataloogid luuakse</b> <br />'.implode('<br />',$this->complete_names($this->catalogs_to_make($meta),$meta['prefix'],$meta['sufix']));
 
 			break;
 			case 'tyyp':
@@ -353,7 +353,7 @@ class menu_gen extends class_base
 		$jrk=0;
 		if ($meta['gen_and_deal'] || $meta['gen_only'])
 		{
-			echo "parent = {$meta['destination_path']} <br>";
+			echo "parent = {$meta['destination_path']} <br />";
 			$mn = get_instance('menuedit');
 			foreach ($CREATE as $key => $name)
 			{
@@ -367,7 +367,7 @@ class menu_gen extends class_base
 					'jrk' => $jrk,
 					'no_flush' => 1,
 				));/**/
-				echo $jrk.'. oid('.$new_cat.') - '.$name.'<br>' ;
+				echo $jrk.'. oid('.$new_cat.') - '.$name.'<br />' ;
 				$made[$key]=array('id' => $new_cat,'name' => $name);
 				//settimeout(20);
 				flush();
@@ -392,7 +392,7 @@ class menu_gen extends class_base
 					continue;
 				}
 				$where_to=$this->assign_catalog($val,$made,$meta['group_by'],$meta['gen_rest_into']); //object,available catalogs,grouping
-				echo "{$val['name']} - $key >> $where_to<br>";
+				echo "{$val['name']} - $key >> $where_to<br />";
 				if ($where_to)
 				{
 					$this->upd_object(array('oid'=>$key,'parent'=>$where_to));

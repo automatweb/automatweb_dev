@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.298 2003/07/18 11:53:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.299 2003/08/01 12:48:16 axel Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -85,7 +85,7 @@ class menuedit extends aw_template
 		// at this point $section is already numeric,
 		// we checked it in $this->request_startup()
 //		$section = aw_global_get("section");
-//		echo "section = $section <br>";
+//		echo "section = $section <br />";
 
 
 		$obj = $this->get_object($section);
@@ -423,7 +423,7 @@ class menuedit extends aw_template
 					global $DBUG;
 					if ($DBUG)
 					{
-						print "checking $sval<br>";
+						print "checking $sval<br />";
 					}
 					if ($obj !== false)
 					{

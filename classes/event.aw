@@ -36,8 +36,8 @@ class event extends aw_template
 			{
 				$repl = $this->_show_object($obj);
 			};
-			//$name = sprintf("<br><img src='%s'>%s",get_icon_url($obj["class_id"],""),$obj["name"]);
-			$name = "<br>" .$repl;
+			//$name = sprintf("<br /><img src='%s'>%s",get_icon_url($obj["class_id"],""),$obj["name"]);
+			$name = "<br />" .$repl;
 		}
 		else
 		{

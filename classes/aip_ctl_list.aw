@@ -156,7 +156,7 @@ class aip_ctl_list extends aw_template
 			// find the file by name
 			$oid = $this->db_fetch_field("SELECT id FROM aip_files WHERE filename LIKE '%".$ar["name"]."%'","id");
 			
-//			echo "name = $ar[name] oid = $oid<br>\n";
+//			echo "name = $ar[name] oid = $oid<br />\n";
 //			flush();
 			if ($oid)
 			{

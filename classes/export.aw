@@ -214,7 +214,7 @@ class export extends aw_template
 		set_time_limit(0);
 		ignore_user_abort(true);
 
-		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br>\n";
+		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br />\n";
 		flush();
 
 		if ($rule_id)
@@ -264,7 +264,7 @@ class export extends aw_template
 					"file" => $nname,
 					"content" => fread($fp, 10000000)
 				));
-				echo "copied file $fil to $nname <br>";
+				echo "copied file $fil to $nname <br />";
 				fclose($fp);
 			}
 		}
@@ -310,7 +310,7 @@ class export extends aw_template
 				// ignore folders!
 				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
 				$this->db_query("DELETE FROM export_content WHERE filename LIKE '$fn'");
-				echo "removing file $fn <br>\n";
+				echo "removing file $fn <br />\n";
 				flush();
 			}
 		}
@@ -322,25 +322,25 @@ class export extends aw_template
 			// $zip_file contains the path and name of the file into which we should zip the exported site
 			// first, delete the old zip
 			@unlink($zip_file);
-			echo "creating zip file $zip_file <br>\n";
+			echo "creating zip file $zip_file <br />\n";
 			flush();
 			if (!chdir($this->folder))
 			{
-				echo "can't change dir to $this->folder <br>\n";
+				echo "can't change dir to $this->folder <br />\n";
 			}
 			$cmd = aw_ini_get("server.zip_path")." -r $zip_file *";
 			$res = `$cmd`;
-			echo "created zip file $zip_file<br>\n";
+			echo "created zip file $zip_file<br />\n";
 			flush();
 		}
 
 		if ($aw_zip_fname != "" && $aw_zip_folder)
 		{
-			echo "creating zip file $aw_zip_fname in AW <br>\n";
+			echo "creating zip file $aw_zip_fname in AW <br />\n";
 			flush();
 			if (!chdir($this->folder))
 			{
-				echo "can't change dir to temp folder <br>\n";
+				echo "can't change dir to temp folder <br />\n";
 			}
 			$cmd = aw_ini_get("server.zip_path")." -r ".aw_ini_get("server.tmpdir")."/aw_zip_temp.zip *";
 			$res = `$cmd`;
@@ -369,17 +369,17 @@ class export extends aw_template
 				));
 			}
 			@unlink(aw_ini_get("server.tmpdir")."/aw_zip_temp.zip");
-			echo "uploaded zip file to AW<br>\n";
+			echo "uploaded zip file to AW<br />\n";
 			flush();
 		}
 
-		echo "kontrollin vigaseid lehti.. <Br>";
+		echo "kontrollin vigaseid lehti.. <br />";
 		$this->db_query("SELECT id,filename,orig_url,lang_id FROM export_content
 			WHERE LENGTH(content) < 300 AND orig_url IS NOT NULL AND orig_url != ''
 		");
 		while($row = $this->db_next())
 		{
-			echo "uuendan .. url = $row[orig_url]  <br>";
+			echo "uuendan .. url = $row[orig_url]  <br />";
 			$this->save_handle();
 
 			$cnt = 0;
@@ -396,7 +396,7 @@ class export extends aw_template
 			if (!$complete)
 			{
 				$msg = "Lehek&uuml;&uuml;lje uuendamine eba&otilde;nnestus!!! url = $row[orig_url]";
-				echo "<br><br><B><font color=red>$msg</font></b><br><br>";
+				echo "<br /><br /><B><font color=red>$msg</font></b><br /><br />";
 				$this->err_log[] = array(
 					"tm" => time(),
 					"url" => $row['orig_url'],
@@ -405,10 +405,10 @@ class export extends aw_template
 			}
 			$this->restore_handle();
 		}
-		echo "creating log entry ...<br>\n";
+		echo "creating log entry ...<br />\n";
 		flush();
 		$this->write_log();
-		echo "<br>all done. <br><br>\n\n";
+		echo "<br />all done. <br /><br />\n\n";
 		die();
 	}
 
@@ -423,7 +423,7 @@ class export extends aw_template
 			fclose($_fp);
 			if (($this->rule_id && $rid == $this->rule_id) || !$this->rule_id)
 			{
-				echo "<b>Found stop flag as ".$_stfn.", shutting down.</b><br>\n";
+				echo "<b>Found stop flag as ".$_stfn.", shutting down.</b><br />\n";
 				$this->err_log[] = array(
 					"tm" => time(),
 					"msg" => "Found stop flag as ".$_stfn.", shutting down."
@@ -442,10 +442,10 @@ class export extends aw_template
 
 		$url = $this->rewrite_link($url);
 		$_url = $url;
-		//echo "fetch_and_save_page($url, $lang_id) <br>";
+		//echo "fetch_and_save_page($url, $lang_id) <br />";
 		if ($url == "")
 		{
-			echo "<p><Br>VIGA, tyhi url! </b><Br>";
+			echo "<p><br />VIGA, tyhi url! </b><br />";
 			$this->err_log[] = array(
 				"tm" => time(),
 				"msg" => "VIGA, tyhi url!"
@@ -458,7 +458,7 @@ class export extends aw_template
 		if (isset($this->hashes[$url]) || $this->check_excludes($url))
 		{
 			$tmp = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
-//			echo "fetch_and_save_page($_url, $lang_id) returning $tmp <br>";
+//			echo "fetch_and_save_page($_url, $lang_id) returning $tmp <br />";
 			return $tmp;
 		}
 
@@ -473,14 +473,14 @@ class export extends aw_template
 
 		// if we switch languages, we have to remake menu caches
 		$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
-//		echo "made cache for $t_lang_id <br>";
+//		echo "made cache for $t_lang_id <br />";
 
 		// set the hash table
 		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
 		$current_section = $this->current_section;
 
 		// read content
-//		echo "$url <br>\n";
+//		echo "$url <br />\n";
 		$fc = $this->get_page_content($url);
 
 		// pause for set number of seconds
@@ -498,7 +498,7 @@ class export extends aw_template
 		{
 			$name = $this->folder."/".$file_name;
 		}
-		echo "saving $url as $name (req level: $this->fsp_level)<br>\n";
+		echo "saving $url as $name (req level: $this->fsp_level)<br />\n";
 		flush();
 
 		// now. convert all the links in the page
@@ -513,21 +513,21 @@ class export extends aw_template
 		{
 			$is_print = true;
 		}
-//		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
+//		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br />";
 		if (substr($name, -4) == "html")
 		{
 				$fc .= "\n<!--  viimati genereeritud ".date("H:i d.m.Y")." kasutaja ".aw_global_get("uid")." poolt -->";
 		}
 		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id, $url);
 
-//		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
+//		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br />";
 		$this->fsp_level--;
 		return $f_name;
 	}
 
 	function convert_links(&$fc,$lang_id, $single_page_only, $url = false)
 	{
-//		echo "convert_links(fc,$lang_id) <br>";
+//		echo "convert_links(fc,$lang_id) <br />";
 		// uukay. so the links we gotta convert are identified by having $baseurl in them. so look for that
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -600,7 +600,7 @@ class export extends aw_template
 					}
 					$tid = gen_uniq_id();
 					$temps[$tid] = $fname;
-	//				echo "fname = $fname , tid = $tid <br>";
+	//				echo "fname = $fname , tid = $tid <br />";
 					$fname = $tid;
 				}
 				else
@@ -611,7 +611,7 @@ class export extends aw_template
 			// we still gotta replace the link, even if it is an extlink outta here, 
 			// cause otherwise we would end up in an infinite loop
 
-//			echo "replace $link with $fname begin = $begin end = $end , url = $url <br>";
+//			echo "replace $link with $fname begin = $begin end = $end , url = $url <br />";
 			// replace the link in the html
 			$fc = substr($fc,0,$begin).$fname.substr($fc,$end);
 		}
@@ -628,13 +628,13 @@ class export extends aw_template
 
 		// convert poll links
 		$fc = str_replace("$baseurl/poll.aw?", "/dyn.aw?type=poll&", $fc);
-//		echo "convert_links(fc,$lang_id) returning <br>";
+//		echo "convert_links(fc,$lang_id) returning <br />";
 	}
 
 	function save_file($fc,$name, $no_db = false, $cur_sec = "", $lang_id = "", $url = '')
 	{
-//		echo "save_file(fc,$name) <br>";
-//		echo "saving file as $name <br>\n";
+//		echo "save_file(fc,$name) <br />";
+//		echo "saving file as $name <br />\n";
 		preg_match("/__global = (.*)/",$fc,$mt);
 		if (file_exists($name))
 		{
@@ -693,15 +693,15 @@ class export extends aw_template
 				$this->db_query("INSERT INTO export_filelist(filename,section,lang_id) VALUES('$name','$cur_sec','$lang_id')");
 			}
 		}
-//		echo "save_file(fc,$name) returning <br>";
+//		echo "save_file(fc,$name) returning <br />";
 	}
 
 	function get_ext_for_link($link, $headers)
 	{
-//		echo "get_ext_for_link($link, headers) <br>";
+//		echo "get_ext_for_link($link, headers) <br />";
 		if (isset($this->link2type[$link]))
 		{
-//			echo "get_ext_for_link($link, headers) returning ",$this->link2type[$link],"<br>";
+//			echo "get_ext_for_link($link, headers) returning ",$this->link2type[$link],"<br />";
 			return $this->link2type[$link];
 		}
 
@@ -730,7 +730,7 @@ class export extends aw_template
 
 		if (!isset($this->type2ext[$ct]))
 		{
-			echo "<B><font color=red><br>VIGA! EI LEIDNUD ext for type $ct <br></font></b>";
+			echo "<B><font color=red><br />VIGA! EI LEIDNUD ext for type $ct <br /></font></b>";
 			$this->err_log[] = array(
 				"tm" => time(),
 				"url" => $link,
@@ -739,7 +739,7 @@ class export extends aw_template
 		}
 
 		$this->link2type[$link] = $this->type2ext[$ct];
-//		echo "get_ext_for_link($link, headers) returning ",$this->link2type[$ct],"<br>";
+//		echo "get_ext_for_link($link, headers) returning ",$this->link2type[$ct],"<br />";
 		return $this->type2ext[$ct];
 	}
 
@@ -752,7 +752,7 @@ class export extends aw_template
 		{
 			return $this->rewrite_link_cache[$link];
 		}
-//		echo "rewrite_link($link) <br>";
+//		echo "rewrite_link($link) <br />";
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 		$frontpage = $this->cfg["frontpage"];
@@ -786,7 +786,7 @@ class export extends aw_template
 			// so we check for that
 			if (($eqpos = strpos($HG["section"], "=")) !== false)
 			{
-//				echo "doing weird magick for link $_link <br>";
+//				echo "doing weird magick for link $_link <br />";
 				$tp = substr($HG["section"], 0, $eqpos);
 				$lslpos = strrpos($tp, "/");
 				$ttp = substr($tp, 0, $lslpos);
@@ -797,8 +797,8 @@ class export extends aw_template
 				// and now put the full string together again
 				$tq = "section=".$ttp."&".$aftersec;
 				parse_str($tq,$HG);
-//				echo "hg = <pre>", var_dump($HG),"</pre> <br>";
-//				echo "returning tq = $tq <br>";
+//				echo "hg = <pre>", var_dump($HG),"</pre> <br />";
+//				echo "returning tq = $tq <br />";
 			}
 
 			$js = "";
@@ -830,8 +830,8 @@ class export extends aw_template
 				$js = "?".$js;
 			}
 			$link = $baseurl."/index.aw".$js;
-//			echo "returned1 $link for $_link <Br>";
-//			echo "rewrite_link($_link) returning $link <br>";
+//			echo "returned1 $link for $_link <br />";
+//			echo "rewrite_link($_link) returning $link <br />";
 			$this->rewrite_link_cache[$_link] = $link;
 			return $link;
 		}
@@ -860,7 +860,7 @@ class export extends aw_template
 				if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)
 				{
 					// external link, should not be touched I guess
-//					echo "rewrite_link($_link) returning $link <br>";
+//					echo "rewrite_link($_link) returning $link <br />";
 					$this->rewrite_link_cache[$_link] = $link;
 					return $link;
 				}
@@ -870,10 +870,10 @@ class export extends aw_template
 					$link = $baseurl.$link;
 				}
 				$link = $this->rewrite_link($link);
-//				echo "rewrote extlink $_link to $link  <br>";
+//				echo "rewrote extlink $_link to $link  <br />";
 			}
 			$this->rewrite_link_cache[$_link] = $link;
-//			echo "rewrite_link($_link) returning $link <br>";
+//			echo "rewrite_link($_link) returning $link <br />";
 			return $link;
 		}
 	}
@@ -882,7 +882,7 @@ class export extends aw_template
 	{
 		$this->loaded_rule = $this->get_object($id);
 		$this->rule_id = $id;
-//		echo "rule = <pre>", var_dump($this->loaded_rule),"</pre> <br>";
+//		echo "rule = <pre>", var_dump($this->loaded_rule),"</pre> <br />";
 	}
 
 	function add_rule($arr)
@@ -997,7 +997,7 @@ class export extends aw_template
 		}
 
 		$this->menu_cache->make_caches(array("lang_id" => $lang_id));
-		//echo "get_hash_for_url($url, $lang_id)<br>";
+		//echo "get_hash_for_url($url, $lang_id)<br />";
 		$fpurls = array(
 			$this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export",
 			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1&automatweb=aw_export",
@@ -1011,7 +1011,7 @@ class export extends aw_template
 		);
 		if (in_array($url,$fpurls))
 		{
-//			echo "get_hash_for_url($url, $lang_id) returning index<br>";
+//			echo "get_hash_for_url($url, $lang_id) returning index<br />";
 			$this->hash2url[$lang_id][$url] = "index";
 			return "index";
 		}
@@ -1023,7 +1023,7 @@ class export extends aw_template
 			$secid = $mt[1];
 			if ($secid)
 			{
-//				echo "get_hash_for_url($url, $lang_id) returning ",$secid.",".$lang_id,"<br>";
+//				echo "get_hash_for_url($url, $lang_id) returning ",$secid.",".$lang_id,"<br />";
 				$this->hash2url[$lang_id][$url] = $secid.",".$lang_id;
 				return $secid.",".$lang_id;
 			}
@@ -1048,7 +1048,7 @@ class export extends aw_template
 						$res = $_res.",".($cnt++);
 					}
 					$this->ftn_used[$res] = true;
-//					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br>";
+//					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br />";
 					$this->hash2url[$lang_id][$url] = $res;
 					return $res;
 				}
@@ -1126,7 +1126,7 @@ class export extends aw_template
 					$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE sec_name = '$res'");
 					if (is_array($row))
 					{
-//						echo "found $res filename on db <br>";
+//						echo "found $res filename on db <br />";
 						// urls with that name exist
 						// check for the current url
 						$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE url = '$qu'");
@@ -1134,7 +1134,7 @@ class export extends aw_template
 						{
 							// found the name for the current url, use it as final filename
 							$res = $this->fix_fn($row['filename']);
-//							echo "found url in db $qu filename = $res <Br>";
+//							echo "found url in db $qu filename = $res <br />";
 						}
 						else
 						{
@@ -1143,7 +1143,7 @@ class export extends aw_template
 							$res = $this->fix_fn($_res.",".$mcnt);
 							$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 								VALUES('$qu','$res','$_res','$mcnt')");
-//							echo "did not find url in db, try sec_name $_res , got mcount $mcnt final res = $res <br>";
+//							echo "did not find url in db, try sec_name $_res , got mcount $mcnt final res = $res <br />";
 						}
 					}
 					else
@@ -1151,7 +1151,7 @@ class export extends aw_template
 						// no files by that name exist, insert into the db
 						$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 							VALUES('$qu','$res','$_res','0')");
-//						echo "no file by name $res found, insert $qu <br>";
+//						echo "no file by name $res found, insert $qu <br />";
 					}
 					$this->fta_used[$res] = true;
 					$this->hash2url[$lang_id][$url] = $res;
@@ -1161,8 +1161,8 @@ class export extends aw_template
 		}
 
 		$tmp = gen_uniq_id(str_replace($this->cfg["baseurl"],"",$url)).",".$lang_id;
-//		echo "made hash for link $url = $tmp <br>";
-//		echo "get_hash_for_url($url, $lang_id) returning ",$tmp,"<br>";
+//		echo "made hash for link $url = $tmp <br />";
+//		echo "get_hash_for_url($url, $lang_id) returning ",$tmp,"<br />";
 		$this->hash2url[$lang_id][$url] = $tmp;
 		return $tmp;
 	}
@@ -1198,7 +1198,7 @@ class export extends aw_template
 			{
 				if (strncasecmp($url,$eu, strlen($eu)) == 0)
 				{
-					echo "excluded $url <br>";
+					echo "excluded $url <br />";
 					return true;
 				}
 			}
@@ -1209,10 +1209,10 @@ class export extends aw_template
 	{
 		if (substr($link, 0, 4) == "ftp:" || (substr($link,0,4) == "http" && strpos($link, $this->cfg["baseurl"]) === false))
 		{
-//			echo "is_external($link) returning true <br>";
+//			echo "is_external($link) returning true <br />";
 			return true;
 		}
-//		echo "is_external($link) returning false<br>";
+//		echo "is_external($link) returning false<br />";
 		return false;
 	}
 
@@ -1264,19 +1264,19 @@ class export extends aw_template
 				}
 				else
 				{
-//					echo "is out of rule $url <Br>";
+//					echo "is out of rule $url <br />";
 					return true;
 				}
 			}
 			else
 			{
-//				echo "is out of rule2 $url <Br>";
+//				echo "is out of rule2 $url <br />";
 				return true;
 			}
 		}
 		else
 		{
-//			echo "is out of rule3 $url <Br>";
+//			echo "is out of rule3 $url <br />";
 			return true;
 		}
 	}
@@ -1369,7 +1369,7 @@ class export extends aw_template
 		print "Acquiring session\n";
 		flush();
 
-//		echo "op = $op <br>";
+//		echo "op = $op <br />";
 		$socket->write($op);
 
 		$ipd="";
@@ -1379,7 +1379,7 @@ class export extends aw_template
 			$ipd .= $data;
 		};
 
-//		echo "ipd = $ipd <br>";
+//		echo "ipd = $ipd <br />";
 		if (preg_match("/automatweb=(\w+?);/",$ipd,$matches))
 		{
 			$cookie = $matches[1];
@@ -1410,7 +1410,7 @@ class export extends aw_template
 	function do_aw_parse_url($link)
 	{
 		$_link = $link;
-//		echo "enter do_aw_parse_url($link) <br>\n\n";
+//		echo "enter do_aw_parse_url($link) <br />\n\n";
 //		flush();
 		$pi = str_replace($this->cfg["baseurl"], "", $link);
 
@@ -1424,7 +1424,7 @@ class export extends aw_template
 				// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
 				// why so?
 				parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HG);
-		//		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
+		//		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br />";
 			} 
 
 			if (($_pos = strpos($pi, "section=")) === false)
@@ -1544,7 +1544,7 @@ class export extends aw_template
 		{
 			$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"].$js;
 		}
-//		echo "exit do_aw_parse_url($link) = $link <br>\n\n";
+//		echo "exit do_aw_parse_url($link) = $link <br />\n\n";
 //		flush();
 		return $link;
 	}
@@ -1594,7 +1594,7 @@ class export extends aw_template
 		$fp = fopen(aw_ini_get("server.tmpdir")."/aw.export.stop","w");
 		fwrite($fp, $id);
 		fclose($fp);
-		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
+		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
 	}
 
 	function pick_active($arr)
@@ -1674,7 +1674,7 @@ class export extends aw_template
 
 	function copy_contents($from, $to)
 	{
-		echo "copying files... \n <Br>";
+		echo "copying files... \n <br />";
 		flush();
 		if ($dir = @opendir($from)) 
 		{
@@ -1688,21 +1688,21 @@ class export extends aw_template
 					{
 						// copy subdirs as well
 						mkdir($tn,0777);
-						echo "copying subfolder $fn to $tn <br>\n";
+						echo "copying subfolder $fn to $tn <br />\n";
 						$this->copy_contents($fn, $tn);
 					}
 					else
 					{
 						copy($fn, $tn);
 						chmod($tn,0666);
-						echo "$fn => $tn <br>\n";
+						echo "$fn => $tn <br />\n";
 						flush();
 					}
 				}
 			}  
 			closedir($dir);
 		}
-		echo "finished! <br>\n";
+		echo "finished! <br />\n";
 	}
 
 	function view_log($arr)
@@ -1803,19 +1803,19 @@ class export extends aw_template
 
 		if ($type == "errors")
 		{
-			$lstr = "<b>VEAD:</b><br><br>";
+			$lstr = "<b>VEAD:</b><br /><br />";
 			$log = new aw_array(aw_unserialize($row["content"]));
 			foreach($log->get() as $entry)
 			{
-				$lstr.="VIGA (".$this->time2date($entry["tm"],2).")<br>\n";
-				$lstr.="URL: $entry[url] <br>\n";
-				$lstr.="TEADE: $entry[msg] <br>\n-----------------------------<br>\n";
+				$lstr.="VIGA (".$this->time2date($entry["tm"],2).")<br />\n";
+				$lstr.="URL: $entry[url] <br />\n";
+				$lstr.="TEADE: $entry[msg] <br />\n-----------------------------<br />\n";
 			}
-			$lstr .=" <Br><br>";
+			$lstr .=" <br /><br />";
 		}
 		if ($type == "added")
 		{
-			$lstr .= "<b>LISATUD FAILID:</b><br><br>";
+			$lstr .= "<b>LISATUD FAILID:</b><br /><br />";
 			$lstr .= "<table border=1><tr><td class='celltext'>URL</td><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["added_files"]));
 			foreach($log->get() as $entry)
@@ -1823,21 +1823,21 @@ class export extends aw_template
 				$entry['global'] = "&nbsp;".round($entry['global'],2)."&nbsp;";
 				$lstr.="<tr><td class='celltext'>$entry[url]&nbsp;</td><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
 			}
-			$lstr .=" </table><Br><br>";
+			$lstr .=" </table><br /><br />";
 		}
 		if ($type == "removed")
 		{
-			$lstr .= "<b>KUSTUTATUD FAILID:</b><br><br>";
+			$lstr .= "<b>KUSTUTATUD FAILID:</b><br /><br />";
 			$log = new aw_array(aw_unserialize($row["removed_files"]));
 			foreach($log->get() as $entry)
 			{
-				$lstr .= "FAIL: $entry<br>\n";
+				$lstr .= "FAIL: $entry<br />\n";
 			}
-			$lstr .=" <Br><br>";
+			$lstr .=" <br /><br />";
 		}
 		if ($type == "changed")
 		{
-			$lstr .= "<b>MUUDETUD FAILID:</b><br><br>";
+			$lstr .= "<b>MUUDETUD FAILID:</b><br /><br />";
 			$lstr .= "<table border=1><tr><td class='celltext'>URL</td><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["changed_files"]));
 			foreach($log->get() as $entry)
@@ -1896,7 +1896,7 @@ class export extends aw_template
 		{
 			return;
 		}
-		echo "delete folder $folder .......<br>\n";
+		echo "delete folder $folder .......<br />\n";
 		flush();
 		if ($dir = @opendir($folder)) 
 		{
@@ -1911,13 +1911,13 @@ class export extends aw_template
 					}
 					else
 					{
-						echo "delete file $fn<br>\n";
+						echo "delete file $fn<br />\n";
 						flush();
 						@unlink($fn);
 					}
 				}
 			}  
-			echo "delf $folder <br>";
+			echo "delf $folder <br />";
 			flush();
 			closedir($dir);
 			rmdir($folder);
@@ -1926,7 +1926,7 @@ class export extends aw_template
 
 	function write_log()
 	{
-		echo "creating log entry ...<br>\n";
+		echo "creating log entry ...<br />\n";
 		flush();
 		$lg = aw_serialize($this->err_log,SERIALIZE_XML);
 		$this->quote(&$lg);
@@ -1973,7 +1973,7 @@ class export extends aw_template
 	function submit_iexport($arr)
 	{
 		extract($arr);
-		echo "Teostan eksporti, palun oodake .. <Br>\n";
+		echo "Teostan eksporti, palun oodake .. <br />\n";
 		flush();
 		$urls = explode("\n", $urls);
 		foreach($urls as $url)
@@ -1989,7 +1989,7 @@ class export extends aw_template
 				$exp->fetch_and_save_page($exp->rewrite_link($url."&print=1"), aw_global_get("lang_id"), true);
 			}
 		}
-		echo "<br><br>\n\nValmis, <a href='".$this->mk_my_orb("iexport")."'>Tagasi</a> <br>\n";
+		echo "<br /><br />\n\nValmis, <a href='".$this->mk_my_orb("iexport")."'>Tagasi</a> <br />\n";
 	}
 
 	function fix_fn($fn)

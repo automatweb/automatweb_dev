@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.14 2003/06/25 14:56:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.15 2003/08/01 12:48:16 axel Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -139,7 +139,7 @@ class remote_login extends class_base
 		if (!$silent)
 		{
 			print "<pre>";
-			print "Logging out:<bR>";
+			print "Logging out:<br />";
 		}
 
 		$socket->write($op);

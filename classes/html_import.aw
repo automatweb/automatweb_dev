@@ -174,7 +174,7 @@ class html_import extends class_base
 						'begin' =>
 html::textarea(array('name'=> 'ruul['.$key.'][begin]', 'cols'=>25, 'rows' => 4, 'value' => $rule[$key]['begin'])),
 						'desc' =>
-'<table border=0 cellpadding=0 cellspacing=0><tr><td>kirjeldus<br>'.
+'<table border=0 cellpadding=0 cellspacing=0><tr><td>kirjeldus<br />'.
 html::textbox(array('name'=> 'ruul['.$key.'][desc]', 'value'=>$rule[$key]["desc"]))
 ."<br /><b>sql veerg</b>".
 html::textbox(array('name'=> 'ruul['.$key.'][mk_field]', 'value'=>$rule[$key]['mk_field']))
@@ -835,12 +835,12 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 
 					$exec=($ob["meta"]["output"]=="mk_my_table")?true:false;
 					$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,$exec);
-					echo "<br>OK ".trim($file)."<br>";
+					echo "<br />OK ".trim($file)."<br />";
 				}
 				else
 				{
-					echo " !! ".trim($file)."<br>";
-//					echo "could not import data from $file !! string comparision failed!!<br>";
+					echo " !! ".trim($file)."<br />";
+//					echo "could not import data from $file !! string comparision failed!!<br />";
 				}
 				flush();
 				set_time_limit(30);
@@ -916,7 +916,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 			$this->pinu[]=$t;
 			$color=$aktiivne?"#ff9999":$this->color[$t%6];
 			$html=html::button(array('value'=>'siit','onclick' => 'document.changeform.starts.value='.$t.';document.changeform.submit();')).
-			"<br></tstart $t><table border=1 id=$t bgcolor=$color>";
+			"<br /></tstart $t><table border=1 id=$t bgcolor=$color>";
 			return $html;
 		}
 	}
@@ -1022,12 +1022,12 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 					}
 					else
 					{
-						echo $q."<br>";
+						echo $q."<br />";
 					}
 				}
 				else
 				{
-					echo "tühi kirje!<br>";
+					echo "tühi kirje!<br />";
 				}
 
 		}
@@ -1063,7 +1063,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 				}
 				else
 				{
-					echo "tühi kirje!<br>";
+					echo "tühi kirje!<br />";
 				}
 		}
 		return implode("\n\r",$csv);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.39 2003/07/14 14:46:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.40 2003/08/01 12:48:15 axel Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -194,25 +194,25 @@ class acl_base extends db_connector
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
-		//	echo "entering can, access = $access, oid = $oid<Br>";
+		//	echo "entering can, access = $access, oid = $oid<br />";
 		while ($oid > 0)
 		{
-//			echo "oid = $oid<br>";
+//			echo "oid = $oid<br />";
 			$_t = aw_cache_get("aclcache",$oid);
 			if (is_array($_t))
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
-//				echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
+//				echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br />";
 			}
 			else
 			{
-//				echo "not found in cache!<br>";
+//				echo "not found in cache!<br />";
 				if ($tacl = $this->get_acl_for_oid($oid))
 				{
 					// found acl for this object from the database, so check it
 					$parent = $tacl["parent"];
-//					echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
+//					echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br />";
 					aw_cache_set("aclcache",$oid,$tacl);
 				}
 				else
@@ -221,7 +221,7 @@ class acl_base extends db_connector
 					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
 					$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
 					aw_cache_set("aclcache",$oid,$tacl);
-//					echo "not found in db, parent = $parent<br>";
+//					echo "not found in db, parent = $parent<br />";
 				}
 			}
 
@@ -233,7 +233,7 @@ class acl_base extends db_connector
 			{
 				$max_priority = $tacl["priority"];
 				$max_acl = $tacl;
-//				echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
+//				echo "bigger than max priority (",$tacl[priority],") , setting max<br />";
 			}
 			// siin oli 100, aga seda on imho ilmselgelt liiga palju
 			// 25 peaks vist piisama kyll
@@ -250,7 +250,7 @@ class acl_base extends db_connector
 //		return 1;
 		
 		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
-//		echo "returning from can_aw , oid = $o_oid , result = <pre>", var_dump($max_acl),"</pre> <br>";
+//		echo "returning from can_aw , oid = $o_oid , result = <pre>", var_dump($max_acl),"</pre> <br />";
 		return $max_acl;
 	}
 
@@ -295,7 +295,7 @@ class acl_base extends db_connector
 		// stuff all the objects in the cache, because the next query will not 
 		// get a list of objects if they don't have their acl specified
 		$q = "SELECT objects.oid as oid, objects.parent as parent FROM objects $js WHERE ($where)";
-		//echo "q = $q <br>";
+		//echo "q = $q <br />";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -312,26 +312,26 @@ class acl_base extends db_connector
 										 ORDER BY acl.oid";
 										 //OR isnull(acl.oid)	// seems we don't need these, cause every object is owned by somebody
 										 //OR  isnull(acl.gid)// and therefore will have a record in the acl table. 
-//		echo "query: '$q'<br>";
+//		echo "query: '$q'<br />";
 
 		$this->db_query($q);
 		$currobj = array(); 
 		$curr_oid = 0;
 		while ($row = $this->db_next())
 		{
-//			echo "row! <br>";
+//			echo "row! <br />";
 			// now find all records with the same oid and get the acl with the largest priority
 			if ($row["oid"] == $curr_oid)
 			{
 				$currobj[] = $row;
-	//			 echo "same oid ($curr_oid), adding<br>";
+	//			 echo "same oid ($curr_oid), adding<br />";
 			}
 			else
 			{
-		//		 echo "diff oid<br>";
+		//		 echo "diff oid<br />";
 				if ($curr_oid)
 				{
-			//		 echo "listing same oids to find highest priority<br>";
+			//		 echo "listing same oids to find highest priority<br />";
 					$mp = -1;
 					reset($currobj);
 					while (list(,$v) = each($currobj))
@@ -340,11 +340,11 @@ class acl_base extends db_connector
 						{
 							$mp = $v["priority"];
 							$ma = $v;
-				//			 echo "higher priority ($mp), setting new high, ",$v[oid],"<br>";
+				//			 echo "higher priority ($mp), setting new high, ",$v[oid],"<br />";
 						}
 					}
 					aw_cache_set("aclcache",$ma["oid"],$ma);
-//				echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
+//				echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br />";
 				}
 				$currobj = array();
 				$curr_oid = $row["oid"];
@@ -354,7 +354,7 @@ class acl_base extends db_connector
 
 		if ($curr_oid)
 		{
-//			echo "1listing same oids to find highest priority<br>";
+//			echo "1listing same oids to find highest priority<br />";
 			$mp = -1;
 			reset($currobj);
 			while (list(,$v) = each($currobj))
@@ -363,11 +363,11 @@ class acl_base extends db_connector
 				{
 					$mp = $v["priority"];
 					$ma = $v;
-	//				 echo "higher priority ($mp), setting new high<br>";
+	//				 echo "higher priority ($mp), setting new high<br />";
 				}
 			}
 			aw_cache_set("aclcache",$ma["oid"],$ma);
-//			echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
+//			echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br />";
 		}
 		$this->restore_handle();
 	}
@@ -483,7 +483,7 @@ class acl_base extends db_connector
 	// !generates an error message to the user and exits aw
 	function prog_acl_error($right,$prog)
 	{
-		die("Sorry, but you do not have $right access to program ".$this->cfg["programs"][$prog]["name"]."<br>");
+		die("Sorry, but you do not have $right access to program ".$this->cfg["programs"][$prog]["name"]."<br />");
 	}
 
 	function check_environment(&$sys, $fix = false)

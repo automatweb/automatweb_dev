@@ -1108,8 +1108,8 @@ class bugtrack extends aw_template
 			die("Tühi fail või miski muu kala filtri importimisel");
 		};
 		$this->__load_filters(1);
-		/*echo("enne:<pre>");print_r($this->bugtr_filters);echo("</pre><br>");
-		echo("enne:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br>");*/
+		/*echo("enne:<pre>");print_r($this->bugtr_filters);echo("</pre><br />");
+		echo("enne:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br />");*/
 		foreach($array as $f)
 		{
 			$f["leia"]=1;
@@ -1125,8 +1125,8 @@ class bugtrack extends aw_template
 			};
 			$this->bugtr_fgroups[$gid]["p"][]=$id;
 		};
-		/*echo("pärast:<pre>");print_r($this->bugtr_filters);echo("</pre><br>");
-		echo("pärast:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br>");*/
+		/*echo("pärast:<pre>");print_r($this->bugtr_filters);echo("</pre><br />");
+		echo("pärast:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br />");*/
 		$this->__save_filters(1);
 		die("<script language='javascript'>window.close();</script>");
 	}
@@ -1151,7 +1151,7 @@ class bugtrack extends aw_template
 			$cutarray_f=array_flip(is_array($cutarray_f)?$cutarray_f:array());
 			
 			unset($filters["name"]);
-			//echo("gname=$gname<br>");//dbg
+			//echo("gname=$gname<br />");//dbg
 			$fs="";
 			for ($i=0; $i<sizeof($filters) ; $i++)
 			{
@@ -1473,7 +1473,7 @@ class bugtrack extends aw_template
 				{
 					$fid=$filters[$i]["id"];
 					$fname=$filters[$i]["name"];
-					//echo("fid=$fid fname=$fname<br>");//dbg
+					//echo("fid=$fid fname=$fname<br />");//dbg
 					if ($bugtr_filt==$fid) 
 					{
 						$was_sel=1;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.22 2003/06/04 13:39:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.23 2003/08/01 12:48:15 axel Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -410,7 +410,7 @@ class aw_mail {
 		$boundary='AW'.chr(rand(65,91)).'--'.md5(uniqid(rand()));
 		$atc="Content-Type: multipart/alternative;".CRLF." boundary=\"$boundary\"".CRLF.CRLF;
 
-		$plain = strtr($this->body,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+		$plain = strtr($this->body,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
 		$plain = $this->strip_html($plain);
 				
 		$atc.="Content-Type: text/plain; charset=".CHARSET . CRLF;
@@ -498,7 +498,7 @@ class aw_mail {
 		$fp = fopen($path,"rb");
 		if (!$fp)
 		{
-			print "attach failed<br>";
+			print "attach failed<br />";
 			return false; // fail
 		}
 

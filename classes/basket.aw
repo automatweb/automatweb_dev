@@ -383,7 +383,7 @@ class basket extends aw_template
 					"entry_id" => $basket["of_entry"],
 					"op_id" => $ob["meta"]["order_form_op"]
 				));
-				$htmlmail.="<br><br>".$_ft_basket;
+				$htmlmail.="<br /><br />".$_ft_basket;
 			}
 
 			foreach($mls as $ml)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.7 2003/08/01 12:48:17 axel Exp $
 class repeater 
 {
 	////
@@ -48,7 +48,7 @@ class repeater
 			foreach($this->vector as $key => $dt)
 			{
 				list($start,$end) = each($dt);
-				printf("%d | %s | %s<br>",$key,date("d-m-Y H:i",$start),date("d-m-Y H:i",$end));
+				printf("%d | %s | %s<br />",$key,date("d-m-Y H:i",$start),date("d-m-Y H:i",$end));
 			};
 		};
 	}

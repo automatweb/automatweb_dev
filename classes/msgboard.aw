@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.30 2002/12/03 15:19:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.31 2003/08/01 12:48:16 axel Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -112,7 +112,7 @@ class msgboard extends aw_template
 				$this->vars(array(
 					"topic" => $row["name"], 
 					"created" => $this->time2date($row["created"], 2),
-					"text" => str_replace("\n","<Br>",$row["comment"]),
+					"text" => str_replace("\n","<br />",$row["comment"]),
 					"from" => $row["last"],
 					"topic_id" => $id,
 					"forum_id" => $forum_id
@@ -392,7 +392,7 @@ class msgboard extends aw_template
 				$this->vars(array(
 					"topic" => $row["name"],
 					"created" => $this->time2date($row["created"], 2),
-					"text" => str_replace("\n","<br>",$row["comment"]),
+					"text" => str_replace("\n","<br />",$row["comment"]),
 					"from" => $row["last"],
 				));
 				$top = $this->parse("TOPIC");
@@ -711,7 +711,7 @@ class msgboard extends aw_template
 	// !Butafooria
 	function rename_topic($name,$id)
 	{
-		print "renaming forum $id to $name<br>";
+		print "renaming forum $id to $name<br />";
 	}
 
 	function list_topics($forum_id)
@@ -791,7 +791,7 @@ class msgboard extends aw_template
 					"topic" => $row["name"], 
 					"from" => $row["last"],
 					"created" => $this->time2date($row["created"],2), 
-					"text" => str_replace("\n","<br>",$row["comment"]),
+					"text" => str_replace("\n","<br />",$row["comment"]),
 					"topic_id" => $row["oid"],
 					"cnt" => ( $nc < 1 ? "0" : $nc),
 					"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.20 2003/07/18 12:29:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.21 2003/08/01 12:48:19 axel Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -54,28 +54,28 @@ class sys extends aw_template
 		while($row = $this->db_next())
 		{
 			$name = strip_tags($row["name"]);
-			print "found document $row[oid] $name, checking images<br>";
+			print "found document $row[oid] $name, checking images<br />";
 			$this->save_handle();
 			$q = "SELECT * FROM objects WHERE parent = $row[oid] AND class_id = " . CL_IMAGE;
 			$this->db_query($q);
 			while($row2 = $this->db_next())
 			{
-				print "&nbsp;&nbsp;&nbsp;found image $row2[name]<br>";
-				print "&nbsp;&nbsp;&nbsp;checking aliases<br>";
+				print "&nbsp;&nbsp;&nbsp;found image $row2[name]<br />";
+				print "&nbsp;&nbsp;&nbsp;checking aliases<br />";
 				$q = "SELECT * FROM aliases WHERE source = '$row[oid]' AND target = '$row2[oid]'";
 				$this->save_handle();
 				$this->db_query($q);
 				$row3 = $this->db_next();
 				if ($row3)
 				{
-					print "<b>Found alias</b><br>";
+					print "<b>Found alias</b><br />";
 					print "<pre>";
 					print_r($row3);
 					print "</pre>";
 				}
 				else
 				{
-					print "<b>No such alias, creating</b><br>";
+					print "<b>No such alias, creating</b><br />";
 					$q = "INSERT INTO aliases (source,target,type)
 						VALUES('$row[oid]','$row2[oid]',6)";
 					$this->db_query($q);
@@ -367,7 +367,7 @@ class sys extends aw_template
 						if (not(is_array($orig[$table])))
 						{
 							$line = "CREATE table $table ($key $dr[type] $flags $autoinc)";
-							echo "line = $line <br>";
+							echo "line = $line <br />";
 							$orig[$table] = array();
 						}
 						else
@@ -376,7 +376,7 @@ class sys extends aw_template
 						};
 					};
 
-					print "Q1: $line<br>";
+					print "Q1: $line<br />";
 					aw_global_set("__from_raise_error",1);
 					$this->db_query($line);
 					$line = "";
@@ -390,10 +390,10 @@ class sys extends aw_template
 					};
 					if ($line)
 					{
-						print "Q2: $line<br>";
+						print "Q2: $line<br />";
 						$this->db_query($line);
 					};
-					//print "updating field $key of table $table<br>";
+					//print "updating field $key of table $table<br />";
 					//print "donor value is <pre>";
 					//print_r($donor_struct[$table][$key]);
 					//print "</pre>";
@@ -402,7 +402,7 @@ class sys extends aw_template
 			}
 
 		};
-		print "all done<br>";
+		print "all done<br />";
 		if (!$args["no_exit"])
 		{
 			exit;
@@ -432,21 +432,21 @@ class sys extends aw_template
 		$messages = "";
 		foreach($modules as $module)
 		{
-			echo "checking $module ... <br>";
+			echo "checking $module ... <br />";
 			flush();
 			$t = get_instance($module);
 			$_msg = $t->check_environment(&$this,$args["fix"]);
 			if ($_msg)
 			{
-				$messages .= "Module '$module' reported the following errors<br>\n";
+				$messages .= "Module '$module' reported the following errors<br />\n";
 				$messages .= $_msg;
-				$messages .= "<br>\n<br>\n";
+				$messages .= "<br />\n<br />\n";
 			};
 		};
 		if ($messages)
 		{
 			print $messages;
-			print "Please correct the above errors before proceeding<br>";
+			print "Please correct the above errors before proceeding<br />";
 		}
 		else
 		{
@@ -470,12 +470,12 @@ class sys extends aw_template
 				$s2 = $this->db_print_table($cur_table); 
 				if (!$fix)
 				{
-					return "Table ".$op_table["name"]." differs from correct version, must have: <br>".$s1."<br>got:<br>".$s2."<br>";
+					return "Table ".$op_table["name"]." differs from correct version, must have: <br />".$s1."<br />got:<br />".$s2."<br />";
 				}
 				else
 				{
 					$this->db_sync_tables($op_table,$op_table["name"]);
-					return "Table ".$op_table["name"]." differs from correct version, modified from: <br>".$s1."<br>to:<br>".$s2."<br>";
+					return "Table ".$op_table["name"]." differs from correct version, modified from: <br />".$s1."<br />to:<br />".$s2."<br />";
 				}
 			}
 		lc_load("definition");}
@@ -492,7 +492,7 @@ class sys extends aw_template
 		{
 			if (!(file_exists($tpldir."/".$tpl) && is_readable($tpldir."/".$tpl)))
 			{
-				$ret.="Cannot open template ".$tpldir."/".$tpl." <br>";
+				$ret.="Cannot open template ".$tpldir."/".$tpl." <br />";
 			}
 		}
 		return $ret;
@@ -509,7 +509,7 @@ class sys extends aw_template
 		{
 			if (!(file_exists($td."/".$tpl) && is_readable($td."/".$tpl)))
 			{
-				$ret.="Cannot open template ".$td."/".$tpl." <br>";
+				$ret.="Cannot open template ".$td."/".$tpl." <br />";
 			}
 		}
 		return $ret;
@@ -525,7 +525,7 @@ class sys extends aw_template
 		{
 			if (!(file_exists($site_basedir."/public/".$tpl) && is_readable($site_basedir."/public/".$tpl)))
 			{
-				$ret.="Cannot find file ".$site_basedir."/public/".$tpl." <br>";
+				$ret.="Cannot find file ".$site_basedir."/public/".$tpl." <br />";
 			}
 		}
 		return $ret;
@@ -541,7 +541,7 @@ class sys extends aw_template
 		{
 			if (!(file_exists($basedir."/xml/orb/".$tpl.".xml") && is_readable($basedir."/xml/orb/".$tpl.".xml")))
 			{
-				$ret.="Cannot find file ".$basedir."/xml/orb/".$tpl.".xml <br>";
+				$ret.="Cannot find file ".$basedir."/xml/orb/".$tpl.".xml <br />";
 			}
 		}
 		return $ret;
@@ -555,7 +555,7 @@ class sys extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			print "oid = $row[oid], cnt = $row[cnt]<br>";
+			print "oid = $row[oid], cnt = $row[cnt]<br />";
 		};
 
 	}

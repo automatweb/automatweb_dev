@@ -100,7 +100,7 @@ class parser extends aw_template
 			foreach($classes as $class)
 			{
 				$_class = $class;//$this->cfg["classdir"]."/".$class;
-				echo "loading and parsing file $_class <br>\n";
+				echo "loading and parsing file $_class <br />\n";
 				flush();
 				$this->do_parse($_class);
 				$this->saved_trees[$class]["functions"] = $this->functions;
@@ -122,7 +122,7 @@ class parser extends aw_template
 
 				if ($add_enter_func)
 				{
-					echo "adding enter/exit_function calls to $_class <br>\n";
+					echo "adding enter/exit_function calls to $_class <br />\n";
 					$fc = $this->add_enter_func($_class);
 					$pd[$class] = IS_PARSED;
 					$_str = aw_serialize($pd);
@@ -132,7 +132,7 @@ class parser extends aw_template
 				else
 				if ($remove_enter_func)
 				{
-					echo "removing enter/exit_function calls to $_class <br>\n";
+					echo "removing enter/exit_function calls to $_class <br />\n";
 					$fc = $this->remove_enter_func($_class);
 					$pd[$class] = NOT_PARSED;
 					$_str = aw_serialize($pd);
@@ -141,7 +141,7 @@ class parser extends aw_template
 				}
 			}
 		}
-		die("class count = ".$this->class_count." <br>\nfunction count = ".$this->function_count." <br>\nMaximum brace depth = ".$this->max_brace_level." \n<br>max level in file ".$this->max_brace_file." on line ".$this->max_brace_line." <br>\n");
+		die("class count = ".$this->class_count." <br />\nfunction count = ".$this->function_count." <br />\nMaximum brace depth = ".$this->max_brace_level." \n<br />max level in file ".$this->max_brace_file." on line ".$this->max_brace_line." <br />\n");
 	}
 
 	////
@@ -151,14 +151,14 @@ class parser extends aw_template
 		$f = fopen($file,"r");
 		if (!$f)
 		{
-			echo "could not open file $file for reading, exiting <br>";
+			echo "could not open file $file for reading, exiting <br />";
 			die();
 		}
 		$fc = fread($f,filesize($file));
 		fclose($f);
 
 		$fc = $this->strip_comments($fc); 
-/*		echo "stripped comments: <Br><pre>";
+/*		echo "stripped comments: <br /><pre>";
 		$lar = explode("\n",$fc);
 		$cnt = 1;
 		foreach($lar as $line)
@@ -187,19 +187,19 @@ class parser extends aw_template
 		// use the parser for this as well, because that has string handling built in
 		$this->p_init($fc);
 
-//		echo "stripping comments <Br>";
+//		echo "stripping comments <br />";
 		while (!$this->p_eos())
 		{
 			$tok = $this->_p_get_token();
-//			echo "token = $tok <Br>";
+//			echo "token = $tok <br />";
 			if (substr($tok,0,2) == "//")
 			{
-//				echo "onelinecomment <Br>";
+//				echo "onelinecomment <br />";
 				$in_line = true;
 				while ($in_line)
 				{
 					$_tok = $this->_p_get_token(true);	// strings inside comments must be ignored
-//					echo "skipping <pre>",var_dump($_tok),"</pre> as part of oneline <br>";
+//					echo "skipping <pre>",var_dump($_tok),"</pre> as part of oneline <br />";
 					if ($_tok === false)
 					{
 						$in_line = false;
@@ -210,17 +210,17 @@ class parser extends aw_template
 					}
 				}
 				$ret.="\n";
-//				echo "end of oneline <br>";
+//				echo "end of oneline <br />";
 			}
 			else
 			if (substr($tok,0,1) == "#")
 			{
-//				echo "onelinecomment2 <Br>";
+//				echo "onelinecomment2 <br />";
 				$in_line = true;
 				while ($in_line)
 				{
 					$_tok = $this->_p_get_token(true);	// strings inside comments must be ignored
-//					echo "skipping <pre>",var_dump($_tok),"</pre> as part of oneline2 <br>";
+//					echo "skipping <pre>",var_dump($_tok),"</pre> as part of oneline2 <br />";
 					if ($_tok === false)
 					{
 						$in_line = false;
@@ -231,7 +231,7 @@ class parser extends aw_template
 					}
 				}
 				$ret.="\n";
-//				echo "end of oneline2 <br>";
+//				echo "end of oneline2 <br />";
 			}
 			else
 			if ($tok == "/*")
@@ -286,27 +286,27 @@ class parser extends aw_template
 					$tok = "\$".$tok;
 				}
 			}
-//			echo "tok = <pre>", htmlspecialchars(var_dump($tok)),"</pre> <Br>";
+//			echo "tok = <pre>", htmlspecialchars(var_dump($tok)),"</pre> <br />";
 			// process token
 			if ($tok == "class")
 			{
-//				echo "tok == $tok , prev_tok = $prev_tok <Br>";
+//				echo "tok == $tok , prev_tok = $prev_tok <br />";
 				$cur_class = $this->p_get_token();
 				if (!$cur_class)
 				{
-					die("error - end of file after class in line ".$this->p_get_line()." <Br>");
+					die("error - end of file after class in line ".$this->p_get_line()." <br />");
 				}
 				$this->classes[$cur_class] = array("name" => $cur_class,"file" => $file_name, "start_line" => $this->p_get_line());
-//				echo "found class $cur_class in line ".$this->p_get_line()." <br>";
+//				echo "found class $cur_class in line ".$this->p_get_line()." <br />";
 
 				$try = $this->p_get_token();
-//				echo "try after class = $try <Br>";
+//				echo "try after class = $try <br />";
 //				flush();
 				if ($try == "extends")
 				{
 					$ex_name = $this->p_get_token();
 					$this->classes[$cur_class]["extends"] = $ex_name;
-//					echo "class extends $ex_name <br>";
+//					echo "class extends $ex_name <br />";
 //					flush();
 					$try = $this->p_get_token();
 				}
@@ -317,7 +317,7 @@ class parser extends aw_template
 					$class_start_brace_level = $brace_level;
 					$brace_level++;
 					$this->class_count++;
-//					echo "found brace, class starts <Br>";
+//					echo "found brace, class starts <br />";
 //					flush();
 				}
 			}
@@ -328,7 +328,7 @@ class parser extends aw_template
 				// read function name and args
 				$_tok = $this->p_get_token();
 				$cur_func = $_tok;
-//				echo "found function, name = $cur_func , line = ".$this->p_get_line()."<br>";
+//				echo "found function, name = $cur_func , line = ".$this->p_get_line()."<br />";
 //				flush();
 				$args = "";
 				while (($_tok = $this->_p_get_token()) != "("); // opening (
@@ -351,11 +351,11 @@ class parser extends aw_template
 					{
 						$args.=$_tok;
 					}
-//					echo "got token = $_tok , brack_lev = $bracket_level <br>\n";
+//					echo "got token = $_tok , brack_lev = $bracket_level <br />\n";
 //					flush();
 				} while ($bracket_level > 0);
 
-//				echo "argstr = $args <br>";
+//				echo "argstr = $args <br />";
 //				flush();
 				// now, opening {
 				$_tok = $this->p_get_token();
@@ -365,7 +365,7 @@ class parser extends aw_template
 					$brace_level++;
 					$in_function = true;
 					$this->function_count++;
-//					echo "found brace, func starts , name= $cur_func, level = $func_start_brace_level <br>";
+//					echo "found brace, func starts , name= $cur_func, level = $func_start_brace_level <br />";
 				}
 				$this->functions[$cur_class][$cur_func] = array("name" => $cur_func,"file" => $file_name, "start_line" => $this->p_get_line(),"args" => $args);
 			}
@@ -379,7 +379,7 @@ class parser extends aw_template
 					$this->max_brace_file = $file_name;
 					$this->max_brace_line = $this->p_get_line();
 				}
-//				echo "found { in line ".$this->p_get_line()." , brace_level = $brace_level <Br>";
+//				echo "found { in line ".$this->p_get_line()." , brace_level = $brace_level <br />";
 			}
 			else
 			if ($tok == "}")
@@ -387,12 +387,12 @@ class parser extends aw_template
 				// ok, brace close, we must figure out what this means. 
 				// check if class ends 
 				$brace_level--;
-//				echo "found } in line ".$this->p_get_line()." , brace_level = $brace_level , class_start = $class_start_brace_level <Br>";
+//				echo "found } in line ".$this->p_get_line()." , brace_level = $brace_level , class_start = $class_start_brace_level <br />";
 				if ($brace_level == $class_start_brace_level && $in_class)
 				{
 					// class ends
 					$this->classes[$cur_class]["end_line"] = $this->p_get_line();
-//					echo "found end of class $cur_class at line ".$this->p_get_line()." <br>";
+//					echo "found end of class $cur_class at line ".$this->p_get_line()." <br />";
 					$in_class = false;
 					$cur_class = "__global";
 				}
@@ -400,7 +400,7 @@ class parser extends aw_template
 				if ($brace_level == $func_start_brace_level && $in_function)
 				{
 					$this->functions[$cur_class][$cur_func]["end_line"] = $this->p_get_line();
-//					echo "found end of function $cur_func at line ".$this->p_get_line()." <br>";
+//					echo "found end of function $cur_func at line ".$this->p_get_line()." <br />";
 					$in_function = false;
 					$cur_func = "";
 				}
@@ -439,7 +439,7 @@ class parser extends aw_template
 			{
 				$this->p_line++;
 			}
-//			echo "returninf ".$this->p_str[$this->p_pos]." , line = ".$this->p_line." <Br>";
+//			echo "returninf ".$this->p_str[$this->p_pos]." , line = ".$this->p_line." <br />";
 			return $this->p_str[$this->p_pos++];
 		}
 		return false;
@@ -548,13 +548,13 @@ class parser extends aw_template
 	function p_get_string()
 	{
 		$str_start = $this->p_getch();
-//		echo "enter p_get_string() <Br>";
+//		echo "enter p_get_string() <br />";
 		if ($str_start != "\"" && $str_start != "'")
 		{
-			die("error in p_get_string (line: ".$this->p_get_line()." , pos = ".$this->p_pos." ) , called without string start <br>\n");
+			die("error in p_get_string (line: ".$this->p_get_line()." , pos = ".$this->p_pos." ) , called without string start <br />\n");
 		}
 		$ret = $str_start;
-//		echo "str_start = $str_start <br>";
+//		echo "str_start = $str_start <br />";
 		while (($ch = $this->p_getch()) !== false)
 		{
 			if ($ch == "\\")
@@ -562,22 +562,22 @@ class parser extends aw_template
 				// skip over escaped chars, they can't end strings
 				$ret.=$ch;
 				$ret.=$this->p_getch();
-//				echo "found \\ , skipping , ret = ".htmlspecialchars($ret)." <br>";
+//				echo "found \\ , skipping , ret = ".htmlspecialchars($ret)." <br />";
 			}
 			else
 			if ($ch == $str_start)
 			{
-//				echo "found eos $ch , ret = ".htmlspecialchars($ret)." <Br>";
+//				echo "found eos $ch , ret = ".htmlspecialchars($ret)." <br />";
 				return $ret.$ch;
 			}
 			else
 			{
 				$ret.=$ch;
-//				echo "normal char, $ch adding, ret = ".htmlspecialchars($ret)." <Br>";
+//				echo "normal char, $ch adding, ret = ".htmlspecialchars($ret)." <br />";
 			}
 		}
-//		echo "ch = <pre>", var_dump($ch),"</pre> <br>";
-		die("error in line ".$this->p_get_line()." file ended with open string! <Br>\n");
+//		echo "ch = <pre>", var_dump($ch),"</pre> <br />";
+		die("error in line ".$this->p_get_line()." file ended with open string! <br />\n");
 	}
 
 	////
@@ -625,19 +625,19 @@ class parser extends aw_template
 		if ($fc_n != $fc)
 		{
 			$backup_name = $file.".".time().".aw-backup";
-			echo "creating back-up of old class: $file to $backup_name <Br>\n";
+			echo "creating back-up of old class: $file to $backup_name <br />\n";
 			if (!copy($file, $backup_name))
 			{
-				die("copy of $file to $backup_name failed, stopping <br>\n");
+				die("copy of $file to $backup_name failed, stopping <br />\n");
 			}
-			echo "saving new file as $file ....<br>\n";
+			echo "saving new file as $file ....<br />\n";
 			$this->put_file(array("file" => $file, "content" => $fc_n));
 			chmod($file,0666);
-			echo "all done. <br><br>\n\n";
+			echo "all done. <br /><br />\n\n";
 		}
 		else
 		{
-			echo "no changes made in class $file <br><br>\n\n";
+			echo "no changes made in class $file <br /><br />\n\n";
 		}
 	}
 
@@ -650,7 +650,7 @@ class parser extends aw_template
 		$fd = $this->functions[$class_name][$func_name];
 		$ret = "";
 		$cnt = $fd["start_line"];
-//		echo "func_name = $func_name , cnt = $cnt , looping to ".$fd["end_line"]." , fd = <pre>", var_dump($fd)," </pre><br>";
+//		echo "func_name = $func_name , cnt = $cnt , looping to ".$fd["end_line"]." , fd = <pre>", var_dump($fd)," </pre><br />";
 		while ($cnt < ($fd["end_line"]-1))
 		{
 			$ret.=$lines[$cnt]."\n";
@@ -679,18 +679,18 @@ class parser extends aw_template
 		if ($fc_o != $fc)
 		{
 			$backup_name = $file.".".time().".aw-backup";
-			echo "creating back-up of old class: $file to $backup_name <Br>\n";
+			echo "creating back-up of old class: $file to $backup_name <br />\n";
 			if (!copy($file, $backup_name))
 			{
-				die("copy of $file to $backup_name failed, stopping <br>\n");
+				die("copy of $file to $backup_name failed, stopping <br />\n");
 			}
-			echo "saving new file as $file ....<br>\n";
+			echo "saving new file as $file ....<br />\n";
 			$this->put_file(array("file" => $file, "content" => $fc));
-			echo "all done. <br><br>\n\n";
+			echo "all done. <br /><br />\n\n";
 		}
 		else
 		{
-			echo "no changes made in class $file <br><br>\n\n";
+			echo "no changes made in class $file <br /><br />\n\n";
 		}
 	}
 
@@ -706,7 +706,7 @@ class parser extends aw_template
 			}
 			echo "} \n";
 		}
-		echo "</pre><br>\n";
+		echo "</pre><br />\n";
 		flush();
 	}
 

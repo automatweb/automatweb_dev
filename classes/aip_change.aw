@@ -457,10 +457,10 @@ class aip_change extends aw_template
 			{
 				// now get the action from the array in the session so we won't have to find the damn things again
 				// and possibly fuck up the order or something. 
-				echo "processing action type ",$act["action"]," for file ",$act["file"]," <br>";
+				echo "processing action type ",$act["action"]," for file ",$act["file"]," <br />";
 				if ($act["action"] == CREATE_FOLDER)
 				{
-					echo "createfolder <br>";
+					echo "createfolder <br />";
 					$m = get_instance("menuedit");
 					// create new menu
 					// for that we have to split the damn filename into pieces and for each piece check if a menu for that 
@@ -469,7 +469,7 @@ class aip_change extends aw_template
 
 					if (!($par = $this->find_parent_for_file($nar[0],$parent,strlen($nar[0]))))
 					{
-						echo "no parent for $nar[0] creating under $parent <br>";
+						echo "no parent for $nar[0] creating under $parent <br />";
 						// no 1st level menu,create it
 						$par = $m->add_new_menu(array(
 							"name" => $nar[0],
@@ -486,7 +486,7 @@ class aip_change extends aw_template
 
 					if (!($par2 = $this->find_parent_for_file($nar[0]." ".$nar[1],$par,strlen($nar[0]." ".$nar[1]))))
 					{
-						echo "no parent for $nar[1] creating under $par <br>";
+						echo "no parent for $nar[1] creating under $par <br />";
 						// no 2nd level menu,create it
 						$par2 = $m->add_new_menu(array(
 							"name" => $nar[1],
@@ -504,7 +504,7 @@ class aip_change extends aw_template
 
 					if (!($par3 = $this->find_parent_for_file($nar[0]." ".$nar[1].".".$nar[2],$par2,strlen($nar[0]." ".$nar[1].".".$nar[2]))))
 					{
-						echo "no parent for $nar[2] creating under $par2 <br>";
+						echo "no parent for $nar[2] creating under $par2 <br />";
 						// no 3rd level menu,create it
 						$par3 = $m->add_new_menu(array(
 							"name" => $nar[2],
@@ -566,7 +566,7 @@ class aip_change extends aw_template
 
 					if (!$id)
 					{
-						echo "<font color=red>ERROR: no such file $act[file] <br>";
+						echo "<font color=red>ERROR: no such file $act[file] <br />";
 					}
 					else
 					{
@@ -616,12 +616,12 @@ class aip_change extends aw_template
 			{
 				// if the file exists, delete it so we can overwrite
 				@unlink($pdf_dir."/".$fil);
-				echo "rename ".$ch_dir."/".$fil." to ".$pdf_dir."/".$fil." <br>";
+				echo "rename ".$ch_dir."/".$fil." to ".$pdf_dir."/".$fil." <br />";
 				@rename($ch_dir."/".$fil, $pdf_dir."/".$fil);
 			}
 		}
 		// now figure out all the menus that have this change and set them as active.
-		echo "activating menus ... <Br>\n";
+		echo "activating menus ... <br />\n";
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0");
 		while ($row = $this->db_next())
 		{
@@ -640,7 +640,7 @@ class aip_change extends aw_template
 					"key" => "aip_active_change",
 					"value" => 0
 				));
-				echo "activated menu $row[name] <br>\n";
+				echo "activated menu $row[name] <br />\n";
 			}
 			$this->restore_handle();
 		}
@@ -879,7 +879,7 @@ class aip_change extends aw_template
 		// and for each see how many characters of the filename the setting for the menu specifies. 
 		// and return the menu with the greatest number of characters. 
 
-	//	echo "find parent for file $f $parent $min_len <br>";
+	//	echo "find parent for file $f $parent $min_len <br />";
 		$max_menu = 0;
 		$max_chars = 0;
 		foreach($ar as $mid => $mdat)
@@ -911,7 +911,7 @@ class aip_change extends aw_template
 			{
 				$_tns = $_tn;
 			}
-//			echo "tn = $_tn , tns = $_tns tnpg = $tnpg <br>";
+//			echo "tn = $_tn , tns = $_tns tnpg = $tnpg <br />";
 
 			$asp = strpos($meta["aip_filename"], "-");
 			$aspg = 0;
@@ -924,19 +924,19 @@ class aip_change extends aw_template
 			{
 				$as = $meta["aip_filename"];
 			}
-//		echo "as = $meta[aip_filename] , tns = $as , aspg = $aspg <br>";
+//		echo "as = $meta[aip_filename] , tns = $as , aspg = $aspg <br />";
 
 
 			if ($_tns == $as)
 			{
 				if (!$aspg)
 				{
-//					echo "match <Br>";
+//					echo "match <br />";
 					return $mid;
 				}
 				if ($tnpg >= $aspg)
 				{
-//					echo "match <Br>";
+//					echo "match <br />";
 					return $mid;
 				}
 			}
@@ -1033,7 +1033,7 @@ class aip_change extends aw_template
 									AND $where $aa
           ORDER BY objects.parent, jrk,objects.created";
 
-//		echo "q = $q <br>";
+//		echo "q = $q <br />";
 		if (not($this->db_query($q,false)))
 		{
 			return false;
@@ -1111,22 +1111,22 @@ class aip_change extends aw_template
 		{
 			if ($od["status"] > 0)
 			{
-				echo "checking event $oid <br>\n";
+				echo "checking event $oid <br />\n";
 				$meta = $this->get_object_metadata(array(
 					"metadata" => $od["metadata"]
 				));
 				$publish = $meta["act_time"];
 				$activate = $meta["j_time"];
-				echo "publish = ".$this->time2date($publish, 2)." , activate = ".$this->time2date($activate, 2)." , current = ".$this->time2date($t, 2)." <br>\n";
+				echo "publish = ".$this->time2date($publish, 2)." , activate = ".$this->time2date($activate, 2)." , current = ".$this->time2date($t, 2)." <br />\n";
 				if (abs($t - $publish) < 600 && $publish <= $t)
 				{
-					echo "publishing change $oid <br>\n";
+					echo "publishing change $oid <br />\n";
 					$ai = get_instance("aip_change");
 					$ai->do_publish(array("id" => $oid));
 				}
 				if (abs($t - $activate) < 600 && $activate <= $t)
 				{
-					echo "activating change $oid <br>\n";
+					echo "activating change $oid <br />\n";
 					$ai = get_instance("aip_change");
 					$ai->do_change(array("id" => $oid));
 				}

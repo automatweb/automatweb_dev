@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.4 2003/04/28 14:11:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.5 2003/08/01 12:48:16 axel Exp $
 // aw_test.aw - AW remote control
 class aw_test extends aw_template 
 {
@@ -109,7 +109,7 @@ class aw_test extends aw_template
 		// that's the name of the query button and if it's set then it means we have to do the test run
 		if ($do_query)
 		{
-			print "starting test run, please be patient, it _will_ take some time<br>";
+			print "starting test run, please be patient, it _will_ take some time<br />";
 			$this->handshake(array(
 				"host" => $server,
 			));
@@ -247,7 +247,7 @@ class aw_test extends aw_template
 		$op .= "Cache-control: no-cache\r\n";
 		$op .= "Pragma: no-cache\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
-		print "sending request $req <br>\n";
+		print "sending request $req <br />\n";
 		$socket->write($op);
 		$ipd = "";
 		while($data = $socket->read())
@@ -309,7 +309,7 @@ class aw_test extends aw_template
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 
 		print "<pre>";
-		print "Logging out:<bR>";
+		print "Logging out:<br />";
 		$socket->write($op);
 		
 		while($data = $socket->read())

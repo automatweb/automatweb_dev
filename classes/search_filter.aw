@@ -161,7 +161,7 @@ class search_filter extends aw_template
                 {
                         $this->save_handle();
                         $arr=$this->get_object_metadata(array("oid" => $r["oid"]));
-                        echo("doing id".$r["oid"]."<br>");
+                        echo("doing id".$r["oid"]."<br />");
                         if (is_array($arr))
                         {
                                 $arr2=array("data"=>$arr["data"],"filter"=>$arr["filter"]);
@@ -258,7 +258,7 @@ class search_filter extends aw_template
                         
                         $formname=str_replace(" ","_",$r["name"]);
                         $content=$this->form->get_form_elements(array("id" => $fid,"key" => "id"));
-                        #echo("form title=$formname<br><pre>");print_r($content);echo("</pre>");//dbg
+                        #echo("form title=$formname<br /><pre>");print_r($content);echo("</pre>");//dbg
 
                         $arr=array();
                         // Kui on mitmest pärjast otsing siis paneme real table nime ette *chain_id* siis saab
@@ -273,12 +273,12 @@ class search_filter extends aw_template
                                 $arr["real"]="form_".$fid."_entries";
                         };
                         
-                        //echo("content=><pre>");print_r($content);echo("</pre><br>");//dbg
+                        //echo("content=><pre>");print_r($content);echo("</pre><br />");//dbg
                         foreach($content as $f_id => $edata)
                         {
                                 $fieldname=$edata["name"];
                                 $create=1;
-                                if ($GLOBALS["dbg_cbox"]) {echo("$fieldname=><pre>");print_r($edata);echo("</pre><br>");};//dbg
+                                if ($GLOBALS["dbg_cbox"]) {echo("$fieldname=><pre>");print_r($edata);echo("</pre><br />");};//dbg
                                 switch ($edata["type"])
                                 {
                                         case "button"://Don't let these suckers in!
@@ -638,7 +638,7 @@ class search_filter extends aw_template
                 if ($this->data["type"]=="chain")
                 {
                         // kui on mitu chaini siis tuleb siin SEDA andmete näitamise osa korrata 1x iga chaini matchide jaoks
-                        if ($GLOBALS["dbg_ft"]) echo "multchain=[".$this->data["multchain"]."]<br>";
+                        if ($GLOBALS["dbg_ft"]) echo "multchain=[".$this->data["multchain"]."]<br />";
                         if (!$this->data["multchain"])
                         {
                                 $chainids[]=$this->data["target_id"];//All is good & easy
@@ -652,12 +652,12 @@ class search_filter extends aw_template
                         {
                                 foreach ($chainids as $chain_id) // This is THE loop
                                 {
-                                        if ($GLOBALS["dbg_ft"]) echo "[searching in $chain_id]<br>";
+                                        if ($GLOBALS["dbg_ft"]) echo "[searching in $chain_id]<br />";
                                         $eids = $this->perform_search($this->data["multchain"]?$chain_id:array());// Limit conditions to chain $chain_id
                                         
                                         $this->ft->load_chain($chain_id);
 
-                                        if ($GLOBALS["dbg_ft"]) {echo "eids=", var_dump($eids), "<br>";};//dbg
+                                        if ($GLOBALS["dbg_ft"]) {echo "eids=", var_dump($eids), "<br />";};//dbg
 
                                         $tbls = "";
                                         $joins = "";
@@ -680,7 +680,7 @@ class search_filter extends aw_template
                                         if ($eids != "")
                                         {
                                                 $q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
-                                                 if ($GLOBALS["dbg_ft"]) echo "q = $q <br>";//dbg
+                                                 if ($GLOBALS["dbg_ft"]) echo "q = $q <br />";//dbg
                                                 $this->db_query($q);
                                                 while ($row = $this->db_next())
                                                 {
@@ -690,7 +690,7 @@ class search_filter extends aw_template
                                                         }
                                                         $used_eids[$row["chain_entry_id"]]=1;
 
-                                                        if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";//dbg
+                                                        if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br />";//dbg
                                                         $num_rec_found++;
                                                         if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
                                                         {
@@ -698,7 +698,7 @@ class search_filter extends aw_template
                                                                 {
                                                                         
                                                                         $v2=$row[$statd2["field"]];
-                                                                        //echo($statd2["field"]." = ".$v2."<br>");//dbg
+                                                                        //echo($statd2["field"]." = ".$v2."<br />");//dbg
                                                                         switch($statd2["func"])
                                                                         {
                                                                                 case "sum":
@@ -748,7 +748,7 @@ class search_filter extends aw_template
                                                 {
                                                         
                                                         $v2=$row[$statd2["field"]];
-                                                        //echo($statd2["field"]." = ".$v2." ++".$statd2["func"]."<br>");//dbg
+                                                        //echo($statd2["field"]." = ".$v2." ++".$statd2["func"]."<br />");//dbg
 
                                                         switch($statd2["func"])
                                                         {
@@ -796,11 +796,11 @@ class search_filter extends aw_template
                 //siin teeb lingi csv outputile
                 if ($this_page)
                 {
-                        $parse.="&nbsp;&nbsp;<a href='".$this_page."&get_csv_file=1' target=_blank>CSV</a><br>";
+                        $parse.="&nbsp;&nbsp;<a href='".$this_page."&get_csv_file=1' target=_blank>CSV</a><br />";
                 } 
                 else
                 {
-                        $parse.="&nbsp;&nbsp;<a href='".$this->mk_my_orb("search",array("id"=>$id,"get_csv_file"=>1))."' target=_blank>CSV</a><br>";
+                        $parse.="&nbsp;&nbsp;<a href='".$this->mk_my_orb("search",array("id"=>$id,"get_csv_file"=>1))."' target=_blank>CSV</a><br />";
                 };
                 
                 $parse.= $this->ft->finalize_table(array("no_form_tags" => $no_form_tags));
@@ -978,14 +978,14 @@ class search_filter extends aw_template
                                         if (is_array($this->master_array))
                                         foreach($this->master_array as $faketname => $tdata)
                                         {
-                                                //echo("f=$faketname<br>");//dbg
+                                                //echo("f=$faketname<br />");//dbg
                                                 if ($faketname &&  (isset($this->data["selected_forms"][$faketname]) || $this->data["type"]!="chain"))
                                                 {
-                                                        //echo("on olemas<br>");
+                                                        //echo("on olemas<br />");
                                                         
                                                         list($a_,$form_id,$b_)=explode("_",$tdata["real"]);
                                                         $form_ids[]=$form_id;
-                                                        //echo("faketname=$faketname form_id=$form_id<br>");//dbg
+                                                        //echo("faketname=$faketname form_id=$form_id<br />");//dbg
                                                         if (is_array($tdata["fields"]))
                                                         foreach($tdata["fields"] as $fakefname => $fdata)
                                                         {
@@ -993,7 +993,7 @@ class search_filter extends aw_template
                                                                 
                                                                 if (isset($this->data["selected_fields"]["$faketname.$fakefname"]))
                                                                 {
-                                                                        //echo("field=$fakefname<br>");//dbg
+                                                                        //echo("field=$fakefname<br />");//dbg
                                                                         list($a_,$fieldid)=explode("_",$fdata["real"]);
 
                                                                         $names[$num_cols][1]=$fakefname;
@@ -1091,7 +1091,7 @@ class search_filter extends aw_template
                         for ($pee=0;$pee<$this->filter["nump"];$pee++)
                         {
                                 $vchain=explode("*",$this->filter["p$pee"]["field"]);
-                                if ($GLOBALS["dbg_ft"]) {echo("vchain=<pre>");print_r($vchain);echo("</pre><br>");};
+                                if ($GLOBALS["dbg_ft"]) {echo("vchain=<pre>");print_r($vchain);echo("</pre><br />");};
 
                                 // count($vchain)<3 is for fulltextsearch field witch doesnt exist really
                                 if ($vchain[1]==$limit_to_chain || count($vchain)<3)
@@ -1123,7 +1123,7 @@ class search_filter extends aw_template
                         // look at that line above: if ($vchain[1]==$limit_to_chain || count($vchain)<3)
                 }
 
-                if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=1>$sqlw</textarea><br>";
+                if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=1>$sqlw</textarea><br />";
                 
 
                 //Nii, nüüd tuleb see täistekstotsing ringi vahetada
@@ -1138,7 +1138,7 @@ class search_filter extends aw_template
                         if ($fakefname)
                         {
                                 $realfname=$fdata["real"];
-                                if ($GLOBALS["dbg_ft"]) echo("realfname=$realfname fakefname=$fakefname<br>");
+                                if ($GLOBALS["dbg_ft"]) echo("realfname=$realfname fakefname=$fakefname<br />");
                                 if ($realfname[0]=="*")
                                 {
                                         $vdata=explode("*",$realfname);//remove chain info
@@ -1146,7 +1146,7 @@ class search_filter extends aw_template
                                 };
                                 if (is_array($limit_to_chain) || $vdata[1]==$limit_to_chain)
                                 {
-                                        if ($GLOBALS["dbg_ft"]) echo("fakefname=$fakefname realfname=$realfname<br>");//dbg
+                                        if ($GLOBALS["dbg_ft"]) echo("fakefname=$fakefname realfname=$realfname<br />");//dbg
                                         $used_tables[$realfname]=1;
 
                                         if (is_array($fdata["fields"]))
@@ -1160,10 +1160,10 @@ class search_filter extends aw_template
 
                 $ftsstring=join(" or ",$fulltextsearch);
                 //print_r($fulltextsearch);//dbg
-                //echo("ftsstring=$ftsstring<br>");//dbg
-                //echo("sqlw=$sqlw<br>");//dbg
+                //echo("ftsstring=$ftsstring<br />");//dbg
+                //echo("sqlw=$sqlw<br />");//dbg
                 $sqlw=preg_replace("/%virtual.%täistekst = '(.*?)'/","($ftsstring)",$sqlw);
-                //echo("sqlw=$sqlw<br>");//dbg
+                //echo("sqlw=$sqlw<br />");//dbg
 
                 if ($this->data["type"]=="chain")
                 {
@@ -1196,7 +1196,7 @@ class search_filter extends aw_template
 						$sqlw AND objects.status != 0
 					";
                 };
-                if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=10>$sql</textarea><br>";
+                if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=10>$sql</textarea><br />";
 
                 $this->db_query($sql);
                 $matches=array();
@@ -1204,7 +1204,7 @@ class search_filter extends aw_template
                 {
                         $matches[]=$r["id"];
                 };
-                if ($GLOBALS["dbg_ft"]) {echo "<pre>", var_dump($matches),"</pre><br>";};//dbg
+                if ($GLOBALS["dbg_ft"]) {echo "<pre>", var_dump($matches),"</pre><br />";};//dbg
                 return $matches;
         }
 

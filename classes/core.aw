@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.212 2003/07/31 21:21:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.213 2003/08/01 12:48:16 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1575,7 +1575,7 @@ class core extends acl_base
 
 		$this->_log(ST_CORE, SA_RAISE_ERROR, $msg, $oid);
 
-		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n".$msg;
+		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<br /><br />\n\n".$msg;
 
 
 		// meilime veateate listi ka
@@ -1707,7 +1707,7 @@ class core extends acl_base
 					die();
 				}
 				flush();
-				die("<br><b>AW_ERROR: $msg</b><br>\n\n<br>");
+				die("<br /><b>AW_ERROR: $msg</b><br />\n\n<br />");
 			}
 		};
 		aw_global_set("__from_raise_error",0);

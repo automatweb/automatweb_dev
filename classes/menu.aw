@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.62 2003/07/18 11:47:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.63 2003/08/01 12:48:16 axel Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -253,17 +253,17 @@ class menu extends class_base
 				break;
 
 			case "icon":
-				$ext = $this->cfg["ext"];
-				if ($args["objdata"]["icon_id"])
+				$ext = $this->cfg['ext'];
+				if ($args['objdata']['icon_id'])
 				{
-					$icon = "<img src='$baseurl" . "/automatweb/icon.$ext" . "?id=" . $args[objdata][icon_id] . "'>";
+					$icon = "<img src='$baseurl" . "/automatweb/icon.$ext" . "?id=" . $args['objdata']['icon_id'] . "'>";
 				}
 				else
 				{
 					$m = get_instance("menuedit");
 					if ($args["objdata"]["admin_feature"])
 					{
-						$icon = "<img src='" . $m->get_feature_icon_url($args["objdata"]["admin_feature"]) . "'>";
+						$icon = "<img src='" . $m->get_feature_icon_url($args['objdata']['admin_feature']) . "'>";
 					}
 					else
 					{
@@ -574,8 +574,6 @@ class menu extends class_base
 		if (is_array($sections))
 		{
 			$a = array();
-			//reset($sections);
-			//while (list(,$v) = each($sections))
 			foreach($sections as $v)
 			{
 				if ($sar[$v])
@@ -590,8 +588,6 @@ class menu extends class_base
 			}
 		}
 		$deleted = array();
-		//reset($sar);
-		//while (list($oid,) = each($sar))
 		foreach($sar as $oid => $val)
 		{
 			if (!$a[$oid])
@@ -600,8 +596,6 @@ class menu extends class_base
 			}
 		}
 
-		//reset($deleted);
-		//while (list($oid,) = each($deleted))
 		foreach($deleted as $oid => $val)
 		{
 			$this->updmenus[] = $oid;

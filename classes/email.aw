@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.27 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.28 2003/08/01 12:48:16 axel Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -248,7 +248,7 @@ class email extends aw_template
 		$c = $this->mk_mail($user["id"], $mail["contents"],$user["name"], $user["mail"],$msg_id);
 
 		$c = $this->mk_stamps($c);
-		$c = str_replace("\n", "<br>", $c);
+		$c = str_replace("\n", "<br />", $c);
 
 		if ($mail["mail_from_name"] != "")
 		{
@@ -502,7 +502,7 @@ class email extends aw_template
 			$t = get_instance("smtp");
 			$t->send_message(aw_ini_get("mail.smtp_server"), $mail["mail_from"], $user["mail"], $msg);
 
-			echo LC_EMAIL_SENT_EMAIL3, $user["name"], "(" ,  $user["mail"], ") 'le<br>";
+			echo LC_EMAIL_SENT_EMAIL3, $user["name"], "(" ,  $user["mail"], ") 'le<br />";
 			flush();
 		}
 

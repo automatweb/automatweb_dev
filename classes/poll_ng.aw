@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.2 2002/12/30 20:16:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.3 2003/08/01 12:48:16 axel Exp $
 
 /*
 
@@ -114,7 +114,7 @@ class poll_ng extends class_base
 				$retval .= html::href(array(
 					"url" => $url . "&choice=" . $key,
 					"caption" => $choice["name"],
-				)) . "<br>";
+				)) . "<br />";
 			};
 		};
 		$retval .= "</div>";

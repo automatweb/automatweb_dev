@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.18 2003/01/23 09:05:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.19 2003/08/01 12:48:16 axel Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -211,7 +211,7 @@ class cache extends core
 
 		if (($source_mtime > $cache_mtime) || (strlen($src) < 1))
 		{
-			//print "need to reparse<br>";
+			//print "need to reparse<br />";
 			// 1) get an instance of the unserializer class,
 			
 			$clobj = &$args["unserializer"][0];

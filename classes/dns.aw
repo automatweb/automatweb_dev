@@ -85,7 +85,7 @@ class dns extends aw_template
 		{
 			if (not(preg_match("/^([\w|\d]*)\.[org|net|com|ee]/",$domain)))
 			{
-				return "<b>Invalid domain</b><br>";
+				return "<b>Invalid domain</b><br />";
 			}
 			else
 			{
@@ -119,11 +119,11 @@ class dns extends aw_template
 
 					if (preg_match("/No match for/i",$buf))
 					{
-						return "$domain on registreerimata<br>";
+						return "$domain on registreerimata<br />";
 					}
 					else
 					{
-						return "$domain on registreeritud<br>";
+						return "$domain on registreeritud<br />";
 					};
 				};
 			};
@@ -196,11 +196,11 @@ class dns extends aw_template
 			$this->types[$type],
 			0
 		);	
-		echo "packet = <pre>", $this->binhex($packet),"</pre> <br>";
+		echo "packet = <pre>", $this->binhex($packet),"</pre> <br />";
 		
 		// connecting to nameserver
 		$fp = fsockopen("udp://212.7.7.6",53,$errno, $errstr,10);
-		echo "errno = $errno , errstr = $errstr <br>\n";
+		echo "errno = $errno , errstr = $errstr <br />\n";
 		flush();
 		fwrite($fp, $packet);
 		$cnt = 0;

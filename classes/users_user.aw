@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.63 2003/07/08 11:58:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.64 2003/08/01 12:48:19 axel Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1307,7 +1307,7 @@ class users_user extends aw_template
 
 	function _normalize_group_object($gd)
 	{
-		//echo "normalize group object for group $gd[name] , gid = $gd[gid] <br>";
+		//echo "normalize group object for group $gd[name] , gid = $gd[gid] <br />";
 		// get all users oids that are in this group
 		$members = array();
 		$sql = "
@@ -1346,7 +1346,7 @@ class users_user extends aw_template
 			if (isset($used[$d["brother_of"]]))
 			{
 				$this->delete_object($oid, false, false);
-//				echo "found duplicate in group $gd[name] , oid = $oid <br>";
+//				echo "found duplicate in group $gd[name] , oid = $oid <br />";
 			}
 			else
 			{
@@ -1358,11 +1358,11 @@ class users_user extends aw_template
 		// now, remove all objects that are users that are not in this group
 		foreach($u_objs as $oid => $d)
 		{
-//			echo "real object under group object is $oid , brother of $d[brother_of] <br>";
+//			echo "real object under group object is $oid , brother of $d[brother_of] <br />";
 			if (!isset($members[$d["brother_of"]]))
 			{
 				$this->delete_object($oid, false, false);
-//				echo "deleteing object $oid from group $gd[name] <br>";
+//				echo "deleteing object $oid from group $gd[name] <br />";
 			}
 		}
 
@@ -1371,7 +1371,7 @@ class users_user extends aw_template
 		{
 			if (!isset($r_u_o[$oid]))
 			{
-//				echo "did not find object $oid under $gd[oid] <br>";
+//				echo "did not find object $oid under $gd[oid] <br />";
 				$o_uid = $this->get_uid_for_oid($oid);
 				$_t = $this->new_object(array(
 					"parent" => $gd["oid"],
@@ -1381,7 +1381,7 @@ class users_user extends aw_template
 					"status" => STAT_ACTIVE,
 					"no_flush" => 1
 				));
-//				echo "adding uid $o_uid to group $gd[name] (oid = $oid) , new oid = $_t <br>";
+//				echo "adding uid $o_uid to group $gd[name] (oid = $oid) , new oid = $_t <br />";
 			}
 		}
 
@@ -1409,7 +1409,7 @@ class users_user extends aw_template
 		{
 			if (!isset($members[$alias["id"]]))
 			{
-//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[oid] <br>";
+//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[oid] <br />";
 				$this->delete_alias($gd["oid"], $alias["oid"], true, true);
 			}
 		}
@@ -1419,7 +1419,7 @@ class users_user extends aw_template
 		{
 			if (!isset($aliases[$member]))
 			{
-//				echo "did not find member $member in aliases for group $gd[oid] $gd[name], adding alias<br>";
+//				echo "did not find member $member in aliases for group $gd[oid] $gd[name], adding alias<br />";
 				// add the user as alias
 				core::addalias(array(
 					"id" => $gd["oid"],

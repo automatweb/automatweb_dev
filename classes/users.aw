@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.92 2003/07/08 12:21:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.93 2003/08/01 12:48:19 axel Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -357,7 +357,7 @@ class users extends users_user
 
 		if (!is_valid("password",$pwd))
 		{
-			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid märke<br>"));
+			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid märke<br />"));
 		}
 
 		if ($arr["pwd"] != "")
@@ -1545,7 +1545,7 @@ class users extends users_user
 		{
 			$this->save_handle();
 			$this->db_query("UPDATE users SET created_hour = '".(date("H",$row["created"]))."', created_day = '".(mktime(0,0,0,date("m",$row["created"]),date("d",$row["created"]),date("Y",$row["created"])))."', created_week = '".(date("w",$row["created"]))."', created_month = '  ".(date("m",$row["created"]))."', created_year = '".(date("Y",$row["created"]))."' WHERE uid = '".$row["uid"]."'");
-			echo "updated $row[uid] <Br>";
+			echo "updated $row[uid] <br />";
 			flush();
 			$this->restore_handle();
 		}
@@ -1561,7 +1561,7 @@ class users extends users_user
 			$this->db_query("UPDATE syslog SET created_hour = '".(date("H",$row["tm"]))."', created_day = '".(mktime(0,0,0,date("m",$row["tm"]),date("d",$row["tm"]),date("Y",$row["tm"])))."', created_week = '".(date("w",$row["tm"]))."', created_month = '  ".(date("m",$row["tm"]))."', created_year = '".(date("Y",$row["tm"]))."' WHERE id = '".$row["id"]."'");
 			if (($cnt % 100) == 0)
 			{
-				echo "updated $cnt records <Br>";
+				echo "updated $cnt records <br />";
 				flush();
 			}
 			$cnt++;
@@ -1744,7 +1744,7 @@ class users extends users_user
 			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. \n\nProbleemide korral saatke e-mail $email.\n\nKõike paremat soovides,\n$name_wm";
 			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
 			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
-			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!<br>");
+			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
 		};
 		return $this->mk_my_orb("send_hash",array());
 	}
@@ -1824,7 +1824,7 @@ class users extends users_user
 		$row = $this->db_next();
 		if (!$row)
 		{
-			return "<span style='color: red'>Sellist võtit pole väljastatud!</span><br>";
+			return "<span style='color: red'>Sellist võtit pole väljastatud!</span><br />";
 		};
 
 		if ($args["change"])
@@ -2055,7 +2055,7 @@ class users extends users_user
 				$pwd = md5($pwd);
 			}
 			$this->db_query("UPDATE users SET password = '$pwd' WHERE uid = '$uid'");
-			echo "generated password $pwd for user $uid <br>\n";
+			echo "generated password $pwd for user $uid <br />\n";
 		}
 		die();
 //		return $this->mk_my_orb("gen_list");
@@ -2067,11 +2067,11 @@ class users extends users_user
 	// otherwise it will be impossible to log in.
 	function pwconv($args = array())
 	{
-		print "Encrypting passwords with MD5. This may take a few moments<br>";
+		print "Encrypting passwords with MD5. This may take a few moments<br />";
 		flush();
 		$q = "UPDATE users SET password = md5(password)";
 		$this->db_query($q);
-		print "Done!<br> Don't forget to turn on auth.md5_passwords or you wont be able to log in anymore!";
+		print "Done!<br /> Don't forget to turn on auth.md5_passwords or you wont be able to log in anymore!";
 
 		// here be dragons .. or rather the code to set the
 		// variable in the site ini file
@@ -2125,7 +2125,7 @@ class users extends users_user
 					)
 				)
 			));
-			//echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br>";
+			//echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br />";
 			$ini_opts["groups.tree_root"] = $opts["groups.tree_root"];
 			$ini_opts["groups.all_users_grp"] = $opts["groups.all_users_grp"];
 		}
@@ -2204,7 +2204,7 @@ class users extends users_user
 		// read the damn file
 		if (is_uploaded_file($imp))
 		{
-			echo "Impordin kasutajaid ... <Br>";
+			echo "Impordin kasutajaid ... <br />";
 			$first = true;
 			$f = fopen($imp,"r");
 			while(($row = fgetcsv($f, 10000,",")))
@@ -2255,11 +2255,11 @@ class users extends users_user
 					));
 				}
 
-				echo "Importisin kasutaja $uid ... <Br>\n";
+				echo "Importisin kasutaja $uid ... <br />\n";
 				flush();
 				$first = false;
 			}
-			echo "Valmis! <br>\n";
+			echo "Valmis! <br />\n";
 			die(html::href(array(
 				"url" => $this->mk_my_orb("grp_members", array("gid" => $gid), "groups"),
 				"caption" => "Tagasi"

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.201 2003/07/28 15:57:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.202 2003/08/01 12:48:16 axel Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -499,7 +499,7 @@ class document extends aw_template
 				}
 				else
 				{
-					$def = "<br><B>Edasi loe ajakirjast!</b></font>";
+					$def = "<br /><B>Edasi loe ajakirjast!</b></font>";
 				};
 				$doc["content"] = substr($doc["content"],0,$pp).$def;
 			}
@@ -518,12 +518,12 @@ class document extends aw_template
 		{
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>Loe edasi</a></b></font>";
 			}
 		}
 
@@ -578,7 +578,7 @@ class document extends aw_template
 					}
 					else
 					{
-						$txt .= $doc["lead"] . "<br>";
+						$txt .= $doc["lead"] . "<br />";
 					}
 				}
 
@@ -593,7 +593,7 @@ class document extends aw_template
 					$txt .= "</b>";
 				};
 
-				$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
+				$txt .= ($this->cfg["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br />" : "")."$doc[content]";
 				$doc["content"] = $txt;
 			};
 		};
@@ -715,7 +715,7 @@ class document extends aw_template
 
 		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
-			$doc["content"] = str_replace("\r\n","<br>",$doc["content"]);
+			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
 		}
 
 		$pb = "";
@@ -940,7 +940,7 @@ class document extends aw_template
 			"LANG" => $langs,
 			"SEL_LANG" => "",
 			"menu_addr"	=> $mn["link"],
-			"lead_br"	=> $doc["lead"] != "" ? "<br>" : "",
+			"lead_br"	=> $doc["lead"] != "" ? "<br />" : "",
 			"doc_count" => $this->doc_count++,
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
@@ -2550,7 +2550,7 @@ class document extends aw_template
 				$mtalsstr = "OR documents.docid IN (".$mts.")";
 			}
 			*/
-			//echo "ms = $mtalsstr<br>";
+			//echo "ms = $mtalsstr<br />";
 		}
 
 		$cnt = 0;
@@ -2595,7 +2595,7 @@ class document extends aw_template
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
-		dbg::p("search_q = $q <br>");
+		dbg::p("search_q = $q <br />");
 		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2624,7 +2624,7 @@ class document extends aw_template
 			}
 			else
 			{
-				$p1 = strpos($row["content"],"<BR>");
+				$p1 = strpos($row["content"],"<br />");
 				$p2 = strpos($row["content"],"</P>");
 				$pos = min($p1,$p2);
 				$co = substr($row["content"],0,$pos);
@@ -2852,7 +2852,7 @@ class document extends aw_template
 				{
 					$this->darr[] = $v["last"];
 				}
-				dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
+				dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br />");
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
@@ -3323,9 +3323,9 @@ class document extends aw_template
 	// uses the settings set in the general static site settings for generation
 	function gen_static_doc($id)
 	{
-		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br><br>\n\n";
-		echo "\n\r<br>";
-		echo "\n\r<br>"; flush();
+		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n";
+		echo "\n\r<br />";
+		echo "\n\r<br />"; flush();
 		ob_start();
 
 		$exp = get_instance("export");
@@ -3353,8 +3353,8 @@ class document extends aw_template
 		}
 
 		ob_end_clean();
-		echo  "Staatilised lehek&uuml;ljed loodud!<br>\n";
-		die("<Br><br><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< tagasi dokumendi muutmise juurde</a>");
+		echo  "Staatilised lehek&uuml;ljed loodud!<br />\n";
+		die("<br /><br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< tagasi dokumendi muutmise juurde</a>");
 	}
 
 	////
@@ -3709,7 +3709,7 @@ class document extends aw_template
 			global $DBG;
 			if ($DBG)
 			{
-				print "not found, defaulting to edit<br>";
+				print "not found, defaulting to edit<br />";
 			}
 			$template = "edit.tpl";
 		}

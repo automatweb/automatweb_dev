@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.129 2003/07/23 13:12:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.130 2003/08/01 12:48:16 axel Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1269,8 +1269,8 @@ class planner extends class_base
 			{
 				$repl = $this->_show_object($obj);
 			};
-			//$name = sprintf("<br><img src='%s'>%s",get_icon_url($obj["class_id"],""),$obj["name"]);
-			$name = "<br>" .$repl;
+			//$name = sprintf("<br /><img src='%s'>%s",get_icon_url($obj["class_id"],""),$obj["name"]);
+			$name = "<br />" .$repl;
 		}
 		else
 		{

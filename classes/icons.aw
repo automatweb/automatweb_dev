@@ -534,7 +534,7 @@ class icons extends aw_template
 
 			$unzip_path = aw_ini_get("server.unzip_path");
 			$op = `$unzip_path -o -j -d $dir $fail`;
-			echo "<pre>".$op."</pre><br>";
+			echo "<pre>".$op."</pre><br />";
 			flush();
 
 			$h = opendir($dir);
@@ -556,7 +556,7 @@ class icons extends aw_template
 						if (!$pfile)
 						{
 							// faili ei leidnud. kustutame selle 2ra ja j2tkame luupi.
-							echo "file not found, deleting ",$dir."/".$file," and continuing loop <br>";
+							echo "file not found, deleting ",$dir."/".$file," and continuing loop <br />";
 							unlink($dir."/".$file);
 							continue;
 						}
@@ -609,19 +609,19 @@ class icons extends aw_template
 
 		$basename = substr($icon,0,strrpos($icon,"."));
 		$nname = $basename.".gif";
-		echo "nname = $nname <br>";
+		echo "nname = $nname <br />";
 		$icon = $idir."/".$icon;
 		$odir = $tdir."/".$nname;
 		// now $tdir contains files $icon.gif.0 / $icon.gif.1 ...
 		$op = `$convert_dir +adjoin "$icon" "$odir"`;
-		echo "$convert_dir (convert +adjoin $icon $odir) result: <pre>$op</pre><Br>";
+		echo "$convert_dir (convert +adjoin $icon $odir) result: <pre>$op</pre><br />";
 		// find the right size image with identify
 		$h = opendir($tdir);
 		$found = false;
 		$c_file = false;
 		while ($file = readdir($h))
 		{
-			echo "scanning, file = $file <br>";
+			echo "scanning, file = $file <br />";
 			// loopi ei l6peta 2ra kui faili leiame sellep2rast et vaja k6ik failid 2ra kustutada. 
 			if ($file != "." && $file != "..")
 			{
@@ -630,24 +630,24 @@ class icons extends aw_template
 					$fi = $tdir."/".$file;
 					$e_fi = str_replace("/","\/",$fi);
 					$op = `$identify_dir "$fi"`;
-					echo "$identify_dir $fi result:<br><pre>$op</pre><br>";
+					echo "$identify_dir $fi result:<br /><pre>$op</pre><br />";
 					$res = preg_match("/$e_fi (\d*)x(\d*)/",$op,$mat);
 
-					echo "res = $res filesize (/$e_fi (\d*)x(\d*)/) match = ", $mat[1]," , ",$mat[2],"<Br>";
+					echo "res = $res filesize (/$e_fi (\d*)x(\d*)/) match = ", $mat[1]," , ",$mat[2],"<br />";
 					if ($mat[1] == "16" && $mat[2] == "16")
 					{
 						$found = true;
 						$c_file = $file;
-						echo "found!<br>";
+						echo "found!<br />";
 						// now replace file.ico with file.gif
 						unlink($icon);
 						rename($fi,$idir."/".$nname);						
-						echo "deleted $icon and moved $fi to ",$idir."/".$nname,"<br>";
+						echo "deleted $icon and moved $fi to ",$idir."/".$nname,"<br />";
 						$c_file = $nname;
 						// now also crop the image to the right size
 						$nm = $idir."/".$nname;
 						$op = `$convert_dir -crop 16x16 "$nm" "$nm"`;
-						echo "crop result: $op <br>";
+						echo "crop result: $op <br />";
 					}
 
 					if ($mat[1] == "32" && $mat[2] == "32")
@@ -655,21 +655,21 @@ class icons extends aw_template
 						// uh, kui leiame 32x32 ikooni, siis konverdime selle 16x16x ja impordime ikka
 						$found = true;
 						$c_file = $file;
-						echo "found!<br>";
+						echo "found!<br />";
 						// now replace file.ico with file.gif
 						unlink($icon);
 						rename($fi,$idir."/".$nname);						
-						echo "deleted $icon and moved $fi to ",$idir."/".$nname,"<br>";
+						echo "deleted $icon and moved $fi to ",$idir."/".$nname,"<br />";
 						$c_file = $nname;
 						// now also crop the image to the right size
 						$nm = $idir."/".$nname;
 						$op = `$convert_dir -geometry 16x16! "$nm" "$nm"`;
-						echo "crop result: $op <br>";
+						echo "crop result: $op <br />";
 						$op = `$convert_dir -crop 16x16 "$nm" "$nm"`;
-						echo "size result: $op <br>";
+						echo "size result: $op <br />";
 					}
 				}
-				echo "deleting ",$tdir."/".$file,"<br>";
+				echo "deleting ",$tdir."/".$file,"<br />";
 				@unlink($tdir."/".$file);
 			}
 		}
@@ -805,25 +805,25 @@ class icons extends aw_template
 			{
 				// save as aw icon
 				//"/automatweb/images/icon_aw.gif" 
-				echo "clid $clid icon is default icon_aw.gif <br>";
+				echo "clid $clid icon is default icon_aw.gif <br />";
 
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 				fwrite($f, $fc);
 				fclose($f);
 			}
 			else
 			{
-				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br>";
+				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br />";
 				// save!
-				echo "writing clid $clids as ".aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif <Br>";
+				echo "writing clid $clids as ".aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif <br />";
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 
 
@@ -841,11 +841,11 @@ class icons extends aw_template
 			$ext = str_replace(".", "", $ext);
 			if ($dat["id"])
 			{
-				echo "writing ftype iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif <Br>";
+				echo "writing ftype iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif <br />";
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 
 
@@ -855,12 +855,12 @@ class icons extends aw_template
 			}
 			else
 			{
-				echo "ftype $ext icon is default <br>";
+				echo "ftype $ext icon is default <br />";
 
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 				fwrite($f, $fc);
 				fclose($f);
@@ -875,18 +875,18 @@ class icons extends aw_template
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			fwrite($f, $fc);
 			fclose($f);
 		}
 		else
 		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif <Br>";
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
@@ -900,18 +900,18 @@ class icons extends aw_template
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			fwrite($f, $fc);
 			fclose($f);
 		}
 		else
 		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif <Br>";
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
@@ -924,18 +924,18 @@ class icons extends aw_template
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			fwrite($f, $fc);
 			fclose($f);
 		}
 		else
 		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif <Br>";
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
@@ -948,18 +948,18 @@ class icons extends aw_template
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			fwrite($f, $fc);
 			fclose($f);
 		}
 		else
 		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif <Br>";
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
@@ -972,18 +972,18 @@ class icons extends aw_template
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			fwrite($f, $fc);
 			fclose($f);
 		}
 		else
 		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif <Br>";
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif", "w");
 			if (!$f)
 			{
-				echo "can!t open ya bassstardooo!! $clid<br>";
+				echo "can!t open ya bassstardooo!! $clid<br />";
 			}
 			$ic = $this->get($v["id"]);
 			fwrite($f, $ic["file"]);
@@ -997,25 +997,25 @@ class icons extends aw_template
 			{
 				// save as aw icon
 				//"/automatweb/images/icon_aw.gif" 
-				echo "prid $prid icon is default icon_aw.gif <br>";
+				echo "prid $prid icon is default icon_aw.gif <br />";
 
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 				fwrite($f, $fc);
 				fclose($f);
 			}
 			else
 			{
-				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br>";
+				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br />";
 				// save!
-				echo "writing prid $prid as ".aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif <Br>";
+				echo "writing prid $prid as ".aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif <br />";
 				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif", "w");
 				if (!$f)
 				{
-					echo "can!t open ya bassstardooo!! $clid<br>";
+					echo "can!t open ya bassstardooo!! $clid<br />";
 				}
 
 

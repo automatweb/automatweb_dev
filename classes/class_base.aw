@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.137 2003/07/22 08:38:27 axel Exp $
+// $Id: class_base.aw,v 2.138 2003/08/01 12:48:16 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -210,9 +210,31 @@ class class_base extends aw_template
 			$content = $cli->get_result();
 		};
 
+		
+		//this hack is for desktop. we need to show new object in desktop 'realtime'
+		$added = '';
+		if (isset($GLOBALS['added_object']))
+		{
+			$added = "
+			
+<script type=\"text/javascript\">
+<!--
+	if (window != window.top)
+	{
+		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
+		{
+			top.fetch_object('".$GLOBALS['added_object']."');
+		}
+	}
+// -->
+</script>			
+			";
+			aw_session_del('added_object');
+		}
+
 		return $this->gen_output(array(
 			"parent" => $this->parent,
-			"content" => isset($content) ? $content : "",
+			"content" => $added.(isset($content) ? $content : ""),//axel häkkis
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 	}
@@ -1795,7 +1817,8 @@ class class_base extends aw_template
 				"status" => !empty($status) ? $status : 1,
 				"period" => $period,
 			));
-
+			aw_session_set("added_object",$id);//axel häkkis
+			
 			if ($alias_to)
 			{
 				$almgr = get_instance("aliasmgr");
@@ -2269,7 +2292,7 @@ class class_base extends aw_template
 
 	function sync_object($args = array())
 	{
-		//print "syncing oid = " . $this->id . "<br>";
+		//print "syncing oid = " . $this->id . "<br />";
 		// remove current fields belonging to this object from the property table
 		$id = $this->id;
 

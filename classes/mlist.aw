@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.10 2003/07/28 15:01:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.11 2003/08/01 12:48:16 axel Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -604,7 +604,7 @@ class mlist extends aw_template
 					$this->db_query("INSERT INTO ml_var_values(var_id,user_id,value) VALUES('$v_id','$usid','$vvl')");
 				}
 			}
-			echo "Leidsin $name ( $mail ) muutujad: ".join(",",$varst)."<br>";
+			echo "Leidsin $name ( $mail ) muutujad: ".join(",",$varst)."<br />";
 			flush();
 		}			
 		$this->_log(ST_ML_LIST, SA_IMPORT,$this->name);
@@ -824,12 +824,12 @@ class mlist extends aw_template
 												 AND ml_users.mail = '$ml'", "oid");
 				if ($mmid)
 				{
-					echo "kustutan aadressi $ml ($mmid) <br>";
+					echo "kustutan aadressi $ml ($mmid) <br />";
 					$this->delete_object($mmid);
 				}
 				else
 				{
-					echo "kasutajat aadressiga $ml pole selles listis! <Br>";
+					echo "kasutajat aadressiga $ml pole selles listis! <br />";
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.9 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.10 2003/08/01 12:48:16 axel Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -653,7 +653,7 @@ class events extends aw_template
 	
 	function parse_alias($args = array())
 	{
-		//print "pa called<bR>";
+		//print "pa called<br />";
 		//print "<pre>";
 		//print_r($args);
 		//print "</pre>";

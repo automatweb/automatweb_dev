@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.99 2003/07/14 14:46:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.100 2003/08/01 12:48:16 axel Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -167,7 +167,7 @@ if (!defined("DEFS"))
 	function format_text($text)
 	{
 		$text = str_replace("\n\n","<p>",$text);
-		$text = str_replace("\n","<br>",$text);
+		$text = str_replace("\n","<br />",$text);
 		return $text;
 	}
 
@@ -321,7 +321,7 @@ if (!defined("DEFS"))
 		echo '<pre>';
 		print_r($arr);
 		echo '</pre>';
-		if ($die) die('<hr>');
+		if ($die) die('<hr />');
 		return $arr;
 	}
 
@@ -795,7 +795,7 @@ if (!defined("DEFS"))
 		{
 			if (aw_global_get("DEBUG") == 1)
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 
@@ -804,7 +804,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug1"])
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 
@@ -813,7 +813,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug2"])
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 
@@ -822,7 +822,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug3"])
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 
@@ -831,7 +831,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug4"])
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 
@@ -840,7 +840,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug5"])
 			{
-				echo $msg."<br>\n";
+				echo $msg."<br />\n";
 			}
 		}
 	}

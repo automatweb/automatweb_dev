@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.121 2003/06/04 19:19:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.122 2003/08/01 12:48:16 axel Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1024,11 +1024,11 @@ class messenger extends menuedit_light
 				$muutujalistvahe.="&nbsp;<b>#$v#</b>&nbsp;";
 				if (strlen($muutujalistvahe)>100)
 				{
-					$muutujalist.=($muutujalist?"<br>":"")."$muutujalistvahe";
+					$muutujalist.=($muutujalist?"<br />":"")."$muutujalistvahe";
 					$muutujalistvahe="";
 				};
 			};
-			$muutujalist.=($muutujalist?"<br>":"")."$muutujalistvahe";
+			$muutujalist.=($muutujalist?"<br />":"")."$muutujalistvahe";
 			$stamps="";
 			// võta need stambid, millele saatjal on "send" õigus
 			$this->get_objects_by_class(array("class" => CL_ML_STAMP));
@@ -1037,11 +1037,11 @@ class messenger extends menuedit_light
 				$stampsvahe.="&nbsp;<b>#".$stamp["name"]."#</b>&nbsp;";
 				if (strlen($stampsvahe)>100)
 				{
-					$stamps.=($stamps?"<br>":"")."$stampsvahe";
+					$stamps.=($stamps?"<br />":"")."$stampsvahe";
 					$stampsvahe="";
 				};
 			};
-			$stamps.=($stamps?"<br>":"")."$stampsvahe";
+			$stamps.=($stamps?"<br />":"")."$stampsvahe";
 			$this->vars(array(
 				"muutujalist" => $muutujalist,
 				"stambilist" => $stamps));
@@ -1325,13 +1325,13 @@ class messenger extends menuedit_light
 						{
 							unset($members[$key]);
 							/*if ($GLOBALS["automatweb"]=="kalatehas")
-								echo("$internal denied mail $membermail [$key]<br>");*/
+								echo("$internal denied mail $membermail [$key]<br />");*/
 						} 
 						else
 						{
 							$sentto[$membermail]=1;
 							/*if ($GLOBALS["automatweb"]=="kalatehas")
-								echo("$internal allowed mail $membermail [$key]<br>");*/
+								echo("$internal allowed mail $membermail [$key]<br />");*/
 						};
 					};
 					$to = join(",",$members);
@@ -1414,8 +1414,8 @@ class messenger extends menuedit_light
 		else
 		{
 			// HTML mail
-			//$body=strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
-			$body=strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+			//$body=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
+			$body=strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
 		};
 		$this->awm->create_message(array(
 			"froma" => $froma,
@@ -1493,12 +1493,12 @@ class messenger extends menuedit_light
 							"#kuupaev#" => $this->time2date(time(),2),
 				));
 				$this->awm->gen_mail();
-				print "Saadan aadressile $member[mail]<br>";
+				print "Saadan aadressile $member[mail]<br />";
 				//print ".";
 				flush();
 			}
-			print "<br>";
-			print sizeof($alist) . " kirja saadetud<br>";
+			print "<br />";
+			print sizeof($alist) . " kirja saadetud<br />";
 			$baseurl = aw_global_get("baseurl");
 			print "<a href='".$this->mk_my_orb("folder")."'>tagasi messengeri</a>";
 			exit;
@@ -1582,7 +1582,7 @@ class messenger extends menuedit_light
 		if ($_sethtml=="3")// html => text
 		{
 			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
-			$message=strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
+			$message=strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n")));
 			//echo("<textarea cols=80 rows=15>$message</textarea>");//dbg
 			$sethtml=", type = type & ".MSG_MASKNOTHTML;
 			if ($_makelist)
@@ -1593,7 +1593,7 @@ class messenger extends menuedit_light
 		
 		if ($_sethtml=="2")// text => html
 		{
-			$message=strtr($message,array("\r"=>"","\n"=>"<br>"));
+			$message=strtr($message,array("\r"=>"","\n"=>"<br />"));
 			$sethtml=", type = type | ".MSG_HTML;
 			if ($_makelist)
 			{
@@ -1855,7 +1855,7 @@ class messenger extends menuedit_light
 			{
 				$qs .= sprintf(" %s ",$connector[$i-1]);
 				$quser .= ($connector[$i-1] == "and") ? MSG_CONNECTOR_AND : MSG_CONNECTOR_OR;
-				$quser .= "<br>";
+				$quser .= "<br />";
 			};
 		};
 
@@ -2094,7 +2094,7 @@ class messenger extends menuedit_light
 			$message = htmlspecialchars($message);
 			$message = $this->MIME_decode($message);
 			$message = preg_replace("/(\r)/","",$message);
-			$message = preg_replace("/(\n)/","<br>",$message);
+			$message = preg_replace("/(\n)/","<br />",$message);
 			$message = quoted_printable_decode($message);
 			$message = preg_replace("/(http|https|ftp)(:\/\/\S+?)\s/si","<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $message);
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.8 2002/09/30 06:44:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.9 2003/08/01 12:48:18 axel Exp $
 
 class sql_filter extends aw_template 
 {
@@ -130,7 +130,7 @@ class sql_filter extends aw_template
 			
 			$faketable=$this->reverse[$realtable]["fake"];
 			$fakefield=$this->reverse[$realtable]["fields"][$realfield]["fake"];
-			//echo("explode $realtable,$realfield =>$faketable.$fakefield<br>");//dbg
+			//echo("explode $realtable,$realfield =>$faketable.$fakefield<br />");//dbg
 			
 			$fakeval=$filter["p$i"]["val"];
 			if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]) &&
@@ -155,14 +155,14 @@ class sql_filter extends aw_template
 					$change_p_val="_date";
 					$selecteddate=$fakeval;
 				};
-				//echo("change_p_val=$change_p_val<br>");//dbg
+				//echo("change_p_val=$change_p_val<br />");//dbg
 				$rclass="ftitle2";
 				
 			} else
 			{
 				$rclass="title";
 			};
-			//echo("join=".$filter["p$i"]["join"]."<br>");//dbg
+			//echo("join=".$filter["p$i"]["join"]."<br />");//dbg
 
 			$this->vars(array(
 				"tid" => $i,
@@ -193,7 +193,7 @@ class sql_filter extends aw_template
 			$c_opor=$apart["join"]=="or"?" checked ":"";
 			$buttoncaption="Salvesta";
 			$change_p_op=$apart["op"];
-			//echo("change_p_op=$change_p_op<br>");//dbg
+			//echo("change_p_op=$change_p_op<br />");//dbg
 			//echo("<pre>");print_r($fieldarr);echo("</pre>");//dbg
 			$change_p_field=$apart["field"];
 

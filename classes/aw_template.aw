@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.47 2003/07/14 14:46:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.48 2003/08/01 12:48:15 axel Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -305,7 +305,7 @@ class aw_template extends core
 		global $TPL;
 		if ( (aw_ini_get("debug_mode") !=0 ) && $TPL)
 		{
-			print "using " . $this->template_filename . "<br>";
+			print "using " . $this->template_filename . "<br />";
 		};
 		$this->tpl_reset();
 		if (is_array($arr))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.10 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.11 2003/08/01 12:48:16 axel Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -434,7 +434,7 @@ class graph extends aw_template
 						$data=$gm->get_stats();
 /*								while (list($ke,$va)=each($data[ybytes]))
 							{
-								echo "$ke";echo " = $va<br>";
+								echo "$ke";echo " = $va<br />";
 							}	
 							exit;
 */						$gr_type="bytes";									
@@ -708,11 +708,11 @@ class graph extends aw_template
 					$ycount=$ii+1;
 					$i++;
 				}
-/*							echo $temp[x];echo "<br>";
+/*							echo $temp[x];echo "<br />";
 					for($i=0;$i<$ycount;$i++) {
 						$cur="y".$i;
 						$curc="yc".$i;						
-						print("$temp[$cur] $temp[$curc]<br>");
+						print("$temp[$cur] $temp[$curc]<br />");
 					}
 */				fclose ($fp);
 //								echo "Ajee.. done... edukas appload";
@@ -740,19 +740,19 @@ class graph extends aw_template
 			{
 				while(list($ke,$val) = each($v)) 
 				{
-					echo "$ke = $val<br>";						
+					echo "$ke = $val<br />";						
 					if (is_array($val))
 					{					
 						while(list($kee,$va) = each($val)) 
 						{
-							//echo "$kee = $va<br>";						
+							//echo "$kee = $va<br />";						
 						}
 					}
 				}
 			} 
 			else 
 			{
-				echo "mh1 = $v<br>";						
+				echo "mh1 = $v<br />";						
 			}
 		}
 		exit;

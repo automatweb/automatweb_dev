@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.8 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.9 2003/08/01 12:48:17 axel Exp $
 
 classload("db");
 class replicator_host extends db_connector
@@ -52,10 +52,10 @@ class replicator_host extends db_connector
 			
 			$correcthash=md5($rec["IP"].$rec["RAND"].$this->key.$rec["RAND"]);
 
-			//echo("ip=".$rec["IP"]." rand=".$rec["RAND"]." key=".$this->key." <br>,thus, hash=$correcthash<br> client sent=$hash<br><br>");//dbg
+			//echo("ip=".$rec["IP"]." rand=".$rec["RAND"]." key=".$this->key." <br />,thus, hash=$correcthash<br /> client sent=$hash<br /><br />");//dbg
 			if ($hash!=$correcthash || $rec["IP"]!=$REMOTE_ADDR)
 			{
-				$error="wrong hash"/*."ip=".$rec["IP"]."rand=".$rec["RAND"]." key=".$this->key." <br>,thus,hash=$correcthash<br> client sent=$hash<br><br>"*/;
+				$error="wrong hash"/*."ip=".$rec["IP"]."rand=".$rec["RAND"]." key=".$this->key." <br />,thus,hash=$correcthash<br /> client sent=$hash<br /><br />"*/;
 			} else
 			{
 				if ($func=="CLOSE")
@@ -108,7 +108,7 @@ class replicator_client extends db_connector
 		$this->tid=$open_result["tid"];
 		//echo("key=*$key*");
 		//echo
-//"<br>makinghash:md5($SERVER_ADDR.{$open_result["rand"]}.$key.{$open_result["rand"]})";//DBG
+//"<br />makinghash:md5($SERVER_ADDR.{$open_result["rand"]}.$key.{$open_result["rand"]})";//DBG
 		$this->hash=md5($SERVER_ADDR.$open_result["rand"].$key.$open_result["rand"]);
 
 
@@ -117,10 +117,10 @@ class replicator_client extends db_connector
 	function _query($arr)
 	{
 		$q=$this->url."?transaction=".urlencode(serialize($arr));
-		//echo "<br>query=$q<br>";//DBG
+		//echo "<br />query=$q<br />";//DBG
 		$ret=@file($q);
 
-		//echo("<br>ret=".join("",$ret).",");print_r(unserialize(join("",$ret)));echo("<br>");//DBG
+		//echo("<br />ret=".join("",$ret).",");print_r(unserialize(join("",$ret)));echo("<br />");//DBG
 
 		if (!is_array($ret))
 			return array("error"=>"httpquery failed ".urldecode($q));

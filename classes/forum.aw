@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.77 2003/07/28 15:43:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.78 2003/08/01 12:48:16 axel Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1724,7 +1724,7 @@ topic");
 		if ($DBUG)
 		{
 			print "<pre>";
-			print "ca = " . $this->last_read[$args["oid"]] . "<br>";
+			print "ca = " . $this->last_read[$args["oid"]] . "<br />";
 			print "</pre>";
 		}
 		$mark = ($check_against > $this->last_read[$args["oid"]]) ? $this->parse("NEW_MSGS") : "";
@@ -1745,7 +1745,7 @@ topic");
 			global $DBUG;
 			if ($DBUG)
 			{
-				print "read = $read_msgs, total = $total_msgs<br>";
+				print "read = $read_msgs, total = $total_msgs<br />";
 			}
 
 			if ($read_msgs < $total_msgs)

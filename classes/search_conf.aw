@@ -364,7 +364,7 @@ class search_conf extends aw_template
 
 					// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
 					$mtalsstr = "OR documents.docid IN (".join(",",$mtals).")";
-					//echo "ms = $mtalsstr<br>";
+					//echo "ms = $mtalsstr<br />";
 				}
 			}
 
@@ -731,7 +731,7 @@ class search_conf extends aw_template
 			}
 
 			$this->db_query("UPDATE documents SET modified = $modified WHERE docid = ".$row["oid"]);
-			echo "modified doc ",$row["title"], " , tm = ",$row["tm"], " set date to ", $this->time2date($modified,3), "<br>\n";
+			echo "modified doc ",$row["title"], " , tm = ",$row["tm"], " set date to ", $this->time2date($modified,3), "<br />\n";
 			flush();
 			$this->restore_handle();
 		}

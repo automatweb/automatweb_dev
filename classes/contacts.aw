@@ -162,7 +162,7 @@ class contacts extends aw_template
 
 		if ($fdata["class_id"] == CL_CONTACT_GROUP)
 		{
-			//print "check passed<br>";
+			//print "check passed<br />";
 			$path[$fdata["oid"]] = $fdata["name"];
 		}
 		else
@@ -265,7 +265,7 @@ class contacts extends aw_template
 
 		if ($fdata["class_id"] == CL_CONTACT_GROUP)
 		{
-			//print "check passed<br>";
+			//print "check passed<br />";
 			$path[$fdata["oid"]] = $fdata["name"];
 		}
 		else

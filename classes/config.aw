@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.46 2003/05/13 15:05:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.47 2003/08/01 12:48:16 axel Exp $
 
 class db_config extends aw_template 
 {
@@ -1210,7 +1210,7 @@ class config extends db_config
 			$this->set_other_icon($v["id"],$iid);
 			$cnt++;
 		}
-		echo "Importisin $cnt ikooni. <a href='".$this->mk_my_orb("other_icons")."'>Tagasi</a><br>";
+		echo "Importisin $cnt ikooni. <a href='".$this->mk_my_orb("other_icons")."'>Tagasi</a><br />";
 	}
 
 	function import()

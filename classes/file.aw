@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.52 2003/07/23 17:06:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.53 2003/08/01 12:48:16 axel Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -210,7 +210,7 @@ class file extends class_base
 			elseif ($fi["type"] == "text/xml")
 			{
 				$replacement = htmlspecialchars($fi["content"]);
-				$replacement = str_replace("\n","<br>\n",$replacement);
+				$replacement = str_replace("\n","<br />\n",$replacement);
 				// tabs
 				$replacement = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;",$replacement);
 			}
@@ -246,7 +246,7 @@ class file extends class_base
 		}
 		if ($XX3)
 		{
-			print "ct = $replacement<br>";
+			print "ct = $replacement<br />";
 		};
 		return $replacement;
 	}
@@ -466,15 +466,15 @@ class file extends class_base
 			{
 				if (!file_exists($dir))
 				{
-					$retval .= "Kataloog $dir puudub<br>";
+					$retval .= "Kataloog $dir puudub<br />";
 				}
 				elseif (!is_dir($dir))
 				{
-					$retval .= "$dir ei ole kataloog<br>";
+					$retval .= "$dir ei ole kataloog<br />";
 				}
 				elseif (!is_writable($dir))
 				{
-					$retval .= "$dir ei ole kirjutatav<br>";
+					$retval .= "$dir ei ole kirjutatav<br />";
 				};
 			};
 		};

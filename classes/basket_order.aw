@@ -63,7 +63,7 @@ class basket_order extends basket
 				"entry_id" => $order["meta"]["of_entry"],
 				"op_id" => $ob["meta"]["order_form_op"]
 			));
-			$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $order["meta"], true);
+			$htmlmail.="<br /><br />".$this->_draw_basket_ft($ob, $order["meta"], true);
 		}
 
 		$this->vars(array(

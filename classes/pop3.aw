@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.7 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.8 2003/08/01 12:48:16 axel Exp $
 class pop3 extends aw_template
 {
 	function pop3()
@@ -50,7 +50,7 @@ class pop3 extends aw_template
 		{
 			preg_match("/(\d*)\s*(.*)/",$res = $this->read_response(),$br);
 			$muidls[$br[1]] = $br[2];
-//			echo $br[2],"<br>";
+//			echo $br[2],"<br />";
 		}
 		$this->read_response();	// a "." is returned after the list
 
@@ -66,8 +66,8 @@ class pop3 extends aw_template
 			}
 			else
 			{
-				#echo "message nr $i not downed, uidl = '",$muidls[$i],"<br>";
-				#print "idl was not set, therefore we are not skipping the message<br>";
+				#echo "message nr $i not downed, uidl = '",$muidls[$i],"<br />";
+				#print "idl was not set, therefore we are not skipping the message<br />";
 			};
 
 			//if ($delete)
@@ -89,7 +89,7 @@ class pop3 extends aw_template
 			$this->raise_error(ERR_POP3_CONNECT,"pop3: error connecting, $errno , $errstr",true);
 			return false;
 		}
-//		echo "connected<br>\n";
+//		echo "connected<br />\n";
 //		flush();
 		return true;
 	}
@@ -97,7 +97,7 @@ class pop3 extends aw_template
 	function read_response()
 	{
 		$line = fgets($this->fp, 512);
-//		echo "<< :$line<br>";
+//		echo "<< :$line<br />";
 //		flush();
 		return $line;
 	}
@@ -105,7 +105,7 @@ class pop3 extends aw_template
 	function send_command($cmdstr)
 	{
 		fputs($this->fp, $cmdstr."\n");
-//		echo ">>> :$cmdstr<br>\n";
+//		echo ">>> :$cmdstr<br />\n";
 //		flush();
 	}
 
@@ -154,7 +154,7 @@ class pop3 extends aw_template
 				}
 			}
 		} while ($continue);
-//	echo "message $num follows:<br>\n<pre>$ret</pre>\nBEEP!\n<br>";
+//	echo "message $num follows:<br />\n<pre>$ret</pre>\nBEEP!\n<br />";
 //		flush();
 		return $ret;
 	}
