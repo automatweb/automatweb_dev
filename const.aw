@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.56 2002/01/31 00:37:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.57 2002/02/05 02:33:51 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -614,6 +614,7 @@ define("PRG_HTML_POPUP",54); // html popip
 define("PRG_CONFIG_SITES",55);// saitide tegemine
 define("PRG_CONFIG_DOCFOLDERS",56); // dokumendi liigutamsie kataloogide vailimine
 define("PRG_CONFIG_FORMS",57);	// formi elementide tyypide config
+define("PRG_AUTOMATED_TEST",58); // interface for automated test suite
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -673,6 +674,7 @@ PRG_DOCMGR						=> array("name" => "Document manager",	"url" => "orb.aw?class=do
 PRG_CONFIG_SITES			=> array("name" => "Config/saidid",			"url" => "orb.aw?class=config&action=sites"),
 PRG_CONFIG_DOCFOLDERS	=> array("name" => "Config/dokumendi kataloogid",			"url" => "orb.aw?class=config&action=docfolders"),
 PRG_CONFIG_FORMS			=> array("name" => "Config/FormGen",		"url" => "orb.aw?class=form_config&action=config"),
+PRG_AUTOMATED_TEST			=> array("name" => "Automated testsuite",		"url" => "orb.aw?class=remote&action=config"),
 );
 
 // formide tyybid
