@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.19 2003/02/28 15:08:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.20 2003/05/02 06:50:45 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -137,8 +137,20 @@ class menu_cache extends aw_template
 			if ($this->loaded_cache != $filename)
 			{
 				enter_function("menu_cache::make_caches::load");
-				include($fn);
-				$this->loaded_cache = $filename;
+				$cache_loaded = false;
+				@include($fn);
+				// if the cache was empty == parse error most probably, kill the file
+				// and retry
+				if (!$cache_loaded)
+				{
+					$cache = get_instance("cache");
+					$cache->file_invalidate($filename);
+					$this->make_caches($args);
+				}
+				else
+				{
+					$this->loaded_cache = $filename;
+				}
 				exit_function("menu_cache::make_caches::load");
 			}
 		}
@@ -171,6 +183,7 @@ class menu_cache extends aw_template
 				$php->set("arr_name", "this->subs");
 				$c_d .= "\n".$php->php_serialize($this->subs,true);
 
+				$c_d .= "\n\$cache_loaded = true;";
 				$c_d .= "\n?>";
 				$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID."::period::".$this->period,$c_d);
 			};
