@@ -158,17 +158,6 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>valimid</name>
-            <type>popup_objmgr</type>
-            <clid>CL_SELECTION</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>settings</group>
-            <caption>valimid</caption>
-      </property>
-      <property>
             <name>limit_per_page</name>
             <type>textbox</type>
             <size>8</size>

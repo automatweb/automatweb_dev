@@ -38,13 +38,6 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="mk_shortcut">
-			<function name="mk_shortcut">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 			
 		<action name="paste">
 			<function name="paste">

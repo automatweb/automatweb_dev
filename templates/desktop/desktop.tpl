@@ -1575,15 +1575,16 @@ divv += '</div>';
 document.getElementById('BARITEMSP' + el).innerHTML = divv;
 
 windstatus = '<span name="ic' + ifrn + '" id="ic' + ifrn + '" class="baricon">' + icon + '</span>';
-windstatus += '<a class="menuButton" class="barbutton" title="' + capt + '" style="border:solid 1px gray;margin:1px;" ';
+windstatus += '<a name="icna' + ifrn + '" id="icna' + ifrn + '" class="menuButton" title="' + capt + '" style="border:solid 1px gray;margin:1px;" ';
 //windstatus += 'onclick="WINDOW[' + win + '].window.focus(); ';
 windstatus += 'onclick=" ';
 windstatus += 'document.getElementById(' + ifr + ').style.visibility = ' + "'" + 'visible' + "'" + ';';
 //windstatus +='winList[' + ifr + '].restore();';
 windstatus += 'return false;" ';
 windstatus += 'oncontextmenu="buttonClick(event, ' + "'" + baritem + "'" + ',20 + barheight); return false;" >';
-windstatus += '<img style="position:relative;top:4px;" src="{VAR:images_path}/' + icon + '" height="16" alt=""/>&nbsp;' + capt + '</a>';
-
+windstatus += '<img style="position:relative;top:4px;" src="{VAR:images_path}/' + icon + '" height="16" alt=""/>&nbsp;';
+windstatus += '<span name="icn' + ifrn + '" id="icn' + ifrn + '">' + capt.substr(0,16) + '</span></a>';
+windstatus += '';
 document.getElementById(el).innerHTML = windstatus;
 
 //WINDOW[win] = window.open(url,label,prop);
@@ -1743,7 +1744,7 @@ function savedesktop(a)
 		{
 			id = List[i].id;
 			//alert(top.frames[List[i].id].document.location);
-			ur = top.frames[List[i].id].document.location;
+			ur = top.frames[List[i].id].document.location;//siin tekib viga kui url ei ole samast serverist kust desktop
 			allelements += '&WS[' + id + '][src]=' + encodeURIComponent(ur) + "";
 		}
 	}
@@ -1842,13 +1843,19 @@ function deletion(url)
 	document.getElementById('pipe').src = url;
 }
 
+function fetch_object(oid)
+{
+	top.frames['pipe'].document.getElementById('activity').innerHTML = 'uue objekti lisamine!!';
+	document.getElementById('pipe').src = '{VAR:pipe_url}&fetch_object=' + oid;
+}
+
 var exit_is_ok = false;
 
 /*//]]>*/
 </script></head>
 <body onunload="return false;if (!exit_is_ok){ alert('Korralikuks väljumiseks kasuta tausta menuüüs olevat [Sulge Desktop] nuppu!');window.open('{VAR:REQUEST_URI}','foo','fullscreen');}else{}">
 
-<div id="status" style="position:absolute;top:0px;left:400px;zIndex:6666;">status</div>
+<div id="status" style="position:absolute;top:0px;left:400px;zIndex:6666;"></div>
 
 <!-- taustamenüü -->
 <div id="bodycontext" class="menu"  onmouseover="menuMouseover(event)">
@@ -1956,9 +1963,7 @@ href="" title="Start" onclick="return buttonClick(event, 'filemenu{VAR:datadir}'
 onmouseover="buttonMouseover(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);"><img
 onclick="return false;" style="border:0px;position:relative;top:4px;z-index:10" src="{VAR:images_path}/icon_aw.gif " height="16" alt=""/></a>
 
-
 {VAR:launchbar}
-
 
 <a href="" onclick="return buttonClick(event, 'launche',20 + barheight);"
 class="menuButton" title="" style="border:solid gray 1px"
@@ -1974,6 +1979,7 @@ onmouseover="buttonMouseover(event, 'launche',20 + barheight);">{VAR:showlaunche
 <span id="w[7]" name="w[7]"></span>
 <span id="w[8]" name="w[8]"></span>
 <span id="w[9]" name="w[9]"></span>
+
 </div>
 
 
@@ -2127,6 +2133,7 @@ Kustuta</a>
 <!-- SUB: MENU_ITEM_SUB -->
 <a class="menuItem" href=""
 	onclick="return false;"
+	oncontextmenu="javascript:pop('{VAR:open}',{VAR:xy},'{VAR:caption}','1');hidemenus();return false;"
 	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');"><img src="{VAR:icons_path}/class_{VAR:clid}.gif"
 	height="16" alt="" />
 	<span
@@ -2158,7 +2165,7 @@ height="16" alt="" />{VAR:caption}</a>
 <!-- END SUB: MENU_ITEM_lang -->
 
 <!-- SUB: MENU_SEPARATOR -->
-<div class="menuItemSep"></div>
+<div class="menuItemSep" title="{VAR:title} - {VAR:caption}"></div>
 <!-- END SUB: MENU_SEPARATOR -->
 
 <!-- SUB: MENU -->

@@ -65,8 +65,8 @@
 //	@property valim type=relpicker reltype=VALIM
 //	@caption vali aktiivne valim
 
-	@property valimid type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects
-	@caption valimid
+//	@property valimid type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects
+//	@caption valimid
 
 	@property limit_per_page type=textbox size=8
 	@caption mitu rida näita
@@ -175,7 +175,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		classload('kliendibaas/selection');
 
-		$arg2['obj']['oid'] = $args['obj']['meta']['active_selection'];
+		$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
 		$arg2['obj']['parent'] = $args['obj']['parent'];
 		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
 		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
@@ -322,7 +322,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			break;
 			case 'search_form':
 
-				if ($req['do_search'])
+				if (isset($req['do_search']))
 				{
 					$meta['do_search'] = true;
 					$meta['search'] = $meta['search_history'][$req['search_history']];
@@ -374,10 +374,31 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$data['value']='';
 			break;
 			case 'order_by_columns':
-				$data['options']=$this->show_columns;
+				$data['options'] =  array(
+					'firma_nimetus' => 'firma nimi',
+//					'firma_reg_nr' => 'reg nr',
+//					'firma_ettevotlusvorm' => 'ettevõtlusvorm',
+//					'pohitegevus' => 'põhitegevus',
+//					'tegevusala_kood' => 'tegevusala kood',
+//					'tegevuse_kirjeldus' => 'tegevuse kirjeldus',
+//					'isik.firma_juht' => 'firmajuht',
+//					'kaubamargid' => 'kaubamärgid',
+//					'f_address.f_aadress' => 'aadress',
+//					'f_riik' => ' asukoha riik',
+//					'f_address.f_linn' => 'linn',
+//					'f_address.f_maakond' => 'maakond',
+//					'f_postiindeks' => 'postiindeks',
+//					'f_telefon' => 'telefon',
+//					'f_mobiil' => 'mobiiltelefon',
+//					'f_faks' => 'faks',
+//					'f_piipar' => 'piipar',
+//					'f_e_mail' => 'e-mail',
+//					'f_address.f_kodulehekylg' => 'kodulehekülg',
+				);
 			break;
 			case 'show_columns':
-				$data['options']=$this->show_columns;
+			
+				$data['options'] = $this->show_columns;
 //				print_r($args['obj']['meta']['show_columns']);die();
 //				$data['selected']=$args['obj']['meta']['show_columns'];
 //				$data['multiple']=1;
@@ -447,7 +468,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				if (is_array($form['objs']))
 				{
 					$sl = get_instance('kliendibaas/selection');
-//					$selection = (array)$this->get_object_metadata(array('oid'=>$meta['valim'],'key'=>'selection'));
+//					$selection = (array)$this->get_object_metadata(array(OID=>$meta['valim'],'key'=>'selection'));
 					$selection = $sl->get_selection($meta['valim']);
 					if (is_array($selection))
 					foreach($form['objs'] as $key => $val)
@@ -457,7 +478,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							unset($selection[$key]);
 						}
 					}
-//					$this->set_object_metadata(array('oid'=>$meta['valim'],'key'=>'selection','value'=>$selection+(array)$form['select']));
+//					$this->set_object_metadata(array(OID=>$meta['valim'],'key'=>'selection','value'=>$selection+(array)$form['select']));
 					$objects = (array)$selection+(array)$form['select'];
 					$sl->set_selection($meta['valim'],$objects);
 				}
@@ -469,8 +490,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'search':
 				if ($form['do_search'])
 				{
-					$oo = $this->get_object_metadata(array('no_cashe' => 1,'oid' => $args['obj']['oid'],'key' => 'search_history'));
-					//$pp = $this->get_object_metadata(array('oid' => $args['obj']['oid'],'key' => 'search__require_history'));
+					$oo = $this->get_object_metadata(array('no_cashe' => 1,OID => $args['obj'][OID],'key' => 'search_history'));
+					//$pp = $this->get_object_metadata(array(OID => $args['obj'][OID],'key' => 'search__require_history'));
 					if (count($oo) > 5)
 					{
 						array_pop($oo);
@@ -480,9 +501,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					//$pp = (array)$pp;
 					array_push($oo,$form['search']);
 					//array_push($pp,$form['search_require']);
-					$this->set_object_metadata(array('oid' => $args['obj']['oid'], 'key' => 'search_history', 'value' => $oo));
+					$this->set_object_metadata(array(OID => $args['obj'][OID], 'key' => 'search_history', 'value' => $oo));
 					$this->search_values = $form['search'];
-					//$this->set_object_metadata(array('oid' => $args['obj']['oid'], 'key' => 'search_require_history', 'value' => $pp));
+					//$this->set_object_metadata(array(OID => $args['obj'][OID], 'key' => 'search_require_history', 'value' => $pp));
 					$retval = PROP_IGNORE;
 				}
 			break;
@@ -550,7 +571,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		 	' order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);
 
 			$data = $this->db_fetch_array($q);
-			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj']['oid'],'');
+			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj'][OID],'');
 
 		}
 		else
@@ -602,7 +623,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			//die();
 
-			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj']['oid'],$level+2);
+			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj'][OID],$level+2);
 		}
 		else
 		{
@@ -626,14 +647,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		//function page_numbers($url,$min,$max)
 
 
-
+		$lks = '';
 		for ($i=0;$i<=((int)($cnt/$limit));$i++)
 		{
 			$lks.=
 			html::href(array('caption'=>'<b>'.($i+1).'</b>',
 				'url'=>$this->mk_my_orb('change',
 					array(
-						'id'=>$ob['obj']['oid'],
+						'id'=>$ob['obj'][OID],
 						'group'=>'tegevusalad',
 						'kood'=>$row['kood'],
 						'page'=>$i,
@@ -664,8 +685,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$arr = new aw_array($data);
 		foreach($arr->get() as $row)
 		{
-			$row['check']=html::checkbox(array('name'=>'sel['.$row['oid'].']'));
-//			$row['change']=html::href(array('caption'=>'muuda','target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row['oid']),'kliendibaas/tegevusala')));
+			$row['check']=html::checkbox(array('name'=>'sel['.$row[OID].']'));
+//			$row['change']=html::href(array('caption'=>'muuda','target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
 			$row['fcount']=$row['fcount']?(html::href(array('caption'=>'<b> [ '.$row['fcount'].' ] </b>',
 				'url'=>$this->mk_my_orb('change',
 					array('id'=>$oid, 'group'=>'manager', 'kood'=>$row['kood'])
@@ -677,7 +698,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					array('id'=>$oid, 'group'=>'tegevusalad', 'kood'=>$row['kood'],'page'=>0,'level'=> $level, 'section' =>$section)//'prev'=>$req['kood'])
 				)
 			));
-			$row['tegevusala']=html::href(array('caption'=>$row['tegevusala'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row['oid']),'kliendibaas/tegevusala')));
+			$row['tegevusala']=html::href(array('caption'=>$row['tegevusala'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
 
 			$t->define_data(
 				$row
@@ -690,16 +711,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function firma_manager($args)
 	{
 	//arr($args,1);
+//error_reporting(E_ALL);
+		$meta = $args['obj']['meta'];
+		$limit = (isset($meta['limit_per_page']) && ($meta['limit_per_page'] > 0)) ? $meta['limit_per_page'] : 20;
+		$req = $args['request'];
+		$page = isset($meta['page']) ? $meta['page'] : 0;
+		$page = isset($req['page']) ? $req['page'] : $page;
+		$order_by = isset($meta['order_by_columns']) ? $meta['order_by_columns'] : 'objects.name';
+		$where = ' where objects.status<>0 ';
 
-		$meta=$args['obj']['meta'];
-		$limit=$meta['limit_per_page']?$meta['limit_per_page']:20;
-		$req=$args['request'];
-		$page=$meta['page']?$meta['page']:0;
-		$page=isset($req['page'])?$req['page']:$page;
-		$order_by=$meta['order_by_columns']?$meta['order_by_columns']:'objects.name';
-		$where=' where objects.status<>0 ';
-
-		$sele = $meta['sele'];
+		$sele = isset($meta['sele']) ? $meta['sele'] : false ;
 
 /*		if ($req['do_search'])
 		{
@@ -747,7 +768,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$like_st = '%';
 			$like_en = '%';
 
-			if ($req['kood'])
+			if (isset($req['kood']))
 			{
 				unset($meta['search']);
 				unset($meta['search_require']);
@@ -764,12 +785,21 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		));
 		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
 
+		
+		if (!is_array($meta['show_columns']) || (count($meta['show_columns']) < 1)) 
+		{
+			$meta['show_columns'] = array('firma_nimetus' => 'firma nimi');
+		}
 
 		foreach($this->show_columns as $key => $val)
 		{
 
-			if (!(isset($meta['show_columns'][$key]) ||(($meta['do_search']||$req['do_search']) && $meta['search'][$key])
-			||($meta['do_search'] && $meta['search_require'][$key])))
+			if (
+				!(isset($meta['show_columns'][$key])
+				||
+				(((isset($meta['do_search']) && $meta['do_search']) || (isset($req['do_search']) && $req['do_search']))  && $meta['search'][$key])
+				||((isset($meta['do_search']) && $meta['do_search']) && $meta['search_require'][$key]))
+			)
 			{
 				continue;
 			}
@@ -911,15 +941,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				));
 			}
 		}
-		
-		if (is_array($meta['search_history']))
+		$s_hist = '';
+		if (isset($meta['search_history']) && is_array($meta['search_history']))
 		{
 			foreach ($meta['search_history'] as $key => $val)
 			{
 				$s_hist .= html::href(array('caption' => 'otsing',
 					'url'=>$this->mk_my_orb('change',
 						array(
-							'id' => $args['obj']['oid'],
+							'id' => $args['obj'][OID],
 							'group' 	=> 'manager',
 	//						'page' => $i,
 							'do_search' => 1,
@@ -930,7 +960,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			}
 		}
 
-		$fields['oid'] ='firma.oid as oid';
+		$fields[OID] ='firma.oid as oid';
 
 		$t->define_field(array(
 			'name' => 'check',
@@ -938,7 +968,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			'width'=> 15,
 		));
 
-		$fields['oid'] ='firma.oid as oid';
+		$fields[OID] ='firma.oid as oid';
 
 		foreach($tabelid as $key => $val)
 		{
@@ -974,7 +1004,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$data = $this->db_fetch_array($q);
 
 		//define data
-		$t=$this->firmad_table($data,$selection,$t);
+		$t=$this->firmad_table($data,isset($selection) ? $selection : array(),$t);
 
 		$navigate=array(
 			' |< '=> 0,
@@ -985,13 +1015,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		);
 
 		$last = ((int)($cnt/$limit));
+		$lks = '';
 		for ($i = 0; $i <= $last; $i++)
 		{
 			$lks.=(($i==$page)?' [':'').
 			html::href(array('caption'=>'<b>'.($i+1).'</b>',
 				'url'=>$this->mk_my_orb('change',
 					array(
-						'id'=>$args['obj']['oid'],
+						'id'=>$args['obj'][OID],
 						'group' => 'manager',
 						'page' => $i,
 					)
@@ -1004,7 +1035,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			}
 		}
 
-		$nav=$this->my_buttons($navigate,'page');
+		$nav = $this->my_buttons($navigate,'page');
 
 //		return $node["value"] = 'total: '.$cnt.'<br />'.$nav.'lk: '.$lks.'<br />'.$t;
 
@@ -1048,8 +1079,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$find->define_data(array(
 				'attrib' => $val,
-				'input' => html::textbox(array('name'=>'search['.$key.']','value' =>$meta['search'][$key],'size'=>20)),
-				'require' => html::checkbox(array('name'=> 'search_require['.$key.']','value'=> 1,'checked'=> $meta['search_require'][$key])),
+				'input' => html::textbox(array('name'=>'search['.$key.']','value' => isset($meta['search'][$key]) ? $meta['search'][$key] : '','size'=>20)),
+				'require' => html::checkbox(array('name'=> 'search_require['.$key.']','value'=> 1,'checked'=> isset($meta['search_require'][$key]) ? $meta['search_require'][$key] : false)),
 			));
 		}
 
@@ -1065,19 +1096,19 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$arr = new aw_array($data);
 		foreach($arr->get() as $row)
 		{
-			$row['check']=html::checkbox(array('name'=>'sel['.$row['oid'].']','checked' => $selection[$row['oid']],'value' => $row['oid']));
-			$row['check'].=html::hidden(array('name'=>'objs['.$row['oid'].']' ,'value'=>1));
+			$row['check'] = html::checkbox(array('name'=>'sel['.$row[OID].']','checked' => isset($selection[$row[OID]]) ? $selection[$row[OID]] : false,'value' => $row[OID]));
+			$row['check'].= html::hidden(array('name'=>'objs['.$row[OID].']' ,'value'=>1));
 
 
-			if ($row['firma_nimetus'])
+			if (isset($row['firma_nimetus']))
 			{
-				$row['firma_nimetus']=html::href(array('caption'=>$row['firma_nimetus'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row['oid']),'kliendibaas/firma')));
+				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
 			}
-			if ($row['f_kodulehekylg'])
+			if (isset($row['f_kodulehekylg']))
 			{
-				$row['f_kodulehekylg']=html::href(array('url'=>$row['f_kodulehekylg'],'caption'=> $row['f_kodulehekylg'], 'target' => '_blank' ));
+				$row['f_kodulehekylg']=html::href(array('url'=> ((strpos($row['f_kodulehekylg'],'://')===false) ? 'http://' : '').$row['f_kodulehekylg'],'caption'=> $row['f_kodulehekylg'], 'target' => '_blank' ));
 			}
-			if ($row['f_e_mail'])
+			if (isset($row['f_e_mail']))
 			{
 				$row['f_e_mail']=html::href(array('url'=>'mailto:'.$row['f_e_mail'],'caption'=> $row['f_e_mail']));
 			}
@@ -1091,6 +1122,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function my_buttons($button,$page)
 	{
+		$nav = '';
 		foreach($button as $key => $val)
 		{
 			$nav.=html::button(array('value'=>$key,'onclick'=>'document.changeform.'.$page.'.value='.$val.';document.changeform.submit()'));
@@ -1133,7 +1165,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 //					"contact"=>$contact,
 				)
 			));
-			$f[]='oid';
+			$f[]=OID;
 			$v[]="'".$id."'";
 
 			$q='insert into kliendibaas_'.$tyyp.'('.implode(",",$f).')values('.implode(",",$v).')';
@@ -1171,7 +1203,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			foreach($data as $val)
 			{
 					$k='0'.$val['kood'];
-				echo			$q = "update kliendibaas_tegevusala set kood='".$k."' where oid=".$val['oid'];
+				echo			$q = "update kliendibaas_tegevusala set kood='".$k."' where oid=".$val[OID];
 //				$this->db_query($q);
 
 			}

@@ -101,9 +101,23 @@
             <field>firmajuht</field>
             <caption>firmajuht</caption>
       </property>
+      <property>
+            <name>look</name>
+            <type>text</type>
+            <callback>look_firma</callback>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <group>look</group>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <look>
+                  <caption>Vaata</caption>
+            </look>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
                   <index>oid</index>

@@ -204,7 +204,7 @@ function pop(url,w,h)
 </script>";
 
 			$link = $scr.html::button(array(
-				'onclick' => "pop('".$this->mk_my_orb('show_desktop', array('id' => $args['obj']['oid']))."','700', '600');return false;",
+				'onclick' => "pop('".$this->mk_my_orb('show_desktop', array('id' => $args['obj'][OID]))."','700', '600');return false;",
 				'value' => 'Käivita AW desktop',
 			));
 
@@ -278,7 +278,7 @@ function pop(url,w,h)
 	function show_icons()
 	{
 
-		$path = '/www/dev/axel/automatweb_dev/automatweb/images/';
+		$path = $this->cfg['basedir'].'/automatweb/images/';
 		$uri = $this->cfg['baseurl'].'/automatweb/images/';
 		$paths = array(
 			'',
@@ -350,7 +350,7 @@ function pop(url,w,h)
 			if($val['acceptlang'] == $lc)
 			{
 				$this->vars(array(
-					'active_acceptlang' => $val['acceptlang'],
+					'active_acceptlang' => $val['acceptlang'],//aw_global_get("lang_id")
 					'active_lang' => $val['name'],
 				));
 			}
@@ -438,10 +438,14 @@ function pop(url,w,h)
 		if ($ob['meta']['launchbar'])
 		{
 //			$arr = $this->db_fetch_array('select name, parent, '.OID.', class_id from objects where class_id='.CL_OBJECT_TYPE.' parent = '.$ob['meta']['launchbar'].' order by jrk');
-			$arr = $this->get_objects_below(array('parent' => $ob['meta']['launchbar'], 'class' => CL_OBJECT_TYPE, 'orderby' => 'jrk', 'ret' => ARR_ALL));
-			
-			//!!! KEELT PEAKS KA ÄKKI AREVSTAMA?!
-
+			$arr = $this->get_objects_below(array(
+				'parent' => $ob['meta']['launchbar'],
+				'class' => CL_OBJECT_TYPE,
+				'orderby' => 'jrk',
+				'ret' => ARR_ALL,
+				'lang_id' => aw_global_get('lang_id'),	
+			));
+							
 			$this->vars(array(
 				'add_object_type' => $this->mk_my_orb('new', array('parent' => $ob['meta']['launchbar']),'object_type'),
 			));
@@ -469,8 +473,8 @@ function pop(url,w,h)
 					//{
 					//	$this->icons[$type] = icons::get_icon_url($type,$val["name"]);
 					//}
-					$val['change_object_type'] = $this->mk_my_orb('change', array('id' => $val['oid']),'object_type');
-					$val['delete_object_type'] = $this->mk_my_orb('dodelete', array('id' => $val['oid'], 'class_id' => 'object_type'));
+					$val['change_object_type'] = $this->mk_my_orb('change', array('id' => $val[OID]),'object_type');
+					$val['delete_object_type'] = $this->mk_my_orb('dodelete', array('id' => $val[OID], 'class_id' => 'object_type'));
 					//$val['icon'] = $this->icons[$type];
 					$val['url'] = $this->mk_my_orb('new', array('parent' => $ob['meta']['newobjects']),$cldat['file']);
 					$val['title'] = 'Lisa uus '.$cldat['name'];
@@ -524,7 +528,12 @@ function pop(url,w,h)
 		$desktop_items = '';
 		if ($ob['meta']['desktopobjects'])
 		{
-			$arr = $this->get_objects_below(array('parent' => $ob['meta']['desktopobjects'], 'orderby' => OID, 'ret' => ARR_ALL));//'orderby' => 'jrk'
+			$arr = $this->get_objects_below(array(
+				'parent' => $ob['meta']['desktopobjects'],
+				'orderby' => OID,
+				'ret' => ARR_ALL,
+				'lang_id' => aw_global_get('lang_id'),
+			));//'orderby' => 'jrk'
 
 			if (count($arr)>0)
 			{
@@ -545,13 +554,6 @@ function pop(url,w,h)
 						$classes[$clid]['file'] = $cldat['alias_class'];
 					}
 
-					//if (!isset($this->icons[$val["class_id"]]))
-					//{
-					//	$this->icons[$val["class_id"]] = icons::get_icon_url($val["class_id"],$val["name"]);
-					//}
-					//$val['icon'] = $this->icons[$val["class_id"]];
-
-
 					$context_items = array();
 
 					$this->vars($val);
@@ -569,21 +571,21 @@ function pop(url,w,h)
 						$context_items['explore'] = array(
 							'title' => 'Ava puuga kaust',
 							'caption' => 'Ava puuga',
-							'url' => $this->cfg['baseurl'].'/automatweb/index.aw?parent='.$val['oid'],
+							'url' => $this->cfg['baseurl'].'/automatweb/index.aw?parent='.$val[OID],
 							'wxy' => $this->xy,
 							'iconfile' => 'class_1.gif',
 						);
 
-						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val['oid']),'menu');
+						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val[OID]),'menu');
 					}
 					else
 					{
-						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val['oid']),$cldat['file']);
+						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val[OID]),$cldat['file']);
 
 						$context_items['view'] = array(
 							'title' => 'Vaata',
 							'caption' => 'Vaata',
-							'url' => $this->mk_my_orb('view', array('id' => $val['oid']),$cldat['file']),
+							'url' => $this->mk_my_orb('view', array('id' => $val[OID]),$cldat['file']),
 							'wxy' => $this->xy,
 							'default' => true,
 							'iconfile' => 'class_6.gif',
@@ -601,7 +603,7 @@ function pop(url,w,h)
 					$context_items['delete'] = array(
 						'title' => 'Kustuta',
 						'caption' => 'Kustuta',
-						'url' => $this->mk_my_orb('dodelete', array('id' => $val['oid'], 'class_id' => $val['class_id'])),
+						'url' => $this->mk_my_orb('dodelete', array('id' => $val[OID], 'class_id' => $val['class_id'])),
 						'iconfile' => 'small_delete.gif',
 						'tpl' => 'ICON_CONTEXT_ITEM2',
 					);
@@ -733,7 +735,7 @@ function pop(url,w,h)
 			'LAUNCHERCONTEXTS' => $launchercontexts,
 			'add_folder' => $this->mk_my_orb('new', array('parent' => $ob['meta']['desktopobjects']), 'menu'),
 			'add_object_type' => $this->mk_my_orb('new', array('parent' => $ob['meta']['launchbar']), 'object_type'),
-			'pipe_url' => $this->mk_my_orb('pipe', array('id' => $ob['oid'])),
+			'pipe_url' => $this->mk_my_orb('pipe', array('id' => $ob[OID])),
 			'showclock' => 'true',
 			'CLOCK' => $this->parse('CLOCK'),
 			'refresh_url' => $this->mk_my_orb('redirect', array('url' => urlencode(aw_global_get('REQUEST_URI')))),
@@ -749,7 +751,7 @@ function pop(url,w,h)
 			'usdate' => (int)$usdate,
 			'launchbar' => $launchbar,
 			'datadir' => $ob['meta']['datadir'],
-			'filemenufix' => ($this->cnt + $cnt) * 25,
+			'filemenufix' => ($this->cnt + $cnt) * 25 - ($this->sepcnt * 14),
 			'langmenufix' => count($langs) * 20,
 			'main_menu' => $this->menu,
 			'backgroundimage' => $backgroundimage,
@@ -795,7 +797,12 @@ function pop(url,w,h)
 			$current_layout = $ob['meta']['desktop_layout'];
 
 			$orderby = ($args['orderby'] && ($args['orderby'] != 'lineup')) ? $args['orderby'] : OID;
-			$arr = $this->get_objects_below(array('parent' => $ob['meta']['desktopobjects'], 'orderby' => $orderby, 'ret' => ARR_ALL));
+			$arr = $this->get_objects_below(array(
+				'parent' => $ob['meta']['desktopobjects'], 
+				'orderby' => $orderby, 
+				'ret' => ARR_ALL,
+				'lang_id' => aw_global_get('lang_id'),	
+			));
 
 			$i=0;
 			$j=0;
@@ -855,6 +862,15 @@ function pop(url,w,h)
 			);
 			$this->set_object_metadata(array(OID => $args['id'], 'key' => 'desktop_layout', 'value' => $current_layout));
 		}
+		elseif(isset($args['fetch_object']))
+		{
+			//if ($new_object_parent == $desktop_oid)
+			//parse icon onto desktop
+			//elseif($new_object_parent == $new_documents_menu_oid)
+			//
+			//$str = "alert('".$args['fetch_object']."');";
+		
+		}
 
 		echo '<html>
 		<head>
@@ -864,7 +880,7 @@ function pop(url,w,h)
 <script type="text/javascript">
 <!--		
 		'.$str.'
-		-->
+		// -->
 		</script>
 		<span id="activity" style="color:red;postition:absolute;" ></span>
 		</body></html>';
@@ -891,7 +907,7 @@ function pop(url,w,h)
 				$inst = get_instance($cdat['alias_class'] != '' ? $cdat['alias_class'] : $cdat['file']);
 				if (method_exists($inst, 'delete_hook'))
 				{
-					$inst->delete_hook(array('oid' => $args['id']));
+					$inst->delete_hook(array(OID => $args['id']));
 				}
 			}
 			$this->delete_object($args['id']);
@@ -988,6 +1004,7 @@ function pop(url,w,h)
 						'parent' => $parent,
 						'orderby' => 'jrk',
 						'ret' => ARR_ALL,
+						'lang_id' => aw_global_get('lang_id'),	
 					));
 				}
 				else
@@ -998,6 +1015,8 @@ function pop(url,w,h)
 				if (count($arr) > 0)
 				{
 					$subs = array();
+					$sepcnt = 0;
+					$cntmin = 0;
 					//$this->menu .= '<div id="filemenu'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n";
 
 					foreach($arr as $key => $val)
@@ -1033,18 +1052,17 @@ function pop(url,w,h)
 						{
 							case CL_PSEUDO:
 								$this->vars(array(
-									//'icon' => $icon,
 									'caption' => $val['name'],
 									'sub_menu_id' => 'filemenu'.$val[OID],
-									'title' => '',
+									'title' => $val['comment'],
 									'clid' => $type,
+									'open' => $this->mk_my_orb('right_frame', array('parent' => $val[OID]), 'admin_menus'),
 								));
 								$subs[] = $val[OID];
 								$items .= $this->parse('MENU_ITEM_SUB');
 							break;
 							case CL_OBJECT_TYPE:
 								$this->vars(array(
-									//'icon' => $icon,
 									'caption' => $val['name'],
 									'url' => $this->mk_my_orb('new', array('parent' => $this->newobjects),$this->cfg['classes'][$type]['file']),
 									'title' => '',
@@ -1053,6 +1071,24 @@ function pop(url,w,h)
 								));
 								$items .= $this->parse('MENU_ITEM');
 							break;
+							case CL_MENU_SEPARATOR:
+								
+								
+								if ($val['status']!= '2')
+								{
+									$cntmin++;
+									break;
+								}
+								$sepcnt++;
+								$this->vars(array(
+									'caption' => $val['name'],
+									'url' => $this->mk_my_orb('change', array('id' => $val[OID]),$cldat['file']),
+									'title' => $val['comment'],
+								));
+								$items .= $this->parse('MENU_SEPARATOR');
+							break;
+							
+							
 
 							default:
 								$this->vars(array(
@@ -1063,7 +1099,7 @@ function pop(url,w,h)
 									'clid' => $type,
 									'icon' => 'class_'.$type.'.gif',
 								));
-								$items .= $this->parse('MENU_ITEM');
+								$items .= $this->parse('MENU_ITEM') ;
 						}
 
 					}
@@ -1102,7 +1138,8 @@ function pop(url,w,h)
 
 				//if (!isset($this->cnt))
 				{
-					$this->cnt = count($arr);
+					$this->cnt = count($arr) - $cntmin;
+					$this->sepcnt = $sepcnt;
 					//echo $this->cnt;
 				}
 
@@ -1110,79 +1147,6 @@ function pop(url,w,h)
 			}
 		}
 
-
-
-
-
-
-	/*			$this->vars(array(
-					'url' => '#',
-					'caption' => $obj['name'],
-				));
-
-				 $menu_items = $this->parse('MENU_ITEM');*/
-	// parent(int) - millisest nodest alustame?
-	// class(int) - milline klass meid huvitab?
-	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
-	// status - only objects of this status are returned if set
-	// orderby(string) - millise välja järgi tulemus järjestada?
-	// full(bool) - if true, also recurses to subfolders
-	// ret(int) - ARR_NAME or ARR_ALL, default is ARR_ALL
-
-//	'parent' => $ob['meta']['datadir'],
-//	'full' => true,
-/*
-	function get_objects_below($args = array())
-	{
-		extract($args);
-
-		$groups = array();
-
-
-		if (isset($full))
-		{
-			$this->get_objects_by_class($args + array('class' => CL_PSEUDO));
-			while ($row = $this->db_next())
-			{
-				$ta = $args;
-				$ta['parent'] = $row['oid'];
-				$this->vars(array(
-					'sub_menu_id' => 'fmenu'.$ta['parent'],
-					'caption' => $row['name'],
-				));
-
-				$this->pars.=$this->parse('MENU_ITEM_SUB');
-
-				$this->pars.= '<div id="fmenu'.$ta["parent"].'" class="menu">';
-				$tg = $this->get_objects_below($ta);
-				$this->pars.= '</div>';
-
-				foreach($tg as $k => $v)
-				{
-					$groups[$k] = $v;
-				}
-			}
-		}
-
-		$this->get_objects_by_class($args);
-
-		while($row = $this->db_next())
-		{
-			$groups[$row['oid']] = $row;
-
-			$this->vars(array(
-				'url' => '',
-				'caption' => $row['name'],
-			));
-
-			$this->pars .= $this->parse('MENU_ITEM');
-
-		};
-		$this->vars(array('menu_id' => 'fmenu'.$ta['parent']));
-		$this->pars .= $this->parse('MENU');
-		return $groups;
-	}
-*/
 
 	////
 	// !this should create a string representation of the object

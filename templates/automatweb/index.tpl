@@ -19,6 +19,20 @@ function activate_window()
 		}
 	}
 }
+function update_window_title()
+{
+	if (window != window.top)
+	{
+		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
+		{
+			winn =(window.name.indexOf('frei') == 1) ? window.name : parent.window.name;
+			top.document.getElementById('wc' + winn.substr(1)).innerHTML = document.title;
+			top.document.getElementById('icn' + winn.substr(1)).innerHTML = document.title.substr(0,16);
+			top.document.getElementById('icna' + winn.substr(1)).title = document.title;
+		}
+	}
+}
+
 // -->
 </script>
 <script type="text/javascript">
@@ -56,7 +70,7 @@ function check_generic_loader()
 // -->
 </script>
 </head>
-<body onmousedown="activate_window();" bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="create_objects(); check_generic_loader();">
+<body onmousedown="activate_window();" bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="update_window_title();create_objects(); check_generic_loader();">
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <tr>
 <td align="left" class="yah">&nbsp;

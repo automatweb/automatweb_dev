@@ -40,6 +40,14 @@
 
 	@property firmajuht type=popup_objmgr change=1
 	@caption firmajuht
+	
+	
+	@default group=look
+	@groupinfo look caption=Vaata
+	
+	@property look type=text callback=look_firma table=objects method=serialize field=meta
+	
+	
 */
 
 
@@ -73,6 +81,18 @@ define ('TOOTED',6);
 
 class firma extends class_base
 {
+
+	function look_firma()
+	{
+
+		$nodes = array();
+		$nodes['firma'] = array(
+			"value" => 'firm andmed tulevad siia',
+		);
+		return $nodes;
+
+	}
+
 	function firma()
 	{
 		$this->init(array(

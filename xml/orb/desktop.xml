@@ -45,6 +45,7 @@
 				<optional name="WI"/>
 				<optional name="reorder"/>
 				<optional name="orderby"/>
+				<optional name="fetch_object"/>
 				</arguments>
 			</function>
 		</action>
