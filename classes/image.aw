@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.121 2004/11/23 15:52:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.122 2004/12/01 11:35:14 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -649,7 +649,7 @@ class image extends class_base
 					if (($id = $this->_get_conf_for_folder($arr["obj_inst"]->parent(), true)))
 					{
 						$o = obj($id);
-						$prop["value"] = "Piltide automaatset suurendamist kontrollib objekt ".html::href(array(
+						$prop["value"] = t("Piltide automaatset suurendamist kontrollib objekt ").html::href(array(
 							"url" => $this->mk_my_orb("change", array("id" => $id), $o->class_id()),
 							"caption" => $o->name()
 						));
