@@ -699,6 +699,7 @@ class aw_site extends class_base
 
 			$dbi->db_query("UPDATE objects SET site_id = ".$ini_opts["site_id"]);
 			$dbi->db_query("UPDATE objects SET createdby = '".$site["site_obj"]["default_user"]."', modifiedby = '".$site["site_obj"]["default_user"]."'");
+			$dbi->db_query("UPDATE objects SET lang_id = 1");
 		}
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
@@ -1255,6 +1256,7 @@ class aw_site extends class_base
 		// get main.tpl
 		$tpl = new aw_template;
 		$tpl->read_tpl(file($site["docroot"]."/templates/automatweb/menuedit/main.tpl"));
+		echo "tried to read template ".$site["docroot"]."/templates/automatweb/menuedit/main.tpl <br>";
 		$tpls = $tpl->get_subtemplates_regex("(MENU_.*)");
 		$_tpls = array();
  		foreach($tpls as $tpl)
@@ -1279,6 +1281,8 @@ class aw_site extends class_base
 				// this gets special treatment
 				continue;
 			}
+			echo "got menu area $area , with levels $levels <br>\n";
+			flush();
 
 			$astr = strtoupper(substr($area, 0,1)).strtolower(substr($area, 1));
 			$astr = str_replace("6", "&otilde;", $astr);
@@ -1295,6 +1299,7 @@ class aw_site extends class_base
 			$o->save();
 
 			$pt = $o->id();
+			echo "created root menu for area, name = ".$astr." men&uuml;&uuml; id = $pt <br>\n"; 
 			// also set ini opt
 			$ini_opts["menuedit.menu_defs[$pt]"] = $area;
 			for ($i = 0; $i < $levels; $i++)
@@ -1307,14 +1312,18 @@ class aw_site extends class_base
 				$o->set_name($astr." tase ".($i+1));
 				$o->save();
 
+				echo "created level $i menu for area, name = ".$astr." tase ".($i+1)." under obj $pt <br>\n"; 
 				$pt = $o->id();
 			}
 		}
 
-
-		reset($site['site_obj']['select_tpl_sites']);
-		list(, $sn) = each($site['site_obj']['select_tpl_sites']);
-		$sn = str_replace("http://","",$sn);
+		$sn = "";
+		if (is_array($site['site_obj']['select_tpl_sites']))
+		{
+			reset($site['site_obj']['select_tpl_sites']);
+			list(, $sn) = each($site['site_obj']['select_tpl_sites']);
+			$sn = str_replace("http://","",$sn);
+		}
 	
 		if ($sn == "")
 		{
