@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.79 2003/02/11 18:15:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.80 2003/02/12 12:32:34 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -669,7 +669,18 @@ if (!defined("DEFS"))
 	{
 		function aw_array($arg = false)
 		{
-			$this->arg = (is_array($arg)) ? $arg : array($arg);
+			if (is_array($arg))
+			{
+				$this->arg = $arg;
+			}
+			elseif ($arg)
+			{
+				$this->arg = array($arg);
+			}
+			else
+			{
+				$this->arg = array();
+			};
 			reset($this->arg);
 		}
 
