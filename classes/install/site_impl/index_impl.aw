@@ -1,12 +1,13 @@
 <?php
+//if ($alias && $alias != "forum_v2" && $alias != "personalikeskkond")
 if ($alias && $alias != "forum_v2")
 {
 	$class = $alias;
 };
 
-if ($class || $reforb)
+if (($class && $class != "personnel_management") || $reforb)
+//if ($class  || $reforb)
 {
-	// if we detect an orb call, load the orb handler and let it take over
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/orb_impl_exec.".aw_ini_get("ext"));
 }
 else
@@ -18,7 +19,6 @@ else
 
 // get an instance if the site class
 $si =&__get_site_instance();
-
 
 // if we are drawing the site's front page
 if ((!$section || $section == aw_ini_get("frontpage")) && !$class) 
