@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.20 2003/07/09 14:41:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.21 2003/07/09 17:29:12 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -801,7 +801,8 @@ class converters extends aw_template
 
 	function convert_seealso_menus()
 	{
-		$q = "SELECT oid,metadata FROM objects WHERE class_id = 1";
+		/*
+		$q = "SELECT oid,metadata FROM objects WHERE class_id = 1 ORDER BY oid";
 		$this->db_query($q);
 		$sao = array();
 		while($row = $this->db_next())
@@ -810,26 +811,72 @@ class converters extends aw_template
 			if (is_array($unmet["seealso_refs"]))
 			{
 				$sao[$row["oid"]] = $unmet["seealso_refs"];
+				print "<pre>";
+				print_r($row);
+				print "</pre>";
 			};		
 		}
 
 		print "<pre>";
 		print_r($sao);
 		print "</pre>";
+		*/
 
 		$q = "SELECT id,seealso FROM menu WHERE seealso IS NOT NULL";
 		$this->db_query($q);
+		$oas = array();
 		while($row = $this->db_next())
 		{
 			$unser_seealso = aw_unserialize($row["seealso"]);
 			if (is_array($unser_seealso))
 			{
-				print "<pre>";
-				print "id = $row[id]<bR>";
-				print_r($unser_seealso);
-				print "</pre>";
+				$res = array();
+				foreach($unser_seealso as $key => $val)
+				{
+					if (is_array($val))
+					{
+						$res = $res + $val;
+					}
+					else
+					{
+						$res[$key] = 0;
+					};
+				};
+				if (sizeof($res) > 0)
+				{
+					$oas[$row["id"]] = $res;
+				};
 			};
 		};
+
+		print "<pre>";
+		print_r($oas);
+		print "</pre>";
+
+		$almgr = get_instance("aliasmgr");
+
+		// now we cycle over oas, and create an assload of relations
+		foreach($oas as $key => $val)
+		{
+			// $oas'i keyd on targetid
+			// $val'i keyd on sourced .. ja kuhu pekki ma jrk panen?
+			foreach($val as $vkey => $vval)
+			{
+				print "creating relation from $vkey to $key with jrk $vval<br>";
+				flush();
+				$almgr->create_alias(array(
+					"id" => $vkey,
+					"alias" => $key,
+					"data" => $vval,
+					"reltype" => 5,
+				));
+				print "done<br>";
+				flush();
+				// and just if I my ask do I put the freaking jrk?
+				// no other way than to serialize it into "data"
+			}
+
+		}
 
 	}
 };
