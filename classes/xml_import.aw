@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.18 2003/08/01 12:48:20 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.19 2003/11/06 14:57:14 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -360,6 +360,7 @@ class xml_import extends class_base
 				$pnimi = $this->convert_unicode($t_attr["pnimi"]);
 				$tid = $t_attr["id"];
 				$veeb = $t_attr["veeb"];
+				$koht = "";
 				$ruum = $t_attr["ruum"];
 				$email = $t_attr["email"];
 				$markus = $this->convert_unicode($t_attr["markus"]);
@@ -377,9 +378,12 @@ class xml_import extends class_base
 				$ysid = $attr["ysid"];
 				$eriala = $this->convert_unicode($attr["eriala"]);
 				$markus = $this->convert_unicode($attr["markus"]);
-				$koht = $this->convert_unicode($attr["koht"]);
+				if (strlen($attr["koht"]) > 0)
+				{	
+					$koht = $this->convert_unicode($attr["koht"]);
 
-				$koht = preg_replace("/\s$/","&nbsp;",$koht);
+					$koht = preg_replace("/\s$/","&nbsp;",$koht);
+				};
 				$eriala = preg_replace("/\s$/","&nbsp;",$eriala);
 
 				/*
@@ -476,9 +480,11 @@ class xml_import extends class_base
 							{
 								usort($items, create_function('$a,$b','if ($a["jrk"] > $b["jrk"]) return 1; if ($a["jrk"] < $b["jrk"]) return -1; return 0;'));
 								$tmp = $items[0];
-								$info = array();
+								$info = $ruum = array();
 								array_walk($items,create_function('$val,$key,$info','$info[] = $val["info"];'),&$info);
+								array_walk($items,create_function('$val,$key,$ruum','if (strlen($val["ruum"]) > 0) { $ruum[] = $val["ruum"];};'),&$ruum);
 								$tmp["info"] = join(", ",$info);
+								$tmp["ruum"] = join(", ",$ruum);
 								$fieldnames = join(",",array_keys($tmp));
 								$fieldvalues = join(",",map("'%s'",array_values($tmp)));
 								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
@@ -558,9 +564,14 @@ class xml_import extends class_base
 		$this->db_query($q);
 		$oppekava_url = $oppeaasta_url = "";
 		$aasta_urls = array();
+		$st_id = array();
 
 		foreach($values as $key => $val)
 		{
+			if ( ($val["tag"] == "struktuur") && ($val["type"] == "complete") )
+			{
+				$st_id[] = $val["attributes"]["id"];
+			};
 			if ( ($val["tag"] == "oppekava_url") && ($val["type"] == "complete") )
 			{
 				$oppekava_url = $val["value"];
@@ -608,8 +619,10 @@ class xml_import extends class_base
 				ksort($aasta_urls);
 				$aasta_url_str = join(", ",$aasta_urls);
 				$this->quote($aasta_url_str);
-				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste)
-					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url_str','$oppeaste')";				
+				$st_id_str = join(",",$st_id);
+				$st_id = array();
+				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste,st_id)
+					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url_str','$oppeaste','$st_id_str')";				
 				print $q;
 				print "<br />";
 				$nimetus = $nimetus_en = $oppeaste = $id = $kood = "";
