@@ -143,6 +143,10 @@ function setLink(li,title)
 <td class="celltext"><input type="checkbox" name="is_translatable" value="1" {VAR:is_translatable}></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">&Auml;ra j&auml;ta meelde poolikut sisestust:</td>
+<td class="celltext"><input type="checkbox" name="no_use_eid_once" value="1" {VAR:no_use_eid_once}></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>
