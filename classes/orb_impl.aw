@@ -1,0 +1,37 @@
+<?php
+$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS);
+
+if ($fastcall == 1)
+{
+	// loadime klassi
+	classload("fastcall_base");
+	classload($class);
+	// instantseerime
+	$inst = new $class;
+	// ja ongi k6ik
+	die($inst->$action($vars));
+}
+
+include("site_header.".aw_ini_get("ext"));
+
+classload("orb");
+$orb = new orb(array(
+	"class" => $class,
+	"action" => $action,
+	"reforb" => $reforb,
+	"user"	=> 1,
+	"vars" => $vars,
+	"silent" => false,
+));
+$content = $orb->get_data();
+
+// et kui orb_data on link, siis teeme ümbersuunamise
+// see ei ole muidugi parem lahendus. In fact, see pole üleüldse
+// mingi lahendus
+if (substr($content,0,5) == "http:" || $reforb == 1)
+{
+	header("Location: $content");
+	print "\n\n";
+	exit;
+};
+?>
