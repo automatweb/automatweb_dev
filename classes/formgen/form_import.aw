@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.4 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.5 2004/06/15 08:47:50 kristo Exp $
 classload("formgen/form_base");
 class form_import extends form_base
 {
@@ -244,8 +244,12 @@ class form_import extends form_base
 				}
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
-			$this->quote(&$entry_name);
-			$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
+			$o = obj();
+			$o->set_name($entry_name);
+			$o->set_parent($parent);
+			$o->set_class_id(CL_FORM_ENTRY);
+			$entry_id = $o->save(); 
+
 			$q = "insert into form_entries(id,form_id) values($entry_id, $id)";
 			$this->db_query($q);
 			
@@ -413,10 +417,11 @@ class form_import extends form_base
 		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
 			// first we create a new chain entry for this line
-			$chain_entry_id = $this->new_object(array(
-				"parent" => $f->chain["save_folder"],
-				"class_id" => CL_CHAIN_ENTRY,
-			));
+			$o = obj();
+			$o->set_parent($f->chain["save_folder"]);
+			$o->set_class_id(CL_CHAIN_ENTRY);
+			$chain_entry_id = $o->save(); 
+
 			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) values($chain_entry_id,$id,'".aw_global_get("uid")."')");
 
 			$chentrys = array();
@@ -485,8 +490,12 @@ class form_import extends form_base
 					}
 				}
 				// now insert it into the correct tables, form_entry and form_$fid_entries
-				$this->quote(&$entry_name);
-				$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
+				$o = obj();
+				$o->set_name($entry_name);
+				$o->set_parent($parent);
+				$o->set_class_id(CL_FORM_ENTRY);
+				$entry_id = $o->save(); 
+
 				$chentrys[$fid] = $entry_id;
 
 				$this->db_query("insert into form_entries(id,form_id) values($entry_id, $fid)");

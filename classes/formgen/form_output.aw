@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.14 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.15 2004/06/15 08:47:50 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -132,30 +132,23 @@ class form_output extends form_base
 		
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->set_comment($comment);
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => CL_FORM_XML_OUTPUT
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_class_id(CL_FORM_XML_OUTPUT);
 		};
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "forms",
-			"value" => $forms,
-		));
+
+		$o->set_meta("forms", $forms);
+		$id = $o->save();
 	
-		$url = $this->mk_my_orb("edit_xml",array("id" => $id));
-		return $url;
+		return $this->mk_my_orb("edit_xml",array("id" => $id));
 	}
 
 	/**  
@@ -282,11 +275,9 @@ class form_output extends form_base
 			"tag" => $tag,
 			"active" => $real_act,
 		);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "data",
-			"value" => $data,
-		));
+		$o = obj($id);
+		$o->set_meta("data", $data);
+		$o->save();
 		return $this->mk_my_orb("xml_op",array("id" => $id));
 	}
 
@@ -404,11 +395,20 @@ class form_output extends form_base
 
 		if ($id)
 		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->save();
 		}
 		else
 		{
-			$id = $this->new_object(array("parent" => $parent, "name" => $name, "comment" => $comment, "class_id" => CL_FORM_OUTPUT));
+			$o = obj();
+			$o->set_name($name);
+			$o->set_parent($parent);
+			$o->set_comment($comment);
+			$o->set_class_id(CL_FORM_OUTPUT);
+			$id = $o->save();
+
 			$this->db_query("INSERT INTO form_output(id) VALUES($id)");
 			$this->load_output($id);
 			$elements = $this->make_keys($elements);
@@ -1362,7 +1362,12 @@ class form_output extends form_base
 
 			if ($type == "add")
 			{
-				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+				$o = obj();
+				$o->set_name($name);
+				$o->set_parent($parent);
+				$o->set_class_id(CL_FORM_ELEMENT);
+				$el = $o->save();
+
 				$this->db_query("INSERT INTO form_elements (id) values($el)");
 			}
 			else

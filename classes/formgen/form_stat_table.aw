@@ -49,11 +49,11 @@ class form_stat_table extends form_base
 
 		if (!$id)
 		{
-			$id = $this->new_object(array(
-				"name" => $name,
-				"class_id" => CL_FORM_STAT_TABLE,
-				"parent" => $parent,
-			));
+			$o = obj();
+			$o->set_name($name);
+			$o->set_class_id(CL_FORM_STAT_TABLE);
+			$o->set_parent($parent);
+			$id = $o->save();
 		}
 
 		$this->load_stat_table($id);

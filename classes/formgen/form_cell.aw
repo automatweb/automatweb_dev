@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.13 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.14 2004/06/15 08:47:50 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -209,11 +209,12 @@ class form_cell extends form_base
 			// inserted into another form the default properties are the same as in the pervious form
 			// the actual info about how the element is to be shown is written into the form's data structure 
 			// and also element2form table contains all element -> form relationships
-			$el = $this->new_object(array(
-				"parent" => $parent, 
-				"name" => $name, 
-				"class_id" => CL_FORM_ELEMENT
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_class_id(CL_FORM_ELEMENT);
+			$el = $o->save();
+
 			$this->db_query("INSERT INTO form_elements (id) values($el)");
 			$arr = array(); // new elements do not have any props, so set that to 0
 		}
@@ -269,11 +270,11 @@ class form_cell extends form_base
 		extract($arr);
 		$this->save_handle();
 
-		$el = $this->new_object(array(
-			"parent" => $parent, 
-			"name" => $name, 
-			"class_id" => CL_FORM_ELEMENT
-		));
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_name($name);
+		$o->set_class_id(CL_FORM_ELEMENT);
+		$el = $o->save();
 		$this->db_query("INSERT INTO form_elements (id) values($el)");
 		$this->form->add_element_cols($this->id,$el);
 

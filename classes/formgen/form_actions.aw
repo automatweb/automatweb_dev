@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.23 2004/06/09 12:58:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.24 2004/06/15 08:47:50 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -187,13 +187,14 @@ class form_actions extends form_base
 		else
 		{
 			// add
-			$action_id = $this->new_object(array(
-				"parent" => $id, 
-				"name" => $name, 
-				"class_id" => CL_FORM_ACTION, 
-				"comment" => $comment, 
-				"status" => 2
-			));
+			$o = obj();
+			$o->set_parent($id);
+			$o->set_name($name);
+			$o->set_class_id(CL_FORM_ACTION);
+			$o->set_comment($comment);
+			$o->set_status(STAT_ACTIVE);
+			$action_id = $o->save();
+
 			$this->db_query("INSERT INTO form_actions(id,form_id,type) VALUES($action_id, $id, '$type')");
 			$this->_log(ST_FORM_ACTION, SA_ADD, $name, $id);
 			return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));

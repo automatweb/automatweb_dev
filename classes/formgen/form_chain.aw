@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.15 2004/06/11 08:50:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.16 2004/06/15 08:47:50 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -104,25 +104,24 @@ class form_chain extends form_base
 	
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"flags" => $flags,
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_flags($flags);
+			$o->save();
 			$this->db_query("UPDATE form_chains SET content = '$content' WHERE id = $id");
 
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"comment" => $comment,
-				"status" => 2,
-				"class_id" => CL_FORM_CHAIN,
-				"flags" => $flags,
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_clas_id(CL_FORM_CHAIN);
+			$o->set_flags($flags);
+			$id = $o->save();
 			$this->db_query("INSERT INTO form_chains(id,content) VALUES($id,'$content')");
 			if ($alias_doc)
 			{
@@ -130,20 +129,6 @@ class form_chain extends form_base
 			}
 
 		}
-	
-		// notify form_calendar
-		/*
-		if ($cal_entry_form)
-		{
-			$fc = get_instance("formgen/form_calendar");
-			$fc->upd_calendar(array(
-				"cal_id" => $id,
-				"form_id" => $cal_entry_form,
-				"vform_id" => $cal_controller,
-				"active" => $has_calendar,
-			));
-		}
-		*/
 
 		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
 		if (is_array($forms))
@@ -583,10 +568,12 @@ class form_chain extends form_base
 		// ok, here we must create a new chain_entry if none is specified
 		if (!$chain_entry_id)
 		{
-			$chain_entry_id = $this->new_object(array(
-				"parent" => $this->chain["save_folder"],
-				"class_id" => CL_CHAIN_ENTRY,
-			));
+			aw_disable_acl();
+			$o = obj();
+			$o->set_parent($this->chain["save_folder"]);
+			$o->set_class_id(CL_CHAIN_ENTRY);
+			$chain_entry_id = $o->save();
+			aw_restore_acl();
 
 			$this->db_query("INSERT INTO form_chain_entries(id,chain_id)
 						VALUES($chain_entry_id,$id)");
@@ -920,10 +907,12 @@ class form_chain extends form_base
 				$this->save_handle();
 				// create object for it
 				echo "entry $erow[id] for chain $row[oid] <br />";
-				$chain_entry_id = $this->new_object(array(
-					"parent" => $f->chain["save_folder"],
-					"class_id" => CL_CHAIN_ENTRY,
-				));
+				aw_disable_acl();
+				$o = obj();
+				$o->set_parent($f->chain["save_folder"]);
+				$o->set_class_id(CL_CHAIN_ENTRY);
+				$chain_entry_id = $o->save();
+				aw_restore_acl();
 				
 				// update id in form_chain_entries table and all form_xxx_entries tables for the chain entry
 				$e = $this->get_chain_entry($erow["id"]);

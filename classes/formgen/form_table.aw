@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.56 2004/05/17 06:36:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.57 2004/06/15 08:47:50 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1577,19 +1577,19 @@ class form_table extends form_base
 
 		if ($id)
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
+			$o = obj($id);
+			$o->set_name($name);
+			$o->save();
 		}
 		else
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_FORM_TABLE,
-				"name" => $name,
-				"comment" => $comment
-			));
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_class_id(CL_FORM_TABLE);
+			$o->set_name($name);
+			$o->set_comment($comment);
+			$id = $o->save();
+
 			$this->db_query("INSERT INTO form_tables(id, content, num_cols, cols) values('$id','',0,0)");
 		}
 

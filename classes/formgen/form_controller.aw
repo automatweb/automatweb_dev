@@ -83,22 +83,20 @@ class form_controller extends form_base
 		else
 		{
 			// add
-			$id = $this->new_object(array(
-				"name" => $name,
-				"class_id" => CL_FORM_CONTROLLER,
-				"parent" => $parent,
-				"status" => 2,
-				"metadata" => array(
-					"eq" => $eq,
-					"errmsg" => $errmsg,
-					"vars" => array(),
-					"show_errors_showctl" => $show_errors_showctl,
-					"warn_only_entry_controller" => $warn_only_entry_controller,
-					"no_var_replace" => $no_var_replace,
-					"error_js_pop" => $error_js_pop,
-					"error_icon" => $error_icon
-				)
-			));
+			$o = obj();
+			$o->set_name($name);
+			$o->set_class_id(CL_FORM_CONTROLLER);
+			$o->set_parent($parent);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_meta("eq", $eq);
+			$o->set_meta("errmsg",$errmsg);
+			$o->set_meta("vars", array());
+			$o->set_meta("show_errors_showctl" , $show_errors_showctl);
+			$o->set_meta("warn_only_entry_controller" , $warn_only_entry_controller);
+			$o->set_meta("no_var_replace" , $no_var_replace);
+			$o->set_meta("error_js_pop" , $error_js_pop);
+			$o->set_meta("error_icon" , $error_icon);
+			$id = $o->save();
 		}
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
