@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.25 2004/05/07 11:22:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.26 2004/05/14 07:39:06 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -69,7 +69,7 @@ caption Pildi/foto url
 @property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
-@property sect type=relpicker reltype=RELTYPE_SECTION table=kliendibaas_isik automatic=1 group=contact field=section
+@property sect type=relpicker reltype=RELTYPE_SECTION table=kliendibaas_isik automatic=1 group=general field=section
 @caption Üksus
 
 property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
@@ -88,6 +88,7 @@ caption Kodused kontaktandmed
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment group=contact
 @caption Kontakt
+
 
 //property email type=textbox store=no 
 //caption E-post
@@ -247,8 +248,8 @@ class crm_person extends class_base
 			case "lastname":
 				if ($form['firstname'] || $form['lastname'])
 				{
-					$title = $form['title'] ? $form['title'].' ' : '';
-					$arr["obj_inst"]->set_name($title.$form['firstname']." ".$form['lastname']);
+					//$title = $form['title'] ? $form['title'].' ' : '';
+					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
 				}
 				break;
 		
@@ -320,7 +321,7 @@ class crm_person extends class_base
 		return $retval;
 
 	}
-	
+
 	function isik_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];
@@ -608,7 +609,23 @@ class crm_person extends class_base
 		));
 	}
 
-	function show($args)
+
+	/** shows a person
+
+	@attrib name=show
+
+	@param id required
+
+	**/
+	function show($arr)
+	{
+		$arx = array();
+		$obj = new object($arr["id"]);
+		$arx["alias"]["target"] = $obj->id();
+		return $this->parse_alias($arx);
+	}
+
+	function show2($args)
 	{
 		extract($args);
 
@@ -801,6 +818,7 @@ class crm_person extends class_base
 			"name" => $to->name(),
 			"phone" => $pdat["phone"],
 			"email" => $pdat["email"],
+			"notes" => nl2br($to->prop("notes")),
 		));
 		// show image if there is a placeholder for it in the current template
 		if ($this->template_has_var("imgurl"))
@@ -815,16 +833,25 @@ class crm_person extends class_base
 				$imgurl = $img_inst->get_url_by_id($conn->prop("to"));
 			};
 			$this->vars(array(
-				"imgurl" => html::img(array("url" => $imgurl)),
+				"imgurl" => $imgurl,
 			));
 		};
 
-		$at_once = 2;
+		$at_once = 20;
 
 		// show document list, if there is a placeholder for it in the current template
 		// XXX: I need a navigator
 		if ($this->is_template("DOCLIST"))
 		{
+			// how the bloody hell do I get the limiting to work
+
+			// prev 10 / next 10 .. how do I pass the thing?
+			// äkki teha kuudega? ah? hm?
+
+			// alguses näitame viimast 10-t
+			// ... then how do I limit those?
+
+			// hot damn, this thing sucks
 			$dt = aw_global_get("date");
 			if ((int)$dt == $dt)
 			{
@@ -853,9 +880,10 @@ class crm_person extends class_base
 					$this->vars(array(
 						"url" => html::href(array(
 							"url" => aw_ini_get("baseurl") . "/" . $o->id(),
-							"caption" => $o->prop("title"),
+							"caption" => strip_tags($o->prop("title")),
 						)),
 						"commcount" => $doc_ids[$o->id()]["commcount"],
+						"commurl" => $this->mk_my_orb("show_threaded",array("board" => $o->id()),"forum"),
 					));
 					$docs .= $this->parse("ITEM");
 				};
