@@ -1,8 +1,7 @@
 Creating a toolbar object:
 
 #php#
-classload("toolbar");
-$tb = new toolbar();
+$tb = get_instance("vcl/toolbar");
 #/php#
 
 Adding a button
