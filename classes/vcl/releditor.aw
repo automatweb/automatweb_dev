@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.21 2004/06/18 10:23:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.22 2004/06/18 15:20:16 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -122,24 +122,17 @@ class releditor extends core
 
 		$all_props = array();
 
-		// generate a list of all properties. Needed if I'm going to display a form
-		// but not needed, if I'm going to add a button only
-		if ($visual == "manager")
-		{
-			//if (!empty($arr["request"][$this->elname]))
-			//{
-				$all_props = $t->get_property_group($filter);
-			//};
-		}
-		else
-		{
-			$all_props = $t->get_property_group($filter);
-		};
+		// generate a list of all properties. Needed to display edit form
+		// and to customize table display in manager mode
+		//$all_props = $t->get_property_group($filter);
+		$all_props = $t->load_defaults();
 
 		$this->all_props = $all_props;
 		
 		$act_props = array();
 
+		$form_type = $arr["request"][$this->elname];
+		$this->form_type = $form_type;
 		if ($visual == "manager")
 		{
 			// insert the toolbar into property array
@@ -151,7 +144,6 @@ class releditor extends core
 			$act_props[$tabledef["name"]] = $tabledef;
 		};
 
-		$form_type = $arr["request"][$this->elname];
 		// "form" does not need a caption
 		if ($visual == "manager" && $form_type == "new")
 		{
@@ -360,6 +352,11 @@ class releditor extends core
 			"name" => "check",
 		));
 
+		if ($arr["prop"]["table_edit_fields"])
+		{
+			$ed_fields = new aw_array($arr["prop"]["table_edit_fields"]);
+		};
+
 		// and how do I get values for those?
 
 		// and how do I show the selected row?
@@ -367,6 +364,8 @@ class releditor extends core
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => $arr["prop"]["reltype"],
 		));
+
+		$name = $arr["prop"]["name"];
 
 		foreach($conns as $conn)
 		{
@@ -389,7 +388,23 @@ class releditor extends core
 				)),
 				"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
 			);
-			$rowdata = $rowdata + $target->properties();
+			$export_props = $target->properties();
+			if ($ed_fields && ($this->form_type != $target->id()))
+			{
+				foreach($ed_fields->get() as $ed_field)
+				{
+					// fucking hackery! :(
+					if ($this->all_props[$ed_field]["type"] == "textbox")
+					{
+						$export_props[$ed_field] = html::textbox(array(
+							"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
+							"value" => $export_props[$ed_field],
+							"size" => $this->all_props[$ed_field]["size"],
+						));
+					};
+				};
+			};
+			$rowdata = $rowdata + $export_props;
 			$awt->define_data($rowdata);
 		};
 
@@ -423,7 +438,9 @@ class releditor extends core
 		$elname = $prop["name"];
 
 		$emb = $arr["request"][$elname];
-		
+		// _data is used to edit multiple connections at once
+		unset($emb["_data"]);
+
 		$clinst->init_class_base();
 		$emb_group = "general";
 
@@ -437,7 +454,8 @@ class releditor extends core
 			$use_form = $prop["use_form"];
 		};
 
-		$props = $clinst->get_property_group($filter);
+		//$props = $clinst->get_property_group($filter);
+		$props = $clinst->load_defaults();
 
 		$propname = $prop["name"];
 		$proplist = is_array($prop["props"]) ? $prop["props"] : array($prop["props"]);
@@ -460,18 +478,20 @@ class releditor extends core
 					// tundub, et polnud sellist faili, eh?
 					if (empty($tmpname) || !is_uploaded_file($tmpname))
 					{
-						return false;
+					}
+					else
+					{
+						$contents = $this->get_file(array(
+							"file" => $tmpname,
+						));
+						$emb[$name] = array(
+							"tmp_name" => $tmpname,
+							"type" => $filetype,
+							"name" => $filename,
+							"contents" => base64_encode($contents),
+						);
+						$el_count++;
 					};
-					$contents = $this->get_file(array(
-						"file" => $tmpname,
-					));
-					$emb[$name] = array(
-						"tmp_name" => $tmpname,
-						"type" => $filetype,
-						"name" => $filename,
-						"contents" => base64_encode($contents),
-					);
-					$el_count++;
 				}
 				else
 				{
@@ -486,49 +506,71 @@ class releditor extends core
                 };
 
 		// TODO: make it give feedback to the user, if an object can not be added
-		if ($el_count == 0)
+		if ($el_count > 0)
 		{
-			return false;
+
+			$emb["group"] = "general";
+			$emb["parent"] = $obj->parent();
+			$emb["return"] = "id";
+			$emb["prefix"] = $elname;
+
+			$reltype = $arr["prop"]["reltype"];
+
+			$emb["cb_existing_props_only"] = 1;
+
+			$obj_id = $clinst->submit($emb);
+
+			if ($prop["rel_id"] == "first" && empty($emb["id"]))
+			{
+				// I need to disconnect, no?
+				$old = $obj->connections_from(array(
+					"type" => $arr["prop"]["reltype"],
+				));
+
+				foreach($old as $conn)
+				{
+					$obj->disconnect(array(
+						"from" => $conn->prop("to"),
+					));
+				};
+			};
+
+			if (is_oid($obj_id))
+			{
+				if (empty($emb["id"]))
+				{
+					$obj->connect(array(
+						"to" => $obj_id,
+						"reltype" => $arr["prop"]["reltype"],
+					));
+				};
+			};
 		};
 
-		$emb["group"] = "general";
-		$emb["parent"] = $obj->parent();
-		$emb["return"] = "id";
-		$emb["prefix"] = $elname;
+		$obj->save();
 
-		$reltype = $arr["prop"]["reltype"];
-
-		$emb["cb_existing_props_only"] = 1;
-
-		$obj_id = $clinst->submit($emb);
-
-		if ($prop["rel_id"] == "first" && empty($emb["id"]))
+		$things = $arr["request"][$elname]["_data"];
+		if (sizeof($things) > 0)
 		{
-			// I need to disconnect, no?
-			$old = $obj->connections_from(array(
+			$conns = $obj->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
 
-			foreach($old as $conn)
+			foreach($conns as $conn)
 			{
-				$obj->disconnect(array(
-					"from" => $conn->prop("to"),
-				));
+				$conn_id = $conn->prop("id");
+				if ($things[$conn_id])
+				{
+					$to_obj = $conn->to();
+					foreach($things[$conn_id] as $propname => $propvalue)
+					{
+						$to_obj->set_prop($propname,$propvalue);
+					};
+					$to_obj->save();
+				};
 			};
 		};
 
-		if (is_oid($obj_id))
-		{
-			if (empty($emb["id"]))
-			{
-				$obj->connect(array(
-					"to" => $obj_id,
-					"reltype" => $arr["prop"]["reltype"],
-				));
-			};
-		};
-			
-		$obj->save();
 		$cache_inst = get_instance("cache");
 		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
 
