@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.17 2003/10/22 08:59:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.18 2003/10/30 16:10:12 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -46,11 +46,12 @@ class toolbar extends aw_template
 
 	////
 	// !Allows to add custom data to the boolar
-	function add_cdata($content)
+	function add_cdata($content,$side = "")
 	{
 		$args = array(
 			"type" => "cdata",
 			"data" => $content,
+			"side" => $side,
 		);
 		$this->matrix[] = $args;
 	}
@@ -73,8 +74,10 @@ class toolbar extends aw_template
 		$matrix = new aw_array($this->matrix);
 		$this->vars(array('align' => isset($this->align) ? $this->align : 'left'));
 		$result = $this->parse("start");
+		$right_side_content = "";
 		foreach($matrix->get() as $val)
 		{
+			$side = !empty($val["side"]) ? "right" : "left";
 			switch($val["type"])
 			{
 				case "button":
@@ -92,17 +95,38 @@ class toolbar extends aw_template
 						$val["onClick"] = "";
 					};
 					$this->vars($val);
-					$result .= $this->parse($val["type"]);
+					if ($side == "left")
+					{
+						$result .= $this->parse($val["type"]);
+					}
+					else
+					{
+						$right_side_content .= $this->parse($val["type"]);
+					};
 					break;
 				
 				case "separator":
 					$this->vars($val);
-					$result .= $this->parse("separator");
+					if ($side == "left")
+					{
+						$result .= $this->parse("separator");
+					}
+					else
+					{
+						$right_side_content .= $this->parse("separator");
+					};
 					break;
 				
 				case "cdata":
 					$this->vars($val);
-					$result .= $this->parse("cdata");
+					if ($side == "left")
+					{
+						$result .= $this->parse("cdata");
+					}
+					else
+					{
+						$right_side_content .= $this->parse("cdata");
+					};
 					break;
 			};
 		};
@@ -116,6 +140,15 @@ class toolbar extends aw_template
 				$result .= $this->parse("end_sep");
 			}
 		}
+
+		if (!empty($right_side_content))
+		{
+			$this->vars(array(
+				"right_side_content" => $right_side_content,
+			));
+
+			$result .= $this->parse("right_side");
+		};
 
 		$result .= $this->parse("real_end");
 		return $result;
