@@ -15,36 +15,25 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <group>
+                  <num_0>firmad</num_0>
+                  <num_1>f2</num_1>
+            </group>
             <table>objects</table>
-            <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Org. toolbar</caption>
       </property>
       <property>
-            <name>search_form</name>
-            <type>text</type>
-            <no_caption>1</no_caption>
+            <name>search_form1</name>
+            <type>form</type>
+            <sclass>crm_org_search</sclass>
+            <sform>crm_search</sform>
             <table>objects</table>
-            <group>firmad</group>
+            <group>f2</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>otsing</caption>
-      </property>
-      <property>
-            <name>sfield</name>
-            <type>textbox</type>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>exclude</name>
-            <type>textbox</type>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <caption>Compound search</caption>
       </property>
       <property>
             <name>manageri</name>
@@ -54,24 +43,7 @@
             <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>make_search</name>
-            <type>textbox</type>
-            <size>1</size>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>search_type</name>
-            <type>textbox</type>
-            <size>1</size>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <caption>Firmade nimekiri</caption>
       </property>
       <property>
             <name>tegtoolbar</name>
@@ -224,10 +196,19 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <f2>
+                  <submit>no</submit>
+                  <caption>Otsing</caption>
+                  <parent>org</parent>
+            </f2>
             <firmad>
                   <submit>no</submit>
-                  <caption>Organisatsioonid</caption>
+                  <caption>Nimekiri</caption>
+                  <parent>org</parent>
             </firmad>
+            <org>
+                  <caption>Organisatsioonid</caption>
+            </org>
             <tegevusalad>
                   <submit>no</submit>
                   <caption>Tegevusalad</caption>

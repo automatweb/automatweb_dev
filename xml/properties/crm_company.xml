@@ -124,24 +124,62 @@
             <caption>Organisatsiooni juht</caption>
       </property>
       <property>
+            <name>human_resources</name>
+            <type>table</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>humanres</group>
+            <field>human_resources</field>
+            <caption>Inimesed</caption>
+      </property>
+      <property>
             <name>addresslist</name>
             <type>text</type>
             <store>no</store>
-            <group>humanres</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>contacts</group>
             <field>addresslist</field>
             <caption>Aadressid</caption>
       </property>
       <property>
-            <name>human_resources</name>
-            <type>table</type>
-            <store>no</store>
-            <group>humanres</group>
-            <no_caption>1</no_caption>
-            <table>objects</table>
-            <field>human_resources</field>
-            <caption>Inimesed</caption>
+            <name>phone_id</name>
+            <type>relmanager</type>
+            <table>kliendibaas_firma</table>
+            <reltype>RELTYPE_PHONE</reltype>
+            <props>name</props>
+            <group>contacts</group>
+            <field>phone_id</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>url_id</name>
+            <type>relmanager</type>
+            <table>kliendibaas_firma</table>
+            <reltype>RELTYPE_URL</reltype>
+            <props>name</props>
+            <group>contacts</group>
+            <field>url_id</field>
+            <caption>Veebiaadress</caption>
+      </property>
+      <property>
+            <name>email_id</name>
+            <type>relmanager</type>
+            <table>kliendibaas_firma</table>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <props>mail</props>
+            <group>contacts</group>
+            <field>email_id</field>
+            <caption>E-posti aadressid</caption>
+      </property>
+      <property>
+            <name>telefax_id</name>
+            <type>relmanager</type>
+            <table>kliendibaas_firma</table>
+            <reltype>RELTYPE_TELEFAX</reltype>
+            <props>name</props>
+            <group>contacts</group>
+            <field>telefax_id</field>
+            <caption>Fax</caption>
       </property>
       <property>
             <name>tasks_call</name>
@@ -152,6 +190,23 @@
             <group>tasks_overview</group>
             <field>tasks_call</field>
             <caption>Kõned</caption>
+      </property>
+      <property>
+            <name>org_add_call</name>
+            <type>releditor</type>
+            <reltype>RELTYPE_CALL</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>comment</num_1>
+                  <num_2>start1</num_2>
+                  <num_3>is_done</num_3>
+                  <num_4>content</num_4>
+            </props>
+            <store>no</store>
+            <table>objects</table>
+            <group>tasks_overview</group>
+            <field>org_add_call</field>
+            <caption>Lisa kõne</caption>
       </property>
       <property>
             <name>org_actions</name>
@@ -202,8 +257,11 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
-            <humanres>
+            <contacts>
                   <caption>Kontaktid</caption>
+            </contacts>
+            <humanres>
+                  <caption>Inimesed</caption>
                   <submit>no</submit>
             </humanres>
             <overview>
@@ -231,7 +289,6 @@
             </tasks>
             <tasks_overview>
                   <caption>Ülevaade</caption>
-                  <submit>no</submit>
             </tasks_overview>
       </groupinfo>
       <tableinfo>
@@ -312,6 +369,11 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Telefon</caption>
             </PHONE>
+            <TELEFAX>
+                  <value>18</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Fax</caption>
+            </TELEFAX>
       </reltypes>
 </properties>
 
