@@ -90,20 +90,20 @@ class basket_users extends basket
 	function change($arr)
 	{
 		extract($arr);
-		$ob = $this->get_basket($id);
+		$ob = obj($id);
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda kasutaja tellimuste nimekirja");
 		}
 		else
 		{
-			$this->mk_path($ob["parent"], "Muuda kasutaja tellimuste nimekirja");
+			$this->mk_path($ob->parent(), "Muuda kasutaja tellimuste nimekirja");
 		}
 		$this->read_template("add_uo_list.tpl");
 
 		$this->vars(array(
-			"name" => $ob["name"],
-			"baskets" => $this->picker($ob["meta"]["basket"],$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+			"name" => $ob->name(),
+			"baskets" => $this->picker($ob->meta("basket"),$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
@@ -127,13 +127,13 @@ class basket_users extends basket
 	{
 		extract($arr);
 		$this->read_template("user_orders.tpl");
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
 		$this->_init_table();
 
-		if ($ob["meta"]["basket"])
+		if ($ob->meta("basket"))
 		{
-			$ss = "AND subclass = '".$ob["meta"]["basket"]."'";
+			$ss = "AND subclass = '".$ob->meta("basket")."'";
 		}
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_SHOP_BASKET_ORDER." AND status = 2 AND createdby = '".aw_global_get("uid")."' $ss");
 		while ($row = $this->db_next())

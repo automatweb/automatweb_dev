@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.269 2004/06/25 19:20:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.270 2004/06/25 20:31:42 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2235,8 +2235,8 @@ class document extends aw_template
 	function sel_menus($arr)
 	{
 		extract($arr);
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],LC_DOCUMENT_PREW);
+		$obj = obj($id);
+		$this->mk_path($obj->parent(),LC_DOCUMENT_PREW);
 
 		$this->read_template("nbrother.tpl");
 		$sar = array();
@@ -2275,7 +2275,7 @@ class document extends aw_template
 	{
 		extract($arr);
 
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 
 		$sar = array(); $oidar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
@@ -2321,7 +2321,6 @@ class document extends aw_template
 			$tmp->delete();
 		}
 		reset($added);
-		$this->quote($obj);
 		while(list($oid,) = each($added))
 		{
 			if ($oid != $id)	// no recursing , please
@@ -3482,17 +3481,17 @@ class document extends aw_template
 		$exp = get_instance("export");
 		$exp->init_settings();
 
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 
 		// doc parent
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj["parent"], $obj["lang_id"], true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj->parent(), $obj->lang_id(), true);
 
 		$exp->exp_reset();
 
 		// doc
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj["lang_id"], true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, $obj->lang_id(), true);
 		// print doc
-		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj["lang_id"], true);
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id."&print=1", $obj->lang_id(), true);
 
 
 		// if the document is on the front page, then do the damn
@@ -3500,7 +3499,7 @@ class document extends aw_template
 		$fp = $this->db_fetch_field("SELECT frontpage_left FROM documents WHERE docid = $id", "frontpage_left");
 		if ($fp == 1)
 		{
-			$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage"), $obj["lang_id"], true);
+			$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage"), $obj->lang_id(), true);
 		}
 
 		ob_end_clean();
@@ -3855,8 +3854,8 @@ class document extends aw_template
 			
 			if (not($row))
 			{
-				$prnt = $this->get_object($section);
-				$section = $prnt["parent"];
+				$prnt = obj($section);
+				$section = $prnt->parent();
 			}
 			else
 			{

@@ -106,40 +106,35 @@ class basket extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$ob = $this->get_basket($id);
+		$ob = obj($id);
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda korvi");
 		}
 		else
 		{
-			$this->mk_path($ob["parent"], "Muuda korvi");
+			$this->mk_path($ob->parent(), "Muuda korvi");
 		}
 		$this->read_template("add.tpl");
 
 		$oj = get_instance("objects");
 		$fo = get_instance("formgen/form");
 
-		$ops = $fo->get_op_list($ob["meta"]["order_form"]);
+		$ops = $fo->get_op_list($ob->meta("order_form"));
 
 		$this->vars(array(
-			"name" => $ob["name"],
-			"after_order" => $ob["meta"]["after_order"],
-			"mail_to" => $ob["meta"]["mail_to"],
-			"ftbls" => $this->picker($ob["meta"]["ftbl"],$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
-			"ord_parents" => $this->picker($ob["meta"]["ord_parent"],$oj->get_list()),
-			"order_form" => $this->picker($ob["meta"]["order_form"], $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
-			"order_form_op" => $this->picker($ob["meta"]["order_form_op"], $ops[$ob["meta"]["order_form"]]),
-			"order_ftbl" => $this->picker($ob["meta"]["order_ftbl"], $this->list_objects(array("class" => CL_FORM_TABLE,"addempty" => true))),
+			"name" => $ob->name(),
+			"after_order" => $ob->meta("after_order"),
+			"mail_to" => $ob->meta("mail_to"),
+			"ftbls" => $this->picker($ob->meta("ftbl"),$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
+			"ord_parents" => $this->picker($ob->meta("ord_parent"),$oj->get_list()),
+			"order_form" => $this->picker($ob->meta("order_form"), $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
+			"order_form_op" => $this->picker($ob->meta("order_form_op"), $ops[$ob->meta("order_form")]),
+			"order_ftbl" => $this->picker($ob->meta("order_ftbl"), $this->list_objects(array("class" => CL_FORM_TABLE,"addempty" => true))),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
-	}
-
-	function get_basket($id)
-	{
-		return $this->get_object($id);
 	}
 
 	////
@@ -284,7 +279,7 @@ class basket extends aw_template
 		// read in the state of the basket
 		$this->init_basket($id);
 		// read in the basket's config
-		$ob = $this->get_basket($id);
+		$ob = obj($id);
 
 		// make sure the document won't get cached
 		aw_global_set("no_cache_content",1);
@@ -293,7 +288,7 @@ class basket extends aw_template
 		$tmp = aw_global_get("shop_basket");
 		$basket = $tmp[$this->current_basket_id];
 
-		if (!$ob["meta"]["order_form"])
+		if (!$ob->meta("order_form"))
 		{
 			$this->raise_error(ERR_BASKET_NO_OF_SET,"No order form is selected for basket $id, can't continue!", true);
 		}
@@ -302,7 +297,7 @@ class basket extends aw_template
 		$this->vars(array(
 			"basket" => $this->_draw_basket_ft($ob, $basket),//$ft->finalize_table(),
 			"order_form" => $ff->gen_preview(array(
-				"id" => $ob["meta"]["order_form"],
+				"id" => $ob->meta("order_form"),
 				"load_entry_data" => $basket["of_based_on"],
 				"reforb" => $this->mk_reforb("finalize_order", array("id" => $id, "ret_url" => aw_global_get("REQUEST_URI"))),
 			))
@@ -334,7 +329,7 @@ class basket extends aw_template
 		// read in the state of the basket
 		$this->init_basket($id);
 		// read in the basket's config
-		$ob = $this->get_basket($id);
+		$ob = obj($id);
 
 		// get the current basket
 		$tmp = aw_global_get("shop_basket");
@@ -343,7 +338,7 @@ class basket extends aw_template
 		$creat = time();
 
 		$o = obj();
-		$o->set_parent($ob["meta"]["ord_parent"]);
+		$o->set_parent($ob->meta("ord_parent"));
 		$o->set_class_id(CL_SHOP_BASKET_ORDER);
 		$order_id = $o->save();
 
@@ -359,7 +354,7 @@ class basket extends aw_template
 		// now create the form entry under the order
 		$finst = get_instance("formgen/form");
 		$finst->process_entry(array(
-			"id" => $ob["meta"]["order_form"],
+			"id" => $ob->meta("order_form"),
 			"parent" => $order_id,
 		));
 
@@ -386,7 +381,7 @@ class basket extends aw_template
 				VALUES('$order_id','$iid','$icnt','".$basket["prices"][$iid]."','".$basket["form_ids"][$iid]."')");
 		}
 
-		$mls = explode(",", $ob["meta"]["mail_to"]);
+		$mls = explode(",", $ob->meta("mail_to"));
 		if (is_array($mls))
 		{
 			// put together the mail to send to those who want it
@@ -394,7 +389,7 @@ class basket extends aw_template
 			$its = "";
 
 			$ff = get_instance("formgen/form");
-			$ff->load($ob["meta"]["order_form"]);
+			$ff->load($ob->meta("order_form"));
 			$ff->load_entry($finst->entry_id);
 
 			$this->vars(array(
@@ -423,7 +418,7 @@ class basket extends aw_template
 			));
 			$mail = $this->parse();
 
-			if (!$ob["meta"]["order_form_op"])
+			if (!$ob->meta("order_form_op"))
 			{
 				$this->raise_error(ERR_BASKET_NO_OOP, "No output selectes for order form - can't send HTML mail!", false, true);
 			}
@@ -431,25 +426,24 @@ class basket extends aw_template
 			{
 				$_ft_basket = $this->_draw_basket_ft($ob, $basket, true);
 				$finst = get_instance("formgen/form");
-				$finst->load($ob["meta"]["order_form"]);
+				$finst->load($ob->meta("order_form"));
 				$htmlmail = $finst->show(array(
-					"id" => $ob["meta"]["order_form"],
+					"id" => $ob->meta("order_form"),
 					"entry_id" => $basket["of_entry"],
-					"op_id" => $ob["meta"]["order_form_op"]
+					"op_id" => $ob->meta("order_form_op")
 				));
 				$htmlmail.="<br /><br />".$_ft_basket;
 			}
 
 			foreach($mls as $ml)
 			{
-//				mail($ml, "Tellimus korvist ".$ob["name"], $mail);
 				// send html mail
 				$awm = get_instance("aw_mail");
 				// we set all the relevant fields later on
 				$awm->create_message(array(
 					"froma" => "automatweb@automatweb.com",
 					"fromn" => "AutomatWeb",
-					"subject" => "Tellimus korvist ".$ob["name"],
+					"subject" => "Tellimus korvist ".$ob->name(),
 					"to" => $ml,
 					"body" => $mail,
 				));
@@ -465,7 +459,7 @@ class basket extends aw_template
 		$this->save_user_basket();
 		$this->current_basket_id = false;
 
-		return $ob["meta"]["after_order"] == "" ? urldecode($ret_url) : $ob["meta"]["after_order"];
+		return $ob->meta("after_order") == "" ? urldecode($ret_url) : $ob->meta("after_order");
 	}
 
 	/** adds item to basket and redirects to specified url 
@@ -503,9 +497,9 @@ class basket extends aw_template
 	function _draw_basket_ft($ob, $basket, $is_mail = false)
 	{
 		// start drawing the set table
-		if (!$ob["meta"]["ftbl"])
+		if (!$ob->meta("ftbl"))
 		{
-			$this->raise_error(ERR_BASKET_NO_TBL_SET, "No form table set for basket $ob[oid] - can't show basket!", true);
+			$this->raise_error(ERR_BASKET_NO_TBL_SET, "No form table set for basket ".$ob->id()." - can't show basket!", true);
 		}
 
 		// form factory for reading in other forms
@@ -513,7 +507,7 @@ class basket extends aw_template
 
 		// start drawing the basket
 		$ft = get_instance("formgen/form_table");
-		$ft->start_table($is_mail ? $ob["meta"]["order_ftbl"] : $ob["meta"]["ftbl"]);
+		$ft->start_table($is_mail ? $ob->meta("order_ftbl") : $ob->meta("ftbl"));
 		foreach($basket["items"] as $iid => $icnt)
 		{
 			$fid = $basket["form_ids"][$iid];
