@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.66 2004/02/18 10:11:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.67 2004/02/27 11:56:00 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -69,9 +69,6 @@
 
 	@property active_selection_objects type=text callback=callback_obj_list
 
-	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600 group=general
-	@caption majanda valimeid
-
 	@property active_selection type=textbox group=objsearch,advanced,selectione
 
 
@@ -85,7 +82,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 */
 	function callback_obj_list($args)
 	{
-		classload('kliendibaas/selection');
+		classload('crm/crm_selection');
+		$this->selection_object = new crm_selection();
 
 		$arg2['obj']['oid'] = $args['obj']['meta']['active_selection'];
 		$arg2['obj']['parent'] = $args['obj']['parent'];
@@ -97,6 +95,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function selection_manage_bar($args = array())
 	{
 		$nodes = array();
+		$this->selection_object = get_instance(CL_CRM_SELECTION);
 		$nodes['toolbar'] = array(
 			'value' => $this->selection_object->mk_toolbar(array(
 				'arr' =>$this->selection['meta']['selections'],
@@ -128,8 +127,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		/* loome valimi instansi kui seda juba tehtud pole */
 		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
 		{
-			classload('kliendibaas/selection');
-			$this->selection_object = new selection();
+			classload('crm/crm_selection');
+			$this->selection_object = new crm_selection();
 			$this->selection = $args['obj'];
 		}
 		//// end:valim///
