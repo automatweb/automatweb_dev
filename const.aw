@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.32 2001/07/28 13:46:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.33 2001/08/01 23:23:58 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -362,6 +362,8 @@ define("CL_FORUM",69); // 68 sest siis ei teki probleeme kui dev versioon siia y
 
 define("CL_OBJECT_VOTE",70); // mingi tunnuse alusesl grupeeritud objektide poolt hääletamine
 
+define("CL_CSS",71); // CSS objekt
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -415,6 +417,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_FORM_XML_INPUT => array("name" => "XML sisend", "file" => "form_input", "can_add" => 1),
 			CL_FORUM => array("name" => "Foorum", "file" => "forum", "can_add" => 1),
 			CL_OBJECT_VOTE => array("name" => "Objektide hääletus","file" => "object_vote","can_add" => 1),
+			CL_CSS => array("name" => "CSS Editor","file" => "css","can_add" => 0),
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -501,6 +504,7 @@ define("PRG_BANNER_PROFILES",40);
 define("PRG_EKOMAR",41);
 define("PRG_KEYWORD",42);
 define("PRG_CONF_JOIN_MAIL",43);
+define("PRG_CSS_EDITOR",44);
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -549,6 +553,7 @@ PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,"url" => "orb.aw?clas
 PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files"),
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
+PRG_CSS_EDITOR		=> array("name" => "CSS editor",				"url" => "orb.aw?class=css&action=list"),
 );
 
 // formide tyybid
