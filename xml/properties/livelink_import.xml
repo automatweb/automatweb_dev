@@ -1,6 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>rootnode</name>
+            <type>textbox</type>
+            <size>10</size>
+            <maxlength>10</maxlength>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Juurika ID</caption>
+      </property>
+      <property>
             <name>outdir</name>
             <type>textbox</type>
             <table>objects</table>
