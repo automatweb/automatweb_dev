@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.29 2003/10/22 13:25:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.30 2003/10/30 16:11:31 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1379,7 +1379,7 @@ class admin_menus extends aw_template
 				"caption" => ($lid == aw_global_get("lang_id") ? "<b>".$ln."</b>" : $ln)
 			));
 		}
-		$toolbar->add_end_cdata("<span class=\"mlang\">[".join("|", $tmp)."]</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+		$toolbar->add_cdata("<span class=\"mlang\">[".join("|", $tmp)."]</span>&nbsp;&nbsp;&nbsp;&nbsp;","right");
 
 
 		return $toolbar;
