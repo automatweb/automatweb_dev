@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.16 2003/09/16 14:51:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.17 2004/01/13 14:15:49 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -114,9 +114,15 @@ class scheduler extends aw_template
 		$found = false;
 		if (is_array($this->repdata))
 		{
-			foreach($this->repdata as $evnt)
+			$tmp = $this->repdata;
+			foreach($tmp as $key => $evnt)
 			{
+				if ($found && $evnt["event"] == $event)
+				{
+					unset($this->repdata[$key]);
+				};
 				if ($evnt["time"] == $time && $evnt["event"] == $event && $evnt["uid"] == $uid)
+				//if ($evnt["event"] == $event && $evnt["uid"] == $uid)
 				{
 					$found = true;
 				}
@@ -189,13 +195,14 @@ class scheduler extends aw_template
 	{
 		extract($arr);
 		set_time_limit(0);
-		
+
 		// read in all events
 		$this->open_session();
 		$this->close_session(true);
 
 		// now do all events for which the time has expired
 		$cp = $this->repdata;
+
 		foreach($cp as $evnt)
 		{
 			if (isset($evnt["time"]) && (time() > $evnt["time"]))
@@ -215,12 +222,29 @@ class scheduler extends aw_template
 	
 		// ok, here check if this event is already being processed
 		$lockfilename = $this->cfg["lock_file"] . "." . $evnt["event_id"];
-		if (file_exists($lockfilename) && (filectime($lockfilename) > (time()-36000)))
+		//if (file_exists($lockfilename) && (filectime($lockfilename) > (time()-36000)))
+		if (file_exists($lockfilename))
 		{
-			// they are so just bail out
-			echo "bailing for lock file ",$lockfilename,"<br />\n";
-			return;
+			$pid = $this->get_file(array(
+				"file" => $lockfilename,
+			));
+			if ($pid == getmypid())
+			{
+				// they are so just bail out
+				echo "bailing for lock file ",$lockfilename,"<br />\n";
+				return;
+			}
+			else
+			{
+				echo "shouldn't but bailing for lock file ",$lockfilename,"<br />\n";
+				return;
+			};
 		}
+
+		$this->put_file(array(
+			"file" => $lockfilename,
+			"content" => getmypid(),
+		));
 
 		touch($lockfilename);
 
@@ -243,6 +267,8 @@ class scheduler extends aw_template
 
 		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br />";
 		$req = $awt->do_send_request(array("host" => $url, "req" => substr($ev_url,strlen("http://")+strlen($url))));
+		echo "unlinking ",$lockfilename," <br />";
+		unlink($lockfilename);
 
 		if ($evnt["uid"] && $evnt["password"])
 		{
@@ -255,8 +281,6 @@ class scheduler extends aw_template
 
 		$this->remove($evnt);
 		
-		echo "unlinking ",$lockfilename," <br />";
-		unlink($lockfilename);
 
 	}
 
