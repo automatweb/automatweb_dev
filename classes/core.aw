@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.255 2004/03/15 12:52:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.256 2004/03/15 18:59:19 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1840,24 +1840,26 @@ class core extends acl_base
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
-		$path = "";
-		$current = new object($oid);
-		// path() always return an array
-		$chain = array_reverse($current->path());
-
-		foreach($chain as $obj)
+		if (is_oid($oid))
 		{
-			$name = $obj->name();
-			$name = !empty($name) ? $name : "(nimetu)";
-			$path = html::href(array(
-				"url" => $this->mk_my_orb("right_frame",array(
-					"parent" => $obj->id(),
-					"period" => $period,
-				),"admin_menus"),
-				"caption" => $name,
-			)) . " / " . $path;
-		};
-			
+			$path = "";
+			$current = new object($oid);
+			// path() always return an array
+			$chain = array_reverse($current->path());
+
+			foreach($chain as $obj)
+			{
+				$name = $obj->name();
+				$name = !empty($name) ? $name : "(nimetu)";
+				$path = html::href(array(
+					"url" => $this->mk_my_orb("right_frame",array(
+						"parent" => $obj->id(),
+						"period" => $period,
+					),"admin_menus"),
+					"caption" => $name,
+				)) . " / " . $path;
+			};
+		}			
 
 		$GLOBALS["site_title"] = $path.$text;
 		// find the bit after / in text
