@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.27 2003/10/14 12:21:06 kristo Exp $
+// $Id: cfgutils.aw,v 1.28 2003/10/30 17:39:45 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -161,7 +161,8 @@ class cfgutils extends aw_template
 			{
 				if (is_array($groupinfo))
 				{
-					$this->groupinfo = $this->groupinfo + $groupinfo;
+					//$this->groupinfo = $this->groupinfo + $groupinfo;
+					$this->groupinfo = array_merge($this->groupinfo,$groupinfo);
 				};
 			}
 			else
@@ -230,6 +231,7 @@ class cfgutils extends aw_template
 		{
 			$file = $this->clist[$clid];
 		};
+
                 // full cavity search
 		/*
                 if (preg_match("/\W/",$file))
@@ -241,7 +243,7 @@ class cfgutils extends aw_template
 			"file" => $file,
 			"filter" => $filter,
 		));
-
+		
 		if (empty($this->classinfo["trans"]))
 		{
 			unset($coreprops["needs_translation"]);
