@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.6 2003/07/03 16:02:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.7 2003/07/04 14:51:03 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -36,9 +36,46 @@
 	
 	@property add_comment type=callback callback=callback_gen_add_comment store=no no_caption=1 group=add_comment
 	@caption Lisa kommentaar
+	
+	@property style_caption type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Tabeli pealkirja stiil
+	
+	@property style_l1_folder type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Esimese taseme folderi stiil
+
+	@property style_folder_caption type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Folderi pealkirja stiil
+	
+	@property style_folder_topic_count type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Folderi teemade arvu stiil
+	
+	@property style_folder_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Folderi postituste arvu stiil
+	
+	@property style_folder_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Folderi viimase postituse stiil
+	
+	@property style_topic_caption type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema pealkirja stiil
+	
+	@property style_topic_replies type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema vastuste arvu stiil
+	
+	@property style_topic_author type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema autori stiil
+	
+	@property style_topic_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema viimase postituste stiil
+
+	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Kommentaari kasutajainfo stiil
+
+	@property style_comment_text type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Kommentaari teksti stiil
 
 	@groupinfo container caption=Foorum submit=no
 	@groupinfo contents caption=Sisu submit=no parent=container
+	@groupinfo styles caption=Stiilid
 	@groupinfo add_topic caption="Lisa teema" parent=container
 	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
@@ -46,6 +83,7 @@
 
 define('RELTYPE_TOPIC_FOLDER',1);
 define('RELTYPE_ADDRESS_FOLDER',2);
+define('RELTYPE_STYLE',3);
 
 class forum_v2 extends class_base
 {
@@ -62,6 +100,7 @@ class forum_v2 extends class_base
                 return array(
                         RELTYPE_TOPIC_FOLDER => "teemade kataloog",
 			RELTYPE_ADDRESS_FOLDER => "listiliikmete kataloog",
+			RELTYPE_STYLE => "stiil",
 		);
 	}
 
@@ -74,6 +113,10 @@ class forum_v2 extends class_base
                         case RELTYPE_TOPIC_FOLDER:
 			case RELTYPE_ADDRESS_FOLDER:
                                 $retval = array(CL_PSEUDO);
+				break;
+
+			case RELTYPE_STYLE:
+				$retval = array(CL_CSS);
 				break;
 		};
 		return $retval;
@@ -113,12 +156,17 @@ class forum_v2 extends class_base
 
 	function callback_gen_contents($args = array())
 	{
+		classload("layout/active_page_data");
+		$this->style_data = array();
 		$fld = $args["obj"]["meta"]["topic_folder"];
 		if (!is_numeric($fld))
 		{
 			return false;
 		};			
 
+		$this->meta = $args["obj"]["meta"];
+		$this->_add_style("style_caption");
+		
 		$args["fld"] = $fld;
 
 		if (is_numeric($args["request"]["topic"]))
@@ -133,7 +181,7 @@ class forum_v2 extends class_base
 		{
 			$retval = $this->draw_all_folders($args);
 		};
-		
+
 		$prop = $args["prop"];
 		$prop["type"] = "text";
 		$prop["value"] = $retval;
@@ -153,7 +201,14 @@ class forum_v2 extends class_base
 		$this->read_template("forum.tpl");
 
 		$c = "";
-			
+		
+		$this->_add_style("style_l1_folder");
+		$this->_add_style("style_folder_caption");
+		$this->_add_style("style_folder_topic_count");
+		$this->_add_style("style_folder_comment_count");
+		$this->_add_style("style_folder_last_post");
+		$this->vars($this->style_data);
+
 		foreach($flds as $fdata)
 		{
 			$this->vars(array(
@@ -246,6 +301,12 @@ class forum_v2 extends class_base
 			}
 			$path[] = $name;
 		};
+		
+		$this->_add_style("style_topic_caption");
+		$this->_add_style("style_topic_replies");
+		$this->_add_style("style_topic_author");
+		$this->_add_style("style_topic_last_post");
+		$this->vars($this->style_data);
 
 		$subtopics = $this->get_objects_below(array(
 			"parent" => $topic_obj["oid"],
@@ -339,6 +400,10 @@ class forum_v2 extends class_base
 			"oid" => $args["request"]["topic"],
 			"clid" => CL_MSGBOARD_TOPIC,
 		));
+		
+		$this->_add_style("style_comment_user");
+		$this->_add_style("style_comment_text");
+		$this->vars($this->style_data);
 		
 		$comments_on_page = !empty($args["obj"]["meta"]["topics_on_page"]) ? $args["obj"]["meta"]["topics_on_page"] : 5;
 		$path = array();
@@ -608,6 +673,12 @@ class forum_v2 extends class_base
 			$retval = $this->db_next();
 		};
 		return $retval;
+	}
+
+	function _add_style($name)
+	{
+		active_page_data::add_site_css_style($this->meta[$name]);
+		$this->style_data[$name] = "st" . $this->meta[$name];
 	}
 
 	////////////////////////////////////
