@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.18 2004/02/03 14:06:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.19 2004/02/03 17:37:39 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -70,6 +70,9 @@
 	@property style_folder_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Folderi viimase postituse stiil
 	
+	@property style_forum_yah type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Foorumi YAH
+	
 	@property style_topic_caption type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Teema pealkirja stiil
 	
@@ -84,6 +87,9 @@
 
 	@property style_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Kommentaaride arvu stiil
+	
+	@property style_comment_creator type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema püstitaja stiil
 
 	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Kommentaari kasutajainfo stiil
@@ -485,18 +491,22 @@ class forum_v2 extends class_base
 
 		$obj_chain = $this->get_obj_chain(array(
 			"oid" => $topic_obj->id(),
-			"stop" => $args["request"]["folder"],
+			//"stop" => $args["request"]["folder"],
+			"stop" => $topic_obj->parent(),
 		));
 
 		$path = array();
 		foreach($obj_chain as $key => $name)
 		{
-			if ($key == $fld)
+			//if ($key == $fld)
+			if ($key == $args["request"]["folder"])
 			{
+				/*
 				$name = html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => $this->rel_id,"_alias" => get_class($this))),
 					"caption" => $name,
 				));
+				*/
 			}
 			else
 			{
@@ -514,6 +524,7 @@ class forum_v2 extends class_base
 		$this->_add_style("style_topic_replies");
 		$this->_add_style("style_topic_author");
 		$this->_add_style("style_topic_last_post");
+		$this->_add_style("style_forum_yah");
 		$this->vars($this->style_data);
 
 		$subtopic_list = new object_list(array(
@@ -623,6 +634,8 @@ class forum_v2 extends class_base
 		$topic_obj = new object($args["request"]["topic"]);
 
 		$this->_add_style("style_comment_user");
+		$this->_add_style("style_comment_creator");
+		$this->_add_style("style_forum_yah");
 		$this->_add_style("style_comment_count");
 		$this->_add_style("style_comment_time");
 		$this->_add_style("style_comment_text");
@@ -690,12 +703,15 @@ class forum_v2 extends class_base
 			"oid" => $args["request"]["topic"],
 			"stop" => $args["obj_inst"]->prop("topic_folder"),
 		));
+
+		$fld = $topic_obj->parent();
+
 		foreach($obj_chain as $key => $name)
 		{
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $fld,"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			}
@@ -704,17 +720,17 @@ class forum_v2 extends class_base
 				$obj = new object($key);
 				if ($obj->class_id() == CL_MENU)
 				{
-					if ($obj["parent"] != $fld)
+					if ($obj->id() == $args["obj_inst"]->prop("topic_folder"))
 					{
 						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 							"caption" => $name,
 						));
 					}
 					else
 					{
 						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"c" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
 							"caption" => $name,
 						));
 					};
