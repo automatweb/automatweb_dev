@@ -9,17 +9,8 @@
 		<!--tabelsisu-->
 		<table width="100%" cellspacing="0" cellpadding="0">
 		<tr><td><td class="tableinside">
+{VAR:toolbar}
 
-
-<table border="0" cellpadding="0" cellspacing="2">
-<tr>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:document.searchform.submit();"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Otsi" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
-href="javascript:document.searchform.submit();">Otsi / Salvesta</a>
-</td>
-<td>&nbsp;&nbsp;&nbsp;</td>
-</tr>
-</table>
 
 
 		</td>
@@ -45,12 +36,45 @@ redir_targets[{VAR:clid}] = '{VAR:url}';
 <script type="text/javascript">
 function refresh_page(arg)
 {
+	if (!document.searchform.special)
+	{
+		return false;
+	}
+	if (!document.searchform.special.checked)
+	{
+		return false;
+	}
 	idx = arg.options[arg.selectedIndex].value;
 	if (redir_targets[idx])
 	{
 		window.location = redir_targets[idx];
 	};
 }
+
+function submit(val)
+{
+	document.resulttable.subaction.value=val;
+	document.resulttable.submit();
+}
+
+function mk_group(text)
+{
+	res = prompt(text);
+	if (res)
+	{
+		document.resulttable.subaction.value = 'mkgroup';
+		document.resulttable.grpname.value = res;
+		document.resulttable.submit();
+	};
+}
+
+function assign_config()
+{
+	document.resulttable.subaction.value='assign_config';
+	document.resulttable.action = '{VAR:baseurl}/automatweb/orb.{VAR:ext}';
+	document.resulttable.submit();
+}
+
 </script>
 
 
@@ -66,5 +90,8 @@ function refresh_page(arg)
 <!-- END SUB: field -->
 </table>
 {VAR:reforb}
+<input type="submit" value="Otsi">
 </form>
 {VAR:table}
+{VAR:treforb}
+{VAR:ef}
