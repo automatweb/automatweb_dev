@@ -168,6 +168,15 @@
             <store>no</store>
             <caption>Subaction (sys)</caption>
       </property>
+      <property>
+            <name>gen_controllers</name>
+            <table>objects</table>
+            <group>controllers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>gen_controller_props</callback>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
@@ -183,6 +192,9 @@
                   <caption>Kõik omadused</caption>
                   <submit>no</submit>
             </avail>
+            <controllers>
+                  <caption>Kontrollerid</caption>
+            </controllers>
       </groupinfo>
       <reltypes>
             <PROP_GROUP>
@@ -195,6 +207,11 @@
                   <clid>CL_RTE</clid>
                   <caption>element</caption>
             </ELEMENT>
+            <CONTROLLER>
+                  <value>3</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.32 2004/06/08 09:50:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.33 2004/08/11 10:27:54 sven Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -57,10 +57,15 @@
 
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
+	
+	@property gen_controllers type=callback callback=gen_controller_props group=controllers
 
+	
+	
 	@groupinfo groupdata caption=Grupid 
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
+	@groupinfo controllers caption="Kontrollerid"
 
 	@classinfo relationmgr=yes
 
@@ -69,6 +74,9 @@
 
 	@reltype ELEMENT value=2 clid=CL_RTE
 	@caption element
+
+	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
+	@caption Kontroller
 
 */
 class cfgform extends class_base
@@ -128,6 +136,23 @@ class cfgform extends class_base
 		return $retval;
 	}
 
+	function gen_controller_props($arr)
+	{
+		$controllers = $arr["obj_inst"]->meta("controllers");
+		$retval = array();
+		foreach ($this->prplist as $prop)
+		{
+			$retval[] = array(
+				"name" => "controllers[".$prop["name"]."]",
+				"caption" => $prop["caption"],
+				"type" => "relpicker",
+				"reltype" => RELTYPE_CONTROLLER,
+				"value" => $controllers[$prop["name"]],
+			);
+		}
+		return  $retval;
+	}
+	
 	function callback_pre_edit($arr)
 	{
 		$this->_init_cfgform_data($arr["obj_inst"]);
@@ -167,7 +192,11 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
+			case "gen_controllers":
+				$arr["obj_inst"]->set_meta("controllers", $arr["request"]["controllers"]);		
+			break;
 			case "cfg_proplist":
+			
 			case "cfg_groups":
 				if (empty($data["value"]))
 				{
