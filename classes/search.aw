@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.33 2003/05/26 15:51:07 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.34 2003/05/26 17:37:21 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -364,7 +364,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$this->_init_os_tbl();
 
 			$parts = array();
-			$partcount = 0;
+			//$partcount = 0;
+			$partcount = 1; //ahto wants that we search all the objects whenever we havent specified any search parameters
 			foreach($real_fields as $key => $val)
 			{
 				$_part = "";
@@ -673,7 +674,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			if (is_array($fields[$key]))
 			{
 				$fieldref = $fields[$key];
-				$fieldref['name'] = 's['.$key.']';
+				if (!isset($fieldref['name']))
+				{
+					$fieldref['name'] = 's['.$key.']';
+				}
+				
 				
 						$scr = <<<SCR
 							<script language= "javascript">
@@ -728,7 +733,7 @@ SCR;
 				{
 					case "select":
 						$items = $this->picker($fieldref["selected"],$fieldref["options"]);
-						$element = "<select name='s[$key]' onChange='$fieldref[onChange]'>$items</select>";
+						$element = "<select name='".$fieldref['name']."' onChange='$fieldref[onChange]'>$items</select>";
 						$caption = $fieldref["caption"];
 						break;
 
@@ -738,7 +743,7 @@ SCR;
 						foreach($fieldref["options"] as $okey => $oval)
 						{
 							$checked = checked($okey == $fieldref["selected"]);
-							$element .= sprintf("<input type='radio' name='s[%s]' value='%s' %s> %s &nbsp;&nbsp;&nbsp;",$key,$okey,$checked,$oval);
+							$element .= sprintf("<input type='radio' name='".$fieldref['name']."' value='%s' %s> %s &nbsp;&nbsp;&nbsp;",$okey,$checked,$oval);
 						};
 
 						$caption = $fieldref["caption"];
@@ -759,7 +764,7 @@ SCR;
 
 						//$mselectbox = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
 
-						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:170px"></select>'.$scr."
+						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:200px"></select>'.$scr."
 if (document.forms['searchform'].elements['s[class_id][]'])
 {
 	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]'], 'select');
@@ -814,7 +819,7 @@ GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].el
 						//$items = $this->mpicker($fieldref["selected"],$fieldref["options"]);
 						$items = $this->mpicker($sel,$fieldref["options"]);
 						$size = ($fieldref["size"]) ? $fieldref["size"] : 5;
-						$element = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
+						$element = sprintf("<select multiple size='$size' name='".$fieldref['name']."[]' onChange='%s'>%s</select>",$fieldref["onChange"],$items);
 						$caption = $fieldref["caption"];
 						break;
 
@@ -827,7 +832,7 @@ GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].el
 						break;
 
 					case "checkbox":
-						$element = "<input type='checkbox' name='s[$key]' $fieldref[checked]>";
+						$element = "<input type='checkbox' name='".$fieldref['name']."' $fieldref[checked]>";
 						$caption = $fieldref["caption"];
 						break;
 

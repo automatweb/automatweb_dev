@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.96 2003/05/26 15:51:06 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.97 2003/05/26 17:37:21 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -27,6 +27,7 @@ class aliasmgr extends aw_template
 	// intended to replace pickobject.aw
 	function search($args = array())
 	{
+			$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 		extract($args);
 		$GLOBALS['site_title'] = "Seostehaldur";
 		$this->read_template("search.tpl");
@@ -54,7 +55,6 @@ class aliasmgr extends aw_template
 		$this->id = $id;
 		$obj = $this->get_object($id);
 
-		$this->reltype = $reltype;
 
 		if (is_object($this->ref))
 		{
@@ -125,9 +125,17 @@ class aliasmgr extends aw_template
 				"filter" => "1",
 			);
 			//$fields["class_id"] = 'n/a';
+			$fields["reltype"] = array(
+				'type' => 'textbox',
+				'value' => $args['reltype'],
+			);			
 		}
 		else
 		{
+			$fields["reltype"] = array(
+				'type' => 'textbox',
+				'value' => $args['reltype'],
+			);
 			$fields["server"] = "n/a";
 			$fields["location"] = "n/a";
 			$fields["alias"] = "n/a";
@@ -1003,7 +1011,7 @@ class aliasmgr extends aw_template
 				$history = $this->mk_kstring($hh);
 				if ($history)
 				{
-					$dvals .= ','.$history.',"----------------","capt_new_object"';
+					$dvals .= ',"----------------","capt_new_object",'.$history.',"----------------","capt_new_object"';
 				}
 			}
 
