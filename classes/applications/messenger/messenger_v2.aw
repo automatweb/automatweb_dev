@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.4 2004/11/19 00:36:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.5 2005/01/21 13:11:21 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -919,6 +919,29 @@ class messenger_v2 extends class_base
 			"ft_page" => $arr["ft_page"],
 			"mailbox" => $arr["mailbox"],
 		));
+	}
+
+	/**
+		@attrib name=test_tree all_args="1"
+
+	**/
+	function test_tree($arr)
+	{
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+		$list = imap_getmailboxes($this->drv_inst->mbox,$this->drv_inst->servspec,"*");
+		foreach($list as $folder_o)
+		{
+			$fn = $folder_o->name;
+			$status = imap_status($this->drv_inst->mbox,$folder_o->name,SA_ALL);
+			print "fn = $fn";
+			arr($status);
+
+		};
+		print "all done<br>";
+		//arr($list);
+		//$folders  = $this->drv_inst->list_folders();
 	}
 
 	function callback_mod_retval($arr)
