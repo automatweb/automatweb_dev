@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.32 2004/06/22 12:34:42 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.33 2004/06/22 13:14:14 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -67,7 +67,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property contact_toolbar type=toolbar no_caption=1 store=no group=contacts2
 @caption "The Green Button"
 
-@property unit_listing_tree type=treeview parent=hbox1 no_caption=1
+@property unit_listing_tree type=treeview parent=hbox1 no_caption=1 has_root=false
 @caption Puu
 
 @property human_resources type=table store=no parent=hbox1 no_caption=1
@@ -425,6 +425,7 @@ class crm_company extends class_base
 			case "unit_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];
+				$tree_inst->set_has_root(false);
 				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
 				if($arr['request']['unit']=='parent' || !$arr['request']['unit'])
 				{
@@ -1592,7 +1593,7 @@ class crm_company extends class_base
 		
 		$tb->add_menu_item(array(
 				'parent'=>'add_item',
-				'text'=>'Sektsioon',
+				'text'=>'Üksus',
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
