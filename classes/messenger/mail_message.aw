@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.27 2004/05/06 11:20:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.28 2004/05/06 12:03:31 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -810,13 +810,17 @@ class mail_message extends class_base
 	function mail_send($arr)
 	{
 		$this->id_only = true;
-	
+
 		// mfrom is a select box containing all the different identities for
 		// this messenger, but I need the textual value for it
 		// field, I'll resolve the numeric 
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->_connect_server(array(
+                        "msgr_id" => $arr["msgrid"],
+                ));
+
 		if (is_numeric($arr["mfrom"]) && isset($arr["msgrid"]))
 		{
-			$msgr = get_instance(CL_MESSENGER_V2);
 			$identities = $msgr->_get_identity_list(array(
 				"id" => $arr["msgrid"],	
 			));
@@ -836,14 +840,15 @@ class mail_message extends class_base
 
 		// would be nice to set the replied flag for the original message too
 		// but I really don't know how on earth I'm going to do that
-		/*
 		$msgr->drv_inst->store_message(array(
-			"from" => $identities[$arr["request"]["mfrom"]],
-			"to" => $arr["request"]["mto"],
-			"subject" => $arr["request"]["name"],
+			"from" => $arr["mfrom"],
+			"date" => $arr["date"],
+			"to" => $arr["mto"],
+			"cc" => $arr["cc"],
+			"subject" => $arr["name"],
 			"message" => $this->awm->bodytext,
 		));
-		*/
+                
 		
 		print "saadetud<p>";
 		print "<a href='javascript:window.close();'>sulge aken</a>";
