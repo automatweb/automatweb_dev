@@ -946,7 +946,7 @@ class core extends acl_base
 		// ja sellest voib tekkida jamasid... see, et mitu inimest korraga sama
 		// faili kirjutavad, peaks olema suht väikese tõenäosusega sündmus, sest
 		// üldjuhul me kasutame random nimedega faile.
-		if (not(($fh = fopen($file,"w"))))
+		if (not(($fh = fopen($file,"wb"))))
 		{
 			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,"Couldn't open file '$file' for writing",true);
 		}
