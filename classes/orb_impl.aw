@@ -24,6 +24,8 @@ $action = $vars["action"];
 
 if ($vars["fastcall"] == 1)
 {
+	session_name("automatweb");
+	session_start();
 	// loadime klassi
 	classload("fastcall_base");
 	classload($class);
