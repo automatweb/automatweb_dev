@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.7 2001/05/22 02:05:04 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.8 2001/05/22 02:07:58 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -85,6 +85,10 @@ if (empty($admin_rootmenu2))
 if (empty($basedir))
 {
 	$basedir = "/www/apache/domains/sam.elkdata.com/htdocs/automatweb_dev"; 								// the root of all evil ;)
+	if (!file_exists($basedir."/COPYING"))
+	{
+		$basedir = "/www/automatweb_dev/public";
+	}
 };
 // keemia. Kui oleme saidi adminnis sees, siis votame
 // templated siit
