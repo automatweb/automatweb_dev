@@ -31,6 +31,7 @@
 				<arguments>
 					<required name="id"/>
 					<optional name="from"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -41,6 +42,7 @@
 					<required name="id"/>
 					<optional name="from"/>
 					<optional name="cid"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -73,6 +75,7 @@
 				<arguments>
 					<required name="id"/>
 					<optional name="section"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -86,6 +89,7 @@
 			<function name="show">
 				<arguments>
 					<required name="board"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -93,6 +97,7 @@
 			<function name="show_threaded">
 				<arguments>
 					<required name="board"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -100,6 +105,7 @@
 			<function name="reply">
 				<arguments>
 					<required name="parent"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -113,6 +119,7 @@
 			<function name="search">
 				<arguments>
 					<required name="board"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -125,6 +132,7 @@
 		<action name="mark_all_read" nologin="1">
 			<function name="mark_all_read">
 				<required name="id"/>
+				<optional name="section"/>
 			</function>
 		</action>
 </class>
