@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.19 2003/12/16 15:36:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.20 2003/12/17 08:14:57 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -460,10 +460,12 @@ class ml_queue extends aw_template
 		extract($r);
 		// vali järgmine meililisti liige tabelist
 		$gidin = false;
+		/*
 		if ($gid != "0" &&  $gid)
 		{
 			$gidin=explode("|",$gid);
 		} 
+		*/
 		$avoidmids=explode(",", $this->db_fetch_field("SELECT avoidmids FROM ml_avoidmids WHERE aid='$aid'","avoidmids"));
 		// process until the member has been found or the member list has been exhausted
 		$ok=0;
@@ -474,7 +476,7 @@ class ml_queue extends aw_template
 			foreach($this->ml_list_members as $_mid => $_mdat)
 			{
 				// mis trikk selle gid-iga on? I don't like it.
-				if (!in_array($_mid, $avoidmids) && (!is_array($gidin) || (in_array($_mdat["parent"], $gidin))))
+				if (!in_array($_mid, $avoidmids))
 				{
 					$found = true;
 					$member = $_mdat;
@@ -491,16 +493,19 @@ class ml_queue extends aw_template
 				
 			// gets its value from the ml_queue thingie
 			$member_obj = new object($member["oid"]);
-			$avoidmessages = $member_obj->meta("avoidmessages");
-			if ($avoidmessages[$mid])
-			{
-				$ok = 0;
-			} 
-			else
-			{
+			//$avoidmessages = $member_obj->meta("avoidmessages");
+			//if ($avoidmessages[$mid])
+			//{
+			//	$ok = 0;
+			//} 
+			//else
+			//{
+				//print "serving $mid<br>";
 				$this->send_message($mid,$member["oid"],$r);
+				//$avoidmessages[$mid] = 1;
+				//$member_obj->meta("avoidmessages");
 				$ok = 1;
-			};
+			//};
 
 			// pane siia tabelisse kirja, et sellele liikmele enam ei saadaks
 			$aavoidmids = $avoidmids;
@@ -513,15 +518,24 @@ class ml_queue extends aw_template
 			// will be emptied at the end so I have no way to figure out which members
 			// got the message and which didn't. So, what to do, what to do?
 			$aavoidmids[] = $member["oid"];
-			$avoidmids = join(",",$aavoidmids);
+			$_writeout = join(",",$aavoidmids);
+			$avoidmids = $aavoidmids;
+			/*
+			print gettype($avoidmids);
+			print "<br>";
+			*/
 			//decho("pärast avoidmids=$avoidmids<br />");//dbg
 
-			$q="UPDATE ml_avoidmids SET avoidmids='$avoidmids' WHERE aid='$aid'";
+			$q="UPDATE ml_avoidmids SET avoidmids='$_writeout' WHERE aid='$aid'";
 			$this->db_query($q);
 			
 			$tm = time();
 			$q = "UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
 			$this->db_query($q);
+			/*
+			print gettype($avoidmids);
+			print "<br>";
+			*/
 		};
 		//decho("<b>out of do_queue_item</b><br />");
 		return ML_QUEUE_IN_PROGRESS;
@@ -643,7 +657,7 @@ class ml_queue extends aw_template
 			"fromn" => $fromn,
 			"subject" => $subject,
 			"To" => $mailto,
-			"Sender"=>"duke@struktuur.ee",
+			"Sender"=>"bounces@struktuur.ee",
 			"body" => $is_html?strip_tags(strtr($message,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"))):$message,
 		));
 
