@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.11 2002/11/25 15:01:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.12 2002/11/26 13:16:15 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2085,7 +2085,7 @@ class form_element extends aw_template
 						// the data where the value for the element should be, gets passed as $udcnt_values 
 						$udcnt = (int)$udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
 					}
-					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");";
+					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");return false";
 					if ($this->arr["up_button_use_img"] && $this->arr["up_button_img"]["id"])
 					{
 						$aft = "<input type='image' src='".image::check_url($this->arr["up_button_img"]["url"])."' onClick='$onc'>";
@@ -2095,7 +2095,7 @@ class form_element extends aw_template
 						$aft = "<input type='button' onClick='$onc' value='+'>";
 					}
 
-					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");";
+					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");return false";
 					if ($this->arr["down_button_use_img"] && $this->arr["down_button_img"]["id"])
 					{
 						$aft .= "<input type='image' src='".image::check_url($this->arr["down_button_img"]["url"])."' onClick='$onc'>";
