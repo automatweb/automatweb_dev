@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.42 2004/11/23 13:17:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.43 2005/01/14 07:43:47 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -196,6 +196,7 @@ class sys extends aw_template
 			"otto.struktuur.ee" => "otto.struktuur.ee",
 			"rate.automatweb.com" => "rate.automatweb.com",
 			"www.kiosk.ee" => "www.kiosk.ee",
+			"prisma.struktuur.ee" => "prisma.struktuur.ee",
 
 		);
 		
