@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.1 2001/05/15 20:59:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.2 2001/05/21 07:12:20 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -10,6 +10,7 @@ define(AW_VERSION,"2.0.0");
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 // ---------------------------------------------------------------------------
+$tpldirs["stat.struktuur.ee"] = "/www/stat/templates";
 if (empty($driver))
 {
 	$driver = "mysql"; 			// driver
@@ -83,7 +84,7 @@ if (empty($admin_rootmenu2))
 // kui saidi const.aw ei defineeri seda, siis määrame default väärtuse
 if (empty($basedir))
 {
-	$basedir = "/www/apache/domains/sam.elkdata.com/htdocs/automatweb_dev"; 								// the root of all evil ;)
+	$basedir = "/www/automatweb_dev/public"; 								// the root of all evil ;)
 };
 // keemia. Kui oleme saidi adminnis sees, siis votame
 // templated siit
@@ -406,6 +407,7 @@ define(PRG_SITE_BANNER_STATS,38);
 define(PRG_BANNER_USERS,39);
 define(PRG_BANNER_PROFILES,40);
 define(PRG_EKOMAR,41);
+define(PRG_KEYWORD,42);
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -450,7 +452,8 @@ PRG_SITE_BANNER_ADMIN	=> array("name" => MN_SITE_BANNER_ADMIN,"url" => "orb.aw?c
 PRG_SITE_BANNER_STATS	=> array("name" => MN_SITE_BANNER_STATS,"url" => "orb.aw?class=banner_buyer&action=sel_buyer_redirect&fun=buyer_banner_stats&r_class=banner_buyer"),
 PRG_BANNER_USERS			=> array("name" => MN_BANNER_USERS,"url" => "orb.aw?class=banner&action=show_users"),
 PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,"url" => "orb.aw?class=banner&action=show_profiles"),
-PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files")
+PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files"),
+PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 );
 
 // formide tyybid

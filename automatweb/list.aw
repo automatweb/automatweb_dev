@@ -106,6 +106,13 @@ switch($type) {
 		$content = $t->list_mails($id);
 		break;
 	
+	case "submit_default":
+		$t = new email;
+		$t->submit_default($HTTP_POST_VARS);
+		header("Location: list.$ext?type=list_mails&id=$id");
+		print "\n\n";
+		exit;
+	
 	case "new_mail":
 		$t = new email;
 		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $parent","parent");
@@ -232,6 +239,13 @@ switch($type) {
 		$t = new mlist($id);
 		$content = $t->change_vars($parent);
 		break;
+	
+	case "submit_default_list":
+		$t = new lists;
+		$t->submit_default_list($HTTP_POST_VARS);
+		header("Location: list.$ext?parent=$parent&op=open");
+		print "\n\n";
+		exit;
 
 	case "list_lists":
 	default:
