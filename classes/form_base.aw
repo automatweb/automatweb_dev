@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.45 2002/09/04 14:16:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.46 2002/09/04 14:20:02 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -464,7 +464,7 @@ class form_base extends form_db_base
 
 		if ($subtype)
 		{
-			$typ .= " AND (forms.subtype && $subtype) = 1 ";
+			$typ .= " AND (forms.subtype && $subtype) > 0 ";
 		}
 
 		$q = sprintf("	SELECT
