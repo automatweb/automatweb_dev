@@ -577,13 +577,12 @@
       </property>
       <property>
             <name>no_show_in_promo</name>
-            <table>objects</table>
+            <table>documents</table>
             <group>settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <trans>1</trans>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>no_show_in_promo</field>
             <caption>&amp;Auml;ra n&amp;auml;ita konteineris</caption>
       </property>
       <classinfo>

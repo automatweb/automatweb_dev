@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.88 2004/11/15 16:28:56 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.89 2004/11/15 17:13:28 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -178,7 +178,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
 @caption Muutmise kuupaev dokumendi sees
 
-@property no_show_in_promo type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
+@property no_show_in_promo type=checkbox ch_value=1 group=settings trans=1 table=documents field=no_show_in_promo method=
 @caption &Auml;ra n&auml;ita konteineris
 
 @groupinfo calendar caption=Kalender
@@ -898,6 +898,17 @@ class doc extends class_base
 				}
 			}
 		}
+	}
+
+	/** 
+
+		@attrib name=upg nologin="1"
+
+	**/
+	function upg($arr)
+	{
+		$this->db_query("ALTER TABLE documents ADD no_show_in_promo int default 0");
+		die("all done");
 	}
 };
 ?>
