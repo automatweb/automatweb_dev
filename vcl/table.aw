@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.15 2001/12/05 22:00:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.16 2001/12/12 22:34:22 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -452,6 +452,11 @@ class aw_table
 
 			if ($v["nowrap"])
 				$ta["nowrap"] = "";
+
+			if ($v["width"])
+			{
+				$ta["width"] = $v["width"];
+			};
 				
 			$tbl .= $this->opentag($ta);
 
@@ -525,6 +530,7 @@ class aw_table
 					// moodustame celli
 					$cell_attribs = array("name"    => "td",
 							      "classid" => $style,
+							      "width" => $v1["width"],
 							      "bgcolor" => $bgcolor);
 
 					if ($this->actionrows)
