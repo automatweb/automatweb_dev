@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.3 2004/11/30 10:20:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.4 2004/12/02 13:26:50 ahti Exp $
 
 /*
 
@@ -129,12 +129,14 @@ class classificator extends class_base
 				};
 			};
 		};
-
+		/* whatta hell is this thing doing here anyway?
+		// it's not very nice to override caption
 		if (!empty($name))
 		{
 			$prop["caption"] = $name;
 			// so I know that these are object in that array
 		};
+		*/
 		if (empty($use_type))
 		{
 			$use_type = $prop["mode"];
