@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.42 2001/09/27 16:31:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.43 2001/10/02 10:05:41 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -633,6 +633,7 @@ PRG_TPLEDIT => array("name" => "TemplateEditor", "url" => "orb.aw?class=tpledit&
 	define("FTYPE_ENTRY",1);
 	define("FTYPE_SEARCH",2);
 	define("FTYPE_RATING",3);
+	define("FTYPE_FILTER_SEARCH",4);
 
 // formide alamtyybid
 	define("FSUBTYPE_JOIN",1);
