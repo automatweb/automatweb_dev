@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.110 2004/12/27 12:40:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.111 2005/01/18 10:50:12 kristo Exp $
 
 /*
 
@@ -1229,6 +1229,7 @@ class site_show extends class_base
 			$sel_lang = $langs->fetch(aw_global_get("lang_id"));
 			$this->vars(array(
 				"sel_charset" => $sel_lang["charset"],
+				"charset" => $sel_lang["charset"],
 				"se_lang_id" => $lang_id,
 				"lang_code" => $sel_lang["acceptlang"]
 			));
@@ -1300,6 +1301,7 @@ class site_show extends class_base
 			"SEL_LANG_BEGIN" => "",
 			"LANG_BEGIN" => "",
 			"sel_charset" => $sel_lang["charset"],
+			"charset" => $sel_lang["charset"],
 			"se_lang_id" => $lang_id,
 			"lang_code" => $sel_lang["acceptlang"]
 		));
