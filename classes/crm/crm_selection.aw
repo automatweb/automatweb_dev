@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.11 2004/02/17 13:53:35 duke Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -392,7 +393,7 @@ class crm_selection extends class_base
 	{
 		// see on siis mingi sitt, mis teeb kas uue selektsiooni või liigutab asju 
 		// ühest kohast teise .. geezas christ.
-		$uri = $args['return_url'];
+		//$uri = $args['return_url'];
 		if ($args['add_to_selection'])
 		{
 			if (is_array($args['sel']))
@@ -402,8 +403,9 @@ class crm_selection extends class_base
 
 		};
 
-		header('Location: '.$uri);
+		/*header('Location: '.$uri);
 		die;
+		*/
 
 	}
 
