@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.28 2002/09/03 06:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.29 2002/10/23 09:30:06 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -490,7 +490,8 @@ class gallery extends aw_template
 				{
 					$cell = $this->arr[$page-1]["content"][$row][$col];
 					$xsize = $cell["xsize"] ? $cell["xsize"] : 500;
-					$ysize = $cell["ysize"] ? $cell["ysize"] + 50: 400;
+					$add = $cell["caption"] != "" ? 50 : 0;
+					$ysize = $cell["ysize"] ? $cell["ysize"] + $add: 400;
 					if ($cell["link"] != "")
 					{
 						$url = $cell["link"];
