@@ -21,8 +21,9 @@
 			<function name="submit"/>
 		</action>
 
-		
-		
+		<action name="getcookie" public="1">
+			<function name="getcookie"/>
+		</action>
 	</class>
 </orb>
 		
