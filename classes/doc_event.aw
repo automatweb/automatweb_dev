@@ -10,8 +10,21 @@ class doc_event extends core
 	function _get_event_folders($args = array())
 	{
 		$calendars = array($args["folder"]);
+		$this->save_handle();
+		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$args[id]' AND reltype = " . RELTYPE_EVENT_SOURCE;
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$mx = aw_unserialize($row["metadata"]);
+			if (!empty($mx["event_folder"]))
+			{
+				$calendars[] = $mx["event_folder"];
+			};
+		};
+
 		$calstring = join(",",$calendars);
 		return $calstring;
+	
 	}
 
 	////
