@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.44 2004/07/01 18:22:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.45 2004/08/19 11:33:03 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -42,7 +42,7 @@
 	@default table=objects
 	@default field=meta
 
-	@property no_title type=checkbox ch_value=1 value=1 group=show method=serialize
+	@property no_title type=checkbox ch_value=1  group=show method=serialize
 	@caption Ilma pealkirjata
 
 	@property groups type=select multiple=1 size=15 group=show method=serialize
@@ -51,7 +51,7 @@
 	@property use_fld_tpl type=checkbox ch_value=1 group=show method=serialize
 	@caption Kasuta dokumendi asukoha templatet
 	
-	@property all_menus type=checkbox ch_value=1 value=1 group=menus method=serialize
+	@property all_menus type=checkbox ch_value=1 group=menus method=serialize
 	@caption Näita igal pool
 
 	@property section type=table group=menus method=serialize store=no
@@ -722,6 +722,10 @@ class promo extends class_base
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)
 			{
+				if ($_GET["PROMO_DBG"] == 1)
+				{
+					echo "showing promo ".$o->name()." (".$o->id().") <br>";
+				}
 				// visible. so show it
 				// get list of documents in this promo box
 				$pr_c = "";
