@@ -1,6 +1,6 @@
 CVS Usage
 
-CVS is the version control software that we use. It records a history of all the changes made and enbales several developers to work on the code at the same time. 
+CVS is the version control software that we use. It records a history of all the changes made and allows several developers to work on the code at the same time. 
 
 <b>Why do we use CVS?</b>
 
@@ -88,6 +88,12 @@ After you enter the message and exit the editor, the actual commit takes place.
 Note: it seems that by default "joe" is used as an editor, if you want to use a sane editor , then do "export EDITOR=vim" (you can use any editor available in the system) before commiting. It's best to put this command in your "~/.bashrc", then it will be executed each time you login and you don't have to do it yourself each time.
 
 Now, you can start making more changes to the code. 
+
+Backing out a change:
+
+cvs update -jX.Y -jM.N somefile.aw
+
+where X.Y is the current version and M.N is the version you want to revert to.
 
 More information about using CVS can be found in the official documentation: http://www.cvshome.org/docs/manual/cvs-1.11.10/cvs.html
 
