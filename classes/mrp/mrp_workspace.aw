@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.6 2005/01/13 19:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.7 2005/01/14 07:44:53 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -219,7 +219,7 @@ class mrp_workspace extends class_base
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-					"mrp_workspace" => $this_object->id (),
+					"workspace" => $this_object->id (),
 				), "mrp_schedule");
 				$plan_href = html::href(array(
 					"caption" => "[Planeeri]",
@@ -389,9 +389,9 @@ class mrp_workspace extends class_base
 		$toolbar =& $arr["prop"]["toolbar"];
 		$this_object =& $arr["obj_inst"];
 
-		if (is_oid ($arr["request"]["mrp_resource_tree_active_item"]))
+		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
 		{
-			$parent = obj ($arr["request"]["mrp_resource_tree_active_item"]);
+			$parent = obj ($arr["request"]["mrp_tree_active_item"]);
 
 			if ($parent->class_id () != CL_MENU)
 			{
