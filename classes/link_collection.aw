@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.2 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.3 2001/11/29 21:58:58 duke Exp $
 // link_collection.aw - Lingikogude haldus
 global $orb_defs;
 lc_load("linkcollection");
@@ -67,7 +67,7 @@ class link_collection extends aw_template {
 		$this->add_alias($parent,$id);
 
 		// salvestan lingikogu aliase
-		return $this->mk_orb("change",array("id" => $parent,"parent" => $par_obj["parent"]),"document");
+		return $this->mk_orb("list_aliases",array("id" => $parent),"aliasmgr");
 	}
 
 
