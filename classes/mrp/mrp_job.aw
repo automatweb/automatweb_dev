@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.3 2005/01/14 10:34:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.4 2005/01/25 12:30:31 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -35,7 +35,7 @@
 	@property starttime type=datetime_select
 	@caption Plaanitud töösseminekuaeg
 
-	@property state type=radio
+	@property state type=text
 	@caption Staatus
 
 
@@ -93,9 +93,8 @@ CREATE TABLE `mrp_job` (
 */
 
 ### resource types
-define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_MACHINE", 1);
 define ("MRP_RESOURCE_OUTSOURCE", 2);
-define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -105,6 +104,7 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -167,8 +167,9 @@ class mrp_job extends class_base
 		switch($prop["name"])
 		{
 			case "length":
-			case "buffer":
-				$prop["value"] = $prop["value"] * 3600;
+			case "pre_buffer":
+			case "post_buffer":
+				$prop["value"] = round ($prop["value"] * 3600);
 				break;
 
 		}

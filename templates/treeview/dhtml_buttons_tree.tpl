@@ -11,6 +11,8 @@ function add_node (nodeID)
 {
 	TreeInput = document.getElementById("treeinput" + "{VAR:checkbox_data_var}");
 	AddedNodes = TreeInput.value;
+	// ButtonImg = document.getElementById("nodeimg" + nodeID);
+	// ButtonImg.src = "{VAR:baseurl}/automatweb/images/node_add_button_click.gif";
 
 	if (AddedNodes)
 	{
@@ -24,6 +26,12 @@ function add_node (nodeID)
 	AddedNodes.push (nodeID);
 	AddedNodes = AddedNodes.join ("{VAR:separator}");
 	TreeInput.value = AddedNodes;
+	AddedResourcesDisplay = document.getElementById("AddedResourcesDisplay{VAR:tree_id}");
+	ResourceTag = document.getElementById("ResourceName" + nodeID);
+	Resource = ResourceTag.innerHTML;
+	AddedResources = AddedResourcesDisplay.innerHTML;
+	AddedResources = AddedResources + "<br>" + Resource;
+	AddedResourcesDisplay.innerHTML = AddedResources;
 }
 
 function toggle_children(objref,menu_level) {
@@ -207,9 +215,12 @@ open_nodes = new Array({VAR:open_nodes});
 <div class="nodetext"><span class="iconcontainer"><img src="{VAR:iconurl}" border="0" style="vertical-align:middle; margin-left: 16px;"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}">{VAR:name}</a></div>
 <!-- END SUB: SINGLE_NODE -->
 <!-- SUB: SINGLE_NODE_BUTTON -->
-<div class="nodetext"><span class="iconcontainer"><img src="{VAR:baseurl}/automatweb/images/node_add_button.gif" border="0" style="vertical-align:middle; margin-left: 16px;" onclick="add_node({VAR:id})" id="nodeimg{VAR:id}"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}" onclick="add_node({VAR:id})">{VAR:name}</a></div>
+<div class="nodetext"><span class="iconcontainer"><img src="{VAR:baseurl}/automatweb/images/node_add_button.gif" border="0" style="vertical-align:middle; margin-left: 16px; cursor: pointer;" onclick="add_node({VAR:id})" id="nodeimg{VAR:id}" alt="Lisa ressursile töö"></span>&nbsp;<span style="cursor: pointer;" onclick="add_node({VAR:id})" id="ResourceName{VAR:id}">{VAR:name}</span></div>
 <!-- END SUB: SINGLE_NODE_BUTTON -->
 <!-- END SUB: SUB_NODES -->
 </div></div>
 <!-- END SUB: TREE_NODE -->
 <input type="hidden" name="{VAR:checkbox_data_var}" value="" id="treeinput{VAR:checkbox_data_var}">
+<div id="AddedResourcesDisplay{VAR:tree_id}" class="nodetext">
+<br>
+</div>

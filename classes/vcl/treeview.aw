@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.38 2005/01/16 12:26:25 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.39 2005/01/25 12:30:34 voldemar Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1158,9 +1158,9 @@ class treeview extends class_base
 				$oname = "<b>".$oname."</b>";
 			}
 
-			if ( ($this->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id(), $arr["checkbox_class_filter"]) )
+			if ( ($tv->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id (), $arr["checkbox_class_filter"]) )
 			{
-				if (is_array ($this->checked_nodes) and in_array ($o->id(), $this->checked_nodes))
+				if (is_array ($this->checked_nodes) and in_array ($o->id (), $this->checked_nodes))
 				{
 					$checkbox_status = 1;
 				}
@@ -1169,7 +1169,7 @@ class treeview extends class_base
 					$checkbox_status = 0;
 				}
 			}
-			elseif ( ($this->tree_type == TREE_DHTML_WITH_BUTTONS) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id(), $arr["checkbox_class_filter"]) )
+			elseif ( ($tv->tree_type == TREE_DHTML_WITH_BUTTONS) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id (), $arr["checkbox_class_filter"]) )
 			{
 				$checkbox_status = "button";
 			}

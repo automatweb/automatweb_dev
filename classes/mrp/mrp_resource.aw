@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.5 2005/01/14 10:34:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.6 2005/01/25 12:30:28 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -18,8 +18,8 @@
 	@property category type=text editonly=1
 	@caption Kategooria
 
-	// @property type type=select
-	// @caption Tüüp
+	@property type type=select
+	@caption Tüüp
 
 
 @default group=grp_resource_schedule
@@ -42,8 +42,8 @@
 	@property default_post_buffer type=textbox
 	@caption Vaikimisi järelpuhveraeg (h)
 
-	@property global_buffer type=textbox
-	@caption "Päevapuhver" (h)
+	@property global_buffer type=textbox default=4
+	@caption Päeva üldpuhver (h)
 
 
 @default group=grp_resource_unavailable
@@ -75,9 +75,8 @@
 */
 
 ### resource types
-define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_MACHINE", 1);
 define ("MRP_RESOURCE_OUTSOURCE", 2);
-// define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -87,6 +86,7 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -107,6 +107,60 @@ class mrp_resource extends class_base
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
 
+//
+				foreach ($this_object->connections_from(array("type" => RELTYPE_RECUR)) as $connection)
+				{
+					if ($connection and !$this->kd)
+					{
+						$e = $connection->to ();
+						arr ($e->properties ());
+						$this->kd = true;
+						break;
+					}
+				}
+
+//recur props:
+// Array
+// (
+    // [name] => t88aeg
+    // [comment] =>
+    // [status] => 1
+    // [time] => 18 //starttime
+    // [length] => 15
+    // [recur_type] => 1- p2ev|2 -ndl|4 - aasta 3-kuu
+    // [interval_daily] => 1  iga x p2eva j2rel
+    // [interval_weekly] =>  ...
+    // [interval_monthly] =>
+    // [interval_yearly] =>
+    // [weekdays] =>
+
+// kui recur type on ndl siis valitud p2evad:
+// [weekdays] => Array
+        // (
+            // [2] => 2 - teisip2ev
+            // [3] => 3 - ...
+            // [4] => 4
+            // [5] => 5
+        // )
+
+    // [month_days] =>
+    // [month_rel_weekdays] =>
+    // [month_weekdays] =>
+    // [start] => 1106344800 //algus
+    // [end] => 1230674400 //l6pp
+    // [brother_of] => 139457
+    // [parent] => 139151
+    // [class_id] => 286
+    // [lang_id] => 1
+    // [period] => 0
+    // [created] => 1106421605
+    // [modified] => 1106421791
+    // [periodic] => 0
+// )
+
+
+//
+
 		if ($arr["new"])
 		{
 			$this->mrp_workspace = $arr["request"]["mrp_workspace"];
@@ -121,6 +175,7 @@ class mrp_resource extends class_base
 					if ($connection)
 					{
 						$workspace = $connection->to();
+						break;
 					}
 				}
 
@@ -149,8 +204,20 @@ class mrp_resource extends class_base
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
+			case "type":
+				$prop["options"] = array (
+					MRP_RESOURCE_MACHINE => "Masin",
+					MRP_RESOURCE_OUTSOURCE => "Allhange",
+				);
+				break;
+
 			case "job_list":
 				$this->create_job_list_table ($arr);
+				break;
+
+			case "default_pre_buffer":
+			case "default_post_buffer":
+				$prop["value"] = $prop["value"] / 3600;
 				break;
 		}
 
@@ -171,7 +238,10 @@ class mrp_resource extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "default_pre_buffer":
+			case "default_post_buffer":
+				$prop["value"] = round ($prop["value"] * 3600);
+				break;
 		}
 		return $retval;
 	}
@@ -310,13 +380,13 @@ class mrp_resource extends class_base
 		return $ret;
 	}
 
-	function get_unavailable_times ($resource)
+	function get_unavailable_times ($resource, $workspace_id)
 	{
 		$ret = array ();
 
 		if ($resource->prop ("unavailable_weekends"))
 		{
-			$this->_get_weekends ($ret);
+			$this->_get_weekends ($ret, $workspace_id);
 		}
 
 		$this->_get_dates ($ret, $resource->prop ("unavailable_dates"));
@@ -330,22 +400,10 @@ class mrp_resource extends class_base
 		return $ret;
 	}
 
-	function _get_weekends(&$ret)
+	function _get_weekends(&$ret, $workspace_id)
 	{
 		### get workspace object "owning" current object
-		foreach ($this_object->connections_from(array("type" => RELTYPE_MRP_OWNER)) as $connection)
-		{
-			if ($connection)
-			{
-				$workspace = $connection->to();
-
-				if (!is_object ($workspace))
-				{
-					exit ("suur jama");//!!! mis siin teh.?
-				}
-			}
-		}
-
+		$workspace = obj ($workspace_id);
 		$weeks = ceil ($workspace->prop ("parameter_schedule_length") * 52);
 		$wd = date("w");
 		$sat = mktime(0,0,0, date("m"), date("d") + (($wd == 0) ? -1 : 6 - $wd), date("Y"));

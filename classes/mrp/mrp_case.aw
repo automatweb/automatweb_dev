@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.4 2005/01/14 10:34:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.5 2005/01/25 12:30:28 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 @groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
-@groupinfo grp_case_comments caption="Juhtumi kommentaarid"
+@groupinfo grp_case_comments caption="Kommentaarid"
 
 
 @default group=general
@@ -31,34 +31,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property customer_priority type=textbox
-	@caption Kliendi prioriteet
+	@property sales_priority type=select
+	@caption Prioriteedihinnang müügimehelt
 
 	@property state type=text
 	@caption Staatus
 
-	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER table=mrp_case
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER
 	@caption Klient
 
-	@property extern_id type=hidden 
+	@property extern_id type=hidden
 
 @default table=objects
 @default field=meta
 @default method=serialize
-	// @property number_of_jobs type=textbox store=no newonly=1 size=3
-	// @caption Tööde arv
-
 	@property planned_date type=text store=no editonly=1
 	@caption Planeeritud valmimisaeg
 
-	@property available_resources type=hidden no_caption=1
 
 @default group=grp_case_data
-
-	@property format type=textbox 
+	@property format type=textbox
 	@caption Formaat
 
-	@property sisu_lk_arv type=textbox 
+	@property sisu_lk_arv type=textbox
 	@caption Sisu lk arv
 
 	@property kaane_lk_arv type=textbox
@@ -199,6 +194,8 @@ CREATE TABLE `mrp_case` (
   `customer_priority` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
   `state` tinyint(2) unsigned default '1',
+  `extern_id` int(11) unsigned default NULL,
+  `customer` int(11) unsigned default NULL,
 
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
@@ -207,9 +204,8 @@ CREATE TABLE `mrp_case` (
 */
 
 ### resource types
-define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_MACHINE", 1);
 define ("MRP_RESOURCE_OUTSOURCE", 2);
-define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -219,6 +215,7 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -362,14 +359,11 @@ class mrp_case extends class_base
 		if (is_string ($arr["request"]["mrp_resourcetree_data"]))
 		{
 			### create new jobs based on resources chosen from tree
-			$used_resources = explode (",", $this_object->prop ("available_resources"));
-			$selected_resources = explode (",", $arr["request"]["mrp_resourcetree_data"]);
+			$added_resources = explode (",", $arr["request"]["mrp_resourcetree_data"]);
 
-			if ($used_resources != $selected_resources)
+			foreach ($added_resources as $resource_id)
 			{
-				$new_resources = array_diff ($selected_resources,$used_resources);
-
-				foreach ($new_resources as $resource_id)
+				if (is_oid ($resource_id))
 				{
 					$arr["mrp_new_job_resource"] = $resource_id;
 					$this->add_job ($arr);
@@ -377,10 +371,6 @@ class mrp_case extends class_base
 			}
 
 			$this->correct_job_order ($arr);
-
-			### make changes to used resources
-			$this_object->set_prop ("available_resources", $arr["request"]["mrp_resourcetree_data"]);
-			$this_object->save ();
 		}
 	}
 
@@ -468,23 +458,22 @@ class mrp_case extends class_base
 		return $chart->draw_chart ();
 	}
 
-	function create_resource_tree ($arr = array())
+	function create_resource_tree ($arr = array ())
 	{
 		$this_object =& $arr["obj_inst"];
 		$workspace =& $this->get_current_workspace ($arr);
 		$resources_folder = $workspace->prop ("resources_folder");
-		$resource_tree = new object_tree(array(
+		$resource_tree = new object_tree (array (
 			"parent" => $resources_folder,
-			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+			// "sort_by" => "objects.jrk",
 		));
-		$checked_nodes = explode (",", $this_object->prop ("available_resources"));
 
-		classload("vcl/treeview");
-		$tree = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML_WITH_CHECKBOXES,
+		classload ("vcl/treeview");
+		$tree = treeview::tree_from_objects (array (
+			"tree_opts" => array (
+				"type" => TREE_DHTML_WITH_BUTTONS,
 				"tree_id" => "resourcetree",
-				"checked_nodes" => $checked_nodes,
 				"persist_state" => true,
 				"checkbox_data_var" => "mrp_resourcetree_data",
 			),
@@ -494,19 +483,18 @@ class mrp_case extends class_base
 			"checkbox_class_filter" => array (CL_MRP_RESOURCE),
 		));
 
-		// $tree->set_selected_item($arr["request"]["meta"]);
-		$arr["prop"]["value"] = $tree->finalize_tree();
+		$arr["prop"]["value"] = $tree->finalize_tree ();
 	}
 
-	function create_workflow_toolbar ($arr = array())
+	function create_workflow_toolbar ($arr = array ())
 	{
 		$toolbar =& $arr["prop"]["toolbar"];
-		$toolbar->add_button(array(
-			"name" => "add",
-			"img" => "new.gif",
-			"tooltip" => "Lisa uus töö",
-			"action" => "add_job",
-		));
+		// $toolbar->add_button(array(
+			// "name" => "add",
+			// "img" => "new.gif",
+			// "tooltip" => "Lisa uus töö",
+			// "action" => "add_job",
+		// ));
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -584,19 +572,6 @@ class mrp_case extends class_base
 		$table->set_default_sortby ("exec_order");
 		$table->set_default_sorder ("asc");
 
-		### get available resources for html select
-		$available_resources = explode (",", $this_object->prop ("available_resources"));
-		$select_resource_options = array ("0" => "");
-
-		foreach ($available_resources as $resource_id)
-		{
-			if (is_oid ($resource_id))
-			{
-				$resource = obj ($resource_id);
-				$select_resource_options[$resource->id ()] = $resource->name ();
-			}
-		}
-
 		### define data for each connected job
 		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
 
@@ -604,11 +579,12 @@ class mrp_case extends class_base
 		{
 			$job = $connection->to ();
 			$job_id = $job->id ();
-			$selected_resource = NULL;
+			$resource_id = $job->prop ("resource");
+			$resource = obj ($resource_id);
 			$status = $job->prop ("job_status");
 			$disabled = false;
-			$etag = '</span>';
 			$stag = '<span>';
+			$etag = '</span>';
 
 			switch ($status)
 			{
@@ -640,16 +616,6 @@ class mrp_case extends class_base
 					break;
 			}
 
-			### find currently used/connected resource
-			$job_connections = $job->connections_from(array ("type" => RELTYPE_MRP_RESOURCE, "class_id" => CL_MRP_RESOURCE));
-
-			foreach ($job_connections as $job_connection)
-			{
-				$resource = $job_connection->to ();
-				$selected_resource = $resource->id ();
-				break;
-			}
-
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites = $job->prop ("prerequisites");
 			$prerequisites = explode (",", $prerequisites);
@@ -662,27 +628,14 @@ class mrp_case extends class_base
 					$prerequisite_job = obj ($oid);
 					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
 				}
-				else
-				{
-					///!!!mingi veateade teha? mida siin edasi teha?
-				}
 			}
 
 			$prerequisites = implode (",", $prerequisites_translated);
 
-
-			###
-			$options = $select_resource_options;
-
-			if ($selected_resource)
-			{
-				if (count ($select_resource_options) < 2)
-				{
-					$options = array ($selected_resource => $resource->name ());
-				}
-
-				unset ($options["0"]);
-			}
+			### get & process field values
+			$resource_name = $resource->name () ? $resource->name () : "-";
+			$starttime = $job->prop ("starttime");
+			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
 
 			$change_url = $this->mk_my_orb("change", array(
 				"id" => $job_id,
@@ -702,13 +655,7 @@ class mrp_case extends class_base
 					"disabled" => $disabled,
 					)
 				),
-				"resource" => html::select(array(
-					"name" => "mrp_workflow_job-" . $job_id . "-resource",
-					"options" => $options,
-					"value" => $selected_resource,
-					"disabled" => $disabled,
-					)
-				),
+				"resource" => $resource_name,
 				"length" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "3",
@@ -738,7 +685,7 @@ class mrp_case extends class_base
 					)
 				),
 				"exec_order" => $job->prop ("exec_order"),
-				"starttime" => date (MRP_DATE_FORMAT, $job->prop ("starttime")),
+				"starttime" => $planned_start,
 				"status" => $status,
 				"job_id" => $job_id,
 			));
@@ -1096,6 +1043,12 @@ class mrp_case extends class_base
 				if ($this->can("delete", $o->id()))
 				{
 					$class = $o->class_id ();
+
+					if ($class = CL_MRP_JOB)
+					{
+						$o->set_prop ("state", MRP_STATUS_DELETED);
+					}
+
 					$o->delete ();
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.9 2005/01/14 10:34:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.10 2005/01/25 12:30:31 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -9,7 +9,7 @@
 @groupinfo grp_projects caption="Projektid" submit=no
 @groupinfo grp_resources caption="Ressursid" submit=no
 @groupinfo grp_schedule caption="Kalender" submit=no
-@groupinfo grp_users caption="Kasutajad" 
+@groupinfo grp_users caption="Kasutajad"
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
 
@@ -115,7 +115,7 @@
 	@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
 
 	@property parameter_timescale type=textarea
-	@caption Otsingutabeli ajaskaala definitsioon (jaotuste lõpud, komaga eraldatud)
+	@caption Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
@@ -140,9 +140,8 @@
 */
 
 ### resource types
-define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_MACHINE", 1);
 define ("MRP_RESOURCE_OUTSOURCE", 2);
-define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -152,6 +151,7 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -307,6 +307,7 @@ class mrp_workspace extends class_base
 		$resource_tree = new object_tree(array(
 			"parent" => $resources_folder,
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
 		));
 
 		classload("vcl/treeview");
@@ -794,6 +795,7 @@ class mrp_workspace extends class_base
 		$range_start = ($columns == 7) ? $this->get_week_start ($range_start) : $range_start;
 		$range_end = (int) ($range_start + $columns * 86400);
 		$hilighted_project = (int) ($arr["request"]["mrp_hilight"] ? $arr["request"]["mrp_hilight"] : false);
+		$hilighted_jobs = array ();
 
 		### add row dfn-s, resource names
 		$resource_tree = new object_tree(array(
@@ -835,7 +837,7 @@ class mrp_workspace extends class_base
 
 		for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
 		{
-			$length = $job->prop ("length") + $job->prop ("buffer");
+			$length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
 			$resource_id = $job->prop ("resource");
 			$project_id = $job->prop ("project");
 			$start = $job->prop ("starttime");
@@ -957,22 +959,15 @@ class mrp_workspace extends class_base
 
 					foreach ($connections as $connection)
 					{
-						$o1 = $connection->to ();
-						$o1_connections = $o1->connections_from ();
-
-						foreach ($o1_connections as $o1_connection)
-						{
-							$o2 = $o1_connection->to ();
-							$o2->delete ();
-						}
-
-						$o1->delete ();
+						$job = $connection->to ();
+						$job->set_prop ("state", MRP_STATUS_DELETED);
+						$job->delete ();
 					}
 				}
 
-				if ($this->can("delete", $o->id()))
+				if ($this->can ("delete", $o->id()))
 				{
-					$o->delete();
+					$o->delete ();
 				}
 			}
 		}
@@ -1228,7 +1223,7 @@ class mrp_workspace extends class_base
 		}
 	}
 
-	/** 
+	/**
 
 		@attrib name=submit_user_mgr_save
 
@@ -1320,7 +1315,7 @@ class mrp_workspace extends class_base
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
-		
+
 		$t->add_menu_button(array(
 			"name" => "add_menu",
 			"tooltip" => t("Uus"),
@@ -1335,7 +1330,7 @@ class mrp_workspace extends class_base
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			)),
 		));
-		
+
 		if (false && is_oid($arr["request"]["cat"]))
 		{
 			$t->add_menu_item(array(
@@ -1348,7 +1343,7 @@ class mrp_workspace extends class_base
 				))
 			));
 		}
-		
+
 
 		/*$t->add_button(array(
 			"name" => "delete",
@@ -1368,11 +1363,11 @@ class mrp_workspace extends class_base
 
 		$t =& $arr["prop"]["vcl_inst"];
 		classload("icons");
-		
+
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$nm = $c->prop("to.name");
-		
+
 			$t->add_item(0, array(
 				"id" => $c->prop("to"),
 				"name" => ($_GET["cat"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
@@ -1532,7 +1527,7 @@ class mrp_workspace extends class_base
 		if (is_oid($arr["request"]["cust"]))
 		{
 			$this->_init_cust_list_proj_t($t);
-			
+
 			$cust = obj($arr["request"]["cust"]);
 			$ol = new object_list(array(
 				"class_id" => CL_MRP_CASE,
@@ -1557,7 +1552,7 @@ class mrp_workspace extends class_base
 
 	/** imports given project from prisma db
 
-		@attrib name=import_project 
+		@attrib name=import_project
 
 		@param id required type=int
 
