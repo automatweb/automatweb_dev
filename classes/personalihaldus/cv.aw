@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/cv.aw,v 1.2 2004/03/17 22:20:17 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/cv.aw,v 1.3 2004/03/18 14:40:20 duke Exp $
 // cv.aw - CV 
 /*
 @classinfo syslog_type=ST_CV relationmgr=yes
@@ -450,7 +450,7 @@ class cv extends class_base
 			$valdkond->delete();	
 		}
 	
-		foreach ($arr["form_data"]["valdkond"] as $valdkond)
+		foreach ($arr["request"]["valdkond"] as $valdkond)
 		{
 			if($valdkond)
 			{
