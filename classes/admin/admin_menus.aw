@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.51 2004/02/12 11:48:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.52 2004/02/13 11:38:04 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -278,7 +278,7 @@ class admin_menus extends aw_template
 			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
 			$this->vars(array(
 				"link" => $ourl,
-				"text" => "Open"
+				"text" => "Ava"
 			));
 			$retval = $this->parse("MENU_ITEM");
 		}
@@ -289,7 +289,7 @@ class admin_menus extends aw_template
 
 			$this->vars(array(
 				"link" => $churl,
-				"text" => "Change"
+				"text" => "Muuda"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 
@@ -297,7 +297,7 @@ class admin_menus extends aw_template
 
 			$this->vars(array(
 				"link" => $cuturl,
-				"text" => "Cut"
+				"text" => "L&otilde;ika"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -306,7 +306,7 @@ class admin_menus extends aw_template
 
 		$this->vars(array(
 			"link" => $copyurl,
-			"text" => "Copy"
+			"text" => "Kopeeri"
 		));
 		$retval .= $this->parse("MENU_ITEM");
 
@@ -318,7 +318,7 @@ class admin_menus extends aw_template
 
 			$this->vars(array(
 				"link" => $delurl,
-				"text" => "Delete"
+				"text" => "Kustuta"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -328,7 +328,7 @@ class admin_menus extends aw_template
 			$delurl = "javascript:go_acl(".$id.")";
 			$this->vars(array(
 				"link" => $delurl,
-				"text" => "ACL"
+				"text" => "&Otilde;igused"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -1366,7 +1366,7 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "cut",
-			"tooltip" => "Cut",
+			"tooltip" => "L&otilde;ika",
 			"url" => "javascript:submit('cut')",
 			"imgover" => "cut_over.gif",
 			"img" => "cut.gif",
@@ -1374,7 +1374,7 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "copy",
-			"tooltip" => "Copy",
+			"tooltip" => "Kopeeri",
 			"url" => "javascript:submit('copy')",
 			"imgover" => "copy_over.gif",
 			"img" => "copy.gif",
@@ -1384,7 +1384,7 @@ class admin_menus extends aw_template
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
-				"tooltip" => "Paste",
+				"tooltip" => "Kleebi",
 				"url" => "javascript:submit('paste')",
 				"imgover" => "paste_over.gif",
 				"img" => "paste.gif",
@@ -1393,7 +1393,7 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Delete",
+			"tooltip" => "Kustuta",
 			"url" => "javascript:if(confirm('Are you sure you want to delete this?')){submit('delete')};",
 			"imgover" => "delete_over.gif",
 			"img" => "delete.gif",
@@ -1401,7 +1401,7 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "edit",
-			"tooltip" => "Edit",
+			"tooltip" => "Muuda",
 			"url" => "javascript:change()",
 			"imgover" => "edit_over.gif",
 			"img" => "edit.gif",
@@ -1411,7 +1411,7 @@ class admin_menus extends aw_template
 	
 		$toolbar->add_button(array(
 			"name" => "refresh",
-			"tooltip" => "Refresh",
+			"tooltip" => "Uuenda",
 			"url" => "javascript:window.location.reload()",
 			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
@@ -1419,7 +1419,7 @@ class admin_menus extends aw_template
 	
 		$toolbar->add_button(array(
 			"name" => "import",
-			"tooltip" => "Import",
+			"tooltip" => "Impordi",
 			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
 			"imgover" => "import_over.gif",
 			"img" => "import.gif",
