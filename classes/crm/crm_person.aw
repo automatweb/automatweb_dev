@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.47 2004/07/09 10:23:27 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.48 2004/07/09 12:45:33 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -261,11 +261,6 @@ class crm_person extends class_base
 					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
 				}
 			break;
-			case 'rank':
-			{
-				break;	
-			}
-		
 		};
 		return $retval;
 	}
@@ -282,7 +277,7 @@ class crm_person extends class_base
 				//let's list the professions the organization/unit is associated with
 				//if the person is associated with a section then show the professions
 				//from the section and if not then show all the professions in the system
-				$conns = $arr['obj_inst']->connections_to(array(
+				$conns = $arr['obj_inst']->connections_from(array(
 					'type'=> RELTYPE_SECTION
 				));
 
@@ -291,7 +286,7 @@ class crm_person extends class_base
 					foreach($conns as $conn)
 					{
 						//organization || section
-						$tmp_obj = new object($conn->prop('from'));
+						$tmp_obj = new object($conn->prop('to'));
 						//connections from organization||section->profession
 						$conns2 = $tmp_obj->connections_from(array(
 									'type'=>'RELTYPE_PROFESSIONS'
