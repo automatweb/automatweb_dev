@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.39 2005/01/10 12:53:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.40 2005/01/19 21:27:52 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -541,7 +541,7 @@ class releditor extends core
 							"tmp_name" => $tmpname,
 							"type" => $filetype,
 							"name" => $filename,
-							"contents" => base64_encode($contents),
+							"contents" => $contents,
 						);
 						$el_count++;
 					};
