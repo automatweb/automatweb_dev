@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.15 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.16 2001/09/22 12:02:18 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
-$orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
-														"submit"				=> array("function"	=> "submit","params"	=> array("parent")),
-														"submit_change"	=> array("function"	=> "submit_change","params"	=> array("id","parent","idx")),
-														"change"				=> array("function"	=> "change","params"	=> array("id")),
+$orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent"), "opt" =>array("docid")),
+														"submit"				=> array("function"	=> "submit","params"	=> array("parent"), "opt" =>array("docid")),
+														"submit_change"	=> array("function"	=> "submit_change","params"	=> array("id","parent","idx"), "opt" =>array("docid")),
+														"change"				=> array("function"	=> "change","params"	=> array("id"), "opt" =>array("docid")),
 														"delete"				=> array("function"	=> "delete","params"	=> array("id"), "opt" =>array("parent","docid"))
 														);
 lc_load("document");
@@ -72,24 +72,32 @@ class images extends aw_template
 		classload("objects");
 		$ob = new objects;
 		$this->di->vars(array(
-			"reforb" => $this->mk_reforb("submit", array())
-			"menus" => $this->picker($parent, $ob->get_list())
+			"reforb" => $this->mk_reforb("submit", array("docid" => $arr["docid"])),
+			"menus" => $this->picker($arr["parent"], $ob->get_list())
 		));
 		return $this->di->parse();
 	}
 
 	function submit($arr)
 	{	
-		global $pilt, $pilt_type,$comment;
+		global $pilt, $pilt_type,$comment,$pilt_name;
 		$ar = $this->di->_upload(array(
 			"filename" => $pilt, 
 			"file_type" => $pilt_type, 
+			"name" => $pilt_name,
 			"oid" => $arr["parent"], 
 			"descript" => $comment,
 			"link" => $arr["link"], 
 			"newwindow" => $arr["newwindow"]
 		));
-		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
+		if ($arr["docid"])
+		{
+			return $this->mk_my_orb("change", array("id" => $arr["docid"]),"document");
+		}
+		else
+		{
+			return $this->mk_my_orb("change", array("id" => $ar["id"]));
+		}
 	}
 
 	function change($arr)
@@ -97,22 +105,42 @@ class images extends aw_template
 		extract($arr);
 		$this->di->read_template("nedit.tpl");
 		$pic = $this->di->get_img_by_id($id);
+		$this->di->mk_path($pic["parent"], "Muuda pilti");
+		classload("objects");
+		$ob = new objects;
 		$this->di->vars(array(
 			"comment" => $pic["comment"],
 			"link" => $pic["link"],
 			"url"	=> $pic["url"],
 			"newwindow"	=> checked($pic["newwindow"]),
-			"reforb" => $this->mk_reforb("submit_change", array("id" => $pic["id"], "parent" => $pic["parent"],"idx" => $pic["idx"]))
+			"menus" => $this->picker($pic["parent"], $ob->get_list()),
+			"reforb" => $this->mk_reforb("submit_change", array("id" => $pic["id"], "idx" => $pic["idx"],"docid" => $arr["docid"]))
 		));
 		return $this->di->parse();
 	}
 
 	function submit_change($arr)
 	{
-		global $pilt, $pilt_type,$comment;
-		$ar = $this->di->_replace(array("filename" => $pilt, "file_type" => $pilt_type, "oid" => $arr["parent"], "comment" => $comment,"poid" => $arr["id"],"idx" => $arr["idx"],"link" => $arr["link"], "newwindow" => $arr["newwindow"]));
-	
-		return $this->mk_my_orb("change", array("id" => $arr["parent"]),"document");
+		global $pilt, $pilt_type,$comment,$pilt_name;
+		$ar = $this->di->_replace(array(
+			"filename" => $pilt, 
+			"file_type" => $pilt_type, 
+			"name" => $pilt_name,
+			"oid" => $arr["parent"], 
+			"comment" => $comment,
+			"poid" => $arr["id"],
+			"idx" => $arr["idx"],
+			"link" => $arr["link"], 
+			"newwindow" => $arr["newwindow"]
+		));
+		if ($arr["docid"])
+		{
+			return $this->mk_my_orb("change", array("id" => $arr["docid"]),"document");
+		}
+		else
+		{
+			return $this->mk_my_orb("change", array("id" => $ar["id"]));
+		}
 	}
 
 	function delete($arr)
