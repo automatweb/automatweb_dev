@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.101 2004/01/14 15:39:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.102 2004/01/23 10:40:06 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2674,7 +2674,7 @@ class users extends users_user
 
 	/** login
 		
-		@attrib name=login params=name default="0" nologin="1"
+		@attrib name=login params=name default="0" nologin="1" is_public="1" caption="Logi sisse"
 		
 		@param uid required
 		@param password required
@@ -2697,7 +2697,7 @@ class users extends users_user
 
 	/** logout
 		
-		@attrib name=logout params=name default="0" nologin="1"
+		@attrib name=logout params=name default="0" nologin="1" is_public="1" caption="Logi v&amp;auml;lja"
 		
 		@returns
 		
@@ -2709,6 +2709,101 @@ class users extends users_user
 	function orb_logout($arr = array())
 	{
 		return parent::orb_logout($arr);
+	}
+
+	/** event list
+		@attrib name=events nologin="1"
+
+		@param user required
+		@param password required
+		@param limit optional
+
+	**/
+	function events($arr)
+	{
+		// first, check that user
+
+		$user = $arr["user"];
+		$pass = $arr["password"];
+		$this->quote($user);
+		$this->quote($pass);
+
+		$q = "SELECT count(*) AS cnt FROM users WHERE uid = '$user' AND password = '$pass'";
+		$row = $this->db_fetch_row($q);
+		if ($row["cnt"] == 0)
+		{
+			return false;
+		};
+
+		// if limit is given, then return the events that are in the range between
+		// now and now+limit (seconds)
+
+		// if not give, simply return all upcoming events up to the end of the range
+		$limit = (int)$arr["limit"];
+
+		$cal_id = $this->get_user_config(array(
+			"uid" => $arr["user"],
+			"key" => "user_calendar",
+		));
+
+		$res = array();
+		if (empty($cal_id))
+		{
+			return false;
+
+		};
+		$pl = get_instance(CL_PLANNER);
+
+		// XXX: I do not have the means to ask for next n event, so I'm working
+		// around it by asking events for the current and next week and the 
+		// filtering out the upcoming events
+
+		// XXX: _init_event_source needs to be rewritten
+
+		$evts = $pl->_init_event_source(array(
+			"id" => $cal_id,
+			"type" => "week",
+			"flatlist" => 1,
+		));
+		$evts = $evts + $pl->_init_event_source(array(
+			"id" => $cal_id,
+			"type" => "week",
+			"flatlist" => 1,
+			"date" => date("d-m-Y",time() + 86400 * 7),
+		));
+
+		$now = time();
+
+		$clinf = aw_ini_get("classes");
+		
+		foreach($evts as $item)
+		{
+			$use = false;
+			if ($item["start"] >= $now)
+			{
+				if ($limit == 0)
+				{
+					$use = true;
+				};
+				if ($limit > 0 && $item["start"] <= $now + $limit)
+				{
+					$use = true;
+				};
+			};
+			if (!$use)
+			{
+				continue;
+			};
+			$res[] = array(
+				// XXX: name should not contain the icon
+				"event" => strip_tags($item["name"]),
+				"type" => $clinf[$item["class_id"]]["name"],
+				"start" => $item["start"],
+				"event_url" => $item["link"],
+				"icon_url" => $item["event_icon_url"],
+			);
+		};		
+		return $res;
 	}
 }
 ?>

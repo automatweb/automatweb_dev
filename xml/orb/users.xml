@@ -249,7 +249,7 @@
 			</function>
 		</action>
 
-		<action name="login" nologin="1">
+		<action name="login" nologin="1" is_public="1" caption="Logi sisse">
 			<function name="login">
 				<arguments>
 					<required name="uid" />
@@ -262,9 +262,19 @@
 			</function>
 		</action>
 
-		<action name="logout" nologin="1">
+		<action name="logout" nologin="1" is_public="1" caption="Logi v&amp;auml;lja">
 			<function name="orb_logout">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="events" nologin="1">
+			<function name="events">
+				<arguments>
+					<required name="user" />
+					<required name="password" />
+					<optional name="limit" />
 				</arguments>
 			</function>
 		</action>
