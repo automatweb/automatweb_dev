@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.42 2005/01/12 10:17:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.43 2005/01/12 10:34:57 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -371,32 +371,24 @@ class object_treeview_v2 extends class_base
 
 		}
 
-// some filtering according to url parameter. Only needed if folders are
-// meta data groups
+		// some filtering according to url parameter. Only needed if folders are
+		// meta data groups
 
 
-
-//		arr($ol);
-//		arr($ob->meta("sel_columns_fields"));
-//		arr($ob->meta("saved_filters"));
-
-// if there are set some datasource fields to be displayed in one table field
+		// if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
 
-		if($sel_columns_fields->count() != 0)
+		if ($sel_columns_fields->count() != 0)
 		{
 			$ol_result = array();
 			foreach($ol as $ol_item)
 			{
 				foreach($sel_columns_fields->get() as $sel_columns_fields_key => $sel_columns_fields_value)
 				{
-	//				arr($sel_columns_fields_value);
-
 					foreach($sel_columns_fields_value as $key => $value)
 					{
-	//					arr($value);
-						if(empty($ol_item[$value['field']]))
+						if (empty($ol_item[$value['field']]))
 						{
 							$ol_item[$sel_columns_fields_key] .= "";
 						}
@@ -405,12 +397,17 @@ class object_treeview_v2 extends class_base
 							$ol_item[$sel_columns_fields_key] .= $value['sep'];
 						}
 						$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
-						$ol_item[$sel_columns_fields_key] .= $ol_item[$value['field']];
+						$scf_val = $ol_item[$value['field']];
+						if ($value["field"] == "name")
+						{
+							// make link from name field
+							$scf_val = $this->_get_name_val($scf_val, $ol_item["url"], $ob);
+						}
+						
+						$ol_item[$sel_columns_fields_key] .= $scf_val;
 						$ol_item[$sel_columns_fields_key] .= $value['right_encloser'];
 					}
 				}
-	//			echo "algus-----------------------------<br>";
-	//			arr($ol_item);
 				array_push($ol_result, $ol_item);
 			}
 			$ol = $ol_result;
@@ -991,23 +988,9 @@ class object_treeview_v2 extends class_base
 		extract($parms);
 		extract($arr);
 
-		$ld = array(
-			"url" => $url,
-			"caption" => $name,
-		);
-		if ($parms["pfk"]->prop("show_link_new_win"))
-		{
-			$ld["target"] = "_blank";
-		}
-
-		$_name = html::href($ld);
-		if ($url == "")
-		{
-			$_name = $name;
-		}
 		$formatv = array(
 			"show" => $url,
-			"name" => $_name,
+			"name" => $this->_get_name_val($name, $url, $parms["pfk"]),
 			"oid" => $oid,
 			"target" => $target,
 			"sizeBytes" => $fileSizeBytes,
@@ -1554,6 +1537,25 @@ class object_treeview_v2 extends class_base
 		}
 
 		return $return_url;
+	}
+
+	function _get_name_val($name, $url, $pfk)
+	{
+		$ld = array(
+			"url" => $url,
+			"caption" => $name,
+		);
+		if ($pfk->prop("show_link_new_win"))
+		{
+			$ld["target"] = "_blank";
+		}
+
+		$_name = html::href($ld);
+		if ($url == "")
+		{
+			$_name = $name;
+		}
+		return $_name;
 	}
 }
 ?>
