@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.221 2003/09/23 16:33:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.222 2003/09/24 16:26:54 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2422,12 +2422,11 @@ class core extends acl_base
 		}
 		if (is_array($args) && isset($args["trid"]))
 		{
-			$this->trid = $args["trid"];
 			if (!is_object($this->tr))
 			{
 				$this->tr = get_instance("translate/class_translator");
 			}
-			$this->tr->load_catalog($this->trid);
+			$this->tr->load_catalog($this->clid);
 		}
 	}
 
