@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.6 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.7 2001/11/14 19:09:06 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -39,7 +39,7 @@ class calendar extends aw_template
 		$contents = $args["contents"];
 		$tpl 	= ($args["tpl"]) ? $args["tpl"] : "plain.tpl";
 		$misc   = (is_array($args["misc"])) ? $args["misc"] : array();
-
+		$marked = (is_array($args["marked"])) ? $args["marked"] : array();
 
 		$add	= $args["add"]; // miski räga, mis linkidele otsa pannakse
 
@@ -102,10 +102,18 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
+				if ($marked[$day])
+				{
+					$markup = "<b>%s</b>";
+				}
+				else
+				{
+					$markup = "%s";
+				};
 			$this->vars(array(
-				"nday" => $day,
+				"nday" => sprintf($markup,$day),
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
-				"day" => $day,
+				"day" => sprintf($markup,$day),
 			));
 			$tpl = ($day == $act_day) ? "week.activecell" : "week.cell";
 			if (($day <= 0) || ($day > $days_in_mon))
