@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.42 2001/07/27 01:49:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.43 2001/07/27 19:40:11 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -82,9 +82,9 @@ class core extends db_connector
 		));
 		
 		// if key is defined, return only that part of the metainfo
-		if ($args[$key])
+		if ($args["key"])
 		{	
-			$retval = $metadata[$key];
+			$retval = $metadata[$args["key"]];
 		}
 		// otherwise the whole thing
 		else
@@ -389,6 +389,7 @@ class core extends db_connector
 			"created" => time(),
 			"modifiedby" => $uid,
 			"modified" => time(),
+			"lang_id" => $lang_id,
 			"site_id" => $SITE_ID,
 		);
 
@@ -396,11 +397,6 @@ class core extends db_connector
 		// If the input arrays have the same string keys,
 		//  then the later value for that key will overwrite the previous one.
 		$values = array_merge($arr,$_localdata);
-
-		if (!$values["lang_id"])
-		{
-			$values["lang_id"] = $lang_id;
-		};
 		
 		reset($values);
 
