@@ -39,6 +39,7 @@ define("OP_HAS_LUGU", 23);	// params { a_parent, level, a_parent_p_fn}
 
 define("OP_IF_SUBMENUS", 24);		// params { a_parent, level}
 define("OP_GET_OBJ_SUBMENUS", 25);	// params { a_parent, level, a_parent_p_fn}
+define("OP_IF_LOGGED", 26);	// params { }
 
 class site_template_compiler extends aw_template
 {
@@ -70,7 +71,8 @@ class site_template_compiler extends aw_template
 			22 => "OP_LIST_INIT",
 			23 => "OP_HAS_LUGU",
 			24 => "OP_IF_SUBMENUS",
-			25 => "OP_GET_OBJ_SUBMENUS"
+			25 => "OP_GET_OBJ_SUBMENUS",
+			26 => "OP_IF_LOGGED"
 		);
 
 		$this->id_func = (aw_ini_get("menuedit.show_real_location") == 1 ? "brother_of" : "id");
@@ -219,6 +221,11 @@ class site_template_compiler extends aw_template
 				}
 
 				$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] |= $is_in_parent;
+
+				if ($parent_tpl == "logged")
+				{
+					$this->menu_areas[$area]["levels"][$level]["in_logged"] = true;
+				}
 			}
 		}
 
@@ -383,6 +390,18 @@ class site_template_compiler extends aw_template
 		$this->req_level ++;
 
 		$end_block = false;
+
+		if ($ldat["in_logged"])
+		{
+			$this->ops[] = array(
+				"op" => OP_IF_LOGGED,
+				"params" => array()
+			);
+			$this->ops[] = array(
+				"op" => OP_START_BLK,
+				"params" => array()
+			);
+		}
 
 		// figure out if we need to determine visibility
 		if ($level > 1)
@@ -630,6 +649,14 @@ class site_template_compiler extends aw_template
 		}
 
 		if ($end_block)
+		{
+			$this->ops[] = array(
+				"op" => OP_END_BLK,
+				"params" => array()
+			);
+		}
+
+		if ($ldat["in_logged"])
 		{
 			$this->ops[] = array(
 				"op" => OP_END_BLK,
@@ -1013,7 +1040,14 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		// TODO: this could be optimized out for non - login menus
-		$ret .= $this->_gi()."if (!(\$this->skip || (".$o_name."->prop(\"users_only\") && aw_global_get(\"uid\") == \"\")))\n";
+		if (aw_ini_get("menuedit.no_show_users_only"))
+		{
+			$ret .= $this->_gi()."if (!(\$this->skip || (".$o_name."->prop(\"users_only\") && aw_global_get(\"uid\") == \"\")))\n";
+		}
+		else
+		{
+			$ret .= $this->_gi()."if (!\$this->skip)\n";
+		}
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
@@ -1072,12 +1106,15 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi().");\n";	
 
 
-		$ret .= $this->_gi()."if (aw_global_get(\"uid\") == \"\")\n";
-		$ret .= $this->_gi()."{\n";
-		$this->brace_level++;
-		$ret .= $this->_gi()."\$__list_filter[\"users_only\"] = 0;\n";
-		$this->brace_level--;
-		$ret .= $this->_gi()."}\n";
+		if (aw_ini_get("menuedit.no_show_users_only"))
+		{
+			$ret .= $this->_gi()."if (aw_global_get(\"uid\") == \"\")\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$__list_filter[\"users_only\"] = 0;\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
 
 		$ret .= $this->_gi()."$list_name = new object_list(\$__list_filter);\n";
 
@@ -1769,6 +1806,14 @@ class site_template_compiler extends aw_template
 //		$res .= $this->_gi()."\$this->cache->file_invalidate(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".($arr["level"]-1)."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\")\n";
 		
 
+		return $ret;
+	}
+
+	function _g_op_if_logged($arr)
+	{
+		$ret = "";
+
+		$ret .= $this->_gi()."if (aw_global_get(\"uid\") != \"\")\n";
 		return $ret;
 	}
 }
