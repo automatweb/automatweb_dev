@@ -33,9 +33,22 @@ class html2pdf extends class_base
 		fwrite($fp, $arr["source"]);
 		fclose($fp);
 
+		$lds = "";
+		if ($arr["landscape"] == 1)
+		{
+			$lds = "--landscape";
+		}
+
+		$nns = "";
+		if ($arr["no_numbers"] == 1)
+		{
+			$nns = "--no-numbered";
+		}
+
 		$hd = aw_ini_get("html2pdf.htmldoc_path");
-		$pdf = shell_exec($hd." -t pdf --quiet --book --jpeg --webpage '$tmpf'");
-		@unlink($tmpf);
+		$cmdl = $hd." -t pdf --quiet --book --jpeg --webpage $lds $nns '$tmpf'";
+		$pdf = shell_exec($cmdl);
+		unlink($tmpf);
 		return $pdf;
 	}
 }
