@@ -56,6 +56,12 @@ class forum extends aw_template
 			"key" => "rated",
 			"value" => $rated,
 		));
+		
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "template",
+			"value" => $template,
+		));
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -68,10 +74,12 @@ class forum extends aw_template
 		$o = $this->get_object($id);
 		$meta = $this->get_object_metadata(array("metadata" => $o["metadata"]));
 		$this->mk_path($o["parent"], "Muuda foorumit");
+		global $template_sets;
 		$this->vars(array(
 			"name" => $o["name"],
 			"comment" => $o["comment"],
 			"comments" => checked($meta["comments"]),
+			"template" => $this->picker($meta["template"],$template_sets),
 			"rated" => checked($meta["rated"]),
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 			"url" => $GLOBALS["baseurl"]."/comments.".$GLOBALS["ext"]."?action=topics&forum_id=".$id
