@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.17 2004/09/01 15:31:58 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.18 2004/09/03 10:24:08 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -134,7 +134,11 @@ class crm_offer extends class_base
 				return PROP_IGNORE;
 			break;
 			case "orderer":
-				if(!($my_org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PREFORMER')))
+				if(!($arr["new"] == 1))
+				{
+					$my_org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PREFORMER');
+				}
+				else
 				{
 					$my_org = $this->u_i->get_current_company();
 					$my_org = &obj($my_org);
@@ -553,6 +557,10 @@ class crm_offer extends class_base
 		if($arr["request"]["offer_status"] == 3 || $arr["request"]["offer_status"] == 4)
 		{
 			$arr["obj_inst"]->set_prop("is_done", OBJ_IS_DONE);
+		}
+		else 
+		{
+			$arr["obj_inst"]->set_prop("is_done", 0);
 		}
 		//If offer status has been changed then lets write to log about it.
 		if($arr["request"]["prev_status"] != $arr["request"]["offer_status"])
