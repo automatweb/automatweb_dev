@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.3 2004/03/01 12:12:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.4 2004/03/01 16:39:29 duke Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -254,20 +254,27 @@ class add_tree_conf extends class_base
 
 		// go over groups and for each check if it has the conf
 		$cur_max = 0;
-		foreach(aw_global_get("gidlist_oid") as $g_oid)
+		$gidlist_oid = aw_global_get("gidlist_oid");
+		if (is_array($gidlist_oid))
 		{
-			$o = obj($g_oid);
-			$c = $o->connections_from(array(
-				"type" => 5 /* RELTYPE_ADD_TREE from core/users/group */
-			));
-			if (count($c) > 0 && $o->prop("priority") > $cur_max)
+			foreach($gidlist_oid as $g_oid)
 			{
-				$cur_max = $o->prop("priority");
-				$fc = reset($c);
-				$ret = $fc->prop("to");
+				if (!is_oid($g_oid))
+				{
+					continue;
+				};
+				$o = obj($g_oid);
+				$c = $o->connections_from(array(
+					"type" => 5 /* RELTYPE_ADD_TREE from core/users/group */
+				));
+				if (count($c) > 0 && $o->prop("priority") > $cur_max)
+				{
+					$cur_max = $o->prop("priority");
+					$fc = reset($c);
+					$ret = $fc->prop("to");
+				}
 			}
-		}
-
+		};
 		return $ret;
 	}
 
