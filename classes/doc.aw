@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.49 2003/11/05 14:45:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.50 2003/11/06 12:40:43 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -475,15 +475,31 @@ class doc extends class_base
 	function gen_navtoolbar($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
-		$toolbar->add_button(array(
-                        "name" => "save",
-                        "tooltip" => "Salvesta",
-			"target" => "contentarea",
-			"url" => "javascript:parent.contentarea.submit_changeform();",
-                        "img" => "save.gif",
-                ));
+		if ($this->classinfo["raw_output"] == 1)
+		{
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"target" => "contentarea",
+				"url" => "javascript:parent.contentarea.submit_changeform();",
+				"url" => "javascript:submit_changeform();",
+				"img" => "save.gif",
+			));
+		}
+		else
+		{
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+	//			"target" => "contentarea",
+	//			"url" => "javascript:parent.contentarea.submit_changeform();",
+				"url" => "javascript:submit_changeform();",
+				"img" => "save.gif",
+			));
+		};
+
 	
-		if ($arr["obj_inst"]->id())
+		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->id())
 		{
 			$toolbar->add_button(array(
 				"name" => "preview",
