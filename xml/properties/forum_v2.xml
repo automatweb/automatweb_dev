@@ -89,6 +89,126 @@
             <method>serialize</method>
             <caption>Lisa kommentaar</caption>
       </property>
+      <property>
+            <name>style_caption</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabeli pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>style_l1_folder</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Esimese taseme folderi stiil</caption>
+      </property>
+      <property>
+            <name>style_folder_caption</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Folderi pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>style_folder_topic_count</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Folderi teemade arvu stiil</caption>
+      </property>
+      <property>
+            <name>style_folder_comment_count</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Folderi postituste arvu stiil</caption>
+      </property>
+      <property>
+            <name>style_folder_last_post</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Folderi viimase postituse stiil</caption>
+      </property>
+      <property>
+            <name>style_topic_caption</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>style_topic_replies</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema vastuste arvu stiil</caption>
+      </property>
+      <property>
+            <name>style_topic_author</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema autori stiil</caption>
+      </property>
+      <property>
+            <name>style_topic_last_post</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema viimase postituste stiil</caption>
+      </property>
+      <property>
+            <name>style_comment_user</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaari kasutajainfo stiil</caption>
+      </property>
+      <property>
+            <name>style_comment_text</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaari teksti stiil</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -103,6 +223,9 @@
                   <submit>no</submit>
                   <parent>container</parent>
             </contents>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
             <add_topic>
                   <caption>Lisa teema</caption>
                   <parent>container</parent>
