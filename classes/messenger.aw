@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.38 2001/05/30 02:50:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.39 2001/05/30 03:24:07 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -401,6 +401,7 @@ class messenger extends menuedit_light
 				$awf = new file();
 				$fdata = $awf->get(array("id" => $row["oid"]));
 				header("Content-Type: $fdata[type]");
+				header("Content-Disposition: filename=$row[name]");
 				print $fdata["file"];
 				exit;
 			};
