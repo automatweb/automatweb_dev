@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.17 2004/11/02 12:20:28 duke Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.18 2004/12/01 20:34:34 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -194,7 +194,7 @@ class docgen_viewer extends class_base
 		die($this->parse());
 	}
 
-	function display_class($data, $cur_file)
+	function display_class($data, $cur_file, $opts = array())
 	{
 		
 		$this->read_template("class_info.tpl");
@@ -203,6 +203,11 @@ class docgen_viewer extends class_base
 		foreach($data["functions"] as $func => $f_data)
 		{
 			$arg = "";
+
+			if ($opts["api_only"] && !$f_data["doc_comment"]["attribs"]["api"])
+			{
+				continue;
+			}
 
 			$_ar = new aw_array($f_data["arguments"]);
 			foreach($_ar->get() as $a_var => $a_data)
@@ -303,6 +308,7 @@ class docgen_viewer extends class_base
 		@attrib params=name nologin=0 is_public=0 all_args=0 caption="N&auml;ita klassi infot" default=0 name=class_info
 
 		@param file required 
+		@param api_only optional
 
 		@returns 
 		html with class info
@@ -320,7 +326,9 @@ class docgen_viewer extends class_base
 		{
 			if ($class != "")
 			{
-				$op .= $this->display_class($c_data, $file);
+				$op .= $this->display_class($c_data, $file, array(
+					"api_only" => $api_only
+				));
 			}
 		}
 
@@ -767,22 +775,35 @@ class docgen_viewer extends class_base
 		{
 			$da = get_instance("core/docgen/docgen_analyzer_simple_db_writer");
 			$data = $da->analyze_file($file, true);
+			$rel_file = str_replace(aw_ini_get("basedir"), "",$file);
 			foreach($data["classes"] as $class => $c_data)
 			{
 				$this->db_query("DELETE FROM aw_da_funcs WHERE class = '$class'");
+				$this->db_query("DELETE FROM aw_da_func_attribs WHERE class = '$class'");
 				echo "writing class $class... <br>\n";
 				flush();
 				foreach($c_data["functions"] as $fname => $fdata)
 				{
 					//echo "&nbsp;&nbsp;&nbsp;writing function $fname... <br>\n";
 					//flush();
-					$this->db_query("INSERT INTO aw_da_funcs(class,func, ret_class) 
+					$this->db_query("INSERT INTO aw_da_funcs(class,func, ret_class, file) 
 						values(
 							'$class',
 							'$fname',
-							'".$fdata["return_var"]["class"]."'
+							'".$fdata["return_var"]["class"]."',
+							'$rel_file'
 						)
 					");
+
+					// also attribs
+					$docc = safe_array($fdata["doc_comment"]["attribs"]);
+					foreach($docc as $aname => $avalue)
+					{
+						$this->db_query("
+							INSERT INTO aw_da_func_attribs(class,func,attrib_name,attrib_value)
+								VALUES('$class','$fname','$aname','$avalue')
+						");
+					}
 				}
 			}
 		}
@@ -836,6 +857,7 @@ class docgen_viewer extends class_base
 				}
 			}
 		}
+		die("ALL DONE");
 	}
 
 	/** displays where the class::function is called from. wildly inaccurate at the moment.
@@ -907,6 +929,12 @@ class docgen_viewer extends class_base
 		));
 
 		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("api_class_list"),
+			"target" => "classlist",
+			"caption" => "API klassid"
+		));
+
+		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("doclist"),
 			"target" => "classlist",
 			"caption" => "Eraldi dokumentatsioon"
@@ -916,6 +944,12 @@ class docgen_viewer extends class_base
 			"url" => $this->mk_my_orb("proplist",array('id'=>$arr['id'])),
 			"target" => "classlist",
 			"caption" => "Classbase tagid"
+		));
+
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id'])),
+			"target" => "bott",
+			"caption" => "Uuenda API andmebaas"
 		));
 
 		if ($arr["id"])
@@ -1096,6 +1130,117 @@ class docgen_viewer extends class_base
 				"name" => $file,
 				"id" => $fp,
 				"url" => $this->mk_my_orb("class_info", array("file" => $awpath)),
+				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
+				"target" => "classinfo"
+			));
+			$hasf = true;
+		}
+
+		return $hasf;
+	}
+
+	/**
+
+		@attrib name=api_class_list
+
+	**/
+	function api_class_list($arr)
+	{
+		$this->read_template("classlist.tpl");
+
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgclsssapi",
+			"persist_state" => true,
+			"root_name" => "Classes",
+			"url_target" => "list"
+		));
+	
+		// get files that have at least one api method
+		$api_files = array();
+		$this->db_query("
+			SELECT 
+				distinct(file) as file
+			FROM
+				aw_da_func_attribs fa
+				LEFT JOIN aw_da_funcs f ON (fa.class = f.class AND fa.func = f.func)
+			WHERE
+				fa.attrib_name = 'api' AND fa.attrib_value='1'
+		");
+		while ($row = $this->db_next())
+		{
+			$fp = $this->cfg["basedir"].$row["file"];
+			$api_files[$fp] = $fp;
+		}
+
+		$this->ic = get_instance("icons");
+		$this->_req_mk_clf_api_tree($tv, $this->cfg["classdir"], $api_files);
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => $this->cfg["classdir"],
+			))
+		));
+
+		return $this->parse();
+	}
+
+	function _req_mk_clf_api_tree(&$tv, $path, $api_files)
+	{
+		$dc = array();
+		$fc = array();
+		$dh = opendir($path);
+		while (($file = readdir($dh)) !== false)
+		{
+			$fp = $path."/".$file;
+			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
+			{
+				if (is_dir($fp))
+				{
+					$dc[] = $file;
+				}
+				else
+				{
+					if ($api_files[$fp])
+					{
+						$fc[] = $file;
+					}
+				}
+			}
+		}
+		closedir($dh);
+
+		sort($dc);
+		sort($fc);
+		
+		$hasf = false;
+		foreach($dc as $file)
+		{
+			$fp = $path."/".$file;
+			$_hasf = $this->_req_mk_clf_api_tree($tv, $fp, $api_files);
+
+			if ($_hasf)
+			{
+				$tv->add_item($path, array(
+					"name" => $file,
+					"id" => $fp,
+					"url" => "#",
+				));
+				$hasf = true;
+			}
+		}
+
+		foreach($fc as $file)
+		{
+			$fp = $path."/".$file;
+			$awpath = str_replace($this->cfg["classdir"], "", $fp);
+	
+			$tv->add_item($path, array(
+				"name" => $file,
+				"id" => $fp,
+				"url" => $this->mk_my_orb("class_info", array("file" => $awpath, "api_only" => 1)),
 				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
 				"target" => "classinfo"
 			));
