@@ -1,72 +1,170 @@
 <?php
 classload("images");
 
+global $orb_defs;
+$orb_defs["gallery"] = "xml";
+
 class gallery extends aw_template
 {
 	function gallery($id = 0)
 	{
 		$this->db_init();
 		$this->tpl_init("gallery");
+		$this->sub_merge = 1;
 		if ($id != 0)
+		{
 			$this->load($id);
+		}
+	}
+
+	////
+	// !generates the form for adding a gallery
+	function add($arr)
+	{
+		extract($arr);
+		$this->read_template("add.tpl");
+		$this->mk_path($parent,"Lisa galerii");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_doc" => $alias_doc))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !generates the form for changing a gallery
+	function change($arr)
+	{
+		extract($arr);
+		if (!($row = $this->get_object($id)))
+		{
+			$this->raise_error("no such gallery($id)!", true);
+		}
+		$this->read_template("add.tpl");
+		$this->mk_path($row["parent"],"Muuda galeriid");
+
+		$this->vars(array(
+			"name" => $row["name"], 
+			"comment" => $row["comment"],
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"content" => $this->mk_orb("admin", array("id" => $id))
+		));
+		$this->parse("CHANGE");
+		return $this->parse();
+	}
+
+	////
+	// !saves or creates the gallery
+	function csubmit($arr)
+	{
+		extract($arr);
+
+		if ($id)
+		{
+			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+		}
+		else
+		{
+			$parent = $parent ? $parent : $GLOBALS["rootmenu"];
+			$id = $this->new_object(array("parent" => $parent,"name" => $name, "comment" => $comment, "class_id" => CL_GALLERY));
+			$this->db_query("INSERT INTO galleries VALUES($id,'')");
+			if ($alias_doc)
+			{
+				$this->add_alias($alias_doc, $id);
+			}
+		}
+		return $this->mk_orb("change", array("id" => $id));
 	}
 
 	function load($id)
 	{
 		$this->db_query("SELECT objects.*, galleries.content as content FROM objects LEFT JOIN galleries ON galleries.id = objects.oid WHERE oid = $id");
 		if (!($row = $this->db_next()))
+		{
 			$this->raise_error("load_gallery($id): no such gallery!", true);
+		}
 
-		$this->arr = unserialize($row[content]);
-		$this->name = $row[name]; 
+		$this->arr = unserialize($row["content"]);
+		$this->name = $row["name"]; 
+		$this->parent = $row["parent"];
 		$this->id = $id;
-		$this->comment = $row[comment];
+		$this->comment = $row["comment"];
 		$this->vars(array("id" => $id, "name" => $this->name, "comment" => $this->comment));
 
-		if ($this->arr[pages] < 1)
-			$this->arr[pages] = 1;
-		for ($pg = 0; $pg < $this->arr[pages]; $pg++)
+		if ($this->arr["pages"] < 1)
 		{
-			if ($this->arr[$pg][rows] < 1)
-				$this->arr[$pg][rows] = 1;
-			if ($this->arr[$pg][cols] < 1)
-				$this->arr[$pg][cols] = 1;
+			$this->arr["pages"] = 1;
+		}
+		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
+		{
+			if ($this->arr[$pg]["rows"] < 1)
+			{
+				$this->arr[$pg]["rows"] = 1;
+			}
+			if ($this->arr[$pg]["cols"] < 1)
+			{
+				$this->arr[$pg]["cols"] = 1;
+			}
 		}
 	}
 
-	function admin($page)
+	////
+	// !generates the form for uploading pictures for gallery $id, page $page
+	function admin($arr)
 	{
-		if ($page < 1)
-			$page = 0;
-
+		extract($arr);
+		$page = max($page,0);
 		$this->read_template("grid.tpl");
+		$this->load($id);
+		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda</a> / Sisu");
 		
-		for ($pg = 0; $pg < $this->arr[pages]; $pg++)
+		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
 		{
-			$this->vars(array("page" => $pg));
+			$this->vars(array(
+				"page" => $pg,
+				"to_page" => $this->mk_orb("admin", array("id" => $id, "page" => $pg))
+			));
 			if ($pg == $page)
+			{
 				$p.=$this->parse("SEL_PAGE");
+			}
 			else
+			{
 				$p.=$this->parse("PAGE");
+			}
 		}
-		$this->vars(array("PAGE" => $p, "SEL_PAGE" => ""));
+		$this->vars(array(
+			"PAGE" => $p, 
+			"SEL_PAGE" => "",
+			"add_page" => $this->mk_orb("add_page", array("id" => $id))
+		));
 
-		for ($row = 0; $row < $this->arr[$page][rows]; $row++)
+		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
 			$this->vars(array("row" => $row));
 			$c = "";
-			for ($col = 0; $col < $this->arr[$page][cols]; $col++)
+			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
-				$cell = $this->arr[$page][content][$row][$col];
-				$this->vars(array("imgurl" => $cell[tnurl], "caption" => $cell[caption], "bigurl" => $cell[bigurl],"col" => $col,"date" => $cell[date]));
-				$b = $cell[bigurl] != "" ? $this->parse("BIG") : "";
+				$cell = $this->arr[$page]["content"][$row][$col];
+				$this->vars(array(
+					"imgurl" => $cell["tnurl"], 
+					"caption" => $cell["caption"], 
+					"bigurl" => $cell["bigurl"],
+					"col" => $col,
+					"date" => $cell["date"]
+				));
+				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
 				$this->vars(array("BIG" => $b));
 				$c.=$this->parse("CELL");
 			}
 			$this->vars(array("CELL" => $c));
 			$l.=$this->parse("LINE");
 		}
-		$this->vars(array("LINE" => $l,"page" => $page));
+		$this->vars(array(
+			"LINE" => $l,
+			"page" => $page,
+			"reforb" => $this->mk_reforb("c_submit", array("id" => $id,"page" => $page))
+		));
 		return $this->parse();
 	}
 
