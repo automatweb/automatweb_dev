@@ -1,93 +1,41 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.6 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.7 2002/12/17 18:35:03 duke Exp $
 // menu_tree.aw - menüüpuu
+
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property menus type=select multiple=1 size=15
+	@caption Menüüd
+
+*/
 class menu_tree extends aw_template
 {
 	function menu_tree()
 	{
-		$this->tpl_init("menu_tree");
-		$this->db_init();
-	}
-
-	function change($arr)
-	{
-		extract($arr);
-		if ($parent)
-		{
-			if ($return_url)
-			{
-				$this->mk_path(0,"<a href='$return_url'>tagasi</a> / Lisa menüüpuu");
-			}
-			else
-			{
-				$this->mk_path($parent, "Lisa menüüpuu");
-			};
-			$sel_menus = array();
-		}
-		else
-		{
-			$obj = $this->get_obj_meta($id);
-			$name = $obj["name"];
-			$sel_menus = $obj["meta"]["menus"];
-			if (not(is_array($sel_menus)))
-			{
-				$sel_menus = array();
-			};
-			if ($return_url)
-			{
-				$_return_url = urldecode($return_url);
-				$this->mk_path(0,"<a href='$_return_url'>tagasi</a> / Muuda menüüpuud");
-			}
-			else
-			{
-				$this->mk_path($obj["parent"], "Muuda menüüpuud");
-			};
-		};
-
-		$this->read_template("add_tree.tpl");
-		$ob = get_instance("objects");
-		$menus = $ob->get_list();
-		$this->vars(array(
-			"name" => $name,
-			"menus" => $this->multiple_option_list(array_flip($sel_menus),$menus),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"id" => $id,"alias_to" => $alias_to,"return_url" => $return_url)),
+		$this->init(array(
+			"clid" => CL_MENU_TREE,
 		));
-		return $this->parse();
 	}
 
-	function submit($arr)
+	function get_property($args)
 	{
-		extract($arr);
-		if ($id)
+		$data = &$args["prop"];
+		$retval = true;
+		switch($data["name"])
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-			));
+			case "menus":
+				$ob = get_instance("objects");
+				$menus = $ob->get_list();
+				$data["options"] = $menus;
+				break;
 		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_MENU_TREE,
-				"name" => $name,
-			));
-		
-			if ($alias_to)
-			{
-				$this->add_alias($alias_to,$id);
-			};
-		};
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "menus",
-			"value" => $menus,
-		));
+		return PROP_OK;
+        }
 
-		
-		return $this->mk_orb("change", array("id" => $id,"return_url" => urlencode($return_url)));
-	}
-	
 	function parse_alias($args = array())
 	{
 		extract($args);
