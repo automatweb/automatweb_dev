@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.77 2002/09/05 16:06:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.78 2002/09/13 15:49:16 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 classload("calendar","defs");
@@ -799,11 +799,6 @@ class planner extends calendar
 			$end = mktime(23,59,59,12,31,2002);
 		};
 
-		// defaultima näitma lihtsalt tavalisi eventeid (neid millel type on NULL)
-		// tekalt, ma kardan, et sellega voib tekkida probleeme, kui me AW-d
-		// mone teise DB peale portima hakkame.
-		//$tp = ($type) ? " AND planner.type = $type " : " AND planner.type = NULL ";
-
 		$eselect = (isset($event)) ? "AND planner.id = '$event'" : "";
 		$limit = ($limit) ? $limit : 999999;
 		$retval = array();
@@ -823,90 +818,49 @@ class planner extends calendar
 				ORDER BY start";
 		};	
 		$this->db_query($q);
+		$results = array();
+		$timebase = mktime(0,0,0,1,1,2001);
+		$start_gdn = sprintf("%d",($start - $timebase) / 86400);
+		$end_gdn = sprintf("%d",(($end - $timebase) / 86400) + 1);
+		$gdn = $start_gdn;
+		$range = range($start_gdn,$end_gdn);	
 		while($row = $this->db_next())
 		{
-			// sx-i peab kuidagi teisiti arvutama
-			// fawking kala seisneb selles, et kui sa oled 
-			// repeateritega määratud ajaloigu sees, siis
-			// ntx päevade puhul hakatakse tsyklit valest kohast ..
-			// ehk siis repeateri algusest. 
-			$ex = ($end > $row["rep_until"]) ? $row["rep_until"] : $end;
-			if (isset($event))
+			$reps = aw_unserialize($row["repeaters"]);
+			$meta = aw_unserialize($row["metadata"]);
+			if ($meta["repeaters1"]["own_time"])
 			{
-				#$start2 = ($row["start"] > $start) ? $row["start"] : $start;
-				$start2 = ($row["start"] > $start) ? $start : $row["start"];
-				$repeater->init($start,$start2,$ex);
+				$hour = $meta["repeaters1"]["reptime"]["hour"];
+				$minute = $meta["repeaters1"]["reptime"]["minute"];
+				list($d,$m,$y) = explode("-",date("d-m-Y",$start));
+				$row["start"] = mktime($hour,$minute,0,$m,$d,$y);
 			}
 			else
 			{
-				$repeater->init($start,$row["start"],$ex);
+				$hour = $minute = 0;
 			};
-			
-			$this->save_handle();
-			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]' ORDER BY type DESC";
-			$this->db_query($q);
-			while($rep = $this->db_next())
+			if (is_array($reps))
 			{
-				$repeater->handle($rep);
+				$intersect = array_intersect($reps,$range);
 			};
-			$this->restore_handle();
-			$vector = $repeater->get_vector();
-			if ($vector)
+			// always show the event at the day it was added
+			$idx = ($index_time) ? $row["start"] : date("dmy",$row["start"]);
+			$retval[$idx][] = $row;
+			if (is_array($intersect))
 			{
-				$size = sizeof($vector);
-				$continue = true;
-				reset($vector);
-				$cnt = 0;
-				while($continue)
+				foreach($intersect as $xgdn)
 				{
-					$cnt++;
-					list(,$slice) = each($vector);
-					if (not(is_array($slice)))
+					$ts = mktime($hour,$minute,0,1,$xgdn,2001);
+					if ($ts >= $row["rep_from"])
 					{
-						$continue = false;
-						continue;
-					};
-					list($slice_start,$slice_end) = each($slice);
-					if ($slice_start < $start)
-					{
-						continue;
-					};
-					$_saast = $row["start"];
-					$index = date("dmY",$slice_start);
-					if ($index_time)
-					{
-						#if ($_saast > $slice_start)
-						#{
-						#	$_slice = $s_saast;
-						#}
-						#else
-						#{
-						#	$_slice = $slice_start;
-						#};
-						$retval[$slice_start] = $row;
-					}
-					else
-					{
-						$retval[$index][] = $row;
-					}
-					if ( ($cnt >= $size) || ($cnt >= $limit) )
-					{
-						$continue = false;
+						$gx = ($index_time) ? $ts : date("dmY",$ts);
+						$retval[$gx][] = $row;
 					};
 				};
-			}
-			else
-			{
-				$index = date("dmY",$row["start"]);
-				if ($index_time)
-				{
-					$retval[$row["start"]] = $row;
-				}
-				else
-				{
-					$retval[$index][] = $row;
-				}
 			};
+			$intersect = "";
+				
+			$gdn++;
 		};
 		return (sizeof($retval) > 0) ? $retval : false;
 	}

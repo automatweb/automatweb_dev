@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.17 2002/07/23 21:16:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.18 2002/09/13 15:49:16 duke Exp $
 
 class cal_event extends aw_template 
 {
@@ -459,10 +459,20 @@ class cal_event extends aw_template
 				};
 			};
 
+			if (!$use_class)
+			{
+				$use_class = "planner";
+			};
+
+			if (!$use_method)
+			{
+				$use_method = "event_repeaters";
+			};
+
 			$this->vars(array(
-				"add_link" => $this->mk_my_orb("event_repeaters",array("id" => $id,"cycle" => "new"),"planner"),
-				"ed_link" => $this->mk_my_orb("event_repeaters",array("id" => $id),"planner"),
-				"del_link" => $this->mk_my_orb("delete_repeater",array("id" => $id),"planner"),
+				"add_link" => $this->mk_my_orb($use_method,array("id" => $id,"cycle" => "new"),$use_class),
+				"ed_link" => $this->mk_my_orb($use_method,array("id" => $id),$use_class),
+				"del_link" => $this->mk_my_orb("delete_repeater",array("id" => $id),$use_class),
 				"line" => $content,
 			));
 		}
@@ -544,7 +554,20 @@ class cal_event extends aw_template
 		
 		$reps = aw_serialize($this->reps,SERIALIZE_PHP_NOINDEX);
 		$this->quote($reps);
-		$q = "UPDATE planner SET rep_until = '$rep_end', rep_from = '$rep_from', repeaters = '$reps' WHERE id = '$id'";
+		// if we are adding repeaters for the scheduler, then there is likely
+		// no record in the planner table, so we create it, when necessary.
+		$q = "SELECT id FROM planner WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row)
+		{
+			$q = "UPDATE planner SET rep_until = '$rep_end', rep_from = '$rep_from', repeaters = '$reps' WHERE id = '$id'";
+		}
+		else
+		{
+			$q = "INSERT INTO planner (id,rep_until,rep_from,repeaters)
+				VALUES ('$id','$rep_end','$rep_from','$reps')";
+		};
 		$this->db_query($q);
 
 		classload("scheduler");
@@ -552,6 +575,11 @@ class cal_event extends aw_template
 		$sched->update_repeaters(array("id" => $id));
 
 		// FIXME: this sucks
+		if ($obj["class_id"] == CL_SCHEDULER)
+		{
+			return $this->mk_my_orb("set_time",array("id" => $id),"scheduler");
+		}
+		else
 		if ($parent_class == CL_CALENDAR)
 		{
 			return $this->mk_my_orb("event_repeaters",array("id" => $id,"stage" => $stage),"planner");
@@ -874,8 +902,6 @@ class cal_event extends aw_template
 		extract($args);
 		classload("aliasmgr");
 		$amgr = new aliasmgr;
-		$amgr->_init_aliases();
-		$this->defs = $amgr->defs;
 		$this->read_template("search_doc.tpl");
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);
@@ -890,6 +916,7 @@ class cal_event extends aw_template
 			$back_link = $this->mk_my_orb("change",array("id" => $id));
 		};
 		$this->mk_path(0,"<a href='$back_link'>Tagasi</a> | <b>Otsi objekti</b>");
+		$amgr->make_alias_typearr();
     if ($s_name != "" || $s_comment != "" || $s_type > 0)
     {
 			$se = array();
@@ -907,7 +934,7 @@ class cal_event extends aw_template
 			}
 			else
 			{
-				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
+				$se[] = " objects.class_id IN (".join(",",$amgr->typearr).") ";
 			}
 
 			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
@@ -937,20 +964,16 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$s_type = 0;
 		}
 
-		$tar = array(0 => LC_OBJECTS_ALL);
-		foreach($this->defs as $key => $val)
-		{
-			$clid = $val["class_id"];
-			$tar[$clid] = $this->cfg["classes"][$clid]["name"];
-		}
+		$amgr->make_alias_classarr();
 		$this->vars(array("id" => $id,
-				"class" => ($parent_class == CL_CALENDAR) ? "planner" : "cal_event",
-				"action" => ($parent_class == CL_CALENDAR) ? "event_object_search" : "search",
-				"s_name"  => $s_name,
-				"s_type"  => $s_type,
-				"s_comment" => $s_comment,
-				"pick_link" => $this->mk_my_orb("pick",array("id" => $id)),
-				"types" => $this->picker($s_type, $tar)));
+			"class" => ($parent_class == CL_CALENDAR) ? "planner" : "cal_event",
+			"action" => ($parent_class == CL_CALENDAR) ? "event_object_search" : "search",
+			"s_name"  => $s_name,
+			"s_type"  => $s_type,
+			"s_comment" => $s_comment,
+			"pick_link" => $this->mk_my_orb("pick",array("id" => $id)),
+			"types" => $this->picker($s_type, array(0 => LC_OBJECTS_ALL) + $amgr->classarr)
+		));
 		return $this->parse();
 	}	
 
