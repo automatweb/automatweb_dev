@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.28 2001/06/20 00:03:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.29 2001/06/20 00:16:38 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -731,23 +731,14 @@ class document extends aw_template
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		}
 
-		if ($this->prog_acl("view", PRG_MENUEDIT))
-		{
-			$this->vars(array("EDIT" => $this->parse("EDIT")));
-		}
-		else
-		{
-			$this->vars(array("EDIT" => ""));
-		};
-
-		$sht= "";
-    if ($doc["show_title"] == 1)
-    {
-      $sht = $this->parse("SHOW_TITLE");
-    }
-    $this->vars(array("SHOW_TITLE" => $sht));
- 
-    // keeleseosed
+		$this->vars(array(
+			"SHOW_TITLE" 	=> ($doc["show_title"] == 1) ? $this->parse("SHOW_TITLE") : "",
+			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
+			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
+			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
+			));
+		
+		// keeleseosed
 		if ($this->is_template("LANG_BRO"))
 		{
 			$lab = unserialize($doc["lang_brothers"]);
@@ -769,28 +760,19 @@ class document extends aw_template
 					{
 						$langs.=$this->parse("LANG_BRO");
 						// tshekime et kui sellel dokul pole m22ratud muutmise kuup2eva, siis vaatame kas m6nel seotud dokul on
-					// ja kui on, siis kasutame seda
-					if ($tm == "")
-					{
-						$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE docid = ".$lab[$v["id"]],"tm");
-					}
-					}
-				}
+						// ja kui on, siis kasutame seda
+						if ($tm == "")
+						{
+							$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE docid = ".$lab[$v["id"]],"tm");
+						};
+					};
+				};
 			}
-       $this->vars(array("LANG_BRO" => $langs));
-    }
+			
+			$this->vars(array("LANG_BRO" => $langs));
+		}; // keeleseosed
 		
-		$tm = $doc["tm"];
-		if ($tm == "")
-		{
-			$tm = $this->time2date($doc["modified"],8);
-		}
-
-		if ($doc["show_modified"])
-		{
-			$this->vars(array("SHOW_MODIFIED" => $this->parse("SHOW_MODIFIED")));
-		}
-
+		// I kinda hate this part, mime registry should really be somewhere else
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
 		$aliases = $this->get_aliases_for($docid);
  		if ($this->is_template("FILE"))
@@ -826,13 +808,6 @@ class document extends aw_template
 			$this->vars(array("FILE" => $fff));
 		}
  
-		$cr = "";
-		if ($doc["copyright"])
-		{
-			$cr = $this->parse("COPYRIGHT");
-		}
-		
-		$this->vars(array("COPYRIGHT" => $cr));
 
 		$retval = $this->parse();
 		return $retval;
