@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.77 2003/07/09 07:47:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.78 2003/07/11 07:23:20 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -467,7 +467,14 @@ class form extends form_base
 
 		$this->arr["is_translatable"] = $is_translatable;
 
-		$this->subtype = 0;
+		if ($this->subtype & FSUBTYPE_JOIN)
+		{
+			$this->subtype = FSUBTYPE_JOIN;
+		}
+		else
+		{
+			$this->subtype = 0;
+		}
 		if ($email_form_action)
 		{
 			$this->subtype += FSUBTYPE_EMAIL_ACTION;
@@ -5879,7 +5886,10 @@ class form extends form_base
 			foreach($changeset as $ch_el => $ch_el_val)
 			{
 				$chelinst =& $ef->get_element_by_id($ch_el);
-//				echo "changing element $ch_el value to $ch_el_val , prev value = ", $chelinst->get_val()," <br>";
+/*				if (aw_global_get("uid") == "erkihotel")
+				{
+					echo "changing element $ch_el value to $ch_el_val , prev value = ", $chelinst->get_val()," <br>";
+				}*/
 				$ef->set_element_value($ch_el, $ch_el_val, true);
 				$ef->entry[$ch_el] = $ch_el_val;
 			}
