@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.9 2003/10/24 10:54:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.10 2003/10/27 12:42:30 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -375,7 +375,8 @@ class messenger_v2 extends class_base
 					"name" => "mark[" . $key . "]",
 					"value" => 1,
 				)),
-				"from" => $this->_format(htmlspecialchars($message["from"]),$seen),
+				//"from" => $this->_format(htmlspecialchars($message["from"]),$seen),
+				"from" => $this->_format(htmlspecialchars($this->_conv_addr($message["from"])),$seen),
 				"subject" => html::href(array(
 					"url" => $this->mk_my_orb("change",array(
 							"id" => $arr["obj"]["oid"],
@@ -386,8 +387,7 @@ class messenger_v2 extends class_base
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
 				"date" => $this->_format(date("H:i d-M",strtotime($message["date"])),$seen),
-				"size" => $this->_format(sprintf("%dK",$message["size"]/1024),$seen),
-				"seen" => $this->_format($this->_conv_stat($message["seen"]),$seen),
+				"size" => $this->_format(sprintf("%d",$message["size"]/1024),$seen),
 				"answered" => $this->_format($this->_conv_stat($message["answered"]),$seen),
 			));
 		};
@@ -406,6 +406,20 @@ class messenger_v2 extends class_base
 	function _conv_stat($code)
 	{
 		return ($code == 0) ? "ei" : "jah";
+	}
+
+	////
+	// !Returns full name from the address
+	function _conv_addr($addr)
+	{
+		if (preg_match("/(.*)</",$addr,$m))
+		{
+			return $m[1];
+		}
+		else
+		{
+			return $addr;
+		};
 	}
 
 	function make_folder_tree($arr)
@@ -544,6 +558,7 @@ class messenger_v2 extends class_base
 		elseif (!empty($this->use_mailbox))
 		{
 			// I need to ask a name from the user and then create the actual folder
+			/*
 			$toolbar->add_button(array(
 				"name" => "newfolder",
 				"tooltip" => "Uus kataloog",
@@ -555,18 +570,16 @@ class messenger_v2 extends class_base
 				"name" => "editfolder",
 				"tooltip" => "Muuda kataloogi nime",
 				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","editfolder" => $this->use_mailbox)),
-				//"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","editfolder" => $this->use_mailbox)),
-				//"url" => "javascript:alert(document.forms['changeform'].elements['currentfolder'].value);",
-				//"target" => "msgrcont",
 				"url" => "javascript:rename_folder();",
 				"img" => "kaust_tagasi.gif",
 				"imgover" => "kaust_tagasi_over.gif",
 			));
 			$toolbar->add_separator();
+			*/
 		};
 
 
-		$toolbar->add_cdata("Vii kirjad");
+		//$toolbar->add_cdata("Vii kirjad");
 
 		$_tmp = array();
 		foreach($this->mailboxlist as $item)
@@ -582,8 +595,7 @@ class messenger_v2 extends class_base
 			"name" => "move",
 			"tooltip" => "Vii valitud kirjad kataloogi",
 			"url" => "javascript:document.changeform.subgroup.value='move_messages';document.changeform.submit();",
-			"img" => "save.gif",
-			"imgover" => "save_over.gif",
+			"img" => "import.gif",
 		));
 
 		$toolbar->add_separator();
