@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.30 2002/09/03 06:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.31 2002/10/15 12:03:04 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -52,6 +52,14 @@ class file extends aw_template
 				};
     
 				$replacement = $fi["content"];
+			}
+			// embed xml files
+			elseif ($fi["type"] == "text/xml")
+			{
+				$replacement = htmlspecialchars($fi["content"]);
+				$replacement = str_replace("\n","<br>\n",$replacement);
+				// tabs
+				$replacement = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;",$replacement);
 			}
 			else
 			{
