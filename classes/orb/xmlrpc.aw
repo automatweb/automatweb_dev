@@ -20,7 +20,6 @@ class xmlrpc extends aw_template
 			"request" => $xml,
 			"session" => $arr["remote_session"]
 		));
-		echo "val = ", htmlentities($resp)," <br>";
 		return $this->decode_response($resp);
 	}
 
