@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.29 2003/01/29 20:18:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.30 2003/01/30 12:30:49 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -86,7 +86,7 @@
 	@property type type=select group=general
 	@caption Menüü tüüp
 	
-	@property admin_feature type=select group=general
+	@property admin_feature type=select group=general table=menu field=admin_feature
 	@caption Vali programm
 	
 	@property pclass type=select table=objects field=meta method=serialize group=general
@@ -281,7 +281,7 @@ class menu extends class_base
 				if ($args["objdata"]["type"] == MN_ADMIN1)
 				{
 					$m = get_instance("menuedit");
-					$data["options"] = array_merge(array("0" => "--vali--"),$m->get_feature_sel());				
+					$data["options"] = array("0" => "--vali--") + $m->get_feature_sel();
 				}
 				else
 				{
