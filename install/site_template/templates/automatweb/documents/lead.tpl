@@ -1,4 +1,12 @@
-<b><a href='{VAR:baseurl}/{VAR:docid}'>{VAR:title}</a></b> <br /><br />
+<b>
+<!-- SUB: TITLE_LINK_BEGIN -->
+<a href='{VAR:baseurl}/{VAR:docid}'>
+<!-- END SUB: TITLE_LINK_BEGIN -->
+{VAR:title}
+<!-- SUB: TITLE_LINK_END -->
+</a>
+<!-- END SUB: TITLE_LINK_END -->
+</b> <br /><br />
 {VAR:text}
 
 <!-- SUB: image -->
