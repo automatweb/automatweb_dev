@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.13 2003/02/05 03:54:50 duke Exp $
+// $Id: cfgutils.aw,v 1.14 2003/03/13 14:11:33 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -20,6 +20,10 @@ class cfgutils extends aw_template
 		$this->clist = array();
 		foreach($this->cfg["classes"] as $key => $val)
 		{
+			if (empty($val["file"]))
+			{
+				continue;
+			};
 			$fname = $val["file"];
 			// cause property catalog is flat - alltho maybe it shouldn't be
 			$fl = strpos($fname,"/") ? substr(strrchr($fname,"/"),1) : $fname;
@@ -150,7 +154,7 @@ class cfgutils extends aw_template
 			$groupinfo = $tmp;
 			
 			$this->classinfo = $classinfo[0];
-			if (is_array($this->groupinfo))
+			if (isset($this->groupinfo) && is_array($this->groupinfo))
 			{
 				if (is_array($groupinfo))
 				{
@@ -179,7 +183,7 @@ class cfgutils extends aw_template
 		extract($args);
 		// this is the stuff we need to cache
 		$coreprops = $this->load_class_properties(array("file" => "class_base"));
-		if (!$file)
+		if (empty($file))
 		{
 			$file = $this->clist[$clid];
 		};
@@ -190,18 +194,6 @@ class cfgutils extends aw_template
                 };
 		$objprops = $this->load_class_properties(array("file" => $file));
 
-		/*
-		if (is_array($this->groupinfo))
-		{
-			$tmp = array();
-			foreach($this->groupinfo as $key => $val)
-			{
-				$tmp[$key] = $this->normalize_text_nodes($val[0]);
-
-			};
-		};
-		$this->groupinfo = $tmp;
-		*/
 		if (is_array($objprops))
 		{
 			foreach($objprops as $objprop)
@@ -210,7 +202,7 @@ class cfgutils extends aw_template
 				{
 					foreach($objprop["group"] as $_group)
 					{
-						if (!$this->groupinfo[$_group])
+						if (empty($this->groupinfo[$_group]))
 						{
 							$this->groupinfo[$_group] = array("caption" => $_group);
 						};
@@ -219,7 +211,7 @@ class cfgutils extends aw_template
 				}
 				else
 				{
-					if (!$this->groupinfo[$objprop["group"]])
+					if (empty($this->groupinfo[$objprop["group"]]))
 					{
 						$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
 					};
@@ -237,7 +229,11 @@ class cfgutils extends aw_template
 				$tmp[$key] = $this->normalize_text_nodes($val[0]);
 			};
 		};
-		$this->tableinfo = $tmp;
+
+		if (isset($tmp))
+		{
+			$this->tableinfo = $tmp;
+		};
 		return array_merge($coreprops,$objprops);
 	}
 
@@ -312,7 +308,7 @@ class cfgutils extends aw_template
 			$res = array();
 			foreach($val as $key => $val)
 			{
-				if ($val["text"])
+				if (isset($val["text"]))
 				{
 					$res[$key] = $val["text"];
 				}
