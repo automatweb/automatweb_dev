@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.1 2005/03/20 16:48:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.2 2005/03/21 11:16:20 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
@@ -46,7 +46,7 @@ class objects extends core
 		extract($arr);
 		$ret = array();
 		// only SELECT queries
-		if (strtoupper(substr(trim($sql), 0, 7)) != "SELECT")
+		if (strtoupper(substr(trim($sql), 0, 6)) != "SELECT")
 		{
 			return NULL;
 		}

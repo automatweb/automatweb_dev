@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.87 2005/03/20 16:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.88 2005/03/21 11:16:20 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -661,7 +661,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					{
 						$q = "SELECT * FROM objects WHERE $where limit 500";
 					}
-//					echo "s_q = $q <br />";
 					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
 					if (is_array($_tmp))
@@ -1632,6 +1631,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function execute_search($args = array())
 	{
+		$obj_list = $this->_get_s_parent($args);
 		extract($args);
 		if (is_array($request))
 		{
@@ -1991,5 +1991,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"SEARCH_SEL" => $arr["inst"]->parse("SEARCH_SEL")
 		));
 	}
+
+
+
 };
 ?>
