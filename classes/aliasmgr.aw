@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.100 2003/05/29 15:31:02 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.101 2003/06/03 15:17:34 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -640,7 +640,7 @@ class aliasmgr extends aw_template
 		// fetch a list of all the aliases for this object
 		$alist = $this->get_aliases(array(
 			"oid" => $id,
-			"type" => $types
+			//"type" => $types
 		));
 
 		$chlinks = array();
