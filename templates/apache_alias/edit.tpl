@@ -41,6 +41,10 @@ name="save" alt="Salvesta" title="Salvesta" border="0" SRC="{VAR:baseurl}/automa
 
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
+<td class="aste05" colspan="2" align="center"><span style="font-color: red">
+{VAR:error}
+</td>
+</tr>
 <td class="aste05">
 ID:
 </td>
