@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.24 2001/06/14 14:53:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.25 2001/06/16 09:47:50 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1477,10 +1477,12 @@ class planner extends calendar {
 			$next = date("d-m-Y",strtotime("+1 week",$start));
 			$prev = date("d-m-Y",strtotime("-1 week",$start));
 		};
-		$this->_get_events_in_range(array(
-			"start" => $start,
-			"delta" => "+1 week",
-		));
+		$end = strtotime("+1 week",$start) + 86399; //23h59m59s
+		$events = $this->get_events(array(
+				"start" => $start,
+				"end" => $end,
+				"uid" => UID,
+			));
 
 		$contents = array();
 		if ($user)
@@ -1532,7 +1534,7 @@ class planner extends calendar {
 		for ($i = 0; $i <= 6; $i++)
 		{
 			$current = $start + ($i * 60 * 60 * 24);
-			$current_long = date("d-m-Y",$current);
+			$current_long = date("dmY",$current);
 			if ($today == $current_long)
 			{
 				if ($short)
@@ -1564,7 +1566,7 @@ class planner extends calendar {
 				"sufix" => $sufix,
 				"date" => date("d-m-Y",$current),
 				"contents" => $contents[date("d",$current)],
-				"events" => $counts[date("d",$current)],
+				"events" => sizeof($events[$current_long]),
 			));
 			$c .= $this->parse("line");
 		};
