@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.5 2004/02/04 13:41:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.6 2004/03/09 15:31:45 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -96,10 +96,7 @@ class form_alias extends form_base
 			"entry" => $entry,
 			"a_reforb" => $this->mk_reforb("submit_entry_alias", array("parent" => $parent, "return_url" => $return_url,"sf" => $sf, "entry_id" => $entry_id,"alias_to" => $alias_to,"id" => $id))
 		));
-		if ($entry != "")
-		{
-			$this->vars(array("results" => $this->parse("results")));
-		}
+		$this->vars(array("results" => $this->parse("results")));
 		if ($form != "")
 		{
 			$this->vars(array("show_form" => $this->parse("show_form")));
@@ -124,7 +121,11 @@ class form_alias extends form_base
 
 		if ($alias_to)
 		{
-			$this->add_alias($alias_to,$entry_id,serialize(array("type" => "show", "output" => 1, "form_id" => $sf)));	
+			$_id = $this->add_alias($alias_to,$entry_id,serialize(array("type" => "show", "output" => 1, "form_id" => $sf)));	
+			$c = new connection($_id);
+			$c->change(array(
+				"to" => $c->prop("to")
+			));
 		}
 		else
 		if ($id)
