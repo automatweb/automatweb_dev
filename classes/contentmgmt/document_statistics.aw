@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.4 2004/03/25 13:40:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.5 2004/03/25 13:48:57 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -81,7 +81,9 @@ class document_statistics extends class_base
 				$data["vcl_inst"]->define_field(array(
 					"name" => "hits",
 					"caption" => "Vaatamisi",
-					"align" => "center"
+					"align" => "center",
+					"type" => "int",
+					"sortable" => 1
 				));
 
 				foreach($st as $did => $hc)
@@ -96,6 +98,7 @@ class document_statistics extends class_base
 
 				$data["vcl_inst"]->set_default_sortby("hits");
 				$data["vcl_inst"]->set_default_sorder("desc");
+				$data["vcl_inst"]->sort_by();
 				break;
 
 			case "folders":
@@ -191,10 +194,7 @@ class document_statistics extends class_base
 		classload("vcl/table");
 		$t = new aw_table();
 
-		$st = $this->get_stat_arr(array(
-			"timespan" => $ob->prop("timespan"),
-			"count" => $ob->prop("count"),
-		));
+		$st = $this->get_stat_arr($ob);
 				
 
 		$this->read_template("show.tpl");
@@ -293,6 +293,7 @@ class document_statistics extends class_base
 		$timespan = $obj->prop("timespan");
 		$count = $obj->prop("count");
 
+		classload("date_calc");
 		if ($timespan == "week")
 		{
 			$fc = array();
