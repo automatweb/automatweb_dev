@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="mrp_resource" folder="mrp" extends="class_base">
-		<action name="start_job">
+		<action name="is_available">
 			<function name="start_job">
 				<arguments>
 					<required name="resource" type="int" />

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.19 2005/03/15 11:30:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.20 2005/03/15 11:41:07 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -779,6 +779,7 @@ class mrp_resource extends class_base
 		{
 			case MRP_STATUS_RESOURCE_AVAILABLE:
 				$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+				$resource->save ();
 				return MRP_STATUS_RESOURCE_AVAILABLE;
 
 			case MRP_STATUS_RESOURCE_INUSE:
@@ -816,6 +817,7 @@ class mrp_resource extends class_base
 
 			case MRP_STATUS_RESOURCE_INUSE:
 				$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
+				$resource->save ();
 				return MRP_STATUS_RESOURCE_INUSE;
 				break;
 
@@ -823,6 +825,33 @@ class mrp_resource extends class_base
 				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
 				break;
 
+			default:
+				return false;
+		}
+	}
+
+/**
+    @attrib name=is_available
+	@param resource required type=int
+**/
+	function start_job ($arr)
+	{
+		if (is_oid)
+		{
+			$resource = obj ($arr["resource"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		switch ($resource->prop ("state"))
+		{
+			case MRP_STATUS_RESOURCE_AVAILABLE:
+				return true;
+
+			case MRP_STATUS_RESOURCE_INUSE:
+			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
 			default:
 				return false;
 		}
