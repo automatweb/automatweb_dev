@@ -1,5 +1,6 @@
 <html>
 <head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css">
 <script type="text/javascript">
 function showhide()
