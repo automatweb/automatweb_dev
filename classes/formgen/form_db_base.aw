@@ -400,14 +400,14 @@ class form_db_base extends aw_template
 		if (($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] != "") || $this->arr["save_table"] != 1)
 		{
 			$this->delete_object($entry_id);
-			$this->_log(ST_FORM_ENTRY, SA_DELETE,"Kustutas formi $this->name sisestuse $entry_id", $entry_id);
+			$this->_log(ST_FORM_ENTRY, SA_DELETE,"form $this->name sisestus $entry_id", $entry_id);
 		}
 		else
 		{
 			// delete permanently from the table then I guess
 			$q = "DELETE FROM ".$this->arr["save_table_start_from"]." WHERE ".$this->arr["save_tables"][$this->arr["save_table_start_from"]]." = '$entry_id'";
 			$this->db_query($q);
-			$this->_log(ST_FORM_ENTRY, SA_DELETE,"Kustutas formi $this->name sisestuse $entry_id (tabelist ".$this->arr["save_table_start_from"].")");
+			$this->_log(ST_FORM_ENTRY, SA_DELETE,"form $this->name sisestus $entry_id (tabelist ".$this->arr["save_table_start_from"].")");
 		}
 	}
 

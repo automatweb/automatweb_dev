@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.48 2003/01/11 17:16:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.49 2003/01/20 14:25:50 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -218,7 +218,7 @@ class users_user extends aw_template
 					online = 1
 					WHERE uid = '$uid'";
 		$this->db_query($q);
-		$this->_log(ST_USERS, SA_LOGIN, USR_LOGGED_IN);
+		$this->_log(ST_USERS, SA_LOGIN, $uid);
 		if (aw_ini_get("TAFKAP"))
 		{
 			setcookie("tafkap",$uid,strtotime("+7 years"));
@@ -255,7 +255,7 @@ class users_user extends aw_template
 		$this->db_query($q);
     aw_global_set("uid","");
     aw_session_set("uid","");
-		$this->_log(ST_USERS, SA_LOGOUT ,USR_LOGGED_OUT);
+		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
 	}
 
 	////
@@ -307,7 +307,7 @@ class users_user extends aw_template
 
 		$q = "UPDATE users SET $sets WHERE uid = '".$data["uid"]."'";
 		$this->db_query($q);
-		$this->_log(ST_USERS, SA_CHANGE, aw_global_get("uid") . " muutis kasutaja \"$data[uid]\" andmeid");
+		$this->_log(ST_USERS, SA_CHANGE, $data['uid']);
 	}
 
 	function savegroup($data) 
@@ -327,7 +327,7 @@ class users_user extends aw_template
 
 		$q = "UPDATE groups SET modified = ".time().", modifiedby = '".aw_global_get("uid")."', $sets WHERE gid = '".$data["gid"]."'";
 		$this->db_query($q);
-		$this->_log(ST_GROUPS, SA_CHANGE ,aw_global_get("uid") . " muutis grupi \"$data[gid]\" andmeid");
+		$this->_log(ST_GROUPS, SA_CHANGE, $data['gid']);
 	}
 
 	///
@@ -417,7 +417,7 @@ class users_user extends aw_template
 		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
 			VALUES('$gname',$t,'$uid',$t,'$uid','$type','$data',$parent,$priority,$oid,$search_form)";
 		$this->db_query($q);
-		$this->_log(ST_GROUPS, SA_ADD,aw_global_get("uid") . " lisas uue grupi - $gname");
+		$this->_log(ST_GROUPS, SA_ADD, $gname);
 		return $this->db_fetch_field("SELECT MAX(gid) AS gid FROM groups", "gid");
 	}
 
@@ -630,7 +630,7 @@ class users_user extends aw_template
 		// ja v6tame teistelt k6ik 6igused kodukataloomale 2ra
 		$this->deny_obj_access($hfid);
 
-		$this->_log(ST_USERS, SA_ADD,aw_global_get("uid")." lisas kasutaja $uid");
+		$this->_log(ST_USERS, SA_ADD, $uid);
 	}
 
 	function deletegroup($gid)
@@ -646,7 +646,7 @@ class users_user extends aw_template
 //		$this->db_query("DELETE FROM groupmembergroups WHERE parent = $gid OR child = $gid");
 		$this->db_query("DELETE FROM acl WHERE gid = $gid");
 
-		$this->_log(ST_USERS, SA_DELETE_GRP,"Kustutas grupi ".$this->grpcache[$gid]["name"]);
+		$this->_log(ST_USERS, SA_DELETE_GRP, $this->grpcache[$gid]["name"]);
 
 		
 		if (!is_array($this->grpcache[$gid]))
@@ -933,7 +933,7 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO groupmembergroups(parent,child,created,createdby)
 					VALUES($parent,$child,".time().",'".aw_global_get("uid")."')");
 
-		$this->_log(ST_GROUPS, SA_GRP_ADD_SUBGRP,aw_global_get("uid")." lisas grupi $parent sisse grupi $child");
+		$this->_log(ST_GROUPS, SA_GRP_ADD_SUBGRP, "lisas grupi $parent sisse grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->add_users_to_group_rec($parent,$uarr);
 	}
@@ -943,7 +943,7 @@ class users_user extends aw_template
 		$this->db_query("DELETE FROM groupmembergroups
 					WHERE parent = $parent AND child = $child");
 
-		$this->_log(ST_GROUPS, SA_GRP_DEL_SUBGRP,aw_global_get("uid")." kustutas grupi $parent seest grupi $child");
+		$this->_log(ST_GROUPS, SA_GRP_DEL_SUBGRP, "kustutas grupi $parent seest grupi $child");
 		$uarr = $this->getgroupmembers2($child);
 		$this->remove_users_from_group_rec($parent,$uarr);
 	}

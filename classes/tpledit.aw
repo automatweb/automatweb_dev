@@ -379,7 +379,7 @@ class tpledit extends aw_template
 				"content" => stripslashes($source),
 			));
 		};
-		$this->_log(ST_TEMPLATE, SA_CHANG, "changed template $fullpath");
+		$this->_log(ST_TEMPLATE, SA_CHANG, $fullpath);
 		return $this->mk_orb("edit",array("file" => $file,"revision" => $revision));
 	}
 

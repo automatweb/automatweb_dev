@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.75 2003/01/11 17:16:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.76 2003/01/20 14:25:50 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -501,7 +501,7 @@ class users extends users_user
 			}
 		}
 
-		$this->_log(ST_USERS, SA_CHANGE_PWD, "$arr[id] changed password");
+		$this->_log(ST_USERS, SA_CHANGE_PWD, $arr['id']);
 		if (is_admin())
 		{
 			return $this->mk_my_orb("gen_list", array());
@@ -579,7 +579,7 @@ class users extends users_user
 			$add_state = "";
 			aw_session_set("session_filled_forms",array());
 
-			$this->_log(ST_USERS, SA_ADD,  $add_state["uid"]." joined");
+			$this->_log(ST_USERS, SA_ADD,  $add_state["uid"]);
 			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after_join;
 		}
 		else
@@ -1088,7 +1088,7 @@ class users extends users_user
 		$mail = str_replace("\r\n","\n",$mail);
 
 		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".$this->cfg["mail_from"]);
-		$this->_log(ST_USERS, SA_REMIND_PWD, "user $username was reminded of his/her password");
+		$this->_log(ST_USERS, SA_REMIND_PWD, $username);
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
 
@@ -1290,7 +1290,7 @@ class users extends users_user
 		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
 
-		$this->_log(ST_USERS, SA_CHANGE, aw_global_get("uid")." changed settings ");
+		$this->_log(ST_USERS, SA_CHANGE, aw_global_get("uid"));
 		return $this->mk_my_orb("settings", array("id" => $id));
 	}
 
@@ -1982,7 +1982,7 @@ class users extends users_user
 		$newpass = md5($pass1);
 		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
 		$this->db_query($q);
-		$this->_log(ST_USERS, SA_CHANGE_PWD,"$uid vahetas parooli (hash)");
+		$this->_log(ST_USERS, SA_CHANGE_PWD, $uid);
 //		$this->read_adm_template("password_change_success.tpl");
 //		return $this->parse();
 		aw_session_set("status_msg","<b><font color=green>Parool on edukalt vahetatud</font></b>");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.5 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/variables.aw,v 2.6 2003/01/20 14:25:50 kristo Exp $
 
 class variables extends aw_template
 {
@@ -31,12 +31,12 @@ class variables extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name));
-			$this->_log(ST_ML_VAR, SA_CHANGE, sprintf(LC_VARS_CHANGED_VAR,$name), $id);
+			$this->_log(ST_ML_VAR, SA_CHANGE, $name, $id);
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent,"name" => $name, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
-			$this->_log(ST_ML_VAR,SA_ADD, sprintf(LC_VARS_ADD_VAR,$name), $id);
+			$this->_log(ST_ML_VAR,SA_ADD, $name, $id);
 		}
 
 		return $this->mk_my_orb("change", array("id" => $id));
@@ -383,12 +383,12 @@ class variables extends aw_template
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $value));
-			$this->_log(ST_ML_STAMP,SA_CHANGE, sprintf(LC_VARS_CHANGED_STAMP,$name), $id);
+			$this->_log(ST_ML_STAMP,SA_CHANGE, $name, $id);
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => 1,"name" => $name, "class_id" => CL_MAILINGLIST_STAMP, "comment" => $value));
-			$this->_log(ST_ML_STAMP,SA_ADD, sprintf(LC_VARS_ADD_STAMP,$name), $id);
+			$this->_log(ST_ML_STAMP,SA_ADD, $name, $id);
 		};
 		return $this->mk_my_orb("change_stamp",array("id" => $id));
 	}
@@ -443,7 +443,7 @@ class variables extends aw_template
 				"status" => 2,
 				"comment" => $comment,
 			));
-			$this->_log(ST_ML_CAT, SA_CHANGE,sprintf(LC_VARS_CHANGED_CAT,$name), $id);
+			$this->_log(ST_ML_CAT, SA_CHANGE, $name, $id);
 		}
 		else
 		{
@@ -454,7 +454,7 @@ class variables extends aw_template
 				"comment" => $comment,
 			));
 			
-			$this->_log(ST_ML_CAT, SA_ADD,sprintf(LC_VARS_ADD_CAT,$name), $id);
+			$this->_log(ST_ML_CAT, SA_ADD, $name, $id);
 		}
 		return $this->mk_my_orb("change_cat",array("id" => $id));
 	}

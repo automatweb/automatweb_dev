@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.25 2003/01/17 10:22:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.26 2003/01/20 14:25:50 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -3403,7 +3403,7 @@ class form extends form_base
 		}
 
 		// add the type of the form to the log message as well
-		$this->_log(ST_FORM, SA_ADD,$this->vars["LC_FORMS_LOG_NEW"] ." ". $this->ftypes[$type] ." ". $name, $id);
+		$this->_log(ST_FORM, SA_ADD, $this->ftypes[$type] ." ". $name, $id);
 
 		// XXX: sucky-sucky
 		if ($alias_doc)
@@ -3544,7 +3544,7 @@ class form extends form_base
 		extract($arr);
 		$this->delete_object($id);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->_log(ST_FORM, SA_DELETE,"Kustutas formi $name ($id)", $id);
+		$this->_log(ST_FORM, SA_DELETE, $name, $id);
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent), "menuedit"));
 	}
 
@@ -3822,7 +3822,7 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-		$this->_log(ST_FORM, SA_CHANGE,"Muutis formi $this->name ($id) metainfot", $id);
+		$this->_log(ST_FORM, SA_CHANGE, $this->name, $id);
 		return $this->mk_orb("metainfo",  array("id" => $id));
 	}
 

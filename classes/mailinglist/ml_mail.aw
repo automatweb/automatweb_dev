@@ -33,7 +33,7 @@ class ml_mail extends aw_template
 	
 		$this->db_query("INSERT INTO messages (id) VALUES ('$oid')");
 		
-		$this->_log(ST_MAILINGLIST_MAIL, SA_ADD ,"lisas meili $oid", $oid);
+		$this->_log(ST_MAILINGLIST_MAIL, SA_ADD , $oid, $oid);
 		return $this->mk_my_orb("change",array("id" => $oid));
 	}
 
@@ -53,7 +53,7 @@ class ml_mail extends aw_template
 			"key" => "conf",
 			"value" => $conf
 		));
-		$this->_log(ST_MAILINGLIST_MAIL,SA_ADD,"lisas meili $id", $id);
+		$this->_log(ST_MAILINGLIST_MAIL,SA_ADD,$id, $id);
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
@@ -173,7 +173,7 @@ class ml_mail extends aw_template
 
 		$this->db_query("DELETE FROM messages where id='$id'");
 
-		$this->_log(ST_MAILINGLIST_MAIL, SA_DELETE,"kustutas meili $id", $id);
+		$this->_log(ST_MAILINGLIST_MAIL, SA_DELETE,$id, $id);
 
 		$url=$this->mk_my_orb("mlist",array("parent" => $parent),"menuedit");
 		header("Location:$url");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.205 2003/01/17 15:24:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.206 2003/01/20 14:25:50 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -43,7 +43,7 @@ class menuedit extends aw_template
 		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);
 		$this->db_query($q);
-		$this->_log(ST_MENUEDIT, SA_ADD ,sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args["name"]), $newoid);
+		$this->_log(ST_MENUEDIT, SA_ADD, $args["name"], $newoid);
 
 		if (!$args['no_flush'])
 		{
@@ -984,7 +984,7 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,sprintf(LC_MENUEDIT_LOOKED_SITE,$log),$section);
+			$this->_log(ST_MENUEDIT, SA_PAGEVIEW, $log, $section);
 		}
 	}
 
@@ -2640,7 +2640,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			));
 
 			$this->upd_object($charr);
-			$this->_log(ST_MENUEDIT, SA_CHANGE,sprintf(LC_MENUEDIT_CJANGED_MENU,$name), $id);
+			$this->_log(ST_MENUEDIT, SA_CHANGE, $name, $id);
 			$q = "UPDATE menu SET 
 							tpl_edit = '$tpl_edit',
 							tpl_lead = '$tpl_lead',
@@ -2684,7 +2684,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// keelame teistel selle n2gemise sharetud folderis
 				$this->deny_obj_access($id);
 			}
-			$this->_log(ST_MENUEDIT, SA_ADD,sprintf(LC_MENUEDIT_ADDED_SECTION,$name), $id);
+			$this->_log(ST_MENUEDIT, SA_ADD, $name, $id);
 		}
 
 		$updmenus[] = $id;

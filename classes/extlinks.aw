@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.27 2002/12/30 14:28:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.28 2003/01/20 14:25:50 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -24,7 +24,7 @@ class extlinks extends class_base
 		$q = "INSERT INTO extlinks (id,oid,url,name,hits,newwindow,doclinkcollection) 
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$doclinkcollection')";
 		$this->db_query($q);
-		$this->_log(ST_EXTLINK, SA_ADD,sprintf(LC_EXTLINKS_ADD_LINK,$name), $id);
+		$this->_log(ST_EXTLINK, SA_ADD, $name, $id);
 	}
 
 	////
@@ -134,7 +134,7 @@ class extlinks extends class_base
 			WHERE id = '$lid'";
 		$this->db_query($q);
 		$this->upd_object(array("oid" => $lid,"name" => $name));
-		$this->_log(ST_EXTLINK, SA_CHANGE,sprintf(LC_EXTLINKS_CHANGED_LINK,$name), $lid);
+		$this->_log(ST_EXTLINK, SA_CHANGE, $name, $lid);
 	}
 
 	function get_link($id)
@@ -168,7 +168,7 @@ class extlinks extends class_base
 						VALUES ('$id',$t,'$host','$uid')";
 		$this->db_query($q);
 		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
-		$this->_log(ST_EXTLINK, SA_CLICK,sprintf(LC_EXTLINKS_CLIK_LINK,$name), $id);
+		$this->_log(ST_EXTLINK, SA_CLICK, $name, $id);
 	}
 
 };

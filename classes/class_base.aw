@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.53 2003/01/17 18:02:49 duke Exp $
+// $Id: class_base.aw,v 2.54 2003/01/20 14:25:49 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -500,11 +500,11 @@ class class_base extends aliasmgr
 
 		if ($this->new)
 		{
-			$this->_log($syslog_type, SA_ADD, "Lisas $classname objekti $name ($id)", $id);
+			$this->_log($syslog_type, SA_ADD, "nimi = $name, klass = $classname id = $id", $id);
 		}
 		else
 		{
-			$this->_log($syslog_type, SA_CHANGE, "Muutis $classname objekti $name ($id)", $id);
+			$this->_log($syslog_type, SA_CHANGE, "nimi = $name, klass = $classname id = $id", $id);
 		};
 
 		$args = array(

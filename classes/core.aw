@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.144 2003/01/07 19:23:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.145 2003/01/20 14:25:49 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -253,7 +253,7 @@ class core extends db_connector
 		}
 
 		$obj = $this->get_object($oid);
-		$this->_log(ST_CORE, SA_DELETE, "Kustutas objekti $obj[name] , id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
+		$this->_log(ST_CORE, SA_DELETE, "$obj[name], id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
 
 		$where = " oid = '$oid'";
 		if ($class_id)

@@ -313,7 +313,7 @@ class ml_rule extends aw_template
 				$this->execute_rules($matches,$ruledta);
 			};
 
-			$this->_log(ST_MAILINGLIST_RULE, SA_CHANGE,"muutis ruuli $name", $id);
+			$this->_log(ST_MAILINGLIST_RULE, SA_CHANGE,$name, $id);
 			return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));
 		};
 	}
@@ -371,7 +371,6 @@ class ml_rule extends aw_template
 	{
 		if (!is_array($arr))
 		{
-			$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR,"error: match_rules arr ei ole array");
 			return;
 		};
 
@@ -565,7 +564,6 @@ class ml_rule extends aw_template
 	{
 		if (!is_array($arr))
 		{
-			$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR,"error: execute_rules arr ei ole array");
 			return;
 		};
 
@@ -645,7 +643,6 @@ class ml_rule extends aw_template
 
 
 					default:
-						$this->_log(ST_MAILINGLIST_RULE, SA_RAISE_ERROR, "error: WTF?? execute_rules on mid=$mid rule rid=$rid has no action!");
 						break;
 				};// of switch
 			};// of foreach($midarr as $mid)

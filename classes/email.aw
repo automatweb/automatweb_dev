@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.26 2003/01/03 14:57:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.27 2003/01/20 14:25:50 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -131,13 +131,13 @@ class email extends aw_template
 		{
 			$this->upd_object(array("oid" => $mail_id));
 			$this->db_query("UPDATE ml_mails SET mail_from = '$from', mail_from_name='$from_name', subj = '$subject' , contents='$contents' WHERE id = $mail_id");
-			$this->_log(ST_ML_MAIL, SA_CHANGE,sprintf(LC_EMAIL_CHANGED_EMAIL,$subject), $mail_id);
+			$this->_log(ST_ML_MAIL, SA_CHANGE, $subject, $mail_id);
 		}
 		else
 		{
 			$mail_id = $this->new_object(array("parent" => $parent,"name" => "e-mail", "class_id" => CL_EMAIL));
 			$this->db_query ("INSERT INTO ml_mails VALUES($mail_id, '$from' , '$subject' , '$contents' , 0,'$from_name')");
-			$this->_log(ST_ML_MAIL,SA_ADD, sprintf(LC_EMAIL_ADD_EMAIL,$subject), $mail_id);
+			$this->_log(ST_ML_MAIL, SA_ADD, $subject, $mail_id);
 		}
 
 		if ($link_addr != "")
@@ -154,7 +154,7 @@ class email extends aw_template
 				}
 			}
 			$_id = $this->new_object(array("parent" => $mail_id,"name" => $link_addr,"class_id" => CL_MAIL_LINK));
-			$this->_log(ST_ML_MAIL_LINK, SA_ADD ,sprintf(LC_EMAIL_ADD_MAIL_LINK,$subject,$link_addr),$_id);
+			$this->_log(ST_ML_MAIL_LINK, SA_ADD, $link_addr, $_id);
 		}
 
 		if ($send_mail != "")
@@ -220,7 +220,7 @@ class email extends aw_template
 		extract($arr);
 		$this->delete_object($id);
 		$subject = $this->db_fetch_field("SELECT subj FROM ml_mails WHERE id = $id","subj");
-		$this->_log(ST_ML_MAIL, SA_DELETE,sprintf(LC_EMAIL_ERASED_MAIL,$subject), $id);
+		$this->_log(ST_ML_MAIL, SA_DELETE, $subject, $id);
 		header("Location: ".$this->mk_my_orb("list_mails", array("id" => $parent)));
 	}
 
@@ -508,7 +508,7 @@ class email extends aw_template
 
 		$this->db_query("INSERT INTO ml_sent VALUES($list_id, $id, ".time().")");
 		$this->db_query("UPDATE ml_mails SET sent = ".time()." WHERE id = $id");
-		$this->_log(ST_ML_MAIL, SA_SEND,sprintf(LC_EMAIL_SENT_MAIL2,$mail["subj"]), $id);
+		$this->_log(ST_ML_MAIL, SA_SEND, $mail["subj"], $id);
 	}
 	
 	function send_plain_mail($from, $to, $subj, $text)

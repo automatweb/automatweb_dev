@@ -1379,32 +1379,32 @@ class dronline extends class_base
 
 		$ru = aw_global_get("REQUEST_URI");
 		// block addresses listbox
-		if ($id)
-		{
-			$si = $this->get_block_ips($id);
-			$cdata .= html::select(array(
-				'name' => 'ip_block',
-				'options' => $si,
-				'selected' => $arr['sel_ip_block'],
-			));
+//		if ($id)
+//		{
+//			$si = $this->get_block_ips($id);
+//			$cdata .= html::select(array(
+//				'name' => 'ip_block',
+//				'options' => $si,
+//				'selected' => $arr['sel_ip_block'],
+//			));
+//
+//			$cdata .= html::select(array(
+//				'name' => 'ip_allow',
+//				'options' => $this->get_allow_ips($id),
+//				'selected' => $arr['sel_ip_allow'],
+//			));
+//
+//			$cdata .= html::href(array(
+//				'url' => 'javascript:update_ip(document.'.$formname.')',
+//				'caption' => html::img(array(
+//					'url' => $this->cfg['baseurl'].'/automatweb/images/icons/save.gif',
+//					'border' => '0'
+//				))
+//			));
+//			$ru = preg_replace("/sel_ip_block==[^&$]*/","",$ru);
+//			$ru = preg_replace("/sel_ip_allow==[^&$]*/","",$ru);
+//		}
 
-			$cdata .= html::select(array(
-				'name' => 'ip_allow',
-				'options' => $this->get_allow_ips($id),
-				'selected' => $arr['sel_ip_allow'],
-			));
-
-			$cdata .= html::href(array(
-				'url' => 'javascript:update_ip(document.'.$formname.')',
-				'caption' => html::img(array(
-					'url' => $this->cfg['baseurl'].'/automatweb/images/icons/save.gif',
-					'border' => '0'
-				))
-			));
-			$ru = preg_replace("/sel_ip_block==[^&$]*/","",$ru);
-			$ru = preg_replace("/sel_ip_allow==[^&$]*/","",$ru);
-		}
-		
 		// add timespan listbox
 		$cdata .= html::select(array(
 			'name' => 'def_span',

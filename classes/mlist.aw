@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.8 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.9 2003/01/20 14:25:50 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -215,7 +215,7 @@ class mlist extends aw_template
 			}
 		}
 
-		$this->_log(ST_ML_USER, SA_ADD ,sprintf(LC_LIST_ADD_USER,$name,$this->name), $user_id);
+		$this->_log(ST_ML_USER, SA_ADD, sprintf(LC_LIST_ADD_USER,$name,$this->name), $user_id);
 		return $user_id;
 	}
 
@@ -607,7 +607,7 @@ class mlist extends aw_template
 			echo "Leidsin $name ( $mail ) muutujad: ".join(",",$varst)."<br>";
 			flush();
 		}			
-		$this->_log(ST_ML_LIST, SA_IMPORT,sprintf(LC_LIST_IMPORTED_USER,$this->name));
+		$this->_log(ST_ML_LIST, SA_IMPORT,$this->name);
 		$or = $this->mk_my_orb("list_members",array("id" => $list_id)); 
 		print "Kliki <a href='$or'>siia</a> jätkamiseks";
 		exit;

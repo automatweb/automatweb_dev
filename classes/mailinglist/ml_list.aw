@@ -107,7 +107,7 @@ class ml_list extends aw_template
 				$this->update_automatic_list($id);
 			}
 
-			$this->_log(ST_MAILINGLIST, SA_CHANGE,"muutis meililisti $name", $id);
+			$this->_log(ST_MAILINGLIST, SA_CHANGE, $name, $id);
 		}
 		else
 		{
@@ -120,7 +120,7 @@ class ml_list extends aw_template
 					"user_form_conf" => $user_form_conf
 				)
 			));
-			$this->_log(ST_MAILINGLIST, SA_ADD,"lisas meililisti $name", $id);
+			$this->_log(ST_MAILINGLIST, SA_ADD, $name, $id);
 		}
 		return $this->mk_my_orb("omadused",array("id" => $id));
 	}

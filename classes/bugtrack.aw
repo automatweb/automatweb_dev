@@ -473,7 +473,7 @@ class bugtrack extends aw_template
 		$this->update_mail($req["id"],MAIL_ADD);
 
 		// logi 
-		$this->_log(ST_BUG, SA_ADD,"Lisas bugtrackki ".$this->bugtypes[$arr["bug_type"]]." $title");
+		$this->_log(ST_BUG, SA_ADD,$this->bugtypes[$arr["bug_type"]]." $title");
 
 		return $this->mk_my_orb("edit",array("id"=> $req["id"]),"",false,true);
 	}
@@ -568,7 +568,7 @@ class bugtrack extends aw_template
 		$this->update_mail($id,MAIL_CHANGE);
 
 		// logi 
-		$this->_log(ST_BUG, SA_CHANGE,"Muutis bugi ".$bug["title"]);
+		$this->_log(ST_BUG, SA_CHANGE,$bug["title"]);
 		
 		return $this->mk_my_orb("edit",array("id" => $id),"",false,true);
 	}
@@ -638,7 +638,7 @@ class bugtrack extends aw_template
 			foreach($sel as $id)
 			{
 				$buk = $this->get_bug($id);
-				$this->_log(ST_BUG, SA_DELETE,"Kustutas bugi ".$buk["title"]);
+				$this->_log(ST_BUG, SA_DELETE,$buk["title"]);
 				
 				// kustuta kohalikust tabelist kui puuk ise pole masterist pandud
 				if ($buk["site"]!=$this->cfg["mastersite"])

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.144 2003/01/14 16:38:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.145 2003/01/20 14:25:49 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1230,7 +1230,7 @@ class document extends aw_template
 			));
 			
 			// logime aktsioone
-			$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat", $id);
+			$this->_log(ST_DOCUMENT, SA_CHANGE,"<a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> (arhiivikoopia)", $id);
 			// laena mulle bensiini ja tikke, vanemuine
 			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
@@ -1407,7 +1407,7 @@ class document extends aw_template
 		$this->flush_cache();
 
 		// logime aktsioone
-		$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>",$id);
+		$this->_log(ST_DOCUMENT, SA_CHANGE,"<a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>",$id);
 
 		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]),"",false,true);
 	}
@@ -3574,7 +3574,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$dat = $this->get_record("objects","oid",$section);
-		$this->_log(ST_DOCUMENT, SA_PRINT, "Printis dokumendi $dat[name] ",$section);
+		$this->_log(ST_DOCUMENT, SA_PRINT, "$dat[name] ",$section);
 		echo($this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl"
