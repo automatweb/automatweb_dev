@@ -47,6 +47,14 @@
             <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
+            <name>s_oid</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>textbox</type>
+            <field>s_oid</field>
+            <caption>OID</caption>
+      </property>
+      <property>
             <name>s_modifiedby</name>
             <table>objects</table>
             <group>recycle_search</group>
