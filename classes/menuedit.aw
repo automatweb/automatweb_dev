@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.222 2003/02/05 04:12:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.223 2003/02/05 10:51:01 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1498,21 +1498,19 @@ class menuedit extends aw_template
 			$atc_root = $atc_inst->get_root_for_user($atc_id);
 			if ($atc_root)
 			{
-				$menu_cache = get_instance("menu_cache");
-				$menu_cache->make_caches();
-				$menus = $menu_cache->get_menus_below($atc_root);
-
-				$mn = array($atc_root);
-				foreach($menus as $_oid => $_dat)
-				{
-					$mn[] = $_oid;
-				}
+				$mn = $this->get_objects_below(array(
+					'parent' => $atc_root,
+					'class' => CL_PSEUDO,
+					'full' => true,
+					'ignore_lang' => true,
+					'ret' => ARR_NAME
+				)) + array($atc_root => $atc_root);
 
 				$objs = array();
 				$mns = join(",",$mn);
 				if ($mns != "")
 				{
-					$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".$mns.") ORDER BY jrk");
+					$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND parent IN (".$mns.") ORDER BY jrk");
 					while ($row = $this->db_next())
 					{
 						$objs[$row["parent"]][] = $row;
