@@ -774,10 +774,18 @@ class _int_object
 
 		$prev = $this->flag($flag);
 
-		$mask = 2147483647 ^ $flag;
-		$mask |= $val;
+		if ($val)
+		{
+			// if set flag, then or the current bits with the value
+			$value = $this->obj["flags"] | $flag;
+		}
+		else
+		{
+			$mask = OBJ_FLAGS_ALL ^ $flag;
+			$value = $this->obj["flags"] & $mask;
+		}
 
-		$this->_int_set_of_value("flags", $this->obj["flags"] & $mask);
+		$this->_int_set_of_value("flags", $value);
 		$this->_int_do_implicit_save();
 		return $prev;
 	}

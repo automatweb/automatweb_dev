@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.84 2003/12/10 14:11:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.85 2003/12/18 11:14:58 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -210,6 +210,8 @@ define("OBJ_NEEDS_TRANSLATION",2);
 define("OBJ_IS_TRANSLATED",4);
 // this will be used for objects with calendar functionality
 define("OBJ_IS_DONE",8);
+// if you need to select an active object from a bunch of objects, then this flag marks the active object
+define("OBJ_FLAG_IS_SELECTED", 16);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 

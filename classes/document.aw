@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.227 2003/12/17 12:22:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.228 2003/12/18 11:14:58 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1166,7 +1166,7 @@ class document extends aw_template
 			$clearable_fields = array("content","lead","title");
 			foreach($clearable_fields as $_field)
 			{
-				$data[$_field] = strip_tags($data[$_field], "<b><i><u><p><p><em><ul><li><ol><strong>");
+				$data[$_field] = strip_tags($data[$_field], "<b><i><u><p><p><em><ul><li><ol><strong><br>");
 			};
 		}
 
