@@ -90,7 +90,6 @@ function assign_config()
 <!-- END SUB: field -->
 </table>
 {VAR:reforb}
-<input type="submit" value="Otsi">
 </form>
 {VAR:table}
 {VAR:treforb}
