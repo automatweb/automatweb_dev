@@ -214,7 +214,7 @@ class site_content extends menuedit
 		if ($periodic && $text == "") 
 		{
 			$docc = $this->show_periodic_documents($section,$obj);
-			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($params["print"]) )
+			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($GLOBALS["print"]) )
 			{
 				// this tells site index.aw not to show the index.tpl
 				// shrug, erki wants it that way
@@ -230,7 +230,7 @@ class site_content extends menuedit
 			// sektsioon pole perioodiline
 			//$docc = $this->show_documents($section,$docid,$template);
 			$docc = $this->show_documents($section,$docid,$xtemplate);
-			if ( ($this->mar[$sel_menu_id]["no_menus"] == 1) || ($params["print"]) )
+			if ( ($this->mar[$sel_menu_id]["no_menus"] == 1) || ($GLOBALS["print"]) )
 			{
 				$this->no_index_template = true;
 				return $docc;
