@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.13 2004/05/17 14:23:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.14 2004/05/27 08:44:52 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -499,22 +499,37 @@ class aw_table extends aw_template
 
 		if (!empty($pageselector))
 		{
-			switch($pageselector)
+			$this->pageselector = $pageselector;
+		}
+
+		if (!empty($records_per_page))
+		{
+			$this->records_per_page = $records_per_page;
+		}
+
+		if (!empty($has_pages))
+		{
+			$this->has_pages = $has_pages;
+		}
+
+		if (!empty($this->pageselector))
+		{
+			switch($this->pageselector)
 			{
 				case "text":
 					$tbl .= $this->draw_text_pageselector(array(
-						"records_per_page" => $records_per_page
+						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "buttons":
 					$tbl .= $this->draw_button_pageselector(array(
-						"records_per_page" => $records_per_page
+						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "lb":
 				default:
 					$tbl .= $this->draw_lb_pageselector(array(
-						"records_per_page" => $records_per_page
+						"records_per_page" => $this->records_per_page
 					));
 			}
 		}
@@ -550,6 +565,16 @@ class aw_table extends aw_template
 			$tmp = $this->tableattribs;
 			$tmp["name"] = "table";
 			$tbl .= $this->opentag($tmp);
+		}
+
+		if (!empty($this->pageselector_string))
+		{
+			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
+			$tbl .= "<tr>\n";
+			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan, "classid" => $this->style1));
+			$tbl .= $this->pageselector_string;
+			$tbl .= "</td>\n";
+			$tbl .= "</tr>\n";
 		}
 
 		if (!empty($this->headerstring))
@@ -680,9 +705,9 @@ class aw_table extends aw_template
 				$counter++;
 				$p_counter++;
 				// if this is not on the active page, don't show the damn thing
-				if (isset($has_pages) && $has_pages && isset($records_per_page) && $records_per_page)
+				if (isset($this->has_pages) && $this->has_pages && isset($this->records_per_page) && $this->records_per_page)
 				{
-					$cur_page = (int)(($p_counter-1) / $records_per_page);
+					$cur_page = (int)(($p_counter-1) / $this->records_per_page);
 					if ($cur_page != $act_page)
 					{
 						continue;
@@ -1553,11 +1578,12 @@ class aw_table extends aw_template
 		{
 			$style = "class=\"style_".$style."\"";
 		}
-		$num_pages = $this->d_row_cnt / $records_per_page;
+		$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
+		$num_pages = $_drc / $records_per_page;
 		for ($i = 0; $i < $num_pages; $i++)
 		{
 			$from = $i*$records_per_page+1;
-			$to = min(($i+1)*$records_per_page, $this->d_row_cnt);
+			$to = min(($i+1)*$records_per_page, $_drc);
 			$this->vars(array(
 				"style" => $arr["style"],
 				"url" => $url . "ft_page=".$i,
