@@ -1,5 +1,6 @@
 <?php
-
+// $Id: export.aw,v 2.15 2002/11/21 11:30:35 kristo Exp $
+// export.aw - class for exporting site to static files
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
 define("FN_TYPE_HASH",3);
@@ -285,6 +286,13 @@ class export extends aw_template
 
 	function fetch_and_save_page($url, $lang_id, $single_page_only = false, $file_name = false)
 	{
+		// check if we must stop
+		if (file_exists(aw_ini_get("server.tmpdir")."/aw.export.stop"))
+		{
+			echo "<b>Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down.</b><br>\n";
+			unlink(aw_ini_get("server.tmpdir")."/aw.export.stop");
+			die();
+		}
 		$url = $this->rewrite_link($url);
 		$_url = $url;
 //		echo "fetch_and_save_page($url, $lang_id) <br>";
@@ -827,6 +835,7 @@ class export extends aw_template
 		$this->vars(array(
 			"name" => $this->loaded_rule["name"],
 			"menus" => $this->multiple_option_list($this->loaded_rule["meta"]["menus"],$ls),
+			"stop_rule" => $this->mk_my_orb("stop_rule", array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit_rule", array("id" => $id)),
 			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->loaded_rule["meta"]["event_id"]),"cal_event",false,true),
 			"do_rule" => $this->mk_my_orb("do_export", array("rule_id" => $id))
@@ -1390,5 +1399,13 @@ class export extends aw_template
 		return $found; 
 	}
 
+	function stop_rule($arr)
+	{
+		extract($arr);
+		$fp = fopen(aw_ini_get("server.tmpdir")."/aw.export.stop","w");
+		fwrite($fp, $id);
+		fclose($fp);
+		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
+	}
 }
 ?>

@@ -48,6 +48,9 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 	<tr class="aste05">
 		<td colspan="2" class="celltext"><a href='{VAR:do_rule}'>T&auml;ida ruul</a></td>
 	</tr>
+	<tr class="aste05">
+		<td colspan="2" class="celltext"><a href='{VAR:stop_rule}'>Peata taustal k&auml;iv eksport</a> - see v&otilde;ib v&otilde;tta kaua aega, kontrolli tehakse enne iga lehek&uuml;lje t&otilde;mbamist - see kehtib k&otilde;ikide ruulide ja eksportide kohta, mitte ainult konkreetse ruuli kohta.</td>
+	</tr>
 <!-- END SUB: CHANGE -->
 </table>
 

@@ -52,6 +52,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="stop_rule">
+			<function name="stop_rule">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
