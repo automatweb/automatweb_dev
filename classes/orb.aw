@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.26 2002/11/11 18:03:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.27 2002/12/02 12:50:23 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -43,8 +43,7 @@ class orb extends aw_template
 		// class defineeritud?
 		if (!isset($class))
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$fatal,$silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$silent);
 		};
 		
 		// laeme selle klassi siis
@@ -65,8 +64,7 @@ class orb extends aw_template
 		// action defineeritud?
 		if (!isset($action))
 		{
-			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,$fatal,$silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,true,$silent);
 		};
 
 		// create an array of class names that should be loaded.
@@ -104,9 +102,7 @@ class orb extends aw_template
 		// still not found?
 		if (not($found))
 		{
-			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),$fatal,$silent);
-			bail_out();
-
+			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
 		};
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
@@ -115,8 +111,7 @@ class orb extends aw_template
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
-				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
-				bail_out();
+				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),true,$silent);
 			}
  
 			if ($orb_defs[$class][$action]["xmlrpc"] == 1)
@@ -156,8 +151,7 @@ class orb extends aw_template
 			{
 				if (!isset($vars[$key]))
 				{
-					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
-					bail_out();
+					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
 				};
 
 				$vartype = $orb_defs[$class][$action]["types"][$key];
@@ -165,8 +159,7 @@ class orb extends aw_template
 				{
 					if ($vars[$key] != sprintf("%d",$vars[$key]))
 					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
-						bail_out();
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$silent);
 					};
 				};
 				$params[$key] = $vars[$key];
@@ -180,8 +173,7 @@ class orb extends aw_template
 				{
 					if ( ($vartype == "int") && ($vars[$key] != sprintf("%d",$vars[$key])) )
 					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
-						bail_out();
+						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$silent);
 					};
 					$params[$key] = $vars[$key];
 				}
@@ -419,8 +411,7 @@ class orb extends aw_template
 	{
 		if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml"))
 		{
-			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 		}
 
 		$ret = $this->load_xml_orb_def($class);
@@ -443,8 +434,7 @@ class orb extends aw_template
 
 			if (!class_exists($class))
 			{
-				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
-				bail_out();
+				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}
 		};
 
@@ -487,14 +477,12 @@ class new_orb extends orb
 
 		if (!isset($class))
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$this->fatal,$this->silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$this->silent);
 		};
 
 		if (!isset($action))
 		{
-			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,$this->fatal,$this->silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,true,$this->silent);
 		};
 
 		// get orb defs for the class
@@ -519,8 +507,7 @@ class new_orb extends orb
 			$inst = get_instance("orb/".$method);
 			if (!is_object($inst))
 			{
-				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", $this->fatal,$this->silent);
-				bail_out();
+				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"Could not load request handler for request method '".$method."'", true,$this->silent);
 			}
 			// send the remote request and read the result
 			$data = $inst->do_request($arr);
@@ -550,8 +537,7 @@ class new_orb extends orb
 				{
 					if (!isset($params[$key]))
 					{
-						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$this->fatal,$this->silent);
-						bail_out();
+						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$this->silent);
 					};
 
 					$vartype = $orb_defs[$class][$action]["types"][$key];
@@ -559,8 +545,7 @@ class new_orb extends orb
 					{
 						if (((string)($params[$key])) != ((string)((int)$params[$key])))
 						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
-							bail_out();
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
 						};
 					};
 					$ret[$key] = $params[$key];
@@ -577,8 +562,7 @@ class new_orb extends orb
 					{
 						if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
 						{
-							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
-							bail_out();
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
 						};
 						$ret[$key] = $params[$key];
 					}
@@ -613,14 +597,12 @@ class new_orb extends orb
 			}
 			else
 			{
-				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$func,$class),$this->fatal,$this->silent);
-				bail_out();
+				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$func,$class),true,$this->silent);
 			}
 		}
 		else
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$this->fatal,$this->silent);
-			bail_out();
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$this->silent);
 		}
 	}
 
@@ -668,7 +650,6 @@ class new_orb extends orb
 		if (!is_object($inst))
 		{
 			$this->raise_error(ERR_ORB_RPC_NO_HANDLER,"orb::handle_rpc_call - Could not load request handler for request method '".$method."'", true,false);
-			bail_out();
 		}
 
 		// decode request
