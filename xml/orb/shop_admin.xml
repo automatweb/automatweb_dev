@@ -108,6 +108,36 @@
 			</function>
 		</action>
 
+		<action name="system_stattables">
+			<function name="do_system_stattables">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_stattables">
+			<function name="submit_system_stattables">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="system_items">
+			<function name="do_system_items">
+				<arguments>
+					<required name="shop_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_system_items">
+			<function name="submit_system_items">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="categories_frame">
 			<function name="categories_frame">
 				<arguments>

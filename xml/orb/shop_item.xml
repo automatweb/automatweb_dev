@@ -58,8 +58,24 @@
 			</function>
 		</action>
 
+		<action name="set_per_places">
+			<function name="set_per_places">
+				<arguments>
+					<required name="id"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_per_prices">
 			<function name="submit_per_prices">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_per_places">
+			<function name="submit_per_places">
 				<arguments>
 				</arguments>
 			</function>
