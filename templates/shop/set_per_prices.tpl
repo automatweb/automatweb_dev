@@ -11,7 +11,9 @@
 	<tr>
 		<td class="fcaption2">From:</td>
 		<td class="fcaption2">To:</td>
-		<td class="fcaption2">Price:</td>
+		<!-- SUB: CUR_H -->
+		<td class="fcaption2">Price ({VAR:cur_name}):</td>
+		<!-- END SUB: CUR_H -->
 		<td class="fcaption2">Weekly price:</td>
 		<td class="fcaption2">To weeks price:</td>
 		<td class="fcaption2">Delete:</td>
@@ -20,7 +22,9 @@
 	<tr>
 		<td class="fcaption2">{VAR:from}</td>
 		<td class="fcaption2">{VAR:to}</td>
-		<td class="fcaption2"><input type='text' name='price[{VAR:id}]' value='{VAR:price}' size=5 class='small_button'></td>
+		<!-- SUB: CUR -->
+		<td class="fcaption2"><input type='text' name='price[{VAR:id}][{VAR:cur_id}]' value='{VAR:price}' size=5 class='small_button'></td>
+		<!-- END SUB: CUR -->
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='1' {VAR:week_check}></td>
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='2' {VAR:2week_check}></td>
 		<td class="fcaption2"><input type='checkbox' name='del[{VAR:id}]' value=1></td>
