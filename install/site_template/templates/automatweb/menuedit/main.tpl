@@ -29,24 +29,6 @@
   <td align="right">
 
 
-<!-- SUB: SEARCH_SEL -->
-<form method="get" action="{VAR:baseurl}/index.{VAR:ext}" name="search">
-<table border="0" cellspacing="5" cellpadding="0">
-<tr>
-<td><select name="parent" class="formselect">{VAR:search_sel}</select></td>
-<td><input type="text" size="15" class="formtext" name="str" /></td>
-<td>
-<!--[<a href="#" onClick="document.search.submit()"><b>OTSI</b></a>]-->
-
-<input type="submit" value=" {VAR:LC_SEARCH_BTN} " class="formbutton" />
-</td>
-</tr>
-</table>
-<input type="hidden" name="class" value="document" />
-<input type="hidden" name="action" value="search" />
-<input type="hidden" name="section" value="{VAR:section}" />
-</form>
-<!-- END SUB: SEARCH_SEL -->
 
   </td>
 </tr>
@@ -160,16 +142,14 @@
 
 
 <!-- SUB: logged -->
-<table width="230" border="0" cellpadding="0" cellspacing="0">
-<tr><td background="{VAR:baseurl}/img/kast_hall_taust.gif" bgcolor="#F5F5F5"><IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="20" BORDER="0" ALT=""><br>
-
-	<table width="190" align="center" border="0" cellpadding="0" cellspacing="0" background="{VAR:baseurl}/img/trans.gif">
+	
+	<table width="155" align="center" border="0" cellpadding="0" cellspacing="0" background="{VAR:baseurl}/img/trans.gif">
 	
 	<tr><td class="boxtitle"><b>{VAR:uid}</b> ({VAR:date})</td></tr>
 
-	<tr><td><IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""><br>
+	<tr><td>
 	
-	<table border="0" cellpadding="0" cellspacing="2">
+	<table border="0" cellpadding="0" cellspacing="2" width="100%" class="boxcontent">
 
 <!-- SUB: MENU_LOGGED_L1_ITEM -->
 	<tr><td colspan="2" class="boxcontent" valign="top">{VAR:text}</td></tr>
@@ -177,13 +157,13 @@
 
 
 	<!-- SUB: MENU_LOGGED_L2_ITEM -->
-	<tr><td class="boxcontent" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
+	<tr><td class="boxcontent" align="right" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
 	<td class="boxcontent" valign="top"><a
 	href="{VAR:link}" {VAR:target}>{VAR:text}</a></td></tr>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM -->
 
 	<!-- SUB: MENU_LOGGED_L2_ITEM_SEL -->
-	<tr><td class="boxcontent" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
+	<tr><td class="boxcontent" align="right" valign="top"><font color="#D00000"><b>&#183;</b></font>&nbsp;</td>
 	<td class="boxcontent" valign="top"><b>{VAR:text}</b></td></tr>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM_SEL -->
 
@@ -194,11 +174,6 @@
 
 	</td></tr>
 	</table>
-
-</td></tr>
-<tr><td bgcolor="#F5F5F5"><IMG src="{VAR:baseurl}/img/kast_hall_bottom.gif" WIDTH="230" HEIGHT="20" BORDER="0" ALT=""></td></tr>
-</table>
-<IMG src="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""><br>
 
 
 <!-- END SUB: logged -->
