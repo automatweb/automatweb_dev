@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.12 2003/07/18 11:54:23 kristo Exp $
-define("SHARED_FOLDER_ID",2147483647);
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.13 2003/09/25 12:35:31 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -12,7 +11,7 @@ class admin_folders extends aw_template
 		lc_site_load("menuedit",$this);
 		lc_load("definition");
 	}
-	
+
 	function show_folders($arr)
 	{
 		extract($arr);
@@ -78,15 +77,27 @@ class admin_folders extends aw_template
 		$this->db_query($q);
 	}
 
+	// I need some other and better way to build the tree
 	function gen_folders($period)
 	{
 
-		$this->read_template("folders.tpl");
+		if (aw_ini_get("menuedit.folders_v2"))
+		{
+			$this->read_template("folders_v2.tpl");
+		}
+		else
+		{
+			$this->read_template("folders.tpl");
+		};
 
 		$arr = array();
 		$mpr = array();
-		get_instance("icons");
 
+		$this->treeitems = array();
+
+		get_instance("icons");
+	
+		// x_mpr is used to store items for which we have no view access
 		$this->x_mpr = array();
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
 		// listib koik menyyd ja paigutab need arraysse
@@ -101,7 +112,7 @@ class admin_folders extends aw_template
 			}
 			else
 			{
-				$this->x_mpr[$row['oid']] = $row;
+				$this->x_mpr[$row['oid']] = 1;
 			}
 		}
 
@@ -117,7 +128,7 @@ class admin_folders extends aw_template
 			}
 			else
 			{
-				$this->x_mpr[$row['oid']] = $row;
+				$this->x_mpr[$row['oid']] = 1;
 			}
 		}
 
@@ -137,19 +148,17 @@ class admin_folders extends aw_template
 			}
 		}
 
+		// and, of course, the drawing function has to be recursive
+
+
 		// objektipuu
 		$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
 		// kodukataloom
+
 		$tr.=$this->mk_homefolder(&$arr);
 
-		// the whole she-bang
-		$arr = array();
-		$this->db_listall("objects.status = 2 AND menu.type = ".MN_ADMIN1,true,true);
-		while ($row = $this->db_next())
-		{
-			$arr[$row["parent"]][] = $row;
-		}
+		// shortcuts for the programs
 		$tr.= $this->rec_admin_tree(&$arr, $this->cfg["amenustart"]);
 
 		$this->vars(array(
@@ -225,40 +234,6 @@ class admin_folders extends aw_template
 		return $this->parse();
 	}
 
-	function rec_homefolder(&$arr,$parent)
-	{
-		if (!is_array($arr[$parent]))
-		{
-			return "";
-		}
-
-		$baseurl = $this->cfg["baseurl"];
-		$ret = "";
-		reset($arr[$parent]);
-		while (list(,$row) = each($arr[$parent]))
-		{
-			$sub = $this->rec_tree(&$arr,$row["oid"],0);
-			$this->vars(array(
-				"name" => $row["name"],
-				"id" => $row["oid"],
-				"parent" => $row["parent"],
-				"iconurl" => $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$this->cfg["ext"]."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]),"admin_menus"),
-				//"url" => "javascript:go_go(".$row["oid"].",'')",
-			));
-			$this->homefolders[$row["oid"]] = $row["oid"];
-			if ($sub == "")
-			{
-				$ret.=$this->parse("DOC");
-			}
-			else
-			{
-				$ret.=$this->parse("TREE").$sub;
-			};
-		}
-		return $ret;
-	}
-
 	////
 	// !Loob kasutaja kodukataloogi
 	function mk_homefolder(&$arr)
@@ -269,118 +244,30 @@ class admin_folders extends aw_template
 		$ext = $this->cfg["ext"];
 		$baseurl = $this->cfg["baseurl"];
 
-		// k6igepealt loeme k6ik kodukatalooma all olevad menyyd
-		$this->db_query("SELECT menu.*,objects.* FROM menu
-					LEFT JOIN objects ON objects.oid = menu.id
-					WHERE oid = ".$udata["home_folder"]);
-		if (!($hf = $this->db_next()))
-		{
-			$this->raise_error(ERR_MNEDIT_NOFOLDER,sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
-		};
-		
-		// when we create the home folders we write down which ones are shown
-		// so we won't show them again under shared folders
-		$this->homefolders = array();
+		$hf = new object($udata["home_folder"]);
 
-		$ret = $this->rec_homefolder($arr, $hf["oid"]);
+		// if the home directory does not exist, then raise an error .. but
+		// if we try to load an non-existing object, then the object class
+		// will yell anyway
+	
+			// $this->raise_error(ERR_MNEDIT_NOFOLDER,sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
+	
+		$ret = $this->rec_tree($arr, $hf->id(),0);
 
 		$this->vars(array(
-			"name" => $hf["name"],
-			"id" => $hf["oid"], 
+			"name" => $hf->name(),
+			"id" => $hf->id(), 
 			"parent" => $admin_rootmenu2,
 			"iconurl" => icons::get_icon_url("homefolder",""),
-			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]),"admin_menus")
+			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus")
 		));
+
 		$hft = $this->parse("TREE");
-
-		// now we need to make a list of all the shared folders of all the users.
-		// we do that by simply scanning the array of all folders for visible menus with type MN_HOME_FOLDER_SUB
-		// that should work, because if acl is checked, then only folders that are shared to this user will be visible
-		// and we exclude the users own home folder menus cause they would be duplicated there otherwise
-		$shared_arr = $this->get_shared_arr(&$arr,$this->homefolders);
-		$shares = "";
-		reset($shared_arr);
-		while (list(,$v) = each($shared_arr))
-		{
-			$this->vars(array(
-				"name"	=> $v["name"],
-				"id"	=> $v["oid"],		
-				"parent"=> SHARED_FOLDER_ID,
-				"iconurl" => $row["icon_id"] ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url"	=> $this->mk_my_orb("right_frame", array("parent" => $v["oid"]),"admin_menus"),
-			));
-			$shares.=$this->parse("DOC");
-		}
-
-		$this->vars(array(
-			"name"=> "SHARED FOLDERS",
-			"id" => SHARED_FOLDER_ID,		
-			"parent" => $hf["oid"],
-			"iconurl" => icons::get_icon_url("shared_folders",""),
-			"url" => $this->mk_my_orb("right_frame",array("parent" => SHARED_FOLDER_ID),"admin_menus"),
-			//"url" => "javascript:go_go(".SHARED_FOLDER_ID.",'')",
-		));
-		if ($shares != "")
-		{
-			$shfs = $this->parse("TREE");
-		}
-		else
-		{
-			$shfs = $this->parse("DOC");
-		};
-
-		// now we need to make a list of all the groups created by this user
-		$dbu = get_instance("users_user");
-		$dbu->listgroups(-1,-1,4);
-		$grps_arr = array();
-		while ($row = $dbu->db_next())
-		{
-			$row["oid"] = $row["gid"];
-			$grps_arr[$row["parent"]][] = $row;
-		}
-		$dgid = $dbu->get_gid_by_uid($uid);
-		$grptree = $this->rec_tree_grps(&$grps_arr, $dgid);
-
-		$this->vars(array(
-			"name"		=> "GROUPS",
-			"id"			=> "gr_".$dgid,
-			"parent"	=> $hf["oid"],
-			"iconurl" => icons::get_icon_url("hf_groups",""),
-			"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $dgid),"groups")
-		));
-		if ($grptree != "")
-		{
-			$grps = $this->parse("TREE");
-		}
-		else
-		{
-			$grps = $this->parse("DOC");
-		}
-
-		$ret = $hft.$shfs.$shares.$grps.$grptree.$ret;
+		$ret = $hft.$ret;
 
 		return $ret;
 	}
 
-
-	function get_shared_arr(&$arr,$exclude)
-	{
-		$ret = array();
-
-		reset($arr);
-		while (list($parent, $v) = each($arr))
-		{
-			reset($v);
-			while (list(,$row) = each($v))
-			{
-				if (isset($row["mtype"]) && $row["mtype"] == MN_HOME_FOLDER_SUB && !$exclude[$row["oid"]])
-				{
-					$ret[] = $row;
-				}
-			}
-		}
-		return $ret;
-	}
 
 	function rec_admin_tree(&$arr,$parent)
 	{
@@ -397,25 +284,16 @@ class admin_folders extends aw_template
 		$ret = "";
 		while (list(,$row) = each($arr[$parent]))
 		{
-			if ($row["status"] != 2)
+			if ($row["status"] != STAT_ACTIVE)
 			{
 				continue;
 			}
+
 			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
 			{
 				continue;
 			}
-
-			$sub = $this->rec_admin_tree(&$arr,$row["oid"]);
-
-			if ($row["admin_feature"])
-			{
-				$sub.=$this->get_feature_tree($row["admin_feature"],$row["oid"]);
-			}
-
-			$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
-			// as far as I know, this works everywhere
-			$blank = "about:blank";
+			
 			// ugly-ass hack, but can't really think of anything else right now
 			if ($row["admin_feature"] == PRG_GROUPS && aw_ini_get("groups.tree_root"))
 			{
@@ -425,6 +303,23 @@ class admin_folders extends aw_template
 			{
 				$row["link"] = $this->mk_my_orb("right_frame", array("parent" => aw_ini_get("users.root_folder")), "admin_menus");
 			}
+			
+			// ignore programs with no program url
+			if (empty($row["link"]) && $row["admin_feature"] && empty($this->cfg["programs"][$row["admin_feature"]]["url"]))
+			{
+				continue;
+			};
+
+			$sub = $this->rec_admin_tree(&$arr,$row["oid"]);
+
+			if ($row["admin_feature"])
+			{
+				$sub.=$this->get_feature_tree($row["admin_feature"],$row["oid"]);
+			}
+
+			$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
+			// as far as I know, this works everywhere
+			$blank = "about:blank";
 			$this->vars(array(
 				"name"		=> $row["name"],
 				"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
@@ -576,29 +471,6 @@ class admin_folders extends aw_template
 					}
 				}
 			}
-		}
-		return $ret;
-	}
-
-	function rec_tree_grps(&$arr,$parent)
-	{
-		if (!isset($arr[$parent]) || !is_array($arr[$parent]))
-		{
-			return "";
-		}
-
-		reset($arr[$parent]);
-		while (list(,$row) = each($arr[$parent]))
-		{
-			$sub = $this->rec_tree_grps(&$arr,$row["oid"]);
-			$this->vars(array(
-				"name" => $row["name"],
-				"id" => "gr_".$row["oid"],
-				"parent" => "gr_".$row["parent"],
-				"iconurl" => $this->cfg["baseurl"]."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_orb("mk_grpframe",array("parent" => $row["gid"]),"groups")
-			));
-			$ret .= ($sub == "") ? $this->parse("DOC") : $this->parse("TREE");
 		}
 		return $ret;
 	}
