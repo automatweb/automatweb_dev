@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.70 2003/01/30 16:27:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.71 2003/01/31 00:32:00 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -57,7 +57,7 @@ class aliasmgr extends aw_template
 		$fields["class_id"] = array(
 			"type" => "select",
 			"caption" => "Klass",
-			"options" => $this->classarr,
+			"options" => array("" => "") + $this->classarr,
 			"selected" => $args["s"]["class_id"],
 		);
 	}
@@ -795,6 +795,17 @@ class aliasmgr extends aw_template
 				$cache_inst->file_set($key,$replacement);
 			}
 		}
+	}
+
+	function search_callback_modify_parts($args,$parts)
+	{
+		// if there is no class_id part, limit the search to those object types
+		// which have alias_class set
+		if (!$parts["class_id"])
+		{
+			$this->make_alias_classarr();
+			$parts["class_id"] = sprintf("class_id IN (%s)",join(",",array_keys($this->classarr)));
+		};
 	}
 }
 ?>
