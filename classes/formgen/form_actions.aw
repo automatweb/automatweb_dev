@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.3 2002/12/02 12:20:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.4 2002/12/16 18:11:45 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -79,6 +79,7 @@ class form_actions extends form_base
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
 						$data["no_mail_on_change"] = $no_mail_on_change;
+						$data["link_to_change"] = $link_to_change;
 						$la = get_instance("languages");
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -256,7 +257,8 @@ class form_actions extends form_base
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
 			"T_LANG" => $lt,
 			"LANG" => $lc,
-			"no_mail_on_change" => checked($data["no_mail_on_change"])
+			"no_mail_on_change" => checked($data["no_mail_on_change"]),
+            "link_to_change" => checked($data["link_to_change"])
 		));
 
 		return $this->parse();
@@ -575,7 +577,7 @@ class form_actions extends form_base
 
 		if ($data["op_id"])
 		{
-			$app.="\n".$this->mk_my_orb("show_entry", array(
+			$app.="\n".$this->mk_my_orb(($data["link_to_change"] ? "show" : "show_entry"), array(
 				"id" => $form->get_id(), 
 				"entry_id" => $entry_id, 
 				"op_id" => $data["op_id"],
