@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.21 2004/09/10 10:40:56 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.20 2004/09/10 10:36:05 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -31,7 +31,7 @@
 @property prev_status type=hidden store=no
 
 @property sum type=textbox table=aw_crm_offer size=7
-@caption Hind (ilma KM)
+@caption Hind(ilma KM)
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
