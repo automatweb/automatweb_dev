@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.68 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.69 2005/04/01 15:26:15 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -236,7 +236,7 @@ class object_treeview_v2 extends class_base
 				}
 
 				$prop["options"] = array(
-					TREE_DHTML => "DHTML",
+					TREE_DHTML => t("DHTML"),
 					TREE_TABLE => t("Tabel"),
 				);
 // if tree_type isn't set, TREE_DHTML will be used 
@@ -1154,7 +1154,7 @@ class object_treeview_v2 extends class_base
 					{
 						$row["col_".$j] = html::href(array(
 							"caption" => $tmp_fld[$j][$i]['name'],
-							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id'],
+							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id']."#table",
 						));
 					}	
 					$table->define_data($row);
@@ -1180,7 +1180,7 @@ class object_treeview_v2 extends class_base
 					$tv->add_item($fld["parent"], array(
 						"id" => $fld["id"],
 						"name" => $fld["name"],
-						"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'],
+						"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id']."#table",
 						"icon" => $fld["icon"],
 						"comment" => $fld["comment"],
 						"data" => array(
