@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.246 2004/04/02 11:16:11 duke Exp $
+// $Id: class_base.aw,v 2.247 2004/04/07 15:10:00 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -294,7 +294,8 @@ class class_base extends aw_template
 
 		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group2($filter);
-		$awt->start("shit");
+
+
 
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
@@ -429,6 +430,11 @@ class class_base extends aw_template
 			};
 		};
 
+		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
+		{
+			$cli->set_layout($this->layoutinfo);
+		};
+
 		if ($args["cb_part"] == 1)
 		{
 			// tabs and YAH are in the upper frame, so we don't show them below
@@ -443,14 +449,13 @@ class class_base extends aw_template
 		// and the only user of that is the crm_company class. Would be _really_ nice
 		// to beg rid of all that shit
 		$this->inst->relinfo = $this->relinfo;
-		$awt->stop("shit");
 
 
 		$awt->start("parse-properties");
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-
+		
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -1920,7 +1925,9 @@ class class_base extends aw_template
 				$val["vcl_inst"] = new vcalendar();
 			};
 
-			if (!empty($val["parent"]))
+			$test = empty($this->layoutinfo[$val["parent"]]);
+
+			if (!empty($val["parent"]) && empty($this->layoutinfo[$val["parent"]]))
 			{
 				$remap_children = true;
 			};
@@ -3510,6 +3517,8 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->normalize_text_nodes($cfgu->get_classinfo()));
+		
+		$this->layoutinfo = $cfgu->get_layoutinfo();
 
 		$this->relinfo = $cfgu->get_relinfo();
 

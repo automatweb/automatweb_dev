@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.53 2004/03/17 17:39:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.54 2004/04/07 15:10:00 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -19,8 +19,18 @@ class htmlclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
+		if (!empty($arr["template"]))
+		{
+			$this->use_template = $arr["template"] . ".tpl";
+		};
 		$this->group_style = "";
+		$this->layoutinfo = array();
 		$this->start_output();
+	}
+
+	function set_layout($arr)
+	{
+		$this->layoutinfo = $arr;
 	}
 
 	function set_form_target($target = "_top")
@@ -52,17 +62,16 @@ class htmlclient extends aw_template
 	{
 		$this->set_parse_method("eval");
 		$tpl = "default.tpl";
-		$this->read_template("default.tpl");
-		//if (aw_global_get("uid") == "duke")
-		//{
-			$script = aw_global_get("SCRIPT_NAME");
-			//$handler = empty($script) ? "index" : "orb";
-			$this->vars(array(
-				"handler" => empty($script) ? "index" : "orb",
-			));
-
-
-		//};
+		if (!empty($this->use_template))
+		{
+			$tpl = $this->use_template;
+		};
+		$this->read_template($tpl);
+		$script = aw_global_get("SCRIPT_NAME");
+		//$handler = empty($script) ? "index" : "orb";
+		$this->vars(array(
+			"handler" => empty($script) ? "index" : "orb",
+		));
 		$this->orb_vars = array();
 		$this->submit_done = false;
 		$this->proplist = array();
@@ -151,7 +160,7 @@ class htmlclient extends aw_template
 			$args["html"] = $args["value"];
 		}
 		else
-		if ($args["parent"])
+		if ($args["parent"] && empty($this->layoutinfo[$args["parent"]]))
 		{
 			$this->proplist[$args["parent"]]["html"] .= $this->put_subitem($args);
 		}
@@ -160,6 +169,12 @@ class htmlclient extends aw_template
 		if ($type == "hidden")
 		{
 			$this->orb_vars[$args["name"]] = $args["value"];
+		}
+		else
+		if ($args["type"] == "submit")
+		{
+			$args["html"] = $this->put_submit($args);
+			$this->submit_done = true;
 		}
 		else
 		if (isset($args["no_caption"]))
@@ -184,7 +199,14 @@ class htmlclient extends aw_template
 		{
 			$args["html"] = $this->put_content($args);
 		};
-		$this->proplist[$args["name"]] = $args;
+		if ($args["parent"] && !empty($this->layoutinfo[$args["parent"]]))
+		{
+			$this->layoutinfo[$args["parent"]]["items"][] = $args["html"];
+		}
+		else
+		{
+			$this->proplist[$args["name"]] = $args;
+		};
 	}
 
 	////
@@ -326,6 +348,16 @@ class htmlclient extends aw_template
 		return $rv;
 	}
 
+	////
+	// !Creates a submit button
+	function put_submit($arr)
+	{
+		$this->vars(array(
+			"sbt_caption" => $arr["caption"],
+		));
+		return $this->parse("SUBMIT");
+	}
+
 	function put_subitem($args)
 	{
 		$this->vars(array(
@@ -384,6 +416,9 @@ class htmlclient extends aw_template
 		if (empty($submit) || $submit !== "no")
 		{
 			// I need to figure out whether I have a relation manager
+			$this->vars(array(
+				"sbt_caption" => "Salvesta",
+			));
 			$sbt = $this->parse("SUBMIT");
 		};
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
@@ -415,6 +450,63 @@ class htmlclient extends aw_template
 					unset($sbt);
 				};
 				$res .= $item["html"];
+			};
+		};
+
+		if (!empty($this->layoutinfo))
+		{
+			// first pass creates contents for all boxes
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if (empty($val["parent"]))
+				{
+					continue;
+				};
+				$type = $val["type"];
+				// it can be one of:
+				// 1. hbox
+				// 2. vbox
+				$tmp = "";
+				if ($type == "vbox")
+				{
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>";
+					$tmp .= join("</table><table border=0 cellspacing=0 cellpadding=0 width=100%>",$val["items"]);
+					$tmp .= "</table></td></tr></table>";
+				};
+				if ($type == "hbox")
+				{
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
+					$tmp .= join("</td><td valign=top>",$val["items"]);
+					$tmp .= "</td></tr></table>";
+				};
+					
+				$this->layoutinfo[$val["parent"]]["items"][] = $tmp;
+			};
+
+			// second one tries to put together the complete picture
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if (!empty($val["parent"]))
+				{
+					continue;
+				};
+
+				$type = $val["type"];
+				// it can be one of:
+				// 1. hbox
+				// 2. vbox
+				if ($type == "vbox")
+				{
+					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
+					$res .= join("</td></tr><tr><td valign=top>",$val["items"]);
+					$res .= "</td></tr></table>";
+				};
+				if ($type == "hbox")
+				{
+					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
+					$res .= join("</td><td valign=top>",$val["items"]);
+					$res .= "</td></tr></table>";
+				};
 			};
 		};
 
