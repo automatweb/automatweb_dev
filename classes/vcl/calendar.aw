@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.22 2004/09/28 12:41:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.23 2004/09/29 11:50:25 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -984,6 +984,7 @@ class vcalendar extends aw_template
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
 			"datestamp" => date("d.m.Y",$evt["timestamp"]),
+			"aw_date" => date("d-m-Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
 			"name" => $evt["name"],
 			"id" => $evt["id"],
