@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.174 2003/05/01 17:39:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.175 2003/05/02 13:11:42 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -113,13 +113,14 @@ class document extends aw_template
 		{
 			if ($this->period > 0)
 			{
-				$period = $this->period;
+				$period = (int)$this->period;
 			}
 			else
 			{
-				$period = $this->get_cval("activeperiod");
+				$period = (int)$this->get_cval("activeperiod");
 			};
 		};
+		$period = (int)$period;
 		$row = $this->get_menu($parent);
 		$sections = $row["meta"]["sss"];
 		if ($row["meta"]["all_pers"])
@@ -141,12 +142,12 @@ class document extends aw_template
 			}
 			else
 			{
-				$pstr = "objects.parent = $parent";
+				$pstr = "objects.parent = '$parent'";
 			};
 		}
 		else
 		{
-			$pstr = "objects.parent = $parent";
+			$pstr = "objects.parent = '$parent'";
 		};
 
 		if (is_array($periods))
@@ -158,12 +159,12 @@ class document extends aw_template
 			}
 			else
 			{
-				$rstr = "objects.period = $period";
+				$rstr = "objects.period = '$period'";
 			}
 		}
 		else
 		{
-			$rstr = "objects.period = $period";
+			$rstr = "objects.period = '$period'";
 		};
 	
 		// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
