@@ -248,7 +248,7 @@ class connection
 				)
 			);
 
-			post_message(
+			post_message_with_param(
 				MSG_STORAGE_ALIAS_ADD_TO,
 				$this->conn["to.class_id"],
 				array(
