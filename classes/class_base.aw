@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.35 2002/12/30 19:20:22 duke Exp $
+// $Id: class_base.aw,v 2.36 2003/01/02 13:29:36 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -175,12 +175,12 @@ class class_base extends aliasmgr
 				{
 					$id_arg = $args["id"];
 				};
-		
+
 				$tmp = $this->load_object(array(
 					"table" => $key,
 					"idfield" => $val["index"],
 					"id" => $id_arg,
-					"fields" => $this->fields[$key],
+					"fields" => $this->realfields[$key],
 				));
 				$this->data[$key] = $tmp;
 				$this->objdata = $tmp;
@@ -944,12 +944,17 @@ class class_base extends aliasmgr
 			if ($property["table"])
 			{
 				$fields[$property["table"]][$_field] = $fval;
+				if ($property["type"] != "text")
+				{
+					$realfields[$property["table"]][$_field] = $fval;
+				};
 			};
 
 		};
 
 		$this->tables = $tables;
 		$this->fields = $fields;
+		$this->realfields = $realfields;
 
 		if (is_array($layout[$activegroup]["items"]))
 		{
