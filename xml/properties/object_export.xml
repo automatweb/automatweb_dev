@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJECT_TYPE</reltype>
-            <caption>Objektit&amp;uuml;&amp;uuml; mida eksportida</caption>
+            <caption>Objektit&amp;uuml;&amp;uuml;p mida eksportida</caption>
       </property>
       <property>
             <name>root_folder</name>
@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Kataloog, kust objektid v&amp;otilde;tta</caption>
+            <caption>Kaust, kust objektid v&amp;otilde;tta</caption>
       </property>
       <property>
             <name>csv_separator</name>
@@ -83,7 +83,7 @@
             <FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>kataloog</caption>
+                  <caption>kaust</caption>
             </FOLDER>
       </reltypes>
 </properties>
