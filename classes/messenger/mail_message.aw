@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.17 2003/11/27 16:12:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.18 2003/11/28 13:52:30 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -27,7 +27,7 @@
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
 
-	@property message type=textarea cols=80 rows=40 
+	@property message type=textarea cols=80 rows=40 no_caption=1
 	@caption Sisu
 
 	@property attachments type=text store=no
@@ -348,6 +348,7 @@ class mail_message extends class_base
 				if ($this->state == "show")
 				{
 					$data["type"] = "text";
+					$data["value"] = htmlspecialchars($this->msgdata["to"]);
 				};
 				break;
 
@@ -505,21 +506,36 @@ class mail_message extends class_base
 		{
 			$tb->add_button(array(
 				"name" => "reply",
+				"img" => "mail_reply.gif",
 				"url" => "javascript:document.changeform.subgroup.value='reply';document.changeform.submit();",
 				"tooltip" => "Vasta/kvoodi",
 			));
-			
+	
+			/*
 			$tb->add_button(array(
 				"name" => "reply2",
 				"url" => "javascript:document.changeform.subgroup.value='reply2';document.changeform.submit();",
 				"tooltip" => "Vasta/tühjalt",
 			));
+			*/
 			
 			$tb->add_button(array(
 				"name" => "reply3",
+				"img" => "mail_reply_all.gif",
 				"url" => "javascript:document.changeform.subgroup.value='reply3';document.changeform.submit();",
 				"tooltip" => "Vasta/kõigile",
 			));
+
+			$tb->add_separator();
+			
+			$tb->add_button(array(
+				"name" => "forward",
+				"url" => "javascript:document.changeform.subgroup.value='forward';document.changeform.submit();",
+				"img" => "mail_fwd.gif",
+				"tooltip" => "Forward",
+			));
+
+			$tb->add_separator();
 
 			$tb->add_button(array(
 				"name" => "delete",
@@ -527,15 +543,7 @@ class mail_message extends class_base
 				"img" => "delete.gif",
 				"tooltip" => "Kustuta",
 			));
-		};
 
-		if ($this->act != "reply" && $this->act != "forward" && $this->act != "")
-		{
-			$tb->add_button(array(
-				"name" => "forward",
-				"url" => "javascript:document.changeform.subgroup.value='forward';document.changeform.submit();",
-				"tooltip" => "Forward",
-			));
 		};
 
 		if ($this->act != "show")
