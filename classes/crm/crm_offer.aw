@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.7 2004/03/08 16:49:15 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -25,6 +25,25 @@ default group=calendar
 default group=other_calendars
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
+@default method=serialize
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,weekdays,end
+@caption Kordused
+
+@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@caption Kalendrid
+
+@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@caption Projektid
+
+@groupinfo recurrence caption=Kordumine
+@groupinfo calendars caption=Kalendrid
+@groupinfo projects caption=Projektid
+
+@tableinfo planner index=id master_table=objects master_index=brother_of
+
+@reltype RECURRENCE value=1 clid=CL_RECURRENCE
+@caption Kordus
+
 */
 
 class crm_offer extends class_base
@@ -34,6 +53,37 @@ class crm_offer extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_OFFER
 		));
+	}
+	
+	function cb_project_selector($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->project_selector($arr);
+	}
+
+	function cb_calendar_selector($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->calendar_selector($arr);
+	}
+
+	function set_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "project_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_project_selector($arr);
+				break;
+
+			case "calendar_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_calendar_selector($arr);
+				break;
+		};
+		return $retval;
 	}
 
 }

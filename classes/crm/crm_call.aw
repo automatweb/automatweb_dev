@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.8 2004/02/03 12:03:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.9 2004/03/08 16:49:15 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -14,7 +14,7 @@
 @property start1 type=datetime_select field=start 
 @caption Algus
 
-@property duration type=time_select field=end 
+@property end type=datetime_select field=end 
 @caption Kestus
 
 @property content type=textarea cols=60 rows=30 field=description
@@ -23,7 +23,27 @@
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
+@default table=objects
+@default field=meta
+@default method=serialize
+
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,weekdays,end
+@caption Kordused
+
+@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@caption Kalendrid
+
+@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@caption Projektid
+
+@groupinfo recurrence caption=Kordumine
+@groupinfo calendars caption=Kalendrid
+@groupinfo projects caption=Projektid
+
 @tableinfo planner index=id master_table=objects master_index=brother_of
+
+@reltype RECURRENCE value=1 clid=CL_RECURRENCE
+@caption Kordus
 
 
 */
@@ -59,6 +79,39 @@ class crm_call extends class_base
 		$done .= $obj->prop("name");
 		return $done;
 	}
+
+	function cb_project_selector($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->project_selector($arr);
+	}
+
+	function cb_calendar_selector($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->calendar_selector($arr);
+	}
+
+	function set_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "project_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_project_selector($arr);
+				break;
+
+			case "calendar_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_calendar_selector($arr);
+				break;
+		};
+		return $retval;
+	}
+
+
 
 };
 ?>
