@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.30 2003/07/08 10:03:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.31 2003/07/22 16:07:59 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -112,6 +112,27 @@
 
 @property start1 type=datetime_select field=start table=planner group=calendar
 @caption Algab 
+
+@property createdby table=objects field=createdby group=general type=text
+@caption Kes tegi
+
+@property user1 table=documents group=general type=textbox size=60
+@caption Kasutaja defineeritud 1
+
+@property user2 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 2
+
+@property user3 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 3
+
+@property user4 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 4
+
+@property user5 table=documents group=general type=textarea rows=2 cols=60
+@caption Kasutaja defineeritud 5
+
+@property user6 table=documents group=general type=textarea rows=5 cols=60
+@caption Kasutaja defineeritud 6
 
 @property duration type=time_select field=end table=planner group=calendar
 @caption Kestab
@@ -437,7 +458,8 @@ class doc extends class_base
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
-                        "url" => "javascript:document.changeform.submit()",
+			"target" => "_self",
+                        "url" => "javascript:document.changeform.submit();",
                         "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
