@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.72 2001/10/13 17:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.73 2001/10/14 13:43:24 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1330,7 +1330,8 @@ class form extends form_base
 				$this->save_handle();
 				if ($r_row["el_from"])
 				{
-					$this->db_query("SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'");
+					$q = "SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'";
+					$this->db_query($q);
 					$er_row = $this->db_next();
 					if (is_array($er_row))
 					{
@@ -1344,7 +1345,8 @@ class form extends form_base
 				}
 				if ($r_row["el_to"])
 				{
-					$this->db_query("SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'");
+					$q = "SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'";
+					$this->db_query($q);
 					$er_row = $this->db_next();
 					if (is_array($er_row))
 					{
@@ -1375,6 +1377,7 @@ class form extends form_base
 
 		if ($this->arr["save_table"] == 1)
 		{
+			dbg("save_table<br>");
 			// whee. loeme entry_id j2rgi valitud tabelist infi
 			if (is_array($this->arr["save_tables"]))
 			{
@@ -1401,6 +1404,7 @@ class form extends form_base
 		{
 			$q = "SELECT form_".$id."_entries.*,objects.created as created FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE id = $entry_id";
 			$this->db_query($q);
+			dbg("load_entry_1  - ".$q."<br>");
 
 			if (!($row = $this->db_next()))
 			{
@@ -1419,7 +1423,12 @@ class form extends form_base
 
 			// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
 			$this->temp_ids = array();
-			$this->req_load_relations($id,&$row);
+
+			// we can skip relation loading when we load the search form entry, cause there are no relations created in search forms
+			if ($this->type != FTYPE_SEARCH)
+			{
+				$this->req_load_relations($id,&$row);
+			}
 
 			if ($row["chain_id"])
 			{
@@ -1430,6 +1439,7 @@ class form extends form_base
 					if ($ceid != $entry_id)
 					{
 						$this->db_query("SELECT * FROM form_".$cfid."_entries WHERE id = $ceid");
+						dbg("load_entry_chain_q = SELECT * FROM form_".$cfid."_entries WHERE id = $ceid <br>");
 						$crow = $this->db_next();
 						if (is_array($crow))
 						{
@@ -1865,6 +1875,7 @@ class form extends form_base
 				"form_name"	=> $row["name"], 
 				"form_comment" => $row["comment"], 
 				"form_location" => $row["parent"], 
+				"form_change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
 				"form_id" => $row["oid"],
 				"row"	=> $cnt,
 				"checked" => checked($this->arr["search_from"][$row["oid"]] == 1),
@@ -2072,7 +2083,6 @@ class form extends form_base
 			}
 	
 			// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
-			$chqpts = array();
 			foreach($ch_q as $chgrp => $ch_ar)
 			{
 				$chqs = join(" OR ", $ch_ar);
@@ -2096,7 +2106,7 @@ class form extends form_base
 
 			$this->main_search_form = $mid;
 			$matches = array();
-//		echo "query = $query  <br>\n";
+			dbg("form_search_q1 = $query  <br>\n");
 //		flush();
 			$this->db_query($query);
 //		echo "q finished \n <br>";
@@ -2144,16 +2154,19 @@ class form extends form_base
 					// oh la la
 					if ($el->get_type() == "multiple")
 					{
-						$query.=" AND (";
-						$ec=explode(",",$el->entry);
-						reset($ec);
-						$qpts = array();
-						while (list(, $v) = each($ec))
+						if ($el->entry != "")
 						{
-							$qpts[] =" form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->arr["multiple_items"][$v]."%' ";
-						}
+							$query.=" AND (";
+							$ec=explode(",",$el->entry);
+							reset($ec);
+							$qpts = array();
+							while (list(, $v) = each($ec))
+							{
+								$qpts[] =" form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->arr["multiple_items"][$v]."%' ";
+							}
 
-						$query.= join("OR",$qpts).")";
+							$query.= join("OR",$qpts).")";
+						}
 					}
 					else
 					if ($el->get_type() == "checkbox")
@@ -2227,7 +2240,6 @@ class form extends form_base
 
 
 			// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
-			$chqpts = array();
 			foreach($ch_q as $chgrp => $ch_ar)
 			{
 				$chqs = join(" OR ", $ch_ar);
@@ -2242,7 +2254,7 @@ class form extends form_base
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
-		//	echo "q = $query <br>";
+			dbg("form_search_q2 = $query <br>");
 			$matches = array();
 			$this->db_query($query);
 			while ($row = $this->db_next())

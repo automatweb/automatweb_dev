@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.37 2001/10/14 04:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.38 2001/10/14 13:43:25 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -104,6 +104,7 @@ lc_load("definition");
 			if ($this->arr["type"] == "textarea")
 			{
 				$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
+				$src = preg_replace("/((http(s?):\/\/)|(www\.))([\w\.]+)/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
 				$html = str_replace("\n","<br>",$src);
 			}
 					
@@ -228,7 +229,7 @@ lc_load("definition");
 					}
 					else
 					{
-						$html.="<a href='".$row["url"]."'>".$this->arr["flink_text"]."</a>";
+						$html.="<a target='_new' href='".$row["url"]."'>".$this->arr["flink_text"]."</a>";
 					}
 				}
 			}

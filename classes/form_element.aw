@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.28 2001/10/14 06:36:10 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.29 2001/10/14 13:43:24 cvs Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -1034,27 +1034,7 @@ class form_element extends aw_template
 				// kui seoseelement siis feigime sisu
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
-					$this->save_handle();
-					$rel_el = "form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"];
-					if ($this->arr["rel_unique"] == 1)
-					{
-						$rel_el = "distinct(".$rel_el.")";
-					}
-					$this->db_query("SELECT $rel_el as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
-					$cnt=0; 
-					while($row = $this->db_next())
-					{
-						$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
-						$cnt++;
-					}
-					$this->arr["listbox_count"] = $cnt;
-					if ($this->form->type == FTYPE_SEARCH)
-					{
-						$this->arr["listbox_count"] = $cnt+1;
-						$this->arr["listbox_items"][$cnt] = "";
-						$this->arr["listbox_default"] = $cnt;
-					}
-					$this->restore_handle();
+					$this->make_relation_listbox_content();
 				}
 				$html="<select $stat_check name='".$prefix.$elid."'";
 				if ($this->arr["lb_size"] > 1)
@@ -1354,6 +1334,9 @@ class form_element extends aw_template
 				$fn = $var."_name";
 				global $$fn;
 
+				// nyah. this should be rewritten to use file class... 
+				// and actually db_images class should be deprecated and all file uploads handled by file class
+				// cause it's interface and everything is lots better
 				$im = new db_images;
 				if ($this->arr["fshow"] == 1)
 				{
@@ -1483,16 +1466,7 @@ class form_element extends aw_template
 			case "listbox":
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
-					$this->save_handle();
-					$this->db_query("SELECT form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"]." as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
-					$cnt=0; 
-					while($row = $this->db_next())
-					{
-						$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
-						$cnt++;
-					}
-					$this->arr["listbox_count"] = $cnt;
-					$this->restore_handle();
+					$this->make_relation_listbox_content();
 				}
 
 				$sp = split("_", $this->entry, 10);
@@ -1781,6 +1755,41 @@ class form_element extends aw_template
 			$GLOBALS["elements_created"] = true;
 			$GLOBALS["formcache"] = $formcache;
 		}
+	}
+
+	////
+	// !reads the elements for the relation listbox (this element) from the database
+	function make_relation_listbox_content()
+	{
+		$this->save_handle();
+		$rel_el = "form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"];
+
+		$order_by = "";
+		if ($this->arr["sort_by_alpha"])
+		{
+			$order_by = "ORDER BY $rel_el ";
+		}
+
+		if ($this->arr["rel_unique"] == 1)
+		{
+			$rel_el = "distinct(".$rel_el.")";
+		}
+
+		$this->db_query("SELECT $rel_el as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0 $order_by");
+		$cnt=0; 
+		while($row = $this->db_next())
+		{
+			$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
+			$cnt++;
+		}
+		$this->arr["listbox_count"] = $cnt;
+		if ($this->form->type == FTYPE_SEARCH)
+		{
+			$this->arr["listbox_count"] = $cnt+1;
+			$this->arr["listbox_items"][$cnt] = "";
+			$this->arr["listbox_default"] = $cnt;
+		}
+		$this->restore_handle();
 	}
 }
 ?>
