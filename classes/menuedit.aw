@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.212 2003/01/26 18:59:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.213 2003/01/27 19:37:24 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -3274,6 +3274,7 @@ class menuedit extends aw_template
 			{
 				$db["mtype"] = MN_HOME_FOLDER_SUB;	// so you can share them later on.
 			}
+
 			$id = $this->new_object(array("parent" => $parent,"name" => $db["name"], "class_id" => $db["class_id"], "status" => $db["status"], "comment" => $db["comment"], "jrk" => $db["jrk"], "visible" => $db["visible"], "alias" => $db["alias"], "periodic" => $db["periodic"]));
 			$this->db_query("INSERT INTO menu 
 						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
