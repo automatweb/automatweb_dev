@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.21 2004/07/07 10:37:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.22 2004/07/08 11:20:25 duke Exp $
 
 /*
 
@@ -97,13 +97,16 @@ class classificator extends class_base
 			};
 
 
-			if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1) || $use_type == "mselect")
+			if (empty($prop["value"]))
 			{
-				$prop["value"] = $connections;
-			}
-			else
-			{
-				$prop["value"] = $selected;
+				if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1) || $use_type == "mselect")
+				{
+					$prop["value"] = $connections;
+				}
+				else
+				{
+					$prop["value"] = $selected;
+				};
 			};
 		};
 
