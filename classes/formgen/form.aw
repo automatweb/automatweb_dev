@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.109 2004/10/28 15:11:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.110 2004/10/29 21:11:17 duke Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2042,7 +2042,7 @@ class form extends form_base
 			// läbi veebi.
 			$this->_log(ST_FORM_ENTRY, SA_ADD,"Lisas formi $this->name ($this->id) kaudu uue sisestuse $this->entry_name ($this->entry_id) ", $this->entry_id);
 			// check automatic mailinglist except 
-			$ml_list_inst = get_instance("mailinglist/ml_list");
+			$ml_list_inst = get_instance(CL_ML_LIST);
 			$this->db_query("SELECT * FROM ml_list2automatic_form WHERE fid = '$this->id'");
 			while ($row = $this->db_next())
 			{

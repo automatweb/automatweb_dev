@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.3 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.4 2004/10/29 21:10:17 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -199,7 +199,7 @@ class mail_message extends class_base
 
 		if ($to_list)
 		{
-			$mllist = get_instance("mailinglist/ml_list");
+			$mllist = get_instance(CL_ML_LIST);
 			// if sending from messenger, then we are inside a popup
 			// and don't want to display the rest of the list interface 
 			// form (or perhaps I do?)
@@ -211,7 +211,7 @@ class mail_message extends class_base
 					"group" => "mail_report",
 					"cb_part" => 1,
 					"fxt" => 1),
-				"ml_list");
+				CL_ML_LIST);
 			}
 			else
 			{
@@ -219,7 +219,7 @@ class mail_message extends class_base
 					"id" => $target_obj->id(),
 					"mail_id" => $this->id,
 					"group" => "mail_report"),
-				"ml_list");
+				CL_ML_LIST);
 			};
 			aw_session_set("route_back",$route_back);
 			// scheduleerib kirjade saatmise
