@@ -1,6 +1,6 @@
 <?php
 // ---------------------------------------------------------------------------
-// (C) OÜ Sruktuur Meedia 2000
+// (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
 
 // aw version - [major release].[minor release].[fix number]
@@ -328,7 +328,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_BANNER_BUYER => array("name" => "Banneri klient", "file" => "banner_buyer", "can_add" => 1),
 			CL_BANNER_SITE => array("name" => "Banneri sait", "file" => "banner_site", "can_add" => 1),
 			CL_SHOP => array("name" => "Pood", "file" => "shop", "can_add" => 1),
-			CL_SHOP_ITEM => array("name" => "Kaubaartikkel", "file" => "shop_item", "can_add" => 1)
+			CL_SHOP_ITEM => array("name" => "Kaubaartikkel", "file" => "shop_item", "can_add" => 1),
+			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0)
 );
 // kliendid. 
 // hierarhia esimene element on root
