@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.90 2005/01/05 15:45:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.91 2005/02/07 14:23:31 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -393,7 +393,7 @@ class htmlclient extends aw_template
 			// hm, do we need STAT_ANY? or should I just fix the search
 			// do not use dumb value like 3 -- duke
 			$args["options"] = array(
-				3 => "Kõik",
+				3 => "K&otilde;ik",
 				STAT_ACTIVE => "Aktiivne",
 				STAT_NOTACTIVE => "Deaktiivne",
 			);
@@ -1218,7 +1218,9 @@ class htmlclient extends aw_template
 				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
 				break;
+				
 			case "reset":
+				$arr["class"] = "sbtbutton";
 			case "button":
 				$retval = html::button($arr);
 				break;
