@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.66 2003/02/06 11:28:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.67 2003/02/25 14:38:41 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -322,6 +322,12 @@ class forum extends class_base
 			"threadedcomments" => "Kommentaarid",
 		);
 
+		$hide_tabs = array();
+		if ($this->cfg["hide_tabs"])
+		{
+			$hide_tabs = explode(",",$this->cfg["hide_tabs"]);
+		};
+
 		$retval .= "";
 		$this->read_template("tabs.tpl");
 		$hide_tabs_if_forum_is_doc = array("flat","addcomment","search","details");
@@ -331,6 +337,11 @@ class forum extends class_base
 			{
 				continue;
 			};
+			if ( in_array($val,$hide_tabs) )
+			{
+				continue;
+			};
+
 			if ( ($val == "newtopic") && $this->cfg["newtopic_logged_only"] == 1 && aw_global_get("uid") == "" )
 			{
 				// suck
@@ -795,7 +806,7 @@ topic");
 
 		if (!$args["no_add_comment"])
 		{
-			$retval .= $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded"),$add_params));
+			$retval .= $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded","no_comments" => $no_comments),$add_params));
 		};
 
 		return $retval;
@@ -1118,7 +1129,7 @@ topic");
 			"comment" => $args["comment"],
 			"subj" => $subj,
 			"reply" => $reply,
-			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act)),
+			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act,"no_comments" => $args["no_comments"])),
 		));
 		return $this->parse();
 	}
@@ -1213,11 +1224,11 @@ topic");
 
 		if ($section)
 		{
-			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"_alias" => "forum"));
+			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"_alias" => "forum","no_comments" => $args["no_comments"]));
 		}
 		else
 		{
-			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section));
+			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"no_comments" => $args["no_comments"]));
 		};
 		return $retval;
 
