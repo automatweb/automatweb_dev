@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.28 2004/12/02 09:22:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.29 2004/12/03 12:55:59 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1007,7 +1007,7 @@ class site_search_content extends class_base
 		
 		if (empty($arr["opts"]["str"]))
 		{
-			$arr["opts"]["str"] = S_OPT_PHRASE;
+			$arr["opts"]["str"] = S_OPT_ANY_WORD;
 		}
 
 		load_vcl("date_edit");
