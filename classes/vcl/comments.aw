@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.2 2004/03/24 17:49:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.3 2004/06/25 15:01:58 duke Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -17,10 +17,18 @@ class comments extends class_base
 	{
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
-		$oid = $this->obj->id();
+		// alright, It seems that I need another way to to initialize this object
+		// comments for an image get saved under the image itself
+		if (is_object($this->obj))
+		{
+			$oid = $this->obj->id();
+		};
 		$fcg = get_instance(CL_COMMENT);
+
+		$parent = !empty($prop["use_parent"]) ? $prop["use_parent"] : $oid;
+
 		$comms = $fcg->get_comment_list(array(
-			"parent" => $oid,
+			"parent" => $parent,
 		));
 		$prname = $prop["name"];
 		$pager = $this->pager(array(
@@ -28,7 +36,10 @@ class comments extends class_base
 			"onpage" => 20,
 		));
 		$res = "";
-		$res .= "<h2>" . $this->obj->name() . "</h2>";
+		if (is_object($this->obj))
+		{
+			$res .= "<h2>" . $this->obj->name() . "</h2>";
+		};
 		$res .= "Selle objekti kohta on " . count($comms) . " kommentaari<br><br>";
 		$res .= "$pager<br><br>";
 		$c = 0;
@@ -68,6 +79,12 @@ class comments extends class_base
 				"type" => "textarea",
 				"caption" => "Kommentaar",
 				"name" => $prname . "[comment]",
+			),
+			$prname . "_obj_id" => array(
+				"type" => "hidden",
+				"caption" => "",
+				"value" => $parent,
+				"name" => $prname . "[obj_id]",
 			),
 		);
 		return $rv;
