@@ -10,6 +10,9 @@
 <td class="fcaption">{VAR:LC_PROMO_LINK}:</td><td class="fform"><input type='text' NAME='link' VALUE='{VAR:link}'></td>
 </tr>
 <tr>
+<td class="fcaption">Lingi kirjeldus:</td><td class="fform"><input type='text' NAME='link_caption' VALUE='{VAR:link_caption}'></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=2>{VAR:LC_PROMO_BOX_TYPE}:</td>
 </tr>
 <tr>
@@ -22,13 +25,13 @@
 <td class="fcaption">{VAR:LC_PROMO_WHTOUT_TITLE}:</td><td class="fform"><input type='checkbox' NAME='no_title' VALUE='1' {VAR:no_title}></td>
 </tr>
 <tr>
-<td class="fcaption">{VAR:LC_PROMO_TEMPLATE_FOR_CHANGE}</td><td class="fform">
-<select name="tpl_edit">
-{VAR:tpl_edit}
-</select>
-</td>
+<td class="fcaption">{VAR:LC_PROMO_TEMPLATE_FOR_CHANGE}</td><td class="fform"><select name="tpl_edit">{VAR:tpl_edit}</select></td>
 </tr>
+<tr>
+	<td class="fcaption">Vali grupid kellele promo kasti n&auml;idatakse:</td>
+	<td class="fform"><select name="groups[]" class="small_button" multiple size="10">{VAR:groups}</select></td>
 </tr>
+
 <tr>
 <td class="fcaption">{VAR:LC_PROMO_TEMPLATE_FOR_SHOW}</td><td class="fform">
 <select name="tpl_lead">
