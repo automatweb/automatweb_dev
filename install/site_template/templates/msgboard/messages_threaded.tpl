@@ -8,7 +8,7 @@ function box2(caption,url)
 	}
 }
 </script>
-<form method="POST" name="commform" action="/reforb.{VAR:ext}">
+<form method="post" name="commform" action="/reforb.{VAR:ext}">
 
 {VAR:TABS}
 
@@ -40,20 +40,20 @@ function box2(caption,url)
         </tr>
 
         <tr class="msgboardcolor3">
-          <td width="100%" class="msgboardrw2" colspan="2"><b>{VAR:topic}</b><br>{VAR:text}</td>
+          <td width="100%" class="msgboardrw2" colspan="2"><b>{VAR:topic}</b><br />{VAR:text}</td>
       </tr>
 
 
 <!-- END SUB: TOPIC -->
 </table>
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="6" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="6" border="0" alt=""><br />
 
 
 <!-- SUB: message -->
-<table width=100% border=0 cellpadding=0 cellspacing=0>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td width=1><img src='{VAR:baseurl}/img/trans.gif' width="{VAR:level}" height="1" alt="" border="0"></td>
+<td width="1"><img src="{VAR:baseurl}/img/trans.gif" width="{VAR:level}" height="1" alt="" border="0" /></td>
 <td>
 	<table width="100%" border="0" cellspacing="0" cellpadding="3">
 	<tr class="msgboardcolor4">
@@ -71,7 +71,7 @@ function box2(caption,url)
 
 		<!-- SUB: KUSTUTA -->
 
-		<!--{VAR:LC_MSGBOARD_SELECT}: --><input type='checkbox' name='check[]' value='{VAR:id}'>
+		<!--{VAR:LC_MSGBOARD_SELECT}: --><input type="checkbox" name="check[]" value="{VAR:id}" />
 
 		<!-- END SUB: KUSTUTA -->
 
@@ -81,14 +81,14 @@ function box2(caption,url)
 	</tr>
 	<tr class="msgboardcolor4">
           <td width="100%" class="msgboardrw1" colspan="2">
-		<b>{VAR:subj}</b><br>
+		<b>{VAR:subj}</b><br />
 		{VAR:comment}
 	  </td>
 	</tr>
 	</table>
 
 </td></tr></table>
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="6" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="6" border="0" alt="" /><br />
 <!-- END SUB: message -->
 
 
@@ -119,7 +119,7 @@ function box2(caption,url)
 
 <!--[ <a href="#" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;"><b>{VAR:LC_MSGBOARD_DELETE}</b></a> ]&nbsp;&nbsp;-->
 
-<input type="submit" class='formbutton' value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;">
+<input type="submit" class='formbutton' value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;" />
 
 {VAR:reforb}
 
@@ -137,10 +137,10 @@ function box2(caption,url)
 </form>
 </table>
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
-<form action="/reforb.{VAR:ext}" METHOD=POST name="addpost">
+<form action="/reforb.{VAR:ext}" method="post" name="addpost">
 <tr class="msgboardcolor3">
 
 <td class="textmiddle" nowrap height="24"><b>{VAR:LC_MSGBOARD_ADD_NEW_COMM}</b></td>

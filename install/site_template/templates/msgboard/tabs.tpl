@@ -6,7 +6,7 @@
    <td class="msgboardcolor4">
    
 
-	<table border=0 cellpadding=0 cellspacing=0>
+	<table border="0" cellpadding="0" cellspacing="0">
 		<tr> 
 
 		<!-- SUB: tab -->
@@ -28,4 +28,4 @@
 	</tr>
 </table>
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br />

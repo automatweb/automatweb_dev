@@ -25,26 +25,27 @@
 <!-- begin logo and search -->
 <table width="634" border="0" cellpadding="0" cellspacing="0">
 <tr>
-  <td><a href="{VAR:baseurl}"><IMG SRC="{VAR:baseurl}/img/automatweb.gif" BORDER="0" ALT=""></a></td>
+  <td><a href="{VAR:baseurl}"><img src="{VAR:baseurl}/img/automatweb.gif" border="0" alt="" /></a></td>
   <td align="right">
 
 
 <!-- SUB: SEARCH_SEL -->
-<table border="0" cellspacing="5" cellpadding="0">
 <form method="get" action="{VAR:baseurl}/index.{VAR:ext}" name="search">
+<table border="0" cellspacing="5" cellpadding="0">
 <tr>
 <td><select name="parent" class="formselect">{VAR:search_sel}</select></td>
-<td><input type="text" size="15" class="formtext" name="str"></td>
+<td><input type="text" size="15" class="formtext" name="str" /></td>
 <td>
 <!--[<a href="#" onClick="document.search.submit()"><b>OTSI</b></a>]-->
 
-<input type="submit" value=" {VAR:LC_SEARCH_BTN} " class="formbutton"></td>
-<input type="hidden" name="class" value="document">
-<input type="hidden" name="action" value="search">
-<input type="hidden" name="section" value="{VAR:section}">
+<input type="submit" value=" {VAR:LC_SEARCH_BTN} " class="formbutton" />
+</td>
 </tr>
-</form>
 </table>
+<input type="hidden" name="class" value="document" />
+<input type="hidden" name="action" value="search" />
+<input type="hidden" name="section" value="{VAR:section}" />
+</form>
 <!-- END SUB: SEARCH_SEL -->
 
   </td>
@@ -66,7 +67,7 @@
 </table>
 <!-- end YAH -->
 
-<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="7" BORDER="0" ALT=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 
 <table width="660" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -116,7 +117,7 @@
 <!-- END SUB: MENU_VASAK_L1_ITEM_SEL -->
 
 </table>
-<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="7" BORDER="0" ALT=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 
 
 
@@ -134,26 +135,26 @@
 			<table>
 				<tr>
 					<td class="textsmall" align="right">Username:</td>
-					<td><input type="text" name="uid" size="8" class="formtext"></td>
+					<td><input type="text" name="uid" size="8" class="formtext" /></td>
 				</tr>
 				<tr>
 					<td class="textsmall" align="right">Password:</td>
-					<td><input type="password" name="password" size="8" class="formtext"></td>
+					<td><input type="password" name="password" size="8" class="formtext" /></td>
 				</tr>
 				<tr>
 				    <td></td>
-					<td><input type="submit" value="Log In" class="formbutton"></td>
+					<td><input type="submit" value="Log In" class="formbutton" /></td>
 				</tr>
 			</table>
-			<input type="hidden" name="class" value="users">
-			<input type="hidden" name="action" value="login">
+			<input type="hidden" name="class" value="users" />
+			<input type="hidden" name="action" value="login" />
 		</form>
 
 	</td></tr>
 	<!-- end box_content -->
 
 </table>
-<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="7" BORDER="0" ALT=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 <!-- END SUB: login -->
 
 
@@ -169,7 +170,7 @@
 	<tr><td class="boxcontent">
 	
 		<!-- SUB: MENU_LOGGED_L1_ITEM -->		
-		&gt; <a href="{VAR:link}" {VAR:target}>{VAR:text}</a><br>
+		&gt; <a href="{VAR:link}" {VAR:target}>{VAR:text}</a><br />
 		<!-- END SUB: MENU_LOGGED_L1_ITEM -->
 
 
@@ -177,7 +178,7 @@
 	<!-- end box_content -->
 
 </table>
-<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="7" BORDER="0" ALT=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 <!-- END SUB: logged -->
 
 
@@ -185,7 +186,7 @@
 
 
   </td>
-  <td width="10" valign="top"><IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="10" HEIGHT="1" BORDER="0" ALT=""></td>
+  <td width="10" valign="top"><img src="{VAR:baseurl}/img/trans.gif" width="10" height="1" border="0" alt="" /></td>
   <!-- END SUB: LEFT_PANE -->
 
 
@@ -206,7 +207,7 @@
 
 
   <!-- SUB: RIGHT_PANE -->
-     <td width="10" valign="top"><IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="10" HEIGHT="1" BORDER="0" ALT=""></td>
+     <td width="10" valign="top"><img src="{VAR:baseurl}/img/trans.gif" width="10" height="1" border="0" alt="" /></td>
   <td width="155" valign="top">
 
 
@@ -225,7 +226,7 @@
 		{VAR:content}
 	</td></tr>
 </table>
-<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="7" BORDER="0" ALT=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 <!-- END SUB: RIGHT_PROMO -->
 
 
@@ -249,7 +250,7 @@
 
 
 
-<hr noshade size="1" width="660">
+<hr noshade size="1" width="660" />
 
 <table width="634" border="0" cellpadding="0" cellspacing="0">
 <tr>

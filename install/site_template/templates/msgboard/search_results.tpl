@@ -14,7 +14,7 @@
 <!-- SUB: message -->
 <table width="100%" border="0" cellspacing="0" cellpadding="3" >
 
-	<tr><td colspan="6"><img src="{VAR:baseurl}/img/trans.gif" width="1" height="1" border="0" alt=""></td></tr>
+	<tr><td colspan="6"><img src="{VAR:baseurl}/img/trans.gif" width="1" height="1" border="0" alt="" /></td></tr>
 	<tr class="msgboardcolor4">
           <td width="100%" class="msgboardrw2">
 	<!--{VAR:LC_MSGBOARD_NAME}:-->
@@ -35,11 +35,7 @@
 </table>
 <!-- END SUB: message -->
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br>
-
-
-
-
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt="" /><br />
 
 
 
@@ -69,14 +65,8 @@
 		<!-- END SUB: TOPIC_ODD -->
 
 
-
-
-
-
-
-
 <!-- SUB: PAGES -->
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt="" /><br />
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr class="msgboardcolor3">
 
@@ -92,10 +82,6 @@
 <!-- END SUB: SEL_PAGE -->
 
 </td>
-
-
-
-
 
 			<!--
 			<input type="submit" value=" Hinda " class="mboardtextsmall">

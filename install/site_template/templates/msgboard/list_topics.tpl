@@ -9,11 +9,11 @@ function box2(caption,url)
 }
 </script>
 <!-- SUB: DELETE -->
-<input type="checkbox" name="check[]" value="{VAR:id}">
+<input type="checkbox" name="check[]" value="{VAR:id}" />
 <!-- END SUB: DELETE -->
 
 <form name="topicform" method="POST" action="/reforb.{VAR:ext}">
-<input type="hidden" name="act" value="">
+<input type="hidden" name="act" value="" />
 
 
 
@@ -63,7 +63,7 @@ function box2(caption,url)
 
 
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt="" /><br />
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr class="msgboardcolor3">
 
@@ -86,29 +86,26 @@ function box2(caption,url)
 <td height="21" align="right" class="textmiddle">
 
 
-
 <!--[ <a href="#" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'delete'; document.topicform.submit()} ;return false;"><b>{VAR:LC_MSGBOARD_DELETE}</b></a> ] &nbsp;&nbsp;-->
 
-<input type="submit" class='formbutton' name="delete" value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'delete'; document.topicform.submit()} ;return false;">
+<input type="submit" class='formbutton' name="delete" value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'delete'; document.topicform.submit()} ;return false;" />
 <!-- SUB: TO_ARCHIVE -->
 
 <!--[ <a href="#" onClick="if (confirm('{VAR:LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'archive'; document.topicform.submit()} ;return false;"><b>{VAR:LC_MSGBOARD_ARCHIVE}</b></a> ]&nbsp;&nbsp;-->
 
-<input type="submit" class='formbutton' onClick="if (confirm('{VAR:LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'archive'; document.topicform.submit()} ;return false;" name="archive" value="{VAR:LC_MSGBOARD_ARCHIVE}">
+<input type="submit" class='formbutton' onClick="if (confirm('{VAR:LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'archive'; document.topicform.submit()} ;return false;" name="archive" value="{VAR:LC_MSGBOARD_ARCHIVE}" />
 <!-- END SUB: TO_ARCHIVE -->
 
 <!-- SUB: FROM_ARCHIVE -->
 
 <!--[ <a href="#" onClick="if (confirm('{VAR:LC_MSGBOARD_RESTORE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'activate'; document.topicform.submit()} ;return false;"><b>{VAR:LC_MSGBOARD_ACTIVATE}</b></a> ]&nbsp;&nbsp;-->
 
-<input type="submit" onClick="if (confirm('{VAR:LC_MSGBOARD_RESTORE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'activate'; document.topicform.submit()} ;return false;" class='formbutton' name="archive" value="{VAR:LC_MSGBOARD_ACTIVATE}">
+<input type="submit" onClick="if (confirm('{VAR:LC_MSGBOARD_RESTORE_SELECTED_CONFIRM}')) {document.topicform.act.value = 'activate'; document.topicform.submit()} ;return false;" class='formbutton' name="archive" value="{VAR:LC_MSGBOARD_ACTIVATE}" />
 <!-- END SUB: FROM_ARCHIVE -->
 {VAR:reforb}
 
 </td>
 <!-- END SUB: actions -->
-
-
 
 			<!--
 			<input type="submit" value=" Hinda " class="mboardtextsmall">
@@ -116,11 +113,5 @@ function box2(caption,url)
 			-->
 </tr>
 </table>
-
-                  
-
-
-    
-
 
 </form>

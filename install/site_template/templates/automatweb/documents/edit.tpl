@@ -1,4 +1,4 @@
-<form method="POST" action="reforb.{VAR:ext}" name="doc">
+<form method="post" action="reforb.{VAR:ext}" name="doc">
 
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
@@ -6,7 +6,8 @@
 
 	<!--tabelshadow-->
 	<table width="100%" cellspacing="0" cellpadding="0">
-	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+	<tr><td width="1" class="tableshadow"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="1" height="1" border="0" alt="" /></td>
+	<td class="tableshadow"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="1" height="1" border="0" alt="" />
 		<!--tabelsisu-->
 		<table width="100%" cellspacing="0" cellpadding="0">
 		<tr><td><td class="tableinside">
@@ -15,15 +16,15 @@
 <table border="0" cellpadding="0" cellspacing="2">
 
 <tr>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:document.doc.submit();" 
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+<td align="center" class="icontext"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="2" height="2" border="0" alt="" /><a href="javascript:document.doc.submit();" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25" /></a><a
 href="javascript:document.doc.submit();" >Salvesta</a></td>
-<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="10" height="2" border="0" alt="" /></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
+<td align="center" class="icontext"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="2" height="2" border="0" alt="" /><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><a
 target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
-<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="10" height="2" border="0" alt="" /></td>
 
 </table>
 
@@ -42,36 +43,28 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 </table>
 
 
-
-
-
-
-
-
-
-
-<table border=0 cellspacing=1 cellpadding=2 width="100%">
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
 
 <tr>
-<td COLSPAN=2>
+<td colspan="2">
 
 
-<table border=0 cellpadding=0 cellspacing=0>
+<table border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td colspan=3><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
+		<td colspan="3"><img src="{VAR:baseurl}/images/transa.gif" width="1" height="10" border="0" alt="" /></td>
 	</tr>
 	<tr>
-		<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;M‰‰rangud&nbsp;</b></td>
-		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
+		<td class="celltext"><img src="{VAR:baseurl}/images/transa.gif" width="113" height="1" border="0" /><b>&nbsp;M‰‰rangud&nbsp;</b></td>
+		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src="{VAR:baseurl}/images/transa.gif" width="1" height="10" border="0" alt="" /></td>
 		<td class="celltext">&nbsp;	
-			Aktiivne: <input type='checkbox' name='status' value='2' {VAR:cstatus}>&nbsp;&nbsp;&nbsp;
-			Foorum:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>&nbsp;&nbsp;&nbsp;
-	N‰ita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>&nbsp;&nbsp;&nbsp;
+			Aktiivne: <input type="checkbox" name="status" value="2" {VAR:cstatus} />&nbsp;&nbsp;&nbsp;
+			Foorum:	<input type="checkbox" name="is_forum" value="1" {VAR:is_forum} />&nbsp;&nbsp;&nbsp;
+	N‰ita leadi: <input type="checkbox" name="showlead" value="1" {VAR:showlead} />&nbsp;&nbsp;&nbsp;
 	<!--
 	Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>&nbsp;&nbsp;&nbsp;
 	-->
-	Pealkiri klikitav: <input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>&nbsp;&nbsp;&nbsp;
-	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1><br>
+	Pealkiri klikitav: <input type="checkbox" name="title_clickable" {VAR:title_clickable} value="1" />&nbsp;&nbsp;&nbsp;
+	T&uuml;hista stiilid:	<input type="checkbox" name="clear_styles" value="1" />
 
 	<!--
 	&nbsp;&nbsp;Lingi vıtmesınad:	<input type='checkbox' name="link_keywords" value=1>&nbsp;&nbsp;&nbsp;
@@ -87,14 +80,14 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 </tr>
 
 <tr>
-<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
-<td class="celltext"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+<td class="celltext"><img src="{VAR:baseurl}/images/transa.gif" width="110" height="1" alt="" /><b>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="celltext"><input class="tekstikast" type="text" name="title" size="80" value="{VAR:title}" /></td>
 </tr>
 
 
 <tr>
-<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Autor:&nbsp;</b></td>
-<td class="celltext"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
+<td class="celltext"><img src="{VAR:baseurl}/images/transa.gif" width="110" height="1" alt="" /><b>&nbsp;Autor:&nbsp;</b></td>
+<td class="celltext"><input class="tekstikast" type="text" name="author" size="80" value="{VAR:author}" /></td>
 </tr>
 
 <tr>
@@ -119,7 +112,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 
 	<!--tabelshadow-->
 	<table width="100%" cellspacing="0" cellpadding="0">
-	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+	<tr><td width="1" class="tableshadow"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="1" height="1" border="0" ALT="" /></td><td class="tableshadow"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="1" height="1" border="0" ALT="" />
 		<!--tabelsisu-->
 		<table width="100%" cellspacing="0" cellpadding="0">
 		<tr><td><td class="tableinside">
@@ -128,20 +121,19 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 <table border="0" cellpadding="0" cellspacing="2">
 
 <tr>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:document.doc.submit();"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save2','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save2" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+<td align="center" class="icontext"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="2" height="2" border="0" ALT="" /><a href="javascript:document.doc.submit();"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save2','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save2" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25" /></a><a
 href="javascript:document.doc.submit();">Salvesta</a></td>
-<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="10" height="2" border="0" ALT="" /></td>
 
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:preview}"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview2','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview2" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
+<td align="center" class="icontext"><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="2" height="2" border="0" ALT="" /><a href="{VAR:preview}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview2','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview2" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25" /></a><a
 href="{VAR:preview}">Eelvaade</a></td>
-<td><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+<td><img src="{VAR:baseurl}/automatweb/images/trans.gif" width="10" height="2" border="0" ALT="" /></td>
 
 </table>
 
-
-		</td>
+	</td>
 		</tr>
 		</table>
 
@@ -154,7 +146,7 @@ href="{VAR:preview}">Eelvaade</a></td>
 </tr>
 </table>
 
-<table width="100%" border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 <td>
 <iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">

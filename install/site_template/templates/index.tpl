@@ -1,19 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-<TITLE> Your Title Here / {VAR:stitle}</TITLE>
-
+<html>
+<head>
+<title> Your Title Here / {VAR:stitle}</title>
 <link rel="stylesheet" href="{VAR:baseurl}/css/styles.css">
-</HEAD>
-
-<BODY bgcolor="#FFFFFF" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
+</head>
+<body>
 <center>
 
-
-
-		{VAR:content}
-
+	{VAR:content}
 
 </center>
-</BODY>
-</HTML>
+</body>
+</html>

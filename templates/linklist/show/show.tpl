@@ -37,7 +37,7 @@
 
 	<tr>
 		<td colspan=3>
-			<hr>statusbar:  
+			<hr />statusbar:  
 			&nbsp;linke kataloogis:	{VAR:total2}
 			  // abix:{VAR:abix}
 		</td>

@@ -9,7 +9,7 @@ function box2(caption,url)
 }
 </script>
 
-<form method="POST" name="commform" action="/reforb.{VAR:ext}">
+<form method="post" name="commform" action="/reforb.{VAR:ext}">
 
 
 
@@ -37,7 +37,7 @@ function box2(caption,url)
         </tr>
 
         <tr class="msgboardcolor3">
-          <td width="100%" class="textmiddle"><b>{VAR:topic}</b><br>{VAR:text}</td>
+          <td width="100%" class="textmiddle"><b>{VAR:topic}</b><br />{VAR:text}</td>
       </tr>
 
 
@@ -45,7 +45,7 @@ function box2(caption,url)
 </table>
 
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="3" border="0" alt="" /><br />
 
 
 
@@ -68,14 +68,14 @@ function box2(caption,url)
           <td align="center" class="msgboardrw1" nowrap>{VAR:time}</td>
 	  <td class="msgboardrw1" height="24" nowrap>
 	  <!-- SUB: KUSTUTA -->
-	<input type="checkbox" name="check[]" value="{VAR:id}">
+	<input type="checkbox" name="check[]" value="{VAR:id}" />
 		<!-- END SUB: KUSTUTA -->
 		</td>
         </tr>
 	</table>
 
 </td></tr></table>
-<img src='{VAR:baseurl}/img/trans.gif' width="1" height="7" alt="" border="0"><br>
+<img src='{VAR:baseurl}/img/trans.gif' width="1" height="7" alt="" border="0" /><br />
 <!-- END SUB: message -->
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -102,7 +102,7 @@ function box2(caption,url)
 
 <!--[ <a href="#" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;"><b>{VAR:LC_MSGBOARD_DELETE}</b></a> ]&nbsp;&nbsp;-->
 
-<input type="submit" class='formbutton' value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;">
+<input type="submit" class="formbutton" value="{VAR:LC_MSGBOARD_DELETE}" onClick="if (confirm('{VAR:LC_MSGBOARD_DELETE_SELECTED}?')) {document.commform.submit()} ;return false;" />
 
 
 
@@ -123,10 +123,10 @@ function box2(caption,url)
 </form>
 </table>
 
-<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt=""><br>
+<img src="{VAR:baseurl}/img/trans.gif" width="1" height="7" border="0" alt="" /><br />
 
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
-<form action="/reforb.{VAR:ext}" METHOD=POST name="addpost">
+<form action="/reforb.{VAR:ext}" method="post" name="addpost">
 <tr class="msgboardcolor3">
 
 <td class="textmiddle" nowrap height="24"><b>{VAR:LC_MSGBOARD_ADD_NEW_COMM}</b></td>

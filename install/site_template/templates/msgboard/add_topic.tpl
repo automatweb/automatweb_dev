@@ -1,9 +1,5 @@
 {VAR:TABS}
 		
-
-
-
-
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
 <form action="/reforb.{VAR:ext}" METHOD=POST name="addpost">
 <tr class="msgboardcolor3">
@@ -15,14 +11,14 @@
           <td width="100%" class="msgboardcolor4">
 	  
 	  
-<table  border="0" cellspacing="5" cellpadding="0">
+<table border="0" cellspacing="5" cellpadding="0">
 	<tr>
-		<td valign="middle" align="right"  class="textmiddle">{VAR:LC_MSGBOARD_SUBJECT}:</td>
-		<td><input type="text" NAME="topic" SIZE="40" value='{VAR:name}'></td>
+		<td valign="middle" align="right" class="textmiddle">{VAR:LC_MSGBOARD_SUBJECT}:</td>
+		<td><input type="text" name="topic" size="40" value='{VAR:name}'></td>
 	</tr>
 
 	<tr>
-	<td valign="middle" align="right" class="textmiddle">{VAR:LC_MSGBOARD_NAME}:</td><td><input type="text" NAME="from" SIZE="40"></td>
+	<td valign="middle" align="right" class="textmiddle">{VAR:LC_MSGBOARD_NAME}:</td><td><input type="text" name="from" size="40" /></td>
 	</tr>
 
 	<tr>
@@ -30,7 +26,7 @@
 	</tr>
 	<tr>
 	<td></td>
-		<td><input type='submit' class="formbutton" VALUE='{VAR:LC_MSGBOARD_SAVE}'>
+		<td><input type="submit" class="formbutton" value='{VAR:LC_MSGBOARD_SAVE}' />
 		<!--[ <a href="#" onClick="document.addpost.submit();"><b>{VAR:LC_MSGBOARD_SAVE}</b></a> ]&nbsp;&nbsp;-->
 		</td>
 	</tr>
