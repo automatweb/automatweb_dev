@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.161 2004/11/21 19:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.162 2004/11/21 19:06:10 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -753,7 +753,7 @@ class aliasmgr extends aw_template
 				"id" => $id,
 				"subaction" => "none",
 				"return_url" => $return_url,
-				"orig_return_url" => $args["return_url"]
+				"orig_return_url" => urlencode($_GET["return_url"])
 				),$this->use_class
 			);
 		};
