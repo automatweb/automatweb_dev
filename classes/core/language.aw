@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.10 2004/06/17 13:46:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.11 2004/07/09 08:22:37 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -203,6 +203,11 @@ class language extends class_base
 
 	function callback_pre_save($arr)
 	{
+		if (!$arr["obj_inst"]->prop("lang_id"))
+		{
+			$id = $this->db_fetch_field("SELECT max(id) as id FROM languages", "id")+1;
+			$arr["obj_inst"]->set_prop("lang_id", $id);
+		}
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
 		$arr["obj_inst"]->set_prop("lang_site_id", join(",", array_keys(is_array($prop["value"]) ? $arr["obj_inst"]->prop("lang_site_id") : array())));
 	}
