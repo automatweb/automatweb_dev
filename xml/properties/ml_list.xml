@@ -2,14 +2,25 @@
 <properties>
       <property>
             <name>def_user_folder</name>
-            <type>popup_objmgr</type>
-            <clid>CL_PSEUDO</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
+            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <caption>Vali kataloog, kuhu pannakse uued liikmed </caption>
+      </property>
+      <property>
+            <name>sub_form_type</name>
+            <type>select</type>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vormi tüüp</caption>
       </property>
       <property>
             <name>user_form_conf</name>
@@ -63,6 +74,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <members>
