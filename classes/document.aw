@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.266 2004/06/19 20:07:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.267 2004/06/19 20:08:08 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2331,66 +2331,6 @@ class document extends aw_template
 		return $this->mk_orb("sel_menus",array("id" => $id));
 	}
 
-	function _serialize($arr)
-	{
-		extract($arr);
-		$this->db_query("SELECT documents.*,objects.*,objects.oid as oid FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $oid");
-		$row = $this->db_next();
-
-		$al = $this->get_aliases_for($oid);
-		return serialize(array("row" => $row, "aliases" => $al));
-	}
-
-	function _unserialize($arr)
-	{
-		extract($arr);
-
-		$ar = unserialize($str);
-	
-		$row = $ar["row"];
-
-		$is_brother = false;
-		if ($row["oid"] != $row["brother_of"])
-		{
-			$is_brother = true;
-		}
-		else
-		{
-			unset($row["brother_of"]);
-		}
-
-		$row["oid"] = 0;
-		$row["parent"] = $parent;
-		$row["lang_id"] = aw_global_get("lang_id");
-		$row["period"] = $arr["period"];
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-
-		if (!is_brother)
-		{
-			$this->upd_object(array("oid" => $id, "brother_of" => $id));
-		}
-
-		reset($this->knownfields);
-		while(list($fcap,$fname) = each($this->knownfields)) 
-		{
-			$this->quote(&$row[$fname]);
-			$q_parts[] = "'$row[$fname]'";
-			$s_parts[] = "$fname";
-		};
-		
-		// see paneb siis paringu kokku. Whee.
-		$q = "INSERT INTO documents(docid,".join(",",$s_parts).") VALUES($id," . join(",",$q_parts) . ")"; 
-		$this->db_query($q);
-
-		$al = $ar["aliases"];
-		reset($al);
-		while (list(,$arow) = each($al))
-		{
-			$this->add_alias($id,$arow["target"], $arow["data"]);
-		}
-		return true;
-	}
 
 	/** Performs a search from all documents 
 		
