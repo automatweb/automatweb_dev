@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.30 2003/03/13 16:14:08 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.31 2003/03/28 18:28:46 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -72,6 +72,7 @@ class html extends aw_template
 		extract($args);
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
+		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
 		return "<input type=\"text\" id=\"$name\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"/>\n";
 	}
@@ -88,6 +89,7 @@ class html extends aw_template
 		extract($args);
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
+		$value = isset($value) ? $value : "";
 		if (isset($richtext) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
 		{
 			$args["type"] = "richtext";
