@@ -9,6 +9,12 @@
 			</function>
 		</action>
 
+		<action name="gen_db_struct" nologin="1">
+			<function name="gen_db_struct">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
