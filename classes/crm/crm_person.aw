@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.17 2004/03/16 14:36:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.18 2004/04/07 13:48:45 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -119,9 +119,9 @@ selection.aw
 @caption templiidid
 
 @default group=show
-@groupinfo show caption=Visiitkaart submit=no
+groupinfo show caption=Visiitkaart submit=no
 @groupinfo contact caption=Kontaktandmed
-@property dokus type=text callback=show_isik
+property dokus type=text callback=show_isik
 
 @classinfo no_status=1
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.16 2004/04/07 11:26:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.17 2004/04/07 13:48:45 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -432,7 +432,10 @@ class crm_company extends class_base
 				"name" => $conn->prop("to.name"),
 				"id" => $conn->prop("to"),
 				"phone" => $pdat["phone"],
-				"email" => $pdat["email"],
+				"email" => html::href(array(
+					"url" => "mailto:" . $pdat["email"],
+					"caption" => $pdat["email"],
+				)),
 				"rank" => $pdat["rank"],
 				"new_task" => html::href(array(
 					"caption" => "Uus toimetus",
