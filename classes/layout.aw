@@ -172,7 +172,26 @@ class layout extends class_base
 				$ge = get_instance("vcl/grid_editor");
 				$grid = $arr['obj_inst']->meta('grid');
 				$grid["table_style"] = $arr["obj_inst"]->meta("table_style");
-				$prop['value'] = $ge->show($grid, $arr['obj_inst']->id());
+				$tmp = $ge->show($grid, $arr['obj_inst']->id());
+				if ($arr['obj_inst']->prop("header") != "")
+				{
+					$tmp = nl2br($arr['obj_inst']->prop("header")).$tmp;
+				}
+				if ($arr['obj_inst']->prop("footer") != "")
+				{
+					$tmp .= nl2br($arr['obj_inst']->prop("footer"));
+				}
+				$d = get_instance("document");
+				$d->create_relative_links($tmp);
+				if (strpos($tmp, "<a") !== false)
+				{
+					$prop["value"] = $tmp;
+				}
+				else
+				{
+					$prop["value"] = create_email_links($tmp);
+				}
+
 				break;
 
 			case "table_style":
