@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.1 2001/05/24 21:12:06 duke Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"

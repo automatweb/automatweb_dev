@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.1 2001/05/24 21:11:40 duke Exp $
 // klass taimerite jaoks
 class aw_timer {
 	var $timers; // siin sailitame koiki taimereid
