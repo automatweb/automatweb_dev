@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.35 2004/06/27 13:10:08 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.36 2004/06/29 09:43:09 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -72,7 +72,10 @@ caption Pildi/foto url
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
-@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
+//@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
+//@caption Ametinimetus
+
+@property rank type=objpicker clid=CL_CRM_PROFESSION table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
 @property sect type=relpicker reltype=RELTYPE_SECTION table=kliendibaas_isik automatic=1 group=general field=section
@@ -274,12 +277,12 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
-			case 'rank' :
+			/*case 'rank' :
 			{
 				//let's list the professions the organization/unit is associated with
 				$drop_down_list = array();
 				//connections from person->organization
-				$conns = $arr['obj_inst']->connections_to(array(
+				$conns = $arr['obj_inst']->connections_from(array(
 					'type'=>RELTYPE_WORK
 				));
 				//connections from person->section
@@ -292,11 +295,10 @@ class crm_person extends class_base
 				{
 					$conns = $tmp_conns;
 				}
-
 				foreach($conns as $conn)
 				{
 					//organization || section
-					$tmp_obj = new object($conn->prop('from'));
+					$tmp_obj = new object($conn->prop('to'));
 					//connections from organization||section->profession
 					$conns2 = $tmp_obj->connections_from(array(
 								'type'=>'RELTYPE_PROFESSIONS'
@@ -350,7 +352,7 @@ class crm_person extends class_base
 				ksort($drop_down_list);
 				$data['options'] = &$drop_down_list;
 				break;
-			}
+			}*/
 			case "title":
 				$data["options"] = array("Härra","Proua","Preili");
 				break;

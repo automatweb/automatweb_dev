@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.6 2004/06/11 12:55:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.7 2004/06/29 09:43:09 rtoomas Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -226,7 +226,7 @@ class crm_org_search extends class_base
 			$count++;
 			// aga ülejäänud on kõik seosed!
 			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
-			if (is_oid($o->prop("ettevotlusvorm")))
+			if (is_oid($o->prop("ettevotlusvorm")) && $this->can("view", $o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
 				$vorm = $tmp->name();

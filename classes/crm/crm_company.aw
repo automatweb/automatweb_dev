@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.38 2004/06/27 13:49:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.39 2004/06/29 09:43:09 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -156,9 +156,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 ////end of box////
 
-@property buu type=table store=no group=my_customers
-@caption Buu
-
 @groupinfo contacts caption="Kontaktid"
 @groupinfo oldcontacts caption="Nimekiri" parent=contacts submit=no
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
@@ -255,7 +252,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @caption Üksus
 
 @reltype PROFESSIONS value=29 clid=CL_CRM_PROFESSION
-@caption Võimalikud ametinimetused
+@caption Võimalikud ametid
 
 @reltype CATEGORY value=30 clid=CL_CRM_CATEGORY
 @caption Kategooria
@@ -482,7 +479,8 @@ class crm_company extends class_base
 			case 'ettevotlusvorm':
 			{
 				$ol = new object_list(array(
-					'class_id' => CL_CRM_CORPFORM
+					'class_id' => CL_CRM_CORPFORM,
+					'sort_by' => 'objects.jrk, objects.name',
 				));
 				$elements = array();
 				for($o=$ol->begin();!$ol->end();$o=$ol->next())
@@ -493,7 +491,6 @@ class crm_company extends class_base
 					}
 					$elements[$o->id()] = $o->prop('shortname');
 				}
-				asort($elements);
 				$arr['prop']['options'] = $elements;
 				break;
 			}
