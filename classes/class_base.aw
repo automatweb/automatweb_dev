@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.101 2003/05/06 13:53:59 duke Exp $
+// $Id: class_base.aw,v 2.102 2003/05/12 16:37:12 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -338,7 +338,7 @@ class class_base extends aw_template
 					"period" => isset($period) ? $period : "",
 					"class_id" => $this->clid,
 					"alias" => isset($alias) ? $alias : "",
-					"status" => isset($status) ? $status : 1,
+					"status" => !empty($status) ? $status : 1,
 			));
 
 			if ($alias_to)
@@ -392,7 +392,6 @@ class class_base extends aw_template
 		$form_data = $args;
 		
 		load_vcl('date_edit');
-
 
 		foreach($realprops as $property)
 		{
@@ -549,7 +548,7 @@ class class_base extends aw_template
 		{
 			$coredata["metadata"] = $metadata;
 		};
-		
+
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
 			$def = $this->cfg["classes"][$this->clid]["def"];
@@ -598,7 +597,10 @@ class class_base extends aw_template
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
-			$this->inst->callback_post_save(array("id" => $this->id));
+			$this->inst->callback_post_save(array(
+				"id" => $this->id,
+				"new" => $this->new,
+			));
 		}
 
 		$this->log_obj_change();
@@ -882,6 +884,7 @@ class class_base extends aw_template
 				$this->coredata = $tmp;
 			};
 		};
+
 
 	}	
 
@@ -1255,6 +1258,7 @@ class class_base extends aw_template
 				$_field = "metadata";
 			};
 
+
 			if (isset($property["table"]))
 			{
 				if ($_field)
@@ -1264,6 +1268,7 @@ class class_base extends aw_template
 						$fields[$property["table"]][$_field] = $fval;
 					};
 				};
+
 				if (($property["type"] != "text") && ($property["type"] != "callback") && ($property["store"] != "no"))
 				{
 					$realfields[$property["table"]][$_field] = $fval;
@@ -1271,7 +1276,6 @@ class class_base extends aw_template
 			};
 
 		};
-
 
 
 		$this->tables = $tables;
@@ -1839,8 +1843,8 @@ class class_base extends aw_template
 			$clid_list = $this->inst->callback_get_classes_for_relation(array(
 				"reltype" => $reltype,
 			));
-		}
 
+		}
 		$args["clid_list"] = $clid_list;
 
 		$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
