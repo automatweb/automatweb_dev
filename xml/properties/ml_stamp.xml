@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>content</name>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>15</rows>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Sisu</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MAILINGLIST_STAMP</syslog_type>
+      </classinfo>
+</properties>
+
