@@ -75,6 +75,10 @@ class db_login extends class_base
 
 	function login_as($oid)
 	{
+		if (!$this->can("view", $oid))
+		{
+			return false;
+		}
 		$server = get_instance(CL_DB_SERVER_LOGIN);
 		$ob = obj($oid);
 		if ($ob->prop('db_server') && $ob->prop('db_base') != '' && $ob->prop('db_user') != '')
