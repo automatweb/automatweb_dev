@@ -18,15 +18,6 @@
             <caption>Template näitamiseks</caption>
       </property>
       <property>
-            <name>preview</name>
-            <type>text</type>
-            <group>preview</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Eelvaade</caption>
-      </property>
-      <property>
             <name>tpl_edit</name>
             <type>select</type>
             <table>menu</table>
@@ -61,25 +52,14 @@
             <caption>Lingi kirjeldus</caption>
       </property>
       <property>
-            <name>all_menus</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <value>1</value>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Näita igal pool</caption>
-      </property>
-      <property>
             <name>no_title</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <value>1</value>
             <group>show</group>
+            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <method>serialize</method>
             <caption>Ilma pealkirjata</caption>
       </property>
       <property>
@@ -88,31 +68,40 @@
             <multiple>1</multiple>
             <size>15</size>
             <group>show</group>
+            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <method>serialize</method>
             <caption>Grupid, kellele kasti näidata</caption>
       </property>
       <property>
             <name>section</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>15</size>
+            <type>text</type>
+            <callback>callback_get_menus</callback>
             <group>menus</group>
+            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <method>serialize</method>
             <caption>Vali menüüd, mille all kasti näidata</caption>
       </property>
       <property>
-            <name>last_menus</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>15</size>
+            <name>all_menus</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <value>1</value>
             <group>menus</group>
+            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <caption>Näita igal pool</caption>
+      </property>
+      <property>
+            <name>last_menus</name>
+            <type>text</type>
+            <callback>callback_get_doc_sources</callback>
+            <group>menus</group>
             <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
             <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
       </property>
       <property>
@@ -120,20 +109,18 @@
             <type>textbox</type>
             <size>4</size>
             <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>menu</table>
+            <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
       <classinfo>
-            <objtable>menu</objtable>
-            <objtable_index>id</objtable_index>
             <corefields>name,comment,status</corefields>
+            <relationmgr>yes</relationmgr>
+            <syslog_type>ST_PROMO</syslog_type>
       </classinfo>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
-                  <default>1</default>
             </general>
             <menus>
                   <caption>Menüüd</caption>
@@ -141,9 +128,6 @@
             <show>
                   <caption>Näitamine</caption>
             </show>
-            <preview>
-                  <caption>Eelvaade</caption>
-            </preview>
       </groupinfo>
       <tableinfo>
             <menu>
