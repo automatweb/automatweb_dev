@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.91 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.92 2004/06/29 10:43:34 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -722,7 +722,9 @@ class users_user extends aw_template
 		};
 
 		// teeme default grupi
-		$gid = $this->addgroup(0, $uid, GRP_DEFAULT);
+		aw_disable_acl();
+		$gid = $this->addgroup(0, $uid, GRP_DEFAULT, 0, USER_GROUP_PRIORITY, 0, 1);
+		aw_restore_acl();
 
 		// lisame kasutaja default grupi liikmex
 		$this->db_query("INSERT INTO groupmembers (gid,uid,created) VALUES ('$gid','$uid',$t)");
