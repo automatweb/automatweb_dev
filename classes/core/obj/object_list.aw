@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.27 2004/05/27 08:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.28 2004/07/07 18:10:04 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -143,7 +143,14 @@ class object_list extends _int_obj_container_base
 
 		if (!isset($param["save"]))
 		{
-			$param["save"] = true;
+			if ($param["func"] == "delete")
+			{
+				$param["save"] = false;
+			}
+			else
+			{
+				$param["save"] = true;
+			}
 		}
 
 		$func = $param["func"];
