@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.154 2004/10/08 15:27:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.155 2004/10/08 16:00:11 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -539,6 +539,7 @@ if (!defined("DEFS"))
 	// !Let's deal with no name objects in one place
 	function parse_obj_name($name)
 	{
+		$name = trim($name);
 		$rv = empty($name) ? "(nimetu)" : $name;
 		$rv = str_replace('"',"&quot;", $rv);
 		return $rv;
