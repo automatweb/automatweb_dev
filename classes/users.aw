@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.36 2002/07/12 07:08:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.37 2002/07/12 16:58:30 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -406,10 +406,7 @@ class users extends users_user
 				$cpw = $this->parse("CAN_PWD");
 			}
 
-			$met = aw_unserialize($row["join_form_entry"]);
-			// no information about jon forms, don't show the change link
-			// because it doesn't do anything anyway
-			if (sizeof($met) == 0)
+			if ($row["join_grp"] == "")
 			{
 				$cc = "";
 			};
@@ -1032,10 +1029,6 @@ class users extends users_user
 
 			if ($jfrm)
 			{
-/*				// show them one after another to the user
-				$orb = $this->mk_orb("show", array("id" => $jfrm, "extraids[redirect_after]" => urlencode($this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp), "users"))),"form");
-				header("Location: $orb");
-				return $orb;*/
 				// new approach here - user can pick an entry for the form as well now. 
 				$this->read_template("show_form.tpl");
 			
@@ -2203,15 +2196,11 @@ class users extends users_user
 		if ($id)
 		{
 			// form submitted
-			if ($entry_type == "existing")
-			{
-				$session_filled_forms[$id] = $ex_entry;
-			}
-			else
+			if (!$ex_entry)
 			{
 				// this also marks the session_filled_forms array
 				$f = get_instance("form");
-				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"]));
+				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"], "entry_id" => $ex_entry));
 			}
 		}
 
@@ -2236,7 +2225,7 @@ class users extends users_user
 			$f_ref = $this->mk_reforb("process_entry", array("id" => $id,"no_reforb" => true));
 
 			$this->vars(array(
-				"form" => $f->gen_preview(array("id" => $jfrm, "tpl" => "show_noform.tpl","reforb" => $f_ref)),
+				"form" => $f->gen_preview(array("id" => $jfrm, "tpl" => "show_noform.tpl","reforb" => $f_ref, "entry_id" => $ex_entry)),
 				"entries" => $this->picker('',$f->get_entries(array("id" => $jfrm, "addempty" => true))),
 				"reforb" => $this->mk_reforb("submit_ua_form", array("id" => $jfrm, "join_grp" => $join_grp,"no_reforb" => 1))
 			));
