@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.112 2003/05/29 16:18:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.113 2003/06/02 13:13:20 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -7,7 +7,7 @@
 	@default table=objects
 	@default field=meta
 	@default method=serialize
-	@default group=general
+	@default group=general2
 	@classinfo relationmgr=yes 
 	@classinfo toolbar=yes
 
@@ -68,16 +68,6 @@
 	@property workdays callback=callback_get_workday_choices group=advanced
 	@caption Tööpäevad
 
-	@property preview type=text callback=callback_get_preview_link store=no editonly=1
-	@caption Eelvaade
-
-	@groupinfo advanced caption=Seaded
-
-	// -- calendar view
-	@default view=show
-	
-	@property id type=hidden table=objects field=oid group=show_day,show_week,show_month,add_event
-
 	@default store=no
 
 	@property show_day callback=callback_show_day group=show_day 
@@ -91,10 +81,13 @@
 	
 	@property add_event callback=callback_get_add_event group=add_event 
 	@caption Lisa sündmus
-
-	@groupinfo show_day caption=Päev submit=no
-	@groupinfo show_week caption=Nädal submit=no
-	@groupinfo show_month caption=Kuu submit=no default=1
+	
+	@groupinfo show_day caption=Päev submit=no parent=views
+	@groupinfo show_week caption=Nädal submit=no parent=views
+	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
+	@groupinfo views caption=Vaated
+	@groupinfo general2 caption=Üldine parent=general
+	@groupinfo advanced caption=Seaded parent=general
 	@groupinfo add_event caption=Lisa_sündmus
 
 */
@@ -231,20 +224,6 @@ class planner extends class_base
 
 		}
 		return $retval;
-	}
-
-	function callback_get_preview_link($args = array())
-	{
-		$nodes[] = array(
-			"caption" => "Näita",
-			"type" => "text",
-			"value" => html::href(array(
-				"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"cb_view" => "show")),
-				"caption" => "Näita kalendrit",
-				"target" => "_blank",
-			)),
-		);
-		return $nodes;
 	}
 
 	function callback_get_workday_choices($args = array())
@@ -2201,7 +2180,7 @@ class planner extends class_base
 			$colors = new aw_array(array("#FFFF00","#FF9900","#FF3300","#99CCFF","#996600",
 								"#6600FF","#339999","#336600","#A04CBC","#DCD00C"));
 			$events = $this->events[$dx];
-			$step = 30*60; // pool tundi
+			$step = 15*60; // pool tundi
 			$ref_matrix = array();
 			for ($i = $di["start"]; $i <= $di["end"]; $i = $i + $step)
 			{
@@ -2305,8 +2284,11 @@ class planner extends class_base
 					};
 				};
 
+				$min = date("i",$ts);
+				$dch = ($min == 0) ? date("H:i",$ts) : "<small>$min</small>";
+
 				$this->vars(array(
-					"dcellheader" => date("H:i",$ts),
+					"dcellheader" => $dch,
 					"duration_cell" => join("",$dslots),
 
 				));
