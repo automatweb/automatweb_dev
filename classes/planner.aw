@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.115 2003/06/03 13:20:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.116 2003/06/03 16:43:15 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -16,8 +16,8 @@
 	@property content_generator type=select rel=1
 	@caption Näitamisfunktsioon
 
-	@property event_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT
-	@caption Sündmuse lisamise vorm
+	@property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
+	@caption Def. sündmuse sisetamise vorm
 
 	@property day_start type=time_select rel=1
 	@caption Päev algab
@@ -61,7 +61,7 @@
 	@property event_max_items type=textbox size=4 group=advanced rel=1
 	@caption Max. sündmusi 
 
-	@property event_folder type=select 
+	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption Sündmuste kataloog
 
 	@property workdays callback=callback_get_workday_choices group=advanced
@@ -83,7 +83,8 @@
 	
 	@property add_event callback=callback_get_add_event group=add_event 
 	@caption Lisa sündmus
-	
+
+	@groupinfo general caption=Seaded
 	@groupinfo show_day caption=Päev submit=no parent=views
 	@groupinfo show_week caption=Nädal submit=no parent=views
 	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
@@ -111,6 +112,8 @@ define("RELTYPE_EVENT_SOURCE",2);
 define("RELTYPE_EVENT",3);
 define("RELTYPE_DC_RELATION",4);
 define("RELTYPE_GET_DC_RELATION",5);
+define("RELTYPE_EVENT_FOLDER",6);
+define("RELTYPE_EVENT_ENTRY",7);
 
 define("CAL_SHOW_DAY",1);
 define("CAL_SHOW_OVERVIEW",2);
@@ -150,6 +153,8 @@ class planner extends class_base
 			RELTYPE_EVENT => "sündmus",
 			RELTYPE_DC_RELATION => "viide kalendri väljundile",
 			RELTYPE_GET_DC_RELATION => "võta kalendri väljundid",
+			RELTYPE_EVENT_FOLDER => "sündmuste kataloog",
+			RELTYPE_EVENT_ENTRY => "sündmuse sisestamise vorm",	
 		);
         }
 
@@ -167,6 +172,13 @@ class planner extends class_base
 				$retval = array(CL_PLANNER);
 				break;
 
+			case RELTYPE_EVENT_FOLDER:
+				$retval = array(CL_PSEUDO);
+				break;
+
+			case RELTYPE_EVENT_ENTRY:
+				$retval = array(CL_CFGFORM);
+				break;
 		};
 		return $retval;
         }
@@ -187,7 +199,30 @@ class planner extends class_base
 				break;
 
 			case "event_folder":
-				$data["options"] = $this->get_menu_list();
+				$alist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_EVENT_FOLDER);
+				// this used to be a menu list, and the following code should
+				// create a relation for the menu
+				if ( (sizeof($alist) == 0) && !empty($data["value"]))
+				{
+					$this->addalias(array(
+						"id" => $args["obj"]["oid"],
+						"alias" => $data["value"],
+						"reltype" => RELTYPE_EVENT_FOLDER,
+					));
+				}
+				break;
+
+			case "event_cfgform":
+				$alist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_EVENT_ENTRY);
+
+				if ( (sizeof($alist) == 0) && !empty($data["value"]))
+				{
+					$this->addalias(array(
+						"id" => $args["obj"]["oid"],
+						"alias" => $data["value"],
+						"reltype" => RELTYPE_EVENT_ENTRY,
+					));
+				}
 				break;
 
 			case "content_generator":
@@ -424,7 +459,7 @@ class planner extends class_base
 		// yuck, what a mess
 		$obj = $this->get_object($args["request"]["id"]);
 		$meta = $obj["meta"];
-		$event_cfgform = $meta["event_cfgform"];
+		$event_cfgform = empty($args["request"]["cfgform_id"]) ? $meta["event_cfgform"] : $args["request"]["cfgform_id"];
 		$event_folder = $meta["event_folder"];
 
 		$event_id = $args["request"]["event_id"];
@@ -434,6 +469,11 @@ class planner extends class_base
 
 		if ($event_cfgform)
 		{
+			$ev_data = $this->get_object($event_id);
+			if ($ev_data["meta"]["cfgform_id"])
+			{
+				$event_cfgform = $ev_data["meta"]["cfgform_id"];
+			};
 			$frm = $this->get_object($event_cfgform);
 			// events are documents
 			classload("doc");
@@ -449,15 +489,14 @@ class planner extends class_base
 				$emb_group = $args["request"]["cb_group"];
 			};
 
-			$ev_data = $this->get_object($event_id);
+
+
 
 			$t->role = "obj_edit";
-			
-
+		
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
-
 
 			// sorry ass attempt to get editing of linked documents to work
 			$obj_to_load = $this->event_id;
@@ -480,7 +519,7 @@ class planner extends class_base
 				"subtitle" => 1,
 			);	
 			$captions = array();
-			foreach($xtmp->get() as $key => $val)
+			foreach($xtmp as $key => $val)
 			{
 				if ($this->event_id && ($key != $emb_group))
 				{
@@ -2205,7 +2244,7 @@ class planner extends class_base
 					$rstart = $val["start"] - ($val["start"] % $step);
 
 					// let's fool around a bit
-					$end = $val["start"] + 7200;
+					$end = !empty($val["end"]) ? $val["end"] : $val["start"] + 7200;
 
 					$nextcolor = $colors->next();
 					if (!$nextcolor)
@@ -2469,10 +2508,36 @@ class planner extends class_base
                 {
 			$toolbar = &$arr["prop"]["toolbar"];
 
+			$this->read_template("js_popup_menu.tpl");
+			$menudata = "";
+			$alist = $this->get_aliases_for($id,-1,"","","",RELTYPE_EVENT_ENTRY);
+			if (is_array($alist))
+			{
+				foreach($alist as $key => $val)
+				{
+					$this->vars(array(
+						"link" => $this->mk_my_orb("change",array("id" => $id,"group" => "add_event","cfgform_id" => $val["oid"])),
+						"text" => $val["name"],
+					));
+
+					$menudata .= $this->parse("MENU_ITEM");
+				};
+			};
+
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "create_event",
+			));
+
+			$menu = $this->parse();
+
+                	$toolbar->add_cdata($menu);
+	
 			$toolbar->add_button(array(
                                 "name" => "add",
                                 "tooltip" => "Uus",
-                                "url" => "#",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'create_event');",
                                 "img" => "new.gif",
                                 "imgover" => "new_over.gif",
                                 "class" => "menuButton",
@@ -2481,24 +2546,40 @@ class planner extends class_base
 			$dt = date("d-m-Y",time());
 
 			$toolbar->add_button(array(
-                                "name" => "today",
-                                "tooltip" => "Täna",
-                                "url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","date" => $dt)),
-                                "img" => "icon_cal_today.gif",
-                                "imgover" => "icon_cal_today_over.gif",
-                                "class" => "menuButton",
-                        ));
+				"name" => "today",
+				"tooltip" => "Täna",
+				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","date" => $dt)),
+				"img" => "icon_cal_today.gif",
+				"imgover" => "icon_cal_today_over.gif",
+				"class" => "menuButton",
+			));
 			
 			$toolbar->add_button(array(
-                                "name" => "delete",
-                                "tooltip" => "Kustuta märgitud sündmused",
-                                "url" => "#",
-                                "img" => "delete.gif",
-                                "imgover" => "delete_over.gif",
-                                "class" => "menuButton",
-                        ));
+				"name" => "delete",
+				"tooltip" => "Kustuta märgitud sündmused",
+				"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
+				"img" => "delete.gif",
+				"imgover" => "delete_over.gif",
+				"class" => "menuButton",
+			));
 			
                 };
 	}
+
+	function delete_events($args = array())
+	{
+		extract($args);
+		if (sizeof($mark) > 0)
+		{
+			foreach($mark as $event)
+			{
+				$this->delete_object($event);
+			}
+		};
+		return $this->mk_my_orb("change",array("id" => $args["id"],"group" => $args["subgroup"],"date" => $args["date"]));
+	}
+
+
+
 };
 ?>
