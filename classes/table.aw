@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.17 2001/12/12 13:08:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.18 2001/12/19 00:02:18 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -24,297 +24,335 @@ $orb_defs["table"] ="xml";
 			lc_load("definition");
 		global $lc_table;
 		if (is_array($lc_table))
-	{
+		{
 			$this->vars($lc_table);
 		}
-		}
+	}
 
-		////
-		// !Parsib ntx dokumendi sees olevaid tabelite aliasi lahti
-		function parse_alias($args = array())
+	////
+	// !Parsib ntx dokumendi sees olevaid tabelite aliasi lahti
+	function parse_alias($args = array())
+	{
+		extract($args);
+		// koigepealt siis kysime koigi tabelite aliased
+		if (!is_array($this->tablealiases))
 		{
-			extract($args);
-			// koigepealt siis kysime koigi tabelite aliased
-			if (!is_array($this->tablealiases))
-			{
-				$this->tablealiases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_TABLE,
-							));
-			};
-			$t = $this->tablealiases[$matches[3] - 1]; 
-			if ($matches[4] == "v")
-			{
-				$align = "left";
-			}
-			if ($matches[4] == "k")
-			{
-				$align = "center";
-			}
-			if ($matches[4] == "p")
-			{
-				$align = "right";
-			}
-			$replacement = $this->show(array("id" => $t["target"],"align" => $align));
-			return $replacement;
+			$this->tablealiases = $this->get_aliases(array(
+							"oid" => $oid,
+							"type" => CL_TABLE,
+						));
+		};
+		$t = $this->tablealiases[$matches[3] - 1]; 
+		if ($matches[4] == "v")
+		{
+			$align = "left";
+		}
+		if ($matches[4] == "k")
+		{
+			$align = "center";
+		}
+		if ($matches[4] == "p")
+		{
+			$align = "right";
+		}
+		$replacement = $this->show(array("id" => $t["target"],"align" => $align));
+		return $replacement;
 			
-		}
+	}
 
-		////
-		// !Asendab tabeli sources aliased vastavate väärtustega
-		// content(string) - tabeli source
-		// oid(int) - millise tabeliga tegu?
-		function replace_aliases($args = array())
-		{
-			extract($args);
-			$mp = $this->register_parser(array(
-				"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
-			));
-	
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "p",
-				"class" => "image",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+	////
+	// !Asendab tabeli sources aliased vastavate väärtustega
+	// content(string) - tabeli source
+	// oid(int) - millise tabeliga tegu?
+	function replace_aliases($args = array())
+	{
+		extract($args);
+		$mp = $this->register_parser(array(
+			"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "l", // L
-				"class" => "extlinks",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-				"reset" => "reset_aliases",
-				"templates" => array("link"),
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "p",
+			"class" => "image",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "v",
-				"class" => "file",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "l", // L
+			"class" => "extlinks",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+			"reset" => "reset_aliases",
+			"templates" => array("link"),
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "f",
-				"class" => "form",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "v",
+			"class" => "file",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "c",
-				"class" => "form_chain",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "f",
+			"class" => "form",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "x",
-				"class" => "link_collection",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "c",
+			"class" => "form_chain",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "g",
-				"class" => "graph",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "x",
+			"class" => "link_collection",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$this->register_sub_parser(array(
-				"idx" => 2,
-				"match" => "r",
-				"class" => "form_alias",
-				"reg_id" => $mp,
-				"function" => "parse_alias",
-			));
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "g",
+			"class" => "graph",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
-			$retval = $this->parse_aliases(array(
-				"oid" => $id,
-				"text" => $content,
-			));
-			return $retval;
-		}
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "r",
+			"class" => "form_alias",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
+
+		$retval = $this->parse_aliases(array(
+			"oid" => $id,
+			"text" => $content,
+		));
+		return $retval;
+	}
+
+	////
+	// !Generates the navigational menu for the table generator
+	function gen_navbar($args = array())
+	{
+		extract($args);
+		load_vcl("xmlmenu");
+		$xm = new xmlmenu();
+		global $basedir;
+		$links = array(
+			"change_url" => $this->mk_my_orb("change", array("id" => $this->id)),
+			"edit_url" => $this->mk_my_orb("styles", array("id" => $this->id)),
+			"props_url" => $this->mk_my_orb("edit_properties",array("id" => $this->id)),
+			"admin_url" => $this->mk_my_orb("admin", array("id" => $this->id)),
+			"preview_url" => $this->mk_my_orb("view", array("id" => $this->id)),
+			"import_url" => $this->mk_my_orb("gen_import", array("id" => $this->id)),
+		);
+		$retval = $xm->build_menu(array(
+			"vars"  => array_merge($vars,$links),
+			"xml"   => $basedir . "/xml/tablegen_menu.xml",
+			"tpl"   => $this->template_dir . "/navigation.tpl",
+			"activelist" => $activelist,
+		));
+		return $retval;
+	}
 		
-		function load_table($id)
+	function load_table($id)
+	{
+		if ($this->table_loaded)
+			return;
+
+		if (not($id))
 		{
-			if ($this->table_loaded)
-				return;
+			return;
+		}
 
-			if (not($id))
-			{
-				return;
-			}
+		$this->id = $id;
 
-		$q = "select aw_tables.*, objects.*	from aw_tables 
-											LEFT JOIN objects on objects.oid = aw_tables.id 
+	$q = "select aw_tables.*, objects.*	from aw_tables 
+										LEFT JOIN objects on objects.oid = aw_tables.id 
 											where aw_tables.id = $id";
-			$this->db_query($q);
-			if (!($row = $this->db_next()))
-				$this->raise_error("no such table $id (tables.class->load_table)!", true);
-			
-			/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
-			$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
-
-			$this->arr = unserialize($row[contents]);
-
-			if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
-			{
-				$this->arr["cols"] =1;
-				$this->arr[map][0][0] = array("row" => 0, "col" => 0);
-				$this->arr["rows"] = 1;
-			}
-			$this->table_name = $row[name];
-			$this->table_comment = $row[comment];
-			$this->table_id = $id;
-			$this->table_parent = $row[parent];
-
-			// $this->table_loaded = true;
-		}
-
-		function aliases($args = array())
-		{
-			$this->read_template("table_aliases.tpl");
-			extract($args);
-			$this->vars(array(
-				"change"	=> $this->mk_orb("change", array("id" => $id)),
-				"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-				"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
-				"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-				"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-				"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
-				"view"		=> $this->mk_orb("view", array("id" => $id)),
-			));
-			return $this->parse();
-		}
+		$this->db_query($q);
+		if (!($row = $this->db_next()))
+			$this->raise_error("no such table $id (tables.class->load_table)!", true);
 		
-		function gen_admin_html($arr)
-		{
-			extract($arr);
-			$this->load_table($id);
-				
+		/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
+		$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
 
-			$this->read_template("table_modify.tpl");
-			session_register("is_filter$id");
-			session_register("filter$id");
+		$this->arr = unserialize($row[contents]);
+
+		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
+		{
+			$this->arr["cols"] =1;
+			$this->arr[map][0][0] = array("row" => 0, "col" => 0);
+			$this->arr["rows"] = 1;
+		}
+		$this->table_name = $row[name];
+		$this->table_comment = $row[comment];
+		$this->table_id = $id;
+		$this->table_parent = $row[parent];
+
+		// $this->table_loaded = true;
+	}
+
+	function aliases($args = array())
+	{
+		$this->read_template("table_aliases.tpl");
+		extract($args);
+		$this->vars(array(
+			"change"	=> $this->mk_orb("change", array("id" => $id)),
+			"styles"	=> $this->mk_orb("styles", array("id" => $id)),
+			"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
+			"admin"	=> $this->mk_orb("admin", array("id" => $id)),
+			"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+			"view"		=> $this->mk_orb("view", array("id" => $id)),
+		));
+		return $this->parse();
+	}
+	
+	////
+	// Change	
+	function gen_admin_html($arr)
+	{
+		extract($arr);
+
+
+		$this->load_table($id);
+		$menu = $this->gen_navbar(array(
+			"activelist" => array("change"),
+		));
+
+
+		$this->read_template("table_modify.tpl");
+		session_register("is_filter$id");
+		session_register("filter$id");
+		
+		if ($arr["is_filter"])
+		{
+			$GLOBALS["is_filter$id"]=1;
+			$GLOBALS["filter$id"]=$filter;
+		
+		};
 			
-			if ($arr["is_filter"])
+		if ($GLOBALS["is_filter$id"])
+		{
+			//echo("isfilter");//dbg
+			$col="";
+			for($a=-1;$a<$this->arr["cols"];$a++)
 			{
-				$GLOBALS["is_filter$id"]=1;
-				$GLOBALS["filter$id"]=$filter;
+				$this->vars(array("text" => ($a > -1)?chr($a+65):""));
 				
+				$h_header=$this->parse("H_HEADER");
+				$this->vars(array("H_HEADER" => $h_header,"BOX"=>"" ,"AREA"=>""));
+				$col.=$this->parse("COL");
 			};
-			
+			$this->vars(array("COL" => $col));
+			$this->parse("LINE");
+			classload("search_filter");
+			$flt=new search_filter();
+			$flt->id=$GLOBALS["filter$id"];
+			$flt->__load_data();
+
+			$blah="";
+			if (is_array($flt->data["statdata"]))
+				foreach($flt->data["statdata"] as $alias => $dta)
+				{
+					$blah.="#$alias&nbsp;&nbsp;".$dta["display"]."<br>";
+				};
+			$this->vars(array("extdata" => $blah));
+			$extdata=$this->parse("extdata");
+		} else
+		{
+			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+			$extdata="";
+		};
+
+		for ($i=0; $i < $this->arr["rows"]; $i++)
+		{
+			$col="";
 			if ($GLOBALS["is_filter$id"])
 			{
-				//echo("isfilter");//dbg
-				$col="";
-				for($a=-1;$a<$this->arr["cols"];$a++)
-				{
-					$this->vars(array("text" => ($a > -1)?chr($a+65):""));
-					
-					$h_header=$this->parse("H_HEADER");
-					$this->vars(array("H_HEADER" => $h_header,"BOX"=>"" ,"AREA"=>""));
-					$col.=$this->parse("COL");
-				};
-				$this->vars(array("COL" => $col));
-				$this->parse("LINE");
-				classload("search_filter");
-				$flt=new search_filter();
-				$flt->id=$GLOBALS["filter$id"];
-				$flt->__load_data();
-
-				$blah="";
-				if (is_array($flt->data["statdata"]))
-					foreach($flt->data["statdata"] as $alias => $dta)
-					{
-						$blah.="#$alias&nbsp;&nbsp;".$dta["display"]."<br>";
-					};
-				$this->vars(array("extdata" => $blah));
-				$extdata=$this->parse("extdata");
-			} else
-			{
-				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
-				$extdata="";
+				$this->vars(array("text" => $i+1,"BOX"=>"" ,"AREA"=>""));
+				$h_header=$this->parse("H_HEADER");
+				$this->vars(array("H_HEADER" => $h_header));
+				$col=$this->parse("COL");
 			};
-
-			for ($i=0; $i < $this->arr["rows"]; $i++)
+			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
-				$col="";
-				if ($GLOBALS["is_filter$id"])
-				{
-					$this->vars(array("text" => $i+1,"BOX"=>"" ,"AREA"=>""));
-					$h_header=$this->parse("H_HEADER");
-					$this->vars(array("H_HEADER" => $h_header));
-					$col=$this->parse("COL");
-				};
-				for ($a=0; $a < $this->arr["cols"]; $a++)
-				{
-					if (!($spans = $this->get_spans($i, $a)))
+				if (!($spans = $this->get_spans($i, $a)))
 						continue;
 
-					$map = $this->arr[map][$i][$a];
+				$map = $this->arr[map][$i][$a];
 
-					$cell = $this->arr["contents"][$map[row]][$map[col]];
-					$scell = $this->arr["styles"][$map[row]][$map[col]];
-					
-					$this->vars(array("text"	=> $cell["text"],
-														"col"		=> $map[col],
-														"row"		=> $map[row],
-														"num_cols"	=> $scell[cols],
-														"num_rows"	=> $scell[rows]));
-					if ($scell[rows] > 1)
-						$ba = $this->parse("AREA");
-					else
-						$ba = $this->parse("BOX");
-					
-					$this->vars(array("AREA" => $ba, "BOX" => ""));
-					$col.=$this->parse("COL");
-				}
-
-				$this->vars(array("COL"	=> $col));
-				$this->parse("LINE");
+				$cell = $this->arr["contents"][$map[row]][$map[col]];
+				$scell = $this->arr["styles"][$map[row]][$map[col]];
+				
+				$this->vars(array("text"	=> $cell["text"],
+													"col"		=> $map[col],
+													"row"		=> $map[row],
+													"num_cols"	=> $scell[cols],
+													"num_rows"	=> $scell[rows]));
+				if ($scell[rows] > 1)
+					$ba = $this->parse("AREA");
+				else
+					$ba = $this->parse("BOX");
+				
+				$this->vars(array("AREA" => $ba, "BOX" => ""));
+				$col.=$this->parse("COL");
 			}
-			$st = new style;
-			$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
-												"table_id" => $id,
-												"change"	=> $this->mk_orb("change", array("id" => $id)),
-												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-												"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
-												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-												"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-												"view"		=> $this->mk_orb("view", array("id" => $id)),
-												"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
-												"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
-												"table_name" => $this->table_name,
-												"table_header" => $this->arr[table_header],
-												"table_footer" => $this->arr[table_footer],
-												"extdata" => $extdata,
-												"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
-												"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
-			$ar = $this->get_aliases_of($this->table_id);
-			reset($ar);
-			while (list(,$v) = each($ar))
-			{
-				$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v[id],),"aliasmgr"),"title" => $v["name"]));
-				$this->parse("ALIAS_LINK");
-			}
-			return $this->parse();
+			$this->vars(array("COL"	=> $col));
+			$this->parse("LINE");
 		}
+		$st = new style;
+		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
+											"table_id" => $id,
+											"change"	=> $this->mk_orb("change", array("id" => $id)),
+											"styles"	=> $this->mk_orb("styles", array("id" => $id)),
+											"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
+											"admin"	=> $this->mk_orb("admin", array("id" => $id)),
+											"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
+											"view"		=> $this->mk_orb("view", array("id" => $id)),
+											"menu" => $menu,
+											"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
+											"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
+											"table_name" => $this->table_name,
+											"table_header" => $this->arr[table_header],
+											"table_footer" => $this->arr[table_footer],
+											"extdata" => $extdata,
+											"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
+											"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
-		function gen_admin2_html($arr)
+		$ar = $this->get_aliases_of($this->table_id);
+		reset($ar);
+		while (list(,$v) = each($ar))
+		{
+			$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v[id],),"aliasmgr"),"title" => $v["name"]));
+			$this->parse("ALIAS_LINK");
+		}
+		return $this->parse();
+	}
+
+	function gen_admin2_html($arr)
 		{
 			extract($arr);
 			$this->load_table($id);
+			$menu = $this->gen_navbar(array(
+				"activelist" => array("admin"),
+			));
 			if (!$GLOBALS["is_filter$id"])
 			{
 				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
@@ -390,6 +428,7 @@ $orb_defs["table"] ="xml";
 												"table_header" => $this->arr[table_header],
 												"table_footer" => $this->arr[table_footer],
 												"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
+												"menu" => $menu,
 												"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
 			$ar = $this->get_aliases_of($this->table_id);
@@ -833,6 +872,10 @@ $orb_defs["table"] ="xml";
 		{
 			extract($arr);
 			$this->load_table($id);
+			$menu = $this->gen_navbar(array(
+				"activelist" => array("edit"),
+			));
+
 			if (!$GLOBALS["is_filter$id"])
 			{
 				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
@@ -944,6 +987,7 @@ $orb_defs["table"] ="xml";
 												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
 												"view"		=> $this->mk_orb("view", array("id" => $id)),
 												"rows"	=> $this->arr[rows],
+												"menu" => $menu,
 												"cols"	=> $this->arr[cols],
 												"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
 												"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
@@ -1233,6 +1277,24 @@ $orb_defs["table"] ="xml";
 			};
 			//echo("ans=$evl<br>");//dbg
 			return $evl;
+		}
+
+		////
+	  // !Generates the preview for the tablegen (with navigation bar)
+		function gen_preview($args = array())
+		{
+			extract($args);
+			$content = $this->show($args);
+			$menu = $this->gen_navbar(array(
+				"activelist" => array("preview"),
+			));
+			$this->read_template("preview.tpl");
+			$this->vars(array(
+				"content" => $content,
+				"menu" => $menu,
+			));
+			return $this->parse();
+
 		}
 
 		function show($arr)
@@ -1599,12 +1661,16 @@ $orb_defs["table"] ="xml";
 		{
 			extract($arr);
 			$this->load_table($id);
+			$menu = $this->gen_navbar(array(
+				"activelist" => array("import"),
+			));
 			$this->read_template("import.tpl");
 
 			$this->vars(array("reforb"	=> $this->mk_reforb("import", array("id" => $id)),
 												"change"	=> $this->mk_orb("change", array("id" => $id)),
 												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
 												"view"		=> $this->mk_orb("view", array("id" => $id)),
+												"menu" => $menu,
 												"name"		=> $this->table_name));
 
 			return $this->parse();
