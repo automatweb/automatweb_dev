@@ -14,12 +14,12 @@ var chlinks = new Array();
 
 function selall()
 {
-	len = document.aform.elements.length;
+	len = document.changeform.elements.length;
 	for (i=0; i < len; i++)
 	{
-		if (document.aform.elements[i].name.indexOf("check") != -1)
+		if (document.changeform.elements[i].name.indexOf("check") != -1)
 		{
-			document.aform.elements[i].checked=chk_status;
+			document.changeform.elements[i].checked=chk_status;
 		}
 	}
 	chk_status = !chk_status;
@@ -56,12 +56,12 @@ function search_for_object()
 
 function awchange()
 {
-	len = document.aform.elements.length;
+	len = document.changeform.elements.length;
 	cnt = 0;
 	chk = 0;
 	for (i = 0; i < len; i++)
 	{
-		with(document.aform.elements[i])
+		with(document.changeform.elements[i])
 		{
 			if (type == "checkbox" && name.indexOf("check") != -1)
 			{
@@ -85,11 +85,11 @@ function awchange()
 
 function awdelete()
 {
-	len = document.aform.elements.length;
+	len = document.changeform.elements.length;
 	idx = 0;
 	for (i = 0; i < len; i++)
 	{
-		with(document.aform.elements[i])
+		with(document.changeform.elements[i])
 		{
 			if (type == "checkbox" && name.indexOf("check") != -1 )
 			{
@@ -105,8 +105,8 @@ function awdelete()
 	{
 		if (confirm('Kustutada need ' + idx + ' aliast?'))
 		{
-			document.aform.subaction.value = 'delete';
-			document.aform.submit();
+			document.changeform.subaction.value = 'delete';
+			document.changeform.submit();
 		};
 	}
 	else
@@ -117,7 +117,7 @@ function awdelete()
 
 function saveform()
 {
-	document.aform.submit();
+	document.changeform.submit();
 }
 </script>
 
@@ -127,7 +127,7 @@ function saveform()
 </td>
 </form>
 </tr>
-<form name="aform" action="reforb.{VAR:ext}">
+<form name="changeform" action="reforb.{VAR:ext}">
 {VAR:table}
 {VAR:reforb}
 </form>
