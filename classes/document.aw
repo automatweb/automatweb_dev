@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.282 2004/09/17 07:33:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.283 2004/10/07 21:34:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1297,6 +1297,12 @@ class document extends aw_template
 		{
 			$this->vars(array(
 				"HAS_text" => $this->parse("HAS_text")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_text" => $this->parse("NO_text")
 			));
 		}
 
