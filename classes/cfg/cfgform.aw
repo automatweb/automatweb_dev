@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.31 2004/05/11 10:51:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.32 2004/06/08 09:50:41 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -28,6 +28,9 @@
 	@property classinfo_allow_rte type=checkbox ch_value=1 field=meta method=serialize
 	@caption Luba RTE kasutamist
 
+	@property classinfo_allow_rte_toggle type=checkbox ch_value=1 field=meta method=serialize
+	@caption Näita RTE/HTML nuppu
+
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
 	@caption Ära kasuta seostehaldurit
 
@@ -46,11 +49,11 @@
 	@property availprops type=callback callback=callback_gen_avail_props store=no group=avail no_caption=1
 	@caption Kõik omadused
 
-	property cfg_proplist type=hidden field=meta method=serialize
-	caption Omadused
+	@property cfg_proplist type=hidden field=meta method=serialize
+	@caption Omadused
 	
-	property cfg_groups type=hidden field=meta method=serialize
-	caption Grupid
+	@property cfg_groups type=hidden field=meta method=serialize
+	@caption Grupid
 
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
