@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.7 2001/06/26 15:29:02 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -13,6 +14,61 @@ class db_objects extends aw_template
 		$this->tpl_init();
 		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE);		
 		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE);	
+	}
+
+	function search_objs($docid)
+	{
+		$this->tpl_init("automatweb/objects");
+		$this->read_template("search_doc.tpl");
+		global $s_name, $s_comment,$s_type,$SITE_ID;
+		if ($s_name != "" || $s_comment != "" || $s_type > 0)
+		{
+			$se = array();
+			if ($s_name != "")
+			{
+				$se[] = " name LIKE '%".$s_name."%' ";
+			}
+			if ($s_comment != "")
+			{
+				$se[] = " comment LIKE '%".$s_comment."%' ";
+			}
+			if ($s_type > 0)
+			{
+				$se[] = " class_id = '".$s_type."' ";
+			}
+			else
+			{
+				$se[] = " class_id IN (".join(",",$this->typearr).") ";
+			}
+			$this->db_query("SELECT name,oid,class_id FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se));
+			while ($row = $this->db_next())
+			{
+				$this->vars(array("name" => $row["name"], 
+													"id" => $row["oid"],
+													"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
+													"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Võta see</a>" : "")));
+				$l.=$this->parse("LINE");
+			}
+			$this->vars(array("LINE" => $l));
+		}
+		else
+		{
+			$s_name = "%";
+			$s_comment = "%";
+			$s_type = 0;
+		}
+		$tar = array(0 => "K&otilde;ik");
+		reset($this->typearr);
+		while (list(,$v) = each($this->typearr))
+		{
+			$tar[$v] = $GLOBALS["class_defs"][$v]["name"];
+		}
+		$this->vars(array("docid" => $docid,
+											"s_name"	=> $s_name,
+											"s_type"	=> $s_type,
+											"s_comment"	=> $s_comment,
+											"types"	=> $this->picker($s_type, $tar)));
+		return $this->parse();
 	}
 
 	////
@@ -229,6 +285,7 @@ class db_objects extends aw_template
 	}
 };
 
+
 class objects extends db_objects
 {
 	function objects()
@@ -320,4 +377,5 @@ class objects extends db_objects
 		return $this->parse();
 	}
 }
+
 ?>
