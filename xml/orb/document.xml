@@ -15,7 +15,6 @@
 				<arguments>
 					<required name="id" acl="edit;view"/>
 					<optional name="section"/>
-					<optional name="version"/>
 					<optional name="period"/>
 				</arguments>
 			</function>
@@ -103,20 +102,6 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="archive">
-			<function name="show_archive">
-				<arguments>
-					<required name="docid"/>
-					<optional name="sortby"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="submit_archive">
-			<function name="submit_archive">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
 
 		<action name="send" nologin="1">
 			<function name="send">
@@ -182,12 +167,6 @@
 			</function>
 		</action>
 		
-		<action name="convert_tm" all_args="1">
-			<function name="convert_tm">
-				<arguments/>
-			</function>
-		</action>
-
 		<action name="fetch">
 			<function name="fetch">
 				<arguments>
