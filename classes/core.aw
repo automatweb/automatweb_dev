@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.19 2001/06/05 11:56:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.20 2001/06/05 16:19:51 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -516,7 +516,7 @@ class core extends db_connector
 		extract($args);
 		
 		// map2 supports both arrays and strings and returns array
-		$tlist = join(',',map2('%d',$type));
+		$tlist = join(',',map('%d',$type));
 
 		$q = "SELECT aliases.*,objects.*
 			FROM aliases
