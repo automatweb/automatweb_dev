@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.114 2002/07/31 10:03:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.115 2002/08/01 15:21:19 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2268,20 +2268,24 @@ class form extends form_base
 		}
 		enter_function("form::new_do_search::query",array());
 		$this->db_query($sql,false);
+		if ($this->arr["show_table"])
+		{
+			$form_table->set_num_rows($this->num_rows());
+		}
 		exit_function("form::new_do_search::query",array());
 		while ($row = $this->db_next())
 		{
 			if ($this->arr["show_table"])
 			{
 				enter_function("form::new_do_search::table_loop",array());
-				if ($row["chain_entry_id"])
+				if (isset($row["chain_entry_id"]) && $row["chain_entry_id"])
 				{
 					$this->save_handle();
 					$cid = $this->get_chain_for_chain_entry($row["chain_entry_id"]);
 					$this->restore_handle();
 				};
 
-				if ($fc->chain["has_calendar"])
+				if (isset($fc->chain["has_calendar"]) && $fc->chain["has_calendar"])
 				{
 					dbg("cid = $cid<br>");
 					dbg("checking calendar for $row[chain_entry_id]<br>");
@@ -2308,7 +2312,21 @@ class form extends form_base
 				}
 				else
 				{
-					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
+					if (not(isset($cid)))
+					{
+						$cid = 0;
+					};
+
+					if (isset($row["chain_entry_id"]))
+					{
+						$rcid = $row["chain_entry_id"];
+					}
+					else
+					{
+						$rcid = 0;
+					};
+
+					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$rcid);
 				}
 				exit_function("form::new_do_search::table_loop",array());
 			}
