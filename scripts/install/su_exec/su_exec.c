@@ -29,6 +29,7 @@ CMD_TRANS_ENTRY g_cmd_trans_tbl[] = {
 	{"copy", "cp"},
 	{"mkdir", "mkdir"},
 	{"chmod", "chmod"},
+	{"chown", "chown"},
 	{"ln", "ln"},
 	{"rndc","rndc"},
 	{"find", "find"}
