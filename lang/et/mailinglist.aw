@@ -59,4 +59,10 @@ $lc_mailinglist["LC_MAILINGLIST_ADD_LINK"] = "Lisa link";
 $lc_mailinglist["LC_MAILINGLIST_ADDRESS"] = "Aadress";
 $lc_mailinglist["LC_MAILINGLIST_CHOOSE_LIST_SEND"] = "Vali, millisesse listi saadame";
 
+$lc_mailinglist["LC_MAILINGLIST_DATE"] = "kuupaev";
+
+$lc_mailinglist["LC_MAILINGLIST_NUMBER"] = "Number";
+
+
+
 ?>

@@ -10,6 +10,7 @@ $lc_promo["LC_PROMO_AT_LEFT"] = "Vasakul";
 $lc_promo["LC_PROMO_TEMPLATE_FOR_CHANGE"] = "Template (muutmiseks)";
 $lc_promo["LC_PROMO_TEMPLATE_FOR_SHOW"] = "Template (n&auml;itamiseks)";
 $lc_promo["LC_PROMO_SHOW"] = "Salvesta";
+$lc_promo["LC_PROMO_WHTOUT_TITLE"] = "Ilma pealkirjata";
 
 
 ?>

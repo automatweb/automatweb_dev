@@ -115,4 +115,37 @@ $lc_shop["LC_SHOP_WEEK_PRICE"] = "1 n";
 $lc_shop["LC_SHOP_2_WEEK_PRICE"] = "2 n";
 $lc_shop["LC_SHOP_DELETE"] = "Del";
 $lc_shop["LC_SHOP_PLACES"] = "Kohti";
+
+$lc_shop["LC_SHOP_ART_TOG"] = "artiklit kokku";
+$lc_shop["LC_SHOP_PER_ART"] = "Periodical article";
+$lc_shop["LC_SHOP_REP_TOG"] = "kordust kokku";
+$lc_shop["LC_SHOP_EACH_HAS_ITS_OWN"] = "Each article has own calendar";
+$lc_shop["LC_SHOP_ORDER_FORM"] = "Order form";
+$lc_shop["LC_SHOP_PRICE_CAL"] = "Price calculation formula";
+$lc_shop["LC_SHOP_EX_OUT"] = "Extras output";
+$lc_shop["LC_SHOP_USE_ART_SET"] = "Kasuta artikli m&auml;&auml;ranguid";
+$lc_shop["LC_SHOP_PERIOD_STARTS"] = "Period starts";
+
+$lc_shop["LC_SHOP_BACK_TO_SHOP"] = "Back to shop";
+$lc_shop["LC_SHOP_CHOOSE_ITEM_PROP"] = "Choose item properties";
+$lc_shop["LC_SHOP_IT_WITH_QUANT"] = "Item with quantity";
+$lc_shop["LC_SHOP_DET_PER_PRI"] = "Determine periodic prices";
+$lc_shop["LC_SHOP_BILL_NR"] = "Arve nr";
+$lc_shop["LC_SHOP_PASSENGERS"] = "Reisijad";
+$lc_shop["LC_SHOP_PRICE_TOG"] = "Hind kokku";
+$lc_shop["LC_SHOP_COMISJON"] = "Komisjon";
+$lc_shop["LC_SHOP_SOMETAX"] = "Käibemaks";
+$lc_shop["LC_SHOP_TO_PAY"] = "Tasuda";
+$lc_shop["LC_SHOP_IN_THIS_VIEW"] = "In this view You can search from made reservations by passenger name, order ID or agent name";
+$lc_shop["LC_SHOP_LOOK"] = "Vaata";
+$lc_shop["LC_SHOP_GOODITEM"] = "Kaubaartikkel";
+$lc_shop["LC_SHOP_HOW_MANY_COL"] = "Mitu tulpa";
+$lc_shop["LC_SHOP_AMOUNT"] = "Kogus";
+$lc_shop["LC_SHOP_PARENT_ON_MENU"] = "Parent men&uuml;&uuml;";
+$lc_shop["LC_SHOP_PRICE_AVA"] = "Hind (keskmine)";
+$lc_shop["LC_SHOP_BRONND"] = "Broneeritud";
+$lc_shop["LC_SHOP_FILLING"] = "T&auml;ituvuse";
+$lc_shop["LC_SHOP_TITLE"] = "Pealkiri";
+$lc_shop["LC_SHOP_CHOOSE_PER_START_EL"] = "Vali perioodi alguse element";
+
 ?>
