@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.39 2003/01/07 15:26:16 duke Exp $
+// $Id: class_base.aw,v 2.40 2003/01/08 10:09:08 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -331,6 +331,7 @@ class class_base extends aliasmgr
 				$this->add_alias($alias_to,$id);
 			};
 			$this->new = true;
+			$this->id = $id;
 		}
 
 		$fields = $this->fields["objects"];
