@@ -137,7 +137,7 @@ class crm_selection extends class_base
 		// I need a way to let the table know that the incoming data is already 
 		// sorted.
 
-		$t->set_default_sortby('jrk');
+		$t->set_default_sortby('name');
 
 		$t->define_field(array(
 			'name' => 'name',
@@ -236,7 +236,94 @@ class crm_selection extends class_base
 	
 	/**  
 		
-		@attrib name=delete_from_selection params=name default="0"
+		@attrib name=navigate
+		
+		@returns
+		
+		@comment navigates to another selection
+
+	**/
+	function navigate($arr)
+	{
+		if (is_oid($arr["target_selection"]))
+		{
+			$tid = $arr["target_selection"];
+		}
+		else
+		{
+			$tid = $arr["id"];
+		};
+		return $this->mk_my_orb("change",array("id" => $tid,"group" => $arr["group"]));
+	}
+	
+	/**  
+		
+		@attrib name=copy_objects 
+		
+		@returns
+		
+		@comment copies objects from one selection to another
+
+	**/
+	function copy_objects($arr)
+	{
+		if (is_oid($arr["target_selection"]) && is_array($arr["sel"]))
+		{
+			$target_selection = $arr["target_selection"];
+			$target_obj = new object($target_selection);
+
+			print "Objektide kopeerimine valimisse " . $target_obj->name() . "<bR>";
+
+			foreach($arr["sel"] as $key => $val)
+			{
+				$tmp = new object($val);
+				print $tmp->name() . "<br>";
+				$values[]='('.$target_selection.','.$key.')';
+			}
+			$this->db_query("insert into selection(oid,object) values ".implode(',',$values));
+
+		}
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["group"]));
+	}
+	
+	/**  
+		
+		@attrib name=move_objects 
+		
+		@returns
+		
+		@comment moves objects from one selection to another
+
+	**/
+	function move_objects($arr)
+	{
+		if (is_oid($arr["target_selection"]) && is_array($arr["sel"]))
+		{
+			$target_selection = $arr["target_selection"];
+			$target_obj = new object($target_selection);
+
+			print "Objektide liigutamine valimisse " . $target_obj->name() . "<bR>";
+
+			$source_ids = array();
+
+			foreach($arr["sel"] as $key => $val)
+			{
+				$tmp = new object($val);
+				$source_ids[] = $val;
+				print $tmp->name() . "<br>";
+				$values[]='('.$target_selection.','.$key.')';
+			}
+			$this->db_query("DELETE FROM selection WHERE oid = '$arr[id]' AND object IN (" . join(",",$source_ids) . ")");
+			$this->db_query("insert into selection(oid,object) values ".implode(',',$values));
+
+		}
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["group"]));
+	}
+	
+	
+	/**  
+		
+		@attrib name=delete_from_selection params=name 
 		
 		@param id required
 		@param return_url required
@@ -247,25 +334,18 @@ class crm_selection extends class_base
 		@comment
 
 	**/
-	function delete_from_selection($args)
+	function delete_from_selection($arr)
 	{
-		//arr($args,1);
-		$uri=$args['return_url'];
-
-		//if ($args['active_selection'])
-		//{
-			if (is_array($args['sel']))
-			{
-				$this->remove_objects_from_selection($args['id'],$args['sel']);
-			}
-		//}
-		header('Location: '.$uri);
-		die;
+		if (is_array($arr['sel']))
+		{
+			$this->remove_objects_from_selection($arr['id'],$arr['sel']);
+		}
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["group"]));
 	}
 
 	/**  
 		
-		@attrib name=save_selection params=name default="0"
+		@attrib name=save_selection params=name 
 		
 		@param id required
 		@param return_url required
@@ -276,31 +356,28 @@ class crm_selection extends class_base
 		@comment
 
 	**/
-	function save_selection($args)
+	function save_selection($arr)
 	{
-		//arr($args,1);
-		$uri=$args['return_url'];
-		if(is_array($args['jrk']))
+		if(is_array($arr['jrk']))
 		{
-		$arr = $this->get_selection($args['this_selection']);
+			$sel = $this->get_selection($args['id']);
 
-		foreach($args['jrk'] as $key => $val)
-		{
-			if (($arr[$key]['jrk'] != $key) || ((int)$arr['status'][$key] != (int)$args['status'][$key]))
+			foreach($arr['jrk'] as $key => $val)
 			{
-				$q = 'update selection set jrk="'.$val.'" , status="'.$args['status'][$key].'" where oid='.$args['this_selection'].' and object='.$key;
-				$this->db_query($q);
+				if (($sel[$key]['jrk'] != $key) || ((int)$sel['status'][$key] != (int)$arr['status'][$key]))
+				{
+					$q = 'UPDATE selection SET jrk="'.$val.'" , status="'.$arr['status'][$key].'" WHERE oid='.$arr['id'].' AND object='.$key;
+					$this->db_query($q);
+				}
 			}
 		}
-		}
-		header('Location: '.$uri);
-		die;
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["group"]));
 	}
 
 
 	/**  
 		
-		@attrib name=add_to_selection params=name default="0"
+		@attrib name=add_to_selection params=name 
 		
 		@param id required
 		@param return_url required
@@ -323,35 +400,7 @@ class crm_selection extends class_base
 				$this->set_selection($args['add_to_selection'], $args['sel'],false);
 			}
 
-		}
-		else
-		{
-			$o = new object;
-			$o->set_class_id($this->clid);
-			$o->set_name($args["new_selection_name"]);
-			$o->set_status(STAT_NOTACTIVE);
-			$o->set_parent($args["parent"]);
-
-
-			$o->save();
-
-
-			if (is_array($args['sel']))
-			{
-				$this->set_selection($o->id(), $args['sel'],false);
-			}
-
-	
-			$data = new object($args["id"]);
-			$ins = $data->instance();
-
-			$source_object = new object($args["id"]);
-			$source_object->connect(array(
-				"to" => $o->id(),
-				"reltype" => $ins->selections_reltype,
-			));
 		};
-			
 
 		header('Location: '.$uri);
 		die;
@@ -368,79 +417,84 @@ class crm_selection extends class_base
 			"class" => CL_CRM_SELECTION,
 		));
 
-		$ops[0] = '- lisa uude valimisse -';
 		foreach($conns as $conn)
 		{
 			$ops[$conn->prop("to")] = $conn->prop("to.name");
 		};
 		
-		$str .= html::select(array(
-			'name' => 'add_to_selection',
-			'options' => $ops,
-			'selected' => $selected,
-		));
-
-		if ($selected)
-		{
-			$toolbar->add_cdata('<u><b><small>'.$ops[$selected].'</small></b></u>');
-		}
-		else
-		{
-			$toolbar->add_cdata('<small>Vali valim</small>');
-		}
-
-		$toolbar->add_cdata($str);
 		$parent = $arr["obj_inst"]->parent();
 		
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
+
+		$users = get_instance("users");
+
+		$kb_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "kliendibaas",
+		));
+
+		// include selections from crm_db
+		if (is_oid($kb_id))
+		{
+			$kb_obj = new object($kb_id);
+			$others = $kb_obj->connections_from(array(
+				"type" => 1,
+			));
+			foreach($others as $other)
+			{
+				$ops[$other->prop("to")] = $other->prop("to.name");
+			};
+		};
+
+
+		asort($ops);
+		
+		$str .= html::select(array(
+			'name' => 'target_selection',
+			'options' => array(" - vali valim - ") + $ops,
+			'selected' => $selected,
+		));
+
+		$toolbar->add_cdata($str);
+
+		$toolbar->add_button(array(
+			"name" => 'go_move',
+			"tooltip" => "Liiguta",
+			"action" => "move_objects",
+		));
 		
 		$toolbar->add_button(array(
-			"name" => 'go_add',
-			"tooltip" => "Lisa valitud valimisse",
-			"url" => "#",
-			"img" => "import.gif",
-			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
-		));
-		$toolbar->add_button(array(
-			"name" => 'activate',
-				"tooltip" => 'aktiveeri',
-				"url" => "#",
-				"img" => "refresh.gif",
-				'onClick' => 'document.changeform.active_selection.value = document.changeform.add_to_selection.value;document.changeform.submit()',
+			"name" => 'go_copy',
+			"tooltip" => "Kopeeri",
+			"action" => "copy_objects",
 		));
 
-
 		$toolbar->add_button(array(
-			"name" => 'change_it',
-			"tooltip" => 'Muuda valimit',
-			"url" => "#",
+			"name" => "navigate",
+			"tooltip" => 'aktiveeri',
 			"img" => "edit.gif",
-'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array(),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+			"action" => "navigate",
 		));
+
+		$toolbar->add_separator();
 
 		$toolbar->add_button(array(
 			"name" => "save",
 			"tooltip" => "Salvesta",
-			"url" => "#",
+			"action" => "save_selection",
 			"img" => "save.gif",
-			'onClick' => "go_manage_selection(document.changeform.active_selection.value,'".$REQUEST_URI."','save_selection','".$parent."');return true;",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta valitud objektid valimist",
-			"url" => "#",
+			"confirm" => "Kustutada valitud objektid sellest valimist?",
 			"img" => "delete.gif",
-			'onClick' => "go_manage_selection(document.changeform.this_selection.value,'".$REQUEST_URI."','delete_from_selection','".$parent."');return true;",
+			"action" => "delete_from_selection",
 		));
 
 		$str = "";
-		$str .= html::hidden(array('name' => 'this_selection', 'value' => $arr["obj_inst"]->id()));
-		//$str .= html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
-		$str .= html::hidden(array('name' => 'del'));
-		$str .= html::hidden(array('name' => 'new_selection_name'));
 		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/kliendibaas/selall.script'));
-		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
 		$toolbar->add_cdata($str);
 	}
 
@@ -477,17 +531,7 @@ class crm_selection extends class_base
 				$values[]='('.$oid.','.$key.')';
 			}
 
-			// kui on vaja valimi sisu asendada, siis viska kõik minema
-			// samas mulle tundub, et seda replace asja ei kasutata kusagil.
-			if ($replace)
-			{
-				$this->db_query('delete from selection where oid='.$oid);
-			}
-			// muidu ainult valitud itemid
-			else
-			{
-				$q ="delete from selection where oid='$oid' and object in (".implode(' , ',array_keys($arr)).")";
-			};
+			$q ="delete from selection where oid='$oid' and object in (".implode(' , ',array_keys($arr)).")";
 			$this->db_query($q);
 
 			// ja siis lisame uued
@@ -513,7 +557,7 @@ class crm_selection extends class_base
 
 	/** Displays active items from selection using a template 
 		
-		@attrib name=show params=name default="0"
+		@attrib name=show params=name 
 		
 		@param id required
 		
