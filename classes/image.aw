@@ -380,7 +380,15 @@ class image extends aw_template
 
 			if ($passed)
 			{
-				$size = GetImageSize($fname);
+				if ($this->is_flash($file))
+				{
+					$size[2] = 69;
+				}
+				else
+				{
+					$size = GetImageSize($fname);
+				};
+
 				if (!is_array($size)) 
 				{
 					print "access denied.";
@@ -398,6 +406,10 @@ class image extends aw_template
 						case "3":
 							$type = "image/png";
 							break;
+						case "69":
+							$type = "application/x-shockwave-flash";
+							break;
+
 					};
 					header("Content-type: $type");
 					readfile($fname);
