@@ -154,6 +154,12 @@
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
 
+@property no_last type=checkbox ch_value=1 group=settings trans=1
+@caption Ära arvesta muutmist
+
+@property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
+@caption Muutmise kuupaev dokumendi sees
+
 
 @property sbt type=submit value=Salvesta store=no 
 
