@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.83 2002/01/30 01:22:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.84 2002/01/31 00:22:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -139,8 +139,7 @@ class document extends aw_template
 				$period = $this->get_cval("activeperiod");
 			};
 		};
-		$this->db_query("SELECT * FROM menu WHERE id = $parent");
-		$row = $this->db_next();
+		$row = $this->get_menu($parent);
 		$sections = unserialize($row["sss"]);
 		$periods = unserialize($row["pers"]);
 		
@@ -788,8 +787,7 @@ class document extends aw_template
 
 		if ($doc["parent"])
 		{
-			$this->db_query("SELECT * FROM menu WHERE id = ".$doc["parent"]);
-			$mn = $this->db_next();
+			$mn = $this->get_menu($doc["parent"]);
 		}
 
 		if (!isset($this->doc_count))
