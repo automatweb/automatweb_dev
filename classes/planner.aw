@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.93 2003/03/14 13:02:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.94 2003/03/14 13:37:01 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2009,7 +2009,7 @@ class planner extends class_base
 			foreach($events as $key => $e)
 			{
 				// draws single cells inside the day
-				$daylink = $this->mk_my_orb("view",array("section" => $section,"id" => $this->id,"type" => $type,"date" => $di["next"]));
+				$daylink = $this->mk_my_orb("view",array("section" => $section,"id" => $this->id,"type" => "day","date" => date("d-m-Y",$e["start"])));
                                 $this->vars(array(
                                         "lead" => $e["lead"],
                                         "moreinfo" => $e["moreinfo"],
@@ -2024,9 +2024,6 @@ class planner extends class_base
 					$this->vars(array("link" => $this->parse("link")));
 					$_tmp = $this->parse("link");
 				};
-				$this->vars(array(
-                                        "link" => "",
-                                ));
 
 				$c .= $this->ev->draw($e);
 			};
@@ -2188,6 +2185,7 @@ class planner extends class_base
                                         "lead" => "",
                                         "moreinfo" => "",
                                         "title" => "",
+					"link" => "",
 					"imgurl" => "/img/trans.gif",
                                 ));
 
