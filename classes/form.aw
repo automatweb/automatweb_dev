@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.51 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.52 2001/08/13 09:16:24 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1859,6 +1859,7 @@ class form extends form_base
 				$query = "SELECT distinct(form_".$mid."_entries.chain_id) as oid FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".join(" ",map2("LEFT JOIN form_%s_entries ON form_%s_entries.chain_id = form_".$mid."_entries.chain_id",$forms_in_q))." WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ".$query;
 			}
 
+			$this->main_search_form = $mid;
 			$matches = array();
 //		echo "query = $query  <br>\n";
 //		flush();
@@ -2035,7 +2036,7 @@ class form extends form_base
 					$row["ev_created"] = $this->time2date($row["created"], 2);
 					$row["ev_uid"] = $row["modifiedby"];
 					$row["ev_modified"] = $this->time2date($row["modified"], 2);
-					$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
+					$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
 					$row["ev_delete"] = "<a href='".$this->mk_my_orb(
 						"delete_entry", 
 							array(
@@ -2046,7 +2047,7 @@ class form extends form_base
 						"form")."'>Kustuta</a>";
 					if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
 					{
-						$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+						$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_searrch_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_searrch_form],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
 					}
 					if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
 					{
