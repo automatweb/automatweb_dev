@@ -21,14 +21,9 @@
 			</function>
 		</action>
 
-		<action name="search">
+		<action name="search" all_args="1">
 			<function name="search">
-				<arguments>
-					<required name="docid" type="int"/>
-					<optional name="s_name"/>
-					<optional name="s_type"/>
-					<optional name="s_comment"/>
-				</arguments>
+				<arguments/>
 			</function>
 		</action>
 		
