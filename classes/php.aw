@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.15 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.16 2002/12/05 08:25:16 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -55,10 +55,6 @@ class php_serializer
 		if (!is_array($arr))
 		{
 			@eval(stripslashes($str));
-			if (!is_array($arr))
-			{
-				die("php_unserialize failed!");
-			}
 		}
 		return $arr;
 	}
