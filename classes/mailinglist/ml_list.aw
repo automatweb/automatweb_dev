@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.53 2004/06/17 14:34:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.54 2004/08/02 12:18:33 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -315,7 +315,11 @@ class ml_list extends class_base
 			$allow = true;
 		};
 
-
+		$udef_fields["textboxes"] = $args["udef_txtbox"];
+		$udef_fields["textareas"] = $args["udef_txtarea"];
+		$udef_fields["checkboxes"] = $args["udef_checkbox"];
+		$udef_fields["classificators"] = $args["udef_classificator"];
+		
 		if ($allow)
 		{
 			if ($args["op"] == 1)
@@ -327,6 +331,7 @@ class ml_list extends class_base
 					"list_id" => $list_obj->id(),
 					"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),
 					"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
+					"udef_fields" => $udef_fields,
 				));	
 			};
 			if ($args["op"] == 2)
@@ -948,6 +953,7 @@ class ml_list extends class_base
 		{
 			$relobj = new object($args["alias"]["relobj_id"]);
 			$meta = $relobj->meta("values");
+			arr($meta);
 			if (!empty($meta["CL_ML_LIST"]["sub_form_type"]))
 			{
 				$sub_form_type = $meta["CL_ML_LIST"]["sub_form_type"];
@@ -972,8 +978,27 @@ class ml_list extends class_base
 			};
 			$this->vars(array(
 				"FOLDER" => $c,
-			));
+			));	
 		};
+		
+		$classificator_inst = get_instance(CL_CLASSIFICATOR);
+		
+		for ($i = 1; $i <= 5; $i++)
+		{
+			$options = $classificator_inst->get_options_for(array(
+				"clid" => CL_ML_MEMBER,
+				"name" => "udef_classificator$i",
+			));
+			
+			$this->vars(array(
+				"classificator$i" => html::select(array(
+					"name" => "udef_classificator[$i]",
+					"options" => $options,
+				)),
+			));
+		}
+		
+		
 		$this->vars(array(
 			"listname" => $tobj->name(),
 			"reforb" => $this->mk_reforb("subscribe",array(
