@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.29 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.30 2005/04/01 11:47:21 duke Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -948,7 +948,12 @@ class object_import extends class_base
 		}
 
 		// check if the number is less than max allowed
-		if (count($uniq) > $o->prop("del_max"))
+		$del_max = $o->prop("del_max");
+		if (empty($del_max))
+		{
+			$del_max = 200;
+		};
+		if (count($uniq) > $del_max)
 		{
 			echo sprintf(t("ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"), count($uniq), $o->prop("del_max"));
 			return sprintf(t("VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"), count($uniq), $o->prop("del_max"));
