@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.16 2001/12/12 22:34:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.17 2002/01/31 00:50:01 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -179,7 +179,6 @@ class aw_table
 		$sess_field_key   = $this->prefix . "_sortby";
 		$sess_field_order = $this->prefix . "_sorder";
 		$before = $aw_tables[$sess_field_key];
-
 
 		// m‰‰rame sorteerimisj‰rjekorra
 
