@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.20 2005/01/04 16:27:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.21 2005/01/04 16:57:01 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -347,7 +347,7 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		passthru("wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
+		passthru("wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
 		var_dump($retval);
 		print "got structure, parsing \n";
 		// check whether opening succeeded?
@@ -370,7 +370,7 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
+		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
 		print "executing $cmdline<br />";
 		passthru($cmdline);
 		// check whether opening succeeded?
