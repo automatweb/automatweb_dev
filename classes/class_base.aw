@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.50 2003/01/17 14:27:51 duke Exp $
+// $Id: class_base.aw,v 2.51 2003/01/17 15:38:11 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1094,6 +1094,46 @@ class class_base extends aliasmgr
 			foreach($objlist->get() as $okey => $oval)
 			{
 				$options[$oval["target"]] = $oval["name"];
+			}
+
+			$val["type"] = "select";
+			$val["options"] = $options;
+		};
+		
+		if (($val["type"] == "relpicker") && ($val["reltype"]))
+		{
+			$reltypes = $this->coredata["meta"]["alias_reltype"];
+			if (!$reltypes)
+			{
+				$reltypes = array();
+			};
+			// retrieve the list of all aliases first time this is invoked
+			if (!is_array($this->alist))
+			{
+				$almgr = get_instance("aliasmgr");
+				if ($this->id)
+				{
+					$this->alist = $almgr->get_oo_aliases(array(
+								"oid" => $this->id,
+								"ret_type" => GET_ALIASES_FLAT,
+					));
+				}
+				else
+				{
+					$this->alist = array();
+				};
+			};
+
+			$objlist = new aw_array($this->alist);
+
+			$options = array("0" => "--vali--");
+			// generate option list
+			foreach($objlist->get() as $okey => $oval)
+			{
+				if ($reltypes[$oval["target"]] == $val["reltype"])
+				{
+					$options[$oval["target"]] = $oval["name"];
+				};
 			}
 
 			$val["type"] = "select";
