@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.76 2005/04/02 19:04:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.77 2005/04/04 10:01:23 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -14,7 +14,7 @@
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
+	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
 
@@ -3053,15 +3053,33 @@ class mrp_workspace extends class_base
 			"ws" => $arr["obj_inst"]
 		));
 
+		switch ($arr["request"]["group"])
+		{
+			case "grp_printer_done":
+				$states = array(MRP_STATUS_DONE);
+				break;
+
+			case "grp_printer_aborted":
+				$states = array(MRP_STATUS_ABORTED);
+				break;
+
+			case "grp_printer":
+			case "grp_printer_current":
+				$states = array(
+					MRP_STATUS_NEW, MRP_STATUS_PLANNED, MRP_STATUS_INPROGRESS, 
+					MRP_STATUS_LOCKED, MRP_STATUS_PAUSED, MRP_STATUS_DELETED, 
+					MRP_STATUS_ONHOLD, MRP_STATUS_ARCHIVED
+				);
+				break;
+		}
+
 		classload("date_calc");
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => 30,
-			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
-			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
-			"onlydone" => ($arr["request"]["group"] == "grp_printer_done" ? true : false),
-			"not_done" => ($arr["request"]["group"] == "grp_printer_done" ? false : true),
-			"onlyaborted" => ($arr["request"]["group"] == "grp_printer_aborted" ? true : false),
+//			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
+//			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
+			"states" => $states
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -3314,30 +3332,19 @@ class mrp_workspace extends class_base
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"]),
-//			"status" => new obj_predicate_not(MRP_STATUS_DONE),
+			//"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"]),
 			"sort_by" => "mrp_job.starttime"
 		);
 
-		if ($arr["onlydone"])
+		if ($arr["states"])
 		{
-			$filt["state"] = MRP_STATUS_DONE;
+			$filt["state"] = $arr["states"];
 		}
 
-		if ($arr["not_done"])
-		{
-			$filt["state"] = new obj_predicate_not(MRP_STATUS_DONE);
-		}
-
-		if ($arr["onlyaborted"])
-		{
-			$filt["state"] = MRP_STATUS_ABORTED;
-		}
-
-		if ($arr["maxend"] > 100 )
+		/*if ($arr["maxend"] > 100 )
 		{
 			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 100, $arr["maxend"]);
-		}
+		}*/
 
 		$jobs = new object_list($filt);
 
@@ -3470,7 +3477,7 @@ class mrp_workspace extends class_base
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
-			//"pj_job" => $tmp["pj_job"]
+			"pj_job" => $tmp["pj_job"]
 		));
 	}
 
@@ -3498,7 +3505,7 @@ class mrp_workspace extends class_base
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
-			//"pj_job" => $tmp["pj_job"]
+			"pj_job" => $tmp["pj_job"]
 		));
 	}
 
