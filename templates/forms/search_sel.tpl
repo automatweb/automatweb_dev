@@ -33,7 +33,7 @@ Lehek&uuml;lg:
 <!-- SUB: LINE -->
 <tr>
 <td class="plain">{VAR:form_id}</td>
-<td class="plain">{VAR:form_name}</td>
+<td class="plain"><a href='{VAR:form_change}'>{VAR:form_name}</a></td>
 <td class="plain">{VAR:form_comment}</td>
 <td class="plain">{VAR:form_location}</td>
 <td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}><input type='hidden' name='inpage[{VAR:form_id}]' value='1'><input type='hidden' name='prev[{VAR:form_id}]' value='{VAR:prev}'></td>
