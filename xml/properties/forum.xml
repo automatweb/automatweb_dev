@@ -64,6 +64,15 @@
             <table>objects</table>
             <caption>Hinded</caption>
       </property>
+      <property>
+            <name>language</name>
+            <callback>callback_get_languages</callback>
+            <group>languages</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Keel</caption>
+      </property>
       <classinfo>
             <corefields>name,comment,status</corefields>
             <toolbar>yes</toolbar>
@@ -72,6 +81,9 @@
             <rates>
                   <caption>Hinded</caption>
             </rates>
+            <languages>
+                  <caption>Keel</caption>
+            </languages>
       </groupinfo>
 </properties>
 
