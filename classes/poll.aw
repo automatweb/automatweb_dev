@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.10 2002/06/17 10:06:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.11 2002/06/26 11:11:39 kristo Exp $
 session_register("poll_clicked");
 class poll extends aw_template 
 {
@@ -369,7 +369,15 @@ class poll extends aw_template
 			return "";
 		}
 
-		$this->vars(array("poll_id" => $ap["oid"], "question" => $ap["name"]));
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $ap["metadata"]
+		));
+
+		$this->vars(array(
+			"poll_id" => $ap["oid"], 
+			"question" => $meta["name"][aw_global_get("lang_id")],
+			"set_lang_id" => aw_global_get("lang_id")
+		));
 
 		$ans = $this->get_answers($ap["oid"]);
 		reset($ans);
@@ -413,6 +421,7 @@ class poll extends aw_template
 			return "";
 		}
 		$lang_id = aw_global_get("lang_id");
+		$this->vars(array("set_lang_id" => $lang_id));
 
 		$answers = $this->get_answers($id);
 		$total = 0;
@@ -456,7 +465,15 @@ class poll extends aw_template
 		$qs = aw_unserialize($poll["questions"]);
 
 
-		$this->vars(array("ANSWER" => $as,"question" => $poll["name"], "date" => $this->time2date($poll["modified"],2),"addcomment" => $t->add_comment(array("board" => $id)), "num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
+		$this->vars(array(
+			"ANSWER" => $as,
+			"question" => $poll["meta"]["name"][aw_global_get("lang_id")], 
+			"date" => $this->time2date($poll["modified"],2),
+			"addcomment" => $t->add_comment(array("board" => $id)), 
+			"num_comments" => $t->get_num_comments($id), 
+			"poll_id" => $id, 
+			"QUESTION" => $p
+		));
 
 		return $this->parse();
 	}
