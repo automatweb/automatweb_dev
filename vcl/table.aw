@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.12 2001/10/09 23:38:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.13 2001/11/06 10:01:24 cvs Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -231,7 +231,6 @@ class aw_table
 			$flag = SORT_REGULAR;
 		};
 
- 
 		if ($sorder == "asc") 
 		{
 			if ($flag == SORT_NUMERIC)
@@ -240,7 +239,8 @@ class aw_table
 			}
 			else
 			{
-				uksort($newdata,create_function('$a,$b','return strcasecmp($a,$b);'));
+//				uksort($newdata,create_function('$a,$b','return strcasecmp($a,$b);'));
+				uksort($newdata,array($this,"__str_cmp"));
 			}
 		} 
 		else 
@@ -251,7 +251,8 @@ class aw_table
 			}
 			else
 			{
-				uksort($newdata,create_function('$a,$b','return -strcasecmp($a,$b);'));
+//				uksort($newdata,create_function('$a,$b','return -strcasecmp($a,$b);'));
+				uksort($newdata,array($this,"__reverse_str_cmp"));
 			}
 		};
 		$this->data = $newdata;
@@ -259,6 +260,19 @@ class aw_table
 	
 	}
 
+	function __str_cmp($a,$b)
+	{
+		$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$a);
+		$_b = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$b);
+		return strcasecmp($_a,$_b);
+	}
+
+	function __reverse_str_cmp($a,$b)
+	{
+		$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$a);
+		$_b = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$b);
+		return -strcasecmp($_a,$_b);
+	}
 
 	function draw() 
 	{
