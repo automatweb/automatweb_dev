@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.92 2004/10/08 15:27:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.93 2004/10/27 06:54:23 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -295,7 +295,7 @@ class file extends class_base
 			// n2itame kohe
 			// kontrollime koigepealt, kas headerid on ehk väljastatud juba.
 			// dokumendi preview vaatamisel ntx on.
-			if ($fi["type"] == "text/html")
+			if (trim($fi["type"]) == "text/html")
 			{
 				if (!headers_sent())
 				{
@@ -317,7 +317,7 @@ class file extends class_base
 				};
 			}
 			// embed xml files
-			elseif ($fi["type"] == "text/xml")
+			elseif (trim($fi["type"]) == "text/xml")
 			{
 				$replacement = htmlspecialchars($fi["content"]);
 				$replacement = str_replace("\n","<br />\n",$replacement);
