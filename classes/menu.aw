@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.12 2002/11/24 15:23:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.13 2002/11/26 12:35:12 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -42,7 +42,7 @@
 	@property description type=textbox field=meta method=serialize group=keywords
 	@caption META description
 	
-	@property sections type=select multiple=1 field=meta size=20 method=serialize group=relations
+	@property sections type=select multiple=1 size=20 group=relations
 	@caption Vennastamine
 
 	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
@@ -596,6 +596,32 @@ class menu extends aw_template
 		$this->updmenus[] = (int)$args["id"];
 		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($this->updmenus);
+	}
+
+	function callback_pre_save($args)
+	{
+		if (!$args["object"]["type"])
+		{
+			$args["objdata"]["type"] = MN_CONTENT;
+		}
+	}
+
+	function callback_gen_path($args = array())
+	{
+		if ($args["id"])
+		{
+			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"menuedit");
+			$title = html::href(array(
+				"url" => $link,
+				"caption" => $args["object"]["name"],
+			));
+			$title .= " / Muuda";
+		}
+		else
+		{
+			$title = "Lisa";
+		};
+		return $title;
 	}
 
 };
