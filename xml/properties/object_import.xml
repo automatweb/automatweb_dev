@@ -206,7 +206,10 @@
             </OBJECT_TYPE>
             <FOLDER>
                   <value>2</value>
-                  <clid>CL_MENU</clid>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_PROJECT</num_1>
+                  </clid>
                   <caption>kataloog kuhu objektid panna</caption>
             </FOLDER>
             <DATASOURCE>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.22 2004/12/13 14:57:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.23 2004/12/23 11:28:18 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -73,7 +73,7 @@
 @reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
 @caption imporditav klass
 
-@reltype FOLDER value=2 clid=CL_MENU
+@reltype FOLDER value=2 clid=CL_MENU,CL_PROJECT
 @caption kataloog kuhu objektid panna
 
 @reltype DATASOURCE value=3 clid=CL_ABSTRACT_DATASOURCE
