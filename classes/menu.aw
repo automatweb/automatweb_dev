@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.65 2003/09/17 14:56:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.66 2003/09/23 16:34:37 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -173,7 +173,6 @@
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
-	@classinfo corefields=name,comment,alias,status,jrk
 	@classinfo syslog_type=ST_MENU
 
 	@groupinfo general caption=Üldine default=1
@@ -185,6 +184,7 @@
 	@groupinfo import_export caption=Eksport submit=no
 
 	@tableinfo menu index=id master_table=objects master_index=oid
+	@classinfo trans_id=TR_MENU
 */
 
 define("RELTYPE_PICTURES_MENU",1);
@@ -200,6 +200,7 @@ class menu extends class_base
 		$this->init(array(
 			"tpldir" => "automatweb/menu",
 			"clid" => CL_PSEUDO,
+			"trid" => TR_MENU,
 		));
 	}
 	
