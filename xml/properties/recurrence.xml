@@ -2,114 +2,169 @@
 <properties>
       <property>
             <name>start</name>
-            <type>date_select</type>
             <table>calendar2recurrence</table>
             <group>general</group>
+            <type>date_select</type>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <field>start</field>
             <caption>Alates</caption>
       </property>
       <property>
             <name>recur_type</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Korduse tüüp</caption>
       </property>
       <property>
             <name>interval_daily</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>2</size>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Iga X päeva tagant</caption>
       </property>
       <property>
             <name>interval_weekly</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>2</size>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Iga X nädala tagant</caption>
       </property>
       <property>
             <name>interval_monthly</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>2</size>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Iga X kuu tagant</caption>
       </property>
       <property>
             <name>interval_yearly</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>2</size>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Iga X aasta tagant</caption>
       </property>
       <property>
             <name>weekdays</name>
+            <table>objects</table>
+            <group>general</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Nendel päevadel</caption>
       </property>
       <property>
             <name>month_days</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Kindlatel päevadel</caption>
       </property>
       <property>
             <name>month_rel_weekdays</name>
+            <table>objects</table>
+            <group>general</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Valitud nädalapäevadel</caption>
       </property>
       <property>
             <name>month_weekdays</name>
+            <table>objects</table>
+            <group>general</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Nädalapäevad</caption>
       </property>
       <property>
             <name>end</name>
-            <type>date_select</type>
             <table>calendar2recurrence</table>
             <group>general</group>
+            <type>date_select</type>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <field>end</field>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>test</name>
+            <table>objects</table>
+            <group>test</group>
             <type>text</type>
             <store>no</store>
-            <group>test</group>
-            <table>objects</table>
             <field>test</field>
             <caption>Test</caption>
       </property>
