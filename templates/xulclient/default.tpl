@@ -100,6 +100,17 @@ function callAsync() {
 	//alert(response);
 }
 ]]></script>
+
+
+
+<tabbox>
+  <tabs>
+<!-- SUB: TAB -->
+    <tab id="{VAR:id}" label="{VAR:caption}"/>
+<!-- END SUB: TAB -->
+  </tabs>
+  <tabpanels>
+    <tabpanel id="general">
 <vbox style="overflow: auto;" flex="1">
 
 <grid flex="1">
@@ -126,5 +137,8 @@ function callAsync() {
 </grid>
 {VAR:reforb}
 </vbox>
+    </tabpanel>
+  </tabpanels>
+</tabbox>
 </window>
 
