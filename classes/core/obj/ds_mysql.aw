@@ -657,10 +657,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				if ($this->can("view", $row["oid"]))
-				{
-					$ret[$row["oid"]] = $row["oid"];
-				}
+				$ret[$row["oid"]] = $row["oid"];
 			}
 		}
 

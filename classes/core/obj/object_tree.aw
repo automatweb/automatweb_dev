@@ -256,21 +256,19 @@ class object_tree extends _int_obj_container_base
 		$awt->start("ds_search");
 		$oids = $GLOBALS["object_loader"]->ds->search($filter);
 		$awt->stop("ds_search");
+		$acl_oids = array();
 		foreach($oids as $oid)
 		{
-			$o = new object($oid);
-			$this->tree[$o->parent()][$o->id()] = $o;
-
-			// why should this be in here, if it can be out there? --duke
-
-			/*
-			$filter["parent"] = $oid;
-			$this->_int_req_filter($filter);
-			*/
+			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
+			{
+				$o = new object($oid);
+				$this->tree[$o->parent()][$o->id()] = $o;
+				$acl_oids[] = $oid;
+			}
 		}
 		if (sizeof($oids) > 0)
 		{
-			$filter["parent"] = $oids;
+			$filter["parent"] = $acl_oids;
 			$this->_int_req_filter($filter);
 		};
 	}
