@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.9 2004/02/11 11:57:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.10 2004/02/11 20:04:00 duke Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -8,25 +8,25 @@
 @default table=objects
 @default group=general
 
-@property utr_toolbar group=utr_day,utr_week,utr_month,utr_all type=toolbar  store=no no_caption=1
+@property utr_toolbar group=utr_day,utr_week,utr_month,utr_all type=toolbar  store=no no_caption=1 editonly=1
 @caption TB
 
-@property tr_toolbar group=tr_day,tr_week,tr_month,tr_all type=toolbar  store=no no_caption=1
+@property tr_toolbar group=tr_day,tr_week,tr_month,tr_all type=toolbar  store=no no_caption=1 editonly=1
 @caption TB
 
-@property inp_toolbar group=ipr_day,ipr_week,ipr_month,ipr_all type=toolbar  store=no no_caption=1
+@property inp_toolbar group=ipr_day,ipr_week,ipr_month,ipr_all type=toolbar  store=no no_caption=1 editonly=1
 @caption TB
 
-@property baselang type=select group=general store=no
+@property baselang type=select store=no
 @caption Baaskeel
 
-@property targetlang type=select group=general store=no
+@property targetlang type=select store=no
 @caption Sihtkeel
 
-@property targetlang_all type=checkbox ch_value=1 group=general field=meta method=serialize
+@property targetlang_all type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas kasutada k&otilde;iki keeli sihtkeelteks
 
-@property translated_all_langs type=checkbox ch_value=1 group=general field=meta method=serialize
+@property translated_all_langs type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas objekt ilmub T&otilde;lgitud tabi alla ainult siis kui on t&otilde;litud k&otilde;kidesse keeltesse
 
 @property translated group=tr_day,tr_week,tr_month,tr_all type=text store=no no_caption=1
@@ -61,17 +61,14 @@
 
 @classinfo relationmgr=yes
 
+@reltype CLASS value=1 clid=CL_OBJECT_TYPE
+@caption klass
+
 */
-
-define("RELTYPE_CLASS",1);
-
 class site_translation extends class_base
 {
 	function site_translation()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			"tpldir" => "translate/site_translation",
 			"clid" => CL_SITE_TRANSLATION
@@ -136,7 +133,7 @@ class site_translation extends class_base
 		$udat = $this->get_user();
 		$ucfg = new object($udat["oid"]);
 
-		$tr_o = obj($args["obj"]["oid"]);
+		$tr_o = $args["obj_inst"];
 		if ($tr_o->prop("baselang"))
 		{
 			$this->base_lang_id = $tr_o->prop("baselang");
@@ -169,10 +166,9 @@ class site_translation extends class_base
 		
 		// now get a list of connections from this object
 
-		if ($args["obj"]["oid"])
+		if (empty($args["new"]))
 		{
-			$obj = new object($args["obj"]["oid"]);
-			$conns = $obj->connections_from(array(
+			$conns = $tr_o->connections_from(array(
 				"type" => RELTYPE_CLASS,
 			));
 			foreach($conns as $conn)
@@ -259,7 +255,8 @@ class site_translation extends class_base
 			"align" => "center",
 		));	
 
-		$obj = obj($args["obj"]["oid"]);
+		$obj = $args["obj_inst"];
+
 		$l = get_instance("languages");
 
 		if ($obj->meta("targetlang_all"))
@@ -516,7 +513,7 @@ class site_translation extends class_base
 		);
 		$thingies = new object_list($filter);
 
-		$o = new object($args["obj"]["oid"]);
+		$o = $args["obj_inst"];
 
 		load_vcl("table");
 		$t = new aw_table(array(
@@ -646,95 +643,80 @@ class site_translation extends class_base
 
 	function gen_utr_toolbar($arr)
 	{
-		$id = $arr["obj"]["oid"];
-		if ($id)
+		// which links do I need on the toolbar?
+		// 1- lisa grupp
+		$toolbar = &$arr["prop"]["toolbar"];
+
+		if (!isset($arr["request"]["clid"]))
 		{
-			// which links do I need on the toolbar?
-			// 1- lisa grupp
-			$toolbar = &$arr["prop"]["toolbar"];
+			$arr["request"]["clid"] = CL_MENU;
+		}
 
-			if (!isset($arr["request"]["clid"]))
-			{
-				$arr["request"]["clid"] = CL_MENU;
-			}
+		$toolbar->add_cdata(html::select(array(
+			"name" => "clid",
+			"options" => $this->_prep_clid_list(),
+			"selected" => (int)$arr["request"]["clid"],
+		)));
 
-			$toolbar->add_cdata(html::select(array(
-				"name" => "clid",
-				"options" => $this->_prep_clid_list(),
-				"selected" => (int)$arr["request"]["clid"],
-			)));
-
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"url" => "#",
-				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
-		};
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "#",
+			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+			"img" => "save.gif",
+		));
 	}
 
 	function gen_inp_toolbar($arr)
 	{
-		$id = $arr["obj"]["oid"];
-		if ($id)
+		// which links do I need on the toolbar?
+		// 1- lisa grupp
+		$toolbar = &$arr["prop"]["toolbar"];
+
+		if (!isset($arr["request"]["clid"]))
 		{
-			// which links do I need on the toolbar?
-			// 1- lisa grupp
-			$toolbar = &$arr["prop"]["toolbar"];
+			$arr["request"]["clid"] = CL_MENU;
+		}
 
-			if (!isset($arr["request"]["clid"]))
-			{
-				$arr["request"]["clid"] = CL_MENU;
-			}
+		$toolbar->add_cdata(html::select(array(
+			"name" => "clid",
+			"options" => $this->_prep_clid_list(),
+			"selected" => (int)$arr["request"]["clid"],
+		)));
 
-			$toolbar->add_cdata(html::select(array(
-				"name" => "clid",
-				"options" => $this->_prep_clid_list(),
-				"selected" => (int)$arr["request"]["clid"],
-			)));
-
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"url" => "#",
-				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
-		};
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "#",
+			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+			"img" => "save.gif",
+		));
 	}
 	
 	function gen_tr_toolbar($arr)
 	{
-		$id = $arr["obj"]["oid"];
-		if ($id)
-		{
-			// which links do I need on the toolbar?
-			// 1- lisa grupp
-			$toolbar = &$arr["prop"]["toolbar"];
+		// which links do I need on the toolbar?
+		// 1- lisa grupp
+		$toolbar = &$arr["prop"]["toolbar"];
 
-			if (!isset($arr["request"]["clid"]))
-			{
-				$arr["request"]["clid"] = CL_MENU;
-			}
-			
-			$toolbar->add_cdata(html::select(array(
-				"name" => "clid",
-				"options" => $this->_prep_clid_list(),
-				"selected" => (int)$arr["request"]["clid"],
-			)));
-                        
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Salvesta",
-				"url" => "#",
-				"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
+		if (!isset($arr["request"]["clid"]))
+		{
+			$arr["request"]["clid"] = CL_MENU;
 		}
+		
+		$toolbar->add_cdata(html::select(array(
+			"name" => "clid",
+			"options" => $this->_prep_clid_list(),
+			"selected" => (int)$arr["request"]["clid"],
+		)));
+		
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "#",
+			"onClick" => "document.location.href=document.location.href+'&clid='+document.getElementById('clid').value;",
+			"img" => "save.gif",
+		));
 	}
 
 	function _prep_clid_list()
@@ -777,25 +759,6 @@ class site_translation extends class_base
 		));
 
 		return $this->parse();
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_CLASS => "klass",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_CLASS:
-				$retval = array(CL_OBJECT_TYPE);
-				break;
-		};
-		return $retval;
 	}
 }
 ?>
