@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.23 2003/01/29 20:18:01 duke Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.24 2003/02/06 09:44:43 duke Exp $
 
 class db_periods extends aw_template 
 {
@@ -535,6 +535,7 @@ class periods extends db_periods
 		$retval = array();
 		while($row = $this->db_next())
 		{
+			$row["data"] = aw_unserialize($row["data"]);
 			$retval[] = $row;
 		};
 		return $retval;
