@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.9 2003/01/20 14:25:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.10 2003/02/26 15:59:34 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -1029,7 +1029,7 @@ class form_base extends form_db_base
 		}
 		if ($a > 0)
 		{
-			if ($map[$i][$a-1]["col"] == $map[$i][$a]["col"])
+			if ((isset($map[$i][$a-1]["col"]) && $map[$i][$a-1]["col"]) == (isset($map[$i][$a]["col"]) && $map[$i][$a]["col"]))
 			{
 				$topleft = false;
 			}
@@ -1041,7 +1041,7 @@ class form_base extends form_db_base
 			for ($t_row=$i; $t_row < $rows && $map[$t_row][$a]["row"] == $map[$i][$a]["row"]; $t_row++)
 				;
 
-			for ($t_col=$a; $t_col < $cols && $map[$i][$t_col]["col"] == $map[$i][$a]["col"]; $t_col++)
+			for ($t_col=$a; $t_col < $cols && (isset($map[$i][$t_col]["col"]) && $map[$i][$t_col]["col"]) == (isset($map[$i][$a]["col"]) && $map[$i][$a]["col"]); $t_col++)
 				;
 
 			$rowspan = $t_row - $i;

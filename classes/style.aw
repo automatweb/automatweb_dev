@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.22 2003/01/29 12:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.23 2003/02/26 15:58:41 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -344,9 +344,10 @@ class style extends aw_template
 		}
 
 		$cstr = join(" ",$cstyles);
-		if ($st["css_class"] != "")
+		$cssc = "";
+		if (isset($st["css_class"]) && $st["css_class"] != "")
 		{
-			$cssc=" class=\"".$st["css_class"]."\" ";
+			$cssc = " class=\"".$st["css_class"]."\" ";
 		}
 		if ($cstr != "")
 		{

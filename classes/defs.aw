@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.82 2003/02/25 11:04:30 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.83 2003/02/26 15:57:59 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -397,7 +397,10 @@ if (!defined("DEFS"))
 		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order");
 		foreach($impvars as $k)
 		{
-			aw_global_set($k,$GLOBALS[$k]);
+			if (isset($GLOBALS[$k]))
+			{
+				aw_global_set($k,$GLOBALS[$k]);
+			}
 		}
 
 		// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
@@ -425,7 +428,7 @@ if (!defined("DEFS"))
 	// and causing potential security problems
 	function aw_global_get($var)
 	{
-		return $GLOBALS["__aw_globals"][$var];
+		return isset($GLOBALS["__aw_globals"][$var]) ? $GLOBALS["__aw_globals"][$var] : false;
 	}
 
 	function aw_global_set($var,$val)
@@ -441,11 +444,11 @@ if (!defined("DEFS"))
 		{
 			return false;
 		}
-		if (!is_array($GLOBALS["__aw_cache"][$cache]))
+		if (!isset($GLOBALS["__aw_cache"][$cache]) || !is_array($GLOBALS["__aw_cache"][$cache]))
 		{
 			return false;
 		}
-		return $GLOBALS["__aw_cache"][$cache][$key];
+		return isset($GLOBALS["__aw_cache"][$cache][$key]) ? $GLOBALS["__aw_cache"][$cache][$key] : false;
 	}
 
 	function aw_cache_set($cache,$key,$val = "")

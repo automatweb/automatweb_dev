@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.36 2003/02/25 15:21:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.37 2003/02/26 15:56:48 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -20,7 +20,7 @@ class aw_template extends acl_base
 
 	function tpl_init($basedir = "")
 	{
-		if (!is_array($this->cfg))
+		if (!isset($this->cfg) || !is_array($this->cfg))
 		{
 			aw_config_init_class(&$this);
 		}
@@ -38,7 +38,7 @@ class aw_template extends acl_base
 		// and calls tpl_init as well, and then does $this->init,
 		// which in turn calls tpl_init again and makes us lose
 		// all the data that came from extlinks
-		if ($this->init_done == 1)
+		if (isset($this->init_done) && $this->init_done == 1)
 		{
 			return false;
 		}
@@ -234,8 +234,14 @@ class aw_template extends acl_base
 
 	function is_parent_tpl($tpl,$parent)
 	{
-		$retval = $this->v2_parent_map[$tpl] == $parent;
-		return $retval;
+		if (!isset($this->v2_parent_map[$tpl]))
+		{
+			return "" == $parent;
+		}
+		else
+		{
+			return $this->v2_parent_map[$tpl] == $parent;
+		}
 	}
        
 	////
@@ -258,13 +264,19 @@ class aw_template extends acl_base
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
-		$src = localparse($this->v2_templates[$this->v2_name_map[$object]], $this->vars);
+		$tmp = isset($this->v2_name_map[$object]) ? $this->v2_name_map[$object] : "";
+		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
+		$src = localparse($val, $this->vars);
 
 		// võtame selle maha ka
 		aw_session_del("status_msg", true);
 
 		if ($this->sub_merge == 1)
 		{
+			if (!isset($this->vars[$object]))
+			{
+				$this->vars[$object] = "";
+			}
 	   		$this->vars[$object] .= $src;
 		}
 		return $src;

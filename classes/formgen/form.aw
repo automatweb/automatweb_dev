@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.43 2003/02/21 13:42:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.44 2003/02/26 15:59:34 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -58,9 +58,9 @@ class form extends form_base
 		$replacement = $this->gen_preview(array(
 			"id" => $alias["target"],
 			"form_action" => "/reforb.".$this->cfg["ext"],
-			"load_entry_data" => $GLOBALS["load_entry_data"],
-			"load_entry_data_form" => $GLOBALS["load_entry_data_form"],
-			"load_chain_data" => $GLOBALS["load_chain_data"]
+			"load_entry_data" => isset($GLOBALS["load_entry_data"]) ? $GLOBALS["load_entry_data"] : false,
+			"load_entry_data_form" => isset($GLOBALS["load_entry_data_form"]) ? $GLOBALS["load_entry_data_form"] : false,
+			"load_chain_data" => isset($GLOBALS["load_chain_data"]) ? $GLOBALS["load_chain_data"] : false
 		));
 
 		return $replacement;
@@ -876,6 +876,9 @@ class form extends form_base
 	//	$load_chain_data - loads the specified chain entry's data and matches the elements in this form by element names
 	function gen_preview($arr)
 	{
+		$arr["prefix"] = isset($arr["prefix"]) ? $arr["prefix"] : false;
+		$arr["elvalues"] = isset($arr["elvalues"]) ?  $arr["elvalues"] : false ;
+		$arr["no_submit"] = isset($arr["no_submit"]) ? $arr["no_submit"]  : false;
 		extract($arr);
 
 		// kui id-d pole antud, siis kasutame seda vormi, mis juba eelnevalt

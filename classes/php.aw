@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.17 2003/01/23 16:36:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.18 2003/02/26 15:58:27 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
+	var $no_index = false;
+
 	function php_serialize($arr)
 	{
 		if (!is_array($arr))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.5 2003/02/13 14:38:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.6 2003/02/26 15:59:35 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -76,8 +76,8 @@ class form_cell extends form_base
 			}
 		}
 
-		$this->style = $this->form->arr["elements"][$row][$col]["style"];
-		$this->style_class = $this->form->arr["elements"][$row][$col]["style_class"];
+		$this->style = isset($this->form->arr["elements"][$row][$col]["style"]) ? $this->form->arr["elements"][$row][$col]["style"] : false;
+		$this->style_class = isset($this->form->arr["elements"][$row][$col]["style_class"]) ? $this->form->arr["elements"][$row][$col]["style_class"] : false;
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.31 2003/02/18 21:49:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.32 2003/02/26 15:59:35 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -105,7 +105,10 @@ class form_element extends aw_template
 			'hour' => $this->vars["SUBTYPE_TS_HOUR"],
 			'day' => $this->vars["SUBTYPE_TS_DAY"],
 		);
-
+		if (!isset($this->arr["type"]))
+		{
+			$this->arr["type"] = "";
+		}
 	}
 
 	////
@@ -121,6 +124,10 @@ class form_element extends aw_template
 		$this->fid = $form->get_id();
 		$this->col = $col;
 		$this->row = $row;
+		if (!isset($this->arr["type"]))
+		{
+			$this->arr["type"] = "";
+		}
 	}
 
 
@@ -1355,26 +1362,27 @@ class form_element extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		if ($this->form->lang_id == $lang_id)
 		{
-			$mue = $this->arr["must_error"];
+			$mue = isset($this->arr["must_error"]) ? $this->arr["must_error"] : false;
 		}
 		else
 		{
-			$mue = $this->arr["lang_must_error"][$lang_id];
+			$mue = isset($this->arr["lang_must_error"][$lang_id]) ? $this->arr["lang_must_error"][$lang_id] : false;
 		}
 
 		$mue = str_replace("\"","\\\"",$mue);
 		
 		if ($this->form->lang_id == $lang_id)
 		{
-			$cle = $this->arr["check_length_error"];
+			$cle = isset($this->arr["check_length_error"]) ? $this->arr["check_length_error"] : false;
 		}
 		else
 		{
-			$cle = $this->arr["check_length_error"][$lang_id];
+			$cle = isset($this->arr["check_length_error"][$lang_id]) ? $this->arr["check_length_error"][$lang_id] : false;
 		}
 
 		$cle = str_replace("\"","\\\"",$cle);
 
+		$str = "";
 		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
 		{
 			$str .= "document.fm_".$this->form->id."._el_".$this->id.".value=_ifr_".$this->id.".document.body.innerHTML;\n";
@@ -1553,7 +1561,7 @@ class form_element extends aw_template
 
 	function get_show_controllers() 
 	{ 
-		if (is_array($this->arr["show_controllers"]))
+		if (isset($this->arr["show_controllers"]) && is_array($this->arr["show_controllers"]))
 		{
 			return $this->arr["show_controllers"];
 		}
@@ -1861,14 +1869,22 @@ class form_element extends aw_template
 	{
 		// check if this element is supposed to be shown right now
 		$show = true;
-		if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"] && $this->arr["has_act"] == 1)
+		if (!isset($this->arr["act_from"]))
 		{
-			$show = false;
+			$show = true;
 		}
-		if ($this->arr["act_to"] > (24*3600*400) && time() > $this->arr["act_to"] && $this->arr["has_act"] == 1)
+		else
 		{
-			$show = false;
+			if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"] && $this->arr["has_act"] == 1)
+			{
+				$show = false;
+			}
+			if ($this->arr["act_to"] > (24*3600*400) && time() > $this->arr["act_to"] && $this->arr["has_act"] == 1)
+			{
+				$show = false;
+			}
 		}
+
 		if (!$show)
 		{
 			return "";
@@ -1882,7 +1898,9 @@ class form_element extends aw_template
 		}
 
 		$html="";
-		if (is_array($this->form->controller_errors[$this->id]) && count($this->form->controller_errors[$this->id]) > 0)
+		if (isset($this->form->controller_errors[$this->id]) && 
+			is_array($this->form->controller_errors[$this->id]) && 
+			count($this->form->controller_errors[$this->id]) > 0)
 		{
 			$html.="<font color='red' size='2'>";
 			$html.=join("<br />",$this->form->controller_errors[$this->id])."<Br />";
@@ -1892,25 +1910,33 @@ class form_element extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		if ($this->form->lang_id == $lang_id)
 		{
-			$text = $this->arr["text"];
-			$info = $this->arr["info"]; 
+			$text = isset($this->arr["text"]) ? $this->arr["text"] : false;
+			$info = isset($this->arr["info"]) ? $this->arr["info"] : false; 
 		}
 		else
 		{
-			$text = $this->arr["lang_text"][$lang_id];
-			$info = $this->arr["lang_info"][$lang_id]; 
+			$text = isset($this->arr["lang_text"][$lang_id]) ? $this->arr["lang_text"][$lang_id] : false;
+			$info = isset($this->arr["lang_info"][$lang_id]) ? $this->arr["lang_info"][$lang_id] : false; 
 		}
 
 		$ext = false;
 
 		$stat_check = "";
 
+
 		if (aw_global_get("fg_check_status"))
 		{
 			$stat_check = " onChange='set_changed()' ";
 		};
 
-		$disabled = ($this->arr["disabled"] == 1 ? " disabled " : "");
+		if (!isset($this->arr["disabled"]))
+		{
+			$disabled = "";
+		}
+		else
+		{
+			$disabled = ($this->arr["disabled"] == 1 ? " disabled " : "");
+		}
 
 		if ($disabled)
 		{
@@ -2036,7 +2062,7 @@ class form_element extends aw_template
 
 							// now check all listbox item controllers for this lb item and if any of them fail, don't show item
 							$controllers_ok = true;
-							if (is_array($this->arr["lb_item_controllers"]))
+							if (isset($this->arr["lb_item_controllers"]) && is_array($this->arr["lb_item_controllers"]))
 							{
 								foreach($this->arr["lb_item_controllers"] as $ctrlid)
 								{
@@ -2072,7 +2098,7 @@ class form_element extends aw_template
 									{
 										$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value."</option>\n";
 									}
-									if ($this->arr['hidden'] && $_lbsel == $_v)
+									if ((isset($this->arr['hidden']) && $this->arr['hidden']) && $_lbsel == $_v)
 									{
 										$html .= html::hidden(array(
 											'name' => $element_name,
@@ -2512,30 +2538,40 @@ class form_element extends aw_template
 				break;
 		};
 
+		$sep_ver = "";
+		$sep_hor = "";
 		if ($this->arr["type"] != "")
 		{
 			$sep_ver = ($this->arr["text_distance"] > 0 ? "<br /><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0' /><br />" : "<br />");
 			$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0' />" : "");
 		}
-		if ($this->arr["text_pos"] == "up")
-		{
-			$html = $text.$sep_ver.$html;
-		}
-		else
-		if ($this->arr["text_pos"] == "down")
-		{
-			$html = $html.$sep_ver.$text;
-		}
-		else
-		if ($this->arr["text_pos"] == "right")
-		{
-			$html = $html.$sep_hor.$text;
-		}
-		else
+
+		if (!isset($this->arr["text_pos"]))
 		{
 			$html = $text.$sep_hor.$html;		// default is on left of element
 		}
-		if ($this->arr["info"] != "")
+		else
+		{
+			if ($this->arr["text_pos"] == "up")
+			{
+				$html = $text.$sep_ver.$html;
+			}
+			else
+			if ($this->arr["text_pos"] == "down")
+			{
+				$html = $html.$sep_ver.$text;
+			}
+			else
+			if ($this->arr["text_pos"] == "right")
+			{
+				$html = $html.$sep_hor.$text;
+			}
+			else
+			{
+				$html = $text.$sep_hor.$html;		// default is on left of element
+			}
+		}
+		if (isset($this->arr["info"]) && $this->arr["info"] != "")
 		{
 			$html .= "<br /><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
 		}
@@ -2545,7 +2581,7 @@ class form_element extends aw_template
 			$html.="<br />";
 		}
 		else
-		if ($this->arr["sep_pixels"] > 0)
+		if (isset($this->arr["sep_pixels"]) && $this->arr["sep_pixels"] > 0)
 		{
 			$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
 		}
