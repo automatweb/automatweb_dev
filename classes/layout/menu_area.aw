@@ -22,9 +22,10 @@
 @property show_name type=checkbox rel=1 ch_value=1 
 @caption Kas n&auml;idata nime
 
-*/
+@reltype ROOT_FOLDER value=1 clid=CL_MENU
+@caption root kataloog
 
-define("RELTYPE_ROOT_FOLDER",1);
+*/
 
 class menu_area extends class_base
 {
@@ -60,13 +61,6 @@ class menu_area extends class_base
 			$str = $root_o->name();
 		}
 		return $str;
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_ROOT_FOLDER => "root kataloog",
-		);
 	}
 
 	function callback_pre_save($arr)
@@ -139,7 +133,6 @@ class menu_area extends class_base
 			);
 		}
 
-		dbg::dump($acts);
 		return $acts;
 	}
 

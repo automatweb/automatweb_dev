@@ -46,5 +46,12 @@
             <syslog_type>ST_MENU_AREA</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <ROOT_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>root kataloog</caption>
+            </ROOT_FOLDER>
+      </reltypes>
 </properties>
 
