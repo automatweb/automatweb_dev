@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.2 2002/01/03 18:29:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.3 2002/01/04 15:53:26 duke Exp $
 // object_chain.aw - Objektipärjad
 
 classload("objects");
@@ -124,7 +124,6 @@ class object_chain extends aw_template
 		{
 			foreach($objects as $value)
 			{
-				print "$parent - $value<br>";
 				$this->add_alias($parent,$value);
 			};
 		};
