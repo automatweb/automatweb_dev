@@ -98,7 +98,7 @@ a purpose when "persist_state" is used.
 
 persist_sate - optional, bool, if set to true, the tree tries to remember
 it's state (information about opened and closed nodes) between page loads
-using cookies. If you use this, you absolutely _need_ to specify tree_id
+using cookies. If you want to use this, you absolutely _need_ to specify tree_id
 as well. Defaults to false.
 
 get_branch_func - optional. An action that returns a subtree (contents)
