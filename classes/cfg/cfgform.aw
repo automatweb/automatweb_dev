@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.25 2003/12/03 12:31:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.26 2004/01/13 14:12:20 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -46,11 +46,11 @@
 	@property availprops type=callback callback=callback_gen_avail_props store=no group=avail no_caption=1
 	@caption Kõik omadused
 
-	@property cfg_proplist type=hidden field=meta method=serialize
-	@caption Omadused
+	property cfg_proplist type=hidden field=meta method=serialize
+	caption Omadused
 	
-	@property cfg_groups type=hidden field=meta method=serialize
-	@caption Grupid
+	property cfg_groups type=hidden field=meta method=serialize
+	caption Grupid
 
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
@@ -139,6 +139,12 @@ class cfgform extends class_base
 
 	function _init_properties($class_id)
 	{
+
+		error::throw_if(empty($class_id),(array(
+                        "id" => ERR_ABSTRACT,
+                        "msg" => "this is not a valid config form"
+                )));
+
 		$fl = $this->cfg["classes"][$class_id]["file"];
 		if ($fl == "document")
 		{
@@ -189,17 +195,17 @@ class cfgform extends class_base
 			case "subclass":
 				// do not overwrite subclass if it was not in the form
 				// hum .. this is temporary fix of course. yees --duke
-				if (empty($arr["form_data"]["subclass"]))
+				if (empty($arr["request"]["subclass"]))
 				{
 					$retval = PROP_IGNORE;
 				}
 				// cfg_proplist is in "formdata" only if this a serialized object
 				// being unserialized. for example, if we are copying this object
 				// over xml-rpc
-				elseif ($arr["new"] && empty($arr["form_data"]["cfg_proplist"]))
+				elseif ($arr["new"] && empty($arr["request"]["cfg_proplist"]))
 				{
 					// fool around a bit to get the correct data
-					$subclass = $arr["form_data"]["subclass"];
+					$subclass = $arr["request"]["subclass"];
 
 					// now that's the tricky part ... this thingsbum overrides
 					// all the settings in the document config form
@@ -258,13 +264,13 @@ class cfgform extends class_base
 		
 	function callback_pre_save($arr)
 	{
-		$obj_inst = $arr["obj_inst"];
+		$obj_inst = &$arr["obj_inst"];
 
 		// if we are unzerializing the object, then we need to set the 
 		// subclass as well.
-		if (isset($args["form_data"]["subclass"]))
+		if (isset($arr["request"]["subclass"]))
 		{
-			$obj_inst->set_prop("subclass",$arr["form_data"]["subclass"]);
+			$obj_inst->set_prop("subclass",$arr["request"]["subclass"]);
 		};
 		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
@@ -321,6 +327,7 @@ class cfgform extends class_base
 				"grp_caption" => $this->grplist[$key]["caption"],
 				"grpid" => $key,
 			));
+
 
 			$sc = "";
 			foreach($proplist as $property)
@@ -517,7 +524,7 @@ class cfgform extends class_base
 
 	function add_new_properties($arr)
 	{
-		$target = $arr["form_data"]["target"];
+		$target = $arr["request"]["target"];
 		// first check, whether a group with that id exists
 		$_tgt = $arr["obj_inst"]->meta("cfg_groups");
 		if (isset($_tgt[$target]))
@@ -525,7 +532,7 @@ class cfgform extends class_base
 			$this->_init_cfgform_data($arr["obj_inst"]);
 			// and now I just have to modify the proplist, eh?
 			$prplist = $this->prplist;
-			$mark = $arr["form_data"]["mark"];
+			$mark = $arr["request"]["mark"];
 			if (is_array($mark))
 			{
 				foreach($mark as $pkey => $pval)
@@ -546,12 +553,12 @@ class cfgform extends class_base
 
 	function save_layout($arr)
 	{
-		$subaction = $arr["form_data"]["subaction"];
+		$subaction = $arr["request"]["subaction"];
 		$this->_init_cfgform_data($arr["obj_inst"]);
 		switch($subaction)
 		{
 			case "addgrp":
-				$newgrpname =$arr["form_data"]["newgrpname"];
+				$newgrpname =$arr["request"]["newgrpname"];
 				$grpid = strtolower(preg_replace("/\W/","",$newgrpname));
 				if ((strlen($grpid) > 2) && empty($this->grplist[$grpid]))
 				{
@@ -564,7 +571,7 @@ class cfgform extends class_base
 				break;
 
 			case "delete":
-				$mark = $arr["form_data"]["mark"];
+				$mark = $arr["request"]["mark"];
 				$prplist = $this->prplist;
 				if (is_array($mark))
 				{
@@ -577,8 +584,8 @@ class cfgform extends class_base
 				break;
 
 			case "move":
-				$mark = $arr["form_data"]["mark"];
-				$target = $arr["form_data"]["target"];
+				$mark = $arr["request"]["mark"];
+				$target = $arr["request"]["target"];
 				$prplist = $this->prplist;
 				if (is_array($mark))
 				{
@@ -603,24 +610,24 @@ class cfgform extends class_base
 				};
 				*/
 
-				if (is_array($arr["form_data"]["prpnames"]))
+				if (is_array($arr["request"]["prpnames"]))
 				{
-					foreach($arr["form_data"]["prpnames"] as $key => $val)
+					foreach($arr["request"]["prpnames"] as $key => $val)
 					{
 						$prplist[$key]["caption"] = $val;
-						$prplist[$key]["ord"] = $arr["form_data"]["prop_ord"][$key];
+						$prplist[$key]["ord"] = $arr["request"]["prop_ord"][$key];
 					};
 				};
 
-				if (is_array($arr["form_data"]["prpconfig"]))
+				if (is_array($arr["request"]["prpconfig"]))
 				{
-					foreach($arr["form_data"]["xconfig"] as $key => $val)
+					foreach($arr["request"]["xconfig"] as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
 						{
-							if ($val2 != $arr["form_data"]["prpconfig"][$key][$key2])
+							if ($val2 != $arr["request"]["prpconfig"][$key][$key2])
 							{
-								$prplist[$key][$key2] = $arr["form_data"]["prpconfig"][$key][$key2];
+								$prplist[$key][$key2] = $arr["request"]["prpconfig"][$key][$key2];
 							};
 						};
 					};
@@ -678,12 +685,12 @@ class cfgform extends class_base
 	function update_groups($arr)
 	{
 		$grplist = $this->grplist;
-		if (is_array($arr["form_data"]["grpcaption"]))
+		if (is_array($arr["request"]["grpcaption"]))
 		{
-			foreach($arr["form_data"]["grpcaption"] as $key => $val)
+			foreach($arr["request"]["grpcaption"] as $key => $val)
 			{
 				$grplist[$key] = array("caption" => $val);
-				$styl = $arr["form_data"]["grpstyle"][$key];
+				$styl = $arr["request"]["grpstyle"][$key];
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;

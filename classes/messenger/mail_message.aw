@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.19 2003/12/03 12:34:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.20 2004/01/13 14:11:28 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -112,6 +112,14 @@ class mail_message extends class_base
                 $msgdata = $msgr->drv_inst->fetch_message(array(
                                 "msgid" => $arr["request"]["msgid"],
                 ));
+
+		//var_dump($msgdata);
+
+		if (empty($msgdata))
+		{
+			print "couldn't retrieve message " . $arr["request"]["msgid"] . ", perhaps it has been deleted or moved?<bR>";
+			die();
+		};
 
 		// kui ma nüüd vastan, siis ....
 		if ($this->act == "reply")
@@ -261,7 +269,7 @@ class mail_message extends class_base
 					//"cc" => $cc,
 					"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
 				));
-                        	$this->awm->htmlbodyattach(array("data"=>$msg));
+                        	$this->awm->htmlbodyattach(array("data"=>nl2br($msg)));
                 	}
 			else
 			{
@@ -284,7 +292,6 @@ class mail_message extends class_base
                                 "subject" => $arr["request"]["name"],
                                 "message" => $this->awm->bodytext,
                         ));
-
 
                         //mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
 
@@ -343,6 +350,12 @@ class mail_message extends class_base
 				else
 				{
 					$data["value"] = htmlspecialchars($this->msgdata["to"]);
+				};
+
+				if ($this->act == "reply")
+				{
+					$data["type"] == "textbox";
+					$data["value"] = $this->msgdata["to"];
 				};
 
 				if ($this->state == "show")

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.33 2003/12/05 13:36:05 duke Exp $
+// $Id: cfgutils.aw,v 1.34 2004/01/13 14:12:20 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -204,7 +204,7 @@ class cfgutils extends aw_template
 
 		$do_filter = false;
 
-		if (isset($filter) && is_array($filter))
+		if (isset($filter) && is_array($filter) && sizeof($filter) > 0)
 		{
 			$do_filter = true;
 			if (in_array("group",array_keys($filter)) && strlen($filter["group"]) == 0 )
@@ -246,20 +246,20 @@ class cfgutils extends aw_template
 
 	function load_properties($args = array())
 	{
-		$this->_init_clist();
 		extract($args);
 		// this is the stuff we need to cache
 		// maybe I should implement some kind of include for properties?
-		$filter = isset($args["filter"]) ? $args["filter"] : "";
+		$filter = isset($args["filter"]) ? $args["filter"] : array();
+		$this->_init_clist();
+		if (empty($file))
+		{
+			$file = $this->clist[$clid];
+		};
 		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
 			"file" => "class_base",
 			"filter" => $filter,
 		));
-		if (empty($file))
-		{
-			$file = $this->clist[$clid];
-		};
 
                 // full cavity search
 		/*
@@ -325,7 +325,8 @@ class cfgutils extends aw_template
 		{
 			$this->tableinfo = $tmp;
 		};
-		return array_merge($coreprops,$objprops);
+		$rv = array_merge($coreprops,$objprops);
+		return $rv;
 	}
 
 	function parse_cfgform($args = array())

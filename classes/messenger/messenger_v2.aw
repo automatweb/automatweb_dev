@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.23 2003/12/08 08:02:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.24 2004/01/13 14:11:28 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -337,7 +337,6 @@ class messenger_v2 extends class_base
 
 	function _format($str,$flag)
 	{
-		//$str = wordwrap($str,20,"\n",1);
 		return ($flag) ? $str : "<strong>$str</strong>";
 
 
@@ -605,9 +604,14 @@ class messenger_v2 extends class_base
 
 	}
 
+	////
+	// !Creates hash tables from connected filter objects to make any following
+	// processing of messages easier.
 	function preprocess_filters()
 	{
-		$conns = $this->msgobj->connections_from(array("type" => RELTYPE_RULE));
+		$conns = $this->msgobj->connections_from(array(
+			"type" => RELTYPE_RULE,
+		));
 
 		if (sizeof($conns) == 0)
 		{
