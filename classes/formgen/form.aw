@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.4 2002/11/07 22:57:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.6 2002/11/14 10:15:51 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -58,6 +58,7 @@ class form extends form_base
 			"id" => $alias["target"],
 			"form_action" => "/reforb.".$this->cfg["ext"],
 			"load_entry_data" => $GLOBALS["load_entry_data"],
+			"load_entry_data_form" => $GLOBALS["load_entry_data_form"],
 			"load_chain_data" => $GLOBALS["load_chain_data"]
 		));
 
@@ -916,7 +917,14 @@ class form extends form_base
 		{
 			if ($load_entry_data)
 			{
-				$lf_fid = $this->get_form_for_entry($load_entry_data);
+				if ($load_entry_data_form)
+				{
+					$lf_fid = $load_entry_data_form;
+				}
+				else
+				{
+					$lf_fid = $this->get_form_for_entry($load_entry_data);
+				}
 				$lf_fm = get_instance("formgen/form");
 				$lf_fm->load($lf_fid);
 				$lf_fm->load_entry($load_entry_data);
@@ -929,7 +937,12 @@ class form extends form_base
 					{
 						foreach($els as $el)
 						{
-							$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], false);
+							$usr_val = false;
+							if ($lf_el->get_type() == "textbox" && $el->get_type() == "listbox")
+							{
+								$usr_val = true;
+							}
+							$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], $usr_val);
 						}
 					}
 				}
@@ -5874,7 +5887,7 @@ class form extends form_base
 
 	function get_last_search_chain_entry_ids()
 	{
-		return is_array($this->matched_chain_entries) ? $this->matched_chain_entries : array();
+		return is_array($this->matched_chain_entries) ? array_unique($this->matched_chain_entries) : array();
 	}
 
 	//// 
