@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.34 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.35 2001/09/18 00:21:18 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -785,14 +785,14 @@ class shop extends shop_base
 		if ($order_forms["current_cnt"] > 0 || $num > 0)
 		{
 			$pe = "";
-			foreach($order_forms["entries"] as $ar)
+			foreach($order_forms["entries"] as $a_id => $ar)
 			{
 				$f->reset();
 				$prev_entry = $f->show(array("id" => $ar["form"], "entry_id" => $ar["entry"], "op_id" => $order_forms["order"][$num]["op_id"]));
 				$this->vars(array(
 					"entry" => $prev_entry,
 					"chentry" => $this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"],"eid" => $ar["entry"])),
-					"delentry" => $this->mk_my_orb("del_pass_entry", array("shop_id" => $shop_id, "section" => $section, "num" => $ar["num"], "eid" => $ar["entry"]))
+					"delentry" => $this->mk_my_orb("del_pass_entry", array("shop_id" => $shop_id, "section" => $section, "num" => $a_id, "eid" => $ar["entry"],"c_num" => $num))
 				));
 				$pe.=$this->parse("prev_entry");
 			}
@@ -1567,7 +1567,7 @@ class shop extends shop_base
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
 		$order = $this->db_next();
 
-		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id");
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id ORDER BY item_type_order");
 		while ($row = $this->db_next())
 		{
 			$o_items[$row["item_id"]] = $row;
@@ -2380,6 +2380,8 @@ class shop extends shop_base
 	{
 		extract($arr);
 
+		$GLOBALS["order_forms"] = array();
+
 		// load the entry from the database
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
 		$order = $this->db_next();
@@ -2504,7 +2506,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$GLOBALS["shopping_cart"] = array();
-
+		$GLOBALS["order_forms"] = array();
 		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));
 	}
 
@@ -2512,6 +2514,10 @@ class shop extends shop_base
 	{
 		extract($arr);
 		global $order_forms;
+		if ($c_num == $order_forms["entries"][$num]["num"])
+		{
+			$order_forms["current_cnt"] = max($order_forms["current_cnt"]-1,0);
+		}
 		unset($order_forms["entries"][$num]);
 		header("Location: ".$this->mk_my_orb("order", array("shop_id" => $shop_id, "section" => $section,"num" => 0)));
 	}
