@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.171 2002/11/12 17:59:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.172 2002/11/13 16:04:18 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 /*
@@ -810,11 +810,14 @@ class menuedit extends aw_template
 
 		$popups = $this->build_popups();
 
-		$this->set_object_metadata(array(
-			"oid" => $section,
-			"key" => "metaref",
-			"value" => $this->metaref,
-		));
+		if (is_array($this->metaref) && (sizeof($this->metaref) > 0))
+		{
+			$this->set_object_metadata(array(
+				"oid" => $section,
+				"key" => "metaref",
+				"value" => $this->metaref,
+			));
+		};
 
 		$retval = $this->parse();
 		return $this->parse() . $popups;
@@ -2918,7 +2921,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$template_sets = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
 
 		$this->vars(array(
-			"name"				=> htmlentities($row["name"]), 
+			"name"				=> str_replace("\"","&quot;",$row["name"]), 
 			"comment"			=> $row["comment"], 
 			"alias"				=> $row["alias"],
 			"created"			=> $this->time2date($row["created"],2),
