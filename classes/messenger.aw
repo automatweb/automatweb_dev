@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.105 2002/11/06 09:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.106 2002/11/08 12:22:04 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -288,8 +288,11 @@ class messenger extends menuedit_light
 	function count_unread($args = array())
 	{
 		$inbox = ($this->user["msg_inbox"]) ? $this->user["msg_inbox"] : $this->user["home_folder"];
-		$count = $this->driver->count_unread(array("folder" => $inbox));
-		return $count;
+		if (is_object($this->driver))
+		{
+			$count = $this->driver->count_unread(array("folder" => $inbox));
+		};
+		return (int)$count;
 	}
 
 
