@@ -1,13 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.181 2004/05/20 08:13:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.182 2004/06/10 11:15:31 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
-/*
-
-EMIT_MESSAGE(MSG_EVENT_ADD);
-
-*/
-
 /*
 
 EMIT_MESSAGE(MSG_EVENT_ADD);	
@@ -320,11 +314,32 @@ class planner extends class_base
 				};
 				$awt->start("calendar-project-event-loader");
 				// XXX: get_events_from_projects should use current date range as well
+				/*
 				$event_ids = $event_ids + $prj->get_events_from_projects(array(
 					"user_ids" => $user_ids,
 					"project_id" => aw_global_get("project"),
 					"type" => "my_projects",
 				));
+				*/
+				$tmp = $prj->get_events_from_projects(array(
+					"user_ids" => $user_ids,
+					"project_id" => aw_global_get("project"),
+					"type" => "my_projects",
+				));
+
+				if (!is_array($tmp))
+				{
+					$tmp = array($tmp);
+				};
+
+				if (aw_global_get("project"))
+				{
+					$folders = $tmp;
+				}
+				else
+				{
+					$folders = $folders + $tmp;
+				};
 				$awt->stop("calendar-project-event-loader");
 			};
 		};
@@ -334,13 +349,16 @@ class planner extends class_base
 		$rv = array();
 		// a project is selected, but no events in range? Just return
 		// an empty array!
-		if ($project && sizeof($event_ids) == 0)
+		/*
+		if ($project && sizeof($folders) == 0)
 		{
 			return $rv;
 		};
+		*/
 
 		$eidstr = $parstr = "";
 
+		/*
 		if (sizeof($event_ids) > 0)
 		{
 			$eidstr = " objects.oid IN (" . join(",",$event_ids) . ")";
@@ -353,6 +371,7 @@ class planner extends class_base
 				$eidstr = " OR" . $eidstr;
 			};
 		};
+		*/
 
 		if (sizeof($folders) > 0)
 		{
@@ -379,18 +398,19 @@ class planner extends class_base
 
 		// if events from a project were requested, then include events
 		// from that projects only - id's are in event_ids array()
-		if ($project)
-		{
-			$q .= $eidstr;
-		}
+		
+		//if ($project)
+		//{
+		//	$q .= $eidstr;
+		//}
 		// include events from all folders and all projects
-		else
-		{
+		//else
+		//{
 			if ($parstr)
 			{
 				$q .= $parprefix . "(" . $parstr . $eidstr . ")";
 			};
-		}
+		//}
 
 		$awt->start("calendar-initial-event-list");
 
@@ -409,8 +429,11 @@ class planner extends class_base
 
 		$fldstr = join(",",$folders);
 
+		global $awt;
+
 		if (aw_ini_get("calendar.recurrence_enabled") == 1)
 		{
+			$awt->start("recurrence-calc");
 			// now collect recurrence data
 			$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
 				WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
@@ -434,6 +457,7 @@ class planner extends class_base
 				};
 				$this->recur_info[$row["id"]][] = $row["recur_start"];
 			};
+			$awt->stop("recurrence-calc");
 		};
 		return $rv;
 	}
@@ -457,12 +481,14 @@ class planner extends class_base
 
 		$obj = new object($id);
 		$this->id = $id;
-
+		
+		global $awt;
+		$awt->start("get-event-list");
 		$events = $this->get_event_list($args);
+		$awt->stop("get-event-list");
 		$reflist = array();
 		$this->events_done = true;
 		$rv = array();
-		global $awt;
 		$awt->start("calendar-full-event-list");
 		$this->rec = array();
 		// that eidlist thingie is no good! I might have events out of my range which I still need to include
@@ -471,43 +497,41 @@ class planner extends class_base
 		{
 			// fuck me. plenty of places expect different data from me .. until I'm
 			// sure that nothing breaks, I can't remove this
-			$row = $event + $this->get_object($event["id"]);
+			$awt->start("get-edit-link");
+			$of = new object($event["id"]);
+			$row = $event + $of->properties();
+			$awt->stop("get-edit-link");
 			$rec = array();
 			$gx = date("dmY",$event["start"]);
 			$row["link"] = $this->get_event_edit_link(array(
 				"cal_id" => $this->id,
 				"event_id" => $event["id"],
 			));
-
-			$eo = new object($row["oid"]);
+	
+			$eo = $of;
 			if ($row["status"] == 0)
 			{
 				continue;
 			};
+			$awt->start("hmm");
 			if ($row["brother_of"] != $row["oid"])
 			{
-				$this->save_handle();
-				$real_obj = $this->get_object($row["brother_of"]);
-				if ($real_obj["status"] != 0)
-				{
-					$eo = $eo->get_original();
-				};
-				$row["name"] = $real_obj["name"];
-				$row["comment"] = $real_obj["comment"];
-				$row["status"] = $real_obj["status"];
-				$row["flags"] = $real_obj["flags"];
-				$this->restore_handle();
+				$real_obj = $of->get_original();
+				$eo = $real_obj;
+				$row["name"] = $real_obj->name();
+				$row["comment"] = $real_obj->comment();;
+				$row["status"] = $real_obj->status();
+				$row["flags"] = $real_obj->flags();
 			};
 
-			if ($row["status"] != 0)
+			$row["event_icon_url"] = icons::get_icon_url($eo);
+			$rv[$gx][$row["brother_of"]] = $row;
+			if ($args["flatlist"])
 			{
-				$row["event_icon_url"] = icons::get_icon_url($eo);
-				$rv[$gx][$row["brother_of"]] = $row;
-				if ($args["flatlist"])
-				{
-					$reflist[] = &$rv[$gx][$row["brother_of"]];
-				};
+				$reflist[] = &$rv[$gx][$row["brother_of"]];
 			};
+
+			$awt->stop("hmm");
 		};
 		$awt->stop("calendar-full-event-list");
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day"));
@@ -553,7 +577,6 @@ class planner extends class_base
 	{
 		// yuck, what a mess
 		$obj = $args["obj_inst"];
-		//$obj = $this->get_object($args["request"]["id"]);
 		$meta = $obj->meta();
 		
 		$event_folder = $obj->prop("event_folder");
@@ -659,108 +682,6 @@ class planner extends class_base
 				};
 			};
 		}
-		else/*if ($event_cfgform)*/
-		{
-			aw_session_set('org_action',aw_global_get('REQUEST_URI'));
-			$ev_data = $this->get_object($event_id);
-			if ($ev_data["meta"]["cfgform_id"])
-			{
-				$event_cfgform = $ev_data["meta"]["cfgform_id"];
-			};
-			$frm = $this->get_object($event_cfgform);
-			// events are documents
-			classload("doc");
-			$t = new doc();
-			$t->cfgform = $frm;
-			$t->cfgform_id = $frm["oid"];
-			$t->init_class_base();
-
-			$emb_group = "general";
-			if ($this->event_id && $args["request"]["cb_group"])
-			{
-				$emb_group = $args["request"]["cb_group"];
-			};
-
-			$this->emb_group = $emb_group;
-
-			$t->role = "obj_edit";
-			
-			$obj_to_load = $this->event_id;
-
-			if ($ev_data["class_id"] == CL_BROTHER_DOCUMENT)
-			{
-				$obj_to_load = $ev_data["brother_of"];
-			};
-
-			$t->id = $obj_to_load;
-
-
-
-			// now, I have a certain amount of groups that should get 
-			// get their contents from this class ... or perhaps not?
-
-			// well, there still are connections you know. just the special
-			// interface for creating them is located inside the planner class ..
-
-			// dunno, doesn't look like a very good idea but lets see how
-			// it works out
-
-			$all_props = $t->get_active_properties(array(
-				"group" => $emb_group,
-			));
-				
-			if ($this->event_id)
-			{
-				$t->obj_inst = $event_obj;
-				//$t->id = $obj_to_load;
-			}
-			else
-			{
-				$t->obj_inst = new object;
-			};
-
-			// see gruppide tegemine on vaja kuidagi paremini tööle saada junõu
-			$xprops = array();
-			$this->emb_group = $emb_group;
-			$bid = $obj->brother_of();
-			$t->inst->set_calendars(array($bid));
-			foreach($all_props as $sk => $st)
-			{
-				if ($st["richtext"])
-				{
-					unset($all_props[$sk]["richtext"]);
-				};
-			};
-			//$t->inst->set_calendars(array($obj->id()));
-			$xprops = $t->parse_properties(array(
-					"properties" => $all_props,
-					"name_prefix" => "emb",
-			));
-			$resprops = array();
-				$resprops["capt"] = $this->do_group_headers(array(
-					"t" => &$t,
-				));
-			// bad, I need a way to detect the default group. 
-			// but for now this has to do.
-			//$resprops["capt"] = $tmp;
-			foreach($xprops as $key => $val)
-			{
-				$resprops[$key] = $val;
-			};
-
-			$resprops[] = array("type" => "hidden","name" => "emb[class]","value" => "doc");
-			$resprops[] = array("type" => "hidden","name" => "emb[action]","value" => "submit");
-			$resprops[] = array("type" => "hidden","name" => "emb[group]","value" => $emb_group);
-			if ($obj_to_load)
-			{
-				$resprops[] = array("type" => "hidden","name" => "emb[id]","value" => $obj_to_load);	
-			}
-			else
-			{
-				$resprops[] = array("type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);	
-			};
-
-		};
 		return $resprops;
 	}
 
@@ -780,17 +701,7 @@ class planner extends class_base
 			$t = get_instance($clfile);
 			$t->init_class_base();
 		}
-		else
-		{
-			$obj = $this->get_object($args["obj_inst"]->id());
-			$event_cfgform = $obj["meta"]["event_cfgform"];
-			$frm = $this->get_object($event_cfgform);
-			classload("doc");
-			$t = new doc();
-			$is_doc = true;
-			// nini. kui embedded object on document, siis saab vendade loomine special meaningu
-			// sest need tehakse siis vendadega. otherwise, 
-		};
+
 		if (is_array($emb))
 		{
 			if (empty($emb["id"]))
@@ -832,7 +743,6 @@ class planner extends class_base
 		// aga kuhu kurat ma sellisel juhul selle sündmuse salvestan?
 		// äkki ma saan seda nii teha, et isiku juures üldse sündmust ei salvestata,
 		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
-
 
 		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
 		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
@@ -915,12 +825,11 @@ class planner extends class_base
                 // it has.
                 if ($alias["relobj_id"])
                 {
-                        $relobj = $this->get_object(array(
-                                "oid" => $alias["relobj_id"],
-                                "clid" => CL_RELATION,
-                        ));
+			$relobj = new object($alias["relobj_id"]);
+			$tmp = $relobj->meta("values");
+			$overrides = $tmp["CL_PLANNER"];
 
-                        $overrides = $relobj["meta"]["values"]["CL_PLANNER"];
+                        //$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
                         if (is_array($overrides))
                         {
                                 $this->overrides = $overrides;
@@ -1150,20 +1059,14 @@ class planner extends class_base
 	function event_repeaters($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		/*
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("xxx"),
-			"vars" => array("id" => $obj["parent"]),
-		));
-		*/
+		$obj = new object($id);
+		$par_obj = new object($obj->parent());
 		$ce = get_instance("calendar/cal_event");
 		$html = $ce->repeaters(array(
 			"id" => $id,
 			"cycle" => $cycle,
 		));
-		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
+		$this->mk_path($par_obj->parent(),"Kalender / Muuda sündmust");
 		return $menubar . $html;
 	}
 
@@ -1252,6 +1155,8 @@ class planner extends class_base
 
 			// XXX: check acl and only show that button, if the user actually _can_
 			// edit the calendar
+
+			/*
 			$toolbar->add_button(array(
 				"name" => "delete",
 				"tooltip" => "Kustuta märgitud sündmused",
@@ -1259,23 +1164,39 @@ class planner extends class_base
 				"img" => "delete.gif",
 				"class" => "menuButton",
 			));
+			*/
 
 			if ($arr["obj_inst"]->prop("my_projects") == 1)
 			{
 				$toolbar->add_separator();
 
 				$prj_opts = array("" => "--filtreeri projekti järgi--");
-
-				$users = get_instance("users");
-				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-				$conns = $user->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-					"sort_by" => "from.name",
+			
+				$owners = $arr["obj_inst"]->connections_from(array(
+					"type" => RELTYPE_CALENDAR_OWNERSHIP,
 				));
 
-				foreach($conns as $conn)
+				// ignore projects, if there are no users connected to this calendar
+				if (sizeof($owners) == 0)
 				{
-					$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
+				}
+				else
+				{
+					$user_ids = array();
+
+					foreach($owners as $owner)
+					{
+						$user_obj = $owner->to();
+						$conns = $user_obj->connections_to(array(
+							"from.class_id" => CL_PROJECT,
+							"sort_by" => "from.name",
+						));
+
+						foreach($conns as $conn)
+						{
+							$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
+						};
+					};
 				};
 
 				$toolbar->add_cdata("&nbsp;&nbsp;".html::select(array(
@@ -1350,12 +1271,15 @@ class planner extends class_base
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
 
+		global $awt;
+		$awt->start("init-event-source");
 		$events = $this->_init_event_source(array(
 			"id" => $arr["request"]["id"],
 			"type" => $range["viewtype"],
 			"flatlist" => 1,
 			"date" => date("d-m-Y",$range["timestamp"]),
 		));
+		$awt->stop("init-event-source");
 
 		foreach($events as $event)
 		{
