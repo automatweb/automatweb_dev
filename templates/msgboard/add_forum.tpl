@@ -34,10 +34,10 @@
 <td class="fgtitle">Hinnatav:</td><td class="fform"><input type="checkbox" name="rated" value=1 {VAR:rated}></td>
 </tr>
 <tr>
-<td class="fgtitle">Teemasid lehel:</td><td class="fform"><input type="text" name="topicsonpage" size="4" value="{VAR:topicsonpage}"></td>
+<td class="fgtitle">Teemasid lehel:</td><td class="fform"><select name="topicsonpage">{VAR:topicsonpage}</select> </td>
 </tr>
 <tr>
-<td class="fgtitle">Kommentaare lehel:</td><td class="fform"><input type="text" name="onpage" size="4" value="{VAR:onpage}"></td>
+<td class="fgtitle">Kommentaare lehel:</td><td class="fform"><select name="onpage">{VAR:onpage}</select></td>
 </tr>
 <tr>
 <td class="fgtitle" colspan=2 align=center><input type='submit' VALUE='{VAR:LC_MSGBOARD_SAVE}' CLASS="small_button"></td>
