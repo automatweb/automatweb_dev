@@ -1094,6 +1094,10 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi().")),\n";
 		$ret .= $this->_gi()."\"lang_id\" => array(),\n";
 		$ret .= $this->_gi()."\"sort_by\" => (\$parent_obj->prop(\"sort_by_name\") ? \"objects.name\" : \"objects.jrk,objects.created\"),\n";
+		if (aw_ini_get("menuedit.objects_from_other_sites") == 1)
+		{
+			$ret .= $this->_gi()."\"site_id\" => array(),\n";
+		}
 		return $ret;
 	}
 
