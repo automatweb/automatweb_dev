@@ -24,23 +24,23 @@
 	</search>
 	<contacts>
 		<caption>Kontaktid</caption>
-		<link>?class=messenger&amp;action=contacts</link>
+		<link>?class=contacts</link>
 		<sublinks>
 			<list>
 				<caption>Nimekiri</caption>
-				<link>?class=messenger&amp;action=contacts</link>
+				<link>?class=contacts</link>
 			</list>
 			<search>
 				<caption>Otsi</caption>
-				<link>?class=messenger&amp;action=search_contact</link>
+				<link>?class=contacts&amp;action=search</link>
 			</search>
 			<newgroup>
 				<caption>Uus grupp</caption>
-				<link>?class=messenger&amp;action=add_contact_group&amp;{VAR:folder}</link>
+				<link>?class=contacts&amp;action=add_group&amp;{VAR:folder}</link>
 			</newgroup>
 			<newcontact>
 				<caption>Uus kontakt</caption>
-				<link>?class=messenger&amp;action=add_contact&amp;{VAR:folder}</link>
+				<link>?class=messenger&amp;action=add&amp;{VAR:folder}</link>
 			</newcontact>
 		</sublinks>
 	</contacts>
