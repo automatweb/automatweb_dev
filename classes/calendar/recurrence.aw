@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.2 2004/03/09 12:09:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.3 2004/03/17 13:47:07 duke Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -8,41 +8,40 @@
 @default table=objects
 @default group=general
 
-@property start type=date_select table=calendar2recurrence 
+form=+emb syntax means, that this thing should be in all the default forms + 
+the emb form. The latter I can then use for embedding cases
+@property start type=date_select table=calendar2recurrence form=+emb 
 @caption Alates
 
-@property recur_type type=select field=meta method=serialize
+@property recur_type type=select field=meta method=serialize form=+emb
 @caption Korduse tüüp
 
-@property interval_daily type=textbox size=2 field=meta method=serialize
+@property interval_daily type=textbox size=2 field=meta method=serialize form=+emb
 @caption Iga X päeva tagant
 
-@property interval_weekly type=textbox size=2 field=meta method=serialize
+@property interval_weekly type=textbox size=2 field=meta method=serialize form=+emb
 @caption Iga X nädala tagant
 
-@property interval_monthly type=textbox size=2 field=meta method=serialize
+@property interval_monthly type=textbox size=2 field=meta method=serialize form=+emb
 @caption Iga X kuu tagant
 
-@property interval_yearly type=textbox size=2 field=meta method=serialize
+@property interval_yearly type=textbox size=2 field=meta method=serialize form=+emb
 @caption Iga X aasta tagant
 
-property opt1 type=text subtitle=1
-caption se seadistused
-
-@property weekdays type=chooser multiple=1 field=meta method=serialize
+@property weekdays type=chooser multiple=1 field=meta method=serialize form=+emb
 @caption Nendel päevadel
 
-@property month_days type=textbox field=meta method=serialize
+@property month_days type=textbox field=meta method=serialize form=+emb
 @caption Kindlatel päevadel
 
-@property month_rel_weekdays type=chooser multiple=1 field=meta method=serialize
+@property month_rel_weekdays type=chooser multiple=1 field=meta method=serialize form=+emb
 @caption Valitud nädalapäevadel
 
-@property month_weekdays type=chooser multiple=1 field=meta method=serialize
+@property month_weekdays type=chooser multiple=1 field=meta method=serialize form=+emb
 @caption Nädalapäevad
 
-// lõppu per-se ei ole. Kuigi selle võib määrata. Igal juhul on see optional
-@property end type=date_select table=calendar2recurrence
+// lõppu per-se ei ole. Kuigi selle võib määrata. Igal juhul on see optional 
+@property end type=date_select table=calendar2recurrence form=+emb
 @caption Kuni
 
 @property test type=text store=no group=test
@@ -51,15 +50,6 @@ caption se seadistused
 @groupinfo test caption=Test
 
 @tableinfo calendar2recurrence index=obj_id master_table=objects master_index=brother_of
-
-// recurrence always has a beginning and an end.
-// where do I save those?
-
-// do I need fast access to those? Probably not
-
-// the fact is, I need a relation type to bind a recurrence to an event
-// and then... if and when I do that, I need to do some fast math
-// compensate
 
 // the reason I need a separate table for saving recurrence information is search.
 // Searching events should not read in all the existing events and then do some math
@@ -149,10 +139,10 @@ class recurrence extends class_base
 
 			case "recur_type":
 				$data["options"] = array(
-					RECUR_DAILY => "daily",
-					RECUR_WEEKLY => "weekly",
-					RECUR_MONTHLY => "monthly",
-					RECUR_YEARLY => "yearly",
+					RECUR_DAILY => "päev",
+					RECUR_WEEKLY => "nädal",
+					//RECUR_MONTHLY => "monthly",
+					RECUR_YEARLY => "aasta",
 				);
 				break;
 
@@ -318,6 +308,20 @@ class recurrence extends class_base
 	}	
 
 	////
+	// !Sets a name for the object if one is not specified (embed forms)
+	function callback_pre_save($arr)
+	{
+		$name = $arr["obj_inst"]->name();
+		if (empty($name))
+		{
+			$new_name = date("Y/m/d",$arr["obj_inst"]->prop("start"));
+			$new_name .= " - ";
+			$new_name .= date("Y/m/d",$arr["obj_inst"]->prop("end"));
+			$arr["obj_inst"]->set_name($new_name);
+		};
+	}
+
+	////
 	// !Update recurrence information
 	function callback_post_save($arr)
 	{
@@ -370,8 +374,6 @@ class recurrence extends class_base
 				"interval" => $arr["obj_inst"]->prop("interval_yearly"),
 			));
 		};
-
-		//var_dump($rx);
 
 		if (is_array($rx) && sizeof($rx) > 0)
 		{
