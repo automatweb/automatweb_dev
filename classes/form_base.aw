@@ -1,5 +1,5 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.1 2001/05/19 23:35:04 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -140,7 +140,7 @@ class form_base extends aw_template
 			$this->arr[rows] = 0;
 		}
 		$this->db_query("UPDATE forms SET content = '$contents' , rows = ".$this->arr[rows]." , cols = ".$this->arr[cols]." WHERE id = ".$this->id);
-		$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name");
+		$this->_log("form","Muutis formi $this->name");
 	}
 
 	////

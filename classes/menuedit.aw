@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.2 2001/05/19 23:28:22 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = array(
@@ -1061,13 +1062,13 @@ classload("defs");
 				$com = $all_menus ? "all_menus" : serialize($sets);
 				$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
 				$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
-				$this->log_action($GLOBALS["uid"], "promo", "Muutis promo kasti $title");
+				$this->_log("promo", "Muutis promo kasti $title");
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent,"name" => $title,"class_id" => CL_PROMO,"comment" => $all_menus ? "all_menus" : serialize($sets),"status" => 1,"last" => $type));
 				$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
-				$this->log_action($GLOBALS["uid"], "promo", "Lisas promo kasti $title");
+				$this->_log("promo", "Lisas promo kasti $title");
 			}
 			return $id;
 		}

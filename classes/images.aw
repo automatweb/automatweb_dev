@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.2 2001/05/19 23:32:13 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -239,7 +240,7 @@ class db_images extends aw_template {
 				$p_oid = $this->register_object($oid,$pname,6,"$comment");
 				global $link;
 				$this->db_query("INSERT INTO images(id,file,idx,link,newwindow) VALUES($p_oid, '$fname.$ext' , '$idx','$link','$newwindow')");
-				$this->log_action($GLOBALS["uid"],"image","Muutis pilti $p_oid");
+				$this->_log("image","Muutis pilti $p_oid");
 				return array("id" => $p_oid, "idx" => $idx);
 			} 
 			else 
@@ -351,7 +352,7 @@ class db_images extends aw_template {
 	// kustutame pildi, pildi objekti id j2rgi
 	function del_image_by_oid($oid)
 	{
-		$this->log_action($GLOBALS["uid"],"image","Kustutas pildi $oid");
+		$this->_log("image","Kustutas pildi $oid");
 		$this->delete_object($oid);
 	}
 

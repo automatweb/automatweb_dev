@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.1 2001/05/19 23:35:53 duke Exp $
 
 // form_actions.aw - creates and executes form actions
 
@@ -93,7 +94,7 @@ class form_actions extends form_base
 				}
 				$this->db_query("UPDATE form_actions SET data = '$data' WHERE id = $action_id");
 				$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $action_id","name");
-				$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name actioni $name");
+				$this->_log("form","Muutis formi $this->name actioni $name");
 				return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 			}
 			else
@@ -108,7 +109,7 @@ class form_actions extends form_base
 			// add
 			$action_id = $this->new_object(array("parent" => $id, "name" => $name, "class_id" => CL_FORM_ACTION, "comment" => $comment, "status" => 2));
 			$this->db_query("INSERT INTO form_actions(id,form_id,type) VALUES($action_id, $id, '$type')");
-			$this->log_action($GLOBALS["uid"],"form","Lisas formile $id actioni $name");
+			$this->_log("form","Lisas formile $id actioni $name");
 			return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 		}
 	}
