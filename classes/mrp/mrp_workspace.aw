@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.20 2005/02/09 07:19:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.21 2005/02/11 07:50:45 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -45,6 +45,8 @@
 	@property projects_tree type=text store=no no_caption=1 parent=vsplitbox
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
 
+	@property legend type=text store=no no_caption=1
+
 
 @default group=grp_resources
 	@property resources_toolbar type=toolbar store=no no_caption=1 parent=box
@@ -59,6 +61,17 @@
 	@property chart_navigation type=text store=no no_caption=1
 	@property master_schedule_chart type=text store=no no_caption=1
 
+	@property chart_project_hilight type=select store=no
+	@caption T&otilde;sta esile projekt
+
+	@property chart_project_hilight_gotostart type=checkbox store=no
+	@caption Mine valitud projekti algusesse
+
+	@property chart_start_date type=date_select store=no
+	@caption N&auml;idatava perioodi algus
+
+	@property chart_submit type=submit store=no
+	@caption N&auml;ita
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1 parent=box
@@ -245,6 +258,8 @@ define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
+define ("MRP_COLOUR_OVERDUE", "#FF1111");
 
 class mrp_workspace extends class_base
 {
@@ -361,6 +376,10 @@ class mrp_workspace extends class_base
 			case "projects_list":
 				$this->create_projects_list ($arr);
 				break;
+			case "legend":
+				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;"></span> &Uuml;le t&auml;htaja planeeritud projektid</div>';
+				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;"></span> &Uuml;le t&auml;htaja l&auml;inud</div>';
+				break;
 
 			### users tab
 			case "users_toolbar":
@@ -405,6 +424,36 @@ class mrp_workspace extends class_base
 
 			case "chart_navigation":
 				$prop["value"] = $this->create_chart_navigation ($arr);
+				break;
+			
+			case "chart_start_date":
+				$prop["value"] = empty ($arr["request"]["mrp_chart_start"]) ? $this->get_week_start () : $arr["request"]["mrp_chart_start"];
+				break;
+
+			case "chart_project_hilight":
+				if (is_oid ($arr["request"]["mrp_hilight"]))
+				{
+					$project = obj ($arr["request"]["mrp_hilight"]);
+					$options = array (($arr["request"]["mrp_hilight"]) => $project->name ());
+				}
+				else
+				{
+					$options = array ("0" => " ");
+				}
+				
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => new obj_predicate_not (MRP_STATUS_DELETED),
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+
+				for ($project =& $list->begin (); !$list->end (); $project =& $list->next ())
+				{
+					$options[$project->id ()] = $project->name ();
+				}
+				$prop["options"] = $options;
+				$prop["value"] = $arr["request"]["mrp_hilight"];
 				break;
 
 			case "parameter_timescale_unit":
@@ -485,6 +534,57 @@ class mrp_workspace extends class_base
 		}
 
 		return $retval;
+	}
+
+	function callback_mod_retval ($arr)
+	{
+		### gantt chart start selection
+		$month = (int) $arr["request"]["chart_start_date"]["month"];
+		$day = (int) $arr["request"]["chart_start_date"]["day"];
+		$year = (int) $arr["request"]["chart_start_date"]["year"];
+		$mrp_chart_start = mktime (0, 0, 0, $month, $day, $year);
+		$arr["args"]["mrp_chart_start"] = $mrp_chart_start;
+
+		### gantt chart project hilight
+		if ($arr["request"]["chart_project_hilight"])
+		{
+			$arr["args"]["mrp_hilight"] = $arr["request"]["chart_project_hilight"];
+		}
+
+		### gantt chart start move to project start
+		if ($arr["request"]["chart_project_hilight_gotostart"])
+		{
+			$project_id = false;
+
+			if (is_oid ($arr["args"]["mrp_hilight"]))
+			{
+				$project_id = $arr["args"]["mrp_hilight"];
+			}
+
+			if (is_oid ($arr["request"]["chart_project_hilight"]))
+			{
+				$project_id = $arr["request"]["chart_project_hilight"];
+			}
+
+			if ($project_id)
+			{
+				$list = new object_list (array (
+					"class_id" => CL_MRP_JOB,
+					"state" => new obj_predicate_not (MRP_STATUS_DELETED),
+					"parent" => $this_object->prop ("jobs_folder"),
+					"exec_order" => 1,
+					"project" => $project_id,
+				));
+				$first_job = $list->begin ();
+				$project_start = $first_job->prop ("starttime");
+				$project_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
+				$arr["args"]["mrp_chart_start"] = $project_start;
+			}
+			else
+			{
+				//!!!error: no project selected for hiliting
+			}
+		}
 	}
 
 	function create_resources_tree ($arr = array())
@@ -908,40 +1008,48 @@ class mrp_workspace extends class_base
 		$table->define_field (array (
 			"name" => "customer",
 			"caption" => "Klient",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field (array (
 			"name" => "name",
 			"caption" => "Projekt",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field (array (
 			"name" => "starttime",
 			"caption" => "Materjalide saabumine",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "planned_date",
 			"caption" => "Planeeritud valmimine",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "due_date",
 			"caption" => "Tähtaeg",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "priority",
 			"caption" => "Prioriteet",
+			"chgbgcolor" => "bgcolour_overdue",
 		));
 		$table->define_field(array(
 			"name" => "sales_priority",
 			"caption" => "Müügi prioriteet",
+			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1
 		));
 		$table->define_field(array(
 			"name" => "modify",
 			"caption" => "Ava",
+			"chgbgcolor" => "bgcolour_overdue",
 		));
 
 		$table->define_chooser(array(
@@ -1091,6 +1199,10 @@ class mrp_workspace extends class_base
 
 					### hilight for planned overdue
 					$stat = ($project->prop ("due_date") < $planned_date) ? "<strong>!ylet2htaja</strong>" : "";
+					$bg_colour = ($project->prop ("due_date") < $planned_date) ? MRP_COLOUR_PLANNED_OVERDUE : false;
+
+					### hilight for overdue
+					$bg_colour = ($project->prop ("due_date") <= time ()) ? MRP_COLOUR_OVERDUE : $bg_colour;
 					break;
 
 				case "all":
@@ -1099,21 +1211,29 @@ class mrp_workspace extends class_base
 			}
 
 			### define data for html table row
-			$table->define_data(array(
+			$definition = array(
 				"modify" => html::href(array(
 					"caption" => "Ava",
 					"url" => $change_url,
 					)
 				),
 				"customer" => $customer->name (),
-				"name" => $stat . $project->name (),
+				"name" => $project->name (),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
 				"starttime" => date (MRP_DATE_FORMAT, $project->prop ("starttime")),
 				"due_date" => date (MRP_DATE_FORMAT, $project->prop ("due_date")),
 				"planned_date" => date (MRP_DATE_FORMAT, $planned_date),
 				"project_id" => $project_id,
-			));
+				"bgcolour_overdue" => $bg_colour,
+			);
+
+			if (!$bg_colour)
+			{
+				unset ($definition["bgcolour_overdue"]);
+			}
+
+			$table->define_data($definition);
 		}
 	}
 
@@ -1122,37 +1242,38 @@ class mrp_workspace extends class_base
 		$this_object = $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
 		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
-		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : time ());
-		$range_start = ($columns == 7) ? $this->get_week_start ($range_start) : $range_start;
+		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $this->get_week_start ());
 		$range_end = (int) ($range_start + $columns * 86400);
 		$hilighted_project = (int) ($arr["request"]["mrp_hilight"] ? $arr["request"]["mrp_hilight"] : false);
 		$hilighted_jobs = array ();
 
 		### add row dfn-s, resource names
-		$resource_tree = new object_tree(array(
+		$toplevel_categories = new object_list (array (
+			"class_id" => CL_MENU,
 			"parent" => $this_object->prop ("resources_folder"),
-			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
 		));
-		$list = $resource_tree->to_list();
-		$list->filter (array (
-			"class_id" => array (CL_MRP_RESOURCE, CL_MENU),
-		), true);
 
-		for ($resource =& $list->begin (); !$list->end (); $resource =& $list->next ())
+		for ($category =& $toplevel_categories->begin (); !$toplevel_categories->end (); $category =& $toplevel_categories->next ())
 		{
-			$resource_id = $resource->id ();
-			if ($resource->class_id () == CL_MRP_RESOURCE)
+			$id = $category->id ();
+			$chart->add_row (array (
+				"name" => $id,
+				"type" => "separator",
+			));
+
+			$resource_tree = new object_tree(array(
+				"parent" => $id,
+				"class_id" => array (CL_MRP_RESOURCE),
+			));
+			$resources = $resource_tree->to_list();
+
+			for ($resource =& $resources->begin (); !$resources->end (); $resource =& $resources->next ())
 			{
+				$id = $resource->id ();
 				$chart->add_row (array (
-					"name" => $resource_id,
+					"name" => $id,
 					"title" => $resource->name (),
-					"uri" => html::get_change_url ($resource_id)
-				));
-			}
-			else
-			{
-				$chart->add_row (array (
-					"type" => "separator",
+					"uri" => html::get_change_url ($id)
 				));
 			}
 		}
@@ -1176,22 +1297,22 @@ class mrp_workspace extends class_base
 			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
 		// ));
 		$res = $this->db_fetch_array (
-			"SELECT `planned_length` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 ".
-			"ORDER BY `planned_length` DESC ".
+			"SELECT planned_length FROM mrp_job ".
+			"WHERE state!=" . MRP_STATUS_DELETED . " AND ".
+			"length > 0 ".
+			"ORDER BY planned_length DESC ".
 			"LIMIT  1".
 		"");
 		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
 
 		$jobs = $this->db_fetch_array (
-			"SELECT `oid` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 AND ".
-			"`starttime` > " . ($range_start - $max_length) . " AND ".
-			"`starttime` < " . $range_end . " AND ".
-			"`resource` != 0 AND ".
-			"`resource` IS NOT NULL".
+			"SELECT oid FROM mrp_job ".
+			"WHERE state!=" . MRP_STATUS_DELETED . " AND ".
+			"length > 0 AND ".
+			"starttime > " . ($range_start - $max_length) . " AND ".
+			"starttime < " . $range_end . " AND ".
+			"resource != 0 AND ".
+			"resource IS NOT NULL".
 		"");
 
 		foreach ($jobs as $job)
@@ -1214,7 +1335,7 @@ class mrp_workspace extends class_base
 					"length" => $length,
 					"uri" => aw_url_change_var ("mrp_hilight", $project_id),
 					"title" => $job->name () . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+// /* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
 				);
 
 				$chart->add_bar ($bar);
@@ -1228,6 +1349,7 @@ class mrp_workspace extends class_base
 			"start" => $range_start,
 			"end" => $range_end,
 			"columns" => $columns,
+			"width" => 950,
 		));
 
 		### define columns
@@ -1287,7 +1409,7 @@ class mrp_workspace extends class_base
 		));
 		$start_nav[] = html::href (array (
 			"caption" => "Täna",
-			"url" => aw_url_change_var ("mrp_chart_start", $this->get_week_start (time ())),
+			"url" => aw_url_change_var ("mrp_chart_start", $this->get_week_start ()),
 		));
 		$start_nav[] = html::href (array (
 			"caption" => "Järgmine",
@@ -1299,7 +1421,14 @@ class mrp_workspace extends class_base
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + 5*$period_length)),
 		));
 
-		$navigation = 'Periood: ' . implode (" ", $start_nav) . ' Päevi perioodis: ' . implode (" ", $length_nav);
+		$navigation = '&nbsp;&nbsp;Periood: ' . implode (" ", $start_nav) . ' &nbsp;&nbsp;Päevi perioodis: ' . implode (" ", $length_nav);
+
+		if (is_oid ($arr["request"]["mrp_hilight"]))
+		{
+			$project = obj ($arr["request"]["mrp_hilight"]);
+			$navigation .= ' &nbsp;&nbsp;Valitud projekt: <span style="color: #CC0000;">' . $project->name () . '</span>';
+		}
+
 		return $navigation;
 	}
 
@@ -1388,8 +1517,12 @@ class mrp_workspace extends class_base
 		return $ret;
 	}
 
-	function get_week_start ($time)
+	function get_week_start ($time = NULL)
 	{
+		if (!$time)
+		{
+			$time = time();
+		}
 		$date = getdate ($time);
 		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
 		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
@@ -2387,6 +2520,11 @@ class mrp_workspace extends class_base
 			}
 		}
 		$arr["obj_inst"]->set_meta("sales_pri", $dat);
+	}
+
+	function callback_on_load($arr)
+	{
+		$this->cfgmanager = 17639;
 	}
 }
 
