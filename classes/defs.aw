@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.127 2004/03/09 18:23:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.128 2004/03/11 09:05:14 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -660,6 +660,10 @@ if (!defined("DEFS"))
 	// !this replaces global caches - if you use this function, then cache contents cannot be overriden from the url
 	function aw_cache_get($cache,$key)
 	{
+		if (is_array($key))
+		{
+			return false;
+		}
 		if (!is_array($GLOBALS["__aw_cache"]))
 		{
 			return false;
@@ -673,6 +677,10 @@ if (!defined("DEFS"))
 
 	function aw_cache_set($cache,$key,$val = "")
 	{
+		if (is_array($key))
+		{
+			return false;
+		}
 		if (!is_array($GLOBALS["__aw_cache"]))
 		{
 			$GLOBALS["__aw_cache"] = array($cache => array($key => $val));
