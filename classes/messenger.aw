@@ -1,7 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.119 2003/04/24 07:47:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.120 2003/05/08 17:36:21 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
+
+// TODO: 
+// 1) get rid of the stupid menuedit_light dependency
+// 2) to be continued...
 lc_load("definition");
 
 // sisemine, aw sees saadetud teade
@@ -1366,6 +1370,7 @@ class messenger extends menuedit_light
 			$mllist=get_instance("mailinglist/ml_list");
 			$route_back=$this->mk_my_orb("edit",array("id" => $msg_id));
 			aw_session_set("route_back",$route_back);
+			// scheduleerib kirjade saatmise
 			$url=$mllist->route_post_message(array("id" => $msg_id, "targets" => $lists));
 			Header("Location: $url");
 			die();
@@ -1465,7 +1470,7 @@ class messenger extends menuedit_light
 					"contenttype" => $row2["type"],
 				));
 			};
-			mail("duke@struktuur.ee","att test","attaching $fname");
+			//mail("duke@struktuur.ee","att test","attaching $fname");
 
 		};
 
