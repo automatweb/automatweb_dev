@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.65 2004/09/04 18:46:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.66 2004/09/09 11:04:33 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2978,8 +2978,10 @@ class form_table extends form_base
 					// get the #blah555# notation
 					$str = " ".$als[$aid]." ";
 
+
 					$amgr = get_instance("aliasmgr");
 					$amgr->parse_oo_aliases($this->table_id, $str);
+
 					$tbl .= $str;
 				}
 			}

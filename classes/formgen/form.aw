@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.106 2004/08/25 12:37:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.107 2004/09/09 11:04:32 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2264,7 +2264,8 @@ class form extends form_base
 		// if this is a search form, then search, instead of showing the entered data
 		if ($this->type == FTYPE_SEARCH || $this->type == FTYPE_FILTER_SEARCH)
 		{
-			return $this->show_s_res($arr);
+			$tmp = $this->show_s_res($arr);
+			return $tmp;
 		}
 
 		if (!$no_load_op)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.21 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.22 2004/09/09 11:04:33 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -178,14 +178,23 @@ class form_chain extends form_base
 		$this->read_template("add_chain.tpl");
 
 		$la = get_instance("languages");
-		$lar = $la->listall();
+		$lar = $la->listall(true);
 
 		foreach($lar as $l)
 		{
+			$aru = $this->chain["after_redirect_url"];
+			if (is_array($aru))
+			{
+				$aru = $aru[$l["id"]];
+			}
 			$this->vars(array(
-				"lang_name" => $l["name"]
+				"lang_name" => $l["name"],
+				"lang_id" => $l["id"],
+				"after_redirect_url" => $aru,
+				"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			));
 			$lh.=$this->parse("LANG_H");
+			$rl.=$this->parse("REDIR_LANG");
 		}
 
 		$ch_forms = array();
@@ -295,13 +304,13 @@ class form_chain extends form_base
 			"LANG_H" => $lh,
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
-			"after_redirect_url" => $this->chain["after_redirect_url"],
 			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list()),
 			"has_calendar" => checked($fc["flags"] && OBJ_HAS_CALENDAR),
 			//"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
 			"cal_controllers" => $this->picker($this->chain["cal_controller"],$cntforms),
 			//"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],$ev_entry_forms),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"REDIR_LANG" => $rl
 		));
 		return $this->parse();
 	}
@@ -807,7 +816,13 @@ class form_chain extends form_base
 				else
 				if ($this->chain["after_redirect"] == 1 && $this->chain["gotonext"][$form_id] == 1)
 				{
-					return $this->chain["after_redirect_url"];
+					$url = $this->chain["after_redirect_url"];
+					if (is_array($this->chain["after_redirect_url"]))
+					{
+						$url = $this->chain["after_redirect_url"][aw_global_get("lang_id")];
+					}
+
+					return $url;
 				}
 			}
 		}

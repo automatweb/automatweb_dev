@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.71 2004/08/30 09:29:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.72 2004/09/09 11:04:33 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -153,14 +153,14 @@ class form_element extends aw_template
 
 			$this->vars(array(
 				"cell_id"									=> "element_".$this->id,
-				"cell_text"								=> htmlentities($this->arr["text"]),
-				"cell_name"								=> htmlentities($this->arr["name"]),
-				"cell_type_name"					=> htmlentities($this->arr["type_name"]),
-				"cell_dist"								=> htmlentities($this->arr["text_distance"]),
+				"cell_text"								=> htmlspecialchars($this->arr["text"]),
+				"cell_name"								=> htmlspecialchars($this->arr["name"]),
+				"cell_type_name"					=> htmlspecialchars($this->arr["type_name"]),
+				"cell_dist"								=> htmlspecialchars($this->arr["text_distance"]),
 				"types"										=> $this->picker($this->arr["type"],$this->types),
 				"default_name"						=> "element_".$this->id."_def",
-				"default"									=> htmlentities($this->arr["default"]),
-				"cell_info"								=> htmlentities($this->arr["info"]),
+				"default"									=> htmlspecialchars($this->arr["default"]),
+				"cell_info"								=> htmlspecialchars($this->arr["info"]),
 				"front_checked"						=> checked($this->arr["front"] == 1),
 				"cell_order"							=> $this->arr["ord"],
 				"type"										=> $this->arr["type"],
@@ -735,6 +735,7 @@ class form_element extends aw_template
 					"add_types" => $this->picker($this->arr["def_date_add"],$add_types),
 					"date_now_checked" => checked($this->arr["def_date_type"] == "now"),
 					"date_rel_checked" => checked($this->arr["def_date_type"] == "rel"),
+					"date_none_checked" => checked($this->arr["def_date_type"] == "none"),
 					"date_rel_els" => $this->picker($this->arr["def_date_rel_el"], $d_els),
 					"has_year" => checked($this->arr["has_year"] == 1 || $has_all),
 					"has_month" => checked($this->arr["has_month"] == 1 || $has_all),
@@ -2426,7 +2427,7 @@ class form_element extends aw_template
 				{
 					$html .= html::hidden(array(
 						'name' => $element_name,
-						'value' => htmlentities($tb_val)
+						'value' => htmlspecialchars($tb_val)
 					));
 				}
 				else
@@ -2437,7 +2438,7 @@ class form_element extends aw_template
 					{
 						$html .= html::hidden(array(
 							'name' => $element_name,
-							'value' => htmlentities($tb_val)
+							'value' => htmlspecialchars($tb_val)
 						));
 					}
 				}
@@ -2447,14 +2448,14 @@ class form_element extends aw_template
 					{
 						$tb_val = $this->arr["js_flopper_value"];
 					}
-					$html .= "<input $js_flopper $css $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($tb_val))."\" />$aft\n";
+					$html .= "<input $js_flopper $css $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlspecialchars($tb_val))."\" />$aft\n";
 				}
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $css $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities(round($this->get_val($elvalues),2)))."\" />\n";
+				$html .= "<input $css $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlspecialchars(round($this->get_val($elvalues),2)))."\" />\n";
 				break;
 
 			case "alias":
@@ -2770,6 +2771,11 @@ class form_element extends aw_template
 				if ($this->arr["def_date_type"] == "now")
 				{
 					$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+				}
+				else
+				if ($this->arr["def_date_type"] == "none")
+				{
+					$def = -1;
 				}
 				else
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.27 2004/08/24 13:03:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.28 2004/09/09 11:04:33 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -811,12 +811,25 @@ class form_actions extends form_base
 		else
 		if ($data["op_id"])
 		{
-			$link_url ="\n".$this->mk_my_orb("show_entry", array(
-				"id" => $form->get_id(), 
-				"entry_id" => $entry_id, 
-				"op_id" => $data["op_id"],
-				"section" => ($data["l_section"] > 0 ? $data["l_section"] : NULL)
-			), "form", false, false);
+			if ($form->entry["chain_id"])
+			{
+				$link_url ="\n".$this->mk_my_orb("show", array(
+					"id" => $form->get_chain_for_chain_entry($form->entry["chain_id"]),
+					"form_id" => $form->get_id(), 
+					"entry_id" => $form->entry["chain_id"], 
+					"op_id" => $data["op_id"],
+					"section" => ($data["l_section"] > 0 ? $data["l_section"] : NULL)
+				), "form_chain", false, false);
+			}
+			else
+			{
+				$link_url ="\n".$this->mk_my_orb("show_entry", array(
+					"id" => $form->get_id(), 
+					"entry_id" => $entry_id, 
+					"op_id" => $data["op_id"],
+					"section" => ($data["l_section"] > 0 ? $data["l_section"] : NULL)
+				), "form", false, false);
+			}
 		}
 		$link_url = str_replace('/automatweb','',$link_url);
 
@@ -880,7 +893,7 @@ class form_actions extends form_base
 			if ($data["text_only"])
 			{
 				$l = get_instance("languages");
-				$ct = "";/*"Content-type: text/plain; charset=".$l->get_charset()."\n";*/
+				$ct = "Content-type: text/plain; charset=".$l->get_charset()."\n";
 				$from = $f->get_element_value($data["from_email_el"]);
 				mail($data["email"], $subj, strip_tags($msg_html)."\n".$app."\n".$link_url, "From: $from\n$ct");
 			}
@@ -955,10 +968,15 @@ class form_actions extends form_base
 			}
 			$froma = str_replace("\"","", $froma);
 
-			send_mail($data["email"],$subj, $msg.$app,"From: $froma\n");
+			$ll = get_instance("languages");
+
+			$msg = html_entity_decode($msg);
+			$app = html_entity_decode($app);
+
+			send_mail($data["email"],$subj, $msg.$app,"From: $froma\nContent-type: text/plain; charset=".$ll->get_charset()."\n");
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
 			{
-				send_mail($_to,$subj, $msg.$app,"From: $froma\n");
+				send_mail($_to,$subj, $msg.$app,"From: $froma\nContent-type: text/plain; charset=".$ll->get_charset()."\n");
 			}
 		}
 	}
@@ -971,8 +989,9 @@ class form_actions extends form_base
 
 	function do_email_confirm_action(&$form, $data, $entry_id)
 	{
+		$ll = get_instance("languages");
 		$to = $form->get_element_value($data["email_el"]);
-		send_mail($to,$data["subj"], $data["content"],"From: $data[from_name] <$data[from_addr]>\n");
+		send_mail($to,$data["subj"], $data["content"],"From: $data[from_name] <$data[from_addr]>\nContent-type: text/plain; charset=".$ll->get_charset()."\n");
 	}
 }
 ?>

@@ -56,8 +56,14 @@ function setLink(li,title)
 <td class="fform" colspan=20><input type="checkbox" name="during_show_entry" value="1" {VAR:during_show_entry}> {VAR:LC_FORMS_FILLING_FORM_SHOW_OUTPUT}<input type="radio" name="op_pos" value="up" {VAR:op_up}> {VAR:LC_FORMS_UP} <input type="radio" name="op_pos" value="down" {VAR:op_down}> {VAR:LC_FORMS_DOWN}<input type="radio" name="op_pos" value="right" {VAR:op_right}> {VAR:LC_FORMS_IN_RIGHT} <input type="radio" name="op_pos" value="left" {VAR:op_left}> {VAR:LC_FORMS_IN_LEFT} <select class="small_button" name="during_show_op">{VAR:d_ops}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=20><input type="checkbox" name="after_redirect" value="1" {VAR:after_redirect}> P&auml;rast t&auml;itmist Suuna aadressile: <input type='text' name='after_redirect_url' value='{VAR:after_redirect_url}'> <a href="#" onclick="sel_el=document.b88.after_redirect_url;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+<td class="fform" colspan=20><input type="checkbox" name="after_redirect" value="1" {VAR:after_redirect}> P&auml;rast t&auml;itmist Suuna &uuml;mber</td>
 </tr>
+
+<!-- SUB: REDIR_LANG -->
+<tr>
+<td class="fform" colspan=20>Aadress {VAR:lang_name}: <input type='text' name='after_redirect_url[{VAR:lang_id}]' value='{VAR:after_redirect_url}'> <a href="#" onclick="sel_el=document.b88.after_redirect_url;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+</tr>
+<!-- END SUB: REDIR_LANG -->
 <tr>
 	<td class="fform" colspan="30">P&auml;rja sisesused salvestatakse kataloogi <select name='save_folder'>{VAR:folders}</select></td>
 </tr>
