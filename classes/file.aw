@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.84 2004/06/29 11:49:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.85 2004/07/08 13:44:45 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -798,7 +798,14 @@ class file extends class_base
 		// $o is file object
 		// assume it is a csv file
 		// parse it and return first row.
-		$fp = fopen($o->prop("file"),"r");
+		if ($o->prop("file_url") != "")
+		{
+			$fp = fopen($o->prop("file_url"),"r");
+		}
+		else
+		{
+			$fp = fopen($o->prop("file"),"r");
+		}
 		$delim = ",";
 		if ($params["separator"] != "")
 		{
@@ -824,7 +831,14 @@ class file extends class_base
 	function get_objects($o, $params = array())
 	{
 		$ret = array();
-		$fp = fopen($o->prop("file"),"r");
+		if ($o->prop("file_url") != "")
+		{
+			$fp = fopen($o->prop("file_url"),"r");
+		}
+		else
+		{
+			$fp = fopen($o->prop("file"),"r");
+		}
 		$delim = ",";
 		if ($params["separator"] != "")
 		{
