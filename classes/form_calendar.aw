@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.7 2002/08/21 12:05:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.8 2002/08/21 20:50:44 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -415,6 +415,12 @@ class form_calendar extends form_base
 
 		while($row = $this->db_next())
 		{
+			$this->save_handle();
+			$q = "SELECT * FROM form_" . $row["form_id"] . "_entries WHERE id = '$row[entry_id]'";
+			$this->db_query($q);
+			$row2 = $this->db_next();
+			$this->restore_handle();
+			$row = $row + $row2;
 			$e_start = $row["start"];
 			$e_end = $row["end"];
 			if (!$e_end)

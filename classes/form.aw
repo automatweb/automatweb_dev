@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.127 2002/08/21 12:05:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.128 2002/08/21 20:50:44 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1163,6 +1163,10 @@ class form extends form_base
 				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
 				if ($res !== true)
 				{
+					if (!$res)
+					{
+						$res = "error!";
+					};
 					$this->controller_errors[$ctrl["el_id"]][] = $res;
 					$controllers_ok = false;
 				}
@@ -1198,6 +1202,7 @@ class form extends form_base
 				die();
 			}
 		}
+
 
 		if ($new)
 		{
@@ -1343,6 +1348,7 @@ class form extends form_base
 		}
 
 		// if we got there it's probably ok to save the data out to the cache too
+		/*
 		if ($this->meta["calendar_chain"])
 		{
 			$fc->upd_event(array(
@@ -1354,6 +1360,7 @@ class form extends form_base
 				"items" => $_count,
 			));
 		}
+		*/
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$sff = aw_global_get("session_filled_forms");
@@ -2287,6 +2294,12 @@ class form extends form_base
 				if (isset($fc->chain["has_calendar"]) && $fc->chain["has_calendar"])
 				{
 					dbg("cid = $cid<br>");
+					global $DBUG;
+					if ($DBUG)
+					{
+						print "checking<br>";
+						print $row[chain_entry_id];
+					};
 					dbg("checking calendar for $row[chain_entry_id]<br>");
 					dbg("id = " . $fc->chain["cal_form"] . "<br>");
 					$has_vacancies = $fcal->check_vacancies(array(
@@ -5680,6 +5693,20 @@ class form extends form_base
 			}
 		}
 		return $col;
+	}
+
+	////
+	// !returns the name of the form, as written in html
+	function get_form_html_name()
+	{
+		return $this->form_html_name;
+	}
+
+	////
+	// !sets the name of the form, as written in html
+	function set_form_html_name($name)
+	{
+		$this->form_html_name = $name;
 	}
 };	// class ends
 ?>

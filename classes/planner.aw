@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.70 2002/08/21 10:40:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.71 2002/08/21 20:50:44 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -283,10 +283,11 @@ class planner extends calendar
 		// if it's set, we get the information about possible ranges from that form
 		$menubar = $this->gen_menu(array(
 			"activelist" => array($act),
-			"vars" => array("date" => $date,"id" => $id),
+			"vars" => array("date" => $date,"id" => $id,"ctrl" => $ctrl),
 		));
 
 		$this->id = $id;
+		$this->ctrl = $ctrl;
 
 		$object = $this->get_object($id);
 
@@ -338,6 +339,11 @@ class planner extends calendar
 
 			$vac_cont = (int)$fch->chain["cal_controller"];
 
+			$q = "SELECT ev_table FROM calendar2forms WHERE cal_id = '$object[oid]'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$ev_table = $row["ev_table"];
+
 			$events = $fc->get_events(array(
 				"eid" => $object["oid"],
 				"start" => $di["start"],
@@ -351,7 +357,7 @@ class planner extends calendar
 			$this->cached_chain_ids = array();
 
 			$this->ft = get_instance("form_table");
-			$this->table_id = $fc->arr["event_display_table"];
+			$this->table_id = $ev_table;
 			// event_display_table can be empty
 			if ($this->table_id)
 			{
@@ -1596,15 +1602,9 @@ class planner extends calendar
 			$this->ft->start_table($table_id);
 			foreach($this->raw_events[$args["dx"]] as $row)
 			{
-				// FIXME: bogus arguments
-				// cache the results
-				$cid = $this->cached_chain_ids[$row["chain_id"]];
-				if (not($cid))
-				{
-					$cid = $this->ft->get_chain_for_chain_entry($row["chain_id"]);
-					$this->cached_chain_ids[$row["chain_id"]] = $cid;
-				};
-				$this->ft->row_data($row,$row["form_id"],$section,0,$cid,$row["chain_id"]);
+				$__ch = $this->ft->get_chains_for_form($row["form_id"]);
+				list($_ch,) = each($__ch);
+				$this->ft->row_data($row,$row["form_id"],$section,0,$_ch,$this->ctrl);
 			}
 			$c .= $this->ft->finalize_table();
 
