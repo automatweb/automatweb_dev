@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.21 2005/01/04 16:57:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.22 2005/01/26 14:53:29 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -39,8 +39,10 @@
 
 	@groupinfo auth caption="Autoriseerimine"
 
+	@classinfo syslog_type=ST_LIVELINK_IMPORT relationmgr=yes
 
-	@classinfo syslog_type=ST_LIVELINK_IMPORT
+	@reltype LOGFILE value=1 clid=CL_FILE
+	@caption Logifail
 
 */
 
@@ -51,6 +53,13 @@ class livelink_import extends class_base
 		$this->init(array(
 			'clid' => CL_LIVELINK_IMPORT
 		));
+	}
+
+	// if import progress needs to be redirected to a file, then it can be done in this method
+	function log_progress($msg)
+	{
+		print $msg . "<br>";
+		$this->logdata .= $msg . "\n";
 	}
 
 	function get_property($args)
@@ -110,6 +119,60 @@ class livelink_import extends class_base
 		return array($error,$msg);
 	}
 
+	function _open_logfile($arr)
+	{
+		$o = new object($arr["id"]);
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_LOGFILE",
+		));
+
+		if (sizeof($conns) == 0)
+		{
+			$this->log_file_parent = $o->parent();
+		}
+		else
+		{
+			$first = reset($conns);
+			$this->log_file_id = $first->prop("to");
+		};
+		$this->logdata = "";
+		#var_dump($this->log_file_parent);
+		#var_dump($this->log_file_id);
+	}
+
+	function _close_logfile($id)
+	{
+		$t = get_instance(CL_FILE);
+		$file_id = $t->create_file_from_string(array(
+			"parent" => $this->log_file_parent,
+			"id" => $this->log_file_id,
+			"content" => $this->logdata,
+			"name" => "Livelink_import_" . date("Y-m-d") . ".txt",
+		));
+		if (empty($this->log_file_id))
+		{
+			$o = new object($id);
+			$o->connect(array(
+				"to" => $file_id,
+				"reltype" => RELTYPE_LOGFILE,
+			));
+		};
+		//print "closing logfile<br>";
+	}
+
+	function _finish_import($arr)
+	{
+		if ($arr["success"])
+		{
+			$this->log_progress("Livelink import succeeded");
+		}
+		else
+		{
+			$this->log_progress("Livelink import failed!");
+		};
+		$this->_close_logfile($arr["id"]);
+	}
+
 	/**  
 		
 		@attrib name=invoke params=name default="0"
@@ -124,12 +187,19 @@ class livelink_import extends class_base
 	**/
 	function invoke($args = array())
 	{
+		$this->_open_logfile(array(
+			"id" => $args["id"],
+		));
 		$obj = new object($args["id"]);
 		$outdir = $obj->prop("outdir");
 		list($err,$msg) = $this->_chk_outdir($outdir);
 		if ($err)
 		{
-			print $msg;
+			$this->log_progress($msg);
+			$this->_finish_import(array(
+				"success" => false,
+				"id" => $args["id"],
+			));
 			die();
 		};
 
@@ -162,7 +232,10 @@ class livelink_import extends class_base
 			));
 		};
 
-		print "<font color='green'><big>Import completed!</big></font>";
+		$this->_finish_import(array(
+			"success" => true,
+			"id" => $args["id"],
+		));
 		print "</pre>";
 	}
 
@@ -195,9 +268,9 @@ class livelink_import extends class_base
 
 		ob_implicit_flush(1);
 
-                print "going to fetch structure<br />";
+                $this->log_progress("going to fetch structure");
                 $outf = $this->fetch_structure();
-                print "done!<br />";
+                $this->log_progress("done!");
 
                 # parse the structure
                 $xml_parser = xml_parser_create();
@@ -221,13 +294,13 @@ class livelink_import extends class_base
 		if (sizeof($this->file_id_list) > 0)
 		{
 			$flist = join(",",$this->file_id_list);
-			print "and now I'm going to delete these files";
+			$this->log_progress("and now I'm going to delete these files");
 			$q = "SELECT filename FROM livelink_files WHERE id IN ($flist)";
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
 				$outfile = $this->outdir . "/" . basename($row["filename"]);		
-				print "deleting $outfile<br />";
+				$this->log_progress("deleting $outfile");
 				unlink($outfile);
 			};
 
@@ -251,7 +324,7 @@ class livelink_import extends class_base
 			$description = isset($attribs["description"]) ? $attribs["description"] : "";
 			$id = $attribs["id"];
 			$parent = $attribs["parentid"];
-			$modified = strtotime($attribs["modified"]);
+			$modified = $this->mystrtotime($attribs["modified"]);
 			$rootnode = $this->rootnode;
 
 
@@ -274,11 +347,10 @@ class livelink_import extends class_base
 				$icon = ($attribs["objtype"] == 136) ? "compound_doc.gif" : "folder.gif";
 				$iconurl = sprintf("<img src='/img/%s' alt='' title='' />",$icon);
 				$this->quote($iconurl);
-				print "creating $name\n";
+				$this->log_progress("creating $name\n");
 				$q = "INSERT INTO livelink_folders  (id,name,realname,description,parent,modified,rootnode,icon)
 					VALUES ('$id','$name','$realname','$description','$parent','$modified','$rootnode','$iconurl')";
-				print $q;
-				print "\n";
+				$this->log_progress($q);
 				//$this->need2update[] = $id;
 				$this->db_query($q);
 			}
@@ -286,7 +358,7 @@ class livelink_import extends class_base
 			if ($modified > $old["modified"])
 			{
 				# update existing one
-				print "renewing $name\n";
+				$this->log_progress("renewing $name");
 				$this->quote($name);
 				$this->quote($description);
 				$this->quote($realname);
@@ -306,8 +378,7 @@ class livelink_import extends class_base
 					WHERE id = '$id'";
 				//$this->need2update[] = $id;
 
-				print $q;
-				print "\n";
+				$this->log_progress($q);
 				$this->db_query($q);
 			}
 			else
@@ -347,9 +418,11 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		passthru("wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
-		var_dump($retval);
-		print "got structure, parsing \n";
+		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1";
+		$this->log_progress("executing $cmdline");
+		passthru($cmdline,$retval);
+		//var_dump($retval);
+		$this->log_progress("got structure, parsing");
 		// check whether opening succeeded?
 		$fc = join("",file($outfile));
 		// reap the bloody header
@@ -371,7 +444,7 @@ class livelink_import extends class_base
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
 		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
-		print "executing $cmdline<br />";
+		$this->log_progress("executing $cmdline");
 		passthru($cmdline);
 		// check whether opening succeeded?
 		$fc = join("",file($outfile));
@@ -382,7 +455,7 @@ class livelink_import extends class_base
 		fclose($fh);
 		sleep(3);
 
-		print "entering parser<br />";
+		$this->log_progress("entering parser");
 		
 		$this->parse_file($outfile);
 		unlink($outfile);
@@ -433,42 +506,49 @@ class livelink_import extends class_base
 			$rootnode = $this->rootnode;
 			if (in_array($parent,$this->exceptions))
 			{
-				$this->write_outfile();
+				$write_result = $this->write_outfile();
 			}
 			else
 			if (empty($old))
 			{
-				print "creating file $filename\n";
-				$this->quote($name);
-				$this->quote($filename);
-				$this->quote($realname);
-				// wah, wah
-				$this->write_outfile();
-				$q = "INSERT INTO livelink_files (id,parent,name,realname,filename,modified,icon,rootnode)
-				VALUES('$id','$parent','$name','$realname','$filename','$modified','$iconurl','$rootnode')";
-				$this->db_query($q);
+				$this->log_progress("creating file $filename");
+				$write_result = $this->write_outfile();
+				if ($write_result)
+				{
+					$this->quote($name);
+					$this->quote($filename);
+					$this->quote($realname);
+					// wah, wah
+					$q = "INSERT INTO livelink_files (id,parent,name,realname,filename,modified,icon,rootnode)
+					VALUES('$id','$parent','$name','$realname','$filename','$modified','$iconurl','$rootnode')";
+					$this->db_query($q);
+				};
 			}
 			else
 			//if ($modified > $old["modified"])
 			if (($modified > $old["modified"]) || ($parent != $old["parent"]))
 			{
-				print "updating file $filename";
-				$this->quote($name);
-				$this->quote($filename);
-				$this->quote($realname);
+				$this->log_progress("updating file $filename");
 				// wah, wah
-				$this->write_outfile();
-				$q = "UPDATE livelink_files SET
-				parent = '$parent',name = '$name',realname = '$realname',filename = '$filename',
-				modified = '$modified', rootnode = '$rootnode',
-				icon = '$iconurl'
-				WHERE id = '$id'";
-				$this->db_query($q);	
-				print $q;
+				$write_result = $this->write_outfile();
+				if ($write_result)
+				{
+					$this->quote($name);
+					$this->quote($filename);
+					$this->quote($realname);
+					$q = "UPDATE livelink_files SET
+					parent = '$parent',name = '$name',realname = '$realname',filename = '$filename',
+					modified = '$modified', rootnode = '$rootnode',
+					icon = '$iconurl'
+					WHERE id = '$id'";
+					$this->db_query($q);	
+					$this->log_progress($q);
+				};
 			}
 			else
 			{
-				print "not touching $filename, it has not been modified\n";
+				$this->log_progress("$modified <= " . $old["modified"]);
+				$this->log_progress("not touching $filename, it has not been modified");
 			};
 		};
 	}
@@ -476,10 +556,20 @@ class livelink_import extends class_base
 	function write_outfile()
 	{
 		$outfile = $this->outdir . "/" . $this->filename;
-		print "writing $outfile<br />>";
-		$fh = fopen($outfile,"w");
-		fwrite($fh,base64_decode(trim($this->content)));
-		fclose($fh);
+		$this->log_progress("writing $outfile");
+		$fh = @fopen($outfile,"w");
+		if ($fh)
+		{
+			fwrite($fh,base64_decode(trim($this->content)));
+			fclose($fh);
+			$rv = true;
+		}
+		else
+		{
+			$this->log_progress("Cannot open $outfile for writing, skipping. Check permissions");
+			$rv = false;
+		};
+		return $rv;
 	}
 
         function _xml_file_start_element($parser,$name,$attribs)
@@ -497,19 +587,18 @@ class livelink_import extends class_base
 			$this->fext = $fext;
 			$this->filename = $this->id . "." . $fext;
                         $this->name = ($attribs["name"]) ? $attribs["name"] : $attribs["filename"];
-                        $this->modified = strtotime($attribs["modifydate"]);
+			$this->alg = $attribs["modifydate"];
+                        $this->modified = $this->mystrtotime($attribs["modifydate"]);
                 };
 
                 if (($name == "llnode") && isset($attribs["parentid"]))
                 {
                         $this->parentid = $attribs["parentid"];
                         #$this->desc = $attribs["description"];
-			print "setting name to $attribs[name]<br />";
+			$this->log_progress("setting name to $attribs[name]");
 			$this->desc = $attribs["name"];
-			print "llnode node properties:<br />";
-			print "<pre>";
-			print_r($attribs);
-			print "</pre>";
+			$this->log_progress("llnode node properties:");
+			$this->log_progress(print_r($attribs,true));
                         $this->id = $attribs["id"];
                 };
         }
@@ -529,5 +618,13 @@ class livelink_import extends class_base
 			$this->content .= $data;
 		};
 	}
+
+	// creates a usable timestamp from YYYY-MM-DDTHH:MM:SS
+	function mystrtotime($orig)
+	{
+		$p = unpack("a4year/c1e/a2mon/c1e/a2day/c1e/a2hour/c1e/a2min/c1e/a2sec",$orig);
+		return mktime($p["hour"],$p["min"],$p["sec"],$p["mon"],$p["day"],$p["year"]);
+	}
+
 }
 ?>
