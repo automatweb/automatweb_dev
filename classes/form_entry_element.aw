@@ -207,7 +207,7 @@ define(FORM_EELEMENT_LOADED,1);
 					$var=$base."_lb_".$b;
 					$this->arr[listbox_items][$b] = $$var;
 				}
-				while ($this->arr[listbox_items][$cnt-1] == "")
+				while (isset($this->arr[listbox_items][$cnt-1]) && ($this->arr[listbox_items][$cnt-1] == ""))
 				{
 					$cnt--;
 				}
