@@ -39,6 +39,12 @@
 				<tr>
 					<td class="fcaption2" colspan=2><input type='text' name='price_eq' value='{VAR:price_eq}' size=50></td>
 				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2>Kauba t&uuml;&uuml;p:</td>
+				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2><select name='type'>{VAR:types}</select></td>
+				</tr>
 			</table>
 				<input class="small_button" type='submit' value='Salvesta'>
 				{VAR:reforb3}
