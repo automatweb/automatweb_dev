@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.70 2003/11/13 11:18:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.71 2003/11/19 16:23:37 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -382,6 +382,8 @@ class users_user extends aw_template
     aw_global_set("uid","");
     aw_session_set("uid","");
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
+
+		
 	}
 
 	////
@@ -391,7 +393,14 @@ class users_user extends aw_template
 		extract($args);
 		$this->logout(aw_global_get("uid"));
 		session_destroy();
-		return $this->cfg["baseurl"];
+		if ($GLOBALS["redir_to"] != "")
+		{
+			return $GLOBALS["redir_to"];
+		}
+		else
+		{
+			return $this->cfg["baseurl"];
+		}
 	}
 	
 	////
@@ -1297,7 +1306,7 @@ class users_user extends aw_template
 	// so - will anything break if I take it out? We will see.
 	function get_gids_by_uid($uid, $ret_all = false)
 	{
-		$q = "SELECT groupmembers.gid AS gid, groups.priority as priority FROM groupmembers
+		$q = "SELECT groupmembers.gid AS gid, groups.priority as priority,groups.oid as oid FROM groupmembers
 			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'";
 		$this->db_query($q);
 		$retval = array();
