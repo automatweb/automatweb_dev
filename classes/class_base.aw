@@ -1,5 +1,13 @@
 <?php
-// $Id: class_base.aw,v 2.163 2003/11/04 09:59:25 kristo Exp $
+// $Id: class_base.aw,v 2.164 2003/11/05 13:17:14 duke Exp $
+// the root of all good.
+// 
+// ------------------------------------------------------------------
+// Do not be writink any HTML in this class, it defeats half
+// of the purpose of this class. If you really absolutely
+// must, then do it in the htmlclient class.
+// ------------------------------------------------------------------:w
+// 
 // Common properties for all classes
 /*
 	@default table=objects
@@ -27,7 +35,7 @@
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
 	@caption Tõlge kinnitatud
 
-	@groupinfo general caption=Üldine default=1
+	@groupinfo general caption=Üldine default=1 icon=edit
 */
 
 
@@ -150,14 +158,51 @@ class class_base extends aw_template
 
 		$this->validate_cfgform($cfgform_id);
 
+		if ($this->classinfo["fixed_toolbar"])
+		{
+			$this->layout_mode = "fixed_toolbar";
+		}
+
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 				"rel" => $this->is_rel,
+				// only load the toolbar if we are shoing the container .. hm, perhaps
+				// there is a better way to accomplish that?
+				// gah, I'm really not that proud of this shit
+				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
 
 		$this->request = $args;
+
+		// XX: arrr
+		foreach($this->groupinfo as $key => $val)
+		{
+			if (empty($this->props_by_group[$key]))
+			{
+				// ignore groups with no properties
+				continue;
+
+			}
+			// we only want subgroups that are children of the currently active group
+			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"])) //"hide_tabs_L2" kas seda kasutatakse kuskil??
+			{
+				continue;
+			}
+			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
+			{
+				if ($this->toolbar_type != 'menubar')
+				{
+					continue;
+				}
+			}
+			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
+			{
+				continue;
+			}
+		}
+
 
 		if (!empty($this->id))
 		{
@@ -177,6 +222,57 @@ class class_base extends aw_template
 
 			};
 		};
+		
+		// here be some magic to determine the correct output client
+		// this means we could create a TTY client for AW :)
+		// actually I'm thinking of native clients and XML-RPC
+		// output client is probably the first that should be
+		// implemented.
+		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+
+		if (!empty($lm))
+		{
+			$gdata["submit"] = "no";
+		};
+
+		// and, if we are in that other layout mode, then we should probably remap all
+		// the links in the toolbar .. augh, how the hell do I do that?
+		if ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"]))
+		{
+			$lm = "fixed_toolbar";
+			$new_uri = $_SERVER["REQUEST_URI"] . "&" . "cb_part=1";
+			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => $lm));
+
+			$realprops["iframe_container"] = array(
+				"type" => "iframe",
+				"src" => $new_uri,
+				"value" => "haha",
+			);
+			// show only the elements and not the frame (because it contains some design
+			// elements and "<form>" tag that I really do not need
+			$this->classinfo["raw_output"] = 1;
+
+		}
+		else
+		{
+			$cli = get_instance("cfg/" . $this->output_client);
+			if ($this->layout_mode == "fixed_toolbar")
+			{
+				if ($this->use_mode == "new")
+				{
+					$cli->set_form_target();
+				};
+				// tabs and YAH are in the upper frame, so we don't show them below
+				$this->classinfo["hide_tabs"] = 1;
+				$this->classinfo["no_yah"] = 1;
+			};
+		};
+
+
+		if (!empty($gdata["grpstyle"]))
+		{
+			$cli->set_group_style($gdata["grpstyle"]);
+		};
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
@@ -185,6 +281,7 @@ class class_base extends aw_template
 			"properties" => &$realprops,
 		));
 
+
 		// so now I have a list of properties along with their values,
 
 		// here be some magic to determine the correct output client
@@ -192,7 +289,9 @@ class class_base extends aw_template
 		// actually I'm thinking of native clients and XML-RPC
 		// output client is probably the first that should be
 		// implemented.
-		$cli = get_instance("cfg/" . $this->output_client);
+
+		// and, if we are in that other layout mode, then we should probably remap all
+		// the links in the toolbar .. augh, how the hell do I do that?
 
 		foreach($resprops as $val)
 		{
@@ -205,8 +304,6 @@ class class_base extends aw_template
 		{
 			$orb_class = "doc";
 		};
-
-		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
 
 
 		$argblock = array(
@@ -239,7 +336,9 @@ class class_base extends aw_template
 		extract($args);
 		if (empty($content))
 		{
-			$content = $cli->get_result();
+			$content = $cli->get_result(array(
+				"raw_output" => $this->classinfo["raw_output"],
+			));
 		};
 		
 		$rv =  $this->gen_output(array(
@@ -257,6 +356,7 @@ class class_base extends aw_template
 		// check whether this current class is based on class_base
 		$this->init_class_base();
 		$this->orb_action = $args["action"];
+
 
 		$this->is_translated = 0;
 
@@ -328,6 +428,7 @@ class class_base extends aw_template
 				"request" => &$form_data,
 				"orb_class" => &$orb_class,
 				"clid" => $this->clid,
+				"new" => $this->new,
 			));
 		};
 		// rrrr, temporary hack
@@ -416,6 +517,7 @@ class class_base extends aw_template
 				$cfgu = get_instance("cfg/cfgutils");
 				$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
 				list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+				$this->classinfo = $cfgu->get_classinfo();
 				$this->cfg_proplist = $proplist;
 				$this->cfg_groups = $grplist;
 				$this->cfgform["meta"]["cfg_groups"] = $grplist;
@@ -579,7 +681,7 @@ class class_base extends aw_template
 	{
 		$classname = $this->cfg["classes"][$this->clid]["name"];
 
-		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
+		$name = $this->obj_inst->name();
 		$return_url = isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
@@ -589,7 +691,8 @@ class class_base extends aw_template
 			{
 				$title = $name;
 			};
-			$parent = $this->coredata["parent"];
+			$parent = $this->obj_inst->parent();
+			//$parent = $this->coredata["parent"];
 		}
 		else
 		{
@@ -628,7 +731,10 @@ class class_base extends aw_template
 			)) . " / " . $title;
 		};
 
-		$this->mk_path($parent,$title,aw_global_get("period"));
+		if (empty($this->classinfo["no_yah"]))
+		{
+			$this->mk_path($parent,$title,aw_global_get("period"));
+		};
 
 		if (($this->toolbar_type == 'menubar') || (isset($this->classinfo['toolbar_type']) && ($this->classinfo['toolbar_type']['text'] == 'menubar')))
 		{
@@ -695,6 +801,10 @@ class class_base extends aw_template
 				if (aw_global_get("section"))
 				{
 					$link_args->set_at("section",aw_global_get("section"));
+				};
+				if ($_REQUEST["cb_part"])
+				{
+					$link_args->set_at("cb_part",$_REQUEST["cb_part"]);
 				};
 				if ($this->embedded)
 				{
@@ -781,8 +891,15 @@ class class_base extends aw_template
 		};
 
 		$vars["content"] = $args["content"];
-		
-		return $this->tp->get_tabpanel($vars);
+
+		if (isset($this->classinfo["raw_output"]))
+		{
+			return $args["content"];
+		}
+		else
+		{
+			return $this->tp->get_tabpanel($vars);
+		};
 	}
 
 	////
@@ -824,14 +941,16 @@ class class_base extends aw_template
 	// or saving data. 
 	function get_active_properties($args = array())
 	{
+
 		$no_group = !empty($args["all"]) ? $args["all"] : false;
+
 		$this->get_all_properties(array(
 			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
+			"type" => isset($args["type"]) ? $args["type"] : "",
 		));
-		
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -889,7 +1008,7 @@ class class_base extends aw_template
 
 		// now I know the group
 		$property_list = array();
-
+		
 		$this->cb_views = array();
 
 		$retval = $tables = $fields = $realfields = array();
@@ -1030,6 +1149,7 @@ class class_base extends aw_template
 		$this->realfields = isset($realfields) ? $realfields : NULL;
 
 		$idx = $this->default_group;
+
 		
 		
 
@@ -1124,6 +1244,10 @@ class class_base extends aw_template
 			// if a config form is loaded, then ignore stuff that isn't
 			// defined in there. I really shouldn't cause any problems
 			// with well working code.
+			if (!empty($args["type"]) && $_all_props[$val["name"]]["type"] != $args["type"])
+			{
+				continue;
+			};
 			if (!empty($this->cfgform_id))
 			{
 				// we can have as many relpickers as we want
@@ -1230,14 +1354,15 @@ class class_base extends aw_template
 		}
 
 		$grpinfo = array();
+
 		if (is_array($grplist))
 		{
 			foreach($grplist as $key => $val)
 			{
-				if (in_array($key,array_keys($group_el_cnt)))
+				if (!empty($args["type"]) || in_array($key,array_keys($group_el_cnt)))
 				{
 					// skip the group, if it is not listed in the config form object
-					if (!empty($this->cfgform_id) && empty($grplist[$key]))
+					if (!empty($this->cfgform_id) && empty($grplist[$key]) )
 					{
 						continue;
 					}
@@ -1516,6 +1641,7 @@ class class_base extends aw_template
 			"request" => isset($this->request) ? $this->request : "",
 			"data" => &$this->data,
 			"obj_inst" => &$this->obj_inst,
+			"groupinfo" => &$this->groupinfo,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
@@ -1636,7 +1762,36 @@ class class_base extends aw_template
 			}
 			else
 			{
+				if ($this->layout_mode == "fixed_toolbar" && $val["type"] == "toolbar")
+				{
+					foreach($this->groupinfo as $grp_id => $grp_data)
+					{
+						// disable all other buttons besides the general when
+						// adding a new object
+						if ($this->use_mode == "new" && $grp_id != $this->active_group)
+						{
+							continue;
+						};
+						$val["toolbar"]->add_button(array(
+							"name" => "grp_" . $grp_id,
+							"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
+							"tooltip" => $grp_data["caption"],
+							"target" => "contentarea",
+							"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
+						));
+						
+					}
+
+					$rte = get_instance("vcl/rte");
+					$rte->get_rte_toolbar(array(
+						"toolbar" => &$val["toolbar"],
+					));
+
+					
+				};
+
 				$this->convert_element(&$val);
+
 				if (empty($name))
 				{
 					$name = $key;
@@ -1736,6 +1891,7 @@ class class_base extends aw_template
 	function list_aliases($args = array())
 	{
 		extract($args);
+
 		$this->init_class_base();
 
 		$this->action = $action;
@@ -1768,6 +1924,13 @@ class class_base extends aw_template
 
 			}
 		}
+
+		if (!empty($args["cb_part"]))
+		{
+			$this->classinfo["no_yah"] = 1;
+			$this->classinfo["hide_tabs"] = 1;
+			aw_global_set("hide_yah",1);
+		};
 		
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
@@ -1886,7 +2049,6 @@ class class_base extends aw_template
 			$this->get_value(&$val);
 			if (!empty($val["value"]) || $val["store"] != "no")
 			{
-				//if (aw_global_get("__is_rpc_call") && $val["type"] == "fileupload" && is_readable($val["value"]))
 				if ($val["type"] == "fileupload" && is_readable($val["value"]))
 				{
 					$name = $val["name"];
@@ -1910,12 +2072,23 @@ class class_base extends aw_template
 				};
 			};
 		}
+			
+		// also add relations
+		$obj = new object($this->id);
+		$conns = $obj->connections_from();
+		foreach($conns as $conn)
+		{
+			// I also need to the connection type (at least)
+			$result["connections"][] = array(
+				"to" => $conn->prop("to"),
+				"reltype" => $conn->prop("reltype"),
+			);
+		};
 
 		if (aw_global_get("__is_rpc_call"))
 		{
 			$result["class_id"] = $this->clid;
-			return $result;
-			//$retval = aw_serialize($result, SERIALIZE_XMLRPC);
+			$retval = $result;
 		}
 		else
 		{
@@ -1951,7 +2124,7 @@ class class_base extends aw_template
 		$this->init_class_base();
 
 		// and this of course should handle both creating new objects and updating existing ones
-		
+
 		$callback = method_exists($this->inst,"set_property");
 		
 		$new = false;
@@ -2247,6 +2420,7 @@ class class_base extends aw_template
 			{
 				if (isset($property["value"]) && !empty($table))
 				{
+					//$this->obj_inst->set_prop($_field,$property["value"]);
 					$this->obj_inst->set_prop($name,$property["value"]);
 					//$this->objdata[$table][$_field] = $property["value"];
 				};
@@ -2297,6 +2471,11 @@ class class_base extends aw_template
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
 			//$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
 		};
+
+		if (is_array($args["cb_nobreaks"]))
+		{
+			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
+		}
 
 		$this->obj_inst->save();
 
