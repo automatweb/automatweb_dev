@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.30 2002/06/20 12:48:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.31 2002/07/11 18:25:05 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1164,8 +1164,9 @@ class users_user extends aw_template
 	// !tagastab array grupi id'dest, kuhu kasutaja kuulub
 	// This function shouldn't be in the core, I think, since it's called only once,
 	// from the site_header
-	// 
+
 	// - yeah. good point. - terryf
+	// - can we store users groups inside her session? -- duke
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
@@ -1178,26 +1179,6 @@ class users_user extends aw_template
 			$retval[(int)$row["gid"]] = (int)$row["gid"];
 		};
 
-		// FIXME: make the damn login menu thingies work again. 
-
-		// oh, yes, this is higly not logical, to do this here,
-		// but for now, this will do
-/*		classload("config");
-		$config = new config();
-
-		$this->login_menu = $config->get_login_menus($retval);
-
-		if ($this->login_menu)
-		{
-			$menu_defs_v2 = aw_ini_get("menuedit.menu_defs");
-			$_tmp = array_flip($menu_defs_v2);
-			if ($_tmp["LOGGED"])
-			{
-				// nullime senise LOGGED menüü
-				unset($menu_defs_v2[$_tmp["LOGGED"]]);
-			}
-			$menu_defs_v2[$this->login_menu] = "LOGGED";
-		};*/
 		return $retval;
 	}
 };
