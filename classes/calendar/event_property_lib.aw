@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.16 2005/01/11 13:44:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.17 2005/01/12 09:47:44 ahti Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -204,32 +204,39 @@ class event_property_lib extends aw_template
 		classload("vcl/table");
 		$rtrn = array();
 		$table = new vcl_table();
-		
-		$table->define_field(array(
-			'name' => 'name',
-			'caption' => t('Nimi'),
-			'sortable' => '1',
-			'callback' => array(&$this,'callb_human_name'),
-			'callb_pass_row' => true,
-		));
-		$table->define_field(array(
-			'name' => 'phone',
-			'caption' => t('Telefon'),
-			'sortable' => '1',
-		));
-
-		$table->define_field(array(
-			'name' => 'email',
-			'caption' => t('E-post'),
-			'sortable' => '1',
-		));
-
-		$noshow = array('status', 'phone','firstname','lastname','name','email');
-
+		//$noshow = array('status', 'phone','firstname','lastname','name','email');
 		$datas = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_CALENDAR_REGISTRATION_FORM,
 			"type" => 3 // regform.RELTYPE_DATA
 		));
+		$f = 0;
+		if(count($datas) == 0)
+		{
+			$f = 1;
+			$table->define_field(array(
+				'name' => 'name',
+				'caption' => t('Nimi'),
+				'sortable' => '1',
+				'callback' => array(&$this,'callb_human_name'),
+				'callb_pass_row' => true,
+			));
+			$table->define_field(array(
+				'name' => 'phone',
+				'caption' => t('Telefon'),
+				'sortable' => '1',
+			));
+	
+			$table->define_field(array(
+				'name' => 'email',
+				'caption' => t('E-post'),
+				'sortable' => '1',
+			));
+			$table->define_field(array(
+				'name' => 'rank',
+				'caption' => t('Ametinimetus'),
+				'sortable' => '1',
+			));
+		}
 		$darr = array();
 		$fields = array();
 		$cff = get_instance("cfg/cfgform");
@@ -251,7 +258,7 @@ class event_property_lib extends aw_template
 			}
 			foreach($to->properties() as $pn => $pv)
 			{
-				if (in_array($pn,$noshow) || !isset($ps[$pn]))
+				if (!isset($ps[$pn]))
 				{
 					continue;
 				}
@@ -274,18 +281,16 @@ class event_property_lib extends aw_template
 				"align" => "center"
 			));
 		}
-
-		$table->define_field(array(
-			'name' => 'rank',
-			'caption' => t('Ametinimetus'),
-			'sortable' => '1',
-		));
 		if ($_GET["get_csv_file"] != 1)
 		{
+			$table->define_field(array(
+				"name" => "change",
+				"caption" => "Muuda",
+				"align" => "center",
+			));
 			$table->define_chooser(array(
-				'name' => 'check',
-				'field' => 'id',
-				'caption' => 'X',
+				"name" => "check",
+				"field" => "id",
 			));
 		}
 		$table->set_sortable(false);
@@ -295,21 +300,12 @@ class event_property_lib extends aw_template
 		foreach($conns as $conn)
 		{
 			$person = get_instance(CL_CRM_PERSON);
-			if($conn->prop('from.class_id') == CL_CRM_PERSON)
+			if($conn->prop("from.class_id") == CL_CRM_PERSON)
 			{
-				$data = $person->fetch_person_by_id(array('id'=>$conn->prop('from')));
-				$dat = array(
-					'id' => $conn->prop('from'),
-					'name' => $data['name'],
-					'phone' => $data['phone'],
-					'email' => $data['email'],
-					'rank' => $data['rank'],
-					'reg_data' => $regd
-				);
-
-				$regd = "";
-				if (($_tmp = $darr[$conn->prop("from")]))
+				$dat = array();
+				if (($_tmp = $darr[$conn->prop("from")]) && $f == 0)
 				{
+					/*
 					$regd = html::href(array(
 						"url" => $this->mk_my_orb("view", array(
 							"id" => $_tmp->id(), 
@@ -318,6 +314,8 @@ class event_property_lib extends aw_template
 						), CL_CALENDAR_REGISTRATION_FORM),
 						"caption" => "Vaata"
 					));
+					*/
+					$dat["change"] = html::get_change_url($_tmp->id(), array(), "Muuda");
 					foreach($_tmp->properties() as $pn => $pv)
 					{
 						if (!isset($dat[$pn]))
@@ -345,6 +343,22 @@ class event_property_lib extends aw_template
 							$dat[$pn] = $pv;
 						}
 					}
+				}
+				elseif(($data = $person->fetch_person_by_id(array("id" => $conn->prop("from")))) && $f == 1)
+				{
+					$dat = array(
+						"id" => $conn->prop("from"),
+						"name" => $data["name"],
+						"phone" => $data["phone"],
+						"email" => $data["email"],
+						"rank" => $data["rank"],
+						"reg_data" => $regd,
+						"change" => html::get_change_url($conn->prop("from"), array(), "Muuda"),
+					);
+				}
+				else
+				{
+					continue;
 				}
 				$table->define_data($dat);
 			}
