@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.15 2001/05/31 15:56:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.16 2001/05/31 16:13:57 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -933,6 +933,31 @@ class planner extends calendar {
 		{
 			return $this->mk_my_orb("day",array("date" => $date));
 		};
+	}
+
+	////
+	// !Lisab eventi
+	// argumendid:
+	// parent(int)
+	// title(string)
+	// start(timestamp)
+	// end(timestamp)
+	// place(string)
+	// description(string)
+	function add_event($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$id = $this->new_object(array(	
+			"class_id" => CL_CAL_EVENT,
+			"parent" => $parent,
+			"name" => $title,
+		),true);
+
+		$q = "INSERT INTO planner 
+			(id,uid,start,end,title,place,description)
+			VALUES ('$id','$uid','$start','$end','$title','$place','$description')";
+		$this->db_query($q);
 	}
 
 
