@@ -1,0 +1,10 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="object_translation" folder="translate">
+		<action name="create" all_args="1">
+			<function name="create">
+				<arguments/>
+			</function>
+		</action>
+	</class>
+</orb>
