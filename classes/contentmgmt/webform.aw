@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.28 2004/12/31 10:37:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.29 2005/01/05 10:13:03 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -14,10 +14,10 @@
 @caption Initsialiseeri objekt
 
 @property form_type type=select newonly=1 method=serialize field=meta
-@caption Vormi tüüp
+@caption Vormi tp
 
 @property form_type_value type=text editonly=1
-@caption Vormi tüüp
+@caption Vormi tp
 
 @property def_name type=textbox method=serialize field=meta
 @caption Saatja nimi
@@ -26,10 +26,10 @@
 @caption Saatja e-mail
 
 @property obj_name type=select multiple=1 size=3 field=meta method=serialize
-@caption Millised sisestatud väärtused pannakse nimeks
+@caption Millised sisestatud vï¿½rtused pannakse nimeks
 
 @property redirect type=textbox field=meta method=serialize
-@caption Kuhu suunata peale täitmist
+@caption Kuhu suunata peale tï¿½tmist
 
 ------------- end: general -------------
 
@@ -90,7 +90,7 @@
 
 
 ------------- entries -------------
-@groupinfo entries caption="Näita sisestusi" submit=no parent=show_entries
+@groupinfo entries caption="Nï¿½ta sisestusi" submit=no parent=show_entries
 
 @property entries_toolbar type=toolbar group=entries,search no_caption=1
 @caption Sisestuste toolbar
@@ -123,7 +123,7 @@
 
 
 ------------- get_controllers -------------
-@groupinfo get_controllers caption="Näitamine" parent=controllers
+@groupinfo get_controllers caption="Nï¿½tamine" parent=controllers
 
 @property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=get_controllers
 @caption Kontrollerite kaust
@@ -151,7 +151,7 @@
 @caption Meiliaadress
 
 @reltype OBJECT_TYPE value=6 clid=CL_OBJECT_TYPE
-@caption Objekti tüüp
+@caption Objekti tp
 
 @reltype REGISTER value=7 clid=CL_REGISTER
 @caption Register
@@ -169,10 +169,10 @@
 @caption Objektide eksport
 
 @reltype CAL_REG_FORM value=12 clid=CL_CALENDAR_REGISTRATION_FORM
-@caption Sündmuse vorm
+@caption Sndmuse vorm
 
 @reltype CAL_REG_FORM_CONF value=13 clid=CL_CALENDAR_REGISTRATION_FORM_CONF
-@caption Sündmuse vormi konf
+@caption Sndmuse vormi konf
 
 */
 
@@ -187,14 +187,14 @@ class webform extends class_base
 		$this->n_props = array("checkboxes", "radiobuttons");
 		$this->trans_names = array(
 			"text" => t("Tekst"),
-			"textbox" => t("Väike tekstikast"),
-			"checkbox" => t("Märkeruut"),
-			"classificator" => t("Valikväli"),
-			"date_select" => t("Kuupäevavalik"),
+			"textbox" => t("Vï¿½ke tekstikast"),
+			"checkbox" => t("Mï¿½keruut"),
+			"classificator" => t("Valikvï¿½i"),
+			"date_select" => t("Kuupï¿½vavalik"),
 			"textarea" => t("Suur tekstikast"),
-			"hidden" => t("Peidetud väli"),
+			"hidden" => t("Peidetud vï¿½i"),
 			"submit" => t("Saada nupp"),
-			"reset" => t("Tühista nupp"),
+			"reset" => t("Thista nupp"),
 		);
 		$this->def_props = array(
 			"firstname" => "Eesnimi",
@@ -220,13 +220,18 @@ class webform extends class_base
 			}
 			if(!$arr["new"])
 			{
-				if($obj_inst->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM)
+				if($obj_inst->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM )
 				{
 					$this->p_clid = CL_REGISTER_DATA;
 				}
 				else
 				{
 					$this->p_clid = CL_CALENDAR_REGISTRATION_FORM;
+				}
+				if($obj_inst->prop("form_type") != $this->p_clid)
+				{
+					$obj_inst->set_prop("form_type", $this->p_clid);
+					$obj_inst->save();
 				}
 			}
 		}
@@ -266,13 +271,13 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sndmuse vorm");
 				break;
 				
 			case "form_type":
 				$prop["options"] = array(
 					CL_REGISTER_DATA => t("Tavaline vorm"),
-					CL_CALENDAR_REGISTRATION_FORM => t("Sündmuse vorm"),
+					CL_CALENDAR_REGISTRATION_FORM => t("Sndmuse vorm"),
 				);
 				break;
 				
@@ -514,7 +519,7 @@ class webform extends class_base
 		$arr["obj_inst"]->save();
 		$this->p_clid = $arr["request"]["form_type"];
 		$form = obj();
-		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "Sündmuse vorm ").$arr["obj_inst"]->id());
+		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "Sndmuse vorm ").$arr["obj_inst"]->id());
 		$form->set_parent($arr["obj_inst"]->id());
 		$form->set_class_id($this->p_clid);
 		$form->set_status(STAT_ACTIVE);
@@ -543,7 +548,7 @@ class webform extends class_base
 		$object_type = obj();
 		$object_type->set_parent($arr["obj_inst"]->id());
 		$object_type->set_class_id(CL_OBJECT_TYPE);
-		$object_type->set_name("Objekti tüüp ".$arr["obj_inst"]->id());
+		$object_type->set_name("Objekti tp ".$arr["obj_inst"]->id());
 		$object_type->set_status(STAT_ACTIVE);
 		$object_type->set_prop("use_cfgform", $cfgform->id());
 		$object_type->set_prop("type", $this->p_clid);
@@ -654,9 +659,9 @@ class webform extends class_base
 		}
 		$set_controllers = array(
 			array(
-				"name" => "*elemendinimi* peab olema täidetud",
+				"name" => "*elemendinimi* peab olema tï¿½detud",
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption peab olema täidetud",
+				"errmsg" => "%caption peab olema tï¿½detud",
 			),
 			array(
 				"name" => "*elemendinimi* peab olema valitud",
@@ -664,7 +669,7 @@ class webform extends class_base
 				"errmsg" => "%caption peab olema valitud",
 			),
 			array(
-				"name" => "Kontrolli e-maili õigsust",
+				"name" => "Kontrolli e-maili ï¿½gsust",
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
 				"errmsg" => "%caption sisestatud e-mailiaadress pole korrektne",
 			),
@@ -765,11 +770,12 @@ class webform extends class_base
 			"textbox" => 0,
 			"textarea" => 1,
 			"text" => 2,
-			"classificator" => 3,
-			"hidden" => 4,
-			"date_select" => 5,
-			"submit" => 6,
-			"reset" => 7,
+			"checkbox" => 3,
+			"classificator" => 4,
+			"hidden" => 5,
+			"date_select" => 6,
+			"submit" => 7,
+			"reset" => 8,
 		);
 		$def_props = array();
 		if($this->p_clid == CL_CALENDAR_REGISTRATION_FORM)
@@ -972,9 +978,9 @@ class webform extends class_base
 		);
 		$prp_types = array(
 			"" => "-- vali --",
-			"mselect" => "Mitmerealine rippmenüü",
-			"select" => "Rippmenüü",
-			"checkboxes" => "Märkeruut",
+			"mselect" => "Mitmerealine rippmen",
+			"select" => "Rippmen",
+			"checkboxes" => "Mï¿½keruut",
 			"radiobuttons" => "Raadionupp",
 		);
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
