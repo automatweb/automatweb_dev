@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.29 2004/03/09 18:24:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.30 2004/04/02 16:40:24 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -8,6 +8,9 @@
 	
 	@property caption type=textbox table=objects field=meta method=serialize trans=1
 	@caption Pealkiri
+
+	@property image type=relpicker reltype=RELTYPE_IMAGE table=objects field=meta method=serialize 
+	@caption Pilt
 
 	@property tpl_lead type=select table=menu group=show
 	@caption Template näitamiseks
@@ -23,6 +26,9 @@
 	
 	@property link_caption type=textbox table=objects field=meta method=serialize
 	@caption Lingi kirjeldus
+	
+	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Sisu ei cacheta
 	
 	@default table=objects
 	@default field=meta
@@ -67,6 +73,7 @@
 */
 define("RELTYPE_ASSIGNED_MENU",1);
 define("RELTYPE_DOC_SOURCE",2);
+define("RELTYPE_IMAGE",3);
 class promo extends class_base
 {
 	function promo()
@@ -85,6 +92,11 @@ class promo extends class_base
 		{
 			return array(CL_MENU);
 		}
+		else
+		if ($args["reltype"] == RELTYPE_IMAGE)
+		{
+			return array(CL_IMAGE);
+		}
 	}
 
 	function callback_get_rel_types()
@@ -92,6 +104,7 @@ class promo extends class_base
 		return array(
 			RELTYPE_ASSIGNED_MENU => "näita menüü juures",
 			RELTYPE_DOC_SOURCE => "võta dokumente selle menüü alt",
+			RELTYPE_IMAGE => "pilt",
 		);
 	}
 
@@ -477,12 +490,23 @@ class promo extends class_base
 			}
 		}
 
+		$image = "";
+		$image_url = "";
+		if ($ob->prop("image"))
+		{
+			$i = get_instance("image");
+			$image_url = $i->get_url_by_id($ob->prop("image"));
+			$image = $i->make_img_tag($image_url);
+		}
+
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$this->vars(array(
 			"title" => $ob->meta("caption"),
 			"content" => $content,
 			"align" => $align[$args["matches"][4]],
-			"link" => $ob->prop("link")
+			"link" => $ob->prop("link"),
+			"image" => $image,
+			"image_url" => $image_url
 		));
 
 		if (!$ob->meta('no_title'))
@@ -618,9 +642,12 @@ class promo extends class_base
 				// visible. so show it
 				// get list of documents in this promo box
 				$pr_c = "";
+				global $awt;
+				$awt->start("def-doc");
 				$docid = $inst->get_default_document(array(
 					"obj" => $o
 				));
+				$awt->stop("def-doc");
 
 				if (!is_array($docid))
 				{
@@ -637,6 +664,8 @@ class promo extends class_base
 							$tpl_filename .= "2";
 						}
 					}
+					global $awt;
+					$awt->start("promo-prev");
 					$cont = $doc->gen_preview(array(
 						"docid" => $d,
 						"tpl" => $tpl_filename,
@@ -649,8 +678,18 @@ class promo extends class_base
 						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 					));
+					$awt->stop("promo-prev");
 					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
+				}
+
+				$image = "";
+				$image_url = "";
+				if ($o->prop("image"))
+				{
+					$i = get_instance("image");
+					$image_url = $i->get_url_by_id($o->prop("image"));
+					$image = $i->make_img_tag($image_url);
 				}
 
 				$inst->vars(array(
@@ -660,6 +699,8 @@ class promo extends class_base
 					"url" => $o->prop("link"),
 					"link_caption" => $o->meta("link_caption"),
 					"promo_doc_count" => (int)$d_cnt,
+					"image" => $image, 
+					"image_url" => $image_url
 				));
 
 				// which promo to use? we need to know this to use

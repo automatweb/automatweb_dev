@@ -11,6 +11,16 @@
             <caption>Pealkiri</caption>
       </property>
       <property>
+            <name>image</name>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pilt</caption>
+      </property>
+      <property>
             <name>tpl_lead</name>
             <group>show</group>
             <type>select</type>
