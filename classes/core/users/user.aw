@@ -163,6 +163,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property userch5 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
 @caption User-defined checkbox 5
 
+@property join_form_entry type=hidden table=users field=join_form_entry 
 
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
@@ -176,6 +177,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 /@reltype USER_DATA value=3
 /@caption Andmed
 
+@reltype FG_PROFILE value=7 clid=CL_FORM_ENTRY
+@caption FG profiil
 
 */
 
@@ -1237,6 +1240,20 @@ class user extends class_base
 
 				}
 			}
+		}
+		else
+		if ($arr["connection"]->prop("reltype") == 7 )// FG_PROFILE
+		{
+			// set join form entry
+			$u = $arr["connection"]->from();
+			$jfe = safe_array(aw_unserialize($u->prop("join_form_entry")));
+			$f = get_instance("formmgen/form");
+			$eid = $arr["connection"]->prop("to");
+			$fid = $f->get_form_for_entry($eid);
+
+			$jfe[$fid] = $eid;
+			$u->set_prop("join_form_entry", aw_serialize($jfe, SERIALIZE_NATIVE));
+			$u->save();
 		}
 	}
 

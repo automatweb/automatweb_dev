@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.164 2004/11/24 15:12:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.165 2004/11/28 19:16:10 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -44,12 +44,12 @@ if (!defined("DEFS"))
 
 	function post_message($msg, $params)
 	{
-		if (aw_global_get("__in_post_message") == 1)
+		if (aw_global_get("__in_post_message") > 0)
 		{
 			return;
 		}
 
-		aw_global_set("__in_post_message", 1);
+		aw_disable_messages();
 
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message(array(
@@ -57,9 +57,18 @@ if (!defined("DEFS"))
 			"params" => $params
 		));
 
-		aw_global_set("__in_post_message", 0);
+		aw_restore_messages();
 	}
 	
+	function aw_disable_messages()
+	{
+		aw_global_set("__in_post_message", aw_global_get("__in_post_message")+1);
+	}
+
+	function aw_restore_messages()
+	{
+		aw_global_set("__in_post_message", aw_global_get("__in_post_message")-1);
+	}
 
 	function get_lc_date($time=0, $format=3)
 	{
@@ -73,12 +82,12 @@ if (!defined("DEFS"))
 	
 	function post_message_with_param($msg, $param, $params)
 	{
-		if (aw_global_get("__in_post_message") == 1)
+		if (aw_global_get("__in_post_message") > 0)
 		{
 			return;
 		}
 
-		aw_global_set("__in_post_message", 1);
+		aw_disable_messages();
 
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message_with_param(array(
@@ -87,7 +96,7 @@ if (!defined("DEFS"))
 			"params" => $params
 		));
 
-		aw_global_set("__in_post_message", 0);
+		aw_restore_messages();
 	}
 
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")

@@ -347,6 +347,13 @@
             <user>1</user>
             <caption>User-defined checkbox 5</caption>
       </property>
+      <property>
+            <name>join_form_entry</name>
+            <table>users</table>
+            <group>aclwizard</group>
+            <type>hidden</type>
+            <field>join_form_entry</field>
+      </property>
       <classinfo>
             <syslog_type>ST_USER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -408,6 +415,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Email</caption>
             </EMAIL>
+            <FG_PROFILE>
+                  <value>7</value>
+                  <clid>CL_FORM_ENTRY</clid>
+                  <caption>FG profiil</caption>
+            </FG_PROFILE>
       </reltypes>
 </properties>
 
