@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.114 2004/10/08 16:40:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.115 2004/10/13 09:19:42 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1142,13 +1142,15 @@ class image extends class_base
 
 		if ($o->prop("file2") != "")
 		{
+			$file2 = basename($o->prop("file2"));
+			$file2 = $this->cfg["site_basedir"]."/files/".$file2{0}."/".$file2;
 			if ($has_big_alt !== NULL)
 			{
 				$alt = $has_big_alt;
 			}
 			$imagetag = image::make_img_tag($u, $alt);
 
-			$size = @getimagesize($o->prop("file2"));
+			$size = @getimagesize($file2);
 
 			$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
 			$bi_link = "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
