@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.37 2004/06/02 10:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.38 2004/06/07 12:23:26 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -771,6 +771,15 @@ class promo extends class_base
 					"promo_doc_count" => (int)$d_cnt,
 					"image" => $image, 
 					"image_url" => $image_url
+				));
+
+				$hlc = "";
+				if ($o->meta("link_caption") != "")
+				{
+					$hlc = $inst->parse("HAS_LINK_CAPTION");
+				}
+				$inst->vars(array(
+					"HAS_LINK_CAPTION" => $hlc
 				));
 
 				// which promo to use? we need to know this to use
