@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.12 2004/04/30 08:47:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.13 2004/05/13 12:44:11 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -33,6 +33,9 @@
 
 @property mail_to type=textbox field=meta method=serialize group=mail
 @caption Meiliaadressid
+
+@property mail_info type=text store=no group=mail
+@caption Legend
 
 @property mail_subj type=textbox field=meta method=serialize group=mail
 @caption Kirja teema
@@ -75,6 +78,10 @@ class document_statistics extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "mail_info":
+				$data["value"] = "#sisu# asendatakse statistika tabeliga. ";
+				break;
+
 			case "timespan":
 				$data["options"] = array(
 					"day" => "P&auml;ev",
@@ -241,6 +248,10 @@ class document_statistics extends class_base
 
 		foreach($st as $did => $hc)
 		{
+			if ($did == aw_ini_get("frontpage"))
+			{
+				continue;
+			};
 			$o = obj($did);
 			$this->vars(array(
 				"doc_name" => trim(strip_tags($o->name())),

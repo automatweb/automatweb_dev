@@ -64,6 +64,15 @@
             <caption>Meiliaadressid</caption>
       </property>
       <property>
+            <name>mail_info</name>
+            <table>objects</table>
+            <group>mail</group>
+            <type>text</type>
+            <store>no</store>
+            <field>mail_info</field>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>mail_subj</name>
             <table>objects</table>
             <group>mail</group>
