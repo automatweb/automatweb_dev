@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.21 2005/03/22 20:54:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.22 2005/03/23 14:34:52 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -475,8 +475,8 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == 8035  ) {
-// /* dbg */ if ($job["resource"] == 6670  ) {
+// /* dbg */ if ($job["oid"] == 8035  ) {
+/* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
 
@@ -493,13 +493,17 @@ class mrp_schedule extends class_base
 // /* dbg */ }
 
 				### states for planning jobs
-				$applicable_states = array (
+				$applicable_planning_states = array (
 					MRP_STATUS_PLANNED,
 					MRP_STATUS_NEW,
+				);
+
+				### states for reserving job time and length w/o planning
+				$applicable_timereserve_states = array (
 					MRP_STATUS_ABORTED,
 				);
 
-				if ( in_array ($job["state"], $applicable_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
+				if ( in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
 				{
 
 // /* dbg */ if ($this->mrpdbg) {
@@ -509,6 +513,12 @@ class mrp_schedule extends class_base
 					### (re)schedule job next in line
 					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job["length"]);
 					$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length);
+				}
+				elseif (in_array ($job["state"], $applicable_timereserve_states))
+				{
+					### postpone next jobs by job length
+ 					$scheduled_start = $minstart;
+ 					$scheduled_length = $job["length"];
 				}
 				else
 				{
@@ -709,6 +719,14 @@ class mrp_schedule extends class_base
 		{
 			$resource_tag = $resource_id . "-" . $threads;
 			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
+
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "thread nr." . $threads. " reservation: ";
+/* dbg */ arr ($available_times[$resource_tag]);
+/* dbg */ echo "reserved times: ";
+/* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ }
+
 		}
 		while (--$threads);
 
@@ -737,14 +755,14 @@ class mrp_schedule extends class_base
 		### reserve time
 		$resource_tag = $selected_resource_tag;
 		$reserved_time = $available_times[$resource_tag][0];
+		$time_range = (int) $available_times[$resource_tag][2];
 		$length = $available_times[$resource_tag][1];
 		$this->reserved_times[$resource_tag][$time_range][$reserved_time] = $length;
 
 /* timing */ timing ("reserve_time - make corrections to timerange starting-times", "start");
 
 		### make corrections to selected thread's timerange starting-times
-		$time_range = $available_times[$resource_tag][2];
-		$i = 1;
+		$i = 0;
 
 		while (isset ($this->reserved_times[$resource_tag][$time_range + $i]))
 		{
@@ -790,6 +808,10 @@ class mrp_schedule extends class_base
 		}
 
 /* timing */ timing ("reserve_time - make corrections to timerange starting-times", "end");
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "reserved times: ";
+/* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ }
 
 		$reserved_time = $this->schedule_start + $reserved_time;
 		return array ($reserved_time, $length);
