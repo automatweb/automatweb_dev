@@ -41,9 +41,8 @@
       <property>
             <name>preview</name>
             <type>text</type>
-            <table>objects</table>
+            <store>no</store>
             <group>general</group>
-            <field>preview</field>
             <caption>Eelvaade</caption>
       </property>
 </properties>
