@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.5 2004/12/10 10:09:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.6 2005/03/18 12:02:30 ahti Exp $
 
 /*
 
@@ -107,7 +107,7 @@ class banner extends class_base
 
 	function do_save_prob_tbl(&$arr)
 	{
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LOCATION )) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LOCATION")) as $c)
 		{
 			$loc = $c->to();
 			// banners for that location
@@ -142,7 +142,7 @@ class banner extends class_base
 
 		// get the location(s) for this banner and then get all banners for that location. stick them into a table 
 		// and let the user enter probabilities
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LOCATION )) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LOCATION")) as $c)
 		{
 			$loc = $c->to();
 			// banners for that location
