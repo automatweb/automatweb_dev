@@ -23,5 +23,12 @@
 			</function>
 		</action>
 
+		<action name="submit_act_tbl" >
+			<function name="submit_act_tbl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
