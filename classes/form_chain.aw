@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.23 2002/07/18 10:48:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.24 2002/07/23 05:23:41 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -707,7 +707,7 @@ class form_chain extends form_base
 			$ft->row_data($row,$form_id,$section,0,$chain,$chain_entry);
 		}
 
-		return $ft->finish_table();
+		return $ft->finalize_table();
 	}
 
 	function delreplicas()
