@@ -440,7 +440,7 @@ class site_show extends class_base
 		}
 
 		// if it is a document, use this one. 
-		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION))
+		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION) || $obj->class_id() == CL_BROTHER_DOCUMENT)
 		{
 			return $obj->id();	// most important not to change this, it is!
 		}
@@ -602,7 +602,24 @@ class site_show extends class_base
 			{
 				if (!($no_fp_document && $o->prop("esilehel") == 1))
 				{
-					$docid[$cnt++] = ($o->class_id() == CL_DOCUMENT) ? $o->id() : $o->brother_of();
+					// oh. damn. this is sneaky. what if the brother is not active - we gits to check for that and if it is, then
+					// use the brother
+					if ($o->class_id() != CL_DOCUMENT)
+					{
+						$bo = obj($o->brother_of());
+						if ($bo->status() != STAT_ACTIVE)
+						{
+							$docid[$cnt++] = $o->id();
+						}
+						else
+						{
+							$docid[$cnt++] = $o->brother_of();
+						}
+					}
+					else
+					{
+						$docid[$cnt++] = $o->id();
+					}
 				}
 			}
 
@@ -1010,6 +1027,7 @@ class site_show extends class_base
 					$ya .= $this->parse("YAH_LINK");
 				}
 				$this->title_yah.=" / ".$ref->name();
+				$this->title_yah_arr[] = $ref->name();
 			}
 
 			if ($prev && $prev->id() == $this->cfg["rootmenu"])
@@ -1407,6 +1425,10 @@ class site_show extends class_base
 		$section = $this->section_obj->id();
 		$frontpage = $this->cfg["frontpage"];
 
+		// site_title_rev - shows two levels in reverse order
+		$pcnt = count($this->title_yah_arr);
+		$site_title_rev = strip_tags($this->title_yah_arr[$pcnt-1])." / ".strip_tags($this->title_yah_arr[$pcnt-2])." / ";
+
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -1421,6 +1443,7 @@ class site_show extends class_base
 			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
 			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 			"site_title" => strip_tags($this->site_title),
+			"site_title_rev" => $site_title_rev
 		));
 
 		if (aw_global_get("uid") == "")
