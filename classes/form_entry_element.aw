@@ -207,8 +207,10 @@ define(FORM_EELEMENT_LOADED,1);
 					$var=$base."_lb_".$b;
 					$this->arr[listbox_items][$b] = $$var;
 				}
-				if ($this->arr[listbox_items][$cnt-1] == "")		// if the last item is empty, remove it
+				while ($this->arr[listbox_items][$cnt-1] == "")
+				{
 					$cnt--;
+				}
 
 				$this->arr[listbox_count]=$cnt;
 				$var = $base."_lradio";
