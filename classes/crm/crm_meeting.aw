@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.14 2004/08/02 11:16:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.15 2004/08/25 18:48:33 rtoomas Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -8,6 +8,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @default table=objects
 @default group=general
+
+@property info_on_object type=text store=no
+@caption Osalejad
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -54,12 +57,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
 @caption Osalejad
 
+@property search_contact_firstname type=textbox store=no group=participants
+@caption Eesnimi
+
+@property search_contact_lastname type=textbox store=no group=participants
+@caption Perenimi
+
+@property search_contact_code type=textbox store=no group=participants
+@caption Isikukood
+
+@property search_contact_button type=submit store=no group=participants action=search_contacts
+@caption Otsi
+
+@property search_contact_results type=table store=no group=participants no_caption=1
+@caption Tulemuste tabel
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
-@groupinfo participants caption=Osalejad
+@groupinfo participants caption=Osalejad submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -85,6 +103,35 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+         case 'info_on_object':
+				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+				{
+					$conns = $arr['obj_inst']->connections_to(array(
+						'type' => 8,//CRM_PERSON.RELTYPE_PERSON_MEETING==8
+					));
+
+					foreach($conns as $conn)
+					{
+						$obj = $conn->from();
+						//isik
+						$data['value'].= html::href(array(
+							'url' => html::get_change_url($obj->id()),
+							'caption' => $obj->name(),
+						));
+						//isiku default firma
+						if(is_oid($obj->prop('work_contact')))
+						{
+							$company = new object($obj->prop('work_contact'));
+							$data['value'] .= " ".html::href(array(
+								'url' => html::get_change_url($company->id()),
+								'caption' => $company->name(),
+							));
+						}
+						$data['value'].='<br>';
+					}
+				}
+         break;
+
 			case 'task_toolbar' :
 			{
 				$tb = &$data['toolbar'];
@@ -101,13 +148,16 @@ class crm_meeting extends class_base
 					'name' => 'Search',
 					'img' => 'search.gif',
 					'tooltip' => 'Otsi',
+					'url' => aw_url_change_var(array(
+						'show_search' => 1,
+					)),
 				));
-
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
 		}
 	}
+	
 
 	function parse_alias($arr)
 	{
@@ -147,6 +197,19 @@ class crm_meeting extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
+		//the person who added the task will be a participant, whether he likes it
+		//or not
+		if($arr['new'])
+		{
+			//
+			$arr['obj_inst']->save();
+			$user = get_instance('core/users/user');
+			$person = new object($user->get_current_person());
+			$person->connect(array(
+				'reltype' => 'RELTYPE_PERSON_MEETING',
+				'to' => $arr['obj_inst'],
+			));
+		}
 		switch($data["name"])
 		{
 			case "project_selector":
@@ -193,5 +256,21 @@ class crm_meeting extends class_base
 			}
 		}		
    }
-};
+
+	/**
+      @attrib name=search_contacts
+   **/
+	function search_contacts($arr)
+	{
+		return $this->mk_my_orb('change',array(
+						'id' => $arr['id'],
+						'group' => $arr['group'],
+						'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
+						'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
+						'search_contact_code' => urlencode($arr['search_contact_code']),
+					),
+					$arr['class']
+		);
+	}
+}
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.69 2004/08/24 15:48:46 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.70 2004/08/25 18:48:33 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -2089,6 +2089,7 @@ class crm_company extends class_base
 	function submit_new_task($arr)
 	{
 		$arr['clid'] = CL_TASK;
+		$arr['reltype'] = 10; //CL_CRM_PERSON.RELTYPE_PERSON_TASK
 		$this->submit_new_action_to_person(&$arr);
 	}
 
@@ -2134,6 +2135,7 @@ class crm_company extends class_base
 	function submit_new_call($arr)
 	{
 		$arr['clid'] = CL_CRM_CALL;
+		$arr['reltype'] = 9; //CL_CRM_PERSON.RELTYPE_PERSON_CALL
 		$this->submit_new_action_to_person(&$arr);
 	}
 	
@@ -2144,6 +2146,7 @@ class crm_company extends class_base
 	function submit_new_meeting($arr)
 	{
 		$arr['clid'] = CL_CRM_MEETING;
+		$arr['reltype'] = 8; //CL_CRM_PERSON.RELTYPE_PERSON_MEETING
 		$this->submit_new_action_to_person(&$arr);
 	}
 
@@ -2161,15 +2164,17 @@ class crm_company extends class_base
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
 		$alias_to_org_arr = array();
 		$fake_alias = 0;
+		
 		reset($arr['check']);
+
 		$fake_alias = current($arr['check']);
 
 		$url = $this->mk_my_orb('change',array(
 				'id'=>$cal_id,
 				'group'=>'add_event',
 				'alias_to_org'=>$fake_alias,
-				'reltype_org'=>9, //PERSON_CALL
-				'clid'=>$arr['clid'],
+				'reltype_org'=> $arr['reltype'],
+				'clid'=> $arr['clid'],
 				'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
 				//'person_id'=>$person,
 			),'planner');
@@ -3662,8 +3667,13 @@ class crm_company extends class_base
 			$obj->connect(array(
 					'to' => $value,
 					'reltype' => $reltype 
-					));
+			));
+
+			$person = new object($value);
+			$person->set_prop('work_contact',$arr['id']);
+			$person->save();
 		}
+
 		return $this->mk_my_orb('change',array(
 								'id' => $arr['id'],
 								'unit' => $arr['unit'],
