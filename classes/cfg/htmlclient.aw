@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.17 2003/01/17 18:01:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.18 2003/01/26 18:42:32 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -215,13 +215,13 @@ class htmlclient extends aw_template
 			$this->res .= "\t<td class='chformrightcol'>";
 			$this->res .= "<input type='submit' value='Salvesta' class='small_button'>";
 			$this->res .= "</td>\n";
-			$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
-			unset($data["orb_class"]);
-			$this->res .= $this->mk_reforb($action,$data,$orb_class);
 			$this->res .= "</tr>\n";
 
-			$this->res .= "</table>\n";
 		};
+		$this->res .= "</table>\n";
+		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
+		unset($data["orb_class"]);
+		$this->res .= $this->mk_reforb($action,$data,$orb_class);
 		$this->res .= "</form>\n";
 	}
 
