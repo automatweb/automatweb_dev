@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.20 2005/02/16 15:04:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.21 2005/02/16 15:05:34 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1276,6 +1276,10 @@ class mrp_case extends class_base
 //!!! miks see workspacest v6etakse?
 	function _get_sales_priority($o)
 	{
+		if (!is_oid($o->id()))
+		{
+			return array();
+		}
 		$ws = $o->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		if ($ws)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.31 2005/02/16 15:04:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.32 2005/02/16 15:05:34 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2098,7 +2098,7 @@ class mrp_workspace extends class_base
 		$i = get_instance(CL_MRP_PRISMA_IMPORT);
 		$id = $i->import_project($arr["id"]);
 
-		header("Location: ".html::get_change_url($id));
+		header("Location: ".html::get_change_url($id)."&return_url=".urlencode(html::get_change_url(aw_ini_get("prisma.ws"))."&group=grp_projects"));
 		die();
 	}
 
