@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.80 2002/02/27 14:12:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.81 2002/02/27 20:06:03 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -69,7 +69,8 @@ class core extends db_connector
 		// the object into memory.
 		if ($oid)
 		{
-			$odata = $this->_get_object_metadata($oid);
+			$odata = $this->get_object($oid);
+			//$odata = $this->_get_object_metadata($oid);
 		}
 		else
 		{
