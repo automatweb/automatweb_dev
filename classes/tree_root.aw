@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tree_root.aw,v 2.3 2002/12/17 18:09:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tree_root.aw,v 2.4 2002/12/19 18:01:51 duke Exp $
 // tree_root.aw - puu rootobjekt
 
 /*
@@ -14,7 +14,7 @@
 */
 
 
-class tree_root extends aw_template
+class tree_root extends class_base
 {
 	function tree_root()
 	{

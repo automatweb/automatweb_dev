@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.7 2002/12/17 18:35:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.8 2002/12/19 18:01:51 duke Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -11,8 +11,11 @@
 	@property menus type=select multiple=1 size=15
 	@caption Menüüd
 
+	@property template type=select 
+	@caption Template
+
 */
-class menu_tree extends aw_template
+class menu_tree extends class_base
 {
 	function menu_tree()
 	{
@@ -32,6 +35,15 @@ class menu_tree extends aw_template
 				$menus = $ob->get_list();
 				$data["options"] = $menus;
 				break;
+
+			case "template":
+				$tpldir = $this->cfg["site_basedir"] . "/templates/menu_tree";
+				$tpls = $this->get_directory(array(
+					"dir" => $tpldir,
+				));
+				$data["options"] = $tpls;
+				break;
+
 		}
 		return PROP_OK;
         }

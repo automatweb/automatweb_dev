@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.5 2002/11/14 16:04:18 duke Exp $
+// $Id: site_threepane.aw,v 1.6 2002/12/19 18:00:40 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -26,7 +26,7 @@
 	@classinfo relationmgr=yes
 
 */
-class site_threepane extends aw_template
+class site_threepane extends class_base
 {
 	function site_threepane($args = array())
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Id: xml_import.aw,v 2.7 2002/11/04 21:40:16 duke Exp $
+// $Id: xml_import.aw,v 2.8 2002/12/19 18:01:51 duke Exp $
 /*
 	@default table=objects
 	@default group=general
@@ -9,18 +9,18 @@
 	@property import_function type=select field=meta method=serialize
 	@caption Impordifunktsioon
 
-	@property run_import type=text
+	@property run_import type=text editonly=1
 	@caption Käivita import
 
 */
-class xml_import extends aw_template
+class xml_import extends class_base
 {
 
 	function xml_import($args = array())
 	{
 		$this->init(array(
 			"tpldir" => "xml_import",
-			"clid" => CL_DATASOURCE,
+			"clid" => CL_XML_IMPORT,
 		));
 		$this->methods = array(
 			"import_tudengid" => "import_tudengid",
@@ -60,6 +60,14 @@ class xml_import extends aw_template
 		};
 	}
 
+	function set_property($args = array())
+	{
+		if ($args["prop"]["name"] == "run_import")
+		{
+			$retval = PROP_IGNORE;
+		};
+		return $retval;
+	}
 
 	////
 	// !Wrapper to display the repeater editing interface inside this classes frame
