@@ -29,9 +29,10 @@ class tpledit extends aw_template {
 		$tpldir .= "$parent";
 		$files = array();
 		$dirs = array();
+		$sep = (strlen($parent) > 1) ? "/" : "";
 		if ($dir = @opendir($tpldir)) {
 			while ($file = readdir($dir)) {
-				$fullname = $tpldir . $file;
+				$fullname = $tpldir . $sep . $file;
 				if (is_dir($fullname))
 				{
 					if (strpos($file,".") === false)
@@ -58,7 +59,7 @@ class tpledit extends aw_template {
 				"name" => $name,
 				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
 				"size" => $stat[$fullname][FILE_SIZE],
-				"dirlink" => $this->mk_orb("browse",array("parent" => $parent . "/" . $name)),
+				"dirlink" => $this->mk_orb("browse",array("parent" => $parent . $sep . $name)),
 			));
 
 			$d .= $this->parse("directory");
@@ -66,7 +67,7 @@ class tpledit extends aw_template {
 
 		foreach($files as $name)
 		{
-			$fullname = $tpldir . $name;
+			$fullname = $tpldir . $sep . $name;
 			$relname = substr($fullname,strlen($tplroot) + 1);
 			$this->vars(array(
 				"name" => $name,
@@ -101,7 +102,8 @@ class tpledit extends aw_template {
 			"path" => $path,
 		));
 
-		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array()) . "'>TemplateEditor</a>";
+		$test = $this->mk_orb("shak",array("kala" => "tursk2"));
+		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
 		return $this->parse();
 	}
 
@@ -110,7 +112,7 @@ class tpledit extends aw_template {
 		extract($args);
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
-		$source = join("",@file($tpldir . $file));
+		$source = join("",@file($tpldir . "/" . $file));
 		$this->read_template("edit.tpl");
 		$this->vars(array(
 			"file" => $file,
@@ -118,7 +120,7 @@ class tpledit extends aw_template {
 			"rawlink" => $this->mk_orb("source",array("file" => $file)),
 			"reforb" => $this->mk_reforb("submit",array("file" => $file)),
 		));
-		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array()) . "'>TemplateEditor</a>";
+		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
 		return $this->parse();
 	}
 
@@ -153,7 +155,7 @@ class tpledit extends aw_template {
 		extract($args);
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
-		$source = join("",@file($tpldir . $file));
+		$source = join("",@file($tpldir . "/" . $file));
 		$realname = basename($file);
 		header("Content-Type: text/html");
 		header("Content-Disposition: filename=$realname");
