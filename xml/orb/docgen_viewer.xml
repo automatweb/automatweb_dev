@@ -37,7 +37,7 @@
 				<arguments>
 					<required name="file" />
 					<required name="v_class" />
-					<required name="func" />
+					<optional name="func" />
 				</arguments>
 			</function>
 		</action>
