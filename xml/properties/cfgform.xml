@@ -176,6 +176,18 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>gen_controller_props</callback>
+            <caption>Kontrollerid</caption>
+      </property>
+      <property>
+            <name>sysdefault</name>
+            <table>objects</table>
+            <group>system</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Süsteemi seaded</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -195,6 +207,9 @@
             <controllers>
                   <caption>Kontrollerid</caption>
             </controllers>
+            <system>
+                  <caption>Seaded</caption>
+            </system>
       </groupinfo>
       <reltypes>
             <PROP_GROUP>
