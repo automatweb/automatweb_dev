@@ -1,11 +1,21 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.26 2001/05/25 14:24:07 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.27 2001/05/27 00:14:46 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
 classload("defs");
 global $orb_defs;
 $orb_defs["messenger"] = "xml";
+
+// sisemine, aw sees saadetud teade
+define('MSG_INTERNAL',1);
+// väline, ntx pop3 serverist võetud teade
+define('MSG_EXTERNAL',2);
+
+// teadete staatused
+define('MSG_STATUS_UNREAD',0);
+define('MSG_STATUS_READ',1);
+
 
 // sql draiver messengeri jaoks
 class msg_sql_driver extends db_connector
@@ -25,11 +35,6 @@ class msg_sql_driver extends db_connector
 		$this->db_query($q);
 		$row = $this->db_next();
 
-		if ($mark_as_read)
-		{
-			$q = "UPDATE messages SET status = 1 WHERE id = '$id'";
-			$this->db_query($q);
-		}
 		return $row;
 	}
 
@@ -80,12 +85,45 @@ class msg_sql_driver extends db_connector
 	// !liigutab mingi messi teise folderisse
 	// argumendid:
 	// folder(int) - kuhu teade liigutada
-	// id(int) - milline teade liigutada
+	// id(int voi array) - milline teade(teated) liigutada
 	function msg_move($args = array())
 	{
-		extract($args);
-		$q = "UPDATE objects SET parent = '$folder' WHERE oid = '$id'";
+		if (is_array($args["id"]) && (sizeof($args["id"]) > 0))
+		{
+			$idl = join(',',$args["id"]);
+		}
+		else
+		{
+			$idl = $args["id"];
+		};
+		$q = sprintf("UPDATE objects SET parent = %d WHERE oid IN ('%s')",$args["folder"],$idl);
 		$this->db_query($q);
+	}
+
+	////
+	// !Märgib teate loetuks, ehk siis soltuvalt etteantud konfiguratsioonivotmest,
+	// muudab ainult status flagi voi ka parentit (ehk folderit)
+	// argumendid:
+	// parent(int)(optional) - kui defineeritud, siis viiakse teade ka uude folderisse
+	// id(int voi array) - teate id, voi id-de array
+	function msg_mark_as_read($args = array())
+	{
+		if (is_array($args["id"]) && (sizeof($args["id"]) > 0))
+		{
+			$idl = join(',',$args["id"]);
+		}
+		else
+		{
+			$idl = $args["id"];
+		};
+
+		$q = sprintf("UPDATE messages SET status = %d WHERE id IN ('%s')",MSG_STATUS_READ,$idl);
+		$this->db_query($q);
+
+		if ($args["parent"])
+		{
+			$this->msg_move($args);
+		}
 	}
 
 	// listib teated. inefficient? maybe
@@ -145,7 +183,6 @@ class msg_sql_driver extends db_connector
 
 classload("menuedit_light","xml");
 // siit algab messengeri põhiklass
-// kirju tüüpi draft peab ka kuidagi märkima
 class messenger extends menuedit_light 
 {
 	////
@@ -158,7 +195,10 @@ class messenger extends menuedit_light
 		$this->db_init();
 		$this->tpl_init("messenger");
 		$driverclass = "msg_" . $this->drivername . "_driver";
+
+		// $this->driveri kaudu pöördutakse andmebaasidraiveri poole
 		$this->driver = new $driverclass;
+		
 		// juhuks, kui kusagil on vaja kasutada messengeri alamhulka, siis konstruktorile
 		// fast argumendi etteandmisega saab vältida rohkem aega nõudvaid operatsioone
 		// kuigi tegelikult peaks selleks messengeri klassi hoopis kaheks lööma
@@ -229,7 +269,9 @@ class messenger extends menuedit_light
 		$users->tpl_init("messenger");
 		print $users->gen_plain_list(array("tpl" => "pick_users.tpl"));
 	}
-	
+
+	////
+	// !And this too should be some place else
 	function pick_groups($args = array())
 	{
 		classload("menuedit_light");
@@ -256,8 +298,10 @@ class messenger extends menuedit_light
 			$c .= $this->parse("line");
 			$c2 .= $this->parse("names");
 		};
-		$this->vars(array("line" => $c,
-				"names" => $c2));
+		$this->vars(array(
+				"line" => $c,
+				"names" => $c2
+			));
 		return $this->parse();
 			
 	}
@@ -321,10 +365,9 @@ class messenger extends menuedit_light
 	}
 		
 
-
-
 	////
 	// !This should thread all the messages we have here, overrides the function in menuedit_light
+	// but it is not used right now. As far as I can see.
 	function _gen_rec_list2($parents = array())
 	{
 		$this->save_handle();
@@ -418,13 +461,12 @@ class messenger extends menuedit_light
 		};
 		foreach($flist as $key => $val)
 		{
-			$checked = ($this->msgconf["msg_defaultfolder"] == $key) ? "checked" : "";
 			$this->vars(array(
 				"id" => $key,
 				"name" => $val,
 				"total" => ($totals[$key]) ? $totals[$key] : 0,
 				"unread" => ($unread[$key]) ? $unread[$key] : 0,
-				"checked" => $checked,
+				"checked" => checked($this->msgconf["msg_defaultfolder"] == $key),
 			));
 			$c .= $this->parse("line");
 		};
@@ -533,7 +575,7 @@ class messenger extends menuedit_light
 					// kui status == true, siis on teade loetud
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($cnt % 2) ? "#EEEEEE" : "#FFFFFF";
-					$tpl = ($msg["status"]) ? "line" : "unreadline";
+					$msg["style"] = ($msg["status"]) ? "textsmall" : "textsmallbold";
 					if ($msg["type"] == 2)
 					{
 						$msg["from"] = htmlspecialchars($msg["mfrom"]);
@@ -548,7 +590,7 @@ class messenger extends menuedit_light
 					$msg["cnt"] = $cnt;
 					$msg["tm"] = $this->time2date($row["tm"]);
 					$this->vars($msg);
-					$c .= $this->parse($tpl);
+					$c .= $this->parse("line");
 				};
 				$cnt++;
 			};
@@ -976,35 +1018,46 @@ class messenger extends menuedit_light
 	{
 		$menu = $this->gen_msg_menu(array());
 		extract($args);
+	
+		// hm. kas seda GLOBALS["udata"] seest ei saaks?
 		$user = $this->get_user(array(
 			"uid" => UID,
 		));
+
 		$msg = $this->driver->msg_get(array(
 			"id" => $id,
-			"mark_as_read" => 1,
 		));
+
 		$folder_list = $this->_folder_list();
+
 		$this->read_template("message.tpl");
+		
 		$vars = array();
-		if ($msg["type"] == 2)
+
+		// Sõltuvalt message tüübist on vaja erinevad template väljad täita erinevate väärtustega
+		switch($msg["type"])
 		{
-			$vars = array(
-				"mfrom" => htmlspecialchars($msg["mfrom"]),
-				"mtargets" => htmlspecialchars($msg["mto"]),
-				"subject" => htmlspecialchars($this->MIME_decode($msg["subject"])),
-			);
-		}
-		else
-		{
-			$vars = array(
-				"mfrom" => $msg["createdby"],
-				"mto" => $msg["mto"],
-				"mtargets" => $msg["mtargets1"],
-				"subject" => $msg["subject"],
-			);
+			case MSG_EXTERNAL:
+				// replace < and > in the fields with correspondening HTML entitites
+				$vars = array(
+					"mfrom" => htmlspecialchars($msg["mfrom"]),
+					"mtargets" => htmlspecialchars($msg["mto"]),
+					"subject" => htmlspecialchars($this->MIME_decode($msg["subject"])),
+				);
+				break;
+
+			case MSG_INTERNAL:
+				$vars = array(
+					"mfrom" => $msg["createdby"],
+					"mto" => $msg["mto"],
+					"mtargets" => $msg["mtargets1"],
+					"subject" => $msg["subject"],
+				);
+				break;
 		};
 
 		$this->vars($vars);	
+
 		$this->vars(array(
 			"tm" => $this->time2date($msg["tm"]),
 			"mtargets2" => $msg["mtargets2"],
@@ -1018,6 +1071,8 @@ class messenger extends menuedit_light
 			"mbox_name" => $mboxes[$mailbox],
 			"folders_dropdown" => $this->picker($user["msg_inbox"],$folder_list),
 		));
+		
+		// Attachid
 		$q = "SELECT * FROM msg_objects WHERE message_id = '$id'";
 		$this->db_query($q);
 		$att_list = array();
@@ -1037,19 +1092,18 @@ class messenger extends menuedit_light
 			$this->vars(array("id" => $v["idd"]));
 			$att .= $this->parse("att");
 		};
+		
 		$this->vars(array(
 			"att" => $att,
 			"menu" => $menu,
 		));
-		// kui kasutaja soovib teateid liigutada, siis teeme seda nüüd
-		if ($this->msgconf["msg_move_read"])
-		{
-			$this->driver->msg_move(array(
-					"id" => $id,
-					"folder" => $this->msgconf["msg_move_read_folder"],
-			));
-		}
 
+		// kui kasutaja soovib teateid liigutada, siis teeme seda nüüd
+		$moveto = ($this->msgconf["msg_move_read"]) ? $this->msgconf["msg_move_read_folder"] : "";
+		$this->driver->msg_mark_as_read(array(
+						"id" => $id,
+						"parent" => $moveto,
+					));
 		return $this->parse();
 	}
 	////
@@ -1135,12 +1189,6 @@ class messenger extends menuedit_light
 			$raw["msg_quotechar"] = ">";
 		};
 
-		// vaikimisi signatuurieraldaja
-		if (!isset($raw["msg_sigsep"]))
-		{
-			$raw["msg_sigsep"] = "--";
-		};
-
 		// mitu attachi lisamise textboxi by default kuvatakse
 		if (!isset($raw["msg_cnt_att"]))
 		{
@@ -1212,7 +1260,7 @@ class messenger extends menuedit_light
 								"cnt" => $cnt, 
 								"signame" => $sigdat["name"],
 								"signature" => nl2br($sigdat["content"]),
-								"default" => ($this->conf["defsig"] == $signum) ? "checked" : "",
+								"default" => checked($this->conf["defsig"] == $signum),
 							));
 						$siglist .= $this->parse("sig");
 					};
@@ -1235,7 +1283,7 @@ class messenger extends menuedit_light
 						$this->vars(array(
 								"id" => $accid,
 								"name" => $cvalues["name"],
-								"checked" => ($cvalues["default"]) ? "checked" : "",
+								"checked" => checked($cvalues["default"]),
 								"type" => "POP3", // *pun intended*
 						));
 						$c .= $this->parse("line");
@@ -1251,15 +1299,14 @@ class messenger extends menuedit_light
 				$conf = $this->msgconf;
 				$vars = array(
 						"msg_on_page" => $this->picker($conf["msg_on_page"],array("10" => "10", "20"=>"20","30"=>"30","40"=>"40")),
-						"msg_store_sent" => ($conf["msg_store_sent"]) ? "checked" : "",
+						"msg_store_sent" => checked($conf["msg_store_sent"]),
 						"msg_ondelete" => $this->picker($conf["msg_ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
-						"msg_confirm_send" => ($conf["msg_confirm_send"]) ? "checked" : "",
+						"msg_confirm_send" => checked($conf["msg_confirm_send"]),
 						"msg_quote_list" => $this->picker($conf["msg_quotechar"],array(">" => ">",":" => ":")),
 						"msg_default_pri" => $this->picker($conf["msg_default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
-						"msg_sigsep" => $conf["msg_sigsep"],
 						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
 						"msg_move_read_folder" => $this->picker($conf["msg_move_read_folder"],$folder_list),
-						"msg_move_read" => ($conf["msg_move_read"]) ? "checked" : "",
+						"msg_move_read" => checked($conf["msg_move_read"]),
 						"aftpage" => "general",
 						);
 				break;
@@ -1786,8 +1833,8 @@ class messenger extends menuedit_light
 		$this->vars(array(
 			"field_list" => $this->picker($field_index,$fields),
 			"folder_list" => $this->picker($folder_index,$folders),
-			"folder_checked" => ($delivery == "fldr") ? "checked" : "",
-			"addr_checked" => ($delivery == "mail") ? "checked" : "",
+			"folder_checked" => checked($delivery == "fldr"),
+			"addr_checked" => checked($delivery == "mail"),
 			"rule" => $row["rule"],
 			"addr" => $row["addr"],
 			"title" => $title,
