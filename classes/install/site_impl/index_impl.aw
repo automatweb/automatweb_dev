@@ -1,12 +1,13 @@
 <?php
 //if ($alias && $alias != "forum_v2" && $alias != "personalikeskkond")
-if ($alias && $alias != "forum_v2")
+//if ($alias && $alias != "forum_v2")
+if ($alias)
 {
 	$class = $alias;
 };
 
-if (($class && $class != "personnel_management") || $reforb)
-//if ($class  || $reforb)
+//if (($class && $class != "personnel_management") || $reforb)
+if ($class  || $reforb)
 {
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/orb_impl_exec.".aw_ini_get("ext"));
 }
