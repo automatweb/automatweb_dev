@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.95 2004/12/09 17:03:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.96 2004/12/10 10:11:43 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -295,7 +295,7 @@ class doc extends class_base
 
 			case "calendar_relation":
 				$cl = new aw_array($this->calendar_list);
-				$data["options"] = array(-1 => "puudub") + $cl->get();
+				$data["options"] = array(-1 => t("puudub")) + $cl->get();
 				break;
 
 			case "duration":
@@ -570,7 +570,7 @@ class doc extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"url" => "javascript:submit_changeform();",
 			"img" => "save.gif",
 		));
@@ -580,7 +580,7 @@ class doc extends class_base
 		{
 			$toolbar->add_button(array(
 				"name" => "preview",
-				"tooltip" => "Eelvaade",
+				"tooltip" => t("Eelvaade"),
 				"target" => "_blank",
 				"url" => aw_global_get("baseurl") . "/" . $arr["obj_inst"]->id(),
 				"img" => "preview.gif",
@@ -653,7 +653,7 @@ class doc extends class_base
 	{
 		extract($args);
 		$sar = array();
-		$this->db_query("SELECT parent FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
+		$this->db_query("SELECT parent FROM objects WHERE brother_of = '$id' AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
 		while ($arow = $this->db_next())
 		{
 			$sar[$arow["parent"]] = $arow["parent"];
@@ -743,7 +743,7 @@ class doc extends class_base
 		if (empty($def_cfgform))
 		{
 			$retval["ng_doc"] = array(
-				"caption" => "Dokument 2.0",
+				"caption" => t("Dokument 2.0"),
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"doc"),
 			);
 		}
@@ -932,7 +932,16 @@ class doc extends class_base
 	**/
 	function upg($arr)
 	{
-		$this->db_query("ALTER TABLE documents ADD no_show_in_promo int default 0");
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user6 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user7 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user8 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user9 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user10 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user11 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user12 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user13 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user14 varchar(255)", false);
+		$this->db_query("ALTER TABLE aw_shop_packaging ADD user15 varchar(255)", false);
 		die("all done");
 	}
 };

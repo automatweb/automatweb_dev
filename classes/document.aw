@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.304 2004/11/23 13:20:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.305 2004/12/10 10:11:24 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -397,7 +397,7 @@ class document extends aw_template
 		//$meta = $doc["meta"];
 		if ($meta["show_last_changed"])
 		{
-			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
+			$doc["content"] .= "<p><font size=1><i>".t("Viimati muudetud:")."&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
 	
 
@@ -583,7 +583,7 @@ class document extends aw_template
 				}
 				else
 				{
-					$def = "<br /><B>Edasi loe ajakirjast!</b></font>";
+					$def = t("<br /><B>Edasi loe ajakirjast!</b></font>");
 				};
 				$doc["content"] = substr($doc["content"],0,$pp).$def;
 			}
@@ -607,7 +607,7 @@ class document extends aw_template
 			$re = LC_LOE_EDASI;
 			if ($re == "")
 			{
-				$re = "Loe edasi";
+				$re = t("Loe edasi");
 			}
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
@@ -1033,12 +1033,12 @@ class document extends aw_template
 		if ($this->is_template("LINKLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
 
-			$pos = strpos($doc["content"],"Vaata lisaks:");
+			$pos = strpos($doc["content"],t("Vaata lisaks:"));
 			if ($pos !== false)
 			{
 				$doc["content"] = substr($doc["content"],0,$pos);
 			};
-			$pos = strpos($doc["content"],"Samal teemal:");
+			$pos = strpos($doc["content"],t("Samal teemal:"));
 			if ($pos !== false)
 			{
 				$doc["content"] = substr($doc["content"],0,$pos);
@@ -1082,12 +1082,12 @@ class document extends aw_template
 		if ($this->is_template("DOCLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
 
-			$pos = strpos($doc["content"],"Vaata lisaks:");
+			$pos = strpos($doc["content"],t("Vaata lisaks:"));
 			if ($pos !== false)
 			{
 				$doc["content"] = substr($doc["content"],0,$pos);
 			};
-			$pos = strpos($doc["content"],"Samal teemal:");
+			$pos = strpos($doc["content"],t("Samal teemal:"));
 			if ($pos !== false)
 			{
 				$doc["content"] = substr($doc["content"],0,$pos);
@@ -2009,9 +2009,9 @@ class document extends aw_template
 											"newwindow" => checked($document["newwindow"]),
 											"author"  => $document["author"],
 											"photos"  => $document["photos"],
-											"periood"  => ($document["period"] > 0) ? $pdata["description"] : "staatiline",
-											"status"  => $this->option_list($document["status"],array("2" => "Jah","1" => "Ei")),
-											"visible" => $this->option_list($document["visible"],array("1" => "Jah","0" => "Ei")),
+											"periood"  => ($document["period"] > 0) ? $pdata["description"] : t("staatiline"),
+											"status"  => $this->option_list($document["status"],array("2" => t("Jah"),"1" => t("Ei"))),
+											"visible" => $this->option_list($document["visible"],array("1" => t("Jah"),"0" => t("Ei"))),
 											"keywords"  => $document["keywords"],
 										  "lead"    => ($is_ie ? str_replace("\"","&quot;",trim($document["lead"])) : $document["lead"]),
 											"alias" => $document["alias"],
@@ -3025,14 +3025,14 @@ class document extends aw_template
 		$tt->parse_xml_def($this->cfg["site_basedir"]."/xml/generic_table.xml");
 		$tt->define_field(array(
 			"name" => "name",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 			"talign" => "center",
 			"sortable" => 1,
 		));
 		$tt->define_field(array(
 			"name" => "modified",
 			"type" => "time",
-			"caption" => "Kuup&auml;ev",
+			"caption" => t("Kuup&auml;ev"),
 			"talign" => "center",
 			"format" => "j.m.y",
 			"align" => "center",
@@ -3040,7 +3040,7 @@ class document extends aw_template
 		));
 		$tt->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Autor",
+			"caption" => t("Autor"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -3563,7 +3563,7 @@ class document extends aw_template
 	// uses the settings set in the general static site settings for generation
 	function gen_static_doc($id)
 	{
-		echo "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n";
+		echo t("<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n");
 		echo "\n\r<br />";
 		echo "\n\r<br />"; flush();
 		ob_start();
@@ -3593,8 +3593,8 @@ class document extends aw_template
 		}
 
 		ob_end_clean();
-		echo  "Staatilised lehek&uuml;ljed loodud!<br />\n";
-		die("<br /><br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< tagasi dokumendi muutmise juurde</a>");
+		echo  t("Staatilised lehek&uuml;ljed loodud!<br />\n");
+		die("<br /><br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'> <<< ".t("tagasi dokumendi muutmise juurde")."</a>");
 	}
 
 	////
@@ -3604,25 +3604,25 @@ class document extends aw_template
 		$fields = array();
 		$fields["name"] = array(
 			"type" => "textbox",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 			"value" => $args["name"],
 		);
 
 		$fields["lead"] = array(
 			"type" => "textbox",
-			"caption" => "Lead",
+			"caption" => t("Lead"),
 			"value" => $args["lead"],
 		);
 
 		$fields["content"] = array(
 			"type" => "textbox",
-			"caption" => "Sisu",
+			"caption" => t("Sisu"),
 			"value" => $args["content"],
 		);
 		
 		$fields["author"] = array(
 			"type" => "textbox",
-			"caption" => "Autor",
+			"caption" => t("Autor"),
 			"value" => $args["author"],
 		);
 
@@ -3632,7 +3632,7 @@ class document extends aw_template
 
 		$fields["period"] = array(
 			"type" => "multiple",
-			"caption" => "Periood",
+			"caption" => t("Periood"),
 			"options" => $mlist,
 			"selected" => $args["period"],
 		);
@@ -3692,7 +3692,7 @@ class document extends aw_template
 		$args["clid"] = "document";
 		$os = $this->mk_my_orb("search",array("parent" => $args["parent"]),"search");
 		$url = $this->mk_my_orb("docsearch",array("parent" => $args["parent"]));
-		$this->mk_path($args["parent"],"<a href='$os'>Objektiotsing</a> / <a href='$url'>Dokumentide otsing</a>");
+		$this->mk_path($args["parent"],"<a href='$os'>".t("Objektiotsing")."</a> / <a href='$url'>".t("Dokumentide otsing")."</a>");
 		$form = $search->show($args);
 		$results = $search->get_results();
 		$this->vars(array(
