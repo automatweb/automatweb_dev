@@ -115,7 +115,7 @@ function mk_my_table($arr)
 // please refer to Storage documentation for the explanation of connections_from method.
 $ob = $arr["obj_inst"]; 
 $conn = $ob->connections_from(array(
-     "type" => RELTYPE_MESSAGE,
+     "type" => "RELTYPE_MESSAGE",
 ));
 // iterate over all connections with this type
 foreach($conn as $c)
