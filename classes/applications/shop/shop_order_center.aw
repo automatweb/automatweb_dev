@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.9 2004/06/19 19:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.10 2004/07/05 15:32:48 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -119,6 +119,7 @@ class shop_order_center extends class_base
 	{
 		$arr["obj_inst"]->set_meta("itemlayouts", $arr["request"]["itemlayout"]);
 		$arr["obj_inst"]->set_meta("itemlayouts_long", $arr["request"]["itemlayout_long"]);
+		$arr["obj_inst"]->set_meta("itemlayouts_long_2", $arr["request"]["itemlayout_long_2"]);
 		$arr["obj_inst"]->set_meta("tblayouts", $arr["request"]["tblayout"]);
 	}
 
@@ -159,6 +160,12 @@ class shop_order_center extends class_base
 		$t->define_field(array(
 			"name" => "item_layout_long",
 			"caption" => "Paketi vaate kujundus",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "item_layout_long_2",
+			"caption" => "Paketi teise vaate kujundus",
 			"align" => "center"
 		));
 
@@ -207,6 +214,7 @@ class shop_order_center extends class_base
 
 		$this->itemlayouts = $o->meta("itemlayouts");
 		$this->itemlayouts_long = $o->meta("itemlayouts_long");
+		$this->itemlayouts_long_2 = $o->meta("itemlayouts_long_2");
 
 		$this->itemlayout_items = array("0" => "--vali--");
 		foreach($o->connections_from(array("type" => RELTYPE_ITEM_LAYOUT)) as $c)
@@ -245,6 +253,11 @@ class shop_order_center extends class_base
 				"name" => "itemlayout_long[".$o->id()."]",
 				"options" => $this->itemlayout_items,
 				"selected" => $this->itemlayouts_long[$o->id()]
+			)),
+			"item_layout_long_2" => html::select(array(
+				"name" => "itemlayout_long_2[".$o->id()."]",
+				"options" => $this->itemlayout_items,
+				"selected" => $this->itemlayouts_long_2[$o->id()]
 			)),
 		));
 	}
@@ -486,7 +499,7 @@ class shop_order_center extends class_base
 		return $tl_inst->finish_table();
 	}
 
-	/** returns the long layout object for the product 
+	/** returns the long layout object for the product, based on the view given in the url
 
 		@comment
 			$soc - order center object
@@ -495,7 +508,14 @@ class shop_order_center extends class_base
 	function get_long_layout_for_prod($arr)
 	{
 		extract($arr);
-		$il = $soc->meta("itemlayouts_long");
+		if ($GLOBALS["view"] == 2)
+		{
+			$il = $soc->meta("itemlayouts_long_2");
+		}
+		else
+		{
+			$il = $soc->meta("itemlayouts_long");
+		}
 		foreach(array_reverse($prod->path()) as $p)
 		{
 			if ($il[$p->id()])

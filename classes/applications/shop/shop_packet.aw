@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.6 2004/07/02 13:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.7 2004/07/05 15:32:48 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -199,6 +199,8 @@ class shop_packet extends class_base
 		$prods = "";
 		$pisets = array();
 		$first = true;
+		$p_cnt = 1;
+		$pager = array();
 		foreach($prod->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$w = $c->to();
@@ -207,7 +209,8 @@ class shop_packet extends class_base
 				"prod_name" => $w->name(),
 				"prod_price" => $w_i->get_price($w),
 				"prod_link" => obj_link($prod->id().":".$oc_obj->id()),
-				"prod_in_packet_link" => obj_link($prod->id().":".$oc_obj->id())."?prod=".$w->id()
+				"prod_in_packet_link" => obj_link($prod->id().":".$oc_obj->id())."?prod=".$w->id(),
+				"prod_num" => $p_cnt,
 			));
 
 			if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
@@ -233,10 +236,38 @@ class shop_packet extends class_base
 					}
 				}
 
+				for ($i = 1; $i < 6; $i++)
+				{
+					if ($l_inst->template_has_var("sel_prod_uservarm".$i."_edit"))
+					{
+						$tmp = $clssf->get_options_for(array(
+							"clid" => $w->class_id(),
+							"name" => "uservarm".$i,
+							"obj_inst" => $w,
+						));
+						$options = array();
+						$awa = new aw_array($w->prop("uservarm".$i));
+						foreach($awa->get() as $v)
+						{
+							$options[$v] = $tmp[$v];
+						}
+						$html = html::select(array(
+							"name" => "order_data[".$w->id()."][uservarm".$i."]",
+							"options" => $options,
+							"selected" => $itemd["data"]["uservarm".$i]
+						));
+						$l_inst->vars(array(
+							"sel_prod_uservarm".$i."_edit" => $html,
+						));
+					}
+				}
+
 				$l_inst->vars(array(
 					"sel_prod_id" => $w->id(),
+					"sel_prod_name" => $w->name(),
 					"sel_prod_quantity" => $itemd["quant"],
-					"sel_prod_price" => $w_i->get_price($w)
+					"sel_prod_price" => $w_i->get_price($w),
+					"sel_prod_userta2" => $w->prop("userta2")
 				));
 			}
 
@@ -254,34 +285,70 @@ class shop_packet extends class_base
 					"prod_image".$cnt."_url" => $u,
 				));
 
+				if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
+				{
+					$l_inst->vars(array(
+						"sel_prod_image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
+						"sel_prod_image".$cnt."_url" => $u,
+						"sel_prod_image".$cnt."_onclick" => image::get_on_click_js($c->prop("to")),
+						"sel_prod_more_img_url" => aw_url_change_var("view", 2)
+					));
+					$tstr = "SEL_PROD_HAS_OVER_".($cnt-1)."_IMAGES";
+					$l_inst->vars(array(
+						$tstr => $l_inst->parse($tstr)
+					));
+				}
+
 				if ($u != "")
 				{
 					$l_inst->vars(array(
 						"PROD_HAS_IMAGE_".$cnt => $l_inst->parse("PROD_HAS_IMAGE_".$cnt)
 					));
 					$pisets["PROD_HAS_IMAGE_".$cnt] = "";
+					if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
+					{
+						$l_inst->vars(array(
+							"SEL_PROD_HAS_IMAGE_".$cnt => $l_inst->parse("SEL_PROD_HAS_IMAGE_".$cnt)
+						));
+					}
 				}
 				else
 				{
 					$l_inst->vars(array(
 						"PROD_HAS_IMAGE_".$cnt => ""
 					));
+					if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
+					{
+						$l_inst->vars(array(
+							"SEL_PROD_HAS_IMAGE_".$cnt => ""
+						));
+					}
 				}
 				$cnt++;
 			}
 
-			if ($GLOBALS["prod"] == $w->id())
+			if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
 			{
 				$h_s_p = $l_inst->parse("HAS_SEL_PROD");
+				$pager[] = $l_inst->parse("PROD_PAGER_SEL");
+			}
+			else
+			{
+				$pager[] = $l_inst->parse("PROD_PAGER");
 			}
 
 			$prods .= $l_inst->parse("PRODUCT");
 			$first = false;
+			$p_cnt++;
+
 		}
 
 		$l_inst->vars(array(
 			"PRODUCT" => $prods,
 			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $oc_obj_id, "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
+			"PROD_PAGER" => join($l_inst->parse("PROD_PAGER_SEP"), $pager),
+			"PROD_PAGER_SEL" => "",
+			"PROD_PAGER_SEP" => ""
 		));
 
 		// insert images
@@ -292,10 +359,20 @@ class shop_packet extends class_base
 		foreach($imgc as $c)
 		{
 			$u = $i->get_url_by_id($c->prop("to"));
+			$onc = image::get_on_click_js($c->prop("to"));
+
 			$l_inst->vars(array(
 				"image".$cnt => image::make_img_tag_wl($c->prop("to")),
 				"image".$cnt."_url" => $u,
+				"image".$cnt."_onclick" => $onc
 			));
+			
+			if ($onc != "")
+			{
+				$l_inst->vars(array(
+					"IMAGE".$cnt."_HAS_BIG" => $l_inst->parse("IMAGE".$cnt."_HAS_BIG")
+				));
+			}
 
 			$l_inst->vars(array(
 				"HAS_IMAGE_".$cnt => $l_inst->parse("HAS_IMAGE_".$cnt)

@@ -355,6 +355,56 @@
             <caption>User-defined var 10</caption>
       </property>
       <property>
+            <name>uservarm1</name>
+            <table>aw_shop_products</table>
+            <group>daat</group>
+            <type>classificator</type>
+            <field>varuserm1</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM1</reltype>
+            <caption>User-defined var (multiple) 1</caption>
+      </property>
+      <property>
+            <name>uservarm2</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm2</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM2</reltype>
+            <caption>User-defined var (multiple) 2</caption>
+      </property>
+      <property>
+            <name>uservarm3</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm3</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM3</reltype>
+            <caption>User-defined var (multiple) 3</caption>
+      </property>
+      <property>
+            <name>uservarm4</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm4</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM4</reltype>
+            <caption>User-defined var (multiple) 4</caption>
+      </property>
+      <property>
+            <name>uservarm5</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm5</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM5</reltype>
+            <caption>User-defined var (multiple) 5</caption>
+      </property>
+      <property>
             <name>packaging</name>
             <table>objects</table>
             <group>packaging</group>
@@ -429,6 +479,31 @@
                   <clid>CL_SHOP_PRODUCT_PACKAGING</clid>
                   <caption>pakend</caption>
             </PACKAGING>
+            <VARUSERM1>
+                  <value>3</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 1</caption>
+            </VARUSERM1>
+            <VARUSERM2>
+                  <value>4</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 2</caption>
+            </VARUSERM2>
+            <VARUSERM3>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 3</caption>
+            </VARUSERM3>
+            <VARUSERM4>
+                  <value>6</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 4</caption>
+            </VARUSERM4>
+            <VARUSERM5>
+                  <value>7</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 5</caption>
+            </VARUSERM5>
       </reltypes>
 </properties>
 
