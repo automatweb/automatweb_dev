@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.14 2001/05/22 12:27:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.15 2001/05/23 13:10:01 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -191,6 +191,9 @@ class keywords extends aw_template {
 	// !Kuvab koikide keywordide vormi
 	function list_keywords($args = array())
 	{
+		return;
+		print "B#";
+		flush();
 		$this->read_template("list.tpl");
 		// koigepealt uurime välja lugejate arvu listides
 		
@@ -244,8 +247,33 @@ class keywords extends aw_template {
 			));
 			$c .= $this->parse("LINE");
 		};
-		$this->vars(array("LINE" => $c));
+		$this->vars(array("LINE" => $c,
+				"reforb" => $this->mk_reforb("delete_keywords",array()));
 		return $this->parse();
+	}
+	
+	////
+	// !Kustutab keywordide listist tulnud andmete pohjal keyworde 
+	function delete_keywords($args = array())
+	{
+		extract($args);
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+		if (is_array($check))
+		{
+			foreach($check as $key => $val)
+			{
+				$q = "DELETE FROM keywords2objects WHERE keyword_id = '$key'";
+				$this->db_query($q);
+				print $q . "<br>";
+
+				$q = "DELETE FROM keywords WHERE id = '$key'";
+				$this->db_query($q);
+				print $q  . "<br>";
+			};
+		}
+		return $this->mk_my_orb("list",array());
 	}
 
 	////
