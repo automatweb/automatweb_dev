@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.66 2001/12/03 15:29:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.67 2001/12/04 21:11:09 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -272,6 +272,47 @@ class document extends aw_template
 		$this->data = $data;
 		return $data;
 	}
+
+	////
+	// !Generates a RSS feed from all documents under a menu. Or from all articles
+	// in the current period, if a menu is not specified
+	function gen_rss_feed($args = array())
+	{
+		classload("rdf");
+		global $baseurl;
+		global $stitle;
+		$rdf = new rdf(array(
+			"about" => "$baseurl/index.aw/format=rss",
+			"link" => "$baseurl/index.aw",
+			"title" => $stitle,
+			"description" => PUBLISHER,
+                ));
+
+		extract($args);
+		$parent = (int)$parent;
+		if ($parent)
+		{
+			$pstr = " AND objects.parent = '$parent' ";
+		}
+		else
+		{
+			$pstr = "";
+		};
+		$q = "SELECT documents.docid AS docid,title,lead,author,objects.modified AS modified FROM documents
+			LEFT JOIN objects ON objects.oid = documents.docid
+			WHERE objects.period = '$period' AND objects.status = 2 $pstr";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$row["title"] = strip_tags($row["title"]);
+			$rdf->add_item($row);
+		};
+		header("Content-Type: text/xml");
+		print $rdf->gen_output();
+		die();
+        }
+
+
 
 	// see on lihtsalt wrapper backwards compatibility jaoks
 	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) 
@@ -694,7 +735,7 @@ class document extends aw_template
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
-				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+				$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
 			};
 		}
 
@@ -3375,7 +3416,11 @@ class document extends aw_template
 			"tbgcolor" => "#C3D0DC",
 		));
 
-		$tt->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		print "<!--";
+		print $GLOBALS["basedir"];
+		print "-->";
+
+		$tt->parse_xml_def($GLOBALS["site_basedir"]."/xml/generic_table.xml");
 		$tt->set_header_attribs(array(
 			"id" => $id,
 			"class" => "document",
