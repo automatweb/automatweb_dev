@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.61 2001/10/11 09:07:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.62 2001/10/30 17:02:30 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -249,7 +249,7 @@ class core extends db_connector
 	function dmsg($msg)
 	{
 		global $HTTP_SESSION_VARS;
-		if ($HTTP_SESSION_VARS["debugging"])
+		if (($HTTP_SESSION_VARS["debugging"]) || ($GLOBALS["DEBUG"] == 1))
 		{
 			if (is_array($msg))
 			{
@@ -1361,6 +1361,10 @@ class core extends db_connector
 			$template = $row["filename"];
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
+		if ($template == "")
+		{
+			$this->raise_error("You have not selected an document editing template for this menu!",true);
+		}
 		return $template;
 	}
 
@@ -1400,12 +1404,26 @@ class core extends db_connector
 	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false)
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array())
 	{
 		global $ext;
 		if ($cl_name == "")
 		{
 			$cl_name = get_class($this);
+		}
+
+		// this means it was not passed as an argument
+		if (is_array($use_orb))
+		{
+			global $REQUEST_URI;
+			if (!(strpos($REQUEST_URI,"orb.".$ext) === false))
+			{
+				$use_orb = true;
+			}
+			else
+			{
+				$use_orb = false;
+			}
 		}
 
 		// handle arrays!
@@ -1466,6 +1484,30 @@ class core extends db_connector
 	}
 
 	////
+	// !Creates an url, similar to mk_my_orb but this doesnt put the orb attributes
+	// into the link
+	function mk_url($params)
+	{
+		// polegi array? näri siis pori
+		if (not(is_array($params)))
+		{
+			return false;
+		}
+
+		$parts = join("&",map2("%s=%s",$params));
+
+		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false))
+		{
+			$retval = $GLOBALS["baseurl"]."/automatweb/orb.$ext?$parts";
+		}
+		else
+		{
+			$retval = $GLOBALS["baseurl"]."/?".$parts;
+		}
+		return $retval;
+	}
+
+	////
 	// !old version of orb url maker, use mk_my_orb instead 
 	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
 	// the best solution, but for now, it works
@@ -1521,7 +1563,7 @@ class core extends db_connector
 
 	////
 	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
-	function mk_reforb($fun,$arr,$cl_name = "")
+	function mk_reforb($fun,$arr = array(),$cl_name = "")
 	{
 		global $ext;
 		if ($cl_name == "")
