@@ -2,12 +2,20 @@
 <properties>
       <property>
             <name>subclass</name>
-            <type>callback</type>
-            <callback>callback_get_class_list</callback>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>subclass</field>
+            <caption>Klass</caption>
+      </property>
+      <property>
+            <name>ctype</name>
+            <type>text</type>
+            <editonly>1</editonly>
             <field>subclass</field>
             <table>objects</table>
             <group>general</group>
-            <caption>Klass</caption>
+            <caption>Tüüp</caption>
       </property>
       <property>
             <name>xml_definition</name>
@@ -43,9 +51,6 @@
             <group>grplist</group>
             <caption>Grupid</caption>
       </property>
-      <classinfo>
-            <corefields>name,comment,status</corefields>
-      </classinfo>
       <groupinfo>
             <prplist>
                   <caption>Omadused</caption>
