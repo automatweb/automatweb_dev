@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.1 2004/12/08 12:23:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.2 2004/12/09 11:51:18 kristo Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -60,7 +60,6 @@ class gantt_chart extends class_base
 		// $this->bar_anchors = $arr["bar_anchors"] ? "anchors" : "noanchors";
 
 		$this->scale_quotient = ($this->cells * $this->cell_size) / $this->chart_width;
-		$this->scale_quotient = (($this->end-$this->start) / $this->chart_width);
 	}
 
 	// Adds one row.
@@ -76,7 +75,7 @@ class gantt_chart extends class_base
 		$row_title_uri = empty ($arr["uri"]) ? false : $arr["uri"];
 		$row_title_uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
-		$this->rows[] = array (
+		$this->rows[$row_name] = array (
 			"name" => $row_name,
 			"title" => $row_title,
 			"uri" => $row_title_uri,
@@ -107,23 +106,20 @@ class gantt_chart extends class_base
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
-		$this->data[$row][$start] = array (
+		$this->data[] = array (
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
 			"hilight" => $hilight,
 			"bar_uri" => $uri,
 			"bar_uri_target" => $uri_target,
+			"row" => $row
 		);
 	}
 
 	function draw_chart ()
 	{
-		//return $this->_test();
-		foreach ($this->data as $key => $row)
-		{
-			ksort ($this->data[$key]);
-		}
+		$this->sort_data();
 
 		$this->read_template ($this->style . "_style.tpl");
 		$this->vars = array (
@@ -136,6 +132,19 @@ class gantt_chart extends class_base
 		$row_switch = 0;
 		$bar_switch = 0;
 		$rows = "";
+
+		// go over all bars and check if any are out of chart
+		foreach($this->data as $row)
+		{
+			foreach(safe_array($row) as $bar)
+			{
+				if (($bar["start"] + $bar["length"]) > $this->end)
+				{
+					$this->end = $bar["start"] + $bar["length"];
+				}
+			}
+		}
+		$this->scale_quotient = (($this->end-$this->start) / $this->chart_width);
 
 		foreach ($this->rows as $row)
 		{
@@ -153,7 +162,7 @@ class gantt_chart extends class_base
 				while ($pointer < $cell_end)
 				{
 					$bar = array_shift ($this->data[$row["name"]]);
-					$bar_type = $bar["hilight"] ? "hilighted" : ($row_switch . current ($bar_switch));
+					$bar_type = $bar["hilight"] ? "hilighted" : ($row_switch . ($bar_switch));
 
 					### trim bars starting before chart start
 					if ($bar["start"] < $this->start)
@@ -208,11 +217,11 @@ class gantt_chart extends class_base
 				### fill remaining empty space
 				if ($pointer < $cell_end)
 				{
-					echo "eempty len = ".ceil (($cell_end - $pointer) / $this->scale_quotient)." end = $cell_end , pointer = $pointer scale = ".$this->scale_quotient." <br>";
+					//echo "eempty len = ".ceil (($cell_end - $pointer) / $this->scale_quotient)." end = $cell_end , pointer = $pointer scale = ".$this->scale_quotient." <br>";
 					$this->vars (array (
 						"length" => ceil (($cell_end - $pointer) / $this->scale_quotient),
 					));
-					$cell_contents = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
+					$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
 					$pointer = $cell_end;
 				}
 
@@ -323,6 +332,23 @@ class gantt_chart extends class_base
 		$this->vars(array(
 			"TIMESPAN" => $ts
 		));
+	}
+
+	function sort_data()
+	{
+		usort($this->data, create_function('$a,$b','if ($a["start"] == $b["start"]) { return 0; } return ($a["start"] > $b["start"] ? 1 : -1);'));
+		$tmpr = $this->rows;
+		$tmpd = array();
+		$this->rows = array();
+		foreach($this->data as $bar)
+		{
+			if (!isset($this->rows[$bar["row"]]))
+			{
+				$this->rows[$bar["row"]] = $tmpr[$bar["row"]];
+			}
+			$tmpd[$bar["row"]][$bar["start"]] = $bar;
+		}
+		$this->data = $tmpd;
 	}
 }
 
