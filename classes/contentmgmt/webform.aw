@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.54 2005/02/02 13:24:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.55 2005/02/02 15:51:10 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -471,7 +471,7 @@ class webform extends class_base
 				}
 				break;
 			case "styles":
-				$arr["obj_inst"]->set_meta("styles", safe_array($arr["request"]["style"]));
+				$arr["obj_inst"]->set_meta("xstyles", safe_array($arr["request"]["style"]));
 				$arr["obj_inst"]->set_meta("m_styles", safe_array($arr["request"]["m_style"]));
 				$arr["obj_inst"]->save();
 				break;
@@ -1186,7 +1186,7 @@ class webform extends class_base
 	
 	function callback_styles($arr)
 	{
-		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
+		$sel_styles = safe_array($arr["obj_inst"]->meta("xstyles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$this->get_rel_props(array(
 			"obj_inst" => $arr["obj_inst"],
@@ -1384,7 +1384,7 @@ class webform extends class_base
 		$cfgform_i = get_instance(CL_CFGFORM);
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
-		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
+		$sel_styles = safe_array($arr["obj_inst"]->meta("xstyles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$errs = safe_array($arr["errors"]);
 		$values = safe_array($arr["values"]);
