@@ -113,12 +113,17 @@ class layout extends class_base
 		}
 
 
+
 		$ob = obj($alias["target"]);
 		$ge = get_instance("vcl/grid_editor");
 		$grid = $ob->meta('grid');
 		$grid['table_style'] = $ob->meta('table_style');
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
+		if ($ob->prop("header") != "")
+		{
+			$tmp = nl2br($ob->prop("header")).$tmp;
+		}
 
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
