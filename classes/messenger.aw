@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.101 2002/08/08 17:35:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.102 2002/08/08 17:38:01 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1485,7 +1485,7 @@ class messenger extends menuedit_light
 							"#kuupaev#" => $this->time2date(time(),2),
 				));
 				$this->awm->gen_mail();
-				print "Saadan aadressile $member[email]<br>";
+				print "Saadan aadressile $member[mail]<br>";
 				//print ".";
 				flush();
 			}
