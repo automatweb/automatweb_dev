@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.11 2001/05/23 04:22:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.12 2001/05/23 05:36:18 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1159,21 +1159,23 @@ class messenger extends menuedit_light
 					};
 				};
 				$acclist = $c;
-				$vars = array("line" => $acclist);
+				$vars = array("line" => $acclist,
+						"aftpage" => "accounts");
 				break;
 
 			default:
 				$tpl = "conf_general.tpl";
+				$conf = $this->msgconf;
 				$vars = array(
 						"msg_on_page" => $this->picker($conf["msg_on_page"],array("10" => "10", "20"=>"20","30"=>"30","40"=>"40")),
-						"default_folder" => $this->picker($conf["default_folder"],$folder_list),
-						"store_sent" => ($conf["store_sent"]) ? "checked" : "",
-						"ondelete" => $this->picker($conf["ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
-						"confirm_send" => ($conf["confirm_send"]) ? "checked" : "",
-						"quote_list" => $this->picker($this->conf["quotechar"],array(">" => ">",":" => ":")),
-						"default_pri" => $this->picker($this->conf["default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
-						"sigsep" => $this->conf["sigsep"],
-						"cnt_att" => $this->picker($this->conf["cnt_att"],array("3" => "3","4" => "4","5" => "5")),
+						"msg_store_sent" => ($conf["msg_store_sent"]) ? "checked" : "",
+						"msg_ondelete" => $this->picker($conf["msg_ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
+						"msg_confirm_send" => ($conf["msg_confirm_send"]) ? "checked" : "",
+						"msg_quote_list" => $this->picker($conf["msg_quotechar"],array(">" => ">",":" => ":")),
+						"msg_default_pri" => $this->picker($conf["msg_default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
+						"msg_sigsep" => $conf["msg_sigsep"],
+						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
+						"aftpage" => "general",
 						);
 				break;
 		};
@@ -1211,7 +1213,15 @@ class messenger extends menuedit_light
 			};
 			$this->msgconf["msg_pop3servers"] = $serverlist;
 		};
-		
+		if ($aftpage)
+		{
+			$ret = $this->mk_my_orb("configure",array("page" => $aftpage));
+
+		}
+		else
+		{
+			$ret = $this->mk_my_orb("folders",array());	
+		};
 		// nüüd tsükkel üle kõigi $args-i elementide, mille nimi algab msg_-ga
 		foreach($args as $key => $val)
 		{
@@ -1219,6 +1229,11 @@ class messenger extends menuedit_light
 			{
 				$this->msgconf[$key] = $val;
 			}
+		};
+		if ($checkbool)
+		{
+			$this->msgconf["msg_store_sent"] = ($msg_store_sent) ? 1 : 0;
+			$this->msgconf["msg_confirm_send"] = ($msg_confirm_send) ? 1 : 0;
 		};
 		$users->set_user_config(array(
 						"uid" => UID,
@@ -1228,7 +1243,7 @@ class messenger extends menuedit_light
 		global $status_msg;
 		$status_msg = "Konfiguratsioonimuudatused on salvestatud";
 		session_register("status_msg");
-		return $this->mk_my_orb("folders",array());
+		return $ret;
 		
 	}
 	
