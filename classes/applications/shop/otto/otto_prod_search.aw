@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.1 2004/08/23 09:11:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.2 2004/08/24 13:01:18 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -15,7 +15,12 @@ class otto_prod_search extends class_base
 	var $search_fld = array(
 		array("Naiste mood", array(136)),
 		array("Ehted ja Kellad", array(137)),
-		array("Meeste mood", array(138))
+		array("Meeste mood", array(138)),
+		array("Lapsed ja teismelised", array(140)),
+		array("Jalatsid", array(142)),
+		array("Spordirõivad", array(1383)),
+		array("Mööbel", array(143)),
+		array("Kodusisustus", array(144))	
 	);
 
 	function otto_prod_search()
@@ -102,7 +107,7 @@ class otto_prod_search extends class_base
 					"name" => "%".$arr["str"]."%",
 					"user3" => "%".$arr["str"]."%",
 					"userta2" => "%".$arr["str"]."%",
-					"user20" => "%".$arr["str"]."%",
+					"user20" => "%".substr($arr["str"], 0,6)."%",
 				)
 			))
 		);
@@ -285,7 +290,7 @@ class otto_prod_search extends class_base
 
 	/**
 
-		@attrib name=exts
+		@attrib name=exts nologin=1
 
 	**/
 	function exts($arr)

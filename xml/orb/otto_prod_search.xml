@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="exts" >
+		<action name="exts" nologin="1">
 			<function name="exts">
 				<arguments>
 				</arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.12 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.13 2004/08/24 13:01:16 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -10,6 +10,9 @@
 
 @property prod_layout type=relpicker reltype=RELTYPE_PROD_LAYOUT field=meta method=serialize
 @caption Kujundus, mida korvis kasutatakse
+
+@property postal_price type=textbox field=meta method=serialize size=5
+@caption Postikulu (liidetakse korvi hinnale)
 
 @reltype PROD_LAYOUT value=1 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundus
@@ -216,7 +219,8 @@ class shop_order_cart extends class_base
 
 		$this->vars(array(
 			"logged" => $ll,
-			"not_logged" => $lln
+			"not_logged" => $lln,
+			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));
 
 		return $this->parse();
@@ -324,6 +328,7 @@ class shop_order_cart extends class_base
 
 		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
 		{
+			aw_session_set("order_cond_fail", 1);
 			if (!$arr["return_url"])
 			{
 				if ($arr["from"] == "pre")
@@ -394,6 +399,15 @@ class shop_order_cart extends class_base
 			}
 			$warehouse = $oc->prop("warehouse");
 		}
+
+		// get cart from oc (order center)
+		if ($oc->prop("cart"))
+		{
+			$order_cart = obj($oc->prop("cart"));
+			// now, get postal_price from cart
+			$params["postal_price"] = $order_cart->prop("postal_price");
+		}
+
 		$so->start_order(obj($warehouse), $oc);
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
@@ -569,6 +583,12 @@ class shop_order_cart extends class_base
 			"obj_inst" => $wh_o
 		));
 
+		$rd = get_instance(CL_REGISTER_DATA);
+		$els = $rd->parse_properties(array(
+			"properties" => $els,
+			"name_prefix" => ""
+		));
+
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		foreach($els as $pn => $pd)
@@ -580,6 +600,14 @@ class shop_order_cart extends class_base
 		$html = $htmlc->get_result(array(
 			"raw_output" => 1
 		));
+
+		if (aw_global_get("order_cond_fail"))
+		{
+			$this->vars(array(
+				"ACC_ERROR" => $this->parse("ACC_ERROR")
+			));
+			aw_session_set("order_cond_fail", 0);
+		}
 
 		if (aw_global_get("uid") != "")
 		{
@@ -606,7 +634,8 @@ class shop_order_cart extends class_base
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
-			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "pre"))
+			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "pre")),
+			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));
 
 		$ll = $lln = "";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.10 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.11 2004/08/24 13:01:16 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -344,6 +344,7 @@ class shop_order extends class_base
 
 		$oi->set_meta("discount", $params["discount"]);
 		$oi->set_meta("prod_paging", $params["prod_paging"]);
+		$oi->set_meta("postal_price", $params["postal_price"]);
 
 		if ($this->order_center)
 		{
@@ -708,6 +709,8 @@ class shop_order extends class_base
 			$hs = $this->parse("NO_SELLER");
 		}
 
+		$total += $o->meta("postal_price");
+
 		$this->vars(array(
 			"HAS_SELLER" => $hs,
 			"NO_SELLER" => "",
@@ -716,7 +719,8 @@ class shop_order extends class_base
 			"total" => number_format($total,2),
 			"id" => $o->id(),
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),
-			"discount" => $o->meta("discount")
+			"discount" => $o->meta("discount"),
+			"postal_price" => number_format($o->meta("postal_price"))
 		));
 
 		if (!$arr["is_pdf"])
