@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.24 2005/01/21 12:50:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.25 2005/02/18 13:34:54 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -501,9 +501,12 @@ class calendar_view extends class_base
 					"flatlist" => 1,
 					"date" => date("d-m-Y",$range["timestamp"]),
 				));
-				$num = $range["limit_events"];
-				$count = count($events);
-				$events = array_slice($events, 0, $num);
+				if (is_numeric($range["limit_events"]))
+				{
+					$num = $range["limit_events"];
+					$count = count($events);
+					$events = array_slice($events, 0, $num);
+				};
 				break;
 
 			case CL_DOCUMENT_ARCHIVE:
