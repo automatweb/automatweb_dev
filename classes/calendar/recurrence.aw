@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.1 2004/03/08 16:51:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.2 2004/03/09 12:09:10 duke Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -91,7 +91,11 @@ class recurrence extends class_base
 			RECUR_MONTHLY => array("interval_monthly","month_weekdays","month_rel_weekdays","month_days"),
 			RECUR_YEARLY => array("interval_yearly"),
 		);
-		$type = $arr["obj_inst"]->prop("recur_type");
+		$type = false;
+		if (is_object($arr["obj_inst"]))
+		{
+			$type = $arr["obj_inst"]->prop("recur_type");
+		};
 		if (empty($type))
 		{
 			$type = RECUR_DAILY;
