@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.42 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.43 2003/02/06 15:32:20 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -659,25 +659,6 @@ class objects extends db_objects
 		}
 		return $replacement;
 
-	}
-
-	////
-	// !New generation search
-	function search_new($args = array())
-	{
-		extract($args);
-		$xf = get_instance("xmlform");
-		$this->values = array(
-			"name" => "nimi",
-			"comment" => "comment",
-		);
-		$result = $xf->gen_html(array(
-			"obj" => $this,
-			"values" => $this->values,
-			"form" => "search_object",
-			"map" => "search_object",
-		));
-		return $result;
 	}
 
 	function get_fvalue($args = array())
