@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.16 2004/03/16 14:26:43 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.17 2004/03/16 14:36:15 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -57,10 +57,10 @@ caption Msn/yahoo/aol/icq
 @property picture type=relpicker reltype=RELTYPE_PICTURE
 @caption Pilt/foto
 
-@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik
+@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
-@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik
+@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
 @property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
@@ -161,8 +161,6 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype ADDRESS value=1 clid=CL_CRM_ADDRESS
 @caption aadressid
 
-
-
 @reltype PICTURE value=3 clid=CL_IMAGE
 @caption pilt
 
@@ -173,7 +171,7 @@ CREATE TABLE `kliendibaas_isik` (
 @caption lapsed
 
 @reltype WORK value=6 clid=CL_CRM_COMPANY
-@caption Töökoht
+@caption töökoht
 
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
 @caption ametinimetus
@@ -182,7 +180,7 @@ CREATE TABLE `kliendibaas_isik` (
 @caption kohtumine
 
 @reltype PERSON_CALL value=9 clid=CL_CRM_CALL
-@caption Kõne
+@caption kõne
 
 @reltype PERSON_TASK value=10 clid=CL_TASK
 @caption toimetus
@@ -199,11 +197,12 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PROFILE value=14 clid=CL_PROFIIL
 @caption Profiil
 
-@reltype USER_DATA value=15
-@caption Andmed
+reltype USER_DATA value=15 
+caption Andmed
 
 @reltype CV value=19 clid=CL_CV
 @caption CV
+
 
 */
 
@@ -337,7 +336,7 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_relation",
-						"title" => "Kalender mï¿½ï¿½ramata",
+						"title" => "Kalender määramata",
 						'text' => 'Lisa '.$val['caption'],
 						'disabled' => true,
 					));
@@ -390,7 +389,7 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
-						'title' => 'Kalender mï¿½ï¿½ramata',
+						'title' => 'Kalender määramata',
 						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
 						'disabled' => true,
 					));
@@ -660,7 +659,7 @@ class crm_person extends class_base
 
 	function fetch_all_data($id)
 	{
-//vot siuke pï¿½ring, ï¿½ra kï¿½si
+//vot siuke päring, ära küsi
 		return  $this->db_fetch_row("select
 			t1.oid as oid,
 			t2.name as name,
@@ -746,6 +745,10 @@ class crm_person extends class_base
 	{
 		$ob = $arr["obj_inst"];
 		$args = array();
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
