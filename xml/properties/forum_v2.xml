@@ -402,7 +402,10 @@
             </STYLE_DONOR>
             <FORUM_ADMIN>
                   <value>5</value>
-                  <clid>CL_USER</clid>
+                  <clid>
+                        <num_0>CL_USER</num_0>
+                        <num_1>CL_GROUP</num_1>
+                  </clid>
                   <caption>Administraator</caption>
             </FORUM_ADMIN>
       </reltypes>
