@@ -1,85 +1,87 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.30 2003/10/21 13:52:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.31 2003/10/30 13:38:31 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
 @classinfo syslog_type=ST_CSS relationmgr=yes
-@groupinfo general caption=Üldine
 @groupinfo preview caption=Eelvaade
 
 @default group=general 
 @default table=objects
+@default field=meta
+@default method=serialize
 
-@property ffamily type=select field=meta method=serialize group=general
+@property ffamily type=select
 @caption Font
 
-@property italic type=checkbox ch_value=1 field=meta method=serialize group=general
+@property italic type=checkbox ch_value=1 
 @caption <i>Italic</i>
 
-@property bold type=checkbox ch_value=1 field=meta method=serialize group=general
+@property bold type=checkbox ch_value=1 
 @caption <b>Bold</b>
 
-@property underline type=checkbox ch_value=1 field=meta method=serialize group=general
+@property underline type=checkbox ch_value=1
 @caption <u>Underline</u>
 
-@property size type=textbox field=meta method=serialize group=general size=5
+@property size type=textbox size=5
 @caption Suurus
 
-@property units type=select field=meta method=serialize group=general
+@property units type=select 
 @caption Suuruse &uuml;hikud
 
-@property fgcolor type=colorpicker field=meta method=serialize group=general
+@property fgcolor type=colorpicker 
 @caption Teksti v&auml;rv
 
-@property bgcolor type=colorpicker field=meta method=serialize group=general
+@property bgcolor type=colorpicker 
 @caption Tausta v&auml;rv
 
-@property lineheight type=textbox field=meta method=serialize group=general size=5
+@property lineheight type=textbox size=5
 @caption Joone k&otilde;rgus
 
-@property lhunits type=select field=meta method=serialize group=general
+@property lhunits type=select 
 @caption Joone k&otilde;rguse &uuml;hikud
 
-@property border type=textbox field=meta method=serialize group=general size=5
+@property border type=textbox size=5
 @caption Border width
 
-@property bordercolor type=colorpicker field=meta method=serialize group=general
+@property bordercolor type=colorpicker 
 @caption Border color
 
-@property align type=select field=meta method=serialize group=general
+@property align type=select 
 @caption Align
 
-@property valign type=select field=meta method=serialize group=general
+@property valign type=select 
 @caption Valign
 
-@property width type=textbox field=meta method=serialize group=general size=5
+@property width type=textbox size=5
 @caption Laius
 
-@property w_units type=select field=meta method=serialize group=general
+@property w_units type=select 
 @caption Laiuse &uuml;hikud
 
-@property height type=textbox field=meta method=serialize group=general size=5
+@property height type=textbox size=5
 @caption K&otilde;rgus 
 
-@property h_units type=select field=meta method=serialize group=general
+@property h_units type=select 
 @caption K&otilde;rguse &uuml;hikud
 
-@property a_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@property a_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil
 
-@property a_hover_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@property a_hover_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil (hover)
 
-@property a_visited_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@property a_visited_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil (visited)
 
-@property a_active_style type=relpicker field=meta method=serialize group=general reltype=RELTYPE_CSS
+@property a_active_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil (active)
 
-@property user_css type=textarea width=30 height=5 field=meta method=serialize group=general
+@property user_css type=textarea width=30 height=5 
 @caption Kasutaja css
 
-@property pre type=text field=meta method=serialize group=preview no_caption=1
+@property pre type=text group=preview no_caption=1
+@caption Eelvaade
 
 */
 
@@ -108,46 +110,15 @@ class css extends class_base
 			"6" => "cursive",
 			"7" => "Trebuchet MS,Tahoma,sans-serif"
 		);
-
-		$this->units = array(
-			"px" => "pikslit",
-			"pt" => "punkti (1pt=1/72in)",
-			"in" => "tolli",
-			"em" => "ems (suhteline)",
-			"cm" => "sentimeetrit",
-			"mm" => "millimeetrit",
-		);
-
-		// siin on süsteemsed stiilid defineeritud.
-		$this->styles = array(
-			"0" => "ftitle",
-			"1" => "fcaption",
-			"2" => "title",
-			"3" => "plain",
-			"4" => "header1",
-			"5" => "fgtitle",
-			"6" => "fgtext",
-		);
-
-		$this->aligns = array(
-			"" => "",
-			"left" => "Vasak",
-			"center" => "Keskel",
-			"right" => "Paremal"
-		);
-
-		$this->valigns = array(
-			"" => "",
-			"top" => "&Uuml;leval",
-			"middle" => "Keskel",
-			"bottom" => "All"
-		);
 	}
 
 	function get_style_data_by_id($id)
 	{
-		$style_obj = $this->get_object($id);
-		return $this->_gen_css_style("st${id}",$style_obj["meta"]["css"]);
+		if (!empty($id))
+		{
+			$style_obj = new object($id);
+			return $this->_gen_css_style("st${id}",$style_obj->meta("css"));
+		};
 	}
 
 	////
@@ -338,18 +309,35 @@ class css extends class_base
 				break;
 
 			case "align":
-				$prop['options'] = $this->aligns;
+				$prop['options'] = array(
+					"" => "",
+					"left" => "Vasak",
+					"center" => "Keskel",
+					"right" => "Paremal"
+				);
 				break;
 
 			case "valign":
-				$prop['options'] = $this->valigns;
+				$prop['options'] = array(
+					"" => "",
+					"top" => "&Uuml;leval",
+					"middle" => "Keskel",
+					"bottom" => "All"
+				);
 				break;
 
 			case "units":
 			case "lhunits":
 			case "w_units":
 			case "h_units":
-				$prop['options'] = $this->units;
+				$prop['options'] = array(
+					"px" => "pikslit",
+					"pt" => "punkti (1pt=1/72in)",
+					"in" => "tolli",
+					"em" => "ems (suhteline)",
+					"cm" => "sentimeetrit",
+					"mm" => "millimeetrit",
+				);
 				break;
 
 			case "pre":
@@ -362,21 +350,23 @@ class css extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		$dc =& $arr["coredata"];
-		$_t = new aw_array($dc['meta']['css']);
+		$cssmeta = $arr["obj_inst"]->meta("css");
+		$_t = new aw_array($cssmeta);
 		foreach($_t->get() as $k => $v)
 		{
-			$dc['meta'][$k] = $v;
+			$arr["obj_inst"]->set_meta($k,$v);
 		}
 	}
 
 	function callback_pre_save($arr)
 	{
-		$dc =& $arr["coredata"];
-		$_t = new aw_array($dc['metadata']);
+		$meta = $arr["obj_inst"]->meta();	
+		$cssmeta = $arr["obj_inst"]->meta("css");
+		$_t = new aw_array($meta);
 		foreach($_t->get() as $k => $v)
 		{
-			$dc['metadata']['css'][$k] = $v;
+			$cssmeta[$k] = $v;
 		}
+		$arr["obj_inst"]->set_meta("css",$cssmeta);
 	}
 };
