@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.21 2005/01/06 13:17:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.22 2005/01/16 16:56:39 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -541,7 +541,10 @@ class calendar_view extends class_base
 			$this->obj_inst = new object($arr["alias"]["target"]);
 		};
 		
-		$this->target_doc = $this->_get_output_doc($this->obj_inst);
+		if ($this->obj_inst)
+		{
+			$this->target_doc = $this->_get_output_doc($this->obj_inst);
+		}
 		
 		classload("vcl/calendar");
 
