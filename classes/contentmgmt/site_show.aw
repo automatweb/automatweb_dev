@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.114 2005/01/28 14:04:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.115 2005/02/18 14:04:00 kristo Exp $
 
 /*
 
@@ -1020,6 +1020,7 @@ class site_show extends class_base
 			}
 		}
 		$smn = $this->sel_section_obj->name();
+		$smc = $this->sel_section_obj->comment();
 		if (aw_ini_get("menuedit.strip_tags"))
 		{
 			$smn = strip_tags($smn);
@@ -1046,8 +1047,23 @@ class site_show extends class_base
 			"sel_menu_name_no_doc" => $smn_nodoc,
 			"sel_menu_image" => $sel_image,
 			"sel_menu_image_url" => $sel_image_url,
+			"sel_menu_comment" => $smc,
 			"sel_menu_o_img_url" => $sel_menu_o_img_url,
 			"sel_menu_timing" => $sel_menu_timing
+		));
+
+		$has_smu = $no_smu;
+		if ($sel_image_url != "")
+		{
+			$has_smu = $this->parse("HAS_SEL_MENU_IMAGE_URL");
+		}
+		else
+		{
+			$no_smu = $this->parse("NO_SEL_MENU_IMAGE_URL");
+		}
+		$this->vars(array(
+			"HAS_SEL_MENU_IMAGE_URL" => $has_smu,
+			"NO_SEL_MENU_IMAGE_URL" => $no_smu
 		));
 	}
 
@@ -1056,7 +1072,6 @@ class site_show extends class_base
 	function make_yah()
 	{
 		$path = $this->path;
-
 		$ya = "";
 		$cnt = count($path);
 
@@ -2308,7 +2323,7 @@ class site_show extends class_base
 		$rv = $this->parse();
 
 
-		$rv .= $this->build_popups();
+		//$rv .= $this->build_popups();
 		return $rv;
 	}
 	
