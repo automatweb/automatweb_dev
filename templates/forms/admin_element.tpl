@@ -58,6 +58,12 @@ function setsel(el,val)
 	</td>
 </tr>
 <!-- END SUB: SEARCH_LB -->
+<!-- SUB: FILTER_PART_LB -->
+<tr>
+<td class="fgtext">Elemendiga seotud filtri osa:</td>
+<td class="fgtext" colspan="3"><select class="small_button" name='{VAR:cell_id}_part'>{VAR:parts}</select></td>
+</tr>
+<!-- END SUB: FILTER_PART_LB -->
 <tr>
 	<td class="fgtext">T&uuml;&uuml;p:</td>
 	<td class="fgtext"><select class="small_button" NAME='{VAR:cell_id}_type'>

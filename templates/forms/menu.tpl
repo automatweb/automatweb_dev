@@ -72,8 +72,11 @@ function toggle1(layer1,layer2) {
 <!-- SUB: CAN_GRID -->
 <a class="alamlingid" href='{VAR:change}'>{VAR:LC_FORMS_ADMIN_FORM}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- SUB: SEARCH_SEL -->
-<a class="alamlingid" href='{VAR:sel_search}'>{VAR:LC_FORMS_CHOOSE_LOOKED_FORMS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
+<a class="alamlingid" href='{VAR:sel_search}'><!-- IMHO: LOOKED != OTSITAVAD aga hui sellega-->{VAR:LC_FORMS_CHOOSE_LOOKED_FORMS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: SEARCH_SEL -->
+<!-- SUB: FILTER_SEARCH_SEL -->
+<a class="alamlingid" href='{VAR:sel_filter_search}'>Vali kasutatav filter</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
+<!-- END SUB: FILTER_SEARCH_SEL -->
 
 <!-- END SUB: CAN_GRID -->
 
@@ -112,6 +115,8 @@ function toggle1(layer1,layer2) {
 <a class="alamlingid" href='{VAR:set_folders}'>{VAR:LC_FORMS_CHOOSE_CATALOGUES}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 
 <a class="alamlingid" href='{VAR:translate}'>{VAR:LC_FORMS_LANGS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
+
+<a class="alamlingid" href='{VAR:tables}'>Tabelid</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!--
 <a class="alamlingid" href='forms.{VAR:ext}?type=html&id={VAR:form_id}'>HTML</a>
 -->
