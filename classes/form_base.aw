@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.26 2001/10/08 14:48:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.27 2001/10/10 19:52:16 cvs Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -485,7 +485,7 @@ class form_base extends aw_template
 
 					if ($data["op_id"])
 					{
-						$app.="\n".$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid, "op_id" => $data["op_id"]), "form");
+						$app.="\n".$this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $data["op_id"]), "form");
 					}
 					mail($data["email"],LC_FORM_BASE_ORDER_FROM_AW, $msg.$app,"From: automatweb@automatweb.com\n");
 					break;
