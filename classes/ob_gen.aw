@@ -1,5 +1,9 @@
 <?php
 
+//todo:
+// logi tabel 
+// 
+
 class ob_gen extends aw_template
 {
 	////////////////////////////////////
@@ -28,12 +32,12 @@ class ob_gen extends aw_template
 					"name" => $name,
 					"comment" => $comment,
 					"metadata" =>array(
-						"status" => $status,
+						"my_status" => $my_status,
 						"limit" => $limit,
 						"sisu_table" => $sisu_table,
-						"save_to_parent" => $save_to_parent,
+						"my_parent" => $my_parent,
 						"source_table" => $source_table,
-						"class_id" => $class_id,
+						"my_class_id" => $my_class_id,
 						"use_object" => $use_object,
 						"use_sisu" => $use_sisu,
 					),
@@ -58,6 +62,7 @@ class ob_gen extends aw_template
 						"sisu" => $sisu,
 						"unique" => $unique,
 						"dejoin" => $dejoin,
+						"add" => $add,
 						"dejoin_table" => $dejoin_table,
 						"dejoin_field" => $dejoin_field,
 						"remember" => $remember,
@@ -69,7 +74,7 @@ class ob_gen extends aw_template
 		else
 		{
 			$id = $this->new_object(array(
-				"parent" => $parent,
+				"my_parent" => $my_parent,
 				"name" => $name,
 				"comment" => $comment,
 				"class_id" => CL_OB_GEN,
@@ -116,8 +121,9 @@ class ob_gen extends aw_template
 	// returns oid
 	function create_my_object($arr)
 	{
-		print_r($arr);
-		/*
+//		print "<pre>";
+//		print_r($arr);
+		
 		extract($arr);
 
 		if (is_array($object))
@@ -161,8 +167,9 @@ class ob_gen extends aw_template
 		
 
 		$oid=$oid?$oid:$this->db_last_insert_id;
-		*/		$this->newcount++;
-		return array('oid'=>$oid, "msg"=>$msg, );
+				$this->newcount++;
+/**/
+		return array('oid'=>$oid, "msg"=>$object['name']." / ".$msg, );
 	}
 
 
@@ -170,25 +177,46 @@ class ob_gen extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-//		echo "<pre>";	
-		
-		$ob['meta']['source_table']="testtest";
-		$field="tekst;
-		$row = $this->db_fetch_row("select max(id),min(id) from ".$ob['meta']['source_table'], "id");
-		$max = $this->db_fetch_row("select id from ".$ob['meta']['source_table']." where id=min(id)", "id");			
+		echo "<pre>";	
+$mitu=0;		
+		$ob['meta']['source_table']="imported_firmad";
+		$field="tooted";
 
+		$row = $this->db_fetch_row("select max(id),min(id) from ".$ob['meta']['source_table']);
+		$min=$row["min(id)"];
+		$max=$row["max(id)"];
+//		for ($id=$min;$id<=3;$id++)
 		for ($id=$min;$id<=$max;$id++)
 		{
-			$val = $this->db_fetch_field("select $field from ".$ob['meta']['source_table']." where id=$id");
-			if ($val)
+			$val = $this->db_fetch_field("select ".$field." from ".$ob['meta']['source_table']." where id=".$id, $field);
+			if ($val!=NULL)
 			{
-					//process val
-				$val="juhhaidii";
-				$q="update ".$ob['meta']['source_table']." set $field=$val where id=$id";
+				$value="";
+				if ($mitu)
+				{
+					preg_match_all("/([0-9]{2,})&nbsp;/", $val, $r);
+	
+					foreach($r[1] as $key=>$vv)
+					{
+						$oooid = $this->db_fetch_field("select oid from klindibaas_tegevusala where kood='".$va."'", "oid");
+						$value.=$oooid.";";
+					}
+				}
+				else
+				{
+				
+					preg_match("/([0-9]){2,}/", $val, $r);
+					$value= $this->db_fetch_field("select oid from klindibaas_tegevusala where kood='".$r[0]."'", "oid");;
+				}
+	
+				$q="update ".$ob['meta']['source_table']." set ".$field."='".$value."' where id=".$id;
+				echo $id.">".$value."\n";
+				flush();
 				$this->db_query($q);
 			}
 		}
-//		echo "</pre>";			
+
+		echo "</pre>";			
 		die();
 	}
 	
@@ -205,9 +233,9 @@ class ob_gen extends aw_template
 		if ($ob['meta']['use_object'])
 		{
 			$object_data=array(
-				'class_id'=>$ob['meta']['class_id'],
-				'parent'=>$ob['meta']['parent'],
-				'status'=>$ob['meta']['status'],
+				'class_id'=>$ob['meta']['my_class_id'],
+				'parent'=>$ob['meta']['my_parent'],
+				'status'=>$ob['meta']['my_status'],
 			);
 		}
 
@@ -228,6 +256,9 @@ class ob_gen extends aw_template
 			if (is_array($data))
 			foreach ($data as $row)
 			{
+
+				
+				
 				$object=array();
 				$sisu=array();
 				$meta=array();
@@ -243,57 +274,66 @@ class ob_gen extends aw_template
 
 				$this->quote($row);
 
-				foreach($row as $key=> $val)
+				foreach($row as $field=> $val)
 				{
 
-				if ($ob['meta']['unique'][$key])
+					if ($ob['meta']['unique'][$field])
 					{
-						if ($unique[$val]==$val) //already made that object
+						if ($unique[$field][$val]==$val) //already made that object
 						{
 							//echo "$val\n";$skipit=1;
-							echo "skipped, already got ".$val."!\n";
+//							echo "skipped, already got ".$val."!\n";
 							$skipped++;
 							continue 2; //juba olemas, järgmine rida andmeid ette
 //							break;
 						}
 						else
 						{
-							$unique[$val]=$val;
+							$unique[$field][$val]=$val;
 						}
 						
 					}
 
 					foreach($whats as $what)
 					{
-						if ($ob['meta'][$what][$key]){
-						if ($ob['meta']['dejoin'][$what][$key] && $ob['meta']['dejoin_table'][$what][$key] && $ob['meta']['dejoin_field'][$what][$key] && $val)
-						{
-
-							// kui meil on eelnevalt sama asja baasist küsitud
-							if ($ob['meta']['remember'][$what][$key] && $remembered[$what][$key][$val])
+$c=0;
+//for ($j=0;$j<(count($ob['meta']['add'][$what][$field]));$j++)
+for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
+//for ($j=0;$j<2;$j++)
+{
+						
+						if ($ob['meta'][$what][$field][$c]){
+							if ($ob['meta']['dejoin'][$what][$field][$c] && $ob['meta']['dejoin_table'][$what][$field][$c] && $ob['meta']['dejoin_field'][$what][$field][$c] && $val)
 							{
-								$$what+=array($ob['meta'][$what][$key] => $remembered[$what][$key][$val]);
+								// kui meil on eelnevalt sama asja baasist küsitud
+								if ($ob['meta']['remember'][$what][$field][$c] && $remembered[$what][$field][$c][$val])
+								{
+									$$what+=array($ob['meta'][$what][$field][$c] => $remembered[$what][$field][$val]);
+								}
+								else
+								{
+									$q='select oid from '.$ob['meta']['dejoin_table'][$what][$field][$c].' where '.$ob['meta']['dejoin_field'][$what][$field][$c].'="'.$val.'" limit 1';
+	
+									$get_oid=$this->db_fetch_field($q, 'oid');
+
+									if($ob['meta']['remember'][$what][$field][$c]) //jätame meelde mida baasist küsisime
+									{
+										$remembered[$what][$field][$c][$val]=$get_oid;
+									}
+		
+									$$what+=array($ob['meta'][$what][$field][$c] => $get_oid?$get_oid:NULL);
+								}
+
 							}
 							else
 							{
-								$q='select oid from '.$ob['meta']['dejoin_table'][$what][$key].' where '.$ob['meta']['dejoin_field'][$what][$key].'="'.$val.'" limit 1';
-
-								$get_oid=$this->db_fetch_field($q, 'oid');
-
-								if($ob['meta']['remember'][$what][$key]) //jätame meelde mida baasist küsisime
-								{
-									$remembered[$what][$key][$val]=$get_oid;
-								}
-	
-								$$what+=array($ob['meta'][$what][$key] => $get_oid?$get_oid:NULL);
+								$$what+=array($ob['meta'][$what][$field][$c] => $val);
 							}
+						}
 
-						}
-						else
-						{
-							$$what+=array($ob['meta'][$what][$key] => $val);
-						}
-						}
+$c++;
+}
+
 
 					}
 				}
@@ -306,8 +346,7 @@ class ob_gen extends aw_template
 						),
 					));
 
-					echo "created: ".$ok."\n";
-
+					echo "created: ".$ok['oid']." : ".$ok['msg']."<br>";
 					flush();
 					set_time_limit (30);
 
@@ -429,56 +468,74 @@ class ob_gen extends aw_template
 
 		$object_fields = $this->db_get_fieldnames('objects',1);
 		$fnames = $this->db_get_fieldnames($ob['meta']['source_table']);
+		$whats=array("object","sisu","meta");
+
+//print_r($ob);
 
 		foreach($fnames as $field)
 		{
+//print_r($ob);
+
 			$this->vars(array(
 				"field_name" => $field,
 			));
-
-			$whats=array("object","sisu","meta");
-
+			$aargh=array();
 			foreach($whats as $what)
 			{
+
+$c=0;
+for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
+{
+
+
 				$dejoin_conf[$what]="";
 
-				if ($ob['meta']['dejoin'][$what][$field])
+				if ($ob['meta']['dejoin'][$what][$field][$c])
 				{
-					if (!$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field]] && $ob['meta']['dejoin_table'][$what][$field])
+					if (!$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]] && $ob['meta']['dejoin_table'][$what][$field][$c])
 					{
-						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field]]=$this->db_get_fieldnames($ob['meta']['dejoin_table'][$what][$field],1);
+						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]=$this->db_get_fieldnames($ob['meta']['dejoin_table'][$what][$field][$c],1);
+					}
+					else 
+					{
+						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]=array(0=>" - ");
 					}
 					$this->vars(array(
 						"what" => $what,
-						"dejoin_tables" => $this->picker($ob['meta']['dejoin_table'][$what][$field],$list_tables),
-						"dejoin_fields" => $this->picker($ob['meta']['dejoin_field'][$what][$field],$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field]]),
-						"remember" =>checked($ob['meta']['remember'][$what][$field]),
+						"dejoin_tables" => $this->picker($ob['meta']['dejoin_table'][$what][$field][$c],$list_tables),
+						"dejoin_fields" => $this->picker($ob['meta']['dejoin_field'][$what][$field][$c],$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]),
+						"remember" =>checked($ob['meta']['remember'][$what][$field][$c]),
 					));
 					$dejoin_conf[$what]= $this->parse("dejoin");
+					$oncemore=1;
 				}
+
+
+				$this->vars(array(
+					"dejoin_".$what => checked($ob['meta']['dejoin'][$what][$field][$c]),
+					"object_f" => $this->picker($ob['meta']['object'][$field][$c],$object_fields),
+					"meta_f" => $ob['meta']['meta'][$field][$c],
+					"sisu_f" => $this->picker($ob['meta']['sisu'][$field][$c],$list_sisu_fields),
+					"add"=>checked($ob['meta']['add'][$what][$field][$c]),
+				));
+
+				$aargh[$what].=$this->parse($what).$dejoin_conf[$what];
+
+$c++;
+}
 
 			}
 			$this->vars(array(
-				"dejoin_object" =>checked($ob['meta']['dejoin']['object'][$field]),
-				"dejoin_sisu" =>checked($ob['meta']['dejoin']['sisu'][$field]),
-				"dejoin_meta" =>checked($ob['meta']['dejoin']['meta'][$field]),
-
 				"dejoini" => $dejoin,
-				"unique" =>checked($ob['meta']['unique'][$field]),
-				"sisu_table_data" => $this->picker($ob['meta']['sisu'][$field],$list_sisu_fields),
-				"object_fields" => $this->picker($ob['meta']['object'][$field],$object_fields),
-				"object_meta" => $ob['meta']['meta'][$field],
+				"unique" => checked($ob['meta']['unique'][$field]),
 			));
 
 
 			$data[]=array(
 				"source" => $field,
-				"object" => $this->parse("object").$dejoin_conf['object'],
-				"meta" =>  $this->parse("meta").$dejoin_conf['meta'],
-				"sisu" => $this->parse("sisu").$dejoin_conf['sisu'],
 				"unique" => $this->parse("unique"),
 //				"dejoin" => $this->parse("dejoin"),
-			);		
+			)+ $aargh;		
 
 		}		
 
@@ -490,7 +547,6 @@ class ob_gen extends aw_template
 			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
 			"genereeri" => $this->mk_my_orb("generate_objects", array("id" => $id)),
 			"genereeri5" => $this->mk_my_orb("generate_objects", array("id" => $id, "test_limit" => 10)),
-
 			"normalizer" => $this->mk_my_orb("normalizer", array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do" => "ob_conf","return_url" => urlencode($return_url)))
 		));
@@ -560,9 +616,9 @@ class ob_gen extends aw_template
 			asort($list_classes);
 
 			$this->vars(array(
-				"list_classes" => $this->picker($ob['meta']['class_id'],$list_classes),		
-				"status" => $this->picker($ob['meta']['status'],array(0=> 'mitteaktiivsed',2=> 'aktiivsed')),		
-				"parents" => $this->picker($ob['meta']['save_to_parent'], $parents),
+				"list_classes" => $this->picker($ob['meta']['my_class_id'],$list_classes),		
+				"status" => $this->picker($ob['meta']['my_status'],array(0=> 'mitteaktiivsed',2=> 'aktiivsed')),		
+				"parents" => $this->picker($ob['meta']['my_parent'], $parents),
 			));
 	
 			$object=$this->parse("object");
