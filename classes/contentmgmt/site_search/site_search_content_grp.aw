@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.12 2004/12/01 10:58:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.13 2004/12/03 13:02:52 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -125,6 +125,10 @@ class site_search_content_grp extends class_base
 	//	id - group id
 	function get_menus($arr)
 	{
+		if (!is_oid($arr["id"]) || !$this->can("view", $arr["id"]))
+		{
+			return array();
+		}
 		$o = obj($arr["id"]);
 
 		$conns = $o->connections_from(array(
