@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.27 2002/10/30 11:01:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop_item.aw,v 1.1 2002/11/03 10:49:45 kristo Exp $
 
 define("PRICE_PER_WEEK",1);
 define("PRICE_PER_2WEEK",2);
 
 define("PR_PER_PAGE" , 12);
 
-classload("shop_base","objects");
+classload("shop_base");
 class shop_item extends shop_base
 {
 	function shop_item()
@@ -36,8 +36,7 @@ class shop_item extends shop_base
 			$this->read_template("edit_item.tpl");
 			$f = get_instance("formgen/form");
 
-			classload("objects");
-			$o = new db_objects;
+			$o = get_instance("objects");
 
 			$itt = $this->get_item_type($type);
 
@@ -62,8 +61,7 @@ class shop_item extends shop_base
 		$this->read_template("admin_system_menu.tpl");
 
 		$o = $this->get_object($id);
-		classload("shop_menuedit");
-		$shm = new shop_menuedit;
+		$shm = get_instance("shop_menuedit");
 		$this->vars(array(
 			"path" => $shm->mk_path($o["parent"], "",0,true,false)
 		));
@@ -131,8 +129,7 @@ class shop_item extends shop_base
 		$this->read_template("edit_item.tpl");
 
 		$shcats = array("0" => "");
-		classload("shop");
-		$shop = new shop;
+		$shop = get_instance("shop");
 		$shs = $shop->get_list();	// list shops
 		foreach($shs as $sh_id => $sh_name)
 		{
@@ -235,8 +232,7 @@ class shop_item extends shop_base
 
 		$f_entry = get_instance("formgen/form_entry");
 		
-		classload("planner");
-		$planner = new planner();
+		$planner = get_instance("planner");
 
 		$new_entry_id = $f_entry->cp(array(
 			"eid" => $old_item["entry_id"],
@@ -403,7 +399,6 @@ class shop_item extends shop_base
 		// siin peame tegema uued objektid ja v2rgid ka
 		$o = $this->get_item($id);
 
-		classload("planner");
 		if ($has_objs)
 		{
 			$num_items = $this->db_fetch_field("SELECT count(*) AS cnt FROM objects WHERE parent = $id AND class_id = ".CL_SHOP_ITEM." AND status != 0","cnt");
@@ -427,7 +422,7 @@ class shop_item extends shop_base
 			else
 			if ($num_items < $max_items)
 			{
-				$pl = new planner;
+				$pl = get_instance("planner");
 
 				// olemas on v2hem kui vaja, teeme uusi
 				$diff = $max_items - $num_items;
@@ -455,7 +450,7 @@ class shop_item extends shop_base
 
 			$calendar_id = $o["calendar_id"];
 			$event_id = $o["per_event_id"];
-			$pl = new planner;
+			$pl = get_instance("planner");
 			// has period but no objects, then it must have just one calendar attached to it. create it if it doesn't exist
 			if (!$o["calendar_id"])
 			{
@@ -491,8 +486,7 @@ class shop_item extends shop_base
 		$this->mk_path($it["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda</a> / Muuda hindu");
 		$this->read_template("set_per_prices.tpl");
 
-		classload("currency");
-		$cur = new currency;
+		$cur = get_instance("currency");
 		$cur_list = $cur->get_list();
 
 		load_vcl("date_edit");
@@ -713,8 +707,7 @@ class shop_item extends shop_base
 		$o = $this->get_item($id,true);
 		
 		$shcats = array("0" => "");
-		classload("shop");
-		$shop = new shop;
+		$shop = get_instance("shop");
 		$shs = $shop->get_list();	// list shops
 		foreach($shs as $sh_id => $sh_name)
 		{

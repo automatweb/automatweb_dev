@@ -1,8 +1,6 @@
 <?php
 
-classload("shop_base","shop_menuedit");
-classload("shop");
-classload("objects");
+classload("shop_base");
 class shop_admin extends shop_base
 {
 	function shop_admin()
@@ -137,7 +135,7 @@ class shop_admin extends shop_base
 	{
 		extract($arr);
 
-		$sh = new shop;
+		$sh = get_instance("shop");
 		$sh->submit_owner_data(array("id" => $shop_id));
 
 		return $this->mk_my_orb("system_requisites", array("shop_id" => $shop_id), "",false, true);
@@ -169,7 +167,7 @@ class shop_admin extends shop_base
 		$this->db_query("UPDATE shop SET owner_form_op = '$owner_form_op' WHERE id = '$shop_id'");
 
 		$arr["id"] = $shop_id;
-		$s = new shop;
+		$s = get_instance("shop");
 		$s->submit_tables($arr);
 
 		return $this->mk_my_orb("system_invoice", array("shop_id" => $shop_id), "",false, true);
@@ -199,7 +197,7 @@ class shop_admin extends shop_base
 
 		$sh = $this->get($shop_id);
 
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$ol = $ob->get_list();
 		$this->vars(array(
 			"article_menus" => $this->multiple_option_list($this->get_article_menus($shop_id),$ol),
@@ -230,7 +228,7 @@ class shop_admin extends shop_base
 		$this->read_template("admin_system_other.tpl");
 		$sh = $this->get($shop_id);
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$this->do_core_admin_ofs($shop_id);
 
 		$this->vars(array(
@@ -294,7 +292,7 @@ class shop_admin extends shop_base
 	{
 		$sh = $this->get($shop_id);
 
-		$m = new menuedit;
+		$m = get_instance("menuedit");
 		$m->tpl_init("shop");
 		$m->read_template($tpl);
 
@@ -326,7 +324,7 @@ class shop_admin extends shop_base
 	function categories_right($arr)
 	{
 		extract($arr);
-		$m = new shop_menuedit;
+		$m = get_instance("shop_menuedit");
 	}
 
 	function article_frame($arr)
@@ -349,7 +347,7 @@ class shop_admin extends shop_base
 	function article_right($arr)
 	{
 		extract($arr);
-		$m = new shop_menuedit;
+		$m = get_instance("shop_menuedit");
 	}
 
 	function currency_redirect($arr)
@@ -460,14 +458,13 @@ class shop_admin extends shop_base
 			}
 			
 			$tablesfortypes = $this->get_user_tables_for_types();
-			classload("shop_table");
 			// nyt kui on ajavahemike kaupa siis tuleb igale kaubale eraldi tabel
 			// tabelit n2idatakse vastavalt kauba tyybile
 			reset($items);
 			while(list($i_id,$i_arr) = each($items))
 			{
 				$tb = "";
-				$st = new shop_table;
+				$st = get_instance("shop_table");
 			
 				$this->vars(array(
 					"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],
@@ -477,7 +474,7 @@ class shop_admin extends shop_base
 
 				if (list($i_id,$i_arr) = each($items))
 				{
-					$st = new shop_table;
+					$st = get_instance("shop_table");
 				
 					$this->vars(array(
 						"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],
@@ -883,9 +880,8 @@ class shop_admin extends shop_base
 			}
 		}
 
-		classload("users");
 		$ags = array();
-		$us = new users;
+		$us = get_instance("users");
 		$us->list_groups(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
 		while($row = $us->db_next())
 		{
@@ -973,17 +969,15 @@ class shop_admin extends shop_base
 		extract($arr);
 		$this->read_template("admin_system_items.tpl");
 
-		classload("users");
 		$ags = array();
-		$us = new users;
+		$us = get_instance("users");
 		$us->list_groups(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
 		while($row = $us->db_next())
 		{
 			$ags[$row["gid"]] = $row["name"];
 		}
 
-		classload("config");
-		$con = new db_config;
+		$con = get_instance("config");
 		$its = $con->get_simple_config("show_items");
 		$_its = aw_unserialize($its);
 
@@ -1035,8 +1029,7 @@ class shop_admin extends shop_base
 		}
 			
 		$_its = aw_serialize($its,SERIALIZE_PHP);
-		classload("config");
-		$con = new config;
+		$con = get_instance("config");
 		$con->set_simple_config("show_items", $_its);
 
 		return $this->mk_my_orb("system_items", array("shop_id" => $shop_id),"",false,true);

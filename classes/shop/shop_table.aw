@@ -1,7 +1,6 @@
 <?php
 
 classload("shop_base");
-classload("shop_item");
 class shop_table extends shop_base
 {
 	function shop_table()
@@ -81,9 +80,9 @@ class shop_table extends shop_base
 			if ($it)
 			{
 				$typ = $this->get_item_type($it["type_id"]);
-				$f1 = new form;
+				$f1 = get_instance("formgen/form");
 				$f1->load($typ["form_id"]);
-				$f2 = new form;
+				$f2 = get_instance("formgen/form");
 				$f2->load($typ["cnt_form"]);
 				$els = $f1->get_all_elements();
 				$tels = $f2->get_all_elements();
@@ -183,9 +182,9 @@ class shop_table extends shop_base
 			{
 				$typ["cnt_form"] = $it["cnt_form"];
 			}
-			$f1 = new form;
+			$f1 = get_instance("formgen/form");
 			$f1->load($typ["form_id"]);
-			$f2 = new form;
+			$f2 = get_instance("formgen/form");
 			$f2->load($typ["cnt_form"]);
 			$els = $f1->get_all_elements();
 			$tels = $f2->get_all_elements();
@@ -467,7 +466,7 @@ class shop_table extends shop_base
 		}
 		$this->vars(array("TITLE" => $he));
 
-		$f2 = new form;
+		$f2 = get_instance("formgen/form");
 		$f2->load($cnt_form);
 		$tosum = $this->get_tosum_elements($sht,$f2,$typ);
 
@@ -530,8 +529,7 @@ class shop_table extends shop_base
 		if ($it["has_period"] && $it["per_cnt"] > 0)
 		{
 			// if objecxt has some periods attached, get those
-			classload("planner");
-			$pl = new planner;
+			$pl = get_instance("planner");
 			$_from = $from < $it["per_from"] ? $it["per_from"] : $from;
 			$reps = $pl->get_events(array("start" => $_from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
 

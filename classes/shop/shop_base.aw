@@ -289,8 +289,7 @@ class shop_base extends aw_template
 	// !returns the items that should be shown to the currently logged in user
 	function get_user_item_picker($arr = array())
 	{
-		classload("config");
-		$con = new config;
+		$con = get_instance("config");
 		$_its = $con->get_simple_config("show_items");
 		$its = aw_unserialize($_its);
 
@@ -320,8 +319,7 @@ class shop_base extends aw_template
 	function get_item_picker($arr = array())
 	{
 		extract($arr);
-		classload("objects");
-		$ob = new objects;
+		$ob = get_instance("objects");
 		if ($short_name == 1)
 		{
 			$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0");

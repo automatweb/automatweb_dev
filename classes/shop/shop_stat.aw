@@ -90,7 +90,7 @@ class shop_stat extends shop
 		));
 	
 		// we have to do this, cause in php all functions are virtual, and get($id) gets overriden in this class
-		$shop = new shop;
+		$shop = get_instance("shop");
 
 		$shmenus = array();
 		$shar = $this->get_shops_for_stat($id);

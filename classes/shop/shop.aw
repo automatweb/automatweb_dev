@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.48 2002/10/30 11:01:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop.aw,v 1.1 2002/11/03 10:49:45 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -20,7 +20,6 @@ define("SHOP_PER_PAGE",10);
 
 //lc_load("shop");
 classload("shop_base");
-classload("shop_item");
 class shop extends shop_base
 {
 	function shop()
@@ -38,14 +37,12 @@ class shop extends shop_base
 		$this->mk_path($parent,"Add target");
 		$this->read_template("add.tpl");
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 
 		$fb = get_instance("formgen/form_base");
 		$fl = $fb->get_list(FTYPE_ENTRY);
 
-		classload("currency");
-		$cu = new currency;
+		$cu = get_instance("currency");
 
 		$eq = $this->listall_eqs(false);
 		$this->vars(array(
@@ -69,8 +66,7 @@ class shop extends shop_base
 		$this->mk_path($oba["parent"], "Change target");
 		$this->read_template("add.tpl");
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 
 		$fb = get_instance("formgen/form_base");
 
@@ -101,8 +97,7 @@ class shop extends shop_base
 			}
 		}
 
-		classload("currency");
-		$cu = new currency;
+		$cu = get_instance("currency");
 
 		$eq = $this->listall_eqs(false);
 		$this->vars(array(
@@ -370,8 +365,7 @@ class shop extends shop_base
 	// !returns the currently active currency
 	function get_act_cur($shop)
 	{
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$ucur = $u->get_user_config(array("uid" => aw_global_get("uid"), "key" => "user_currency"));
 		if (!$ucur)
 		{
@@ -405,8 +399,7 @@ class shop extends shop_base
 		global $shopping_cart;
 		$section = $this->do_shop_menus($id,$section);
 
-		classload("item_type");
-		$ityp = new item_type;
+		$ityp = get_instance("item_type");
 		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
 
 		$min_p = $this->get_cart_min_period();
@@ -806,8 +799,7 @@ class shop extends shop_base
 
 		// read the default values for this form from the join form that the user filled when he joined
 		$elvals = array();
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$udata = $u->get_user(array("uid" => aw_global_get("uid")));
 		$jf = unserialize($udata["join_form_entry"]);
 		if (is_array($jf))
@@ -1212,8 +1204,6 @@ class shop extends shop_base
 			$parent = $this->do_shop_menus($shop,$section);
 			$ignoregoto = $this->db_fetch_field("SELECT shop_ignoregoto FROM menu WHERE id = $parent","shop_ignoregoto");
 
-			classload("planner");
-
 			// so we check for it here
 			if ($parallel)
 			{
@@ -1236,7 +1226,7 @@ class shop extends shop_base
 				$ir = "";
 				// this object has a repeater and can therefore have a repeat count
 				$rep_cnt = $row["per_cnt"];
-				$pl = new planner;
+				$pl = get_instance("planner");
 				// get the events for this planner from today to 800 days, limiting the number of events to $rep_num
 				$reps = $pl->get_events(array( "start" => max($row["per_from"],time()), "limit" => $rep_cnt,"index_time" => true,"event" => $row["per_event_id"],"end" => time()+800*24*3600));
 				if (is_array($reps))
@@ -1793,8 +1783,7 @@ class shop extends shop_base
 	function get_shop_categories($id,$prep_store_name = true)
 	{
 		$sh = $this->get($id);
-		classload("objects");
-		$o = new objects;
+		$o = get_instance("objects");
 		$oar = $o->gen_rec_list_noprint(array("start_from" => $sh["root_menu"]));
 
 		// now make menu array
@@ -1929,8 +1918,7 @@ class shop extends shop_base
 
 					$free_items = array();
 					$free_item_count = 0;
-					classload("planner");
-					$pl = new planner;
+					$pl = get_instance("planner");
 					// we must repeat this whole operation $count number of times too.
 					// so we must load the items one by one and check their calendars for events during the time specified in the form. 
 					$this->db_query("SELECT * FROM objects WHERE parent = ".$it["oid"]." AND class_id = ".CL_SHOP_ITEM." AND status != 0");
@@ -2024,7 +2012,7 @@ class shop extends shop_base
 			// if the item has periods and objects then free_items will contain an array
 			// of objects to order for period $free_items["from"] to $free_items["to"]
 
-			$pl = new planner;
+			$pl = get_instance("planner");
 			// broneerime itemid
 			foreach($free_items["items"] as $row)
 			{
@@ -2173,8 +2161,7 @@ class shop extends shop_base
 			$this->restore_handle();
 		}
 
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$ar = $u->get_join_entries();
 		foreach($ar as $foid => $eid)
 		{
@@ -2299,8 +2286,7 @@ class shop extends shop_base
 			$this->restore_handle();
 		}
 
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$ar = $u->get_join_entries();
 		foreach($ar as $foid => $eid)
 		{
@@ -2464,8 +2450,7 @@ class shop extends shop_base
 		$issuedby = $f->show(array("id" => $sh["owner_form"], "entry_id" => $sh["owner_form_entry"], "op_id" => $sh["owner_form_op_issued"]));
 		$f->reset();
 
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$pt =  $u->show_join_data(array("tpl" => "join_data_nopwd.tpl","second" => true));
 
 		$order_entry_id = $this->db_fetch_field("SELECT cnt_entry FROM order2item WHERE item_id = $item_id AND order_id = $order_id","cnt_entry");
@@ -2523,8 +2508,7 @@ class shop extends shop_base
 			return $def;
 		}
 
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$u_cur = $u->get_user_config(array("uid" => aw_global_get("uid"), "key" => "user_currency"));
 
 		$this->save_handle();
