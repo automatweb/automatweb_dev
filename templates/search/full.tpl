@@ -75,6 +75,19 @@ function assign_config()
 	document.resulttable.submit();
 }
 
+var chk_status = true;
+function search_selall()
+{
+	len = document.resulttable.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.resulttable.elements[i].name.indexOf("sel") != -1)
+		{
+			document.resulttable.elements[i].checked=chk_status;
+		}
+	}
+	chk_status = !chk_status;
+}
 </script>
 
 
