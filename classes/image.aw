@@ -201,7 +201,12 @@ class image extends aw_template
 			else
 			if ($idata["link"] != "")
 			{
-				if (isset($tpls["image_linked"]))
+				if (isset($tpls["image_inplace_linked"]))
+				{
+					$replacement = $this->localparse($tpls["image_inplace_linked"],$vars);
+					$inplace = "image_inplace_linked";
+				}
+				else if (isset($tpls["image_linked"]))
 				{
 					$replacement = $this->localparse($tpls["image_linked"],$vars);
 				}
