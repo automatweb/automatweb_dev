@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.68 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.69 2001/11/16 09:48:00 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -313,7 +313,7 @@ class menuedit extends aw_template
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
-		if ($obj["class_id"] == CL_DOCUMENT)
+		if ($obj["class_id"] == CL_DOCUMENT || $obj["class_id"] == CL_PERIODIC_SECTION)
 		{
 			$this->sel_section = $obj["parent"];
 		}
@@ -322,7 +322,7 @@ class menuedit extends aw_template
 			$this->sel_section = $section;
 		}
 
-		$sel_menu_id = $section;
+		$sel_menu_id = $this->sel_section;
 
 		$this->vars(array(
 			"sel_menu_id" => $sel_menu_id
@@ -431,14 +431,10 @@ class menuedit extends aw_template
 			$this->left_pane = false;
 		}
 
-		$this->left_pane = true;
-
 		if (!$this->mar[$sel_menu_id]["right_pane"])
 		{
 			$this->right_pane = false;
 		}
-
-		$this->right_pane = true;
 
 		// loome sisu
 		if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
@@ -3847,7 +3843,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$is_mid = true;
 			};
 
-				dbg($mn.$ap."<br>");
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)
 			{
 				$ap.="_NOSUB";	// menu without subitems
@@ -4339,7 +4334,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
 		$cache = new cache();
-		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+//		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		$ms = false;
 		if (!$ms)
 		{
 			// make one big array for the whole menu
