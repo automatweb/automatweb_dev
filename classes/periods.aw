@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.11 2002/08/29 03:10:03 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.15 2002/10/21 12:10:16 duke Exp $
 
 class db_periods extends aw_template 
 {
@@ -266,41 +266,36 @@ class db_periods extends aw_template
 		return $row["active_period"];
 	}
 
+
 	// see funktsioon tagastab kõigi eksisteerivate perioodide nimekirja
-	// kujul <option val=$id>$description</option>
+	// array kujul
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
 	// kui $active == 0, siis on selected see option, mis parajasti aktiivne on
 	// kui $active == 'somethingelse', siis on selectitud vastava id-ga element
+	function period_list($active)
+	{
+		if ($active == 0)
+		{
+			$active = $this->get_cval("activeperiod");
+		};
+		$this->active = $active;
+		$this->clist();
+		$elements = array();
+		while($row = $this->db_next())
+		{
+			$elements[$row["id"]] = $row["description"];
+		};
+		return $elements;
+	}
+	
 	function period_olist($active = 0) 
 	{
-		if ($active == 0) 
-		{
-			$active = $this->get_cval("activeperiod");
-		};
-		$this->clist();
-		$elements = array();
-		while($row = $this->db_next()) 
-		{
-			$elements[$row["id"]] = $row["description"];
-		};
-		return $this->option_list($active,$elements);
+		return $this->picker($this->active,$this->period_list($active));
 	}
 
-	////
-	// !sama mis period_olist, aga multiple select boxi jaox
-	function period_mlist($active) 
+	function period_mlist($active)
 	{
-		if ($active == 0) 
-		{
-			$active = $this->get_cval("activeperiod");
-		};
-		$this->clist();
-		$elements = array();
-		while($row = $this->db_next()) 
-		{
-			$elements[$row["id"]] = $row["description"];
-		};
-		return $this->multiple_option_list($active,$elements);
+		return $this->mpicker($this->active,$this->period_list($active));
 	}
 
 	function save($data) 
@@ -314,6 +309,7 @@ class db_periods extends aw_template
 		$img = get_instance("image");
 		$old["data"]["image"] = $img->add_upload_image("image",0,$old["data"]["image"]["id"]);
 		$old["data"]["image_link"] = $image_link;
+		$old["data"]["pyear"] = $pyear;
 
 		$dstr = aw_serialize($old["data"]);
 		$this->quote($dstr);
@@ -347,25 +343,34 @@ class periods extends db_periods
 		$this->read_template("list.tpl");
 		$active = $this->rec_get_active_period();
 		$this->clist();
+		load_vcl("table");
+		$table = new aw_table(array(
+			"prefix" => "periods",
+		));
+	
+		$table->parse_xml_def($this->cfg["basedir"]."/xml/periods/list.xml");
+
+
 		while($row = $this->db_next()) 
 		{
-			$style = ($row["id"] == $active) ? "selected" : "plain";
-			$this->vars(array(
-				"id" => $row["id"],
-				"archived"    => checked($row["archived"] == 1),
-				"active"	   => checked($row["id"] == $active),
-				"jrk"	   => $row["jrk"],
-				"oldarc"      => $row["archived"],
-				"created"     => $this->time2date($row["created"],1),
-				"description" => $row["description"],
-				"rs"	   => $style,
-				"change" => $this->mk_my_orb("change", array("id" => $row["id"]))
-			));
-			$content .= $this->parse("LINE");
+			$jrk_html = "<input type='text' size='3' maxlength='3' name='jrk[$row[id]]' value='$row[jrk]'><input type='hidden' name='oldjrk[$row[id]]' value='$row[jrk]'>";
+			$archived = checked($row["archived"]);
+			$arc_html = "<input type='checkbox' name='arc[$row[id]]' $archived><input type='hidden' name='oldarc[$row[id]]' value='$row[archived]'>";
+			$actcheck = checked($row["id"] == $active);
+			$act_html = "<input type='radio' name='activeperiod' $actcheck value='$row[id]'>";
+			$row["jrk"] = $jrk_html;
+			$row["archived"] = $arc_html;
+			$row["active"] = $act_html;
+			$ch_url = $this->mk_my_orb("change",array("id" => $row["id"]));
+			$row["change"] = "<a href='$ch_url'>Muuda</a>";
+			$table->define_data($row);
 		};
+		
+		$table->sort_by(array("sortby" => $sortby));
+
 		$this->vars(array(
-			"LINE" => $content,
 			"add" => $this->mk_my_orb("add"),
+			"table" => $table->draw(),
 			"reforb" => $this->mk_reforb("savestatus", array("oldactiveperiod" => $active, "oid" => $this->oid))
 		));
 		return $this->parse();
@@ -376,7 +381,16 @@ class periods extends db_periods
 		extract($arr);
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Perioodid</a> / Lisa uus");
 		$this->read_template("add.tpl");
+		$years = array(
+			"2000" => "2000",
+			"2001" => "2001",
+			"2002" => "2002",
+			"2003" => "2003",
+			"2004" => "2004",
+			"2005" => "2005",
+		);
 		$this->vars(array(
+			"pyear" => $this->picker(-1,array("0" => "--vali--") + $years),
 			"reforb" => $this->mk_reforb("submit_add", array("oid" => $this->oid))
 		));
 		return $this->parse();
@@ -388,11 +402,9 @@ class periods extends db_periods
 		if (!$id)
 		{
 			$id = $this->add($archived,$description);
-		}
-		else
-		{
-			$this->save($arr);
-		}
+		};
+		$arr["id"] = $id;
+		$this->save($arr);
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -402,6 +414,14 @@ class periods extends db_periods
 		$this->read_template("edit.tpl");
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Perioodid</a> / Muuda");
 		$cper = $this->get($id);
+		$years = array(
+			"2000" => "2000",
+			"2001" => "2001",
+			"2002" => "2002",
+			"2003" => "2003",
+			"2004" => "2004",
+			"2005" => "2005",
+		);
 		$this->vars(array(
 			"ID" => $cper["id"],
       "description" => $cper["description"],
@@ -409,6 +429,7 @@ class periods extends db_periods
 	    "arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
 			"image" => image::make_img_tag(image::check_url($cper["data"]["image"]["url"])),
 			"image_link" => $cper["data"]["image_link"],
+			"pyear" => $this->picker($cper["data"]["pyear"],array("0" => "--vali--") + $years),
 			"reforb" => $this->mk_reforb("submit_add", array("id" => $id))
 		));
 		return $this->parse();
@@ -470,8 +491,19 @@ class periods extends db_periods
 	{
 		$this->read_template("arhiiv.tpl");
 		$this->clist(1);
+		$pyear = 0;
 		while($row = $this->db_next()) 
 		{
+			$dat = aw_unserialize($row["data"]);
+			if ($pyear != $dat["pyear"])
+			{
+				$this->vars(array(
+					"pyear" => $dat["pyear"],
+				));
+				
+				$content .= $this->parse("year");
+				$pyear = $dat["pyear"];
+			};
 			$this->vars(array(
 				"period" => $row["id"],
 				"description" => $row["description"]
