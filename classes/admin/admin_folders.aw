@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.6 2003/05/13 11:27:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.7 2003/06/04 14:03:04 duke Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -184,7 +184,7 @@ class admin_folders extends aw_template
 					}
 				}
 			}
-			$ar[0] = MN_PERIODIC;
+			$ar[0] = "Mitteperioodilised";
 			$this->vars(array(
 				"periods" => str_replace("\n","",$this->picker($period,$ar))
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.7 2003/05/13 11:27:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.8 2003/06/04 14:03:04 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -105,19 +105,22 @@ class converters extends aw_template
 	
 	function menu_reset_template_sets()
 	{
-		$q = "SELECT id FROM menu";
+		$q = "SELECT oid FROM objects WHERE class_id = 1";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
-			$oldmeta = $this->get_object_metadata(array("oid" => $row["id"]));
+			$oldmeta = $this->get_object_metadata(array("oid" => $row["oid"]));
 			if ($oldmeta)
 			{
-				$oldmeta["tpl_dir"] = "";
-				$this->set_object_metadata(array(
-					"oid" => $row["id"],
-					"data" => $oldmeta,
-				));	
+				if (!empty($oldmeta["tpl_dir"]))
+				{
+					$oldmeta["tpl_dir"] = "";
+					$this->set_object_metadata(array(
+						"oid" => $row["id"],
+						"data" => $oldmeta,
+					));	
+				};
 			}
 			$this->restore_handle();
 		}
