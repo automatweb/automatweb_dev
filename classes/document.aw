@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.188 2003/05/29 08:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.189 2003/06/03 12:06:29 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -331,6 +331,7 @@ class document extends aw_template
 		{
 			return false;
 		};
+
 		
 		// if oid is in the arguments check whether that object is attached to 
 		// this document and display it instead of document
@@ -1113,14 +1114,6 @@ class document extends aw_template
 		$plugins = $awdoc->parse_long_template(array(
 			"inst" => $this,
 		));
-
-		global $XX1;
-		if ($XX1)
-		{
-			print "<pre>";
-			print_r($plugins);
-			print "</pre>";
-		};
 
 		$plg_arg = array();
 		foreach($plugins as $plg_name)
@@ -2742,12 +2735,14 @@ class document extends aw_template
 		{
 			foreach($parens as $_parent)
 			{
-				dbg::p("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
-				if ($this->can("view",$_parent) && is_array($this->mmc[$_parent]))
+				if ($this->can("view",$_parent))
 				{
 					$this->marr[] = $_parent;
 					// list of default documents
-					$this->rec_list($_parent,$this->mmc[$_parent]["name"]);
+					if (is_array($this->mmc[$_parent]))
+					{
+						$this->rec_list($_parent,$this->mmc[$_parent]["name"]);
+					}
 				};
 			}
 		};
