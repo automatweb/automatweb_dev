@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.27 2004/03/09 11:50:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.1 2004/12/09 18:54:47 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -38,24 +38,21 @@ class xml_import extends class_base
 
 	function get_property($args)
 	{
-                $data = &$args["prop"];
-                switch($data["name"])
-                {
-                        case "import_function":
-                                $data["options"] = $this->methods;
-                                break;
-                                                                                                                            
-                        case "run_import":
-                                classload("html");
-                                $id = $args["obj_inst"]->id();
+		$data = &$args["prop"];
+		switch($data["name"])
+		{
+			case "import_function":
+				$data["options"] = $this->methods;
+				break;
+																								
+			case "run_import":
+				classload("html");
+				$id	= $args["obj_inst"]->id();
 				$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
 				$data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
-                                break;
-                                                                                                                            
-                                                                                                                            
-                                                                                                                            
-                };
-        }
+				break;
+		};
+	}
 
 	/**  
 		
@@ -88,7 +85,7 @@ class xml_import extends class_base
 		flush();
 		// retrieve data
 		$method = $obj->prop("import_function");
-		$ds = get_instance("datasource");
+		$ds = get_instance("applications/clients/ut/xml_import/datasource");
 		$src_data = $ds->retrieve(array("id" => $obj->prop("datasource")));
 		print "Got " . strlen($src_data) . " bytes of data<br />";
 		flush();
