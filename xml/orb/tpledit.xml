@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="tpledit">
+
+		<action name="browse">
+			<function name="browse">
+				<arguments>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="edit">
+			<function name="edit">
+				<arguments>
+					<optional name="file"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="download">
+			<function name="download">
+				<arguments>
+					<optional name="file"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="source">
+			<function name="source">
+				<arguments>
+					<optional name="file"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+					<optional name="file"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
