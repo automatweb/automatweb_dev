@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.85 2003/03/18 16:02:44 duke Exp $
+// $Id: class_base.aw,v 2.86 2003/03/19 14:38:10 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -74,29 +74,19 @@ class class_base extends aliasmgr
 		{
 			die($this->ds->get_error_text());
 		};
+		
+		$this->validate_cfgform($args["cfgform"]);
 
 		$this->parent = $args["parent"];
 		extract($args);
 
-		// try to load the bastard
-		if ($args["cfgform"])
-		{
-			$_tmp = $this->get_object(array(
-				"oid" => $args["cfgform"],
-				"class" => CL_CFGFORM,
-				"subclass" => $this->clid,
-			));
+		$this->id = "";
 
-			if ($_tmp)
-			{
-				$this->cfgform_id = $_tmp["oid"];
-			};
-		};
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
-				"group" => $args["group"],
-				"cb_view" => $args["cb_view"],
+				"group" => isset($args["group"]) ? $args["group"] : "",
+				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 
 		$this->request = $args;
@@ -111,7 +101,7 @@ class class_base extends aliasmgr
 
 		$cli = get_instance("cfg/" . $this->output_client);
 
-		if (is_array($this->layout))
+		if (isset($this->layout) && is_array($this->layout))
 		{
 			foreach($this->layout as $key => $val)
 			{
@@ -148,7 +138,6 @@ class class_base extends aliasmgr
 		};
 	
 		$argblock = array(
-			"id" => $id,
 			"group" => isset($group) ? $group : "",
 			"orb_class" => $orb_class,
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
@@ -197,20 +186,8 @@ class class_base extends aliasmgr
 		$this->id = $id;
 		
 		$obj = $this->get_object($this->id);
-		if (isset($obj["meta"]["cfgform_id"]))
-		{
-			$cfgform_id = $obj["meta"]["cfgform_id"];
-			$_tmp = $this->get_object(array(
-				"oid" => $cfgform_id,
-				"class" => CL_CFGFORM,
-				"subclass" => $this->clid,
-			));
 
-			if ($_tmp)
-			{
-				$this->cfgform_id = $_tmp["oid"];
-			};
-		};
+		$this->validate_cfgform($obj["meta"]["cfgform_id"]);
 
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
@@ -323,27 +300,14 @@ class class_base extends aliasmgr
 		// check whether this current class is based on class_base
 		$this->init_class_base();
 
+		$this->validate_cfgform($args["cfgform"]);
+
 		$this->quote($args);
 
 		extract($args);
 
-		$this->id = $id;
+		$this->id = isset($id) ? $id : "";
 		
-		// try to load the bastard
-		if (isset($args["cfgform"]))
-		{
-			$_tmp = $this->get_object(array(
-				"oid" => $args["cfgform"],
-				"class" => CL_CFGFORM,
-				"subclass" => $this->clid,
-			));
-
-			if ($_tmp)
-			{
-				$this->cfgform_id = $_tmp["oid"];
-			};
-		};
-
 		// get the list of properties in the active group
 		// actually, it does a little more than dat, it also
 		// sorts the data into different variables
@@ -368,11 +332,11 @@ class class_base extends aliasmgr
 			// to land. 
 			$id = $this->ds->ds_new_object(array(),array(
 					"parent" => $parent,
-					"name" => $name,
-					"comment" => $comment,
-					"period" => $period,
+					"name" => isset($name) ? $name : "",
+					"comment" => isset($comment) ? $comment : "",
+					"period" => isset($period) ? $period : "",
 					"class_id" => $this->clid,
-					"alias" => $alias,
+					"alias" => isset($alias) ? $alias : "",
 					"status" => isset($status) ? $status : 1,
 			));
 
@@ -395,7 +359,7 @@ class class_base extends aliasmgr
 		$fields["parent"] = "direct";
 		$fields["metadata"] = "serialize";
 		$tmp = $this->load_object(array(
-			"id" => $args["id"],
+			"id" => $this->id,
 			"table" => "objects",
 			"idfield" => "oid",
 			"fields" => $fields,
@@ -613,11 +577,11 @@ class class_base extends aliasmgr
 		return $this->mk_my_orb($action,$args,$orb_class);
 	}
 
+	////
+	// ! Log the action
 	function log_obj_change()
 	{
-		// logging
-		$classname = get_class($this->orb_class);
-		$name = $this->coredata["name"];
+		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
 
 		$syslog_type = ST_CONFIG;
 		if (isset($this->classinfo['syslog_type']))
@@ -634,6 +598,25 @@ class class_base extends aliasmgr
 		else
 		{
 			$this->_log($syslog_type, SA_CHANGE, $name, $this->id);
+		};
+	}
+
+	function validate_cfgform($id = false)
+	{
+		// try to load the bastard
+		$this->cfgform_id = 0;
+		if ($id)
+		{
+			$_tmp = $this->get_object(array(
+				"oid" => $id,
+				"class" => CL_CFGFORM,
+				"subclass" => $this->clid,
+			));
+
+			if ($_tmp)
+			{
+				$this->cfgform_id = $_tmp["oid"];
+			};
 		};
 	}
 	
@@ -836,18 +819,17 @@ class class_base extends aliasmgr
 
 	function gen_output($args = array())
 	{
-		// XXX: figure out a way to do better titles
-		$classname = get_class($this->orb_class);
+		$classname = $this->cfg["classes"][$this->clid]["name"];
 
 		$name = isset($this->coredata["name"]) ? $this->coredata["name"] : "";
 		$return_url = isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
-		// XXX: pathi peab htmlclient tegema
+		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if ($this->id)
 		{
 			if (empty($title))
 			{
-				$title = "Muuda $classname objekti " . $name;
+				$title = "Muuda $classname " . $name;
 			};
 			$parent = $this->coredata["parent"];
 		}
@@ -855,7 +837,7 @@ class class_base extends aliasmgr
 		{
 			if (empty($title))
 			{
-				$title = "Lisa $classname objekt";
+				$title = "Lisa $classname";
 			};
 			$parent = $args["parent"];
 		};
@@ -1565,7 +1547,7 @@ class class_base extends aliasmgr
 	{
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
 		$table = isset($property["table"]) ? $property["table"] : "";
-		if (empty($this->id) && $property["default"])
+		if (empty($this->id) && isset($property["default"]))
 		{
 			$property["value"] = $property["default"];
 		}
