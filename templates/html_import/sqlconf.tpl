@@ -11,7 +11,7 @@
 						<!--tabelsisu-->
 						<table width="100%" cellspacing="0" cellpadding="0">
 							<tr>
-								<td class="tableinside" height="29">
+								<td class="tableinside" height="29" class="celltext">
 									<table border="0" cellpadding="0" cellspacing="0" width="100%">
 										<tr>
 											<td width="5"><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
@@ -54,19 +54,19 @@
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>lisa id veerg (id int primary key auto_increment)
+											<td class="celltext" colspan=2>
+											
+											lisa id veerg (id int primary key auto_increment)
 											<input type=checkbox name="add_id" value=1 {VAR:add_id}><br>
-														<b>{VAR:create_table}</b>
-														<pre>{VAR:mk_table}</pre><br><br>
-														<b>{VAR:drop_table}</b>
-														<pre>{VAR:got_table}</pre>
-											</td>
-										</tr>
+											<!--lisa päritolufaili veerg
+											<input type=checkbox name="add_source" value=1 {VAR:add_source}><br>-->
+
+											<b>{VAR:create_table}</b>
+											<pre>{VAR:mk_table}</pre><br><br>
+											<pre>{VAR:got_table}</pre>
+										</td>
+									</tr>
 									</table>
-									{VAR:gogo}
-											<table border=1 cellpadding=0 cellspacing=0>
-									{VAR:some_data}
-											</table>
 								</td>
 							</tr>
 						</table>
