@@ -67,7 +67,6 @@ class forum extends aw_template
 		$this->read_template("add_forum.tpl");
 		$o = $this->get_object($id);
 		$meta = $this->get_object_metadata(array("metadata" => $o["metadata"]));
-		print_r($meta);
 		$this->mk_path($o["parent"], "Muuda foorumit");
 		$this->vars(array(
 			"name" => $o["name"],
