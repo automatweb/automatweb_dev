@@ -407,7 +407,7 @@
       <property>
             <name>uservarm1</name>
             <table>aw_shop_products</table>
-            <group>daat</group>
+            <group>data</group>
             <type>classificator</type>
             <field>varuserm1</field>
             <store>connect</store>
