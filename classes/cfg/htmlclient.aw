@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.68 2004/06/25 11:56:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.69 2004/06/27 13:04:16 rtoomas Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -506,7 +506,7 @@ class htmlclient extends aw_template
 				$tmp = "";
 				if ($type == "vbox")
 				{
-					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>";
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>";
 					$tmp .= join("</table><table border=0 cellspacing=0 cellpadding=0 width=100%>",$val["items"]);
 					$tmp .= "</table></td></tr></table>";
 				};
@@ -540,10 +540,28 @@ class htmlclient extends aw_template
 				};
 				if ($type == "hbox")
 				{
-					$width = (int)100 / sizeof($val["items"]);
-					$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>";
-					$res .= join("</td><td valign=top width='${width}%'>",$val["items"]);
-					$res .= "</td></tr></table>";
+					if(isset($val['width']))
+					{
+						$width_array = explode(':',$val['width']);
+						$tmp_html = '';
+						foreach($val['items'] as $key=>$value)
+						{
+							$width="";
+							if(isset($width_array[$key]))
+							{
+								$width = 'width="'.$width_array[$key].'"';
+							}
+							$tmp_html.='<td valign=top '.$width.'>'.$value.'</td>';
+						}
+						$res.="<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr>$tmp_html</tr></table>";
+					}
+					else
+					{
+						$width = (int)100 / sizeof($val["items"]);
+						$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>";
+						$res .= join("</td><td valign=top width='${width}%'>",$val["items"]);
+						$res .= "</td></tr></table>";
+					}
 				};
 			};
 		};
