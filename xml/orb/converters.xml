@@ -21,6 +21,20 @@
 				<arguments/>
 			</function>
 		</action>
+		
+		<action name="convert_aliases">
+			<function name="convert_aliases">
+				<arguments/>
+			</function>	
+		</action>	
+
+		<action name="convert_periods">
+			<function name="convert_periods">
+				<arguments>
+					<optional name="parent" type="int"/>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
