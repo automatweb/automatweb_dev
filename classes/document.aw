@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.254 2004/05/12 10:54:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.255 2004/05/14 09:03:19 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -274,6 +274,8 @@ class document extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
+		global $awt;
+
 		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
@@ -348,6 +350,9 @@ class document extends aw_template
 			};
 		}
 		
+		$doc["title"] = $this->sanitize($doc["title"]);
+		$doc["lead"] = $this->sanitize($doc["lead"]);
+		
 		if ($doc["meta"])
 		{
 			$meta = $doc["meta"];
@@ -417,6 +422,8 @@ class document extends aw_template
 			$this->read_any_template($tpl);
 		};
 
+
+		$awt->start("phase3");
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
 			if ($this->cfg["print_cap"] != "")
@@ -464,6 +471,9 @@ class document extends aw_template
 				$this->vars(array("PRINTANDSEND" => $_tmp));
 			};
 		};
+
+		$awt->stop("phase3");
+		$awt->start("phase4");
 
 
 		lc_site_load("document", &$this);
@@ -514,6 +524,9 @@ class document extends aw_template
 		{
 		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$doc["content"]);
 		};
+
+		$awt->stop("phase4");
+		$awt->start("phase5");
 
 
 		// in_archive disappears if we move around in archives
@@ -583,6 +596,9 @@ class document extends aw_template
 				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
 			}
 		}
+
+		$awt->stop("phase5");
+		$awt->start("phase6");
 	
 		// laeme vajalikud klassid
 		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
@@ -709,6 +725,10 @@ class document extends aw_template
 			$this->create_keyword_relations(&$doc["content"]);
 			$this->create_keyword_relations(&$doc["lead"]);
 		}
+
+		$awt->stop("phase6");
+		$awt->start("phase7");
+		$awt->start("phase71");
 	
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
@@ -750,18 +770,26 @@ class document extends aw_template
 		$top_link = $this->parse("top_link");
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
 
+		$awt->stop("phase71");
+		$awt->start("phase72");
+
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		$al = get_instance("aliasmgr");
 
 		if (!isset($text) || $text != "undef") 
 		{
+			$awt->start("phase721");
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
-			
+			$awt->stop("phase721");
+		
+			$awt->start("phase722");
 			$doc["content"] = $this->parse_aliases(array(
 				"oid" => $docid,
 				"text" => $doc["content"],
 			));
+
+			$awt->stop("phase722");
 
 			// this damn ugly-ass hack is here because we need to be able to put the last search value
 			// from form_table to document title
@@ -773,6 +801,9 @@ class document extends aw_template
 
 			$this->vars($al->get_vars());
 		}; 
+
+		$awt->stop("phase72");
+		$awt->start("phase73");
 
 		if (trim($doc["user3"]) != "" && strpos($doc["user3"],"#") !== false)
 		{
@@ -791,34 +822,54 @@ class document extends aw_template
 			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
 		};
 
+		$awt->stop("phase73");
+
 		$pb = "";
 
 		$this->vars(array(
 			"link_text" => $doc["link_text"],
 		));
 
-		if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"] && is_oid($this->cfg["link_authors_section"]))
-		{
-			global $awt;
-			$awt->start("obj_tree");
-			$awt->count("obj_tree");
-			$author_list = array();
-			$author_tree = new object_tree(array(
-				"parent" => $this->cfg["link_authors_section"],
-				"class_id" => array(CL_MENU,CL_DOCUMENT),
-				"status" => STAT_ACTIVE, 
-			));
-			$al = $author_tree->to_list();
-			for($item =& $al->begin(); !$al->end(); $item =& $al->next())
-			{
-				if ($item->name != "")
-				{
-					$author_list[$item->name()] = $item->id();
-				};
-			}
+		$awt->stop("phase7");
+		$awt->start("phase8");
 
-			$awt->stop("obj_tree");
+		////if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"])
+
+		if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"] && (is_oid($this->cfg["link_authors_section"]) || is_array($this->cfg["link_authors_section"])))
+		{
+			$authors_done = aw_global_get("authors_done");
+			if ($authors_done)
+			{
+				$author_list = aw_global_get("author_list");
+				aw_global_set("authors_done",1);
+			}
+			else
+			{
+				$ap_items = new aw_array($this->cfg["link_authors_section"]);
+				$author_list = array();
+
+				foreach($ap_items->get() as $ap_item)
+				{
+					$author_tree = new object_tree(array(
+						"parent" => $ap_item,
+						"class_id" => array(CL_MENU,CL_DOCUMENT),
+						"status" => STAT_ACTIVE, 
+					));
+					$al = $author_tree->to_list();
+					for($item =& $al->begin(); !$al->end(); $item =& $al->next())
+					{
+						if ($item->name() != "")
+						{
+							$author_list[$item->name()] = $item->id();
+						};
+					}
+				};
+				aw_global_set("authors_done",1);
+				aw_global_set("author_list",$author_list);
+			};
 		};
+
+		$awt->stop("phase8");
 
 		if ($doc["photos"])
 		{
@@ -1162,6 +1213,7 @@ class document extends aw_template
 			header("X-AW-Last-Modified: ".$_date);
 			header("X-AW-Document-Title: ".($pagetitle != "" ? $pagetitle : strip_tags($title)));
 		}
+
 
 		$this->vars(array(
 			"doc_modified" => $_date,
@@ -3088,8 +3140,10 @@ class document extends aw_template
 		));
 		$tt->define_field(array(
 			"name" => "modified",
+			"type" => "time",
 			"caption" => "Kuup&auml;ev",
 			"talign" => "center",
+			"format" => "j.m.y",
 			"align" => "center",
 			"sortable" => 1,
 		));
@@ -3133,10 +3187,13 @@ class document extends aw_template
 
 			$tt->define_data(array(
 				"name" => sprintf("<a href='%s'>%s</a>",document::get_link($row["oid"]),$row["name"]),
-				"modified" => $this->time2date($row["modified"],8),
+				//"modified" => $this->time2date($row["modified"],8),
+				"modified" => $row["modified"],
 				"modifiedby" => $author,
 			));
 		};
+		$tt->set_default_sortby("modified");
+		$tt->set_default_sorder("desc");
 		$tt->sort_by();
 		return $tt->draw();
 	}
@@ -4102,6 +4159,13 @@ class document extends aw_template
 		};
 
 		$this->vars($pvars);
+	}
+
+	function sanitize($str)
+	{
+		// remove p tags from start and end
+		$string = preg_replace("/(^<p>|<\/p>$)/i","",$str);
+		return $string;
 	}
 };
 ?>
