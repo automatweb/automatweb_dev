@@ -1,5 +1,5 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.2 2004/03/17 10:32:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.3 2004/03/17 18:10:14 sven Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
  	
@@ -15,6 +15,8 @@
 @reltype HALDUR value=3 clid=CL_CRM_COMPANY
 @caption Haldur
 
+@reltype VALDKONNAD value=20 clid=CL_META
+@caption Tegevusvaldkonnad
 //////////////////////////TOOLBARS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 @property navtoolbar_job_seeker type=toolbar no_caption=1 store=no group=cv_nimekiri,tootsijad_nimekiri,tootsijad_valdkonnad
@@ -34,7 +36,8 @@
 @property offers type=relpicker group=setings table=objects method=serialize field=meta reltype=RELTYPE_KAUST
 @caption Tööpakkumiste kaust
 
-@property tegevusvaldkonnad type=classificator method=serialize field=meta group=setings
+@property tegevusvaldkonnad type=relpicker reltype=RELTYPE_VALDKONNAD method=serialize field=meta group=setings
+@caption Tegevusvaldkondade kaust
 
 ///////////////////////////TABLES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 

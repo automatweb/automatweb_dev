@@ -2,6 +2,7 @@
 <properties>
       <property>
             <name>navtoolbar_job_seeker</name>
+            <table>objects</table>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -10,11 +11,11 @@
                   <num_1>tootsijad_nimekiri</num_1>
                   <num_2>tootsijad_valdkonnad</num_2>
             </group>
-            <table>objects</table>
             <field>navtoolbar_job_seeker</field>
       </property>
       <property>
             <name>navtoolbar_job_offer</name>
+            <table>objects</table>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -23,23 +24,22 @@
                   <num_1>toopakkujad_tood</num_1>
                   <num_2>toopakkumised_cats</num_2>
             </group>
-            <table>objects</table>
             <field>navtoolbar_job_offer</field>
       </property>
       <property>
             <name>navtoolbar_manager</name>
+            <table>objects</table>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <group>haldurid</group>
-            <table>objects</table>
             <field>navtoolbar_manager</field>
       </property>
       <property>
             <name>orgs</name>
+            <table>objects</table>
             <type>relpicker</type>
             <group>setings</group>
-            <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
             <reltype>RELTYPE_KAUST</reltype>
@@ -47,9 +47,9 @@
       </property>
       <property>
             <name>persons</name>
+            <table>objects</table>
             <type>relpicker</type>
             <group>setings</group>
-            <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
             <reltype>RELTYPE_KAUST</reltype>
@@ -57,9 +57,9 @@
       </property>
       <property>
             <name>cvparent</name>
+            <table>objects</table>
             <type>relpicker</type>
             <group>setings</group>
-            <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
             <reltype>RELTYPE_KAUST</reltype>
@@ -67,9 +67,9 @@
       </property>
       <property>
             <name>offers</name>
+            <table>objects</table>
             <type>relpicker</type>
             <group>setings</group>
-            <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
             <reltype>RELTYPE_KAUST</reltype>
@@ -77,133 +77,136 @@
       </property>
       <property>
             <name>tegevusvaldkonnad</name>
-            <type>classificator</type>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_VALDKONNAD</reltype>
             <method>serialize</method>
             <field>meta</field>
             <group>setings</group>
-            <table>objects</table>
+            <caption>Tegevusvaldkondade kaust</caption>
       </property>
       <property>
             <name>jobtable</name>
+            <table>objects</table>
             <type>table</type>
             <group>toopakkujad_tood</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>jobtable</field>
       </property>
       <property>
             <name>users</name>
+            <table>objects</table>
             <type>text</type>
             <group>tootsijad_nimekiri</group>
             <subtitle>1</subtitle>
-            <table>objects</table>
             <field>users</field>
             <caption>Tööotsijad:</caption>
       </property>
       <property>
             <name>persontable</name>
+            <table>objects</table>
             <type>table</type>
             <group>tootsijad_nimekiri</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>persontable</field>
       </property>
       <property>
             <name>companytable</name>
+            <table>objects</table>
             <type>table</type>
             <group>toopakkujad_nimekiri</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>companytable</field>
       </property>
       <property>
             <name>cvtable</name>
+            <table>objects</table>
             <type>table</type>
             <group>cv_nimekiri</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>cvtable</field>
       </property>
       <property>
             <name>subtitle_tootsijad</name>
+            <table>objects</table>
             <type>text</type>
             <group>haldurid</group>
             <subtitle>1</subtitle>
-            <table>objects</table>
             <field>subtitle_tootsijad</field>
             <caption>Personalikeskkonna haldurid:</caption>
       </property>
       <property>
             <name>manager_table</name>
+            <table>objects</table>
             <type>table</type>
             <group>haldurid</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>manager_table</field>
       </property>
       <property>
             <name>manager_person</name>
+            <table>objects</table>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <wrapchildren>1</wrapchildren>
             <group>tootsijad_valdkonnad</group>
-            <table>objects</table>
             <field>manager_person</field>
       </property>
       <property>
             <name>treeview_person</name>
+            <table>objects</table>
             <type>text</type>
             <parent>manager_person</parent>
             <store>no</store>
             <group>tootsijad_valdkonnad</group>
-            <table>objects</table>
             <field>treeview_person</field>
       </property>
       <property>
             <name>catjoblist_person</name>
+            <table>objects</table>
             <type>table</type>
             <parent>manager_person</parent>
             <store>no</store>
             <group>tootsijad_valdkonnad</group>
-            <table>objects</table>
             <field>catjoblist_person</field>
       </property>
       <property>
             <name>manager</name>
+            <table>objects</table>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <wrapchildren>1</wrapchildren>
             <group>toopakkumised_cats</group>
-            <table>objects</table>
             <field>manager</field>
       </property>
       <property>
             <name>treeview</name>
+            <table>objects</table>
             <type>text</type>
             <parent>manager</parent>
             <store>no</store>
             <group>toopakkumised_cats</group>
-            <table>objects</table>
             <field>treeview</field>
       </property>
       <property>
             <name>catjoblist</name>
+            <table>objects</table>
             <type>table</type>
             <parent>manager</parent>
             <store>no</store>
             <group>toopakkumised_cats</group>
-            <table>objects</table>
             <field>catjoblist</field>
       </property>
       <property>
             <name>my_personal_toolbar</name>
+            <table>objects</table>
             <type>toolbar</type>
             <group>
                   <num_0>mycvs</num_0>
@@ -211,61 +214,60 @@
                   <num_2>my_personal_info</num_2>
             </group>
             <no_caption>1</no_caption>
-            <table>objects</table>
             <field>my_personal_toolbar</field>
       </property>
       <property>
             <name>mycvs</name>
+            <table>objects</table>
             <type>table</type>
             <group>mycvs</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>mycvs</field>
       </property>
       <property>
             <name>my_candits</name>
+            <table>objects</table>
             <type>table</type>
             <group>my_candits</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>my_candits</field>
       </property>
       <property>
             <name>my_personal_info</name>
+            <table>objects</table>
             <type>table</type>
             <group>mycvs</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>my_personal_info</field>
       </property>
       <property>
             <name>org_jobs</name>
+            <table>objects</table>
             <type>table</type>
             <group>org_jobs</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>org_jobs</field>
       </property>
       <property>
             <name>org_candits</name>
+            <table>objects</table>
             <type>table</type>
             <group>org_jobs_candits</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>org_candits</field>
       </property>
       <property>
             <name>org_info</name>
+            <table>objects</table>
             <type>table</type>
             <group>org_info</group>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>org_info</field>
       </property>
       <classinfo>
@@ -366,6 +368,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Haldur</caption>
             </HALDUR>
+            <VALDKONNAD>
+                  <value>20</value>
+                  <clid>CL_META</clid>
+                  <caption>Tegevusvaldkonnad</caption>
+            </VALDKONNAD>
       </reltypes>
 </properties>
 
