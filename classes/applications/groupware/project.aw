@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.22 2004/12/13 12:56:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.23 2004/12/14 14:46:25 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -692,12 +692,6 @@ class project extends class_base
 			$web_pages[$conn["to"]] = $conn["from"];
 		};
 
-		global $XX5;
-		if ($XX5)
-		{
-			arr($events);
-		};
-
 		if (1 == $arr["project_media"])
 		{
 			$conns = $c->find(array(
@@ -745,12 +739,15 @@ class project extends class_base
 				{
 					$fx = $id;
 					$fxo = new object($fx);
-					$project_images[$fxo->id()] = $project_images[$fx];
+					if ($project_images[$fx])
+					{
+						$project_images[$fxo->id()] = $project_images[$fx];
+					};
 				};
 			};
 
 		};
-		
+
 		$baseurl = aw_ini_get("baseurl");
 
 		foreach($events as $key => $event)
