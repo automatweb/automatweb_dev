@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.39 2005/02/17 12:13:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.40 2005/02/17 13:13:39 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1352,10 +1352,10 @@ class aw_table extends aw_template
 		//if (substr($file,0,1) != "/"  && substr($file,0,2) != "C:")
 		if (substr($file,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($file,0,2)))
 		{
-			if (!is_admin())
-			{
-				$path = aw_ini_get("site_basedir") . "/xml/" . $file . ".xml";
-			}
+			//if (!is_admin())
+			//{
+			$path = aw_ini_get("site_basedir") . "/xml/" . $file . ".xml";
+			//}
 
 			if (!file_exists($path))
 			{
