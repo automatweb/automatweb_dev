@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.43 2001/06/01 04:42:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.44 2001/06/01 05:07:27 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -853,7 +853,10 @@ class messenger extends menuedit_light
 
 		if ($preview)
 		{
-			print "we should now display preview of the message here. think we can handle that?";
+			return $this->mk_site_orb(array(
+							"action" => "preview",
+							"id" => $msg_id,
+						));
 		};
 
 		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
@@ -1299,7 +1302,7 @@ class messenger extends menuedit_light
 				$subject = quoted_printable_decode($this->MIME_decode($msg["subject"]));
 				$vars = array(
 					"mfrom" => htmlspecialchars($from),
-					"mtargets" => htmlspecialchars($msg["mto"]),
+					"mtargets1" => htmlspecialchars($msg["mto"]),
 					"subject" => htmlspecialchars($subject),
 				);
 				break;
@@ -1313,6 +1316,14 @@ class messenger extends menuedit_light
 					"subject" => $subject,
 				);
 				break;
+
+			default:
+				// ehk siis, meil on kasil uue kirja koostamine
+				$vars = array(
+					"mtargets1" => $msg["mtargets1"],
+					"subject" => $msg["subject"],
+				);
+				break;
 		};
 
 		$this->vars($vars);	
@@ -1324,14 +1335,17 @@ class messenger extends menuedit_light
 		$message = nl2br($this->MIME_decode($message));
 		#if ($this->msgconf["msg_font"] != "courier")
 	#	{
-			$message = preg_replace("/[\r|\n|\r\n|\n\r]/","<br>",$message);
+		#	$message = preg_replace("/[\r|\n|\r\n|\n\r]/","<br>",$message);
 	#	};
+		$this->vars(array("msg_id" => $args["id"]));
+		$s = ($op == "show") ? $this->parse("show") : $this->parse("preview");
 		$this->vars(array(
 			"tm" => $this->time2date($msg["tm"]),
 			"mtargets2" => $msg["mtargets2"],
 			"id" => $msg["id"],
-			"msg_id" => $id,
-			"msgid" => $msg["id"],
+			"msg_id" => $args["id"],
+			"msgid" => $args["id"],
+			"show" => $s,
 			"status" => $msg["status"],
 			"message" => $message,
 			"msg_font" => ($this->msgconf["msg_font"]) ? $this->msgconf["msg_font"] : "Courier",
