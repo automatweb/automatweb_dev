@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.66 2005/01/25 09:06:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.67 2005/02/14 13:29:11 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -274,7 +274,7 @@ class html extends aw_template
 		$selector->set("minute_step", ($args["minute_step"] ? $args["minute_step"] : 1));
 		$selector->configure(array("hour" => 1, "minute" => 1));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
-		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
+		$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $m, $d, $y);
 
 		if ($disabled)
 		{
@@ -325,7 +325,7 @@ class html extends aw_template
 		$selector->configure($set);
 		if (is_array($args['value']))
 		{
-			$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
+			$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $args["value"]["month"], $args["value"]["day"], $args["value"]["year"]);
 		}
 		else
 		{
@@ -351,17 +351,17 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
-		$selector->configure(array("day" => 1,"month" => 1,"year" => 1));
-		if (is_array($args['value']))
+		$selector->configure(array("day" => 1, "month" => 1, "year" => 1));
+		if (is_array($args["value"]))
 		{
-			$val = mktime(0,0,0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
+			$val = mktime(0, 0, 0, $args["value"]["month"], $args["value"]["day"], $args["value"]["year"]);
 		}
 		else
 		{
-			$val = $args['value'];
+			$val = $args["value"];
 		}
-		$year_from = isset($args["year_from"]) ? $args["year_from"] : 2001;
-		$year_to = isset($args["year_to"]) ? $args["year_to"] : 2008;
+		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
+		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
 
 		if ($disabled)
 		{
