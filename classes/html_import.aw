@@ -23,28 +23,55 @@
 	@caption näitefailid töötlemiseks
 
 	@property single type=select
-	@caption failid remote/local:
+	@caption tüüp
+
 ////////////////////////////////////////////////
-	
+
 	@default group=output_conf
-	@groupinfo output_conf caption=output_conf
+	@groupinfo output_conf caption=väljund
 	@property output type=select
 	@caption tüüp
 
 	@property mk_my_table type=textbox
-	@caption sql tabeli nimi "html_import_"
+	@caption sql tabeli nimi 'html_import_'
 
 	@property olemas type=text
 	@caption NB olemasolevad tabelid:
 ////////////////////////////////////////////////
 
+	@default group=visual_conf
+	@groupinfo visual_conf caption=visio
+
+	@property reset type=button editonly=1
+	@caption reset table
+
+	@property starts type=textbox
+	@caption hidden
+
+	@property match type=textarea
+	@caption faili unikaalne string siia:
+
+	@property testi type=text
+	@caption testi
+
+	@property ruuls_setup type=text
+	@caption ruuls setup
+
+	@property ruul type=textarea
+	@caption
+
+////////////////////////////////////////////////
+
 	@default group=sqlconf
-	@groupinfo sqlconf caption=sql_makahää
+	@groupinfo sqlconf caption=sql tabeli seaded
 	@property making_sql type=text
 	@caption tabeli kokkupanek
 
 	@property show_create type=text
-	@caption siuke tabel on olemas
+	@caption selline tabel on olemas
+
+	@property show_create_table type=text
+	@caption selline tabel tehakse
 
 	@property add_id type=checkbox ch_value=1
 	@caption lisa id veerg (id int primary key auto_increment)
@@ -52,44 +79,27 @@
 	@property create_link type=text
 	@caption loo tabel
 
-	@property show_create_table type=text
-	@caption selline tabel tehakse
+	@property drop_link type=text
+	@caption kustuta tabel
 
-	@property sql_ruul
+	@property empty_link type=text
+	@caption tühjenda tabel
+
+	@property view_link type=text
+	@caption vaata tabelit
+
+	@property import_link type=text
+	@caption IMPORT
+
+	@property sql_ruul type=textbox
+	@caption sql_ruul hidden
 
 ///////////////////////////////////////////////
 
-
-
-
 */
 
-/////////////////
-/*
-//	@groupinfo sql_data caption=sdfgsdf
-//	@default group=plaa
-//	@default group=sql_data
-//	@property  type=text
-//	@caption
-//	@property  type=text
-//	@caption
-//	@property  type=text
-//	@caption
-*/
 
 define("PREFIX","html_import_"); // sql tabelitele ette, et mingit jama ei tekiks
-
-/*
-				"metadata" => array(
-					"starts"=>$starts,
-					"ruul"=>$ruul,
-					"match"=>$match,
-					"sql_ruul"=>$sql_ruul,
-					"mk_my_table"=>$mk_my_table,
-					"mk_my_query"=>$mk_my_query,
-
-*/
-
 
 
 class html_import extends class_base
@@ -103,51 +113,43 @@ class html_import extends class_base
 	}
 
 
-	////
-	// !this gets called when the user clicks on change object
-	// parameters:
-	// id - the id of the object to change
-	// return_url - optional, if set, "back" link should point to it
-	function conf($arr)
+	function visual_conf($ob)
 	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda HTML import");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda html_import");
-		}
-		$this->read_template("conf.tpl");
-
-		$link=$this->mk_my_orb("conf", array("id" => $id, "return_url" => urlencode($return_url)));
-
-		$examples=explode("\n",$ob["meta"]["example"]);
-		foreach ($examples as $key => $val)
-		{
-			$exmpl.="testi :<a href=".$this->mk_my_orb("ruul_test",array("id"=>$id, "f"=>$key))." target=_blank>$val</a><br />";
-		}
-
-		if ($reset)
-		{
-			$starts="";
-		}
-		else
-		{
-			$starts=$starts?$starts:$ob["meta"]["starts"];
-		}
-		$this->set_object_metadata(array("oid" => $id,"key" => "starts","value" => $starts,));
-
-		$what=$ob["meta"]["ruul"];
+		$meta=$ob['meta'];
+		$examples=explode("\n",$meta["example"]);
+		$what=$meta["ruul"];
 		$html=$this->getfile($examples[0]);
 
-		if ($ob["meta"]["example"])
+		if ($meta["example"])
 		{
-			if ($ob["meta"]["single"])
+			if ($meta["single"])
 			{
-//$what=$ob["meta"]["ruul"];
+
+			load_vcl("table");
+			$t = new aw_table(array(
+				"prefix" => "html_ruul_conf",
+			));
+
+			$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+
+			$t->define_field(array(
+				'name' => 'ruul',
+				'caption' => 'reegel',
+			));
+			$t->define_field(array(
+				'name' => 'begin',
+				'caption' => 'algus string',
+			));
+			$t->define_field(array(
+				'name' => 'desc',
+				'caption' => 'kirjeldus/sql',
+			));
+			$t->define_field(array(
+				'name' => 'end',
+				'caption' => 'lõpu string',
+			));
+
+
 				$rule=$what;
 				$ruul=array();
 				$i=0;$j=1;
@@ -168,27 +170,46 @@ class html_import extends class_base
 
 				foreach($ruul as $key=>$val)
 				{
-					$this->vars(array(
-						"ruul"=>$key,
-						"mis"=>"ruul",
-						"mk_field"=>$rule[$key]["mk_field"],
-						"desc"=>$rule[$key]["desc"],
-						"begin"=>$rule[$key]["begin"],
-						"end"=>$rule[$key]["end"],
-					));
-					$ruulid=$this->parse("ruul").$ruulid;
+
+					$data[]=array(
+						'ruul' => $key,
+						'begin' =>
+html::textarea(array('name'=> 'ruul['.$key.'][begin]', 'cols'=>25, 'rows' => 4, 'value' => $rule[$key]['begin'])),
+						'desc' =>
+'<table border=0 cellpadding=0 cellspacing=0><tr><td>kirjeldus<br>'.
+html::textbox(array('name'=> 'ruul['.$key.'][desc]', 'value'=>$rule[$key]["desc"]))
+."<br /><b>sql veerg</b>".
+html::textbox(array('name'=> 'ruul['.$key.'][mk_field]', 'value'=>$rule[$key]['mk_field']))
+.'<nobr>strip html'.
+html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'checked' => $what['ruul_'.$i]['strip_html']))
+.'</nobr></td></tr></table>',
+						'end'=>
+html::textarea(array('name'=> 'ruul['.$key.'][end]', 'cols'=>25, 'rows' => 4, 'value' => $rule[$key]['end'])),
+					);
 				}
 
-				$ruulid=$this->parse("ruulbar").$ruulid;
-//				$source=$this->ruultest($html,$ob["meta"]["ruul"]);
-				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=15>".$html."</textarea><br /><br />".$source;
-			}
-			if (!$ob["meta"]["single"])
-			{
-				$source=preg_replace("/(<([\/]?)table[^>]*>)/ei", '\$this->caunt($link,"\\2","$starts")', $this->getbody($html));
-				if($starts)//&&$ends)
+
+
+				$arr = new aw_array($data);
+				foreach($arr->get() as $row)
 				{
-//					$source=preg_replace("/(<([\/]?)table[^>]*>)/ei", '\$this->caunt($link,"\\2","$starts")', $this->getbody($html));
+					$t->define_data(
+						$row
+					);
+				}
+				$t->sort_by();
+				$ruulid = $t->draw();
+
+
+//				$source=$this->ruultest($html,$meta["ruul"]);
+				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=15>".$html."</textarea><br /><br />".$ruulid;
+			}
+			if (!$meta["single"])
+			{
+				$starts=$meta['starts'];
+				$source=preg_replace("/(<([\/]?)table[^>]*>)/ei", '\$this->caunt("\\2","$starts")', $this->getbody($html));
+				if($meta['starts'])
+				{
 					$source=$this->gettable($source,"",$starts,$starts);
 					$tmp=spliti("<tr", $source);		//leiame veergude arvu
 					$cnt=preg_match_all("/(<td)/i", $tmp[1], $null);
@@ -203,77 +224,64 @@ class html_import extends class_base
 					for ($i=1;$i<count($tbl[1]);$i++)
 //					foreach($what as $key => $val)
 					{
-//						if ($whatl["ruul_".$i]["mk_field"])
-//						{
-							$this->vars(array(
-								"mis"=>"ruul",
-								"ruul"=>"ruul_".$i,
-								"mk_field"=>$what["ruul_".$i]["mk_field"],
-								"desc"=>$what["ruul_".$i]["desc"],
-							));
-							$rhuul=$this->parse("fields");
+						$rhuul=
+'<font color=blue size=-1><p>kirjeldus<br />'.
+html::textbox(array('name'=> 'ruul[ruul_'.$i.'][desc]', 'value'=>$what['ruul_'.$i]['desc'],'size'=>15))
+.'<br /><b>sql veerg</b><br />'.
+html::textbox(array('name'=> 'ruul[ruul_'.$i.'][mk_field]', 'value'=>$what['ruul_'.$i]['mk_field'],'size'=>10)).
+' <nobr>strip html'.
+html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'checked' => $what['ruul_'.$i]['strip_html']))
+.'</nobr></p></font>';
 							$source=preg_replace("/(<td[^\!>]*>)/i", '<td !>'.$rhuul, $source,1);
-//						}
 					}
 				}
 				$notest=1;
 				$show="fail: ".$examples[0]."<br /><textarea cols=95 rows=10>".$html."</textarea><br /><br />".$source;
 			}
 		}
-
-//echo aw_ini_get('db.base');
-
-//CL_DB_LOGIN
-
-		$this->vars(array(
-			"database"=>$ob["meta"]["database"],
-			"match"=>$ob["meta"]["match"],
-			"ruul"=>$ruulid,
-			"reset"=> "<a href='$link&reset=1'>reset</a>",
-			"source"=>$show,
-			"ruul_test"=>$notest?"":$exmpl,
-			"toolbar" => $this->my_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "starts"=>$starts, "do"=>"conf", "return_url" => urlencode($return_url))),
-			"abx"=>"",
-		));
-		return $this->parse();
+		return $meta["database"].$show.($notest?'':$exmpl);
 	}
 
 
+	function create_table($arr)
+	{
+		extract($arr);
+		$ob=$this->get_object($id);
+		$q=$this->mk_my_table($ob["meta"]["mk_my_table"],$ob["meta"]['ruul'],$ob["meta"]['sql_ruul'],$ob["meta"]["add_id"],true);
+		header('Location:'.$return_url);
+	}
 
-/*
-		if ($create_table)
-		{
-			$tbl_exists=$this->mk_my_table($ob["meta"]["mk_my_table"],$ruul,$sql_ruul,$ob["meta"]["add_id"],$create_table);
-		}
+	function empty_table($arr)
+	{
+		extract($arr);
+		$ob=$this->get_object($id);
+		$this->db_query("delete from ".PREFIX.$ob['meta']['mk_my_table']);
+		header('Location:'.$return_url);
+	}
 
 
-		if ($drop_table)
-		{
-			$this->drop_table($ob["meta"]["mk_my_table"]);
-
-			$this->set_object_metadata(array( //$overwrite
-				"oid" => $id,
-				"key" => "db_table_contents",
-				"value" => "",
-			));
-		}
-
-/**/
+	function drop_table($arr)
+	{
+		extract($arr);
+		$ob=$this->get_object($id);
+		$this->db_query("DROP table ".PREFIX.$ob["meta"]["mk_my_table"]);
+		$this->set_object_metadata(array( //$overwrite
+			"oid" => $id,
+			"key" => "db_table_contents",
+			"value" => '',
+		));
+		header('Location:'.$return_url);
+	}
 
 
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
+		$form = &$args["form_data"];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
-			case 'sql_ruul':
 
-				$data['value'] = serialize($data['value']);
-				print_r($data);
-				die('sdfgsdf');
-			break;
 		};
 		return $retval;
 	}
@@ -286,23 +294,62 @@ class html_import extends class_base
 		$meta=$args['obj']['meta'];
 		$id=$args['obj']['oid'];
 
-		static $tbl_exists;
-
-		if (!isset($tbl_exists))
+		static $tbl_exists,$tables;
+		if (!isset($tables))
 		{
-			$this->db_list_tables();
-			while ($tb = $this->db_next_table())
+			$all_db_tables=$this->db_query('show tables');
+			while ($row = $this->db_next())
 			{
-				if ($tb==PREFIX.$meta["mk_my_table"])
+				if (is_int(strpos($row['Tables_in_samaw'],PREFIX)))
 				{
-					$tbl_exists=true;
-					break 1;
+					$tables[$row['Tables_in_samaw']] = $row['Tables_in_samaw'];
+					if ($row['Tables_in_samaw']==PREFIX.$meta["mk_my_table"])
+					{
+						$tbl_exists=true;
+					//break 1;
+					}
 				}
+
 			}
 		}
 
 		switch($data["name"])
 		{
+
+			case 'testi':
+
+				if (!$meta['single'])
+				{
+					$retval=PROP_IGNORE;
+				}
+				else
+				{
+					$examples=explode("\n",$meta['example']);
+					foreach ($examples as $key => $val)
+					{
+						$exmpl.='testi :<a href='.$this->mk_my_orb('ruul_test',array("id"=>$id, "f"=>$key))." target=_blank>$val</a><br />";
+					}
+					$data['value']=$exmpl;
+				}
+			break;
+
+			case 'ruuls_setup':
+				$data['value']=$this->visual_conf($args['obj']);
+			break;
+
+			case 'reset':
+				$data['value']='reset';
+				$data['onclick']= "document.changeform.starts.value='';document.changeform.submit();";
+			break;
+
+
+			case 'ruul':
+				$retval=PROP_IGNORE;
+			break;
+			case 'sql_ruul':
+				$retval=PROP_IGNORE;
+			break;
+
 			case 'show_create_table':
 				if (!$tbl_exists)
 				{
@@ -310,7 +357,7 @@ class html_import extends class_base
 				}
 				else
 				{
-//					$retval=PROP_IGNORE;
+					$retval=PROP_IGNORE;
 				}
 
 			break;
@@ -322,7 +369,7 @@ class html_import extends class_base
 				else
 				{
 				$data['value']='test';
-//					$retval=PROP_IGNORE;
+					$retval=PROP_IGNORE;
 				}
 
 			break;
@@ -330,20 +377,57 @@ class html_import extends class_base
 			case 'create_link':
 				if ($tbl_exists)
 				{
-//					$retval=PROP_IGNORE;
+					$retval=PROP_IGNORE;
 				}
 				else
 				{
 					$data['value'] = html::href(array(
 						'caption'=>'CREATE',
-						'url'=>$this->mk_my_orb("sqlconf", array(
+						'url'=>$this->mk_my_orb('create_table', array(
 							"id" => $id,
-							"create_table" => "yes",
-							"return_url" => urlencode($return_url)
+							'return_url' => urlencode($this->mk_my_orb('change',array('id' => $id,'group' => 'sqlconf'))),
 						)),
+//						'target'=> '_blank',
 					));
 				}
 			break;
+
+			case 'drop_link':
+				if (!$tbl_exists)
+				{
+					$retval=PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = html::href(array(
+						'caption'=>'DROP',
+						'url'=>$this->mk_my_orb('drop_table', array(
+							"id" => $id,
+							'return_url' => urlencode($this->mk_my_orb('change',array('id' => $id,'group' => 'sqlconf'))),
+						)),
+						//'target'=> '_blank',
+					));
+				}
+			break;
+
+			case 'empty_link':
+				if ($tbl_exists)
+				{
+					$data['value'] = html::href(array(
+						'caption'=>'EMPTY',
+						'url'=>$this->mk_my_orb('empty_table', array(
+							"id" => $id,
+							'return_url' => urlencode($this->mk_my_orb('change',array('id' => $id,'group' => 'sqlconf'))),
+						)),
+//						'target'=> '_blank',
+					));
+				}
+				else
+				{
+					$retval=PROP_IGNORE;
+				}
+			break;
+
 
 			case 'show_create':
 				if ($tbl_exists)
@@ -352,7 +436,7 @@ class html_import extends class_base
 				}
 				else
 				{
-//					$retval=PROP_IGNORE;
+					$retval=PROP_IGNORE;
 				}
 
 			break;
@@ -412,23 +496,14 @@ class html_import extends class_base
 				}
 				else
 				{
-//					$retval=PROP_IGNORE;
+					$retval=PROP_IGNORE;
 				}
 			break;
 			case 'olemas':
-				if ($meta['output']=='mk_my_table')
+//				if ($meta['output']=='mk_my_table')
+				if ($tables)
 				{
-					//$tables = array();
-					//$tbels = array();
-					$this->db_list_tables();
-					while ($tb = $this->db_next_table())
-					{
-						if (is_int(strpos($tb,PREFIX)))
-						{
-							$tables[$tb] = $tb;
-						}
-					}
-					$data['value'] = $tables;
+					$data['value'] = implode('<br />',$tables);
 				}
 				else
 				{
@@ -437,58 +512,31 @@ class html_import extends class_base
 				}
 			break;
 
-			case 'empty_link':
-				if ($tbl_exists)
-				{
-					$data['value'] = html::href(array(
-						'caption'=>'EMPTY',
-						'url'=>$this->mk_my_orb("sql_data", array(
-							"id" => $id,
-							"empty_table" => "yes",
-							"return_url" => urlencode($return_url)
-						)),
-					));
-
-				}
-			break;
-			case 'drop_link':
-				if ($tbl_exists)
-				{
-					$data['value']=html::href(array(
-						'caption'=>'DROP',
-						'url'=>$this->mk_my_orb("sqlconf", array(
-							"id" => $id,
-							"drop_table" => "yes",
-							"return_url" => urlencode($return_url))
-						),
-					));
-				}
-				else
-				{
-//					$retval=PROP_IGNORE;
-				}
 
 			break;
 			case 'import_link':
-							if ($tbl_exists){
-				$examples=explode("\n",$meta["example"]);
-				$html=$this->getfile($examples[0]);
-				if (is_int(strpos($html,$meta["match"]))) //&& create lause õige && veerge on defineeritud
+				if ($tbl_exists || ($meta['output']=='mk_my_query'))
 				{
-					$import_link=html::href(array('target'=>'_blank','caption'=>'IMPORT', 'url'=>$this->mk_my_orb("tiri",array("id"=>$id))));
+					$examples=explode("\n",$meta["example"]);
+					$html=$this->getfile($examples[0]);
+					if (is_int(strpos($html,$meta["match"]))) //&& create lause õige && veerge on defineeritud
+					{
+						$data['value']=html::href(array('target'=>'_blank','caption'=>'IMPORT', 'url'=>$this->mk_my_orb('import',array("id"=>$id))));
+					}
+					else
+					{
+						$data['value']="unikaalne string puudu või vale";
+					}
 				}
-				else
-				{
-					$import_link="unikaalne string puudu või vale";
-				}}
+
 			break;
-			case 'view_table_contents':
+			case 'view_link':
 				if ($tbl_exists){
 					if (!$meta['db_table_contents'])
 					{
-						$meta['db_table_contents']=$this->new_object(array(
+						$meta['db_table_contents'] = $this->new_object(array(
 							"parent" => $parent,
-							"name" => "html_import_".$meta["mk_my_table"],
+							"name" => PREFIX.$meta["mk_my_table"],
 							"class_id" => CL_DB_TABLE_CONTENTS,
 							"comment" => "generated by html_import",
 							"metadata" => array(
@@ -505,12 +553,18 @@ class html_import extends class_base
 							"value" => $meta['db_table_contents'],
 						));
 					}
-					$data['value']=html::href(array('caption' => 'sisu',
+					$data['value']=html::href(array('caption' => 'tabeli sisu',
 						'target' => '_blank',
 						'url' =>
-		$this->mk_my_orb("content", array('id'=>$meta['db_table_contents'], "return_url" => urlencode($return_url)),'db_table_contents'),
+		$this->mk_my_orb("content", array('id'=>$meta['db_table_contents']),'db_table_contents'),
 					));
 				}
+				else
+				{
+					$retval=PROP_IGNORE;
+				}
+
+
 			break;
 		}
 
@@ -567,16 +621,6 @@ class html_import extends class_base
 	}
 
 
-	function drop_table($table)
-	{
-		$this->db_query("DROP table ".PREFIX.$table);
-	}
-
-	function empty_table($table)
-	{
-		$this->db_query("delete from ".PREFIX.$table);
-	}
-
 	function making_sql($ob)
 	{
 
@@ -603,10 +647,10 @@ class html_import extends class_base
 				"name" => "unique",
 				"caption" => "unikaalne",
 			));
-			$t->define_field(array(
+/*			$t->define_field(array(
 				"name" => "strip_html",
 				"caption" => "strip html",
-			));
+			));*/
 			$t->define_field(array(
 				"name" => "fieldtype",
 				"caption" => "veeru tüüp",
@@ -625,7 +669,6 @@ class html_import extends class_base
 						"comment" => $ruul[$key]["desc"],
 						"sqlfield" => $ruul[$key]["mk_field"],
 						"unique"=>html::checkbox(array('name'=>$mis."[unique]",'value'=>1,'checked'=>$sql_ruul[$key]["unique"])),
-						"strip_html"=>html::checkbox(array('name'=>$mis."[strip_html]", 'value' => 1,'checked' => $sql_ruul[$key]["strip_html"])),
 						"fieldtype" => html::select(array('name' => $mis."[type]", 'options' => $tyyp, 	'selected' => $sql_ruul[$key]["type"])),
 						"size"=>html::textbox(array('name'=>$mis."[size]", 'size'=>5,'maxlength' => 5, 'value' => $sql_ruul[$key]['size'])),
 					);
@@ -653,6 +696,8 @@ class html_import extends class_base
 	// create - set true if you wanna make the actual tabel instead of just gettin' the query
 	function mk_my_table($tablename,$ruul,$sql_ruul,$add_id,$create=false)
 	{
+		$ruul=$ruul;
+		$sql_ruul=$sql_ruul;
 		if (is_array($ruul))
 		foreach($ruul as $key => $val)
 		{
@@ -677,8 +722,8 @@ class html_import extends class_base
 		$q="create table ".PREFIX.$tablename." ($cols \n)";
 		if ($create)
 		{
-			$ii=$this->db_query($q);
-			if (!$ii)
+			$done=$this->db_query($q);
+			if (!$done)
 			{
 				return false;
 			}
@@ -708,13 +753,11 @@ class html_import extends class_base
 
 
 	////
-	// ! will perform the import process
+	// ! will perform the import proccess
 	function tiri($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-
-		classload("linklist");
 
 		if ($ob["meta"]["file_list"])
 		{
@@ -723,13 +766,11 @@ class html_import extends class_base
 		}
 		else
 		{
-			$path=$ob["meta"]["source_path"]."/";
-			$files=linklist::get_templates($path);// selle linklistis oleva meetodi peaks oopis coressse panema
+			classload("linklist");
+			$files=linklist::get_templates($ob["meta"]["source_path"]."/");// selle linklistis oleva meetodi peaks oopis coressse panema
 		}
 
-
-
-		if (!$files) 
+		if (!$files)
 		{
 			die("could not get files, check if if they really excist and can be opened");
 		}
@@ -738,10 +779,12 @@ class html_import extends class_base
 		$starts=$ob["meta"]["starts"];
 		$what=$ob["meta"]["ruul"];
 
+//print_r($what);
+
 		foreach($what as $key => $val)
 		{
 			$cells[]=$val["mk_field"];
-			$strip_tags[$val["mk_field"]]=$val["mk_field"]?true:false;
+			$strip_html[$val["mk_field"]] = $val['strip_html']?true:false;
 		}
 
 		$fields=$this->field_list($cells);
@@ -763,37 +806,27 @@ class html_import extends class_base
 						{
 							if($val["mk_field"])
 							{
-								$begin=str_replace("/", "\/", $val["begin"]);
-								$end=str_replace("/", "\/", $val["end"]);
+
+								$begin=preg_quote($val["begin"],'/');
+								$end=preg_quote($val["end"],'/');
 								preg_match("/($begin)(.*)($end)/sU", $source, $mm);
 								//striptags?
 								$tbl[1][]=$mm[2];
 							}
 						}
 
-					}				
+					}
 					else
 					{
-						$source=preg_replace("/(<([\/]?)table[^>]*>)/ei", '\$this->caunt($link,"\\2","$starts")', $source);
+						$source=preg_replace("/(<([\/]?)table[^>]*>)/ei", '\$this->caunt("\\2","$starts")', $source);
 						$source=$this->gettable($source,"",$starts,$starts);
-						$tbl=$this->table_to_array($source,$cells,$strip_tags);
+						$tbl=$this->table_to_array($source,$cells,$strip_html);
 					}
 //print_r($tbl);
 
 
 					$exec=($ob["meta"]["output"]=="mk_my_table")?true:false;
 					$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,$exec);
-/*					switch ($ob["meta"]["output"])
-					{
-						case "mk_my_table":
-							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,true);
-						break;
-
-						case "mk_my_query":
-							$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true);
-						break;
-						
-					}*/
 					echo "<br>OK ".trim($file)."<br>";
 				}
 				else
@@ -817,6 +850,13 @@ class html_import extends class_base
 	}
 
 
+	
+	function preg_()
+	{
+
+
+	}
+
 	////
 	// ! does the specified ruul really work
 	//  well it does if it looks pink
@@ -831,8 +871,9 @@ class html_import extends class_base
 		if ($ruuls)
 		foreach($ruuls as $key=>$val)
 		{
-			$begin=str_replace("/", "\/", $val["begin"]);
-			$end=str_replace("/", "\/", $val["end"]);
+			$begin=preg_quote($val["begin"],'/');
+			$end=preg_quote($val["end"],'/');
+
 			if($begin && $end)
 			{
 //				echo strpos($source,$begin);
@@ -841,6 +882,8 @@ class html_import extends class_base
 				{
 //					$warn="<font color=blue><b>algusstringe leiti rohkem kui üks!!</b></font>";
 				}
+
+
 
 				$source=preg_replace("/($begin)(.*)($end)/Us", '\\1<span title="'.$val["desc"]." - ".$val["mk_field"].'" style="background-color:#ffaaaa">\\2'.$warn.'</span>\\3', $source);
 			}
@@ -851,7 +894,7 @@ class html_import extends class_base
 
 
 //teeme pinu et siis kui mingi tabel on tabeli sees, algus ja lõpu id oleks õige
-	function caunt($link,$end,$aktiivne='')
+	function caunt($end,$aktiivne='')
 	{
 		if ($end)
 		{
@@ -863,23 +906,12 @@ class html_import extends class_base
 			$this->tblnr++;
 			$t=$this->tblnr;
 			$this->pinu[]=$t;
-			$link.="&starts=$t";
 			$color=$aktiivne?"#ff9999":$this->color[$t%6];
-			$html="<a href=$link>[andmed vaid sellest tabelist?]</a><br></tstart $t><table border=1 id=$t bgcolor=$color>";
+			$html=html::button(array('value'=>'siit','onclick' => 'document.changeform.starts.value='.$t.';document.changeform.submit();')).
+			"<br></tstart $t><table border=1 id=$t bgcolor=$color>";
 			return $html;
 		}
 	}
-
-
-
-/*
-
-		if ($empty_table)
-		{
-			$this->empty_table($ob["meta"]["mk_my_table"]);
-		}
-
-/**/
 
 
 
@@ -894,14 +926,15 @@ class html_import extends class_base
 	// table - html table
 	// gets - list of columns to return (0 .. ), if not specified all columns will be returned
 
-	function table_to_array($table,$gets=array(),$strip_tags=array())
+	function table_to_array($table,$gets=array(),$strip_html=array())
 	{
 		$html=preg_replace("/<\/td>/i", "#%#", $table);
 		$html=preg_replace("/<td[^>]*?>/i", "", $html);
 		$html=preg_replace("/<\/tr>/i", "#&#", $html);
 		$html=preg_replace("/<tr[^>]*?>/i", "", $html);
-		$html=strip_tags($html);
+		//$html=strip_tags($html);
 		$rows=explode("#&#",trim($html));
+//		print_r($strip_html);
 		foreach($rows as $val)
 		{
 			$row=trim($val);
@@ -913,12 +946,12 @@ class html_import extends class_base
 				{
 					if($gets[$key])
 					{
-						$cell=($strip_tags[$gets[$key]])?strip_tags($cell):$cell;
+						$cell=($strip_html[$gets[$key]])?strip_tags($cell):$cell;
 						$dat[]=trim($cell);
 					}
 					elseif(!$gets) //kui veerud on üldse määramata, siis kogu tabel ->
 					{
-						$cell=($strip_tags[$gets[$key]])?strip_tags($cell):$cell;
+						$cell=($strip_html[$gets[$key]])?strip_tags($cell):$cell;
 						$dat[]=trim($cell);
 					}
 				}
@@ -964,7 +997,6 @@ class html_import extends class_base
 			$this->quote($val);
 				foreach($val as $key => $val)
 				{
-//					$val=$this->quote(trim(strip_tags($val)));
 					$val=$this->quote(trim($val));
 					$got=$val?"yes":$got;
 					$va[$key]="'".$val."'";
