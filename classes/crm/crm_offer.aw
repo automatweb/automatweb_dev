@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.29 2005/03/24 10:02:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.30 2005/04/04 08:44:27 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -13,6 +13,9 @@
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algus
+
+@property end type=datetime_select field=end table=planner
+@caption L&otilde;pp
 
 @property preformer type=hidden table=aw_crm_offer datatype=int
 

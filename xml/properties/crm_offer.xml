@@ -18,6 +18,14 @@
             <caption>Algus</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>L&amp;otilde;pp</caption>
+      </property>
+      <property>
             <name>preformer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
