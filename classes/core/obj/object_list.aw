@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.13 2003/11/20 13:09:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.14 2003/12/05 12:34:03 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -72,6 +72,31 @@ class object_list extends _int_obj_container_base
 
 		$this->_int_sort_list($param["prop"], (($param["order"] == "asc" || !$param["order"]) ? "asc" : "desc"));
 	}
+
+	function sort_by_cb($cb)
+	{
+		if (is_array($cb))
+		{
+			error::throw_if(!is_object($cb[0]), array(
+				"id" => ERR_CORE_NO_OBJ,
+				"msg" => "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!"
+			));
+
+			error::throw_if(!method_exists($cb[0], $cb[1]), array(
+				"id" => ERR_CORE_NO_OBJ,
+				"msg" => "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!"
+			));
+		}
+		else
+		{
+			error::throw_if(!function_exists($cb),array(
+				"id" => ERR_CORE_NO_FUNC,
+				"msg" => "object_list::sort_by_cb($cb): no function $cb exists!"
+			));
+		}
+		$this->_int_sort_list_cb($cb);
+	}
+
 
 	function begin()
  	{
@@ -151,15 +176,6 @@ class object_list extends _int_obj_container_base
 			));
 		}
 
-		// what is this supposed to mean? I just want to iterate over the damn objects
-		// and not save them --duke
-		/*
-		if (!isset($param["save"]))
-		{
-			$param["save"] = true;
-		}
-		*/
-
 		if (is_array($param["func"]))
 		{
 			if (!method_exists($param["func"][0], $param["func"][1]))
@@ -181,6 +197,9 @@ class object_list extends _int_obj_container_base
 
 		// why not foreach($this->list as $item)? it works just as well, and is
 		// easier on the eyes -- duke
+		// 
+		// because then I will not have to reimplement lazy loading here. ever heard of encapsulation?
+		// -- terryf
 
 		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
 		{
@@ -298,6 +317,30 @@ class object_list extends _int_obj_container_base
 			}
 		}
 		return $this->list[$oid];
+	}
+
+	function _int_sort_list_cb($cb)
+	{
+		// cb is checked before getting here
+		
+		$this->cb = $cb;
+		uksort($this->list, array(&$this, "_int_sort_list_cb_cb"));
+		unset($this->cb);
+	}
+
+	function _int_sort_list_cb_cb($a, $b)
+	{
+		$a_o = $this->_int_get_at($a);
+		$b_o = $this->_int_get_at($b);
+		if (is_array($this->cb))
+		{
+			$tcb = $this->cb;
+			return $tcb[0]->$tcb[1]($a_o, $b_o);
+		}
+		else
+		{
+			return $this->cb($a_o, $b_o);
+		}
 	}
 }
 
