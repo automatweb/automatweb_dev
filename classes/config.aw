@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.39 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.40 2002/12/19 15:18:03 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -1499,6 +1499,7 @@ class config extends db_config
 		{
 			$f = fopen($favicon,"r");
 			$fc = fread($f,filesize($favicon));
+			$this->quote(&$fc);
 			fclose($f);
 			$this->set_simple_config("favicon", $fc);
 		}
