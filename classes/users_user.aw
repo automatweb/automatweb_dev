@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.95 2004/08/21 10:22:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.96 2004/10/04 13:35:48 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -275,7 +275,8 @@ class users_user extends aw_template
 		setcookie("nocache",1);
 		session_register("uid");
 		aw_global_set("uid", $uid);
-		
+		aw_session_set("uid_oid", $this->get_oid_for_uid($uid));
+
 		$userconfig = $this->get_user_config(array(
 			'uid' => aw_global_get("uid"),
 		));
