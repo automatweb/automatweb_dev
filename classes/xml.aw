@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.14 2003/07/16 14:04:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.15 2003/07/16 16:43:58 duke Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
@@ -153,10 +153,17 @@ class xml
 				{
 					$pkey = $this->parents[$plen-1];
 				};
-				$xkey = ($this->child_id[$pkey]) ? $this->child_id[$pkey] : $this->num_prefix;
-				if ($this->enumerate)
+				if ($this->child_id[$pkey])
 				{
-					$xkey .= $key;
+					$xkey = $this->child_id[$pkey];
+				}
+				else
+				{
+					$xkey = $this->num_prefix;
+					if ($this->enumerate)
+					{
+						$xkey .= $key;
+					};
 				};
 				$key = $xkey;
 			};
@@ -227,11 +234,6 @@ class xml
 					$tag = $realkey;
 				};
 			};
-
-			//if (strpos($tag,$this->num_prefix) == 0)
-			//{
-			//	$tag = str_replace($this->num_prefix,"",$tag);
-			//};
 
 			// kui lopetet tag, siis on meil väärtus käes, ja rohkem pole vaja midagi teha
 			if ($v1["type"]	== "complete")
