@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:55 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/sys.aw:139
 msgid "Failed opening connection to server %s"
 msgstr ""
@@ -6,35 +18,35 @@ msgstr ""
 msgid "Write error"
 msgstr ""
 
-#: classes/sys.aw:502
+#: classes/sys.aw:503
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
-#: classes/sys.aw:558
+#: classes/sys.aw:559
 msgid "all done! "
 msgstr ""
 
-#: classes/sys.aw:603
+#: classes/sys.aw:604
 msgid "Nimi"
 msgstr ""
 
-#: classes/sys.aw:607
+#: classes/sys.aw:608
 msgid "Klass"
 msgstr ""
 
-#: classes/sys.aw:611
+#: classes/sys.aw:612
 msgid "Muutja"
 msgstr ""
 
-#: classes/sys.aw:615
+#: classes/sys.aw:616
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:782
+#: classes/sys.aw:783
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:842
+#: classes/sys.aw:843
 msgid "All done"
 msgstr ""
 

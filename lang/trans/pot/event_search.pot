@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:27 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/applications/calendar/event_search.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
@@ -215,7 +227,7 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:138
-msgid "Tp"
+msgid "T&uuml;&uuml;p"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:143
@@ -236,6 +248,14 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:165
 msgid "Tekstiotsing"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:179
+msgid "Ainult kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:180
+msgid "Kuup&auml;ev, kellaajad"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:188
@@ -280,6 +300,22 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:301
 msgid "Otsi nupp"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:321
+msgid "Kuu navigaator"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:322
+msgid "N&auml;dala navigaator"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:327
+msgid "Kuu j&auml;rgi"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:328
+msgid "P&auml;eva j&auml;rgi"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:394
@@ -334,7 +370,23 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:866
+#: classes/applications/calendar/event_search.aw:833
+msgid "kõik"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:839
+msgid "kõik"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:855
+msgid "kõik"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:861
+msgid "kõik"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:868
 msgid "Otsi"
 msgstr ""
 

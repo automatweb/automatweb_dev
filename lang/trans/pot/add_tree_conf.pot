@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:11 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/admin/add_tree_conf.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
@@ -50,19 +62,19 @@ msgstr ""
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:61
+#: classes/admin/add_tree_conf.aw:68
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:66
+#: classes/admin/add_tree_conf.aw:73
 msgid "N&auml;htav"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:72
+#: classes/admin/add_tree_conf.aw:79
 msgid "Kasutatav"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:79
+#: classes/admin/add_tree_conf.aw:86
 msgid "Aliasena lisatav"
 msgstr ""
 

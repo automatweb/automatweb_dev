@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:17 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/applications/shop/shop_product.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
@@ -814,7 +826,7 @@ msgstr ""
 msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:407
+#: classes/applications/shop/shop_product.aw:460
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 

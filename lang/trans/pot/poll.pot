@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:37 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/contentmgmt/poll.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
@@ -166,55 +178,55 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:432
+#: classes/contentmgmt/poll.aw:470
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:439
+#: classes/contentmgmt/poll.aw:477
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:446
+#: classes/contentmgmt/poll.aw:484
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:456
+#: classes/contentmgmt/poll.aw:494
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:486
+#: classes/contentmgmt/poll.aw:524
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:493
+#: classes/contentmgmt/poll.aw:531
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:502
+#: classes/contentmgmt/poll.aw:540
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:511
+#: classes/contentmgmt/poll.aw:549
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:589
+#: classes/contentmgmt/poll.aw:627
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:601
+#: classes/contentmgmt/poll.aw:639
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:762
+#: classes/contentmgmt/poll.aw:800
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:770
+#: classes/contentmgmt/poll.aw:808
 msgid "K&uuml;simus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:780
+#: classes/contentmgmt/poll.aw:818
 msgid "Vastus nr %s "
 msgstr ""
 

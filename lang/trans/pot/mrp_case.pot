@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:55 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/mrp/mrp_case.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
@@ -442,90 +454,6 @@ msgstr ""
 msgid "Omaduse M&uuml;&uuml;gi hind (myygi_hind) help"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:prop_case_description
-msgid "Omaduse Juhtumi kirjeldus? (case_description) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_case_description_comment
-msgid "Omaduse Juhtumi kirjeldus? (case_description) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_case_description_help
-msgid "Omaduse Juhtumi kirjeldus? (case_description) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_case_id
-msgid "Omaduse Töö/tellimuse number (case_id) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_case_id_comment
-msgid "Omaduse Töö/tellimuse number (case_id) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_case_id_help
-msgid "Omaduse Töö/tellimuse number (case_id) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_started_date
-msgid "Omaduse Sisestatud (started_date) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_started_date_comment
-msgid "Omaduse Sisestatud (started_date) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_started_date_help
-msgid "Omaduse Sisestatud (started_date) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_finished_date
-msgid "Omaduse Valminud (finished_date) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_finished_date_comment
-msgid "Omaduse Valminud (finished_date) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_finished_date_help
-msgid "Omaduse Valminud (finished_date) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_locked_date
-msgid "Omaduse Lukustatud (locked_date) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_locked_date_comment
-msgid "Omaduse Lukustatud (locked_date) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_locked_date_help
-msgid "Omaduse Lukustatud (locked_date) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_aborted_date
-msgid "Omaduse Katkestatud (aborted_date) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_aborted_date_comment
-msgid "Omaduse Katkestatud (aborted_date) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_aborted_date_help
-msgid "Omaduse Katkestatud (aborted_date) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_abort_comment
-msgid "Omaduse Katkestamise põhjus (abort_comment) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_abort_comment_comment
-msgid "Omaduse Katkestamise põhjus (abort_comment) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_abort_comment_help
-msgid "Omaduse Katkestamise põhjus (abort_comment) help"
-msgstr ""
-
 #: classes/mrp/mrp_case.aw:prop_user_comments
 msgid "Omaduse Kommentaarid juhtumi ja tööde kohta (user_comments) caption"
 msgstr ""
@@ -622,10 +550,6 @@ msgstr ""
 msgid "Grupi Projekti andmed (grp_case_data) pealkiri"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:group_grp_case_details
-msgid "Grupi Projekti kirjeldus (grp_case_details) pealkiri"
-msgstr ""
-
 #: classes/mrp/mrp_case.aw:group_grp_case_workflow
 msgid "Grupi Ressursid ja töövoog (grp_case_workflow) pealkiri"
 msgstr ""
@@ -662,55 +586,67 @@ msgstr ""
 msgid "Seose Projekti omanik (RELTYPE_MRP_OWNER) tekst"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:261
+#: classes/mrp/mrp_case.aw:246
 msgid "Uus"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:262
+#: classes/mrp/mrp_case.aw:247
 msgid "Planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:263
+#: classes/mrp/mrp_case.aw:248
 msgid "Töös"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:264
+#: classes/mrp/mrp_case.aw:249
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:265
+#: classes/mrp/mrp_case.aw:250
 msgid "Valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:266
+#: classes/mrp/mrp_case.aw:251
 msgid "Lukustatud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:267
+#: classes/mrp/mrp_case.aw:252
 msgid "Paus"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:268
+#: classes/mrp/mrp_case.aw:253
 msgid "Kustutatud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:269
+#: classes/mrp/mrp_case.aw:254
 msgid "Plaanist väljas"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:270
+#: classes/mrp/mrp_case.aw:255
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:411
+#: classes/mrp/mrp_case.aw:290
+msgid "Kasutatav ressursihalduskeskkond määramata. "
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:361
+msgid "Projekt pole plaanis"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:424
+msgid "Kasutatav ressursihalduskeskkond määramata. "
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:453
 msgid "Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:706
+#: classes/mrp/mrp_case.aw:698
 msgid "<< N&auml;dal tagasi"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:710
+#: classes/mrp/mrp_case.aw:702
 msgid "N&auml;dal edasi >>"
 msgstr ""
 
@@ -722,151 +658,147 @@ msgstr ""
 msgid "Kustutada kõik valitud tööd?"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:767
+#: classes/mrp/mrp_case.aw:769
 msgid "Testi/hinda valmimisaega"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:783
+#: classes/mrp/mrp_case.aw:792
 msgid "Planeeri"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:798
-msgid "Võta planeerimisest v&auml;lja"
+#: classes/mrp/mrp_case.aw:815
+msgid "Plaanist v&auml;lja"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:813
-msgid "Katkesta projekt"
+#: classes/mrp/mrp_case.aw:837
+msgid "Katkesta"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:814
+#: classes/mrp/mrp_case.aw:838
 msgid "Katkesta projekt?"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:829
-msgid "Arhiveeri projekt"
+#: classes/mrp/mrp_case.aw:860
+msgid "Arhiveeri"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:843
+#: classes/mrp/mrp_case.aw:874
 msgid "Nr."
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:847
-msgid "Eeldustööd"
+#: classes/mrp/mrp_case.aw:878
+msgid "Eeldus&shy;tööd"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:851
+#: classes/mrp/mrp_case.aw:882
 msgid "Nimi"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:855
+#: classes/mrp/mrp_case.aw:886
 msgid "Pikkus (h)"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:859
-msgid "Eelpuhver (h)"
+#: classes/mrp/mrp_case.aw:890
+msgid "Eel&shy;puhver (h)"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:863
-msgid "Järelpuhver (h)"
+#: classes/mrp/mrp_case.aw:894
+msgid "Järel&shy;puhver (h)"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:867
-msgid "Kommentaar"
+#: classes/mrp/mrp_case.aw:898
+msgid "Kommen&shy;taar"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:872
+#: classes/mrp/mrp_case.aw:903
 msgid "Min. algusaeg"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:877
+#: classes/mrp/mrp_case.aw:908
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:881
+#: classes/mrp/mrp_case.aw:912
 msgid "Töösse"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:885
+#: classes/mrp/mrp_case.aw:916
 msgid "Ava"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:968
-msgid "JAH"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:975
-msgid "Ava"
+msgid "JAH"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1443
+#: classes/mrp/mrp_case.aw:1456
 msgid "Millal"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1453
+#: classes/mrp/mrp_case.aw:1466
 msgid "T&ouml;&ouml"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1460
+#: classes/mrp/mrp_case.aw:1473
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1467
+#: classes/mrp/mrp_case.aw:1480
 msgid "sisu"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1474
+#: classes/mrp/mrp_case.aw:1487
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1596
+#: classes/mrp/mrp_case.aw:1613
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1608
+#: classes/mrp/mrp_case.aw:1625
 msgid "Projekt pole planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1653
+#: classes/mrp/mrp_case.aw:1670
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1675
+#: classes/mrp/mrp_case.aw:1692
 msgid "Projekti tööd pole kõik valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1685
+#: classes/mrp/mrp_case.aw:1702
 msgid "Projekt pole töös"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1732
+#: classes/mrp/mrp_case.aw:1749
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1744
+#: classes/mrp/mrp_case.aw:1761
 msgid "Projekt pole töös"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1787
+#: classes/mrp/mrp_case.aw:1804
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1799
+#: classes/mrp/mrp_case.aw:1816
 msgid "Projekt pole valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1846
+#: classes/mrp/mrp_case.aw:1863
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1860
+#: classes/mrp/mrp_case.aw:1877
 msgid "Projekt pole planeerimiseks valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1914
+#: classes/mrp/mrp_case.aw:1933
 msgid "Projekti id vale"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1927
+#: classes/mrp/mrp_case.aw:1946
 msgid "Projekti staatus sobimatu"
 msgstr ""
 

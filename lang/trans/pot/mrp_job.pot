@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:55 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/mrp/mrp_job.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
@@ -32,6 +44,42 @@ msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_advised_starttime
+msgid "Omaduse Soovitav algusaeg (advised_starttime) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_advised_starttime_comment
+msgid "Omaduse Soovitav algusaeg (advised_starttime) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_advised_starttime_help
+msgid "Omaduse Soovitav algusaeg (advised_starttime) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_job_toolbar
+msgid "Omaduse  (job_toolbar) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_job_toolbar_comment
+msgid "Omaduse  (job_toolbar) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_job_toolbar_help
+msgid "Omaduse  (job_toolbar) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_resource
+msgid "Omaduse Ressurss (resource) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_resource_comment
+msgid "Omaduse Ressurss (resource) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_resource_help
+msgid "Omaduse Ressurss (resource) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_length
@@ -80,18 +128,6 @@ msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_minstart_help
 msgid "Omaduse Varaseim alustusaeg (minstart) help"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_resource
-msgid "Omaduse Ressurss (resource) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_resource_comment
-msgid "Omaduse Ressurss (resource) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_resource_help
-msgid "Omaduse Ressurss (resource) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_project
@@ -166,18 +202,6 @@ msgstr ""
 msgid "Omaduse Staatus (state) help"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_job_toolbar
-msgid "Omaduse  (job_toolbar) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_job_toolbar_comment
-msgid "Omaduse  (job_toolbar) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_job_toolbar_help
-msgid "Omaduse  (job_toolbar) help"
-msgstr ""
-
 #: classes/mrp/mrp_job.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
@@ -194,151 +218,195 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_MRP_PROJECT) tekst"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:128
+#: classes/mrp/mrp_job.aw:150
 msgid "Uus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:129
+#: classes/mrp/mrp_job.aw:151
 msgid "Planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:130
+#: classes/mrp/mrp_job.aw:152
 msgid "Töös"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:131
+#: classes/mrp/mrp_job.aw:153
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:132
+#: classes/mrp/mrp_job.aw:154
 msgid "Valmis"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:133
+#: classes/mrp/mrp_job.aw:155
 msgid "Lukustatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:134
+#: classes/mrp/mrp_job.aw:156
 msgid "Paus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:135
+#: classes/mrp/mrp_job.aw:157
 msgid "Kustutatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:136
+#: classes/mrp/mrp_job.aw:158
 msgid "Plaanist väljas"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:137
+#: classes/mrp/mrp_job.aw:159
 msgid "Arhiveeritud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:175
-msgid "Ressurss määramata"
+#: classes/mrp/mrp_job.aw:183
+msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas. "
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:186
+#: classes/mrp/mrp_job.aw:198
+msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond. "
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:245
 msgid "Määramata"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:280
+#: classes/mrp/mrp_job.aw:300
 msgid "Alusta"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:291
+#: classes/mrp/mrp_job.aw:302
+msgid "Oled kindel et soovid t&ouml;&ouml;d alustada?"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:319
 msgid "Valmis"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:298
-msgid "Katkesta"
+#: classes/mrp/mrp_job.aw:321
+msgid "Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:301
-msgid "Kommentaar peab olema t&auml;idetud!"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:309
+#: classes/mrp/mrp_job.aw:327
 msgid "Paus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:316
+#: classes/mrp/mrp_job.aw:334
+msgid "Lõpeta vahetus ja logi v&auml;lja?"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:335
 msgid "Vahetuse l&otilde;pp"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:325
+#: classes/mrp/mrp_job.aw:359
 msgid "J&auml;tka"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:352
+#: classes/mrp/mrp_job.aw:367
+msgid "Katkesta"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:370
+msgid "Katkesta t&ouml;&ouml;?"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:371
+msgid "Kommentaar peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:396
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:368
+#: classes/mrp/mrp_job.aw:412
 msgid "Projekt pole töös ega planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:373
+#: classes/mrp/mrp_job.aw:417
 msgid "Töö pole planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:393
+#: classes/mrp/mrp_job.aw:435
 msgid "Eeldustööd tegemata"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:403
+#: classes/mrp/mrp_job.aw:441
+msgid "Eeldustöö definitsioon on katki"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:452
 msgid "Ressurss kinni"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:428
+#: classes/mrp/mrp_job.aw:477
 msgid "Projekti alustamine ebaõnnestus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:476
+#: classes/mrp/mrp_job.aw:526
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:488
+#: classes/mrp/mrp_job.aw:538
 msgid "Töö staatus sobimatu"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:542
+#: classes/mrp/mrp_job.aw:559
+msgid "Ressursi vabastamine ebaõnnestus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:597
 msgid "Projekti lõpetamine ebaõnnestus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:578
+#: classes/mrp/mrp_job.aw:633
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:590
+#: classes/mrp/mrp_job.aw:645
 msgid "Töö pole tegemisel"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:637
+#: classes/mrp/mrp_job.aw:666
+msgid "Ressursi vabastamine ebaõnnestus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:698
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:649
+#: classes/mrp/mrp_job.aw:710
 msgid "Töö pole tegemisel"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:697
+#: classes/mrp/mrp_job.aw:758
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:713
+#: classes/mrp/mrp_job.aw:774
 msgid "Töö pole pausil"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:718
+#: classes/mrp/mrp_job.aw:779
 msgid "Projekt pole jätkatav"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:766
+#: classes/mrp/mrp_job.aw:827
 msgid "Töö id vale"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:778
+#: classes/mrp/mrp_job.aw:843
+msgid "Töö pole katkestatud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:848
+msgid "Projekt pole jätkatav"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:896
+msgid "Töö id vale"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:908
 msgid "Töö pole tegemisel"
 msgstr ""
 

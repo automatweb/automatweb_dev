@@ -1,3 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 08:51:14 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
 #: classes/crm/crm_company.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
@@ -1526,119 +1538,119 @@ msgstr ""
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4004
+#: classes/crm/crm_company.aw:4007
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4012
+#: classes/crm/crm_company.aw:4015
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4019
+#: classes/crm/crm_company.aw:4022
 msgid "Koostaja"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4026
+#: classes/crm/crm_company.aw:4029
 msgid "Lisatud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4036
+#: classes/crm/crm_company.aw:4039
 msgid "Summa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4043
+#: classes/crm/crm_company.aw:4046
 msgid "Staatus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4051
+#: classes/crm/crm_company.aw:4054
 msgid "X"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4097
+#: classes/crm/crm_company.aw:4100
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4098
+#: classes/crm/crm_company.aw:4101
 msgid "Saadetud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4099
+#: classes/crm/crm_company.aw:4102
 msgid "Esitletud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4100
+#: classes/crm/crm_company.aw:4103
 msgid "Tagasilükatud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4101
+#: classes/crm/crm_company.aw:4104
 msgid "Positiivelt lõppenud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4184
+#: classes/crm/crm_company.aw:4187
 msgid "Kõik organisatsioonid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4251
+#: classes/crm/crm_company.aw:4254
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4265
+#: classes/crm/crm_company.aw:4268
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4273
+#: classes/crm/crm_company.aw:4276
 msgid "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4274
+#: classes/crm/crm_company.aw:4277
 msgid "Kustuta"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4340
+#: classes/crm/crm_company.aw:4343
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4377
+#: classes/crm/crm_company.aw:4380
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4384
+#: classes/crm/crm_company.aw:4387
 msgid "Cut"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4393
+#: classes/crm/crm_company.aw:4396
 msgid "Paste"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4474
+#: classes/crm/crm_company.aw:4477
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4480
+#: classes/crm/crm_company.aw:4483
 msgid "Muudetud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4490
+#: classes/crm/crm_company.aw:4493
 msgid "Tüüp"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4667
+#: classes/crm/crm_company.aw:4670
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4673
+#: classes/crm/crm_company.aw:4676
 msgid "Osalejad"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4679
+#: classes/crm/crm_company.aw:4682
 msgid "Loodud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4685
+#: classes/crm/crm_company.aw:4688
 msgid "Rollid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4949
+#: classes/crm/crm_company.aw:4952
 msgid "Rollid"
 msgstr ""
 
