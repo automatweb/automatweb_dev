@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.155 2002/09/25 13:40:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.156 2002/09/26 16:13:30 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1421,7 +1421,7 @@ class menuedit extends aw_template
 				}
 
 				$objs = array();
-				$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".join(",",$mn).")");
+				$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".join(",",$mn).") ORDER BY jrk");
 				while ($row = $this->db_next())
 				{
 					$objs[$row["parent"]][] = $row;
@@ -1472,7 +1472,7 @@ class menuedit extends aw_template
 								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
 
 								$cnt++;
-								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."||list\n";
+								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list\n";
 							}
 						}
 					}
@@ -5646,6 +5646,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$obj = $this->get_object($oid);
 		return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $this->cfg["classes"][$obj["class_id"]]["file"]);
+	}
+
+	function blank($arr)
+	{
+		return "<html><body>&nbsop;</body></html>";
 	}
 }
 ?>
