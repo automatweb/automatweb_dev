@@ -1,15 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.69 2003/03/26 03:48:06 duke Exp $
-// foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
-// hindamisatribuute peab saama sisestama läbi veebivormi.
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.70 2003/03/27 15:40:45 duke Exp $
+// forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
         @default table=objects
 	@default group=general
+	
+	@property topicsonpage type=select field=meta method=serialize
+	@caption Teemasid lehel
 
         @property comments type=checkbox field=meta method=serialize ch_value=1
         @caption Kommenteeritav
+	
+	@property onpage type=select field=meta method=serialize
+	@caption Kommentaare lehel
         
 	@property rated type=checkbox field=meta method=serialize ch_value=1
         @caption Hinnatav
@@ -17,19 +21,20 @@
 	@property template type=select field=meta method=serialize
 	@caption Template
 
-	@property onpage type=select field=meta method=serialize
-	@caption Kommentaare lehel
-
-	@property topicsonpage type=select field=meta method=serialize
-	@caption Teemasid lehel
+	@property preview type=text store=no editonly=1
+	@caption Eelvaade
 
 	@property rates callback=callback_get_rates field=meta method=serialize group=rates
 	@caption Hinded
+
+	@property language callback=callback_get_languages group=languages field=meta method=serialize
+	@caption Keel
 
 	@classinfo corefields=name,comment,status
 	@classinfo toolbar=yes
 
 	@groupinfo rates caption=Hinded
+	@groupinfo languages caption=Keel
 
 */
 
@@ -68,6 +73,21 @@ class forum extends class_base
 		$this->$members = $u->getgroupmembers("Kasutajatugi");
 		
 		$this->lc_load("msgboard","lc_msgboard");
+		lc_site_load("msgboard",&$this);
+	}
+
+	////
+	// !Should be called for all functions that display a forum
+	function init_forum_display($args = array())
+	{
+		$forum_obj = $this->get_object($args["id"]);
+		if (isset($forum_obj["meta"]["language"]) && $forum_obj["meta"]["language"] != 0)
+		{
+			$lx = get_instance("languages");
+			$ldata = $lx->fetch($forum_obj["meta"]["language"]);
+			$this->lc_load("msgboard","lc_msgboard",$ldata["acceptlang"]);
+
+		};
 	}
 
 	function callback_get_rates($args = array())
@@ -204,7 +224,7 @@ class forum extends class_base
 
 		$this->vars(array(
 			"table" => $t->draw(),
-			"change_link" => $this->mk_my_orb("configure",array("id" => $id)),
+			"change_link" => $this->mk_my_orb("change",array("id" => $id)),
 			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit_notify_list",array("id" => $id)),
 		));
@@ -244,27 +264,12 @@ class forum extends class_base
 
 	function callback_get_toolbar($args = array())
 	{
-		$toolbar = &$args["toolbar"];
 		$id = $args["id"];
-		$content_url = $this->mk_my_orb("topics",array("id" => $id));
-		$notify_url = $this->mk_my_orb("notify_list",array("id" => $id));
-
-		$content_link = "<a href='$content_url' class='fgtitle'>Foorumi sisu</a>";
-		$notify_link = "<a href='$notify_url' class='fgtitle'>E-posti aadressid</a>";
-
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.changeform.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-                ));
-
 		if ($id)
 		{
-			$toolbar->add_separator();
-			$toolbar->add_cdata($content_link);
-			$toolbar->add_separator();
+			$notify_url = $this->mk_my_orb("notify_list",array("id" => $id));
+			$notify_link = "<a href='$notify_url' class='fgtitle'>E-posti aadressid</a>";
+			$toolbar = &$args["toolbar"];
 			$toolbar->add_cdata($notify_link);
 		};
 	}
@@ -291,11 +296,11 @@ class forum extends class_base
 		
 		$tabs = array(
 			"newtopic" => $this->mk_my_orb("add_topic",array("id" => $id,"_alias" => "forum","section" => $this->section)),
-			"configure" => $this->mk_my_orb("configure",array("id" => $id,"_alias" => "forum","section" => $this->section)),
+			"configure" => $this->mk_my_orb("change",array("id" => $id,"_alias" => "forum","section" => $this->section)),
 			"addcomment" => $this->mk_my_orb("addcomment",array("board" => $board,"_alias" => "forum","section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 			"archive" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section,"archive" => 1)),
-			"props_link" => $this->mk_my_orb("configure",array("id" => $id)),
+			"props_link" => $this->mk_my_orb("change",array("id" => $id)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 			"search" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
 			"search_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
@@ -308,18 +313,18 @@ class forum extends class_base
 		);
 
 		$captions = array(
-			"newtopic" => "Uus teema",
-			"addcomment" => "Uus küsimus",
-			"flat" => "Teemad",
-			"configure" => "Konfigureeri",
-			"archive" => "Arhiiv",
-			"threadedsubjects" => "Pealkirjad",
-			"mark_all_read" => "Kõik loetuks",
-			"search" => "Otsi",
-			//"no_response" => "Vastamata küsimused",
-			"details" => "Foorum",
-			"flatcomments" => "Aja järgi",
-			"threadedcomments" => "Kommentaarid",
+			"newtopic" => $this->vars["LC_MSGBOARD_NEWTOPIC"],
+			"addcomment" => $this->vars["LC_MSGBOARD_ADDCOMMENT"],
+			"flat" => $this->vars["LC_MSGBOARD_FLATLIST"],
+			"configure" => $this->vars["LC_MSGBOARD_CONFIGURE"],
+			"archive" => $this->vars["LC_MSGBOARD_ARCHIVE"],
+			"threadedsubjects" => $this->vars["LC_MSGBOARD_TITLES_ONLY"],
+			"mark_all_read" => $this->vars["LC_MSGBOARD_MARK_ALL_READ"],
+			"search" => $this->vars["LC_MSGBOARD_SEARCH"],
+			"no_response" => $this->vars["LC_MSGBOARD_NO_RESPONSE"],
+			"details" => $this->vars["LC_MSGBOARD_FORUM"],
+			"flatcomments" => $this->vars["LC_MSGBOARD_SORTBY_DATE"],
+			"threadedcomments" => $this->vars["LC_MSGBOARD_SORTBY_THREAD"],
 		);
 
 		$hide_tabs = array();
@@ -432,6 +437,7 @@ class forum extends class_base
 			}
 		};
 		extract($args);
+		$this->init_forum_display(array("id" => $id));
 		if ($section)
 		{
 			$this->section = $section;
@@ -476,7 +482,7 @@ topic");
 			"value" => $email,
 		));
 
-		if ($section && !aw_global_get("cal"))
+		if ($section)
 		{
 			$retval = $this->cfg["baseurl"] . "/?section=$section";
 		}
@@ -492,13 +498,14 @@ topic");
 	function show($args = array())
 	{
 		extract($args);
-		$board_obj = $this->get_obj_meta($board);
-		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+		$board_obj = $this->get_object($board);
+		$forum_obj = $this->get_object($board_obj["parent"]);
+		$this->init_forum_display(array("id" => $forum_obj["oid"]));
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
 		$aw_mb_last[$board_obj["parent"]] = time();
-		$meta = $this->get_object_metadata(array("oid" => $forum_obj["oid"]));
-		$board_meta = $this->get_object_metadata(array("oid" => $board));
+		$meta = $forum_obj["meta"];
+		$board_meta = $board_obj["meta"];
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
@@ -661,7 +668,7 @@ topic");
 		{
 			$forum_votes[$args["board"]] = rand();
 			session_register("forum_votes");
-			$board_obj = $this->get_obj_meta($board);
+			$board_obj = $this->get_object($board);
 			$voters = ++$board_obj["meta"]["voters"];
 			$votesum = $board_obj["meta"]["votesum"] + $vote;
 			$this->set_object_metadata(array(
@@ -686,28 +693,31 @@ topic");
 		$this->level = 0;
 		$this->comments = array();
 		$this->content = "";
+		$tabs = "";
 		extract($args);
-		$board_obj = $this->get_obj_meta($board);
+
+		$board_obj = $this->get_object($board);
+		$board_meta = $board_obj["meta"];
+
 		$forum_obj = $this->get_object($board_obj["parent"]);
-		$meta = $this->get_object_metadata(
-			array("oid" => $forum_obj["oid"],
-		));
-		$board_meta = $this->get_object_metadata(array("oid" => $board));
+		$this->init_forum_display(array("id" => $forum_obj["oid"]));
+		$meta = $forum_obj["meta"];
+		// this is weird, I don't need that if the template is shown inside the site
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
+
 		$this->forum_id = $forum_obj["oid"];
 		$this->board = $board;
-		$this->section = $section;
+		$this->section = isset($section) ? $section : "";
 		
-		$this->_query_comments(array("board" => $board));
 	
 		$rated = "";
-		if ($meta["rated"])
+		if (!empty($meta["rated"]))
 		{
 			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
 		};
 	
-		if ($no_comments)
+		if (isset($no_comments))
 		{
 			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
 			$tpl = "subjects_threaded.tpl";
@@ -725,18 +735,38 @@ topic");
 		$content = "";
 		$this->comm_count = 0;
 		$this->reply_counts = array();
+		$this->_query_comments(array("board" => $board));
+
+		$level1comments = 0;
 		while($row = $this->db_next())
 		{
 			$this->comm_count++;
 			$this->_comments[$row["parent"]][] = $row;
+			if ($row["parent"] == 0)
+			{
+				$level1comments++;
+			};
 		};
+
+		$this->from = isset($args["from"]) ? $args["from"] : 0;
+		$this->level1comments = $level1comments;
+		$this->level1comments_done = 0;
+		$this->commentsonpage = is_numeric($meta["onpage"]) ? $meta["onpage"] : 25;
+
+		list($this->from,$this->to) = $this->_draw_pager(array(
+			"pgaction" => "show_threaded",
+			"total" => $level1comments,
+			"onpage" => $this->commentsonpage,
+			"active" => $this->from,
+		));
+		
 		if ($no_response)
 		{
 			$this->count_replies(0);
 		}
 		else
 		{
-			$start_from = ($cid) ? $cid : 0;
+			$start_from = isset($cid) ? $cid : 0;
 			global $HTTP_COOKIE_VARS;
 			$this->aw_mb_read = unserialize($HTTP_COOKIE_VARS["aw_mb_read"]);
 			if ($cid)
@@ -745,13 +775,13 @@ topic");
 				$q = "SELECT * FROM comments WHERE id = '$cid'";
 				$this->db_query($q);
 				$crow = $this->db_next();
-				#$this->_comments[$start_from][] = $crow;
 				$this->mark_comments = 1;
 				$this->content .= $this->display_comment($crow);
 			};
-			if (!$no_comments)
+			if (empty($no_comments))
 			{
-				// if we are showing the threaded version with comments, then we oughta mark them read as well, souldn't we
+				// if we are showing the threaded version with comments,
+				// then we oughta mark them read as well, souldn't we
 				$this->mark_comments = true;
 			}
 			$this->rec_comments($start_from);
@@ -897,7 +927,7 @@ topic");
 
 		$commcount = sizeof($this->_comments[$level]);
 		$icon_prefix = "";
-	
+
 		if ($this->level > 0)
 		{
 			for ($i = 0; $i < ($this->level - 1); $i++)
@@ -915,7 +945,6 @@ topic");
 			$val["spacer"] = str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$this->level);
 			$val["level"] = 20 * $this->level;
 			$replies = sizeof($this->_comments[$val["id"]]);
-			#$icon_prefix = ($cc == $commcount) ? "<img src='/img/forum/blank.gif'>" : "<img src='/img/forum/vert.gif'>";
 			if ($cc == $commcount)
 			{
 				$icon_sufix = ($replies == 0) ? "last" : "minus-last";
@@ -925,7 +954,26 @@ topic");
 				$icon_sufix = ($replies == 0) ? "node" : "minus";
 			};
 			$val["icons"] = $icons . $icon_prefix . "<img src='".$this->cfg["baseurl"]."/img/forum/$icon_sufix.gif'>";
-			$this->content .= $this->display_comment($val);
+			if ($this->level == 0)
+			{
+				if ($this->level1comments_done >= $this->from)
+				{
+					$this->content .= $this->display_comment($val);
+				};
+				$this->level1comments_done++;
+			}
+			else
+			{
+				$this->content .= $this->display_comment($val);
+			};
+			if ($this->level == 0)
+			{
+				if ($this->level1comments_done == ($this->to) + 1)
+				{
+					return;	
+				};
+			};
+				
 			$this->level++;
 			$this->rec_comments($val["id"]);
 			$this->level--;
@@ -1240,7 +1288,8 @@ topic");
 	function topics($args = array())
 	{
 		extract($args);
-		$o = $this->get_obj_meta($id);
+		$o = $this->get_object($id);
+		$this->init_forum_display(array("id" => $id));
 		$this->section = $section;
 
 		$this->forum_id = $id;
@@ -1303,7 +1352,8 @@ topic");
 	function topics_detail($args = array())
 	{
 		extract($args);
-		$o = $this->get_obj_meta($id);
+		$o = $this->get_object($id);
+		$this->init_forum_display(array("id" => $id));
 
 		$this->forum_id = $id;
 		$this->from = $from;
@@ -1374,13 +1424,14 @@ topic");
 		  // neither is defined .. what the hell do you want anyway?
 			return;
 		};
+		$this->init_forum_display(array("id" => $id));
 		$this->section = $section;
 		$this->forum_id = $id;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search.tpl");
 		$o = $this->get_object($board);
-		$board_obj = $this->get_obj_meta($board);
-		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+		$board_obj = $this->get_object($board);
+		$forum_obj = $this->get_object($board_obj["parent"]);
 		$flink = $this->mk_my_orb("configure",array("id" => $board));
 		$this->mk_path($o["parent"], "<a href='$flink'>$o[name]</a> / Otsi");
 		$this->mk_links(array(
@@ -1407,8 +1458,8 @@ topic");
 		{
 			$board = $id;
 		};
-		$board_obj = $this->get_obj_meta($board);
-		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+		$board_obj = $this->get_object($board);
+		$forum_obj = $this->get_object($board_obj["parent"]);
 		$c = "";
 
 		// koigepealt tuleb koostada topicute nimekiri mingi foorumi all
@@ -1755,24 +1806,16 @@ topic");
 	// !Performs a query to get comments matching a certain criteria
 	function _query_comments($args = array())
 	{
-		extract($args);
-		if ($args["board"])
+		if (isset($args["board"]))
 		{
-			$q = "SELECT * FROM comments WHERE board_id = '$board' ORDER BY time";
+			$q = "SELECT * FROM comments WHERE board_id = '$args[board]' ORDER BY time";
 			$this->db_query($q);
 		}
 	}
 
-	////
-	// !Draws a page
-	// requires a loaded template and PAGES, PAGE and SEL_PAGE subtemplates to be defined
-	// total(int) - how many items do we have?
-	// onpage(int) - how many items on a page?
-	// active(int) - what item are we showing at the moment? 
-	function _draw_pager($args = array())
+	function _draw_comment_pager($args = array())
 	{
 		extract($args);
-		$content = "";
 		if (!$onpage)
 		{
 			$onpage = 5;
@@ -1816,6 +1859,73 @@ topic");
 		return(array($act_start,$act_end));
 	}
 
+	////
+	// !Draws a page
+	// requires a loaded template and PAGES, PAGE and SEL_PAGE subtemplates to be defined
+	// total(int) - how many items do we have?
+	// onpage(int) - how many items on a page?
+	// active(int) - what item are we showing at the moment? 
+	function _draw_pager($args = array())
+	{
+		extract($args);
+		$content = "";
+		if (!$onpage)
+		{
+			$onpage = 5;
+		};
+		$num_pages = (int)(($total / $onpage) + 1);
+
+		// no pager, if we have less entries than will fit on one page
+		if ($total < ($onpage - 1))
+		{
+			return array(0,$total);
+		};
+
+		for ($i = 1; $i <= $num_pages; $i++)
+		{
+			$page_start = ($i - 1)  * $onpage;
+			$page_end = $page_start + $onpage - 1;
+			if ( ($active >= $page_start) and ($active < $page_end) )
+			{
+				$act_start = $page_start;
+				$act_end = $page_end;
+				$tpl = "SEL_PAGE";
+			}
+			else
+			{
+				$tpl = "PAGE";
+			};
+			$pglink = "#";
+			if ($args["pgaction"] == "show_threaded")
+			{
+				$pglink = $this->mk_my_orb("show_threaded",array("board" => $this->board,"from" => $page_start,"section" => $this->section));
+			}
+			else
+			if ($args["details"] == "topics_detail")
+			{
+				$pglink = $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section,"archive" => $this->archive));
+			}
+			else
+			if ($args["details"] == "topics")
+			{
+				$pglink = $this->mk_my_orb("topics",array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section,"archive" => $this->archive));
+			};
+			$this->vars(array(
+				"pagelink" => $pglink,
+				"linktext" => $i,
+			));
+			$content .= $this->parse($tpl);
+		};
+		$this->vars(array(
+			"PAGE" => $content,
+		));
+		$this->vars(array(
+			"PAGES" => $this->parse("PAGES"),
+		));
+
+		return(array($act_start,$act_end));
+	}
+
 	///
 	// !deletes a topic from the board. What about the comments though?
 	function del_topic($arr)
@@ -1842,7 +1952,7 @@ topic");
 		extract($arr);
 		$this->read_template("add_topic.tpl");
 
-		$top = $this->get_obj_meta($board);
+		$top = $this->get_object($board);
 
 		$this->vars(array(
 			"name" => $top["name"],
@@ -1921,7 +2031,33 @@ topic");
 			case "topicsonpage":
 				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 				break;
+
+			case "preview":
+				$data["value"] = html::href(array(
+					"url" => $this->mk_my_orb("topics",array("id" => $args["obj"]["oid"])),
+					"caption" => "Näita",
+				));
+				break;
 		};
+	}
+
+	function callback_get_languages($args = array())
+	{
+		$lx = get_instance("languages");
+		$xlist = array("0" => "default") + $lx->get_list();
+		$retval = array();
+		foreach($xlist as $key => $val)
+		{
+			$retval[] = array(
+				"name" => $args["prop"]["name"],
+				"type" => "radiobutton",
+				"caption" => $val,
+				"value" => $args["prop"]["value"],
+				"rb_value" => $key,
+			);
+
+		};
+		return $retval;
 	}
 }
 ?>
