@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.297 2004/11/05 14:14:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.298 2004/11/09 15:44:50 sven Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -538,7 +538,12 @@ class document extends aw_template
 		{
 		       $doc["content"] = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$doc["content"]);
 		};
-
+		
+		if(aw_ini_get("document.parse_keywords") && $doc_o->prop("link_keywords2"))
+		{
+			$this->parse_keywords($doc["content"]);	
+		}
+		
 		$awt->stop("phase4");
 		$awt->start("phase5");
 
@@ -4254,7 +4259,33 @@ class document extends aw_template
 		};
 
 	}
+	
+	//This could be bloody slow
+	function parse_keywords(&$content)
+	{
+		$content_arr = split(" ", $content);
+		
+		//Lets find keywords in document
+		$keywords = new object_list(array(
+			"class_id" => CL_KEYWORD,
+			"keyword" => $content_arr,
+		));
+		
+		foreach ($keywords->arr() as $keyword)
+		{
+			$keys_arr[$keyword->prop("keyword")] = $keyword->id(); 
+		}
 
+		foreach ($keys_arr as $key => $value)
+		{
+			$href = html::href(array(
+				"caption" => $key,
+				"url" => $this->mk_my_orb("show_documents", array("id" => $value), CL_KEYWORD),
+			));
+			$content = str_replace($key, $href , $content);
+		}
+	}
+	
 	function parse_text($text)
 	{
 		reset($this->tags);

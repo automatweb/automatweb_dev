@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.84 2004/11/01 12:20:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.85 2004/11/09 15:44:50 sven Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -7,7 +7,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 
-@classinfo trans=1 no_comment=1
+@classinfo trans=1 no_comment=1 relationmgr=yes
 
 @default table=documents
 @default group=general
@@ -78,6 +78,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property link_keywords type=checkbox ch_value=1 store=no trans=1
 @caption Lingi võtmesõnad
+
+@property link_keywords2 type=checkbox ch_value=1 field=meta method=serialize table=objects
+@caption Võtmesõnad lingina
 
 @property esilehel type=checkbox ch_value=1 group=settings trans=1
 @caption Esilehel
@@ -183,6 +186,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
+@reltype KEYWORD value=1 clid=CL_KEYWORD
+@caption Märksõna
 */
 
 define(RELTYPE_COMMENT,1);
