@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.24 2003/01/30 19:15:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.25 2003/02/28 13:15:11 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -484,7 +484,7 @@ class promo extends class_base
 
 	function convert($args = array())
 	{
-		$q = "SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = " . CL_PROMO;
+		$q = sprintf("SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = %d AND site_id = %d",CL_PROMO,aw_ini_get("site_id"));
 		$this->db_query($q);
 		// so, basically, if I load a CL_PROMO object and discover that it's
 		// comment field is serialized - I will have to convert all promo
