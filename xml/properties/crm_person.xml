@@ -178,12 +178,36 @@
       </property>
       <property>
             <name>email</name>
-            <type>textbox</type>
-            <store>no</store>
-            <table>kliendibaas_isik</table>
+            <type>relmanager</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>contact</group>
-            <field>email</field>
-            <caption>E-post</caption>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <props>mail</props>
+            <caption>Meiliaadressid</caption>
+      </property>
+      <property>
+            <name>phone</name>
+            <type>relmanager</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>contact</group>
+            <reltype>RELTYPE_PHONE</reltype>
+            <props>name</props>
+            <caption>Telefoninumbrid</caption>
+      </property>
+      <property>
+            <name>url</name>
+            <type>relmanager</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>contact</group>
+            <reltype>RELTYPE_URL</reltype>
+            <props>url</props>
+            <caption>Veebiaadressid</caption>
       </property>
       <property>
             <name>org_actions</name>
@@ -262,6 +286,9 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <contact>
+                  <caption>Kontaktandmed</caption>
+            </contact>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -292,9 +319,6 @@
                   <caption>Visiitkaart</caption>
                   <submit>no</submit>
             </show>
-            <contact>
-                  <caption>Kontaktandmed</caption>
-            </contact>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -334,21 +358,36 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>ametinimetus</caption>
             </RANK>
-            <MEETING>
+            <PERSON_MEETING>
                   <value>8</value>
                   <clid>CL_CRM_MEETING</clid>
                   <caption>kohtumine</caption>
-            </MEETING>
-            <CALL>
+            </PERSON_MEETING>
+            <PERSON_CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
                   <caption>kõne</caption>
-            </CALL>
-            <TASK>
-                  <value>9</value>
+            </PERSON_CALL>
+            <PERSON_TASK>
+                  <value>10</value>
                   <clid>CL_TASK</clid>
                   <caption>toimetus</caption>
-            </TASK>
+            </PERSON_TASK>
+            <EMAIL>
+                  <value>11</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-post</caption>
+            </EMAIL>
+            <URL>
+                  <value>12</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Veebiaadress</caption>
+            </URL>
+            <PHONE>
+                  <value>13</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Telefon</caption>
+            </PHONE>
       </reltypes>
 </properties>
 

@@ -124,6 +124,16 @@
             <caption>Organisatsiooni juht</caption>
       </property>
       <property>
+            <name>addresslist</name>
+            <type>text</type>
+            <store>no</store>
+            <group>humanres</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>addresslist</field>
+            <caption>Aadressid</caption>
+      </property>
+      <property>
             <name>human_resources</name>
             <type>table</type>
             <store>no</store>
@@ -132,6 +142,16 @@
             <table>objects</table>
             <field>human_resources</field>
             <caption>Inimesed</caption>
+      </property>
+      <property>
+            <name>tasks_call</name>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>tasks_overview</group>
+            <field>tasks_call</field>
+            <caption>Kõned</caption>
       </property>
       <property>
             <name>org_actions</name>
@@ -183,10 +203,11 @@
       </classinfo>
       <groupinfo>
             <humanres>
-                  <caption>Inimesed</caption>
+                  <caption>Kontaktid</caption>
+                  <submit>no</submit>
             </humanres>
             <overview>
-                  <caption>Seotud tegevused</caption>
+                  <caption>Tegevused</caption>
             </overview>
             <all_actions>
                   <caption>Kõik</caption>
@@ -208,6 +229,10 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </tasks>
+            <tasks_overview>
+                  <caption>Ülevaade</caption>
+                  <submit>no</submit>
+            </tasks_overview>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -272,6 +297,21 @@
                   <clid>CL_TASK</clid>
                   <caption>Toimetus</caption>
             </TASK>
+            <EMAIL>
+                  <value>15</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-post</caption>
+            </EMAIL>
+            <URL>
+                  <value>16</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Veebiaadress</caption>
+            </URL>
+            <PHONE>
+                  <value>17</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Telefon</caption>
+            </PHONE>
       </reltypes>
 </properties>
 

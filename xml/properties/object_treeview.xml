@@ -78,6 +78,63 @@
             <field>clids</field>
             <caption>Klassid</caption>
       </property>
+      <property>
+            <name>title_bgcolor</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <table>objects</table>
+            <caption>Pealkirja taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>even_bgcolor</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <table>objects</table>
+            <caption>Paaris rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>odd_bgcolor</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <table>objects</table>
+            <caption>Paaritu rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>header_css</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <table>objects</table>
+            <caption>Pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>line_css</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>styles</group>
+            <table>objects</table>
+            <caption>Rea stiil</caption>
+      </property>
+      <property>
+            <name>columns</name>
+            <type>callback</type>
+            <callback>callback_get_columns</callback>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>columns</group>
+            <table>objects</table>
+            <caption>Tulbad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_TREE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -89,6 +146,12 @@
             <clids>
                   <caption>Objektit&amp;uuml;&amp;uuml;bid</caption>
             </clids>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
+            <columns>
+                  <caption>Tulbad</caption>
+            </columns>
       </groupinfo>
       <reltypes>
             <FOLDER>
