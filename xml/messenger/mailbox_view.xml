@@ -1,12 +1,11 @@
 <?xml version='1.0'?>
 <tabledef>
 <data>
-<field name="seen" caption="Loet." talign="center" align="center" width="20" nowrap="1"/>
 <field name="answered" caption="Vast." talign="center" align="center" width="20" nowrap="1"/>
 <field name="from" caption="Kellelt" talign="center"/>
 <field name="subject" caption="Teema" talign="center" />
 <field name="date" caption="Kuup&amp;auml;ev" talign="center" nowrap="1"/>
-<field name="size" caption="Suurus" talign="center" nowrap="1" align="center"/>
+<field name="size" caption="KB" talign="center" nowrap="1" align="center"/>
 <field name="mark" caption="Vali" talign="center" align="center"/>
 </data>
 
