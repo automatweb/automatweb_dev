@@ -1,9 +1,8 @@
 <?php
-// $Id: class_base.aw,v 2.123 2003/06/18 15:23:55 duke Exp $
+// $Id: class_base.aw,v 2.124 2003/06/19 11:44:29 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
-	@default corefield=yes
 	@default group=general
 
 	@property name type=textbox group=general rel=1
@@ -1739,7 +1738,8 @@ class class_base extends aw_template
 			$type = $property["type"];
 
                         $xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
-			if (empty($xval) && !empty($property["default"]))
+
+			if ($new && empty($xval) && !empty($property["default"]))
 			{
 				$xval = $property["default"];
 			};
