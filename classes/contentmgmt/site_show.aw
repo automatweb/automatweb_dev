@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.43 2004/03/10 15:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.44 2004/03/11 09:07:35 kristo Exp $
 
 /*
 
@@ -1762,7 +1762,17 @@ class site_show extends class_base
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
+				                if (aw_ini_get("ini_rootmenu"))
+				                {
+				                        $tmp = aw_ini_get("rootmenu");
+				                        $GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+				                }						
 						$_p = $o->path();
+
+				                if (aw_ini_get("ini_rootmenu"))
+				                {
+				                        $GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+                				}						
 						$alp = array();
 						foreach($_p as $p_o)
 						{
@@ -1772,18 +1782,6 @@ class site_show extends class_base
 							}
 						}
 						
-/*						$tmp = array();
-						if (!is_array($this->menu_aliases))
-						{
-							$this->menu_aliases = array();
-						};
-						foreach($this->menu_aliases as $_al)
-						{
-							if ($_al != "n/a")
-							{
-								$tmp[] = $_al;
-							}
-						}*/
 						$link .= join("/",$alp);
 						if (sizeof($tmp) > 0)
 						{
