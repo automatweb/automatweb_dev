@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.34 2004/11/26 14:08:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.35 2004/12/01 12:16:44 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -362,10 +362,10 @@ class vcalendar extends aw_template
 
 		$this->read_template($this->container_template);
 		$types = array(
-			"day" => "Päev",
-			"week" => "Nädal",
-			"month" => "Kuu",
-			"relative" => "Ülevaade",
+			"day" => t("Päev"),
+			"week" => t("Nädal"),
+			"month" => t("Kuu"),
+			"relative" => t("Ülevaade"),
 		);
 		$ts = "";
 
@@ -406,7 +406,7 @@ class vcalendar extends aw_template
 		{
 			$this->vars(array(
 				"TASK" => $tstr,
-				"tasks_title" => "Toimetused",
+				"tasks_title" => t("Toimetused"),
 			));
 
 			$this->vars(array(
@@ -700,8 +700,8 @@ class vcalendar extends aw_template
 			};
 		
 			$dt = date("d",$reals);
-                	$mn = locale::get_lc_month(date("m",$reals));
-                	$mn2 = $mn . " " . date("H:i",$reals);
+			$mn = locale::get_lc_month(date("m",$reals));
+			$mn2 = $mn . " " . date("H:i",$reals);
 
 
 			$this->vars(array(
@@ -711,10 +711,10 @@ class vcalendar extends aw_template
 				"lc_weekday" => get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
-                        	"date_and_time" => $dt . ". " . $mn2,
+                "date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
 				"long_day_name" => locale::get_lc_weekday($wn),
-                        	"date" => locale::get_lc_date($reals,5),
+				"date" => locale::get_lc_date($reals,5),
 			));
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
@@ -748,7 +748,7 @@ class vcalendar extends aw_template
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
-                       	"date" => locale::get_lc_date($this->range["start"],5),
+			"date" => locale::get_lc_date($this->range["start"],5),
 		));
 		return $this->parse();
 	}
@@ -1019,8 +1019,8 @@ class vcalendar extends aw_template
 		$this->evt_tpl->vars($evt);
 
 		$dt = date("d",$evt["start1"]);
-                $mn = locale::get_lc_month(date("m",$evt["start1"]));
-                $mn .= " " . date("H:i",$evt["start1"]);
+		$mn = locale::get_lc_month(date("m",$evt["start1"]));
+		$mn .= " " . date("H:i",$evt["start1"]);
 
 		
 		$this->evt_tpl->vars(array(
@@ -1037,14 +1037,14 @@ class vcalendar extends aw_template
 			"COMMENT" => "",
 			"comment" => $evt["comment"],
 			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
-                        "date_and_time" => $dt . ". " . $mn,
+			"date_and_time" => $dt . ". " . $mn,
 		));
 
 
 		if (!empty($evt["comment"]))
 		{
 			$this->evt_tpl->vars(array(
-					'comment_content' => $evt['comment'],
+				'comment_content' => $evt['comment'],
 			));
 
 			$this->evt_tpl->vars(array(

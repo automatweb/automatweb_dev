@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.3 2004/11/25 11:43:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -109,47 +109,47 @@ class event_search extends class_base
 		$formconfig = $o->meta("formconfig");
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 		));
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 		
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 		));
 		
 		$t->define_field(array(
 			"name" => "data",
-			"caption" => "Sisu",
+			"caption" => t("Sisu"),
 		));
 
 		$t->set_sortable(false);
 
 		$t->define_data(array(
-			"type" => "Tekstiotsing",
+			"type" => t("Tekstiotsing"),
 			"caption" => html::textbox(array(
 				"name" => "fulltext[caption]",
-				"value" => $formconfig["fulltext"]["caption"] ? $formconfig["fulltext"]["caption"] : "Tekstiotsing",
+				"value" => $formconfig["fulltext"]["caption"] ? $formconfig["fulltext"]["caption"] : ("Tekstiotsing"),
 			)),
 		));
 		
 		$t->define_data(array(
-			"type" => "Alguskuupäev",
+			"type" => t("Alguskuupäev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
-				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : "Alguskuupäev",
+				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuupäev"),
 			)),
 		));
 		
 		$t->define_data(array(
-			"type" => "Lõppkuupäev",
+			"type" => t("Lõppkuupäev"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
-				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : "Lõppkuupäev",
+				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lõppkuupäev"),
 			)),
 		));
 		
@@ -157,7 +157,7 @@ class event_search extends class_base
 			"type" => "RELTYPE_PROJECT_SELECTOR",
 		));
 
-		$prj_opts = array("0" => "--vali--");
+		$prj_opts = array("0" => t("--vali--"));
 
 		foreach($prj_conns as $prj_conn)
 		{
@@ -167,10 +167,10 @@ class event_search extends class_base
 		};
 		
 		$t->define_data(array(
-			"type" => "Projekt 1",
+			"type" => t("Projekt 1"),
 			"caption" => html::textbox(array(
 				"name" => "project1[caption]",
-				"value" => $formconfig["project1"]["caption"] ? $formconfig["project1"]["caption"] : "Projekt 1",
+				"value" => $formconfig["project1"]["caption"] ? $formconfig["project1"]["caption"] : t("Projekt 1"),
 			)),
 			"data" => html::select(array(
 				"name" => "project1[rootnode]",
@@ -180,10 +180,10 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"type" => "Projekt 2",
+			"type" => t("Projekt 2"),
 			"caption" => html::textbox(array(
 				"name" => "project2[caption]",
-				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : "Projekt 2",
+				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : t("Projekt 2"),
 			)),
 			"data" => html::select(array(
 				"name" => "project2[rootnode]",
@@ -222,23 +222,23 @@ class event_search extends class_base
 		$o = $arr["obj_inst"];
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 		));
 
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 		));
 
 		$t->define_field(array(
 			"name" => "active",
-			"caption" => "Aktiivne",
+			"caption" => t("Aktiivne"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "Jrk",
+			"caption" => t("Jrk"),
 			"align" => "center",
 		));
 
@@ -251,7 +251,7 @@ class event_search extends class_base
 
 		if (!is_oid($use_output))
 		{
-			$arr["prop"]["error"] = "Väljundvorm on valimata";
+			$arr["prop"]["error"] = t("Väljundvorm on valimata");
 			return PROP_ERROR;
 		};
 
@@ -400,7 +400,7 @@ class event_search extends class_base
 		// projektivalikute asemel kuvatakse 
 		$ob = new object($arr["id"]);
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
-                $htmlc->start_output();
+		$htmlc->start_output();
 
 		$formconfig = $ob->meta("formconfig");
 		
@@ -452,7 +452,7 @@ class event_search extends class_base
 		
 		$htmlc->add_property(array(
 			"name" => "sbt",
-			"caption" => "Otsi",
+			"caption" => t("Otsi"),
 			"type" => "submit",
 		));
 
@@ -514,9 +514,9 @@ class event_search extends class_base
 				};
 				//arr($or_parts);
 				$search[] = new object_list_filter(array(
-                			"logic" => "OR",
-                			"conditions" => $or_parts,
-        			));
+					"logic" => "OR",
+					"conditions" => $or_parts,
+				));
 			};
 			$clinf = aw_ini_get("classes");
 			$edata = array();
@@ -662,27 +662,28 @@ class event_search extends class_base
 			));
 
 
-			  $htmlc->add_property(array(
-				  "name" => "results",
-				  "type" => "text",
-				  "no_caption" => 1,
-				  "value" => $this->parse(),
-			  ));
+			$htmlc->add_property(array(
+				"name" => "results",
+				"type" => "text",
+				"no_caption" => 1,
+				"value" => $this->parse(),
+			));
 		};
 
-		$htmlc->finish_output(array("data" => array(
-                                "class" => get_class($this),
-                                "section" => aw_global_get("section"),
-                                "action" => "search",
+		$htmlc->finish_output(array(
+			"data" => array(
+				"class" => get_class($this),
+				"section" => aw_global_get("section"),
+				"action" => "search",
 				"id" => $ob->id(),
-                                ),
-				"method" => "get",
-				"form_handler" => aw_ini_get("baseurl") . "/" . aw_global_get("section"),
-                ));
+			),
+			"method" => "get",
+			"form_handler" => aw_ini_get("baseurl") . "/" . aw_global_get("section"),
+		));
 
-                $html = $htmlc->get_result(array(
-                        "form_only" => 1
-                ));
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
+		));
 
 		//arr($arr);
 
@@ -701,16 +702,13 @@ class event_search extends class_base
 			"parent" => $parent,
 			"class_id" => CL_PROJECT,
 		));
-		return array("0" => "kõik") + $ol->names();
+		return array("0" => t("kõik")) + $ol->names();
 
 	}
 
 	function __sort_props_by_ord($el1,$el2)
-   {
-      return (int)($el1["ord"] - $el2["ord"]);
-   }
-
-
-
+	{
+		return (int)($el1["ord"] - $el2["ord"]);
+	}
 }
 ?>

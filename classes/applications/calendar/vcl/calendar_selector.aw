@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.1 2004/10/12 17:11:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/calendar_selector.aw,v 1.2 2004/12/01 12:13:20 kristo Exp $
 class calendar_selector extends core
 {
 	function calendar_selector()
@@ -101,7 +101,7 @@ class calendar_selector extends core
 		foreach($new_ones as $plid)
 		{
 			$plr_obj = new object($plid);
-                	$bro = $event_obj->create_brother($plr_obj->prop("event_folder"));
+			$bro = $event_obj->create_brother($plr_obj->prop("event_folder"));
 		};
 
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.3 2004/10/29 08:01:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -131,21 +131,21 @@ class recurrence extends class_base
 
 			case "month_rel_weekdays":
 				$data["options"] = array(
-					"1" => "esimesel",
-					"2" => "teisel",
-					"3" => "kolmandal",
-					"4" => "neljandal",
-					"-1" => "viimasel",
+					"1" => t("esimesel"),
+					"2" => t("teisel"),
+					"3" => t("kolmandal"),
+					"4" => t("neljandal"),
+					"-1" => t("viimasel"),
 
 				);
 				break;
 
 			case "recur_type":
 				$data["options"] = array(
-					RECUR_DAILY => "päev",
-					RECUR_WEEKLY => "nädal",
+					RECUR_DAILY => t("päev"),
+					RECUR_WEEKLY => t("nädal"),
 					//RECUR_MONTHLY => "monthly",
-					RECUR_YEARLY => "aasta",
+					RECUR_YEARLY => t("aasta"),
 				);
 				break;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder.aw,v 1.1 2004/10/18 13:27:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_reminder.aw,v 1.2 2004/12/01 12:12:14 kristo Exp $
 // calendar_reminder.aw - Kalendri meeldetuletus 
 /*
 
@@ -83,10 +83,10 @@ class calendar_reminder extends class_base
 	function process_pending_reminders($arr)
 	{
 		$sched = get_instance("scheduler");
-                $sched->add(array(
-                        "event" => $this->mk_my_orb("process_pending_reminders", array(), "", false, true),
-                        "time" => time()+119,   // every 2 minutes
-                ));
+		$sched->add(array(
+			"event" => $this->mk_my_orb("process_pending_reminders", array(), "", false, true),
+			"time" => time()+119,   // every 2 minutes
+		));
 
 		$ol = new object_list(array(
 			"class_id" => CL_CALENDAR_REMINDER,
@@ -107,7 +107,7 @@ class calendar_reminder extends class_base
 				$event_name = $event_obj->name();
 				$event_start = $this->time2date($event_obj->prop("start1"),2);
 				// XXX: see teade tuleks kuidagi kalendri juurde panna
-				$msg = "Hei, varsti algab ${event_name}, täpsemalt kell ${event_start}, vaata et sa ära ei unusta!";
+				$msg = sprintf(t("Hei, varsti algab %s, täpsemalt kell %s, vaata et sa ära ei unusta!"), $event_name, $event_start);
 				$c++;
 
 				// now I need an e-mail address for the user

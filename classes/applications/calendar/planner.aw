@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.28 2004/11/25 12:09:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.29 2004/12/01 12:12:14 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -265,7 +265,7 @@ class planner extends class_base
 		));
 		if (sizeof($conns) == 0)
 		{
-			return sprintf("Kasutajal '%s' puudub default kalender",aw_global_get("uid"));
+			return sprintf(t("Kasutajal '%s' puudub default kalender"),aw_global_get("uid"));
 		};
 		list(,$conn) = each($conns);
 		$obj_id = $conn->prop("from");
@@ -349,10 +349,10 @@ class planner extends class_base
 			case "event_search_type":
 				
 				$data["options"] = array(
-					CL_CRM_OFFER => "Pakkumine",
-					CL_CRM_CALL => "Kõne",
-					CL_TASK => "Toimetus",
-					CL_CRM_MEETING => "Kohtumine",				
+					CL_CRM_OFFER => t("Pakkumine"),
+					CL_CRM_CALL => t("Kõne"),
+					CL_TASK => t("Toimetus"),
+					CL_CRM_MEETING => t("Kohtumine"),
 				);
 				
 				if($arr["request"]["event_search_type"])
@@ -390,7 +390,7 @@ class planner extends class_base
 					}
 					else
 					{
-						$data["value"] = "Otsingu tulemusena ei leitud ühtegi objekti";
+						$data["value"] = t("Otsingu tulemusena ei leitud ühtegi objekti");
 					}
 				}
 				else
@@ -420,9 +420,9 @@ class planner extends class_base
 				}
 				
 				$data["options"] = array(
-					"done" => "Otsi tehtud sündmusi",
-					"not_done" => "Otsi tegemata sündmusi",
-					"all_cal" => "Otsi kõigist kalendritest",
+					"done" => t("Otsi tehtud sündmusi"),
+					"not_done" => t("Otsi tegemata sündmusi"),
+					"all_cal" => t("Otsi kõigist kalendritest"),
 				);
 			break;
 		}
@@ -771,8 +771,8 @@ class planner extends class_base
 			{
 				$new_group = ($key == "general") ? "" : $key;
 				$captions[] = html::href(array(
-						"url" => aw_url_change_var("cb_group",$new_group),
-						"caption" => $val["caption"],
+					"url" => aw_url_change_var("cb_group",$new_group),
+					"caption" => $val["caption"],
 				));
 			}
 			else
@@ -800,7 +800,7 @@ class planner extends class_base
 		{
 			return array(array(
 				"type" => "text",
-				"value" => "Sündmuste kataloog on valimata",
+				"value" => t("Sündmuste kataloog on valimata"),
 			));
 			return PROP_ERROR;
 		};
@@ -857,7 +857,7 @@ class planner extends class_base
 			{
 				return array(array(
 					"type" => "text",
-					"value" => "Seda klassi ei saa kasutada sündmuste sisestamiseks",
+					"value" => t("Seda klassi ei saa kasutada sündmuste sisestamiseks"),
 				));
 			}
 			else
@@ -1069,33 +1069,33 @@ class planner extends class_base
 		extract($arr);
 		$this->cal_oid = $alias["target"];
 
-                // if there is a relation object, then load it and apply the settings
-                // it has.
-                if ($alias["relobj_id"])
-                {
+		// if there is a relation object, then load it and apply the settings
+		// it has.
+		if ($alias["relobj_id"])
+		{
 			$relobj = new object($alias["relobj_id"]);
 			$tmp = $relobj->meta("values");
 			$overrides = $tmp["CL_PLANNER"];
 
-                        //$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
-                        if (is_array($overrides))
-                        {
-                                $this->overrides = $overrides;
-                        };
-                        if (!empty($relobj["name"]))
-                        {
-                                $this->caption = $relobj["name"];
-                        };
+			//$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
+			if (is_array($overrides))
+			{
+				$this->overrides = $overrides;
+			};
+			if (!empty($relobj["name"]))
+			{
+				$this->caption = $relobj["name"];
+			};
 
-                        $this->relobj_id = $alias["relobj_id"];
-                }
+			$this->relobj_id = $alias["relobj_id"];
+		}
 
-                $replacement = $this->change(array(
+		$replacement = $this->change(array(
 			"id" => $alias["target"],
 			"group" => "views",
 			"viewtype" => $_REQUEST["viewtype"],
 		));
-                return $replacement;
+		return $replacement;
 	}
 
 	////
@@ -1312,7 +1312,7 @@ class planner extends class_base
 			"id" => $id,
 			"cycle" => $cycle,
 		));
-		$this->mk_path($par_obj->parent(),"Kalender / Muuda sündmust");
+		$this->mk_path($par_obj->parent(),t("Kalender / Muuda sündmust"));
 		return $menubar . $html;
 	}
 
@@ -1330,17 +1330,17 @@ class planner extends class_base
 	function gen_navtoolbar(&$arr)
 	{
 		$id = $arr["obj_inst"]->id();
-                if ($id)
-                {
+		if ($id)
+		{
 			$toolbar = &$arr["prop"]["vcl_inst"];
 			// would be nice to have a vcl component for doing drop-down menus
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => RELTYPE_EVENT_ENTRY,
 			));
 			$toolbar->add_menu_button(array(
-                                "name" => "create_event",
-                                "tooltip" => "Uus",
-                        ));
+				"name" => "create_event",
+				"tooltip" => t("Uus"),
+			));
 			foreach($conns as $conn)
 			{
 				$toolbar->add_menu_item(array(
@@ -1383,14 +1383,14 @@ class planner extends class_base
 
 			$toolbar->add_button(array(
 				"name" => "search",
-				"tooltip" => "Otsi kalendri sündmust",
+				"tooltip" => t("Otsi kalendri sündmust"),
 				"url" => aw_url_change_var(array("search" => 1)),
 				"img" => "search.gif",
 			));
 			
 			$toolbar->add_button(array(
 				"name" => "today",
-				"tooltip" => "Täna",
+				"tooltip" => t("Täna"),
 				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day","date" => $dt)) . "#today",
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",
@@ -1402,7 +1402,7 @@ class planner extends class_base
 			/*
 			$toolbar->add_button(array(
 				"name" => "delete",
-				"tooltip" => "Kustuta märgitud sündmused",
+				"tooltip" => t("Kustuta märgitud sündmused"),
 				"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
 				"img" => "delete.gif",
 				"class" => "menuButton",
@@ -1413,7 +1413,7 @@ class planner extends class_base
 			{
 				$toolbar->add_separator();
 
-				$prj_opts = array("" => "--filtreeri projekti järgi--");
+				$prj_opts = array("" => t("--filtreeri projekti järgi--"));
 			
 				$owners = $arr["obj_inst"]->connections_from(array(
 					"type" => RELTYPE_CALENDAR_OWNERSHIP,
@@ -1450,7 +1450,7 @@ class planner extends class_base
 
 				$toolbar->add_button(array(
 					"name" => "refresh",
-					"tooltip" => "Reload",
+					"tooltip" => t("Reload"),
 					"url" => "javascript:document.changeform.project.value=document.changeform.prj.value;document.changeform.submit();",
 					"img" => "refresh.gif",
 				));
@@ -1458,7 +1458,7 @@ class planner extends class_base
 
 			$toolbar->add_button(array(
 				"name" => "only_vac",
-				"tooltip" => "Ainult vabad ajad",
+				"tooltip" => t("Ainult vabad ajad"),
 				"url" => aw_url_change_var("clid_filt", CL_CALENDAR_VACANCY),
 				"img" => "qmarks.gif",
 				"class" => "menuButton",
@@ -1709,21 +1709,21 @@ class planner extends class_base
 		// jrk, algus, lõpp, checkbox kinnita
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "Jrk",
+			"caption" => t("Jrk"),
 			"numeric" => 1,
 		));	
 		$t->define_field(array(
 			"name" => "start",
-			"caption" => "Algus",
+			"caption" => t("Algus"),
 		));
 		$t->define_field(array(
 			"name" => "end",
-			"caption" => "Lõpp",
+			"caption" => t("Lõpp"),
 		));
 		$t->define_chooser(array(
 			"name" => "confirm",
 			"field" => "start_tm",
-			"caption" => "Vali",
+			"caption" => t("Vali"),
 		));
 
 		$slots = $this->_gen_vac_slots($arr);
@@ -1910,24 +1910,24 @@ class planner extends class_base
 			"name" => "start",
 			//"type" => "time",
 			//"format" => "H:i d-M",
-			"caption" => "Algus",
+			"caption" => t("Algus"),
 		));
 		$t->define_field(array(
 			"name" => "end",
 			//"type" => "time",
 			//"format" => "H:i d-M",
-			"caption" => "Lõpp",
+			"caption" => t("Lõpp"),
 		));
 		$t->define_field(array(
 			"name" => "meeting",
-			"caption" => "Uus kohtumine",
+			"caption" => t("Uus kohtumine"),
 		));
 
 		/*
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
-			"caption" => "Vali",
+			"caption" => t("Vali"),
 		));
 		*/
 
@@ -1963,21 +1963,21 @@ class planner extends class_base
 						"clid" => CL_CRM_MEETING,
 						"cal_id" => $arr["obj_inst"]->id(),
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus kohtumine",
+					"caption" => t("Uus kohtumine"),
 				))." | ".html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(
 						"id" => $vac->id(),
 						"clid" => CL_CRM_CALL,
 						"cal_id" => $arr["obj_inst"]->id(),
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus k&otilde;ne",
+					"caption" => t("Uus k&otilde;ne"),
 				))." | ".html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(
 						"id" => $vac->id(),
 						"clid" => CL_TASK,
 						"cal_id" => $arr["obj_inst"]->id(),
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus toimetus",
+					"caption" => t("Uus toimetus"),
 				)),
 			));
 		};
@@ -2003,27 +2003,27 @@ class planner extends class_base
 			
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Sündmuse nimi",
+			"caption" => t("Sündmuse nimi"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "createdby",
-			"caption" => "Sündmuse looja",
+			"caption" => t("Sündmuse looja"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 
 		$table->define_field(array(
 			"name" => "participants",
-			"caption" => "Sündmusel osalejad",
+			"caption" => t("Sündmusel osalejad"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 			
 		$table->define_field(array(
 			"name" => "date",
-			"caption" => "Algus",
+			"caption" => t("Algus"),
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
@@ -2034,7 +2034,7 @@ class planner extends class_base
 		
 		$table->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
@@ -2252,7 +2252,7 @@ class planner extends class_base
 					"store" => "no",
 					"type" => "text",
 					"no_caption" => 1,
-					"caption" => "Tulemuste tabel",
+					"caption" => t("Tulemuste tabel"),
 					"value" => $this->do_search_contact_results_tbl($request)
 				);
 			}
@@ -2263,31 +2263,31 @@ class planner extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "phone",
-			"caption" => "Telefon",
+			"caption" => t("Telefon"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "E-post",
+			"caption" => t("E-post"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "position",
-			"caption" => "Ametinimetus",
+			"caption" => t("Ametinimetus"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "co",
-			"caption" => "Organisatsioon",
+			"caption" => t("Organisatsioon"),
 			"align" => "center"
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.5 2004/12/01 12:06:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.6 2004/12/01 12:12:14 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -115,7 +115,7 @@ class staging extends class_base
 			"type" => "text",
 			"name" => $prefix . "[active]",
 			"value" => date("d.m.Y H:i",$o->prop("start1")),
-			"caption" => "Originaalobjekt",
+			"caption" => t("Originaalobjekt"),
 		);
 
 		$empty_slots = 50;
@@ -123,10 +123,10 @@ class staging extends class_base
 		{
 			$to = $conn->to();
 			$id = $to->id();
-			$caption = "Koopia";
+			$caption = t("Koopia");
 			if ($id == $arr["obj_inst"]->id())
 			{
-				$caption .= " (Aktiivne)";
+				$caption .= t(" (Aktiivne)");
 			};
 				
 			$rv["existing_" . $prefix . $id] = array(
@@ -144,7 +144,7 @@ class staging extends class_base
 		$rv["sbx"] = array(
 			"type" => "text",
 			"subtitle" => 1,
-			"caption" => "Uued",
+			"caption" => t("Uued"),
 		);
 
 		for ($i = 1; $i <= $empty_slots; $i++)
@@ -153,7 +153,7 @@ class staging extends class_base
 			$rv["new_" . $prefix . $i] = array(
 				"type" => "datetime_select",
 				"name" => $prefix . "[new][" . $i . "]",
-				"caption" => "Uus $i",
+				"caption" => sprintf(t("Uus %s"), $i),
 				"group" => $arr["prop"]["group"],
 				"value" => $start1,
 				"day" => "text",
@@ -163,7 +163,7 @@ class staging extends class_base
 			$rv["newx_" . $prefix . $i] = array(
 				"type" => "checkbox",
 				"name" => $prefix . "[newx][" . $i . "]",
-				"caption" => "Tee sündmus $i",
+				"caption" => sprintf(t("Tee sündmus %s"), $i),
 				"group" => $arr["prop"]["group"],
 				"value" => 1,
 			);

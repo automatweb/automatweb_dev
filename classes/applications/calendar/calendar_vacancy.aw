@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.3 2004/10/07 21:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -136,21 +136,21 @@ class calendar_vacancy extends class_base
 						"clid" => CL_CRM_MEETING,
 						"cal_id" => $arr["request"]["id"],
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus kohtumine",
+					"caption" => t("Uus kohtumine"),
 				))." | ".html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(
 						"id" => $vac->id(),
 						"clid" => CL_CRM_CALL,
 						"cal_id" => $arr["request"]["id"],
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus k&otilde;ne",
+					"caption" => t("Uus k&otilde;ne"),
 				))." | ".html::href(array(
 					"url" => $this->mk_my_orb("reserve_slot",array(
 						"id" => $vac->id(),
 						"clid" => CL_TASK,
 						"cal_id" => $arr["request"]["id"],
 					),CL_CALENDAR_VACANCY),
-					"caption" => "Uus toimetus",
+					"caption" => t("Uus toimetus"),
 				));
 				break;
 
@@ -229,7 +229,7 @@ class calendar_vacancy extends class_base
 				$tb->add_button(array(
 					'name' => 'del',
 					'img' => 'delete.gif',
-					'tooltip' => 'Kustuta valitud',
+					'tooltip' => t('Kustuta valitud'),
 					'action' => 'submit_delete_participants_from_calendar',
 				));
 
@@ -238,7 +238,7 @@ class calendar_vacancy extends class_base
 				$tb->add_button(array(
 					'name' => 'Search',
 					'img' => 'search.gif',
-					'tooltip' => 'Otsi',
+					'tooltip' => t('Otsi'),
 					'url' => aw_url_change_var(array(
 						'show_search' => 1,
 					)),
@@ -247,7 +247,7 @@ class calendar_vacancy extends class_base
 				$tb->add_button(array(
 					'name' => 'save',
 					'img' => 'save.gif',
-					'tooltip' => 'Salvesta',
+					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
 				$this->return_url=aw_global_get('REQUEST_URI');

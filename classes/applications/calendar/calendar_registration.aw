@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.4 2004/11/02 12:18:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.5 2004/12/01 12:12:14 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -58,14 +58,14 @@ class calendar_registration extends class_base
 				break;
 
 			case "mail_legend":
-				$prop["value"] = "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - registreeruja andmed ja sisu<br>
+				$prop["value"] = t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - registreeruja andmed ja sisu<br>
 					#name# - kalendri omaniku nimi<br>
 					#phone# - kalendri omaniku telefon<br>
 					#email# - kalendri omaniku e-mail<br>
 					#addr# - kalendri omaniku aadress<br>
 					#date# - kohtumise kuup&auml;ev<br>
 					#time_from# - kohtumise alguskellaaeg<br>
-					#time_to# - kohtumise k&otilde;ppkellaaeg<br>";
+					#time_to# - kohtumise k&otilde;ppkellaaeg<br>");
 				break;
 		};
 		return $retval;
@@ -229,12 +229,12 @@ class calendar_registration extends class_base
 		$pass = true;
 		$req = array("first_name", "last_name", "code", "email", "phone");
 		$dat = array(
-			"first_name" => "Eesnimi:\n", 
-			"last_name" => "Perekonnanimi:\n", 
-			"email" => "E-mai:\n",
-			"phone" => "Telefon:\n",
-			"code" => "Isikukood:\n",
-			"content" => "Kohtumise sisu:\n"
+			"first_name" => t("Eesnimi:\n"), 
+			"last_name" => t("Perekonnanimi:\n"), 
+			"email" => t("E-mai:\n"),
+			"phone" => t("Telefon:\n"),
+			"code" => t("Isikukood:\n"),
+			"content" => t("Kohtumise sisu:\n")
 		);
 		$fail_fld = array();
 		foreach($req as $req_f)

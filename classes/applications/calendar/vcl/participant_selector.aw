@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.1 2004/10/29 15:51:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.2 2004/12/01 12:13:20 kristo Exp $
 class participant_selector extends core
 {
 	function participant_selector()
@@ -31,7 +31,7 @@ class participant_selector extends core
 		
 		$table->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => '1',
 			'callback' => array(&$this,'callb_human_name'),
 			'callb_pass_row' => true,
@@ -39,19 +39,19 @@ class participant_selector extends core
 
 		$table->define_field(array(
 			'name' => 'phone',
-			'caption' => 'Telefon',
+			'caption' => t('Telefon'),
 			'sortable' => '1',
 		));
 
 		$table->define_field(array(
 			'name' => 'email',
-			'caption' => 'E-post',
+			'caption' => t('E-post'),
 			'sortable' => '1',
 		));
 
 		$table->define_field(array(
 			'name' => 'rank',
-			'caption' => 'Ametinimetus',
+			'caption' => t('Ametinimetus'),
 			'sortable' => '1',
 		));
 
