@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.48 2004/07/09 12:45:33 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.49 2004/07/12 10:52:34 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -280,7 +280,7 @@ class crm_person extends class_base
 				$conns = $arr['obj_inst']->connections_from(array(
 					'type'=> RELTYPE_SECTION
 				));
-
+				$drop_down_list = array();
 				if(sizeof($conns))
 				{
 					foreach($conns as $conn)
@@ -1266,6 +1266,6 @@ class crm_person extends class_base
 			}
 		};
 	}
-	
+
 }
 ?>
