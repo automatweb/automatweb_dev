@@ -252,7 +252,23 @@
             <table>planner</table>
             <group>calendar</group>
             <field>start</field>
-            <caption>Algab</caption>
+            <caption>Algab (kp)</caption>
+      </property>
+      <property>
+            <name>start1</name>
+            <type>datetime_select</type>
+            <field>start</field>
+            <table>planner</table>
+            <group>calendar</group>
+            <caption>Algab </caption>
+      </property>
+      <property>
+            <name>duration</name>
+            <type>time_select</type>
+            <field>end</field>
+            <table>planner</table>
+            <group>calendar</group>
+            <caption>Kestab</caption>
       </property>
       <property>
             <name>link_calendars</name>

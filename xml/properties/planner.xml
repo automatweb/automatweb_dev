@@ -22,14 +22,13 @@
       </property>
       <property>
             <name>event_cfgform</name>
-            <type>objpicker</type>
-            <clid>CL_CFGFORM</clid>
-            <subclass>CL_DOCUMENT</subclass>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_ENTRY</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general2</group>
-            <caption>Sündmuse lisamise vorm</caption>
+            <caption>Def. sündmuse sisetamise vorm</caption>
       </property>
       <property>
             <name>day_start</name>
@@ -190,7 +189,8 @@
       </property>
       <property>
             <name>event_folder</name>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -250,6 +250,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <general>
+                  <caption>Seaded</caption>
+            </general>
             <show_day>
                   <caption>Päev</caption>
                   <submit>no</submit>
