@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.34 2002/08/29 03:10:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.35 2002/09/25 13:36:34 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -69,22 +69,6 @@ class db_objects extends aw_template
 		return $flist;
 	}
 
-	function mkah(&$arr, &$ret,$parent,$prefix)
-	{
-		if (!is_array($arr[$parent]))
-		{
-			return;
-		}
-
-		reset($arr[$parent]);
-		while (list(,$v) = each($arr[$parent]))
-		{
-			$name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
-			$ret[$v["oid"]] = $name;
-			$this->mkah(&$arr,&$ret,$v["oid"],$name);
-		}
-	}
-
 	////
 	// !Genereerib mingit klassi objektide nimekirja, rekursiivselt alates $start_from-ist
 	// Eeliseks järgneva funktsiooni ees on see, et ei loeta koiki menüüsid sisse
@@ -139,84 +123,9 @@ class db_objects extends aw_template
 		$this->restore_handle();
 	}
 
-	////
-	// !teeb objektide nimekirja ja tagastab selle arrays, sobiv picker() funxioonile ette andmisex
-	// ignore_langmenus = kui sait on mitme keelne ja on const.aw sees on $lang_menus = true kribatud
-	// siis kui see parameeter on false siis loetaxe aint aktiivse kelle menyyd
-
-	// empty - kui see on true, siis pannaxe k6ige esimesex arrays tyhi element
-	// (see on muiltiple select boxide jaoks abix)
-
-	// rootobj - mis objektist alustame
 	function get_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
 	{
-		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
-
-		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
-		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid");
-
-		if (!$ignore_langmenus)
-		{
-			if ($this->cfg["lang_menus"] == 1)
-			{
-				$aa = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = 69)";
-				$cf_name.="::lm::1::lang_id::".aw_global_get("lang_id");
-			}
-		}
-
-		// 1st memory cache
-		if (($ret = aw_global_get($cf_name)))
-		{
-			return $ret;
-		}
-
-		// then disk cache
-		$cache = new cache;
-		if (($cont = $cache->file_get($cf_name)))
-		{
-			$dat = aw_unserialize($cont);
-			aw_global_set($cf_name, $dat);
-			return $dat;
-		}
-		
-		// and finally, the database
-		$this->db_query("SELECT objects.oid as oid, 
-														objects.parent as parent,
-														objects.name as name
-											FROM objects 
-											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE objects.class_id = 1 AND objects.status != 0 $aa
-											GROUP BY objects.oid
-											ORDER BY objects.parent, menu.is_l3,jrk");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["parent"]][] = $row;
-		}
-
-		$tt = array();
-		if ($empty)
-		{
-			$tt[] = "";
-		}
-		if ($rootobj == -1)
-		{
-			$rootobj = $admin_rootmenu;
-		}
-		$this->mkah(&$ret,&$tt,$rootobj,"");
-
-		if ($rootobj == $admin_rootmenu)
-		{
-			$hf = $this->db_fetch_field("SELECT home_folder FROM users WHERE uid = '".aw_global_get("uid")."'","home_folder");
-			$hf_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$hf'","name");
-			// but we must also add the home folder itself!
-			$tt[$hf] = $hf_name;
-			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
-		}
-
-		$cache->file_set($cf_name,aw_serialize($tt));
-		aw_global_set($cf_name, $tt);
-
-		return $tt;
+		return $this->get_menu_list($ignore_langmenus,$empty,$rootobj);
 	}
 	
 	function count_by_parent($parent,$typearr = "") 
@@ -256,6 +165,23 @@ class objects extends db_objects
 	// one(int) - use picker template (search_one) 
 	function search($arr)
 	{
+		$s = get_instance("search");
+		// all the required fields and their default values
+		$defaults = array(
+			"name" => "",
+			"comment" => "",
+			"class_id" => 0,
+			"parent" => 0,
+			"createdby" => "",
+			"modifiedby" => "",
+			"active" => 1,
+			"alias" => "",
+		);
+
+		// now override the defaults with possible values from the user
+		$real_fields = array_merge($defaults,$arr);
+
+		return $s->show($real_fields);
 		$this->tpl_init("automatweb/objects");
 		$this->sub_merge = 1;
 		extract($arr);

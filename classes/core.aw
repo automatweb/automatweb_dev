@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.108 2002/09/19 15:12:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.109 2002/09/25 13:36:34 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2170,5 +2170,101 @@ class core extends db_connector
 		));
 		return $this->parse();
 	}
+	
+	////
+	// !teeb objektide nimekirja ja tagastab selle arrays, sobiv picker() funxioonile ette andmisex
+	// ignore_langmenus = kui sait on mitme keelne ja on const.aw sees on $lang_menus = true kribatud
+	// siis kui see parameeter on false siis loetaxe aint aktiivse kelle menyyd
+
+	// empty - kui see on true, siis pannaxe k6ige esimesex arrays tyhi element
+	// (see on muiltiple select boxide jaoks abix)
+
+	// rootobj - mis objektist alustame
+	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
+	{
+		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
+
+		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
+		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid");
+
+		if (!$ignore_langmenus)
+		{
+			if ($this->cfg["lang_menus"] == 1)
+			{
+				$aa = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = 69)";
+				$cf_name.="::lm::1::lang_id::".aw_global_get("lang_id");
+			}
+		}
+
+		// 1st memory cache
+		if (($ret = aw_global_get($cf_name)))
+		{
+			return $ret;
+		}
+
+		// then disk cache
+		$cache = new cache;
+		if (($cont = $cache->file_get($cf_name)))
+		{
+			$dat = aw_unserialize($cont);
+			aw_global_set($cf_name, $dat);
+			return $dat;
+		}
+		
+		// and finally, the database
+		$this->db_query("SELECT objects.oid as oid, 
+														objects.parent as parent,
+														objects.name as name
+											FROM objects 
+											LEFT JOIN menu ON menu.id = objects.oid
+											WHERE objects.class_id = 1 AND objects.status != 0 $aa
+											GROUP BY objects.oid
+											ORDER BY objects.parent,jrk");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["parent"]][] = $row;
+		}
+
+		$tt = array();
+		if ($empty)
+		{
+			$tt[] = "";
+		}
+		if ($rootobj == -1)
+		{
+			$rootobj = $admin_rootmenu;
+		}
+		$this->mkah(&$ret,&$tt,$rootobj,"");
+
+		if ($rootobj == $admin_rootmenu)
+		{
+			$hf = $this->db_fetch_field("SELECT home_folder FROM users WHERE uid = '".aw_global_get("uid")."'","home_folder");
+			$hf_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$hf'","name");
+			// but we must also add the home folder itself!
+			$tt[$hf] = $hf_name;
+			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
+		}
+
+		$cache->file_set($cf_name,aw_serialize($tt));
+		aw_global_set($cf_name, $tt);
+
+		return $tt;
+	}
+
+	function mkah(&$arr, &$ret,$parent,$prefix)
+        {
+                if (!is_array($arr[$parent]))
+                {
+                        return;
+                }
+
+                reset($arr[$parent]);
+                while (list(,$v) = each($arr[$parent]))
+                {
+                        $name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
+                        $ret[$v["oid"]] = $name;
+                        $this->mkah(&$arr,&$ret,$v["oid"],$name);
+                }
+        }
 };
 ?>
