@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php_file.aw,v 2.1 2003/10/14 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php_file.aw,v 2.2 2003/11/05 15:24:25 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer_file
 {
@@ -35,7 +35,6 @@ class php_serializer_file
 			}
 			else
 			{
-//				$v = str_replace("\\","\\\\",$v);
 				$v = "'".str_replace("'","\'", $v)."'";
 			}
 
