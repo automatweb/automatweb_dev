@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.42 2004/11/17 16:50:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.43 2004/11/18 17:33:37 sven Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -61,8 +61,12 @@
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
 	
-	@property gen_controllers type=callback callback=gen_controller_props group=controllers
+	@property gen_submit_controllers type=callback callback=gen_controller_props group=set_controllers
 	@caption Kontrollerid
+	
+	@property gen_view_controllers type=callback callback=gen_view_controller_props group=get_controllers
+	@caption Kontrollerid
+	
 
 	@property sysdefault type=table group=system no_caption=1
 	@caption Süsteemi seaded
@@ -71,6 +75,10 @@
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
 	@groupinfo controllers caption="Kontrollerid"
+	
+	@groupinfo set_controllers caption=Salvestamine parent=controllers
+	@groupinfo get_controllers caption=Näitamine parent=controllers
+	
 	@groupinfo system caption="Seaded"
 
 	@classinfo relationmgr=yes
@@ -82,8 +90,12 @@
 	@caption element
 
 	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
-	@caption Kontroller
+	@caption Salvestamise kontroller
 
+	
+	@reltype VIEWCONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
+	@caption N&auml;tamise kontroller
+	
 	@reltype OUTPUT value=4 clid=CL_CFGFORM
 	@caption Väljund
 
@@ -162,11 +174,38 @@ class cfgform extends class_base
 		$retval = array();
 		foreach ($this->prplist as $prop)
 		{
+			$caption = $prop["caption"];
+			if(!$caption)
+			{
+				$caption = $prop["name"];
+			}
 			$retval[] = array(
 				"name" => "controllers[".$prop["name"]."]",
-				"caption" => $prop["caption"],
+				"caption" => $caption,
 				"type" => "relpicker",
 				"reltype" => RELTYPE_CONTROLLER,
+				"value" => $controllers[$prop["name"]],
+			);
+		}
+		return  $retval;
+	}
+	
+	function gen_view_controller_props($arr)
+	{
+		$controllers = $arr["obj_inst"]->meta("view_controllers");
+		$retval = array();
+		foreach ($this->prplist as $prop)
+		{
+			$caption = $prop["caption"];
+			if(!$caption)
+			{
+				$caption = $prop["name"];
+			}
+			$retval[] = array(
+				"name" => "view_controllers[".$prop["name"]."]",
+				"caption" => $caption,
+				"type" => "relpicker",
+				"reltype" => RELTYPE_VIEWCONTROLLER,
 				"value" => $controllers[$prop["name"]],
 			);
 		}
@@ -289,10 +328,15 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
-			case "gen_controllers":
+			case "gen_submit_controllers":
 				$arr["obj_inst"]->set_meta("controllers", $arr["request"]["controllers"]);		
 				break;
-
+			
+			case "gen_view_controllers":
+				$arr["obj_inst"]->set_meta("view_controllers", $arr["request"]["view_controllers"]);		
+			break;
+			
+				
 			case "sysdefault":
 				$ol = new object_list(array(
                                         "class_id" => $this->clid,
