@@ -106,6 +106,21 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="iexport">
+			<function name="iexport">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_iexport">
+			<function name="submit_iexport">
+				<arguments>
+					<optional name="urls"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

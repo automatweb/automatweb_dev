@@ -95,7 +95,8 @@ class export extends aw_template
 			"rule_folders" => $this->multiple_option_list($fr,$o->get_list()),
 			"public_symlink_name" => $this->get_cval("export::public_symlink_name"),
 			"pick_active" => $this->mk_my_orb("pick_active_version", array()),
-			"view_log" => $this->mk_my_orb("view_log", array())
+			"view_log" => $this->mk_my_orb("view_log", array()),
+			"iexp_url" => $this->mk_my_orb("iexport", array())
 		));
 		return $this->parse();
 	}
@@ -1891,6 +1892,42 @@ class export extends aw_template
 	{
 		$this->init_settings();
 		$this->fetch_and_save_page("http://editwww.ut.ee/index.aw?set_lang_id=2", 2, true);
+	}
+
+	function iexport($arr)
+	{
+		extract($arr);
+		$this->read_template("iexport.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_iexport", array("no_reforb" => 1)),
+			"exp_url" => $this->mk_my_orb("export"),
+			"gen_url" => $this->mk_my_orb("do_export"),
+			"pick_active" => $this->mk_my_orb("pick_active_version"),
+			"view_log" => $this->mk_my_orb("view_log")
+		));
+		return $this->parse();
+	}
+
+	function submit_iexport($arr)
+	{
+		extract($arr);
+		echo "Teostan eksporti, palun oodake .. <Br>\n";
+		flush();
+		$urls = explode("\n", $urls);
+		foreach($urls as $url)
+		{
+			$exp = get_instance("export");
+			$exp->init_settings();
+			$url = trim($url);
+			if ($url != "")
+			{
+				flush();
+				$exp->fetch_and_save_page($exp->rewrite_link($url), aw_global_get("lang_id"), true);
+				// print doc
+				$exp->fetch_and_save_page($exp->rewrite_link($url."&print=1"), aw_global_get("lang_id"), true);
+			}
+		}
+		echo "<br><br>\n\nValmis, <a href='".$this->mk_my_orb("iexport")."'>Tagasi</a> <br>\n";
 	}
 }
 ?>
