@@ -8,6 +8,7 @@ dist:
 		--exclude=doc\
 		--exclude=stats\
 		--exclude=img\
+		--exclude=files/logs\
 		*
 	@echo "Done. File is aw-dist.tar.gz"
 
