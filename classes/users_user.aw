@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.57 2003/06/04 19:18:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.58 2003/06/17 12:00:29 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -265,7 +265,7 @@ class users_user extends aw_template
 		};
 
 		// check for not active. 
-		if (is_array($udata))
+/*		if (is_array($udata))
 		{
 			$act_from = $this->get_user_config(array(
 				"uid" => $uid, 
@@ -285,7 +285,7 @@ class users_user extends aw_template
 				$success = false;
 				$msg = "Kasutaja pole aktiivne!";
 			}
-		}
+		}*/
 		$this->msg = $msg;
 
 		// all checks complete, result in $success, process it
@@ -1287,7 +1287,7 @@ class users_user extends aw_template
 
 	function _normalize_group_object($gd)
 	{
-//		echo "normalize group object for group $gd[name] , gid = $gd[gid] <br>";
+		//echo "normalize group object for group $gd[name] , gid = $gd[gid] <br>";
 		// get all users oids that are in this group
 		$members = array();
 		$sql = "
@@ -1397,7 +1397,8 @@ class users_user extends aw_template
 		{
 			if (!isset($members[$alias["id"]]))
 			{
-				$this->delete_alias($gd["oid"], $alias["old_id"]);
+//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[old_id] <br>";
+				$this->delete_alias($gd["oid"], $alias["old_id"], true, true);
 			}
 		}
 
@@ -1414,6 +1415,7 @@ class users_user extends aw_template
 			}
 			if (!$found)
 			{
+//				echo "did not find member $member in aliases for group $gd[oid] $gd[name], adding alias<br>";
 				// add the user as alias
 				core::addalias(array(
 					"id" => $gd["oid"],
