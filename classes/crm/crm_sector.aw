@@ -61,7 +61,7 @@ class crm_sector extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$form = &$arr["form_data"];
+		$form = &$arr["request"];
 		switch($data["name"])
 		{
 			case 'kood':

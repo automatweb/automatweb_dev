@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.2 2003/11/11 10:23:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.3 2003/12/09 18:34:39 duke Exp $
 // crm_call.aw - Kõne 
 /*
 
@@ -30,18 +30,5 @@ class crm_call extends class_base
 			"clid" => CL_CRM_CALL
 		));
 	}
-
-	function _change($args)
-	{
-		$args['strs'] = array(
-			'type' => 'KONE',
-			'typeStr' => 'Kõne',
-			'typestr' => 'kõne',
-			'typestrs' => 'kõne',
-		);
-		
-		$kohtumine = get_instance('kliendibaas/kohtumine');
-		$kohtumine->_change($args);
-	}	
 };
 ?>

@@ -11,35 +11,37 @@
 //	@caption näitamise pilootobjekt
 
 @property template type=select
-@caption Näitamise templiit
+@caption Näitamise template
 
 //	@property use_existing_pilot type=checkbox
 //	@caption näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas
 
 
-@property active_selection type=textbox group=selectione
+property active_selection type=textbox group=selectione
 
-@property forms type=checkbox
-@caption Näita tagasiside linke
+@property forms type=relpicker multiple=1 reltype=RELTYPE_BACKFORMS2
+@caption Tagasiside vormid
 
-@property forms type=relpicker reltype=RELTYPE_BACKFORMS2
-@caption tagasiside vormid
+@default group=contents
+@groupinfo contents submit=no caption="Objektid"
+@property active_selection_objects type=callback callback=callback_obj_list
 
-////////////////////////////////////////////////////////////
-
-@default group=selectione
-@groupinfo selectione submit=no caption="Seotud valimid"
-
-@property active_selection_objects type=text callback=callback_obj_list
-
-/////////////////////////////////////////////////////////////
-
-@default group=shou
-@groupinfo shou caption="Näita"
-@property dokus type=text callback=show_selection
+@default group=preview
+@groupinfo preview caption="Näita" submit=no
+@property contents type=callback callback=show_selection
 
 */
 
+
+/*
+@reltype BACKFORMS2 value=1 clid=CL_PILOT
+@caption Tagasisidevorm
+
+@reltype RELATED_SELECTIONS value=2 clid=CL_CRM_SELECTION
+@caption Seotud valimid
+
+
+*/
 
 /*
 CREATE TABLE `selection` (
@@ -49,17 +51,6 @@ CREATE TABLE `selection` (
   `status` tinyint(4) default NULL,
   UNIQUE KEY `oid` (`oid`,`object`)
 ) TYPE=MyISAM;
-
-*/
-
-//define ('PILOT', 1);
-/*
-@reltype BACKFORMS2 value=1 clid=CL_PILOT
-@caption Tagasisidevorm
-
-@reltype RELATED_SELECTIONS value=2 clid=CL_CRM_SELECTION
-@caption Seotud valimid
-
 
 */
 
@@ -78,12 +69,12 @@ class crm_selection extends class_base
 	}
 
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args['prop'];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$meta = $args['obj']['meta'];
 
+		// mis FUCK sellega toimub?
 		if (!isset($this->selection_args))
 		{
 			$this->selection_args = $args;
@@ -91,35 +82,56 @@ class crm_selection extends class_base
 
 		switch($data["name"])
 		{
-			case 'forms':
-				$data['multiple'] = 1;
-			break;
 			case 'template':
 				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/selection/templs/'));
 				$data['options'] = $tpls;
-			break;
+				break;
+
 			case 'active_selection':
 				$retval = PROP_IGNORE;
-			break;
+				break;
 
 		}
 		return  $retval;
 	}
+	
+	function set_property($arr)
+	{
+		$data = &$arr["prop"];
+		$form = &$arr["request"];
+		$retval = PROP_OK;
+		// see on küll täiesti vale koht selleks, damn I need to add a lot to the 
+		// classbase documentation
+		if (isset($form['del']))
+		{
+			$this->remove_objects_from_selection($arr['obj_inst']->id(),$form['sel']);
+		}
+		switch($data['name'])
+		{
+
+		};
+		return $retval;
+	}
 
 	function callback_obj_list($args)
 	{
-		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
-		$args['obj']['meta']['active_selection'] : $args['obj'][OID];
-		$arg2['obj']['parent'] = $args['obj']['parent'];
-		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
-		$arg2['sel']['oid'] = $args['obj'][OID];
-		return $dat = $this->obj_list($arg2);
+		// this is invoked directly by class_base .. which in turn invokes the stupid
+		// obj_list function. why the fuck does this have to be this way?
+		$list_arg["obj"]["id"] = $args["obj_inst"]->meta("active_selection") != "" ?  $args["obj_inst"]->meta("active_selection") : $args["obj_inst"]->id();
+		$list_arg['obj']['parent'] = $args['obj_inst']->parent();
+		$list_arg['obj']['meta']['active_selection'] = $list_arg['obj']['id'] ? $list_arg['obj']['id'] : $args['obj']['meta']['selections'][0];
+		$list_arg['sel']['oid'] = $args['obj']['id'];
+		return $dat = $this->obj_list(array(
+			"id" => $args["obj_inst"]->id(),
+		));
 	}
 
 
 	function show_selection($args)
 	{
-		$retval = $this->show($args);
+		$retval = $this->show(array(
+			"id" => $args["obj_inst"]->id(),
+		));
 		$nodes = array();
 		$nodes[] = array(
 			"value" => $retval,
@@ -127,18 +139,15 @@ class crm_selection extends class_base
 		return $nodes;
 	}
 
-	function obj_list($args)
+	////
+	// !Generates a list of objects in a selection
+	// id - id of the selection
+	function obj_list($arr)
 	{
-		//arr($args);	
-		$ob = $args['obj'];
-		$meta = $ob['meta'];
-
-		$arr = $this->get_selection($ob[OID]);
+		$objects = $this->get_selection($arr["id"]);
 
 		load_vcl('table');
-		$t = new aw_table(array(
-			'prefix' => 'selection_',
-		));
+		$t = new aw_table();
 		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
 		$t->set_default_sortby('jrk');
 
@@ -177,29 +186,24 @@ class crm_selection extends class_base
 			'caption' => 'kommentaar',
 		));
 
-		$t->define_field(array(
-			'name' => 'select',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
-			'width' => '20',
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
 		));
 
-//arr($this->cfg,1);
-		if (is_array($arr))
+		if (is_array($objects))
 		{
-			foreach ($arr as $key => $val)
+			foreach ($objects as $object)
 			{
-				$data = $this->get_object($val['object']);
-				$data['status'] = $val['status']; //it has to be this way
-				$data['jrk'] = $val['jrk']; //it has to be this way
-				$clid = $data['class_id'];
-				$data['clid'] = $clid; //it has to be this way
-				$data['select'] = html::checkbox(array('name' => 'sel['.$val['object'].']'));
-
-				$data['class_id'] = $this->cfg["classes"][$clid]['name'];
-
-				$t->define_data(
-					$data
-				);
+				$item = new object($object["object"]);
+				$t->define_data(array(
+					"id" => $item->id(),
+					"name" => $item->name(),
+					"status" => $object["status"],
+					"jrk" => $object["jrk"],
+					"clid" => $item->class_id(),
+					"class_id" => $this->cfg["classes"][$item->class_id()]["name"],
+				));
 			}
 		}
 		$t->sort_by();
@@ -208,68 +212,52 @@ class crm_selection extends class_base
 		$nodes['manager'] = array(
 			"value" =>
 			$this->mk_toolbar(array(
+				// whatta fuck?
+				'id' => $arr["id"],
 				'selection' => $args['sel'][OID],
 				'parent' => $args['obj']['parent'],
 				'selected' => $meta['active_selection'],
 				'show_buttons' => array('activate','add','change','save','delete'),
 			)).
 			$t->draw().
-			html::hidden(array('name' => 'this_selection', 'value' => $args['obj'][OID])).
+			html::hidden(array('name' => 'this_selection', 'value' => $arr["id"])).
+			// what the fuck is going on with that active_selection?
 			html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
 		);
 		return $nodes;
 	}
 
-	function callb_name($args)
+	function callb_name($arr)
 	{
 		return html::href(array(
-			'caption' => $args['name'],
+			'caption' => $arr['name'],
 			'url' => $this->mk_my_orb('change', array(
-					'id' => $args[OID],
+					'id' => $arr["id"],
 					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-				),basename($this->cfg['classes'][$args['clid']]['file'])
-			),
+				),$arr['clid']),
 		));
 	}
 
 
-	function callb_jrk($args)
+	function callb_jrk($arr)
 	{
 		return  html::textbox(array(
 			'size' => 4,
 			'maxlength' => 4,
-			'name' => 'jrk['.$args[OID].']',
-			'value' => (int)$args['jrk'],
-		));/**/
+			'name' => 'jrk['.$arr["id"].']',
+			'value' => (int)$arr['jrk'],
+		));
 	}
 
-	function callb_active($args)
-	{//arr($args,1);
+	function callb_active($arr)
+	{
 		return html::checkbox(array(
 			'size' => 4,
 			'maxlength' => 4,
-			'name' => 'status['.$args[OID].']',
+			'name' => 'status['.$arr["id"].']',
 			'value' => 1,
-			'checked' => ((int)$args['status']==1)
+			'checked' => ((int)$arr['status']==1)
 		));
-	}
-/**/
-
-
-	function delete_from_selection($args)
-	{
-		//arr($args,1);
-		$uri=$args['return_url'];
-
-		if ($args['active_selection'])
-		{
-			if (is_array($args['sel']))
-			{
-				$this->remove_from_selection($args['active_selection'],$args['sel']);
-			}
-		}
-		header('Location: '.$uri);
-		die;
 	}
 
 	function save_selection($args)
@@ -296,6 +284,8 @@ class crm_selection extends class_base
 
 	function add_to_selection($args)
 	{
+		// see on siis mingi sitt, mis teeb kas uue selektsiooni või liigutab asju 
+		// ühest kohast teise .. geezas christ.
 		$uri = $args['return_url'];
 		if ($args['add_to_selection'])
 		{
@@ -307,48 +297,31 @@ class crm_selection extends class_base
 		}
 		else
 		{
-			$newoid = $this->new_object(array(
-				'name' => $args['new_selection_name'],
-				'status' => 1,
-				'parent' => $args['parent'],
-				'class_id' => CL_SELECTION
-				),false);
+			$o = new object;
+			$o->set_class_id($this->clid);
+			$o->set_name($args["new_selection_name"]);
+			$o->set_status(STAT_NOTACTIVE);
+			$o->set_parent($args["parent"]);
+			$o->save();
+
+
 			if (is_array($args['sel']))
 			{
-				$this->set_selection($newoid, $args['sel'],false);
-
+				$this->set_selection($o->id(), $args['sel'],false);
 			}
 
-			$selections = $this->get_object_metadata(array(OID => $args['id'],'key' => 'selections'));
-			$selections = array_merge($selections,array($newoid => $newoid));
-			$this->set_object_metadata(array(
-				OID => $args['id'],
-				"key" => 'selections',
-				"value" => $selections,
-			));
-
 		
-$data = $this->get_object($args['id']);
-$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
-$ins = get_instance($data['class_file']);
+			$data = $this->get_object($args['id']);
+			$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
+			$ins = get_instance($data['class_file']);
 
-			
-			
-			$this->addalias(array(
-				'id' => $args['id'],
-				'alias' => $newoid,
-				'no_cache' => true,
-				'reltype' => $ins->selections_reltype,
+			$source_object = new object($args["id"]);
+			$source_object->connect(array(
+				"to" => $o->id(),
+				"reltype" => $ins->selections_reltype,
 			));
+		};
 			
-
-//arr($args,1);
-//		põhimõtteliselt siin võiks minna uue objekti muutmise peale, ja tagasi nupuga saaks tagasi minna
-//			$newuri = $this->mk_my_orb('change',array('id' => $newoid, 'return_url' => $uri),'selection');
-
-//			header('Location: '.$newuri);
-//			die;
-		}
 
 		header('Location: '.$uri);
 		die;
@@ -366,36 +339,33 @@ $ins = get_instance($data['class_file']);
 		extract($args);
 		$delbutton = isset($delbutton)?$delbutton:true;
 		$align = isset($align)?$align:'left';
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		$toolbar = get_instance("toolbar");
 
-		/*if (is_array($args['arr']))
+		// ah et mõni teine objekt saab ka siis selektsionina käituda jah? god fucking dammit
+		if ($args["connection_source"])
 		{
-			foreach ($args['arr'] as $key => $val)
-			{
-				$dat = $this->get_object($val);
-				$ops[$val] = $dat['name'];
-			}
-		}*/
-		
-		$arr = $this->get_aliases(array(
-			'oid' => $args['selection'],
-			'type' => CL_SELECTION,
-		));
-		
-		$this_obj = $this->get_object($args['selection']);
-		if ($this_obj['class_id'] == CL_SELECTION)
-		{
-			$arr[] = $this_obj;
+			$source_object = new object($args["connection_source"]);
 		}
-		
-		
-				
-		if (is_array($arr))
-		foreach ($arr as $key => $val)
+		else
 		{
-			$ops[$val[OID]] = $val['name'];
-		}		
-		
+			$source_object = new object($args["id"]);
+		};
+
+		$conns = $source_object->connections_from(array(
+			"class" => CL_CRM_SELECTION,
+		));
+
+		// lisame aktiivse objekti ka, kui ta on valim
+		if ($source_object->class_id() == CL_CRM_SELECTION)
+		{
+			$arr[$source_object->id()] = $source_object->name();
+		}
+	
+		$ops = array();
+		foreach($conns as $conn)
+		{
+			$ops[$conn->prop("to")] = $conn->prop("to.name");
+		};
 		
 		$ops[0] = '- lisa uude valimisse -';
 		$str .= html::select(array(
@@ -425,9 +395,10 @@ $ins = get_instance($data['class_file']);
 						"tooltip" => 'aktiveeri',
 						"url" => "#",
 						"img" => "refresh.gif",
+						// siit nagu midagi hargneks juba. urk
 						'onClick' => 'document.changeform.active_selection.value = document.changeform.add_to_selection.value;document.changeform.submit()',
 					));
-				break;
+					break;
 				case 'add':
 					$toolbar->add_button(array(
 						"name" => 'go_add',
@@ -436,16 +407,16 @@ $ins = get_instance($data['class_file']);
 						"img" => "import.gif",
 						'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
 					));
-				break;
+					break;
 				case 'change':
 					$toolbar->add_button(array(
 						"name" => 'change_it',
 						"tooltip" => 'Muuda valimit',
 						"url" => "#",
 						"img" => "edit.gif",
-			'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array(),'selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+			'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array(),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
 					));
-				break;
+					break;
 				case 'save':
 					$toolbar->add_button(array(
 						"name" => "save",
@@ -454,7 +425,8 @@ $ins = get_instance($data['class_file']);
 						"img" => "save.gif",
 						'onClick' => "go_manage_selection(document.changeform.active_selection.value,'".$REQUEST_URI."','save_selection','".$parent."');return true;",
 					));
-				break;
+					break;
+
 				case 'delete':
 					$toolbar->add_button(array(
 						"name" => "delete",
@@ -463,7 +435,7 @@ $ins = get_instance($data['class_file']);
 						"img" => "delete.gif",
 						'onClick' => "go_manage_selection(document.changeform.this_selection.value,'".$REQUEST_URI."','delete_from_selection','".$parent."');return true;",
 					));
-				break;
+					break;
 			}
 		}
 
@@ -504,37 +476,36 @@ $ins = get_instance($data['class_file']);
 	{
 		if (count($arr)>0)
 		{
-			//$arr=$this->db_fetch_array("select object from selection where oid='".$oid."'");
 			foreach($arr as $key => $val)
 			{
 				$values[]='('.$oid.','.$key.')';
 			}
 
+			// kui on vaja valimi sisu asendada, siis viska kõik minema
+			// samas mulle tundub, et seda replace asja ei kasutata kusagil.
 			if ($replace)
 			{
 				$this->db_query('delete from selection where oid='.$oid);
 			}
-			//echo "insert into selection(oid,object) values ".implode(',',$values);
-			$q ="delete from selection where oid='$oid' and object in (".implode(' , ',array_keys($arr)).")";
+			// muidu ainult valitud itemid
+			else
+			{
+				$q ="delete from selection where oid='$oid' and object in (".implode(' , ',array_keys($arr)).")";
+			};
 			$this->db_query($q);
+
+			// ja siis lisame uued
 			return $this->db_query("insert into selection(oid,object) values ".implode(',',$values));
 		}
 	}
 
-	//oid - selection oid
-	//objects - array of objects in selection
-	function remove_from_selection($oid,$arr=array())
+	////
+	// !oid - selection id
+	// objects - array of object id's to be removed:
+	function remove_objects_from_selection($oid,$arr=array())
 	{
-		if (is_array($arr))
-		{
-			foreach($arr as $key => $val)
-			{
-				$q='delete from selection where oid='.$oid.' and object='.$key;
-				$this->db_query($q);
-				$c++; //just count
-			}
-		}
-		return $c;
+		$items = new aw_array($arr);
+		$this->db_query("DELETE FROM selection WHERE oid = '$oid AND object IN (" . $items->to_sql() . ")");
 	}
 
 
@@ -544,87 +515,49 @@ $ins = get_instance($data['class_file']);
 		return ($a[$this->sortby] > $b[$this->sortby]) ? +1 : -1;
 	}
 
-	function show($args)
+	////
+	// !Displays active items from selection using a template 
+	function show($arr)
 	{
-
-		if (isset($args['id']))
-		{
-			$args['obj'][OID] = $args['id'];
-		}
-
-		$obj = $this->get_object($args['obj'][OID]);
-		$arr = $this->get_selection($args['obj'][OID],'active');
-
-		//echo $this->sel_tpl = implode('',file($this->cfg['tpldir'].'/selection/templs/default.tpl'));
-
-		if (!isset($obj['meta']['template']))
+		$obj = new object($arr["id"]);
+		$arr = $this->get_selection($obj->id(),"active");
+		if ("" == $obj->prop("template"))
 		{
 			return 'templiit määramata';
 		}
 
-		if (empty($obj['meta']['template']))
-		{
-			$this->sel_tpl = '{VAR:name}<br />';
-		}
-		else
-		{
-			$tpl = $this->cfg['tpldir'].'/selection/templs/'.$obj['meta']['template'];
-			$this->sel_tpl = implode('',file($tpl));
-		}
+		$this->tpl_init($this->tpldir . "/selection/templs");
+		$this->read_template($obj->prop("template"));
 
-		$str = '';
+		$str = "";
 
 		if (is_array($arr))
 		{
 
-			$this->default_forms = $args['obj']['meta']['forms'];
+			$this->default_forms = $obj->prop("forms");
 			//sorteerime jrk järgi
 			$this->sortby = 'jrk';
 			uasort($arr, array ($this, 'cmp_obj'));
+
 			foreach ($arr as $key => $val)
 			{
-/*				if ($cb['get_data'] && method_exists($this,$cb['get_data']))
+				$item = new object($val["object"]);
+				// figure out which class processes the aliases.. dunno, really
+				$classfile = isset($this->cfg['classes'][$item->class_id()]['alias_class']) ? $this->cfg['classes'][$item->class_id()]['alias_class'] : $this->cfg['classes'][$item->class_id()]['file'];
+				$inst = get_instance($classfile);
+
+				if (method_exists($inst,'show_in_selection'))
 				{
-					$data = call_user_func (array($this,$cb['get_data']), $val['object']);
-				}
-				else*/
-				{//arr($this->cfg,1);
-
-					$data = $this->get_object($val['object']);
-					$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
-//$str .= $data['name'];
-					//switch($meta){}
-
-//					if (!isset($obj['meta']['tpdfggg']))
-					{
-						if (!isset($inst[$data['class_file']]))
-						{
-							$inst[$data['class_file']] = get_instance($data['class_file']);
-						}
-
-						if (method_exists($inst[$data['class_file']],'show_in_selection'))
-						{
-							$inst[$data['class_file']]->deafult_forms = $this->default_forms;
-							$str .= $inst[$data['class_file']]->show_in_selection(array('id' =>$val['object'],'obj' => $data));
-						}
-						else
-						{
-							$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data, 'class_file' => $data['class_file']));
-						}
-					}
-/*					else
-					{
-						$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
-					}
-*/
-
-/*					$data['pilot'] = html::href(array('caption' => 'tagasiside', 'url' =>
-					$this->mk_my_orb('form',array('id' => $data[OID],),'pilot_object'),
+					$inst->default_forms = $this->default_forms;
+					$str .= $inst->show_in_selection(array(
+						"id" => $item->id(),
 					));
-					$this->vars($data);
-
-					$str .= $this->parse('object');
-					*/
+				}
+				else
+				{
+					$str .= $this->show_in_selection(array(
+						"id" => $item->id(),
+					));
 				}
 
 			}
@@ -633,57 +566,38 @@ $ins = get_instance($data['class_file']);
 		{
 			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
 		}
-		//$this->vars(array('object' => $str));
-		exit_function("selection::");
-		exit_function("selection::");
 		return $str;
-		//$this->parse();
 	}
 
 	function show_in_selection($args)
 	{
-		//$this->read_template();
-		//$obj['class_file']
-		//siin võib teha alampringud jne mida veel vaja objekti juures näidata
-
-
-		$forms = '';
+		$forms = "";
+		$tagasisidevormid = "";
 		if (is_array($this->default_forms))
 		{
 			foreach($this->default_forms as $val)
 			{
-				if (!$val)
-				continue;
-
-				$form = $this->get_object($val);
-				$args['obj']['tagasisidevormid'] .= html::href(array(
-				'target' => $form['meta']['open_in_window']? '_blank' : NULL,
-				'caption' => $form['name'], 'url' => $this->mk_my_orb('form', array(
-					'id' => $form[OID],
-					'feedback' => $args['obj'][OID],
-					'feedback_cl' => rawurlencode($data['class_file']),
+				$form = new object($val);
+				$tagasisidevormid .= html::href(array(
+				'target' => $form->meta('open_in_window') != "" ? '_blank' : NULL,
+				'caption' => $form->name(), 'url' => $this->mk_my_orb('form', array(
+					'id' => $form->id(),
+					'feedback' => $args['id'],
 					),'pilot_object'))).'<br />';
 			}
 		}
-		return localparse($this->sel_tpl, $args['obj']);
+		$obj = new object($args["id"]);
+		$this->vars(array(
+			"name" => $obj->name(),
+			"parent" => $obj->parent(),
+			"id" => $obj->id(),
+		));
+		$this->vars(array(
+			"object" => $this->parse("object"),
+		));
+		return $this->parse();
 	}
 
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$form = &$args["form_data"];
-		$retval = PROP_OK;
-
-		if (isset($form['del']))
-		{
-			$this->remove_from_selection($args['obj'][OID],$form['sel']);
-		}
-		switch($data['name'])
-		{
-
-		};
-		return $retval;
-	}
 
 	function parse_alias($args)
 	{

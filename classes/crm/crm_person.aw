@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.3 2003/12/01 14:26:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.4 2003/12/09 18:34:39 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -205,7 +205,6 @@ class crm_person extends class_base
 				break;
 
 			case 'navtoolbar':
-				// kust see global tuleb?
 				$this->isik_toolbar($arr);
 				break;
 			break;
@@ -216,6 +215,7 @@ class crm_person extends class_base
 
 	function callback_org_actions($args)
 	{
+		// oh fuck you. isikuga seotud tegevuse nimekiri. fuck, fuck, fuck.
 		$inst = get_instance('crm/crm_company');
 		return $inst->callback_org_actions($args);
 	}
@@ -275,6 +275,7 @@ class crm_person extends class_base
 						"parent" => "add_relation",
 						"title" => "Kalender määramata",
 						'text' => 'Lisa '.$val['caption'],
+						'disabled' => true,
 					));
 				}
 				else
@@ -326,6 +327,7 @@ class crm_person extends class_base
 						"parent" => "add_event",
 						'title' => 'Kalender määramata',
 						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
+						'disabled' => true,
 					));
 				}
 				else
@@ -396,9 +398,9 @@ class crm_person extends class_base
 		$row = $this->fetch_all_data($id);
 
 		$forms = '';
-		if (is_array($this->deafult_forms))
+		if (is_array($this->default_forms))
 		{
-			$obj['meta']['forms'] = array_merge($this->deafult_forms, $obj['meta']['forms']);
+			$obj['meta']['forms'] = array_merge($this->default_forms, $obj['meta']['forms']);
 		}
 
 

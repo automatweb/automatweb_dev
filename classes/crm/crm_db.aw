@@ -1,5 +1,6 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.5 2003/12/09 18:34:39 duke Exp $
+// crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
 	@default table=objects
@@ -24,8 +25,6 @@
 		
 	@property manageri type=text callback=firma_manager
 	
-	//valimi nupud	
-	@property selection_manage_buttons type=text callback=selection_manage_bar
 	
 	@property make_search type=textbox size=1
 	@property search_type type=textbox size=1
@@ -36,12 +35,10 @@
 	@groupinfo tegevusalad submit=no caption=Tegevusalad 
 
 	@property tegtoolbar type=toolbar store=no no_caption=1	
+	@caption Tegevusalade toolbar
 	
-	@property tegevusala_manager type=text callback=tegevusala_manager
-	
-	//valimi nupud	
-	@property selection_manage_buttons2 type=text callback=selection_manage_bar
-	
+	@property sector_manager type=callback callback=callback_sector_manager
+	@caption Tegevusalade kataloog
 
 ////////////////////////////////////////////////////////////
 	@default group=settings
@@ -77,21 +74,6 @@
 	@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
 	@caption Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda
 
-	@property kone_form type=relpicker reltype=RELTYPE_FORMS
-	@caption Kõne sisestusvorm
-
-	@property pakkumine_form type=relpicker reltype=RELTYPE_FORMS
-	@caption Pakkumise sisestusvorm
-		
-	@property tehing_form type=relpicker reltype=RELTYPE_FORMS
-	@caption Tehingu sisestusvorm
-	
-	@property kohtumine_form type=relpicker reltype=RELTYPE_FORMS
-	@caption Kohtumise sisestusvorm
-	
-	@property default_form type=relpicker reltype=RELTYPE_FORMS
-	@caption Vaikimisi sisestusvorm
-	
 //	@property where_firm type=checkbox ch_value=on
 //	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
 
@@ -100,31 +82,13 @@
 	
 	@property default_kliendibaas type=checkbox 
 	@caption See on kasutaja default kliendibaas
-
-
+	
 	@default group=objects_manager
 	@groupinfo objects_manager caption=Objektide&nbsp;lisamine submit=no
 
 	@property addtoolbar type=toolbar store=no no_caption=1
 	
-		
-	//@property objects_manager type=text callback=objects_manager
-
-	
-////////////////////////////////////////////////////////////
-
-/	@default group=overview
-/	@groupinfo overview caption=Ülevaade
-/
-/	@property overview type=text callback=owerview
-
-//////////////valimite kraam////////////////////////////////////////////////////////////////////////////
-
-	@default group=selectione
-	
-	@groupinfo selectione submit=no caption=Valimid
-	@property active_selection_objects type=text callback=callback_obj_list
-	@property active_selection type=textbox group=firmad,selectione
+	@property active_selection type=textbox group=firmad
 	
 
 
@@ -152,7 +116,7 @@
 @reltype RIIK_CAT value=7 clid=CL_MENU
 @caption Riikide kataloogid
 
-@reltpye TEGEVUSALA_CAT value=8 clid=CL_MENU
+@reltype TEGEVUSALA_CAT value=8 clid=CL_MENU
 @caption Tegevusalade kataloogid
 
 @reltype TOODE_CAT value=9 clid=CL_MENU
@@ -170,21 +134,10 @@
 @reltype FORMS  value=13 clid=CL_CFGFORM
 @caption Sisestusvormid
 
-// this seems to be the same as the first one
-reltype SELECTIONS_RELTYPE value=14
-
-
-
 */
-//define('SELECTIONS_RELTYPE',SELECTIONS);
-			
-//pakkumise sisestamise vorm
-//kõne sisestamise vorm
-//jne
 
 class crm_db extends class_base
 {
-	//var $show_columns;
 	var $selections_reltype;
 	
 
@@ -194,51 +147,9 @@ class crm_db extends class_base
 			'clid' => CL_CRM_DB,
 			'tpldir' => 'kliendibaas',
 		));
-		$this->selections_reltype = SELECTIONS_RELTYPE;
+		$this->selections_reltype = RELTYPE_SELECTIONS;
 	}	
 		
-//// valim///
-/* ühesõnaga valimi klassiga näitame valimeid ja manageerime neid
-põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
-*/
-
-	function callback_obj_list($args)
-	{
-		classload('crm/crm_selection');
-		$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
-		$arg2['obj']['parent'] = $args['obj']['parent'];
-		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
-		$arg2['sel']['oid'] = $args['obj'][OID];	
-		if (!is_object($this->selection_object))
-		{
-			$this->selection_object = new crm_selection();
-		};
-		return $this->selection_object->obj_list($arg2);
-	}
-	
-	function selection_manage_bar($args = array())
-	{
-		$nodes = array();
-		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
-		{
-			classload('crm/crm_selection');
-			$this->selection_object = new crm_selection();
-			$this->selection = $args['obj'];
-		}
-		$nodes['toolbar'] = array(
-			'value' => $this->selection_object->mk_toolbar(array(
-				'selection' => $args['obj'][OID],
-				'parent' => $this->selection['parent'],
-				'selected' => $this->selection['meta']['active_selection'],
-				'align' => 'right',
-				'show_buttons' => array('add','change'),
-			))
-		);
-		return $nodes;
-	}
-//// end:valim///
-
-
 	function get_property(&$args)
 	{
 
@@ -249,14 +160,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		
 		//// valim///
 		/* loome valimi instansi kui seda juba tehtud pole */
-		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
+		if (!is_object($this->selection_object))
 		{
 			classload('crm/crm_selection');
 			$this->selection_object = new crm_selection();
 			$this->selection = $args['obj'];
 		}
 
-		// so, loeme sisse kõik selle objekti aliases ja jaotame nad tüübi järgi ära, jees
+		// so, loeme sisse kõik selle objekti seosed ja jaotame nad tüübi järgi ära, jees
 		if (!is_array($this->got_aliases))
 		{
 			$conns = $args["obj_inst"]->connections_from();
@@ -275,18 +186,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 				
 
-
-			case 'selection_manage_buttons':
-			
-				$make_search = ($args['obj']['meta']['make_search'] && !$args['request']['no_search']) ? true : false;
-				if (($args['obj']['meta']['search_type'] && !$make_search))
-				{
-					$retval=PROP_IGNORE;
-				}
-				break;		
-		
-						
-			
 			case 'default_kliendibaas':
 				$this->users = get_instance("users");
                                 $obj_id = $args["obj_inst"]->id();
@@ -321,11 +220,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 			case 'search_form':
 
-/*				if (isset($req['do_search']))
-				{
-					$meta['do_search'] = true;
-					$meta['search'] = $meta['search_history'][$req['search_history']];
-				}*/
 				$data['value'] = $this->search_form($args);
 				break;
 
@@ -338,14 +232,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 
 			case 'make_search':
-
-				$args['obj']['oid']['meta']['make_search'] = '0';
+				$args["obj_inst"]->set_meta("make_search",0);
 				$retval=PROP_IGNORE;
-				
 				break;
 
 			case 'search_type':
-				$args['obj']['oid']['meta']['search_type'] = '0';
+				$args["obj_inst"]->set_meta("search_type",0);
 				$retval=PROP_IGNORE;
 				break;
 						
@@ -365,7 +257,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
-		$form = &$args["form_data"];
+		$form = &$args["request"];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
@@ -373,6 +265,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'sfield':
 				if (!$form['sfield'])
 				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					aw_session_set("crm_db_search",$form["sfield"]);
 					$retval = PROP_IGNORE;
 				};
 				break;
@@ -390,8 +287,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		return $retval;
 	}
 
-	
-	function tegevusala_manager($args)
+	////
+	// !sector manager
+	function callback_sector_manager($args)
 	{
 	
 		$tase = $args['request']['tase'] ? $args['request']['tase'] : 1;
@@ -403,11 +301,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		
 		$tase = ($tase>3)?3:$tase;
 
-		//arr($args);
-
 		$limit = 100; // siia vaja ka aretada leheküljed //axel 
 
-	
+
+		// võtame tegevusalasid kusagilt alt, wuh? või siis ei võta? või mida see parent_in tegigi
 		
 		$teg_parent = ' t1.parent'.$this->parent_in($this->got_aliases[TEGEVUSALA_CAT]).' and ';
 			
@@ -516,10 +413,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			);
 		}
 		
-		$teg_obj = new object($teg_oid);
 		// right, I have a teg_obj, now I need to create a list of connected objects
 		if (!empty($teg_oid))
 		{
+			$teg_obj = new object($teg_oid);
 			$conns = $teg_obj->connections_to(array(
 				"reltype" => 5,
 			));
@@ -531,63 +428,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$tf = $this->init_firmad_table();
 		foreach($conns as $conn)
 		{
+			// _virmade tabel, eh?
 			$obj = $conn->from();
-			$addr_obj = new object($obj->prop('contact'));
-			$url_obj = new object($addr_obj->prop("kodulehekylg"));
-			$kodulehekylg = $url_obj->prop("url");
-			$email_obj = new object($addr_obj->prop("e_mail"));
-			$county_obj = new object($addr_obj->prop("maakond"));
-			$linn_id = $addr_obj->prop("linn");
-			$corpform = new object($obj->prop("ettevotlusvorm"));
-			$sector_obj = new object($obj->prop("pohitegevus"));
-			$telefon = new object($addr_obj->prop("telefon"));
-			$juht_obj_id = $obj->prop('firmajuht');
-			if ($juht_obj_id)
-			{
-				$juht_obj = new object($juht_obj_id);
-				$juht_name = $juht_obj->name();
-			}
-			else
-			{
-				$juht_name = "";
-			};
-
-			if ($linn_id)
-			{
-				$city_obj = new object($addr_obj->prop("linn"));
-				$cityname = $city_obj->name();
-			}
-			else
-			{
-				$cityname = "";
-			};
-			$tf->define_data(array(
-				'fname' => html::href(array(
-					'url' => $this->mk_my_orb('change',array(
-						'id' => $obj->id(),
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-					), 'crm/crm_company'),
-					'caption' => $conn->prop("from.name"),
-				)),
-				'check' => $check,
-				'reg_nr' => $obj->prop('reg_nr'),
-				'ettevotlusvorm' => $corpform->name(),
-				'full_address' => $obj->prop('full_address'),
-				'address' => $addr_obj->name(),
-				'firmajuht' => 	html::href(array(
-					'url' => $this->mk_my_orb('change',array(
-						'id' => $juht_obj_id,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-					), 'crm/crm_person'),
-					'caption' => $juht_name,
-				)),
-				'linn' => $cityname,
-				'maakond' => $county_obj->name(),
-				'e_mail' => $email_obj->name(),
-				'kodulehekylg' => html::href(array('url' => $kodulehekylg,'caption' => $kodulehekylg,'target' => '_blank')),
-				'telefon' => $telefon->name(),
-				'pohitegevus' => $sector_obj->name(),
-			));
+			$this->_add_org_to_table(&$tf,$obj);
 		};
 
 				
@@ -603,7 +446,65 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		return $nodes;
 
 	}
-	
+
+	function _add_org_to_table($tf,$obj)
+	{
+		if (is_oid($obj->prop('contact')))
+		{
+			$addr_obj = new object($obj->prop('contact'));
+			$url_obj = new object($addr_obj->prop("kodulehekylg"));
+			$kodulehekylg = $url_obj->prop("url");
+			$linn_id = $addr_obj->prop("linn");
+		}
+		else
+		{
+			$addr_obj = new object();
+		};
+
+		$tf->define_data(array(
+			'id' => $obj->id(),
+			'fname' => html::href(array(
+				'url' => $this->mk_my_orb('change',array(
+					'id' => $obj->id(),
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				), CL_CRM_COMPANY),
+				'caption' => $obj->prop("name"),
+			)),
+			'check' => $check,
+			'reg_nr' => $obj->prop('reg_nr'),
+			'ettevotlusvorm' => $this->_get_name_for_object($obj->prop("ettevotlusvorm")),
+			'full_address' => $obj->prop('full_address'),
+			'address' => $this->_get_name_for_object($obj->prop('contact')),
+			'firmajuht' => 	html::href(array(
+				'url' => $this->mk_my_orb('change',array(
+					'id' => $obj->prop("firmajuht"),
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				), CL_CRM_PERSON),
+				'caption' => $this->_get_name_for_object($obj->prop("firmajuht")),
+			)),
+			'linn' => $this->_get_name_for_object($addr_obj->prop("linn")),
+			'maakond' => $this->_get_name_for_object($addr_obj->prop("county")),
+			'e_mail' => $this->_get_name_for_object($addr_obj->prop("e_mail")),
+			'kodulehekylg' => html::href(array('url' => $kodulehekylg,'caption' => $kodulehekylg,'target' => '_blank')),
+			'telefon' => $this->_get_name_for_object($addr_obj->prop("telefon")),
+			'pohitegevus' => $this->_get_name_for_object($obj->prop("pohitegevus")),
+		));
+	}
+
+	function _get_name_for_object($obj_id)
+	{
+		if ($obj_id)
+		{
+			$obj = new object($obj_id);
+			$rv = $obj->name();
+		}
+		else
+		{
+			$rv = "";
+		};
+		return $rv;
+	}
+
 	function parent_in($arr)
 	{
 		if (is_array($arr))
@@ -672,8 +573,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if ($make_search)
 		{	
 			$search_params = '';
-			$exclude = $args['obj']['meta']['exclude'];
-			$sfield = $args['obj']['meta']['sfield'];
+			$exclude = $args['obj_inst']->meta('exclude');
+			//$sfield = $args['obj_inst']->meta('sfield');
+			$sfield = aw_global_get("crm_db_search");
 
 			if ($sfield[$id = 'name'])
 			{
@@ -1026,130 +928,23 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			'caption' => 'Organisatsiooni juht',
 			'sortable' => '1',
 		));
-		
-		$tf->define_field(array(
-			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
-			'width'=> 15,
+
+		$tf->define_chooser(array(
+			"field" => "id",
+			"name" => "sel",
 		));
+		
 		return $tf;
 	}
 
 	function firmad_table($arr)
 	{
-		$tf = new aw_table(array(
-			'prefix' => 'kliendibaas_frimad',
-		));
-		$tf->set_default_sortby('fname');	
-		$tf->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-
-		$tf->define_field(array(
-			'name' => 'fname',
-			'caption' => 'Organisatsioon',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'reg_nr',
-			'caption' => 'Reg nr.',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'pohitegevus',
-			'caption' => 'Tegevusala',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'ettevotlusvorm',
-			'caption' => 'Õiguslik vorm',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'address',
-			'caption' => 'Aadress',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'linn',
-			'caption' => 'Linn/Vald/Alev',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'maakond',
-			'caption' => 'Maakond',
-			'sortable' => '1',
-		));		
-		
-		$tf->define_field(array(
-			'name' => 'e_mail',
-			'caption' => 'E-post',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'kodulehekylg',
-			'caption' => 'Kodulehekülg',
-			'sortable' => '1',
-		));
-		$tf->define_field(array(
-			'name' => 'telefon',
-			'caption' => 'Telefon',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'firmajuht',
-			'caption' => 'Organisatsiooni juht',
-			'sortable' => '1',
-		));
-		
-		$tf->define_field(array(
-			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
-			'width'=> 15,
-		));
-
+		$tf = $this->init_firmad_table();
 		if (is_array($arr))
 		foreach($arr as $val)
 		{
-			$check = html::checkbox(array('name'=>'sel['.$val[OID].']','checked' => isset($selection[$val[OID]]) ? $selection[$val[OID]] : false,'value' => $val[OID]));
-			$check.= html::hidden(array('name'=>'objs['.$val[OID].']' ,'value'=>1));
-		
-			$tf->define_data(
-				array(
-					//'kood' => $val['kood'],
-					'fname' => html::href(array(
-						'url' => $this->mk_my_orb('change',array(
-							'id' => $val[OID],
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						), 'crm/crm_company'),
-						'caption' => $val['name'],
-					)),
-					'check' => $check,
-					'reg_nr' => $val['reg_nr'],
-					'ettevotlusvorm' => $val['ettevotlusvorm'],
-					'full_address' => $val['full_address'],
-					'address' => $val['address'],
-					'firmajuht' => 	html::href(array(
-						'url' => $this->mk_my_orb('change',array(
-							'id' => $val['firmajuht_oid'],
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						), 'crm/crm_person'),
-						'caption' => $val['firmajuht'],
-					)),
-					'linn' => $val['linn'],
-					'maakond' => $val['maakond'],
-					'e_mail' => $val['e_mail'],
-					'kodulehekylg' => html::href(array('url' => $val['kodulehekylg'],'caption' => $val['kodulehekylg'],'target' => '_blank')),
-					'telefon' => $val['telefon'],
-					'pohitegevus' => $val['pohitegevus'],
-				)
-			);
+			$obj = new object($val["oid"]);
+			$this->_add_org_to_table(&$tf,$obj);
 		}
 
 		$tf->sort_by();
@@ -1159,19 +954,20 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function search_form($args)
 	{
-		if (!$args['obj']['meta']['search_type'])
+		if ($args['obj_inst']->meta('search_type') == "0")
 		{
 			$this->read_template('search_default.tpl');
 			return $this->parse();
 		}
 		
-		$search_template = 'search_'.$args['obj']['meta']['search_type'].'.tpl';
+		$search_template = 'search_'.$args['obj_inst']->meta('search_type').'.tpl';
 		$form = '';
-	
+
 		$this->read_template($search_template);
-		
-		$sfield = $args['obj']['meta']['sfield'];
-		$exclude = $args['obj']['meta']['exclude'];
+	
+		$sfield = aw_global_get("crm_db_search");
+		//$sfield = $args['obj_inst']->meta('sfield');
+		$exclude = $args['obj_inst']->meta('exclude');
 		
 		$this->vars(array(
 			'id' => $id = 'name',
@@ -1303,6 +1099,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	}
 
 
+	// organisatsioonide toolbar
 	function org_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];                
@@ -1368,8 +1165,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				));
 			}
                 }
-				
-			
+
+		$toolbar->add_separator();
 
 		$toolbar->add_menu_button(array(
 			"name" => "search_event",
@@ -1401,9 +1198,74 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"url" => '',
 			"img" => "prog_42.gif",
 		));
+
+		$toolbar->add_separator();
+
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => "Kustuta",
+			"url" => "javascript:void()",
+			"onClick" => "javascript:document.changeform.action.value='process_organizations'; document.changeform.submit();",
+			"img" => "delete.gif",
+		));
+		
+		$conns = $args["obj_inst"]->connections_from(array(
+			"class" => CL_CRM_SELECTION,
+			"sort_by" => "to.name",
+		));
+
+		$ops = array();
+
+		foreach($conns as $conn)
+		{
+			$ops[$conn->prop("to")] = $conn->prop("to.name");
+		};
+
+		$REQUEST_URI = aw_global_get("REQUEST_URI");
+
+		$ops[0] = '- lisa uude valimisse -';
+                $str .= html::select(array(
+                        'name' => 'add_to_selection',
+                        'options' => $ops,
+                        'selected' => $selected,
+                ));
+
+		$toolbar->add_separator(array(
+			"side" => "right",
+		));
+
+		$toolbar->add_cdata($str,"right");
+
+		$parent = $args["obj_inst"]->parent();
+
+		$toolbar->add_button(array(
+			"name" => 'go_add',
+			"tooltip" => "Lisa valitud valimisse",
+			"url" => "javascript:void();",
+			"img" => "import.gif",
+			"side" => "right",
+			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
+		));
+
+		$str = "";
+		$toolbar->add_button(array(
+			"name" => 'change_it',
+			"tooltip" => 'Muuda valimit',
+			"url" => "javascript:void();",
+			"img" => "edit.gif",
+			"side" => "right",
+			'onClick' => "JavaScript:if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+		));
+
+		$str .= html::hidden(array('name' => 'new_selection_name'));
+                $str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
+		$toolbar->add_cdata($str);
 		
 	
 	}	
+
+	////
+	// !Objektide lisamise tabi toolbar. Geez.
 	function add_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];                
@@ -1424,6 +1286,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$parents[$key] = $crm_db->prop("dir_".$val) ? $kliendibaas['meta']['dir_'.$val] : $kliendibaas['meta']['dir_default'];
 			}
 
+			// ah et muudkui lisame objekte?
 			$alist = array(
 				array('class_id' => CL_CRM_COMPANY),
 				array('class_id' => CL_CRM_PERSON),
@@ -1471,7 +1334,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	
 	}	
 	
-
+	////
+	// !Tegevusalade toolbar
 	function teg_toolbar(&$args)
 	{
                 if (empty($args["new"]))
@@ -1502,6 +1366,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							"parent" => "add_item",
 							'title' => 'Kaust määramata',
 							'text' => 'Lisa '.$classinf["name"],
+							'disabled' => true,
 						));
 					}
 					else
@@ -1533,36 +1398,86 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					"url" => $this->mk_my_orb('change', array('id' => $cal_id),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
-					"class" => "menuButton",
 				));
 			}
 
 		
                 };
-	}
-	
-	function keys_vals($arr)
-	{
-		$keys = array();
-		$vals = array();
-		foreach($arr as  $key => $val)
-		{
-			$keys[] = $key;
-			$vals[] = $val;
-		}
-		return array('keys' => implode(',',$keys), 'vals' => '"'.implode('","',$vals).'"');
-	}
-		
-	function alias_to_org($args)
-	{
-		$this->addalias(array(
-			'id' => $args['org'],
-			'alias' => $args['event'],
-			'no_cache' => true,
-			'reltype' => $args['reltype'],
+
+		$conns = $args["obj_inst"]->connections_from(array(
+			"class" => CL_CRM_SELECTION,
+			"sort_by" => "to.name",
 		));
-		if (!$args['nodie'])
-		die('seos tehtud');
+
+		$ops = array();
+
+		foreach($conns as $conn)
+		{
+			$ops[$conn->prop("to")] = $conn->prop("to.name");
+		};
+
+		$REQUEST_URI = aw_global_get("REQUEST_URI");
+
+		$ops[0] = '- lisa uude valimisse -';
+                $str .= html::select(array(
+                        'name' => 'add_to_selection',
+                        'options' => $ops,
+                        'selected' => $selected,
+                ));
+
+		$toolbar->add_separator(array(
+			"side" => "right",
+		));
+
+		$toolbar->add_cdata($str,"right");
+
+		$parent = $args["obj_inst"]->parent();
+
+		$toolbar->add_button(array(
+			"name" => 'go_add',
+			"tooltip" => "Lisa valitud valimisse",
+			"url" => "javascript:void();",
+			"img" => "import.gif",
+			"side" => "right",
+			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
+		));
+
+		$str = "";
+		$toolbar->add_button(array(
+			"name" => 'change_it',
+			"tooltip" => 'Muuda valimit',
+			"url" => "javascript:void();",
+			"img" => "edit.gif",
+			"side" => "right",
+'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+		));
+
+		$str .= html::hidden(array('name' => 'new_selection_name'));
+                $str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
+		$toolbar->add_cdata($str);
+	}
+
+	function process_organizations($arr)
+	{
+		unset($arr["MAX_FILE_SIZE"]);
+		unset($arr["action"]);
+		$sel = new aw_array($arr["sel"]);
+		foreach($sel->get() as $obj_id)
+		{
+			$o = new object($obj_id);
+			$o->delete();
+		};
+		foreach($arr as $key => $val)
+		{
+			if ($key != "sel" && $key != "reforb" && $val)
+			{
+				$tmp[$key] = $val;
+				// kuidas ma need vidinad kokku panen, a?
+				
+
+			};
+		};
+		return $this->mk_my_orb("change",$tmp);
 	}
 };
 ?>

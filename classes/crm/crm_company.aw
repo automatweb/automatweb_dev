@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.5 2003/12/05 12:44:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.6 2003/12/09 18:34:39 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -66,7 +66,7 @@
 @reltype WORKERS value=8 clid=CL_CRM_PERSON
 @caption Töötajad
 
-@reltype OFFER value=9 clid=CL_CRM_OFFER,CL_CRM_PERSON
+@reltype OFFER value=9 clid=CL_CRM_OFFER
 @caption Pakkumine
 
 @reltype DEAL value=10 clid=CL_CRM_DEAL
@@ -213,14 +213,14 @@ class crm_company extends class_base
 					$cldat["file"] = $cldat["alias_class"];
 				}
 			}
-			
+		
+			// I need to filder the connections based on whether they write to calendar
+			// or not.
 			
 			$t->define_data(array(
 				'name' => html::href(array('caption' => $item->name(),'url' => $this->mk_my_orb('change', array('id' => $item->id()), $cldat["file"]))),
 				// oh geez. so that is how it's done
 				'type' => $cldat["name"],
-				//'type' => $reltype_caption[$val['reltype']],
-				//'event_start' => date('Y-m-d H:i',$pl['start']),
 				'event_start' => date('Y-m-d H:i',$item->prop("start1")),
 				'event_end' => date('Y-m-d H:i',$item->prop("duration")),
 				'moreinfo' => $doc['moreinfo'],
@@ -253,6 +253,8 @@ class crm_company extends class_base
 			"key" => "user_calendar",
 		));
 
+		// hm, I dunno but there seems to be a conflict here. Because you set the folders
+		// through the crm_db class, which means that they can be different for each user
 		if (empty($crm_db_id))
 		{
 			$parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj_inst']->parent();
@@ -273,14 +275,6 @@ class crm_company extends class_base
 			$parents[RELTYPE_CALL] = $parents[RELTYPE_OFFER] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $user_calendar->prop('event_folder');
 		}
 
-
-		$alist = array(
-			array('clid' => CL_CRM_PERSON, 'reltype' => RELTYPE_WORKERS),
-			array('clid' => CL_CRM_SECTOR, 'reltype' => RELTYPE_TEGEVUSALAD),
-			array('clid' => CL_CRM_ADDRESS, 'reltype' => RELTYPE_ADDRESS),
-			array('clid' => CL_CRM_CORPFORM, 'reltype' => RELTYPE_ETTEVOTLUSVORM),
-		);
-		
 		$toolbar->add_menu_button(array(
 			"name" => "main_menu",
 			"tooltip" => "Uus",
@@ -289,47 +283,40 @@ class crm_company extends class_base
 		$toolbar->add_sub_menu(array(
 			"parent" => "main_menu",
 			"name" => "calendar_sub",
-			"text" => "Lisa kalendrisse..",
+			"text" => $this->cfg["classes"][CL_PLANNER]["name"],
 		));
 		
 		$toolbar->add_sub_menu(array(
 			"parent" => "main_menu",
 			"name" => "firma_sub",
-			"text" => "Lisa organisatsioonile..",
+			"text" => $this->cfg["classes"][$this->clid]["name"],
 		));
 
-
-		if (is_array($alist))
+		$alist = array(RELTYPE_WORKERS,RELTYPE_TEGEVUSALAD,RELTYPE_ADDRESS,RELTYPE_ETTEVOTLUSVORM);
+		foreach($alist as $key => $val)
 		{
-			foreach($alist as $key => $val)
+			$clids = $this->relinfo[$val]["clid"];
+			foreach($clids as $clid)
 			{
-				$classinf = $this->cfg["classes"][$val["clid"]];
-				if (!$parents[$val['reltype']])
-				{
-					$toolbar->add_menu_item(array(
-						"parent" => "calendar_sub",
-						'text' => 'Lisa '.$classinf["name"],
-						"disabled" => true,
-					));
-				}
-				else
-				{
-					$toolbar->add_menu_item(array(
-						"parent" => "calendar_sub",
-						'link' => $this->mk_my_orb('new',array(
-							'alias_to' => $args['obj_inst']->id(),
-							'reltype' => $val['reltype'],
-							'class' => 'planner',
-							'id' => $cal_id,
-							'group' => 'add_event',
-							'action' => 'change',
-							'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
-							'parent' => $parents[$val['reltype']],
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						)),
-						'text' => 'Lisa '.$classinf["name"],
-					));
-				}
+				$classinf = $this->cfg["classes"][$clid];
+
+				$url = $this->mk_my_orb('new',array(
+					'alias_to' => $args['obj_inst']->id(),
+					'reltype' => $val,
+					'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
+					'parent' => $parents[$val],
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				),$clid);
+
+				$has_parent = isset($parents[$val]) && $parents[$val];
+				$disabled = $has_parent ? false : true;
+				$toolbar->add_menu_item(array(
+					"parent" => "firma_sub",
+					"text" => 'Lisa '.$classinf["name"],
+					"link" => $has_parent ? $url : "",
+					"title" => $has_parent ? "" : "Kataloog määramata",
+					"disabled" => $has_parent ? false : true,
+				));
 			};
 		};
 
@@ -338,62 +325,51 @@ class crm_company extends class_base
 		// basically, I need to create a list of relation types that are of any
 		// interest to me and then get a list of all classes for those
 
-		$action = array("OFFER","DEAL","KOHTUMINE","CALL");
+		$action = array(RELTYPE_OFFER,RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL);
 
-		/*
-		$action = array(
-			array("reltype" => RELTYPE_OFFER,"clid" => CL_CRM_OFFER),
-			array("reltype" => RELTYPE_DEAL,"clid" => CL_CRM_DEAL),
-			array("reltype" => RELTYPE_KOHTUMINE,"clid" => CL_CRM_MEETING),
-			array("reltype" => RELTYPE_CALL,"clid" => CL_CRM_CALL),
-		);
-		*/
-
-		if (is_array($action))
+		foreach($action as $key => $val)
 		{
-			foreach($action as $key => $val)
+			$clids = $this->relinfo[$val]["clid"];
+			$reltype = $this->relinfo[$val]["value"];
+			foreach($clids as $clid)
 			{
-				$clids = $this->relinfo[$val["clid"]];
-				if (!is_array($clids))
-				{
-					$clids = array($clids);
-				};
-				$reltype = $this->relinfo[$val]["value"];
-				if (sizeof($clids) > 0 && !empty($clids[0]))
-				{
-					foreach($clids as $clid)
-					{
-						$classinf = $this->cfg["classes"][constant($clid)];
-						if (!$parents[$reltype])
-						{
-							$toolbar->add_menu_item(array(
-								'parent' => "firma_sub",
-								'title' => 'Kalender või kalendri sündmuste kataloog määramata',
-								'text' => 'Lisa '.$classinf["name"],
-								"disabled" => true,
-							));
-						}
-						else
-						{
-							$toolbar->add_menu_item(array(
-								"parent" => "firma_sub",
-								'link' => $this->mk_my_orb('new',array(
-									'alias_to_org' => $args['obj_inst']->id(),
-									'reltype_org' => $reltype,
-									'class' => 'planner',
-									'id' => $cal_id,
-									'group' => 'add_event',
-									'clid' => constant($clid),
-									'action' => 'change',
-									'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
-									'parent' => $parents[$reltype],
-									'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-								)),
-								'text' => 'Lisa '.$classinf["name"],
-							));
-						}
-					};
-				};
+				$classinf = $this->cfg["classes"][$clid];
+				$url = $this->mk_my_orb('new',array(
+					// alright then. so what do those things to? 
+					// they add a relation between the object created through
+					// the planner and this object
+
+
+					// can I do that with messages instead? and if I can, how
+					// on earth am I going to do that?
+
+					// I'm adding an event object to a calendar, how do I know
+					// that I will have to attach it to an organization as well?
+					
+					// Maybe I should attach it directly to the organization and
+					// then send a message somehow that it should be put in my
+					// calendar as well .. hm that actually does sound
+					// like a solution.
+					'alias_to_org' => $args['obj_inst']->id(),
+					'reltype_org' => $reltype,
+					'class' => 'planner',
+					'id' => $cal_id,
+					'group' => 'add_event',
+					'clid' => $clid,
+					'action' => 'change',
+					'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
+					'parent' => $parents[$reltype],
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				));
+				$has_parent = isset($parents[$val]) && $parents[$val];
+				$disabled = $has_parent ? false : true;
+				$toolbar->add_menu_item(array(
+					"parent" => "calendar_sub",
+					"title" => $has_parent ? "" : "Kalender või kalendri sündmuste kataloog määramata",
+					"text" => "Lisa ".$classinf["name"],
+					"disabled" => $has_parent ? false : true,
+					"link" => $has_parent ? $url : "",
+				));
 			};
 		};
 			

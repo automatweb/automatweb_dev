@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.3 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.4 2003/12/09 18:34:39 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -32,23 +32,6 @@ class crm_offer extends class_base
 			"clid" => CL_CRM_OFFER
 		));
 	}
-
-	
-	
-	function __change($args)
-	{
-		$args['strs'] = array(
-			'type' => 'PAKKUMINE',
-			'typeStr' => 'Pakkumine',
-			'typestr' => 'pakkumine',
-			'typestrs' => 'pakkumise',
-		);
-		
-		$kohtumine = get_instance('crm/crm_meeting');
-		$kohtumine->_change($args);
-	}
-
-	
 
 }
 ?>
