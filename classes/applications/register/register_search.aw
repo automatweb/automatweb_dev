@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.20 2005/01/06 07:45:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.21 2005/01/24 14:54:09 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -354,7 +354,13 @@ class register_search extends class_base
 		{
 			$request["ft_page"] = $GLOBALS["ft_page"];
 		}
+
+		enter_function("register_search::show::form");
+
+		enter_function("register_search::show::form::gsp");
 		$props =  $this->get_sform_properties($ob, $request);
+		exit_function("register_search::show::form::gsp");
+
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		foreach($props as $pn => $pd)
@@ -366,11 +372,13 @@ class register_search extends class_base
 		$html = $htmlc->get_result(array(
 			"raw_output" => 1
 		));
+		exit_function("register_search::show::form");
 
 		classload("vcl/table");
 		$t = new aw_table(array(
 			"layout" => "generic"
 		));
+		enter_function("register_search::show::dsrt");
 		$this->do_search_res_tbl(array(
 			"prop" => array(
 				"vcl_inst" => &$t
@@ -378,6 +386,9 @@ class register_search extends class_base
 			"obj_inst" => &$ob,
 			"request" => $request,
 		));
+		exit_function("register_search::show::dsrt");
+
+		enter_function("register_search::show::final");
 		if (count($t->data) < 1 && $request["search_butt"] != "" && $ob->prop("notfound_text") != "")
 		{
 			$table = nl2br(sprintf($ob->prop("notfound_text"), $request["rsf"][$this->fts_name]));
@@ -408,6 +419,7 @@ class register_search extends class_base
 			"section" => aw_global_get("section"),
 			"table" => $table
 		));
+		exit_function("register_search::show::final");
 		return $this->parse();
 	}
 
@@ -593,6 +605,13 @@ class register_search extends class_base
 
 	function get_search_results($o, $request)
 	{
+		// return immediately if nothing is to be done
+		if (empty($request["search_butt"]) && !$o->prop("show_all_right_away"))
+		{
+			return array(new object_list(), new object_list());
+		}
+		
+		enter_function("register_search::show::dsrt::gsr::init");
 		$reg = obj($o->prop("register"));
 		$reg_i = $reg->instance();
 
@@ -610,6 +629,9 @@ class register_search extends class_base
 			))
 			
 		);
+		exit_function("register_search::show::dsrt::gsr::init");
+
+		enter_function("register_search::show::dsrt::gsr::loop");
 		foreach($props as $pn => $pd)
 		{
 			if ($request["rsf"][$pn] != "")
@@ -661,7 +683,9 @@ class register_search extends class_base
 				"conditions" => $tmp
 			));
 		}
+		exit_function("register_search::show::dsrt::gsr::loop");
 
+		enter_function("register_search::show::dsrt::gsr::finit");
 		$tdata = $o->meta("tdata");
 
 		if ($GLOBALS["sortby"] != "")
@@ -679,7 +703,8 @@ class register_search extends class_base
 		{
 			$filter["sort_by"] = "objects.name ASC ";
 		}
-		if (count($filter) > 3 || $o->prop("show_all_right_away") == 1)
+
+		if (!empty($request["search_butt"]) || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
 			if (($ppg = $o->prop("per_page")))
@@ -706,6 +731,7 @@ class register_search extends class_base
 			}
 		}
 
+		exit_function("register_search::show::dsrt::gsr::finit");
 		return array($ret, $ol_cnt);
 	}
 
@@ -719,7 +745,9 @@ class register_search extends class_base
 		$can_change = false;
 		$can_delete = false;
 
+		enter_function("register_search::show::dsrt::gsr");
 		list($ol, $ol_cnt) = $this->get_search_results($arr["obj_inst"], $arr["request"]);
+		exit_function("register_search::show::dsrt::gsr");
 
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
@@ -811,6 +839,7 @@ class register_search extends class_base
 
 	function mod_chooser_prop(&$props, $pn, $reg )
 	{
+		enter_function("register_search::show::form::mod_chooser_p");
 		// since storage can't do this yet, we gots to do sql here :(
 		$p =& $props[$pn];
 		$opts = array("" => "");
@@ -820,16 +849,29 @@ class register_search extends class_base
 			$reg_i = $reg->instance();
 			$flds = $reg_i->_get_reg_folders($reg);
 
-			$this->db_query("SELECT distinct($p[field]) as val FROM $p[table] 
-				LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")");
-			while ($row = $this->db_next())
+			// this is an expensive query, so cache the results
+			$c = get_instance("cache");
+			$cfn = "register_search_mod_chooser_p_".$pn;
+
+			if (!($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
 			{
-				$opts[$row["val"]] = $row["val"];
+				$this->db_query("SELECT distinct($p[field]) as val FROM $p[table] 
+					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")");
+				while ($row = $this->db_next())
+				{
+					$opts[$row["val"]] = $row["val"];
+				}
+				$c->file_set($cfn, aw_serialize($opts));
+			}
+			else
+			{
+				$opts = aw_unserialize($res);
 			}
 		}
 
 		$p["type"] = "select";
 		$p["options"] = $opts;
+		exit_function("register_search::show::form::mod_chooser_p");
 	}
 
 	/**
