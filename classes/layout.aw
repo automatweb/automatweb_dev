@@ -54,11 +54,13 @@
 @property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 group=general
 @caption Millistes kataloogides n&auml;idatakse
 
-@reltype CELLSTYLE_FOLDER value=1 clid=CL_PSEUDO
+@reltype CELLSTYLE_FOLDER value=1 clid=CL_MENU
 @caption celli stiilide kataloog
 
-@reltype SHOW_FOLDER value=2 clid=CL_PSEUDO
+@reltype SHOW_FOLDER value=2 clid=CL_MENU
 @caption näita selles kataloogis
+
+@classinfo no_status=1
 			
 
 */

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.64 2003/11/13 11:21:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.65 2003/11/20 13:48:35 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,10 +59,10 @@
 	@caption Avaldamise kuupäev
 
 	@groupinfo settings caption=Seadistused
-    @groupinfo dates caption=Ajad
+    	@groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
-	@classinfo trans_id=TR_FILE
+	@classinfo no_status=1
 
 */
 
@@ -76,7 +76,6 @@ class file extends class_base
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",
-			"trid" => TR_FILE,
 		));
 		lc_load("definition");
 		$this->lc_load("file","lc_file");
@@ -221,7 +220,7 @@ class file extends class_base
 			// so what if we have it twice?
 			$this->dequote(&$fi["content"]);
 			$fi["content"] .= "</body>";
-			if (strpos(strtolower($fi["content"]),"<body>"))
+			if (strpos(strtolower($fi["content"]),"<body"))
 			{
 				preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
 				// return only the body of the file

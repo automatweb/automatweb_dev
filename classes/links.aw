@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.43 2003/11/13 11:21:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.44 2003/11/20 13:48:11 duke Exp $
 
 /*
 
@@ -69,7 +69,7 @@
 @property link_image_active_until type=date_select field=meta table=objects method=serialize group=Pilt
 @caption Pilt aktiivne kuni
 
-@classinfo trans_id=TR_EXTLINK
+@classinfo no_status=1
 
 */
 
@@ -80,7 +80,6 @@ class links extends class_base
 		$this->init(array(
 			"tpldir" => "automatweb/extlinks",
 			"clid" => CL_EXTLINK,
-			"trid" => TR_EXTLINK
 		));
 
 		$this->lc_load("extlinks","lc_extlinks");
