@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.47 2003/11/05 13:25:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.48 2003/11/05 13:44:41 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -149,6 +149,8 @@
 
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
+
+@property nobreaks type=hidden table=documents
 
 @property sbt type=submit value=Salvesta store=no 
 

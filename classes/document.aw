@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.216 2003/11/05 13:25:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.217 2003/11/05 13:44:41 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -603,17 +603,6 @@ class document extends aw_template
 			$doc["content"] = str_replace("#viimati_muudetud num=\"".$matches[1]."\"#",$this->get_last_doc_list($matches[1]),$doc["content"]);
 		}
 
-		if (strpos($doc["content"], "#chat#") !== false)
-		{
-			$doc["content"] = str_replace("#chat#", "<applet codebase=\"http://aw.struktuur.ee/risto/arco/\" code=Klient.class height=37 width=77></applet>",$doc["content"]);
-			if(aw_global_get("uid") != "")
-			{
-				$socket = fsockopen("aw.struktuur.ee", 10020,$errno,$errstr,10);
-				fputs($socket,"NIMI ".aw_global_get("uid")."\n");
-				fclose($socket);
-			}
-		}
-
 		if (strpos($doc['content'], "#login#") !== false)
 		{
 			$li = get_instance("aw_template");
@@ -906,21 +895,16 @@ class document extends aw_template
 		}
 
 		$_date = $doc["modified"] > 1 ? $doc["modified"] : $doc["created"];
-		$date_est = date("d", $_date).". ".get_et_month(date("m", $_date))." ".date("Y", $_date);
-			
-		if (!aw_ini_get("document.show_real_location"))
-		{
-			$r_docid = $doc["real_oid"];
-		}
-		else
-		{
-			$r_docid = $docid;
-		}
+		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
+
+		$r_docid = $docid;
+
 		if (!headers_sent())
 		{
 			header("X-AW-Last-Modified: ".$_date);
 			header("X-AW-Document-Title: ".($pagetitle != "" ? $pagetitle : strip_tags($title)));
 		}
+
 		$this->vars(array(
 			"date_est" => $date_est,
 			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
@@ -1064,25 +1048,46 @@ class document extends aw_template
 			$retval = array();
 			while(list($k,$v) = each($keywords)) 
 			{
-				// fields may contain HTML and we don't want that
 				$v = trim(strip_tags($v));
-				if (is_array($section) && (sizeof($section) > 0))
+
+/*				if (!is_array($section))
 				{
-					$prnt = "parent IN (".join(",",$section).")";
+					$ot = new object_tree(array(
+						"parent" => $section,
+						"class_id" => array(CL_MENU,CL_DOCUMENT),
+						"status" => 2
+					));
+					$ol = $ot->to_list();
+					for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
+					{
+						if (strpos($o->name(), $v) !== false)
+						{
+							$retval[$v] = $o->id();
+							break;
+						}
+					}
 				}
 				else
-				{
-					$prnt = "parent = " . (int)$section;
-				}
-				$q = "SELECT oid FROM objects
-							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_MENU;
-				$retval[$v] = $this->db_fetch_field($q,"oid");
-				if (!$retval[$v])
-				{
+				{*/
+					// fields may contain HTML and we don't want that
+					if (is_array($section) && (sizeof($section) > 0))
+					{
+						$prnt = "parent IN (".join(",",$section).")";
+					}
+					else
+					{
+						$prnt = "parent = " . (int)$section;
+					}
 					$q = "SELECT oid FROM objects
-								WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_DOCUMENT;
+								WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_MENU;
 					$retval[$v] = $this->db_fetch_field($q,"oid");
-				}
+					if (!$retval[$v])
+					{
+						$q = "SELECT oid FROM objects
+									WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_DOCUMENT;
+						$retval[$v] = $this->db_fetch_field($q,"oid");
+					}
+//				}
 			}; // eow
 			return $retval;
 		}; // eoi

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.109 2003/11/05 13:23:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.110 2003/11/05 13:44:44 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -165,12 +165,6 @@ if (!defined("DEFS"))
 	function get_lc_month($id)
 	{
 		$mnames = explode("|",LC_MONTH);
-		return $mnames[(int)$id];
-	}
-
-	function get_et_month($id)
-	{
-		$mnames = explode("|","blah|jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
 		return $mnames[(int)$id];
 	}
 
