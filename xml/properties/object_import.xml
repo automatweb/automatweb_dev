@@ -55,7 +55,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Esimene rida on pealkrijadega</caption>
+            <caption>Esimene rida on pealkirjadega</caption>
       </property>
       <property>
             <name>do_import</name>

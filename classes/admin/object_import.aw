@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.1 2004/05/07 10:48:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.2 2004/05/07 10:54:01 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -26,7 +26,7 @@
 @caption Uploaditud fail
 
 @property file_has_header type=checkbox ch_value=1 
-@caption Esimene rida on pealkrijadega
+@caption Esimene rida on pealkirjadega
 
 @property do_import type=checkbox ch_value=1 
 @caption Teosta import
