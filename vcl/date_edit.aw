@@ -9,9 +9,17 @@ class date_edit
 
 	// kui aega ette ei anta, siis kuvame selleks kuupäeva
 	// ööpäev hiljem dokumendi avamisest. See on üsna suvaline muidugi
-	function date_edit($varname,$timestamp = "+24h") 
+	function date_edit($varname = "",$timestamp = "+24h") 
 	{
 		$this->init($varname,$timestamp);
+		// default to all shown
+		$this->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+			"hour" => "",
+			"minute" => "",
+		));
 	}
 
 	function set($field,$value)
@@ -126,7 +134,7 @@ class date_edit
 					);
 					while(list($mk,$mv) = each($mnames)) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month),$mv);
+						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp > 0),$mv);
 					};
 					$retval .= "</select>\n";
 					break;
@@ -143,7 +151,7 @@ class date_edit
 					}
 					for ($i = 1; $i <= 31; $i++) 
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $day),$i);
+						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $day && $this->timestamp > 0),$i);
 					};
 					$retval .= "</select>\n";
 					break;
@@ -160,7 +168,7 @@ class date_edit
 					}
 					for ($i = 0; $i <= 23; $i++) 
 					{
-						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $hour),$i);
+						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $hour && $this->timestamp > 0),$i);
 					};
 					$retval .= "</select> :\n";
 					break;
@@ -178,7 +186,7 @@ class date_edit
 					$step = ($this->minute_step) ? $this->minute_step : 1;
 					for ($i = 0; $i <= 59; $i = $i + $step) 
 					{
-						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $minute),$i);
+						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp > 0),$i);
 					};
 					$retval .= "</select>\n";
 					break;
