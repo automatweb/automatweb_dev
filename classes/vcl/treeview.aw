@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.22 2004/02/26 14:10:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.23 2004/03/01 14:43:42 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -78,14 +78,10 @@ class treeview extends class_base
 		$this->urltemplate = isset($args["urltemplate"]) ? $args["urltemplate"] : "";
 		$this->config = $args["config"];
 
-		$rootobj = $this->get_object($root);
-		if (!$rootobj)	
+		$rootobj = obj($root);
+		if (isset($rootobj->meta("treetype")))
 		{
-			return "invalid root object";
-		};
-		if (isset($obj["meta"]["treetype"]))
-		{
-			$type = $obj["meta"]["treetype"];
+			$type = $rootobj->meta("treetype");
 		}
 		else
 		{
@@ -103,13 +99,13 @@ class treeview extends class_base
 		// if the caller specified clid list, then we list all of those objects,
 		// if not, then only menus
 		
-                // listib koik menyyd ja paigutab need arraysse	
+		// listib koik menyyd ja paigutab need arraysse	
 
 		$this->ic = get_instance("icons");
 
 
-                // objektipuu
-                $this->rec_tree($root);
+		// objektipuu
+		$this->rec_tree($root);
 
 		$tr = $this->generate_tree($root);
 
@@ -119,10 +115,10 @@ class treeview extends class_base
 			"root" => $root,
 			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
 			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
-			"rootname" => isset($obj["meta"]["rootcaption"]) ? $obj["meta"]["rootcaption"] : $rootobj["name"],
+			"rootname" => $rootobj->meta("rootcaption"),
 			"rooturl" => $this->do_item_link($rootobj),
-			"icon_root" => isset($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
-                ));
+			"icon_root" => isset($rootobj->meta("icon_root"))? $this->mk_my_orb("show",array("id" => $rootobj->meta("icon_root")),"icons") : "/automatweb/images/aw_ikoon.gif",
+		));
 
 		$retval = $this->parse();
 		return $retval;
@@ -143,10 +139,10 @@ class treeview extends class_base
 	function show($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 		return $this->generate(array(
 			"urltemplate" => $args["urltemplate"],
-			"config" => $obj["meta"],
+			"config" => $obj->meta(),
 		));
 	}
 	
