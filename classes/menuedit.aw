@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.225 2003/02/06 08:15:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.226 2003/02/06 09:46:45 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2351,7 +2351,9 @@ class menuedit extends aw_template
 			{
 				$this->mpr[$parent][] = array(
 					"name" => $val["description"],
+					"comment" => $val["data"]["comment"],
 					"type" => MN_CONTENT,
+					"link" => $this->mk_my_orb("show",array("id" => $val["id"]),"contents"),
 				);
 			};
 		};
@@ -2995,13 +2997,6 @@ class menuedit extends aw_template
 		$this->skip = false;
 		if ($row["mtype"] == MN_PMETHOD)
 		{
-				global $DBX;
-				if ($DBX)
-				{
-					print "<pre>";
-					print_r($row);
-					print "</pre>";
-				};
 			// I should retrieve orb definitions for the requested class
 			// to figure out which arguments it needs and then provide
 			// those
