@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.8 2004/02/17 15:09:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.9 2004/05/06 12:35:47 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -18,7 +18,7 @@
 	@property orgtoolbar type=toolbar store=no no_caption=1 group=firmad,f2
 	@caption Org. toolbar
 
-	@property search_form1 type=form sclass=crm_org_search sform=crm_search
+	@property search_form1 type=form sclass=crm/crm_org_search sform=crm_search
 	@caption Compound search
 
 	@default group=firmad
