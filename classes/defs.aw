@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.48 2002/08/16 17:59:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.49 2002/08/16 22:28:50 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -618,6 +618,12 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
+	/// I think we should just use the PHP superglobal $GLOBALS for storing
+	// those variables instead of messing with our own objects. Empty it
+	// first and then put variables we need into it.
+
+	// oh, dammit. Shouldn't the aw_globals also be initalized and accesed
+	// through the aw_dir/init.aw - ?
 	function &_aw_global_init()
 	{
 		global $aw_globals_instance;
