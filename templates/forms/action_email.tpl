@@ -43,6 +43,15 @@
 <td class="celltext">Lingi tekst (kui see on t&auml;idetud, siis saadetakse HTML mail):</td>
 <td class="celltext"><input type="text" name="link_caption" value="{VAR:link_caption}"></td>
 </tr>
+ <tr class="aste01">
+<td class="celltext">Saada alati tekstip&otilde;hine e-mail:</td>
+<td class="celltext"><input type="checkbox" name="text_only" value="1" {VAR:text_only}></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">E-maili "from" aadress v&otilde;ta elemendist:</td>
+<td class="celltext"><select name="from_email_el" class="formselect">{VAR:from_email_el}</select></td>
+</tr>
+
 <tr class="aste01">
 <td class="celltext">Lisa mailile PDF formaadis sisu:</td>
 <td class="celltext"><input type="checkbox" name="add_pdf" value="1" {VAR:add_pdf}></td>
