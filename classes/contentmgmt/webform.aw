@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.47 2005/01/21 13:04:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.48 2005/01/24 11:27:59 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1293,21 +1293,23 @@ class webform extends class_base
 			if(is_object($form_conf))
 			{
 				$event = $form_conf->get_first_obj_by_reltype("RELTYPE_EVENT");
-				
-				$form_conf_i = $form_conf->instance();
-				
-				$form_conf_i->read_template("show.tpl");
-		
-				$form_conf_i->_insert_event_inf($event, $form_conf);
-		
-				if ($form_conf->prop("max_pers") && $form_conf_i->get_count_for_event($event) > $form_conf->prop("max_pers"))
+				if ($event)
 				{
-					return $form_conf_i->parse();
-				}
-				$ef_id = $form_conf->id();
-				if($form_conf->prop("show_content") == 1)
-				{
-					$this->_insert_event_inf($event, $form_conf);
+					$form_conf_i = $form_conf->instance();
+				
+					$form_conf_i->read_template("show.tpl");
+		
+					$form_conf_i->_insert_event_inf($event, $form_conf);
+		
+					if ($form_conf->prop("max_pers") && $form_conf_i->get_count_for_event($event) > $form_conf->prop("max_pers"))
+					{
+						return $form_conf_i->parse();
+					}
+					$ef_id = $form_conf->id();
+					if($form_conf->prop("show_content") == 1)
+					{
+						$this->_insert_event_inf($event, $form_conf);
+					}
 				}
 			}
 		}
