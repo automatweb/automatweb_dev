@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.36 2001/08/23 17:51:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.37 2001/09/06 12:13:48 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -191,7 +191,7 @@ if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
 };
 if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 {
-	$pi .= $QUERY_STRING;
+	$pi .= "?".$QUERY_STRING;
 };
 
 if ($pi) 
@@ -558,6 +558,7 @@ define("PRG_LOGIN_MENU",45); // vastavalt grupile login menüü määramine
 define("PRG_ML_MANAGER",47);
 define("PRG_CONFIG_ERRORS",48);	// sisselogimist vajavate veateadete konfimine
 define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
+define("PRG_SYSCONF",50); // konfiguratsioonieditor
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -610,6 +611,7 @@ PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=c
 PRG_CSS_EDITOR		=> array("name" => "Kasutaja CSS editor",				"url" => "orb.aw?class=css&action=list"),
 PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor",				"url" => "orb.aw?class=css&action=syslist"),
 PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
+PRG_SYSCONF				=> array("name" => "Automatweb config", "url" => "orb.aw?class=sysconf&action=edit"),
 PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors")
 );
 
