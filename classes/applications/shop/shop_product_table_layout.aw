@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.2 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.3 2004/05/19 16:07:11 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -61,6 +61,22 @@ class shop_product_table_layout extends class_base
 		$this->oc = $oc;
 		$this->cnt = 0;
 		$this->read_template("table.tpl");
+
+		$soce = new aw_array(aw_global_get("soc_err"));
+		foreach($soce->get() as $prid => $errmsg)
+		{
+			$this->vars(array(
+				"msg" => $errmsg
+			));
+			$err .= $this->parse("ERROR");
+		}
+
+		aw_session_del("soc_err");
+
+		$this->vars(array(
+			"ERROR" => $err
+		));
+
 		$this->r_template = "ROW";
 		$this->r_cnt = 1;
 		if ($this->is_template("ROW1"))
@@ -115,7 +131,7 @@ class shop_product_table_layout extends class_base
 			"ROW" => $this->ft_str,
 			"ROW1" => $this->ft_str,
 			"ROW2" => "",
-			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $this->oc->id()), "shop_order_cart")
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart")
 		));
 		return $this->parse();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.3 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.4 2004/05/19 16:07:11 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -63,6 +63,20 @@ class shop_order_cart extends class_base
 	{
 		extract($arr);
 		$this->read_template("show.tpl");
+
+		$soce = new aw_array(aw_global_get("soc_err"));
+		foreach($soce->get() as $prid => $errmsg)
+		{
+			$this->vars(array(
+				"msg" => $errmsg
+			));
+			$err .= $this->parse("ERROR");
+		}
+		$this->vars(array(
+			"ERROR" => $err
+		));
+
+		aw_session_del("soc_err");
 
 		$oc = obj($oc);
 
@@ -128,6 +142,52 @@ class shop_order_cart extends class_base
 		// now get item layout from cart
 		$layout = obj($cart_o->prop("prod_layout"));
 
+		$order_ok = true;
+		$awa = new aw_array($arr["add_to_cart"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			$i_o = obj($iid);
+			$i_i = $i_o->instance();
+
+			if ($arr["update"] == 1)
+			{
+				$cc = $quant;
+			}
+			else
+			{
+				$cc = $_SESSION["cart"]["items"][$iid] + $quant;
+			}
+
+			$mon = $i_i->get_must_order_num($i_o);
+			if ($mon)
+			{
+				if (($cc % $mon) != 0)
+				{
+					$soce = aw_global_get("soc_err");
+					if (!is_array($soce))
+					{
+						$soce = array();
+					}
+					$soce[$iid] = $i_o->name()." peab tellima ".$mon." kaupa, hetkel kokku $cc!";
+					aw_session_set("soc_err", $soce);
+					$order_ok = false;
+				}
+			}
+		}
+
+		if (!$order_ok)
+		{
+			if (!$arr["return_url"])
+			{
+				header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
+			}
+			else
+			{
+				header("Location: ".$arr["return_url"]);
+			}
+			die();
+		}
+
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -177,6 +237,21 @@ class shop_order_cart extends class_base
 	function add_item($iid, $quant)
 	{
 		$_SESSION["cart"]["items"][$iid] += $quant;
+	}
+
+	function get_cart_value()
+	{
+		$total = 0;
+
+		$awa = new aw_array($_SESSION["cart"]["items"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			$i = obj($iid);
+			$inst = $i->instance();
+			$total += ($quant * $inst->get_price($i));
+		}
+
+		return $total;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.3 2004/05/13 14:47:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.4 2004/05/19 16:07:11 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -245,6 +245,16 @@ class shop_product_packaging extends class_base
 			"prod" => $prod,
 			"oc_obj" => $soc_o
 		));
+	}
+
+	function get_must_order_num($o)
+	{
+		$prod = reset($o->connections_to(array(
+			"from.class_id" => CL_SHOP_PRODUCT,
+		)));
+		$prod = $prod->from();
+		$prod_i = $prod->instance();
+		return $prod_i->get_must_order_num($prod);
 	}
 }
 ?>
