@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.4 2002/12/16 18:11:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.5 2002/12/19 10:40:25 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -80,6 +80,7 @@ class form_actions extends form_base
 						$data["l_section"] = $l_section;
 						$data["no_mail_on_change"] = $no_mail_on_change;
 						$data["link_to_change"] = $link_to_change;
+						$data["link_caption"] = $link_caption;
 						$la = get_instance("languages");
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -258,7 +259,8 @@ class form_actions extends form_base
 			"T_LANG" => $lt,
 			"LANG" => $lc,
 			"no_mail_on_change" => checked($data["no_mail_on_change"]),
-            "link_to_change" => checked($data["link_to_change"])
+            "link_to_change" => checked($data["link_to_change"]),
+            "link_caption" => $data["link_caption"]
 		));
 
 		return $this->parse();
@@ -561,11 +563,28 @@ class form_actions extends form_base
 				$app = LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO;
 				foreach($jfes as $fid => $eid)
 				{
-					$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+					$app .= $this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+				}
+				
+				if ($data['link_caption'] != '')
+				{
+					$app_html .= html::href(array(
+						'url' => $this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form"),
+						'caption' => LC_FORM_BASE_USER.aw_global_get("uid").LC_FORM_BASE_INFO
+					)).'<br>';
 				}
 			}
 		}
 		$f = get_instance("formgen/form");
+		if ($data['op_id'] && $data['link_caption'] != '')
+		{
+			$msg_html = $f->show(array(
+				"id" => $form->get_id(),
+				"entry_id" => $entry_id,
+				"op_id" => $data['op_id']
+			));
+		}
+
 		$f->load($form->get_id());
 		$f->load_entry($entry_id);
 		$msg = $f->show_text();
@@ -575,18 +594,52 @@ class form_actions extends form_base
 			$data = array("email" => $data);
 		}
 
+		if ($data['link_to_change'])
+		{
+			$link_url ="\n".$this->mk_my_orb("show", array(
+				"id" => $form->get_id(), 
+				"entry_id" => $entry_id, 
+				"section" => $data["l_section"]
+			), "form", false, false);
+		}
+		else
 		if ($data["op_id"])
 		{
-			$app.="\n".$this->mk_my_orb(($data["link_to_change"] ? "show" : "show_entry"), array(
+			$link_url ="\n".$this->mk_my_orb("show_entry", array(
 				"id" => $form->get_id(), 
 				"entry_id" => $entry_id, 
 				"op_id" => $data["op_id"],
 				"section" => $data["l_section"]
-			), "form");
+			), "form", false, false);
 		}
+		$link_url = str_replace('/automatweb','',$link_url);
+
 		$subj = $data["subj"][aw_global_get("lang_id")] != "" ? $data["subj"][aw_global_get("lang_id")] :LC_FORM_BASE_ORDER_FROM_AW;
 
-		mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+		if ($data['link_caption'] != '')
+		{
+			$awm = get_instance("aw_mail");
+			$awm->create_message(array(
+				"froma" => "automatweb@automatweb.com",
+				"fromn" => "AutomatWeb",
+				"subject" => $subj,
+				"to" => $data['email'],
+				"body" => $msg.$app.$link_url,
+			));
+			
+			$app = $msg_html.'<br>'.$app_html.'<br>'.html::href(array(
+				'url' => $link_url,
+				'caption' => $data['link_caption']
+			));
+
+			$awm->htmlbodyattach(array("data" => $app));
+			$awm->gen_mail();
+		}
+		else
+		{
+			$app .= $link_url;
+			mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+		}
 	}
 }
 ?>

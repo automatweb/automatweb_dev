@@ -40,6 +40,10 @@
 <td class="celltext"><input type="checkbox" name="link_to_change" value="1" {VAR:link_to_change}></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Lingi tekst (kui see on t&auml;idetud, siis saadetakse HTML mail):</td>
+<td class="celltext"><input type="text" name="link_caption" value="{VAR:link_caption}"></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input type='submit' class='formbutton' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
