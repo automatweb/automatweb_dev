@@ -152,6 +152,7 @@
 					<optional name="title"/>
 					<optional name="xtitle"/>
 					<optional name="ytitle"/>
+					<optional name="typestr"/>
 				</arguments>
 			</function>
 		</action>

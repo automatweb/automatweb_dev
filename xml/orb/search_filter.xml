@@ -48,12 +48,29 @@
 				<arguments>
 					<required name="id"/>
 					<optional name="get_csv_file"/>
+					<optional name="no_menu"/>
 				</arguments>
 			</function>
 		</action>
 
 		<action name="output">
 			<function name="orb_output">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="output_use">
+			<function name="orb_output_use">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_output_use">
+			<function name="orb_submit_output_use">
 				<arguments>
 					<required name="id"/>
 				</arguments>

@@ -14,6 +14,7 @@
 				<arguments>
 					<required name="id"/>
 					<optional name="section"/>
+					<optional name="version"/>
 				</arguments>
 			</function>
 		</action>
@@ -45,6 +46,12 @@
 			<function name="save">
 				<arguments>
 					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="save_form">
+			<function name="save_form">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
@@ -131,6 +138,12 @@
 				<arguments>
 					<required name="docid"/>
 					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="submit_archive">
+			<function name="submit_archive">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

@@ -20,7 +20,7 @@
 		<action name="edit">
 			<function name="orb_edit">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -28,7 +28,7 @@
 		<action name="submit_edit">
 			<function name="orb_submit_edit">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>

@@ -45,6 +45,13 @@
 			</function>
 		</action>
 
+		<action name="search_log">
+			<function name="search_log">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="change_grp">
 			<function name="change_grp">
 				<arguments>
