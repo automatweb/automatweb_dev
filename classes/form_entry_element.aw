@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.15 2001/06/18 23:54:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.16 2001/06/19 00:46:25 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 
@@ -390,6 +390,7 @@ load_vcl("date_edit");
 			$text = $this->arr["text"];
 
 			$elid = $this->id;
+			$ext = false;
 
 			switch($this->arr["type"])
 			{
@@ -405,13 +406,34 @@ load_vcl("date_edit");
 
 				case "listbox":
 					$html="<select name='".$prefix.$elid."'>";
-					for ($b=0; $b < $this->arr["listbox_count"]; $b++)
+					if (is_array($elvalues[$this->arr["name"]]))
+					{
+						$val = $this->get_val($elvalues);
+						$cnt = sizeof($val);
+						$this->arr["listbox_items"] = $val;
+						$ext = true;
+					}
+					else
+					{
+						$cnt = $this->arr["listbox_count"];
+					};
+
+					for ($b=0; $b < $cnt; $b++)
 					{	
 						if ($this->entry_id)
 							$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
 						else
 							$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
-						$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$this->arr["listbox_items"][$b];
+			
+						list($key,$value) = each($this->arr["listbox_items"]);
+						if ($ext)
+						{
+							$html .= "<option $lbsel value='$key'>$value</option>\n";
+						}
+						else
+						{
+							$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+						};
 					}
 					$html.="</select>";
 					break;
