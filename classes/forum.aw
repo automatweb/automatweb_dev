@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.56 2002/11/07 10:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.57 2002/11/07 12:35:02 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -257,34 +257,34 @@ class forum extends aw_template
 	function configure($arr)
 	{
 		extract($arr);
-		// if parent is defined, then we are about to add a new forum,
+		// oh fuck, this is SO bad
+		if ($return_url)
+		{
+			$title = "<a href='$return_url'>Tagasi</a>";	
+			$pathparent = 0;
+		}
+		else
+		{
+			$pathparent = $parent;
+		};
+
 		if ($id)
 		{
 			$obj = $this->get_object($id);
 			$this->id = $id;
 			$pobj = $this->get_object($obj["parent"]);
-			$title = "Muuda foorumit";
-			$this->mk_path($parent, $title);
+			$title .= "/ Muuda foorumit";
 			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
 		}
 		else
 		{
 			$pobj = $this->get_object($parent);
-			// FIXME: if we entered this function from the objects list,
-			// we redirect the user to the topic list, becase the Big Pointy
-			// Haired boss wants it that way. And besides, this is temporary
-			// (yeah, right) anyway, until we figure out something better.
-			//if (not($new) && ($pobj["class_id"] == CL_PSEUDO))
-			//{
-			//	header("Location: " . $this->mk_my_orb("topics",array("id" => $id)));
-			//	exit;
-			//};
-			
-			$title = "Lisa foorum";
+			$title .= "/ Lisa foorum";
 		
 			$meta = array();
 		};
 		// otherwise we are modifying an existing forum
+		$this->mk_path($pathparent, $title);
 
 		$toolbar = get_instance("toolbar");
 
@@ -316,18 +316,8 @@ class forum extends aw_template
 			$toolbar->add_cdata($notify_link);
 		};
 
-		if ($pobj["class_id"] == CL_DOCUMENT)
-		{
-			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
-	
-		}
-		else
-		{
-			$this->mk_path($pobj["oid"], $title);
-		};
-
 		$cfgform = get_instance("cfg/cfgform");
-		$reforb = $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent));
+		$reforb = $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent,"alias_to" => $alias_to,"return_url" => $return_url));
 		$xf = $cfgform->ch_form(array(
 				"clid" => &$this,
 				"obj" => $obj,
@@ -375,12 +365,11 @@ class forum extends aw_template
 			),
 		));
 
-		if ($pobj["class_id"] == CL_DOCUMENT)
+		if ($alias_to)
 		{
-			// yea, it was a document allright. So we create an alias
-			// and return to the alias list. Or shouldn't we?
-			$this->add_alias($parent,$id);
-			$retval = $this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr");
+			$this->delete_alias($alias_to,$id);
+			$this->add_alias($alias_to,$id);
+			$retval = $this->mk_my_orb("list_aliases",array("id" => $alias_to),"aliasmgr");
 		}
 		else
 		{
