@@ -1798,6 +1798,10 @@ class form_db_base extends aw_template
 					$where .= " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
 				}
 			}
+			if ($this->arr["is_translatable"])
+			{
+				$where .= " AND ".$rel_tbl.".lang_id = '".aw_global_get("lang_id")."' ";
+			}
 		}
 
 		$order_by = "";
