@@ -275,16 +275,16 @@ class connection
 				}
 				else
 				{
-					error::throw(array(
-						"id" => ERR_ACL,
-						"msg" => "connection::save(): no access to create relation object!"
-					));
+					$noc = true;
 				}
-				$o->set_class_id(CL_RELATION);
-				$o->set_status(STAT_ACTIVE);
-				$o->set_subclass($to->class_id());
 
-				$this->conn["relobj_id"] = $o->save();
+				if (!$noc)
+				{
+					$o->set_class_id(CL_RELATION);
+					$o->set_status(STAT_ACTIVE);
+					$o->set_subclass($to->class_id());
+					$this->conn["relobj_id"] = $o->save();
+				}
 			}
 		}
 
