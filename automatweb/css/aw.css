@@ -204,7 +204,7 @@ height: 28px;
 background-color: #DAE8F0;
 padding-right: 6px;
 }
-.chformleftcol a {color: #FFFFFF; text-decoration:underline;}
+.chformleftcol a {color: #000000; text-decoration:underline;}
 .chformleftcol a:hover {color: #000000; text-decoration:underline;}
 
 
