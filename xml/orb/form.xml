@@ -150,6 +150,12 @@
 			</function>
 		</action>
 		
+		<action name="submit_element">
+			<function name="submit_element">
+				<arguments/>
+			</function>
+		</action>
+		
 		<action name="submit_grid">
 			<function name="save_grid">
 				<arguments>
