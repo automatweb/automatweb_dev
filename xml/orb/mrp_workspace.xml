@@ -91,6 +91,14 @@
 			</function>
 		</action>
 
+		<action name="acontinue">
+			<function name="acontinue">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="end_shift">
 			<function name="end_shift">
 				<arguments>

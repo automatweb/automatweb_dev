@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.63 2005/03/29 10:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.64 2005/03/29 11:01:18 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -16,6 +16,7 @@
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_old caption="Tegemata asjad" parent=grp_printer submit=no
 	@groupinfo grp_printer_done caption="Tehtud asjad" parent=grp_printer submit=no
+	@groupinfo grp_printer_aborted caption="Katkestatud asjad" parent=grp_printer submit=no
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
@@ -208,7 +209,7 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer_current,grp_printer_old,grp_printer_done
+@default group=grp_printer_current,grp_printer_old,grp_printer_done,grp_printer_aborted
 
 	@property printer_legend type=text
 	@caption Legend
@@ -2844,6 +2845,7 @@ if ($_GET["mrp_set_all_resources_available"])
 			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
 			"onlydone" => ($arr["request"]["group"] == "grp_printer_done" ? true : false),
 			"not_done" => ($arr["request"]["group"] == "grp_printer_done" ? false : true),
+			"onlyaborted" => ($arr["request"]["group"] == "grp_printer_aborted" ? true : false),
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -3111,6 +3113,11 @@ if ($_GET["mrp_set_all_resources_available"])
 			$filt["state"] = new obj_predicate_not(MRP_STATUS_DONE);
 		}
 
+		if ($arr["onlyaborted"])
+		{
+			$filt["state"] = MRP_STATUS_ABORTED;
+		}
+
 		if ($arr["maxend"] > 100 )
 		{
 			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 100, $arr["maxend"]);
@@ -3247,7 +3254,7 @@ if ($_GET["mrp_set_all_resources_available"])
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
-			"pj_job" => $tmp["pj_job"]
+			//"pj_job" => $tmp["pj_job"]
 		));
 	}
 
@@ -3275,7 +3282,7 @@ if ($_GET["mrp_set_all_resources_available"])
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
-			"pj_job" => $tmp["pj_job"]
+			//"pj_job" => $tmp["pj_job"]
 		));
 	}
 
@@ -3318,6 +3325,34 @@ if ($_GET["mrp_set_all_resources_available"])
 		$arr["id"] = $arr["pj_job"];
 
 		$ud = parse_url($j->scontinue($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
+
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=acontinue
+		@param id required type=int
+	**/
+	function acontinue ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+
+		$ud = parse_url($j->acontinue($arr));
 		$pars = array();
 		parse_str($ud["query"], $pars);
 		$this->dequote($pars["errors"]);

@@ -684,6 +684,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <caption>Legend</caption>
@@ -697,6 +698,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>table</type>
             <no_caption>1</no_caption>
@@ -711,6 +713,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -725,6 +728,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <no_caption>1</no_caption>
@@ -739,6 +743,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -754,6 +759,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -768,6 +774,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>textarea</type>
             <rows>5</rows>
@@ -784,6 +791,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -799,6 +807,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -813,6 +822,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -827,6 +837,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -841,6 +852,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -855,6 +867,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -870,6 +883,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -884,6 +898,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -898,6 +913,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -912,6 +928,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -926,6 +943,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -940,6 +958,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -954,6 +973,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -968,6 +988,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -982,6 +1003,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -996,6 +1018,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1010,6 +1033,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1024,6 +1048,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1038,6 +1063,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1052,6 +1078,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1066,6 +1093,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1080,6 +1108,7 @@
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
                   <num_2>grp_printer_done</num_2>
+                  <num_3>grp_printer_aborted</num_3>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1134,6 +1163,11 @@
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_done>
+            <grp_printer_aborted>
+                  <caption>Katkestatud asjad</caption>
+                  <parent>grp_printer</parent>
+                  <submit>no</submit>
+            </grp_printer_aborted>
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>
