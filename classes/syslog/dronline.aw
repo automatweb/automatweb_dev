@@ -114,9 +114,21 @@ class dronline extends class_base
 		));
 
 		$tbp->add_tab(array(
-			'active' => ($dro_tab == 'stat'  ? true : false),
-			'caption' => 'Statistika',
-			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat')))
+			'active' => ($dro_tab == 'stat_time'  ? true : false),
+			'caption' => 'Statistika aja l&otilde;ikes',
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat_time')))
+		));
+
+		$tbp->add_tab(array(
+			'active' => ($dro_tab == 'stat_addr'  ? true : false),
+			'caption' => 'Statistika aadresside l&otilde;ikes',
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat_addr')))
+		));
+
+		$tbp->add_tab(array(
+			'active' => ($dro_tab == 'stat_obj'  ? true : false),
+			'caption' => 'Statistika objektide l&otilde;ikes',
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat_obj')))
 		));
 
 		$tbp->add_tab(array(
@@ -150,7 +162,8 @@ class dronline extends class_base
 			'sortable' => 1,
 			'numeric' => 1,
 			'type' => 'time',
-			'format' => $df[2]
+			'format' => $df[2],
+			'nowrap' => 1
 		));
 		$t->define_field(array(
 			'name' => 'uid',
@@ -168,7 +181,9 @@ class dronline extends class_base
 			'sortable' => 1,
 		));
 
-		$this->db_query("SELECT * FROM syslog WHERE ".$this->get_where_clause($id)." LIMIT ".$this->get_limit_clause($id));
+		$q = "SELECT * FROM syslog ".$this->get_where_clause($id)." ORDER BY tm DESC LIMIT ".$this->get_limit_clause($id);
+		echo "q = $q <Br>";
+		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
 			$t->define_data($row);
@@ -179,18 +194,18 @@ class dronline extends class_base
 		return $t->draw();
 	}
 
-	function get_where_clause($oid)
+	function get_where_clause($oid, $prep = 'WHERE')
 	{
 		$ob = $this->get_object($oid);
 		$conf_o = $this->get_object($ob['meta']['conf']);
 
 		// merge configs
-		if ($ob['meta']['from'] != 0)
+		if ($ob['meta']['from'] > (400*24*3600))
 		{
 			$conf_o['meta']['from'] = $ob['meta']['from'];
 		}
 
-		if ($ob['meta']['to'] != 0)
+		if ($ob['meta']['to'] > (400*24*3600))
 		{
 			$conf_o['meta']['to'] = $ob['meta']['to'];
 		}
@@ -199,11 +214,11 @@ class dronline extends class_base
 		$sql = array();
 
 		$mt = $conf_o['meta'];
-		if ($mt['from'])
+		if ($mt['from'] > (400*24*3600))
 		{
 			$sql[] = 'tm >= '.$mt['from'];
 		}
-		if ($mt['to'])
+		if ($mt['to'] > (400*24*3600))
 		{
 			$sql[] = 'tm <= '.$mt['to'];
 		}
@@ -220,7 +235,12 @@ class dronline extends class_base
 			$sql[] = 'action LIKE \'%'.$mt['textfilter'].'%\'';
 		}
 
-		return join(" AND ", $sql);
+		$ret =  join(" AND ", $sql);
+		if ($ret != "")
+		{
+			return ''.$prep.''.$ret;
+		}
+		return "";
 	}
 
 	function get_limit_clause($id)
@@ -240,13 +260,195 @@ class dronline extends class_base
 	function _do_ipblock($arr)
 	{
 		extract($arr);
-		return "ipblock";
+		$this->read_adm_template("block.tpl");
+		$old = aw_unserialize($this->get_cval("blockedip"));
+		$c = "";
+		while(list($k,$v) = each($old))
+		{
+			$this->vars(array(
+				"ip" => $v,
+				"id" => $k,
+				"checked" => "checked",
+			));
+			$c .= $this->parse("line");
+		};
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("saveblock", array('id' => $id))
+		));
+		return $this->parse();
 	}	
 
-	function _do_stat($arr)
+	function saveblock($arr)
 	{
 		extract($arr);
-		return "stat";
+		$old = aw_unserialize($this->get_cval("blockedip"));
+		$store = array();
+		if (is_array($check))
+		{
+			while(list($k,$v) = each($check))
+			{
+				$store[] = $old[$k];
+			};
+		};
+		if (inet::is_ip($new))
+		{
+			$store[] = $new;
+		};
+		$old_s = serialize($store);
+		$this->quote($old_s);
+		$this->set_cval('blockedip', $old_s);
+		return $this->mk_my_orb("change",array('id' => $id, 'dro_tab' => 'ipblock'));
+	}
+
+	function _do_stat_time($arr)
+	{
+		extract($arr);
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'dronline'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$df = aw_ini_get('config.dateformats');
+
+		$t->define_field(array(
+			'name' => 'tm',
+			'caption' => 'Vahemik',
+			'sortable' => 1,
+			'type' => 'time',
+			'numeric' => 1,
+			'format' => $df[3],
+			'nowrap' => 1
+		));
+		$t->define_field(array(
+			'name' => 'cnt',
+			'caption' => 'Mitu',
+			'sortable' => 1,
+			'numeric' => 1,
+		));
+
+		$q = "SELECT count(*) as cnt,date_format(from_unixtime(tm),'%m%d%y') as tm1, tm 
+				FROM syslog
+				".$this->get_where_clause($id)."
+				GROUP BY tm1
+				ORDER BY tm ASC
+				LIMIT ".$this->get_limit_clause($id);
+		echo "q = $q <br>";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$t->define_data($row);
+		}
+//		$t->set_default_sortby('cnt');
+//		$t->set_default_sorder('desc');
+//		$t->sort_by();
+		return $t->draw();
+	}
+
+	function _do_stat_addr($arr)
+	{
+		extract($arr);
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'dronline'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$df = aw_ini_get('config.dateformats');
+
+		$t->define_field(array(
+			'name' => 'rec',
+			'caption' => '#',
+			'sortable' => 1,
+			'numeric' => 1,
+			'nowrap' => 1
+		));
+
+		$t->define_field(array(
+			'name' => 'ip',
+			'caption' => 'IP Aadress',
+			'sortable' => 1,
+			'nowrap' => 1
+		));
+		$t->define_field(array(
+			'name' => 'cnt',
+			'caption' => 'Mitu',
+			'sortable' => 1,
+			'numeric' => 1,
+		));
+
+		$q = "SELECT count(*) as cnt,ip 
+				FROM syslog
+				".$this->get_where_clause($id)."
+				GROUP BY ip
+				ORDER BY cnt DESC
+				LIMIT ".$this->get_limit_clause($id);
+		echo "q = $q <br>";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			list($row['ip'],) = inet::gethostbyaddr($row['ip']);
+			$t->define_data($row);
+		}
+//		$t->set_default_sortby('cnt');
+//		$t->set_default_sorder('desc');
+//		$t->sort_by();
+		return $t->draw();
+	}
+
+	function _do_stat_obj($arr)
+	{
+		extract($arr);
+
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'dronline'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$df = aw_ini_get('config.dateformats');
+
+		$t->define_field(array(
+			'name' => 'rec',
+			'caption' => '#',
+			'sortable' => 1,
+			'numeric' => 1,
+			'nowrap' => 1
+		));
+
+		$t->define_field(array(
+			'name' => 'oid',
+			'caption' => 'OID',
+			'sortable' => 1,
+			'nowrap' => 1
+		));
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => 'Nimi',
+			'sortable' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'cnt',
+			'caption' => 'Mitu',
+			'sortable' => 1,
+			'numeric' => 1,
+		));
+
+		$q = "SELECT count(*) as cnt,ip, objects.name as name,syslog.oid AS oid
+				FROM syslog
+					LEFT JOIN objects ON objects.oid = syslog.oid
+				WHERE syslog.oid IS NOT NULL AND syslog.oid > 0 ".$this->get_where_clause($id,' AND ')."
+				GROUP BY oid
+				ORDER BY cnt DESC
+				LIMIT ".$this->get_limit_clause($id);
+		echo "q = $q <br>";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$t->define_data($row);
+		}
+//		$t->set_default_sortby('cnt');
+//		$t->set_default_sorder('desc');
+//		$t->sort_by();
+		return $t->draw();
 	}
 }
 ?>
