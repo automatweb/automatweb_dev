@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.92 2004/09/29 13:27:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.93 2004/10/07 21:36:09 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -240,6 +240,8 @@ define("OBJ_IS_DONE",1 << 3);
 define("OBJ_FLAG_IS_SELECTED", 1 << 4);
 // this says that the object is part of the auto-object translation. in addition to this it can have the NEEDS_TRANSLATION ot IS_TRANSLATED
 define("OBJ_HAS_TRANSLATION", 1 << 5);
+// this says that the object used to be a calendar vacancy
+define("OBJ_WAS_VACANCY", 1 << 6);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
