@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.140 2002/11/08 13:01:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.126 2002/11/20 13:15:02 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -361,8 +361,6 @@ class document extends aw_template
 				$doc["title"] = "";
 				$doc["meta"]["show_print"] = 1;
 				$mk_compat = false;
-				$this->vars(array("page_title" => strip_tags($fl["comment"])));
-				$pagetitle = strip_tags($fl["comment"]);
 			};
 		}
 
@@ -490,7 +488,7 @@ class document extends aw_template
 					//"printlink" => $this->mk_my_orb("print",array("section" => $docid,"oid" => $oid),"document",0,1),
 					"printlink" => $link,
 				));
-				#aw_global_set("no_menus",1);
+				aw_global_set("no_menus",1);
 				$_tmp = $this->parse("PRINTANDSEND");
 				$this->vars(array("PRINTANDSEND" => $_tmp));
 			};
@@ -535,13 +533,6 @@ class document extends aw_template
 
 		$db_periods = get_instance("periods",$this->cfg["per_oid"]);
 		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
-		
-		// period vars
-		$this->vars(array(
-			"act_per_id" => $act_per['id'],
-			"act_per_name" => $act_per['description']
-		));
-		$this->dequote(&$doc["title"]);
 		$this->title = $doc["title"];
 
 		//if (aw_global_get("in_archive"))
@@ -948,7 +939,6 @@ class document extends aw_template
 		}
 		classload("image");
 		$this->vars(array(
-			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
 			"text"  => $doc["content"],
@@ -1227,7 +1217,7 @@ class document extends aw_template
 			));
 			
 			// logime aktsioone
-			$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat", $id);
+			$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a> arhiivikoopiat");
 			// laena mulle bensiini ja tikke, vanemuine
 			return $this->mk_my_orb("change", array("id" => $data["id"],"section" => $data["section"],"version" => $data["version"]));
 		};
@@ -1264,8 +1254,8 @@ class document extends aw_template
 
 		if ($data["clear_styles"] == 1)
 		{
-			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
-			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
+			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<br>,<p>");
+			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<br>,<p>");
 		}
 
 		if ($data["status"] == 0)
@@ -1404,7 +1394,7 @@ class document extends aw_template
 		$this->flush_cache();
 
 		// logime aktsioone
-		$this->_log(ST_DOCUMENT, SA_CHANGE,"muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>",$id);
+		$this->_log("document","muutis dokumenti <a href='".$this->cfg["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
 		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]),"",false,true);
 	}
@@ -1601,6 +1591,7 @@ class document extends aw_template
 
 	function submit_add($arr)
 	{
+		$this->quote(&$arr);
 		extract($arr);
 		if ($docfolder)
 		{
@@ -2093,7 +2084,7 @@ class document extends aw_template
 			};
 			$q = sprintf("UPDATE documents SET %s WHERE docid = '%d'",join(",",$values),$id);
 			$this->db_query($q);
-			$this->_log(ST_DOCUMENT, SA_CHANGE,"aktiveeris dokumendi $id arhiiviversiooni", $id);
+			$this->_log("document","aktiveeris dokumendi $id arhiiviversiooni");
 
 		};
 
@@ -2516,7 +2507,6 @@ class document extends aw_template
 		$row["oid"] = 0;
 		$row["parent"] = $parent;
 		$row["lang_id"] = aw_global_get("lang_id");
-		$row["period"] = $arr["period"];
 		$this->quote(&$row);
 		$id = $this->new_object($row);
 
@@ -2558,11 +2548,6 @@ class document extends aw_template
 			$sortby = "percent";
 		}
 
-		if ($parent == "default")
-		{
-			$parent = $this->get_cval("search::default_group");
-		}
-
 		$str = trim($str);
 		$this->tpl_init("automatweb/documents");
 		// kas ei peaks checkkima ka teiste argumentide oigsust?
@@ -2578,10 +2563,6 @@ class document extends aw_template
 		}
 
 		$this->read_template("search.tpl");
-		if(aw_ini_get("document.search_static"))
-		{
-			return $this->do_static_search($str, $from, $sortby, $parent, $section);
-		}
 
 		if (($bs = aw_ini_get("search.baseurl")) != "")
 		{
@@ -2605,35 +2586,6 @@ class document extends aw_template
 
 		$sc = get_instance("search_conf");
 		$search_groups = $sc->get_groups();
-
-		if ($search_groups[$parent]["search_form"])
-		{
-			// do form search
-			$finst = get_instance("formgen/form");
-			// we must load the form before we can set element values
-			$finst->load($search_groups[$parent]["search_form"]);
-
-			// set the search elements values
-			foreach($search_groups[$parent]["search_elements"] as $el)
-			{
-				$finst->set_element_value($el, $str, true);
-			}
-
-			global $restrict_search_el,$restrict_search_val,$use_table,$search_form;
-			$this->vars(array(
-				"MATCH" => $finst->new_do_search(array(
-					"restrict_search_el" => $restrict_search_el,
-					"restrict_search_val" => $restrict_search_val,
-					"use_table" => $use_table,
-					"section" => $section,
-					"search_form" => $search_form
-				)),
-				"HEADER" => ""
-			));
-
-			return $this->parse();
-		}
-
 		$search_group = $search_groups[$parent];
 
 		$this->menucache = array();
@@ -2667,7 +2619,7 @@ class document extends aw_template
 		{
 			foreach($parens as $_parent)
 			{
-				dbg::p("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
+				dbg("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
 				if ($this->can("view",$_parent) && is_array($this->mmc[$_parent]))
 				{
 					$this->marr[] = $_parent;
@@ -2696,8 +2648,6 @@ class document extends aw_template
 
 		// oh crap. siin peab siis failide seest ka otsima. 
 		$mtfiles = array();
-		// this query is _very_ expensive, if there are lots of records in
-		// the files table OTOH, it's quite hard to "fix" this as it is -- duke
 		$this->db_query("SELECT id FROM files WHERE files.showal = 1 AND files.content LIKE '%$str%' ");
 		while ($row = $this->db_next())
 		{
@@ -2728,8 +2678,6 @@ class document extends aw_template
 
 		// nini. otsime tabelite seest ka.
 		$mts = array();
-		// expensive as well. We need a better way to do searches - shurely there
-		// are some good algoritms for that? -- duke
 		$this->db_query("SELECT id FROM aw_tables WHERE contents LIKE '%$str%'");
 		while ($row = $this->db_next())
 		{
@@ -2790,20 +2738,20 @@ class document extends aw_template
 			// search all words
 			$wds = explode(" ",$str);
 			$docmatcha = array();
-			$docmatcha[] = join(" AND ",map("documents.title LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" AND ",map("documents.content LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" AND ",map("documents.author LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",$this->map("documents.title LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",$this->map("documents.content LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",$this->map("documents.author LIKE '%%%s%%'",$wds));
 			if ($this->cfg["use_dcache"])
 			{
-				$docmatcha[] = join(" AND ",map("documents.dcache LIKE '%%%s%%'",$wds));
+				$docmatcha[] = join(" AND ",$this->map("documents.dcache LIKE '%%%s%%'",$wds));
 			};
-			$docmatch = join(" OR ", map("(%s)",$docmatcha));
+			$docmatch = join(" OR ", $this->map("(%s)",$docmatcha));
 		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
-		dbg::p("search_q = $q <br>");
+		dbg("search_q = $q <br>");
 		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2816,10 +2764,7 @@ class document extends aw_template
 			// if match is found in title, then multiply number by 5, to emphasize importance
 			
 			// hook for site specific document parsing
-			if (is_object($si))
-			{
-				$si->parse_search_result_document(&$row);
-			}
+			$si->parse_search_result_document(&$row);
 
 			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 			$max_count = max($c,$max_count);
@@ -2985,12 +2930,9 @@ class document extends aw_template
 			"section" => $section
 		));
 		$ps = $this->parse("PAGESELECTOR");
-		$this->vars(array(
-			"PAGESELECTOR" => $ps, 
-			"HEADER" => $this->parse("HEADER")
-		));
+		$this->vars(array("PAGESELECTOR" => $ps));
 
-		$this->_log(ST_SEARCH, SA_DO_SEARCH, "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
+		$this->_log("document", "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
 		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
 
 		$retval = $this->parse();
@@ -3014,7 +2956,7 @@ class document extends aw_template
 				{
 					$this->darr[] = $v["last"];
 				}
-				dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
+				dbg("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
@@ -3474,7 +3416,7 @@ class document extends aw_template
 		mail("\"$to_name\" <".$to.">",str_replace("\n","",str_replace("\r","",$this->parse("title"))),$this->parse("mail"),"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
-		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
+		$this->_log("document", "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
 
 		return $this->cfg["baseurl"]."/?section=".$section;
 	}
@@ -3536,7 +3478,7 @@ class document extends aw_template
 		$feedback = get_instance("feedback");
 		$arr["title"] = $inf["title"];
 		$feedback->add_feedback($arr);
-		$this->_log(ST_DOCUMENT, SA_SEND, "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
+		$this->_log("document", "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
 		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));
 	}
 
@@ -3554,7 +3496,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$dat = $this->get_record("objects","oid",$section);
-		$this->_log(ST_DOCUMENT, SA_PRINT, "Printis dokumendi $dat[name] ",$section);
+		$this->_log("document", "Printis dokumendi $dat[name] ",$section);
 		echo($this->gen_preview(array(
 			"docid" => $section,
 			"tpl" => "print.tpl"
@@ -3743,153 +3685,42 @@ class document extends aw_template
 		return $this->parse();
 	}
 
-	function do_static_search($str, $from, $sortby, $_par, $_sec)
+	function get_properties($args = array())
 	{
-		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
-		$docarr = array();
-
-		$public_url = $this->get_cval("export::public_symlink_name");
-
-		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'");
-		while ($row = $this->db_next())
-		{
-			if (file_exists($public_url."/".$row['filename']))
-			{
-				$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
-				$max_count = max($c,$max_count);
-
-				$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
-				$title = strip_tags($mt[$nm-1][1]);
-
-				$docarr[] = array(
-					"matches" => $c, 
-					"title" => $title,
-					"section" => $row["filename"],
-					"modified" => $row["modified"],
-					"filename" => $row["filename"]
-				);
-			}
-		}
-
-		if ($sortby == "percent")
-		{
-			$d2arr = array();
-			reset($docarr);
-			while (list(,$v) = each($docarr))
-			{
-				if ($max_count == 0)
-				{
-					$d2arr[100][] = $v;
-				}
-				else
-				{
-					$d2arr[($v["matches"]*100) / $max_count][] = $v;
-				}
-			}
-
-			krsort($d2arr,SORT_NUMERIC);
-
-			$docarr = array();
-			reset($d2arr);
-			while (list($p,$v) = each($d2arr))
-			{
-				reset($v);
-				while (list(,$v2) = each($v))
-				{
-					$docarr[] = $v2;
-				}
-			}
-		}
-
-		$per_page = 10;
-		$num = 0;
-		foreach($docarr as $perc => $row)
-		{
-			if ($num >= $from && $num < ($from + $per_page))	// show $per_page matches per screen
-			{
-				if ($max_count == 0)
-				{
-					$sstr = 100;
-				}
-				else
-				{
-					$sstr = substr(($row["matches"]*100) / $max_count,0,4);
-				}
-				$this->vars(array(
-					"section" => $row["section"],
-					"title" => ($row["title"] != "" ? $row["title"] : $row["filename"]),
-					"modified" => $this->time2date($row["modified"],5),
-					"percent" => $sstr
-				));
-				$mat.=$this->parse("MATCH");
-			}
-			$num++;
-		}
-
-		$this->vars(array(
-			"parent" => $_par,
-			"section" => $_sec,
-			"sstring" => $str,
-			"sortby" => $sortby,
-		));
-
-		// make prev page / next page
-		if ($cnt > $per_page)
-		{
-			if ($from > 0)
-			{
-				$this->vars(array("from" => $from-$per_page));
-				$prev = $this->parse("PREVIOUS");
-			}
-			if ($from+$per_page <= $cnt)
-			{
-				$this->vars(array("from" => $from+$per_page));
-				$next = $this->parse("NEXT");
-			}
-
-			for ($i=0; $i < $cnt / $per_page; $i++)
-			{
-				$this->vars(array(
-					"from" => $i*$per_page,
-					"page_from" => $i*$per_page,
-					"page_to" => min(($i+1)*$per_page,$cnt)
-				));
-				if ($i*$per_page == $from)
-				{
-					$pg.=$this->parse("SEL_PAGE");
-				}
-				else
-				{
-					$pg.=$this->parse("PAGE");
-				}
-			}
-		}
-		$pg = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $pg);
-		$prev = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $prev);
-		$next = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $next);
-		$this->vars(array(
-			"PREVIOUS" => $prev,
-			"NEXT" => $next,
-			"PAGE" => $pg,
-			"SEL_PAGE" => "",
-			"from" => $from,
-			"section" => 1
-		));
-
-		$ps = $this->parse("PAGESELECTOR");
-		$this->vars(array(
-			"PAGESELECTOR" => $ps,
-		));
-
-		$this->vars(array(
-			"MATCH" => $mat,
-			"sstring" => $str,
-			"matches" => $cnt,
-			"section" => 1,
-			"from" => $from,
-			"s_parent" => 1
-		));
-		return $this->parse();
+		$fields = array();
+		$fields["showlead"] = array(
+			"type" => "checkbox",
+			"caption" => "Näita leadi",
+			"value" => $args["showlead"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["title_clickable"] = array(
+			"type" => "checkbox",
+			"caption" => "Pealkiri klikitav",
+			"value" => $args["title_clickable"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["no_right_pane"] = array(
+			"type" => "checkbox",
+			"caption" => "Ilma parema paanita",
+			"value" => $args["no_right_pane"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		$fields["is_forum"] = array(
+			"type" => "checkbox",
+			"caption" => "Omab foorumit",
+			"value" => $args["is_forum"],
+			"store" => "table",
+			"table" => "documents",
+			"idfield" => "docid",
+		);
+		return $fields;
 	}
 };
 ?>
