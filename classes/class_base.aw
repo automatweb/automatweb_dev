@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.241 2004/03/23 16:11:52 duke Exp $
+// $Id: class_base.aw,v 2.242 2004/03/23 16:44:58 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1851,23 +1851,6 @@ class class_base extends aw_template
 				continue;
 			};
 
-			// right now this only supports classificator
-			// eventually all VCL component will have to implement their
-			// own init_vcl_property method
-			if ($this->vcl_register[$val["type"]])
-			{
-				$reginst = $this->vcl_register[$val["type"]];
-				$ot = get_instance($reginst);
-				if (is_callable(array($ot,"init_vcl_property")))
-				{
-					$ot->init_vcl_property(array(
-						"property" => &$val,
-						"clid" => $this->clid,
-						"obj_inst" => &$this->obj_inst,
-					));
-				};
-
-			};
 			if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
 			{
 				classload("toolbar");
