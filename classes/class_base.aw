@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.286 2004/07/07 18:21:41 duke Exp $
+// $Id: class_base.aw,v 2.287 2004/07/08 11:21:06 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1769,6 +1769,7 @@ class class_base extends aw_template
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
 			$property["store"] != "connect" && 
+			empty($property["value"]) && 
 			$this->obj_inst->is_property($property["name"]) && 
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
@@ -1886,7 +1887,7 @@ class class_base extends aw_template
 				// and this as well
 				continue;
 			};
-
+			
 
 			// eventually all VCL components will have to implement their
                         // own init_vcl_property method
@@ -2021,10 +2022,12 @@ class class_base extends aw_template
 		foreach($properties as $key => $val)
 		{
 
+
 			if ($val["name"] == "tabpanel" && $this->view)
 			{
 				continue;
 			};
+
 
 			// XXX: need to get rid of that "text" index
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
@@ -2335,6 +2338,42 @@ class class_base extends aw_template
 
 		$awt->stop("parse-properties");
 
+		return $resprops;
+	}
+
+	function process_properties($arr)
+	{
+		// if name_prefix given, prefixes all element names with the value 
+		// e.g. if name_prefix => "emb" and there is a property named comment,
+		// then the result will be name => emb[comment], this simplifies 
+		// processing of embedded config forms
+		if ($arr["name_prefix"])
+		{
+			$tmp = $arr["properties"];
+			$resprops = array();
+			foreach($tmp as $key => $el)
+			{
+				$bracket = strpos($el["name"],"[");
+				// I need to rename the parent attribute as well
+				if ($bracket > 0)
+				{
+					$pre = substr($el["name"],0,$bracket);
+					$aft = substr($el["name"],$bracket);
+					$newname = $args["name_prefix"] . "[$pre]" . $aft;
+				}
+				else
+				{
+					$newname = $args["name_prefix"] . "[" . $el["name"] . "]";
+					if (!empty($el["parent"]))
+					{
+						$el["parent"] = $args["name_prefix"] . "_" . $el["parent"];
+					};
+				};
+				$el["name"] = $newname;
+				// just to get an hopefully unique name .. 
+				$resprops[$args["name_prefix"] . "_" . $key] = $el;
+			}
+		}
 		return $resprops;
 	}
 
