@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.10 2001/11/14 07:28:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.11 2002/01/07 10:47:57 kristo Exp $
 
 lc_load("form");
 	class form_search_element extends form_element
 	{
 		function form_search_element()
 		{
+			$this->form_element();
 			global $awt;
 			$this->tpl_init("forms");
 			$this->db_init();

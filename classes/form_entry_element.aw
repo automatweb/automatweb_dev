@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.46 2001/12/18 00:09:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.47 2002/01/07 10:47:57 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -11,6 +11,7 @@ lc_load("definition");
 	{
 		function form_entry_element()
 		{
+			$this->form_element();
 			global $awt;
 			$awt->start("form_entry_element::new()");
 			$this->tpl_init("forms");
