@@ -137,8 +137,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @reltype PERSON value=2 clid=CL_CRM_PERSON
 @caption isik
 
-@reltype USER_DATA value=3
-@caption Andmed
+/@reltype USER_DATA value=3
+/@caption Andmed
 
 
 */
@@ -1225,7 +1225,18 @@ class user extends class_base
 				$gid = $this->users->get_gid_for_oid($parent->id());
 
 				$user = $arr["obj_inst"];
-		
+
+				$user->connect(array(
+					"to" => $parent->id(),
+					"reltype" => 1 // RELTYPE_GRP
+				));
+
+				// add reverse alias to group
+				$parent->connect(array(
+					"to" => $user->id(),
+					"reltype" => 2 // RELTYPE_MEMBER from group
+				));
+
 				$this->users->add_users_to_group_rec(
 					$gid,
 					array($uid),
