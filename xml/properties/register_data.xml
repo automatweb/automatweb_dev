@@ -575,6 +575,15 @@
             <field>usersubmit1</field>
             <caption>User-defined submit 1</caption>
       </property>
+      <property>
+            <name>userreset1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>reset</type>
+            <store>no</store>
+            <field>userreset1</field>
+            <caption>User-defined reset 1</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
