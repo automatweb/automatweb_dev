@@ -233,6 +233,12 @@ switch($type) {
 		$t = new variables;
 		$content = $t->add_stamp();
 		break;
+
+	case "checkit":
+		$site_title = "<a href='list.$ext?parent=$parent'>Listide nimekiri</a> / Kontrolli listi liikmeid";
+		$t = new mlist($id);
+		$content = $t->checkit();
+		break;
 		
 	case "change_list_vars":
 		$site_title = "<a href='list.$ext?parent=$parent'>Listide nimekiri</a> / Vali listi muutujad";
