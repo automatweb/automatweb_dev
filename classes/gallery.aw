@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.10 2001/08/16 16:08:40 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.11 2001/09/07 09:45:00 kristo Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -163,7 +163,8 @@ class gallery extends aw_template
 		$this->vars(array(
 			"PAGE" => $p, 
 			"SEL_PAGE" => "",
-			"add_page" => $this->mk_orb("add_page", array("id" => $id))
+			"add_page" => $this->mk_orb("add_page", array("id" => $id)),
+			"del_page" => $this->mk_orb("del_page", array("id" => $id))
 		));
 
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
@@ -257,16 +258,24 @@ class gallery extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
+/*		echo "submit! \n<br>";
+		flush();*/
 		$this->load($id,$page);
-
 		if ($page < 1)
 		{
 			$page = 0;
 		}
+//		echo "load! \n<br>";
+//		flush();
+
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
+//			echo "row $row ! \n<br>";
+//			flush();
 			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
+//				echo "col $col ! \n<br>";
+//				flush();
 				$t = new db_images;
 				$var = "tn_".$row."_".$col;
 				global $$var,${$var."_type"};
@@ -439,6 +448,16 @@ class gallery extends aw_template
 			$this->vars(array("PAGES" => $this->parse("PAGES")));
 		}
 		return $this->parse();
+	}
+
+	function del_page($arr)
+	{
+		extract($arr);
+		$this->load($id,$page);
+		$this->arr["pages"] --;
+		$this->save();
+		header("Location: ".$this->mk_orb("admin", array("id" => $id, "page" => 0)));
+		die();
 	}
 }
 ?>
