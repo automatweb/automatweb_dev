@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.55 2004/12/09 13:14:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.56 2004/12/10 13:11:48 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -136,10 +136,10 @@
 	@groupinfo mail_settings caption="Meiliseaded" parent=settings
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
-	@caption Teemade kataloog
+	@caption Teemade kaust
 
 	@reltype ADDRESS_FOLDER value=2 clid=CL_MENU
-	@caption Listiliikmete kataloog
+	@caption Listiliikmete kaust
 
 	@reltype STYLE value=3 clid=CL_CSS
 	@caption Stiil
@@ -185,7 +185,7 @@ class forum_v2 extends class_base
 				if (!is_oid($topic_folder))
 				{
 					$retval = PROP_ERROR;
-					$data["error"] = t("Teemade kataloog on valimata");
+					$data["error"] = t("Teemade kaust on valimata");
 				}
 				else
 				{
