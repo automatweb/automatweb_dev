@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.46 2003/03/06 17:54:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.47 2003/03/06 23:08:07 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -38,6 +38,8 @@ class aw_table
 		$this->rowdefs = array();
 		$this->data = array();
 		$this->actions = array();
+		$this->col_styles = array();
+		$this->nfields = array();
 
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et m??rata default sort order.
@@ -162,6 +164,10 @@ class aw_table
 		$aw_tables = aw_global_get("aw_tables"); 
 		$sess_field_key   = $this->prefix . "_sortby";
 		$sess_field_order = $this->prefix . "_sorder";
+		if (empty($params["sorder"]))
+		{
+			$params["sorder"] = "asc";
+		};
 
 		// figure out the column by which we must sort
 		// start from the parameters
@@ -210,10 +216,10 @@ class aw_table
 		}*/
 
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
-		$this->rgroupby = $params["rgroupby"];
-		$this->rgroupsortdat = $params["rgroupsortdat"];
-		$this->vgroupby = $params["vgroupby"];
-		$this->vgroupdat = $params["vgroupdat"];
+		$this->rgroupby = isset($params["rgroupby"]) ? $params["rgroupby"] : "";
+		$this->rgroupsortdat = isset($params["rgroupsortdat"]) ? $params["rgroupsortdat"] : "";
+		$this->vgroupby = isset($params["vgroupby"]) ? $params["vgroupby"] : "";
+		$this->vgroupdat = isset($params["vgroupdat"]) ? $params["vgroupdat"] : "";
 
 		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
 		// after this point are always arrays
@@ -327,7 +333,7 @@ class aw_table
 				$v1 =$a[$_eln];
 				$v2 =$b[$_eln];
 				$this->u_sorder = $this->sorder[$_eln];
-				$this->sort_flag = $this->nfields[$_eln] ? SORT_NUMERIC : SORT_REGULAR;
+				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
 				if ($v1 != $v2)
 				{
 					break;
@@ -417,17 +423,32 @@ class aw_table
 		}
 		
 		// if we show title under grouping elements, then we must not show it on the first line!
-		if (!$this->titlebar_under_groups && !$arr["no_titlebar"])
+		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]))
 		{
 			// make header!
 			$tbl .= $this->opentag(array("name" => "tr"));
 			foreach($this->rowdefs as $k => $v)
 			{
 				$style = false;
-				$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
+				if (isset($v["sortable"]))
+				{
+					if (isset($this->sortby[$v["name"]]))
+					{
+						$style_key = "header_sorted";
+					}
+					else
+					{
+						$style_key = "header_sortable";
+					};
+				}
+				else
+				{
+					$style_key = "header_normal";
+				};
+				$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
 				if (!$style)
 				{
-					$style = (isset($v["sortable"]) ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+					$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
 				}
 				$tbl.=$this->opentag(array(
 					"name" => "td",
@@ -447,8 +468,8 @@ class aw_table
 					// by default, if a column is not sorted and you click on it, it should be sorted asc
 					$so = "asc";
 
-					// kui on sorteeritud selle v?lja j?rgi
-					if ($this->sortby[$v["name"]])
+					// kui on sorteeritud selle välja järgi
+					if (isset($this->sortby[$v["name"]]))
 					{
 						$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
 						$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
@@ -564,14 +585,24 @@ class aw_table
 					{
 						if (isset($this->sortby[$v1["name"]])) 
 						{
-							$style = (($counter % 2) == 0) ? $this->col_styles[$v1["name"]]["content_sorted_style2"] : $this->col_styles[$v1["name"]]["content_sorted_style1"];
+							$style_key = (($counter % 2) == 0) ? "content_sorted_style2" : "content_sorted_style1";
 							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
 						} 
 						else 
 						{
-							$style = (($counter % 2) == 0) ? $this->col_styles[$v1["name"]]["content_style2"] : $this->col_styles[$v1["name"]]["content_style1"];
+							
+							$style_key = (($counter % 2) == 0) ? "content_style2" : "content_style1";
 							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
+						};
+
+						if (isset($this->col_styles[$v1["name"]][$style_key]))
+						{
+							$style = $this->col_styles[$v1["name"]][$style_key];
 						}
+						else
+						{
+							$style = "";
+						};
 
 						if (!$style)
 						{
@@ -699,7 +730,7 @@ class aw_table
 			$tbl .= $this->closetag(array("name" => "table"));
 		};
 
-		// tagastame selle k?ki
+		// tagastame selle käki
 		return $tbl;
 	}
 
