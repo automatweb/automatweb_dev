@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.20 2003/02/07 19:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.21 2003/02/07 19:42:25 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -639,6 +639,7 @@ class form_calendar extends form_base
 		};
 		$this->el_relation = $row["el_relation"];
 		$this->cal_controller = $cal_controller;
+		$this->cal_id = $row["cal_id"];
 			
         }
 
@@ -676,6 +677,8 @@ class form_calendar extends form_base
                         LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
                         WHERE relation = '$rel' AND cal_id = '$cal_id' AND form_id = '$id'
                                 AND end >= '$_start' AND start <= '$_end'";
+
+		$this->db_query($q);
                                                                                                                             
                 while($row = $this->db_next())
                 {

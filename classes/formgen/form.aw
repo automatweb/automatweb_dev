@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.33 2003/02/07 19:00:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.34 2003/02/07 19:42:25 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1037,6 +1037,8 @@ class form extends form_base
 			// set error messages otherwise
 			$this->fcal_instance = get_instance("formgen/form_calendar");
 			$this->fcal_instance->init_cal_controller(array("id" => $this->id));
+			$rel_value = $this->get_element_selection_id($this->fcal_instance->el_relation);
+			$this->fcal_instance->relation = $rel_value;
 		}
 
 		$c="";
