@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.25 2004/12/02 16:00:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.26 2004/12/07 09:04:55 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -46,6 +46,9 @@
 
 @property group_in_table type=select
 @caption Millise v&auml;lja j&auml;rgi tabel grupeerida
+
+@property filter_by_char_field type=select
+@caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
@@ -94,6 +97,8 @@ class object_treeview_v2 extends class_base
 		"select" => "Vali"
 	);
 
+	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "õ", "ä", "ö", "ü", "x", "y", "z");
+
 	function object_treeview_v2()
 	{
 		$this->init(array(
@@ -137,8 +142,7 @@ class object_treeview_v2 extends class_base
 // folders or not. If it doesn't, i think theres nothing to do with that
 // property so just hide it.
 				$ds_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_DATASOURCE");
-
-				if(($ds_obj->class_id() == CL_OTV_DS_OBJ) && ($ds_obj->prop("use_meta_as_folders") == 1))
+				if(!empty($ds_obj) && ($ds_obj->class_id() == CL_OTV_DS_OBJ) && ($ds_obj->prop("use_meta_as_folders") == 1))
 				{
 					$prop['options'] = $col_list;
 				}
@@ -148,6 +152,9 @@ class object_treeview_v2 extends class_base
 				}
 				break;
 			case "group_in_table":
+				$prop['options'] = $col_list;
+				break;
+			case "filter_by_char_field":
 				$prop['options'] = $col_list;
 				break;
 			case "group_table":
@@ -223,6 +230,7 @@ class object_treeview_v2 extends class_base
 
 		@param id required type=int acl=view
 		@param tv_sel optional type=int
+		@param char optional
 	**/
 	function show($arr)
 	{
@@ -268,10 +276,13 @@ class object_treeview_v2 extends class_base
 
 
 
-		// do some filtering in $ol
+// do some filtering in $ol
 		$filters = $ob->meta("saved_filters");
-
-		if ((is_array($filters) && count($filters) > 0) || !empty($GLOBALS['tv_sel']))
+// filtering is taking place if one of the following conditions are present:
+// -> $filter variable is array and its element count is bigger than zero
+// -> $GLOBALS['tv_sel'] is not empty
+// -> $GLOBALS['char'] is not empty
+		if ((is_array($filters) && count($filters) > 0) || !empty($GLOBALS['tv_sel']) || !empty($GLOBALS['char']))
 		{
 
 //			$ol_result = array();
@@ -301,18 +312,27 @@ class object_treeview_v2 extends class_base
 					}
 				}
 
-// if meta data fields are used as folders, then i need to do some
+// if meta data fields are used as folders, then i need to do
 // some filtering according to $GLOBALS['tv_sel']
-				if($d_o->prop("use_meta_as_folders") == 1)
+				if(($d_o->prop("use_meta_as_folders") == 1) && empty($GLOBALS['char']))
 				{
 					if(!empty($GLOBALS['tv_sel']) && ($fld[$GLOBALS['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
 					{
 						unset($ol[$ol_key]);
 					}
 				}
+				if(!empty($GLOBALS['char']))
+				{
+					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
+					if((strlen($GLOBALS['char']) == 1) && ($f[0] != $GLOBALS['char']))
+					{
+						unset($ol[$ol_key]);
+
+
+					}
+				}
 			}
 
-//			$ol = $ol_result;
 		}
 
 // some filtering according to url parameter. Only needed if folders are
@@ -418,13 +438,18 @@ class object_treeview_v2 extends class_base
 		$group_field = $ob->prop("group_in_table");
 		$group_name = "";
 		$sel_cols_count = count($sel_cols);
+// parsing table rows - if the field value, which is used to make table groups
+// changes, i'll create group header line and put it in the table
+// groups are not made, if char param is present in url
 		foreach($ol as $odata)
 		{
-//			echo $group_name." :: ".$odata[$group_field]." :: ".$group_field."<br>";
-			if($group_name != $odata[$group_field])
+			if(($group_name != $odata[$group_field]) && empty($GLOBALS['char']))
 			{
-				$this->vars(array("content" => $odata[$ob->prop("group_in_table")]));
-				$this->vars(array("cols_count" => $sel_cols_count));
+				$this->vars(array(
+					"content" => $odata[$ob->prop("group_in_table")],
+					"cols_count" => $sel_cols_count,
+					"group_bgcolor" => "#".$ob->prop("group_header_bgcolor"),
+				));
 				$c .= $this->parse("FILE_GROUP");
 			}
 
@@ -436,16 +461,7 @@ class object_treeview_v2 extends class_base
 			));
 			$group_name = $odata[$group_field];
 		}
-/*
-		$ajutine_muutuja = "";
-		for($muutuja=0; $muutuja<10; $muutuja++)
-		{
-			$this->vars(array("muutuja" => $muutuja));
-			$ajutine_muutuja .= $this->parse("FILE_GROUP");
-		}
 
-		$this->vars(array("FILE_GROUP" => $ajutine_muutuja));
-*/
 		$tb = "";
 		$no_tb = "";
 		if ($ob->prop("show_add"))
@@ -457,7 +473,28 @@ class object_treeview_v2 extends class_base
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
 
+		$filter_by_char_field = $ob->meta("filter_by_char_field");
+		if(!empty($filter_by_char_field))
+		{
+			$alphabet_parsed = "";
+			foreach($this->alphabet as $char)
+			{
+				$this->vars(array(
+					"char" => $char,
+					"char_url" => aw_url_change_var("char", $char),
+				));
+				$alphabet_parsed .= $this->parse("ALPHABET");
+			}
+// lets put a link at the end of the alphabet to reset the char to empty value
+			$this->vars(array(
+				"char" => t("K&otilde;ik"),
+				"char_url" => aw_url_change_var("char", ""),
+			));
+			$alphabet_parsed .= $this->parse("ALPHABET");
+		}
+
 		$this->vars(array(
+			"ALPHABET" => $alphabet_parsed,
 			"FILE" => $c,
 			"HEADER_HAS_TOOLBAR" => $tb,
 			"HEADER_NO_TOOLBAR" => $no_tb,
@@ -847,6 +884,7 @@ class object_treeview_v2 extends class_base
 	{
 		extract($parms);
 		extract($arr);
+
 		$ld = array(
 			"url" => $url,
 			"caption" => $name,
@@ -938,6 +976,12 @@ class object_treeview_v2 extends class_base
 		$this->vars(array(
 			"COLUMN" => $str
 		));
+
+// get row background color
+		$this->vars(array(
+			"bgcolor" => "#".$this->_get_bgcolor($tree_obj, $this->cnt),
+		));
+
 		return $this->parse("FILE");
 	}
 

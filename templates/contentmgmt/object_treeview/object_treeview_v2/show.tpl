@@ -35,7 +35,6 @@ text-decoration: none;
 		<!-- SUB: COLUMN -->
 		<td class="{VAR:css_class}">{VAR:content}</td>
 		<!-- END SUB: COLUMN -->
-
 	</tr>
 	<!-- END SUB: FILE -->
 	<!-- SUB: FILE_GROUP -->
@@ -44,7 +43,11 @@ text-decoration: none;
 	</tr>
 	<!-- END SUB: FILE_GROUP -->
 </table>
-
+<center>
+<!-- SUB: ALPHABET -->
+<a href="{VAR:char_url}">{VAR:char}</a>&nbsp;&nbsp; 
+<!-- END SUB: ALPHABET -->
+</center>
 {VAR:reforb}
 
 </form>
