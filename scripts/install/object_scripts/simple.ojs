@@ -39,21 +39,31 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 		# AW objektide menyy
 		$aw_obj = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Avalikud AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
-			$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
-				#obj { class_id=CL_USER, parent=${users}, name=${default_user}, uid=${default_user}, password=${default_user_pwd}, status=STAT_ACTIVE }
+
+			$ctmt = obj { class_id=CL_MENU, parent=${aw_obj}, name="Sisuhaldus", type=MN_CLIENT, jrk="10", status=STAT_NOTACTIVE }
+
+				$cont = obj { class_id=CL_MENU, parent=${ctmt}, name="Konteinerid", type=MN_CLIENT, status=STAT_ACTIVE }
+
+
+			obj { class_id=CL_MENU, parent=${aw_obj}, name="Interaktiivne", type=MN_CLIENT, jrk="20", status=STAT_NOTACTIVE }
+			obj { class_id=CL_MENU, parent=${aw_obj}, name="Tugiteenused", type=MN_CLIENT, jrk="30", status=STAT_NOTACTIVE }
+
 
 			# grupid - k6ik kasutajad, administraatorid
-			$grps = obj { class_id=CL_MENU, parent=${aw_obj}, name="Grupid", type=MN_CLIENT, status=STAT_ACTIVE }
-				#$all_users = obj { class_id=CL_GROUP, parent=${grps} name="K&otilde;ik kasutajad", status=STAT_ACTIVE }
+			$grps = obj { class_id=CL_MENU, parent=${aw_obj}, name="Kasutajagrupid", jrk="40", type=MN_CLIENT, status=STAT_NOTACTIVE }
 
-			$cont = obj { class_id=CL_MENU, parent=${aw_obj}, name="Konteinerid", type=MN_CLIENT, status=STAT_ACTIVE }
+			
+			$mn_conf = obj { class_id=CL_MENU, parent=${aw_obj}, name="S&uuml;steemsed seaded", type=MN_CLIENT, jrk="50", status=STAT_NOTACTIVE }
 
-			# siia peaks tulema 
-			$mn_conf = obj { class_id=CL_MENU, parent=${aw_obj}, name="Seaded", type=MN_CLIENT, status=STAT_ACTIVE }
+				# adminni proged. - config only. could be none soon
+				$admin_root = obj { class_id=CL_MENU, parent=${mn_conf}, jrk="1", name="AutomatWeb" type=MN_ADMIN1, status=STAT_ACTIVE }
+					obj { class_id=CL_MENU, parent=${admin_root}, name="Config" type=MN_ADMIN1, admin_feature=PRG_CONFIG, status=STAT_ACTIVE }
+
 
 				$langs = obj { class_id=CL_MENU, parent=${mn_conf}, name="Keeled", type=MN_CLIENT, status=STAT_ACTIVE }
 
-				$dokforms = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi vormid", type=MN_CLIENT, status=STAT_ACTIVE }
+				$dokforms = obj { class_id=CL_MENU, parent=${mn_conf}, name="Seadete vormid", type=MN_CLIENT, status=STAT_ACTIVE }
+					$doc_conf_form = obj { class_id=CL_CFGFORM, parent=${dokforms}, name="Dokument", subclass=CL_DOCUMENT, classinfo_fixed_toolbar=1 }
 
 				$doktpl = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi templiidid", type=MN_CLIENT, status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${doktpl}, name="Tavaline pikk dokument", t_name="Tavaline pikk dokument", type=2, filename="plain.tpl", status=STAT_ACTIVE }
@@ -66,12 +76,11 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 					$search_grp = obj { class_id=CL_SITE_SEARCH_CONTENT_GRP, parent=${search_fld}, name="Kogu sait", status=STAT_ACTIVE }
 					$search_obj = obj { class_id=CL_SITE_SEARCH_CONTENT, parent=${search_fld}, name="Saidi sisu otsing", status=STAT_ACTIVE, search_live=1, per_page=20, default_order=1, default_search_opt=1 }
 
-		# adminni proged. - config only. could be none soon
-		$admin_root = obj { class_id=CL_MENU, parent=${klient}, jrk="1", name="AutomatWeb" type=MN_ADMIN1, status=STAT_ACTIVE }
-			obj { class_id=CL_MENU, parent=${admin_root}, name="Config" type=MN_ADMIN1, admin_feature=PRG_CONFIG, status=STAT_ACTIVE }
-				
+				$add_tree_conf = obj { class_id=CL_ADD_TREE_CONF, parent=${mn_conf}, name="Lisamise puu seaded", status=STAT_NOTACTIVE }
 
 		$aw_obj_priv = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Piiratud ligip&auml;&auml;suga AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
+
+$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
 
 ini { site_rootmenu=${site_root} }
 
@@ -92,3 +101,17 @@ ini { groups.tree_root=${grps} }
 ini { amenustart=${admin_root} }
 
 ini { admin_rootmenu2=${klient} }
+
+ini { document.no_static_forms = 1 }
+
+ini { document.default_cfgform = ${doc_conf_form} }
+
+ini { menuedit.num_menu_images = 3 }
+
+ini { menu.num_menu_images = 3 }
+
+ini { debug_mode = 1 }
+
+ini { menuedit.recursive_aliases = 1 }
+
+ini { menuedit.long_menu_aliases = 1 }
