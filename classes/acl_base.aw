@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.49 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.50 2004/02/29 17:43:07 kristo Exp $
 
 lc_load("definition");
 
@@ -437,7 +437,7 @@ class acl_base extends db_connector
 			}
 
 			// FIXME: after I have checked all the relevant checkboxes for all the sites, this should return $can_adm
-			return $can_adm;
+			return true; //$can_adm;
 		};
 	}
 
