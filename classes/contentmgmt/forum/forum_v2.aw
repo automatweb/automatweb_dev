@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.62 2005/01/04 13:42:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.63 2005/01/04 14:57:54 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -1151,6 +1151,19 @@ class forum_v2 extends class_base
 				"value" => 1,
 			);
 		};
+		
+		$uid = aw_global_get("uid");
+		$add = "";
+		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
+		{
+			$this->vars(array(
+				"author" => $uid,
+			));
+			$add = "_logged";
+		}
+		$this->vars(array(
+			"a_name" => $this->parse("a_name".$add),
+		));
 			
 		$retval["contents"] = array(
 			"type" => "text",
