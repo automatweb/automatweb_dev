@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.23 2004/02/12 10:58:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.24 2004/02/12 10:59:41 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -34,7 +34,7 @@
 	@property message type=textarea cols=80 rows=40
 	@caption Sisu
 
-	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no 
+	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no
 	@caption Manused
 
 	property send type=submit value=Saada store=no 
@@ -185,6 +185,7 @@ class mail_message extends class_base
 			};
 			$to_list = true;
 		};
+
 
 		if ($to_list)
 		{
@@ -544,6 +545,7 @@ class mail_message extends class_base
 			$tb->add_separator();
 			$tb->add_menu_button(array(
 				"name" => "calendar",
+				"tooltip" => "",
 				"img" => "icon_cal_today.gif",
 			));
 			$ev_classes = $pl->get_event_classes();
@@ -578,6 +580,7 @@ class mail_message extends class_base
 		$tb->add_menu_button(array(
 			"name" => "viewmode",
 			"img" => "preview.gif",
+			"tooltip" => "",
 		));
 
 		$tb->add_menu_item(array(
