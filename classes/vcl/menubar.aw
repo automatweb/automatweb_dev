@@ -8,7 +8,7 @@ class menubar extends aw_template
 	function menubar($args = array())
 	{
 		$this->init("tabpanel");
-		$tpl = isset($args["tpl"]) ? $args["tpl"] . ".tpl" : "tabs2.tpl";
+		$tpl = isset($args["tpl"]) ? $args["tpl"] . ".tpl" : "menus.tpl";
 		$this->read_template($tpl);
 		$this->tabs = array();
 		$this->tabcount = array();
