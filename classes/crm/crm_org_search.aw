@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.8 2004/07/05 13:21:15 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.9 2004/08/18 11:45:07 rtoomas Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -146,11 +146,6 @@ class crm_org_search extends class_base
 			return false;
 		};
 
-		$filter = array(
-			"class_id" => CL_CRM_COMPANY,
-			"limit" => 100,
-		);
-
 		$req = $arr["request"];
 
 		array_walk($req, create_function('&$v,$k', '$v = trim($v);'));
@@ -195,7 +190,7 @@ class crm_org_search extends class_base
 			};
 		};
 		$addr_filter = array();
-
+		
 		if (!empty($req["city"]))
 		{
 			$addr_filter["linn"] = $req["city"];
@@ -213,6 +208,7 @@ class crm_org_search extends class_base
 
 		$addr_xfilter = array();
 		$no_results = false;
+
 		if(sizeof($xfilter['linn']))
 		{
 			$city_list = new object_list(array(
@@ -257,15 +253,14 @@ class crm_org_search extends class_base
 
 		if (sizeof($addr_filter) > 0 || sizeof($addr_xfilter)>0)
 		{
-			$addr_filter["class_id"] = CL_CRM_ADDRESS;
-			$addr_filter["limit"] = 100;
-			$addr_xfilter['class_id'] = CL_CRM_ADDRESS;
-			$addr_xfilter['limit'] = 100;
-
 			if(sizeof($addr_xfilter))
 			{
 				$addr_filter = $addr_xfilter;
 			}
+			
+			$addr_filter["class_id"] = CL_CRM_ADDRESS;
+			$addr_filter["limit"] = 100;
+			
 			$addr_list = new object_list($addr_filter);
 			if (sizeof($addr_list->ids()) > 0)
 			{
@@ -285,6 +280,10 @@ class crm_org_search extends class_base
 		{
 			$filter = $xfilter;
 		}
+		
+		$filter['class_id'] = CL_CRM_COMPANY;
+		$filter['limit'] = 100;
+		
 		$results = new object_list($filter);
 		$count = 0;
 
