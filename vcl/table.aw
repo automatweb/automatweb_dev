@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.68 2003/10/28 12:46:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.69 2003/11/04 19:51:56 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -751,7 +751,24 @@ class aw_table
 
 					if (isset($v1["type"]) && $v1["type"] == "time")
 					{
-						$val = date($v1["format"],$val);
+						if (!empty($v1["smart"]))
+						{
+							$today = date("dmY");
+							$thisdate = date("dmY",$val);
+							if ($today == $thisdate)
+							{
+								// XX: make it translatable
+								$val = "täna";
+							}
+							else
+							{
+								$val = date($v1["format"],$val);
+							};
+						}
+						else
+						{
+							$val = date($v1["format"],$val);
+						};
 					};
 
 					if (empty($val) && $v1["type"]!="int")
