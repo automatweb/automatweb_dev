@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.107 2003/05/19 15:06:20 axel Exp $
+// $Id: class_base.aw,v 2.108 2003/05/29 15:38:06 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -464,7 +464,7 @@ class class_base extends aw_template
 					continue;
 				};
 
-				if ($type == "date_select")
+				if (($type == "date_select") || ($type == "datetime_select"))
 				{
 					// turn the array into a timestamp
 					$savedata[$name] = date_edit::get_timestamp($savedata[$name]);
@@ -1608,6 +1608,11 @@ class class_base extends aw_template
 		if (empty($this->id) && isset($property["default"]))
 		{
 			$property["value"] = $property["default"];
+		}
+		else
+		if (empty($this->id) && $property["type"] == "datetime_select")
+		{
+			$property["value"] = time();
 		}
 		else
 		if (isset($this->values) && is_array($this->values))
