@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.13 2002/01/30 00:10:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.14 2002/02/28 12:17:53 duke Exp $
 // form_chain.aw - form chains
 lc_load("form");
 global $orb_defs;
@@ -244,7 +244,7 @@ class form_chain extends form_base
 
 		$this->read_template("chain.tpl");
 
-		if ($this->chain["fillonce"])
+		if ($this->chain["fillonce"] && $GLOBALS["uid"])
 		{
 			// kui seda saab aint yx kord t2ita siis yritame leida selle t2itmise
 			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".$GLOBALS["uid"]."'","id");
