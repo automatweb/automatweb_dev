@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.294 2003/06/04 14:19:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.295 2003/06/26 15:31:22 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -157,7 +157,7 @@ class menuedit extends aw_template
 		else
 		{
 			// kui asi on caches, siis paneme kirja et mis lehte vaadatati.
-			$ch = $this->get_object_chain($section);
+			$ch = $this->get_object_chain($section, true);
 			//reset($ch);
 			//while (list($k,$v) = each($ch))
 			foreach($ch as $k => $v)
