@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.80 2003/04/23 11:49:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.81 2003/08/01 11:26:16 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -199,6 +199,10 @@ define("FORM_USES_CALENDAR",58);
 
 // object flags - bitmask
 define("OBJ_HAS_CALENDAR",1);
+// this will be set for objects that need to be translated
+define("OBJ_NEEDS_TRANSLATION",2);
+// this will be set for objects whose translation has been checked/confirmed
+define("OBJ_IS_TRANSLATED",4);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
