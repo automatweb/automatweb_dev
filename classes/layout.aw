@@ -141,7 +141,9 @@ class layout extends class_base
 
 			case "grid_preview":
 				$ge = get_instance("vcl/grid_editor");
-				$prop['value'] = $ge->show($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+				$grid = $arr['obj_inst']->meta('grid');
+				$grid["table_style"] = $arr["obj_inst"]->meta("table_style");
+				$prop['value'] = $ge->show($grid, $arr['obj_inst']->id());
 				break;
 
 			case "table_style":
