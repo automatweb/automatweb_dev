@@ -1,8 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.24 2004/06/15 09:57:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.25 2004/06/15 11:13:03 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_UNIT, on_connect_unit_to_person)
+
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
@@ -243,6 +246,7 @@ CREATE TABLE `kliendibaas_firma` (
 class crm_company extends class_base
 {
 	var $unit=0;
+	var $activeNode = 0;
 
 	function crm_company()
 	{
@@ -252,20 +256,25 @@ class crm_company extends class_base
 		));
 	}
 		
-	function generate_tree($tree, $obj,$node_id){
+	function generate_tree($tree, $obj,$node_id)
+	{
 		//objekti kõik seosed
 		$conns = $obj->connections_from(array(
 			'type'=>'RELTYPE_UNIT'
 		));
 		//kõik objektid järgnevas loobis peavad minema parentisse, mille
 		//id on parameetri hetke väärtus		
-		$this_level_id = new Integer($node_id->getValue());
+		$this_level_id = $node_id;
 		foreach($conns as $conn){
 			//iga alam item saab ühe võrra suurema väärtuse
-			$node_id->incr();	
-			$tree->add_item($this_level_id->getValue(),
-									array("id"=>$node_id->getValue(),
-											"name"=>$conn->prop('to.name'),
+			$node_id++;
+			if($conn->prop('to')==$this->activeNode)
+				$name='<b>'.$conn->prop('to.name').'</b>';
+			else
+				$name=$conn->prop('to.name');
+			$tree->add_item($this_level_id,
+									array("id"=>$node_id,
+											"name"=>$name,
 											'url'=>aw_url_change_var('unit',$conn->prop('to')))
 			);			
 			//$conn'ist saab objekt
@@ -293,12 +302,16 @@ class crm_company extends class_base
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];	
 				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
+				if($arr['request']['unit']=='parent'){//isset($arr['request']['unit']) && (int)$arr['request']['unit']){
+					$name = '<b>'.'Üksused'.'</b>';
+				}
+				else
+					$name = 'Üksused';
 				$tree_inst->add_item(0,array("id"=>1,
-														'name'=>'Üksused',
+														'name'=>$name,
 														'url'=>aw_url_change_var('unit','parent')));
-				//couldn't get reference of primitives working, using a Integer wrapper
-				$node_id = new Integer(0);
-				$node_id->incr();
+				$node_id = 1;
+				$this->activeNode = (int)$arr['request']['unit'];
 				crm_company::generate_tree(&$tree_inst,&$arr['obj_inst'],&$node_id);
 				break;
 			}
@@ -327,7 +340,7 @@ class crm_company extends class_base
 							'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
 							'reltype'=>$rel_type,
 							'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-						),'crm_unit')
+						),'crm_person')
 						
 				));
 				//delete button
@@ -807,9 +820,24 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => 8,
+				"reltype" => RELTYPE_WORKERS,
 			));
-		};
+		}
+	}
+
+	// Invoked when a connection is created from unit to person
+	// .. this will then create the opposite connection.
+	function on_connect_unit_to_person($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_UNIT)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => RELTYPE_MEMBER,
+			));
+		}
 	}
 
 	// Invoked when a connection from person to organization is removed
@@ -1189,7 +1217,8 @@ class crm_company extends class_base
 		@param id required type=int acl=view
 		@param unit optional type=int
 	**/
-	function submit_delete_relations($arr){
+	function submit_delete_relations($arr)
+	{
 		$mainObj = new Object($arr['id']);
 		
 		if((int)$arr['unit']){
@@ -1207,26 +1236,10 @@ class crm_company extends class_base
 		);
 	}
 
-	function callback_mod_reforb($arr){
+	function callback_mod_reforb($arr)
+	{
 		$arr['unit'] = $this->unit;
 	}
 }
-
-class Integer{
-	var $int = 0;
-	
-	function Integer($int){
-		$this->int=$int;
-	}
-		
-	function incr(){
-		$this->int++;
-	}
-	
-	function getValue(){
-		return $this->int;
-	}
-}
-
 
 ?>
