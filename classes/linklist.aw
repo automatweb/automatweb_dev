@@ -51,6 +51,46 @@ class linklist extends aw_template
 	}
 
 
+	function lingikogu_toolbar($arr)
+	{
+		extract($arr); //id
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+		$toolbar->add_separator();
+		$toolbar->add_button(array(
+			"name" => "change",
+			"tooltip" => "konfigureeri",
+			"url" => $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "conf.gif",
+			"img" => "conf.gif",
+		));
+
+		$toolbar->add_separator();
+		$toolbar->add_button(array(
+			"name" => "stats",
+			"tooltip" => "stat conf",
+			"url" => $this->mk_my_orb("stats", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "lists_over.gif",
+			"img" => "lists.gif",
+		));
+		$toolbar->add_button(array(
+			"name" => "show_stats",
+			"tooltip" => "show stats",
+			"url" => $this->mk_my_orb("show_stats", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "conf.gif",
+			"img" => "conf.gif",
+
+
+		));
+//		$toolbar->add_cdata($this->parse("aliaslist"));
+		return $toolbar->get_toolbar();
+	}
 
 
 
@@ -64,26 +104,6 @@ class linklist extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-		$toolbar->add_button(array(
-			"name" => "stat",
-			"tooltip" => "statistika",
-			"url" => $this->mk_my_orb("stat", array("id" => $id, "return_url" => urlencode($return_url))),
-			"imgover" => "lists_over.gif",
-			"img" => "lists.gif",
-		));
-		$toolbar->add_separator();
-//		$toolbar->add_cdata($this->parse("aliaslist"));
-		$toolbar = $toolbar->get_toolbar();
-
-
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda linklist");
@@ -178,6 +198,12 @@ class linklist extends aw_template
 //					"return" => ARR_ALL,
 			));
 
+			//leiame stiilid
+			$stiilid= $this->list_objects(array(
+					"class" => CL_CSS,
+					"orderby" => "name",
+			));
+
 			if($ob["meta"]["forms"])
 			{
 				$form = get_instance("form"); 
@@ -242,6 +268,7 @@ class linklist extends aw_template
 			$this->vars(array(
 					"mis" => $key,
 					"is_hyper" => checked($ob["meta"]["klikitav"][$key]),
+					"stiilid"=> $this->picker($ob["meta"]["stiil"][$key],$stiilid),
 			));
 			$klikitav.= $this->parse("klikitav");
 		}
@@ -249,19 +276,18 @@ class linklist extends aw_template
 		$ref = $this->mk_reforb("submit", array("id" =>  $id, "return_url" => urlencode($return_url)));
 
 		//gets a list of templates (for linkslist "show")
-		$list_templates = $this->get_templates(SHOW_TPL_DIR);
 
 		$this->vars(array(
-		
+	
 				"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
 				"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
 				"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
 
 			"jrk_columns_default" => checked($ob["meta"]["jrk_columns_default"]),
 			"dir_is_form_result" => checked($ob["meta"]["dir_is_form_result"]),
-			"toolbar" => $toolbar,
+			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
 			"default_tulpi" => $ob["meta"]["default_tulpi"],			// default column count
-			"abix" => "", 
+			"abix" => $ob["meta"]["test"][1][2][8]."test", 
 			"is_formentry" => $ob["meta"]["is_formentry"]?checked($ob["meta"]["is_formentry"]):"",		// kas on vormisisestus (radio)
 			"is_not_formentry" => $ob["meta"]["is_formentry"]?"":checked(1),	// kas on vormisisestus (radio)
 			"vormisisestus" => $vormisisestus,				// formentry data (sub)
@@ -276,7 +302,7 @@ class linklist extends aw_template
 			"path" => checked($ob["meta"]["path"]),				//show path
 			"default_sortby_dirs" => $this->picker($ob["meta"]["default_sortby_dirs"], $sortim),
 			"default_sortby_links" => $this->picker($ob["meta"]["default_sortby_links"], $sortim),
-			"default_template" => $this->picker($ob["meta"]["default_template"], $list_templates),
+			"default_template" => $this->picker($ob["meta"]["default_template"], $this->get_templates(SHOW_TPL_DIR)),
 			"rootitems" => $this->picker($ob["meta"]["lingiroot"], $root_list),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
@@ -311,6 +337,27 @@ class linklist extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
+		if ($statconf)
+		{
+
+
+			return $this->mk_my_orb("stats", array_merge($from_date,$till_date,array(
+			"second" => $till_date["second"],
+			"yearly" => $yearly,
+			"monthly" => $monthly,
+			"dayly" => $dayly,
+			"weekly" => $weekly,
+			"hourly" => $hourly,
+			"minutely" => $minutely,
+			"secondly" => $secondly,
+
+
+				"oo"=>88, 
+				"id" => $id, 
+				"return_url" => urlencode($return_url)
+			)));		
+		}
+
 		if ($id)
 		{
 			$this->upd_object(array(
@@ -320,19 +367,21 @@ class linklist extends aw_template
 				"metadata" => array(
 					"lingiroot" => $lingiroot,
 					"path" => $path,
-
+"test"=>$test,
 					"tulpi" => $tulpi,
 					"jrk_columns" => $jrk_columns,
 					"level_template" => $level_template,
 					"sortby_dirs" => $sortby_dirs,
 					"sortby_links" => $sortby_links,
 					"kustuta" => $kustuta,
-
+					"stiil"=>$stiil,
 					"is_formentry" => $is_formentry,
 					"forms" => $forms,
 					"felement" => $felement,
 					"dir_is_form_result" => $dir_is_form_result,
 					"vordle" => $vordle,
+					"form_output_is" => $form_output_is,
+
 					"jrk_columns_default" => $jrk_columns_default,
 					"default_tulpi" => (int)$default_tulpi?(int)$default_tulpi:1,
 					"klikitav" => $klikitav,
@@ -364,11 +413,11 @@ class linklist extends aw_template
 			));
 		}
 
-
 		if ($alias_to)
 		{
 			$this->add_alias($alias_to, $id);
 		}
+
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
@@ -392,7 +441,7 @@ class linklist extends aw_template
 	function show($arr)
 	{
 		extract($arr); // cd = current directory
-
+		$uid= aw_global_get("uid");
 		$this->write_stat(array("oid"=>$id,"uid"=>$uid,"action"=>1));
 
 		$ob = $this->get_object($id);
@@ -460,7 +509,7 @@ class linklist extends aw_template
 					"return" => ARR_ALL
 				));
 				//linkide asemel on vormi väljastus
-				$links = $form->new_do_search(array()); 
+				$links = $form->new_do_search(array("output_id"=>$ob["meta"]["form_output_is"]));
 	
 			}
 
@@ -603,11 +652,17 @@ class linklist extends aw_template
 					$links.= $this->parse("links"); //parse links
 				}
 			}
+		$s = get_instance("css");
 
-		
+ 		$day_style = $this->get_object($ob["meta"]["stiil"]);
+		$css = "<style>\n";
+		$css .= $s->_gen_css_style("style".$day_style["oid"],$day_style["meta"]["css"]);
+		$css .= "</style>";
+
 
 		$this->vars(array(
-			"abix"=>$tase,
+			"css" => $css,
+			"abix" => $tase."<a href=# class=\"style".$ob["meta"]["stiil"]."\">stiiil</a>",
 			"nms" => $nms,
 			"total" => (int)$total,
 			"total2" => (int)$total2,
@@ -721,91 +776,148 @@ function write_stat($arr)
 
 /////////////////////////////////
 
+
 /*
-			"stat"=>$this->get_stat(array()),
+	function statsu($arr)
+	{
+		extract($arr);
+//print_r($arr);
+
+		return $this->mk_my_orb("stats", array("year"=>$year,"id" => $id, "return_url" => urlencode($return_url)));
+	}
+*/
 
 
+	function stats($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($id);
+		$this->read_template("stats.tpl");
 
-function stat($arr)
+function add_cero($dat,$len=2,$cero="0")
 {
-extract($arr);
-if ($)
-
-
-
-
-
+return $dat=strlen($dat)<$len?$cero.(int)$dat:$dat;
 }
 
+extract($from_date);
+$t1=$year.add_cero($month).add_cero($day).add_cero($hour).add_cero($minute).add_cero($second);
+extract($till_date,EXTR_PREFIX_ALL,"_");
+$t1=$year.add_cero($month).add_cero($day).add_cero($hour).add_cero($minute).add_cero($second);
 
 
-
-function get_stat($arr)
+if (($from) && ($_till))
 {
-		extract($arr);
-		$this->read_template("stat.tpl");
+$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
+}
+elseif($from)
+{
+$q = "select * from lingikogu_stat where tm>='$t1'";
+}
+elseif($_till)
+{
+$q = "select * from lingikogu_stat where tm<='$t1'";
+}
+else
+$q = "select * from lingikogu_stat";
 
-	$sekund=date("s");
-	$minut=date("i");
-	$tund=date("H");
-	$paev=date("d");
-	$kuu=date("m");
-	$aasta=date("Y");
+/*
+$q = "select * from lingikogu_stat where tm>='$tm' limit 50";
+$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
+*/
 
 
+$stat_out = $this->show_stats($id,$q);
+/*
+if (!$year)
+{
+	$second=date("s");
+	$minute=date("i");
+	$hour=date("H");
+	$day=date("d");
+	$month=date("m");
+	$year=date("Y");
+}
+*/
+
+		load_vcl("date_edit");
+		$from = new date_edit("active_until");
+		$from->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => ""
+		));
+
+		$this->vars(array(
+		"caunt"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat","caunt"),
+		"caunt_dirs"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=1","caunt"),
+		"caunt_links"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=2","caunt"),
+			"from_date" => $from_date,
+			"till_date" => $till_date,
+			"stat_out"=>$stat_out,
+			"from" => $from->gen_edit_form("from",0),
+			"to" => $from->gen_edit_form("to",0),
 
 
-$now=$aasta.$kuu.$paev.$tund.$minut.$sekund;
+			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
+			"abix" => $abix,
+			"name" => $ob["name"],
+			"link" => $this->mk_my_orb("stats", array("id" => $id, "return_url" => urlencode($return_url))),
+			"reforb" => $this->mk_reforb("submit", array("statconf"=>1, "id" => $id, "return_url" => urlencode($return_url))),
+		));
+		return $this->parse();
+}
 
-$t1="20020115110011";
-$t2="20021015110011";
+	
+	
 
+	
+	function show_stats($id,$q) //id,query,
+	{
+	/*
 
-$q = "select oid from lingikogu_stat where tm between $t1 and $t2"; //vahemik
+	$second=date("s");
+	$minute=date("i");
+	$hour=date("H");
+	$day=date("d");
+	$month=date("m");
+	$year=date("Y");
+
+	$sekund="00";
+	$minut="00";
+	$tund="01";
+	$paev="11";
+	$kuu="11";
+	$aasta="2002";
+*/
+
+//$q = "select oid from lingikogu_stat where tyyp = tm between '$t1' and '$t2'"; //vahemik
+
+//$q = "select * from lingikogu_stat where tm between '$t1' and NOW()"; //vahemik
 //$q = "select oid from lingikogu_stat where tm >= $t1"; //alates
 //$q = "select oid from lingikogu_stat where tm <= $t1"; //kuni
 //$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
 //$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
-
 	
 	$this->db_query($q);
 
-while ($row=$this->db_fetch_row())
-{
-
-			print_r($row);
-
-}
-		
-
-
-
-
-		$q = "select count(id) as caunt from lingikogu_stat";
-		$caunt=$this->db_fetch_field($q,"caunt");
-		$q = "select count(id) as caunt from lingikogu_stat where action=1";
-		$caunt_dirs=$this->db_fetch_field($q,"caunt");
-		$q = "select count(id) as caunt from lingikogu_stat where action=2";
-		$caunt_links=$this->db_fetch_field($q,"caunt");
-
-		$this->vars(array(
-			"caunt"=>$caunt,
-			"caunt_links"=>$caunt_links,
-			"caunt_dirs"=>$caunt_dirs,
-//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,
+			load_vcl("table");
+			$t = new aw_table(array(
+				"prefix" => "lingikogu_stats", 
 			));
-
-		return $this->parse();
-
-
-//		$this->db_query($q);
-
-//return $html;
+//echo $this->cfg["site_basedir"];
+//			$t->parse_xml_def($this->cfg["site_basedir"]."/xml/linklist/show_stats.xml"); 
+			$t->parse_xml_def("/www/automatweb_dev/xml/linklist/show_stats.xml"); 
+			while ($row= $this->db_next()) 
+			{ 
+				$t->define_data($row); 
+			} 
+			$t->sort_by(); 
+			return $t->draw();
 }
 
 
-
-*/
 }
 
 ?>
