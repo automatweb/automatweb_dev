@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.269 2003/03/26 03:48:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.270 2003/03/28 11:24:41 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -5246,7 +5246,7 @@ class menuedit extends aw_template
 
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
-		$parent = isset($parent) ? $parent : $this->cfg["rootmenu"];
+		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
 		$sel_objs = aw_global_get("cut_objects");
 		if (!is_array($sel_objs))
 		{
@@ -5306,7 +5306,8 @@ class menuedit extends aw_template
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
-		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $cls $ps ");
+		$q = "SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $cls $ps ";
+		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
@@ -5402,7 +5403,6 @@ class menuedit extends aw_template
 				$this->t->define_data($row);
 			}
 		}
-
 		$this->get_add_menu(array(
 			"id" => $parent,
 			"ret_data" => true,
