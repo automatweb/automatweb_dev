@@ -152,7 +152,7 @@ function init_config($arr)
 		$fc = fread($f,filesize($cache_file));
 		fclose($f);
 		$GLOBALS["cfg"] = unserialize($fc);
-		if (is_array($GLOBALS["cfg"]["__default"]["classes"]))
+		if (is_array($GLOBALS["cfg"]["__default"]["classes"]) && $GLOBALS["cfg"]["__default"]["frontpage"] > 0)
 		{
 			$read_from_cache = true;
 		}
@@ -188,13 +188,17 @@ function init_config($arr)
 		// and write to cache if file is specified
 		if ($cache_file)
 		{
+			$str = serialize($GLOBALS["cfg"]);
+			
 			$f = @fopen($cache_file,"w");
 			if (!$f)
 			{
 				die("pagecache is not writable, cannot continue!");
 			};
-			$str = serialize($GLOBALS["cfg"]);
+			flock($f, LOCK_EX);
 			fwrite($f,$str);
+			fflush($f);
+			flock($f, LOCK_UN);
 			fclose($f);
 		}
 //		list($micro,$sec) = split(" ",microtime());
