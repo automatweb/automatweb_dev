@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.233 2004/02/04 13:49:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.234 2004/02/06 10:39:35 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -195,11 +195,11 @@ class document extends aw_template
 			extract($docid);
 		}
 
-		if (not($this->can("view",$docid)) && !$no_acl_checks)
+		if (not($this->can("view",$docid)) || not($this->object_exists($docid)))
 		{
-		//	and why is this commented out?
-		//	$this->data = false;
-		//	return false;
+			//	and why is this commented out?
+			$this->data = false;
+			return false;
 		}
 
 		if ($this->period > 0 && !$this->ignore_periods) 
@@ -281,6 +281,10 @@ class document extends aw_template
 		{
 			// we need to put the translation merging into this fetch function
 			$doc = $this->fetch($docid, $no_acl_checks);
+			if ($doc == false)
+			{
+				return "";
+			}
 			$doc_o = obj($docid);
 		}
 		else
@@ -426,6 +430,8 @@ class document extends aw_template
 			};
 		};
 
+
+		lc_site_load("document", &$this);
 		$this->vars(array("imurl" => "/images/trans.gif"));
 		// import charset for print
 		$_langs = get_instance("languages");
@@ -464,7 +470,7 @@ class document extends aw_template
 		# translate stuff between #code# and #/code#
 		if (false !== strpos($doc["content"],"#code#"))
 		{
-		       $doc["content"] = preg_replace("/(#code#)(.+?)(#\/code#)/esm","htmlspecialchars(stripslashes('\$2'))",$doc["content"]);
+		       $doc["content"] = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$doc["content"]);
 		};
 
 		if (false !== strpos($doc["content"],"#php#"))
@@ -1078,6 +1084,12 @@ class document extends aw_template
 		{
 			$retval = preg_replace("/<a(.*)>/U", "", $retval);
 			$retval = str_replace("</a>", "", $retval);
+		}
+
+		if (aw_global_get("print") || $GLOBALS["action"] == "print")
+		{
+			$apd = get_instance("layout/active_page_data");
+			$retval .= $apd->on_shutdown_get_styles();
 		}
 
 		if (aw_global_get("print"))
