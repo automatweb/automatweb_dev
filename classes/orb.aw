@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.33 2003/02/05 18:58:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.34 2003/02/07 14:51:10 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -489,6 +489,7 @@ class new_orb extends orb
 	//              if this is set, then server will be ignored
 	function do_method_call($arr)
 	{
+		$arr["server"] = str_replace("http://","",$arr["server"]);
 		extract($arr);
 
 		$this->fatal = true;
