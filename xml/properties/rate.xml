@@ -4,68 +4,74 @@
             <name>top</name>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Mitu topis</caption>
       </property>
       <property>
             <name>top_type</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>J&amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>objects_from</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Millistele objektidele kehtib</caption>
       </property>
       <property>
             <name>objects_from_clid</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali klass</caption>
       </property>
       <property>
             <name>objects_from_folder</name>
             <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_FOLDER</reltype>
+            <reltype>RELTYPE_RATE_FOLDER</reltype>
             <multiple>1</multiple>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali kataloogid</caption>
       </property>
       <property>
             <name>objects_from_oid</name>
             <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_OID</reltype>
+            <reltype>RELTYPE_RATE_OID</reltype>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali objekt</caption>
       </property>
       <classinfo>
             <syslog_type>ST_RATE</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
+      <reltypes>
+            <RATE_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Hinnatavate objektide kataloog</caption>
+            </RATE_FOLDER>
+            <RATE_OID>
+                  <value>2</value>
+                  <caption>Hinnatav objekt</caption>
+            </RATE_OID>
+      </reltypes>
 </properties>
 
