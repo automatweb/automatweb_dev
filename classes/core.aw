@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.15 2001/06/01 02:24:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.16 2001/06/01 02:30:53 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -648,6 +648,21 @@ class core extends db_connector
 					FROM objects
 					WHERE class_id = $class AND status != 0 $qualifier
 					GROUP BY objects.oid");
+	}
+	
+	////
+	// !loendab mingisse kindlasse klassi kuuluvad objektid mingi parenti all
+	// argumendid
+	// class (int) - klassi id
+	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
+	function count_objects($args = array())
+	{
+		extract($args);
+		$this->db_query("SELECT COUNT(*) AS cnt
+					FROM objects
+					WHERE class_id = $class AND status != 0 AND parent = '$parent'";
+		$row = $this->db_next();
+		return $row["cnt"];
 	}
 
 	////
