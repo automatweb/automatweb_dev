@@ -11,6 +11,16 @@
             <caption>Välimus</caption>
       </property>
       <property>
+            <name>num_next_events</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu j&amp;auml;rgmist</caption>
+      </property>
+      <property>
             <name>default_view</name>
             <table>objects</table>
             <group>general</group>

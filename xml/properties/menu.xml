@@ -152,6 +152,16 @@
             <caption>Leadi template</caption>
       </property>
       <property>
+            <name>get_content_from</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTENT_FROM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Sisu objektist</caption>
+      </property>
+      <property>
             <name>grkeywords</name>
             <table>objects</table>
             <type>select</type>
@@ -678,6 +688,11 @@
                   </clid>
                   <caption>alammen&amp;uuml;&amp;uuml;d objektist</caption>
             </SUBMENUS>
+            <CONTENT_FROM>
+                  <value>17</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Sisu objektist</caption>
+            </CONTENT_FROM>
       </reltypes>
 </properties>
 
