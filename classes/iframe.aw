@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.6 2003/01/26 20:49:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.7 2004/02/09 12:03:40 duke Exp $
 // iframe.aw - iframes
 
 /*
@@ -53,20 +53,9 @@ class iframe extends class_base
 
 	}
 
-	////
-	// !Fetches an iframe object from database and returns it
-	function _get_iframe($id)
+	function get_property($arr)
 	{
-		return $this->get_object(array(
-				"oid" => $id,
-				"class_id" => CL_HTML_IFRAME,
-				"unserialize_meta" => 1,
-		));
-	}
-
-	function get_property($args = array())
-	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -79,14 +68,14 @@ class iframe extends class_base
 				break;
 
 			case "width":
-				if (!$args["obj"]["oid"])
+				if ($arr["new"])
 				{
 					$data["value"] = $this->default_width;
 				};
 				break;
 
 			case "height":
-				if (!$args["obj"]["oid"])
+				if ($arr["new"])
 				{
 					$data["value"] = $this->default_height;
 				};
@@ -95,33 +84,33 @@ class iframe extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-                $data = &$args["prop"];
-		$form_data = &$args["form_data"];
+                $data = &$arr["prop"];
                 $retval = PROP_OK;
                 switch($data["name"])
                 {
 			case "width":
-				if ($form_data["width"] > $this->max_width)
+				if ($data["value"] > $this->max_width)
 				{
-					$form_data["width"] = $this->max_width;
+					$data["value"] = $this->max_width;
 				};
-				if ($form_data["width"] < $this->min_width)
+				if ($data["value"] < $this->min_width)
 				{
-					$form_data["width"] = $this->min_width;
+					$data["value"] = $this->min_width;
 				};
 				break;
 
 			case "height":
-				if ($form_data["height"] > $this->max_height)
+				if ($data["value"] > $this->max_height)
 				{
-					$form_data["height"] = $this->max_height;
+					$data["value"] = $this->max_height;
 				};
-				if ($form_data["height"] < $this->min_height)
+				if ($data["value"] < $this->min_height)
 				{
-					$form_data["height"] = $this->min_height;
+					$data["value"] = $this->min_height;
 				};
+				i
 				break;
 		};
 		return $retval;
@@ -129,16 +118,16 @@ class iframe extends class_base
 
 	////
 	// !Parses an iframe alias
-	function parse_alias($args = array())
+	function parse_alias($arr)
 	{
-		extract($args);
+		extract($arr);
 		if (not($alias["target"]))
 		{
 			return "";
 		};
-			
-		$obj = $this->_get_iframe($alias["target"]);
 
+		$obj = new object($alias["target"]);
+			
 		$this->read_adm_template("iframe.tpl");
 
 		$align = array(
@@ -149,12 +138,12 @@ class iframe extends class_base
 		);
 
 		$this->vars(array(
-			"url" => $obj["meta"]["url"],
-			"width" => $obj["meta"]["width"],
-			"height" => $obj["meta"]["height"],
-			"scrolling" => $obj["meta"]["scrolling"],
-			"frameborder" => $obj["meta"]["frameborder"],
-			"comment" => $obj["meta"]["comment"],
+			"url" => $obj->prop("url"),
+			"width" => $obj->prop("width"),
+			"height" => $obj->prop("height"),
+			"scrolling" => $obj->prop("scrolling"),
+			"frameborder" => $obj->prop("frameborder"),
+			"comment" => $obj->comment(),
 			"align" => $align[$matches[4]], // that's where the align char is
 		));
 
