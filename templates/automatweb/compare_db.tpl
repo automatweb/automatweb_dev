@@ -13,7 +13,7 @@ Special väljal on kujutatud lisainfo välja kohta, see voiks ka baaside vahel üht
 sellest ka mingeid erilis probleeme.
 <p>
 Vaadake see tabel hoolikalt üle, märgistage väljad, mida soovite ka lokaalsesse baasi tekitada, ning seejärel vajutage
-nuppi "Process". <b><font color="red">Soovitav on enne teha varukoopia baasist</font></b>
+nuppu "Process". <b><font color="red">Soovitav on enne teha varukoopia baasist</font></b>
 
 <table border="1" width="100%">
 <form method="POST" action="{VAR:baseurl}/orb.{VAR:ext}">
