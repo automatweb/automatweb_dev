@@ -121,9 +121,11 @@ class layout extends class_base
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 
+		$al = get_instance("aliasmgr");
 		if ($ob->prop("header") != "")
 		{
 			$h_tmp = create_email_links(nl2br($ob->prop("header")));
+			$al->parse_oo_aliases($ob->id(), &$h_tmp);
 			if ($grid["table_style"])
 			{
 				$st = get_instance("style");
@@ -139,6 +141,7 @@ class layout extends class_base
 		if ($ob->prop("footer") != "")
 		{
 			$h_tmp = create_email_links(nl2br($ob->prop("footer")));
+			$al->parse_oo_aliases($ob->id(), &$h_tmp);
 			if ($grid["table_style"])
 			{
 				$st = get_instance("style");
