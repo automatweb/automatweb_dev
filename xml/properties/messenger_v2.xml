@@ -20,6 +20,15 @@
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
+            <name>user_messenger</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja default messenger</caption>
+      </property>
+      <property>
             <name>mailbox</name>
             <type>hidden</type>
             <group>main_view</group>
