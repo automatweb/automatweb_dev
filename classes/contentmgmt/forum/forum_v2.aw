@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.58 2004/12/10 13:54:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.59 2004/12/16 16:16:33 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1731,14 +1731,20 @@ class forum_v2 extends class_base
 	**/
 	function _can_admin($forum_id)
 	{
+		$uid_oid = aw_global_get("uid_oid");
+		if (empty($uid_oid))
+		{
+			return false;
+		};
 		$c = new connection();
 		$conns = $c->find(array(
 			"from" => $forum_id,
-			"to" => aw_global_get("uid_oid"), 
+			"to" => $uid_oid,
 			"type" => RELTYPE_FORUM_ADMIN,
 		));
 
 		return sizeof($conns) > 0;
+
 	}
 };
 ?>
