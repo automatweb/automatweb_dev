@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.32 2002/07/23 16:41:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.33 2002/07/24 20:47:04 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
-// st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
+// st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
 // et saax igale formile eraldi elemendi properteid panna
 // JA elemendi juures on kirjas, et mis formide sees selle element on. 
 // see on sellex, et siis kui on vaja teha nimekirja t2idetud formidest, kus see element sees on, siis
@@ -11,7 +11,7 @@
 // no public interface here. everything goes through form.aw
 // why? iizi. cause the element properies are saved in the form and therefore the form must always be loaded
 // so we have to go through form->load to get the cells' elements.
-lc_load("definition");
+
 class form_cell extends form_base
 {
 	function form_cell()
@@ -23,9 +23,13 @@ class form_cell extends form_base
 	////
 	// !ElementFactory for all you fancy people ;)
 	// creates the correct element based on form type
-	function mk_element($type, &$r, &$form)
+	//
+	// sometime in the future this should be rewritten to compose elements together from pieces, using
+	// the decorator pattern - for instance, like this: $tmp = new search_element(new listbox_element)
+	// then we could split the bloody huge form_element class into smaller pieces
+	// 
+	function mk_element($type, &$r)
 	{
-//		echo "type = $type <br>";
 		switch($type)
 		{
 			case FTYPE_ENTRY:
@@ -43,36 +47,40 @@ class form_cell extends form_base
 			default:
 				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
 		}
-		$tmp = new $t;
-		$tmp->load(&$r,&$form,$this->col, $this->row);
-		$this->arr[$this->cnt] = $tmp;
+		$this->arr[$this->cnt] =& new $t;
+		$this->arr[$this->cnt]->load(&$r, &$this->form, $this->col, $this->row);
 		$this->cnt++;
 	}
 
+	////
+	// !loads the form cell from the given form instance $form and takes it's place as the cell form col $col and row $row
 	function load(&$form, $row, $col)
 	{
-		$this->type = $form->get_type();
 		$this->col = $col;
 		$this->row = $row;
-		$this->id = $form->get_id();
-		$this->cnt = 0;
-		$this->parent = $form->get_parent();
 		$this->form = &$form;
+
+		$this->id = $this->form->get_id();
+		$this->parent = $this->form->get_parent();
+
+		// the number of elements in this cell
+		$this->cnt = 0;
 
 		if (is_array($this->form->arr["elements"][$row][$col]))
 		{
-			reset($this->form->arr["elements"][$row][$col]);
-			while (list($k,$v) = each($this->form->arr["elements"][$row][$col]))
+			foreach($this->form->arr["elements"][$row][$col] as $k => $v)
 			{
-				if (is_number($k))
+				// awkwardly enough, the styles are saved here too under the name "style" and "style_class" - so 
+				// we check if it is a number so we won't try to create elements from styles
+				if (is_number($k))	
 				{
-					$this->mk_element($this->type, &$v, &$form);
+					$this->mk_element($form->get_type(), &$v);
 				}
 			}
 		}
 
-		$this->style = isset($this->form->arr["elements"][$row][$col]["style"]) ? $this->form->arr["elements"][$row][$col]["style"] : 0;
-		$this->style_class = isset($this->form->arr["elements"][$row][$col]["style_class"]) ? $this->form->arr["elements"][$row][$col]["style_class"] : 0;
+		$this->style = $this->form->arr["elements"][$row][$col]["style"];
+		$this->style_class = $this->form->arr["elements"][$row][$col]["style_class"];
 	}
 
 	////
@@ -80,44 +88,34 @@ class form_cell extends form_base
 	function admin_cell()
 	{
 		$this->read_template("admin_cell.tpl");
-		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FORM_CHANGE_CELL);
-
-		$this->vars(array(
-			"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $this->col, "row" => $this->row, "after" => -1)),
-			"cell_style"	=> $this->mk_orb("sel_cell_style", array("id" => $this->id, "col" => $this->col, "row" => $this->row),"form"),
-			"form_id" => $this->id,
-			"form_col" => $this->col,
-			"form_row" => $this->row,
-			"parent" => $this->id,
-		));
+		$chlink = $this->mk_my_orb("change", array("id" => $this->id),"form");
+		$this->mk_path($this->parent, "<a href='".$chlink.LC_FORM_CELL_CHANGE_FORM_CHANGE_CELL);
 
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$this->vars(array("after" => $this->arr[$i]->get_id(),"element" => $this->arr[$i]->gen_admin_html()));
-			$this->vars(array("EL_NLAST" => ($i == ($this->cnt-1) ? "" : $this->parse("EL_NLAST"))));
-			$this->vars(array("EL_ADD" => (1 ? $this->parse("EL_ADD") : ""),
-												"EL_ACL" => (1 ? $this->parse("EL_ACL") : "")));
-
+			$this->vars(array(
+				"after" => $this->arr[$i]->get_id(),
+				"element" => $this->arr[$i]->gen_admin_html()
+			));
 			$this->parse("ELEMENT_LINE");
 		}
 
 		$this->vars(array(
-			"add_el" => $this->mk_orb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form"),
+			"add_el" => $this->mk_my_orb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form"),
 		));
 
 		$ca = $this->parse("CAN_ADD");
 
-		$caa = $this->parse("CAN_ACTION");
-
 		$this->vars(array(
 			"CAN_ADD" 	=> $ca,
-			"CAN_ACTION"	=>$caa,
+			"cell_style" => $this->picker($this->get_style(), $this->form->style_instance->get_select(0,ST_CELL, true)),
 			"reforb"	=> $this->mk_reforb("submit_cell", array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form"),
 		));
-			
-		return $this->parse();
+		return $this->form->do_menu_return($this->parse());
 	}
 
+	////
+	// !returns an array containing data about all the elements in this cell
 	function get_elements()
 	{
 		$ret = array();
@@ -148,42 +146,43 @@ class form_cell extends form_base
 			{
 				$ret[$i]["group"] = $this->arr[$i]->arr["ch_grp"];
 			}
-
 		}
 		return $ret;
 	}
 
 	////
 	// !this is called when the form grid is saved, and we must only save the name and order of elements
-	function save_short(&$form)
+	// $dat - the POST data
+	function save_short($dat)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$this->arr[$i]->save_short();
-			$form->arr["elements"][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
+			$this->arr[$i]->save_short($dat);
 		}
+		$this->prep_save();
 	}
 
 	////
 	// !Adds a new element in the folder $parent and associates it with the currently loaded form also. 
 	// if wizard_step is not set then we are coming from the "add new element" link and have to let the
 	// user make a choice what element she wants to add
-
 	// if wizard_step is set, then she already made her choice and we can probably just add the element
 	function add_element()
 	{
-		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
+		$churl = $this->mk_orb("change", array("id" => $this->id),"form");
+		$this->mk_path($this->parent, "<a href='".$churl.LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
 		$this->read_template("add_el_wiz1.tpl");
 
-		classload("objects");
-		$o = new db_objects;
+		$o = get_instance("objects");
+		$tlist = $o->get_list();
+
 		if (!(is_array($this->form->arr["el_menus"]) && count($this->form->arr["el_menus"]) > 0))
 		{
-			$mlist = $o->get_list();
+			$mlist = $tlist;
 		}
 		else
 		{
-			$tlist = $o->get_list();
+			$mlist = array();
 			foreach($this->form->arr["el_menus"] as $menuid)
 			{
 				$mlist[$menuid] = $tlist[$menuid];
@@ -193,9 +192,9 @@ class form_cell extends form_base
 		$this->vars(array(
 			"reforb"		=> $this->mk_reforb("submit_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form"),
 			"folders"		=> $this->picker($this->parent, $mlist),
-			"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))
+			"elements"	=> $this->picker(0,$this->form->listall_elements())
 		));
-		return $this->parse();
+		return $this->form->do_menu_return($this->parse());
 	}
 
 	////
@@ -203,28 +202,28 @@ class form_cell extends form_base
 	function submit_element($args = array())
 	{
 		extract($args);
-		// add new element
 		if ($type == "add")
 		{
-			// form elements are weird things.
-			// namely. they are at the same time menus AND form elements. 
-			// so each element is written in three places
-			// objects table, class_id = CL_PSEUDO 
-			// menu table with type MN_FORM_ELEMENT
-			// form_elements table that is used to remember the elements proiperties when the element is
-			// inserted into another form
-			// the actual info about how the element is to be shown is written into the form's array. whee. 
-			// and also element2form table contains all element -> table relationships
-			$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
-//			$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
+			// add new element
+
+			// form_elements table is used to remember the elements properties so that when the element is
+			// inserted into another form the default properties are the same as in the pervious form
+			// the actual info about how the element is to be shown is written into the form's data structure 
+			// and also element2form table contains all element -> form relationships
+			$el = $this->new_object(array(
+				"parent" => $parent, 
+				"name" => $name, 
+				"class_id" => CL_FORM_ELEMENT
+			));
 			$this->db_query("INSERT INTO form_elements (id) values($el)");
 			$arr = array(); // new elements do not have any props, so set that to 0
 		}
-		// the other choice is most likely "select" which ment that the user selected an already existing element
 		else
 		{
+			// the other choice is most likely "select" which ment that the user selected an already existing element
 			if ($el)
 			{
+				// so we read it's properties from the element's table
 				$oo = $this->get_object($el);
 				$name = $oo["name"];
 				$ord = $oo["jrk"];
@@ -235,16 +234,21 @@ class form_cell extends form_base
 		
 		if ($el)
 		{
-			// register the new element into this form
-			$this->_do_add_element($this->id,$el);
+			// create necessary db tables
+			$this->form->add_element_cols($this->id,$el);
 
 			// add the element into the form.
 			// but! use the props saved in the form_elements table to create them with the right config right away!
+			
+			// sneak in the new bits
 			$arr["id"] = $el;
 			$arr["name"] = $name;
 			$arr["ord"] = $ord;
 
 			// so we lose the relations if adding an existing element. Is there a good reason for that? -- duke
+			//
+			// well - sonce the likelyhood of these still pointing to the right place is pretty small, it seemes
+			// best to do it. but no, I can't think of any other reason right now. why, you no like it? - terryf
 			$arr["linked_element"] = 0;
 			$arr["linked_form"] = 0;
 			$arr["linked_element"] = 0;
@@ -257,18 +261,26 @@ class form_cell extends form_base
 
 	////
 	// !adds an element to this cell
-	// $parent, $name, $ord, $based_on
+	// $parent, $name, $ord - pretty obvious methinks
+	// $based_on - the element whose properties the new element will recieve. if props is not set and this is, the properties are 
+	//		read from the database from the based_on element, optional
+	// $props - the element properties, optional
 	function do_add_element($arr)
 	{
 		extract($arr);
-		$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+		$this->save_handle();
+
+		$el = $this->new_object(array(
+			"parent" => $parent, 
+			"name" => $name, 
+			"class_id" => CL_FORM_ELEMENT
+		));
 		$this->db_query("INSERT INTO form_elements (id) values($el)");
-		$this->_do_add_element($this->id,$el);
+		$this->form->add_element_cols($this->id,$el);
+
 		if (!is_array($props))
 		{
-			$this->save_handle();
 			$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$based_on,"props");
-			$this->restore_handle();
 			$arr = aw_unserialize($props);
 		}
 		else
@@ -283,32 +295,14 @@ class form_cell extends form_base
 		$arr["type_name"] = "";
 		$arr["rel_table_id"] = 0;
 		$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
+		$this->restore_handle();
+
 		return $el;
-	}
-
-	function _do_add_element($fid,$el)
-	{
-		if (is_number($el))
-		{
-			// we must also update the form_$id_entries table
-			// sigh. would be really nice if we could have element of another type - integer for example
-			// that would make some searches really faster
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD el_$el TEXT");
-			$this->db_query("ALTER TABLE form_".$fid."_entries ADD ev_$el TEXT");
-
-			// add indexes to form tables aswell
-			// can't add these - mysql has a limit of 10 indexes per table :((
-			// so we can't have more than 5 elements per form when we do this :((
-//			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX el_$el(el_$el(10))");
-//			$this->db_query("ALTER TABLE form_".$fid."_entries ADD INDEX ev_$el(ev_$el(10))");
-
-			// and add this form to the list of forms in which the element is
-			$this->db_query("INSERT INTO element2form(el_id,form_id) VALUES ($el,$fid)");
-		}
 	}
 
 	//// 
 	// !deletes all the elements in this cell
+	// this will only get called when the user deletes a row or column - then it will be called for each cell in that row/col
 	function del()
 	{
 		for ($i=0; $i < $this->cnt; $i++)
@@ -317,11 +311,13 @@ class form_cell extends form_base
 		}
 	}
 
+	////
+	// !generates the html for this cell. or rather - let's the elements generate it and adds styles
 	function gen_user_html_not($def_style, $colspan, $rowspan,$prefix = "",$elvalues,$no_submit=false)
 	{
 		$c = "";
 		$cs = "";
-		for ($i=0; $i < $this->cnt; $i++)
+		for ($i = 0; $i < $this->cnt; $i++)
 		{
 			// here we must check the show element controllers
 			$errs = array();
@@ -342,7 +338,7 @@ class form_cell extends form_base
 
 			if ($controllers_ok)
 			{
-				$c.=$this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
+				$c .= $this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
 			}
 			else
 			{
@@ -353,12 +349,14 @@ class form_cell extends form_base
 				}
 			}
 		}
+
 		if ($c == "")
 		{
-			$c = "<img src='".$this->cfg["baseurl"]."/images/transa.gif' height=1 width=1 border=0>";
+			$c = "<img src='".$this->cfg["baseurl"]."/automatweb/images/trans.gif' height=1 width=1 border=0>";
 		}
 
-		$style_id=$this->style;
+		// this gets set to the cell style at loading time
+		$style_id = $this->style;
 		if (!$style_id)
 		{
 			$style_id = $def_style;
@@ -371,9 +369,10 @@ class form_cell extends form_base
 			{
 				if (!isset($this->form->styles[$style_id]))
 				{
-					$styl = "formstyle".aw_global_get("form_style_count");
+					$form_style_count = aw_global_get("form_style_count");
+					$styl = "formstyle".$form_style_count;
 					$this->form->styles[$style_id] = $styl;
-					aw_global_set("form_style_count",aw_global_get("form_style_count")+1);
+					aw_global_set("form_style_count", $form_style_count+1);
 				}
 				else
 				{
@@ -384,10 +383,9 @@ class form_cell extends form_base
 		}
 		else
 		{
-			$stc = get_instance("style");
 			if ($style_id)
 			{
-				$cs.= $stc->get_cell_begin_str($style_id,$colspan,$rowspan);
+				$cs.= $this->form->style_instance->get_cell_begin_str($style_id,$colspan,$rowspan);
 			}
 			else
 			{
@@ -398,7 +396,7 @@ class form_cell extends form_base
 
 			if ($style_id)
 			{
-				$cs.= $stc->get_cell_end_str($style_id);
+				$cs.= $this->form->style_instance->get_cell_end_str($style_id);
 			}
 
 			$cs.= "</td>";
@@ -406,6 +404,12 @@ class form_cell extends form_base
 		return $cs;
 	}
 	
+	////
+	// !gets called after submitting a form and must read the data from POST vars and gather it into $entry array. 
+	// also must check view controllers, so that we don't overwrite data for elements that were not in the form.
+	// $entry - array to collect the data to  (el_id => value)
+	// $id - entry_id
+	// prefix - gets prepended to all element's names in html - so we can merge several forms together
 	function process_entry(&$entry, $id,$prefix = "")
 	{
 		$controllers_ok = true;
@@ -427,13 +431,15 @@ class form_cell extends form_base
 			}
 			if ($shctrlok)
 			{
-				// call process_entry for each
+				// call process_entry for each element and let it manage the data itself
 				$controllers_ok &= $this->arr[$i] -> process_entry(&$entry, $id,$prefix);
 			}
 		};
 		return $controllers_ok;
 	}
 
+	////
+	// !changes the contained element's values to the ones given in $arr, e_id - entry_id
 	function set_entry(&$arr, $e_id)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
@@ -442,6 +448,9 @@ class form_cell extends form_base
 		}
 	}
 
+	////
+	// !returns an array containing references to all the contained form elements in this cell
+	// but it doesn't return the value, it modifies the array passed as an argument
 	function get_els(&$arr)
 	{
 		if (!is_array($arr))
@@ -454,79 +463,86 @@ class form_cell extends form_base
 		}
 	}
 
+	////
+	// !returns the style id for this cell
 	function get_style()
 	{
 		return $this->style;
 	}
 
+	////
+	// !saves the style for the current cell and also in the form so that it will be remembered if the form is saved
+	// $id - style id
+	// $style_class - the class_id of the style object (this is used to differentiate between css and aw styles)
 	function set_style($id,$style_class = 0)
 	{
 		$this->form->arr["elements"][$this->row][$this->col]["style"] = $id;
 		$this->form->arr["elements"][$this->row][$this->col]["style_class"] = $style_class;
+		$this->style = $id;
+		$this->style_class = $style_class;
 	}
 
 	////
-	// !generates the form for selecting cell style
-	function pickstyle()
+	// !saves the elements in this cell and also deletes the ones that must be and saves cell style
+	function submit_cell(&$arr)
 	{
-		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change",array("id" => $this->id),"form")."'>Muuda formi</a> / <a href='".$this->mk_orb("admin_cell",array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form").LC_FORM_CELL_CHANDE_CELL);
-		$this->read_template("pickstyle.tpl");
-
-		classload("style");
-		$t = new style;
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("save_cell_style", array("id" => $this->id, "col" => $this->col, "row" => $this->row),"form"),
-			"stylessel"	=> $this->option_list($this->get_style(),$t->get_select(0,ST_CELL))
-		));
-		return $this->parse();
-	}
-
-	////
-	// !saves the elements in this cell
-	function submit_cell(&$arr,&$form)
-	{
+		$deleted = false;
 		// gather all properties of the elements in the cell in their arrays from the submitted form
 		// and put them in the form's array of element properties
 		for ($i=0; $i < $this->cnt; $i++)
 		{
+			$elid = $this->arr[$i]->get_id();
 			if ($this->arr[$i]->save(&$arr) == false)
 			{
+				// save function returning false signalt we must delete the element from this form.
+
+				// this handles the database side
 				$this->arr[$i]->del();
-				// we must delete the element from this form.
-				$elid = $this->arr[$i]->get_id();
-				unset($form->arr["elements"][$this->row][$this->col][$elid]);
+				unset($this->form->arr["elements"][$this->row][$this->col][$elid]);
+
+				// we must also erase the object from this cell 
+				unset($this->arr[$i]);
+				$deleted = true;
 			}
 			else
 			{
-				$id = $this->arr[$i]->get_id();
-				$props = $this->arr[$i]->get_props();
-				$form->arr["elements"][$this->row][$this->col][$id] = $props;
-				// also save the elements properties so that when you add the same element to a new form, 
+				// save the elements properties to form_elements' table so that when you add the same element to a new form, 
 				// all it's properties are exactly the same! yeah! baby! SWEET!
-				$xp = aw_serialize($props,SERIALIZE_XML);
+				$xp = aw_serialize($this->arr[$i]->get_props(),SERIALIZE_XML);
 				$this->quote(&$xp);
-				$this->db_query("UPDATE form_elements SET props = '".$xp."' WHERE id = ".$id);
+				$this->db_query("UPDATE form_elements SET props = '".$xp."' WHERE id = ".$elid);
 			}
 		}
+		// if we deleted some element(s), we must compact the element array, leaving out the deleted elements
+		if ($deleted)
+		{
+			$tmp = array();
+			$num = 0;
+			foreach($this->arr as $cnt => $el)
+			{
+				if (is_object($el))
+				{
+					$tmp[$num++] = $el;
+				}
+			}
+			$this->arr = $tmp;
+			$this->cnt = $num;
+		}
+		
+		$this->prep_save();
+		$this->set_style($arr["cell_style"], CL_STYLE);
 	}
 
+	////
+	// !lets all member elements generate javascript that checks the element values before submit and returns the aggregate
 	function gen_check_html()
 	{
 		$ret = "";
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$ret.=$this->arr[$i] -> gen_check_html();
+			$ret.=$this->arr[$i]->gen_check_html();
 		}
 		return $ret;
-	}
-
-	function set_lang_text($lid,$lar)
-	{
-		for ($i=0; $i < $this->cnt; $i++)
-		{
-			$this->arr[$i]->set_lang_text($lid,$lar[$this->arr[$i]->get_id()]);
-		}
 	}
 
 	////
@@ -536,7 +552,7 @@ class form_cell extends form_base
 		extract($arr);
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			if ($this->arr[$i] -> get_id() == $element)
+			if ($this->arr[$i]->get_id() == $element)
 			{
 				switch($type)
 				{
@@ -551,9 +567,18 @@ class form_cell extends form_base
 					case CTRL_USE_TYPE_LB:
 						$this->arr[$i]->remove_lb_controller($controller);
 						break;
+
+					case CTRL_USE_TYPE_DEFVALUE:
+						$this->arr[$i]->remove_defvalue_controller($controller);
+						break;
+
+					case CTRL_USE_TYPE_VALUE:
+						$this->arr[$i]->remove_value_controller($controller);
+						break;
 				}
 			}
 		}
+		$this->prep_save();
 	}
 
 	////
@@ -568,39 +593,14 @@ class form_cell extends form_base
 	}
 
 	////
-	// !sets element $el 's entry to $val
+	// !sets element $el 's entry to $val if the element exists in this cell
 	function set_element_entry($el,$val)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
 		{
 			if ($this->arr[$i]->get_id() == $el)
 			{
-				if ($this->arr[$i]->get_type() == "listbox")
-				{
-					if ($this->arr[$i]->arr["subtype"] == "relation" && $this->arr[$i]->arr["rel_element"] && $this->arr[$i]->arr["rel_form"])
-					{
-						$this->arr[$i]->make_relation_listbox_content();
-					}
-					// find the right element from the lb content
-					if (is_array($this->arr[$i]->arr["listbox_items"]))
-					{
-						foreach($this->arr[$i]->arr["listbox_items"] as $lbid => $lbval)
-						{
-							if ($lbval == $val)
-							{
-								$val = "element_".$this->arr[$i]->get_id()."_lbopt_".$lbid;
-								$this->arr[$i]->entry = $val;
-//								echo "set entry to $val <br>";
-//								echo "get val = ",$this->arr[$i]->get_value()," <br>";
-								return;
-							}
-						}
-					}
-				}
-				else
-				{
-					$this->arr[$i]->entry = $val;
-				}
+				$this->arr[$i]->set_value($val);
 			}
 		}
 	}
