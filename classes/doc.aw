@@ -1,5 +1,5 @@
 <?php
-// $Id: doc.aw,v 2.5 2003/03/12 14:09:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.6 2003/03/17 18:49:17 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -86,7 +86,7 @@
 @property sections type=select multiple=1 size=20 group=vennastamine store=no
 @caption Sektsioonid
 
-@property aliasmgr type=aliasmgr field=meta method=serialize table=objects
+@property aliasmgr type=aliasmgr store=no editonly=1
 @caption Aliastehaldur
 
 @property cal_event callback=callback_get_event_editor store=no group=calendar
@@ -351,5 +351,29 @@ class doc extends class_base
 			}
 		}
 	}
+
+	function get_doc_add_menu($parent, $period)
+	{
+		$cfgforms = $this->get_cfgform_list();
+		$retval = array();
+		$retval["doc_default"] = array(
+			"caption" => "Dokument",
+			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
+		);
+
+		foreach($cfgforms as $key => $val)
+		{
+			$retval["doc_$key"] = array(
+				"caption" => $val,
+				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period,"cfgform" => $key),"doc"),
+			);
+		}
+		$retval["doc_brother"] = array(
+			"caption" => "Dokument (vend)",
+			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document_brother"),
+		);
+		return $retval;
+	}
+
 };
 ?>
