@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.47 2002/09/25 16:36:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.48 2002/09/25 22:42:35 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -23,72 +23,17 @@ class aliasmgr extends aw_template
 	function search($args = array())
 	{
 		extract($args);
-		$this->read_template("search_doc.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_my_orb("list_aliases", array("id" => $docid))."'>Tagasi</a>");
 		$search = get_instance("search");
-		return $search->show(array("docid" => $docid, "name" => $name,"comment" => $comment, "obj" => "aliasmgr"));
-		$this->make_alias_typearr();
-
-    if ($s_name != "" || $s_comment != "" || $s_type > 0)
-    {
-			$se = array();
-			if ($s_name != "" && $s_name != "%")
-			{
-				$se[] = " objects.name LIKE '%".$s_name."%' ";
-			}
-			if ($s_comment != "" && $s_comment != "%")
-			{
-				$se[] = " objects.comment LIKE '%".$s_comment."%' ";
-			}
-			if ($s_type > 0)
-			{
-				$se[] = " objects.class_id = '".$s_type."' ";
-			}
-			else
-			{
-				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
-			}
-
-			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
-as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND ".join("AND",$se);
-			$this->db_query($q);
-			while ($row = $this->db_next())
-			{
-				$this->vars(array(
-					"name" => $row["name"],
-					"id" => $row["oid"],
-					"type"  => $this->cfg["classes"][$row["class_id"]]["name"],
-					"created" => $this->time2date($row["created"],2),
-					"modified" => $this->time2date($row["modified"], 2),
-					"createdby" => $row["createdby"],
-					"modifiedby" => $row["modifiedby"],
-					"parent_name" => $row["parent_name"],
-					"pick_url" => $this->mk_my_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"aliasmgr"),
-				));
-				$l.=$this->parse("LINE");
-			}
-			$this->vars(array("LINE" => $l));
-		}
-		else
-		{
-			$s_name = "%";
-			$s_comment = "%";
-			$s_type = 0;
-		}
-
-		$this->make_alias_classarr();
-		asort($this->classarr);
-		$this->vars(array(
+		return $res . $search->show(array(
 			"docid" => $docid,
-			"s_name"  => $s_name,
-			"s_type"  => $s_type,
-			"s_comment" => $s_comment,
-			"pick_link" => $this->mk_my_orb("pick",array("id" => $docid)),
-			"types" => $this->picker($s_type, array(0 => LC_OBJECTS_ALL) + $this->classarr)
+			"name" => $name,
+			"comment" => $comment,
+			"obj" => "aliasmgr",
 		));
-		return $this->parse();
 	}	
 
+	////
+	// !Callbacks for object search
 	function _get_s_class_id($val)
 	{
 		$this->make_alias_classarr();
@@ -96,8 +41,31 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		return $this->picker($val,$this->classarr);
 	}
 
+	function _get_s_header($args)
+	{
+		$this->read_template("search.tpl");
+		$toolbar = get_instance("toolbar");
+		$buttons = "";
+		$buttons .= $toolbar->gen_button(array(
+			"name" => "save",
+			"tooltip" => "Tee valitud objektidele aliased",
+			"url" => "javascript:aw_save()",
+			"imgover" => "automatweb/images/blue/awicons/save_over.gif",
+			"img" => "automatweb/images/blue/awicons/save.gif",
+		));
+
+		$this->vars(array(
+			"buttons" => $buttons,
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
+		));
+
+		return $this->parse();
+	}
+
 	function _gen_s_chlink($args)
 	{
+		//return "<a href='" . $this->mk_my_orb("addalias",array("id" => $args["docid"], "alias" => $args["oid"]),"aliasmgr") . "'>Võta see</a>";
+		return "<input type='checkbox' name='check' value='$args[oid]'>";
 		return "<a href='" . $this->mk_my_orb("addalias",array("id" => $args["docid"], "alias" => $args["oid"]),"aliasmgr") . "'>Võta see</a>";
 	}
 
@@ -501,20 +469,28 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	function addalias($arr)
 	{
 		extract($arr);
-		$al = $this->get_object($alias);
-		// let the correct class override the alias adding if it wants to
-		// if the class does not handle it, it falls back on core::addalias
-		$cl = $this->cfg["classes"][$al["class_id"]]["file"];
-		if ($cl != "")
+		$aliases = explode(",",$alias);
+		foreach($aliases as $onealias)
 		{
-			$inst = get_instance($cl);
-			return $inst->addalias($arr);
-		}
-		else
-		{
-			$this->add_alias($id,$alias);
-			header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
-		}
+			$_al = (int)$onealias;
+			if ($_al > 0)
+			{
+				$al = $this->get_object($_al);
+			}
+			// let the correct class override the alias adding if it wants to
+			// if the class does not handle it, it falls back on core::addalias
+			$cl = $this->cfg["classes"][$al["class_id"]]["file"];
+			if ($cl != "")
+			{
+				$inst = get_instance($cl);
+				$inst->addalias($arr);
+			}
+			else
+			{
+				$this->add_alias($id,$alias);
+			}
+		};
+		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 
 	////
