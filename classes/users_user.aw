@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.36 2002/08/02 14:12:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.37 2002/08/02 14:18:17 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1178,6 +1178,7 @@ class users_user extends aw_template
 	// - nope, we actually don't always query the users table. aw.com does, but that's in site::on_page()
 	//   and it is done by messenger. but then again, maybe we should - then all users that get blocked while
 	//   being logged in will get kicked out. ok, fair enough - let's make it do that. feel free to implement this. :) - terryf
+	//   :* -- duke
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
