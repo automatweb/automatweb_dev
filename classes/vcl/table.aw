@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.27 2004/09/04 17:42:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.28 2004/09/04 21:20:26 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1700,15 +1700,45 @@ class vcl_table extends aw_table
 	}
 
 	/** assumes that table columns are defined - iterates over object_list passed and reads correct props from it
+
+		@comment
+			$args can contain:
+				
+				change_col - column name with change link to object
 	**/
-	function data_from_ol($ol)
+	function data_from_ol($ol, $args = array())
 	{
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$data = array();
 			foreach($this->rowdefs as $k => $v)
 			{
-				$data[$v["name"]] = $o->prop($v["name"]);
+				if ($v["name"] == "oid")
+				{
+					$val = $o->id();
+				}
+				else
+				if ($v["name"] == "createdby")
+				{
+					$tmp = $o->createdby();
+					$val = $tmp->name();
+				}
+				else
+				if ($v["name"] == "modifiedby")
+				{
+					$tmp = $o->modifiedby();
+					$val = $tmp->name();
+				}
+				else
+				{
+					$val = $o->prop($v["name"]);
+				}
+
+				if (isset($args["change_col"]) && $args["change_col"] == $v["name"])
+				{
+					$val = html::get_change_url($o->id(), array(), $val);
+				}
+				$data[$v["name"]] = $val;
 			}			
 
 			if ($this->use_chooser)
