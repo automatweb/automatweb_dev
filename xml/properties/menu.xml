@@ -521,10 +521,6 @@
             <syslog_type>ST_MENU</syslog_type>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-                  <default>1</default>
-            </general>
             <advanced>
                   <caption>Spetsiaal</caption>
             </advanced>
