@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.6 2001/11/01 07:40:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.7 2001/11/01 10:38:44 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -38,7 +38,8 @@ class forum extends aw_template
 	}
 
 
-
+	////
+	// !Kuvab uue topicu lisamise vormi
 	function add_topic($args = array())
 	{
 		extract($args);
@@ -55,6 +56,8 @@ class forum extends aw_template
 		return $this->parse();
 	}
 
+	////
+	// !Lisab uue topicu
 	function submit_topic($args = array())
 	{
 		extract($args);
@@ -73,7 +76,7 @@ class forum extends aw_template
 		}
 		else
 		{
-			$retval = $this->mk_orb("change",array("id" => $id));
+			$retval = $this->mk_my_orb("topics",array("id" => $id));
 		}
 		return $retval;
 	}
@@ -100,10 +103,16 @@ class forum extends aw_template
 
 		// miskit splitter tyypi funktsiooni on vaja, mis soltuvalt sellest kas tegu on adminni
 		// voi dokumendi sees oleva asjaga valjastaks sobiva lingi
+		if (not($id))
+		{
+			$id = $forum_obj["oid"];
+		};
 		$this->vars(array(
 			"message" => $content,
 			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board)),
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $oid)),
+			"flat_link" => $this->mk_my_orb("show",array("board" => $board)),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $id)),
 		));
 		
 		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $section));
@@ -135,6 +144,8 @@ class forum extends aw_template
 		$this->vars(array(
 			"message" => $this->content,
 			"flat_link" => $this->mk_my_orb("show",array("board" => $board)),
+			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board)),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $forum_obj["oid"])),
 		));
 		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent));
 	}
@@ -149,6 +160,7 @@ class forum extends aw_template
 		foreach($this->comments[$level] as $key => $val)
 		{
 			$val["spacer"] = str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;",$this->level);
+			$val["level"] = 20 * $this->level;
 			$this->content .= $this->display_comment($val);
 			$this->level++;
 			$this->rec_comments($val["id"]);
@@ -181,6 +193,7 @@ class forum extends aw_template
 	{
 		$this->vars(array(
 			"spacer" => $args["spacer"],
+			"level" => $args["level"],
 			"from" => $args["name"],
 			"email" => $args["email"],
 			"parent" => $args["parent"],
@@ -257,6 +270,11 @@ class forum extends aw_template
 		$this->mk_path($o["parent"], "Foorum");
 		$this->read_template("list_topics.tpl");
 
+		global $HTTP_COOKIE_VARS;
+		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
+		$this->last_read = $aw_mb_last[$id];
+		$this->now = time();
+
 		$this->use_orb_for_links = 1;
 		$content = $this->_draw_all_topics(array(
 						"id" => $id,
@@ -270,7 +288,9 @@ class forum extends aw_template
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id)),
 			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id)),
 			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
+			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id)),
 			"TOPIC" => $content,
+			"TOPIC_EVEN" => $content,
 		));
 		return $this->parse();
 	}
@@ -396,6 +416,16 @@ class forum extends aw_template
 
 	}
 
+	function mark_all_read($args = array())
+	{
+		extract($args);
+		global $HTTP_COOKIE_VARS;
+		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
+		$aw_mb_last[$id] = time();
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
+		return $this->mk_my_orb("topics",array("id" => $id));
+	}
+
 	function parse_alias($args = array())
 	{
 		extract($args);
@@ -475,6 +505,7 @@ class forum extends aw_template
 		$obj = $this->get_objects_below(array(
 			"parent" => $id,
 			"class" => CL_MSGBOARD_TOPIC,
+			"orderby" => "created desc",
 		));
 		$content = "";
 		if (is_array($obj))
@@ -501,7 +532,6 @@ class forum extends aw_template
 				}
 				$cnt++;
 			}
-			print $pager;
 				
 		};
 		return $content;
@@ -524,6 +554,10 @@ class forum extends aw_template
 			$topic_link = $this->mk_url(array("board" => $args["oid"],"section" => $args["section"]));
 		};
 
+		// mille vastu võrrelda=
+		$check_against = ($args["modified"] > $args["created"]) ? $args["modified"] : $args["created"];
+		$mark = ($check_against > $this->last_read) ? $this->parse("NEW_MSGS") : "";
+
 		$this->vars(array(
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
@@ -533,6 +567,7 @@ class forum extends aw_template
 			"comments" => (int)$this->comments[$args["oid"]],
 			"cnt" => (int)$this->comments[$args["oid"]],
 			"topic_link" => $topic_link,
+			"NEW_MSGS" => $mark,
 		));
 		$even = ($this->topic_count % 2);
 		if ($this->is_template("TOPIC_EVEN"))
@@ -545,7 +580,8 @@ class forum extends aw_template
 		{
 			$tpl_to_parse = "TOPIC";
 		};
-		return $this->parse($tpl_to_parse);
+		$retval = $this->parse($tpl_to_parse);
+		return $retval;
 	}
 	
 	////
@@ -555,7 +591,7 @@ class forum extends aw_template
 		extract($args);
 		if ($args["board"])
 		{
-			$q = "SELECT * FROM comments WHERE board_id = '$board'";
+			$q = "SELECT * FROM comments WHERE board_id = '$board' ORDER BY time DESC";
 			$this->db_query($q);
 		}
 	}
@@ -593,7 +629,7 @@ class forum extends aw_template
 				$tpl = "PAGE";
 			};
 			$this->vars(array(
-				"pagelink" => $this->mk_my_orb("change",array("id" => $this->forum_id,"from" => $page_start)),
+				"pagelink" => $this->mk_my_orb("topics",array("id" => $this->forum_id,"from" => $page_start)),
 				"linktext" => $i,
 			));
 			$content .= $this->parse($tpl);
