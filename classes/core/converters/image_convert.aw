@@ -97,29 +97,29 @@ class image_convert extends class_base
 	
 	function load_from_string($str)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$this->driver->load_from_string($str);
 	}
 
 	function load_from_file($str)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$this->driver->load_from_file($str);
 	}
 
 	
 	function size()
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		return $this->driver->size();
 	}
 
@@ -128,19 +128,19 @@ class image_convert extends class_base
 	// x, y, width, height, new_width, new_height
 	function resize($arr)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		return $this->driver->resize($arr);
 	}
 
 	function resize_simple($width, $height)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		list($w, $h) = $this->size();
 		return $this->driver->resize(array(
 			"x" => 0, 
@@ -154,19 +154,19 @@ class image_convert extends class_base
 
 	function get($type)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		return $this->driver->get($type);
 	}
 
 	function save($filename, $type)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		return $this->driver->save($filename, $type);
 	}
 
@@ -174,10 +174,10 @@ class image_convert extends class_base
 	// !returns an instance of this class that has the same image loaded, but any operations on it, will not affect the original image
 	function &copy()
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$ic = new image_convert;
 		$ic->driver = $this->driver->copy();
 		return $ic;
@@ -185,10 +185,10 @@ class image_convert extends class_base
 
 	function destroy()
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$this->driver->destroy();
 		unset($this);
 	}
@@ -198,19 +198,19 @@ class image_convert extends class_base
 	// $source, $x, $y, $pct
 	function merge($img)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$this->driver->merge($img);
 	}
 
 	function set_error_reporting($rep)
 	{
-		if (!$this->driver)
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
-		}
+		error::raise_if(!($this->driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => t("image_covert: could not detect any supported imagehandlers!")
+		));
 		$this->driver->error_rep = $rep;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.323 2005/04/05 10:56:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.324 2005/04/05 11:01:28 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -741,6 +741,7 @@ class document extends aw_template
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->parse_text($doc["content"]); 
+
 		
 		$doc["content"] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc["content"]);
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
@@ -869,6 +870,11 @@ class document extends aw_template
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["user2"],array("templates" => &$this->templates,"meta" => &$meta));
 		}
+
+		if ($_GET["XX5"])
+		{
+			arr($doc);
+		};
 
 		// where do I put that shit? that break conversion thingie?
 		if ($doc["nobreaks"] || $doc["meta"]["cb_nobreaks"]["content"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
@@ -3015,7 +3021,7 @@ class document extends aw_template
 		}
 		else
 		{
-			$replacement = $this->gen_preview(array("docid" => $d["target"] /*, "leadonly" => 1 */));
+			$replacement = $this->gen_preview(array("docid" => $d["target"]));
 		};
 		return $replacement;
 
@@ -3829,7 +3835,7 @@ class document extends aw_template
 	function sanitize($str)
 	{
 		// remove p tags from start and end
-		$string = preg_replace("/(^<p>|<\/p>$)/i","",$str);
+		$string = preg_replace("/(^<p>|<\/p>$)/i","",trim($str));
 		return $string;
 	}
 
