@@ -6,7 +6,7 @@
 				<arguments>
 					<optional name="parent" type="int" acl="add"/>
 					<optional name="period"/>
-					<optional name="alias_to" type="int"/>
+					<optional name="alias_to"/>
 					<optional name="return_url"/>
 					<optional name="reltype" type="int"/>
 				</arguments>

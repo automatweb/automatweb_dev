@@ -9,6 +9,15 @@
             <caption>User ID</caption>
       </property>
       <property>
+            <name>uid_entry</name>
+            <store>no</store>
+            <type>textbox</type>
+            <group>general</group>
+            <table>users</table>
+            <field>uid_entry</field>
+            <caption>User ID</caption>
+      </property>
+      <property>
             <name>logins</name>
             <field>logins</field>
             <type>text</type>

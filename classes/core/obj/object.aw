@@ -378,6 +378,11 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->create_brother($parent);
 	}
+
+	function is_connected_to($param)
+	{
+		return $GLOBALS["objects"][$this->oid]->is_connected_to($param);
+	}
 }
 
 function &obj($param = NULL)

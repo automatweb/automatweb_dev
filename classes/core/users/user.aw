@@ -2,6 +2,16 @@
 
 /*
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_USER, on_delete_user)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_USER, on_delete_alias)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
+
+*/
+
+/*
+
 @classinfo syslog_type=ST_USER relationmgr=yes
 
 @groupinfo chpwd caption="Muuda parooli"
@@ -20,6 +30,9 @@
 @default group=general
 
 @property uid field=uid type=text group=general
+@caption User ID
+
+@property uid_entry store=no type=textbox group=general
 @caption User ID
 
 @property logins field=logins type=text
@@ -149,7 +162,25 @@ class user extends class_base
 				$prop['value'] = $this->time2date($prop['value'],2);
 				break;
 
+			case "uid_entry": 
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "uid": 
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "name":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
 				$prop['value'] = $this->users->get_user_config(array(
 					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "real_name",
@@ -252,6 +283,22 @@ class user extends class_base
 					"key" => "real_name",
 					"value" => $prop['value']
 				));
+				break;
+
+			case "uid_entry":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					if ($this->db_fetch_field("SELECT uid FROM users WHERE uid = '".$prop["value"]."'", "uid") == $prop["value"])
+					{
+						$prop["error"] = "Selline kasutaja on juba olemas!";
+						return PROP_FATAL_ERROR;
+					}
+					if (!is_valid("uid", $prop["value"]))
+					{
+						$prop["error"] = "Selline kasutajanimi pole lubatud!";
+						return PROP_FATAL_ERROR;
+					}
+				}
 				break;
 
 			case "admin_lang":
@@ -493,42 +540,11 @@ class user extends class_base
 	}
 
 	////
-	// !this will automatically get called when an object of this type is deleted
-	function delete_hook($arr)
-	{
-		extract($arr);
-		// now we must find to what user this object pointed to and remove the user from the parent group
-		$obj = $this->get_object($oid);
-
-		// get the user
-		$uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $obj[brother_of]", "uid");
-
-		// unless the object is the original user, in which case, we must delete it and all it's brothers and block the user
-
-		if ($obj["brother_of"] == $obj["oid"])
-		{
-			// block user and delete all objects
-			$this->users->do_delete_user($uid);
-
-			$ol = new object_list(array(
-				"brother_of" => $oid
-			));
-			$ol->delete();
-		}
-		else
-		{
-			// remove the user from this and all groups above
-			$gid = $this->db_fetch_field("SELECT gid FROM groups WHERE oid = $obj[parent]", "gid");
-
-			$this->users->remove_users_from_group_rec($gid, array($uid), true);
-		}
-	}
-
-	////
 	// !this will get automatically called if an object of this type is cut-pasted
 	// params:
 	//	oid
 	//	new_parent
+	// damn - must figure out a way to do this via storage messages... must remember what is changed for object or somesuch..
 	function cut_hook($arr)
 	{
 		extract($arr);
@@ -537,29 +553,119 @@ class user extends class_base
 		// if original, do nothing
 		// if brother, find new group and change group membership
 
-		$obj = $this->get_object($oid);
-		if ($obj["brother_of"] != $obj["oid"])
+		$obj = obj($oid);
+		if ($new_parent == $obj->parent())
+		{
+			return;
+		}
+
+		if ($obj->is_brother())
 		{
 			// old parent group
-			$o_gid = $this->db_fetch_field("SELECT gid FROM groups WHERE oid = $obj[parent]", "gid");
+			$o_gid = $this->users->get_gid_for_oid($obj->parent());
 
 			// new gid
-			$n_gid = $this->db_fetch_field("SELECT gid FROM groups WHERE oid = $new_parent", "gid");
+			$n_gid = $this->users->get_gid_for_oid($new_parent);
 
 			// get the user
-			$uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $obj[brother_of]", "uid");
+			$uid = $this->users->get_uid_for_oid($obj->brother_of());
 
 			if ($o_gid)
 			{
-				$this->users->remove_users_from_group_rec($o_gid, array($uid));
+				$this->users->remove_users_from_group_rec($o_gid, array($uid), false, false);
+
+				// get the parent obj for the user's brother
+				// and remove the user from that group
+				$real_user = $obj->get_original();
+				$grp_o = obj($obj->parent());
+
+
+				// sync manually here.
+				// remove alias from user to group
+				if ($real_user->is_connected_to(array("to" => $grp_o->id())))
+				{
+					$real_user->disconnect(array(
+						"from" => $grp_o->id()
+					));
+				}
+
+				// remove alias from group to user
+				if ($grp_o->is_connected_to(array("to" => $real_user->id())))
+				{
+					$grp_o->disconnect(array(
+						"from" => $real_user->id()
+					));
+				}
+
+				// go over all the groups below this one and remove all aliases to this user
+				// and also all user brothers
+				$ot = new object_tree(array(
+					"parent" => $grp_o->id(),
+					"class_id" => CL_GROUP
+				));
+				
+				$ol = $ot->to_list();
+				for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
+				{
+					// get all connections from the group to the user object
+					foreach($grp_o->connections_from(array("to" => $real_user->id())) as $c)
+					{
+						$c->delete();
+					}
+
+					// disconnect user from group as well
+					if ($real_user->is_connected_to(array("to" => $grp_o->id())))
+					{
+						$real_user->disconnect(array(
+							"from" => $grp_o->id()
+						));
+					}
+	
+					// get all objects below that point to the current user
+					$inside_ol = new object_list(array(
+						"parent" => $grp_o->id(),
+						"class_id" => CL_USER,
+						"brother_of" => $real_user->id()
+					));
+					$inside_ol->delete();
+				}
 			}
+
 			if ($n_gid)
 			{
-				$this->users->add_users_to_group_rec($n_gid, array($uid));
+				$this->users->add_users_to_group_rec($n_gid, array($uid), false, true, false);
+
+				// get groups
+				$group = obj($new_parent);
+				$user = $obj->get_original();
+
+				$grps = $group->path();
+				foreach($grps as $p_o)
+				{
+					if ($p_o->class_id() == CL_GROUP)
+					{
+						$user->connect(array(
+							"to" => $p_o->id(),
+							"reltype" => RELTYPE_GRP
+						));
+
+						// add reverse alias to group
+						$p_o->connect(array(
+							"to" => $user->id(),
+							"reltype" => 2 // RELTYPE_MEMBER from group
+						));
+
+						if ($p_o->id() != $group->id())
+						{
+							$user->create_brother($p_o->id());
+						}
+					}
+				}
 			}
 		}		
 	}
 
+	// must not be deleting these, most important it is!
 	function _serialize($arr)
 	{
 		extract($arr);
@@ -617,8 +723,6 @@ class user extends class_base
 
 		$g = get_instance("core/users/group");
 	
-		$ml = $this->get_menu_list();		
-
 		$t =& $g->_init_obj_table(array(
 			"exclude" => array("grp_name")
 		));
@@ -632,7 +736,12 @@ class user extends class_base
 			{
 				continue;
 			}
-			$row['obj_parent'] = $ml[$row['obj_parent']];
+			if (!$this->can("edit", $row["oid"]) || !$this->object_exists($row["oid"]))
+			{
+				continue;
+			}
+			$o = obj($row["oid"]);
+			$row['obj_parent'] = $o->path_str();
 			$row["acl"] = html::href(array(
 				"caption" => "Muuda",
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
@@ -698,11 +807,13 @@ class user extends class_base
 		return $acls;
 	}
 
-	function on_delete_hook($oid)
+	function on_delete_user($arr)
 	{
+		extract($arr);
+
 		// check if we are deleting the real thing
-		$is_bro = $this->db_fetch_field("select brother_of from objects where oid = '$oid'", "brother_of") != $oid;
-		if (!$is_bro)
+		$o = obj($oid);
+		if (!$o->is_brother())
 		{
 			// block user
 			$this->users->do_delete_user($this->users->get_uid_for_oid($oid));
@@ -711,19 +822,146 @@ class user extends class_base
 			));
 			$ol->delete();
 		}
+		else
+		{
+			// get the parent obj for the user's brother
+			// and remove the user from that group
+			$o = obj($oid);
+			$real_user = $o->get_original();
+
+			$grp_o = obj($o->parent());
+
+			$gid = $this->users->get_gid_for_oid($o->parent());
+			$uid = $this->users->get_uid_for_oid($o->brother_of());
+			if ($gid)
+			{
+				$this->users->remove_users_from_group_rec(
+					$gid, 
+					array($uid),
+					false,
+					false
+				);
+
+				// sync manually here.
+				// remove alias from user to group
+				if ($real_user->is_connected_to(array("to" => $grp_o->id())))
+				{
+					$real_user->disconnect(array(
+						"from" => $grp_o->id()
+					));
+				}
+
+				// remove alias from group to user
+				if ($grp_o->is_connected_to(array("to" => $real_user->id())))
+				{
+					$grp_o->disconnect(array(
+						"from" => $real_user->id()
+					));
+				}
+
+				// go over all the groups below this one and remove all aliases to this user
+				// and also all user brothers
+				$ot = new object_tree(array(
+					"parent" => $o->parent(),
+					"class_id" => CL_GROUP
+				));
+				
+				$ol = $ot->to_list();
+				for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
+				{
+					// get all connections from the group to the user object
+					foreach($grp_o->connections_from(array("to" => $real_user->id())) as $c)
+					{
+						$c->delete();
+					}
+
+					// disconnect user from group as well
+					if ($real_user->is_connected_to(array("to" => $grp_o->id())))
+					{
+						$real_user->disconnect(array(
+							"from" => $grp_o->id()
+						));
+					}
+	
+					// get all objects below that point to the current user
+					$inside_ol = new object_list(array(
+						"parent" => $grp_o->id(),
+						"class_id" => CL_USER,
+						"brother_of" => $real_user->id()
+					));
+					$inside_ol->delete();
+				}
+			}
+		}
 	}
 
-/*	function on_delete_alias($arr)
+	function on_delete_alias($arr)
 	{
-		extract($arr);
-		// if the alias to delete is acl, then we must remove this group from the acl.
-		$a_o = $this->get_object($alias);
-		if ($a_o["class_id"] == CL_ACL)
+		// now, if the alias deleted was a group alias, then 
+		// remove the user from that goup and do all the other movements
+		if ($arr["connection"]->prop("reltype") == RELTYPE_GRP)
 		{
-			$a = get_instance("acl_class");
-			$a->remove_group_from_acl($a_o[OID], $this->users->get_gid_for_oid($id));
+			$user = $arr["connection"]->from();
+			$group = $arr["connection"]->to();
+
+			$uid = $this->users->get_uid_for_oid($user->id());
+			$gid = $this->users->get_gid_for_oid($group->id());
+
+			$this->users->remove_users_from_group_rec(
+				$gid,
+				array($uid),
+				false,	// checkdyn
+				false	// normalize
+			);
+
+			// now, delete the user from the group
+			if ($group->is_connected_to(array("to" => $user->id())))
+			{
+				$group->disconnect(array(
+					"from" => $user->id()
+				));
+			}
+
+			// delete user bros
+			$ol = new object_list(array(
+				"parent" => $group->id(),
+				"brother_of" => $user->id()
+			));
+			$ol->delete();
+
+			// get all groups below the removed group
+			$ot = new object_tree(array(
+				"parent" => $group->id(),
+				"class_id" => CL_GROUP
+			));
+			$ol = $ot->to_list();
+			for($item = $ol->begin(); !$ol->end(); $item = $ol->next())
+			{
+				// remove all brothers from those groups
+				$user_brothers = new object_list(array(
+					"parent" => $item->id(),
+					"brother_of" => $user->id()
+				));
+				$user_brothers->delete();
+
+				// remove all aliases from those groups to this user
+				if ($item->is_connected_to(array("to" => $user->id())))
+				{
+					$item->disconnect(array(
+						"from" => $user->id()
+					));
+				}
+
+				// also remove all aliases from user to the group
+				if (count($user->connections_from(array("to" => $item->id()))) > 0)
+				{
+					$user->disconnect(array(
+						"from" => $item->id()
+					));
+				}
+			}
 		}
-	}*/
+	}
 
 	function _get_stat($uid)
 	{
@@ -812,23 +1050,129 @@ class user extends class_base
 		return $t;
 	}
 
-	function add($arr)
+	function on_add_alias($arr)
 	{
-		/*$po = $this->get_object($arr["parent"]);
-		if ($po["class_id"] == CL_GROUP)
+		if ($arr["connection"]->prop("reltype") == RELTYPE_GRP)
 		{
-			return $this->add_user_to_grp($arr);
+			// it was a group alias, add the suer to the group and all below it
+			$user = $arr["connection"]->from();
+			$group = $arr["connection"]->to();
+
+			$uid = $this->users->get_uid_for_oid($user->id());
+			$gid = $this->users->get_gid_for_oid($group->id());
+		
+			$this->users->add_users_to_group_rec(
+				$gid,
+				array($uid),
+				true,
+				true,
+				false
+			);
+
+			// get groups
+			$grps = $group->path();
+			foreach($grps as $p_o)
+			{
+				if ($p_o->class_id() == CL_GROUP)
+				{
+					$user->connect(array(
+						"to" => $p_o->id(),
+						"reltype" => RELTYPE_GRP
+					));
+
+					// add reverse alias to group
+					$p_o->connect(array(
+						"to" => $user->id(),
+						"reltype" => 2 // RELTYPE_MEMBER from group
+					));
+
+
+					$user->create_brother($p_o->id());
+
+				}
+			}
 		}
-		else
-		{*/
-			return $this->users->add_user($arr);
-//		}
 	}
 
-/*	function add_user_to_grp($arr)
+	function callback_pre_save($arr)
 	{
-		$this->read_template("add_user.tpl");
-		return $this->parse();
-	}*/
+		if ($arr["new"])
+		{
+			$arr["obj_inst"]->set_prop("uid", $arr["request"]["uid_entry"]);
+			$arr["obj_inst"]->set_name($arr["request"]["uid_entry"]);
+		}
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["new"])
+		{
+			$this->users->add(array(
+				"uid" => $arr["obj_inst"]->prop("uid"),
+				"password" => generate_password(),
+				"email" => $arr["request"]["email"],
+				"join_grp" => "",
+				"join_form_entry" => "",
+				"user_oid" => $arr["obj_inst"]->id(),
+				"no_add_user" => true
+			));
+
+			// now, we also must check if the user was added under a group
+			$parent = obj($arr["obj_inst"]->parent());
+			if ($parent->class_id() == CL_GROUP)
+			{
+				aw_global_set("__in_post_message", 1);
+				// we have to move the object to a new loacation
+				$arr["obj_inst"]->set_parent(aw_ini_get("users.root_folder"));
+				$arr["obj_inst"]->save();
+
+				// and do the add to group thing
+				$uid = $arr["obj_inst"]->prop("uid");
+				$gid = $this->users->get_gid_for_oid($parent->id());
+
+				$user = $arr["obj_inst"];
+		
+				$this->users->add_users_to_group_rec(
+					$gid,
+					array($uid),
+					true,
+					true,
+					false
+				);
+
+				// get groups
+				$grps = $parent->path();
+				foreach($grps as $p_o)
+				{
+					if ($p_o->class_id() == CL_GROUP)
+					{
+						$user->connect(array(
+							"to" => $p_o->id(),
+							"reltype" => RELTYPE_GRP
+						));
+
+						// add reverse alias to group
+						$p_o->connect(array(
+							"to" => $user->id(),
+							"reltype" => 2 // RELTYPE_MEMBER from group
+						));
+
+						$last_bro = $user->create_brother($p_o->id());
+						if ($p_o->id() == $parent->id())
+						{
+							$go_to = $last_bro;
+						}
+					}
+				}
+
+				// now, find the correct brother
+				if ($go_to)
+				{
+					header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
+					die();
+				}
+			}
+		}
+	}
 }
 ?>

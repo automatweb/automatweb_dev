@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.97 2003/12/03 12:11:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.98 2003/12/09 15:56:59 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2331,12 +2331,6 @@ class users extends users_user
 		{
 			send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		}
-	}
-
-	function on_delete_alias($arr)
-	{
-		$i = get_instance("core/users/user");	
-		$i->on_delete_alias($arr);
 	}
 }
 ?>

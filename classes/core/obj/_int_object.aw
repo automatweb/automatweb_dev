@@ -118,8 +118,22 @@ class _int_object
 		$oids = $GLOBALS["object_loader"]->param_to_oid_list($param["to"]);
 		foreach($oids as $oid)
 		{
+			// check if a connection to the same object with the same reltype already exists
+			// if it does, then don't do it again.
+			$cprms = array("to" => $oid);
+			if ($param["reltype"])
+			{
+				$cprms["type"] = $param["reltype"];
+			}
+
+			if (count($this->connections_from($cprms)) > 0)
+			{
+				continue;
+			}
+
 			$c = new connection();
 			$param["from"] = $this->obj["oid"];
+			$param["to"] = $oid;
 			$c->change($param);
 		}
 	}
@@ -969,7 +983,35 @@ class _int_object
 			"msg" => "object::create_brother($parent): no parent!"
 		));
 
+		// make sure brothers are only created for original objects, no n-level brothers!
+		if ($this->obj["brother_of"] != $this->obj["oid"])
+		{
+			$o = obj($this->obj["brother_of"]);
+			return $o->create_brother($parent);
+		}
+
+		// check if a brother already exists for this object under
+		// the $parent menu. 
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"brother_of" => $this->obj["oid"]
+		));
+		if ($ol->count() > 0)
+		{
+			$tmp = $ol->begin();
+			return $tmp->id();
+		}
+
 		return $this->_int_create_brother($parent);
+	}
+
+	function is_connected_to($param)
+	{
+		if (count($this->connections_from($param)) > 0)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	/////////////////////////////////////////////////////////////////

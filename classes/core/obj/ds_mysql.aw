@@ -239,7 +239,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				//echo "set table $data[table] <br>";
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
-				$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+				// check if the property has a value
+				if (isset($objdata["properties"][$prop]))
+				{
+					$tbls[$data["table"]]["defaults"][$data["field"]] = $objdata["properties"][$prop];
+				}
+				else
+				{
+					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.74 2003/12/04 11:47:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.75 2003/12/09 15:56:59 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -771,6 +771,7 @@ class users_user extends aw_template
 	//	join_form_entry
 	//	use_md5_passwords - optional,if true, encodes password with md5, regardless of the default
 	//	all_users_group - if set, overrides the system default
+	//  no_add_user
 	function add($data) 
 	{
 		extract($data);
@@ -804,9 +805,12 @@ class users_user extends aw_template
 		
 
 		// teeme kasutaja
-		$this->db_query("
-			INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,logins,oid) 
-			VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','0', '$user_oid')");
+		if (!$no_add_user)
+		{
+			$this->db_query("
+				INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,logins,oid) 
+				VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','0', '$user_oid')");
+		}
 
 		// teeme default grupi
 		$oid = $this->new_object(array(

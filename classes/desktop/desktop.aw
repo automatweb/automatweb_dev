@@ -934,15 +934,6 @@ function pop(url,w,h)
 		//arr($args,1);
 		if ($this->can('delete', $args['id']))
 		{
-			$cdat = $this->cfg['classes'][$args['class_id']];
-			if (($args['class_id'] != CL_PSEUDO) &&   $cdat['file'] != '')
-			{
-				$inst = get_instance($cdat['alias_class'] != '' ? $cdat['alias_class'] : $cdat['file']);
-				if (method_exists($inst, 'delete_hook'))
-				{
-					$inst->delete_hook(array(OID => $args['id']));
-				}
-			}
 			$this->delete_object($args['id']);
 
 			$str="parent.document.getElementById('dra".$args['id']."').style.visibility = 'hidden';\n";

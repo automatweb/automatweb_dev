@@ -141,6 +141,13 @@
             <group>objects</group>
             <field>obj_acl</field>
       </property>
+      <property>
+            <name>gp_parent</name>
+            <type>hidden</type>
+            <field>parent</field>
+            <table>groups</table>
+            <group>objects</group>
+      </property>
       <classinfo>
             <syslog_type>ST_GROUP</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.51 2003/12/03 12:10:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.52 2003/12/09 15:56:59 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -612,7 +612,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			while($row = $this->get_next())
 			{
 				if (!$this->can("view",$row["oid"])) continue;
-				
+
+				$row_o = obj($row["oid"]);				
+
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
 				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
@@ -621,7 +623,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$row["name"] = "(nimetu)";
 				};
 				$row["type"] = $type;
-				$row["location"] = $obj_list[$row["parent"]];
+				
+				$row["location"] = $row_o->path_str();
 				$this->search_callback(array(
 					"name" => "modify_data",
 					"data" => &$row,
@@ -645,6 +648,13 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$row["change"] = "<input type='checkbox' name='sel[$row[oid]]' value='$row[oid]'>";
 				};
 
+				if ($this->can("edit", $row["oid"]))
+				{
+					$row["name"] = html::href(array(
+						"caption" => $row["name"],
+						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $this->cfg["classes"][$row["class_id"]]["file"])
+					));
+				}
 				$this->t->define_data($row);
 				$results++;
 			};
@@ -1150,12 +1160,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function _get_s_parent($args = array())
 	{
-		$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
+		/*$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
 		if (!is_array($ret))
-		{
+		{*/
 			return array("0" => "Igalt poolt");
-		}
-		return array("0" => "Igalt poolt") + $ret;
+		//}
+		//return array("0" => "Igalt poolt") + $ret;
 	}
 
 	function _get_s_redir_target()

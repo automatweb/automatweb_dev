@@ -1,6 +1,16 @@
 <?php
-// lahe
-  
+
+/*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_GROUP, on_save_grp)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_GROUP, on_delete_grp)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_GROUP, on_add_alias_to_group)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_GROUP, on_remove_alias_from_group)
+*/
+
 /*
 
 
@@ -61,6 +71,8 @@
 @caption Objektid
 
 @property obj_acl type=callback callback=get_acls store=no
+
+@property gp_parent type=hidden field=parent table=groups
 
 @reltype SEARCHFORM value=1 clid=CL_FORM
 @caption otsinguvorm
@@ -433,38 +445,6 @@ class group extends class_base
 		return $t;
 	}
 
-	////
-	// !override alias adding
-	function callback_on_addalias($arr)
-	{
-		$tar = explode(",", $arr["alias"]);
-		foreach($tar as $alias)
-		{
-			$arr["alias"] = $alias;
-			$this->on_addalias($arr);
-		}
-	}
-
-	function on_addalias($arr)
-	{
-		// now, if the alias is of type RELTYPE_MEMBER, then we must add the user to the group
-		if ($arr["reltype"] == RELTYPE_MEMBER)
-		{
-			// get the gid to what we must add the user
-			$gid = $this->users->get_gid_for_oid($arr["id"]);
-			// get the uid to add
-			$uid = $this->users->get_uid_for_oid($arr["alias"]);
-
-			$this->users->add_users_to_group_rec($gid, array($uid), true, true);
-		}
-		
-		// if alias is acl, then we gots to add the group to that acl object
-		if ($arr["reltype"] == RELTYPE_ACL)
-		{
-			$this->normalize_acl_group_aliases();
-		}
-	}
-
 	function get_acls($arr)
 	{
 		$acls = array();
@@ -528,104 +508,11 @@ class group extends class_base
 		return $this->mk_my_orb("change", array("id" => $u->get_oid_for_gid($gid), "group" => "roles"));
 	}
 
-	////
-	// !this gets called when alias is deleted
-	function on_delete_alias($arr)
-	{
-		extract($arr);
-		// if the alias to delete is acl, then we must remove this group from the acl.
-		$a_o = $this->get_object($alias);
-		if ($a_o["class_id"] == CL_ACL)
-		{
-			$a = get_instance("acl_class");
-			$a->remove_group_from_acl($a_o[OID], $this->users->get_gid_for_oid($id));
-		}
-		else
-		if ($a_o["class_id"] == CL_USER)
-		{
-//			echo "remove users from group , , id = $id gid = ".$this->users->get_gid_for_oid($id)." alias = $alias, uid = ".$this->users->get_uid_for_oid($alias)." <br />";
-			$this->users->remove_users_from_group_rec(
-				$this->users->get_gid_for_oid($id),
-				array($this->users->get_uid_for_oid($alias))
-			);
-		}
-	}
-
-	function callback_on_submit_relation_list($arr)
-	{
-		// here we gots to remove the group from all acls that are not in alias list
-		$this->normalize_acl_group_aliases();
-	}
-
-	function normalize_acl_group_aliases()
-	{
-		return;
-		// get all groups
-		$go = $this->list_objects(array(
-			"class" => CL_GROUP,
-			"return" => ARR_ALL
-		));
-
-		$a = get_instance("acl_class");
-
-		foreach($go as $gobj)
-		{
-			// get acls for this group
-			$acls = $a->get_acls_for_group($this->users->get_gid_for_oid($gobj["oid"]));
-			// get all current aliases for acls
-			$als = $this->get_aliases(array(
-				"oid" => $gobj["oid"],
-				"reltype" => RELTYPE_ACL
-			));
-			
-			// now, add all acls that are not aliases
-			foreach($acls as $acl)
-			{
-				$found = false;
-				foreach($als as $al)
-				{
-					if ($al["id"] == $acl)
-					{
-						$found = true;
-					}
-				}
-
-				if (!$found)
-				{
-					core::addalias(array(
-						"id" => $gobj["oid"],
-						"alias" => $acl,
-						"reltype" => RELTYPE_ACL,
-						"no_cache" => true
-					));
-				}
-			}
-
-			// now, remove all aliases that are not in $acls
-			foreach($als as $al)
-			{
-				if (!isset($acls[$al["id"]]))
-				{
-					$this->delete_alias($gobj["oid"], $al["id"], true);
-				}
-			}
-		}		
-	}
-
 	function callback_pre_save($arr)
 	{
 		if (isset($arr["request"]["name"]))
 		{
 			$arr["obj_inst"]->set_name($arr["request"]["name"]);
-		}
-	}
-
-	function on_delete_hook($oid)
-	{
-		$gid = $this->users->get_gid_for_oid($oid);
-		if ($gid)
-		{
-			$this->users->deletegroup($gid);
 		}
 	}
 
@@ -686,6 +573,176 @@ class group extends class_base
 			$title = "Lisa";
 		};
 		return $title;
+	}
+
+	function on_save_grp($arr)
+	{
+		$o = obj($arr["oid"]);
+
+		$modified = false;
+
+		// ok, find all the groups that this group object is under
+		// and make it really a part of those groups
+		foreach(array_reverse($o->path()) as $p_o)
+		{
+			if ($p_o->class_id() == CL_GROUP)
+			{
+				$p_gid = $this->users->get_gid_for_oid($p_o->id());
+
+				if ($o->prop("gp_parent") != $p_gid)
+				{
+					$o->set_prop("gp_parent", $p_gid);
+					$o->save();
+					$modified = true;
+				}
+			}
+
+			if ($modified)
+			{
+				break;
+			}
+		}
+
+		if ($modified && $p_gid)
+		{
+			// this of course means we get to update user membership as well.
+			// what we gotta do is get all users from this group and add them to the parent group
+			
+			unset($this->users->grpcache);
+			unset($this->users->grpcache2);
+
+			// this will also trigger alias creation and other magic that syncs back from 
+			// user tables to object table
+			$members = $this->users->getgroupmembers2($this->users->get_gid_for_oid($o->id()));
+			if (count($members) > 0)
+			{
+				$this->users->add_users_to_group_rec(
+					$p_gid,
+					$members
+				);
+			}
+		}
+	}
+
+	function on_remove_alias_from_group($arr)
+	{
+		$uid_o = $arr["connection"]->to();
+		$grp_o = $arr["connection"]->from();
+
+		$uid = $this->users->get_uid_for_oid($uid_o->id());
+		$gid = $this->users->get_gid_for_oid($grp_o->id());
+
+		// remove user from group rec
+		$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
+
+		// delete all brothers from the current group
+		$user_brothers = new object_list(array(
+			"parent" => $grp_o->id(),
+			"brother_of" => $uid_o->id()
+		));
+		$user_brothers->delete();
+
+		// delete alias from user to this group
+		if (count($uid_o->connections_from(array("to" => $grp_o->id()))) > 0)
+		{
+			$uid_o->disconnect(array(
+				"from" => $grp_o->id()
+			));
+		}
+
+		// get all subgroups
+		$ot = new object_tree(array(
+			"parent" => $grp_o->id(),
+			"class_id" => CL_GROUP
+		));
+		$ol = $ot->to_list();
+		for($item = $ol->begin(); !$ol->end(); $item = $ol->next())
+		{
+			// remove all brothers from those groups
+			$user_brothers = new object_list(array(
+				"parent" => $item->id(),
+				"brother_of" => $uid_o->id()
+			));
+			$user_brothers->delete();
+
+			// remove all aliases from those groups
+			foreach($item->connections_from(array("to" => $uid_o->id())) as $c)
+			{
+				$c->delete();
+			}
+
+			// also remove all aliases from user to the group
+			if (count($uid_o->connections_from(array("to" => $item->id()))) > 0)
+			{
+				$uid_o->disconnect(array(
+					"from" => $item->id()
+				));
+			}
+		}
+	}
+
+	function on_add_alias_to_group($arr)
+	{
+		if ($arr["connection"]->prop("reltype") == RELTYPE_MEMBER)
+		{
+			// get the gid to what we must add the user
+			$gid = $this->users->get_gid_for_oid($arr["connection"]->prop("from"));
+			// get the uid to add
+			$uid = $this->users->get_uid_for_oid($arr["connection"]->prop("to"));
+
+			$group = $arr["connection"]->from();
+			$user = $arr["connection"]->to();
+
+			// we must also add an alias to the user object pointing to this group
+			$user->connect(array(
+				"to" => $group->id(),
+				"reltype" => 1 // RELTYPE_GRP from user
+			));
+
+			$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
+
+			// do our own sync here
+			// add a brother below this group
+			$user->create_brother($group->id());
+
+			// go over all parent groups
+			foreach($group->path() as $p_o)
+			{
+				if ($p_o->id() == $group->id())
+				{
+					continue;
+				}
+				
+				if ($p_o->class_id() == CL_GROUP)
+				{
+					// add a brother below all parent groups
+					$user->create_brother($p_o->id());
+
+					// add an alias to the user to all parent groups
+					$p_o->connect(array(
+						"to" => $user->id(),
+						"reltype" => RELTYPE_MEMBER
+					));
+
+					// add a reverse alias to the user for all groups
+					$user->connect(array(
+						"to" => $p_o->id(),
+						"reltype" => 1 // RELTYPE_GRP from user
+					));
+				}
+			}
+		}
+	}
+
+	function on_delete_grp($arr)
+	{
+		extract($arr);
+
+		$gid = $this->users->get_gid_for_oid($oid);
+		if ($gid)
+		{
+			$this->users->deletegroup($gid);
+		}
 	}
 }
 ?>

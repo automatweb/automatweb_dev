@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.114 2003/12/03 12:33:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.115 2003/12/09 15:56:59 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -19,21 +19,39 @@ if (!defined("DEFS"))
 
 	function post_message($msg, $params)
 	{
+		if (aw_global_get("__in_post_message") == 1)
+		{
+			return;
+		}
+
+		aw_global_set("__in_post_message", 1);
+
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message(array(
 			"msg" => $msg, 
 			"params" => $params
 		));
+
+		aw_global_set("__in_post_message", 0);
 	}
 
 	function post_message_with_param($msg, $param, $params)
 	{
+		if (aw_global_get("__in_post_message") == 1)
+		{
+			return;
+		}
+
+		aw_global_set("__in_post_message", 1);
+
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message_with_param(array(
 			"msg" => $msg, 
 			"param" => $param,
 			"params" => $params
 		));
+
+		aw_global_set("__in_post_message", 0);
 	}
 
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
@@ -210,7 +228,7 @@ if (!defined("DEFS"))
 	// !checks if the parameter is an oid
 	function is_oid($oid)
 	{
-		return is_numeric($oid);
+		return !empty($oid) && is_numeric($oid);
 	}
 
 	//// 

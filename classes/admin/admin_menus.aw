@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.39 2003/12/03 12:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.40 2003/12/09 15:56:59 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1428,14 +1428,6 @@ class admin_menus extends aw_template
 			{
 				if ($this->can("delete", $o->id()))
 				{
-					if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
-					{
-						$inst = get_instance($this->cfg["classes"][$o->class_id()]["alias_class"] != "" ? $this->cfg["classes"][$o->class_id()]["alias_class"] : $this->cfg["classes"][$o->class_id()]["file"]);
-						if (method_exists($inst, "delete_hook"))
-						{
-							$inst->delete_hook(array("oid" => $o->id()));
-						}
-					}
 					$o->delete();
 				}
 			}
