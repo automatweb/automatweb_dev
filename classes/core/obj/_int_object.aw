@@ -596,7 +596,7 @@ class _int_object
 		$uid = $this->obj["createdby"];
 		if (!$uid)
 		{
-			return NULL;
+			return obj();
 		}
 
 		$ui = get_instance("users");
@@ -623,7 +623,7 @@ class _int_object
 		$uid = $this->obj["modifiedby"];
 		if (!$uid)
 		{
-			return NULL;
+			return obj();
 		}
 
 		$ui = get_instance("users");
@@ -1086,6 +1086,14 @@ class _int_object
 
 		// now. we gots to find the class_id of the object
 		$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+
+		global $XX3;
+		if ($XX3)
+		{
+			print "<pre>";
+			print_r($this->obj);
+			print "</pre>";
+		};
 
 		$this->_int_load_properties();
 
