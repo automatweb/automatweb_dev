@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.14 2004/01/13 16:24:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.15 2004/02/16 16:12:52 duke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -79,6 +79,7 @@ class rate extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				classload("aliasmgr");
 				$prop['options'] = aliasmgr::get_clid_picker();
 				break;
 
