@@ -79,16 +79,18 @@ class releditor extends aw_template
 		// load the first connection.
 		// It should be relatively simple to extend this so that it can load
 		// a programmaticaly specified relation
+		
 		if ($prop["rel_id"] == "first")
 		{
 			$o = $arr["obj_inst"];
 			$conns = $o->connections_from(array(
-				"reltype" => $prop["reltype"],
+				"type" => $prop["reltype"],
 			));
 			$key = reset($conns);
 			if ($key)
 			{
 				$obj_inst = $key->to();
+				print $obj_inst->name();
 			};
 		};
 
@@ -201,12 +203,6 @@ class releditor extends aw_template
 		//return $this->t->draw();
 	}
 
-	////
-	// !This processes the newly added relation
-	function process_relation($arr)
-	{
-
-	}
 
 };
 ?>
