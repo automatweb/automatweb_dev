@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.1 2004/11/02 14:18:08 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.2 2004/11/10 16:38:49 sven Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -278,6 +278,7 @@ class orders_order extends class_base
 				$person->set_prop("lastname", $props["lastname"]);
 				$person->set_prop("personal_id", $props["personal_id"]);
 				$person->set_prop("comment", $props["person_contact"]);
+				$person->set_prop("birthday", mktime(0, 0, 0, $props["person_birthday"]["month"], $props["person_birthday"]["day"], $props["person_birthday"]["year"]));
 				$person->save();
 				
 				if($props["person_email"])
@@ -405,6 +406,11 @@ class orders_order extends class_base
 **/
 	function do_persondata_submit($arr)
 	{
+		if(!$arr["udef_checkbox1"])
+		{
+			$arr["udef_checkbox1"] = 0;
+		}
+		
 		$oform = &obj($_SESSION["order_form_id"]);
 		$arr["cfgform"] = $oform->prop("orderform");
 		parent::submit($arr);
