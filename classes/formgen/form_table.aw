@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.63 2004/08/02 12:42:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.64 2004/08/03 10:47:09 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1324,6 +1324,10 @@ class form_table extends form_base
 
 	function get_css($id = 0)
 	{
+		if ($GLOBALS["format"] == "pdf")
+		{
+			return "";
+		}
 		if ($id)
 		{
 			$this->load_table($id);
