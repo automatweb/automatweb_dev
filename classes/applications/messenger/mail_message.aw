@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.5 2004/12/30 15:56:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.6 2005/01/25 15:12:06 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -202,6 +202,7 @@ class mail_message extends class_base
 
 		if ($to_list)
 		{
+			$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
 			$mllist = get_instance(CL_ML_LIST);
 			// if sending from messenger, then we are inside a popup
 			// and don't want to display the rest of the list interface 
@@ -212,6 +213,7 @@ class mail_message extends class_base
 					"id" => $target_obj->id(),
 					"mail_id" => $this->id,
 					"group" => "mail_report",
+					"qid" => $qid,
 					"cb_part" => 1,
 					"fxt" => 1),
 				CL_ML_LIST);
@@ -221,10 +223,11 @@ class mail_message extends class_base
 				$route_back = $this->mk_my_orb("change",array(
 					"id" => $target_obj->id(),
 					"mail_id" => $this->id,
+					"qid" => $qid,
 					"group" => "mail_report"),
 				CL_ML_LIST);
 			};
-			aw_session_set("route_back",$route_back);
+			aw_session_set("route_back", $route_back);
 			// scheduleerib kirjade saatmise
 			$url = $mllist->route_post_message(array(
 				"id" => $this->id,

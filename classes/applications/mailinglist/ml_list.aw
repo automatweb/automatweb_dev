@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.13 2005/01/25 11:00:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.14 2005/01/25 15:12:06 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -297,7 +297,6 @@ class ml_list extends class_base
 		$this->db_query($q);
 		
 		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
-			
 		return aw_global_get("route_back");
 	}
 
@@ -473,6 +472,7 @@ class ml_list extends class_base
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = str_replace("#subject#", $msg_obj->name(), $message);
+		$message = str_replace("#traceid#", "?t=".md5(uniqid(rand(), true)), $message);
 		if (is_oid($msg_obj->meta("template_selector")))
 		{
 			$tpl_obj = new object($msg_obj->meta("template_selector"));
@@ -1234,7 +1234,12 @@ class ml_list extends class_base
 			$row["delay"]/=60;
 			
 			$row["status"] = html::href(array(
-				"url" => $this->mk_my_orb("change", array("group" => "mail_report", "id" => $arr["obj_inst"]->id(),"mail_id" => $row['mid'])),
+				"url" => $this->mk_my_orb("change", array(
+					"group" => "mail_report", 
+					"id" => $arr["obj_inst"]->id(),
+					"mail_id" => $row['mid'],
+					"qid" => $row["qid"],
+				)),
 				"caption" => $status_str,
 			));
 			$row["protsent"] = $this->queue_ready_indicator($row["position"],$row["total"]);
@@ -1530,6 +1535,7 @@ class ml_list extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/report");
 		$_mid = $arr["request"]["mail_id"];
+		$qid = $arr["request"]["qid"];
 		$id = $arr["obj_inst"]->id();
 		if(strtolower(aw_ini_get('db.driver'))=='mssql')
 		{
@@ -1541,11 +1547,10 @@ class ml_list extends class_base
 			$lim1 = "";
 			$lim2 = " LIMIT 50 ";
 		}
-
 		$q = "
 			SELECT $lim1 target, tm, subject, id, vars
 			FROM ml_sent_mails
-			WHERE lid = '$id' AND mail = '$_mid' AND mail_sent = 1 ORDER BY tm DESC $lim2";
+			WHERE lid = '$id' AND mail = '$_mid' AND qid = '$qid' AND mail_sent = 1 ORDER BY tm DESC $lim2";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -1730,7 +1735,8 @@ class ml_list extends class_base
 							#subject# - Kirja teema<br />
 							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
 							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
-							Kui soovid kirja pandavat lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi lõppu t=1, st link kujul http://www.automatweb.com/456?t=1 või http://www.automatweb.com/?class=general&action=general&t=1",
+							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
+							Näiteks: http://www.struktuur.ee/aw#traceid#",
 					);
 				}
 				$filtered_props[$id] = $prop;

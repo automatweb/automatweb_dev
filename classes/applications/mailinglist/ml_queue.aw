@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.12 2005/01/25 11:00:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.13 2005/01/25 15:12:06 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -714,12 +714,14 @@ class ml_queue extends aw_template
 		// 2) store to ml_sent_mails (which has a default value of '0' in mail_sent values
 		// use all variables. 
 		//print "<tr><td>".$arr["name"]."</td><td>".$arr["mail"]."</td></tr>\n";
+		$vars = md5(uniqid(rand(), true));
 		$data = array(
 			"name" => $arr["name"],
 			"mail" => $arr["mail"],
 			"member_id" => $arr["member_id"],
 			"mail_id" => $arr["mail_id"],
 			"subject" => $arr["msg"]["subject"],
+			"traceid" => "?t=$vars",
 		);
 		
 		$this->used_variables = array();
@@ -744,7 +746,7 @@ class ml_queue extends aw_template
 		$mailfrom = trim($mailfrom);
 		$subject = trim($subject);
 		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . " <" . $mailfrom . ">";
-		$used_vars = array_keys($this->used_variables);
+		//$used_vars = array_keys($this->used_variables);
 
 		$mid = $arr["mail_id"];
 		$member_id = $arr["member_id"];
@@ -752,15 +754,15 @@ class ml_queue extends aw_template
 		
 		$this->quote($message);
 		$this->quote($subject);
-		$vars = join(",", $used_vars);
-		$this->quote($vars);
+		//$vars = join(",", $used_vars);
+		//$this->quote($vars);
 		$qid = $arr["qid"];
 		$target = $arr["name"] . " <" . $arr["mail"] . ">";
 		$this->quote($target);
 
 		$mid = $arr["mail_id"];
 		// there is an additional field mail_sent in that table with a default value of 0
-		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."',',".$vars.",','$message','$subject','$mailfrom','$qid','$target')");
+		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."','$vars','$message','$subject','$mailfrom','$qid','$target')");
 
 		// 3) process queue then only retrieves messages from that table where mail_sent is set
 		// to 0
