@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.10 2005/03/31 10:09:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.11 2005/03/31 10:57:44 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -184,6 +184,17 @@ class pot_scanner extends core
 				fwrite($fp, "\n");
 			}
 			fclose($fp);
+
+			// now, for all languages, check of the .po file exists and if not, copy the new .pot over to that
+			$langs = $this->_get_langs();
+			foreach($langs as $lang)
+			{
+				$fn = aw_ini_get("basedir")."/lang/trans/$lang/po/".basename($file_to,".pot").".po";
+				if (!file_exists($fn))
+				{
+					copy($file_to, $fn);
+				}
+			}
 		}
 	}
 
@@ -344,22 +355,7 @@ class pot_scanner extends core
 	{
 		echo "creating aw files from translated po files\n\n";
 		// for each language dir
-		$langs = array();
-		$dir = aw_ini_get("basedir")."/lang/trans";
-		if ($dh = @opendir($dir)) 
-		{
-			while (false !== ($file = readdir($dh)))
-			{
-				$fn = $dir."/".$file;
-				if (is_dir($fn) && $file != "." && $file != "..")
-				{
-					if (strlen($file) == 2)
-					{
-						$langs[$file] = $file;
-					}
-				}
-			}
-		}
+		$langs = $this->_get_langs();
 
 		foreach($langs as $lang)
 		{
@@ -441,5 +437,26 @@ class pot_scanner extends core
 	function _code_quote($str)
 	{
 		return str_replace("\"", "\\\"", $str);
+	}
+
+	function _get_langs()
+	{
+		$langs = array();
+		$dir = aw_ini_get("basedir")."/lang/trans";
+		if ($dh = @opendir($dir)) 
+		{
+			while (false !== ($file = readdir($dh)))
+			{
+				$fn = $dir."/".$file;
+				if (is_dir($fn) && $file != "." && $file != "..")
+				{
+					if (strlen($file) == 2)
+					{
+						$langs[$file] = $file;
+					}
+				}
+			}
+		}
+		return $langs;
 	}
 }
