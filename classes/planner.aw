@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.3 2001/05/16 03:57:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.4 2001/05/16 05:04:46 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -461,7 +461,35 @@ class planner extends calendar {
 		list($d,$m,$y) = split("-",$date);
 		$q = "SELECT * FROM planner_repeaters WHERE eid = '$id'";
 		$this->db_query($q);
-		$rep = $this->db_next();
+		$dayskip = $weekskip = $monskip = $yearskip = 0;
+		$daypwhen = $weekpwhen = $monpwhen = $monpwhen2 = $yearpwhen = "";
+		
+		while($rep = $this->db_next())
+		{
+			switch($rep["type"])
+			{
+				case REP_DAY:
+					$dayskip = $rep["skip"];
+					$daypwhen = $rep["pwhen"];
+					break;
+
+				case REP_WEEK:
+					$weekskip = $rep["skip"];
+					$weekpwhen = $rep["pwhen"];
+					break;
+
+				case REP_MONTH:
+					$monskip = $rep["skip"];
+					$monpwhen = $rep["pwhen"];
+					$monpwhen2 = $rep["pwhen2"];
+					break;
+
+				case REP_YEAR:
+					$yearskip = $rep["skip"];
+					$yearpwhen = $rep["pwhen"];
+					break;
+			};
+		};
 		$colors = array(
 				"#000000" => "must",
 				"#990000" => "punane",
@@ -483,10 +511,17 @@ class planner extends calendar {
 				"repcheck" => ($rep) ? "checked" : "",
 				"color" => $this->picker($row["color"],$colors),
 				"description" => $row["description"],
+				"dayskip" => $dayskip,
+				"daypwhen" => $daypwhen,
+				"weekskip" => $weekskip,
+				"weekpwhen" => $weekpwhen,
+				"monskip" => $monskip,
+				"monpwhen" => $monpwhen,
+				"monpwhen2" => $monpwhen2,
+				"yearskip" => $yearskip,
+				"yearpwhen" => $yearpwhen,
 				"reminder" => $row["reminder"],
-				"dayskip_type" => $rep["dayskip"],
 				"delete" => $delbut,
-				"dayskip_value" => $rep["skip"],
 				"private" => ($row["private"]) ? "checked" : "",
 				"place" => $row["place"],
 				"reforb" => $this->mk_reforb("submit_adm_event",array("parent" => $parent,
@@ -539,6 +574,9 @@ class planner extends calendar {
 					color = '$color',
 					place = '$place',
 					private = '$private',
+					rep_type = '$rep_type',
+					rep_dur = '$rep_dur',
+					rep_forever = '$rep_forever',
 					reminder = '$reminder',
 					description = '$description'
 				WHERE id = '$id'";
@@ -562,56 +600,50 @@ class planner extends calendar {
 		$this->db_query($q);
 		if ($repeater && (!$delete))
 		{
-			$dskip = 0;
-			$reptype = REP_DAY;
-			if ($dayskip_type == 1)
-			{
-				$dskip = 1;
-			}
-			elseif ($dayskip_type == 2)
-			{
-				$dskip = $dayskip_value;
-			}
-			elseif ($dayskip_type == 3)
-			{
-				$reptype = REP_WEEK;
-				$pwhen = $wd;
-			};
-
-			// forever
-			if ($repeat == 1)
-			{
-				$end = strtotime("+30 years",$start);
-			}
-			elseif ($repeat == 2)
-			{
-				switch($repeat_type)
-				{
-					case "1":
-						$unit = "days";
-						break;
-
-					case "2":
-						$unit = "weeks";
-						break;
-
-					case "3":
-						$unit = "months";
-						break;
-
-					case "4":
-						$unit = "years";
-						break;
-				};
-				$end = strtotime("+$repeat_value $unit",$start);
-			};
 			// vanad minema
 			$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
 			$this->db_query($q);
-			$q = "INSERT INTO planner_repeaters
-				(eid,cid,type,start,end,skip,pwhen,duration,dur_type,forever,dayskip)
-				VALUES ('$id','$parent','$reptype','$start','$end','$dskip','$pwhen','$repeat_value','$repeat_type','$repeat','$dayskip_type')";
-			$this->db_query($q);
+			if (isset($dayskip))
+			{
+				$reptype = REP_DAY;
+				$q = "INSERT INTO planner_repeaters
+					(eid,cid,type,start,end,skip,pwhen)
+					VALUES
+					('$id','$parent','$reptype','$start','$end','$dayskip','$daypwhen')";
+				$this->db_query($q);
+			};
+			
+			if (isset($weekskip))
+			{
+				$reptype = REP_WEEK;
+				$q = "INSERT INTO planner_repeaters
+					(eid,cid,type,start,end,skip,pwhen)
+					VALUES
+					('$id','$parent','$reptype','$start','$end','$weekskip','$weekpwhen')";
+				$this->db_query($q);
+			};
+			
+			if (isset($monskip))
+			{
+				$reptype = REP_MONTH;
+				$q = "INSERT INTO planner_repeaters
+					(eid,cid,type,start,end,skip,pwhen,pwhen2)
+					VALUES
+					('$id','$parent','$reptype','$start','$end','$monskip','$monpwhen','$monpwhen2')";
+				$this->db_query($q);
+			};
+			
+			if (isset($monskip))
+			{
+				$reptype = REP_YEAR;
+				$q = "INSERT INTO planner_repeaters
+					(eid,cid,type,start,end,skip,pwhen)
+					VALUES
+					('$id','$parent','$reptype','$start','$end','$yearskip','$yearpwhen')";
+				$this->db_query($q);
+			};
+
+				
 		}
 		else
 		{
