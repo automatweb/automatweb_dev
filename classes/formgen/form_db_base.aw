@@ -964,7 +964,8 @@ class form_db_base extends aw_template
 								$query.=" AND ";
 							}
 							// seems to me that radiobutton values should also always be an exact match, not just partial
-							$query.=" (".$elname." = '".$value."')";
+//							$query.=" (".$elname." = '".$value."')";
+							$query.=" (".$elname2." LIKE '%".$value."%')";
 						}
 					}
 					else
