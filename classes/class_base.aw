@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.247 2004/04/07 15:10:00 duke Exp $
+// $Id: class_base.aw,v 2.248 2004/04/07 16:44:36 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -432,7 +432,18 @@ class class_base extends aw_template
 
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
-			$cli->set_layout($this->layoutinfo);
+			$tmp = array();
+			// export only layout information for the current group
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if ($val["group"] == $this->use_group)
+				{
+					$tmp[$key] = $val;
+
+
+				};
+			};
+			$cli->set_layout($tmp);
 		};
 
 		if ($args["cb_part"] == 1)
@@ -892,7 +903,7 @@ class class_base extends aw_template
 		$return_url = !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
-		if ($this->id)
+		if (is_oid($this->id))
 		{
 			if (empty($title))
 			{
@@ -1924,8 +1935,6 @@ class class_base extends aw_template
 				classload("vcl/calendar");
 				$val["vcl_inst"] = new vcalendar();
 			};
-
-			$test = empty($this->layoutinfo[$val["parent"]]);
 
 			if (!empty($val["parent"]) && empty($this->layoutinfo[$val["parent"]]))
 			{
