@@ -29,23 +29,16 @@
 			</function>
 		</action>
 
-		<action name="add_rule">
+		<action name="new">
 			<function name="add_rule">
 				<arguments>
+					<required name="parent"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_rule">
+		<action name="change">
 			<function name="change_rule">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="del_rule">
-			<function name="del_rule">
 				<arguments>
 					<required name="id"/>
 				</arguments>
@@ -55,6 +48,7 @@
 		<action name="do_export" nologin="1">
 			<function name="do_export">
 				<arguments>
+					<optional name="rule_id"/>
 				</arguments>
 			</function>
 		</action>

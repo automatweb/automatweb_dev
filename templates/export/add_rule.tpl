@@ -45,6 +45,9 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 	<tr class="aste05">
 		<td colspan="2" class="celltext"><a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>Vali millal t&auml;idetakse</a></td>
 	</tr>
+	<tr class="aste05">
+		<td colspan="2" class="celltext"><a href='{VAR:do_rule}'>T&auml;ida ruul</a></td>
+	</tr>
 <!-- END SUB: CHANGE -->
 </table>
 

@@ -17,7 +17,7 @@
 
 
 
-<td class="celltitle">&nbsp;<b>Saidi export | <a href='{VAR:rules}'>Ruulid</a> | <a href='{VAR:gen_url}'>Ekspordi</a> &nbsp;</td>
+<td class="celltitle">&nbsp;<b>Saidi export | <a href='{VAR:gen_url}'>Ekspordi</a> &nbsp;</td>
 <td align="left"><!--save--><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.q.submit()" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
 </tr></table>

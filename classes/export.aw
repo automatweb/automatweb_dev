@@ -136,6 +136,11 @@ class export extends aw_template
 		$automatic = $this->get_cval("export::automatic");
 		$this->fn_type = $this->get_cval("export::fn_type");
 
+		if ($rule_id)
+		{
+			$this->load_rule($rule_id);
+		}
+
 		// take the folder thing and add the date to it so we can make several copies in the same folder
 		@mkdir($folder,0777);
 		if (!is_dir($folder))
@@ -158,8 +163,22 @@ class export extends aw_template
 			$this->exclude_urls = $this->cfg["exclude_urls"];
 		}
 
-		// ok, start from the front page
-		$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=1",1);
+		if ($rule_id)
+		{
+			// if we are doing a rule, do all pages in rule
+			foreach($this->loaded_rule["meta"]["menus"] as $mnid)
+			{
+				$this->fetch_and_save_page(
+					$this->cfg["baseurl"]."/index.aw?section=$mnid&set_lang_id=".$this->loaded_rule["lang_id"],
+					$this->loaded_rule["lang_id"]
+				 );
+			}
+		}
+		else
+		{
+			// ok, start from the front page
+			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=1",1);
+		}
 
 		// copy needed files
 		if (is_array($this->cfg["copy_files"]))
@@ -356,7 +375,31 @@ class export extends aw_template
 			else
 			{
 				// fetch the page
-				$fname = $this->fetch_and_save_page($link,$lang_id);
+				if ($this->rule_id && $this->is_out_of_rule($link))
+				{
+					$link = $this->add_session_stuff($link, $lang_id);
+
+					// if we have done this page already, let's not do it again!
+					if (isset($this->hashes[$link]) || $this->check_excludes($link))
+					{
+						$fname = $this->hashes[$link].".".$this->get_ext_for_link($link,$http_response_header);
+					}
+					else
+					{
+						// here we track the active language in the url
+						$t_lang_id = $lang_id;
+						if (preg_match("/set_lang_id=(\d*)/", $link,$mt))
+						{
+							$t_lang_id=$mt[1];
+						}
+						$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
+						$fname = $this->get_hash_for_url($link,$t_lang_id).".".$this->get_ext_for_link($link,$http_response_header);
+					}
+				}
+				else
+				{
+					$fname = $this->fetch_and_save_page($link,$lang_id);
+				}
 			}
 			// we still gotta replace the link, even if it is an extlink outta here, 
 			// cause otherwise we would end up in an infinite loop
@@ -452,7 +495,7 @@ class export extends aw_template
 			$end = "";
 			if (substr($ud["path"],1) != "" || $ud["query"] != "" || $ud["fragment"] != "")
 			{
-				$end = "?section=".substr($ud["path"],1)."&".$ud["query"].$ud["fragment"];
+				$end = "?section=".str_replace("?", "&",substr($ud["path"],1)."&".$ud["query"].$ud["fragment"]);
 			}
 			$link = $baseurl."/index.".$ext.$end;
 			// now just extract it again
@@ -535,52 +578,23 @@ class export extends aw_template
 		return $link;
 	}
 
-	function load_rules()
+	function load_rule($id)
 	{
-		$rd = $this->get_cval("export::rules");
-//		echo "rd = <pre>", htmlentities($rd),"</pre> <br>";
-		$this->rules = aw_unserialize($rd);
-		if (!is_array($this->rules))
-		{
-			$this->rules = array();
-		}
-	}
-
-	function rules($arr)
-	{
-		extract($arr);
-		$this->read_template("rules.tpl");
-
-		$this->load_rules();
-//		echo "rules = <pre>",var_dump($this->rules),"</pre> <br>";
-		foreach($this->rules as $rid => $rdat)
-		{
-			$this->vars(array(
-				"name" => $rdat["name"],
-				"change" => $this->mk_my_orb("change_rule", array("id" => $rid)),
-				"delete" => $this->mk_my_orb("del_rule", array("id" => $rid))
-			));
-			$l.=$this->parse("LINE");
-		}
-		$this->vars(array(
-			"LINE" => $l,
-			"add" => $this->mk_my_orb("add_rule"),
-			"settings" => $this->mk_my_orb("export"),
-			"gen_url" => $this->mk_my_orb("do_export")
-		));
-		return $this->parse();
+		$this->loaded_rule = $this->get_object($id);
+		$this->rule_id = $id;
+//		echo "rule = <pre>", var_dump($this->loaded_rule),"</pre> <br>";
 	}
 
 	function add_rule($arr)
 	{
 		extract($arr);
 		$this->read_template("add_rule.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_my_orb("rules")."'>Ruulid</a> / Lisa");
+		$this->mk_path($parent,"Lisa");
 
 		$o = get_instance("objects");
 		$this->vars(array(
 			"menus" => $this->multiple_option_list(array(),$o->get_list()),
-			"reforb" => $this->mk_reforb("submit_rule")
+			"reforb" => $this->mk_reforb("submit_rule", array("parent" => $parent))
 		));
 		return $this->parse();
 	}
@@ -588,66 +602,52 @@ class export extends aw_template
 	function submit_rule($arr)
 	{
 		extract($arr);
-		$this->load_rules();
 
 		if ($id)
 		{
-			$this->rules[$id]["name"] = $name;
-			$this->rules[$id]["menus"] = $this->make_keys($menus);
+			$this->upd_object(array(
+				"name" => $name,
+				"metadata" => array(
+					"menus" => $this->make_keys($menus)
+				)
+			));
 		}
 		else
 		{
-			$id = $this->gen_uniq_id();
-			$arr = array("name" => $name, "menus" => $this->make_keys($menus));
-
 			$pl = new planner;
 			$pl->submit_add(array("parent" => 1));
-			$arr["cal_id"] = $pl->id;
-			$arr["event_id"] = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
 
-			$this->rules[$id] = $arr;
+			$id = $this->new_object(array(
+				"name" => $name,
+				"metadata" => array(
+					"menus" => $this->make_keys($menus),
+					"cal_id" => $pl->id,
+					"event_id" => $pl->bron_add_event(array("parent" => $pl->id,"start" => time(), "end" => time()+1))
+				)
+			));
 		}
 
-		$this->save_rules();
-		return $this->mk_my_orb("change_rule", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function change_rule($arr)
 	{
 		extract($arr);
-		$this->load_rules();
-		$this->mk_path(0,"<a href='".$this->mk_my_orb("rules")."'>Ruulid</a> / Muuda");
+		$this->load_rule($id);
+		$this->mk_path($this->loaded_rule["parent"],"Muuda ekspordi ruuli");
 		$this->read_template("add_rule.tpl");
 		$o = get_instance("objects");
 		$this->vars(array(
-			"name" => $this->rules[$id]["name"],
-			"menus" => $this->multiple_option_list($this->rules[$id]["menus"],$o->get_list()),
+			"name" => $this->loaded_rule["name"],
+			"menus" => $this->multiple_option_list($this->loaded_rule["meta"]["menus"],$o->get_list()),
 			"reforb" => $this->mk_reforb("submit_rule", array("id" => $id)),
-			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->rules[$id]["event_id"]),"cal_event",false,true),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->loaded_rule["meta"]["event_id"]),"cal_event",false,true),
+			"do_rule" => $this->mk_my_orb("do_export", array("rule_id" => $id))
 		));
 		$this->vars(array(
 			"CHANGE" => $this->parse("CHANGE")
 		));
 		return $this->parse();
-	}
-
-	function save_rules()
-	{
-		$ser = aw_serialize($this->rules, SERIALIZE_PHP);
-		$this->quote(&$ser);
-		$c = get_instance("config");
-		$c->set_simple_config("export::rules", $ser);
-	}
-
-	function del_rule($arr)
-	{
-		extract($arr);
-		$this->load_rules();
-		$this->delete_object($this->rules[$id]["cal_id"]);
-		$this->delete_object($this->rules[$id]["event_id"]);
-		unset($this->rules[$id]);
-		$this->save_rules();
-		header("Location: ".$this->mk_my_orb("rules"));
 	}
 
 	function get_hash_for_url($url, $lang_id)
@@ -882,6 +882,40 @@ class export extends aw_template
 			return true;
 		}
 		return false;
+	}
+
+	function is_out_of_rule($url)
+	{
+		preg_match("/section=([^&=\?]*)/",$url,$mt);
+		$secid = $mt[1];
+		if ($secid != "")
+		{
+			if (!is_number($secid))
+			{
+				$seco = $this->_get_object_by_alias($secid);
+				$secid = $seco["oid"];
+			}
+
+			if (is_number($secid))
+			{
+				if ($this->loaded_rule["meta"]["menus"][$secid] == $secid)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>
