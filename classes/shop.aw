@@ -360,8 +360,28 @@ class shop extends aw_template
 		classload("form");
 		$f = new form;
 
+		// read the default values for this form from the join form that the user filled when he joined
+		$elvals = array();
+		classload("users");
+		$u = new users;
+		$udata = $u->get_user(array("uid" => UID));
+		$jf = unserialize($udata["join_form_entry"]);
+		if (is_array($jf))
+		{
+			$f = new form();
+			foreach($jf as $joinform => $joinentry)
+			{
+				$f->load($joinform);
+				$f->load_entry($joinentry);
+				$elvals = array_merge($elvals, $f->get_element_values());
+			};
+		};
 		$this->vars(array(
-			"form" => $f->gen_preview(array("id" => $sh["order_form"], "reforb" => $this->mk_reforb("submit_order", array("shop_id" => $shop_id, "section" => $section)))),
+			"form" => $f->gen_preview(array(
+									"elvalues" => $elvals,
+									"id" => $sh["order_form"], 
+									"reforb" => $this->mk_reforb("submit_order", array("shop_id" => $shop_id, "section" => $section))
+								)),
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section))
