@@ -12,9 +12,8 @@
 <tr>
 	<!-- SUB: DAY -->
 	<td width="20%" valign="top" style="border: 1px solid #8AAABE; background-color: #FFF;">
-	<div align="right"><small><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></small></div>
+	<div align="right" style="font-size: 13px; font-weight: bold; background: #EEE;"><a style="text-decoration: none;" href="{VAR:daylink}">{VAR:daynum}</a></div>
 	<span style="font-size: 11px;">
-	<p>
 		{VAR:EVENT}
 	</span>
 	</td>

@@ -79,7 +79,7 @@ function navigate_to()
 <a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
 </tr>
 </table>
-<table border="0" cellspacing="0" cellpadding="2">
+<table border="0" cellspacing="0">
 <tr>
 <td rowspan="1" valign="top" width="90%">
 {VAR:content}
@@ -112,7 +112,9 @@ function navigate_to()
 <span style="font-size: 10px;">
 <center><b>{VAR:tasks_title}</b></center>
 <!-- SUB: TASK -->
-<a href="{VAR:task_url}">{VAR:task_name}</a><br>
+<div style="margin: 2px; border: 1px solid #CCC; background: #EEE;">
+<a href="{VAR:task_url}" style="text-decoration: none;">{VAR:task_name}</a>
+</div>
 <!-- END SUB: TASK -->
 </span>
 <!-- END SUB: TASKS -->
