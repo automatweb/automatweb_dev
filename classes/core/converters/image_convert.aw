@@ -73,6 +73,15 @@ class image_convert extends class_base
 
 		if ($driver == "")
 		{
+			// try imagick module
+			if (extension_loaded("imagick"))
+			{
+				$driver = "imagick_module";
+			}
+		}
+
+		if ($driver == "")
+		{
 			// try to detect imagemagick
 			$convert = aw_ini_get("server.convert_dir");
 			if (file_exists($convert) && is_executable($convert))
@@ -544,6 +553,164 @@ class _int_image_convert_driver_imagick extends aw_template
 	// $source, $x, $y, $pct
 	function merge($arr)
 	{
+		extract($arr);
+		$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv");
+
+		$cmd = $this->composite." -geometry +".$x."+".$y." ".$source->driver->filename." ".$this->filename." ".$tn;
+		shell_exec($cmd);
+		unlink($this->filename);
+		$this->filename = $tn;
+	}
+}
+
+
+class _int_image_convert_driver_imagick_module extends aw_template
+{
+	function _int_image_convert_driver_imagick()
+	{
+		$this->error_rep = true;
+	}
+
+	function load_from_string($str)
+	{
+		// save string to temp file
+		$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv");
+		$this->put_file(array(
+			"file" => $tn,
+			"content" => $str
+		));
+
+		$this->handle = imagick_readimage($tn);
+		if ( imagick_iserror( $this->handle ) )
+		{
+			$reason = imagick_failedreason( $this->handle ) ;
+			$description = imagick_faileddescription( $this->handle ) ;
+
+			if ($this->error_rep == false)
+			{
+				$this->is_error = true;
+			}
+			else
+			{
+				$this->raise_error(ERR_NO_FILE, sprintf(t("image_convert::load_from_string(): could not read image from string! reason = %s, desc = %s"), $reason, $description));
+			}
+		}
+	}
+
+	function load_from_file($str)
+	{
+		if (!file_exists($str) || filesize($str) == 0)
+		{
+			if ($this->error_rep == false)
+			{
+				$this->is_error = true;
+				return;
+			}
+			else
+			{
+				$this->raise_error(ERR_NO_FILE, sprintf(t("image_convert::load_from_file(%s): could not read image from file! reason = %s, desc = %s"), $str, $reason, $description));
+				return;
+			}
+		}
+
+		$this->handle = imagick_readimage($str);
+		if ( imagick_iserror( $this->handle ) )
+		{
+			$reason = imagick_failedreason( $this->handle ) ;
+			$description = imagick_faileddescription( $this->handle ) ;
+
+			if ($this->error_rep == false)
+			{
+				$this->is_error = true;
+			}
+			else
+			{
+				$this->raise_error(ERR_NO_FILE, sprintf(t("image_convert::load_from_file(%s): could not read image from file! reason = %s, desc = %s"), $str, $reason, $description));
+			}
+		}
+	}
+
+	
+	function size()
+	{
+		$tmp = array(imagick_getwidth($this->handle), imagick_getheight($this->handle));
+		return $tmp;
+	}
+
+	////
+	// !resize
+	// x, y, width, height, new_width, new_height
+	function resize($arr)
+	{
+		extract($arr);
+		imagick_resize( $this->handle, $new_width, $new_height, IMAGICK_FILTER_UNKNOWN, 0);
+	}
+
+	function get($type)
+	{
+		switch($type)
+		{
+			case IMAGE_PNG:
+				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv").".png";
+				imagick_writeimage($this->handle, $tn);
+				break;
+
+			case IMAGE_JPEG:
+				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv").".jpg";
+				imagick_writeimage($this->handle, $tn);
+				break;
+
+			case IMAGE_GIF:
+				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv").".gif";
+				imagick_writeimage($this->handle, $tn);
+				break;
+
+			case IMAGE_WBMP:
+				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv").".wbmp";
+				imagick_writeimage($this->handle, $tn);
+				break;
+
+			default:
+				if ($this->error_rep == false)
+				{
+					$this->is_error = true;
+				}
+				else
+				{
+					$this->raise_error(ERR_IMAGE_TYPE, sprintf(t("image_convert::get(%s): unknown image type!"), $type));
+				}
+		}
+		$fc = $this->get_file(array("file" => $tn));
+		unlink($tn);
+		return $fc;
+	}
+
+	function save($filename, $type)
+	{
+		imagick_writeimage($this->handle, $filename);
+	}
+
+	////
+	// !returns an instance of this class that has the same image loaded, but any operations on it, will not affect the original image
+	function &copy()
+	{
+		$inst = new _int_image_convert_driver_imagick_module;
+		$inst->load_from_string($this->get(IMAGE_PNG));
+		return $inst;
+	}
+
+	function destroy()
+	{
+		imagick_free($this->handle);
+		unset($this);
+	}
+
+	////
+	// !merges the current image with the image given as $img
+	// $source, $x, $y, $pct
+	function merge($arr)
+	{
+		return E_NOIMPL;
 		extract($arr);
 		$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_img_conv");
 
