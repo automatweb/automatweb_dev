@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.145 2003/09/22 10:31:52 kristo Exp $
+// $Id: class_base.aw,v 2.146 2003/09/22 12:08:35 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -126,13 +126,6 @@ class class_base extends aw_template
 			};
 
 			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
-
-			$o_t = get_instance("translate/object_translation");
-			$t_list = $o_t->translation_list($this->id);
-			if (in_array($this->id, $t_list))
-			{
-				$this->is_translated = 1;
-			}
 		};
 
 		$cfgform_id = $this->get_cfgform_for_object(array(
@@ -149,6 +142,19 @@ class class_base extends aw_template
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 				"rel" => $this->is_rel,
 		));
+
+		if (($args["action"] == "change") || ($args["action"] == "view"))
+		{
+			if ($this->classinfo["trans"]["text"] == 1)
+			{
+				$o_t = get_instance("translate/object_translation");
+				$t_list = $o_t->translation_list($this->id, true);
+				if (in_array($this->id, $t_list))
+				{
+					$this->is_translated = 1;
+				}
+			}
+		}
 
 		$this->request = $args;
 
@@ -663,8 +669,15 @@ class class_base extends aw_template
 
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
+
 		foreach($this->groupinfo as $key => $val)
 		{
+			if (empty($this->props_by_group[$key]))
+			{
+				// ignore groups with no properties
+				continue;
+
+			}
 			// we only want subgroups that are children of the currently active group
 			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"])) //"hide_tabs_L2" kas seda kasutatakse kuskil??
 			{
@@ -1530,6 +1543,7 @@ class class_base extends aw_template
 		// need to cycle over the property nodes, do replacements
 		// where needed and then cycle over the result and generate
 		// the output
+
 		foreach($properties as $key => $val)
 		{
 			if (($val["type"] == "toolbar") && ($this->orb_action != "submit"))
@@ -1683,6 +1697,19 @@ class class_base extends aw_template
 			}
 		}
 
+		// this we use to keep track of which groups to show and which to hide
+		$this->props_by_group = array();
+		foreach($resprops as $key => $val)
+		{
+			if (empty($this->props_by_group[$val["group"]]))
+			{
+				$this->props_by_group[$val["group"]] = 1;
+			}
+			else
+			{
+				$this->props_by_group[$val["group"]]++;
+			};
+		}
 
 		return $resprops;
 	}
@@ -1939,11 +1966,14 @@ class class_base extends aw_template
 			$this->id = $id;
 		};
 
-		$o_t = get_instance("translate/object_translation");
-		$t_list = $o_t->translation_list($this->id);
-		if (in_array($this->id, $t_list))
+		if ($this->classinfo["trans"]["text"] == 1)
 		{
-			$this->is_translated = 1;
+			$o_t = get_instance("translate/object_translation");
+			$t_list = $o_t->translation_list($this->id, true);
+			if (in_array($this->id, $t_list))
+			{
+				$this->is_translated = 1;
+			}
 		}
 
 		$this->new = $new;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.4 2003/09/22 09:33:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.5 2003/09/22 12:08:36 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -109,7 +109,7 @@ class object_translation extends aw_template
 		return $this->mk_my_orb("change",array("id" => $clone_id),$fl);
 	}
 
-	function translation_list($oid)
+	function translation_list($oid, $no_orig = false)
 	{
 		$obj = obj($oid);
 
@@ -136,12 +136,29 @@ class object_translation extends aw_template
 
 		$l = get_instance("languages");
 
-		$ret = array(
-			$l->get_langid_for_code($obj->lang()) => $obj->id()
-		);
+		if ($no_orig)
+		{
+			$ret = array();
+		}
+		else
+		{
+			$ret = array(
+				$l->get_langid_for_code($obj->lang()) => $obj->id()
+			);
+		}
 		foreach($conn as $c)
 		{
-			$ret[$c->prop("to.lang_id")] = $c->prop("to");
+			if ($no_orig)
+			{
+				if ($c->prop("to") != $obj->id())
+				{
+					$ret[$c->prop("to.lang_id")] = $c->prop("to");
+				}
+			}
+			else
+			{
+				$ret[$c->prop("to.lang_id")] = $c->prop("to");
+			}
 		}
 		return $ret;
 	}

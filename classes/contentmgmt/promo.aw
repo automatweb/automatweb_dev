@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.8 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.9 2003/09/22 12:08:36 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -729,7 +729,7 @@ class promo extends class_base
 					"3" => "DOWN_PROMO",
 				);
 	
-				$use_tpl = $templates[$meta["type"]];
+				$use_tpl = $templates[$o->meta("type")];
 				if (!$use_tpl)
 				{
 					$use_tpl = "LEFT_PROMO";

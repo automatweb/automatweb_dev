@@ -50,7 +50,6 @@ class docgen_analyzer extends class_base
 
 	function display_class($data)
 	{
-		echo dbg::dump($data);
 		$this->read_template("class_info.tpl");
 
 		$f = "";
@@ -76,7 +75,7 @@ class docgen_analyzer extends class_base
 				"start_line" => $f_data["start_line"],
 				"end_line" => $f_data["end_line"],
 				"returns_ref" => ($f_data["returns_ref"] ? "X" : "&nbsp;"),
-				"ARG" => $arg
+				"ARG" => $arg,
 			));
 
 			$f .= $this->parse("FUNCTION");
@@ -87,6 +86,7 @@ class docgen_analyzer extends class_base
 			"extends" => $data["extends"],
 			"end_line" => $data["end_line"],
 			"start_line" => $data["start_line"],
+			"orb_defs" => nl2br(htmlentities($this->_get_orb_defs($data))),
 			"FUNCTION" => $f
 		));
 
@@ -131,6 +131,7 @@ class docgen_analyzer extends class_base
 		$this->in_class = false;
 		$this->in_function = false;
 		$this->cur_line = 1;
+		$this->cur_file = $file;
 		
 		reset($this->tokens);
 		while ($token = $this->get())
@@ -283,6 +284,7 @@ class docgen_analyzer extends class_base
 		$this->data["classes"][$name] = array();
 		$this->data["classes"][$name]["name"] = $name;
 		$this->data["classes"][$this->current_class]["start_line"] = $this->get_line();
+		$this->data["classes"][$name]["file"] = $this->cur_file;
 
 		$tok = $this->get();
 		if (is_array($tok))
@@ -536,7 +538,7 @@ class docgen_analyzer extends class_base
 			if (substr($line, 0, strlen("@attrib")) == "@attrib")
 			{
 				// parse attributes
-				$data["attribs"] = trim(substr($line, strlen("@attrib")));
+				$data["attribs"] = $this->_do_parse_attributes(trim(substr($line, strlen("@attrib"))));
 			}
 			else
 			if (substr($line, 0, strlen("@param")) == "@param")
@@ -590,6 +592,144 @@ class docgen_analyzer extends class_base
 			}
 		}
 		return $data;
+	}
+
+	function _do_parse_attributes($str)
+	{
+		$ret = array();
+		// any attribute can have quoted content
+		// so we can't just explode by space
+		$in_att_name = false;
+		$in_att_value = false;
+		$att_val_quoted = false;
+		$cur_att_name = "";
+		$cur_att_val = "";
+
+		$len = strlen($str);
+		for ($i = 0; $i < $len; $i++)
+		{
+//			echo "i = $i, char = ".$str{$i}." <br>";
+			if ($in_att_name)
+			{
+				if ($str{$i} == "=")
+				{
+//					echo "in_att_name found eq <br>";
+					$in_att_name = false;
+					$in_att_value = true;
+				}
+				else
+				{
+//					echo "in att name add <br>";
+					$cur_att_name .= $str{$i};
+				}
+			}
+			else
+			if ($in_att_value)
+			{
+				if ($str{$i} == "\"" && trim($cur_att_value) == "")
+				{
+//					echo "in att value begin quoted <br>";
+					$att_val_quoted = true;
+				}
+
+				$end_value = false;
+				if ($att_val_quoted && $str{$i} == "\"" && trim($cur_att_value) != "")
+				{
+//					echo "att val found end quoted cur att = $cur_att_value <br>";
+					$end_value = true;
+				}
+				else
+				if ($att_val_quoted == false && $str{$i} == " ")
+				{
+//					echo "att val found end not quoted cur att = $cur_att_value <br>";
+					$end_value = true;
+				}
+
+				if ($end_value)
+				{
+					if ($att_val_quoted)
+					{
+						$ret[trim($cur_att_name)] = substr($cur_att_value, 1);
+					}
+					else
+					{
+						$ret[trim($cur_att_name)] = $cur_att_value;
+					}
+//					echo "att val ended att $cur_att_name => $cur_att_value <br>";
+					$in_att_value = false;
+					$att_val_quoted = false;
+					$cur_att_name = "";
+					$cur_att_value = "";
+				}
+				else
+				{
+//					echo "add to cur att value ".$str{$i}." cur val = $cur_att_value<br>";
+					$cur_att_value .= $str{$i};
+				}
+			}
+			else
+			{
+				if ($str{$i} != " ")
+				{
+//					echo "not space, start new att <Br>";
+					$in_att_name = true;
+					$cur_att_name = $str{$i};
+				}
+			}
+		}
+		if (trim($cur_att_name) != "")
+		{
+			$ret[trim($cur_att_name)] = $cur_att_value;
+		}
+		return $ret;
+	}
+
+	function _get_orb_defs($data)
+	{
+		$xml  = "<?xml version='1.0'?>\n";
+		$xml .= "<orb>\n";
+
+		$folder = substr(dirname($data["file"]), 1);
+
+		$xml .= "\t<class name=\"".$data["name"]."\" folder=\"".$folder."\" extends=\"".$data["extends"]."\">\n";
+
+		foreach($data["functions"] as $f_name => $f_data)
+		{
+			// func is public if name attrib is set
+			$attr = $f_data["doc_comment"]["attribs"];
+			if (($a_name = $attr["name"]) != "")
+			{
+				$xml .= "\t\t<action name=\"$a_name\"";
+				$x_a = array();
+				if (isset($attr["default"]) && $attr["default"] == 1)
+				{
+					$x_a[] = "default=\"1\"";
+				}
+
+				if (isset($attr["nologin"]) && $attr["nologin"] == 1)
+				{
+					$x_a[] = "nologin=\"1\"";
+				}
+
+				if (isset($attr["is_public"]) && $attr["is_public"] == 1)
+				{
+					$x_a[] = "is_public=\"1\"";
+				}
+
+				if (isset($attr["all_args"]) && $attr["all_args"] == 1)
+				{
+					$x_a[] = "all_args=\"1\"";
+				}
+
+				if (isset($attr["caption"]) && $attr["caption"] != "")
+				{
+					$x_a[] = "caption=\"".$attr["caption"]."\"";
+				}
+			}
+		}
+
+		$xml .= "</orb>\n";
+		return $xml;
 	}
 }
 ?>
