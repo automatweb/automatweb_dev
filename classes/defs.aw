@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.150 2004/09/20 11:57:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.151 2004/10/05 13:13:56 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1161,6 +1161,30 @@ if (!defined("DEFS"))
 
 			return $msg;
 		}
+	}
+
+	// wrapper for localization classes
+	class locale
+	{
+		var $default_locale = "en";
+		var $lc_date_inst = false;
+		function get_lc_weekday($num, $short)
+		{
+			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date");
+                	if(!is_object($this->lc_date_inst))
+                	{
+                        	$this->lc_date_inst = get_instance("core/locale/" . $this->default_locale . "/date");
+                	};
+			if (method_exists($this->lc_date_inst,"get_lc_weekday"))
+			{
+				return $this->lc_date_inst->get_lc_weekday($num,$short);
+			}
+			else
+			{
+				return "";
+			};
+		}
+
 	}
 
 	// wrapper for arrays - helps to get rid of numerous is_array checks
