@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.71 2004/07/07 13:19:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.72 2004/09/08 11:32:49 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -11,22 +11,36 @@ class htmlclient extends aw_template
 {
 	function htmlclient($arr = array())
 	{
-		$this->init(array("tpldir" => "htmlclient"));
+		$tpldir = isset($arr["tpldir"]) ? $arr["tpldir"] : "htmlclient";
+		$this->init(array("tpldir" => $tpldir));
 		$this->res = "";
 		$this->layout_mode = "default";
 		$this->form_target = "";
+		$this->tabs = ($arr["tabs"] === false) ? false : true;
 		if (!empty($arr["layout_mode"]))
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
 		if (!empty($arr["template"]))
 		{
-			$this->use_template = $arr["template"] . ".tpl";
+			// apparently some places try to specify a template without an extension,
+			// deal with it
+			if (strpos($arr["template"],".tpl"))
+			{
+				$this->use_template = $arr["template"];
+			}
+			else
+			{
+				$this->use_template = $arr["template"] . ".tpl";
+			};
 		};
 		$this->group_style = "";
 		$this->layoutinfo = array();
 		$this->start_output();
-		$this->tp = get_instance("vcl/tabpanel");
+		if ($this->tabs)
+		{
+			$this->tp = get_instance("vcl/tabpanel");
+		};
 
 		// I even need those in the tabpanel
 	}
@@ -179,6 +193,15 @@ class htmlclient extends aw_template
 
 		$type = isset($args["type"]) ? $args["type"] : "";
 
+		if ($args["layout"])
+		{
+			$lf = $this->layoutinfo[$args["layout"]];
+		}
+		else
+		{
+			$lf = array();
+		};
+
 		if ($type == "iframe")
 		{
 			$src = $args["src"];
@@ -193,6 +216,11 @@ class htmlclient extends aw_template
 		if ($args["parent"] && empty($this->layoutinfo[$args["parent"]]))
 		{
 			$this->proplist[$args["parent"]]["html"] .= $this->put_subitem($args);
+		}
+		else
+		if ($args["layout"] && sizeof($lf["items"]) < ($lf["cols"] * $lf["rows"]))
+		{
+			$args["html"] = $this->put_subitem($args);
 		}
 		else
 		// hidden elements end up in the orb_vars
@@ -229,9 +257,39 @@ class htmlclient extends aw_template
 		{
 			$args["html"] = $this->put_content($args);
 		};
+
 		if ($args["parent"] && !empty($this->layoutinfo[$args["parent"]]))
 		{
 			$this->layoutinfo[$args["parent"]]["items"][] = $args["html"];
+		}
+		// now I have to check whether this property is placed in a grid
+		// if so, place this thing int he grid
+		elseif (	!empty($args["layout"]) && 
+				!empty($this->layoutinfo[$args["layout"]]) &&
+				$this->layoutinfo[$args["layout"]]["type"] == "grid")
+		{
+			// now for starters lets assume that this grid thingie uses autoflow, I'll implement
+			// other things later on. properties come in and will be placed in the correct places
+			// in that grid
+			$lf = $this->layoutinfo[$args["layout"]];
+			$size = $lf["cols"] * $lf["rows"];
+			if (sizeof($lf["items"]) < $size)
+			{
+				// temporary solution to deal with colspans
+				$this->layoutinfo[$args["layout"]]["items"][] = $args;
+				// but I also need to know how to add the fukken spans!
+
+				// so what happens if a element is put in a cell .. now, I do not want to think
+				// about that right now
+
+				// colspan 2, rowspan 2 .. yees?
+			}
+			else
+			{
+				$this->proplist[$args["name"]] = $args;
+			};
+			//$this->proplist[$args["name"]] = $args;
+
 		}
 		else
 		{
@@ -470,6 +528,11 @@ class htmlclient extends aw_template
 			$res .= $this->error;
 		};
 
+		// ach! vahi raiska .. siit see jama ju sisse tuleb!
+
+		// proplist tehakse enne ja siis layout takka otsa .. and this will break a lot of things
+		// now how do I work this out?
+
 		if (sizeof($this->proplist) > 0)
 		{
 			foreach($this->proplist as $ki => $item)
@@ -486,6 +549,8 @@ class htmlclient extends aw_template
 					$res .= $sbt;
 					unset($sbt);
 				};
+				// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
+				// siis ma asendan selle gridi lihtsalt tema leiaudiga
 				$res .= $item["html"];
 			};
 		};
@@ -500,11 +565,18 @@ class htmlclient extends aw_template
 				{
 					continue;
 				};
+
+				if ("grid" == $val["type"])
+				{
+					continue;
+				};
+
 				$type = $val["type"];
 				// it can be one of:
 				// 1. hbox
 				// 2. vbox
 				$tmp = "";
+				// geezas christ, this thing is SO bad :(
 				if ($type == "vbox")
 				{
 					$tmp .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>";
@@ -521,6 +593,7 @@ class htmlclient extends aw_template
 				$this->layoutinfo[$val["parent"]]["items"][] = $tmp;
 			};
 
+
 			// second one tries to put together the complete picture
 			foreach($this->layoutinfo as $key => $val)
 			{
@@ -528,6 +601,7 @@ class htmlclient extends aw_template
 				{
 					continue;
 				};
+
 
 				$type = $val["type"];
 				// it can be one of:
@@ -563,6 +637,94 @@ class htmlclient extends aw_template
 						$res .= join("</td><td valign=top width='${width}%'>",$val["items"]);
 						$res .= "</td></tr></table>";
 					}
+				};
+
+				if ("grid" == $type)
+				{
+					$rows = $val["rows"];
+					$cols = $val["cols"];
+					// siin tuleks siis vast midagi ette võtta nii et näidataks tõesti ainult
+					// vajalikke asju. JA, see asi tuleks kuidagi liita seadete vormiga ..
+					// oh god, that is just horrible
+					$grid = new aw_template();
+					$grid->tpl_init("htmlclient");
+					$grid->read_template("grid.tpl");
+
+					$items = $val["items"];
+					$idx = 0;
+					$tres = "";
+					$used = array();
+					for ($i = 1; $i <= $rows; $i++)
+					{
+						$cells = "";
+						for ($j = 1; $j <= $cols; $j++)
+						{
+							print "doing $i * $j<br>";
+							if ($used[$i][$j])
+							{
+								print "skipping, cause it is used<br>";
+								continue;
+							};
+							// now how do I get the spans to work?
+							if (isset($items[$idx]))
+							{
+								$rowspan = $items[$idx]["rowspan"];
+								$colspan = $items[$idx]["colspan"];
+								if (empty($rowspan))
+								{
+									$rowspan = 1;
+								};
+								if (empty($colspan))
+								{
+									$colspan = 1;
+								};
+
+								if ($rowspan > 1 || $colspan > 1)
+								{
+									for ($i1 = 1; $i1 <= $rowspan; $i1++)
+									{
+										for ($j1 = 1; $j1 <= $colspan; $j1++)
+										{
+											$used[$j + $i1][$i + $j1] = 1;
+										}
+									};
+									arr($used);
+								};
+								// now, how do I leave out stolen cells?
+								$grid->vars(array(
+									"element" => $this->draw_element($items[$idx]),
+									"caption" => $items[$idx]["caption"],
+									"colspan" => $colspan,
+									"rowspan" => $rowspan,
+								));
+								// I need to be able to hide cells without a caption
+								$tpl = "GRID_CELL";
+								if (isset($items[$idx]["no_caption"]))
+								{
+									$tpl .= "_NO_CAPTION";
+								};
+								$cells .= $grid->parse($tpl);
+							}
+							else
+							{
+								$cells .= $grid->parse("GRID_EMPTY_CELL");
+							};
+							// now how do I get the spans to work?
+							$idx++;
+						};
+						$grid->vars(array(
+							"GRID_CELL" => $cells,
+						));
+						$tres .= $grid->parse("GRID_ROW");
+					};
+					$grid->vars(array(
+						"GRID_ROW" => $tres,
+					));
+					$res .= $this->put_content(array(
+						"type" => "text",
+						"value" => $grid->parse(),
+					));
+						
 				};
 			};
 		};
@@ -629,9 +791,12 @@ class htmlclient extends aw_template
 				// perhaps, just perhaps I should create a separate property type
 				// out of the tabpanel
 				//$rv = $this->tp->get_tabpanel(array());
-				$rv = $tp->get_tabpanel(array(
-					"content" => $rv,
-				));
+				if ($this->tabs)
+				{
+					$rv = $tp->get_tabpanel(array(
+						"content" => $rv,
+					));
+				};
 			}
 			else
 			{
