@@ -15,6 +15,9 @@
 <td class="fcaption">Kommenteeritav:</td><td class="fform"><input type="checkbox" name="comments" value=1 {VAR:comments}></td>
 </tr>
 <tr>
+<td class="fcaption">Hinnatav:</td><td class="fform"><input type="checkbox" name="rated" value=1 {VAR:rated}></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=2><input type='submit' VALUE='{VAR:LC_MSGBOARD_SAVE}' CLASS="small_button"></td>
 </tr>
 </table>
