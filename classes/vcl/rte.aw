@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.5 2004/03/08 20:20:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.6 2004/04/22 12:17:03 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -184,6 +184,7 @@ class rte extends class_base
                         ));
                         preg_match("/(\.text \{.+?\})/sm",$site_styles,$m);
                         $text_style = str_replace("\n"," ",$m[1]);
+			$text_style = str_replace("\r","",$text_style);
 
                         $this->vars(array(
                                 "rte_styles" => $text_style,
