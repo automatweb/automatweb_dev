@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.9 2001/11/27 13:01:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.10 2001/11/29 13:31:19 duke Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -101,27 +101,45 @@ class archive extends aw_template {
 		{
 			return false;
 		};
-
 		extract($args);
 		$this->_calc_path($args);
-		$tstamp = ($version) ? $version : time();
+
+		// if version is defined, then existing revision is updated
+		// otherwise a new version is created
+		if ($version)
+		{
+			$tstamp = $version;
+			// if we update an existing version then we have to 
+			// replace the data in the archive table, not 
+			// insert a new record
+			define("REPLACE",1);
+		}
+		else
+		{
+			$tstamp = time();
+		};
+
+		// calculate the full path to archive file
 		$fname = $this->fullpath . "/$tstamp";
+		// and create the contents for the file
 		if ($ser_content)
 		{
-			$ser = aw_serialize($args["content"],SERIALIZE_XML);
+			$ser = aw_serialize($args["ser_content"],SERIALIZE_XML);
 		}
 		else
 		{
 			$ser = $args["content"];
 		};
+
+		// and finally store it to the database
 		$this->put_file(array(
 			"file" => $fname,
 			"content" => $ser,
 		));
+
+		// update the revision information in the object metadata
 		$meta = $this->obj_get_meta(array("oid" => $oid));
-
 		$arc = $meta["archive"];
-
 		$arc[$tstamp] = array(
 			"timestamp" => $tstamp,
 			"uid" => UID,
@@ -134,6 +152,7 @@ class archive extends aw_template {
 			"meta" => array("archive" => $arc),
 		));
 
+		// store information for later indexing and searching
 		if (is_array($data))
 		{
 			// siia salvestame vastavate väljade nimed ja sisu sisu
@@ -141,9 +160,18 @@ class archive extends aw_template {
 			{
 				$raw_value = strip_tags($val);
 				$this->quote($raw_value);
-
-				$q = "INSERT INTO archive (oid,version,name,contents,class_id)
-					VALUES ('$oid','$tstamp','$key','$raw_value','$class_id')";
+				if (defined("REPLACE"))
+				{
+					$q = "UPDATE archive SET
+						name = '$key'
+						contents = '$raw_value'
+						WHERE oid = '$oid' AND version = '$tstamp'";
+				}
+				else
+				{
+					$q = "INSERT INTO archive (oid,version,name,contents,class_id)
+						VALUES ('$oid','$tstamp','$key','$raw_value','$class_id')";
+				};
 				$this->db_query($q);
 			};
 		};
