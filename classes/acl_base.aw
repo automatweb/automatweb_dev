@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.22 2002/10/09 09:55:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.23 2002/10/16 13:56:06 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
