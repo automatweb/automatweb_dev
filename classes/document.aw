@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.4 2001/05/18 15:02:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.5 2001/05/19 00:11:21 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
-// definnerime orbi funktsioonid
+// defineerime orbi funktsioonid
 global $orb_defs;
 $orb_defs["document"] = "xml";
 session_register("s_pic_sortby");	// doku edimisel aliaste sortimine
@@ -1521,7 +1521,7 @@ class document extends aw_template
 		extract($arr);
 
 		$oob = $this->get_object($id);
-		if ($oob[class_id] == CL_BROTHER_DOCUMENT)
+		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
 			$id = $oob["brother_of"];
 
 		$document = $this->fetch($id);
@@ -1529,7 +1529,7 @@ class document extends aw_template
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
-		if ($document[class_id] == 1) {
+		if ($document["class_id"] == 1) {
 			$mcap = "Sektsiooni defaultid";
 		} else {
 			$mcap = "Dokumendid";
