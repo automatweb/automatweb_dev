@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.7 2004/06/15 08:52:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.8 2004/06/26 08:15:02 kristo Exp $
 
 class object_vote extends aw_template
 {
@@ -100,8 +100,8 @@ class object_vote extends aw_template
 		$meta = $tmp->meta("object_vote");
 		$check = $meta["check"];
 		$jrk = $meta["jrk"];
-		$cluster = $this->get_object($id);
-		$q = "SELECT *,objects.* FROM documents LEFT JOIN objects ON (documents.docid = objects.oid) WHERE site_id = '$SITE_ID' AND objects.period = '$cluster[period]' AND status = 2";
+		$cluster = obj($id);
+		$q = "SELECT *,objects.* FROM documents LEFT JOIN objects ON (documents.docid = objects.oid) WHERE site_id = '$SITE_ID' AND objects.period = '".$cluster->period()."' AND status = 2";
 		$this->db_query($q);
 		$c  = "";
 		while($row = $this->db_next())

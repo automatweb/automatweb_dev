@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.18 2004/06/25 18:46:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.19 2004/06/26 08:15:02 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -156,7 +156,7 @@ class object_chain extends aw_template
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
-		$o = $this->get_object($id);
+		$o = obj($id);
 
 		if ($return_url)
 		{
@@ -165,10 +165,10 @@ class object_chain extends aw_template
 		}
 		else
 		{
-			$this->mk_path($o["parent"], "Muuda objektip&auml;rga");
+			$this->mk_path($o->parent(), "Muuda objektip&auml;rga");
 		};
 
-		$meta = aw_unserialize($o["metadata"]);
+		$meta = $o->meta();
 
 		$tar = array(0 => "K&otilde;ik");
 		$class_defs = aw_ini_get("classes");
@@ -266,7 +266,7 @@ class object_chain extends aw_template
 		));
 
 		$this->vars(array(
-			"name" => $o["name"],
+			"name" => $o->name(),
 			"SEARCH" => $this->parse("SEARCH"),
 			"OBJECT" => $os
 		));

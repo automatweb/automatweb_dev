@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.270 2004/06/25 20:31:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.271 2004/06/26 08:15:02 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1778,7 +1778,8 @@ class document extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		extract($arr);
 
-		$oob = $this->get_object($id);
+		$oob = obj($id);
+		$oob = $oob->fetch();
 
 		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
 		{

@@ -691,8 +691,7 @@ class search_filter extends aw_template
                 $this->__load_data();
 
                 $tbl=get_instance("table");
-                $rec=$this->get_object($this->data["stat_id"]);
-                if ($this->data["stat_id"] && $rec["status"]!=0)
+                if ($this->data["stat_id"])
                 {
                         $parse="<div><IFRAME SRC='".$this->mk_my_orb("change",array(
                                 "id"=>$this->data["stat_id"],
