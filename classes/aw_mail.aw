@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.30 2004/09/09 11:15:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.31 2004/09/27 06:23:00 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -501,7 +501,7 @@ class aw_mail {
 			$fp = fopen($path,"rb");
 			if (!$fp)
 			{
-				print "attach failed<br />";
+				//print "attach failed<br />";
 				return false; // fail
 			}
 
