@@ -1,51 +1,64 @@
 <?php
 
-class backup extends aw_template
+/*
+
+@classinfo no_comment=1 no_status=1
+
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
+
+@property folder type=textbox
+@caption Serveri kataloog, kuhu backupi fail kirjutatakse
+
+@property do_bup type=checkbox ch_value=1
+@caption Loo backup
+
+*/
+class backup extends class_base
 {
 	function backup()
 	{
-		$this->init("backup");
-	}
-
-	/**  
-		
-		@attrib name=backup params=name default="1"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function orb_backup($arr)
-	{
-		extract($arr);
-		$this->read_template("backup.tpl");
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_backup", array()),
-			"folder" => $this->get_cval("backup::folder")
+		$this->init(array(
+			"tpldir" => "backup",
+			"clid" => CL_BACKUP
 		));
-		return $this->parse();
 	}
 
-	/**  
-		
-		@attrib name=submit_backup params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
 
-	**/
-	function submit_backup($arr)
+		switch($prop["name"])
+		{
+			case "do_bup":
+				if ($arr["obj_inst"]->prop("folder") == "")
+				{
+					return PROP_IGNORE;
+				}
+				break;
+		}
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["obj_inst"]->prop("do_bup"))
+		{
+			$arr["obj_inst"]->set_prop("do_bup", 0);
+			$arr["obj_inst"]->save();
+			$this->do_backup($arr["obj_inst"]);
+		}
+	}
+
+	function do_backup($o)
 	{
 		extract($arr);
-		$cf = get_instance("config");
-		$cf->set_simple_config("backup::folder", $folder);
+		$folder = $o->prop("folder");
+		error::throw_if(!$folder, array(
+			"id" => "ERR_NO_FOLDER",
+			"msg" => "backup::do_backup(): no server folder set for backup!"
+		));
 
 		set_time_limit(0);
 		// ookay. first, the database dump.
