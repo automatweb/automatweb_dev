@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.27 2004/02/11 17:02:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.28 2004/02/12 10:20:35 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -480,18 +480,11 @@ class messenger_v2 extends class_base
 		));
 		
 		$drafts = $this->msgobj->prop("msg_drafts");
-
 		$toolbar = &$arr["prop"]["toolbar"];
 
-		// this is wrong, I have to create the the empty message body first and then allow 
-		// editing it. For this to work, I need to figure out the location of the drafts folder ..
-		// mind you .. that folder can also be on the server
-
-		// aga kuda kurat ma seda popupi kaudu teen, see peaks mingi redirect olema siis
 		$toolbar->add_button(array(
 			"name" => "newmessage",
 			"tooltip" => "Uus kiri",
-			// selle asemel ma pean tegema uue objekti tüüpi draft, shalla-lalla
 			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("create_draft",array(
 				"msgrid" => $this->msgobj->id(),
 				"cb_part" => 1,
@@ -512,10 +505,11 @@ class messenger_v2 extends class_base
 			"selected" => 0,
 			"options" => $_tmp,
 		)),"right");
+
 		$toolbar->add_button(array(
 			"name" => "move",
 			"tooltip" => "Vii valitud kirjad kataloogi",
-			"url" => "javascript:document.changeform.subgroup.value='move_messages';document.changeform.submit();",
+			"action" => "move_messages",
 			"img" => "import.gif",
 			"side" => "right",
 		));
@@ -528,16 +522,13 @@ class messenger_v2 extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta märgitud kirjad",
-			"url" => "javascript:document.changeform.subgroup.value='delete_messages';document.changeform.submit();",
+			"confirm" => "Kustutada märgitud kirjad?",
+			"action" => "delete_messages",
 			"img" => "delete.gif",
 			"side" => "right",
 		));
 	}
 	
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($args)
 	{
 		extract($args);
@@ -745,17 +736,16 @@ class messenger_v2 extends class_base
 		return $rv;
 	}
 
-	function callback_post_save($arr)
+	/** Deletes messages from server
+
+		@attrib name=delete_messages
+
+	**/
+	function delete_messages($arr)
 	{
-		$this->redir_to_mailbox = "";
-		if (!empty($arr["request"]["mailbox"]) && ($arr["request"]["mailbox"] != "INBOX"))
-		{
-			$this->redir_to_mailbox = $arr["request"]["mailbox"];
-		};
+		$marked = is_array($arr["mark"]) && sizeof($arr["mark"]) > 0 ? $arr["mark"] : false;
 
-		$marked = is_array($arr["request"]["mark"]) && sizeof($arr["request"]["mark"]) > 0 ? $arr["request"]["mark"] : false;
-
-		if (($arr["request"]["subgroup"] == "delete_messages") && is_array($marked))
+		if (is_array($marked))
 		{
 			$this->_connect_server(array(
 				"msgr_id" => $arr["id"],
@@ -763,9 +753,24 @@ class messenger_v2 extends class_base
 			$this->drv_inst->delete_msgs_from_folder(array_keys($marked));
 		};
 
-		if (($arr["request"]["subgroup"] == "move_messages") &&
-			$arr["request"]["move_to_folder"] !== 0 &&
-			is_array($marked))
+		// those have to return links, and how do I do that?
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"ft_page" => $arr["ft_page"],
+			"mailbox" => $arr["mailbox"],
+		));
+	}
+
+	/** Moves messages to another server
+
+		@attrib name=move_messages
+
+	**/
+	function move_messages($arr)
+	{
+		$marked = is_array($arr["mark"]) && sizeof($arr["mark"]) > 0 ? $arr["mark"] : false;
+		if ($arr["move_to_folder"] !== 0 && is_array($marked))
 		{
 			$this->_connect_server(array(
 				"msgr_id" => $arr["id"],
@@ -773,25 +778,20 @@ class messenger_v2 extends class_base
 
 			$rv = $this->drv_inst->move_messages(array(
 				"id" => array_keys($marked),
-				"to" =>  $arr["request"]["move_to_folder"],
+				"to" =>  $arr["move_to_folder"],
 			));
-
-			$this->redir_to_mailbox = $arr["request"]["mailbox"];
-
 		};
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"ft_page" => $arr["ft_page"],
+			"mailbox" => $arr["mailbox"],
+		));
 	}
 
 	function callback_mod_retval($arr)
 	{
 		$args = &$arr["args"];
-		if (!empty($this->redir_to_mailbox))
-		{
-			$args["mailbox"] = $this->redir_to_mailbox;
-		};
-		if (!empty($this->redir_to_group))
-		{
-			$args["group"] = $this->redir_to_group;
-		};
 		if (!empty($arr["request"]["ft_page"]))
 		{
 			$args["ft_page"] = $arr["request"]["ft_page"];
