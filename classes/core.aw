@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.201 2003/06/04 19:21:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.202 2003/06/07 13:39:11 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -257,6 +257,13 @@ class core extends db_connector
 		}*/
 
 		$obj = $this->get_object($oid);
+		// give the class the option to hook into object deleteion
+		$cl = $this->cfg["classes"][$obj["class_id"]]["file"];
+		if ($cl)
+		{
+			$inst = get_instance($cl);
+			$inst->on_delete_hook($oid);
+		}
 		$this->_log(ST_CORE, SA_DELETE, "$obj[name], id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
 
 		$where = " oid = '$oid'";
