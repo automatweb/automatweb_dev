@@ -1,9 +1,10 @@
 <?php
-// $Id: class_base.aw,v 2.41 2003/01/09 15:51:04 duke Exp $
+// $Id: class_base.aw,v 2.42 2003/01/09 17:39:24 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
 	@default corefield=yes
+	@default group=general
 
 	@property name type=textbox group=general
 	@caption Objekti nimi
@@ -165,6 +166,7 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 		));
 
+
 		// load the object data, if there is anything to load at all
 		foreach($this->tables as $key => $val)
 		{
@@ -205,6 +207,7 @@ class class_base extends aliasmgr
 				$this->coredata = $tmp;
 			};
 		};
+
 
 		if (method_exists($this->inst,"callback_pre_edit"))
 		{
@@ -959,7 +962,10 @@ class class_base extends aliasmgr
 
 			if ($property["table"])
 			{
-				$fields[$property["table"]][$_field] = $fval;
+				if ($_field)
+				{
+					$fields[$property["table"]][$_field] = $fval;
+				};
 				if ($property["type"] != "text")
 				{
 					$realfields[$property["table"]][$_field] = $fval;
