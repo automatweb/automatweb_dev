@@ -109,7 +109,7 @@ var chk_status;
 
 function aw_sel_chb(form,elname)
 {
-	chs = chk_status;
+	chs = !chk_status;
 
 	len = form.elements.length;
 	for(i = 0; i < len; i++)
