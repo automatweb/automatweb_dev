@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.12 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.13 2001/12/18 00:10:12 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -107,6 +107,57 @@ class acl_base extends core
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 	}
 
+	////
+	// !saves the acl for oid<=>gid relation, but only touches the acls set in mask, leaves others in tact
+	function save_acl_masked($oid,$gid,$aclarr,$mask)
+	{
+		$acl = $this->get_acl_for_oid_gid($oid,$gid);
+
+		global $acl_ids;
+		reset($acl_ids);
+		while(list($bitpos,$name) = each($acl_ids))
+		{
+			if (isset($mask[$name]))
+			{
+				if (isset($aclarr[$name]) && $aclarr[$name] == 1)
+				{
+					$a = ALLOWED;
+				}
+				else
+				{
+					$a = DENIED;
+				}
+			}
+			else
+			{
+				$a = $acl[$name];
+			}
+
+			$qstr[] = " ( $a << $bitpos ) ";
+		}
+		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+	}
+
+	function get_acl_for_oid_gid($oid,$gid)
+	{
+		$q = "SELECT 
+						*,
+						acl.id as acl_rel_id, 
+						objects.parent as parent,
+						".$this->sql_unpack_string().",
+						groups.priority as priority,
+						acl.oid as oid 
+					FROM acl 
+						LEFT JOIN groups ON groups.gid = acl.gid
+						LEFT JOIN objects ON objects.oid = acl.oid
+					WHERE acl.oid = $oid AND acl.gid = $gid
+				";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		return $row;
+	}
+
 	function get_acl_for_oid($oid)
 	{
 		global $gidlist;
@@ -148,7 +199,7 @@ class acl_base extends core
 		{
 			return true;
 		}
-
+dbg("olen real 155 sait=".$SITE_ID." UID=".$uid." OID=".$o_oid."<br>");
 		
 		if (!($GLOBALS["use_acl_server"] && ($GLOBALS["uid"] == "kix" || $GLOBALS["uid"] == "risto")))
 		{
@@ -228,11 +279,14 @@ class acl_base extends core
 			$awt->start("acl::can_server");
 			if (!$o_oid)
 			{
+				dbg("olen real 231 OID=".$o_oid." tagastan false<br>");
 				return false;
 			}
+		dbg("olen real 234 <br>");
 			global $acl_server_socket;
 			if (!$acl_server_socket)
 			{
+				dbg("olen real 237 võtan javaga yhendust<br>");
 				$awt->start("acl::can_server::connect");
 				$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
 				$awt->stop("acl::can_server::connect");
@@ -252,6 +306,7 @@ class acl_base extends core
 				{
 					$u_uid = $uid;
 				}
+				//echo "saadan: -1 ".$SITE_ID." ".$u_uid." ".$o_oid."<br>";
 				fputs($acl_server_socket,"-1 ".$SITE_ID." ".$u_uid." ".$o_oid."\n");
 				$s_res.=fgets ($acl_server_socket,1000);
 				// parsime tulemuse laiali
@@ -260,8 +315,9 @@ class acl_base extends core
 				{
 					list($s_r_name, $s_r_value) = explode(" ",$s_line);
 					$max_acl[$s_r_name] = $s_r_value;
-//					echo "got access for $s_r_name as $s_r_value <br>";
+					//echo "got access for $s_r_name as $s_r_value <br>";
 				}
+		//		echo "out of can() <br>";
 			}
 			$awt->stop("acl::can_server");
 		}
@@ -416,6 +472,7 @@ class acl_base extends core
 	// !checks if the user has the $right for program $progid
 	function prog_acl($right,$progid)
 	{
+		//dbg("nime pikkusex=".strlen(UID)."   nimex on=".defined("UID")."<br>");
 		global $prog_cache,$SITE_ID;
 		if ((!defined("UID")) or (strlen(UID) == 0))
 		{
@@ -434,6 +491,7 @@ class acl_base extends core
 				$c = new db_config;
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
 			}
+			dbg("olen real 441 ".$right."<br>");
 			return $this->can($right,$prog_cache[$progid]);
 		};
 	}
