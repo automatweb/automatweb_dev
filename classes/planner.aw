@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.106 2003/04/16 10:40:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.107 2003/04/17 14:26:47 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -13,7 +13,7 @@
 	@property default_view type=select group=advanced rel=1
 	@caption Default vaade
 
-	@property content_generator type=select group=advanced
+	@property content_generator type=select group=advanced rel=1
 	@caption Näitamisfunktsioon
 
 	@property event_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT
@@ -108,6 +108,7 @@ define("REP_YEAR",4);
 define("RELTYPE_SUMMARY_PANE",1);
 define("RELTYPE_EVENT_SOURCE",2);
 define("RELTYPE_EVENT",3);
+define("RELTYPE_DC_RELATION",4);
 
 define("CAL_SHOW_DAY",1);
 define("CAL_SHOW_OVERVIEW",2);
@@ -145,8 +146,27 @@ class planner extends class_base
 			RELTYPE_SUMMARY_PANE => "näita kokkuvõtte paanis",
 			RELTYPE_EVENT_SOURCE => "võta sündmusi teistest kalendritest",
 			RELTYPE_EVENT => "sündmus",
+			RELTYPE_DC_RELATION => "link kalendriga",
 		);
         }
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+		switch($args["reltype"])
+		{
+			case RELTYPE_DC_RELATION:
+				$retval = array(CL_RELATION);
+				break;
+
+			case RELTYPE_EVENT_SOURCE:
+				$retval = array(CL_PLANNER);
+				break;
+
+		};
+		return $retval;
+        }
+
 
 	function get_property($args = array())
 	{
@@ -168,7 +188,7 @@ class planner extends class_base
 
 			case "content_generator":
 				$awo = get_instance("aw_orb");
-				$tmp = array("0" => "default") + $awo->get_classes_by_interface(array("interface" => "content"));
+				$tmp = array("0" => "näita kalendri sisu") + $awo->get_classes_by_interface(array("interface" => "content"));
 				$data["options"] = $tmp;
 				break;
 
@@ -414,6 +434,7 @@ class planner extends class_base
 	// !Displays the form for adding a new event
 	function callback_get_add_event($args = array())
 	{
+		// yuck, what a mess
 		$obj = $this->get_object($args["request"]["id"]);
 		$meta = $obj["meta"];
 		$event_cfgform = $meta["event_cfgform"];
@@ -444,10 +465,12 @@ class planner extends class_base
 			$ev_data = $this->get_object($event_id);
 
 			$t->role = "obj_edit";
+			
 
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
+
 
 			// sorry ass attempt to get editing of linked documents to work
 			$obj_to_load = $this->event_id;
@@ -493,6 +516,7 @@ class planner extends class_base
 			};
 			$this->emb_group = $emb_group;
 			$tmp["value"] = join(" | ",$captions);
+			$t->inst->set_calendars(array($obj["oid"]));
 			$xprops = $t->parse_properties(array(
 					"properties" => $all_props,
 			));
@@ -620,14 +644,6 @@ class planner extends class_base
 		{
 			$args["caption"] = isset($this->event_id) ? "Muuda sündmust" : "Lisa sündmus";
 		};
-	}
-
-
-	function change_event($args = array())
-	{
-		print "<pre>";
-		print "inside change event<br>";
-		print "</pre>";
 	}
 
 	////
