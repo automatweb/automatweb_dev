@@ -905,11 +905,12 @@ class site_template_compiler extends aw_template
 		$dat = current($this->list_name_stack);
 		$list_name = $dat["list_name"];
 
-		$ret  .= $this->_gi()."$list_name = new object_list(array(\n";
+		$ret  .= $this->_gi()."\$__list_filter = array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"parent\" => \$parent_obj->id(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
+
 		$ret .= $this->_gi()."new object_list_filter(array(\n";
 
 		$this->brace_level++;
@@ -943,8 +944,19 @@ class site_template_compiler extends aw_template
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
 
+		$ret = "";
 		$this->brace_level--;
-		$ret  = $this->_gi()."));\n";
+		$ret .= $this->_gi().");\n";	
+
+
+		$ret .= $this->_gi()."if (aw_global_get(\"uid\") == \"\")\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."; \$__list_filter[\"users_only\"] = 0;\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi()."$list_name = new object_list(\$__list_filter);\n";
 
 		$ret .= $this->_gi()."$inst_name =& \$this;\n";		
 		$ret .= $this->_gi()."$fun_name = \"make_menu_link\";\n";
@@ -961,7 +973,8 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
 
-		$ret  = $this->_gi().$content_name." = \"\";\n";
+		$ret = "";
+		$ret .= $this->_gi().$content_name." = \"\";\n";
 		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); ".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
