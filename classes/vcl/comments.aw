@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.4 2004/07/26 14:26:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.5 2004/07/26 14:34:18 ahti Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -98,7 +98,6 @@ class comments extends class_base
 	{
 		$comm = get_instance(CL_COMMENT);
 		$commdata = $arr["prop"]["value"];
-		arr($commdata);
 		$nc = $comm->submit(array(
 			"parent" => $commdata["obj_id"],  // "parent" => $arr["obj_inst"]->id(),
 			"commtext" => $commdata["comment"],
