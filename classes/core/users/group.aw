@@ -84,7 +84,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @property objects type=text store=no no_caption=1
 @caption Objektid
 
-@property obj_acl type=callback callback=get_acls store=no
+@property obj_acl type=callback callback=get_acls store=no 
 
 @property gp_parent type=hidden field=parent table=groups
 @property gp_gid type=hidden field=gid table=groups
@@ -809,20 +809,12 @@ class group extends class_base
 			// handle relation objects
 			// FIXME: classbase will automatically give the connection as a parameter, but 
 			// currently we do this ourselves
-			/*
-			if ($arr["obj_inst"]->meta("conn_id"))
-			{
-				$c = new connection($arr["obj_inst"]->meta("conn_id"));
-			}
-			else
-			{
-			*/
-				$c = new connection();
-				list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
-				$c = new connection($c_d["id"]);
-			/*
-			}
-			*/
+			
+			$c = new connection();
+			$tmp = $c->find(array("relobj_id" => $arr["obj_inst"]->id()));
+			list(, $c_d) = each($tmp);
+			$c = new connection($c_d["id"]);
+			
 
 			// now get the real acl from the connection
 			$grp = $c->to();
