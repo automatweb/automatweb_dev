@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.75 2004/06/26 10:03:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.76 2004/07/16 11:05:58 rtoomas Exp $
 // search.aw - Search Manager
 
 /*
@@ -476,7 +476,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							}
 							elseif (strlen($val) > 0)
 							{
-								$q = "select ".OID." from objects where class_id=".CL_PSEUDO." and name like '%".$val."%' limit 100";
+								if(strtolower(aw_ini_get('db.driver'))=='mssql')
+								{
+									$q = "select ".OID." from objects where class_id="
+											.CL_PSEUDO." and name like '%".$val."%'  limit 100"; 
+								}
+								{
+									$q = "select top 100 ".OID." from objects where class_id="
+											.CL_PSEUDO." and name like '%".$val."%' ";
+								}
+								//$q = "select ".OID." from objects where class_id=".CL_PSEUDO." and name like '%".$val."%' "; //MSSQL: limit 100";
 								$locs = $this->db_fetch_array($q);
 								if (count($locs)>0)
 								{
@@ -648,7 +657,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				{
 					$where = join(" AND ",$parts);
 					// limit the results to 500
-					$q = "SELECT * FROM objects WHERE $where LIMIT 500";
+					if(strtolower(aw_ini_get('db.driver'))=='mssql')
+					{
+						$q = "SELECT top 500 * FROM objects WHERE $where ";
+					}
+					else
+					{
+						$q = "SELECT * FROM objects WHERE $where limit 500";
+					}
 //					echo "s_q = $q <br />";
 					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
