@@ -203,10 +203,47 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_FROM_YEAR_TO_YEAR}:</td>
 <td class="fgtext">&nbsp;<input CLASS="small_button" SIZE=5 type='text' NAME='{VAR:cell_id}_from_year' VALUE='{VAR:from_year}'>&nbsp;-&nbsp;<input type=text CLASS="small_button"  SIZE=5 NAME='{VAR:cell_id}_to_year' VALUE='{VAR:to_year}'></td>
-<td valign=top class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td valign=top class="fgtext" colspan="2">
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
+<td class="fgtext">&nbsp;Aasta:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_year' value='1' {VAR:has_year}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_year_ord' value='{VAR:year_ord}' size="2" class="small_button"></td>
 </tr>
 <tr>
+<td class="fgtext">&nbsp;Kuu:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_month' value='1' {VAR:has_month}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_month_ord' value='{VAR:month_ord}' size="2" class="small_button"></td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;P&auml;ev:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_day' value='1' {VAR:has_day}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_day_ord' value='{VAR:day_ord}' size="2" class="small_button"></td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;Tund:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_hr' value='1' {VAR:has_hr}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_hr_ord' value='{VAR:hr_ord}' size="2" class="small_button"></td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;Minut:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_minute' value='1' {VAR:has_minute}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_minute_ord' value='{VAR:minute_ord}' size="2" class="small_button"></td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;Sekund:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_second' value='1' {VAR:has_second}></td>
+<td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_second_ord' value='{VAR:second_ord}' size="2" class="small_button"></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="fgtext">Kuup&auml;eva formaat n&auml;itamisel:</td>
+<td class="fgtext"><input type='text' name='{VAR:cell_id}_date_format' VALUE='{VAR:date_format}' class='small_button'></td>
+<td class="fgtext" colspan="2">&nbsp;
+</td>
+</tr>
 <td class="fgtext">Default kuup&auml;ev:</td>
 <td class="fgtext" align="right">
 &nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> Kuup&auml;ev elemendist 
@@ -384,6 +421,12 @@ function toggle_file_link_newwin()
 <input class="small_button" type='radio' NAME='{VAR:cell_id}_separator_type' VALUE='2' {VAR:sep_space_checked}>&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_sep_pixels' MAXLENGTH=10 SIZE=10 VALUE='{VAR:cell_sep_pixels}'>&nbsp;{VAR:LC_FORMS_PIXELS}</td>
 <td class="fgtext"><img src='/images/transa.gif' height=1 width=85><br>{VAR:LC_FORMS_ORDER}:</td>
 <td class="fgtext"><input class="small_button" type='text' size=2 NAME='{VAR:cell_id}_order' VALUE='{VAR:cell_order}'></td>
+</tr>
+<tr>
+<td class="fgtext">Aktiivne alates:</td>
+<td class="fgtext">{VAR:act_from}</td>
+<td class="fgtext">Aktiivne kuni:</td>
+<td class="fgtext">{VAR:act_to}</td>
 </tr>
 <!-- SUB: HAS_SIMPLE_CONTROLLER -->
 <tr>

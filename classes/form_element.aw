@@ -1,10 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.31 2001/10/26 15:20:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.32 2001/11/01 22:03:28 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
-global $orb_defs;
-$orb_defs["form_element"] = 
-array("change"	=> array("function"	=> "change",	"params"	=> array("id")));
 
 class form_element extends aw_template
 {
@@ -28,40 +25,51 @@ class form_element extends aw_template
 
 	function do_core_admin()
 	{
-			$this->vars(array("cell_id"									=> "element_".$this->id, 
-												"cell_text"								=> htmlentities($this->arr["text"]),
-												"cell_name"								=> htmlentities($this->arr["name"]),
-												"cell_type_name"					=> htmlentities($this->arr["type_name"]),
-												"cell_dist"								=> htmlentities($this->arr["text_distance"]),
-												"type_active_textbox" 		=> ($this->arr["type"] == "textbox" ? " SELECTED " : ""),
-												"type_active_textarea" 		=> ($this->arr["type"] == "textarea" ? " SELECTED " : ""),
-												"type_active_checkbox" 		=> ($this->arr["type"] == "checkbox" ? " SELECTED " : ""),
-												"type_active_radiobutton" => ($this->arr["type"] == "radiobutton" ? " SELECTED " : ""),
-												"type_active_listbox" 		=> ($this->arr["type"] == "listbox" ? " SELECTED " : ""),
-												"type_active_multiple"		=> ($this->arr["type"] == "multiple" ? " SELECTED " : ""),
-												"type_active_file"				=> ($this->arr["type"] == "file" ? " SELECTED " : ""),
-												"type_active_link"				=> ($this->arr["type"] == "link" ? " SELECTED " : ""),
-												"type_active_button"			=> ($this->arr["type"] == "button" ? " SELECTED " : ""),
-												"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
-												"type_active_date"				=> ($this->arr["type"] == "date" ? " SELECTED " : ""),
-												"default_name"						=> "element_".$this->id."_def",
-												"default"									=> htmlentities($this->arr["default"]),
-												"cell_info"								=> htmlentities($this->arr["info"]),
-												"front_checked"						=> checked($this->arr["front"] == 1),
-												"cell_order"							=> $this->arr["ord"],
-												"type"										=> $this->arr["type"],
-												"sep_enter_checked"				=> ($this->arr["sep_type"] == 1 ? " CHECKED " : "" ),
-												"sep_space_checked"				=> ($this->arr["sep_type"] != 1 ? " CHECKED " : "" ),
-												"cell_sep_pixels"					=> $this->arr["sep_pixels"],
-												"element_id"							=> $this->id,
-												"text_pos_up"							=> ($this->arr["text_pos"] == "up" ? "CHECKED" : ""),
-												"text_pos_down"						=> ($this->arr["text_pos"] == "down" ? "CHECKED" : ""),
-												"text_pos_left"						=> ($this->arr["text_pos"] == "left" ? "CHECKED" : ""),
-												"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
-												"length"									=> $this->arr["length"],
-												"srow_grp"								=> $this->arr["srow_grp"],
-												"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form"),
-												"ignore_text" => checked($this->arr["ignore_text"])
+		$de = new date_edit(0);
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+			"hour" => "",
+			"minute" => ""
+		));
+			$this->vars(array(
+				"cell_id"									=> "element_".$this->id, 
+				"cell_text"								=> htmlentities($this->arr["text"]),
+				"cell_name"								=> htmlentities($this->arr["name"]),
+				"cell_type_name"					=> htmlentities($this->arr["type_name"]),
+				"cell_dist"								=> htmlentities($this->arr["text_distance"]),
+				"type_active_textbox" 		=> ($this->arr["type"] == "textbox" ? " SELECTED " : ""),
+				"type_active_textarea" 		=> ($this->arr["type"] == "textarea" ? " SELECTED " : ""),
+				"type_active_checkbox" 		=> ($this->arr["type"] == "checkbox" ? " SELECTED " : ""),
+				"type_active_radiobutton" => ($this->arr["type"] == "radiobutton" ? " SELECTED " : ""),
+				"type_active_listbox" 		=> ($this->arr["type"] == "listbox" ? " SELECTED " : ""),
+				"type_active_multiple"		=> ($this->arr["type"] == "multiple" ? " SELECTED " : ""),
+				"type_active_file"				=> ($this->arr["type"] == "file" ? " SELECTED " : ""),
+				"type_active_link"				=> ($this->arr["type"] == "link" ? " SELECTED " : ""),
+				"type_active_button"			=> ($this->arr["type"] == "button" ? " SELECTED " : ""),
+				"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
+				"type_active_date"				=> ($this->arr["type"] == "date" ? " SELECTED " : ""),
+				"default_name"						=> "element_".$this->id."_def",
+				"default"									=> htmlentities($this->arr["default"]),
+				"cell_info"								=> htmlentities($this->arr["info"]),
+				"front_checked"						=> checked($this->arr["front"] == 1),
+				"cell_order"							=> $this->arr["ord"],
+				"type"										=> $this->arr["type"],
+				"sep_enter_checked"				=> ($this->arr["sep_type"] == 1 ? " CHECKED " : "" ),
+				"sep_space_checked"				=> ($this->arr["sep_type"] != 1 ? " CHECKED " : "" ),
+				"cell_sep_pixels"					=> $this->arr["sep_pixels"],
+				"element_id"							=> $this->id,
+				"text_pos_up"							=> ($this->arr["text_pos"] == "up" ? "CHECKED" : ""),
+				"text_pos_down"						=> ($this->arr["text_pos"] == "down" ? "CHECKED" : ""),
+				"text_pos_left"						=> ($this->arr["text_pos"] == "left" ? "CHECKED" : ""),
+				"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
+				"length"									=> $this->arr["length"],
+				"srow_grp"								=> $this->arr["srow_grp"],
+				"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form"),
+				"ignore_text" => checked($this->arr["ignore_text"]),
+				"act_from" => $de->gen_edit_form("element_".$this->id."_act_from",$this->arr["act_from"],2001,2005,true),
+				"act_to" => $de->gen_edit_form("element_".$this->id."_act_to",$this->arr["act_to"],2001,2005,true),
 			));
 
 			$cd = "";
@@ -299,6 +307,12 @@ class form_element extends aw_template
 						$d_els[$d_el->get_id()] = $d_el->get_el_name();
 					}
 				}
+				$has_all = false;
+				if ($this->arr["has_year"] != 1 && $this->arr["has_month"] != 1 && $this->arr["has_day"] != 1 && 
+						$this->arr["has_hr"] != 1 && $this->arr["has_minute"] != 1 && $this->arr["has_second"] != 1)
+				{
+					$has_all = true;
+				}
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
 					"to_year" => $this->arr["to_year"],
@@ -307,7 +321,20 @@ class form_element extends aw_template
 					"add_types" => $this->picker($this->arr["def_date_add"],$add_types),
 					"date_now_checked" => checked($this->arr["def_date_type"] == "now"),
 					"date_rel_checked" => checked($this->arr["def_date_type"] == "rel"),
-					"date_rel_els" => $this->picker($this->arr["def_date_rel_el"], $d_els)
+					"date_rel_els" => $this->picker($this->arr["def_date_rel_el"], $d_els),
+					"has_year" => checked($this->arr["has_year"] == 1 || $has_all),
+					"has_month" => checked($this->arr["has_month"] == 1 || $has_all),
+					"has_day" => checked($this->arr["has_day"] == 1 || $has_all),
+					"has_hr" => checked($this->arr["has_hr"] == 1),
+					"has_minute" => checked($this->arr["has_minute"] == 1),
+					"has_second" => checked($this->arr["has_second"] == 1),
+					"date_format" => $this->arr["date_format"],
+					"year_ord" => $this->arr["year_ord"],
+					"month_ord" => $this->arr["month_ord"],
+					"day_ord" => $this->arr["day_ord"],
+					"hr_ord" => $this->arr["hour_ord"],
+					"minute_ord" => $this->arr["minute_ord"],
+					"second_ord" => $this->arr["second_ord"],
 				));
 				$di = $this->parse("DATE_ITEMS");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -365,6 +392,16 @@ class form_element extends aw_template
 
 		$var = $base."_tbl_col";
 		$this->arr["table_col"] = $$var;
+
+		$var = $base."_act_from";
+		global $$var;
+		$v = $$var;
+		$this->arr["act_from"] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+
+		$var = $base."_act_to";
+		global $$var;
+		$v = $$var;
+		$this->arr["act_to"] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
@@ -625,6 +662,32 @@ class form_element extends aw_template
 			$this->arr["def_date_add"] = $$var;
 			$var=$base."_def_date_rel";
 			$this->arr["def_date_rel_el"] = $$var;
+			$var=$base."_has_year";
+			$this->arr["has_year"] = $$var;
+			$var=$base."_has_month";
+			$this->arr["has_month"] = $$var;
+			$var=$base."_has_day";
+			$this->arr["has_day"] = $$var;
+			$var=$base."_has_hr";
+			$this->arr["has_hr"] = $$var;
+			$var=$base."_has_minute";
+			$this->arr["has_minute"] = $$var;
+			$var=$base."_has_second";
+			$this->arr["has_second"] = $$var;
+			$var=$base."_date_format";
+			$this->arr["date_format"] = $$var;
+			$var=$base."_year_ord";
+			$this->arr["year_ord"] = $$var;
+			$var=$base."_month_ord";
+			$this->arr["month_ord"] = $$var;
+			$var=$base."_day_ord";
+			$this->arr["day_ord"] = $$var;
+			$var=$base."_hr_ord";
+			$this->arr["hour_ord"] = $$var;
+			$var=$base."_minute_ord";
+			$this->arr["minute_ord"] = $$var;
+			$var=$base."_second_ord";
+			$this->arr["second_ord"] = $$var;
 		}
 
 		if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset" || $this->arr["type"] == "button")
@@ -1015,11 +1078,35 @@ class form_element extends aw_template
 		return $this->parse();
 	}
 
+	function _date_ord_cmp($a,$b)
+	{
+		if ($a == $b)
+		{
+			return 0;
+		}
+		return ($a < $b) ? -1 : 1;
+	}
+
 	function do_core_userhtml($prefix,$elvalues,$no_submit)
 	{
 		global $awt;
 		$awt->start("form_element::do_core_userhtml");
 		$awt->count("form_element::do_core_userhtml");
+
+		// sheck if this element is supposed to be shown right now
+		$show = true;
+		if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"])
+		{
+			$show = false;
+		}
+		if ($this->arr["act_to"] > (24*3600*400) && time() > $this->arr["act_to"])
+		{
+			$show = false;
+		}
+		if (!$show)
+		{
+			return "";
+		}
 
 		$html="";
 		global $lang_id;
@@ -1229,11 +1316,53 @@ class form_element extends aw_template
 
 			case "date":
 				$de = new date_edit(time());
-				$de->configure(array(
-					"year" => "",
-					"month" => "",
-					"day" => ""
-				));
+				$bits = array();
+				$has_some = false;
+				if ($this->arr["has_year"])
+				{
+					$bits["year"] = $this->arr["year_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_month"])
+				{
+					$bits["month"] = $this->arr["month_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_day"])
+				{
+					$bits["day"] = $this->arr["day_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_hr"])
+				{
+					$bits["hour"] = $this->arr["hour_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_minute"])
+				{
+					$bits["minute"] = $this->arr["minute_ord"];
+					$has_some = true;
+				}
+				if ($this->arr["has_second"])
+				{
+					$bits["second"] = $this->arr["second_ord"];
+					$has_some = true;
+				}
+
+				uasort($bits,array($this,"_date_ord_cmp"));
+
+				if ($has_some)
+				{
+					$de->configure($bits);
+				}
+				else
+				{
+					$de->configure(array(
+						"year" => "",
+						"month" => "",
+						"day" => ""
+					));
+				}
 				$fy = $this->arr["from_year"];
 				$ty = $this->arr["to_year"];
 				if ($this->arr["def_date_type"] == "now")
