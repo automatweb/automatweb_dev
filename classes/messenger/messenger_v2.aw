@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.17 2003/11/08 06:40:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.18 2003/11/08 07:50:51 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -441,7 +441,7 @@ class messenger_v2 extends class_base
 				"url" => $this->mk_my_orb("change",array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => "main_view",
-					"mailbox" => $val["name"],
+					"mailbox" => $val["int_name"],
 				)),
 			));
 				
@@ -979,16 +979,6 @@ class messenger_v2 extends class_base
 		return $rv;
 	}
 
-
-	function store_part($arr)
-	{
-		print "storing attachment<br>";
-		print "<pre>";
-		print_r($arr);
-		print "</pre>";
-
-
-	}
 
 	function callback_get_rel_types()
 	{
