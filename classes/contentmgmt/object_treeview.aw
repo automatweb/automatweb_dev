@@ -240,7 +240,7 @@ class object_treeview extends class_base
 		{
 			$is_admin = false;
 		}
-																		a
+																		
 		$adm_c = $ob->connections_from(array(
 			"type" => RELTYPE_ALL_ACCESS_GRP
 		));
