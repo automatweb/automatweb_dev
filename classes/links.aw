@@ -128,10 +128,11 @@ class links extends extlinks
 				if ($s_class_id == "item")
 				{
 					$url = $this->mk_site_orb(array("action" => "order_item", "item_id" => $row["oid"], "section" => $row["parent"],"class" => "shop"));
+					$url = substr($url,strlen($baseurl));
 				}
 				else
 				{
-					$url = $baseurl."/".$index_file.".".$ext."/section=".$row["oid"];
+					$url = "/".$index_file.".".$ext."/section=".$row["oid"];
 				}
 				$this->vars(array(
 					"name" => htmlentities($row["name"],ENT_QUOTES), 

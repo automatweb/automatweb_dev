@@ -21,35 +21,35 @@ define(FORM_EELEMENT_LOADED,1);
 			$chk_val = " CHECKED ";
 
 			$this->vars(array("cell_id"									=> "element_".$this->id, 
-												"cell_text"								=> $this->arr[text],
-												"cell_name"								=> $this->arr[name],
-												"cell_dist"								=> $this->arr[text_distance],
-												"type_active_textbox" 		=> ($this->arr[type] == "textbox" ? " SELECTED " : ""),
-												"type_active_textarea" 		=> ($this->arr[type] == "textarea" ? " SELECTED " : ""),
-												"type_active_checkbox" 		=> ($this->arr[type] == "checkbox" ? " SELECTED " : ""),
-												"type_active_radiobutton" => ($this->arr[type] == "radiobutton" ? " SELECTED " : ""),
-												"type_active_listbox" 		=> ($this->arr[type] == "listbox" ? " SELECTED " : ""),
-												"type_active_multiple"		=> ($this->arr[type] == "multiple" ? " SELECTED " : ""),
-												"type_active_file"				=> ($this->arr[type] == "file" ? " SELECTED " : ""),
-												"type_active_link"				=> ($this->arr[type] == "link" ? " SELECTED " : ""),
-												"type_active_submit"			=> ($this->arr[type] == "submit" ? " SELECTED " : ""),
-												"type_active_reset"				=> ($this->arr[type] == "reset" ? " SELECTED " : ""),
-												"type_active_price"				=> ($this->arr[type] == "price" ? " SELECTED " : ""),
+												"cell_text"								=> htmlentities($this->arr["text"]),
+												"cell_name"								=> htmlentities($this->arr["name"]),
+												"cell_dist"								=> htmlentities($this->arr["text_distance"]),
+												"type_active_textbox" 		=> ($this->arr["type"] == "textbox" ? " SELECTED " : ""),
+												"type_active_textarea" 		=> ($this->arr["type"] == "textarea" ? " SELECTED " : ""),
+												"type_active_checkbox" 		=> ($this->arr["type"] == "checkbox" ? " SELECTED " : ""),
+												"type_active_radiobutton" => ($this->arr["type"] == "radiobutton" ? " SELECTED " : ""),
+												"type_active_listbox" 		=> ($this->arr["type"] == "listbox" ? " SELECTED " : ""),
+												"type_active_multiple"		=> ($this->arr["type"] == "multiple" ? " SELECTED " : ""),
+												"type_active_file"				=> ($this->arr["type"] == "file" ? " SELECTED " : ""),
+												"type_active_link"				=> ($this->arr["type"] == "link" ? " SELECTED " : ""),
+												"type_active_submit"			=> ($this->arr["type"] == "submit" ? " SELECTED " : ""),
+												"type_active_reset"				=> ($this->arr["type"] == "reset" ? " SELECTED " : ""),
+												"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
 												"default_name"						=> "element_".$this->id."_def",
-												"default"									=> $this->arr["default"],
-												"cell_info"								=> $this->arr[info],
-												"front_checked"						=> ($this->arr[front] == 1 ? $chk_val : ""),
-												"cell_order"							=> $this->arr[ord],
-												"type"										=> $this->arr[type],
-												"sep_enter_checked"				=> ($this->arr[sep_type] == 1 ? " CHECKED " : "" ),
-												"sep_space_checked"				=> ($this->arr[sep_type] != 1 ? " CHECKED " : "" ),
-												"cell_sep_pixels"					=> $this->arr[sep_pixels],
+												"default"									=> htmlentities($this->arr["default"]),
+												"cell_info"								=> htmlentities($this->arr["info"]),
+												"front_checked"						=> ($this->arr["front"] == 1 ? $chk_val : ""),
+												"cell_order"							=> $this->arr["ord"],
+												"type"										=> $this->arr["type"],
+												"sep_enter_checked"				=> ($this->arr["sep_type"] == 1 ? " CHECKED " : "" ),
+												"sep_space_checked"				=> ($this->arr["sep_type"] != 1 ? " CHECKED " : "" ),
+												"cell_sep_pixels"					=> $this->arr["sep_pixels"],
 												"element_id"							=> $this->id,
-												"text_pos_up"							=> ($this->arr[text_pos] == "up" ? "CHECKED" : ""),
-												"text_pos_down"						=> ($this->arr[text_pos] == "down" ? "CHECKED" : ""),
-												"text_pos_left"						=> ($this->arr[text_pos] == "left" ? "CHECKED" : ""),
-												"text_pos_right"					=> ($this->arr[text_pos] == "right" ? "CHECKED" : ""),
-												"length"									=> $this->arr[length],
+												"text_pos_up"							=> ($this->arr["text_pos"] == "up" ? "CHECKED" : ""),
+												"text_pos_down"						=> ($this->arr["text_pos"] == "down" ? "CHECKED" : ""),
+												"text_pos_left"						=> ($this->arr["text_pos"] == "left" ? "CHECKED" : ""),
+												"text_pos_right"					=> ($this->arr["text_pos"] == "right" ? "CHECKED" : ""),
+												"length"									=> $this->arr["length"],
 												"changepos"								=> $this->mk_orb("change_el_pos",array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form")));
 
 			$cd = "";
@@ -58,8 +58,8 @@ define(FORM_EELEMENT_LOADED,1);
 			$li = ""; $hl = ""; $hl2 = "";
 			if ($this->arr[type] == "link")
 			{
-				$this->vars(array("link_text"			=> $this->arr[link_text],
-													"link_address"	=> $this->arr[link_address]));
+				$this->vars(array("link_text"			=> $this->arr["link_text"],
+													"link_address"	=> $this->arr["link_address"]));
 				$li = $this->parse("HLINK_ITEMS");
 			}
 			else
@@ -70,80 +70,80 @@ define(FORM_EELEMENT_LOADED,1);
 			$fi = "";
 			if ($this->arr[type] == "file")
 			{
-				$this->vars(array("ftype_image_selected"	=> ($this->arr[ftype] == 1 ? "CHECKED" : ""),
-													"ftype_file_selected"		=> ($this->arr[ftype] == 2 ? "CHECKED" : ""),
-													"file_link_text"				=> $this->arr[flink_text],
-													"file_show"							=> ($this->arr[fshow] == 1 ? "CHECKED" : ""),
-													"file_alias"						=> ($this->arr[fshow] != 1 ? "CHECKED" : "")));
+				$this->vars(array("ftype_image_selected"	=> ($this->arr["ftype"] == 1 ? "CHECKED" : ""),
+													"ftype_file_selected"		=> ($this->arr["ftype"] == 2 ? "CHECKED" : ""),
+													"file_link_text"				=> $this->arr["flink_text"],
+													"file_show"							=> ($this->arr["fshow"] == 1 ? "CHECKED" : ""),
+													"file_alias"						=> ($this->arr["fshow"] != 1 ? "CHECKED" : "")));
 				$fi = $this->parse("FILE_ITEMS");
 			}
 
 			$lb = "";
-			if ($this->arr[type] == "listbox")		
+			if ($this->arr["type"] == "listbox")		
 			{	
-				for ($b=0; $b < ($this->arr[listbox_count]+1); $b++)
+				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
 				{
 					$this->vars(array("listbox_item_id" 			=> "element_".$this->id."_lb_".$b,
-														"listbox_item_value"		=> $this->arr[listbox_items][$b],
+														"listbox_item_value"		=> $this->arr["listbox_items"][$b],
 														"listbox_radio_name"		=> "element_".$this->id."_lradio",
 														"listbox_radio_value"		=> $b,
-														"listbox_radio_checked"	=> ($this->arr[listbox_default] == $b ? $chk_val : "")));
+														"listbox_radio_checked"	=> ($this->arr["listbox_default"] == $b ? $chk_val : "")));
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
 			}
 
 			$mu = "";
-			if ($this->arr[type] == "multiple")		
+			if ($this->arr["type"] == "multiple")		
 			{	
-				for ($b=0; $b < ($this->arr[multiple_count]+1); $b++)
+				for ($b=0; $b < ($this->arr["multiple_count"]+1); $b++)
 				{
 					$this->vars(array("multiple_item_id" 				=> "element_".$this->id."_mul_".$b,
-														"multiple_item_value"			=> $this->arr[multiple_items][$b],
+														"multiple_item_value"			=> $this->arr["multiple_items"][$b],
 														"multiple_check_name"			=> "element_".$this->id."_m_".$b,
 														"multiple_check_value"		=> "1",
-														"multiple_check_checked"	=> ($this->arr[multiple_defaults][$b] == 1 ? $chk_val : "")));
+														"multiple_check_checked"	=> ($this->arr["multiple_defaults"][$b] == 1 ? $chk_val : "")));
 					$mu.=$this->parse("MULTIPLE_ITEMS");
 				}	
 			}
 
 			$ta = "";
-			if ($this->arr[type] == "textarea")
+			if ($this->arr["type"] == "textarea")
 			{
 				$this->vars(array("textarea_cols_name"	=> "element_".$this->id."_ta_cols",
 													"textarea_rows_name"	=> "element_".$this->id."_ta_rows",
-													"textarea_cols"	=> $this->arr[ta_cols],
-													"textarea_rows"	=> $this->arr[ta_rows]));
+													"textarea_cols"	=> $this->arr["ta_cols"],
+													"textarea_rows"	=> $this->arr["ta_rows"]));
 				$ta = $this->parse("TEXTAREA_ITEMS");
 			}
 
 			$gp="";
-			if ($this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "radiobutton")
 			{
 				$this->vars(array("default_checked"		=> ($this->arr["default"] == 1 ? $chk_val : ""),
-													"cell_group"				=> $this->arr[group]));
+													"cell_group"				=> $this->arr["group"]));
 				$gp = $this->parse("RADIO_ITEMS");
 			}
 			
 			$dt="";
-			if ($this->arr[type] == "textbox")
+			if ($this->arr["type"] == "textbox")
 				$dt = $this->parse("DEFAULT_TEXT");
 
 			$dc="";
-			if ($this->arr[type] == "checkbox")
+			if ($this->arr["type"] == "checkbox")
 			{
 				$this->vars(array("default_checked"	=> ($this->arr["default"] == 1 ? $chk_val : "")));
 				$dc = $this->parse("CHECKBOX_ITEMS");
 			}
 
 			$pc="";
-			if ($this->arr[type] == "price")
+			if ($this->arr["type"] == "price")
 			{
 				$this->vars(array("price"	=> $this->arr["price"]));
 				$pc = $this->parse("PRICE_ITEMS");
 			}
 
 			$bt = "";
-			if ($this->arr[type] == "submit" || $this->arr[type] == "reset")
+			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset")
 			{
 				$this->vars(array("button_text" => $this->arr["button_text"]));
 				$bt = $this->parse("BUTTON_ITEMS");

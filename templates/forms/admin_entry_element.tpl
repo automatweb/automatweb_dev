@@ -119,7 +119,7 @@
 <tr>
 <!-- SUB: EL_NOHLINK -->
 <td valign=top class="fgtext">Tekst:</td>
-<td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE='{VAR:cell_text}'>&nbsp;Kaugus elemendist:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
+<td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE="{VAR:cell_text}">&nbsp;Kaugus elemendist:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: EL_HLINK -->

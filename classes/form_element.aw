@@ -35,14 +35,15 @@ class form_element extends aw_template
 	{
 		$var = "element_".$this->id."_text";
 		global $$var;
-		$this->arr[text] = $$var;
+		$this->arr["text"] = $$var;
+		$this->dequote(&$this->arr["text"]);
 
 		$var = "element_".$this->id."_order";
 		global $$var;
 		$$var+=0;
-		if ($this->arr[ord] != $$var)
+		if ($this->arr["ord"] != $$var)
 		{
-			$this->arr[ord] = $$var;
+			$this->arr["ord"] = $$var;
 			$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
 		}
 	}

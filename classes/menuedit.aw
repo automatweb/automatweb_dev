@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.13 2001/05/28 17:38:30 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.14 2001/05/29 16:44:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -179,18 +179,14 @@ classload("cache","validator","defs");
 			$format 	= $params["format"];
 			// niisiis. vars array peaks sisaldama mingeid pre-parsed html tükke,
 			// mis võivad tulla ntx kusagilt orbi klassi seest vtm.
-
 			// array keydeks peaksid olema variabled template sees, mis siis asendatakse
 			// oma väärtustega
 			$vars 		= $params["vars"];
 
-			$esilehel       = $params["esilehel"];
-
 			// debuukimiseks
 			global $SITE_ID;
-		  	// impordime taimeriklassi
+	  	// impordime taimeriklassi
 			global $awt;
-
 			global $test;
 			global $baseurl;
 
@@ -262,7 +258,7 @@ classload("cache","validator","defs");
 			else
 			if ($periodic && $text == "") 
 			{
-				$this->vars(array("doc_content" => $this->show_periodic_documents($section,$obj,$format)));
+				$this->vars(array("doc_content" => $this->show_periodic_documents($section,$obj)));
 			} 
 			else 
 			if ($text == "")
@@ -1398,7 +1394,7 @@ classload("cache","validator","defs");
 			{
 				if ($row["status"] != 2)
 					continue;
-				if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && $GLOBALS["SITE_ID"] == 666)
+				if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($GLOBALS["SITE_ID"] == 666 || $SITE_ID == 667 || $SITE_ID == 8))
 					continue;
 
 				$sub = $this->rec_admin_tree(&$arr,$row[oid]);
@@ -2648,7 +2644,7 @@ classload("cache","validator","defs");
 			if (!$this->can("edit",$id))
 				$this->raise_error("Your access level does not allow you to do this!", true);
 
-			global $basedir;
+			global $basedir,$baseurl;
       global $ext;
       include("$basedir/vcl/date_edit.$ext");
       $d_edit = new date_edit("x");
@@ -2679,7 +2675,7 @@ classload("cache","validator","defs");
 			if (!($row = $this->db_next()))
 				$this->raise_error("menuedit->gen_change_html($id): No such menu!", true);
 
-			if ($row[class_id] == CL_PROMO)
+			if ($row["class_id"] == CL_PROMO)
 				return $this->change_promo($id,true);
 
 			$this->read_template("nchange.tpl");
@@ -2689,54 +2685,56 @@ classload("cache","validator","defs");
 			$this->db_query($q);
 			$edit_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl[id]] = $tpl[name];
+				$edit_templates[$tpl["id"]] = $tpl[name];
 			};
 			// kysime infot lyhikeste templatede kohta
 			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 			$this->db_query($q);
 			$short_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl[id]] = $tpl[name];
+				$short_templates[$tpl["id"]] = $tpl[name];
 			};
 			// kysime infot pikkade templatede kohta
 			$q = "SELECT * FROM template WHERE type = 2 ORDER BY id";
 			$this->db_query($q);
 			$long_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$long_templates[$tpl[id]] = $tpl[name];
+				$long_templates[$tpl["id"]] = $tpl[name];
 			};
 
 			$sar = array();
 			$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
 			while ($arow = $this->db_next())
-				$sar[$arow[parent]] = $arow[parent];
+				$sar[$arow["parent"]] = $arow["parent"];
 
 			classload("objects");
 			$ob = new db_objects;
-		 $activate_at = ($row[activate_at]) ? $row[activate_at] : "+24h";
-      $deactivate_at = ($row[deactivate_at]) ? $row[deactivate_at] : "+48h";
-			$this->dequote(&$row[name]);
+		 $activate_at = ($row["activate_at"]) ? $row["activate_at"] : "+24h";
+      $deactivate_at = ($row["deactivate_at"]) ? $row["deactivate_at"] : "+48h";
+			$this->dequote(&$row["name"]);
 
-			if ($row[ndocs] > 0)
+			if ($row["ndocs"] > 0)
 				$il = $this->parse("IS_LAST");
 
 			// kui see on adminni menyy, siis kuvame kasutajale featuuride listi, 
 			// mille hulgast ta siis valida saab, et mis selle menyy alt avaneb. 
-			if ($row[type] == MN_ADMIN1)
+			if ($row["type"] == MN_ADMIN1)
 			{
-				$this->vars(array("admin_feature" => $this->picker($row[admin_feature],$this->get_feature_sel())));
+				$this->vars(array("admin_feature" => $this->picker($row["admin_feature"],$this->get_feature_sel())));
 				$af = $this->parse("ADMIN_FEATURE");
 			}
-			if ($row[img_id])
+			if ($row["img_id"])
 			{
 				classload("images");
 				$t = new db_images;
-				$img = $t->get_img_by_id($row[img_id]);
-				$this->vars(array("image" => "<img src='".$img[url]."'>"));
+				$img = $t->get_img_by_id($row["img_id"]);
+				$this->vars(array("image" => "<img src='".$img["url"]."'>"));
 			}
 			classload("shop");
 			$sh = new shop;
 			$shs = $sh->get_list();
+
+			$icon = $row["icon_id"] ? "<img src=\"".$baseurl."/icon.".$ext."?id=".$row["icon_id"]."\">" : ($row["admin_feature"] ? "<img src=\"".$this->get_feature_icon_url($row["admin_feature"])."\">" : "");
 
 			$sa = unserialize($row["seealso"]);
 			$oblist = $ob->get_list();
@@ -2775,8 +2773,7 @@ classload("cache","validator","defs");
 												"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
 												"ndocs"				=> $row["ndocs"],
 												"ex_menus"		=> $this->multiple_option_list($ob->get_list(false,false,$id),$ob->get_list(false,false,$id)),
-												"icon"				=> $row["icon_id"] ? 
-												"<img src='".$GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row["icon_id"]."'>" : "",
+												"icon"				=> $icon,
 												"IS_LAST"			=> $il,
 												"shop"				=> $this->picker($row["shop_id"],$shs),
 												"is_shop"			=> checked($row["is_shop"]),
@@ -2847,6 +2844,13 @@ classload("cache","validator","defs");
 		// !sets the icon ($icon_id) for menu $id
 		function set_menu_icon($id,$icon_id)
 		{
+			$af = $this->db_fetch_field("SELECT admin_feature FROM menu WHERE id = $id","admin_feature");
+			if ($af)
+			{
+				classload("config");
+				$c = new db_config;
+				$c->set_program_icon($af,$icon_id);
+			}
 			$this->db_query("UPDATE menu SET icon_id = $icon_id WHERE id = $id");
 		}
 
@@ -3473,63 +3477,60 @@ classload("cache","validator","defs");
 		}
 	}
 
-	function show_periodic_documents($section,$obj,$format)
+	function show_periodic_documents($section,$obj)
 	{
 		global $awt;
 		$awt->start("show_periodic_documents()");
 
 		$d = new db_documents();
-		// if $section is a periodic document then emulate the current period for it
+		$cont = "";
+		// if $section is a periodic document then emulate the current period for it and show the document right away
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
 		{
+			$template = $this->get_long_template($section);
 			$activeperiod = $obj["period"];
+			$cont = $d->gen_preview(array(
+						"docid" => $section,
+						"boldlead" => 1,
+						"tpl" => $template));
+			$this->vars(array("docid" => $section));
+			$PRINTANDSEND = $this->parse("PRINTANDSEND");
 		}
 		else
 		{
 			$activeperiod = $GLOBALS["act_per_id"];
-		}
-		$d->set_period($activeperiod);
-		$d->list_docs($section, $activeperiod,2);
-		$cont = "";
-		if ($d->num_rows > 1) 
-		{
-			$template = $this->get_lead_template($section);
-			while($row = $d->db_next()) 
+			$d->set_period($activeperiod);
+			$d->list_docs($section, $activeperiod,2);
+			if ($d->num_rows > 1)		// the database driver sets this
 			{
-				$d->save_handle();
-				$d->set_period($row["period"]);
-				$cont .= $d->gen_preview(array(
-					"docid" => $row[docid],
-					"tpl" => $template,
-					"tpls" => $tpls,
-					"leadonly" => 1,
-					"section" => $section,
-					"strip_img" => $strip_img,
-					"doc"	=> $row));
-				$d->restore_handle();
-			}; // while
-		} // if
-		// on 1 doku
-		else 
-		{
-			$row = $d->db_next();
-			$template = $this->get_long_template($section);
-			// siin teeme koigepealt kindlaks, et kas ehk sellise id-ga
-			// dokumenti juba olemas ei ole
-			$docid = $row[docid];
-			if (($doc = $d->fetch($docid))) 
-			{
-				$section = $docid;
-			};
-			$cont = $d->gen_preview(array(
-						"docid" => $section,
-						"boldlead" => 1,
+				$template = $this->get_lead_template($section);
+				while($row = $d->db_next()) 
+				{
+					$d->save_handle();
+					$d->set_period($row["period"]);
+					$cont .= $d->gen_preview(array(
+						"docid" => $row["docid"],
 						"tpl" => $template,
-						"tpls" => $tpls,
-						"doc" => $doc));
-			$this->vars(array("docid" => $section));
-			$PRINTANDSEND = $this->parse("PRINTANDSEND");
-		};
+						"leadonly" => 1,
+						"section" => $section,
+						"doc"	=> $row));
+					$d->restore_handle();
+				}; // while
+			} // if
+			// on 1 doku
+			else 
+			{
+				$row = $d->db_next();
+				$template = $this->get_long_template($section);
+				$cont = $d->gen_preview(array(
+							"docid" => $row["docid"],
+							"boldlead" => 1,
+							"tpl" => $template,
+							"doc" => $row));
+				$this->vars(array("docid" => $row["docid"]));
+				$PRINTANDSEND = $this->parse("PRINTANDSEND");
+			}
+		}
 		$awt->stop("show_periodic_documents()");
 		return $cont;
 	}

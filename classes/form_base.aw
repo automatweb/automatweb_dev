@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.4 2001/05/29 16:34:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.5 2001/05/29 16:44:46 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -59,7 +59,16 @@ class form_base extends aw_template
 		$this->type = $row[type];
 		$this->comment = $row[comment];
 
-		$this->arr = unserialize($row[content]);
+		if (substr($row["content"],0,14) == "<?xml version=")
+		{
+			classload("xml");
+			$x = new xml;
+			$this->arr = $x->xml_unserialize(array("source" => $row["content"]));
+		}
+		else
+		{
+			$this->arr = unserialize($row[content]);
+		}
 
 		$this->normalize();
 
@@ -118,28 +127,31 @@ class form_base extends aw_template
 	function save()
 	{
 		// we must do this, otherwise we also serialize all the cells and stuff, which isn't necessary
-		for ($col = 0; $col < $this->arr[cols]; $col++)		
+		for ($col = 0; $col < $this->arr["cols"]; $col++)		
 		{
-			for ($row = 0; $row < $this->arr[rows]; $row++)
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
-				$this->arr[contents][$row][$col] = "";
+				$this->arr["contents"][$row][$col] = "";
 			}
 		}
 
 		// we must also do this, because the column/row count may have changed
-		$contents = serialize($this->arr);
+		classload("xml");
+		$x = new xml;
+		$contents = $x->xml_serialize($this->arr);
+
 		$this->quote(&$contents);
 
 		$this->upd_object(array("oid" => $this->id,"name" => $this->name, "comment" => $this->comment));
-		if (!$this->arr[cols])
+		if (!$this->arr["cols"])
 		{
-			$this->arr[cols] = 0;
+			$this->arr["cols"] = 0;
 		}
-		if (!$this->arr[rows])
+		if (!$this->arr["rows"])
 		{
-			$this->arr[rows] = 0;
+			$this->arr["rows"] = 0;
 		}
-		$this->db_query("UPDATE forms SET content = '$contents' , rows = ".$this->arr[rows]." , cols = ".$this->arr[cols]." WHERE id = ".$this->id);
+		$this->db_query("UPDATE forms SET content = '$contents' , rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
 		$this->_log("form","Muutis formi $this->name");
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.2 2001/05/29 16:44:46 kristo Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml {
@@ -191,7 +191,9 @@ class xml {
 					$value = trim($v1["value"]);
 
 					// moodustame evali jaoks rea
-					$line = "\$retval" . $path . "='$value';";
+					$value = str_replace("\\","\\\\",$value);
+					$value = str_replace("\"","\\\"",$value);
+					$line = "\$retval" . $path . "=\"$value\";";
 
 					// and here we go. It might be ugly, but at the moment I don't care
 					eval($line); 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.4 2001/05/21 10:43:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.5 2001/05/29 16:44:46 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -421,11 +421,11 @@ class form_cell extends aw_template
 			{
 				$elid = $this->arr[$i]->get_id();
 				// we must delete the element from this form.
-				unset($form->arr[elements][$this->row][$this->col][$elid]);
+				unset($form->arr["elements"][$this->row][$this->col][$elid]);
 
 				// remove this form from the list of forms in which the element is
 				$row = $this->db_query("SELECT * FROM form_elements WHERE id = ".$elid);
-				$ra = unserialize($row[forms]);
+				$ra = unserialize($row["forms"]);
 				unset($ra[$this->id]);
 				$rs = serialize($ra);
 				$this->db_query("UPDATE form_elements SET forms = '$rs' WHERE id = ".$elid);
@@ -435,7 +435,7 @@ class form_cell extends aw_template
 			}
 			else
 			{
-				$form->arr[elements][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
+				$form->arr["elements"][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
 			}
 		}
 	}
