@@ -9,8 +9,16 @@
 	<td class="fform"><input type="file" size="40" name="file" ></td>
 </tr>
 <tr>
+	<td class="fcaption">Asukoht:</td>
+	<td class="fform"><select name='parent' class='small_button'>{VAR:parents}</select></td>
+</tr>
+<tr>
 	<td class="fcaption">Nimi:</td>
 	<td class="fform"><input type="text" size="40" name="name" value='{VAR:name}'></td>
+</tr>
+<tr>
+	<td class="fcaption">Pildi allkiri:</td>
+	<td class="fform"><input type="text" size="40" name="comment" value='{VAR:comment}'></td>
 </tr>
 <tr>
 	<td class="fcaption">Link:</td>

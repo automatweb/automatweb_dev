@@ -1,6 +1,6 @@
 <?php
 
-classload("file");
+classload("file","objects");
 
 class image extends aw_template
 {
@@ -23,8 +23,10 @@ class image extends aw_template
 			$this->mk_path($parent,"Lisa pilt");
 		}
 
+		$ob = new objects;
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "return_url" => $return_url,"alias_to" => $alias_to))
+			"parents" => $this->picker($parent, $ob->get_list()),
+			"reforb" => $this->mk_reforb("submit", array("return_url" => $return_url,"alias_to" => $alias_to))
 		));
 		return $this->parse();
 	}
@@ -39,7 +41,8 @@ class image extends aw_template
 			$this->upd_object(array(
 				"oid" => $id,
 				"name" => $name,
-				"comment" => $comment
+				"comment" => $comment,
+				"parent" => $parent
 			));
 
 			global $file,$file_name,$file_type;
@@ -114,7 +117,9 @@ class image extends aw_template
 	
 		$img = $this->get_image_by_id($id);
 
+		$ob = new objects;
 		$this->vars(array(
+			"parents" => $this->picker($obj["parent"],$ob->get_list()),
 			"name" => $obj["name"],
 			"comment" => $obj["comment"],
 			"img" => "<img src='".$img["url"]."'>",
@@ -142,47 +147,6 @@ class image extends aw_template
 //		$url = $this->mk_my_orb("show", array("file" => basename($url)),"image",false,true);
 		$url = $GLOBALS["baseurl"]."/img.".$GLOBALS["ext"]."?file=".basename($url);
 		return $url;
-	}
-
-	function show($arr)
-	{
-		extract($arr);
-		$rootdir = $GLOBALS["site_basedir"];
-
-		$f1 = substr($file,0,1);
-		$fname = $rootdir . "/files/$f1/" . $file;
-		if (!file_exists($fname))
-		{
-			// try some other places for backwards compatibility as well
-			$fname = $GLOBALS["site_basedir"]. "/img/$f1/" . $file;
-			if (!file_exists($fname))
-			{
-				$fname = $GLOBALS["basedir"] . "/img/$f1/" . $file;
-			}
-		}
-
-		$size = GetImageSize($fname);
-		if (!is_array($size)) 
-		{
-			print "access denied.";
-		} 
-		else 
-		{
-			switch($size[2]) 
-			{
-				case "1":
-					$type = "image/gif";
-					break;
-				case "2":
-					$type = "image/jpg";
-					break;
-				case "3":
-					$type = "image/png";
-					break;
-			};
-			header("Content-type: $type");
-			readfile($fname);
-		};
 	}
 
 	///
@@ -217,11 +181,11 @@ class image extends aw_template
 		if ($idata)
 		{
 			$vars = array(
-					"imgref" => $idata["url"],
-					"imgcaption" => $idata["comment"],
-					"align" => $align[$matches[4]],
-					"plink" => $idata["link"],
-					"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
+				"imgref" => $idata["url"],
+				"imgcaption" => $idata["comment"],
+				"align" => $align[$matches[4]],
+				"plink" => $idata["link"],
+				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
 			);
  
 			if ($idata["link"] != "")
