@@ -1,0 +1,56 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="contact" folder="kliendibaas">
+		<action name="new">
+			<function name="change">
+				<arguments>
+					<required name="parent"/>
+					<optional name="alias_to"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="alias_to"/>
+					<optional name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="id"/>
+					<optional name="alias_to"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pop_select">
+			<function name="pop_select">
+				<arguments>
+					<required name="tyyp"/>
+					<optional name="id"/>
+					<optional name="default"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
