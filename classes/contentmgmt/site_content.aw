@@ -2123,6 +2123,11 @@ class site_content extends menuedit
 				break;
 			}
 
+			if ($sel_menu_meta["img_act"])
+			{
+				$sel_menu_meta["img_act_url"] = $this->image->get_url_by_id($sel_menu_meta["img_act"]);
+			}
+
 			if ($sel_menu_meta["img_act_url"] != "")
 			{
 				$sel_image = "<img name='sel_menu_image' src='".image::check_url($sel_menu_meta["img_act_url"])."' border='0'>";
