@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.248 2004/02/13 11:35:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.249 2004/02/25 15:40:37 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1504,7 +1504,7 @@ class core extends acl_base
 		// we replicate by POST request, cause this thing can be too long for a GET request
 		global $class,$action;
 
-		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
+		if (!($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
 			$socket = get_instance("socket");
@@ -2285,6 +2285,34 @@ class core extends acl_base
 	function object_exists($oid)
 	{
 		return $GLOBALS["object_loader"]->ds->object_exists($oid);
+	}
+
+	////
+	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
+	function do_menu($items)
+	{
+		global $action;
+		$im = "";
+		foreach($items as $iid => $idata)
+		{
+			$this->vars(array(
+				"url"	=> $idata["url"],
+				"text" => $idata["name"]
+			));
+			if ($action == $iid)
+			{
+				$im.=$this->parse("SEL_ITEM");
+			}
+			else
+			{
+				$im.=$this->parse("ITEM");
+			}
+		}
+		$this->vars(array(
+			"ITEM" => $im,
+			"SEL_ITEM" => ""
+		));
+		return $this->parse();
 	}
 };
 ?>
