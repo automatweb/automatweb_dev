@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.27 2005/01/25 11:37:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.28 2005/01/28 14:15:05 duke Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1181,9 +1181,7 @@ class register_data extends class_base
 					}
 				}
 				$mail_subj = $register_obj->prop("mail_subject");
-			
 				$headers = "To: ".$mail_addresses_to."\r\n";
-				
 				$headers .= "From: ".$mail_addr_from."\r\n";
 				$url = $this->mk_my_orb("change", array("id" => $arr['id']));
 				$mail_addresses_to = substr($mail_addresses_to, 0, (strlen($mail_addresses_to)-2));
@@ -1193,7 +1191,7 @@ class register_data extends class_base
 				arr("addr_from ".$mail_addr_from);
 				arr("subj ".$mail_subj);
 				arr("headers ".$headers);
-*/				
+*/
 				send_mail($mail_addresses_to, $mail_subj, $url, $headers);
 			}
 		}
