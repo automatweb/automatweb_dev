@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.54 2004/11/15 15:55:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.55 2004/11/15 16:38:20 sven Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -13,6 +13,9 @@
 
 @reltype KEYWORD value=1 clid=CL_DOCUMENT
 @caption Dokument
+
+@reltype FILE value=2 clid=CL_FILE
+@caption Fail
 */
 
 define("ARR_LISTID", 1);
@@ -65,6 +68,12 @@ class keywords extends class_base
 			
 			if($docs->count() > 0)
 			{
+				
+				//Well if we have only one document linked with keyword, no point to show complete list
+				if($docs->count() == 1)
+				{
+					return aw_ini_get("baseurl")."/".$doc->id();
+				}
 				
 				$this->read_template("/automatweb/keywords/doclist2.tpl");
 				//$this->submerge = 1;
