@@ -3,6 +3,7 @@
       <property>
             <name>subclass</name>
             <type>select</type>
+            <newonly>1</newonly>
             <table>objects</table>
             <group>general</group>
             <field>subclass</field>
@@ -44,6 +45,7 @@
             <group>layout</group>
             <store>no</store>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -67,6 +69,7 @@
             <group>avail</group>
             <store>no</store>
             <no_caption>1</no_caption>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -101,6 +104,19 @@
             <table>objects</table>
             <group>general</group>
             <caption>Grupid</caption>
+      </property>
+      <property>
+            <name>subaction</name>
+            <type>hidden</type>
+            <store>no</store>
+            <group>
+                  <num_0>layout</num_0>
+                  <num_1>avail</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Subaction (sys)</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
