@@ -176,7 +176,7 @@
       </property>
       <property>
             <name>menu_images</name>
-            <type>generated</type>
+            <type>callback</type>
             <field>meta</field>
             <method>serialize</method>
             <callback>callback_get_menu_image</callback>
