@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.10 2003/02/20 13:33:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.11 2003/02/21 12:56:33 duke Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -186,7 +186,7 @@ class scheduler extends aw_template
 		$cp = $this->repdata;
 		foreach($cp as $evnt)
 		{
-			if (time() > $evnt["time"])
+			if (isset($evnt["time"]) && (time() > $evnt["time"]))
 			{
 				echo "exec event $evnt[event] <br>";
 				$this->do_and_log_event($evnt);
