@@ -522,19 +522,92 @@ class site_list extends class_base
 	function change_site($arr)
 	{
 		extract($arr);
-		$this->mk_path(0, html::href(array(
-			'url' => $this->mk_my_orb("site_list"),
-			'caption' => "AW Saitide list"
-		))." / Muuda saiti ");
-		$this->read_template("change.tpl");
+
+
+		#$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		
 		$sd = $this->get_site_data(array("site_id" => $id));
-		$this->vars($sd);
-		$this->vars(array(
-			"server_id" => $this->picker($sd["server_id"], $this->server_picker()),
-			"site_used" => checked($sd["site_used"]),
-			"reforb" => $this->mk_reforb("submit_change_site", array("id" => $id))
+
+		$htmlc->add_property(array(
+			"name" => "id",
+			"type" => "text",
+			"caption" => "ID",
+			"value" => $id,
 		));
-		return $this->parse();
+		
+		$htmlc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => "Nimi",
+			"size" => 50,
+			"value" => $sd["name"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "url",
+			"type" => "textbox",
+			"caption" => "URL",
+			"size" => 50,
+			"value" => $sd["url"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "server_id",
+			"type" => "select",
+			"caption" => "Server",
+			"value" => $sd["server_id"],
+			"options" => $this->server_picker(),
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "site_used",
+			"type" => "checkbox",
+			"caption" => "Used?",
+			"value" => 1,
+			"ch_value" => $sd["site_used"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "code_branch",
+			"type" => "textbox",
+			"caption" => "Code branch",
+			"value" => $sd["code_branch"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "basedir",
+			"type" => "text",
+			"caption" => "Basedir",
+			"value" => $sd["basedir"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "updater_uid",
+			"type" => "text",
+			"caption" => "Updater",
+			"value" => $sd["updater_uid"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "last_update",
+			"type" => "text",
+			"caption" => "Last update",
+			"value" => !empty($sd["last_update"]) ? date("d.m.Y / H:i",$sd["last_update"]) : "n/a",
+		));
+
+		$htmlc->finish_output(array("data" => array(
+				"class" => get_class($this),
+				"action" => "submit_change_site",
+				"id" => $id,
+			),
+		));
+
+		return $htmlc->get_result(array(
+			"form_only" => 1
+		));
+
 	}
 
 	/**  
@@ -551,6 +624,8 @@ class site_list extends class_base
 	function submit_change_site($arr)
 	{
 		extract($arr);
+
+		arr($arr);
 
 		$this->db_query("UPDATE aw_site_list SET name = '$name', url = '$url', server_id = '$server_id', site_used = '$site_used', code_branch = '$code_branch' where id = '$id'");
 
