@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.18 2003/04/17 12:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.19 2003/07/07 15:01:02 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -314,6 +314,10 @@ class sys extends aw_template
 		{
 			foreach($check as $table => $fields)
 			{
+				if ($table == "syslog")
+				{
+					continue;
+				}
 				foreach($fields as $key => $val)
 				{
 					$dr = $donor_struct[$table][$key];
@@ -373,6 +377,7 @@ class sys extends aw_template
 					};
 
 					print "Q1: $line<br>";
+					aw_global_set("__from_raise_error",1);
 					$this->db_query($line);
 					$line = "";
 					if ( ($dr["key"] == "PRI") && ($prim_key_added == false))
