@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.308 2004/10/14 12:16:25 duke Exp $
+// $Id: class_base.aw,v 2.309 2004/10/14 15:24:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1932,6 +1932,8 @@ class class_base extends aw_template
                                 if (is_callable(array($ot,"init_vcl_property")))
                                 {
                                         $res = $ot->init_vcl_property(array(
+						"prop" => &$val,
+						// this is deprecated
                                                 "property" => &$val,
 						"id" => $this->id,
                                                 "clid" => $this->clid,
