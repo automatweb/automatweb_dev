@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.221 2003/02/02 17:33:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.222 2003/02/05 04:12:13 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4984,6 +4984,11 @@ class menuedit extends aw_template
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
 				$row["is_menu"] = 1;
+			}
+			else
+			if ($row["class_id"] == CL_PLANNER)
+			{
+				$chlink = $this->mk_my_orb("change",array("id" => $row["oid"],"cb_view" => "show"),"planner");
 			}
 			else
 			{
