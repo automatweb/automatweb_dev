@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.56 2003/07/03 11:54:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.57 2003/07/07 09:30:31 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -76,7 +76,7 @@
 	@property img_act type=imgupload field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
 
-	@property menu_images type=callback field=meta method=serialize callback=callback_get_menu_image group=presentation
+	@property menu_images type=callback field=meta method=serialize callback=callback_get_menu_image group=presentation store=no
 	@caption Menüü pildid
 
 	// and now stuff that goes into menu table

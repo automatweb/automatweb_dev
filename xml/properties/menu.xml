@@ -219,6 +219,7 @@
             <method>serialize</method>
             <callback>callback_get_menu_image</callback>
             <group>presentation</group>
+            <store>no</store>
             <table>objects</table>
             <caption>Menüü pildid</caption>
       </property>
