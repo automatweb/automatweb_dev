@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.40 2004/12/01 14:06:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.41 2004/12/02 13:54:15 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -383,6 +383,14 @@ class object_list extends _int_obj_container_base
 					$_o = new object($oid);
 					foreach($meta_filter as $mf_k => $mf_v)
 					{
+						if ($mf_v{0} == "%")
+						{
+							error::raise(array(
+								"id" => "ERR_META_FILTER",	
+								"msg" => "object_list::filter($mf_k => $mf_v): can not do LIKE searches on metadata fields!"
+							));
+						}
+
 						$tmp = $_o->meta($mf_k);
 						if (is_numeric($mf_v))
 						{
