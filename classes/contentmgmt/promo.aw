@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.42 2004/06/21 10:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.43 2004/06/21 12:37:01 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -799,15 +799,6 @@ class promo extends class_base
 					"image_url" => $image_url
 				));
 
-				$hlc = "";
-				if ($o->meta("link_caption") != "")
-				{
-					$hlc = $inst->parse("HAS_LINK_CAPTION");
-				}
-				$inst->vars(array(
-					"HAS_LINK_CAPTION" => $hlc
-				));
-
 				// which promo to use? we need to know this to use
 				// the correct SHOW_TITLE subtemplate
 				$pa = aw_ini_get("promo.areas");
@@ -835,6 +826,15 @@ class promo extends class_base
 				{
 					$use_tpl = "LEFT_PROMO";
 				};
+
+				$hlc = "";
+				if ($o->meta("link_caption") != "")
+				{
+					$hlc = $inst->parse($use_tpl.".HAS_LINK_CAPTION");
+				}
+				$inst->vars(array(
+					"HAS_LINK_CAPTION" => $hlc
+				));
 
 				if ($o->meta("no_title") != 1)
 				{
