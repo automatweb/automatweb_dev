@@ -391,6 +391,13 @@ function get_instance($class,$args = array())
 			$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
 		}
 		$ext = $GLOBALS["cfg"]["__default"]["ext"];
+		if (!file_exists($classdir."/".str_replace(".","", $class).".".$ext))
+		{
+			error::throw(array(
+				"id" => ERR_CLASS,
+				"msg" => "the requested class $class does not exist !"
+			));
+		}
 		include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
 		{
