@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.6 2003/02/26 15:59:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.7 2003/03/28 10:19:31 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -45,7 +45,7 @@ class form_cell extends form_base
 				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
 		}
 		$this->arr[$this->cnt] =& get_instance($t);
-		$this->arr[$this->cnt]->load(&$r, &$this->form, $this->col, $this->row);
+		$this->arr[$this->cnt]->load(&$r, &$this->form, $this->col, $this->row, $this->cnt);
 		$this->cnt++;
 	}
 
@@ -328,7 +328,7 @@ class form_cell extends form_base
 			$controllers_ok = true;
 			foreach($shcs as $ctlid)
 			{
-				$res = $this->form->controller_instance->do_check($ctlid, $this->arr[$i]->get_controller_value(), &$this->form, $this->arr[$i]);
+				$res = $this->form->controller_instance->do_check($ctlid, $this->arr[$i]->get_controller_value(), &$this->form, &$this->arr[$i]);
 				if ($res !== true)
 				{
 					$controllers_ok = false;
