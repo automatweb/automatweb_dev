@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.2 2001/05/21 07:12:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.3 2001/05/21 21:19:17 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -114,9 +114,13 @@ else
 };
 $classdir = $basedir."/classes";	 	  // where the classes are
 // veateadete tekstid
-define(LC,"ee");
-include("$basedir/lang/" . LC . "/errors.aw");
-include("$basedir/lang/" . LC . "/common.aw");
+if (empty($LC))
+{
+	$LC="et";
+}
+
+include("$basedir/lang/" . $LC . "/errors.aw");
+include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
 if ($PATH_INFO) 
@@ -160,8 +164,16 @@ else
 	function lc_load($file)
 	{
 		global $basedir;
-		global $ext;
-		include_once("$basedir/lang/" . LC . "/$file.$ext");
+		global $ext,$LC;
+		include_once("$basedir/lang/" . $LC . "/$file.$ext");
+	}
+
+	// loads localization constants from the site's $site_basedir
+	function lc_site_load($file)
+	{
+		global $site_basedir;
+		global $ext,$LC;
+		include_once("$site_basedir/lang/" . $LC . "/$file.$ext");
 	}
 
 	function classload($args)
