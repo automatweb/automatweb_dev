@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.16 2002/10/16 11:35:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.1 2002/10/28 13:00:07 kristo Exp $
 // form_actions.aw - creates and executes form actions
-
+classload("formgen/form_base");
 class form_actions extends form_base
 {
 	function form_actions()
@@ -303,7 +303,7 @@ class form_actions extends form_base
 		// now I have to figure out all the e-mail fields
 		if (is_array($srcforms))
 		{
-			$fg = get_instance("form_base");
+			$fg = get_instance("formgen/form_base");
 			foreach($srcforms as $key => $val)
 			{
 				if ($key > 0)
@@ -348,7 +348,7 @@ class form_actions extends form_base
 		$this->read_template("action_join_list.tpl");
 		$data = unserialize($row["data"]);
 
-		$finst = get_instance("form");
+		$finst = get_instance("formgen/form");
 		$finst->load($id);
 
 		// make checkboxes
@@ -449,7 +449,7 @@ class form_actions extends form_base
 			return;
 		};
 
-		$f = get_instance("form");
+		$f = get_instance("formgen/form");
 
 		if ($data["output"] > 0)
 		{
@@ -565,7 +565,7 @@ class form_actions extends form_base
 				}
 			}
 		}
-		$f = get_instance("form");
+		$f = get_instance("formgen/form");
 		$f->load($form->get_id());
 		$f->load_entry($entry_id);
 		$msg = $f->show_text();
