@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.38 2001/09/12 17:59:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.39 2001/09/12 19:39:19 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -562,6 +562,7 @@ define("PRG_ML_MANAGER",47);
 define("PRG_CONFIG_ERRORS",48);	// sisselogimist vajavate veateadete konfimine
 define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
 define("PRG_SYSCONF",50); // konfiguratsioonieditor
+define("PRG_CONFIG_REDIRECT",51);	// sisselogimist vajavate veateadete konfimine
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -615,7 +616,8 @@ PRG_CSS_EDITOR		=> array("name" => "Kasutaja CSS editor",				"url" => "orb.aw?cl
 PRG_CSS_SYS_EDITOR		=> array("name" => "Süsteemi CSS editor",				"url" => "orb.aw?class=css&action=syslist"),
 PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_queue&action=queue&manager=1"),
 PRG_SYSCONF				=> array("name" => "Automatweb config", "url" => "orb.aw?class=sysconf&action=edit"),
-PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors")
+PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors"),
+PRG_CONFIG_REDIRECT => array("name" => "Config/suunamine", "url" => "orb.aw?class=config&action=grp_redirect")
 );
 
 // formide tyybid
