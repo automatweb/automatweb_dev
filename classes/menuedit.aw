@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.149 2002/08/29 03:11:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.150 2002/09/03 06:04:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -3747,11 +3747,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		));
 
 		$in_path = in_array($parent,$path);
-		if ($this->menu_defaults[$name] == $parent)
+		if (is_array($this->menu_defaults[$name]))
 		{
-			if (!in_array($this->menu_defs_name_map[$name], $path))
+			if ($this->menu_defaults[$name][$parent] == $parent)
 			{
-				$in_path = true;
+				if (!in_array($this->menu_defs_name_map[$name], $path))
+				{
+					$in_path = true;
+				}
+			}
+		}
+		else
+		{
+			if ($this->menu_defaults[$name] == $parent)
+			{
+				if (!in_array($this->menu_defs_name_map[$name], $path))
+				{
+					$in_path = true;
+				}
 			}
 		}
 
@@ -3866,11 +3879,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 
 			$is_sel = false;
-			if ($this->menu_defaults[$name] == $row["oid"])
+			if (is_array($this->menu_defaults[$name]))
 			{
-				if (!in_array($this->menu_defs_name_map[$name], $path))
+				if ($this->menu_defaults[$name][$row["oid"]] == $row["oid"])
 				{
-					$is_sel = true;
+					if (!in_array($this->menu_defs_name_map[$name], $path))
+					{
+						$is_sel = true;
+					}
+				}
+			}
+			else
+			{
+				if ($this->menu_defaults[$name] == $row["oid"])
+				{
+					if (!in_array($this->menu_defs_name_map[$name], $path))
+					{
+						$is_sel = true;
+					}
 				}
 			}
 
@@ -3892,11 +3918,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if ($this->is_template($mn."_N"))
 			{
 				$cont = true;
-				if ($this->menu_defaults[$name] == $row["parent"])
+				if (is_array($this->menu_defaults[$name]))
 				{
-					if (!in_array($this->menu_defs_name_map[$name], $path))
+					if ($this->menu_defaults[$name][$row["parent"]] == $row["parent"])
 					{
-						$cont = false;
+						if (!in_array($this->menu_defs_name_map[$name], $path))
+						{
+							$cont = false;
+						}
+					}
+				}
+				else
+				{
+					if ($this->menu_defaults[$name] == $row["parent"])
+					{
+						if (!in_array($this->menu_defs_name_map[$name], $path))
+						{
+							$cont = false;
+						}
 					}
 				}
 				if (!in_array($row["parent"],$path) && $cont)
@@ -3937,12 +3976,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// if the current menu is set as the default active menu for this menu area
 			// and the selected path does not go through the root of this menu area, then 
 			// we should mark this menu as active
-			if ($this->menu_defaults[$name] == $row["oid"])
+			if (is_array($this->menu_defaults[$name]))
 			{
-				if (!in_array($this->menu_defs_name_map[$name], $path))
+				if ($this->menu_defaults[$name][$row["oid"]] == $row["oid"])
 				{
-					$ap.="_SEL";		// a selected menu
-					$this_selected = true;
+					if (!in_array($this->menu_defs_name_map[$name], $path))
+					{
+						$ap.="_SEL";		// a selected menu
+						$this_selected = true;
+					}
+				}
+			}
+			else
+			{
+				if ($this->menu_defaults[$name] == $row["oid"])
+				{
+					if (!in_array($this->menu_defs_name_map[$name], $path))
+					{
+						$ap.="_SEL";		// a selected menu
+						$this_selected = true;
+					}
 				}
 			}
 
