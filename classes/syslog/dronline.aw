@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.35 2005/03/08 14:34:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.36 2005/03/15 09:29:07 kristo Exp $
 
 /*
 
@@ -472,7 +472,7 @@ class dronline extends class_base
 			}
 			if ($mt['to'] > (400*24*3600))
 			{
-				$sql[] = 'syslog.tm <= '.(get_day_start($mt['to']) + 24 * 3600);
+				$sql[] = 'syslog.tm <= '.$mt['to'];
 				$this->vars(array(
 					"desc" => "Kuni:",
 					"value" => $this->time2date($mt['to'],2)
@@ -602,7 +602,7 @@ class dronline extends class_base
 				if (substr($k,0,4) == 'slc_' && $v == 1)	// syslog action&type combo
 				{
 					$_t = explode('_',$k);
-					$cin[] = '( syslog.type = \''.$_t[1].'\' AND syslog.action = \''.$_t[2].'\' )';
+					$cin[] = '( syslog.type = \''.$_t[1].'\' AND syslog.act_id = \''.$_t[2].'\' )';
 					$c_strs[] = $sts[$_t[1]]['name']."/".$stas[$_t[2]]['name'];
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.344 2005/02/16 09:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.345 2005/03/15 09:29:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -36,7 +36,7 @@ class menuedit extends aw_template
 		$o->set_prop("link", $args["link"]);
 		$newoid = $o->save();
 
-		$this->_log(ST_MENUEDIT, SA_ADD, $args["name"], $newoid);   
+		$this->_log(ST_MENU, SA_ADD, $args["name"], $newoid);   
 
 		if (!$args['no_flush'])   
 		{   

@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 /*
 
-@classinfo syslog_type=ST_USER relationmgr=yes no_status=1
+@classinfo syslog_type=ST_USERS relationmgr=yes no_status=1
 
 @groupinfo chpwd caption="Parool"
 @groupinfo roles caption=Rollid
