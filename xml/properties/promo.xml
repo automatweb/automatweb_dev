@@ -6,6 +6,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <trans>1</trans>
             <group>general</group>
             <caption>Pealkiri</caption>
       </property>

@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.26 2004/02/25 15:39:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.27 2004/02/25 15:55:15 kristo Exp $
 // promo.aw - promokastid.
 
 /*
 	@classinfo trans=1
 	@default group=general
 	
-	@property caption type=textbox table=objects field=meta method=serialize
+	@property caption type=textbox table=objects field=meta method=serialize trans=1
 	@caption Pealkiri
 
 	@property tpl_lead type=select table=menu group=show
