@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.39 2001/05/30 03:24:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.40 2001/05/31 18:58:23 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -948,12 +948,13 @@ class messenger extends menuedit_light
 				$froma = $udata["email"];
 				$fromn = "";
 			};
-			$awm->create(array(
+			$this->dequote($message);
+			$awm->create_message(array(
 					"froma" => $froma,
 					"fromn" => $fromn,
 					"subject" => $subject,
 					"to" => $etargets,
-					"body" => stripslashes($message),
+					"body" => $message,
 				));
 		};
 			

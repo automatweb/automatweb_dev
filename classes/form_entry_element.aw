@@ -4,6 +4,8 @@ if (defined("FORM_EELEMENT_LOADED")) {
 define(FORM_EELEMENT_LOADED,1);
 	session_register("clipboard");
 
+load_vcl("date_edit");
+
 	class form_entry_element extends form_element
 	{
 		function form_entry_element()
@@ -35,6 +37,7 @@ define(FORM_EELEMENT_LOADED,1);
 												"type_active_submit"			=> ($this->arr["type"] == "submit" ? " SELECTED " : ""),
 												"type_active_reset"				=> ($this->arr["type"] == "reset" ? " SELECTED " : ""),
 												"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
+												"type_active_date"				=> ($this->arr["type"] == "date" ? " SELECTED " : ""),
 												"default_name"						=> "element_".$this->id."_def",
 												"default"									=> htmlentities($this->arr["default"]),
 												"cell_info"								=> htmlentities($this->arr["info"]),
@@ -414,6 +417,17 @@ define(FORM_EELEMENT_LOADED,1);
 				$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
 			}
 
+			if($this->arr["type"] == "date")
+			{
+				$de = new date_edit(time());
+				$de->configure(array(
+					"year" => "",
+					"month" => "",
+					"day" => ""
+				));
+				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()));
+			}
+
 			if ($this->arr["type"] == "")
 				$html .= $text;
 			else
@@ -480,8 +494,19 @@ define(FORM_EELEMENT_LOADED,1);
 				return;
 			}
 			else
-			if ($this->arr[type] == "radiobutton")
-				$var = $prefix."radio_group_".$this->arr[group];
+			if ($this->arr["type"] == "radiobutton")
+			{
+				$var = $prefix."radio_group_".$this->arr["group"];
+			}
+			else
+			if ($this->arr["type"] == "date")
+			{
+				$var = $prefix.$this->id;
+				global $$var;
+				$v = $$var;
+				$entry[$this->id] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+				return;
+			}
 			else
 				$var = $prefix.$this->id;
 
@@ -525,6 +550,11 @@ define(FORM_EELEMENT_LOADED,1);
 
 			if ($this->arr[type] == "price")
 				$html.=$this->entry;
+
+			if ($this->arr["type"] == "date")
+			{
+				$html.=$this->time2date($this->entry,5);
+			}
 
 			if ($this->arr[type] == "file")
 			{
@@ -584,6 +614,11 @@ define(FORM_EELEMENT_LOADED,1);
 					
 			if ($this->arr[type] == "textbox")
 				$html.=trim($this->entry);
+
+			if ($this->arr["type"] == "date")
+			{
+				$html.=$this->time2date($this->entry,5);
+			}
 
 			if ($this->arr[type] == "price")
 				$html.=trim($this->entry);

@@ -89,7 +89,7 @@ class shop_item extends aw_template
 			$f->process_entry(array("id" => $o["form_id"],"entry_id" => $o["entry_id"]));
 			// kui itemi nimi muutub, siis muutub vendadel ka
 			$name = $f->get_element_value_by_name("nimi");
-			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."' WHERE brother_of = $id ");
+			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."', WHERE brother_of = $id ");
 			$price = $f->get_element_value_by_type("price");
 			$this->db_query("UPDATE shop_items SET price='$price' WHERE id = $id");
 		}
@@ -143,7 +143,13 @@ class shop_item extends aw_template
 			"menus" => $this->multiple_option_list($this->get_brother_list($id),$shcats),
 			"reforb" => $this->mk_reforb("submit_bros", array("id" => $id)),
 			"redir" => $this->picker($o["redir"], $shcats),
-			"reforb2" => $this->mk_reforb("submit_redir", array("id" => $id))
+			"reforb2" => $this->mk_reforb("submit_redir", array("id" => $id)),
+			"reforb3" => $this->mk_reforb("submit_opts", array("id" => $id)),
+			"has_max" => checked($o["has_max"]),
+			"max_items" => $o["max_items"],
+			"has_period" => checked($o["has_period"]),
+			"has_objs" => checked($o["has_objs"]),
+			"price_eq" => $o["price_eq"]
 		));
 		return $this->parse();
 	}
@@ -243,6 +249,63 @@ class shop_item extends aw_template
 	{
 		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE objects.oid = $id");
 		return $this->db_next();
+	}
+
+	function submit_opts($arr)
+	{
+		extract($arr);
+
+		// siin peame tegema uued objektid ja v2rgid ka
+		$o = $this->get($id);
+
+		if ($has_objs)
+		{
+			$num_items = $this->db_fetch_field("SELECT count(*) AS cnt FROM objects WHERE parent = $id AND class_id = ".CL_SHOP_ITEM." AND status != 0","cnt");
+			// child itemid on seotu objects::parent j2rgi.
+			if ($num_items > $max_items)
+			{
+				// enne oli seda objekti rohkem kui preagu, j2relikult kustutame osa 2ra..
+				// hmh, millised? well. ntx esimesed n. 
+				$diff = $num_items - $max_items;
+				$this->db_query("SELECT oid FROM objects WHERE parent = $id AND class_id = ".CL_SHOP_ITEM." AND status != 0 LIMIT $diff");
+				while ($row = $this->db_next())
+				{
+					$its[] = $row["oid"];
+				}
+				$its = join(",",$its);
+				if ($its != "")
+				{
+					$this->db_query("UPDATE objects SET status = 0 WHERE oid IN($its)");
+				}
+			}
+			else
+			if ($num_items < $max_items)
+			{
+				classload("planner");
+				$pl = new planner;
+
+				// olemas on v2hem kui vaja, teeme uusi
+				$diff = $max_items - $num_items;
+				for ($i=0; $i < $diff; $i++)
+				{
+					// teeme uue child objekti
+					$ch_id = $this->new_object(array(
+						"parent" => $id,
+						"class_id" => CL_SHOP_ITEM,
+						"status" => 2
+					));
+					// paneme talle kalendri kylge.
+					$pl->submit_add(array("parent" => $ch_id));
+					// paneme tehtud kalendri id objekti last v2lja kirja ka
+					$this->upd_object(array("oid" => $ch_id, "last" => $pl->id));
+				}
+			}
+			// nyt peax olema 6ige arv child objekte
+		}
+
+		$this->db_query("UPDATE shop_items SET price='$price',has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , price_eq = '$price_eq' WHERE id = $id");
+
+		return $this->mk_orb("change", array("id" => $id));
 	}
 }
 ?>

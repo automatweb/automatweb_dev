@@ -45,6 +45,13 @@
 			</function>
 		</action>
 
+		<action name="submit_opts">
+			<function name="submit_opts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

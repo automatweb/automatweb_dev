@@ -15,6 +15,7 @@
     <option {VAR:type_active_submit} VALUE='submit'>Submit nupp
     <option {VAR:type_active_reset} VALUE='reset'>Reset nupp
     <option {VAR:type_active_price} VALUE='price'>Hind
+    <option {VAR:type_active_date} VALUE='date'>Kuup&auml;ev
 <!-- SUB: CAN_DELETE -->
     <option VALUE='delete'>Kustuta see element
 <!-- END SUB: CAN_DELETE -->

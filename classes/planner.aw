@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.17 2001/05/31 16:19:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.18 2001/05/31 18:58:23 cvs Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -47,6 +47,7 @@ class planner extends calendar {
 			"class_id" => CL_CALENDAR,
 			"parent" => $parent,
 			"name" => $name,true));
+		$this->id = $id;
 		return $this->mk_orb("change",array("id" => $id));
 	}
 
@@ -619,7 +620,7 @@ class planner extends calendar {
 	function get_events($args = array())
 	{
 		extract($args);
-		$retval = array;
+		$retval = array();
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
 			WHERE objects.status = 2 AND objects.parent = '$parent' AND (start >= '$start' AND start <= '$end') ORDER BY start";

@@ -17,6 +17,8 @@ session_register("shopping_cart");
 
 define(ORD_FILLED,1);
 
+lc_load("shop");
+
 class shop extends aw_template
 {
 	function shop()
@@ -118,6 +120,31 @@ class shop extends aw_template
 		{
 			$parent = $s["root_menu"];
 		}
+
+		// we must detect if we are outside of the shop menu hierarchy
+		// make yah link
+		$p = $parent;
+		$op = $this->get_object($p);
+		while ($p != $s["root_menu"] && $p)
+		{
+			$this->vars(array(
+				"id" => $op["oid"],
+				"name" => $op["name"],
+//				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $op["oid"]))
+				"yah_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$op["oid"]
+			));
+			$y = $this->parse("YAH").$y;
+			$p = $op["parent"];
+			$op = $this->get_object($p);
+		}
+
+		if ($p != $s["root_menu"])
+		{
+			// we are outside of the menu hierarchy and therefore must redo the YAH link
+			$y = "";
+			$parent = $s["root_menu"];
+		}
+
 		// some of the shop categories
 		$this->db_query("SELECT objects.name,objects.oid FROM objects WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
 		while ($row = $this->db_next())
@@ -134,22 +161,6 @@ class shop extends aw_template
 				"SHOW_CAT" => $this->shop_menus,
 				"CAT" => ""
 		));
-
-		// make yah link
-		$p = $parent;
-		$op = $this->get_object($p);
-		while ($p != $s["root_menu"] && $p)
-		{
-			$this->vars(array(
-				"id" => $op["oid"],
-				"name" => $op["name"],
-//				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $op["oid"]))
-				"yah_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$op["oid"]
-			));
-			$y = $this->parse("YAH").$y;
-			$p = $op["parent"];
-			$op = $this->get_object($p);
-		}
 
 		$this->vars(array(
 			"YAH" => $y, 
@@ -174,7 +185,7 @@ class shop extends aw_template
 		}
 
 		global $shopping_cart;
-		$parent = $this->do_shop_menus($id,$section);
+		$section = $this->do_shop_menus($id,$section);
 
 		classload("form");
 
@@ -414,6 +425,97 @@ class shop extends aw_template
 		extract($arr);
 		$sh = $this->get($shop_id);
 
+		classload("form");
+		$f = new form;
+
+		global $shopping_cart;
+		if (is_array($shopping_cart["items"]))
+		{
+			reset($shopping_cart["items"]);
+			while (list($item_id,$ar) = each($shopping_cart["items"]))
+			{
+				if ($ar["cnt"] > 0)
+				{
+					// so, get the item
+					$it = $this->get_item($item_id);
+
+					// load it's cnt_form
+					$f->load($it["cnt_form"]);
+					// now find all the rows that are selected in the entry from the shopping cart
+					$f->load_entry($ar["cnt_entry"]);
+
+					// check the availability of the item
+					if ($it["has_max"] && $it["has_period"] && $it["has_objs"])
+					{
+						echo "item $item_id <br>";
+						$from = $f->get_element_value_by_name("Alates");
+						$to = $f->get_element_value_by_name("Kuni");
+						echo "from = ", $this->time2date($from,3)," to = ", $this->time2date($to,3)," <br>";
+						$count = $ar["cnt"];
+						echo "count = $count <br>";
+						$free_items = array();
+						$free_item_count = 0;
+						classload("planner");
+						$pl = new planner;
+						// we must repeat this whole operation $count number of times too.
+						// so we must load the items one by one and check their calendars for events during the time specified in the form. 
+						$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
+						while ($row = $this->db_next())
+						{
+							echo "checking subs ,  id = ", $row["oid"], " <br>";
+							// objekti last v2ljas on kalendri id
+							// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
+							if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
+							{
+								// leidsime vaba itemi
+								$free_items[] = $row;
+								$free_item_count++;
+
+								echo "sub free!<br>";
+								// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
+								if ($free_item_count == $count)
+								{
+									break;
+								}
+							}
+						}
+						if ($free_item_count < $count)
+						{
+							echo "not enuff availabale <br>";
+							// if no item is available, abort the order
+							global $status_msg;
+							$status_msg = sprintf(E_SHOP_ITEMS_ORDER_CHANGED,$it["name"]);
+							session_register("status_msg");
+							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
+						}
+						else
+						{
+							echo "found all necessary <br>";
+							// broneerime itemid
+							foreach($free_items as $row)
+							{
+								echo "bronning ",$row["oid"], " <br>";
+								// lisame itemi kalenddrisse evendi selle aja peale
+								$pl->add_event(array("parent" => $row["last"],"start" => $from, "end" => $to));
+							}
+						}
+					}
+
+					$selrows = $this->get_selected_rows_in_form(&$f);
+
+					$mail.="Nimi: ".$it["name"]."\n";
+					$mail.="Kogus ja tüüp: \n";
+					$rowhtml = "";
+					foreach($selrows as $rownum)
+					{
+						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
+						$mail.=$f->mk_show_text_row($rownum)."\n";
+					}
+					$mail.="\n";
+				}
+			}
+		}
+
 		// save the user info
 		classload("form");
 		$f = new form;
@@ -432,14 +534,7 @@ class shop extends aw_template
 		$ord_id = $this->db_fetch_field("SELECT MAX(id) AS id FROM orders","id")+1;
 		$this->db_query("INSERT INTO orders(id,entry_id,tm,user,ip,shop_id,day,month,wd,hr) VALUES($ord_id,$eid,".time().",'$uid','".get_ip()."','$shop_id','$day','$month','$wd','$hr')");
 
-		// now we must also send an email to somebody notifying them of the new order.
-		// the email must contain all the info about the purchase, including all the
-		// items and their counts and also the order form data.
-		$mail = "Tere!\n\\ kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n";
-
-		classload("form");
-		$f = new form;
-
+		// kirjutame baasi alles siin, p2rast kontrollimist et kas k6ik ikka olemas on
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
@@ -448,28 +543,16 @@ class shop extends aw_template
 			{
 				if ($ar["cnt"] > 0)
 				{
-					// so, get the item
-					$it = $this->get_item($item_id);
-					// load it's cnt_form
-					$f->load($it["cnt_form"]);
-					// now find all the rows that are selected in the entry from the shopping cart
-					$f->load_entry($ar["cnt_entry"]);
-					$selrows = $this->get_selected_rows_in_form(&$f);
-
-					$mail.="Nimi: ".$it["name"]."\n";
-					$mail.="Kogus ja tüüp: \n";
-					$rowhtml = "";
-					foreach($selrows as $rownum)
-					{
-						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
-						$mail.=$f->mk_show_text_row($rownum)."\n";
-					}
-					$mail.="\n";
 					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."')");
 					$t_p += (double)$ar["cnt"] * (double)$ar["price"];
 				}
 			}
 		}
+
+		// now we must also send an email to somebody notifying them of the new order.
+		// the email must contain all the info about the purchase, including all the
+		// items and their counts and also the order form data.
+		$mail = "Tere!\n\\ kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n";
 
 		$this->db_query("UPDATE orders SET t_price = '$t_p' WHERE id = $ord_id");
 		
@@ -565,9 +648,7 @@ class shop extends aw_template
 			$shop = $this->find_shop_id($section);
 		}
 
-
 		classload("form");
-
 		$row = $this->get_item($item_id,true);
 
 		global $shopping_cart,$ext;
@@ -614,8 +695,15 @@ class shop extends aw_template
 	
 		$it = $this->get_item($item_id,true);
 
+		$old_entry = 
 		classload("form");
 		$f = new form;
+
+		if ($shopping_cart["items"][$item_id]["cnt_entry"])
+		{
+			$old_entry = $f->get_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
+		}
+
 		$f->process_entry(array(
 			"id" => $it["cnt_form"], 
 			"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
@@ -636,6 +724,66 @@ class shop extends aw_template
 			// this row's count must be added to this item's count in the shopping cart
 			$count+=$rowels["mitu"];
 		}
+
+		// if the item is set to have some max amount of items and they have calendars, then we must check if there are still some available
+		// during the specified time.
+		if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
+		{
+			// check if the user entered some dates in the form, if not, then show error message and go back.
+			$from = $f->get_element_value_by_name("Alates");
+			$to = $f->get_element_value_by_name("Kuni");
+
+			if ($from < 1 || $to < 1)
+			{
+				global $status_msg;
+				$status_msg = E_SHOP_NO_DATE_SET;
+				session_register("status_msg");
+
+				// before returning also restore the form entry
+				$f->restore_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
+			}
+			// right now just check this combination
+			
+			$free_items = array();
+			$free_item_count = 0;
+			classload("planner");
+			$pl = new planner;
+			// we must repeat this whole operation $count number of times too.
+			// so we must load the items one by one and check their calendars for events during the time specified in the form. 
+			$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
+			while ($row = $this->db_next())
+			{
+				// objekti last v2ljas on kalendri id
+				// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
+				if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
+				{
+					// leidsime vaba itemi
+					$free_items[] = $row;
+					$free_item_count++;
+
+					// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
+					if ($free_item_count == $count)
+					{
+						break;
+					}
+				}
+			}
+			if ($free_item_count < $count)
+			{
+				// pold vabu itemeid sel ajal
+				global $status_msg;
+				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
+				session_register("status_msg");
+				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
+				$f->restore_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
+			}
+			// ei broneeri asju tegelt 2ra, bronnime alles siis kui tyyp p2ris tellimuse teeb.
+			// tegelt tuleks siinkohal teha miski temp-record selle kohta, et see asi on sel kellal bronnitud
+			// et keegi teine samal ajal ei saax seda sama aja peale bronnida a minu vaene v2ike pea ei v6ta seda praegusel hetkel
+		}
+
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 		$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
@@ -643,7 +791,7 @@ class shop extends aw_template
 		// if the item specifies, where to go after ordering it, then go there. otherwise don't go anywhere
 		if ($it["redir"])
 		{
-			return $this->mk_my_orb("show", array("parent" => $it["redir"]));
+			return $this->mk_my_orb("show", array("section" => $it["redir"]));
 		}
 		else
 		{

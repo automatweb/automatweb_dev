@@ -58,7 +58,7 @@
 			</function>
 		</action>
 		
-		<action name="get_attach">
+		<action name="get_attach" nologin="1">
 			<function name="get_attach">
 				<arguments>
 					<required name="msgid"/>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.9 2001/05/29 16:44:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.10 2001/05/31 18:58:23 cvs Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -285,6 +285,7 @@ $orb_defs["form"] = "xml";
 			$this->arr[after_submit_text] = $after_submit_text;
 			$this->arr[after_submit_link] = $after_submit_link;
 			$this->arr[ff_folder] = $ff_folder;
+			$this->arr["name_el"] = $entry_name_el;
 			$this->save();
 			return $this->mk_orb("table_settings", array("id" => $id));
 		}
@@ -602,6 +603,24 @@ $orb_defs["form"] = "xml";
 			return $orb;
 		}
 
+		// returns array id => name of all elements in the loaded form
+		function get_all_elements()
+		{
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					$elar = $this->arr["contents"][$row][$col]->get_elements();
+					reset($elar);
+					while (list(,$el) = each($elar))
+					{
+						$ret[$el["id"]] = $el["name"];
+					}
+				}
+			}
+			return $ret;
+		}
+
 		////
 		// !Generates the form used in modifying the table settings
 		function gen_settings($arr)
@@ -612,22 +631,25 @@ $orb_defs["form"] = "xml";
 			classload("style");
 			$t = new style;
 			$o = new db_objects;
-			$this->vars(array("form_bgcolor"				=> $this->arr[bgcolor],
-												"form_border"					=> $this->arr[border],
-												"form_cellpadding"		=> $this->arr[cellpadding],
-												"form_cellspacing"		=> $this->arr[cellspacing],
-												"form_height"					=> $this->arr[height],
-												"form_width"					=> $this->arr[width],
-												"form_hspace"					=> $this->arr[hspace],
-												"form_vspace"					=> $this->arr[vspace],
-												"def_style"						=> $this->picker($this->arr[def_style],$t->get_select(0,ST_CELL)),
-												"submit_text"					=> $this->arr[submit_text],
-												"after_submit_text"		=> $this->arr[after_submit_text],
-												"after_submit_link"		=> $this->arr[after_submit_link],
-												"as_1"								=> ($this->arr[after_submit] == 1 ? "CHECKED" : ""),
-												"as_2"								=> ($this->arr[after_submit] == 2 ? "CHECKED" : ""),
-												"as_3"								=> ($this->arr[after_submit] == 3 ? "CHECKED" : ""),
-												"ff_folder"						=> $this->picker($this->arr[ff_folder], $o->get_list())));
+			$this->vars(array(
+				"form_bgcolor"				=> $this->arr[bgcolor],
+				"form_border"					=> $this->arr[border],
+				"form_cellpadding"		=> $this->arr[cellpadding],
+				"form_cellspacing"		=> $this->arr[cellspacing],
+				"form_height"					=> $this->arr[height],
+				"form_width"					=> $this->arr[width],
+				"form_hspace"					=> $this->arr[hspace],
+				"form_vspace"					=> $this->arr[vspace],
+				"def_style"						=> $this->picker($this->arr[def_style],$t->get_select(0,ST_CELL)),
+				"submit_text"					=> $this->arr[submit_text],
+				"after_submit_text"		=> $this->arr[after_submit_text],
+				"after_submit_link"		=> $this->arr[after_submit_link],
+				"as_1"								=> ($this->arr[after_submit] == 1 ? "CHECKED" : ""),
+				"as_2"								=> ($this->arr[after_submit] == 2 ? "CHECKED" : ""),
+				"as_3"								=> ($this->arr[after_submit] == 3 ? "CHECKED" : ""),
+				"ff_folder"						=> $this->picker($this->arr[ff_folder], $o->get_list()),
+				"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements())
+			));
 			$ns = "";
 			if ($this->type != 2)
 				$ns = $this->parse("NOSEARCH");
@@ -1994,6 +2016,27 @@ $orb_defs["form"] = "xml";
 				}
 			}
 			return $ret;
+		}
+
+		////
+		// returns the entry in an array that you can feed to restore_entry to revert the saved entry to the old data
+		function get_entry($form_id,$entry_id)
+		{
+			$this->db_query("SELECT * FROM form_".$form_id."_entries WHERE id = $entry_id");
+			return $this->db_next();
+		}
+
+		function restore_entry($form_id,$entry_id,$arr)
+		{
+			if (!is_array($arr))
+			{
+				return;
+			}
+			$str = join(",",$this->map2(" %s = '%s' ",$arr));
+			if ($str != "" && $entry_id)
+			{
+				$this->db_query("UPDATE form_".$form_id."_entries SET $str WHERE id = $entry_id");
+			}
 		}
 	};	// class ends
 ?>
