@@ -156,6 +156,9 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
 											Vali tulba kontrollerid:<br>
 											<select name="cols[{VAR:col_id}][controllers][]" multiple class="formselect">{VAR:controllers}</select><Br>
+											
+											Vali v&auml;&auml;rtuse kontroller:<br>
+											<select name="cols[{VAR:col_id}][val_controller]" class="formselect">{VAR:val_controller}</select><Br>
 
 											<input type="checkbox" name="cols[{VAR:col_id}][link_new_window]" value="1" {VAR:col_link_new_window}> Uues aknas <br><br>
 

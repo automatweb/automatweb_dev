@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.59 2004/06/25 19:03:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.60 2004/06/26 09:07:06 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2260,7 +2260,8 @@ class form_table extends form_base
 				"link_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style1"], $sts),
 				"link_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style2"], $sts),
 				"group_style_styles" => $this->picker($this->table["defs"][$col]["styles"]["group_style"], $sts),
-				"controllers" => $this->mpicker($this->table["defs"][$col]["controllers"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
+				"controllers" => $this->mpicker($this->table["defs"][$col]["controllers"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
+				"val_controller" => $this->picker($this->table["defs"][$col]["val_controller"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
 			));
 			$hst = "";
 			if ($this->table["defs"][$col]["has_col_style"])
