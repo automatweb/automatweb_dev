@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.68 2002/08/29 03:14:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.69 2002/09/03 06:31:03 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1499,6 +1499,16 @@ class form_element extends aw_template
 		return is_array($this->arr["metadata"][$lid]) ? $this->arr["metadata"][$lid] : array();
 	}
 
+	function get_up_down_count_el_form()
+	{
+		return $this->arr["up_down_count_el_form"];
+	}
+
+	function get_up_down_count_el_el()
+	{
+		return $this->arr["up_down_count_el_el"];
+	}
+
 	////
 	// !saves the element properties that are on the grid editing page (name, text, grp)
 	// $dat - POST vars
@@ -1969,7 +1979,7 @@ class form_element extends aw_template
 						// now figure out the damn value. but how the hell do we do that??!!
 						// damn, this is not good, but I see no other way. 
 						// the data where the value for the element should be, gets passed as $udcnt_values 
-						$udcnt = $udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
+						$udcnt = (int)$udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
 					}
 					$aft = "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");' value='+'>";
 					$aft .= "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");' value='-'>";

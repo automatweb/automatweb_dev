@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.50 2002/08/29 03:13:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.51 2002/09/03 06:31:03 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -258,43 +258,46 @@ class form_table extends form_base
 				$this->table["view_cols"]["view"] = "view";
 				$dat["ev_view"] = $this->table["texts"]["view"][$this->lang_id];
 			}
-			foreach($this->table["view_cols"] as $v_el)
+			if (is_array($this->table["view_cols"]))
 			{
-				$cl = $this->get_col_for_el($v_el);
-				$_caption = $dat["ev_".$v_el];
-
-				$popdat = $this->table["defs"][$cl];
-				if (isset($popdat["link_popup"]) && $popdat["link_popup"])
+				foreach($this->table["view_cols"] as $v_el)
 				{
-					$show_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
-						$show_link_popup,
-						$popdat["link_popup_scrollbars"],
-						!$popdat["link_popup_fixed"],
-						$popdat["link_popup_toolbar"],
-						$popdat["link_popup_addressbar"],
-						$popdat["link_popup_width"],
-						$popdat["link_popup_height"]
-					);
-				};
+					$cl = $this->get_col_for_el($v_el);
+					$_caption = $dat["ev_".$v_el];
 
-				if (is_array($popdat["alias"]))
-				{
-					// first, the image aliases, because they affect the row contents
-					foreach($popdat["alias"] as $_aidx => $aid)	
+					$popdat = $this->table["defs"][$cl];
+					if (isset($popdat["link_popup"]) && $popdat["link_popup"])
 					{
-						$alias_data = $popdat["alias_data"][$aid];
-						if ($alias_data["class_id"] == CL_IMAGE)
+						$show_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+							$show_link_popup,
+							$popdat["link_popup_scrollbars"],
+							!$popdat["link_popup_fixed"],
+							$popdat["link_popup_toolbar"],
+							$popdat["link_popup_addressbar"],
+							$popdat["link_popup_width"],
+							$popdat["link_popup_height"]
+						);
+					};
+
+					if (is_array($popdat["alias"]))
+					{
+						// first, the image aliases, because they affect the row contents
+						foreach($popdat["alias"] as $_aidx => $aid)	
 						{
-							$imgdat = $this->image->get_image_by_id($alias_data["target"]);
-							$show_link = "<img border='0' src='".$show_link."' alt='".$dat["ev_".$v_el]."'>";
-							$reset_aliases[$cl][$_aidx] = $this->table["defs"][$cl]["alias"][$_aidx];
-							unset($this->table["defs"][$cl]["alias"][$_aidx]);
+							$alias_data = $popdat["alias_data"][$aid];
+							if ($alias_data["class_id"] == CL_IMAGE)
+							{
+								$imgdat = $this->image->get_image_by_id($alias_data["target"]);
+								$show_link = "<img border='0' src='".$show_link."' alt='".$dat["ev_".$v_el]."'>";
+								$reset_aliases[$cl][$_aidx] = $this->table["defs"][$cl]["alias"][$_aidx];
+								unset($this->table["defs"][$cl]["alias"][$_aidx]);
+							}
 						}
 					}
-				}
 
-				// I don't see _targetwin being defined anywhere and this causes a warning
-				$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
+					// I don't see _targetwin being defined anywhere and this causes a warning
+					$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
+				}
 			}
 
 			$del_link = $this->get_link("delete", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
@@ -411,7 +414,6 @@ class form_table extends form_base
 								$form =& $this->cache_get_form_instance($form_id);
 								$form->set_form_html_name($this->get_html_name_for_tbl_form());
 								$el_ref = $form->get_element_by_id($element_id);
-
 								$bcount = $this->baskets[$cc["basket"]]->get_item_count(array("item_id" => $dat["entry_id"]));
 								$str .= $el_ref->gen_user_html_not(
 									"",
@@ -533,6 +535,19 @@ class form_table extends form_base
 					{
 						$ret[$fid][$elid] = $elid;
 					}
+				}
+			}
+			// we got to check all the shop basket count elements and get the increment/decrement count element's id also, 
+			// because we got to load it's value from the database...
+			if ($this->table["defs"][$i]["els"]["formel"] == "formel")
+			{
+				$element_id = $this->table["defs"][$i]["formel"];
+				$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
+				$form =& $this->cache_get_form_instance($form_id);
+				$el_ref = $form->get_element_by_id($element_id);
+				if (($fid = $el_ref->get_up_down_count_el_form()))
+				{
+					$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
 				}
 			}
 		}
@@ -721,7 +736,14 @@ class form_table extends form_base
 		{
 			if ($this->table["empty_table_alias"])
 			{
-				$tbl = $this->render_aliases(array($this->table["empty_table_alias"]));
+				if (is_array($this->table["empty_table_alias"]))
+				{
+					$tbl = $this->render_aliases($this->table["empty_table_alias"]);
+				}
+				else
+				{
+					$tbl = $this->render_aliases(array($this->table["empty_table_alias"]));
+				}
 			}
 			else
 			{
@@ -1171,7 +1193,7 @@ class form_table extends form_base
 		$this->table["table_header_aliases"] = $this->make_keys($settings["table_header_aliases"]);
 		$this->table["no_show_empty"] = $settings["no_show_empty"];
 		$this->table["empty_table_text"] = $settings["empty_table_text"];
-		$this->table["empty_table_alias"] = $settings["empty_table_alias"];
+		$this->table["empty_table_alias"] = $this->make_keys($settings["empty_table_alias"]);
 		$this->table["no_grpels_in_restrict"] = $settings["no_grpels_in_restrict"];
 		$this->table["has_grpsettings"] = $settings["has_grpsettings"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
@@ -1298,7 +1320,7 @@ class form_table extends form_base
 			"no_grpels_in_restrict" => checked($this->table["no_grpels_in_restrict"]),
 			"no_show_empty" => checked($this->table["no_show_empty"]),
 			"empty_table_text" => $this->table["empty_table_text"],
-			"empty_table_alias" => $this->picker($this->table["empty_table_alias"], $als),
+			"empty_table_alias" => $this->mpicker($this->table["empty_table_alias"], $als),
 			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
 			"show_second_table_aliases" => $this->mpicker($this->table["show_second_table_aliases"], $als),
 			"second_table_search_el" => $this->picker($this->table["show_second_table_search_el"], $els),
