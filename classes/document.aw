@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.295 2004/11/03 12:16:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.296 2004/11/03 14:54:05 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -355,7 +355,8 @@ class document extends aw_template
 				$pagetitle = strip_tags($fl["comment"]);
 			};
 		}
-		
+
+	
 		$doc["title"] = $this->sanitize($doc["title"]);
 		$doc["lead"] = $this->sanitize($doc["lead"]);
 		
@@ -878,7 +879,6 @@ class document extends aw_template
 
 		$awt->stop("phase7");
 
-
 		if ($doc["photos"])
 		{
 			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
@@ -932,7 +932,6 @@ class document extends aw_template
 			 	$pb = $this->parse("pblock");
 			};
 		};
-
 
 		// <mail to="bla@ee">lahe tyyp</mail>
  		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
