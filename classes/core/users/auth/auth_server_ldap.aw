@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.9 2004/11/25 07:42:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.10 2004/11/29 13:02:08 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -31,7 +31,17 @@
 @property ad_grp_txt type=textbox
 @caption AD Grupp, kus kasutajad peavad olema (tekst)
 
+@property no_user_grp type=relpicker reltype=RELTYPE_GROUP
+@caption Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole
 
+@property auto_create_user type=checkbox ch_value=1
+@caption Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole
+
+@property break_chain type=checkbox ch_value=1
+@caption Gruppi mitekuuluvus katkestab ahela
+
+@reltype GROUP value=2 clid=CL_GROUP
+@caption grupp
 
 */
 
@@ -91,7 +101,7 @@ class auth_server_ldap extends class_base
 		return $retval;
 	}	
 
-	function check_auth($server, $credentials)
+	function check_auth($server, $credentials, &$conf)
 	{
 		if (!extension_loaded("ldap"))
 		{
@@ -127,22 +137,24 @@ class auth_server_ldap extends class_base
 			}
 			if ($grp == "" || ($grp != "" && $this->_is_member_of($res, $server, $grp, $credentials)))
 			{
-				// search user's email
-				/*$dna = array("CN=Users");
-				foreach(explode(".", $o->prop("ad_domain")) as $part)
-				{
-					$dna[] = "dc=".$part;
-				}
+				$this->_proc_credentials($res, $server, $credentials);
 
-				$dn = join(", ",$dna);
-				$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"],array("mail")); 
-				$info = ldap_get_entries($res, $sr);
-				die(dbg::dump($info));*/
-				return array(true, "");
+				if ($conf->check_local_user($server->id(), $credentials))
+				{
+					return array(true, "", false);
+				}
 			}
 			else
 			{
-				$break = true;
+				if ($grp != "")
+				{
+					$this->remove_user_from_group($server->prop("no_user_grp"), $credentials);
+				}
+		
+				if ($server->prop("break_chain"))
+				{
+					$break = true;
+				}
 			}
 		}
 		return array(false, "Sellist kasutajat pole v&otilde;i parool on vale!", $break);
@@ -219,6 +231,48 @@ class auth_server_ldap extends class_base
 		}
 
 		return $ret;
+	}
+
+	/** reads users email and name from ad server
+	**/
+	function _proc_credentials($res, $server, &$cred)
+	{
+		$dn = $server->prop("ad_base_dn");
+		if (!$dn)
+		{
+			return;
+		}
+
+		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"], array("mail","displayname"));
+
+		$info = ldap_get_entries($res, $sr);
+
+		if ($info["count"] > 0 && $info[0]["mail"]["count"])
+		{
+			$cred["mail"] = $info[0]["mail"]["0"];
+		}
+		if ($info["count"] > 0 && $info[0]["displayname"]["count"])
+		{
+			$cred["name"] = $info[0]["displayname"]["0"];
+		}
+	}
+
+	function remove_user_from_group($grp, $cred)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"name" => $cred["uid"],
+			"site_id" => array(),
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id")
+		));
+
+		if ($ol->count())
+		{
+			$u = $ol->begin();
+			$g = get_instance(CL_GROUP);
+			$g->remove_user_from_group($u, obj($grp));
+		}
 	}
 }
 ?>

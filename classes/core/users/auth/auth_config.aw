@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.7 2004/11/26 14:02:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.8 2004/11/29 13:02:08 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -9,12 +9,6 @@
 @default group=general
 @default field=meta
 @default method=serialize
-
-@property no_user_grp type=relpicker reltype=RELTYPE_GROUP
-@caption Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole
-
-@property auto_create_user type=checkbox ch_value=1
-@caption Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole
 
 @groupinfo servers caption=Autentimine
 
@@ -28,8 +22,6 @@
 @reltype AUTH_SERVER value=1 clid=CL_AUTH_SERVER_LDAP,CL_AUTH_SERVER_LOCAL
 @caption autentimisserver
 
-@reltype GROUP value=2 clid=CL_GROUP
-@caption grupp
 */
 
 class auth_config extends class_base
@@ -214,14 +206,11 @@ class auth_config extends class_base
 		foreach($servers as $server)
 		{
 			$server_inst = get_instance($server->class_id());
-			list($is_valid, $msg, $break_chain) = $server_inst->check_auth($server, $credentials);
+			list($is_valid, $msg, $break_chain) = $server_inst->check_auth($server, $credentials, $this);
 
 			if ($is_valid)
 			{
-				if ($this->_check_local_user($auth_id, $credentials))
-				{
-					return array(true, $msg);
-				}
+				return array(true, $msg);
 			}
 			else
 			if ($break_chain)
@@ -274,21 +263,33 @@ class auth_config extends class_base
 	}
 
 	/** checks if the given local user exists and if not, creates it
+
+		@attrib api=1
+
 	**/
-	function _check_local_user($auth_id, $cred)
+	function check_local_user($auth_id, $cred)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"name" => $cred["uid"],
 			"site_id" => array(),
-			"lang_id" => array()
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id")
 		));
+
+		$confo = obj($auth_id);
+
 		if ($ol->count())
 		{
+			// check e-mail and name if present in $cred
+			if (!empty($cred["mail"]) || !empty($cred["name"]))
+			{
+				$u = $ol->begin();
+				$this->_upd_udata($u, $cred, $confo);
+			}
 			return true;
 		}
 
-		$confo = obj($auth_id);
 		if (!$confo->prop("auto_create_user"))
 		{
 			return false;
@@ -302,13 +303,8 @@ class auth_config extends class_base
 			"password" => $cred["password"]
 		));
 
-		// get group from auth conf
-		if (($grp = $confo->prop("no_user_grp")))
-		{
-			// add to group
-			$gp = get_instance(CL_GROUP);
-			$gp->add_user_to_group($new_user, obj($grp));
-		}
+		$this->_upd_udata($new_user, $cred, $confo);
+
 		aw_restore_acl();
 		return true;
 	}
@@ -349,6 +345,30 @@ class auth_config extends class_base
 		session_register("request_uri_before_auth");
 		header("Location: ".aw_ini_get("baaseurl")."/login.".aw_ini_get("ext"));
 		die();
+	}
+
+	function _upd_udata($u, $cred, $confo)
+	{
+		aw_disable_acl();
+		$u->set_prop("email", $cred["mail"]);
+		$u->save();
+
+		$users = get_instance("users");
+		$users->set_user_config(array(
+			"uid" => $cred["uid"],
+			"key" => "real_name",
+			"value" => $cred["name"]
+		));
+
+		// get group from auth conf
+		if (($grp = $confo->prop("no_user_grp")))
+		{
+			// add to group
+			$gp = get_instance(CL_GROUP);
+			$gp->add_user_to_group($u, obj($grp));
+		}
+
+		aw_restore_acl();
 	}
 }
 ?>

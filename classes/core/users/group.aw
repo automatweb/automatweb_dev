@@ -991,5 +991,64 @@ class group extends class_base
 			$user->create_brother($p_o->id());
 		}
 	}
+
+	/** removes user $user from group $group
+
+		@attrib api=1
+
+	**/
+	function remove_user_from_group($user, $group)
+	{
+		$gid = $this->users->get_gid_for_oid($group->id());
+		$uid = $this->users->get_uid_for_oid($user->id());
+
+		// remove user from group rec
+		$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
+
+		// delete all brothers from the current group
+		$user_brothers = new object_list(array(
+			"parent" => $group->id(),
+			"brother_of" => $user->id()
+		));
+		$user_brothers->delete();
+
+		// delete alias from user to this group
+		if (count($user->connections_from(array("to" => $group->id()))) > 0)
+		{
+			$user->disconnect(array(
+				"from" => $group->id()
+			));
+		}
+
+		// get all subgroups
+		$ot = new object_tree(array(
+			"parent" => $group->id(),
+			"class_id" => CL_GROUP
+		));
+		$ol = $ot->to_list();
+		for($item = $ol->begin(); !$ol->end(); $item = $ol->next())
+		{
+			// remove all brothers from those groups
+			$user_brothers = new object_list(array(
+				"parent" => $item->id(),
+				"brother_of" => $user->id()
+			));
+			$user_brothers->delete();
+
+			// remove all aliases from those groups
+			foreach($item->connections_from(array("to" => $user->id())) as $c)
+			{
+				$c->delete();
+			}
+
+			// also remove all aliases from user to the group
+			if (count($user->connections_from(array("to" => $item->id()))) > 0)
+			{
+				$user->disconnect(array(
+					"from" => $item->id()
+				));
+			}
+		}
+	}
 }
 ?>

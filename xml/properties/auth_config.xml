@@ -1,26 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>no_user_grp</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_GROUP</reltype>
-            <caption>Grupp, kuhu pannakse kasutajad, keda kohalikus s&amp;uuml;steemis pole</caption>
-      </property>
-      <property>
-            <name>auto_create_user</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kas lastakse sisse logida kasutajatel, keda kohalikus s&amp;uuml;steemis pole</caption>
-      </property>
-      <property>
             <name>servers</name>
             <table>objects</table>
             <group>servers</group>
@@ -64,11 +44,6 @@
                   </clid>
                   <caption>autentimisserver</caption>
             </AUTH_SERVER>
-            <GROUP>
-                  <value>2</value>
-                  <clid>CL_GROUP</clid>
-                  <caption>grupp</caption>
-            </GROUP>
       </reltypes>
 </properties>
 

@@ -63,11 +63,48 @@
             <type>textbox</type>
             <caption>AD Grupp, kus kasutajad peavad olema (tekst)</caption>
       </property>
+      <property>
+            <name>no_user_grp</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GROUP</reltype>
+            <caption>Grupp, kuhu pannakse kasutajad, keda kohalikus s&amp;uuml;steemis pole</caption>
+      </property>
+      <property>
+            <name>auto_create_user</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kas lastakse sisse logida kasutajatel, keda kohalikus s&amp;uuml;steemis pole</caption>
+      </property>
+      <property>
+            <name>break_chain</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Gruppi mitekuuluvus katkestab ahela</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_AUTH_SERVER_LDAP</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <reltypes>
+            <GROUP>
+                  <value>2</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>grupp</caption>
+            </GROUP>
+      </reltypes>
 </properties>
 
