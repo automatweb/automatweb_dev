@@ -2,6 +2,7 @@
 $basedir = realpath(".");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini")));
+aw_global_set("no_db_connection", true);
 classload("defs");
 classload("aw_template");
 $scanner = get_instance("core/docgen/docgen_analyzer");
