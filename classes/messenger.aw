@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.88 2001/07/31 23:29:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.89 2001/08/31 00:35:37 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -12,6 +12,8 @@ $orb_defs["messenger"] = "xml";
 define('MSG_INTERNAL',1);
 // v‰line, ntx pop3 serverist vıetud teade
 define('MSG_EXTERNAL',2);
+// meililisti saatimiseks mıeldud teade
+define('MSG_LIST',3);
 
 // teadete staatused
 define('MSG_STATUS_UNREAD',0);
@@ -732,6 +734,28 @@ class messenger extends menuedit_light
 		return $oid;
 	}
 
+	// lauri muudetud -->
+
+	////
+	// ! Paneb teate $args["id"] t¸¸biks MSG_LIST
+	function set_list_message($args = array())
+	{
+		extract($args);
+		$q ="UPDATE messages SET type = '".MSG_LIST."' WHERE id ='$id'";
+		$this->db_query($q);
+	}
+
+	function set_list($args = array())
+	{
+		extract($args);
+		$this->set_list_message(array("id" => $id));
+		return $this->mk_site_orb(array(
+						"action" => "edit",
+						"id" => $id,
+					));
+	}
+	// <--
+
 	function reply_message($args = array())
 	{	
 		extract($args);
@@ -920,6 +944,55 @@ class messenger extends menuedit_light
 		// topime kogutud info template sisse
 		$this->vars($msg);
 
+		// lauri muudetud -->
+		$this->vars(array(
+			"msg_field_width" => ($this->msgconf["msg_field_width"]) ? $this->msgconf["msg_field_width"] : 50));
+
+		if ($msg["type"] == MSG_LIST)
+		{
+			classload("ml_list");
+			$mlist = new ml_list();
+
+			$saatmisekiri = $this->parse("listisaatmine");
+
+			$muutujad= $mlist->get_all_varnames();
+			foreach($muutujad as $k => $v)
+			{
+				$muutujalistvahe.="&nbsp;<b>#$v#</b>&nbsp;";
+				if (strlen($muutujalistvahe)>100)
+				{
+					$muutujalist.=($muutujalist?"<br>":"")."$muutujalistvahe";
+					$muutujalistvahe="";
+				};
+			};
+			$muutujalist.=($muutujalist?"<br>":"")."$muutujalistvahe";
+			$stamps="";
+			// vıta need stambid, millele saatjal on "send" ıigus
+			$this->get_objects_by_class(array("class" => CL_ML_STAMP));
+			while ($stamp = $this->db_next())
+			{
+				if ($this->can("send",$stamp["oid"]))
+				{
+					$stampsvahe.="&nbsp;<b>#".$stamp["name"]."#</b>&nbsp;";
+					if (strlen($stampsvahe)>100)
+					{
+						$stamps.=($stamps?"<br>":"")."$stampsvahe";
+						$stampsvahe="";
+					};
+				};
+			};
+			$stamps.=($stamps?"<br>":"")."$stampsvahe";
+			$this->vars(array(
+				"muutujalist" => $muutujalist,
+				"stambilist" => $stamps));
+			$muutujad = $this->parse("muutujad");
+		} else
+		{
+			$this->vars(array("msg_id" => $msg_id));
+			$saatmisekiri = $this->parse("tavalinesaatmine");
+		};
+		// <--
+
 		if ($this->msgconf["msg_confirm_send"])
 		{
 			$send = $this->parse("confirmsend");
@@ -932,6 +1005,10 @@ class messenger extends menuedit_light
 		$this->vars(array(
 			"msg_id" => $msg_id,
 			"send" => $send,
+			// lauri muudetud -->
+			"saatmisekiri" => $saatmisekiri,
+			"muutujad" => $muutujad,
+			// <--
 			"siglist" => $siglist,
 			"idlist" => $idlist,
 			"prilist" => $this->picker($this->msgconf["msg_default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
@@ -1012,6 +1089,20 @@ class messenger extends menuedit_light
 							"id" => $msg_id,
 						));
 		};
+
+		// lauri muudetud -->
+		$rmsg=$this->driver->msg_get(array("id" => $msg_id));
+		if ($rmsg["type"] == MSG_LIST)
+		{
+			classload("ml_list");
+			$mlist=new ml_list();
+			global $route_back;
+			$route_back=$this->mk_site_orb(array());
+			session_register("route_back");
+			return $mlist->route_post_message($rmsg);//tagastab urli saatmise aegade m‰‰ramisele
+		};
+		// <--
+
 		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
 		// koigepealt splitime mtargetsi komade pealt ‰ra ja eemaldame whitespace
 		
@@ -1084,11 +1175,13 @@ class messenger extends menuedit_light
 		if ($args["signature"] != "none")
 		{
 			// signatuur loppu
-			$message .= $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
+			$message .= "\r\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
 		};
 
 		classload("aw_mail");
 		$this->awm = new aw_mail();
+
+		$message = str_replace("\n","\r\n",$message);
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
 		if (sizeof($externals) > 0)
 		{
@@ -1302,12 +1395,14 @@ class messenger extends menuedit_light
 	function save_message($args = array())
 	{
 		extract($args);
+		// lauri muudetud: lisasin mfrom v‰lja
 		$q = "UPDATE messages
 			SET 
 				message = '$message',
 				subject = '$subject',
 				mtargets1 = '$mtargets1',
 				mtargets2 = '$mtargets2',
+				mfrom = '$mfrom',
 				pri = '$pri'
 			WHERE id = '$msg_id'";
 		$this->db_query($q);
@@ -1763,7 +1858,7 @@ class messenger extends menuedit_light
 
 		$message = $msg["message"];
 		$message = htmlspecialchars($message);
-		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
+		//$message = preg_replace("/(http:\/\/\S+)/si","\\1<a href='\2' target='new'>\2</a>",$message);
 
 		$message = $this->MIME_decode($message);
 		$message = preg_replace("/(\r|\n)/","<br>",$message);
@@ -2410,8 +2505,10 @@ class messenger extends menuedit_light
 
 		if (!$row["msg_inbox"])
 		{
-			print "inbox does not exist. aborting";
-			exit;
+			$retval = MSG_INIT;
+			$this->init_messenger();
+			$retval .= "<a href='$baseurl/?class=messenger'>" . MSG_INIT2 . "</a>";
+			return $retval;
 		};
 
 		$parent = $row["msg_inbox"];
@@ -2477,12 +2574,12 @@ class messenger extends menuedit_light
 
 				$body = $awm->get_part(array("part" => "body"));
 				// siin checkime ruule:
-				$subject = $this->MIME_decode($body["headers"]["Subject"]);
-				$from = $this->MIME_decode($body["headers"]["From"]);
-				$cc = $this->MIME_decode($body["headers"]["Cc"]);
-				$to = $this->MIME_decode($body["headers"]["To"]);
+				$subject = $body["headers"]["Subject"];
+				$from = $body["headers"]["From"];
+				$cc = $body["headers"]["Cc"];
+				$to = $body["headers"]["To"];
+				$content = $body["body"];
 				$mfrom = $from;
-				$content = $this->MIME_decode($body["body"]);
 				$processing = true;
 				$deliver_to = $parent;
 				$priority = 0;
@@ -2874,8 +2971,13 @@ class messenger extends menuedit_light
 		$pos = strpos($string,'=?');
 		if ($pos === false)
 		{
+			return $string;
+		}
+		else
+		{
 			return quoted_printable_decode($string);
 		};
+
 
 		// take out any spaces between multiple encoded words
 		$string = preg_replace('|\?=\s=\?|', '?==?', $string);
