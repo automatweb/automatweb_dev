@@ -191,6 +191,28 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="add_identity">
+			<function name="edit_identity">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit_identity">
+			<function name="edit_identity">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_identity">
+			<function name="submit_identity">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="submit_configure">
 			<function name="submit_configure">
