@@ -182,6 +182,7 @@ function init_config($arr)
 
 	// only load those definitions if fastcall is not set. This shouldnt break anything
 	// and should save us a little memory. -- duke
+//	echo "fastcall = $GLOBALS[fastcall] <br>";
 	if (!$GLOBALS["fastcall"])
 	{
 		// and here do the defs for classes
@@ -286,11 +287,12 @@ function get_instance($class,$args = array())
 	$instance = aw_global_get($id);
 	if (not($instance))
 	{
+		$lib = str_replace(".","", $class);
+		$libfile = $classdir."/".$lib.".".$ext;
+		@include_once($libfile);
+
 		preg_match("/(\w*)$/",$class,$m);
 		$lib = $m[1];
-		$class = str_replace(".","", $class);
-		$libfile = "$classdir/$class.$ext";
-		@include_once($libfile);
 		if (class_exists($lib))
 		{
 			if (sizeof($args) > 0)
