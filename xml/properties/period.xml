@@ -26,6 +26,7 @@
             <use_form>emb</use_form>
             <field>meta</field>
             <method>serialize</method>
+            <store>no</store>
             <caption>Pilt2</caption>
       </property>
       <property>
@@ -131,7 +132,7 @@
                   <caption>Perioodi pilt</caption>
             </IMAGE>
             <CONTENTS_DOC>
-                  <value>1</value>
+                  <value>2</value>
                   <clid>CL_DOCUMENT</clid>
                   <caption>Sisukorra dokument</caption>
             </CONTENTS_DOC>

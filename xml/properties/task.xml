@@ -57,6 +57,7 @@
                   <num_7>interval_yearly</num_7>
                   <num_8></num_8>
             </props>
+            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <property>
@@ -100,6 +101,7 @@
       <groupinfo>
             <recurrence>
                   <caption>Kordumine</caption>
+                  <submit>no</submit>
             </recurrence>
             <calendars>
                   <caption>Kalendrid</caption>

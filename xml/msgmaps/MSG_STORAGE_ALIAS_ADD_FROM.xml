@@ -1,29 +1,29 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_add_alias_to_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>core/users/user</class>
-      <func>on_add_alias</func>
-      <param>CL_USER</param>
-</num_1>
-<num_2>
-      <class>personalihaldus/personalikeskkond</class>
-      <func>on_connect_manager_to_keskkond</func>
-      <param>CL_PERSONALIKESKKOND</param>
-</num_2>
-<num_3>
       <class>crm/crm_company</class>
       <func>on_connect_person_to_org</func>
       <param>CL_CRM_PERSON</param>
-</num_3>
-<num_4>
+</num_0>
+<num_1>
       <class>crm/crm_person</class>
       <func>on_connect_org_to_person</func>
       <param>CL_CRM_COMPANY</param>
+</num_1>
+<num_2>
+      <class>core/users/user</class>
+      <func>on_add_alias</func>
+      <param>CL_USER</param>
+</num_2>
+<num_3>
+      <class>core/users/group</class>
+      <func>on_add_alias_to_group</func>
+      <param>CL_GROUP</param>
+</num_3>
+<num_4>
+      <class>personalihaldus/personalikeskkond</class>
+      <func>on_connect_manager_to_keskkond</func>
+      <param>CL_PERSONALIKESKKOND</param>
 </num_4>
 <num_5>
       <class>applications/shop/shop_product</class>

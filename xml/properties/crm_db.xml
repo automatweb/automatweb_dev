@@ -31,7 +31,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>form</type>
-            <sclass>crm_org_search</sclass>
+            <sclass>crm/crm_org_search</sclass>
             <sform>crm_search</sform>
             <caption>Compound search</caption>
       </property>

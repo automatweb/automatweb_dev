@@ -10,7 +10,11 @@
             <caption>Test</caption>
       </property>
       <classinfo>
-            <corefields>name,comment,status</corefields>
+            <corefields>
+                  <num_0>name</num_0>
+                  <num_1>comment</num_1>
+                  <num_2>status</num_2>
+            </corefields>
       </classinfo>
 </properties>
 

@@ -6,13 +6,18 @@
       <param>CL_GROUP</param>
 </num_0>
 <num_1>
+      <class>applications/personnel_management/personnel_management_cv</class>
+      <func>on_cv_save</func>
+      <param>CL_PERSONNEL_MANAGEMENT_CV</param>
+</num_1>
+<num_2>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_job_save</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_1>
-<num_2>
+</num_2>
+<num_3>
       <class>doc</class>
       <func>on_save_document</func>
       <param>CL_DOCUMENT</param>
-</num_2>
+</num_3>
 </xml>

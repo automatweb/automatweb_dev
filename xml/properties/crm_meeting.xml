@@ -76,6 +76,7 @@
                   <num_7>interval_yearly</num_7>
                   <num_8></num_8>
             </props>
+            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <property>

@@ -60,6 +60,16 @@
             <caption>Luba RTE kasutamist</caption>
       </property>
       <property>
+            <name>classinfo_allow_rte_toggle</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita RTE/HTML nuppu</caption>
+      </property>
+      <property>
             <name>classinfo_disable_relationmgr</name>
             <table>objects</table>
             <group>general</group>
@@ -126,6 +136,24 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Kõik omadused</caption>
+      </property>
+      <property>
+            <name>cfg_proplist</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Omadused</caption>
+      </property>
+      <property>
+            <name>cfg_groups</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Grupid</caption>
       </property>
       <property>
             <name>subaction</name>

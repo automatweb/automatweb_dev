@@ -3,4 +3,3 @@
 	<class name="object_import_exception" folder="admin" extends="class_base">
 	</class>
 </orb>
-		

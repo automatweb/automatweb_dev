@@ -60,6 +60,7 @@
                   <num_1>weekdays</num_1>
                   <num_2>end</num_2>
             </props>
+            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <property>

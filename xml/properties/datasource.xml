@@ -35,6 +35,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <editonly>1</editonly>
+            <size>60</size>
             <caption>Faili url</caption>
       </property>
       <classinfo>
