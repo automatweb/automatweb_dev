@@ -8,6 +8,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="show_pic1" is_content="1" caption="Näita pilti">
+			<function name="show_pic1">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
