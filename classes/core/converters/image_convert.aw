@@ -20,8 +20,11 @@ class image_convert extends class_base
 			$this->raise_error(ERR_IMAGE_DRIVER, t("image_covert: could not detect any supported imagehandlers!"));
 		}
 
-		$this->driver = new $driver;
-		$this->dirver->ref =& $this;
+		if ($driver != "")
+		{
+			$this->driver = new $driver;
+			$this->dirver->ref =& $this;
+		}
 	}
 
 	// this is here, because the authors of the php gd module are stupid idiots.
