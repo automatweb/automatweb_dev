@@ -164,7 +164,7 @@
             <method>serialize</method>
             <group>grp_search_proj</group>
             <type>datetime_select</type>
-            <caption>T&amp;aml;htaeg</caption>
+            <caption>T&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>sp_customer</name>

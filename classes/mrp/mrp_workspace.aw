@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.39 2005/03/13 20:21:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.40 2005/03/14 09:45:52 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -67,7 +67,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@caption Alustamisaeg (meterjalide saabumine)
 
 	@property sp_due_date type=datetime_select
-	@caption T&aml;htaeg
+	@caption T&auml;htaeg
 
 	@property sp_customer type=textbox
 	@caption Klient
@@ -1204,10 +1204,10 @@ class mrp_workspace extends class_base
 
 		if ($list_request != "search")
 		{
-		$table->define_chooser(array(
-			"name" => "selection",
-			"field" => "project_id",
-		));
+			$table->define_chooser(array(
+				"name" => "selection",
+				"field" => "project_id",
+			));
 		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
@@ -3025,9 +3025,17 @@ class mrp_workspace extends class_base
 				"class_id" => CL_MRP_CASE,
 				"name" => "%".$arr["request"]["sp_name"]."%",
 				"comment" => "%".$arr["request"]["sp_comment"]."%",
-				"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, date_edit::get_timestamp($arr["request"]["sp_starttime"])),
-				"due_date" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, date_edit::get_timestamp($arr["request"]["sp_due_date"])),
 			);
+			$st = date_edit::get_timestamp($arr["request"]["sp_starttime"]);
+			if ($st > 100)
+			{
+				$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $st);
+			}
+			$dd = date_edit::get_timestamp($arr["request"]["sp_due_date"]);
+			if ($dd > 100)
+			{
+				$filt["due_date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $dd);
+			}
 			if ($arr["request"]["sp_customer"] != "")
 			{
 				$filt["CL_MRP_CASE.customer.name"] = "%".$arr["request"]["sp_customer"]."%";
@@ -3050,29 +3058,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-	{
+		{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-		{
+			{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-		}
+			}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-	}
+			}
 			if ($arr["request"]["cs_phone"] != "")
-	{
+			{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-	}
+		}
 
 		foreach($results->arr() as $cust)
-	{
+		{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),
@@ -3080,7 +3088,7 @@ class mrp_workspace extends class_base
 				"email" => $cust->prop_str("email_id"),
 				"oid" => $cust->id(),
 				"priority" => $cust->prop("priority")
-		));
+			));
 		}
 	}
 }
