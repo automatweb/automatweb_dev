@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.93 2003/05/22 10:57:38 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.94 2003/05/23 15:22:06 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -36,10 +36,6 @@ class aliasmgr extends aw_template
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
 
-//		$this->rel_type_classes = $rel_type_classes;
-
-		//$this->clid_list = $clid_list;
-
 		$this->make_alias_classarr();
 
 		if (is_array($rel_type_classes))
@@ -59,38 +55,6 @@ class aliasmgr extends aw_template
 		$obj = $this->get_object($id);
 
 		$this->reltype = $reltype;
-/*
-		if (strlen($this->reltype) > 2)//brr
-		{
-			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
-			{
-				if (!isset($hist[$this->reltype]))
-				{
-					$hist[$this->reltype] = $this->reltype;
-				}
-			}
-			else
-			{
-				$hist = array($this->reltype => $this->reltype);
-			}
-			aw_session_set('aliasmgr_obj_history',$hist);
-		}
-		//if (strlen($cl) > 2)//brr
-		{echo $cl;
-			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
-			{
-				if (!isset($hist[$cl]))
-				{
-					$hist[$cl] = $cl;
-				}
-			}
-			else
-			{
-				$hist = array($cl => $cl);
-			}
-			aw_session_set('aliasmgr_obj_history',$hist);
-		}
-*/
 
 		if (is_object($this->ref))
 		{
@@ -160,8 +124,6 @@ class aliasmgr extends aw_template
 				"selected" => $args["s"]["class_id"],
 				"filter" => "1",
 			);
-
-
 		}
 		else
 		{
@@ -180,8 +142,6 @@ class aliasmgr extends aw_template
 			);
 			$fields["class_id"] = 'n/a';
 		}
-
-
 	}
 
 	function search_callback_modify_data($row,$args)
@@ -975,13 +935,16 @@ class aliasmgr extends aw_template
 		// generate a list of class => name pairs
 		foreach($classes as $clid => $cldat)
 		{
-			if (isset($cldat["alias"]) && empty($cldat["disable_alias"]))
+			if (isset($cldat["alias"]))
 			{
 				$fil = ($cldat["alias_class"] != "") ? $cldat["alias_class"] : $cldat["file"];
 				preg_match("/(\w*)$/",$fil,$m);
 				$lib = $m[1];
 				// indent the names
-				$choices[$lib] = $spacer . $cldat["name"];
+				if (empty($cldat["disable_alias"]))
+					$choices[$lib] = $spacer . $cldat["name"];
+
+				$choices2[$lib] = $spacer . $cldat["name"];
 			}
 		}
 		asort($choices);
@@ -997,10 +960,18 @@ class aliasmgr extends aw_template
 		foreach($this->reltypes as $k => $v)
 		{
 			$dval = true;
+			if ($k == 0)
+			{
+				$choice =  &$choices;
+			}
+			else
+			{
+				$choice = &$choices2;
+			}
 
 			if (!isset($this->rel_type_classes[$k]))
 			{
-				$vals = $this->mk_kstring($choices);
+				$vals = $this->mk_kstring($choice);
 				$defaults1 .= 'listB.setDefaultOption("'.$k.'","capt_new_object");'."\n";
 			}
 			else
@@ -1020,7 +991,7 @@ class aliasmgr extends aw_template
 			{
 				$dvals = ',"Objekti tüüp","capt_new_object"';
 
-				$comp = isset($this->rel_type_classes[$k]) ? $this->rel_type_classes[$k] : $choices;
+				$comp = isset($this->rel_type_classes[$k]) ? $this->rel_type_classes[$k] : $choice;
 				$hh = array_intersect($hist,$comp);
 				$history = $this->mk_kstring($hh);
 				if ($history)
@@ -1046,7 +1017,7 @@ class aliasmgr extends aw_template
 				"options" => array('_' => 'Seose tüüp') + $this->reltypes,
 				"name" => "reltype",
 				"selected" => $this->reltype,
-				"selected" => (count($this->reltypes) == 1) ? 0 : NULL,
+//				"selected" => (count($this->reltypes) == 1) ? 0 : NULL,
 				'onchange' => "listB.populate();",
 			))
 		);
