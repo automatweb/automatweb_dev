@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.100 2002/08/01 17:22:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.101 2002/08/20 08:34:24 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -417,7 +417,7 @@ class core extends db_connector
 				"status","hits","lang_id","comment","last","modifiedby",
 				"jrk","period","alias","periodic","site_id","activate_at",
 				"deactivate_at","autoactivate","autodeactivate","brother_of",
-				"cache_dirty","metadata","subclass"
+				"cache_dirty","metadata","subclass","flags"
 			);
 
 		// vahetame key=>value paarid ära
@@ -1248,6 +1248,8 @@ class core extends db_connector
 
 		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
 
+		$fl = ($fl) ? " AND flags = '$flags' " : "";
+
 		if ($lang_id)
 		{
 			if ($class == CL_PSEUDO)
@@ -1272,7 +1274,7 @@ class core extends db_connector
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
 				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class $pstr $astr $cstr $typestr $ostr";
+				WHERE objects.class_id = $class $pstr $astr $fl $cstr $typestr $ostr";
 		}
 		else
 		{
