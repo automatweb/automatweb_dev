@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.5 2004/12/01 14:05:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.6 2004/12/27 12:39:17 kristo Exp $
 
 lc_load("definition");
 
@@ -57,7 +57,10 @@ class acl_base extends db_connector
 
 	function add_acl_group_to_obj($gid,$oid,$aclarr = array(), $invd = true)
 	{
-		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
+		if (!$this->db_fetch_field("SELECT gid FROM acl WHERE gid = '$gid' AND oid = '$oid'", "gid"))
+		{
+			$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
+		}
 		if (sizeof($aclarr) == 0)
 		{
 			// set default acl if not specified otherwise

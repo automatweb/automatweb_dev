@@ -1354,8 +1354,11 @@ class _int_object
 		{
 			foreach($this->obj["_create_connections"] as $new_conn)
 			{
-				$obj = obj($this->obj["oid"]);
-				$obj->connect($new_conn);
+				//$obj = obj($this->obj["oid"]);
+				if (is_oid($new_conn["to"]))
+				{
+					$this->connect($new_conn);
+				}
 			};
 		};
 

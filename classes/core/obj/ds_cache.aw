@@ -173,11 +173,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$fqfn = $this->cache->get_fqfn($cfn."-$fn-$oid");
 		if (file_exists($fqfn))
 		{
+			include($fqfn);
 			if ($GLOBALS["INTENSE_DUKE"] == 1)
 			{
 				echo "_get_cache look for file ".$cfn."-$fn-$oid got result <br>";
 			}
-			include($fqfn);
 			return $arr;
 		}
 
