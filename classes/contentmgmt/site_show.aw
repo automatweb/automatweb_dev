@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.68 2004/06/25 18:18:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.69 2004/07/08 12:26:34 duke Exp $
 
 /*
 
@@ -578,13 +578,6 @@ class site_show extends class_base
 			{
 				$ordby = "objects.jrk";
 			}
-			global $XX6;
-			if ($XX6)
-			{
-				var_dump($ordby);
-				arr($filter);
-			};
-
 			$no_fp_document = aw_ini_get("menuedit.no_fp_document");
 
 			if (strpos($ordby,"planner.start") !== false)
@@ -2063,6 +2056,7 @@ class site_show extends class_base
 		{
 			return $docc;
 		}
+
 		$awt->stop("do-show-template");
 		$this->import_class_vars($arr);
 
@@ -2183,7 +2177,6 @@ class site_show extends class_base
 		{
 			$this->path = array();
 		};
-
 
 		if (aw_ini_get("ini_rootmenu"))
 		{
