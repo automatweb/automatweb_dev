@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.80 2004/09/13 14:21:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.81 2004/09/16 08:54:31 kristo Exp $
 
 /*
 
@@ -1154,7 +1154,7 @@ class site_show extends class_base
 		if (count($lar) < 2)
 		{
 			// crap, we need to insert the sel lang acharset here at least!
-			$sel_lang = $lar[aw_global_get("lang_id")];
+			$sel_lang = $langs->fetch(aw_global_get("lang_id"));
 			$this->vars(array(
 				"sel_charset" => $sel_lang["charset"],
 				"se_lang_id" => $lang_id,
@@ -1215,6 +1215,12 @@ class site_show extends class_base
 					$l.=$this->parse("LANG");
 				}
 			}
+		}
+
+		if (!$sel_lang)
+		{
+			$ll = get_instance("languages");
+			$sel_lang = $ll->fetch(aw_global_get("lang_id"));
 		}
 		$this->vars(array(
 			"LANG" => $l,
