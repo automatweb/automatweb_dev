@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.16 2004/10/14 13:42:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.17 2004/10/22 15:00:25 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -628,6 +628,13 @@ class shop_order extends class_base
 					"prod_name" => $product_info->name(),
 					"prod_price" => $product_info_i->get_price($product_info),
 					"prod_tot_price" => number_format($cur_tot, 2)
+				));
+			}
+
+			foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
+			{
+				$this->vars(array(
+					"order_data_".$__nm => $__vl
 				));
 			}
 

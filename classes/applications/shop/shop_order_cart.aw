@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.18 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.19 2004/10/22 15:00:25 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -422,6 +422,26 @@ class shop_order_cart extends class_base
 					}
 				}
 			}
+
+			if (isset($awa["all_pkts"]) && is_array($awa["all_pkts"]))
+			{
+				foreach($awa["all_pkts"] as $iid => $k_d)
+				{
+					if (is_oid($iid) && $this->can("view", $iid))
+					{
+						$tmp = obj($iid);
+						foreach($tmp->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
+						{
+							$_SESSION["cart"]["item_data"][$c->prop("to")] = $k_d;
+						}
+					}
+				}
+			}
+		}
+
+		if (!empty($arr["clear_cart"]))
+		{
+			$this->clear_cart();
 		}
 
 		if (!empty($arr["pre_confirm_order"]))
@@ -680,16 +700,23 @@ class shop_order_cart extends class_base
 		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
 
 		$els = $swh->callback_get_order_current_form(array(
-			"obj_inst" => $wh_o
+			"obj_inst" => $wh_o,
+			"no_data" => (aw_global_get("uid") == "" ? true : false)
 		));
 
-		$els["userdate1"]["year_from"] = 1930;
-		$els["userdate1"]["year_to"] = date("Y");
-		$els["userdate1"]["no_default"] = true;
-		$els["userdate1"]["value"] = -1;
+		if ($els["userdate1"])
+		{
+			$els["userdate1"]["year_from"] = 1930;
+			$els["userdate1"]["year_to"] = date("Y");
+			$els["userdate1"]["no_default"] = true;
+			$els["userdate1"]["value"] = -1;
+		}
 
-		$els["userdate2"]["year_from"] = date("Y");
-		$els["userdate2"]["year_to"] = date("Y")+3;
+		if ($els["userdate2"])
+		{
+			$els["userdate2"]["year_from"] = date("Y");
+			$els["userdate2"]["year_to"] = date("Y")+3;
+		}
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.17 2004/09/20 13:13:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.18 2004/10/22 15:00:25 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1856,6 +1856,11 @@ class shop_warehouse extends class_base
 		$oc_i = $oc->instance();
 
 		$props = $oc_i->get_properties_from_data_form($oc, $cud);
+
+		if ($arr["no_data"])
+		{
+			return $props;
+		}
 
 		if (($pp = $oc->prop("data_form_person")) && is_oid($o->prop("order_current_person")))
 		{
