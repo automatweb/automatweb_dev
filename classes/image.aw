@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.133 2005/02/02 13:13:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.134 2005/03/20 13:37:52 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1240,14 +1240,13 @@ class image extends class_base
 				{
 					$prop = "file";
 				}
-
 				if ($arr["obj_inst"]->prop($prop) == "")
 				{
 					$ret = false;
 				}
 				else
 				{
-					$cv->load_from_file($arr["obj_inst"]->prop($prop));
+					$cv->load_from_file($this->_mk_fn($arr["obj_inst"]->prop($prop)));
 					if ($cv->is_error())
 					{
 						$ret = false;
@@ -1257,6 +1256,12 @@ class image extends class_base
 			return $ret;
 		}
 		return true;
+	}
+
+	function _mk_fn($fn)
+	{
+		$ret = basename($fn);
+		return aw_ini_get("site_basedir")."/files/".$ret{0}."/".$ret;
 	}
 }
 ?>
