@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.359 2005/01/26 23:22:41 duke Exp $
+// $Id: class_base.aw,v 2.360 2005/01/27 11:18:08 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2649,7 +2649,7 @@ class class_base extends aw_template
 		}
 		else
 		{
-			return $this->gen_output(array("content" => $gen));
+			return $this->gen_output(array("content" => $gen,"orb_action" => "change"));
 		}
 	}
 
@@ -2738,6 +2738,7 @@ class class_base extends aw_template
 		return $this->gen_output(array(
 			"content" => $gen,
 			"title" => $title,
+			"orb_action" => "change",
 		));
 	}	
 
