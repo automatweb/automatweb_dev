@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.75 2003/02/14 18:33:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.76 2003/02/17 13:48:39 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -206,7 +206,7 @@ class aliasmgr extends aw_template
 		{
 			$aliases = $this->get_oo_aliases(array("oid" => $oid));
 			// write the aliases into metainfo for faster access later on
-			if (is_array($aliases))
+			if (is_array($aliases) && $oid)
 			{
 				$this->upd_object(array(
 					"oid" => $oid,
@@ -698,7 +698,7 @@ class aliasmgr extends aw_template
 
 
 		// paneme aliases kirja
-		if (is_array($_aliases))
+		if (is_array($_aliases) && $oid)
 		{
 			$this->upd_object(array(
 				"oid" => $oid,
