@@ -196,23 +196,12 @@ function MM_swapImage() { //v3.0
 </head>
 <body bgcolor="#FFFFFF" onLoad="MM_preloadImages('{VAR:baseurl}/images/blue/awicons/new_over.gif','{VAR:baseurl}/images/blue/awicons/save_over.gif','{VAR:baseurl}/images/blue/awicons/cut_over.gif','{VAR:baseurl}/images/blue/awicons/copy_over.gif','{VAR:baseurl}/images/blue/awicons/paste_over.gif','{VAR:baseurl}/images/blue/awicons/delete_over.gif','{VAR:baseurl}/images/blue/awicons/edit_over.gif','{VAR:baseurl}/images/blue/awicons/refresh_over.gif','{VAR:baseurl}/images/blue/awicons/search_over.gif','{VAR:baseurl}/images/blue/awicons/bugtrack_over.gif')">
 
-<form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
 
 
 
-
-
-<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="1" HEIGHT="2" BORDER=0 ALT=""><br>
-<table border=0 width="100%" cellspacing="0" cellpadding="2">
-<tr>
-<td align="left" class="sitehead">Objektid</td>
-<td align="right" class="sitehead"><!--<a href="javascript:self.close();"><IMG SRC="{VAR:baseurl}/automatweb/images/close.gif" WIDTH="14" HEIGHT="13" BORDER=0 ALT="Close window"></a>--></td>
-</tr>
-</table>
-
-<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
+<form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
 <tr><td class="tableborder">
 
 	<!--tabelshadow-->
@@ -271,9 +260,11 @@ SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
 href="javascript:document.foo.submit()" onClick="return ddelete()"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><IMG
 SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
-href="javascript:document.foo.submit()" onClick="return doSubmit('change')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
-SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--naita--><!--<a
-href="javascript:window.parent.objects.location.href=show()">{VAR:LC_MENUEDIT_SHOW}</a>--><!--refresh--><a
+href="javascript:document.foo.submit()" onClick="return doSubmit('change')" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('edit','','{VAR:baseurl}/automatweb/images/blue/awicons/edit_over.gif',1)"><img name="edit" alt="{VAR:LC_MENUEDIT_CHANGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/edit.gif" width="25" height="25"></a><!--show--><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:window.parent.objects.location.href=show()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('show','','{VAR:baseurl}/automatweb/images/blue/awicons/show_over.gif',1)"><img name="show" alt="{VAR:LC_MENUEDIT_SHOW}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/show.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--refresh--><a
 href="#" onClick='window.location.reload()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','{VAR:baseurl}/automatweb/images/blue/awicons/refresh_over.gif',1)"><img name="refresh" alt="{VAR:LC_MENUEDIT_REFRESH}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--search--><!--<a
 href="#" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('search','','{VAR:baseurl}/automatweb/images/blue/awicons/search_over.gif',1)"><img name="search" alt="Search" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/search.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="">--><!--bugtrack--><a
 href="orb.aw?action=list&class=bugtrack&filt=all" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bugtrack','','{VAR:baseurl}/automatweb/images/blue/awicons/bugtrack_over.gif',1)"><img name="bugtrack" alt="Bugtrack" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/bugtrack.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
@@ -294,18 +285,6 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" heigh
 
 </td></tr>
 </table>
-
-
-
-{VAR:yah}
-
-
-
-
-
-
-
-
 
 
 
