@@ -248,7 +248,7 @@ class shop_admin extends shop_base
 		$ob = new objects;
 		$this->do_core_admin_ofs($shop_id);
 
-		$shts = $this->listall_shop_tables();
+/*		$shts = $this->listall_shop_tables();
 
 		$its = $this->listall_item_types();
 
@@ -262,12 +262,12 @@ class shop_admin extends shop_base
 				"tables" => $this->picker($tablesfortypes[$i_id],$shts)
 			));
 			$stt.=$this->parse("STAT_TABLE");
-		}
+		}*/
 
 		$this->vars(array(
 			"root_menu" => $this->picker($sh["root_menu"],$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit_system_other", array("shop_id" => $shop_id)),
-			"STAT_TABLE" => $stt
+//			"STAT_TABLE" => $stt
 		));
 		return $this->do_system_menu($shop_id);
 	}
@@ -280,14 +280,14 @@ class shop_admin extends shop_base
 
 		$this->do_core_save_ofs($shop_id, $order_form,$of_rep,$of_op,$of_op_long,$of_op_search);
 
-		$this->db_query("DELETE FROM shop_table2item_type");
+/*		$this->db_query("DELETE FROM shop_table2item_type");
 		if (is_array($type_tables))
 		{
 			foreach($type_tables as $type_id => $table_id)
 			{
 				$this->db_query("INSERT INTO shop_table2item_type(type_id,table_id) VALUES('$type_id','$table_id')");
 			}
-		}
+		}*/
 		return $this->mk_my_orb("system_other", array("shop_id" => $shop_id), "", false, true);
 	}
 
@@ -305,7 +305,9 @@ class shop_admin extends shop_base
 			"system_invoice" => array("name" => "Invoice", "url" => $this->mk_my_orb("system_invoice", array("shop_id" => $shop_id), "",false,true)),
 			"system_nrseries" => array("name" => "Number series", "url" => $this->mk_my_orb("system_nrseries", array("shop_id" => $shop_id), "",false,true)),
 			"system_catalogues" => array("name" => "Catalogues", "url" => $this->mk_my_orb("system_catalogues", array("shop_id" => $shop_id), "",false,true)),
-			"system_other" => array("name" => "Other", "url" => $this->mk_my_orb("system_other", array("shop_id" => $shop_id), "",false,true))
+			"system_other" => array("name" => "Other", "url" => $this->mk_my_orb("system_other", array("shop_id" => $shop_id), "",false,true)),
+			"system_stattables" => array("name" => "Statistics tables", "url" => $this->mk_my_orb("system_stattables", array("shop_id" => $shop_id), "",false,true)),
+			"system_items" => array("name" => "Select items", "url" => $this->mk_my_orb("system_items", array("shop_id" => $shop_id), "",false,true)),
 		);
 
 		return $this->do_menu($menu_items).$ret;
@@ -434,15 +436,6 @@ class shop_admin extends shop_base
 		$t_from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
 		$t_to = mktime($to["hour"],$to["minute"],0,$to["month"],$to["day"],$to["year"]);
 
-		if (is_array($art_types))
-		{
-			$a_types = array();
-			foreach($art_types as $typid)
-			{
-				$a_types[$typid] = $typid;
-			}
-		}
-
 		if (is_array($arts))
 		{
 			$a_items = array();
@@ -451,18 +444,41 @@ class shop_admin extends shop_base
 				$a_items[$aid] = $aid;
 			}
 		}
-
-		if (!$show_type)
+	
+		$aarts = $this->get_user_item_picker();
+		reset($aarts);
+		while (list($aid,$aname)  = each($aarts))
 		{
-			$show_type = 2;
+			$itm = "";
+			$this->vars(array(
+				"art_name" => $aname,
+				"item_id" => $aid,
+				"sel_item" => checked($a_items[$aid] == $aid)
+			));
+			$itm.=$this->parse("SUBITEM");
+
+			if (list($aid,$aname)  = each($aarts))
+			{
+				$this->vars(array(
+					"art_name" => $aname,
+					"item_id" => $aid,
+					"sel_item" => checked($a_items[$aid] == $aid)
+				));
+				$itm.=$this->parse("SUBITEM");
+			}
+			else
+			{
+				$itm.=$this->parse("NOITEM");
+			}
+			$this->vars(array("SUBITEM" => $itm,"NOITEM" => ""));
+			$rtm.=$this->parse("ITEM");
 		}
+
 		$this->vars(array(
+			"ITEM" => $rtm,
 			"t_from" => $de->gen_edit_form("from", $t_from),
 			"t_to"	=> $de->gen_edit_form("to", $t_to),
 			"reforb" => $this->mk_reforb("detailed_reservations", array("shop_id" => $shop_id,"no_reforb" => true,"search" => true)),
-			"art_types" => $this->multiple_option_list($a_types,$this->listall_item_types()),
-			"arts" => $this->multiple_option_list($a_items,$this->get_item_picker()),
-			"all_art_types" => checked($all_art_types==1),
 			"all_arts" => checked($all_arts==1),
 			"show_type_1" => checked($show_type == 1),
 			"show_type_2" => checked($show_type == 2),
@@ -475,7 +491,7 @@ class shop_admin extends shop_base
 			$items = array();
 			if ($all_arts) 
 			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS,));
+				$items = $this->get_user_item_picker(array("type" => ALL_PROPS));
 				$by_type = false;
 			}
 			else
@@ -484,63 +500,41 @@ class shop_admin extends shop_base
 				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND id IN (".join(",",$this->map("%d",$a_items)).")"));
 				$by_type = false;
 			}
-			else
-			if ($all_art_types)
-			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS));
-				$by_type = true;
-			}
-			else
-			if (is_array($art_types))
-			{
-				$items = $this->get_item_picker(array("type" => ALL_PROPS, "constraint" => " AND type_id IN (".join(",",$this->map("%d",$a_types)).")"));
-				$by_type = true;
-			}
 			
-			$tablesfortypes = $this->get_tables_for_types();
+			$tablesfortypes = $this->get_user_tables_for_types();
 			classload("shop_table");
-			if ($show_type == 1)
+			// nyt kui on ajavahemike kaupa siis tuleb igale kaubale eraldi tabel
+			// tabelit n2idatakse vastavalt kauba tyybile
+			reset($items);
+			while(list($i_id,$i_arr) = each($items))
 			{
-				// nyt kui on ajavahemike kaupa siis tuleb igale kaubale eraldi tabel
-				// tabelit n2idatakse vastavalt kauba tyybile
-				foreach($items as $i_id => $i_arr)
+				$tb = "";
+				$st = new shop_table;
+			
+				$this->vars(array(
+					"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],
+					"table" => $st->show(array("id" => $tablesfortypes[$i_arr["type_id"]], "item_id" => $i_id,"from" => $t_from, "to" => $t_to,"show_type" => "periods"))
+				));
+				$tb.=$this->parse("DATE_TABLE");
+
+				if (list($i_id,$i_arr) = each($items))
 				{
 					$st = new shop_table;
 				
 					$this->vars(array(
-						"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."/".$i_arr["name"],
+						"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],
 						"table" => $st->show(array("id" => $tablesfortypes[$i_arr["type_id"]], "item_id" => $i_id,"from" => $t_from, "to" => $t_to,"show_type" => "periods"))
 					));
 					$tb.=$this->parse("DATE_TABLE");
 				}
-				$this->vars(array("DATE_TABLE" => $tb));
-			}
-			else
-			{
-				// kui on summeeritult, siis on iga kauba jaoks yx rida ja iga kauba tyybi kohta eraldi tabel
-				// niisis k6igepealt leiame k6ik kaubatyybid
-				$itypes = array();
-				$i_join = array();
-				foreach($items as $i_id => $i_arr)
+				else
 				{
-					if ($i_arr["type_id"])
-					{
-						$itypes[$i_arr["type_id"]] = $i_arr["type_id"];
-						$i_join[] = $i_id;
-					}
+					$tb.=$this->parse("NO_TABLE");
 				}
-
-				foreach($itypes as $type_id)
-				{
-					$st = new shop_table;
-					$this->vars(array(
-						"item_type_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $type_id","name"),
-						"table" => $st->show(array("id" => $tablesfortypes[$type_id], "type_id" => ($by_type ? $type_id : 0),"group_by" => "item_id","clause" => "item_type = $type_id AND item_id IN(".join(",",$i_join).")","from" => $t_from, "to" => $t_to))
-					));
-					$tb.=$this->parse("SUM_TABLE");
-				}
-				$this->vars(array("SUM_TABLE" => $tb));
+				$this->vars(array("DATE_TABLE" => $tb,"NO_TABLE" => ""));
+				$dr.=$this->parse("DT_ROW");
 			}
+			$this->vars(array("DT_ROW" => $dr));
 		}
 		return $this->parse();
 	}
@@ -598,7 +592,8 @@ class shop_admin extends shop_base
 			"arts" => $this->multiple_option_list($a_items,$this->get_item_picker()),
 			"all_art_types" => checked($all_art_types==1),
 			"all_arts" => checked($all_arts==1),
-			"print_url" => $this->mk_my_orb("passengers", $arr+array("print" => true), "",false, true)
+			"print_url" => $this->mk_my_orb("passengers", $arr+array("print" => true), "",false, true),
+			"use_end" => checked($use_end == 1)
 		));
 		
 		if ($search)
@@ -644,7 +639,12 @@ class shop_admin extends shop_base
 				$ijss = " AND item_id IN(".$ijss.")";
 			}
 
-			$this->db_query("SELECT order_id,MIN(period) AS period FROM order2item WHERE period >= $t_from AND period <= $t_to $ijss GROUP BY order_id");
+			$fun = "MIN";
+			if ($use_end)
+			{
+				$fun = "MAX";
+			}
+			$this->db_query("SELECT order_id,$fun(period) AS period FROM order2item WHERE period >= $t_from AND period <= $t_to $ijss GROUP BY order_id");
 			while ($row = $this->db_next())
 			{
 				$order_ids[] = $row["order_id"];
@@ -713,6 +713,7 @@ class shop_admin extends shop_base
 			"arts" => $this->picker($art,$ipi),
 			"all_art_types" => checked($all_art_types==1),
 			"all_arts" => checked($all_arts==1),
+			"use_end" => checked($use_end)
 		));
 
 		if ($search)
@@ -779,7 +780,12 @@ class shop_admin extends shop_base
 			foreach($orders as $oid => $odata)
 			{
 				// we do the time filtering here cause we can't do it in the query because then we might skip opver some important items
-				if ($odata["has_item"] && $odata["from"] >= $t_from && $odata["from"] <= $t_to)
+				$_tm = $odata["from"];
+				if ($use_end)
+				{
+					$_tm = $odata["to"];
+				}
+				if ($odata["has_item"] && $_tm >= $t_from && $_tm <= $t_to)
 				{
 					$oids[] = $oid;
 				}
@@ -848,6 +854,184 @@ class shop_admin extends shop_base
 			));
 		}
 		return $this->parse();
+	}
+
+	function do_system_stattables($arr)
+	{
+		extract($arr);
+		$this->read_template("admin_system_stattables.tpl");
+	
+		$grps = array();
+		$this->db_query("SELECT distinct(gid) as gid FROM shop_table2item_type");
+		while($row = $this->db_next())
+		{
+			if ($row["gid"])
+			{
+				$grps[$row["gid"]] = $row["gid"];
+			}
+		}
+
+		classload("users");
+		$ags = array();
+		$us = new users;
+		$us->list_groups(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+		while($row = $us->db_next())
+		{
+			$ags[$row["gid"]] = $row["name"];
+		}
+
+		$itypes = $this->listall_item_types();
+
+		$map = array();
+		$this->db_query("SELECT * FROM shop_table2item_type");
+		while ($row = $this->db_next())
+		{
+			$map[$row["type_id"]][$row["gid"]] = $row["table_id"];
+		}
+
+		$tables = $this->listall_shop_tables();
+
+		foreach($grps as $gid)
+		{
+			$this->vars(array(
+				"grp_name" => $ags[$gid]
+			));
+			$gn.=$this->parse("GRP_NAME");
+		}
+		$this->vars(array("GRP_NAME" => $gn));
+
+		foreach($itypes as $typid => $typname)
+		{
+			$this->vars(array(
+				"type_name" => $typname
+			));
+			$tns=$this->parse("TYPE_NAME");
+
+			$col = "";
+			foreach($grps as $gid)
+			{
+				$this->vars(array(
+					"tables" => $this->picker($map[$typid][$gid],$tables),
+					"grp" => $gid,
+					"type" => $typid
+				));
+				$col.=$this->parse("COL");
+			}
+			$this->vars(array(
+				"COL" => $col,
+				"TYPE_NAME" => $tns
+			));
+			$row.=$this->parse("ROW");
+		}
+		$this->vars(array(
+			"TYPE_NAME" => $tns,
+			"ROW" => $row
+		));
+
+
+		$this->vars(array(
+			"groups" => $this->multiple_option_list($grps,$ags),
+			"reforb" => $this->mk_reforb("submit_system_stattables", array("shop_id" => $shop_id))
+		));
+		return $this->do_system_menu($shop_id);
+	}
+
+	function submit_system_stattables($arr)
+	{
+		extract($arr);
+
+		$this->db_query("DELETE FROM shop_table2item_type");
+		if (is_array($groups))
+		{
+			$itypes = $this->listall_item_types();
+			foreach($groups as $gid)
+			{
+				foreach($itypes as $typid => $typname)
+				{
+					$this->db_query("INSERT INTO shop_table2item_type(table_id,type_id,gid) VALUES('".$tables[$gid][$typid]."','$typid','$gid')");
+				}
+			}
+		}
+		
+		return $this->mk_my_orb("system_stattables", array("shop_id" => $shop_id),"",false,true);
+	}
+
+	function do_system_items($arr)
+	{
+		extract($arr);
+		$this->read_template("admin_system_items.tpl");
+
+		classload("users");
+		$ags = array();
+		$us = new users;
+		$us->list_groups(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+		while($row = $us->db_next())
+		{
+			$ags[$row["gid"]] = $row["name"];
+		}
+
+		classload("config");
+		$con = new db_config;
+		$its = $con->get_simple_config("show_items");
+		classload("php");
+		$php = new php_serializer;
+		$_its = $php->php_unserialize($its);
+
+		$all_its = $this->get_item_picker();
+
+		if (is_array($_its["groups"]))
+		{
+			foreach($_its["groups"] as $gid => $data)
+			{
+				$this->vars(array(
+					"grp_name" => $ags[$gid],
+					"all_items" => checked($data["all_items"] == 1),
+					"items" => $this->multiple_option_list($data["items"], $all_its),
+					"gid" => $gid
+				));
+				$gs.=$this->parse("GRP");
+			}
+		}
+
+		$this->vars(array(
+			"GRP" => $gs,
+			"groups" => $this->multiple_option_list($_its["groups"], $ags),
+			"reforb" => $this->mk_reforb("submit_system_items", array("shop_id" => $shop_id))
+		));
+		return $this->do_system_menu($shop_id);
+	}
+
+	function submit_system_items($arr)
+	{
+		extract($arr);
+
+		$its = array();
+
+		if (is_array($groups))
+		{
+			foreach($groups as $gid)
+			{
+				$its["groups"][$gid]["all_items"] = $all_items[$gid];
+				$gpis = array();
+				if (is_array($gpitems[$gid]))
+				{
+					foreach($gpitems[$gid] as $iid)
+					{
+						$gpis[$iid] = $iid;
+					}
+				}
+				$its["groups"][$gid]["items"] = $gpis;
+			}
+		}
+			
+		classload("php");
+		$php = new php_serializer;
+		$_its = $php->php_serialize($its);
+		classload("config");
+		$con = new config;
+		$con->set_simple_config("show_items", $_its);
+
+		return $this->mk_my_orb("system_items", array("shop_id" => $shop_id),"",false,true);
 	}
 }
 

@@ -541,7 +541,8 @@ class shop_table extends shop_base
 			// if objecxt has some periods attached, get those
 			classload("planner");
 			$pl = new planner;
-			$reps = $pl->get_events(array("start" => $from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
+			$_from = $from < $it["per_from"] ? $it["per_from"] : $from;
+			$reps = $pl->get_events(array("start" => $_from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
 			if (is_array($reps))
 			{
 				foreach($reps as $time => $evnt)
@@ -558,7 +559,7 @@ class shop_table extends shop_base
 				// find out the difference in days between the actual date and the showable period start date
 				$diff = ($from - $it["per_from"]) / (24*3600);
 				// now find out the number of days we need to add to the showable period start date to get the correct date
-				$to_add = $diff % 7;
+				$to_add = 7-($diff % 7);
 				$cur_date = $from + ($to_add*24*3600);
 				$cur_date = ($cur_date < $it["per_from"] ? $it["per_from"] : $cur_date);
 				while (($cur_date + 24*3600*7) < $to)

@@ -142,7 +142,7 @@ class shop_base extends aw_template
 	function listall_items($type = FOR_SELECT,$constraint = "")
 	{
 		$ret = array();
-		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE class_id = ".CL_SHOP_ITEM." AND status = 2 $constraint");
+		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE class_id = ".CL_SHOP_ITEM." AND status = 2 $constraint ORDER BY jrk");
 		while ($row = $this->db_next())
 		{
 			if ($type == FOR_SELECT)
@@ -305,18 +305,80 @@ class shop_base extends aw_template
 		return $ret;
 	}
 
+	function get_user_tables_for_types()
+	{
+		global $uid,$all_users_grp;
+		$gid = $this->db_fetch_field("SELECT groups.gid as gid FROM groupmembers LEFT JOIN groups ON groups.gid = groupmembers.gid WHERE groupmembers.uid = '$uid' AND groupmembers.gid != $all_users_grp AND (groups.type = ".GRP_REGULAR." OR groups.type = ".GRP_DYNAMIC.")  ORDER BY groups.priority DESC","gid");
+
+		$ret = array();
+		$this->db_query("SELECT * FROM shop_table2item_type WHERE gid = $gid");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["type_id"]] = $row["table_id"];
+		}
+		return $ret;
+	}
+
+	////
+	// !returns the items that should be shown to the currently logged in user
+	function get_user_item_picker($arr = array())
+	{
+		classload("config");
+		$con = new config;
+		$_its = $con->get_simple_config("show_items");
+		classload("php");
+		$php = new php_serializer;
+		$its = $php->php_unserialize($_its);
+
+		// now find the group with the biggest priority that the user belongs to.
+		global $uid,$all_users_grp;
+
+		$gid = $this->db_fetch_field("SELECT groups.gid as gid FROM groupmembers LEFT JOIN groups ON groups.gid = groupmembers.gid WHERE groupmembers.uid = '$uid' AND groupmembers.gid != $all_users_grp AND (groups.type = ".GRP_REGULAR." OR groups.type = ".GRP_DYNAMIC.") ORDER BY groups.priority DESC","gid");
+
+		$arr["short_name"] = 1;
+		if ($its["groups"][$gid]["all_items"] == 1)
+		{
+			return $this->get_item_picker($arr);
+		}
+		else
+		{
+			return $this->get_item_picker(array("item_ids" => $its["groups"][$gid]["items"],"type" => $arr["type"],"short_name" => 1));
+		}
+	}
+
 	////
 	// !returns all items that are not deleted and not under deleted menus either
 	// parameters: constraint = string that is placed in WHERE clause of item select query
 	// type == FOR_SELECT - returns array of item_id => item_name
 	// type == ALL_PROPS - returns array of item_id => item_props_array
+	// item_ids = array, if set, specifies the ids if items to include
 	function get_item_picker($arr = array())
 	{
 		extract($arr);
 		classload("objects");
 		$ob = new objects;
-		$menus = $ob->get_list(false,false,($root_menu ? $root_menu : -1));
-		$items = $this->listall_items(ALL_PROPS,$arr["constraint"]);
+		if ($short_name == 1)
+		{
+			$this->db_query("SELECT oid,name FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0");
+			while ($row = $this->db_next())
+			{
+				$menus[$row["oid"]] = $row["name"];
+			}
+		}
+		else
+		{
+			$menus = $ob->get_list(false,false,($root_menu ? $root_menu : -1));
+		}
+
+		if (is_array($item_ids))
+		{
+			$cons = " AND oid IN (".join(",",$this->map("%d",$item_ids)).")";
+			$items = $this->listall_items(ALL_PROPS,$cons);
+		}
+		else
+		{
+			$items = $this->listall_items(ALL_PROPS,$arr["constraint"]);
+		}
 		$ret = array();
 		foreach($items as $iid => $irow)
 		{
