@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.152 2003/10/02 09:56:45 duke Exp $
+// $Id: class_base.aw,v 2.153 2003/10/06 13:32:58 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -156,6 +156,8 @@ class class_base extends aw_template
 		{
 			$this->load_obj_data(array("id" => $this->id));
 
+			// it is absolutely essential that pre_edit is called
+			// only for existing objects
 			if (method_exists($this->inst,"callback_pre_edit"))
 			{
 				$this->inst->callback_pre_edit(array(
@@ -393,6 +395,7 @@ class class_base extends aw_template
 				$this->cfgform_id = $_tmp["oid"];
 				$this->cfgform = $_tmp;
 			};
+
 		}
 		elseif ($this->clid == CL_DOCUMENT)
 		{
@@ -754,7 +757,7 @@ class class_base extends aw_template
 		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
 		// just go with the iframe layout thingie. This frees us from the unneccessary
 		// wrappers inside the class_base.
-		if (isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]) && !$this->is_rel)
+		if (isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]))
 		{
 			$link = "";
 			if (isset($this->id))
