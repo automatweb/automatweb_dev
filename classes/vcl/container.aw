@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/container.aw,v 1.1 2004/04/07 17:18:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/container.aw,v 1.2 2004/04/12 14:07:54 kristo Exp $
 // this is used to use contentmgmt classes inside class_base forms
 
 class container extends class_base
@@ -21,6 +21,18 @@ class container extends class_base
 				$pl = get_instance(CL_POLL);
 				$val = $pl->gen_user_html(126591);
 				*/
+				break;
+
+			case "menu_area":
+				// siia on vaja koodi, mis joonistab menüü
+				$val = "here be dragons";
+				$ss = get_instance("contentmgmt/site_show");
+				$val = $ss->do_show_menu_template(array(
+					"template" => "test_area.tpl",
+					"mdefs" => array(
+						111156 => "TEST"
+					)
+				));
 				break;
 		};
 
