@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.20 2002/01/30 01:09:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.21 2002/01/30 01:12:05 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -1012,6 +1012,12 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		{
 			$aliases[$row["class_id"]][] = $row;
 		};
+
+		$by_alias = array();
+		foreach($this->defs as $key => $val)
+		{
+			$by_alias[$val["alias"]] = $key;
+		}  
 
 		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
 
