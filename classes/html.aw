@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.70 2005/03/18 11:31:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.71 2005/03/24 10:00:31 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -10,10 +10,12 @@ class html extends aw_template
 	// selected(int)
 	// onchange(string)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function select($args = array())
 	{
 		extract($args);
 		$disabled = ($disabled ? " disabled" : "");
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$sz = $mz = $onc = $cl = "";
 		// things that make one go humm.. -- duke
 		if (empty($selected) && isset($value))
@@ -53,7 +55,7 @@ class html extends aw_template
 		$sel_array = @array_flip($sel_array);
 
 		$optstr = "";
-		
+
 		// implementing a thing called optgroup -- ahz
 		foreach(safe_array($optgroup) as $key => $val)
 		{
@@ -65,7 +67,7 @@ class html extends aw_template
 			}
 			$optstr .= "</optgroup>\n";
 		}
-		
+
 		foreach(safe_array($options) as $k => $v)
 		{
 			$selected = isset($sel_array[$k]) ? " selected " : "";
@@ -75,7 +77,7 @@ class html extends aw_template
 		{
 			$onc = 'onchange="'.$onchange.'"';
 		}
-		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled>\n$optstr</select>\n";
+		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>\n";
 	}
 
 	////
@@ -84,17 +86,19 @@ class html extends aw_template
 	// value(string)
 	// size(int)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function textbox($args = array())
 	{
 		extract($args);
 		$disabled = ($disabled ? " disabled" : "");
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
 		$id = str_replace("[","_",$name);
 		$id = str_replace("]","_",$id);
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
-		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"" . $disabled . " />\n";
+		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" $disabled $textsize />\n";
 	}
 
 	////
@@ -105,12 +109,14 @@ class html extends aw_template
 	// rows(int)
 	// wrap(string)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function textarea($args = array())
 	{
 		extract($args);
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
 		$value = isset($value) ? $value : "";
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		// now, the browser detection is best done in javascript
 		if (!empty($richtext))
 		{
@@ -126,7 +132,7 @@ class html extends aw_template
 			$disabled = ($disabled ? " disabled" : "");
 			$wrap = isset($wrap) ? $wrap : "soft";
 			$style = isset($style) ? " style='$style' " : "";
-			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style" . $disabled . ">$value</textarea>\n";
+			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
 		};
 		return $retval;
 	}
@@ -162,18 +168,30 @@ class html extends aw_template
 	// name(string)
 	// value(string)
 	// size(int)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function password($args = array())
 	{
 		extract($args);
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$size = isset($size) ? $size : 40;
-		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength' $textsize />\n";
 	}
 
 	////
 	// !Simple text
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function text($args = array())
 	{
-		return $args["value"];
+		if ($textsize)
+		{
+			$element = '<span style="font-size: ' . $textsize . ';">' . $args["value"] . '</span>';
+		}
+		else
+		{
+			$element = $args["value"];
+		}
+
+		return $element;
 	}
 
 	////
@@ -190,9 +208,11 @@ class html extends aw_template
 	////
 	// !File upload
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function fileupload($args = array())
 	{
 		extract($args);
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$disabled = ($disabled ? " disabled" : "");
 		$rv = "";
 
@@ -201,7 +221,7 @@ class html extends aw_template
 			$rv = $value . "<br />";
 		}
 
-		return $rv . "<input type='file' id='$name' name='$name'" . $disabled . " />\n";
+		return $rv . "<input type='file' id='$name' name='$name' $disabled $textsize />\n";
 	}
 
 	////
@@ -210,11 +230,12 @@ class html extends aw_template
 	// value(string)
 	// checked(bool)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function checkbox($args = array())
 	{
 		extract($args);
 		$checked = isset($checked) ? checked($checked) : '';
-		$disabled = ($disabled ? " disabled" : "");
+		$disabled = ($disabled ? "disabled" : "");
 		$capt = '';
 		if (empty($value))
 		{
@@ -227,9 +248,14 @@ class html extends aw_template
 		if (isset($caption))
 		{
 			$capt .= " " . $caption;
-		};
+		}
 
-		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked " . $disabled . "/> $capt\n";
+		if ($textsize and $capt)
+		{
+			$capt = '<span style="font-size: ' . $textsize . ';">' . $capt . '</span>';
+		}
+
+		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked $disabled /> $capt\n";
 		return $rv;
 	}
 
@@ -239,26 +265,36 @@ class html extends aw_template
 	// value(string)
 	// checked(bool)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function radiobutton($args = array())
 	{
 		extract($args);
 		$checked = checked($checked);
-		$disabled = ($disabled ? " disabled" : "");
-		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick'" . $disabled . " />\n $caption";
+		$disabled = ($disabled ? "disabled" : "");
+
+		if ($textsize and $caption)
+		{
+			$caption = '<span style="font-size: ' . $textsize . ';">' . $caption . '</span>';
+		}
+
+		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick' $disabled />\n $caption";
 	}
 
 	////
 	// !Submit button
 	// value(string)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function submit($args = array())
 	{
 		extract($args);
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+
 		if (isset($onclick))
 		{
 			$onclick = 'onclick="'.$onclick.'"';
 		}
 
-		return "<input id='cbsubmit' type='submit' name='$name' value='$value' class='$class' $onclick />\n";
+		return "<input id='cbsubmit' type='submit' name='$name' value='$value' class='$class' $onclick $textsize />\n";
 	}
 
 	////
@@ -266,16 +302,19 @@ class html extends aw_template
 	// value(string)
 	// onclick(string)
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function button($args = array())
 	{
 		extract($args);
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$disabled = ($disabled ? " disabled" : "");
-		return "<input type='".($type ? $type : "button")."' class='$class' value='$value' onClick=\"".$onclick."\"" . $disabled . " />\n";
+		return "<input type='".($type ? $type : "button")."' class='$class' value='$value' onClick=\"".$onclick."\" $disabled $textsize />\n";
 	}
 
 	////
 	// !Time selector
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function time_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -285,9 +324,19 @@ class html extends aw_template
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $m, $d, $y);
 
-		if ($disabled)
+		if ($disabled or $textsize)
 		{
-			$name = array ("name" => $args["name"], "disabled" => true);
+			$name = array ("name" => $args["name"]);
+
+			if ($disabled)
+			{
+				$name["disabled"] = true;
+			}
+
+			if ($textsize)
+			{
+				$name["textsize"] = $textsize;
+			}
 		}
 		else
 		{
@@ -300,6 +349,7 @@ class html extends aw_template
 	////
 	// !Datetime selector
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function datetime_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -341,9 +391,19 @@ class html extends aw_template
 			$val = $args['value'];
 		}
 
-		if ($disabled)
+		if ($disabled or $textsize)
 		{
-			$name = array ("name" => $args["name"], "disabled" => true);
+			$name = array ("name" => $args["name"]);
+
+			if ($disabled)
+			{
+				$name["disabled"] = true;
+			}
+
+			if ($textsize)
+			{
+				$name["textsize"] = $textsize;
+			}
 		}
 		else
 		{
@@ -356,6 +416,7 @@ class html extends aw_template
 	////
 	// !Date selector
 	// disabled(bool)
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function date_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -381,13 +442,23 @@ class html extends aw_template
 		{
 			$val = time();
 		}
-		
+
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
-		
-		if ($disabled)
+
+		if ($disabled or $textsize)
 		{
-			$name = array ("name" => $args["name"], "disabled" => true);
+			$name = array ("name" => $args["name"]);
+
+			if ($disabled)
+			{
+				$name["disabled"] = true;
+			}
+
+			if ($textsize)
+			{
+				$name["textsize"] = $textsize;
+			}
 		}
 		else
 		{
@@ -435,18 +506,20 @@ class html extends aw_template
 			onClick - onClick aktsioon
 			title - Kui mouse hoverib peal, siis mis info juttu näidata
 			caption - tekst mida näeb kasutaja
+			textsize(string) -- examples: "10px", "0.7em", "smaller".
 	*/
 	function href($args = array())
 	{
 		extract($args);
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$target = isset($target) ? " target='$target' " : "";
 		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
 		$title = isset($title) ? " alt='$title' title='$title' " : "";
-		return "<a href='$url' $target $title $onClick>$caption</a>";
+		return "<a href='$url' $target $title $onClick $textsize>$caption</a>";
 	}
 
 	////
-	// 
+	//
 	//
 	//
 	function popup($arr = array())
@@ -484,10 +557,12 @@ class html extends aw_template
 
 	////
 	// !html <span class='$class'>$content</span>
+	// textsize(string) -- examples: "10px", "0.7em", "smaller".
 	function span($args = array())
 	{
 		extract($args);
-		return '<span class="'.$class.'">'.$content.'</span>';
+		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+		return '<span class="' . $class . '" ' . $textsize . '>' . $content . '</span>';
 	}
 
 	function get_change_url($oid, $params = array(), $caption = false)

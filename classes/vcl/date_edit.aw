@@ -70,7 +70,8 @@ class date_edit
 	{
 		if (is_array ($varname))
 		{
-			$disabled = $varname["disabled"] ? " disabled" : "";
+			$textsize = isset ($varname["textsize"]) ? 'style="font-size: ' . (string) $varname["textsize"] . ';"' : "";
+			$disabled = isset ($varname["textsize"]) ? "disabled" : "";
 			$varname = $varname["name"];
 		}
 
@@ -110,7 +111,7 @@ class date_edit
 			switch($k)
 			{
 				case "year":
-					$retval .= sprintf("<select $clid name='%s[year]'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[year]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -123,11 +124,11 @@ class date_edit
 					break;
 
 				case "year_textbox":
-					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year' $disabled $textsize>\n",$this->varname);
 					break;
 
 				case "month":
-					$retval .= sprintf("<select $clid name='%s[month]'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[month]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -162,11 +163,11 @@ class date_edit
 					break;
 
 				case "month_textbox":
-					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month' $disabled $textsize>\n",$this->varname);
 					break;
 
 				case "day":
-					$retval .= sprintf("<select $clid name='%s[day]'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[day]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -179,11 +180,11 @@ class date_edit
 					break;
 
 				case "day_textbox":
-					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day' $disabled $textsize>\n",$this->varname);
 					break;
 
 				case "hour":
-					$retval .= sprintf("<select $clid name='%s[hour]'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[hour]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -196,11 +197,11 @@ class date_edit
 					break;
 
 				case "hour_textbox":
-					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour' $disabled $textsize>\n",$this->varname);
 					break;
 
 				case "minute":
-					$retval .= sprintf("<select $clid name='%s[minute]'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[minute]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -214,7 +215,7 @@ class date_edit
 					break;
 
 				case "minute_textbox":
-					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute'" . $disabled . ">\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute' $disabled $textsize>\n",$this->varname);
 					break;
 			}; // end switch
 		}; // end while
