@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.97 2003/06/27 13:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.98 2003/07/02 11:48:47 axel Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -187,7 +187,7 @@ if (!defined("DEFS"))
 				'min' => 3,
 				'max' => 30)
 			);
-		// defineerimata character set, bail out	
+		// defineerimata character set, bail out
 		if (!isset($sets[$set]))
 		{
 			return false;
@@ -234,6 +234,17 @@ if (!defined("DEFS"))
 		} 
 		return $valid;
 	};
+
+	////
+	// !if a is between z and y, return true else return false
+	// y < z
+	function between($a,$y,$z, $onTrue = true, $onFalse = false)
+	{
+		if (($a >= $y) && ($a <= $z))
+			return $onTrue;
+		else
+			return $onFalse;
+	}
 
 	////
 	// !Kas argument on e-maili aadress?
@@ -762,7 +773,7 @@ if (!defined("DEFS"))
 				echo $msg."<br>\n";
 			}
 		}
-		
+
 		// prints if the user has a cookie named debug1
 		function p1($msg)
 		{
