@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.26 2004/12/07 09:04:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.27 2004/12/08 08:35:01 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -50,6 +50,9 @@
 @property filter_by_char_field type=select
 @caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
 
+@property hide_table_content_by_default type=checkbox ch_value=1
+@caption &Auml;ra n&auml;ita vaikimisi tabeli sisu
+
 @groupinfo styles caption="Stiilid"
 @default group=styles
 @property title_bgcolor type=colorpicker
@@ -97,7 +100,7 @@ class object_treeview_v2 extends class_base
 		"select" => "Vali"
 	);
 
-	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "õ", "ä", "ö", "ü", "x", "y", "z");
+	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "&otilde;", "&auml;", "&ouml;", "&uuml;", "x", "y", "z");
 
 	function object_treeview_v2()
 	{
@@ -254,7 +257,16 @@ class object_treeview_v2 extends class_base
 		$fld = $d_inst->get_folders($d_o);
 
 		// get all objects to show
-		$ol = $d_inst->get_objects($d_o, $fld, $GLOBALS["tv_sel"]);
+		// if is checked, that objects won't be shown by default, then don't show them, unless
+		// there are set some url params (tv_sel, char)
+		if (($ob->meta("hide_table_content_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		{
+			$ol = array();
+		}
+		else
+		{
+			$ol = $d_inst->get_objects($d_o, $fld, $_GET["tv_sel"]);
+		}
 
 		// make folders
 		$this->vars(array(
@@ -280,9 +292,9 @@ class object_treeview_v2 extends class_base
 		$filters = $ob->meta("saved_filters");
 // filtering is taking place if one of the following conditions are present:
 // -> $filter variable is array and its element count is bigger than zero
-// -> $GLOBALS['tv_sel'] is not empty
-// -> $GLOBALS['char'] is not empty
-		if ((is_array($filters) && count($filters) > 0) || !empty($GLOBALS['tv_sel']) || !empty($GLOBALS['char']))
+// -> $_GET['tv_sel'] is not empty
+// -> $_GET['char'] is not empty
+		if ((is_array($filters) && count($filters) > 0) || !empty($_GET['tv_sel']) || !empty($_GET['char']))
 		{
 
 //			$ol_result = array();
@@ -313,22 +325,25 @@ class object_treeview_v2 extends class_base
 				}
 
 // if meta data fields are used as folders, then i need to do
-// some filtering according to $GLOBALS['tv_sel']
-				if(($d_o->prop("use_meta_as_folders") == 1) && empty($GLOBALS['char']))
+// some filtering according to $_GET['tv_sel']
+				if(($d_o->prop("use_meta_as_folders") == 1) && empty($_GET['char']))
 				{
-					if(!empty($GLOBALS['tv_sel']) && ($fld[$GLOBALS['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
+					if(!empty($_GET['tv_sel']) && ($fld[$_GET['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
 					{
+
+
 						unset($ol[$ol_key]);
+
 					}
 				}
-				if(!empty($GLOBALS['char']))
+// if there is char param set in the url, then filter objects by this fields value which is set by
+// filter_by_char_field property
+				if(!empty($_GET['char']))
 				{
 					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
-					if((strlen($GLOBALS['char']) == 1) && ($f[0] != $GLOBALS['char']))
+					if((strlen($_GET['char']) == 1) && ($f[0] != $_GET['char']))
 					{
 						unset($ol[$ol_key]);
-
-
 					}
 				}
 			}
@@ -443,7 +458,7 @@ class object_treeview_v2 extends class_base
 // groups are not made, if char param is present in url
 		foreach($ol as $odata)
 		{
-			if(($group_name != $odata[$group_field]) && empty($GLOBALS['char']))
+			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 			{
 				$this->vars(array(
 					"content" => $odata[$ob->prop("group_in_table")],
@@ -799,7 +814,7 @@ class object_treeview_v2 extends class_base
 				)
 			));
 		}
-		$tv->set_selected_item($GLOBALS["tv_sel"]);
+		$tv->set_selected_item($_GET["tv_sel"]);
 
 		$pms = array();
 		/*if (isset($GLOBALS["class"]))
