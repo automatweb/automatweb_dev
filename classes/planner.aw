@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.2 2001/05/16 03:09:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.3 2001/05/16 03:57:22 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -462,6 +462,12 @@ class planner extends calendar {
 		$q = "SELECT * FROM planner_repeaters WHERE eid = '$id'";
 		$this->db_query($q);
 		$rep = $this->db_next();
+		$colors = array(
+				"#000000" => "must",
+				"#990000" => "punane",
+				"#009900" => "roheline",
+				"#000099" => "sinine",
+			);
 		$this->vars(array(
 				"today" => "$d." . get_lc_month($m) . " $y",
 				"shour" => $this->picker($shour,$h_list),
@@ -475,6 +481,7 @@ class planner extends calendar {
 				"repeat_type" => $rep["dur_type"],
 				"repeat" => $rep["forever"],
 				"repcheck" => ($rep) ? "checked" : "",
+				"color" => $this->picker($row["color"],$colors),
 				"description" => $row["description"],
 				"reminder" => $row["reminder"],
 				"dayskip_type" => $rep["dayskip"],
@@ -529,6 +536,7 @@ class planner extends calendar {
 					start = '$start',
 					end = '$end',
 					title = '$title',
+					color = '$color',
 					place = '$place',
 					private = '$private',
 					reminder = '$reminder',
