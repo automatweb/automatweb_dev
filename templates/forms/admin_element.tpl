@@ -575,6 +575,15 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: CHECK_LENGTH -->
 
+<!-- SUB: SEARCH_PROPS -->
+<tr>
+<td class="fgtext">Otsingul t&auml;pne vaste:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_all_text' VALUE='1' {VAR:search_all_text}></td>
+<td class="fgtext">Jaga otsing s&otilde;nadeks:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_separate_words' VALUE='1' {VAR:search_separate_words}></td>
+</tr>
+<!-- END SUB: SEARCH_PROPS -->
+
 <!-- SUB: HAS_CONTROLLER -->
 <tr>
 <td class="fgtext">Vali elemendi sisestuse kontroller(id):</td>
