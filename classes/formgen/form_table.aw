@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.69 2004/10/08 15:23:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.70 2004/11/02 09:54:46 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -206,6 +206,7 @@ class form_table extends form_base
 				return;
 			}
 		}
+
 
 		$this->last_row_data = $dat;
 
