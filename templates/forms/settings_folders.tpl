@@ -7,6 +7,12 @@
 <td colspan=2 class="fform"><select name='ff_folder' class='small_button'>{VAR:ff_folder}</select></td>
 </tr>
 <tr>
+<td class="fform" colspan=2>Kataloog kuhu lisatakse t&uuml;&uuml;elemendid:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select name='newel_parent' class='small_button'>{VAR:ne_folder}</select></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_CATALOGUE_WHERE_SAVES_FORM_EL}:</td>
 </tr>
 <tr>
