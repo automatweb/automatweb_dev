@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.10 2002/11/14 12:38:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.11 2002/11/25 15:01:30 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2711,7 +2711,11 @@ class form_element extends aw_template
 			case "listbox":
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
-					$this->make_relation_listbox_content();
+					if ($this->entry != "")
+					{
+						// relation listbox can only have a value if the user has selected something!
+						$this->make_relation_listbox_content();
+					}
 				}
 
 				$sp = split("_", $this->entry, 10);

@@ -1328,7 +1328,18 @@ class form_db_base extends aw_template
 		$this->_fr_forms_used = array();
 		$this->form_rel_tree = array();
 
+		$frfo = aw_global_get("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels));
+		$frt = aw_global_get("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels));
+		if (is_array($frfo) && is_array($frt))
+		{
+			$this->_fr_forms_used = $frfo;
+			$this->form_rel_tree = $frt;
+			return;
+		}
+
 		$this->req_build_form_relation_tree($f_root, $no_reverse_rels);
+		aw_session_set("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels),$this->_fr_forms_used);
+		aw_session_set("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels), $this->form_rel_tree);
 //		echo "built form relations tree, starting from $f_root: <br><pre>", var_dump($this->form_rel_tree),"</pre> <Br>";
 	}
 
