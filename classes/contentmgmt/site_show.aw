@@ -14,6 +14,9 @@ class site_show extends class_base
 {
 	var $path;				// the path to the selected section
 	var $sel_section;		// the MENU that is selected - section can point to any object below it
+	var $sel_section_real;	// the MENU that is selected - section can point to any object below it - 
+							// this is the real object if translation is active - damn, it seems I can't make the translation
+							// thing COMPLETELY transparent after all :((((((((
 	var $sel_section_obj;	// the MENU OBJECT that is selected - section can point to any object below it
 	var $section_obj;		// the object instance for $section
 	var $properties;		// the properties gathered from menus in the path
@@ -70,6 +73,15 @@ class site_show extends class_base
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
+		if (aw_ini_get("config.object_translation"))
+		{
+			$ot = get_instance("translate/object_translation");
+			$this->sel_section_real = $ot->get_original($this->sel_section);
+		}
+		else
+		{
+			$this->sel_section_real = $this->sel_section;
+		}
 		$this->sel_section_obj = obj($this->sel_section);
 
 		$this->site_title = $this->sel_section_obj->name();
@@ -150,7 +162,9 @@ class site_show extends class_base
 			"comment" => "", // prop!
 			"tpl_view" => "", // prop!
 			"tpl_lead" => "",// prop!
-			"show_layout" => "" // prop!
+			"show_layout" => "",
+			"ip_allowed" => array(),
+			"ip_denied" => array()
 		);
 
 		$cnt = count($this->path);
@@ -160,11 +174,31 @@ class site_show extends class_base
 
 			foreach($this->properties as $key => $val)
 			{
-				// check whether this object has any properties that 
-				// none of the previous ones had
-				if (empty($this->properties[$key]) && $obj->class_id() == CL_MENU && $obj->prop($key))
+				if ($key == "ip_allowed")
 				{
-					$this->properties[$key] = $obj->prop($key);
+					$tipa = $obj->meta("ip_allow");
+					if (is_array($tipa) && count($tipa) > 0)
+					{
+						$this->properties[$key] = $tipa;
+					}
+				}
+				else
+				if ($key == "ip_denied")
+				{
+					$tipa = $obj->meta("ip_deny");
+					if (is_array($tipa) && count($tipa) > 0)
+					{
+						$this->properties[$key] = $tipa;
+					}
+				}
+				else
+				{
+					// check whether this object has any properties that 
+					// none of the previous ones had
+					if (empty($this->properties[$key]) && $obj->class_id() == CL_MENU && $obj->prop($key))
+					{
+						$this->properties[$key] = $obj->prop($key);
+					}
 				}
 			}
 		}
@@ -205,6 +239,77 @@ class site_show extends class_base
 		if ($this->properties["comment"])
 		{
 			$arr["comment"] = $this->properties["comment"];
+		}
+
+		if (count($this->properties["ip_allowed"]) > 0 || count($this->properties["ip_denied"]))
+		{
+			$this->do_check_ip_access(array(
+				"allowed" => $this->properties["ip_allowed"],
+				"denied" => $this->properties["ip_denied"]
+			));
+		}
+	}
+
+	////
+	// !checks if the current IP has access
+	// parameters:
+	//	allowed - array of addresses allowed
+	//	denied - array of addresses denied
+	//
+	// algorithm:
+	// if count(allowed) > 0 , then deny everything else, except allowed
+	// if count(denied) > 0, then allow everyone, except denied
+	function do_check_ip_access($arr)
+	{
+		extract($arr);
+		$cur_ip = aw_global_get("REMOTE_ADDR");
+
+		$ipa = get_instance("syslog/ipaddress");
+
+		if (count($allowed) > 0)
+		{
+			$deny = true;
+			foreach($allowed as $ipid => $t)
+			{
+				$ipo = obj($ipid);
+
+				if ($ipa->match($ipo->prop("addr"), $cur_ip))
+				{
+					$deny = false;
+				}
+			}
+
+			if ($deny)
+			{
+				$this->no_access_redir($this->section_obj->id());
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		if (count($denied) > 0)
+		{
+			$deny = false;
+			foreach($denied as $ipid => $t)
+			{
+				$ipo = obj($ipid);
+
+				if ($ipa->match($ipo->prop("addr"), $cur_ip))
+				{
+					$deny = true;
+				}
+			}
+
+			if ($deny)
+			{
+				$this->no_access_redir($this->section_obj->id());
+			}
+			else
+			{
+				return;
+			}
 		}
 	}
 
@@ -393,7 +498,6 @@ class site_show extends class_base
 			{
 				$filter["parent"] = $obj->id();
 			};
-
 			if ($obj->prop("ndocs") > 0)
 			{
 				$filter["limit"] = $obj->prop("ndocs"); 
@@ -428,7 +532,7 @@ class site_show extends class_base
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
-			
+
 			$documents = new object_list($filter);
 
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
@@ -1485,6 +1589,47 @@ class site_show extends class_base
 		$this->make_final_vars();		
 
 		return $this->parse().$this->build_popups();
+	}
+
+	////
+	// !Redirect the user if he/she didn't have the right to view that section
+	function no_access_redir($section)
+	{
+		$c = get_instance("config");
+		$ec = $c->get_simple_config("errors");
+		$ra = aw_unserialize($ec);
+			
+		$gidlist = aw_global_get("gidlist");
+		if (is_array($gidlist))
+		{
+			$d_gid = 0;
+			$d_pri = 0;
+			$d_url = "";
+			foreach($gidlist as $gid)
+			{
+				if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
+				{
+					$d_gid = $gid;
+					$d_pri = $ra[$gid]["pri"];
+					$d_url = $ra[$gid]["url"];
+				}
+			}
+			
+			if ($d_url != "")
+			{
+				if ($d_url != aw_global_get("REQUEST_URI"))
+				{
+					header("Location: $d_url");
+					die();
+				}
+				else
+				{
+					$this->raise_error(ERR_ACL_ERR,"Access denied and error redirects are defined.incorrectly. Please report this to the site administrator",1);
+				};
+					
+			}
+		}
+		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
 	}
 }
 ?>

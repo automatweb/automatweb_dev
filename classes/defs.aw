@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.103 2003/09/23 16:33:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.104 2003/09/24 11:46:08 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -740,6 +740,18 @@ if (!defined("DEFS"))
 				aw_cache_set("solved",$addr,$ret);
 			};
 			return array($ret,$addr);
+		}
+
+		////
+		// !returns the ip address that resolves to $name
+		function name2ip($name)
+		{
+			if (!($ret = aw_cache_get("name2ip_solved",$name)))
+			{
+				$ret = gethostbyname($name);
+				aw_cache_set("nam2ip_solved",$name,$ret);
+			};
+			return $ret;
 		}
 
 		////

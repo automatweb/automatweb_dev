@@ -490,6 +490,15 @@
             <method>serialize</method>
             <group>show</group>
       </property>
+      <property>
+            <name>ip</name>
+            <type>table</type>
+            <store>no</store>
+            <group>ip</group>
+            <no_caption>1</no_caption>
+            <table>menu</table>
+            <field>ip</field>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -522,6 +531,9 @@
                   <caption>Eksport</caption>
                   <submit>no</submit>
             </import_export>
+            <ip>
+                  <caption>IP Aadressid</caption>
+            </ip>
       </groupinfo>
       <tableinfo>
             <menu>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.66 2003/09/23 16:34:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.67 2003/09/24 11:46:08 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -170,6 +170,8 @@
 
 	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
+	@property ip type=table store=no group=ip no_caption=1
+
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
@@ -182,6 +184,7 @@
 	@groupinfo presentation caption=Presentatsioon
 	@groupinfo show caption=Näitamine
 	@groupinfo import_export caption=Eksport submit=no
+	@groupinfo ip caption="IP Aadressid"
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 	@classinfo trans_id=TR_MENU
@@ -192,6 +195,10 @@ define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
 define("RELTYPE_SHOW_AS_CALENDAR",3);
 define("RELTYPE_SHOW_AS_LAYOUT",4);
 define("RELTYPE_SEEALSO",5);
+define("RELTYPE_IP",6);
+
+define("IP_ALLOWED", 1);
+define("IP_DENIED", 2);
 
 class menu extends class_base
 {
@@ -307,6 +314,62 @@ class menu extends class_base
 					'DESC' => "Suurem (uuem) enne",
 					'ASC' => "V&auml;iksem (vanem) enne",
 				);
+				break;
+
+			case "ip":
+				$t = &$args["prop"]["obj_inst"];
+				$t->define_field(array(
+					"name" => "ip_name",
+					"caption" => "IP Nimi",
+					"sortable" => 1,
+					"align" => "center"
+				));
+				$t->define_field(array(
+					"name" => "ip",
+					"caption" => "IP Aadress",
+					"sortable" => 1,
+					"align" => "center"
+				));
+				$t->define_field(array(
+					"name" => "allowed",
+					"caption" => "Lubatud",
+					"sortable" => 0,
+					"align" => "center"
+				));
+				$t->define_field(array(
+					"name" => "denied",
+					"caption" => "Keelatud",
+					"sortable" => 0,
+					"align" => "center"
+				));
+				
+				$o = obj($args["obj"]["oid"]);
+
+				$allow = $o->meta("ip_allow");
+				$deny = $o->meta("ip_deny");
+
+				$conn = $o->connections_from(array(
+					"type" => RELTYPE_IP
+				));
+				foreach($conn as $c)
+				{
+					$c_o = $c->to();
+			
+					$t->define_data(array(
+						"ip_name" => $c_o->name(),
+						"ip" => $c_o->prop("addr"),
+						"allowed" => html::radiobutton(array(
+							"name" => "ip[".$c_o->id()."]",
+							"checked" => $allow[$c_o->id()] == 1,
+							"value" => IP_ALLOWED
+						)),
+						"denied" => html::radiobutton(array(
+							"name" => "ip[".$c_o->id()."]",
+							"checked" => $deny[$c_o->id()] == 1,
+							"value" => IP_DENIED
+						))
+					));
+				}
 				break;
 		};
 		return $retval;
@@ -547,9 +610,30 @@ class menu extends class_base
 				$metadata["pm_url_menus"] = $form_data["pm_url_menus"];
 				$metadata["pm_url_admin"] = $form_data["pm_url_admin"];
 				break;
-				
+
+			case "ip":
+				$allow = array();
+				$deny = array();
+
+				$ar = new aw_array($args["form_data"]["ip"]);
+				foreach($ar->get() as $ipid => $ipv)
+				{
+					if ($ipv == IP_ALLOWED)
+					{
+						$allow[$ipid] = 1;
+					}
+					else
+					if ($ipv == IP_DENIED)
+					{
+						$deny[$ipid] = 1;
+					}
+				}
+				$metadata = &$args["metadata"];
+				$metadata["ip_allow"] = $allow;
+				$metadata["ip_deny"] = $deny;
+				break;				
 		};
-                return $retval;
+		return $retval;
 	}
 
 	////
@@ -932,14 +1016,15 @@ class menu extends class_base
 			RELTYPE_SHOW_AS_CALENDAR => "võta objekte kalendrist",
 			RELTYPE_SHOW_AS_LAYOUT => "kasuta saidi n&auml;itamisel layouti",
 			RELTYPE_SEEALSO => "vaata lisaks",
+			RELTYPE_IP => "IP aadress ligip&auml;&auml;su piiramiseks",
 		);
 	}
 
 	function callback_get_classes_for_relation($args = array())
 	{
 		$retval = false;
-                switch($args["reltype"])
-                {
+		switch($args["reltype"])
+		{
 			case RELTYPE_PICTURES_MENU:
 			case RELTYPE_SHOW_SUBFOLDERS_MENU:
 			case RELTYPE_SEEALSO:
@@ -950,6 +1035,9 @@ class menu extends class_base
 				break;
 			case RELTYPE_SHOW_AS_LAYOUT:
 				$retval = array(CL_LAYOUT);
+				break;
+			case RELTYPE_IP:
+				$retval = array(CL_IPADDRESS);
 				break;
 		};
 		return $retval;
