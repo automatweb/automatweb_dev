@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.15 2002/09/23 11:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.16 2002/09/23 11:37:02 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -151,9 +151,11 @@ class lists extends aw_template
 					$vid = $var_name_to_id_map[$els[$elid]];
 					if ($vid)
 					{
+						$this->quote(&$eval);
 						$varvals[$vid] = $eval;
 					}
 				}
+				$this->quote(&$_udata["password"]);
 				$varvals[$pwd_var_id] = $_udata["password"];
 				$varvals[$uid_var_id] = $uid;
 				$li->db_add_user(array(
