@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.51 2004/11/30 16:00:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.52 2004/12/02 14:31:35 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -159,6 +159,7 @@ class forum_v2 extends class_base
 		));
 
 		lc_site_load("forum",&$this);
+
 	}
 
 	function get_property($arr)
@@ -1321,6 +1322,11 @@ class forum_v2 extends class_base
 		extract($arr);
 		$ob = new object($id);
 
+		$this->classconfig = array(
+			"hide_tabs" => 1,
+			"relationmgr" => false,
+		);
+
 		$this->read_template('show.tpl');
 
 		$this->vars(array(
@@ -1491,10 +1497,14 @@ class forum_v2 extends class_base
 
                 @comment
 
-        **/
-        function change($arr)
-        {
-                return parent::change($arr);
-        }
+	**/
+	function change($arr)
+	{
+		if (!is_admin())
+		{
+			$arr["fxt"] = 1;
+		}
+		return parent::change($arr);
+	}
 };
 ?>
