@@ -63,18 +63,18 @@ class date_edit {
 					
 				case "month":
 					$retval .= sprintf("<select name='%s[month]'>\n",$this->varname);
-				        $mnames = array("1" => "jaanuar",
-							"2" => "veebruar",
-							"3" => "märts",
-							"4" => "aprill",
-							"5" => "mai",
-							"6" => "juuni",
-							"7" => "juuli",
-							"8" => "august",
-							"9" => "september",
-							"10" => "oktoober",
-							"11" => "november",
-							"12" => "detsember");
+				        $mnames = array("1" => LC_M1,
+							"2" => LC_M2,
+							"3" => LC_M3,
+							"4" => LC_M4,
+							"5" => LC_M5,
+							"6" => LC_M6,
+							"7" => LC_M7,
+							"8" => LC_M8,
+							"9" => LC_M9,
+							"10" => LC_M10,
+							"11" => LC_M11,
+							"12" => LC_M12);
 					while(list($mk,$mv) = each($mnames)) {
 						$sel = ($mk == $month) ? "selected" : "";
 						$retval .= sprintf("<option value='%s'%s>%s</option>\n",$mk,$sel,$mv);
