@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.2 2002/12/24 15:07:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.1 2004/01/15 12:39:06 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -68,8 +68,7 @@ class folder_list extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $ob->prop("rootmenu"),
-			"class_id" => CL_MENU,
-			"sort_by" => "objects.name"
+			"class_id" => CL_MENU
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
@@ -79,8 +78,7 @@ class folder_list extends class_base
 		{
 			$this->vars(array(
 				"name" => $o->name(),
-				"link" => $ssh->make_menu_link($o),
-				"selected" => selected($o->id() == aw_global_get("section"))
+				"link" => $ssh->make_menu_link($o)
 			));
 
 			$fls .= $this->parse("FOLDER");

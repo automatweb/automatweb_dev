@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>rootmenu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Juurkataloog</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_FOLDER_LIST</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>1</value>
+                  <caption>juurkataloog</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+

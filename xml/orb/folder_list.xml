@@ -3,3 +3,4 @@
 	<class name="folder_list" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
+		
