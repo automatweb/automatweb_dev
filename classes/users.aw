@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.130 2004/11/19 11:30:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.131 2004/12/10 10:10:03 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -336,6 +336,13 @@ class users extends users_user
 				"email" => $add_state["email"], 
 				"join_grp" => $join_grp
 			));			
+
+			$si = __get_site_instance();
+			if (method_exists($si, "on_add_user_site"))
+			{
+				$si->on_add_user_site($add_state["uid"]);
+			}
+
 			$this->update_dyn_user($add_state["uid"]);
 
 			$al = $this->get_cval("useradd::autologin");
