@@ -1,6 +1,6 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td colspan="2" height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/automatweb/images/forum_add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
+<td colspan="2" height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px; background: #FFFFFF;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/automatweb/images/forum_add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
 </td>
 </tr>
 <tr>
