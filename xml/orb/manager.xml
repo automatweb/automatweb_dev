@@ -27,6 +27,12 @@
 				<arguments/>
 			</function>
 		</action>
+		
+		<action name="delete">
+			<function name="delete">
+				<arguments/>
+			</function>
+		</action>
 
 		<action name="add_menu">
 			<function name="edit_menu">
