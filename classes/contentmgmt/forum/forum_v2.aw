@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.16 2004/01/13 16:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.17 2004/02/03 12:32:52 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -943,8 +943,11 @@ class forum_v2 extends class_base
 		{
 			$st_data = $this->obj_inst->prop($name);
 		};
-		active_page_data::add_site_css_style($st_data);
-		$this->style_data[$name] = "st" . $st_data;
+		if ($st_data)
+		{
+			active_page_data::add_site_css_style($st_data);
+			$this->style_data[$name] = "st" . $st_data;
+		};
 	}
 
 	function get_topic_selector($arr)
