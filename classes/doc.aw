@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.51 2003/11/11 13:24:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.52 2003/11/11 16:40:40 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -880,6 +880,32 @@ class doc extends class_base
 
 	function on_save_document($params)
 	{
+		flush();
+		$o = obj($params["oid"]);
+
+		// go over all menus that are parents of this document and mark this doc as active for them if it is active and not active if it is not.
+		
+		foreach($o->path() as $p_o)
+		{
+			if ($p_o->id() != $o->id())
+			{
+				$docs = $p_o->meta("active_documents");
+				if ($o->status() == STAT_ACTIVE)
+				{
+					$docs[$o->id()] = $o->id();
+				}
+				else
+				{
+					unset($docs[$o->id()]);
+				}
+
+				$p_o->set_meta("active_documents", $docs);
+				// I started getting error messages 
+				// "object::save(): object cannot be saved, needed properties are not set (parent, class_id) "
+				// all over the place, so I'm commeting this out until there is a better error check in place
+				//$p_o->save();
+			}
+		}
 	}
 };
 ?>
