@@ -21,6 +21,7 @@
             <editonly>1</editonly>
             <type>text</type>
             <table>objects</table>
+            <field>generate</field>
             <caption>Genereeri objektid</caption>
       </property>
       <classinfo>

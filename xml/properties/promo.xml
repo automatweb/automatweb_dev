@@ -146,6 +146,21 @@
             </preview>
       </groupinfo>
       <tableinfo>
+            <files>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid	</master_index>
+            </files>
+            <images>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </images>
+            <extlinks>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </extlinks>
             <menu>
                   <index>id</index>
                   <master_table>objects</master_table>

@@ -46,5 +46,12 @@
             <corefields>name,comment,status</corefields>
             <toolbar>yes</toolbar>
       </classinfo>
+      <tableinfo>
+            <files>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid	</master_index>
+            </files>
+      </tableinfo>
 </properties>
 

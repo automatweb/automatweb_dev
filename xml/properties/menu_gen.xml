@@ -159,28 +159,22 @@
             <method>serialize</method>
             <caption>objektid</caption>
       </property>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-                  <default>1</default>
-            </general>
-            <advanced>
-                  <caption>Spetsiaal</caption>
-            </advanced>
-            <keywords>
-                  <caption>Võtmesõnad</caption>
-            </keywords>
-            <relations>
-                  <caption>Seosed</caption>
-            </relations>
-            <presentation>
-                  <caption>Presentatsioon</caption>
-            </presentation>
-            <show>
-                  <caption>Näitamine</caption>
-            </show>
-      </groupinfo>
       <tableinfo>
+            <files>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid	</master_index>
+            </files>
+            <images>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </images>
+            <extlinks>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </extlinks>
             <menu>
                   <index>id</index>
                   <master_table>objects</master_table>
