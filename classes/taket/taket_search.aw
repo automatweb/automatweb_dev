@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.3 2004/01/14 15:02:59 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.4 2004/03/27 20:14:33 rtoomas Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -76,14 +76,14 @@ class taket_search extends class_base
 		$client = new IXR_Client('80.235.30.13','/xmlrpc/index.php',8888);
 		if(isset($arr['kogus']) && !strstr($arr['kogus'],','))
 		{
-			$arr['kogus']=((int)$arr['kogus']<0)?1:(int)$arr['kogus'];
+			$arr['kogus']=((int)$arr['kogus']<=0)?1:(int)$arr['kogus'];
 		}
 		else if(isset($arr['kogus']))
 		{
 			$tmpArr=split(',',$arr['kogus']);
 			$tmpArr2=array();
 			foreach($tmpArr as $value){
-				$tmpArr2[]=(int)$value<0?1:(int)$value;
+				$tmpArr2[]=(int)$value<=0?1:(int)$value;
 			}
 			$arr['kogus']=implode(',',$tmpArr2);
 			unset($tmpArr2);
@@ -103,7 +103,9 @@ class taket_search extends class_base
 		$data=$client->getResponse();
 		//print_r($data);
 		//print_r($client);
+		//echo "<!-- ";
 		//print_r($data['query']);
+		//echo " -->";
 		//die();
 		$this->read_template('search.tpl');
 		//ei ole eriti hea feature kui on mitmeleveliga subid
@@ -138,8 +140,7 @@ class taket_search extends class_base
 			foreach($products as $key=>$value)
 			{
 				$products[$key]=trim($value);
-				$quantities[$value] = (int)$quantities[$key];
-				$quantities[$value]=($quantities[$value])?$quantities[$value]:1;
+				$quantities[trim($value)] = ((int)$quantities[$key])>0?(int)$quantities[$key]:1;
 			}			
 		}
 		
@@ -225,20 +226,29 @@ class taket_search extends class_base
 				//if matches its the mainproduct
 				foreach($products as $key2=>$value2)
 				{
+					//if "partial" search
 					if($arr['osaline'])
 					{
-						if(strstr(strtoupper($value['product_code']),strtoupper($value2)))
+						if(
+							strstr(strtoupper($value['product_code']),strtoupper($value2))
+							||
+							strstr(strtoupper($value['search_code']),strtoupper($value2))
+						)
 						{
-							$value['quantity']=(int)$quantities[$key2];
+							$value['quantity']=(int)$quantities[$value2];
 							$lastQuantity=(int)$value['quantity'];
 							$matched=true;
 						}					
 					}
 					else
 					{
-						if(strpos(strtoupper($value['product_code']),strtoupper($value2))===0)
+						if(
+							strpos(strtoupper($value['product_code']),strtoupper($value2))===0
+							||
+							strpos(strtoupper($value['search_code']),strtoupper($value2))===0
+						)
 						{
-							$value['quantity']=(int)$quantities[$key2];
+							$value['quantity']=(int)$quantities[$value2];
 							$lastQuantity=(int)$value['quantity'];
 							$matched=true;
 						}
@@ -260,6 +270,7 @@ class taket_search extends class_base
 			if($value['quantity']<=$value['inStock'])
 			{
 					$value['inStock2'] = 'Olemas';
+					$this->vars(array('inStock3'=>$this->parse('instockyes')));
 			}
 			//this product is out of stock
 			else
@@ -267,10 +278,12 @@ class taket_search extends class_base
 					if($value['inStock']>0)
 					{
 						$value['inStock2'] = 'Osaliselt';
+						$this->vars(array('inStock3'=>$this->parse('instockpartially')));
 					}
 					else
 					{
 						$value['inStock2'] = 'Ei ole';
+						$this->vars(array('inStock3'=>$this->parse('instockno')));
 					}
 			}
 
