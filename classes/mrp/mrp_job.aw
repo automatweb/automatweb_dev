@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.32 2005/03/24 21:40:52 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.33 2005/03/26 12:04:33 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
-EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1
 
@@ -18,6 +17,10 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property comment type=textarea
 	@caption Kommentaar
+
+	@property advised_starttime type=datetime_select
+	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
+	@caption Soovitav algusaeg
 
 
 @groupinfo data caption="Andmed"
@@ -60,6 +63,14 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property state type=text
 	@caption Staatus
 
+	// @property real_start type=text
+	// @caption Töösse läinud
+
+	// @property real_length type=text
+	// @caption Tööks kulunud aeg (h)
+
+
+
 
 // --------------- RELATION TYPES ---------------------
 
@@ -86,6 +97,8 @@ CREATE TABLE `mrp_job` (
   `project` int(11) unsigned default NULL,
   `minstart` int(10) unsigned default NULL,
   `starttime` int(10) unsigned default NULL,
+  // `real_start` int(10) unsigned default NULL,
+  // `real_length` int(10) unsigned default NULL,
   `prerequisites` char(255) default NULL,
   `state` tinyint(2) unsigned default '1',
   `pre_buffer` int(10) unsigned default NULL,
@@ -120,6 +133,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
 
 class mrp_job extends class_base
 {
@@ -183,15 +197,27 @@ class mrp_job extends class_base
 				$prop["value"] = round (($prop["value"] / 3600), 2);
 				break;
 
+			case "advised_starttime":
+				if ($resource->property("type") != MRP_RESOURCE_SUBCONTRACTOR)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "real_start":
+				$prop["value"] = $prop["value"] ? date (MRP_DATE_FORMAT, $prop["value"]) : t("Plaanis");
+				break;
+
+			case "real_length":
+				$prop["value"] = $prop["value"] ? round (($prop["value"] / 3600), 2) : t("L&otilde;petamata");
+				break;
+
 			case "state":
 				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : t("Määramata");
 				break;
 
 			case "job_toolbar":
-				if ($this_object->prop ("state") != MRP_STATUS_DONE)
-				{
-					$this->create_job_toolbar ($arr);
-				}
+				$this->create_job_toolbar ($arr);
 				break;
 		}
 
@@ -202,8 +228,16 @@ class mrp_job extends class_base
 	{
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
+
 		switch($prop["name"])
 		{
+			case "advised_starttime":
+				if ($resource->property("type") != MRP_RESOURCE_SUBCONTRACTOR)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "length":
 			case "pre_buffer":
 			case "post_buffer":
@@ -328,6 +362,12 @@ class mrp_job extends class_base
 		if ($this_object->prop("state") == MRP_STATUS_PAUSED)
 		{
 			$disabled = false;
+			$action = "scontinue";
+		}
+		elseif ($this_object->prop("state") == MRP_STATUS_ABORTED)
+		{
+			$disabled = false;
+			$action = "acontinue";
 		}
 		else
 		{
@@ -338,7 +378,7 @@ class mrp_job extends class_base
 			"name" => "scontinue",
 			//"img" => "continue.gif",
 			"tooltip" => t("J&auml;tka"),
-			"action" => "scontinue",
+			"action" => $action,
 			"disabled" => $disabled,
 		));
 
@@ -472,6 +512,7 @@ class mrp_job extends class_base
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$this_object->set_prop ("real_start", time());
 
 			### log
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -530,6 +571,7 @@ class mrp_job extends class_base
 		{
 			### finish job
 			$this_object->set_prop ("state", MRP_STATUS_DONE);
+			$this_object->set_prop ("real_length", (time() - $this_object->prop("real_start")));
 			$this_object->save ();
 
 			### set resource as free
@@ -754,6 +796,75 @@ class mrp_job extends class_base
 		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
 		{
 			$errors[] = t("Töö pole pausil");
+		}
+
+		if (!in_array ($project->prop ("state"), $applicable_project_states))
+		{
+			$errors[] = t("Projekt pole jätkatav");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
+		{
+			### continue job
+			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$this_object->save ();
+
+			### update progress
+			$progress = max ($project->prop ("progress"), time ());
+			$project->set_prop ("progress", $progress);
+			$project->save ();
+
+			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			return $return_url;
+		}
+	}
+
+/**
+	@attrib name=acontinue
+	@param id required type=int
+**/
+	function acontinue($arr)
+	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_job");
+
+		if (is_oid ($arr["id"]))
+		{
+			$this_object = obj ($arr["id"]);
+		}
+		else
+		{
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$applicable_project_states = array (
+			MRP_STATUS_INPROGRESS,
+			// MRP_STATUS_ONHOLD,
+		);
+		$applicable_job_states = array (
+			MRP_STATUS_ABORTED,
+		);
+
+		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		{
+			$errors[] = t("Töö pole katkestatud");
 		}
 
 		if (!in_array ($project->prop ("state"), $applicable_project_states))

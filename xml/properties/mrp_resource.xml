@@ -5,7 +5,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>text</type>
             <group>
                   <num_0>general</num_0>
                   <num_1>grp_resource_maintenance</num_1>

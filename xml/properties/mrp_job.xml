@@ -18,6 +18,15 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>advised_starttime</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>datetime_select</type>
+            <field>advised_starttime</field>
+            <comment>Allhankijaga kokkulepitud aeg, millal töö alustada.</comment>
+            <caption>Soovitav algusaeg</caption>
+      </property>
+      <property>
             <name>job_toolbar</name>
             <group>data</group>
             <table>objects</table>

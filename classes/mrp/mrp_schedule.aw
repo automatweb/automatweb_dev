@@ -1,9 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.26 2005/03/24 21:40:52 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.27 2005/03/26 12:04:33 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
-
-HANDLE_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED, create)
 
 @classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes
 
@@ -37,6 +35,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
 
 ini_set ("max_execution_time", "90");
 
@@ -129,69 +128,10 @@ class mrp_schedule extends class_base
 		));
 	}
 
-/**
-    @attrib name=get_unavailable_periods
-	@param mrp_resource required type=int
-	@param mrp_start required type=int
-	@param mrp_length required type=int
-**/
-	function get_unavailable_periods ($arr)
-	{
-		$resource_id = $arr["mrp_resource"];
-		$resource = obj ($resource_id);
-		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		$pointer = 0;
-
-		if (!$workspace)
-		{
-			return false;
-		}
-
-		if (!$this->initialized)
-		{
-			$this->schedule_start = $arr["mrp_start"];
-			$this->schedule_length = $arr["mrp_length"];
-
-			$resources_folder = $workspace->prop ("resources_folder");
-			$resource_tree = new object_tree (array (
-				"parent" => $resources_folder,
-				"class_id" => array (CL_MRP_RESOURCE,CL_MENU),
-			));
-			$resource_list = $resource_tree->to_list ();
-			$resource_list->filter (array (
-				"class_id" => CL_MRP_RESOURCE,
-				"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
-			));
-			$resources = $resource_list->ids ();
-			$this->init_resource_data ($resources);
-			$this->initialized = true;
-		}
-
-		while ($pointer <= ($this->schedule_start + $this->schedule_length))
-		{
-			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
-			$pointer = $unavailable_start + $unavailable_length + 1;
-			$unavailable_start = $this->schedule_start + $unavailable_start;
-			$unavailable_end = $unavailable_start + $unavailable_length;
-			$this->unavailable_times[$unavailable_start] = $unavailable_end;
-		}
-
-		return true;
-	}
-
 	function initialize ($arr)
 	{
-		if (is_oid ($arr["mrp_workspace"]))
-		{
-			$workspace = obj ($arr["mrp_workspace"]);
-			$this->workspace_id = $workspace->id ();
-		}
-		else
-		{
-			echo "Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!";
-			exit ();
-		}
-
+		$workspace = obj ($arr["mrp_workspace"]);
+		$this->workspace_id = $workspace->id ();
 		$this->scheduling_time = time ();
 
 		### get parameters
@@ -277,12 +217,53 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
+		$workspace_id = (int) $arr["mrp_workspace"];
+
+		if (is_oid($workspace_id))
+		{
+			$workspace = obj ($workspace_id);
+		}
+		else
+		{
+			echo "Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!";
+			exit;
+		}
+
+		### get and acquire semaphore for given workspace
+		$sem_id = sem_get($workspace_id, 1);
+
+		if ($sem_id === false)
+		{
+			echo "Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!";
+			exit;
+		}
+
+		sem_acquire($sem_id);
+
+		### start scheduling only if input data has been altered
+		$msg_queue = msg_get_queue($workspace_id);
+		$rescheduling_needed = msg_receive($msg_queue, MSG_MRP_RESCHEDULING_NEEDED, $msgtype, 4, $message, false, MSG_IPC_NOWAIT, $msg_error);
+
+		if ($rescheduling_needed === ENOMSG)
+		{
+	  		### Release&remove semaphore and queue
+			if (!sem_release($sem_id))
+			{
+				echo "Viga: planeerimisluku avamine ebaõnnestus! Järgnevad planeerimised ei toimu enne vea kõrvaldamist.";
+			}
+
+			sem_remove($sem_id);
+			return;
+		}
+		else
+		{
+			msg_remove_queue($msg_queue);
+		}
 
 /* timing */ timing ("initialize", "start");
 
 
 		$this->initialize ($arr);
-		$workspace = obj ($arr["mrp_workspace"]);
 
 
 /* timing */ timing ("initialize", "end");
@@ -402,14 +383,14 @@ class mrp_schedule extends class_base
 			MRP_STATUS_ABORTED,
 		);
 
-		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE
-		`state` IN (" . implode (",", $applicable_states) . ") AND
-		`length` > 0 AND
-		`project` != 0 AND
-		`resource` != 0 AND
-		`project` IS NOT NULL AND
-		`resource` IS NOT NULL
-		");
+		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE " .
+		"`state` IN (" . implode (",", $applicable_states) . ") AND " .
+		// "`length` > 0 AND " .
+		"`project` != 0 AND " .
+		"`resource` != 0 AND " .
+		"`project` IS NOT NULL AND " .
+		"`resource` IS NOT NULL " .
+		"");
 
 
 /* timing */ timing ("get all jobs from db", "end");
@@ -503,7 +484,7 @@ class mrp_schedule extends class_base
 					MRP_STATUS_ABORTED,
 				);
 
-				if ( in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
+				if ( in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) and ($job["length"] > 0))
 				{
 
 // /* dbg */ if ($this->mrpdbg) {
@@ -514,7 +495,7 @@ class mrp_schedule extends class_base
 					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job["length"]);
 					$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length);
 				}
-				elseif (in_array ($job["state"], $applicable_timereserve_states))
+				elseif (in_array ($job["state"], $applicable_timereserve_states) or ($job["length"] == 0))
 				{
 					### postpone next jobs by job length
  					$scheduled_start = $minstart;
@@ -550,7 +531,7 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "end");
 /* dbg */ $this->mrpdbg=0;
-/* dbg */ echo "<small>proj: " . $project_id . " | job: " . $job["oid"] . " | res: " . $job["resource"] . " | start: " . date (MRP_DATE_FORMAT, $scheduled_start) . " | end: " . date (MRP_DATE_FORMAT, $scheduled_start+$scheduled_length) . "</small><br>";
+// /* dbg */ echo "<small>proj: " . $project_id . " | job: " . $job["oid"] . " | res: " . $job["resource"] . " | start: " . date (MRP_DATE_FORMAT, $scheduled_start) . " | end: " . date (MRP_DATE_FORMAT, $scheduled_start+$scheduled_length) . "</small><br>";
 			}
 
 /* timing */ timing ("one project total", "end");
@@ -559,13 +540,30 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("schedule jobs total", "end");
 /* timing */ timing ("save schedule data", "start");
-/* dbg */ echo "<hr>";
+// /* dbg */ echo "<hr>";
 
 		$this->save ();
+
+		### free lock and set scheduling not needed
+		$workspace->set_prop("scheduling_lock", 0);
+
+		if (!$workspace->prop("scheduling_lock"))
+		{
+			$workspace->set_prop("rescheduling_needed", 0);
+		}
+
+		$workspace->save();
 
 /* timing */ timing ("save schedule data", "end");
 /* timing */ timing (null, "show");
 
+  		### Release&remove semaphore
+		if (!sem_release($sem_id))
+		{
+			echo "Viga: planeerimisluku avamine ebaõnnestus! Järgnevad planeerimised ei toimu enne vea kõrvaldamist.";
+		}
+
+		sem_remove($sem_id);
 	}
 
 	function compute_due_date ()
@@ -1338,6 +1336,56 @@ function timing ($name, $action = "time")
 				echo "</pre>";
 				break;
 		}
+	}
+
+/**
+    @attrib name=get_unavailable_periods
+	@param mrp_resource required type=int
+	@param mrp_start required type=int
+	@param mrp_length required type=int
+**/
+	function get_unavailable_periods ($arr)
+	{
+		$resource_id = $arr["mrp_resource"];
+		$resource = obj ($resource_id);
+		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		$pointer = 0;
+
+		if (!is_oid($workspace))
+		{
+			return false;
+		}
+
+		if (!$this->initialized)
+		{
+			$this->schedule_start = $arr["mrp_start"];
+			$this->schedule_length = $arr["mrp_length"];
+
+			$resources_folder = $workspace->prop ("resources_folder");
+			$resource_tree = new object_tree (array (
+				"parent" => $resources_folder,
+				"class_id" => array (CL_MRP_RESOURCE,CL_MENU),
+			));
+			$resource_list = $resource_tree->to_list ();
+			$resource_list->filter (array (
+				"class_id" => CL_MRP_RESOURCE,
+				"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
+			));
+			$resources = $resource_list->ids ();
+			$this->init_resource_data ($resources);
+			$this->initialized = true;
+		}
+
+		while ($pointer <= ($this->schedule_start + $this->schedule_length))
+		{
+			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
+			$pointer = $unavailable_start + $unavailable_length + 1;
+			$unavailable_start = $this->schedule_start + $unavailable_start;
+			$unavailable_end = $unavailable_start + $unavailable_length;
+			$this->unavailable_times[$unavailable_start] = $unavailable_end;
+		}
+
+		return true;
 	}
 }
 

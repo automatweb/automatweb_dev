@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.42 2005/03/24 21:40:52 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.43 2005/03/26 12:04:33 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -224,6 +224,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
 
 class mrp_case extends class_base
 {
@@ -256,7 +257,20 @@ class mrp_case extends class_base
 
 		if ($arr["new"])
 		{
-			$this->mrp_workspace = $arr["request"]["mrp_workspace"];
+			if (is_oid($arr["request"]["mrp_workspace"]))
+			{
+				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
+				$workspace = obj($arr["request"]["mrp_workspace"]);
+			}
+			else
+			{
+				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
+				return PROP_FATAL_ERROR;
+			}
+		}
+		else
+		{
+			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		}
 
 		switch($prop["name"])
@@ -294,7 +308,35 @@ class mrp_case extends class_base
 				break;
 
 			case "schedule_chart":
-				$prop["value"] = $this->create_schedule_chart ($arr);
+				### project states for showing its schedule chart
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_INPROGRESS,
+				);
+
+				if (in_array ($this_object->prop ("state"), $applicable_states))
+				{
+					### update schedule
+					$schedule = get_instance (CL_MRP_SCHEDULE);
+					$schedule->create (array("mrp_workspace" => $workspace->id()));
+				}
+
+				### project states for showing its schedule chart
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_DONE,
+					MRP_STATUS_ARCHIVED,
+				);
+
+				if (in_array ($this_object->prop ("state"), $applicable_states))
+				{
+					$prop["value"] = $this->create_schedule_chart ($arr);
+				}
+				else
+				{
+					$prop["value"] = t("Projekt pole plaanis");
+				}
 				break;
 
 			case "resource_tree":
@@ -306,6 +348,18 @@ class mrp_case extends class_base
 				break;
 
 			case "workflow_table":
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_INPROGRESS,
+				);
+
+				if (in_array ($this_object->prop ("state"), $applicable_states))
+				{
+					### update schedule
+					$schedule = get_instance (CL_MRP_SCHEDULE);
+					$schedule->create (array("mrp_workspace" => $workspace->id()));
+				}
+
 				$this->create_workflow_table ($arr);
 				break;
 
@@ -334,6 +388,28 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
+
+		if ($arr["new"])
+		{
+			if (is_oid($arr["request"]["mrp_workspace"]))
+			{
+				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
+				$workspace = obj($arr["request"]["mrp_workspace"]);
+			}
+			else
+			{
+				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
+				return PROP_FATAL_ERROR;
+			}
+		}
+		else
+		{
+			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		}
+
+		### post rescheduling msg
+		$msg_queue = msg_get_queue((int) $workspace->id());
+		msg_send ($msg_queue, MSG_MRP_RESCHEDULING_NEEDED, true, false, false);
 
 		switch($prop["name"])
 		{
@@ -891,13 +967,8 @@ class mrp_case extends class_base
 			$resource_name = $resource->name () ? $resource->name () : "...";
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
-
-			$change_url = $this->mk_my_orb ("change", array (
-				"id" => $job_id,
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-			), "mrp_job");
-
 			$comment = "";
+
 			if ($job->prop("comment") != "")
 			{
 				$comment = html::href(array(
@@ -908,15 +979,10 @@ class mrp_case extends class_base
 			}
 
 			$table->define_data(array(
-				"open" => html::href(array(
-					"caption" => t("Ava"),
-					"url" => $change_url,
-					)
-				),
-				"name" => $this_object->name () . " - " . html::get_change_url(
-					$resource->id(),
+				"name" => html::get_change_url(
+					$job->id(),
 					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
-					$resource_name
+					$this_object->name () . " - " . $resource_name
 				),
 				"length" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",

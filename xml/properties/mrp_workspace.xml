@@ -517,6 +517,17 @@
             <caption>Projekti headeri kontroller</caption>
       </property>
       <property>
+            <name>max_subcontractor_timediff</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <default>1</default>
+            <comment>Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.</comment>
+            <caption>Allhanke suurim ajanihe (h)</caption>
+      </property>
+      <property>
             <name>title_sceduler_parameters</name>
             <table>objects</table>
             <field>meta</field>

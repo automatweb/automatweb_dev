@@ -1,9 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.30 2005/03/24 21:40:52 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.31 2005/03/26 12:04:33 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
-
-EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1
 
@@ -20,7 +18,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 @default field=meta
 @default method=serialize
 
-	@property state type=textbox group=general,grp_resource_maintenance
+	@property state type=text group=general,grp_resource_maintenance
 	@caption Ressursi staatus
 
 
@@ -120,6 +118,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MSG_MRP_RESCHEDULING_NEEDED", 1);
 
 class mrp_resource extends class_base
 {
@@ -159,15 +158,25 @@ class mrp_resource extends class_base
 
 		if ($arr["new"])
 		{
-			$this->mrp_workspace = $arr["request"]["mrp_workspace"];
+			if (is_oid($arr["request"]["mrp_workspace"]))
+			{
+				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
+				$workspace = obj($arr["request"]["mrp_workspace"]);
+			}
+			else
+			{
+				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
+				return PROP_FATAL_ERROR;
+			}
+		}
+		else
+		{
+			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 		}
 
 		switch($prop["name"])
 		{
 			case "category":
-				### get workspace object "owning" current object
-				$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
 				if ($workspace)
 				{
 					$resources_folder_id = $workspace->prop ("resources_folder");
@@ -185,11 +194,15 @@ class mrp_resource extends class_base
 				}
 				else
 				{
-					$prop["value"] = t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi.");
+					$prop["value"] = t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi. ");
 				}
 				break;
 
 			case "resource_calendar":
+				### update schedule
+				$schedule = get_instance (CL_MRP_SCHEDULE);
+				$schedule->create (array("mrp_workspace" => $workspace->id()));
+
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
@@ -224,6 +237,10 @@ class mrp_resource extends class_base
 				break;
 
 			case "job_list":
+				### update schedule
+				$schedule = get_instance (CL_MRP_SCHEDULE);
+				$schedule->create (array("mrp_workspace" => $workspace->id()));
+
 				$this->create_job_list_table ($arr);
 				break;
 
@@ -277,7 +294,7 @@ class mrp_resource extends class_base
 					case MRP_STATUS_RESOURCE_INUSE:
 						if ($prop["value"] == 1)
 						{
-							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna.";
+							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna. ";
 							$retval = PROP_ERROR;
 						}
 						break;
