@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.24 2005/03/16 12:21:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.25 2005/03/18 08:20:05 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -880,6 +880,11 @@ class cb_search extends class_base
 		$htmlc->start_output();
 		foreach($props as $pn => $pd)
 		{
+			$pd2 = unserialize(serialize($pd));
+			if ($pd["type"] == "relpicker")
+			{
+				$pd["type"] = "select";
+			}
 			$htmlc->add_property($pd);
 		}
 		$htmlc->add_property(array(
