@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.1 2001/12/11 12:51:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.2 2001/12/19 18:10:59 duke Exp $
 // menu_chain.aw - menüüpärjad
 global $orb_defs;
 $orb_defs["menu_chain"] = "xml";
@@ -11,53 +11,64 @@ class menu_chain extends aw_template {
 		$this->tpl_init("automatweb/menu_chain");
 	}
 
-	function add($args = array())
-	{
-		extract($args);
-		$this->mk_path($parent, " / " . "Lisa uus menüüpärg");
-		$this->read_template("add.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
-		));
-		return $this->parse();
-	}
-
+	////
+	// !Displays the form for adding or editing a menu chain
 	function change($args = array()){
 		extract($args);
+		
+		if ($id)
+		{
+			$title = "Muuda menüüpärga";
+			$obj = $this->get_object($id);
+			$meta = aw_unserialize($obj["metadata"]);
+			$parent = $obj["parent"];
+		}
+		else
+		{
+			$title = "Uus menüüpärg";
+			$obj = array();
+		};
+
+		$meta = (is_array($meta))? $meta : array();
+		$this->dequote($obj);
+
+		if ($return_url)
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / $title");
+		}
+		else
+		{
+			$this->mk_path($parent,$obj["name"] . " / $title");
+		};
+			
 		$this->read_template("change.tpl");
-		$obj = $this->get_object($id);
-		classload("php");
-		$phps = new php_serializer();
-		$meta = $phps->php_unserialize($obj["metadata"]);
+
 		classload("objects");
 		$dbo = new db_objects();
 		$olist = $dbo->get_list();
-		$this->mk_path($obj["parent"],$obj["name"]);
-		if (not(is_array($meta)))
-		{
-			$meta = array();
-		};
+
+
 		$this->vars(array(
 			"name" => $obj["name"],
 			"comment" => $obj["comment"],
 			"menus" => $this->multiple_option_list(array_flip($meta),$olist),
 			"weburl" => $this->mk_site_orb(array("action" => "view","id" => $id)),
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"id" => $id)),
+			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"id" => $id,"return_url" => $return_url)),
 		));
 		return $this->parse();
 	}
 
+	////
+	// !Saves the menu_chain object
 	function submit($args = array())
 	{
 		$this->quote($args);
 		extract($args);
+		$meta = aw_serialize($menus,SERIALIZE_PHP);
 		if ($id)
 		{
 			$_tmp = $this->get_object($id);
 			$par_obj = $this->get_object($_tmp["parent"]);
-			classload("php");
-			$phps = new php_serializer();
-			$meta = $phps->php_serialize($menus);
 			
 			$this->upd_object(array(
 				"oid" => $id,
@@ -74,25 +85,18 @@ class menu_chain extends aw_template {
 				"name" => $name,
 				"comment" => $comment,
 				"status" => 2,
+				"metadata" => $meta,
 				"class_id" => CL_MENU_CHAIN,
 			));
 		
 			$par_obj = $this->get_object($parent);
-			$new = 1;
-			if ($par_obj["class_id"] == CL_DOCUMENT)
+			if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE) )
 			{
 				$this->add_alias($parent,$id);
 			};
 		};
-
-		if (not($new) && $par_obj["class_id"] == CL_DOCUMENT)
-		{
-			return $this->mk_my_orb("list_aliases",array("id" => $par_obj["oid"]),"aliasmgr");
-		}
-		else
-		{
-			return $this->mk_my_orb("change",array("id" => $id));
-		};
+		$url = $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url)));
+		return $url;
 	}
 
 	function view($args = array())
