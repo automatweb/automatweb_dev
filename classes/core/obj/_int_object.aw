@@ -5,8 +5,6 @@ class _int_object
 	///////////////////////////////////////////
 	// private variables
 
-	var $ds;	// datasource
-
 	var $obj;			// actual object data
 	var $implicit_save; 
 	var $properties;	// class property definitions are here

@@ -1278,7 +1278,7 @@ class site_show extends class_base
 	function make_menu_link($o)
 	{
 		$this->skip = false;
-		if ($o->prop("mtype") == MN_PMETHOD)
+		if ($o->prop("type") == MN_PMETHOD)
 		{
 			// I should retrieve orb definitions for the requested class
 			// to figure out which arguments it needs and then provide
