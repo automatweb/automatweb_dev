@@ -87,6 +87,10 @@ Näita kõiki dokumente:
 </td>
 </tr>
 <tr>
+<td class="celltext">&nbsp;Otsing staatilisest sisust:&nbsp;</td>
+<td class="celltext">&nbsp;<input type="checkbox" name="static_search" value="1" {VAR:static_search}>&nbsp;</td>
+</tr>
+<tr>
 <td class="celltext" valign="top">&nbsp;{VAR:LC_SEARCH_CONF_MENUS}:&nbsp;</td>
 <td class="celltext">&nbsp;<select class='small_button' size=20 name='menus[]' multiple>{VAR:menus}</select>&nbsp;</td>
 </tr>
