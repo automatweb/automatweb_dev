@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.6 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.7 2004/02/16 09:54:55 duke Exp $
 
 /*
 	@classinfo relationmgr=yes
@@ -86,7 +86,7 @@ class html_popup extends class_base
 	{
 		$prop = $args["prop"];
 		$nodes = array();
-		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
+		$section_include_submenus = $args["obj_inst"]->meta("section_include_submenus");
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -114,9 +114,9 @@ class html_popup extends class_base
 			"align" => "center",
 		));
 
-		if ($args["obj"]["oid"])
+		if (is_oid($args["obj_inst"]->id()))
 		{
-			$obj = obj($args["obj"]["oid"]);
+			$obj = $args["obj_inst"];
 			$conns = $obj->connections_from(array(
 				"type" => RELTYPE_FOLDER
 			));
@@ -187,11 +187,10 @@ class html_popup extends class_base
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
-		$meta = &$args["metadata"];
 		$retval = PROP_OK;
 		if ($data["name"] == "menus")
 		{
-			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
+			$args["obj_inst"]->set_meta("section_include_submenus",$args["request"]["include_submenus"]);
 		};
 		return $retval;
 	}
