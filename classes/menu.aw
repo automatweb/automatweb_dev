@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.4 2002/06/13 23:06:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.5 2002/08/29 03:12:11 kristo Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
@@ -87,18 +87,19 @@ class menu extends aw_template
 		extract($args);
 		if (!is_array($this->mcaliases))
 		{
-	    $this->mcaliases = $this->get_aliases(array(
-        "oid" => $oid,
-        "type" => CL_PSEUDO,
-      ));
-    };
-    $f = $this->mcaliases[$matches[3] - 1];
-    if (!$f["target"])
-    {
+			$this->mcaliases = $this->get_aliases(array(
+				"oid" => $oid,
+				"type" => CL_PSEUDO,
+			));
+		};
+		$f = $this->mcaliases[$matches[3] - 1];
+		if (!$f["target"])
+		{
 			return "";
-    }
+		}
 		$target = $f;
 		return sprintf("<a href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
 	}
+
 };
 ?>
