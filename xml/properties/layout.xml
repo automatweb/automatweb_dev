@@ -121,6 +121,7 @@
             <multiple>1</multiple>
             <rel>1</rel>
             <method>serialize</method>
+            <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
@@ -130,9 +131,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <settings>
                   <caption>M&amp;auml;&amp;auml;rangud</caption>
             </settings>
