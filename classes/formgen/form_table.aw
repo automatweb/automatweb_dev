@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.57 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.58 2004/06/21 18:36:53 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1465,7 +1465,7 @@ class form_table extends form_base
 
 		foreach($all_aliases as $ad)
 		{
-			if ($ad["target"] == $aid)
+			if ($ad["real_id"] == $aid)
 			{
 				return $ad; 
 			}
@@ -2218,6 +2218,8 @@ class form_table extends form_base
 				foreach($this->table["defs"][$col]["alias"] as $aid)	
 				{
 					$alias_data = $this->table["defs"][$col]["alias_data"][$aid];
+					//$c = new connection($aid);
+					//$__o = $c->to();
 					if ($alias_data["class_id"] == CL_FORM_TABLE)
 					{
 						$has_ftable_aliases = true;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.266 2004/06/19 20:10:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.267 2004/06/21 18:36:52 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -524,6 +524,7 @@ class core extends acl_base
 		$aliases = array();
 		while($row = $this->db_next()) 
 		{
+			$row["real_id"] = $row["id"];
 			$row["id"] = $row["target"];
 			$aliases[]=$row;
 		};
