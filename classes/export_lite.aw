@@ -74,7 +74,7 @@ class export_lite extends aw_template
 		}
 
 		$url = $this->rewrite_link($url);
-		//echo "rewrote link to $url <br>";
+//		echo "rewrote link to $url <br>";
 
 		$_url = $url;
 		if ($url == "")
@@ -622,7 +622,7 @@ class export_lite extends aw_template
 			$this->get_session();
 		}
 
-		$host = str_replace("http://","",$this->cfg["baseurl"]);
+		$host = str_replace("http://","",aw_ini_get("baseurl"));
 		preg_match("/.*:(.+?)/U",$host, $mt);
 		if ($mt[1])
 		{
@@ -630,7 +630,8 @@ class export_lite extends aw_template
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
 
-		$req  = "GET $url HTTP/1.0\r\n";
+		$y_url = str_replace(aw_ini_get("baseurl"),"", $url);
+		$req  = "GET $y_url HTTP/1.0\r\n";
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "User-agent: AW-export_lite-spider\r\n";
@@ -640,12 +641,14 @@ class export_lite extends aw_template
 			"host" => $host,
 			"port" => $port,
 		));
+//		echo "req = ".dbg::dump($req)." <br>";
 		$socket->write($req);
 		$ipd = "";
 		while($data = $socket->read(10000000))
 		{
 			$ipd .= $data;
 		};
+//		echo "ipd = ".dbg::dump($ipd)." <br>";
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
 		$this->last_request_headers = $headers;
 
