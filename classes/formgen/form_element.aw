@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.40 2003/05/08 14:24:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.41 2003/05/09 15:41:59 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -193,6 +193,7 @@ class form_element extends aw_template
 				"search_logical_append" => $this->arr["search_logical_append"],
 				"search_logical_prepend" => $this->arr["search_logical_prepend"],
 				"is_translatable" => checked($this->arr["is_translatable"]),
+				"show_as_text" => checked($this->arr["show_as_text"])
 			));
 
 			$this->vars(array(
@@ -292,7 +293,10 @@ class form_element extends aw_template
 					"submit_on_select" => checked($this->arr["submit_on_select"]),
 					"lb_search_like" => checked($this->arr["lb_search_like"])
 				));
-				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
+				$this->vars(array(
+					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
+					"SHOW_AS_TEXT" => $this->parse("SHOW_AS_TEXT")
+				));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
 				{
 					$this->vars(array(
@@ -510,7 +514,6 @@ class form_element extends aw_template
 					"down_button_img" => image::make_img_tag(image::check_url($this->arr["down_button_img"]["url"])),
 					"up_button_use_img" => checked($this->arr["up_button_use_img"]),
 					"down_button_use_img" => checked($this->arr["down_button_use_img"]),
-					"show_as_text" => checked($this->arr["show_as_text"])
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
@@ -518,7 +521,7 @@ class form_element extends aw_template
 					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
 					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
 					"HAS_ADD_SUB_BUTTONS" => ($this->arr["up_down_button"] ? $this->parse("HAS_ADD_SUB_BUTTONS") : ""),
-					"TEXTBOX_ITEMS" => $this->parse("TEXTBOX_ITEMS")
+					"SHOW_AS_TEXT" => $this->parse("SHOW_AS_TEXT")
 				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -814,6 +817,9 @@ class form_element extends aw_template
 
 		$var = $base."_is_translatable";
 		$this->arr["is_translatable"] = $$var;
+
+		$var = $base."_show_as_text";
+		$this->arr["show_as_text"] = $$var;
 
 		$cnt =0;
 		if (is_array($this->arr["table"]))
@@ -1227,9 +1233,6 @@ class form_element extends aw_template
 			$this->arr["up_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["up_button_img"]["id"]);
 			$var=$base."_down_button_img";
 			$this->arr["down_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["down_button_img"]["id"]);
-
-			$var = $base."_show_as_text";
-			$this->arr["show_as_text"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -2041,7 +2044,7 @@ class form_element extends aw_template
 					$this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, &$this);
 				}
 
-				if (!$this->arr['hidden'])
+				if (!$this->arr['hidden'] && !$this->arr["show_as_text"])
 				{
 					$sos = "";
 					if ($this->arr["submit_on_select"])
@@ -2094,7 +2097,22 @@ class form_element extends aw_template
 					}
 				}
 
-//				for ($b=0; $b < $cnt; $b++)
+				if ($this->arr["show_as_text"])
+				{
+					if (is_array($larr))
+					{
+						foreach($larr as $b => $value)
+						{
+							$_v = "element_".$this->id."_lbopt_".$b;
+							if ($_v == $_lbsel)
+							{
+								$html .= $value;
+							}
+						}
+					}
+				}
+				else
+				{
 				if (is_array($larr))
 				{
 					foreach($larr as $b => $value)
@@ -2162,6 +2180,7 @@ class form_element extends aw_template
 				if (!$this->arr['hidden'])
 				{
 					$html.=$lb_opts."</select>\n";
+				}
 				}
 				break;
 

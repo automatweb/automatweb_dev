@@ -504,14 +504,14 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: CHECKBOX_ITEMS -->
 
-<!-- SUB: TEXTBOX_ITEMS -->
+<!-- SUB: SHOW_AS_TEXT -->
 <tr>
 <td class="fgtext">N&auml;ita tekstina:</td>
 <td class="fgtext"><input class='small_button' type='checkbox' NAME='{VAR:cell_id}_show_as_text' VALUE='1' {VAR:show_as_text}></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
-<!-- END SUB: TEXTBOX_ITEMS -->
+<!-- END SUB: SHOW_AS_TEXT -->
 
 <!-- SUB: PRICE_ITEMS -->
 <tr>
