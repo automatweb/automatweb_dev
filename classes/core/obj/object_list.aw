@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.19 2004/01/20 16:31:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.20 2004/02/25 15:38:14 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -396,6 +396,14 @@ class object_list extends _int_obj_container_base
 		else
 		{
 			return $this->cb($a_o, $b_o);
+		}
+	}
+
+	function _int_remove_from_list($oid_l)
+	{
+		foreach($oid_l as $oid)
+		{
+			unset($this->list[$oid]);
 		}
 	}
 }
