@@ -34,6 +34,7 @@ class form_element extends aw_template
 			$this->vars(array("cell_id"									=> "element_".$this->id, 
 												"cell_text"								=> htmlentities($this->arr["text"]),
 												"cell_name"								=> htmlentities($this->arr["name"]),
+												"cell_type_name"					=> htmlentities($this->arr["type_name"]),
 												"cell_dist"								=> htmlentities($this->arr["text_distance"]),
 												"type_active_textbox" 		=> ($this->arr["type"] == "textbox" ? " SELECTED " : ""),
 												"type_active_textarea" 		=> ($this->arr["type"] == "textarea" ? " SELECTED " : ""),
@@ -281,6 +282,14 @@ class form_element extends aw_template
 			$this->arr["name"] = $$var;
 			$this->do_change_name($$var);
 		}
+
+		$var=$base."_type_name";
+		if ($$var != $this->arr["type_name"])
+		{
+			$this->arr["type_name"] = $$var;
+			$this->do_change_type_name($$var);
+		}
+
 		$var=$base."_list";
 		$this->arr["join_list"] = $$var;
 		$var=$base."_email_el";
@@ -604,6 +613,39 @@ class form_element extends aw_template
 							if ($k == $this->id)
 							{
 								$fup->arr["elements"][$row][$col][$k]["name"] = $name;
+							}
+						}
+					}
+				}
+			}
+			$fup->save();
+		}
+		$this->restore_handle();
+	}
+
+	function do_change_type_name($name)
+	{
+		$this->db_query("UPDATE form_elements SET type_name = '$name' WHERE id = ".$this->id);
+
+		// ok now here we must fuckin load all the forms that contain this element and fuckin change all elements typenames in those. 
+		// shit I hate this but I suppose it's gotta be done
+		$this->save_handle();
+		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$this->id);
+		while ($drow = $this->db_next())
+		{
+			$fup = new form;
+			$fup->load($drow["form_id"]);
+			for ($row = 0;$row < $fup->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $fup->arr["cols"]; $col++)
+				{
+					if (is_array($fup->arr["elements"][$row][$col]))
+					{
+						foreach($fup->arr["elements"][$row][$col] as $k => $v)
+						{
+							if ($k == $this->id)
+							{
+								$fup->arr["elements"][$row][$col][$k]["type_name"] = $name;
 							}
 						}
 					}
