@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.24 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.25 2001/11/20 13:44:54 duke Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -296,7 +296,8 @@ class msgboard extends aw_template
 			$subj = strip_tags($subj);
 			$email = strip_tags($email);
 
-			$this->db_query("INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$topic_id','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')");
+			$q = "INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')";
+			$this->db_query($q);
 			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM comments","id");
 
 			// if it is under a topic object, update the topic objects modified date if the configuration says so.

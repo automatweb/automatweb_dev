@@ -212,7 +212,7 @@ function del_gallery()
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Teavita liste" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
+<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> </td>
 </tr>
 <tr>
 <td class="hele_hall_taust" COLSPAN=2>
@@ -229,6 +229,8 @@ function del_gallery()
 	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
 	| 'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
 	| Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>
+	| T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
+	| Lingi võtmesõnad      <input type='checkbox' name="link_keywords" value=1>
 		</td>
 	</tr>
 </table>
@@ -242,16 +244,20 @@ function doSubmit()
 }
 </script>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Allikas:&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Nimi:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+</tr>
+<tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Amet:&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="10" value="{VAR:tm}"></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;E-post:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Telefon:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="channel" size="80" value="{VAR:channel}"></td>
 </tr>
 <tr>
 <td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
@@ -269,15 +275,24 @@ function doSubmit()
 <!-- END SUB: NOT_IE -->
 <!-- SUB: IE -->
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Allikas:&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Nimi:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+</tr>
+<tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Amet:&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="30" value="{VAR:tm}"></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;E-post:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Telefon:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="channel" size="80" value="{VAR:channel}"></td>
+</tr>
+
+<tr>
+<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B></b></td>
 <td class="hele_hall_taust">
 <br>
 <div id=idBox style="width: 100%;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly valign="top">
@@ -322,27 +337,18 @@ function doSubmit()
 <select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF"><option>Suurus...<option>1<option>2<option>3<option>4<option>5<option>6<option>7</select>
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
 										<option selected>V&auml;rv...
-										<option style="color:black">must</option>
-										<option style="color:#FF9900">domina</option>
-										<option style="color:darkslategray">tumehall</option>
-										<option style="color:red">punane</option>
-										<option style="color:maroon">tumelilla</option>
-										<option style="color:lightpink">heleroosa</option>
-										<option style="color:purple">lilla</option>
-										<option style="color:blue">sinine</option>
-										<option style="color:darkblue">tumesinine</option>
-										<option style="color:teal">rohekassinine</option>
-										<option style="color:skyblue">taevasinine</option>
-										<option style="color:green">soheline</option>
-										<option style="color:seagreen">mereroheline</option>
-										<option style="color:olive">oliiv</option>
-										<option style="color:orange">oranz</option>
-										<option style="color:darkgoldenrod">tumekollane</option>
-										<option style="color:gray">hall</option>
+										<option style="color:black">Alapealkiri 2 (default)</option>
+										<option style="color:#008572">Alapealkiri 3</option>
+
+										<option style="color:#00A0C6">am sinine</option>
+										<option style="color:#4DAC27">am roheline</option>
+										<option style="color:#F2B600">am kollane</option>
+										<option style="color:#FF8000">am orange</option>
+										<option style="color:#008572">am rohekas sinine</option>
+
+
 									</select>
 </div>
-<input type="hidden" name="title" value="{VAR:title}">
-<iframe name="title_edit" onFocus="sel_el='title_edit'" frameborder="1" width="600" height="50"></iframe>
 </td>
 </tr>
 <tr>
@@ -359,17 +365,17 @@ function doSubmit()
 <input type='hidden' name='nobreaks' value='1'>
 <script for=window event=onload>
 	cont_edit.document.designMode='On';
-	cont_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	cont_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Arial, Verdana, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	cont_edit.document.write(doc.content.value);
 	cont_edit.document.write("</body></html>");
 
 	lead_edit.document.designMode='On';
-	lead_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	lead_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Arial, Verdana, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	lead_edit.document.write(doc.lead.value);
 	lead_edit.document.write("</body></html>");
 
 	title_edit.document.designMode='On';
-	title_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	title_edit.document.write("<html><head><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset={VAR:charset}\"></head><body style='font-family: Arial, Verdana, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
 	title_edit.document.write(doc.title.value);
 	title_edit.document.write("</body></html>");
 </script>
@@ -845,7 +851,7 @@ function format(what,opt)
 </tr>
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Teavita liste" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
+<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}')"> 
 </td>
 </tr>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.61 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.62 2001/11/20 13:44:54 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -334,7 +334,7 @@ class document extends aw_template
 	
 		global $print;	
 
-		if ( ($meta["show_print"]) && (not($print)) )
+		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
 		{
 			global $REQUEST_URI;
 			if (defined("PRINT_CAP"))
@@ -1417,7 +1417,7 @@ class document extends aw_template
 		};
 
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders");
+		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
 		if ($df != "")
 		{
 			$xml = new xml;
@@ -1517,6 +1517,9 @@ class document extends aw_template
 		$this->db_query($q);
 
 		$this->id = $lid;
+
+		$this->set_object_metadata(array("oid" => $lid, "key" => "show_print", "value" => 1));
+
 		return $this->mk_my_orb("change", array("id" => $lid));
 	}
 
@@ -1636,7 +1639,7 @@ class document extends aw_template
 		$meta = $this->get_object_metadata(array("oid" => $id));
 
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders");
+		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
 		if ($df != "")
 		{
 			$xml = new xml;
@@ -2626,7 +2629,7 @@ class document extends aw_template
 
 		classload("config");
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders");
+		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
 		$xml = new xml;
 		$_df = $xml->xml_unserialize(array("source" => $df));
 
@@ -3008,7 +3011,10 @@ class document extends aw_template
 			$max_count = max($c,$max_count);
 
 			// find the first paragraph of text
-			$co = substr($row[content],0,strpos($row[content],"<BR>"));
+			$p1 = strpos($row[content],"<BR>");
+			$p2 = strpos($row[content],"</P>");
+			$pos = min($p1,$p2);
+			$co = substr($row[content],0,$pos);
 			$co = strip_tags($co);
 			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
 			$docarr[] = array("matches" => $c, "title" => $row[title],"section" => $row[docid],"content" => $co,"modified" => $this->time2date($row[modified],5),"tm" => $row[tm]);
@@ -3125,7 +3131,7 @@ class document extends aw_template
 		$ob = new objects;
 		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
 		$conf = new config;
-		$df = $conf->get_simple_config("docfolders");
+		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
 		if ($df != "")
 		{
 			$xml = new xml;
@@ -3138,8 +3144,10 @@ class document extends aw_template
 			list($parent,$parent) = each($_df);
 		}
 
+		global $lang_id;
+
 		$_df = array(0 => "Vaata / Liiguta") + $_df;
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND parent = '$parent'");
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND parent = '$parent' AND lang_id = '$lang_id'");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(

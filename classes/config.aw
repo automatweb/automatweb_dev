@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.26 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.27 2001/11/20 13:44:54 duke Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
 
-classload("aw_template","xml","objects");
+classload("aw_template","xml","objects","languages");
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -1228,7 +1228,12 @@ class config extends db_config
 		extract($arr);
 		$this->read_template("docfolders.tpl");
 
-		$df = $this->get_simple_config("docfolders");
+		global $lang_id;
+		$langs = new languages;
+		$la = $langs->fetch($lang_id);
+		$LC=$la["acceptlang"];
+
+		$df = $this->get_simple_config("docfolders".$LC);
 		$xml = new xml;
 		$_df = $xml->xml_unserialize(array("source" => $df));
 
@@ -1270,7 +1275,12 @@ class config extends db_config
 
 		$this->quote(&$df);
 
-		$this->set_simple_config("docfolders", $df);
+		global $lang_id;
+		$langs = new languages;
+		$la = $langs->fetch($lang_id);
+		$LC=$la["acceptlang"];
+
+		$this->set_simple_config("docfolders".$LC, $df);
 
 		return $this->mk_my_orb("docfolders");
 	}

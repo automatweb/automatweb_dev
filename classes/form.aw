@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.80 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.81 2001/11/20 13:44:54 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2369,6 +2369,12 @@ class form extends form_base
 						$q_els[] = "form_".$form_id."_entries.ev_".$elid." as ev_".$elid;
 					}
 				}
+
+				if (!is_array($q_els))
+				{
+					$this->raise_error("Tulemuste kuvamise tabelis pole yhtegi elementi!", true);
+				}
+
 				$eids = join(",", $matches);
 				$awt->stop("form::do_search::setup");
 				if ($eids != "")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.19 2001/11/19 14:35:27 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.20 2001/11/20 13:44:54 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -283,6 +283,10 @@ class forum extends aw_template
 	// requires a loaded template with a subtemplate "message"
 	function display_comment($args = array())
 	{
+		$comment = $args["comment"];
+		$comment = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $comment);
+		$comment = preg_replace("/(\S*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$comment);
+
 		$this->vars(array(
 			"SHOW_COMMENT" => "",
 			"spacer" => $args["spacer"],
@@ -292,7 +296,7 @@ class forum extends aw_template
 			"parent" => $args["parent"],
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
-			"comment" => nl2br($args["comment"]),
+			"comment" => nl2br($comment),
 			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"])),
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
