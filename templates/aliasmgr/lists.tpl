@@ -1,7 +1,54 @@
+<script language="Javascript">
+var targets = new Array();
+<!-- SUB: target_def -->
+targets[{VAR:cnt}] = "{VAR:target}";
+<!-- END SUB: target_def -->
+function replace_action(selbox)
+{
+	with(document.foo)
+	{
+		if (aselect.selectedIndex == 0)
+		{
+			link = "undef";
+		}
+		else
+		{
+			link = targets[document.foo.aselect.selectedIndex];
+		};
+		
+		act.value = link;
+	};
+}
+
+function redir()
+{
+	with(document.foo.act)
+	{
+		if (value == "undef")
+		{
+			alert('Vali alias!');
+		}
+		else
+		{
+			window.location.href=value;
+		};
+	};
+};
+</script>
 <table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#EEEEEE">
 <tr>
+<form method="GET" name="foo">
 <td colspan="2" class="title">
-<a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus objekt&gt;&gt;&gt;</a></td>
+<select name="aselect" onChange="replace_action(this)">
+<option>--Vali alias--</option>
+{VAR:aliases}
+</select>
+<a href="javascript:redir()">Lisa uus alias</a>
+ |
+<a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus objekt&gt;&gt;&gt;</a>
+</td>
+<input type="hidden" name="act" value="undef"> 
+</form>
 </tr>
 <form name="aform">
 <!-- SUB: table -->
