@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.112 2003/11/10 19:38:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.113 2003/11/12 15:30:17 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -22,6 +22,16 @@ if (!defined("DEFS"))
 		$inst = get_instance("core/msg/msg_dispatch");
 		$inst->post_message(array(
 			"msg" => $msg, 
+			"params" => $params
+		));
+	}
+
+	function post_message_with_param($msg, $param, $params)
+	{
+		$inst = get_instance("core/msg/msg_dispatch");
+		$inst->post_message_with_param(array(
+			"msg" => $msg, 
+			"param" => $param,
 			"params" => $params
 		));
 	}
@@ -344,7 +354,7 @@ if (!defined("DEFS"))
 	function arr($arr,$die=false)
 	{
 		echo '<pre>';
-		print_r($arr);
+//		print_r($arr);
 		echo '</pre>';
 		if ($die) die('<hr />');
 		return $arr;
@@ -540,7 +550,7 @@ if (!defined("DEFS"))
 		// why? well, then you can't override server vars from the url.
 
 		// known variables - these can be modified by the user and are not to be trusted, so we get them first 
-		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date","trid");
+		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date","trid","project");
 		foreach($impvars as $k)
 		{
 			if (isset($GLOBALS[$k]))
