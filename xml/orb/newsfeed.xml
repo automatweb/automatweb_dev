@@ -3,4 +3,3 @@
 	<class name="newsfeed" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		
