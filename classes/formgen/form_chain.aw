@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.30 2002/09/30 06:56:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.1 2002/10/28 13:58:07 kristo Exp $
 // form_chain.aw - form chains
 
-classload("form_base");
-
+classload("formgen/form_base");
 class form_chain extends form_base
 {
 	function form_chain()
@@ -112,7 +111,7 @@ class form_chain extends form_base
 		/*
 		if ($cal_entry_form)
 		{
-			$fc = get_instance("form_calendar");
+			$fc = get_instance("formgen/form_calendar");
 			$fc->upd_calendar(array(
 				"cal_id" => $id,
 				"form_id" => $cal_entry_form,
@@ -360,7 +359,6 @@ class form_chain extends form_base
 			$first = false;
 		}
 
-		classload("form");
 		$cur_form = "";
 		if ($this->chain["show_reps"][$form_id] && $entry_id)
 		{
@@ -385,7 +383,7 @@ class form_chain extends form_base
 			$led = $GLOBALS["load_entry_data"];
 			$lcd = $GLOBALS["load_chain_data"];
 		}
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->set_current_chain_entry($entry_id);
 		aw_global_set("current_chain_entry", $entry_id);
 		aw_global_set("current_chain",$id);
@@ -432,7 +430,7 @@ class form_chain extends form_base
 			}
 			if ($show_form_id)
 			{
-				$f = new form;
+				$f = get_instance("formgen/form");
 				$entry = $f->show(array("id" => $show_form_id, "entry_id" => $ear[$show_form_id],"op_id" => $this->chain["during_show_op"]));
 				switch ($this->chain["op_pos"])
 				{
@@ -476,7 +474,6 @@ class form_chain extends form_base
 		}
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
-		classload("form");
 
 		// if this form is part of form calendar definition and is used for defining
 		// periods, then we need to set a special flag so form->process_entry can
@@ -493,7 +490,7 @@ class form_chain extends form_base
 
 		if ($has_calendar && $this->chain["cal_controller"])
 		{
-			$frm = get_instance("form_base");
+			$frm = get_instance("formgen/form_base");
 			$frm->load($this->chain["cal_controller"]);
 			/*
 			print "<pre>";
@@ -557,7 +554,7 @@ class form_chain extends form_base
 			//print "updating time definition<br>";
 		};
 		
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->process_entry(array(
 				"id" => $form_id,
 				"chain_entry_id" => $chain_entry_id,
@@ -728,7 +725,7 @@ class form_chain extends form_base
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM_CHAIN." AND status != 0");
 		while ($row = $this->db_next())
 		{
-			$f = new form_chain;
+			$f = get_instance("formgen/form_chain");
 			$f->load_chain($row["oid"]);
 
 			echo "chain $row[oid] <br>";
@@ -767,8 +764,7 @@ class form_chain extends form_base
 	function show_table_for_chain_entry($arr)
 	{
 		extract($arr);
-		classload("form_table");
-		$ft = new form_table;
+		$ft = get_instance("formgen/form_table");
 		// now get all entries of the form for the chain entry
 		$entdat = $ft->get_entries(array(
 			"id" => $form_id,
