@@ -174,7 +174,6 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <datatype>int</datatype>
             <caption>Elementide vahe (cellspacing) (px)</caption>
       </property>
       <property>
@@ -185,7 +184,6 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <datatype>int</datatype>
             <caption>Sisu kaugus joontest (cellspadding) (px)</caption>
       </property>
       <property>

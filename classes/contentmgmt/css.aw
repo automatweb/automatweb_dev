@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.4 2004/12/14 10:05:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.5 2005/01/18 10:31:35 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -60,10 +60,10 @@
 @property height type=textbox size=5
 @caption K&otilde;rgus
 
-@property padding type=textbox size=5 datatype=int
+@property padding type=textbox size=5 
 @caption Elementide vahe (cellspacing) (px)
 
-@property margin type=textbox size=5 datatype=int
+@property margin type=textbox size=5 
 @caption Sisu kaugus joontest (cellspadding) (px)
 
 @property a_style type=relpicker reltype=RELTYPE_CSS
@@ -210,7 +210,6 @@ class css extends class_base
 		{
 			return false;
 		};
-
 		foreach($data as $key => $val)
 		{
 			if ($val === "")
@@ -259,6 +258,10 @@ class css extends class_base
 					if ($val == 1)
 					{
 						$mask = "text-decoration: underline;\n";
+					}
+					else
+					{
+						$mask = "";
 					}
 					break;
 
