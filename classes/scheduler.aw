@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.27 2004/12/08 15:09:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.28 2004/12/10 12:25:33 ahti Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -266,8 +266,16 @@ class scheduler extends aw_template
 
 	function do_and_log_event($evnt)
 	{
+		ob_start();
+		$file = $this->cfg["error_file"];
+		touch($file);
+		$fl = fopen($file, "wb");
 		if ($evnt["event"] == "")
 		{
+			echo "no event specified, exiting<br />\n";
+			fwrite($fl, ob_get_contents());
+			fclose($fl);
+			ob_end_flush();
 			return;
 		}
 	
@@ -283,11 +291,17 @@ class scheduler extends aw_template
 			{
 				// they are so just bail out
 				echo "bailing for lock file ",$lockfilename,"<br />\n";
+				fwrite($fl, ob_get_contents());
+				fclose($fl);
+				ob_end_flush();
 				return;
 			}
 			else
 			{
 				echo "shouldn't but bailing for lock file ",$lockfilename,"<br />\n";
+				fwrite($fl, ob_get_contents());
+				fclose($fl);
+				ob_end_flush();
 				return;
 			};
 		}
@@ -335,8 +349,9 @@ class scheduler extends aw_template
 		$this->log_event($evnt, $req);
 
 		$this->remove($evnt);
-		
-
+		fwrite($fl, ob_get_contents());
+		fclose($fl);
+		ob_end_flush();
 	}
 
 	////
