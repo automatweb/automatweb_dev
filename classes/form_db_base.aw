@@ -342,11 +342,58 @@ class form_db_base extends aw_template
 		if (($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] != "") || $this->arr["save_table"] != 1)
 		{
 			$this->delete_object($entry_id);
-			$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
-			$after = $this->hexbin($after);
-			header("Location: ".$after);
-			die();
 		}
+		else
+		if ($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] == "")
+		{
+			// no objects, just writing to weirdass database tables. 
+			// so we go through them, start from the first and find the next table's id via the relation,
+			// recurse to the next table, then delete the row
+			$this->req_delete_entry($this->arr["save_table_start_from"],$entry_id);
+		}
+		$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
+		$after = $this->hexbin($after);
+		header("Location: ".$after);
+		die();
+	}
+
+	////
+	// !recursively goes through all the database tables for the loaded form and delete the entry
+	function req_delete_entry($tbl,$entry_id)
+	{
+		$this->save_handle();
+
+		$_tmp = $this->arr["save_tables_rels"][$tbl];
+		if (is_array($_tmp))
+		{
+			// go through the tables related to this one one by one and have them delete their data
+			foreach($_tmp as $r_tbl => $r_tbl)
+			{
+				// here we must find the columns that are in relation from this table to the next 
+				// and then find the next table's index_column value for that row
+
+				// the index column in the next table
+				$n_idx_col = $this->arr["save_tables"][$r_tbl];	
+
+				// the column from the next table, that is related to the index column in the current table
+				$rel_col = $this->arr["save_tables_rel_els"][$tbl]["to"];
+
+				// get the entry id for the next table
+				$q = "SELECT $n_idx_col AS n_entry_id FROM $r_tbl WHERE $rel_col = '$entry_id'";
+				$n_entry_id = $this->db_fetch_field($q,"n_entry_id");
+				dbg("q = $q , n_entry_id = $n_entry_id<br>");
+
+				// and recurse to the next table with the new entry id
+				$this->req_delete_entry($r_tbl,$n_entry_id);
+			}
+		}
+		
+		// and finally, delete the row from this table
+		$idx_col = $this->arr["save_tables"][$tbl];
+		$q = "DELETE FROM $tbl WHERE $idx_col = '$entry_id'";
+		dbg("query $q <br>");
+		$this->db_query($q);
+		$this->restore_handle();
 	}
 
 	////
@@ -399,6 +446,7 @@ class form_db_base extends aw_template
 		foreach($els as $el)
 		{
 			$ret[$el->get_id()] = $row[$el->get_save_col()];
+			dbg("tabel $tbl el with id ".$el->get_id()." , save col = ".$el->get_save_col()." got value ".$row[$el->get_save_col()]." <br>");
 		}
 
 		// and now recurse to the other tables
@@ -601,7 +649,7 @@ class form_db_base extends aw_template
 		}
 		
 		$sql = "SELECT ".$sql_data." FROM ".$sql_join." ".$sql_where;
-//		echo "sql = $sql <br>";
+		dbg("get_search_query sql = $sql <br>");
 		return $sql;
 	}
 
@@ -809,8 +857,12 @@ class form_db_base extends aw_template
 			{
 				$relf =& $this->cache_get_form_instance($el->arr["linked_form"]);
 				$linked_el = $relf->get_element_by_id($el->arr["linked_element"]);
-
-				$elname = $linked_el->get_save_table().".".$linked_el->get_save_col();
+				
+				// if added by duke. Is this correct?
+				if (is_object($linked_el))
+				{
+					$elname = $linked_el->get_save_table().".".$linked_el->get_save_col();
+				};
 
 				if (trim($el->get_value()) != "")	
 				{
@@ -905,6 +957,70 @@ class form_db_base extends aw_template
 		}
 
 		return $query;
+	}
+
+	////
+	// !returns all values for element $el_id entered through form $form
+	// sort_by_alpha = if true, the result is sorted alphabetically
+	// unique = if true, the result will contain only unique values
+	//
+	// returns an array of values for the element
+	function db_get_values_for_element($arr)
+	{
+		$this->save_handle();
+		extract($arr);
+		// now we need to figure out where the other form saves it's data. so we load it :(
+		$tf =& $this->cache_get_form_instance($form);
+		$el = $tf->get_element_by_id($el_id);
+		if (!$el)
+		{
+			// we oughta handle this more graciously methinks. but l8r
+			$this->raise_error("no element $el_id in form $form!", true);
+		}
+
+		$table = $el->get_save_table();
+		$col = $el->get_save_col();
+	
+		if ($tf->arr["save_table"] == 1)
+		{
+			// if objects are also created, then we are basically fucked, because objects might be created for one table
+			// and the element we want is in another table - so we would need to bridge that gap by joins. fuck.
+			// anyway, we just don't support writing to tables with objects now - we don't check object's status
+			// FIXME
+			$where = "";
+		}
+		else
+		{
+			// the simple case - formgen table with objects
+			$where = "LEFT JOIN objects ON objects.oid = ".$table.".id WHERE objects.status != 0";
+		}
+
+		$rel_el = $table.".".$col;
+
+		$order_by = "";
+		if ($sort_by_alpha)
+		{
+			$order_by = "ORDER BY $rel_el ";
+		}
+
+		if ($unique)
+		{
+			$rel_el = "distinct(".$rel_el.")";
+		}
+
+		$q = "SELECT $rel_el as el FROM $table $where $order_by";
+		dbg("relation q = $q <br>");
+		$this->db_query($q);
+
+		$cnt=0; 
+		$ret = array();
+		while($row = $this->db_next())
+		{
+			$ret[$cnt] = $row["el"];
+			$cnt++;
+		}
+		$this->restore_handle();
+		return $ret;
 	}
 }
 ?>
