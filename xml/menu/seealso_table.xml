@@ -1,8 +1,0 @@
-<?xml version='1.0'?>
-<tabledef>
-<data>
-<field name="id" caption="OID" talign="center" type="int"/>
-<field name="name" caption="Nimi" talign="left"/>
-</data>
-
-</tabledef>
