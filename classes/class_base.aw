@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.316 2004/11/07 11:47:37 kristo Exp $
+// $Id: class_base.aw,v 2.317 2004/11/10 12:26:00 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2963,6 +2963,8 @@ class class_base extends aw_template
 		$propvalues = array();
 		$tmp = array();
 
+		$this->stop_processing = false;
+
 		// first, gather all the values.
 		foreach($properties as $key => $property)
 		{
@@ -3075,7 +3077,8 @@ class class_base extends aw_template
 				// other raises an error. Then we will have the original
 				// value in the session. Is that a problem?
 			};
-			
+		
+			// what the duke is going on here? errors?
 			if (isset($errors[$name]["msg"]))
 			{
 				$status = PROP_FATAL_ERROR;
@@ -3130,8 +3133,9 @@ class class_base extends aw_template
 				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
 
+				$this->stop_processing = true;
 				
-				return false;
+				//return false;
 			};
 
 			// oh well, bail out then.
@@ -3264,6 +3268,11 @@ class class_base extends aw_template
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};
 			};
+		};
+
+		if ($this->stop_processing)
+		{
+			return false;
 		};
 
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
