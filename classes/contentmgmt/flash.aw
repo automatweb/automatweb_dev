@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.9 2004/10/13 07:56:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.1 2005/02/13 12:13:05 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -111,8 +111,7 @@ class flash extends class_base
 			$arr["obj_inst"]->set_prop("width",$this->real_width);
 			$arr["obj_inst"]->set_prop("height",$this->real_height);
 		};
-        }
-
+	}
 
 	function get_url($url)
 	{

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="flash" folder="" extends="class_base">
+	<class name="flash" folder="contentmgmt" extends="class_base">
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
