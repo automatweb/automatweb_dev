@@ -126,7 +126,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_search" nologin="1">
+		<action name="submit_search" all_args="1" nologin="1">
 			<function name="submit_search">
 				<arguments>
 				</arguments>
@@ -161,6 +161,7 @@
 			<function name="del_msg">
 				<required name="comment"/>
 				<required name="board"/>
+				<optional name="section"/>
 			</function>
 		</action>
 

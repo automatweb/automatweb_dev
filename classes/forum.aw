@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.27 2001/12/13 17:26:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.28 2001/12/14 06:07:55 cvs Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -165,11 +165,12 @@ class forum extends aw_template
 		if ($board)
 		{
 			$this->vars(array(
-				"threaded_link" => $this->mk_my_orb("show_threaded", array("board" => $board,"_alias" => "forum")),
-				"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board,"_alias" => "forum")),
-				"flat_link" => $this->mk_my_orb("show",array("board" => $board,"_alias" => "forum")),
-				"search_link" => $this->mk_my_orb("search",array("board" => $board,"_alias" => "forum")),
-				"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id, "from" => $from,"_alias" => "forum")),
+				"threaded_link" => $this->mk_my_orb("show_threaded", array("board" => $board,"_alias" => "forum","section" => $this->section)),
+				"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board,"_alias" => "forum","section" => $this->section)),
+				"flat_link" => $this->mk_my_orb("show",array("board" => $board,"_alias" => "forum","section" => $this->section)),
+				"search_link" => $this->mk_my_orb("search",array("board" => $board,"_alias" => "forum","section" => $this->section)),
+				"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id, "from" => $from,"_alias" => "forum","section" => $this->section)),
+				"forum_link" => $this->mk_my_orb("topics",array("id" => $parent,"_alias" => "forum", "section" => $this->section)),
 			));
 		};
 
@@ -181,6 +182,7 @@ class forum extends aw_template
 				"props_link" => $this->mk_my_orb("change",array("id" => $id)),
 				"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 				"search_forum_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
+				"search_link" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
 				"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id, "_alias" => "forum","section" => $this->section, "from" => $from)),
 			));
 		}
@@ -290,6 +292,7 @@ class forum extends aw_template
 
 		$this->mk_links(array(
 			"board" => $board,
+			"id" => $id
 		));
 
 		$voteblock = "";
@@ -387,6 +390,10 @@ class forum extends aw_template
 
 		$this->read_template("messages_threaded.tpl");
 		$content = "";
+		$this->mk_links(array(
+			"board" => $board,
+			"id" => $forum_obj["oid"],
+		));
 		while($row = $this->db_next())
 		{
 			$this->comments[$row["parent"]][] = $row;
@@ -394,10 +401,6 @@ class forum extends aw_template
 		$this->rec_comments(0);
 		$this->vars(array(
 			"message" => $this->content,
-			"flat_link" => $this->mk_my_orb("show",array("board" => $board,"section" => $this->section)),
-			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => $this->section)),
-			"forum_link" => $this->mk_my_orb("topics",array("id" => $forum_obj["oid"],"section" => $this->section)),
-			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
 		));
 		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $this->section));
 	}
@@ -457,9 +460,10 @@ class forum extends aw_template
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
 			"comment" => nl2br(create_links($args["comment"])),
-			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"])),
+			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"],"section" => $this->section)),
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
+			"topic_link" => $this->mk_my_orb("show",array("board" => $args["board_id"],"section" => $this->section,"_alias" => "forum")),
 		));
 
 		if ($this->is_template("SHOW_COMMENT") && ($this->cid == $args["id"]))
@@ -610,9 +614,6 @@ class forum extends aw_template
 		return $this->parse();
 	}
 
-		
-
-	
 
 	////
 	// !Shows the search form
@@ -635,7 +636,7 @@ class forum extends aw_template
 			"board" => $board,
 		));
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_search",array("id" => $id, "board" => $board)),
+			"reforb" => $this->mk_reforb("submit_search",array("id" => $id, "board" => $board,"no_reforb" => 1,"section" => $this->section)),
 		));
 		return $this->parse();
 	}
@@ -646,16 +647,36 @@ class forum extends aw_template
 	{
 		extract($args);
 		$this->read_template("search_results.tpl");
+		if (not($board))
+		{
+			$board = $id;
+		};
 		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
 
 		// koigepealt tuleb koostada topicute nimekiri mingi foorumi all
 		$blist[] = 0;
-		$q = "SELECT * FROM objects WHERE parent = '$board' AND status = 2 AND class_id = " . CL_MSGBOARD_TOPIC;
-		$this->db_query($q);
-		while ($row = $this->db_next())
+		if ($board_obj["class_id"] == CL_MSGBOARD_TOPIC)
 		{
-			$blist[] = $row["oid"];
+			$blist[] = $board_obj["oid"];
+			$this->mk_links(array(
+				"board" => $board,
+				"parent" => $board_obj["parent"],
+			));
+			$this->forum_id = $forum_obj["oid"];
+		}
+		else
+		{	
+			$q = "SELECT * FROM objects WHERE parent = '$board' AND status = 2 AND class_id = " . CL_MSGBOARD_TOPIC;
+			$this->db_query($q);
+			$this->forum_id = $board_obj["parent"];
+			$this->mk_links(array(
+				"id" => $board,
+			));
+			while ($row = $this->db_next())
+			{
+				$blist[] = $row["oid"];
+			};
 		};
 		$bjlist = join(",",$blist);
 		// valjad: from,email,subj,comment
@@ -673,19 +694,19 @@ class forum extends aw_template
 		while($row = $this->db_next())
 		{
 			$cnt++;
-			$this->vars(array(
-				"from" => $row["name"],
-				"subj" => $row["subj"],
-				"email" => $row["email"],
-				"comment" => $row["comment"],
-			));
-			$c .= $this->parse("message");
+			#$this->vars(array(
+			#	"from" => $row["name"],
+			#	"subj" => $row["subj"],
+			#	"email" => $row["email"],
+			#	"time" => $this->time2date($row["time"]),
+			#	"comment" => $row["comment"],
+			#));
+			#$c .= $this->parse("message");
+			$c .= $this->display_comment($row);
 		};
 		$this->vars(array(
 			"count" => $cnt,
 			"message" => $c,
-			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["oid"])),
-			"search_link" => $this->mk_my_orb("search",array("board" => $board,"section" => $this->section)),
 		));
 		return $this->parse();
 
@@ -962,8 +983,17 @@ class forum extends aw_template
 	{
 		extract($arr);
 		$this->delete_object($board);
+		$pobj = $this->get_object($forum_id);
+		if ($pobj["class_id"] == CL_DOCUMENT)
+		{
+			$retval = $this->mk_link(array("section" => $pobj["oid"]));
+		}
+		else
+		{
+			$retval = $this->mk_my_orb("topics", array("id" => $forum_id));
+		};
+		return $retval;
 
-		return $this->mk_my_orb("topics",array("id" => $forum_id),"forum");
 	}
 
 	////
@@ -996,7 +1026,16 @@ class forum extends aw_template
 			"last" => $from,
 			"comment" => $comment
 		));
-		return $this->mk_my_orb("show", array("board" => $board));
+		$pobj = $this->get_object($forum_id);
+		if ($pobj["class_id"] == CL_DOCUMENT)
+		{
+			$retval = $this->mk_link(array("section" => $pobj["oid"]));
+		}
+		else
+		{
+			$retval = $this->mk_my_orb("show", array("board" => $board));
+		};
+		return $retval;
 	}
 
 	////
@@ -1006,8 +1045,18 @@ class forum extends aw_template
 		extract($arr);
 
 		$this->db_query("DELETE FROM comments WHERE id = $comment");
+		$_tmp = $this->get_object($board);
+		$pobj = $this->get_object($_tmp["parent"]);
+		if ($section)
+		{
+			$retval = $this->mk_my_orb("show",array("_alias" => "forum","board" => $board,"section" => $section));
+		}
+		else
+		{
+			$retval = $this->mk_my_orb("show", array("board" => $board));
+		};
 
-		return $this->mk_my_orb("show", array("board" => $board));
+		return $retval;
 	}
 }
 ?>
