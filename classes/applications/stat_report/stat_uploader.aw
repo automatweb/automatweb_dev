@@ -27,6 +27,9 @@
 @property comment type=textarea
 @caption Kommentaar
 
+@property MAX_FILE_SIZE type=hidden
+@caption Faili max. suurus
+
 @property submit type=submit value=Saada
 
 @classinfo hide_tabs=1
@@ -251,6 +254,11 @@ class stat_uploader extends class_base
 				{
 					$prop["value"] = $_GET["reg"];
 				};
+				break;
+
+			case "MAX_FILE_SIZE":
+				$prop["value"] = $this->obj->prop("filesize") * 1024;
+				break;
 
 		};
 		return $rv;
