@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.16 2004/09/09 10:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.17 2004/09/17 12:18:47 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -386,10 +386,31 @@ class shop_order_cart extends class_base
 
 		if ($arr["from"] != "confirm")
 		{
-			$awa = new aw_array($order_data);
-			foreach($awa->get() as $iid => $dat)
+			$awa = safe_array($order_data);
+			foreach($awa as $iid => $dat)
 			{
 				$_SESSION["cart"]["item_data"][$iid] = $dat;
+			}
+
+			if (isset($awa["all_items"]) && is_array($awa["all_items"]))
+			{
+				$awa_i = new aw_array($arr["add_to_cart"]);
+				$awa_all = safe_array($awa["all_items"]);
+				foreach($awa_i->get() as $iid => $quant)
+				{
+					if ($quant > 0)
+					{
+						if (!isset($_SESSION["cart"]["item_data"][$iid]) || !is_array($_SESSION["cart"]["item_data"][$iid]))
+						{
+							$_SESSION["cart"]["item_data"][$iid] = array();
+						}
+
+						foreach($awa_all as $aa_k => $aa_v)
+						{
+							$_SESSION["cart"]["item_data"][$iid][$aa_k] = $aa_v;
+						}
+					}
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.15 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.16 2004/09/17 12:18:47 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2156,11 +2156,12 @@ class shop_warehouse extends class_base
 			$po = $po->get_original();
 		}
 
-		$ol = new object_list(array(
+		$filt = array(
 			"parent" => $po->id(),
 			"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
-		));
+		);
+		$ol = new object_list($filt);
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->class_id() == CL_MENU)
@@ -2175,7 +2176,7 @@ class shop_warehouse extends class_base
 		foreach($ret as $o)
 		{
 			$inst = $o->instance();
-			foreach($inst->get_contained_products($o) as $co)
+			foreach($inst->get_contained_products($o, $conf) as $co)
 			{
 				$tmp[] = $co;
 			}

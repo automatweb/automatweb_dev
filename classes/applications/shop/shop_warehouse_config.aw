@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.4 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.5 2004/09/17 12:18:47 kristo Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -34,6 +34,9 @@
 
 @property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO field=meta method=serialize multiple=1
 @caption Haldurfirmad
+
+@property sell_prods type=checkbox ch_value=1 field=meta method=serialize 
+@caption Ladu m&uuml;b tooteid, mitte pakendeid
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog

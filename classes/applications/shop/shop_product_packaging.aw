@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.6 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.7 2004/09/17 12:18:47 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -154,6 +154,7 @@ class shop_product_packaging extends class_base
 			"packaging_view_link" => obj_link($pi->id().":".$oc_obj->id()),
 			"name" => $prod->name(),
 			"price" => $this->get_price($prod),
+			"tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($prod)), 2),
 			"obj_price" => $this->get_price($pi),
 			"obj_tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($pi)), 2),
 			"id" => $prod->id(),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.13 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.14 2004/09/17 12:18:47 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -446,19 +446,13 @@ class shop_order_center extends class_base
 
 	function make_menu_link($o)
 	{
-		/*static $i;
-		if (!is_object($i))
-		{
-			$i = get_instance("contentmgmt/site_show");
-		}
-		return $i->make_menu_link($o);*/
-
 		if ($o->prop("link") != "")
 		{
 			return $o->prop("link");
 		}
-		
-		return $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
+
+		$link =  $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
+		return $link;
 	}
 
 	/** shows shop items

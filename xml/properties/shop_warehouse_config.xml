@@ -91,6 +91,16 @@
             <multiple>1</multiple>
             <caption>Haldurfirmad</caption>
       </property>
+      <property>
+            <name>sell_prods</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ladu m&amp;uuml;b tooteid, mitte pakendeid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
