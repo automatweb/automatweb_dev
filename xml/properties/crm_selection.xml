@@ -51,9 +51,6 @@
             <field>meta</field>
             <method>serialize</method>
       </property>
-      <property>
-            <comment>moves objects from one selection to another</comment>
-      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
