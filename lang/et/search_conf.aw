@@ -15,4 +15,17 @@ $lc_search_conf["LC_SEARCH_CONF_ACTION"] = "Tegevus";
 $lc_search_conf["LC_SEARCH_CONF_CHANGE"] = "Muuda";
 $lc_search_conf["LC_SEARCH_CONF_DELETE"] = "Delete";
 
+$lc_search_conf["LC_SEARCH_FROM"] = "Kust";
+$lc_search_conf["LC_SEARCH_TITLE"] = "pealkiri";
+$lc_search_conf["LC_SEARCH_TEXT"] = "tekst";
+$lc_search_conf["LC_SEARCH_OR"] = " mõni sõna ";
+$lc_search_conf["LC_SEARCH_AND"] = " kõik sõnad ";
+$lc_search_conf["LC_SEARCH_ALL"] = " täpne fraas ";
+$lc_search_conf["LC_SEARCH_SORT"] = " Sorteeri";
+$lc_search_conf["LC_SEARCH_SORT2"] = " järgi";
+$lc_search_conf["LC_SEARCH_SORT_BY_MOD"] = "muutmiskuupäeva";
+$lc_search_conf["LC_SEARCH_SORT_BY_TITLE"] = "pealkirja";
+$lc_search_conf["LC_SEARCH_SORT_BY_TEXT"] = "teksti";
+$lc_search_conf["LC_SEARCH_BTN_CAPTION"] = "Otsi!";
+
 ?>

@@ -450,6 +450,7 @@ define("LC_MENUEDIT_SECTION","Section");
 define("LC_MENUEDIT_ADMINN_MENU","Admin menu");
 define("LC_MENUEDIT_DOCUMENT","Document");
 define("LC_MENUEDIT_CATALOG","Catalogue");
+define("LC_MENUEDIT_PMETHOD","Public method");
 define("LC_MENUEDIT_CJANGED_MENU","Changed menus %s");
 define("LC_MENUEDIT_ADDED_SECTION","Added section %s");
 define("LC_MENUEDIT_IMPORT_MENU","Import menus");

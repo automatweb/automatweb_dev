@@ -468,6 +468,7 @@ define("LC_MENUEDIT_SECTION","Sektsioon");
 define("LC_MENUEDIT_ADMINN_MENU","Adminni menyy");
 define("LC_MENUEDIT_DOCUMENT","Dokument");
 define("LC_MENUEDIT_CATALOG","Kataloog");
+define("LC_MENUEDIT_PMETHOD","Avalik meetod");
 define("LC_MENUEDIT_CJANGED_MENU","Muutis men&uuml;&uuml;d %s");
 define("LC_MENUEDIT_ADDED_SECTION","Lisas sektsiooni %s");
 define("LC_MENUEDIT_IMPORT_MENU","Impordi men&uuml;&uuml;sid");
