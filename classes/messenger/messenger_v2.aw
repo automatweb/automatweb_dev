@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.1 2003/09/08 14:46:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.2 2003/09/09 15:43:10 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -25,14 +25,20 @@ caption Identiteet
 @property mail_toolbar type=toolbar no_caption=1 group=message_view store=no
 @caption Msg. toolbar
 
-@property message_view type=table no_caption=1 group=message_view store=no
+@property msg_cont type=text group=message_view no_caption=1
+@caption heh
+
+@property treeview type=text group=message_view parent=msg_cont
+@caption Shalla lalla
+
+@property message_view type=table no_caption=1 group=message_view store=no parent=msg_cont
 @caption Kirjad
 
-property msg_inbox_folder type=relpicker reltype=RELTYPE_MAIL_FOLDER
-caption Inbox
+@property trend type=text group=message_view parent=msg_cont
+@caption Phehh
 
-property msg_outbox_folder type=relpicker reltype=RELTYPE_MAIL_FOLDER
-caption Outbox
+@property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
+@caption Outbox
 
 @groupinfo message_view caption="Kirjad" submit=no
 @groupinfo write_mail caption="Uus kiri" submit=no
@@ -45,7 +51,8 @@ caption Outbox
 define("RELTYPE_MAIL_IDENTITY",1); // things that appear on the From lines etc...
 define("RELTYPE_MAIL_SOURCE",2); // pop3, imap, etc..
 define("RELTYPE_MAIL_CONFIG",3); // millist konfiguratsiooni kasutada
-define("RELTYPE_MAIL_FOLDER",4); // folder
+define("RELTYPE_FOLDER",4); // kataloog kuhu maile salvestada .. kehtib ainult local delivery korral
+define("RELTYPE_ADDRESS",5); // used to specify delivery addresses .. which can be AW lists for example
 
 class messenger_v2 extends class_base
 {
@@ -76,12 +83,24 @@ class messenger_v2 extends class_base
 				}
 				else
 				{
+					// I need a better way to lay out properties .. what about for example ..
+					// parent for properties? eh .. well, I think that could really work
 					$data["value"] = $this->gen_message_list($arr);
 				};
 				break;
 
 			case "mail_toolbar":
 				$data["value"] = $this->gen_mail_toolbar($arr);
+				break;
+
+			case "treeview":
+				$data["value"] = $this->make_folder_tree($arr);
+				break;
+
+			case "trend":
+				// ugly hackling. Will go away as soon as I figure out how to put a tree and
+				// a vcl table side by side
+				$data["value"] = "</td></tr></table>";
 				break;
 
 		};
@@ -141,15 +160,14 @@ class messenger_v2 extends class_base
 
 	function gen_message_list(&$arr)
 	{
-		$t = &$arr["prop"]["obj_inst"];
-		$t->parse_xml_def("messenger/mailbox_view");
-
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		// now .. I think I need classes to handle mailbox folders and mailbox messages
 		$contents = $this->drv_inst->get_folder_contents();
+		
+		$t = &$arr["prop"]["obj_inst"];
+		$t->parse_xml_def("messenger/mailbox_view");
 		
 		foreach($contents as $key => $message)
 		{
@@ -160,14 +178,18 @@ class messenger_v2 extends class_base
 				)),
 				"from" => htmlspecialchars($message["from"]),
 				"subject" => html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"msgid" => $key,"group" => $arr["request"]["group"],"mailbox" => $this->use_mailbox)),
+					"url" => $this->mk_my_orb("change",array(
+							"id" => $arr["obj"]["oid"],
+							"msgid" => $key,
+							"group" => $arr["request"]["group"],
+							"mailbox" => $this->use_mailbox,
+					)),
 					"caption" => parse_obj_name($message["subject"]),
 				)),
 				"date" => $message["date"],
 				"size" => $message["size"],
 				"seen" => $this->_conv_stat($message["seen"]),
 				"answered" => $this->_conv_stat($message["answered"]),
-				"recent" => $this->_conv_stat($message["recent"]),
 			));
 		};
 
@@ -177,6 +199,43 @@ class messenger_v2 extends class_base
 	{
 		return ($code == 0) ? "ei" : "jah";
 	}
+
+	function make_folder_tree($arr)
+	{
+		$this->_connect_server(array(
+			"msgr_id" => $arr["obj"]["oid"],
+		));
+
+		$rv = "<table border='0' width='100%'><tr><td valign='top'><small>";
+
+		$this->mailboxlist = $this->drv_inst->list_folders();
+		$selected = isset($arr["request"]["mailbox"]) ? $arr["request"]["mailbox"] : "INBOX";
+		foreach($this->mailboxlist as $key => $val)
+		{
+			if ($val == $selected)
+			{
+				$rv .= "<strong>$val</strong>";
+			}
+			else
+			{
+				$rv .= html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $arr["obj"]["oid"],
+						"group" => "message_view",
+						"mailbox" => $val,
+					)),
+					"caption" => $val,
+				));
+			};
+			$rv .= "<br>";
+		};
+
+		$rv .= "</td><td valign='top'>";
+
+		return $rv;
+	}
+
+
 	
 
 	function gen_mail_toolbar($arr)
@@ -185,22 +244,22 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		$this->mailboxlist = $this->drv_inst->list_folders();
-
-		//imap_createmailbox($this->mbox,imap_utf7_encode($this->servspec . "INBOX.Sent-mail"));
+		//$this->mailboxlist = $this->drv_inst->list_folders();
 
 		$toolbar = &$arr["prop"]["toolbar"];
-		$selected = isset($arr["request"]["mailbox"]) ? $arr["request"]["mailbox"] : "INBOX";
 
+		/*
 		$toolbar->add_cdata(html::select(array(
 				"name" => "mailbox",
 				"options" => $this->mailboxlist,
 				"selected" => $selected,
 		)));
+		*/
 
 		$req_uri = aw_global_get("REQUEST_URI");
 
-		
+	
+		/*
 		$toolbar->add_button(array(
 			"name" => "refresh",
 			"tooltip" => "Lae meilbox",
@@ -208,18 +267,18 @@ class messenger_v2 extends class_base
 			"img" => "refresh.gif",
 			"imgover" => "refresh_over.gif",
 		));
+		*/
 
 
 		if (!empty($arr["request"]["msgid"]))
 		{
-			$toolbar->add_separator();
 			$toolbar->add_cdata(html::href(array(
 				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"msgid" => $arr["request"]["msgid"],"group" => "write_mail","mailbox" => $this->use_mailbox)),
 				"caption" => "Vasta",
 			)));
+			$toolbar->add_separator();
 		}
 		
-		$toolbar->add_separator();
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta märgitud kirjad",
@@ -291,6 +350,8 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
+		$outbox = $msgobj->prop("msg_outbox");
+
 		$mailbox = $arr["request"]["mailbox"];
 		$msgid = $arr["request"]["msgid"];
 
@@ -305,17 +366,10 @@ class messenger_v2 extends class_base
 		$t = get_instance("messenger/mail_message");
                 $t->init_class_base();
                 $emb_group = "general";
-		/*
-                if ($this->event_id && $args["request"]["cb_group"])
-                {
-                        $emb_group = $args["request"]["cb_group"];
-                };
-		*/
+
                 $all_props = $t->get_active_properties(array(
                         "group" => $emb_group,
                 ));
-
-
 
                 $t->request = $args["request"];
 
@@ -325,11 +379,14 @@ class messenger_v2 extends class_base
                 $all_props[] = array("type" => "hidden","name" => "parent","value" => $outbox);
 
 		// yah, I know .. this sucks -- duke
-		unset($all_props["needs_translation"]);
-		unset($all_props["is_translated"]);
 		unset($all_props["uidl"]);
 
 		$all_props["mfrom"]["value"] = $msgobj->prop("fromname");
+
+		$all_props["mto"]["type"] = "relpicker";
+		$all_props["mto"]["reltype"] = "RELTYPE_ADDRESS";
+		$all_props["mto"]["size"] = 1;
+
 		if (sizeof($msgdata) > 0)
 		{
 			$all_props["mto"]["value"] = !empty($msgdata["reply_to"]) ? $msgdata["reply_to"] : $msgdata["from"];
@@ -340,7 +397,88 @@ class messenger_v2 extends class_base
                 return $t->parse_properties(array(
                         "properties" => $all_props,
                         "name_prefix" => "emb",
+			"target_obj" => $msgobj->id(),
                 ));
+	}
+	
+	function submit_write_mail($arr)
+	{
+                $emb = $arr["form_data"]["emb"];
+		// I will not submit data, instead I'll store it into the "Sent" folder
+		// on the IMAP server .. yeees, yees, that is really cool
+
+		$obj_id = $arr["form_data"]["id"];
+		$this->_connect_server(array(
+			"msgr_id" => $arr["form_data"]["id"],
+		));
+
+		$to_addr = $emb["mto"];
+
+		// heh, this means you can send mail directly to any object just by writing it's id here
+		// it's bad, and I'll fix it later --duke
+		if (is_numeric($to_addr))
+		{
+			$target_obj = new object($to_addr);
+			if ($target_obj->prop("class_id") == CL_ML_LIST)
+			{
+				// now then .. how the fuck am I going to put that constructed message
+				// into the outbound queue of this list? eh? mh? ah?
+
+				// and do I have to save it as an AW object as well? eh?
+				if (isset($emb["group"]))
+				{
+					$this->emb_group = $emb["group"];
+				};
+
+				$lists = array(":" . $target_obj->prop("name"));
+
+				$t = get_instance("messenger/mail_message");
+                		$t->id_only = true;
+				unset($emb["send"]);
+				$msg_id = $t->submit($emb);
+				$mllist=get_instance("mailinglist/ml_list");
+                        	$route_back=$this->mk_my_orb("change",array("id" => $obj_id,"group" => "message_view"));
+                        	aw_session_set("route_back",$route_back);
+                        	// scheduleerib kirjade saatmise
+                        	$url=$mllist->route_post_message(array("id" => $msg_id, "targets" => $lists));
+                        	Header("Location: $url");
+                        	die();
+			};
+		}
+		else
+		{
+			imap_append($this->mbox,$this->servspec . $this->outbox,
+			   "From: $emb[mfrom]\r\n"
+			   ."To: $emb[mto]\r\n"
+			   ."Subject: $emb[name]\r\n"
+			   ."\r\n"
+			   .$emb[message] . "r\n"
+			   );
+			//print "I wanda .. kas see mail läks nüüd kohale ää";
+
+			$envelope = array();
+			$envelope["from"] = $emb["mfrom"];
+			//$envelope["to"] = $emb["mto"];
+			$envelope["subject"] = $emb["name"];
+			$envelope["date"] = date('r');
+
+			$part1["type"]= "TEXT";
+			$part1["subtype"]="PLAIN";
+			$part1["charset"] = "ISO-8859-4";
+			$part1["contents.data"] = $emb["message"];
+
+			$body[1] = $part1;
+
+			$msg = imap_mail_compose($envelope,$body);
+
+			mail($emb["mto"],$emb["name"],"",$msg);
+
+			// redirect to inbox .. not the smartest thing to do, but hey
+			$this->redir_to_group = "message_view";
+		};
+
+                return PROP_OK;
+
 	}
 
 	////
@@ -383,76 +521,32 @@ class messenger_v2 extends class_base
 		return $msgdata;
 	}
 
-	function submit_write_mail($arr)
-	{
-		$t = get_instance("messenger/mail_message");
-                $emb = $arr["form_data"]["emb"];
-                $t->id_only = true;
-                if (isset($emb["group"]))
-                {
-                        $this->emb_group = $emb["group"];
-                };
-		// I will not submit data, instead I'll store it into the "Sent" folder
-		// on the IMAP server .. yeees, yees, that is really cool
-
-		$obj_id = $args["form_data"]["id"];
-		$this->_connect_server(array(
-			"msgr_id" => $arr["form_data"]["id"],
-		));
-
-		imap_append($this->mbox,$this->servspec . $this->outbox,
-                   "From: $emb[mfrom]\r\n"
-                   ."To: $emb[mto]\r\n"
-                   ."Subject: $emb[name]\r\n"
-                   ."\r\n"
-                   .$emb[message] . "r\n"
-                   );
-		//print "I wanda .. kas see mail läks nüüd kohale ää";
-
-		$envelope = array();
-		$envelope["from"] = $emb["mfrom"];
-		//$envelope["to"] = $emb["mto"];
-		$envelope["subject"] = $emb["name"];
-		$envelope["date"] = date('r');
-
-		$part1["type"]= "TEXT";
-		$part1["subtype"]="PLAIN";
-		$part1["charset"] = "ISO-8859-4";
-		$part1["contents.data"] = $emb["message"];
-
-		$body[1] = $part1;
-
-		$msg = imap_mail_compose($envelope,$body);
-
-		mail($emb["mto"],$emb["name"],"",$msg);
-
-		// redirect to inbox .. not the smarters thing to do, but hey
-		$this->redir_to_group = "message_view";
-
-                return PROP_OK;
-
-	}
 
 	function callback_get_rel_types()
 	{
 		return array(
-			RELTYPE_MAIL_FOLDER => "mailikataloog",
 			RELTYPE_MAIL_IDENTITY => "messengeri identiteet",
 			RELTYPE_MAIL_SOURCE => "mailikonto",
 			RELTYPE_MAIL_CONFIG => "messengeri konfiguratsioon",
+			RELTYPE_FOLDER => "mailikataloog",
+			RELTYPE_ADDRESS => "adressaat",
 		);
 	}
 
-	function callback_get_classes_for_relation($args = array())
+	function callback_get_classes_for_relation($arr)
 	{
 		$retval = false;
-		switch($args["reltype"])
+		switch($arr["reltype"])
 		{
                         case RELTYPE_MAIL_SOURCE:
                                 $retval = array(CL_PROTO_IMAP);
                                 break;
 
-			case RELTYPE_MAIL_FOLDER:
+			case RELTYPE_ADDRESS:
+				$retval = array(CL_ML_LIST);
+				break;
+
+			case RELTYPE_FOLDER:
 				$retval = array(CL_MENU);
 				break;
 		};
