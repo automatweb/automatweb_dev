@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.56 2003/07/07 14:19:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.57 2003/07/08 08:53:03 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2347,6 +2347,10 @@ class form_element extends aw_template
 				if ($this->arr["show_as_text"])
 				{
 					$html .= $tb_val;
+					$html .= html::hidden(array(
+						'name' => $element_name,
+						'value' => htmlentities($tb_val)
+					));
 				}
 				else
 				{
