@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.18 2005/03/16 13:10:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.19 2005/03/17 10:28:17 kristo Exp $
 // __classname.aw - __name 
 /*
 
@@ -46,7 +46,7 @@ class __classname extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["return_url"] = $arr["return_url"] != "" ? $arr["return_url"] : post_ru();
+		$arr["post_ru"] = post_ru();
 	}
 
 	////////////////////////////////////
