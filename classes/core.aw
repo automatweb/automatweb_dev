@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.11 2001/05/25 22:54:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.12 2001/05/27 04:01:43 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -774,7 +774,7 @@ class core extends db_connector
 		// now figure out if we are in the admin interface. 
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
 		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
-		// url-il? - duke
+		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
 		if (substr($GLOBALS["REQUEST_URI"],0,11) == "/automatweb" || $force_admin)
 		{
 			// admin side.
@@ -822,7 +822,9 @@ class core extends db_connector
 	}
 
 	////
-	// !DEPRECATED - use mk_my_orb
+	// !reforbi koostamine
+	// ei, ma ei ytleks, et see deprecated on. See on lihtsalt alternatiivne lähenemine
+	// reforbi koostamisele, kusjuures ta on väga liberaalne parameetrite suhtes.
 	// eelmise analoog. Parameetrid votab arrayst
 	function mk_site_orb($args = array())
 	{
