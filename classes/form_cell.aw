@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.1 2001/05/19 23:33:21 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -188,84 +189,6 @@ class form_cell extends aw_template
 			}
 			return false;
 		}
-/*		if ($parent == 0)
-			$parent = $this->parent;
-		if ($after == "")
-		{
-			$this->db_query("SELECT MAX(ord) as cnt 
-						 FROM form_elements 
-						 LEFT JOIN objects ON objects.oid = form_elements.id
-						 WHERE objects.parent = $this->id AND col=$this->col AND row = $this->row");
-			$m = $this->db_next();
-			$cnt=$m[cnt]+10;
-		}
-		else
-		if ($after == -1)
-		{
-			$this->db_query("SELECT MIN(ord) as cnt FROM form_elements LEFT JOIN objects ON objects.oid = form_elements.id WHERE objects.parent = $this->id AND col= $this->col AND row = $this->row AND objects.status != 0");
-			$row = $this->db_next();
-			$cnt = $row[cnt] - 1;
-		}
-		else
-		{
-			$arr = array();
-			$this->db_query("SELECT * FROM form_elements
-							 LEFT JOIN objects ON objects.oid = form_elements.id
-							 WHERE objects.parent = $this->id AND col= $this->col AND row = $this->row AND objects.status != 0
-						 ORDER BY ord");
-			while ($row = $this->db_next())
-				$arr[$row[id]] = $row;
-
-			// find if we can fit the new element between the two elements before and after it
-			// and if we can't, renumber order numbers
-			reset($arr);
-			while (list($id, $v) = each($arr))
-				if ($id == $after)
-				{
-					if (!(list($nid,$next) = each($arr)))
-					{
-						// if we need to add after the last element, it's simple
-						$cnt = $v["ord"]+10;
-					}
-					else
-					{
-						// check if we can fit
-						if (($next["ord"] - $v["ord"]) < 2)
-						{
-							// we can't
-							// so renumber the buggers
-							$cnt = $v["ord"] + 10;
-							$cur = $cnt+10;
-							$this->db_query("UPDATE form_elements SET ord = $cur WHERE id = ".$nid);
-							while (list($nid,) = each($arr))
-							{
-								$cur+=10;
-								$this->db_query("UPDATE form_elements SET ord = $cur WHERE id = ".$nid);
-							}
-						}
-						else
-						{
-							// we can, so split the difference
-							$cnt = $v["ord"] + (($next["ord"] - $v["ord"])/2);
-						}
-					}
-					break;
-				}
-		}
-
-		$id = $this->new_object(array("parent" => $parent, "name" => "element", "class_id" => CL_FORM_ELEMENT,"jrk" => $cnt));
-		$this->db_query("INSERT INTO form_elements(id, col, row, ord,form_id) values($id,$this->col, $this->row, '$cnt',$this->id)");
-
-		$this->load($this->id, $this->row, $this->col); 
-		for ($i=0; $i < $this->cnt; $i++)
-			if ($this->arr[$i]->get_id() == $id)
-				$this->arr[$i]->set_style($this->style);
-
-		// update the form's table 2
-		$this->db_query("ALTER TABLE form_".$this->id."_entries add el_$id text");
-		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $this->id","name");
-		$this->log_action($GLOBALS["uid"],"form","Lisas formi $name elemendi");
-		return $this->mk_orb("change",array("id" => $this->id, "col" => $this->col, "row" => $this->row));*/
 	}
 
 	function _do_add_element($fid,$el)
