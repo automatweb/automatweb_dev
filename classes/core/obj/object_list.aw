@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.9 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.10 2003/10/15 11:38:37 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -49,7 +49,7 @@ class object_list extends _int_obj_container_base
 
 	function get_at($param)
 	{
-		return $this->list[$GLOBALS["object_loader"]->param_to_oid($param)];
+		return $this->_int_get_at($GLOBALS["object_loader"]->param_to_oid($param));
 	}
 
 	function sort_by($param)
@@ -79,18 +79,21 @@ class object_list extends _int_obj_container_base
 		// begin returns the first item, does not advance iterator
 		// next 1st advances the iterator, them returns current item
 		// then end will be correct even for 1 element lists!
-		reset($this->list);
-		return current($this->list);
+		$this->iter_index = 0;
+		$this->iter_lut = array_keys($this->list);
+
+		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
 
 	function next()
 	{
-		return next($this->list);
+		$this->iter_index++;
+		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
 
 	function end()
 	{
-		return (!is_object(current($this->list)) ? true : false);
+		return (($this->iter_index) == (count($this->iter_lut)));
 	}
 
 	function foreach_o($param)
@@ -199,7 +202,12 @@ class object_list extends _int_obj_container_base
 
 	function arr()
 	{
-		return $this->list;
+		$ret = array();
+		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		{
+			$ret[$o->id()] = $o;
+		}
+		return $ret;
 	}
 
 	function from_arr($param)
@@ -241,7 +249,8 @@ class object_list extends _int_obj_container_base
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{
-				$this->list[$oid] = new object($oid);
+				//$this->list[$oid] = new object($oid);
+				$this->list[$oid] = $oid;
 			}
 		}
 	}
@@ -263,6 +272,18 @@ class object_list extends _int_obj_container_base
 		{
 			$this->list[$oid] = new object($oid);
 		}
+	}
+
+	function _int_get_at($oid)
+	{
+		if (!is_object($this->list[$oid]))
+		{
+			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
+			{
+				$this->list[$oid] = new object($oid);
+			}
+		}
+		return $this->list[$oid];
 	}
 }
 
