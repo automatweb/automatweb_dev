@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.11 2004/11/09 15:58:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.12 2004/11/26 14:03:28 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -121,7 +121,8 @@ class folder_list extends class_base
 			"parent" => $ob->prop("rootmenu"),
 			"class_id" => CL_MENU,
 			"sort_by" => $sby,
-			"status" => $ob->prop("only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE)
+			"status" => $ob->prop("only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"site_id" => array()
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
