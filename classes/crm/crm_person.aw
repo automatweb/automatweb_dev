@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.67 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.68 2005/01/11 13:17:24 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -33,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
+
+@property ext_id type=textbox table=objects field=subclass
+@caption Sidussüsteemi ID
 
 @property gender type=chooser 
 @caption Sugu
@@ -405,6 +408,10 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "ext_id":
+				$retval = PROP_IGNORE;
+				break;
+
 			case 'work_contact':
 				//i'm gonna to this manually i guess
 				//cos a person can be connected to a company
