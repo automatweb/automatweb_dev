@@ -298,6 +298,7 @@ function aw_config_init_class(&$that)
 	unset($td["classes"]);
 	unset($td["classfolders"]);
 	unset($td["programs"]);
+	unset($td["errors"]);
 
 	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$td);
 	$that->cfg["acl"] = $GLOBALS["cfg"]["acl"];

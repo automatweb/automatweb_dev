@@ -2406,7 +2406,8 @@ class bugtrack extends aw_template
 			$nc[$row["type_id"]] = $row["cnt"];
 		}
 
-		foreach($this->cfg["errors"] as $tid => $tdat)
+		$errs = aw_ini_get("errors");
+		foreach($errs as $tid => $tdat)
 		{
 			$this->vars(array(
 				"type_id" => $tid,
@@ -2453,10 +2454,11 @@ class bugtrack extends aw_template
 			$l.=$this->parse("COMMENT");
 		}
 
+		$errs = aw_ini_get("errors");
 		$this->vars(array(
 			"COMMENT" => $l,
 			"type_id" => $type_id,
-			"type_name" => $this->cfg["errors"][$type_id]["name"],
+			"type_name" => $errs[$type_id]["name"],
 			"reforb" => $this->mk_reforb("submit_err_type_comment", array("type_id" => $type_id)),
 			"back" => $this->mk_my_orb("show_types")
 		));
