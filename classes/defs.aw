@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.61 2002/12/02 17:43:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.62 2002/12/02 17:47:25 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -21,38 +21,6 @@ if (!defined("DEFS"))
 		return preg_replace("/((\s|^)+)(\S+)@(\S+)/","\\2<a href='mailto:\\3@\\4'>\\3@\\4</a>", $src);
 	}
 
-	function strip_html($src)
-	{
-		$search = array (	"'<script[^>]*?>.*?</script>'si",  // Strip out javascript
-					"'<[\/\!]*?[^<>]*?>'si",           // Strip out html tags
-					"'&(quot|#34);'i",                 // Replace html entities
-					"'&(amp|#38);'i",
-					"'&(lt|#60);'i",
-					"'&(gt|#62);'i",
-					"'&(nbsp|#160);'i",
-					"'&(iexcl|#161);'i",
-					"'&(cent|#162);'i",
-					"'&(pound|#163);'i",
-					"'&(copy|#169);'i",
-					"'&#(\d+);'e");                    // evaluate as php
-
-		$replace = array (	"",
-					"",
-					"\"",
-					"&",
-					"<",
-					">",
-					" ",
-					chr(161),
-					chr(162),
-					chr(163),
-					chr(169),
-					"chr(\\1)");
-
-		$text = preg_replace ($search, $replace, $src);
-		return $text;
-	}
-		
 	function localparse($src = "",$vars = array())
 	{
 		return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
