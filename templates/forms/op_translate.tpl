@@ -78,6 +78,16 @@
 <!-- END SUB: LCOL6 -->
 </tr>
 <!-- END SUB: LROW6 -->
+
+<tr>
+<td colspan="10" class="fform">Popup akna sulgemise nupu tekst:</td>
+</tr>
+
+<tr>
+<!-- SUB: LCOL7 -->
+<td class="fform"><input type='text' name='close_button[{VAR:lang_id}]' value='{VAR:text}' class='small_button'></td>
+<!-- END SUB: LCOL7 -->
+</tr>
 <tr>
 <td class="fform" colspan=10><input type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
