@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.1 2001/11/14 18:45:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.2 2001/11/14 19:05:17 duke Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -30,6 +30,24 @@ class events3 extends aw_template {
 			"7" => "PIKK kalender",
 			"8" => "Koolituskalender",
 		);
+
+		$this->places = array(
+			"1" => "Harjumaa",
+			"2" => "Hiiumaa",
+			"3" => "Ida-Virumaa",
+			"4" => "Jõgevamaa",
+			"5" => "Järvamaa",
+			"6" => "Lääne-Virumaa",
+			"7" => "Läänemaa",
+			"8" => "Põlvamaa",
+			"9" => "Pärnumaa",
+			"9" => "Raplamaa",
+			"11" => "Saaremaa",
+			"12" => "Tartumaa",
+			"13" => "Valgamaa",
+			"14" => "Viljandimaa",
+			"15" => "Võrumaa",
+		);
 	}
 	
 	////
@@ -40,34 +58,42 @@ class events3 extends aw_template {
 	function event_edit($args = array())
 	{
 		extract($args);
-		print "XXX";
 
 		if ($args["id"])
 		{
-			$obj = $this->get_obj_meta($args["id"]);
 			$action = "edit";
-			$old = $this->get_record("events","id",$args["id"]);
+			$act = "Muuda üritust/sündmust";
+			$old = $this->get_record("events3","id",$args["id"]);
+			$obj = $this->get_object($id);
 		}
 		else
 		{
 			$obj = array();
 			$action = "add";
+			$act = "Lisa üritus/sündmus";
 			$old = array();
-			$meta = array();
 		};
 
 		$this->read_template("edit.tpl");
 		
 		load_vcl("date_edit");
                	$start = new date_edit("start");
-               	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
+		$start->set("minute_step",30);
+               	$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
 		$old_st = ($old["start"]) ? $old["start"] : time();
 		$start_ed = $start->gen_edit_form("start",$old_st);
 
-		print "zx";
-		
 		$this->vars(array(
-			"type" => $this->picker(-1,$this->types), 
+			"action" => $act,
+			"type" => $this->picker($old["type"],$this->types), 
+			"place" => $this->picker($old["place"],$this->places),
+			"location" => $old["location"],
+			"name" => $obj["name"],
+			"info" => $old["info"],
+			"organizer" => $old["organizer"],
+			"contact" => $old["contact"],
+			"additional" => $old["additional"],
+			"ticket" => $old["ticket"],
 			"start" => $start_ed,
 			"reforb" => $this->mk_reforb("submit",array("id" => $args["id"],"page" => $page)),
 		));
@@ -81,22 +107,8 @@ class events3 extends aw_template {
 	function event_submit($args = array())
 	{
 		$this->quote($args);
-
 		extract($args);
-		$q = "";
-
-		if ($page == 1)
-		{
-			$styl = 0;
-			if (is_array($style))
-			{
-				foreach($style as $key => $val)
-				{
-					$styl = $styl | $val;
-				};
-			};
-		};
-
+		// it's a new event. Register it.
 		if (not($id))
 		{
 			global $rootmenu;
@@ -105,145 +117,52 @@ class events3 extends aw_template {
 						"parent" => $parent,
 						"class_id" => CL_EVENT,
 						"name" => $name,
-						"status" => 1,
+						"status" => 2,
 			));
 				
-			$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
+			$st = mktime($start["hour"],$start["minute"],0,$start["month"],
 							$start["day"],$start["year"]);
 
-			$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
-				
-			$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
-							$_day,$start["year"]);
 
-			$q = "INSERT INTO events (id,city,start,end,place,artist1,artist2,artist3,organizer,style)
-				VALUES($id,'$city',$st,$et,'$place','$artist1','$artist2','$artist3','$organizer','$styl')";
+			$q = "INSERT INTO events3 (id,type,start,place,location,info,organizer,contact,additional,ticket)
+				VALUES ('$id','$type','$st','$place','$location','$info','$organizer','$contact','$additional','$ticket')";
+
 			$this->db_query($q);
 				
-			$meta = array();
-			$meta["address"] = $address;
-			$meta["brief"] = $brief;
-
-			$this->set_object_metadata(array(
-						"oid" => $id,
-						"key" => "meta",
-						"value" => $meta,
-			));
-					
 		}
 		else
 		{
-
-			$meta = $this->get_object_metadata(array(
-					"oid" => $id,
-					"key" => "meta",
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
 			));
 
+			$st = mktime($start["hour"],$start["minute"],0,$start["month"],
+							$start["day"],$start["year"]);
 
-			if ($page == 1)
-			{
-			
-				$this->upd_object(array(
-						"oid" => $id,
-						"name" => $name,
-				));
+			$q = "UPDATE events3 SET 
+				type = '$type',
+				start = '$st',
+				place = '$place',
+				location = '$location',
+				info = '$info',
+				organizer = '$organizer',
+				contact = '$contact',
+				additional = '$additional',
+				ticket = '$ticket'
+			 	WHERE id = '$id'";
+			$this->db_query($q);
+		};
+		
+		list($year,$month,$day) = split("-",date("Y-m-d",$st));
+		$link = $this->mk_link(array("section" => "events","year" => $year,"mon" => $month,"day" => $day));
+		header("Location: /?$link");
+		print "#";
+		exit;
 
-				$meta["address"] = $address;
-				$meta["brief"] = $brief;
-			
-				$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
-								$start["day"],$start["year"]);
-
-				$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
-					
-				$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
-								$_day,$start["year"]);
-
-				$stl = 0;
-				if (is_array($style))
-				{
-					foreach($style as $key => $val)
-					{
-						$stl = $stl | $val;
-					};
-				};
-
+		#return $this->mk_my_orb("edit",array("id" => $id));
+	}
 	
-				$q = "UPDATE events SET city = '$city',place = '$place',
-						start = '$st',end = '$et',style = '$stl'
-					WHERE id = '$id'";
-
-				
-
-			}
-			elseif ($page == 2)
-			{
-				$q = "UPDATE events SET
-					artist1 = '$artist1',
-					artist2 = '$artist2',
-					artist3 = '$artist3'
-					WHERE id = '$id'";
-
-				$meta["art1info"] = $art1info;
-				$meta["art2info"] = $art2info;
-				$meta["art3info"] = $art3info;
-				$meta["misc"] = $misc;
-			}
-			elseif ($page == 3)
-			{
-				$meta["full"] = $full;
-				$meta["contact"] = $contact;
-				$meta["agelimit"] = $agelimit;
-				$meta["url"] = $url;
-				$q = "UPDATE events SET organizer = '$organizer' WHERE id = '$id'";
-			}
-			elseif ($page == 4)
-			{
-
-				$st = mktime(0,0,0,$t_start["month"],$t_start["day"],$t_start["year"]);
-				
-				$meta["price_flyer"] = $price_flyer;
-				$meta["price_noflyer"] = $price_noflyer;
-				$meta["price"] = $price;
-				$meta["presale"] = ($presale) ? 1 : 0;
-				$meta["places"] = $places;
-				$meta["t_start"] = $st;
-				$meta["free"] = ($free) ? 1 : 0;
-			};
-
-			if ($q)
-			{
-				$this->db_query($q);	
-			};
-			
-			$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "meta",
-					"value" => $meta,
-			));
-
-			if ($activate)
-			{
-				// potential security breach possible
-				$this->db_query("UPDATE objects SET status = 2 WHERE oid = $id");
-				return $this->mk_my_orb("view",array("id" => $id));
-			};
-
-		}
-		$page++;
-		return $this->mk_my_orb("edit",array("page" => $page,"id" => $id));
-	}
-
-	function event_delete($args = array())
-	{
-		extract($args);
-		$this->upd_object(array(
-			"oid" => $id,
-			"status" => 1,
-		));
-		return $this->mk_my_orb("list",array());
-	}
-
 	////
 	// !Kuvab eventite nimekirja mingi tunnuse alusel
 	// Sellele saaks ette anda mitmesuguseid argumente, a la
@@ -266,7 +185,8 @@ class events3 extends aw_template {
 			};
 			$start = mktime(0,0,0,$mon,$day,$year);
 			$end = mktime(23,59,59,$mon,$day,$year);
-			$limits = " AND events.start >= $start AND events.start <= $end";
+			$limits = " AND events3.start >= $start AND events3.start <= $end";
+			$this->vars(array("date" => date("d-m-Y",$start)));
 		}
 		elseif ($op == "tomorrow")
 		{
@@ -274,7 +194,7 @@ class events3 extends aw_template {
 			$start = strtotime("+1 day",$_tmp["start"]);
 			list($mon,$day,$year) = split("-",date("m-d-Y",$start));
 			$end = strtotime("+1 day",$_tmp["end"]);
-			$limits = " AND events.start >= $start AND events.start <= $end";
+			$limits = " AND events3.start >= $start AND events3.start <= $end";
 		}
 		elseif ($uid)
 		{
@@ -287,7 +207,7 @@ class events3 extends aw_template {
 			{
 				$stylemask = 32767;
 			};
-			$limits = " AND (events.start >= $start) AND (events.start <= $end) AND ((style & $stylemask) > 0)";
+			$limits = " AND (events3.start >= $start) AND (events3.start <= $end) AND ((style & $stylemask) > 0)";
 			if ($tpl)
 			{
 				$template = $tpl;
@@ -300,136 +220,29 @@ class events3 extends aw_template {
 			$end = $_tmp["end"];
 
 			// kristian tahtis et aint neid n2idatakse mis pole veel alanud
-			$limits = " AND events.start >= ".time()." AND events.start <= $end";
+			$limits = " AND events3.start >= ".time()." AND events3.start <= $end";
 		};
 
 		$this->read_template($template);
 
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
-
 		$cl = CL_EVENT;
 
-		$q = "SELECT objects.*,events.* FROM objects
-			LEFT JOIN events ON (objects.oid = events.id)
+		$q = "SELECT objects.*,events3.* FROM objects
+			LEFT JOIN events3 ON (objects.oid = events3.id)
 			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
 			$limits	
-			ORDER BY events.start";
+			ORDER BY events3.start";
 
 		//print "<pre>";
 		//print $q;
 		//print "</pre>";
 		$this->db_query($q);
 
-		$c = "";
-		$cnt = 0;
-		$onpage = 10;
-
-		$page = $page - 1;
-
-		$startpage = ($page) * $onpage;
-		$endpage = $startpage + $onpage - 1;
-
-		$pagenums = array();
-
 		while($row = $this->db_next())
 		{
 			$cnt++;
-			$pagenum = sprintf("%d",$cnt/$onpage) + 1;
-			$pagenums[$pagenum] = 1;
 			
-			$_tmp = $xml->xml_unserialize(array("source" => $row["metadata"]));
-			$meta = $_tmp["meta"];
-
-			$this->vars(array(
-				"link_change" => $this->mk_my_orb("edit",array("id" => $row["oid"])),
-				"link_delete" => $this->mk_my_orb("delete",array("id" => $row["oid"])),
-				"flyer_url" => $meta["url"],
-			));
-
-
-			$styles = array();	
-			foreach($this->styles as $key1 => $val1)
-			{
-				if ($key1 & $row["style"])
-				{
-					$styles[] = $val1;
-				};
-			};
-
-			$artist = $row["artist1"] . ", ";
-			$artist .= $row["artist2"] . ", ";
-			$artist .= $row["artist3"];
-
-			if (strlen($meta["url"]) > 3)
-			{
-				$flyer = $this->parse("flyer");
-			}
-			else
-			{
-				$flyer = "";
-			};
-			
-			if ($this->prog_acl("view", PRG_MENUEDIT))
-			{
-				$change = $this->parse("change");
-			}
-			else
-			{
-				$change = "";
-			};
-
-			$this->vars(array(
-				"name" => $row["name"],
-				"date" => $this->time2date($row["start"],3),
-				"time" => $this->time2date($row["start"],10) . " - " . $this->time2date($row["end"],10),
-				"place" => $row["place"],
-				"change" => $change,
-				"brief" => $meta["brief"],
-				"style" => join(", ",$styles),
-				"artist" => $artist,
-				"ticket" => "",
-				"flyer" => $flyer,
-				"price_flyer" => ($meta["price_flyer"]) ? $meta["price_flyer"] . " /" : "",
-				"price_noflyer" => ($meta["price_noflyer"]) ? $meta["price_noflyer"] . " /" : "",
-				"agelimit" => $meta["agelimit"],
-				"link_detail" => $this->mk_my_orb("view",array("id" => $row["oid"])),
-				"free" => "",
-				"price" => "",
-
-			));
-
-			$subtplname = ($meta["free"]) ? "free": "price";
-			$subtpl = $this->parse($subtplname);
-			$this->vars(array(
-				$subtplname => $subtpl,
-			));
-
-			if ($meta["presale"])
-			{
-				$this->vars(array(
-				"presale" => $this->parse("presale"),
-				));
-			}
-			else
-			{
-				$this->vars(array(
-				"presale" => "",
-				));
-			}
-
-			if ($search)
-			{
-				if ( ($cnt >= $startpage) AND ($cnt <= $endpage) )
-				{
-					$activepage = $pagenum;
-					$c .= $this->parse("line");
-				};
-			}
-			else
-			{
-				$c .= $this->parse("line");
-			};
+			$c .= $this->_draw_event($row);
 		};
 
 		$p = "";
@@ -450,39 +263,98 @@ class events3 extends aw_template {
 			
 		$this->vars(array(
 				"line" => $c,
-				"pgsub" => ($search) ? $this->parse("pgsub") : "",
+				"add_link" => $this->mk_my_orb("add",array()),
 				"count" => $cnt));
+		
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$adm = $this->parse("adm");
+		}
+		else
+		{
+			$adm = "";
+		};
+		$this->vars(array("adm" => $adm));
 		return $this->parse();
 	}
+
+	function event_delete($args = array())
+	{
+		extract($args);
+
+		$this->upd_object(array(
+			"oid" => $id,
+			"status" => 1,
+		));
+		$old = $this->get_record("events3","id",$args["id"]);
+		list($year,$month,$day) = split("-",date("Y-m-d",$old["start"]));
+		$link = $this->mk_link(array("section" => "events","year" => $year,"mon" => $month,"day" => $day));
+		header("Location: /?$link");
+		print "#";
+		exit;
+	}
+
+	function _draw_event($args = array())
+	{
+		$row = $args;
+		$this->vars(array(
+			"edlink" => $this->mk_my_orb("edit",array("id" => $row["oid"])),
+			"dellink" => $this->mk_my_orb("delete",array("id" => $row["oid"])),
+		));
+
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$change = $this->parse("admin");
+		}
+		else
+		{
+			$change = "";
+		};
+
+		$this->vars(array(
+			"name" => $row["name"],
+			"start" => $this->time2date($row["start"],3),
+			"location" => $row["location"],
+			"place" => $this->places[$row["place"]],
+			"info" => $row["info"],
+			"organizer" => $row["organizer"],
+			"time" => $this->time2date($row["start"],4),
+			"shorttime" => date("H:i",$row["start"]),
+			"contact" => $row["contact"],
+			"additional" => $row["additional"],
+			"ticket" => $row["ticket"],
+			"link_detail" => $this->mk_my_orb("view",array("id" => $row["oid"])),
+			"admin" => $change,
+
+		));
+
+		return $this->parse("line");
+	}
+
 
 
 	function event_search($args = array())
 	{
+		extract($args);
 		load_vcl("date_edit");
                	$start = new date_edit("start");
+		$start->set("minute_step",30);
                	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
-		$sx = mktime(0,0,0,$m,$d,$y);
+		$sx = ($st) ? $st : mktime(0,0,0,$m,$d,$y);
 		$start_ed = $start->gen_edit_form("start",$sx);
                	$end = new date_edit("end");
 		list($d,$m,$y) = explode("-",date("d-m-Y",strtotime("+1 week")));
-		$ex = mktime(23,59,59,$m,$d,$y);
+		$ex = ($et) ? $et : mktime(23,59,59,$m,$d,$y);
                	$end->configure(array("day" => 1,"month" => 2,"year" => 3));
 		$end_ed = $start->gen_edit_form("end",$ex);
 		$this->read_template("search.tpl");
-		foreach($this->styles as $key => $val)
-		{
-			$this->vars(array(
-				"key" => $key,
-				"name" => $val,
-				"checked" => ($style_checked[$key]) ? "checked" : "",
-			));
-
-			$c .= $this->parse("style");
-
-		};
+		$type = ($type) ? $type : -1;
+		$place = ($place) ? $place : -1;
+	
 		$this->vars(array(
-			"style" => $c,
+			"type" => $this->picker($type,array_merge(array("0" => "kõik"),$this->types)),
+			"place" => $this->picker($place,array_merge(array("0" => "kõik"),$this->places)),
 			"start" => $start_ed,
 			"end" => $end_ed,
 			"reforb" => $this->mk_reforb("do_search",array()),
@@ -493,55 +365,37 @@ class events3 extends aw_template {
 	function do_search($args = array())
 	{
 		extract($args);
-		global $search_params;
-		if ( (not($mask)) and (not($start)) and (not($end)) )
+		$st = mktime(0,0,0,$start["month"],$start["day"],$start["year"]);
+		$et = mktime(23,59,59,$end["month"],$end["day"],$end["year"]);
+		global $rootmenu;
+		$cl = CL_EVENT;
+		$type_search = ($type != 0) ? " AND events3.type = '$type' " : "";
+		$place_search = ($place != 0) ? " AND events3.place = '$place' " : "";
+		$this->read_template("search_results.tpl");
+		$q = "SELECT objects.*,events3.* FROM objects
+			LEFT JOIN events3 ON (objects.oid = events3.id)
+			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+			AND start >= '$st' AND start <= '$et' $type_search $place_search
+			ORDER BY events3.start";
+		$this->db_query($q);
+		$cnt = 0;
+		while($row = $this->db_next())
 		{
-			extract($search_params);
+			$cnt++;
+			$c .= $this->_draw_event($row);
 		};
-		$mask = 0;
-		if (is_array($style))
-		{
-			foreach($style as $key => $val)
-			{
-				$mask = $mask | $val;
-			};
-		};
-		$st = mktime($start["hour"],$start["minute"],0,$start["month"],$start["day"],$start["year"]);
-		$et = mktime($end["hour"],$end["minute"],59,$end["month"],$end["day"],$end["year"]);
-
-		// yikes
-		global $page;
-		if ( $page < 1)
-		{
-			$page = 1;
-		};
-
-		$search_params = array(
-			"mask" => $mask,
-			"start" => $start,
-			"end" => $end,
-			"type" => $type,
-		);
-
-		session_register("search_params");
-
-		$ret = $this->event_list(array(
-			"search" => true,
-			"stylemask" => $mask,
-			"start" => $st,
-			"end" => $et,
-			"tpl" => ($type == "list") ? "list.tpl" : "",
-			"page" => $page,
+		$this->vars(array(
+			"line" => $c,
+			"cnt" => $cnt,
+			"date" => (int)$cnt,
 		));
-		return $ret;
+		return $this->parse() . $this->event_search(array("st" => $st,"et" => $et,"type" => $type, "place" => $place));
 	}
-	
+
+	////
+	// !Performs the actual alias parse
 	function parse_alias($args = array())
 	{
-		//print "pa called<bR>";
-		//print "<pre>";
-		//print_r($args);
-		//print "</pre>";
 		extract($args);
 		global $ext,$baseurl;
 		switch($matches[2])
@@ -558,7 +412,9 @@ class events3 extends aw_template {
 		}
 		return $retval;
 	}
-	
+
+	////
+	// !
 	function _draw_calendar($args = array())
 	{
 		// I don't like this a single bit.
@@ -584,14 +440,14 @@ class events3 extends aw_template {
 			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "month"));
 			$start = $_tmp["start"];
 			$end = $_tmp["end"];
-			$limits = " AND events.start >= $start AND events.start <= $end";
+			$limits = " AND events3.start >= $start AND events3.start <= $end";
 			global $rootmenu;
 			$cl = CL_EVENT;
-			$q = "SELECT objects.*,events.* FROM objects
-				LEFT JOIN events ON (objects.oid = events.id)
+			$q = "SELECT objects.*,events3.* FROM objects
+				LEFT JOIN events3 ON (objects.oid = events3.id)
 				WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
 				$limits	
-				ORDER BY events.start";
+				ORDER BY events3.start";
 
 			//print "<pre>";
 			//print $q;
