@@ -24,11 +24,11 @@
 	@classinfo objtable_index=oid
 */
 
-class tegevusala extends aw_template
+class tegevusala extends class_base
 {
 	function tegevusala()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_TEGEVUSALA,
 		));

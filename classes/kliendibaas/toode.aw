@@ -24,11 +24,11 @@
 	@classinfo objtable_index=oid
 */
 
-class toode extends aw_template
+class toode extends class_base
 {
 	function toode()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_TOODE,
 		));

@@ -57,12 +57,12 @@
 */
 
 
-class contact extends aw_template
+class contact extends class_base
 {
 
 	function contact()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_CONTACT,
 		));
@@ -110,7 +110,7 @@ function put_value(target,value)
 
 function pop_select(url)
 {
-	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LEFT=500")
+	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LsEFT=500")
  	aken.focus()
 }
 </script>
@@ -119,15 +119,15 @@ SCR;
 
 			case "linn_c":
 				$data['value']="vali linn";
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "linn", "return_url" => urlencode($return_url)))."')";
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,'table' => 'kliendibaas_firma',"tyyp" => "linn", "return_url" => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
 			break;
 			case "riik_c":
 				$data['value']="vali riik";
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "riik", "return_url" => urlencode($return_url)))."')";
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,'table' => 'kliendibaas_firma',"tyyp" => "riik", "return_url" => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
 			break;
 			case "maakond_c":
 				$data['value']="vali maakond";
-				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "maakond", "return_url" => urlencode($return_url)))."')";
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb("pop_select", array("id" => $id,'table' => 'kliendibaas_firma',"tyyp" => "maakond", "return_url" => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
 			break;
 
 			case 'more':
@@ -242,72 +242,6 @@ SCR;
 	}
 */
 
-
-	function pop_select($arr)
-	{
-		extract($arr);
-		$this->read_template("kliendibaas/pop_select.tpl");
-		if ($id)
-		{
-			$selected=$this->db_fetch_field("select $tyyp from kliendibaas_contact where oid=$id",$tyyp);
-			$ob = $this->get_object($id);
-		}
-
-		switch($tyyp)
-		{
-			case "linn":
-				{
-					$q="select t1.oid,t1.name from kliendibaas_linn as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["oid"]] = $row["name"];
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/linn");
-				}
-			break;
-			case "riik":
-				{
-					$q="select t1.oid,t1.name from kliendibaas_riik as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["oid"]] = $row["name"];
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/riik");
-				}
-			break;
-			case "maakond":
-				{
-					$q="select t1.oid,t1.name from kliendibaas_maakond as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["oid"]] = $row["name"];
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/maakond");
-				}
-			break;
-
-			default: $data=array(1=>"nosource");
-
-		}
-
-		@asort($data);
-		$options=$this->picker($selected,array(0=>" - ")+(array)$data);
-
-		$this->vars=array(
-			"add"=>$add,
-			"tyyp"=>$tyyp,
-			"mida"=>$tyyp,
-			"options"=>$options,
-			"multiple"=>"multiple",
-		);
-
-		echo $this->parse();
-
-		die();//et mingit jama ei väljastaks
-	}
 
 }
 ?>

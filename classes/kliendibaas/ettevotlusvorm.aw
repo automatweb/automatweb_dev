@@ -15,12 +15,12 @@
 	@classinfo objtable_index=oid
 */
 
-class ettevotlusvorm extends aw_template
+class ettevotlusvorm extends class_base
 {
 
 	function ettevotlusvorm()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_ETTEVOTLUSVORM,
 		));

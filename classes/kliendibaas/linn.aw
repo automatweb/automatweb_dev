@@ -21,11 +21,11 @@
 	@classinfo objtable_index=oid
 */
 
-class riik extends aw_template
+class riik extends class_base
 {
 	function riik()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_RIIK,
 		));

@@ -21,11 +21,11 @@
 	@classinfo objtable_index=oid
 */
 
-class maakond extends aw_template
+class maakond extends class_base
 {
 	function maakond()
 	{
-		$this->init("kliendibaas");
+//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_MAAKOND,
 		));
