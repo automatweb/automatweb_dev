@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.9 2005/02/14 09:43:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.10 2005/03/10 17:38:28 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -576,6 +576,7 @@ class maja_xml_editor extends class_base
 								{
 									if($tmp_value['staatus'] != $sql_c_value)
 									{
+										$sql_query .= "staatus='".$sql_c_value."', ";	
 										$sql_query .= "staatus2='".$sql_c_value."', ";
 										break;
 									}
@@ -597,9 +598,7 @@ class maja_xml_editor extends class_base
 						$sql_query .= $sql_c_key."='".$sql_c_value."', ";
 					}
 				}
-
 				$sql_query = substr($sql_query, 0, (strlen($sql_query)-2));
-				
 				if($insert)
 				{
 					$this->db_query($sql_query);
