@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.115 2003/07/10 12:03:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.116 2003/07/11 11:48:01 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -643,7 +643,7 @@ class aliasmgr extends aw_template
 			$astr = sprintf("#%s%d#",$astr,$alias["idx"]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
-			$reltype_id = (int)$obj["meta"]["alias_reltype"][$alias["target"]];
+			$reltype_id = $alias["reltype"];
 
 			$alias["icon"] = html::img(array(
 				"url" => icons::get_icon_url($aclid,""),
