@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.8 2002/10/09 09:56:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.9 2003/01/07 14:25:08 kristo Exp $
 // acl.aw - Access Control Lists
 
 class acl extends aw_template 
@@ -52,8 +52,8 @@ class acl extends aw_template
 		// andmed väljade kohta käes, nüüd kuvame vormi
 		// dump_struct($fields);
 		$bld = new aw_template;
-    $bld->tpl_init("automatweb/acl");
-    $bld->read_template("cells.tpl");
+		$bld->tpl_init("automatweb/acl");
+		$bld->read_template("cells.tpl");
 
 		$this->read_template("editacl.tpl");
 
@@ -62,22 +62,22 @@ class acl extends aw_template
 			$bld->vars(array(
 				"colspan" => 1,
 				"align" => "left",
-        "content" => $v["caption"]
+				"content" => $v["caption"]
 			));
-      $c.= $bld->parse("title");
+			$c.= $bld->parse("title");
  
-      if ($v["special"])
-      {
+			if ($v["special"])
+			{
 				$this->vars(array(
-          "caption" => $v["caption"],
-          "help"    => $v["help"],
-          "key"     => $v["value"],
-        ));
-        $help .= $this->parse("help");
-        $keys .= $this->parse("xfield");
-      };
-      $count++;
-    };
+					"caption" => $v["caption"],
+					"help"    => $v["help"],
+					"key"     => $v["value"],
+				));
+				$help .= $this->parse("help");
+				$keys .= $this->parse("xfield");
+			};
+			$count++;
+		};
 		$this->vars(array(
 			"header" => $c,
 			"colspan" => $count+2,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.5 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.6 2003/01/07 14:25:08 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -99,7 +99,7 @@ class form_output extends form_base
 			));
 		};
 		
-		$xmlblock = $this->set_object_metadata(array(
+		$this->set_object_metadata(array(
 			"oid" => $id,
 			"key" => "forms",
 			"value" => $forms,

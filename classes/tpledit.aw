@@ -13,7 +13,7 @@ class tpledit extends aw_template
 	{
 		extract($args);
 		load_vcl("table");
-		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
+		$meta = $this->get_object_metadata(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
 			"prefix" => "tpledit_browse",
 			"tbgcolor" => "#C3D0DC",
@@ -164,7 +164,7 @@ class tpledit extends aw_template
 				$arclink = "";
 			};
 
-			$mx_data = $this->obj_get_meta(array("oid" => $oid));
+			$mx_data = $this->get_object_metadata(array("oid" => $oid));
 
 			$archived = ($mx_data["archived"]) ? "checked" : "";
 
@@ -228,9 +228,9 @@ class tpledit extends aw_template
 		{
 			foreach($exists as $key => $val)
 			{
-				$this->obj_set_meta(array(
+				$this->set_object_metadata(array(
 					"oid" => $key,
-					"meta" => array("archived" => $arc[$key]),
+					"data" => array("archived" => $arc[$key]),
 				));
 			};
 		};
@@ -247,7 +247,7 @@ class tpledit extends aw_template
 		$arc = get_instance("archive");
 		if ($meta_obj["oid"])
 		{
-			$meta = $this->obj_get_meta(array(
+			$meta = $this->get_object_metadata(array(
 					"oid" => $meta_obj["oid"],
 			));
 		};
@@ -366,9 +366,9 @@ class tpledit extends aw_template
 
 		if ($do_update)
 		{
-			$this->obj_set_meta(array(
+			$this->set_object_metadata(array(
 				"oid" => $oid,
-				"meta" => array(
+				"data" => array(
 					"arc_name" => $name,
 					"arc_comment" => $comment,
 					),
@@ -491,7 +491,7 @@ class tpledit extends aw_template
 	function show_archive($args = array())
 	{
 		load_vcl("table");
-		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
+		$meta = $this->get_object_metadata(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
 			"prefix" => "mailbox",
 			"tbgcolor" => "#C3D0DC",

@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.3 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.4 2003/01/07 14:25:08 kristo Exp $
 class html_popup extends aw_template 
 {
 	function html_popup($args = array())
@@ -50,9 +50,9 @@ class html_popup extends aw_template
 			"menus" => $menus,
 		);
 
-		$this->obj_set_meta(array(
+		$this->set_object_metadata(array(
 			"oid" => $id,
-			"meta" => $meta,
+			"data" => $meta,
 		));
 
 		return $this->mk_orb("change",array("id" => $id));
@@ -64,7 +64,7 @@ class html_popup extends aw_template
 		$ob = get_instance("objects");
 		$menu = $ob->get_list();
 		$obj = $this->get_object($id);
-		$meta = $this->obj_get_meta(array("oid" => $id));
+		$meta = $this->get_object_metadata(array("oid" => $id));
 		$this->mk_path($obj["parent"],"Muuda popuppi");
 		$this->read_template("change.tpl");
 		if (not($meta["menus"]))

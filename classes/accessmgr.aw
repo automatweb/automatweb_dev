@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.11 2002/11/26 13:01:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.12 2003/01/07 14:25:08 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -10,17 +10,19 @@ class accessmgr extends aw_template
 		lc_load("definition");
 		$this->lc_load("accessmsg","lc_accessmsg");
 
-		$this->ar = unserialize($this->get_cval("accessmgr"));
+		$this->ar = aw_unserialize($this->get_cval("accessmgr"));
 		if (!is_array($this->ar))
 		{
+			$minoid = $this->db_fetch_field("SELECT MIN(oid) AS minoid FROM objects", "minoid");
 			$this->ar = array();
 			// loome k6ik vajalikud objektid
 			// k6igepealt root objekti et saax k6igile 6igusi m22rata
 			$id = $this->new_object(array(
-				"parent" => 0, 
+				"parent" => $minoid,
 				"class_id" => CL_ACCESSMGR, 
 				"status" => 0,
-				"name" => "Accessmgr"
+				"name" => "Accessmgr",
+				"no_flush" => 1
 			));
 			$this->ar["root"] = $id;
 
@@ -31,11 +33,14 @@ class accessmgr extends aw_template
 					"parent" => $this->ar["root"], 
 					"class_id" => CL_ACCESSMGR, 
 					"status" => $prid,
-					"name" => $ar["name"]
+					"name" => $ar["name"],
+					"no_flush" => 1
 				));
 				$this->ar[$prid] = $id;
 			}
-			$this->set_cval("accessmgr", serialize($this->ar));
+			$s = aw_serialize($this->ar);
+			$this->quote(&$s);
+			$this->set_cval("accessmgr", $s);
 		}
 	}
 
@@ -83,7 +88,9 @@ class accessmgr extends aw_template
 				"name" => $this->cfg["programs"][$prid]["name"]
 			));
 			$this->ar[$prid] = $id;
-			$this->set_cval("accessmgr", serialize($this->ar));
+			$s = aw_serialize($this->ar);
+			$this->quote(&$s);
+			$this->set_cval("accessmgr", $s);
 		}
 	}
 

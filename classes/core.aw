@@ -1,11 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.142 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.143 2003/01/07 14:25:08 kristo Exp $
 // core.aw - Core functions
-define("ARR_NAME", 1);
+
+// if a function can either return all properties for something or just a name, then use 
+// $return parameter and give it one of these defined values, so that it will be consistent
+define("ARR_NAME",1);
 define("ARR_ALL",2);
 
+// document template types 
 define("TPLTYPE_TPL",0);
 define("TPLTYPE_FORM",1);
+
+// object statuses
+define("STAT_DELETED", 0);
+define("STAT_NOTACTIVE", 1);
+define("STAT_ACTIVE", 2);
 
 classload("db");
 class core extends db_connector
@@ -27,12 +36,12 @@ class core extends db_connector
 	  $ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
 	  if (!is_array($ret))
 	  {
-		// create key if it does not exist
-		$this->db_query("INSERT INTO config(ckey, content, modified, modified_by) VALUES('$ckey','$val',".time().",'".aw_global_get("uid")."')");
+			// create key if it does not exist
+			$this->db_query("INSERT INTO config(ckey, content, modified, modified_by) VALUES('$ckey','$val',".time().",'".aw_global_get("uid")."')");
 	  }
 	  else
 	  {
-		$this->db_query("UPDATE config SET content = '$val', modified = '".time()."', modified_by = '".aw_global_get("uid")."' WHERE ckey = '$ckey' ");
+			$this->db_query("UPDATE config SET content = '$val', modified = '".time()."', modified_by = '".aw_global_get("uid")."' WHERE ckey = '$ckey' ");
 	  }
 	  return $val;
 	}
@@ -51,15 +60,267 @@ class core extends db_connector
 		return $this->$key;
 	}
 
-	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas XML kujul.
-	// Järgnevate funktsioonidega saab selle välja sisu kätte ja muuta
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	// object handling functions - add, change, delete
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	////
-	// !Loeb objekti metainfo sisse
-	// oid - objekti oid
-	// key - key, mille sisu teada soovitakse
+	// !adds a new object, inserts all fields that are given in the array and puts default
+	// values for all others
+	// lang_id,site_id,created,createdby,modified,modifiedby are set to correct values automatically
+	// parameters, that are not written to objects table:
+	// no_flush - optional, if true, the cache is not flushed, thus object creation is a lot faster, 
+	//            but you must flush the cache manually later. this is useful when creating lots of objects in a row
+	// add_acl - if set to false, acl entries are not created for the object
+  //
+  // when creating an object, at least the parent and class_id values must be specified
+	// status defaults to 1 - not active
+	// by default all access is given to the creator of the object
+	function new_object($arr,$add_acl = true)
+	{
+		if (!is_array($arr))
+		{
+			$this->raise_error(ERR_CORE_NO_PARAMS, "core::new_object() - incorrect parameter, 1st parameter must be an array", true, false);
+		};
+
+		if (!$arr['class_id'])
+		{
+			$this->raise_error(ERR_CORE_NO_TYPE, "core::new_object() - no class_id specified", true, false);
+		}
+
+		if (!$this->can('add', $arr['parent']))
+		{
+			$this->raise_error(ERR_ACL_ERR, "core::new_object() - no can_add access for '$arr[parent]'!", true, false);
+		}
+
+		// objektitabeli väljad
+		// dummy on selleks, et array_flip juures parenti väärtuseks "0" ei tuleks
+		$_ofields = array("dummy","parent","name","createdby","class_id","created","modified",
+				"status","hits","lang_id","comment","last","modifiedby",
+				"jrk","period","alias","periodic","site_id","activate_at",
+				"deactivate_at","autoactivate","autodeactivate","brother_of",
+				"cache_dirty","metadata","subclass","flags"
+			);
+
+		// vahetame key=>value paarid ära
+		$ofields = array_flip($_ofields);
+
+		// check whether to flush the cache
+		$no_flush = $arr["no_flush"];
+		unset($arr["no_flush"]);
+		
+		// oid voib tulla naiteks serializetud objektist
+		// anyhow, meil siin pole sellega midagi peale hakata, so nil.
+		unset($arr["oid"]);
+
+		// Nende väärtustega kirjutame üle whatever asjad $arr sees olid
+		$_localdata = array(
+			"createdby" => aw_global_get("uid"),
+			"created" => time(),
+			"modifiedby" => aw_global_get("uid"),
+			"modified" => time(),
+			// there is a potentional problem here - if there is some kind
+			// of master sites where the contents of multiple sites can
+			// be viewed, and then an object under one of those sites is
+			// added, it will have the site_id of the current site and
+			// not that of the parent
+			"site_id" => $this->cfg["site_id"],
+		);
+
+		if (!$arr["lang_id"])
+		{
+			$arr["lang_id"] = aw_global_get("lang_id");
+		}
+
+		if (!isset($arr["status"]))
+		{
+			$arr["status"] = STAT_NOTACTIVE;
+		}
+
+		// array array_merge (array array1, array array2 [, array ...])
+		// If the input arrays have the same string keys,
+		//  then the later value for that key will overwrite the previous one.
+		$values = array_merge($arr,$_localdata);
+		
+		foreach($values as $key => $val)
+		{
+			// Lisame ainult need valjad, mis objektitabelisse kuuluvad
+			if (isset($ofields[$key]))
+			{
+				$cols[] = $key;
+				$vals[] = "'$val'";
+			};
+
+		}
+		$q = "INSERT INTO objects ( " . join(",",$cols) . ") VALUES (" . join(",",$vals) . ")";
+		$this->db_query($q);
+		$oid = $this->db_last_insert_id();
+
+		if ($oid > 0 && $add_acl)
+		{
+			$this->create_obj_access($oid);
+		};
+
+		if (is_array($arr["metadata"]))
+		{
+			$this->set_object_metadata(array(
+				"oid" => $oid,
+				"data" => $arr["metadata"]
+			));
+		}
+
+		if (!isset($arr["brother_of"]))
+		{
+			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
+		}
+		if (!$no_flush)
+		{
+			$this->flush_cache();
+		};
+		return $oid;
+	}
+
+	////
+	// !updates the given fields in the object
+	// parameters:
+	//   oid - required, id of the object to update
+	//   any object table field - optional
+	// all parameters must be quoted when entering this function
+	function upd_object($params) 
+	{
+		if (!$params["oid"])
+		{
+			$this->raise_error(ERR_CORE_NO_OID, "core::upd_object() - called without an oid!", true, false);
+		};
+
+		if ($params["oid"] == $params["parent"])
+		{
+			$this->raise_error(ERR_CORE_NO_OID,"core::upd_object() - object can't be it's own parent",true, false);
+		};
+
+		if (!$this->can('edit', $params['oid']))
+		{
+			$this->raise_error(ERR_ACL_ERR, "core::upd_object() - no can_edit access for $params[oid]!", true, false);
+		}
+
+		$params["modifiedby"] = aw_global_get("uid");
+		// allow overwriting of the modified field. This SHOULD be temporary
+		// but right this is the fastest way to make AM not suck.
+		$params["modified"] = ($params["modified"]) ? $params["modified"] : time();
+		$params["cachedirty"] = 1;
+		if (isset($params["metadata"]))
+		{
+			$this->dequote(&$params['metadata']);
+			$params["metadata"] = $this->set_object_metadata(array(
+				"oid" => $params["oid"],
+				"data" => $params["metadata"],
+				"no_write" => 1,
+			));
+			$params['metadata'] = aw_serialize($params['metadata']);
+			$this->quote(&$params['metadata']);
+		};
+		$q_parts = array(); // siia sisse paneme päringu osad
+		while(list($k,$v) = each($params)) 
+		{
+			if ($k != "oid") 
+			{
+				$q_parts[] = " $k = '$v' ";
+			};
+		};
+		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
+
+		$this->db_query($q);
+		aw_cache_set("objcache",$params["oid"],"");
+		$this->flush_cache();
+	}
+
+	////
+	// !marks the object $oid as deleted
+	// parameters:
+	//   oid - the object to delete
+	//   class_id - optional, if specified, then the object's class id must match it, otherwise it is not deleted
+	function delete_object($oid,$class_id = false)
+	{
+		if (!$oid)
+		{
+			$this->raise_error(ERR_CORE_NO_OID,"core::delete_object() - no oid specified",false, true);
+		};
+
+		if (!$this->can("delete", $oid))
+		{
+			$this->raise_error(ERR_ACL_ERR, "core::delete_object() - no can_delete access for $oid!", true, false);
+		}
+
+		$obj = $this->get_object($oid);
+		$this->_log(ST_CORE, SA_DELETE, "Kustutas objekti $obj[name] , id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
+
+		$where = " oid = '$oid'";
+		if ($class_id)
+		{
+			$where .= " AND class_id = '$class_id'";
+		};
+		$q = "UPDATE objects
+			SET status = 0,
+			    modified = '".time()."',
+			    modifiedby = '".aw_global_get("uid")."'
+			WHERE $where";
+		$this->db_query($q);
+		aw_cache_set("objcache",$oid,"");
+		$this->flush_cache();
+	}
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	// object getting functions - by id, by alias, etc..
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
+	////
+	// !tagastab objekti info aliase kaudu
+	// if optional $parent argument is also set, we add that to the WHERE clause
+	// of the query (needed for parsing long urls like http://site/kalad/tursk
+	// where we have to make sure that "tursk" actually belongs to "kalad"
+	function _get_object_by_alias($alias,$parent = 0) 
+	{
+		// bail out, if $alias doesn't have the value, because otherwise
+		// we end up scanning _all_ objects which have no alias and are not deleted
+		// for no reason at all. I don't know why this is called with no value
+		// but it does sometimes
+		$this->quote($alias);
+		if (strlen($alias) == 0)
+		{
+			return false;
+		};
+		if ($parent)
+		{
+			$ps = " AND parent = $parent ";
+		};
+		$q = "SELECT * FROM objects	WHERE alias = '$alias' AND status = 2 $ps $ss";
+		$res = $this->db_fetch_row($q);
+		// also unserialize metadata
+		if ($res)
+		{
+			$res['meta'] = aw_unserialize($res['metadata']);
+		}
+		return $res;
+	}
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas serializetud kujul.
+	// Järgnevate funktsioonidega saab selle välja sisu kätte ja muuta
+
+	////
+	// !Reads object metadata
+	// oid - object's oid
+	// key - optional, the key of the metadata that we want, if not set, all metadata is returned
+	// metadata - optional, if set, this is used as the string to read the metadata from, not the database
+	// no_cache - optional, if oid is set, and this is true, then the object is not read from the cache, but from the db
+	// example usage:
 	// $data = $this->get_object_metadata(array(
 	//					"oid" => "666",
-	//					"key" => "notes",));
+	//					"key" => "notes"));
 	function get_object_metadata($args = array())
 	{
 		extract($args);
@@ -67,68 +328,61 @@ class core extends db_connector
 		// the object into memory.
 		if ($oid)
 		{
-			$odata = $this->get_object($oid,$args["no_cache"]);
-			//$odata = $this->_get_object_metadata($oid);
+			if (!($odata = $this->get_object($oid,$no_cache)))
+			{
+				return false;
+			}
+			$metadata = $odata['metadata'];
 		}
-		else
-		{
-			$odata["metadata"] = $args["metadata"];
-		};
-
-		if (!$odata)
-		{
-			return false;
-		};
 
 		// load, and parse the information
-		$metadata = aw_unserialize($odata["metadata"]);
+		$metadata = aw_unserialize($metadata);
 		
 		// if key is defined, return only that part of the metainfo
-		if ($args["key"])
+		if ($key)
 		{	
-			$retval = $metadata[$args["key"]];
+			$metadata = $metadata[$key];
 		}
 		// otherwise the whole thing
-		else
-		{
-			$retval = $metadata;
-		};
-		return $retval;
-	}
-
-	function _get_object_metadata($oid)
-	{
-		$q = "SELECT metadata FROM objects WHERE oid = '$oid'";
-		$this->db_query($q);
-		return $this->db_next();
+		return $metadata;
 	}
 
 	////
-	// !Kirjutab objekti metadata väljas mingi key üle
-	// argumendid
-	// oid - objekti oid
-	// key - votme nimi
-	// value - võtme sisu (integer, string, array, whatever)
+	// !Modifies object's metadata
+	// arguments:
+	// oid - object oid
+	// key - the name of the metadata key
+	// value - the value for the specified key (integer, string, array, whatever)
+	// data - array, if set, it is merged with the existing object metadata
+	// overwrite - optional, if set, then data is not merged, but cleared and then written
+	// delete_key - optional, if set, the specified key is deleted
+	// example usage:
 	// $this->set_object_metadata(array(
 	//				"oid" => $oid,
 	//				"key" => "notes",
 	//				"value" => "3l33t",
 	// ));
-	// mitu keyd saab korraga ka ette anda - $data arrays
-	// kui see on antud, siis mergetakse see metadata arrayga kokku
+	// $this->set_object_metadata(array(
+	//       "oid" => $oid,
+	//       "data" => array("a" => b", "c" => "d")
+	// ));
+	// $this->set_object_metadata(array(
+	//				"oid" => $oid,
+	//				"key" => "notes",
+	//				"delete_key" => true
+	// ));
 	function set_object_metadata($args = array())
 	{
 		extract($args);
 
-		$old = $this->_get_object_metadata($oid);
-
-		// no such object? bail out
-		if (not($old))
+		if (not($obj = $this->get_object($oid)))
 		{
+			// no such object? bail out
 			return false;
 		};
 
-		$metadata = aw_unserialize($old["metadata"]);
+		$metadata = $obj['meta'];
+
 		if ($overwrite)
 		{
 			if ($key)
@@ -168,57 +422,23 @@ class core extends db_connector
 		{
 			unset($metadata[$key]);
 		};
-		
-		$newmeta = aw_serialize($metadata,SERIALIZE_PHP);
 
-		if (not($serialize))
+		if (!$no_write)
 		{
-			$this->quote($newmeta);
-			$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
-			$this->db_query($q);
-			$retval = true;
+			$_mt = aw_serialize($metadata);
+			$this->quote(&$_mt);
+			$this->db_query("UPDATE objects SET 
+				modifiedby = '".aw_global_get("uid")."',
+				modified = '".time()."',
+				metadata = '".$_mt."',
+				cachedirty = '1'
+				WHERE oid = '$oid'
+			");
+			aw_cache_set("objcache",$oid,'');
+			$this->flush_cache();
 		}
-		else
-		{
-			$retval = $newmeta;
-		};
-		return $retval;
-	}
 
-	function obj_get_meta($args = array())
-	{
-		extract($args);
-		classload("php");
-		if (not($oid) && (strlen($meta) == 0))
-		{
-			return false;
-		};
-		$php_ser = new php_serializer();
-		if ($args["oid"])
-		{
-			$q = "SELECT meta FROM objects WHERE oid = $oid";
-			$this->db_query($q);
-			$row = $this->db_next();
-			$meta = $row["meta"];
-		}
-		else
-		{
-			$meta = $args["meta"];
-		};
-		$retval = $php_ser->php_unserialize($meta);
-		return $retval;
-	}
-
-
-	function obj_set_meta($args = array())
-	{
-		extract($args);
-		$old = $this->obj_get_meta(array("oid" => $oid));
-		$old = array_merge($old,$args["meta"]);
-		$ser = aw_serialize($old);
-		$this->quote($ser);
-		$q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
-		$this->db_query($q);
+		return $metadata;
 	}
 
 	////
@@ -228,19 +448,20 @@ class core extends db_connector
 	// action - int, defined in syslog.actions, log entry action (add obj, change obj)
 	// text - text for log entry
 	// oid - object that the action was performed on
+	// example usage:
+	//   $this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
 	function _log($type,$action,$text,$oid = 0)
 	{
 		$this->quote($text);
 
-		$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if (!inet::is_ip($ip))
 		{
-			$ip = $REMOTE_ADDR;
+			$ip = aw_global_get("REMOTE_ADDR");
 		}
 		$t = time();
 		$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
-		$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action, aw_global_get("HTTP_REFERER"));
+		$values = array($t,aw_global_get("uid"),$type,$text,$ip,$oid,$action,aw_global_get("HTTP_REFERER"));
 		if (aw_ini_get("tafkap"))
 		{
 			$fields[] = "tafkap";
@@ -253,46 +474,14 @@ class core extends db_connector
 			$values[] = $this->cfg["site_id"];
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-
 		$this->db_query($q);
 	}
 		
-	////
-	// !outputs debug information if $HTTP_SESSION_VARS["debugging"] is set
-	function dmsg($msg)
-	{
-		if (aw_global_get("debugging") || aw_global_get("DEBUG"))
-		{
-			if (is_array($msg))
-			{
-				print "<b>------DBG START---------</b><br>";
-				print "<pre>";
-				print_r($msg);
-				print "</pre>";
-				print "<b>------DBG END--------</b><br>";
-			}
-			else
-			{
-				print "DBG: $msg<br>";
-			};
-		};
-	}
-
-	////
-	// !Saadab alerdi (ebaonnestunud sisselogimine, vms) aadressile config.alert_addr
-	function send_alert($msg)
-	{
-		$subject = sprintf(aw_ini_get("config.alert_subject"),aw_global_get("HTTP_HOST"));
-		$msg = "IP: ".aw_global_get("REMOTE_ADDR")."\nTeade:" . $msg;
-		mail(aw_ini_get("config.alert_addr"),$subject,$msg,aw_ini_get("config.alert_from"));
-	}
-
 	//// 
-	// !Küsib infot kasutaja kohta. Tõstsin selle siia, sest mitmed teised klassid vajavad seda funktsiooni
-	// ja users klassi laadimine oleks overkill sellisel juhul
-	// Parameetrid:
-	//	uid - kelle info
-	//	field - millise välja sisu. Kui defineerimata, siis terve kirje
+	// !Returns user information
+	// parameters:
+	//	uid - required, the user to fetch
+	//	field - optional, if set, only this field's value is returned, otherwise the whole record
 	function get_user($args = false)
 	{
 		if (!is_array($args))
@@ -307,32 +496,25 @@ class core extends db_connector
 		{
 			return false;
 		}
-		if (!is_array(aw_cache_get("users_cache",$uid)))
+		if (!is_array(($row = aw_cache_get("users_cache",$uid))))
 		{
 			$q = "SELECT * FROM users WHERE uid = '$uid'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			// nu nii. enne oli siin ntx turvaprobleem et sai urlist parooli 2ra nullida. not so any more :)
+			$row = $this->db_fetch_row($q);
 			aw_cache_set("users_cache",$uid,$row);
 		}
-		else
-		{
-			$row = aw_cache_get("users_cache",$uid);
-		};
+
 		if (isset($field))
 		{
-			$retval = $row[$field];
+			$row = $row[$field];
 		}
 		else
 		{
 			if (isset($row))
 			{
 				// inbox defauldib kodukataloogile, kui seda määratud pole
-				$inbox = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
-				$row["msg_inbox"] = $inbox;
-				$retval = $row;
-			};
-		};
+				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+			}
+		}
 		return $row;	
 	}
 
@@ -356,234 +538,21 @@ class core extends db_connector
 	}
 
 	////
-	// !tagastab objekti info aliase kaudu
-	// if optional $parent argument is also se, we add that to the WHERE clause
-	// of the query (needed for parsing long urs like http://site/kalad/tursk
-	// where we have to make sure that "tursk" actually belongs to "kalad"
-	function _get_object_by_alias($alias,$parent = 0) 
-	{
-		// bail out, if $alias doesn't have the value, because otherwise
-		// we end up scanning _all_ objects which have no alias and are not deleted
-		// for no reason at all. I don't know why this is called with no value
-		// but it does sometimes
-		$this->quote($alias);
-		if (strlen($alias) == 0)
-		{
-			return false;
-		};
-		if ($parent)
-		{
-			$ps = " AND parent = $parent ";
-		};
-		$q = "SELECT * FROM objects
-			WHERE alias = '$alias' AND status = 2 $ps $ss";
-		$this->db_query($q);
-		$res = $this->db_fetch_row();
-		return $res;
-	}
-
-	////
 	// !Tagastab kasutaja login menüü id
 	function get_login_menu()
 	{
 		return $this->login_menu;
 	}
 
-	////
-	// !adds a new object, inserts all fields that are given in the array and puts default
-	// values for all others
-	// lang_id,site_id,created,createdby,modified,modifiedby are set to correct values
-	function new_object($arr,$add_acl = true)
-	{
-		if (!is_array($arr))
-		{
-			print LC_CORE_HOW_HAPPENED;
-			die();
-		};
-		
-		// objektitabeli väljad
-		// dummy on selleks, et array_flop juures parenti väärtuseks "0" ei tuleks
-		$_ofields = array("dummy","parent","name","createdby","class_id","created","modified",
-				"status","hits","lang_id","comment","last","modifiedby",
-				"jrk","period","alias","periodic","site_id","activate_at",
-				"deactivate_at","autoactivate","autodeactivate","brother_of",
-				"cache_dirty","metadata","subclass","flags"
-			);
-
-		// vahetame key=>value paarid ära
-		$ofields = array_flip($_ofields);
-
-		// check whether to flush the cache
-		$no_flush = isset($arr["no_flush"]);
-		unset($arr["no_flush"]);
-		
-		// oid voib tulla naiteks serializetud objektist
-		// anyhow, meil siin pole sellega midagi peale hakata, so nil.
-		unset($arr["oid"]);
-
-		// Nende väärtustega kirjutame üle whatever asjad $arr sees olid
-		$_localdata = array(
-			"createdby" => aw_global_get("uid"),
-			"created" => time(),
-			"modifiedby" => aw_global_get("uid"),
-			"modified" => time(),
-			// there is a potentional problem here - if there is some kind
-			// of master sites where the contents of multiple sites can
-			// be viewed, and then an object under one of those sites is
-			// added, it will have the site_id of the current site and
-			// not that of the parent
-			"site_id" => $this->cfg["site_id"],
-		);
-
-		if (!$arr["lang_id"])
-		{
-			$arr["lang_id"] = aw_global_get("lang_id");
-		}
-
-		// array array_merge (array array1, array array2 [, array ...])
-		// If the input arrays have the same string keys,
-		//  then the later value for that key will overwrite the previous one.
-		$values = array_merge($arr,$_localdata);
-		
-		reset($values);
-
-
-		foreach($values as $key => $val)
-		{
-			// Lisame ainult need valjad, mis objektitabelisse kuuluvad
-			if (isset($ofields[$key]))
-			{
-				$cols[] = $key;
-				$vals[] = "'$val'";
-			};
-
-		}
-		// oid on auto_increment tüüpi väli. Possible race condition
-		#$oid = $this->db_fetch_field("SELECT MAX(oid) AS oid FROM objects","oid")+1;
-
-		$q = "INSERT INTO objects ( " . join(",",$cols) . ") VALUES (" . join(",",$vals) . ")";
-		$this->db_query($q);
-		
-//		$q = "SELECT MAX(oid) AS oid FROM objects WHERE createdby = '".aw_global_get("uid")."'";
-//		$oid = $this->db_fetch_field($q,"oid");
-		$oid = $this->db_last_insert_id();
-//		$this->db_query("INSERT INTO hits (oid,hits) VALUES ($oid,0)");
-
-		if ($oid > 0 && $add_acl)
-		{
-			$this->create_obj_access($oid);
-		};
-
-		if (is_array($arr["metadata"]))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $oid,
-				"data" => $arr["metadata"]
-			));
-		}
-
-		if (!isset($arr["brother_of"]))
-		{
-			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
-		}
-		if (!$no_flush)
-		{
-			$this->flush_cache();
-		};
-		return $oid;
-	}
-
-	////
-	// !kirjutab objekti kustutatux
-	function delete_object($oid,$class_id = false)
-	{
-		if (!$this->can("delete", $oid))
-		{
-			return;
-		}
-
-		$obj = $this->get_object($oid);
-		if ($obj["class_id"] == CL_FILE || $obj["class_id"] == CL_PSEUDO)
-		{
-			// remove the file size from all parent folders as well
-			$fi = get_instance("file");
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $obj["metadata"]
-			));
-		}
-		$t = time();
-		$where = " oid = '$oid'";
-		if ($class_id)
-		{
-			$where .= " AND class_id = '$class_id'";
-		};
-
-		$q = "UPDATE objects
-			SET status = 0,
-			    modified = '$t',
-			    modifiedby = '".aw_global_get("uid")."'
-			WHERE $where";
-		$this->_log(ST_CORE, SA_DELETE, sprintf(LC_CORE_TO_ERASED,$oid), $oid);
-		$this->db_query($q);
-	}
 
 	///
 	// !Margib koik saidi objektid dirtyks
 	function flush_cache()
 	{
-		$q = "UPDATE objects SET cachedirty = 1";
-		$this->db_query($q);
-		$q = "UPDATE objects SET cachedata = ''";
+		$q = "UPDATE objects SET cachedirty = 1, cachedata = ''";
 		$this->db_query($q);
 	}
 		
-	////
-	// !uus ja parem objekti uuendamise funktsioon, votab andmed ette arrayst
-	// ja uuendab ainult neid, mida ette anti
-	//  	oid peab olema
-	// etteantud asjad peavad quotetud olema!
-	function upd_object($params) 
-	{
-		if (!$params["oid"])
-		{
-			$this->raise_error(ERR_CORE_NO_OID,LC_CORE_CALLED_WITHOUT_ID,0);
-		};
-
-		if ($params["oid"] == $params["parent"])
-		{
-			$this->raise_error(ERR_CORE_NO_OID,"Object can't be it's own parent",0);
-		};
-
-		$params["modifiedby"] = aw_global_get("uid");
-		// allow overwriting of the modified field. This SHOULD be temporary
-		// but right this is the fastest way to make AM not suck.
-		$params["modified"] = ($params["modified"]) ? $params["modified"] : time();
-		$params["cachedirty"] = 1;
-		if (isset($params["metadata"]))
-		{
-			$this->dequote(&$params['metadata']);
-			$params["metadata"] = $this->set_object_metadata(array(
-				"oid" => $params["oid"],
-				"data" => $params["metadata"],
-				"serialize" => 1,
-			));
-			$this->quote(&$params['metadata']);
-		};
-		$q_parts = array(); // siia sisse paneme päringu osad
-		while(list($k,$v) = each($params)) 
-		{
-			if ($k != "oid") 
-			{
-				$q_parts[] = " $k = '$v' ";
-			};
-		};
-		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
-
-		$this->db_query($q);
-		aw_cache_set("objcache",$params["oid"],"");
-		$this->flush_cache();
-	}
-
 	////
 	// !Tagastab koik mingist nodest allpool olevad objektid
 	// seda on mugav kasutada, kui tegemist on suhteliselt
@@ -1220,34 +1189,32 @@ class core extends db_connector
 
 		if ($no_cache)
 		{
-			$_t = $this->get_record("objects","oid",$oid);
+			$_t = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
 			if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
 			{
 				// brother object, so we gots to read the real objets metadata
-				$_tt = $this->get_record("objects","oid",$_t["brother_of"]);
+				$_tt = $this->db_fetch_row("SELECT * FROM objects WHERE oid = ".$_t["brother_of"]."");
 				$_t["metadata"] = $_tt["metadata"];
 			}
 			if ($unserialize_meta && $_t)
 			{
 				$_t["meta"] = aw_unserialize($_t["metadata"]);
-	//			$this->dequote(&$_t['meta']);
 			}
 		}
 		else
 		{
 			if (!($_t = aw_cache_get("objcache",$oid)))
 			{
-				$_t = $this->get_record("objects","oid",$oid);
+				$_t = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
 				if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
 				{
 					// brother object, so we gots to read the real objets metadata
-					$_tt = $this->get_record("objects","oid",$_t["brother_of"]);
+					$_tt = $this->db_fetch_row("SELECT * FROM objects WHERE oid = ".$_t["brother_of"]."");
 					$_t["metadata"] = $_tt["metadata"];
 				}
 				if ($unserialize_meta && $_t)
 				{
 					$_t["meta"] = aw_unserialize($_t["metadata"]);
-	//				$this->dequote(&$_t['meta']);
 				}
 
 				aw_cache_set("objcache",$oid,$_t);
@@ -1491,7 +1458,7 @@ class core extends db_connector
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
 
-		if (!$is_rpc_call)
+		if (!$is_rpc_call && !headers_sent())
 		{
 			header("X-AW-Error: 1");
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.29 2002/12/03 13:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.30 2003/01/07 14:25:08 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -453,7 +453,7 @@ class acl_base extends core
 			if (!is_array($prog_cache))
 			{
 				$c = get_instance("config");
-				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
+				$prog_cache = aw_unserialize($c->get_simple_config("accessmgr"));
 				aw_global_set("prog_cache",$prog_cache);
 			}
 			return $this->can($right,$prog_cache[$progid]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.14 2002/12/04 12:48:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.15 2003/01/07 14:25:08 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -512,7 +512,6 @@ class groups extends users_user
 	function list_grps_user($arr)
 	{
 		extract($arr);
-		$this->dmsg("entered list_grps_user");
 		if (!$parent)
 		{
 			$parent = $this->db_fetch_field("SELECT gid FROM groups WHERE type = ".GRP_DEFAULT." AND name = '".aw_global_get("uid")."'","gid");
@@ -790,7 +789,6 @@ class groups extends users_user
 	{
 		extract($arr);
 
-		$this->dmsg("entered list_grps");
 		$this->read_template("list_grps.tpl");
 
 		$this->listacl("objects.class_id = ".CL_GROUP);

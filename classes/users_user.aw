@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.46 2002/12/30 14:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.47 2003/01/07 14:25:08 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -24,6 +24,15 @@ class users_user extends aw_template
 	function users_user() 
 	{
 		$this->init("");
+	}
+
+	////
+	// !Saadab alerdi (ebaonnestunud sisselogimine, vms) aadressile config.alert_addr
+	function send_alert($msg)
+	{
+		$subject = sprintf(aw_ini_get("config.alert_subject"),aw_global_get("HTTP_HOST"));
+		$msg = "IP: ".aw_global_get("REMOTE_ADDR")."\nTeade:" . $msg;
+		mail(aw_ini_get("config.alert_addr"),$subject,$msg,aw_ini_get("config.alert_from"));
 	}
 
 	////

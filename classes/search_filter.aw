@@ -67,7 +67,7 @@ class search_filter extends aw_template
 		};
 		
 		//$this->set_object_metadata(array("oid" => $id,"key" => "data","value"=> $this->data));
-		$this->obj_set_meta(array("oid"=>$id,"meta"=>array("data"=>$this->data)));
+		$this->set_object_metadata(array("oid"=>$id,"data"=>array("data"=>$this->data)));
 		return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));
 	}
 
@@ -118,7 +118,7 @@ class search_filter extends aw_template
 	function __load_data()
 	{
 		//$this->data=$this->get_object_metadata(array("oid" => $this->id,"key" => "data"));
-		$kala=$this->obj_get_meta(array("oid" => $this->id));
+		$kala=$this->get_object_metadata(array("oid" => $this->id));
 		$this->data=$kala["data"];
 		//echo("loaddata<pre>");print_r($this->data);echo("</pre>");
 	}
@@ -126,13 +126,13 @@ class search_filter extends aw_template
 	function __save_data()
 	{
 		//$this->set_object_metadata(array("oid" => $this->id,"key" => "data", "value" => $this->data));
-		$this->obj_set_meta(array("oid" => $this->id,"meta"=>array("data"=>$this->data)));
+		$this->set_object_metadata(array("oid" => $this->id,"data"=>array("data"=>$this->data)));
 	}
 
 	function __load_filter()
 	{
 		//$this->filter=$this->get_object_metadata(array("oid" => $this->id,"key" => "filter"));
-		$kala=$this->obj_get_meta(array("oid" => $this->id));
+		$kala=$this->get_object_metadata(array("oid" => $this->id));
 		$this->filter=$kala["filter"];
 		if ($GLOBALS["shit"])
 		{
@@ -151,7 +151,7 @@ class search_filter extends aw_template
 	{
 		//$this->set_object_metadata(array("oid" => $this->id,"key" => "filter","value" => $this->filter));
 		$arr=array("filter"=>$this->filter);
-		$this->obj_set_meta(array("oid" => $this->id,"meta" => $arr));
+		$this->set_object_metadata(array("oid" => $this->id,"data" => $arr));
 	}
 
 	function convert_objects()
@@ -165,7 +165,7 @@ class search_filter extends aw_template
 			if (is_array($arr))
 			{
 				$arr2=array("data"=>$arr["data"],"filter"=>$arr["filter"]);
-				$this->obj_set_meta(array("oid" => $r["oid"],"meta" => $arr2));
+				$this->set_object_metadata(array("oid" => $r["oid"],"data" => $arr2));
 			};
 			$this->restore_handle();
 		};

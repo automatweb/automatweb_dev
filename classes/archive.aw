@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.14 2002/11/07 10:52:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.15 2003/01/07 14:25:08 kristo Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -136,7 +136,8 @@ class archive extends aw_template
 		));
 
 		// update the revision information in the object metadata
-		$meta = $this->obj_get_meta(array("oid" => $oid));
+		$_ob = $this->get_object($oid);
+		$meta = $_ob['meta'];
 		$arc = $meta["archive"];
 		$arc[$tstamp] = array(
 			"timestamp" => $tstamp,
@@ -145,9 +146,9 @@ class archive extends aw_template
 			"comment" => $comment,
 		);
 
-		$this->obj_set_meta(array(
-			"oid" => $oid,
-			"meta" => array("archive" => $arc),
+		$this->upd_object(array(
+			'oid' => $oid,
+			'meta' => array("archive" => $arc)
 		));
 
 		// store information for later indexing and searching
