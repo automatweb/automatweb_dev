@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.12 2001/12/12 23:00:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.13 2001/12/18 19:01:07 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -30,7 +30,7 @@ class aliasmgr extends aw_template {
 
 		$this->defs["links"] = array(
 				"alias" => "l",
-				"title" => "Lingid",
+				"title" => "link",
 				"table" => "extlink",
 				"generator" => "_link_aliases",
 				"class_id" => CL_EXTLINK,
@@ -42,7 +42,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["image"] = array(
 				"alias" => "p",
-				"title" => "Pildid",
+				"title" => "pilt",
 				"table" => "image",
 				"generator" => "_image_aliases",
 				"class_id" => CL_IMAGE,
@@ -52,7 +52,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["tables"] = array(
 				"alias" => "t",
-				"title" => "Tabelid",
+				"title" => "tabel",
 				"table" => "table",
 				"generator" => "_table_aliases",
 				"class_id" => CL_TABLE,
@@ -64,7 +64,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["forms"] = array(
 				"alias" => "f",
-				"title" => "Vormid",
+				"title" => "vorm",
 				"table" => "form",
 				"class_id" => CL_FORM,
 				"generator" => "_form_aliases",
@@ -76,7 +76,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["files"] = array(
 				"alias" => "v",
-				"title" => "Failid",
+				"title" => "fail",
 				"table" => "file",
 				"class_id" => CL_FILE,
 				"generator" => "_file_aliases",
@@ -88,7 +88,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["graphs"] = array(
 				"alias" => "g",
-				"title" => "Graafikud",
+				"title" => "graafik",
 				"table" => "graph",
 				"class_id" => CL_GRAPH,
 				"generator" => "_graph_aliases",
@@ -100,7 +100,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["galleries"] = array(
 				"alias" => "y",
-				"title" => "Galeriid",
+				"title" => "galerii",
 				"table" => "gallery",
 				"generator" => "_gallery_aliases",
 				"class_id" => CL_GALLERY,
@@ -111,7 +111,7 @@ class aliasmgr extends aw_template {
 		
 		$this->defs["form_chains"] = array(
 				"alias" => "c",
-				"title" => "Vormipärjad",
+				"title" => "vormipärg",
 				"table" => "formchain",
 				"generator" => "_form_chain_aliases",
 				"class_id" => CL_FORM_CHAIN,
@@ -124,7 +124,7 @@ class aliasmgr extends aw_template {
 		$this->defs["link_collections"] = array(
 				"alias" => "x",
 				"title" => "Lingikogu oksad",
-				"table" => "link_collection",
+				"table" => "lingikogu",
 				"class_id" => CL_LINK_COLLECTION,
 				"generator" => "_link_collection_aliases",
 				"addlink" => $this->mk_orb("pick_collection",array("parent" => $this->id),"link_collection"),
@@ -135,7 +135,7 @@ class aliasmgr extends aw_template {
 		$this->defs["forums"] = array(
 				"alias" => "o",
 				"title" => "Foorumid",
-				"table" => "forum",
+				"table" => "foorum",
 				"class_id" => CL_FORUM,
 				"generator" => "_forum_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
@@ -147,7 +147,7 @@ class aliasmgr extends aw_template {
 		$this->defs["form_entry"] = array(
 				"alias" => "r",
 				"title" => "Formi sisetus",
-				"table" => "form_entries",
+				"table" => "vormi sisestus",
 				"generator" => "_form_entry_aliases",
 				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
@@ -157,7 +157,7 @@ class aliasmgr extends aw_template {
 		$this->defs["menu_chains"] = array(
 				"alias" => "m",
 				"title" => "Menüüpärjad",
-				"table" => "menu_chains",
+				"table" => "menüüpärg",
 				"generator" => "_menu_chain_aliases",
 				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_chain"),
@@ -167,7 +167,7 @@ class aliasmgr extends aw_template {
 
 		$this->defs["pullouts"] = array(
 				"alias" => "q",
-				"title" => "Pulloudid",
+				"title" => "pullout",
 				"table" => "pullout",
 				"class_id" => CL_PULLOUT,
 				"generator" => "_pullout_aliases",
@@ -195,7 +195,7 @@ class aliasmgr extends aw_template {
 
 		$this->t = new aw_table(array(
 			"prefix" => "images",
-			"imgurl"    => $GLOBALS["baseurl"]."/img",
+			"imgurl"    => $GLOBALS["baseurl"]."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 
@@ -218,16 +218,15 @@ class aliasmgr extends aw_template {
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
-			"width" => 200,
 			"nowrap" => "1",
-			//"sortable" => 1,
+			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
 			"name" => "description",
 			"caption" => "Muu info",
 			"talign" => "center",
 			"nowrap" => "1",
-			//"sortable" => 1,
+			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
 			"name" => "alias",
@@ -235,26 +234,35 @@ class aliasmgr extends aw_template {
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
+			"class" => "celltext",
 			//"nowrap" => "1",
                 ));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => "Muutja",
-			"width" => 80,
 			"align" => "center",
 			"talign" => "center",
 			"nowrap" => "1",
-			//"sortable" => 1,
+			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
-			"width" => 100,
 			"talign" => "center",
+			"align" => "center",
 			"nowrap" => "1",
-			//"sortable" => 1,
+			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
+			"name" => "title",
+			"caption" => "Tüüp",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"sortable" => 1,
+                ));
+		$this->t->define_field(array(
+			"caption" => "Vali",
 			"name" => "check",
 			"width" => 20,
 			"align" => "center",
@@ -263,6 +271,10 @@ class aliasmgr extends aw_template {
 		$aliases = array();
 		$cnt = 0;
 		$targets = "";
+		$counter = 0;
+
+		$this->dellinks = array();
+		$this->chlinks = array();
 
 		foreach($this->defs as $key => $val)
 		{
@@ -270,6 +282,7 @@ class aliasmgr extends aw_template {
 			$this->vars(array(
 				"cnt" => $cnt,
 				"target" => $val["addlink"],
+				"chlink" => $val["chlink"],
 			));
 			$targets .= $this->parse("target_def");
 			$aliases[$cnt] = $val["title"];
@@ -281,10 +294,23 @@ class aliasmgr extends aw_template {
 			$this->_finalize($key);
 		};
 
+		if (not($args["sortby"]))
+		{
+			$sortby = "title";
+		}
+		else
+		{
+			$sortby = $args["sortby"];
+		};
+		$this->t->sort_by(array("field" => $sortby));
+
 		$this->vars(array(
-			"table" => $this->contents,
+			"table" => $this->t->draw(),
 			"id" => $id,
 			"aliases" => $this->picker(0,$aliases),
+			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$this->chlinks)),
+			"dellinks" => join("\n",map2("dellinks[%s] = %s;",$this->dellinks)),
+			"delorb" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 			"target_def" => $targets,
 		));
 			
@@ -301,13 +327,15 @@ class aliasmgr extends aw_template {
 		reset($links);
 		while (list(,$v) = each($links))
 		{	
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"],"docid" => $id),"links"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"docid" => $id),"links");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"address"             => $v["url"],
+				"1description"             => $v["url"],
 			));
+			$v["url"] = $url;
 			$this->_common_parts($v);
 		};
 	}
@@ -318,7 +346,9 @@ class aliasmgr extends aw_template {
 		reset($menu_chains);
 		while (list(,$v) = each($menu_chains))
 		{	
-			$mchain = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"menu_chain"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"menu_chain");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -335,7 +365,9 @@ class aliasmgr extends aw_template {
 		reset($menu_chains);
 		while (list(,$v) = each($menu_chains))
 		{	
-			$mchain = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"pullout"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"pullout");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -352,7 +384,10 @@ class aliasmgr extends aw_template {
 		reset($forms);
 		while (list(,$v) = each($forms))
 		{
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"form"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -371,7 +406,9 @@ class aliasmgr extends aw_template {
 		reset($files);
 		while (list(,$v) = each($files))
 		{
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"], "doc" => $id),"file"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"], "doc" => $id),"file");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -392,7 +429,9 @@ class aliasmgr extends aw_template {
 		{
 			$fic++;
 			$return_url = $this->mk_my_orb("list_aliases", array("id" => $this->id));
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"], "return_url" => urlencode($return_url)),"image"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"], "return_url" => urlencode($return_url)),"image");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -411,7 +450,9 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($tables))
 		{
 			$tc++;
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"table"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"table");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -432,7 +473,9 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($chains))
 		{
 			$cc++;
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"form_chain"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form_chain");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -452,7 +495,9 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($galleries))
 		{
 			$galc++;
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("admin", array("id" => $v["id"]),"gallery"),$v["name"]);
+			$url = $this->mk_orb("admin", array("id" => $v["id"]),"gallery");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -472,7 +517,9 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($fes))
 		{
 			$fec++;
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_orb("change_entry_alias", array("id" => $v["id"]),"form_alias"),$v["name"]);
+			$url = $this->mk_orb("change_entry_alias", array("id" => $v["id"]),"form_alias");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["link"] = $link;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -499,7 +546,9 @@ class aliasmgr extends aw_template {
 			{
 				$lcc++;
 				$name = ($val["name"]) ? $val["name"] : "(nimetu)";
-				$link = sprintf("<a href='%s&id=%d'>%s</a>",$this->defs["link_collections"]["chlink"],$val["oid"],$name);
+				$url = $this->defs["link_collections"]["chlink"] . "&id=?" . $val["oid"];
+				$link = sprintf("<a href='%s&id=%d'>%s</a>",$url,$name);
+				$val["url"] = $url;
 				$this->t->define_data(array(
 					"name" => $link,
 					"description" => $val["comment"],
@@ -529,7 +578,9 @@ class aliasmgr extends aw_template {
 			foreach($forums as $key => $val)
 			{
 				$fcc++;
-				$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $val["oid"]),"forum"),$val["name"]);
+				$url = $this->mk_my_orb("change",array("id" => $val["oid"]),"forum");
+				$link = sprintf("<a href='%s'>%s</a>",$url,$val["name"]);
+				$val["url"] = $url;
 				$this->t->define_data(array(
 					"name" => $link,
 					"comment" => $val["comment"],
@@ -550,7 +601,9 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($graphs))
 		{
 			$gc++;
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"graph"),$v["name"]);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"graph");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
@@ -564,13 +617,13 @@ class aliasmgr extends aw_template {
 	
 	function _initialize($id)
 	{
-		$this->t->reset_data();
+		#$this->t->reset_data();
 		$this->acounter = 0;
-		$this->t->set_attribs(array("prefix" => $this->defs[$id]["table"]));
-		$this->t->set_header_attribs(array("table" => $this->defs[$id]["table"]));
-		$this->vars(array(
-			"add_link" => $this->defs[$id]["addlink"],
-		));
+		#$this->t->set_attribs(array("prefix" => $this->defs[$id]["table"]));
+		#$this->t->set_header_attribs(array("table" => $this->defs[$id]["table"]));
+		#$this->vars(array(
+		#	"add_link" => $this->defs[$id]["addlink"],
+		#));
 	}
 
 	function _finalize($id)
@@ -581,7 +634,7 @@ class aliasmgr extends aw_template {
 		}
 
 		$this->vars(array(
-			"contents" => $this->t->draw(),
+			#"contents" => $this->t->draw(),
 			"title" => $this->defs[$id]["title"],
 			"type" => $this->defs[$id]["table"],
 			"chlink" => $this->defs[$d]["chlink"],
@@ -589,10 +642,10 @@ class aliasmgr extends aw_template {
 			"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 		));
 
-		if ($this->t->rows() > 0)
-		{
-			$this->contents .= $this->parse("table");
-		};
+		#if ($this->t->rows() > 0)
+		#{
+		#	$this->contents .= $this->parse("table");
+		#};
 	}
 
 	function _common_parts($args = array())
@@ -600,8 +653,12 @@ class aliasmgr extends aw_template {
 		$id = ($args["id"]) ? $args["id"] : $args["oid"];
 		$this->acounter++;
 		$alias = sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter);
+		$this->counter++;
+		$this->chlinks[$this->counter] = $args["url"];
+		$this->dellinks[$this->counter] = $id;
 		$this->t->merge_data(array(
-			"check" => sprintf("<input type='checkbox' name='c_%s' value='%d'>",$this->attribs["table"],$id),
+			"title" => $this->defs[$this->def_id]["title"],
+			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$this->counter),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
 		));
