@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.51 2005/01/27 14:31:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.52 2005/02/01 12:39:45 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -109,7 +109,7 @@
 
 ------------- search -------------
 @groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
-@default group=set_controllers
+@default group=search
 
 @property search type=text no_caption=1
 @caption Otsing

@@ -222,7 +222,7 @@
       <property>
             <name>search</name>
             <table>objects</table>
-            <group>set_controllers</group>
+            <group>search</group>
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
