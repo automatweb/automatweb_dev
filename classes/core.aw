@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.77 2002/02/18 13:37:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.78 2002/02/18 17:39:25 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -314,20 +314,18 @@ class core extends db_connector
 	//	field - millise välja sisu. Kui defineerimata, siis terve kirje
 	function get_user($args = array())
 	{
-		global $users_cache;
 		extract($args);
-		if (!is_array($users_cache[$uid]))
+		if (!is_array(aw_cache_get("users_cache",$uid)))
 		{
 			$q = "SELECT * FROM users WHERE uid = '$uid'";
 			$this->db_query($q);
 			$row = $this->db_next();
-			// ok, yeah, dude, NII seda kala kyll ei tuleks parandada!
-//			$row["password"] = "";
-			$users_cache[$uid] = $row;
+			// nu nii. enne oli siin ntx turvaprobleem et sai urlist parooli 2ra nullida. not so any more :)
+			aw_cache_set("users_cache",$uid,$row);
 		}
 		else
 		{
-			$row = $users_cache[$uid];
+			$row = aw_cache_get("users_cache",$uid);
 		};
 		if (isset($field))
 		{
