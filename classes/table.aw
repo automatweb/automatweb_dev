@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.19 2001/12/19 12:30:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.20 2001/12/21 10:10:14 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -136,6 +136,14 @@ $orb_defs["table"] ="xml";
 			"reg_id" => $mp,
 			"function" => "parse_alias",
 		));
+		
+		$this->register_sub_parser(array(
+			"idx" => 2,
+			"match" => "m",
+			"class" => "menu",
+			"reg_id" => $mp,
+			"function" => "parse_alias",
+		));
 
 		$retval = $this->parse_aliases(array(
 			"oid" => $id,
@@ -167,6 +175,13 @@ $orb_defs["table"] ="xml";
 			"activelist" => $activelist,
 		));
 		return $retval;
+	}
+
+	////
+	// !Generates a proper YAH link based on context
+	function gen_yah()
+	{
+		$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 	}
 		
 	function load_table($id)
@@ -235,6 +250,7 @@ $orb_defs["table"] ="xml";
 		$menu = $this->gen_navbar(array(
 			"activelist" => array("configure"),
 		));
+		$this->gen_yah();
 		$st = new style();
 		$this->vars(array(
 			"menu" => $menu,
@@ -292,6 +308,8 @@ $orb_defs["table"] ="xml";
 			"activelist" => array("change"),
 		));
 
+		$this->gen_yah();
+
 
 		$this->read_template("table_modify.tpl");
 		session_register("is_filter$id");
@@ -333,7 +351,7 @@ $orb_defs["table"] ="xml";
 			$extdata=$this->parse("extdata");
 		} else
 		{
-			$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+			$this->gen_yah;
 			$extdata="";
 		};
 
@@ -406,7 +424,7 @@ $orb_defs["table"] ="xml";
 			));
 			if (!$GLOBALS["is_filter$id"])
 			{
-				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+				$this->gen_yah();
 			};
 			
 
@@ -918,9 +936,10 @@ $orb_defs["table"] ="xml";
 				"activelist" => array("edit"),
 			));
 
+
 			if (!$GLOBALS["is_filter$id"])
 			{
-				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
+				$this->gen_yah();
 			};
 
 			$this->read_template("styles.tpl");
@@ -1321,6 +1340,7 @@ $orb_defs["table"] ="xml";
 			$menu = $this->gen_navbar(array(
 				"activelist" => array("preview"),
 			));
+			$this->gen_yah();
 			$this->read_template("preview.tpl");
 			$this->vars(array(
 				"content" => $content,
@@ -1697,6 +1717,7 @@ $orb_defs["table"] ="xml";
 			$menu = $this->gen_navbar(array(
 				"activelist" => array("import"),
 			));
+			$this->gen_yah();
 			$this->read_template("import.tpl");
 
 			$this->vars(array("reforb"	=> $this->mk_reforb("import", array("id" => $id)),

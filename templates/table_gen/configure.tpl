@@ -3,7 +3,7 @@
 <form action='reforb.{VAR:ext}' method=post>
 <table border=0 bgcolor=#cccccc cellspacing=1 cellpadding=2>
 <tr>
-<td class="hele_hall_taust">Aliastehaldur?</td>
+<td class="hele_hall_taust">Näita aliasi?</td>
 <td class="hele_hall_taust"><input type="checkbox" name="aliases" value="1" {VAR:aliases}></td>
 </tr>
 <tr>
