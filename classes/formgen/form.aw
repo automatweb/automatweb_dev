@@ -1,6 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.57 2003/05/08 17:05:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.58 2003/05/09 22:16:04 kristo Exp $
 // form.aw - Class for creating forms
+
+/*
+
+HANDLE_MESSAGE(MSG_LANGUAGE_ADD, on_language_add)
+
+*/
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
 // filling them and processing the results. It's needed to complete our plan to take over the world.
@@ -6136,5 +6142,22 @@ class form extends form_base
 			}
 		}
 	}
+
+	function on_language_add($args)
+	{
+		// when the user adds a language, we need to go over all forms defined in the system and if they
+		// are translatable forms, then add defs for the new language to all entries
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$f = get_instance("formgen/form");
+			$f->load($row["oid"]);
+			if ($f->arr["is_translatable"])
+			{
+				$f->_create_translations();
+			}
+		}
+	}
+
 };	// class ends
 ?>

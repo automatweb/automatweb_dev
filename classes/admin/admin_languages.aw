@@ -1,4 +1,11 @@
 <?php
+
+/*
+
+EMIT_MESSAGE(MSG_LANGUAGE_ADD)
+
+*/
+
 classload("languages");
 class admin_languages extends languages
 {
@@ -77,6 +84,7 @@ class admin_languages extends languages
 	{
 		extract($arr);
 
+		$new = false;
 		$si = join(",", is_array($site_id) ? $site_id : array());
 		if ($id)
 		{
@@ -86,9 +94,15 @@ class admin_languages extends languages
 		{
 			$id = $this->db_fetch_field("select max(id) as id from languages","id")+1;
 			$this->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby, site_id) values($id,'$name','$charset',1,'$acceptlang','".time()."','".aw_global_get("uid")."','$si')");
+			$new = true;
 		}
 
 		$this->init_cache(true);
+
+		if ($new)
+		{
+			post_message("MSG_LANGUAGE_ADD", array("id" => $id));
+		}
 
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
