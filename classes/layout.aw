@@ -172,7 +172,7 @@ class layout extends class_base
 		if ($prop['name'] == "grid")
 		{
 			$ge = get_instance("vcl/grid_editor");
-			$prop['value'] = $ge->on_edit_submit($arr['obj']['meta']['grid'], $arr['form_data']);
+			$arr['metadata']['grid'] = $ge->on_edit_submit($arr['obj']['meta']['grid'], $arr['form_data']);
 		}
 		else
 		if ($prop['name'] == "grid_aliases")
