@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.1 2003/11/08 08:40:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.2 2003/11/08 09:24:15 duke Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -93,8 +93,8 @@ class add_tree_conf extends class_base
 			$root_oid = $grps[$max_gid];
 			if ($root_oid)
 			{
-				$tr_inst = get_instance("tree_root");
-				$root_id = $tr_inst->get_root($root_oid);
+				$tr_obj = new object($root_oid);
+				$root_id = $tr_obj->prop("root");
 			}
 		}
 		return $root_id;
