@@ -1,0 +1,9 @@
+<select {VAR:class} name="ft_page" onChange="window.location='{VAR:pageurl}ft_page='+this.options[this.selectedIndex].value">
+<!-- SUB: page -->
+<option value="{VAR:ft_page}">{VAR:text}</option>
+<!-- END SUB: page -->
+
+<!-- SUB: sel_page -->
+<option value="{VAR:ft_page}" selected>{VAR:text}</option>
+<!-- END SUB: sel_page -->
+</select>

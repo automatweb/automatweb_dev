@@ -1,0 +1,20 @@
+<!-- SUB: selallscript -->
+<script type="text/javascript">
+var chk_status = 1;
+
+function selall(element)
+{
+        element = element + '[';
+        len = document.changeform.elements.length;
+        for (i=0; i < len; i++)
+        {
+                if (document.changeform.elements[i].name.indexOf(element) != -1)
+                {
+                        document.changeform.elements[i].checked = chk_status;
+                        //window.status = "" + i + " / " + len;
+                }
+        }
+        chk_status = chk_status ? 0 : 1;
+}
+</script>
+<!-- END SUB: selallscript -->
