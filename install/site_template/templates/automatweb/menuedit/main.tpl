@@ -29,7 +29,7 @@
   <td align="right">
 
 
-<!-- SUB SEARCH_SEL -->
+<!-- SUB: SEARCH_SEL -->
 <table border="0" cellspacing="5" cellpadding="0">
 <form method="get" action="{VAR:baseurl}/index.{VAR:ext}" name="search">
 <tr>
@@ -45,7 +45,7 @@
 </tr>
 </form>
 </table>
-<!-- END SUB SEARCH_SEL -->
+<!-- END SUB: SEARCH_SEL -->
 
   </td>
 </tr>
