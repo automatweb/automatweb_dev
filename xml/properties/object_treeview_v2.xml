@@ -31,6 +31,16 @@
             <caption>N&amp;auml;ita toolbari</caption>
       </property>
       <property>
+            <name>show_link_new_win</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaata link uues aknas</caption>
+      </property>
+      <property>
             <name>tree_type</name>
             <table>objects</table>
             <group>showing</group>
