@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.21 2004/09/10 10:38:55 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.22 2004/09/14 09:12:12 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -118,6 +118,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 // naff, naff. I need to create different views that contain different properties. That's something
 // I should have done a long time ago, so that I can create different planners
+define("DAY",86400);
 define("WEEK",DAY * 7);
 define("REP_DAY",1);
 define("REP_WEEK",2);
@@ -156,7 +157,6 @@ define("CAL_SHOW_MONTH",4);
 
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
-classload("calendar");
 class planner extends class_base
 {
 	function planner($args = array())
