@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.25 2001/05/24 20:02:28 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.26 2001/05/25 14:24:07 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -532,7 +532,8 @@ class messenger extends menuedit_light
 					};
 					// kui status == true, siis on teade loetud
 					$msg["id"] = $msg["oid"];
-					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
+					$msg["color"] = ($cnt % 2) ? "#EEEEEE" : "#FFFFFF";
+					$tpl = ($msg["status"]) ? "line" : "unreadline";
 					if ($msg["type"] == 2)
 					{
 						$msg["from"] = htmlspecialchars($msg["mfrom"]);
@@ -547,7 +548,7 @@ class messenger extends menuedit_light
 					$msg["cnt"] = $cnt;
 					$msg["tm"] = $this->time2date($row["tm"]);
 					$this->vars($msg);
-					$c .= $this->parse("line");
+					$c .= $this->parse($tpl);
 				};
 				$cnt++;
 			};
