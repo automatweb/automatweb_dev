@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.219 2003/11/13 11:22:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.220 2003/11/26 18:58:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -84,7 +84,25 @@ class document extends aw_template
 		};
 		$period = (int)$period;
 		$row = $this->get_menu($parent);
-		$sections = $row["meta"]["sss"];
+		$me = obj($parent);
+		$gm_subs = $me->meta("section_include_submenus");
+		$gm_c = $me->connections_from(array(
+			"type" => RELTYPE_DOCS_FROM_MENU
+		));
+		foreach($gm_c as $gm)
+		{
+			$gm_id = $gm->prop("to");
+			$sections[$gm_id] = $gm_id;
+			if ($gm_subs[$gm_id])
+			{
+				$_sm_list = $this->get_menu_list(false, false, $fm_id);
+				foreach($_sm_list as $_sm_i => $ttt)
+				{
+					$sections[$_sm_i] = $_sm_i;
+				}
+			}
+		}
+
 		if ($row["meta"]["all_pers"])
 		{
 			$period_instance = get_instance("period");

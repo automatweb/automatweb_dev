@@ -164,14 +164,12 @@
       </property>
       <property>
             <name>sections</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>20</size>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
             <group>relations</group>
             <table>objects</table>
-            <caption>Vennastamine</caption>
+            <field>sections</field>
+            <caption>Vennad</caption>
       </property>
       <property>
             <name>images_from_menu</name>
@@ -215,24 +213,23 @@
       </property>
       <property>
             <name>sss</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>15</size>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
             <group>relations</group>
+            <table>menu</table>
+            <field>sss</field>
             <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
       </property>
       <property>
             <name>pers</name>
-            <type>select</type>
+            <type>relpicker</type>
             <multiple>1</multiple>
-            <size>15</size>
+            <size>5</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>relations</group>
+            <reltype>RELTYPE_PERIOD</reltype>
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
       <property>
@@ -526,7 +523,7 @@
                   <caption>Võtmesõnad</caption>
             </keywords>
             <relations>
-                  <caption>Seosed</caption>
+                  <caption>Kaustad</caption>
             </relations>
             <presentation>
                   <caption>Presentatsioon</caption>
@@ -590,6 +587,16 @@
                   <clid>CL_OBJECT_TREE</clid>
                   <caption>objektide nimekiri</caption>
             </OBJ_TREE>
+            <DOCS_FROM_MENU>
+                  <value>9</value>
+                  <clid>CL_MENU</clid>
+                  <caption>v&amp;otilde;ta dokumente men&amp;uuml;&amp;uuml; alt</caption>
+            </DOCS_FROM_MENU>
+            <PERIOD>
+                  <value>10</value>
+                  <clid>CL_PERIOD</clid>
+                  <caption>v&amp;otilde;ta dokumente perioodi alt</caption>
+            </PERIOD>
       </reltypes>
 </properties>
 

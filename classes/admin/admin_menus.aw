@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.37 2003/11/21 17:03:27 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.38 2003/11/26 18:58:00 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -881,10 +881,21 @@ class admin_menus extends aw_template
 			WHERE
 				$where";
 
-		$filter = array(
+/*		$filter = array(
 			"parent" => $parent,
-			"lang_id" => $lang_id,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"non_filter_classes" => CL_MENU,
+				"conditions" => array(
+					"lang_id" => $lang_id,
+					"class_id" => array(CL_PERIOD, CL_USER, CL_GROUP, CL_MSGBOARD_TOPIC),
+					"type" => MN_CLIENT
+				)
+			))
 		);
+		$GLOBALS["DUKE"] = 1;
+		$ob = new object_list($filter);
+		die();*/
 
 		// make pageselector.
 		$_t = new aw_table;

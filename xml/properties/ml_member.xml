@@ -40,6 +40,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
+            <no_status>1</no_status>
       </classinfo>
       <tableinfo>
             <ml_users>

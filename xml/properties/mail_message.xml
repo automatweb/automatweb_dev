@@ -55,6 +55,16 @@
             <caption>Kuupäev</caption>
       </property>
       <property>
+            <name>html_mail</name>
+            <type>checkbox</type>
+            <ch_value>1024</ch_value>
+            <field>type</field>
+            <method>bitmask</method>
+            <group>general</group>
+            <table>messages</table>
+            <caption>HTML kiri</caption>
+      </property>
+      <property>
             <name>message</name>
             <type>textarea</type>
             <cols>80</cols>
@@ -76,6 +86,7 @@
       <property>
             <name>msgrid</name>
             <type>hidden</type>
+            <store>no</store>
             <group>general</group>
             <table>messages</table>
             <field>msgrid</field>
@@ -84,6 +95,7 @@
       <property>
             <name>msgid</name>
             <type>hidden</type>
+            <store>no</store>
             <group>general</group>
             <table>messages</table>
             <field>msgid</field>
@@ -92,6 +104,7 @@
       <property>
             <name>mailbox</name>
             <type>hidden</type>
+            <store>no</store>
             <group>general</group>
             <table>messages</table>
             <field>mailbox</field>

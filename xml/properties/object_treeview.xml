@@ -29,6 +29,16 @@
             <caption>N&amp;auml;ita katalooge</caption>
       </property>
       <property>
+            <name>show_add</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>N&amp;auml;ita toolbari</caption>
+      </property>
+      <property>
             <name>js_tree</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -37,6 +47,26 @@
             <table>objects</table>
             <group>general</group>
             <caption>Puu puhul kasuta javascripti</caption>
+      </property>
+      <property>
+            <name>groupfolder_acl</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>&amp;Otilde;igused piiratud grupi kataloogide j&amp;auml;rgi</caption>
+      </property>
+      <property>
+            <name>show_notact</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
             <name>clids</name>
@@ -66,6 +96,16 @@
                   <clid>CL_MENU</clid>
                   <caption>kataloog</caption>
             </FOLDER>
+            <ADD_TYPE>
+                  <value>2</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>lisatav objektit&amp;uuml;&amp;uuml;p</caption>
+            </ADD_TYPE>
+            <ALL_ACCESS_GRP>
+                  <value>3</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>projekti haldaja grupp</caption>
+            </ALL_ACCESS_GRP>
       </reltypes>
 </properties>
 

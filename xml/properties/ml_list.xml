@@ -136,6 +136,69 @@
             <method>serialize</method>
             <caption>Impordi liikmed tekstifailist</caption>
       </property>
+      <property>
+            <name>list_status_table</name>
+            <type>table</type>
+            <store>no</store>
+            <group>list_status</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Listi staatus</caption>
+      </property>
+      <property>
+            <name>list_report_table</name>
+            <type>table</type>
+            <store>no</store>
+            <group>list_report</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Listi raport</caption>
+      </property>
+      <property>
+            <name>mail_percentage</name>
+            <type>text</type>
+            <store>no</store>
+            <group>mail_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saadetud</caption>
+      </property>
+      <property>
+            <name>mail_start_date</name>
+            <type>text</type>
+            <store>no</store>
+            <group>mail_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saatmise algus</caption>
+      </property>
+      <property>
+            <name>mail_last_batch</name>
+            <type>text</type>
+            <store>no</store>
+            <group>mail_report</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Viimane batch saadeti</caption>
+      </property>
+      <property>
+            <name>mail_report</name>
+            <type>table</type>
+            <store>no</store>
+            <group>mail_report</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili raport</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -148,6 +211,24 @@
             <subscribing>
                   <caption>Liitumine/lahkumine</caption>
             </subscribing>
+            <raports>
+                  <caption>Raportid</caption>
+            </raports>
+            <list_status>
+                  <caption>Listi staatus</caption>
+                  <parent>raports</parent>
+                  <submit>no</submit>
+            </list_status>
+            <list_report>
+                  <caption>Listi raport</caption>
+                  <parent>raports</parent>
+                  <submit>no</submit>
+            </list_report>
+            <mail_report>
+                  <caption>Maili raport</caption>
+                  <parent>raports</parent>
+                  <submit>no</submit>
+            </mail_report>
       </groupinfo>
       <reltypes>
             <MEMBER_PARENT>

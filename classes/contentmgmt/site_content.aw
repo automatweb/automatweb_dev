@@ -2846,7 +2846,23 @@ class site_content extends menuedit
 			}
 			else
 			{
-				$sections = $me->meta("sss");
+				$gm_subs = $me->meta("section_include_submenus");
+				$gm_c = $me->connections_from(array(
+					"type" => RELTYPE_DOCS_FROM_MENU
+				));
+				foreach($gm_c as $gm)
+				{
+					$gm_id = $gm->prop("to");
+					$sections[$gm_id] = $gm_id;
+					if ($gm_subs[$gm_id])
+					{
+						$_sm_list = $this->get_menu_list(false, false, $fm_id);
+						foreach($_sm_list as $_sm_i => $ttt)
+						{
+							$sections[$_sm_i] = $_sm_i;
+						}
+					}
+				}
 			};
 
 			if ($me->meta("all_pers"))

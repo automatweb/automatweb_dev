@@ -502,7 +502,23 @@ class site_show extends class_base
 			}
 			else
 			{
-				$sections = $obj->meta("sss");
+				$gm_subs = $obj->meta("section_include_submenus");
+				$gm_c = $obj->connections_from(array(
+					"type" => RELTYPE_DOCS_FROM_MENU
+				));
+				foreach($gm_c as $gm)
+				{
+					$gm_id = $gm->prop("to");
+					$sections[$gm_id] = $gm_id;
+					if ($gm_subs[$gm_id])
+					{
+						$_sm_list = $this->get_menu_list(false, false, $gm_id);
+						foreach($_sm_list as $_sm_i => $ttt)
+						{
+							$sections[$_sm_i] = $_sm_i;
+						}
+					}
+				}
 			};
 
 			if ($obj->meta("all_pers"))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.76 2003/11/26 16:40:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.77 2003/11/26 18:58:00 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -59,8 +59,8 @@
 	@property description type=textbox field=meta method=serialize group=keywords
 	@caption META description
 	
-	@property sections type=select multiple=1 size=20 field=meta method=serialize group=relations
-	@caption Vennastamine
+	@property sections type=table store=no group=relations
+	@caption Vennad
 
 	@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
 	@caption V&otilde;ta pildid men&uuml;&uuml; alt
@@ -77,10 +77,10 @@
 	// and now stuff that goes into menu table
 	@default table=menu
 
-	@property sss type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
+	@property sss type=table store=no group=relations
 	@caption Menüüd, mille alt viimased dokumendid võetakse
 	
-	@property pers type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
+	@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=relations reltype=RELTYPE_PERIOD
 	@caption Perioodid, mille alt dokumendid võetakse
 	
 	@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=relations
@@ -179,7 +179,7 @@
 	@groupinfo general caption=Üldine default=1
 	@groupinfo advanced caption=Spetsiaal
 	@groupinfo keywords caption=Võtmesõnad
-	@groupinfo relations caption=Seosed
+	@groupinfo relations caption=Kaustad
 	@groupinfo presentation caption=Presentatsioon
 	@groupinfo show caption=Näitamine
 	@groupinfo import_export caption=Eksport submit=no
@@ -210,6 +210,12 @@
 
 	@reltype OBJ_TREE value=8 clid=CL_OBJECT_TREE
 	@caption objektide nimekiri
+
+	@reltype DOCS_FROM_MENU value=9 clid=CL_MENU
+	@caption v&otilde;ta dokumente men&uuml;&uuml; alt
+
+	@reltype PERIOD value=10 clid=CL_PERIOD
+	@caption v&otilde;ta dokumente perioodi alt
 
 */
 
@@ -259,17 +265,11 @@ class menu extends class_base
 				break;
 			
 			case "sections":
-				$data["options"] = $this->get_menu_list(false,true);
-				$data["selected"] = $this->get_brothers($ob->id());
+				$this->get_brother_table($arr);
 				break;
 
 			case "sss":
-				$data["options"] = $this->get_menu_list();
-				break;
-
-			case "pers":
-				$dbp = get_instance("period",$this->cfg["per_oid"]);
-				$data["options"] = $dbp->period_list(false);
+				$this->get_sss_table($arr);
 				break;
 
 			case "grkeywords":
@@ -591,13 +591,16 @@ class menu extends class_base
 				break;
 
 			case "sections":
-				if (!$ob->id())
+				$dar = new aw_array($arr["request"]["erase"]);
+				foreach($dar->get() as $erase)
 				{
-					$this->update_brothers(array(
-						"id" => $ob->id(),
-						"sections" => $arr["form_data"]["sections"],
-					));
-				};
+					$e_o = obj($erase);
+					$e_o->delete();
+				}
+				break;
+
+			case "sss":
+				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["form_data"]["include_submenus"]);
 				break;
 
 			case "type":
@@ -658,86 +661,6 @@ class menu extends class_base
 				break;				
 		};
 		return $retval;
-	}
-
-	////
-	// !Updates brothers of this menu
-	function update_brothers($args = array())
-	{
-		extract($args);
-		$sar = array(); $oidar = array();
-		// leiame koik selle menüü vennad
-		$menu = $this->get_menu($id);
-		$q = "SELECT * FROM objects
-			 WHERE brother_of = $id AND status != 0 AND class_id = " . CL_BROTHER;
-		$this->db_query($q);
-		while ($row = $this->db_next())
-		{
-			$sar[$row["parent"]] = $row["parent"];
-			$oidar[$row["parent"]] = $row["oid"];
-		}
-
-		$not_changed = array();
-		$added = array();
-
-		$this->updmenus = array();
-
-		if (is_array($sections))
-		{
-			$a = array();
-			foreach($sections as $v)
-			{
-				if ($sar[$v])
-				{
-					$not_changed[$v] = $v;
-				}
-				else
-				{
-					$added[$v] = $v;
-				}
-				$a[$v]=$v;
-			}
-		}
-		$deleted = array();
-		foreach($sar as $oid => $val)
-		{
-			if (!$a[$oid])
-			{
-				$deleted[$oid] = $oid;
-			}
-		}
-
-		foreach($deleted as $oid => $val)
-		{
-			$this->updmenus[] = $oid;
-			$this->delete_object($oidar[$oid]);
-		}
-
-		while(list($oid,) = each($added))
-		{
-			if ($oid != $id)        // no recursing , please
-			{
-				$noid = $this->new_object(array(
-					"parent" => $oid,
-					"class_id" => CL_BROTHER,
-					"status" => 2,
-					"brother_of" => $id,
-					"name" => $menu["name"],
-					"comment" => $menu["comment"],
-					"jrk" => 50,
-				));
-
-				$this->db_query("INSERT INTO menu(id,link,type,is_l3,is_copied,
-							periodic,tpl_edit,tpl_view,tpl_lead,active_period,
-							clickable,target,mid,data,hide_noact)
-				VALUES($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$menu[periodic]','$menu[tpl_edit]','$menu[tpl_view]','$menu[tpl_lead]','$menu[active_period]','$menu[clickable]','$menu[target]','$menu[mid]','$menu[data]','$menu[hide_noact]')");
-				$this->updmenus[] = $noid;
-			}
-		}
-
-		// updmenus is used to invalidate the menu cache for the objects
-		// that have changed. So I need to invalidate all the brothers
-		// and the current menu as well
 	}
 
 	function update_menu_images($args = array())
@@ -920,16 +843,6 @@ class menu extends class_base
 		));
 	}
 
-	function get_brothers($id)
-	{
-		$bsar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
-		while ($arow = $this->db_next())
-		{
-			$bsar[$arow["parent"]] = $arow["parent"];
-		}
-		return $bsar;
-	}
 
 	function callback_on_submit_relation_list($args)
 	{
@@ -967,6 +880,106 @@ class menu extends class_base
 		$obj->set_meta("ip_allow", $allow);
 		$obj->set_meta("ip_deny", $deny);
 		$obj->save();
+	}
+
+	function get_brother_table($arr)
+	{
+		$obj = $arr["obj_inst"];
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => "kustuta",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$ol = new object_list(array(
+			"brother_of" => $obj->id()
+		));
+
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->id() == $obj->id())
+			{
+				continue;
+			}
+			$t->define_data(array(
+				"id" => $o->id(),
+				"name" => $o->path_str(array(
+					"max_len" => 3
+				)),
+				"check" => html::checkbox(array(
+					"name" => "erase[".$o->id()."]",
+					"value" => $o->id(),
+					"checked" => false,
+				)),
+			));
+		}
+	}
+
+	function get_sss_table($arr)
+	{
+		$obj = $arr["obj_inst"];
+
+		$section_include_submenus = $obj->meta("section_include_submenus");
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_DOCS_FROM_MENU
+		));
+
+		foreach($conns as $c)
+		{
+			$o = $c->to();
+
+			$t->define_data(array(
+				"id" => $o->id(),
+				"name" => $o->path_str(array(
+					"max_len" => 3
+				)),
+				"check" => html::checkbox(array(
+					"name" => "include_submenus[".$o->id()."]",
+					"value" => $o->id(),
+					"checked" => $section_include_submenus[$o->id()],
+				)),
+			));
+		}
 	}
 };
 ?>
