@@ -1730,6 +1730,10 @@ class site_content extends menuedit
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
+		if (aw_global_get("uid") == "duke")
+		{
+			print "doing promo boxes";
+		};
 		$doc = get_instance("document");
 
 		# reset period, or we don't see contents of promo boxes under periodic menus:
@@ -1823,6 +1827,7 @@ class site_content extends menuedit
 			{
 				$show_promo = false;
 			};
+
 			
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
@@ -1952,7 +1957,7 @@ class site_content extends menuedit
 
 	function make_poll()
 	{
-		$t = get_instance("poll");
+		$t = get_instance("contentmgmt/poll");
 		$this->vars(array("POLL" => $t->gen_user_html()));
 	}
 
