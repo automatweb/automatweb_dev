@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.14 2001/06/05 16:22:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.15 2001/06/07 12:34:46 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -39,7 +39,9 @@ $orb_defs["form"] = "xml";
 			$this->typearr = array(FORM_ENTRY => FG_ENTRY_FORM, FORM_SEARCH => FG_SEARCH_FORM, FORM_RATING => FG_RATING_FORM);
 		}
 
-		// määrab ära vormi, mida kasutatakse
+		////
+		// !määrab ära vormi, mida kasutatakse
+		// see on eraldi funktsioon, et seda saaks kasutada ka mujalt, kui konstruktori seest
 		function use_form()
 		{
 			$arg = func_get_arg(0);
@@ -89,18 +91,7 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->init($id,"grid.tpl","Muuda formi");
 
-/*			echo "<table border=1>";
-			for ($r=0; $r < $this->arr[rows]; $r++)
-			{
-				echo "<tr>";
-				for ($c=0; $c < $this->arr[cols]; $c++)
-					echo "<td>(", $this->arr[map][$r][$c][row], ",",$this->arr[map][$r][$c][col],")</td>";
-				echo "</tr>";
-			}
-			echo "</table>";
-			flush();*/
-
-			for ($a=0; $a < $this->arr[cols]; $a++)
+			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
 				$fi = "";
 				if ($a == 0)
@@ -330,36 +321,6 @@ $orb_defs["form"] = "xml";
 			}
 			$this->save();
 
-/*			global $HTTP_POST_VARS;
-			$cdelete = array();
-			$rdelete = array();
-			reset($HTTP_POST_VARS);
-			while (list($k,$v) = each($HTTP_POST_VARS))
-			{
-				if (substr($k,0,3) == 'dc_' && $v==1)
-					$cdelete[substr($k,3)] = substr($k,3);
-				else
-				if (substr($k,0,3) == 'dr_' && $v==1)
-					$rdelete[substr($k,3)] = substr($k,3);
-			}
-
-			// kustutame tagant-ettepoole, niiet numbrid ei muutuks
-			krsort($cdelete,SORT_NUMERIC);
-			krsort($rdelete,SORT_NUMERIC);
-
-			reset($cdelete);
-			while (list($k,$v) = each($cdelete))
-			{
-				$this->cells_loaded = false;
-				$this->delete_column($v);
-			}
-
-			reset($rdelete);
-			while (list($k,$v) = each($rdelete))
-			{
-				$this->cells_loaded = false;
-				$this->delete_row($v);
-			}*/
 			return $this->mk_orb("change",array("id" => $this->id));
 		}
 
@@ -1781,13 +1742,14 @@ $orb_defs["form"] = "xml";
 
 		////
 		// !finds the element with name $name in the loaded form and returns a reference to it
+		// Kui ma nyyd oieti aru saan, siis see eeldab muu hulgas ka seda, et on laetud mingi entry.
 		function get_element_by_name($name)
 		{
-			for ($row = 0; $row < $this->arr[rows]; $row++)
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
-				for ($col = 0; $col < $this->arr[cols]; $col++)
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr[contents][$row][$col]->get_els(&$elar);
+					$this->arr["contents"][$row][$col]->get_els(&$elar);
 					reset($elar);
 					while (list(,$el) = each($elar))
 					{
