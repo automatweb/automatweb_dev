@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.11 2005/01/12 11:10:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.12 2005/03/10 12:37:31 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -88,6 +88,7 @@ class object_export extends class_base
 				}
 				$prop["value"] = html::href(array(
 					"url" => aw_url_change_var("do_exp", 1),
+					"target" => "_blank",
 					"caption" => t("Ekspordi CSV fail")
 				));
 				break;
@@ -98,6 +99,7 @@ class object_export extends class_base
 				}
 				$prop["value"] = html::href(array(
 					"url" => aw_url_change_var("xls", 1),
+					"target" => "_blank",
 					"caption" => t("Ekspordi XLS fail")
 				));
 				break;
