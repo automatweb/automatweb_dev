@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.15 2002/12/16 11:33:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.16 2002/12/16 11:40:37 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -20,6 +20,9 @@
 
 	@property aip_filename type=textbox field=meta method=serialize group=advanced
 	@caption Failinimi
+	
+	@property periodic type=checkbox group=advanced
+	@caption Perioodiline
 
 	@property objtbl_conf type=objpicker clid=CL_OBJ_TABLE_CONF field=meta method=serialize group=advanced
 	@caption Objektitabeli konf
@@ -95,9 +98,6 @@
 	@property no_menus type=checkbox group=advanced
 	@caption Ilma menüüdeta
 	
-	@property periodic type=checkbox group=advanced
-	@caption Perioodiline
-
 	@property target type=checkbox group=general
 	@caption Uues aknas
 
