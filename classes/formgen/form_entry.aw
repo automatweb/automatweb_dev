@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.1 2002/10/29 10:24:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.2 2003/06/06 14:42:29 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -137,6 +137,17 @@ class form_entry extends aw_template
 		extract($arr);
 		$this->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
 		return $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr");
+	}
+
+	function on_delete_hook($eid)
+	{
+		// mark the deleted column in the form table
+		$f = get_instance("formgen/form");
+		$fid = $f->get_form_for_entry($eid);
+		if ($fid)
+		{
+			$this->db_query("UPDATE form_".$fid."_entries SET deleted = 1");
+		}
 	}
 }
 ?>
