@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.137 2003/11/13 14:27:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.138 2003/11/18 17:25:25 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -112,7 +112,7 @@
 	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
 	@groupinfo time_settings caption=Ajaseaded parent=general
 	@groupinfo special caption=Spetsiaalne parent=general
-	@groupinfo add_event caption=Lisa_sündmus
+	@groupinfo add_event caption="Muuda sündmust"
 */
 
 // naff, naff. I need to create different views that contain different properties. That's something
@@ -174,7 +174,7 @@ class planner extends class_base
 		);
 
 		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING);
-		$this->specialgroups = array("projects");
+		$this->specialgroups = array("projects","calendars");
 	}
 	
 	function my_calendar($arr)
@@ -396,6 +396,12 @@ class planner extends class_base
 			};
 		};
 
+		// for each of those fucking calendars I need to take into account all the connections they have...
+		// urk. Then, perhaps instead of using connections in calendar I can create those nasty brother objects?
+		// and them delete 'em if I don't need them anymore?
+
+		// hohumm. or perhaps I can create a list of stuff beforehand?
+
 		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
 		$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
 		// holy fuck. oh well. but since I read metadata anyway, why not get project_relations from that?	
@@ -404,7 +410,7 @@ class planner extends class_base
 		$project = aw_global_get("project");
 		// hõkk!
 		// now, if a project has been requested from the URL, I need to do additional filtering for each object
-		// bingo-bongo. I need to save that information into object metadata as well.
+
 		// we sure pass around a LOT of data
 		$this->events_done = true;
 		while($row = $this->db_next())
@@ -443,6 +449,7 @@ class planner extends class_base
 			$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
 			$events[$gx][$row["brother_of"]] = $row;
 		};
+		// nüüd tuleks veel konnektsioone ka arvestada .. oh, god this sucks
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
 		return $events;
@@ -520,6 +527,125 @@ class planner extends class_base
 		return $nodes;
 	}
 
+	function do_group_headers($arr)
+	{
+		$xtmp = $arr["t"]->groupinfo;
+		$tmp = array(
+			"type" => "text",
+			"caption" => "header",
+			"subtitle" => 1,
+		);	
+		unset($xtmp["calendar"]);
+		$captions = array();
+		// still, would be nice to make 'em _real_ second level groups
+		// right now I'm simply faking 'em
+		$xtmp["calendars"] = array(
+			"caption" => "Kalendrid",
+		);
+		$xtmp["projects"] = array(
+			"caption" => "Projektid",
+		);
+		// now, just add another
+		foreach($xtmp as $key => $val)
+		{
+			if ($this->event_id && ($key != $this->emb_group))
+			{
+				$new_group = ($key == "general") ? "" : $key;
+				$captions[] = html::href(array(
+						"url" => aw_url_change_var("cb_group",$new_group),
+						"caption" => $val["caption"],
+				));
+			}
+			else
+			{
+				$captions[] = $val["caption"];
+			};
+		};
+		$this->emb_group = $emb_group;
+		$tmp["value"] = join(" | ",$captions);
+		return $tmp;
+	}
+
+	function do_special_group($arr)
+	{
+		// yes, it looks weird, but I need to load the properties to get
+		// to the groupinfo
+		if (in_array($this->emb_group,$this->specialgroups))
+		{
+			//$event_obj = new object($emb["id"]);
+			if ($this->emb_group == "projects")
+			{
+				$e_conns = $arr["event_obj"]->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				$prjlist = array();
+				foreach($e_conns as $conn)
+				{
+					$prjlist[$conn->prop("from")] = 1;
+				};
+
+				$users = get_instance("users");
+				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+				$conns = $user->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				$all_props = array();
+
+				$meta = $arr["event_obj"]->meta("project_connections");
+
+				foreach($conns as $conn)
+				{
+					$all_props["prj_" . $conn->prop("from")] = array(
+						"type" => "checkbox",
+						"name" => "prj" . "[" .$conn->prop("from") . "]",
+						"caption" => html::href(array(
+							"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
+							"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
+						)),
+						"ch_value" => $prjlist[$conn->prop("from")],
+						"value" => 1,
+					);
+				};
+			}
+			elseif ($this->emb_group == "calendars")
+			{
+				$brlist = new object_list(array(
+					"brother_of" => $arr["event_obj"]->id(),
+				));
+
+				for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
+				{
+					$plrlist[$o->parent()] = $o->id();
+				};
+
+				$all_props = array();
+
+				$docinst = get_instance("doc");	
+				foreach($docinst->get_planners_with_folders() as $row)
+				{
+					if ($row["event_folder"] != $arr["event_obj"]->parent())
+					{
+						$folderdat = $this->get_object($row["event_folder"]);
+
+						$all_props["link_calendars_" . $row["oid"]] = array(
+							"type" => "checkbox",
+							"name" => "link_calendars" . "[" .$row["oid"] . "]",
+							"caption" => html::href(array(
+								"url" => $this->mk_my_orb("change",array("id" => $row["oid"]),"planner"),
+								"caption" => "<font color='black'>" . $row["name"] . "</font>",
+							)),
+							"ch_value" => $row["oid"],
+							"value" => isset($plrlist[$row["event_folder"]]) ? $row["oid"] : 0,
+						);
+					};
+				};
+			}
+		}
+		return $all_props;
+	}
+
 	////
 	// !Displays the form for adding a new event
 	function callback_get_add_event($args = array())
@@ -530,13 +656,17 @@ class planner extends class_base
 		$meta = $obj->meta();
 
 		// use the config form specified in the request url OR the default one from the
-		// object configuration
+		// planner configuration
 		$event_cfgform = empty($args["request"]["cfgform_id"]) ? $meta["event_cfgform"] : $args["request"]["cfgform_id"];
 		// are we editing an existing event?
 		if (!empty($args["request"]["event_id"]))
 		{
 			$event_id = $args["request"]["event_id"];
 			$event_obj = new object($event_id);
+			if ($event_obj->is_brother())
+			{
+				$event_obj = $event_obj->get_original();
+			};
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
@@ -550,6 +680,9 @@ class planner extends class_base
 		};
 
 		$res_props = array();
+			
+		// nii - aga kuidas ma lahenda probleemi sündmuste panemisest teise kalendrisse?
+		// see peaks samamoodi planneri funktsionaalsus olema. wuhuhuuu
 
 		// no there are 3 possible scenarios.
 		// 1 - if a clid is in the url, check whether it's one of those that can be used for enterint events
@@ -581,6 +714,7 @@ class planner extends class_base
 				{
 					$emb_group = $args["request"]["cb_group"];
 				};
+				$this->emb_group = $emb_group;
 			
 				$obj_to_load = $this->event_id;
 				$t->id = $obj_to_load;
@@ -588,6 +722,13 @@ class planner extends class_base
 				$all_props = $t->get_active_properties(array(
 					"group" => $emb_group,
 				));
+		
+				if (in_array($this->emb_group,$this->specialgroups))
+				{
+					$all_props = $this->do_special_group(array(
+						"event_obj" => &$event_obj,
+					));
+				};
 			
 				if ($this->event_id)
 				{
@@ -599,7 +740,10 @@ class planner extends class_base
 						"name_prefix" => "emb",
 				));
 
-				$resprops = array();
+				//$resprops = array();
+				$resprops["capt"] = $this->do_group_headers(array(
+					"t" => &$t,
+				));
 
 				foreach($xprops as $key => $val)
 				{
@@ -639,6 +783,8 @@ class planner extends class_base
 				$emb_group = $args["request"]["cb_group"];
 			};
 
+			$this->emb_group = $emb_group;
+
 			$t->role = "obj_edit";
 			
 			$obj_to_load = $this->event_id;
@@ -662,46 +808,12 @@ class planner extends class_base
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
-
-			// yes, it looks weird, but I need to load the properties to get
-			// to the groupinfo
-			if (in_array($emb_group,$this->specialgroups))
+				
+			if (in_array($this->emb_group,$this->specialgroups))
 			{
-				//$event_obj = new object($emb["id"]);
-				$e_conns = $event_obj->connections_to(array(
-					"from.class_id" => CL_PROJECT,
+				$all_props = $this->do_special_group(array(
+					"event_obj" => &$event_obj,
 				));
-
-				$prjlist = array();
-				foreach($e_conns as $conn)
-				{
-					$prjlist[$conn->prop("from")] = 1;
-				};
-
-				$users = get_instance("users");
-				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-				$conns = $user->connections_to(array(
-					"from.class_id" => CL_PROJECT,
-				));
-
-				$all_props = array();
-
-				$meta = $event_obj->meta("project_connections");
-
-				foreach($conns as $conn)
-				{
-					$all_props["prj_" . $conn->prop("from")] = array(
-						"type" => "checkbox",
-						"name" => "prj" . "[" .$conn->prop("from") . "]",
-						"caption" => html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
-							"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
-						)),
-						"ch_value" => $prjlist[$conn->prop("from")],
-						"value" => 1,
-					);
-				};
-
 			};
 
 			if ($this->event_id)
@@ -712,38 +824,9 @@ class planner extends class_base
 
 			// see gruppide tegemine on vaja kuidagi paremini tööle saada junõu
 			$xprops = array();
-			$xtmp = $t->groupinfo;
-			$tmp = array(
-				"type" => "text",
-				"caption" => "header",
-				"subtitle" => 1,
-			);	
-			$captions = array();
-			// still, would be nice to make 'em _real_ second level groups
-			// right now I'm simply faking 'em
-			$xtmp["projects"] = array(
-				"caption" => "Projektid",
-			);
-			// now, just add another
-			foreach($xtmp as $key => $val)
-			{
-				if ($this->event_id && ($key != $emb_group))
-				{
-					$new_group = ($key == "general") ? "" : $key;
-					$captions[] = html::href(array(
-							"url" => aw_url_change_var("cb_group",$new_group),
-							"caption" => $val["caption"],
-					));
-				}
-				else
-				{
-					$captions[] = $val["caption"];
-				};
-			};
 			$this->emb_group = $emb_group;
-			$tmp["value"] = join(" | ",$captions);
 			$bid = $obj->brother_of();
-			//$t->inst->set_calendars(array($bid));
+			$t->inst->set_calendars(array($bid));
 			foreach($all_props as $sk => $st)
 			{
 				if ($st["richtext"])
@@ -751,15 +834,18 @@ class planner extends class_base
 					unset($all_props[$sk]["richtext"]);
 				};
 			};
-			$t->inst->set_calendars(array($obj->id()));
+			//$t->inst->set_calendars(array($obj->id()));
 			$xprops = $t->parse_properties(array(
 					"properties" => $all_props,
 					"name_prefix" => "emb",
 			));
 			$resprops = array();
+				$resprops["capt"] = $this->do_group_headers(array(
+					"t" => &$t,
+				));
 			// bad, I need a way to detect the default group. 
 			// but for now this has to do.
-			$resprops["capt"] = $tmp;
+			//$resprops["capt"] = $tmp;
 			foreach($xprops as $key => $val)
 			{
 				$resprops[$key] = $val;
@@ -797,6 +883,7 @@ class planner extends class_base
 			return PROP_ERROR;
 		};
 		$emb = $args["request"]["emb"];
+		$is_doc = false;
 		if (!empty($emb["clid"]))
 		{
 			$clfile = $this->cfg["classes"][$emb["clid"]]["file"];
@@ -810,6 +897,10 @@ class planner extends class_base
 			$frm = $this->get_object($event_cfgform);
 			classload("doc");
 			$t = new doc();
+			$is_doc = true;
+
+			// nini. kui embedded object on document, siis saab vendade loomine special meaningu
+			// sest need tehakse siis vendadega. otherwise, 
 		};
 		if (is_array($emb))
 		{
@@ -827,12 +918,16 @@ class planner extends class_base
 		if (in_array($this->emb_group,$this->specialgroups))
 		{
 			$this->event_id = $emb["id"];
+			$event_obj = new object($emb["id"]);
+			if ($event_obj->is_brother())
+			{
+				$event_obj = $event_obj->get_original();
+			};
 			if ($this->emb_group == "projects")
 			{
 				// 1) retreieve all connections that this event has to projects
 				// 2) remove those that were not explicitly checked in the form
 				// 3) create new connections which did not exist before
-				$event_obj = new object($emb["id"]);
 				$e_conns = $event_obj->connections_to(array(
 					"from.class_id" => CL_PROJECT,
 				));
@@ -867,6 +962,58 @@ class planner extends class_base
 
 				$event_obj->set_meta("project_connections",$new_ones);
 				$event_obj->save();
+			};
+			//if ($this->emb_group == "calendars" && !$is_doc)
+			if ($this->emb_group == "calendars")
+			{
+				// 1) retrieve all connections that this event has to projects
+				// 2) remove those that were not explicitly checked in the form
+				// 3) create new connections which did not exist before
+
+				// urk .. I need all brothers of the event object.
+
+				$brlist = new object_list(array(
+					"brother_of" => $event_obj->id(),
+				));
+
+				$plrlist = array();
+				
+				for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
+				{
+					if ($o->id() != $event_obj->id())
+					{
+						$plrlist[$o->parent()] = $o->id();
+					};
+				};
+
+				$all_props = array();
+
+				$new_ones = array();
+				if (is_array($args["request"]["emb"]["link_calendars"]))
+				{
+					$new_ones = $args["request"]["emb"]["link_calendars"];
+				};
+
+				foreach($plrlist as $plid => $evid)
+				{
+					if (!$new_ones[$plid])
+					{
+						$this->disconnect_event(array(
+							"event_id" => $evid,
+						));
+					};
+					unset($new_ones[$plid]);
+				};
+
+		
+				// now new_ones sisaldab nende kalendrite id-sid, millega ma pean seose looma
+				foreach($new_ones as $plid)
+				{
+					$this->connect_event(array(
+						"id" => $plid,
+						"event_id" => $emb["id"],
+					));
+				};
 			};
 		}
 		else
@@ -920,9 +1067,10 @@ class planner extends class_base
 
 	function callback_mod_tab($args = array())
 	{
-		if ($args["id"] == "add_event")
+		//if ($args["id"] == "add_event" && empty($this->event_id))
+		if ($args["activegroup"] != "add_event" && $args["id"] == "add_event")
 		{
-			$args["caption"] = isset($this->event_id) ? "Muuda sündmust" : "Lisa sündmus";
+			return false;
 		};
 	}
 
@@ -2772,7 +2920,7 @@ class planner extends class_base
 
 			$toolbar->add_separator();
 
-			$prj_opts = array("" => "--vali projekt--");
+			$prj_opts = array("" => "--filtreeri projekt järgi--");
 
 			$users = get_instance("users");
 			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
@@ -2813,7 +2961,17 @@ class planner extends class_base
 		return $this->mk_my_orb("change",array("id" => $args["id"],"group" => $args["subgroup"],"date" => $args["date"]));
 	}
 
+	function connect_event($arr)
+	{
+		$ev_obj = new object($arr["event_id"]);
+		$plr_obj = new object($arr["id"]);
+		$bro = $ev_obj->create_brother($plr_obj->prop("event_folder"));
+	}
 
-
+	function disconnect_event($arr)
+	{
+		$bro = new object($arr["event_id"]);
+		$bro->delete();
+	}
 };
 ?>
