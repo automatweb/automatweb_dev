@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.31 2003/02/06 15:30:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.32 2003/02/07 18:49:23 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1028,6 +1028,16 @@ class form extends form_base
 			aw_global_set("fg_check_status",true);
 			$this->vars(array("check_status_text" => $this->arr["check_status_text"]));
 		};
+
+		// if this is calendar, load the form_calendar object and make it available
+		// to controllers
+		if ($this->subtype & FSUBTYPE_EV_ENTRY)
+		{
+			// check vacations and if found, update calendar->form relations
+			// set error messages otherwise
+			$this->fcal_instance = get_instance("formgen/form_calendar");
+			$this->fcal_instance->init_cal_controller(array("id" => $this->id));
+		}
 
 		$c="";
 		$chk_js = "";

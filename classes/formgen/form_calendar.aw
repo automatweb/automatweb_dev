@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.18 2003/02/07 16:54:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.19 2003/02/07 18:49:23 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -619,6 +619,88 @@ class form_calendar extends form_base
 		$vac = $max - $sum - $req_items;
 		return $vac;
 	}
+
+
+	function init_cal_controller($args = array())
+        {
+		extract($args);
+		$q = "SELECT oid,class_id,cal_id,el_relation FROM calendar2forms LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid) WHERE form_id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if ($row["class_id"] == CL_FORM_CHAIN)
+		{
+			$fch = get_instance("formgen/form_chain");
+			$fch->load_chain($row["cal_id"]);
+			$cal_controller = (int)$fch->chain["cal_controller"];
+		}
+		elseif ($row["class_id"] == CL_FORM)
+		{
+			$cal_controller = $row["oid"];
+		};
+		$this->el_relation = $row["el_relation"];
+		$this->cal_controller = $cal_controller;
+		$rel = $this->get_element_by_id($this->el_relation);
+		var_dump($rel);
+        }
+
+	////
+        // !Returns a list of vacancies
+        // start (array) - period start
+        // end (timestamp) - period end
+        // cal_id (int) - calendar id
+        // entry_id (int) - entry id
+        // contr (int) - calendar controller id
+        // req_items (int) - how many items do we want?
+        // rel(int) - selector for calendar
+        function get_vac_list($args = array())
+        {
+                extract($args);
+                print "trying to create vacancy list<br>";
+                print "<pre>";
+                print_r($args);
+                print "</pre>";
+                                                                                                                            
+                $_start = ($start) ? $start : 0;
+                $_end = ($end) ? $end : 0;
+                                                                                                                            
+                $contr = $this->cal_controller;
+                                                                                                                            
+                /*
+                $q = "SELECT txtid,max_items FROM calendar2timedef
+                         WHERE oid = '$contr' AND relation IN ($rel)
+                                AND start <= '$_end' AND end >= '$_start'";
+                                                                                                                            
+                $this->db_query($q);
+                $max_items = array();
+                while($row = $this->db_next())
+                {
+                        $max_items[$row["txtid"]] = $row["max_items"];
+                };
+		                $reserved = array();
+                $q = "SELECT txtid,items FROM calendar2event
+                        LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
+                        WHERE relation = '$rel' AND cal_id = '$cal_id' AND form_id = '$id'
+                                AND end >= '$_start' AND start <= '$_end'";
+                print $q;
+                print "<br>";
+                $this->db_query($q);
+                                                                                                                            
+                while($row = $¼his->db_next())
+                {
+                        $reserved[$row["txtid"]] = $row["items"];
+                };
+                                                                                                                            
+                print "<pre>";
+                print_r($max_items);
+                print_r($reserved);
+                print "</pre>";
+                                                                                                                            
+                //$sum = (int)$row2["sum"];
+                //print "max = $max, sum = $sum, req = $req_items<br>";
+                //$vac = $max - $sum - $req_items;
+                */
+                return $vac;
+        }
 
 	function get_rel_el($args = array())
 	{
