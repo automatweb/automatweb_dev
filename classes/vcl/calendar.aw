@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.23 2004/09/29 11:50:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.24 2004/10/05 13:20:06 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -416,25 +416,18 @@ class vcalendar extends aw_template
 		$this->read_template("month_view.tpl");
 		$rv = "";
 
-		for ($i = 1; $i <= 5; $i++)
+		for ($i = 1; $i <= 7; $i++)
 		{
-			$dn = get_lc_weekday($i);
+			if ($i >= 6 && !$this->full_weeks)
+			{
+				continue;
+			};
+			$dn = locale::get_lc_weekday($i,true);
 			$this->vars(array(
-				"dayname" => strtoupper(substr($dn,0,1)),
+				"dayname" => $dn,
 			));
 			$header .= $this->parse("HEADER_CELL");
-		};
 
-		if ($this->full_weeks)
-		{
-			for ($i = 6; $i <= 7; $i++)
-			{
-				$dn = get_lc_weekday($i);
-				$this->vars(array(
-					"dayname" => strtoupper(substr($dn,0,1)),
-				));
-				$header .= $this->parse("HEADER_CELL");
-			};
 		};
 
 		$this->vars(array(
@@ -482,26 +475,14 @@ class vcalendar extends aw_template
 						$events_for_day .= $sday;
 					};
 				};
-				$calendar_blocks[date("Ymd",$i)] .= $events_for_day;
+				$calendar_blocks[date("Ymd",$i)] = $events_for_day;
 			};
 		};
 
 		$last = 0;
 
-		global $XX4;
-		if ($XX4)
-		{
-			print "rs = $realstart<br>";
-			print "re = $realend<br>";
-		};
-		
 		for ($j = $realstart; $j < $realend; $j = $j + (7*86400))
 		{
-			global $XX4;
-			if ($XX4)
-			{
-				print "j = $j<br>";
-			};
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
 				$dstamp = date("Ymd",$i);
@@ -971,6 +952,7 @@ class vcalendar extends aw_template
 		$this->evt_tpl->vars(array(
 			"parent_1_name" => "",
 			"parent_2_name" => "",
+			"parent_3_name" => "",
 		));
 
 		$this->evt_tpl->vars($evt);
