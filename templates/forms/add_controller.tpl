@@ -51,6 +51,9 @@
 <tr>
 	<td class="fform" colspan="2">Kas n&auml;itamise kontroller n&auml;itab elemendi asemel veateadet? <input type='checkbox' name='show_errors_showctl' value='1' {VAR:show_errors}></td>
 </tr>
+<tr>
+	<td class="fform" colspan="2">Kas sisestuse kontroller hoiatab, kuid teeb siiski sisestuse &auml;ra? <input type='checkbox' name='warn_only_entry_controller' value='1' {VAR:warn_only_entry_controller}></td>
+</tr>
 <!-- SUB: CHANGE2 -->
 <tr>
 	<td class="fform" colspan="2"><a href='{VAR:form_list}'>Vaata millistes elementides see kontroller kasutusel on</a></td>
