@@ -23,21 +23,17 @@
 	<property>
 		<name>lead</name>
 		<group>general</group>
-		<richtext>1</richtext>
 		<caption>Sissejuhatus</caption>
 	</property>
 	<property>
 		<name>content</name>
-		<richtext>1</richtext>
 		<group>general</group>
-		<richtext>1</richtext>
 		<caption>Sisu</caption>
 	</property>
 	<property>
 		<name>moreinfo</name>
 		<group>general</group>
 		<caption>Toimetamata</caption>
-		<richtext>1</richtext>
 		<rows>20</rows>
 	</property>
 	<property>
@@ -45,6 +41,11 @@
 		<value>Salvesta</value>
 		<group>general</group>
 	</property>
+	<property>
+		<name>aliasmgr</name>
+		<group>general</group>
+		<caption>Aliastehaldur</caption>
+	</property>	
 	<property>
 		<name>showlead</name>
 		<group>settings</group>
