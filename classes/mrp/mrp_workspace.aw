@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.83 2005/04/06 11:08:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.84 2005/04/06 11:14:45 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2441,11 +2441,7 @@ class mrp_workspace extends class_base
 		$arr['cat'] = $_GET["cat"];
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
-//!!! if true?
-		if (true || is_oid($_GET["pj_job"]) || $_GET["group"] == "grp_printer")
-		{
-			aw_register_header_text_cb(array(&$this, "make_aw_header"));
-		}
+		aw_register_header_text_cb(array(&$this, "make_aw_header"));
 
 		// if no back link is set, make the yah empty
 		if (!$_GET["return_url"])
