@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.24 2003/01/17 09:30:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.25 2003/01/17 10:22:31 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -3653,6 +3653,7 @@ class form extends form_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
+				$elar = array();
 				$this->arr["contents"][$row][$col]->get_els(&$elar);
 				reset($elar);
 				while (list(,$el) = each($elar))
