@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.15 2004/08/30 09:25:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.16 2004/09/02 14:57:46 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -470,18 +470,25 @@ class otv_ds_postipoiss extends class_base
 		$o = obj($arr["oid"]);
 		$fnam = basename($arr["fnam"]);
 		$mt = get_instance("core/aw_mime_types");
-		header("Content-type: ".$mt->type_for_file($fnam));	
-		header("Content-Disposition: attachment;filename=$fnam");
 
 		$patt = $o->prop("ct_fld")."/*".$arr["real_nr"];
 		$ret = glob($patt);
 		// check if the last letters are the real number
+
 		foreach($ret as $fn)
 		{
 			if (substr($fn, -(strlen($arr["real_nr"])+1)) == ".".$arr["real_nr"])
 			{
-				readfile($fn);
-				die();
+				// also check if the length of the filename matches
+				$t_fn = preg_replace("/[^a-z0-9A-Z]/imsU", "", $fn);
+				$t2_fn = preg_replace("/[^a-z0-9A-Z]/imsU", "", $o->prop("ct_fld")."/".$arr["fnam"].".".$arr["real_nr"]);
+				if ($t_fn == $t2_fn)
+				{
+					header("Content-type: ".$mt->type_for_file($fnam));	
+					header("Content-Disposition: attachment;filename=$fnam");
+					readfile($fn);
+					die();
+				}
 			}
 		}
 		error::throw(array(
