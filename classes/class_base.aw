@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.172 2003/11/19 11:43:09 duke Exp $
+// $Id: class_base.aw,v 2.173 2003/11/19 12:46:44 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -216,7 +216,6 @@ class class_base extends aw_template
 			{
 				$this->inst->callback_pre_edit(array(
 					"id" => $this->id,
-					"coredata" => &$this->coredata,
 					"data" => &$this->data,
 					"request" => $this->request,
 					"obj_inst" => &$this->obj_inst,
@@ -835,7 +834,6 @@ class class_base extends aw_template
 				"id" => $key,
 				"obj_inst" => &$this->obj_inst,
 				"tp" => &$this->tp,
-				"coredata" => $this->coredata,
 				"request" => $this->request,
 				"view" => &$val["view"],
 				"activegroup" => $activegroup,
@@ -1504,7 +1502,8 @@ class class_base extends aw_template
 
 		if (($val["type"] == "aliasmgr") && isset($this->id))
 		{
-			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr",false,true);
+			//$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr",false,true);
+			$link = $this->mk_my_orb("list_aliases",array("id" => $this->obj_inst->brother_of()),"aliasmgr",false,true);
 			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
 			$val["type"] = "";
 			$val["caption"] = "";
@@ -1688,7 +1687,7 @@ class class_base extends aw_template
 			};
 
 			$name = $val["name"];
-			if (is_array($val) && $val["type"] != "callback")
+			if (is_array($val) && $val["type"] != "callback" && $val["type"] != "submit")
 			{
 				$this->get_value(&$val);
 			};
@@ -2454,7 +2453,6 @@ class class_base extends aw_template
 		{
 			$this->inst->callback_pre_save(array(
 				"id" => $this->id,
-				"coredata" => &$this->coredata,
 				"objdata" => &$this->objdata,
 				"form_data" => &$args,
 				"request" => &$args,
@@ -2487,7 +2485,6 @@ class class_base extends aw_template
 			// for a reason
 			$this->inst->callback_post_save(array(
 				"id" => $this->id,
-				"coredata" => $this->coredata,
 				"obj_inst" => $this->obj_inst,
 				"objdata" => $this->objdata,
 				"form_data" => &$args,
