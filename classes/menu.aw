@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.58 2003/07/08 10:03:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.59 2003/07/10 12:19:42 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -94,10 +94,9 @@
 	@property docs_per_period type=textbox size=3 group=relations table=objects field=meta method=serialize
 	@caption Dokumente perioodist
 
-	@property seealso type=select multiple=1 size=15 group=relations
-	@caption Vali menüüd, mille all see menüü on "vaata lisaks" menüü
-
-	@property seealso_refs type=hidden method=serialize field=meta table=objects group=relations
+	@property seealso type=callback callback=callback_get_seealso group=relations store=no
+	@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
+	@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
 
 	@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
 	@caption Järjekorranumber (vaata lisaks)
@@ -199,6 +198,7 @@ define("RELTYPE_PICTURES_MENU",1);
 define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
 define("RELTYPE_SHOW_AS_CALENDAR",3);
 define("RELTYPE_SHOW_AS_LAYOUT",4);
+define("RELTYPE_SEEALSO",5);
 
 class menu extends class_base
 {
@@ -259,17 +259,6 @@ class menu extends class_base
 				$kwds = get_instance("keywords");
 				$data["options"] = $kwds->get_keyword_picker();
 				$data["selected"] = $this->get_menu_keywords($args["obj"]["oid"]);
-				break;
-
-			case "seealso":
-				// seealso asi on nyt nii. et esiteks on metadata[seealso_refs] - seal on
-				// kirjas, mis menyyde all see menyy seealso item on
-				// ja siis menu.seealso on nagu enne serializetud array menyydest mis
-				// selle menyy all seealso on et n2itamisel kiirelt teada saax
-				$sa = $args["obj"]["meta"]["seealso_refs"];
-				$rsar = $sa[aw_global_get("lang_id")];
-				$data["options"] = $this->get_menu_list();
-				$data["value"] = $rsar;
 				break;
 
 			case "icon":
@@ -437,6 +426,29 @@ class menu extends class_base
 		return $nodes;
 	}
 
+	function callback_get_seealso($args = array())
+	{
+		load_vcl("table");
+		$t = new aw_table(array(
+			"layout" => "generic",
+			"xml_def" => "menu/seealso_table",
+		));
+		$mlist = $this->get_aliases_for($args["obj"]["oid"],-1,"","","",RELTYPE_SEEALSO);
+		foreach($mlist as $item)
+		{
+			$t->define_data($item);
+		};
+		
+		$prop = $args["prop"];
+		$nodes = array();
+		$nodes[$prop["name"]] = array(
+			"type" => $prop["type"],
+			"caption" => $prop["caption"],
+			"value" => $t->draw(),
+		);
+		return $nodes;
+	}
+
 	function callback_get_pmethod_options($args = array())
 	{
 		if ($args["objdata"]["type"] != MN_PMETHOD)
@@ -490,29 +502,8 @@ class menu extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
-			// seealso is not saved, it should be skipped.
-			// update_seealso creates $this->seealso_refs (which is a hidden
-			// element for simplicity) 
-			case "seealso":
-				if (!empty($args["obj"]["oid"]))
-				{
-					$this->update_seealso(array(
-						"id" => $args["obj"]["oid"],
-						"meta" => $args["obj"]["meta"],
-						"seealso" => $args["form_data"]["seealso"],
-						"seealso_order" => $args["form_data"]["seealso_order"],
-					));
-				};
-				$retval = PROP_IGNORE;
-				break;
-
 			case "icon":
 				$retval = PROP_IGNORE;
-				break;
-
-			// this puts the result of update_seealso into the save queue
-			case "seealso_refs":
-				$data["value"] = $this->seealso_refs;
 				break;
 
 			case "sections":
@@ -565,72 +556,6 @@ class menu extends class_base
 				
 		};
                 return $retval;
-	}
-
-
-	////
-	// !Updates seealso references
-	// see k2ib siis nii et objekti metadata juures on kirjas et mis menyyde all see menyy
-	// ja siis menu.seealso on serializetud array nendest, mis selle menyy all on seealso
-	// niisis. k2ime k6ik praegused menyyd l2bi kus see menyy seealso on ja kui see on 2ra
-	// v6etud, siis kustutame ja kui jrk muutunud siis muudame seda ja viskame nad arrayst v2lja
-	function update_seealso($args = array())
-	{
-		extract($args);
-
-		if (!is_array($seealso))
-		{
-			$seealso = array();
-		}
-
-		$lang_id = aw_global_get("lang_id");
-
-		if (is_array($meta["seealso_refs"][$lang_id]))
-		{
-			foreach ($meta["seealso_refs"][$lang_id] as $mid)
-			{
-				if (!in_array($mid,$seealso))
-				{
-					// remove this one from the menus seealso list
-					$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
-					$m_sa_a = unserialize($m_sa);
-					unset($m_sa_a[$lang_id][$id]);
-					$m_sa = serialize($m_sa_a);
-					$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
-				}
-				else
-				{
-					if ($seealso_order != $meta["seealso_order"])
-					{
-						// kui jrk on muutunud siis tuleb see 2ra muuta
-						$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
-						$m_sa_a = unserialize($m_sa);
-						$m_sa_a[$lang_id][$id] = $seealso_order;
-						$m_sa = serialize($m_sa_a);
-						$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
-					}
-				}
-			}
-		}
-
-		// nyt k2ime l2bi sisestet seealso array ja lisame need mis pole metadatas olemas juba
-		$sas = $meta["seealso_refs"];
-		unset($sas[$lang_id]);
-		foreach($seealso as $m_said)
-		{
-				if (!isset($meta["seealso_refs"][$lang_id][$m_said]))
-				{
-						// tuleb lisada selle menyy juurde kirje
-						$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $m_said", "seealso");
-						$m_sa_a = unserialize($m_sa);
-						$m_sa_a[$lang_id][$id] = $seealso_order;
-						$m_sa = serialize($m_sa_a);
-						$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $m_said");
-				}
-				$sas[$lang_id][$m_said] = $m_said;
-		}
-
-		$this->seealso_refs = $sas;
 	}
 
 	////
@@ -1017,7 +942,8 @@ class menu extends class_base
 			RELTYPE_PICTURES_MENU => "v&otilde;ta pildid men&uuml;&uuml;lt",
 			RELTYPE_SHOW_SUBFOLDERS_MENU => "võta alamkaustad men&uuml;&uuml;lt",
 			RELTYPE_SHOW_AS_CALENDAR => "võta objekte kalendrist",
-			RELTYPE_SHOW_AS_LAYOUT => "kasuta saidi n&auml;itamisel layouti"
+			RELTYPE_SHOW_AS_LAYOUT => "kasuta saidi n&auml;itamisel layouti",
+			RELTYPE_SEEALSO => "vaata lisaks",
 		);
 	}
 
@@ -1028,6 +954,7 @@ class menu extends class_base
                 {
 			case RELTYPE_PICTURES_MENU:
 			case RELTYPE_SHOW_SUBFOLDERS_MENU:
+			case RELTYPE_SEEALSO:
 				$retval = array(CL_PSEUDO);
 				break;
 			case RELTYPE_SHOW_AS_CALENDAR:
