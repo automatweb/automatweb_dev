@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.122 2002/08/09 11:08:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.123 2002/08/09 13:51:46 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5174,8 +5174,6 @@ class form extends form_base
 	{
 		extract($args);
 		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
-		$period_types = array("hour" => "tund", "day" => "päev", "week" => "nädal", "month" => "kuu");
-		$deact_types = array("hour" => "tundi", "day" => "päeva", "week" => "nädalat", "month" => "kuud");
 	
 		// -----------------------
 		$_els = $this->get_all_elements(array("type" => 1));
@@ -5183,6 +5181,8 @@ class form extends form_base
 		$els_start = array("0" => " -- Vali -- ");
 		$els_end   = array("0" => " -- Vali -- ");
 		$els_count = array("0" => " -- Vali -- ");
+		$els_period = array("0" => " -- Vali --");
+		$els_release = array("0" => " -- Vali --");
 
 		foreach($_els as $key => $val)
 		{
@@ -5200,10 +5200,22 @@ class form extends form_base
 			{
 				$els_count[$key] = $val["name"];
 			};
+			
+			if ( ($val["type"] == "timeslice") && ($val["subtype"] == "period") )
+			{
+				$els_period[$key] = $val["name"];
+			};
+			
+			if ( ($val["type"] == "timeslice") && ($val["subtype"] == "release") )
+			{
+				$els_release[$key] = $val["name"];
+			};
+
 		};
 
-		$start_disabled = $end_disabled = $count_disabled = false;
 
+		$start_disabled = $end_disabled = $count_disabled = $period_disabled = $release_disabled = false;
+		
 		if (sizeof($els_start) == 1)
 		{
 			$els_start = array("0" => "n/a");
@@ -5220,6 +5232,18 @@ class form extends form_base
 		{
 			$els_count = array("0" => "n/a");
 			$count_disabled = true;
+		};
+		
+		if (sizeof($els_period) == 1)
+		{
+			$els_period = array("0" => "n/a");
+			$period_disabled = true;
+		};
+		
+		if (sizeof($els_release) == 1)
+		{
+			$els_release = array("0" => "n/a");
+			$release_disabled = true;
 		};
 
 		$ft = get_instance("form_table");
@@ -5265,9 +5289,13 @@ class form extends form_base
 			"start_disabled" => disabled($start_disabled),
 			"end_disabled" => disabled($end_disabled),
 			"count_disabled" => disabled($count_disabled),
-			"els_start" => $this->picker(-1,$els_start),
-			"els_end" => $this->picker(-1,$els_end),
-			"els_count" => $this->picker(-1,$els_count),
+			"period_disabled" => disabled($period_disabled),
+			"release_disabled" => disabled($release_disabled),
+			"els_start" => $this->picker($this->arr["el_event_start"],$els_start),
+			"els_end" => $this->picker($this->arr["el_event_end"],$els_end),
+			"els_count" => $this->picker($this->arr["el_event_count"],$els_count),
+			"els_period" => $this->picker($this->arr["el_event_period"],$els_period),
+			"els_release" => $this->picker($this->arr["el_event_release"],$els_release),
 			//---------------
 			"reforb"	=> $this->mk_reforb("submit_calendar", array("id" => $this->id))
 		));
@@ -5296,6 +5324,13 @@ class form extends form_base
 		$this->load($id);
 		$this->arr["event_display_table"] = $event_display_table;
 		$this->arr["event_start_el"] = $event_start_el;
+
+		$this->arr["el_event_start"] = $el_event_start;
+		$this->arr["el_event_end"] = $el_event_end;
+		$this->arr["el_event_count"] = $el_event_count;
+		$this->arr["el_event_period"] = $el_event_period;
+		$this->arr["el_event_release"] = $el_event_release;
+
 		$this->subtype = $calendar_role;
 		$this->save();
 		return $this->mk_my_orb("calendar",array("id" => $id));
