@@ -12,7 +12,7 @@
       <property>
             <name>d_period</name>
             <type>relpicker</type>
-            <reltype>RELTYPE_PERIOD</reltype>
+            <reltype>RELTYPE_DOCIMP_PERIOD</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -82,5 +82,12 @@
                   <caption>Seaded</caption>
             </settings>
       </groupinfo>
+      <reltypes>
+            <DOCIMP_PERIOD>
+                  <value>1</value>
+                  <clid>CL_PERIOD</clid>
+                  <caption>Periood</caption>
+            </DOCIMP_PERIOD>
+      </reltypes>
 </properties>
 
