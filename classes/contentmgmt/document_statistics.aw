@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.14 2004/05/19 13:22:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.15 2004/06/17 14:39:11 duke Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -456,7 +456,7 @@ class document_statistics extends class_base
 
 			if ($subs[$c->prop("to")] == 1)
 			{
-				$tmp = $this->get_menu_list(false, false, $c->prop("to"));
+				$tmp = $this->get_menu_list(false, false, $c->prop("to"), -1, false);
 				foreach($tmp as $_id => $_pt)
 				{
 					$menus[$_id] = $_id;
