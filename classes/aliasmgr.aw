@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.127 2003/12/04 16:36:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.128 2003/12/04 19:52:28 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -197,10 +197,7 @@ class aliasmgr extends aw_template
 			$to_delete = new aw_array($check);
 			foreach($to_delete->get() as $alias_id)
 			{
-				$conns = $o->connections_from(array(
-					"to" => $alias_id
-				));
-				$c = $conns[0];
+				$c = new connection($alias_id);
 				$c->delete();
 			};
 		};
@@ -623,8 +620,8 @@ class aliasmgr extends aw_template
 			$adat["title"] = $classes[$aclid]["name"];
 
 			$adat["check"] = html::checkbox(array(
-				"name" => "check[" . $alias->prop("to") . "]",
-				"value" => $alias->prop("to"),
+				"name" => "check[" . $alias->prop("id") . "]",
+				"value" => $alias->prop("id"),
 			));
 
 			$adat["name"] = html::href(array(
