@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.6 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.7 2002/12/05 15:57:12 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -33,6 +33,7 @@ class mlist extends aw_template
 			"import_link" => $this->mk_my_orb("import_members",array("list_id" => $id)),
 			"export_link" => $this->mk_my_orb("export_members",array("list_id" => $id)),
 			"check_link" => $this->mk_my_orb("checkit",array("list_id" => $id)),
+			"del_link" => $this->mk_my_orb("list_del", array("list_id" => $id)),
 		));
 		if ($sortby != "")
 		{
@@ -794,5 +795,46 @@ class mlist extends aw_template
 		return $this->mk_my_orb("checkit",array("list_id" => $list_id));
 	}
 
+	function list_del($arr)
+	{
+		extract($arr);
+		$list_obj = $this->get_object(array("oid" => $list_id,"class_id" => CL_MAILINGLIST));
+		$this->mk_path(0,"<a href='orb.".$this->cfg["ext"]."?class=lists&action=gen_list&parent=$list_obj[parent]'>Listid</a> / Listi '$list_obj[name]' liikmed");
+
+		$this->read_template("list_del.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_list_del", array("list_id" => $list_id))
+		));
+		return $this->parse();
+	}
+
+	function submit_list_del($arr)
+	{
+		extract($arr);
+
+		$mails = explode("\n", $mails);
+		foreach($mails as $ml)
+		{
+			$ml = trim($ml);
+			if ($ml != "")
+			{
+				$mmid = $this->db_fetch_field("SELECT objects.oid as oid FROM objects
+												 LEFT JOIN ml_users ON ml_users.id = objects.oid
+												 WHERE objects.parent = $list_id AND objects.status != 0 AND objects.class_id = 17 
+												 AND ml_users.mail = '$ml'", "oid");
+				if ($mmid)
+				{
+					echo "kustutan aadressi $ml ($mmid) <br>";
+					$this->delete_object($mmid);
+				}
+				else
+				{
+					echo "kasutajat aadressiga $ml pole selles listis! <Br>";
+				}
+			}
+		}
+		die("<a href='".$this->mk_my_orb("list_members", array("id" => $list_id))."'>Tagasi</a>");
+	}
 };
 ?>

@@ -99,5 +99,20 @@
 			<function name="submit_change_vars"/>
 		</action>
 
+		<action name="list_del">
+			<function name="list_del">
+				<arguments>
+					<required name="list_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_list_del">
+			<function name="submit_list_del">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
