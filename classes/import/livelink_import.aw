@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.19 2005/01/04 13:59:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.20 2005/01/04 16:27:15 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -14,11 +14,6 @@
 	@property exception_node type=textbox size=40 maxlength=40
 	@caption Erandite ID (eralda komadega)
 
-	@property ll_username type=textbox size=40
-	@caption Livelink kasutaja
-	
-	@property ll_password type=password size=40
-	@caption Livelink parool
 
 	@property outdir type=textbox 
 	@caption Kataloog, kuhu failid kirjutada
@@ -31,6 +26,19 @@
 
 	@property invoke type=text editonly=1
 	@caption Käivita
+
+	@default group=auth
+	@property ll_username type=textbox size=40
+	@caption Livelink kasutaja
+	
+	@property ll_password type=password size=40
+	@caption Livelink parool
+
+	@property ll_http_auth type=checkbox ch_value=1
+	@caption HTTP autoriseerimisel samad andmed
+
+	@groupinfo auth caption="Autoriseerimine"
+
 
 	@classinfo syslog_type=ST_LIVELINK_IMPORT
 
@@ -150,6 +158,7 @@ class livelink_import extends class_base
 				"fileprefix" => $obj->prop("fileprefix"),
 				"ll_username" => $obj->prop("ll_username"),
 				"ll_password" => $obj->prop("ll_password"),
+				"ll_http_auth" => $obj->prop("ll_http_auth"),
 			));
 		};
 
@@ -167,6 +176,14 @@ class livelink_import extends class_base
 
 		$this->ll_username = $args["ll_username"];
 		$this->ll_password = $args["ll_password"];
+
+		$this->http_username = $this->http_password = "";
+
+		if (!empty($args["ll_http_auth"]))
+		{
+			$this->http_username = $args["ll_username"];
+			$this->http_password = $args["ll_password"];
+		};
 
 		$this->docs_to_retrieve = array();
 		$this->file_id_list = array();
@@ -325,7 +342,12 @@ class livelink_import extends class_base
 		$rootnode = $this->rootnode;
 		$ll_username = $this->ll_username;
 		$ll_password = $this->ll_password;
-		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
+		$http_auth_str = "";
+		if (!empty($this->http_username))
+		{
+			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
+		};
+		passthru("wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
 		var_dump($retval);
 		print "got structure, parsing \n";
 		// check whether opening succeeded?
@@ -343,7 +365,12 @@ class livelink_import extends class_base
 		$outfile = tempnam($this->tmpdir,"aw-");	
 		$ll_username = $this->ll_username;
 		$ll_password = $this->ll_password;
-		$cmdline = "wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
+		$http_auth_str = "";
+		if (!empty($this->http_username))
+		{
+			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
+		};
+		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
 		print "executing $cmdline<br />";
 		passthru($cmdline);
 		// check whether opening succeeded?
