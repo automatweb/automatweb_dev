@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.61 2003/05/26 12:44:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.62 2003/05/29 14:26:53 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4746,8 +4746,13 @@ class form extends form_base
 						$lcol7 = "";
 						foreach($langs as $lar)
 						{
+							$tx = $el->arr["metadata"][$lar["id"]][$mtk];
+							if (!is_array($el->arr["metadata"][$lar["id"]]) || count($el->arr["metadata"][$lar["id"]]) < 1)
+							{
+								$tx = $el->arr["metadata"][$this->lang_id][$mtk];
+							}
 							$this->vars(array(
-								"text" => $el->arr["metadata"][$lar["id"]][$mtk],
+								"text" => $tx,
 								"col" => $col,
 								"row" => $row,
 								"mtk" => $mtk,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.46 2003/05/29 13:27:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.47 2003/05/29 14:26:54 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -206,9 +206,14 @@ class form_element extends aw_template
 
 			// now do element metadata
 			$mtd = "";
-			if (is_array($this->arr["metadata"][aw_global_get("lang_id")]))
+			$md = $this->arr["metadata"][aw_global_get("lang_id")];
+			if (!is_array($md) || count($md) < 1)
 			{
-				foreach($this->arr["metadata"][aw_global_get("lang_id")] as $mn => $mv)
+				$md = $this->arr["metadata"][$this->form->lang_id];
+			}
+			if (is_array($md))
+			{
+				foreach($md as $mn => $mv)
 				{
 					$this->vars(array(
 						"metadata_name" => $mn,
