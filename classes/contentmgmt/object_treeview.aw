@@ -36,8 +36,14 @@
 @property sort_by type=select field=meta method=serialize
 @caption Objekte sorteeritakse
 
+@property tree_on_left type=checkbox ch_value=1 field=meta method=serialize
+@caption Puu vasakul
+
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
+
+@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR field=meta method=serialize group=styles
+@caption Stiilide doonor
 
 @property title_bgcolor type=colorpicker field=meta method=serialize group=styles
 @caption Pealkirja taustav&auml;rv
@@ -68,6 +74,9 @@
 
 @reltype CSS value=4 clid=CL_CSS
 @caption css stiil
+
+@reltype STYLE_DONOR value=5 clid=CL_OBJECT_TREEVIEW
+@caption stiilide doonor
 
 */
 
@@ -124,7 +133,14 @@ class object_treeview extends class_base
 		}
 		$ob = obj($id);
 
-		$this->read_template('show.tpl');
+		if ($ob->prop("tree_on_left"))
+		{
+			$this->read_template('show_left.tpl');
+		}
+		else
+		{
+			$this->read_template('show.tpl');
+		}
 
 		$this->_insert_row_styles($ob);
 
@@ -628,7 +644,8 @@ class object_treeview extends class_base
 			"root_name" => "",
 			"root_url" => "",
 			"root_icon" => "",
-			"type" => $ob->meta('tree_type')
+			"type" => TREE_DHTML, //$ob->meta('tree_type'),
+			"persist_state" => 1
 		));
 
 		// now, insert all folders defined
@@ -681,7 +698,8 @@ class object_treeview extends class_base
 			$pms["rootnode"] = aw_global_get("section");
 		}
 		
-		return $tv->finalize_tree($pms);
+		$tmp = $tv->finalize_tree($pms);
+		return $tmp;
 	}
 
 	function get_clids($arr)
@@ -1000,6 +1018,11 @@ class object_treeview extends class_base
 
 	function _insert_row_styles($o)
 	{
+		if ($o->prop("style_donor"))
+		{
+			$o = obj($o->prop("style_donor"));
+		}
+
 		$style = "textmiddle";
 		if ($o->prop("line_css"))
 		{
@@ -1029,6 +1052,11 @@ class object_treeview extends class_base
 
 	function _get_bgcolor($ob, $line)
 	{
+		if ($ob->prop("style_donor"))
+		{
+			$ob = obj($ob->prop("style_donor"));
+		}
+
 		$ret = "";
 		if (($line % 2) == 1)
 		{
