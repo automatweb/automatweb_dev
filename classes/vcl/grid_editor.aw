@@ -1084,6 +1084,13 @@ class grid_editor extends class_base
 		return $table;
 	}
 
+	////
+	// !shows layout with template
+	// params:
+	//	tpl = template to use
+	//	cell_content_callback - the callback that returns the content for the specified cell, passed as
+	//							array(&calling_class_instance, "member_function_name", array("pass_this_as_argument"))
+	//	ignore_empty - if true, empty cells/columns are not shown
 	function show_tpl($data, $oid, $params)
 	{
 		extract($params);
@@ -1096,6 +1103,7 @@ class grid_editor extends class_base
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
 			$cs = "";
+			$has_content = false;
 			for ($col=0; $col < $this->arr["cols"]; $col++)
 			{
 				if (!($spans = $this->get_spans($row, $col)))
@@ -1119,12 +1127,20 @@ class grid_editor extends class_base
 					"content" => $ct
 				));
 
+				if ($ct != "")
+				{
+					$has_content = true;
+				}
 				$cs .= $this->parse("CELL");
 			}
 			$this->vars(array(
 				"CELL" => $cs
 			));
-			$l .= $this->parse("LINE");
+		
+			if (!$ignore_empty || ($ignore_empty && $has_content))
+			{
+				$l .= $this->parse("LINE");
+			}
 		}
 
 		return $this->parse();

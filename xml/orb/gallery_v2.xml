@@ -23,6 +23,28 @@
 			</function>
 		</action>
 
+		<action name="send" nologin="1">
+			<function name="send">
+				<arguments>
+					<required name="id"/>
+					<required name="page"/>
+					<required name="col"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_send" nologin="1">
+			<function name="submit_send">
+				<arguments>
+					<required name="id"/>
+					<required name="page"/>
+					<required name="col"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

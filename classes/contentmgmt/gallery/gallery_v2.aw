@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.6 2003/03/27 14:26:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.7 2003/03/28 15:13:53 kristo Exp $
 
 /*
 
@@ -637,12 +637,30 @@ class gallery_v2 extends class_base
 		$ps_back = "";
 		$ps_fwd = "";
 		$num_pages = $ob['meta']['num_pages'];
+
+		$sp = 1;
+		$p2rp = array();
+		$cur_sp = 0;
 		for($pg = 1; $pg <= $num_pages; $pg++)
+		{
+			if (!$this->_page_has_images($ob, $pg))
+			{
+				continue;
+			}
+			$p2rp[$sp] = $pg;
+			if ($pg == $page)
+			{
+				$cur_sp = $sp;
+			}
+			$sp++;
+		}
+
+		foreach($p2rp as $sp => $pg)
 		{
 			$url = aw_url_change_var("page", $pg);
 			$this->vars(array(
 				"link" => $url,
-				"page_num" => $pg
+				"page_num" => $sp
 			));
 			if ($pg == $page)
 			{
@@ -652,15 +670,18 @@ class gallery_v2 extends class_base
 			{
 				$pages[] = $this->parse("PAGE");
 			}
-			if ($pg == $page-1)
+
+			if ($cur_sp-1 == $sp)
 			{
 				$ps_back = $this->parse("PAGESEL_BACK");
 			}
-			if ($pg == $page+1)
+
+			if ($cur_sp+1 == $sp)
 			{
 				$ps_fwd = $this->parse("PAGESEL_FWD");
 			}
 		}
+
 		$this->vars(array(
 			"PAGE" => join($this->parse("PAGE_SEP"), $pages),
 			"SEL_PAGE" => "",
@@ -682,7 +703,8 @@ class gallery_v2 extends class_base
 			"num_cols" => $li->get_num_cols(),
 			"layout" => $li->show_tpl($l, $oid, array(
 				"tpl" => "gallery/show_v2_layout.tpl",
-				"cell_content_callback" => array(&$this, "_get_show_cell_content", array("obj" => $ob, "page" => $page))
+				"cell_content_callback" => array(&$this, "_get_show_cell_content", array("obj" => $ob, "page" => $page)),
+				"ignore_empty" => true
 			)),
 			"name" => $ob['name']
 		));
@@ -695,6 +717,11 @@ class gallery_v2 extends class_base
 		$page = $params['page'];
 
 		$pd = $obj['meta']['page_data'][$page]['content'][$row][$col];
+
+		if (!$pd['img']['id'])
+		{
+			return "";
+		}
 		
 		$w = $pd['img']['sz'][0];
 		$h = $pd['img']['sz'][1]+70;
@@ -739,7 +766,37 @@ class gallery_v2 extends class_base
 		$ob = $this->get_object($id);
 		$pd = $ob['meta']['page_data'][$page]['content'][$row][$col];
 
-		$this->read_template("show_v2_image.tpl");
+		$this->read_any_template("show_v2_image.tpl");
+
+		$p_page = $n_page = $page;
+		$p_row = $n_row = $row; 
+		$p_col = $n_col = $col;
+		do {
+			list($p_page, $p_row, $p_col) = $this->_get_prev_img($ob, $p_page, $p_row, $p_col);
+		} while ($p_page > 0 && (!$ob['meta']['page_data'][$p_page]['content'][$p_row][$p_col]['img']['id']));
+
+		do {
+			list($n_page, $n_row, $n_col) = $this->_get_next_img($ob, $n_page, $n_row, $n_col);
+		} while ($n_page <= $ob['meta']['num_pages'] && (!$ob['meta']['page_data'][$n_page]['content'][$n_row][$n_col]['img']['id']));
+
+		if ($n_page > $ob['meta']['num_pages'])
+		{
+			$post_rate_url = $this->mk_my_orb("show_image", array(
+				"id" => $id, 
+				"page" => $page,
+				"row" => $row, 
+				"col" => $col
+			));
+		}
+		else
+		{
+			$post_rate_url = $this->mk_my_orb("show_image", array(
+				"id" => $id, 
+				"page" => $n_page,
+				"row" => $n_row, 
+				"col" => $n_col
+			));
+		}
 
 		$sc = get_instance("contentmgmt/rate/rate_scale");
 		$scale = $sc->get_scale_for_obj($pd['img']['id']);
@@ -749,7 +806,7 @@ class gallery_v2 extends class_base
 			$this->vars(array(
 				"rate_link" => $this->mk_my_orb("rate", array(
 					"oid" => $pd['img']['id'],
-					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+					"return_url" => urlencode($post_rate_url),
 					"rate" => $sci_val
 				), "rate"),
 				"scale_value" => $sci_name
@@ -759,6 +816,8 @@ class gallery_v2 extends class_base
 		
 		$this->add_hit($pd['img']['id']);
 
+		$email_link = $this->mk_my_orb("send", array("id" => $id, "page" => $page, "row" => $row, "col" => $col));
+
 		$r = get_instance("contentmgmt/rate/rate");
 		$this->vars(array(
 			"avg_rating" => $r->get_rating_for_object($pd['img']['id'], RATING_AVERAGE),
@@ -767,9 +826,24 @@ class gallery_v2 extends class_base
 			"image" => image::make_img_tag(image::check_url($pd['img']['url'])),
 			"views" => (int)$this->db_fetch_field("SELECT hits FROM hits WHERE oid = '".$pd['img']['id']."'", "hits"),
 			"RATING_SCALE_ITEM" => $rsi,
-			"name" => $ob['name']
+			"name" => $ob['name'],
+			"prev_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $p_page, "row" => $p_row , "col" => $p_col)),
+			"next_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $n_page, "row" => $n_row , "col" => $n_col)),
 		));
 
+		if ($n_page <= $ob['meta']['num_pages'])
+		{
+			$this->vars(array(
+				"HAS_NEXT_IMAGE" => $this->parse("HAS_NEXT_IMAGE")
+			));
+		}
+
+		if ($p_page > 0)
+		{
+			$this->vars(array(
+				"HAS_PREV_IMAGE" => $this->parse("HAS_PREV_IMAGE")
+			));
+		}
 		die($this->parse());
 	}
 
@@ -1085,6 +1159,102 @@ class gallery_v2 extends class_base
 			);
 		}
 		return $img;
+	}
+
+	function _get_prev_img($ob, $page, $row, $col)
+	{
+		$p_col = $col - 1;
+		if ($p_col < 0)
+		{
+			$p_row = $row - 1;
+			$p_col = $ob['meta']['page_data'][$page]['layout']['cols']-1;
+		}
+		else
+		{
+			$p_row = $row;
+		}
+
+		if ($p_row < 0)
+		{
+			$p_page = $page-1;
+			$p_row = $ob['meta']['page_data'][$p_page]['layout']['rows']-1;
+			$p_col = $ob['meta']['page_data'][$p_page]['layout']['cols']-1;
+		}
+		else
+		{
+			$p_page = $page;
+		}
+
+		return array($p_page, $p_row, $p_col);
+	}
+
+	function _get_next_img($ob, $page, $row, $col)
+	{
+		$n_col = $col + 1;
+		if ($n_col >= $ob['meta']['page_data'][$page]['layout']['cols'])
+		{
+			$n_row = $row+1;
+			$n_col = 0;
+		}
+		else
+		{
+			$n_row = $row;
+		}
+
+		if ($n_row >= $ob['meta']['page_data'][$page]['layout']['rows'])
+		{
+			$n_page = $page+1;
+			$n_row = 0;
+			$n_col = 0;
+		}
+		else
+		{
+			$n_page = $page;
+		}
+
+		return array($n_page, $n_row, $n_col);
+	}
+
+	function send($arr)
+	{
+		extract($arr);
+		$this->read_any_template("send.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_send", $arr)
+		));
+		return $this->parse();
+	}
+
+	function submit_send($arr)
+	{
+		extract($arr);
+		
+		$link = $this->mk_my_orb("show_image", array("id" => $id, "page" => $page, "row" => $row, "col" => $col));
+
+		mail($to, $subject, $message."\n\n".$link."\n\n");
+
+		return $link;
+	}
+
+	function _page_has_images($ob, $page)
+	{
+		$rows = $ob['meta']['page_data'][$page]['layout']["rows"];
+		$cols = $ob['meta']['page_data'][$page]['layout']["cols"];
+		$pd = $ob['meta']['page_data'][$page]['content'];
+ 
+		for ($row = 0; $row < $rows; $row++)
+		{
+			for ($col = 0; $col < $cols; $col++)
+			{
+				if ($pd[$row][$col]['img']['id'])
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
 ?>

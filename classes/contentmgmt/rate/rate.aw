@@ -42,9 +42,11 @@ define("OBJECTS_FROM_OID", 3);
 
 define("ORDER_HIGHEST",1);
 define("ORDER_AVERAGE",2);
+define("ORDER_VIEW",3);
 
 define("RATING_AVERAGE", 1);
 define("RATING_HIGHEST", 2);
+define("RATING_VIEW", 3);
 
 class rate extends class_base
 {
@@ -146,6 +148,7 @@ class rate extends class_base
 				$prop['options'] = array(
 					ORDER_HIGHEST => "K&otilde;rgeima hinde j&auml;rgi",
 					ORDER_AVERAGE => "Keskmise hinde j&auml;rgi",
+					ORDER_VIEWS => "Vaatamiste j&auml;rgi"
 				);
 				break;
 		}
@@ -161,18 +164,25 @@ class rate extends class_base
 		{
 			$avg = $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid'", "avg");
 			$max = $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max");
+			$views = $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
 			$this->set_object_metadata(array(
 				"oid" => $oid,
 				"key" => "__ratings",
 				"value" => array(
 					RATING_AVERAGE => $avg,
-					RATING_HIGHEST => $max
+					RATING_HIGHEST => $max,
+					RATING_VIEWS => $views
 				)
 			));
 			
 			if ($type == RATING_AVERAGE)
 			{
 				return $avg;
+			}
+			else
+			if ($type == RATING_VIEWS)
+			{
+				return $views;
 			}
 			else
 			{
@@ -197,7 +207,8 @@ class rate extends class_base
 
 			$rs = array(
 				RATING_AVERAGE => $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid'", "avg"),
-				RATING_HIGHEST => $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max")
+				RATING_HIGHEST => $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max"),
+				RATING_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
 			);
 			$this->set_object_metadata(array(
 				"oid" => $oid,
@@ -271,10 +282,16 @@ class rate extends class_base
 		{
 			$fun = "AVG(rating)";
 		}
+		else
+		if ($ob['meta']['top_type'] == ORDER_VIEWS)
+		{
+			$fun = "hits.hits";
+		}
 
 		$this->img = get_instance("image");
 
 		$cnt = 1;
+
 		$sql = "
 			SELECT 
 				objects.oid as oid, 
