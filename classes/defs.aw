@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.12 2001/06/18 20:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.13 2001/06/19 15:09:56 duke Exp $
 if (defined("DEFS_LOADED"))
 {
 }
@@ -283,7 +283,9 @@ function is_valid($set,$string)
 
 function is_number($parm)
 {
-	return is_integer($parm);
+	$intparm = (int)$parm;
+	$retval = ($intparm == $parm) ? true : false;
+	return $retval;
 }
 
 // resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
