@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.13 2003/12/04 16:37:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.14 2004/03/09 13:35:04 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -15,6 +15,13 @@ class object_chain extends aw_template
 		$this->init("object_chain");
 	}
 
+	/**
+		@attrib name=new
+
+		@param parent required
+		@param return_url optional
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -34,6 +41,9 @@ class object_chain extends aw_template
 		return $this->parse();
 	}
 
+	/**
+		@attrib name=submit
+	**/
 	function submit($arr)
 	{
 		extract($arr);
@@ -44,7 +54,7 @@ class object_chain extends aw_template
 				"oid" => $id,
 				"name" => $name
 			));
-		
+
 			$_tmp = $this->get_object($id);
 			$par_obj = $this->get_object($_tmp["parent"]);
 		}
@@ -90,10 +100,10 @@ class object_chain extends aw_template
 				}
 			}
 		}
-		
+
 		// kui tegemist on aliaste ja kui see siin on objektipärg, siis
 		// loeme koigepealt sisse olemasolevad aliased ning _kustutame_ need
-		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))                        
+		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))
 		{
 			$old_contents = $this->get_objects_in_chain($id);
 			if (is_array($old_contents))
@@ -123,7 +133,7 @@ class object_chain extends aw_template
 		{
 			$objects = $this->get_objects_in_chain($id);
 		};
-		
+
 		if (is_array($objects))
 		{
 			foreach($objects as $value)
@@ -134,12 +144,19 @@ class object_chain extends aw_template
 
 	}
 
-	function change($arr)
+	/**
+		@attrib name=change
+
+		@param id required
+		@param return_url optional
+
+	**/
+		function change($arr)
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
 		$o = $this->get_object($id);
-	
+
 		if ($return_url)
 		{
 			$return_url = urldecode($return_url);
