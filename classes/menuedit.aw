@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.87 2002/01/28 14:12:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.88 2002/01/28 16:21:57 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -521,7 +521,8 @@ class menuedit extends aw_template
 		lc_site_load("menuedit",$this);
 
 		// get array with path of objects in it
-		$path = $this->get_path($section,$obj);
+		$this->path = $this->get_path($section,$obj);
+		$path = $this->path;
 
 		// you are here links		
 		$this->vars(array("YAH_LINK" => $this->make_yah($path)));
@@ -3907,6 +3908,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"sel_menu_".$name."_L".$this->level."_color" => $meta["color"],
 					"sel_menu_".$name."_L".$this->level."_comment" => $row["comment"]
 				));
+				$this->sel_menus[$name][$this->level] = $row["oid"];
 			}
 
 			$this->vars(array($mn2."_N" => ""));
