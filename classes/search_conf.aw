@@ -107,13 +107,16 @@ class search_conf extends aw_template
 		{
 			if (aw_global_get("uid") != "" || $gdata["users_only"] != 1)
 			{
-				foreach($gdata["menus"] as $mn1 => $mn2)
+				if (is_array($gdata["menus"]))
 				{
-					if ($mn1 == $default)
+					foreach($gdata["menus"] as $mn1 => $mn2)
 					{
-						$def = $grpid;
+						if ($mn1 == $default)
+						{
+							$def = $grpid;
+						}
 					}
-				}
+				};
 				$ret[$grpid] = $gdata["name"];
 			}
 		}
@@ -170,7 +173,7 @@ class search_conf extends aw_template
 			"c_type2" => selected($c_type == 2),
 			"c_type3" => selected($c_type == 3),
 			"keywords" => $this->multiple_option_list($keys,$k->get_all_keywords(array("type" => ARR_KEYWORD))),
-			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section")))
+			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1,"section" => aw_global_get("section"), "set_lang_id" => aw_global_get("lang_id")))
 		));
 
 		if ($search && ($sstring_title != "" || $sstring != ""))
@@ -427,9 +430,12 @@ class search_conf extends aw_template
 			$this->vars(array(
 				"MATCH" => $mat
 			));
-			$this->vars(array(
-				"SEARCH" => $this->parse("SEARCH")
-			));
+			if ($mat != "")
+			{
+				$this->vars(array(
+					"SEARCH" => $this->parse("SEARCH")
+				));
+			}
 
 			// logime ka et tyyp otsis ja palju leidis.
 			$this->do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt);
