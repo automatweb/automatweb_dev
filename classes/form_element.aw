@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.46 2002/01/22 10:23:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.47 2002/02/26 16:23:56 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -1516,7 +1516,14 @@ class form_element extends aw_template
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
-						$html = "<input type='reset' VALUE='".$butt."'>";
+						if ($btype == "image")
+						{
+							$html = "<input type='image' $bsrc onClick=\"form_reset(); return false;\">";
+						}
+						else
+						{
+							$html = "<input type='reset' VALUE='".$butt."'>";
+						};
 					}
 					else
 					if ($this->arr["subtype"] == "url")

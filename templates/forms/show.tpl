@@ -21,6 +21,11 @@ function check_submit()
 
 	return true;
 }
+
+function form_reset()
+{
+	document.fm_{VAR:form_id}.reset();
+}
 var form_changed = 0;
 </script>
 <form name='fm_{VAR:form_id}' action='{VAR:form_action}' METHOD="{VAR:method}" enctype='multipart/form-data' onSubmit="check_submit()">
