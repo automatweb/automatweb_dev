@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.16 2005/01/19 18:19:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.17 2005/01/21 12:55:14 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -330,17 +330,19 @@ class otto_import extends class_base
 					{
 						$add = 0;
 						// check if we got the main img
-						if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+						if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt2))
 						{
 							$add = 1;
 							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-								values('$pcode','1','$mt[1]')");
-							echo "rewrote first image as $mt[1] <Br>\n";
+								values('$pcode','1','$mt2[1]')");
+							echo "rewrote first image as $mt2[1] <Br>\n";
 							flush();
 						}
-
-						$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-							values('$pcode',".(1+$add).",'$mt[1]')");	
+						else
+						{
+							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
+								values('$pcode',".(1+$add).",'$mt[1]')");	
+						}
 						echo "got img $mt[1]  <br>";
 
 
