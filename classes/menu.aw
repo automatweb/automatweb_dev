@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.46 2003/05/13 12:58:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.47 2003/05/20 06:35:10 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -358,9 +358,18 @@ class menu extends class_base
 
 			// image preview
 			$url = image::check_url($val["url"]);
+			if ($url)
+			{
+				$url =  html::img(array("url" => $url));
+				$url .= " ( ".html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $val["id"]),"image"),
+					"caption" => "Muuda"
+				))." ) ";
+			}
+
 			$tmp = array(
 				"type" => "text",
-				"value" => ($url) ? html::img(array("url" => $url)) : "",
+				"value" => $url,
 			);
 			array_push($node["items"],$tmp);
 
