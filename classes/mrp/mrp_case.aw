@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.30 2005/03/13 20:21:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.31 2005/03/14 10:06:20 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -164,7 +164,8 @@ default group=grp_case_material
 
 
 @default group=grp_case_comments
-	@property user_comments type=table store=no
+
+	@property user_comments type=comments 
 	@caption Kommentaarid juhtumi ja tööde kohta
 
 

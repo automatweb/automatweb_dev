@@ -383,8 +383,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
+            <type>comments</type>
             <caption>Kommentaarid juhtumi ja tööde kohta</caption>
       </property>
       <property>
