@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.28 2003/10/30 17:39:45 duke Exp $
+// $Id: cfgutils.aw,v 1.29 2003/11/05 13:16:24 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -308,6 +308,8 @@ class cfgutils extends aw_template
                         $parser->parse_data(array("content" => $args["xml_definition"]));
                         $properties = $parser->get_data("/properties/property");
 			$groupinfo = $parser->get_data("/properties/groupinfo");
+			$classinfo = $parser->get_data("/properties/classinfo");
+			$this->classinfo = $classinfo[0];
 
 			// config forms have no business with other stuff in the properties definition
 			// e.g. they cannot decide where the contents of their values are saved, because

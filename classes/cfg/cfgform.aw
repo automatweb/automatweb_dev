@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.21 2003/10/02 14:00:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.22 2003/11/05 13:16:24 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -22,6 +22,9 @@
 	@property preview type=text store=no editonly=1
 	@caption Definitsioon
 
+	@property edit_groups type=callback callback=callback_edit_groups group=groupdata
+	@caption Muuda gruppe
+
 	@property navtoolbar type=toolbar group=layout store=no no_caption=1 editonly=1
 	@caption Toolbar
 
@@ -43,6 +46,7 @@
 	@property subaction type=hidden store=no group=layout,avail
 	@caption Subaction (sys)
 
+	@groupinfo groupdata caption=Grupid 
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
 
@@ -50,6 +54,7 @@
 
 */
 define(RELTYPE_PROP_GROUP,1);
+define(RELTYPE_ELEMENT,2);
 class cfgform extends class_base
 {
 	function cfgform($arr = array())
@@ -64,6 +69,7 @@ class cfgform extends class_base
 	{
 		return array(
 			RELTYPE_PROP_GROUP => "omaduste kataloog",
+			RELTYPE_ELEMENT => "element",
                 );
         }
 
@@ -75,6 +81,10 @@ class cfgform extends class_base
                         case RELTYPE_PROP_GROUP:
                                 $retval = array(CL_MENU);
                                 break;
+
+			case RELTYPE_ELEMENT:
+				$retval = array(CL_RTE);
+				break;
 		}
 		return $retval;
 	}
@@ -222,6 +232,10 @@ class cfgform extends class_base
 
 			case "layout":
 				$this->save_layout($arr);
+				break;
+
+			case "edit_groups":
+				$this->update_groups($arr);
 				break;
 		}
 		return $retval;
@@ -572,8 +586,9 @@ class cfgform extends class_base
 				break;
 			default:
 				// well, save the names then
-				$grplist = $this->grplist;
+				//$grplist = $this->grplist;
 				$prplist = $this->prplist;
+				/*
 				if (is_array($arr["form_data"]["grpnames"]))
 				{
 					foreach($arr["form_data"]["grpnames"] as $key => $val)
@@ -581,6 +596,7 @@ class cfgform extends class_base
 						$grplist[$key]["caption"] = $val;
 					};
 				};
+				*/
 
 				if (is_array($arr["form_data"]["prpnames"]))
 				{
@@ -605,7 +621,7 @@ class cfgform extends class_base
 					};
 				};
 
-				$this->cfg_groups = $grplist;
+				//$this->cfg_groups = $grplist;
 				$this->cfg_proplist = $prplist;
 
 				break;
@@ -616,5 +632,70 @@ class cfgform extends class_base
 		};
 	}	
 
+	function callback_edit_groups($arr)
+	{
+		// hua, here I have to generate the list of tha groups
+		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
+		$rv = array();
+		$tps = array(
+			"" => "vaikestiil",
+			"stacked" => "pealkiri yleval, sisu all",
+		);
+		foreach($grps->get() as $key => $item)
+		{
+			$res = array();
+			$res["grpcaption[".$key."]"] = array(
+				"name" => "grpcaption[".$key."]",
+				"type" => "textbox",
+				"size" => 40,
+				"caption" => "gdata",
+				"value" => $item["caption"],
+			);
+			$res["grpstyle[".$key."]"] = array(
+				"name" => "grpstyle[".$key."]",
+				"type" => "select",
+				"options" => $tps,
+				"selected" => $item["grpstyle"],
+			);
+			$items = array(
+				"type" => "text",
+				"name" => "b" . $key,
+				"caption" => "ab",
+				"items" => $res,
+				"no_caption" => 1,
+			);		
+
+			$rv["b".$key] = $items;
+		};
+		return $rv;
+	}
+
+	function update_groups($arr)
+	{
+		$grplist = $this->grplist;
+		if (is_array($arr["form_data"]["grpcaption"]))
+		{
+			foreach($arr["form_data"]["grpcaption"] as $key => $val)
+			{
+				$grplist[$key] = array("caption" => $val);
+				$styl = $arr["form_data"]["grpstyle"][$key];
+				if (!empty($styl))
+				{
+					$grplist[$key]["grpstyle"] = $styl;
+				};
+				//print "key = $key<br>";
+				//print "cap " . $arr["form_data"]["grpcaption"][$key] . "<br>";
+				//print "gstyl " . $arr["form_data"]["grpstyle"][$key] . "<br>";
+				//$grplist[$key]["caption"] = $val;
+			};
+		};
+		$this->cfg_groups = $grplist;
+		/*
+		print "<pre>";
+		print_r($arr["form_data"]);
+		print "</pre>";
+		exit;
+		*/
+	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.37 2003/10/05 17:31:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.38 2003/11/05 13:16:24 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -9,19 +9,49 @@
 
 class htmlclient extends aw_template
 {
-	function htmlclient($args = array())
+	function htmlclient($arr = array())
 	{
 		$this->init(array("tpldir" => "htmlclient"));
 		$this->res = "";
+		$this->layout_mode = "default";
+		$this->form_target = "";
+		if (!empty($arr["layout_mode"]))
+		{
+			$this->set_layout_mode($arr["layout_mode"]);
+		};
+		$this->group_style = "";
 		$this->start_output();
 	}
 
+	function set_form_target($target = "_top")
+	{
+		$this->form_target = $target;
+		if (!empty($this->form_target))
+		{
+			$this->vars(array(
+				"form_target" => "target='" . $this->form_target . "' ",
+			));
+		};
+	}
+
+	function set_layout_mode($mode)
+	{
+		$this->layout_mode = $mode;
+	}
+
+	function set_group_style($styl)
+	{
+		$this->group_style = $styl;
+		$this->tmp = get_instance("cfg/htmlclient",array("tpldir" => "htmlclient"));
+		$this->tmp->read_template($styl . ".tpl");
+	}
 
 	////
 	// !Starts the output 
 	function start_output($args = array())
 	{
 		$this->set_parse_method("eval");
+		$tpl = "default.tpl";
 		$this->read_template("default.tpl");
 		$this->orb_vars = array();
 		$this->submit_done = false;
@@ -98,6 +128,16 @@ class htmlclient extends aw_template
 
 
 		// hidden elements end up in the orb_vars
+		if ($type == "iframe")
+		{
+			$this->put_iframe($args);
+		}
+		else
+		if ($this->layout_mode == "fixed_toolbar")
+		{
+			$this->put_block($args);
+		}
+		else
 		if ($type == "hidden")
 		{
 			$this->orb_vars[$args["name"]] = $args["value"];
@@ -260,11 +300,22 @@ class htmlclient extends aw_template
 				)) . substr($caption,1);
 		};
 
-		$this->vars(array(
-			"caption" => $caption,
-			"element" => $this->draw_element($args),
-		));
-		$this->res .= $this->parse("LINE");
+		if (is_object($this->tmp))
+		{
+			$this->tmp->vars(array(
+				"caption" => $caption,
+				"element" => $this->draw_element($args),
+			));
+			$this->res .= $this->tmp->parse("LINE");
+		}
+		else
+		{
+			$this->vars(array(
+				"caption" => $caption,
+				"element" => $this->draw_element($args),
+			));
+			$this->res .= $this->parse("LINE");
+		};
 	}
 
 	function put_header($args)
@@ -290,12 +341,28 @@ class htmlclient extends aw_template
 		));
 		$this->res .= $this->parse("CONTENT");
 	}
+	
+	function put_block($args)
+	{
+		$this->vars(array(
+			"value" => $args["value"],
+		));
+		$this->res .= $this->parse("BLOCK");
+	}
 
+	function put_iframe($args)
+	{
+		$this->vars(array(
+			"src" => $args["src"],
+		));
+		$this->res .= $this->parse("IFRAME");
+	}
+	
 	////
 	// !Finished the output
-	function finish_output($args = array())
+	function finish_output($arr)
 	{
-		extract($args);
+		extract($arr);
 		$sbt = "";
 
 		if ($this->submit_done)
@@ -315,17 +382,18 @@ class htmlclient extends aw_template
 		if ($this->rte)
 		{
 			// make a list of of all RTE-s
+
+			// would be nice if I could update the textareas right when the iframe loses focus ..
+			// I'm almost sure I can do that.
 			foreach($this->rtes as $rte)
 			{
 				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
 			};
 
-
-
-			// miks see raip enkooditud on. mai taha seda
-			//$submit_handler = "document.changeform.elements['content'].value=document.getElementById('content_edit').contentWindow.document.body.innerHTML;";
 			$submit_handler = $txt;
+			$data["cb_nobreaks[${rte}]"] = 1;
 		}
+
 		$this->vars(array(
 			"submit_handler" => $submit_handler,
 			"content" => $this->res,
@@ -335,9 +403,23 @@ class htmlclient extends aw_template
 
 	}
 
-	function get_result()	
+	function get_result($arr)	
 	{
-		return $this->parse();
+		if ($this->layout_mode == "fixed_toolbar")
+		{
+			// this will apply a new style to the BODY node, it's required
+			// to get the classbase layoyt with iframe working correctly
+			$apd = get_instance("layout/active_page_data");
+			$apd->add_serialized_css_style($this->parse("iframe_body_style"));
+		};
+		if ($arr["raw_output"])
+		{
+			return $this->vars["content"];
+		}
+		else
+		{
+			return $this->parse();
+		};
 	}
 
 	function draw_element($args = array())
