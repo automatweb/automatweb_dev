@@ -14,6 +14,9 @@
 <!-- END SUB: page -->
 </td>
 </tr>
+<tr>
+<td colspan="2"><a href="{VAR:add_topic_url}">Lisa teema</a></td>
+</tr>
 </table>
 <table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
@@ -31,5 +34,4 @@
 	<td class="{VAR:style_topic_last_post}">{VAR:last_date}<br>{VAR:last_createdby}</td>
 </tr>
 <!-- END SUB: SUBTOPIC -->
-
 </table>
