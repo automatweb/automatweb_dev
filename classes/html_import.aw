@@ -265,8 +265,8 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	function create_table($arr)
 	{
 		extract($arr);
-		$ob=$this->get_object($id);
-		$q=$this->mk_my_table($ob["meta"]["mk_my_table"],$ob["meta"]['ruul'],$ob["meta"]['sql_ruul'],$ob["meta"]["add_id"],true);
+		$ob=obj($id);
+		$q=$this->mk_my_table($ob->meta("mk_my_table"),$ob->meta('ruul'),$ob->meta('sql_ruul'),$ob->meta("add_id"),true);
 		header('Location:'.$return_url);
 	}
 
@@ -286,8 +286,8 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	function empty_table($arr)
 	{
 		extract($arr);
-		$ob=$this->get_object($id);
-		$this->db_query("delete from ".PREFIX.$ob['meta']['mk_my_table']);
+		$ob=obj($id);
+		$this->db_query("delete from ".PREFIX.$ob->meta('mk_my_table'));
 		header('Location:'.$return_url);
 	}
 
@@ -812,16 +812,16 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	function tiri($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
-		if ($ob["meta"]["file_list"])
+		if ($ob->meta("file_list"))
 		{
-			$files=$ob["meta"]["files"];
+			$files=$ob->meta("files");
 			$files=explode("\r",$files);
 		}
 		else
 		{
-			$files = $this->get_directory(array('dir' => $ob["meta"]["source_path"]));
+			$files = $this->get_directory(array('dir' => $ob->meta("source_path")));
 		}
 
 		if (!$files)
@@ -839,8 +839,8 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 		echo $from.' - '.$next."<br />";
 
 		//tabeli jrk nr
-		$starts=$ob["meta"]["starts"];
-		$what=$ob["meta"]["ruul"];
+		$starts=$ob->meta("starts");
+		$what=$ob->meta("ruul");
 
 //print_r($what);
 
@@ -869,9 +869,9 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 				$this->tblnr=0;
 				$file=$path.$val;
 				$source=$this->getfile($file);
-				if (is_int(strpos($source,$ob["meta"]["match"])))
+				if (is_int(strpos($source,$ob->meta("match"))))
 				{
-					if($ob["meta"]["single"])
+					if($ob->meta("single"))
 					{
 						unset($tbl);
 						foreach($what as $key=>$val)
@@ -900,8 +900,8 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 
 
 
-					$exec=($ob["meta"]["output"]=="mk_my_table")?true:false;
-					$total+=$this->db_insert(PREFIX.$ob["meta"]["mk_my_table"],$fields,$tbl,true,$exec);
+					$exec=($ob->meta("output")=="mk_my_table")?true:false;
+					$total+=$this->db_insert(PREFIX.$ob->meta("mk_my_table"),$fields,$tbl,true,$exec);
 					echo "<br />OK ".trim($file)."<br />";
 				}
 				else
@@ -916,9 +916,9 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 			}
 		}
 		echo "#total: ".(int)$total."\n\r";
-		if ($ob["meta"]["output"]=="mk_my_table")
+		if ($ob->meta("output")=="mk_my_table")
 			echo "kui errorit ei tekkinud, siis andmed läksid vist baasi";
-		if ($ob["meta"]["output"]=="mk_my_query")
+		if ($ob->meta("output")=="mk_my_query")
 			echo "";
 		echo "</pre>";
 echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm)).'#end">järgmised '.$samm.'</a><br />';
@@ -960,10 +960,10 @@ echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $
 	function ruul_test($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-		$examples=explode("\n",$ob["meta"]["example"]);
+		$ob = obj($id);
+		$examples=explode("\n",$ob->meta("example"));
 		$source=$this->getfile($examples[$f]);
-		$ruuls=$ob["meta"]["ruul"];
+		$ruuls=$ob->meta("ruul");
 		if ($ruuls)
 		foreach($ruuls as $key=>$val)
 		{

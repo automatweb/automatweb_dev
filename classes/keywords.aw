@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.49 2004/06/25 21:27:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.50 2004/06/26 07:53:18 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -237,7 +237,7 @@ class keywords extends aw_template
 	function notify($args = array())
 	{
 		extract($args);
-		$gp = $this->get_object($this->cfg["list"]);
+		$gp = obj($this->cfg["list"]);
 		$doc = new object($id);
 		$q = "SELECT keywords.list_id AS list_id,keywords.keyword AS keyword  FROM keywords2objects
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
@@ -266,16 +266,16 @@ class keywords extends aw_template
 			if (!$ml["last"])
 			{
 				// checkime, kas grandparentil on default list määratud
-				if ($gp["last"])
+				if (is_oid($gp->last()))
 				{
 					// oli. nyyd on meil default listi id käes. Tuleb ainult lugeda selle listi last
 					#$ml["last"] = $gp["last"];
 					$this->save_handle();
-					$rl = $this->get_object($gp["last"]);
+					$rl = obj($gp->last());
 					$this->restore_handle();
 					if ($rl)
 					{
-						$ml["last"] = $rl["last"];
+						$ml["last"] = $rl->last();
 					};
 
 				}
