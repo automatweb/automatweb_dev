@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.6 2005/02/09 09:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.7 2005/02/11 09:13:55 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -95,18 +95,25 @@ class menu_tree extends class_base
 		$this->mt_obj = $obj;
 
 		$menus = safe_array($obj->meta("menus"));
-		$ol = new object_list(array(
-			"oid" => $menus,
-			"sort_by" => "objects.jrk",
-			"class_id" => CL_MENU,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"lang_id" => aw_global_get("lang_id"),
-					"type" => MN_CLIENT
-				)
-			))
-		));
+		if (count($menus) == 0)
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"oid" => $menus,
+				"sort_by" => "objects.jrk",
+				"class_id" => CL_MENU,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"lang_id" => aw_global_get("lang_id"),
+						"type" => MN_CLIENT
+					)
+				))
+			));
+		}
 		$menus = $ol->ids();
 		
 		$cho = $obj->meta("children_only");
