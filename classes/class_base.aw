@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.290 2004/07/16 07:32:30 rtoomas Exp $
+// $Id: class_base.aw,v 2.291 2004/08/11 10:57:34 sven Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -689,12 +689,11 @@ class class_base extends aw_template
 		$this->orb_action = $args["action"];
 
 		$this->is_translated = 0;
-
 		// object framework does it's own quoting
 		//$this->quote($args);
 		extract($args);
 
-
+	
 		$request = $args;
 
 		// I need to know the id of the configuration form, so that I
@@ -711,7 +710,7 @@ class class_base extends aw_template
 				$this->is_rel = true;
 			};
 		};
-
+		
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
 
@@ -2705,13 +2704,20 @@ class class_base extends aw_template
 		// object_translation depends on getting the id from here
 		return $this->id;
 	}
-
+	
+	//This function returns all controllers current configform has.
+	function get_all_controllers($config_id)
+	{
+		$obj = &obj($config_id);
+		return $obj->meta("controllers");		
+	}
+	 
 	////
 	// !Processes and saves form data
 	function process_data($args = array())
 	{
 		extract($args);
-
+		
 		$this->init_class_base();
 		if (method_exists($this->inst,"callback_on_load"))
 		{
@@ -2720,7 +2726,7 @@ class class_base extends aw_template
 			));
 		}
 		
-
+		
 		if (method_exists($this->inst,"callback_on_load"))
 		{
 				$this->inst->callback_on_load(array(
@@ -2821,8 +2827,7 @@ class class_base extends aw_template
 			$properties = $this->get_property_group($filter);
 		};
 		
-
-
+		
 		$pvalues = array();
 
 		// this is here so I can keep things in the session
@@ -2902,6 +2907,14 @@ class class_base extends aw_template
 
 		$realprops = $tmp;
 
+		
+		$controller_inst = get_instance(CL_CFGCONTROLLER);
+		
+		if($this->cfgform)
+		{
+			$controllers = $this->get_all_controllers($this->cfgform);
+		}
+		
 		// now do the real job.
 		foreach($realprops as $key => $property)
 		{
@@ -2915,9 +2928,11 @@ class class_base extends aw_template
 				"obj_inst" => &$this->obj_inst,
 				"relinfo" => $this->relinfo,
 			);
-
+			
 			$status = PROP_OK;
-
+			
+		
+			
 			// give the class a possiblity to execute some action
 			// while we are saving it.
 
@@ -2943,15 +2958,23 @@ class class_base extends aw_template
 					$property["error"] = $property["name"] . " - siia saab sisestada ainult arvu!";
 				};
 			};
-
+			
+			if($controllers[$property["name"]])
+			{
+				$controller_id = $controllers[$property["name"]];
+				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $property, $realprops);
+				$property["error"] = $controller_ret["error"];
+				$status = $controller_ret["status"];
+			}
+					
 			if (PROP_ERROR == $status)
 			{
 				$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				aw_session_set("cb_values",$propvalues);
 				$status = PROP_IGNORE;
 			}
-				
-
+			
+			$retval = true;	
 			if (PROP_FATAL_ERROR == $status)
 			{
 				// so what the fuck do I do now?
@@ -2972,7 +2995,9 @@ class class_base extends aw_template
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				};
 				aw_session_set("cb_values",$propvalues);
-				return false;
+				
+				$retval = false;
+				//return false;
 			};
 
 			// oh well, bail out then.
@@ -3262,7 +3287,7 @@ class class_base extends aw_template
 			));
 		}
 		
-		return true;
+		return $false;
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -3550,6 +3575,8 @@ class class_base extends aw_template
 						if ($forms[$grp_oid] && empty($found_form))
 						{
 							$found_form = $forms[$grp_oid];
+							$this->cfgform = $found_form;
+							//arr($found_form);
 						};
 					};
 				}
