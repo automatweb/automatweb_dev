@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.2 2004/01/06 14:28:42 duke Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -542,6 +542,12 @@ class taket_ebasket extends class_base
 
 	function msg_delete_users_ebasket($arr)
 	{
+		// this should not be called if the site is not taket. I'm not sure whether
+		// this check is the correct way so feel free to fix it.
+		if (empty($this->ebasket_parent_id))
+		{
+			return false;
+		};
 		taket_ebasket::delete_users_ebasket(users::get_oid_for_uid($arr['uid']));
 	}
 }

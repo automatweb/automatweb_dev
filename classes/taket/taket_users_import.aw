@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.2 2004/01/06 14:28:42 duke Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
@@ -153,6 +153,12 @@ class taket_users_import extends class_base
 
 	function update_user_info($arr)
 	{
+		// this message should only be handled for taket sites, feel free to implement
+		// it better -- duke
+		if (aw_ini_get("taket.xmlrpchost") == "")
+		{
+			return false;
+		};
 		include('IXR_Library.inc.php');
 		$user_id=users::get_oid_for_uid($arr['uid']);
 		//tirib infi windooza servust kasutaja kohta
