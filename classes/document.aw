@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.242 2004/03/10 15:25:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.243 2004/03/10 16:04:14 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -771,29 +771,40 @@ class document extends aw_template
 			"link_text" => $doc["link_text"],
 		));
 
+		if ($this->cfg["link_authors"] && is_oid($this->cfg["link_authors_section"]))
+		{
+			global $awt;
+			$awt->start("obj_tree");
+			$author_list = array();
+			$author_tree = new object_tree(array(
+				"parent" => $this->cfg["link_authors_section"],
+				"class_id" => array(CL_MENU,CL_DOCUMENT),
+				"status" => STAT_ACTIVE, 
+			));
+			$al = $author_tree->to_list();
+			for($item =& $al->begin(); !$al->end(); $item =& $al->next())
+			{
+				if ($item->name != "")
+				{
+					$author_list[$item->name()] = $item->id();
+				};
+			}
+
+			$awt->stop("obj_tree");
+		};
+
 		if ($doc["photos"])
 		{
 			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
 			{
-				// 1. create a list of possibly interesting objects from the menu
-				// which should contain documents about a photographer
 
-				// using object_list makes this fast, because the results are cached
-				$photo_obj_list = new object_list(array(
-					"class_id" => array(CL_MENU,CL_DOCUMENT),
-					"parent" => $this->cfg["link_authors_section"],
-					"lang_id" => array(),
-				));
 				$authors = array();
 				$x = array();
-
-				// now figure out the real object id for each author
-				// XXX: should this work with multiple authors too? It doesn't now
-				for ($po = $photo_obj_list->begin(); !$photo_obj_list->end(); $po = $photo_obj_list->next())
+				foreach($author_list as $author_name => $author_doc_id)
 				{
-					if (stristr($po->name,$doc["photos"]) !== false)
+					if (stristr($author_name,$doc["author"]) !== false)
 					{
-						$x[$doc["photos"]] = $po->id();
+						$x[$doc["photos"]] = $author_doc_id;
 					};
 
 				};
@@ -802,25 +813,29 @@ class document extends aw_template
 				// (remains from ancient AW)
 				if (sizeof($x) == 0)
 				{
-					$x[$doc["author"]] = "";
+					$x[$doc["photos"]] = "";
 				};
-				while(list($k,$v) = each($x)) 
+
+				if (empty($this->cfg["link_default_link"]))
 				{
-					if ($this->cfg["link_default_link"] != "")
+					$authors = array_keys($x);
+				}
+				else
+				{
+					while(list($k,$v) = each($x)) 
 					{
-						if ($v) 
+						if ($this->cfg["link_default_link"] != "")
 						{
-							$authors[] = sprintf("<a href='/index.$ext?section=%s'>%s</a>",$v,$k);
-						} 
-						else 
-						{
-							$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
-						};
-					}
-					else
-					{
-						$authors[] = $k;
-					}
+							if ($v) 
+							{
+								$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
+							} 
+							else 
+							{
+								$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
+							};
+						}
+					};
 				};
 				$author = join(", ",$authors);
 				$this->vars(array("photos" => $author));
@@ -866,54 +881,46 @@ class document extends aw_template
 		{
 			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
 			{
-				// 1. create a list of possibly interesting objects from the menu
-				// which should contain documents about an author
-
-				// using object_list makes this fast, because the results are cached
-				$author_obj_list = new object_list(array(
-					"class_id" => array(CL_MENU,CL_DOCUMENT),
-					"parent" => $this->cfg["link_authors_section"],
-					"lang_id" => array(),
-				));
 				$authors = array();
 				$x = array();
 
-				// now figure out the real object id for each author
-				// XXX: should this work with multiple authors too? It doesn't now
-				for ($ao = $author_obj_list->begin(); !$author_obj_list->end(); $ao = $author_obj_list->next())
+				// XXX: does not work with multiple authors
+				foreach($author_list as $author_name => $author_doc_id)
 				{
-					if (stristr($ao->name,$doc["author"]) !== false)
+					if (stristr($author_name,$doc["author"]) !== false)
 					{
-						$x[$doc["author"]] = $ao->id();
+						$x[$doc["author"]] = $author_doc_id;
 					};
 
 				};
 
-				// Nothing was found, craft a special array required by the following block of code
-				// (remains from ancient AW)
 				if (sizeof($x) == 0)
 				{
 					$x[$doc["author"]] = "";
 				};
-
-				while(list($k,$v) = each($x)) 
+				
+				if (empty($this->cfg["link_default_link"]))
 				{
-					if ($this->cfg["link_default_link"] != "")
+					$authors = array_keys($x);
+				}
+				else
+				{
+					while(list($k,$v) = each($x)) 
 					{
-						if ($v)
+						if ($this->cfg["link_default_link"] != "")
 						{
-							$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
-						} 
-						else 
-						{
-							$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
-						};
-					}
-					else
-					{
-						$authors[] = $k;
-					}
-				}; // while
+							if ($v) 
+							{
+								$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
+							} 
+							else 
+							{
+								$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
+							};
+						}
+					};
+				};
+
 				$author = join(", ",$authors);
 				$this->vars(array("author" => $author));
 				$ab = $this->parse("ablock");
