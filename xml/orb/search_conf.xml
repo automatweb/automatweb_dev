@@ -38,6 +38,36 @@
 			</function>
 		</action>
 
+		<action name="change">
+			<function name="change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_grp">
+			<function name="change_grp">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_change_grp">
+			<function name="submit_change_grp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_grp">
+			<function name="delete_grp">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
