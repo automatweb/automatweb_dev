@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.19 2002/01/29 23:43:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.20 2002/01/30 01:09:22 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -1013,16 +1013,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$aliases[$row["class_id"]][] = $row;
 		};
 
-		$by_alias = array();
-		foreach($this->defs as $key => $val)
-		{
-			$by_alias[$val["alias"]] = $key;
-		}
-
-		$cnt = 0;
 		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
-		// I nead to count each individual alias
-		$counters = array();
 
 		if (is_array($matches))
 		{
@@ -1039,6 +1030,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 				$clid = $this->defs[$defref]["class_id"];
 				$emb_obj_name = "emb" . $clid;
 
+				$idx = $val[3] - 1;
 
 				if (not(is_object($$emb_obj_name)))
 				{
@@ -1048,20 +1040,17 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 						// load and create the class needed for that alias type
 						classload($class_name);
 						$$emb_obj_name = new $class_name;
-
-						// init the alias counter for this type
-						$counters[$clid] = 0;
 					};
 
 				};
 
-				if (is_object($$emb_obj_name))
+				if ( is_object($$emb_obj_name) )
 				{
 
 					$params = array(
 						"oid" => $oid,
 						"matches" => $val,
-						"alias" => $aliases[$clid][$counters[$clid]],
+						"alias" => $aliases[$clid][$idx],
 						"tpls" => &$args["templates"],
 					);
 					$repl = $$emb_obj_name->parse_alias($params);
@@ -1076,8 +1065,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 						$replacement = $repl;
 					}
 					
-					// increment the counter
-					$counters[$clid]++;
 
 				}
 
