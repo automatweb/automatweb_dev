@@ -6,6 +6,7 @@
 
 @classinfo objtable=images
 @classinfo objtable_index=id
+@default group=general
 
 @property ffile type=fileupload
 @caption Pilt
@@ -24,6 +25,7 @@
 
 @property newwindow type=checkbox ch_value=1 table=images field=newwindow
 @caption Uues aknas
+
 
 */
 class image extends class_base
