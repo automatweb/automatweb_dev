@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.49 2003/06/11 21:29:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.50 2003/06/17 11:58:23 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -149,9 +149,6 @@
 	@property tpl_dir table=objects type=select field=meta method=serialize
 	@caption Template set 
 	
-	@property tpl_edit type=select 
-	@caption Template dokumendi muutmiseks
-	
 	@property tpl_view type=select
 	@caption Template dokumendi näitamiseks (pikk)
 	
@@ -218,17 +215,17 @@ class menu extends class_base
 
 			case "tpl_edit":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 0));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $args["obj"]["oid"]));
 				break;
 			
 			case "tpl_lead":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 1));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 1, "menu" => $args["obj"]["oid"]));
 				break;
 			
 			case "tpl_view":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 2));
+				$data["options"] = $tplmgr->get_template_list(array("type" => 2, "menu" => $args["obj"]["oid"]));
 				break;
 
 			case "tpl_dir":
