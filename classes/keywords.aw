@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.8 2001/05/21 02:13:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.9 2001/05/21 02:14:22 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -22,7 +22,6 @@ class keywords extends aw_template {
 		$this->db_query($q);
 		$row = $this->db_next();
 		$keyword = $row["keyword"];
-		$q = "SELECT * FROM keywords WHERE id = '$id'";
 		$this->read_template("doclist.tpl");
 		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
 		$q = "SELECT * FROM keywords2objects WHERE keyword_id = '$id'";
