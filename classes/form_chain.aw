@@ -362,7 +362,7 @@ class form_chain extends form_base
 
 		$this->load_chain($id);
 		$tfid = $form_id;
-		if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]))
+		if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]) && !isset($GLOBALS["confirm"]))
 		{
 			$prev = 0;
 			foreach($this->chain["forms"] as $fid)

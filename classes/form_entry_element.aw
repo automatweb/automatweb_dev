@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.36 2001/10/01 13:48:41 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.37 2001/10/14 04:56:25 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -31,6 +31,38 @@ lc_load("definition");
 				$this->vars($lc_form);
 			}
 			$this->read_template("admin_element.tpl");
+
+			// here we create the listboxes for selecting tables
+			if (is_array($this->form->arr["save_tables"]))
+			{
+				$tbl_num = 0;
+				foreach($this->form->arr["save_tables"] as $tbl => $tbcol)
+				{
+					$ta = $this->db_get_table($tbl);
+					foreach($ta["fields"] as $fn => $fdata)
+					{
+						$this->vars(array(
+							"tbl_num" => $tbl_num++,
+							"table_name" => $tbl,
+							"col_name" => $fn
+						));
+						$t_tb.=$this->parse("TBL");
+					}
+				}
+				$this->vars(array("TBL" => $t_tb));
+			}
+
+			if ($this->form->arr["save_table"] == 1)
+			{
+				$this->vars(array("TABLE_DEFS" => $this->parse("TABLE_DEFS")));
+
+				global $search_script;
+				if (!$search_script)
+				{
+					$GLOBALS["search_script"] = true;
+					$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
+				}
+			}
 
 			$this->do_core_admin();
 

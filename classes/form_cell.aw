@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.20 2001/10/01 14:05:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.21 2001/10/14 04:56:25 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -83,6 +83,7 @@ class form_cell extends form_base
 		}
 
 		$this->style = isset($this->form->arr["elements"][$row][$col]["style"]) ? $this->form->arr["elements"][$row][$col]["style"] : 0;
+		$this->style_class = isset($this->form->arr["elements"][$row][$col]["style_class"]) ? $this->form->arr["elements"][$row][$col]["style_class"] : 0;
 	}
 
 	////
@@ -340,23 +341,43 @@ class form_cell extends form_base
 			$style_id = $def_style;
 		}
 
-		$stc = new style;
-		if ($style_id)
+		if ($this->style_class == CL_CSS)
 		{
-			$cs.= $stc->get_cell_begin_str($style_id,$colspan,$rowspan);
+			$styl = "";
+			if ($style_id)
+			{
+				global $form_style_count;
+				if (!isset($this->form->styles[$style_id]))
+				{
+					$styl = "formstyle".$form_style_count;
+					$this->form->styles[$style_id] = $styl;
+				}
+				else
+				{
+					$styl = $this->form->styles[$style_id];
+				}
+			}
+			$cs.="<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\" $styl>".$c."</td>";
 		}
 		else
 		{
-			$cs .= "<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\">";
-		}
+			$stc = new style;
+			if ($style_id)
+			{
+				$cs.= $stc->get_cell_begin_str($style_id,$colspan,$rowspan);
+			}
+			else
+			{
+				$cs .= "<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\">";
+			}
 
-		$cs.= $c;
+			$cs.= $c;
 
-		if ($style_id)
-			$cs.= $stc->get_cell_end_str($style_id);
+			if ($style_id)
+				$cs.= $stc->get_cell_end_str($style_id);
 
-		$cs.= "</td>";
-		
+			$cs.= "</td>";
+		}			
 		$awt->stop("form_cell::gen_user_html_not::style");
 		$awt->stop("form_cell::gen_user_html_not");
 		return $cs;
@@ -402,9 +423,10 @@ class form_cell extends form_base
 		return $this->style;
 	}
 
-	function set_style($id,&$form)
+	function set_style($id,$style_class = 0)
 	{
 		$form->arr["elements"][$this->row][$this->col]["style"] = $id;
+		$form->arr["elements"][$this->row][$this->col]["style_class"] = $style_class;
 	}
 
 	function admin_cell_controllers()

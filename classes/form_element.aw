@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.26 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.27 2001/10/14 04:56:25 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -255,16 +255,21 @@ class form_element extends aw_template
 						"bops" => $this->picker($this->arr["button_op"],$opl[$this->fid])
 					));
 				}
+				classload("objects");
+				$ob = new db_objects;
 				$this->vars(array(
 					"button_text" => $this->arr["button_text"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade")),
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade","confirm" => "Kinnita")),
 					"button_url" => $this->arr["button_url"],
 					"chain_forward" => checked($this->arr["chain_forward"]==1),
-					"chain_backward" => checked($this->arr["chain_backward"]==1)
+					"chain_backward" => checked($this->arr["chain_backward"]==1),
+					"folders" => $this->picker($this->arr["confirm_moveto"],$ob->get_list()),
+					"redirect" => $this->arr["confirm_redirect"]
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
 				$this->vars(array(
 					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"BUTTON_CONFIRM_TYPE" => ($this->arr["subtype"] == "confirm" ? $this->parse("BUTTON_CONFIRM_TYPE") : ""),
 					"BUTTON_SUB_URL" => ($this->arr["subtype"] == "url" ? $this->parse("BUTTON_SUB_URL") : ""),
 					"BUTTON_SUB_OP" => ($this->arr["subtype"] == "preview" ? $this->parse("BUTTON_SUB_OP") : "")
 				));
@@ -296,6 +301,23 @@ class form_element extends aw_template
 				$di = $this->parse("DATE_ITEMS");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 			}
+
+			if ($this->form->arr["save_table"] == 1)
+			{
+				$tar = array("" => "");
+				if (is_array($this->form->arr["save_tables"]))
+				{
+					foreach($this->form->arr["save_tables"] as $tbl => $tblcolel)
+					{
+						$tar[$tbl] = $tbl;
+					}
+				}
+				$this->vars(array(
+					"tables" => $this->picker($this->arr["table"], $tar),
+					"table_col" => $this->arr["table_col"]
+				));
+				$this->vars(array("TABLE_LB" => $this->parse("TABLE_LB")));
+			}
 			$this->vars(array(
 				"LISTBOX_ITEMS"		=> $lb, 
 				"MULTIPLE_ITEMS"	=> $mu, 
@@ -326,6 +348,12 @@ class form_element extends aw_template
 
 		$var = $base."_ignore_text";
 		$this->arr["ignore_text"] = $$var;
+
+		$var = $base."_table";
+		$this->arr["table"] = $$var;
+
+		$var = $base."_tbl_col";
+		$this->arr["table_col"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
@@ -601,6 +629,12 @@ class form_element extends aw_template
 
 			$var = $base."_chain_backward";
 			$this->arr["chain_backward"] = $$var;
+
+			$var = $base."_confirm_moveto";
+			$this->arr["confirm_moveto"] = $$var;
+
+			$var = $base."_confirm_redirect";
+			$this->arr["confirm_redirect"] = $$var;
 		}
 
 		$var = $base."_separator_type";
@@ -1120,15 +1154,21 @@ class form_element extends aw_template
 					{
 						$butt = $this->arr["lang_button_text"][$lang_id];
 					}
-					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit")
+					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit" || $this->arr["subtype"] == "confirm")
 					{
 						if ($this->arr["chain_forward"] == 1)
 						{
 							$bname="name=\"no_chain_forward\"";
 						}
+						else
 						if ($this->arr["chain_backward"] == 1)
 						{
 							$bname="name=\"chain_backward\"";
+						}
+						else
+						if ($this->arr["subtype"] == "confirm")
+						{
+							$bname = "name=\"confirm\"";
 						}
 						$html = "<input $bname type='submit' VALUE='".$butt."' onClick=\"return check_submit();\">";
 					}
@@ -1324,6 +1364,16 @@ class form_element extends aw_template
 			// XML-RPC.
 			// um, could you explain what's wrong with it? - terryf
 			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
+		}
+		else
+		if ($this->arr["type"] == "button" && $this->arr["subtype"] == "confirm")
+		{
+			if (isset($GLOBALS[$prefix."confirm"]))
+			{
+				$this->save_handle();
+				$this->upd_object(array("oid" => $id, "parent" => $this->arr["confirm_moveto"]));
+				$this->restore_handle();
+			}
 		}
 		else
 		// I think the listboxes are handled as well here.
@@ -1665,7 +1715,13 @@ class form_element extends aw_template
 
 	function do_search_script($rel = false)
 	{
-		global $elements_created;
+		global $elements_created,$search_script;
+
+		if (!$search_script)
+		{
+			$GLOBALS["search_script"] = true;
+			$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
+		}
 
 		if (!$elements_created)
 		{
@@ -1702,10 +1758,8 @@ class form_element extends aw_template
 				}
 			}
 			$this->vars(array("ELDEFS" => $eds));
-			$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
 			$this->vars(array("SEARCH_DEFS" => $this->parse("SEARCH_DEFS")));
 			$GLOBALS["elements_created"] = true;
-			$GLOBALS["search_script"] = true;
 			$GLOBALS["formcache"] = $formcache;
 		}
 	}
