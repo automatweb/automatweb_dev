@@ -2124,6 +2124,7 @@ class form_db_base extends aw_template
 		}
 		
 		$str = " ORDER BY ";
+		$first = true;
 		foreach($sort_by as $nr => $el)
 		{
 			// get the related element
@@ -2134,7 +2135,12 @@ class form_db_base extends aw_template
 			if ($le && $lf)
 			{
 				$finst = $this->cache_get_form_eldat($lf);
+				if (!$first)
+				{
+					$str .= ",";
+				}
 				$str .= form_db_base::mk_tblcol($finst["els"][$le]["table"],$finst["els"][$le]["col"], $lf)." ".$sort_order[$nr]." ";
+				$first = false;
 			}
 		}
 
