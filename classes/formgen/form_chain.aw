@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.5 2003/01/27 14:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.6 2003/01/27 14:09:33 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -567,6 +567,7 @@ class form_chain extends form_base
 				"cal_relation" => $_eid,
 				"no_ml_rules" => true
 		));
+		$submitted_form_id = $form_id;
 
 //		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <Br>";
 		if ($f->has_controller_errors && $new_chain_entry)
@@ -674,6 +675,7 @@ class form_chain extends form_base
 
 		if ($f->go_to_after_submit != "")
 		{
+			aw_session_del("form_redir_after_submit_".$submitted_form_id);
 			return $f->go_to_after_submit;
 		}
 
