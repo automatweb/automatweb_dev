@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.31 2002/09/19 14:52:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.32 2002/09/26 15:41:11 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -400,7 +400,7 @@ class aw_table
 		}
 		
 		// if we show title under grouping elements, then we must not show it on the first line!
-		if (!$this->titlebar_under_groups)
+		if (!$this->titlebar_under_groups && !$arr["no_titlebar"])
 		{
 			// make header!
 			$tbl .= $this->opentag(array("name" => "tr"));
