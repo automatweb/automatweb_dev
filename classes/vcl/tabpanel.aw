@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.10 2004/05/03 13:46:24 duke Exp $
+// $Id: tabpanel.aw,v 1.11 2004/05/06 12:32:02 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -143,6 +143,10 @@ class tabpanel extends aw_template
 	{
 		$tabs = "";
 		$panels = array();
+		$this->vars(array(
+			"uid" => aw_global_get("uid"),
+			"time" => $this->time2date(time()),
+		));
 		foreach($this->tabcount as $level => $val)
 		{
 			if (($val > 1) || !$this->hide_one_tab)
