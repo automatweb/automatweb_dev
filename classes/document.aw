@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.192 2003/06/04 12:45:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.193 2003/06/04 16:48:31 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -33,60 +33,25 @@ class document extends aw_template
 		{
 			$this->style_engine->define_styles($xml_def);
 		}
+
 		// siia tuleks kirja panna koik dokumentide tabeli v2ljade nimed,
 		// mida voidakse muuta
-		// key on kasutusel selleks, et formeerida logi jaoks moistlik string
-		$this->knownfields = array(
-				LC_DOCUMENT_TITLE		=> "title",
-		 		LC_DOCUMENT_SUBTITLE 		=> "subtitle",
-				LC_DOCUMENT_AUTHOR       		=> "author",
-				LC_DOCUMENT_PHOTO       		=> "photos",
-				LC_DOCUMENT_KEYWORD  		=> "keywords",
-				LC_DOCUMENT_NAMES       		=> "names",
-				LC_DOCUMENT_LEAD        		=> "lead",
-				LC_DOCUMENT_SHOW_LEAD 		=> "showlead",
-				LC_DOCUMENT_THEME       		=> "content",
-				LC_DOCUMENT_FRONTPAGE     		=> "esilehel",
-				LC_DOCUMENT_NR1		=> "jrk1",
-				LC_DOCUMENT_NR2			=> "jrk2",
-				LC_DOCUMENT_NR3			=> "jrk3",
-				LC_DOCUMENT_FRONT_UP	=> "esileht_yleval",
-				LC_DOCUMENT_FRONT_NEWS	=> "esilehel_uudis",
-				LC_DOCUMENT_TITLE_CLIK	=> "title_clickable",
-				LC_DOCUMENT_TSITAAT		=> "cite",
-				LC_DOCUMENT_CANAL			=> "channel",
-				LC_DOCUMENT_TIME		=> "tm",
-				LC_DOCUMENT_FORUM		=> "is_forum",
-				LC_DOCUMENT_LINK_TEXT		=> "link_text",
-				LC_DOCUMENT_LEAD_COM		=> "lead_comments",
-				LC_DOCUMENT_NEW_WIN		=> "newwindow",
-				LC_DOCUMENT_RIGHT		=> "yleval_paremal",
-				LC_DOCUMENT_TITLE_SHOW	=> "show_title",
-				LC_DOCUMENT_COPYRIGHT		=> "copyright",
-				LC_DOCUMENT_LONG_TITLE		=> "long_title",
-				LC_DOCUMENT_NOBREAKS		=> "nobreaks",
-				LC_DOCUMENT_NO_LEFT_PANE		=> "no_left_pane",
-				LC_DOCUMENT_NO_RIGHT_PANE		=> "no_right_pane",
-				LC_DOCUMENT_NO_SEARCH		=> "no_search",
-				LC_DOCUMENT_SHOW_CHANGED =>	"show_modified",
-			"Esileht vasak" => "frontpage_left",
-			"Esileht keskel" => "frontpage_center",
-			"Esileht keskel all" => "frontpage_center_bottom",
-			"Esileht parem" => "frontpage_right",
-			"Jrk Esileht vasak" => "frontpage_left_jrk",
-			"Jrk Esileht keskel" => "frontpage_center_jrk",
-			"Jrk Esileht keskel all" => "frontpage_center_bottom_jrk",
-			"Jrk Esileht parem" => "frontpage_right_jrk",
-			"no_last" => "no_last",
-			"Dok. cache" =>  "dcache",
-			"Moreinfo" => "moreinfo",
+
+		$this->knownfields = array("title","subtitle","author","photos","keywords","names",
+			"lead","showlead","content","esilehel","jrk1","jrk2", "jrk3",
+			"esileht_yleval","esilehel_uudis","title_clickable","cite","channel","tm",
+			"is_forum","link_text","lead_comments","newwindow","yleval_paremal",
+			"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
+			"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
+			"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
+			"frontpage_right_jrk","no_last","dcache","moreinfo",
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
 		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt","dcache");
 
 		// for referer checks
-		$this->refopts = array("Ignoreeri","N?ita","?ra n?ita");
+		$this->refopts = array("Ignoreeri","Näita","Ära näita");
 
 		lc_site_load("document",$this);
 
@@ -104,7 +69,7 @@ class document extends aw_template
 	}
 
 	////
-	// !Listib dokud mingi men?? all
+	// !Listib dokud mingi menüü all
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
 		if ($period == -1)
@@ -1183,8 +1148,6 @@ class document extends aw_template
 				}
 				$q = "SELECT oid FROM objects
 							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_PSEUDO;
-//				$this->db_query($q);
-//					echo "vv = <pre>",var_dump($this->db_next()),"</pre> q = $q  <br>";
 				$retval[$v] = $this->db_fetch_field($q,"oid");
 				if (!$retval[$v])
 				{
@@ -1193,7 +1156,6 @@ class document extends aw_template
 					$retval[$v] = $this->db_fetch_field($q,"oid");
 				}
 			}; // eow
-//			echo "retval = <pre>", var_dump($retval),"</pre> <br>";
 			return $retval;
 		}; // eoi
 	}
@@ -1202,21 +1164,22 @@ class document extends aw_template
 	// !Salvestab dokumendi
 	function save($data) 
 	{
-		// id (docid) on ainuke parameeter, mis *peab* olema kaasa antud
-		// ja siis veel v?hemalt yx teine parameeter mida muuta
-
-		// fetchime vana dokumendi, et seda arhiivi salvestada
-		$old = $this->fetch($data["id"]);
-		
 		$this->quote($data);
-		$user = $data["user"];
-		if ($data["content"]) {$data["content"] = trim($data["content"]);};
-		if ($data["lead"]) {$data["lead"] = trim($data["lead"]);};
-		if ($data["cite"]) {$data["cite"] = trim($data["cite"]);};
-		if ($data["keywords"] || $data["link_keywords"])
+
+		// I don't know why .. but this trimming has been here for a long time
+		$trimfields = array("content","lead","cite");
+		foreach($trimfields as $_field)
+		{
+			if (!empty($data[$_field]))
+			{
+				$data[$_field] = trim($data[$_field]);
+			};
+		};				
+
+		if (isset($data["keywords"]) || isset($data["link_keywords"]))
 		{
 			$kw = get_instance("keywords");
-			if ($data["keywords"])
+			if (isset($data["keywords"]))
 			{
 				$kw->update_keywords(array(
 					"keywords" => $data["keywords"],
@@ -1235,12 +1198,11 @@ class document extends aw_template
 
 		};
 
-		if ($data["clear_styles"] == 1)
+		$clearable_fields = array("content","lead","title");
+		foreach($clearable_fields as $_field)
 		{
-			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
-			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
-			$data["title"] = strip_tags($data["title"], "<b>,<i>,<u>,<p>,<ul><li><ol>");
-		}
+			$data[$_field] = strip_tags($data[$_field], "<b>,<i>,<u>,<p>,<ul><li><ol>");
+		};
 
 		if ($data["status"] == 0)
 		{
@@ -1249,20 +1211,20 @@ class document extends aw_template
 
 		$id = $data["id"];
 		$olddoc = $this->fetch($id);
-		$q_parts = array();
-		$changed_fields = array();
+		$old = $olddoc;
 
-		reset($this->knownfields);
-		// tsykkel yle koigi "tuntud" v2ljade, salvestame ainult 
-		// nende sisu, mida vormis kasutati
-		while(list($fcap,$fname) = each($this->knownfields)) 
+		$q_parts = array();
+
+		$cb_fields = array("esilehel","esileht_yleval","esilehel_uudis","is_forum","lead_comments","showlead",
+			"yleval_paremal","show_title","show_modified","title_clickable","newwindow","no_left_pane",
+			"no_right_pane","no_search","frontpage_left","frontpage_center","frontpage_center_bottom",
+			"frontpage_right","no_last");
+
+		foreach($this->knownfields as $_field)
 		{
-			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search" || $fname == "frontpage_left" || $fname == "frontpage_center" || $fname == "frontpage_center_bottom" || $fname == "frontpage_right" || $fname == "no_last" || $fname == "moreinfo" || $fname == "cite")  
+			if ( (isset($data[$_field]) && in_array($_field,$this->knownfields)) || in_array($_field,$cb_fields))
 			{
-				$q_parts[] = "$fname = '$data[$fname]'";
-				// paneme v?ljade nimed ka kirja, et formeerida logi
-				// jaoks natuke informatiivsem teade
-				$changed_fields[] = $fcap;
+				$q_parts[] = "$_field = '$data[$_field]'";
 			};
 		};
 
@@ -1312,13 +1274,13 @@ class document extends aw_template
 			$this->db_query($q);
 		}
 		
-		// siia moodustame objektitabeli p?ringu osad
+		// siia moodustame objektitabeli päringu osad
 		$oq_parts = array();
 
 		$obj_known_fields = array("name","visible","status","parent");
 
-		// seda on j?rgneva p?ringu koostamiseks vaja, sest objektitabelis pole "title"
-		// v?lja. On "name"
+		// seda on järgneva päringu koostamiseks vaja, sest objektitabelis pole "title"
+		// välja. On "name"
 		if ($data["title"]) 
 		{
 			$data["name"] = $data["title"];
@@ -1333,11 +1295,6 @@ class document extends aw_template
 				$oq_parts[$fname] = $data[$fname];
 			};
 		};
-
-		if ($data["docfolder"])
-		{
-			$oq_parts["parent"] = $data["docfolder"];
-		}
 
 		if (not(preg_match("/\W/",$data["alias"])))
 		{
