@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.13 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.14 2005/03/10 12:41:54 ahti Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -81,7 +81,7 @@ class cfgmanager extends class_base
 
 		// I need a list of all connected groups
 		$groups = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_C_GROUP,
+			"type" => "RELTYPE_C_GROUP",
 		));
 
 		$grplist = array();
@@ -91,7 +91,7 @@ class cfgmanager extends class_base
 		};
 		
 		$forms = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_C_CFGFORM,
+			"type" => "RELTYPE_C_CFGFORM",
 		));
 
 		$by_subclass = array();
