@@ -1,0 +1,67 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>user_form</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasutaja lisamise vorm</caption>
+      </property>
+      <property>
+            <name>user_search_form</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasutaja otsimise vorm</caption>
+      </property>
+      <property>
+            <name>folders</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>20</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Root kataloogid</caption>
+      </property>
+      <property>
+            <name>form_jrk</name>
+            <type>callback</type>
+            <callback>callback_gen_form_jrk_list</callback>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vormide j‰rjekord listi liikme lisamisel</caption>
+      </property>
+      <property>
+            <name>name_els</name>
+            <type>callback</type>
+            <callback>callback_gen_name_list</callback>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali elemendid, mille v‰‰rtus pannakse listi liikme objekti nimeks</caption>
+      </property>
+      <property>
+            <name>mailto_el</name>
+            <type>select</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Element, kus on meiliaadress</caption>
+      </property>
+</properties>
+
