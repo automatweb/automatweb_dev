@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.6 2004/06/09 12:54:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.7 2004/06/17 13:41:46 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -18,6 +18,9 @@
 
 @property show_all_in_empty_search type=checkbox ch_value=1
 @caption T&uuml;hi otsing n&auml;itab k&otilde;iki
+
+@property show_all_right_away type=checkbox ch_value=1
+@caption Otsingus n&auml;idatakse ilma otsimata k&otilde;iki
 
 @property notfound_text type=textarea rows=5 cols=40
 @caption Mida n&auml;idatakse kui midagi ei leita (%s on otsing)
@@ -623,7 +626,7 @@ class register_search extends class_base
 		}
 
 
-		if (count($filter) > 3)
+		if (count($filter) > 3 || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
 			if (($ppg = $o->prop("per_page")))
