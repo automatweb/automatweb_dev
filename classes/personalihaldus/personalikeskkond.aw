@@ -1,5 +1,5 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.3 2004/03/17 18:10:14 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.4 2004/03/17 20:18:00 sven Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
  	
@@ -1149,7 +1149,7 @@ class personalikeskkond extends class_base
 			$user_obj = & obj($user_id);
 			$person_obj = array_pop(( $user_obj->connections_from(array("type" => RELTYPE_PERSON))));
 			$person_obj = $person_obj->to();
-			if($person_obj)
+			if(is_object($person_obj))
 			{
 				$org_obj = array_pop($person_obj->connections_from(array("type" => RELTYPE_WORK)));
 				return $org_obj->to();
