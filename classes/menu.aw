@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.20 2002/12/30 12:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.21 2003/01/07 17:54:53 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -83,16 +83,16 @@
 	@property type type=select group=general
 	@caption Menüü tüüp
 	
-	@property admin_feature type=select group=advanced
+	@property admin_feature type=select group=general
 	@caption Vali programm
 	
-	@property pclass type=select table=objects field=meta method=serialize group=advanced
+	@property pclass type=select table=objects field=meta method=serialize group=general
 	@caption Vali meetod
 	
-	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
+	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=general ch_value=1
 	@caption Meetod viitab adminni
 
-	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
+	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=general ch_value=1
 	@caption Meetodi väljundi kuvamisel menüüde näitamine
 
 	@property clickable type=checkbox group=advanced ch_value=1
@@ -637,10 +637,12 @@ class menu extends class_base
 
 	function callback_pre_save($args)
 	{
+		/*
 		if (!$args["object"]["type"])
 		{
 			$args["objdata"]["type"] = MN_CONTENT;
 		}
+		*/
 	}
 
 	function callback_gen_path($args = array())
