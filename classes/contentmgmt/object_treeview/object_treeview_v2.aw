@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.27 2004/12/08 08:35:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.28 2004/12/08 10:32:01 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -50,8 +50,8 @@
 @property filter_by_char_field type=select
 @caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
 
-@property hide_table_content_by_default type=checkbox ch_value=1
-@caption &Auml;ra n&auml;ita vaikimisi tabeli sisu
+@property hide_content_table_by_default type=checkbox ch_value=1
+@caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
@@ -259,7 +259,7 @@ class object_treeview_v2 extends class_base
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
 		// there are set some url params (tv_sel, char)
-		if (($ob->meta("hide_table_content_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		if (($ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 			$ol = array();
 		}
@@ -344,6 +344,11 @@ class object_treeview_v2 extends class_base
 					if((strlen($_GET['char']) == 1) && ($f[0] != $_GET['char']))
 					{
 						unset($ol[$ol_key]);
+					}
+					else
+					if($_GET['char'] == "all")
+					{
+
 					}
 				}
 			}
@@ -460,10 +465,15 @@ class object_treeview_v2 extends class_base
 		{
 			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 			{
+				$group_header_color_code = $ob->prop("group_header_bgcolor");
+				if(!empty($group_header_color_code) && $group_header_color_code[0] != "#")
+				{
+					$group_header_color_code = "#".$group_header_color_code;
+				}
 				$this->vars(array(
 					"content" => $odata[$ob->prop("group_in_table")],
 					"cols_count" => $sel_cols_count,
-					"group_bgcolor" => "#".$ob->prop("group_header_bgcolor"),
+					"group_bgcolor" => $group_header_color_code,
 				));
 				$c .= $this->parse("FILE_GROUP");
 			}
@@ -487,7 +497,8 @@ class object_treeview_v2 extends class_base
 		{
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
-
+// checking, if there is set a field, which values should be use to filter by first character
+// and according to this i'm showing or not showing the alphabet list
 		$filter_by_char_field = $ob->meta("filter_by_char_field");
 		if(!empty($filter_by_char_field))
 		{
@@ -496,14 +507,14 @@ class object_treeview_v2 extends class_base
 			{
 				$this->vars(array(
 					"char" => $char,
-					"char_url" => aw_url_change_var("char", $char),
+					"char_url" => aw_url_change_var("char", $char, aw_url_change_var("tv_sel", "")),
 				));
 				$alphabet_parsed .= $this->parse("ALPHABET");
 			}
-// lets put a link at the end of the alphabet to reset the char to empty value
+// lets put a link at the end of the alphabet to make all fields to show
 			$this->vars(array(
 				"char" => t("K&otilde;ik"),
-				"char_url" => aw_url_change_var("char", ""),
+				"char_url" => aw_url_change_var("char", "all", aw_url_change_var("tv_sel", "")),
 			));
 			$alphabet_parsed .= $this->parse("ALPHABET");
 		}
@@ -527,28 +538,34 @@ class object_treeview_v2 extends class_base
 		{
 			$udef_cols = $col_list;
 		}
-
-		// columns
-		$h_str = "";
-		foreach($col_list as $colid => $coln)
+		if (($ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
-			$str = "";
-			if ($sel_cols[$colid] == 1)
-			{
-				$this->vars(array(
-					"h_text" => ($colid == "icon" ? "" : $udef_cols[$colid])
-				));
-				$str = $this->parse("HEADER");
-				$this->vars(array(
-					"HEADER" => $str
-				));
-				$h_str .= $this->parse("HEADER");
-			}
-		}
 
-		$this->vars(array(
-			"HEADER" => $h_str
-		));
+		}
+		else
+		{
+			// columns
+			$h_str = "";
+			foreach($col_list as $colid => $coln)
+			{
+				$str = "";
+				if ($sel_cols[$colid] == 1)
+				{
+					$this->vars(array(
+						"h_text" => ($colid == "icon" ? "" : $udef_cols[$colid])
+					));
+					$str = $this->parse("HEADER");
+					$this->vars(array(
+						"HEADER" => $str
+					));
+					$h_str .= $this->parse("HEADER");
+				}
+			}
+
+			$this->vars(array(
+				"HEADER" => $h_str
+			));
+		}
 
 		$res = $this->parse();
 		if ($ob->prop("show_add"))
@@ -731,6 +748,7 @@ class object_treeview_v2 extends class_base
 
 	function _insert_row_styles($o)
 	{
+	
 		$style = "textmiddle";
 		classload("layout/active_page_data");
 		if ($o->prop("line_css"))
@@ -749,7 +767,15 @@ class object_treeview_v2 extends class_base
 		$header_bg = "#E0EFEF";
 		if ($o->prop("title_bgcolor"))
 		{
-			$header_bg = "#".$o->prop("title_bgcolor");
+			$header_bg = $o->prop("title_bgcolor");
+			if($header_bg[0] != "#")
+			{
+				$header_bg = "#".$o->prop("title_bgcolor");
+			}
+			else
+			{
+				$header_bg = $o->prop("title_bgcolor");
+			}
 		}
 
 		$this->vars(array(
@@ -806,7 +832,7 @@ class object_treeview_v2 extends class_base
 			$tv->add_item($fld["parent"], array(
 				"id" => $fld["id"],
 				"name" => $fld["name"],
-				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"])),
+				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"], aw_url_change_var("char", ""))),
 				"icon" => $fld["icon"],
 				"comment" => $fld["comment"],
 				"data" => array(
@@ -993,6 +1019,7 @@ class object_treeview_v2 extends class_base
 		));
 
 // get row background color
+
 		$this->vars(array(
 			"bgcolor" => "#".$this->_get_bgcolor($tree_obj, $this->cnt),
 		));
