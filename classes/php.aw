@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.13 2002/10/09 09:48:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.14 2002/11/26 13:00:06 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -24,7 +24,7 @@ class php_serializer
 	function req_serialize($arr,$to_file)
 	{
 		$str ="array(";
-		$td =array();
+		$td = array();
 		foreach($arr as $k => $v)
 		{
 			if (is_array($v))
