@@ -774,15 +774,86 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$sql[] = $tf." & ".$val["mask"]." = ".$val["flags"];
 			}
 			else
-			if (is_object($val) && get_class($val) == "object_list_filter")
+			if (is_object($val))
 			{
-				if (!empty($val->filter["non_filter_classes"]))
+				$class_name = get_class($val);
+				if ($class_name == "object_list_filter")
 				{
-					$this->_do_add_class_id($val->filter["non_filter_classes"], true);
+					if (!empty($val->filter["non_filter_classes"]))
+					{
+						$this->_do_add_class_id($val->filter["non_filter_classes"], true);
+					}
+					if (isset($val->filter["logic"]))
+					{
+						$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
+					}
 				}
-				if (isset($val->filter["logic"]))
+				else
+				if ($class_name == "obj_predicate_not")
 				{
-					$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
+					$v_data = $val->data;
+					if (is_object($val->data) && get_class($val->data) == "aw_array")
+					{
+						$v_data = $v_data->get();
+					}
+
+					if (is_array($val->data))
+					{
+						$sql[] = $tf." NOT IN (".join(",", $v_data).") ";
+					}
+					else
+					{
+						$sql[] = $tf." != ".$v_data." ";
+					}
+				}
+				else
+				if ($class_name == "obj_predicate_compare")
+				{
+					$v_data = $val->data;
+					if (is_object($val->data) && get_class($val->data) == "aw_array")
+					{
+						$v_data = $v_data->get();
+					}
+
+					$comparator = "";
+					switch($val->comparator)
+					{
+						case OBJ_COMP_LESS:
+							$comparator = " < ";
+							break;
+
+						case OBJ_COMP_GREATER:
+							$comparator = " > ";
+							break;
+
+						case OBJ_COMP_LESS_OR_EQ:
+							$comparator = " <= ";
+							break;
+
+						case OBJ_COMP_GREATER_OR_EQ:
+							$comparator = " >= ";
+							break;
+
+						default:
+							error::throw(array(
+								"id" => ERR_OBJ_COMPARATOR,
+								"msg" => "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: ".$val->comparator."!"
+							));
+					}
+
+					if (is_array($v_data))
+					{
+						$tmp = array();
+						foreach($v_data as $d_k)
+						{
+							$tmp[] = $tf." $comparator $d_k ";
+						}
+						$sql[] = "(".join(" OR ", $tmp).")";
+					}
+					else
+					{
+						$sql[] = $tf." $comparator ".$v_data." ";
+					}
 				}
 			}
 			else
