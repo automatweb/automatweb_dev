@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.41 2002/02/19 16:57:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.42 2002/02/19 17:07:52 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -512,6 +512,11 @@ if (!defined("DEFS"))
 
 	function aw_unserialize($str,$dequote = 0)
 	{
+		if ($dequote)
+		{
+			$str = stripslashes($str);
+		};
+
 		if (substr($str,0,14) == "<?xml version=")
 		{
 			$x = new xml;
@@ -528,7 +533,7 @@ if (!defined("DEFS"))
 		{
 			$retval = unserialize($str);
 		}
-		return ($dequote) ? stripslashes($retval) : $retval;
+		return $retval;
 	}
 
 	function &_aw_global_init()
