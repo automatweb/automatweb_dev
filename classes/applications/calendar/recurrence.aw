@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.5 2004/12/15 10:02:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.6 2004/12/15 14:18:08 duke Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -200,11 +200,11 @@ class recurrence extends class_base
 		// Need to calculate the time shift from the start of the day
 		// 3:10 should become 3 * 3600 + 10 * 60
 
-		$start_hour = date("G",$arr["event_start"]);
-		$start_min = date("i",$arr["event_start"]);
+		$start_hour = $arr["start_hour"];
+		$start_min = $arr["start_min"];
 
-		$end_hour = date("G",$arr["event_end"]);
-		$end_min = date("i",$arr["event_end"]);
+		$end_hour = $arr["end_hour"];
+		$end_min = $arr["end_min"];
 		
 		$interval = (int)$arr["interval"];
 		if ($interval == 0)
@@ -246,12 +246,12 @@ class recurrence extends class_base
 		{
 			$interval = 1;
 		};
+		
+		$start_hour = $arr["start_hour"];
+		$start_min = $arr["start_min"];
 
-		$start_hour = date("G",$arr["event_start"]);
-		$start_min = date("i",$arr["event_start"]);
-
-		$end_hour = date("G",$arr["event_end"]);
-		$end_min = date("i",$arr["event_end"]);
+		$end_hour = $arr["end_hour"];
+		$end_min = $arr["end_min"];
 
 		$rv = array();
 		// can I calculate the start day, end day and then go from there instead?
@@ -274,11 +274,11 @@ class recurrence extends class_base
 			$interval = 1;
 		};
 		
-		$start_hour = date("G",$arr["event_start"]);
-		$start_min = date("i",$arr["event_start"]);
+		$start_hour = $arr["start_hour"];
+		$start_min = $arr["start_min"];
 
-		$end_hour = date("G",$arr["event_end"]);
-		$end_min = date("i",$arr["event_end"]);
+		$end_hour = $arr["end_hour"];
+		$end_min = $arr["end_min"];
 
 		$start_year = date("Y",$arr["start"]);
 		$end_year = date("Y",$arr["end"]);
@@ -325,7 +325,7 @@ class recurrence extends class_base
 	}
 
 	////
-	// !Update recurrence information
+	// !Update recurrence information - calculate timestamps after the object is saved
 	function callback_post_save($arr)
 	{
 		$this->delete_recurrence(array(
@@ -335,6 +335,7 @@ class recurrence extends class_base
 		// now I have to somehow figure out the object id that connects to this
 		// recurrence
 		$conns = $arr["obj_inst"]->connections_to(array());
+
 		if (sizeof($conns) > 0)
 		{
 			// retrieving only the first connection is intentional!!!
@@ -346,44 +347,68 @@ class recurrence extends class_base
 
 		$rx = array();
 
-		if (RECUR_WEEKLY == $arr["obj_inst"]->prop("recur_type"))
+		// those come from the recurrence object
+		$recur_type = $arr["obj_inst"]->prop("recur_type");
+		$recur_start = $arr["obj_inst"]->prop("start");
+		$recur_end = $arr["obj_inst"]->prop("end");
+		$recur_time = $arr["obj_inst"]->prop("time");
+		
+		$recur_start_hour = date("G",$start);
+		$recur_start_min = date("i",$start);
+
+		$recur_end_hour = date("G",$end);
+		$recur_end_min = date("i",$end);
+
+		// if there is a valid time entered for recurrence then use that instead of the one
+		// defined by the event
+		if (strpos($recur_time,":") !== false)
 		{
-			$rx = $this->calc_range_weekly(array(
-				"start" => $arr["obj_inst"]->prop("start"),
-				"end" => $arr["obj_inst"]->prop("end"),
-				"event_start" => $start,
-				"event_end" => $end,
-				"weekdays" => $arr["obj_inst"]->prop("weekdays"),
-				"interval" => $arr["obj_inst"]->prop("interval_weekly"),
-			));
+			list($recur_time_hour,$recur_time_min) = explode(":",$recur_time);
+			if (is_numeric($recur_time_hour) && is_numeric($recur_time_min))
+			{
+				$recur_start_hour = $recur_time_hour;
+				$recur_start_min = $recur_time_min;
+	
+				// if end time is added later, then implement processing here
+				$recur_end_hour = $recur_start_hour;
+				$recur_end_min = $recur_start_min;
+			};
+		};
+
+		$range_data = array(
+			"event_start" => $start,
+			"start_hour" => $recur_start_hour,
+			"start_min" => $recur_start_min,
+			"event_end" => $end,
+			"end_hour" => $recur_end_hour,
+			"end_min" => $recur_end_min,
+			"start" => $recur_start,
+			"end" => $recur_end,
+		);
+
+		if (RECUR_WEEKLY == $recur_type)
+		{
+			$range_data["weekdays"] = $arr["obj_inst"]->prop("weekdays");
+			$range_data["interval"] = $arr["obj_inst"]->prop("interval_weekly");
+			$rx = $this->calc_range_weekly($range_data);
 		}
-		elseif (RECUR_DAILY == $arr["obj_inst"]->prop("recur_type"))
+		elseif (RECUR_DAILY == $recur_type)
 		{
-			$rx = $this->calc_range_daily(array(
-				"start" => $arr["obj_inst"]->prop("start"),
-				"end" => $arr["obj_inst"]->prop("end"),
-				"event_start" => $start,
-				"event_end" => $end,
-				"interval" => $arr["obj_inst"]->prop("interval_daily"),
-			));
+			$range_data["interval"] = $arr["obj_inst"]->prop("interval_daily");
+			$rx = $this->calc_range_daily($range_data);
 		}
-		elseif (RECUR_YEARLY == $arr["obj_inst"]->prop("recur_type"))
+		elseif (RECUR_YEARLY == $recur_type)
 		{
-			$rx = $this->calc_range_yearly(array(
-				"start" => $arr["obj_inst"]->prop("start"),
-				"end" => $arr["obj_inst"]->prop("end"),
-				"event_start" => $start,
-				"event_end" => $end,
-				"interval" => $arr["obj_inst"]->prop("interval_yearly"),
-			));
+			$range_data["interval"] = $arr["obj_inst"]->prop("interval_yearly");
+			$rx = $this->calc_range_yearly($range_data);
 		};
 
 		if (is_array($rx) && sizeof($rx) > 0)
 		{
 			$this->create_recurrence(array(
 				"id" => $arr["obj_inst"]->id(),
-				"start" => $arr["obj_inst"]->prop("start"),
-				"end" => $arr["obj_inst"]->prop("end"),
+				"start" => $recur_start,
+				"end" => $recur_end,
 				"tm_list" => $rx,
 			));
 		};
