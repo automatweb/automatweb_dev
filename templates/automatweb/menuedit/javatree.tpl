@@ -13,9 +13,9 @@
 <param name="active_text_color" value="#424242">
 <param name="top_color" value="#E0E2E5">
 <param name="font_size" value="11">
-<param name="font" value="Times New Roman">
+<param name="font" value="Arial">
 <param name="perioodiline" value="ON"><!-- ON/OFF , kui on, siis puul perioodide valimise võimalus-->
-<param name="deemon" value="OFF"><!-- ON/OFF , kui off, siis puul refresh nupp-->
+<param name="deemon" value="ON"><!-- ON/OFF , kui off, siis puul refresh nupp-->
 <param name="server" value="{VAR:demon_server}"><!-- deemoni asukoha server -->
 <param name="port" value="{VAR:demon_port}">
 <param name="sait" value="{VAR:site_id}"><!-- saidi ID -->
