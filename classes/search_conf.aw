@@ -18,7 +18,10 @@ class search_conf extends aw_template
 		global $lc_search_conf;
 		if (is_array($lc_search_conf))
 		{
-			$this->vars($lc_search_conf);}
+			$this->vars($lc_search_conf);
+		}
+
+		lc_site_load("search",&$this);
 	}
 
 	function gen_admin($level)
@@ -312,6 +315,7 @@ class search_conf extends aw_template
 
 			// get all the parents under what the document can be
 			$p_arr = $this->get_parent_arr($s_parent);
+			
 			$_tpstr = join(",",$p_arr);
 			if ($_tpstr != "")
 			{
@@ -544,9 +548,6 @@ class search_conf extends aw_template
 			$ss = " AND objects.lang_id = ".$GLOBALS["lang_id"];
 		}
 
-		$search_groups = $this->get_groups();
-		$search_group = $search_groups[$parent];
-
 		$this->menucache = array();
 		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
 										 FROM objects 
@@ -560,22 +561,29 @@ class search_conf extends aw_template
 		$this->marr = array();
 		// list of default documents
 		$this->darr = array();
-		foreach($search_group["menus"] as $parent => $parent)
+
+		// $parent is the id of the menu group, not the parent menu
+		// so now we figure out the parent menus and do rec_list for all of them 
+		$mens = $this->get_menus_for_grp($parent);
+		foreach($mens as $mn)
 		{
-			$this->rec_list($parent);
+			$this->rec_list($mn);
 		}
-		return $this->marr;
+		return (is_array($this->marr)) ? $this->marr : array(0);
 	}
 
 	function rec_list($parent)
 	{
 		if (!is_array($this->menucache[$parent]))
+		{
 			return;
+		}
 
 		reset($this->menucache[$parent]);
 		while(list(,$v) = each($this->menucache[$parent]))
 		{
-			if ($v["status"] == 2)
+			//if ($v["status"] == 2)
+			if ($v["status"] > 0)
 			{
 				$this->marr[] = $v["oid"];
 				if ($v["last"] > 0)
