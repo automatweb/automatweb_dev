@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.28 2005/03/24 11:13:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.29 2005/03/29 11:25:05 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -571,7 +571,10 @@ class cb_search extends class_base
 					{
 						$row[$p_pn] = number_format($row[$p_pn], 2);
 					}
-					$vparms = array("id" => $o->id());
+					$vparms = array(
+						"id" => $o->id(),
+						"section" => aw_global_get("section")
+					);
 					if ($arr["obj_inst"]->prop("view_cf"))
 					{
 						$vparms["cfgform"] = $arr["obj_inst"]->prop("view_cf");
