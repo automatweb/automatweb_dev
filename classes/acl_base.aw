@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.2 2001/05/28 14:29:16 cvs Exp $
 
 define(DENIED,0);
 define(ALLOWED,1);
@@ -343,7 +343,11 @@ class acl_base extends core
 	function prog_acl($right,$progid)
 	{
 		global $prog_cache,$SITE_ID;
-		if ($SITE_ID == 666 || $SITE_ID == 8)	// aint rkool,reklaam.struktuur.ee
+		if (!defined("UID"))
+		{
+			return DENIED;
+		}
+		if ($SITE_ID == 666 || $SITE_ID == 667 || $SITE_ID == 8)	// aint rkool,reklaam.struktuur.ee
 		{
 			if (!is_array($prog_cache))
 			{
