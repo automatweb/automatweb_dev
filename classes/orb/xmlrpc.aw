@@ -43,7 +43,7 @@ class xmlrpc extends aw_template
 				$xml .= "\t\t\t\t<name>$name</name>\n";
 				if (is_array($value))
 				{
-					$value = aw_serialize($value);
+					$value = aw_serialize($value, SERIALIZE_NATIVE);
 				}
 				$xml .= "\t\t\t\t<value>$value</value>\n";
 				$xml .= "\t\t\t</member>\n";
@@ -72,7 +72,7 @@ class xmlrpc extends aw_template
 			if ($val["tag"] == "value")
 			{
 				$val["value"] = str_replace("__faking_bitchass_barbara_streisand__","&", $val["value"]);
-				$this->dequote(&$val["value"]);
+//				$this->dequote(&$val["value"]);
 				$try = aw_unserialize($val["value"]);
 				if (is_array($try))
 				{
@@ -213,7 +213,7 @@ class xmlrpc extends aw_template
 		$xml .= "\t\t<param>\n";
 		if (is_array($dat))
 		{
-			$dat = aw_serialize($dat);
+			$dat = aw_serialize($dat, SERIALIZE_NATIVE);
 		}
 		$xml .= "\t\t\t<value>".$dat."</value>\n";
 		$xml .= "\t\t</param>\n";
