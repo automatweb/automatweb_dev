@@ -38,6 +38,13 @@
 			</function>
 		</action>
 
+		<action name="submit_redir">
+			<function name="submit_redir">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

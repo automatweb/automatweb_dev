@@ -93,11 +93,47 @@ class shop_stat extends shop
 			"minute" => ""
 		));
 	
-		
+		// we have to do this, cause in php all functions are virtual, and get($id) gets overriden in this class
+		$shop = new shop;
+
+		$shmenus = array();
+		$shar = $this->get_shops_for_stat($id);
+		foreach ($shar as $shid)
+		{
+			$shmenus = $shmenus + $shop->get_shop_categories($shid);
+		}
+
+/*		// uh, nii, nyyd tuleks siis v2lja m6elda k6ikide valitud poodide kaupade koguse formid
+		// ja nende seest sisestuselemendid v6tta ja lasta tyybil valida et mille kohta ta tahab statti
+
+		//  make menu id list
+		$shmenus = join(",",$this->map2("%s",$shmenus));
+
+		// get all count forms
+		$shforms = array();
+		$this->db_query("SELECT distinct cnt_form as cnt_form FROM shop_items LEFT JOIN objects ON objects.oid = shop_items.id WHERE id IN ($shmenus) AND objects.status != 0");
+		while ($row = $this->db_next())
+		{
+			$shforms[] = $row["cnt_form"];
+		}
+
+		// now get all count form elements
+		// oh fuck, to do this, we have to load all the forms and make a list of elements in each of them. BIJAATCH!
+		classload("form");
+		$f = new form;
+		foreach ($shforms as $form_id)
+		{
+			$f->load($id);
+			$f->
+		}*/
+
 		$this->vars(array(
 			"change" => $this->mk_my_orb("change_stat", array("id" => $id)),
 			"t_from" => $de->gen_edit_form("from", 0),
 			"t_to"	=> $de->gen_edit_form("to", time()),
+			"categories" => $this->multiple_option_list(array(),$shmenus),
+			"reforb" => $this->mk_reforb("show_stat", array("id" => $id,"no_reforb" => true)),
+			"change_stat" => $this->mk_my_orb("change_stat", array("id" => $id))
 		));
 		return $this->parse();
 	}
@@ -118,6 +154,349 @@ class shop_stat extends shop
 			"comment" => $st["comment"]
 		));
 
+		return $this->parse();
+	}
+
+	////
+	// !shows the statistics based on selections from the form
+	function show_stat($arr)
+	{
+		extract($arr);
+		$from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
+		$to = mktime($to["hour"],$to["minute"],0,$to["month"],$to["day"],$to["year"]);
+		
+		switch($stat_type)
+		{
+			case "by_day":
+				return $this->to_stat_by_day($id,$from,$to,$cats,$show_to);
+
+			case "by_month":
+				return $this->to_stat_by_month($id,$from,$to,$cats,$show_to);
+
+			case "by_wd":
+				return $this->to_stat_by_wd($id,$from,$to,$cats,$show_to);
+
+			case "by_hr":
+				return $this->to_stat_by_hr($id,$from,$to,$cats,$show_to);
+		}
+	}
+
+	////
+	// !turnover stats by day, for shop $id from $from to $to
+	function to_stat_by_day($id,$from,$to,$cats,$show_to)
+	{
+		if ($show_to)
+		{
+			$this->read_template("to_stat_by_day.tpl");
+		}
+		else
+		{
+			$this->read_template("to_stat_by_day_no_to.tpl");
+		}
+		$sh = $this->get($id);
+		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / P&auml;evade kaupa");
+
+		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,day FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY day");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"day" => $this->time2date($row["day"],3),
+				"sum" => $row["sum"],
+				"avg" => $row["avg"],
+				"cnt" => $row["cnt"]
+			));
+			$this->parse("DAY");
+			$days[] = $this->time2date($row["day"],3);
+			$m_sum = max($m_sum,$row["sum"]);
+			$m_cnt = max($m_cnt,$row["cnt"]);
+			$sum[] = $row["sum"];
+			$avg[] = $row["avg"];
+			$cnt[] = $row["cnt"];
+			$t_sum += $row["sum"];
+			$t_avg = $row["avg"];
+			$t_cnt += $row["cnt"];
+		}
+		if (!$show_to)
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
+																									 "yvals" => urlencode(join(",",array(0,$m_cnt))),
+																									 "data"  => urlencode(join(",",$cnt)),
+																									 "title" => "Kogus päevade kaupa",
+																									 "xtitle" => "Päev",
+																									 "ytitle" => "Kogus"),"banner");
+		}
+		else
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
+																									 "yvals" => urlencode(join(",",array(0,max($m_sum,$m_cnt)))),
+																									 "data"  => urlencode(join(",",$sum)),
+																									 "data2"  => urlencode(join(",",$avg)),
+																									 "data3"  => urlencode(join(",",$cnt)),
+																									 "title" => "Käive päevade kaupa",
+																									 "xtitle" => "Päev",
+																									 "ytitle" => "Käive"),"banner");		
+		}
+		$this->vars(array(
+			"name" => $sh["name"],
+			"from" => $this->time2date($from,3),
+			"to" => $this->time2date($to,3),
+			"chart" => $chart,
+			"t_sum" => $t_sum,
+			"t_avg" => $t_avg,
+			"t_cnt" => $t_cnt
+		));
+		return $this->parse();
+	}
+
+	////
+	// !turnover stats by month, for shop $id from $from to $to
+	function to_stat_by_month($id,$from,$to,$cats,$show_to)
+	{
+		if ($show_to)
+		{
+			$this->read_template("to_stat_by_month.tpl");
+		}
+		else
+		{
+			$this->read_template("to_stat_by_month_no_to.tpl");
+		}
+		$sh = $this->get($id);
+		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / Kuude kaupa");
+
+		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,month FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY month");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"mon" => $this->time2date($row["month"],7),
+				"sum" => $row["sum"],
+				"avg" => $row["avg"],
+				"cnt" => $row["cnt"]
+			));
+			$this->parse("MONTH");
+			$days[] = $this->time2date($row["month"],7);
+			$m_sum = max($m_sum,$row["sum"]);
+			$m_cnt = max($m_cnt,$row["cnt"]);
+			$sum[] = $row["sum"];
+			$avg[] = $row["avg"];
+			$cnt[] = $row["cnt"];
+			$t_sum += $row["sum"];
+			$t_avg = $row["avg"];
+			$t_cnt += $row["cnt"];
+		}
+		if (!$show_to)
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
+																								 "yvals" => urlencode(join(",",array(0,$m_cnt))),
+																								 "data"  => urlencode(join(",",$cnt)),
+																								 "title" => "Kogus kuude kaupa",
+																								 "xtitle" => "Kuu",
+																								 "ytitle" => "Kogus"),"banner");
+		}
+		else
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
+																								 "yvals" => urlencode(join(",",array(0,max($m_sum,$m_cnt)))),
+																								 "data"  => urlencode(join(",",$sum)),
+																								 "data2"  => urlencode(join(",",$avg)),
+																								 "data3"  => urlencode(join(",",$cnt)),
+																								 "title" => "Käive kuude kaupa",
+																								 "xtitle" => "Kuu",
+																								 "ytitle" => "Käive"),"banner");
+		}
+		$this->vars(array(
+			"name" => $sh["name"],
+			"from" => $this->time2date($from,3),
+			"to" => $this->time2date($to,3),
+			"chart" => $chart,
+			"t_sum" => $t_sum,
+			"t_avg" => $t_avg,
+			"t_cnt" => $t_cnt
+		));
+		return $this->parse();
+	}
+
+	////
+	// !turnover stats by weekday, for shop $id from $from to $to
+	function to_stat_by_wd($id,$from,$to,$cats,$show_to)
+	{
+		if ($show_to)
+		{
+			$this->read_template("to_stat_by_wd.tpl");
+		}
+		else
+		{
+			$this->read_template("to_stat_by_wd_no_to.tpl");
+		}
+		$sh = $this->get($id);
+		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
+
+		$days = array(0 => LC_SUNDAY, 1 => LC_MONDAY, 2 => LC_TUESDAY, 3 => LC_WEDNESDAY, 4 => LC_THURSDAY, 5 => LC_FRIDAY, 6 => LC_SATURDAY);
+
+		$r_i_cnt = array();
+		for ($i=0; $i < 7; $i++)
+		{
+			$sum[$i] = "0";
+			$avg[$i] = "0";
+			$o_cnt[$i] = "0";
+			$i_cnt[$i] = "0";
+			$r_i_cnt[$i] = "0";
+		}
+
+		// k6igepealt p2rime kaubaartiklite koguse
+		$this->db_query("SELECT COUNT(order2item.count) AS i_cnt, wd FROM orders LEFT JOIN order2item ON order2item.order_id = orders.id WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY wd");
+		while ($row = $this->db_next())
+		{
+			$r_i_cnt[$row["wd"]] = $row["i_cnt"];
+		}
+
+		// ja siis muu data
+		$this->db_query("SELECT count(orders.id) as o_cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,wd FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY wd");
+		while ($row = $this->db_next())
+		{
+			$m_sum = max($m_sum,$row["sum"]);
+			$m_o_cnt = max($m_o_cnt,$row["o_cnt"]);
+			$m_i_cnt = max($m_i_cnt,$r_i_cnt[$row["wd"]]);
+			$sum[$row["wd"]] = $row["sum"];
+			$avg[$row["wd"]] = $row["avg"];
+			$o_cnt[$row["wd"]] = $row["o_cnt"];
+			$i_cnt[$row["wd"]] = $r_i_cnt[$row["wd"]];
+			$t_sum += $row["sum"];
+			$t_avg = $row["avg"];
+			$t_o_cnt += $row["o_cnt"];
+			$t_i_cnt += $r_i_cnt[$row["wd"]];
+		}
+
+		for ($i=0; $i < 7; $i++)
+		{
+			$this->vars(array(
+				"wd" => $days[$i],
+				"sum" => $sum[$i],
+				"avg" => $avg[$i],
+				"o_cnt" => $o_cnt[$i],
+				"i_cnt" => $i_cnt[$i]
+			));
+			$this->parse("WD");
+		}
+
+		if ($show_to)
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",array("Puhapaev","Esmaspaev","Teisipaev","Kolmapaev","Neljapaev","Reede","Laupaev"))),
+																									 "yvals" => urlencode(join(",",array(0,max($m_sum,max($m_o_cnt,$m_i_cnt))))),
+																									 "data"  => urlencode(join(",",map("%s",$sum))),
+																									 "data2"  => urlencode(join(",",map("%s",$avg))),
+																									 "data3"  => urlencode(join(",",map("%d ",$o_cnt))),
+																									 "data4"  => urlencode(join(",",map("%d ",$i_cnt))),
+																									 "title" => "Käive nädalapäevade kaupa",
+																									 "xtitle" => "Päev",
+																									 "ytitle" => "Käive"),"banner");
+		}
+		else
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",array("Puhapaev","Esmaspaev","Teisipaev","Kolmapaev","Neljapaev","Reede","Laupaev"))),
+																									 "yvals" => urlencode(join(",",array(0,max($m_o_cnt,$m_i_cnt)))),
+																									 "data"  => urlencode(join(",",map("%d",$o_cnt))),
+																									 "data2"  => urlencode(join(",",map("%d",$i_cnt))),
+																									 "title" => "Kogus nädalapäevade kaupa",
+																									 "xtitle" => "Päev",
+																									 "ytitle" => "Kogus"),"banner");
+		}
+		$this->vars(array(
+			"name" => $sh["name"],
+			"from" => $this->time2date($from,3),
+			"to" => $this->time2date($to,3),
+			"chart" => $chart,
+			"t_sum" => $t_sum,
+			"t_avg" => $t_avg,
+			"t_o_cnt" => $t_o_cnt,
+			"t_i_cnt" => $t_i_cnt
+		));
+		return $this->parse();
+	}
+
+	////
+	// !turnover stats by hr, for shop $id from $from to $to
+	function to_stat_by_hr($id,$from,$to,$cats,$show_to)
+	{
+		if ($show_to)
+		{
+			$this->read_template("to_stat_by_hr.tpl");
+		}
+		else
+		{
+			$this->read_template("to_stat_by_hr_no_to.tpl");
+		}
+		$sh = $this->get($id);
+		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
+
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / Tundide kaupa");
+
+		for ($i=0; $i < 24; $i++)
+		{
+			$sum[$i] = "0";
+			$avg[$i] = "0";
+			$cnt[$i] = "0";
+		}
+
+		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,hr FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY hr");
+		while ($row = $this->db_next())
+		{
+			$m_sum = max($m_sum,$row["sum"]);
+			$m_cnt = max($m_cnt,$row["cnt"]);
+			$sum[$row["hr"]] = $row["sum"];
+			$avg[$row["hr"]] = $row["avg"];
+			$cnt[$row["hr"]] = $row["cnt"];
+			$t_sum += $row["sum"];
+			$t_avg = $row["avg"];
+			$t_cnt += $row["cnt"];
+		}
+
+		for ($i=0; $i < 24; $i++)
+		{
+			$this->vars(array(
+				"hr" => $i,
+				"sum" => $sum[$i],
+				"avg" => $avg[$i],
+				"cnt" => $cnt[$i]
+			));
+			$this->parse("HR");
+			$hrs[] = $i;
+		}
+
+		if ($show_to)
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$hrs)),
+																								 "yvals" => urlencode(join(",",array(0,max($m_sum,$m_cnt)))),
+																								 "data"  => urlencode(join(",",map("%s",$sum))),
+																								 "data2"  => urlencode(join(",",map("%s",$avg))),
+																								 "data3"  => urlencode(join(",",map("%s",$cnt))),
+																								 "title" => "Käive tundide kaupa",
+																								 "xtitle" => "Tund",
+																								 "ytitle" => "Käive"),"banner");
+		}
+		else
+		{
+			$chart = $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$hrs)),
+																								 "yvals" => urlencode(join(",",array(0,$m_cnt))),
+																								 "data"  => urlencode(join(",",map("%d",$cnt))),
+																								 "title" => "Kogus tundide kaupa",
+																								 "xtitle" => "Tund",
+																								 "ytitle" => "Kogus"),"banner");
+		}
+		$this->vars(array(
+			"name" => $sh["name"],
+			"from" => $this->time2date($from,3),
+			"to" => $this->time2date($to,3),
+			"chart" => $chart,
+			"t_sum" => $t_sum,
+			"t_avg" => $t_avg,
+			"t_cnt" => $t_cnt
+		));
 		return $this->parse();
 	}
 }

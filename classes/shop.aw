@@ -161,6 +161,11 @@ class shop extends aw_template
 	{
 		extract($arr);
 		$this->read_template("show_shop.tpl");
+	
+		if (!$id)
+		{
+			$id = $this->find_shop_id($parent);
+		}
 
 		global $shopping_cart;
 		$parent = $this->do_shop_menus($id,$parent);
@@ -511,224 +516,35 @@ class shop extends aw_template
 		return $this->parse();
 	}
 
-	////
-	// !shows turnover stats for shop $id based on $stat_type, orders from $from until $to
-	function do_stat($arr)
+	function find_shop_id($section)
 	{
-		extract($arr);
-
-		$from = mktime($from["hour"],$from["minute"],0,$from["month"],$from["day"],$from["year"]);
-		$to = mktime($to["hour"],$to["minute"],0,$to["month"],$to["day"],$to["year"]);
-		
-		switch($stat_type)
-		{
-			case "by_day":
-				return $this->to_stat_by_day($id,$from,$to);
-
-			case "by_month":
-				return $this->to_stat_by_month($id,$from,$to);
-
-			case "by_wd":
-				return $this->to_stat_by_wd($id,$from,$to);
-
-			case "by_hr":
-				return $this->to_stat_by_hr($id,$from,$to);
-		}
-	}
-
-	////
-	// !turnover stats by day, for shop $id from $from to $to
-	function to_stat_by_day($id,$from,$to)
-	{
-		$this->read_template("to_stat_by_day.tpl");
-		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("turnover_stat", array("id" => $id))."'>Statistika</a> / P&auml;evade kaupa");
-
-		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,day FROM orders WHERE tm >= $from AND tm <= $to AND shop_id = $id GROUP BY day");
+		// now here's the possibility that $shop was omitted. therefore we must figure it out ourself
+		// we do that by loading all the root folders for all the shops
+		// and then traversing the object tree from the current point upwards until we hit a shop root folder.
+		// what if we don't ? hm. well. error message sounds l33t :p
+		$shfolders = array();
+		$this->db_query("SELECT id,root_menu FROM objects,shop WHERE objects.oid = shop.id AND objects.status != 0 AND objects.class_id = ".CL_SHOP);
 		while ($row = $this->db_next())
 		{
-			$this->vars(array(
-				"day" => $this->time2date($row["day"],3),
-				"sum" => $row["sum"],
-				"avg" => $row["avg"],
-				"cnt" => $row["cnt"]
-			));
-			$this->parse("DAY");
-			$days[] = $this->time2date($row["day"],3);
-			$m_sum = max($m_sum,$row["sum"]);
-			$sum[] = $row["sum"];
-			$avg[] = $row["avg"];
-			$cnt[] = $row["cnt"];
-			$t_sum += $row["sum"];
-			$t_avg = $row["avg"];
-			$t_cnt += $row["cnt"];
+			$shfolders[$row["root_menu"]] = $row["id"];
 		}
-		$this->vars(array(
-			"name" => $sh["name"],
-			"from" => $this->time2date($from,3),
-			"to" => $this->time2date($to,3),
-			"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
-																									 "yvals" => urlencode(join(",",array(0,$m_sum))),
-																									 "data"  => urlencode(join(",",$sum)),
-																									 "data2"  => urlencode(join(",",$avg)),
-																									 "data3"  => urlencode(join(",",$cnt)),
-																									 "title" => "Käive päevade kaupa",
-																									 "xtitle" => "Päev",
-																									 "ytitle" => "Käive"),"banner"),
-			"t_sum" => $t_sum,
-			"t_avg" => $t_avg,
-			"t_cnt" => $t_cnt
-		));
-		return $this->parse();
-	}
 
-	////
-	// !turnover stats by month, for shop $id from $from to $to
-	function to_stat_by_month($id,$from,$to)
-	{
-		$this->read_template("to_stat_by_month.tpl");
-		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("turnover_stat", array("id" => $id))."'>Statistika</a> / Kuude kaupa");
-
-		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,month FROM orders WHERE tm >= $from AND tm <= $to AND shop_id = $id GROUP BY month");
-		while ($row = $this->db_next())
+		$oc = $this->get_object_chain($section);
+		foreach($oc as $oid => $orow)
 		{
-			$this->vars(array(
-				"mon" => $this->time2date($row["month"],7),
-				"sum" => $row["sum"],
-				"avg" => $row["avg"],
-				"cnt" => $row["cnt"]
-			));
-			$this->parse("MONTH");
-			$days[] = $this->time2date($row["month"],7);
-			$m_sum = max($m_sum,$row["sum"]);
-			$sum[] = $row["sum"];
-			$avg[] = $row["avg"];
-			$cnt[] = $row["cnt"];
-			$t_sum += $row["sum"];
-			$t_avg = $row["avg"];
-			$t_cnt += $row["cnt"];
+			if ($shfolders[$oid])
+			{
+				// and we found a matching root folder!
+				$shop = $shfolders[$oid];
+				break;
+			}
 		}
-		$this->vars(array(
-			"name" => $sh["name"],
-			"from" => $this->time2date($from,3),
-			"to" => $this->time2date($to,3),
-			"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$days)),
-																									 "yvals" => urlencode(join(",",array(0,$m_sum))),
-																									 "data"  => urlencode(join(",",$sum)),
-																									 "data2"  => urlencode(join(",",$avg)),
-																									 "data3"  => urlencode(join(",",$cnt)),
-																									 "title" => "Käive kuude kaupa",
-																									 "xtitle" => "Kuu",
-																									 "ytitle" => "Käive"),"banner"),
-			"t_sum" => $t_sum,
-			"t_avg" => $t_avg,
-			"t_cnt" => $t_cnt
-		));
-		return $this->parse();
-	}
 
-	////
-	// !turnover stats by weekday, for shop $id from $from to $to
-	function to_stat_by_wd($id,$from,$to)
-	{
-		$this->read_template("to_stat_by_wd.tpl");
-		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("turnover_stat", array("id" => $id))."'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
-
-		$days = array(0 => LC_SUNDAY, 1 => LC_MONDAY, 2 => LC_TUESDAY, 3 => LC_WEDNESDAY, 4 => LC_THURSDAY, 5 => LC_FRIDAY, 6 => LC_SATURDAY);
-
-		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,wd FROM orders WHERE tm >= $from AND tm <= $to AND shop_id = $id GROUP BY wd");
-		while ($row = $this->db_next())
+		if (!$shop)
 		{
-			$m_sum = max($m_sum,$row["sum"]);
-			$sum[$row["wd"]] = $row["sum"];
-			$avg[$row["wd"]] = $row["avg"];
-			$cnt[$row["wd"]] = $row["cnt"];
-			$t_sum += $row["sum"];
-			$t_avg = $row["avg"];
-			$t_cnt += $row["cnt"];
+			$this->raise_error("can't find the matching shop for the item!", true);
 		}
-
-		for ($i=0; $i < 7; $i++)
-		{
-			$this->vars(array(
-				"wd" => $days[$i],
-				"sum" => $sum[$i],
-				"avg" => $avg[$i],
-				"cnt" => $cnt[$i]
-			));
-			$this->parse("WD");
-		}
-
-		$this->vars(array(
-			"name" => $sh["name"],
-			"from" => $this->time2date($from,3),
-			"to" => $this->time2date($to,3),
-			"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",array("Puhapaev","Esmaspaev","Teisipaev","Kolmapaev","Neljapaev","Reede","Laupaev"))),
-																									 "yvals" => urlencode(join(",",array(0,$m_sum))),
-																									 "data"  => urlencode(join(",",map("%s",$sum))),
-																									 "data2"  => urlencode(join(",",map("%s",$avg))),
-																									 "data3"  => urlencode(join(",",map("%s",$cnt))),
-																									 "title" => "Käive nädalapäevade kaupa",
-																									 "xtitle" => "Päev",
-																									 "ytitle" => "Käive"),"banner"),
-			"t_sum" => $t_sum,
-			"t_avg" => $t_avg,
-			"t_cnt" => $t_cnt
-		));
-		return $this->parse();
-	}
-
-	////
-	// !turnover stats by hr, for shop $id from $from to $to
-	function to_stat_by_hr($id,$from,$to)
-	{
-		$this->read_template("to_stat_by_hr.tpl");
-		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("turnover_stat", array("id" => $id))."'>Statistika</a> / Tundide kaupa");
-
-		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,hr FROM orders WHERE tm >= $from AND tm <= $to AND shop_id = $id GROUP BY hr");
-		while ($row = $this->db_next())
-		{
-			$m_sum = max($m_sum,$row["sum"]);
-			$sum[$row["hr"]] = $row["sum"];
-			$avg[$row["hr"]] = $row["avg"];
-			$cnt[$row["hr"]] = $row["cnt"];
-			$t_sum += $row["sum"];
-			$t_avg = $row["avg"];
-			$t_cnt += $row["cnt"];
-		}
-
-		for ($i=0; $i < 24; $i++)
-		{
-			$this->vars(array(
-				"hr" => $i,
-				"sum" => $sum[$i],
-				"avg" => $avg[$i],
-				"cnt" => $cnt[$i]
-			));
-			$this->parse("HR");
-			$hrs[] = $i;
-		}
-
-		$this->vars(array(
-			"name" => $sh["name"],
-			"from" => $this->time2date($from,3),
-			"to" => $this->time2date($to,3),
-			"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$hrs)),
-																									 "yvals" => urlencode(join(",",array(0,$m_sum))),
-																									 "data"  => urlencode(join(",",map("%s",$sum))),
-																									 "data2"  => urlencode(join(",",map("%s",$avg))),
-																									 "data3"  => urlencode(join(",",map("%s",$cnt))),
-																									 "title" => "Käive tundide kaupa",
-																									 "xtitle" => "Tund",
-																									 "ytitle" => "Käive"),"banner"),
-			"t_sum" => $t_sum,
-			"t_avg" => $t_avg,
-			"t_cnt" => $t_cnt
-		));
-		return $this->parse();
+		return $shop;
 	}
 
 	////
@@ -739,32 +555,7 @@ class shop extends aw_template
 
 		if (!$shop)
 		{
-			// now here's the possibility that $shop was omitted. therefore we must figure it out ourself
-			// we do that by loading all the root folders for all the shops
-			// and then traversing the object tree from the current point upwards until we hit a shop root folder.
-			// what if we don't ? hm. well. error message sounds l33t :p
-			$shfolders = array();
-			$this->db_query("SELECT id,root_menu FROM objects,shop WHERE objects.oid = shop.id AND objects.status != 0 AND objects.class_id = ".CL_SHOP);
-			while ($row = $this->db_next())
-			{
-				$shfolders[$row["root_menu"]] = $row["id"];
-			}
-
-			$oc = $this->get_object_chain($section);
-			foreach($oc as $oid => $orow)
-			{
-				if ($shfolders[$oid])
-				{
-					// and we found a matching root folder!
-					$shop = $shfolders[$oid];
-					break;
-				}
-			}
-
-			if (!$shop)
-			{
-				$this->raise_error("can't find the matching shop for the item!", true);
-			}
+			$shop = $this->find_shop_id($section);
 		}
 
 
@@ -842,7 +633,15 @@ class shop extends aw_template
 		$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
 
-		return $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $section));
+		// if the item specifies, where to go after ordering it, then go there. otherwise don't go anywhere
+		if ($it["redir"])
+		{
+			return $this->mk_my_orb("show", array("parent" => $it["redir"]));
+		}
+		else
+		{
+			return $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop, "section" => $section));
+		}
 	}
 
 	////
@@ -992,10 +791,32 @@ class shop extends aw_template
 		return $this->parse();
 	}
 
-	function get_shop_categories($id)
+	function get_shop_categories($id,$prep_store_name = true)
 	{
 		$sh = $this->get($id);
+		classload("objects");
+		$o = new objects;
+		$oar = $o->gen_rec_list_noprint(array("start_from" => $sh["root_menu"]));
 
+		// now make menu array
+		$ret = array();
+		foreach ($oar as $oid => $row)
+		{
+			$str = "";
+			$p = $oid;
+			while ($p && is_array($oar[$p]))
+			{
+				$str="/".$oar[$p]["name"].$str;
+				$p = $oar[$p]["parent"];
+			}
+
+			if ($prep_store_name)
+			{
+				$str = $sh["name"].$str;
+			}
+			$ret[$oid] = $str;
+		}
+		return $ret;
 	}
 }
 ?>

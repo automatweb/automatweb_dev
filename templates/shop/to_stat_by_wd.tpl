@@ -17,14 +17,14 @@
 	<td class="fform">Tellimusi</td>
 	<td class="fform">Keskmine</td>
 </tr>
-<!-- SUB: MONTH -->
+<!-- SUB: WD -->
 <tr>
-	<td class="fcaption2">{VAR:mon}</td>
+	<td class="fcaption2">{VAR:wd}</td>
 	<td class="fform">{VAR:sum}</td>
 	<td class="fform">{VAR:cnt}</td>
 	<td class="fform">{VAR:avg}</td>
 </tr>
-<!-- END SUB: MONTH -->
+<!-- END SUB: WD -->
 <tr>
 	<td class="fcaption2">Kokku:</td>
 	<td class="fform">{VAR:t_sum}</td>

@@ -87,7 +87,6 @@ class shop_item extends aw_template
 		{
 			$o = $this->get($id);
 			$f->process_entry(array("id" => $o["form_id"],"entry_id" => $o["entry_id"]));
-//			$this->upd_object(array("oid" => $id, "name" => $f->get_element_value_by_name("nimi")));
 			// kui itemi nimi muutub, siis muutub vendadel ka
 			$name = $f->get_element_value_by_name("nimi");
 			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."' WHERE brother_of = $id ");
@@ -114,7 +113,7 @@ class shop_item extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$o = $this->get_object($id);
+		$o = $this->get($id);
 		$id = $o["brother_of"];	// this is in case we clicked on a brother to change it, we must revert to the real object
 
 		$o = $this->get($id);
@@ -126,8 +125,14 @@ class shop_item extends aw_template
 		classload("form");
 		$f = new form;
 
-		classload("objects");
-		$ob = new db_objects;
+		$shcats = array("0" => "");
+		classload("shop");
+		$shop = new shop;
+		$shs = $shop->get_list();	// list shops
+		foreach($shs as $sh_id => $sh_name)
+		{
+			$shcats = $shcats + $shop->get_shop_categories($sh_id);
+		}
 
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
@@ -135,10 +140,21 @@ class shop_item extends aw_template
 										"entry_id" => $o["entry_id"],	
 										"reforb" => $this->mk_reforb("submit", array("id" => $id))
 								)),
-			"menus" => $this->multiple_option_list($this->get_brother_list($id),$ob->get_list()),
-			"reforb" => $this->mk_reforb("submit_bros", array("id" => $id))
+			"menus" => $this->multiple_option_list($this->get_brother_list($id),$shcats),
+			"reforb" => $this->mk_reforb("submit_bros", array("id" => $id)),
+			"redir" => $this->picker($o["redir"], $shcats),
+			"reforb2" => $this->mk_reforb("submit_redir", array("id" => $id))
 		));
 		return $this->parse();
+	}
+
+	////
+	// !saves info about where to redirect after the customer orders the item
+	function submit_redir($arr)
+	{
+		extract($arr);
+		$this->db_query("UPDATE shop_items SET redir = '$redir' WHERE id = '$id'");
+		return $this->mk_orb("change", array("id" => $id));
 	}
 
 	////

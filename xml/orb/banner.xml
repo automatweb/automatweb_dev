@@ -148,6 +148,7 @@
 					<required name="data"/>
 					<optional name="data2"/>
 					<optional name="data3"/>
+					<optional name="data4"/>
 					<optional name="title"/>
 					<optional name="xtitle"/>
 					<optional name="ytitle"/>

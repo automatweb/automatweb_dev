@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.3 2001/05/21 16:28:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.4 2001/05/25 15:25:13 kristo Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -68,6 +68,10 @@ function load_xml_orb_def($class)
 				if (($tag == "action") && ($attribs["nologin"]))
 				{
 					$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
+				};
+				if (($tag == "action") && ($attribs["all_args"]))
+				{
+					$orb_defs[$class][$attribs["name"]]["all_args"] = true;
 				};
 				if ($attribs["default"] && ($tag == "action"))
 				{

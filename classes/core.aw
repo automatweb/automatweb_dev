@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.8 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.9 2001/05/25 15:25:13 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -849,7 +849,10 @@ class core extends db_connector
 			$cl_name = get_class($this);
 
 		$urs = join("\n",$this->map2("<input type='hidden' name='%s' value='%s'>\n",$arr));
-		$url = "\n<input type='hidden' name='reforb' value='1'>\n";
+		if ($arr["no_reforb"] != true)
+		{
+			$url = "\n<input type='hidden' name='reforb' value='1'>\n";
+		}
 		$url .= "<input type='hidden' name='class' value='$cl_name'>\n<input type='hidden' name='action' value='$fun'>".$urs;
 		return $url;
 	}

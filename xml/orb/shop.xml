@@ -140,7 +140,7 @@
 			<function name="show">
 				<arguments>
 					<required name="parent"/>
-					<required name="id"/>
+					<optional name="id"/>
 				</arguments>
 			</function>
 		</action>

@@ -113,7 +113,6 @@ class BarGraph extends TTGraph
 
 	function makeBar($values,$colorarr)
 	{	
-		
 		$ycnt=count($values);
 		$this->minValue=0;
 
@@ -135,7 +134,6 @@ class BarGraph extends TTGraph
 		$maxHeight = $this->getTriple(); 
 		$minHeight = $this->imageHeight - $this->getTriple();
 		$maxValue = $this->maxValue;
-		$numofval=count($values["ydata_0"]);
 	
 		$yp = (($minHeight - $maxHeight))/(($this->maxValue - $this->minValue));
 
@@ -149,23 +147,22 @@ class BarGraph extends TTGraph
 //		imagestring($this->image,3,520,15,$sm_colsize,$colorBlack);
 //		imagestring($this->image,3,520,25,$calculated,$colorBlack);	
 	
+		$numofval=count($values["ydata_0"]);
 		for ($i = 0; ($i < $this->xItemCount)&&($i<$numofval); $i++)		
 		{		
 			for ($j = 0; $j<$ycnt; $j++)
 			{		
-				if ($values["ydata_".$j][$i]==0) $values[$i]=0.0000001;
-				if ($values["ydata_".$j][$i] > 0)
+				$height = ($minHeight - (abs($values["ydata_".$j][$i] - $this->minValue)*$yp));
+				if ($height != $minHeight)
 				{
-					$height = ($minHeight - (abs($values["ydata_".$j][$i] - $this->minValue)*$yp));
 					imagerectangle($this->image, $sm_cur, $height, $sm_cur+$sm_colsize, $minHeight, $colorBlack);
 					$col_ar=$this->rgb2Array($colorarr["ycol_".$j]);
 					$color= imagecolorallocate($this->image, $col_ar["r"], $col_ar["g"], $col_ar["b"]);
 					imagefilltoborder($this->image, $sm_cur+1,$height+1, $colorBlack, $color);
-					$sm_cur+=$sm_colsize;
 				}
+				$sm_cur+=$sm_colsize;
 			}			
 			$sm_cur+=$ms;
-				
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.2 2001/05/25 15:25:13 kristo Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
 
@@ -1332,6 +1332,13 @@ class banner extends aw_template
 			$da["ydata_2"] = $da3;
 
 			$c["ycol_2"] = "0000ff";
+		}
+		if ($data4 != "")
+		{
+			$da4 = explode(",",$data4);
+			$da["ydata_3"] = $da4;
+
+			$c["ycol_3"] = "ff00ff";
 		}
 		$Im->makeBar($da,$c);
 

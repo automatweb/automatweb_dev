@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.2 2001/05/21 16:28:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.3 2001/05/25 15:25:13 kristo Exp $
 /*
 	AW Foundation Classes
 	(C) StruktuurMeedia 2000,2001
@@ -51,8 +51,8 @@ class root
 
 	function _get_all($stack = "root")
 	{
-                return $this->stacks[$stack][items];
-        }
+		return $this->stacks[$stack][items];
+  }
 
 
 	function _reset($stack = "root")
@@ -90,17 +90,17 @@ class root
 		return $retval;
 	}
 	// sama, mis eelmine, ainult et moodustuvad paarid
-        // array iga elemendi indeksist ja väärtusest
-        // format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
+  // array iga elemendi indeksist ja väärtusest
+  // format peab siis sisaldama vähemalt kahte kohta muutujate jaoks
 
 	// kui $type != 0, siis pööratakse array nö ringi ... key ja val vahetatakse ära	
 	// TODO: viia defs.aw-sse
-        function map2($format,$array,$type = 0)
+	function map2($format,$array,$type = 0)
 	{
-                $retval = array();
-                if (is_array($array))
+		$retval = array();
+		if (is_array($array))
 		{
-                        while(list($key,$val) = each($array))
+			while(list($key,$val) = each($array))
 			{
 				if ($type == 0)
 				{
@@ -116,14 +116,14 @@ class root
 				{
 					$retval[] = sprintf($format,$v1,$v2);
 				};
-                        };
-                }
+			};
+		}
 		else
 		{
-                       	$retval[] = sprintf($format,$val);
-                };
-                return $retval;
-        }
+			$retval[] = sprintf($format,$val);
+		};
+		return $retval;
+	}
 
 	// TODO: viia defs.aw-sse
 	function gen_uniq_id($param = "")

@@ -145,6 +145,25 @@ class db_objects extends aw_template
 	////
 	// !Genereerib mingit klassi objektide nimekirja, rekursiivselt alates $start_from-ist
 	// Eeliseks järgneva funktsiooni ees on see, et ei loeta koiki menüüsid sisse
+	// see versioon ei prindi objektide nimekirja v2lja ka. mix seda yldse vaja oli printida?!?
+	// ja tagastatav array on kujul array($oid => $row)
+	function gen_rec_list_noprint($args = array())
+	{
+		extract($args);
+		// vaatame ainult seda tüüpi objekte
+		$this->class_id = 1;
+		$this->spacer = 0;
+		// moodustame 2mootmelise array koigist objektidest
+		// parent -> child1,(child2,...childn)
+		$this->rec_list = array(); // siia satuvad koik need objektid
+		$this->no_parent_rel = true;
+		$this->_gen_rec_list(array("$start_from"));
+		return $this->rec_list;
+	}
+
+	////
+	// !Genereerib mingit klassi objektide nimekirja, rekursiivselt alates $start_from-ist
+	// Eeliseks järgneva funktsiooni ees on see, et ei loeta koiki menüüsid sisse
 	function gen_rec_list($args = array())
 	{
 		extract($args);
@@ -154,6 +173,7 @@ class db_objects extends aw_template
 		// moodustame 2mootmelise array koigist objektidest
 		// parent -> child1,(child2,...childn)
 		$this->rec_list = array(); // siia satuvad koik need objektid
+		$this->no_parent_rel = false;
 		$this->_gen_rec_list(array("$start_from"));
 		if (sizeof($this->rec_list) == 0)
 		{
@@ -185,7 +205,14 @@ class db_objects extends aw_template
 		while($row = $this->db_next())
 		{
 			$_parents[] = $row["oid"];
-			$this->rec_list[$row["parent"]][$row["oid"]] = $row;
+			if ($this->no_parent_rel)
+			{
+				$this->rec_list[$row["oid"]] = $row;
+			}
+			else
+			{
+				$this->rec_list[$row["parent"]][$row["oid"]] = $row;
+			}
 		};
 		if (sizeof($_parents) > 0)
 		{

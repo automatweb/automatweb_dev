@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.2 2001/05/21 01:50:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.3 2001/05/25 15:25:13 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -114,29 +114,33 @@ class orb extends aw_template {
 		if ($xml)
 		{
 			// orb on defineeritud XML-i kaudu
-			// required arguments
- 
-			//
-			$required = $orb_defs[$class][$action]["required"];
-			$optional = $orb_defs[$class][$action]["optional"];
-			$defined = $orb_defs[$class][$action]["define"];
-			foreach($required as $key => $val)
+			if ($orb_defs[$class][$action]["all_args"] == true)
 			{
-				if (!isset($vars[$key]))
+				$params = $GLOBALS["HTTP_GET_VARS"];
+			}
+			else
+			{
+				// required arguments
+				$required = $orb_defs[$class][$action]["required"];
+				$optional = $orb_defs[$class][$action]["optional"];
+				$defined = $orb_defs[$class][$action]["define"];
+				foreach($required as $key => $val)
 				{
-					$this->raise_error(sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
-					bail_out();
+					if (!isset($vars[$key]))
+					{
+						$this->raise_error(sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
+						bail_out();
+					};
+					$params[$key] = $vars[$key];
 				};
-				$params[$key] = $vars[$key];
-			};
- 
-			//optional arguments
-			foreach($optional as $key => $val)
-			{
-				$params[$key] = $vars[$key];
-			};
-			$params = array_merge($params,$defined);
- 
+	 
+				//optional arguments
+				foreach($optional as $key => $val)
+				{
+					$params[$key] = $vars[$key];
+				};
+				$params = array_merge($params,$defined);
+			}
 		}
 		else
 		{
