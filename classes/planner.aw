@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.58 2002/01/31 00:16:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.59 2002/02/06 02:23:35 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -644,7 +644,7 @@ class planner extends calendar {
 		$this->db_query($q);
 		$timebase = mktime(0,0,0,1,1,2001);
 		$start_gdn = sprintf("%d",($start - $timebase) / 86400);
-		$end_gdn = sprintf("%d",($end - $timebase) / 86400);
+		$end_gdn = sprintf("%d",(($end - $timebase) / 86400) + 1);
 		$gdn = $start_gdn;
 		$range = range($start_gdn,$end_gdn);	
 		$results = array();
@@ -662,7 +662,7 @@ class planner extends calendar {
 			{
 				foreach($intersect as $xgdn)
 				{
-					$ts = mktime(0,0,0,1,$xgdn+1,2001);
+					$ts = mktime(0,0,0,1,$xgdn,2001);
 					if ($ts >= $row["start"])
 					{
 						$gx = date("dmY",$ts);
