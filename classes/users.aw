@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.85 2003/05/13 07:46:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.86 2003/05/13 14:37:56 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2198,7 +2198,7 @@ class users extends users_user
 
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_import")
+			"reforb" => $this->mk_reforb("submit_import", array("gid" => $gid))
 		));
 		return $this->parse();
 	}
@@ -2229,7 +2229,7 @@ class users extends users_user
 				$act_to = ($row[5] == "NULL" || $row[5] == "" ? -1 : strtotime($row[5]));
 				$act_from = ($row[4] == "NULL" || $row[4] == "" ? -1 : strtotime($row[4]));
 
-				$row = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid'");
+				$row = $this->db_fetch_row("SELECT uid FROM users WHERE uid = '$uid'");
 				if (!is_array($row))
 				{
 					$this->add(array(
@@ -2237,6 +2237,11 @@ class users extends users_user
 						"password" => $pass,
 						"email" => $email
 					));
+					if ($gid)
+					{
+						// add to specified group
+						$this->add_users_to_group_rec($gid, array($uid));
+					}
 				}
 
 				if ($act_from)
@@ -2257,13 +2262,13 @@ class users extends users_user
 					));
 				}
 
-				echo "Importisin kasutaja $uid ... ($act_from, $act_to)<Br>\n";
+				echo "Importisin kasutaja $uid ... <Br>\n";
 				flush();
 				$first = false;
 			}
 			echo "Valmis! <br>\n";
 			die(html::href(array(
-				"url" => $this->mk_my_orb("gen_list"),
+				"url" => $this->mk_my_orb("grp_members", array("gid" => $gid), "groups"),
 				"caption" => "Tagasi"
 			)));
 		}

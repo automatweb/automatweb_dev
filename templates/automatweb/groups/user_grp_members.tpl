@@ -18,7 +18,12 @@
 <td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:this.document.boo.submit();" onClick="selectall(document.boo.elements[1])"
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
 href="javascript:this.document.boo.submit(); " onClick="selectall(document.boo.elements[1])">Salvesta<!--{VAR:LC_EXTLINKS_ADD} {VAR:LC_EXTLINKS_LINK}--></a>
-</td></tr>
+</td>
+<td align="center" class="icontext">&nbsp;</td>
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:import}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('import','','{VAR:baseurl}/automatweb/images/blue/awicons/import_over.gif',1)"><img name="import" alt="Impordi" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/import.gif" width="25" height="25"></a><br><a
+href="{VAR:import}" >Impordi</a>
+</td>
+</tr>
 </table>
 
 

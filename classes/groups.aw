@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.15 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.16 2003/05/13 14:37:56 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -646,7 +646,10 @@ class groups extends users_user
 		$this->mk_path(0,"Muuda grupi ".$gp["name"]." liikmeid");
 		$this->read_template("user_grp_members.tpl");
 		$this->do_grp_members($gid);
-		$this->vars(array("reforb"	=> $this->mk_reforb("submit_grp_members", array("gid" => $gid))));
+		$this->vars(array(
+			"reforb"	=> $this->mk_reforb("submit_grp_members", array("gid" => $gid)),
+			"import" => $this->mk_my_orb("import", array("gid" => $gid), "users")
+		));
 		return $this->parse();
 	}
 

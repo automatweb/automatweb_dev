@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.54 2003/05/13 07:46:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.55 2003/05/13 14:37:56 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -667,16 +667,6 @@ class users_user extends aw_template
 
 					$q = "INSERT INTO groupmembers (gid,uid,created,createdby,permanent) VALUES('$v','$k','$t','$uid',$permanent)";
 					$this->db_query($q);
-				}
-
-				//magistrali korral võtan javaga yhendust
-				if($this->cfg["site_id"]==12)
-				{
-					$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-					//teatan, et grupile $v lisadi user $uid
-					$str="0 ".$this->cfg["site_id"]." ".$uid." ".$gid."\n";
-					fputs($acl_server_socket,$str);
-					fclose($acl_server_socket);
 				}
 			};
 		};
