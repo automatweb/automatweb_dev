@@ -1,10 +1,7 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.10 2001/12/12 22:39:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.11 2001/12/12 22:52:31 duke Exp $
 
-// yup, this class is really braindead at the moment and mostly a copy of
-// the current alias manager inside the document class, but I will optimize
-// this a later.
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
 
@@ -304,17 +301,14 @@ class aliasmgr extends aw_template {
 	{
 		$links = $this->get_aliases_for($this->id,CL_EXTLINK,$_sby, $s_link_order,array("extlinks" => "extlinks.id = objects.oid"));
 		reset($links);
-		$lc = 0;
 		while (list(,$v) = each($links))
 		{	
-			$lc++;
 			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"],"docid" => $id),"links"),$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
 				"address"             => $v["url"],
-				"alias"               => "#l".$lc."#",	
 			));
 			$this->_common_parts($v);
 		};
@@ -324,17 +318,14 @@ class aliasmgr extends aw_template {
 	{
 		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_CHAIN,$_sby, $s_link_order);
 		reset($menu_chains);
-		$mc = 0;
 		while (list(,$v) = each($menu_chains))
 		{	
-			$mc++;
 			$mchain = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"menu_chain"),$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
 				"address"             => $v["url"],
-				"alias"               => "#m".$mc."#",	
 			));
 			$this->_common_parts($v);
 		};
@@ -344,17 +335,14 @@ class aliasmgr extends aw_template {
 	{
 		$menu_chains = $this->get_aliases_for($this->id,CL_PULLOUT,$_sby, $s_link_order);
 		reset($menu_chains);
-		$mc = 0;
 		while (list(,$v) = each($menu_chains))
 		{	
-			$mc++;
 			$mchain = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"pullout"),$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
 				"address"             => $v["url"],
-				"alias"               => "#q".$mc."#",	
 			));
 			$this->_common_parts($v);
 		};
@@ -363,17 +351,15 @@ class aliasmgr extends aw_template {
 	function _form_aliases($args = array())
 	{
 		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
-		$fc = 0;
 		reset($forms);
 		while (list(,$v) = each($forms))
 		{
-			$fc++;
 			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"form"),$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#f".$fc."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],		
 			));
 			$this->_common_parts($v);
@@ -384,17 +370,15 @@ class aliasmgr extends aw_template {
 	{
 
 		$files = $this->get_aliases_for($this->id,CL_FILE,$s_file_sortby, $s_file_order);
-		$fic = 0;
 		reset($files);
 		while (list(,$v) = each($files))
 		{
-			$fic++;
 			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"], "doc" => $id),"file"),$v["name"]);
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#v".$fic."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -415,7 +399,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#p".$fic."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -434,7 +418,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#t".$tc."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -455,7 +439,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#c".$cc."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -475,7 +459,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#y".$galc."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -495,7 +479,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#r".$fec."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -521,7 +505,6 @@ class aliasmgr extends aw_template {
 				$this->t->define_data(array(
 					"name" => $link,
 					"description" => $val["comment"],
-					"alias" => "#x$lcc#",
 					"modified" => $this->time2date($val["modified"],2),
 					"modifiedby" => $val["modifiedby"],
 				));	
@@ -552,7 +535,6 @@ class aliasmgr extends aw_template {
 				$this->t->define_data(array(
 					"name" => $link,
 					"comment" => $val["comment"],
-					"alias" => "#o$fcc#",
 					"edlink" => $this->mk_my_orb("change",array("id" => $val["oid"]),"forum"),
 					"modified" => $this->time2date($val["modified"],2),
 					"modifiedby" => $val["modifiedby"],
@@ -575,7 +557,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"alias"               => "#g".$gc."#","comment" => $v["comment"],
+				"comment" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -585,6 +567,7 @@ class aliasmgr extends aw_template {
 	function _initialize($id)
 	{
 		$this->t->reset_data();
+		$this->acounter = 0;
 		$this->t->set_attribs(array("prefix" => $this->defs[$id]["table"]));
 		$this->t->set_header_attribs(array("table" => $this->defs[$id]["table"]));
 		$this->vars(array(
@@ -596,9 +579,8 @@ class aliasmgr extends aw_template {
 	{
 		if ($this->table == $this->attribs["table"])
 		{
-			$this->t->sort_by(array("field" => $this->sortby));
+			#$this->t->sort_by(array("field" => $this->sortby));
 		}
-
 
 		$this->vars(array(
 			"contents" => $this->t->draw(),
@@ -618,9 +600,11 @@ class aliasmgr extends aw_template {
 	function _common_parts($args = array())
 	{
 		$id = ($args["id"]) ? $args["id"] : $args["oid"];
+		$this->acounter++;
 		$this->t->merge_data(array(
 			"check" => sprintf("<input type='checkbox' name='c_%s' value='%d'>",$this->attribs["table"],$id),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
+			"alias" => sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter),
 		));
 	}
 };
