@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.89 2002/02/18 13:17:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.90 2002/02/18 13:34:43 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1912,7 +1912,7 @@ class form extends form_base
 		{
 			if (!$this->arr["table"])
 			{
-				$this->raise_error("No table selected for showing search results for form ".$this->id."!",true);
+				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing search results for form ".$this->id."!",true);
 			}
 			$used_els = $form_table->get_used_elements();
 			$form_table->start_table($this->arr["table"],array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
@@ -2004,7 +2004,7 @@ class form extends form_base
 
 		if (!is_array($this->arr["search_from"]))
 		{
-			$this->raise_error("form->search($entry_id): no forms selected as search targets!",true);
+			$this->raise_error(ERR_FG_NOTARGETS,"form->search($entry_id): no forms selected as search targets!",true);
 		}
 
 		reset($this->arr["search_from"]);
@@ -2193,7 +2193,7 @@ class form extends form_base
 
 			if (!$id)
 			{
-				$this->raise_error("No forms selected as search targets!");
+				$this->raise_error(ERR_FG_NOTARGETS,"No forms selected as search targets!");
 			}
 
 			$this->search_form = $id;
@@ -2357,7 +2357,7 @@ class form extends form_base
 		{
 			if (!$this->arr["table"])
 			{
-				$this->raise_error("No table selected for showing data!",true);
+				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
 			}
 
 			$awt->start("form::do_search::setup");
@@ -2404,7 +2404,7 @@ class form extends form_base
 
 				if (!is_array($q_els))
 				{
-					$this->raise_error("Tulemuste kuvamise tabelis pole yhtegi elementi!", true);
+					$this->raise_error(ERR_FG_NOTBLELS,"Tulemuste kuvamise tabelis pole yhtegi elementi!", true);
 				}
 
 				$eids = join(",", $matches);
@@ -3300,7 +3300,7 @@ class form extends form_base
 
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
 		if (!($cnt = $this->db_next()))
-			$this->raise_error("form->metainfo(): weird error!", true);
+			$this->raise_error(ERR_FG_EMETAINFO,"form->metainfo(): weird error!", true);
 
 		$this->vars(array("created"			=> $this->time2date($row["created"],2), 
 											"created_by"	=> $row["createdby"],
@@ -3711,7 +3711,7 @@ class form extends form_base
 		$this->init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
 		
 		$o = new db_objects;
-		$menulist = $o->get_list();
+		$_menulist = $o->get_list();
 
 		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
 
@@ -3724,7 +3724,23 @@ class form extends form_base
 				$_tmp[$k] = $v;
 			}
 		}
+
+		// now. if some parent menus are selected, go through all of them and add all their sub-menus to the list
+		// if not, add all menus to the list
+		if (is_array($this->arr["main_folders"]) && count($this->arr["main_folders"]) > 0)
+		{
+			$menulist = array();
+			foreach($this->arr["main_folders"] as $mfid)
+			{
+				$menulist = $menulist + $o->get_list(false,false,$mfid);
+			}
+		}
+		else
+		{
+			$menulist = $_menulist;
+		}
 		$this->vars(array(
+			"main_folders" => $this->multiple_option_list($this->arr["main_folders"], $_menulist),
 			"relation_forms" => $this->multiple_option_list($this->arr["relation_forms"], $_tmp),
 			"ff_folder"	=> $this->picker($this->arr["ff_folder"], $menulist),
 			"ne_folder"	=> $this->picker($this->arr["newel_parent"], $menulist),
@@ -3793,6 +3809,9 @@ class form extends form_base
 				$this->arr["el_menus2"][$menuid] = $menuid;
 			}
 		}
+
+		$this->arr["main_folders"] = $this->make_keys($main_folders);
+
 		$this->save();
 		return $this->mk_orb("set_folders", array("id" => $id));
 	}
