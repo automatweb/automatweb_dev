@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.13 2001/08/27 15:37:39 duke Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.14 2001/08/27 15:57:00 duke Exp $
 
 class db_periods extends aw_template 
 {
@@ -381,8 +381,16 @@ class periods extends db_periods
 		extract($arr);
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Perioodid</a> / Lisa uus");
 		$this->read_template("add.tpl");
+		$years = array(
+			"2000" => "2000",
+			"2001" => "2001",
+			"2002" => "2002",
+			"2003" => "2003",
+			"2004" => "2004",
+			"2005" => "2005",
+		);
 		$this->vars(array(
-			"pyear" => $this->picker(-1,array("0" => "--vali--") + range(2000,2010)),
+			"pyear" => $this->picker(-1,array("0" => "--vali--") + $years),
 			"reforb" => $this->mk_reforb("submit_add", array("oid" => $this->oid))
 		));
 		return $this->parse();
@@ -406,6 +414,14 @@ class periods extends db_periods
 		$this->read_template("edit.tpl");
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Perioodid</a> / Muuda");
 		$cper = $this->get($id);
+		$years = array(
+			"2000" => "2000",
+			"2001" => "2001",
+			"2002" => "2002",
+			"2003" => "2003",
+			"2004" => "2004",
+			"2005" => "2005",
+		);
 		$this->vars(array(
 			"ID" => $cper["id"],
       "description" => $cper["description"],
@@ -413,7 +429,7 @@ class periods extends db_periods
 	    "arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
 			"image" => image::make_img_tag(image::check_url($cper["data"]["image"]["url"])),
 			"image_link" => $cper["data"]["image_link"],
-			"pyear" => $this->picker($cper["data"]["pyear"],array("0" => "--vali--") + range(2000,2010)),
+			"pyear" => $this->picker($cper["data"]["pyear"],array("0" => "--vali--") + $years),
 			"reforb" => $this->mk_reforb("submit_add", array("id" => $id))
 		));
 		return $this->parse();
@@ -475,8 +491,19 @@ class periods extends db_periods
 	{
 		$this->read_template("arhiiv.tpl");
 		$this->clist(1);
+		$pyear = 0;
 		while($row = $this->db_next()) 
 		{
+			$dat = aw_unserialize($row["data"]);
+			if ($pyear != $dat["pyear"])
+			{
+				$this->vars(array(
+					"pyear" => $dat["pyear"],
+				));
+				
+				$content .= $this->parse("year");
+				$pyear = $dat["pyear"];
+			};
 			$this->vars(array(
 				"period" => $row["id"],
 				"description" => $row["description"]
