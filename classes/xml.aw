@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.11 2002/10/22 13:24:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.12 2002/10/24 15:35:00 duke Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
@@ -22,12 +22,21 @@ class xml
 	function _complete_definition($args = array())
 	{
 		$data = $args["data"];
-		$retval = sprintf("<?xml version='%s'?>\n<%s>\n%s</%s>\n",$this->xml_version,$this->ctag,$data,$this->ctag);
+		if ($this->ctag)
+		{
+			$retval = sprintf("<?xml version='%s'?>\n<%s>\n%s</%s>\n",$this->xml_version,$this->ctag,$data,$this->ctag);
+		}
+		else
+		{
+			$retval = sprintf("<?xml version='%s'?>\n%s\n",$this->xml_version,$data);
+		};
 		return $retval;
 	}
 
 	////
 	// !Set a name for children nodes. This is used instead of num_XX if applicable
+	// NB! Right now the unserializer cannot decode data in that format.
+	// damn it .. I really could use an xpath interpreter
 	function set_child_id($key,$id)
 	{
 		$this->child_id[$key] = $id;
@@ -189,7 +198,6 @@ class xml
 			};
 			$tag = $v1["tag"];
 		
-			// hm. mulle tundub, et seda voiks teha str_replacega, mis annaks ilmselt pisikese kiirusevoidu ka.
 			$pref_idx = strpos($tag,$this->num_prefix);
 			if (not($pref_idx === false))
 			{
@@ -205,7 +213,6 @@ class xml
 			//	$tag = str_replace($this->num_prefix,"",$tag);
 			//};
 
-		
 			// kui lopetet tag, siis on meil väärtus käes, ja rohkem pole vaja midagi teha
 			if ($v1["type"]	== "complete")
 			{
