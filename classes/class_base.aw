@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.357 2005/01/21 11:44:59 duke Exp $
+// $Id: class_base.aw,v 2.358 2005/01/26 12:14:39 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -217,7 +217,6 @@ class class_base extends aw_template
 		{
 			$this->cb_values = $cb_values;
 			$has_errors = true;
-			aw_session_del("cb_values");
 		};
 		
 		$cfgform_id = "";
@@ -719,6 +718,13 @@ class class_base extends aw_template
 				$_tmp = $this->gen_output(array());
 			};
 		};
+		
+		// it would be nice to get the errors and other stuff from the object also,
+		// so we unset cb_values here -- ahz
+		if($this->cb_values)
+		{
+			aw_session_del("cb_values");
+		}
 
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
@@ -3199,12 +3205,15 @@ class class_base extends aw_template
 
 		$realprops = $tmp;
 		
+		// this seems not to be neccessary, because the real checking is done lightyears before -- ahz
+		/*
 		$controller_inst = get_instance(CL_CFGCONTROLLER);
 		
 		if($args["cfgform"])
 		{
 			$controllers = $this->get_all_controllers($args["cfgform"]);
 		}
+		*/
 		
 		// now do the real job.
 		foreach($realprops as $key => $property)
