@@ -16,6 +16,15 @@
 			</function>
 		</action>
 
+		<action name="prop_info" >
+			<function name="prop_info">
+				<arguments>
+					<required name="option" />
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="class_info" caption="N&amp;auml;ita klassi infot">
 			<function name="class_info">
 				<arguments>
@@ -79,6 +88,14 @@
 			<function name="topf">
 				<arguments>
 					<optional name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="proplist" >
+			<function name="doc_proplist">
+				<arguments>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
