@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.100 2003/04/29 15:40:30 duke Exp $
+// $Id: class_base.aw,v 2.101 2003/05/06 13:53:59 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -489,6 +489,25 @@ class class_base extends aw_template
 						$metadata[$key] = $ar["id"];
 						$key = $name . "_url";
 						$metadata[$key] = image::check_url($ar["url"]);
+					};
+				}
+
+				// XXX: this does not belong here
+				if ( ($type == "relpicker") && isset($property["pri"]) )
+				{
+					// first, I need to resolve the symbolic class_id to a number
+					// how?
+					$realclid =  constant($property["clid"]);
+					// first zero out all other pri fields
+					$q = sprintf("UPDATE aliases SET pri = 0 WHERE source = %d AND type = %d",
+							$this->id,$realclid);
+					$this->db_query($q);
+					if (!empty($property["value"]))
+					{
+						// and now .. if a value is set, update the pri of _that_
+						$q = sprintf("UPDATE aliases SET pri = %d WHERE source = %d AND target = %d AND type = %d",
+								$property["pri"],$this->id,$property["value"],$realclid);
+						$this->db_query($q);		
 					};
 				}
 
@@ -1330,9 +1349,16 @@ class class_base extends aw_template
 			// if a config form is loaded, then ignore stuff that isn't
 			// defined in there. I really shouldn't cause any problems
 			// with well working code.
-			if (!empty($this->cfgform_id) && empty($_all_props[$val["name"]]))
+			if (!empty($this->cfgform_id))
 			{
-				continue;
+				if ($val["type"] == "relpicker")
+				{
+					// we can have as many relpickers as we want
+				}
+				else if (empty($_all_props[$val["name"]]))
+				{
+					continue;
+				};
 			};
 
 			// override original property definitions with those in config form
@@ -1352,9 +1378,6 @@ class class_base extends aw_template
 				{
 					unset($val["richtext"]);
 				};
-
-
-
 			}
 
 			if (empty($val["view"]))
@@ -1551,6 +1574,14 @@ class class_base extends aw_template
 	{
 		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
 		$table = isset($property["table"]) ? $property["table"] : "";
+		if ($property["type"] == "relpicker" && isset($property["pri"]))
+		{
+			$realclid = constant($property["clid"]);
+			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND pri = %d AND type = %d",
+					$this->id,$property["pri"],$realclid);
+			$property["value"] = $this->db_fetch_field($q,"target");
+		}
+		else
 		if (empty($this->id) && isset($property["default"]))
 		{
 			$property["value"] = $property["default"];
@@ -1731,7 +1762,6 @@ class class_base extends aw_template
 				"id" => $this->id,
 			));
 		};
-		/*
 		if ($this->cfgform_id)
 		{
 			$toolbar->add_cdata(html::href(array(
@@ -1740,7 +1770,6 @@ class class_base extends aw_template
 				"target" => "_blank",
 			)));
 		};
-		*/
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
 
