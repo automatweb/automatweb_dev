@@ -147,6 +147,56 @@
             <store>no</store>
             <caption>Pildid</caption>
       </property>
+      <property>
+            <name>userch1</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch1</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>userch2</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch2</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 2</caption>
+      </property>
+      <property>
+            <name>userch3</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch3</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 3</caption>
+      </property>
+      <property>
+            <name>userch4</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch4</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 4</caption>
+      </property>
+      <property>
+            <name>userch5</name>
+            <table>aw_shop_packaging</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch5</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_PACKAGING</syslog_type>
             <relationmgr>yes</relationmgr>

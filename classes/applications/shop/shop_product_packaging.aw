@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.9 2004/10/14 13:41:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.10 2004/11/25 08:56:02 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -65,6 +65,22 @@
 
 @property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
 @caption Pildid
+
+@property userch1 type=checkbox ch_value=1  field=userch1 group=data datatype=int
+@caption User-defined checkbox 1
+
+@property userch2 type=checkbox ch_value=1  field=userch2 group=data datatype=int
+@caption User-defined checkbox 2
+
+@property userch3 type=checkbox ch_value=1  field=userch3 group=data datatype=int
+@caption User-defined checkbox 3
+
+@property userch4 type=checkbox ch_value=1  field=userch4 group=data datatype=int
+@caption User-defined checkbox 4
+
+@property userch5 type=checkbox ch_value=1  field=userch5 group=data datatype=int
+@caption User-defined checkbox 5
+
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt 
