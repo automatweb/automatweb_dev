@@ -240,6 +240,16 @@
             <caption>Teema viimase postituste stiil</caption>
       </property>
       <property>
+            <name>style_comment_count</name>
+            <type>relpicker</type>
+            <group>styles</group>
+            <reltype>RELTYPE_STYLE</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaaride arvu stiil</caption>
+      </property>
+      <property>
             <name>style_comment_user</name>
             <type>relpicker</type>
             <group>styles</group>
