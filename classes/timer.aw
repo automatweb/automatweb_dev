@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.6 2002/12/05 09:22:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.7 2003/03/28 10:23:53 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -65,6 +65,27 @@ class aw_timer
 			{
 				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
 				$this->timers[$name]["running"] = 0;
+			} 
+			else 
+			{
+				return false;
+			};
+		} 
+		else 
+		{
+			return false;
+		};
+	}
+
+	function elapsed($name)
+	{
+		if ($this->is_defined($name)) 
+		{
+			if ($this->is_running($name)) 
+			{
+				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
+				$this->timers[$name]["running"] = 0;
+				return ($this->get_time() - $this->timers[$name]["started"]);
 			} 
 			else 
 			{
