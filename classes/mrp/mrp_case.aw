@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.24 2005/02/17 12:21:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.25 2005/02/17 12:42:40 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -832,15 +832,15 @@ class mrp_case extends class_base
 
 							foreach ($prerequisites as $oid)
 							{
-								if (is_oid ($oid))
+								if (is_oid ($oid) && $this->can("view", $oid))
 								{
 									$prerequisite_job = obj ($oid);
 									$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
 								}
-								else
+								/*else
 								{
 									$errors = "Viga "; ///!!!mingi veateade teha? mida siin edasi teha?
-								}
+								}*/
 							}
 
 							$prerequisites = implode (",", $prerequisites_translated);
@@ -1149,7 +1149,8 @@ class mrp_case extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case"); echo $return_url;
+		), "mrp_case"); //echo $return_url;
+		
 		return $return_url;
 	}
 
