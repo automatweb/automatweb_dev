@@ -1,12 +1,12 @@
 <?php
-// $Id: class_base.aw,v 2.99 2003/04/23 16:07:25 duke Exp $
+// $Id: class_base.aw,v 2.100 2003/04/29 15:40:30 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
 	@default corefield=yes
 	@default group=general
 
-	@property name type=textbox group=general
+	@property name type=textbox group=general rel=1
 	@caption Nimi
 
 	@property comment type=textbox group=general
@@ -163,6 +163,18 @@ class class_base extends aw_template
 		$this->id = $id;
 		$obj = $this->get_object($this->id);
 
+		$is_rel = false;
+
+		if ($obj["class_id"] == CL_RELATION)
+		{
+			$is_rel = true;
+			$def = $this->cfg["classes"][$this->clid]["def"];
+			$this->values = $obj["meta"]["values"][$def];
+			$this->values["name"] = $obj["name"];
+		};
+
+		$this->is_rel = $is_rel;
+
 		$this->validate_cfgform($obj["meta"]["cfgform_id"]);
 
 		// get a list of active properties for this object
@@ -171,6 +183,7 @@ class class_base extends aw_template
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
+				"rel" => $is_rel,
 
 		));
 
@@ -185,7 +198,6 @@ class class_base extends aw_template
 
 		};
 
-
 		$this->request = $args;
 
 		// parse the properties - resolve generated properties and
@@ -194,6 +206,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
+
 
 		// so now I have a list of properties along with their values,
 		// and some information about the layout - and I want to display
@@ -243,6 +256,8 @@ class class_base extends aw_template
 			"data" => $argblock,
 		));
 
+		$reforb = $cli->vars["reforb"];
+
 		if (empty($content))
 		{
 			$content = $cli->get_result();
@@ -269,9 +284,14 @@ class class_base extends aw_template
 		// can load it. Reason being, the properties can be grouped
 		// differently in the config form then they are in the original
 		// properties
+		$this->is_rel = false;
 		if (isset($id))
 		{
 			$_tmp = $this->get_object($id);
+			if ($_tmp["class_id"] == CL_RELATION)
+			{
+				$this->is_rel = true;
+			};
 			$cgid = 0;
 			if (isset($_tmp["meta"]["cfgform_id"]))
 			{
@@ -295,6 +315,7 @@ class class_base extends aw_template
 			"clfile" => $this->clfile,
 			"group" => $args["group"],
 			"cb_view" => $args["cb_view"],
+			"rel" => $this->is_rel,
 		));
 
 		// now, in embedded cases, we don't want to create any objects,
@@ -470,8 +491,19 @@ class class_base extends aw_template
 						$metadata[$key] = image::check_url($ar["url"]);
 					};
 				}
-				
-				if ($method == "serialize")
+
+				if ($this->is_rel)
+				{
+					if ($name == "name")
+					{
+						$coredata["name"] = $savedata[$name];
+					}
+					else
+					{
+						$values[$name] = $savedata[$name];
+					};
+				}
+				elseif ($method == "serialize")
 				{
 					$metadata[$name] = $savedata[$name];
 				}
@@ -498,6 +530,15 @@ class class_base extends aw_template
 		{
 			$coredata["metadata"] = $metadata;
 		};
+		
+		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
+		{
+			$def = $this->cfg["classes"][$this->clid]["def"];
+			$_tmp = $this->get_object($id);
+			$old = $_tmp["meta"]["values"][$def];
+			$new = array_merge($old,$values);
+			$coredata["metadata"]["values"][$def] = $new;
+		}
 
 
 		// I only want to call those functions below this line in case I'm saving an actual object
@@ -947,7 +988,7 @@ class class_base extends aw_template
 			};
 		};
 		
-		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]))
+		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]) && !$this->is_rel)
 		{
 			$link = "";
 			if (isset($this->id))
@@ -1006,6 +1047,7 @@ class class_base extends aw_template
 			"idfield" => $args["idfield"],
 			"fields" => $args["fields"],
 		));
+
 		return $tmp;
 	}
 
@@ -1049,6 +1091,7 @@ class class_base extends aw_template
 			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"content" => isset($args["content"]) ? $args["content"] : "",
+			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 		));
 		
 
@@ -1228,6 +1271,15 @@ class class_base extends aw_template
 		// actually, config forms should hold a serialized form 
 		// of the data, and not the raw XML source. And I should
 		// validate the XML before I upload it to the object -- duke
+		if ($args["rel"])
+		{
+			$filter = array("rel" => 1);
+		}
+		else
+		{
+			$filter = "";
+		};
+
 		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
 			$proplist = $this->cfgform["meta"]["cfg_proplist"];
@@ -1251,6 +1303,7 @@ class class_base extends aw_template
 		{
 			$_all_props = $cfgu->load_properties(array(
 				"clid" => $this->clid,
+				"filter" => $filter,
 			));
 		};
 	
@@ -1457,8 +1510,6 @@ class class_base extends aw_template
 
 		if (($val["type"] == "cfgform_picker") && $val["clid"])
 		{
-			// now I need to figure out the list of files for thiss
-			// class type
 			$class_id = constant($val["clid"]);
 			$val["options"] = $this->list_objects(array(
 				"class" => CL_CFGFORM,

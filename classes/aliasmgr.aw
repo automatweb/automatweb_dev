@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.89 2003/04/22 14:41:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.91 2003/04/29 15:40:30 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -576,7 +576,7 @@ class aliasmgr extends aw_template
 			if ($alias["relobj_id"])
 			{
 				$alias["reltype"] = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $alias["relobj_id"],"return_url" => $return_url),"relation"),
+					"url" => $this->mk_my_orb("change",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$aclid]["file"]),
 					"caption" => $this->reltypes[$reltype_id],
 				));
 			}
@@ -600,11 +600,23 @@ class aliasmgr extends aw_template
 		$this->t->sort_by();
 		$toolbar = $this->mk_toolbar();
 
+		if (isset($this->reforb))
+		{
+			$reforb = $this->reforb;
+		}
+		else
+		{
+			$reforb = $this->mk_reforb("submit_list",array(
+				"id" => $id,
+				"subaction" => "none",
+				"return_url" => $return_url),$this->use_class);
+		};
+
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"id" => $id,
 			"parent" => $obj["parent"],
-			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none","return_url" => $return_url),$this->use_class),
+			"reforb" => $reforb,
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $toolbar,
 			"return_url" => $return_url,
@@ -913,7 +925,7 @@ class aliasmgr extends aw_template
 			
 			$toolbar->add_button(array(
 				"name" => "delete",
-				"tooltip" => "Kustuta valitud objektid",
+				"tooltip" => "Kustuta valitud seos(ed)",
 				"url" => "javascript:awdelete()",
 				"imgover" => "delete_over.gif",
 				"img" => "delete.gif",
@@ -1034,27 +1046,5 @@ class aliasmgr extends aw_template
 		return $ret;
 	}
 
-	function conv()
-	{
-		$q = "SELECT target,source,type,relobj_id FROM aliases LEFT JOIN objects ON (aliases.relobj_id = objects.oid) WHERE objects.class_id = 179 AND relobj_id != 0";
-		$this->db_query($q);
-		$updates = array();
-		while($row = $this->db_next())
-		{
-			$updates[] = "UPDATE objects SET subclass = $row[type] WHERE oid = $row[relobj_id]";
-		};
-		if (is_array($updates))
-		{
-			foreach($updates as $q)
-			{
-				print $q;
-				print "<br>";
-				flush();
-				$this->db_query($q);
-				sleep(1);
-			};
-		};			
-		print "all done!<br>";
-	}
 }
 ?>

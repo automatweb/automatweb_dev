@@ -23,26 +23,34 @@ class relation extends class_base
 		));
 	}
 
+	// well, this really is deprecated .. meaning that I don't do it this way anymore
 	function callback_get_contents($args = array())
 	{
 		$relobj = $this->get_object(array(
 			"oid" => $args["obj"]["oid"],
 			"clid" => $this->clid,
 		));
+
+		if (empty($relobj["subclass"]))
+		{
+			die("this relation object has no subclass, please run converters->convert_aliases()");
+		};
 		
 		$cldef = $this->cfg["classes"][$relobj["subclass"]];
 		$values = $relobj["meta"]["values"][$cldef["def"]];
 
 		$cfgu = get_instance("cfg/cfgutils");
+		// I need a way to load all the groups as well from that bloody class
 		$rel_properties = $cfgu->load_class_properties(array(
 			"clid" => $relobj["subclass"],
-			"filter" => "rel",
+			"filter" => array("rel" => 1,"group" => $args["request"]["group"]),
 		));
 
-		// cause get_instance does not work with subfolders
-		// hell yes it does! - terryf
-		$clname = $cldef["file"];
-		$t = get_instance($clname);
+		$this->groupinfo = $cfgu->groupinfo;
+
+
+
+		$t = get_instance($cldef["file"]);
 
 		$t->init_class_base();
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.17 2003/04/23 16:07:25 duke Exp $
+// $Id: cfgutils.aw,v 1.18 2003/04/29 15:40:30 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -169,13 +169,34 @@ class cfgutils extends aw_template
 			$this->tableinfo = $tableinfo[0];
                 };
 		$res = array();
+
+		$do_filter = false;
+
+		if (isset($filter) && is_array($filter))
+		{
+			$do_filter = true;
+			if (in_array("group",array_keys($filter)) && strlen($filter["group"]) == 0 )
+			{
+				$filter["group"] = "general";
+			};
+			$pass_count = sizeof($filter);
+		}
+
 		foreach($properties as $key => $val)
 		{
 			$_tmp = $this->normalize_text_nodes($val);
 			$name = $_tmp["name"];
-			if (isset($filter))
+			if ($do_filter)
 			{
-				if (isset($_tmp[$filter]))
+				$pass = 0;
+				foreach($filter as $key => $val)
+				{
+					if ($_tmp[$key] == $val)
+					{
+						$pass++;
+					}
+				}
+				if ($pass == $pass_count)
 				{
 					$res[$name] = $_tmp;
 				};
@@ -193,7 +214,12 @@ class cfgutils extends aw_template
 		$this->_init_clist();
 		extract($args);
 		// this is the stuff we need to cache
-		$coreprops = $this->load_class_properties(array("file" => "class_base"));
+		// maybe I should implement some kind of include for properties?
+		$filter = isset($args["filter"]) ? $args["filter"] : "";
+		$coreprops = $this->load_class_properties(array(
+			"file" => "class_base",
+			"filter" => $filter,
+		));
 		if (empty($file))
 		{
 			$file = $this->clist[$clid];
@@ -203,7 +229,10 @@ class cfgutils extends aw_template
                 {
                         die("Invalid clid - $file<bR>");
                 };
-		$objprops = $this->load_class_properties(array("file" => $file));
+		$objprops = $this->load_class_properties(array(
+			"file" => $file,
+			"filter" => $filter,
+		));
 
 		if (is_array($objprops))
 		{
