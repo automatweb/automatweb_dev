@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.147 2003/01/24 13:41:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.148 2003/01/24 15:02:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -691,6 +691,7 @@ class document extends aw_template
 		if (strpos($doc['content'], "#login#") !== false)
 		{
 			$li = get_instance("aw_template");
+			$li->init();
 			$li->read_template("login.tpl");
 			$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
 		}		
