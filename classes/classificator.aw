@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.12 2004/05/03 13:44:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.13 2004/05/17 13:43:27 duke Exp $
 
 /*
 
@@ -87,6 +87,11 @@ class classificator extends class_base
 					$selected = $conn->prop("to");
 					$connections[$selected] = $selected;
 				};
+			}
+			else
+			{
+				// try to figure out values from some place else
+				$connections = $prop["value"];
 			};
 
 			if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1))
@@ -160,10 +165,9 @@ class classificator extends class_base
 	function process_vcl_property($arr)
 	{
 		$property = $arr["prop"];
-
 		$items = new aw_array($property["value"]);
-
 		$connections = array();
+
 		if (is_oid($arr["obj_inst"]->id()))
 		{
 			// first I need a list of old connections.
@@ -184,6 +188,8 @@ class classificator extends class_base
 		$ids = $this->make_keys($choices->ids());
 
 		// I need to list the choices
+
+		//$arr["prop"]["value"] = $items->get();
 
 		foreach($items->get() as $item)
 		{
