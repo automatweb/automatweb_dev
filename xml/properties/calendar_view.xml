@@ -6,8 +6,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>chooser</type>
-            <orient>vertical</orient>
+            <type>select</type>
             <caption>Välimus</caption>
       </property>
       <property>
@@ -30,14 +29,14 @@
             <caption>Vaade</caption>
       </property>
       <property>
-            <name>show_current_events</name>
+            <name>search_form</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Aktiivse päeva sisu näitamine</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH</reltype>
+            <caption>Otsinguvorm</caption>
       </property>
       <property>
             <name>show_days_with_events</name>
@@ -120,6 +119,57 @@
             <caption>Taust</caption>
       </property>
       <property>
+            <name>table_header</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Tulemuste tabeli pealkiri</caption>
+      </property>
+      <property>
+            <name>table_frow</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Tulemuste tabeli esimene rida</caption>
+      </property>
+      <property>
+            <name>table_srow</name>
+            <table>objects</table>
+            <group>style</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Tulemuste tabeli teine rida</caption>
+      </property>
+      <property>
+            <name>month_navigator</name>
+            <table>objects</table>
+            <group>ftresults</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>Kuu navigaator</caption>
+      </property>
+      <property>
+            <name>result_table</name>
+            <table>objects</table>
+            <group>ftresults</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Tulemuste tabel</caption>
+      </property>
+      <property>
             <name>show_events</name>
             <table>objects</table>
             <group>show_events</group>
@@ -133,11 +183,15 @@
       <classinfo>
             <syslog_type>ST_CALENDAR_VIEW</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <style>
                   <caption>Stiilid</caption>
             </style>
+            <ftresults>
+                  <caption>Tulemuste seadistamine</caption>
+            </ftresults>
             <show_events>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -166,6 +220,11 @@
                   <clid>CL_CSS</clid>
                   <caption>Stiil</caption>
             </STYLE>
+            <SEARCH>
+                  <value>4</value>
+                  <clid>CL_EVENT_SEARCH</clid>
+                  <caption>Otsing</caption>
+            </SEARCH>
       </reltypes>
 </properties>
 
