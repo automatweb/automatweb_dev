@@ -401,10 +401,7 @@ class aw_site extends class_base
 			aw_global_set("__is_install", 0);
 			flush();
 			touch("/tmp/ap_reboot");
-			echo "Valmis! sait on kasutatav 30 sekundi p&auml;rast!<br />\n<a href='".$this->mk_my_orb("change", array(
-				"id" => $log->cur_log_id,
-				"group" => "view"
-				),"aw_site_gen_log")."'>Saidi loomise logi</a>\n";
+			echo "Valmis! sait on kasutatav 30 sekundi p&auml;rast!<br />\n";
 			flush();
 			die();
 		}
