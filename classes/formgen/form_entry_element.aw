@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.3 2002/11/13 11:35:28 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -287,7 +287,16 @@ class form_entry_element extends form_element
 			}
 			else
 			{
-				$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+				// ok, bit of trickery here. if $this->entry is not an array, use it as the link address 
+				// and the text of the element as the link caption
+				if (is_array($this->entry))
+				{
+					$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+				}
+				else
+				{
+					$html.="<a href='".$this->entry."'>".$this->arr["link_text"]."</a>";
+				}
 			}
 		}
 

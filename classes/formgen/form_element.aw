@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.5 2002/11/07 22:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.6 2002/11/13 11:35:28 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1710,7 +1710,11 @@ class form_element extends aw_template
 		$this->entry_id = $e_id;
 		if ($this->arr["type"] == "file" || $this->arr["type"] == "link")
 		{
-			$this->entry = aw_unserialize($this->entry);
+			$tmp = aw_unserialize($this->entry);
+			if ($tmp !== false)
+			{
+				$this->entry = $tmp;
+			}
 		}
 	}
 
