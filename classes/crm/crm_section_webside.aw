@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.5 2004/10/04 09:44:52 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.6 2004/10/04 10:06:39 sven Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -256,7 +256,7 @@ class crm_section_webside extends class_base
 		}
 		else
 		{
-			$this->read_template("frame_one_col.tpl");
+			$this->read_template("frame.tpl");
 		}
 		
 		//$this->read_template("frame.tpl");
@@ -325,7 +325,7 @@ class crm_section_webside extends class_base
 		}
 		else
 		{
-			$this->read_template("frame_one_col.tpl");
+			$this->read_template("frame.tpl");
 		}
 		//This is amazing... i wrote this and I dont understand how it works, but it does
 		for($i=0; $i<$workers_count; $i++)
