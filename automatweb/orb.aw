@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.12 2003/04/21 08:00:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.13 2003/07/17 15:49:19 duke Exp $
 set_time_limit(0);
 include("const.aw");
 
@@ -57,7 +57,8 @@ if (!$t->prog_acl_auth("view", PRG_MENUEDIT))
 // actually, here we should find the program that get's executed somehow and do prog_acl for that. 
 // but there seems to be no sure way to do that unfortunately. 
 
-$orb = new orb(array(
+$orb = new orb();
+$orb->process_request(array(
 	"class" => $class,
 	"action" => $action,
 	"vars" => $vars,
