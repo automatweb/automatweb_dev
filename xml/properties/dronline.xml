@@ -47,15 +47,6 @@
             <caption>Kuni</caption>
       </property>
       <property>
-            <name>def_span</name>
-            <type>select</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>M&amp;auml;&amp;auml;ratud vahemik</caption>
-      </property>
-      <property>
             <name>g_default_tab</name>
             <type>select</type>
             <table>objects</table>

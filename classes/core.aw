@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.145 2003/01/20 14:25:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.146 2003/01/20 16:53:28 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1722,6 +1722,7 @@ class core extends db_connector
 
 	function req_mk_my_orb_part($k,$v, $sep)
 	{
+		$stra = array();
 		foreach($v as $k2 => $v2)
 		{
 			if (is_array($v2))

@@ -298,7 +298,14 @@ class dronline extends class_base
 			$cache = aw_unserialize($this->db_fetch_field("SELECT cache_content FROM dronline_bg_status WHERE id = $id","cache_content"));
 			if (is_array($cache) && isset($cache[$dro_tab]))
 			{
-				$arr['data'] = $cache[$dro_tab];
+				if ($def_span)
+				{
+					$arr['data'] = $cache[$dro_tab][$def_span];
+				}
+				else
+				{
+					$arr['data'] = $cache[$dro_tab]['nospan'];
+				}
 				$this->from_cache = true;
 			}
 		}
@@ -499,6 +506,16 @@ class dronline extends class_base
 			$this->vars(array(
 				"desc" => "Tegevuse filter:",
 				"value" => $mt['textfilter']
+			));
+			$cd .= $this->parse("LINE");
+		}
+
+		if (count($mt['sites']) > 0 && aw_ini_get("syslog.has_site_id"))
+		{
+			$sql[] = "site_id IN (".join(",",map("%s",$mt['sites'])).")";
+			$this->vars(array(
+				"desc" => "Saidid:",
+				"value" => join(",",$mt['sites'])
 			));
 			$cd .= $this->parse("LINE");
 		}
@@ -726,6 +743,7 @@ class dronline extends class_base
 		$data = $data[$cur_range];
 
 		unset($arr['cur_range']);
+		unset($arr['data']);
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'dronline'));
@@ -861,6 +879,7 @@ class dronline extends class_base
 		{
 			return $data;
 		}
+		unset($arr['data']);
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'dronline'));
@@ -1026,6 +1045,7 @@ class dronline extends class_base
 		{
 			return $data;
 		}
+		unset($arr['data']);
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'dronline'));
@@ -1526,17 +1546,38 @@ class dronline extends class_base
 			$fn = "_do_".$tabid.'_get_data';
 			if (method_exists($this, $fn))
 			{
+				foreach($this->def_spans as $spid => $spdat)
+				{
+					$arr['def_span'] = $spid;
+					if ($tabid == 'stat_time')
+					{
+						foreach($this->date_ranges as $rng => $rn)
+						{
+							$arr['cur_range'] = $rng;
+							$td = $this->$fn($arr);
+							$cache[$tabid][$spid][$rng] = $td[$rng];
+						}
+					}
+					else
+					{
+						$cache[$tabid][$spid] = $this->$fn($arr);
+					}
+				}
+
+				unset($arr['def_span']);
+				$spid = "nospan";
 				if ($tabid == 'stat_time')
 				{
 					foreach($this->date_ranges as $rng => $rn)
 					{
 						$arr['cur_range'] = $rng;
-						$cache[$tabid][$rng] = $this->$fn($arr);
+						$td = $this->$fn($arr);
+						$cache[$tabid][$spid][$rng] = $td[$rng];
 					}
 				}
 				else
 				{
-					$cache[$tabid] = $this->$fn($arr);
+					$cache[$tabid][$spid] = $this->$fn($arr);
 				}
 			}
 		}

@@ -83,6 +83,17 @@
             <caption>Mitu rida</caption>
       </property>
       <property>
+            <name>sites</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>5</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Saidid</caption>
+      </property>
+      <property>
             <name>use_filter</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
