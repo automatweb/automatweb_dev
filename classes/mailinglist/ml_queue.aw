@@ -728,12 +728,13 @@ class ml_queue extends aw_template
 		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
 		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
 		echo "froma = $froma , fromn = $fromn  <br>";
+		$message .= " mid = $mid\n";
 		$this->awm->create_message(array(
 			"froma" => $froma,
 			"fromn" => $fromn,
 			"subject" => $subject,
 			"To" => $mailto,
-			"Sender"=>"lauri@struktuur.ee",
+			"Sender"=>"duke@struktuur.ee",
 			"body" => $is_html?strip_tags(strtr($message,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"))):$message,
 		));
 
@@ -751,8 +752,9 @@ class ml_queue extends aw_template
 			$this->db_query($q);
 			$row2 = $this->db_next();
 			$this->restore_handle();
-			$prefix = substr($row2["file"],0,1);
-			$fname = $this->cfg["site_basedir"] . "/files/$prefix/$row2[file]";
+			$basename = basename($row2["file"]);
+			$prefix = substr($basename,0,1);
+			$fname = $this->cfg["site_basedir"] . "/files/$prefix/$basename";
 			if (file_exists($fname))
 			{
 				$this->awm->fattach(array(	
