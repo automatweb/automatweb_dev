@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.35 2004/02/19 14:58:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.36 2004/02/25 16:10:33 kristo Exp $
 
 /*
 
@@ -1247,12 +1247,12 @@ class site_show extends class_base
 					$name
 				);
 			}
-		
+
 			$this->vars(array(
 				"name" => $name,
 				"lang_url" => $url,
 				"img_url" => $img_url,
-				"sel_img_url" => $se_limg_url
+				"sel_img_url" => $sel_img_url
 			));
 
 			if ($lc == $lang_id)
@@ -1274,6 +1274,7 @@ class site_show extends class_base
 			"LANG" => $l,
 			"SEL_LANG" => "",
 			"sel_charset" => $sel_lang["charset"],
+			"lang_fp_text" => $sel_lang["meta"]["fp_text"],
 			"se_lang_id" => aw_global_get("lang_id")
 		));
 	}
