@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.324 2004/11/26 11:51:23 duke Exp $
+// $Id: class_base.aw,v 2.325 2004/11/28 21:16:57 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1860,10 +1860,14 @@ class class_base extends aw_template
 		{
 			if($value)
 			{
-				$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
-				if($retval == PROP_IGNORE)
+				$values = is_array($value) ? $value : array($value);
+				foreach($values as $value)
 				{
-					unset($properties[$key]);
+					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+					if($retval == PROP_IGNORE)
+					{
+						unset($properties[$key]);
+					}
 				}
 			}
 		}
@@ -2894,23 +2898,28 @@ class class_base extends aw_template
 			
 			if($controllers[$key])
 			{
-				$controller_id = $controllers[$key];
-				$prpdata["value"] = $val;
-				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
-
-				if ($controller_ret != PROP_OK)
+				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
+				foreach($controllers as $controller_id)
 				{
-					$ctrl_obj = new object($controller_id);
-					$errmsg = $ctrl_obj->prop("errmsg");
-					if (empty($errmsg))
+					$prpdata["value"] = $val;
+					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
+
+					if ($controller_ret != PROP_OK)
 					{
-						$errmsg = "Entry was blocked by a controller, but no error message is available";
+						$ctrl_obj = new object($controller_id);
+						$errmsg = $ctrl_obj->prop("errmsg");
+						if (empty($errmsg))
+						{
+							$errmsg = "Entry was blocked by a controller, but no error message is available";
+						};
+						$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
+						$res[$key]["msg"][] = $errmsg;
 					};
-					$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
-					$res[$key] = array(
-						"msg" => $errmsg,
-					);
-				};
+				}
+				if(count($res["key"]["msg"]) > 0)
+				{
+					$res["key"]["msg"] = implode("<br />\n", $res["key"]["msg"]);
+				}
 			}
 		};
 		return $res;
