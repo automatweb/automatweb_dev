@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.14 2002/01/02 18:19:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.15 2002/01/08 02:29:54 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -72,7 +72,7 @@ class extlinks extends aw_template {
 		}
 		else
 		{
-			$replacement = sprintf("<a href='%s' target='%s'>%s</a>",$url,$target,$link["name"]);
+			$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 		};
 		return $replacement;
 	}
