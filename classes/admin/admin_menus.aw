@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.97 2005/03/17 18:17:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.98 2005/04/04 10:29:27 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1217,7 +1217,7 @@ class admin_menus extends aw_template
 			"ret_data" => true,
 			"sharp" => true,
 			"addmenu" => 1,
-			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $current_period : $period,
+			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $period : $period,
 		));
 
 		if (!$sortby)
