@@ -1,16 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <cols>40</cols>
-            <rows>3</rows>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
-      </property>
-      <property>
             <name>firstname</name>
             <type>textbox</type>
             <size>15</size>
@@ -19,6 +9,16 @@
             <group>general</group>
             <field>firstname</field>
             <caption>eesnimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <field>comment</field>
+            <cols>40</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>lastname</name>
@@ -73,12 +73,12 @@
       <property>
             <name>messenger</name>
             <type>textbox</type>
-            <size>10</size>
+            <size>30</size>
             <maxlength>200</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>messenger</field>
-            <caption>msn</caption>
+            <caption>msn/yahoo/aol/icq</caption>
       </property>
       <property>
             <name>birthday</name>
@@ -93,7 +93,7 @@
       <property>
             <name>social_status</name>
             <type>textbox</type>
-            <size>10</size>
+            <size>20</size>
             <maxlength>20</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
@@ -103,7 +103,7 @@
       <property>
             <name>spouse</name>
             <type>textbox</type>
-            <size>15</size>
+            <size>25</size>
             <maxlength>50</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
@@ -114,7 +114,7 @@
             <name>children</name>
             <type>textarea</type>
             <cols>20</cols>
-            <rows>3</rows>
+            <rows>2</rows>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>children</field>
@@ -122,93 +122,55 @@
       </property>
       <property>
             <name>digitalID</name>
-            <type>textarea</type>
-            <cols>20</cols>
-            <rows>3</rows>
+            <type>textbox</type>
+            <size>20</size>
+            <maxlength>300</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>digitalID</field>
-            <caption>digitaalallkiri</caption>
+            <caption>digitaalallkiri(fail vms)?</caption>
       </property>
       <property>
             <name>pictureurl</name>
             <type>textbox</type>
-            <size>20</size>
+            <size>40</size>
             <maxlength>200</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>pictureurl</field>
-            <caption>foto/pildi url</caption>
+            <caption>pildi/foto url</caption>
       </property>
       <property>
             <name>picture</name>
-            <type>button</type>
-            <value>lisa</value>
+            <type>relpicker</type>
+            <reltype>PICTURE</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>picture</field>
-            <caption>pildiobjekt</caption>
-      </property>
-      <property>
-            <name>work_contact_change</name>
-            <type>text</type>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>work_contact_change</field>
-            <caption>töökoha kontakt</caption>
+            <caption>pilt/foto</caption>
       </property>
       <property>
             <name>work_contact</name>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>WORKADDRESS</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>work_contact</field>
-            <caption>töökoha kontakt hidden</caption>
-      </property>
-      <property>
-            <name>personal_contact_change</name>
-            <type>text</type>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>personal_contact_change</field>
-            <caption>kodukoha kontakt</caption>
+            <caption>töökoha kontakt andmed</caption>
       </property>
       <property>
             <name>personal_contact</name>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>HOMEADDRESS</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>personal_contact</field>
-            <caption>kodukoha kontakt hidden</caption>
-      </property>
-      <property>
-            <name>popups</name>
-            <type>text</type>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>popups</field>
-            <caption>popup</caption>
+            <caption>kodused kontakt andmed</caption>
       </property>
       <classinfo>
-            <objtable>kliendibaas_isik</objtable>
-            <objtable_index>oid</objtable_index>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
-            <kliendibaas_ettevotlusvorm>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_ettevotlusvorm>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
             <kliendibaas_isik>
                   <index>oid</index>
                   <master_table>objects</master_table>

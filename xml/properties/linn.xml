@@ -17,10 +17,6 @@
             <field>location</field>
             <caption>Asukoha kirjeldus</caption>
       </property>
-      <classinfo>
-            <objtable>kliendibaas_linn</objtable>
-            <objtable_index>oid</objtable_index>
-      </classinfo>
       <tableinfo>
             <kliendibaas_linn>
                   <index>oid</index>

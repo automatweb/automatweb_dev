@@ -19,16 +19,7 @@
             <field>vorm</field>
             <caption>vorm</caption>
       </property>
-      <classinfo>
-            <objtable>kliendibaas_ettevotlusvorm</objtable>
-            <objtable_index>oid</objtable_index>
-      </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
             <kliendibaas_ettevotlusvorm>
                   <index>oid</index>
                   <master_table>objects</master_table>

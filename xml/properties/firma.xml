@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <cols>40</cols>
-            <rows>3</rows>
+            <name>name</name>
+            <type>textbox</type>
+            <size>30</size>
+            <maxlenght>255</maxlenght>
             <table>objects</table>
             <group>general</group>
-            <caption>Kommentaar</caption>
+            <field>name</field>
+            <caption>firma nimetus</caption>
       </property>
       <property>
             <name>reg_nr</name>
@@ -22,149 +22,63 @@
       </property>
       <property>
             <name>pohitegevus</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
+            <type>relpicker</type>
+            <reltype>POHITEGEVUS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>pohitegevus</field>
             <caption>põhitegevus</caption>
       </property>
       <property>
-            <name>pohitegevus_b</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>pohitegevus_b</field>
-            <caption>pohitegevus</caption>
-      </property>
-      <property>
-            <name>korvaltegevused</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>korvaltegevused</field>
-            <caption>kõrvaltegevused</caption>
-      </property>
-      <property>
-            <name>korvaltegevused_b</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>korvaltegevused_b</field>
-            <caption>korvaltegevused</caption>
-      </property>
-      <property>
             <name>ettevotlusvorm</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
+            <type>relpicker</type>
+            <reltype>TOOTED</reltype>
+            <multiple>1</multiple>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>ettevotlusvorm</field>
-            <caption>ettevõtlusvorm</caption>
-      </property>
-      <property>
-            <name>ettevotlusvorm_b</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>ettevotlusvorm_b</field>
-            <caption>ettevõtlusvorm</caption>
-      </property>
-      <property>
-            <name>firma_nimetus</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>firma_nimetus</field>
-            <caption>fima nimetus</caption>
-      </property>
-      <property>
-            <name>tooted</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>tooted</field>
-            <caption>tooted</caption>
-      </property>
-      <property>
-            <name>tooted_b</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>tooted_b</field>
             <caption>tooted</caption>
       </property>
       <property>
             <name>kaubamargid</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
+            <type>textarea</type>
+            <cols>25</cols>
+            <rows>2</rows>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>kaubamargid</field>
             <caption>kaubamärgid</caption>
       </property>
       <property>
-            <name>contact_change</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>contact_change</field>
-            <caption>kontakt</caption>
-      </property>
-      <property>
             <name>contact</name>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>ADDRESS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>contact</field>
-            <caption>kontakt hidden</caption>
+            <caption>aadress</caption>
       </property>
       <property>
             <name>tegevuse_kirjeldus</name>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlenght>20</maxlenght>
+            <type>textarea</type>
+            <cols>25</cols>
+            <rows>2</rows>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>tegevuse_kirjeldus</field>
             <caption>tegevuse kirjeldus</caption>
       </property>
       <property>
-            <name>firmajuht_change</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>firmajuht_change</field>
-            <caption>firmajuht</caption>
-      </property>
-      <property>
             <name>firmajuht</name>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>FIRMAJUHT</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>firmajuht</field>
-            <caption>firmajuht hidden</caption>
-      </property>
-      <property>
-            <name>popups</name>
-            <type>text</type>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <field>popups</field>
-            <caption>pop</caption>
+            <caption>firmajuht</caption>
       </property>
       <classinfo>
-            <objtable>kliendibaas_firma</objtable>
-            <objtable_index>oid</objtable_index>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>
             <kliendibaas_firma>

@@ -29,7 +29,7 @@
             <caption>isikute kataloog(id)</caption>
       </property>
       <property>
-            <name>dir_contact</name>
+            <name>dir_address</name>
             <type>select</type>
             <table>objects</table>
             <group>directorys</group>
@@ -94,7 +94,7 @@
       <property>
             <name>manager</name>
             <type>generated</type>
-            <callback>contact_manager</callback>
+            <callback>address_manager</callback>
             <table>objects</table>
             <group>manager</group>
             <field>meta</field>
@@ -124,7 +124,7 @@
             <type>textbox</type>
             <size>3</size>
             <table>objects</table>
-            <group>tegevusala</group>
+            <group>manager</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>page</caption>
@@ -167,11 +167,48 @@
             <caption>actions</caption>
       </property>
       <property>
+            <name>select</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>objs</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>sel</name>
+            <type>checkbox</type>
+            <ch_value>on</ch_value>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>teg_page</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>tegevusalad</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>teg_page</caption>
+      </property>
+      <property>
             <name>tegevusala_manager</name>
             <type>generated</type>
             <callback>tegevusala_manager</callback>
             <table>objects</table>
-            <group>tegevusala</group>
+            <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -180,21 +217,53 @@
             <type>checkbox</type>
             <ch_value>on</ch_value>
             <table>objects</table>
-            <group>tegevusala</group>
+            <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>näita ainult tegevusalasid, kus alal on ka ettevõtteid</caption>
       </property>
+      <property>
+            <name>teg_do_search</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>tegevusalad</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>do otsing</caption>
+      </property>
+      <property>
+            <name>teg_search</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <group>tegevusalad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>valim</name>
+            <type>relpicker</type>
+            <reltype>VALIM</reltype>
+            <table>objects</table>
+            <group>selection</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>vali valim</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
       <groupinfo>
             <directorys>
                   <caption>kataloogid</caption>
             </directorys>
             <manager>
-                  <caption>haldus</caption>
+                  <caption>ettevõtted</caption>
             </manager>
-            <tegevusala>
-                  <caption>tegevusala</caption>
-            </tegevusala>
+            <tegevusalad>
+                  <caption>tegevusalad</caption>
+            </tegevusalad>
             <selection>
                   <caption>selection</caption>
             </selection>

@@ -5,7 +5,7 @@
             <type>textbox</type>
             <size>5</size>
             <maxlength>5</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>postiindeks</field>
             <caption>postinindex</caption>
@@ -15,7 +15,7 @@
             <type>textbox</type>
             <size>10</size>
             <maxlength>15</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>telefon</field>
             <caption>telefon</caption>
@@ -25,7 +25,7 @@
             <type>textbox</type>
             <size>10</size>
             <maxlength>15</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>mobiil</field>
             <caption>telefon</caption>
@@ -35,7 +35,7 @@
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>faks</field>
             <caption>faks</caption>
@@ -45,7 +45,7 @@
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>piipar</field>
             <caption>piipar</caption>
@@ -55,7 +55,7 @@
             <type>textbox</type>
             <size>30</size>
             <maxlength>100</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>aadress</field>
             <caption>aadress</caption>
@@ -65,7 +65,7 @@
             <type>textbox</type>
             <size>25</size>
             <maxlength>100</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>e_mail</field>
             <caption>e-mail</caption>
@@ -75,83 +75,47 @@
             <type>textbox</type>
             <size>40</size>
             <maxlength>300</maxlength>
-            <table>kliendibaas_contact</table>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>kodulehekylg</field>
             <caption>kodulehekülg</caption>
       </property>
       <property>
-            <name>linn_c</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>linn_c</field>
-            <caption>vali linn/asula</caption>
-      </property>
-      <property>
-            <name>maakond_c</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>maakond_c</field>
-            <caption>vali_maakond</caption>
-      </property>
-      <property>
-            <name>riik_c</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>riik_c</field>
-            <caption>vali_riik</caption>
-      </property>
-      <property>
-            <name>more</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>more</field>
-      </property>
-      <property>
-            <name>popups</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>popups</field>
-      </property>
-      <property>
             <name>linn</name>
-            <type>textbox</type>
-            <table>kliendibaas_contact</table>
+            <type>relpicker</type>
+            <reltype>LINN</reltype>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>linn</field>
-            <caption>hidden linn</caption>
+            <caption>linn</caption>
       </property>
       <property>
             <name>maakond</name>
-            <type>textbox</type>
-            <table>kliendibaas_contact</table>
+            <type>relpicker</type>
+            <reltype>MAAKOND</reltype>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>maakond</field>
-            <caption>hidden mk</caption>
+            <caption>maakond</caption>
       </property>
       <property>
             <name>riik</name>
-            <type>textbox</type>
-            <table>kliendibaas_contact</table>
+            <type>relpicker</type>
+            <reltype>RIIK</reltype>
+            <table>kliendibaas_address</table>
             <group>general</group>
             <field>riik</field>
-            <caption>hidden rk</caption>
+            <caption>riik</caption>
       </property>
       <classinfo>
-            <objtable>kliendibaas_contact</objtable>
-            <objtable_index>oid</objtable_index>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
+            <kliendibaas_address>
                   <index>oid</index>
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
-            </kliendibaas_contact>
+            </kliendibaas_address>
       </tableinfo>
 </properties>
 
