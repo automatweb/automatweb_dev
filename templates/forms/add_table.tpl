@@ -37,6 +37,9 @@
 <td class="fform">Linkide stiil:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
 </tr>
 <tr>
+<td class="fform">Vaata link uues aknas:</td><td class="fform"><input type="checkbox" name="view_new_win" value="1" {VAR:view_new_win}></td>
+</tr>
+<tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_FORMS_WHERE_ELEMENTS_TAKEN}:</td><td class="fform"><select class='small_button' name='forms[]' multiple size=7>{VAR:forms}</select></td>
 </tr>
 <tr>
