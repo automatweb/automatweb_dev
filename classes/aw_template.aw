@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.61 2004/07/30 08:00:45 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.62 2004/08/13 13:12:12 rtoomas Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -243,6 +243,7 @@ class aw_template extends core
 	function read_any_template($name, $silent = false)
 	{
 		$this->template_filename = $this->site_template_dir."/".$name;
+		$this->template_filename = trim($this->template_filename);
 		if (file_exists($this->template_filename))
 		{
 			$retval = $this->read_tpl(file($this->template_filename));
