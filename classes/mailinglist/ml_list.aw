@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.68 2004/09/15 11:56:44 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.69 2004/09/15 13:38:04 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -799,6 +799,8 @@ class ml_list extends class_base
 		$ml_list_members = $this->get_members($arr["obj_inst"]->id(),$perpage * $ft_page +1,$perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/member_list");
+		$t->set_default_sortby("id");
+		$t->set_default_sorder("desc");
 		
 		
 		if($arr["obj_inst"]->prop("member_config"))
@@ -876,7 +878,6 @@ class ml_list extends class_base
 				for($i = 0; $i < 10; $i++)
 				{	
 					$tabledata["udef_txbox$i"] = $member_obj->prop("udef_txbox$i");
-					arr($member_obj->prop("udef_date$i"));
 					if($member_obj->prop("udef_date$i"))
 					{
 						$tabledata["udef_date$i"] = get_lc_date($member_obj->prop("udef_date$i"));
@@ -885,6 +886,7 @@ class ml_list extends class_base
 			}	
 			$t->define_data($tabledata);	
 		}		
+		$t->sort_by();
 	}
 
 
@@ -990,7 +992,7 @@ class ml_list extends class_base
 		$list_obj = new object($id);
 
 
-		$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
+		$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
 
 		// why oh why is it so bloody slow with 1600 objects :(
 		/*
