@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.34 2004/12/22 19:15:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.35 2005/01/18 11:33:23 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -595,6 +595,7 @@ class site_search_content extends class_base
 		$keyword_list = new object_list(array(
 			"class_id" => CL_KEYWORD,
 			"name" => "%$str%",
+			"site_id" => array()
 		));
 		;		
 		//If keyword not found, no point to process it futher
