@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.15 2004/03/16 14:20:53 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.16 2004/04/07 11:26:21 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -248,10 +248,9 @@ class crm_company extends class_base
 	function callback_pre_edit($arr)
 	{
 		// initialize
-		$users = get_instance("users");
-		$this->cal_id = $users->get_user_config(array(
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),
-			"key" => "user_calendar",
 		));
 	}
 	
@@ -411,10 +410,9 @@ class crm_company extends class_base
 		// alias_to_org oleks isiku id
 		// reltype_org oleks vastava seose id
 
-		$users = get_instance("users");
-		$cal_id = $users->get_user_config(array(
+		$pl = get_instance(CL_PLANNER);
+		$cal_id = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),
-			"key" => "user_calendar",
 		));
 
 		// XXX: I should check whether $this->cal_id exists and only include those entries
