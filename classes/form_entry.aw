@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.6 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.7 2001/07/19 14:24:30 duke Exp $
 
 global $orb_defs;
 
@@ -63,6 +63,48 @@ class form_entry extends aw_template
 			$block = $block + $this->get_record("form_" . $form_id . "_entries","id",$entry_id);
 		};
 		return $block;
+	}
+
+	////
+	// !Teeb entryst koopia
+	// argumendid:
+	// eid (int), entry_id, mida kopeerida
+	// parent (int), mille alla uu koopia teha. Kui defineerimata, siis jääb samasse kohta
+	function cp($args = array())
+	{
+		extract($args);
+		// koigepealt registreerime uue objekti.
+		$old = $this->get_object($eid);
+		// üle kanname koik andmed, parent-i asendame
+		if ($args["parent"])
+		{
+			$old["parent"] = $args["parent"];
+		};
+		// acl-iga voib kamm tekkida.
+		$new_id = $this->new_object($old);
+		
+		$oldentry = $this->get_record("form_entries","id",$eid);
+
+		$t = time();
+
+		$q = "INSERT INTO form_entries (id,form_id,contents,tm)
+			VALUES ('$oldentry[id]','$oldentry[form_id],$oldentry[contents],$t)";
+
+		$this->db_query($q);
+
+		$ftable = sprintf("form_%s_entries",$oldentry["form_id"]);
+
+		$old_f_entry = $this->get_record($ftable,"id",$eid);
+
+		$old_f_entry["id"] = $new_id;
+
+		$keys = array_keys($old_f_entry);
+		$values = array_values($old_f_entry);
+
+		$q = sprintf("INSERT INTO $ftable (%s) VALUES (%s)",join(",",$keys),join(",",map('%s',$values)));
+
+		$this->db_query($q);
+
 	}
 }
 ?>
