@@ -41,6 +41,7 @@
                   <clid>
                         <num_0>CL_AUTH_SERVER_LDAP</num_0>
                         <num_1>CL_AUTH_SERVER_LOCAL</num_1>
+                        <num_2>CL_AUTH_SERVER_NDS</num_2>
                   </clid>
                   <caption>autentimisserver</caption>
             </AUTH_SERVER>
