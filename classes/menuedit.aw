@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.303 2003/11/13 11:19:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.304 2003/12/05 13:01:43 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -450,27 +450,40 @@ class menuedit extends aw_template
 					{
 						// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
 						// vaatame, kas selle nimega aliast on?
-						$obj = $this->_get_object_by_alias($sval,$prnt);
+						$ol = new object_list(array(
+							"alias" => $sval,
+							"parent" => $prnt,
+							"status" => STAT_ACTIVE,
+							"site_id" => aw_ini_get("site_id")
+						));
+						if ($ol->count() == 0)
+						{
+							$obj = false;
+						}
+						else
+						{
+							$obj = $ol->begin();
+						}
 
 						// need to check one more thing, IF prnt = 0 then fetch the parent
 						// of this object and see whether it has an alias. if so, do not
 						// let him access this menu directly
 						if ($prnt == 0)
 						{
-							$pobj = $this->get_object($obj["parent"]);
-							if (strlen($pobj["alias"]) > 0)
+							$pobj = obj($obj->parent());
+							if (strlen($pobj->alias()) > 0)
 							{
 								$obj = false;
 							}
 						};
 
-						if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
+						if ( ($prnt != 0) && ($obj->parent() != $prnt) )
 						{
 							$obj = false;
 						}
 						else
 						{
-							$prnt = $obj["oid"];
+							$prnt = $obj->id();
 						}
 					}
 				}
@@ -479,7 +492,12 @@ class menuedit extends aw_template
 			{
 				// vaatame, kas selle nimega aliast on?
 				$this->quote(&$section);
-				$obj = $this->_get_object_by_alias($section);
+				$ol = new object_list(array(
+					"alias" => $section,
+					"status" => STAT_ACTIVE,
+					"site_id" => aw_ini_get("site_id")
+				));
+				$obj = $ol->begin();
 			}
 
 			// nope. mingi skriptitatikas? voi cal6
@@ -518,7 +536,7 @@ class menuedit extends aw_template
 			} 
 			else 
 			{
-				$section = $obj["oid"];
+				$section = $obj->id();
 			};
 		} 
 		else 

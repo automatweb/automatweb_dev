@@ -337,18 +337,6 @@ class user extends class_base
 	function _get_group_membership($uid, $id)
 	{
 		$gl = $this->users->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
-		// now, get all RELTYPE_GRP aliases and remove all others from this list
-		/*		$als = $this->get_aliases(array(
-			"oid" => $this->users->get_oid_for_uid($uid),
-			"reltype" => RELTYPE_GRP
-		));
-		$_gl = array();
-		foreach($als as $alias)
-		{
-			$_gid = $this->users->get_gid_for_oid($alias["target"]);
-			$_gl[$_gid] = $gl[$_gid];		
-		}
-		$gl = $_gl;*/
 
 		// get all groups this user is member of
 		$groups = $this->users->getgroupsforuser($uid);
@@ -522,7 +510,10 @@ class user extends class_base
 			// block user and delete all objects
 			$this->users->do_delete_user($uid);
 
-			$this->delete_brothers_of($oid);
+			$ol = new object_list(array(
+				"brother_of" => $oid
+			));
+			$ol->delete();
 		}
 		else
 		{
@@ -715,7 +706,10 @@ class user extends class_base
 		{
 			// block user
 			$this->users->do_delete_user($this->users->get_uid_for_oid($oid));
-			$this->delete_brothers_of($oid);
+			$ol = new object_list(array(
+				"brother_of" => $oid
+			));
+			$ol->delete();
 		}
 	}
 
