@@ -1,6 +1,49 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.117 2002/10/22 08:04:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.118 2002/11/04 20:27:31 duke Exp $
 // core.aw - Core functions
+
+// Core properties - common for all classes
+/*
+	@default table=objects
+
+	@property name type=textbox group=general
+	@caption Objekti nimi
+
+	@property comment type=textbox group=general
+	@caption Kommentaar
+
+	@property alias type=textbox group=general 
+	@caption Alias
+
+	@property status type=status group=general 
+	@caption Staatus
+
+	@property jrk type=textbox size=4 group=general
+	@caption Jrk
+
+	@property created type=date access=ro
+	@caption Loomise kuupäev
+
+	@property createdby type=uid access=ro
+	@caption Looja
+
+	@property modified type=date access=ro
+	@caption Muutmise kuupäev
+
+	@property modifiedby type=uid access=ro
+	@caption Muutja
+
+	@property oid type=int access=ro
+	@caption Objekti id
+
+	@property parent type=int access=ro
+	@caption Parenti id
+
+	@property class_id type=class_id access=ro
+	@caption Klassi id
+*/
+
+
 
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -495,8 +538,7 @@ class core extends db_connector
 		if ($obj["class_id"] == CL_FILE || $obj["class_id"] == CL_PSEUDO)
 		{
 			// remove the file size from all parent folders as well
-			classload("file");
-			$fi = new file;
+			$fi = get_instance("file");
 			$meta = $this->get_object_metadata(array(
 				"metadata" => $obj["metadata"]
 			));
@@ -577,10 +619,37 @@ class core extends db_connector
 	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
 	// active(bool) - kui true, siis tagastakse ainult need objektid, mis on aktiivse
 	// orderby(string) - millise välja järgi tulemus järjestada?
+	// full(bool) - if true, also recurses to subfolders
+	// ret(int) - ARR_NAME or ARR_ALL, default is ARR_ALL
 	function get_objects_below($args = array())
 	{
 		extract($args);
+		$this->save_handle();
 		$groups = array();
+
+		if ($full)
+		{
+			$this->get_objects_by_class(array(
+				"parent" => $parent,
+				"class" => CL_PSEUDO,
+				"type" => $type,
+				"lang_id" => $lang_id,
+				"active" => $active,
+				"status" => $status,
+				"orderby" => $orderby,
+			));
+			while ($row = $this->db_next())
+			{
+				$ta = $args;
+				$ta["parent"] = $row["oid"];
+				$tg = $this->get_objects_below($ta);
+				foreach($tg as $k => $v)
+				{
+					$groups[$k] = $v;
+				}
+			}
+		}
+
 		$this->get_objects_by_class(array(
 			"parent" => $parent,
 			"class" => $class,
@@ -593,8 +662,19 @@ class core extends db_connector
 			
 		while($row = $this->db_next())
 		{
-			$groups[$row["oid"]] = $row;
+			if ($ret == ARR_NAME)
+			{
+				$groups[$row["oid"]] = $row["name"];
+			}
+			else
+			{
+				$row["meta"] = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"]
+				));
+				$groups[$row["oid"]] = $row;
+			}
 		};
+		$this->restore_handle();
 		return $groups;
 	}
 
@@ -837,8 +917,7 @@ class core extends db_connector
 		// edaspidi registreerime koikide parserite callback meetodid
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
-			classload("dummy");
-			$this->parsers = new dummy();
+			$this->parsers = get_instance("dummy");
 			// siia paneme erinevad regulaaravaldised
 			$this->parsers->reglist = array();
 		};
@@ -849,8 +928,7 @@ class core extends db_connector
 		{
 			if (!is_object($this->parsers->$class))
 			{
-				classload($class);
-				$this->parsers->$class = new $class;
+				$this->parsers->$class = get_instance($class);
 			};
 		
 			$block = array(
@@ -887,11 +965,9 @@ class core extends db_connector
 	function register_sub_parser($args = array())
 	{
 		extract($args);	
-		classload($class);
 		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
-			classload($class);
-			$this->parsers->$class = new $class;
+			$this->parsers->$class = get_instance($class);
 		};
 
 		$block = array(
@@ -1248,7 +1324,11 @@ class core extends db_connector
 		$sqlparts = array();
 		if (is_array($parent))
 		{
-			$sqlparts[] = "parent IN (" . join(",",map("'%s'",$parent)) . ")";
+			$prtstr = join(",",map("'%s'",$parent));
+			if ($prtstr != "")
+			{
+				$sqlparts[] = "parent IN (" . $prtstr . ")";
+			}
 		}
 		else
 		if ($parent)
@@ -1491,8 +1571,7 @@ class core extends db_connector
 		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
-			classload("socket");
-			$socket = new socket(array(
+			$socket = get_instance("socket",array(
 				"host" => aw_ini_get("config.error_log_site"),
 				"port" => 80,
 			));
@@ -1520,8 +1599,7 @@ class core extends db_connector
 
 		if ($fatal)
 		{
-			classload("config");
-			$co = new config;
+			$co = get_instance("config");
 			$u = $co->get_simple_config("error_redirect");
 			if ($u != "" && aw_global_get("uid") != "kix")
 			{
@@ -1717,6 +1795,9 @@ class core extends db_connector
 		{
 			$cl_name = get_class($this);
 		}
+
+		preg_match("/(\w*)$/",$cl_name,$m);
+		$cl_name = $m[1];
 
 		// this means it was not passed as an argument
 		if (is_array($use_orb))
@@ -2177,10 +2258,7 @@ class core extends db_connector
 			return false;
 		}
 
-		classload($v["file"]);
-		$t = new $v["file"];
-
-
+		$t = get_instance($v["file"]);
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
 	}
 	
@@ -2208,8 +2286,18 @@ class core extends db_connector
 
 	////
 	// !this should be called from the constructor of each class
-	function init($tpldir)
+	function init()
 	{
+		$arg = func_get_arg(0);
+		if (is_array($arg))
+		{
+			$tpldir = $arg["tpldir"];
+			$this->clid = $arg["clid"];
+		}
+		else
+		{
+			$tpldir = $arg;
+		};
 		$this->db_init();
 		$this->tpl_init($tpldir);
 	}
@@ -2294,14 +2382,14 @@ class core extends db_connector
 		}
 
 		// then disk cache
-		$cache = new cache;
+		$cache = get_instance("cache");
 		if (($cont = $cache->file_get($cf_name)))
 		{
 			$dat = aw_unserialize($cont);
 			aw_global_set($cf_name, $dat);
 			return $dat;
 		}
-		
+
 		// and finally, the database
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
@@ -2336,7 +2424,7 @@ class core extends db_connector
 			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
 		}
 
-		$cache->file_set($cf_name,aw_serialize($tt));
+		$cache->file_set($cf_name,aw_serialize($tt,array("to_file" => true)));
 		aw_global_set($cf_name, $tt);
 
 		return $tt;
