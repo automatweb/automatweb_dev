@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="homedir">
+		<action name="del_objects">
+			<function name="del_objects">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_folder">
+			<function name="submit_add_folder">
+				<arguments>
+					<required name="parent"/>
+					<required name="name"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show">
+			<function name="gen_home_dir">
+				<arguments>
+					<optional name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
