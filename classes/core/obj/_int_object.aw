@@ -1453,7 +1453,7 @@ class _int_object
 				MSG_STORAGE_DELETE,
 				$this->obj["class_id"],
 				array(
-					"oid" => $this->obj["oid"]
+					"oid" => $oid
 				)
 			);
 			$GLOBALS["object_loader"]->ds->delete_object($oid);
