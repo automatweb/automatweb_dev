@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.46 2005/01/19 02:49:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.47 2005/01/19 10:35:23 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -144,7 +144,7 @@ class object_treeview_v2 extends class_base
 				// another hack, just to make possible to set, that show link won't appear
 				// in any column, uh.
 				unset($col_list['']);
-				$col_list = array_merge(array("---" => "---"), $col_list);
+				$col_list = array_merge(array("" => "", "---" => "---"), $col_list);
 				$prop['options'] = $col_list;
 				break;
 			case "tree_type":
