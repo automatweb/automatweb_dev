@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.235 2004/03/09 18:23:58 kristo Exp $
+// $Id: class_base.aw,v 2.236 2004/03/16 10:35:32 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -606,7 +606,6 @@ class class_base extends aw_template
 				$this->inst->callback_mod_retval(array(
 					"action" => &$action,
 					"args" => &$args,
-					"form_data" => &$request,
 					"request" => &$request,
 					"orb_class" => &$orb_class,
 					"clid" => $this->clid,
@@ -1465,6 +1464,8 @@ class class_base extends aw_template
 
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
+			global $awt;
+			$awt->start("fill-obj-picker");
 			$val["type"] = "select";
 			$filter = array(
 				"class_id" => constant($val["clid"]),
@@ -1476,12 +1477,18 @@ class class_base extends aw_template
 				$filter["subclass"] = constant($val["subclass"]);
 			};
 
+			$awt->start("obj-list");
 			$ol = new object_list($filter);
+			$awt->stop("obj-list");
 
+			$awt->start("obj-names");
 			$names = $ol->names();
+			$awt->stop("obj-names");
+
 			asort($names);
 
 			$val["options"] = array("" => "") + $names;
+			$awt->stop("fill-obj-picker");
 		};
 
 		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
@@ -1570,6 +1577,9 @@ class class_base extends aw_template
 
 	function parse_properties($args = array())
 	{
+		global $awt;
+		$awt->start("parse-properties");
+		$awt->count("parse-properties");
 		$properties = &$args["properties"];
 		if (!is_array($properties))
 		{
@@ -2009,6 +2019,8 @@ class class_base extends aw_template
 			}
 		}
 
+		$awt->stop("parse-properties");
+
 		return $resprops;
 	}
 
@@ -2347,7 +2359,6 @@ class class_base extends aw_template
 		$new = false;
 		$this->id = isset($id) ? $id : "";
 
-
 		// basically, if this is a new object, then I need to load all the properties 
 		// that have default values and add them to the bunch.
 
@@ -2501,7 +2512,6 @@ class class_base extends aw_template
 
                         $argblock = array(
                                 "prop" => &$property,
-                                "form_data" => &$rawdata,
 				"request" => &$rawdata,
                                 "new" => $new,
 				"obj_inst" => &$this->obj_inst,
@@ -2732,7 +2742,6 @@ class class_base extends aw_template
 			$this->inst->callback_pre_save(array(
 				"new" => $new,
 				"id" => $this->id,
-				"form_data" => &$args,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
 			));
@@ -2785,7 +2794,6 @@ class class_base extends aw_template
 			$this->inst->callback_post_save(array(
 				"id" => $this->obj_inst->id(),
 				"obj_inst" => $this->obj_inst,
-				"form_data" => &$args,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
