@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>choices</name>
+            <type>generated</type>
+            <callback>callback_get_choices</callback>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Variandid</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
