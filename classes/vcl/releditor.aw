@@ -23,12 +23,6 @@ class releditor extends aw_template
 		$this->tpl_init();
 	}
 
-	function add_item($arr)
-	{
-
-
-	}
-
 	function init_rel_editor($arr)
 	{
 		$prop = $arr["prop"];
@@ -37,6 +31,35 @@ class releditor extends aw_template
 		$clid = $arr["prop"]["clid"][0];
 
 		$props = $arr["prop"]["props"];
+		$xprops = array();
+
+		$errors = false;
+
+		if (!is_array($props))
+		{
+			$errors = true;
+			$xprops[] = array(
+				"type" => "text",
+				"caption" => " ",
+				"value" => "Viga $prop[name] definitsioonis (omadused defineerimata!)",
+			);
+		};
+
+		if (empty($clid))
+		{
+			$errors = true;
+			$xprops[] = array(
+				"type" => "text",
+				"caption" => " ",
+				"value" => "Viga $prop[name] definitsioonis (seose tüüp defineerimata!)",
+			);
+		};
+
+		if ($errors)
+		{
+			return $xprops;
+		};
+
 
 		// now I have to query the target class and add the fields in here
 
@@ -44,11 +67,30 @@ class releditor extends aw_template
 		$t->init_class_base();
 		$emb_group = "general";
 
+		// now then.
 		$all_props = $t->get_active_properties(array(
 			"group" => $emb_group,
 		));
 
 		$act_props = array();
+
+		$obj_inst = false;
+
+		// load the first connection.
+		// It should be relatively simple to extend this so that it can load
+		// a programmaticaly specified relation
+		if ($prop["rel_id"] == "first")
+		{
+			$o = $arr["obj_inst"];
+			$conns = $o->connections_from(array(
+				"reltype" => $prop["reltype"],
+			));
+			$key = reset($conns);
+			if ($key)
+			{
+				$obj_inst = $key->to();
+			};
+		};
 
 		foreach($all_props as $key => $prop)
 		{
@@ -58,14 +100,23 @@ class releditor extends aw_template
 			};
 		};
 		
-		$clinf = aw_ini_get("classes");
-		$clname = $clinf[$clid]["name"];
+		if (is_object($obj_inst))
+		{
+			$act_props["id"] = array(
+				"type" => "hidden",
+				"name" => "id",
+				"value" => $obj_inst->id(),
+			);
+		};
+
 
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => "cba_emb",
+			"obj_inst" => $obj_inst,
 		));
-
+		
+		
 		return $xprops;
 	}
 
@@ -115,6 +166,7 @@ class releditor extends aw_template
 				}
 				else
 				{
+					// this shit takes care of those non-empty select boxes
 					if ($emb[$item["name"]] && $item["type"] != "datetime_select")
 					{
 						$el_count++;
@@ -129,13 +181,12 @@ class releditor extends aw_template
 			return false;
 		};
 
-
 		$emb["group"] = "general";
 		$emb["parent"] = $obj->parent();
+		$emb["return"] = "id";
 
 		$reltype = $arr["prop"]["reltype"];
 
-		$clinst->id_only = true;
 		$obj_id = $clinst->submit($emb);
 
 		$obj->connect(array(
