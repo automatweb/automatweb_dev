@@ -28,6 +28,14 @@
             <caption>Algus</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>Lõpeb</caption>
+      </property>
+      <property>
             <name>whole_day</name>
             <table>objects</table>
             <group>general</group>

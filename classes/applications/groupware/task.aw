@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.7 2004/10/05 07:13:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.8 2004/10/07 21:22:37 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -16,6 +16,9 @@
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algus
+
+@property end type=datetime_select table=planner 
+@caption Lõpeb
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
