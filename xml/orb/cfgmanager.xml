@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cfgmanager">
+	<class name="cfgmanager" folder="cfg">
 		<action name="new">
 			<function name="add">
 				<arguments>
@@ -23,6 +23,16 @@
 			</function>
 		</action>
 
-</class>
+		<property name="priobj">
+			<store type="meta"/>
+			<constraint type="int"/>
+
+		</property>
+
+		<property name="cfgform">
+			<store type="meta"/>
+			<constraint type="array"/>
+		</property>
+	</class>
 </orb>
 		
