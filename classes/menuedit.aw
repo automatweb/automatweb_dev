@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.166 2002/10/22 08:04:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.167 2002/10/22 09:57:24 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1087,7 +1087,7 @@ class menuedit extends aw_template
 				if ($obj !== false)
 				{
 					// vaatame, kas selle nimega aliast on?
-					$obj = $this->_get_object_by_alias($sval,$prnt);
+					$obj = $this->_get_object_by_alias($sval/*,$prnt*/);
 					//$obj = $this->_get_object_by_alias2($sval,$prnt);
 
 					// need to check one more thing, IF prnt = 0 then fetch the parent
@@ -1106,14 +1106,14 @@ class menuedit extends aw_template
 						}
 					};*/
 
-					if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
+/*					if ( ($prnt != 0) && ($obj["parent"] != $prnt) )
 					{
 						$obj = false;
 					}
 					else
-					{
+					{*/
 						$prnt = $obj["oid"];
-					};
+//					};
 
 				};
 			};
@@ -1641,7 +1641,7 @@ class menuedit extends aw_template
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
-			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"]), "menuedit",true,true);
+			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1658,7 +1658,7 @@ class menuedit extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"]), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1687,8 +1687,7 @@ class menuedit extends aw_template
 			}
 		}
 
-
-		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
 		if ($type == "js")
 		{
 			$this->vars(array(
@@ -1704,7 +1703,7 @@ class menuedit extends aw_template
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -2653,7 +2652,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 		global $period;
-		$this->mk_path($id, "Muuda");
+		$this->mk_path($id, "Muuda",$period);
 		if (!$this->can("edit",$id))
 		{
 			$this->raise_error(ERR_MNEDIT_ACL_NOCHANGE,LC_MENUEDIT_NOT_ALLOW, true);
@@ -4283,7 +4282,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$activeperiod = aw_global_get("act_per_id");
 			$d->set_period($activeperiod);
 			$d->list_docs($section, $activeperiod,2);
-
+	
 			// I need to  know that for the public method menus
 			$d->set_opt("cnt_documents",$d->num_rows());
 
@@ -5754,9 +5753,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 
-		if ($period)
+		if (isset($period))
 		{
-			$ps = " AND period = '$period' ";
+			$ps = " AND ((period = '$period') OR (periodic = 1)) ";
 		}
 
 		$this->read_template("js_popup_menu.tpl");
@@ -5796,10 +5795,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
 			$this->save_handle();
+/*			$this->vars(array(
+				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true))
+			));*
+
+			$this->vars(array(
+				"oid" => $row["oid"],
+				"name" => "",
+				"bgcolor" => $row["cutcopied"],
+				"icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
+				"width" => "16",
+				"height" => "16",
+				"icon_over" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
+				"url" => $host,
+				"URLPARAM" => "",
+				"FETCHCONTENT" => ($this->cfg["fetchcontent"] ? $this->parse("FETCHCONTENT") : "")
+			));*/
 			$this->vars(array(
 				"menu_id" => "js_pop_".$row["oid"],
 				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"MENU_ITEM" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true,"type" => "js"))
+				"MENU_ITEM" => $this->get_popup_data(array("period" => $period,"id" => $row["oid"], "ret_data" => true, "sharp" => true,"type" => "js"))
 			));
 			$row["java"] = $this->parse();
 
@@ -5809,6 +5824,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$row["icon"] = "<img src=\"".$iu."\">";
 			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
 			$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
+			$row["hidden_jrk"] = $row["jrk"];
 			$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
 			$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
 			$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
@@ -5846,7 +5862,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("id" => $parent, "ret_data" => true, "sharp" => true, "addmenu" => 1))
+			"content" => $this->get_add_menu(array("id" => $parent, "ret_data" => true, "sharp" => true, "addmenu" => 1, "period" => $period))
 		));
 		$up = $this->parse("URLPARAM");
 		$this->vars(array(
@@ -5862,6 +5878,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$add_applet = $this->parse();
 
 		$la = get_instance("languages");
+
+		if (!$sortby)
+		{
+			$sortby = "hidden_jrk";
+		};
+
+		if (!$sort_order)
+		{
+			$sort_order = "asc";
+		};
+
+		$this->t->set_numeric_field("hidden_jrk");
 
 		$this->t->sort_by(array(
 			"field" => array("is_menu", $sortby),
