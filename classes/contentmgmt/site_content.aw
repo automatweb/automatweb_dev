@@ -74,7 +74,7 @@ class site_content extends menuedit
 
 		classload("image");
 		$imc = get_instance("image");
-		$pers = get_instance("periods");
+		$pers = get_instance("period");
 		$_t = aw_global_get("act_period");
 		$imdata = $imc->get_image_by_id($_t["data"]["image"]["id"]);
 		$this->vars(array(
@@ -606,16 +606,22 @@ class site_content extends menuedit
 				// now we replace the list of menus with list of periods
 				// oh, god, I hate myself
 				$this->mpr[$parent] = array();
-				$per = get_instance("periods");
+				$per = get_instance("period");
 				$perlist = new aw_array($per->list_periods(0));
+				$counter = 0;
 				foreach($perlist->get() as $key => $val)
 				{
+					$counter++;
 					$this->mpr[$parent][] = array(
-						"name" => $val["description"],
-						"comment" => $val["data"]["comment"],
+						"name" => $val["name"],
+						"comment" => $val["comment"],
 						"type" => MN_CONTENT,
 						"link" => $this->mk_my_orb("show",array("period" => $val["id"]),"contents"),
 					);
+					if ($counter >= $this->mar[$parent]["meta"]["show_period_count"])
+					{
+						break;
+					};
 				};
 			};
 		}
@@ -2672,7 +2678,7 @@ class site_content extends menuedit
 
 			if ($me_row["meta"]["all_pers"])
 			{
-				$period_instance = get_instance("periods");
+				$period_instance = get_instance("period");
 				$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 			}
 			else
