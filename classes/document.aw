@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.169 2003/04/04 08:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.170 2003/04/08 16:27:53 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -333,6 +333,7 @@ class document extends aw_template
 			//	$docid = $doc["docid"];
 		};
 			
+		$this->dequote(&$doc["lead"]);
 		// if there is no document with that id, then bail out
 		if (!isset($doc))
 		{
