@@ -1,13 +1,31 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>input_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Sisendi tüüp</caption>
+      </property>
+      <property>
             <name>from_folder</name>
             <table>objects</table>
             <group>general</group>
             <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
-            <caption>Piltide kaust</caption>
+            <caption>Süsteemi kaust</caption>
+      </property>
+      <property>
+            <name>from_folder_aw</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE_FOLDER</reltype>
+            <field>meta</field>
+            <caption>AW kaust</caption>
       </property>
       <property>
             <name>width_bigger_than</name>
@@ -70,5 +88,12 @@
                   <caption>Staatus</caption>
             </status>
       </groupinfo>
+      <reltypes>
+            <IMAGE_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Piltide kaust</caption>
+            </IMAGE_FOLDER>
+      </reltypes>
 </properties>
 
