@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.19 2002/09/03 06:33:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.20 2002/09/25 15:03:13 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -43,7 +43,6 @@ class links extends extlinks
 			"search_doc" => $this->mk_orb("search_doc", array()),
 			"extlink" => "checked",
 			"link_image_active_until" => $de->gen_edit_form("active_until",0),
-			"docs" => $this->picker(0,$t->mk_docsel())
 		));
 		return $this->parse();
 	}
