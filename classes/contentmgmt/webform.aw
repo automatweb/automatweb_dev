@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.15 2004/12/20 11:10:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.16 2004/12/20 14:32:27 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -361,11 +361,26 @@ class webform extends class_base
 					"to" => $metamgr->id(),
 					"reltype" => "RELTYPE_METAMGR",
 				));
+				/*
+				$groups = new object_list(array(
+					"class_id" => CL_GROUP,
+					"sort_by" => "groups.priority ASC",
+					"limit" => 1,
+				));
+				foreach($groups->arr() as $group)
+				{
+					arr($group->properties());
+				}*/
+				$nlg = $this->get_cval("non_logged_in_users_group");
+				$g_oid = users::get_oid_for_gid($nlg);
+				$group = obj($g_oid);
 				$dir = obj();
 				$dir->set_parent($arr["obj_inst"]->parent());
 				$dir->set_class_id(CL_MENU);
 				$dir->set_name("sisestused_".$arr["obj_inst"]->id());
 				$dir->set_status(STAT_ACTIVE);
+				$dir->save();
+				$dir->acl_set($group, array("can_add" => 1));
 				$dir->save();
 				$register = obj();
 				$register->set_parent($arr["obj_inst"]->parent());
@@ -1138,7 +1153,8 @@ class webform extends class_base
 				}
 			}
 		}
-		foreach($els as $key => $val)
+		$tmp = $els;
+		foreach($tmp as $key => $val)
 		{
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
@@ -1175,6 +1191,48 @@ class webform extends class_base
 			if($all_props[$key]["type"] == "reset" || $all_props[$key]["type"] == "submit")
 			{
 				$els[$key]["class"] = $els[$key]["style"]["prop"];
+			}
+			if($val["type"] == "select")
+			{
+				foreach(safe_array($val["options"]) as $k => $v)
+				{
+					if(is_oid($k) && $this->can("view", $k))
+					{
+						$obj = obj($k);
+						$value = $obj->comment();
+						if($value == 1)
+						{
+							$els[$key]["selected"][$k] = $k;
+							if($val["multiple"] != 1)
+							{
+								break;
+							}
+						}
+					}
+				}
+			}
+			if($val["type"] == "chooser")
+			{
+				foreach(safe_array($val["options"]) as $k => $v)
+				{
+					if(is_oid($k) && $this->can("view", $k))
+					{
+						$obj = obj($k);
+						$value = $obj->comment();
+						if($value == 1)
+						{
+							if($val["multiple"] == 1)
+							{
+								$els[$key]["value"][$k] = 1;
+							}
+							else
+							{
+								$els[$key]["value"] = $k;
+								break;
+							}
+						}
+					}
+				}
 			}
 		}
 		classload("cfg/htmlclient");
