@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.18 2004/03/09 15:38:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.19 2004/03/25 11:37:07 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -37,13 +37,21 @@ class menu_tree extends class_base
 			case "menus":
 				$ol = new object_list(array(
 					"class_id" => CL_MENU,
-					"status" => STAT_ACTIVE
+					"status" => array(STAT_ACTIVE,STAT_NOTACTIVE),
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"lang_id" => aw_global_get("lang_id"),
+							"type" => MN_CLIENT
+						)
+					)),
 				));
 				$menus = array();
 				for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 				{
 					$menus[$o->id()] = $o->path_str();
 				}
+				asort($menus);
 				$data["options"] = $menus;
 				break;
 
@@ -143,14 +151,17 @@ class menu_tree extends class_base
 
 			if ($this->add_start_from)
 			{
-				$_root = $this->get_object($start_from);
-				$this->object_list[$_root["parent"]][$start_from] = $_root;
+				$_root = obj($start_from);
+				if ($_root->status() == STAT_ACTIVE)
+				{
+					$this->object_list[$_root->parent()][$start_from] = $_root;
+				}
 			}
 
 			reset($this->object_list);
 			$this->level = 0;
 			$this->_recurse_object_list(array(
-				"parent" => $_root["parent"],
+				"parent" => (is_object($_root) ? $_root->parent() : ""),
 			));
 
 			if ($this->layout_mode == 1)
@@ -177,30 +188,30 @@ class menu_tree extends class_base
 	
 		$nsuo = (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"));
 
-		$plist = join(",",$parents);
-		$q = sprintf("SELECT %s,parent,name,class_id,alias,menu.link,objects.metadata as metadata,menu.clickable as clickable FROM objects 
-				LEFT JOIN menu ON (objects.%s = menu.id)
-				WHERE class_id = '%d' AND parent IN (%s) AND status = 2 AND lang_id = %d AND menu.type != %s
-				ORDER BY jrk",
-				OID,OID,CL_PSEUDO,$plist,aw_global_get("lang_id"), MN_FORM_ELEMENT);
-		$this->db_query($q);
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"parent" => $parents,
+			"status" => STAT_ACTIVE,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"lang_id" => aw_global_get("lang_id"),
+					"type" => MN_CLIENT
+				)
+			))
+		));
 		$_parents = array();
-		while($row = $this->db_next())
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			// hmm?
-			$this->dequote($row);
-			$this->dequote($row);
+			$name = $o->name();
 			if ($this->strip_tags)
 			{
-				$row["name"] = strip_tags($row["name"]);
+				$name = strip_tags($name);
 			}
 			$can = true;
 			if ($nsuo)
 			{
-				$meta = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"]
-				));
-				if ($meta["users_only"] == 1)
+				if ($o->meta("users_only") == 1)
 				{
 					$can = false;
 				}
@@ -208,8 +219,8 @@ class menu_tree extends class_base
 			
 			if ($can)
 			{
-				$_parents[] = $row[OID];
-				$this->object_list[$row["parent"]][$row[OID]] = $row;
+				$_parents[] = $o->id();
+				$this->object_list[$o->parent()][$o->id()] = $o;
 			}
 		};
 		if (sizeof($_parents) > 0)
@@ -241,9 +252,9 @@ class menu_tree extends class_base
 		while(list($k,$v) = each($slice))
 		{
 			$slicecounter++;
-			$id = $v[OID];
+			$id = $v->id();
 			$spacer = str_repeat($this->spacer,$this->level * $this->sq);
-			$name = $spacer . $v["name"];
+			$name = $spacer . $v->name();
 				
 			if ($this->single_tpl)
 			{
@@ -264,7 +275,7 @@ class menu_tree extends class_base
 			}
 			elseif ($this->layout_mode == 3)
 			{
-				if ($v["clickable"] != 1 && $this->is_template("ITEM_NOCLICK"))
+				if ($v->prop("clickable") != 1 && $this->is_template("ITEM_NOCLICK"))
 				{
 					$tpl = "ITEM_NOCLICK";
 				}
@@ -277,16 +288,16 @@ class menu_tree extends class_base
 			{
 				$tpl = $this->tlist[$this->level + 1][0];
 			};
-			if ($v["alias"])
+			if ($v->alias())
 			{
 				if (aw_ini_get("menuedit.recursive_aliases") == 0)
 				{
-					$id = $v["alias"];
+					$id = $v->alias();
 				}
 				else
 				{
 					$id = join("/",$this->alias_stack);
-					$id .= ($id == "" ? "" : "/") . $v["alias"];
+					$id .= ($id == "" ? "" : "/") . $v->alias();
 				};
 				$id = $this->cfg["baseurl"]."/".$id;
 			}
@@ -295,39 +306,39 @@ class menu_tree extends class_base
 				$id = $this->cfg["baseurl"]."/".$id;
 			};
 
-			if ($v["link"] != "")
+			if ($v->prop("link") != "")
 			{
-				$url = $v["link"];
+				$url = $v->prop("link");
 				$id = $url;
 			}
 
-			if ($this->children_only && $v[OID] == $this->start_from)
+			if ($this->children_only && $v->id() == $this->start_from)
 			{
 				// do nothing
 			}
 			else
 			{
 				// check if we have already shown this one, so let's not do it again!
-				if (!isset($this->shown[$v[OID]]))
+				if (!isset($this->shown[$v->id()]))
 				{
 					$this->vars(array(
 						"url" => $url,
 						"oid" => $id,
-						"name" => parse_obj_name($v["name"]),
+						"name" => parse_obj_name($v->name()),
 						"spacer" => $spacer,
 					));
 
 					$this->res .= $this->parse($tpl);
-					$this->shown[$v[OID]] = $id;
+					$this->shown[$v->id()] = $id;
 				}
 			};
 
-			$next_slice = $this->object_list[$v[OID]];
+			$next_slice = $this->object_list[$v->id()];
 			if (is_array($next_slice) && (sizeof($next_slice) > 0))
 			{
-				if ($v["alias"])
+				if ($v->alias())
 				{
-					array_push($this->alias_stack,$v["alias"]);
+					array_push($this->alias_stack,$v->alias());
 				};
 
 				if ($this->layout_mode == 3)
@@ -338,7 +349,7 @@ class menu_tree extends class_base
 				$this->level++;
 
 				$this->_recurse_object_list(array(
-					"parent" => $v[OID],
+					"parent" => $v->id(),
 				));
 				
 				$this->level--;
@@ -348,7 +359,7 @@ class menu_tree extends class_base
 					$this->res .= $this->parse("END");
 				};	
 
-				if ($v["alias"])
+				if ($v->alias())
 				{
 						array_pop($this->alias_stack);
 				};
