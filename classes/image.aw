@@ -214,7 +214,14 @@ class image extends aw_template
 				}
 				else
 				{
-					 $replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
+					if ($idata["comment"] != "")
+					{
+						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
+					}
+					else
+					{
+						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0'></a>",$idata["link"],$idata["url"]);
+					}
 				};
 			}
 			else
@@ -224,6 +231,8 @@ class image extends aw_template
 					$tpl = "image_inplace";
 					$inplace = $tpl;
 					// mix seda lauset vaja on?
+					// sellep2rast et kui on 2 pilti pandud - siis esimese jaoks kasutatakse image_inplace subi ja j2rgmiste jaoks
+					// tavalist image subi juba - terryf
 					$this->image_inplace_used = true;
 				}
 				else
@@ -237,7 +246,14 @@ class image extends aw_template
 				}
 				else
 				{
-					$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+					if ($idata["comment"] != "")
+					{
+						$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+					}
+					else
+					{
+						$replacement = sprintf("<img src='%s'>",$idata["url"]);
+					}
 				};
 			}	
 		};
@@ -272,6 +288,43 @@ class image extends aw_template
 		{
 			return false;
 		}
+	}
+
+	////
+	// !saves a image that was uploaded in a form to the db
+	// $name - the name of the image input in form
+	// $parent - the parent object of the image
+	function add_upload_image($name,$parent)
+	{
+		global $HTTP_POST_FILES;
+
+		$_fi = new file;
+		$id = false;
+		if ($HTTP_POST_FILES[$name]['tmp_name'] != "" && $HTTP_POST_FILES[$name]['tmp_name'] != "none")
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_IMAGE,
+				"status" => 2,
+				"name" => $name,
+			));
+
+			if (is_uploaded_file($HTTP_POST_FILES[$name]['tmp_name']))
+			{
+				$f = fopen($HTTP_POST_FILES[$name]['tmp_name'],"r");
+				$fc = fread($f,filesize($HTTP_POST_FILES[$name]['tmp_name']));
+				fclose($f);
+				$fl = $_fi->_put_fs(array("type" => $HTTP_POST_FILES[$name]['type'], "content" => $fc));
+
+				$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
+			}
+		}
+		else
+		{
+			return false;
+		}
+
+		return array("id" => $id,"url" => $this->get_url($fl));
 	}
 }
 ?>
