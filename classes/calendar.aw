@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.22 2003/05/29 15:36:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.23 2003/06/11 14:08:37 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -469,6 +469,10 @@ class calendar extends aw_template
 
 		$this->read_template($tpl);
 		$content = $line = "";
+
+		// heh. funky parse case
+		$today = strtotime(date("F j, Y"));
+
 		for ($i = $real_start; $i <= $real_end; $i = $i + DAY)
 		{
 			$dx = date("dmY",$i);
@@ -479,8 +483,11 @@ class calendar extends aw_template
 				"url" => $arr["day_orb_link"] . "&date=${dxx}",
 			));
 
-
-			if ($i == $arr["now"])
+			if ($i == $today)
+			{
+				$stpl = "today_cell";
+			}
+			elseif ($i == $arr["now"])
 			{
 				$stpl = "current_cell";
 			}
