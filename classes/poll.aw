@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.35 2003/04/30 14:03:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.36 2003/05/08 10:26:33 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -446,6 +446,11 @@ class poll extends aw_template
 			$this->read_any_template("poll.tpl");
 		}
 
+		if ($GLOBALS["answer_id"])
+		{
+			return $this->show($GLOBALS["poll_id"]);
+		}
+
 		$lid = aw_global_get("lang_id");
 		$section = aw_global_get("section");
 
@@ -461,17 +466,17 @@ class poll extends aw_template
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
-/*			if ($def)	 
+			if ($def)	 
 			{	 
 				$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
 			}	 
 			else	 
 			{	 
 				$au = "/?section=".$section."&poll_id=".$ap["oid"]."&answer_id=".$k;	 
-			}*/
+			}
 			$this->dequote(&$v["answer"]);
 			$this->dequote(&$ap["meta"]["answers"][$lid][$k]);
-			$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
+//			$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
 			$this->vars(array(
 				"answer_id" => $k, 
 				"answer" => ($ap["meta"]["answers"][$lid][$k] == "" ? $v["answer"] : $ap["meta"]["answers"][$lid][$k]), 
