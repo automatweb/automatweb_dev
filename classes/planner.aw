@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.118 2003/06/04 11:22:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.119 2003/06/06 14:46:30 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -716,36 +716,14 @@ class planner extends class_base
 	// !used to sort events by start date (ascending)
 	function __asc_sort($el1,$el2)
 	{
-		if ($el1["start"] < $el2["start"])
-		{
-			return -1;
-		}
-		elseif ($el1["start"] > $el2["start"])
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		};
+		return (int)($el1["start"] - $el2["start"]);
 	}
 	
 	////
 	// !used to sort events by start date (descending)
 	function __desc_sort($el1,$el2)
 	{
-		if ($el1["start"] > $el2["start"])
-		{
-			return -1;
-		}
-		elseif ($el1["start"] < $el2["start"])
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		};
+		return (int)($el2["start"] - $el1["start"]);
 	}
 	
 	////
