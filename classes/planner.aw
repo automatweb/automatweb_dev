@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.150 2004/01/05 13:14:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.151 2004/01/05 14:10:25 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -29,26 +29,14 @@
 	@property only_days_with_events type=checkbox ch_value=1 group=advanced
 	@caption Näidatakse ainult sündmustega päevi
 
-	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
-	@caption "Lisa event" nähtav
-
-	@property tab_day_visible type=checkbox ch_value=1 default=1 group=time_settings
-	@caption "Päev" nähtav
-
-	@property tab_week_visible type=checkbox ch_value=1 default=1 group=time_settings
-	@caption "Nädal" nähtav
-
-	@property tab_month_visible type=checkbox ch_value=1 default=1 group=advanced
-	@caption "Kuu" nähtav
-
 	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
 	
 	@property navigator_months type=select group=advanced
 	@caption Kuud navigaatoris
 
-	@property use_tabpanel type=checkbox ch_value=1 default=1 group=advanced
-	@caption Kalendri näitamisel kasutatakse 'tabpanel' komponenti
+	@property my_projects type=checkbox ch_value=1 group=advanced
+	@caption Näita minu projekte
 
 	@property items_on_line type=textbox size=4 group=special rel=1
 	@caption Max. cell'e reas
@@ -121,8 +109,8 @@ define("REP_MONTH",3);
 define("REP_YEAR",4);
 
 /*
-@reltype EVENT_SOURCE value=2 clid=CL_PLANNER
-@caption võta sündmusi teistest kalendritest
+@reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
+@caption võta sündmusi
 
 @reltype EVENT value=3 clid=CL_TASK
 @caption sündmus
@@ -369,11 +357,17 @@ class planner extends class_base
 		};
 
 
-		// also include events from any projects the user participates in
-		$project = aw_global_get("project");
-		$additional_ids = $prj->get_events_from_projects(array(
-			"project_id" => aw_global_get("project"),
-		));
+		// also include events from any projects that are connected to this calender
+		// if the user wants so
+		if ($obj->prop("my_projects") == 1)
+		{
+			$project = aw_global_get("project");
+			$additional_ids = $prj->get_events_from_projects(array(
+				"project_id" => aw_global_get("project"),
+			));
+		};
+
+		// ok, what the fuck is going on here?
 
 		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
 		// XXX: convert to object_list. For this I need to make sure I get all the users of "events" array
@@ -401,13 +395,6 @@ class planner extends class_base
 
 
 		};
-
-		global $XX3;
-		if ($XX3)
-		{
-			var_dump($q);
-		};
-
 
 		$this->db_query($q);
 		$events = array();
@@ -1237,63 +1224,7 @@ class planner extends class_base
 		};
 		$this->actlink = $actlink;
 		
-		$use_tabpanel = false;
-
-		if (!empty($this->conf["use_tabpanel"]))
-		{
-			$use_tabpanel = true;
-		};
-		
 		$today = date("d-m-Y");
-
-		if ($use_tabpanel)
-		{
-			// generate a menu bar
-			// tabpanel really should be in the htmlclient too
-			$this->tp = get_instance("vcl/tabpanel");			
-		
-			if ($this->conf["tab_day_visible"] == 1)
-			{	
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $today,"ctrl" => $ctrl,"type" => "day")),
-					"caption" => "Täna",
-					"active" => ($act == $today),
-				));
-
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "day")),
-					"caption" => "Päev",
-					"active" => ($act == "day"),
-				));
-			};
-
-			if ($this->conf["tab_week_visible"] == 1)
-			{
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "week")),
-					"caption" => "Nädal",
-					"active" => ($act == "week"),
-				));
-			};
-		
-			if ($this->conf["tab_month_visible"] == 1)
-			{	
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "month")),
-					"caption" => "Kuu",
-					"active" => ($act == "month"),
-				));
-			};
-
-			if ($this->conf["tab_add_visible"] == 1)
-			{
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("new",array("parent" => $parent,"date" => $date,"alias_to" => $id,"return_url" => urlencode($actlink)),"cal_event"),
-					"caption" => "Lisa sündmus",
-					"active" => 0,
-				));
-			};
-		};
 
 		// ctrl is a form controller object
 		// if it's set, we get the information about possible ranges from that form
@@ -1672,12 +1603,6 @@ class planner extends class_base
 		if ($this->no_wrapper)
 		{
 			$retval = $content;
-		}
-		else
-		if ($use_tabpanel)
-		{
-			$vars["content"] = $this->parse();
-                	$retval = $this->tp->get_tabpanel($vars);
 		}
 		else
 		{
@@ -2912,33 +2837,36 @@ class planner extends class_base
 				"class" => "menuButton",
 			));
 
-			$toolbar->add_separator();
-
-			$prj_opts = array("" => "--filtreeri projekt järgi--");
-
-			$users = get_instance("users");
-			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-			$conns = $user->connections_to(array(
-				"from.class_id" => CL_PROJECT,
-			));
-
-			foreach($conns as $conn)
+			if ($arr["obj_inst"]->prop("my_projects") == 1)
 			{
-				$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
+				$toolbar->add_separator();
+
+				$prj_opts = array("" => "--filtreeri projekt järgi--");
+
+				$users = get_instance("users");
+				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+				$conns = $user->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				foreach($conns as $conn)
+				{
+					$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
+				};
+
+				$toolbar->add_cdata("&nbsp;&nbsp;".html::select(array(
+					"name" => "prj",
+					"options" => $prj_opts,
+					"selected" => $arr["request"]["project"],
+				)));
+
+				$toolbar->add_button(array(
+					"name" => "refresh",
+					"tooltip" => "Reload",
+					"url" => "javascript:document.changeform.project.value=document.changeform.prj.value;document.changeform.submit();",
+					"img" => "refresh.gif",
+				));
 			};
-
-			$toolbar->add_cdata("&nbsp;&nbsp;".html::select(array(
-				"name" => "prj",
-				"options" => $prj_opts,
-				"selected" => $arr["request"]["project"],
-			)));
-
-			$toolbar->add_button(array(
-				"name" => "refresh",
-				"tooltip" => "Reload",
-				"url" => "javascript:document.changeform.project.value=document.changeform.prj.value;document.changeform.submit();",
-				"img" => "refresh.gif",
-			));
                 };
 	}
 
