@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.57 2003/07/07 09:30:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.58 2003/07/08 10:03:22 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -173,6 +173,11 @@
 	@property export type=callback callback=callback_get_export_options group=import_export store=no
 	@caption Eksport
 
+	@property sort_by type=select table=objects field=meta method=serialize group=show
+	@caption Dokumente j&auml;rjestatakse
+
+	@property sort_ord type=select table=objects field=meta method=serialize group=show
+
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
@@ -304,6 +309,22 @@ class menu extends class_base
 				};
 				break;	
 
+			case "sort_by":
+				$data['options'] = array(
+					'' => "",
+					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
+					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
+					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
+					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+				);
+				break;
+
+			case "sort_ord":
+				$data['options'] = array(
+					'DESC' => "Suurem (uuem) enne",
+					'ASC' => "V&auml;iksem (vanem) enne",
+				);
+				break;
 		};
 		return $retval;
 	}

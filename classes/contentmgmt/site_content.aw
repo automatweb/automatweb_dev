@@ -794,15 +794,6 @@ class site_content extends menuedit
 				$this->restore_handle();
 			};
 
-			if ($check_acl)
-			{
-				// sellele menle pole oigusi, me ei n�ta seda
-				if (not($this->can("view",$row["oid"])))
-				{
-					continue;
-				};
-			};
-
 			// only show content menus
 			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB && $row["mtype"] != MN_PMETHOD)
 			{
@@ -908,6 +899,15 @@ class site_content extends menuedit
 			}
 
 			$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
+
+			if ($check_acl)
+			{
+				// sellele menle pole oigusi, me ei n�ta seda
+				if (not($this->can("view",$row["oid"])))
+				{
+					continue;
+				};
+			};
 			
 			if ($cnt == $total && $this->is_template($mn."_END"))
 			{
@@ -2780,7 +2780,18 @@ class site_content extends menuedit
 			$cnt = 0;
 			if ($ordby == "")
 			{
-				$ordby = aw_ini_get("menuedit.document_list_order_by");
+				if ($me_row["meta"]["sort_by"] != "")
+				{
+					$ordby = $me_row["meta"]["sort_by"];
+					if ($me_row["meta"]["sort_ord"] != "")
+					{
+						$ordby .= " ".$me_row["meta"]["sort_ord"];
+					}
+				}
+				else
+				{
+					$ordby = aw_ini_get("menuedit.document_list_order_by");
+				}
 			}
 
 			if ($ordby == "")

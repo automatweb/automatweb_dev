@@ -507,6 +507,23 @@
             <field>export</field>
             <caption>Eksport</caption>
       </property>
+      <property>
+            <name>sort_by</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>show</group>
+            <caption>Dokumente j&amp;auml;rjestatakse</caption>
+      </property>
+      <property>
+            <name>sort_ord</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>show</group>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>

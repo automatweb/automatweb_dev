@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.29 2003/07/04 13:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.30 2003/07/08 10:03:22 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -181,7 +181,8 @@ class doc extends class_base
 				break;
 
 			case "calendar_relation":
-				$data["options"] = array(-1 => "puudub") + $this->calendar_list;
+				$cl = new aw_array($this->calendar_list);
+				$data["options"] = array(-1 => "puudub") + $cl->get();
 				break;
 
 			case "duration":
@@ -257,36 +258,50 @@ class doc extends class_base
 
 			case "tm":
 				$modified = time();
-				$tm = $data["value"];
-				list($_date, $_time) = explode(" ", $tm);
+				list($_date, $_time) = explode(" ", $data["value"]);
 				list($hour, $min) = explode(":", $_time);
-				list($day,$mon,$year) = explode("/",$_date);
 
-				$ts = mktime($hour,$min,0,$mon,$day,$year);
-				if ($ts)          
+				$try = explode("/",$_date);
+				if (count($try) < 3)
+				{
+					$ts = 0;
+				}
+				else
+				{
+					list($day,$mon,$year) = explode("/",$_date);
+
+					$ts = mktime($hour,$min,0,$mon,$day,$year);
+				}
+
+				if ($ts > (3600*24*400))
 				{
 					$modified = $ts;
 				}
 				else
 				{
 					// 2kki on punktidega eraldatud
+					if ($_date == "")
+					{
+						$_date = $data["value"];
+					}
 					list($day,$mon,$year) = explode(".",$_date);
 					$ts = mktime($hour,$min,0,$mon,$day,$year);
 					if ($ts)
-					{        
+					{
 						$modified = $ts;
-					}                
+					}	
 					else
-					{    
-                                       		// 2kki on hoopis - 'ga eraldatud?
+					{
+						// 2kki on hoopis - 'ga eraldatud?
 						list($day,$mon,$year) = explode("-",$_date);
 						$ts = mktime($hour,$min,0,$mon,$day,$year);
-						if ($ts)       
+						if ($ts)
 						{
 							$modified = $ts;
 						}
 					}
-				};
+				}
+
 				// we need this later too
 				$this->_modified = $modified;
 				break;
