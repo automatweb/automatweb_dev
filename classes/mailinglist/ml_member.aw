@@ -1,51 +1,125 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.13 2003/04/03 22:54:16 duke Exp $
+// ml_member.aw - Mailing list member
 
-class ml_member extends aw_template
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property conf_obj type=objpicker clid=CL_ML_LIST_CONF
+	@caption Vali konfiguratsioon
+
+	@property fchange type=text store=no editonly=1 group=fillout
+	@caption Muuda
+
+	@groupinfo fillout caption=Täida_vorm submit=no
+
+	@classinfo syslog_type=ST_MAILINGLIST_MEMBER
+
+*/
+
+class ml_member extends class_base
 {
 	function ml_member()
 	{
-		$this->init("mailinglist/ml_member");
+		$this->init(array(
+			"tpldir" => "mailinglist/ml_member",
+			"clid" => CL_ML_MEMBER,
+		));
 		lc_load("definition");
 	}
 
-	////
-	//! Näitab uue liikme lisamist
-	function orb_new($arr)
+	function get_property($args)
 	{
-		extract($arr);
-		$this->mk_path($parent,"Lisa meililisti liige");
-		$this->read_template("add.tpl");
-		
-		$this->vars(array(
-			"conf" => $this->picker(0, $this->list_objects(array("class" => CL_ML_LIST_CONF))),
-			"reforb" => $this->mk_reforb("submit_new", array("parent" => $parent))
-		));
-		return $this->parse();
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "conf_obj":
+				if (isset($args["obj"]["oid"]))
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+			case "fchange":
+				if (empty($args["obj"]["oid"]))
+				{
+					return PROP_IGNORE;
+				};
+				$conf_obj = $args["obj"]["meta"]["conf_obj"];
+				if (empty($conf_obj))
+				{
+					$data["error"] = "The configuration object for this list member has not been set (try deleting the member and recreting it, after making sure that the list has a configuration object set)!";
+					$retval = PROP_ERROR;
+				}
+				else
+				{
+					$mlc_inst = get_instance("mailinglist/ml_list_conf");
+					$fl = $mlc_inst->get_forms_by_id($conf_obj);
+
+					$fid = $args["request"]["fid"];
+					// if fid is set, use that, if not, take the forst from the conf
+					if (!$fid)
+					{
+						list($fid, ) = each($fl);
+					}
+					$f = get_instance("formgen/form");
+					$fparse = $f->gen_preview(array(
+						"id" => $fid,
+						"entry_id" => $args["obj"]["meta"]["form_entries"][$fid],
+						"reforb" => $this->mk_reforb("submit",array(
+							"id" => $args["obj"]["oid"],
+							"fid" => $fid,
+							"group" => $this->group,
+				
+						))
+					));
+
+					$this->read_template("member_change.tpl");
+					$this->group = $data["group"];
+					$this->vars(array(
+						"editform" => $fparse,
+						"selecter" => $this->make_form_selecter($fl, $args["obj"]["oid"], $fid),
+						"l_sent" => $this->mk_my_orb("sent",array("id" => $args["obj"]["oid"],"lid" => $lid)),
+					));
+					$data["value"] = $this->parse();
+				};
+				break;
+		}
+		return $retval;
 	}
 
-	////
-	//! Händleb uue liikme lisamist
-	function orb_submit_new($arr)
-	{
-		extract($arr);
+	function set_property($args = array())
+        {
+                $data = &$args["prop"];
+                $retval = PROP_OK;
+                switch($data["name"])
+                {
+			case "conf_obj":
+				if (isset($args["obj"]["oid"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					// dunno really, but that was done in the old orb_submit_new
+					$ml_inst = get_instance("mailinglist/ml_list");
+					$ml_inst->flush_member_cache();
+				};
+				break;
+			case "fchange":
+				$this->handle_submit($args["form_data"]);
+				break;
 
-		$id = $this->new_object(array(
-			"parent" => $parent,
-			"class_id" => CL_ML_MEMBER,
-			"metadata" => array(
-				"conf_obj" => $conf
-			)
-		));
-//		$rule_inst = get_instance("mailinglist/ml_rule");
-//		$rule_inst->exec_dynamic_rules();
-		$ml_inst = get_instance("mailinglist/ml_list");
-		$ml_inst->flush_member_cache();
-		return $this->mk_my_orb("change",array("id" => $id));
+		}
+		return $retval;
 	}
 
 	////
 	//! Händleb muutmist
-	function orb_submit_change($arr)
+	function handle_submit($arr)
 	{
 		extract($arr);
 	
@@ -56,6 +130,7 @@ class ml_member extends aw_template
 			"id" => $fid,
 			"entry_id" => $ob["meta"]["form_entries"][$fid]
 		));
+
 		$ob["meta"]["form_entries"][$fid] = $f->entry_id;
 
 		$row = $this->db_fetch_row("SELECT * FROM ml_member2form_entry WHERE member_id = '$ob[brother_of]' AND form_id = '$fid'");
@@ -124,54 +199,8 @@ class ml_member extends aw_template
 			"metadata" => $ob["meta"]
 		));
 
-//		$rule=get_instance("mailinglist/ml_rule");
-//		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
 		$ml_inst = get_instance("mailinglist/ml_list");
 		$ml_inst->flush_member_cache();
-
-		$this->_log(ST_MAILINGLIST_MEMBER, SA_CHANGE, $namestr, $id);
-		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
-	}
-
-	////
-	//! Näitab liikme muutmist
-	function orb_change($ar)
-	{
-		extract($ar);
-		$o=$this->get_object($id);
-		$this->mk_path($o["parent"],"Muuda meililisti liiget");				
-
-		if (!$o["meta"]["conf_obj"])
-		{
-		  $this->raise_error(ERR_MLM_NOCONF, "The configuration object for this list member has not been set (try deleting the member and recreting it, after making sure that the list has a configuration object set)!", true);
-		}
-
-		$mlc_inst = get_instance("mailinglist/ml_list_conf");
-		$fl = $mlc_inst->get_forms_by_id($o["meta"]["conf_obj"]);
-
-		// if fid is set, use that, if not, take the forst from the conf
-		if (!$fid)
-		{
-			list($fid, ) = each($fl);
-		}
-		$f = get_instance("formgen/form");
-		$fparse = $f->gen_preview(array(
-			"id" => $fid,
-			"entry_id" => $o["meta"]["form_entries"][$fid],
-			"reforb" => $this->mk_reforb("submit_change",array(
-				"id" => $id,
-				"fid" => $fid
-			))
-		));
-
-		$this->read_template("member_change.tpl");
-		$this->vars(array(
-			"editform" => $fparse,
-			"selecter" => $this->make_form_selecter($fl, $id, $fid),
-			"l_sent" => $this->mk_my_orb("sent",array("id" => $id,"lid" => $lid)),
-		));
-
-		return $this->parse();
 	}
 
 	////
@@ -260,7 +289,7 @@ class ml_member extends aw_template
 				$this->vars(array(
 					"fname" => $dat[$_fid],
 					"fid" => $_fid,
-					"link" => $this->mk_my_orb("change", array("id" => $id, "fid" => $_fid))
+					"link" => $this->mk_my_orb("change", array("id" => $id, "fid" => $_fid, "group" => $this->group))
 				));
 				if ($fid == $_fid)
 				{
