@@ -353,7 +353,8 @@ class shop extends shop_base
 				"item_id" => $row["oid"],
 				"price" => $row["price"],
 				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
-				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section))
+				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section)),
+				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),"shop_item")
 			));
 			$tp+=(double)$shopping_cart["items"][$row["oid"]]["cnt"]*(double)$row["price"];	// selle arvutame p2rast kogusummast maha
 																																			// et saada korvi hind = baashind + selle lehe asjade hind
@@ -363,7 +364,8 @@ class shop extends shop_base
 		$this->vars(array(
 			"tot_price" => (double)$shopping_cart["price"]-(double)$tp,	
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
-			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section))
+			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section)),
+			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item")
 		));
 		return $this->parse();
 	}
@@ -982,7 +984,8 @@ class shop extends shop_base
 					}
 				}
 				$this->vars(array(
-					"ITEM_REP_N" => $ir
+					"ITEM_REP_N" => $ir,
+					"change" => $this->mk_my_orb("change", array("id" => $row["brother_of"]), "shop_item")
 				));
 				$pari .= $this->parse("PAR_ITEM");
 				$this->restore_handle();
@@ -1018,6 +1021,7 @@ class shop extends shop_base
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent)),
+			"add_item" => $this->mk_my_orb("new", array("parent" => $parent),"shop_item")
 		));
 		return $this->parse();
 	}

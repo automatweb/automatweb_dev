@@ -23,7 +23,8 @@ class shop_item extends shop_base
 
 			$this->vars(array(
 				"reforb" => $this->mk_reforb("new", array("parent" => $parent,"reforb" => 0,"step" => 2)),
-				"types" => $this->picker(0,$this->listall_item_types(FOR_SELECT))
+				"types" => $this->picker(0,$this->listall_item_types(FOR_SELECT)),
+				"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
 			));
 			return $this->parse();
 		}
@@ -42,7 +43,8 @@ class shop_item extends shop_base
 			$this->vars(array( 
 				"item" => $f->gen_preview(array(
 										"id" => $itt["form_id"],
-										"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type))
+										"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type)),
+										"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$parent
 									)),
 				"menus" => $this->multiple_option_list(array(),$o->get_list())
 			));
@@ -85,7 +87,7 @@ class shop_item extends shop_base
 			// now also set the item to be a brother of itself, so we can user brother_of for joining purposes l8r
 			$this->upd_object(array("oid" => $id, "brother_of" => $id));
 		}
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	////
@@ -147,9 +149,10 @@ class shop_item extends shop_base
 			"type" => $itt["name"],
 			"price_eq" => $eq["name"],
 			"per_from" => $de->gen_edit_form("per_from", $o["per_from"],2001,2010),
-			"sel_period" => $this->mk_orb("repeaters", array("id" => $o["per_event_id"]),"planner"),
+			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"planner"),
 			"per_cnt" => $o["per_cnt"],
-			"per_prices" => $this->mk_orb("set_per_prices", array("id" => $id))
+			"per_prices" => $this->mk_my_orb("set_per_prices", array("id" => $id)),
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"]
 		));
 		return $this->parse();
 	}
@@ -160,7 +163,7 @@ class shop_item extends shop_base
 	{
 		extract($arr);
 		$this->db_query("UPDATE shop_items SET redir = '$redir' WHERE id = '$id'");
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	////
@@ -242,7 +245,7 @@ class shop_item extends shop_base
 			// just delete all brothaz
 			$this->db_query("UPDATE objects SET status = 0 WHERE class_id = ".CL_SHOP_ITEM." AND brother_of = $id");
 		}
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function submit_opts($arr)
@@ -328,7 +331,7 @@ class shop_item extends shop_base
 
 		$this->db_query("UPDATE shop_items SET price='$price',has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , price_eq = '$price_eq',calendar_id = '$calendar_id',per_from = '$per_from',per_event_id = '$event_id',per_cnt = '$per_cnt' WHERE id = $id");
 
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	////
@@ -337,7 +340,7 @@ class shop_item extends shop_base
 	{
 		extract($arr);
 		$it = $this->get_item($id);
-		$this->mk_path($it["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda</a> / Muuda hindu");
+		$this->mk_path($it["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda</a> / Muuda hindu");
 		$this->read_template("set_per_prices.tpl");
 
 		load_vcl("date_edit");
@@ -408,7 +411,7 @@ class shop_item extends shop_base
 			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
 			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price) VALUES($id,$tfrom,$tto,'".$price[0]."')");
 		}
-		return $this->mk_orb("set_per_prices", array("id" => $id));
+		return $this->mk_my_orb("set_per_prices", array("id" => $id));
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.25 2001/06/21 07:37:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.26 2001/06/21 14:10:47 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -565,7 +565,14 @@ $orb_defs["form"] = "xml";
 
 			if ($form_action == "")
 			{
-				$form_action = "/automatweb/reforb.".$GLOBALS["ext"];
+				if (stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false)
+				{
+					$form_action = "/automatweb/reforb.".$GLOBALS["ext"];
+				}
+				else
+				{
+					$form_action = "/reforb.".$GLOBALS["ext"];
+				}
 			}
 			$form_action = $GLOBALS["baseurl"].$form_action;
 
