@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="document">
-		<action name="new" public="1">
+		<action name="new" caption="New document" is_public="1">
 			<function name="add">
 				<arguments>
 					<required name="parent" acl="add"/>
@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="change" public="1">
+		<action name="change" caption="Edit document" is_public="1">
 			<function name="change">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -62,7 +62,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="sellang">
 			<function name="sel_lang_bros">
 				<arguments>
@@ -89,7 +88,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="sel_menus">
 			<function name="sel_menus">
 				<arguments>
@@ -97,7 +95,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="submit_menus">
 			<function name="submit_menus">
 				<arguments>
@@ -105,7 +102,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="archive">
 			<function name="show_archive">
 				<arguments>
@@ -114,7 +110,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="submit_archive">
 			<function name="submit_archive">
 				<arguments>

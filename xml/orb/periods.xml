@@ -34,7 +34,7 @@
 			</function>
 		</action>
 
-		<action name="list" default="1" nologin="1" public="1">
+		<action name="list" default="1" nologin="1" is_public="1" caption="List">
 			<function name="site_list">
 				<arguments>
 				</arguments>

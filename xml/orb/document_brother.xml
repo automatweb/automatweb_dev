@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="document_brother" extends="document">
-		<action name="new" public="1">
+		<action name="new" is_public="1">
 			<function name="add">
 				<arguments>
 					<required name="parent"/>

@@ -43,7 +43,7 @@
 			</function>
 		</action>
 		
-		<action name="change_pwd" public="1">
+		<action name="change_pwd" is_public="1" caption="Change password">
 			<function name="change_pwd">
 				<arguments>
 					<optional name="id"/>
@@ -78,7 +78,7 @@
 			</function>
 		</action>
 
-		<action name="logout" public="1" nologin="1">
+		<action name="logout" is_public="1" nologin="1" caption="Log out">
 			<function name="orb_logout">
 				<arguments>
 				</arguments>
@@ -179,7 +179,7 @@
 			<function name="show_user_info"/>
 		</action>
 
-		<action name="udata" public="1">
+		<action name="udata" is_public="1" caption="Edit information">
 			<function name="do_change_site">
 				<arguments>
 					<optional name="fid" type="int"/>
