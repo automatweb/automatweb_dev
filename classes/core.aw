@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.16 2001/06/01 02:30:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.17 2001/06/01 02:47:42 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -107,8 +107,8 @@ class core extends db_connector
 
 		$metadata[$key] = $value;
 		$newmeta = $xml->xml_serialize($metadata);
-		$this->quote($metadata);
-		$q = "UPDATE objects SET medadata = '$metadata' WHERE oid = '$oid'";
+		$this->quote($newmeta);
+		$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
 		$this->db_query($q);
 		return true;
 	}
@@ -660,7 +660,7 @@ class core extends db_connector
 		extract($args);
 		$this->db_query("SELECT COUNT(*) AS cnt
 					FROM objects
-					WHERE class_id = $class AND status != 0 AND parent = '$parent'";
+					WHERE class_id = $class AND status != 0 AND parent = '$parent'");
 		$row = $this->db_next();
 		return $row["cnt"];
 	}
