@@ -1,6 +1,6 @@
 <form method="POST" action="/index.{VAR:ext}">
 <span style="font-family: Arial, Helvetica; font-size: 12px">
-<strong>Unustasid oma parooli?</strong><br><br>
+<strong></strong>
 Sisestage oma kasutajanimi või e-posti aadress ning teile meilitakse link, millele klikkides pääsete parooli muutmise lehele.<br><br>
 Probleemide puhul palun võtke ühendust aadressil <a href="mailto:{VAR:webmaster}">{VAR:webmaster}</a>.
 </span>
