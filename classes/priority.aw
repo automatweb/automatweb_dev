@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.5 2003/02/21 13:12:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.6 2003/11/10 19:00:49 duke Exp $
 // priority.aw - prioriteedi objekt
 /*
 	@default table=objects
@@ -17,18 +17,17 @@ class priority extends class_base
 	function priority()
 	{
 		$this->init(array(
-			"tpldir" => "priority",
 			"clid" => CL_PRIORITY,
 		));
 	}
 
-	function callback_get_pri_list($args = array())
+	function callback_get_pri_list($arr)
 	{
-		$obj = $this->get_object($args["obj"]["oid"]);
+		$obj = $arr["obj_inst"];
 		$nodes = array();
 		$uu = get_instance("users_user");
 		$grouplist = $uu->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
-		$prilist = new aw_array($obj["meta"]["pri"]);
+		$prilist = new aw_array($obj->meta("pri"));
 		$max = 0;
 		$idx = 0;
 		foreach($prilist->get() as $key => $val)
@@ -68,15 +67,15 @@ class priority extends class_base
 		return $tmp;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
-		$form_data = &$args["form_data"];
+		$data = &$arr["prop"];
+		$form_data = &$arr["request"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "pri":
-				$grps = $args["form_data"]["grps"];
+				$grps = $form_data["grps"];
 				if (is_array($grps))
 				{
 					foreach($grps as $g_id => $g_data)
@@ -94,48 +93,19 @@ class priority extends class_base
 		return $retval;
 	}
 
-	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		return aw_serialize($row);
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = unserialize($str);
-		$row["parent"] = $parent;
-		$id = $this->new_object($row);
-		return true;
-	}
-
 	function get_groups($id)
 	{
-		$ob = $this->get_object($id);
+		$ob = new object($id);
+		$meta = $ob->meta();
 		$ret = array();
-		if (is_array($ob["meta"]["pri"]))
+		if (is_array($meta["pri"]))
 		{
-			foreach($ob["meta"]["pri"] as $idx => $gdata)
+			foreach($meta["pri"] as $idx => $gdata)
 			{
 				$ret[$gdata["grp"]] = $gdata["pri"];
 			}
 		}
 		return $ret;
 	}
-}
+};
 ?>
