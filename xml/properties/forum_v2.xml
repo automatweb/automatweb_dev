@@ -1,0 +1,94 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>topic_folder</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOPIC_FOLDER</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teemade kataloog</caption>
+      </property>
+      <property>
+            <name>address_folder</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Listiliikmete kataloog</caption>
+      </property>
+      <property>
+            <name>container</name>
+            <type>text</type>
+            <store>no</store>
+            <group>container</group>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konteiner</caption>
+      </property>
+      <property>
+            <name>show</name>
+            <type>callback</type>
+            <callback>callback_gen_contents</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>contents</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Foorumi sisu</caption>
+      </property>
+      <property>
+            <name>add_topic</name>
+            <type>callback</type>
+            <callback>callback_gen_add_topic</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>add_topic</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lisa teema</caption>
+      </property>
+      <property>
+            <name>add_comment</name>
+            <type>callback</type>
+            <callback>callback_gen_add_comment</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>add_comment</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lisa kommentaar</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_FORUM</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <container>
+                  <caption>Foorum</caption>
+                  <submit>no</submit>
+            </container>
+            <contents>
+                  <caption>Sisu</caption>
+                  <submit>no</submit>
+                  <parent>container</parent>
+            </contents>
+            <add_topic>
+                  <caption>Lisa teema</caption>
+                  <parent>container</parent>
+            </add_topic>
+            <add_comment>
+                  <caption>Lisa kommentaar</caption>
+                  <parent>container</parent>
+            </add_comment>
+      </groupinfo>
+</properties>
+
