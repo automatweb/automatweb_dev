@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.9 2003/02/05 03:54:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.10 2003/03/12 14:02:01 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -13,10 +13,10 @@
 	@default field=meta
 	@default method=serialize
 
-	@property xml_definition type=fileupload 
+	@property xml_definition type=fileupload editonly=1
 	@caption Uploadi vormi fail
 
-	@property preview type=text store=no	
+	@property preview type=text store=no editonly=1
 	@caption Definitsioon
 	
 	property property_list type=callback callback=callback_get_prop_list editonly=1
@@ -88,6 +88,16 @@ class cfgform extends class_base
 						$data["value"] = $contents;
 					};
 				};
+				break;
+
+			case "subclass":
+				// do not overwrite subclass if it was not in the form
+				// hum .. this is temporary fix of course. yees --duke
+				if (empty($args["form_data"]["subclass"]))
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
 		}
 		return $retval;
 	}
@@ -295,7 +305,7 @@ class cfgform extends class_base
 
 	function callback_pre_save($args = array())
 	{
-		if ($args["form_data"]["subclass"])
+		if (isset($args["form_data"]["subclass"]))
 		{
 			$coredata = &$args["coredata"];
 			$coredata["subclass"] = $args["form_data"]["subclass"];
