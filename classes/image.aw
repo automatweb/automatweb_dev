@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.125 2005/01/19 21:27:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.126 2005/01/19 22:28:05 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -41,7 +41,7 @@
 	@property link type=textbox table=images field=link group=settings
 	@caption Link
 
-	@property newwindow type=checkbox ch_value=1 table=images field=newwindowa group=settings
+	@property newwindow type=checkbox ch_value=1 table=images field=newwindow group=settings
 	@caption Uues aknas
 
 	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize group=settings

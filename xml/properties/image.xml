@@ -8,15 +8,6 @@
             <field>subclass</field>
       </property>
       <property>
-            <name>ord</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>textbox</type>
-            <size>3</size>
-            <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
-      </property>
-      <property>
             <name>file</name>
             <group>general</group>
             <table>images</table>
@@ -88,7 +79,7 @@
       </property>
       <property>
             <name>link</name>
-            <group>general</group>
+            <group>settings</group>
             <table>images</table>
             <type>textbox</type>
             <field>link</field>
@@ -96,7 +87,7 @@
       </property>
       <property>
             <name>newwindow</name>
-            <group>general</group>
+            <group>settings</group>
             <table>images</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -105,7 +96,7 @@
       </property>
       <property>
             <name>no_print</name>
-            <group>general</group>
+            <group>settings</group>
             <table>objects</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -177,6 +168,15 @@
             <store>no</store>
       </property>
       <property>
+            <name>ord</name>
+            <group>settings</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <size>3</size>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>resize_warn</name>
             <group>general</group>
             <table>objects</table>
@@ -190,6 +190,9 @@
             <syslog_type>ST_IMAGE</syslog_type>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
             <img2>
                   <caption>Suur pilt</caption>
             </img2>
