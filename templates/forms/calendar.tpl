@@ -34,6 +34,7 @@
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
 <tr class="aste03">
 <td class="celltext" align="center">Objekt</td>
+<td class="celltext" align="center">Seoseelement</td>
 <td class="celltext" align="center">Algus</td>
 <td class="celltext" align="center">Arv</td>
 <td class="celltext" align="center">Tabel</td>
@@ -42,6 +43,7 @@
 <!-- SUB: LINE -->
 <tr class="aste04">
 <td class="celltext">{VAR:name}</td>
+<td class="celltext">{VAR:rel}</td>
 <td class="celltext">{VAR:start}</td>
 <td class="celltext">{VAR:cnt}</td>
 <td class="celltext">{VAR:table}</td>

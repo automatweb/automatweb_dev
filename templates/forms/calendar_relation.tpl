@@ -8,6 +8,10 @@
 <td class="celltext"><select name="cal_id">{VAR:target_objects}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Seoseelement:</td>
+<td class="celltext"><select name="el_relation">{VAR:relation_els}</select></td>
+</tr>
+<tr class="aste01">
 <td class="celltext">Sündmuse alguse element:</td>
 <td class="celltext"><select name="el_start">{VAR:start_els}</select></td>
 </tr>
