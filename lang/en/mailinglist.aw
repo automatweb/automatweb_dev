@@ -59,4 +59,9 @@ $lc_mailinglist["LC_MAILINGLIST_ADD_LINK"] = "Add link";
 $lc_mailinglist["LC_MAILINGLIST_ADDRESS"] = "Address";
 $lc_mailinglist["LC_MAILINGLIST_CHOOSE_LIST_SEND"] = "Choose in which list we send";
 
+$lc_mailinglist["LC_MAILINGLIST_DATE"] = "kuupaev";
+
+$lc_mailinglist["LC_MAILINGLIST_NUMBER"] = "Number";
+
+
 ?>

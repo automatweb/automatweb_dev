@@ -11,4 +11,5 @@ $lc_promo["LC_PROMO_TEMPLATE_FOR_CHANGE"] = "Template (for changing)";
 $lc_promo["LC_PROMO_TEMPLATE_FOR_SHOW"] = "Template (for showing)";
 $lc_promo["LC_PROMO_SHOW"] = "Save";
 
+$lc_promo["LC_PROMO_WHTOUT_TITLE"] = "Ilma pealkirjata";
 ?>

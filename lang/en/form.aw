@@ -304,4 +304,105 @@ $lc_form["LC_FORMS_RADIO_VALUE"] = "Radiobutton value:";
 
 $lc_form["LC_FORMS_CHOOSE_MOVE_FOLDERS"] = "Choose folders where elements can be moved";
 $lc_form["LC_FORMS_IGNORE_TEXT"] = "Ignore text";
+
+$lc_form["LC_FORMS_SMALLDS_FORMS"]="Vormid";
+$lc_form["LC_FORMS_FORMCHAINS"]="Vormipärjad";
+
+//translate.tpl
+$lc_form["LC_FORMS_ELEMENTS_TEXTS"]="Elementide tekstid";
+$lc_form["LC_FORMS_LISTBOXES_CONTENT"]="Listboxide sisu";
+$lc_form["LC_FORMS_MLISTBX_CONTENT"]="Multiple listboxide sisu";
+$lc_form["LC_FORMS_SUBSCRIPTS_CONTENT"]="Subskriptide sisu";
+$lc_form["LC_FORMS_DEFAULT_TEXTS_CONTENT"]="Default tekstide sisu";
+$lc_form["LC_FORMS_ERRORS_CONTENT"]="Veateadete sisu";
+$lc_form["LC_FORMS_BUTTONTS_TEXTS"]="Nuppude tekstid";
+
+//SETTINGS_FOLDER.TPL
+$lc_form["LC_FORMS_CHOOSE_CATALOGUE_WHERE_ADD_TYPELEMENT"]="Kataloog kuhu lisatakse t&uuml;&uuml;pelementide baasil tehtud elemendid";
+$lc_form["LC_FORMS_CHOOSE_TIEELEMENTFORMS"]="Vali seoseelementide formid";
+
+//settings.tpl
+$lc_form["LC_FORMS_ALLOW_HTML"]="Luba väljundites HTMLi näitamist";
+$lc_form["LC_FORMS_CONTROL_FORM_STATUS"]="Kontrollida vormi staatust lehelt lahkumisel";
+$lc_form["LC_FORMS_TEXT_DISPLAY_USER"]="Tekst, mida kasutajale kuvada";
+$lc_form["LC_FORMS_SHOW_ENTRIES"]="N&auml;ita sisestust";
+
+//search_sel.tpl
+$lc_form["LC_FORMS_PAGE"]="Lehek&uuml;lg";
+$lc_form["LC_FORMS_SEARCH_ONLY_FRM_FORM"]="Otsi ainult formist, mitte p&auml;rgadest";
+$lc_form["LC_FORMS_SEARCH_FROM_CHAIN"]="otsi p&auml;rjast";
+$lc_form["LC_FORMS_USE_NEW_SEARCH"]="Kas kasutada uut otsingut";
+$lc_form["LC_FORMS_SEARCH_FROM_FORMAS"]="Otsing formidest";
+$lc_form["LC_FORMS_CHOOSE_FORMS_WH_SEARCH"]="Vali formid, millest otsitakse";
+$lc_form["LC_FORMS_CHOOSE_OUTPUT_WH_DP_RESULTS"]="Vali v&auml;ljund, millega tulemusi kuvatakse";
+$lc_form["LC_FORMS_SEARCH_FROM_FORMCHAINS"]="Otsing formi p&auml;rjast";
+$lc_form["LC_FORMS_CHOOSE_CHAIN_WH_SEARCH"]="Vali p&auml;rg, millest otsitakse";
+
+
+$lc_form["LC_FORMS_TRANSALTE"]="T&otilde;lgi";
+
+//menu.tpl
+$lc_form["LC_FORMS_CHOOSE_USEABLE_FILTER"]="Vali kasutatav filter";
+$lc_form["LC_FORMS_TABLES"]="Tabelid";
+
+
+$lc_form["LC_FORMS_FILTER_SEARCHFORM"]="Filtri otsinguform";
+
+//admin_tables.tpl
+$lc_form["LC_FORMS_MINGI_HOIATAV_JUTT"]="Tabelite konfiguratsiooni ei salvestata kui leitakse m6ni viga, <br>niiet enne kui siit lehelt &auml;ra l&auml;hed ole kindel<br> et muudatused on salvestatud";
+$lc_form["LC_FORMS_SAVE_DATA_TO_OTHER_TABLE"]="Kas salvestada formi andmed m6nda teise tabelisse";
+$lc_form["LC_FORMS_CHOOSE_TABLES_WH_CAN_SAVE_DATA"]="Vali tabelid, millesse saab andmeid salvestada";
+$lc_form["LC_FORMS_WHERE_MAKE_OBJ"]="Kuhu tehakse objekt";
+$lc_form["LC_FORMS_WH_COLUMN_OBJ_ID"]="Mis tulbas on objekti id";
+$lc_form["LC_FORMS_UNIC_COL_IN_TABLE"]="Unikaalne tulp tabelis";
+$lc_form["LC_FORMS_TABLE"]="Tabel";
+$lc_form["LC_FORMS_CHOOSE_TABLES_WH_RELATED"]="Vali tabelid millega see seotud on";
+$lc_form["LC_FORMS_THIS_TABLE_REAL_COL"]="selles tabelis on relatsioonis tulbaga";
+
+//ADMIN_TABLES.TPL
+$lc_form["LC_FORMS_COLUMN_IN_TABLE"]="Tulp tabelis";
+$lc_form["LC_FORMS_EL_REAL_FILTR_PART"]="Elemendiga seotud filtri osa";
+$lc_form["LC_FORMS_REAL_FORM"]="Seose form";
+$lc_form["LC_FORMS_REAL_EL"]="Seose element";
+$lc_form["LC_FORMS_ONLY_UNIC"]="Ainult unikaalsed";
+$lc_form["LC_FORMS_YEAR"]="Aasta";
+$lc_form["LC_FORMS_MONTH"]="Kuu";
+$lc_form["LC_FORMS_DAY"]="P&auml;ev";
+$lc_form["LC_FORMS_HOUR"]="Tund";
+$lc_form["LC_FORMS_MINUT"]="Minut";
+$lc_form["LC_FORMS_SECUND"]="Sekund";
+$lc_form["LC_FORMS_DATE_FOMAT_SHOW"]="Kuup&auml;eva formaat n&auml;itamisel";
+$lc_form["LC_FORMS_DEFAULT_DATE"]="Default kuup&auml;e";
+$lc_form["LC_FORMS_DATE_IN_ELEMENT"]="Kuup&auml;ev elemendist ";
+$lc_form["LC_FORMS_TIME"]="Kellaaeg";
+$lc_form["LC_FORMS_LINK_IN_NEW_WIN"]="Link uues aknas";
+$lc_form["LC_FORMS_FOLDER_TO_MOVE"]="Folder kuhu liigutada";
+$lc_form["LC_FORMS_URL_TO_MOVE"]="Url kuhu suunata";
+$lc_form["LC_FORMS_NOT_GO_FORW_IN_CHAIN"]="Kas p&auml;rjas ei minda edasi";
+$lc_form["LC_FORMS_NOT_GO_BACK_IN_CHAIN"]="Kas p&auml;rjas minnakse tagasi";
+$lc_form["LC_FORMS_CHOOSE_OUTPUT"]="Vali v&auml;ljund";
+$lc_form["LC_FORMS_ACTIVE_SINCE"]="Aktiivne alates";
+$lc_form["LC_FORMS_ACTIVE_TILL"]="Aktiivne kuni";
+$lc_form["LC_FORMS_HEH_ACT_DATE"]="Arvesta aktiivsuse kuup&auml;evi";
+
+//add_table.tpl
+$lc_form["LC_FORMS_LINK_STYLE"]="Linkide stiil";
+$lc_form["LC_FORMS_PRINT_BUTTON"]="<b>Prindi</b> nupp";
+$lc_form["LC_FORMS_WHACH_LINK_POP"]="Vaata link <i>popup</i>-s";
+$lc_form["LC_FORMS_POPUP_WIN_PARA"]="<i>Popup</i> akna mõõtmed";
+$lc_form["LC_FORMS_SCROLLBAR"]="Kerimisribad";
+$lc_form["LC_FORMS_FIX_SIZE"]="Fikseeritud suurus";
+$lc_form["LC_FORMS_CHOOSE_ELEMENTS"]="Vali elemendid";
+$lc_form["LC_FORMS_ADD_COLU"]="Lisa tulp";
+$lc_form["LC_FORMS_DEL_COLU"]="Kustuta tulp";
+$lc_form["LC_FORMS_CHOOSE_LOOK_EL"]="Vali vaatamise element";
+$lc_form["LC_FORMS_CHOOSE_CHANGE_EL"]="Vali muutmise element";
+
+//add_chain.tpl
+$lc_form["LC_FORMS_AFTER_FILLING_LAST_FORM_SHOW_OUTPUT"]="P&auml;rast viimase formi t&auml;itmist n&auml;idatakse v&auml;ljundit";
+$lc_form["LC_FORMS_FILLING_FORM_SHOW_OUTPUT"]="P&auml;rja t&auml;itmise ajal n&auml;idatakse v&auml;ljundit";
+
+
+$lc_form["LC_FORMS_WH_MENU_LINK_IS"]="Mis men&uuml;&uuml; alla link n2itab";
+
 ?>
