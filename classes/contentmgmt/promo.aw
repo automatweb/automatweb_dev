@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.63 2005/04/05 10:56:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.64 2005/04/05 11:37:38 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1120,7 +1120,8 @@ class promo extends class_base
 						"oid" => $ids,
 						"limit" => $box->prop("ndocs"),
 						"sort_by" => $this->_get_ordby($box),
-						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE)
+						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
+						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 					));
 
 					// now we know the whole list, so just set that
@@ -1150,7 +1151,8 @@ class promo extends class_base
 					$ol = new object_list(array(
 						"oid" => $mt,
 						"sort_by" => $this->_get_ordby($box),
-						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE)
+						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
+						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 					));
 					$mt = $this->make_keys($ol->ids());
 				}
