@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.17 2001/08/08 02:25:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.18 2001/08/08 06:08:10 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -823,10 +823,14 @@ class users extends users_user
 		$t = new db_config;
 		$jfs = unserialize($t->get_simple_config("user_add_forms"));*/
 		$jfs = array();
-		$this->db_query("SELECT objects.*,forms.grp as grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$GLOBALS["SITE_ID"]." AND forms.subtype = ".FSUBTYPE_JOIN);
+		$this->db_query("SELECT objects.*,forms.grp as grp,forms.j_mustfill as j_mustfill FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$GLOBALS["SITE_ID"]." AND forms.subtype = ".FSUBTYPE_JOIN);
 		while ($row = $this->db_next())
 		{
-			$jfs[$row[oid]] = array("group" => $row[grp]);
+			// paneme siia arraysse aint need formid, mida PEAB t2itma, teisi v6ime ignoreerida
+			if ($row["j_mustfill"] == 1)
+			{
+				$jfs[$row["oid"]] = array("group" => $row["grp"]);
+			}
 		}
 
 //			echo "<pre>",var_dump($jfs)."</pre>";
@@ -836,7 +840,7 @@ class users extends users_user
 		// teeme gruppide nimekirja
 		while (list($fid,$ar) = each($jfs))
 		{
-			$groups[$ar[group]][$fid] = $session_filled_forms[$fid];
+			$groups[$ar["group"]][$fid] = $session_filled_forms[$fid];
 //				echo "fid $fid ", $session_filled_forms[$fid],"<br>";
 		}
 
@@ -850,7 +854,9 @@ class users extends users_user
 			while (list($fid,$filled) = each($ar))
 			{
 				if (!$filled)
+				{
 					$all_filled = false;
+				}
 			}
 
 			if ($all_filled)
