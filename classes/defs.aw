@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.137 2004/05/06 12:28:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.138 2004/05/19 16:21:06 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,20 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+
+	function convert_unicode($source)
+	{
+		$retval = str_replace(chr(195).chr(181), "&otilde;", $source);
+		$retval = str_replace(chr(195).chr(149), "&Otilde;", $retval);
+		$retval = str_replace(chr(195).chr(164), "&auml;", $retval);
+		$retval = str_replace(chr(195).chr(188), "&uuml;", $retval);
+		$retval = str_replace(chr(195).chr(182), "&ouml;", $retval);
+
+
+		$retval = str_replace(chr(154), "&Scaron;", $retval);
+
+		return $retval;
+	}
 
 	function obj_link($oid)
 	{
