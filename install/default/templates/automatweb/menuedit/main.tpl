@@ -38,7 +38,7 @@
 
 <!-- SUB: login -->
 <table width="143" border="0" cellspacing="0" cellpadding="0">
-<form action='{VAR:baseurl}/reforb.{VAR:ext}' method="POST">
+<form action='{VAR:baseurl}/index.{VAR:ext}' method="POST">
                     <tr> 
                       <td align="left" valign="top"> 
                         <table width="143" border="0" cellspacing="0" cellpadding="2" class="text">
