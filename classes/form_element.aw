@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.73 2002/09/05 13:59:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.74 2002/09/09 12:29:41 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -539,8 +539,6 @@ class form_element extends aw_template
 					"0" => "Ühekordne",
 					"1" => "Igal sisestusel oma",
 				);
-
-				$defs = $am->get_defs();
 
 				$this->vars(array(
 					"aliaslist" => $this->picker($this->arr["alias"],$aliaslist),
@@ -2015,8 +2013,6 @@ class form_element extends aw_template
 
 					// There can be only one
 					$alias = $am->get_oo_aliases(array("oid" => $this->arr["id"],"ret_type" => GET_ALIASES_FLAT));
-
-					$defs = $am->get_defs();
 
 					$def = $defs[$this->arr["alias_subtype"]];
 
