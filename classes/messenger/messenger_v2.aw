@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.8 2003/10/23 15:58:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.9 2003/10/24 10:54:05 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -133,6 +133,7 @@ class messenger_v2 extends class_base
 			case "user_messenger":
 				$users = get_instance("users");
 				$obj_id = $arr["obj_inst"]->id();
+
 				if ($obj_id == $users->get_user_config(array(
                                                 "uid" => aw_global_get("uid"),
                                                 "key" => "user_messenger")))
@@ -229,7 +230,7 @@ class messenger_v2 extends class_base
                                         "key" => "user_messenger",
                                 ));
 				$obj_id = $arr["obj_inst"]->id();
-                                if(($kb == $obj_id) || ($kb == ''))
+                                if(($kb == $obj_id) || empty($kb))
                                 {
                                         $users->set_user_config(array(
                                                 "uid" => aw_global_get("uid"),
