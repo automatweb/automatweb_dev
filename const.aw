@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.68 2002/07/23 13:00:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.69 2002/08/16 12:52:23 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -172,6 +172,9 @@ define("FSUBTYPE_EV_ENTRY",2);
 // kas seda vormi saab kasutada vormi baasil e-maili
 // actionite tegemiseks?
 define("FSUBTYPE_EMAIL_ACTION",4);
+
+// kas seda vormi kasutatakse kalendri ajavahemike defineerimiseks?
+define("FSUBTYPE_CAL_CONF",8);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
@@ -368,6 +371,7 @@ $error_types = array(
 	ERR_FILE_WRONG_CLASS => "ERR_FILE_WRONG_CLASS",
 	ERR_F_OP_NO_SESSION_FORM => "ERR_F_OP_NO_SESSION_FORM",
 	ERR_SCHED_NOTIMEREP => "ERR_SCHED_NOTIMEREP" ,
-	ERR_FG_NOFORMRELS => "ERR_FG_NOFORMRELS"
+	ERR_FG_NOFORMRELS => "ERR_FG_NOFORMRELS",
+	ERR_FG_TBL_NOSEARCHTBL => "ERR_FG_TBL_NOSEARCHTBL"
 );
 ?>
