@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.95 2003/03/14 14:41:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.96 2003/03/14 15:42:45 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -93,18 +93,23 @@
 
 // naff, naff. I need to create different views that contain different properties. That's something
 // I should have done a long time ago, so that I can create different planners
-define(WEEK,DAY * 7);
-define(REP_DAY,1);
-define(REP_WEEK,2);
-define(REP_MONTH,3);
-define(REP_YEAR,4);
+define("WEEK",DAY * 7);
+define("REP_DAY",1);
+define("REP_WEEK",2);
+define("REP_MONTH",3);
+define("REP_YEAR",4);
 
-define(RELTYPE_SUMMARY_PANE,1);
-define(RELTYPE_EVENT_SOURCE,2);
-define(RELTYPE_EVENT,3);
+define("RELTYPE_SUMMARY_PANE",1);
+define("RELTYPE_EVENT_SOURCE",2);
+define("RELTYPE_EVENT",3);
+
+define("CAL_SHOW_DAY",1);
+define("CAL_SHOW_OVERVIEW",2);
+define("CAL_SHOW_WEEK",3);
+define("CAL_SHOW_MONTH",4);
+
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
-
 classload("calendar");
 class planner extends class_base
 {
@@ -782,20 +787,23 @@ class planner extends class_base
 		switch($type)
 		{
 			case "week":
+				$this->type = CAL_SHOW_WEEK;
 				$tpl = isset($args["week_tpl"]) ? $args["week_tpl"] : "disp_week.tpl";
 				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => $tpl));
 
-				$caption = sprintf("%s - %s",$this->time2date($di["start"],2),$this->time2date($di["end"],2));
+				$caption = sprintf("%s - %s",$this->time2date($di["start"],8),$this->time2date($di["end"],8));
 				$start = $date;
 				break;
 			
 			case "month":
+				$this->type = CAL_SHOW_MONTH;
 				$content = $this->disp_month(array("events" => $events,"di" => $di,"tpl" => "disp_week.tpl"));
-				$caption = sprintf("%s - %s",$this->time2date($di["start"],2),$this->time2date($di["end"],2));
+				$caption = sprintf("%s",$this->time2date($di["start"],7));
 				$start = $date;
 				break;
 
 			case "overview":
+				$this->type = CAL_SHOW_OVERVIEW;
 				$title = CAL_OVERVIEW;
 				list($d1,$m1,$y1) = split("-",date("d-m-Y",$di["start"]));
 				list($d2,$m2,$y2) = split("-",date("d-m-Y",$di["end"]));
@@ -826,6 +834,7 @@ class planner extends class_base
 				break;
 
 			case "day":
+				$this->type = CAL_SHOW_DAY;
 				if (is_array($this->conf))
 				{
 					$tpl = "disp_day2.tpl";
@@ -835,7 +844,7 @@ class planner extends class_base
 					$tpl = "disp_day.tpl";
 				};
 				$content = $this->disp_day(array("events" => $events,"di" => $di,"tpl" => $tpl));
-				$caption = sprintf("%s - %s",$this->time2date($di["start"],2),$this->time2date($di["end"],2));
+				$caption = sprintf("%s",$this->time2date($di["start"],8));
 				$start = $date;
 				break;
 
@@ -918,8 +927,27 @@ class planner extends class_base
 		$mlist = explode("|",LC_MONTH);
 		unset($mlist[0]);
 		$section = aw_global_get("section");
-		$prev = $this->mk_my_orb("view",array("section" => $section,"id" => $id,"type" => $type,"date" => $di["prev"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
-		$next = $this->mk_my_orb("view",array("section" => $section,"id" => $id,"type" => $type,"date" => $di["next"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
+
+		$prev = $this->mk_my_orb("view",array(
+			"section" => $section,
+			"id" => $id,
+			"type" => $type,
+			"date" => $di["prev"],
+			"id" => $id,
+			"ctrl" => $ctrl,
+			"ctrle" => $ctrle,
+		));
+
+		$next = $this->mk_my_orb("view",array(
+			"section" => $section,
+			"id" => $id,
+			"type" => $type,
+			"date" => $di["next"],
+			"id" => $id,
+			"ctrl" => $ctrl,
+			"ctrle" => $ctrle,
+		));
+
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
@@ -1121,14 +1149,27 @@ class planner extends class_base
 					"caption" => $row["name"],
 				));
 				// find the first image
-                                $this->save_handle();
-                                $q = "SELECT target FROM aliases WHERE source = '$row[id]' AND type = 6";
-                                $this->db_query($q);
-                                $row2 = $this->db_next();
-                                if (is_array($row2))
-                                {
-                                        $imgdata = $ia->get_image_by_id($row2["target"]);
-                                        $row["imgurl"] = $imgdata["url"];
+				$this->save_handle();
+				$q = "SELECT target,type FROM aliases WHERE source = '$row[id]'";
+				$this->db_query($q);
+				while($row2 = $this->db_next())
+				{
+					// I want the first image
+					if (empty($row["imgurl"]) && $row2["type"] == CL_IMAGE)
+					{
+						$imgdata = $ia->get_image_by_id($row2["target"]);
+						$row["imgurl"] = $imgdata["url"];
+					};
+
+					if ($row2["type"] == CL_FORUM)
+					{
+						$row["forum_id"] = $row2["target"];
+					}
+
+					if ($row2["type"] == CL_GALLERY_V2)
+					{
+						$row["gallery_id"] = $row2["target"];
+					};
                                 };
                                 $this->restore_handle();
 
@@ -2005,12 +2046,33 @@ class planner extends class_base
 			$c = "";
 
 			$section = aw_global_get("section");
+			$d = get_instance("document");
 	
 			foreach($events as $key => $e)
 			{
 				// draws single cells inside the day
-				$daylink = $this->mk_my_orb("view",array("section" => $section,"id" => $this->id,"type" => "day","date" => date("d-m-Y",$e["start"])));
+				// I need to replace this with calls to doc->gen_preview() -- duke
+				$pv = "";
+				if ($e["class_id"] == CL_DOCUMENT)
+				{
+					$section = $e["id"];
+					if ($this->type == CAL_SHOW_DAY)
+					{
+						$pv = $d->gen_preview(array(
+							"docid" => $e["id"],
+						));
+					};
+				};
+
+				$daylink = $this->mk_my_orb("view",array(
+					"section" => $section,
+					"id" => $this->id,
+					"type" => "day",
+					"date" => date("d-m-Y",$e["start"]),
+				));
+
                                 $this->vars(array(
+					"event_content" => $pv,
                                         "lead" => $e["lead"],
                                         "moreinfo" => $e["moreinfo"],
                                         "title" => $e["title"],
