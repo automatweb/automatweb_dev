@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>survey_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SURVEY_FOLDER</reltype>
+            <caption>Millisesse kataloogi täidetud ankeedid salvestada?</caption>
+      </property>
+      <property>
+            <name>use_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SURVEY_CFGFORM</reltype>
+            <caption>Millist seadete vormi kasutada?</caption>
+      </property>
+      <property>
+            <name>redirect_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIRECT_TO</reltype>
+            <caption>Kuhu ümber suunata</caption>
+      </property>
+      <property>
+            <name>filled_surveys</name>
+            <table>objects</table>
+            <group>filled_surveys</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Täidetud ankeedid</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SURVEY_MANAGER</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <filled_surveys>
+                  <caption>Täidetud ankeedid</caption>
+                  <submit>no</submit>
+            </filled_surveys>
+      </groupinfo>
+      <reltypes>
+            <SURVEY_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kataloog</caption>
+            </SURVEY_FOLDER>
+            <SURVEY_CFGFORM>
+                  <value>2</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </SURVEY_CFGFORM>
+            <REDIRECT_TO>
+                  <value>3</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Kuhu peale täitmist suunata</caption>
+            </REDIRECT_TO>
+      </reltypes>
+</properties>
+
