@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.78 2004/07/16 13:39:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.79 2004/07/18 17:29:18 rtoomas Exp $
 
 class admin_menus extends aw_template
 {
@@ -820,7 +820,6 @@ class admin_menus extends aw_template
 		{
 			$params["parent"] = $this->cfg["rootmenu"];
 		}
-	
 		$key = "admin_menus_".$params["parent"]."_".join("_", map2("%s_%s", $params));
 		$ts = $this->db_fetch_field("SELECT max(modified) as mod FROM objects WHERE parent = ".$params["parent"], "mod");
 
@@ -922,7 +921,7 @@ class admin_menus extends aw_template
 
 		$per_page = 100;
 		$ft_page = $GLOBALS["ft_page"];
-		$lim = ($ft_page * $per_page).",".$per_page;
+		//$lim = ($ft_page * $per_page).",".$per_page;
 
 		$where = "objects.parent = '$parent' AND
 				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC.",".CL_LANGUAGE."))
@@ -965,14 +964,7 @@ class admin_menus extends aw_template
 			));
 		}
 
-		if(strtolower(aw_ini_get('db.driver'))=='mssql')
-		{
-			$q = "SELECT top $lim objects.* $query";
-		}
-		else
-		{
-			$q = "SELECT objects.* $query LIMIT $lim";
-		}
+		$q = "SELECT objects.* $query";
 		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
