@@ -116,7 +116,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Nõua parooli vahetust esimesel logimisel</caption>
+            <caption>N&amp;otilde;ua parooli vahetust esimesel logimisel</caption>
       </property>
       <property>
             <name>default_acl</name>
