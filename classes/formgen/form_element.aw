@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.74 2004/10/07 14:39:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.75 2004/10/19 11:11:30 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3184,7 +3184,14 @@ class form_element extends aw_template
 				else
 				{
 					$sp = split("_", $this->entry, 10);
-					$html = $this->arr["listbox_items"][$sp[3]];
+					if (isset($this->arr["listbox_lang_items"][aw_global_get("lang_id")][$sp[3]]))
+					{
+						$html = $this->arr["listbox_lang_items"][aw_global_get("lang_id")][$sp[3]];
+					}
+					else
+					{
+						$html = $this->arr["listbox_items"][$sp[3]];
+					}
 				}
 				break;
 
