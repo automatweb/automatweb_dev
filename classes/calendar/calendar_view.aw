@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.25 2005/02/18 13:34:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.26 2005/03/07 16:41:52 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -417,8 +417,6 @@ class calendar_view extends class_base
 		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
 		$arr["cal_inst"]->vars($this->vars);
-
-
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
@@ -448,12 +446,11 @@ class calendar_view extends class_base
 		else
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => RELTYPE_EVENT_SOURCE,
+				"type" => "RELTYPE_EVENT_SOURCE",
 			));
 			$cal_inst = &$arr["cal_inst"];
 			$first_image = $cal_inst->has_feature("first_image");
 			$project_media = $cal_inst->has_feature("project_media");
-
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -755,7 +752,7 @@ class calendar_view extends class_base
 		if ("grouped" == $use_template)
 		{
 			$conns = $this->obj_inst->connections_from(array(
-				"type" => RELTYPE_EVENT_SOURCE,
+				"type" => "RELTYPE_EVENT_SOURCE",
 			));
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.41 2005/03/07 16:14:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.42 2005/03/07 16:41:52 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -379,6 +379,11 @@ class event_search extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "brs",
+			"caption" => t("Reavahetused"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
 			"align" => "center",
@@ -455,6 +460,11 @@ class event_search extends class_base
 					"name" => "${pname}[${sname}][fullview]",
 					"value" => 1,
 					"checked" => ($oldvals[$sname]["fullview"] == 1),
+				)),
+				"brs" => html::checkbox(array(
+					"name" => "${pname}[${sname}][brs]",
+					"value" => 1,
+					"checked" => ($oldvals[$sname]["brs"] == 1),
 				)),
 				"ord" => html::textbox(array(
 					"name" => "${pname}[${sname}][ord]",
@@ -1159,12 +1169,16 @@ class event_search extends class_base
 								));
 							}
 						}
-						if($tabledef[$nms]["clickable"] == 1)
+						if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
 						{
 							$v = html::href(array(
 								"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
 								"caption" => $v,
 							));
+						}
+						if($tabledef[$nms]["brs"] == 1)
+						{
+							$v = nl2br($v);
 						}
 						$aliasmrg->parse_oo_aliases($ekey, $v);
 						$val[] = $v;
