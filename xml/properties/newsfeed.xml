@@ -20,6 +20,16 @@
             <caption>Tüüp</caption>
       </property>
       <property>
+            <name>limittype</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <caption>Milliseid uudiseid näidata?</caption>
+      </property>
+      <property>
             <name>count</name>
             <table>objects</table>
             <group>general</group>
@@ -28,6 +38,16 @@
             <type>textbox</type>
             <size>2</size>
             <caption>Mitu viimast</caption>
+      </property>
+      <property>
+            <name>days</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>2</size>
+            <caption>Mitme viimase päeva omad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_NEWSFEED</syslog_type>
