@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.6 2001/07/12 05:34:34 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -55,6 +55,7 @@ class extlinks extends aw_template {
 							"type" => CL_EXTLINK,
 					));
 		};
+
 		// now, match[3] contains the index inside the aliases array
 		$l = $this->extlinkaliases[$matches[3] - 1];
 		$link = $this->get_link($l["target"]);
@@ -67,8 +68,16 @@ class extlinks extends aw_template {
 				"target" => $link["newwindow"] ? "target='_blank'" : "",
 			);
 
+
 		$replacement = $this->localparse($tpls["link"],$vars);
 		return $replacement;
+	}
+
+	////
+	// !resetib aliased
+	function reset_aliases()
+	{
+		$this->extlinkaliases = "";
 	}
 
 	function save_link($args) {
