@@ -230,8 +230,9 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq , res = $res<br><br>");
+		dbg::p2("controller id $id: evaling $eq <br>");
 		@eval($eq);
+		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br>");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
