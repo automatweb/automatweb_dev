@@ -7,6 +7,8 @@
 				<arguments>
 					<required name="parent" type="int"/>
 					<define name="new" value="1"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
@@ -25,6 +27,8 @@
 					<optional name="parent" type="int"/>
 					<optional name="from"/>
 					<optional name="section"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
 				</arguments>
 			</function>
 		</action>
