@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.2 2004/11/04 11:54:09 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.3 2004/11/17 13:14:30 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -48,7 +48,9 @@ class auth_server_local extends class_base
 		// sisse logida
 		$success = false;
 
-		$q = "SELECT * FROM users WHERE uid = '$credentials[uid]' AND blocked = 0";
+		$_uid = $credentials["uid"];
+		$this->quote(&$_uid);
+		$q = "SELECT * FROM users WHERE uid = '$_uid' AND blocked = 0";
 		$this->db_query($q);
 		$udata = $this->db_next();
 
