@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.18 2003/10/30 14:01:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.19 2003/11/05 13:28:51 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -100,11 +100,16 @@ class admin_folders extends aw_template
 			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
 			"root_name" => "<b>AutomatWeb</b>",
 			"has_root" => empty($this->use_parent) ? true : false,
+			"tree_id" => "ad_folders",
+			//"persist_state" => true,
 			"get_branch_func" => $this->mk_my_orb("gen_folders",array("parent" => "0"),"workbench"),
 		));
 
 		$awt->start("menu-list");
 		// listib koik menyyd ja paigutab need arraysse
+
+		// this is HARD. I probably cannot load this thing on demand, if I have a 
+		// selected branch .. but I really should be able to.
 		$this->db_listall();
 		$awt->stop("menu-list");
 		$awt->start("menu-map");
@@ -199,8 +204,6 @@ class admin_folders extends aw_template
 		}
 
 		$this->_x_shown[$this->cfg["admin_rootmenu2"]] = true;
-		// objektipuu
-		//$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
 		// kodukataloom
 
@@ -343,10 +346,12 @@ class admin_folders extends aw_template
 		};
 
 		// if all else fails ..
+		/*
 		if (empty($iconurl))
 		{
 			$iconurl = $baseurl . "/automatweb/images/closed_folder.gif";
 		}
+		*/
 		$arr["iconurl"] = $iconurl;
 
 		if (empty($arr["linkxxx"]))
