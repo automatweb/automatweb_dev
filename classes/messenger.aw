@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.77 2001/06/25 16:05:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.78 2001/06/26 00:04:32 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -16,6 +16,7 @@ define('MSG_EXTERNAL',2);
 define('MSG_STATUS_UNREAD',0);
 define('MSG_STATUS_READ',1);
 
+lc_load("messenger");
 // siit algab messengeri põhiklass
 class messenger extends menuedit_light 
 {
@@ -355,8 +356,11 @@ class messenger extends menuedit_light
 		{
 			$mactive = array("inbox");
 			$id = $this->msgconf["msg_defaultfolder"];
+			if (!$id)
+			{
+				$id = $inbox;
+			};
 			$folder = $id;
-			//$id = $inbox;
 		};
 		$menu = $this->gen_msg_menu(array(
 						"activelist" => $mactive,
@@ -1223,37 +1227,105 @@ class messenger extends menuedit_light
 		));
 	}
 
+	////
+	// !Initsialiseerib otsingu
+	function _init_search($args = array())
+	{
+		$this->fields = array(
+			"mfrom" => MSG_FIELD_FROM,
+			"subject"=> MSG_FIELD_SUBJECT,
+			"message" => MSG_FIELD_CONTENT,
+		);
+
+		$this->connectors = array(
+			"and" => MSG_CONNECTOR_AND,
+			"or" => MSG_CONNECTOR_OR,
+		);
+
+		// since we need to save the contents of the search, we will 
+		// do it right with user metadata
+		classload("users");
+		$this->awuser = new users();
+	}
+
+
 	function search($args = array())
 	{
+		$a2 = ($args["refine"]) ? "refine" : "newsearch";
 		$menu = $this->gen_msg_menu(array(
-				"activelist" => array("search","newsearch"),
+				"activelist" => array("search",$a2),
 				));
+
 		$flist = $this->_folder_list();
+
 		$this->read_template("search.tpl");
 		$c = "";
+
+		$this->_init_search();
+
+		$_sconf = $this->awuser->get_user_config(array(
+							"uid" => UID,
+							"key" => "msg_searches",
+					));
+		if (is_array($_sconf) && ($args["refine"]))
+		{
+			list(,$sconf) = each($_sconf);
+			$checkall = false;
+		}
+		else
+		{
+			// kui kuvame uut otsimisvormi, siis by default on koik
+			// folderid checkitud.
+			$checkall = true;
+			$sconf = array();
+		};
+
+		// koostame checkboxitud nimekirja vormidest, kust on vaja otsida
 		foreach($flist as $key => $val)
 		{
+			if ($checkall)
+			{
+				$checked = "checked";
+			}
+			else
+			{
+				$checked = ($sconf["folders"][$key]) ? "checked" : "";
+			};
+
 			$this->vars(array(
+					"checked" => $checked,
 					"id" => $key,
 					"name" => $val,
 				));
 			$c .= $this->parse("line");
 		};
+
 		$rf =  $this->mk_reforb("do_search",array());
+
 		$sline = "";
+
 		for ($i = 0; $i <= 4; $i++)
 		{
+			$chosen = ($checkall) ? -1 : $sconf["field"][$i];
 			$this->vars(array(
 					"idx" => $i,
 					"num" => $i + 1,
+					"fieldlist" => $this->picker($chosen,$this->fields),
+					"value" => $sconf["search"][$i],
 				));
 			$sline .= $this->parse("sline");
 			if ($i < 4)
 			{
+				$chosen = ($checkall) ? -1 : $sconf["connector"][$i];
+				$this->vars(array(
+					"connlist" => $this->picker($chosen,$this->connectors),
+				));
+
 				$sline .= $this->parse("connline");
 			};
 		};
 		$this->vars(array(
+			"msg_search_remark" => MSG_SEARCH_REMARK,
 			"sline" => $sline,
 			"line" => $c,
 			"menu" => $menu,
@@ -1275,12 +1347,20 @@ class messenger extends menuedit_light
 				"activelist" => array("search"),
 				));
 
+		$id = "s" . gen_uniq_id();
+
+		$this->_init_search();
+
+		// me salvestame ta kasutajatabelisse, sest mingil hetkel tulevikus lisame 
+		// otsingute salvestamise featuuri
+		$this->awuser->set_user_config(array(
+					"uid" => UID,
+					"key" => "msg_searches",
+					"value" => array($id => $args),
+				));
+
 		$folder_list = $this->_folder_list();
-		$fnames = array(
-			"mfrom" => "kellelt",
-			"subject" => "teema",
-			"message" => "sisu",
-		);
+		
 		// koigepealt tuleb siis koostada query string
 		$qs = "";
 		$quser = "";
@@ -1290,13 +1370,13 @@ class messenger extends menuedit_light
 			if ($search[$i - 1])
 			{
 				$qs .= sprintf("(%s LIKE '%%%s%%')",$field[$i - 1], $search[$i - 1]);
-				$quser .= sprintf(" ..väljal <b>%s</b> sisaldub string '%s'",$fnames[$field[$i - 1]],$search[$i - 1]);
+				$quser .= sprintf(" ..väljal <b>%s</b> sisaldub string '%s'",$this->fields[$field[$i - 1]],$search[$i - 1]);
 			};
 
 			if ($search[$i])
 			{
 				$qs .= sprintf(" %s ",$connector[$i-1]);
-				$quser .= ($connector[$i-1] == "and") ? " ja " : " või ";
+				$quser .= ($connector[$i-1] == "and") ? MSG_CONNECTOR_AND : MSG_CONNECTOR_OR;
 				$quser .= "<br>";
 			};
 		};
