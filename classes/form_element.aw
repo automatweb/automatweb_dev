@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.32 2001/11/01 22:03:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.33 2001/11/07 17:32:18 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -31,7 +31,8 @@ class form_element extends aw_template
 			"month" => "",
 			"day" => "",
 			"hour" => "",
-			"minute" => ""
+			"minute" => "",
+			"classid" => "small_button"
 		));
 			$this->vars(array(
 				"cell_id"									=> "element_".$this->id, 
@@ -70,6 +71,7 @@ class form_element extends aw_template
 				"ignore_text" => checked($this->arr["ignore_text"]),
 				"act_from" => $de->gen_edit_form("element_".$this->id."_act_from",$this->arr["act_from"],2001,2005,true),
 				"act_to" => $de->gen_edit_form("element_".$this->id."_act_to",$this->arr["act_to"],2001,2005,true),
+				"has_act" => checked($this->arr["has_act"] == 1)
 			));
 
 			$cd = "";
@@ -219,7 +221,7 @@ class form_element extends aw_template
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu"))
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu","int" => "Arv"))
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				$dt = $this->parse("DEFAULT_TEXT");
@@ -402,6 +404,10 @@ class form_element extends aw_template
 		global $$var;
 		$v = $$var;
 		$this->arr["act_to"] = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
+
+		$var = $base."_has_act";
+		global $$var;
+		$this->arr["has_act"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
@@ -1095,11 +1101,11 @@ class form_element extends aw_template
 
 		// sheck if this element is supposed to be shown right now
 		$show = true;
-		if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"])
+		if ($this->arr["act_from"] > (24*3600*400) && time() < $this->arr["act_from"] && $this->arr["has_act"] == 1)
 		{
 			$show = false;
 		}
-		if ($this->arr["act_to"] > (24*3600*400) && time() > $this->arr["act_to"])
+		if ($this->arr["act_to"] > (24*3600*400) && time() > $this->arr["act_to"] && $this->arr["has_act"] == 1)
 		{
 			$show = false;
 		}
