@@ -664,27 +664,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		if (count($this->meta_filter) > 0)
-		{
-			foreach($ret as $roid)
-			{
-				$add = true;
-				$_o = new object($roid);
-				foreach($this->meta_filter as $mf_k => $mf_v)
-				{
-					if ($_o->meta($mf_k) != $mf_v)
-					{
-						$add = false;
-					}
-				}
-
-				if (!$add)
-				{
-					unset($ret[$roid]);
-				}
-			}
-		}
-		return $ret;
+		return array($ret, $this->meta_filter);
 	}
 
 	function delete_object($oid)
@@ -728,7 +708,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			$tbl = "objects";
 			$fld = $key;
-			if (isset($this->properties[$key]))
+			if (isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
 			{
 				$tbl = $this->properties[$key]["table"];
 				$fld = $this->properties[$key]["field"];

@@ -265,8 +265,28 @@ class object_tree extends _int_obj_container_base
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{
 				$o = new object($oid);
-				$this->tree[$o->parent()][$o->id()] = $o;
-				$acl_oids[] = $oid;
+				if (count($meta_filter) > 0)
+				{
+					$add = true;
+					foreach($meta_filter as $mf_k => $mf_v)
+					{
+						if ($o->meta($mf_k) != $mf_v)
+						{
+							$add = false;
+						}
+					}
+
+					if ($add)
+					{
+						$this->tree[$o->parent()][$o->id()] = $o;
+						$acl_oids[] = $oid;
+					}
+				}
+				else
+				{
+					$this->tree[$o->parent()][$o->id()] = $o;
+					$acl_oids[] = $oid;
+				}
 			}
 		}
 		if (sizeof($acl_oids) > 0)

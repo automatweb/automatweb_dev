@@ -1320,5 +1320,73 @@ class user extends class_base
 		}
 		return false;
 	}
+
+	/** creates a new user object and returns the object
+
+		@param uid required
+		@param email optional
+		@param password optional
+
+	**/
+	function add_user($arr)
+	{
+		extract($arr);
+		error::throw_if(empty($uid), array(
+			"id" => ERR_NO_UID,
+			"msg" => "users::add_user($arr): no uid specified"
+		));
+
+		if (empty($password))
+		{
+			$password = generate_password();
+		}
+
+		$o = obj();
+		$o->set_name($uid);
+		$o->set_class_id(CL_USER);
+		$o->set_parent(aw_ini_get("users.rootmenu"));
+		$o->set_prop("uid", $uid);
+		$o->set_prop("password", $password);
+		$o->set_prop("email", $email);
+		$o->save();
+
+		$this->users->add(array(
+			"uid" => $uid,
+			"password" => $password,
+			"email" => $o->prop("email"),
+			"join_grp" => "",
+			"join_form_entry" => "",
+			"user_oid" => $o->id(),
+			"no_add_user" => true
+		));
+
+		// we need to do this like this, cause the functions in users class are really badly done.
+		$this->users->save(array(
+			"uid" => $uid,
+			"password" => $password,
+			"home_folder" => $this->users->hfid
+		));
+
+		// add user to all users grp if we are not under that
+		$aug = aw_ini_get("groups.all_users_grp");
+		$aug_oid = $this->users->get_oid_for_gid($aug);
+		if ($aug_oid != $o->parent())
+		{
+			$aug_o = obj($aug_oid);
+			$o->connect(array(
+				"to" => $aug_o->id(),
+				"reltype" => 1 // RELTYPE_GRP from user
+			));
+
+			// add reverse alias to group
+			$aug_o->connect(array(
+				"to" => $o->id(),
+				"reltype" => 2 // RELTYPE_MEMBER from group
+			));
+		}
+
+		return $o;
+	}
+
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.84 2004/03/11 09:06:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.85 2004/03/28 21:48:31 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -754,6 +754,9 @@ class users_user extends aw_template
 		$this->create_obj_access($hfid,$uid);
 		// ja v6tame teistelt k6ik 6igused kodukataloomale 2ra
 		$this->deny_obj_access($hfid);
+
+		// kasutajaobjektile alati k6ik 6igused
+		$this->create_obj_access($user_oid,$uid);
 
 		// set username to all "uid" fields in all filled join forms
 		$usjfe = new aw_array(aw_unserialize($join_form_entry));
