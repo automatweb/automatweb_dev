@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.17 2005/02/07 15:32:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.18 2005/02/08 12:27:10 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2197,9 +2197,6 @@ class mrp_workspace extends class_base
 		$arr["id"] = $arr["pj_job"];
 		$j->start($arr);
 
-		$job = obj($arr["id"]);
-		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
-
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
@@ -2218,9 +2215,6 @@ class mrp_workspace extends class_base
 		$arr["id"] = $arr["pj_job"];
 		$j->done($arr);
 
-		$job = obj($arr["id"]);
-		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
-
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
@@ -2238,9 +2232,6 @@ class mrp_workspace extends class_base
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
 		$j->abort($arr);
-
-		$job = obj($arr["id"]);
-		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.9 2005/02/07 13:18:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.10 2005/02/08 12:27:10 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -117,6 +117,14 @@ define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
 class mrp_job extends class_base
 {
+	var $states = array (
+		MRP_STATUS_NEW => "Uus",
+		MRP_STATUS_PLANNED => "Töösse planeeritud",
+		MRP_STATUS_INPROGRESS => "Töös",
+		MRP_STATUS_ABORTED => "Katkestatud",
+		MRP_STATUS_DONE => "Valmis",
+	);
+
 	function mrp_job ()
 	{
 		$this->init(array(
@@ -146,14 +154,7 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$states = array (
-					MRP_STATUS_NEW => "Uus",
-					MRP_STATUS_PLANNED => "Töösse planeeritud",
-					MRP_STATUS_INPROGRESS => "Töös",
-					MRP_STATUS_ABORTED => "Katkestatud",
-					MRP_STATUS_DONE => "Valmis",
-				);
-				$prop["value"] = $states[$prop["value"]] ? $states[$prop["value"]] : "Määramata";
+				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "Määramata";
 				break;
 
 			case "job_toolbar":
@@ -284,11 +285,22 @@ class mrp_job extends class_base
 		}
 
 		$project =& $this->get_project ($arr);
+		$log = $project->prop("state") != MRP_STATUS_INPROGRESS;
 		$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 		$project->save ();
 
+		
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		if ($log)
+		{
+			$ws->mrp_log($this_object->prop("project"), NULL, "Projekt l&auml;ks t&ouml;&ouml;sse");
+		}
+
 		$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 		$this_object->save ();
+
+		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
 	}
 
 /**
@@ -309,6 +321,15 @@ class mrp_job extends class_base
 		$this_object->set_prop ("state", MRP_STATUS_DONE);
 		$this_object->save ();
 
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$ws->mrp_log(
+			$this_object->prop("project"), 
+			$this_object->id(), 
+			"T&ouml;&ouml; ".$this_object->name().
+				" staatus muudeti ".$this->states[$this_object->prop("state")], 
+			$arr["pj_change_comment"]
+		);
+
 		### set status DONE for whole project if this was the last job
 		$project =& $this->get_project ($arr);
 		$list = new object_list (array (
@@ -320,8 +341,19 @@ class mrp_job extends class_base
 
 		if (!$next_jobs)
 		{
+			$log = $project->prop("state") != MRP_STATUS_DONE;
+
 			$project->set_prop ("state", MRP_STATUS_DONE);
 			$project->save ();
+		
+			if ($log)
+			{
+				$ws->mrp_log(
+					$project->id(), 
+					NULL, 
+					"Projekt l&otilde;petati"
+				);
+			}
 		}
 	}
 
@@ -348,6 +380,9 @@ class mrp_job extends class_base
 
 		$this_object->set_prop ("state", MRP_STATUS_ABORTED);
 		$this_object->save ();
+
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 	}
 
 	function on_delete_job ($arr)
