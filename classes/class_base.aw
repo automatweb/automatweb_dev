@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.19 2002/12/16 17:25:43 kristo Exp $
+// $Id: class_base.aw,v 2.20 2002/12/18 13:17:27 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -125,22 +125,22 @@ class class_base extends aliasmgr
 		// the output
 		$resprops = array();
 
-                foreach($realprops as $key => $val)
-                {
-                        if (is_array($val))
-                        {
-                                $this->get_value(&$val);
-                        };
+		foreach($realprops as $key => $val)
+		{
+			if (is_array($val))
+			{
+				$this->get_value(&$val);
+			};
 
-                        $argblock = array(
-                                "prop" => &$val,
-                        );
+			$argblock = array(
+				"prop" => &$val,
+			);
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
-                        if ($callback)
-                        {
-                                $status = $this->inst->get_property($argblock);
-                        };
+			if ($callback)
+			{
+				$status = $this->inst->get_property($argblock);
+			};
 
 			// I need other way to retrieve a list of dynamically
 			// generated properties from the class and display those
@@ -153,41 +153,34 @@ class class_base extends aliasmgr
 			{
 				// skip editonly elements for new objects
 			}
-			else
-			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
-			{
-				$meth = $val["generator"];
-				$vx = $this->inst->$meth($argblock);
-				$resprops = array_merge($resprops,$vx);
-			}
 			elseif ($val["type"] == "hidden")
 			{
 				// do nothing
 			}
-                        else
-                        {
-                                $resprops[] = $val;
-                        };
-                }
+			else
+			{
+				$resprops[] = $val;
+			};
+		}
 
-                $content = "";
+		$content = "";
 
-                foreach($resprops as $val)
-                {
-                        if (is_array($val["items"]))
-                        {
-                                foreach($val["items"] as $subkey => $subval)
-                                {
-                                        $this->convert_element(&$subval);
-                                        $val["items"][$subkey] = $subval;
-                                }
-                        }
-                        else
-                        {
-                                $this->convert_element(&$val);
-                        };
-                        $cli->add_property($val);
-                };
+		foreach($resprops as $val)
+		{
+			if (is_array($val["items"]))
+			{
+				foreach($val["items"] as $subkey => $subval)
+				{
+					$this->convert_element(&$subval);
+					$val["items"][$subkey] = $subval;
+				}
+			}
+			else
+			{
+				$this->convert_element(&$val);
+			};
+			$cli->add_property($val);
+		};
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
 
@@ -196,15 +189,15 @@ class class_base extends aliasmgr
 			$orb_class = "doc";
 		};
 
-                $cli->finish_output(array(
-					"action" => "submit",
-					"data" => array(
-						"id" => $id,
-						"group" => $group,
-						"orb_class" => $orb_class,
-						"parent" => $parent,
-						"period" => $period,
-					),
+		$cli->finish_output(array(
+			"action" => "submit",
+			"data" => array(
+				"id" => $id,
+				"group" => $group,
+				"orb_class" => $orb_class,
+				"parent" => $parent,
+				"period" => $period,
+			),
 		));
 
 		$content = $cli->get_result();
@@ -260,24 +253,24 @@ class class_base extends aliasmgr
 		// where needed and then cycle over the result and generate
 		// the output
 		$resprops = array();
-                foreach($realprops as $key => $val)
-                {
-                        if (is_array($val))
-                        {
-                                $this->get_value(&$val);
-                        };
+		foreach($realprops as $key => $val)
+		{
+			if (is_array($val))
+			{
+				$this->get_value(&$val);
+			};
 
-                        $argblock = array(
-                                "prop" => &$val,
-                                "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
-                        );
+			$argblock = array(
+				"prop" => &$val,
+				"obj" => &$this->coredata,
+				"objdata" => &$this->objdata,
+			);
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
-                        if ($callback)
-                        {
-                                $status = $this->inst->get_property($argblock);
-                        };
+			if ($callback)
+            {
+				$status = $this->inst->get_property($argblock);
+			};
 
 			// I need other way to retrieve a list of dynamically
 			// generated properties from the class and display those
@@ -286,40 +279,34 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
-			{
-				$meth = $val["generator"];
-				$vx = $this->inst->$meth($argblock);
-				$resprops = array_merge($resprops,$vx);
-			}
-			elseif ($val["type"] == "hidden")
+			if ($val["type"] == "hidden")
 			{
 				// do nothing
 			}
-                        else
-                        {
-                                $resprops[] = $val;
-                        };
-                }
+            else
+            {
+				$resprops[] = $val;
+			};
+		}
 
-                $content = "";
-
-                foreach($resprops as $val)
-                {
-                        if (is_array($val["items"]))
-                        {
-                                foreach($val["items"] as $subkey => $subval)
-                                {
-                                        $this->convert_element(&$subval);
-                                        $val["items"][$subkey] = $subval;
-                                }
-                        }
-                        else
-                        {
-                                $this->convert_element(&$val);
-                        };
-                        $cli->add_property($val);
-                };
+		$content = "";
+		
+		foreach($resprops as $val)
+		{
+			if (is_array($val["items"]))
+			{
+				foreach($val["items"] as $subkey => $subval)
+				{
+					$this->convert_element(&$subval);
+					$val["items"][$subkey] = $subval;
+				}
+			}
+			else
+			{
+				$this->convert_element(&$val);
+			};
+			$cli->add_property($val);
+		};
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
 
@@ -328,15 +315,15 @@ class class_base extends aliasmgr
 			$orb_class = "doc";
 		};
 
-                $cli->finish_output(array(
-					"action" => "submit",
-					"data" => array(
-						"id" => $id,
-						"group" => $group,
-						"orb_class" => $orb_class,
-						"parent" => $parent,
-						"period" => $period,
-					),
+		$cli->finish_output(array(
+			"action" => "submit",
+			"data" => array(
+				"id" => $id,
+				"group" => $group,
+				"orb_class" => $orb_class,
+				"parent" => $parent,
+				"period" => $period,
+			),
 		));
 
 		if (!$content)
@@ -348,7 +335,6 @@ class class_base extends aliasmgr
 			"parent" => $parent,
 			"content" => $content,
 		));
-
 	}
 
 	////
@@ -419,21 +405,21 @@ class class_base extends aliasmgr
 		$resprops = array();
 		$savedata = array();
 		$form_data = $args;
-                foreach($realprops as $property)
-                {
-                        if (is_array($property))
-                        {
+		foreach($realprops as $property)
+		{
+			if (is_array($property))
+			{
 				// this return the old/saved value of the property
-                                $this->get_value(&$property);
+				$this->get_value(&$property);
 				// new data is in $args
-                        };
+			};
 
-                        $argblock = array(
-                                "prop" => &$property,
-                                "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
+			$argblock = array(
+				"prop" => &$property,
+				"obj" => &$this->coredata,
+				"objdata" => &$this->objdata,
 				"form_data" => &$form_data,
-                        );
+			);
 
 			// give the class a possiblity to execute some action
 			// while we are saving it.
@@ -442,12 +428,12 @@ class class_base extends aliasmgr
 			// whether to save the data or not, so please, make sure
 			// that your set_property returns PROP_OK for stuff
 			// that you want to save
-                        if ($callback)
-                        {
+			if ($callback)
+			{
 				// I need a way to let set_property insert
 				// data back into the save queue
-                                $status = $this->inst->set_property($argblock);
-                        }
+				$status = $this->inst->set_property($argblock);
+			}
 			else
 			{
 				$status = PROP_OK;
@@ -566,7 +552,7 @@ class class_base extends aliasmgr
 			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
 		};
 
-                return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"period" => aw_global_get("period")),get_class($this->orb_class));
+		return $this->mk_my_orb("change",array("id" => $id,"group" => $group,"period" => aw_global_get("period")),get_class($this->orb_class));
 	}
 
 	////
@@ -766,7 +752,7 @@ class class_base extends aliasmgr
 		$this->get_active_cfgform();
 
 		// loads all properties for this class
-		$all_props = $cfgu->load_properties(array("file" => $cfile));
+		$_all_props = $cfgu->load_properties(array("file" => $cfile));
 
 		$this->classinfo = $cfgu->get_classinfo();
 		$corefields = $this->get_visible_corefields();
@@ -778,6 +764,25 @@ class class_base extends aliasmgr
 		$elements = array();
 		$this->groupnames = array();
 		$default_ord = 0;
+
+		// ok, first add all the generated props to the props array 
+		$all_props = array();
+		foreach($_all_props as $k => $val)
+		{
+			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = new aw_array($this->inst->$meth($argblock));
+				foreach($vx->get() as $vxk => $vxv)
+				{
+					$all_props[$vxk] = $vxv;
+				}
+			}
+			else
+			{
+				$all_props[$k] = $val;
+			}
+		}
 
 		// now, cycle over all the properties and do all necessary filtering
 		foreach($all_props as $val)
