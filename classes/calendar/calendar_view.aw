@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.12 2004/11/03 12:15:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.13 2004/11/19 12:01:04 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -240,6 +240,7 @@ class calendar_view extends class_base
 		$range = $arr["range"];
 		$arr["cal_inst"]->vars($this->vars);
 
+
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
@@ -268,13 +269,18 @@ class calendar_view extends class_base
 				"type" => RELTYPE_EVENT_SOURCE,
 			));
 
+			$cal_inst = &$arr["cal_inst"];
+			$first_image = $cal_inst->has_feature("first_image");
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
+
 				$events = $this->get_events_from_object(array(
 					"obj_inst" => $to_o,
 					"range" => $range,
+					"first_image" => $first_image,
 				));
+
 				foreach($events as $event)
 				{
 					$data = $event;
@@ -282,7 +288,7 @@ class calendar_view extends class_base
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
-					$arr["cal_inst"]->add_item(array(
+					$cal_inst->add_item(array(
 						"timestamp" => $event["start"],
 						"data" => $data,
 					));
@@ -328,6 +334,7 @@ class calendar_view extends class_base
 					"id" => $o->id(),
 					"range" => $range,
 					"status" => $arr["status"],
+					"first_image" => $arr["first_image"],
 				));
 				break;
 		};
@@ -366,10 +373,15 @@ class calendar_view extends class_base
 		{
 			$tpldir = $use2dir[$use_template];
 		};
-		
+	
+		// oookey .. I need a way to query the calendar whether it has to show images?
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
 		));
+		if ($arr["event_template"])
+		{
+			$args["event_template"] = $arr["event_template"];
+		};
 
 		$args = array(
 			"container_template" => "intranet1.tpl",
@@ -437,6 +449,8 @@ class calendar_view extends class_base
 			"status" => $arr["status"],
 		);
 
+		$vcal->init_output(array("event_template" => $arr["event_template"]));
+
 		if ($use_template == "last_events")
 		{
 			$exp_args["limit_events"] = $this->obj_inst->prop("num_next_events");
@@ -486,10 +500,6 @@ class calendar_view extends class_base
 			$args["tpl"] = "week.tpl";
 		};
 
-		if ($arr["event_template"])
-		{
-			$args["event_template"] = $arr["event_template"];
-		};
 
 		return $vcal->get_html($args);
 	}
