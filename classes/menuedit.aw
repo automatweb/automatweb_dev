@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.263 2003/03/13 15:36:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.264 2003/03/14 13:05:30 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -401,7 +401,12 @@ class menuedit extends aw_template
 		{
 			$pl = get_instance("planner");
 			$target = $meta["aliases_by_class"][CL_PLANNER][1]["target"];
-			$_tmp = $pl->view(array("id" => $target,"week_tpl" => "week.tpl"));
+			global $type;
+			$_tmp = $pl->view(array(
+				"id" => $target,
+				"week_tpl" => "week.tpl",
+				"type" => ($type == "day") ? "day" : "",
+			));
 			$this->vars(array("doc_content" => $_tmp));
 		}
 		else
