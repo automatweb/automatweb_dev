@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="submit_search" nologin="1">
+			<function name="submit_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

@@ -223,6 +223,13 @@
 			</function>
 		</action>
 		
+		<action name="submit_all_els">
+			<function name="submit_all_els">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="show_entry" nologin="1">
 			<function name="show">
 				<arguments>
@@ -246,6 +253,7 @@
 			<function name="gen_search_sel">
 				<arguments>
 					<required name="id"/>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>
@@ -304,6 +312,28 @@
 			<function name="submit_table">
 				<arguments>
 					<required name="return"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="convtype">
+			<function name="convtype">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="set_folders">
+			<function name="set_folders">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_folders">
+			<function name="save_folders">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

@@ -33,6 +33,26 @@
 			</function>
 		</action>
 
+		<action name="add_n_rows">
+			<function name="add_n_rows">
+				<arguments>
+					<required name="id"/>
+					<optional name="after"/>
+					<optional name="count"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_n_cols">
+			<function name="add_n_cols">
+				<arguments>
+					<required name="id"/>
+					<optional name="after"/>
+					<optional name="count"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="ch_cell">
 			<function name="ch_cell">
 				<arguments>

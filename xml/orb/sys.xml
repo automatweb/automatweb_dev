@@ -4,6 +4,7 @@
 		<action name="check" nologin="1">
 			<function name="check">
 				<arguments>
+					<optional name="fix"/>
 				</arguments>
 			</function>
 		</action>

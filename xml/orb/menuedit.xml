@@ -133,6 +133,13 @@
 			</function>
 		</action>
 
+		<action name="mdelete">
+			<function name="mdelete">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

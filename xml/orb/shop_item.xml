@@ -65,6 +65,14 @@
 			</function>
 		</action>
 
+		<action name="show_free">
+			<function name="show_free">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
