@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.10 2002/02/07 02:29:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.11 2002/02/07 03:18:53 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -344,7 +344,7 @@ class cal_event extends aw_template {
 			{
 				$_tmp = strtotime("+1 week");
 			};
-			$repend_ed= $repend->gen_edit_form("repend",$_tmp);
+			$repend_ed= $repend->gen_edit_form("repend",$_tmp,2001,2010);
 			
 			// set up the date editor for cycle start
 			$repstart = new date_edit("start");
@@ -357,7 +357,7 @@ class cal_event extends aw_template {
 			{
 				$_tmp = $event["start"];
 			};
-			$repstart_ed= $repstart->gen_edit_form("repstart",$_tmp);
+			$repstart_ed= $repstart->gen_edit_form("repstart",$_tmp,2001,2010);
 			// oh, I know, this is sooo ugly
 			$this->vars(array(
 					"region1" => checked($meta["region1"]),
@@ -413,10 +413,14 @@ class cal_event extends aw_template {
 					if ($obj_meta[$key])
 					{
 						$repdat = $obj_meta[$key];
+						$_tmp = $repdat["repstart"];
+						$_st = sprintf("%d.%s %d",$_tmp["day"],get_lc_month($_tmp["month"]),$_tmp["year"]);
+						$_tmp = $repdat["repend"];
+						$_et = sprintf("%d.%s %d",$_tmp["day"],get_lc_month($_tmp["month"]),$_tmp["year"]);
 						$this->vars(array(
 							"id" => $i,
-							"start" => "trill",
-							"end" => "trall",
+							"start" => $_st,
+							"end" => $_et,
 						));
 						$content .= $this->parse("line");
 					};
@@ -445,12 +449,8 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 		
-		// store them inside the object so we can use them elsewhere
-		$this->repeats = $args;
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$parent_class = $par_obj["class_id"];
 
+		// save the current settings
 		$key = "repeaters" . $cycle;
 		$this->set_object_metadata(array(
 			"oid" => $id,
@@ -458,40 +458,60 @@ class cal_event extends aw_template {
 			"key" => $key,
 			"value" => $args,
 		));
+	
+		// now we fetch them all back again, so that we can perform our calculations
+		$obj = $this->get_obj_meta($id);
+		$obj_meta = $obj["meta"];
+		$par_obj = $this->get_object($obj["parent"]);
+		$parent_class = $par_obj["class_id"];
 		
 		// if that one was a new cycle, then we need update the object as well
 		if ($new)
 		{
-			$cycle = $this->set_object_metadata(array(
+			$this->set_object_metadata(array(
 					"oid" => $id,
 					"key" => "cycle_counter",
 					"value" => $cycle, // 1
 			));
-		};
 
-		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id)
-			WHERE objects.oid = '$id'";
-		$this->db_query($q);
-		$event = $this->db_next();
-
-
-		if ($stage == 2)
-		{
-			// have to figure out the day the previous repeaters end
-			$event["start"] = $event["rep_until"];
-			$this->reps = aw_unserialize($event["repeaters"]);
+			$cycle_counter = $cycle;
 		}
 		else
 		{
-			$this->reps = array();
+			// find out how many cycles we have
+			$cycle_counter = $this->get_object_metadata(array(
+					"oid" => $id,
+					"key" => "cycle_counter",
+			));
 		}
-		
-			
-		$rep_end = $this->process_repeaters($event,$args);
+	
+		// zero everything out
+		$this->reps = array();
+	
+		// now we recalculate all the cycles and repeaters this event has
+		// NOTE: we really should only recalculate the data for the current cycle
+		for ($i = 1; $i <= $cycle_counter; $i++)
+		{
+			$key = sprintf("repeaters%d",$i);
+			if ($obj_meta[$key])
+			{
+				$this->repeats = $obj_meta[$key];
+				$this->process_repeaters($obj_meta[$key]);
+			};
+		}
+	
+		sort($this->reps);
 
+		// find out the first and the last day
+		$first = reset($this->reps);
+		$end = end($this->reps);
+
+		$rep_from = mktime(0,0,0,1,$first,2001);
+		$rep_end = mktime(23,59,59,1,$end,2001);
+		
 		$reps = aw_serialize($this->reps,SERIALIZE_PHP_NOINDEX);
 		$this->quote($reps);
-		$q = "UPDATE planner SET rep_until = '$rep_end', repeaters = '$reps' WHERE id = '$id'";
+		$q = "UPDATE planner SET rep_until = '$rep_end', rep_from = '$rep_from', repeaters = '$reps' WHERE id = '$id'";
 		$this->db_query($q);
 
 		// FIXME: this sucks
@@ -650,7 +670,12 @@ class cal_event extends aw_template {
 				//$ts = mktime(0,0,0,$month,$this->d,$year);
 				// something weird is going on
 				$ts = mktime(23,59,59,1,$this->gdaynum,2001);
-				$this->reps[] = $this->gdaynum;
+
+				// try to avoid duplicate repeaters
+				if (not(in_array($this->gdaynum,$this->reps)))
+				{
+					$this->reps[] = $this->gdaynum;
+				};
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
 				// check whether we have reached the max count
@@ -679,16 +704,15 @@ class cal_event extends aw_template {
 
 	////
 	// Processes all events
-	function process_repeaters($event,$args)
+	function process_repeaters($args)
 	{
-		// here.
-		// I also have to know the week day of the event
 		extract($args);
-		$start = $event["start"];
-		$this->start = $start;
-		list($start_year,$start_wday) = explode("-",date("Y-w",$start));
 
-		list($sx_m,$sx_d) = explode("-",date("n-j",$start));
+		$repstart = mktime(0,0,0,$repstart["month"],$repstart["day"],$repstart["year"]);
+		$this->start = $repstart;
+		list($start_year,$start_wday) = explode("-",date("Y-w",$repstart));
+
+		list($sx_m,$sx_d) = explode("-",date("n-j",$repstart));
 		$this->start_day = $sx_d;
 		
 		$this->start_month = $sx_m;
@@ -730,7 +754,7 @@ class cal_event extends aw_template {
 
 		classload("date_calc");
 		$timebase = mktime(0,0,0,1,1,2001);
-		$ddiff = get_day_diff($timebase,$start);
+		$ddiff = get_day_diff($timebase,$repstart);
 		$this->gdaynum = $ddiff + 1;
 
 

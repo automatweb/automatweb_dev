@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.62 2002/02/07 02:08:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.63 2002/02/07 03:18:53 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -639,8 +639,8 @@ class planner extends calendar {
 		$q = "SELECT *,planner.oid AS aid FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
 			WHERE objects.status = 2 AND planner.folder = '$folder'
-			AND ( (start >= '$start') OR (start <= '$end') OR (rep_until >= '$start'))
-			ORDER BY start";
+			AND ( (rep_from >= '$start') OR (rep_from <= '$end') OR (rep_until >= '$start'))
+			ORDER BY rep_from";
 		$this->db_query($q);
 		$timebase = mktime(0,0,0,1,1,2001);
 		$start_gdn = sprintf("%d",($start - $timebase) / 86400);
@@ -663,7 +663,7 @@ class planner extends calendar {
 				foreach($intersect as $xgdn)
 				{
 					$ts = mktime(0,0,0,1,$xgdn,2001);
-					if ($ts >= $row["start"])
+					if ($ts >= $row["rep_from"])
 					{
 						$gx = date("dmY",$ts);
 						$results[$gx][] = $row;
