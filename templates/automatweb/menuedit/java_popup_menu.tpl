@@ -13,7 +13,7 @@
 <param name="x" value="0">
 <param name="y" value="20">
 <param name="onClick" value="1">
-<param name="url" value="aw.struktuur.ee"> 
+<param name="url" value="{VAR:url}"> 
 <param name="urlparam1" value="&id={VAR:oid}">  
 <!-- SUB: URLPARAM -->
 <param name="urlparam{VAR:nr}" value="&{VAR:key}={VAR:val}">  
