@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.30 2005/01/31 18:29:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.31 2005/02/02 16:52:33 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1197,9 +1197,9 @@ class register_data extends class_base
 	{
 		// if there is some address set in register obj. where the user should be redirected, then
 		// lets do it 
-		if (!empty($arr['request']['register_id']))
+		if (!empty($arr['request']['set_register_id']))
 		{
-			$register = obj($arr['request']['register_id']);
+			$register = obj($arr['request']['set_register_id']);
 			$data_return_url = $register->prop("data_return_url");
 			if (!empty($data_return_url))
 			{
