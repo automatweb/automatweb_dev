@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.54 2004/07/12 11:17:05 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.55 2004/07/13 07:48:03 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -451,21 +451,8 @@ class crm_company extends class_base
 		$this->reltype_category = $this->crm_company_reltype_category;
 		//
 		$this->group_not_shown = false;
-		$name = aw_global_get('uid').' kliendid';
-		//tsekime kas kasutajal on isik objekt üldse tehtud ja seotud endaga
-		//eeldan, et kasutaja existeerib :)
-		$users = get_instance('users_user');
-		$user = new object($users->get_oid_for_uid(aw_global_get('uid')));
-		//getting the person
-		$conns = $user->connections_from(array(
-			'type' => 'RELTYPE_PERSON'
-		));
-		//kui on mitu, siis võtan esimese
-		if(sizeof($conns))
-		{
-			$tmp = current($conns);
-			$this->users_person = new object($tmp->prop('to'));
-		}
+		$us = get_instance(CL_USER);
+		$this->users_person = obj($us->get_current_person());
 	}
 
 	/*
@@ -872,11 +859,8 @@ class crm_company extends class_base
 				//need to delete every category of the tree that the person doesn't
 				//have a relation with
 				$my_data = array();
-				$crm_person = get_instance('crm/crm_person');
-				$users = get_instance('users_user');
-				$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
-				//genereerin listi persooni kõikidest firmadest
-				$person = new object($person);
+				$us = get_instance(CL_USER);
+				$person = obj($us->get_current_person());
 				$conns=$person->connections_from(array(
 							'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
 							));
@@ -933,10 +917,8 @@ class crm_company extends class_base
 				break;
 			case 'my_customers_table':
 			{
-				$crm_person = get_instance('crm/crm_person');
-				$users = get_instance('users_user');
-				$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
-				$person = new object($person);
+				$us = get_instance(CL_USER);
+				$person = obj($us->get_current_person());
 				$conns = $person->connections_from(array(
 								'type'=>22, //crm_person.reltype_CLIENT_IM_HANDLING
 							));
@@ -1398,9 +1380,6 @@ class crm_company extends class_base
 		if($old_iface)
 		{
 			$this->get_all_workers_for_company(&$arr['obj_inst'],&$persons,true);
-			echo "<!-- ";
-			print_r($persons);
-			echo "-->";
 		}
 		else
 		{
@@ -1431,7 +1410,7 @@ class crm_company extends class_base
 				"id" => $person->id(),
 				"cal_id" => $cal_id,
 			));
-			$crmp->get_latest_event();
+
 			if(is_oid($arr['request']['cat']))
 			{
 				//persons only from this category
@@ -1918,9 +1897,6 @@ class crm_company extends class_base
 		reset($arr['check']);
 		$fake_alias = current($arr['check']);
 
-		//why need person? cos i want to add the same event to the user too
-		//$person = get_instance('crm/crm_person');
-		//$person = $person->get_person_by_user_id(users_user::get_oid_for_uid(aw_global_get('uid')));
 		$url = $this->mk_my_orb('change',array(
 				'id'=>$cal_id,
 				'group'=>'add_event',
@@ -3144,9 +3120,8 @@ class crm_company extends class_base
 		{
 			//have to get the list of all the companys for
 			//this users person
-			$crm_person = get_instance('crm/crm_person');
-			$users = get_instance('users_user');
-			$person = $crm_person->get_person_by_user_id($users->get_oid_for_uid(aw_global_get('uid')));
+			$us = get_instance(CL_USER);
+			$person = obj($us->get_current_person());
 			//if the user has a person's object associated with him
 			if($person)
 			{

@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.49 2004/07/12 10:52:34 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.50 2004/07/13 07:48:03 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -582,23 +582,6 @@ class crm_person extends class_base
 		return $nodes;
 	}
 
-	/*
-		id - oid of the user	
-	*/
-	function get_person_by_user_id($id)
-	{
-		$obj = new object($id);
-		$conns = $obj->connections_from(array(
-						'type'=>'RELTYPE_PERSON'
-					));
-		if(sizeof($conns))
-		{
-			$conn = current($conns);
-			return $conn->prop('to');
-		}
-		return null;
-	}
-
 	function fetch_person_by_id($arr)
 	{
 		// how do I figure out the _last_ action done with a person?
@@ -1057,29 +1040,6 @@ class crm_person extends class_base
 	////
 	// !Perhaps I can make a single function that returns the latest event (if any)
 	// for each connection?
-	function get_latest_event()
-	{
-		/*$person = $this->get_person_by_user_id(users_user::get_oid_for_uid(aw_global_get('uid')));
-		if($person)
-		{
-			$person = new object($person);
-			$options = array(RELTYPE_PERSON_CALL=>'start1',
-									RELTYPE_PERSON_MEETING=>'start1',
-									RELTYPE_PERSON_TASK=>'start1');
-			foreach($options as $reltype=>$property)
-			{
-				$conns = $person->connections_from(array(
-								'reltype'=>$reltype
-							));
-				ARR($conns);
-			}
-			die();
-			$conns = $person->connections_from(array(
-							'reltype' => $reltypes
-						));
-			arr($conns);
-		}*/
-	}
 	
 	function do_org_actions($arr)
 	{
