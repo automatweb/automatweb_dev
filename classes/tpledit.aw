@@ -259,17 +259,32 @@ class tpledit extends aw_template {
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 		$oid = $meta_obj["oid"];
+		classload("archive");
+		$arc = new archive();
 		if ($meta_obj["oid"])
 		{
 			$meta = $this->obj_get_meta(array(
 					"oid" => $meta_obj["oid"],
 			));
 		};
-		print "<pre>";
-		print_r($meta);
-		print "</pre>";
-		$dirname = dirname($file);
-		$source = join("",@file($tpldir . "/" . $file));
+		
+		// we are trying to alter a file from the archive
+		if ($revision)
+		{
+			$source = $arc->checkout(array(
+						"oid" => $oid,
+						"version" => $revision,
+			));
+
+			$arc_name = $meta["archive"][$revision]["name"];
+			$arc_comment = $meta["archive"][$revision]["comment"];
+		}
+		else
+		{	
+			$source = join("",@file($tpldir . "/" . $file));
+			$arc_name = $meta["arc_name"];
+			$arc_comment = $meta["arc_comment"];
+		}
 		$this->read_template("edit.tpl");
 		$parents = explode("/",$file);
 
@@ -293,11 +308,12 @@ class tpledit extends aw_template {
 		$this->vars(array(
 			"file" => $file,
 			"source" => htmlspecialchars($source),
-			"name" => $meta["name"],
-			"comment" => $meta["comment"],
+			"name" => $arc_name,
+			"comment" => $arc_comment,
 			"rawlink" => $this->mk_orb("source",array("file" => $file)),
 			"arclink" => $this->mk_orb("archive",array("oid" => $oid)),
-			"reforb" => $this->mk_reforb("submit",array("file" => $file)),
+			"preview_url" => $this->mk_orb("preview",array("file" => $file)),
+			"reforb" => $this->mk_reforb("submit",array("file" => $file,"revision" => $revision)),
 		));
 		$GLOBALS["site_title"] = join(" / ",$path);
 		return $this->parse();
@@ -324,34 +340,72 @@ class tpledit extends aw_template {
 			// create archive
 			$arc->add(array("oid" => $oid));
 			$timestamp = 0;
+			$activate = 1;
 		}
 		else
 		{
-			// Uuendame olemasoleva objekti metainfot
-			$this->upd_object(array(
-					"oid" => $meta_obj["oid"],
-					"name" => $file,
-			));
+			if ($activate)
+			{
+				// Uuendame olemasoleva objekti metainfot
+				$this->upd_object(array(
+						"oid" => $meta_obj["oid"],
+						"name" => $file,
+				));
 
+
+			};
+				
 			$oid = $meta_obj["oid"];
 
-			$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
-			// add a new copy of the template object to the archive
-			$timestamp = $arc->commit(array(
-				"oid" => $meta_obj["oid"],
-				"content" => trim($ser),
-				"name" => $name,
-				"comment" => $comment,
-			));
+			if ($archive || $revision)
+			{
+
+				if (not($revision))
+				{
+					$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
+				}
+				else
+				{
+					$ser = stripslashes($source);
+				};
+				// add a new copy of the template object to the archive
+				$timestamp = $arc->commit(array(
+					"oid" => $meta_obj["oid"],
+					"content" => trim($ser),
+					"name" => $name,
+					"comment" => $comment,
+					"version" => $revision,
+				));
+			};
 
 			
 		}
 
-		$this->put_file(array(
-			"file" => $fullpath,
-			"content" => stripslashes($source),
-		));
-		return $this->mk_orb("edit",array("file" => $file));
+		if ($revision)
+		{
+			$do_update = $activate;
+		}
+		else
+		{
+			$do_update = true;
+		};
+
+		if ($do_update)
+		{
+			$this->obj_set_meta(array(
+					"oid" => $oid,
+					"meta" => array(
+						"arc_name" => $name,
+						"arc_comment" => $comment,
+						),
+			));
+
+			$this->put_file(array(
+				"file" => $fullpath,
+				"content" => stripslashes($source),
+			));
+		};
+		return $this->mk_orb("edit",array("file" => $file,"revision" => $revision));
 	}
 
 	// Fetchib template metaobjekti
@@ -373,10 +427,30 @@ class tpledit extends aw_template {
 		extract($args);
 		$this->read_template("upload.tpl");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_upload",array()),
+			"reforb" => $this->mk_reforb("submit_upload",array("fullname" => $fullname)),
 		));
 		$GLOBALS["site_title"] = "Upload template";
 		return $this->parse();
+	}
+
+	function submit_upload($args = array())
+	{
+		extract($args);
+		global $HTTP_POST_FILES;
+		$filedat = $HTTP_POST_FILES["template"];
+		global $tpldirs,$HTTP_HOST;
+		$tpldir = $tpldirs[$HTTP_HOST];
+		// we got a file, so register it
+		if (is_array($filedat))
+		{
+			$realname = substr($fullname,strlen($tpldir) + 1);
+			$meta_obj = $this->_fetch_tpl_obj(array("name" => $realname));
+			// name - original name
+			// tmp_name - the current location
+
+
+		}
+			
 	}
 
 
@@ -392,6 +466,19 @@ class tpledit extends aw_template {
 		header("Content-Disposition: filename=$realname");
 		print $source;
 		exit;
+	}
+	
+	function preview($args = array())
+	{
+		extract($args);
+		global $tpldirs,$HTTP_HOST;
+		$tpldir = $tpldirs[$HTTP_HOST];
+		$src_path = $tpldir . "/" . $file;
+		$this->read_template("preview.tpl");
+		$this->vars(array(
+			"srcurl" => $this->mk_orb("source",array("file" => $file)),
+		));
+		return $this->parse();
 	}
 	
 	function source($args = array())
@@ -487,6 +574,13 @@ class tpledit extends aw_template {
 				"align" => "center",
                                 "nowrap" => 1,
                 ));
+		$t->define_field(array(
+                                "name" => "act1",
+                                "caption" => "Tegevus",
+                                "talign" => "center",
+				"align" => "center",
+                                "nowrap" => 1,
+                ));
 		$arc = new archive();
 		$contents = $arc->get($args);
 		// FIXME: check the object class too
@@ -496,14 +590,23 @@ class tpledit extends aw_template {
 		$c = "";
 		if (is_array($contents))
 		{
-			foreach($contents as $element)
+			foreach($contents as $elname => $element)
 			{
+				$name = $meta["archive"][$elname]["name"];
+				if (strlen($name) == 0)
+				{
+					$name = "(nimetu)";
+				};
+
+				$namelink = $this->mk_orb("edit",array("file" => $obj["name"],"revision" => $elname)); 
+
 				$t->define_data(array(
-					"name" => $meta["archive"][$element[FILE_MODIFIED]]["name"],
-					"uid" => $meta["archive"][$element[FILE_MODIFIED]]["uid"],
-					"date" => $this->time2date($element[FILE_MODIFIED],9),
+					"act1" => sprintf("<a href='%s'>%s</a>",$namelink,"Muuda"),
+					"name" => $name,
+					"uid" => $meta["archive"][$elname]["uid"],
+					"date" => $this->time2date($elname,9),
 					"size" => $element[FILE_SIZE],
-					"activate" => "<input type=radio name=active value=" . $element[FILE_MODIFIED] . ">",
+					"activate" => "<input type=radio name=active value=" . $elname . ">",
 				));
 
 			};
@@ -512,6 +615,7 @@ class tpledit extends aw_template {
 		$this->vars(array(
 			"table" => $t->draw(),
 			"reforb" => $this->mk_reforb("submit_archive",array("oid" => $args["oid"])),
+			"edlink" => $this->mk_orb("edit",array("file" => $obj["name"])),
 		));
 		return $this->parse();
 		
