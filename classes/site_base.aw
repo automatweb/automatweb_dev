@@ -1,9 +1,8 @@
 <?php
 
-// this is the empty template. start here please.
-// you are supposed to use this when building new sites. 
-// basically, you copy all the files to the new folder, change a few paths
-// and fill this one in and you're good to go.
+// this is the base class for the "site" class where you can put site-specific functionality
+// and that has callbacks and hooks for all the actions you could ever want, so you can intercept aw 
+// when you need to do something site specific
 classload("aw_template");
 class site_base extends aw_template
 {
