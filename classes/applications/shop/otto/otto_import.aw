@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.20 2005/02/15 15:30:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.21 2005/02/21 08:54:53 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -168,7 +168,7 @@ class otto_import extends class_base
 				break;
 
 			case "to_img":
-				if ($prop["value"] != "" && $arr["request"]["orig_img"] != "")
+				if ($prop["value"] != "" /*&& $arr["request"]["orig_img"] != ""*/)
 				{
 					// do replace
 					$toims = explode(",", $prop["value"]);
@@ -225,7 +225,8 @@ class otto_import extends class_base
 					continue;
 				}
 
-				$fld_url = $arr->prop("base_url")."/".trim($fname)."-2.csv";
+				$fext = ($arr->prop("file_ext") != "" ? $arr->prop("file_ext") : "xls");
+				$fld_url = $arr->prop("base_url")."/".trim($fname)."-2.".$fext;
 				if (!$this->is_csv($fld_url))
 				{
 					continue;
@@ -278,7 +279,7 @@ class otto_import extends class_base
 
 		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/files/status.txt"))
 		{
-			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
+			//$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 		else
@@ -304,6 +305,11 @@ class otto_import extends class_base
 		//$data = array("887978");
 		foreach ($data as $pcode) 
 		{
+			if ($pcode == "")
+			{
+				continue;
+			}
+
 			if ($skip_to && $pcode != $skip_to)
 			{
 				$cur_cnt++;
@@ -349,18 +355,46 @@ class otto_import extends class_base
 				flush();
 
 				$o_html = $html;
+
+
 				// subrequest for two images
-				preg_match_all("/<a href=\"Javascript:document\.location\.href='(.*)'\+link_ext\" class=\"produkt\">/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				//die($html);
+				preg_match_all("/<\/table>\n<a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+
 				$urld = array();
+				//die(dbg::dump($mt));
 				foreach($mt[1] as $url)
 				{
+					$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
 					$urld[$url] = $url;
 				}
 
 				foreach($urld as $url)
 				{
+//					echo "url = $url <br>";
 					$html = $this->file_get_contents($url);
-					if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
+
+					preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					foreach($mt[1] as $idx => $img)
+					{
+						$imnr = basename($img, ".jpg");
+						$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'", "imnr");
+						if (!$t_imnr)
+						{
+							echo "insert new image $imnr <br>\n";
+							flush();
+							$q = ("
+								INSERT INTO 
+									otto_prod_img(pcode, nr,imnr, server_id) 
+									values('$pcode','".$mt[2][$idx]."','$imnr', 1)
+							");
+							//echo "q = $q <br>";
+							$this->db_query($q);
+						}
+
+					}
+
+					/*if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
 					{
 						echo "total fakap <br>";
 						flush();
@@ -427,7 +461,7 @@ class otto_import extends class_base
 							}
 						}
 					
-					}
+					}*/
 				}
 			}
 			else
@@ -1860,7 +1894,7 @@ class otto_import extends class_base
 	**/
 	function swt($arr)
 	{
-		return $this->read_img_from_schwab($arr["pcode"]);
+		return $this->pictimp(obj(1062),false);
 	}
 
 	function read_img_from_schwab($pcode)
