@@ -1,0 +1,74 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>from_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Piltide kaust</caption>
+      </property>
+      <property>
+            <name>width_bigger_than</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>textbox</type>
+            <size>10</size>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Laiuse tingimus</caption>
+      </property>
+      <property>
+            <name>new_width</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>textbox</type>
+            <size>10</size>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Uus laius</caption>
+      </property>
+      <property>
+            <name>message</name>
+            <table>objects</table>
+            <group>status</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>message</field>
+      </property>
+      <property>
+            <name>from_folder_contents</name>
+            <table>objects</table>
+            <group>status</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>from_folder_contents</field>
+            <caption>Info table</caption>
+      </property>
+      <property>
+            <name>do_resize</name>
+            <table>objects</table>
+            <group>status</group>
+            <type>submit</type>
+            <value>Töötle</value>
+            <action>do_resize</action>
+            <store>no</store>
+            <field>do_resize</field>
+            <caption>Töötle</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_IMAGE_RESIZER</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <config>
+                  <caption>Võimalused</caption>
+            </config>
+            <status>
+                  <caption>Staatus</caption>
+            </status>
+      </groupinfo>
+</properties>
+
