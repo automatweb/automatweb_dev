@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.64 2004/02/25 15:57:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.65 2004/03/08 19:16:00 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -23,6 +23,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property subtitle type=textbox size=60 trans=1
 @caption Alapealkiri
+
+@property alias type=textbox size=60 table=objects field=alias
+@caption Alias
 
 @property author type=textbox size=60 trans=1
 @caption Autor
