@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.53 2003/07/01 10:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.54 2003/07/01 12:59:13 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3613,7 +3613,7 @@ class form_element extends aw_template
 				$lbitems = $this->get_el_lb_items();
 				foreach($lbitems as $idx => $str)
 				{
-					if ($str == $val)
+					if (trim($str) == trim($val))
 					{
 						$this->entry = "element_".$this->arr["id"]."_lbopt_".$idx;
 						return;
