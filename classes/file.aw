@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.63 2003/10/21 18:59:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.64 2003/11/13 11:21:42 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -112,7 +112,7 @@ class file extends class_base
 					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
 					$size = filesize($file);
 					$data["value"] = html::href(array(
-						"url" => $this->mk_my_orb("preview",array("id" => $arr["obj_inst"]->id(),"name" => urlencode($arr["obj_inst"]->prop("name")))),
+						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name())/*$this->mk_my_orb("preview",array("id" => $arr["obj_inst"]->id(),"name" => urlencode($arr["obj_inst"]->prop("name"))))*/,
 						"caption" => sprintf("%s (%dK)",$arr["obj_inst"]->prop("name"),$size/1024),
 						"target" => "_blank",
 					));
