@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.46 2004/09/04 18:49:08 kristo Exp $
+// $Id: cfgutils.aw,v 1.47 2004/09/14 09:30:48 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -123,7 +123,6 @@ class cfgutils extends aw_template
 
 		$source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
-
 
 		if ($source)
 		{
