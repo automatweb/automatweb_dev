@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.95 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.96 2004/06/25 21:29:27 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -850,11 +850,11 @@ class menu extends class_base
 		// the contents of the container
 		if ($args["id"])
 		{
-			$obj = $this->get_object($args["id"]);
+			$obj = new object($args["id"]);
 			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"admin_menus");
 			$title = html::href(array(
 				"url" => $link,
-				"caption" => $obj["name"],
+				"caption" => $obj->name(),
 			));
 			$title .= " / Muuda";
 		}
