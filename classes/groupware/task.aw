@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.2 2003/11/19 11:32:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.3 2003/11/27 12:35:37 duke Exp $
 // task.aw - Toimetus 
 
 /*
@@ -27,6 +27,8 @@
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
+@classinfo no_status=1
+
 */
 
 class task extends class_base
@@ -45,7 +47,6 @@ class task extends class_base
 		switch($data["name"])
 		{
 			case "comment":
-			case "status":
 				$retval = PROP_IGNORE;
 				break;
 
