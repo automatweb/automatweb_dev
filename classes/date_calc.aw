@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.9 2003/08/29 11:51:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.10 2003/12/03 12:35:50 duke Exp $
 
 ////
 // !get_date_range
@@ -191,13 +191,6 @@ function get_date_range($args = array())
 		"next" => date("d-m-Y",$next),
 		"timestamp" => $timestamp,
 	);
-	global $XX3;
-	if ($XX3)
-	{
-		print "<pre>";
-		print_r($arr);
-		print "</pre>";
-	};
 	return $arr;
 }	
 

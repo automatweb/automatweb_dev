@@ -11,7 +11,8 @@ class doc_event extends core
 	{
 		$calendars = array($args["folder"]);
 		$this->save_handle();
-		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$args[id]' AND reltype = " . RELTYPE_EVENT_SOURCE;
+		// TODO: register all reltypes as constants or something, so that they can be accessed from outside the class.
+		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$args[id]' AND reltype = " . 2;	// RELTYPE_EVENT_SOURCE from planner
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -314,6 +315,12 @@ class doc_event extends core
 		}
 
 		$this->next_event = $this->prev_event = "";
+
+		global $XX3;
+		if ($XX3)
+		{
+			arr($args);
+		};
 		
 		if ($this->start_time || $rel_next_start)
 		{
@@ -324,6 +331,7 @@ class doc_event extends core
 				"type" => $type,
 				"direction" => 1,
 			));
+
 
 			$this->_get_next_event(array(
 				"calstring" => $calstring,
