@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.68 2004/06/11 08:52:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.69 2004/06/15 08:50:02 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -390,7 +390,16 @@ class admin_menus extends aw_template
 				$db["mtype"] = MN_HOME_FOLDER_SUB;	// so you can share them later on.
 			}
 
-			$id = $this->new_object(array("parent" => $parent,"name" => $db["name"], "class_id" => $db["class_id"], "status" => $db["status"], "comment" => $db["comment"], "jrk" => $db["jrk"], "visible" => $db["visible"], "alias" => $db["alias"], "periodic" => $db["periodic"]));
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $db["name"], 
+				"class_id" => $db["class_id"],
+				"status" => $db["status"], 
+				"comment" => $db["comment"], 
+				"jrk" => $db["jrk"], 
+				"alias" => $db["alias"], 
+				"periodic" => $db["periodic"]
+			));
 			$this->db_query("INSERT INTO menu 
 						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
 			VALUES ($id,'".$db["link"]."','".$db["mtype"]."','".$db["is_l3"]."','".$db["periodic"]."','".$db["clickable"]."','".$db["target"]."','".$db["mid"]."','".$db["hide_noact"]."','".$db["ndocs"]."','".$db["admin_feature"]."','".$db["number"]."',$icon_id,'".$db["links"]."')");
@@ -753,14 +762,6 @@ class admin_menus extends aw_template
 						"jrk" => substr($mt[1],($pos > 0 ? $pos+1 : 0))
 					));
 
-					if ($mopts["fn"] != "")
-					{
-						$this->set_object_metadata(array(
-							"oid" => $id,
-							"key" => "aip_filename",
-							"value" => $mopts["fn"]
-						));
-					}
 					$this->db_query("INSERT INTO menu (id,type,link,clickable,target,mid,hide_noact,width,right_pane,left_pane)
 						VALUES($id,".MN_CONTENT.",'".$mopts["link"]."','".$mopts["click"]."','".$mopts["target"]."','".$mopts["mid"]."','".$mopts["makdp"]."','".$mopts["width"]."','".(!$mopts["rp"])."','".(!$mopts["lp"])."')");
 					$levels[$mt[1]] = $id;
