@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.52 2004/11/05 14:06:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.53 2004/11/17 09:19:26 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -176,7 +176,8 @@ class promo extends class_base
 					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
 					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
 					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
-					'objects.name' => "Objekti nime j&auml;rgi"
+					'objects.name' => "Objekti nime j&auml;rgi",
+					'planner.start' => "Kalendris valitud aja j&auml;rgi",
 				);
 				break;
 
