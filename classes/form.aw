@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.5 2001/05/21 07:07:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.6 2001/05/21 10:43:58 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -645,6 +645,8 @@ $orb_defs["form"] = "xml";
 		//	$reforb - replaces {VAR:reforb}
 		//  $form_action = <form action='$form_action'
 		//  $extraids - array of parameters to pass along with the form
+		//  $elvalues - array of name => value pairs for elements that specify default values
+		//  $prefix - value to prefix the element names with
 		function gen_preview($arr)
 		{
 			extract($arr);
@@ -671,7 +673,7 @@ $orb_defs["form"] = "xml";
 			$c="";
 			for ($i=0; $i < $this->arr[rows]; $i++)
 			{
-				$html=$this->mk_row_html($i,&$images);
+				$html=$this->mk_row_html($i,&$images,$prefix,$elvalues);
 				$this->vars(array("COL" => $html));
 				$c.=$this->parse("LINE");
 			}
@@ -730,14 +732,14 @@ $orb_defs["form"] = "xml";
 
 		////
 		// !generates one row of form elements
-		function mk_row_html($row,&$images,$prefix = "")
+		function mk_row_html($row,&$images,$prefix = "",$elvalues = array())
 		{
 			$html = "";
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
 				if (($arr = $this->get_spans($row, $a)))
 				{
-					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($this->arr["def_style"], &$images, $arr["colspan"], $arr["rowspan"],$prefix);
+					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($this->arr["def_style"], &$images, $arr["colspan"], $arr["rowspan"],$prefix,$elvalues);
 				}
 			}
 			return $html;
@@ -1962,6 +1964,36 @@ $orb_defs["form"] = "xml";
 				return true;
 			}
 			return false;
+		}
+
+		////
+		// !returns array of name => value pairs for the loaded form entry if $type == ARR_ELNAME
+		// if $type == ARR_ELID, then array index is element id
+		function get_element_values($type = ARR_ELNAME)
+		{
+			$ret = array();
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					$this->arr["contents"][$row][$col]->get_els(&$elar);
+					reset($elar);
+					while (list(,$el) = each($elar))
+					{
+						if ($type == ARR_ELNAME)
+						{
+							$k = $el->get_el_name();
+						}
+						else
+						if ($type == ARR_ELID)
+						{
+							$k = $el->get_id();
+						}
+						$ret[$k] = $this->entry[$el->get_id()];
+					}
+				}
+			}
+			return $ret;
 		}
 	};	// class ends
 ?>

@@ -299,7 +299,25 @@ define(FORM_EELEMENT_LOADED,1);
 			return true;
 		}
 
-		function gen_user_html_not(&$images,$prefix = "")		// function that doesn't use templates
+		function get_val($elvalues = array())
+		{
+			if ($this->entry_id)
+			{
+				$val = $this->entry;
+			}
+			else
+			if ($elvalues[$this->arr["name"]] != "")
+			{
+				$val = $elvalues[$this->arr["name"]];
+			}
+			else
+			{
+				$val = $this->arr["default"];
+			}
+			return $val;
+		}
+
+		function gen_user_html_not(&$images,$prefix = "",$elvalues = array())		// function that doesn't use templates
 		{
 			$html="";
 			$info = $images->proc_text($this->arr[info], $this->parent);
@@ -310,12 +328,12 @@ define(FORM_EELEMENT_LOADED,1);
 			if ($this->arr[type] == "textarea")
 			{
 				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr[ta_cols]."' ROWS='".$this->arr[ta_rows]."'>";
-				$html.=($this->entry_id ? $this->entry : $this->arr["default"])."</textarea>";
+				$html.=($this->get_val($elvalues))."</textarea>";
 			}
 			
 			if ($this->arr[type] == "radiobutton")
 			{
-				$ch = ($this->entry_id ? ($this->entry == $this->id ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
+				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
 				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr[group]."' VALUE='".$this->id."' $ch>";
 			}
 			
@@ -333,14 +351,14 @@ define(FORM_EELEMENT_LOADED,1);
 				$html.="</select>";
 			}
 				
-			if ($this->arr[type] == "multiple")
+			if ($this->arr["type"] == "multiple")
 			{
 				$html="<select NAME='".$prefix.$elid."[]' MULTIPLE>";
 
 				if ($this->entry_id)
 					$ear = explode(",",$this->entry);
 
-				for ($b=0; $b < $this->arr[multiple_count]; $b++)
+				for ($b=0; $b < $this->arr["multiple_count"]; $b++)
 				{
 					$sel = false;
 					if ($this->entry_id)
@@ -351,71 +369,71 @@ define(FORM_EELEMENT_LOADED,1);
 								$sel = true;
 					}
 					else
-						$sel = ($this->arr[multiple_defaults][$b] == 1 ? true : false);
+						$sel = ($this->arr["multiple_defaults"][$b] == 1 ? true : false);
 
-					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$this->arr[multiple_items][$b];
+					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$this->arr["multiple_items"][$b];
 				}
 				$html.="</select>";
 			}
 			
-			if ($this->arr[type] == "checkbox")
+			if ($this->arr["type"] == "checkbox")
 			{
 				$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
 				$html = "<input type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
 			}
 			
-			if ($this->arr[type] == "textbox")
+			if ($this->arr["type"] == "textbox")
 			{
-				$l = $this->arr[length] ? "SIZE='".$this->arr[length]."'" : "";
-				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->entry_id ? $this->entry : $this->arr["default"])."'>";
+				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
+				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
 			}
 
 			if ($this->arr["type"] == "price")
 			{
-				$html = "<input type='text' NAME='".$prefix.$elid."' VALUE='".($this->entry_id ? $this->entry : $this->arr["price"])."'>";
+				$html = "<input type='text' NAME='".$prefix.$elid."' VALUE='".($this->get_val($elvalues))."'>";
 			}
 
-			if ($this->arr[type] == "submit")
+			if ($this->arr["type"] == "submit")
 				$html = "<input type='submit' VALUE='".$this->arr["button_text"]."'>";
 
-			if ($this->arr[type] == "reset")
+			if ($this->arr["type"] == "reset")
 				$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
 				
-			if($this->arr[type] == "file")
+			if($this->arr["type"] == "file")
 				$html = "<input type='file' NAME='".$prefix.$elid."'>";
 
-			if($this->arr[type] == "link")
+			if($this->arr["type"] == "link")
 			{
-				$html="<table border=0><tr><td align=right>".$this->arr[link_text]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry[text] : "")."'></td></tr>";
-				$html.="<tr><td align=right>".$this->arr[link_address]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry[address] : "")."'></td></tr></table>";
+				$html="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
+				$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
 			}
 
-			if ($this->arr[type] == "")
+			if ($this->arr["type"] == "")
 				$html .= $text;
 			else
 			{
-				$sep_ver = ($this->arr[text_distance] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr[text_distance]."' border='0'><br>" : "<br>");
-				$sep_hor = ($this->arr[text_distance] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr[text_distance]."' border='0'>" : "");
-				if ($this->arr[text_pos] == "up")
+				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr[text_distance]."' border='0'><br>" : "<br>");
+				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr[text_distance]."' border='0'>" : "");
+				if ($this->arr["text_pos"] == "up")
 					$html = $text.$sep_ver.$html;
 				else
-				if ($this->arr[text_pos] == "down")
+				if ($this->arr["text_pos"] == "down")
 					$html = $html.$sep_ver.$text;
 				else
-				if ($this->arr[text_pos] == "right")
+				if ($this->arr["text_pos"] == "right")
 					$html = $html.$sep_hor.$text;
 				else
 					$html = $text.$sep_hor.$html;		// default is on left of element
 			}
 			
-			if ($this->arr[info] != "")
+			if ($this->arr["info"] != "")
 				$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
 
-			if ($this->arr[sep_type] == 1)	// reavahetus
+			if ($this->arr["sep_type"] == 1)	// reavahetus
 				$html.="<br>";
 			else
-			if ($this->arr[sep_pixels] > 0)
-				$html.="<img src='/images/transa.gif' width=".$this->arr[sep_pixels]." height=1 border=0>";
+			if ($this->arr["sep_pixels"] > 0)
+				$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
 			return $html;
 		}
 
