@@ -13,6 +13,56 @@
 <!-- SUB: hidden -->
 	{VAR:element}
 <!-- END SUB: hidden -->
+<!-- SUB: getoptions -->
+<script language= "javascript">
+function GetOptions(from, tu,tyype)
+{
+	if (tyype == 'select')
+	{
+		var defaults = new Array();
+
+		{VAR:selected}
+
+		len = tu.options.length;
+		for (i=0; i < len; i++)
+		{
+			tu.options[0] = null
+		}
+		var j = 0;
+		len = from.options.length;
+		for (var i=0; i < len; i++)
+		{
+			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+			{
+//					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, seld[from.options[i].value]);
+tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, ((len == 1) ? true : (defaults[from.options[i].value] ? defaults[from.options[i].value] : false)));
+				j = j + 1;
+			}
+		}
+	}
+	else
+	{
+		len = tu.value = '';
+		len = from.options.length;
+		for (var i=0; i < len; i++)
+		{
+			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+			{
+				tu.value = tu.value + ',' + from.options[i].value;
+			}
+
+		}
+
+	}
+	document.searchform.elements['s[name]'].focus();
+}
+
+if (document.forms['searchform'].elements['{VAR:element}'])
+{
+	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['{VAR:element}'], '{VAR:type}');
+}
+</script>
+<!-- END SUB: getoptions -->
 
 
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.39 2003/05/28 12:03:29 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.40 2003/05/28 13:37:25 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -697,55 +697,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			}
 		}
 
-
-//dont worry this is javascript
-				$scr = <<<SCR
-<script language= "javascript">
-function GetOptions(from, tu,tyype)
-{
-	if (tyype=='select')
-	{
-		var defaults = new Array();
-
-		$selected
-
-		len = tu.options.length;
-		for (i=0; i < len; i++)
-		{
-			tu.options[0] = null
-		}
-		var j = 0;
-		len = from.options.length;
-		for (var i=0; i < len; i++)
-		{
-			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-			{
-//					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, seld[from.options[i].value]);
-tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, ((len == 1) ? true : (defaults[from.options[i].value] ? defaults[from.options[i].value] : false)));
-				j = j + 1;
-			}
-
-		}
-	}
-	else
-	{
-		len = tu.value = '';
-		len = from.options.length;
-		for (var i=0; i < len; i++)
-		{
-			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-			{
-				tu.value = tu.value + ',' + from.options[i].value;
-			}
-
-		}
-
-	}
-	document.searchform.elements['s[name]'].focus();
-}
-SCR;
-
-
 		foreach($fields as $key => $val)
 		{
 			if (is_array($fields[$key]))
@@ -755,7 +706,7 @@ SCR;
 				{
 					$fieldref['name'] = 's['.$key.']';
 				}
-				
+
 				switch($fieldref["type"])
 				{
 					case "select":
@@ -789,13 +740,14 @@ SCR;
 						$items = $this->mpicker($sel,$fieldref["options"]);
 						$size = ($fieldref["size"]) ? $fieldref["size"] : 5;
 
-						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:200px"></select>'.$scr."
-if (document.forms['searchform'].elements['s[class_id][]'])
-{
-	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]'], 'select');
-}
-</script>
-";
+						$this->vars(array(
+							'selected' => $selected,
+							'element' => 's[class_id][]',
+							'type' => 'select',
+						));
+
+
+						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:200px"></select>'.$this->parse('getoptions');
 
 						if (isset($fieldref["filter"]))
 						{
@@ -816,16 +768,13 @@ if (document.forms['searchform'].elements['s[class_id][]'])
 						break;
 
 					case "class_id_hidden":
+						$this->vars(array(
+							'selected' => $selected,
+							'element' => 's[class_id]',
+							'type' => 'textbox',
+						));
 
-						$element = html::hidden($fieldref).$scr.
-"
-if (document.forms['searchform'].elements['s[class_id]'])
-{
-GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id]'], 'textbox');
-}
-
-"
-.'</script>';
+						$element = html::hidden($fieldref).$this->parse('getoptions');
 
 
 					break;
@@ -959,7 +908,7 @@ GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].el
 		{
 			$reforb = $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent));
 		}
-		
+
 
 		$this->vars(array(
 			"table" => $table,
