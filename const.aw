@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.13 2001/05/31 21:26:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.14 2001/06/05 17:40:03 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ if (empty($basedir))
 
 	if (!file_exists($basedir."/COPYING"))
 	{
-		$basedir = "/www/automatweb_dev/public";
+		$basedir = "/www/automatweb_dev";
 		// koht, kus asub ikoonide convertimisex kasutatav proge
 		$convert_dir = "/usr/X11R6/bin/convert";
 		// piltide identimisex kasutatav proge
