@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.26 2004/10/08 15:54:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.27 2004/11/19 11:31:06 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2336,9 +2336,14 @@ class planner extends class_base
 				$tmp = obj($o->prop("rank"));
 				$rank = $tmp->name();
 			}
+			$_co = "";
+			if (is_oid($o->prop("work_contact")) && $this->can("view",$o->prop("work_contact")))
+			{
+				$_co = html::get_change_url($o->prop("work_contact"), array(), $org_name);
+			}
 			$t->define_data(array(
 				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
-				"co" => html::get_change_url($o->prop("work_contact"), array(), $org_name),
+				"co" => $_co,
 				"phone" => $phone,
 				"email" => $email,
 				"position" => $rank,
