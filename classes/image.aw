@@ -197,7 +197,8 @@ class image extends aw_template
 				"imgcaption" => $idata["comment"],
 				"align" => $align[$matches[4]],
 				"plink" => $idata["link"],
-				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
+				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
+				"img_name" => $idata["name"]
 			);
  
 			if ($this->is_flash($idata["file"]))
