@@ -1,19 +1,13 @@
 <script type="text/javascript">
-var chk_status = 1;
-
-function selall(element)
+var chk_status = true;
+function selall()
 {
-        element = element + '[';
-        len = document.changeform.elements.length;
-        for (i=0; i < len; i++)
-        {
-                if (document.changeform.elements[i].name.indexOf(element) != -1)
-                {
-                        document.changeform.elements[i].checked = chk_status;
-                        //window.status = "" + i + " / " + len;
-                }
-        }
-        chk_status = chk_status ? 0 : 1;
+	len = document.changeform.elements.length;
+	for (i = 0; i < len; i++)
+	{
+		document.changeform.elements[i].checked = chk_status;
+	}
+	chk_status = !chk_status;
 }
 </script>
 <!-- SUB: group -->
@@ -25,7 +19,7 @@ function selall(element)
 		<td width="100" bgcolor="{VAR:bgcolor}">Pealkiri</td>
 		<td width="150" bgcolor="{VAR:bgcolor}">Pealkirja asukoht</td>
 		<td width="100" bgcolor="{VAR:bgcolor}">Tüüp</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><a href="javascript:selall('mark')">Vali</a></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><a href="javascript:selall()">Vali</a></td>
 	</tr>
 	<!-- SUB: property -->
 	<tr>
@@ -33,7 +27,7 @@ function selall(element)
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:capt_ord}</td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}" style="border: 3px solid blue;"></td>
 	</tr>
 	<!-- SUB: clf1 -->
 	<tr>

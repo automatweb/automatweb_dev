@@ -9,7 +9,7 @@
 		<!-- SUB: avail_property -->
 		<tr>
 			<td width="30" align="center">{VAR:prp_name}</td>
-			<td width="100"><input type="text" name="mark[{VAR:prp_type}]" style="width:50px"></td>
+			<td width="100"><input type="text" id="mark[{VAR:prp_type}]" name="mark[{VAR:prp_type}]" style="width:50px"></td>
 			<td width="100">kasutusel {VAR:prp_used} / alles {VAR:prp_unused}</td>
 		</tr>	
 		<!-- END SUB: avail_property -->

@@ -179,14 +179,35 @@
             <caption>Subaction (sys)</caption>
       </property>
       <property>
-            <name>gen_controllers</name>
+            <name>gen_submit_controllers</name>
             <table>objects</table>
-            <group>controllers</group>
+            <group>set_controllers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
             <callback>gen_controller_props</callback>
             <caption>Kontrollerid</caption>
+      </property>
+      <property>
+            <name>gen_view_controllers</name>
+            <table>objects</table>
+            <group>get_controllers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>gen_view_controller_props</callback>
+            <caption>Kontrollerid</caption>
+      </property>
+      <property>
+            <name>default_table</name>
+            <table>objects</table>
+            <group>defaults</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Vaikimisi v‰‰rtused</caption>
       </property>
       <property>
             <name>sysdefault</name>
@@ -217,8 +238,24 @@
             <controllers>
                   <caption>Kontrollerid</caption>
             </controllers>
-            <system>
+            <set_controllers>
+                  <caption>Salvestamine</caption>
+                  <parent>controllers</parent>
+            </set_controllers>
+            <get_controllers>
+                  <caption>N‰itamine</caption>
+                  <parent>controllers</parent>
+            </get_controllers>
+            <settings>
                   <caption>Seaded</caption>
+            </settings>
+            <defaults>
+                  <caption>Omaduste v‰‰rtused</caption>
+                  <parent>settings</parent>
+            </defaults>
+            <system>
+                  <caption>Vormi seaded</caption>
+                  <parent>settings</parent>
             </system>
       </groupinfo>
       <reltypes>
@@ -235,8 +272,13 @@
             <CONTROLLER>
                   <value>3</value>
                   <clid>CL_CFGCONTROLLER</clid>
-                  <caption>Kontroller</caption>
+                  <caption>Salvestamise kontroller</caption>
             </CONTROLLER>
+            <VIEWCONTROLLER>
+                  <value>5</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>N&amp;auml;tamise kontroller</caption>
+            </VIEWCONTROLLER>
             <OUTPUT>
                   <value>4</value>
                   <clid>CL_CFGFORM</clid>
