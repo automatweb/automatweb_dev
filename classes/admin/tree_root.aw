@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.1 2003/11/08 09:23:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.2 2003/11/09 18:19:33 duke Exp $
 // tree_root.aw - puu rootobjekt
 
 /*
@@ -12,10 +12,13 @@
 	@caption Rootmenüü
 
 	@classinfo relationmgr=yes
+	
+	@reltype ROOT value=1 clid=CL_MENU
+	@caption juurmenüü
 
 */
 
-define("RELTYPE_ROOT",1);
+//define("RELTYPE_ROOT",1);
 
 class tree_root extends class_base
 {
@@ -48,23 +51,5 @@ class tree_root extends class_base
 		};
 	}
 
-	function callback_get_rel_types()
-	{
-                return array(
-                        RELTYPE_ROOT => "juurmenüü",
-		);
-	}
-
-	function callback_get_classes_for_relation($arr)
-	{
-		$retval = false;
-		switch($arr["reltype"])
-		{
-			case RELTYPE_ROOT:
-				$retval = array(CL_MENU);
-				break;
-		};
-		return $retval;
-	}
 };
 ?>
