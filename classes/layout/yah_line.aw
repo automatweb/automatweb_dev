@@ -53,7 +53,7 @@ class yah_line extends class_base
 			if ($show)
 			{
 				$mn = $mc->get_cached_menu($oid);
-				$check_subs = ($mc->subs[$mn["oid"]] > 0) || $ob->prop('show_nosubs') == 1);
+				$check_subs = ($mc->subs[$mn["oid"]] > 0) || $ob->prop('show_nosubs') == 1;
 
 				if ($mn["clickable"] == 1 && $check_subs)
 				{
