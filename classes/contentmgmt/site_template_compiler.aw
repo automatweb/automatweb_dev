@@ -694,6 +694,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"link\" => \$this->make_menu_link($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
 	
@@ -850,7 +851,7 @@ class site_template_compiler extends aw_template
 				$ret .= $this->_gi()."\"parent\" => \$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."),\n";
 			}
 		}
-		$ret .= $this->_gi()."\"class_id\" => CL_PSEUDO,\n";
+		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
 		$ret .= $this->_gi()."\"sort_by\" => \"objects.jrk,objects.created\",\n";
 		return $ret;
@@ -886,6 +887,40 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); ".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+
+			// add hide_noact check
+			$ret .= $this->_gi()."if (".$o_name."->prop(\"hide_noact\") == 1)\n";
+			$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+				$ret .= $this->_gi()."if (aw_global_get(\"act_per_id\") > 1)\n";
+				$ret .= $this->_gi()."{\n";
+					$this->brace_level++;
+					$ret .= $this->_gi()."\$_tmp = ".$o_name."->meta(\"active_documents_p\");\n";
+					$ret .= $this->_gi()."if (!is_array(\$_tmp[aw_global_get(\"act_per_id\")]) || count(\$_tmp[aw_global_get(\"act_per_id\")]) < 1)\n";
+					$ret .= $this->_gi()."{\n";
+						$this->brace_level++;
+						$ret .= $this->_gi()."continue;\n";
+						$this->brace_level--;
+					$ret .= $this->_gi()."}\n";
+					$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+
+		$ret .= $this->_gi()."\$_tmp = ".$o_name."->meta(\"active_documents\");\n";
+		$ret .= $this->_gi()."if (!is_array(\$_tmp) || count(\$_tmp) < 1)\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."continue;\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$this->brace_level--;
+				$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."}\n";
+
 		return $ret;
 	}
 
