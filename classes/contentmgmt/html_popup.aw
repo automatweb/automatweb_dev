@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.5 2005/03/18 15:59:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.6 2005/03/21 15:46:20 ahti Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
@@ -219,7 +219,7 @@ class html_popup extends class_base
 				$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects");
 			}
 
-			$rv .= sprintf("<script type='text/javascript'>window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=%s,width=%s,height=%s');</script>", $url, $o->prop("scrollbars"), $o->prop("width"), $o->prop("height"));
+			$rv .= sprintf("<script type='text/javascript'>window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=%s,width=%s,height=%s');</script>", $url, (int)$o->prop("scrollbars"), (int)$o->prop("width"), (int)$o->prop("height"));
 
 		};
 		return $rv;
