@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.125 2003/12/04 10:03:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.126 2003/12/04 12:22:54 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -581,7 +581,12 @@ class aliasmgr extends aw_template
 		$chlinks = array();
 		foreach($obj->connections_from() as $alias)
 		{
-			$adat = array();
+			$adat = array(
+				"createdby" => $alias->prop("to.createdby"),
+				"created" => $alias->prop("to.created"),
+				"modifiedby" => $alias->prop("to.modifiedby"),
+				"modified" => $alias->prop("to.modified"),
+			);
 
 			$aclid = $alias->prop("to.class_id");
 
@@ -856,9 +861,12 @@ class aliasmgr extends aw_template
 	function recover_idx_enumeration($id)
 	{
 		// fetch a list of all the aliases for this object
-		$alist = $this->get_aliases(array(
+		/*$alist = $this->get_aliases(array(
 			"oid" => $id,
-		));
+		));*/
+		$o = obj($id);
+		$alist = $o->connections_from();
+
 		$oid = $id;
 
 		// we need to check whether there are any conflicts in the idx list
@@ -870,22 +878,22 @@ class aliasmgr extends aw_template
 		foreach($alist as $alias)
 		{
 			// if any of the idx-s is 0, then we need to re-enumerate for sure.
-			if ($alias["idx"] == 0)
+			if ($alias->prop("idx") == 0)
 			{
-				$need_to_enumerate[$alias["class_id"]] = 1;
+				$need_to_enumerate[$alias->prop("to.class_id")] = 1;
 			};
 
-			$idx_by_class[$alias["class_id"]]++;
+			$idx_by_class[$alias->prop("to.class_id")]++;
 
-			$idx_by_id[$alias["id"]] = $idx_by_class[$alias["class_id"]];
+			$idx_by_id[$alias->prop("id")] = $idx_by_class[$alias->prop("to.class_id")];
 
-			if ($idx_check[$alias["class_id"]][$alias["idx"]])
+			if ($idx_check[$alias->prop("class_id")][$alias->prop("idx")])
 			{
-				$need_to_enumerate[$alias["class_id"]] = 1;
+				$need_to_enumerate[$alias->prop("class_id")] = 1;
 			}
 			else
 			{
-				$idx_check[$alias["class_id"]][$alias["idx"]] = 1;
+				$idx_check[$alias->prop("class_id")][$alias->prop("idx")] = 1;
 			};
 		}
 

@@ -476,6 +476,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_s.flags as `from.flags`,
 				o_t.modified as `to.modified`,
 				o_s.modified as `from.modified`,
+				o_t.modifiedby as `to.modifiedby`,
+				o_s.modifiedby as `from.modifiedby`,
 				o_t.name as `to.name`,
 				o_s.name as `from.name`,
 				o_t.class_id as `to.class_id`,
