@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.104 2003/06/26 10:36:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.105 2003/06/26 14:55:06 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -349,7 +349,24 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
+		// try to find aliases until we no longer find any. 
+		// why is this? well, to enable the user to add aliases bloody anywhere. like in files that are to be shown right away
+		while (1)
+		{
+
+		$_cnt++;
+		if ($_cnt > 20)
+		{
+			// make sure we don't end up in an endless loop
+			break;
+		}
+
+		$_res = preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
+		if (!$_res)
+		{
+			// if no more aliases are found, then break out of the loop.
+			break;
+		}
 
 		$cache_inst = get_instance("cache");
 
@@ -462,7 +479,8 @@ class aliasmgr extends aw_template
 					}
 				}
 			}
-		};
+		}
+		}	// while (1)
 	}
 
 	////
