@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.156 2003/02/14 17:52:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.157 2003/02/21 12:47:44 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -682,26 +682,17 @@ class core extends db_connector
 	// target on see, mida lingitakse
 	// aliaste tabelisse paigutame ka klassi id, nii
 	// peaks hiljem olema voimalik natuke kiirust gainida
+
+	// positioned arguments suck, add_alias is the Right Way to do this,
+	// but I will leave this in place just in case someone still
+	// needs it.	
 	function add_alias($source,$target,$extra = "") 
 	{
-		$target_data = $this->get_object($target);
-		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$source' AND type =  '$target_data[class_id]'","idx");
-		if ($idx === "")
-		{
-			$idx = 1;
-		}
-		else
-		{
-			$idx++;
-		}
-		$q = "INSERT INTO aliases (source,target,type,data,idx)
-			VALUES('$source','$target','$target_data[class_id]','$extra','$idx')";
-
-		$this->db_query($q);
-		$aliasmgr = get_instance("aliasmgr");
-		$aliasmgr->cache_oo_aliases($source);
-
-		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $source aliase $target", $source);
+		$this->add_alias(array(
+			"id" => $source,
+			"alias" => $target,
+			"extra" => $extra,
+		));
 	}
 
 	////
@@ -845,11 +836,33 @@ class core extends db_connector
 	// parameters:
 	//   id - the id of the object where the alias will be attached
 	//   alias - the id of the object to attach as an alias
+	//   relobj_id - reference to the relation object
+	//   reltype - type of the relation
 	function addalias($arr)
 	{
 		extract($arr);
-		$this->add_alias($id,$alias);
-		//header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		$extra = ($arr["extra"]) ? $arr["extra"] : "";
+		$target_data = $this->get_object($alias);
+		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
+		if ($idx === "")
+		{
+			$idx = 1;
+		}
+		else
+		{
+			$idx++;
+		}
+
+		$relobj_id = (int)$arr["relobj_id"];
+		$reltype = (int)$arr["reltype"];
+		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
+			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
+
+		$this->db_query($q);
+		$aliasmgr = get_instance("aliasmgr");
+		$aliasmgr->cache_oo_aliases($id);
+
+		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
 	}
 
 	////
