@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.25 2004/01/13 16:24:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.26 2004/01/19 10:45:25 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -219,7 +219,8 @@ class messenger_v2 extends class_base
 			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
 
 			// right now it only deals with a single server.
-			$_sdat =$conns[0];
+			list(,$_sdat) = each($conns);
+			//$_sdat =$conns[0];
 			if (empty($_sdat))
 			{
 				die("‹htegi sobivat IMAP sissep‰‰su ei leitud");
