@@ -756,6 +756,10 @@ class site_show extends class_base
 		{
 			$docid = $this->get_default_document();
 		}
+		else
+		{
+			$docid = $arr["docid"];
+		}
 
 		return $this->_int_show_documents($docid);
 	}
@@ -1085,7 +1089,8 @@ class site_show extends class_base
 			"SEL_LANG_BEGIN" => "",
 			"LANG_BEGIN" => "",
 			"sel_charset" => $sel_lang["charset"],
-			"se_lang_id" => $lang_id
+			"se_lang_id" => $lang_id,
+			"lang_code" => $sel_lang["acceptlang"]
 		));
 	}
 
@@ -1235,17 +1240,23 @@ class site_show extends class_base
 	{
 		if (!$this->current_login_menu_id)
 		{
-			$cfg = get_instance("config");
-			$_id = $cfg->get_login_menus();
-			if ($_id > 0)
-			{
-				$this->current_login_menu_id = $_id;
-			}
-			else
+			if (aw_global_get("uid") == "")
 			{
 				$this->current_login_menu_id = array_search("LOGGED", aw_ini_get("menuedit.menu_defs"));
 			}
-			
+			else
+			{
+				$cfg = get_instance("config");
+				$_id = $cfg->get_login_menus();
+				if ($_id > 0)
+				{
+					$this->current_login_menu_id = $_id;
+				}
+				else
+				{
+					$this->current_login_menu_id = array_search("LOGGED", aw_ini_get("menuedit.menu_defs"));
+				}
+			}
 		}
 		return $this->current_login_menu_id;
 	}
