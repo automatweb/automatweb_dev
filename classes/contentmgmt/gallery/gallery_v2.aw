@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.37 2004/02/17 10:07:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.38 2004/02/19 22:12:16 duke Exp $
 
 /*
 
@@ -278,12 +278,15 @@ class gallery_v2 extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		$obj = $arr['obj'];
+		$obj = get_object($arr["obj_inst"]->id());
+		$meta = $arr["obj_inst"]->meta();
 		if (substr($prop['name'],0,3) == "pg_")
 		{
 			$page_number = (int)substr($prop['name'], 3, 1);
+			$pg_data = $arr["obj_inst"]->meta("page_data");
 
-			$page_data = $obj['meta']['page_data'][$page_number]['layout'];
+			$page_data = $pg_data[$page_number]['layout'];
+			// _get_default_layout only needs a parent
 			if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
 			{
 				// this the first time this page is edited, so get the default layout for it
@@ -291,23 +294,26 @@ class gallery_v2 extends class_base
 				$page_data = $l->get_layout($def_layout);
 			}
 
-			$this->_page_content = $obj['meta']['page_data'][$page_number]['content'];
-			$obj['meta']['image_folder'] = $this->_get_image_folder($obj);
+			$this->_page_content = $pg_data[$page_number]['content'];
+
+			// _get_image_folder also only needs the parent
+			// this obj thingie gets passed to _set_edit_cell_content, which only uses
+			// that image_folder value
+			$obj["meta"]["image_folder"] = $this->_get_imate_folder($obj);
 
 			$ge = get_instance("vcl/grid_editor");
-			$obj['meta']['page_data'][$page_number]['layout'] = $ge->on_edit_submit(
+			$pg_data[$page_number]['layout'] = $ge->on_edit_submit(
 				$page_data, 
-				$arr['form_data'],
+				$arr['request'],
 				array(
 					"cell_content_callback" => array(&$this, "_set_edit_cell_content", array("obj" => $obj, "page" => $page_number))
 				)
 			);
-			$obj['meta']['page_data'][$page_number]['content'] = $this->_page_content;
-			$arr['obj_inst']->set_meta("page_data", $obj['meta']['page_data']);
+			$pg_data[$page_number]['content'] = $this->_page_content;
+			$arr['obj_inst']->set_meta("page_data", $pg_data);
 		}
 		if ($prop['name'] == "reinit_layout" && $prop["value"] == 1)
 		{
-			$obj['meta']['page_data'] = array();
 			$arr['obj_inst']->set_meta('page_data', array());
 			$prop['value'] = 0;
 		}
@@ -319,7 +325,7 @@ class gallery_v2 extends class_base
 				$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
 				if (move_uploaded_file($zip_file, $tn))
 				{
-					$arr["metadata"]["up_zip_file"] = $tn;
+					$arr["obj_inst"]->set_meta("up_zip_file",$tn);
 					chmod($tn, 0666);
 				}
 				else
@@ -346,11 +352,11 @@ class gallery_v2 extends class_base
 
 			if ($meta["import_zip"] == 1)
 			{
-				$zf = $meta["up_zip_file"];
+				// un_zip_file was set in set_property
+				$zf = escapeshellarg($arr["obj_inst"]->meta("up_zip_file"));
 				$zip = aw_ini_get("server.unzip_path");
 				$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
 				mkdir($tn,0777);
-								
 				$cmd = $zip." -d $tn $zf";
 				$op = shell_exec($cmd);
 				$meta["import_local"] = 1;
