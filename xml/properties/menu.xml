@@ -197,6 +197,16 @@
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
       <property>
+            <name>docs_per_period</name>
+            <type>textbox</type>
+            <size>3</size>
+            <group>relations</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokumente perioodist</caption>
+      </property>
+      <property>
             <name>seealso</name>
             <type>select</type>
             <multiple>1</multiple>
@@ -430,6 +440,26 @@
             <table>menu</table>
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
+      </property>
+      <property>
+            <name>show_periods</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>show</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita perioode</caption>
+      </property>
+      <property>
+            <name>show_period_count</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>show</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu viimast perioodi</caption>
       </property>
       <property>
             <name>export</name>
