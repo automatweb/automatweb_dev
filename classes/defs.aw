@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.11 2001/06/18 18:46:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.12 2001/06/18 20:54:09 kristo Exp $
 if (defined("DEFS_LOADED"))
 {
 }
@@ -246,28 +246,9 @@ function http_refresh($delay,$url)
 	exit;
 }
 
-// dumbib array, for debugging purposes
-function dump_array($arr)
-{
-	if (is_array($arr))
-	{
-		while(list($k,$v) = each($arr))
-		{
-			if (is_array($v))
-			{
-				dump_array($v);
-			}
-			else
-			{
-				print "$k = $v<br>";
-			};
-		};
-	};
-}
-
-// kasutamine
+////
+// !kasutamine
 // if (is_valid("password",$pass_entered_in_a_form))
-
 function is_valid($set,$string)
 {
 	$sets = array(
@@ -302,15 +283,7 @@ function is_valid($set,$string)
 
 function is_number($parm)
 {
-	$int = (int)$parm;
-	if (strlen($parm) == strlen($int))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	};
+	return is_integer($parm);
 }
 
 // resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
@@ -498,7 +471,8 @@ function map2($format,$array,$type = 0)
 	return $retval;
 }
 
-function jerk_alert($contents) {
+function jerk_alert($contents) 
+{
 	$to = "log@struktuur.ee";
 	$subject = "Jerk alert!";
 	$headers = "From: AK veebiserver <nobody@heaven.eestiajakirjad.ee>";
