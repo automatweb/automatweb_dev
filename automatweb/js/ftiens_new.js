@@ -182,7 +182,7 @@ function drawFolder(leftSide)
   this.outputLink() 
   doc.write("<img id='folderIcon" + this.id + "' name='folderIcon" + this.id + "' src='" + this.iconSrc+"' border=0></a>") 
   doc.write("</td><td valign=middle nowrap class='fgtext_bad'>") 
-  url = "parent.frames[\"list\"].location.href=\""+this.hreference+ "\";return false;";
+  url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.hreference+ "\";return false;";
   onclick = "onClick='"+url+"'";
   doc.write("<a href='#' "+onclick+">"+this.desc + "</a>");
   if (USETEXTLINKS) 
@@ -293,13 +293,13 @@ function initializeItem(level, lastNode, leftSide)
 function drawItem(leftSide) 
 { 
   this.blockStart("item")
-  url = "parent.frames[\"list\"].location.href=\""+this.link+ "\";return false;";
+  url = "parent.frames[\""+TARGETFRAME+"\"].location.href=\""+this.link+ "\";return false;";
   onclick = "onClick='"+url+"'";
 
   doc.write("<tr><td class='fgtext_bad'>") 
   doc.write(leftSide) 
   //doc.write("<a href=" + this.link + ">") 
-  doc.write("<a href='"+this.link+"' "+onclick+" target='list'>")
+  doc.write("<a href='"+this.link+"' "+onclick+" target='"+TARGETFRAME+"'>")
   doc.write("<img id='itemIcon"+this.id+"' ") 
   doc.write("src='"+this.iconSrc+"' border=0>") 
   doc.write("</a>") 
@@ -477,6 +477,7 @@ function insDoc(parentFolder, document)
  
 //These two variables are overwriten on defineMyTree.js if needed be
 USETEXTLINKS = 0 
+TARGETFRAME = "list";
 STARTALLOPEN = 0
 indexOfEntries = new Array 
 nEntries = 0 
