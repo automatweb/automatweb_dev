@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.17 2003/10/22 08:49:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.18 2003/10/27 15:41:16 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -28,7 +28,11 @@ define("TREE_HTML", 1);
 define("TREE_JS", 2);
 define("TREE_DHTML",3);
 
+// does this tree type support loading branches on-demand?
 define("LOAD_ON_DEMAND",1);
+
+// does this tree type support persist state (using cookies)
+define("PERSIST_STATE",2);
 
 class treeview extends class_base
 {
@@ -222,6 +226,9 @@ class treeview extends class_base
 	//   root_name - root menu name
 	//   root_url - root menu url
 	//   root_icon - root menu icon
+	//   has_root - whether to draw to the root node. trees that load branches on demand don't
+	//		need to draw the rootnode for branches.
+	//   tree_id  - set to an unique id, if you want the tree to persist it's state
 	//	type - TREE_HTML|TREE_JS|TREE_DHTML , defaults to TREE_JS
 	function start_tree($arr)
 	{
@@ -229,17 +236,24 @@ class treeview extends class_base
 		$this->tree_type = empty($arr["type"]) ? TREE_JS : $arr["type"];
 		$this->tree_dat = $arr;
 		$this->has_root = empty($arr["has_root"]) ? false : $arr["has_root"];
+		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
+
 		if ($this->tree_type == TREE_DHTML && !empty($this->get_branch_func))
 		{
 			$this->features[LOAD_ON_DEMAND] = 1;
-		}
+		};
+
+		if ($this->tree_type == TREE_DHTML && !empty($this->tree_id) && $arr["persist_state"])
+		{
+			$this->features[PERSIST_STATE] = 1;
+		};
 
 	}
 
 	function has_feature($feature)
 	{
-		return isset($this->features[$feature]);
+		return isset($this->features[$feature]) ? 1 : 0;
 	}
 
 	////
@@ -254,7 +268,11 @@ class treeview extends class_base
 	//      target - the target frame of the link
 	function add_item($parent, $item)
 	{
-		$this->items[$parent][] = $item;
+		// dhtml tree (sometimes) needs to know information about
+		// a specific node and for this it needs to access
+		// that node directly. 
+		$this->itemdata[$item["id"]] = $item;
+		$this->items[$parent][] = &$this->itemdata[$item["id"]];
 	}
 
 	function set_selected_item($id)
@@ -354,7 +372,28 @@ class treeview extends class_base
 		$this->set_parse_method("eval");
 		$this->read_template("dhtml_tree.tpl");
 
-		$this->vars(array("target" => $this->tree_dat["url_target"]));
+
+		$this->r_path = array();
+		// now figure out the paths to selected nodse
+
+		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
+		if ($this->has_feature(PERSIST_STATE))
+		{
+			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
+			$r_path = array();
+			foreach($opened_nodes as $open_node)
+			{
+				$rp = $this->_get_r_path($open_node);
+				$r_path = array_merge($r_path,$rp);
+			};
+			$this->r_path = array_unique($r_path);
+		};
+
+		$this->vars(array(
+			"target" => $this->tree_dat["url_target"],
+			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
+		));
+
 		$rv = $this->draw_dhtml_tree($this->rootnode);
 
 		$root = "";
@@ -363,6 +402,7 @@ class treeview extends class_base
 			$this->vars(array(
 				"rootname" => $this->tree_dat["root_name"],
 				"rooturl" => $this->tree_dat["root_url"],
+				"tree_id" => $this->tree_id,
 				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
 			));
 			if ($this->get_branch_func)
@@ -374,9 +414,17 @@ class treeview extends class_base
 			$root .= $this->parse("HAS_ROOT");
 		};
 
+		// so, by default all items below the second level are hidden, but I should be able to
+		// make them visible based on my selected item. .. oh god, this is SO going to be not
+		// fun
+
+		// so, how do I figure out the path to the root node .. and if I do, then that's the
+		// same thing I'll have to give as an argument when using the on-demand feature
+
 		$this->vars(array(
 			"TREE_NODE" => $rv,
 			"HAS_ROOT" => $root,
+			"persist_state" => $this->has_feature(PERSIST_STATE),
 		));
 
 		return $this->parse();
@@ -384,28 +432,58 @@ class treeview extends class_base
 
 	}
 
+	// figures out the path from an item to the root of the tree
+	function _get_r_path($id)
+	{
+		$item = $this->itemdata[$id];
+		$rpath = array();
+		while(!empty($item))
+		{
+			$rpath[] = $item["id"];
+			$item = in_array($item["parent"],$rpath) ? false : $this->itemdata[$item["parent"]];
+		};
+		return $rpath;
+	}
+
 	function draw_dhtml_tree($parent)
 	{
 		$data = $this->items[$parent];
+
 		if (!is_array($data))
 		{
 			return "";
 		};
+
 		$this->level++;
 		$result = "";
+
 		foreach($data as $item)
 		{
 			$subres = $this->draw_dhtml_tree($item["id"]);
 
+			if (isset($item["iconurl"]))
+			{
+				$iconurl = $item["iconurl"];
+			}
+			elseif (in_array($item["id"],$this->r_path))
+			{
+				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/open_folder.gif";
+			}
+			else
+			{
+				$iconurl = $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif";
+			};
+
 			$this->vars(array(
 				"name" => $item["name"],
-				"idx" => $item["id"],
-				"idy" => $item["id"],
-				"idz" => $item["id"],
-				"iconurl" => isset($item["iconurl"]) ? $item["iconurl"] : $this->cfg["baseurl"] . "/automatweb/images/closed_folder.gif",
+				"id" => $item["id"],
+				"iconurl" => $iconurl,
 				"url" => $item["url"],
+				// spacer is only used for purely aesthetic reasons - to make
+				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),
 			));
+
 
 			if (empty($subres))
 			{
@@ -420,6 +498,9 @@ class treeview extends class_base
 			{
 				$this->vars(array(
 					"SINGLE_NODE" => $subres,
+					"display" => in_array($item["id"],$this->r_path) ? "block" : "none",
+					"data_loaded" => in_array($item["id"],$this->r_path) ? "true" : "false",
+					"node_image" => in_array($item["id"],$this->r_path) ? $this->cfg["baseurl"] . "/automatweb/images/minusnode.gif" : $this->cfg["baseurl"] . "/automatweb/images/plusnode.gif",
 				));
 				$tmp = $this->parse("SUB_NODES");
 				$this->vars(array(
