@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.21 2005/02/21 08:54:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.22 2005/03/03 12:57:44 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -275,6 +275,7 @@ class otto_import extends class_base
 		else
 		{
 			$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
+			//$data = array("3112371","340751F");
 		}
 
 		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/files/status.txt"))
@@ -343,7 +344,7 @@ class otto_import extends class_base
 			$html = $this->file_get_contents($url);
 
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
-			if (strpos($html,"konnten leider keine") !== false)
+			if (strpos($html,"Leider konnten wir im gesamten OTTO") !== false)
 			{ 
 				// read from baur.de
 				$this->read_img_from_baur($pcode);
@@ -371,97 +372,73 @@ class otto_import extends class_base
 
 				foreach($urld as $url)
 				{
-//					echo "url = $url <br>";
+					//echo "url = $url <br>";
 					$html = $this->file_get_contents($url);
 
 					preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
-					foreach($mt[1] as $idx => $img)
+					$f_imnr = NULL;
+
+					// ach! if only single image then no js!!!
+					if (count($mt[1]) == 0)
 					{
-						$imnr = basename($img, ".jpg");
-						$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'", "imnr");
+						preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$html, $mt2);
+						$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '".$mt2[1]."' AND nr = '1' AND pcode = '$pcode'", "pcode");
+						if (!$f_imnr)
+						{
+							$f_imnr = $t_imnr.".jpg";
+						}
 						if (!$t_imnr)
 						{
-							echo "insert new image $imnr <br>\n";
+							echo "insert new image ".$mt2[1]." <br>\n";
 							flush();
 							$q = ("
 								INSERT INTO 
 									otto_prod_img(pcode, nr,imnr, server_id) 
-									values('$pcode','".$mt[2][$idx]."','$imnr', 1)
+									values('$pcode','1','".$mt2[1]."', 1)
 							");
 							//echo "q = $q <br>";
 							$this->db_query($q);
 						}
-
-					}
-
-					/*if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
-					{
-						echo "total fakap <br>";
-						flush();
 					}
 					else
 					{
-						$add = 0;
-						// check if we got the main img
-						if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt2))
+						foreach($mt[1] as $idx => $img)
 						{
-							$add = 1;
-							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-								values('$pcode','1','$mt2[1]')");
-							echo "rewrote first image as $mt2[1] <Br>\n";
-							flush();
-						}
-						else
-						{
-							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-								values('$pcode',".(1+$add).",'$mt[1]')");	
-						}
-						echo "got img $mt[1]  <br>";
-
-
-						// also, other images, detect them via the jump_img('nr') js func
-						preg_match_all("/jump_img\('(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
-						$nrs = $mt[1];
-						foreach($nrs as $nr)
-						{
-							$nurl = $url."&bild_nr=".$nr;
-							echo "fetch other image nr $nr $url<br>\n";
-							flush();
-							$ismatch = false;
-							$cnt = 1;
-							do {
-								//sleep(1);
-								$nhtml = $this->file_get_contents($nurl);
-								$ismatch = preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
-								if ($cnt > 1)
-								{
-									echo "try nr $cnt <Br>\n";
-									flush();
-								}
-							} while(!$ismatch && $cnt++ < 9);
-
-							if (!$ismatch)
+							$imnr = basename($img, ".jpg");
+							$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'", "pcode");
+							if (!$f_imnr)
 							{
-								error::raise(array(
-									"id" => "ERR_NO_FETCH",
-									"msg" => "otto_import::images(): could not fetch html for url $nurl!"
-								));
+								$f_imnr = $t_imnr.".jpg";
 							}
-							
-							if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt))
+							if (!$t_imnr)
 							{
-								echo "for product $pcode no image number $nr! <br>\n";
-								echo "html is $nhtml <br>";
+								echo "insert new image $imnr <br>\n";
 								flush();
-							}
-							else
-							{
-								$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
-									values('$pcode','".($nr+$add)."','$mt[1]')");
+								$q = ("
+									INSERT INTO 
+										otto_prod_img(pcode, nr,imnr, server_id) 
+										values('$pcode','".$mt[2][$idx]."','$imnr', 1)
+								");
+								//echo "q = $q <br>";
+								$this->db_query($q);
 							}
 						}
-					
-					}*/
+					}
+
+					// check for rundumanshiftph
+					if (strpos($html, "rundum_eb") !== false)
+					{
+						preg_match_all("/javascript:OpenPopUpZoom\('690','540','(.*)'\+selectedImage\);/imsU", $html, $mt);
+						// get the rundum image number from the popup :(
+						$r_html = file_get_contents($mt[1][1].$f_imnr);
+
+						// save rundum
+						// get rundum imnr from html
+						preg_match("/http:\/\/image01\.otto\.de:80\/pool\/OttoDe\/de_DE\/images\/format360\/(.*)\.swf/imsU", $r_html, $mt);
+						echo "set flash to true <br>";
+						$this->db_query("UPDATE otto_prod_img SET has_flash = '$mt[1]' WHERE pcode = '$pcode' AND nr = 1");
+					}
+
 				}
 			}
 			else
@@ -521,14 +498,6 @@ class otto_import extends class_base
 							values('$pcode','".($nr+$add)."','$mt[1]')");
 					}
 				}
-			}
-
-			// check for rundumanshiftph
-			if (strpos($o_html, "rundum_eb") !== false)
-			{
-				// save rundum
-				echo "set flash to true <br>";
-				$this->db_query("UPDATE otto_prod_img SET has_flash = 1 WHERE pcode = '$pcode' AND nr = 1");
 			}
 
 			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
@@ -1494,13 +1463,25 @@ class otto_import extends class_base
 	**/
 	function submit_add_cart($arr)
 	{
+		$afv = 1;
+
+		if (!$arr["testjs"])
+		{
+			$afv = 2;
+		}
+
 		if (strpos($arr["return_url"], "?") === false)
 		{
-			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."?afto=1";
+			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."?afto=".$afv;
 		}
 		else
 		{
-			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."&afto=1";
+			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."&afto=".$afv;
+		}
+
+		if (!$arr["testjs"])
+		{
+			//return $retval;
 		}
 
 		// rewrite some vars that are hard to rewire in js and forward to shop order cart
@@ -1863,7 +1844,7 @@ class otto_import extends class_base
 			foreach($pa as $pn)
 			{
 				// check if the image combo already exists
-				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$pn' AND nr = '$cnt' AND pcode = '$pcode'", "imnr");
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$pn' AND nr = '$cnt' AND pcode = '$pcode'", "pcode");
 				if (!$imnr)
 				{
 					echo "insert new image $pn <br>\n";
@@ -1894,7 +1875,7 @@ class otto_import extends class_base
 	**/
 	function swt($arr)
 	{
-		return $this->pictimp(obj(1062),false);
+		return $this->pictimp(false,false);
 	}
 
 	function read_img_from_schwab($pcode)
@@ -1928,7 +1909,7 @@ class otto_import extends class_base
 			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/formatb\/(\d+).jpg/imsU", $fc2, $mt);
 			$first_im = $mt[1];
 
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{
 				echo "insert new image $first_im <br>\n";
@@ -1954,7 +1935,7 @@ class otto_import extends class_base
 				preg_match("/http:\/\/image01\.otto\.de:80\/pool\/formatb\/(\d+).jpg/imsU", $fc3, $mt);
 				$im = $mt[1];
 
-				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "imnr");
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
 				if (!$imnr)
 				{
 					echo "insert new image $im <br>\n";
@@ -1998,7 +1979,7 @@ class otto_import extends class_base
 			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/AlbaModaDe\/de_DE\/images\/albamoda_formatb\/(\d+).jpg/imsU", $fc2, $mt);
 			$first_im = $mt[1];
 
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{
 				echo "insert new image $first_im <br>\n";
@@ -2044,7 +2025,7 @@ class otto_import extends class_base
 			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt);
 			$first_im = $mt[1];
 
-			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "imnr");
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{
 				echo "insert new image $first_im <br>\n";
