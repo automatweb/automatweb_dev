@@ -360,6 +360,17 @@ function toggle_year()
 <td>
 <table border="0" cellspacing="0" cellpadding="1">
 <form method="POST" action="reforb.{VAR:ext}" name="repeater">
+<tr>
+<td class="fgtitle" colspan="3">
+<strong>Alates:</strong>
+{VAR:repstart}
+</td>
+</tr>
+<tr bgcolor="#EEEEEE">
+<td colspan="3" class="fgtitle">
+<hr size=1 width="100%">
+</td>
+</tr>
 <!-- days -->
 <tr>
 <td align="center" rowspan="3" width="15" valign="top" class="fgtitle">
