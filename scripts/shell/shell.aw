@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.4 2004/01/06 11:55:23 kristo Exp $
-echo "Welcome to AW shell!\n";
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.5 2004/04/15 06:29:33 duke Exp $
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
 
