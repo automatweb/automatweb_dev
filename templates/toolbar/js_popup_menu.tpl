@@ -2,7 +2,7 @@
 </script>
 <div id="{VAR:id}" class="menu" onmouseover="menuMouseover(event)">
 <!-- SUB: MENU_ITEM -->
-<a class="menuItem" href="{VAR:link}">{VAR:text}</a>
+<a class="menuItem" href="{VAR:link}" {VAR:onClick}>{VAR:text}</a>
 <!-- END SUB: MENU_ITEM -->
 
 <!-- SUB: MENU_ITEM_DISABLED -->
