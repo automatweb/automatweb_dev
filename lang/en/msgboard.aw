@@ -75,7 +75,7 @@ $lc_msgboard["LC_MSGBOARD_RESTORE_SELECTED_CONFIRM"] = "Restore selected topics?
 
 
 $lc_msgboard["LC_MSGBOARD_NEWTOPIC"] = "New topic";
-$lc_msgboard["LC_MSGBOARD_ADDCOMMENT"]= "Uus kommentaar";
+$lc_msgboard["LC_MSGBOARD_ADDCOMMENT"]= "New comment";
 $lc_msgboard["LC_MSGBOARD_FLATLIST"] = "List of topics";
 $lc_msgboard["LC_MSGBOARD_CONFIGURE"] = "Configure";
 $lc_msgboard["LC_MSGBOARD_TOPICS_ONLY"] = "Topics only";
