@@ -57,20 +57,6 @@
 			</function>
 		</action>
 
-		<action name="sites">
-			<function name="sites">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_add_site">
-			<function name="submit_add_site">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="docfolders">
 			<function name="docfolders">
 				<arguments>
