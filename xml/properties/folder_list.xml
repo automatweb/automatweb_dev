@@ -8,7 +8,7 @@
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Juurkataloog</caption>
+            <caption>Juurkaust</caption>
       </property>
       <property>
             <name>template</name>
@@ -45,7 +45,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;Auml;ra lingi katalooge</caption>
+            <caption>&amp;Auml;ra lingi ksustu</caption>
       </property>
       <property>
             <name>only_act</name>
@@ -55,7 +55,17 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;ita ainult aktiivseid katalooge</caption>
+            <caption>N&amp;auml;ita ainult aktiivseid kaustu</caption>
+      </property>
+      <property>
+            <name>link_only_act</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lingi ainult aktiivsed kaustad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FOLDER_LIST</syslog_type>
@@ -65,7 +75,7 @@
             <FOLDER>
                   <clid>CL_MENU</clid>
                   <value>1</value>
-                  <caption>juurkataloog</caption>
+                  <caption>juurkaust</caption>
             </FOLDER>
       </reltypes>
 </properties>

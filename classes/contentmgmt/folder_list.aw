@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.7 2004/05/19 16:17:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.8 2004/09/20 13:04:22 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -9,7 +9,7 @@
 @default group=general
 
 @property rootmenu type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
-@caption Juurkataloog
+@caption Juurkaust
 
 @property template type=select field=meta method=serialize
 @caption Kujundusmall
@@ -21,13 +21,16 @@
 @caption N&auml;ita kausta all
 
 @property no_folder_links type=checkbox ch_value=1 field=meta method=serialize
-@caption &Auml;ra lingi katalooge
+@caption &Auml;ra lingi ksustu
 
 @property only_act type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita ainult aktiivseid katalooge
+@caption N&auml;ita ainult aktiivseid kaustu
+
+@property link_only_act type=checkbox ch_value=1 field=meta method=serialize
+@caption Lingi ainult aktiivsed kaustad
 
 @reltype FOLDER clid=CL_MENU value=1
-@caption juurkataloog
+@caption juurkaust
 
 */
 
@@ -191,7 +194,7 @@ class folder_list extends class_base
 				));
 			}
 
-			if ($ob->prop("no_folder_links"))
+			if ($ob->prop("no_folder_links") || ($ob->prop("link_only_act") && $o->status() == STAT_NOTACTIVE))
 			{
 				$this->vars(array(
 					"NO_LINK" => $this->parse("NO_LINK"),
