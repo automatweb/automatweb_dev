@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.21 2003/01/07 17:54:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.22 2003/01/24 12:59:18 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -66,7 +66,7 @@
 	@property sss type=select multiple=1 size=15 method=serialize group=relations
 	@caption Menüüd, mille alt viimased dokumendid võetakse
 	
-	@property pers type=select multiple=1 size=15 method=serialize group=relations
+	@property pers type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
 	@caption Perioodid, mille alt dokumendid võetakse
 
 	@property seealso type=select multiple=1 size=15 group=relations
@@ -101,7 +101,7 @@
 	@property no_menus type=checkbox group=advanced ch_value=1
 	@caption Ilma menüüdeta
 	
-	@property target type=checkbox group=general ch_value=1
+	@property target type=checkbox group=general ch_value=1 search=1
 	@caption Uues aknas
 
 	@property mid type=checkbox group=advanced ch_value=1
