@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.29 2003/10/30 18:16:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.30 2003/11/04 15:03:51 duke Exp $
 
 /*
 
@@ -277,7 +277,7 @@ class gallery_v2 extends class_base
 			$obj['meta']['page_data'][$page_number]['content'] = $this->_page_content;
 			$arr['metadata'] = $obj['meta'];
 		}
-		if ($prop['name'] == "reinit_layout")
+		if ($prop['name'] == "reinit_layout" && $prop["value"] == 1)
 		{
 			$obj['meta']['page_data'] = array();
 			$arr['metadata']['page_data'] = array();
