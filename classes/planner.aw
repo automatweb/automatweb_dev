@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.4 2001/05/16 05:04:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.5 2001/05/16 05:42:43 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -276,9 +276,47 @@ class planner extends calendar {
 				break;
 			
 			case "month":
+				$this->read_template("sub_mon.tpl");
 				$title = CAL_MONTH;
 				list($m1,$y1) = split("-",date("m-Y",$di["start"]));
 				$caption = sprintf("%s %d",get_lc_month($m1),$y1);
+				$start_d = date("d",$di["start"]);
+				$end_d = date("d",$di["end"]);
+				$start = (int)$start_d + 1 - $di["start_wd"];
+				$end = (int)$end_d + (7 - $di["end_wd"]);
+				$wx = 0;
+				$c = "";
+				$c1 = "";
+				$c2 = "";
+				for ($i = $start; $i <= $end; $i++)
+				{
+					$wx++;
+					if (($i >= $start_d) && ($i <= $end_d))
+					{
+						$title = "test";
+						$this->vars(array(
+								"title" => $title,
+						));
+						$c2 .= $this->parse("element");
+						$this->vars(array("element" => $c2));
+						$c2 = "";
+						$c1 .= $this->parse("line.subline");
+					}
+					else
+					{
+						$this->vars(array("element" => "&nbsp;"));
+						$c1 .= $this->parse("line.subline");
+					};
+					if ($wx == 7)
+					{
+						$this->vars(array("subline" => $c1));
+						$c1 = "";
+						$c .= $this->parse("line");
+						$wx = 0;
+					};
+				};
+				$this->vars(array("line" => $c));
+				$content = $this->parse();
 				break;
 
 			case "overview":
@@ -463,9 +501,11 @@ class planner extends calendar {
 		$this->db_query($q);
 		$dayskip = $weekskip = $monskip = $yearskip = 0;
 		$daypwhen = $weekpwhen = $monpwhen = $monpwhen2 = $yearpwhen = "";
-		
+	
+		$rc = 0;
 		while($rep = $this->db_next())
 		{
+			$rc++;
 			switch($rep["type"])
 			{
 				case REP_DAY:
@@ -508,7 +548,7 @@ class planner extends calendar {
 				"repeat_value" => $rep["duration"],
 				"repeat_type" => $rep["dur_type"],
 				"repeat" => $rep["forever"],
-				"repcheck" => ($rep) ? "checked" : "",
+				"repcheck" => ($rc > 0) ? "checked" : "",
 				"color" => $this->picker($row["color"],$colors),
 				"description" => $row["description"],
 				"dayskip" => $dayskip,
@@ -745,7 +785,7 @@ class planner extends calendar {
 			"start" => $start_ts,
 			"end" => $end_ts,
 			"start_wd" => $this->_convert_wday(date("w",$start_ts)),
-			"end_dd" => $this->_convert_wday(date("w",$end_ts)),
+			"end_wd" => $this->_convert_wday(date("w",$end_ts)),
 			"wd" => $this->_convert_wday(date("w",$timestamp)),
 			"prev" => date("d-m-Y",$prev),
 			"next" => date("d-m-Y",$next),
