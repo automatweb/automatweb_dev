@@ -18,8 +18,8 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_TOPIC_FOLDER</reltype>
-            <caption>Teemade kataloog</caption>
-            <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
+            <caption>Teemade kaust</caption>
+            <comment>Sellest kaustast võetakse foorumi teemad</comment>
       </property>
       <property>
             <name>address_folder</name>
@@ -29,9 +29,9 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
-            <caption>Listiliikmete kataloog</caption>
+            <caption>Listiliikmete kaust</caption>
             <comment>
-            <![CDATA[Sellesse kataloogi paigutatakse "listi liikmete" objektid]]>
+            <![CDATA[Sellesse kausta paigutatakse "listi liikmete" objektid]]>
             </comment>
       </property>
       <property>
@@ -50,7 +50,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Postitusi lehel</caption>
+            <caption>Kommentaare lehel</caption>
       </property>
       <property>
             <name>topic_depth</name>
@@ -383,12 +383,12 @@
             <TOPIC_FOLDER>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>teemade kataloog</caption>
+                  <caption>Teemade kataloog</caption>
             </TOPIC_FOLDER>
             <ADDRESS_FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>listiliikmete kataloog</caption>
+                  <caption>Listiliikmete kataloog</caption>
             </ADDRESS_FOLDER>
             <STYLE>
                   <value>3</value>
@@ -398,8 +398,13 @@
             <STYLE_DONOR>
                   <value>4</value>
                   <clid>CL_FORUM_V2</clid>
-                  <caption>võta stiilid</caption>
+                  <caption>Stiilidoonor</caption>
             </STYLE_DONOR>
+            <FORUM_ADMIN>
+                  <value>5</value>
+                  <clid>CL_USER</clid>
+                  <caption>Administraator</caption>
+            </FORUM_ADMIN>
       </reltypes>
 </properties>
 

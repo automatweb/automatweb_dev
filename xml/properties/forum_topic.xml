@@ -35,6 +35,16 @@
             <caption>Autori meil</caption>
       </property>
       <property>
+            <name>answers_to_mail</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>answers_to_mail</field>
+            <caption>Soovin vastuseid e-mailile</caption>
+      </property>
+      <property>
             <name>subscribers_editor</name>
             <table>objects</table>
             <group>subscribers</group>
