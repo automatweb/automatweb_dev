@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.60 2004/06/11 09:14:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.61 2004/06/25 19:16:20 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -362,24 +362,6 @@ class objects extends db_objects
 		$tmp = obj($oid);
 		$tmp->delete();
 		aw_restore_acl();
-	}
-
-	/**  
-		
-		@attrib name=delete_aliases_of params=name default="0"
-		
-		@param oid required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function orb_delete_aliases_of($arr)
-	{
-		extract($arr);
-		return $this->delete_aliases_of($oid);
 	}
 
 	function on_site_init($dbi, $site, &$ini_opts)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.273 2004/06/25 19:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.274 2004/06/25 19:16:20 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -318,13 +318,6 @@ class core extends acl_base
 				"parent" => $row["parent"]);
 		};
 		return $aliases;
-	}
-
-	////
-	// !Deletes all aliases for $oid
-	function delete_aliases_of($oid)
-	{
-		$this->db_query("DELETE FROM aliases WHERE source = $oid");
 	}
 
 	////

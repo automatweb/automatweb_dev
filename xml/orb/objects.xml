@@ -25,14 +25,6 @@
 			</function>
 		</action>
 
-		<action name="delete_aliases_of" >
-			<function name="orb_delete_aliases_of">
-				<arguments>
-					<required name="oid" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="get_db_pwd" nologin="1">
 			<function name="orb_get_db_pwd">
 				<arguments>

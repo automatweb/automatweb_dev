@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.73 2004/06/18 16:23:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.74 2004/06/25 19:16:20 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1518,14 +1518,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 		elseif($subaction == "delete")
 		{
-			if (is_array($sel))		
+			if (is_array($sel) && !$s["server"])		
 			{
 				while (list($ooid,) = each($sel))
 				{
+					// this would have fucked up on remote servers anyway...
 					if($this->can('delete',$ooid))
 					{
-						$this->_search_mk_call("objects", "delete_object", array("oid" => $ooid), $args);
-						$this->_search_mk_call("objects", "delete_aliases_of", array("oid" => $ooid), $args);					
+						$tmp = obj($ooid);
+						$tmp->delete();
 					}
 				}
 			};
