@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.56 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.57 2004/06/26 09:15:07 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -1897,8 +1897,8 @@ class table extends aw_template
 			if ($used[$stylid] != 1)
 			{
 				$used[$stylid] = 1;
-				$css_info = $this->get_obj_meta($stylid);
-				$css_file .= $css->_gen_css_style("st".$stylid,$css_info["meta"]["css"]);
+				$css_info = obj($stylid);
+				$css_file .= $css->_gen_css_style("st".$stylid,$css_info->meta("css"));
 			}
 		}
 		if ($css_file != "")

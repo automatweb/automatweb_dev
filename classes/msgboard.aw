@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.35 2004/06/26 08:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.36 2004/06/26 09:15:07 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -492,10 +492,10 @@ class msgboard extends aw_template
 
 	function search($id,$forum_id)
 	{
-		$obj = $this->get_obj_meta($forum_id);
-		if ($obj["meta"]["template"])
+		$obj = obj($forum_id);
+		if ($obj->meta("template"))
 		{
-			$this->tpl_init("../" . $obj["meta"]["template"] . "/msgboard");
+			$this->tpl_init("../" . $obj->meta("template") . "/msgboard");
 		};
 		$this->read_template("search.tpl");
 		$this->vars(array(
@@ -711,10 +711,10 @@ class msgboard extends aw_template
 		global $HTTP_SESSION_VARS;
 		$votes = $HTTP_SESSION_VARS["commentvotes"];
 
-		$obj = $this->get_obj_meta($forum_id);
-		if ($obj["meta"]["template"])
+		$obj = obj($forum_id);
+		if ($obj->meta("template"))
 		{
-			$this->tpl_init("../" . $obj["meta"]["template"] . "/msgboard");
+			$this->tpl_init("../" . $obj->meta("template") . "/msgboard");
 		};
 
 		$this->read_template("list_topics.tpl");

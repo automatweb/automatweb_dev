@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.279 2004/06/26 08:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.280 2004/06/26 09:15:07 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -429,14 +429,6 @@ class core extends acl_base
 		return $_t;
 	}
 
-	////
-	// !DEPRECATED - get_object pakib ka metadata lahti nyyd
-	// Tagastab objekti ja tema lahtiparsitud metainfo
-	function get_obj_meta($oid)
-	{
-		return $this->get_object($oid);
-	}
-			
 	////
 	// !tagastab mingisse kindlasse klassi kuuluvad objektid
 	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli

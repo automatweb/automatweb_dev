@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.8 2004/06/15 08:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.9 2004/06/26 09:15:07 kristo Exp $
 
 /*
 	@default table=objects
@@ -292,9 +292,9 @@ class cal_event extends class_base
 	function _change($args = array())
 	{
 		extract($args);
-		$object = $this->get_obj_meta($id);
-		$par_obj = obj($object["parent"]);
-		$meta = $object["meta"];
+		$object = obj($id);
+		$par_obj = obj($object->parent());
+		$meta = $object->meta();
 
 		$menubar = $this->gen_menu(array(
 			"activelist" => array("event"),
@@ -308,7 +308,7 @@ class cal_event extends class_base
 		$row["meta"] = $meta;
 		$this->_fill_event_form($row);
 		$cal_link = sprintf("<a href='%s'><img border='0' src='%s'>Kalender</a>",$this->vars["calendar_url"],$this->vars["icon_url"]);
-		$this->mk_path($object["parent"],"$cal_link | Muuda kalendrisündmust");
+		$this->mk_path($object->parent(),"$cal_link | Muuda kalendrisündmust");
 
 		if ($par_obj->class_id() == CL_CALENDAR)
 		{
@@ -353,16 +353,16 @@ class cal_event extends class_base
 	{
 		extract($args);
 
-		$obj = $this->get_obj_meta($id);
+		$obj = obj($id);
 
 		// I wonder what happens if a non-existing ID is given
 		$q = "SELECT * FROM planner WHERE id = '$id'";
 		$this->db_query($q);
 		$event = $this->db_next();
 
-		$obj_meta = $obj["meta"];
+		$obj_meta = $obj->meta();
 
-		$par_obj = obj($obj["parent"]);
+		$par_obj = obj($obj->parent());
 		
 		$menubar = $this->gen_menu(array(
 			"activelist" => array("repeaters"),
