@@ -1,23 +1,26 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.13 2003/04/03 22:54:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.14 2003/04/10 14:19:30 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
 	@default table=objects
-	@default field=meta
-	@default method=serialize
 	@default group=general
 
-	@property conf_obj type=objpicker clid=CL_ML_LIST_CONF
+	@property conf_obj type=objpicker clid=CL_ML_LIST_CONF field=meta method=serialize
 	@caption Vali konfiguratsioon
 
-	@property fchange type=text store=no editonly=1 group=fillout
+	@property fchange type=text store=no editonly=1 field=meta method=serialize
 	@caption Muuda
 
-	@groupinfo fillout caption=Täida_vorm submit=no
+	@property name type=textbox table=ml_users
+	@caption Nimi
+
+	@property mail type=textbox table=ml_users
+	@caption E-post
 
 	@classinfo syslog_type=ST_MAILINGLIST_MEMBER
 
+	@tableinfo ml_users index=id master_table=objects master_index=oid
 */
 
 class ml_member extends class_base
@@ -37,14 +40,27 @@ class ml_member extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "comment":
+				$retval = PROP_IGNORE;
+				break;
 			case "conf_obj":
 				if (isset($args["obj"]["oid"]))
 				{
 					$retval = PROP_IGNORE;
 				};
 				break;
+			case "mail":
+				if (!empty($args["obj"]["meta"]["conf_obj"]))
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
 			case "fchange":
 				if (empty($args["obj"]["oid"]))
+				{
+					return PROP_IGNORE;
+				};
+				if (strlen($args["obj"]["meta"]["email"]) > 0)
 				{
 					return PROP_IGNORE;
 				};
@@ -110,7 +126,10 @@ class ml_member extends class_base
 				};
 				break;
 			case "fchange":
-				$this->handle_submit($args["form_data"]);
+				if (isset($args["obj"]["meta"]["conf_obj"]))
+				{
+					$this->handle_submit($args["form_data"]);
+				};	
 				break;
 
 		}
@@ -384,6 +403,169 @@ class ml_member extends class_base
 		$ml_inst = get_instance("mailinglist/ml_list");
 		$ml_inst->flush_member_cache();
 		return $id;
+	}
+
+	////
+	// email(string) - email addy
+	// folder(string) - id of the folder to check
+	function check_member($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$q = "SELECT oid FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id) WHERE mail = '$email' AND parent = '$folder' AND status != 0";
+		$this->db_query($q);
+		return $this->db_next();
+	}
+
+	////
+	// !Creates a new subscribe, the other version, deals with members with no config form
+	// name - name of the subscriber
+	// email - email addy
+	// list_id - id of the list to use for subscribing
+	function subscribe_member_to_list($args = array())
+	{
+		// it would be _really_, _really_ nice if I could init 
+		// the data from the class_base, but it's not yet possible
+		$this->quote($args);
+		$name = $args["name"];
+		$email = $args["email"];
+		$list_id = $args["list_id"];
+
+		$list_obj = $this->get_object(array(
+			"oid" => $list_id,
+			"class_id" => CL_ML_LIST,
+		));
+
+		$section = aw_global_get("section");
+
+		if (empty($list_obj["meta"]["def_user_folder"]))
+		{
+			return $this->cfg["baseurl"] . "/" . $section;
+		};
+
+		$fldr = $list_obj["meta"]["def_user_folder"];
+		if (!$this->check_member(array("email" => $email,"folder" => $fldr)))
+		{
+			$objname = $name . " <" . $email . ">";
+			$objname = htmlspecialchars($objname);
+			$new_id = $this->new_object(array(
+				"parent" => $list_obj["meta"]["def_user_folder"],
+				"class_id" => $this->clid,
+				"name" => $objname,
+				"metadata" => array("name" => $name,"email" => $email),
+			));
+			$q = "INSERT INTO ml_users (name,mail,id) VALUES ('$name','$email','$new_id')";
+			$this->db_query($q);
+		};
+
+		return $this->cfg["baseurl"] . "/" . $section;
+
+	}
+
+	////
+	// !Removes a member from list
+	// email - email addy
+	// list_id - id of the list to unsubscribe from
+	function unsubscribe_member_from_list($args = array())
+	{
+		$this->quote($args);
+		$email = $args["email"];
+		$list_id = $args["list_id"];
+
+		$list_obj = $this->get_object(array(
+			"oid" => $list_id,
+			"class_id" => CL_ML_LIST,
+		));
+		
+		$section = aw_global_get("section");
+
+		if (empty($list_obj["meta"]["def_user_folder"]))
+		{
+			return $this->cfg["baseurl"] . "/" . $section;
+		};
+
+		$fldr = $list_obj["meta"]["def_user_folder"];
+
+		$check = $this->check_member(array("email" => $args["email"],"folder" => $fldr));
+
+		if ($check)
+		{
+			$this->delete_object($check["oid"],$this->clid);
+			$q = "DELETE FROM ml_users WHERE oid = '$check[oid]'";
+			$this->db_query($q);
+		};
+
+		return $this->cfg["baseurl"] . "/" . $section;
+	}
+
+	////
+	// !Returns member information (e-mail address and variables)
+	// lid (int) - list id
+	// member (int) - member id
+	function get_member_information($args = array())
+	{
+		extract($args);
+
+		$memberdata = array();
+		$mailto = "";
+
+		$list_obj = $this->get_object(array(
+			"oid" => $lid,
+			"class_id" => CL_ML_LIST,
+		));
+
+		$m = $this->get_object(array(
+			"oid" => $member,
+			"class_id" => CL_ML_MEMBER,
+		));
+
+		$replica = $this->db_fetch_row("SELECT name,mail FROM ml_users WHERE id = '$member'");
+
+		$ml_list_inst = get_instance("mailinglist/ml_list");
+
+		if (is_array($replica))
+		{
+			$mailto = $replica["mail"];
+			$memberdata["name"] = $replica["name"];
+		}
+		// ah, but you see, the list actually _can_ have a config form
+		// but the member may not.
+		else
+		if ($list_obj["meta"]["user_form_conf"])
+		{
+			$form_inst = get_instance("formgen/form");
+			$mailel = $ml_list_inst->get_mailto_element($lid);
+			$vars = $ml_list_inst->get_all_varnames($lid);
+			$user_forms = $ml_list_inst->get_forms_for_list($lid);
+			foreach($user_forms as $uf_id)
+			{
+				//echo "uf_id = $uf_id <br>";
+				if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
+				{
+					$uf_inst =& $form_inst->cache_get_form_instance($uf_id);
+					$uf_inst->load_entry($uf_eid);
+					foreach($vars as $var_id => $var_name)
+					{
+						$el = $uf_inst->get_element_by_id($var_id);
+						if (is_object($el))
+						{
+							$memberdata[$var_name] = $el->get_value();
+							if ($var_id == $mailel)
+							{
+								$mailto = $memberdata[$var_name];
+							};
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			// find the plain old member then
+		
+
+		}
+		return array($mailto,$memberdata);
 	}
 };
 ?>

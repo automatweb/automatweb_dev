@@ -1,27 +1,31 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.21 2003/04/03 23:16:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.22 2003/04/10 14:19:30 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
 	@default field=meta
 	@default method=serialize
 	@default group=general
+	
+	@property def_user_folder type=popup_objmgr clid=CL_PSEUDO editonly=1
+	@caption Vali kataloog, kuhu pannakse uued liikmed 
 
 	@property user_form_conf type=objpicker clid=CL_ML_LIST_CONF
 	@caption Vali konfiguratsioon
 
-	@property vars type=callback callback=callback_gen_list_variables editonly=1
-	@caption Muutujad
-
 	@property user_folders type=select multiple=1 size=15 editonly=1
 	@caption Vali kataloogid, kust võetakse listi liikmed
 
-	@property def_user_folder type=select editonly=1
-	@caption Vali kataloog, kuhu pannakse automaatselt lisatud liikmed 
+	@property vars type=callback callback=callback_gen_list_variables editonly=1
+	@caption Muutujad
 
 	@property automatic_form type=select editonly=1
 	@caption Vali vorm, mille sisestustest tehakse automaatselt liikmed
 
+	@property member_list type=text store=no group=members
+	@caption Liikmed
+	
+	@groupinfo members caption=Liikmed submit=no
 	@classinfo syslog_type=ST_MAILINGLIST
 	
 */
@@ -44,10 +48,17 @@ class ml_list extends class_base
 	{
 		$data = &$args["prop"];
 		$retval = PROP_OK;
+		$conf_set = empty($args["obj"]["meta"]["user_form_conf"]) ? false : true;
+		$name = $data["name"];
+		# don't show these elements, if the configuration has not been chosen
+		if (!$conf_set && in_array($data["name"],array("vars","automatic_form")))	
+		{
+			return PROP_IGNORE;
+		};
+
 		switch($data["name"])
 		{
 			case "user_folders":
-			case "def_user_folder":
                 		$data["options"] = $this->_get_defined_user_folders($args["obj"]["meta"]["user_form_conf"]);
 				break;
 	
@@ -65,6 +76,13 @@ class ml_list extends class_base
 				}
 				$data["options"] = $fl;
 				break;
+
+			case "member_list":
+				$data["value"] = $this->gen_member_list(array(
+					"list_id" => $args["obj"]["oid"],
+				));
+				break;
+				
 
 		};
 		return $retval;
@@ -147,7 +165,35 @@ class ml_list extends class_base
 		return $retval;
 	}
 
+	function gen_member_list($args = array())
+	{
+		$ml_list_members = $this->get_members($args["list_id"]);
+		load_vcl("table");
+		$t = new aw_table(array("xml_def" => "mlist/member_list"));
+		$ml_member_inst = get_instance("mailinglist/ml_member");
+		if (is_array($ml_list_members))
+		{	
+			foreach($ml_list_members as $key => $val)
+			{
+				$this->save_handle();
+				// XXX: SLOW!!!
+				// but until the form based member thingies do not write
+				// to ml_users, there is no simpler way to do this
+				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
+					"lid" => $args["list_id"],
+					"member" => $val["oid"],
+				));
+				$this->restore_handle();
+				$t->define_data(array(
+					"id" => $val["oid"],
+					"email" => $mailto,
+					"name" => $memberdata["name"],
+				));	
 
+			}
+		};		
+		return $t->draw();
+	}
 
 	function _get_defined_user_folders($conf)
 	{
@@ -357,6 +403,7 @@ class ml_list extends class_base
 	{
 		extract($args);
 		$this->mk_path(0,"<a href='".aw_global_get("route_back")."'>Tagasi</a>&nbsp;/&nbsp;Saada teade");
+
 		$this->read_template("post_message.tpl");
 
 		load_vcl("date_edit");
@@ -577,23 +624,28 @@ class ml_list extends class_base
 
 	function get_members($id)
 	{
-/*		if (is_array($ret = aw_cache_get("ml_list::get_members", $id)))
-		{
-			return $ret;
-		}*/
 		$ret = array();
 
 		$ob = $this->load_list($id);
-		$ar = new aw_array($this->list_ob["meta"]["user_folders"]);
-		foreach($ar as $prnt)
+		$prnts = array($this->list_ob["meta"]["def_user_folder"]);
+		if (is_array($this->list_ob["meta"]["user_folders"]))
 		{
-			$ret+=$this->get_objects_below(array(
-				"parent" => $prnt,
-				"class" => CL_ML_MEMBER,
-				"full" => true
-			));
+			$prnts = $prnts+$this->list_ob["meta"]["user_folders"];
+		};
+		$ar = new aw_array($prnts);
+		
+		foreach($ar->get() as $prnt)
+		{
+			if ($prnt > 0)
+			{
+				$ret+=$this->get_objects_below(array(
+					"parent" => $prnt,
+					"class" => CL_ML_MEMBER,
+					"full" => true,
+					"fields" => "oid,parent",
+				));
+			};
 		}
-		aw_cache_set("ml_list::get_members", $id, $ret);
 		return $ret;
 	}	
 
@@ -765,6 +817,42 @@ class ml_list extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function parse_alias($args = array())
+	{
+		$tobj = $this->get_object($args["alias"]["target"]);
+		$this->read_template("subscribe.tpl");
+		$this->vars(array(
+			"listname" => $tobj["name"],
+			"reforb" => $this->mk_reforb("subscribe",array("id" => $args["alias"]["target"],"section" => aw_global_get("section"))),
+		));
+		return $this->parse();
+
+	}
+
+	function subscribe($args = array())
+	{
+		$list_id = $args["id"];
+		if ($args["op"] == 1)
+		{
+			$ml_member = get_instance("mailinglist/ml_member");
+			$retval = $ml_member->subscribe_member_to_list(array(
+				"name" => $args["name"],
+				"email" => $args["email"],
+				"list_id" => $args["id"],
+			));	
+		};
+		if ($args["op"] == 2)
+		{
+			$ml_member = get_instance("mailinglist/ml_member");
+			$retval = $ml_member->unsubscribe_member_from_list(array(
+				"email" => $args["email"],
+				"list_id" => $args["id"],
+			));	
+		};
+		return $retval;
+			
 	}
 };
 ?>

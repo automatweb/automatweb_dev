@@ -593,6 +593,7 @@ class ml_queue extends aw_template
 		{
 			$this->d = get_instance("msg_sql");
 		};
+
 		$msg = $this->d->msg_get(array("id" => $mid));
 
 		$msg_meta = $this->get_object_metadata(array(
@@ -600,39 +601,13 @@ class ml_queue extends aw_template
 			"key" => "msg",
 		));
 
-		$ml_list_inst = get_instance("mailinglist/ml_list");
-		$form_inst = get_instance("formgen/form");
+		$ml_member_inst = get_instance("mailinglist/ml_member");
+		list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
+			"lid" => $lid,
+			"member" => $member,
+		));
 
-		// the element that contains the e-mail address
-		$mailel = $ml_list_inst->get_mailto_element($lid);
-		decho("mailel = $mailel lid = $lid <br>");
-
-		$m = $this->get_object($member);
-
-		$vars = $ml_list_inst->get_all_varnames($lid);
-		$user_forms = $ml_list_inst->get_forms_for_list($lid);
 		$l = array();
-		foreach($user_forms as $uf_id)
-		{
-			echo "uf_id = $uf_id <br>";
-			if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
-			{
-				$uf_inst =& $form_inst->cache_get_form_instance($uf_id);
-				$uf_inst->load_entry($uf_eid);
-				foreach($vars as $var_id => $var_name)
-				{
-					$el = $uf_inst->get_element_by_id($var_id);
-					if (is_object($el))
-					{
-						$memberdata[$var_name] = $el->get_value();
-						if ($var_id == $mailel)
-						{
-							$mailto = $memberdata[$var_name];
-						};
-					}
-				}
-			}
-		}
 
 		if (aw_cache_get("ml_queue::send_message::mails::$mid::$lid", $mailto))
 		{
@@ -641,16 +616,6 @@ class ml_queue extends aw_template
 		aw_cache_set("ml_queue::send_message::mails::$mid::$lid", $mailto, true);
 
 		echo "yeah <br>";
-/*		if (!isset($this->f))
-		{
-			$this->f=get_instance("formgen/form");
-		};
-		$this->f->load($this->formid);
-		$this->f->load_entry($member);
-		$memberdata=$this->f->get_element_values();
-		decho("memberdata=<pre>");dprint_r($memberdata);decho("</pre>");//dbg*/
-		
-		decho("impersonating ".$r["uid"]."<br>");//dbg
 		
 		// save original UID
 		if (!isset($this->originaluid))
