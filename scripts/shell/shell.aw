@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.6 2004/06/03 16:42:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.7 2004/06/17 22:01:46 kristo Exp $
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
 
 // print out working directory.
 $cwd = getcwd();
 $inifile = $cwd . "/aw.ini";
-$use_timer = false;
+$use_timer = true;
 if (!file_exists($inifile))
 {
 	die("No aw.ini found in current directory - $cwd\n");
@@ -22,8 +22,6 @@ print "Using $inifile\n";
 
 classload("timer");
 $awt = new aw_timer;
-
-print "hua!";
 
 readline_completion_function("autocomplete");
 function autocomplete($arg)
@@ -55,6 +53,7 @@ while ($continue)
 	{
 		$continue = false;
 	}
+	else
 	if ($str == "timer")
 	{
 		$use_timer = true;
@@ -82,11 +81,11 @@ while ($continue)
 		eval($str);
 		if ($use_timer)
 		{
-			print $awt->elapsed("shellcommand");
+			//print $awt->elapsed("shellcommand");
+			//print "\n";
+			echo "\ncmd took ".$awt->elapsed("shellcommand")." seconds \n";
 			$awt->stop("shellcommand");
-			print "\n";
 		};
-		echo "\ncmd took ".$awt->elapsed("shellcommand")." seconds \n";
 	};
 };
 echo "bye then ..\n";
