@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.113 2004/10/08 15:59:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.114 2004/10/08 16:40:57 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1128,16 +1128,26 @@ class image extends class_base
 		$img->save($file, IMAGE_JPEG);
 	}
 
-	function make_img_tag_wl($id)
+	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL)
 	{
 		$that = get_instance("image");
 		$u = $that->get_url_by_id($id);
 
 		$o = obj($id);
-		$imagetag = image::make_img_tag($u, $o->name());
+
+		if ($alt === NULL)
+		{
+			$alt = $o->name();
+		}
 
 		if ($o->prop("file2") != "")
 		{
+			if ($has_big_alt !== NULL)
+			{
+				$alt = $has_big_alt;
+			}
+			$imagetag = image::make_img_tag($u, $alt);
+
 			$size = @getimagesize($o->prop("file2"));
 
 			$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
@@ -1146,8 +1156,13 @@ class image extends class_base
 			$imagetag = html::href(array(
 				"url" => "javascript:void(0)",
 				"onClick" => $bi_link,
-				"caption" => $imagetag
+				"caption" => $imagetag,
+				"title" => $alt
 			));
+		}
+		else
+		{
+			$imagetag = image::make_img_tag($u, $alt);
 		}
 
 		return $imagetag;
