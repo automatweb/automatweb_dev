@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.14 2003/09/26 09:51:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.15 2003/09/29 12:38:25 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -213,73 +213,6 @@ class treeview extends class_base
 	}
 
 	////
-	// !Creates a tree from an array (invokes itself recursively)
-	// parent(int) - current root node
-	// data(arr) - pointer to the array
-	function create_tree_from_array($args = array())
-	{
-		if (!is_array($args["data"][$args["parent"]]))
-		{
-			return;
-		};
-		$this->read_template("ftiens.tpl");
-		$parent = isset($args["parent"]) ? $args["parent"] : 1;
-		$tr = $this->_rec_tree_from_array(array(
-			"parent" => $args["parent"],
-			//"parent" => 1,
-			"data" => &$args["data"],
-		));
-		$this->vars(array(
-			"TREE" => $tr,
-			"root" => $parent,
-			"rootname" => $args["data"][0][$parent]["name"],
-			"rooturl" => $args["data"][0][$parent]["link"],
-			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
-			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
-		));
-		return $this->parse();
-	}
-
-
-	function _rec_tree_from_array($args = array())
-	{
-		$ret = "";
-		reset($args["data"][$args["parent"]]);
-		while (list($key,$row) = each($args["data"][$args["parent"]]))
-		{
-			if (isset($args["data"][$key]) && is_array($args["data"][$key]))
-			{
-				$sub = $this->_rec_tree_from_array(array(
-					"parent" => $key,
-					"data" => &$args["data"],
-				));
-			}
-			else
-			{
-				$sub = "";
-			};
-			
-			$this->vars(array(
-				"name" => $row["name"],
-				"id" => $key,
-				"parent" => $args["parent"],
-				"iconurl" => $row["icon_url"],
-				"url" => $row["link"],
-				"targetframe" => "right",
-			));
-			if ($sub == "")
-			{
-				$ret.=$this->parse("DOC");
-			}
-			else
-			{
-				$ret.=$this->parse("TREE").$sub;
-			}
-		};
-		return $ret;
-	}
-
-	////
 	// !inits tree
 	// params:
 	//   root_name - root menu name
@@ -437,7 +370,7 @@ class treeview extends class_base
 				"idx" => $item["id"],
 				"idy" => $item["id"],
 				"idz" => $item["id"],
-				"iconurl" => $item["iconurl"],
+				"iconurl" => isset($item["iconurl"]) ? $item["iconurl"] : $this->cfg["baseurl"] . "/automatweb/images/ftv2doc.gif",
 				"url" => $item["url"],
 				"spacer" => str_repeat("    ",$this->level),
 			));
