@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.61 2004/10/28 15:07:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.62 2004/11/07 11:11:22 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -370,8 +370,6 @@ class config extends db_config
 		$err = $this->get_simple_config("error_redirect");
 		$if = $this->get_simple_config("user_info_form");
 		$op = $this->get_simple_config("user_info_op");
-		$bt = $this->get_simple_config("bugtrack_developergid");
-		$btadm = $this->get_simple_config("bugtrack_admgid");
 		$al = $this->get_simple_config("useradd::autologin");
 		$ipp = $this->get_cval("ipaddresses::default_folder");
 
@@ -438,8 +436,6 @@ class config extends db_config
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
-			"bt_gid" => $this->picker($bt,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
-			"bt_adm" => $this->picker($btadm,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
 			"MUSTLOGIN" => $r_ml,
 			"ERROR_REDIRECT" => $r_el,
 			"reforb" => $this->mk_reforb("submit_loginaddr"),
@@ -847,8 +843,6 @@ class config extends db_config
 			$var = "error_redirect_".$ld["acceptlang"];
 			$this->set_simple_config($var, $$var);
 		}
-		$this->set_simple_config("bugtrack_developergid",$bt_gid);
-		$this->set_simple_config("bugtrack_admgid",$bt_adm);
 		$this->set_simple_config("useradd::autologin",$autologin);
 		$this->set_simple_config("ipaddresses::default_folder",$ipp);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.32 2004/10/28 11:21:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.33 2004/11/07 11:11:22 kristo Exp $
 
 class icons extends aw_template
 {
@@ -919,7 +919,7 @@ class icons extends aw_template
 			return aw_ini_get("icons.server")."/ftype_".$pi["extension"].".gif";
 		}
 		else
-		if (in_array($clid,array("promo_box","brother","conf_icon_other","conf_icon_programs","conf_icon_classes","conf_icon_ftypes","conf_icons","conf_jf","conf_users","conf_icon_import","conf_icon_db","homefolder","hf_groups","bugtrack")))
+		if (in_array($clid,array("promo_box","brother","conf_icon_other","conf_icon_programs","conf_icon_classes","conf_icon_ftypes","conf_icons","conf_jf","conf_users","conf_icon_import","conf_icon_db","homefolder","hf_groups")))
 		{
 			return aw_ini_get("icons.server")."/iother_".$clid.".gif";
 		}
