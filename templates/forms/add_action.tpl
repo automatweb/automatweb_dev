@@ -28,6 +28,10 @@
 <td class="celltext">{VAR:LC_FORMS_MOVE_FORM_ENTRIES_OTHER_CATEGORY}</td>
 </tr>-->
 <tr>
+<td class="celltext"><input type='radio' NAME='type' VALUE='after_submit_controller' {VAR:after_submit_controller}></td>
+<td class="celltext">T&auml;ida kontroller p&auml;rast formi submittimist</td>
+</tr>
+<tr>
 <td class="celltext"><input type='radio' NAME='type' VALUE='join_list' {VAR:join_list_selected}></td>
 <td class="celltext">{VAR:LC_FORMS_ESPOUSE_MAILLIST}</td>
 </tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.8 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.9 2003/02/13 15:20:57 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -13,6 +13,7 @@ class form_actions extends form_base
 			"join_list" => array("execute" => "do_join_list_action"),
 			"email_form" => array("execute" => "do_email_form_action"),
 			"email" => array("execute" => "do_email_action"),
+			"after_submit_controller" => array("execute" => "do_after_submit_controller_action")
 		);
 	}
 
@@ -124,6 +125,11 @@ class form_actions extends form_base
 						$data["name_tb"] = $j_name_tb;
 						$data = serialize($data);
 						break;
+
+					case "after_submit_controller":
+						$data["controller"] = $controller;
+						$data = serialize($data);
+						break;
 				}
 				$this->db_query("UPDATE form_actions SET data = '$data' WHERE id = $action_id");
 				$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $action_id","name");
@@ -173,14 +179,15 @@ class form_actions extends form_base
 		{
 			$this->if_init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			$this->vars(array(
-				"name"									=> $row["name"], 
-				"comment"								=> $row["comment"], 
+				"name"							=> $row["name"], 
+				"comment"						=> $row["comment"], 
 				"email_selected"				=> checked($row["type"] == 'email'),
-				"move_filled_selected"	=> checked($row["type"] == 'move_filled'),
-				"join_list_selected"		=> checked($row["type"] == 'join_list'),
-				"email_form"						=> checked($row["type"] == 'email_form'),
-				"action_id"							=> $id,
-				"reforb"								=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
+				"move_filled_selected"			=> checked($row["type"] == 'move_filled'),
+				"join_list_selected"			=> checked($row["type"] == 'join_list'),
+				"email_form"					=> checked($row["type"] == 'email_form'),
+				"after_submit_controller"		=> checked($row["type"] == 'after_submit_controller'),
+				"action_id"						=> $id,
+				"reforb"						=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
 			));
 			return $this->parse();
 		}
@@ -200,6 +207,9 @@ class form_actions extends form_base
 
 				case "join_list":
 					return $this->_change_join_list_action($dt);
+
+				case "after_submit_controller":
+					return $this->_change_after_submit_controller_action($dt);
 			}
 		}
 	}
@@ -380,6 +390,23 @@ class form_actions extends form_base
 		));
 		return $this->parse();
 	}
+
+	////
+	// !Generates a form for selecting the controller to execute after the form has been submitted
+	function _change_after_submit_controller_action($args = array())
+	{
+		extract($args);
+		$this->read_template("action_after_submit_controller.tpl");
+		$data = unserialize($row["data"]);
+
+		$lst = $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true));
+		$this->vars(array(
+			"controller" => $this->picker($data["controller"], $lst),
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
+		));
+		return $this->parse();
+	}
+
 
 	////
 	// !ececutes form actions, gets called after form submit
@@ -641,6 +668,12 @@ class form_actions extends form_base
 			$app .= $link_url;
 			mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
 		}
+	}
+
+	function do_after_submit_controller_action(&$form, $data, $entry_id)
+	{
+		$cinst = get_instance("formgen/form_controller");
+		$cinst->eval_controller($data["controller"],false,$form,false);
 	}
 }
 ?>
