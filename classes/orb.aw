@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.27 2002/12/02 12:50:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.28 2002/12/18 15:02:22 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -83,17 +83,21 @@ class orb extends aw_template
 			{
 				// only load if definitions for this class are
 				// not yet loaded (master class)
-				if (not($orb_defs[$clname]))
+				if (not($_orb_defs[$clname]))
 				{
-					$orb_defs = $this->try_load_class($clname);
+					$_orb_defs = $this->try_load_class($clname);
 				};
 
-				$fun = $orb_defs[$clname][$action];
+				$fun = $_orb_defs[$clname][$action];
 
 				if (is_array($fun))
 				{
 					$found = true;
-					$class = $clname;
+					// copy the function definition from the extended class to the called class
+					// this way it works like real inheritance - all the other properties, 
+					// including which class is instantiated, come from the class that was called
+					// and not the class in which the function was found
+					$orb_defs[$class][$action] = $_orb_defs[$clname][$action];
 				};
 			};
 
