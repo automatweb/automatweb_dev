@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.30 2003/08/01 13:27:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.31 2004/06/09 21:01:34 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -1276,18 +1276,17 @@ class form_calendar extends form_base
 		};
 		
 		$els_start = $els_listboxes = $els_relation = $els_end = $tables = $target_objects = array("0" => " -- Vali --");
-                $els_count = array();
+		$els_count = array();
 
-		$this->get_objects_by_class(array(
-			"class" => array(CL_FORM,CL_FORM_CHAIN),
-			"active" => true,
-			"flags" => OBJ_HAS_CALENDAR,
+		$ol = new object_list(array(
+			"class_id" => array(CL_FORM,CL_FORM_CHAIN),
+			"status" => STAT_ACTIVE,
+			"flags" => array(
+				"mask" => OBJ_HAS_CALENDAR,
+				"flags" => OBJ_HAS_CALENDAR
+			)
 		));
-
-                while($row = $this->db_next())
-                {
-                        $target_objects[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
-                };
+		$target_objects = $ol->names();
 
 		foreach($els as $key => $val)
 		{

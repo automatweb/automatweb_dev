@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.13 2004/05/10 11:08:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.14 2004/06/09 21:01:34 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -98,18 +98,15 @@ class form_output extends form_base
 		$this->mk_path($id,"Koosta XML väljund");
 		if ($id)
 		{
-			$odata = $this->get_object($id);
-			$xdata = $this->get_object_metadata(array(
-				"metadata" => $odata["metadata"],
-			));
+			$odata = obj($id);
 			$this->vars(array(
 				"adminurl" => $this->mk_my_orb("xml_op",array("id" => $id)),
 			));
 		}
-		$sel = ($xdata["forms"]) ? array_flip($xdata["forms"]) : array();
+		$sel = ($odata->meta("forms")) ? array_flip($odata->meta("forms")) : array();
 		$this->vars(array(
-			"name" => $odata["name"],
-			"comment" => $odata["comment"],
+			"name" => $odata->name(),
+			"comment" => $odata->comment(),
 			"admin" => (isset($id)) ? $this->parse("admin") : "",
 			"forms" => $this->multiple_option_list($sel, $this->get_list(FTYPE_ENTRY,true,true)),
 			"reforb" => $this->mk_reforb("submit_xml",array("parent" => $parent,"id" => $id)),
@@ -179,10 +176,8 @@ class form_output extends form_base
 		$this->mk_path($id,"Koosta XML väljund");
 		$this->read_template("xml_output.tpl");
 		extract($args);
-		$odata = $this->get_object($id);
-		$xdata = $this->get_object_metadata(array(
-			"metadata" => $odata["metadata"],
-		));
+		$odata = obj($id);
+		$xdata = $odata->meta();
 
 		if (is_array($xdata["forms"]))
 		{
@@ -499,8 +494,8 @@ class form_output extends form_base
 	function change($arr)
 	{
 		extract($arr);
-		$object = $this->get_object($id);
-		if ($object["class_id"] == CL_FORM_XML_OUTPUT )
+		$object = obj($id);
+		if ($object->class_id() == CL_FORM_XML_OUTPUT )
 		{
 			return $this->mk_my_orb("edit_xml",array("id" => $id));
 		};
@@ -1287,8 +1282,8 @@ class form_output extends form_base
 		{
 			foreach ($this->arr["relation_forms"] as $fid)
 			{
-				$o = $this->get_object($fid);
-				$ret[$fid] = $o["name"];
+				$o = obj($fid);
+				$ret[$fid] = $o->name();
 			}
 		}
 		return $ret;
@@ -1374,9 +1369,9 @@ class form_output extends form_base
 			{
 				if ($el)
 				{
-					$oo = $this->get_object($el);
-					$name = $oo["name"];
-					$ord = $oo["jrk"];
+					$oo = obj($el);
+					$name = $oo->name();
+					$ord = $oo->jrk();
 				}
 			}
 		

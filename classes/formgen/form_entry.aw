@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.6 2004/03/25 09:47:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.7 2004/06/09 21:01:34 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -40,8 +40,8 @@ class form_entry extends aw_template
 		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $id", "form_id");
 
 
-		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], LC_FORM_ENTRY_CHANGE_ENTRY);
+		$o = obj($id);
+		$this->mk_path($o->parent(), LC_FORM_ENTRY_CHANGE_ENTRY);
 
 		$f = get_instance("formgen/form");
 		return $f->gen_preview(array("id" => $fid, "entry_id" => $id));
@@ -88,14 +88,14 @@ class form_entry extends aw_template
 	{
 		extract($args);
 		// koigepealt registreerime uue objekti.
-		$old = $this->get_object($eid);
+		$old = obj($eid);
 		// üle kanname koik andmed, parent-i asendame
 		if ($args["parent"])
 		{
-			$old["parent"] = $args["parent"];
+			$old->set_parent($args["parent"]);
 		};
 		// acl-iga voib kamm tekkida.
-		$new_id = $this->new_object($old);
+		$new_id = $old->save_new();
 	
 		$oldentry = $this->get_record("form_entries","id",$eid);
 

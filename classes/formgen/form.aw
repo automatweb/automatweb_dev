@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.95 2004/05/06 12:24:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.96 2004/06/09 21:01:33 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -584,7 +584,7 @@ class form extends form_base
 
 		if ($setstyle)
 		{
-			$style_obj = $this->get_object($setstyle);
+			$style_obj = obj($setstyle);
 		}
 
 		$this->load($id);
@@ -594,7 +594,7 @@ class form extends form_base
 			{
 				if ($chk[$row][$col] == 1)
 				{
-					$this->arr["contents"][$row][$col]->set_style($setstyle,$style_obj["class_id"]);
+					$this->arr["contents"][$row][$col]->set_style($setstyle,$style_obj->class_id());
 					if ($addel)
 					{
 						// we must add an element of the specified type to this cell
@@ -4605,7 +4605,7 @@ class form extends form_base
 		if (is_array($c_cell))
 		{
 			$oldel = $this->arr["elements"][$row][$col][$el_id];
-			$oldel_ob = $this->get_object($el_id);
+			$oldel_ob = obj($el_id);
 
 			$cnt = 1;
 			foreach($c_cell as $rowc)
@@ -4619,7 +4619,7 @@ class form extends form_base
 					$name = $oldel["name"]."_".$cnt;
 					$this->arr["contents"][$row][$col]->do_add_element(array(
 						"name" => $name, 
-						"parent" => $oldel_ob["parent"], 
+						"parent" => $oldel_ob->parent(), 
 						"based_on" => $el_id
 					));
 					$cnt++;
@@ -4732,7 +4732,7 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->if_init($id,"metainfo.tpl","Muutis formi $this->name metainfot");
-		$row = $this->get_object($this->id);
+		$row = obj($this->id);
 
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
 		if (!($cnt = $this->db_next()))
@@ -4740,16 +4740,20 @@ class form extends form_base
 			$this->raise_error(ERR_FG_EMETAINFO,"form->metainfo(): weird error!", true);
 		}
 
-		$this->vars(array("created"			=> $this->time2date($row["created"],2), 
-											"created_by"	=> $row["createdby"],
-											"modified"		=> $this->time2date($row["modified"],2),
-											"modified_by"	=> $row["modifiedby"],
-											"views"				=> $row["hits"],
-											"num_entries"	=> $cnt["cnt"],
-											"position"		=> $ret,
-											"reforb"			=> $this->mk_reforb("submit_metainfo", array("id" => $this->id)),
-											"form_name"		=> $row["name"],
-											"form_comment" => $row["comment"]));
+		$cby = $row->createdby();
+		$mby = $row->modifiedby();
+		$this->vars(array(
+			"created" => $this->time2date($row->created(),2), 
+			"created_by" => $cby->name(),
+			"modified" => $this->time2date($row->modified(),2),
+			"modified_by" => $mby->name(),
+			"views" => $row->hits(),
+			"num_entries" => $cnt["cnt"],
+			"position" => $ret,
+			"reforb" => $this->mk_reforb("submit_metainfo", array("id" => $this->id)),
+			"form_name" => $row->name(),
+			"form_comment" => $row->comment()
+		));
 		return $this->do_menu_return();
 	}
 
@@ -5365,8 +5369,8 @@ class form extends form_base
 		{
 			foreach ($this->arr["relation_forms"] as $fid)
 			{
-				$o = $this->get_object($fid);
-				$ret[$fid] = $o["name"];
+				$o = obj($fid);
+				$ret[$fid] = $o->name();
 			}
 		}
 		return $ret;
@@ -6614,19 +6618,24 @@ class form extends form_base
 			return $this->do_menu_return($_cont);				
 		};
 
-		$this->get_objects_by_class(array("class" => CL_FORM));
-		$forms = $chains = array();
-		while($row = $this->db_next())
-		{
-			$forms[$row["oid"]] = $row["name"];
-		};
+		$ol = new object_list(array(
+			"class_id" => CL_FORM,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$forms = $ol->names();
 			
-		$this->get_objects_by_class(array("class" => CL_FORM_CHAIN,"flags" => OBJ_HAS_CALENDAR));
-		while($row = $this->db_next())
-		{
-			$chains[$row["oid"]] = $row["name"];
-		};
-
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_CHAIN,
+			"flags" => array(
+				"mask" => OBJ_HAS_CALENDAR,
+				"flags" => OBJ_HAS_CALENDAR
+			),
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$chains = $ol->names();
+			
 		$of_target_type = ($this->arr["of_target_type"]) ? $this->arr["of_target_type"] : "form";
 
 		$lines = "";

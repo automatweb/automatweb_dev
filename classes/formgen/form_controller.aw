@@ -140,12 +140,12 @@ class form_controller extends form_base
 			{
 				if ($vd["form_id"])
 				{
-					$fd = $this->get_object($vd["form_id"]);
-					$ref = $fd["name"];
+					$fd = obj($vd["form_id"]);
+					$ref = $fd->name();
 					if ($vd["el_id"])
 					{
-						$ed = $this->get_object($vd["el_id"]);
-						$ref.=".".$ed["name"];
+						$ed = obj($vd["el_id"]);
+						$ref.=".".$ed->name();
 					}
 				}
 				$__false = false;
@@ -184,12 +184,8 @@ class form_controller extends form_base
 
 	function load_controller($id)
 	{
-		$ret = $this->get_object($id);
-		if ($ret["meta"]["eq"] === false)
-		{
-			$this->dequote($ret["metadata"]);
-			$ret["meta"] = aw_unserialize($ret["metadata"]);
-		}
+		$ret = obj($id);
+		$ret = $ret->fetch();
 		$this->loaded_controller = $ret;
 		return $ret;
 	}

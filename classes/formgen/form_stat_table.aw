@@ -136,7 +136,8 @@ class form_stat_table extends form_base
 
 	function load_stat_table($id)
 	{
-		$this->s_table = $this->get_object($id);
+		$tmp = obj($id);
+		$this->s_table = $tmp->fetch();
 	}
 
 	function save_stat_table()

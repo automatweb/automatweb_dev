@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.3 2004/01/13 16:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.4 2004/06/09 21:01:34 kristo Exp $
 classload("formgen/form_base");
 class form_import extends form_base
 {
@@ -27,8 +27,8 @@ class form_import extends form_base
 	{
 		extract($arr);
 		$this->read_template("import_entries.tpl");
-		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id),"form")."'>Muuda formi</a> / Impordi sisetusi");
+		$o = obj($id);
+		$this->mk_path($o->parent(), "<a href='".$this->mk_my_orb("change", array("id" => $id),"form")."'>Muuda formi</a> / Impordi sisetusi");
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_form", array("id" => $id))
@@ -277,8 +277,8 @@ class form_import extends form_base
 	{
 		extract($arr);
 		$this->read_template("import_entries.tpl");
-		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], sprintf(LC_IMPORT_CHAIN_HEADER,$this->mk_my_orb("change", array("id" => $id),"form_chain")));
+		$o = obj($id);
+		$this->mk_path($o->parent(), sprintf(LC_IMPORT_CHAIN_HEADER,$this->mk_my_orb("change", array("id" => $id),"form_chain")));
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_chain", array("id" => $id))

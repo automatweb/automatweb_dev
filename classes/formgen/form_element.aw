@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.67 2004/03/25 09:46:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.68 2004/06/09 21:01:34 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1914,7 +1914,7 @@ class form_element extends aw_template
 	{
 		$this->read_template("change_pos.tpl");
 		$o = get_instance("objects");
-		$obj = $this->get_object($this->id);
+		$obj = obj($this->id);
 		if (!(is_array($f->arr["el_menus"]) && count($f->arr["el_menus"]) > 0))
 		{
 			$mlist = $o->get_list();
@@ -1930,7 +1930,7 @@ class form_element extends aw_template
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_chpos", array("id" => $this->fid, "col" => $this->col, "row" => $this->row, "el_id" => $this->id), "form"),
-			"folders"	=> $this->picker($obj["parent"], $mlist),
+			"folders"	=> $this->picker($obj->parent(), $mlist),
 			"name"		=> $this->arr["name"]
 		));
 

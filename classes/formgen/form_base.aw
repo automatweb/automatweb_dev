@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.23 2004/03/09 11:07:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.24 2004/06/09 21:01:34 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -994,16 +994,20 @@ class form_base extends form_db_base
 		// get list of elements in the current form or output
 		$elarr = $is_op ? $this->get_all_elements_in_op() : $this->get_all_elements();
 
-		$this->get_objects_by_class(array("class" => CL_FORM_ELEMENT));
-		while ($row = $this->db_next())
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_ELEMENT,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			if (!isset($elarr[$row["oid"]]))
+			if (!isset($elarr[$o->id()]))
 			{
 				// if this element does not exist in this form yet and is in the right folder,
 				// add it to the select list.
-				if (!$check_parent || $is_op || ($check_parent && in_array($row["parent"],$this->arr["el_menus2"])))
+				if (!$check_parent || $is_op || ($check_parent && in_array($o->parent(),$this->arr["el_menus2"])))
 				{
-					$ar[$row["oid"]] = $ol[$row["parent"]]."/".$row["name"];
+					$ar[$o->id()] = $ol[$o->parent()]."/".$o->name();
 				}
 			}
 		}
