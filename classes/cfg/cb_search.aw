@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.4 2004/06/11 08:42:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.5 2004/06/14 14:30:37 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -245,7 +245,10 @@ class cb_search extends class_base
 		// now, get a list of properties in both classes and generate the search form
 		// get a list of properties in both classes
 		$this->_prepare_form_data($arr);
+
 		$this->_prepare_search($arr);
+
+
 		// would be nice to separate things by blah
 		$res = array();
 		foreach($this->in_form as $iname => $item)
@@ -261,33 +264,39 @@ class cb_search extends class_base
 
 			if ($item["type"] == "classificator")
 			{
-				$this->mod_chooser_prop($res, $iname);
+				$this->mod_chooser_prop($res, $iname, $item["clid"]);
 			}
 		};
 		return $res;
 	}
 
-	function mod_chooser_prop(&$props, $pn)
+	function mod_chooser_prop(&$props, $pn, $clid)
 	{
 		// since storage can't do this yet, we gots to do sql here :(
 		$p =& $props[$pn];
 		$opts = array("" => "");
 		if ($p["table"] != "" && $p["field"] != "")
 		{
-			$this->db_query("SELECT distinct($p[field]) as val FROM $p[table]");
+			/*$q = "SELECT distinct($p[field]) as val FROM $p[table]";
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$opts[$row["val"]] = $row["val"];
-			}
+			}*/
+			$clsf = get_instance("classificator");
+			$opts = $clsf->get_options_for(array(
+				"name" => $pn,
+				"clid" => $clid
+			));
 		}
 
 		// now make names
-		$ol = new object_list(array(
+		/*$ol = new object_list(array(
 			"oid" => $opts
-		));
+		));*/
 
 		$p["type"] = "select";
-		$p["options"] = array("" => "") + $ol->names();
+		$p["options"] = array("" => "") + $opts;
 	}
 
 	function _prepare_search($arr)
@@ -713,6 +722,7 @@ class cb_search extends class_base
 		{
 			$request["ft_page"] = $GLOBALS["ft_page"];
 		}
+
 		list($props, $clid, $relinfo) = $this->get_props_from_obj($ob);
 		
 		$props = $this->callback_gen_search(array(
