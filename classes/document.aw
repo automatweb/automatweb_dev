@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.133 2002/12/03 13:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.134 2002/12/11 12:32:03 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -490,7 +490,7 @@ class document extends aw_template
 					//"printlink" => $this->mk_my_orb("print",array("section" => $docid,"oid" => $oid),"document",0,1),
 					"printlink" => $link,
 				));
-				aw_global_set("no_menus",1);
+				#aw_global_set("no_menus",1);
 				$_tmp = $this->parse("PRINTANDSEND");
 				$this->vars(array("PRINTANDSEND" => $_tmp));
 			};
@@ -2774,7 +2774,10 @@ class document extends aw_template
 			// if match is found in title, then multiply number by 5, to emphasize importance
 			
 			// hook for site specific document parsing
-			$si->parse_search_result_document(&$row);
+			if (is_object($si))
+			{
+				$si->parse_search_result_document(&$row);
+			}
 
 			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 			$max_count = max($c,$max_count);
