@@ -68,6 +68,7 @@ switch($action)
 		break;
 
 	default:
+		print "searching for documents<br>";
 		$content = $t->list_docs_a(array("period" => $period));
 }
 include("admin_footer.$ext");

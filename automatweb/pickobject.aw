@@ -1,5 +1,7 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/automatweb/Attic/pickobject.aw,v 2.3 2001/12/18 00:18:48 kristo Exp $
 // Obsolete?
+// no, but .. use the ORB, Luke, use the ORB
 include("const.aw");
 include("admin_header.$ext");
 // see on nö lyhendatud versioon object prauserit ... saab kasutada yhe konkreetse objekti
