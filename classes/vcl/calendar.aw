@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.3 2004/01/06 16:52:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.4 2004/01/13 14:16:34 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -417,10 +417,11 @@ class vcalendar extends aw_template
 	function draw_event($evt)
 	{
 		$m = date("m",$evt["timestamp"]);
+		$lc_month = get_lc_month($m);
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
-			"date" => date("d-m-Y H:i",$evt["timestamp"]),
-			"lc_date" => date("d",$evt["timestamp"]) . ". " . get_lc_month($m) . " " . date("Y",$evt["timestamp"]),
+			"date" => date("j-m-Y H:i",$evt["timestamp"]),
+			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
 			"name" => $evt["name"],
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"modifiedby" => $evt["modifiedby"],
