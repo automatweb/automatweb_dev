@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.49 2004/03/08 17:51:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.50 2004/04/14 10:27:03 kristo Exp $
 
 /*
 
@@ -305,7 +305,7 @@ class links extends class_base
 		{
 			if ($this->img)
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->img,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->img,$this->cur_link->prop("alt"));
 			}
 			else
 			{
@@ -335,7 +335,7 @@ class links extends class_base
 		};
 		$this->real_link = $link->prop("url");
 
-		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") >= time()) )
+		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") < 100 || $link->prop("link_image_active_until") >= time()) )
 		{
 			$img = new object_list(array(
 				"parent" => $link->id(),
