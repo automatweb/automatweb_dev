@@ -54,8 +54,7 @@ class active_page_data extends class_base
 		$ret = "";
 		foreach($styles->get() as $stylid)
 		{
-			$css_info = $this->get_obj_meta($stylid);
-			$ret .= $css->_gen_css_style("st".$stylid,$css_info["meta"]["css"]);
+			$ret .= $css->get_style_data_by_id($stylid);
 		}
 
 		if ($ret != "")
