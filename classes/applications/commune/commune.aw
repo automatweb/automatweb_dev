@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.1 2004/06/02 10:21:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.2 2004/06/16 08:50:06 ahti Exp $
 // commune.aw - Kommuun 
 /*
 
@@ -387,7 +387,7 @@ class commune extends class_base
 			"obj_inst" => $o,
 		));
 
-		$t2 = get_instance(CL_PROFIIL);
+		$t2 = get_instance(CL_PROFILE);
 		$t2->init_class_base();
 		$props = $t2->get_property_group(array(
 			"group" => "settings",
@@ -701,7 +701,7 @@ class commune extends class_base
 		));
 
 		$new = false;
-		$clinst = get_instance(CL_PROFIIL);
+		$clinst = get_instance(CL_PROFILE);
 		$vars = array();
 		$vars["group"] = "settings";
 		$vars["return"] = "id";
@@ -976,7 +976,7 @@ class commune extends class_base
 			$pox = reset($po);
 			$po_object = $pox->to();
 			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
-				"clid" => CL_PROFIIL
+				"clid" => CL_PROFILE
 			));
 			
 			foreach($properties as $pn => $pd)
