@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.13 2001/12/18 19:01:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.14 2001/12/19 23:24:16 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -12,6 +12,12 @@ class aliasmgr extends aw_template {
 		$this->db_init();
 		$this->tpl_init("aliasmgr");
 		$this->contents = "";
+		lc_load("aliasmgr");
+		global $lc_aliasmgr;
+		if (is_array($lc_aliasmgr))
+		{
+			$this->vars($lc_aliasmgr);
+		};
 
 	}
 		
@@ -27,11 +33,11 @@ class aliasmgr extends aw_template {
 		// properties).
 		
 		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
+		$this->return_url = $return_url;
 
 		$this->defs["links"] = array(
 				"alias" => "l",
 				"title" => "link",
-				"table" => "extlink",
 				"generator" => "_link_aliases",
 				"class_id" => CL_EXTLINK,
 				"addlink" => $this->mk_my_orb("new", array("docid" => $this->id, "parent" => $this->parent),"links"),
@@ -43,7 +49,6 @@ class aliasmgr extends aw_template {
 		$this->defs["image"] = array(
 				"alias" => "p",
 				"title" => "pilt",
-				"table" => "image",
 				"generator" => "_image_aliases",
 				"class_id" => CL_IMAGE,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"image"),
@@ -53,7 +58,6 @@ class aliasmgr extends aw_template {
 		$this->defs["tables"] = array(
 				"alias" => "t",
 				"title" => "tabel",
-				"table" => "table",
 				"generator" => "_table_aliases",
 				"class_id" => CL_TABLE,
 				"addlink" => $this->mk_my_orb("add_doc", array("id" => $this->id, "parent" => $this->parent),"table"),
@@ -65,7 +69,6 @@ class aliasmgr extends aw_template {
 		$this->defs["forms"] = array(
 				"alias" => "f",
 				"title" => "vorm",
-				"table" => "form",
 				"class_id" => CL_FORM,
 				"generator" => "_form_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form"),
@@ -77,7 +80,6 @@ class aliasmgr extends aw_template {
 		$this->defs["files"] = array(
 				"alias" => "v",
 				"title" => "fail",
-				"table" => "file",
 				"class_id" => CL_FILE,
 				"generator" => "_file_aliases",
 				"addlink" => $this->mk_my_orb("new",array("id" => $this->id, "parent" => $this->parent),"file"),
@@ -89,7 +91,6 @@ class aliasmgr extends aw_template {
 		$this->defs["graphs"] = array(
 				"alias" => "g",
 				"title" => "graafik",
-				"table" => "graph",
 				"class_id" => CL_GRAPH,
 				"generator" => "_graph_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"graph"),
@@ -101,7 +102,6 @@ class aliasmgr extends aw_template {
 		$this->defs["galleries"] = array(
 				"alias" => "y",
 				"title" => "galerii",
-				"table" => "gallery",
 				"generator" => "_gallery_aliases",
 				"class_id" => CL_GALLERY,
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"gallery"),
@@ -112,7 +112,6 @@ class aliasmgr extends aw_template {
 		$this->defs["form_chains"] = array(
 				"alias" => "c",
 				"title" => "vormipärg",
-				"table" => "formchain",
 				"generator" => "_form_chain_aliases",
 				"class_id" => CL_FORM_CHAIN,
 				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_chain"),
@@ -123,8 +122,7 @@ class aliasmgr extends aw_template {
 
 		$this->defs["link_collections"] = array(
 				"alias" => "x",
-				"title" => "Lingikogu oksad",
-				"table" => "lingikogu",
+				"title" => "lingikogu",
 				"class_id" => CL_LINK_COLLECTION,
 				"generator" => "_link_collection_aliases",
 				"addlink" => $this->mk_orb("pick_collection",array("parent" => $this->id),"link_collection"),
@@ -134,8 +132,7 @@ class aliasmgr extends aw_template {
 
 		$this->defs["forums"] = array(
 				"alias" => "o",
-				"title" => "Foorumid",
-				"table" => "foorum",
+				"title" => "foorum",
 				"class_id" => CL_FORUM,
 				"generator" => "_forum_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
@@ -146,8 +143,7 @@ class aliasmgr extends aw_template {
 
 		$this->defs["form_entry"] = array(
 				"alias" => "r",
-				"title" => "Formi sisetus",
-				"table" => "vormi sisestus",
+				"title" => "vormi sisetus",
 				"generator" => "_form_entry_aliases",
 				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
@@ -155,20 +151,26 @@ class aliasmgr extends aw_template {
 		);
 		
 		$this->defs["menu_chains"] = array(
-				"alias" => "m",
-				"title" => "Menüüpärjad",
-				"table" => "menüüpärg",
+				"alias" => "mc",
+				"title" => "menüüpärg",
 				"generator" => "_menu_chain_aliases",
-				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_chain"),
 				"chlink" => $this->mk_my_orb("change",array(),"menu_chain"),
 				"field" => "id"
 		);
-
+		
+		$this->defs["menus"] = array(
+				"alias" => "m",
+				"title" => "menüü link",
+				"generator" => "_menu_aliases",
+				"addlink" => $this->mk_my_orb("add_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu"),
+				"chlink" => $this->mk_my_orb("change",array(),"menu"),
+				"field" => "id"
+		);
+		
 		$this->defs["pullouts"] = array(
 				"alias" => "q",
 				"title" => "pullout",
-				"table" => "pullout",
 				"class_id" => CL_PULLOUT,
 				"generator" => "_pullout_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"pullout"),
@@ -333,7 +335,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"1description"             => $v["url"],
+				"description"             => $v["url"],
 			));
 			$v["url"] = $url;
 			$this->_common_parts($v);
@@ -346,14 +348,35 @@ class aliasmgr extends aw_template {
 		reset($menu_chains);
 		while (list(,$v) = each($menu_chains))
 		{	
-			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"menu_chain");
+			$meta = aw_unserialize($v["metadata"]);
+			$this->dequote($v);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => $this->return_url),"menu_chain");
 			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"address"             => $v["url"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
+	function _menu_aliases($args = array())
+	{
+		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_ALIAS,$_sby, $s_link_order);
+		reset($menu_chains);
+		while (list(,$v) = each($menu_chains))
+		{	
+			$url = $this->mk_my_orb("change_alias", array("id" => $v["id"],"return_url" => $this->return_url),"menu");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
 		};
@@ -372,7 +395,7 @@ class aliasmgr extends aw_template {
 				"name"                => $mchain,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"address"             => $v["url"],
+				"description"             => $v["comment"],
 			));
 			$this->_common_parts($v);
 		};
@@ -392,7 +415,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],		
 			));
 			$this->_common_parts($v);
@@ -413,7 +436,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -436,7 +459,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" 		=> $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -457,7 +480,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -480,7 +503,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -502,7 +525,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -524,7 +547,7 @@ class aliasmgr extends aw_template {
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"comment" => $v["comment"],
+				"description" => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
