@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="banner_profile">
+	<class name="banner_profile" folder="banner">
 
 		<action name="new">
 			<function name="add">
