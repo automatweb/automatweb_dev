@@ -37,15 +37,22 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		return $this->db_fetch_row($q);
 	}
 
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
 		$ret = $this->db_fetch_row("SELECT * FROM objects WITH (nolock) WHERE oid = $oid AND status != 0");
 		if ($ret === false)
 		{
-			error::throw(array(
-				"id" => ERR_NO_OBJ,
-				"msg" => "object::load($oid): no such object!"
-			));
+			if ($param["no_errors"])
+			{
+				return NULL;
+			}
+			else
+			{
+				error::throw(array(
+					"id" => ERR_NO_OBJ,
+					"msg" => "object::load($oid): no such object!"
+				));
+			}
 		}
 
 		$ret["meta"] = aw_unserialize($ret["metadata"]);

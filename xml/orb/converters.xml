@@ -179,5 +179,19 @@
 			</function>
 		</action>
 
+		<action name="acl_to_objtbl" >
+			<function name="acl_to_objtbl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="test_acl" >
+			<function name="test_acl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.46 2004/09/14 09:06:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.47 2004/09/15 18:06:36 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1625,6 +1625,7 @@ class converters extends aw_template
 		}
 	}
 
+
 	/** converts files from db to fs
 	
 		@attrib name=conv_files_to_fs
@@ -1650,6 +1651,110 @@ class converters extends aw_template
 				flush();
 				$this->restore_handle();
 			}
+		}
+		die("all done");
+	}
+
+	/** convert acl to object table
+
+		@attrib name=acl_to_objtbl 
+
+	**/
+	function acl_to_objtbl()
+	{
+		$aclids = aw_ini_get("acl.ids");
+
+		$this->db_query("UPDATE objects SET acldata = ''");
+
+		// for all entries in the acl table
+		// that are not for the owner of the object
+		// write those suckers to the objects table acldata field
+		$this->db_query("
+			SELECT
+				objects.createdby as createdby, 
+				acl.gid as gid,
+				acl.oid as oid,
+				acl.acl as acl,
+				groups.type as g_type,
+				groups.name as g_name,
+				groups.oid as g_oid
+			FROM 
+				acl
+				LEFT JOIN objects ON objects.oid = acl.oid
+				LEFT JOIN groups ON groups.gid = acl.gid
+		");
+		while ($row = $this->db_next())
+		{
+			$skip = ($row["g_type"] == GRP_DEFAULT || $row["g_type"] == GRP_DELETED_USER) && (strtolower($row["g_name"]) == strtolower($row["createdby"]) || $row["createdby"] == "");
+
+			if (true || !$skip)
+			{
+				echo "row ".join(",", map2("%s => %s", $row))." is real, write to objtbl <br>";
+				// get prev value 
+				$this->save_handle();
+
+				$curacl = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = $row[oid]", "acldata")));
+				$curacl[$row["g_oid"]] = array();
+				foreach($aclids as $bp => $nm)
+				{
+					$curacl[$row["g_oid"]][$nm] = (((1 << $bp) & $row["acl"]) ? 1 : 0);
+				}
+
+				//echo "got curacl as ".dbg::dump($curacl);
+				$ser = aw_serialize($curacl);
+				$this->quote(&$ser);
+
+				$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $row[oid]");
+				$this->restore_handle();
+			}
+
+			if (((++$cnt) % 500) == 1)
+			{
+				echo "obj nr $cnt , oid = $row[oid] <br>\n";
+				flush();
+			}
+		}
+
+		die("all done");
+	}	
+
+	/**
+		
+		@attrib name=test_acl
+
+	**/
+	function test_acl()
+	{
+		set_time_limit(0);
+		$aclids = aw_ini_get("acl.ids");
+		$this->db_query("SELECT oid FROM objects ");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			foreach($aclids as $nm)
+			{
+				$nm = str_replace("can_", "", $nm);
+				$r1 = $this->can($nm, $row["oid"]);
+				$r2 = $GLOBALS["object_loader"]->can($nm, $row["oid"]);
+				if ($r1 != $r2)
+				{
+					echo "diff in acl! old = $r1 , new = $r2 , oid = $row[oid], nm = $nm <br>\n";
+					/*$r2 = $GLOBALS["object_loader"]->can($nm, $row["oid"], true);
+					$GLOBALS["acl_dbg"] = 1;
+					$r1 = $this->can($nm, $row["oid"]);
+					$GLOBALS["acl_dbg"] = 0;
+					echo "------------------------------- <br>\n";*/
+					flush();
+					$cnt++;
+					break;
+				}
+			}
+			if (($cnt++ % 500) == 1)
+			{
+				echo "obj cnt $cnt, oid = $row[oid] <br>\n";
+				flush();
+			}
+			$this->restore_handle();
 		}
 		die("all done");
 	}

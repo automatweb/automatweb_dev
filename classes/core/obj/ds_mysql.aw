@@ -37,15 +37,22 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		return $this->db_fetch_row($q);
 	}
 
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
 		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
 		if ($ret === false)
 		{
-			error::throw(array(
-				"id" => ERR_NO_OBJ,
-				"msg" => "object::load($oid): no such object!"
-			));
+			if ($param["no_errors"])
+			{
+				return NULL;
+			}
+			else
+			{
+				error::throw(array(
+					"id" => ERR_NO_OBJ,
+					"msg" => "object::load($oid): no such object!"
+				));
+			}
 		}
 
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
@@ -55,6 +62,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$ret["brother_of"] = $ret["oid"];
 		}
+
+		// unserialize acldata
+		$ret["acldata"] = aw_unserialize($ret["acldata"]);
+
+		// filter it for all current groups 
+
+		// or we could join the acl table based on the current user. 
+		// but we can't do that, cause here we can't do things based on the user
+		// then again we could just read all the acl and save that. maybe. you think?
+
+		// crap. descisions, descisions...
+
+		// ok, so try for the store-shit-in-object-table
 		return $ret;
 	}
 

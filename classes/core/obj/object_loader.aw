@@ -352,6 +352,113 @@ class _int_object_loader
 		$ds->dc[$ds->default_cid] = $new_conn;
 		return $old; 
 	}
+
+	function can($acl_name, $oid, $dbg = false)
+	{
+		// we get the acl from read_objdata
+		enter_function("object_loader::can");
+		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		{
+			$max_priority = -1;
+			$max_acl = $GLOBALS["cfg"]["acl"]["default"];
+
+			$gl = aw_global_get("gidlist_pri_oid");
+
+			$is_owner = false;
+
+			if ($dbg)
+			{
+				echo "asked for $oid ( $acl_name) <br>\n";
+			}
+
+			// go through the object tree and find the acl that is of highest priority among the current users group
+			$cur_oid = $oid;
+			while ($cur_oid > 0)
+			{
+				if ($dbg)
+				{
+					echo "loop $cur_oid <br>\n";
+				}
+				if ($GLOBALS["objects"][$cur_oid])
+				{
+					$tmp = $GLOBALS["objects"][$cur_oid]->obj["acldata"];
+					//echo "got acldata from glob  <br>";
+				}
+				else
+				{
+					$tmp = $this->ds->get_objdata($cur_oid, array(
+						"no_errors" => true
+					));
+					//echo "got acldata from db <br>";
+				}
+				if ($tmp === NULL)
+				{
+					if ($dbg)
+					{
+						echo "objdata for object $cur_oid is null, return false <br>\n";
+					}
+					// if any object above the one asked for is deleted, no access
+					exit_function("object_loader::can");
+					return false;
+				}
+
+				/*if ($cur_oid == $oid && $tmp["createdby"] == aw_global_get("uid"))
+				{
+					if ($dbg)
+					{
+						echo "createdby = $tmp[createdby] is current user, set is owner to true <br>\n";
+					}
+					// we don't return true here immediately, because then owners would get access to objects under deleted objects that are theirs
+					$is_owner = true;
+				}*/
+
+				$acld = safe_array($tmp["acldata"]);
+				if ($dbg)
+				{
+					echo "acld = ".dbg::dump($acld)."\n";
+				}
+
+				// now, iterate over the current acl data with the current gidlist
+				// and find the highest priority acl currently
+				foreach($gl as $g_oid => $g_pri)
+				{
+					if ($dbg)
+					{
+						echo "check acld , group oid $g_oid with pri $g_pri , cur max = $max_priority<br>\n";
+					}
+					if ($g_pri > $max_priority && isset($acld[$g_oid]))
+					{
+						$max_acl = $acld[$g_oid];
+						$max_priority = $g_pri;
+					}
+				}
+
+				if (++$cnt > 100)
+				{
+					$this->raise_error(ERR_ACL_EHIER,"object_loader->can($access,$oid): error in object hierarchy, count exceeded!",true);
+				}
+
+				// go to parent
+				$cur_oid = $tmp["parent"];
+			}
+
+			aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+		}
+
+		if ($is_owner)
+		{
+			return true;
+		}
+
+		exit_function("object_loader::can");
+		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
+		{
+			return $GLOBALS["cfg"]["acl"]["default"];
+		}
+
+		// and now return the highest found
+		return (int)$max_acl["can_".$acl_name];
+	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();

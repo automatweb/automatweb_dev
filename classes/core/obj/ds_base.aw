@@ -33,7 +33,7 @@ class _int_obj_ds_base extends acl_base
 	////
 	// !returns all the object tabel data for the specified object
 	// metadata must be unserialized
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
 		error::throw(array(
 			"id" => ERR_ABSTRACT,

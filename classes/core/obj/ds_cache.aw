@@ -15,7 +15,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$this->cache = get_instance("cache");
 	}
 
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
 		$ret = $this->_get_cache("get_objdata", $oid);
 		if (is_array($ret))
@@ -24,7 +24,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 		else
 		{
-			$ret = $this->contained->get_objdata($oid);
+			$ret = $this->contained->get_objdata($oid, $param);
 			$this->_set_cache("get_objdata", $oid, $ret);
 			return $ret;
 		}

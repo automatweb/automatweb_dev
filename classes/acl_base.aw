@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.81 2004/09/09 11:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.82 2004/09/15 18:06:35 kristo Exp $
 
 lc_load("definition");
 
@@ -76,15 +76,29 @@ class acl_base extends db_connector
 	{
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
 
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			// convert gid to oid
+			$g = get_instance("groups");
+			$g_oid = $g->oid_for_gid($gid);
+			unset($ad[$g_oid]);
+			$ser = aw_serialize($ad);
+			$this->quote(&$ser);
+			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+		}
+
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
 		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_invalidate("objcache-get_objdata-$oid");
 	}
 
 	function save_acl($oid,$gid,$aclarr, $invd = true)
 	{
 		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 		reset($acl_ids);
+		$nd = array();
 		while(list($bitpos,$name) = each($acl_ids))
 		{
 			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
@@ -96,6 +110,7 @@ class acl_base extends db_connector
 				$a = $GLOBALS["cfg"]["acl"]["denied"];
 			}
 
+			$nd[$name] = (int)$aclarr[$name];
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		//let's calculate the acl in PHP
@@ -105,12 +120,25 @@ class acl_base extends db_connector
 		$this->db_query("UPDATE acl SET acl = $acl WHERE oid = $oid AND gid = $gid");
 		//$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			// convert gid to oid
+			$g = get_instance("groups");
+			$g_oid = $g->oid_for_gid($gid);
+			$ad[$g_oid] = $nd;
+			$ser = aw_serialize($ad);
+			$this->quote(&$ser);
+			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+		}
+
 
 		if ($invd)
 		{
 			aw_session_set("__acl_cache", array());
 			$c = get_instance("cache");
 			$c->file_invalidate_regex("acl-cache(.*)");
+			$c->file_invalidate("objcache-get_objdata-$oid");
 		}
 	}
 
@@ -122,6 +150,7 @@ class acl_base extends db_connector
 
 		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 		reset($acl_ids);
+		$nd = array();
 		while(list($bitpos,$name) = each($acl_ids))
 		{
 			if (isset($mask[$name]))
@@ -140,13 +169,27 @@ class acl_base extends db_connector
 				$a = $acl[$name];
 			}
 
+			$nd[$name] = (int)$aclarr[$name];
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			// convert gid to oid
+			$g = get_instance("groups");
+			$g_oid = $g->oid_for_gid($gid);
+			$ad[$g_oid] = $nd;
+			$ser = aw_serialize($ad);
+			$this->quote(&$ser);
+			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+		}
+
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
 		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_invalidate("objcache-get_objdata-$oid");
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -316,6 +359,10 @@ class acl_base extends db_connector
 		if ($GLOBALS["cfg"]["acl"]["no_check"])
 		{
 			return true;
+		}
+		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+		{
+			return $GLOBALS["object_loader"]->can($access, $oid);
 		}
 
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)) || $GLOBALS["acl_dbg"])

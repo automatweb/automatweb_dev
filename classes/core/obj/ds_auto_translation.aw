@@ -13,15 +13,15 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	////
 	// !returns all the object tabel data for the specified object
 	// metadata must be unserialized
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
 		if ($GLOBALS["__obj_sys_opts"]["no_auto_translation"] == 1)
 		{
-			return $this->contained->get_objdata($oid);
+			return $this->contained->get_objdata($oid, $param);
 		}
 
 		$lang_id = aw_global_get("lang_id");
-		$req_od = $this->contained->get_objdata($oid);
+		$req_od = $this->contained->get_objdata($oid, $param);
 
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
 		// to this object .. 
@@ -58,7 +58,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$oid]["trans_orig"] = $f_c["from"];
 
 				// but we still gots to read the original and get the untranslated props from that!
-				return $this->_merge_obj_dat($this->contained->get_objdata($f_c["from"]), $objdata);
+				return $this->_merge_obj_dat($this->contained->get_objdata($f_c["from"], $param), $objdata);
 			}
 			// this is not the corret language object. get the original and try to find
 			// a related translation object that has the correct lang_id
@@ -90,11 +90,11 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$f_c2["to"]]["trans_orig"] = $f_c["from"];
 
 				// the correct object is in $f_c2["to"]
-				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c2["to"]));
+				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c2["to"], $param));
 			}
 			else
 			{
-				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c["from"]));
+				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c["from"], $param));
 			}
 		}
 		else
@@ -131,7 +131,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 					$this->objdata[$dat["to"]]["trans_orig"] = $oid;
 
 					// the correct object is in $dat["to"]
-					return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($dat["to"]));
+					return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($dat["to"], $param));
 				}
 				else
 				{

@@ -25,9 +25,9 @@ class _int_obj_ds_decorator
 	////
 	// !returns all the object tabel data for the specified object
 	// metadata must be unserialized
-	function get_objdata($oid)
+	function get_objdata($oid, $param = array())
 	{
-		return $this->contained->get_objdata($oid);
+		return $this->contained->get_objdata($oid, $param);
 	}
 
 	////
