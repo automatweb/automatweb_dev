@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.18 2005/02/08 12:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.19 2005/02/09 07:18:44 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1663,6 +1663,8 @@ class mrp_workspace extends class_base
 				$rel->set_prop("resource", $res);
 				$rel->save();
 			}
+
+			unset($existing_rels[$prof]);
 		}
 
 		// delete deleted ones
