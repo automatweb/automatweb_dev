@@ -32,7 +32,8 @@
 	@property template type=select
 	@caption Tagasisidevorm
 
-
+	@property open_in_window type=checkbox ch_value=1
+	@caption Ava uues aknas
 */
 
 //define('TEMPLATE',1);
@@ -41,7 +42,7 @@ class pilot_object extends class_base
 	function pilot_object()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be,
-	    // if they exist at all. the default folder does not actually exist, 
+	    // if they exist at all. the default folder does not actually exist,
 	    // it just points to where it should be, if it existed
 		$this->init(array(
 			'tpldir' => 'pilot_object',
@@ -59,15 +60,15 @@ class pilot_object extends class_base
 	function form($args)
 	{
 		$form = $this->get_object($args['id']);
-		$obj = get_instance($args['tagasiside_class']);
+		$obj = get_instance($args['feedback_cl']);
 
 		if (method_exists($obj,'fetch_all_data'))
 		{
-			$data = $obj->fetch_all_data($args['tagasiside']);
+			$data = $obj->fetch_all_data(rawurldecode($args['feedback']));
 		}
 		else
 		{
-			$data = $this->get_object($args['tagasiside']);
+			$data = $this->get_object($args['feedback']);
 		}
 
 		//arr($data,1);

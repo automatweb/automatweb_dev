@@ -71,7 +71,7 @@
 	@default field=meta
 	@default table=objects
 	@default method=serialize
-	@groupinfo forms caption=väljundid
+	@groupinfo forms caption=Väljundid
 
 	@property forms type=relpicker reltype=BACKFORMS
 	@caption tagasiside vormid
@@ -165,11 +165,11 @@ class isik extends class_base
 
 				$form = $this->get_object($val);
 				$forms.= html::href(array(
-				'target' => '_blank',
+				'target' => $form['meta']['open_in_window']? '_blank' : NULL,
 				'caption' => $form['name'], 'url' => $this->mk_my_orb('form', array(
 					'id' => $form[OID],
-					'tagasiside' => $id,
-					'tagasiside_class' => 'kliendibaas/isik',
+					'feedback' => $id,
+					'feedback_cl' => rawurlencode('kliendibaas/isik'),
 
 					),'pilot_object'))).'<br />';
 			}

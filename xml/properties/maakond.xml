@@ -3,10 +3,10 @@
       <property>
             <name>comment</name>
             <type>textarea</type>
-            <table>kliendibaas_maakond</table>
-            <group>general</group>
             <field>comment</field>
-            <caption>Keeled</caption>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>name</name>

@@ -17,6 +17,16 @@
             <method>serialize</method>
             <caption>Tagasisidevorm</caption>
       </property>
+      <property>
+            <name>open_in_window</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ava uues aknas</caption>
+      </property>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>

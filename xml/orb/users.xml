@@ -5,13 +5,13 @@
 			<function name="gen_list">
 			</function>
 		</action>
-		
+
 		<action name="add_user">
 			<function name="add_user">
 				<arguments>
 					<optional name="level"/>
 					<optional name="join_grp"/>
-				</arguments>	
+				</arguments>
 			</function>
 		</action>
 
@@ -34,7 +34,7 @@
 				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="do_change">
 			<function name="do_change">
 				<arguments>

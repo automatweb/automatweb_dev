@@ -33,6 +33,16 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>forms</name>
+            <type>relpicker</type>
+            <reltype>BACKFORMS2</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>tagasiside vormid</caption>
+      </property>
+      <property>
             <name>obj_list</name>
             <type>text</type>
             <callback>obj_list</callback>
@@ -72,7 +82,7 @@
                   <caption>Seotud valimid</caption>
             </selectione>
             <shou>
-                  <caption>shõu</caption>
+                  <caption>Näita</caption>
             </shou>
       </groupinfo>
 </properties>

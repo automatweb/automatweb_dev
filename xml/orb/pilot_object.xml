@@ -6,8 +6,8 @@
 			<function name="form">
 				<arguments>
 					<required name="id" />
-					<optional name="tagasiside" />
-					<optional name="tagasiside_class" />
+					<optional name="feedback" />
+					<optional name="feedback_cl" />
 				</arguments>
 			</function>
 		</action>

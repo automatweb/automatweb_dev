@@ -21,6 +21,12 @@
 
 	@property active_selection type=textbox group=objects,selectione
 
+	@property forms type=checkbox
+	@caption Näita tagasisisde linke
+
+	@property forms type=relpicker reltype=BACKFORMS2
+	@caption tagasiside vormid
+
 ////////////////////////////////////////////////////////////
 
 	@default group=objects
@@ -39,7 +45,7 @@
 /////////////////////////////////////////////////////////////
 
 	@default group=shou
-	@groupinfo shou caption=shõu
+	@groupinfo shou caption="Näita"
 	@property dokus type=text callback=show_selection
 
 */
@@ -58,6 +64,8 @@ CREATE TABLE `selection` (
 
 //define ('PILOT', 1);
 
+define ('BACKFORMS2',1);
+
 class selection extends class_base
 {
 
@@ -69,12 +77,13 @@ class selection extends class_base
 		));//	arr(get_defined_vars(),1);
 	}
 
-	/*function callback_get_rel_types()
+
+	function callback_get_rel_types()
 	{
 		return array(
-			PILOT => 'pilootobjekt',
+			BACKFORMS2 => 'pilootobjekt',
 		);
-	}*/
+	}
 
 	function get_property($args)
 	{
@@ -89,6 +98,9 @@ class selection extends class_base
 
 		switch($data["name"])
 		{
+			case 'forms':
+				$data['multiple'] = 1;
+			break;
 			case 'template':
 				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/selection/templs/'));
 				$data['options'] = $tpls;
@@ -132,22 +144,10 @@ class selection extends class_base
 
 	function show_selection($args)
 	{
-		//arr($args,1);
-		//$meta['active_selection'];
-		if (!is_numeric($args['obj']['meta']['pilot']))
-		{echo $args['obj']['meta']['pilot'];
-			$retval = 'pilootobjekt määramata';
-		}
-		else
-		{
-			$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
-			$po = get_instance('pilot_object');
-			$retval = $po->show($arg2);
-		}
-
+		$retval = $this->show($args);
 		$nodes = array();
 		$nodes[] = array(
-			"value" => $retval,
+			"value" => 'test'.$retval,
 		);
 		return $nodes;
 	}
@@ -570,7 +570,15 @@ class selection extends class_base
 			return 'templiit määramata';
 		}
 
-		$this->sel_tpl = implode('',file($this->cfg['tpldir'].'/selection/templs/'.$obj['meta']['template']));
+		if (empty($obj['meta']['template']))
+		{
+			$this->sel_tpl = '{VAR:name}<br>';
+		}
+		else
+		{
+			$tpl = $this->cfg['tpldir'].'/selection/templs/'.$obj['meta']['template'];
+			$this->sel_tpl = implode('',file($tpl));
+		}
 
 		$str = '';
 
