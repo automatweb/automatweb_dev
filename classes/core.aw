@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.68 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.69 2001/11/20 16:20:22 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1298,7 +1298,7 @@ class core extends db_connector
 			classload("config");
 			$co = new config;
 			$u = $co->get_simple_config("error_redirect");
-			if ($ux != "")
+			if ($u != "")
 			{
 				header("Location: $u");
 				die();
