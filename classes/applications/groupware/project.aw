@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.14 2004/11/19 12:03:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.15 2004/11/19 12:47:14 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -1006,17 +1006,43 @@ class project extends class_base
 		}
 		else
 		{
-			$tb->add_menu_item(array(
-				"name" => "x_" . $o->id(),
-				"parent" => "subprj",
-				"text" => "Etendus",
-				"link" => $this->mk_my_orb("new",array(
-					"parent" => $o->id(),
-					"group" => "change",
-					"clid" => CL_STAGING,
-					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
-				),CL_STAGING),
+			$conns = $o->connections_from(array(
+				"type" => "RELTYPE_PRJ_CFGFORM",
 			));
+
+			if (sizeof($conns) > 0)
+			{
+				foreach($conns as $conn)
+				{
+					$cobj = $conn->to();
+					$tb->add_menu_item(array(
+						"name" => "x_" . $cobj->id(),
+						"parent" => "subprj",
+						"text" => $cobj->name(),
+						"link" => $this->mk_my_orb("new",array(
+							"parent" => $o->id(),
+							"group" => "change",
+							"cfgform" => $cobj->id(),
+							"clid" => $cobj->subclass(),
+							"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+						),$cobj->subclass()),
+					));
+				};
+			}
+			else
+			{
+				$tb->add_menu_item(array(
+					"name" => "x_" . $o->id(),
+					"parent" => "subprj",
+					"text" => "Etendus",
+					"link" => $this->mk_my_orb("new",array(
+						"parent" => $o->id(),
+						"group" => "change",
+						"clid" => CL_STAGING,
+						"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+					),CL_STAGING),
+				));
+			};
 		};
 
 		// and now .. to the lowest level ... I need to add configuration forms .. or that other stuff
