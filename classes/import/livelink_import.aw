@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.3 2003/04/17 12:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.4 2003/04/23 15:30:22 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -114,6 +114,17 @@ class livelink_import extends class_base
 
 		print "<pre>";
 
+		$this->icons = array(
+			"pdf" => "apppdf.gif",
+			"txt" => "apptext.gif",
+			"rtf" => "apptext.gif",
+			"doc" => "appword.gif",
+			"htm" => "appiexpl.gif",
+			"html" => "appiexpl.gif",
+			"xls" => "appexel.gif",
+			"csv" => "appexel.gif",
+		);
+
 		$rootnodes = explode(",",$obj["meta"]["rootnode"]);
 
 		$this->exceptions = explode(",",$obj["meta"]["exception_node"]);
@@ -201,8 +212,7 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			//if ($modified > $old["modified"])
-			if (1)
+			if ($modified > $old["modified"])
 			{
 				# update existing one
 				print "renewing $name\n";
@@ -305,6 +315,12 @@ class livelink_import extends class_base
 			$modified = $this->modified;
 			$filename = $this->fileprefix . $this->filename;
 			$old = $this->db_fetch_row("SELECT modified FROM livelink_files WHERE id = '$id'");
+			$iconurl = "";
+			if ($this->icons[$this->fext])
+			{
+				$iconurl = sprintf("<img src='/img/%s' alt='%s' />",$this->icons[$this->fext],$this->fext);
+				$this->quote($iconurl);
+			};
 			if (in_array($parent,$this->exceptions))
 			{
 				$this->write_outfile();
@@ -317,13 +333,12 @@ class livelink_import extends class_base
 				$this->quote($filename);
 				// wah, wah
 				$this->write_outfile();
-				$q = "INSERT INTO livelink_files (id,parent,name,filename,modified)
-				VALUES('$id','$parent','$name','$filename','$modified')";
+				$q = "INSERT INTO livelink_files (id,parent,name,filename,modified,icon)
+				VALUES('$id','$parent','$name','$filename','$modified','$iconurl')";
 				$this->db_query($q);
 			}
 			else
-			//if ($modified > $old["modified"])
-			if (1)
+			if ($modified > $old["modified"])
 			{
 				print "updating file $filename";
 				$this->quote($name);
@@ -332,7 +347,8 @@ class livelink_import extends class_base
 				$this->write_outfile();
 				$q = "UPDATE livelink_files SET
 				parent = '$parent',name = '$name',filename = '$filename',
-				modified = '$modified'
+				modified = '$modified',
+				icon = '$iconurl'
 				WHERE id = '$id'";
 				$this->db_query($q);
 			}
@@ -362,6 +378,9 @@ class livelink_import extends class_base
                 if (($name == "version") && isset($attribs["filename"]))
                 {
                         $this->filename = $attribs["id"] . "-" . $attribs["filename"];
+			$fext  = array_pop(explode('.', $attribs["filename"]));	
+			$this->fext = $fext;
+			$this->filename = $attribs["id"] . "." . $fext;
                         $this->name = ($attribs["name"]) ? $attribs["name"] : $attribs["filename"];
                         $this->modified = strtotime($attribs["modifydate"]);
                         $this->id = $attribs["id"];
