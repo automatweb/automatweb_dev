@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.11 2001/11/13 00:01:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.12 2001/11/14 20:09:31 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -120,6 +120,7 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"topic" => $board_obj["name"],
+			"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board))
 		));
 
 		$voteblock = "";
@@ -152,6 +153,9 @@ class forum extends aw_template
 			};
 		};
 
+		$this->vars(array(
+			"CHANGE_TOPIC" => ($this->prog_acl("view", PRG_MENUEDIT) ? $this->parse("CHANGE_TOPIC") : "")
+		));
 
 		$this->vars(array(
 			"message" => $content,
@@ -160,6 +164,7 @@ class forum extends aw_template
 			"flat_link" => $this->mk_my_orb("show",array("board" => $board,"section" => $this->section)),
 			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
 			"VOTE_FOR_TOPIC" => $voteblock,
 			"TOPIC" => $this->parse("TOPIC"),
 		));
@@ -279,6 +284,7 @@ class forum extends aw_template
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
 			"comment" => $args["comment"],
+			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"]))
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
 		));
@@ -287,6 +293,14 @@ class forum extends aw_template
 		{
 			$this->vars(array("SHOW_COMMENT" => $this->parse("SHOW_COMMENT")));
 		};
+
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$del = $this->parse("KUSTUTA");
+		}
+		$this->vars(array(
+			"KUSTUTA" => $del
+		));
 
 		return $this->parse("message");
 	}
@@ -490,7 +504,7 @@ class forum extends aw_template
 			"value" => $topicsonpage,
 		));
 
-		if ($parent)
+		if ($pxarent)
 		{
 			$parobj = $this->get_object($parent);
 			if ($parobj["class_id"] == CL_DOCUMENT)
@@ -699,6 +713,10 @@ class forum extends aw_template
 		$mark = ($check_against > $this->last_read) ? $this->parse("NEW_MSGS") : "";
 
 		$this->vars(array(
+			"del_topic" => $this->mk_my_orb("delete_topic", array("board" => $args["oid"],"forum_id" => $args["parent"]))
+		));
+
+		$this->vars(array(
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
 			"createdby" => $args["createdby"],
@@ -708,6 +726,7 @@ class forum extends aw_template
 			"cnt" => (int)$this->comments[$args["oid"]],
 			"topic_link" => $topic_link,
 			"NEW_MSGS" => $mark,
+			"DELETE" => ($this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "")
 		));
 		$even = ($this->topic_count % 2);
 		if ($this->is_template("TOPIC_EVEN"))
@@ -746,6 +765,10 @@ class forum extends aw_template
 	{
 		extract($args);
 		$content = "";
+		if (!$onpage)
+		{
+			$onpage = 5;
+		};
 		$num_pages = (int)(($total / $onpage) + 1);
 
 		// no pager, if we have less entries than will fit on one page
@@ -783,6 +806,49 @@ class forum extends aw_template
 		));
 
 		return(array($act_start,$act_end));
+	}
+
+	function del_topic($arr)
+	{
+		extract($arr);
+		$this->delete_object($board);
+
+		return $this->mk_my_orb("change",array("id" => $forum_id),"forum");
+	}
+
+	function change_topic($arr)
+	{
+		extract($arr);
+		$this->read_template("add_topic.tpl");
+
+		$top = $this->get_object($board);
+
+		$this->vars(array(
+			"name" => $top["name"],
+			"comment" => $top["comment"],
+			"reforb" => $this->mk_reforb("save_topic", array("board" => $board))
+		));
+		return $this->parse();
+	}
+
+	function save_topic($arr)
+	{
+		extract($arr);
+		$this->upd_object(array(
+			"oid" => $board,
+			"name" => $topic,
+			"comment" => $comment
+		));
+		return $this->mk_my_orb("show", array("board" => $board));
+	}
+
+	function del_msg($arr)
+	{
+		extract($arr);
+
+		$this->db_query("DELETE FROM comments WHERE id = $comment");
+
+		return $this->mk_my_orb("show", array("board" => $board));
 	}
 }
 ?>
