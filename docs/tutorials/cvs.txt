@@ -4,7 +4,7 @@ CVS is the version control software that we use. It records a history of all the
 
 <b>Why do we use CVS?</b>
 
-Version control enables us to keep track of changes and easily back them out of needed. It enables several people to work on the same codebase at the same time and makes sure that no code is accidentaly deleted or overwritten. CVS was chosen, because it is used very widely and is free. There are several shortcomings in cvs (no support for renaming files, onyl one level of repositories) and when they start getting in the way, we might switch to bitkeeperor some other, more advanced version control software. 
+Version control enables us to keep track of changes and easily back them out of needed. It enables several people to work on the same codebase at the same time and makes sure that no code is accidentaly deleted or overwritten. CVS was chosen, because it is used very widely and is free. There are several shortcomings in cvs (no support for renaming files, only one level of repositories) and when they start getting in the way, we might switch to bitkeeperor some other, more advanced version control software. 
 
 <b>How to use CVS?</b>
 
@@ -16,12 +16,16 @@ The code in CVS is held in a central repository and all developers check out a c
 cvs -z3 -d :pserver:[username]@dev.struktuur.ee:/www/cvs login
 .. enter password ..
 
+Password will be stored (encrypted) in a file named .cvspass in your home directory, so that you do not have
+to enter the password for each subsequent command. If you have received a new account and have never before
+checked out anything while using that account, then you have to "touch ~/.cvspass" before you can log in.
+This will create an empty file to hold the passwords.
+
 cvs -z3 -d :pserver:[username]@dev.struktuur.ee:/www/cvs checkout automatweb_dev
 
 now, a folder named "automatweb_dev" will be created to the current directory and the latest AW version will be put in that folder. 
 
-
-Now, you can start editing the code, making any changes that you want to the files. After you have made the changes and have verified that they work and tested them a bit, you should push the changes to to the repository, so that others will also have access to your changes. But, before you can push your changes to the server, you must make sure that your code works with all the latest changes that other developers have made. To check that, you have to get the latest changes from the repository and merge the changes into your code version. This is called "updating" your code. 
+Now, you can start editing the code, making any changes that you want to the files. After you have made the changes and have verified that they work and tested them a bit, you should push the changes to the repository, so that others will also have access to your changes. But, before you can push your changes to the server, you must make sure that your code works with all the latest changes that other developers have made. To check that, you have to get the latest changes from the repository and merge the changes into your code version. This is called "updating" your code. 
 
 <i>Updating your code version:</i>
 
@@ -81,6 +85,8 @@ You can also omit the folder/file names from the list - if you do that, all chan
 
 After you enter the message and exit the editor, the actual commit takes place. 
 
+Note: it seems that by default "joe" is used as an editor, if you want to use a sane editor , then do "export EDITOR=vim" (you can use any editor available in the system) before commiting. It's best to put this command in your "~/.bashrc", then it will be executed each time you login and you don't have to do it yourself each time.
+
 Now, you can start making more changes to the code. 
 
 More information about using CVS can be found in the official documentation: http://www.cvshome.org/docs/manual/cvs-1.11.10/cvs.html
@@ -88,6 +94,6 @@ More information about using CVS can be found in the official documentation: htt
 
 <b>What branches are in the AW CVS?</b>
 
-In the AutomatWeb CVS repository, there currently are two branches, HEAD and AW_3_5_0. The HEAD branch is the one with active development. the AW_3_5_0 branch holds the code that will get abandoned on Januay 15th, 2004. From that point on, all customers that do not have upgrade agreements will keep on living on that code version and will no longer recieve any updates. All new customers and customers with upgrade agreements will be migrated to the HEAD branch and development will continue there.
+In the AutomatWeb CVS repository, there currently are two branches, HEAD and AW_3_5_0. The HEAD branch is the one with active development. the AW_3_5_0 branch holds the code that was abandoned on Januay 15th, 2004. From that point on, all customers that did not have upgrade agreements live on that code version and will no longer recieve any updates (except for security fixes of course). All new customers and customers with upgrade agreements will be migrated to the HEAD branch and development will continue there.
 
 Basically, that means, that all new development will take place in the HEAD branch, from what release branches that will be abandoned some time later, will be created. 
