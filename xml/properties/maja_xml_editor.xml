@@ -61,6 +61,16 @@
             <caption>Additional info</caption>
       </property>
       <property>
+            <name>content_table_01</name>
+            <table>objects</table>
+            <group>group_01</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>content_table_01</field>
+            <caption>Sisu tabel 01</caption>
+      </property>
+      <property>
             <name>xml_field_01</name>
             <table>objects</table>
             <group>group_01</group>
@@ -80,14 +90,14 @@
             <caption>Andmebaasi tabel</caption>
       </property>
       <property>
-            <name>content_table_01</name>
+            <name>content_table_02</name>
             <table>objects</table>
-            <group>group_01</group>
+            <group>group_02</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>content_table_01</field>
-            <caption>Sisu tabel 01</caption>
+            <field>content_table_02</field>
+            <caption>Sisu tabel 02</caption>
       </property>
       <property>
             <name>xml_field_02</name>
@@ -109,14 +119,14 @@
             <caption>Andmebaasi tabel</caption>
       </property>
       <property>
-            <name>content_table_02</name>
+            <name>content_table_03</name>
             <table>objects</table>
-            <group>group_02</group>
+            <group>group_03</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>content_table_02</field>
-            <caption>Sisu tabel 02</caption>
+            <field>content_table_03</field>
+            <caption>Sisu tabel 03</caption>
       </property>
       <property>
             <name>xml_field_03</name>
@@ -138,14 +148,14 @@
             <caption>Andmebaasi tabel</caption>
       </property>
       <property>
-            <name>content_table_03</name>
+            <name>content_table_04</name>
             <table>objects</table>
-            <group>group_03</group>
+            <group>group_04</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>content_table_03</field>
-            <caption>Sisu tabel 03</caption>
+            <field>content_table_04</field>
+            <caption>Sisu tabel 04</caption>
       </property>
       <property>
             <name>xml_field_04</name>
@@ -167,14 +177,14 @@
             <caption>Andmebaasi tabel</caption>
       </property>
       <property>
-            <name>content_table_04</name>
+            <name>content_table_05</name>
             <table>objects</table>
-            <group>group_04</group>
+            <group>group_05</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>content_table_04</field>
-            <caption>Sisu tabel 04</caption>
+            <field>content_table_05</field>
+            <caption>Sisu tabel 05</caption>
       </property>
       <property>
             <name>xml_field_05</name>
@@ -194,16 +204,6 @@
             <method>serialize</method>
             <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
             <caption>Andmebaasi tabel</caption>
-      </property>
-      <property>
-            <name>content_table_05</name>
-            <table>objects</table>
-            <group>group_05</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>content_table_05</field>
-            <caption>Sisu tabel 05</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MAJA_XML_EDITOR</syslog_type>

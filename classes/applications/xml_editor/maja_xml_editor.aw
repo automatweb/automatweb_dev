@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.12 2005/03/20 17:31:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.13 2005/03/20 17:38:11 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -37,17 +37,20 @@
 
 @groupinfo group_01 caption="Tab 01" parent=content_change
 
+@property content_table_01 type=table store=no no_caption=1 group=group_01
+@caption Sisu tabel 01
+
 @property xml_field_01 type=select group=group_01 field=meta method=serialize
 @caption Parent XMl-ist
 
 @property db_table_01 type=relpicker group=group_01 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
 @caption Andmebaasi tabel
 
-@property content_table_01 type=table store=no no_caption=1 group=group_01
-@caption Sisu tabel 01
-
 ---------
 @groupinfo group_02 caption="Tab 02" parent=content_change
+
+@property content_table_02 type=table store=no no_caption=1 group=group_02
+@caption Sisu tabel 02
 
 @property xml_field_02 type=select group=group_02 field=meta method=serialize
 @caption Parent XML-ist
@@ -55,11 +58,12 @@
 @property db_table_02 type=relpicker group=group_02 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
 @caption Andmebaasi tabel
 
-@property content_table_02 type=table store=no no_caption=1 group=group_02
-@caption Sisu tabel 02
-
 ---------
 @groupinfo group_03 caption="Tab 03" parent=content_change
+
+
+@property content_table_03 type=table store=no no_caption=1 group=group_03
+@caption Sisu tabel 03
 
 @property xml_field_03 type=select group=group_03 field=meta method=serialize
 @caption Parent XML-ist
@@ -67,11 +71,11 @@
 @property db_table_03 type=relpicker group=group_03 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
 @caption Andmebaasi tabel
 
-@property content_table_03 type=table store=no no_caption=1 group=group_03
-@caption Sisu tabel 03
-
 ---------
 @groupinfo group_04 caption="Tab 04" parent=content_change
+
+@property content_table_04 type=table store=no no_caption=1 group=group_04
+@caption Sisu tabel 04
 
 @property xml_field_04 type=select group=group_04 field=meta method=serialize
 @caption parent XML-ist
@@ -79,11 +83,11 @@
 @property db_table_04 type=relpicker group=group_04 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
 @caption Andmebaasi tabel
 
-@property content_table_04 type=table store=no no_caption=1 group=group_04
-@caption Sisu tabel 04
-
 ---------
 @groupinfo group_05 caption="Tab 05" parent=content_change
+
+@property content_table_05 type=table store=no no_caption=1 group=group_05
+@caption Sisu tabel 05
 
 @property xml_field_05 type=select group=group_05 field=meta method=serialize
 @caption parent XML-ist
@@ -91,8 +95,6 @@
 @property db_table_05 type=relpicker group=group_05 field=meta method=serialize reltype=RELTYPE_DB_TABLE_CONTENTS
 @caption Andmebaasi tabel
 
-@property content_table_05 type=table store=no no_caption=1 group=group_05
-@caption Sisu tabel 05
 
 
 @reltype DB_TABLE_CONTENTS value=1 clid=CL_DB_TABLE_CONTENTS
