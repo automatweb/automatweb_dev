@@ -98,6 +98,7 @@ switch ($type)
 			$timers_arr[] = "$label = $v" . "s";
 		};
 		die("<br><br><br><font size=1>".join(" | ",$timers_arr)."</font>");*/
+		die();
 		break;
 
 	case "menus":
