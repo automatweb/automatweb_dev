@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>conf_folders</name>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kataloogid, kus konf kehtib</caption>
+      </property>
+      <property>
+            <name>conf_ratings</name>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_RATE</reltype>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Hindamisobjektid</caption>
+      </property>
+      <property>
+            <name>images_folder</name>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_IMAGES_FOLDER</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Piltide asukoht</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_GALLERY_CONF</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+

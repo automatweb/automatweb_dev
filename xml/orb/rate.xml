@@ -5,7 +5,7 @@
 		<action name="rate" nologin="1">
 			<function name="add_rate">
 				<arguments>
-					<required name="oid" type="int"/>
+					<required name="oid"/>
 					<required name="return_url"/>
 					<required name="rate"/>
 				</arguments>
@@ -15,12 +15,10 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id" type="int"/>
-					<optional name="gallery_id" type="int"/>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
-		
 
 	</class>
 </orb>

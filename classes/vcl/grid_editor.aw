@@ -112,7 +112,7 @@ class grid_editor extends class_base
 		}
 	}
 
-	function on_edit($data, $oid)
+	function on_edit($data, $oid, $params = array())
 	{
 		$this->_init_table($data);
 
@@ -190,6 +190,22 @@ class grid_editor extends class_base
 					"EXP_DOWN"					=> $ed,
 				));
 			
+				// do the callback if specified
+				$cc = "";
+				if (is_array($params) && isset($params['cell_content_callback']))
+				{
+					$that =& $params['cell_content_callback'][0];
+					$fun =& $params['cell_content_callback'][1];
+					$parms =& $params['cell_content_callback'][2];
+					$cc = $that->$fun($parms, $map['row'], $map['col']);
+				}
+				else
+				{	
+					$cc = $this->parse("COL_CONTENT");
+				}
+				$this->vars(array(
+					"COL_CONTENT" => $cc
+				));
 				$col.=$this->parse("COL");
 			}
 			$fr = "";
@@ -217,7 +233,7 @@ class grid_editor extends class_base
 		return $this->parse();
 	}
 
-	function on_edit_submit($data, $post)
+	function on_edit_submit($data, $post, $params = array())
 	{
 		$this->_init_table($data);
 
@@ -234,6 +250,26 @@ class grid_editor extends class_base
 
 		$this->_process_command($cmds);
 	
+		if ($params['cell_content_callback'])
+		{
+			// call the save content handler for each cell
+			for($_row = 0; $_row < $this->arr["rows"]; $_row++)
+			{
+				for($_col = 0; $_col < $this->arr["cols"]; $_col++)
+				{
+					if (!($spans = $this->get_spans($_row, $_col)))
+					{
+						continue;
+					}
+					$map = $this->arr["map"][$_row][$_col];
+					$that =& $params['cell_content_callback'][0];
+					$fun =& $params['cell_content_callback'][1];
+					$parms =& $params['cell_content_callback'][2];
+					$this->arr['aliases'][$map['row']][$map['col']] =  $that->$fun($parms, $map['row'], $map['col'], $post);
+				}
+			}
+		}
+
 		// delete selected rows/cols
 /*		$cdelete = array();
 		$rdelete = array();
@@ -1048,6 +1084,51 @@ class grid_editor extends class_base
 		return $table;
 	}
 
+	function show_tpl($data, $oid, $params)
+	{
+		extract($params);
+
+		$this->tpl_init();
+		$this->_init_table($data);
+
+		$this->read_any_template($tpl);
+
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			$cs = "";
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				if (!($spans = $this->get_spans($row, $col)))
+				{
+					continue;
+				}
+
+				$ct = "";
+				if (is_array($params) && isset($params['cell_content_callback']))
+				{
+					$map = $this->arr["map"][$row][$col];
+					$that =& $params['cell_content_callback'][0];
+					$fun =& $params['cell_content_callback'][1];
+					$parms =& $params['cell_content_callback'][2];
+					$ct = $that->$fun($parms, $map['row'], $map['col']);
+				}
+				
+				$this->vars(array(
+					"colspan" => $spans["colspan"],
+					"rowspan" => $spans["rowspan"],
+					"content" => $ct
+				));
+
+				$cs .= $this->parse("CELL");
+			}
+			$this->vars(array(
+				"CELL" => $cs
+			));
+			$l .= $this->parse("LINE");
+		}
+
+		return $this->parse();
+	}
 
 	function set_row_style($row, $style)
 	{

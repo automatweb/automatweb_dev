@@ -151,6 +151,7 @@ function exec_cmd(cmd)
 	<tr>
 		<!-- SUB: COL -->
 		<td bgcolor=#FFFFFF rowspan={VAR:rowspan} colspan={VAR:colspan} class="celltext">
+			<!-- SUB: COL_CONTENT -->
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 				<tr>
 					<td width="1" height="1"><img src='{baseurl}/automatweb/images/trans.gif' width='1' height='1'></td>
@@ -174,6 +175,7 @@ function exec_cmd(cmd)
 					<td width="1"><img src='{baseurl}/automatweb/images/trans.gif' width='1' height='1'></td>
 				</tr>
 			</table>
+			<!-- END SUB: COL_CONTENT -->
 		</td>
 		<!-- END SUB: COL -->
 
