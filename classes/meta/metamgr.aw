@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.5 2004/10/26 11:55:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.6 2004/11/11 15:07:37 ahti Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -137,6 +137,11 @@ class metamgr extends class_base
 	function do_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => 1,
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
