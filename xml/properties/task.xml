@@ -1,8 +1,42 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>done</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tehtud</caption>
+      </property>
+      <property>
+            <name>start1</name>
+            <type>datetime_select</type>
+            <field>start</field>
+            <table>planner</table>
+            <group>general</group>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>content</name>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>30</rows>
+            <field>description</field>
+            <table>planner</table>
+            <group>general</group>
+            <caption>Sisu</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </planner>
+      </tableinfo>
 </properties>
 

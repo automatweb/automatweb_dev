@@ -348,5 +348,43 @@
                   <caption>Lisa_sündmus</caption>
             </add_event>
       </groupinfo>
+      <reltypes>
+            <SUMMARY_PANE>
+                  <value>1</value>
+                  <caption>Näita kokkuvõtte paanis</caption>
+            </SUMMARY_PANE>
+            <EVENT_SOURCE>
+                  <value>2</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>võta sündmusi teistest kalendritest</caption>
+            </EVENT_SOURCE>
+            <EVENT>
+                  <value>3</value>
+                  <caption>sündmus</caption>
+            </EVENT>
+            <DC_RELATION>
+                  <value>4</value>
+                  <clid>CL_RELATION</clid>
+                  <caption>viide kalendri väljundile</caption>
+            </DC_RELATION>
+            <GET_DC_RELATION>
+                  <value>5</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>võta kalendri väljundid</caption>
+            </GET_DC_RELATION>
+            <EVENT_FOLDER>
+                  <value>6</value>
+                  <clid>CL_MENU</clid>
+                  <caption>sündmuste kataloog</caption>
+            </EVENT_FOLDER>
+            <EVENT_ENTRY>
+                  <value>7</value>
+                  <clid>
+                        <num_0>CL_CFGFORM</num_0>
+                        <num_1>CL_CRM_CALL</num_1>
+                  </clid>
+                  <caption>sündmuse sisestamise vorm</caption>
+            </EVENT_ENTRY>
+      </reltypes>
 </properties>
 
