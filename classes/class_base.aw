@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.345 2004/12/21 13:39:55 duke Exp $
+// $Id: class_base.aw,v 2.346 2004/12/27 11:34:34 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1261,10 +1261,14 @@ class class_base extends aw_template
 			$link = "";
 			if (isset($this->id))
 			{
-				$link = $this->mk_my_orb("list_aliases",array(
-					"id" => $this->id,
-					"return_url" => urlencode($return_url)),
-				get_class($this->orb_class));
+				$link = $this->mk_my_orb(
+					"list_aliases",
+					array(
+						"id" => $this->id,
+						"return_url" => urlencode($return_url)
+					),
+					get_class($this->orb_class)
+				);
 			};
 
 			//$this->tp->add_tab(array(
@@ -1786,7 +1790,16 @@ class class_base extends aw_template
 
 		if (empty($val["value"]) && ($val["type"] == "aliasmgr") && isset($this->id))
 		{
-			$link = $this->mk_my_orb("list_aliases",array("id" => $this->obj_inst->brother_of()),"aliasmgr",false,true);
+			$link = $this->mk_my_orb(
+				"list_aliases",
+				array(
+					"id" => $this->obj_inst->brother_of(),
+					"no_op" => 1
+				),
+				get_class($this->orb_class),
+				false,
+				true
+			);
 			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
 			$val["no_caption"] = 1;
 		};
