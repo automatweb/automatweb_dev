@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.277 2004/09/06 09:07:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.278 2004/09/09 10:58:04 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -358,8 +358,11 @@ class document extends aw_template
 		}
 		else
 		{
-			$__tmp = obj($doc["brother_of"]);
-			$meta = $__tmp->meta();
+			if ($this->can("view", $doc["brother_of"]))
+			{
+				$__tmp = obj($doc["brother_of"]);
+				$meta = $__tmp->meta();
+			}
 		};
 
 		$si = __get_site_instance();

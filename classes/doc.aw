@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.81 2004/08/18 07:08:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.82 2004/09/09 10:58:04 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -165,6 +165,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property no_topic_links type=checkbox table=objects field=meta method=serialize ch_value=1
 @caption Ära tee Samal teemal linke
+
+@property no_last type=checkbox ch_value=1 group=settings trans=1
+@caption Ära arvesta muutmist
+
+@property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
+@caption Muutmise kuupaev dokumendi sees
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
