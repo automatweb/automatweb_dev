@@ -32,7 +32,8 @@ function Browser() {
   }
 }
 
-var browser = new Browser();
+// browserdetect.js is loaded anyway, don't perform an inferior detection here
+//var browser = new Browser();
 
 //----------------------------------------------------------------------------
 // Code for handling the menu bar and active button.
