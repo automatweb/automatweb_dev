@@ -7,6 +7,15 @@ class html2pdf extends class_base
 		$this->init();
 	}
 
+	function can_convert()
+	{
+		if (is_file(aw_ini_get("html2pdf.htmldoc_path"))
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	////
 	// !converts html to pdf, returns pdf content
 	// parameters:

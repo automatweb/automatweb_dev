@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.35 2005/01/28 11:40:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.36 2005/03/01 20:31:21 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -904,15 +904,18 @@ class form_actions extends form_base
 			if ($data["add_pdf"])
 			{
 				$co = get_instance("core/converters/html2pdf");
-				$pdf = $co->convert(array(
-					"source" => $msg_html
-				));
-				$awm->fattach(array(
-					"content" => $pdf,
-					"filename" => $fname,
-					"contenttype" => "application/pdf",
-					"name" => $fname
-				));
+				if ($co->can_convert())
+				{
+					$pdf = $co->convert(array(
+						"source" => $msg_html
+					));
+					$awm->fattach(array(
+						"content" => $pdf,
+						"filename" => $fname,
+						"contenttype" => "application/pdf",
+						"name" => $fname
+					));
+				}
 			}
 
 			$awm->gen_mail();
@@ -994,15 +997,18 @@ class form_actions extends form_base
 					if ($data["add_pdf"])
 					{
 						$co = get_instance("core/converters/html2pdf");
-						$pdf = $co->convert(array(
-							"source" => $msg_html
-						));
-						$awm->fattach(array(
-							"content" => $pdf,
-							"filename" => $fname,
-							"contenttype" => "application/pdf",
-							"name" => $fname
-						));
+						if ($co->can_convert())
+						{
+							$pdf = $co->convert(array(
+								"source" => $msg_html
+							));
+							$awm->fattach(array(
+								"content" => $pdf,
+								"filename" => $fname,
+								"contenttype" => "application/pdf",
+								"name" => $fname
+							));
+						}
 					}
 	
 					$awm->gen_mail();
