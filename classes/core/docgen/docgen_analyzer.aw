@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.12 2004/03/09 18:24:04 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.13 2004/03/15 16:55:13 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -747,6 +747,7 @@ class docgen_analyzer extends class_base
 
 	function handle_variable_ref($v_tok)
 	{
+		return;
 		$tok = $this->get();
 		if ($tok[0] == T_OBJECT_OPERATOR)
 		{
@@ -932,6 +933,7 @@ class docgen_analyzer extends class_base
 					if ($assign[0] == T_ISSET)
 					{
 						// we're sorta fucked here, cause that's the start of a complex expression probably :(
+						echo "isset <Br>";
 						$tmp = $this->get();
 						$this->dump_tok($tmp, false);
 						$tmp = $this->get();
@@ -941,6 +943,7 @@ class docgen_analyzer extends class_base
 					}
 					else
 					{
+						echo "oither <br>";
 						$this->dump_tok($assign, false);
 					}
 				}
