@@ -35,6 +35,10 @@ class _int_object
 
 	function load($param)
 	{
+		if ($GLOBALS["TRACE_OBJ"])
+		{
+			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
+		}
 		if (is_array($param))
 		{
 			$this->obj = $param;
@@ -1332,7 +1336,13 @@ class _int_object
 				$ret[] = obj($rootmenu);
 			}
 		}
-		return array_reverse($ret);
+
+		$ret = array_reverse($ret);
+		if ($param["no_self"])
+		{
+			array_pop($ret);
+		}
+		return $ret;
 	}
 
 	function _int_can($param)
@@ -1361,7 +1371,7 @@ class _int_object
 				{
 					error::throw(array(
 						"id" => ERR_ACL,
-						"msg" => "object::save(): no acess to save object!"
+						"msg" => "object::save(): no acess to save object ".$this->obj["oid"]." under ".$this->obj["parent"]." !"
 					));
 				}
 			}
@@ -1375,7 +1385,7 @@ class _int_object
 				{
 					error::throw(array(
 						"id" => ERR_ACL,
-						"msg" => "object::save(): no access to add object under folder ".$this->obj["parent"]."!"
+						"msg" => "object::save(): no access to add object under folder ".$this->obj["parent"]." (gidlist = ".join(",", aw_global_get("gidlist")).")!"
 					));
 				}
 			}
