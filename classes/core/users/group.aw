@@ -934,7 +934,7 @@ class group extends class_base
 			"no_caption" => 1,
 			"type" => "text",
 			"store" => "no",
-			"value" => "Default &otilde;igused"
+			"value" => "Default &otilde;igused seose loomisel"
 		);
 
 		$aclids = aw_ini_get("acl.ids");
