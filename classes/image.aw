@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.46 2003/04/15 15:51:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.47 2003/04/15 15:52:14 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -69,6 +69,10 @@ class image extends class_base
 			{
 				$row["url"] = $this->get_url($row["file"]);
 				$row["meta"] = aw_unserialize($row["metadata"]);
+				if ($row["meta"]["file2"] != "")
+				{
+					$row["big_url"] = $this->get_url($row["meta"]["file2"]);
+				}
 				aw_cache_set("get_image_by_id", $id, $row);
 			}
 		}
@@ -130,6 +134,7 @@ class image extends class_base
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
 				"img_name" => $idata["name"],
 				"alt" => $alt,
+				"bigurl" => $idata["big_url"]
 			);
  
 			if ($this->is_flash($idata["file"]))
@@ -144,11 +149,13 @@ class image extends class_base
 					$replacement = localparse($tpls["image_inplace_linked"],$vars);
 					$inplace = "image_inplace_linked";
 				}
-				else if (isset($tpls["image_linked"]))
+				else 
+				if (isset($tpls["image_linked"]))
 				{
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
-				else if (!$this->cfg["no_default_template"])
+				else 
+				if (!$this->cfg["no_default_template"])
 				{
 					if ($idata["comment"] != "")
 					{
@@ -174,6 +181,10 @@ class image extends class_base
 				else
 				{
 					$tpl = "image";
+					if ($idata["big_url"] != "")
+					{
+						$tpl = "image_has_big";
+					}
 					$inplace = 0;
 				};
 				if (isset($tpls[$tpl]))
@@ -197,7 +208,7 @@ class image extends class_base
 				"replacement" => $replacement,
 				"inplace" => $inplace,
 		);
-		return $retval;
+		return str_replace("\n", "", $retval);
 	}
 
 	function get_img_by_oid($oid,$idx) 
@@ -209,6 +220,12 @@ class image extends class_base
 		$this->db_query($q);
 		$row = $this->db_next();
 		$row["url"] = $this->get_url($row["file"]);
+		$row["meta"] = aw_unserialize($row["metadata"]);
+		if ($row["meta"]["file2"] != "")
+		{
+			$row["big_url"] = $this->get_url($row["meta"]["file2"]);
+		}
+
 		return $row;
 	}
 
