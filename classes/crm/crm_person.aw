@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.69 2005/01/18 11:32:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.70 2005/01/21 13:00:42 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -55,8 +55,7 @@ caption Msn/yahoo/aol/icq
 @property education type=relpicker reltype=RELTYPE_EDUCATION automatic=1
 @caption Haridus
 
-@property address type=relpicker reltype=RELTYPE_ADDRESS
-@caption Aadress
+
 
 @property social_status type=chooser 
 @caption Perekonnaseis
@@ -67,8 +66,8 @@ caption Msn/yahoo/aol/icq
 @property children type=relpicker reltype=RELTYPE_CHILDREN group=relatives
 @caption Lapsed
 
-property pictureurl type=textbox size=40 maxlength=200
-caption Pildi/foto url
+@property pictureurl type=textbox size=40 maxlength=200
+@caption Pildi/foto url
 
 @property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file 
 @caption Pilt/foto
@@ -91,6 +90,9 @@ caption Pildi/foto url
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
+@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize group=contact
+@caption Osakond
+
 @property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
@@ -98,6 +100,9 @@ property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendiba
 caption Kodused kontaktandmed
 
 @default group=contact
+
+@property address type=relpicker reltype=RELTYPE_ADDRESS
+@caption Aadress
 	
 @property email type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail
 @caption Meiliaadressid
@@ -176,12 +181,7 @@ property programming_skills type=releditor rel_id=first reltype=RELTYPE_PROGRAMM
 @property education_table type=table store=no no_caption=1 group=education
 
 @property add_edu_table type=table no_caption=1 store=no group=add_edu
-@property add_edu_editor type=releditor store=no group=add_edu mode=manager reltype=RELTYPE_ADD_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
-
-@property basic_education_edit type=releditor store=no group=education reltype=RELTYPE_BASIC_EDUCATION props=school,date_from,date_to,additonal_info
-@property secondary_education_edit type=releditor store=no group=education reltype=RELTYPE_SECONDARY_EDUCATION props=school,date_from,date_to,additonal_info
-@property higher_education_edit type=releditor store=no group=education reltype=RELTYPE_HIGHER_EDUCATION props=school,profession,date_from,date_to,additonal_info
-@property vocational_education_edit type=releditor store=no group=education reltype=RELTYPE_VOCATIONAL_EDUCATION props=school,profession,date_from,date_to,additonal_info
+@property add_edu_editor type=releditor store=no group=add_edu mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
 
 property cv_view_tb type=toolbar no_caption=1 store=no wrapchildren=1 group=cv_view
 property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
@@ -329,21 +329,6 @@ caption CV
 @reltype LANGUAGE_SKILL value=27 clid=CL_CRM_PERSON_LANGUAGE
 @caption Keeleoskus
 
-@reltype BASIC_EDUCATION value=28 clid=CL_CRM_PERSON_BASIC_EDUCATION
-@caption Põhiharidus
-
-@reltype HIGHER_EDUCATION value=29 clid=CL_CRM_PERSON_HIGHER_EDUCATION
-@caption Kõrgharidus
-
-@reltype VOCATIONAL_EDUCATION value=30 clid=CL_CRM_PERSON_VOCATIONAL_EDUCATION
-@caption Kutseharidus
-
-@reltype SECONDARY_EDUCATION value=31 clid=CL_CRM_PERSON_SECONDARY_EDUCATION
-@caption Keskharidus
-
-@reltype ADD_EDUCATION value=32 clid=CL_CRM_PERSON_ADD_EDUCATION
-@caption Täienduskoolitus
-
 @reltype PROGRAMMING_SKILLS value=33 clid=CL_CRM_PERSON_PROGRAMMING_SKILLS
 @caption Programmeerimisoskus
 
@@ -368,6 +353,12 @@ caption CV
 @reltype FRIEND_GROUPS value=40 clid=CL_META
 @caption Sõbragrupid
 
+@reltype VACATION value=41 clid=CL_CRM_VACATION
+@caption Puhkus
+
+@reltype CONTRACT_STOP value=42 clid=CL_CRM_CONTRACT_STOP
+@caption Töölepingu peatamine
+
 */
 
 class crm_person extends class_base
@@ -389,16 +380,13 @@ class crm_person extends class_base
 		switch($prop["name"])
 		{
 			case "lastname":
-			
-				if ($form['firstname'] || $form['lastname'])
+				if (!empty($form["firstname"]) || !empty($form["lastname"]))
 				{
-					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
+					$arr["obj_inst"]->set_name($form["firstname"]." ".$form["lastname"]);
 				}			
 				break;
+
 		};
-		//echo "<pre>";
-		//print_r($arr);
-		//echo "</pre>";
 		return $retval;
 	}
 
@@ -409,6 +397,12 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "pictureurl":
+				// this one is generated by the picture releditor and should not be edited
+				// manually
+				$retval = PROP_IGNORE;
+				break;
+
 			case "ext_id":
 				$retval = PROP_IGNORE;
 				break;
@@ -2159,6 +2153,16 @@ class crm_person extends class_base
 			}
 		}
 		return false;
+	}
+
+	// this is a helper method, which can be used to add or update a specific
+	// aspect of the person object
+	function create_or_update_image($arr)
+	{
+		// this things needs to figure out whether this person already has an image
+		// but this is going to be extraordinarily slow
+
+
 	}
 }
 ?>
