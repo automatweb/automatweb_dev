@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.23 2003/06/12 14:30:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.24 2003/06/12 15:38:42 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -159,7 +159,7 @@ class doc extends class_base
 			case "tm":
 				if (empty($args["obj"]["oid"]))
 				{
-					$data["value"] = date("d/m/Y");
+					$data["value"] = date("d.m.Y");
 				};
 				break;
 
