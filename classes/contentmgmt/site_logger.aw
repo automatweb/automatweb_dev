@@ -12,6 +12,21 @@ class site_logger extends core
 	// !writes a pageview event to the aw log
 	function add($arr)
 	{
+		// log pv to file
+		$fn = aw_ini_get("basedir")."/files/logs/";
+		if (!is_dir($fn))
+		{
+			@mkdir($fn);
+		}
+		$fn .= date("Y-m-d").".log";
+
+		$f = @fopen($fn, "a");
+		if ($f)
+		{
+			fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")."\n");
+			fclose($f);
+		}
+
 		if (aw_ini_get("syslog.log_pageviews") != 1)
 		{
 			return false;

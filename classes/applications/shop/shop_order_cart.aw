@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.19 2004/10/22 15:00:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.20 2004/11/19 08:20:22 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -125,7 +125,7 @@ class shop_order_cart extends class_base
 				continue;
 			}
 
-			if (!$this->can("view", $iid))
+			if (!$this->can("view", $iid) || !is_oid($iid))
 			{
 				continue;
 			}
@@ -264,6 +264,10 @@ class shop_order_cart extends class_base
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
+			if (!is_oid($iid) || !$this->can("view", $iid))
+			{
+				continue;
+			}
 			$i_o = obj($iid);
 			$i_i = $i_o->instance();
 

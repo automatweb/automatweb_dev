@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.321 2004/11/18 17:37:12 sven Exp $
+// $Id: class_base.aw,v 2.322 2004/11/19 08:23:19 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -203,6 +203,8 @@ class class_base extends aw_template
 	function change($args = array())
 	{
 		global $awt;
+
+		$args["return_url"] = $_GET["return_url"];
 
 		$awt->start("cb-change");
 		$this->init_class_base();

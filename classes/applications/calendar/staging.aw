@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.3 2004/10/29 15:57:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.4 2004/11/19 08:18:20 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -118,7 +118,7 @@ class staging extends class_base
 			"caption" => "Originaalobjekt",
 		);
 
-		$empty_slots = 15;
+		$empty_slots = 20;
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -198,7 +198,9 @@ class staging extends class_base
 	}
 
 	/**
-		@attrib name=fixxer
+		@attrib name=fixxer all_args="1"
+		@param group optional acl="edit,view"
+		@param group2 required type="int"
 	**/
 	function fixxer($arr)
 	{
@@ -450,7 +452,7 @@ class staging extends class_base
 	}
 
 	/**
-		@attrib name=fixxer
+		@attrib name=fixxer2
 	**/
 	function fixer($arr)
 	{
