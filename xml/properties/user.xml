@@ -345,16 +345,6 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>isik</caption>
             </PERSON>
-            <BLOCKED>
-                  <value>4</value>
-                  <clid>CL_USER</clid>
-                  <caption>blokeeritud</caption>
-            </BLOCKED>
-            <IGNORED>
-                  <value>5</value>
-                  <clid>CL_USER</clid>
-                  <caption>ignoreeritud</caption>
-            </IGNORED>
             <EMAIL>
                   <value>6</value>
                   <clid>CL_ML_MEMBER</clid>
