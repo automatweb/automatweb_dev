@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.75 2002/01/08 02:48:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.76 2002/01/08 05:07:14 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -527,188 +527,8 @@ class document extends aw_template
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
 		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
 
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
-					));
+		$this->register_parsers();
 
-		// pildid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "p",
-					"class" => "image",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-					"templates" => array("image","image_linked","image_inplace","image_flash"),
-				));
-		// välised lingid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "l", // L
-					"class" => "extlinks",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-					"reset" => "reset_aliases",
-					"templates" => array("link"),
-				));
-		// tabelid	
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "t", // L
-					"class" => "table",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// guestbuugid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "b",
-					"class" => "guestbook",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// failid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "v",
-					"class" => "file",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// vormid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "f",
-					"class" => "form",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// vormi p2rjad
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "c",
-					"class" => "form_chain",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// lingikogud
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "x",
-					"class" => "link_collection",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// foorumid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "o",
-					"class" => "forum",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// graafikud
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "g",
-					"class" => "graph",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		// galeriid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "y",
-					"class" => "gallery",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// formi entryd
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "r",
-					"class" => "form_alias",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// pulloudid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "q",
-					"class" => "pullout",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// menyyd.
-		$this->register_sub_parser(array(
-                        "idx" => 2,
-                        "match" => "m",
-                        "class" => "menu",
-                        "reg_id" => $mp,
-                        "function" => "parse_alias",
-                ));
-
-		
-		// keywordide list. bijaatch!
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)huvid(.+?)(#)/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "keywords",
-					"reg_id" => $mp,
-					"function" => "parse_aliases",
-					));
-
-		// liituja info. bijaatch!
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)liituja_andmed(#)/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "users",
-					"reg_id" => $mp,
-					"function" => "show_join_data",
-					));
-
-		// parooli meeldetuletus. bijaatch!
-		$mp = $this->register_parser(array(
-					"reg" => "/#parooli_meeldetuletus edasi=\"(.*)\"#/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "users",
-					"reg_id" => $mp,
-					"function" => "pwd_remind",
-					));
-		
-		// eventsitega seonduv kamm
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)event_(.+?)(#)/i",
-					));
-
-		if (defined("PIKK"))
-		{
-			$class = "events3";
-		}
-		else
-		{
-			$class = "events";
-		};
-		$this->register_sub_parser(array(
-					"class" => $class,
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-					));
 
 		// linkide parsimine
 		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/",$doc["content"],$matches))
@@ -3129,10 +2949,203 @@ class document extends aw_template
 		classload("form");
 		$f = new form;
 
-		return $f->show(array(
+		$this->register_parsers();
+
+		$tx = $f->show(array(
 			"id" => $f->get_form_for_entry($meta["entry_id"]),
 			"entry_id" => $meta["entry_id"],
 			"op_id" => $tpl
+		));
+
+		return $this->parse_aliases(array(
+							"text"	=> $tx,
+							"oid"	=> $docid,
+					));
+	}
+
+	function register_parsers()
+	{
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
+					));
+
+		// pildid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "p",
+					"class" => "image",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+					"templates" => array("image","image_linked","image_inplace","image_flash"),
+				));
+		// välised lingid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "l", // L
+					"class" => "extlinks",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+					"reset" => "reset_aliases",
+					"templates" => array("link"),
+				));
+		// tabelid	
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "t", // L
+					"class" => "table",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+		// guestbuugid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "b",
+					"class" => "guestbook",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// failid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "v",
+					"class" => "file",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// vormid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "f",
+					"class" => "form",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+		// vormi p2rjad
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "c",
+					"class" => "form_chain",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// lingikogud
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "x",
+					"class" => "link_collection",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// foorumid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "o",
+					"class" => "forum",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// graafikud
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "g",
+					"class" => "graph",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		// galeriid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "y",
+					"class" => "gallery",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// formi entryd
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "r",
+					"class" => "form_alias",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// pulloudid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "q",
+					"class" => "pullout",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+		// menyyd.
+		$this->register_sub_parser(array(
+                        "idx" => 2,
+                        "match" => "m",
+                        "class" => "menu",
+                        "reg_id" => $mp,
+                        "function" => "parse_alias",
+                ));
+
+		
+		// keywordide list. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)huvid(.+?)(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "keywords",
+					"reg_id" => $mp,
+					"function" => "parse_aliases",
+					));
+
+		// liituja info. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)liituja_andmed(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "users",
+					"reg_id" => $mp,
+					"function" => "show_join_data",
+					));
+
+		// parooli meeldetuletus. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/#parooli_meeldetuletus edasi=\"(.*)\"#/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "users",
+					"reg_id" => $mp,
+					"function" => "pwd_remind",
+					));
+		
+		// eventsitega seonduv kamm
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)event_(.+?)(#)/i",
+					));
+
+		if (defined("PIKK"))
+		{
+			$class = "events3";
+		}
+		else
+		{
+			$class = "events";
+		};
+		$this->register_sub_parser(array(
+					"class" => $class,
+					"reg_id" => $mp,
+					"function" => "parse_alias",
 		));
 	}
 };
