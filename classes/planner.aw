@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.161 2004/01/29 17:42:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.162 2004/01/30 13:33:36 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -196,7 +196,7 @@ class planner extends class_base
 			return "kulla mees, sa pole omale default kalendrit ju valinud?";
 		};
 		$arr["id"] = $obj_id;
-		$arr["group"] = "show_week";
+		$arr["group"] = "views";
 		return $this->change($arr);
 	}
 
@@ -3047,9 +3047,11 @@ class planner extends class_base
 			"overview_func" => array(&$this,"get_overview"),
 		));
 
+		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
+			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
 
 		// that is all nice and well. But I also need a separate function for 
