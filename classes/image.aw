@@ -440,6 +440,7 @@ class image extends aw_template
 		}
 
 		$url = preg_replace("/^http:\/\/.*\//U","/",$url);
+		$url = preg_replace("/^https:\/\/.*\//U","/",$url);
 		if (substr($url,0,4) == "/img")
 		{
 			$fname = substr($url,13);
