@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.14 2004/02/20 10:03:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.15 2004/03/16 14:20:53 sven Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -13,6 +13,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @default group=general
 
 @property navtoolbar type=toolbar store=no no_caption=1 group=general,all_actions,meetings,tasks,calls editonly=1
+
 
 @property name type=textbox size=30 maxlenght=255 table=objects
 @caption Organisatsiooni nimi
@@ -94,6 +95,10 @@ caption Õiguslik vorm
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
+@property jobsact type=table no_caption=1 group=jobsact
+@property jobsnotact type=table no_caption=1 group=notact
+
+
 @groupinfo contacts caption="Kontaktid" 
 @groupinfo humanres caption="Inimesed" submit=no
 @groupinfo overview caption="Tegevused" 
@@ -101,7 +106,10 @@ caption Õiguslik vorm
 @groupinfo calls caption="Kõned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
-@groupinfo tasks_overview caption="Ülevaade" 
+@groupinfo tasks_overview caption="Ülevaade"
+@groupinfo jobs caption="Tööpakkumised"
+@groupinfo jobsact caption="Aktiivsed" parent=jobs
+@groupinfo notact caption="Mitteaktiivsed" parent=jobs
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -147,6 +155,15 @@ caption Õiguslik vorm
 
 @reltype TELEFAX value=18 clid=CL_CRM_PHONE
 @caption Fax
+
+@reltype JOBS value=19 clid=CL_JOB_OFFER
+@caption T&ouml;&ouml;pakkumine
+
+@reltype TOOPAKKUJA value=20 clid=CL_CRM_COMPANY
+@caption Tööpakkuja
+
+@reltype TOOTSIJA value=21 clid=CL_CRM_PERSON
+@caption Tööotsija
 
 @classinfo no_status=1
 			
@@ -210,13 +227,18 @@ class crm_company extends class_base
 			case "human_resources":
 				$this->do_human_resources($arr);
 				break;
-
 			case "tasks_call":
 				$this->do_tasks_call($arr);
 				break;
 
 			case "addresslist":
 				$this->do_addresslist($arr);
+				break;
+			case "jobsact":
+				$this->do_jobslist($arr);
+				break;
+			case "jobsnotact":
+				$this->do_jobs_notact_list($arr);
 				break;
 			
 		};
@@ -232,7 +254,107 @@ class crm_company extends class_base
 			"key" => "user_calendar",
 		));
 	}
-
+	
+	function do_jobs_notact_list($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "ametikoht",
+			"caption" => "Ametikoht",
+			"sortable" => "1",
+		));
+		
+		$table->define_field(array(
+			"name" => "deadline",
+			"caption" => "Tähtaeg",
+			"sortable" => "1",
+		));
+		
+		$table->define_field(array(
+			"name" => "kandideerijad",
+			"caption" => "Kandidaadid",
+			"sortable" => "1",
+		));
+		
+		$table->define_chooser(array(
+			"name" => "select",
+			"caption" => "X",
+		));
+		
+		
+		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		{
+			$job = &obj($job->prop("to"));
+			
+			if($job->prop("deadline") < time())
+			{
+				$table->define_data(array(
+					"ametikoht" => html::href(array(
+						"caption" => $job->name(),
+						"url" => $this->mk_my_orb("change", array("id" => $job->id()), "job_offer"),
+				)),
+					"deadline" => get_lc_date($job->prop("deadline"), LC_DATE_FORMAT_LONG_FULLYEAR),
+					"kandideerijad" => html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), "job_offer"),
+						"caption" => "Vaata kandidaate",
+					)), 
+				));
+			}
+		}
+	}
+	
+	function do_jobslist($arr)
+	{
+		
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "ametikoht",
+			"caption" => "Ametikoht",
+			"sortable" => "1",
+			"width" => "200",
+		));
+		
+		$table->define_field(array(
+			"name" => "deadline",
+			"caption" => "Tähtaeg",
+			"sortable" => "1",
+		));
+		
+		$table->define_field(array(
+			"name" => "kandideerijad",
+			"caption" => "Kandidaadid",
+			"sortable" => "1",
+		));
+		
+		$table->define_chooser(array(
+			"name" => "select",
+			"caption" => "X",
+		));
+		
+		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+		{
+			$job = &obj($job->prop("to"));
+			
+			if($job->prop("deadline")>time())
+			{
+				$table->define_data(array(
+					"ametikoht" => html::href(array(
+						"caption" => $job->name(),
+						"url" => $this->mk_my_orb("change", array("id" => $job->id()), "job_offer"),
+				)),
+					"deadline" => get_lc_date($job->prop("deadline"), LC_DATE_FORMAT_LONG_FULLYEAR),
+					"kandideerijad" => html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), "job_offer"),
+						"caption" => "Vaata kandidaate",
+					)), 
+				));
+			}
+		}
+		
+	}
+	
 	function do_human_resources($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -572,7 +694,7 @@ class crm_company extends class_base
 		// through the crm_db class, which means that they can be different for each user
 		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj_inst']->parent();
+			$parents[RELTYPE_JOBS] = $parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj_inst']->parent();
 		}
 		else
 		{
@@ -607,7 +729,7 @@ class crm_company extends class_base
 			"text" => $this->cfg["classes"][$this->clid]["name"],
 		));
 
-		$alist = array(RELTYPE_WORKERS,RELTYPE_TEGEVUSALAD,RELTYPE_ADDRESS,RELTYPE_ETTEVOTLUSVORM);
+		$alist = array(RELTYPE_WORKERS,RELTYPE_TEGEVUSALAD,RELTYPE_ADDRESS,RELTYPE_ETTEVOTLUSVORM,RELTYPE_JOBS);
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
