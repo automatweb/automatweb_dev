@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.4 2001/05/21 10:06:12 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.5 2001/05/21 17:29:41 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -682,13 +682,11 @@ class db_documents extends aw_template
 								header("Content-type: text/html");
 							};
 							preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi[content],$map);
-/*							$this->read_template("show_file.tpl");
-							$this->vars(array("content" => $map[2]));
-							die($this->parse());*/
 
 							// strip returns, cause the file is already a html file, so we don't need to replace newlines with <br> l8r
 							$replacement = str_replace("\n","",$map[2]);
-
+							// don't show copyright if we are showing a html file. weird but true. statistikaameti jaox
+							$doc["copyright"] = 0;
 						}
 						else
 						{
