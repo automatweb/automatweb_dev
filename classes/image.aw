@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.111 2004/10/07 21:34:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.112 2004/10/08 15:26:36 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -401,6 +401,7 @@ class image extends class_base
 				$img_obj->save();
 				$img_id = $img_obj->id();
 			}
+			$img_obj = obj($img_id);
 
 			if (is_uploaded_file($_FILES[$name]['tmp_name']))
 			{
@@ -413,15 +414,8 @@ class image extends class_base
 					)),
 				));
 
-				if (!$img_id)
-				{
-					$this->db_query("INSERT INTO images(id,file) VALUES($id,'$fl')");
-				}
-				else
-				{
-					$id = $img_id;
-					$this->db_query("UPDATE images SET file = '$fl' WHERE id = '$id'");
-				}
+				$img_obj->set_prop("file", $fl);
+				$img_obj->save();
 			}
 		}
 		else
@@ -431,6 +425,7 @@ class image extends class_base
 				$id = $this->get_image_by_id($img_id);
 				// we need to return the image size as well
 				$sz = @getimagesize($id['file']);
+				$fl = $id["file"];
  				return array(
 					"id" => $img_id,
 					"url" => $id["url"],
@@ -443,7 +438,7 @@ class image extends class_base
 			}
 		}
 
-		return array("id" => $id,"url" => $this->get_url($fl), "sz" => $sz);
+		return array("id" => $img_id,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
 	/**  
