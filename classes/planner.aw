@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.141 2003/11/19 17:59:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.142 2003/11/25 16:02:36 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -56,9 +56,6 @@
 	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
 	@caption Kasuta menubari
 	
-	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
-	@caption Kasuta menubari
-
 	@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
 	@caption Kasutaja default kalender
 
@@ -412,7 +409,7 @@ class planner extends class_base
 			if (empty($project))
 			{
 				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) $add AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND objects.status != 0",join(",",$folders));
 			}
 			else
 			{
@@ -420,6 +417,24 @@ class planner extends class_base
 				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add");
 			};
 		}
+		else
+		if (!empty($project))
+		{
+			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND objects.status != 0";
+		}
+		else
+		{
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
+
+
+		};
+
+		global $XX3;
+		if ($XX3)
+		{
+			var_dump($q);
+		};
+
 
 		$this->db_query($q);
 		$events = array();
@@ -668,17 +683,20 @@ class planner extends class_base
 		if (!empty($args["request"]["event_id"]))
 		{
 			$event_id = $args["request"]["event_id"];
-			$event_obj = new object($event_id);
-			if ($event_obj->is_brother())
+			if (true || $GLOBALS["object_loader"]->object_exists($event_id))
 			{
-				$event_obj = $event_obj->get_original();
-			};
-			$this->event_id = $event_id;
-			$clid = $event_obj->class_id();
-			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
-			{
-				unset($clid);
-			};
+				$event_obj = new object($event_id);
+				if ($event_obj->is_brother())
+				{
+					$event_obj = $event_obj->get_original();
+				};
+				$this->event_id = $event_id;
+				$clid = $event_obj->class_id();
+				if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
+				{
+					unset($clid);
+				};
+			}
 		}
 		else
 		{
@@ -1493,6 +1511,7 @@ class planner extends class_base
 					"type" => "month",
 					"day_orb_link" => $this->day_orb_link,
 					"marked" => $events,
+					"caption_url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_month","ctrl" => $ctrl,"section" => aw_global_get("section"),"date" => date("d-m-Y",$_prevmon))),
 				));
 			};
 			$navi1 = $_cal->draw_calendar(array(
@@ -2961,7 +2980,9 @@ class planner extends class_base
 		{
 			foreach($mark as $event)
 			{
-				$this->delete_object($event);
+				$obj = new object($event);
+				$obj->delete();
+				//$this->delete_object($event);
 			}
 		};
 		return $this->mk_my_orb("change",array("id" => $args["id"],"group" => $args["subgroup"],"date" => $args["date"]));
