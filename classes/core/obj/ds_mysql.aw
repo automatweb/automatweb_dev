@@ -1016,6 +1016,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
 		$this->quote(&$objdata);
+	
+		$objdata["createdby"] = aw_global_get("uid");		
+		$objdata["created"] = time();		
+
+		$objdata["modifiedby"] = aw_global_get("uid");		
+		$objdata["modified"] = time();		
+
+		$objdata["lang_id"] = aw_global_get("lang_id");		
 
 		// create oid
 		$q = "
@@ -1030,7 +1038,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
-				'".$objdata["jrk"]."',		'".aw_global_get("act_per_id")."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
+				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
 				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
 				'".$objdata["oid"]."'
 		)";
