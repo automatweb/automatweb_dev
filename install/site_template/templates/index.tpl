@@ -3,6 +3,9 @@
 <head>
 <title> Your Title Here / {VAR:stitle}</title>
 <link rel="stylesheet" href="{VAR:baseurl}/css/styles.css">
+<meta NAME="Generator" CONTENT="AutomatWeb">
+<meta NAME="Author" CONTENT="Struktuur Meedia">
+
 </head>
 <body>
 <center>
