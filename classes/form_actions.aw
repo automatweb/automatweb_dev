@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.11 2002/06/28 22:02:24 duke Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.12 2002/07/17 07:44:41 kristo Exp $
 // form_actions.aw - creates and executes form actions
 
 class form_actions extends form_base
@@ -150,6 +149,9 @@ class form_actions extends form_base
 
 	////
 	// !generates the html for changing action $aid of form $id , page $level
+	// I would really really like to get rid of that stupid level 2 and settle with one
+	// form for each page. But that then means that I have to somehow embed the 
+	// form fields for writing name and comment for the action inside all other forms
 	function change_action($arr)
 	{
 		extract($arr);
@@ -207,6 +209,7 @@ class form_actions extends form_base
 	{
 		extract($args);
 		// retrieve e-mail aadresses to send mail to
+		// XXX: what if the form gets data from SQL table?
 		$fid = sprintf("form_%d_entries",$data["srcform"]);
 		$did = sprintf("ev_%d",$data["srcfield"]);
 		$q = "SELECT $did FROM $fid LEFT JOIN objects ON ($fid.id = objects.oid) WHERE status = 2";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.29 2002/06/26 11:28:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.30 2002/07/17 07:44:41 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -25,6 +25,7 @@ class form_cell extends form_base
 	// creates the correct element based on form type
 	function mk_element($type, &$r, &$form)
 	{
+//		echo "type = $type <br>";
 		switch($type)
 		{
 			case FTYPE_ENTRY:
@@ -411,11 +412,27 @@ class form_cell extends form_base
 	function process_entry(&$entry, $id,$prefix = "")
 	{
 		$controllers_ok = true;
+
 		// iterate over all the elements in the cell
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			// call process_entry for each
-			$controllers_ok &= $this->arr[$i] -> process_entry(&$entry, $id,$prefix);
+			$shctrlok = true;
+			$errs = array();
+			$shcs = $this->arr[$i]->get_show_controllers();
+			$controllers_ok = true;
+			foreach($shcs as $ctlid)
+			{
+				$res = $this->form->controller_instance->do_check($ctlid, $this->arr[$i]->get_controller_value(), &$this->form, $this->arr[$i]);
+				if ($res !== true)
+				{
+					$shctrlok = false;
+				}
+			}
+			if ($shctrlok)
+			{
+				// call process_entry for each
+				$controllers_ok &= $this->arr[$i] -> process_entry(&$entry, $id,$prefix);
+			}
 		};
 		return $controllers_ok;
 	}

@@ -437,10 +437,17 @@ class form_db_base extends aw_template
 		$sql_where = $this->get_sql_where_clause();
 		if ($sql_where != "")
 		{
-			$sql_where = "WHERE ".$sql_where;
+			$sql_where = " WHERE ".$sql_where;
 		}
 		
-		$sql = "SELECT ".$sql_data." FROM ".$sql_join." ".$sql_where;
+		$sql_grpby = $this->get_sql_grpby($group_els);
+		if ($sql_grpby != "")
+		{
+			$sql_grpby = " GROUP BY ".$sql_grpby;
+//			echo "grpby = $sql_grpby <bt>";
+		}
+
+		$sql = "SELECT ".$sql_data." FROM ".$sql_join.$sql_where.$sql_grpby;
 		dbg("sql = $sql <br>");
 		return $sql;
 	}
@@ -517,6 +524,7 @@ class form_db_base extends aw_template
 			}
 		}
 
+//		echo "rel_tree = <pre>", var_dump($this->form_rel_tree),"</pre> <br>";
 		$srfi =& $this->cache_get_form_instance($start_relations_from);
 
 		if ($srfi->arr["save_tables"])
@@ -638,11 +646,17 @@ class form_db_base extends aw_template
 				foreach($els as $el)
 				{
 					$s_t = $el->get_save_table();
-					if ($s_t == $tbl)
+					if ($s_t == $tbl && $tbl != "")
 					{
 						// if this element gets written to the current table, include it in the sql
-						$sql.=", ".$tbl.".".$el->get_save_col()." AS ev_".$el->get_id();
-						$sql.=", ".$tbl.".".$el->get_save_col2()." AS el_".$el->get_id();
+						if ($el->get_save_col() != "")
+						{
+							$sql.=", ".$tbl.".".$el->get_save_col()." AS ev_".$el->get_id();
+						}
+						if ($el->get_save_col2() != "")
+						{
+							$sql.=", ".$tbl.".".$el->get_save_col2()." AS el_".$el->get_id();
+						}
 					}
 				}
 			}
@@ -672,11 +686,17 @@ class form_db_base extends aw_template
 					foreach($els as $el)
 					{
 						$s_t = $el->get_save_table();
-						if ($s_t == $tbl)
+						if ($s_t == $tbl && $tbl != "")
 						{
 							// if this element gets written to the current table, include it in the sql
-							$sql.=", ".$tbl.".".$el->get_save_col()." AS ev_".$el->get_id();
-							$sql.=", ".$tbl.".".$el->get_save_col2()." AS el_".$el->get_id();
+							if ($el->get_save_col() != "")
+							{
+								$sql.=", ".$tbl.".".$el->get_save_col()." AS ev_".$el->get_id();
+							}
+							if ($el->get_save_col2() != "")
+							{
+								$sql.=", ".$tbl.".".$el->get_save_col2()." AS el_".$el->get_id();
+							}
 						}
 					}
 				}
@@ -686,7 +706,7 @@ class form_db_base extends aw_template
 		// now if the start search from form is not written to table it will get objects table
 		// joined and then we can fetch creator/modifier and other fields
 		$srfi =& $this->cache_get_form_instance($start_relations_from);
-		if (!$srfi->arr["save_tables"])
+		if (!$srfi->arr["save_table"])
 		{
 			$sql.=", objects.modified as modified, objects.created as created, objects.modifiedby as modifiedby ";
 		}
@@ -841,11 +861,15 @@ class form_db_base extends aw_template
 			}
 		}
 
-		if ($query != "")
+		$srfi =& $this->cache_get_form_instance($this->arr["start_search_relations_from"]);
+		if ($srfi->arr["save_tables_obj_tbl"] != "")
 		{
-			$query.=" AND ";
+			if ($query != "")
+			{
+				$query.=" AND ";
+			}
+			$query.=" objects.status != 0 ";
 		}
-		$query.=" objects.status != 0 ";
 		return $query;
 	}
 
@@ -985,7 +1009,16 @@ class form_db_base extends aw_template
 	{
 		$this->_fr_forms_used = array();
 		$this->form_rel_tree = array();
-		$this->req_build_form_relation_tree($f_root);
+
+		if (($rt = aw_cache_get("form_rel_trees", $f_root)))
+		{
+			$this->form_rel_tree = $rt;
+		}
+		else
+		{
+			$this->req_build_form_relation_tree($f_root);
+			aw_cache_set("form_rel_trees", $f_root, $this->form_rel_tree);
+		}
 //		echo "built form relations tree, starting from $f_root: <br><pre>", var_dump($this->form_rel_tree),"</pre> <Br>";
 	}
 
@@ -995,8 +1028,13 @@ class form_db_base extends aw_template
 
 		$this->_fr_forms_used[$f_root] = true;
 
+//		echo "in $f_root <br>";
 		// check for any relation elements in form
+
+		enter_function("form_db_base::req_build_form_relation_tree::except_load",array());
 		$form =& $this->cache_get_form_instance($f_root);
+		exit_function("form_db_base::req_build_form_relation_tree::except_load");
+
 		$rels = $form->get_element_by_type("listbox","relation",true);
 		foreach($rels as $el)
 		{
@@ -1007,9 +1045,11 @@ class form_db_base extends aw_template
 				"el_to" => $el->get_related_element()
 			);
 
+//			echo "found rel el in form $f_root : rel_form = ", $el->get_related_form()," rel el = ", $el->get_related_element()," <br>";
 			// now recurse to the to form if it is not already used
 			if (!$this->_fr_forms_used[$el->get_related_form()])
 			{
+//				echo "req on ",$el->get_related_form()," <br>";	
 				$this->req_build_form_relation_tree($el->get_related_form());
 			}
 		}
@@ -1029,15 +1069,33 @@ class form_db_base extends aw_template
 
 				// and for each form, mark the relation 
 				$this->form_rel_tree[$f_root][$chfid] = array("form_from" => $f_root, "el_from" => "chain_id", "form_to" => $chfid, "el_to" => "chain_id");
+//				echo "found chain rel from $f_root to $chfid <br>";
 
 				// and recurse if the form is not used already
 				if (!$this->_fr_forms_used[$chfid])
 				{
+//					echo "req on $chfid <br>";	
 					$this->req_build_form_relation_tree($chfid);
 				}
 			}
 		}
 
+		// also try to read the reverse relations from the relations table that would not be found otherwise
+		// - mening that the relation listbox is in another form and is refering to $f_root
+		$q = "SELECT * FROM form_relations LEFT JOIN objects ON objects.oid = form_relations.form_to WHERE form_from = '$f_root' AND objects.status != 0 ";
+//		echo "q = $q <br>";
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$this->form_rel_tree[$f_root][$row["form_to"]] = array("form_from" => $f_root, "el_from" => $row["el_from"], "form_to" => $row["form_to"], "el_to" => $row["el_to"]);
+//			echo "found db rel from $f_root to $row[form_to] <br>";
+			if (!$this->_fr_forms_used[$row["form_to"]])
+			{
+//				echo "req on ",$row["form_to"]," <br>";
+				$this->req_build_form_relation_tree($row["form_to"]);
+			}
+		}
+//		echo "out <br>";
 		$this->restore_handle();
 	}
 
@@ -1158,6 +1216,23 @@ class form_db_base extends aw_template
 		}
 		$this->restore_handle();
 		return $ret;
+	}
+
+	function get_sql_grpby($grpby)
+	{
+		$gpb = array();
+		foreach($grpby as $fid => $elid)
+		{
+			if ($fid)
+			{
+				$finst =& $this->cache_get_form_instance($fid);
+				$el =& $finst->get_element_by_id($elid);
+
+				$gpb[] = $el->get_save_table().".".$el->get_save_col();
+			}
+		}
+
+		return join(",", $gpb);
 	}
 }
 ?>

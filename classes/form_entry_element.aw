@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.51 2002/06/18 08:49:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.52 2002/07/17 07:44:43 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -303,7 +303,7 @@ class form_entry_element extends form_element
 			else
 			if ($this->arr["subtype"] == "close")
 			{
-				$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.close();return false;\">";
+				$html = "<input type='submit' VALUE='".$butt."' onClick='window.close();return false;'>";
 			}
 		}
 
@@ -406,9 +406,14 @@ class form_entry_element extends form_element
 			else
 			// this is bad too. We need an image called transa.gif for each site.
 			// so? of course we need an image like that? what the fuck is wrong with that? - terryf
+			// 1) trans.gif, transa.gif, t.gif .. why the hell do we need so many of them?
+			// THAT is the reason I don't like this image.
+			// we should use only one and perhaps it in the automatweb/images dir
+			// besides using transparent pixels for layout is SO 20st century
+			// but .. what the hell.
 			if ($this->arr["sep_pixels"] > 0)
 			{
-				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
 			}
 		}
 

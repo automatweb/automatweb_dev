@@ -560,6 +560,21 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: HAS_SIMPLE_CONTROLLER -->
 
+<!-- SUB: CHECK_LENGTH -->
+<tr>
+<td class="fgtext">Tähemärkide arvu piirang (javascript):</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_check_length' VALUE='1' {VAR:check_length}>
+&nbsp; &nbsp; &nbsp; Max tähemärke:
+<input type='text' CLASS="small_button" NAME='{VAR:cell_id}_max_length' VALUE='{VAR:max_length}'>
+</td>
+<td class="fgtext">Veatede, kui välja sisu on pikem:
+</td>
+<td class="fgtext">
+<input type='text' CLASS="small_button" NAME='{VAR:cell_id}_check_length_error' VALUE='{VAR:check_length_error}'>
+</td>
+</tr>
+<!-- END SUB: CHECK_LENGTH -->
+
 <!-- SUB: HAS_CONTROLLER -->
 <tr>
 <td class="fgtext">Vali elemendi sisestuse kontroller(id):</td>

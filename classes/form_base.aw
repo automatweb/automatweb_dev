@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.33 2002/06/25 18:20:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.34 2002/07/17 07:44:41 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -441,6 +441,69 @@ class form_base extends form_db_base
 							$li->db_remove_user($this->entry[$data["textbox"]]);
 						};
 					}
+					break;
+				
+				case "email_form":
+					$data = unserialize($row["data"]);
+					if ($data["sbt_bind"] == 0)
+					{
+						$send = true;
+					}
+					else
+					{
+						$send = ($data["sbt_bind"] == $this->el_submit["id"]);
+					};
+
+					if (not($send))
+					{
+						// YIKES
+						break;
+					};
+
+						
+					if ($data["output"] > 0)
+					{
+						// have to create the output
+						$f = get_instance("form");
+						$msg = $f->show(array(
+							"id" => $this->id,
+							"entry_id" => $entry_id,
+							"op_id" => $data["output"],
+						));
+					}
+					else
+					{
+						$this->load_entry($entry_id);
+
+						// warning, the following code has a very high
+						// suck factor. Some sites have a "update" link
+						// by each document. Clickin on that link opens 
+						// a new document which contains a FG form that can
+						// be used to submit comments about the visited
+						// document. That form has an email action and
+						// the contents of that e-mail action should
+						// contain the referer, the link, from which 
+						// the user clicked on the Update button.
+
+						// can this be done in some other way? if so,
+						// this should be fixed.
+
+						// oh and last_section is set in the site code
+						$last = aw_global_get("last_section");
+						if ($last)
+						{
+							$msg = "Referer: " . $this->cfg["baseurl"] . "/$last\n";
+						};
+
+						$msg .= $this->show_text();
+					};
+
+					$fa = get_instance("form_actions");
+					$fa->do_action(array(
+						"type" => "email_form",
+						"msg" => $msg,
+						"data" => unserialize($row["data"]),
+					));
 					break;
 
 				case "email":
@@ -1227,10 +1290,12 @@ class form_base extends form_db_base
 	// id(int) - id of the form, which we are to load
 	// key(int) - what value to use as the key of the resulting array. default is the name
 	// use_loaded (bool) - if set, use the already loaded form
+	// all_data - if true, returns all data, else just the name, default is true
 	function get_form_elements($args = array())
 	{
 		extract($args);
 		$arrkey = ($args["key"]) ? $args["key"] : "name";
+		$all_data = (isset($args["all_data"])) ? $args["all_data"] : true;
 
 		if (not($use_loaded))
 		{
@@ -1258,7 +1323,14 @@ class form_base extends form_db_base
 					// is probably just captions 'n stuff
 					if ($val["type"])
 					{
-						$retval[$val[$arrkey]] = $val;
+						if ($all_data)
+						{
+							$retval[$val[$arrkey]] = $val;
+						}
+						else
+						{
+							$retval[$val[$arrkey]] = $val["name"];
+						}
 					};
 				};
 			}
@@ -1554,9 +1626,15 @@ class form_base extends form_db_base
 
 			$rel_el = $el->get_save_table().".".$el->get_save_col();
 
-			$id_col = $inst->arr["save_tables"][$el->get_save_table()];
+			$id_col = $inst->arr["save_tables"][$el->get_save_table()]." as id,";
 
-			$this->db_query("SELECT $id_col as id, $rel_el as ev_".$rel_element." FROM ".$el->get_save_table());
+			if ($rel_unique == 1)
+			{
+				$rel_el = "distinct(".$rel_el.")";
+				$id_col = "";
+			}
+
+			$this->db_query("SELECT $id_col $rel_el as ev_".$rel_element." FROM ".$el->get_save_table());
 		}
 		else
 		{

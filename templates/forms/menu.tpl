@@ -22,7 +22,7 @@ function toggle(layer) {
 
 function toggle1(layer1,layer2) {
 	hideall();
-        theobjs[layer1].objShow();
+        //theobjs[layer1].objShow();
         theobjs[layer2].objShow();
 };
 </script>
@@ -42,23 +42,25 @@ function toggle1(layer1,layer2) {
 </td>
 </tr>
 <tr> 
-<td background="/images/transa.gif" height="17" class="alamLingidText"><img src="/images/menu/transparent.gif" border="0" width="100" height="2"></td>
+<td height="17" class="alamLingidText"><img src="/images/transa.gif" border="0" width="100" height="2" /></td>
 </tr>
+<!--
 <tr> 
-<td background="/images/transa.gif" height="17" class="alamLingidText"><img src="/images/menu/transparent.gif" border="0" width="100" height="2"></td>
+<td height="17" class="alamLingidText"><img src="/images/transa.gif" border="0" width="100" height="2" /></td>
 </tr>
+-->
 </table>
 </div>
 
 <!-- begin# menu 1 Toimeta -->
 <div id="menu1" class="menyy1"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="javascript:toggle1('menu1','menu1b')" class="peaLingidText">{VAR:LC_FORMS_TOIMETA}</a></td></tr></table></div>
-
-<div id="menu1b" class="alammenyy">{VAR:LC_FORMS_TOIMETA}> 
+<div id="menu1b" class="alammenyy">{VAR:LC_FORMS_TOIMETA}&gt;
 <!-- SUB: CAN_GRID -->
 <a class="alamlingid" href='{VAR:change}'>{VAR:LC_FORMS_ADMIN_FORM}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- SUB: SEARCH_SEL -->
 <a class="alamlingid" href='{VAR:sel_search}'><!-- IMHO: LOOKED != OTSITAVAD aga hui sellega-->{VAR:LC_FORMS_CHOOSE_LOOKED_FORMS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: SEARCH_SEL -->
+
 <!-- SUB: FILTER_SEARCH_SEL -->
 <a class="alamlingid" href='{VAR:sel_filter_search}'>{VAR:LC_FORMS_CHOOSE_USEABLE_FILTER}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: FILTER_SEARCH_SEL -->
@@ -85,7 +87,7 @@ function toggle1(layer1,layer2) {
 <!-- begin# menu 2 M22rangud -->
 <div id="menu2" class="menyy2"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="objects.{VAR:ext}" target="main" class="peaLingidText">{VAR:LC_FORMS_SETTINGS}</a></td></tr></table></div>
 
-<div id="menu2b" class="alammenyy">{VAR:LC_FORMS_SETTINGS}> 
+<div id="menu2b" class="alammenyy">{VAR:LC_FORMS_SETTINGS}&gt;
 <!-- SUB: CAN_TABLE -->
 <a href='{VAR:table_settings}' class="alamlingid">{VAR:LC_FORMS_TABLE_STYLES}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_TABLE -->
@@ -114,7 +116,7 @@ function toggle1(layer1,layer2) {
 <!-- end# menu 2 -->
 
 </div>
-<img src='/images/transa.gif' width=1 height=60>
+<img src='/images/transa.gif' width=1 height=1>
 <script language = javascript>
 init();
 <!-- SUB: GRID_SEL -->

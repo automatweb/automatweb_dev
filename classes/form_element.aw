@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.56 2002/07/12 06:26:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.57 2002/07/17 07:44:42 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -289,10 +289,11 @@ class form_element extends aw_template
 					));
 					$relation_lb = $this->parse("RELATION_LB");
 					$this->vars(array("RELATION_LB" => $relation_lb));
-					if ($this->form->type == FTYPE_SEARCH)
-					{
+//					if ($this->form->type == FTYPE_SEARCH)
+//					{
 						$relation_uniq = $this->parse("SEARCH_RELATION");
-					}
+						$this->vars(array("SEARCH_RELATION" => $relation_uniq));
+//					}
 				}
 			}
 
@@ -1243,27 +1244,95 @@ class form_element extends aw_template
 		return $this->arr["text"]; 
 	}
 
-	function get_ch_grp() { return $this->arr["ch_grp"]; }
-	function get_ch_value() { return $this->arr["ch_value"]; }
-	function get_el_name()		{	return $this->arr["name"]; }
-	function get_style()	{	return $this->arr["style"]; }
-	function get_type()		{	return $this->arr["type"]; }
-	function get_subtype()		{	return isset($this->arr["subtype"]) ? $this->arr["subtype"] : ""; }
-	function get_srow_grp()		{	return isset($this->arr["srow_grp"]) ? $this->arr["srow_grp"] : ""; }
-	function get_id()			{ return $this->id;	}
-	function get_order()	{ return $this->arr["ord"]; }
-	function get_props()  { return $this->arr; }
-	function get_type()		{	return $this->arr["type"]; }
-	function get_row()		{ return $this->row; }
-	function get_col()		{ return $this->col; }
-	function get_el_group()		{ return $this->arr["group"]; }
-	function get_related_form() { return $this->arr["rel_form"]; }
-	function get_related_element() { return $this->arr["rel_element"]; }
+	function get_ch_grp() 
+	{ 
+		return $this->arr["ch_grp"]; 
+	}
+
+	function get_ch_value() 
+	{
+		return $this->arr["ch_value"]; 
+	}
+
+	function get_el_name()		
+	{	
+		return $this->arr["name"]; 
+	}
+
+	function get_style()	
+	{	
+		return $this->arr["style"]; 
+	}
+
+	function get_type()		
+	{
+		return $this->arr["type"]; 
+	}
+
+	function get_subtype()		
+	{	
+		return isset($this->arr["subtype"]) ? $this->arr["subtype"] : ""; 
+	}
+
+	function get_srow_grp()		
+	{	
+		return isset($this->arr["srow_grp"]) ? $this->arr["srow_grp"] : ""; 
+	}
+
+	function get_id()			
+	{ 
+		return $this->id;	
+	}
+
+	function get_order()	
+	{ 
+		return $this->arr["ord"]; 
+	}
+
+	function get_props()  
+	{ 
+		return $this->arr; 
+	}
+
+	function get_type()		
+	{	
+		return $this->arr["type"]; 
+	}
+
+	function get_row()		
+	{ 
+		return $this->row; 
+	}
+
+	function get_col()		
+	{ 
+		return $this->col; 
+	}
+
+	function get_el_group()		
+	{
+		return $this->arr["group"]; 
+	}
+
+	function get_related_form() 
+	{ 
+		return $this->arr["rel_form"]; 
+	}
+
+	function get_related_element() 
+	{ 
+		return $this->arr["rel_element"]; 
+	}
+
 	function get_el_lb_items()	
 	{
 		return $this->arr["listbox_items"];
 	} 
-	function get_thousands_sep() { return $this->arr["thousands_sep"]; }
+
+	function get_thousands_sep() 
+	{ 
+		return $this->arr["thousands_sep"]; 
+	}
 
 	// generic wrapper
 	function get_prop($key)
@@ -1886,22 +1955,20 @@ class form_element extends aw_template
 					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit" || $this->arr["subtype"] == "confirm")
 					{
-						/*
-						if ($this->arr["chain_forward"] == 1)
-						{
-							$bname="name=\"no_chain_forward\"";
-						}
-						else
-						if ($this->arr["chain_backward"] == 1)
-						{
-							$bname="name=\"chain_backward\"";
-						}
-						else
-						if ($this->arr["subtype"] == "confirm")
-						{
-							$bname = "name=\"confirm\"";
-						}
-						*/
+//						if ($this->arr["chain_forward"] == 1)
+//						{
+//							$bname="name=\"no_chain_forward\"";
+//						}
+//						else
+//						if ($this->arr["chain_backward"] == 1)
+//						{
+//							$bname="name=\"chain_backward\"";
+//						}
+//						else
+//						if ($this->arr["subtype"] == "confirm")
+//						{
+//							$bname = "name=\"confirm\"";
+//						}
 
 						$bname = sprintf("name='submit[%d]'",$this->id);
 
@@ -2657,28 +2724,6 @@ class form_element extends aw_template
 	function make_relation_listbox_content()
 	{
 		$this->save_handle();
-		/*
-		$rel_el = "form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"];
-
-		$order_by = "";
-		if ($this->arr["sort_by_alpha"])
-		{
-			$order_by = "ORDER BY $rel_el ";
-		}
-
-		if ($this->arr["rel_unique"] == 1)
-		{
-			$rel_el = "distinct(".$rel_el.")";
-		}
-
-		$this->db_query("SELECT $rel_el as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0 $order_by");
-		$cnt=0; 
-		while($row = $this->db_next())
-		{
-			$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
-			$cnt++;
-		}
-		*/
 
 		// I made it a separete function because I need those valuse in exact same order in form->process_entry
 		// too - to check whether the entry falls into allowed range in a calendar

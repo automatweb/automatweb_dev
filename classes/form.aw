@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.104 2002/07/12 18:20:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.105 2002/07/17 07:44:41 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2196,6 +2196,7 @@ class form extends form_base
 
 		$form_table = new form_table;
 		$used_els = array();
+		$group_els = array();
 
 		// now, if the results are to be shown in a table, load the table and ask it for the necessary elements 
 		// if it is not to be shown in a table - but as a list of outputs - or whatever - assume all elements are necessary
@@ -2223,13 +2224,18 @@ class form extends form_base
 			));
 
 			$used_els = $form_table->get_used_elements();
-
 //			echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
+
+			$group_els = $form_table->get_group_by_elements();
+//			echo "group_els = <pre>", var_dump($group_els),"</pre> <br>";
 		}
 
 		// now get the search query
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
-		$sql = $this->get_search_query(array("used_els" => $used_els));
+		$sql = $this->get_search_query(array(
+			"used_els" => $used_els,
+			"group_els" => $group_els
+		));
 //		echo "sql = $sql <br>";
 		$result = "";
 

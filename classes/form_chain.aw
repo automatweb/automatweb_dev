@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.19 2002/06/27 23:45:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.20 2002/07/17 07:44:42 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -95,7 +95,7 @@ class form_chain extends form_base
 			}
 
 		}
-		
+	
 		// notify form_calendar
 		$fc = get_instance("form_calendar");
 		$fc->upd_calendar(array(
@@ -453,7 +453,9 @@ class form_chain extends form_base
 				"parent" => $this->chain["save_folder"],
 				"class_id" => CL_CHAIN_ENTRY,
 			));
-			$this->db_query("INSERT INTO form_chain_entries(id,chain_id,uid) VALUES($chain_entry_id,$id,'".aw_global_get("uid")."')");
+
+			$this->db_query("INSERT INTO form_chain_entries(id,chain_id)
+						VALUES($chain_entry_id,$id)");
 		}
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
@@ -503,7 +505,10 @@ class form_chain extends form_base
 
 		$tfid = $form_id;
 
-		//if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]) && !isset($GLOBALS["confirm"]))
+		// sbt is a reference to the submit button object that was clicked
+
+		// the following code figures out which form in the chain should be
+		// shown next
 		if ($this->chain["gotonext"][$form_id] && ($sbt["chain_forward"] == 0) && ($sbt["confirm"] == 0))
 		{
 			$prev = 0;
@@ -514,7 +519,6 @@ class form_chain extends form_base
 			// so we cycle over all the forms in the chain and ...
 			foreach($this->chain["forms"] as $fid)
 			{
-				//if (isset($sbt["chain_backward"]))
 				if ( $sbt["chain_backward"] > 0)
 				{
 					if ($fid == $form_id)
@@ -590,7 +594,7 @@ class form_chain extends form_base
 		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id)).LC_FORM_CHAIN_CHANGE_WREATH_INPUT);
 		$this->read_template("show_chain_entries.tpl");
 
-		$this->db_query("SELECT form_chain_entries.*,objects.created as tm FROM form_chain_entries LEFT JOIN objects ON objects.oid = form_chain_entries.id WHERE chain_id = $id AND objects.status != 0");
+		$this->db_query("SELECT form_chain_entries.*,objects.created AS tm,objects.createdby AS uid FROM form_chain_entries LEFT JOIN objects ON objects.oid = form_chain_entries.id WHERE chain_id = $id AND objects.status != 0");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(

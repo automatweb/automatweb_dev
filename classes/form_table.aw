@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.31 2002/07/15 09:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.32 2002/07/17 07:44:43 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -480,6 +480,21 @@ class form_table extends form_base
 		));
 		$this->t->parse_xml_def_string($this->get_xml($id));
 		$this->t->set_header_attribs($header_attribs);
+
+		// mark down the path
+		$old_sk = $GLOBALS["prev_sk"];
+		$tbl_sk = $GLOBALS["tbl_sk"];
+		$fg_table_sessions = aw_global_get("fg_table_sessions");
+		if ($old_sk != "")
+		{
+			$fg_table_sessions[$tbl_sk] = $fg_table_sessions[$old_sk];
+		}
+		if (!is_array($fg_table_sessions[$tbl_sk]))
+		{
+			$fg_table_sessions[$tbl_sk] = Array();
+		}
+		$fg_table_sessions[$tbl_sk][] = aw_global_get("REQUEST_URI");
+		aw_session_set("fg_table_sessions", $fg_table_sessions);
 	}
 
 	////
@@ -523,10 +538,10 @@ class form_table extends form_base
 
 			// FIXME: kõigepealt peaks kontrollima, kas tabelis üldse ev_change välja ongi, vastasel
 			// korral on see acl kontroll mõttetu ajakulu -- duke
-			if ($this->can("edit",$dat["entry_id"])  || $this->cfg["site_id"] == 11)
+/*			if ($this->can("edit",$dat["entry_id"])  || $this->cfg["site_id"] == 11)
 			{
 				$dat["ev_change"] = "<a href='".$change_link."'>".$this->table["texts"]["change"][$this->lang_id]."</a>";
-			}
+			}*/
 			$dat["ev_created"] = $this->time2date($dat["created"], 2);
 			$dat["ev_uid"] = $dat["modifiedby"];
 			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
@@ -597,7 +612,7 @@ class form_table extends form_base
 			$cc = $this->table["defs"][$col];
 			if (is_array($cc["els"]))
 			{
-				$str = array();
+				$str = "";
 				foreach($cc["els"] as $elid => $elid)
 				{
 					if ($dat["ev_".$elid] != "")
@@ -605,20 +620,20 @@ class form_table extends form_base
 						// check if the column has an alias set, if it does then figure out the url for the alias
 						if ($cc["alias"])
 						{
-							$str[] = $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section);
+							$str .= $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section).$this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						if ($elid == "order")
 						{
-							$str[]=$this->get_order_url($col,$dat["ev_".$elid],$dat);
+							$str .= $this->get_order_url($col,$dat["ev_".$elid],$dat).$this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						{
-							$str[]=$dat["ev_".$elid];
+							$str .= $dat["ev_".$elid].$this->table["defs"][$col]["el_sep"][$elid];
 						}
 					}
 				}
-				$dat["ev_col_".$col] = join(",",$str);
+				$dat["ev_col_".$col] = $str;
 
 				if ($cc["link_el"])
 				{
@@ -841,7 +856,10 @@ class form_table extends form_base
 			{
 				foreach($this->table["defs"][$i]["el_forms"] as $elid => $fid)
 				{
-					$ret[$fid][$elid] = $elid;
+					if ($fid)
+					{
+						$ret[$fid][$elid] = $elid;
+					}
 				}
 			}
 		}
@@ -857,6 +875,14 @@ class form_table extends form_base
 		if ($this->table["rgroup_form"] && $this->table["rgroup"])
 		{
 			$ret[$this->table["rgroup_form"]][$this->table["rgroup"]] = $this->table["rgroup"];
+		}
+
+		if (is_array($this->table["defsort"]))
+		{
+			foreach($this->table["defsort"] as $el)
+			{
+				$ret[$this->table["defsort_forms"][$el["el"]]][$el["el"]] = $el["el"];
+			}
 		}
 		return $ret;
 	}
@@ -894,19 +920,34 @@ class form_table extends form_base
 	function finalize_table($arr = array())
 	{
 		extract($arr);
-		$_sby = $GLOBALS["sortby"];
+		$_sby = array($GLOBALS["sortby"]);
 		$_so = $GLOBALS["sort_order"];
-		if ($_sby == "")
+		if (is_array($this->table["defsort"]))
 		{
-			$_sby = "ev_".$this->table["defaultsort"];
-			$_so = "asc";
-			$_sn = ($this->table["defaultsort_type"] == "int");
+			foreach($this->table["defsort"] as $nr => $dat)
+			{
+				$cl = $this->get_col_for_el($dat["el"]);
+				if ($this->table["defsort_el_types"][$dat["el"]] == "int")
+				{
+					$_sn = true;
+				}
+				if ($cl === false)
+				{
+					$cl = "ev_".$dat["el"];
+				}
+				else
+				{
+					$cl = "ev_col_".$cl;
+				}
+				$_sby[] = $cl;
+				$_so = "asc";
+			}
 		}
 
 		$_grpby = array();
 		$_coll_el = array();
 		$_coll_sep = array();
-		if (is_array($this->table["grps"]))
+/*		if (is_array($this->table["grps"]))
 		{
 			foreach($this->table["grps"] as $nr => $dat)
 			{
@@ -931,7 +972,26 @@ class form_table extends form_base
 		if ($this->table["group"])
 		{
 			$_grpby = "ev_".$this->table["group"];
+		}*/
+
+		$r_g = false;
+		if (is_array($this->table["rgrps"]))
+		{
+			foreach($this->table["rgrps"] as $nr => $dat)
+			{
+				$tmp = $this->get_col_for_el($dat["el"]);
+				if ($tmp === false)
+				{
+					$cl = "ev_".$dat["el"];
+				}
+				else
+				{
+					$cl = "ev_col_".$tmp;
+				}
+				$r_g[$cl] = $cl;
+			}
 		}
+
 		$this->t->sort_by(array(
 			"field" => $_sby,
 			"sorder" => $_so,
@@ -939,7 +999,8 @@ class form_table extends form_base
 			"collect_el" => $_coll_el,
 			"collect_sep" => $_coll_sep,
 			"collect_ordel" => $_coll_ordel,
-			"sort_numeric" => $_sn
+			"sort_numeric" => $_sn,
+			"rgroupby" => $r_g
 		));
 		$tbl = $this->get_css();
 
@@ -966,15 +1027,6 @@ class form_table extends form_base
 		if ($this->table["user_button_top"])
 		{
 			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
-		}
-		$r_g = false;
-		if (is_array($this->table["rgrps"]))
-		{
-			foreach($this->table["rgrps"] as $nr => $dat)
-			{
-				$cl = $this->get_col_for_el($dat["el"]);
-				$r_g[$cl] = $cl;
-			}
 		}
 
 		$tbl.=$this->t->draw(array(
@@ -1227,17 +1279,17 @@ class form_table extends form_base
 				$sep = "&";
 			}
 			$new_sk = $this->gen_uniq_id();
-			$fg_table_sessions = aw_global_get("fg_table_sessions");
+/*			$fg_table_sessions = aw_global_get("fg_table_sessions");
 			$fg_table_sessions[$new_sk] = $fg_table_sessions[$GLOBALS["tbl_sk"]];
 			if (!is_array($fg_table_sessions[$new_sk]))
 			{
 				$fg_table_sessions[$new_sk] = array();
-			}
+			}*/
 
-			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk;
+			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
 
-			$fg_table_sessions[$new_sk][] = $url;
-			aw_session_set("fg_table_sessions",$fg_table_sessions);
+//			$fg_table_sessions[$new_sk][] = $url;
+//			aw_session_set("fg_table_sessions",$fg_table_sessions);
 
 			return "<a href='".$url."'>".$elval."</a>";
 		}
@@ -1319,6 +1371,24 @@ class form_table extends form_base
 
 		$this->load_table($id);
 
+		$t_forms = $this->get_forms_for_table($id);
+		
+		if (is_array($t_forms))
+		foreach($t_forms as $formid)
+		{
+			$formels=$this->get_form_elements(array("id"=> $formid,"key"=> "id"));
+			if (is_array($formels))
+			{
+				foreach($formels as $k_elid => $v_eldata)
+				{
+					$els[$k_elid]=$formid;
+					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
+					$elsubtypes[$formid][$k_elid]["thousands_sep"]=$v_eldata["thousands_sep"];
+				};
+			}
+		};
+
+
 		$this->table["has_aliasmgr"] = $settings["has_aliasmgr"];
 		$this->table["has_yah"] = $settings["has_yah"];
 		$this->table["select_default"] = $settings["select_default"];
@@ -1346,6 +1416,8 @@ class form_table extends form_base
 			if ($dat["el"])
 			{
 				$this->table["defsort"][] = $dat;
+				$this->table["defsort_forms"][$dat["el"]] = $els[$dat["el"]];
+				$this->table["defsort_el_types"][$dat["el"]] = $elsubtypes[$els[$dat["el"]]][$dat["el"]]["subtype"];
 			}
 		}
 		usort($this->table["defsort"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
@@ -1360,6 +1432,7 @@ class form_table extends form_base
 			if ($dat["gp_el"])
 			{
 				$this->table["grps"][] = $dat;
+				$this->table["grps_forms"][$dat["gp_el"]] = $els[$dat["gp_el"]];
 			}
 		}
 
@@ -1373,6 +1446,7 @@ class form_table extends form_base
 			if ($dat["el"])
 			{
 				$this->table["rgrps"][] = $dat;
+				$this->table["rgrps_forms"][$dat["el"]] = $els[$dat["el"]];
 			}
 		}
 		usort($this->table["rgrps"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
@@ -1741,14 +1815,31 @@ class form_table extends form_base
 			foreach($this->table["defs"][$i]["els"] as $elid)
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
+				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$elid]["subtype"];
 			}
 			$this->table["defs"][$i]["grps"] = $this->make_keys($cols[$i]["grps"]);
 			$this->table["defs"][$i]["alias_data"] = $this->get_data_for_alias($cols[$i]["alias"]);
+			// sort elements in col
+			$this->elsort_dat = $this->table["defs"][$i]["el_ord"];
+			uasort($this->table["defs"][$i]["els"], array($this, "elsort"));
 		}
 
 		usort($this->table["defs"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
 		$this->save_table_settings();
 		return $this->mk_my_orb("new_change_cols", array("id" => $id));
+	}
+
+	function elsort($a,$b)
+	{
+		if ($this->elsort_dat[$a] > $this->elsort_dat[$b])
+		{
+			return 1;
+		}
+		if ($this->elsort_dat[$a] < $this->elsort_dat[$b])
+		{
+			return -1;
+		}
+		return 0;
 	}
 
 	function new_change_styles($arr)
@@ -1933,6 +2024,7 @@ class form_table extends form_base
 
 	function get_col_for_el($el)
 	{
+		$cl = false;
 		for ($_i = 0; $_i < $this->table["cols"]; $_i++)
 		{
 			if ($this->table["defs"][$_i]["els"][$el])
@@ -1941,6 +2033,16 @@ class form_table extends form_base
 			}
 		}
 		return $cl;
+	}
+
+	function get_group_by_elements()
+	{
+		$ret = array();
+		foreach($this->table["grps"] as $nr => $dat)
+		{
+			$ret[$this->table["grps_forms"][$dat["gp_el"]]] = $dat["gp_el"];
+		}
+		return $ret;
 	}
 }
 

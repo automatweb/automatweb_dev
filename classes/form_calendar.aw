@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.4 2002/06/26 11:24:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.5 2002/07/17 07:44:41 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -403,10 +403,12 @@ class form_calendar extends form_base
 	{
 		extract($args);
 
-		$ft_name = sprintf("form_%s_entries",$id);
+		$ft_name = sprintf("form_%s_entries",$eform);
 
 		$q = sprintf("SELECT *,objects.name AS name FROM objects
 				LEFT JOIN calendar2event ON (objects.oid = calendar2event.entry_id)
+				LEFT JOIN form_entries ON (objects.oid = form_entries.id)
+				LEFT JOIN $ft_name ON (objects.oid = $ft_name.id)
 				WHERE calendar2event.cal_id = '$cal_id' AND objects.status = 2 AND (start >= %d) AND (end <= %d)",
 				$start,$end);
 
@@ -656,7 +658,7 @@ class form_calendar extends form_base
 	{
 		//$shift = ($ct_tslice["type"] == "day") ? 3600 * 24 : 3600;
 		extract($args);
-		$shift = 3600;
+		$shift = 3600 * 24;
 		$blocks = array();
 
 		// XXX 3600
@@ -686,7 +688,7 @@ class form_calendar extends form_base
 
 		if ($eid)
 		{
-			$q = "SELECT * FROM calendar2timedef WHERE cal_id = '$eid' AND start <= '$start' AND end <= '$end'";
+			$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE cal_id = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
@@ -706,12 +708,14 @@ class form_calendar extends form_base
 			// [14:00] -> -1
 
 			// --------
-	
+
 			$events = $this->_get_entries_in_range2(array(
 							"start" => $start,
 							"end" => $end,
 							"cal_id" => $eid,
+							"eform" => $eform,
 			));
+
 
 			// now we have all the ranges (if any) and events (if any)
 			// and are going to build the events for calendar
@@ -761,6 +765,131 @@ class form_calendar extends form_base
 	
 		}
 		return $this->has_vacancies;
+		#return $found;
+
+	}
+	
+	function get_events($args = array())
+	{
+		$id = (int)$id;
+		extract($args);	
+		$found = false;
+		$blocks = array();
+		$events = array();
+		$this->raw_events = array();
+		$this->raw_headers = array();
+
+		$this->load($eform);
+
+		if ($eid)
+		{
+			$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE cal_id = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$found = true;
+				$new_blocks = $this->_process_blocks($row);
+				$blocks = $blocks + $new_blocks;
+			}
+
+			$this->vector = array();
+
+			// get events in range and build an incremental vector of all events. for
+			// example, if we have 2 events, one from 10:00-13:00 and other from
+			// 11:00-14:00, then the vector will look akin to (keys are timestamps)
+			// [10:00] -> +1
+			// [11:00] -> +1
+			// [13:00] -> -1
+			// [14:00] -> -1
+
+			// --------
+	
+			$events = $this->_get_entries_in_range2(array(
+							"start" => $start,
+							"end" => $end,
+							"cal_id" => $eid,
+							"eform" => $eform,
+			));
+
+			// now we have all the ranges (if any) and events (if any)
+			// and are going to build the events for calendar
+			ksort($this->vector);
+			$this->blocks = $blocks;
+			reset($this->blocks);
+		
+			if ( is_array($this->blocks) && (sizeof($this->blocks) > 0) )
+			{
+				array_walk($this->vector,array(&$this,"_process_frame"));
+			}
+		
+			// If I want to find vacancies, then I have to check whether each block has
+			// the required amount of blocks available:
+			
+
+			//if ($check == "vacancies")
+			//{
+				$this->has_vacancies = true;
+			//}
+			
+			// do not show usual entries		
+			//$events = array();
+
+			// no blocks, just bail out
+			if (sizeof($this->blocks) == 0)
+			{
+				$this->has_vacancies = false;
+			}
+
+			// done. now we can build the special entries for the calenar
+
+			
+			foreach($this->blocks as $bid => $block)
+			{
+				$dkey = date("dmY",$block["start"]);
+				$cnt = (int)$this->event_counts[$dkey];
+				//$vac = $block["max"] - $block["cnt"];
+				$vac = $block["max"] - $cnt;
+
+				$title = "<small>free <b>$vac of $block[max]</b></small>";
+
+				if ($vac == $block["max"])
+				{
+					$color = "#AAFFAA";
+				}
+				elseif ($vac == 0)
+				{
+					//$title = "fully booked ($block[max])!";
+					$color = "#FF6633";
+				}
+				// shouldn't happen, maybe should even be configurable?
+				elseif ($vac < 0)
+				{
+					$title = sprintf("<b>OVERBOOKED BY %d!</b>",abs($vac));
+					$color = "#FF0000";
+				}
+				else
+				{
+					$color = "#FFFFAA";
+				};
+			
+				$this->raw_headers[$dkey] = $title;
+		
+				$dummy = array(
+					"title" => $title,
+					"start" => $block["start"],
+					"end" => $block["end"],
+					"color" => $color,
+					"target" => "_new",
+				);
+
+				if ($vac != 0)
+				{
+					$events[$dkey][] = $dummy;
+				}
+			};
+	
+		}
+		return $events;
 		#return $found;
 
 	}

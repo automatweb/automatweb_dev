@@ -3,7 +3,7 @@
 	<class name="form_table">
 
 		<action name="new">
-			<function name="add">
+			<function name="new_add">
 				<arguments>
 					<required name="parent"/>
 				</arguments>
@@ -18,7 +18,7 @@
 		</action>
 		
 		<action name="change">
-			<function name="change">
+			<function name="new_change_cols">
 				<arguments>
 					<required name="id"/>
 				</arguments>
@@ -59,6 +59,89 @@
 					<optional name="form_id"/>
 					<optional name="chain_id"/>
 					<optional name="op_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_new">
+			<function name="new_add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_settings">
+			<function name="new_submit_settings">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_cols">
+			<function name="new_submit_cols">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_change_cols">
+			<function name="new_change_cols">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_change_settings">
+			<function name="new_change_settings">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_change_styles">
+			<function name="new_change_styles">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_styles">
+			<function name="new_submit_styles">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_change_translate">
+			<function name="new_change_translate">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_translate">
+			<function name="new_submit_translate">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_change_aliasmgr">
+			<function name="new_change_aliasmgr">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_aliasmgr">
+			<function name="new_submit_aliasmgr">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
