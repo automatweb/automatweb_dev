@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.1 2003/11/10 21:40:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.2 2003/11/19 11:32:19 duke Exp $
 // task.aw - Toimetus 
 
 /*
@@ -21,6 +21,9 @@
 
 @property content type=textarea cols=60 rows=30 field=description table=planner
 @caption Sisu
+
+@property aliasmgr type=aliasmgr store=no
+@caption Seostehaldur
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
