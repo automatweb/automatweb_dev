@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.63 2004/08/16 09:29:19 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.64 2004/08/18 11:45:19 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -245,9 +245,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 /////end of my_customers
 
 @groupinfo contacts caption="Kontaktid"
-@groupinfo oldcontacts caption="Nimekiri" parent=contacts submit=no
+@groupinfo oldcontacts caption="Isikud" parent=contacts submit=no
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
-@groupinfo cedit caption="Kontaktide muutmine" parent=contacts
+@groupinfo cedit caption="Üldkontaktid" parent=contacts
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
