@@ -1,14 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.18 2003/10/30 16:10:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.19 2003/11/27 17:44:05 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
 	function toolbar($args = array())
 	{
 		$this->init("toolbar");
-		$tpl = "buttons.tpl";
-
-		$this->read_template($tpl);
 		$this->matrix = array();
 
 		extract($args);
@@ -21,7 +18,58 @@ class toolbar extends aw_template
 			"imgbase" => $this->cfg["baseurl"] . $imgbase,
 		));
 
+		$this->menus = array();
+
 		$this->end_sep = array();
+	}
+
+	function _init_menu()
+	{
+		$this->menu_inited = true;
+		$this->read_template("js_popup_menu.tpl");
+	}
+
+	function add_menu_button($arr)
+	{
+		if (!$this->menu_inited)
+		{
+			$this->_init_menu();
+		};
+		$name = $arr["name"];
+		$arr["onClick"] = "return buttonClick(event, '${name}');";
+		$arr["class"] = "menuButton";
+		$arr["url"] = "";
+		$arr["img"] = "new.gif";
+		$arr["type"] = "button";
+		$arr["id"] = $name;
+		$this->matrix[$arr["name"]] = $arr;
+	}
+
+	function add_menu_item($arr)
+	{
+		$this->vars($arr);
+		$tpl = isset($arr["disabled"]) ? "MENU_ITEM_DISABLED" : "MENU_ITEM";
+		$this->menus[$arr["parent"]] .= $this->parse($tpl);
+	}
+
+	function add_sub_menu($arr)
+	{
+		$arr["sub_menu_id"] = $arr["name"];
+		$this->vars($arr);
+		$this->menus[$arr["parent"]] .= $this->parse("MENU_ITEM_SUB");
+	}
+
+	function build_menus()
+	{
+		foreach($this->menus as $parent => $menudata)
+		{
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => $parent,
+			));
+			$cdata = $this->parse();
+			$this->add_cdata($cdata);
+		};
 	}
 
 	////
@@ -71,7 +119,13 @@ class toolbar extends aw_template
 	// 		This allows us to have multiple toolbars on a page
 	function get_toolbar($args = array())
 	{
+		if ($this->menu_inited)
+		{
+			$this->build_menus();
+		};
 		$matrix = new aw_array($this->matrix);
+		$tpl = "buttons.tpl";
+		$this->read_template($tpl);
 		$this->vars(array('align' => isset($this->align) ? $this->align : 'left'));
 		$result = $this->parse("start");
 		$right_side_content = "";
