@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.20 2001/11/24 11:01:49 lauri Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.21 2001/11/29 22:14:36 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -380,10 +380,10 @@ class file extends aw_template
 				"user" => $this->mk_site_orb(array("class" => "document","action" => "change","id" => $id)),
 
 				// aw-st lisati doku juurde fail
-				"awdoc" => $this->mk_orb("change", array("id" => $id), "document",$user),
+				"awdoc" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr"),
 
 				// menueditist lisati fail
-				"awfile" => $this->mk_orb("obj_list", array("parent" => $parent), "menuedit",$user),
+				"awfile" => $this->mk_my_orb("obj_list", array("parent" => $parent), "menuedit"),
 
 				// messengeri külge attachitud fail
 				"messenger" => $this->mk_site_orb(array("class" => "messenger","action" => "edit","id" => $msg_id)),
