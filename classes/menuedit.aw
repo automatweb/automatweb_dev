@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.209 2003/01/24 13:42:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.210 2003/01/24 14:04:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4743,6 +4743,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
+				$promos = array();
 		$gidlist = aw_global_get("gidlist");
 		while ($row = $this->db_next())
 		{
@@ -4860,7 +4861,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 
 
-				$promos = array();
 
 				if ($this->is_template($use_tpl . $ap))
 				{
