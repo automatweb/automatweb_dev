@@ -14,7 +14,7 @@ class site_show extends class_base
 {
 	var $path;				// the path to the selected section
 	var $sel_section;		// the MENU that is selected - section can point to any object below it
-	var $sel_section_real;	// the MENU that is selected - section can point to any object below it - 
+	var $sel_section_real;	// the MENU that is selected - section can point to any object below it -
 							// this is the real object if translation is active - damn, it seems I can't make the translation
 							// thing COMPLETELY transparent after all :((((((((
 	var $sel_section_obj;	// the MENU OBJECT that is selected - section can point to any object below it
@@ -858,9 +858,9 @@ class site_show extends class_base
 
 	////
 	// !build "you are here" links from the path
-	function make_yah()
+	 function make_yah()
 	{
-		$ya = "";  
+		$ya = "";
 		$cnt = count($this->path);
 
 		$this->title_yah = "";
@@ -871,8 +871,9 @@ class site_show extends class_base
 		$show = false;
 
 		$prev = false;
+		$show_obj_tree = false;
 
-		for ($i=0; $i < $cnt; $i++)	
+		for ($i=0; $i < $cnt; $i++)
 		{
 			if (!aw_ini_get("menuedit.long_menu_aliases"))
 			{
@@ -910,15 +911,42 @@ class site_show extends class_base
 			{
 				$link = $ref->prop("link");
 			}
+
+			if ($show_obj_tree)
+			{
+				$link = $ot_inst->get_yah_link($ot_id, $ref);
+			}
+
+			// now. if the object in the path is marked to use site tree as
+			// the displayer, then get the link from that
+			if ($ref->prop("show_object_tree"))
+			{
+				$show_obj_tree = true;
+				$ot_inst = get_instance("contentmgmt/object_treeview");
+				$ot_id = $ref->prop("show_object_tree");
+			}
+
 			$this->vars(array(
 				"link" => $link,
-				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())), 
+				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())),
 				"ysection" => $ref->id()
 			));
 
 			if ($ref->prop("clickable") == 1 && $show)
 			{
-				$ya .= $this->parse("YAH_LINK");
+				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
+				{
+					$ya .= $this->parse("YAH_LINK_BEGIN");
+				}
+				else
+				if ($this->is_template("YAH_LINK_END") && $i == ($cnt-1))
+				{
+					$ya .= $this->parse("YAH_LINK_END");
+				}
+				else
+				{
+					$ya .= $this->parse("YAH_LINK");
+				}
 				$this->title_yah.=" / ".$ref->name();
 			}
 
@@ -929,9 +957,9 @@ class site_show extends class_base
 			$prev = $ref;
 		}
 
-		// form table yah links get made here. 
-		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for 
-		// all shown tables (and yeah, I know it is gonna be friggin huge. 
+		// form table yah links get made here.
+		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for
+		// all shown tables (and yeah, I know it is gonna be friggin huge.
 		// and no, I can't remove the old ones, cause the user might have other windows open
 		// and if I remove all the other ones from the array, he will lose the yah link in other windows
 		if ($GLOBALS["tbl_sk"] != "")
@@ -958,7 +986,9 @@ class site_show extends class_base
 		}
 
 		$this->vars(array(
-			"YAH_LINK" => $ya
+			"YAH_LINK" => $ya,
+			"YAH_LINK_END" => "",
+			"YAH_LINK_BEGIN" => ""
 		));
 
 		if ($ya != "")
@@ -1584,7 +1614,6 @@ class site_show extends class_base
 					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 					$_tl = $link;
 					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-//					echo "made hash for link $_tl = $link <br />";
 				}
 				else
 				{
@@ -1602,7 +1631,6 @@ class site_show extends class_base
 						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 						$_tl = $link;
 						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-	//					echo "made hash for link $_tl = $link <br />";
 					}
 					else
 					{
