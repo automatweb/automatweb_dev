@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.169 2003/11/09 18:18:54 duke Exp $
+// $Id: class_base.aw,v 2.170 2003/11/10 21:41:17 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -446,7 +446,6 @@ class class_base extends aw_template
 				$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
-			//$retval = $this->mk_my_orb($action,$args,$orb_class,false,$use_orb);
 			$retval = $this->mk_my_orb($action,$args,$orb_class);
 		};
 		return $retval;
@@ -1565,46 +1564,10 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
-			if ($table == "objects")
+			// so, how do I figure out whether a property exists?
+			if (empty($property["emb"]) && is_object($this->obj_inst) && $this->obj_inst->is_property($property["name"]))
 			{
-				if ($field == "meta")
-				{
-					//if (isset($this->coredata["meta"][$property["name"]]))
-					if (isset($this->data["objects"]["meta"][$property["name"]]))
-					{
-						//$property["value"] = $this->coredata["meta"][$property["name"]];
-						$property["value"] = $this->data["objects"]["meta"][$property["name"]];
-					};
-				}
-				else
-				{
-					//if (isset($this->coredata[$_field]))
-					if (isset($this->data["objects"][$_field]))
-					{
-						//$property["value"] = $this->coredata[$_field];
-						$property["value"] = $this->data["objects"][$_field];
-					};
-				};
-			}
-			else
-			{
-				if ($property["method"] == "serialize")
-				{
-					if (isset($this->data[$table][$field]))
-					{
-						// meaning that you cannot serialize more than one property
-						// into a single field. 
-						$property["value"] = aw_unserialize($this->data[$table][$field]);
-					};
-				}
-				else
-				{
-					if (isset($this->data[$table][$_field]))
-					{
-						$property["value"] = $this->data[$table][$_field];
-					};
-				};
+				$property["value"] = $this->obj_inst->prop($property["name"]);
 			};
 		};
 		
@@ -1653,6 +1616,7 @@ class class_base extends aw_template
 
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
+		$has_rte = false;
 		foreach($properties as $key => $val)
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -1673,6 +1637,11 @@ class class_base extends aw_template
 			{
 				$resprops[$key] = $val;
 			};
+
+			if (isset($val["richtext"]) && 1 == $val["richtext"])
+			{
+				$has_rte = true;
+			};
 		}
 
 		$properties = $resprops;
@@ -1682,8 +1651,17 @@ class class_base extends aw_template
 		// where needed and then cycle over the result and generate
 		// the output
 
+
 		foreach($properties as $key => $val)
 		{
+			if (isset($val["emb"]) && $val["emb"] == 1)
+			{
+				// embedded properties have already passed through parse_properties
+				// and there is no need to do that again
+				$resprops[$key] = $val;
+				continue;
+			};
+
 			if (($val["type"] == "toolbar") && ($this->orb_action != "submit") && !is_object($val["toolbar"]))
 			{
 				classload("toolbar");
@@ -1785,12 +1763,13 @@ class class_base extends aw_template
 						
 					}
 
-					$rte = get_instance("vcl/rte");
-					$rte->get_rte_toolbar(array(
-						"toolbar" => &$val["toolbar"],
-					));
-
-					
+					if ($has_rte)
+					{
+						$rte = get_instance("vcl/rte");
+						$rte->get_rte_toolbar(array(
+							"toolbar" => &$val["toolbar"],
+						));
+					};
 				};
 
 				$this->convert_element(&$val);
@@ -1857,7 +1836,6 @@ class class_base extends aw_template
 				}
 			}
 		}
-
 
 		return $resprops;
 	}
@@ -2163,7 +2141,7 @@ class class_base extends aw_template
 			$o = new object;
 			$o->set_class_id($this->clid);
 			$o->set_parent($parent);
-			$o->set_status(!empty($status) ? $status : 1);
+			$o->set_status(!empty($status) ? $status : STAT_ACTIVE);
 			if ($period)
 			{
 				$o->set_period($period);
@@ -2250,6 +2228,11 @@ class class_base extends aw_template
 			{
 				continue;
 			};
+			// status has already been written out, no need to do this again
+			if ($property["name"] == "status")
+			{
+				continue;
+			};
 			// don't save or display un-translatable fields if we are editing a translated object
 			if (!$this->is_translated && $property["name"] == "is_translated")
 			{
@@ -2319,7 +2302,6 @@ class class_base extends aw_template
 				continue;
 			};
 
-
 			// don't care about text elements
 			if ($type == "text")
 			{
@@ -2358,10 +2340,6 @@ class class_base extends aw_template
 				{
 					$this->obj_inst->set_meta($name . "_id",0);
 					$this->obj_inst->set_meta($name . "_url","");
-					/*
-					$metadata[$name . "_id"] = 0;
-					$metadata[$name . "_url"] = "";
-					*/
 				}
 				else
 				{
@@ -2369,12 +2347,9 @@ class class_base extends aw_template
 					$t = get_instance("image");
 					$key = $name . "_id";
 					$oldid = $this->obj_inst->meta($key);
-					//$oldid = (int)$this->coredata["meta"][$key];
 					$ar = $t->add_upload_image($name, $this->obj_inst->parent(), $oldid);
 					$this->obj_inst->set_meta($key,$ar["id"]);
-					//$metadata[$key] = $ar["id"];
 					$key = $name . "_url";
-					//$metadata[$key] = image::check_url($ar["url"]);
 					$this->obj_inst->set_meta($key,image::check_url($ar["url"]));
 					$heh = $this->obj_inst->meta();
 				};
@@ -2416,55 +2391,38 @@ class class_base extends aw_template
 				if ($name == "name")
 				{
 					$this->obj_inst->set_name($property["value"]);
-					//$this->coredata["name"] = $property["value"];
 				}
 				else
 				{
 					$values[$name] = $property["value"];
 				};
 			}
-			/*
-			else if ($method == "serialize")
-			{
-				$this->obj_inst->set_prop($name,$property["value"]);
-				//$metadata[$name] = $property["value"];
-			}
-			*/
 			elseif ($table == "objects")
 			{
 				if ($method == "bitmask")
 				{
 					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
 					$this->obj_inst->set_prop($name,$val);
-					//$this->obj_inst->set_prop($name,$property["ch_value"]);
-					//$this->coredata[$field] = $pvalues[$field];
 				} 
 				else
-				if (isset($rawdata[$name]))
+				// mis check see on? ahah.. sellepärast vist kadusid menüüpildid ka ära, jees?
+				// if I understand the problem the right way, if I set a property to an array
+				// value, it will not be saved. jees?
+				//if (isset($rawdata[$name]))
 				{
-					//$this->obj_inst->set_prop($field,$property["value"]);
+					// mida perset ma sellega siin peale hakkan?
+					//arr($property);
 					$this->obj_inst->set_prop($name,$property["value"]);
-					//$this->coredata[$field] = $property["value"];
 				};
 			}
 			else
 			{
 				if (isset($property["value"]) && !empty($table))
 				{
-					//$this->obj_inst->set_prop($_field,$property["value"]);
 					$this->obj_inst->set_prop($name,$property["value"]);
-					//$this->objdata[$table][$_field] = $property["value"];
 				};
 			};
 		};
-		
-
-		/*
-		if (sizeof($metadata) > 0)
-		{
-			$this->coredata["metadata"] = $metadata;
-		};
-		*/
 
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
