@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.12 2005/01/21 12:45:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.13 2005/02/21 15:13:25 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -106,7 +106,11 @@
 @property seealso type=relpicker reltype=RELTYPE_SEEALSO
 @caption
 
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
+@caption Kordused
+
 @groupinfo projects caption="Projektid"
+@groupinfo recurrence caption=Kordumine
 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -116,6 +120,9 @@
 
 @reltype SEEALSO value=2 clid=CL_DOCUMENT
 @caption Vaata lisaks
+
+@reltype RECURRENCE value=3 clid=CL_RECURRENCE
+@caption Kordus
 
 */
 
