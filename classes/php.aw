@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.6 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.7 2002/03/07 19:13:32 duke Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
@@ -42,6 +42,7 @@ class php_serializer
 				$v = str_replace("\n","\\\n",$v);
 				$v = str_replace("\r","\\\r",$v);
 				$v = str_replace("\$","\\\\\$",$v);
+				// $v = "\"$v\"";
 				$v = "\"$v\"";
 			}
 			$k = str_replace("\"","\\\"",$k);
@@ -51,20 +52,26 @@ class php_serializer
 			}
 			else
 			{
-				$td[] = "\"$k\""."=>".$v."\n";
+				//$td[] = "\"$k\""."=>".$v."\n";
+				$td[] = "'$k'"."=>".$v;
 			};
 		}
-		return $str.join(",",$td).")\n";
+		return $str.join(",\n",$td).")\n";
 	}
 
 	function php_unserialize($str)
 	{
 		global $awt;
-		$awt->start("php::php_unserialize");
-		$awt->count("php::unser");
-//		echo "str = <pre>$str</pre> <br>";
+		if (is_object($awt))
+		{
+			$awt->start("php::php_unserialize");
+			$awt->count("php::unser");
+		};
 		eval($str);
-		$awt->stop("php::php_unserialize");
+		if (is_object($awt))
+		{
+			$awt->stop("php::php_unserialize");
+		};
 		return $arr;
 	}
 }
