@@ -1,20 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.5 2004/03/02 16:43:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.6 2004/03/03 10:39:05 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
+
+	@classinfo no_comment=1 no_status=1
+
 	@default table=objects
 	@default field=meta
 	@default method=serialize
 	@default group=general
-
-	@property priority_id type=objpicker clid=CL_PRIORITY
-	@caption Prioriteedi objekt
-
-	@property grps callback=callback_get_groups group=grps
-	@caption Grupid
-
-	@groupinfo grps caption="Puu root objektid"
 
 	@property sel type=table store=no group=general no_caption=1
 
@@ -113,6 +108,42 @@ class add_tree_conf extends class_base
 
 	function _req_do_table(&$t, $parent, $visible, $usable, $alias_add)
 	{
+		foreach($this->cfg["classes"] as $cl_id => $cld)
+		{
+			if (!$cld["can_add"] || !isset($cld["parents"]))
+			{
+				continue;
+			}
+
+			if ($cld["parents"] == 0)
+			{
+				$ala = "";
+				if ($cld["alias"] != "")
+				{
+					$ala = html::checkbox(array(
+						"name" => "alias_add[$cl_id]",
+						"value" => 1,
+						"checked" => $alias_add[$cl_id] == 1
+					));
+				}
+
+				$t->define_data(array(
+					"name" => str_repeat("&nbsp;", ($this->level+1) * 10).$cld["name"],
+					"visible" => html::checkbox(array(
+						"name" => "visible[obj][$cl_id]",
+						"value" => 1,
+						"checked" => $visible["obj"][$cl_id] == 1
+					)),
+					"usable" => html::checkbox(array(
+						"name" => "usable[$cl_id]",
+						"value" => 1,
+						"checked" => $usable[$cl_id] == 1
+					)),
+					"alias_add" => $ala,
+				));
+			}
+		}
+
 		$this->level++;
 		foreach($this->cfg["classfolders"] as $id => $cfd)
 		{
@@ -169,39 +200,6 @@ class add_tree_conf extends class_base
 			}
 		}
 		$this->level--;
-	}
-
-	function callback_get_groups($args = array())
-	{
-		$data = $args["prop"]["value"];
-		$nodes = array();
-
-		$ginst = get_instance("users");
-		$gdata = $ginst->get_group_picker(array(
-			"type" => array(GRP_REGULAR,GRP_DYNAMIC),
-		));
-
-		$pri = get_instance("priority");
-		$grps = new aw_array($pri->get_groups($args["obj_inst"]->prop("priority_id")));
-
-		$rt = new object_list(array(
-			"class_id" => CL_TREE_ROOT,
-		));
-
-		$roots = array("" => "") + $rt->names();
-
-		foreach($grps->get() as $gid => $gpri)
-		{
-			$nodes[] = array(
-				"caption" => $gdata[$gid],
-				"type" => "select",
-				"name" => "grps[$gid]",
-				"options" => $roots,
-				"selected" => $data[$gid],
-			);
-		};
-		
-		return $nodes;
 	}
 
 	////
