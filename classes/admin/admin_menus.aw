@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.34 2003/11/13 13:39:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.35 2003/11/18 15:38:01 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -77,7 +77,6 @@ class admin_menus extends aw_template
 						foreach($arr as $row)
 						{
 							$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
-
 							if ($meta["type"] == "__all_objs")
 							{
 								$cldata = array();
@@ -113,7 +112,12 @@ class admin_menus extends aw_template
 							}
 							else
 							{
-								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
+								$use_cfgform = "";
+								if (!empty($meta["use_cfgform"]))
+								{
+									$use_cfgform = $meta["use_cfgform"];
+								};
+								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period,"cfgform" => $use_cfgform), $this->cfg["classes"][$meta["type"]]["file"], true, true);
 								$cnt++;
 								$this->add_menu[((int)$counts[$row["parent"]])][$cnt] = array(
 									"caption" => $row["name"],
@@ -542,6 +546,9 @@ class admin_menus extends aw_template
 		$cut_objects = aw_global_get("cut_objects");
 		$copied_objects = aw_global_get("copied_objects");
 
+		$cache = get_instance("cache");
+		$langs = get_instance("languages");
+
 		if (is_array($cut_objects))
 		{
 			reset($cut_objects);
@@ -550,10 +557,10 @@ class admin_menus extends aw_template
 				if ($oid != $parent)
 				{
 					// so, let the object update itself when it is being cut-pasted, if it so desires
-					$obj = obj($oid);
-					if ($this->cfg["classes"][$obj->class_id()]["file"] != "")
+					$o = obj($oid);
+					if ($this->cfg["classes"][$o->class_id()]["file"] != "")
 					{
-						$inst = $obj->instance();
+						$inst = $o->instance();
 						if (method_exists($inst, "cut_hook"))
 						{
 							$inst->cut_hook(array(
@@ -563,12 +570,15 @@ class admin_menus extends aw_template
 						}
 					}
 					
-					$this->upd_object(array(
-						"oid" => $oid, 
-						"parent" => $parent,
-						"period" => $period,
-						"lang_id" => aw_global_get("lang_id")
-					));
+					$cache->file_invalidate_regex("admin_menus_".$o->parent().".*");
+					$o->set_parent($parent);
+					if ($period)
+					{
+						$o->set_period($period);
+					}
+
+					$o->set_lang($langs->get_langid());
+					$o->save();
 				}
 			}
 		}
@@ -773,6 +783,35 @@ class admin_menus extends aw_template
 		}
 	}
 
+	function cache_right_frame($arr)
+	{
+		$params = $arr;
+		$params["lang_id"] = aw_global_get("lang_id");
+		$params["site_id"] = aw_ini_get("site_id");
+		$params["uid"] = aw_ini_get("uid");
+		$params["ft_page"] = $GLOBALS["ft_page"];
+		if (empty($params["parent"]))
+		{
+			$params["parent"] = $this->cfg["rootmenu"];
+		}
+	
+		$key = "admin_menus_".$params["parent"]."_".join("_", map2("%s_%s", $params));
+		$ts = $this->db_fetch_field("SELECT max(modified) as mod FROM objects WHERE parent = ".$params["parent"], "mod");
+
+		$ca = get_instance("cache");
+		if (!($res = $ca->file_get_ts($key, $ts)) || ((is_array($GLOBALS["cut_objects"]) && count($GLOBALS["cut_objects"]) > 0) || (is_array($GLOBALS["copied_objects"]) && count($GLOBALS["copied_objects"]) > 0)))
+		{
+			$res = $this->right_frame($arr);
+			$ca->file_set($key, $res);
+		}
+		else
+		{
+			$this->mk_path($params["parent"],"",$params["period"]);
+		}
+		return $res;
+
+	}
+
 	////
 	// !Displays the right frame table .. uh, what a name. 
 	function right_frame($arr)
@@ -807,22 +846,12 @@ class admin_menus extends aw_template
 
 		$this->setup_rf_table($parent);
 
-		$host = str_replace("http://","",$this->cfg["baseurl"]);
-		if (preg_match("/.*:(.+?)/U",$host, $mt))
-		{
-			if (isset($mt[1]))
-			{
-				$host = str_replace(":".$mt[1], "", $host);
-			}
-		};
-
 		$ps = "";
 
 		if ($period)
 		{
 			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
 		}
-
 
 
 		// do not show relation objects in the list. hm, I wonder whether
