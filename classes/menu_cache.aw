@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.18 2003/02/11 18:32:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.19 2003/02/28 15:08:21 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -179,6 +179,23 @@ class menu_cache extends aw_template
 
 	function get_cached_menu($oid)
 	{
+		if (!isset($this->mar[$oid]))
+		{
+			// read from db
+			$data = $this->db_fetch_row("
+				SELECT * 
+				FROM objects 
+					LEFT JOIN menu ON menu.id = objects.oid
+				WHERE 
+					objects.oid = $oid
+			");
+			$data["meta"] = aw_unserialize($data["metadata"]);
+			unset($data["metadata"]);
+			$data["mtype"] = $data["type"];
+			$this->mar[$oid] = $data;
+			$this->mpr[$data["parent"]][] = $data;
+			upd_instance("menu_cache", &$this);
+		}
 		return $this->mar[$oid];
 	}
 
