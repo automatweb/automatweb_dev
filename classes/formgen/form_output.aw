@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.6 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.7 2003/02/10 14:08:18 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -1357,6 +1357,21 @@ class form_output extends form_base
 				}
 			}
 		}
+
+
+		$lcol7 = "";
+		foreach($langs as $lar)
+		{
+			$txt = $this->output["lang_close_button_text"][$lar["id"]];
+			$this->vars(array(
+				"text" => $txt,
+				"lang_id" => $lar["id"],
+			));
+			$lcol7.=$this->parse("LCOL7");
+		}
+		$this->vars(array("LCOL7" => $lcol7));
+
+
 		$this->vars(array(
 			"LROW" => $lrow,
 			"LROW1" => $lrow1,
@@ -1385,6 +1400,8 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
+					$this->output["lang_close_button_text"][$lar["id"]] = $close_button[$lar["id"]];
+
 					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					foreach($langs as $lar)
