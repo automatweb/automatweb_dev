@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.23 2004/10/05 07:21:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.24 2004/10/14 13:36:17 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -180,6 +180,8 @@ class form_chain extends form_base
 		$la = get_instance("languages");
 		$lar = $la->listall(true);
 
+
+		$rl = "";
 		foreach($lar as $l)
 		{
 			$aru = $this->chain["after_redirect_url"];

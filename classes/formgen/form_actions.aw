@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.28 2004/09/09 11:04:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.29 2004/10/14 13:36:17 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -867,6 +867,8 @@ class form_actions extends form_base
 			{
 				$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
 			}
+			$ll = get_instance("languages");
+			//$awm->set_header("Content-type","text/plain; charset=".$ll->get_charset());
 
 			$fname = "attachment.pdf";
 			if (aw_global_get("fa_mail_attach_name") != "")
@@ -930,6 +932,8 @@ class form_actions extends form_base
 				{
 					$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
 				}
+				$ll = get_instance("languages");
+				//$awm->set_header("Content-type","text/plain; charset=".$ll->get_charset());
 
 				$fname = "attachment.pdf";
 				if (aw_global_get("fa_mail_attach_name") != "")
