@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.17 2003/01/16 14:26:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.18 2003/01/16 17:07:36 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -1097,14 +1097,18 @@ class search extends class_base
 		{
 			extract($request);
 		};
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"prefix" => "search",
-		));
+		$format = ($format) ? $format : "vcl";
 
-		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+		if ($format == "vcl")	
+		{
+			load_vcl("table");
+			$this->t = new aw_table(array(
+				"prefix" => "search",
+			));
 
-		$this->_init_os_tbl();
+			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+			$this->_init_os_tbl();
+		};
 
 		$parts = array();
 		$partcount = 0;
@@ -1320,8 +1324,10 @@ class search extends class_base
 				$row["change"] = "<input type='checkbox' name='sel[$row[oid]]' value='$row[oid]'>";
 			};
 
-
-			$this->t->define_data($row);
+			if ($format == "vcl")
+			{
+				$this->t->define_data($row);
+			};
 			$results++;
 		};
 
@@ -1337,11 +1343,14 @@ class search extends class_base
 			{
 				$sortby = "name";
 			}
-			$this->t->sort_by(array("field" => $sortby));
+			if ($format == "vcl")
+			{
+				$this->t->sort_by(array("field" => $sortby));
 
-			$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
-			$this->table .= $this->t->draw();
-			$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
+				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
+				$this->table .= $this->t->draw();
+				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
+			};
 		};
 
 		if ($results > 0)
@@ -1374,6 +1383,29 @@ class search extends class_base
 		));
 		$this->mk_path($fobj["parent"],"Vaata otsingut $fobj[name]");
 		return $this->table;
+	}
+
+	function get_search_results($args = array())
+	{
+		extract($args);
+		$fobj = $this->get_object($id);
+		$meta = new aw_array($fobj["meta"]);
+		$params = array();
+		foreach($meta->get() as $key => $val)
+		{
+			if (substr($key,0,2) == "s_")
+			{
+				$realkey = substr($key,2);
+				$params[$realkey] = $val;
+			};
+		};
+		$real_fields = $this->get_real_fields(array("s" => $params));
+		$this->execute_search(array(
+			"real_fields" => $real_fields,
+			"request" => $args,
+			"format" => "rows",
+		));
+		return $this->db_rows;
 	}
 };
 ?>
