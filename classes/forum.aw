@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.17 2001/11/15 14:07:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.18 2001/11/19 06:35:23 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -126,7 +126,7 @@ class forum extends aw_template
 			"from" => $board_obj["last"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
-			"text" => $board_obj["comment"],
+			"text" => nl2br($board_obj["comment"]),
 
 			"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board))
 		));
@@ -292,7 +292,7 @@ class forum extends aw_template
 			"parent" => $args["parent"],
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
-			"comment" => $args["comment"],
+			"comment" => nl2br($args["comment"]),
 			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"])),
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
@@ -727,6 +727,18 @@ class forum extends aw_template
 			"del_topic" => $this->mk_my_orb("delete_topic", array("board" => $args["oid"],"forum_id" => $args["parent"]))
 		));
 
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $args["metadata"]
+		));
+		if ($meta["voters"] == 0)
+		{
+			$rate = 0;
+		}
+		else
+		{
+			$rate = $meta["votesum"] / $meta["voters"];
+		};
+
 		$this->vars(array(
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
@@ -738,7 +750,7 @@ class forum extends aw_template
 			"cnt" => (int)$this->comments[$args["oid"]],
 			"topic_link" => $topic_link,
 			"NEW_MSGS" => $mark,
-			"rate" => (int)$args["rate"],
+			"rate" => (int)$rate,
 			"DELETE" => ($this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "")
 		));
 		$even = ($this->topic_count % 2);
