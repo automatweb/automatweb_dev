@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.7 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.8 2001/05/25 20:27:14 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -454,6 +454,15 @@ class mlist extends aw_template
 		$this->db_query("SELECT ml_users.mail as mail, objects.name as name FROM objects LEFT JOIN ml_users ON objects.oid = ml_users.id WHERE class_id = 17 AND status != 0");
 		while ($row = $this->db_next())
 			echo $row["name"],",",$row["mail"],"\n";
+	}
+
+	function is_member($email)
+	{
+		$this->db_query("SELECT * FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE parent=$this->id AND status != 0 AND mail='$email'");
+		if (($row = $this->db_next()))
+			return $row[id];	
+		else
+			return false;
 	}
 };
 ?>
