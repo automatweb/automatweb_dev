@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.8 2002/11/14 18:38:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.9 2002/11/15 18:24:15 duke Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
@@ -23,13 +23,13 @@
 	@property aip_filename type=textbox field=meta method=serialize group=advanced
 	@caption Failinimi
 
-	@property objtbl_conf type=select field=meta method=serialize group=advanced
+	@property objtbl_conf type=objpicker clid=CL_OBJ_TABLE_CONF field=meta method=serialize group=advanced
 	@caption Objektitabeli konff
 
-	@property add_tree_conf type=select field=meta method=serialize group=advanced
+	@property add_tree_conf type=objpicker clid=CL_ADD_TREE_CONF field=meta method=serialize group=advanced
 	@caption Objekti lisamise puu konff
 
-	@property cfgmanager type=select field=meta method=serialize group=advanced
+	@property cfgmanager type=objpicker clid=CL_CFGMANAGER field=meta method=serialize group=advanced
 	@caption Konfiguratsioonihaldur
 	
 	@property show_lead type=checkbox field=meta method=serialize group=advanced
@@ -58,7 +58,7 @@
 
 	// and now stuff that goes into menu table
 	@default table=menu
-	
+
 	@property sss type=select multiple=1 size=15 method=serialize group=relations
 	@caption Menüüd, mille alt viimased dokumendid võetakse
 	
@@ -68,6 +68,8 @@
 	@property seealso type=select multiple=1 size=15 group=relations
 	@caption Vali menüüd, mille all see menüü on "vaata lisaks" menüü
 
+	@property seealso_refs type=hidden method=serialize field=meta table=objects group=relations
+
 	@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
 	@caption Järjekorranumber (vaata lisaks)
 
@@ -76,6 +78,18 @@
 
 	@property type type=select group=advanced
 	@caption Menüü tüüp
+	
+	@property admin_feature type=select group=advanced
+	@caption Vali programm
+	
+	@property pclass type=select table=objects field=meta method=serialize group=advanced
+	@caption Vali meetod
+	
+	@property pm_url_admin type=checkbox table=objects field=meta method=serialize group=advanced
+	@caption Meetod viitab adminni
+
+	@property pm_url_menus type=checkbox table=objects field=meta method=serialize group=advanced
+	@caption Meetodi väljundi kuvamisel menüüde näitamine
 
 	@property clickable type=checkbox group=advanced
 	@caption Klikitav
@@ -144,20 +158,9 @@ class menu extends aw_template
 	function get_property($args)
 	{
 		$data = &$args["prop"];
+		$retval = true;
 		switch($data["name"])
 		{
-			case "objtbl_conf":
-				$data["options"] = $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true));
-				break;
-
-			case "add_tree_conf":
-				$data["options"] = $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true));
-				break;
-
-			case "cfgmanager":
-				$data["options"] = $this->list_objects(array("class" => CL_CFGMANAGER, "addempty" => true));
-				break;
-
 			case "type":
 				$m = get_instance("menuedit");
 				$data["options"] = $m->get_type_sel();
@@ -244,7 +247,40 @@ class menu extends aw_template
 				$data["value"] = $args["obj"]["meta"]["img_act_url"] != "" ? "<img src='".$args[obj][meta][img_act_url]."'>" : "";
 				break;
 
+			case "admin_feature":
+				if ($args["objdata"]["type"] == MN_ADMIN1)
+				{
+					$m = get_instance("menuedit");
+					$data["options"] = array_merge(array("0" => "--vali--"),$m->get_feature_sel());				
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;	
+
+			case "pclass":
+				if ($args["objdata"]["type"] == MN_PMETHOD)
+				{
+					$m = get_instance("menuedit");
+					$data["options"] = $m->get_pmethod_sel();
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
+			case "pm_url_admin":
+			case "pm_url_menus":
+				if ($args["objdata"]["type"] != MN_PMETHOD)
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
 		};
+		return $retval;
 	}
 
 	////
@@ -308,16 +344,59 @@ class menu extends aw_template
 	}
 
 	function set_property($args = array())
-        {
-                $data = &$args["prop"];
+	{	
+		$data = &$args["prop"];
+		$retval = PROP_OK;
 		switch($data["name"])
-                {
+		{
+			// grkeywords just triggers an action, nothing should
+			// be saved into the objects table
 			case "grkeywords":
 				$m = get_instance("menuedit");
 				$m->save_menu_keywords($data["value"],$args["obj"]["oid"]);
+				$retval = PROP_IGNORE;
 				break;
 
-                };
+			// seealso is not saved, it should be skipped.
+			// update_seealso creates $this->seealso_refs (which is a hidden
+			// element for simplicity) 
+			case "seealso":
+				$this->update_seealso(array(
+					"id" => $args["obj"]["oid"],
+					"meta" => $args["obj"]["meta"],
+					"seealso" => $args["form_data"]["seealso"],
+					"seealso_order" => $args["form_data"]["seealso_order"],
+				));
+				$retval = PROP_IGNORE;
+				break;
+
+			// this puts the result of update_seealso into the save queue
+			case "seealso_refs":
+				$form_data = &$args["form_data"];
+				$form_data["seealso_refs"] = $this->seealso_refs;
+				break;
+
+			case "sections":
+				$this->update_brothers(array(
+					"id" => $args["obj"]["oid"],
+					"menu" => array_merge($args["obj"],$args["objdata"]),
+					"sections" => $args["form_data"]["sections"],
+				));
+
+			case "type":
+				$form_data = &$args["form_data"];
+				if ($form_data["type"] != MN_ADMIN1)
+				{
+					$form_data["admin_feature"] = 0;
+				};
+				if ($form_data["type"] != MN_PMETHOD)
+				{
+					$form_data["pclass"] = "";
+					$form_data["pm_url_admin"] = "";
+					$form_data["pm_url_menus"] = "";
+				};
+		};
+                return $retval;
 	}
 
 	////
@@ -413,6 +492,154 @@ class menu extends aw_template
 		}
 		$target = $f;
 		return sprintf("<a href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
+	}
+
+	////
+	// !Updates seealso references
+	// see k2ib siis nii et objekti metadata juures on kirjas et mis menyyde all see menyy
+	// ja siis menu.seealso on serializetud array nendest, mis selle menyy all on seealso
+	// niisis. k2ime k6ik praegused menyyd l2bi kus see menyy seealso on ja kui see on 2ra
+	// v6etud, siis kustutame ja kui jrk muutunud siis muudame seda ja viskame nad arrayst v2lja
+	function update_seealso($args = array())
+	{
+		extract($args);
+
+		if (!is_array($seealso))
+		{
+			$seealso = array();
+		}
+
+		$lang_id = aw_global_get("lang_id");
+
+		if (is_array($meta["seealso_refs"][$lang_id]))
+		{
+			foreach ($meta["seealso_refs"][$lang_id] as $mid)
+			{
+				if (!in_array($mid,$seealso))
+				{
+					// remove this one from the menus seealso list
+					$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
+					$m_sa_a = unserialize($m_sa);
+					unset($m_sa_a[$lang_id][$id]);
+					$m_sa = serialize($m_sa_a);
+					$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
+				}
+				else
+				{
+					if ($seealso_order != $meta["seealso_order"])
+					{
+						// kui jrk on muutunud siis tuleb see 2ra muuta
+						$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $mid", "seealso");
+						$m_sa_a = unserialize($m_sa);
+						$m_sa_a[$lang_id][$id] = $seealso_order;
+						$m_sa = serialize($m_sa_a);
+						$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $mid");
+					}
+				}
+			}
+		}
+
+		// nyt k2ime l2bi sisestet seealso array ja lisame need mis pole metadatas olemas juba
+		$sas = $meta["seealso_refs"];
+		unset($sas[$lang_id]);
+		foreach($seealso as $m_said)
+		{
+				if (!isset($meta["seealso_refs"][$lang_id][$m_said]))
+				{
+						// tuleb lisada selle menyy juurde kirje
+						$m_sa = $this->db_fetch_field("SELECT seealso FROM menu WHERE id = $m_said", "seealso");
+						$m_sa_a = unserialize($m_sa);
+						$m_sa_a[$lang_id][$id] = $seealso_order;
+						$m_sa = serialize($m_sa_a);
+						$this->db_query("UPDATE menu SET seealso = '$m_sa' WHERE id = $m_said");
+				}
+				$sas[$lang_id][$m_said] = $m_said;
+		}
+
+		$this->seealso_refs = $sas;
+	}
+
+	////
+	// !Updates brothers of this menu
+	function update_brothers($args = array())
+	{
+		extract($args);
+		$sar = array(); $oidar = array();
+		// leiame koik selle menüü vennad
+		$q = "SELECT * FROM objects
+			 WHERE brother_of = $id AND status != 0 AND class_id = " . CL_BROTHER;
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$sar[$row["parent"]] = $row["parent"];
+			$oidar[$row["parent"]] = $row["oid"];
+		}
+
+		$not_changed = array();
+		$added = array();
+
+		$this->updmenus = array();
+
+		if (is_array($sections))
+		{
+			reset($sections);
+			$a = array();
+			while (list(,$v) = each($sections))
+			{
+				if ($sar[$v])
+				{
+					$not_changed[$v] = $v;
+				}
+				else
+				{
+					$added[$v] = $v;
+				}
+				$a[$v]=$v;
+			}
+		}
+		$deleted = array();
+		reset($sar);
+		while (list($oid,) = each($sar))
+		{
+			if (!$a[$oid])
+			{
+				$deleted[$oid] = $oid;
+			}
+		}
+
+		reset($deleted);
+		while (list($oid,) = each($deleted))
+		{
+			$this->updmenus[] = $oid;
+			$this->delete_object($oidar[$oid]);
+		}
+		reset($added);
+
+		while(list($oid,) = each($added))
+		{
+			if ($oid != $id)        // no recursing , please
+			{
+				$noid = $this->new_object(array(
+					"parent" => $oid,
+					"class_id" => CL_BROTHER,
+					"status" => 2,
+					"brother_of" => $id,
+					"name" => $menu["name"],
+					"comment" => $menu["comment"],
+					"jrk" => 50,
+				));
+
+				$this->db_query("INSERT INTO menu(id,link,type,is_l3,is_copied,
+							periodic,tpl_edit,tpl_view,tpl_lead,active_period,
+							clickable,target,mid,data,hide_noact)
+				VALUES($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$menu[periodic]','$menu[tpl_edit]','$menu[tpl_view]','$menu[tpl_lead]','$menu[active_period]','$menu[clickable]','$menu[target]','$menu[mid]','$menu[data]','$menu[hide_noact]')");
+				$this->updmenus[] = $noid;
+			}
+		}
+
+		// updmenus is used to invalidate the menu cache for the objects
+		// that have changed. So I need to invalidate all the brothers
+		// and the current menu as well
 	}
 
 };
