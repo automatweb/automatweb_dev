@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.1 2003/12/04 14:55:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.2 2003/12/08 11:03:44 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -56,6 +56,8 @@ class aw_table extends aw_template
 			$this->parse_xml_def($data["xml_def"]);
 		};
 		$this->use_chooser = false;
+		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
+		$this->chooser_hilight = true;
 	}
 
 	////
@@ -453,7 +455,7 @@ class aw_table extends aw_template
 	function draw($arr = array())
 	{
 		// väljastab tabeli
-		$this->read_template("default.tpl");
+		$this->read_template("scripts.tpl");
 		if (!is_array($this->rowdefs))
 		{
 			print "Don't know what to do";
@@ -476,7 +478,7 @@ class aw_table extends aw_template
 			$tbl .= $this->table_header;
 		}
 
-		if (isset($pageselector) && $pageselector != "")
+		if (!empty($pageselector))
 		{
 			switch($pageselector)
 			{
@@ -498,9 +500,18 @@ class aw_table extends aw_template
 			}
 		}
 
+		$this->vars(array(
+			"sel_row_style" => $this->tr_sel,
+		));
+		
+
 		if ($this->use_chooser)
 		{
 			$tbl .= $this->parse("selallscript");
+			if ($this->chooser_hilight)
+			{
+				$tbl .= $this->parse("hilight_script");
+			};
 		}
 
 
@@ -642,8 +653,8 @@ class aw_table extends aw_template
 		// koostame tabeli sisu
 		if (is_array($this->data))
 		{
-			// ts?kkel ?le data
-			$counter = 0; // kasutame ridadele erineva v?rvi andmiseks
+			// tsükkel üle data
+			$counter = 0; // kasutame ridadele erineva värvi andmiseks
 			$p_counter = 0;
 			foreach($this->data as $k => $v)
 			{
@@ -660,7 +671,8 @@ class aw_table extends aw_template
 				}
 
 				// rida algab
-				$tbl .= $this->opentag(array("name" => "tr", "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
+				$rowid = "trow" . $counter;
+				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
 
 				$tmp = "";
 				// grpupeerimine
@@ -872,7 +884,12 @@ class aw_table extends aw_template
 					if ($this->use_chooser)
 					{
 						$name = $this->chooser_config["name"] . "[" . $v[$this->chooser_config["field"]] . "]";
-						$tbl .= "<td align='center'><input type='checkbox' name='$name' value=1></td>";
+						$onclick = "";
+						if ($this->chooser_hilight)
+						{
+							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
+						};
+						$tbl .= "<td align='center'><input type='checkbox' name='${name}' value=1 ${onclick}></td>";
 					};
 					$tbl .= "</tr>\n";
 				};
@@ -992,6 +1009,10 @@ class aw_table extends aw_template
 			{
 				$attr_list .= " name='$v'";
 			} 
+			elseif ($k == "domid")
+			{
+				$attr_list .= " id='$v'";
+			}
 			elseif ($v != "")
 			{
 				if ($k == "nowrap")
@@ -1121,6 +1142,10 @@ class aw_table extends aw_template
 
 			case "content_tr_style2":
 				$this->tr_style2 = $attrs["value"];
+				break;
+
+			case "content_tr_sel":
+				$this->tr_sel = $attrs["value"];
 				break;
 
 			// actionid
