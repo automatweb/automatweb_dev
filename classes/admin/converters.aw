@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.16 2003/06/26 14:14:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.17 2003/07/01 10:19:52 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -322,6 +322,8 @@ class converters extends aw_template
 
 	function groups_convert()
 	{
+		set_time_limit(0);
+
 		$uroot = aw_ini_get("users.root_folder");
 		if (!$uroot)
 		{
@@ -335,7 +337,7 @@ class converters extends aw_template
 		$this->db_query("ALTER TABLE users add index oid(oid)");
 
 		// 1st, let's do users
-		$q = 'select oid, uid from users';
+		$q = 'select users.oid, users.uid, objects.parent from users left join objects ON objects.oid = users.oid';
 		$arr = $this->db_fetch_array($q);
 		foreach($arr as $val)
 		{
@@ -351,6 +353,15 @@ class converters extends aw_template
 				{
 					$this->db_query('update users set oid='.$oid.' where uid="'.$val['uid'].'"');
 				}
+				echo "created object for user $val[uid] <br>\n";
+				flush();
+			}
+			else
+			if ($val["parent"] != aw_ini_get("users.root_folder"))
+			{
+				$this->db_query("UPDATE objects SET parent = ".aw_ini_get("users.root_folder")." WHERE oid = '".$val['oid']."'");
+				echo "moved object to folder for user $val[uid] <br>\n";
+				flush();
 			}
 		}
 
@@ -482,6 +493,7 @@ class converters extends aw_template
 			$this->_rec_groups_convert($row["gid"], $row["oid"]);
 			$this->restore_handle();
 		}
+		die("Valmis!");
 	}
 
 	function _rec_groups_convert($pgid, $poid)
