@@ -15,6 +15,8 @@ class mingi extends aw_template
 	{
 		extract($arr);
 
+		echo "hobvune!! <br>";
+
 		return "blabla";
 	}
 
