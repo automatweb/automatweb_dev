@@ -1,14 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.13 2001/05/31 13:38:45 kristo Exp $
-/*       _\|/_
-         (o o)
- +----oOO-{_}-OOo----------------------------------+
- |          AW Foundation Classes                  |
- |          (C) StruktuurMeedia 2000,2001          |
- +------------------------------------------------*/
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.14 2001/06/01 02:14:04 duke Exp $
+// core.aw - Core functions
 
 classload("connect");
-
 class core extends db_connector
 {
 	var $errmsg;		
@@ -49,6 +43,74 @@ class core extends db_connector
 	{
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
 		return $this->db_fetch_field($q,"content");
+	}
+
+	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas XML kujul.
+	// Järgnevate funktsioonidega saab selle välja sisu kätte ja muuta
+	////
+	// !Loeb objekti metainfo sisse
+	// oid - objekti oid
+	// key - key, mille sisu teada soovitakse
+	// $data = $this->get_object_metadata(array(
+	//					"oid" => "666",
+	//					"key" => "notes",));
+	function get_object_metadata($args = array())
+	{
+		extact($args);
+		$odata = $this->_get_object_metadata($oid);
+		if (!$odata)
+		{
+			return false;
+		};
+		// load, and parse the information
+		classload("xml");
+		$xml = new xml(array("ctag" => "metadata"));
+		$metadata = $xml->xml_unserialize(array(
+					"source" => $odata["metadata"],
+		));
+		return $metadata[$key];
+	}
+
+	function _get_object_metadata($oid)
+	{
+		$q = "SELECT metadata FROM objects WHERE oid = '$oid'";
+		$this->db_query($q);
+		return $this->db_next();
+	}
+
+	////
+	// !Kirjutab objekti metadata väljas mingi key üle
+	// argumendid
+	// oid - objekti oid
+	// key - votme nimi
+	// value - võtme sisu (integer, string, array, whatever)
+	// $this->set_object_metadata(array(
+	//				"oid" => $oid,
+	//				"key" => "notes",
+	//				"value" => "3l33t",
+	// ));
+	function set_object_metadata($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		// loeme vana metadata sisse
+		$old = $this->_get_object_metadata($oid);
+		if (!$old)
+		{
+			return false;
+		};
+		classload("xml");
+		$xml = new xml(array("ctag" => "metadata"));
+		$metadata = $xml->xml_unserialize(array(
+					"source" => $old["metadata"],
+		));
+
+		$metadata[$key] = $value;
+		$newmeta = $xml->xml_serialize($metadata);
+		$this->quote($metadata);
+		$q = "UPDATE objects SET medadata = '$metadata' WHERE oid = '$oid'";
+		$this->db_query($q);
+		return true;
 	}
 
 	////
