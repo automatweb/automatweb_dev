@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.3 2001/05/18 14:09:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.4 2001/05/18 15:02:02 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // definnerime orbi funktsioonid
 global $orb_defs;
@@ -973,9 +973,18 @@ class document extends aw_template
 		// ja siis veel vähemalt yx teine parameeter mida muuta
 		$this->quote($data);
 		$user = $data["user"];
-		if ($data[content]) {$data[content] = trim($data[content]);};
-		if ($data[lead]) {$data[lead] = trim($data[lead]);};
-		if ($data[cite]) {$data[cite] = trim($data[cite]);};
+		if ($data["content"]) {$data["content"] = trim($data["content"]);};
+		if ($data["lead"]) {$data["lead"] = trim($data["lead"]);};
+		if ($data["cite"]) {$data["cite"] = trim($data["cite"]);};
+		if ($data["keywords"])
+		{
+			classload("keywords");
+			$kw = new keywords;
+			$kw->update_keywords(array(
+						"keywords" => $data["keywords"],
+						"oid" => $data["id"],
+			));
+		};
 
 		if ($data["status"] == 0)
 		{
