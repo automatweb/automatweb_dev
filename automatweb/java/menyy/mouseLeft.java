@@ -28,16 +28,17 @@ class menu extends Menu
 class menuItem extends MenuItem 
 { 
 	URL viide; 
-	String label; 
+	String label,frame; 
 	Applet boss; 
-	int id,parent; 
+	int id,parent;
  
-	menuItem(String nimi,String viit,Applet bos,int idd,int par) 
+	menuItem(String nimi,String viit,Applet bos,int idd,int par,String raam) 
 	{ 
 		parent=par;
 		id=idd;
 		boss=bos; 
-		label=nimi; 
+		label=nimi;
+		frame=raam;
 		setLabel(label); 
  
 		int size=new Integer(boss.getParameter("menu_textsize")).intValue(); 
@@ -49,7 +50,7 @@ class menuItem extends MenuItem
  
 			addActionListener(new ActionListener(){                                                                                                                                                                                                             
 				public void actionPerformed(ActionEvent event){                                                                                                                                                                                                        
-					boss.getAppletContext().showDocument(viide,label);                                                                                                                                                                                                               
+					boss.getAppletContext().showDocument(viide,frame);                                                                                                                                                                                                               
 				}                                                                                                                                                                                                                                                      
 			});	 
 		} 
@@ -111,7 +112,8 @@ public class mouseLeft extends Applet
 	Image icon; 
 	Image icon1;//niisama refresh 
 	Image icon2;//mouse over refresh 
-	PopupMenu popup; 
+	PopupMenu popup;
+	boolean ikoon=true;
  
 	public void destroy()
 	{
@@ -145,18 +147,42 @@ public class mouseLeft extends Applet
 		}                                                                                              			                                                                                         			 
 		catch(Exception e)                                                                            			 
 		{                                                                                              			 
-			System.out.println("Ei saanud ikooni kätte "+e);                                        			 
+			System.out.println("Ei saanud ikooni kätte "+e);
+			ikoon=false;
 		}  
 		 
 		String aadress=""; 
 		byte[] array=new byte[1]; 
 		byte[] array2; 
-		int i=0; 
+		int i=1;
  
 		try 
 		{   
-			aadress="http://"+getParameter("url")+"/orb.aw?class=menuedit&action=get_popup_data&id="+getParameter("oid"); 
- 
+			//pärimise aadressi ehitamine
+			aadress="http://"+getParameter("url")+"/orb.aw?class=menuedit&action=get_popup_data";
+
+			String parameeter;
+			try
+			{
+				while(true)
+				{
+					parameeter=getParameter("urlparam"+i);
+					if (parameeter==null)
+					{
+						break;
+					}
+					aadress=aadress+parameeter;
+					i++;
+				}
+			}
+			catch(Exception e)
+			{
+			}
+			System.out.println("URL="+aadress);
+			
+			//aadress="http://"+getParameter("url")+"/orb.aw?class=menuedit&action=get_popup_data&id="+getParameter("oid"); 
+			
+			i=0;
 			InputStream sisse=new URL(aadress).openConnection().getInputStream(); 
 			int in=sisse.read(); 
 							 
@@ -177,25 +203,25 @@ public class mouseLeft extends Applet
 				sisse.close(); 
  
 				String menyy=new String(array); 
-System.out.println("menyy="+menyy); 
+//System.out.println("menyy="+menyy); 
 /*=================== PARSIN ============================ 
-//(id	parent	nimi	url)
+//(id|parent|nimi|url|frame)
 
-1|0|Set notification|http://server/?set_notification&id=667
+1|0|Set notification|http://server/?set_notification&id=667|frame
  separator
- 2|0|Info|
-        3|2|General|http://server/?info&id=667
-        4|2|Audit|
-                5|4|alam1|http://server/?info&id=667
+ 2|0|Info||
+        3|2|General|http://server/?info&id=667|frame
+        4|2|Audit||
+                5|4|alam1|http://server/?info&id=667|frame
                 separator
-                6|4|alam2|http://server/?info&id=667
-        7|2|General2|http://server/?info&id=667
-        8|2|Audit2|http://server/?audit&id=667
- 9|0|alam1|http://server/?info&id=667
+                6|4|alam2|http://server/?info&id=667|frame
+        7|2|General2|http://server/?info&id=667|frame
+        8|2|Audit2|http://server/?audit&id=667|frame
+ 9|0|alam1|http://server/?info&id=667|frame
 
 */
  
-			String nimi,viit,alam; 
+			String nimi,viit,alam,frame; 
 			int tab,id,parent; 
 			menu[] jada=new menu[0];
 			menu[] jada2;
@@ -225,16 +251,20 @@ System.out.println("menyy="+menyy);
 
 					nimi=menyy.substring(0,tab); 
 					menyy=menyy.substring(tab+1); 
-					tab=menyy.indexOf("\n"); 
+					tab=menyy.indexOf("|"); 
 	 
 					viit=menyy.substring(0,tab); 
 					menyy=menyy.substring(tab+1); 
-//System.out.println("id="+id+"    parent="+parent+"   nimi="+nimi+"     viit="+viit);
+					tab=menyy.indexOf("\n"); 
+
+					frame=menyy.substring(0,tab);	
+					menyy=menyy.substring(tab+1); 
+//System.out.println("id="+id+"    parent="+parent+"   nimi="+nimi+"     viit="+viit+"  frame="+frame);
 					if(parent==0)
 					{
 						if(viit.compareTo("")!=0)
 						{
-							popup.add(new menuItem(nimi,viit,this,id,parent));
+							popup.add(new menuItem(nimi,viit,this,id,parent,frame));
 						}
 						else
 						{
@@ -255,7 +285,7 @@ System.out.println("menyy="+menyy);
 					{
 						if((viit.compareTo("")!=0)&&(seff.id==parent))
 						{
-							seff.add(new menuItem(nimi,viit,this,id,parent));
+							seff.add(new menuItem(nimi,viit,this,id,parent,frame));
 						}
 						else
 						if(seff.id==parent)
@@ -285,7 +315,7 @@ System.out.println("menyy="+menyy);
 
 							if((viit.compareTo("")!=0)&&(seff.id==parent))
 							{
-								seff.add(new menuItem(nimi,viit,this,id,parent));
+								seff.add(new menuItem(nimi,viit,this,id,parent,frame));
 							}
 							else
 							if(seff.id==parent)
@@ -330,7 +360,13 @@ System.out.println("menyy="+menyy);
  
 	public void paint(Graphics g) 
 	{ 
-		g.drawImage(icon, 0, 0, this); 
+		int tekststart=0;
+		if(ikoon)
+		{
+			g.drawImage(icon, 0, 0, this);
+			tekststart=25;
+		}
+		 
 		String text=getParameter("text"); 
 		if(text.compareTo("")!=0) 
 		{ 
@@ -354,11 +390,13 @@ System.out.println("menyy="+menyy);
 				fore=Color.black; 
 			} 
 			g.setColor(fore); 
-			g.drawString(text,25,20); 
+			//g.drawString(text,25,20); 
+			g.drawString(text,tekststart,getSize().height-1);
 
 			if(getParameter("underline").compareTo("U")==0)
 			{
-				g.drawLine(25,23,getSize().width-5,23);
+				//g.drawLine(25,23,getSize().width-5,23);
+				g.drawLine(tekststart,getSize().height-1,getSize().width-5,getSize().height-1);
 			}
 		} 
 	} 
