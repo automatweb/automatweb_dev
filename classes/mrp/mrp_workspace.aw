@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.73 2005/03/31 20:04:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.74 2005/04/02 00:45:07 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -36,12 +36,7 @@
 
 
 @default group=general
-	@property configuration type=relpicker reltype=RELTYPE_MRP_CONFIGURATION
-	@caption Ressursihalduse seaded
-
-	@property configuration type=relpicker reltype=RELTYPE_MRP_WORKSPACE_CFGMGR
-	@caption Keskkonna seaded
-
+	@property test type=text store=no no_caption=1
 
 @default group=grp_customers
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
@@ -409,6 +404,98 @@ class mrp_workspace extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
+
+/* dbg */ if ($prop["name"] == "test" and aw_global_get('uid') == "voldemar")
+/* dbg */ {
+/* dbg */
+// set all  PLANNED projects INPROGRESS that have jobs inprogress, done ...
+// if ($_GET["mrp_set_all_inprogress"])
+// {
+	// $list = new object_list(array(
+		// "parent" => $this_object->prop ("projects_folder"),
+		// "class_id" => CL_MRP_CASE,
+		// "state" => MRP_STATUS_PLANNED,
+	// ));
+	// $list = $list->arr();
+
+	// foreach ($list as $project)
+	// {
+		// $connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+		// $inconsistent = false;
+
+		// foreach ($connections as $connection)
+		// {
+			// $job = $connection->to();
+
+			// $applicable_states = array (
+				// MRP_STATUS_INPROGRESS,
+				// MRP_STATUS_PAUSED,
+				// MRP_STATUS_DONE,
+			// );
+
+			// if ((!in_array ($job->prop ("state"), $applicable_states)) or ( (((int) $job->prop ("state")) == MRP_STATUS_ABORTED) and (((int) $project->prop ("state")) != MRP_STATUS_ABORTED) ) )
+			// {
+				// $inconsistent = true;
+			// }
+		// }
+
+		// if ($inconsistent)
+		// {
+			// echo "project id: " . $project->id() ."<br>";
+			// $project->set_prop("state", MRP_STATUS_INPROGRESS);
+			// $project->save();
+			// echo "state set to: [" . MRP_STATUS_INPROGRESS . "]<br><br>";
+		// }
+	// }
+
+// }
+
+
+/* dbg */ //finish all jobs in progress and set_all_resources_available
+// if ($_GET["mrp_set_all_resources_available"])
+// {
+		// $resources_folder = $this_object->prop ("resources_folder");
+		// $resource_tree = new object_tree(array(
+			// "parent" => $resources_folder,
+			// "class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			// "sort_by" => "objects.jrk",
+		// ));
+	// $list = new object_list (array (
+		// "class_id" => CL_MRP_JOB,
+		// "state" => MRP_STATUS_INPROGRESS,
+	// ));
+
+	// $jj = $list->arr();
+	// $j = get_instance(CL_MRP_JOB);
+
+	// foreach ($jj as $job_id => $job)
+	// {
+		// echo "job id: " . $job->id() ."<br>";
+		// $arr = array("id"=>$job_id);
+		// $ud = parse_url($j->done($arr));
+		// $pars = array();
+		// parse_str($ud["query"], $pars);
+		// $this->dequote($pars["errors"]);
+		// $errs = unserialize($pars["errors"]);
+		// echo "done: [" . implode(",", $errs) . "]<br><br>";
+	// }
+
+	// $list = $resource_tree->to_list();
+	// $list->filter (array (
+		// "class_id" => CL_MRP_RESOURCE,
+	// ));
+	// $list = $list->arr();
+
+	// foreach ($list as $res_id => $r)
+	// {
+		// echo "res id: " . $res_id ."<br>";
+		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		// $r->save();
+		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
+	// }
+// }
+/* dbg */
+/* dbg */ }
 
 		if (substr($prop["name"], 0, 3) == "pjp")
 		{
@@ -883,46 +970,6 @@ class mrp_workspace extends class_base
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
 		));
-
-
-/* dbg */ //finish all jobs in progress and set_all_resources_available
-// if ($_GET["mrp_set_all_resources_available"])
-// {
-	// $list = new object_list (array (
-		// "class_id" => CL_MRP_JOB,
-		// "state" => MRP_STATUS_INPROGRESS,
-	// ));
-
-	// $jj = $list->arr();
-	// $j = get_instance(CL_MRP_JOB);
-
-	// foreach ($jj as $job_id => $job)
-	// {
-		// echo "job id: " . $job->id() ."<br>";
-		// $arr = array("id"=>$job_id);
-		// $ud = parse_url($j->done($arr));
-		// $pars = array();
-		// parse_str($ud["query"], $pars);
-		// $this->dequote($pars["errors"]);
-		// $errs = unserialize($pars["errors"]);
-		// echo "done: [" . implode(",", $errs) . "]<br><br>";
-	// }
-
-	// $list = $resource_tree->to_list();
-	// $list->filter (array (
-		// "class_id" => CL_MRP_RESOURCE,
-	// ));
-	// $list = $list->arr();
-
-	// foreach ($list as $res_id => $r)
-	// {
-		// echo "res id: " . $res_id ."<br>";
-		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-		// $r->save();
-		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
-	// }
-// }
-/* dbg */
 
 		classload("vcl/treeview");
 		$tree = treeview::tree_from_objects(array(
@@ -2006,6 +2053,7 @@ class mrp_workspace extends class_base
 			"subdivisions" => $subdivisions,
 			"timespans" => $subdivisions,
 			"width" => 950,
+			"row_height" => 10,
 		));
 
 		### define columns

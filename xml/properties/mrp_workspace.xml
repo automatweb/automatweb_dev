@@ -8,14 +8,14 @@
             <type>hidden</type>
       </property>
       <property>
-            <name>configuration</name>
+            <name>test</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MRP_WORKSPACE_CFGMGR</reltype>
-            <caption>Keskkonna seaded</caption>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>box</name>

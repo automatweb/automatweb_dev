@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.37 2005/03/30 18:02:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.38 2005/04/02 00:45:07 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -175,7 +175,7 @@ class mrp_resource extends class_base
 
 	function callback_on_load ($arr)
 	{
-		if (((string) $arr["request"]["action"]) == "new")
+		if (!is_oid ($arr["request"]["id"]))
 		{
 			if (is_oid ($arr["request"]["mrp_workspace"]))
 			{
@@ -200,6 +200,13 @@ class mrp_resource extends class_base
 
 	function get_property($arr)
 	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
+			return PROP_FATAL_ERROR;
+		}
+
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
@@ -281,12 +288,19 @@ class mrp_resource extends class_base
 	{
 		if ($this->workspace)
 		{
-			$arr["mrp_workspace"] = $this->workspace;
+			$arr["mrp_workspace"] = $this->workspace->id ();
 		}
 	}
 
 	function set_property ($arr = array ())
 	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
+			return PROP_FATAL_ERROR;
+		}
+
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
@@ -339,6 +353,7 @@ class mrp_resource extends class_base
 						if ($prop["value"] == 1)
 						{
 							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna. ";
+/* dbg */ echo $prop["error"];
 							$retval = PROP_ERROR;
 						}
 						break;

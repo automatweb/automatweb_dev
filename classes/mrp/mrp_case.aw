@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.53 2005/03/31 06:45:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.54 2005/04/02 00:45:07 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -277,7 +277,7 @@ class mrp_case extends class_base
 
 	function callback_on_load ($arr)
 	{
-		if (((string) $arr["request"]["action"]) == "new")
+		if (!is_oid ($arr["request"]["id"]))
 		{
 			if (is_oid ($arr["request"]["mrp_workspace"]))
 			{
@@ -304,7 +304,7 @@ class mrp_case extends class_base
 	{
 		if ($this->workspace)
 		{
-			$arr["mrp_workspace"] = $this->workspace;
+			$arr["mrp_workspace"] = $this->workspace->id ();
 		}
 	}
 
@@ -313,6 +313,7 @@ class mrp_case extends class_base
 		if ($this->mrp_error)
 		{
 			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
 			return PROP_IGNORE;
 		}
 
@@ -432,6 +433,7 @@ class mrp_case extends class_base
 		if ($this->mrp_error)
 		{
 			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
 			return PROP_FATAL_ERROR;
 		}
 
@@ -475,12 +477,20 @@ class mrp_case extends class_base
 				if ($ol->count() > 0)
 				{
 					$prop["error"] = t("Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!");
+/* dbg */ echo $prop["error"];
 					return PROP_FATAL_ERROR;
 				}
 				break;
 
 			case "workflow_table":
-				$this->save_workflow_data ($arr);
+				$save = $this->save_workflow_data ($arr);
+
+				if ($save !== PROP_OK)
+				{
+					$prop["error"] = $save;
+/* dbg */ echo $prop["error"];
+					return PROP_FATAL_ERROR;
+				}
 				break;
 		}
 
@@ -1105,10 +1115,6 @@ class mrp_case extends class_base
 									$prerequisite_job = obj ($oid);
 									$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
 								}
-								else
-								{
-									$errors = "Viga "; ///!!!mingi veateade teha? mida siin edasi teha?
-								}
 							}
 
 							$prerequisites = implode (",", $prerequisites_translated);
@@ -1122,15 +1128,7 @@ class mrp_case extends class_base
 								{
 									settype ($prerequisite, "integer");
 									$job_id = $jobs[$prerequisite];
-
-									if (is_oid ($job_id))
-									{
-										$prerequisites[] = $job_id;
-									}
-									else
-									{
-										$errors .= "Viga. "; ///!!!
-									}
+									$prerequisites[] = $job_id;
 								}
 
 								$prerequisites = implode (",", $prerequisites);
@@ -1179,8 +1177,7 @@ class mrp_case extends class_base
 							}
 							else
 							{
-								///!!! spetsif veateade
-								$errors .= "Viga";
+								$errors .= "Viga: ressursi objekti-id katkine. ";//!!! mida see t2hendada v6iks?
 							}
 							break;
 
@@ -1194,14 +1191,14 @@ class mrp_case extends class_base
 				}
 				else
 				{
-					$errors .= "Viga";///!!!
+					$errors .= "Viga: töö objekti-id katkine";
 				}
 			}
 		}
 
 		if ($errors)
 		{
-			return PROP_FATAL_ERROR;
+			return $errors;
 		}
 		else
 		{

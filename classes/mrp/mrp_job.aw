@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.44 2005/03/30 18:02:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.45 2005/04/02 00:45:07 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -177,7 +177,7 @@ class mrp_job extends class_base
 
 	function callback_on_load ($arr)
 	{
-		if (((string) $arr["request"]["action"]) == "new")
+		if (!is_oid ($arr["request"]["id"]))
 		{
 			$this->mrp_error .= t("Uut tööd saab luua vaid ressursihalduskeskkonnas. ");
 		}
@@ -210,6 +210,7 @@ class mrp_job extends class_base
 		if ($this->mrp_error)
 		{
 			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
 			return PROP_IGNORE;
 		}
 
@@ -271,6 +272,7 @@ class mrp_job extends class_base
 		if ($this->mrp_error)
 		{
 			$prop["error"] = $this->mrp_error;
+/* dbg */ echo $prop["error"];
 			return PROP_FATAL_ERROR;
 		}
 
