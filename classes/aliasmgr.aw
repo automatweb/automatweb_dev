@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.3 2001/11/22 16:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.4 2001/12/04 09:54:12 cvs Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -215,6 +215,7 @@ class aliasmgr extends aw_template {
 		$this->_form_entry_aliases();
 		$this->vars(array(
 			"table" => $this->contents,
+			"id" => $id
 		));
 		return $this->parse();
 	}
