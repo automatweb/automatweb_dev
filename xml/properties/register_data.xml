@@ -520,47 +520,47 @@
       </property>
       <property>
             <name>usertext1</name>
-            <group>data</group>
-            <table>aw_register_data</table>
+            <group>general</group>
+            <table>objects</table>
             <type>text</type>
-            <store>no</store>
-            <field>usertext1</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Usertext1</caption>
       </property>
       <property>
             <name>usertext2</name>
-            <group>data</group>
-            <table>aw_register_data</table>
+            <group>general</group>
+            <table>objects</table>
             <type>text</type>
-            <store>no</store>
-            <field>usertext2</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Usertext2</caption>
       </property>
       <property>
             <name>usertext3</name>
-            <group>data</group>
-            <table>aw_register_data</table>
+            <group>general</group>
+            <table>objects</table>
             <type>text</type>
-            <store>no</store>
-            <field>usertext3</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Usertext3</caption>
       </property>
       <property>
             <name>usertext4</name>
-            <group>data</group>
-            <table>aw_register_data</table>
+            <group>general</group>
+            <table>objects</table>
             <type>text</type>
-            <store>no</store>
-            <field>usertext4</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Usertext4</caption>
       </property>
       <property>
             <name>usertext5</name>
-            <group>data</group>
-            <table>aw_register_data</table>
+            <group>general</group>
+            <table>objects</table>
             <type>text</type>
-            <store>no</store>
-            <field>usertext5</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Usertext5</caption>
       </property>
       <property>
