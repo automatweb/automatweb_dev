@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.12 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.13 2003/09/09 15:13:04 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
+
+// is on it's way out, as is the old messenger itself
 class msg_sql_driver extends core
 {
 	function msg_sql_driver()
@@ -28,6 +30,12 @@ class msg_sql_driver extends core
 		$row["meta"] = $this->get_object_metadata(array(
 			"metadata" => $row["metadata"]
 		));
+		// get subject from object name, since that is where the new mail_message class keeps
+		// it -- duke
+		if (empty($row["subject"]) && !empty($row["name"]))
+		{
+			$row["subject"] = $row["name"];
+		};
 		return $row;
 	}
 
