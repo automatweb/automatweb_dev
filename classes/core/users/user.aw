@@ -146,6 +146,24 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property aclwizard_a type=text store=no
 @caption 
 
+@groupinfo userdef caption="User-defined"
+
+@property userch1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+@caption User-defined checkbox 1
+
+@property userch2 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+@caption User-defined checkbox 2
+
+@property userch3 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+@caption User-defined checkbox 3
+
+@property userch4 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+@caption User-defined checkbox 4
+
+@property userch5 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+@caption User-defined checkbox 5
+
+
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
 

@@ -292,6 +292,61 @@
             <field>aclwizard_a</field>
             <caption></caption>
       </property>
+      <property>
+            <name>userch1</name>
+            <table>objects</table>
+            <group>userdef</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <user>1</user>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>userch2</name>
+            <table>objects</table>
+            <group>userdef</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <user>1</user>
+            <caption>User-defined checkbox 2</caption>
+      </property>
+      <property>
+            <name>userch3</name>
+            <table>objects</table>
+            <group>userdef</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <user>1</user>
+            <caption>User-defined checkbox 3</caption>
+      </property>
+      <property>
+            <name>userch4</name>
+            <table>objects</table>
+            <group>userdef</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <user>1</user>
+            <caption>User-defined checkbox 4</caption>
+      </property>
+      <property>
+            <name>userch5</name>
+            <table>objects</table>
+            <group>userdef</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <user>1</user>
+            <caption>User-defined checkbox 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_USER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -326,6 +381,9 @@
             <aclwizard>
                   <caption>ACL Maag</caption>
             </aclwizard>
+            <userdef>
+                  <caption>User-defined</caption>
+            </userdef>
       </groupinfo>
       <tableinfo>
             <users>
