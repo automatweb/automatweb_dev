@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.2 2004/11/05 13:32:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/message_template.aw,v 1.3 2004/12/31 10:12:14 ahti Exp $
 // message_template.aw - Kirja template 
 /*
 
@@ -17,6 +17,9 @@
 
 @property is_html type=checkbox ch_value=1
 @caption HTML
+
+@property legend type=text
+@caption Legend
 
 @property content type=textarea cols=50 rows=20
 @caption Sisu
@@ -37,18 +40,18 @@ class message_template extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "legend":
+				$prop["value"] = "NB! Sisu pealkirja stiili nimi peab olema alati <font color=red>doc-title</font> ja alampealkirja <font color=red>doc-titleSub</font>";
+				break;
 		};
 		return $retval;
 	}
-	*/
 
 	/*
 	function set_property($arr = array())
