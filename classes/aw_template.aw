@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.26 2002/08/16 22:02:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.27 2002/11/12 18:01:50 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -40,14 +40,12 @@ class aw_template extends acl_base
 	function _init_vars()
 	{
 		// this comes from session.
-		global $status_msg;
-
 		$this->vars = array(
 			"self" => $this->PHP_SELF,
 			"ext"  => $this->cfg["ext"],
 			// not very random really
 			"rand" => time(),
-			"status_msg" => $status_msg,
+			"status_msg" => aw_global_get("status_msg"),
 			"baseurl" => $this->cfg["baseurl"]
 		);
 	}
@@ -243,11 +241,7 @@ class aw_template extends acl_base
 		$src = preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 
 		// võtame selle maha ka
-		global $status_msg;
-		if ($status_msg)
-		{
-			session_unregister("status_msg");
-		};
+		aw_session_del("status_msg", true);
 
 		if ($this->sub_merge == 1)
 		{
