@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.6 2003/09/29 13:03:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.7 2003/09/29 13:21:32 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -378,6 +378,10 @@ class messenger_v2 extends class_base
 		$tree->add_item(0,array(
 			"name" => parse_obj_name($this->_name),
 			"id" => $i,
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj"]["oid"],
+				"group" => "main_view",
+			)),
 		));
 
 		$i++;
@@ -387,8 +391,6 @@ class messenger_v2 extends class_base
 			"id" => $i,
 		));
 
-		//$boxes[0][$i] = array("name" => "Local folders");
-		// how the fuck do I put some javascript into tree output?
 		$local_fld = $i;
 		$this->localfolders = array();
 		$conns = $this->msgobj->connections_from(array("type" => RELTYPE_FOLDER));
@@ -399,7 +401,7 @@ class messenger_v2 extends class_base
 			$tree->add_item($local_fld,array(
 				"name" => $sdat->prop("name"),
 				"id" => $i,
-				"link" => $this->mk_my_orb("change",array(
+				"url" => $this->mk_my_orb("change",array(
 					"id" => $arr["obj"]["oid"],
 					"group" => $arr["prop"]["group"],
 					"localmailbox" => $sdat->id(),
@@ -471,7 +473,6 @@ class messenger_v2 extends class_base
 			"name" => "newmessage",
 			"tooltip" => "Uus kiri",
 			"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "write_mail")),
-			"target" => "msgrcont",
 			"img" => "new.gif",
 			"imgover" => "new_over.gif",
 		));
@@ -493,9 +494,7 @@ class messenger_v2 extends class_base
 			$toolbar->add_button(array(
 				"name" => "newfolder",
 				"tooltip" => "Uus kataloog",
-				//"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","parentfolder" => $this->use_mailbox)),
-				"url" => "javascript:new_folder();",
-				#"target" => "msgrcont",
+				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","parentfolder" => $this->use_mailbox)),
 				"img" => "new.gif",
 				"imgover" => "new_over.gif",
 			));
@@ -1208,13 +1207,16 @@ class messenger_v2 extends class_base
 
 		$req_grp = $arr["request"]["group"];
 
-		if (in_array($arr["id"],array("msg_view","main_view","write_mail")) && $req_grp != $arr["id"])
+		if ($arr["id"] == "msg_view" && $req_grp != "msg_view")
 		{
-			if ($req_grp != $arr["id"])
-			{
-				return false;
-			};
+			return false;
 		};
+		
+		if ($arr["id"] == "write_mail" && $req_grp != "write_mail")
+		{
+			return false;
+		};
+
 
 	}
 
