@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.29 2002/08/12 14:38:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.30 2002/09/04 07:31:25 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -928,7 +928,6 @@ class aw_table
 			xml_error_string(xml_get_error_code($xml_parser)),
 			xml_get_current_line_number($xml_parser)));
 		};
-		return $this->data;
 	}
 
 	function parse_xml_def($file) 
