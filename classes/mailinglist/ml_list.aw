@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.20 2003/04/02 17:19:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.21 2003/04/03 23:16:40 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -110,11 +110,14 @@ class ml_list extends class_base
 						};
 					};
 					// leia lisatud muutujad
-					foreach ($vars as $k => $v)
+					if (is_array($vars))
 					{
-						if (!isset($obj["meta"]["vars"][$k]))
+						foreach ($vars as $k => $v)
 						{
-							$this->add_pseudo_var($args["obj"]["oid"],$k);
+							if (!isset($obj["meta"]["vars"][$k]))
+							{
+								$this->add_pseudo_var($args["obj"]["oid"],$k);
+							};
 						};
 					};
 				};
