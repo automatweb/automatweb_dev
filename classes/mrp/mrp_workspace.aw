@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.40 2005/03/14 09:45:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.41 2005/03/14 09:53:51 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -71,6 +71,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property sp_customer type=textbox
 	@caption Klient
+
+	@property sp_status type=chooser multiple=1 
+	@caption Staatus
 
 	@property sp_submit type=submit value=Otsi
 	@caption Otsi
@@ -604,6 +607,15 @@ class mrp_workspace extends class_base
 
 			case "cs_result":
 				$this->_cs_result($arr);
+				break;
+
+			case "sp_status":
+				$prop["options"] = array(
+					MRP_STATUS_DONE => "Tehtud",
+					MRP_STATUS_ABORTED => "Katkestatud",
+					MRP_STATUS_PLANNED => "Avatud"
+				);
+				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 		}
 		return $retval;
@@ -3031,14 +3043,21 @@ class mrp_workspace extends class_base
 			{
 				$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $st);
 			}
+
 			$dd = date_edit::get_timestamp($arr["request"]["sp_due_date"]);
 			if ($dd > 100)
 			{
 				$filt["due_date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $dd);
 			}
+
 			if ($arr["request"]["sp_customer"] != "")
 			{
 				$filt["CL_MRP_CASE.customer.name"] = "%".$arr["request"]["sp_customer"]."%";
+			}
+
+			if ($arr["request"]["sp_status"])
+			{
+				$filt["state"] = $arr["request"]["sp_status"];
 			}
 			$results = new object_list($filt);
 		}

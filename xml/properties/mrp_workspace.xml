@@ -176,6 +176,16 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>sp_status</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>sp_submit</name>
             <table>objects</table>
             <field>meta</field>
