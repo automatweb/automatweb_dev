@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.40 2003/01/08 10:09:08 duke Exp $
+// $Id: class_base.aw,v 2.41 2003/01/09 15:51:04 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -763,7 +763,6 @@ class class_base extends aliasmgr
 			'oid' => $this->id
 		);
 
-
 		// ok, first add all the generated props to the props array 
 		$all_props = array();
 		foreach($_all_props as $k => $val)
@@ -774,6 +773,10 @@ class class_base extends aliasmgr
 				$vx = new aw_array($this->inst->$meth($argblock));
 				foreach($vx->get() as $vxk => $vxv)
 				{
+					if (!$vxv["group"])
+					{
+						$vxv["group"] = $val["group"];
+					};
 					$all_props[$vxk] = $vxv;
 				}
 			}
