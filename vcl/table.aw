@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.13 2001/11/06 10:01:24 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.14 2001/11/08 22:48:48 duke Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -19,11 +19,12 @@ class aw_table
 	{
 		// väljad
 		// prefix - kasutame sessioonimuutujate registreerimisel
-		$this->prefix = $data["prefix"];
+		$this->set_attribs($data);
 		$this->sortby = $data["sortby"];
 		$this->imgurl = $data["imgurl"];
 		$this->self   = $data["self"];
 		$this->tbgcolor = $data["tbgcolor"];
+		$this->header_attribs = array();
 
 		if (strpos($this->self,"?") === false)
 			$this->separator = "?";
@@ -53,6 +54,14 @@ class aw_table
 		$this->first = true;
 	}
 
+	function set_attribs($args = array())
+	{
+		if ( $args["prefix"] )
+		{
+			$this->prefix = $args["prefix"];
+		}
+	}
+
 	// see on alternatiiv. Soovitav on kasutada funktsiooni parse_xml_def
 	function define_row($data) 
 	{
@@ -75,7 +84,22 @@ class aw_table
 	{
 		// sisestame andmed
 		$this->data[] = $row;
+		$this->last = sizeof($this->data);
 	}
+
+	function merge_data($row)
+	{
+		$this->data[$this->last-1]  = array_merge($this->data[$this->last-1],$row);
+	}
+
+	////
+	// !Throws everything away, we need this when we want to use the same
+	// table class on the same page for multiple tables
+	function reset_data()
+	{
+		$this->data = array();
+	}
+	
 	
 	function define_action($row) 
 	{
@@ -116,12 +140,11 @@ class aw_table
 	
 	function set_header_attribs($args)
 	{
-		$params = array();
 		while(list($k,$v) = each($args))
 		{
-			$params[] = "$k=$v"; 
+			$this->header_attribs[$k] = $v;
 		};
-		$this->header_att_string = join("&",$params);
+		$this->header_att_string = join("&",map2("%s=%s",$this->header_attribs));
 	}
 
 	function add_query_string($string)
