@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.86 2004/01/08 07:43:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.87 2004/02/23 16:39:48 sven Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -220,5 +220,12 @@ define("OBJ_FLAG_IS_SELECTED", 16);
 
 // for CL_BROTHER_DOCUMENT 
 define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
+
+
+//Date formats
+define("LC_DATE_FORMAT_SHORT", 1); // For example: 20.06.88 or 05.12.98 
+define("LC_DATE_FORMAT_SHORT_FULLYEAR", 2); // For example: 20.06.1999 or 05.12.1998
+define("LC_DATE_FORMAT_LONG", 3); // For example: 20. juuni 99
+define("LC_DATE_FORMAT_LONG_FULLYEAR", 4); // For example: 20. juuni 1999
 
 ?>
