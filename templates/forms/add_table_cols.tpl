@@ -138,15 +138,32 @@
 											Erineva stiiliga: <input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][has_col_style]" value="1" {VAR:has_col_style}><Br>
 
 											<!-- SUB: HAS_STYLE -->
-											Stiil:<br>
-											<select class="formselect" name="cols[{VAR:col_id}][col_style]">{VAR:styles}</select><br>
-											Lingi stiil:<br>
-											<select class="formselect" name="cols[{VAR:col_id}][col_link_style]">{VAR:link_styles}</select><br>
-											Headeri stiil:<br>
-											<select class="formselect" name="cols[{VAR:col_id}][col_header_style]">{VAR:header_styles}</select><br>
-											Headeri lingi stiil:<br>
-											<select class="formselect" name="cols[{VAR:col_id}][col_header_link_style]">{VAR:header_link_styles}</select><br>
+											Tavaline pealkirja stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][header_normal]">{VAR:header_normal_styles}</select><br>
+											Tavalise pealkirja lingi stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][header_link]">{VAR:header_link_styles}</select><br>
+											Sorditav pealkirja stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][header_sortable]">{VAR:header_sortable_styles}</select><br>
+											Sorditud pealkirja stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][header_sorted]">{VAR:header_sorted_styles}</select><br>
+											Sortimislinkide stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][header_sortable_link]">{VAR:header_sortable_link_styles}</select><br>
+											1 celli stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][content_style1]">{VAR:content_style1_styles}</select><br>
+											2 celli stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][content_style2]">{VAR:content_style2_styles}</select><br>
+											1 sorditud celli stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][content_sorted_style1]">{VAR:content_sorted_style1_styles}</select><br>
+											2 sorditud celli stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][content_sorted_style2]">{VAR:content_sorted_style2_styles}</select><br>
+											1 celli linkide stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][link_style1]">{VAR:link_style1_styles}</select><br>
+											2 celli linkide stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][link_style2]">{VAR:link_style2_styles}</select><br>
+											Grupi rea stiil:<br>
+											<select class="formselect" name="cols[{VAR:col_id}][styles][group_style]">{VAR:group_style_styles}</select><br>
 											<!-- END SUB: HAS_STYLE -->
+
 											<!-- END SUB: SEL_SETINGS2 -->
 
 											<!-- SUB: SEL_POPUP -->

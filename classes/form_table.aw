@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.61 2002/10/16 13:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.62 2002/10/16 15:43:34 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -70,6 +70,9 @@ class form_table extends form_base
 
 		load_vcl("table");
 		$this->t = new aw_table(array("prefix" => "fg_".$id));
+
+		// reset css style counter
+		$this->used_styles = array();
 
 		// this figures out which fields in the table are numeric and tells the vcl table component about their names
 		$this->set_numeric_fields_in_table();
@@ -959,6 +962,9 @@ class form_table extends form_base
 			}
 		}
 
+		// reset css style counter
+		$this->used_styles = array();
+
 		return $tbl;
 	}
 
@@ -1046,13 +1052,15 @@ class form_table extends form_base
 				{
 					$xml.=" sortable=\"1\" ";
 				}
-				if ($cc["col_style"])
+				if (is_array($cc["styles"]))
 				{
-					$xml.=" style=\"style_".$cc["col_style"]."\"";
-				}
-				if ($cc["col_header_style"])
-				{
-					$xml.=" header_style=\"style_".$cc["col_header_style"]."\"";
+					foreach($cc["styles"] as $k => $v)
+					{
+						if ($v)
+						{
+							$xml.=" $k=\"style_".$v."\"";
+						}
+					}
 				}
 				$xml.=" $numericattr />\n";
 			}
@@ -1061,65 +1069,105 @@ class form_table extends form_base
 		return $xml.="\n</data></tabledef>";
 	}
 
+	////
+	// !this makes sure that only one of each style gets put on the page
+	function chk_get_css($st, $lst)
+	{
+		if (!$this->used_styles[$st])
+		{
+			$this->used_styles[$st] = true;
+			return $this->s->get_css($st,$lst);
+		}
+	}
+
 	function get_css($id = 0)
 	{
 		if ($id)
 		{
 			$this->load_table($id);
 		}
-		$s = get_instance("style");
+		$this->s = get_instance("style");
 		$op = "<style type=\"text/css\">\n";
 
 		if ($this->table["header_normal"])
 		{
-			$op.= $s->get_css($this->table["header_normal"],$this->table["header_link"]);
+			$op.= $this->chk_get_css($this->table["header_normal"],$this->table["header_link"]);
 		}
 		if ($this->table["group_style"])
 		{
-			$op.= $s->get_css($this->table["group_style"],$this->table["link_style"]);
+			$op.= $this->chk_get_css($this->table["group_style"],$this->table["link_style"]);
 		}
 		if ($this->table["header_sortable"])
 		{
-			$op.= $s->get_css($this->table["header_sortable"],$this->table["header_sortable_link"]);
+			$op.= $this->chk_get_css($this->table["header_sortable"],$this->table["header_sortable_link"]);
 		}
 		if ($this->table["header_sorted"])
 		{
-			$op.= $s->get_css($this->table["header_sorted"],$this->table["header_sortable_link"]);
+			$op.= $this->chk_get_css($this->table["header_sorted"],$this->table["header_sortable_link"]);
 		}
 		if ($this->table["content_style1"])
 		{
-			$op.= $s->get_css($this->table["content_style1"],$this->table["link_style1"]);
+			$op.= $this->chk_get_css($this->table["content_style1"],$this->table["link_style1"]);
 		}
 		if ($this->table["content_style2"])
 		{
-			$op.= $s->get_css($this->table["content_style2"],$this->table["link_style2"]);
+			$op.= $this->chk_get_css($this->table["content_style2"],$this->table["link_style2"]);
 		}
 		if ($this->table["content_sorted_style1"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style1"],$this->table["link_style1"]);
+			$op.= $this->chk_get_css($this->table["content_sorted_style1"],$this->table["link_style1"]);
 		}
 		if ($this->table["content_sorted_style2"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style2"]);
+			$op.= $this->chk_get_css($this->table["content_sorted_style2"],$this->table["link_style2"]);
 		}
 		if ($this->table["pg_lb_style"])
 		{
-			$op.= $s->get_css($this->table["pg_lb_style"],0);
+			$op.= $this->chk_get_css($this->table["pg_lb_style"],0);
 		}
 		if ($this->table["pg_text_style"])
 		{
-			$op.= $s->get_css($this->table["pg_text_style"],$this->table["pg_text_style_link"]);
+			$op.= $this->chk_get_css($this->table["pg_text_style"],$this->table["pg_text_style_link"]);
 		}
 
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
-			if ($this->table["defs"][$col]["col_style"])
+			$cc = $this->table["defs"][$col];
+			if (is_array($cc["styles"]))
 			{
-				$op.= $s->get_css($this->table["defs"][$col]["col_style"],$this->table["defs"][$col]["col_link_style"]);
-			}
-			if ($this->table["defs"][$col]["col_header_style"])
-			{
-				$op.= $s->get_css($this->table["defs"][$col]["col_header_style"],$this->table["defs"][$col]["col_header_link_style"]);
+				$st = $cc["styles"];
+				if ($st["header_normal"])
+				{
+					$op.= $this->chk_get_css($st["header_normal"],$st["header_link"]);
+				}
+				if ($st["header_sortable"])
+				{
+					$op.= $this->chk_get_css($st["header_sortable"],$st["header_sortable_link"]);
+				}
+				if ($st["header_sorted"])
+				{
+					$op.= $this->chk_get_css($st["header_sorted"],$st["header_sortable_link"]);
+				}
+				if ($st["content_style1"])
+				{
+					$op.= $this->chk_get_css($st["content_style1"],$st["link_style1"]);
+				}
+				if ($st["content_style2"])
+				{
+					$op.= $this->chk_get_css($st["content_style2"],$st["link_style2"]);
+				}
+				if ($st["content_sorted_style1"])
+				{
+					$op.= $this->chk_get_css($st["content_sorted_style1"],$st["link_style1"]);
+				}
+				if ($st["content_sorted_style2"])
+				{
+					$op.= $this->chk_get_css($st["content_sorted_style2"],$st["link_style2"]);
+				}
+				if ($st["group_style"])
+				{
+					$op.= $this->chk_get_css($st["group_style"],$st["link_style"]);
+				}
 			}
 		}
 
@@ -1842,6 +1890,8 @@ class form_table extends form_base
 			));
 			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
 
+			$sts = $style_inst->get_select(0,ST_CELL, true);
+
 			$this->vars(array(
 				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
 				"col_email" => checked($this->table["defs"][$col]["is_email"]),
@@ -1850,10 +1900,18 @@ class form_table extends form_base
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"]),
 				"no_show_empty" => checked($this->table["defs"][$col]["no_show_empty"]),
 				"has_col_style" => checked($this->table["defs"][$col]["has_col_style"]),
-				"styles" => $this->picker($this->table["defs"][$col]["col_style"], $style_inst->get_select(0,ST_CELL, true)),
-				"link_styles" => $this->picker($this->table["defs"][$col]["col_link_style"], $style_inst->get_select(0,ST_CELL, true)),
-				"header_styles" => $this->picker($this->table["defs"][$col]["col_header_style"], $style_inst->get_select(0,ST_CELL, true)),
-				"header_link_styles" => $this->picker($this->table["defs"][$col]["col_header_link_style"], $style_inst->get_select(0,ST_CELL, true)),
+				"header_normal_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_normal"], $sts),
+				"header_link_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_link"], $sts),
+				"header_sortable_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_sortable"], $sts),
+				"header_sorted_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_sorted"], $sts),
+				"header_sortable_link_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_sortable_link"], $sts),
+				"content_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["content_style1"], $sts),
+				"content_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["content_style2"], $sts),
+				"content_sorted_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["content_sorted_style1"], $sts),
+				"content_sorted_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["content_sorted_style2"], $sts),
+				"link_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style1"], $sts),
+				"link_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style2"], $sts),
+				"group_style_styles" => $this->picker($this->table["defs"][$col]["styles"]["group_style"], $sts),
 			));
 			$hst = "";
 			if ($this->table["defs"][$col]["has_col_style"])
