@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.82 2004/11/26 06:32:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.83 2004/11/29 13:58:48 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -22,7 +22,6 @@ class htmlclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
-		//arr($tpl);
 		if($arr["tplmode"] == "groups")
 		{;
 			$this->tplmode = "groups";
@@ -363,7 +362,12 @@ class htmlclient extends aw_template
 		{
 			$args["value"] = $args["vcl_inst"]->get_html();
 		}
-		
+		if($args["type"] == "reset")
+		{
+			$args["no_caption"] = 1;
+			$args["value"] = $args["caption"];
+			unset($args["caption"]);
+		}
 		if ($args["type"] == "s_status")
 		{
 			if (empty($args["value"]))
@@ -435,7 +439,6 @@ class htmlclient extends aw_template
 	// !Creates a normal line
 	function put_line($args)
 	{
-		//arr($args);
 		$rv = "";
 		$caption = $args["caption"];
 		unset($args["caption"]);
@@ -477,12 +480,10 @@ class htmlclient extends aw_template
 			}
 			else
 			{
-				//arr("LINE".$add);
 				$this->vars($tpl_vars);
 				$rv = $this->parse("LINE".$add);
 			}
 		}
-		//arr($rv);
 		return $rv;
 	}
 
@@ -929,7 +930,6 @@ class htmlclient extends aw_template
 				"reforb" => $this->mk_reforb($action,$data,$orb_class),
 				"SUBMIT" => $sbt,
 			);
-			//arr($this->get_prop_names());
 			$this->sub_tpl->vars($vars);
 		}
 		else
@@ -980,7 +980,6 @@ class htmlclient extends aw_template
 			{
 				if($this->tplmode == "groups")
 				{
-					//arr($this->get_prop_names());
 					$rv = $this->sub_tpl->parse();
 				}
 				else
@@ -1195,7 +1194,7 @@ class htmlclient extends aw_template
 				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
 				break;
-
+			case "reset":
 			case "button":
 				$retval = html::button($arr);
 				break;
