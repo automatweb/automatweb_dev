@@ -50,7 +50,7 @@ class apache_alias extends aw_template
 		};
 
 
-		$q = "SELECT * FROM apache_aliases LIMIT $from,$on_page";
+		$q = "SELECT * FROM apache_aliases ORDER BY alias LIMIT $from,$on_page";
 		$this->db_query($q);
 		$lines = "";
 		while($row = $this->db_next())
@@ -113,6 +113,10 @@ class apache_alias extends aw_template
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
 
+		aw_session_set("ap_error","");
+		aw_session_set("ap_alias","");
+		aw_session_set("ap_dir","");
+
 		return $this->parse();
 	}
 	
@@ -134,7 +138,7 @@ class apache_alias extends aw_template
 		};
 
 		$check = $this->get_record("apache_aliases","alias",$alias);
-		if ($check)
+		if ($check && ($check["id"] != $id))
 		{
 			$error .= "Sellise nimega alias on juba olemas!<br>";
 		};
@@ -186,6 +190,16 @@ class apache_alias extends aw_template
 		while($row = $this->db_next())
 		{
 			$conf .= "Alias /$row[alias] $row[dir]\n";
+		};
+		$fp = @fopen($this->cfg["aliasfile"],"w");
+		if (!$fp)
+		{
+			printf("Faili %s ei saanud kirjutamiseks avada!",$this->cfg["aliasfile"]);
+		}
+		else
+		{
+			fputs($fp,$conf);
+			fclose($fp);
 		};
 		return $conf;
 	}
