@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.39 2004/02/05 13:27:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.40 2004/02/06 09:55:01 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -316,6 +316,28 @@ class ml_list extends class_base
 		return $retval;
 	}
 
+	/** delete members from list
+		
+		@attrib name=delete_members 
+		
+		@param id required type=int 
+		
+	**/
+	function delete_members($arr)
+	{
+		if (is_array($arr["sel"]))
+		{
+			foreach($arr["sel"] as $member_id)
+			{
+				$member_obj = new object($member_id);
+				$member_obj->delete();
+			};
+		};
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => "membership"));
+	}
+	
+	
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -385,7 +407,7 @@ class ml_list extends class_base
 			case "show_mail_message":
 				$data["value"] = $this->gen_ml_message_view($arr);
 				break;
-				
+
 
 		};
 		return $retval;
@@ -446,6 +468,7 @@ class ml_list extends class_base
 		};
 		return $retval;
 	}
+	
 
 	////
 	// !Imports members from a text file / or text block
@@ -623,18 +646,6 @@ class ml_list extends class_base
 		};		
 	}
 
-	function delete_members($arr)
-	{
-		if (is_array($arr["sel"]))
-		{
-			foreach($arr["sel"] as $member_id)
-			{
-				$member_obj = new object($member_id);
-				$member_obj->delete();
-			};
-		};
-		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => "membership"));
-	}
 
 	function gen_list_status_tb($arr)
 	{
@@ -733,6 +744,7 @@ class ml_list extends class_base
 		$member_list = new object_list(array(
 			"parent" => $list_obj->prop("def_user_folder"),
 			"class_id" => CL_ML_MEMBER,
+			"lang_id" => array(),
 		));
 
 		$cnt = 0;
