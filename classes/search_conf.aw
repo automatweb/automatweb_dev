@@ -1051,7 +1051,7 @@ class search_conf extends aw_template
 		$lgps = $this->get_groups(true);
 		$lgps[$this->cfg["site_id"]][aw_global_get("lang_id")] = $grps;
 
-		$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($lgps));
+		$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($lgps));
 		$dat = aw_serialize($lgps,SERIALIZE_XML);
 		$this->quote(&$dat);
 		$c = get_instance("config");
@@ -1061,7 +1061,7 @@ class search_conf extends aw_template
 	function get_groups($no_strip = false)
 	{
 		$cache = get_instance("cache");
-		$cs = $cache->file_get("search_groups::".$this->cfg["site_id"]);
+		$cs = $cache->file_get("search_groups-".$this->cfg["site_id"]);
 		if ($cs)
 		{
 			$ret = aw_unserialize($cs);
@@ -1070,7 +1070,7 @@ class search_conf extends aw_template
 		{
 			$dat = $this->get_cval("search_grps");
 			$ret = aw_unserialize($dat);
-			$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($ret));
+			$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($ret));
 		};
 
 		if ($no_strip)

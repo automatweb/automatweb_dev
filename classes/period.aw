@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.16 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.17 2004/01/22 13:45:07 hannes Exp $
 // period.aw - periods 
 /*
 
@@ -70,8 +70,8 @@ class period extends class_base
 		lc_load("definition");
 		$this->oid = $this->cfg["per_oid"];
 		$this->lc_load("periods","lc_periods");	
-		$this->cf_name = "periods::cache::site_id::".$this->cfg["site_id"]."::period::";
-		$this->cf_ap_name = "active_period::cache::site_id::".$this->cfg["site_id"];
+		$this->cf_name = "periods-cache-site_id-".$this->cfg["site_id"]."-period-";
+		$this->cf_ap_name = "active_period-cache-site_id-".$this->cfg["site_id"];
 		$this->cache = get_instance("cache");
 		$this->init_active_period_cache();
 	}

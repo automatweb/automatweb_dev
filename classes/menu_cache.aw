@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.26 2004/01/06 12:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.27 2004/01/22 13:45:06 hannes Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -123,7 +123,7 @@ class menu_cache extends aw_template
 			$lang_id = aw_global_get("lang_id");
 		}
 		$SITE_ID = $this->cfg["site_id"];
-		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID."::period::".$this->period;
+		$filename = "menuedit-menu_cache-lang-" . $lang_id . "-site_id-" . $SITE_ID."-period-".$this->period;
 		$fn = aw_ini_get("cache.page_cache")."/".$filename;
 		if ($this->loaded_cache != $filename)
 		{
@@ -192,7 +192,7 @@ class menu_cache extends aw_template
 
 				$c_d .= "\n\$cache_loaded = true;";
 				$c_d .= "\n?>";
-				$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID."::period::".$this->period,$c_d);
+				$cache->file_set("menuedit-menu_cache-lang-".$lang_id."-site_id-".$SITE_ID."-period-".$this->period,$c_d);
 			};
 		}
 	}

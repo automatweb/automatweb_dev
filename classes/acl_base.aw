@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.45 2003/12/03 12:02:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.46 2004/01/22 13:45:05 hannes Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -53,7 +53,7 @@ class acl_base extends db_connector
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl::cache(.*)");
+		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 
 	function save_acl($oid,$gid,$aclarr)
@@ -76,7 +76,7 @@ class acl_base extends db_connector
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl::cache(.*)");
+		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 
 	////
@@ -110,7 +110,7 @@ class acl_base extends db_connector
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl::cache(.*)");
+		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -271,7 +271,7 @@ class acl_base extends db_connector
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
 			// try for file cache
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl::cache::".$oid."::uid::".$GLOBALS["__aw_globals"]["uid"];
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
 			if (file_exists($fqfn))
 			{
 //				echo "acl cache hit file $oid ($fqfn) <br>";

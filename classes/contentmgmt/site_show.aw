@@ -1132,9 +1132,7 @@ class site_show extends class_base
 			{
 				// if it has connections pointing to it, then it is, so get the translations from the original
 				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$obj = obj($f_conn->prop("from"));
+				$obj = obj($conn[0]->prop("from"));
 				$conn = $obj->connections_from(array(
 					"type" => RELTYPE_TRANSLATION
 				));
@@ -1736,7 +1734,7 @@ class site_show extends class_base
 	function get_cached_compiled_filename($arr)
 	{
 		$tpl = $arr["tpldir"]."/".$arr["template"];
-		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template::".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
 		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
 		{
 			return $fn;
@@ -1752,7 +1750,7 @@ class site_show extends class_base
 		$code = $co->compile($path, $tpl);
 
 		$tpl = $path."/".$tpl;
-		$fn = "compiled_menu_template::".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+		$fn = "compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
 
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);

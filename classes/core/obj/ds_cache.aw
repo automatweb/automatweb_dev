@@ -92,11 +92,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		$query_hash = md5(serialize($arr));
 
-		$res = $this->_get_cache("search::".$query_hash, 0, "connection");
+		$res = $this->_get_cache("search-".$query_hash, 0, "connection");
 		if (!is_array($res))
 		{
 			$res = $this->contained->find_connections($arr);
-			$this->_set_cache("search::".$query_hash, 0, $res, "connection");
+			$this->_set_cache("search-".$query_hash, 0, $res, "connection");
 		}
 		return $res;
 	}
@@ -120,8 +120,8 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$tp["site_id"] = aw_ini_get("site_id");
 		}
-		$query_hash = "search::".md5(serialize($tp));
-
+		$query_hash = "search-".md5(serialize($tp));
+		
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{
@@ -140,7 +140,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function _get_cache($fn, $oid, $cfn = "objcache")
 	{
-		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$cfn."::$fn::$oid";
+		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$cfn."-$fn-$oid";
 		if (file_exists($fqfn))
 		{
 			include($fqfn);
@@ -157,7 +157,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
 		$str .= "?>";
 
-		$this->cache->file_set($cfn."::$fn::$oid", $str);
+		$this->cache->file_set($cfn."-$fn-$oid", $str);
 	}
 
 	function _clear_cache($oid, $cfn = "objcache")

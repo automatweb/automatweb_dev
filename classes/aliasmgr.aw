@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.136 2004/01/15 13:43:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.137 2004/01/22 13:45:05 hannes Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -248,7 +248,7 @@ class aliasmgr extends aw_template
 			{
 				if (!$cache[$ad->prop('to')])
 				{
-					$cache_inst->file_invalidate_regex('alias_cache::source::'.$id.'::target::'.$ad->prop('to').'.*');
+					$cache_inst->file_invalidate_regex('alias_cache-source-'.$id.'-target-'.$ad->prop('to').'.*');
 				}
 				$ad->change(array(
 					"cached" => $cache[$ad->prop('to')]
@@ -1198,7 +1198,7 @@ HTM;
 				$this->url_hash = gen_uniq_id($this->REQUEST_URI);
 			}
 
-			$key = 'alias_cache::source::'.$adata['from'].'::target::'.$adata['to'].'::urlhash::'.$this->url_hash;
+			$key = 'alias_cache-source-'.$adata['from'].'-target-'.$adata['to'].'-urlhash-'.$this->url_hash;
 			if (($replacement = $cache_inst->file_get($key)) !== false)
 			{
 				return $replacement;
@@ -1233,7 +1233,7 @@ HTM;
 					));
 				}
 
-				$key = 'alias_cache::source::'.$adata['from'].'::target::'.$adata['to'].'::urlhash::'.$this->url_hash;
+				$key = 'alias_cache-source-'.$adata['from'].'-target-'.$adata['to'].'-urlhash-'.$this->url_hash;
 				$cache_inst->file_set($key,$replacement);
 			}
 		}
