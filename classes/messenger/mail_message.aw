@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.16 2003/11/26 16:27:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.17 2003/11/27 16:12:44 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -181,22 +181,30 @@ class mail_message extends class_base
 			// aha .. we just check whether this account has any local folders
 			// set to be used as outbox
 
+			// what should I do in situations where I do not have a messenger?
+			// Like when I'm sending from a list for example
 
+			$fxt = false;
 
-			$msgr = get_instance("messenger/messenger_v2");
-			$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
-			$msgr->_connect_server(array(
-				"msgr_id" => $arr["request"]["msgrid"],
-			));
+			if ($arr["request"]["msgrid"])
+			{
+				$msgr = get_instance("messenger/messenger_v2");
+				$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
+				$msgr->_connect_server(array(
+					"msgr_id" => $arr["request"]["msgrid"],
+				));
 
-			$identities = $msgr->_get_identity_list(array(
-				"id" => $arr["request"]["msgrid"],	
-			));
-			
-			$msgrobj = new object($arr["request"]["msgrid"]);
-			$outbox = $msgrobj->prop("msg_outbox");
+				$identities = $msgr->_get_identity_list(array(
+					"id" => $arr["request"]["msgrid"],	
+				));
+				
+				$msgrobj = new object($arr["request"]["msgrid"]);
+				//$outbox = $msgrobj->prop("msg_outbox");
+				$arr["request"]["parent"] = $msgrobj->prop("msg_outbox");
+				$fxt = true;
+			};	
 
-			if (!empty($outbox))
+			if (!empty($arr["request"]["parent"]))
 			{
 				$to_addr = $arr["request"]["mto"];
 				if (is_numeric($to_addr))
@@ -210,8 +218,11 @@ class mail_message extends class_base
 					$to_list = true;
 				};
 				$arr["request"]["mto"] = $to_addr;
-				$arr["request"]["parent"] = $outbox;
-				$arr["request"]["mfrom"] = $identities[$arr["request"]["mfrom"]];
+				// numeric? then it is identity id, otherwise just trust the value in there
+				if (is_numeric($arr["request"]["mfrom"]))
+				{
+					$arr["request"]["mfrom"] = $identities[$arr["request"]["mfrom"]];
+				};
 				$arr["request"]["rawdata"] = $arr["request"];
 				// this should create a message object in local filesystem
 				// wuhuhuhuuu
@@ -220,9 +231,17 @@ class mail_message extends class_base
 				if ($to_list)
 				{
 					$mllist=get_instance("mailinglist/ml_list");
-					//http://intranet.automatweb.com/automatweb/orb.aw?class=ml_list&action=change&group=mail_report&id=77477&mail_id=83464&cb_part=1&fxt=1
-					$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report","cb_part" => 1,"fxt" => 1),"ml_list");
-					//$route_back=$this->mk_my_orb("change",array("id" => $this->id,"group" => "message_view"));
+					// if sending from messenger, then we are inside a popup
+					// and don't want to display the rest of the list interface 
+					// form (or perhaps I do?)
+					if ($fxt)
+					{
+						$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report","cb_part" => 1,"fxt" => 1),"ml_list");
+					}
+					else
+					{
+						$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report"),"ml_list");
+					};
 					aw_session_set("route_back",$route_back);
 					// scheduleerib kirjade saatmise
 					$url=$mllist->route_post_message(array("id" => $this->id, "targets" => $lists));
@@ -563,7 +582,7 @@ class mail_message extends class_base
 			$rv["value"] = htmlspecialchars($this->msgdata["from"]);
 			$rv["type"] = "text";
 		}
-		else
+		elseif (isset($arr["request"]["msgrid"]))
 		{
 			$msgr = get_instance("messenger/messenger_v2");
 			$rv["type"] = "select";
@@ -574,7 +593,11 @@ class mail_message extends class_base
 			{
 				$rv["options"][$key] = htmlspecialchars($item);
 			};
-		};	
+		}
+		else
+		{
+			$rv["type"] = "textbox";
+		};
 		return array($rv);
 	}
 	
