@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.6 2004/01/13 14:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.7 2004/01/19 12:35:49 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -67,9 +67,18 @@ caption Msn/yahoo/aol/icq
 
 @default group=contact
 @caption Kontaktandmed
+	
+@property email type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail
+@caption Meiliaadressid
 
-@property email type=textbox store=no 
-@caption E-post
+@property phone type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_PHONE props=name
+@caption Telefoninumbrid
+
+@property url type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url
+@caption Veebiaadressid
+
+//property email type=textbox store=no 
+//caption E-post
 
 @default group=overview
 
@@ -85,6 +94,7 @@ caption Msn/yahoo/aol/icq
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
+@groupinfo contact caption="Kontaktandmed"
 @groupinfo overview caption=Tegevused
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
@@ -168,8 +178,17 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype CALL value=9 clid=CL_CRM_CALL
 @caption kõne
 
-@reltype TASK value=9 clid=CL_TASK
+@reltype TASK value=10 clid=CL_TASK
 @caption toimetus
+
+@reltype EMAIL value=11 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype URL value=12 clid=CL_EXTLINK
+@caption Veebiaadress
+
+@reltype PHONE value=13 clid=CL_CRM_PHONE
+@caption Telefon
 
 
 */
@@ -202,7 +221,15 @@ class crm_person extends class_base
 				break;
 
 			case "email":
-				$this->upd_contact_data($arr);
+				$this->process_email($arr);
+				break;
+			
+			case "phone":
+				$this->process_phone($arr);
+				break;
+
+			case "url":
+				$this->process_url($arr);
 				break;
 		};
 		return $retval;
@@ -231,6 +258,7 @@ class crm_person extends class_base
 				break;
 
 			case "email":
+				/*
 				$personal_contact = $arr["obj_inst"]->prop("personal_contact");
 				if ($personal_contact)
 				{
@@ -238,6 +266,7 @@ class crm_person extends class_base
 					$addr = new object($pc->prop("primary_mail"));
 					$data["value"] = $addr->prop("mail");
 				};
+				*/
 				break;
 				
 
@@ -250,6 +279,98 @@ class crm_person extends class_base
 		}
 		return $retval;
 
+	}
+
+	function process_email($arr)
+	{
+		$prop = $arr["prop"];
+
+                $target_reltype = constant($prop["reltype"]);
+                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
+
+                // now get a bloody instance of that object.
+
+                $inst = get_instance($clid);
+                $inst->id_only = true;
+
+                $req = $arr["request"]["cb_emb"]["email"];
+
+                if (empty($req["new"]["mail"]))
+                {
+                        return false;
+                }
+
+                $member_id = $inst->submit(array(
+                        "name" => $req["new"]["mail"],
+                        "mail" => $req["new"]["mail"],
+                        "parent" => $req["new"]["parent"],
+                ));
+
+                $arr["obj_inst"]->connect(array(
+                        "to" => $member_id,
+                        "reltype"=> RELTYPE_EMAIL,
+                ));
+	}
+	
+	function process_phone($arr)
+	{
+		$prop = $arr["prop"];
+
+                $target_reltype = constant($prop["reltype"]);
+                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
+
+                // now get a bloody instance of that object.
+
+                $inst = get_instance($clid);
+                $inst->id_only = true;
+
+                $req = $arr["request"]["cb_emb"]["phone"];
+
+                if (empty($req["new"]["name"]))
+                {
+                        return false;
+                }
+
+                $member_id = $inst->submit(array(
+                        "name" => $req["new"]["name"],
+                        "parent" => $req["new"]["parent"],
+                ));
+
+                $arr["obj_inst"]->connect(array(
+                        "to" => $member_id,
+                        "reltype"=> RELTYPE_PHONE,
+                ));
+	}
+	
+	function process_url($arr)
+	{
+		$prop = $arr["prop"];
+
+                $target_reltype = constant($prop["reltype"]);
+                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
+
+                // now get a bloody instance of that object.
+
+                $inst = get_instance($clid);
+                $inst->id_only = true;
+
+                $req = $arr["request"]["cb_emb"]["url"];
+
+                if (empty($req["new"]["url"]))
+                {
+                        return false;
+                }
+
+                $member_id = $inst->submit(array(
+                        "name" => $req["new"]["name"],
+                        "url" => $req["new"]["url"],
+                        "parent" => $req["new"]["parent"],
+                ));
+
+                $arr["obj_inst"]->connect(array(
+                        "to" => $member_id,
+                        "reltype"=> RELTYPE_URL,
+                ));
 	}
 
 	function isik_toolbar(&$args)
@@ -284,6 +405,8 @@ class crm_person extends class_base
 			$user_calendar = new object($cal_id);
 			$parents[RELTYPE_ISIK_KONE] = $parents[RELTYPE_ISIK_KOHTUMINE] = $user_calendar->prop('event_folder');
 		}
+
+		/*
 
 		$alist = array(
 			array('caption' => 'Organisatsioon','class' => 'crm_company', 'reltype' => RELTYPE_WORK),
@@ -328,6 +451,7 @@ class crm_person extends class_base
 			};
 		
 		};
+		*/
 		
 		
 
@@ -411,10 +535,115 @@ class crm_person extends class_base
 
 	function fetch_person_by_id($arr)
 	{
+		// how do I figure out the _last_ action done with a person?
+
+		// I need today's date..
+		// I need a list of all events that have a calendar presentation
+		// and then I just fetch the latest thingie
+
+		// easy as pie
+
+		
 		$o = new object($arr["id"]);
+		$cal_id = $arr["cal_id"];
 
+		$phones = $emails = $urls = $ranks = array();
 
+		$tasks = $o->connections_from(array(
+			"type" => array(9,10),
+		));
 
+		$to_ids = array();
+		foreach($tasks as $task)
+		{
+			$to_ids[] = $task->prop("to");
+		};
+
+		if (aw_global_get("uid") == "duke")
+		{
+			if (sizeof($to_ids) > 0)
+			{
+				// find the latest object from the tables
+				 $olist = new object_list(array(
+					"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL),
+					"oid" => $to_ids,
+					"sort_by" => "planner.start DESC",
+					"limit" => 1,
+				));
+				print "from = " . $o->id();
+				print "name = " . $o->name();
+				print "<pre>";
+				print_r($olist->ids());
+				print "</pre>";
+			};
+		};
+
+		$conns = $o->connections_from(array(
+                        "type" => 13,
+                ));
+		foreach($conns as $conn)
+		{
+			$phones[] = $conn->prop("to.name");
+		};
+		
+		$conns = $o->connections_from(array(
+                        "type" => 12,
+                ));
+		foreach($conns as $conn)
+		{
+			$url_o = $conn->to();
+			$urls[] = html::href(array(
+				"url" => $url_o->prop("url"),
+				"caption" => $url_o->prop("url"),
+			));
+		};
+		
+		$conns = $o->connections_from(array(
+                        "type" => 11,
+                ));
+		foreach($conns as $conn)
+		{
+			$to_obj = $conn->to();
+			$emails[] = $to_obj->prop("mail");
+		};
+		
+		$conns = $o->connections_from(array(
+                        "type" => 7,
+                ));
+		foreach($conns as $conn)
+		{
+			$ranks[] = $conn->prop("to.name");
+		};
+
+		$rv = array(
+			"phone" => join(",",$phones),
+			"url" => join(",",$urls),
+			"email" => join(",",$emails),
+			"rank" => join(",",$ranks),
+			"add_task_url" => $this->mk_my_orb("change",array(
+				"id" => $cal_id,
+				"group" => "add_event",
+				"alias_to_org" => $o->id(),
+				"reltype_org" => 10,
+				"clid" => CL_TASK,
+			),CL_PLANNER),
+			"add_call_url" => $this->mk_my_orb("change",array(
+				"id" => $cal_id,
+				"group" => "add_event",
+				"alias_to_org" => $o->id(),
+				"reltype_org" => 9,
+				"clid" => CL_CRM_CALL,
+			),CL_PLANNER),
+			"add_meeting_url" => $this->mk_my_orb("change",array(
+				"id" => $cal_id,
+				"group" => "add_event",
+				"alias_to_org" => $o->id(),
+				"reltype_org" => 8,
+				"clid" => CL_CRM_MEETING,
+			),CL_PLANNER),
+			
+		);
+		return $rv;
 	}
 
 	function upd_contact_data($arr)
@@ -617,6 +846,10 @@ class crm_person extends class_base
 		extract($args);
 		return $this->show(array('id' => $alias['target']));
 	}
+
+	////
+	// !Perhaps I can make a single function that returns the latest event (if any)
+	// for each connection?
 	
 	function do_org_actions($arr)
 	{
@@ -652,6 +885,7 @@ class crm_person extends class_base
 
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
+		classload("icons");
 
 		foreach($conns as $conn)
 		{
@@ -663,16 +897,9 @@ class crm_person extends class_base
 			
 			$cldat = $classes[$item->class_id()];
 
-			if ($item->class_id() == CL_CRM_CALL)
+			if ($item->class_id() == CL_CRM_CALL || $item->class_id() == CL_CRM_MEETING)
 			{
-				if ($item->prop("is_done") == "")
-				{
-					$icon = "call-todo.gif";
-				}
-				else
-				{
-					$icon = "call-done.gif";
-				};
+				$icon = icons::get_icon_url($item);
 			}
 			else
 			{
