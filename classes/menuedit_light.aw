@@ -17,6 +17,7 @@ class menuedit_light extends aw_template
 		// vaatame ainult seda tüüpi objekte
 		$this->class_id = ($args["class_id"]) ? $args["class_id"] : CL_PSEUDO;
 		$this->type = $args["type"];
+		$this->try_aliases = ($args["try_aliases"]) ? $args["try_aliases"] : 0;
 		//
 		$this->field = ($args["field"]) ? $args["field"] : "oid";
 		$this->sq = (isset($args["sq"])) ? $args["sq"] : 3;
@@ -28,6 +29,7 @@ class menuedit_light extends aw_template
 		$this->add_start_from = ($args["add_start_from"]) ? $args["add_start_from"] : false;
 		// kui see on true, siis kasutatakse ainult ühte ja esimest templatet
 		$this->single_tpl = ($args["single_tpl"]) ? $args["single_tpl"] : false;
+		$this->alias_stack = array();
 		// moodustame 2mootmelise array koigist objektidest
 		// parent -> child1,(child2,...childn)
 		$this->object_list = array(); // siia satuvad koik need objektid
@@ -137,6 +139,16 @@ class menuedit_light extends aw_template
 					{
 						$tpl = $this->tlist[$this->level + 1][0];
 					};
+					if ($v["alias"] && sizeof($this->alias_stack) == $this->level)
+					{
+						  $obj_id = join("/",$this->alias_stack);
+						  $obj_id .= "/" . $v["alias"];
+					}
+					else
+					{
+						$obj_id = $id;
+					};
+
 					$this->vars(array(
 						"oid" => $id,
 						"name" => $v["name"],
@@ -149,9 +161,17 @@ class menuedit_light extends aw_template
 					$this->res[$id] = $name;
 				};
 				$this->level++;
+				if ($v["alias"])
+				{
+						array_push($this->alias_stack,$v["alias"]);
+				};
 				$this->_recurse_object_list(array(
 					"parent" => $v[$this->field],
 				));
+				if ($v["alias"])
+				{
+						array_pop($this->alias_stack);
+				};
 				$this->level--;
 			};
 		}
