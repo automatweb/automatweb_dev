@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.16 2004/10/05 09:23:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.17 2004/10/29 16:06:21 duke Exp $
 
 ////
 // !get_date_range
@@ -128,8 +128,8 @@ function get_date_range($args = array())
 			$start_ts = mktime(0,0,0,1,1,$y);
 			$end_ts = mktime(23,59,59,12,31,$y);
 			
-			$prev = mktime(0,0,0,$d,$m,$y-1);
-			$next = mktime(23,59,59,$d,$m,$y+1);
+			$prev = mktime(0,0,0,$m,$d,$y-1);
+			$next = mktime(23,59,59,$m,$d,$y+1);
 			break;
 		
 		case "3month":
@@ -208,7 +208,7 @@ function get_date_range($args = array())
 
 		case "last_events":
 			$start_ts = $rg_start;
-			$end_ts = time()+24*3600*1000; // far enough methinks
+			$end_ts = time()+24*3600*100; // far enough methinks
 
 			$next = $end_ts + 1;
 			$prev = $start_ts - 1;
