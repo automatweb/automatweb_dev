@@ -108,7 +108,11 @@ function apply_editor_style(doc,val,iframe)
 	doc.write("<body class='text'>");
 	//doc.write(val);
 	// val = val.replace(/\r/,"");
-	doc.write(val.replace(/\r\n/gi,"<br>\r\n"));
+	// siin tuleb teha asendus .. v.a. juhul kui tegemist on lõpetava <b> tagiga, siis
+	// me asendust ei tee.
+	// kui on midagi muudd peale >, siis whitespacet ja siis reavahe, siis asenda
+	val = val.replace(/([|^>|^>\s+])[\r\n|\n]/gi,"$1<br>\r\n")
+	doc.write(val.replace(/><br>/gi,">"))
 	//doc.write(val.replace(/\n/gi,"<br>\n"));
 	doc.writeln("</body></html>");
 	doc.close();
