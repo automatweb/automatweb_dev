@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.11 2004/02/17 20:38:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.12 2004/02/25 16:06:41 kristo Exp $
 /*
 
 @default table=objects
@@ -84,8 +84,16 @@ class dronline_conf extends class_base
 
 		if ($prop['name'] == 'user')
 		{
-			$ui = get_instance('users');
-			$prop['options'] = $ui->get_user_picker(array('add_empty' => true));
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"site_id" => array(),
+				"lang_id" => array()
+			));
+			$prop["options"] = array();	
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				$prop["options"][$o->prop("uid")] = $o->prop("uid");
+			}
 		}
 		else
 		if ($prop['name'] == 'from' && $arr['new'])
