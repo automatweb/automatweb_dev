@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.2 2004/11/10 12:44:16 duke Exp $
 // messenger_config.aw - Messengeri config 
 /*
 
@@ -12,6 +12,7 @@
 
 @property msgs_on_page type=select 
 @caption Kirju lehel
+
 
 */
 
@@ -62,7 +63,6 @@
 
 */
 
-define("RELTYPE_MAIL_FOLDER",1);
 
 class messenger_config extends class_base
 {
@@ -103,27 +103,6 @@ class messenger_config extends class_base
 		return $retval;
 	}	
 	*/
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_MAIL_FOLDER => "meilikataloog",
-			RELTYPE_MAIL_SOURCE => "mailikonto",
-			RELTYPE_CONFIG => "messengeri konfiguratsioon",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_MAIL_SOURCE:
-				$retval = array(CL_PROTO_POP3);
-				break;
-		};
-		return $retval;
-	}
 
 
 
