@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.32 2002/11/07 10:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.33 2002/11/07 23:04:32 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -369,8 +369,9 @@ class file extends aw_template
 				"parent" => $parent,
 				"return_url" => $return_url,
 				"user" => $user,
-				"alias_to" => $alias_to
-			))
+				"alias_to" => $alias_to,
+				"is_aip" => $GLOBALS["is_aip"]
+			)),
 		));
 		return $this->parse();
 	}
@@ -436,6 +437,12 @@ class file extends aw_template
 				}
 				$this->_log("fail","Lisas faili $file_name ($pid)");
 			};
+
+			// ok, I hate mysqlf for doing this, but I can't do it any other way, sorry :(
+			if ($is_aip)
+			{
+				$this->db_query("INSERT INTO aip_files (filename, tm, menu_id, id) VALUES('$file_name','".time()."','".$parent."','$pid')");
+			}
 
 			// defineerime voimalikud orb-i väärtused siin ära
 
@@ -709,7 +716,7 @@ class file extends aw_template
 				"type" => $type
 			));
 
-			return array("id" => $id,"url" => $this->get_url($id,$fname));
+			return array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);
 		}
 		else
 		{
@@ -730,7 +737,7 @@ class file extends aw_template
 				}
 				else
 				{
-					return array("id" => $file_id,"url" => $this->get_url($file_id, $fd["name"]));
+					return array("id" => $file_id,"url" => $this->get_url($file_id, $fd["name"]), "orig_name" => $fd["name"]);
 				}
 			}
 			else
