@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.7 2004/03/17 13:43:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.8 2004/03/18 16:18:26 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -162,13 +162,16 @@ class releditor extends aw_template
 			{
 				// take the first
 				$o = $arr["obj_inst"];
-				$conns = $o->connections_from(array(
-					"type" => $prop["reltype"],
-				));
-				$key = reset($conns);
-				if ($key)
+				if (is_oid($o->id()))
 				{
-					$obj_inst = $key->to();
+					$conns = $o->connections_from(array(
+						"type" => $prop["reltype"],
+					));
+					$key = reset($conns);
+					if ($key)
+					{
+						$obj_inst = $key->to();
+					};
 				};
 			};
 		};
@@ -193,13 +196,20 @@ class releditor extends aw_template
 
 		};
 
-		if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
+		if (($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
+		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
 		{
+			// I might not want a submit button, eh?
 			$act_props["sbt"] = array(
 				"type" => "submit",
 				"name" => "sbt",
 				"value" => "Salvesta",
 			);
+		};
+
+		if (!$obj_inst)
+		{
+			$obj_inst = new object();
 		};
 
 		$xprops = $t->parse_properties(array(
@@ -351,6 +361,9 @@ class releditor extends aw_template
 					$filename = $_fileinf["name"][$name];
 					$filetype = $_fileinf["type"][$name];
 					$tmpname = $_fileinf["tmp_name"][$name];
+					$contents = $this->get_file(array(
+						"file" => $tmpname,
+					));
 					// tundub, et polnud sellist faili, eh?
 					if (empty($tmpname))
 					{
@@ -360,7 +373,9 @@ class releditor extends aw_template
 						"tmp_name" => $tmpname,
 						"type" => $filetype,
 						"name" => $filename,
+						"contents" => $contents,
 					);
+					$el_count++;
 				}
 				else
 				{
@@ -373,7 +388,7 @@ class releditor extends aw_template
 
                         };
                 };
-	
+
 		// TODO: make it give feedback to the user, if an object can not be added
 		if ($el_count == 0)
 		{
