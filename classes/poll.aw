@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.39 2003/06/26 14:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.40 2003/07/01 10:20:54 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -459,10 +459,20 @@ class poll extends aw_template
 		$lid = aw_global_get("lang_id");
 		$section = aw_global_get("section");
 
+
 		$this->dequote(&$ap);
+		if (is_array($ap["meta"]["name"]))
+		{
+			$namear = $ap["meta"]["name"];
+		}
+		else
+		{
+			$namear = $ap["meta"]["names"];
+		}
+
 		$this->vars(array(
 			"poll_id" => $ap["oid"], 
-			"question" => ($ap["meta"]["name"][$lid] == "" ? $ap["name"] : $ap["meta"]["name"][$lid]),
+			"question" => ($namear[$lid] == "" ? $ap["name"] : $namear[$lid]),
 			"set_lang_id" => $lid
 		));
 
@@ -619,8 +629,17 @@ class poll extends aw_template
 
 		$qs = aw_unserialize($poll["questions"]);
 
+		if (is_array($poll["meta"]["name"]))
+		{
+			$namear = $poll["meta"]["name"];
+		}
+		else
+		{
+			$namear = $poll["meta"]["names"];
+		}
+		$this->dequote(&$namear);
 
-		$na = $poll["meta"]["name"][aw_global_get("lang_id")];
+		$na = $namear[aw_global_get("lang_id")];
 		$this->vars(array(
 			"ANSWER" => $as,
 			"question" => ($na == "" ? $poll["name"] : $na),
