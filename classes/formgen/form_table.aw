@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.45 2003/07/07 13:51:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.46 2003/07/08 08:43:32 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -21,6 +21,7 @@ class form_table extends form_base
 			"chpos" => "Move",
 			"order" => "Order", 
 			"select" => "Select",
+			"hidden_select" => "Peidetud Select",
 			"jrk" => "Jrk",
 			"cnt" => "Count",
 			"formel" => "Koguse element",
@@ -376,6 +377,7 @@ class form_table extends form_base
 				$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
 			};
 			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked(isset($this->table["select_default"]) && ($this->table["select_default"]))." VALUE='1'>";
+			$dat["ev_hidden_select"] = "<input type='hidden' name='sel[".$dat["entry_id"]."]' ".checked(isset($this->table["select_default"]) && ($this->table["select_default"]))." VALUE='1'>";
 			$dat["ev_jrk"] = "[__jrk_replace__]";
 		}
 
