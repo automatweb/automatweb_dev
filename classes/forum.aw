@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.21 2001/11/20 14:29:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.22 2001/11/29 22:03:02 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -521,7 +521,7 @@ class forum extends aw_template
 			{
 				$this->add_alias($parent,$id);
 			}
-			$retval = $this->mk_my_orb("change",array("id" => $parent),"document");
+			$retval = $this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr");
 		}
 		else
 		{
@@ -529,7 +529,8 @@ class forum extends aw_template
 			$parobj = $this->get_object($thisobj["parent"]);
 			if ($parobj["class_id"] == CL_DOCUMENT)
 			{
-				$retval = $this->mk_my_orb("change",array("id" => $parobj["oid"]),"document");
+				$this->add_alias($thisobj["parent"],$id);
+				$retval = $this->mk_my_orb("list_aliases",array("id" => $parobj["oid"]),"aliasmgr");
 			}
 			else
 			{
@@ -559,6 +560,9 @@ class forum extends aw_template
 	function submit_search($args = array())
 	{
 		extract($args);
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
 
 	}
 
