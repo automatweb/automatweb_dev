@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.78 2003/02/05 20:15:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.79 2003/02/13 09:37:18 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -481,14 +481,14 @@ class users extends users_user
 			$this->save(array("uid" => $arr["id"], "email" => $arr["email"]));
 		}
 
-		if ($send_welcome_mail && $arr["pwd"] == "")
+		if ($send_welcome_mail)
 		{
 			$udata = $this->get_user(array("uid" => $arr["id"]));
 
 			// send him some email as well if the users selected to do so
 			$c = get_instance("config");
 			$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
-			$mail = str_replace("#parool#", $udata["password"],$mail);
+			$mail = str_replace("#parool#", $arr["pwd"],$mail);
 			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $arr["id"]))),$mail);
 			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
