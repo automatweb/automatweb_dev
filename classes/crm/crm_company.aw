@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.9 2004/01/13 17:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.10 2004/01/16 12:20:44 kristo Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -45,8 +45,16 @@ caption Õiguslik vorm
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Organisatsiooni juht
 
+@property addresslist type=text store=no group=humanres no_caption=1
+@caption Aadressid
+
 @property human_resources type=table store=no group=humanres no_caption=1
 @caption Inimesed
+
+@default group=tasks_overview
+
+@property tasks_call type=text store=no no_caption=1
+@caption Kõned
 
 @default group=overview
 
@@ -62,12 +70,13 @@ caption Õiguslik vorm
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
-@groupinfo humanres caption="Inimesed"
-@groupinfo overview caption="Seotud tegevused" 
+@groupinfo humanres caption="Kontaktid" submit=no
+@groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
+@groupinfo tasks_overview caption="Ülevaade" submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -101,6 +110,18 @@ caption Õiguslik vorm
 
 @reltype TASK value=13 clid=CL_TASK
 @caption Toimetus
+
+@reltype TASK value=14 clid=CL_TASK
+@caption toimetus
+
+@reltype EMAIL value=15 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype URL value=16 clid=CL_EXTLINK
+@caption Veebiaadress
+
+@reltype PHONE value=17 clid=CL_CRM_PHONE
+@caption Telefon
 
 @classinfo no_status=1
 			
@@ -164,6 +185,14 @@ class crm_company extends class_base
 			case "human_resources":
 				$this->do_human_resources($arr);
 				break;
+
+			case "tasks_call":
+				$this->do_tasks_call($arr);
+				break;
+
+			case "addresslist":
+				$this->do_addresslist($arr);
+				break;
 			
 		};
 		return $retval;
@@ -209,20 +238,69 @@ class crm_company extends class_base
                         'caption' => 'Viimane tegevus',
                         'sortable' => '1',
                 ));
+		$t->define_field(array(
+			'name' => 'new_call',
+			'align' => 'center',
+		));
+		$t->define_field(array(
+			'name' => 'new_meeting',
+			'align' => 'center',
+		));
+		$t->define_field(array(
+			'name' => 'new_task',
+			'align' => 'center',
+		));
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_WORKERS,
 		));
 
 		$crmp = get_instance(CL_CRM_PERSON);
 
-		// now I need a way to figure out the phone number for a person and I think
-		// the best way to accomplish that would be in the crm_person class
+		// http://intranet.automatweb.com/automatweb/orb.aw?class=planner&action=change&alias_to_org=87521&reltype_org=RELTYPE_ISIK_KOHTUMINE&id=46394&clid=224&group=add_event&title=Kohtumine:%20Anti%20Veeranna&parent=46398
+
+		// to get those adding links work, I need 
+		// 1. id of my calendar
+		// 2. relation type
+		// alias_to_org oleks isiku id
+		// reltype_org oleks vastava seose id
+
+		$users = get_instance("users");
+		$cal_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "user_calendar",
+		));
+
+		// XXX: I should check whether $this->cal_id exists and only include those entries
+		// when it does.
+
+		// call : rel=9 : clid=CL_CRM_CALL
+		// meeting : rel=8 : clid=CL_CRM_MEETING
+		// task : rel=10 : clid=CL_TASK
 		foreach($conns as $conn)
 		{
 			$idat = $crmp->fetch_all_data($conn->prop("to"));
+			$pdat = $crmp->fetch_person_by_id(array(
+				"id" => $conn->prop("to"),
+				"cal_id" => $cal_id,
+			));
 			$t->define_data(array(
 				"name" => $conn->prop("to.name"),
 				"id" => $conn->prop("to"),
+				"phone" => $pdat["phone"],
+				"email" => $pdat["email"],
+				"rank" => $pdat["rank"],
+				"new_task" => html::href(array(
+					"caption" => "Uus toimetus",
+					"url" => $pdat["add_task_url"],
+				)),
+				"new_call" => html::href(array(
+					"caption" => "Uus kõne",
+					"url" => $pdat["add_call_url"],
+				)),
+				"new_meeting" => html::href(array(
+					"caption" => "Uus kohtumine",
+					"url" => $pdat["add_meeting_url"],
+				)),
 			));
 		};
 
@@ -231,13 +309,65 @@ class crm_company extends class_base
 	function callb_human_name($arr)
 	{
 		return html::href(array(
-			"url" => $this->mk_my_orb("change",array("id" => $arr["id"]),CL_CRM_PERSON),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["id"],
+				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+			),CL_CRM_PERSON),
 			"caption" => $arr["name"],
 		));
+	}
+
+	function do_tasks_call($arr)
+	{
+		$prop = &$arr["prop"];
+		$obj = $arr["obj_inst"];
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_CALL,
+		));
+		$rv = "";
+		foreach($conns as $conn)
+		{
+			$target_obj = $conn->to();
+			$inst = $target_obj->instance();
+			if (method_exists($inst,"request_execute"))
+			{
+				$rv .= $inst->request_execute($target_obj);
+			};
+		};
+		$prop["value"] = $rv;
+	}
+	
+	function do_addresslist($arr)
+	{
+		$prop = &$arr["prop"];
+		$obj = $arr["obj_inst"];
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_ADDRESS,
+		));
+		$rv = "";
+		foreach($conns as $conn)
+		{
+			$target_obj = $conn->to();
+			$inst = $target_obj->instance();
+			if (method_exists($inst,"request_execute"))
+			{
+				$rv .= $inst->request_execute($target_obj);
+			};
+		};
+		$prop["value"] = $rv;
 	}
 	
 	function do_org_actions($arr)
 	{
+		// whee, this thing includes project and that uses properties, so we gots
+		// to do this here or something. damn, we need to do the reltype
+		// loading in get_instance or something
+		$cfgu = get_instance("cfg/cfgutils");
+		$cfgu->load_class_properties(array(
+			"file" => "project",
+			"clid" => 239
+		));
+
 		$ob = $arr["obj_inst"];
 		$args = array();
 		switch($arr["prop"]["name"])
@@ -294,17 +424,11 @@ class crm_company extends class_base
 			};
 			
 			$cldat = $classes[$item->class_id()];
+			classload("icons");
 
-			if ($item->class_id() == CL_CRM_CALL)
+			if ($item->class_id() == CL_CRM_CALL || $item->class_id() == CL_CRM_MEETING)
 			{
-				if ($item->prop("is_done") == "")
-				{
-					$icon = "call-todo.gif";
-				}
-				else
-				{
-					$icon = "call-done.gif";
-				};
+				$icon = icons::get_icon_url($item);
 			}
 			else
 			{
