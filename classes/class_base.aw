@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.280 2004/06/22 14:36:39 duke Exp $
+// $Id: class_base.aw,v 2.281 2004/06/25 20:22:47 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -112,6 +112,8 @@ class class_base extends aw_template
 			"reminder" => "vcl/reminder",
 			"popup_search" => "vcl/popup_search",
 			"treeview" => "vcl/treeview",
+			"toolbar" => "vcl/toolbar",
+			//"relationmgr" => "vcl/relationmgr",
 		);
 
 		// XXX: this is temporary
@@ -2034,16 +2036,14 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
+			//if (($val["type"] == "toolbar") && !is_object($val["toolbar"]))
+			if ($val["type"] == "toolbar")
 			{
-				classload("toolbar");
-				$val["toolbar"] = new toolbar();
 				if ($this->layout_mode == "fixed_toolbar")
 				{
-					$val["toolbar"]->set_opt("button_target","contentarea");
+					$val["vcl_inst"]->set_opt("button_target","contentarea");
 				};
 			};
-
 
 			if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
 			{
@@ -2135,7 +2135,7 @@ class class_base extends aw_template
 				$awt->stop("get_property_${pname}");
 			};
 
-			
+		
 			$val["_parsed"] = 1;
 
 			if ($status === PROP_IGNORE)
@@ -2232,7 +2232,7 @@ class class_base extends aw_template
 							{
 								continue;
 							};
-							$val["toolbar"]->add_button(array(
+							$val["vcl_inst"]->add_button(array(
 								"name" => "grp_" . $grp_id,
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
@@ -2249,7 +2249,7 @@ class class_base extends aw_template
 					{
 						$rte = get_instance("vcl/rte");
 						$rte->get_rte_toolbar(array(
-							"toolbar" => &$val["toolbar"],
+							"toolbar" => &$val["vcl_inst"],
 							"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
 						));
 					};
