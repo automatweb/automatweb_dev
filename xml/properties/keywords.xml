@@ -27,6 +27,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </KEYWORD>
+            <FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Fail</caption>
+            </FILE>
       </reltypes>
 </properties>
 

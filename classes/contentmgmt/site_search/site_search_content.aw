@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.22 2004/11/16 13:53:19 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.23 2004/11/16 13:57:11 sven Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -448,10 +448,14 @@ class site_search_content extends class_base
 			"to" => $ids_list,
 			"from.class_id" => CL_DOCUMENT,
 		));
-		arr($aliased_docs_conns);
+		
 		foreach ($aliased_docs_conns as $conn)
 		{
 			$doc_ids[] = $conn["from"];	
+		}
+		if(!$doc_ids)
+		{
+			return;
 		}
 		
 		$ol = new object_list(array(
