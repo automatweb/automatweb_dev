@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.158 2002/10/01 11:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.159 2002/10/02 12:27:43 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -3792,7 +3792,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->invalidate_menu_cache($this->updmenus);
 
-		return $this->mk_orb("menu_list", array("parent" => $parent));
+		return $this->mk_my_orb("right_frame", array("parent" => $parent));
 	}
 
 	function req_import_menus($i_p, &$menus, $parent)
@@ -3926,14 +3926,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->invalidate_menu_cache($updmenus);
 
 		$GLOBALS["copied_objects"] = array();
-		if ($from_menu)
-		{
-			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		}
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	function o_delete($arr)
@@ -5616,6 +5609,102 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		));
 
 		$this->read_template("right_frame.tpl");
+
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		
+		if ($this->can("add", $parent))
+		{
+			$toolbar->add_cdata($add_applet);
+		};
+
+		$toolbar->add_button(array(
+                        "name" => "save",
+                        "tooltip" => "Salvesta",
+                        "url" => "javascript:document.foo.submit()",
+                        "imgover" => "save_over.gif",
+                        "img" => "save.gif",
+                ));
+		$toolbar->add_separator();
+		
+		$toolbar->add_button(array(
+                        "name" => "cut",
+                        "tooltip" => "Cut",
+                        "url" => "javascript:submit('cut')",
+                        "imgover" => "cut_over.gif",
+                        "img" => "cut.gif",
+                ));
+		
+		$toolbar->add_button(array(
+                        "name" => "copy",
+                        "tooltip" => "Copy",
+                        "url" => "javascript:submit('copy')",
+                        "imgover" => "copy_over.gif",
+                        "img" => "copy.gif",
+                ));
+		
+		if (count($sel_objs) > 0)
+		{
+			$toolbar->add_button(array(
+				"name" => "paste",
+				"tooltip" => "Paste",
+				"url" => "javascript:submit('paste')",
+				"imgover" => "paste_over.gif",
+				"img" => "paste.gif",
+			));
+		};
+		
+		$toolbar->add_button(array(
+                        "name" => "delete",
+                        "tooltip" => "Delete",
+                        "url" => "javascript:submit('delete')",
+                        "imgover" => "delete_over.gif",
+                        "img" => "delete.gif",
+                ));
+		
+		$toolbar->add_button(array(
+                        "name" => "edit",
+                        "tooltip" => "Edit",
+                        "url" => "javascript:change()",
+                        "imgover" => "edit_over.gif",
+                        "img" => "edit.gif",
+                ));
+		
+		$toolbar->add_separator();
+		
+		$toolbar->add_button(array(
+                        "name" => "refresh",
+                        "tooltip" => "Refresh",
+                        "url" => "javascript:window.location.reload()",
+                        "imgover" => "refresh_over.gif",
+                        "img" => "refresh.gif",
+                ));
+		
+		$toolbar->add_button(array(
+                        "name" => "import",
+                        "tooltip" => "Import",
+                        "url" => $this->mk_my_orb("import",array("parent" => $parent)),
+                        "imgover" => "import_over.gif",
+                        "img" => "import.gif",
+                ));
+		
+		$toolbar->add_button(array(
+                        "name" => "bugtrack",
+                        "tooltip" => "Bugtrack",
+                        "url" => $this->mk_my_orb("list",array("filt" => "all"),"bugtrack"),
+                        "imgover" => "bugtrack_over.gif",
+                        "img" => "bugtrack.gif",
+                ));
+		
+		$toolbar->add_button(array(
+                        "name" => "search",
+                        "tooltip" => "Otsi",
+                        "url" => $this->mk_my_orb("search",array(),"search"),
+                        "imgover" => "search_over.gif",
+                        "img" => "search.gif",
+                ));
+
+		
+
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
@@ -5623,22 +5712,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"parent" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
-			"add_applet" => $add_applet
+			"toolbar" => $toolbar->get_toolbar(),
 		));
 
-		if ($this->can("add", $parent))
-		{
-			$this->vars(array(
-				"ADD_CAT" => $this->parse("ADD_CAT")
-			));
-		}
-
-		if (count($sel_objs) > 0)
-		{
-			$this->vars(array(
-				"PASTE" => $this->parse("PASTE")
-			));
-		}
 		return $this->parse();
 	}
 
