@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.15 2001/10/18 09:36:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.16 2001/11/08 11:55:13 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -102,6 +102,10 @@ class gallery extends aw_template
 
 	function load($id,$pg)
 	{
+		if (not($id))
+		{
+			return;
+		}
 		$this->db_query("SELECT objects.*, galleries.content as content FROM objects LEFT JOIN galleries ON galleries.id = objects.oid WHERE oid = $id");
 		if (!($row = $this->db_next()))
 		{
