@@ -36,62 +36,6 @@
             <field>lang_skills_tb</field>
       </property>
       <property>
-            <name>education_tb</name>
-            <table>objects</table>
-            <group>haridustee</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>education_tb</field>
-      </property>
-      <property>
-            <name>educationtabel</name>
-            <table>objects</table>
-            <group>haridustee</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>educationtabel</field>
-      </property>
-      <property>
-            <name>keeleoskused</name>
-            <table>objects</table>
-            <group>keeleoskused</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>keeleoskused</field>
-      </property>
-      <property>
-            <name>lang_skill_label</name>
-            <table>objects</table>
-            <group>keeleoskused</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <value>Lisa&amp;nbsp;</value>
-            <store>no</store>
-            <field>lang_skill_label</field>
-      </property>
-      <property>
-            <name>computer_skills</name>
-            <table>objects</table>
-            <group>arvutioskus</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>computer_skills</field>
-      </property>
-      <property>
-            <name>comp_skill_label</name>
-            <table>objects</table>
-            <group>arvutioskus</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <value>Lisa&amp;nbsp;arvutioskus</value>
-            <store>no</store>
-            <field>comp_skill_label</field>
-      </property>
-      <property>
             <name>jobs</name>
             <table>objects</table>
             <group>tookogemus</group>
@@ -101,45 +45,14 @@
             <field>jobs</field>
       </property>
       <property>
-            <name>haridus_label</name>
+            <name>comp_skill_label</name>
             <table>objects</table>
-            <group>haridustee</group>
+            <group>arvutioskus</group>
             <type>text</type>
             <subtitle>1</subtitle>
-            <value>Kooli&amp;nbsp;lisamine</value>
+            <value>Arvutioskuste&amp;nbsp;lisamine</value>
             <store>no</store>
-            <field>haridus_label</field>
-      </property>
-      <property>
-            <name>education</name>
-            <table>objects</table>
-            <group>haridustee</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_EDUCATION</reltype>
-            <props>
-                  <num_0>lisainfo_edu</num_0>
-                  <num_1>loppaasta</num_1>
-                  <num_2>algusaasta</num_2>
-                  <num_3>eriala</num_3>
-                  <num_4>kool</num_4>
-                  <num_5>education_type</num_5>
-            </props>
-            <store>no</store>
-            <field>education</field>
-      </property>
-      <property>
-            <name>language_skills</name>
-            <table>objects</table>
-            <group>keeleoskused</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_LANG</reltype>
-            <props>
-                  <num_0>keel</num_0>
-                  <num_1>tase</num_1>
-            </props>
-            <store>no</store>
-            <field>language_skills</field>
-            <caption>Keeleoskus</caption>
+            <field>comp_skill_label</field>
       </property>
       <property>
             <name>kogemused</name>
@@ -154,24 +67,9 @@
                   <num_3>ametikoht</num_3>
                   <num_4>tasks</num_4>
             </props>
-            <rel_id>57486</rel_id>
             <store>no</store>
             <field>kogemused</field>
             <caption>Kogemused</caption>
-      </property>
-      <property>
-            <name>arvutioskus</name>
-            <table>objects</table>
-            <group>arvutioskus</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_ARVUTIOSKUS</reltype>
-            <props>
-                  <num_0>oskus</num_0>
-                  <num_1>tase</num_1>
-            </props>
-            <store>no</store>
-            <field>arvutioskus</field>
-            <caption>Arvutioskus</caption>
       </property>
       <property>
             <name>juhiload</name>
@@ -183,82 +81,6 @@
             <reltype>RELTYPE_JUHILUBA</reltype>
             <field>juhiload</field>
             <caption>Juhiload</caption>
-      </property>
-      <property>
-            <name>ametinimetus</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Ametinimetus</caption>
-      </property>
-      <property>
-            <name>palgasoov</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <size>5</size>
-            <caption>Palgasoov</caption>
-      </property>
-      <property>
-            <name>valdkond</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>classificator</type>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
-            <store>connect</store>
-            <reltype>RELTYPE_TEGEVUSVALDKOND</reltype>
-            <field>valdkond</field>
-            <caption>Tegevusala</caption>
-      </property>
-      <property>
-            <name>liik</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>classificator</type>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <store>connect</store>
-            <reltype>RELTYPE_LIIK</reltype>
-            <field>liik</field>
-            <caption>T&amp;ouml;&amp;ouml; liik</caption>
-      </property>
-      <property>
-            <name>asukoht</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <automatic>1</automatic>
-            <reltype>RELTYPE_LINN</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <orient>vertical</orient>
-            <caption>Ttamise piirkond</caption>
-      </property>
-      <property>
-            <name>koormus</name>
-            <table>objects</table>
-            <group>toosoov</group>
-            <type>classificator</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
-            <caption>T&amp;ouml;&amp;ouml; koormus</caption>
-      </property>
-      <property>
-            <name>job_addinfo</name>
-            <table>staff_cv</table>
-            <group>toosoov</group>
-            <type>textarea</type>
-            <field>addinfo</field>
-            <caption>Lisainfo soovitava t&amp;ouml;&amp;ouml; kohta</caption>
       </property>
       <property>
             <name>soovitajad</name>
@@ -297,9 +119,240 @@
             <wrapchildren>1</wrapchildren>
             <field>cv_view</field>
       </property>
+      <property>
+            <name>computer_skills</name>
+            <table>objects</table>
+            <group>arvutioskus</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>computer_skills</field>
+      </property>
+      <property>
+            <name>arvutioskus</name>
+            <table>objects</table>
+            <group>arvutioskus</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_ARVUTIOSKUS</reltype>
+            <props>
+                  <num_0>oskus</num_0>
+                  <num_1>tase</num_1>
+            </props>
+            <store>no</store>
+            <field>arvutioskus</field>
+            <caption>Arvutioskus</caption>
+      </property>
+      <property>
+            <name>other_computer_skills</name>
+            <table>staff_cv</table>
+            <group>arvutioskus</group>
+            <type>textarea</type>
+            <field>other_computer_skills</field>
+      </property>
+      <property>
+            <name>other_compterskills_label</name>
+            <table>objects</table>
+            <group>arvutioskus</group>
+            <type>text</type>
+            <store>no</store>
+            <field>other_compterskills_label</field>
+            <caption>Teised arvutioskused</caption>
+      </property>
+      <property>
+            <name>keeleoskused</name>
+            <table>objects</table>
+            <group>keeleoskused</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>keeleoskused</field>
+      </property>
+      <property>
+            <name>lang_skill_label</name>
+            <table>objects</table>
+            <group>keeleoskused</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <value>Lisa&amp;nbsp;</value>
+            <store>no</store>
+            <field>lang_skill_label</field>
+      </property>
+      <property>
+            <name>language_skills</name>
+            <table>objects</table>
+            <group>keeleoskused</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_LANG</reltype>
+            <props>
+                  <num_0>keel</num_0>
+                  <num_1>tase</num_1>
+            </props>
+            <store>no</store>
+            <field>language_skills</field>
+            <caption>Keeleoskus</caption>
+      </property>
+      <property>
+            <name>other_languages_label</name>
+            <table>objects</table>
+            <group>keeleoskused</group>
+            <type>text</type>
+            <store>no</store>
+            <field>other_languages_label</field>
+      </property>
+      <property>
+            <name>other_languages</name>
+            <table>staff_cv</table>
+            <group>keeleoskused</group>
+            <type>textarea</type>
+            <field>other_languages</field>
+            <caption>Teised keeled</caption>
+      </property>
+      <property>
+            <name>jobs_wanted_tb</name>
+            <table>objects</table>
+            <group>toosoov</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>jobs_wanted_tb</field>
+      </property>
+      <property>
+            <name>jobs_wanted_table</name>
+            <table>objects</table>
+            <group>toosoov</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>jobs_wanted_table</field>
+      </property>
+      <property>
+            <name>jobs_wanted</name>
+            <table>objects</table>
+            <group>toosoov</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_JOBWANTED</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>palgasoov</num_1>
+                  <num_2>valdkond</num_2>
+                  <num_3>liik</num_3>
+                  <num_4>asukoht</num_4>
+                  <num_5>koormus</num_5>
+                  <num_6>lisainfo</num_6>
+                  <num_7>sbutton</num_7>
+            </props>
+            <store>no</store>
+            <field>jobs_wanted</field>
+      </property>
+      <property>
+            <name>jobs_wanted_label</name>
+            <table>objects</table>
+            <group>toosoov</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>jobs_wanted_label</field>
+            <caption>Lisa uus töösoov</caption>
+      </property>
+      <property>
+            <name>education_tb</name>
+            <table>objects</table>
+            <group>haridustee</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>education_tb</field>
+      </property>
+      <property>
+            <name>educationtabel</name>
+            <table>objects</table>
+            <group>haridustee</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>educationtabel</field>
+      </property>
+      <property>
+            <name>haridus_label</name>
+            <table>objects</table>
+            <group>haridustee</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>haridus_label</field>
+      </property>
+      <property>
+            <name>education</name>
+            <table>objects</table>
+            <group>haridustee</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>lisainfo_edu</num_0>
+                  <num_1>loppaasta</num_1>
+                  <num_2>algusaasta</num_2>
+                  <num_3>eriala</num_3>
+                  <num_4>kool</num_4>
+                  <num_5>education_type</num_5>
+            </props>
+            <store>no</store>
+            <field>education</field>
+      </property>
+      <property>
+            <name>education_additional_tb</name>
+            <table>objects</table>
+            <group>taienduskoolitus</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>education_additional_tb</field>
+      </property>
+      <property>
+            <name>education_additional_table</name>
+            <table>objects</table>
+            <group>taienduskoolitus</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>education_additional_table</field>
+      </property>
+      <property>
+            <name>education_additional</name>
+            <table>objects</table>
+            <group>taienduskoolitus</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>lisainfo_edu</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>kool</num_3>
+                  <num_4>education_type</num_4>
+                  <num_5>submit_edu</num_5>
+            </props>
+            <store>no</store>
+            <field>education_additional</field>
+      </property>
+      <property>
+            <name>additional_skills</name>
+            <table>staff_cv</table>
+            <group>other_skills</group>
+            <type>textarea</type>
+            <field>additional_skills</field>
+            <caption>Muud oskused </caption>
+      </property>
+      <property>
+            <name>driving_since</name>
+            <table>staff_cv</table>
+            <group>driving_licenses</group>
+            <type>select</type>
+            <field>driving_since</field>
+            <caption>Juhistaa¾ alates aastast</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_CV</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_yah>1</no_yah>
       </classinfo>
       <groupinfo>
             <skills>
@@ -317,17 +370,33 @@
                   <caption>Juhiload</caption>
                   <parent>skills</parent>
             </driving_licenses>
+            <other_skills>
+                  <caption>Muud oskused</caption>
+                  <parent>skills</parent>
+            </other_skills>
+            <education_main>
+                  <caption>Hariduskäik</caption>
+                  <submit>no</submit>
+            </education_main>
             <haridustee>
-                  <caption>Hariduskï¿½k</caption>
+                  <caption>Hariduskäik</caption>
+                  <submit>no</submit>
+                  <parent>education_main</parent>
             </haridustee>
+            <taienduskoolitus>
+                  <caption>Täienduskoolitus</caption>
+                  <submit>no</submit>
+                  <parent>education_main</parent>
+            </taienduskoolitus>
             <soovitajad>
                   <caption>Soovitajad</caption>
             </soovitajad>
             <tookogemus>
-                  <caption>Tkogemused</caption>
+                  <caption>Töökogemused</caption>
             </tookogemus>
             <toosoov>
-                  <caption>Soovitud t</caption>
+                  <caption>Soovitud töö</caption>
+                  <submit>no</submit>
             </toosoov>
             <statistika>
                   <caption>Statistika</caption>
@@ -351,11 +420,6 @@
                   <clid>CL_EDUCATION</clid>
                   <caption>Haridus</caption>
             </EDUCATION>
-            <KOGEMUS>
-                  <value>4</value>
-                  <clid>CL_PERSONALIHALDUS_TOOKOGEMUS</clid>
-                  <caption>Kogemus</caption>
-            </KOGEMUS>
             <LANG>
                   <value>2</value>
                   <clid>CL_PERSONALIHALDUS_LANG</clid>
@@ -366,26 +430,21 @@
                   <clid>CL_PERSONALIHALDUS_ARVUTIOSKUS</clid>
                   <caption>Arvutioskus</caption>
             </ARVUTIOSKUS>
-            <LINN>
-                  <value>5</value>
-                  <clid>CL_CRM_CITY</clid>
-                  <caption>Linn</caption>
-            </LINN>
-            <TEGEVUSVALDKOND>
-                  <value>6</value>
-                  <clid>CL_META</clid>
-                  <caption>Tegevusala</caption>
-            </TEGEVUSVALDKOND>
+            <KOGEMUS>
+                  <value>4</value>
+                  <clid>CL_PERSONALIHALDUS_TOOKOGEMUS</clid>
+                  <caption>Kogemus</caption>
+            </KOGEMUS>
             <JUHILUBA>
                   <value>8</value>
                   <clid>CL_META</clid>
                   <caption>Juhiluba</caption>
             </JUHILUBA>
-            <LIIK>
-                  <value>9</value>
-                  <clid>CL_META</clid>
-                  <caption>liik</caption>
-            </LIIK>
+            <JOBWANTED>
+                  <value>10</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_WANTED</clid>
+                  <caption>Töösoov</caption>
+            </JOBWANTED>
       </reltypes>
 </properties>
 

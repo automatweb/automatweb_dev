@@ -191,6 +191,34 @@
             <caption>Tööpakkumine maksimaalselt aktiivne(päevades) </caption>
       </property>
       <property>
+            <name>education_types</name>
+            <table>objects</table>
+            <group>education_setings</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>education_types</field>
+            <caption>Vali milliseid hariduse liike saab lisada</caption>
+      </property>
+      <property>
+            <name>list_of_education_cfgform</name>
+            <table>objects</table>
+            <group>education_setings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>list_of_education_cfgform</field>
+      </property>
+      <property>
+            <name>additional_edu</name>
+            <table>objects</table>
+            <group>education_setings</group>
+            <type>select</type>
+            <store>no</store>
+            <field>additional_edu</field>
+            <caption>Täienduskoolituse vorm</caption>
+      </property>
+      <property>
             <name>orgs</name>
             <table>objects</table>
             <group>dir_setings</group>
@@ -352,6 +380,10 @@
                   <caption>Keskkonna seaded</caption>
                   <parent>all_setings</parent>
             </env_setings>
+            <education_setings>
+                  <caption>Haridus seaded</caption>
+                  <parent>all_setings</parent>
+            </education_setings>
             <my_join>
                   <caption>Registreeru</caption>
                   <tabgroup>left</tabgroup>

@@ -40,20 +40,16 @@
             <type>relpicker</type>
             <reltype>RELTYPE_LINN</reltype>
             <automatic>1</automatic>
-            <editonly>1</editonly>
             <method>serialize</method>
             <field>meta</field>
             <caption>Asukoht</caption>
       </property>
       <property>
             <name>deadline</name>
-            <table>objects</table>
+            <table>personnel_management_job</table>
             <group>info_about_job</group>
             <type>date_select</type>
-            <year_from>2004</year_from>
-            <year_to>2010</year_to>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>deadline</field>
             <caption>Konkursi tähtaeg</caption>
       </property>
       <property>
@@ -64,7 +60,6 @@
             <field>meta</field>
             <method>serialize</method>
             <multiple>1</multiple>
-            <editonly>1</editonly>
             <store>connect</store>
             <reltype>RELTYPE_TEGEVUSVALDKOND</reltype>
             <orient>vertical</orient>
@@ -115,10 +110,11 @@
             <name>kandideerin</name>
             <table>objects</table>
             <group>minu_kandidatuur</group>
-            <type>select</type>
+            <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
             <store>no</store>
+            <edit_links>1</edit_links>
             <caption>Vali cv kandideerimiseks</caption>
       </property>
       <property>
@@ -129,28 +125,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>statistika</field>
-      </property>
-      <property>
-            <name>email</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>relmanager</type>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <props>name</props>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>E-mail</caption>
-      </property>
-      <property>
-            <name>phone</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>relmanager</type>
-            <reltype>RELTYPE_PHONE</reltype>
-            <props>name</props>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Telefon</caption>
       </property>
       <property>
             <name>job_from</name>
@@ -189,7 +163,6 @@
             <field>meta</field>
             <method>serialize</method>
             <multiple>1</multiple>
-            <editonly>1</editonly>
             <store>connect</store>
             <reltype>RELTYPE_WORKLOAD</reltype>
             <orient>vertical</orient>
@@ -214,7 +187,6 @@
             <mehtod>serialize</mehtod>
             <reltype>RELTYPE_PRACTICE</reltype>
             <orient>vertical</orient>
-            <editonly>1</editonly>
             <store>connect</store>
             <caption> Liik</caption>
       </property>
@@ -240,6 +212,7 @@
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_yah>1</no_yah>
       </classinfo>
       <groupinfo>
             <info_about_job>
@@ -262,6 +235,7 @@
             </minu_kandidatuur>
             <kandideerinud>
                   <caption>Kandideerijad</caption>
+                  <submit>no</submit>
             </kandideerinud>
             <statistika>
                   <caption>Statistika</caption>
