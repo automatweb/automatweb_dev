@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.61 2001/10/22 05:09:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.62 2001/10/22 22:29:25 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -38,6 +38,8 @@ class menuedit extends aw_template
 		if (!isset($this->menucache[$parent]) || !is_array($this->menucache[$parent]))
 			return;
 
+		global $awt;
+		$awt->start("menuedit::mk_folders");
 		reset($this->menucache[$parent]);
 		while(list(,$v) = each($this->menucache[$parent]))
 		{
@@ -69,6 +71,7 @@ class menuedit extends aw_template
 
 			$this->mk_folders($v["data"]["oid"],$tstr);
 		}
+		$awt->stop("menuedit::mk_folders");
 	}
 
 	////
@@ -95,7 +98,6 @@ class menuedit extends aw_template
 
 	function rd($parent)
 	{
-		
 		$this->db_query("SELECT * FROM objects WHERE parent = $parent AND class_id = 1 AND status != 0 AND objects.lang_id=".$GLOBALS["lang_id"]."");
 		while ($row = $this->db_next())
 		{
@@ -120,6 +122,8 @@ class menuedit extends aw_template
 //	olevad muutujad pannaxe menyyediti template sisse
 	function gen_site_html($params)
 	{
+		global $awt;
+		$awt->start("menuedit::gen_site_html");
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
@@ -191,6 +195,7 @@ class menuedit extends aw_template
 				$res = str_replace("[ss".$gid."]",$this->gen_uniq_id(),$res);
 			}
 		}
+		$awt->stop("menuedit::gen_site_html");
 		return $res;
 	}
 	
@@ -1052,19 +1057,25 @@ class menuedit extends aw_template
 
 	function is_periodic($section,$checkobj = 1) 
 	{
-		 $q = "SELECT periodic FROM menu WHERE id = '$section'";
-		 $periodic = $this->db_fetch_field($q,"periodic");
-		 // menyysektsioon ei ole perioodiline. Well, vaatame 
-		 // siis, kas ehk dokument ise on?
-		 if (!$periodic && $checkobj == 1) {
-			$q = "SELECT period FROM objects WHERE oid = '$section'";
-			$periodic = $this->db_fetch_field($q,"period");
-		 };
-		 return $periodic;
+		global $awt;
+		$awt->start("menuedit::is_periodic");
+		$q = "SELECT periodic FROM menu WHERE id = '$section'";
+		$periodic = $this->db_fetch_field($q,"periodic");
+		// menyysektsioon ei ole perioodiline. Well, vaatame 
+		// siis, kas ehk dokument ise on?
+		if (!$periodic && $checkobj == 1) {
+		$q = "SELECT period FROM objects WHERE oid = '$section'";
+		$periodic = $this->db_fetch_field($q,"period");
+		};
+		$awt->stop("menuedit::is_periodic");
+		return $periodic;
 	}
 
 	function has_sub_dox($oid)
 	{
+		global $awt;
+		$awt->start("menuedit::has_sub_dox");
+		$awt->count("menuedit::has_sub_dox");
 		$has_dox = $this->subs[$oid] > 0 ? 1 : 0;
 		
 		if (is_array($this->mpr[$oid]))
@@ -1080,11 +1091,14 @@ class menuedit extends aw_template
 			}
 		}
 
+		$awt->stop("menuedit::has_sub_dox");
 		return $has_dox;
 	}
 
 	function db_prep_listall($where = " objects.status != 0") 
 	{
+		global $awt;
+		$awt->start("menuedit::db_prep_listall");
 		global $act_per_id;
 		if ($act_per_id) 
 		{
@@ -1103,12 +1117,15 @@ class menuedit extends aw_template
 		{
 			$this->subs[$row["parent"]] = $row["subs"];
 		};
+		$awt->stop("menuedit::db_prep_listall");
 	}
 
 	////
 	// !Listib koik objektid
 	function db_listall($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
 	{
+		global $awt;
+		$awt->start("menuedit::db_listall");
 		global $SITE_ID;
 		$aa = "";
 		if (!$ignore)
@@ -1156,10 +1173,13 @@ class menuedit extends aw_template
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
+		$awt->stop("menuedit::db_listall");
 	}
 
 	function db_listall_lite($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
 	{
+		global $awt;
+		$awt->start("menuedit::db_listall_lite");
 		global $SITE_ID;
 		if (!$ignore)
 		{
@@ -1201,23 +1221,30 @@ class menuedit extends aw_template
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
+		$awt->stop("menuedit::db_listall_lite");
 	}
 
 	function get_default_document($section,$ignore_global = false)
 	{
+		global $awt;
+		$awt->start("menuedit::get_default_document");
 		// the following line looks so wrong
+		// /me vaatab syytult lakke ja teeb n2gu nagu ei saax midagi aru - terryf
 		if (isset($GLOBALS["docid"]) && $GLOBALS["docid"] && $ignore_global == false)
 		{
+			$awt->stop("menuedit::get_default_document");
 			return $GLOBALS["docid"];
 		}
 		if (!$section)
 		{
+			$awt->stop("menuedit::get_default_document");
 			return 0;
 		}
 
 		$obj = $this->get_object($section);	// if it is a document, use this one. 
 		if ($obj["class_id"] == CL_DOCUMENT)
 		{
+			$awt->stop("menuedit::get_default_document");
 			return $section;
 		}
 
@@ -1289,26 +1316,31 @@ class menuedit extends aw_template
 			if ($cnt > 1)
 			{
 				// a list of documents
+				$awt->stop("menuedit::get_default_document");
 				return $docid;
 			}
 			else
 			if ($cnt == 1)
 			{
 				// the correct id
+				$awt->stop("menuedit::get_default_document");
 				return $docid[0];
 			}
 			else
 			{
+				$awt->stop("menuedit::get_default_document");
 				return false;
 			}
 		}
 
+		$awt->stop("menuedit::get_default_document");
 		return $docid;
 	}
 
 	function do_syslog_core($log,$section)
 	{
-		global $uid,$artid,$sid,$mlxuid;
+		global $uid,$artid,$sid,$mlxuid,$awt;
+		$awt->start("menuedit::do_syslog_core");
 		if ($artid)	// tyyp tuli meilist, vaja kirja panna
 		{
 			if (is_number($artid))
@@ -1337,10 +1369,13 @@ class menuedit extends aw_template
 		}
 		else
 			$this->_log("pageview",sprintf(LC_MENUEDIT_LOOKED_SITE,$log),$section);
+		$awt->stop("menuedit::do_syslog_core");
 	}
 
 	function do_syslog(&$mar,&$path,$cnt,$section = 0)
 	{
+		global $awt;
+		$awt->start("menuedit::do_syslog");
 		// now build the string to put in syslog
 		$log = "";
 		for ($i=0; $i < $cnt; $i++)	
@@ -1351,13 +1386,17 @@ class menuedit extends aw_template
 				$log.=$mar[$path[$i+1]]["name"]." / ";
 		}
 		$this->do_syslog_core($log,$section);
+		$awt->stop("menuedit::do_syslog");
 	}
 
 	function check_section($section)
 	{
+		global $awt;
+		$awt->start("menuedit::check_section");
 		global $frontpage;
 		if ($section == "")
 		{
+			$awt->stop("menuedit::check_section");
 			return $frontpage < 1 ? 1 : $frontpage;
 		}
 
@@ -1367,6 +1406,12 @@ class menuedit extends aw_template
 			// vaatame, kas selle nimega aliast on?
 			$obj = $this->_get_object_by_alias($section);
 			// nope. mingi skriptitatikas? voi cal6
+			// inside joked ruulivad exole duke ;)
+			// nendele kes aru ei saanud - cal6 ehk siis kalle volkov - ehk siis okia tyyp 
+			// oli esimene kes aw seest kala leidis - kui urli panna miski oid, mida polnud, siis asi hangus - see oli siis kui 
+			// www.struktuur.ee esimest korda v2lja tuli. 
+			// niiet nyyd te siis teate ;)
+			// - terryf
 			if (!$obj) 
 			{
 				$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS,$section));
@@ -1390,6 +1435,7 @@ class menuedit extends aw_template
 			}
 		};
 
+		$awt->stop("menuedit::check_section");
 		return $section;
 	}
 
@@ -1397,6 +1443,8 @@ class menuedit extends aw_template
 	// ja lisasin siia uue parameetri
 	function gen_folders($period,$popup = 0)
 	{
+		global $awt;
+		$awt->start("menuedit::gen_folders");
 		if ($popup == 1)
 		{
 			$this->read_template("popup.tpl");
@@ -1504,6 +1552,7 @@ class menuedit extends aw_template
 				"periods" => str_replace("\n","",$this->picker($period,$ar))
 			));
 		}
+		$awt->stop("menuedit::gen_folders");
 		return $this->parse();
 	}
 
@@ -1542,7 +1591,8 @@ class menuedit extends aw_template
 	// !Loob kasutaja kodukataloogi
 	function mk_homefolder(&$arr)
 	{
-		global $udata,$uid,$admin_rootmenu2,$ext,$baseurl;
+		global $udata,$uid,$admin_rootmenu2,$ext,$baseurl,$awt;
+		$awt->start("menuedit::mk_homefolder");
 
 		// k6igepealt loeme k6ik kodukatalooma all olevad menyyd
 		$this->db_query("SELECT menu.*,objects.* FROM menu
@@ -1630,12 +1680,15 @@ class menuedit extends aw_template
 
 		$ret = $hft.$shfs.$shares.$grps.$grptree.$ret;
 
+		$awt->stop("menuedit::mk_homefolder");
 		return $ret;
 	}
 
 
 	function get_shared_arr(&$arr,$exclude)
 	{
+		global $awt;
+		$awt->start("menuedit::get_shared_arr");
 		$ret = array();
 
 		reset($arr);
@@ -1650,6 +1703,7 @@ class menuedit extends aw_template
 				}
 			}
 		}
+		$awt->stop("menuedit::get_shared_arr");
 		return $ret;
 	}
 
@@ -1708,6 +1762,8 @@ class menuedit extends aw_template
 
 	function mk_grp_tree($parent)
 	{
+		global $awt;
+		$awt->start("menuedit::mk_grp_tree");
 		classload("groups");
 		$t = new groups;
 		$t->listacl("objects.class_id = ".CL_GROUP." AND objects.status = 2");
@@ -1731,7 +1787,9 @@ class menuedit extends aw_template
 			}
 			$grpcache[$row["parent"]][] = $row;
 		}
-		return $this->rec_grp_tree(&$grpcache,$parent);
+		$ret = $this->rec_grp_tree(&$grpcache,$parent);
+		$awt->stop("menuedit::mk_grp_tree");
+		return $ret;
 	}
 
 	function rec_grp_tree(&$arr,$parent)
@@ -1868,6 +1926,8 @@ class menuedit extends aw_template
 		{
 			return $this->acl_error("view",$parent);
 		}
+		global $awt;
+		$awt->start("menuedit::gen_list_menus");
 
 		// selle voiks ju ka tablegenni peale ajada.
 		global $sortby;
@@ -2008,12 +2068,16 @@ class menuedit extends aw_template
 			"addpromo" => $this->mk_orb("new", array("parent" => $parent),"promo"),
 			"lang_name" => $la->get_langid()
 		));
+
+		$awt->stop("menuedit::gen_list_menus");
 		return $this->parse();
 	}
 
 	// genereerib menyydest vaikese nimekirja templateditori jaoks
 	function gen_picker($params)
 	{
+		global $awt;
+		$awt->start("menuedit::gen_picker");
 		extract($params);
 		$q = "SELECT objects.*,menu.*
 						FROM objects LEFT JOIN menu ON menu.id = objects.oid
@@ -2038,55 +2102,7 @@ class menuedit extends aw_template
 					"tpl" => $tpl,
 					"source" => $object["oid"],
 					"objname" => $object["name"] . "(" . $object["oid"] . ")"));
-		return $this->parse();
-	}
-
-	function gen_list_filled_forms($parent)
-	{
-		classload("form_output");
-		$this->read_template("filled_forms.tpl");
-		
-		$fop = new form_output;
-		$opar = array();
-		$this->db_query("SELECT el_id,form_id FROM element2form WHERE el_id = ".$parent);
-		while ($row = $this->db_next())
-		{
-			$this->save_handle();
-			$fid = $row["form_id"];
-			// korjame k6ikide formide v2ljundi stiilid kokku $opar sisse
-			$opar[$fid] = $fop->get_op_list(array("id" => $fid));
-
-			$fname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fid", "name");
-			$this->db_query("SELECT objects.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0");
-			while ($row = $this->db_next())
-			{
-				$this->vars(array("filler"		=> $row["createdby"], 
-													"hits"			=> $row["hits"], 
-													"form"			=> $fname,
-													"modified"	=> $this->time2date($row["modified"], 2), "oid" => $row["oid"],
-													"change"		=> $this->mk_orb("show", array("id" => $fid, "entry_id" => $row["oid"]), "form"),
-													"form_id"		=> $fid));
-				$l.=$this->parse("LINE");
-			}
-			$this->restore_handle();
-		}
-		reset($opar);
-		while (list($fid, $ar) = each($opar))
-		{
-			$this->vars(array("form_id" => $fid));
-			$fop = ""; $cnt=0;
-			reset($ar);
-			while (list($opid, $opname) = each($ar))
-			{
-				$this->vars(array("op_id" => $opid, "op_name" => $opname, "cnt" => $cnt));
-				$fop.=$this->parse("FORM_OP");
-				$cnt++;
-			}
-			$this->vars(array("FORM_OP" => $fop));
-			$f.=$this->parse("FORM");
-		}
-		$this->vars(array("LINE" => $l, "FORM" => $f,
-											"reforb"	=> $this->mk_reforb("change", array("id" => 0), "form")));
+		$awt->stop("menuedit::gen_picker");
 		return $this->parse();
 	}
 
@@ -2098,16 +2114,15 @@ class menuedit extends aw_template
 		}
 
 		if (!$this->can("view", $parent))
+		{
 			return $this->acl_error("view",$parent);
+		}
+
+		global $awt;
+		$awt->start("menuedit::gen_list_objs");
 
 		$mtype = $this->db_fetch_field("SELECT type FROM menu WHERE id = $parent", "type");
 		
-		// et siis like. Mis tyypi see menu on? kui tegemist vormielementidega, siis...
-		if ($mtype == MN_FORM_ELEMENT)
-		{
-			return $this->gen_list_filled_forms($parent);
-		}
-
 /*		if ($mtype == MN_ML_LIST)
 		{
 			classload("ml_list");
@@ -2341,11 +2356,14 @@ class menuedit extends aw_template
 			));
 		}
 
+		$awt->stop("menuedit::gen_list_objs");
 		return $this->parse();
 	}
 
 	function mk_docsel($parent = 0)
 	{
+		global $awt;
+		$awt->start("menuedit::mk_docsel");
 		// let the user pick a default document
 		// select all documents that are non-periodic and not under this menu and active
 		$this->extrarr = array();
@@ -2408,17 +2426,22 @@ class menuedit extends aw_template
 				$this->mk_folders($ar["data"]["oid"],"");
 			}
 		}
+		$awt->stop("menuedit::mk_docsel");
 		return $this->docs;
 	}
 
 	function get_feature_icon_url($fid)
 	{
+		global $awt;
+		$awt->start("menuedit::get_feature_icon_url");
+		$awt->count("menuedit::get_feature_icon_url");
 		if (!$this->feature_icons_loaded)
 		{
 			$c = new db_config;
 			$this->pr_icons = unserialize($c->get_simple_config("program_icons"));
 		}
 		$i = $this->pr_icons[$fid]["url"];
+		$awt->stop("menuedit::get_feature_icon_url");
 		return $i == "" ? "/images/icon_aw.gif" : $i;
 	}
 
@@ -2556,6 +2579,16 @@ class menuedit extends aw_template
 				$meta["tpl_dir"] = $arr["tpl_dir"];
 			};
 
+			if ($arr["keywords"])
+			{
+				$meta["keywords"] = $arr["keywords"];
+			}
+			
+			if ($arr["description"])
+			{
+				$meta["description"] = $arr["description"];
+			}
+
 			// 2 updates, this is so wrong.
 			$this->set_object_metadata(array(
 				"oid" => $id,
@@ -2580,6 +2613,42 @@ class menuedit extends aw_template
 				"key" => "tpl_dir",
 				"value" => $arr["tpl_dir"],
 			));
+
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "keywords",
+				"value" => $arr["keywords"],
+			));
+			
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "description",
+				"value" => $arr["description"],
+			));
+
+			if ($arr["keywords"] || $arr["description"])
+			{
+				classload("file","php");
+				$awf = new file();
+
+				$old = $awf->get_special_file(array(
+					"name" => "meta.tags",
+				));
+
+				$serializer = new php_serializer();
+				$meta = $serializer->php_unserialize($old);
+
+				$meta[$id] = array(
+					"keywords" => $arr["keywords"],
+					"description" => $arr["description"],
+				);
+				$ser_meta = $serializer->php_serialize($meta);
+
+				$awf->put_special_file(array(
+					"name" => "meta.tags",
+					"content" => $ser_meta,
+				));
+			}
 
 			$sar = array(); $oidar = array();
 			// leiame koik selle menüü vennad
@@ -3375,6 +3444,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"no_menus" => checked($row["no_menus"]),
 			"width" => $row["width"],
 			"img_timing" => $meta["img_timing"],
+			"keywords" => $meta["keywords"],
+			"description" => $meta["description"],
 			"pers" => $dbp->period_mlist(unserialize($row["pers"]))
 		));
 
@@ -3424,6 +3495,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !and thus must go to a different place when clicked.
 	function mk_path($oid,$text = "",$period = 0,$set = true)
 	{
+		global $awt;
+		$awt->start("menuedit::mk_path");
 		global $ext;
 
 		$ch = $this->get_object_chain($oid,false,$GLOBALS["admin_rootmenu2"]);
@@ -3438,6 +3511,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$GLOBALS["site_title"] = $path.$text;
 		}
+		$awt->stop("menuedit::mk_path");
 		return $path;
 	}
 
@@ -3459,6 +3533,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !generates link collection content instead of document for menu
 	function do_link_collection($parent)
 	{
+		global $awt;
+		$awt->start("menuedit::do_link_collection");
 		$this->read_template("link_collection.tpl");
 
 		global $ext, $baseurl;
@@ -3539,6 +3615,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$l.=$this->parse("LINK_LINE");
 		$this->vars(array("LINK_LINE" => $l));
 		$con =  $this->parse();
+		$awt->stop("menuedit::do_link_collection");
 		return $con;
 	}
 
@@ -3562,6 +3639,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			return 0;
 		}
 		
+		global $awt;
+		$awt->start("menuedit::req_draw_menu");
+		$awt->count("menuedit::req_draw_menu");
 	
 		$check_acl = false;
 
@@ -3595,6 +3675,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				echo "returning from req_draw_menu in_path = $in_path level = $this->level parent_tpl = $parent_tpl ignore path = $ignore_path <br>";
 			}
+			$awt->stop("menuedit::req_draw_menu");
 			return 0;
 		}
 		$this->vars(array($mn => ""));
@@ -3905,6 +3986,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->vars(array($mn."2" => $l2));
 		}
 		$this->level--;
+		$awt->stop("menuedit::req_draw_menu");
 		return $cnt;
 	}
 
@@ -3912,7 +3994,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
 	function do_seealso_items($row,$name)
 	{
-		global $ext,$baseurl,$lang_id;
+		global $ext,$baseurl,$lang_id,$awt;
+		$awt->start("menuedit::do_seealso_items");
 		$sa = unserialize($row["seealso"]);
 		if (is_array($sa[$lang_id]))
 		{
@@ -3955,6 +4038,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 		}
+		$awt->stop("menuedit::do_seealso_items");
 	}
 
 	////
@@ -4247,10 +4331,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		global $awt;
 		$awt->start("menuedit::make_menu_caches");
-		$cache = new cache();
-		$ms = $cache->db_get("menuedit::menu_cache");
-		if (!$ms)
-		{
+//		$cache = new cache();
+//		$ms = $cache->db_get("menuedit::menu_cache");
+//		if (!$ms)
+//		{
 			// make one big array for the whole menu
 			$this->mar = array();
 			// see laheb ja loeb kokku, mitu last mingil sektsioonil on
@@ -4267,15 +4351,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->dmsg(array_keys($this->mpr));
 
 			// write the data to the cache
-			$cached = array();
+/*			$cached = array();
 			$cached["mar"] = $this->mar;
 			$cached["mpr"] = $this->mpr;
 			$cached["subs"] = $this->subs;
 
+	//		$cache = new cache();
+//			$ms = $cache->db_get("menuedit::menu_cache");
 			$php = new php_serializer();
-			$c_d = $php->php_serialize($cached);
-			$cache->db_set("menuedit::menu_cache",$c_d);
-		}
+			$c_d = $php->php_serialize($cached);*/
+	//		$cache->db_set("menuedit::menu_cache",$c_d);
+/*		}
 		else
 		{
 			// unserialize the cache
@@ -4284,12 +4370,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->mar = $cached["mar"];
 			$this->mpr = $cached["mpr"];
 			$this->subs = $cached["subs"];
-		}
+		}*/
 		$awt->stop("menuedit::make_menu_caches");
 	}
 
 	function is_link_collection($section)
 	{
+		global $awt;
+		$awt->start("menuedit::is_link_collection");
 		$p = $section; 
 		$links = false;
 		$cnt = 0;
@@ -4303,11 +4391,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}	
 			$p = $this->mar[$p]["parent"];
 		}
+		$awt->stop("menuedit::is_link_collection");
 		return $links;
 	}
 
 	function is_shop($section)
 	{
+		global $awt;
+		$awt->start("menuedit::is_shop");
 		$p = $section; 
 		$links = false;
 		$cnt = 0;
@@ -4328,6 +4419,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}	
 			isset($this->mar[$p]["parent"]) ? $p = $this->mar[$p]["parent"] : $p = 0;
 		}
+		$awt->stop("menuedit::is_shop");
 		if (!$links)
 		{
 			return false;
@@ -4341,6 +4433,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function show_periodic_documents($section,$obj)
 	{
+		global $awt;
+		$awt->start("menuedit::show_periodic_documents");
 		$d = new document();
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
@@ -4389,11 +4483,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
 		}
+		$awt->stop("menuedit::show_periodic_documents");
 		return $cont;
 	}
 
 	function show_documents($section,$docid,$template = "")
 	{
+		global $awt;
+		$awt->start("menuedit::show_documents");
 		classload("document");
 		$d = new document();
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
@@ -4484,11 +4581,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				};
 			}
 		}
+		$awt->stop("menuedit::show_documents");
 		return $ct;
 	}
 
 	function get_path($section,$obj)
 	{
+		global $awt;
+		$awt->start("menuedit::get_path");
 		// now find the path through the menu
 		$path = array();
 		if ($obj["class_id"] == CL_PERIODIC_SECTION || $obj["class_id"] == CL_DOCUMENT)
@@ -4516,11 +4616,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$path[$i+1] = $this->_pop();
 		};
 		// and now in the $path array
+		$awt->stop("menuedit::get_path");
 		return $path;
 	}
 
 	function make_yah($path)
 	{
+		global $awt;
+		$awt->start("menuedit::make_yah");
 		// now build "you are here" links from the path
 		$ya = "";  
 		$show = false;
@@ -4550,6 +4653,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$show = true;
 			}
 		}
+		$awt->stop("menuedit::make_yah");
 		return $ya;
 	}
 
@@ -4557,6 +4661,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
+		global $awt;
+		$awt->start("menuedit::make_promo_boxes");
 		$doc = new document;
 		$right_promo = "";
 		$left_promo = "";
@@ -4675,20 +4781,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"RIGHT_PROMO" => $right_promo,
 			"SCROLL_PROMO" => $scroll_promo,
 		));
+		$awt->stop("menuedit::make_promo_boxes");
 	}
 
 	function make_poll()
 	{
+		global $awt;
+		$awt->start("menuedit::make_poll");
 		if ($this->is_template("POLL"))
 		{
 			classload("poll");
 			$t = new poll;
 			$this->vars(array("POLL" => $t->gen_user_html()));
 		}
+		$awt->stop("menuedit::make_poll");
 	}
 
 	function make_search()
 	{
+		global $awt;
+		$awt->start("menuedit::make_search");
 		if ($this->is_template("SEARCH_SEL"))
 		{
 			global $section,$frontpage;
@@ -4705,10 +4817,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
 		}
+		$awt->stop("menuedit::make_search");
 	}
 
 	function make_nadalanagu()
 	{
+		global $awt;
+		$awt->start("menuedit::make_nadalanagu");
 		if ($this->is_template("NADALA_NAGU"))
 		{
 			classload("nagu");
@@ -4742,6 +4857,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->vars(array("NADALA_NAGU" => $nn));
 			}
 		}
+		$awt->stop("menuedit::make_nadalanagu");
 	}
 
 	function do_rdf($section,$obj,$format,$docid)
@@ -4863,10 +4979,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !generates the ui for the shop
 	function do_shop($section,$shop_id)
 	{
+		global $awt;
+		$awt->start("menuedit::do_shop");
 		classload("shop");
 		$sh = new shop;
 		$ret = $sh->show(array("section" => $section,"id" => $shop_id));
 		$this->vars(array("shop_menus" => $sh->shop_menus));
+		$awt->stop("menuedit::do_shop");
 		return $ret;
 	}
 
@@ -4889,6 +5008,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function make_langs()
 	{
+		global $awt;
+		$awt->start("menuedit::make_langs");
 		global $lang_id;
 		classload("languages");
 		$langs = new languages;
@@ -4913,6 +5034,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"LANG" => $l,
 			"SEL_LANG" => ""
 		));
+		$awt->stop("menuedit::make_langs");
 	}
 }
 ?>
