@@ -67,20 +67,36 @@ background-color: #478EB6;
 		<!-- SUB: tab_L1 -->
 			<td>
 			<table border=0 cellpadding=0 cellspacing=0>
-			<tr><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td><td valign="top" height="20" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="10" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap valign="middle" class="awtab"><a href="{VAR:link}">{VAR:caption}</a></td><td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td></tr></table>
+			<tr><td><div style="width:1px;height:20px" /></td>
+			<td valign="top" class="awtab"><div style="width:10px;height:20px" /></td>
+			<td nowrap valign="middle" class="awtab"><a href="{VAR:link}">{VAR:caption}</a></td>
+			<td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
+			<td><div style="width:1px;height:20px" /></td>
+			</tr></table>
 			</td>
 		<!-- END SUB: tab_L1 -->
 		
 		<!-- SUB: disabled_tab_L1 -->
 			<td>
 			<table border=0 cellpadding=0 cellspacing=0>
-			<tr><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td><td valign="top" height="20" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="10" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap valign="middle" class="awtabdis">{VAR:caption}</td><td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td></tr></table>
+			<tr><td><div style="width:1px;height:20px" /></td>
+			<td valign="top" class="awtab"><div style="width:10px;height:20px" /></td>
+			<td nowrap valign="middle" class="awtabdis">{VAR:caption}</td>
+			<td valign="top" width="10" class="awtab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
+			<td><div style="width:1px;height:20px" /></td>
+			</tr></table>
 			</td>
 		<!-- END SUB: disabled_tab_L1 -->
 
 		<!-- SUB: sel_tab_L1 -->
 			<td>
-			<table border=0 cellpadding=0 cellspacing=0><tr><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td><td valign="top" height="20" width="10" class="awtabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="10" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap valign="middle" class="awtabsel"><a href="{VAR:link}">{VAR:caption}</a></td><td valign="top" width="10" class="awtabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td><td height="20" width="1"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="20" BORDER=0 ALT=""></td></tr></table>
+			<table border=0 cellpadding=0 cellspacing=0><tr>
+			<td><div style="width:1px;height:20px" /></td>
+			<td valign="top" class="awtabsel"><div style="width:10px;height:20px" /></td>
+			<td nowrap valign="middle" class="awtabsel"><a href="{VAR:link}">{VAR:caption}</a></td>
+			<td valign="top" width="10" class="awtabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4" BORDER=0 ALT=""></td>
+			<td><div style="width:1px;height:20px" /></td>
+			</tr></table>
 			</td>
 		<!-- END SUB: sel_tab_L1 -->
 
