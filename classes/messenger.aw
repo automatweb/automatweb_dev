@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.32 2001/05/27 16:58:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.33 2001/05/28 22:44:58 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -123,7 +123,7 @@ class msg_sql_driver extends db_connector
 		$q = sprintf("UPDATE messages SET status = %d WHERE id IN (%s)",$status,$idl);
 		$this->db_query($q);
 
-		if ($args["parent"])
+		if ($args["folder"])
 		{
 			$this->msg_move($args);
 		}
@@ -652,6 +652,28 @@ class messenger extends menuedit_light
 	{
 		extract($args);
 		global $status_msg;
+		if ($delete)
+		{
+			$op = "delete";
+		};
+		if ($mark_as_new)
+		{
+			$op = "mark_as_new";
+		};
+		if ($mark_as_read)
+		{
+			$op = "mark_as_read";
+		};
+		if ($move_to1)
+		{
+			$op = "move_to";
+			$folder = $folder1;
+		};
+		if ($move_to2)
+		{
+			$op = "move_to";
+			$folder = $folder2;
+		};
 		if (!is_array($check))
 		{
 			$status_msg = "Ühtegi teadet polnud märgistatud, seega ei tehtud midagi";
