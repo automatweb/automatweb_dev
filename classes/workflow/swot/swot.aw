@@ -1,15 +1,14 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/workflow/swot/Attic/swot.aw,v 1.7 2003/12/07 15:27:49 duke Exp $
 /*
 
 @classinfo syslog_type=ST_SWOT relationmgr=yes no_status=1
 
-@groupinfo general caption=Üldine
 @groupinfo strengths caption=Tugevused
-@groupinfo weaknesses caption=N&otilde;rkused
-@groupinfo opportunities caption=V&otilde;imalused
+@groupinfo weaknesses caption=Nõrkused
+@groupinfo opportunities caption=Võimalused
 @groupinfo threats caption=Ohud
-@groupinfo view caption=&Uuml;ldvaade
+@groupinfo view caption=Üldvaade
 
 @default table=objects
 @default group=general
@@ -23,10 +22,10 @@
 @caption Tugevused
 
 @property weaknesses type=text group=weaknesses no_caption=1
-@caption Norkused
+@caption Nõrkused
 
 @property opportunities type=text group=opportunities no_caption=1
-@caption Voimalused
+@caption Võimalused
 
 @property threats type=text group=threats no_caption=1
 @caption Ohud
@@ -83,8 +82,6 @@ class swot extends class_base
 		$ob = new object($oid);
 
 		$arr = new aw_array($ob->prop('swot_folder'));
-
-
 
 		$sobjs = new object_list(array(
                         "class_id" => $clid,
