@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.41 2005/01/11 14:04:56 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.42 2005/01/12 10:17:30 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -380,7 +380,6 @@ class object_treeview_v2 extends class_base
 //		arr($ob->meta("sel_columns_fields"));
 //		arr($ob->meta("saved_filters"));
 
-
 // if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
@@ -416,8 +415,6 @@ class object_treeview_v2 extends class_base
 			}
 			$ol = $ol_result;
 		}
-
-
 
 		$this->cnt = 0;
 		$c = "";
@@ -708,7 +705,8 @@ class object_treeview_v2 extends class_base
 				$max_id = 0;
 				$fields = "";
 
-				if(is_array($cols_fields[$colid])){
+				if (is_array($cols_fields[$colid]))
+				{
 					foreach($cols_fields[$colid] as $f_key => $f_val)
 					{
 
