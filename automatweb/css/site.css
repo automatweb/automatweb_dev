@@ -4,13 +4,13 @@
 	font-weight: bold;
 	text-decoration: none;
 	height: 17px;
-	color: #000000;
-	background: #DBE8EE;
+	color: #FFFFFF;
+	background: #8AABBE;
 }
 
-.yah a {color: #6D7477; text-decoration: none;}
+.yah a {color: #FFFFFF; text-decoration: none;}
 .yah a:hover {color: #000000; text-decoration: none;}
-.yah a:visited {color: #6D7477; text-decoration: none;}
+.yah a:visited {color: #FFFFFF; text-decoration: none;}
 .yah a:active {color: #000000; text-decoration: none;}
 
 
@@ -83,6 +83,9 @@ background: #DBE8EE;
 .aste05 {background: #BDD2DC;}
 .aste06 {background: #CADBE4;}
 .aste07 {background: #DBE8EE;}
+
+
+DBE8EE
 
 
 .link {
