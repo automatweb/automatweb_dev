@@ -252,6 +252,24 @@
             <field>org_tasks</field>
             <caption>Toimetused</caption>
       </property>
+      <property>
+            <name>jobsact</name>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <group>jobsact</group>
+            <store>no</store>
+            <table>objects</table>
+            <field>jobsact</field>
+      </property>
+      <property>
+            <name>jobsnotact</name>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <group>notact</group>
+            <store>no</store>
+            <table>objects</table>
+            <field>jobsnotact</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -290,6 +308,17 @@
             <tasks_overview>
                   <caption>Ülevaade</caption>
             </tasks_overview>
+            <jobs>
+                  <caption>Tööpakkumised</caption>
+            </jobs>
+            <jobsact>
+                  <caption>Aktiivsed</caption>
+                  <parent>jobs</parent>
+            </jobsact>
+            <notact>
+                  <caption>Mitteaktiivsed</caption>
+                  <parent>jobs</parent>
+            </notact>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -374,6 +403,21 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Fax</caption>
             </TELEFAX>
+            <JOBS>
+                  <value>19</value>
+                  <clid>CL_JOB_OFFER</clid>
+                  <caption>T&amp;ouml;&amp;ouml;pakkumine</caption>
+            </JOBS>
+            <TOOPAKKUJA>
+                  <value>20</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tööpakkuja</caption>
+            </TOOPAKKUJA>
+            <TOOTSIJA>
+                  <value>21</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Tööotsija</caption>
+            </TOOTSIJA>
       </reltypes>
 </properties>
 

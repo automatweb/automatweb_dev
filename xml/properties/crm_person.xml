@@ -144,7 +144,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_WORK</reltype>
             <table>kliendibaas_isik</table>
-            <group>contact</group>
+            <group>general</group>
             <field>work_contact</field>
             <caption>Organisatsioon</caption>
       </property>
@@ -153,8 +153,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_RANK</reltype>
             <table>kliendibaas_isik</table>
-            <automatic>1</automatic>
-            <group>contact</group>
+            <group>general</group>
             <field>rank</field>
             <caption>Ametinimetus</caption>
       </property>
@@ -352,7 +351,7 @@
             <WORK>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>töökoht</caption>
+                  <caption>Töökoht</caption>
             </WORK>
             <RANK>
                   <value>7</value>
@@ -367,7 +366,7 @@
             <PERSON_CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
-                  <caption>kõne</caption>
+                  <caption>Kõne</caption>
             </PERSON_CALL>
             <PERSON_TASK>
                   <value>10</value>
@@ -394,6 +393,15 @@
                   <clid>CL_PROFIIL</clid>
                   <caption>Profiil</caption>
             </PROFILE>
+            <USER_DATA>
+                  <value>15</value>
+                  <caption>Andmed</caption>
+            </USER_DATA>
+            <CV>
+                  <value>19</value>
+                  <clid>CL_CV</clid>
+                  <caption>CV</caption>
+            </CV>
       </reltypes>
 </properties>
 
