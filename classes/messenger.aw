@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.6 2001/05/22 05:42:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.7 2001/05/23 03:20:10 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -163,6 +163,12 @@ class messenger extends menuedit_light
 		{
 			$this->user = $this->get_user(array(
 				"uid" => UID,
+			));
+			classload("users");
+			$users = new users;
+			$this->msgconf = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "messenger",
 			));
 			$this->xml = new xml();
 			// igal klassi loomisel toome ka 
@@ -408,17 +414,20 @@ class messenger extends menuedit_light
 		};
 		foreach($flist as $key => $val)
 		{
+			$checked = ($this->msgconf["msg_defaultfolder"] == $key) ? "checked" : "";
 			$this->vars(array(
 				"id" => $key,
 				"name" => $val,
 				"total" => ($totals[$key]) ? $totals[$key] : 0,
 				"unread" => ($unread[$key]) ? $unread[$key] : 0,
+				"checked" => $checked,
 			));
 			$c .= $this->parse("line");
 		};
 		$this->vars(array(
 				"line" => $c,
 				"menu" => $menu,
+				"reforb" => $this->mk_reforb("submit_configure",array("aft" => "folders")),
 		));
 		return $this->parse();
 	}
@@ -1206,9 +1215,42 @@ class messenger extends menuedit_light
 		));
 		return $this->parse();
 	}
-
+	
 	function submit_configure($args = array())
 	{
+		// loeme vana konffi sisse
+		classload("users");
+		$users = new users();
+		#$msgconf = $users->get_user_config(array(
+		#				"uid" => UID,
+		#				"key" => "messenger",
+		#			));
+		// nüüd tsükkel üle kõigi $args-i elementide, mille nimi algab msg_-ga
+		foreach($args as $key => $val)
+		{
+			if (strpos($key,"msg_") === 0)
+			{
+				$this->msgconf[$key] = $val;
+			}
+		};
+		$users->set_user_config(array(
+						"uid" => UID,
+						"key" => "messenger",
+						"value" => $this->msgconf,
+		));
+		global $status_msg;
+		$status_msg = "Konfiguratsioonimuudatused on salvestatud";
+		session_register("status_msg");
+		return $this->mk_my_orb("folders",array());
+		
+	}
+	
+
+	function _submit_configure($args = array())
+	{
+		// blargh. bad thing on see, et selle funktsiooni peab taiesti ymber
+		// kirjutama. ja seda selleks, et ta kasutaks users klassi
+		// set_user_config ja get_user_config funktsioone
 		extract($args);
 		$knownfields = array("msg_on_page","store_sent","ondelete","confirm_send",
 					"msg_outbox","msg_trash","msg_draft","signatures","defsig",
