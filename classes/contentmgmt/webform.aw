@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.10 2004/12/03 16:43:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.11 2004/12/06 14:08:37 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -124,6 +124,7 @@ class webform extends class_base
 			"tpldir" => "contentmgmt/webform",
 			"clid" => CL_WEBFORM
 		));
+		$this->n_props = array("checkboxes", "radiobuttons");
 		$this->trans_names = array(
 			"text" => "Tekst",
 			"textbox" => "Väike tekstikast",
@@ -784,6 +785,7 @@ class webform extends class_base
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
 		$clf_type = $object_type->meta("clf_type");
 		$classificator = $object_type->meta("classificator");
+		$prp_orient = array(0 => "horisontaalne", "vertical" => "vertikaalne");
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
@@ -834,6 +836,26 @@ class webform extends class_base
 						)),
 						"predefs" => $prp_metas,
 					));
+					if(in_array($clf_type[$prpdata["name"]], $this->n_props))
+					{
+						$this->vars(array(
+							"v_order" => html::select(array(
+								"name" => "prp_opts[".$prpdata["name"]."][orient]",
+								"options" => $prp_orient,
+								"selected" => $property["orient"],
+							)),
+						));
+						$this->vars(array(
+							"ordering" => $this->parse("ordering"),
+						));
+					}
+					else
+					{
+						$this->vars(array(
+							"v_order" => "",
+							"ordering" => "",
+						));
+					}
 					$this->vars(array(
 						"clf1" => $this->parse("clf1"),
 					));
@@ -1062,6 +1084,8 @@ class webform extends class_base
 	
 	function draw_cfgform_from_ot($arr)
 	{
+		$object_type = obj($arr["ot"]);
+		$clf_type = $object_type->meta("clf_type");
 		$cfgform_i = get_instance(CL_CFGFORM);
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
@@ -1124,6 +1148,10 @@ class webform extends class_base
 			if($val["type"] == "hidden")
 			{
 				$arr["reforb"][$key] = "";
+			}
+			if(in_array($clf_type[$key], $this->n_props))
+			{
+				$els[$key]["orient"] = $all_props[$key]["orient"];
 			}
 		}
 		classload("cfg/htmlclient");

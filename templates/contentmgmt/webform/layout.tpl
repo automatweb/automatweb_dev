@@ -38,8 +38,16 @@ function selall()
 		{VAR:clf_type}
 		</td>
 		<td bgcolor="{VAR:bgcolor}" colspan="3">
+		<!-- SUB: ordering -->
+		Variantide paigutus:
+		{VAR:v_order}
+		<!-- END SUB: ordering -->
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="{VAR:bgcolor}" colspan="5">
 		Uued variandid:
-		<input type="text" name="prp_metas[{VAR:prp_key}]" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:200px">
+		<input type="text" name="prp_metas[{VAR:prp_key}]" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:300px">
 		</td>
 	</tr>
 	<tr>
