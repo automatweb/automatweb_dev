@@ -1,22 +1,8 @@
 <?php
 include("const.aw");
-include("site_header.".aw_ini_get("ext"));
-
-$te = new aw_template;
-$te->init("");
-$te->read_template("login.tpl");
-
-$m = new menuedit(aw_ini_get("per_oid"));
-
-$si =&__get_site_instance();
-
-$content = $m->gen_site_html(array(
-	"section"  => $section,
-	"vars" => $si->on_page(),
-	"text" => $te->parse(),
-	"no_right_pane" => ($content) ? true : false,
-	"sub_callbacks" => $si->get_sub_callbacks()
-));
-
-include("site_footer.".aw_ini_get("ext"));
+// can't use classload here, cause it will be included from within a function and then all kinds of nasty
+// scoping rules come into action. blech.
+$script = basename($_SERVER["SCRIPT_FILENAME"], ".".aw_ini_get("ext"));
+$path = aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/".$script."_impl.".aw_ini_get("ext");
+include($path);
 ?>
