@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.18 2002/06/15 16:43:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.19 2002/06/27 23:45:08 duke Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -497,36 +497,56 @@ class form_chain extends form_base
 			"name" => $f->entry_name
 		));
 
+		$sbt = $f->get_opt("el_submit");
+
 		$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
 
 		$tfid = $form_id;
-		if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]) && !isset($GLOBALS["confirm"]))
+
+		//if ($this->chain["gotonext"][$form_id] && !isset($GLOBALS["no_chain_forward"]) && !isset($GLOBALS["confirm"]))
+		if ($this->chain["gotonext"][$form_id] && ($sbt["chain_forward"] == 0) && ($sbt["confirm"] == 0))
 		{
 			$prev = 0;
+
+			// XXX: rewrite this without using breaks
+
+			// need to figure out whether we have to go "back" in chain
+			// so we cycle over all the forms in the chain and ...
 			foreach($this->chain["forms"] as $fid)
 			{
-				if (isset($GLOBALS["chain_backward"]))
+				//if (isset($sbt["chain_backward"]))
+				if ( $sbt["chain_backward"] > 0)
 				{
 					if ($fid == $form_id)
 					{
+						// if prev was set in the last cycle
+						// set form_id to that
 						if ($prev)
 						{
 							$form_id = $prev;
 						}
+						// otherwise just drop out. first form
+						// can't go back.
 						break;
 					}
 				}
 
+				// default action, go to the next form.
+				// but only if it is not the last in chain
 				if ($prev == $form_id)
 				{
 					$form_id = $fid;
 					break;
 				}
+
 				$prev = $fid;
 			}
 		}
 
-		if ($tfid == $form_id && !isset($GLOBALS["no_chain_forward"]))
+		// so, if this was the last form in the chain and no_chain_forward is
+		// not set, do what we are supposed to to after filling the last form.
+
+		if ($tfid == $form_id && ($sbt["chain_forward"] == 0) )
 		{
 			// check that if we are after the last form then if the user has selected that we should show the entry then do so
 			if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
@@ -540,6 +560,7 @@ class form_chain extends form_base
 			}
 		}
 
+		// has something to do with embedding
 		if ($section && $GLOBALS["class"] == "")
 		{
 			$url = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section."/form_id=".$form_id."/entry_id=".$chain_entry_id;

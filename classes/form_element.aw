@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.53 2002/06/27 22:49:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.54 2002/06/27 23:45:08 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2119,8 +2119,8 @@ class form_element extends aw_template
 
 			if ($clicked)
 			{
-				// let the form know that _this_ button was clicked
-				$this->form->set_opt("submit_id",$skey);
+				// pass a reference to this elements "arr" back to the form
+				$this->form->set_opt("el_submit",&$this->arr);
 
 				if ($this->arr["subtype"] == "confirm")
 				{
