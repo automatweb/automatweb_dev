@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.42 2003/05/09 16:37:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.43 2003/05/14 14:36:00 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3659,6 +3659,14 @@ class form_element extends aw_template
 			$this->arr["listbox_count"] = $cnt;
 		}
 		return $rel;
+	}
+
+	function upd_value()
+	{
+		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"])) 
+		{
+			$this->entry = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
+		}
 	}
 }
 ?>

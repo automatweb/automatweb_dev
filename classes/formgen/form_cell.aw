@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.8 2003/05/08 10:55:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.9 2003/05/14 14:36:00 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -613,6 +613,14 @@ class form_cell extends form_base
 			{
 				$this->arr[$i]->set_value($val, $usr_val);
 			}
+		}
+	}
+
+	function upd_value()
+	{
+		for ($i=0; $i < $this->cnt; $i++)
+		{
+			$this->arr[$i]->upd_value();
 		}
 	}
 };

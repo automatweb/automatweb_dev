@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.58 2003/05/09 22:16:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.59 2003/05/14 14:36:00 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2326,7 +2326,7 @@ class form extends form_base
 					$this->entry[$co["meta"]["target_element"]] = $_ds;
 				};
 			};
-
+			$this->_do_value_controllers();
 		}
 
 		if (is_array($restrict_search_el))
@@ -6159,5 +6159,15 @@ class form extends form_base
 		}
 	}
 
+	function _do_value_controllers()
+	{
+		for($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->upd_value();
+			}
+		}
+	}
 };	// class ends
 ?>
