@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.67 2003/06/19 16:08:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.68 2003/06/19 16:42:44 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -2523,6 +2523,8 @@ class form extends form_base
 //		echo "sql = $sql <br>";
 		$result = "";
 		$this->db_query($sql,false);
+		$cur_row = 0;
+		$total_rows = $this->num_rows();
 		if ($this->arr["show_table"] && !$this->arr["show_s_res_as_forms"])
 		{
 			$form_table->set_num_rows($this->num_rows());
@@ -2545,7 +2547,8 @@ class form extends form_base
 					"entry_id" => $row["entry_id"], 
 					"no_load_entry" => true, 
 					"tpl" => "show_noform.tpl",
-					"prefix" => "sr_".$row["entry_id"]."_"
+					"prefix" => "sr_".$row["entry_id"]."_",
+					"no_submit" => !($cur_row == ($total_rows-1))
 				));
 				$this->s_res_as_forms_eids[] = $row["entry_id"];
 				$this->s_res_as_forms_fid = $show_form->id;
@@ -2606,6 +2609,7 @@ class form extends form_base
 				$show_form->load_entry($row["entry_id"]);
 				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
 			}
+			$cur_row++;
 		}
 
 		
