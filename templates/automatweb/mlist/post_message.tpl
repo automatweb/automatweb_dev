@@ -11,11 +11,11 @@
 </tr>
 <tr>
 <td class="fcaption2">Mitu teadet korraga:</td>
-<td class="fgtext" ><input type="text" name="patch_size[{VAR:lidgid}]" value="0" class='small_button'></td>
+<td class="fgtext" ><input type="text" name="patch_size" value="0" class='small_button'></td>
 </tr>
 <tr>
 <td class="fcaption2">Saatmiste vahel oota (min):</td>
-<td class="fgtext"><input type="text" name="delay[{VAR:lidgid}]" value="0" class='small_button'></td>
+<td class="fgtext"><input type="text" name="delay" value="0" class='small_button'></td>
 </tr>
 <!-- END SUB: listrida -->
 
