@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.1 2004/05/20 08:21:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.2 2004/06/10 11:16:21 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -50,9 +50,11 @@ class project extends class_base
 	// !Optionally this also needs to support date range ..
 	function gen_event_list($arr)
 	{
+		/*
 		$lds = $this->get_events_for_project(array(
 			"project_id" => $arr["obj_inst"]->id(),
 		));
+		*/
 		
 		$t = &$arr["prop"]["vcl_inst"];
 
@@ -71,10 +73,11 @@ class project extends class_base
 
 		$this->overview = array();
 
-		if (sizeof($lds) > 0)
-		{
+		//if (sizeof($lds) > 0)
+		//{
 			$ol = new object_list(array(
-				"oid" => $lds,
+				//"oid" => $lds,
+				"parent" => $arr["obj_inst"]->id(),
 				"sort_by" => "planner.start",
 				new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
 			));
@@ -99,7 +102,7 @@ class project extends class_base
 
 
 			};
-		};
+		//};
 	}
 
 	function get_overview($arr = array())
@@ -121,7 +124,8 @@ class project extends class_base
 		{
 			global $awt;
 			$awt->start("project-event-loader");
-			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
+			#$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
+			$ev_ids = $arr["project_id"];
 			$awt->stop("project-event-loader");
 		}
 		else
@@ -131,16 +135,19 @@ class project extends class_base
 			$users = get_instance("users");
 			if (aw_global_get("uid"))
 			{
+				// see asi peab nüüd hakkama tagastame foldereid!
 				$user_obj = new object($arr["user_ids"][0]);
 				// this is wrong, I need to figure out the users, that this calendar belongs to
 				//$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 				$conns = $user_obj->connections_to(array(
 					"from.class_id" => CL_PROJECT,
 				));
+				// ei mingit bloody cyclet, see hakkab lihtsalt tagastame projektide id-sid, onjä!
 				$ev_ids = array();
 				foreach($conns as $conn)
 				{
-					$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
+					$ev_ids[] = $conn->prop("from");
+					//$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
 				};
 			};
 		};
@@ -202,11 +209,16 @@ class project extends class_base
 	// event_id - id of the event 
 	function connect_event($arr)
 	{
-		$prj_obj = new object($arr["id"]);
+		//$prj_obj = new object($arr["id"]);
+		$evt_obj = new object($arr["event_id"]);
+		// create a brother under the project object
+		$evt_obj->create_brother($arr["id"]);
+		/*
 		$prj_obj->connect(array(
 			"to" => $arr["event_id"],
 			"reltype" => RELTYPE_PRJ_EVENT,
 		));
+		*/
 	}
 
 	////
@@ -215,10 +227,89 @@ class project extends class_base
 	// event_id - id of the event
 	function disconnect_event($arr)
 	{
+		#$evt_obj = new object($arr["event_id"]);
+		#$evt_obj->delete();
+		// deleting is broken now until I can figure out something
+		//$evt_obj 
+		/*
 		$prj_obj = new object($arr["id"]);
 		$prj_obj->disconnect(array(
 			"from" => $arr["event_id"],
 		));
+		*/
+	}
+
+	/**
+		@attrib name=test_it_out all_args="1"
+
+	**/
+	function test_it_out($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+		));
+		set_time_limit(0);
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			/*
+			if ($o->id() != 87738)
+			{
+				continue;
+			};
+			*/
+			$subs = new object_list(array(
+				"parent" => $o->id(),
+				"site_id" => array(),
+			));
+			for ($sub_o = $subs->begin(); !$subs->end(); $sub_o = $subs->next())
+			{
+				$orig = $sub_o->get_original();
+				#print_r($sub_o);
+				$sub2parent[$orig->id()] = $sub_o->id();
+			};
+			#arr($sub2parent);
+			#arr($subs);
+			$brother_parent = $o->id();
+			// now I have to create brothers for each object
+			print "projekt " . $o->name(). "<br>";
+			print "id = " . $o->id() . "<br>";
+			print "connections = ";
+			$conns = $o->connections_from(array(
+				"type" => "RELTYPE_PRJ_EVENT",
+			));
+			// create_brother
+			print sizeof($conns);
+			print "<br><br>";
+			foreach($conns as $conn)
+			{
+				$to_obj = $conn->to();
+				$tmp = $to_obj->get_original();
+				$to_oid = $tmp->id();
+				print "# ";
+				print $conn->prop("reltype") . " ";
+				print $to_obj->name() . " ";
+				$p_obj = new object($to_obj->prop("parent"));
+				print $p_obj->name() . "<bR>";
+				// but first check, whether I already have an object with that parent!
+
+				print_r($to_obj);
+				if ($sub2parent[$to_oid])
+				{
+					print "brother already exists under $brother_parent<br>";
+				}
+				else
+				{
+					print "creating a brother under $brother_parent<br>";
+				};
+				print "<hr>";
+				$to_obj->create_brother($brother_parent);
+			};
+			// I have to clone those, you know
+			print "<br><br>";
+		};
+		print "oh, man, this is SO cool!";
+
+
 	}
 };
 ?>
