@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.46 2003/09/17 15:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.47 2003/10/05 17:48:31 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -888,6 +888,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			));
 		};
 
+
 		if (!$args["clid"])
 		{
 			$mn = get_instance("admin/admin_menus");
@@ -924,6 +925,24 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		return $this->parse();
 	}
+
+	function req_array_reforb($k, $v)
+	{
+		$ret = "";
+		foreach($v as $_k => $_v)
+		{
+			if (is_array($_v))
+			{
+				$ret .= $this->req_array_reforb($k."[".$_k."]",$_v);
+			}
+			else
+			{
+				$ret .= "<input type='hidden' name='".$k."[".$_k."]' value=\"".str_replace("\"","&amp;",$_v)."\" />\n";
+			}
+		}
+		return $ret;
+        }
+
 
 	function modify_toolbar($args)
 	{
