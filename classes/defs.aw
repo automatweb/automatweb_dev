@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.100 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.101 2003/08/25 12:58:49 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -205,7 +205,7 @@ if (!defined("DEFS"))
 		$sets = array(
 			'password' => array(
 				'content' => '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
-				'min' => 4,
+				'min' => 3,
 				'max' => 32),
 			'uid'	=> array(
 				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
@@ -690,6 +690,7 @@ if (!defined("DEFS"))
 		if (!$leave_global)
 		{
 			aw_global_set($name, "");
+			unset($GLOBALS[$name]);
 		}
 	}
 
