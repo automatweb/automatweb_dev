@@ -27,7 +27,19 @@
 				</tr>
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_period' value=1 {VAR:has_period}></td>
-					<td class="fcaption2">Perioodiga item</td>
+					<td class="fcaption2">Perioodiga item <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>Vali periood</a></td>
+				</tr>
+				<tr>
+					<td class="fcaption2">&nbsp;</td>
+					<td class="fcaption2">Alates: {VAR:per_from}</td>
+				</tr>
+				<tr>
+					<td class="fcaption2">&nbsp;</td>
+					<td class="fcaption2">Mitu kordust n&auml;idatakse: <input type='text' name='per_cnt' class='small_button' size=3 VALUE='{VAR:per_cnt}'></td>
+				</tr>
+				<tr>
+					<td class="fcaption2">&nbsp;</td>
+					<td class="fcaption2"><a href='{VAR:per_prices}'>M&auml;&auml;ra perioodide hinnad</a></td>
 				</tr>
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_objs' value=1 {VAR:has_objs}></td>
