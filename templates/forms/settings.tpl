@@ -27,6 +27,9 @@ function varvivalik()
 <td class="fform" colspan=2>{VAR:LC_FORMS_FORM_TRIED_FILL_USER_DATA}: &nbsp;<input type='checkbox' name='try_fill' value=1 {VAR:try_fill}></td>
 </tr>
 <tr>
+<td class="fform" colspan=2>Luba väljundites HTMLi näitamist: &nbsp;<input type='checkbox' name='allow_html' value=1 {VAR:allow_html}></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>Kontrollida vormi staatust lehelt lahkumisel?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
 <br>
 Tekst, mida kasutajale kuvada: <input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40">
