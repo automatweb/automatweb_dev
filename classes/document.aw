@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.311 2005/01/10 15:30:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.312 2005/01/12 11:49:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4267,8 +4267,10 @@ class document extends aw_template
 	//This could be bloody slow
 	function parse_keywords(&$content)
 	{
-		$cleaned = str_replace(".", " ", str_replace("&nbsp;", "", strip_tags($content)));
-		$content_arr = preg_split('/[\s|\.|,]+/', $cleaned);		
+		$cleaned = str_replace("&nbsp;", "", strip_tags($content));
+		// ya can't put a dot in here, cause that breaks stupid-ass keywords that have dots in them. so if you need to find keywords that are at the end of the sentence, then 	
+		// ya gotta figure out a way to regex so that a.b does not get split but a. does.
+		$content_arr = preg_split('/[\s|,]+/', $cleaned);		
 		$content_arr2 = $content_arr;	
 		
 		for($i=0; $i<count($content_arr); $i++)

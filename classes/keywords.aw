@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.58 2005/01/10 15:30:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.59 2005/01/12 11:49:39 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -76,15 +76,27 @@ class keywords extends class_base
 				foreach ($docarr as $doc)
 				{
 					$burl = $si->get_url_for_site($doc->site_id());
+
+					$al = get_instance("aliasmgr");
+					$lead = $doc->prop("lead");
+					$meta = $doc->meta();
+					$al->parse_oo_aliases($doc->id(),&$lead,array("templates" => &$this->templates,"meta" => &$meta));
+
+					$u1 = $doc->prop("user1");
+					if ($u1 != "")
+					{
+						$u1 .= " / ";
+					}
 					$this->vars(array(
 						"date" => get_lc_date($doc->prop("modified")),
 						"title" => $doc->prop("title"),
 						"author" => $doc->prop("author"),
 						"id" => $doc->id(),
-						"lead" => $doc->prop("lead")."<br>",
+						"lead" => $lead."<br>",
 						"link" => $burl."/".$doc->id(),
 						"target" => ($doc->site_id() != $this->cfg["site_id"]) ? " target=\"_blank\" " : "",
-						"site_url" => $burl
+						"site_url" => $burl,
+						"user1" => $u1
 					));
 					$line.= $this->parse("LINE");			
 				}
