@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.3 2003/03/14 16:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.4 2003/03/19 14:16:32 kristo Exp $
 
 /*
 
@@ -354,84 +354,36 @@ class gallery_v2 extends class_base
 				if ($meta["import_local"] == 1)
 				{
 					$fc = $this->get_file(array("file" => $meta['local_folder']."/".$file));
-//					echo "got local file <br>";
 				}
 			
 				// get image size
-				// save temp file
-				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
-				$this->put_file(array(
-					"file" => $tn,
-					"content" => $fc
-				));
-				$img = imagecreatefromjpeg($tn);
-				unlink($tn);
+				$img = $this->_imagecreatefromstring($fc, $file);
 
 				$i_width = imagesx($img);
 				$i_height = imagesy($img);
 
-				if ($i_width > $i_height)
-				{
-					$tn_width = $conf_o["meta"]["h_tn_width"];
-					$tn_height = $conf_o["meta"]["h_tn_height"];
-					$width = $conf_o["meta"]["h_width"];
-					$height = $conf_o["meta"]["h_height"];
-				}
-				else
-				{
-					$tn_width = $conf_o["meta"]["v_tn_width"];
-					$tn_height = $conf_o["meta"]["v_tn_height"];
-					$width = $conf_o["meta"]["v_width"];
-					$height = $conf_o["meta"]["v_height"];
-				}
-//				echo "before convert, tn_width = $tn_width, tn_height = $tn_height , width = $width, height= $height, i_width = $i_width , i_height = $i_height <BR>";
+				$xydata = $this->_get_xydata(array(
+					"i_width" => $i_width,
+					"i_height" => $i_height,
+					"conf_o" => $conf_o
+				));
+				extract($xydata);
 
-				if (!$width)
-				{
-					$width = $i_width;
-				}
-				if (!$height)
-				{
-					$height = $i_height;
-				}
-
-				// now convert to pixels
-				if ($width{strlen($width)-1} == "%")
-				{
-					$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
-				}
-				if ($height{strlen($height)-1} == "%")
-				{
-					$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
-				}
-
-				if ($tn_width{strlen($tn_width)-1} == "%")
-				{
-					$tn_width = (int)($width * (((int)substr($tn_width, 0, -1))/100));
-				}
-				if ($tn_height{strlen($tn_height)-1} == "%")
-				{
-					$tn_height = (int)($height * (((int)substr($tn_height, 0, -1))/100));
-				}
-
-//				echo "after convert, tn_width = $tn_width, tn_height = $tn_height , width = $width, height= $height, i_width = $i_width , i_height = $i_height <BR>";
-				
 				// the conf object may specify a different size for images, so resize if necessary
 				if (($width && ($width != $i_width)) || ($height && ($height != $i_height)))
 				{
-//					echo "resize! <br>";
 					$n_img = imagecreatetruecolor($width, $height);
-					imagecopyresized($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
+					imagecopyresampled($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
 					imagedestroy($img);
 					$img = $n_img;
 				}
-				
-				// get the image
-				// we gots to do the ob trick here :( sucks!
-				ob_start();
-				imagejpeg($img);
-				$fc = ob_get_contents();
-				ob_end_clean();
+
+				if ($conf_o["meta"]["insert_logo"] == 1)
+				{
+					$img = $this->_do_logo($img, $conf_o);
+				}
+
+				$fc = $this->_get_jpeg($img);				
 				
 				$img_inst = get_instance("image");
 				$idata = $img_inst->add_image(array(
@@ -439,29 +391,36 @@ class gallery_v2 extends class_base
 					"orig_name" => $file,
 					"parent" => $img_folder
 				));
-//				echo "idata = ".dbg::dump($idata)." <br>";
 
 				// now we gots to make a thumbnail and add that as well.
 				$n_img = imagecreatetruecolor($tn_width, $tn_height);
-//				echo "imagecopyresized from $n_img to $img $tn_width, $tn_height, $width, $height <br>";
-				$res = imagecopyresized($n_img, $img, 0, 0, 0,0, $tn_width, $tn_height, $width, $height);
-//				echo "tn create res = $res <br>";
+				
+				// now if the user specified that the thumbnail is subimage, then cut it out first
+				if ($tn_is_subimage && $tn_si_width && $tn_si_height)
+				{
+					$t_img = imagecreatetruecolor($tn_si_width, $tn_si_height);
+					imagecopy($t_img, $img, 0, 0, $tn_si_left, $tn_si_top, $tn_si_width, $tn_si_height);
+					$res = imagecopyresampled($n_img, $t_img, 0, 0, 0,0, $tn_width, $tn_height, $tn_si_width, $tn_si_height);
+				}
+				else
+				{
+					$res = imagecopyresampled($n_img, $img, 0, 0, 0,0, $tn_width, $tn_height, $width, $height);
+				}
 				imagedestroy($img);
 				$img = $n_img;
 
-				// get the image
-				// we gots to do the ob trick here :( sucks!
-				ob_start();
-				imagejpeg($img);
-				$fc = ob_get_contents();
-				ob_end_clean();
+				if ($conf_o["meta"]["tn_insert_logo"] == 1)
+				{
+					$img = $this->_do_logo($img, $conf_o, "tn_");
+				}
+
+				$fc = $this->_get_jpeg($img);
 				
 				$tn_idata = $img_inst->add_image(array(
 					"str" => $fc, 
 					"orig_name" => $file,
 					"parent" => $img_folder
 				));
-//				echo "tn_idata = ".dbg::dump($tn_idata)." <br>";
 
 				// and now we need to add the image to the first empty slot
 				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col);
@@ -513,7 +472,7 @@ class gallery_v2 extends class_base
 			$page = 1;
 		}		
 //		echo "gnfp p $page r $row c $col <br>";
-		for ($_page = 1; $_page < $meta['num_pages']; $_page++)
+		for ($_page = 1; $_page <= $meta['num_pages']; $_page++)
 		{
 			if (!$meta['page_data'][$_page]['layout'])
 			{
@@ -825,6 +784,295 @@ class gallery_v2 extends class_base
 			$hits[$row['oid']] = $row['hits'];
 		}
 		return $hits;
+	}
+
+	function _get_xydata($arr)
+	{
+		extract($arr);
+		if ($i_width > $i_height)
+		{
+			$tn_width = $conf_o["meta"]["h_tn_width"];
+			$tn_height = $conf_o["meta"]["h_tn_height"];
+			$width = $conf_o["meta"]["h_width"];
+			$height = $conf_o["meta"]["h_height"];
+			$is_subimage = $conf_o["meta"]["h_tn_subimage"] == 1;
+			if ($is_subimage)
+			{
+				$si_top = $conf_o["meta"]["h_tn_subimage_top"];
+				$si_left = $conf_o["meta"]["h_tn_subimage_left"];
+				$si_width = $conf_o["meta"]["h_tn_subimage_width"];
+				$si_height = $conf_o["meta"]["h_tn_subimage_height"];
+			}
+		}
+		else
+		{
+			$tn_width = $conf_o["meta"]["v_tn_width"];
+			$tn_height = $conf_o["meta"]["v_tn_height"];
+			$width = $conf_o["meta"]["v_width"];
+			$height = $conf_o["meta"]["v_height"];
+			$is_subimage = $conf_o["meta"]["v_tn_subimage"] == 1;
+			if ($is_subimage)
+			{
+				$si_top = $conf_o["meta"]["v_tn_subimage_top"];
+				$si_left = $conf_o["meta"]["v_tn_subimage_left"];
+				$si_width = $conf_o["meta"]["v_tn_subimage_width"];
+				$si_height = $conf_o["meta"]["v_tn_subimage_height"];
+			}
+		}
+
+		// check if the user only specified one of width/height and then calc the other one
+		if ($width && !$height)
+		{
+			if ($width{strlen($width)-1} == "%")
+			{
+				$height = $width;
+			}
+			else
+			{
+				$ratio = $width / $i_width;
+				$height = (int)($i_height * $ratio);
+			}
+		}
+
+		if (!$width && $height)
+		{
+			if ($height{strlen($height)-1} == "%")
+			{
+				$width = $height;
+			}
+			else
+			{
+				$ratio = $height / $i_height;
+				$width = (int)($i_width * $ratio);
+			}
+		}
+
+
+		if ($tn_width && !$tn_height)
+		{
+			if ($tn_width{strlen($tn_width)-1} == "%")
+			{
+				$tn_height = $tn_width;
+			}
+			else
+			{
+				$ratio = $tn_width / $i_width;
+				$tn_height = (int)($i_height * $ratio);
+			}
+		}
+
+		if (!$tn_width && $tn_height)
+		{
+			if ($tn_height{strlen($tn_height)-1} == "%")
+			{
+				$tn_width = $tn_height;
+			}
+			else
+			{
+				$tn_ratio = $tn_height / $i_height;
+				$tn_width = (int)($i_width * $ratio);
+			}
+		}
+
+		if ($si_width && !$si_height)
+		{
+			if ($si_width{strlen($si_width)-1} == "%")
+			{
+				$si_height = $si_width;
+			}
+			else
+			{
+				$ratio = $si_width / $i_width;
+				$si_height = (int)($i_height * $ratio);
+			}
+		}
+
+		if (!$si_width && $si_height)
+		{
+			if ($si_height{strlen($si_height)-1} == "%")
+			{
+				$si_width = $si_height;
+			}
+			else
+			{
+				$ratio = $si_height / $i_height;
+				$si_width = (int)($i_width * $ratio);
+			}
+		}
+
+
+		if (!$width)
+		{
+			$width = $i_width;
+		}
+		if (!$height)
+		{
+			$height = $i_height;
+		}
+
+		// now convert to pixels
+		if ($width{strlen($width)-1} == "%")
+		{
+			$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
+		}
+		if ($height{strlen($height)-1} == "%")
+		{
+			$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
+		}
+
+		if ($tn_width{strlen($tn_width)-1} == "%")
+		{
+			$tn_width = (int)($width * (((int)substr($tn_width, 0, -1))/100));
+		}
+		if ($tn_height{strlen($tn_height)-1} == "%")
+		{
+			$tn_height = (int)($height * (((int)substr($tn_height, 0, -1))/100));
+		}
+
+		if ($si_width{strlen($si_width)-1} == "%")
+		{
+			$si_width = (int)($width * (((int)substr($si_width, 0, -1))/100));
+		}
+		if ($si_height{strlen($si_height)-1} == "%")
+		{
+			$si_height = (int)($height * (((int)substr($si_height, 0, -1))/100));
+		}
+
+		return array(
+			"width" => $width,
+			"height" => $height,
+			"tn_width" => $tn_width,
+			"tn_height" => $tn_height,
+			"tn_is_subimage" => $is_subimage,
+			"tn_si_top" => $si_top,
+			"tn_si_left" => $si_left,
+			"tn_si_width" => $si_width,
+			"tn_si_height" => $si_height
+		);
+	}
+
+	function _get_jpeg($img)
+	{
+		ob_start();
+		imagejpeg($img);
+		$fc = ob_get_contents();
+		ob_end_clean();
+		return $fc;
+	}
+
+	function _imagecreatefromstring($str, $orig_filename)
+	{
+		if (function_exists("imagecreatefromstring"))
+		{
+			return imagecreatefromstring($str);
+		}
+		else
+		{
+			// save temp file
+			$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
+			$this->put_file(array(
+				"file" => $orig_filename,
+				"content" => $str
+			));
+			$_o = strtolower($orig_filename);
+			$ext = substr($_o, strrpos($_o, ".")+1);
+			if ($ext == "jpg" || $ext == "jpeg" || $ext == "pjpeg")
+			{
+				$img = imagecreatefromjpeg($tn);
+			}
+			else
+			if ($ext == "png")
+			{
+				$img = imagecreatefrompng($tn);
+			}
+			else
+			{
+				// try jpeg for default
+				$img = imagecreatefromjpeg($tn);
+			}
+			unlink($tn);
+			return $img;
+		}
+	}
+
+	function _do_logo($img, $conf_o, $p = "")
+	{
+		// first, get the damn image
+		if (!$conf_o["meta"][$p."logo_img"])
+		{
+			return $img;
+		}
+
+		$iinst = get_instance("image");
+		$_img = $iinst->get_image_by_id($conf_o["meta"][$p."logo_img"]);
+
+		$l_img = $this->_imagecreatefromstring($this->get_file(array("file" => $_img["file"])), $_img["file"]);
+
+		// this here finds the transparent color and makes it really be transparent
+		$trans = imagecolorclosestalpha($l_img, 0,0,0, 127);
+		imagecolortransparent($l_img, $trans);
+ 
+		// now, find where to put the damn thing
+		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_TOP)
+		{
+			imagecopymerge(
+				$img, 
+				$l_img, 
+				$conf_o["meta"][$p."logo_dist_x"], 
+				$conf_o["meta"][$p."logo_dist_y"], 
+				0,
+				0, 
+				imagesx($l_img), 
+				imagesy($l_img), 
+				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
+			);
+		}
+		else
+		if ($conf_o["meta"][$p."logo_corner"] == CORNER_LEFT_BOTTOM)
+		{
+			imagecopymerge(
+				$img, 
+				$l_img, 
+				$conf_o["meta"][$p."logo_dist_x"], 
+				imagesy($img) - ($conf_o["meta"][$p."logo_dist_y"] + imagesy($l_img)), 
+				0,
+				0, 
+				imagesx($l_img), 
+				imagesy($l_img), 
+				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
+			);
+		}
+		else
+		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_TOP)
+		{
+			imagecopymerge(
+				$img, 
+				$l_img, 
+				imagesx($img) - ($conf_o["meta"][$p."logo_dist_x"] + imagesx($l_img)), 
+				$conf_o["meta"][$p."logo_dist_y"], 
+				0,
+				0, 
+				imagesx($l_img), 
+				imagesy($l_img), 
+				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
+			);
+		}
+		else
+		if ($conf_o["meta"][$p."logo_corner"] == CORNER_RIGHT_BOTTOM)
+		{
+			imagecopymerge(
+				$img, 
+				$l_img, 
+				imagesx($img) - ($conf_o["meta"][$p."logo_dist_x"] + imagesx($l_img)), 
+				imagesy($img) - ($conf_o["meta"][$p."logo_dist_y"] + imagesy($l_img)), 
+				0,
+				0, 
+				imagesx($l_img), 
+				imagesy($l_img), 
+				($conf_o["meta"][$p."logo_transparency"] ? $conf_o["meta"][$p."logo_transparency"] : 100)
+			);
+		}
+		return $img;
 	}
 }
 ?>

@@ -116,7 +116,7 @@ class aw_mime_types
 	{
 		$file = strtolower($file);
 		$dotpos = strrpos($file,".");
-		$ext = substr($file, $dotpos);
+		$ext = substr($file, $dotpos+1);
 		return $this->type_for_ext($ext);
 	}
 

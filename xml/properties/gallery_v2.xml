@@ -204,6 +204,16 @@
             <caption>Importimisel kirjuta olemasolevad pildid &amp;uuml;le</caption>
       </property>
       <property>
+            <name>import_add_pages</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Importimisel lisa vajadusel lehek&amp;uuml;lgi</caption>
+      </property>
+      <property>
             <name>do_import</name>
             <type>submit</type>
             <field>meta</field>

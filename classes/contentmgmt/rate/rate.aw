@@ -293,7 +293,7 @@ class rate extends class_base
 			GROUP BY 
 				objects.oid
 			ORDER BY val DESC
-			LIMIT ".$ob['meta']['top']."
+			LIMIT ".(int)($ob['meta']['top'])."
 		";
 		$this->db_query($sql);
 		while ($row = $this->db_next())
