@@ -76,7 +76,7 @@ class site_content extends menuedit
 		$imc = get_instance("image");
 		$pers = get_instance("period");
 		$_t = aw_global_get("act_period");
-		$imdata = $imc->get_image_by_id($_t["data"]["image"]["id"]);
+		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
 		$this->vars(array(
 			"per_string" => $_t["name"],
 			"act_per_id" => $_t["id"],
@@ -2896,7 +2896,7 @@ class site_content extends menuedit
 				{
 					if ($is_menu && not($this->properties[$val]))
 					{
-						//print "<!-- found at $obj[oid] -->\n";
+						//print "<!-- found $val at $obj[oid] -->\n";
 						$this->properties[$val] = $_dat[$val];
 					};
 				};
