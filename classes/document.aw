@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.116 2002/08/29 03:18:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.117 2002/09/09 12:30:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -1396,29 +1396,6 @@ class document extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]),"",false,true);
 	}
 
-	function select_alias($docid, $entry_id)
-	{
-		$this->read_template("alias_type.tpl");
-
-		$fb = new form_base;
-		$form = $fb->get_form_for_entry($entry_id);
-
-		$opl = $fb->get_op_list($form);
-
-		$this->vars(array(
-			"op_sel" => $this->picker("", $opl[$form]),
-			"reforb" => $this->mk_reforb("submit_select_alias", array("docid" => $docid, "alias" => $entry_id, "form_id" => $form))
-		));
-		return $this->parse();
-	}
-
-	function submit_select_alias($arr)
-	{
-		extract($arr);
-		$this->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
-		return $this->mk_my_orb("change", array("id" => $docid));
-	}
-
 	////
 	// !Send a link to someone
 	function send_link()
@@ -2220,31 +2197,6 @@ class document extends aw_template
 		header("Location: ".$this->mk_orb("change", $arr));
 	}
 
-	function addalias($arr)
-	{
-		extract($arr);
-		$al = $this->get_object($alias);
-		$obj = $this->get_object($id);
-		if ($al["class_id"] == CL_FORM_ENTRY)	// form_entry
-		{
-			// we must let the user select whether he wants to view or edit the entry
-			$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $docid),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
-			return $this->select_alias($id, $alias);
-		} 
-		elseif ($al["class_id"] == CL_OBJECT_CHAIN)
-		{
-			classload("object_chain");
-			$oc = new object_chain();
-			$oc->expl_chain(array("id" => $alias,"parent" => $id));
-			header("Location: ".$this->mk_orb("list_aliases",array("id" => $id),"aliasmgr"));
-		}
-		else
-		{
-			$this->add_alias($id,$alias);
-			header("Location: ".$this->mk_orb("list_aliases",array("id" => $id),"aliasmgr"));
-		}
-	}
-
 	function list_docs_a($arr)
 	{
 		global $search,$sstring,$sstring2;
@@ -2536,19 +2488,6 @@ class document extends aw_template
 		}
 
 		return $this->mk_orb("sel_menus",array("id" => $id));
-	}
-
-	////
-	// !deletes alias $id of document $docid and returns to editing the document
-	function del_alias($arr)
-	{
-		extract($arr);
-		$ids = explode(";",$id);
-		foreach($ids as $real_id)
-		{
-			$this->delete_alias($docid,$real_id);
-		};
-		header("Location: ".$this->mk_orb("list_aliases", array("id" => $docid),"aliasmgr"));
 	}
 
 	function add_bro($arr)
