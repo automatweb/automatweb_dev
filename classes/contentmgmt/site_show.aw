@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.104 2004/11/24 08:41:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.105 2004/11/30 07:27:27 kristo Exp $
 
 /*
 
@@ -521,8 +521,15 @@ class site_show extends class_base
 				}
 				$skipfirst = $obj->prop("start_ndocs");
 				$lm = $obj->meta("last_menus");
+
+				$lm = array();
+				foreach($obj->connections_from(array("type" => "RELTYPE_DOC_SOURCE")) as $c)
+				{
+					$lm[$c->prop("to")] = $c->prop("to");
+				}
+
 				$lm_sub = $obj->meta("src_submenus");
-				if (is_array($lm) && ($lm[0] !== 0))
+				if (is_array($lm) && count($lm) > 0 && ($lm[0] !== 0))
 				{
 					$sections = $lm;
 					foreach($sections as $_sm)
@@ -656,6 +663,7 @@ class site_show extends class_base
 			{
 				$filter["no_show_in_promo"] = new obj_predicate_not(1);
 			}
+
 			$documents = new object_list($filter);
 
 			$rsid = aw_ini_get("site_id");
