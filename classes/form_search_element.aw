@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.9 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.10 2001/11/14 07:28:22 kristo Exp $
 
 lc_load("form");
 	class form_search_element extends form_element
@@ -64,7 +64,7 @@ lc_load("form");
 		{
 			global $awt;
 			$awt->start("form_search_element::gen_user_html_not");
-		$awt->count("form_search_element::gen_user_html_not");
+			$awt->count("form_search_element::gen_user_html_not");
 
 			if ($this->arr["ver2"])	// backward compatibility sucks ass, but whut can I do...
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.34 2001/11/14 07:14:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.35 2001/11/14 07:28:22 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -1190,27 +1190,41 @@ class form_element extends aw_template
 					$larr = $this->arr["listbox_items"];
 				}
 
+				$lb_opts = "";
 				for ($b=0; $b < $cnt; $b++)
 				{	
 					if ($this->entry_id)
+					{
 						$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
+					}
 					else
+					{
 						$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
+					}
 		
 					if (is_array($larr))
 					{
 						list($key,$value) = each($larr);
 						if ($ext)
 						{
-							$html .= "<option $lbsel value='$key'>$value</option>\n";
+							$lb_opts .= "<option $lbsel value='$key'>$value</option>\n";
 						}
 						else
 						{
-							$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+							// teeb pisikest trikka - kui on otsinguform ja me n2itame parajasti viimast elementi - see on automaagiliselt
+							// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
+							if ($this->form->type == FTYPE_SEARCH && $b == ($cnt-1))
+							{
+								$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts;
+							}
+							else
+							{
+								$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+							}
 						};
 					}
 				}
-				$html.="</select>";
+				$html.=$lb_opts."</select>";
 				break;
 
 			case "multiple":
