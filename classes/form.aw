@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.1 2001/05/19 21:51:45 duke Exp $
 lc_load("form");
 global $orb_defs;
 $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"params" => array("parent"), "opt" => array("alias_doc")),
@@ -809,7 +810,7 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 				$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
 				$this->db_query($sql);
 
-				$this->log_action($GLOBALS["uid"],"form","T&auml;itis formi $this->name");
+				$this->_log("form","T&auml;itis formi $this->name");
 				$this->do_actions($entry_id);
 			}
 			else
@@ -829,7 +830,7 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 				}
 				$sql = "update form_".$this->id."_entries set $ids where id = $entry_id";
 				$this->db_query($sql);
-				$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name sisestust $entry_id");
+				$this->_log("form","Muutis formi $this->name sisestust $entry_id");
 			}
 			// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 			$this->entry_id = $entry_id;
@@ -1574,7 +1575,7 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 
 			$this->load($id);
 
-			$this->log_action($GLOBALS["uid"],"form","Lisas formi $name");
+			$this->_log("form","Lisas formi $name");
 
 			if ($alias_doc)
 			{
@@ -1720,7 +1721,7 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 			extract($arr);
 			$this->delete_object($id);
 			$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-			$this->log_action($GLOBALS["uid"],"form","Kustutas formi $name");
+			$this->_log("form","Kustutas formi $name");
 			header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent), "menuedit"));
 		}
 
@@ -1907,7 +1908,7 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 			$this->quote(&$arr);
 			extract($arr);
 			$this->update_object($id, $name, -1, $comment);
-			$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name metainfot");
+			$this->_log("form","Muutis formi $this->name metainfot");
 			return $this->mk_orb("metainfo",  array("id" => $id));
 		}
 

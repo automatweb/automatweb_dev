@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.1 2001/05/19 21:53:33 duke Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = 
@@ -86,7 +87,7 @@ class form_output extends form_base
 		if ($op_id)
 		{
 			$this->upd_object(array("oid" => $op_id, "name" => $name, "comment" => $comment));
-			$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name outputi stiili $name");
+			$this->_log("form","Muutis formi $this->name outputi stiili $name");
 		}
 		else
 		{
@@ -113,7 +114,7 @@ class form_output extends form_base
 			$tp = serialize($this->output);
 			$id = $this->new_object(array("parent" => $this->id, "name" => $name, "class_id" => CL_FORM_OUTPUT, "comment" => $comment));
 			$this->db_query("insert into form_output values($id, '$tp')");
-			$this->log_action($GLOBALS["uid"],"form","Lisas formile $this->name outputi stiili $name");
+			$this->_log("form","Lisas formile $this->name outputi stiili $name");
 		}
 		return $this->mk_orb("list_op", array("id" => $this->id));
 	}
@@ -175,7 +176,7 @@ class form_output extends form_base
 	{
 		$this->delete_object($id);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->log_action($GLOBALS["uid"],"form","Kustutas formi $this->name outputi stiili $name");
+		$this->_log("form","Kustutas formi $this->name outputi stiili $name");
 	}
 
 	////
@@ -186,7 +187,7 @@ class form_output extends form_base
 		extract($arr);
 
 		$this->update_object($op_id, $name, -1, $comment);
-		$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name outputi stiili $name");
+		$this->_log("form","Muutis formi $this->name outputi stiili $name");
 		return $this->mk_orb("op_meta", array("id" => $id, "op_id" => $op_id));
 	}
 
@@ -197,7 +198,7 @@ class form_output extends form_base
 		$tp = serialize($this->output);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->update_object($id);
-		$this->log_action($GLOBALS["uid"],"form","Muutis formi $this->name outputi stiili $name");
+		$this->_log("form","Muutis formi $this->name outputi stiili $name");
 	}
 
 	////
