@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.1 2004/03/24 14:41:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.2 2004/03/25 09:40:40 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -93,35 +93,31 @@ class document_statistics extends class_base
 		$t = new aw_table();
 
 		$st = $this->get_stat_arr(array(
-			"timespan" => $o->prop("timespan"),
-			"count" => $o->prop("count"),
+			"timespan" => $ob->prop("timespan"),
+			"count" => $ob->prop("count"),
 		));
 				
-		$t->define_field(array(
-			"name" => "docid",
-			"caption" => "Dokument"
-		));
 
-		$t->define_field(array(
-			"name" => "hits",
-			"caption" => "Vaatamisi",
-			"align" => "center"
-		));
+		$this->read_template("show.tpl");
+
+		$l = "";
 
 		foreach($st as $did => $hc)
 		{
 			$o = obj($did);
-			$a = array(
-				"docid" => $o->name(),
+			$this->vars(array(
+				"doc_name" => $o->name(),
+				"docid" => $did,
 				"hits" => $hc
-			);
-			$t->define_data($a);
+			));
+
+			$l .= $this->parse("LINE");
 		}
 
-		$t->set_default_sortby("hits");
-		$t->set_default_sorder("desc");
-
-		return $t->draw();
+		$this->vars(array(
+			"LINE" => $l
+		));
+		return $this->parse();
 	}
 
 	/** adds a hit to the document hit list to the document $docid
@@ -139,13 +135,17 @@ class document_statistics extends class_base
 		$found = false;
 		foreach($fc as $line)
 		{
+			if ($line == "")
+			{
+				continue;
+			}
 			list($did, $hc) = explode(",", $line);
 			if ($did == $docid)
 			{
-				$line = $docid.",".($hc+1)."\n";
+				$line = $docid.",".($hc+1);
 				$found = true;
 			}
-			$nf .= $line;
+			$nf .= trim($line)."\n";
 		}
 
 		if (!$found)
@@ -211,7 +211,7 @@ class document_statistics extends class_base
 			$ds_arr[$did] = $hc;
 		}
 		
-		asort($ds_arr);
+		arsort($ds_arr);
 		$ret = array();
 		$i = 0;
 		foreach($ds_arr as $did => $hc)
