@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.56 2001/09/18 11:55:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.57 2001/09/28 12:46:26 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -151,6 +151,36 @@ class core extends db_connector
 			$retval = true;
 		};
 		return $retval;
+	}
+
+	function obj_get_meta($args = array())
+	{
+		extract($args);
+		if (not($oid))
+		{
+			return false;
+		};
+		classload("php");
+		$php_ser = new php_serializer();
+		$q = "SELECT meta FROM objects WHERE oid = $oid";
+		$this->db_query($q);
+		$row = $this->db_next();
+		#$this->dequote($row["meta"]);
+		return $php_ser->php_unserialize($row["meta"]);
+	}
+
+
+	function obj_set_meta($args = array())
+	{
+		extract($args);
+		$old = $this->obj_get_meta(array("oid" => $oid));
+		$old = array_merge($old,$args["meta"]);
+		classload("php");
+		$php_ser = new php_serializer();
+		$ser = $php_ser->php_serialize($old);
+		$this->quote($ser);
+		$q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
+		$this->db_query($q);
 	}
 
 	////
@@ -317,6 +347,10 @@ class core extends db_connector
 			case "8":
 				// 04.01.00
 				$dateformat = "d.m.y";
+				break;
+			case "9":
+				// 04.01.00
+				$dateformat = "H:i:s d-m-Y";
 				break;
 			default:
 				// 12:22 04-01
@@ -952,6 +986,11 @@ class core extends db_connector
 			else 
 			{
 				$parent = $row["parent"];
+				if (is_array($chain[$row["oid"]]))
+				{
+					// if we have been here before, we have a cyclic path.. baad karma.
+					return $chain;
+				}
 				$chain[$row["oid"]] = $row;
 				$oid = $row["parent"];
 			};
