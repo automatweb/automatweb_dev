@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.85 2003/02/14 11:33:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.86 2003/02/20 13:36:28 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -452,8 +452,11 @@ class planner extends class_base
 			));
 			$this->cal_oid = $oid;
 		};
+		/*
     		$c = $this->calaliases[$matches[3] - 1];
 		$replacement = $this->object_list(array("id" => $c["target"],"type" => "day"));
+		*/
+		$replacement = $this->view(array("id" => $alias["target"]));
 		return $replacement;
 	}
 
@@ -955,9 +958,10 @@ class planner extends class_base
 		{
 			$date = date("d-m-Y");
 		};
-		$di = $this->get_date_range(array(
+		$_cal = get_instance("calendar",array("tpldir" => "planner"));
+		$di = $_cal->get_date_range(array(
 			"date" => $date,
-			"type" => "day",
+			"type" => $type,
 		));
 		
 		$events = $this->get_events2(array(
@@ -1174,37 +1178,41 @@ class planner extends class_base
 		{
 			$reps = aw_unserialize($row["repeaters"]);
 			$meta = aw_unserialize($row["metadata"]);
-			if ($meta["repeaters1"]["own_time"])
+			$ccounter = (int)$meta["cycle_counter"];
+			for ($i = 1; $i <= $ccounter; $i++)
 			{
-				$hour = $meta["repeaters1"]["reptime"]["hour"];
-				$minute = $meta["repeaters1"]["reptime"]["minute"];
-				list($d,$m,$y) = explode("-",date("d-m-Y",$start));
-				$row["start"] = mktime($hour,$minute,0,$m,$d,$y);
-			}
-			else
-			{
-				$hour = $minute = 0;
-			};
-			if (is_array($reps))
-			{
-				$intersect = array_intersect($reps,$range);
-			};
-			// always show the event at the day it was added
-			$idx = ($index_time) ? $row["start"] : date("dmy",$row["start"]);
-			$retval[$idx][] = $row;
-			if (is_array($intersect))
-			{
-				foreach($intersect as $xgdn)
+				if ($meta["repeaters{$i}"]["own_time"])
 				{
-					$ts = mktime($hour,$minute,0,1,$xgdn,2001);
-					if ($ts >= $row["rep_from"])
+					$hour = $meta["repeaters{$i}"]["reptime"]["hour"];
+					$minute = $meta["repeaters{$i}"]["reptime"]["minute"];
+					list($d,$m,$y) = explode("-",date("d-m-Y",$start));
+					$row["start"] = mktime($hour,$minute,0,$m,$d,$y);
+				}
+				else
+				{
+					$hour = $minute = 0;
+				};
+				if (is_array($reps))
+				{
+					$intersect = array_intersect($reps,$range);
+				};
+				// always show the event at the day it was added
+				$idx = ($index_time) ? $row["start"] : date("dmy",$row["start"]);
+				$retval[$idx][] = $row;
+				if (is_array($intersect))
+				{
+					foreach($intersect as $xgdn)
 					{
-						$gx = ($index_time) ? $ts : date("dmY",$ts);
-						$retval[$gx][] = $row;
+						$ts = mktime($hour,$minute,0,1,$xgdn,2001);
+						if ($ts >= $row["rep_from"])
+						{
+							$gx = ($index_time) ? $ts : date("dmY",$ts);
+							$retval[$gx][] = $row;
+						};
 					};
 				};
+				$intersect = "";
 			};
-			$intersect = "";
 				
 			$gdn++;
 		};
