@@ -35,6 +35,9 @@
             <field>kood</field>
             <caption>Toote kood	</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
       <tableinfo>
             <kliendibaas_toode>
                   <index>oid</index>

@@ -124,7 +124,7 @@
       <property>
             <name>children</name>
             <type>relpicker</type>
-            <reltype>CHILDREN</reltype>
+            <reltype>RELTYPE_CHILDREN</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>children</field>
@@ -143,7 +143,7 @@
       <property>
             <name>picture</name>
             <type>relpicker</type>
-            <reltype>PICTURE</reltype>
+            <reltype>RELTYPE_PICTURE</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>picture</field>
@@ -152,7 +152,7 @@
       <property>
             <name>work_contact</name>
             <type>relpicker</type>
-            <reltype>WORK</reltype>
+            <reltype>RELTYPE_WORK</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>work_contact</field>
@@ -161,7 +161,7 @@
       <property>
             <name>rank</name>
             <type>relpicker</type>
-            <reltype>RANK</reltype>
+            <reltype>RELTYPE_RANK</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>rank</field>
@@ -170,7 +170,7 @@
       <property>
             <name>personal_contact</name>
             <type>relpicker</type>
-            <reltype>ADDRESS</reltype>
+            <reltype>RELTYPE_ADDRESS</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>personal_contact</field>
@@ -200,7 +200,7 @@
       <property>
             <name>forms</name>
             <type>relpicker</type>
-            <reltype>BACKFORMS</reltype>
+            <reltype>RELTYPE_BACKFORMS</reltype>
             <table>objects</table>
             <group>forms</group>
             <field>meta</field>
@@ -227,6 +227,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <overview>
@@ -250,7 +251,7 @@
       <reltypes>
             <ADDRESS>
                   <value>1</value>
-                  <clid>CL_ADDRESS</clid>
+                  <clid>CL_CRM_ADDRESS</clid>
                   <caption>aadressid</caption>
             </ADDRESS>
             <PICTURE>
@@ -275,7 +276,7 @@
             </WORK>
             <RANK>
                   <value>7</value>
-                  <clid>CL_AMET</clid>
+                  <clid>CL_CRM_PROFESSION</clid>
                   <caption>ametinimetus</caption>
             </RANK>
             <ISIK_KOHTUMINE>

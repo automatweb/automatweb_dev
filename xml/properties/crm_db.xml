@@ -3,7 +3,7 @@
       <property>
             <name>selections</name>
             <type>relpicker</type>
-            <reltype>SELECTIONS</reltype>
+            <reltype>RELTYPE_SELECTIONS</reltype>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
@@ -113,7 +113,7 @@
       <property>
             <name>dir_firma</name>
             <type>relpicker</type>
-            <reltype>FIRMA_CAT</reltype>
+            <reltype>RELTYPE_FIRMA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -123,7 +123,7 @@
       <property>
             <name>dir_isik</name>
             <type>relpicker</type>
-            <reltype>ISIK_CAT</reltype>
+            <reltype>RELTYPE_ISIK_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -133,7 +133,7 @@
       <property>
             <name>dir_address</name>
             <type>relpicker</type>
-            <reltype>ADDRESS_CAT</reltype>
+            <reltype>RELTYPE_ADDRESS_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -143,7 +143,7 @@
       <property>
             <name>dir_ettevotlusvorm</name>
             <type>relpicker</type>
-            <reltype>ETTEVOTLUSVORM_CAT</reltype>
+            <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -153,7 +153,7 @@
       <property>
             <name>dir_linn</name>
             <type>relpicker</type>
-            <reltype>LINN_CAT</reltype>
+            <reltype>RELTYPE_LINN_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -163,7 +163,7 @@
       <property>
             <name>dir_maakond</name>
             <type>relpicker</type>
-            <reltype>MAAKOND_CAT</reltype>
+            <reltype>RELTYPE_MAAKOND_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -173,7 +173,7 @@
       <property>
             <name>dir_tegevusala</name>
             <type>relpicker</type>
-            <reltype>TEGEVUSALA_CAT</reltype>
+            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -183,7 +183,7 @@
       <property>
             <name>dir_toode</name>
             <type>relpicker</type>
-            <reltype>TOODE_CAT</reltype>
+            <reltype>RELTYPE_TOODE_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -193,7 +193,7 @@
       <property>
             <name>dir_default</name>
             <type>relpicker</type>
-            <reltype>GENERAL_CAT</reltype>
+            <reltype>RELTYPE_GENERAL_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -378,11 +378,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Õiguslike vormide kataloogid</caption>
             </ETTEVOTLUSVORM_CAT>
-            <RELTYPE_FORMS>
+            <FORMS>
                   <value>13</value>
                   <clid>CL_CFGFORM</clid>
                   <caption>Sisestusvormid</caption>
-            </RELTYPE_FORMS>
+            </FORMS>
       </reltypes>
 </properties>
 

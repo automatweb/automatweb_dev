@@ -19,6 +19,9 @@
             <group>general</group>
             <caption>Kommentaar</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
       <tableinfo>
             <kliendibaas_maakond>
                   <index>oid</index>

@@ -35,6 +35,9 @@
             <field>kood</field>
             <caption>Tegevusala kood</caption>
       </property>
+      <classinfo>
+            <no_status>1</no_status>
+      </classinfo>
       <tableinfo>
             <kliendibaas_tegevusala>
                   <index>oid</index>

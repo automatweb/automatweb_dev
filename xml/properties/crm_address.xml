@@ -31,7 +31,7 @@
       <property>
             <name>linn</name>
             <type>relpicker</type>
-            <reltype>LINN</reltype>
+            <reltype>RELTYPE_LINN</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>linn</field>
@@ -40,7 +40,7 @@
       <property>
             <name>maakond</name>
             <type>relpicker</type>
-            <reltype>MAAKOND</reltype>
+            <reltype>RELTYPE_MAAKOND</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>maakond</field>
@@ -49,7 +49,7 @@
       <property>
             <name>riik</name>
             <type>relpicker</type>
-            <reltype>RIIK</reltype>
+            <reltype>RELTYPE_RIIK</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>riik</field>
@@ -58,7 +58,7 @@
       <property>
             <name>telefon</name>
             <type>relpicker</type>
-            <reltype>TELEFON</reltype>
+            <reltype>RELTYPE_TELEFON</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>telefon</field>
@@ -67,7 +67,7 @@
       <property>
             <name>mobiil</name>
             <type>relpicker</type>
-            <reltype>MOBIIL</reltype>
+            <reltype>RELTYPE_MOBIIL</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>mobiil</field>
@@ -76,7 +76,7 @@
       <property>
             <name>faks</name>
             <type>relpicker</type>
-            <reltype>FAKS</reltype>
+            <reltype>RELTYPE_FAKS</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>faks</field>
@@ -95,7 +95,7 @@
       <property>
             <name>e_mail</name>
             <type>relpicker</type>
-            <reltype>EMAIL</reltype>
+            <reltype>RELTYPE_EMAIL</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>e_mail</field>
@@ -104,7 +104,7 @@
       <property>
             <name>kodulehekylg</name>
             <type>relpicker</type>
-            <reltype>WWW</reltype>
+            <reltype>RELTYPE_WWW</reltype>
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>kodulehekylg</field>
@@ -122,6 +122,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <tableinfo>
             <kliendibaas_address>
@@ -166,17 +167,17 @@
             </WWW>
             <TELEFON>
                   <value>7</value>
-                  <clid>CL_PHONE</clid>
+                  <clid>CL_CRM_PHONE</clid>
                   <caption>Telefon</caption>
             </TELEFON>
             <MOBIIL>
                   <value>8</value>
-                  <clid>CL_PHONE</clid>
+                  <clid>CL_CRM_PHONE</clid>
                   <caption>Mobiil</caption>
             </MOBIIL>
             <FAKS>
                   <value>9</value>
-                  <clid>CL_PHONE</clid>
+                  <clid>CL_CRM_PHONE</clid>
                   <caption>Faks</caption>
             </FAKS>
       </reltypes>

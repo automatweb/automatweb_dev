@@ -2,6 +2,7 @@
 <properties>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>
+            <no_status>1</no_status>
       </classinfo>
 </properties>
 

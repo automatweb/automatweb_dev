@@ -9,6 +9,7 @@
                   <num_0>general</num_0>
                   <num_1>overview</num_1>
             </group>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>navtoolbar</field>
       </property>
@@ -45,7 +46,7 @@
       <property>
             <name>pohitegevus</name>
             <type>relpicker</type>
-            <reltype>TEGEVUSALAD</reltype>
+            <reltype>RELTYPE_TEGEVUSALAD</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>pohitegevus</field>
@@ -54,7 +55,7 @@
       <property>
             <name>ettevotlusvorm</name>
             <type>relpicker</type>
-            <reltype>ETTEVOTLUSVORM</reltype>
+            <reltype>RELTYPE_ETTEVOTLUSVORM</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>ettevotlusvorm</field>
@@ -63,7 +64,7 @@
       <property>
             <name>tooted</name>
             <type>relpicker</type>
-            <reltype>TOOTED</reltype>
+            <reltype>RELTYPE_TOOTED</reltype>
             <method>serialize</method>
             <field>meta</field>
             <table>objects</table>
@@ -83,7 +84,7 @@
       <property>
             <name>contact</name>
             <type>relpicker</type>
-            <reltype>ADDRESS</reltype>
+            <reltype>RELTYPE_ADDRESS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>contact</field>
@@ -130,6 +131,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <overview>
@@ -146,22 +148,22 @@
       <reltypes>
             <ETTEVOTLUSVORM>
                   <value>1</value>
-                  <clid>CL_ETTEVOTLUSVORM</clid>
+                  <clid>CL_CRM_CORPFORM</clid>
                   <caption>Õiguslik vorm</caption>
             </ETTEVOTLUSVORM>
             <ADDRESS>
                   <value>3</value>
-                  <clid>CL_ADDRESS</clid>
+                  <clid>CL_CRM_ADDRESS</clid>
                   <caption>Kontaktaadress</caption>
             </ADDRESS>
             <TEGEVUSALAD>
                   <value>5</value>
-                  <clid>CL_TEGEVUSALA</clid>
+                  <clid>CL_CRM_SECTOR</clid>
                   <caption>Tegevusalad</caption>
             </TEGEVUSALAD>
             <TOOTED>
                   <value>6</value>
-                  <clid>CL_TOODE</clid>
+                  <clid>CL_CRM_PRODUCT</clid>
                   <caption>Tooted</caption>
             </TOOTED>
             <CHILD_ORG>
@@ -181,7 +183,7 @@
             </PAKKUMINE>
             <TEHING>
                   <value>10</value>
-                  <clid>CL_CRL_DEAL</clid>
+                  <clid>CL_CRM_DEAL</clid>
                   <caption>Tehing</caption>
             </TEHING>
             <KOHTUMINE>

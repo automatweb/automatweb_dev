@@ -20,7 +20,7 @@
       <property>
             <name>forms</name>
             <type>relpicker</type>
-            <reltype>BACKFORMS2</reltype>
+            <reltype>RELTYPE_BACKFORMS2</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
