@@ -755,6 +755,13 @@ switch($action)
 		die($t->upload_zip($HTTP_POST_VARS));
 		break;
 
+	case "del_icons":
+		classload("icons");
+		$t = new icons;
+		$t->del_icons($sel);
+		header("Location: config.$ext?type=icon_db");
+		break;
+
 	default:
 		include("sorry.aw");
 	};	
