@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.60 2004/10/15 15:07:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.61 2004/10/15 15:08:20 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2102,7 +2102,7 @@ class crm_person extends class_base
 					$prof_list->add($prof->prop("to"));
 				}
 				$profile = $prof_list->arr();
-				arr($profile);
+				//arr($profile);
 			//}
 		}
 		else
