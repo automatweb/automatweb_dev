@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.102 2004/11/24 08:28:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.103 2004/11/24 08:33:39 kristo Exp $
 
 /*
 
@@ -183,7 +183,7 @@ class site_show extends class_base
 			"show_layout" => "",
 			"ip_allowed" => array(),
 			"ip_denied" => array(),
-			"images" => array();
+			"images" => array()
 		);
 
 		$ni = aw_ini_get("menuedit.num_menu_images");
@@ -280,6 +280,18 @@ class site_show extends class_base
 			$this->do_check_ip_access(array(
 				"allowed" => $this->properties["ip_allowed"],
 				"denied" => $this->properties["ip_denied"]
+			));
+		}
+		
+		// insert sel images
+		foreach(safe_array($this->properties["images"]) as $nr => $id)
+		{
+			$url = $this->image->get_url_by_id($id);
+			$this->vars(array(
+				"sel_menu_image_".$nr."_url" => $url,
+				"sel_menu_image_".$nr => html::img(array(
+					"url" => $url
+				))
 			));
 		}
 	}
