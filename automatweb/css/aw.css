@@ -1440,7 +1440,10 @@ text-decoration:underline;
 
 .aw04toolbar {
 border-top: 1px solid #FFFFFF;
+border-left: 1px solid #FFFFFF;
 border-bottom: 1px solid #BDBDBD;
+border-right: 1px solid #BDBDBD;
+padding:0px;
 background-color: #E1E1E1;
 }
 
@@ -1455,10 +1458,26 @@ font-weight: normal;
 color:#000000;
 }
 
+.aw04buttonsep {
+border-left: 0px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+background: #FFFFFF;
+margin: 0px;
+padding: 0px;
+font-family: Verdana, Arial, sans-serif;
+font-size: 9px;
+font-weight: normal;
+color:#000000;
+}
+
+
 .aw04toolbarbutton {
         /*float: left;*/
 		width: 22px;
-        padding: 2px;
+		height: 22px;
+        padding: 4px;
+		font-family: Arial, sans-serif;
+		font-size: 11px;
 		text-align: center;
 		border-style: solid;
         border-width: 1px;
@@ -1468,7 +1487,9 @@ color:#000000;
 .aw04toolbardata {
         /*float: left;*/
 		/*margin-top: 2px;*/
-        padding: 2px;
+        padding: 4px;
+		font-family: Arial, sans-serif;
+		font-size: 11px;
 		text-align: center;
 		border-style: solid;
         border-width: 1px;
@@ -1478,8 +1499,11 @@ color:#000000;
 .aw04toolbarbuttonhover {
         /*float: left;*/
         /*margin: 4px;*/
-	width: 22px;
-	padding: 2px;
+		width: 22px;
+		height: 22px;
+		padding: 4px;
+		font-family: Arial, sans-serif;
+		font-size: 11px;
 		text-align: center;
         border-width: 1px;
         border-style: solid;
@@ -1489,8 +1513,11 @@ color:#000000;
 .aw04toolbarbuttondown {
         /*float: left;*/
 		margin: 4px;
-		padding: 2px;
+		padding: 4px;
+		font-family: Arial, sans-serif;
+		font-size: 11px;
 		width: 22px;
+		height: 22px;
 		text-align: center;
         border-width: 1px;
         border-style: solid;
@@ -1570,7 +1597,7 @@ background-color: #91DA52;
 .aw04tab2divl2 {
 padding-top: 0px;
 padding-bottom: 0px;
-padding-left: 12px;
+padding-left: 25px;
 font-family: Arial, sans-serif;
 font-size: 11px;
 font-weight: bold;
@@ -1626,7 +1653,7 @@ background-repeat: repeat-x;
 
 
 .aw04contenttable {
-width: 100%;
+width: 98%;
 }
 
 .aw04contentcellleft {
