@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="css">
+		<action name="list">
+			<function name="css_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_list">
+			<function name="submit_css_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add">
+			<function name="css_edit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="edit">
+			<function name="css_edit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="css_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
