@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.11 2004/03/02 13:54:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.12 2004/03/02 14:01:32 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -200,14 +200,8 @@ class project extends class_base
 	function connect_event($arr)
 	{
 		$prj_obj = new object($arr["id"]);
-		$to_obj = new object($arr["event_id"]);
-		if ($to_obj->is_brother())
-		{
-			$to_obj = $to_obj->get_original();
-		};
 		$prj_obj->connect(array(
-			//"to" => $arr["event_id"],
-			"to" => $to_obj->id(),
+			"to" => $arr["event_id"],
 			"reltype" => RELTYPE_PRJ_EVENT,
 		));
 	}
