@@ -46,24 +46,25 @@ class xml_import extends aw_template
 		xml_parser_free($parser);
 		foreach($values as $key => $val)
 		{
-			if ( $val["type"] == "complete" )
+			if ( ($val["tag"]  == "tudeng") && $val["type"] == "complete" )
 			{
 				$attr = $val["attributes"];		
-				$nimi = $attr["nimi"];
+				$enimi = $this->convert_unicode($attr["enimi"]);
+				$pnimi = $this->convert_unicode($attr["pnimi"]);
 				$id = $attr["id"];
 				$struktuur = $attr["struktuur"];
 				$oppekava = $attr["oppekava"];
 				$oppeaste = $attr["oppeaste"];
 				$oppevorm = $attr["oppevorm"];
 				$aasta = $attr["aasta"];
-			};
 
-			$this->quote($nimi);
-			$q = "INSERT INTO ut_tudengid (id,nimi,struktuur,oppekava,oppeaste,oppevorm,aasta)
-				VALUES('$id','$nimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta')";
-			print $q;
-			print "<br>";
-			$this->db_query($q);
+				$this->quote($nimi);
+				$q = "INSERT INTO ut_tudengid (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta)
+					VALUES('$id','$enimi','$pnimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta')";
+				print $q;
+				print "<br>";
+				$this->db_query($q);
+			};
 
 
 		}
@@ -113,6 +114,46 @@ class xml_import extends aw_template
 			};
 		}
 	}
+	
+	function import_tootajad($args = array())
+	{
+		$contents = join("",file("/home/duke/tootajad.xml"));
+		$parser = xml_parser_create();
+		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		// xml data arraysse
+		xml_parse_into_struct($parser,$contents,&$values,&$tags);
+		// R.I.P. parser
+		xml_parser_free($parser);
+		foreach($values as $token)
+		{
+			if ( ($token["tag"] == "tootaja") && ($token["type"] == "open") )
+			{
+				$t_attr = $token["attributes"];
+				// lisame uue töötaja baasi
+				$this->quote($t_attr);
+				$enimi = $this->convert_unicode($t_attr["enimi"]);
+				$pnimi = $this->convert_unicode($t_attr["pnimi"]);
+				$q = "INSERT INTO ut_tootajad (id,enimi,pnimi,veeb,ruum,markus) 
+					VALUES ('$t_attr[id]','$enimi','$pnimi','$t_attr[veeb]','$t_attr[ruum]','$t_attr[markus]')";
+				print $q;
+				$this->db_query($q);
+			}
+
+			if ( ($token["tag"] == "amet") && ($token["type"] == "complete") )
+			{
+				$attr = $token["attributes"];
+				$this->quote($attr);
+				$nimi = $this->convert_unicode($attr["nimi"]);
+				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id)
+					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
+						'$attr[markus]','$t_attr[id]')";
+				print $q;
+				$this->db_query($q);
+			}
+			print "<bR>";
+
+		}
+	}
 
 	function convert_unicode($source)
 	{
@@ -124,6 +165,10 @@ class xml_import extends aw_template
 		$retval = str_replace(chr(0xC3). chr(0x95),"Õ",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
 		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA0),"&Scaron;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xA1),"&scaron;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
+		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
 		
 		return $retval;
 	}
