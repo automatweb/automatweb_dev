@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.284 2003/04/21 07:59:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.285 2003/04/22 12:49:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -445,7 +445,7 @@ class menuedit extends aw_template
 		// I will fix this later.. --duke
 
 		// see siin genereerib n䤡la vaate, aga damn I really do hate this
-		if (is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
+		if ($obj["class_id"] == CL_PSEUDO && is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
 		{
 			$pl = get_instance("planner");
 			$target = $meta["aliases_by_class"][CL_PLANNER][1]["target"];
@@ -742,6 +742,14 @@ class menuedit extends aw_template
 			"NO_LEFT_PANE" => "",
 			"NO_RIGHT_PANE" => ""
 		));
+
+		// check if logged is outside LEFT_PANE and if it is, then parse logged again if we are logged in
+		if ($this->is_parent_tpl("LEFT_PANE", "logged") && aw_global_get("uid") != "")
+		{
+			$this->vars(array(
+				"logged" => $this->parse("logged")
+			));
+		}
 		
 		if (is_array($vars))
 		{
