@@ -4530,6 +4530,12 @@ class crm_company extends class_base
 	}
 
 	/** implement our own view!
+
+		@attrib name=view nologin=1
+
+		@param id required
+		@param cfgform optional
+
 	**/
 	function view($arr)
 	{
@@ -4555,7 +4561,7 @@ class crm_company extends class_base
 			//echo "$pn => $pd[caption] <br>";
 			$this->vars(array(
 				"prop" => $pd["caption"],
-				"value" => $o->prop_str($pn, in_array($pn, array("ettevotlusvorm", "firmajuht", "telefax_id")))
+				"value" => nl2br($o->prop_str($pn, in_array($pn, array("ettevotlusvorm", "firmajuht", "telefax_id"))))
 			));
 			$l .= $this->parse("LINE");
 		}

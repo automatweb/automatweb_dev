@@ -120,5 +120,14 @@
 			</function>
 		</action>
 
+		<action name="view" nologin="1">
+			<function name="view">
+				<arguments>
+					<required name="id" />
+					<optional name="cfgform" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
