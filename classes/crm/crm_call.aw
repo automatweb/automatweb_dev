@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.17 2004/10/13 11:01:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.18 2004/11/02 09:23:41 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -126,7 +126,7 @@ class crm_call extends class_base
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
-						'type' => 9,//CRM_PERSON.RELTYPE_PERSON_CALL==9
+						'type' => 8,
 					));
 					
 					foreach($conns as $conn)
