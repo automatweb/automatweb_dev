@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.23 2004/07/01 12:31:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.24 2004/07/01 13:32:36 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -139,6 +139,9 @@ class releditor extends core
 				};
 			};
 		};
+		
+		$form_type = $arr["request"][$this->elname];
+		$this->form_type = $form_type;
 
 		//if (!empty($form_type) || $visual != "manager")
 		//{
@@ -147,15 +150,17 @@ class releditor extends core
 				//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
 				if (is_array($props) && in_array($key,$props))
 				{
-					$act_props[$key] = $prop;
+					$this->all_props[$key] = $prop;
+					if (!empty($form_type) || $visual != "manager")
+					{
+						$act_props[$key] = $prop;
+					};
 				};
 			};
 		//};
 
-		$this->all_props = $act_props;
+		#$this->all_props = $act_props;
 		
-		$form_type = $arr["request"][$this->elname];
-		$this->form_type = $form_type;
 		if ($visual == "manager")
 		{
 			// insert the toolbar into property array
@@ -267,6 +272,7 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
+		// parse_properties fills the thing with values and stuff. And it eats my precious toolbar
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => $this->elname,
@@ -290,8 +296,7 @@ class releditor extends core
 			$this->elname => "new",
 		));
 
-		classload("vcl/toolbar");
-		$tb = new toolbar();
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
@@ -309,8 +314,9 @@ class releditor extends core
 		$rv = array(
 			"name" => $this->elname . "_toolbar",
 			"type" => "toolbar",
-			"toolbar" => $tb,
+			"vcl_inst" => $tb,
 			"no_caption" => 1,
+			"_parsed" => 1,
 		);
 
 		return $rv;
