@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.45 2003/10/27 14:34:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.46 2003/10/27 15:07:17 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -53,6 +53,9 @@
 
 @property show_modified type=checkbox ch_value=1
 @caption Näita muutmise kuupäeva
+
+@property doc_modified type=hidden table=documents field=modified
+@caption Dok. modified
 
 //---------------
 @property no_right_pane type=checkbox ch_value=1 group=settings
@@ -435,6 +438,10 @@ class doc extends class_base
 		if (isset($this->_preview))
 		{
 			$obj_inst->set_meta("dcache",$this->_preview);
+		};
+		if (isset($this->_modified))
+		{
+			$obj_inst->set_prop("doc_modified",$this->_modified);
 		};
 		if ($this->clear_styles)
 		{
