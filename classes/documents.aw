@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.5 2001/05/21 17:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.6 2001/05/21 21:16:08 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -375,6 +375,10 @@ class db_documents extends aw_template
 		};
 
 		$this->vars(array("imurl" => "/images/trans.gif"));
+
+		// load localization settings and put them in the template
+		lc_site_load("document");
+		$this->vars(array($GLOBALS["lc_doc"]));
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc[content], "#telekava_") === false))
@@ -966,6 +970,19 @@ class db_documents extends aw_template
 			$dbu = new users;
 			$doc[content] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc[content]);
 		}
+
+		// keywordide list. bijaatch!
+		if (!(strpos($doc["content"],"#huvid_form") === false))
+		{
+			preg_match("/#huvid_form algus=\"(.*)\"#/",$doc["content"], $maat);
+
+			classload("keywords");
+			$kw = new keywords;
+			$t_int_form = $kw->show_interests_form($mat[1]);
+
+			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\"#/",$t_int_form,$doc["content"]);
+		}
+
 		$awt->stop("db_documents->gen_preview()::misc_replaces");
 
 		$awt->start("db_documents->gen_preview()::author");

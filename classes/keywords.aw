@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.10 2001/05/21 16:28:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.11 2001/05/21 21:16:08 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -279,13 +279,21 @@ class keywords extends aw_template {
 	// !Tagastab koik registreeritud votmesonad
 	// argumendid: type = ARR_LISTID - array index is list id, default
 	// type = ARR_KEYWORD - array index is keyword
+	// $beg = only return keywords that begin with this
 	function get_all_keywords($args = array())
 	{
+		$blen = strlen($args["beg"]);
+
 		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
 		while($row = $this->db_next())
 		{
+			if (substr($row["keyword"],0,$blen) != $beg)
+			{
+				continue;
+			}
+
 			if ($args["type"] == ARR_KEYWORD)
 			{
 				$resarray[$row["keyword"]] = $row["keyword"];
@@ -373,7 +381,47 @@ class keywords extends aw_template {
 	}
 		
 
-		
+	function show_interests_form($beg = "")
+	{
+		$this->read_template("keywords.tpl");
+		classload("list","users_user","form");
+		$u = new users_user();
+		$udata = $u->get_user(array(
+			"uid" => UID,
+		));
+		$jf = unserialize($udata["join_form_entry"]);
+		$eesnimi = $perenimi = "";
+		if (is_array($jf))
+		{
+			$f = new form();
+			foreach($jf as $joinform => $joinentry)
+			{
+				$f->load($joinform);
+				$f->load_entry($joinentry);
+				$el = $f->get_element_by_name("Eesnimi");
+				if ($el->entry)
+				{
+					$eesnimi = $el->entry;
+				};
+				$el = $f->get_element_by_name("Perekonnanimi");
+				if ($el->entry)
+				{
+					$perenimi = $el->entry;
+				};
+			};
+		};
+		$mlist = new mlist();
+		$kw = new keywords();
+		$act = $mlist->get_user_lists(array(
+					"uid" => UID,
+					));
+		$this->vars(array(
+				"name" => "$eesnimi $perenimi",
+				"email" => $udata["email"],
+				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords($beg)),
+		));
+		return $this->parse();
+	}
 		
 		
 };
