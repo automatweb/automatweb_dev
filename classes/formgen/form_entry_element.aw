@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.13 2004/02/11 11:50:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.14 2004/02/20 09:08:44 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -216,7 +216,14 @@ class form_entry_element extends form_element
 			}
 			if ($this->arr["subtype"] == "email")
 			{
-				$src = "<a href='mailto:".$src."'>$src</a>";
+				if (aw_ini_get("formgen.obfuscate_email") == 1)
+				{
+					$src = preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<script language=\"javascript\">fEpost(\"\\1\",\"\\2\");</script><noscript>\\1<img src='".aw_ini_get("baseurl")."/img/at.png' alt='@' style='vertical-align: middle;'/>\\2</noscript>", $src);
+				}
+				else
+				{
+					$src = "<a href='mailto:".$src."'>$src</a>";
+				}
 			}
 			$html = $src;
 		}

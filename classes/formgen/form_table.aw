@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.53 2004/02/11 11:50:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.54 2004/02/20 09:08:44 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -3584,9 +3584,14 @@ class form_table extends form_base
 
 	function create_email_links($str)
 	{
+		if (aw_ini_get("formgen.obfuscate_email") == 1)
+		{
+			return preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<script language=\"javascript\">fEpost(\"\\1\",\"\\2\");</script><noscript>\\1<img src='".aw_ini_get("baseurl")."/img/at.png' alt='@' style='vertical-align: middle;'/>\\2</noscript>", $str);
+		}
 		return preg_replace("/([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/","<a href='mailto:\\1@\\2'>\\1@\\2</a>", $str);
 	}
-	
+
+
 	function get_cur_processing_alias_data()
 	{
 		return aw_global_get("fg_cur_processing_alias_data");
