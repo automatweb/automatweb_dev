@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 /*
 
 
-@classinfo syslog_type=ST_GROUP relationmgr=yes no_comment=1
+@classinfo syslog_type=ST_GROUP relationmgr=yes no_comment=1 no_status=1
 
 @groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
