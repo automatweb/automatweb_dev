@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.6 2001/05/21 10:06:12 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.7 2001/05/21 16:25:34 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1010,6 +1010,22 @@ class document extends aw_template
 			};
 		};
 		
+		// siin paneme muutmise kuup2eva ka kirja. trikk on sellest et dokul on v2li "tm", kuhu saab k2sici kirjutada muutmise kuup2eva. 
+		// vot. nyt kui seal on midagi, siis teeme sellest timestampi ja paneme selle documents::modified sisse kirja. 
+		// kui tm on aga tyhi, siis paneme documents::tm sisse praeguse kellaaja.
+		$modified = time();
+		if ($data["tm"] != "")
+		{
+			list($day,$mon,$year) = explode("/",$row["tm"]);
+
+			$ts = mktime(0,0,0,$mon,$day,$year);
+			if ($ts)
+			{
+				$modified = $ts;
+			}
+		}
+		$q_parts[] = "modified = $modified";
+
 		// see paneb siis paringu kokku. Whee.
 		$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '$id'"; 
 		$this->db_query($q);
