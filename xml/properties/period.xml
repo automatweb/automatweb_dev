@@ -25,6 +25,22 @@
             <caption>Arhiivis</caption>
       </property>
       <property>
+            <name>per_id</name>
+            <type>text</type>
+            <table>periods</table>
+            <field>id</field>
+            <group>general</group>
+            <caption>Perioodi id.</caption>
+      </property>
+      <property>
+            <name>per_oid</name>
+            <type>hidden</type>
+            <table>periods</table>
+            <field>oid</field>
+            <group>general</group>
+            <caption>Oid</caption>
+      </property>
+      <property>
             <name>image</name>
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGE</reltype>
