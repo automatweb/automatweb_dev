@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.19 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.20 2001/12/10 12:36:47 duke Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -501,7 +501,7 @@ class mlist extends aw_template
 
 	function db_remove_user($email)
 	{
-		$id = $this->db_fetch_field("SELECT id FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE ml_users.mail = '$email' AND status != 0","id");
+		$id = $this->db_fetch_field("SELECT id FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE ml_users.mail = '$email' AND status != 0 AND parent = $this->id","id");
 
 		if ($id)
 			$this->delete_object($id);
