@@ -55,6 +55,39 @@
 			</function>
 		</action>
 
+
+		<action name="get_list">
+			<function name="orb_get_list">
+				<arguments>
+					<optional name="ignore_langmenus" />
+					<optional name="empty" />
+					<optional name="rootobj" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="list_objects">
+			<function name="list_objects">
+				<arguments>
+					<optional name="class"/>
+					<optional name="addempty"/>
+					<optional name="parent" type="int"/>
+					<optional name="onlyactive"/>
+					<optional name="name"/>
+					<optional name="return"/>
+					<optional name="subclass"/>
+					<optional name="flags"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="serialize">
+			<function name="serialize">
+				<arguments>
+					<optional name="oid"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
