@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.6 2001/05/30 03:37:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.7 2001/06/04 06:56:31 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -231,7 +231,7 @@ class aw_mail {
 			}
 			else
 			{
-				preg_match("/^(.*): (.*)$/",$line,$matches);
+				preg_match("/^(.+?): (.*)$/",$line,$matches);
 				$headers[$matches[1]] = $matches[2];
 			};
 		};
