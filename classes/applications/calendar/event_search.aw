@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.31 2005/01/27 08:51:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.32 2005/01/27 10:27:59 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -800,9 +800,9 @@ class event_search extends class_base
 						$ol = new object_list(array(
 							"oid" => $ids,
 							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
-							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
+							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
+							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
