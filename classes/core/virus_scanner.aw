@@ -20,7 +20,7 @@ class virus_scanner extends class_base
 		$cmd = "$f --stdout --no-summary \"$file\"";
 		$res = trim(shell_exec($cmd));
 		$len = strlen($res);
-		if ($res[$len-1] == "O" && $res[$len-2] == "O")
+		if ($res[$len-1] == "K" && $res[$len-2] == "O")
 		{
 			return false;
 		}
