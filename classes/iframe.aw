@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.7 2004/02/09 12:03:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.8 2004/03/09 14:48:42 duke Exp $
 // iframe.aw - iframes
 
 /*
@@ -110,7 +110,6 @@ class iframe extends class_base
 				{
 					$data["value"] = $this->min_height;
 				};
-				i
 				break;
 		};
 		return $retval;
