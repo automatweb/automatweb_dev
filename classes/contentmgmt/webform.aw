@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.60 2005/02/14 13:31:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.61 2005/02/14 13:41:25 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1120,12 +1120,16 @@ class webform extends class_base
 				));
 				if($prpdata["type"] == "classificator")
 				{
-					$metas = new object_list(array(
+					$optionz = array(
 						"parent" => $classificator[$prpdata["name"]],
 						"class_id" => CL_META,
 						"status" => STAT_ACTIVE,
-						"sort_by" => $property["sort_by"],
-					));
+					);
+					if(!empty($property["sort_by"]))
+					{
+						$optionz["sort_by"] = $property["sort_by"];
+					}
+					$metas = new object_list($optionz);
 					$prp_metas = implode("; ", $metas->names());
 					$this->vars(array(
 						"clf_type" => html::select(array(
