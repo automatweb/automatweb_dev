@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.5 2001/05/29 16:44:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.6 2001/06/06 14:05:06 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -371,10 +371,13 @@ class form_base extends aw_template
 							$jfes = unserialize($uif["join_form_entry"]);
 						}
 
-						$app = "\n\nKasutaja ".$GLOBALS["uid"]." info:\n\n";
-						foreach($jfes as $fid => $eid)
+						if (is_array($jfes))
 						{
-							$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+							$app = "\n\nKasutaja ".$GLOBALS["uid"]." info:\n\n";
+							foreach($jfes as $fid => $eid)
+							{
+								$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+							}
 						}
 					}
 					$this->load_entry($entry_id);
