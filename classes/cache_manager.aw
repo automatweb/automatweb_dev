@@ -16,6 +16,15 @@
 	@property delete type=checkbox value=1
 	@caption Kas kustutame valitud
 
+	@property repeater_obj type=objpicker clid=CL_REPEATER_OBJ
+	@caption Vali korduste objekt
+
+	@property del_cache type=checkbox value=1
+	@caption Kas kordusel kustutatakse cache
+
+	@property regen_cache type=checkbox value=1
+	@caption Kas kordusel tehakse uus cache
+	
 */
 
 class cache_manager extends class_base
@@ -77,6 +86,28 @@ class cache_manager extends class_base
 				$cache_inst->file_invalidate_regex('alias_cache::source::'.$row['source'].'::target::'.$row['target'].'.*');
 			}
 		}
+
+		if ($ob['meta']['repeater_obj'])
+		{
+			$sched = get_instance('scheduler');
+			$sched->remove(array(
+				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $id))),
+			));
+
+			$sched->add(array(
+				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $id))),
+				'rep_id' => $ob['meta']['repeater_obj']
+			));
+		}
+	}
+
+	function update_cache($arr)
+	{
+		extract($arr);
+
+		$ob = $this->get_object($id);
+
+		die("yeah, all done");
 	}
 }
 ?>

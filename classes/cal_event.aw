@@ -1,8 +1,8 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.19 2002/11/07 10:52:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.20 2002/11/27 20:22:27 kristo Exp $
 
-class cal_event extends aw_template 
+class cal_event extends class_base 
 {
 	function cal_event($args = array())
 	{	
@@ -428,7 +428,7 @@ class cal_event extends aw_template
 					"rep1_checked" => ($meta["rep"]) ? checked($meta["rep"] == 1) : "checked",
 					"rep2_checked" => checked($meta["rep"] == 2),
 					"rep3_checked" => checked($meta["rep"] == 3),
-					"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id,"cycle" => $cycle,"new" => $new),"cal_event"),
+					"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id,"cycle" => $cycle,"new" => $new)),
 			));
 		}
 		else
@@ -574,6 +574,11 @@ class cal_event extends aw_template
 		$sched->update_repeaters(array("id" => $id));
 
 		// FIXME: this sucks
+		if ($obj["class_id"] == CL_REPEATER_OBJ)
+		{
+			return $this->mk_my_orb("set_time",array("id" => $id),"repeater_obj");
+		}
+		else
 		if ($obj["class_id"] == CL_SCHEDULER)
 		{
 			return $this->mk_my_orb("set_time",array("id" => $id),"scheduler");
