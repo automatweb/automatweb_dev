@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.1 2004/02/11 13:06:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.2 2004/02/25 15:49:28 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -16,6 +16,9 @@
 
 @property use_template type=chooser 
 @caption Vali template
+
+@property default_view type=select 
+@caption Vaade
 
 @default group=show_events
 
@@ -45,11 +48,21 @@ class calendar_view extends class_base
 		switch($data["name"])
 		{
 			case "use_template":
-				$data["options"] = $this->get_template_files();
+				//$data["options"] = $this->get_template_files();
+				$data["options"] = array("intranet1.tpl" => "intranet1.tpl");
 				break;
 
 			case "show_events":
 				$this->gen_calendar_contents($arr);
+				break;
+
+			case "default_view":
+				$data["options"] = array(
+					"" => "",
+					"day" => "päev",
+					"week" => "nädal",
+					"month" => "kuu",
+				);
 				break;
 		};
 		return $retval;
@@ -96,6 +109,10 @@ class calendar_view extends class_base
 		));
 
 		$pl = get_instance(CL_PLANNER);
+		$this->obj_inst = $arr["obj_inst"];
+		$conns = $this->obj_inst->connections_from(array(
+			"reltype" => RELTYPE_EVENT_SOURCE,
+		));
 
 
 		foreach ($conns as $conn)
@@ -127,7 +144,6 @@ class calendar_view extends class_base
 			};
 		};
 		
-		$this->obj_inst = $arr["obj_inst"];
 
 	}
 
@@ -182,8 +198,14 @@ class calendar_view extends class_base
 			"container_template" => "intranet1.tpl",
 		));
 
+		$viewtype = $this->obj_inst->prop("default_view");
+		if ($viewtype == "")
+		{
+			$viewtype = "week";
+		};
+
                 $range = $vcal->get_range(array(
-                        "viewtype" => "day",
+                        "viewtype" => $viewtype,
                         "date" => aw_global_get("date"),
                 ));
 		
