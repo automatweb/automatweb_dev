@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.11 2004/04/13 12:18:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.12 2004/04/15 06:07:35 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1581,9 +1581,9 @@ class aw_table extends aw_template
 };
 
 // this is needed to make this work with get_instance
-class table extends aw_table
+class vcl_table extends aw_table
 {
-	function table($arr = array())
+	function vcl_table($arr = array())
 	{
 		return $this->aw_table($arr);
 	}
