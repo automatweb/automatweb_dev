@@ -53,6 +53,15 @@
             <caption>Kehtib ka pildiobjektidele</caption>
       </property>
       <property>
+            <name>send_from_addr</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili From aadress</caption>
+      </property>
+      <property>
             <name>img_vert</name>
             <table>objects</table>
             <group>imgsize</group>

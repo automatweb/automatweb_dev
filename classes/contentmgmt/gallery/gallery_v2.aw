@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.52 2004/07/13 08:05:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.53 2004/10/05 07:14:24 kristo Exp $
 
 /*
 
@@ -863,11 +863,14 @@ class gallery_v2 extends class_base
 			"name" => $ob->name()
 		));
 
+		$ret = $this->parse();
+
 		if (!$this->has_images)
 		{
 			return "";
 		}
-		return $this->parse();
+
+		return $ret;
 	}
 
 	////
@@ -929,7 +932,7 @@ class gallery_v2 extends class_base
 			{
 				for ($col = 0; $col < $pd_l['cols']; $col++)
 				{
-					if ($pd[$row][$col]['img']['id'] == $id)
+					if ($pd[$row][$col]['img']['id'] == $id || $pd[$row][$col]['tn']['id'] == $id)
 					{
 						$retval = $pd[$row][$col];
 						// I need to know _where_ the image was y'know
@@ -941,6 +944,7 @@ class gallery_v2 extends class_base
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -974,13 +978,21 @@ class gallery_v2 extends class_base
 		$tmp = $obj->meta("page_data");
 		$pd = $tmp[$page]['content'][$row][$col];
 
-		if (!$pd['img']['id'])
+		if (!$pd['img']['id'] && !$pd['tn']['id'])
 		{
 			return "";
 		}
 		
-		$w = $pd['img']['sz'][0];
-		$h = $pd['img']['sz'][1]+70;
+		if ($pd['img']['id'])
+		{
+			$w = $pd['img']['sz'][0];
+			$h = $pd['img']['sz'][1]+70;
+		}
+		else
+		{
+			$w = $pd['tn']['sz'][0];
+			$h = $pd['tn']['sz'][1]+70;
+		}
 
 		if ($pd["img"]["is_file"])
 		{
@@ -1013,6 +1025,7 @@ class gallery_v2 extends class_base
 			$link = $fi->get_url($pd["img"]["id"],"sisu.pdf");
 		}
 		else
+		if ($pd['img']['id'])
 		{
 			$link = $this->mk_my_orb("show_image", array(
 				"id" => $obj->id(),
@@ -1022,7 +1035,19 @@ class gallery_v2 extends class_base
 				"img_id" => $pd['img']['id']
 			));
 		}
+		else
+		{
+			$link = $this->mk_my_orb("show_image", array(
+				"id" => $obj->id(),
+				"page" => $page,
+				"row" => $row,
+				"col" => $col,
+				"img_id" => $pd['tn']['id']
+			));
+		}
 		$this->has_images = true;
+
+		$rating = $this->rating->get_rating_for_object($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']);
 
 		$tp = new aw_template;
 		$tp->tpl_init("gallery");
@@ -1032,11 +1057,31 @@ class gallery_v2 extends class_base
 			"height" => $h,
 			"link" => $link,
 			"img" => image::make_img_tag(image::check_url($pd['tn']['url'])),
-			"rating" => $this->rating->get_rating_for_object($pd['img']['id']),
+			"rating" => $rating,
 			"hits" => $this->hits[$pd['img']['id']],
 			"date" => $pd["date"],
 			"caption" => $pd["caption"]
 		));
+
+		if ($rating != "")
+		{
+			$tp->vars(array(
+				"HAS_RATING_SCALE" => $this->parse("HAS_RATING_SCALE")
+			));
+		}
+		
+		if ($pd["date"] != "")
+		{
+			$tp->vars(array(
+				"HAS_DATE" => $tp->parse("HAS_DATE")
+			));
+		}
+		if ($pd["caption"] != "")
+		{
+			$tp->vars(array(
+				"HAS_CAPTION" => $tp->parse("HAS_CAPTION")
+			));
+		}
 		return $tp->parse();
 	}
 
@@ -1119,16 +1164,16 @@ class gallery_v2 extends class_base
 			));
 		}
 
+		$rsi = "";
 		if (count($this->_get_rate_objs($ob)) > 0)
 		{
 			$sc = get_instance("contentmgmt/rate/rate_scale");
-			$scale = $sc->get_scale_for_obj($pd['img']['id']);
-			$rsi = "";
+			$scale = $sc->get_scale_for_obj(($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']));
 			foreach($scale as $sci_val => $sci_name)
 			{
 				$this->vars(array(
 					"rate_link" => $this->mk_my_orb("rate", array(
-						"oid" => $pd['img']['id'],
+						"oid" => ($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']),
 						"return_url" => urlencode($post_rate_url),
 						"rate" => $sci_val
 					), "rate"),
@@ -1144,10 +1189,10 @@ class gallery_v2 extends class_base
 
 		$r = get_instance("contentmgmt/rate/rate");
 		$this->vars(array(
-			"avg_rating" => $r->get_rating_for_object($pd['img']['id'], RATING_AVERAGE),
+			"avg_rating" => $r->get_rating_for_object($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id'], RATING_AVERAGE),
 			"print_link" => "javascript:window.print()",
 			"email_link" => $email_link,
-			"image" => image::make_img_tag(image::check_url($pd['img']['url'])),
+			"image" => image::make_img_tag(image::check_url($pd['img']['id'] ? $pd['img']['url'] : $pd['tn']['url'])),
 			"views" => (int)$this->db_fetch_field("SELECT hits FROM hits WHERE oid = '".$pd['img']['id']."'", "hits"),
 			"RATING_SCALE_ITEM" => $rsi,
 			"name" => $ob->name(),
@@ -1155,6 +1200,13 @@ class gallery_v2 extends class_base
 			"next_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $n_page, "row" => $n_row , "col" => $n_col)),
 			"imgcaption" => $pd['caption']
 		));
+
+		if ($rsi != "")
+		{
+			$this->vars(array(
+				"HAS_RATING_SCALE" => $this->parse("HAS_RATING_SCALE")
+			));
+		}
 
 		if ($n_page <= $ob->meta('num_pages'))
 		{
@@ -1534,10 +1586,23 @@ class gallery_v2 extends class_base
 	function submit_send($arr)
 	{
 		extract($arr);
-		
+
+		$gal = obj($id);
+		$cid = $this->_get_conf_for_folder($gal->parent());
+
+		$headers = NULL;
+		if ($cid)
+		{
+			$co = obj($cid);
+			if ($co->prop("send_from_addr") != "")
+			{
+				$headers = "From: ".$co->prop("send_from_addr")."\n";
+			}
+		}
+
 		$link = $this->mk_my_orb("show_image", array("id" => $id, "page" => $page, "row" => $row, "col" => $col));
 
-		send_mail($to, $subject, $message."\n\n".$link."\n\n");
+		send_mail($to, $subject, $message."\n\n".$link."\n\n", $headers);
 
 		return $link;
 	}

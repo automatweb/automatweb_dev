@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.9 2004/06/07 09:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.10 2004/10/05 07:14:24 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -26,6 +26,9 @@
 
 @property apply_image type=checkbox ch_value=1 
 @caption Kehtib ka pildiobjektidele
+
+@property send_from_addr type=textbox
+@caption Meili From aadress
 
 @default group=imgsize
 
