@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.53 2004/11/15 15:49:30 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.54 2004/11/15 15:55:59 sven Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -56,7 +56,7 @@ class keywords extends class_base
 			"to" => $id,
 		));*/
 		$obj = &obj($id);
-		$conns = $obj->connections_from("RELTYPE_KEYWORD");
+		$conns = $obj->connections_from(array("type" => "RELTYPE_KEYWORD"));
 		
 		if($conns)
 		{
