@@ -1,13 +1,23 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/user</class>
-      <func>on_delete_alias</func>
-      <param>CL_USER</param>
+      <class>crm/crm_company</class>
+      <func>on_disconnect_person_from_org</func>
+      <param>CL_CRM_PERSON</param>
 </num_0>
 <num_1>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_org_from_person</func>
+      <param>CL_CRM_COMPANY</param>
+</num_1>
+<num_2>
       <class>core/users/group</class>
       <func>on_remove_alias_from_group</func>
       <param>CL_GROUP</param>
-</num_1>
+</num_2>
+<num_3>
+      <class>core/users/user</class>
+      <func>on_delete_alias</func>
+      <param>CL_USER</param>
+</num_3>
 </xml>
