@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.2 2004/03/31 08:25:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.3 2004/04/15 08:40:46 kristo Exp $
 
 /*
 
@@ -328,7 +328,7 @@ class banner extends class_base
 
 	/** shows banner
 		
-		@attrib name=proc_banner
+		@attrib name=proc_banner nologin="1"
 
 		@param id optional
 		@param bid optional

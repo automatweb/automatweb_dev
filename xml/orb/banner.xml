@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="banner" folder="applications/banner" extends="class_base">
-		<action name="proc_banner" >
+		<action name="proc_banner" nologin="1">
 			<function name="proc_banner">
 				<arguments>
 					<optional name="id" />
