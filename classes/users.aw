@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.37 2002/07/12 16:58:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.38 2002/07/12 18:21:43 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -663,6 +663,10 @@ class users extends users_user
 		global $session_filled_forms;
 		$session_filled_forms = array();
 
+		if (!$arr["id"])
+		{
+			$arr["id"] = aw_global_get("uid");
+		}
 		$this->do_change($arr);
 	}
 
@@ -708,7 +712,7 @@ class users extends users_user
 		if ($jfrm)
 		{
 			// show them one after another to the user
-			$orb = $this->mk_orb("show", array("id" => $jfrm, "entry_id" => $fs[$jfrm], "extraids[redirect_after]" => urlencode($this->mk_orb("do_change", array("id" => $id), "users"))),"form");
+			$orb = $this->mk_my_orb("show", array("id" => $jfrm, "entry_id" => $fs[$jfrm], "extraids[redirect_after]" => urlencode($this->mk_my_orb("do_change", array("id" => $id), "users"))),"form");
 			header("Location: $orb");
 			return $orb;
 		}
@@ -722,7 +726,7 @@ class users extends users_user
 
 			// and when we're dont with all of them, update dyn groups and return to user list
 			$this->update_dyn_user($id);
-			$orb = $this->mk_orb("gen_list", array());
+			$orb = $this->mk_my_orb("gen_list", array());
 			header("Location: $orb");
 			return $orb;
 		}
