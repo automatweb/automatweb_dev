@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.268 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.269 2004/06/25 18:14:56 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -58,109 +58,6 @@ class core extends acl_base
 	function get_opt($key)
 	{
 		return $this->$key;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	// object handling functions - add, change, delete
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas serializetud kujul.
-	// Järgnevate funktsioonidega saab selle välja sisu kätte ja muuta
-
-	////
-	// !Modifies object's metadata
-	// arguments:
-	// oid - object oid
-	// key - the name of the metadata key
-	// value - the value for the specified key (integer, string, array, whatever)
-	// data - array, if set, it is merged with the existing object metadata
-	// overwrite - optional, if set, then data is not merged, but cleared and then written
-	// delete_key - optional, if set, the specified key is deleted
-	// example usage:
-	// $this->set_object_metadata(array(
-	//				"oid" => $oid,
-	//				"key" => "notes",
-	//				"value" => "3l33t",
-	// ));
-	// $this->set_object_metadata(array(
-	//       "oid" => $oid,
-	//       "data" => array("a" => b", "c" => "d")
-	// ));
-	// $this->set_object_metadata(array(
-	//				"oid" => $oid,
-	//				"key" => "notes",
-	//				"delete_key" => true
-	// ));
-	function set_object_metadata($args = array())
-	{
-		extract($args);
-
-		if (not($obj = $this->get_object($oid)))
-		{
-			// no such object? bail out
-			return false;
-		};
-
-		$metadata = $obj['meta'];
-
-		if (isset($overwrite))
-		{
-			if ($key)
-			{
-				$metadata[$key] = array();
-			}
-			else
-			{
-				$metadata = array();
-			};
-		}
-		
-		if (is_array($data))
-		{
-			// no array_merge here, that screws up numeric indexes - instead of overwriting is renumbers and appends them
-			if (is_array($metadata))
-			{
-				$metadata = $data + $metadata;
-			}
-			else
-			{
-				$metadata = $data;
-			}
-		}
-		else
-		if ($key)
-		{
-			$metadata[$key] = $value;
-		}
-		else
-		{
-			// nothing to do, return
-			return false;
-		};
-		
-		if (isset($delete_key))
-		{
-			unset($metadata[$key]);
-		};
-
-		if (!$no_write)
-		{
-			$_mt = aw_serialize($metadata);
-			$this->quote(&$_mt);
-			$this->db_query("UPDATE objects SET 
-				modifiedby = '".aw_global_get("uid")."',
-				modified = '".time()."',
-				metadata = '".$_mt."',
-				cachedirty = '1'
-				WHERE oid = '$oid'
-			");
-			aw_cache_set("objcache",$oid,'');
-			$this->flush_cache();
-		}
-
-		return $metadata;
 	}
 
 	////
