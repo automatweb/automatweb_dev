@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_company" folder="crm" extends="class_base">
-		<action name="delete_selected_jobs" all_args="1">
+		<action name="delete_selected_jobs" >
 			<function name="delete_selected_jobs">
 				<arguments>
 				</arguments>
@@ -55,11 +55,26 @@
 			</function>
 		</action>
 
+		<action name="submit_delete_my_customers_relations" >
+			<function name="submit_delete_my_customers_relations">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_delete_customer_relations" >
 			<function name="submit_delete_customer_relations">
 				<arguments>
 					<required name="id" type="int" acl="view"/>
 					<optional name="customer" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_new_company" >
+			<function name="create_new_company">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
