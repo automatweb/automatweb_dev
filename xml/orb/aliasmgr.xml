@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="aliasmgr">
+	
+		<action name="list_aliases">
+			<function name="list_aliases">
+				<arguments>
+					<required name="id"/>
+					<optional name="table"/>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
+				</arguments>
+			</function>
+		</action>
+		
+	</orb>
