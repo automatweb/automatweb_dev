@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.96 2004/10/04 13:35:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.97 2004/10/18 15:37:33 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -148,12 +148,8 @@ class users_user extends aw_template
 		$host	= $params["remote_host"];
 		$t = time();
 		$msg = "";
-
-
-		// by default eeldame, et kasutaja on jobu ja ei saa
-		// sisse logida
-		$success	= false;
-		$load_user 	= true;
+		
+		$do_auth = true;
 
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
 		if (!is_valid("password",$password))
@@ -162,6 +158,7 @@ class users_user extends aw_template
 			$this->send_alert($msg);
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 			$load_user = false;
+			$do_auth = false;
 		}
 		else
 		if (!is_valid("uid",$uid))
@@ -170,73 +167,34 @@ class users_user extends aw_template
 			$this->send_alert($msg);
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 			$load_user = false;
+			$do_auth = false;
 		};
 
-		if ($load_user)
+		$auth = get_instance(CL_AUTH_CONFIG);
+		if ($do_auth && ($auth_id = $auth->has_config()))
 		{
-			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
-			$this->db_query($q);
-			$udata = $this->db_next();
-		};
-
-		if (is_array($udata))
-		{
-			if (aw_ini_get("auth.md5_passwords"))
-			{
-				if (md5($password) == $udata["password"])
-				{
-					$success = true;
-				};
-			}
-			else
-			if ($password == $udata["password"])
-			{
-				$success = true;
-			}
-			else
-			{
-				$msg = sprintf(E_USR_WRONG_PASS,$uid,"");
-				$this->send_alert($msg);
-				$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
-			};
+			list($success, $msg) = $auth->check_auth($auth_id, array(
+				"uid" => $uid,
+				"password" => $password
+			));
 		}
 		else
 		{
-			$msg = "Sellist kasutajat pole $uid";
-			$this->send_alert($msg);
-			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
-			session_unregister("uid");
-			aw_global_set("uid","");
-			$uid = "";
-		};
-
-		// check for not active. 
-/*		if (is_array($udata))
-		{
-			$act_from = $this->get_user_config(array(
-				"uid" => $uid, 
-				"key" => "act_from"
-			));
-			$act_to = $this->get_user_config(array(
+			$auth = get_instance(CL_AUTH_SERVER_LOCAL);
+			list($success, $msg) = $auth->check_auth(NULL, array(
 				"uid" => $uid,
-				"key" => "act_to"
+				"password" => $password
 			));
-			if ($act_from > 0 && $act_from > time())
-			{
-				$success = false;
-				$msg = "Kasutaja pole aktiivne!";
-			}
-			if ($act_to > 0 && $act_to < time())
-			{
-				$success = false;
-				$msg = "Kasutaja pole aktiivne!";
-			}
-		}*/
-		$this->msg = $msg;
+		}
 
+		$this->msg = $msg;
+	
 		// all checks complete, result in $success, process it
 		if (!$success)
 		{
+			$this->send_alert($msg);
+			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
+
 			session_unregister("uid");
 			aw_global_set("uid", "");
 			$uid = "";
