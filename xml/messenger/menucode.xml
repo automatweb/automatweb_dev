@@ -52,7 +52,12 @@
 						<caption>Lisa uus</caption>
 						<link>?class=messenger&amp;action=account_type</link>
 					</new>
+					<list>
+						<caption>Nimekiri</caption>
+						<link>?class=messenger&amp;action=configure&amp;page=accounts</link>
+					</list>
 				</sublinks>
+
 			</accounts>
 			<rules>
 				<caption>Reeglid</caption>
