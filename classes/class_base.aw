@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.188 2003/12/10 14:28:16 duke Exp $
+// $Id: class_base.aw,v 2.189 2003/12/11 11:58:11 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1816,6 +1816,22 @@ class class_base extends aw_template
 			{
 				$this->init_rel_manager(&$argblock);
 			};
+			
+			if ( isset($val["editonly"]) && empty($this->id))
+			{
+				continue;
+			}
+			else
+			if ($val["type"] == "aliasmgr" && empty($this->id))
+			{
+				continue;
+				// do not show alias manager if  no id
+			}
+			else
+			if ( isset($val["newonly"]) && !empty($this->id))
+			{
+				continue;
+			};
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
 			if ($callback)
@@ -1834,21 +1850,6 @@ class class_base extends aw_template
 				$val["type"] = "text";
 				$val["value"] = "Viga: $val[error]";
 				$resprops[$key] = $val;
-			}
-			else
-			if ( isset($val["editonly"]) && empty($this->id))
-			{
-				// do nothing
-			}
-			else
-			if ($val["type"] == "aliasmgr" && empty($this->id))
-			{
-				// do not show alias manager if  no id
-			}
-			else
-			if ( isset($val["newonly"]) && !empty($this->id))
-			{
-				// skip it
 			}
 			else
 			if ($val["type"] == "hidden")
