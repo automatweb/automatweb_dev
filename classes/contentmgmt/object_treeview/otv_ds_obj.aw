@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.7 2004/07/13 15:01:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.8 2004/08/23 09:33:36 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -427,7 +427,10 @@ class otv_ds_obj extends class_base
 				"fileSizeMBytes" => $fileSizeMBytes,
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $t->id(), "section" => aw_global_get("section")), $t->class_id()),
-					"caption" => "Muuda"
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
+						"border" => 0
+					))//"Muuda"
 				)),
 			);
 
