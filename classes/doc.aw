@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.6 2003/03/17 18:49:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.7 2003/03/19 18:07:33 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -30,6 +30,9 @@
 
 @property content type=textarea richtext=1 cols=60 rows=30
 @caption Sisu
+
+@property pic1 type=relpicker clid=CL_IMAGE
+@caption Pilt
 
 @property is_forum type=checkbox ch_value=1
 @caption Foorum
@@ -372,6 +375,31 @@ class doc extends class_base
 			"caption" => "Dokument (vend)",
 			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document_brother"),
 		);
+		return $retval;
+	}
+
+	////
+	// !Shows the pic1 element. Well, I think I could use a generic solution for displaying different
+	// values
+	function show_pic1($args = array())
+	{
+		$retval = "";
+		if (isset($args["id"]))
+		{
+			$obj = $this->get_object(array(
+				"oid" => $args["id"],
+				"class_id" => CL_DOCUMENT,
+			));
+
+			if (isset($obj["meta"]["img1"]))
+			{
+				$awi = get_instance("image");
+				$picdata = $awi->get_image_by_id($obj["meta"]["img1"]);
+				$retval = html::img(array(
+					"url" => $picdata["url"],
+				));
+			};
+		};
 		return $retval;
 	}
 
