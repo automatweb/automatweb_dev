@@ -179,7 +179,7 @@ class form_chain extends form_base
 
 		$this->read_template("chain.tpl");
 
-		if ($this->chain["fillonce"] && !$entry_id)
+		if ($this->chain["fillonce"])
 		{
 			// kui seda saab aint yx kord t2ita siis yritame leida selle t2itmise
 			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".$GLOBALS["uid"]."'","id");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_client.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_client.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["banner_client"] = "xml";
@@ -12,6 +12,7 @@ class banner_client extends banner
 	{
 		$this->banner();
 		$this->def_html = "<a href='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?gid=%s&click=1&ss=[ss]'><img src='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?gid=%s&ss=[ss]' border=0></a>";
+		lc_load("definition");
 	}
 
 	////
@@ -32,7 +33,7 @@ class banner_client extends banner
 		extract($arr);
 		$cl = $this->get($id);
 		$this->read_template("add_client.tpl");
-		$this->mk_path($cl["parent"],"Muuda asukohta");
+		$this->mk_path($cl["parent"],LC_CHANGE_POSITION);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"name"	=> $cl["name"],
@@ -80,7 +81,7 @@ class banner_client extends banner
 		extract($arr);
 		$cl = $this->get($id);
 		$this->read_template("ch_html.tpl");
-		$this->mk_path($cl["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda asukohta</a> / Muuda htmli");
+		$this->mk_path($cl["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_POSITION</a> / Muuda htmli");
 
 		$this->vars(array(
 			"html"	=> $cl["html"],
@@ -108,7 +109,7 @@ class banner_client extends banner
 
 		$ar = $this->get_clientarr();
 		$co = $this->get_object($client);
-		$this->mk_path($co["parent"],"Kliendi ".$ar[$client]." - statistika");
+		$this->mk_path($co["parent"],LC_CLIENTSS.$ar[$client].LC_SSTAT);
 
 		$bs = array();
 		$this->db_query("SELECT * FROM banner2client WHERE clid = $client");
@@ -246,7 +247,7 @@ class banner_client extends banner
 	{
 		extract($arr);
 		$this->read_template("stat_by_profile.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $client))."'>Muuda asukohta</a> / <a href='".$this->mk_orb("client_stats", array("client" => $client))."'>Asukoha statistika</a> / Profiilide kaupa");
+		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $client))."'>LC_CHANGE_POSITION</a> / <a href='".$this->mk_orb("client_stats", array("client" => $client))."'>LC_POSITION_STAT</a> / Profiilide kaupa");
 
 		// make list of all the banners for this client
 		$clb = array();

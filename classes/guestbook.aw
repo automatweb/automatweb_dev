@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.4 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
@@ -106,12 +106,12 @@ class guestbook extends aw_template
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GUESTBOOK_ENTRY." AND status != 0 AND parent = $id");
 		while ($row = $this->db_next())
 		{
-			$from = $row[name];
+			$from = htmlspecialchars($row[name]);
 			if ($row[last] != "")
 			{
-				$from = "<a href='mailto:".$row[last]."'>$from</a>";
+				$from = "<a href='mailto:".htmlspecialchars($row[last])."'>$from</a>";
 			}
-			$this->vars(array("from" => $from, "message" => nl2br($row[comment]), "date" => $this->time2date($row[created], 2)));
+			$this->vars(array("from" => $from, "message" => nl2br(htmlspecialchars($row[comment])), "date" => $this->time2date($row[created], 2)));
 			$this->parse("ENTRY");
 		}
 		$this->vars(array("reforb" => $this->mk_reforb("add_entry", array("id" => $id, "url" => urlencode($GLOBALS["REQUEST_URI"])))));

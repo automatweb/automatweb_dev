@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.9 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.10 2001/07/08 18:42:50 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -340,7 +340,7 @@ class db_images extends aw_template
 		$name 		= $params["name"];
 		$set_period = $GLOBALS["set_period"];
 		$newwindow = $params["newwindow"];
-		
+
 		if (!($this->is_valid_image($file_type) || $ignore_type)) 
 		{
 			print "See failitüüp ei sobi mulle";

@@ -55,7 +55,7 @@ class form_import extends form_base
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
 		global $tmpdir;
 		$fp = fopen($tmpdir."/".$file,"r");
-		$ar = fgetcsv($fp,100000);
+		$ar = fgetcsv($fp,100000,";");
 		fclose($fp);
 
 		$cnt = 0;
@@ -114,7 +114,7 @@ class form_import extends form_base
 
 		$parent = $f->arr["ff_folder"];
 
-		while (($ar = fgetcsv($fp,100000)))
+		while (($ar = fgetcsv($fp,100000,";")))
 		{
 			$rowels = array();
 			$rowvals = array();
@@ -125,13 +125,45 @@ class form_import extends form_base
 				// for this element find the column that was specified and insert it into the array
 				if (isset($el[$elid]) && $el[$elid] != -1)
 				{
+					$elref = $f->get_element_by_id($elid);
+					if ($elref->get_type() == "listbox")
+					{
+						// here we must search the listbox for a matcihng string
+						$elvalue = "element_".$elid."_lbopt_0";
+						foreach($elref->arr["listbox_items"] as $num => $str)
+						{
+							if ($str == $ar[$el[$elid]])
+							{
+								$elvalue = "element_".$elid."_lbopt_".$num;
+								break;
+							}
+						}
+					}
+					else
+					if ($elref->get_type() == "multiple")
+					{
+						$elvalue = "";
+						foreach($elref->arr["multiple_items"] as $num => $str)
+						{
+							if ($str == $ar[$el[$elid]])
+							{
+								$elvalue = $num;
+								break;
+							}
+						}
+					}
+					else
+					{
+						$elvalue = $ar[$el[$elid]];
+					}
+
 					if ($elid == $f->arr["name_el"])
 					{
-						$entry_name = $ar[$el[$elid]];
+						$entry_name = $elvalue;
 					}
 					$rowels[] = "el_".$elid;
-					$rowvals[] = "'".$ar[$el[$elid]]."'";
-					$entry[$elid] = $ar[$el[$elid]];
+					$rowvals[] = "'".$elvalue."'";
+					$entry[$elid] = $elvalue;
 				}
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
@@ -193,7 +225,7 @@ class form_import extends form_base
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
 		global $tmpdir;
 		$fp = fopen($tmpdir."/".$file,"r");
-		$ar = fgetcsv($fp,100000);
+		$ar = fgetcsv($fp,100000,";");
 		fclose($fp);
 
 		$cnt = 0;
@@ -259,7 +291,8 @@ class form_import extends form_base
 		classload("xml");
 		$x = new xml;
 		$form = new form;
-		while (($ar = fgetcsv($fp,100000)))
+		$ar = fgetcsv($fp,100000,";");	// skipime esimese rea
+		while (($ar = fgetcsv($fp,100000,";")))
 		{
 			// first we create a new chain entry for this line
 			$chain_entry_id = $this->db_fetch_field("SELECT max(id) as id FROM form_chain_entries", "id")+1;
@@ -281,13 +314,46 @@ class form_import extends form_base
 					// for this element find the column that was specified and insert it into the array
 					if (isset($el[$elid]) && $el[$elid] != -1)
 					{
+						$elref = $form->get_element_by_id($elid);
+						if ($elref->get_type() == "listbox")
+						{
+							// here we must search the listbox for a matcihng string
+							$elvalue = "element_".$elid."_lbopt_0";
+							foreach($elref->arr["listbox_items"] as $num => $str)
+							{
+								if ($str == $ar[$el[$elid]])
+								{
+									$elvalue = "element_".$elid."_lbopt_".$num;
+									break;
+								}
+							}
+						}
+						else
+						if ($elref->get_type() == "multiple")
+						{
+							$elvalue = "";
+							foreach($elref->arr["multiple_items"] as $num => $str)
+							{
+								if ($str == $ar[$el[$elid]])
+								{
+									$elvalue = $num;
+									break;
+								}
+							}
+						}
+						else
+						{
+							$elvalue = $ar[$el[$elid]];
+						}
+
+
 						if ($elid == $form->arr["name_el"])
 						{
-							$entry_name = $ar[$el[$elid]];
+							$entry_name = $elvalue;
 						}
 						$rowels[] = "el_".$elid;
-						$rowvals[] = "'".$ar[$el[$elid]]."'";
-						$entry[$elid] = $ar[$el[$elid]];
+						$rowvals[] = "'".$elvalue."'";
+						$entry[$elid] = $elvalue;
 					}
 				}
 				// now insert it into the correct tables, form_entry and form_$fid_entries

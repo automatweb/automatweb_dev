@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.31 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.32 2001/07/08 18:42:50 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -624,6 +624,7 @@ class menuedit extends aw_template
 
 		$this->make_banners();
 
+		$cd = ($this->can("edit",$section)) ? $this->parse("CHANGEDOCUMENT") : "";
 		global $sstring;
 		$this->vars(array(
 			"ss" => $this->gen_uniq_id(),		// bannerite jaox
@@ -635,7 +636,7 @@ class menuedit extends aw_template
 			"uid" => $GLOBALS["uid"], 
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
-			"CHANGEDOCUMENT" => $this->active_doc ? $this->parse("CHANGEDOCUMENT") : "",
+			"CHANGEDOCUMENT" => $cd,
 			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
@@ -855,7 +856,7 @@ class menuedit extends aw_template
 				menu.left_pane as left_pane
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
+				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 		$awt->stop("menuedit_listall_lite");
@@ -2945,10 +2946,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	
 		$check_acl = false;
 
-		if (in_array($parent,$menu_check_acl))
+		if (is_array($menu_check_acl))
 		{
-			$check_acl = true;
-		};
+			if (in_array($parent,$menu_check_acl))
+			{
+				$check_acl = true;
+			};
+		}
 
 		// make the subtemplate names for this and the next level
 		$mn = "MENU_".$name."_L".$this->level."_ITEM";

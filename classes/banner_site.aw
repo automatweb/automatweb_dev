@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_site.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_site.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["banner_site"] = "xml";
@@ -11,6 +11,8 @@ class banner_site extends banner
 	function banner_site()
 	{
 		$this->banner();
+		lc_load("definition");
+
 	}
 
 	////
@@ -18,7 +20,7 @@ class banner_site extends banner
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa banneri sait");
+		$this->mk_path($parent,LC_ADD_BANNER_SITE);
 		$this->read_template("add_b_site.tpl");
 
 		$ca = $this->get_clientarr();
@@ -35,7 +37,7 @@ class banner_site extends banner
 	{
 		extract($arr);
 		$bo = $this->get($id);
-		$this->mk_path($bo["parent"], "Muuda banneri saiti");
+		$this->mk_path($bo["parent"], LC_CHANGE_BANNER_SITE);
 		$this->read_template("add_b_site.tpl");
 		$ca = $this->get_clientarr();
 		$ca_sel = $this->get_clients_for_site($id);
@@ -106,7 +108,7 @@ class banner_site extends banner
 
 		$ar = $this->get_clientarr();
 		$co = $this->get_object($id);
-		$this->mk_path($co["parent"],"Saidi \"".$co["name"]."\" statistika");
+		$this->mk_path($co["parent"],LC_SITES_SLASH.$co["name"].LC_SITE_STATS);
 
 		$s_c_ar = $this->get_clients_for_site($id);
 		$s_c_str = join(",",$s_c_ar);
@@ -220,7 +222,7 @@ class banner_site extends banner
 	{
 		extract($arr);
 		$this->read_template("client_stat_by_dow.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda saiti</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>Saidi statistika</a> / N&auml;dalap&auml;evade kaupa");
+		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_SITE</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>LC_SITE_STATIST</a> / N&auml;dalap&auml;evade kaupa");
 
 		$s_c_ar = $this->get_clients_for_site($id);
 		$s_c_str = join(",",$s_c_ar);
@@ -245,7 +247,7 @@ class banner_site extends banner
 	{
 		extract($arr);
 		$this->read_template("client_stat_by_hr.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda saiti</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>Saidi statistika</a> / Tundide kaupa");
+		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_SITE</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>LC_SITE_STATIST</a> / Tundide kaupa");
 
 		$s_c_ar = $this->get_clients_for_site($id);
 		$s_c_str = join(",",$s_c_ar);
@@ -270,7 +272,7 @@ class banner_site extends banner
 	{
 		extract($arr);
 		$this->read_template("stat_by_profile.tpl");
-		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda saiti</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>Saidi statistika</a> / Profiilide kaupa");
+		$this->mk_path(0,"<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_SITE</a> / <a href='".$this->mk_orb("stats", array("id" => $id))."'>LC_SITE_STATIST</a> / Profiilide kaupa");
 
 		$s_c_ar = $this->get_clients_for_site($id);
 		$s_c_str = join(",",$s_c_ar);

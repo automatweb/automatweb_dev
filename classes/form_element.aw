@@ -89,6 +89,14 @@ class form_element extends aw_template
 				$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
 			}
 		};
+
+		$var = "element_".$this->id."_name";
+		global $$var;
+		if ($$var != $this->arr["name"])
+		{
+			$this->arr["name"] = $$var;
+			$this->upd_object(array("oid" => $this->id, "name" => $$var));
+		}
 	}
 
 	////
@@ -114,10 +122,11 @@ class form_element extends aw_template
 		$this->arr["style"] = $id;
 	}
 
-	function set_entry(&$arr, $e_id)
+	function set_entry(&$arr, $e_id,&$form)
 	{
 		$this->entry = $arr[$this->id];
 		$this->entry_id = $e_id;
+		$form->values["el_".$this->id] = $this->get_value();
 	}
 
 	function set_mark($mk)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.23 2001/07/04 23:06:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.24 2001/07/08 18:42:50 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -354,6 +354,7 @@ load_vcl("date_edit");
 				$var = $base."_lb_size";
 				$this->arr["mb_size"] = $$var;
 
+				$this->arr["multiple_items"] = array();
 				$cnt=$this->arr["multiple_count"]+1;	
 				for ($b=0,$num=0; $b < $cnt; $b++)
 				{
@@ -537,7 +538,8 @@ load_vcl("date_edit");
 			{
 				case "textarea":
 					$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]."'>";
-					$html.=($this->get_val($elvalues))."</textarea>";
+					$html .= htmlspecialchars($this->get_val($elvalues));
+					$html .= "</textarea>";
 					break;
 
 				case "radiobutton":
@@ -746,19 +748,15 @@ load_vcl("date_edit");
 					{
 						if (is_array($entry[$this->id]))	// this holds array("id" => $image_id, "idx" => $image_idx);
 						{
-							print "replacing<br>";
 							$entry[$this->id] = $im->replace($$var,$$ft,$id,$entry[$this->id]["idx"],"",$entry[$this->id]["id"],true,$$fn);
 						}
 						else
 						{
-							print "updating<br>";
 							$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
 						};
 					}
 					else
 					{
-						print "inserting<br>";
-						print $$fn;
 						$im->upload($$var, $$ft, $id, "",true,$$fn);
 					}
 					$this->entry = $entry[$this->id];
@@ -821,7 +819,7 @@ load_vcl("date_edit");
 
 			if ($this->arr["type"] == "textarea")
 				//$html.=$t->proc_text($this->entry, $this->entry_id);
-				$html .= $this->entry;
+				$html .= htmlspecialchars($this->entry);
 					
 			if ($this->arr["type"] == "radiobutton")
 				$html.=($this->entry == $this->id ? " (X) " : " (-) ");
@@ -844,7 +842,7 @@ load_vcl("date_edit");
 				$html.=$this->entry == 1 ? "(X) " : " (-) ";
 					
 			if ($this->arr["type"] == "textbox")
-				$html .= $this->entry;
+				$html .= htmlspecialchars($this->entry);
 				//$html.=$t->proc_text($this->entry, $this->entry_id);
 
 			if ($this->arr["type"] == "price")
@@ -1165,5 +1163,7 @@ load_vcl("date_edit");
 				$this->arr["multiple_count"] = $cnt;
 			}
 		}
-	}
+
+		function get_type()		{	return $this->arr["type"]; }
+}
 ?>

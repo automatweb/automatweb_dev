@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.13 2001/07/03 00:00:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.14 2001/07/08 18:42:50 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -32,6 +32,7 @@ class aw_mail {
 	function aw_mail($args = array())
 	{
 		return $this->clean($args);
+			lc_load("definition");
 	}
 
 	////

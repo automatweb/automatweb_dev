@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.5 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.6 2001/07/08 18:42:50 duke Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -52,6 +52,7 @@ class acl_base extends core
 			$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
 
 		return join(",",$qstr);
+			lc_load("definition");
 	}
 
 	function get_acl_groups_for_obj($oid)
@@ -312,7 +313,7 @@ class acl_base extends core
 			$gr = $this->get_user_group($uuid);
 			if (!$gr) 
 			{
-				$this->raise_error("Teil on default grupp puudu, palun teatage sellest veast kohe info@struktuur.ee",true);
+				$this->raise_error(LC_NO_DEFAULT_GROUP,true);
 			};
 			$this->add_acl_group_to_obj($gr["gid"], $oid);
 			$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
@@ -351,7 +352,12 @@ class acl_base extends core
 		{
 			return DENIED;
 		}
-		if (isset($GLOBALS["check_prog_acl"]) && $GLOBALS["check_prog_acl"] == true)
+		
+		if (isset($GLOBALS["no_check_acl"]) && $GLOBALS["no_check_acl"] == true)
+		{
+				return ALLOWED;
+		}
+		else
 		{
 			if (!is_array($prog_cache))
 			{
@@ -360,11 +366,7 @@ class acl_base extends core
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
 			}
 			return $this->can($right,$prog_cache[$progid]);
-		}
-		else
-		{
-			return ALLOWED;
-		}
+		};
 	}
 
 	////

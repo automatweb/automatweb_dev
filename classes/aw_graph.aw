@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_graph.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
 class aw_graph extends aw_template
 {
 	function aw_graph()
 	{
-
+	lc_load("definition");
 	}
 
 	function import_data($arr)

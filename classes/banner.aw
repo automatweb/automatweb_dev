@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.3 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.4 2001/07/08 18:42:50 duke Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
 
@@ -39,6 +39,7 @@ class banner extends aw_template
 		$this->tpl_init("banner");
 		$this->db_init();
 		$this->sub_merge = 1;
+			lc_load("definition");
 	}
 
 	////
@@ -68,7 +69,7 @@ class banner extends aw_template
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
-		$this->mk_path($parent, "Lisa banner");
+		$this->mk_path($parent, LC_ADD_BANNER);
 		$this->add_core($parent);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array())
@@ -529,7 +530,7 @@ class banner extends aw_template
 			// tagastame baasi kirjutatud htmli banneri naitamisex.
 			if (!$gid)
 			{
-				die("viga, kliendi id'd pole!");
+				die(LC_ERROR_NO_ID);
 			}
 			die($this->db_fetch_field("SELECT html FROM banner_clients WHERE id = $gid","html"));
 		}
@@ -580,11 +581,11 @@ class banner extends aw_template
 
 			if ($ba["b_url"] != "")
 			{
-				header("Location: ".$ba["b_url"]);
+				header(LC_LOCATION.$ba["b_url"]);
 			}
 			else
 			{
-				header("Content-type: ".$ba["fail_type"]);
+				header(LC_CONTENT_TYPE.$ba["fail_type"]);
 				die($ba["fail"]);
 			}
 		}
@@ -652,7 +653,7 @@ class banner extends aw_template
 	{
 		extract($arr);
 		$ba = $this->get($id);
-		$this->mk_path($ba["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda bannerit</a> / Detailne statistika");
+		$this->mk_path($ba["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_BANNER</a> / Detailne statistika");
 
 		// viimase 7 p2eva stats, nagu phpAdsis
 		$this->read_template("stat_detail.tpl");
@@ -960,7 +961,7 @@ class banner extends aw_template
 		$this->change_core($ba);
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit_site", array("id" => $id,"site" => 1)),
-			"path" => "<a href='".$this->mk_orb("sel_buyer_redirect",array("fun" => "buyer_banners", "r_class" => "banner"),"banner_buyer")."'>Bannerid</a> / Muuda bannerit"
+			"path" => "<a href='".$this->mk_orb("sel_buyer_redirect",array("fun" => "buyer_banners", "r_class" => "banner"),"banner_buyer")."'>LC_BANNERS</a> / Muuda bannerit"
 		));
 
 		return $this->parse();
@@ -974,7 +975,7 @@ class banner extends aw_template
 		$this->read_template("site_add.tpl");
 		$this->add_core($parent);
 		$this->vars(array(
-			"path" => "<a href='".$this->mk_orb("buyer_banners", array())."'>Bannerid</a> / Lisa banner",
+			"path" => "<a href='".$this->mk_orb("buyer_banners", array())."'>LC_BANNERS</a> / Lisa banner",
 			"reforb" => $this->mk_reforb("submit_site", array("site" => 1))
 		));
 		return $this->parse();
@@ -1077,7 +1078,7 @@ class banner extends aw_template
 				"t_clicks" => $t_clicks,
 				"a_views" => (double)$t_views / 7.0,
 				"a_clicks" => (double)$t_clicks / 7.0,
-				"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",array("Puhapaev","Esmaspaev","Teisipaev","Kolmapaev","Neljapaev","Reede","Laupaev"))), "yvals" => urlencode(join(",",array(0,$m_cnt))), "data" => urlencode(join(",",$gviews)),"title" => "Nädalapäevade statistika", "xtitle" => "Päev", "ytitle" => "Vaatamisi","data2" => urlencode(join(",",$gclicks))),"banner")
+				"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",array(LC_SUNDAY1,LC_MONDAY1,LC_TUESDAY1,LC_WENSDAY1,LC_THURSDAY1,LC_FRIDAY1,LC_SATURDAY1))), "yvals" => urlencode(join(",",array(0,$m_cnt))), "data" => urlencode(join(",",$gviews)),"title" => LC_WEEKDAYS_STATISTICS, "xtitle" => LC_DAY, "ytitle" => LC_LOOKS,"data2" => urlencode(join(",",$gclicks))),"banner")
 			));
 		}
 	}
@@ -1200,7 +1201,7 @@ class banner extends aw_template
 		extract($arr);
 		$this->read_template("sel_periods.tpl");
 		$ba = $this->get($id);
-		$this->mk_path($ba["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda bannerit</a> / Vali perioodid");
+		$this->mk_path($ba["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_BANNER</a> / Vali perioodid");
 
 		load_vcl("date_edit");
 		$de = new date_edit(time());
@@ -1438,16 +1439,16 @@ class banner extends aw_template
 			"chart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$bs)),
 																									 "yvals" => urlencode(join(",",array(0,$m_vs))),
 																									 "data"  => urlencode(join(",",$dat)),
-																									 "title" => "Kasutaja banneri vaatamisi",
-																									 "xtitle" => "Banner",
-																									 "ytitle" => "Vaatamisi"),"banner"),
+																									 "title" => LC_USER_LOOKS,
+																									 "xtitle" => LC_BANNER,
+																									 "ytitle" => LC_LOOKS"),"banner"),
 			"t_views" => $t_vs,
 			"cchart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$bs2)),
 																									 "yvals" => urlencode(join(",",array(0,$m_cs))),
 																									 "data"  => urlencode(join(",",$dat2)),
-																									 "title" => "Kasutaja banneri klikke",
-																									 "xtitle" => "Banner",
-																									 "ytitle" => "Klikke"),"banner"),
+																									 "title" => LC_USERS_BANNER_KLIK,
+																									 "xtitle" => LC_BANNER,
+																									 "ytitle" => LC_KLIKS),"banner"),
 			"t_clicks" => $t_cs
 		));
 		if ($t_cs > 0)
@@ -1508,7 +1509,7 @@ class banner extends aw_template
 		{
 			list($ip,) = aw_gethostbyaddr($row["ip"]);
 			$this->vars(array(
-				"act" => ($row["view"] ? "Vaatas bannerit" : "Klikkis bannerile"),
+				"act" => ($row["view"] ? LC_LOOKED_BANNER : LC_KLIKKED_BANNER),
 				"time" => $this->time2date($row["tm"],2),
 				"banner" => $row["name"],
 				"ip" => $ip,

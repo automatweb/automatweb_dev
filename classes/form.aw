@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.32 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.33 2001/07/08 18:42:50 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -586,6 +586,7 @@ $orb_defs["form"] = "xml";
 			{
 				$this->load($id);
 			};
+			global $baseurl;
 
 			if ($form_action == "")
 			{
@@ -867,6 +868,7 @@ $orb_defs["form"] = "xml";
 			{
 				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
 			};
+			$row["form_".$id."_entry"] = $crow["id"];
 
 			if ($row["chain_id"])
 			{
@@ -880,19 +882,25 @@ $orb_defs["form"] = "xml";
 						$crow = $this->db_next();
 						if (is_array($crow))
 						{
+							$crow["form_".$cfid."_entry"] = $crow["id"];
 							$row= $row+$crow;
 						}
 					}
 				}
+				$this->chain_entry_id = $row["chain_id"];
 			}
-			$this->load_entry_from_data($row,$entry_id);
+			else
+			{
+				$this->chain_entry_id = 0;
+			}
+			$this->load_entry_from_data($row,$entry_id,$eids);
 		}
 
-		function load_entry_from_data($row,$entry_id)
+		function load_entry_from_data($row,$entry_id,$eids = array())
 		{
 			$this->entry_id = $entry_id;
 			reset($row);
-
+			$this->values = array();
 			while (list($k,$v) = each($row))
 			{
 				// pildi elementide inff on arrays serializetult
@@ -900,8 +908,15 @@ $orb_defs["form"] = "xml";
 
 				if (substr($k,0,3) == "el_")
 				{
+					//print "k = $k, v = $v<br>";
+					$key = substr($k,3);
 					$this->entry[substr($k,3)] = $v;
-				};
+				}
+				else
+				if (substr($k,0,5) == "form_")
+				{
+					$this->entry[$k] = $v;
+				}
 			};
 
 			$this->vars(array("entry_id" => $entry_id));
@@ -910,7 +925,7 @@ $orb_defs["form"] = "xml";
 			{
 				for ($col=0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
+					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id,&$this);
 				};
 			};
 		}
@@ -1061,7 +1076,7 @@ $orb_defs["form"] = "xml";
 									{
 										for ($ocol=0; $ocol < $op_forms[$op_fid]->arr["cols"]; $ocol++)
 										{
-											$op_forms[$op_fid]->arr["contents"][$orow][$ocol] -> set_entry(&$this->entry, $entry_id);
+											$op_forms[$op_fid]->arr["contents"][$orow][$ocol] -> set_entry(&$this->entry, $entry_id,&$op_forms[$op_fid]);
 										};
 									};
 								}
@@ -1230,7 +1245,32 @@ $orb_defs["form"] = "xml";
 
 			$ops = $this->get_op_list();
 
-			$this->db_query("SELECT oid,parent,name,comment FROM objects LEFT JOIN forms ON forms.id = objects.oid WHERE status != 0 AND class_id = ".CL_FORM." AND forms.type = ".FTYPE_ENTRY);
+			$per_page = 10;
+
+			$total = $this->db_fetch_field("SELECT count(oid) as cnt FROM objects LEFT JOIN forms ON forms.id = objects.oid WHERE status != 0 AND class_id = ".CL_FORM." AND forms.type = ".FTYPE_ENTRY,"cnt");
+			$pages = $total / $per_page;
+			for ($i=0; $i < $pages; $i++)
+			{
+				$this->vars(array(
+					"from" => ($i*$per_page),
+					"to" => min(($i+1)*$per_page, $total),
+					"pageurl" => $this->mk_my_orb("sel_search", array("id" => $id, "page" => $i))
+				));
+				if ($i == $page)
+				{
+					$pp.=$this->parse("SEL_PAGE");
+				}
+				else
+				{
+					$pp.=$this->parse("PAGE");
+				}
+			}
+			$this->vars(array(
+				"PAGE" => $pp,
+				"SEL_PAGE" => ""
+			));
+
+			$this->db_query("SELECT oid,parent,name,comment FROM objects LEFT JOIN forms ON forms.id = objects.oid WHERE status != 0 AND class_id = ".CL_FORM." AND forms.type = ".FTYPE_ENTRY." LIMIT ".($page*$per_page).",$per_page");
 			while($row = $this->db_next())
 			{
 				$this->vars(array(
@@ -1240,6 +1280,7 @@ $orb_defs["form"] = "xml";
 					"form_id" => $row["oid"],
 					"row"	=> $cnt,
 					"checked" => checked($this->arr["search_from"][$row["oid"]] == 1),
+					"prev" => $this->arr["search_from"][$row["oid"]],
 					"ops" => $this->picker($this->arr["search_outputs"][$row["oid"]],$ops[$row["oid"]])
 				));
 				$this->parse("LINE");
@@ -1247,7 +1288,7 @@ $orb_defs["form"] = "xml";
 			}
 
 			$this->vars(array(
-				"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id))
+				"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page))
 			));
 
 			return $this->do_menu_return();
@@ -1261,18 +1302,25 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			$this->arr["search_from"] = array();
-			while( list($k,$v) = each(&$arr))
+//			$this->arr["search_from"] = array();
+/*			while( list($k,$v) = each(&$arr))
 			{
 				if (substr($k,0,3) == "ch_")
 					$this->arr["search_from"][substr($k,3)] = $v;
 				else
 				if (substr($k,0,4) == "sel_")
 					$this->arr["search_outputs"][substr($k,4)] = $v;
+			}*/
+			foreach($inpage as $ifid => $v)
+			{
+				$var = "ch_".$ifid;
+				$this->arr["search_from"][$ifid] = $$var;
+				$var = "sel_".$ifid;
+				$this->arr["search_outputs"][$ifid] = $$var;
 			}
 			
 			$this->save();
-			return $this->mk_orb("sel_search", array("id" => $id));
+			return $this->mk_orb("sel_search", array("id" => $id,"page" => $page));
 		}
 
 		// does the actual searching part and returns
@@ -1392,7 +1440,16 @@ $orb_defs["form"] = "xml";
 						$eobj = $this->get_object($eid);
 
 						$rds = array();
-						$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $eid), "form_entry")."'>Muuda</a>";
+						if ($form->chain_entry_id)
+						{
+							$chain_id = $this->db_fetch_field("SELECT chain_id FROM form_chain_entries WHERE id = ".$this->chain_entry_id,"chain_id");
+							$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $this->chain_entry_id), "form_chain")."'>Muuda</a>";
+						}
+						else
+						{
+							$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $eid), "form_entry")."'>Muuda</a>";
+						}
+						
 						$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]))."'>Vaata</a>";
 						$rds["el_delete"] = "<a href='".$this->mk_my_orb(
 							"delete_entry", 
@@ -1418,7 +1475,7 @@ $orb_defs["form"] = "xml";
 								reset($elar);
 								while (list(,$el) = each($elar))
 								{
-									$rds["el_".$el->get_id()] = $el->get_value();
+									$rds["el_".$el->get_id()] = htmlspecialchars($el->get_value());
 								}
 							}
 						}
@@ -1466,7 +1523,7 @@ $orb_defs["form"] = "xml";
 				}
 			}
 		
-			return $html;
+			return " ".$html;
 		}
 
 		////
@@ -1711,7 +1768,6 @@ $orb_defs["form"] = "xml";
 				for ($col = 0; $col < $this->arr["cols"]; $col++)
 				{
 					$this->arr["contents"][$row][$col]->get_els(&$elar);
-					reset($elar);
 					while (list(,$el) = each($elar))
 					{
 						if ($el->get_id() == $id)
@@ -2015,7 +2071,12 @@ $orb_defs["form"] = "xml";
 		function get_element_value($id)
 		{
 			$el = $this->get_element_by_id($id);
+			if ($el)
+			{
 			return $el->get_value();
+			
+		}
+		return "";
 		}
 
 		////
@@ -2027,7 +2088,7 @@ $orb_defs["form"] = "xml";
 			{
 				for ($col=0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
+					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id,&$this);
 				};
 			};
 		}

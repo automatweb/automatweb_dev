@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.5 2001/07/08 18:42:50 duke Exp $
 	session_register("clipboard");
 
 	$formcache = -1;	// array of forms
@@ -163,23 +164,30 @@
 
 				$t = $form->get_element_by_id($this->arr["linked_element"]);
 
-				$t->entry = $this->entry;
-				$t->entry_id = $this->entry_id;
-				if ($t->get_type() == 'listbox')
+				if ($t)
 				{
-					// add an empty element to the listbox so we can tell the difference, 
-					// if nothing was selected and we can then ignore the lb in the search
-					$t->arr["listbox_items"][$t->arr["listbox_count"]] = "";
-					$t->arr["listbox_default"] = $t->arr["listbox_count"];
-					$t->arr["listbox_count"]++;
-				}
-				if ($this->arr["text"] != "")
-					$t->arr["text"] = $this->arr["text"];
+					$t->entry = $this->entry;
+					$t->entry_id = $this->entry_id;
+					if ($t->get_type() == 'listbox')
+					{
+						// add an empty element to the listbox so we can tell the difference, 
+						// if nothing was selected and we can then ignore the lb in the search
+						$t->arr["listbox_items"][$t->arr["listbox_count"]] = "";
+						$t->arr["listbox_default"] = $t->arr["listbox_count"];
+						$t->arr["listbox_count"]++;
+					}
+					if ($this->arr["text"] != "")
+						$t->arr["text"] = $this->arr["text"];
 
-				if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
-					return $t->gen_user_html_not(&$images);
+					if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
+						return $t->gen_user_html_not(&$images);
+					else
+						return "";
+				}
 				else
+				{
 					return "";
+				}
 			}
 			else
 				return "";
@@ -254,5 +262,6 @@
 			}
 			return $formcache[$this->arr["linked_form"]];
 		}
+	function get_type()		{	return $this->arr["type"]; }
 	}
 ?>

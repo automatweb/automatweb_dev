@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.40 2001/07/03 02:38:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.41 2001/07/08 18:42:50 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -62,7 +62,7 @@ class planner extends calendar {
 			
 		}
 
-		$flatlist[0][$udata["home_folder"]] = "sorteerimata";
+		$flatlist[0][$udata["home_folder"]] = LC_NOT_SORTED;
 		$fl = $this->indent_array($flatlist,0);
 
 		$fullpath = array();
@@ -140,7 +140,7 @@ class planner extends calendar {
 			};
 		};
 		global $status_msg;
-		$status_msg = "$cnt taski viidi teise folderisse";
+		$status_msg = sprintf(LC_TASKS_TRANSPORTED,$cnt); // taavi koht
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 					"action" => "todo",
@@ -240,9 +240,9 @@ class planner extends calendar {
 			
 		}
 
-		$flatlist[0][$udata["home_folder"]] = "sorteerimata";
+		$flatlist[0][$udata["home_folder"]] = LC_NOT_SORTED;
 		$fl = $this->indent_array($flatlist,0);
-		$ftitle = ($op == "add") ? "Lisa TODO" : "Muuda TODO-d";
+		$ftitle = ($op == "add") ? LC_ADD_DOD : LC_CHANGE_DODO;
 		$this->read_template("edit_todo.tpl");
 		if ($id)
 		{
@@ -898,7 +898,7 @@ class planner extends calendar {
 		{
 			$par = $this->get_object($id);
 			$parent = $par["parent"];
-			$caption = "Muuda eventit";
+			$caption = LC_CHANGE_EVENT;
 			$q = "SELECT * FROM planner WHERE id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_next();
@@ -1195,7 +1195,7 @@ class planner extends calendar {
 
 		$this->db_query($q);
 		global $status_msg;
-		$status_msg = " päevaplaan on salvestatud";
+		$status_msg = LC_DAY_IS_SAVED;
 		session_register("status_msg");
 		$obj = $this->get_object($args["id"]);
 		return $this->mk_site_orb(array(
@@ -1223,7 +1223,7 @@ class planner extends calendar {
 			{
 				$q = "UPDATE objects SET status = 1 WHERE oid = '$id'";
 				$this->db_query($q);
-				$status_msg = "Event on kustutatud";
+				$status_msg =LC_EVENT_ERASED;
 			}
 			else
 			{
@@ -1286,7 +1286,7 @@ class planner extends calendar {
 					reminder = '$reminder',
 					description = '$description'
 				WHERE id = '$id'";
-				$status_msg = "Eventi muudatused on salvestatud";
+				$status_msg = LC_EVENT_CHANGED_SAVED;
 			};
 		}
 		// lisame uue
@@ -2076,7 +2076,7 @@ class planner extends calendar {
 			VALUES ('$oid','$start','$end','$uid','$title','$description')";
 		$this->db_query($q);
 		global $status_msg;
-		$status_msg = "Sündmus on päevaplaani lisatud";
+		$status_msg = LC_EVENT_ADDED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"class" => "messenger",

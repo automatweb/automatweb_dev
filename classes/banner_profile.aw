@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["banner_profile"] = "xml";
@@ -10,6 +10,7 @@ class banner_profile extends banner
 	function banner_profile()
 	{
 		$this->banner();
+	lc_load("definition");	
 	}
 
 	////
@@ -23,10 +24,10 @@ class banner_profile extends banner
 		$fid = $c->get_simple_config("banner_profile_form");
 		if (!$fid)
 		{
-			$this->raise_error("No form selected for banner profile creation!", true);
+			$this->raise_error(LC_NO_FORM_FOR_BANNER, true);
 		}
 
-		$this->mk_path($parent, "Lisa banneri profiil");
+		$this->mk_path($parent, LC_ADD_BANNER_PROFILE);
 
 		classload("form");
 		$f = new form;
@@ -84,10 +85,10 @@ class banner_profile extends banner
 
 		if (!$fid)
 		{
-			$this->raise_error("No form selected for banner profile creation!", true);
+			$this->raise_error(LC_NO_FORM_FOR_BANNER, true);
 		}
 
-		$this->mk_path($o["parent"], "Muuda banneri profiili");
+		$this->mk_path($o["parent"], LC_CHANGE_BANNER_PROFILE);
 
 		classload("form");
 		$f = new form;

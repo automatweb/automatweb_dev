@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.2 2001/06/18 21:06:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.3 2001/07/08 18:42:50 duke Exp $
 // acl.aw - Access Control Lists
 
 global $orb_defs;
@@ -11,6 +11,7 @@ class acl extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/acl");
+			lc_load("definition");
 	}
 
 	////

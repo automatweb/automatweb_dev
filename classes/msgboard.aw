@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.6 2001/07/03 09:29:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.7 2001/07/08 18:42:50 duke Exp $
 
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
@@ -84,7 +84,12 @@ class msgboard extends aw_template
 			$this->db_query("SELECT * FROM objects where class_id = ".CL_MSGBOARD_TOPIC." AND oid = '$id'");
 			if (($row = $this->db_next()))
 			{
-				$this->vars(array("topic" => $row[name], "created" => $this->time2date($row[created], 2),"text" => str_replace("\n","<Br>",$row[comment]),"from" => $row[last],"topic_id" => $id));
+				$this->vars(array(
+					"topic" => htmlspecialchars($row[name]),
+					"created" => $this->time2date($row[created], 2),
+					"text" => str_replace("\n","<Br>",htmlspecialchars($row[comment])),
+					"from" => htmlspecialchars($row[last]),
+					"topic_id" => $id));
 				$top = $this->parse("TOPIC");
 			}
 			$this->vars(array("TOPIC" => $top));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.8 2001/07/05 02:44:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.9 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -44,35 +44,42 @@ class form_output extends form_base
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "comment" => $comment, "class_id" => CL_FORM_OUTPUT));
 			$this->db_query("INSERT INTO form_output(id) VALUES($id)");
 			$this->load_output($id);
-			if ($baseform)
+			if (is_array($baseform))
 			{
 				// if the user selected a form to base this op on, make it look like the form.
 				classload("form");
 				$f = new form;
-				$f->load($baseform);
-
 				$this->output= array();
-				$this->output["rows"] = $f->arr["rows"];
-				$this->output["cols"] = $f->arr["cols"];
-
-				for ($row =0; $row < $f->arr["rows"]; $row++)
+				foreach($baseform as $bfid)
 				{
-					for ($col =0; $col < $f->arr["cols"]; $col++)
-					{
-						$elarr=array();
-						$f->arr["contents"][$row][$col]->get_els(&$elarr);
-						$this->output[$row][$col]["style"] = $f->arr["contents"][$row][$col]->get_style();
+					$f->load($bfid);
 
-						$num=0;
-						foreach($elarr as $el)
+					$base_row = $this->output["rows"];
+//					$base_col = $this->output["cols"]; // the op expands down so we don't need to add to the column
+	
+					$this->output["rows"] += $f->arr["rows"];
+					$this->output["cols"] = max($f->arr["cols"],$this->output["cols"]);
+
+					for ($row =0; $row < $f->arr["rows"]; $row++)
+					{
+						for ($col =0; $col < $f->arr["cols"]; $col++)
 						{
-							$this->output[$row][$col]["els"][$num] = $el->get_id();
-							$num++;
+							$elarr=array();
+							$f->arr["contents"][$row][$col]->get_els(&$elarr);
+							$this->output[$base_row+$row][$base_col+$col]["style"] = $f->arr["contents"][$row][$col]->get_style();
+
+							$num=0;
+							foreach($elarr as $el)
+							{
+								$this->output[$base_row+$row][$base_col+$col]["els"][$num] = $el->get_id();
+								$num++;
+							}
+							$this->output[$base_row+$row][$base_col+$col]["el_count"] = $num;
+							$this->output["map"][$base_row+$row][$base_col+$col]["col"] = $f->arr["map"][$row][$col]["col"]+$base_col;
+							$this->output["map"][$base_row+$row][$base_col+$col]["row"] = $f->arr["map"][$row][$col]["row"]+$base_row;
 						}
-						$this->output[$row][$col]["el_count"] = $num;
 					}
 				}
-				$this->output["map"] = $f->arr["map"];
 				$this->save_output($id);
 			}
 		}
@@ -266,9 +273,31 @@ class form_output extends form_base
 		}
 
 		$this->vars(array(
-			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id))
+			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
+			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
+			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
 		));
 		return $this->parse();
+	}
+
+	function add_n_rows($arr)
+	{
+		extract($arr);
+		for ($i=0; $i < $nrows; $i++)
+		{
+			$this->add_row(array("id" => $id, "after" => $after));
+		}
+		return $this->mk_my_orb("admin_op", array("id" => $id));
+	}
+
+	function add_n_cols($arr)
+	{
+		extract($arr);
+		for ($i=0; $i < $ncols; $i++)
+		{
+			$this->add_col(array("id" => $id, "after" => $after));
+		}
+		return $this->mk_my_orb("admin_op", array("id" => $id));
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_buyer.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_buyer.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["banner_buyer"] = "xml";
@@ -11,6 +11,7 @@ class banner_buyer extends banner
 	function banner_buyer()
 	{
 		$this->banner();
+			lc_load("definition");
 	}
 
 	////
@@ -18,7 +19,7 @@ class banner_buyer extends banner
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa banneri klient");
+		$this->mk_path($parent,LC_ADD_BANNER_CLIENT);
 		$this->read_template("add_buyer.tpl");
 
 		$this->vars(array(
@@ -33,7 +34,7 @@ class banner_buyer extends banner
 	{
 		extract($arr);
 		$bo = $this->get($id);
-		$this->mk_path($bo["parent"], "Muuda banneri klienti");
+		$this->mk_path($bo["parent"], LC_CHANGE_BANNER_CLIENT);
 		$this->read_template("add_buyer.tpl");
 		$this->vars(array(
 			"name" => $bo["name"],
@@ -157,7 +158,7 @@ class banner_buyer extends banner
 		extract($arr);
 		$this->read_template("client_stat_by_dow.tpl");
 		$bo = $this->get_object($id);
-		$this->mk_path($bo["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda klienti</a> / <a href='".$this->mk_orb("buyer_banner_stats", array("id" => $id))."'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
+		$this->mk_path($bo["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>LC_CHANGE_CLIENT</a> / <a href='".$this->mk_orb("buyer_banner_stats", array("id" => $id))."'>Statistika</a> / N&auml;dalap&auml;evade kaupa");
 
 		$this->do_stats_by_dow($this->get_banners_for_buyer($id));
 		return $this->parse();

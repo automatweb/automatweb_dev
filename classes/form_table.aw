@@ -262,7 +262,9 @@ class form_table extends form_base
 		if (is_object($this->t))
 		{
 			$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
-			return $this->get_css().$this->t->draw();
+			$css = $this->get_css();
+			$contents = $this->t->draw();
+			return $this->get_css().$contents;
 		}
 		return "";
 	}
@@ -306,40 +308,56 @@ class form_table extends form_base
 		}
 		classload("xml");
 		$x = new xml;
+		$chainentries = array();
 		while ($row = $this->db_next())
 		{
 			if ($chain_id && $row["chain_id"])
 			{
+				if (isset($chainentries[$row["chain_id"]]))
+				{
+					continue;
+				}
+				$chainentries[$row["chain_id"]] = 1;
+
 				// get chain entry ids
 				$char = $x->xml_unserialize(array("source" => $row["ids"]));
 				$rds = array();
 				for ($i=0; $i < $cnt; $i++)
 				{
 					$form = &$far[$i];
-					if (!is_array($row))
+					if (1 == 1)
 					{
-						continue;
-					}
-					$form->load_entry_from_data($row,$char[$form->id]);
-
-					$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain")."'>Muuda</a>";
-
-					$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form")."'>Vaata</a>";
-
-					for ($row = 0; $row < $form->arr["rows"]; $row++)
-					{
-						for ($col = 0; $col < $form->arr["cols"]; $col++)
+						// this will never be true, as db->next always returns an array
+						if (!is_array($row))
 						{
-							$form->arr["contents"][$row][$col]->get_els(&$elar);
-							reset($elar);
-							while (list(,$el) = each($elar))
+							continue;
+						}
+
+						$form->load_entry_from_data($row,$char[$form->id]);
+
+						$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain")."'>Muuda</a>";
+
+						$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form")."'>Vaata</a>";
+
+/*						for ($row = 0; $row < $form->arr["rows"]; $row++)
+						{
+							for ($col = 0; $col < $form->arr["cols"]; $col++)
+							{
+								$form->arr["contents"][$row][$col]->get_els(&$elar);
+								reset($elar);
+								while (list(,$el) = each($elar))
 							{
 								$rds["el_".$el->get_id()] = $el->get_value();
 							}
 						}
-					}
+					}*/
+						$rds=$rds+$form->values;
+					};
 				}
-				$this->t->define_data($rds);
+				if ($form->entry_id)
+				{
+					$this->t->define_data($rds);
+				};
 			}
 			else
 			if ($form_id)

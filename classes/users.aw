@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.10 2001/07/04 23:01:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.11 2001/07/08 18:42:50 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -682,37 +682,37 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state[error] = "Selline kasutaja juba on, vali uus kasutajanimi.";
+			$add_state[error] = "<b><font color='red'>Selline kasutaja juba on, vali uus kasutajanimi.</font></b>";
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state[error] = "Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
+			$add_state[error] = "<b><font color='red'>Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state[error] = "Parool ja parool 2x ei vasta &uuml;ksteisele!";
+			$add_state[error] = "<b><font color='red'>Paroolid ei kattu!</font></b>";
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state[error] = "Passwordis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
+			$add_state[error] = "<b><font color='red'>Paroolis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
 		return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state[error] = "Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.";
+			$add_state[error] = "<b><font color='red'>Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state[error] = "Password peab olema v&auml;hemalt 3 t&auml;he pikkune.";
+			$add_state[error] = "<b><font color='red'>Parool peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
 			return false;
 		}
 		$add_state[error] = "";
@@ -1018,7 +1018,8 @@ class users extends users_user
 			$f = new form();
 			foreach($jf as $joinform => $joinentry)
 			{
-				$f->core_load_entry($joinentry,$joinform);
+				$f->load($joinform);
+				$f->load_entry($joinentry);
 				$elvs = $elvs + $f->entry;
 			};
 			// now elvalues is array el_id => el_value
