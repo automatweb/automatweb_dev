@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.6 2001/07/31 14:30:04 duke Exp $
 lc_load("periods");	
 class db_periods extends aw_template 
 {
 	function db_periods($oid) 
 	{
 		$this->db_init();
-		$this->tpl_init("admin/periods");
+		$this->tpl_init("automatweb/periods");
 		$this->oid = $oid;
 		lc_load("definition");
 		global $lc_periods;
