@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.1 2001/05/19 23:27:05 duke Exp $
 
 global $orb_defs;
 $orb_defs["promo"] = array("new" => array("function" => "add", "params" => array("parent")),
@@ -64,13 +65,13 @@ class promo extends aw_template
 		{
 			$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => serialize($sets)));
 			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
-			$this->log_action($GLOBALS["uid"], "promo", "Muutis promo kasti $title");
+			$this->_log("promo", "Muutis promo kasti $title");
 		}
 		else
 		{
 			$id = $this->register_object($parent,$title,CL_PROMO,serialize($sets),1,$type);
 			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
-			$this->log_action($GLOBALS["uid"], "promo", "Lisas promo kasti $title");
+			$this->_log("promo", "Lisas promo kasti $title");
 		}
 		return $this->mk_orb("change", array("id" => $id));
 	}
