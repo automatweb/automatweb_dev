@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.36 2005/03/01 20:31:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.37 2005/03/03 12:56:00 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -579,7 +579,10 @@ class form_actions extends form_base
 				$fname = $this->actiontype2func[$row["type"]]["execute"];
 				$data = aw_unserialize($row["data"]);
 
-				$this->$fname($form, $data, $entry_id);
+				if ($fname != "" && method_exists($this, $fname))
+				{
+					$this->$fname($form, $data, $entry_id);
+				}
 				$this->restore_handle();
 			}
 		}
