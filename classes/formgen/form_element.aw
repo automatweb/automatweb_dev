@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.17 2002/12/08 14:28:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.18 2002/12/09 16:32:33 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -936,6 +936,7 @@ class form_element extends aw_template
 			$this->sort_listbox();
 
 			// save relation elements
+			$this->db_query("DELETE FROM form_relations WHERE form_from = '".$this->arr["rel_form"]."' AND form_to = '".$this->form->id."' AND el_from = '".$this->arr["rel_element"]."' AND el_to = '".$this->id."'");
 			if ($this->arr["subtype"] == "relation")
 			{
 				$var = $base."_unique";
