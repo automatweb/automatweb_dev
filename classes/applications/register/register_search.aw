@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.17 2004/12/08 11:07:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.18 2004/12/14 10:21:31 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -342,12 +342,16 @@ class register_search extends class_base
 		{
 			$request["search_butt"] = $GLOBALS["search_butt"];
 		}
+
+		if (!$request["search_butt"] && is_array($request["rsf"]) && count($request["rsf"]))
+		{
+			$request["search_butt"] = 1;
+		}
 		if ($GLOBALS["ft_page"])
 		{
 			$request["ft_page"] = $GLOBALS["ft_page"];
 		}
 		$props =  $this->get_sform_properties($ob, $request);
-		
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		foreach($props as $pn => $pd)
