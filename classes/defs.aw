@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.80 2003/02/12 12:32:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.81 2003/02/13 14:43:00 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -601,9 +601,13 @@ if (!defined("DEFS"))
 		// debuukimisel on see funktsioon abiks
 		function dump($data)
 		{
+			ob_start();
 			print "<pre>";
 			var_dump($data);
 			print "</pre>";
+			$ret = ob_get_contents();
+			ob_end_clean();
+			return $ret;
 		}
 
 		////
@@ -613,7 +617,7 @@ if (!defined("DEFS"))
 		{
 			if (aw_global_get("DEBUG") == 1)
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 		
@@ -622,7 +626,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug1"])
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 
@@ -631,7 +635,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug2"])
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 
@@ -640,7 +644,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug3"])
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 
@@ -649,7 +653,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug4"])
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 
@@ -658,7 +662,7 @@ if (!defined("DEFS"))
 		{
 			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug5"])
 			{
-				echo $msg;
+				echo $msg."<br>\n";
 			}
 		}
 	}
