@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.37 2003/07/08 10:49:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.38 2003/07/11 11:59:00 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -205,41 +205,29 @@ class promo extends class_base
 			"align" => "center",
                 ));
 
-		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
-		// and from this array, I need to get the list of objects that
-		// have the reltype RELTYPE_ASSIGNED_MENU
-		if (is_array($alias_reltype))
-		{
-			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_ASSIGNED_MENU) return true;'));
-		};
 
-		if (sizeof($menu_ids) > 0)
-		{
-			// now get those objects and put them into table
-			$q = sprintf("SELECT oid,name,status FROM objects
-					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+		$q = sprintf("SELECT oid,name,status FROM aliases LEFT JOIN objects on (aliases.target = objects.oid) LEFT JOIN menu on (aliases.target = menu.id) WHERE source = '%d'",$args["obj"]["oid"]);
 
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				// it shouldn't be too bad, cause get_object is cached.
-				// still, it sucks.
-				$this->save_handle();
-				$chain = array_reverse($this->get_obj_chain(array(
-					"oid" => $row["oid"],
-				)), true);
-				$path = join("/",array_slice($chain,-3));
-				$this->restore_handle();
-				$this->t->define_data(array(
-					"oid" => $row["oid"],
-					"name" => $path,
-					"check" => html::checkbox(array(
-						"name" => "include_submenus[$row[oid]]",
-						"value" => $row["oid"],
-						"checked" => $section_include_submenus[$row["oid"]],
-					)),
-				));
-			};
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			// it shouldn't be too bad, cause get_object is cached.
+			// still, it sucks.
+			$this->save_handle();
+			$chain = array_reverse($this->get_obj_chain(array(
+				"oid" => $row["oid"],
+			)), true);
+			$path = join("/",array_slice($chain,-3));
+			$this->restore_handle();
+			$this->t->define_data(array(
+				"oid" => $row["oid"],
+				"name" => $path,
+				"check" => html::checkbox(array(
+					"name" => "include_submenus[$row[oid]]",
+					"value" => $row["oid"],
+					"checked" => $section_include_submenus[$row["oid"]],
+				)),
+			));
 		};
 		
 		$nodes[$prop["name"]] = array(
