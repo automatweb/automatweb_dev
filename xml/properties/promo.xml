@@ -1,12 +1,30 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>caption</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
             <name>tpl_lead</name>
             <type>select</type>
             <table>menu</table>
             <group>show</group>
             <field>tpl_lead</field>
             <caption>Template näitamiseks</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <group>preview</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Eelvaade</caption>
       </property>
       <property>
             <name>tpl_edit</name>
@@ -41,6 +59,17 @@
             <method>serialize</method>
             <group>general</group>
             <caption>Lingi kirjeldus</caption>
+      </property>
+      <property>
+            <name>all_menus</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <value>1</value>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita igal pool</caption>
       </property>
       <property>
             <name>no_title</name>
@@ -99,6 +128,7 @@
       <classinfo>
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>
+            <corefields>name,comment,status</corefields>
       </classinfo>
       <groupinfo>
             <general>
@@ -111,6 +141,9 @@
             <show>
                   <caption>Näitamine</caption>
             </show>
+            <preview>
+                  <caption>Eelvaade</caption>
+            </preview>
       </groupinfo>
       <tableinfo>
             <menu>
