@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.18 2002/08/08 17:15:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.19 2002/09/23 11:15:19 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -159,7 +159,16 @@ class email extends aw_template
 			$this->new_object(array("parent" => $mail_id,"name" => $link_addr,"class_id" => CL_MAIL_LINK));
 			$this->_log("e-mail",sprintf(LC_EMAIL_ADD_MAIL_LINK,$subject,$link_addr));
 		}
-		return $this->mk_my_orb("change", array("id" => $mail_id));
+
+		if ($send_mail != "")
+		{
+			$ob = $this->get_object($mail_id);
+			return $this->mk_my_orb("send_mail", array("id" => $mail_id, "parent" => $ob["parent"]));
+		}
+		else
+		{
+			return $this->mk_my_orb("change", array("id" => $mail_id));
+		}
 	}
 
 	function change_mail($arr)
