@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.70 2004/07/07 12:20:56 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.71 2004/07/07 13:19:38 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -709,10 +709,18 @@ class htmlclient extends aw_template
 				foreach($options->get() as $key => $val)
 				{
 					$caption = $val;
+					if ($args["edit_links"])
+					{
+						$o = new object($key);
+						$caption = html::href(array(
+							"url" => $this->mk_my_orb("change",array("id" => $key),$o->class_id()),
+							"caption" => $caption,
+						));
+					};
 					if ($arr["multiple"])
 					{
 						$retval .= html::checkbox(array(
-							"label" => $val,
+							"label" => $caption,
 							"name" => $arr["name"] . "[" . $key . "]",
 							"checked" => ($arr["value"][$key]),
 							"value" => $key,
@@ -720,14 +728,6 @@ class htmlclient extends aw_template
 					}
 					else
 					{
-						if ($args["edit_links"])
-						{
-							$o = new object($key);
-							$caption = html::href(array(
-								"url" => $this->mk_my_orb("change",array("id" => $key),$o->class_id()),
-								"caption" => $caption,
-							));
-						};
 						$retval .= html::radiobutton(array(
 							"caption" => $caption,
 							"name" => $arr["name"],
