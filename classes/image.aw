@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.56 2003/05/26 08:17:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.57 2003/05/26 11:48:29 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -81,6 +81,9 @@ class image extends class_base
 				if ($row["meta"]["file2"] != "")
 				{
 					$row["big_url"] = $this->get_url($row["meta"]["file2"]);
+					$_tmp = basename($row["meta"]["file2"]);
+					$f1 = substr($_tmp,0,1);
+					$row["meta"]["file2"] = aw_ini_get("site_basedir") . "/files/$f1/" . $_tmp;
 				}
 				aw_cache_set("get_image_by_id", $id, $row);
 			}
