@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.32 2004/06/22 09:19:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.33 2004/06/25 09:07:09 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -409,7 +409,7 @@ class crm_person extends class_base
 
 	}
 
-	function isik_toolbar(&$args)
+	function isik_toolbar($args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];
 
@@ -583,7 +583,7 @@ class crm_person extends class_base
 		$o = new object($arr["id"]);
 		$cal_id = $arr["cal_id"];
 
-		$phones = $emails = $urls = $ranks = array();
+		$phones = $emails = $urls = $ranks = $ranks_arr = array();
 
 		$tasks = $o->connections_from(array(
 			"type" => array(9,10),
@@ -625,11 +625,12 @@ class crm_person extends class_base
 		};
 		
 		$conns = $o->connections_from(array(
-                        "type" => 7,
+                        "type" => RELTYPE_RANK,
                 ));
 		foreach($conns as $conn)
 		{
 			$ranks[] = $conn->prop("to.name");
+			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
 
 		$rv = array(
@@ -640,6 +641,7 @@ class crm_person extends class_base
 			"url" => join(",",$urls),
 			"email" => join(",",$emails),
 			"rank" => join(",",$ranks),
+			'ranks_arr' => $ranks_arr,
 			"add_task_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
