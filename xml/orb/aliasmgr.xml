@@ -6,10 +6,36 @@
 		<action name="list_aliases">
 			<function name="list_aliases">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="int"/>
 					<optional name="table"/>
 					<optional name="sortby"/>
 					<optional name="sort_order"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_list">
+			<function name="submit_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search">
+			<function name="search">
+				<arguments>
+					<required name="docid" type="int"/>
+					<optional name="s_name"/>
+					<optional name="s_type"/>
+					<optional name="s_comment"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="pick">
+			<function name="gen_pick_list">
+				<arguments>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
