@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.47 2002/09/04 17:45:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.48 2002/09/17 11:52:47 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -630,23 +630,26 @@ class form_base extends form_db_base
 				}
 
 				$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]];
-				$els = $cell->get_elements();
-				foreach($els as $key => $val)
+				if (is_object($cell))
 				{
-					// we only want elements with type set, the rest
-					// is probably just captions 'n stuff
-					if ($val["type"])
+					$els = $cell->get_elements();
+					foreach($els as $key => $val)
 					{
-						if ($all_data)
+						// we only want elements with type set, the rest
+						// is probably just captions 'n stuff
+						if ($val["type"])
 						{
-							$retval[$val[$arrkey]] = $val;
-						}
-						else
-						{
-							$retval[$val[$arrkey]] = $val["name"];
-						}
+							if ($all_data)
+							{
+								$retval[$val[$arrkey]] = $val;
+							}
+							else
+							{
+								$retval[$val[$arrkey]] = $val["name"];
+							}
+						};
 					};
-				};
+				}
 			}
 		}
 		return $retval;
@@ -694,6 +697,13 @@ class form_base extends form_db_base
 							"subtype" => $el["subtype"],
 						);
 						$ret[$el["id"]] = $block;
+					}
+					elseif ($args["typematch"])
+					{
+						if ($el["type"] == $args["typematch"])
+						{
+							$ret[$el["id"]] = $el["name"];
+						};
 					}
 					else
 					{
