@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.19 2004/11/23 13:37:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.20 2004/12/08 12:48:04 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -421,7 +421,7 @@ class cb_search extends class_base
 			}
 		}
 		$price_props = array();
-		foreach($this->__tdata as $td_p => $td_d)
+		foreach(safe_array($this->__tdata) as $td_p => $td_d)
 		{
 			if ($td_d["is_price"])
 			{
@@ -585,7 +585,7 @@ class cb_search extends class_base
 
 		$this->in_form = array();
 		$res = array();
-		foreach($this->form_dat[$clid] as $pn => $pd)
+		foreach(safe_array($this->form_dat[$clid]) as $pn => $pd)
 		{
 			if (!$pd["visible"])
 			{
@@ -601,7 +601,7 @@ class cb_search extends class_base
 		uksort($this->in_form, array(&$this, "__proptbl_srt"));
 
 		$this->in_results = array();
-		foreach($this->tdata as $pn => $pd)
+		foreach(safe_array($this->tdata) as $pn => $pd)
 		{
 			if (!$pd["visible"] || !is_array($pd))
 			{
@@ -653,7 +653,14 @@ class cb_search extends class_base
 
 		if ($o->prop("root_class_cf"))
 		{
-			$class_i = get_instance($o->prop("root_class"));
+			if ($o->prop("root_class") == CL_DOCUMENT)
+			{
+				$class_i = get_instance("doc");
+			}
+			else
+			{
+				$class_i = get_instance($o->prop("root_class"));
+			}
 			$tmp = $class_i->load_from_storage(array(
 				"id" => $o->prop("root_class_cf")
 			));
