@@ -56,7 +56,7 @@
 		</action>
 
 		<action name="change">
-			<function name="change">
+			<function name="admin_planner">
 				<arguments>
 					<required name="id"/>
 					<optional name="disp"/>
@@ -66,8 +66,9 @@
 		</action>
 
 		<action name="day" default="1">
-			<function name="draw_day">
+			<function name="user_planner">
 				<arguments>
+					<define name="disp" value="day"/>
 					<optional name="date"/>
 				</arguments>
 			</function>
@@ -99,24 +100,26 @@
 
 
 		<action name="show_week">
-			<function name="draw_week">
+			<function name="user_planner">
 				<arguments>
 					<optional name="date"/>
+					<define name="disp" value="week"/>
 				</arguments>
 			</function>
 		</action>
 
 		<action name="overview">
-			<function name="draw_week">
+			<function name="user_planner">
 				<arguments>
-					<define name="op" value="overview"/>
+					<define name="disp" value="overview"/>
 				</arguments>
 			</function>
 		</action>
 		
 		<action name="show_month">
-			<function name="draw_mon">
+			<function name="user_planner">
 				<arguments>
+					<define name="disp" value="month"/>
 				</arguments>
 			</function>
 		</action>
