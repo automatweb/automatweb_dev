@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.27 2003/03/31 10:08:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.28 2003/04/01 16:39:00 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -11,13 +11,8 @@ class htmlclient extends aw_template
 {
 	function htmlclient($args = array())
 	{
-		$this->init("");
+		$this->init(array("tpldir" => "htmlclient"));
 		$this->res = "";
-		$this->style1 = "chformleftcol";
-		$this->style2 = "chformrightcol";
-		$this->style_subheader = "chformsubheader";
-		$this->style_content = "chformrightcol";
-
 		$this->start_output();
 	}
 
@@ -26,9 +21,7 @@ class htmlclient extends aw_template
 	// !Starts the output 
 	function start_output($args = array())
 	{
-		$this->res .= sprintf("<form action='reforb.%s' method='post' name='changeform' enctype='multipart/form-data'>\n",aw_ini_get("ext"));
-		$this->res .= "<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='500000'>\n";
-		$this->res .= "\n<table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>\n";
+		$this->read_template("default.tpl");
 		$this->orb_vars = array();
 		$this->submit_done = false;
 	}
@@ -69,6 +62,11 @@ class htmlclient extends aw_template
 		if (isset($args["no_caption"]))
 		{
 			$this->put_content($args);
+		}
+		else
+		if (isset($args["subtitle"]))
+		{
+			$this->put_header_subtitle($args);
 		}
 		else
 		if ($type)
@@ -194,39 +192,42 @@ class htmlclient extends aw_template
 		};
 	}
 
+	////
+	// !hmm, I should use templates instead of generating all that HTML shit
 	function put_line($args)
 	{
-		$this->res .= "<tr>\n";
-		$this->res .= "\t<td class='" . $this->style1 . "' width='160' nowrap>";
-		if (isset($args["caption"]))
-		{
-			$this->res .= "<label for='$args[name]'> " . $args["caption"] . "</label>&nbsp;";
-		};
-		$this->res .= "</td>\n";
-
-		$this->res.= "\t<td class='" . $this->style2 . "'>";
+		$caption = $args["caption"];
 		unset($args["caption"]);
-		$this->res .= $this->draw_element($args);
-		$this->res .= "</td>\n";
-		$this->res .= "</tr>\n";
+
+		$this->vars(array(
+			"caption" => $caption,
+			"element" => $this->draw_element($args),
+		));
+		$this->res .= $this->parse("LINE");
 	}
 
 	function put_header($args)
 	{
-		$this->res .= "<tr>\n";
-		$this->res .= "\t<td colspan='2' class='" . $this->style_subheader . "' width='160'>";
-		$this->res .= $args["caption"];
-		$this->res .= "</td>\n";
-		$this->res .= "</tr>\n";
+		$this->vars(array(
+			"caption" => $args["caption"],
+		));
+		$this->res .= $this->parse("HEADER");
+	}
+	
+	function put_header_subtitle($args)
+	{
+		$this->vars(array(
+			"value" => $args["value"],
+		));
+		$this->res .= $this->parse("SUB_TITLE");
 	}
 	
 	function put_content($args)
 	{
-		$this->res .= "<tr>\n";
-		$this->res .= "\t<td colspan='2' class='" . $this->style_content . "'>";
-		$this->res .= $args["value"];
-		$this->res .= "</td>\n";
-		$this->res .= "</tr>\n";
+		$this->vars(array(
+			"value" => $args["value"],
+		));
+		$this->res .= $this->parse("CONTENT");
 	}
 
 	////
@@ -234,6 +235,7 @@ class htmlclient extends aw_template
 	function finish_output($args = array())
 	{
 		extract($args);
+		$submit = "";
 		if ($this->submit_done)
 		{
 		
@@ -241,24 +243,21 @@ class htmlclient extends aw_template
 		else
 		if (empty($submit) || $submit !== "no")
 		{
-			$this->res .= "<tr>\n\t<td class='chformleftcol' align='center'>&nbsp;</td>\n";
-			$this->res .= "\t<td class='chformrightcol'>";
-			$this->res .= "<input type='submit' value='Salvesta' class='small_button'>";
-			$this->res .= "</td>\n";
-			$this->res .= "</tr>\n";
-
+			$submit = $this->parse("SUBMIT");
 		};
-		$this->res .= "</table>\n";
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
 		$data = $data + $this->orb_vars;
-		$this->res .= $this->mk_reforb($action,$data,$orb_class);
-		$this->res .= "</form>\n";
+		$this->vars(array(
+			"content" => $this->res,
+			"reforb" => $this->mk_reforb($action,$data,$orb_class),
+			"SUBMIT" => $submit,
+		));
 	}
 
 	function get_result()	
 	{
-		return $this->res;
+		return $this->parse();
 	}
 
 	function draw_element($args = array())
