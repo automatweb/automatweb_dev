@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.13 2003/12/14 15:19:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.14 2004/03/08 09:52:06 duke Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -251,7 +251,14 @@ class xmlrpc extends aw_template
 
 			if (($token["tag"] == "methodName") && ($token["type"] == "complete"))
 			{
-				list($result["class"], $result["action"]) = explode("::", $token["value"]);
+				if (strpos($token["value"],"::"))
+				{
+					list($result["class"], $result["action"]) = explode("::", $token["value"]);
+				}
+				else
+				{
+					list($result["class"], $result["action"]) = explode(".", $token["value"]);
+				};
 			};
 
 			if ($in_value && ($token["type"] == "complete") )
