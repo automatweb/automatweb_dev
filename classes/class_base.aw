@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.349 2004/12/30 13:30:05 duke Exp $
+// $Id: class_base.aw,v 2.350 2005/01/03 13:36:11 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1872,7 +1872,6 @@ class class_base extends aw_template
 			$this->obj_inst->is_property($property["name"]) && 
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
-			//print "got da value! for ${property[name]}<br>";
 			// I need to implement this in storage .. so that $obj->prop('blag')
 			// gives the correct result .. all connections of that type
 			$property["value"] = $this->obj_inst->prop($property["name"]);
@@ -2845,6 +2844,7 @@ class class_base extends aw_template
 		$this->process_data(array(
 			"parent" => $args["parent"],
 			"rawdata" => $raw,
+			"is_paste" => true
 		));
 		
 		// object_translation depends on getting the id from here
@@ -3063,7 +3063,7 @@ class class_base extends aw_template
 			$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
 		};
 
-		if ($args["cb_existing_props_only"])
+		if ($args["cb_existing_props_only"] || $is_paste)
 		{
 			$properties = $this->load_defaults();
 		}
@@ -4011,6 +4011,10 @@ class class_base extends aw_template
 			};
 
 			$propdata = array_merge($all_properties[$key],$val);
+			if (empty($val["default"]))
+			{
+				unset($propdata["default"]);
+			};
 			$propgroups = $property_groups[$key];
 
 			if (!is_array($propgroups))
