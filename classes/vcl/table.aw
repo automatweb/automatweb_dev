@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.12 2004/04/15 06:07:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.13 2004/05/17 14:23:32 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1619,6 +1619,22 @@ class vcl_table extends aw_table
 	{
 		$this->sort_by();
 		return $this->draw();
+	}
+
+	/** assumes that table columns are defined - iterates over object_list passed and reads correct props from it
+	**/
+	function data_from_ol($ol)
+	{
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$data = array();
+			foreach($this->rowdefs as $k => $v)
+			{
+				$data[$v["name"]] = $o->prop($v["name"]);
+			}			
+
+			$this->define_data($data);
+		}
 	}
 };
 ?>
