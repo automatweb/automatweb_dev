@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.125 2003/06/20 14:45:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.126 2003/07/08 09:19:58 axel Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -8,7 +8,8 @@
 	@default field=meta
 	@default method=serialize
 	@default group=general2
-	@classinfo relationmgr=yes 
+	@classinfo relationmgr=yes
+	//@classinfo toolbar_type=menubar
 
 	@property default_view type=select rel=1
 	@caption Default vaade
@@ -49,8 +50,11 @@
 	@property use_tabpanel type=checkbox ch_value=1 default=1 group=advanced
 	@caption Kalendri näitamisel kasutatakse 'tabpanel' komponenti
 
-	@property items_on_line type=textbox size=4 group=special rel=1 
+	@property items_on_line type=textbox size=4 group=special rel=1
 	@caption Max. cell'e reas
+
+	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
+	@caption Kasuta menubari
 
 	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
 	@caption Suund
@@ -91,15 +95,14 @@
 	@caption Lisa sündmus
 
 	@groupinfo general caption=Seaded
-	@groupinfo show_day caption=Päev submit=no parent=views
-	@groupinfo show_week caption=Nädal submit=no parent=views
-	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
-	@groupinfo views caption=Vaated
 	@groupinfo general2 caption=Üldine parent=general
 	@groupinfo advanced caption=Seaded parent=general
 	@groupinfo special caption=Spetsiaalne parent=general
+	@groupinfo views caption=Vaated
+	@groupinfo show_day caption=Päev submit=no parent=views
+	@groupinfo show_week caption=Nädal submit=no parent=views
+	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
 	@groupinfo add_event caption=Lisa_sündmus
-
 */
 
 // when and if I need to display an "add event" form inside another config form, I need to do this
