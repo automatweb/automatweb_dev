@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.278 2004/09/09 10:58:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.279 2004/09/13 13:52:51 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1268,6 +1268,22 @@ class document extends aw_template
 			"user5" => $doc["user5"],
 			"user6" => $doc["user6"],
 		));
+
+		for($i = 1;  $i < 7; $i++)
+		{
+			if ($doc["user".$i] != "")
+			{
+				$this->vars(array(
+					"HAS_user".$i => $this->parse("HAS_user".$i)
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"NO_user".$i => $this->parse("NO_user".$i)
+				));
+			}
+		}
 
 		if (is_object($si) && method_exists($si,"get_document_vars"))
 		{
