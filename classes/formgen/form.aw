@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.35 2003/02/10 14:05:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.36 2003/02/13 09:53:40 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -3381,6 +3381,7 @@ class form extends form_base
 				"name" => $name,
 				"class_id" => CL_FORM,
 				"comment" => $comment,
+				"status" => 2
 		));
 
 		// $type is integer now
