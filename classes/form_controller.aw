@@ -195,8 +195,8 @@ class form_controller extends form_base
 	// !loads controller $id , replaces variables and evals the equasion
 	// $entry is the current element's value
 	// form_ref - reference to the form that the current element is a part of
-	// $el_ref is a reference to the current element - it is used to import metadata values
-	function eval_controller($id, $entry, &$form_ref,&$el_ref)
+	// $el_ref is a reference to the current element - it is used to import metadata values - optional
+	function eval_controller($id, $entry, &$form_ref,$el_ref = false)
 	{
 		if (!$id)
 		{
@@ -213,7 +213,7 @@ class form_controller extends form_base
 
 	////
 	// !this imports all the variable values to equasion $eq
-	function replace_vars($co,$eq,$add_quotes,&$form_ref, &$el_ref, $el_value = "")
+	function replace_vars($co,$eq,$add_quotes,&$form_ref, $el_ref, $el_value = "")
 	{
 		$this->cur_form_instance = &$form_ref;
 		if (is_array($co["meta"]["vars"]))
@@ -256,9 +256,12 @@ class form_controller extends form_base
 		$eq = str_replace("[el]","\"".$el_value."\"",$eq);
 
 		// now do element metadata as well
-		foreach($el_ref->get_metadata() as $mtk => $mtv)
+		if (is_object($el_ref))
 		{
-			$eq = str_replace("[el.".$mtk."]",$mtv,$eq);
+			foreach($el_ref->get_metadata() as $mtk => $mtv)
+			{
+				$eq = str_replace("[el.".$mtk."]",$mtv,$eq);
+			}
 		}
 
 		// and finally init all non-initialized vars to zero to avoid parse errors
@@ -348,7 +351,8 @@ class form_controller extends form_base
 					"et_user_entry" => checked($et_type == "user_entry"),
 					"et_same_chain" => checked($et_type == "same_chain"),
 					"et_writer_entry" => checked($et_type == "writer_entry"),
-					"et_session" => checked($et_type == "session")
+					"et_session" => checked($et_type == "session"),
+					"et_element_sum" => checked($et_type == "element_sum")
 				));
 
 				if ($et_type == "entry_id")
@@ -469,6 +473,12 @@ class form_controller extends form_base
 			{
 				$entry_id = aw_global_get("current_writer_entry");
 //				echo "got eid $entry_id <br>";
+			}
+			else
+			if ($et_type == "element_sum")
+			{
+				$cursums = aw_global_get("fg_element_sums");
+				return $cursums[$elid];
 			}
 
 			if ($entry_id)
