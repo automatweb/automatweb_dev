@@ -1,11 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.6 2004/06/29 11:48:10 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.7 2004/08/02 10:48:12 duke Exp $
 // Shared functionality for event classes
-class event_property_lib extends core
+class event_property_lib extends aw_template
 {
 	function event_property_lib()
 	{
-		$this->init();
+		$this->init(array(
+			"tpldir" => "calendar",
+		));
 	}
 
 	function project_selector($arr)
@@ -70,11 +72,6 @@ class event_property_lib extends core
 		};
 
 		return $all_props;
-	}
-
-	function cb_participant_selector($arr)
-	{
-	
 	}
 
 	function process_project_selector($arr)
@@ -173,6 +170,151 @@ class event_property_lib extends core
 
 	
 		return $all_props;
+	}
+
+	// your basic view, shows calendars from left to right
+	function calendar_others($arr)
+	{
+		$event_obj  = $arr["obj_inst"];
+		$brlist = new object_list(array(
+			"brother_of" => $event_obj->id(),
+		));
+
+		$plrlist = array();
+
+		$current_start = $event_obj->prop("start1");
+
+		$pl = get_instance(CL_PLANNER);
+
+		for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
+		{
+			//if ($o->id() != $event_obj->id())
+			//{
+				$menu_id = $o->parent();
+				$menu_obj = new object($menu_id);
+
+				$cal_conns = $menu_obj->connections_to(array(
+					"type" => 6 // EVENT_FOLDER,
+				));
+
+				$first = reset($cal_conns);
+				if (is_object($first))
+				{
+					$cal_obj = $first->from();
+					$plrlist[$cal_obj->id()] = $cal_obj->id();
+				};
+			//};
+		};
+
+		if (sizeof($plrlist) == 0)
+		{
+			return false;
+		};
+
+		$this->read_template("others.tpl");
+
+		$tt = $tc = "";
+
+		// XXX: get date from url
+		list($d,$m,$y) = explode("-",date("d-m-Y"));
+
+		// XXX: arvestada kalendris määratud päeva alguse ja lõpu aegu
+		$day_start = mktime(9,0,0,$m,$d,$y);
+		$day_end = mktime(21,0,0,$m,$d,$y);
+
+		$step = 60 * 60; // 1. tund
+
+		$first = true;
+		foreach($plrlist as $pl_id)
+		{
+			$pl_obj = new object($pl_id);
+			$events = $pl->get_event_list(array(
+				"id" => $pl_id,
+				"start" => $day_start,
+				"end" => $day_end,
+			));
+
+			$this->vars(array(
+				"calendar_name" => $pl_obj->name(),
+			));
+			$tt .= $this->parse("one_calendar");
+
+			$cells = "";
+			for ($ts = $day_start; $ts <= $day_end; $ts = $ts + $step)
+			{
+				$evstr = "";
+				$free = true;
+				foreach($events as $event)
+				{
+					if (between($event["start"],$ts,$ts+$step-1))
+					{
+						$free = false;
+						$ev_obj = new object($event["id"]);
+						$ev_obj = $ev_obj->get_original();
+						$evstr .= $ev_obj->name() . "<br>";
+					};
+				};
+
+				$this->vars(array(
+					"event" => $evstr,
+					"time" => date("H:i",$ts),
+					"selector_cell" => "",
+					"bgcolor" => $free ? "#CCFFCC" : "#FFCCCC",
+				));
+
+
+				if ($first)
+				{
+					$this->vars(array(
+						"time" => date("H:i",$ts),
+						"checked" => checked(between($current_start,$ts,$ts+$step-1)),
+						"event_sel_id" => $ts,
+					));
+
+					$this->vars(array(
+						"selector_cell" => $this->parse("selector_cell"),
+					));
+				}
+
+				$cells .= $this->parse("cell");
+
+			};
+
+			$this->vars(array(
+				"cell" => $cells,
+			));
+
+			$tc .= $this->parse("one_calendar_content");
+
+			$first = false;
+		};
+		
+		// 
+
+		$this->vars(array(
+			"one_calendar" => $tt,
+			"one_calendar_content" => $tc,
+		));
+
+		$all_props = array();
+		$all_props[$arr["prop"]["name"]] = array(
+			"type" => "text",
+			"name" => $arr["prop"]["name"],
+			"value" => $this->parse(),
+			"caption" => $arr["prop"]["caption"],
+			"no_caption" => $arr["prop"]["no_caption"],
+		);
+
+		return $all_props;
+
+		
+	}
+
+	function process_other_selector($arr)
+	{
+		$event_obj = $arr["obj_inst"];
+		$event_obj->set_prop("start1",$arr["request"]["start_time"]);
+
 	}
 
 	function process_calendar_selector($arr)
