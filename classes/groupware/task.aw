@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.4 2004/01/29 14:31:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/task.aw,v 1.5 2004/02/06 14:11:02 duke Exp $
 // task.aw - Toimetus 
 
 /*
@@ -46,10 +46,6 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "comment":
-				$retval = PROP_IGNORE;
-				break;
-
 		};
 		return $retval;
 	}
