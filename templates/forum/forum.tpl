@@ -7,7 +7,7 @@
 </tr>
 <!-- SUB: L1_FOLDER -->
 <tr>
-<td colspan="5" bgcolor="#ECF6FF"><big>{VAR:name}</big></td>
+<td colspan="5" bgcolor="#ECF6FF"><big><a href="{VAR:open_l1_url}">{VAR:name}</a></big></td>
 </tr>
 <!-- END SUB: L1_FOLDER -->
 
