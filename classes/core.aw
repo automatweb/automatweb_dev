@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.14 2001/06/01 02:14:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.15 2001/06/01 02:24:07 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -638,12 +638,15 @@ class core extends db_connector
 	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli
 	// argumendid
 	// class (int) - klassi id
+	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
+		$qualifier = ($parent) ? "AND parent = '$parent'" : "";
+		// see groyp by jaab mulle natuke segaks tekalt. oidid ju ei kordu eniveis, so what's the point?
 		$this->db_query("SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0
+					WHERE class_id = $class AND status != 0 $qualifier
 					GROUP BY objects.oid");
 	}
 
