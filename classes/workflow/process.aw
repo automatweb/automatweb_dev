@@ -263,11 +263,11 @@ class process extends class_base
 				$o->save();
 				$o->connect(array(
 					"to" => $process->id(),
-					"reltype" => RELTYPE_TRANSITION
+					"reltype" => "RELTYPE_TRANSITION",
 				));
 				$process->connect(array(
 					"to" => $o->id(),
-					"reltype" => 2 // RELTYPE_PROCESS from transition
+					"reltype" => "RELTYPE_PROCESS" // from transition
 				));
 			}
 		}
@@ -306,7 +306,7 @@ class process extends class_base
 
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_ACTION,
+			"type" => "RELTYPE_ACTION",
 			"sort_by" => "to.jrk"
 		));
 
@@ -340,7 +340,7 @@ class process extends class_base
 		}
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_TRANSITION,
+			"type" => "RELTYPE_TRANSITION",
 		));
 
 		$this->transitions = array();
@@ -577,7 +577,7 @@ class process extends class_base
 	function _o_get_trans($o)
 	{
 		$conns = $o->connections_from(array(
-			"type" => RELTYPE_TRANSITION,
+			"type" => "RELTYPE_TRANSITION",
 		));
 
 		$ret = array();

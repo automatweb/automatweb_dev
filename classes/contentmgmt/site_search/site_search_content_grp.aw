@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.16 2005/01/21 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.17 2005/03/18 12:23:19 ahti Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -103,7 +103,7 @@ class site_search_content_grp extends class_base
 		$clinf = aw_ini_get("classes");
 
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_SEARCH_LOCATION,
+			"type" => "RELTYPE_SEARCH_LOCATION",
 		));
 
 

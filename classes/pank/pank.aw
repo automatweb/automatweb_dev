@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.5 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.6 2005/03/18 12:24:44 ahti Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -357,7 +357,7 @@ class pank extends class_base
 		if($obj)
 		{
 			$conns = $obj->connections_from(array(
-							'type' => RELTYPE_PROJECT
+				'type' => "RELTYPE_PROJECT",
 			));
 			classload('core/icons');
 			foreach($conns as $conn)
@@ -390,7 +390,7 @@ class pank extends class_base
 		if($obj)
 		{
 			$conns = $obj->connections_from(array(
-							'type' => RELTYPE_PRJ_EVENT
+				'type' => "RELTYPE_PRJ_EVENT",
 			));
 			classload('core/icons');
 			foreach($conns as $conn)
@@ -418,7 +418,7 @@ class pank extends class_base
 		if($obj)
 		{
 			$conns = $obj->connections_to(array(
-							'type' => 10, //crm_person.reltype_person_task
+				'type' => 10, //crm_person.reltype_person_task
 			));
 
 			classload('core/icons');
@@ -504,7 +504,7 @@ class pank extends class_base
 		//kui vaadata järgmist 3 rida koodi kaugemalt, siis
 		//tundub see olevat amb kõrvalt vaates
 		$conns = $obj->connections_from(array(
-						'type' => 'RELTYPE_OWNER'
+			'type' => 'RELTYPE_OWNER'
 		));
 
 		if(sizeof($conns))
@@ -816,7 +816,7 @@ class pank extends class_base
 		$from_account = $this->get_account_for_obj(&$event_object);
 		
 		$conns = $event_object->connections_from(array(
-						'type' => RELTYPE_PRJ_EVENT
+			'type' => "RELTYPE_PRJ_EVENT"
 		));
 
 		foreach($conns as $conn)
@@ -869,7 +869,7 @@ class pank extends class_base
 		$obj = new object($arr['request']['event_id']);
 		$from_account = $this->get_account_for_obj(&$obj);
 		$conns = $obj->connections_to(array(
-							'type' => 10, //crm_person.reltype_person_task
+			'type' => 10, //crm_person.reltype_person_task
 		));	
 
 		foreach($conns as $conn)

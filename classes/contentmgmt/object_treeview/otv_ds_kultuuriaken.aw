@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.1 2005/03/07 13:42:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.2 2005/03/18 12:22:25 ahti Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -175,7 +175,7 @@ class otv_ds_kultuuriaken extends class_base
 
 		// let's get all parents 
 		$conns_to_parents = $arr['obj_inst']->connections_from(array(
-				"type" => RELTYPE_PARENT,
+				"type" => "RELTYPE_PARENT",
 			));
 
 		$saved_config_conf = $arr['obj_inst']->meta("config_conf");
@@ -342,7 +342,7 @@ class otv_ds_kultuuriaken extends class_base
 		$saved_xml_conf = $o->meta("xml_conf");
 
 		$conns_to_parents = $o->connections_from(array(
-			"type" => RELTYPE_PARENT,
+			"type" => "RELTYPE_PARENT",
 		));
 
 		$last_import = $o->meta("last_import");

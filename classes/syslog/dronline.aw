@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.36 2005/03/15 09:29:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.37 2005/03/18 12:25:19 ahti Exp $
 
 /*
 
@@ -1709,7 +1709,7 @@ class dronline extends class_base
 		$o = obj($arr["id"]);
 		$fdat = $o->meta("folder_dat");
 
-		foreach($o->connections_from(array("type" => RELTYPE_FOLDER)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
 		{
 			$to = $c->to();
 			$t->define_data(array(
@@ -1745,7 +1745,7 @@ class dronline extends class_base
 	{
 		$o = obj($arr["id"]);
 		$fd = array();
-		foreach($o->connections_from(array("type" => RELTYPE_FOLDER)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
 		{
 			$to = $c->to();
 			$fd[$to->id()]["act"] = $arr["act"][$to->id()];

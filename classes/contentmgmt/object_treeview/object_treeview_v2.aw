@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.64 2005/03/17 11:11:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.65 2005/03/18 12:22:25 ahti Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -494,7 +494,7 @@ class object_treeview_v2 extends class_base
 		// and their cfgforms
 		// and make a nice little lut from them.
 		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
+		foreach($ob->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
 		{
 			$addtype = $c->to();
 			if ($addtype->prop("use_cfgform"))
