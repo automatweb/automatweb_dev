@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.11 2004/11/23 14:32:52 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.12 2004/11/23 14:40:26 sven Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -180,23 +180,23 @@
 @property usersubtitle5 type=text store=no group=data subtitle=1
 @caption Subtitle5
 
-@property udefhidden1 type=hidden field=meta method=serialize group=general
-@property udefhidden2 type=hidden field=meta method=serialize group=general
-@property udefhidden3 type=hidden field=meta method=serialize group=general	
+@property udefhidden1 type=hidden field=meta method=serialize group=general table=objects
+@property udefhidden2 type=hidden field=meta method=serialize group=general table=objects
+@property udefhidden3 type=hidden field=meta method=serialize group=general	table=objects
 
-@property usertext1 type=text store=no group=data table=objects
+@property usertext1 type=text store=no group=data
 @caption Usertext1
 
-@property usertext2 type=text store=no group=data table=objects
+@property usertext2 type=text store=no group=data
 @caption Usertext2
 
-@property usertext3 type=text store=no group=data table=objects
+@property usertext3 type=text store=no group=data
 @caption Usertext3
 
-@property usertext4 type=text store=no group=data table=objects
+@property usertext4 type=text store=no group=data
 @caption Usertext4
 
-@property usertext5 type=text store=no group=data table=objects
+@property usertext5 type=text store=no group=data
 @caption Usertext5
 
 @property usersubmit1 type=submit store=no
