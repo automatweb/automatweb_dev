@@ -1,17 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>multi_doc_style</name>
-            <type>checkbox</type>
-            <value>1</value>
-            <ch_value>1</ch_value>
-            <group>advanced</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
-            <caption>Kasuta jumpboxi</caption>
-      </property>
-      <property>
             <name>alias</name>
             <type>textbox</type>
             <group>general</group>
@@ -268,8 +257,7 @@
       </property>
       <property>
             <name>seealso</name>
-            <type>callback</type>
-            <callback>callback_get_seealso</callback>
+            <type>table</type>
             <group>relations</group>
             <store>no</store>
             <table>menu</table>
@@ -505,7 +493,6 @@
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>
             <syslog_type>ST_MENU</syslog_type>
-            <trans_id>TR_MENU</trans_id>
       </classinfo>
       <groupinfo>
             <general>
