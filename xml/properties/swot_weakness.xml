@@ -22,10 +22,5 @@
       <classinfo>
             <syslog_type>ST_SWOT_WEAKNESS</syslog_type>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 

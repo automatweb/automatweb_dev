@@ -29,7 +29,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Norkused</caption>
+            <caption>Nõrkused</caption>
       </property>
       <property>
             <name>opportunities</name>
@@ -39,7 +39,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Voimalused</caption>
+            <caption>Võimalused</caption>
       </property>
       <property>
             <name>threats</name>
@@ -66,23 +66,20 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <strengths>
                   <caption>Tugevused</caption>
             </strengths>
             <weaknesses>
-                  <caption>N&amp;otilde;rkused</caption>
+                  <caption>Nõrkused</caption>
             </weaknesses>
             <opportunities>
-                  <caption>V&amp;otilde;imalused</caption>
+                  <caption>Võimalused</caption>
             </opportunities>
             <threats>
                   <caption>Ohud</caption>
             </threats>
             <view>
-                  <caption>&amp;Uuml;ldvaade</caption>
+                  <caption>Üldvaade</caption>
             </view>
       </groupinfo>
       <reltypes>
