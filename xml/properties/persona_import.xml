@@ -1,0 +1,131 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>last_import</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Viimane import toimus</caption>
+      </property>
+      <property>
+            <name>invk</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Import</caption>
+      </property>
+      <property>
+            <name>ftp_settings</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_DATA_SERVER</reltype>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>server</num_0>
+                  <num_1>username</num_1>
+                  <num_2>password</num_2>
+            </props>
+            <store>no</store>
+            <caption>FTP seaded</caption>
+      </property>
+      <property>
+            <name>xml_folder</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>XML faili asukoht serveris</caption>
+      </property>
+      <property>
+            <name>xml_filename</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>XML faili nimi</caption>
+      </property>
+      <property>
+            <name>xml_personnel_file</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Töötajate XML fail</caption>
+      </property>
+      <property>
+            <name>xml_structure_file</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Struktuuriüksuste XML fail</caption>
+      </property>
+      <property>
+            <name>xml_image_folder</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Pildifailide kataloog (kui on eraldi)</caption>
+      </property>
+      <property>
+            <name>aw_image_folder</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Pildiobjektide kataloog</caption>
+      </property>
+      <property>
+            <name>crm_db_id</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CRM_DB</reltype>
+            <caption>Kasutatav kliendibaas</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PERSONA_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
+      </groupinfo>
+      <reltypes>
+            <CRM_DB>
+                  <value>1</value>
+                  <clid>CL_CRM_DB</clid>
+                  <caption>kliendibaas</caption>
+            </CRM_DB>
+            <DATA_SERVER>
+                  <value>2</value>
+                  <clid>CL_FTP_LOGIN</clid>
+                  <caption>FTP kasutaja</caption>
+            </DATA_SERVER>
+            <FOLDER>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kaust</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+
