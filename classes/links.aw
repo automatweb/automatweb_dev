@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.18 2002/08/29 03:12:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.19 2002/09/03 06:33:38 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -17,21 +17,28 @@ class links extends extlinks
 		extract($arr);
 		classload("menuedit");
 		$t = new menuedit;
-		$this->mk_path($parent, LC_LINKS_ADD);
+		if ($return_url)
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_LINKS_ADD);
+		}
+		else
+		{
+			$this->mk_path($parent, LC_LINKS_ADD);
+		}
 		$this->read_template("nadd.tpl");
 		classload("objects");
 		$ob = new db_objects;
 		load_vcl("date_edit");
 		$de = new date_edit("active_until");
-                $de->configure(array(
-                        "day" => "",
-                        "month" => "",
-                        "year" => "",
-                        "hour" => "",
-                        "minute" => ""
-                ));
+		$de->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => ""
+		));
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "docid" => $docid)),
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url)),
 			"parent" => $this->picker($parent,$ob->get_list()),
 			"search_doc" => $this->mk_orb("search_doc", array()),
 			"extlink" => "checked",
@@ -51,7 +58,14 @@ class links extends extlinks
 		classload("menuedit");
 		$t = new menuedit;
 
-		$this->mk_path($link["parent"], LC_LINKS_CHANGE);
+		if ($return_url)
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_LINKS_CHANGE);
+		}
+		else
+		{
+			$this->mk_path($link["parent"], LC_LINKS_CHANGE);
+		}
 
 		// check whether this link has an image attached
 		$q = "SELECT * FROM objects LEFT JOIN files ON objects.oid = files.id WHERE parent = '$id' AND class_id = " . CL_FILE;
@@ -69,20 +83,20 @@ class links extends extlinks
 		
 		load_vcl("date_edit");
 		$de = new date_edit("active_until");
-                $de->configure(array(
-                        "day" => "",
-                        "month" => "",
-                        "year" => "",
-                        "hour" => "",
-                        "minute" => ""
-                ));
+		$de->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => ""
+		));
 
 		$active_until = ($link["link_image_check_active"]) ? $link["link_image_active_until"] : time() + (3 * 86400);
 
 
 		$ob = new db_objects;
 		$this->vars(array(
-			"reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent)),
+			"reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent,"return_url" => $return_url)),
 			"name"		=> $link["name"],
 			"url"			=> $link["url"],
 			"search_doc" => $this->mk_orb("search_doc", array()),
@@ -141,9 +155,9 @@ class links extends extlinks
 
 			$linkid = $newlinkid;
 
-			if ($docid)
+			if ($alias_to)
 			{
-				$this->add_alias($docid,$newlinkid);
+				$this->add_alias($alias_to,$newlinkid);
 			}
 
 			$id = $newlinkid;
@@ -240,7 +254,7 @@ class links extends extlinks
 		// neid teenuseid. Ntx dokumendiklassi sees.
 
 		#$par_obj = $this->get_object($xparent);
-		return $this->mk_my_orb("change",array("id" => $id));
+		return $this->mk_my_orb("change",array("id" => $id, "return_url" => $return_url));
 		/*
 		if ($docid)
 		{

@@ -15,6 +15,20 @@
 			</function>
 		</action>
 
+		<action name="new">
+			<function name="new_entry_alias">
+				<arguments>
+					<optional name="parent"/>
+					<required name="return_url"/>
+					<optional name="alias_to"/>
+					<optional name="sf"/>				
+					<optional name="entry_id"/>				
+					<optional name="form_submit"/>				
+					<optional name="id"/>				
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_entry_alias">
 			<function name="submit_entry_alias">
 				<arguments>
@@ -23,6 +37,15 @@
 		</action>
 
 		<action name="change_entry_alias">
+			<function name="change_entry_alias">
+				<arguments>
+					<required name="id"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
 			<function name="change_entry_alias">
 				<arguments>
 					<required name="id"/>

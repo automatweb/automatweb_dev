@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.27 2002/07/23 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.28 2002/09/03 06:33:14 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -33,7 +33,7 @@ class gallery extends aw_template
 		$this->mk_path($parent,LC_GALLERY_ADD_GAL);
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_doc" => $alias_doc))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to))
 		));
 		return $this->parse();
 	}
@@ -75,9 +75,9 @@ class gallery extends aw_template
 			$parent = $parent ? $parent : $this->cfg["rootmenu"];
 			$id = $this->new_object(array("parent" => $parent,"name" => $name, "comment" => $comment, "class_id" => CL_GALLERY));
 			$this->db_query("INSERT INTO galleries VALUES($id,'')");
-			if ($alias_doc)
+			if ($alias_to)
 			{
-				$this->add_alias($alias_doc, $id);
+				$this->add_alias($alias_to, $id);
 			}
 		}
 		return $this->mk_orb("change", array("id" => $id));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.29 2002/08/29 03:17:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.30 2002/09/03 06:32:43 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -320,7 +320,15 @@ class file extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,LC_FILE_ADD_FILE);
+		if ($return_url)
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_FILE_ADD_FILE);
+		}
+		else
+		{
+			$this->mk_path($parent,LC_FILE_ADD_FILE);
+		}
+
 		// kui messenger argument on seatud, siis submit_add peaks tagasi messengeri minema
 		if ($msg_id)
 		{
@@ -352,7 +360,8 @@ class file extends aw_template
 				"msg_id" => $msg_id,
 				"parent" => $parent,
 				"return_url" => $return_url,
-				"user" => $user
+				"user" => $user,
+				"alias_to" => $alias_to
 			))
 		));
 		return $this->parse();
@@ -413,6 +422,10 @@ class file extends aw_template
 				if ($id)
 				{
 					$this->add_alias($id,$pid);
+				}
+				if ($alias_to)
+				{
+					$this->add_alias($alias_to,$pid);
 				}
 				$this->_log("fail","Lisas faili $file_name ($pid)");
 			};
