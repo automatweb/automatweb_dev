@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.81 2004/09/10 10:35:42 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.82 2004/09/12 21:14:41 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -3950,7 +3950,7 @@ class crm_company extends class_base
 						"offer_status" => $statuses[$offer->prop("offer_status")],
 						"offer_nr_status" => $offer->prop("offer_status"),
 					));
-					$table->set_default_sortby("offer_nr_status");
+					$table->set_default_sortby("offer_made");
 				}
 			}
 		}
