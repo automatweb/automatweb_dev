@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.3 2004/04/29 14:15:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.4 2004/04/29 14:59:28 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -43,8 +43,8 @@ class otv_ds_postipoiss extends class_base
 		"koostaja" => "Koostaja",
 		"osakond" => "Osakond",
 		"pealkiri" => "Pealkiri",
-		"registreerimiskuupaev" => "Registreerimiskuup&aumll;ev",
-		"registreerimisnumber" => "Registreerimisnumber",
+		"registreerimiskuupaev" => "Registreerimise kpv",
+		"registreerimisnumber" => "Registreerimise nr",
 		"saatja_indeks" => "Saatja indeks",
 		"saatja_kuupaev" => "Saatja kuupaev",
 		"sisu" => "Sisu",

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.2 2004/04/29 14:15:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.3 2004/04/29 14:59:28 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -47,7 +47,7 @@
 @reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS
 @caption andmed
 
-@reltype CSS value=2 clid=CL_GROUP
+@reltype CSS value=2 clid=CL_CSS
 @caption css stiil
 
 */
@@ -193,7 +193,7 @@ class object_treeview_v2 extends class_base
 			if ($sel_cols[$colid] == 1)
 			{
 				$this->vars(array(
-					"h_text" => $coln
+					"h_text" => ($colid == "icon" ? "" : $coln)
 				));
 				$str = $this->parse("HEADER");
 				$this->vars(array(
