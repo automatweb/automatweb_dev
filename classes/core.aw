@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.198 2003/06/03 15:31:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.199 2003/06/03 16:48:59 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
