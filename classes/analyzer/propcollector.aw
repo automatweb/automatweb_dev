@@ -159,9 +159,9 @@ class propcollector extends aw_template
 
 		if ($fields["store"] == "no")
 		{
-			unset($fields["table"]);
-			unset($fields["method"]);
-			unset($fields["field"]);
+			//unset($fields["table"]);
+			//unset($fields["method"]);
+			//unset($fields["field"]);
 		}
 
 		if ($fields["view"] && !$this->views[$fields["view"]])
