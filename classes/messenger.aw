@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.113 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.114 2002/12/20 12:43:10 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1170,7 +1170,7 @@ class messenger extends menuedit_light
 			};
 			$this->save_message($args);
 		};
-
+		
 		if ($save)
 		{
 			// bounce back to edit form
@@ -1339,7 +1339,6 @@ class messenger extends menuedit_light
 				};
 			};
 		};
-
 
 
 		// ja lopuks liigutame ta draftist ära outboxi
