@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.2 2001/05/21 01:15:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.3 2001/05/21 03:16:48 cvs Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -819,17 +819,17 @@ $orb_defs["form"] = "xml";
 					$l = $this->get_ae_location();
 					break;
 				case "search_results":
-					$l = $this->mk_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
+					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
 					break;
 				default:
 					if ($this->type == FTYPE_SEARCH)
 					{
 						// n2itame ocingu tulemusi
-						$l = $this->mk_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1));
+						$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1));
 					}
 					else
 					{
-						$l = $this->mk_orb("show", array("id" => $id, "entry_id" => $entry_id));
+						$l = $this->mk_my_orb("show", array("id" => $id, "entry_id" => $entry_id));
 					}
 					break;
 			}
