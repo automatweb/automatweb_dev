@@ -67,12 +67,13 @@
       <property>
             <name>cfgmanager</name>
             <type>objpicker</type>
-            <clid>CL_CFGMANAGER</clid>
+            <clid>CL_CFGFORM</clid>
+            <subclass>CL_PSEUDO</subclass>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
             <table>objects</table>
-            <caption>Konfiguratsioonihaldur</caption>
+            <caption>Konfiguratsioonivorm</caption>
       </property>
       <property>
             <name>show_lead</name>
@@ -209,7 +210,7 @@
       <property>
             <name>type</name>
             <type>select</type>
-            <group>advanced</group>
+            <group>general</group>
             <table>menu</table>
             <caption>Menüü tüüp</caption>
       </property>
@@ -260,6 +261,13 @@
             <group>advanced</group>
             <table>menu</table>
             <caption>Ilma menüüdeta</caption>
+      </property>
+      <property>
+            <name>periodic</name>
+            <type>checkbox</type>
+            <group>advanced</group>
+            <table>menu</table>
+            <caption>Perioodiline</caption>
       </property>
       <property>
             <name>target</name>
