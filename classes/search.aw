@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.8 2002/10/18 14:18:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.9 2002/10/20 18:59:55 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -14,10 +14,9 @@ class search extends aw_template
 	function add($args = array())
 	{
 		extract($args);
-		$this->read_template("add.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
-		));
+		$args["reforb"] = $this->mk_reforb("submit",array("obj" => $args["obj"],"docid" => $docid, "parent" => $parent));
+		$this->is_object_search = true;
+		return $this->show($args);
 	}
 
 	////
@@ -25,11 +24,13 @@ class search extends aw_template
 	function change($args = array())
 	{
 		extract($args);
-		$this->read_template("change.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
-		));
-
+		$ob = $this->get_object($id);
+		$args["s"] = $ob["meta"];
+		$args["parent"] = $ob["parent"];
+		$args["reforb"] = $this->mk_reforb("submit",array("obj" => $args["obj"],"docid" => $docid, "parent" => $parent,"id" => $id));
+		$args["search"] = 1;
+		$this->is_object_search = true;
+		return $this->show($args);
 	}
 
 	////
@@ -39,7 +40,26 @@ class search extends aw_template
 		$this->quote($args);
 		extract($args);
 
+		if (!$args["id"])
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_SEARCH,
+				"name" => $s["obj_name"]
+			));
+		}
+		else
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $s["obj_name"]
+			));
+		}
 
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => $args["s"]
+		));
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
@@ -120,7 +140,6 @@ class search extends aw_template
 		// perform the actual search
 		if ($search)
 		{
-
 			$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
 			$this->t = new aw_table(array(
@@ -252,7 +271,9 @@ class search extends aw_template
 				{
 					$where = join(" AND ",$parts);
 					$q = "SELECT * FROM objects WHERE $where";
+					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
+//					echo "db_rows = <pre>", var_dump($_tmp),"</pre> <br>";
 					if (is_array($_tmp))
 					{
 						$this->db_rows = $_tmp;
@@ -437,6 +458,7 @@ class search extends aw_template
 			unset($args["class"]);
 			unset($args["action"]);
 			unset($args["no_reforb"]);
+			unset($args["reforb"]);
 			if (is_array($args["class_id"]))
 			{
 				$class_ids = join("\n",map("<input type='hidden' name='class_id[]' value='%d'>",$args["class_id"]));
@@ -444,18 +466,7 @@ class search extends aw_template
 			};
 			if (is_array($args["s"]))
 			{
-				$ss = "";
-//				foreach($args["s"] as $k => $v)
-//				{
-//					if (is_array($v))
-//					{
-						$ss = $this->req_array_reforb("s", $args["s"]);
-//					}
-//					else
-//					{
-//						$ss.="<input type='hidden' name='s[$k]' value='$v'>\n";
-//					}
-//				}
+				$ss = $this->req_array_reforb("s", $args["s"]);
 				unset($args["s"]);
 			};
 			$this->vars(array(
@@ -487,10 +498,14 @@ class search extends aw_template
 
 		$this->table = $table;
 
+		if (!isset($reforb))
+		{
+			$reforb = $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent));
+		}
 		$this->vars(array(
 			"table" => $table,
 			"toolbar" => (is_object($toolbar)) ? $toolbar->get_toolbar() : "",
-			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent)),
+			"reforb" => $reforb
 		));
 
 		return $this->parse();
@@ -523,6 +538,15 @@ class search extends aw_template
 		// 2 - put the names of the search fields into an array
 		// s[name] .. and so on, so that I can access them by 
 		// accessing the s array. I like the latter a lot more.
+
+		if (!$fields["obj_name"] && $this->is_object_search)
+		{
+			$fields["obj_name"] = array(
+				"type" => "textbox",
+				"caption" => "Objekti nimi",
+				"value" => $args["s"]["obj_name"],
+			);
+		};
 
 		if (!$fields["server"])
 		{
@@ -631,7 +655,12 @@ class search extends aw_template
 
 	function _get_s_parent($args)
 	{
-		return array("0" => "Igalt poolt") + $this->_search_mk_call("objects", "get_list", array(), $args);
+		$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
+		if (!is_array($ret))
+		{
+			return array("0" => "Igalt poolt");
+		}
+		return array("0" => "Igalt poolt") + $ret;
 	}
 
 	function _get_s_redir_target()
@@ -902,7 +931,8 @@ class search extends aw_template
 			$_parms["method"] = "xmlrpc";
 			$_parms["login_obj"] = $args["s"]["server"];
 		}
-		return $this->do_orb_method_call($_parms);
+		$ret =  $this->do_orb_method_call($_parms);
+		return $ret;
 	}
 }
 ?>
