@@ -210,10 +210,17 @@ class form_controller extends form_base
 		{
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
+		enter_function("form_controller::eval_controller");
 		$this->form_ref =& $form_ref;
 		$this->el_ref =& $el_ref;
 		$this->entry = $entry;
 
+		global $awt;
+		if ($_COOKIE["profile_controllers"] == "1")
+		{
+				$awt->start("eval_controller::$id");
+				echo "eval_controller $id for entry $entry , el ".(is_object($el_ref) ? $el_ref->get_id() : "")." <br>";
+		}
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
@@ -225,6 +232,12 @@ class form_controller extends form_base
 			$this->dequote(&$eq);
 			eval($eq);
 		}
+		if ($_COOKIE["profile_controllers"] == "1")
+		{
+			echo "got result $res, elapsed time = ".$awt->elapsed("eval_controller::$id")." <br>";
+		}
+
+		exit_function("form_controller::eval_controller");
 		return $res;
 	}
 
@@ -232,6 +245,9 @@ class form_controller extends form_base
 	// !this imports all the variable values to equasion $eq
 	function replace_vars($co,$eq,$add_quotes,$form_ref = false, $el_ref = false, $el_value = "")
 	{
+		// load controllers
+		$eq = preg_replace("/{load:(\d*)}/e","\$this->_load_ctrl_eq(\\1)",$eq);
+
 		if ($co['meta']['no_var_replace'] == 1)
 		{
 			return $eq;
@@ -288,10 +304,7 @@ class form_controller extends form_base
 			}
 		}
 
-		// load controllers
-		$eq = preg_replace("/{load:(\d*)}/e","\$this->_load_ctrl_eq(\\1)",$eq);
-
-		
+	
 		// and finally init all non-initialized vars to zero to avoid parse errors
 		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)]*\])/","0",$eq);
 
@@ -329,6 +342,8 @@ class form_controller extends form_base
 		{
 			$co["meta"]["vars"][$var_name]["form_id"] = $sel_form;
 			$co["meta"]["vars"][$var_name]["el_id"] = $sel_el;
+			$co["meta"]["vars"][$var_name]["other_form_id"] = $other_sel_form;
+			$co["meta"]["vars"][$var_name]["other_el_id"] = $other_sel_el;
 			$co["meta"]["vars"][$var_name]["et_type"] = $entry_type;
 			$co["meta"]["vars"][$var_name]["et_entry_id"] = $sel_entry_id;
 		}
@@ -363,6 +378,12 @@ class form_controller extends form_base
 		$v_form_id = $co["meta"]["vars"][$var_name]["form_id"];
 		$v_el_id = $co["meta"]["vars"][$var_name]["el_id"];
 
+		$o_form_id = $co["meta"]["vars"][$var_name]["other_form_id"];
+		$o_el_id = $co["meta"]["vars"][$var_name]["other_el_id"];
+
+		$forms = $this->get_flist(array("addfolders" => true, "lang_id" => aw_global_get("lang_id")));
+		asort($forms);
+
 		if ($v_form_id)
 		{
 			$this->vars(array(
@@ -378,6 +399,7 @@ class form_controller extends form_base
 					"et_user_data" => checked($et_type == "user_data"),
 					"et_user_entry" => checked($et_type == "user_entry"),
 					"et_same_chain" => checked($et_type == "same_chain"),
+					"et_other_chain" => checked($et_type == "other_chain"),
 					"et_writer_entry" => checked($et_type == "writer_entry"),
 					"et_session" => checked($et_type == "session"),
 					"et_element_sum" => checked($et_type == "element_sum")
@@ -398,11 +420,24 @@ class form_controller extends form_base
 						));
 					}
 					$this->vars(array(
-						"ET_ENTRY_ID" => $this->parse("ET_ENTRY_ID")
+						"ET_ENTRY_ID" => $this->parse("ET_ENTRY_ID"),
 					));
 				}
+
+				$oe = "";
+				if ($et_type == "other_chain")
+				{
+					$this->vars(array(
+						"other_forms" => $this->picker($o_form_id,$forms),
+						"other_elements" => $this->picker($o_el_id,array("" => "") + $this->get_elements_for_forms(array($o_form_id)))
+					));
+					$oe = $this->parse("OTHER_ELEMENT");
+				}
 				$this->vars(array(
-					"EL_SEL" => $this->parse("EL_SEL")
+					"OTHER_ELEMENT" => $oe
+				));
+				$this->vars(array(
+					"EL_SEL" => $this->parse("EL_SEL"),
 				));
 			}
 			$this->vars(array(
@@ -410,13 +445,10 @@ class form_controller extends form_base
 			));
 		}
 
-		$forms = $this->get_flist(array("addfolders" => true, "lang_id" => aw_global_get("lang_id")));
-		asort($forms);
-
 		$this->vars(array(
 			"forms" => $this->picker($v_form_id,$forms),
 			"reforb" => $this->mk_reforb("submit_var", array("id" => $id, "var_name" => $var_name, "change" => 1)),
-			"var_name" => $var_name
+			"var_name" => $var_name,
 		));
 
 		$this->vars(array(
@@ -436,11 +468,16 @@ class form_controller extends form_base
 
 	function get_var_value($co,$var_name)
 	{
+		enter_function("form_controller::get_var_value");
 		$fid = $co["meta"]["vars"][$var_name]["form_id"];
 		$elid = $co["meta"]["vars"][$var_name]["el_id"];
+		
+		$o_fid = $co["meta"]["vars"][$var_name]["other_form_id"];
+		$o_elid = $co["meta"]["vars"][$var_name]["other_el_id"];
+
 		$et_type = $co["meta"]["vars"][$var_name]["et_type"];
 		$et_entry_id = $co["meta"]["vars"][$var_name]["et_entry_id"];
-		$cache_key = $fid."::".$elid."::".$et_type."::".$et_entry_id;
+		$cache_key = $fid."::".$elid."::".$et_type."::".$et_entry_id."::".$o_fid."::".$o_elid;
 		if ($fid && $elid && $et_type)
 		{
 /*			if (($val = aw_cache_get("controller::var_value_cache", $cache_key)))
@@ -501,6 +538,53 @@ class form_controller extends form_base
 				}
 			}
 			else
+			if ($et_type == "other_chain")
+			{
+				enter_function("form_controller::get_var_value::other_chain");
+				// figure out the current chain entry and load it
+				// i hope that does the right thing
+				$chent = aw_global_get("current_chain_entry");
+				if ($chent)
+				{
+					$chd = $this->get_chain_entry($chent);
+					$entry_id = $chd[$o_fid];
+//					echo "got entry id in THIS chain as $entry_id <br>";
+					// now read the related form's entry id, then get the chain entry id from that
+					$rel_eid = $this->db_fetch_field("SELECT el_".$o_elid." as val FROM form_".$o_fid."_entries WHERE id = '$entry_id'", "val");
+					// get the chain entry and find the corect form entry from that
+					list($_tmp, $_tmp2, $_tmp_lbopt, $rel_eid) = explode("_", $rel_eid);
+//					echo "got rel_eid as $rel_eid , fid = $fid<br>";
+					$t_fid = $this->get_form_for_entry($rel_eid);
+					if ($t_fid)
+					{
+						$rel_ch_eid = $this->db_fetch_field("SELECT chain_id FROM form_".$t_fid."_entries WHERE id = '$rel_eid'", "chain_id");
+					}
+//					echo "got rel_ch_eid as $rel_ch_eid <br>";
+					
+					$chd = $this->get_chain_entry($rel_ch_eid);
+//					echo "got chd as ".dbg::dump($chd)." <br>";
+					$entry_id = $chd[$fid];
+//					echo "got entry_id as $entry_id <br>";
+					if (!$entry_id)
+					{
+						// if the entry for this form has not been made in the chain or is in a related form, 
+						// try and load any entry from the chain, since it will contain all the available elements anyway! yay!
+						if (is_array($chd))
+						{
+							foreach($chd as $_fid => $entry_id)
+							{
+								if ($entry_id)
+								{
+									$form =& $this->cache_get_form_instance($_fid);
+									break;
+								}
+							}
+						}
+					}
+				}
+				exit_function("form_controller::get_var_value::other_chain");
+			}
+			else
 			if ($et_type == "session")
 			{
 				$sff = aw_global_get("session_filled_forms");
@@ -526,7 +610,7 @@ class form_controller extends form_base
 				if ($form->entry_id != $entry_id)
 				{
 //					echo "loading entry for form $form->id , entry = $entry_id <br>";
-					$form->load_entry($entry_id);
+					$form->load_entry($entry_id, true);
 				}
 				// and now read the damn value
 				$el =& $form->get_element_by_id($elid);
@@ -534,18 +618,17 @@ class form_controller extends form_base
 				{
 					$val = $el->get_controller_value();
 //					echo "val = $val entry = $el->entry , elid = $elid <br>";
-					aw_cache_set("controller::var_value_cache", $cache_key,$val);
 					return $val;
 				}
 				else
 				{
-					aw_cache_set("controller::var_value_cache", $cache_key,$val);
 					$val = $form->entry[$elid];
 //					echo "returning pure val for element $elid <br>";
 					return $val;
 				}
 			}
 		}
+		exit_function("form_controller::get_var_value");
 	}
 
 	function del_var($arr)
