@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.11 2004/03/23 16:18:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.12 2004/06/08 12:08:23 duke Exp $
 // crm_call.aw - phone call
 /*
 
@@ -70,7 +70,7 @@ class crm_call extends class_base
 			"name" => $obj->name(),
 			"icon" => icons::get_icon_url($obj),
 			"time" => date("d-M-y H:i",$obj->prop("start1")),
-			"content" => nl2br($obj->prop("content")),
+			"content" => nl2br(create_links($obj->prop("content"))),
 		));
 		return $this->parse();
 	}
