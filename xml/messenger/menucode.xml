@@ -41,6 +41,12 @@
 			<accounts>
 				<caption>Kontod</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=accounts</link>
+				<sublinks>
+					<new>
+						<caption>Lisa uus</caption>
+						<link>?class=messenger&amp;action=account_type</link>
+					</new>
+				</sublinks>
 			</accounts>
 			<rules>
 				<caption>Reeglid</caption>
@@ -56,7 +62,7 @@
 					</list>
 				</sublinks>
 			</rules>
-			<folders>
+			<folders2>
 				<caption>Folderid</caption>
 				<link>?class=messenger&amp;action=folders</link>
 				<sublinks>
@@ -69,7 +75,17 @@
 						<link>?class=messenger&amp;action=new_folder</link>
 				</newfolder>
 				</sublinks>
-			</folders>
+			</folders2>
+			<identities>
+				<caption>Identiteedid</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=identities</link>
+				<sublinks>
+					<new>
+						<caption>Lisa uus</caption>
+						<link>?class=messenger&amp;action=add_identity</link>
+					</new>
+				</sublinks>
+			</identities>
 		</sublinks>
 	</configure>
 </messenger>
