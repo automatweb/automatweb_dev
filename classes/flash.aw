@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.2 2003/04/23 09:35:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.3 2003/10/03 11:39:55 duke Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -34,16 +34,16 @@ class flash extends class_base
 		));
 	}
 
-	function get_property($args = array())
+	function get_property($arr = array())
         {
-                $data = &$args["prop"];
+                $data = &$arr["prop"];
                 $retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "preview":
-				if (isset($args["obj"]["meta"]["file"]))
+				if ($arr["obj_inst"]->prop("file"))
 				{
-					$data["value"] = $this->view(array("id" => $args["obj"]["oid"]));
+					$data["value"] = $this->view(array("id" => $arr["obj_inst"]->id()));
 				}
 				else
 				{
@@ -60,10 +60,10 @@ class flash extends class_base
 	}
 	
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-                $data = &$args["prop"];
-                $form_data = &$args["form_data"];
+                $data = &$arr["prop"];
+                $form_data = &$arr["form_data"];
 		$retval = PROP_OK;
                 if ($data["name"] == "file")
                 {
@@ -89,7 +89,10 @@ class flash extends class_base
                                         ));
 
                                         $data["value"] = $fs;
-                                        $this->file_name = $fdata["name"];
+					if (!$arr["obj_inst"]->prop("name"))
+					{
+						$arr["obj_inst"]->set_prop("name",$fdata["name"]);
+					};
                                 };
 
 			}
@@ -101,17 +104,15 @@ class flash extends class_base
 		return $retval;
 	}
 
-	function callback_pre_save($args = array())
+	function callback_pre_save($arr = array())
 	{
-		$coredata = &$args["coredata"];
-		if (!$coredata["name"] && isset($this->file_name))
-		{
-			$coredata["name"] = $this->file_name;
-		};
+		// right now it's impossible to set those in the file upload
+		// handler, because the original values from the form
+		// will overwrite the values I'm going to set there
 		if (isset($this->real_width) && isset($this->real_height))
 		{
-			$coredata["metadata"]["width"] = $this->real_width;
-			$coredata["metadata"]["height"] = $this->real_height;
+			$arr["obj_inst"]->set_prop("width",$this->real_width);
+			$arr["obj_inst"]->set_prop("height",$this->real_height);
 		};
         }
 
@@ -129,52 +130,6 @@ class flash extends class_base
 		};
 		return $url;
         }
-
-
-
-	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -235,20 +190,19 @@ class flash extends class_base
 		die();
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function view($args = array())
 	{
 		extract($args);
-		$ob = $this->get_object($id);
+
+		$ob = new object($id);
 
 		$this->read_template('show.tpl');
 
 		$this->vars(array(
-			"id" => $ob["name"],
-			"url" => $this->get_url($ob["meta"]["file"]),
-			"width" => $ob["meta"]["width"],
-			"height" => $ob["meta"]["height"],
+			"id" => $ob->prop("name"),
+			"url" => $this->get_url($ob->prop("file")),
+			"width" => $ob->prop("width"),
+			"height" => $ob->prop("height"),
 		));
 
 		return $this->parse();
