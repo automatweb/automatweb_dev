@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.109 2003/07/09 12:22:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.110 2003/07/09 12:29:54 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -306,10 +306,8 @@ class aliasmgr extends aw_template
 			$meta = $_tmp["meta"];
 		};
 
-		//if (is_array($meta["aliases_by_class"]) && false)
-		// um, no .. try again. doing it this way caused a heaven 'n hell crap
-		// all over themsleves .. -duke
-		if (is_array($meta["aliases_by_class"]))
+		// ok, let's try it this way
+		if (is_array($meta["aliases_by_class"]) && false)
 		{
 			$aliases = $meta["aliases_by_class"];
 		}
@@ -317,6 +315,7 @@ class aliasmgr extends aw_template
 		{
 			$aliases = $this->get_oo_aliases(array("oid" => $oid));
 			// write the aliases into metainfo for faster access later on
+			/*
 			if (is_array($aliases) && $oid)
 			{
 				$this->upd_object(array(
@@ -327,6 +326,7 @@ class aliasmgr extends aw_template
 					),
 				));
 			};
+			*/
 		};
 
 		$by_idx = array();
