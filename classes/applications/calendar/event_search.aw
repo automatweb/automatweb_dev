@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.22 2005/01/21 14:13:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.23 2005/01/21 17:23:03 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -689,21 +689,11 @@ class event_search extends class_base
 			"caption" => t("Otsi"),
 			"type" => "submit",
 		));
-
-		// perform the search only if a start_date has been selected - this means no search
-		// when first viewing the page with search form
 		
-		//arr($arr);
-		/*
-		if ($start_tm != -1 && $end_tm != -1)
-		{
-			$do_search = true;
-		};
-		*/
 		$do_search = true;
 		if ($do_search)
 		{
-			$search["parent"] = array();
+			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
 			$search["class_id"] = array(CL_CALENDAR_EVENT, CL_CRM_MEETING);
 			$par1 = array();
@@ -725,7 +715,7 @@ class event_search extends class_base
 				}
 				if (is_oid($arr["project2"]))
 				{
-					$search["parent"][] = $arr["project2"];
+					$parx2[] = $arr["project2"];
 				}
 				elseif($search_p2)
 				{
@@ -733,8 +723,7 @@ class event_search extends class_base
 						"parent" => array($formconfig["project2"]["rootnode"]),
 						"class_id" => array(CL_PROJECT, CL_PLANNER),
 					));
-					$par2 = $all_projects2->ids();
-					$search["parent"] = array_merge($search["parent"], $par2);
+					$parx2 = $par2 = $all_projects2->ids();
 				}
 			}
 			elseif($rn1 || $rn2)
@@ -745,7 +734,7 @@ class event_search extends class_base
 				}
 				if($rn2)
 				{
-					$search["parent"][] = $rn2;
+					$parx2[] = $rn2;
 				}
 			}
 			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
@@ -757,7 +746,6 @@ class event_search extends class_base
 			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 			$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$ft_fields = $ob->prop("ftsearch_fields");
-			// kuidas ma nd need parentid kokku laon?
 			if ($arr["fulltext"])
 			{
 				$or_parts = array("name" => "%" . $arr["fulltext"] . "%");
@@ -765,7 +753,6 @@ class event_search extends class_base
 				{
 					$or_parts[$ft_field] = "%" . $arr["fulltext"] . "%";
 				}
-				//arr($or_parts);
 				$search[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => $or_parts,
@@ -775,20 +762,32 @@ class event_search extends class_base
 			$edata = array();
 			$ecount = array();
 			
-			// there is a fatal flaw in my logic
+			// it would be a nice habbit to always commment my own code,
+			// but then again, these magical bugs have miraculous ability to come into
+			// makes tasklist, so why bother :) ok ok, i really should...
 			if (sizeof($search["parent"]) != 0)
 			{
 				$ol = new object_list($search);
-				/*$bl = new object_list(array(
-					"brother_of" => $ol->ids(),
-				));
-				*/
+				$oris = $ol->brother_ofs();
+				$search2 = $search;
+				$search2["parent"] = $parx2;
+				$ol = new object_list($search2);
+				$oris2 = $ol->brother_ofs();
+				$ids = array_intersect($oris2, $oris);
+				if(!empty($ids))
+				{
+					$ol = new object_list(array(
+						"oid" => $ids,
+					));
+				}
+				else
+				{
+					$ol = new object_list();
+				}
+				
 				$this->read_template(($search["brother_of"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
-				//arr($tabledef);
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
-				// first I have to sort the bloody thing in correct order
-				//$this->sub_merge = 1;
 				$cdat = "";
 				$col_count = 0;
 				foreach($tabledef as $key => $propdef)
@@ -838,7 +837,7 @@ class event_search extends class_base
 							$edata[$orig_id]["parent1"] = $parent1;
 						};
 					}
-					if (in_array($pr->id(),$par2))
+					if (in_array($pr->id(), $par2))
 					{
 						$parent2 = $pr->name();
 						if ($edata[$orig_id])
