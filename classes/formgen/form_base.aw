@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.22 2004/02/11 11:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.23 2004/03/09 11:07:08 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -530,7 +530,7 @@ class form_base extends form_db_base
 		{
 			$ss = " AND form_id = $fid ";
 		}
-		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = ".$this->cfg["site_id"]." $ss");
+		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0  $ss");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]][$row["op_id"]] = $row["name"];
