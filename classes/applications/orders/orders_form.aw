@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.4 2004/11/30 16:58:23 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.5 2004/12/06 14:08:30 sven Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -299,7 +299,7 @@ class orders_form extends class_base
 			"udef_textbox5" => $order->prop("udef_textbox5"),
 			"udef_textbox6" => $order->prop("udef_textbox6"),
 			"person_contact" => $person->prop("comment"),
-			"birthday" => get_lc_date($person->prop("birthday")),
+			"birthday" => get_lc_date($person->prop("birthday"), 1),
 		));
 		$retval = $this->parse();
 		$this->read_template("orders_form.tpl");
@@ -362,11 +362,23 @@ class orders_form extends class_base
 			$udef_check1 = true;
 		}
 		
+		//XXX: temporary hack
+		if($_SESSION["LC"]=="lv")
+		{
+			$pysiklient = "pastàvïgais klients";	
+			$esmakordselt = "jauns klients";
+		}
+		else
+		{
+			$pysiklient = "p&uuml;siklient";
+			$esmakordselt = "esmakordselt";
+		}
+		
 		$this->vars(array(
 			"year_select" => $year_select,
 			"customer_type1" => html::radiobutton(array(
 				"name" => "udef_textbox6",
-				"value" => "p&uuml;siklient",
+				"value" => $pysiklient,
 				"checked" => $udef_check1
 			)),
 			"udef_checkbox1" => html::checkbox(array(
@@ -376,7 +388,7 @@ class orders_form extends class_base
 			)),
 			"customer_type2" => html::radiobutton(array(
 				"name" => "udef_textbox6",
-				"value" => "esmakordselt",
+				"value" => $esmakordselt,
 				"checked" => $udef_check2
 			))
 		));
@@ -479,8 +491,11 @@ class orders_form extends class_base
 					"url" => $this->mk_my_orb("delete_from_order",array(
 						"id" => $item->id(),
 					), CL_ORDERS_FORM),
-					"caption" => "Kustuta",
-				)),
+					"caption" => "Kustuta")),
+				"delete_url" => $this->mk_my_orb("delete_from_order",array(
+						"id" => $item->id(),
+					), CL_ORDERS_FORM),	
+				
 				"product_code" => $item->prop("product_code"),
 				"product_color" => $item->prop("product_color"),
 				"product_size" => $item->prop("product_size"),
@@ -488,10 +503,10 @@ class orders_form extends class_base
 				"product_price" => $item->prop("product_price"),
 				"product_image" => $item->prop("product_image"),
 				"product_page" => $item->prop("product_page"),
-				"product_sum" => $item->prop("product_count") * $item->prop("product_price"),
+				"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
 			));
 			$retval.= $this->parse("shop_cart_table");
-			$totalsum = $totalsum + $item->prop("product_count") * $item->prop("product_price");
+			$totalsum = $totalsum + $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
 		}
 		
 		$totalsum = $totalsum + $form->prop("postal_fee");
