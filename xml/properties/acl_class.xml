@@ -2,63 +2,75 @@
 <properties>
       <property>
             <name>chain</name>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELATION_CHAIN</reltype>
+            <reltype>RELTYPE_CHAIN</reltype>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali p&amp;auml;rg</caption>
       </property>
       <property>
             <name>role</name>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELATION_ROLE</reltype>
+            <reltype>RELTYPE_ROLE</reltype>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali roll</caption>
       </property>
       <property>
             <name>groups</name>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <reltype>RELATION_GROUP</reltype>
+            <reltype>RELTYPE_GROUP</reltype>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Vali grupid</caption>
       </property>
       <property>
             <name>priority</name>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Prioriteet</caption>
       </property>
       <property>
             <name>update_acl</name>
-            <field>meta</field>
-            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
             <group>general</group>
             <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Uuenda ACL</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ACL</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
+      <reltypes>
+            <CHAIN>
+                  <value>1</value>
+                  <clid>CL_OBJECT_CHAIN</clid>
+                  <caption>pärg</caption>
+            </CHAIN>
+            <ROLE>
+                  <value>2</value>
+                  <clid>CL_ROLE</clid>
+                  <caption>roll</caption>
+            </ROLE>
+            <GROUP>
+                  <value>3</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>grupp</caption>
+            </GROUP>
+      </reltypes>
 </properties>
 
