@@ -77,7 +77,7 @@ class site_template_compiler extends aw_template
 		$this->menu_areas = array();
 
 		// get all subtemplates 
-		$tpls = $this->get_subtemplates_regex("(MENU.*)");
+		$tpls = $this->get_subtemplates_regex("(MENU_.*)");
 		
 		// now figure out the menu areas that are used
 		$_tpls = array();
@@ -93,6 +93,11 @@ class site_template_compiler extends aw_template
 			$parts = explode("_", $tpl);
 			$area = $parts[1];
 			$level = substr($parts[2], 1);
+
+			if (!array_search($area, aw_ini_get("menuedit.menu_defs")))
+			{
+				continue;
+			}
 
 			$this->menu_areas[$area]["levels"][$level]["templates"][] = $parts;
 			$this->menu_areas[$area]["parent"] = array_search($area, aw_ini_get("menuedit.menu_defs"));
@@ -569,6 +574,13 @@ class site_template_compiler extends aw_template
 				);
 				break;
 
+			case "MID":
+				return array(
+					"prop" => "mid",
+					"value" => "1"
+				);
+				break;
+
 			case "NOTACT":
 				return array(
 					"prop" => "level_selected",
@@ -783,7 +795,13 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 
 		$ret = "";
+		// TODO: this could be optimized out for non - login menus
+		$ret .= $this->_gi()."if (!\$this->skip)\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
 		return $ret;
 	}
 
@@ -1024,7 +1042,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show::menu_area_cache::section::\".\$this->sel_section_real.\"::".$arr["a_parent"]."::level::".$arr["level"]."\",\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show::menu_area_cache::lid::\".aw_global_get(\"lang_id\").\"::section::\".aw_global_get(\"section\").\"::".$arr["a_parent"]."::level::".$arr["level"]."\",\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1036,7 +1054,7 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 
 		$res = "";
-		$res .= $this->_gi()."\$this->cache->file_set(\"site_show::menu_area_cache::section::\".\$this->sel_section_real.\"::".$arr["a_parent"]."::level::".$arr["level"]."\", ".$content_name.");\n";
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show::menu_area_cache::lid::\".aw_global_get(\"lang_id\").\"::section::\".aw_global_get(\"section\").\"::".$arr["a_parent"]."::level::".$arr["level"]."\", ".$content_name.");\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 
