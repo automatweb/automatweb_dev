@@ -116,8 +116,8 @@ background-color: #478EB6;
 
 <!-- SUB: tabs_L2 -->
 <tr>
-<td>
-<div style="width:5px;height:20px" />
+<td style="background-color: #478EB6;">
+		<div style="width:5px;height:20px" />
 </td>
 <td class="chformsubtitle" width="100%">
 		<!-- SUB: tab_L2 -->
@@ -146,9 +146,7 @@ background-color: #478EB6;
 <tr>
 <td rowspan="2" align="left" valign="bottom" width="6" class="awtablecellbackdark"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtable_nurk.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td>
 <td align="left" valign="top" width="99%" bgcolor="#FFFFFF">
-<!--<span style="font-family: Verdana; font-size: 15px;">-->
 {VAR:content}
-<!--</span>-->
 </td>
 </tr>
 <tr>
