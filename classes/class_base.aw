@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.56 2003/01/26 17:43:29 duke Exp $
+// $Id: class_base.aw,v 2.57 2003/01/26 19:03:30 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -399,7 +399,7 @@ class class_base extends aliasmgr
 			$method = $property["method"];
 			$handler = $property["handler"];
 			$type = $property["type"];
-			if ($type == "text")
+			if (($type == "text") || ($type == "callback"))
 			{
 				continue;
 			};
@@ -573,7 +573,7 @@ class class_base extends aliasmgr
 		foreach($this->tables as $key => $val)
 		{
 			// that we already got
-			if ($key != "objects")
+			if (($key != "objects") && (sizeof($this->realfields[$key]) > 0) )
 			{
 				if ($val["master_table"] == "objects")
 				{
@@ -965,9 +965,12 @@ class class_base extends aliasmgr
 			{
 				if ($_field)
 				{
-					$fields[$property["table"]][$_field] = $fval;
+					if ($property["type"] != "callback")
+					{
+						$fields[$property["table"]][$_field] = $fval;
+					};
 				};
-				if ($property["type"] != "text")
+				if (($property["type"] != "text") && ($property["type"] != "callback"))
 				{
 					$realfields[$property["table"]][$_field] = $fval;
 				};
