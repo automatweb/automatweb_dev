@@ -41,6 +41,14 @@
             <field>commtext</field>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>ip</name>
+            <table>forum_comments</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>ip</field>
+            <caption>IP</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_COMMENT</syslog_type>
             <no_status>1</no_status>
