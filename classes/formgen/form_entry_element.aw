@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.12 2004/01/21 10:07:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.13 2004/02/11 11:50:06 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -382,6 +382,13 @@ class form_entry_element extends form_element
 			$html = "timeslice!";
 
 
+		}
+
+		if ($this->arr["el_css_style"])
+		{
+			$html = "<span class=\"st".$this->arr["el_css_style"]."\">".$html."</span>";
+			classload("layout/active_page_data");
+			active_page_data::add_site_css_style($this->arr["el_css_style"]);
 		}
 
 		if ($this->form->lang_id == $lang_id)

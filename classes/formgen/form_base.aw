@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.21 2003/11/13 11:11:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.22 2004/02/11 11:50:05 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -321,6 +321,7 @@ class form_base extends form_db_base
 			"show"						=> $this->mk_my_orb("preview_form", array("id" => $this->id),"form"),
 			"table_settings"	=> $this->mk_my_orb("table_settings", array("id" => $this->id),"form"),
 			"all_elements"		=> $this->mk_my_orb("all_elements", array("id" => $this->id),"form"),
+			"all_elements2"		=> $this->mk_my_orb("all_elements2", array("id" => $this->id),"form"),
 			"actions"					=> $this->mk_my_orb("list_actions", array("id" => $this->id),"form_actions"),
 			"sel_search"			=> $this->mk_my_orb("sel_search", array("id" => $this->id), "form"),
 			"metainfo"				=> $this->mk_my_orb("metainfo", array("id" => $this->id), "form"),
@@ -490,7 +491,7 @@ class form_base extends form_db_base
 		{
 			if ($addfolders)
 			{
-				$row["name"] = $ol[$row["parent"]]."/".$row["name"];
+				$row["name"] = $ol[$row["parent"]]."/".$row["name"]." (".$row["oid"].")";
 			}
 			if ($all_data)
 			{
@@ -601,7 +602,7 @@ class form_base extends form_db_base
 				}
 				else
 				{
-					$ret[$row["el_id"]] = $row["name"];
+					$ret[$row["el_id"]] = $row["name"]." (".$row["el_id"].")";
 				}
 			}
 		}

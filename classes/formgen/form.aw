@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.87 2004/01/13 16:24:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.88 2004/02/11 11:50:04 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -269,6 +269,202 @@ class form extends form_base
 		return $this->do_menu_return();
 	}
 
+	/** Shows all form elements and lets user pick their style
+		
+		@attrib name=all_elements2 params=name default="0"
+		
+		@param id required acl="edit;view"
+		
+		@returns
+		
+		
+		@comment
+		TODO: Move to another class
+
+	**/
+	function gen_all_elements2($arr)
+	{
+		extract($arr);
+		$this->if_init($id, "all_elements2.tpl", LC_FORM_ALL_ELEMENTS);
+
+		for ($c =0; $c < $this->arr["cols"]; $c++)
+		{
+			$this->vars(array("col1" => $c+1));
+			$hh.=$this->parse("HE");
+		}
+		$this->vars(array("HE" => $hh));
+
+		$css = get_instance("css");
+
+		$this->vars(array("form_id" => $this->id));
+		for ($i=0; $i < $this->arr["rows"]; $i++)
+		{
+			$cols="";
+			for ($a=0; $a < $this->arr["cols"]; $a++)
+			{
+				$this->vars(array("ELEMENT"	=> "", "STYLEITEMS" => "", "SOME_ELEMENTS" => ""));	
+				if (!($arr = $this->get_spans($i, $a)))
+				{
+					continue;
+				}
+						
+				$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr;
+				$el_t = "";
+
+				$_cell = new aw_array($cell);
+				foreach($_cell->get() as $idx => $el)
+				{
+					// the element's can_view property is ignored here
+					$this->vars(array(
+						"row" => $arr["r_row"],
+						"col" => $arr["r_col"],
+						"index" => $idx,
+						"el_text"	=> ($el->get_text() == "" ? "&nbsp;" : $el->get_text()),
+						"el_name"	=> ($el->get_el_name() == "" ? "&nbsp;" : $el->get_el_name()),
+						"el_type"	=> ($el->get_type() == "" ? "&nbsp;" : $el->get_type()),
+						"taborder"	=> $el->arr["el_tabindex"],
+						"css_style" => $this->picker($el->arr["el_css_style"], $css->get_select(true))
+					));
+					$meta = $el->get_metadata();
+					$md = "";
+					foreach($meta as $m_k => $m_v)
+					{
+						$this->vars(array(
+							"meta" => $m_v,
+							"meta_idx" => $m_k
+						));
+						$md .= $this->parse("METADATA");
+					}
+
+					$this->vars(array(
+						"meta" => "",
+						"meta_idx" => ""
+					));
+					$md .= $this->parse("METADATA");
+
+					$is_tb = "";
+					$is_rd = "";
+					$is_ch = "";
+
+					if ($el->get_type() == "textbox")
+					{
+						$this->vars(array(
+							"length" => $el->arr["length"]
+						));
+						$is_tb = $this->parse("IS_TEXTBOX");
+					}
+
+					if ($el->get_type() == "radiobutton")
+					{
+						$this->vars(array(
+							"value" => $el->arr["ch_value"]
+						));
+						$is_rd = $this->parse("IS_RADIO");
+					}
+
+					if ($el->get_type() == "checkbox")
+					{
+						$this->vars(array(
+							"value" => $el->arr["ch_value"]
+						));
+						$is_ch = $this->parse("IS_CHECK");
+					}
+
+					$this->vars(array(
+						"METADATA" => $md,
+						"IS_TEXTBOX" => $is_tb,
+						"IS_RADIO" => $is_rd,
+						"IS_CHECK" => $is_ch,
+					));
+					$el_t.=$this->parse("ELEMENT");
+				}
+
+				$this->vars(array(
+					"ELEMENT" => $el_t, 
+					"col" => $arr["r_col"], 
+					"row" => $arr["r_row"],
+					"row1" => $arr["r_row"]+1
+				));	
+
+				$this->vars(array("SOME_ELEMENTS" => $this->parse("SOME_ELEMENTS")));
+
+				$cols.=$this->parse("COL");
+			}
+			$this->vars(array("COL" => $cols));
+			$this->parse("LINE");
+		}
+		$ob = get_instance("objects");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_all_els2", array("id" => $id)),
+			"styles" => $this->picker(0,$stylesel),
+			"folders" => $this->picker(0,(is_array($this->arr["el_move_menus"]) &&  count($this->arr["el_move_menus"]) > 0 ? array("" => "" ) + $this->arr["el_move_menus"] : $ob->get_list(false,true))),
+			"types" => $this->picker(0,$this->listall_el_types(true)),
+			"controllers" => $this->multiple_option_list(array(), $this->get_list_controllers(true))
+		));
+
+		return $this->do_menu_return();
+	}
+
+	function submit_all_els2($arr)
+	{
+		extract($arr);
+		$this->load($id);
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				if (!($arr = $this->get_spans($row, $col)))
+				{
+					continue;
+				}
+					
+				$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr;
+				$_cell = new aw_array($cell);
+				foreach($_cell->get() as $idx => $el)
+				{
+					$t_meta = array();
+
+					$awa = new aw_array($meta[$arr["r_row"]][$arr["r_col"]][$idx]);
+					foreach($awa->get() as $m_idx => $m_data)
+					{
+						if ($m_data["key"] != "")
+						{
+							$t_meta[$m_data["key"]] = $m_data["value"];
+						}
+					}
+
+					$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["metadata"][aw_global_get("lang_id")] = $t_meta;
+					$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["metadata"][aw_global_get("lang_id")] = $t_meta;
+
+					$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["el_tabindex"] = $taborder[$arr["r_row"]][$arr["r_col"]][$idx];
+					$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["el_tabindex"] = $taborder[$arr["r_row"]][$arr["r_col"]][$idx];
+
+					$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["el_css_style"] = $css_style[$arr["r_row"]][$arr["r_col"]][$idx];
+					$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["el_css_style"] = $css_style[$arr["r_row"]][$arr["r_col"]][$idx];
+
+					if ($el->get_type() == "checkbox")
+					{
+						$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["ch_value"] = $checkb[$arr["r_row"]][$arr["r_col"]][$idx];
+						$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["ch_value"] = $checkb[$arr["r_row"]][$arr["r_col"]][$idx];
+					}
+					if ($el->get_type() == "radiobutton")
+					{
+						$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["ch_value"] = $radio[$arr["r_row"]][$arr["r_col"]][$idx];
+						$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["ch_value"] = $radio[$arr["r_row"]][$arr["r_col"]][$idx];
+					}
+					if ($el->get_type() == "textbox")
+					{
+						$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->arr[$idx]->arr["length"] = $textbox[$arr["r_row"]][$arr["r_col"]][$idx];
+						$this->arr["elements"][$arr["r_row"]][$arr["r_col"]][$el->get_id()]["length"] = $textbox[$arr["r_row"]][$arr["r_col"]][$idx];
+					}
+				}
+			}
+		}
+		$this->save();
+		
+		return $this->mk_my_orb("all_elements2", array("id" => $id));
+	}
+
 	/** Shows all form elements and lets user pick their style 
 		
 		@attrib name=all_elements params=name default="0"
@@ -446,15 +642,53 @@ class form extends form_base
 				$el =& $this->get_element_by_id($selid);
 				if (is_array($add_entry_controllers))
 				{
-					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["entry_controllers"] = $tad;
+					if ($add_controllers == 1)
+					{
+						foreach($tad as $k => $v)
+						{
+							$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["entry_controllers"][$k] = $v;
+						}
+					}
+					else
+					{
+						$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["entry_controllers"] = $tad;
+					}
 				}
 				if (is_array($add_show_controllers))
 				{
-					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["show_controllers"] = $tsd;
+					if ($add_controllers == 1)
+					{
+						foreach($tsd as $k => $v)
+						{
+							$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["show_controllers"][$k] = $v;
+						}
+					}
+					else
+					{
+						$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["show_controllers"] = $tsd;
+					}
 				}
 				if (is_array($add_lb_controllers))
 				{
-					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["lb_item_controllers"] = $tld;
+					if ($add_controllers == 1)
+					{
+						foreach($tld as $k => $v)
+						{
+							$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["lb_item_controllers"][$k] = $v;
+						}
+					}
+					else
+					{
+						$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["lb_item_controllers"] = $tld;
+					}
+				}
+				if ($add_value_controller)
+				{
+					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["value_controller"] = $add_value_controller;
+				}
+				if ($add_def_value_controller)
+				{
+					$this->arr["elements"][$el->get_row()][$el->get_col()][$selid]["default_controller"] = $add_def_value_controller;
 				}
 			}
 			$this->save();
@@ -498,6 +732,9 @@ class form extends form_base
 		$this->arr["calendar_controller"] = $calendar_controller;
 		$this->arr["sql_writer_redirect_after"] = $sql_writer_redirect_after;
 		$this->arr["no_use_eid_once"] = $no_use_eid_once;
+		$this->arr["trans_sect"] = $trans_sect;
+		$this->arr["dont_show_trans"] = $dont_show_trans;
+		$this->arr["js_default_element"] = $js_default_element;
 
 		if ($is_translatable && !$this->arr["is_translatable"])
 		{
@@ -941,7 +1178,6 @@ class form extends form_base
 			"roles"		=> $this->picker($sel_role,$roles),
 			"allow_html"	=> checked($allow_html),
 			"def_style"	=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
-			"after_submit_link"	=> $this->arr["after_submit_link"],
 			"as_1"	=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
 			"as_2"	=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
 			"as_3"	=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
@@ -969,7 +1205,66 @@ class form extends form_base
 			"hide_empty_rows" => checked($this->arr["hide_empty_rows"]),
 			"is_translatable" => checked($this->arr["is_translatable"]),
 			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"]),
-			"no_use_eid_once" => checked($this->arr["no_use_eid_once"])
+			"no_use_eid_once" => checked($this->arr["no_use_eid_once"]),
+			"dont_show_trans" => checked($this->arr["dont_show_trans"]),
+			"js_default_element" => $this->picker($this->arr["js_default_element"], $this->get_all_elements())
+		));
+
+		$l = get_instance("languages");
+		$lang_list = $l->get_list();
+
+		$asl_lang ="";
+		foreach($lang_list as $lid => $lname)
+		{
+			if (is_array($this->arr["after_submit_link"]))
+			{
+				$asl = $this->arr["after_submit_link"][$lid];
+			}
+			else
+			{
+				$asl = $this->arr["after_submit_link"];
+			}
+
+			$this->vars(array(
+				"lang_name" => $lname,
+				"lang_id" => $lid,
+				"after_submit_link" => $asl
+			));
+			$asl_lang .= $this->parse("ASL_LANG");
+		}
+		$this->vars(array(
+			"ASL_LANG" => $asl_lang
+		));
+
+		$lt = "";
+		if ($this->arr["is_translatable"])
+		{
+			$show = true;
+			$admg = aw_ini_get("form.translation_groups");
+			if ($admg)
+			{
+				if (!in_array($admg, aw_global_get("gidlist")))
+				{
+					$show = false;
+				}
+			}
+
+			if ($show)
+			{
+				foreach($lang_list as $lid => $ln)
+				{
+					$this->vars(array(
+						"lang_name" => $ln,
+						"lang_id" => $lid,
+						"trans_sect" => $this->arr["trans_sect"][$lid]
+					));
+
+					$lt .= $this->parse("IS_TRANSLATABLE");
+				}
+			}
+		}
+		$this->vars(array(
+			"IS_TRANSLATABLE" => $lt
 		));
 
 		$ns = "";
@@ -1305,6 +1600,64 @@ class form extends form_base
 				"EDIT" => $this->parse("EDIT"),
 			));
 		}
+		
+		$in_grps = true;
+		if (aw_ini_get("form.translator_groups") != "")
+		{
+			$in_grps = false;
+			$gps = explode(",", aw_ini_get("form.translator_groups"));
+			$ugs = aw_global_get("gidlist");
+			foreach($gps as $gp)
+			{
+				if (in_array($gp, $ugs))
+				{
+					$in_grps = true;
+				}
+			}
+		}
+
+		if ($this->arr["is_translatable"] && !$this->arr["dont_show_trans"] && $in_grps)
+		{
+			$tra = "";
+			$la = get_instance("languages");
+			$ll = $la->get_list();
+			foreach($ll as $lid => $ld)
+			{
+				if ($lid == aw_global_get("lang_id"))
+				{
+					continue;
+				}
+				if (aw_global_get("is_showing_chain"))
+				{
+					if ($this->arr["trans_sect"][$lid])
+					{
+						$tu = aw_url_change_var("section", $this->arr["trans_sect"][$lid]);
+						$tu = aw_url_change_var("set_lang_id", $lid, $tu);
+					}
+					else
+					{
+						$tu = aw_url_change_var("set_lang_id", $lid, $tu);
+					}
+				}
+				else
+				{
+					$params = array("id" => $this->id, "entry_id" => $this->entry_id, "set_lang_id" => $lid);
+					if ($this->arr["trans_sect"][$lid])
+					{
+						$params["section"] = $this->arr["trans_sect"][$lid];
+					}
+					$tu = $this->mk_my_orb("show" , $params);
+				}
+				$this->vars(array(
+					"tr_link" => $tu,
+					"lang" => $ld
+				));
+				$tra.=$this->parse("USER_TRANS");
+			}
+			$this->vars(array(
+				"USER_TRANS" => $tra
+			));
+		}
 
 		$st = $this->parse();				
 
@@ -1330,6 +1683,11 @@ class form extends form_base
 		{
 			header("Location: $go_to");
 			aw_session_del("form_redir_after_submit_".$this->id);
+		}
+
+		if ($this->arr["js_default_element"])
+		{
+			$st .= "<script language=\"javascript\">__el = aw_get_el('fm_".$this->id."', '".$this->arr["js_default_element"]."');__el.focus();</script>";
 		}
 
 		return $st;
@@ -1390,6 +1748,7 @@ class form extends form_base
 			$this->post_vars = $values;
 		}
 		else
+		if (!$no_post_vars)
 		{
 			// .. if that is not the case, then we just import all the POST variables.
 			global $HTTP_POST_VARS, $HTTP_GET_VARS;
@@ -1471,9 +1830,9 @@ class form extends form_base
 				{
 					$ctrl["val"] = $this->get_element_value($ctrl["el_id"],true);
 				}
-				$res = $this->controller_instance->do_check($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
+				$res = $this->controller_instance->do_check_and_html($ctrl["ctrlid"], $ctrl["val"], &$this, $this->get_element_by_id($ctrl["el_id"]));
 //				echo "ctrlid = $ctrl[ctrlid] val - $ctrl[val] <br />";
-				if ($res !== true)
+				if ($res !== "")
 				{
 					if (!$res)
 					{
@@ -1563,8 +1922,12 @@ class form extends form_base
 							$return_url = $this->mk_my_orb("show", array("id" => $this->id, "entry_id" => $this->entry_id));
 						}
 					}
-					header("Location: ".$return_url);
-					die();
+					aw_session_set("form_".$this->id."_entry_".$entry_id."_is_error_url", $return_url);
+					if (!$this->no_headers)
+					{
+						header("Location: ".$return_url);
+						die();
+					}
 				}
 			}
 		}
@@ -1646,7 +2009,7 @@ class form extends form_base
 				"els" => $els,
 			));
 		}
-		elseif (($this->subtype & FSUBTYPE_CAL_CONF))
+		elseif (!$no_process_entry && ($this->subtype & FSUBTYPE_CAL_CONF))
 		{
 			$fc = get_instance("formgen/form_calendar");
 			$els = $this->get_form_elements(array(
@@ -1663,7 +2026,7 @@ class form extends form_base
 				"els" => $els,
 			));
 		}
-		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
+		elseif (!$no_process_entry && ($this->subtype & FSUBTYPE_CAL_CONF2))
 		{
 			$id = $this->id;
 			$_start = (int)$this->arr["cal_start"];
@@ -1700,7 +2063,14 @@ class form extends form_base
 		switch ($this->get_location())
 		{
 			case "redirect":
-				$l = $this->arr["after_submit_link"];
+				if (is_array($this->arr["after_submit_link"]))
+				{
+					$l = $this->arr["after_submit_link"][aw_global_get("lang_id")];
+				}
+				else
+				{
+					$l = $this->arr["after_submit_link"];
+				}
 				break;
 			case "search_results":
 				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
@@ -1873,7 +2243,7 @@ class form extends form_base
 				$this->acl_error("view",$entry_id);
 			}
 			$this->load_entry($entry_id);
-			$this->_do_value_controllers();
+			//$this->_do_value_controllers();
 		}
 		else
 		{
@@ -4242,12 +4612,16 @@ class form extends form_base
 		{
 			return false;
 		}
-		return serialize($row);
+		$str = serialize($row);
+		$this->quote(&$str);
+		return $str;
 	}
 
 	function _unserialize($arr)
 	{
 		extract($arr);
+
+		$this->dequote(&$str);
 
 		$row = unserialize($str);
 		// basically, we create a new object and insert the stuff in the array right back in it. 
@@ -4271,6 +4645,7 @@ class form extends form_base
 		));
 
 		// same with the form. 
+		$this->quote(&$row);
 		$this->quote(&$row);
 		$this->db_query("INSERT INTO forms(id,content,type,cols,rows) values($oid,'".$row["content"]."','".$row["type"]."','".$row["cols"]."','".$row["rows"]."')");
 
@@ -4980,7 +5355,7 @@ class form extends form_base
 		$this->if_init($id,"translate.tpl","T&otilde;gi");
 
 		$la = get_instance("languages");
-		$langs = $la->listall();
+		$langs = $la->listall(true);
 
 		foreach($langs as $lar)
 		{
@@ -5322,6 +5697,42 @@ class form extends form_base
 			}
 		}
 
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if (!($el->get_type() == "button" && $el->get_subtype() == "url"))
+					{
+						continue;
+					}
+					$lcol9 = "";
+					foreach($langs as $lar)
+					{
+						$tx = $el->arr["button_url"];
+						if (isset($el->arr["lang_button_url"][$lar["id"]]))
+						{
+							$tx = $el->arr["lang_button_url"][$lar["id"]];
+						}
+						$this->vars(array(
+							"text" => str_replace("\"","&quot;",$tx),
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"],
+						));
+						$lcol9.=$this->parse("LCOL9");
+					}
+					$this->vars(array("LCOL9" => $lcol9,"name" => $el->arr["name"]));
+					$lrow9.=$this->parse("LROW9");
+				}
+			}
+		}
+
 		$this->vars(array(
 			"LROW" => $lrow,
 			"LROW1" => $lrow1,
@@ -5332,6 +5743,7 @@ class form extends form_base
 			"LROW6" => $lrow6,
 			"LROW7" => $lrow7,
 			"LROW8" => $lrow8,
+			"LROW9" => $lrow9,
 			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
 		));
 
@@ -5355,7 +5767,7 @@ class form extends form_base
 		$this->load($id);
 
 		$la = get_instance("languages");
-		$langs = $la->listall();
+		$langs = $la->listall(true);
 
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
@@ -5399,6 +5811,15 @@ class form extends form_base
 							}
 						}
 					}
+					else
+					if ($el->get_type() == "button" && $el->get_subtype() == "url")
+					{
+						foreach($langs as $lar)
+						{
+							$this->arr["elements"][$row][$col][$el->get_id()]["lang_button_url"][$lar["id"]] = $bu[$row][$col][$el->get_id()][$lar["id"]];
+						}
+					}
+
 					// now set metadata
 					$this->arr["elements"][$row][$col][$el->get_id()]["metadata"] = $w[$row][$col][$el->get_id()];
 				}

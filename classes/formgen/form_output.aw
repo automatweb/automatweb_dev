@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.11 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.12 2004/02/11 11:50:06 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -567,7 +567,7 @@ class form_output extends form_base
 
 		// put all styles in this form in an array so they will be faster to use
 		$style = get_instance("style");
-		$style_select = $style->get_select(0,ST_CELL);
+		$style_select = $style->get_select(0,ST_CELL, true);
 		$this->vars(array(
 			"styles" => $this->picker(0,$style_select)
 		));
@@ -699,11 +699,13 @@ class form_output extends form_base
 			"aliasmgr" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
 		));
 
+		$css = get_instance("css");
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
 			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
 			"folders" => $this->picker(0,$ob->get_list(false,true)),
+			"css_styles" => $this->picker(0,$css->get_select(true)),
 			"ALIASMGR" => ($this->output["has_aliasmgr"]) ? $this->parse("ALIASMGR") : "",
 			"change" => $this->mk_my_orb("change",array("id" => $id)),
 			"translate" => $this->mk_my_orb("translate", array("id" => $id))
@@ -821,6 +823,11 @@ class form_output extends form_base
 					if ($elsel[$row][$col][$i] == 1 && $setfolder)
 					{
 						$this->upd_object(array("oid" => $cell["elements"][$i]["id"], "parent" => $setfolder));
+					}
+					else
+					if ($elsel[$row][$col][$i] == 1 && $setcss !== "")
+					{
+						$cell["elements"][$i]["el_css_style"] = $setcss;
 					}
 				}
 			}

@@ -76,6 +76,8 @@ class form_controller extends form_base
 			$co["meta"]["show_errors_showctl"] = $show_errors_showctl;
 			$co["meta"]["warn_only_entry_controller"] = $warn_only_entry_controller;
 			$co["meta"]["no_var_replace"] = $no_var_replace;
+			$co["meta"]["error_js_pop"] = $error_js_pop;
+			$co["meta"]["error_icon"] = $error_icon;
 			$this->save_controller($co);
 		}
 		else
@@ -92,7 +94,9 @@ class form_controller extends form_base
 					"vars" => array(),
 					"show_errors_showctl" => $show_errors_showctl,
 					"warn_only_entry_controller" => $warn_only_entry_controller,
-					"no_var_replace" => $no_var_replace
+					"no_var_replace" => $no_var_replace,
+					"error_js_pop" => $error_js_pop,
+					"error_icon" => $error_icon
 				)
 			));
 		}
@@ -166,7 +170,9 @@ class form_controller extends form_base
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"show_errors" => checked($co["meta"]["show_errors_showctl"]),
 			"warn_only_entry_controller" => checked($co["meta"]["warn_only_entry_controller"]),
-			"no_var_replace" => checked($co['meta']['no_var_replace'])
+			"no_var_replace" => checked($co['meta']['no_var_replace']),
+			"error_js_pop" => checked($co['meta']['error_js_pop']),
+			"error_icon" => checked($co['meta']['error_icon'])
 		));
 
 		$this->vars(array(
@@ -281,8 +287,11 @@ class form_controller extends form_base
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 /*		if (aw_global_get("uid") == "erkihotel")
 		{
-			echo("controller id $id: evaling $eq <br />");
-			eval($eq);
+			//echo("controller id $id: evaling <pre>$eq</pre> <br />");
+			//echo("controller id $id: for row ".$el_ref->row." col = ".$el_ref->col." <br />");
+			//echo("controller id $id: for row ".$el_ref->row." col = ".$el_ref->col." ".$this->dc[$this->default_cid]->_dbg_backtrace()."<br />");
+			@eval($eq);
+			//echo "result = ".dbg::dump($res)." <br>";
 		}
 		else
 		{*/
@@ -334,8 +343,10 @@ class form_controller extends form_base
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 /*		if (aw_global_get("uid") == "erkihotel")
 		{
-			echo ("controller id $id: evaling $eq <br />");
-			eval($eq);
+			//echo ("controller id $id: evaling <pre>$eq</pre> <br />");
+			//echo("controller2 id $id: for row ".$el_ref->row." col = ".$el_ref->col." ".$this->dc[$this->default_cid]->_dbg_backtrace()."<br />");
+			@eval($eq);
+			//echo "result = ".dbg::dump($res)." <br>";
 		}
 		else
 		{	*/
@@ -966,6 +977,31 @@ class form_controller extends form_base
 		extract($args);
 
 		return $this->eval_controller($alias["target"]);
+	}
+
+	function do_check_and_html($id, $val, &$that, &$el)
+	{
+		$res = $this->do_check($id, $val, $that, $el);
+		$str = "";
+		if ($res !== true)
+		{
+			if ($this->loaded_controller["meta"]["error_js_pop"])
+			{
+				$str .= "<script language=\"javascript\">alert(\"$res\");</script>";
+			}
+
+			if ($this->loaded_controller["meta"]["error_icon"])
+			{
+				$str .= "<img src='".aw_ini_get("baseurl")."/img/error.gif"."' alt='$res'>";
+			}
+			else
+			{
+				$str .= "<font color='red' size='2'>";
+				$str .= $res;
+				$str .= "</font>";			
+			}
+		}
+		return $str;
 	}
 }
 

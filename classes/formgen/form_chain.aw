@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.13 2004/01/13 16:24:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.14 2004/02/11 11:50:05 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -362,6 +362,8 @@ class form_chain extends form_base
 			$form_id = $this->get_default_form_in_chain();
 		}
 
+		aw_global_set("is_showing_chain", 1);
+
 		$this->read_template("chain.tpl");
 
 		if ($this->chain["fillonce"] && aw_global_get("uid"))
@@ -412,6 +414,8 @@ class form_chain extends form_base
 		$lang_id = aw_global_get("lang_id");
 
 
+		$prev = false;
+
 		foreach($this->chain["forms"] as $fid)
 		{
 			if (!$toshow[$fid])
@@ -451,6 +455,13 @@ class form_chain extends form_base
 				$ff.=$this->parse("SEL_FORM");
 			}
 			$first = false;
+
+			if ($prev == $form_id)
+			{
+				aw_global_set("chain_next_form_url", $url);
+			}
+
+			$prev = $fid;
 		}
 
 		$cur_form = "";
@@ -751,6 +762,14 @@ class form_chain extends form_base
 					}
 
 					$prev = $fid;
+
+					if ($sbt["chain_finish"])
+					{
+						$tfid = $form_id;
+						$sbt["chain_forward"] = 0;
+						// let the code below redirect us to the end.
+						break;
+					}
 				}
 			}
 

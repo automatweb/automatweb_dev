@@ -159,7 +159,7 @@ class form_db_base extends aw_template
 		if (!($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] == ""))
 		{
 			$this->quote(&$arr['name']);
-			$this->upd_object($arr);
+			$this->upd_object($arr + array("no_flush" => 1));
 		}
 		$this->restore_handle();
 	}
@@ -744,6 +744,7 @@ class form_db_base extends aw_template
 		$sql = "";
 		$first = true;
 		$this->join_sql_used = array($tn => $tn);
+		$this->join_sql_used_forms_from = array();
 //						echo "rrjoins = <pre>", var_dump($this->_joins),"</pre> <br />";
 		foreach($this->_joins as $jdata)
 		{
@@ -787,9 +788,23 @@ class form_db_base extends aw_template
 								$del = " AND $jdata[to_tbl].deleted != 1 ";
 							}
 
+							// now, detect if the join is to the same chain
+							/*if ($jdata["from_el"] == "chain_id")
+							{
+								// and if previously, the chain's first form was joined
+								$chff = $this->form2first_form_in_chain[$__tfid];
+								if ($chff && $this->join_sql_used_forms_from[$chff] != "")
+								{
+									// rewrite the join to be to the first table
+									// so that all the forms in between would not have to be filled
+									$jdata["from_tbl"] = $this->join_sql_used_forms_from[$chff];
+								}
+							}*/
+
 							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON (".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"]." $lang $del) ";
 
 							$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+							$this->join_sql_used_forms_from[$__tfid] = $jdata["from_tbl"];
 						}
 						else
 						{
@@ -1499,7 +1514,11 @@ class form_db_base extends aw_template
 					array_push($this->join_path,$f_to);
 					return true;
 				}
-
+			}
+			// we req only if we don't find a direct relation, because
+			// we only need to req if there is no direct relation!
+			foreach($this->form_rel_tree[$f_root] as $r_fid => $r_data)
+			{
 				if ($this->req_get_join_path($r_fid, $f_to) == true)
 				{
 					return true;
@@ -1519,19 +1538,23 @@ class form_db_base extends aw_template
 	{
 		$this->_fr_forms_used = array();
 		$this->form_rel_tree = array();
+		// REMOVE THIS $this->form2first_form_in_chain = array();
 
 		$frfo = aw_global_get("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels));
 		$frt = aw_global_get("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels));
+		// REMOVE THIS $ffc = aw_global_get("form2first_form_in_chain::".((int)$f_root)."::".((int)$no_reverse_rels));
 		if (is_array($frfo) && is_array($frt))
 		{
 			$this->_fr_forms_used = $frfo;
 			$this->form_rel_tree = $frt;
+			// REMOVE THIS $this->form2first_form_in_chain = $ffc;
 			return;
 		}
 
 		$this->req_build_form_relation_tree($f_root, $no_reverse_rels);
 		aw_session_set("_fr_forms_used::".((int)$f_root)."::".((int)$no_reverse_rels),$this->_fr_forms_used);
 		aw_session_set("form_rel_tree::".((int)$f_root)."::".((int)$no_reverse_rels), $this->form_rel_tree);
+		// REMOVE THIS aw_session_set("form2first_form_in_chain::".((int)$f_root)."::".((int)$no_reverse_rels), $this->form2first_form_in_chain);
 //		echo "built form relations tree, starting from $f_root: <br /><pre>", var_dump($this->form_rel_tree),"</pre> <br />";
 	}
 
@@ -1605,8 +1628,15 @@ class form_db_base extends aw_template
 		{
 			// if it is, then load all forms for the chain
 			$chain_forms = $this->get_forms_for_chain($row["chain_id"]);
+			//$first = true;
 			foreach($chain_forms as $chfid)
 			{
+				/*if ($first)
+				{
+					$first_form_in_chain = $chfid;
+				}
+				$this->form2first_form_in_chain[$chfid] = $first_form_in_chain;
+				$first = false;*/
 				if ($chfid == $f_root)
 				{
 					continue;

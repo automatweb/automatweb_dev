@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.64 2004/01/21 10:07:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.65 2004/02/11 11:50:05 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -149,6 +149,7 @@ class form_element extends aw_template
 		// now load the subtypes from the db or if they are not specified in the db, use all of them.
 		// this function puts types and subtypes in $this->subtypes
 		$this->get_types_cached();
+		$css = get_instance("css");
 
 			$this->vars(array(
 				"cell_id"									=> "element_".$this->id,
@@ -193,7 +194,10 @@ class form_element extends aw_template
 				"search_logical_append" => $this->arr["search_logical_append"],
 				"search_logical_prepend" => $this->arr["search_logical_prepend"],
 				"is_translatable" => checked($this->arr["is_translatable"]),
-				"show_as_text" => checked($this->arr["show_as_text"])
+				"show_as_text" => checked($this->arr["show_as_text"]),
+				"no_hidden_el" => checked($this->arr["no_hidden_el"]),
+				"el_css_style" => $this->picker($this->arr["el_css_style"], $css->get_select(true)),
+				"el_tabindex" => $this->arr["el_tabindex"],
 			));
 
 			$this->vars(array(
@@ -297,7 +301,8 @@ class form_element extends aw_template
 					"lb_size" => $this->arr["lb_size"],
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"]),
 					"submit_on_select" => checked($this->arr["submit_on_select"]),
-					"lb_search_like" => checked($this->arr["lb_search_like"])
+					"lb_search_like" => checked($this->arr["lb_search_like"]),
+					"onChange" => $this->arr["onChange"]
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
@@ -523,6 +528,8 @@ class form_element extends aw_template
 					"down_button_img" => image::make_img_tag(image::check_url($this->arr["down_button_img"]["url"])),
 					"up_button_use_img" => checked($this->arr["up_button_use_img"]),
 					"down_button_use_img" => checked($this->arr["down_button_use_img"]),
+					"js_flopper" => checked($this->arr["js_flopper"]),
+					"js_flopper_value" => $this->arr["js_flopper_value"]
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
@@ -534,6 +541,7 @@ class form_element extends aw_template
 				));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$this->vars(array("IS_TEXTBOX_ITEMS" => $this->parse("IS_TEXTBOX_ITEMS")));
 
 				if ($this->arr["subtype"] == "activity")
 				{
@@ -662,12 +670,16 @@ class form_element extends aw_template
 					"button_url" => $this->arr["button_url"],
 					"chain_forward" => checked($this->arr["chain_forward"]==1),
 					"chain_backward" => checked($this->arr["chain_backward"]==1),
+					"chain_finish" => checked($this->arr["chain_finish"]==1),
 					"folders" => $this->picker($this->arr["confirm_moveto"],$ob->get_list()),
 					"redirect" => $this->arr["confirm_redirect"],
 					"order_form" => $this->picker($this->arr["order_form"],$this->form->get_list(FTYPE_ENTRY)),
 					"button_img" => $img,
 					"use_button_img" => checked($this->arr["button_img"]["use"] == 1),
-					"bt_redir_after_submit" => checked($this->arr["bt_redir_after_submit"])
+					"bt_redir_after_submit" => checked($this->arr["bt_redir_after_submit"]),
+					"button_js_confirm" => checked($this->arr["button_js_confirm"]),
+					"button_js_confirm_text" => $this->arr["button_js_confirm_text"],
+					"button_js_next_form_in_chain" => checked($this->arr["button_js_next_form_in_chain"])
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
 				$this->vars(array(
@@ -676,8 +688,8 @@ class form_element extends aw_template
 					"BUTTON_SUB_URL" => ($this->arr["subtype"] == "url" ? $this->parse("BUTTON_SUB_URL") : ""),
 					"BUTTON_SUB_OP" => ($this->arr["subtype"] == "preview" ? $this->parse("BUTTON_SUB_OP") : ""),
 					"BUTTON_SUB_ORDER" => ($this->arr["subtype"] == "order" ? $this->parse("BUTTON_SUB_ORDER") : ""),
-					"HAS_ONLY_SHOW_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_ONLY_SHOW_CONTROLLER") : ""),
-					"HAS_CONTROLLER" => ""
+					"HAS_ONLY_SHOW_CONTROLLER" => "" ,
+					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 				));
 			}
 
@@ -823,6 +835,15 @@ class form_element extends aw_template
 
 		$var = $base."_show_as_text";
 		$this->arr["show_as_text"] = $$var;
+
+		$var = $base."_no_hidden_el";
+		$this->arr["no_hidden_el"] = $$var;
+
+		$var = $base."_el_css_style";
+		$this->arr["el_css_style"] = $$var;
+
+		$var = $base."_el_tabindex";
+		$this->arr["el_tabindex"] = $$var;
 
 		$cnt =0;
 		if (is_array($this->arr["table"]))
@@ -976,6 +997,9 @@ class form_element extends aw_template
 
 			$var = $base."_lb_search_like";
 			$this->arr["lb_search_like"] = $$var;
+
+			$var = $base."_onChange";
+			$this->arr["onChange"] = $$var;
 
 			$var = $base."_lb_item_controllers";
 			$this->arr["lb_item_controllers"] = $this->make_keys($$var);
@@ -1234,6 +1258,11 @@ class form_element extends aw_template
 			$var=$base."_down_button_use_img";
 			$this->arr["down_button_use_img"] = $$var;
 
+			$var=$base."_js_flopper";
+			$this->arr["js_flopper"] = $$var;
+			$var=$base."_js_flopper_value";
+			$this->arr["js_flopper_value"] = $$var;
+
 			$img = get_instance("image");
 			$var=$base."_up_button_img";
 			$this->arr["up_button_img"] = $img->add_upload_image($var, $this->id, $this->arr["up_button_img"]["id"]);
@@ -1348,6 +1377,9 @@ class form_element extends aw_template
 			$var = $base."_chain_backward";
 			$this->arr["chain_backward"] = $$var;
 
+			$var = $base."_chain_finish";
+			$this->arr["chain_finish"] = $$var;
+
 			$var = $base."_confirm_moveto";
 			$this->arr["confirm_moveto"] = $$var;
 
@@ -1365,6 +1397,15 @@ class form_element extends aw_template
 
 			$var = $base."_bt_redir_after_submit";
 			$this->arr["bt_redir_after_submit"] = $$var;
+
+			$var = $base."_button_js_confirm";
+			$this->arr["button_js_confirm"] = $$var;
+
+			$var = $base."_button_js_confirm_text";
+			$this->arr["button_js_confirm_text"] = $$var;
+
+			$var = $base."_button_js_next_form_in_chain";
+			$this->arr["button_js_next_form_in_chain"] = $$var;
 
 			$var = $base."_button_img";
 			$im = get_instance("image");
@@ -1968,9 +2009,7 @@ class form_element extends aw_template
 			is_array($this->form->controller_errors[$this->id]) && 
 			count($this->form->controller_errors[$this->id]) > 0)
 		{
-			$html.="<font color='red' size='2'>";
-			$html.=join("<br />",$this->form->controller_errors[$this->id])."<br />";
-			$html.="</font>";
+			$html.=join("", $this->form->controller_errors[$this->id]);
 		}
 
 		$lang_id = aw_global_get("lang_id");
@@ -2009,6 +2048,23 @@ class form_element extends aw_template
 			$html.="<input type='hidden' name='".$element_name."' value='".$this->get_val($elvalues)."' />";
 		}
 
+		$css = "";
+		if ($this->arr["el_css_style"])
+		{
+			$css = "class=\"st".$this->arr["el_css_style"]."\"";
+			classload("layout/active_page_data");
+			active_page_data::add_site_css_style($this->arr["el_css_style"]);
+		}
+
+		if ($this->arr["el_tabindex"])
+		{
+			if ($css != "")
+			{
+				$css .= " ";
+			}
+			$css .= "tabindex=\"".$this->arr["el_tabindex"]."\"";
+		}
+
 		switch($this->arr["type"])
 		{
 			case "textarea":
@@ -2033,7 +2089,7 @@ class form_element extends aw_template
 				}
 				else
 				{
-					$html.="<textarea $disabled $stat_check NAME='".$element_name."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
+					$html.="<textarea $disabled $stat_check NAME='".$element_name."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "' $css>";
 					$html .= htmlspecialchars($this->get_val($elvalues));
 					$html .= "</textarea>";
 				}
@@ -2041,7 +2097,7 @@ class form_element extends aw_template
 
 			case "radiobutton":
 				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html .="<input type='radio' $disabled $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch />";
+				$html .="<input type='radio' $disabled $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch $css/>";
 				break;
 
 			case "listbox":
@@ -2056,6 +2112,11 @@ class form_element extends aw_template
 				if (!$this->arr['hidden'] && !$this->arr["show_as_text"])
 				{
 					$sos = "";
+					if ($this->arr["onChange"] != "")
+					{
+							$sos = "onChange=\"".$this->arr["onChange"]."\"";
+					}
+					else
 					if ($this->arr["submit_on_select"])
 					{
 						// for search forms we must not submit the form, but instead set element value in url
@@ -2077,7 +2138,7 @@ class form_element extends aw_template
 						}
 					}
 			
-					$html .="<select $disabled $sos $stat_check name='".$element_name."'";
+					$html .="<select $css $disabled $sos $stat_check name='".$element_name."'";
 					if ($this->arr["lb_size"] > 1)
 					{
 						$html.=" size=\"".$this->arr["lb_size"]."\"";
@@ -2133,10 +2194,13 @@ class form_element extends aw_template
 							if ($_v == $_lbsel)
 							{
 								$html .= $value;
-								$html .= html::hidden(array(
-									"name" => $element_name,
-									"value" => $_v
-								));
+								if (!$this->arr["no_hidden_el"])
+								{
+									$html .= html::hidden(array(
+										"name" => $element_name,
+										"value" => $_v
+									));
+								}
 							}
 						}
 					}
@@ -2216,7 +2280,7 @@ class form_element extends aw_template
 
 			case "multiple":
 				$this->_do_init_multiple_items();
-				$html.="<select $disabled $stat_check NAME='".$element_name."[]' MULTIPLE";
+				$html.="<select $css $disabled $stat_check NAME='".$element_name."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["mb_size"]."\"";
@@ -2287,7 +2351,7 @@ class form_element extends aw_template
 				else
 				{
 					$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
-					$html .= "<input $disabled $stat_check type='checkbox' NAME='".$element_name."' VALUE='1' $sel />\n";
+					$html .= "<input $css $disabled $stat_check type='checkbox' NAME='".$element_name."' VALUE='1' $sel />\n";
 				}
 				break;
 
@@ -2305,6 +2369,12 @@ class form_element extends aw_template
 					$cursums = aw_global_get("fg_element_sums");
 					$cursums[$this->id] += $tb_val;
 					aw_global_set("fg_element_sums", $cursums);
+				}
+
+				$js_flopper = "";
+				if ($this->arr["js_flopper"])
+				{
+					$js_flopper = "onFocus=\"if(this.value=='".$this->arr["js_flopper_value"]."') this.value = ''\" onblur=\"if(this.value=='') this.value='".$this->arr["js_flopper_value"]."';\"";
 				}
 
 				$aft = "";
@@ -2349,21 +2419,28 @@ class form_element extends aw_template
 				if ($this->arr["show_as_text"])
 				{
 					$html .= $tb_val;
-					$html .= html::hidden(array(
-						'name' => $element_name,
-						'value' => htmlentities($tb_val)
-					));
+					if (!$this->arr["no_hidden_el"])
+					{
+						$html .= html::hidden(array(
+							'name' => $element_name,
+							'value' => htmlentities($tb_val)
+						));
+					}
 				}
 				else
 				{
-					$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($tb_val))."\" />$aft\n";
+					if (trim($tb_val) == "" && $this->arr["js_flopper"])
+					{
+						$tb_val = $this->arr["js_flopper_value"];
+					}
+					$html .= "<input $js_flopper $css $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($tb_val))."\" />$aft\n";
 				}
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities(round($this->get_val($elvalues),2)))."\" />\n";
+				$html .= "<input $css $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities(round($this->get_val($elvalues),2)))."\" />\n";
 				break;
 
 			case "alias":
@@ -2412,6 +2489,10 @@ class form_element extends aw_template
 			case "submit":
 			case "reset":
 				$csscl = ($this->arr["button_css_class"] != "" ? "class=\"".$this->arr["button_css_class"]."\"" : "");
+				if ($csscl != "")
+				{
+					$css = $csscl;
+				}
 				// useful if we we are generating a preview of a form and don't want to let the user
 				// to submit the form
 				if (!$no_submit)
@@ -2450,7 +2531,7 @@ class form_element extends aw_template
 						{
 							$onclick =  "return check_submit();";
 						}
-						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+						$html .= "<input $css $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
@@ -2461,11 +2542,11 @@ class form_element extends aw_template
 						}
 						if ($btype == "image")
 						{
-							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"$onclick\" />\n";
+							$html .= "<input $css $disabled type='image' $bsrc onClick=\"$onclick\" />\n";
 						}
 						else
 						{
-							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."' />\n";
+							$html .= "<input $css $disabled type='reset' VALUE='".$butt."' />\n";
 						};
 					}
 					else
@@ -2473,16 +2554,31 @@ class form_element extends aw_template
 					{
 						if ($onclick == "")
 						{
-							$onclick =  "window.location='".$this->arr["button_url"]."';return false;";
+							if ($this->arr["button_js_next_form_in_chain"] == 1 && aw_global_get("chain_next_form_url") != "")
+							{
+								$onclick =  "window.location='".aw_global_get("chain_next_form_url")."';return false;";
+							}
+							else
+							{
+								if (isset($this->arr["lang_button_url"][aw_global_get("lang_id")]))
+								{
+									$buu = $this->arr["lang_button_url"][aw_global_get("lang_id")];
+								}
+								else
+								{
+									$buu = $this->arr["button_url"];
+								}
+								$onclick =  "window.location='".$buu."';return false;";
+							}
 						}
 
 						if ($this->arr["bt_redir_after_submit"])
 						{
-							$html .= "<input $csscl $disabled type='$btype' $bsrc NAME='bt_url_".$this->id."' VALUE='".$butt."' />\n";
+							$html .= "<input $css $disabled type='$btype' $bsrc NAME='bt_url_".$this->id."' VALUE='".$butt."' />\n";
 						}
 						else
 						{
-							$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+							$html .= "<input $css $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 						}
 					}
 					else
@@ -2493,7 +2589,7 @@ class form_element extends aw_template
 						{
 							$onclick = "window.location='".$loc."';return false;";
 						}
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+						$html .= "<input $css $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
@@ -2502,7 +2598,7 @@ class form_element extends aw_template
 						{
 							$onclick = "window.close();return false;";
 						}
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
+						$html .= "<input $css $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 				}
 				break;
@@ -2820,12 +2916,17 @@ class form_element extends aw_template
 			{
 				if ($this->form->post_vars["bt_url_".$this->id] != "")
 				{
-					aw_session_set("form_redir_after_submit_".$this->form->id, $this->arr["button_url"]);
+					$buu = $this->arr["button_url"];
+					if (isset($this->arr["lang_button_url"][aw_global_get("lang_id")]))
+					{
+						$buu = $this->arr["lang_button_url"][aw_global_get("lang_id")];
+					}
+					aw_session_set("form_redir_after_submit_".$this->form->id, $buu);
 					if (!aw_ini_get("fg.no_set_use_eid_once"))
 					{
 						$this->form->set_use_eid_once = true;
 					}
-					$this->form->go_to_after_submit = $this->arr["button_url"];
+					$this->form->go_to_after_submit = $buu;
 				}
 			}
 			else
@@ -2878,7 +2979,7 @@ class form_element extends aw_template
 				$d_id = $this->arr["def_date_rel_el"];
 			}
 			$v = $this->form->post_vars[$prefix.$d_id];
-			if ($this->arr["hidden"])
+			if ($this->arr["hidden"] || aw_global_get("is_ft_change"))
 			{
 				$tm = $v;
 			}
@@ -3488,6 +3589,14 @@ class form_element extends aw_template
 	// !this gives a chance to validate input to all the element's controllers
 	function do_entry_controller_checks()
 	{
+		if ($this->arr["type"] == "button")
+		{
+			if ($GLOBALS["submit"][$this->id] == "")
+			{
+				return;
+			}
+		}
+
 		$ret = true;
 		if (is_array($this->arr["entry_controllers"]))
 		{

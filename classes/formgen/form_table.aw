@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.51 2004/01/13 16:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.53 2004/02/11 11:50:06 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -223,6 +223,8 @@ class form_table extends form_base
 			}
 		}
 
+		$this->last_row_data = $dat;
+
 		$this->num_lines++;
 
 		$reset_aliases = array();
@@ -408,13 +410,20 @@ class form_table extends form_base
 						if ($cc["el_show"][$elid] == 1)
 						{
 							$cursums[$elid] += $dat["ev_".$elid];
-							if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
+							if ($cc["is_edit"] && $cc["el_edit"][$elid])
 							{
-								$str[$elid] = $dat["el_".$elid];
+								$str[$elid] = $this->_get_edit_element($elid, $dat, $cc);
 							}
 							else
 							{
-								$str[$elid] = $dat["ev_".$elid];
+								if ($cc['el_main_types'][$elid] == 'date' && count($cc['els']) == 1)
+								{
+									$str[$elid] = $dat["el_".$elid];
+								}
+								else
+								{
+									$str[$elid] = $dat["ev_".$elid];
+								}
 							}
 						}
 						else
@@ -639,7 +648,14 @@ class form_table extends form_base
 				else
 				if (isset($this->table["defs"][$col]["is_email"]))
 				{
-					$str = "<a href='mailto:".$str."'>".$str."</a>";
+					if ($this->table["defs"][$col]["link"])
+					{
+						$str = "<a href='mailto:".$noshowstr."'>".$str."</a>";
+					}
+					else
+					{
+						$str = "<a href='mailto:".$str."'>".$str."</a>";
+					}
 				}
 
 				$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$str);
@@ -647,7 +663,20 @@ class form_table extends form_base
 				{
 					$this->table_not_empty_cols[$col] = true;
 				}
-				$dat["ev_col_".$col] = $this->create_email_links($str);
+
+				if ($this->table["defs"][$col]["val_controller"])
+				{
+					$str = $this->controller_instance->eval_controller($this->table["defs"][$col]["val_controller"], $str, false, $dat);
+				}
+
+				if (!$this->table["defs"][$col]["link"])
+				{
+					$dat["ev_col_".$col] = $this->create_email_links($str);
+				}
+				else
+				{
+					$dat["ev_col_".$col] = $str;
+				}
 			}
 		}
 
@@ -1228,7 +1257,21 @@ class form_table extends form_base
 			{
 				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall(&quot;".$this->get_html_name_for_tbl_form()."&quot;)'&gt;".$title."&lt;/a&gt;";
 			}
-			
+
+			$_sc_d = "";
+			$awa = new aw_array($cc["el_set_colname"]);
+			foreach($awa->get() as $_sc_elid => $_sc_one)
+			{
+				if ($_sc_one == 1)
+				{
+					$_sc_d .= $this->last_row_data["ev_".$_sc_elid];
+				}
+			}
+			if ($_sc_d != "")
+			{
+				$title = $_sc_d;
+			}
+
 			if ((!$cc["no_show_empty"] || $this->table_not_empty_cols[$col]) && !$cc["not_active"])
 			{
 				$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
@@ -1477,18 +1520,6 @@ class form_table extends form_base
 	/**  
 		
 		@attrib name=new params=name default="0"
-		
-		@param parent required acl="add"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	/**  
-		
-		@attrib name=new_new params=name default="0"
 		
 		@param parent required acl="add"
 		
@@ -2002,18 +2033,6 @@ class form_table extends form_base
 		@comment
 
 	**/
-	/**  
-		
-		@attrib name=new_change_cols params=name default="0"
-		
-		@param id required acl="edit;view"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function new_change_cols($arr)
 	{
 		extract($arr);
@@ -2151,13 +2170,30 @@ class form_table extends form_base
 						"el_sep" => str_replace("\"", "&quot;", $this->table["defs"][$col]["el_sep"][$el]),
 						"el_sep_pre" => str_replace("\"", "&quot;", $this->table["defs"][$col]["el_sep_pre"][$el]),
 						"el_show" => checked($this->table["defs"][$col]["el_show"][$el]),
+						"el_edit" => checked($this->table["defs"][$col]["el_edit"][$el]),
+						"el_set_colname" => checked($this->table["defs"][$col]["el_set_colname"][$el]),
 						"el_search" => checked($this->table["defs"][$col]["el_search"][$el])
+					));
+					$ise = "";
+					if ($this->table["defs"][$col]["is_edit"])
+					{
+						$ise = $this->parse("IS_EDITABLE2");
+					}
+					$this->vars(array(
+						"IS_EDITABLE2" => $ise
 					));
 					$l.= $this->parse("SEL_EL");
 					$elns[$el] = $els[$el];
 				}
 			}
+
+			$ise = "";
+			if ($this->table["defs"][$col]["is_edit"])
+			{
+				$ise = $this->parse("IS_EDITABLE");
+			}
 			$this->vars(array(
+				"IS_EDITABLE" => $ise,
 				"SEL_EL" => $l,
 				"search_map" => $this->picker($this->table["defs"][$col]["search_map"], $elns),
 				"search_el" => $this->picker($this->table["defs"][$col]["search_el"], $elns),
@@ -2189,6 +2225,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
 				"col_email" => checked($this->table["defs"][$col]["is_email"]),
+				"is_edit" => checked($this->table["defs"][$col]["is_edit"]),
 				"col_clicksearch" => checked($this->table["defs"][$col]["clicksearch"]),
 				"col_link" => checked($this->table["defs"][$col]["link"]),
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"]),
@@ -2388,6 +2425,16 @@ class form_table extends form_base
 			// sort elements in col
 			$this->elsort_dat = $this->table["defs"][$i]["el_ord"];
 			uasort($this->table["defs"][$i]["els"], array($this, "elsort"));
+
+			// this must only be done for all languages except the current
+			$tla = new aw_array($old_defs[$i]["lang_title"]);
+			foreach($tla->get() as $olt_id => $olt_val)
+			{
+				if ($olt_id != aw_global_get("lang_id"))
+				{
+					$this->table["defs"][$i]["lang_title"][$olt_id] = $old_defs[$i]["lang_title"][$olt_id];
+				}
+			}
 		}
 
 		usort($this->table["defs"], create_function('$a,$b','if ($a["ord"] > $b["ord"]) return 1; if ($a["ord"] < $b["ord"]) return -1; return 0;'));
@@ -3389,6 +3436,63 @@ class form_table extends form_base
 				}
 			}
 		}
+
+		// check for edit elements and if they are there, process the damn things
+		$has_edit = false;
+		foreach($this->table["defs"] as $col => $def)
+		{
+			if ($def["is_edit"])
+			{
+				$has_edit = true;
+			}
+		}
+
+		if ($has_edit)
+		{
+			$f = get_instance("formgen/form");
+			$awa = new aw_array($shown_entries);
+			foreach($awa->get() as $form_id => $ents)
+			{
+				//echo "load form $form_id <Br>";
+				$f->load($form_id);
+
+				$awg = $GLOBALS["__aw_globals"];
+				$en = new aw_array($ents);
+				foreach($en->get() as $entryd => $els)
+				{
+					$GLOBALS["__aw_globals"] = $awg;
+					// also, we gots to save all aw globals, cause controllers use them
+					$f->load_entry($entryd);
+					$chain_entry_id = $this->db_fetch_field("SELECT chain_id FROM form_".$form_id."_entries WHERE id = '$entryd'", "chain_id");
+					aw_global_set("proc_chain_entry_id", $chain_entry_id);
+					aw_global_set("current_chain_entry", $chain_entry_id);
+					aw_global_set("is_ft_change", 1);
+
+					$f->post_vars = array();
+					foreach($f->entry as $_eid => $_eval)
+					{
+						$f->post_vars["ft_row_".$entryd."_form_".$form_id."_".$_eid] = $_eval;
+					}
+					foreach($GLOBALS["HTTP_POST_VARS"] as $vn => $vv)
+					{
+						if (substr($vn, 0, strlen("ft_row_".$entryd."_form_".$form_id)) == "ft_row_".$entryd."_form_".$form_id)
+						{
+							$f->post_vars[$vn] = $vv;
+						}
+					}
+
+					$f->no_headers = true;
+					$f->process_entry(array(
+						"id" => $form_id,
+						"entry_id" => $entryd,
+						"chain_entry_id" => $chain_entry_id,
+						"prefix" => "ft_row_".$entryd."_form_".$form_id."_",
+						"no_post_vars" => 1
+					));
+				}
+			}
+		}
+
 		return $this->hexbin($return);
 	}
 
@@ -3486,6 +3590,26 @@ class form_table extends form_base
 	function get_cur_processing_alias_data()
 	{
 		return aw_global_get("fg_cur_processing_alias_data");
+	}
+
+	function _get_edit_element($elid, $row, $defs)
+	{
+		$form_id = $defs["el_forms"][$elid];
+		if (!is_object($this->edit_el_forms[$form_id]))
+		{
+			$this->edit_el_forms[$form_id] = get_instance("formgen/form");
+			$this->edit_el_forms[$form_id]->load($form_id);
+		}
+
+		$app = "";
+		if ($this->edit_el_forms[$form_id]->entry_id != $row["entry_id"])
+		{
+			$this->edit_el_forms[$form_id]->load_entry($row["entry_id"]);
+		}
+
+		$el = $this->edit_el_forms[$form_id]->get_element_by_id($elid);
+		$app = "<input type='hidden' name='shown_entries[$form_id][".$row["entry_id"]."][]' value='".$elid."'>";
+		return $el->gen_user_html_not("ft_row_".$row["entry_id"]."_form_".$form_id."_").$app;
 	}
 }
 ?>

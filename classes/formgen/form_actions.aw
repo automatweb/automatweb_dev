@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.17 2004/01/13 16:24:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.18 2004/02/11 11:50:05 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -790,6 +790,17 @@ class form_actions extends form_base
 
 			$awm->htmlbodyattach(array("data" => $app));
 
+			if (aw_global_get("fa_mail_priority"))
+			{
+				$awm->set_header("X-Priority: ".aw_global_get("fa_mail_priority"));
+			}
+
+			$fname = "attachment.pdf";
+			if (aw_global_get("fa_mail_attach_name") != "")
+			{
+				$fname = aw_global_get("fa_mail_attach_name");
+			}
+
 			if ($data["add_pdf"])
 			{
 				$co = get_instance("core/converters/html2pdf");
@@ -798,9 +809,9 @@ class form_actions extends form_base
 				));
 				$awm->fattach(array(
 					"content" => $pdf,
-					"filename" => "attachment.pdf",
+					"filename" => $fname,
 					"contenttype" => "application/pdf",
-					"name" => "attachment.pdf"
+					"name" => $fname
 				));
 			}
 
@@ -824,6 +835,17 @@ class form_actions extends form_base
 
 				$awm->htmlbodyattach(array("data" => $app));
 
+				if (aw_global_get("fa_mail_priority"))
+				{
+					$awm->set_header("X-Priority: ".aw_global_get("fa_mail_priority"));
+				}
+
+				$fname = "attachment.pdf";
+				if (aw_global_get("fa_mail_attach_name") != "")
+				{
+					$fname = aw_global_get("fa_mail_attach_name");
+				}
+
 				if ($data["add_pdf"])
 				{
 					$co = get_instance("core/converters/html2pdf");
@@ -832,9 +854,9 @@ class form_actions extends form_base
 					));
 					$awm->fattach(array(
 						"content" => $pdf,
-						"filename" => "attachment.pdf",
+						"filename" => $fname,
 						"contenttype" => "application/pdf",
-						"name" => "attachment.pdf"
+						"name" => $fname
 					));
 				}
 
