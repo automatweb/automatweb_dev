@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.19 2004/09/10 13:13:46 ahti Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.20 2004/10/29 19:10:26 duke Exp $
 
 	@comment 
 	analyses aw code
@@ -34,6 +34,8 @@ class docgen_analyzer extends class_base
 		$this->in_function = false;
 		$this->cur_line = 1;
 		$this->cur_file = $file;
+
+		$this->classinfo = aw_ini_get("classes");
 		
 		reset($this->tokens);
 		while ($token = $this->get())
@@ -739,8 +741,7 @@ class docgen_analyzer extends class_base
 
 					case T_STRING:
 						// the string is the CL_ define
-						$tmp = aw_ini_get("classes");
-						$class = $tmp[constant($cln[1])]["file"];
+						$class = $this->classinfo[constant($cln[1])]["file"];
 						//echo "from tstring got class $class <br>";
 						break;
 
