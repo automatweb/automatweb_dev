@@ -550,6 +550,8 @@ class form_db_base extends aw_template
 	//			have on the rows that are not displayed, are concatenated together. 
 	//	$group_els - grouping elements - if specified, the sql will do a GROUP BY on all these elements
 	//  $ret_id_only - if true, only the entry id is fetched in the query, nothing else
+	//	$sort_by - array of elements to sort results by
+	//	$sort_order - array of asc/desc orders for sorting elements
 	function get_search_query($arr)
 	{
 		extract($arr);
@@ -580,7 +582,10 @@ class form_db_base extends aw_template
 		$sql_grpby = $this->get_sql_grpby($group_els);
 //		echo "sg = $sql_grpby <br />";
 
-		$sql = "SELECT ".$sql_data." FROM ".$sql_join.$sql_where.$sql_grpby;
+
+		$sql_orderby = $this->get_sql_orderby($sort_by, $sort_order);
+
+		$sql = "SELECT ".$sql_data." FROM ".$sql_join.$sql_where.$sql_grpby.$sql_orderby;
 		if ($GLOBALS["fg_dbg"]) 
 		{
 			echo ("sql = $sql <br />");
@@ -2109,6 +2114,31 @@ class form_db_base extends aw_template
 			}
 			$this->form_rel_tree = $nrt;
 		}
+	}
+
+	function get_sql_orderby($sort_by, $sort_order)
+	{
+		if (!is_array($sort_by))
+		{
+			return " ";
+		}
+		
+		$str = " ORDER BY ";
+		foreach($sort_by as $nr => $el)
+		{
+			// get the related element
+			$el = $this->get_element_by_id($el);
+				
+			$le = $el->arr["linked_element"];
+			$lf = $el->arr["linked_form"];
+			if ($le && $lf)
+			{
+				$finst = $this->cache_get_form_eldat($lf);
+				$str .= form_db_base::mk_tblcol($finst["els"][$le]["table"],$finst["els"][$le]["col"], $lf)." ".$sort_order[$nr]." ";
+			}
+		}
+
+		return $str;
 	}
 }
 ?>

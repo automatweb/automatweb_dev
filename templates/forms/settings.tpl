@@ -131,6 +131,13 @@ function setLink(li,title)
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_SHOW_FORM_WITH_RESULTS}: <input type='checkbox' NAME='show_form_with_results' value='1' {VAR:show_form_with_results}></td>
 </tr>
+<!-- SUB: SEARCH_OP -->
+<tr class="aste01">
+<td class="celltext">Sorteeri v&auml;ljundid v&auml;lja </td>
+<td class="celltext"><select name="sort_op_by[{VAR:sop_nr}]">{VAR:s_op_elements}</select> j&auml;rgi <select name="sort_op_order[{VAR:sop_nr}]">{VAR:s_op_orders}</select> j&auml;rjekorras</td>
+</tr>
+<!-- END SUB: SEARCH_OP -->
+
 <!-- END SUB: SEARCH -->
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CHOOSE_ELEMENT_WHAT_PUT_FORM_ENTRY}</td>

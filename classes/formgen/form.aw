@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.93 2004/04/06 15:14:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.94 2004/04/15 11:32:50 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -808,6 +808,8 @@ class form extends form_base
 		$this->arr["table"] = $table;
 		$this->arr["tablestyle"] = $tablestyle;
 		$this->arr["after_submit_op"] = $after_submit_op;
+		$this->arr["sort_op_by"] = $sort_op_by;
+		$this->arr["sort_op_order"] = $sort_op_order;
 		$this->save();
 		return $this->mk_orb("table_settings", array("id" => $id));
 	}
@@ -1218,6 +1220,34 @@ class form extends form_base
 			"dont_show_trans" => checked($this->arr["dont_show_trans"]),
 			"js_default_element" => $this->picker($this->arr["js_default_element"], array("" => "") + $this->get_all_elements()),
 			"join_optimizer_pessimist" => checked($this->arr["join_optimizer_pessimist"])
+		));
+
+		$sopels = "";
+		$awa = new aw_array($this->arr["sort_op_by"]);
+		$maxnr = 1;
+		foreach($awa->get() as $nr => $sop_el)
+		{
+			if (!$sop_el)
+			{
+				continue;
+			}
+			$this->vars(array(
+				"sop_nr" => $nr,
+				"s_op_elements" => $this->picker($sop_el,array("" => "") + $this->get_all_elements()),
+				"s_op_orders" => $this->picker($this->arr["sort_op_order"][$nr], array("" => "","asc" => "kasvavas", "desc" => "kahanevas"))
+			));
+			$sopels .= $this->parse("SEARCH_OP");
+			$maxnr = $nr+1;
+		}
+
+		$this->vars(array(
+			"sop_nr" => $maxnr,
+			"s_op_elements" => $this->picker(0,array("" => "") + $this->get_all_elements()),
+			"s_op_orders" => $this->picker("", array("" => "", "asc" => "kasvavas", "desc" => "kahanevas"))
+		));
+		$sopels .= $this->parse("SEARCH_OP");
+		$this->vars(array(
+			"SEARCH_OP" => $sopels
 		));
 
 		$l = get_instance("languages");
@@ -3175,7 +3205,9 @@ class form extends form_base
 		$sql = $this->get_search_query(array(
 			"used_els" => $used_els,
 			"group_els" => $group_els,
-			"group_collect_els" => $group_collect_els
+			"group_collect_els" => $group_collect_els,
+			"sort_by" => $this->arr["sort_op_by"],
+			"sort_order" => $this->arr["sort_op_order"]
 		));
 //		echo "sql = $sql <br />";
 		$result = "";
