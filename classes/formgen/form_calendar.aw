@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.13 2003/02/06 15:30:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.14 2003/02/07 15:19:28 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -689,12 +689,9 @@ class form_calendar extends form_base
 												$req_items = 1;
 										};
 										$relrow["req_items"] = $req_items;
-										$lb_sel = $args["post_vars"][$relrow["el_relation"]];
-										if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
-										{
-												$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
-												$rels[] = $relrow;
-										};
+										$relrow["txtid"] = $args["post_vars"][$relrow["el_relation"]];
+												
+										$rels[] = $relrow;
 								};
 						};
 
@@ -813,12 +810,8 @@ class form_calendar extends form_base
                                                 $count = 1;
                                         };
                                         $relrow["count"] = $count;
-					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
-                                        if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
-                                        {
-                                                $relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
-                                                $rels[] = $relrow;
-                                        };
+                                        $relrow["txtid"] = $args["post_vars"][$relrow["el_relation"]];
+									   $rels[] = $relrow;
                                 };
                         };
 
@@ -974,12 +967,8 @@ class form_calendar extends form_base
 
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
 		{
-			$selected = $post_vars[$count_el_id];
-			if (preg_match("/^element_\d*_lbopt_(\d*)$/",$selected,$m))
-			{
-				$lb_id_data[$count_el_id] = $args["els"][$count_el_id]["lb_items"][$m[1]];
-			};
-                }
+			$lb_id_data[$count_el_id] = $args["els"][$count_el_id];
+		}
 
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
 		{
