@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.19 2003/11/08 08:01:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.20 2003/11/09 22:15:55 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -59,13 +59,25 @@ caption Peavaade
 
 @groupinfo main_view caption="Kirjad" submit=no
 
+@reltype MAIL_IDENTITY value=1 clid=CL_MESSENGER_IDENTITY
+@caption messengeri identiteet
+
+@reltype MAIL_SOURCE value=2 clid=CL_PROTO_IMAP
+@caption mailikonto
+
+@reltype MAIL_CONFIG value=3 clid=CL_MESSENGER_CONFIG
+@caption messengeri konfiguratsioon
+
+@reltype FOLDER value=4 clid=CL_MENU
+@caption kataloog
+
+@reltype ADDRESS value=5 clid=CL_ML_LIST
+@caption adressaat
+
+@reltype RULE value=6 clid=CL_MAIL_RULE
+@caption maili ruul
+                        
 */
-define("RELTYPE_MAIL_IDENTITY",1); // things that appear on the From lines etc...
-define("RELTYPE_MAIL_SOURCE",2); // imap, pop3 is deprecated 
-define("RELTYPE_MAIL_CONFIG",3); // which config to use
-define("RELTYPE_FOLDER",4); // kataloog kuhu maile salvestada .. kehtib ainult local delivery korral
-define("RELTYPE_ADDRESS",5); // used to specify delivery addresses .. which can be AW lists for example
-define("RELTYPE_RULE",6); // mail filtering rule
 
 class messenger_v2 extends class_base
 {
@@ -878,51 +890,6 @@ class messenger_v2 extends class_base
 		return $rv;
 	}
 
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_MAIL_IDENTITY => "messengeri identiteet",
-			RELTYPE_MAIL_SOURCE => "mailikonto",
-			RELTYPE_MAIL_CONFIG => "messengeri konfiguratsioon",
-			RELTYPE_FOLDER => "kataloog",
-			RELTYPE_ADDRESS => "adressaat",
-			RELTYPE_RULE => "maili ruul",
-		);
-	} 
-
-	function callback_get_classes_for_relation($arr)
-	{
-		$retval = false;
-		switch($arr["reltype"])
-		{
-                        case RELTYPE_MAIL_SOURCE:
-                                $retval = array(CL_PROTO_IMAP);
-                                break;
-
-			case RELTYPE_ADDRESS:
-				$retval = array(CL_ML_LIST);
-				break;
-
-			case RELTYPE_FOLDER:
-				$retval = array(CL_MENU);
-				break;
-
-			case RELTYPE_MAIL_CONFIG:
-				$retval = array(CL_MESSENGER_CONFIG);
-				break;
-
-			case RELTYPE_RULE:
-				$retval = array(CL_MAIL_RULE);
-				break;
-
-			case RELTYPE_MAIL_IDENTITY:
-				$retval = array(CL_MESSENGER_IDENTITY);
-				break;
-		};
-		return $retval;
-	}
-
 	function callback_post_save($arr)
 	{
 		$this->redir_to_mailbox = "";
@@ -970,23 +937,6 @@ class messenger_v2 extends class_base
 		{
 			$args["group"] = $this->redir_to_group;
 		}
-		if (!empty($this->msgobj))
-		{
-			$args["msgobj"] = $this->msgobj;
-		};
-
-	}
-
-	function callback_mod_tab($arr)
-	{
-		// do not show group headers for iframe contents
-		if ($arr["view"] == "real")
-		{
-			return false;
-		};
-
-		$req_grp = $arr["request"]["group"];
-
 	}
 
 	function _get_identity_list($arr)
