@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.1 2004/04/29 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.2 2004/04/29 12:53:54 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -96,9 +96,9 @@ class otv_ds_postipoiss extends class_base
 		$t->set_sortable(false);
 	}
 
-	function get_objects($o, $fld, $parent)
+	function get_objects($o, $fld = NULL, $parent = NULL)
 	{
-		classload("icons");
+		classload("icons", "image");
 		$dc = $this->get_directory(array(
 			"dir" => $o->prop("xml_fld")
 		));
@@ -109,7 +109,7 @@ class otv_ds_postipoiss extends class_base
 			$fd = aw_unserialize($fc);
 
 			$sbs = explode(",", $fd["teemad"]);
-			$show = false;
+			$show = $parent !== NULL ? false : true;
 			foreach($sbs as $sb)
 			{
 				if ($sb == $parent)
