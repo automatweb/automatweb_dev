@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.40 2004/02/06 09:55:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.41 2004/02/06 10:16:14 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -316,25 +316,6 @@ class ml_list extends class_base
 		return $retval;
 	}
 
-	/** delete members from list
-		
-		@attrib name=delete_members 
-		
-		@param id required type=int 
-		
-	**/
-	function delete_members($arr)
-	{
-		if (is_array($arr["sel"]))
-		{
-			foreach($arr["sel"] as $member_id)
-			{
-				$member_obj = new object($member_id);
-				$member_obj->delete();
-			};
-		};
-		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => "membership"));
-	}
 	
 	
 
@@ -412,6 +393,7 @@ class ml_list extends class_base
 		};
 		return $retval;
 	}
+	
 
 	function set_property($arr)
 	{
@@ -611,6 +593,11 @@ class ml_list extends class_base
 		$ml_list_members = $this->get_members($arr["obj_inst"]->id(),$perpage * $ft_page +1,$perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/member_list");
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+
 		$t->d_row_cnt = $this->member_count;
 		$pageselector = "";
 
@@ -636,10 +623,6 @@ class ml_list extends class_base
 					"id" => $val["oid"],
 					"email" => $mailto,
 					"name" => $memberdata["name"],
-					"check" => html::checkbox(array(
-						"name" => "sel[]",
-						"value" => $val["oid"],
-					)),
 				));	
 
 			}
@@ -670,6 +653,10 @@ class ml_list extends class_base
 		$mq = get_instance("mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/queue");
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "qid",
+		));
 		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 && lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
                 $this->db_query($q);
                 while ($row = $this->db_next())
@@ -700,10 +687,6 @@ class ml_list extends class_base
                         $row["status"] = $status_str;
                         $row["protsent"]=$this->queue_ready_indicator($row["position"],$row["total"]);
                         $row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
-                        $row["vali"]= html::checkbox(array(
-						"name" => "sel[]",
-						"value" => $row["qid"],
-			));
                         $t->define_data($row);
 		};
 	}
@@ -977,6 +960,26 @@ class ml_list extends class_base
 		$writer->id_only = true;
 		// it does it's own redirecting .. duke
 		$message_id = $writer->submit($msg_data);
+	}
+	
+	/** delete members from list
+		
+		@attrib name=delete_members 
+		
+		@param id required type=int 
+		
+	**/
+	function delete_members($arr)
+	{
+		if (is_array($arr["sel"]))
+		{
+			foreach($arr["sel"] as $member_id)
+			{
+				$member_obj = new object($member_id);
+				$member_obj->delete();
+			};
+		};
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => "membership"));
 	}
 };
 ?>
