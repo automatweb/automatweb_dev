@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.95 2004/05/27 08:52:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.96 2004/06/08 06:58:36 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -246,7 +246,7 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>&nbsp;%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a></td></tr><tr><td align=\"center\" class=\"imageLinked\">&nbsp;%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
@@ -681,6 +681,10 @@ class image extends class_base
 					));
 					$prop["value"] = $fl;
 					$set = true;
+					if ($arr["obj_inst"]->name() == "")
+					{
+						$arr["obj_inst"]->set_name($_FILES["file"]["name"]);
+					}
 				}
 				// XXX: this is not the correct way to detect this
 				elseif (!empty($prop["value"]["type"]))
@@ -690,6 +694,11 @@ class image extends class_base
 						"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
 						"content" => base64_decode($prop["value"]["contents"]),
 					));
+					if ($arr["obj_inst"]->name() == "")
+					{
+						$arr["obj_inst"]->set_name($prop["value"]["name"]);
+					}
+
 					$prop["value"] = $fl;
 					$set = true;
 				}
