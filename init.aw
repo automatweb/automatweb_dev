@@ -376,7 +376,6 @@ function aw_startup()
 	$l = new languages;
 	$l->request_startup();
 
-<<<<<<< init.aw
 	$LC = aw_global_get("LC");	
 	if (empty($LC))
 	{
@@ -386,18 +385,6 @@ function aw_startup()
 	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
 	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
 
-=======
-	$LC = aw_global_get("LC");
-	if (empty($LC))
-	{
-		$LC="et";
-	}
-
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
-
-
->>>>>>> 2.10
 	classload("periods");
 	$p = new periods;
 	$p->request_startup();
