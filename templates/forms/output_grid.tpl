@@ -1,5 +1,8 @@
 <form action=reforb.{VAR:ext} method=post>
-<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>
+<input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>&nbsp;&nbsp;&nbsp;
+<!-- SUB: PREVIEW -->
+<a href='{VAR:preview}'>Eelvaade</a>
+<!-- END SUB: PREVIEW -->
 <table border=0>
 <tr>
 <td bgcolor=#d0d0d0>
