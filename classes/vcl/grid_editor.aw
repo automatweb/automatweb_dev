@@ -1080,7 +1080,7 @@ class grid_editor extends class_base
 					"row" => $map["row"],
 					"ta_rows" => $spans["rowspan"],
 					"ta_cols" => $spans["colspan"]*20+(($spans["colspan"]-1)*2),
-					"content" => htmlentities($this->arr['aliases'][$map['row']][$map['col']]),
+					"content" => htmlspecialchars($this->arr['aliases'][$map['row']][$map['col']]),
 					"width" => $colw,
 					"height" => $colh,
 				));
