@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.32 2002/06/26 11:28:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.33 2002/07/11 20:08:44 duke Exp $
 
 classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
@@ -86,20 +86,30 @@ class db_config extends aw_template
 	{
 		$_data = $this->_get_login_menus();
 		$data = $_data[aw_global_get("lang_id")];
+
+		if (!is_array($data))
+		{
+			return;
+		};
+
+		$gids = aw_global_get("gidlist");
 		$cur_pri = -1;
 		$cur_menu = false;
 
-		if (is_array($data["menu"]))
+		if (!is_array($gids))
 		{
-			foreach($data["menu"] as $key => $val)
-			{
-				if ( ($data["pri"][$key] >= $cur_pri) && ($args[$key]))
-				{
-					$cur_pri = $data["pri"][$key];
-					$cur_menu = $val;
-				};
-			};
+			return;
 		};
+
+		foreach($gids as $gid)
+		{
+			if (($data[$gid]["pri"] > $cur_pri) && ($data[$gid]["menu"]))
+			{
+				$cur_pri = $data[$gid]["pri"];
+				$cur_menu = $data[$gid]["menu"];
+			}
+		};
+
 		return $cur_menu;
 
 	}
@@ -116,43 +126,44 @@ class db_config extends aw_template
 	{
 		$this->read_template("login_menu.tpl");
 
-		if (not($this->cfg["login_menus"]))
-		{
-			$this->raise_error(ERR_CONF_NLOGIN,"LOGIN_MENUS on defineerimata.",true);
-		};
-	
 		$_data = $this->_get_login_menus();
+
 		$data = $_data[aw_global_get("lang_id")];
 
+		$this->mk_path(0,"Action menüüd");
 
-		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO,"lang_id" => aw_global_get("lang_id")));
-
-		$menus = array();
-
-		$menus[0] = "määramata";
+		$ob = get_instance("objects");
+		$menus =  $ob->get_list(false,true);
 
 		if (is_array($data["pri"]))
 		{
 			asort($data["pri"]);
 		};
 
-		foreach($obj as $key => $val)
-		{
-			$menus[$key] = $val["name"];
-		};
-
-		classload("users_user");
 		$u = new users_user();
 		$u->list_groups(array("type" => array(GRP_DYNAMIC,GRP_REGULAR)));
 		$c = "";
-
 		while($row = $u->db_next())
 		{
+
+			$return_url = urlencode($this->mk_my_orb("submit_login_menus",array("parent" => $row["gid"]),"config"));
+
+			$midx = $data[$row["gid"]]["menu"];
+			if ($midx)
+			{
+				$name = $menus[$midx];
+			}
+			else
+			{
+				$name = "(määramata)";
+			};
+
 			$this->vars(array(
 				"gid" => $row["gid"],
 				"group" => $row["name"],
-				"priority" =>  ($data["pri"][$row["gid"]]) ? $data["pri"][$row["gid"]] : 0,
-				"menus" => $this->picker($data["menu"][$row["gid"]],$menus),
+				"name" => $name,
+				"priority" =>  ($data[$row["gid"]]["pri"]) ? $data[$row["gid"]]["pri"] : 0,
+				"search" => $this->mk_my_orb("search",array("otype" => CL_PSEUDO,"one" => 1,"return_url" => $return_url),"objects"),
 			));
 
 			$c .= $this->parse("LINE");
@@ -172,18 +183,26 @@ class db_config extends aw_template
 		extract($args);
 		classload("xml");
 		$xml = new xml();
-		$old = $this->get_simple_config("login_menus");
-		$olddata = $xml->xml_unserialize(array("source" => $old));
-		$olddata[aw_global_get("lang_id")] = array(
-			"pri" => $pri,
-			"menu" => $menu,
-		);
+		$old = aw_unserialize($this->get_simple_config("login_menus"));
 
-		$xmldata = $xml->xml_serialize($olddata);
+		if ($pick && $parent)
+		{
+			$old[aw_global_get("lang_id")][$parent]["menu"] = $pick;
+		}
+		else
+		{
+			// overwrite priorities
+			foreach($pri as $key => $val)
+			{
+				$old[aw_global_get("lang_id")][$key]["pri"] = $val;
+			}
+		};
 
-		$this->quote($xmldata);
+		$data = aw_serialize($old);
 
-		$this->set_simple_config("login_menus",$xmldata);
+		$this->quote($data);
+
+		$this->set_simple_config("login_menus",$data);
 
 		return $this->mk_my_orb("login_menus",array());
 	}
