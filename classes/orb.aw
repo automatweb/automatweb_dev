@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.66 2004/09/13 14:21:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.67 2004/09/14 17:25:28 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -982,7 +982,7 @@ class orb extends aw_template
 		{
 			if($obj)
 			{
-				$meth["values"]["id"] = $obj;
+				$meth["values"]["mid"] = $obj;
 			}
 		}
 		return $meth;
