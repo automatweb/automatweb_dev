@@ -116,9 +116,7 @@
             <name>sections</name>
             <type>select</type>
             <multiple>1</multiple>
-            <field>meta</field>
             <size>20</size>
-            <method>serialize</method>
             <group>relations</group>
             <table>objects</table>
             <caption>Vennastamine</caption>
@@ -144,10 +142,10 @@
       </property>
       <property>
             <name>menu_images</name>
-            <type>array</type>
+            <type>generated</type>
             <field>meta</field>
             <method>serialize</method>
-            <getter>callback_get_menu_image</getter>
+            <generator>callback_get_menu_image</generator>
             <group>presentation</group>
             <table>objects</table>
             <caption>Menüü pildid</caption>
@@ -334,21 +332,31 @@
             <type>select</type>
             <table>menu</table>
             <group>show</group>
-            <caption>Template muutmiseks</caption>
+            <caption>Template dokumendi muutmiseks</caption>
       </property>
       <property>
             <name>tpl_view</name>
             <type>select</type>
             <table>menu</table>
             <group>show</group>
-            <caption>Template näitamiseks (pikk)</caption>
+            <caption>Template dokumendi näitamiseks (pikk)</caption>
       </property>
       <property>
             <name>tpl_lead</name>
             <type>select</type>
             <table>menu</table>
             <group>show</group>
-            <caption>Template näitamiseks (lühike)</caption>
+            <caption>Template dokumendi näitamiseks (lühike)</caption>
+      </property>
+      <property>
+            <name>tpl_edit_cfgform</name>
+            <type>cfgform_picker</type>
+            <clid>CL_DOCUMENT</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>show</group>
+            <caption>Konfivorm/template dokumendi muutmiseks</caption>
       </property>
       <property>
             <name>hide_noact</name>
@@ -369,6 +377,7 @@
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>
             <objtable_index>id</objtable_index>
+            <corefields>name,comment,alias,status,jrk</corefields>
       </classinfo>
 </properties>
 

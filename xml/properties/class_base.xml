@@ -5,6 +5,7 @@
             <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Objekti nimi</caption>
       </property>
       <property>
@@ -12,6 +13,7 @@
             <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Kommentaar</caption>
       </property>
       <property>
@@ -19,6 +21,7 @@
             <type>textbox</type>
             <group>general</group>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Alias</caption>
       </property>
       <property>
@@ -26,6 +29,7 @@
             <type>status</type>
             <group>general</group>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -34,6 +38,7 @@
             <size>4</size>
             <group>general</group>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Jrk</caption>
       </property>
       <property>
@@ -41,6 +46,7 @@
             <type>date</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Loomise kuupäev</caption>
       </property>
       <property>
@@ -48,6 +54,7 @@
             <type>uid</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Looja</caption>
       </property>
       <property>
@@ -55,6 +62,7 @@
             <type>date</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Muutmise kuupäev</caption>
       </property>
       <property>
@@ -62,6 +70,7 @@
             <type>uid</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Muutja</caption>
       </property>
       <property>
@@ -69,6 +78,7 @@
             <type>int</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Objekti id</caption>
       </property>
       <property>
@@ -76,6 +86,7 @@
             <type>int</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Parenti id</caption>
       </property>
       <property>
@@ -83,6 +94,7 @@
             <type>class_id</type>
             <access>ro</access>
             <table>objects</table>
+            <corefield>yes</corefield>
             <caption>Klassi id</caption>
       </property>
 </properties>

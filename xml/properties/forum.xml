@@ -40,5 +40,9 @@
             <table>objects</table>
             <caption>Teemasid lehel</caption>
       </property>
+      <classinfo>
+            <corefields>name,comment,status</corefields>
+            <toolbar>yes</toolbar>
+      </classinfo>
 </properties>
 
