@@ -85,5 +85,20 @@ class cookiemonster extends aw_template
 
 		return $this->mk_my_orb("list");
 	}
+
+	function session_show()
+	{
+		foreach($_SESSION as $k => $v)
+		{
+			echo "$k => $v <br>";
+		}
+		die();
+	}
+
+	function session_show_arr()
+	{
+		echo dbg::dump($_SESSION);
+		die();
+	}
 }
 ?>

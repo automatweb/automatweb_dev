@@ -59,6 +59,13 @@ class aip_change extends aw_template
 			"YAH_LINK" => aip::mk_yah_link($parent, $this),
 			"date" => $this->time2date(time(), 2)
 		));
+
+		$this->vars(array(
+			"ADD" => $this->parse("ADD")
+		));
+		$this->vars(array(
+			"NOT_SUP" => $this->parse("NOT_SUP")
+		));
 		return $this->parse();
 	}
 
@@ -81,6 +88,19 @@ class aip_change extends aw_template
 		$de = new date_edit("act_time");
 
 		//$sch = get_instance("scheduler");
+
+		$files_in_fld = array();
+		$_tf = $this->make_keys($files);
+		$change_fold = $this->get_cval("aip_change::change_dir");
+		foreach($_tf as $fi)
+		{
+			$fld = $change_fold."/".$fi;
+			$fils = $this->get_directory(array("dir" => $fld));
+			foreach($fils as $fil)
+			{
+				$files_in_fld[] = $fi."/".$fil;
+			}
+		}
 
 		if ($id)
 		{
@@ -137,6 +157,7 @@ class aip_change extends aw_template
 					"act_time" => $de->get_timestamp($act_time),
 					"j_time" => $de->get_timestamp($j_time),
 					"files" => $this->make_keys($files),
+					"files_in_fld" => $files_in_fld,
 					"upd_type" => $type,
 					"pfiles" => array(
 						"1" => $f1_dat,
@@ -157,7 +178,71 @@ class aip_change extends aw_template
 					"act_time" => $de->get_timestamp($act_time),
 					"j_time" => $de->get_timestamp($j_time),
 					"files" => $this->make_keys($files),
+					"files_in_fld" => $files_in_fld,
 					"upd_type" => $type
+				)
+			));
+
+			$ch = $this->load($id);
+
+			$f = get_instance("file");
+
+			global $change_pdf_1, $change_pdf_2, $change_pdf_3;
+			if (is_uploaded_file($change_pdf_1))
+			{
+				$f1_dat = $f->add_upload_image("change_pdf_1", 1, $ch["meta"]["pfiles"]["1"]["id"]);
+			}
+			else
+			{
+				$f1_dat = $ch["meta"]["pfiles"]["1"];
+			}
+
+			if (is_uploaded_file($change_pdf_2))
+			{
+				$f2_dat = $f->add_upload_image("change_pdf_2", 1, $ch["meta"]["pfiles"]["2"]["id"]);
+			}
+			else
+			{
+				$f2_dat = $ch["meta"]["pfiles"]["2"];
+			}
+
+			if (is_uploaded_file($change_pdf_3))
+			{
+				$f3_dat = $f->add_upload_image("change_pdf_3", 1, $ch["meta"]["pfiles"]["3"]["id"]);
+			}
+			else
+			{
+				$f3_dat = $ch["meta"]["pfiles"]["3"];
+			}
+
+			if ($del_chp_1 == 1)
+			{
+				$f1_dat = array();
+			}
+			if ($del_chp_2 == 1)
+			{
+				$f2_dat = array();
+			}
+			if ($del_chp_3 == 1)
+			{
+				$f3_dat = array();
+			}
+
+			$this->upd_object(array(
+				"oid" => $id, 
+				"name" => $name,
+				"comment" => $comment,
+				"metadata" => array(
+					"act_time" => $de->get_timestamp($act_time),
+					"j_time" => $de->get_timestamp($j_time),
+					"files" => $this->make_keys($files),
+					"files_in_fld" => $files_in_fld,
+					"upd_type" => $type,
+					"pfiles" => array(
+						"1" => $f1_dat,
+						"2" => $f2_dat,
+						"3" => $f3_dat
+					)
 				)
 			));
 		}
@@ -180,8 +265,16 @@ class aip_change extends aw_template
 	{
 		extract($arr);
 		$ch = $this->load($id);
+
+		// if the publishing date is past, then just show the change data
+		if (time() > $ch["meta"]["act_time"])
+		{
+			return $this->_display_change($ch);
+		}
+
 		$this->mk_path(0, "<a href='".$this->mk_my_orb("list")."'>Nimekiri</a> / Muuda");
 		$this->read_template("add.tpl");
+
 
 		load_vcl("date_edit");
 		$de = new date_edit("act_time");
@@ -228,17 +321,20 @@ class aip_change extends aw_template
 			"YAH_LINK" => aip::mk_yah_link($ch["parent"], $this),
 			"changes" => $this->mk_my_orb("list"),
 			"comment" => $ch["comment"],
-			"date" => $this->time2date(time(), 2)
+			"date" => $this->time2date(time(), 2),
+			"files_str" => join(",", $ch["meta"]["files"])
 		));
+
+		$this->vars(array(
+			"CHANGE" => $this->parse("CHANGE")
+		));
+
 		if ($ch["meta"]["upd_type"] != 3)
 		{
 			$this->vars(array(
 				"NOT_SUP" => $this->parse("NOT_SUP")
 			));
 		}
-		$this->vars(array(
-			"CHANGE" => $this->parse("CHANGE")
-		));
 		return $this->parse();
 	}
 
@@ -519,7 +615,8 @@ class aip_change extends aw_template
 				}
 			}
 		}
-	
+
+//		echo "actions = ".dbg::dump($actions)." <br>";	
 	
 		set_time_limit(0);
 		if (is_array($actions))
@@ -627,7 +724,7 @@ class aip_change extends aw_template
 					// and now, also add the file's size to the parent folder's size and to all parent folders above it.
 //					$f->add_size_to_parents($pr,$_sz);
 
-					$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$act[file]','".time()."','$pr')");
+					$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'".strtoupper($act[file])."','".time()."','$pr')");
 				}
 				else
 				if ($act["action"] == UPDATE_FILE)
@@ -650,25 +747,38 @@ class aip_change extends aw_template
 						$pid = $this->upd_object(array(
 							"oid" => $id,
 						));
-						$fc = $this->get_file(array(
-							"file" => $folder."/".$act["file"],
-						));
+
 						$f = get_instance("file");
-						$_fs_filename = $f->_put_fs(array(
-							"content" => $fc,
-							"type" => "application/pdf"
-						));
+						$fc = false;
+						foreach($this->ob["meta"]["files"] as $p_fld)
+						{
+//							echo "test file = ".$folder."/".$p_fld."/".$act["file"]." <br>";
+							if (file_exists($folder."/".$p_fld."/".$act["file"]))
+							{
+								$fc = $this->get_file(array(
+									"file" => $folder."/".$p_fld."/".$act["file"],
+								));
+								$_fs_filename = $f->_put_fs(array(
+									"content" => $fc,
+									"type" => "application/pdf"
+								));
+								$_sz = @filesize($folder."/".$p_fld."/".$act["file"]);
 
-						$this->db_query("UPDATE files SET file = '$_fs_filename' WHERE id = $id");
-						$_sz = filesize($folder."/".$act["file"]);
-						$this->set_object_metadata(array(
-							"oid" => $id,
-							"key" => "file_size", 
-							"value" => $_sz
-						));
-						$this->db_query("UPDATE aip_files SET tm = ".time()." WHERE id = $id");
+								$this->db_query("UPDATE files SET file = '$_fs_filename' WHERE id = $id");
+								$this->set_object_metadata(array(
+									"oid" => $id,
+									"key" => "file_size", 
+									"value" => $_sz
+								));
+								$this->db_query("UPDATE aip_files SET tm = ".time()." WHERE id = $id");
 
-						$_ob = $this->get_object($id);
+								continue;
+							}
+						}
+
+//						echo "update file id $id <br>";
+
+//						$_ob = $this->get_object($id);
 //						$f->add_size_to_parents($_ob["parent"],$_sz-$old_size);
 					}
 				}
@@ -692,7 +802,7 @@ class aip_change extends aw_template
 					// if the file exists, delete it so we can overwrite
 					unlink($pdf_dir."/".$p_file);
 					echo "rename ".$ch_dir."/".$fil."/".$p_file." to ".$pdf_dir."/".$p_file." <br />";
-					rename($ch_dir."/".$fil."/".$p_file, $pdf_dir."/".$p_file);
+					rename($ch_dir."/".$fil."/".$p_file, $pdf_dir."/".strtoupper($p_file));
 				}
 
 				rmdir($ch_dir."/".$fil);
@@ -725,6 +835,30 @@ class aip_change extends aw_template
 		echo "<a href='".$this->mk_my_orb("list", array(), "aip_change", false, true)."'>Tagasi</a>";
 	}
 
+	function _show_files_2($arr)
+	{
+		// show all not active changes
+		// make list of all active changes for this type
+		$this->db_query("SELECT oid FROM objects WHERE status != 0 AND class_id = ".CL_AIP_CHANGE);
+		$ret = "";
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$ob = $this->get_object($row["oid"]);
+			// act_time - avaldamine , j_time - j6ustumine
+			if ($ob["meta"]["act_time"] <= time() && $ob["meta"]["j_time"] > time() && $ob["meta"]["upd_type"] == $arr["type"])
+			{
+				$ret .= $this->_show_files(array(
+					"type" => $arr["type"],
+					"change_id" => $row["oid"]
+				));
+			}
+			$this->restore_handle();
+		}		
+
+		return $ret;
+	}
+
 	/**  
 		
 		@attrib name=show_files params=name nologin="1" default="0"
@@ -739,9 +873,14 @@ class aip_change extends aw_template
 	**/
 	function show_files($arr)
 	{
+		if ($arr["type"] == 2)
+		{
+			return $this->_show_files_2($arr);
+		}
+
 		// make list of all active changes for this type
 		$this->db_query("SELECT oid FROM objects WHERE status != 0 AND class_id = ".CL_AIP_CHANGE);
-		$chs = array();
+		$act_ch = false;
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
@@ -749,20 +888,54 @@ class aip_change extends aw_template
 			// act_time - avaldamine , j_time - j6ustumine
 			if ($ob["meta"]["act_time"] <= time() && $ob["meta"]["j_time"] > time() && $ob["meta"]["upd_type"] == $arr["type"])
 			{
-				$ret .= $this->_show_files(array(
-					"type" => $arr["type"],
-					"change_id" => $row["oid"]
-				));
+				$act_ch = $row["oid"];
 			}
 			$this->restore_handle();
 		}
+
+		if (!$act_ch)
+		{
+			$this->db_query("SELECT oid FROM objects WHERE status != 0 AND class_id = ".CL_AIP_CHANGE);
+			$act_ch_time = 0;
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();
+				$ob = $this->get_object($row["oid"]);
+				// act_time - avaldamine , j_time - j6ustumine
+				if ($ob["meta"]["act_time"] <= time() && $ob["meta"]["upd_type"] == $arr["type"])
+				{
+					if ($act_ch_time < $ob["meta"]["act_time"])
+					{
+						$act_ch = $row["oid"];
+						$act_ch_time = $ob["meta"]["act_time"];
+					}
+				}
+				$this->restore_handle();
+			}
+		}
+
+		if ($act_ch)
+		{
+			$ret .= $this->_show_files(array(
+				"type" => $arr["type"],
+				"change_id" => $act_ch
+			));
+		}
+
 		return $ret;
 	}
 
 	function _show_files($arr)
 	{
 		extract($arr);
-		$this->read_template("show_files.tpl");
+		if ($type == 1)
+		{
+			$this->read_template("show_files_amdt.tpl");
+		}
+		else
+		{
+			$this->read_template("show_files.tpl");
+		}
 
 		if ($type == 3)
 		{
@@ -770,16 +943,23 @@ class aip_change extends aw_template
 		}
 		$ids = array();
 		$ch = $this->load($arr["change_id"]);
-		if (is_array($ch["meta"]["files"]))
+		if (isset($ch["meta"]["files_in_fld"]) && is_array($ch["meta"]["files_in_fld"]))
 		{
-			$change_fold = $this->get_cval("aip_change::change_dir");
-			foreach($ch["meta"]["files"] as $fi)
+			$ids = $ch["meta"]["files_in_fld"];
+		}
+		else
+		{
+			if (is_array($ch["meta"]["files"]))
 			{
-				$fld = $change_fold."/".$fi;
-				$fils = $this->get_directory(array("dir" => $fld));
-				foreach($fils as $fil)
+				$change_fold = $this->get_cval("aip_change::change_dir");
+				foreach($ch["meta"]["files"] as $fi)
 				{
-					$ids[] = $fi."/".$fil;
+					$fld = $change_fold."/".$fi;
+					$fils = $this->get_directory(array("dir" => $fld));
+					foreach($fils as $fil)
+					{
+						$ids[] = $fi."/".$fil;
+					}
 				}
 			}
 		}
@@ -869,6 +1049,7 @@ class aip_change extends aw_template
 		enter_function("aip_pdf::mk_file_list",array());
 //		echo "get file data for $folder <br>";
 		$fd = $this->get_file_data($parent, $folder);
+//		echo "in mk file list fd = ".dbg::dump($fd)." <br>";
 		clearstatcache();
 		if ($dir = @opendir($folder)) 
 		{
@@ -900,7 +1081,7 @@ class aip_change extends aw_template
 					}
 					else
 					{
-						$stat = FILE_STAT_SAME;
+						$stat = FILE_STAT_MODIFIED;
 					}
 
 					$ret[$file] = $stat;
@@ -912,7 +1093,7 @@ class aip_change extends aw_template
 		{
 			if (!$ret[$fn])
 			{
-				$ret[$fn] = FILE_STAT_DELETED;
+				$ret[$fn] = FILE_STAT_MODIFIED;
 			}
 		}
 		exit_function("aip_pdf::mk_file_list");
@@ -1284,6 +1465,58 @@ class aip_change extends aw_template
 			}
 		}
 		die("finished checking\n");
+	}
+
+	function _display_change($ch)
+	{
+		$this->mk_path(0, "<a href='".$this->mk_my_orb("list")."'>Nimekiri</a> / Vaata avaldatud muudatust");
+
+		$this->read_template("display_change.tpl");
+		classload("file");
+		$this->vars(array(
+			"cur_pdf_1" => file::check_url($ch["meta"]["pfiles"]["1"]["url"]),
+			"cur_pdf_2" => file::check_url($ch["meta"]["pfiles"]["2"]["url"]),
+			"cur_pdf_3" => file::check_url($ch["meta"]["pfiles"]["3"]["url"]),
+		));
+
+		if ($ch["meta"]["pfiles"]["1"]["id"])
+		{
+			$this->vars(array("IS_PDF1" => $this->parse("IS_PDF1")));
+		}
+
+		if ($ch["meta"]["pfiles"]["2"]["id"])
+		{
+			$this->vars(array("IS_PDF2" => $this->parse("IS_PDF2")));
+		}
+
+		if ($ch["meta"]["pfiles"]["3"]["id"])
+		{
+			$this->vars(array("IS_PDF3" => $this->parse("IS_PDF3")));
+		}
+
+		$tps = array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT", "3" => "SUP");
+		$this->vars(array(
+			"act_time" => date("d.m.Y H:i", $ch["meta"]["act_time"]),
+			"j_time" => date("d.m.Y H:i", $ch["meta"]["j_time"]),
+			"files" => join(",", is_array($ch["meta"]["files"]) ? $ch["meta"]["files"] : array()),
+			"name" => $ch["name"],
+			"types" => $tps[$ch["meta"]["upd_type"]],
+			"rootmenu" => aip::get_root(),
+			"YAH_LINK" => aip::mk_yah_link($ch["parent"], $this),
+			"changes" => $this->mk_my_orb("list"),
+			"comment" => $ch["comment"],
+			"date" => $this->time2date(time(), 2),
+			"files_str" => join(",", is_array($ch["meta"]["files"]) ? $ch["meta"]["files"] : array())
+		));
+
+
+		if ($ch["meta"]["upd_type"] != 3)
+		{
+			$this->vars(array(
+				"NOT_SUP" => $this->parse("NOT_SUP")
+			));
+		}
+		return $this->parse();
 	}
 }
 ?>

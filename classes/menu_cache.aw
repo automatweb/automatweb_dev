@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.27 2004/01/22 13:45:06 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.28 2004/02/11 11:33:16 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -207,7 +207,7 @@ class menu_cache extends aw_template
 				FROM objects 
 					LEFT JOIN menu ON menu.id = objects.oid
 				WHERE 
-					objects.oid = $oid
+					objects.oid = '$oid'
 			");
 			$data["meta"] = aw_unserialize($data["metadata"]);
 			unset($data["metadata"]);

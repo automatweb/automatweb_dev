@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.234 2004/02/06 10:39:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.235 2004/02/11 11:31:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -502,7 +502,7 @@ class document extends aw_template
 
 		if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
 		{
-			if (aw_global_get("in_archive"))
+			if (aw_global_get("in_archive") || aw_global_get("act_per_id") != $doc["period"])
 			{
 				$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
 			}

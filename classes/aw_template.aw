@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.53 2004/02/11 10:44:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.54 2004/02/11 11:24:54 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -300,7 +300,17 @@ class aw_template extends core
 		}
 		return $ret;
 	}
-       
+
+	function is_in_parents_tpl($tpl, $parent)
+	{
+		$fp = $this->v2_name_map[$tpl];
+		if (strpos($fp, $parent) === false)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	////
 	// !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
 	// muutujad yle
