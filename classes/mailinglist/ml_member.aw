@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.31 2004/08/04 10:31:34 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.32 2004/08/04 10:59:46 sven Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -199,7 +199,7 @@ class ml_member extends class_base
 				$member_obj->set_meta("hash",$hash);
 				$member_obj->set_meta("time",$ts);
 				
-				if(is_array($args["udef_fields"]["classificators"]))
+				if(is_array($args["udef_fields"]["textboxes"]))
 				{
 					foreach($args["udef_fields"]["textboxes"] as $key => $value)
 					{
@@ -207,7 +207,7 @@ class ml_member extends class_base
 					}
 				}
 				
-				if(is_array($args["udef_fields"]["classificators"]))
+				if(is_array($args["udef_fields"]["textareas"]))
 				{
 					foreach($args["udef_fields"]["textareas"] as $key => $value)
 					{
@@ -215,7 +215,7 @@ class ml_member extends class_base
 					}
 				}
 				
-				if(is_array($args["udef_fields"]["classificators"]))
+				if(is_array($args["udef_fields"]["checkboxes"]))
 				{
 					foreach($args["udef_fields"]["checkboxes"] as $key => $value)
 					{
