@@ -9,6 +9,25 @@ class icons extends aw_template
 		lc_load("definition");
 	}
 
+	function orb_add($arr)
+	{
+		extract($arr);
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa ikoon");
+		}
+		else
+		{
+			$this->mk_path($parent,"Lisa ikoon");
+		}
+		$this->read_template("add_icon.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
+		));
+		return $this->parse();
+	}
+
 	function gen_db($arr)
 	{	
 		extract($arr);
@@ -151,10 +170,21 @@ class icons extends aw_template
 				$this->quote(&$fc);
 				$this->db_query("UPDATE icons SET name='$name', comment = '$comment', kelle = '$kelle', puhastatud='$puhastatud', praht = '$praht', opsys = '$opsys', p2rit = '$p2rit', m2rks6nad = '$m2rks6nad', m2rks6nad2 = '$m2rks6nad2', programm = '$programm', file = '$fc', file_type = '$fail_type' WHERE id = $id");
 			}
+			$this->upd_object(array(
+				"oid" => $id, 
+				"name" => $name, 
+				"comment" => $comment
+			));
 		}
 		else
 		{
-			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM icons","id")+1;
+//			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM icons","id")+1;
+			$id = $this->new_object(array(
+				"parent" => $parent, 
+				"class_id" => CL_ICON,
+				"name" => $name, 
+				"comment" => $comment
+			));
 
 			if ($fail == "none")
 			{
@@ -171,19 +201,23 @@ class icons extends aw_template
 																		 VALUES($id,'$name','$comment','$kelle','$puhastatud','$praht','$opsys','$p2rit','$m2rks6nad','$m2rks6nad2','$programm','$fc','$fail_type')");
 			}
 		}
-		return $this->mk_my_orb("change_icon", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function change($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_CHANGE,$this->mk_my_orb("config", array(),"config"),$this->mk_my_orb("icon_db")));
+		$ic = $this->get($id);
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ikooni");
+		}
+		else
+		{
+			$this->mk_path($ic["parent"], "Muuda ikooni");
+		}
 		$this->read_template("change_icon.tpl");
 
-		// mdx, yx ennustus. MITTE KEEGI ei hakka MITTE KUNAGI neid v2lju k6iki t2itma. 
-		// aga, nagu duke ytles, SUUR VALGE MASSA tahtis, niiet teeme siis.
-
-		$ic = $this->get($id);
 		$this->vars(array(
 			"ref" => $ic["url"], 
 			"name" => $ic["name"], 
@@ -200,7 +234,7 @@ class icons extends aw_template
 			"m2rks6nad"		=> $ic["m2rks6nad"],
 			"programm"		=> $ic["programm"],
 			"m2rks6nad2"		=> $ic["m2rks6nad2"],
-			"reforb" => $this->mk_reforb("submit_icon", array("id" => $id))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
 
 		return $this->parse();
@@ -218,6 +252,12 @@ class icons extends aw_template
 		if ($ret == false)
 		{
 			return false;
+		}
+
+		$ob = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$id'");
+		if (is_array($ob))
+		{
+			$ret += $ob;
 		}
 
 		$ret["url"] = $this->cfg["baseurl"]."/automatweb/icon.".$this->cfg["ext"]."?id=$id";
