@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.50 2002/06/18 08:49:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.51 2002/06/26 11:28:10 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -8,6 +8,7 @@ class form_element extends aw_template
 	function form_element()
 	{
 		// FIXME: need stringid lokaliseerida
+		$this->lc_load("form_element","lc_form_element");
 
 		$this->all_subtypes=array(
 			"textbox" => array(
@@ -97,10 +98,9 @@ class form_element extends aw_template
 
 		// week and month do not work very well yet
 		$this->timeslice_types = array(
-			'hour' => 'tund(i)',
-			'day' => 'päev(a)',
-			'week' => 'nädal(at)',
-			'month' => 'kuu(d)',
+			'hour' => $this->vars["SUBTYPE_TS_HOUR"],
+			'day' => $this->vars["SUBTYPE_TS_DAY"],
+			'week' => $this->vars["SUBTYPE_TS_WEEK"],
 		);
 	}	
 

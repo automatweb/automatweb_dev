@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.28 2002/06/13 22:02:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.29 2002/06/26 11:28:10 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -38,6 +38,9 @@ class form_cell extends form_base
 				break;
 			case FTYPE_FILTER_SEARCH:
 				$t = "form_filter_search_element";
+				break;
+			case FTYPE_CONFIG:
+				$t = "form_entry_element";
 				break;
 			default:
 				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
@@ -202,21 +205,22 @@ class form_cell extends form_base
 	function submit_element($args = array())
 	{
 		extract($args);
-
+		// add new element
 		if ($type == "add")
 		{
-			// add new element
 			// form elements are weird things.
 			// namely. they are at the same time menus AND form elements. 
 			// so each element is written in three places
 			// objects table, class_id = CL_PSEUDO 
 			// menu table with type MN_FORM_ELEMENT
-			// form_elements table that is used to remember the elements proiperties when the element is inserted into another form
+			// form_elements table that is used to remember the elements proiperties when the element is
+			// inserted into another form
 			// the actual info about how the element is to be shown is written into the form's array. whee. 
 			// and also element2form table contains all element -> table relationships
 			$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
 //			$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
 			$this->db_query("INSERT INTO form_elements (id) values($el)");
+			$arr = array(); // new elements do not have any props, so set that to 0
 		}
 		// the other choice is most likely "select" which ment that the user selected an already existing element
 		else
@@ -226,23 +230,28 @@ class form_cell extends form_base
 				$oo = $this->get_object($el);
 				$name = $oo["name"];
 				$ord = $oo["jrk"];
+				$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
+				$arr = aw_unserialize($props);
 			}
 		}
 		
 		if ($el)
 		{
+			// register the new element into this form
 			$this->_do_add_element($this->id,$el);
+
 			// add the element into the form.
 			// but! use the props saved in the form_elements table to create them with the right config right away!
-			$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$el,"props");
-			$arr = aw_unserialize($props);
 			$arr["id"] = $el;
 			$arr["name"] = $name;
 			$arr["ord"] = $ord;
+
+			// so we lose the relations if adding an existing element. Is there a good reason for that? -- duke
 			$arr["linked_element"] = 0;
 			$arr["linked_form"] = 0;
 			$arr["linked_element"] = 0;
 			$arr["rel_table_id"] = 0;
+
 			$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
 			$this->form->save();
 		}
