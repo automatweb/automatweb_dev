@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.24 2004/10/14 13:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.25 2004/10/21 09:31:06 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -406,6 +406,7 @@ class form_chain extends form_base
 
 		$fc = get_instance("formgen/form_controller");
 		$toshow = array();
+		$all = array();
 		foreach($this->chain["forms"] as $fid)
 		{
 			// check controllers
@@ -418,6 +419,11 @@ class form_chain extends form_base
 					$show = false;
 				}
 			}
+			$all[] = array(
+				"cur" => $form_id  == $fid,
+				"show" => $show,
+				"id" => $fid
+			);
 			if (!$show)
 			{
 				continue;
@@ -428,9 +434,25 @@ class form_chain extends form_base
 		// check if the form we are currently showing can be shown, if not, pick the first available
 		if (!$toshow[$form_id])
 		{
-			reset($toshow);
-			list(,$form_id) = each($toshow);
+			$form_id = NULL;
+			foreach($all as $ent)
+			{
+				if ($prev["cur"] && $ent["show"])
+				{
+					$form_id = $ent["id"];
+					echo "god id as $form_id <br>";
+				}
+
+				$prev = $ent;
+			}
 			$form_entry_id = NULL;
+
+			if (!$form_id)
+			{
+				reset($toshow);
+				list(,$form_id) = each($toshow);
+				$form_entry_id = NULL;
+			}
 		}
 
 //		echo "entry_id = $entry_id <br>";
