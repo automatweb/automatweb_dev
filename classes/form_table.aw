@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.34 2002/07/17 08:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.35 2002/07/17 20:29:17 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -19,7 +19,8 @@ class form_table extends form_base
 			"active" => "Acive", 
 			"chpos" => "Move",
 			"order" => "Order", 
-			"select" => "Select"
+			"select" => "Select",
+			"jrk" => "Jrk"
 		);
 
 		$this->lang_id = aw_global_get("lang_id");
@@ -482,7 +483,7 @@ class form_table extends form_base
 		$this->t->set_header_attribs($header_attribs);
 
 		// mark down the path
-		$old_sk = $GLOBALS["prev_sk"];
+		$old_sk = $GLOBALS["old_sk"];
 		$tbl_sk = $GLOBALS["tbl_sk"];
 		$fg_table_sessions = aw_global_get("fg_table_sessions");
 		if ($old_sk != "")
@@ -493,7 +494,23 @@ class form_table extends form_base
 		{
 			$fg_table_sessions[$tbl_sk] = Array();
 		}
-		$fg_table_sessions[$tbl_sk][] = aw_global_get("REQUEST_URI");
+		if ($tbl_sk != "")
+		{
+			$num = count($fg_table_sessions[$tbl_sk]);
+			if ($fg_table_sessions[$tbl_sk][$num-1] != aw_global_get("REQUEST_URI"))
+			{
+//				echo "adding for tbl sk $tbl_sk <br>";
+				$fg_table_sessions[$tbl_sk][] = aw_global_get("REQUEST_URI");
+			}
+			else
+			{
+//				echo "no add same <br>";
+			}
+		}
+		else
+		{
+//			echo "notblsk <br>";
+		}
 		aw_session_set("fg_table_sessions", $fg_table_sessions);
 	}
 
@@ -556,6 +573,7 @@ class form_table extends form_base
 			$dat["ev_modified"] = $this->time2date($dat["modified"], 2);
 			$dat["ev_view"] = "<a href='".$show_link."'>".$this->table["texts"]["view"][$this->lang_id]."</a>";		
 			$dat["ev_select"] = "<input type='checkbox' name='sel[".$dat["entry_id"]."]' ".checked($this->table["sel_def"])." VALUE='1'>";
+			$dat["ev_jrk"] = "[__jrk_replace__]";
 
 			$after_show = $this->mk_my_orb("show_entry", 
 				array(
@@ -884,25 +902,20 @@ class form_table extends form_base
 				}
 			}
 		}
-		if ($this->table["defaultsort_form"] && $this->table["defaultsort"])
-		{
-			$ret[$this->table["defaultsort_form"]][$this->table["defaultsort"]] = $this->table["defaultsort"];
-		}
-		if ($this->table["group_form"] && $this->table["group"])
-		{
-			$ret[$this->table["group_form"]][$this->table["group"]] = $this->table["group"];
-		}
 		
-		if ($this->table["rgroup_form"] && $this->table["rgroup"])
-		{
-			$ret[$this->table["rgroup_form"]][$this->table["rgroup"]] = $this->table["rgroup"];
-		}
-
 		if (is_array($this->table["defsort"]))
 		{
 			foreach($this->table["defsort"] as $el)
 			{
 				$ret[$this->table["defsort_forms"][$el["el"]]][$el["el"]] = $el["el"];
+			}
+		}
+
+		if (is_array($this->table["rgrps"]))
+		{
+			foreach($this->table["rgrps"] as $nr => $dat)
+			{
+				$ret[$this->table["rgrps_forms"][$dat["el"]]][$dat["el"]] = $dat["el"];
 			}
 		}
 		return $ret;
@@ -1000,15 +1013,7 @@ class form_table extends form_base
 		{
 			foreach($this->table["rgrps"] as $nr => $dat)
 			{
-				$tmp = $this->get_col_for_el($dat["el"]);
-				if ($tmp === false)
-				{
-					$cl = "ev_".$dat["el"];
-				}
-				else
-				{
-					$cl = "ev_col_".$tmp;
-				}
+				$cl = "ev_".$dat["el"];
 				$r_g[$cl] = $cl;
 			}
 		}
@@ -1284,14 +1289,14 @@ class form_table extends form_base
 		if ($alias_data["class_id"] == CL_FORM_TABLE)
 		{
 			$ru = aw_global_get("REQUEST_URI");
-			// here we must strip out the previous bits 
+			// new approach - restrict_* are now arrays - so that they remember previous levels as well
 			$ru = preg_replace("/use_table=[^&$]*/","",$ru);
-			$ru = preg_replace("/restrict_search_el=[^&$]*/","",$ru);
-			$ru = preg_replace("/restrict_search_val=[^&$]*/","",$ru);
 			$ru = preg_replace("/tbl_sk=[^&$]*/","",$ru);
+			$ru = preg_replace("/old_sk=[^&$]*/","",$ru);
 			// and the leftover &&'s
-			$ru = preg_replace("/&{2,}/","",$ru);
-			if (strpos("?",$ru) === false)
+			$ru = preg_replace("/&{2,}/","&",$ru);
+			$ru = str_replace("?&", "?",$ru);
+			if (strpos($ru,"?") === false)
 			{
 				$sep = "?";
 			}
@@ -1299,18 +1304,19 @@ class form_table extends form_base
 			{
 				$sep = "&";
 			}
+
 			$new_sk = $this->gen_uniq_id();
-/*			$fg_table_sessions = aw_global_get("fg_table_sessions");
-			$fg_table_sessions[$new_sk] = $fg_table_sessions[$GLOBALS["tbl_sk"]];
-			if (!is_array($fg_table_sessions[$new_sk]))
+			$url = $ru.$sep."use_table=".$alias_data["target"];
+			// if we are doing grouping in the table then we must include the group elements value(s) as a restrict search element
+			// as well, because it would make a whole lotta sense that way
+			if (is_array($this->table["rgrps"]))
 			{
-				$fg_table_sessions[$new_sk] = array();
-			}*/
-
-			$url = $ru.$sep."use_table=".$alias_data["target"]."&restrict_search_el=".$elid."&restrict_search_val=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
-
-//			$fg_table_sessions[$new_sk][] = $url;
-//			aw_session_set("fg_table_sessions",$fg_table_sessions);
+				foreach($this->table["rgrps"] as $nr => $_dat)
+				{
+					$url.= "&restrict_search_el[]=".$_dat["el"]."&restrict_search_val[]=".urlencode($dat["ev_".$_dat["el"]]);
+				}
+			}
+			$url.="&restrict_search_el[]=".$elid."&restrict_search_val[]=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
 
 			return "<a href='".$url."'>".$elval."</a>";
 		}

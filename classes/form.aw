@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.105 2002/07/17 07:44:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.106 2002/07/17 20:29:17 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2169,6 +2169,7 @@ class form extends form_base
 		// samas kuulub seal iga kalender konkreetse pärja elementvormi külge, so I have
 		// to figure out which one it is, to find the calendars I required
 
+		enter_function("form::new_do_search::load",array());
 		if ($id)
 		{
 //			echo "loading $id <br>";
@@ -2180,21 +2181,30 @@ class form extends form_base
 			$this->load_entry($entry_id);
 //			echo "this->entry = <pre>", var_dump($this->entry),"</pre> <br>";
 		}
+		exit_function("form::new_do_search::load",array());
 
-		if ($restrict_search_el)
+		enter_function("form::new_do_search::restrict",array());
+		if (is_array($restrict_search_el))
 		{
 			// alter the loaded search entry with the data
 			$l2r = $this->get_linked2real_element_array();
 
-			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
-
-			if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+			foreach($restrict_search_el as $idx => $rel)
 			{
-				$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+				$el =& $this->get_element_by_id($l2r[$rel]);
+
+				if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+				{
+					$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx]);
+				}
 			}
 		}
+		exit_function("form::new_do_search::restrict",array());
 
-		$form_table = new form_table;
+		enter_function("form::new_do_search::init_table",array());
+		$show_form = new form;	// if showing results as outputs, this will be used
+		$form_table = new form_table; // if showing results as a form_table, this will be used
+
 		$used_els = array();
 		$group_els = array();
 
@@ -2229,6 +2239,14 @@ class form extends form_base
 			$group_els = $form_table->get_group_by_elements();
 //			echo "group_els = <pre>", var_dump($group_els),"</pre> <br>";
 		}
+		else
+		{
+			// here we need to get the elements used in the form_output that will show the entries
+			$show_form->load($this->arr["start_search_relations_from"]);
+			$show_form->load_output($this->get_search_output());
+			$used_els = $this->get_op_linked_elements();
+		}
+		exit_function("form::new_do_search::init_table",array());
 
 		// now get the search query
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
@@ -2239,10 +2257,6 @@ class form extends form_base
 //		echo "sql = $sql <br>";
 		$result = "";
 
-//		echo "startform = ".$this->arr["start_search_relations_from"]." <br>";
-		$show_form = new form;
-		$show_form->load($this->arr["start_search_relations_from"]);
-		$show_form->load_output($this->get_search_output());
 
 		// execute it and show the results in the desired form
 		if ($this->arr["search_type"] == "forms")
@@ -2299,11 +2313,14 @@ class form extends form_base
 
 			};
 		}
+		enter_function("form::new_do_search::query",array());
 		$this->db_query($sql,false);
+		exit_function("form::new_do_search::query",array());
 		while ($row = $this->db_next())
 		{
 			if ($this->arr["show_table"])
 			{
+				enter_function("form::new_do_search::table_loop",array());
 				if ($row["chain_entry_id"])
 				{
 					$this->save_handle();
@@ -2340,6 +2357,7 @@ class form extends form_base
 				{
 					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
 				}
+				exit_function("form::new_do_search::table_loop",array());
 			}
 			else
 			{
@@ -2354,11 +2372,13 @@ class form extends form_base
 		}
 
 		
+		enter_function("form::new_do_search::finish_table",array());
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"])
 		{
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 		}
+		exit_function("form::new_do_search::finish_table",array());
 
 		return $result;
 	}
@@ -2399,13 +2419,16 @@ class form extends form_base
 			// TODO: restrict search here
 		}
 		
-		if ($restrict_search_el)
+		if (is_array($restrict_search_el))
 		{
 			// alter the loaded search entry with the data
 			$l2r = $this->get_linked2real_element_array();
 
-			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
-			$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+			foreach($restrict_search_el as $idx => $rel)
+			{
+				$el =& $this->get_element_by_id($l2r[$rel]);
+				$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx]);
+			}
 		}
 
 		// gather all the elements of this form in an array
@@ -2774,15 +2797,18 @@ class form extends form_base
 
 		$matches = $this->search($entry_id,0,$search_el,$search_val,$restrict_search_el, $restrict_search_val);
 
-		if ($restrict_search_el)
+		if (is_array($restrict_search_el))
 		{
 			// alter the loaded search entry with the data
 			$l2r = $this->get_linked2real_element_array();
 
-			$el =& $this->get_element_by_id($l2r[$restrict_search_el]);
-			if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+			foreach($restrict_search_el as $idx => $rel)
 			{
-				$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$restrict_search_el],$restrict_search_val);
+				$el =& $this->get_element_by_id($l2r[$rel]);
+				if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
+				{
+					$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx]);
+				}
 			}
 		}
 
@@ -5347,5 +5373,26 @@ class form extends form_base
 		return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
 	}
 
+	////
+	// !returns all the entry elements that are connected to the loaded output 
+	// returns array[form_id][el_id] = el_id
+	function get_op_linked_elements()
+	{
+		$ret = array();
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->output["cols"]; $col++)
+			{
+				$op_cell = $this->output[$row][$col];
+				for ($i=0; $i < $op_cell["el_count"]; $i++)
+				{
+					$lf = $op_cell["elements"][$i]["linked_form"];
+					$le = $op_cell["elements"][$i]["linked_element"];
+					$ret[$lf][$le] = $le;
+				}
+			}
+		}
+		return $ret;
+	}
 };	// class ends
 ?>

@@ -1,19 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.57 2002/07/17 07:44:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.58 2002/07/17 20:29:17 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
 class form_element extends aw_template
 {
-	function form_element()
-	{
-		// FIXME: need stringid lokaliseerida
-		$this->lc_load("form_element","lc_form_element");
-	
-		// we need that for wysiwyg "textareas"
-		$this->is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
-
-		$this->all_subtypes=array(
+		var $all_subtypes=array(
 			"textbox" => array(
 				"" => "",
 				"count" => "Mitu",
@@ -82,7 +74,7 @@ class form_element extends aw_template
 			),
 		);
 
-		$this->all_types = array(
+		var $all_types = array(
 			"textbox" => "Tekstiboks",
 			'textarea' => "Mitmerealine tekst",
 			'checkbox' => "Checkbox",
@@ -99,12 +91,21 @@ class form_element extends aw_template
 	
 		);
 
+	function form_element()
+	{
+		// FIXME: need stringid lokaliseerida
+		$this->lc_load("form_element","lc_form_element");
+	
+		// we need that for wysiwyg "textareas"
+		$this->is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
+
 		// week and month do not work very well yet
 		$this->timeslice_types = array(
 			'hour' => $this->vars["SUBTYPE_TS_HOUR"],
 			'day' => $this->vars["SUBTYPE_TS_DAY"],
 			'week' => $this->vars["SUBTYPE_TS_WEEK"],
 		);
+
 	}	
 
 	////
@@ -169,11 +170,17 @@ class form_element extends aw_template
 				"default_controller" 			=> $this->picker($this->arr["default_controller"], $this->form->get_list_controllers(true)),
 				"value_controller" 				=> $this->picker($this->arr["value_controller"], $this->form->get_list_controllers(true)),
 				"disabled" 								=> checked($this->arr["disabled"]),
+				"search_all_text"					=> checked($this->arr["search_all_text"]),
+				"search_separate_words"		=> checked($this->arr["search_separate_words"])
 			));
 	
 			$this->vars(array(
 				"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : "")
 			));
+			if ($this->form->type == FTYPE_SEARCH && in_array($this->arr["type"],array("textbox","textarea","price")))
+			{
+				$this->vars(array("SEARCH_PROPS" => $this->parse("SEARCH_PROPS")));
+			}
 
 			// now do element metadata
 			$mtd = "";
@@ -716,6 +723,14 @@ class form_element extends aw_template
 		$var = $base."_has_act";
 		global $$var;
 		$this->arr["has_act"] = $$var;
+
+		$var = $base."_search_all_text";
+		global $$var;
+		$this->arr["search_all_text"] = $$var;
+
+		$var = $base."_search_separate_words";
+		global $$var;
+		$this->arr["search_separate_words"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;

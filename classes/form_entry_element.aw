@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.52 2002/07/17 07:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.53 2002/07/17 20:29:17 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -15,7 +15,6 @@ class form_entry_element extends form_element
 		$this->parent = 0;
 		$this->entry_id = 0;
 		$this->id = 0;
-		$this->currency = new currency;
 	}
 
 	function gen_admin_html()
@@ -205,6 +204,10 @@ class form_entry_element extends form_element
 			// currencies are cached the first time we ask for one
 			if ($this->arr["price_cur"])
 			{
+				if (!is_object($this->currency))
+				{
+					$this->currency = new currency;
+				}
 				if ($this->form->active_currency)
 				{
 					// if the currency in which to show price is set, then show that currency

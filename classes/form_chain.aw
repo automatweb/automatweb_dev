@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.21 2002/07/17 12:28:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.22 2002/07/17 20:29:17 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -108,7 +108,6 @@ class form_chain extends form_base
 			));
 		}
 
-
 		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
 		if (is_array($forms))
 		{
@@ -117,6 +116,7 @@ class form_chain extends form_base
 				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord,rep) values($fid,$id,'".$ct["form_order"][$fid]."','".$rep[$fid]."')");
 			}
 		}
+		echo "endsubmit! <br>";
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 

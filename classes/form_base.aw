@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.34 2002/07/17 07:44:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.35 2002/07/17 20:29:17 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -12,7 +12,6 @@ class form_base extends form_db_base
 		$this->db_init();
 		// must NOT call core::init from here, because we also have an init function in form_base that clashes with the name
 		// fuck, this sucks
-		aw_config_init_class(&$this);
 
 		lc_load("definition");
 		$this->lc_load("form","lc_form");
@@ -49,6 +48,7 @@ class form_base extends form_db_base
 	// $arr[elements] - array of elements in the form, indexed by row and column
 	function load($id = 0)
 	{
+//		echo "load $id <br>";
 		if ($id == 0)
 		{
 			// see tuleb form klassi konstruktorist
@@ -73,6 +73,7 @@ class form_base extends form_db_base
 		$this->entry_id = 0;
 
 		// FIXME: use aw_unserialize
+		enter_function("form_base::load_unsrialize",array());
 		if (substr($row["content"],0,14) == "<?xml version=")
 		{
 			classload("xml");
@@ -91,6 +92,7 @@ class form_base extends form_db_base
 		{
 			$this->arr = unserialize($row["content"]);
 		}
+		exit_function("form_base::load_unsrialize");
 
 		$this->allow_html = $this->arr["allow_html"];
 		$this->normalize();
@@ -153,6 +155,10 @@ class form_base extends form_db_base
 		// here we also update the controller usage table
 		$this->db_query("DELETE FROM form_controller2element WHERE form_id = '".$this->id."'");
 		
+		// go over all the elements in the form and create an array that contains the table/col that 
+		// eash element writes to
+		$el_tbls = array();
+
 		// we must do this, otherwise we also serialize all the cells and stuff, which isn't necessary
 		for ($col = 0; $col < $this->arr["cols"]; $col++)		
 		{
@@ -165,6 +171,10 @@ class form_base extends form_db_base
 					$this->arr["contents"][$row][$col]->get_els(&$ret);
 					foreach($ret as $el)
 					{
+						$el_tbls["els"][$el->get_id()]["table"] = $el->get_save_table();
+						$el_tbls["els"][$el->get_id()]["col"] = $el->get_save_col();
+						$el_tbls["els"][$el->get_id()]["col2"] = $el->get_save_col2();
+
 						$entry_c = $el->get_entry_controllers();
 						foreach($entry_c as $ctrlid)
 						{
@@ -194,8 +204,16 @@ class form_base extends form_db_base
 
 		// we must also do this, because the column/row count may have changed
 		$contents = aw_serialize($this->arr,SERIALIZE_PHP);
-
 		$this->quote(&$contents);
+
+		$el_tbls["save_tables"] = $this->get_tables_for_form();
+		$el_tbls["save_table"] = $this->arr["save_table"];
+		$el_tbls["save_table_data"] = $this->arr["save_tables"];
+		$el_tbls["save_table_start_from"] = $this->arr["save_table_start_from"];
+		$el_tbls["save_tables_obj_tbl"] = $this->arr["save_tables_obj_tbl"];
+
+		$el_tblstr = aw_serialize($el_tbls,SERIALIZE_PHP);
+		$this->quote(&$el_tblstr);
 
 		$this->upd_object(array(
 			"oid" => $this->id,
@@ -213,7 +231,7 @@ class form_base extends form_db_base
 		}
 		// set to 0 if not set already. 
 		$this->subtype = (int)$this->subtype;
-		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
+		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"].",el_tables = '$el_tblstr' WHERE id = ".$this->id);
 		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
 	}
 
@@ -1618,15 +1636,15 @@ class form_base extends form_db_base
 		extract($args);
 		$result = array();
 
-		$inst =& $this->cache_get_form_instance($rel_form);
+		$inst =& $this->cache_get_form_eldat($rel_form);
 
-		if ($inst->arr["save_table"] == 1)
+		if ($inst["save_table"] == 1)
 		{
-			$el = $inst->get_element_by_id($rel_element);
+//			$el = $inst->get_element_by_id($rel_element);
 
-			$rel_el = $el->get_save_table().".".$el->get_save_col();
+			$rel_el = $inst["els"][$rel_element]["table"].".".$inst["els"][$rel_element]["col"];
 
-			$id_col = $inst->arr["save_tables"][$el->get_save_table()]." as id,";
+			$id_col = $inst["save_table_data"][$inst["els"][$rel_element]["table"]]." as id,";
 
 			if ($rel_unique == 1)
 			{
@@ -1634,7 +1652,7 @@ class form_base extends form_db_base
 				$id_col = "";
 			}
 
-			$this->db_query("SELECT $id_col $rel_el as ev_".$rel_element." FROM ".$el->get_save_table());
+			$this->db_query("SELECT $id_col $rel_el as ev_".$rel_element." FROM ".$inst["els"][$rel_element]["table"]);
 		}
 		else
 		{
