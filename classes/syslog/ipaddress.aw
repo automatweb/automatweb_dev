@@ -161,7 +161,7 @@ class ipaddress extends class_base
 
 		// a1 is mask, a2 is the same type as a1
 		$a1pts = explode(".", $a1);
-		$a2pts = explode(".", $a1);
+		$a2pts = explode(".", $a2);
 
 		$match = true;
 		if (!$a1_is_num)
