@@ -58,6 +58,36 @@
             <caption>Korduse tüüp</caption>
       </property>
       <property>
+            <name>interval_minutely</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>2</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Iga X minuti järel</caption>
+      </property>
+      <property>
+            <name>interval_hourly</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>2</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Iga X tunni järel</caption>
+      </property>
+      <property>
             <name>interval_daily</name>
             <table>objects</table>
             <group>general</group>
@@ -70,7 +100,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Iga X päeva tagant</caption>
+            <caption>Iga X päeva järel</caption>
       </property>
       <property>
             <name>interval_weekly</name>
@@ -85,7 +115,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Iga X nädala tagant</caption>
+            <caption>Iga X nädala järel</caption>
       </property>
       <property>
             <name>interval_monthly</name>
@@ -100,7 +130,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Iga X kuu tagant</caption>
+            <caption>Iga X kuu järel</caption>
       </property>
       <property>
             <name>interval_yearly</name>
@@ -115,7 +145,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Iga X aasta tagant</caption>
+            <caption>Iga X aasta järel</caption>
       </property>
       <property>
             <name>weekdays</name>
