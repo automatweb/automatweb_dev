@@ -51,7 +51,6 @@
       </property>
       <classinfo>
             <syslog_type>ST_ROLE</syslog_type>
-            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <acls>

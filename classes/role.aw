@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_ROLE relationmgr=yes
+@classinfo syslog_type=ST_ROLE 
 
 @groupinfo acls caption="Lubatud &otilde;igused"
 
@@ -145,7 +145,7 @@ class role extends class_base
 			case 'save_acl':
 				if ($arr["request"]["save_acl"] == 1)
 				{
-					$ac = get_instance("acl_class");
+					$ac = get_instance("core/acl/acl_class");
 					$rows = $ac->get_acls_for_role($arr["obj_inst"]->id());
 					foreach($rows as $acid)
 					{
