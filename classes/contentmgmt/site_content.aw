@@ -186,7 +186,8 @@ class site_content extends menuedit
 			"def_per_id" => $pers->get_active_period(),
 			"per_img_url" => image::check_url($imdata["url"]),
 			"per_img_tag" => image::make_img_tag(image::check_url($imdata["url"])),
-			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
+			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl")),
+			"printlink" => aw_url_change_var("print", 1)
 		));
 
 		if ($this->is_template("PERIOD_SWITCH"))
@@ -791,7 +792,7 @@ class site_content extends menuedit
 			}
 		}
 
-		$parent_tpl = $this->is_parent_tpl($mn2, $mn);
+		$parent_tpl = $this->is_in_parents_tpl($mn2, $mn);
 		if (!( ($in_path||$this->level == 1) || ($parent_tpl && $in_path) || $ignore_path))
 		{
 			// don't show unless the menu is selected (in the path)
@@ -824,8 +825,22 @@ class site_content extends menuedit
 
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
-		$total = sizeof($tmp) - 1;
-
+		$total = -1;
+		foreach($tmp as $row)
+		{
+			if ($row["meta"]["users_only"])
+			{
+				if (aw_global_get("uid") != "")
+				{
+					$total++;
+				}
+			}
+			else
+			{
+				$total++;
+			}
+		}
+		reset($tmp);
 		while (list(,$row) = each($tmp))
 		{
 			$row["mtype"] = $row["type"];
@@ -844,7 +859,10 @@ class site_content extends menuedit
 			}
 
 			// don't show no-export menus in export
-			if ($row["meta"]["no_export"] == 1 && $_SERVER["HTTP_USER_AGENT"] == "AW-EXPORT")
+			if ($row["meta"]["no_export"] == 1 && 
+				($_SERVER["HTTP_USER_AGENT"] == "AW-EXPORT" ||
+				 $_GET["is_export"] == 1
+			))
 			{
 				continue;
 			}
@@ -865,6 +883,11 @@ class site_content extends menuedit
 
 			// it's already uncompressed, use it
 			$meta = $row["meta"];
+
+			if ($row["meta"]["users_only"] && aw_global_get("uid") == "")
+			{
+				continue;
+			}
 
 			// see on siis n䤡la parema paani leadide n�tamine
 			// nme h䫫. FIX ME.
