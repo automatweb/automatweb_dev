@@ -59,6 +59,17 @@
             <caption>Eelvaade</caption>
       </property>
       <property>
+            <name>export</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <caption>Ekspordi XML</caption>
+      </property>
+      <property>
             <name>rates</name>
             <table>objects</table>
             <group>rates</group>
