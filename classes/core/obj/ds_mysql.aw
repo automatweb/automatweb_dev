@@ -1240,7 +1240,37 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$tbl2 = $this->properties[$val->prop]["table"];
 						$fld2 = $this->properties[$val->prop]["field"];
 					}
-					$sql[] = $tf." = ".$tbl2.".".$fld2." ";
+					switch($val->compare)
+					{
+						case OBJ_COMP_LESS:
+							$compr = " < ";
+							break;
+
+						case OBJ_COMP_GREATER:
+							$compr = " > ";
+							break;
+
+						case OBJ_COMP_LESS_OR_EQ:
+							$compr = " <= ";
+							break;
+
+						case OBJ_COMP_GREATER_OR_EQ:
+							$compr = " >= ";
+							break;
+
+						case OBJ_COMP_BETWEEN:
+							error::raise(array(
+								"id" => "ERR_WRONG_COMPARATOR",
+								"msg" => t("OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!")
+							));
+							break;
+
+						default:
+						case OBJ_COMP_EQUAL:
+							$compr = " = ";
+							break;
+					}
+					$sql[] = $tf.$compr.$tbl2.".".$fld2." ";
 				}
 			}
 			else
