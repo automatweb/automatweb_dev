@@ -230,9 +230,8 @@
       <property>
             <name>aliasmgr</name>
             <type>aliasmgr</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
+            <store>no</store>
+            <editonly>1</editonly>
             <group>general</group>
             <caption>Aliastehaldur</caption>
       </property>
