@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.10 2004/11/09 12:13:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.11 2004/11/09 15:58:07 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -211,13 +211,16 @@ class folder_list extends class_base
 			$fls .= $this->parse("FOLDER");
 		}
 
-		$rm = obj($ob->prop("rootmenu"));
+		if (is_oid($ob->prop("rootmenu")) && $this->can("view", $ob->prop("rootmenu")))
+		{
+			$rm = obj($ob->prop("rootmenu"));
 
-		$this->vars(array(
-			"FOLDER" => $fls,
-			"root_name" => $rm->prop("name"),
-			"root_link" => $ssh->make_menu_link($rm),
-		));
+			$this->vars(array(
+				"FOLDER" => $fls,
+				"root_name" => $rm->prop("name"),
+				"root_link" => $ssh->make_menu_link($rm),
+			));
+		}
 		return $this->parse();
 	}
 }
