@@ -129,6 +129,37 @@
             <caption>Uus k&amp;otilde;rgus</caption>
       </property>
       <property>
+            <name>dimensions_big</name>
+            <group>resize_big</group>
+            <table>objects</table>
+            <type>text</type>
+            <store>no</store>
+            <field>dimensions_big</field>
+            <caption>Mõõtmed</caption>
+      </property>
+      <property>
+            <name>new_w_big</name>
+            <group>resize_big</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>6</size>
+            <store>no</store>
+            <caption>Uus laius (suur)</caption>
+      </property>
+      <property>
+            <name>new_h_big</name>
+            <group>resize_big</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>6</size>
+            <store>no</store>
+            <caption>Uus k&amp;otilde;rgus (suur)</caption>
+      </property>
+      <property>
             <name>do_resize</name>
             <group>resize</group>
             <table>objects</table>
@@ -158,6 +189,9 @@
             <resize>
                   <caption>Muuda suurust</caption>
             </resize>
+            <resize_big>
+                  <caption>Muuda suure pildi suurust</caption>
+            </resize_big>
       </groupinfo>
       <tableinfo>
             <images>
