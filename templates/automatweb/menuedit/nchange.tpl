@@ -274,6 +274,14 @@ function savemenu() {
 		<td class="title">&nbsp;</td>
 		<td class="fgtext_g"><input type='file' name='img'></td>
 	</tr>
+	<tr>
+		<td class="title">Aktiivse men&uuml;&uuml; pilt:</td>
+		<td class="fgtext_g">{VAR:image_act}</td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><input type='file' name='img_act'></td>
+	</tr>
 </table>
 </td>
 </tr>
