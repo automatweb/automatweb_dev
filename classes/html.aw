@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.47 2004/05/25 08:38:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.48 2004/06/14 14:32:09 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -48,7 +48,7 @@ class html extends aw_template
 			$sel_array = array();
 		};
 		// hmhm. dunno, really. but it was in aw_template->mpicker -- duke
-		$sel_array = array_flip($sel_array);
+		$sel_array = @array_flip($sel_array);
 
 		$optstr = "";
 		if (isset($options) && is_array($options))
