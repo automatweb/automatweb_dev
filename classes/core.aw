@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.88 2002/03/27 01:19:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.89 2002/03/27 02:05:55 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -254,16 +254,16 @@ class core extends db_connector
 		$this->quote($time);
 		$fields = array("tm","uid","type","action","ip","oid","created_hour","created_day","created_week","created_month","created_year");
 		$values = array($t,$uid,$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
-		if (aw_ini_get("TAFKAP"))
+		if (aw_ini_get("tafkap"))
 		{
 			$fields[] = "tafkap";
 			$values[] = $tafkap;
 		};
 
-		if (aw_ini_get("SYSLOG_HAS_SITE_ID"))
+		if (aw_ini_get("syslog.has_site_id") == 1)
 		{
 			$fields[] = "site_id";
-                        $values[] = aw_ini_get("SITE_ID");
+                        $values[] = aw_ini_get("site_id");
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 
