@@ -81,11 +81,11 @@ function parse_config($file)
 					$len = strlen($code);
 					for($i = 0; $i < $len; $i++)
 					{
-						if ($code{$i} == "[" && !($code{$i+1} == "\"" || $code{$i+1} == "'"))
+						if ($code{$i} == "[" && !($code{$i+1} == "\"" || $code{$i+1} == "'" || $code{$i+1} == "]"))
 						{
 							$code = substr($code, 0, $i+1)."\"".substr($code, $i+1);
 						}
-						if ($code{$i} == "]" && !($code{$i-1} == "\"" || $code{$i-1} == "'"))
+						if ($code{$i} == "]" && !($code{$i-1} == "\"" || $code{$i-1} == "'" || $code{$i-1} == "["))
 						{
 							$code = substr($code, 0, $i)."\"".substr($code, $i);
 						}
