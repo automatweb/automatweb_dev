@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.6 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.7 2002/02/18 13:47:01 kristo Exp $
 
 
 classload("connect");
@@ -135,7 +135,7 @@ class replicator_client extends db_connector
 
 	function query($func,$arr,$rclose=0)
 	{
-		return $this->_query(array_merge($arr,array("func"=>$func,"tid"=>$this->tid,"hash"=>$this->hash,"replicator_close"=>$rclose)));
+		return $this->_query(array_merge($arr,array("func"=>$func,"tid"=>$this->tid,"hash"=>$this->hash,"replicator_close"=>$rclose,"r_uid" => UID)));
 	}
 }
 ?>

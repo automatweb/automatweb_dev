@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.4 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.5 2002/02/18 13:46:14 kristo Exp $
 
 class sql_filter extends aw_template 
 {
@@ -543,14 +543,14 @@ class sql_filter extends aw_template
 					};
 					$fakejoin=$this->joinnames[$fakejoin];
 				};
-				if ($f["op"]=="LIKE")
+				if ($f["op"]=="LIKE" || $f["op"]=="NOT LIKE")
 				{
 					$fakeval="%$fakeval%";
 				};
 
 				// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
 				// või kui on määratud masterarrays et ei panda siis ka ei panda
-				if (($f["op"]=="LIKE" || $f["op"]=="=" ||$f["op"]=="!=") && (!$f["noqm"]))
+				if (($f["op"]=="LIKE" || $f["op"]=="NOT LIKE" || $f["op"]=="=" ||$f["op"]=="!=") && (!$f["noqm"]))
 				{
 					$fakeval="'$fakeval'";
 				} else 
@@ -558,7 +558,7 @@ class sql_filter extends aw_template
 				{
 					$fakeval+=0;
 				}
-				$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." $fakeval";
+				$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".($f["op"] == "NOT LIKE" ? $f["op"] : strtr($f["op"],$xlate))." $fakeval";
 			};
 		};
 		$this->used_tables=array_keys($this->used_tables);
