@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.4 2003/05/09 15:43:37 kristo Exp $
+// $Id: menu_alias.aw,v 2.5 2003/07/08 11:54:17 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -110,6 +110,18 @@ class menu_alias extends aw_template
 			$ret = sprintf("<a class=\"sisutekst\" href='".$this->cfg["baseurl"]."/%d'>%s</a>",$target["oid"],$target["name"]);
 		}
 		return $ret;
+	}
+
+	function _serialize($arr)
+	{
+		$i = get_instance("admin/admin_menus");
+		return $i->_serialize($arr);
+	}
+
+	function _unserialize($arr)
+	{
+		$i = get_instance("admin/admin_menus");
+		return $i->_unserialize($arr);
 	}
 };
 ?>
