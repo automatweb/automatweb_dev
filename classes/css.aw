@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.37 2004/04/01 09:14:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.38 2004/04/01 09:27:28 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -210,7 +210,10 @@ class css extends class_base
 					break;
 
 				case "underline":
-					$mask = "text-decoration: underline;\n";
+					if ($val == 1)
+					{
+						$mask = "text-decoration: underline;\n";
+					}
 					break;
 
 				case "textdecoration":
