@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.7 2004/09/27 14:39:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.8 2004/09/29 13:04:35 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -188,7 +188,13 @@ class calendar_event extends class_base
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
-		$this->vars($ob->properties());
+		$vars = $ob->properties();
+		$data = array();
+		foreach($vars as $k => $v)
+		{
+			$data[$k] = nl2br($v);
+		}
+		$this->vars($data);
 		return $this->parse();
 	}
 }
