@@ -8,6 +8,35 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	function _int_obj_ds_auto_translation($contained)
 	{
 		parent::_int_obj_ds_decorator($contained);
+		$this->conn_by_to = array();
+		$this->conn_by_from = array();
+
+		enter_function("ds_auto_translation::conn_init");
+		// cache conns 
+		$this->contained->db_query("
+			SELECT 
+				source as `from`,
+				target as `to`,
+				reltype as `type`,
+				a.id as `id`,
+				o_t.lang_id as `to.lang_id`,
+				o_s.lang_id as `from.lang_id`,
+				o_t.class_id as `to.class_id`,
+				o_s.class_id as `from.class_id`
+			FROM 
+				aliases a
+				LEFT JOIN objects o_s ON o_s.oid = a.source
+				LEFT JOIN objects o_t ON o_t.oid = a.target
+			WHERE 
+				reltype IN (".RELTYPE_TRANSLATION.",".RELTYPE_ORIGINAL.")
+				AND o_s.status != 0 AND o_t.status != 0
+		");
+		while ($row = $this->contained->db_next())
+		{
+			$this->conn_by_to[$row["to"]][$row["type"]][$row["id"]] = $row;
+			$this->conn_by_from[$row["from"]][$row["type"]][$row["id"]] = $row;
+		}
+		exit_function("ds_auto_translation::conn_init");
 	}
 
 	////
@@ -45,19 +74,10 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		$conn_oid = $oid;
 		if ($req_od["brother_of"] != $oid && $req_od["brother_of"])
 		{
-			/*$tmp = $this->contained->get_objdata($req_od["brother_of"], array(
-				"no_errors" => true
-			));
-			if ($tmp !== NULL)
-			{
-				$req_od = $tmp;
-			
-				$req_od["oid"] = $oid;
-			}*/
 			$conn_oid = $req_od["brother_of"];
 			$sets["oid"] = $req_od["oid"];
-			$tmp = $this->get_objdata($req_od["parent"]);
-			$sets["parent"] = $tmp["oid"];
+			//$tmp = $this->get_objdata($req_od["parent"]);
+			$sets["parent"] = $req_od["parent"];//$tmp["oid"];
 			if ($GLOBALS["AUTO_TRANS_D"] == 1)
 			{
 				echo __LINE__."::is brother, read conns from $conn_oid <br>";
@@ -71,10 +91,8 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			echo __LINE__."::read conns TO $conn_oid of type RELTYPE_TRANSLATION <br>";
 		}
 
-		$conns = $this->contained->find_connections(array(
-			"to" => $conn_oid,
-			"type" => RELTYPE_TRANSLATION
-		));
+		$conns = safe_array($this->conn_by_to[$conn_oid][RELTYPE_TRANSLATION]);
+
 		if (count($conns) > 1)
 		{
 			error::throw(array(
@@ -95,6 +113,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 			// mark in cache that this is the original object for the translation
 			reset($conns);
+
 			list(,$f_c) = each($conns);
 			$this->objdata[$f_c["from"]]["type"] = OBJ_TRANS_ORIG;
 			
@@ -116,11 +135,17 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			}
 			// this is not the corret language object. get the original and try to find
 			// a related translation object that has the correct lang_id
-			$conns2 = $this->contained->find_connections(array(
-				"from" => $f_c["from"],
-				"type" => RELTYPE_TRANSLATION,
-				"to.lang_id" => $lang_id
-			));
+			
+			$dat = safe_array($this->conn_by_from[$f_c["from"]][RELTYPE_TRANSLATION]);
+			$conns2 = array();	
+			foreach($dat as $idx => $inf)
+			{
+				if ($inf["to.lang_id"] == $lang_id)
+				{
+					$conns2[$idx] = $inf;
+				}
+			}
+
 			if ($GLOBALS["AUTO_TRANS_D"] == 1)
 			{
 				echo __LINE__."::incorrect language, get original and trace from that original = $f_c[from], read connections from that <br>";
@@ -178,11 +203,17 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				{
 					echo __LINE__."::this is the original object, find correct translation from it (from = $conn_oid , type = RELTYPE_TRANSLATION , to.lang_id = $lang_id)  <br>";
 				}
-				$conns = $this->contained->find_connections(array(
-					"from" => $conn_oid,
-					"type" => RELTYPE_TRANSLATION,
-					"to.lang_id" => $lang_id
-				));
+				
+				$dat = safe_array($this->conn_by_from[$conn_oid][RELTYPE_TRANSLATION]);
+				$conns = array();	
+				foreach($dat as $idx => $inf)
+				{
+					if ($inf["to.lang_id"] == $lang_id)
+					{
+						$conns[$idx] = $inf;
+					}
+				}
+
 				if (count($conns) > 1)
 				{
 					error::throw(array(
@@ -304,10 +335,13 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
 		// to this object .. 
-		$conns = $this->contained->find_connections(array(
+		/*$conns = $this->contained->find_connections(array(
 			"to" => $oid,
 			"type" => RELTYPE_TRANSLATION
-		));
+		));*/
+
+		$conns = safe_array($this->conn_by_to[$oid][RELTYPE_TRANSLATION]);
+
 		if (count($conns) > 0)
 		{
 			// return the from object, cause that's the one
@@ -489,24 +523,19 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				}
 			}
 		}
+
 		return $this->contained->find_connections($arr);
 	}
 
 	function _get_original_obj($oid)
 	{
 		// if this is the original
-		$conns = $this->contained->find_connections(array(
-			"from" => $oid,
-			"type" => RELTYPE_TRANSLATION
-		));
+		$conns = safe_array($this->conn_by_from[$oid][RELTYPE_TRANSLATION]);
 		if (count($conns) > 0)
 		{
 			return $oid;
 		}
-		$conn = reset($this->contained->find_connections(array(
-			"from" => $oid,
-			"type" => RELTYPE_ORIGINAL
-		)));
+		$conn = reset(safe_array($this->conn_by_from[$oid][RELTYPE_ORIGINAL]));
 		if (!$conn)
 		{
 			return $oid;
