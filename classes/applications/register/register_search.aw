@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.12 2004/11/29 10:22:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.13 2004/12/03 09:13:49 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -482,7 +482,7 @@ class register_search extends class_base
 			// if is_chooser , make list of all possible options and insert into options.
 			if ($fdata[$pn]["is_chooser"] == 1)
 			{
-				$this->mod_chooser_prop($tmp, $pn);
+				$this->mod_chooser_prop($tmp, $pn, $reg);
 			}
 		}
 
@@ -613,13 +613,19 @@ class register_search extends class_base
 			}
 		}
 
+		$cfgu = get_instance("cfg/cfgutils");
+		$f_props = $cfgu->load_properties(array(
+			"clid" => CL_REGISTER_DATA
+		));	
+
 		// if fulltext search
 		if ($request["rsf"][$this->fts_name] != "")
 		{
 			$tmp = array();
 			foreach($props as $pn => $pd)
 			{
-				if ($pn == "status" || $pn == "register_id")
+				if ($pn == "status" || $pn == "register_id" || $f_props[$pn]["store"] == "no" || $f_props[$pn]["field"] == "meta"
+|| $f_props[$pn]["type"] == "submit")
 				{
 					continue;
 				}
@@ -633,10 +639,6 @@ class register_search extends class_base
 		}
 
 		$tdata = $o->meta("tdata");
-		$cfgu = get_instance("cfg/cfgutils");
-		$f_props = $cfgu->load_properties(array(
-			"clid" => CL_REGISTER_DATA
-		));	
 
 		if ($GLOBALS["sortby"] != "")
 		{
@@ -784,14 +786,19 @@ class register_search extends class_base
 		}
 	}
 
-	function mod_chooser_prop(&$props, $pn)
+	function mod_chooser_prop(&$props, $pn, $reg )
 	{
 		// since storage can't do this yet, we gots to do sql here :(
 		$p =& $props[$pn];
 		$opts = array("" => "");
 		if ($p["table"] != "" && $p["field"] != "")
 		{
-			$this->db_query("SELECT distinct($p[field]) as val FROM $p[table]");
+			// also must filter by register data folder
+			$reg_i = $reg->instance();
+			$flds = $reg_i->_get_reg_folders($reg);
+
+			$this->db_query("SELECT distinct($p[field]) as val FROM $p[table] 
+				LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")");
 			while ($row = $this->db_next())
 			{
 				$opts[$row["val"]] = $row["val"];
