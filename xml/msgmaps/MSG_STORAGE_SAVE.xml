@@ -16,18 +16,23 @@
       <param>CL_CRM_PERSON</param>
 </num_2>
 <num_3>
+      <class>crm/crm_user_creator</class>
+      <func>on_save_co</func>
+      <param>CL_CRM_COMPANY</param>
+</num_3>
+<num_4>
       <class>applications/personnel_management/personnel_management_cv</class>
       <func>on_cv_save</func>
       <param>CL_PERSONNEL_MANAGEMENT_CV</param>
-</num_3>
-<num_4>
+</num_4>
+<num_5>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_job_save</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_4>
-<num_5>
+</num_5>
+<num_6>
       <class>doc</class>
       <func>on_save_document</func>
       <param>CL_DOCUMENT</param>
-</num_5>
+</num_6>
 </xml>
