@@ -236,7 +236,7 @@ class core extends acl_base
 		// edaspidi registreerime koikide parserite callback meetodid
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
-			$this->parsers = get_instance("dummy");
+			$this->parsers = new stdClass;
 			// siia paneme erinevad regulaaravaldised
 			$this->parsers->reglist = array();
 		};

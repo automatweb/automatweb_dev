@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.306 2004/12/14 10:22:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.307 2004/12/20 23:51:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4069,7 +4069,7 @@ class document extends aw_template
 		// edaspidi registreerime koikide parserite callback meetodid
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
-			$this->parsers = get_instance("dummy");
+			$this->parsers = new stdClass;
 			// siia paneme erinevad regulaaravaldised
 			$this->parsers->reglist = array();
 		};
