@@ -1,5 +1,7 @@
 <?php
 /*
+	@tableinfo kliendibaas_riik index=oid master_table=objects master_index=oid
+
 	@default table=objects
 	@default group=general
 
@@ -34,7 +36,7 @@ class riik extends class_base
 {
 	function riik()
 	{
-//		$this->init("kliendibaas");
+		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_RIIK,
 		));

@@ -1,5 +1,7 @@
 <?php
 /*
+	@tableinfo kliendibaas_linn index=oid master_table=objects master_index=oid
+
 	@default table=objects
 	@default group=general
 
